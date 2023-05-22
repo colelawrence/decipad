@@ -88,7 +88,7 @@ const VerticalDivider = () => (
 
 export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookAvatars>,
-  'usersWithAccess'
+  'usersWithAccess' | 'usersFromTeam'
 > &
   ComponentProps<typeof NotebookPublishingPopUp> & {
     permission?: PermissionType | null;
@@ -111,6 +111,7 @@ export const NotebookTopbar = ({
   onDuplicateNotebook = noop,
   onRevertChanges = noop,
   usersWithAccess,
+  usersFromTeam,
   permission,
   isSharedNotebook,
   workspaceAccess,
@@ -240,6 +241,7 @@ export const NotebookTopbar = ({
           allowInvitation={allowInvitation}
           isWriter={isWriter}
           usersWithAccess={usersWithAccess}
+          usersFromTeam={usersFromTeam}
           notebook={notebook}
           {...sharingProps}
         />

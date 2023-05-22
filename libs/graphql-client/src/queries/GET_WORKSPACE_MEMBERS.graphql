@@ -1,0 +1,5 @@
+query GetWorkspaceMembers($workspaceId: ID!) {
+  getWorkspaceById(id: $workspaceId) {
+    ...WorkspaceMembers
+  }
+}

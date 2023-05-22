@@ -1,5 +1,6 @@
 import { NotebookTopbar } from '@decipad/ui';
 import { noop } from '@decipad/utils';
+import { useWorkspaceMembers } from '@decipad/graphql-client';
 import { ComponentProps, FC } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { PermissionType } from 'libs/ui/src/types';
@@ -43,7 +44,9 @@ const Topbar: FC<TopbarProps> = ({
   changeEditorAccess = () => Promise.resolve(),
   removeEditorById = () => Promise.resolve(),
 }) => {
+  const workspaceId = notebook?.workspace?.id || '';
   const { data: session } = useSession();
+  const { everyone: usersFromTeam } = useWorkspaceMembers(workspaceId);
 
   if (!notebook) {
     return null;
@@ -62,7 +65,8 @@ const Topbar: FC<TopbarProps> = ({
           ? 'ADMIN'
           : undefined
       }
-      usersWithAccess={notebook.access.users}
+      usersWithAccess={notebook.access.users || []}
+      usersFromTeam={usersFromTeam}
       permission={notebook.myPermissionType}
       isPublished={notebook.isPublic || undefined}
       isPublishing={isPublishing}

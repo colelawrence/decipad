@@ -1,6 +1,6 @@
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { noop } from 'lodash';
+import { noop, uniqBy } from 'lodash';
 import { FC, useCallback, useState, useContext } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Avatar, Tooltip } from '../../atoms';
@@ -69,8 +69,8 @@ const tooltipRoleStyles = css({
 
 export type NotebookAvatarsProps = {
   isWriter?: boolean;
-  usersWithAccess?: NotebookAvatar[] | null;
-  usersFromTeam?: NotebookAvatar[] | null;
+  usersWithAccess?: NotebookAvatar[];
+  usersFromTeam?: NotebookAvatar[];
   allowInvitation?: boolean;
 
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
@@ -81,12 +81,18 @@ export type NotebookAvatarsProps = {
 
 export const NotebookAvatars = ({
   isWriter,
-  usersWithAccess,
+  usersWithAccess = [],
+  usersFromTeam = [],
   allowInvitation,
   ...sharingProps
 }: NotebookAvatarsProps): ReturnType<FC> => {
   const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
   const clientEvent = useContext(ClientEventsContext);
+
+  const allUsers = uniqBy(
+    [...usersWithAccess, ...usersFromTeam],
+    (access) => access.user.id
+  );
 
   const toggleInvitePopup = useCallback(() => {
     setShowInvitePopup((show) => !show);
@@ -143,12 +149,8 @@ export const NotebookAvatars = ({
           </div>
         </Tooltip>
       )}
-      {usersWithAccess?.map((avatar, index) => {
+      {allUsers?.map((avatar, index) => {
         const email = avatar.user.email || avatar.user.name;
-        const isActiveUser = avatar.user.onboarded;
-        const isOwner = avatar.permission === 'ADMIN';
-
-        if (!isActiveUser && !isOwner) return null;
 
         return isWriter ? (
           <Tooltip

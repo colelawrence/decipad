@@ -1121,6 +1121,13 @@ export type GetWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
 
+export type GetWorkspaceMembersQueryVariables = Exact<{
+  workspaceId: Scalars['ID'];
+}>;
+
+
+export type GetWorkspaceMembersQuery = { __typename?: 'Query', getWorkspaceById?: { __typename?: 'Workspace', access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } | null };
+
 export const ExternalDataSourceFragmentFragmentDoc = gql`
     fragment ExternalDataSourceFragment on ExternalDataSource {
   id
@@ -1774,6 +1781,17 @@ ${WorkspaceNotebookFragmentDoc}`;
 
 export function useGetWorkspacesQuery(options?: Omit<Urql.UseQueryArgs<GetWorkspacesQueryVariables>, 'query'>) {
   return Urql.useQuery<GetWorkspacesQuery, GetWorkspacesQueryVariables>({ query: GetWorkspacesDocument, ...options });
+};
+export const GetWorkspaceMembersDocument = gql`
+    query GetWorkspaceMembers($workspaceId: ID!) {
+  getWorkspaceById(id: $workspaceId) {
+    ...WorkspaceMembers
+  }
+}
+    ${WorkspaceMembersFragmentDoc}`;
+
+export function useGetWorkspaceMembersQuery(options: Omit<Urql.UseQueryArgs<GetWorkspaceMembersQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetWorkspaceMembersQuery, GetWorkspaceMembersQueryVariables>({ query: GetWorkspaceMembersDocument, ...options });
 };
 export type WithTypename<T extends { __typename?: any }> = Partial<T> & { __typename: NonNullable<T['__typename']> };
 
