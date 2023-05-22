@@ -6,11 +6,15 @@ expect.addSnapshotSerializer(typeSnapshotSerializer);
 it('non-indexed columns must have sizes consistent with the table', async () => {
   expect(
     await testGrowTable({ startingColumns: ['A = 1'], newColumn: '[1, 2]' })
-  ).toMatchInlineSnapshot(`"Error: Inconsistent table column sizes"`);
+  ).toMatchInlineSnapshot(
+    `"Error: Inconsistent table column sizes: expected 1 and got 2"`
+  );
 
   expect(
     await testGrowTable({ startingColumns: ['A = [1]'], newColumn: '[1, 2]' })
-  ).toMatchInlineSnapshot(`"Error: Inconsistent table column sizes"`);
+  ).toMatchInlineSnapshot(
+    `"Error: Inconsistent table column sizes: expected 1 and got 2"`
+  );
 
   expect(
     await testGrowTable({
@@ -184,7 +188,9 @@ it('juggles dimensions so the tables dimension is on top (4)', async () => {
       startingColumns: ['X = [1, 2, 3]'],
       newColumn: 'OtherTable.Nums',
     })
-  ).toMatchInlineSnapshot(`"Error: Inconsistent table column sizes"`);
+  ).toMatchInlineSnapshot(
+    `"Error: Inconsistent table column sizes: expected 3 and got 2"`
+  );
 });
 
 it('usage of previous() does not affect length rules', async () => {

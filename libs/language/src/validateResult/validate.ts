@@ -85,18 +85,22 @@ const validate: Validate = <
       ) as T;
     }
     case 'table': {
-      zip(type.columnTypes, getArray(value as Interpreter.ResultTable)).forEach(
-        ([cellType, value]) => {
-          if (cellType) {
-            const implicitColumn: SerializedType = {
-              kind: 'column',
-              cellType,
-              indexedBy: null,
-            };
-            validate(implicitColumn, value);
-          }
+      const columnValues = getArray(value as Interpreter.ResultTable);
+      if (columnValues.length !== type.columnTypes.length) {
+        throw new Error(
+          `table has inconsistent number of columns: expected ${type.columnTypes.length} and has ${columnValues.length}`
+        );
+      }
+      zip(type.columnTypes, columnValues).forEach(([cellType, value]) => {
+        if (cellType) {
+          const implicitColumn: SerializedType = {
+            kind: 'column',
+            cellType,
+            indexedBy: null,
+          };
+          validate(implicitColumn, value);
         }
-      );
+      });
       break;
     }
     case 'row': {

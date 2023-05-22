@@ -1,7 +1,6 @@
 import {
   getChildren,
   getNodeString,
-  hasNode,
   insertText,
   isElement,
   setSelection,
@@ -14,42 +13,24 @@ import {
 import {
   ELEMENT_TABLE,
   ELEMENT_TD,
-  ELEMENT_TH,
   ELEMENT_TR,
   MyEditor,
   MyNodeEntry,
-  TableCellElement,
   TableElement,
   TableHeaderElement,
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
 import { enumerate, dequal } from '@decipad/utils';
-import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 import { Computer } from '@decipad/computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
-import { insertNodes } from '@decipad/editor-utils';
 
 const tableIsSquare = ({
   children: [, headerRow, ...dataRows],
 }: TableElement) =>
   headerRow?.children?.length > 0 &&
   dataRows.every((tr) => tr.children?.length === headerRow.children?.length);
-
-const getBlankCell = (isHeader: boolean) => {
-  const id = nanoid();
-  const children = [{ text: '' }];
-
-  return isHeader
-    ? ({
-        id,
-        type: ELEMENT_TH,
-        children,
-        cellType: { kind: 'string' },
-      } as TableHeaderElement)
-    : ({ id, type: ELEMENT_TD, children } as TableCellElement);
-};
 
 const normalizeFormulaColumns = (
   editor: MyEditor,
@@ -67,33 +48,6 @@ const normalizeFormulaColumns = (
 
   if (formulaColIndices.length === 0) {
     return false;
-  }
-
-  // Prevent formula columns from being the first column
-  if (formulaColIndices[0] === 0) {
-    const normalizers: Array<() => void> = [];
-    for (const [rowIndex, row] of enumerate(table.children)) {
-      if (row.type !== ELEMENT_TR) {
-        continue;
-      }
-
-      const newCellPath = [...tablePath, rowIndex, 0];
-
-      if (hasNode(editor, newCellPath)) {
-        const newCell = getBlankCell(row.children[0].type === ELEMENT_TH);
-
-        normalizers.push(() =>
-          insertNodes(editor, [newCell], { at: newCellPath })
-        );
-      }
-    }
-    if (normalizers.length) {
-      return () => {
-        for (const n of normalizers) {
-          n();
-        }
-      };
-    }
   }
 
   // Empty formula cells. They must have no text (results come from off-document)

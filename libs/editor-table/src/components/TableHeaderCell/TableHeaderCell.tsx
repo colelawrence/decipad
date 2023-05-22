@@ -5,11 +5,16 @@ import {
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { TableColumnHeader, Tooltip } from '@decipad/ui';
+import { TableColumnHeader, Tooltip, CodeLine } from '@decipad/ui';
 import { assertElementType } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate';
+import { selectErrorFromResult } from '@decipad/computer';
+import { useComputer } from '@decipad/react-contexts';
 import { selectColumn } from '../../utils/selectColumn';
 import { useTableHeaderCell } from '../../hooks/useTableHeaderCell';
+import { useIsFormulaSelected } from '../../hooks/useIsFormulaSelected';
+
+const errorDebounceMs = 500;
 
 export const TableHeaderCell: PlateComponent = ({
   attributes,
@@ -18,6 +23,14 @@ export const TableHeaderCell: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_TH);
   const editor = useTEditorRef();
+
+  const errorResult = useComputer().getBlockIdResult$.useWithSelectorDebounced(
+    errorDebounceMs,
+    selectErrorFromResult,
+    element.id
+  );
+
+  const formulaIsSelected = useIsFormulaSelected(element.id);
 
   const {
     readOnly,
@@ -72,6 +85,14 @@ export const TableHeaderCell: PlateComponent = ({
           dropDirection={dropDirection}
           dropdownNames={dropDownNames}
           key={element.id}
+          error={
+            errorResult &&
+            !formulaIsSelected && (
+              <CodeLine variant="table" result={errorResult} element={element}>
+                {' '}
+              </CodeLine>
+            )
+          }
         >
           {children}
         </TableColumnHeader>

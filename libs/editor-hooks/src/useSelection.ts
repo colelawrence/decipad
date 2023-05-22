@@ -3,12 +3,12 @@ import { useSelected } from 'slate-react';
 import { useCallback } from 'react';
 import { useEditorChange } from './useEditorChange';
 
-export const useSelection = (): Selection => {
+export const useSelection = (outside: boolean = false): Selection => {
   const isSelected = useSelected();
   return useEditorChange(
     useCallback(
-      (editor) => (isSelected ? editor.selection : null),
-      [isSelected]
+      (editor) => (isSelected || outside ? editor.selection : null),
+      [isSelected, outside]
     )
   );
 };

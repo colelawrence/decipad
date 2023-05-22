@@ -4,7 +4,6 @@ import {
   Computer,
   Program,
   AST,
-  decilang,
   statementToIdentifiedBlock,
 } from '@decipad/computer';
 import { assertElementType } from '@decipad/editor-utils';
@@ -24,11 +23,12 @@ export const Table: InteractiveLanguageElement = {
 
       const [caption, headerRow, ...dataRows] = table.children;
       const tableName = getNodeString(caption.children[0]);
+      const rowCount = dataRows.length;
 
-      const tableItself = statementToIdentifiedBlock(
-        table.id,
-        decilang`${{ name: tableName }} = {}`
-      );
+      const tableItself = statementToIdentifiedBlock(table.id, {
+        type: 'table',
+        args: [{ type: 'tabledef', args: [tableName, rowCount] }],
+      } as AST.Table);
 
       const columnAssigns: Program = [];
 

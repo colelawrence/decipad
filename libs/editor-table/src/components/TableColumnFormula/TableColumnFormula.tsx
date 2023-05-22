@@ -1,4 +1,4 @@
-import { IdentifiedError, IdentifiedResult, Result } from '@decipad/computer';
+import { selectErrorFromResult } from '@decipad/computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   PlateComponent,
@@ -17,7 +17,7 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
   const header = useTableColumnHeaderOfTableAbove(element, element.columnId);
   const errorResult = useComputer().getBlockIdResult$.useWithSelectorDebounced(
     errorDebounceMs,
-    selectErrors,
+    selectErrorFromResult,
     element.columnId
   );
 
@@ -34,35 +34,4 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
       {children}
     </CodeLine>
   );
-};
-
-const errorMessage = (message?: string): string => {
-  if (message === 'No solutions') {
-    return 'Syntax error';
-  }
-  return message ?? 'Unknown error';
-};
-
-const selectErrors = (
-  blockResult?: IdentifiedResult | IdentifiedError
-): Result.Result | undefined => {
-  if (blockResult?.type === 'identified-error') {
-    return {
-      type: {
-        kind: 'type-error',
-        errorCause: {
-          errType: 'free-form',
-          message: errorMessage(blockResult.error?.message),
-        },
-      },
-      value: Result.Unknown,
-    };
-  }
-  if (
-    blockResult?.type === 'computer-result' &&
-    blockResult?.result?.type.kind === 'type-error'
-  ) {
-    return blockResult.result;
-  }
-  return undefined;
 };

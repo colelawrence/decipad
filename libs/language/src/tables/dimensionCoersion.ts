@@ -64,9 +64,12 @@ const validateLength = async <T extends ColumnLikeValue>(
   value: T,
   wanted: number | undefined
 ): Promise<T> => {
-  if (wanted != null && wanted !== (await value.rowCount())) {
+  const actual = await value.rowCount();
+  if (wanted != null && wanted !== actual) {
     // UI tables will never place us in this situation
-    throw new RuntimeError('Inconsistent table column sizes');
+    throw new RuntimeError(
+      `Inconsistent table column sizes: expected ${wanted} and got ${actual}`
+    );
   }
   return value;
 };

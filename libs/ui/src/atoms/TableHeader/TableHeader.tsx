@@ -2,7 +2,7 @@ import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { FC, forwardRef, useContext } from 'react';
+import { FC, ReactNode, forwardRef, useContext } from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
@@ -159,6 +159,7 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   // drop
   dropTarget?: ConnectDropTarget;
   dropDirection?: 'left' | 'right';
+  error?: ReactNode;
 }
 
 export const TableHeader = ({
@@ -175,6 +176,7 @@ export const TableHeader = ({
   dropTarget,
   dropDirection,
   onSelectColumn,
+  error,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
 
@@ -216,8 +218,8 @@ export const TableHeader = ({
         <div css={[childrenWrapperStyles]} spellCheck={false}>
           {children}
         </div>
-
         {menu}
+        {error}
       </div>
 
       {isEditable && dropDirection === 'right' && (

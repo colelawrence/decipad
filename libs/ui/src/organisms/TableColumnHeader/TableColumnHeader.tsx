@@ -5,6 +5,7 @@ import {
   ElementType,
   FC,
   PropsWithChildren,
+  ReactNode,
   useState,
 } from 'react';
 import { TableColumnMenu } from '..';
@@ -46,6 +47,7 @@ type TableColumnHeaderProps = PropsWithChildren<
       readOnly?: boolean;
       isForImportedColumn?: boolean;
       attributes?: ElementAttributes;
+      error?: ReactNode;
     }
 >;
 
@@ -59,6 +61,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   isForImportedColumn = false,
   children,
   dropdownNames = [],
+  error,
   ...props
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -91,6 +94,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
       }
       highlight={isMenuOpen}
       type={type}
+      error={error}
     >
       {children}
     </TableHeader>

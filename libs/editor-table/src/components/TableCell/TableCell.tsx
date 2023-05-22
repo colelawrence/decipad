@@ -39,9 +39,6 @@ export const TableCell: PlateComponent = ({
   } = useTableCell(element);
 
   if (cellType?.kind === 'table-formula') {
-    if (!formulaResult) {
-      return <td></td>;
-    }
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
     // an uncaught exception in slate-react.
@@ -49,8 +46,10 @@ export const TableCell: PlateComponent = ({
     // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
     return (
       <FormulaTableData
-        result={<CodeResult {...formulaResult} element={element} />}
-        resultType={formulaResult.type.kind}
+        result={
+          formulaResult && <CodeResult {...formulaResult} element={element} />
+        }
+        resultType={formulaResult && formulaResult.type.kind}
         {...attributes}
         selected={selected}
       >

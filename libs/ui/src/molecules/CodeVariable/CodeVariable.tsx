@@ -33,7 +33,7 @@ const selectedStyles = css({
 });
 
 interface CodeVariableProps {
-  readonly children: ReactNode;
+  readonly children?: ReactNode;
   readonly onClick?: () => void;
   readonly provideVariableDefLink?: boolean;
   readonly type?: TableCellType;

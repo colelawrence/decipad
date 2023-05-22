@@ -901,18 +901,6 @@ it('creates caption formulas when missing', () => {
             "children": Array [
               Object {
                 "cellType": Object {
-                  "kind": "string",
-                },
-                "children": Array [
-                  Object {
-                    "text": "Column1",
-                  },
-                ],
-                "id": "id-0",
-                "type": "th",
-              },
-              Object {
-                "cellType": Object {
                   "kind": "table-formula",
                 },
                 "children": Array [
@@ -934,15 +922,6 @@ it('creates caption formulas when missing', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
-                "type": "td",
-              },
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "",
-                  },
-                ],
                 "type": "td",
               },
             ],
@@ -950,15 +929,6 @@ it('creates caption formulas when missing', () => {
           },
           Object {
             "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "",
-                  },
-                ],
-                "id": "id-0",
-                "type": "td",
-              },
               Object {
                 "children": Array [
                   Object {

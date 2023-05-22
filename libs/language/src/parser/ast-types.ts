@@ -26,7 +26,7 @@ export interface Def extends BasicNode {
 
 export interface TableDef extends BasicNode {
   type: 'tabledef';
-  args: [varName: string];
+  args: [varName: string, rowCount?: number];
 }
 
 /** The table part of a table column definition */

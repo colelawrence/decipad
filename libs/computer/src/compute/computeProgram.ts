@@ -10,6 +10,7 @@ import {
   Value,
   Result,
   Type,
+  buildType,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
@@ -40,16 +41,39 @@ const computeStatement = async (
   const statement = getStatement(program, blockId);
 
   realm.inferContext.statementId = getExprRef(blockId);
-  const [valueType, usedNames] = await inferWhileRetrievingNames(
+  const [_valueType, usedNames] = await inferWhileRetrievingNames(
     realm.inferContext,
     statement
   );
+  const valueType = _valueType;
 
   if (valueType.pending) {
     value = Result.UnknownValue;
   } else if (valueType.errorCause == null || valueType.functionness) {
     realm.interpreterRealm.statementId = getExprRef(blockId);
-    value = await evaluateStatement(realm.interpreterRealm, statement);
+    try {
+      value = await evaluateStatement(realm.interpreterRealm, statement);
+    } catch (err) {
+      // early return with error
+      return [
+        {
+          type: 'computer-result',
+          id: blockId,
+          epoch: realm.epoch,
+          result: serializeResult(
+            buildType.impossible((err as Error).message),
+            Result.Unknown
+          ),
+          visibleVariables: getVisibleVariables(
+            program,
+            blockId,
+            realm.inferContext
+          ),
+          usedNames,
+        },
+        undefined,
+      ];
+    }
   }
 
   const data = await value?.getData();
@@ -67,7 +91,7 @@ const computeStatement = async (
     id: blockId,
     epoch: realm.epoch,
     get result() {
-      if (statement.type === 'table') {
+      if (!valueType.errorCause && statement.type === 'table') {
         return identifiedResultForTable(realm, variableName, statement);
       }
       return serializeResult(valueType, data);

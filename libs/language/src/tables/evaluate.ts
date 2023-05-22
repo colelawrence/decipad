@@ -9,9 +9,9 @@ import {
   isExpression,
   getInstanceof,
 } from '../utils';
-import { Realm, evaluate } from '../interpreter';
-import { coerceTableColumnIndices } from './dimensionCoersion';
+import { Realm, RuntimeError, evaluate } from '../interpreter';
 import { shouldEvaluate } from './shouldEvaluate';
+import { coerceTableColumnIndices } from './dimensionCoersion';
 import { sortValue } from '../interpreter/sortValue';
 
 const isRecursiveReference = (expr: AST.Expression) =>
@@ -111,10 +111,17 @@ export const evaluateTable = async (
 
   realm.stack.createNamespace(tableName, 'function');
 
-  let tableLength: number | undefined;
+  const tableDef = table.args[0];
+  let tableLength: number | undefined = tableDef.args[1];
   return realm.withPush(async () => {
     const addColumn = async (name: string, value: ColumnLikeValue) => {
-      tableLength ??= await value.rowCount();
+      const valueCount = await value.rowCount();
+      if (tableLength != null && valueCount !== tableLength) {
+        throw new RuntimeError(
+          `Error evaluating table column: expected length to be ${tableLength}`
+        );
+      }
+      tableLength ??= valueCount;
 
       tableColumns.set(name, value);
       realm.stack.setNamespaced(

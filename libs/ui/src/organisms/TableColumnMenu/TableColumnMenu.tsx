@@ -184,7 +184,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
               ))}
             </MenuList>
 
-            {!isForImportedColumn && !isFirst && (
+            {!isForImportedColumn && (
               <MenuItem
                 key="table-formula"
                 icon={<Formula />}

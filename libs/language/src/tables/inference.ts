@@ -14,7 +14,8 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
 
-  const tableName = getIdentifierString(table.args[0]);
+  const tableDef = table.args[0];
+  const tableName = getIdentifierString(tableDef);
   if (ctx.stack.has(tableName, 'function')) {
     return t.impossible(InferError.duplicatedName(tableName));
   }
@@ -38,7 +39,9 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
     return sortType(getDefined(ctx.stack.get(tableName, 'function')));
   });
 
-  return tableType;
+  return produce(tableType, (type) => {
+    [, type.rowCount] = tableDef.args;
+  });
 };
 
 export async function inferTableColumn(

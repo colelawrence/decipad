@@ -24,9 +24,7 @@ export const createCellFormulaShortcutPlugin = createOnKeyDownPluginFactory({
     const element: MyElement = node;
     const columnIndex = last(path);
 
-    // can't have formulas on first column
-    if (columnIndex == null || columnIndex === 0) return false;
-    if (element.type !== ELEMENT_TD) return false;
+    if (columnIndex == null || element.type !== ELEMENT_TD) return false;
 
     const content = Node.string(element).trim();
 

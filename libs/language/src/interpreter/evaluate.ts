@@ -263,8 +263,7 @@ export async function evaluateStatement(
   realm: Realm,
   statement: AST.Statement
 ) {
-  const value = await evaluate(realm, statement);
-  return value;
+  return evaluate(realm, statement);
 }
 
 export async function evaluateBlock(

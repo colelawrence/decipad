@@ -6,13 +6,12 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
-import { useNodePath } from '@decipad/editor-hooks';
+import { useNodePath, useEditorChange } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
 import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
 import { Range } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { useEditorChange } from '@decipad/editor-hooks';
 import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';

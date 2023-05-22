@@ -57,6 +57,7 @@ export class Type {
   // Table
   columnTypes: Type[] | null = null;
   columnNames: string[] | null = null;
+  rowCount?: number;
 
   rowIndexName: string | null = null;
   rowCellTypes: Type[] | null = null;
