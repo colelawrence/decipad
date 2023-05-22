@@ -24,9 +24,9 @@ import {
   Value,
   NonColumn,
   isColumnLike,
-  getColumnLike,
   ColumnLikeValue,
   ValueGeneratorFunction,
+  getColumnLike,
 } from './types';
 import { columnValueToResultValue } from './columnValueToResultValue';
 import { columnValueToValueGeneratorFunction } from './columnValueToValueGeneratorFunction';
@@ -420,7 +420,7 @@ export class Table implements Value {
 
   static fromNamedColumns(columns: Value[], columnNames: string[]) {
     return new Table(
-      columns.map((v) => getColumnLike(v)),
+      columns.filter(Boolean).map((c) => getColumnLike(c)),
       columnNames
     );
   }
