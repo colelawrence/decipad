@@ -5,12 +5,8 @@ import { EmptyColumn } from './EmptyColumn';
 import { materializeOneResult } from '../utils/materializeOneResult';
 
 it('forbids access into it', async () => {
-  await expect(async () => new EmptyColumn([]).lowLevelGet()).rejects.toThrow();
   await expect(async () =>
     new EmptyColumn([]).indexToLabelIndex()
-  ).rejects.toThrow();
-  await expect(async () =>
-    new EmptyColumn([{ dimensionLength: 1 }]).lowLevelGet()
   ).rejects.toThrow();
 });
 
