@@ -24,10 +24,10 @@ import {
   ParagraphFormulaEditor,
   VoidBlock,
 } from '@decipad/ui';
-import { getDefined, dequal } from '@decipad/utils';
+import { getDefined } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { findNodePath, getNodeString, insertText } from '@udecode/plate';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Element } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { useEditorChange } from '@decipad/editor-hooks';
@@ -47,31 +47,19 @@ export const MagicNumber: PlateComponent = ({
   const blockId = useMagicNumberId(text);
   const shadow = useShadowCodeLine(blockId);
 
-  const [result, setResult] = useState(
-    computer.getBlockIdResult$.get(blockId)?.result
-  );
-  const contextResult = useResult(blockId)?.result;
-
-  useEffect(() => {
-    if (
-      contextResult &&
-      contextResult.type.kind !== 'type-error' &&
-      !dequal(result, contextResult)
-    ) {
-      setResult(contextResult);
-    }
-  }, [contextResult, result]);
+  const result = useResult(blockId)?.result;
 
   const editor = useTEditorRef();
 
   const [inlineExpEditorVisible, setInlineExpEditorVisible] = useState(false);
   const [magicNumberInput, setMagicNumberInput] = useState(exp);
 
-  const loadingState =
-    result?.type?.kind === 'type-error' ||
-    (result?.type?.kind === 'number' && result?.type?.unit?.[0].unit === exp);
+  const { editSource, isEditing } = shadow;
 
-  const { editSource } = shadow;
+  const isLoading = !result || result?.type.kind === 'pending';
+  const hasError = result?.type.kind === 'type-error';
+  const userIsEditing = inlineExpEditorVisible || isEditing;
+  const loadingState = isLoading || (hasError && userIsEditing);
 
   const sourceId = computer.getVarBlockId$.use(exp);
 

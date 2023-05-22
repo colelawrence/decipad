@@ -19,8 +19,9 @@ export const ParagraphFormulaEditor = ({
 }: ParagraphFormulaEditorProps) => {
   return (
     <>
-      <div css={pParaEditStyles} data-testid={'inline-formula-editor'}>
+      <div css={pParaEditStyles}>
         <span
+          data-testid="inline-formula-editor"
           css={[
             pFormulaEditStyles,
             disabled && {

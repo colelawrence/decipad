@@ -1,4 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
+import waitForExpect from 'wait-for-expect';
 import { getResult } from '../utils/page/Block';
 import {
   goToPlayground,
@@ -51,12 +52,19 @@ test.describe('Formula highlighting', () => {
   test('editable when TAB pressed', async () => {
     await keyPress(page, 'Tab');
     // Wait for line to be floaty before we start editing
-    await page.waitForSelector('[data-testid="number-result:3"]');
+    const editor = await page.waitForSelector(
+      '[data-testid="inline-formula-editor"]'
+    );
+    await waitForExpect(async () =>
+      expect(await editor.textContent()).toBe('3')
+    );
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
-    const potentialFormula = await getMagicNumberContent(page);
-    expect(potentialFormula).toEqual('4');
+    await waitForExpect(async () => {
+      const potentialFormula = await getMagicNumberContent(page);
+      expect(potentialFormula).toEqual('4');
+    });
   });
 
   test('you can continue typing after pressing ENTER', async () => {
