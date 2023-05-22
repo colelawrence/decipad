@@ -69,6 +69,10 @@ const invitationButtonContentStyles = css({
 
 const inputContainerStyles = css({
   position: 'relative',
+
+  input: {
+    paddingRight: '112px',
+  },
 });
 
 const inputAccessPickerStyles = css({

@@ -233,6 +233,10 @@ const ellipsisIconStyles = css({
 const inputContainerStyles = css({
   position: 'relative',
   flexGrow: 1,
+
+  input: {
+    paddingRight: '112px',
+  },
 });
 
 const inputAccessPickerStyles = css({
