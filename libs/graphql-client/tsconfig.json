@@ -4,5 +4,6 @@
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "react-jsx"
   },
+  "references": [{ "path": "../toast" }],
   "include": ["src", "src/**/*.json"]
 }

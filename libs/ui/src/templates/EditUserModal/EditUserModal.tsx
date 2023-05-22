@@ -1,4 +1,3 @@
-import { useSafeState } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { create } from 'zustand';
 import {
@@ -10,21 +9,12 @@ import { ClosableModal } from '../../organisms';
 import { cssVar, p13Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 import { Button } from '../../atoms';
-import { ColorThemeSwitch } from '../../molecules/ColorThemeSwitch/ColorThemeSwitch';
+import { ColorThemeSwitch } from '../../molecules';
 import {
   AccountSettingsForm,
   serializeAccountSettingsForm,
 } from '../../molecules/AccountSettingsForm/AccountSettingsForm';
 import { Link } from '../../atoms/Link/Link';
-
-type EditUserModalProps = {
-  readonly name: string;
-  readonly onChangeName: (newName: string) => Promise<void>;
-  readonly username?: string;
-  readonly onChangeUsername?: (newUsername: string) => Promise<void>;
-  readonly description?: string;
-  readonly onChangeDescription?: (newDescription: string) => Promise<void>;
-};
 
 export const useEditUserModalStore = create<{
   isOpened: boolean;
@@ -36,25 +26,14 @@ export const useEditUserModalStore = create<{
   close: () => set({ isOpened: false }),
 }));
 
-const emptyPromise = Promise.resolve;
-
-export const EditUserModal = ({
-  name,
-  username,
-  description,
-  onChangeName = emptyPromise,
-  onChangeUsername = emptyPromise,
-  onChangeDescription = emptyPromise,
-
-  ...props
-}: EditUserModalProps): ReturnType<React.FC> => {
-  const [isSubmitting, setIsSubmitting] = useSafeState(false);
-
+export const EditUserModal: React.FC = () => {
   const isOpened = useEditUserModalStore((state) => state.isOpened);
   const closeModal = useEditUserModalStore((state) => state.close);
 
-  const { currentUser } = useAccountSettingsState();
   const { signOutCallback } = useAuthenticationState();
+  const { currentUser, setName, setUsername, isSubmitting } =
+    useAccountSettingsState();
+  const { name, username } = currentUser;
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
@@ -62,21 +41,17 @@ export const EditUserModal = ({
       const form = event.target as HTMLFormElement;
       const data = serializeAccountSettingsForm(form);
 
-      if (currentUser.name !== data.name) {
-        setIsSubmitting(true);
-        await onChangeName(data.name);
-        setIsSubmitting(false);
+      if (name !== data.name) {
+        await setName(data.name);
       }
 
-      if (currentUser.username !== data.username) {
-        setIsSubmitting(true);
-        await onChangeUsername(data.username);
-        setIsSubmitting(false);
+      if (username !== data.username) {
+        await setUsername(data.username);
       }
 
       closeModal();
     },
-    [currentUser, setIsSubmitting, onChangeUsername, onChangeName, closeModal]
+    [name, username, setUsername, setName, closeModal]
   );
 
   if (!isOpened) {
@@ -86,7 +61,6 @@ export const EditUserModal = ({
   return (
     <ClosableModal
       Heading="h2"
-      {...props}
       title="Account settings"
       closeAction={closeModal}
     >
@@ -115,12 +89,7 @@ export const EditUserModal = ({
         <div>
           <h3 css={inputLabel}>Color theme</h3>
 
-          <p
-            css={{
-              padding: '8px',
-              borderRadius: '4px',
-            }}
-          >
+          <p css={colorSwitchContainerStyle}>
             <ColorThemeSwitch />
           </p>
         </div>
@@ -153,6 +122,11 @@ export const EditUserModal = ({
     </ClosableModal>
   );
 };
+
+const colorSwitchContainerStyle = css({
+  padding: '8px',
+  borderRadius: '4px',
+});
 
 const createWorkspaceButtonStyle = css({
   display: 'flex',

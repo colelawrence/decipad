@@ -45,7 +45,6 @@ import {
   useImportNotebookMutation,
   useMoveNotebookMutation,
   useRenameWorkspaceMutation,
-  useSetUsernameMutation,
   useShareWorkspaceWithEmailMutation,
   useUnarchiveNotebookMutation,
   useUnshareWorkspaceWithUserMutation,
@@ -53,7 +52,6 @@ import {
   useUpdateNotebookStatusMutation,
   useUpdateSectionAddNotebookMutation,
   useUpdateSectionMutation,
-  useUpdateUserMutation,
   useUserQuery,
 } from '@decipad/graphql-client';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
@@ -125,9 +123,6 @@ const Workspace: FC = () => {
 
   const toast = useToast();
 
-  const [name, setName] = useState(user?.self?.name || '');
-  const [username, setUsername] = useState(user?.self?.username || '');
-  const [description, setDescription] = useState(user?.self?.description || '');
   const [result, refetch] = useGetWorkspacesQuery({
     requestPolicy: 'network-only',
   });
@@ -170,14 +165,6 @@ const Workspace: FC = () => {
   );
   const changeNotebookStatus = useMutationResultHandler(
     useUpdateNotebookStatusMutation()[1]
-  );
-  const updateUser = useMutationResultHandler(
-    useUpdateUserMutation()[1],
-    'Failed to save user'
-  );
-  const setUsernameMutation = useMutationResultHandler(
-    useSetUsernameMutation()[1],
-    'Could not change your username'
   );
   const unarchiveNotebook = useMutationResultHandler(
     useUnarchiveNotebookMutation()[1]
@@ -650,53 +637,7 @@ const Workspace: FC = () => {
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
       <LazyRoute>
-        <EditUserModal
-          name={name}
-          username={username}
-          description={description}
-          onChangeName={async (newName) => {
-            setName(newName);
-
-            try {
-              await updateUser({
-                props: {
-                  name: newName,
-                },
-              });
-
-              toast(`Your name changed to ${newName}`, 'success');
-            } catch (err) {
-              console.error('Failed to update user. Error:', err);
-              toast('Could not change your name', 'error');
-            }
-          }}
-          onChangeUsername={async (newUsername) => {
-            const data = await setUsernameMutation({
-              props: {
-                username: newUsername,
-              },
-            });
-            if (data) {
-              const { setUsername: usenameChangeSuccessful } = data;
-              if (usenameChangeSuccessful) {
-                toast(`You are now ${newUsername}`, 'success');
-                setUsername(newUsername);
-              } else {
-                toast(`Username ${newUsername} is already taken`, 'error');
-              }
-            }
-          }}
-          onChangeDescription={async (newDescription) => {
-            const data = await updateUser({
-              props: {
-                description: newDescription,
-              },
-            });
-            if (data) {
-              setDescription(newDescription);
-            }
-          }}
-        />
+        <EditUserModal />
       </LazyRoute>
     </>
   );
