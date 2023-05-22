@@ -4,9 +4,7 @@ import { useDelayedValue } from '@decipad/react-utils';
 import { cssVar, p14Medium } from '../../primitives';
 import { TableFormulaCell } from '../../atoms';
 
-const tdLineStyles = css(p14Medium, {
-  marginLeft: '12px',
-});
+const tdLineStyles = css(p14Medium);
 
 const selectedStyles = css({
   backgroundColor: cssVar('selectionColor'),

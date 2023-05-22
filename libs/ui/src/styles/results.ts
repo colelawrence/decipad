@@ -1,4 +1,4 @@
-import { CSSObject } from '@emotion/react';
+import { CSSObject, css } from '@emotion/react';
 import { cssVar } from '../primitives';
 
 export const resultBubbleStyles: CSSObject = {
@@ -13,3 +13,11 @@ export const resultBubbleStyles: CSSObject = {
     filter: 'unset',
   },
 };
+
+export const characterLimitStyles = css({
+  display: 'block',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  fontFeatureSettings: '"tnum"',
+});

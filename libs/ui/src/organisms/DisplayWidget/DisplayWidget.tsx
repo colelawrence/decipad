@@ -4,6 +4,7 @@ import {
   AvailableSwatchColor,
   CodeResult,
   IconPopover,
+  Tooltip,
   UserIconKey,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
@@ -58,6 +59,13 @@ const iconWrapperStyles = css({
   mixBlendMode: 'luminosity',
 });
 
+const charLimit = css({
+  maxWidth: '200px',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+});
+
 interface DisplayWidgetDropdownProps {
   readonly openMenu: boolean;
   readonly onChangeOpen: (arg0: boolean) => void;
@@ -82,6 +90,18 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
 }) => {
   const Icon = icons[icon];
 
+  const fullVarName = (
+    <p
+      css={[
+        p14Regular,
+        charLimit,
+        !lineResult?.result && { color: cssVar('weakerTextColor') },
+      ]}
+    >
+      {result ?? 'Name'}
+    </p>
+  );
+
   return (
     <>
       <div css={wrapperStyles}>
@@ -101,9 +121,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           />
         )}
         <div css={textWrapperStyles}>
-          <span css={[p14Regular, { color: cssVar('weakTextColor') }]}>
-            {result ?? 'Name'}
-          </span>
+          <Tooltip trigger={fullVarName}>{result ?? 'Name'}</Tooltip>
         </div>
       </div>
       {children}
@@ -112,12 +130,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         onClick={() => !readOnly && onChangeOpen(!openMenu)}
         data-testid="result-widget"
       >
-        <span
-          css={[
-            p24Medium,
-            !lineResult?.result && { color: cssVar('weakerTextColor') },
-          ]}
-        >
+        <span css={[p24Medium, { color: cssVar('strongTextColor') }]}>
           {lineResult?.result?.type.kind !== 'type-error' &&
           lineResult?.result ? (
             <CodeResult {...lineResult.result} />

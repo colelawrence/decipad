@@ -9,11 +9,13 @@ const lineNumberWidth = '22px';
 
 const tdBaseStyles = css(p14Medium, {
   alignItems: 'center',
+  justifyContent: 'center',
   backgroundColor: cssVar('tintedBackgroundColor'),
   minHeight: table.tdMinHeight,
   verticalAlign: 'middle',
   cursor: 'default',
   caretColor: 'transparent',
+  padding: '0 8px',
 
   // Show line numbers on the first cell of each row.
   position: 'relative',

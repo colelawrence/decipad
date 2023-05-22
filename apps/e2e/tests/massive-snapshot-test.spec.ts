@@ -104,7 +104,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
       24
     );
-    await expect(page.locator('[data-slate-editor] p')).toHaveCount(7);
+    await expect(page.locator('[data-slate-editor] p')).toHaveCount(9);
   });
 
   // TODO: ENG-1891 fix this test

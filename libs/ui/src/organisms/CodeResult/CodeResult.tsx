@@ -18,6 +18,7 @@ import {
 } from '../../atoms';
 import { InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
+import TextResult from '../../atoms/TextResult/TextResult';
 
 // Simple result components
 
@@ -87,6 +88,10 @@ const getResultMatchers = (): ResultMatcher[] => [
     match: ({ type }) => type.kind === 'range',
   },
   {
+    component: TextResult,
+    match: ({ type }) => type.kind === 'string',
+  },
+  {
     component: InlineCodeError,
     match: ({ type, variant }) =>
       type.kind === 'type-error' && variant === 'inline',
@@ -117,9 +122,14 @@ function getResultComponent<T extends SerializedTypeKind>(
 export function CodeResult<T extends SerializedTypeKind>(
   props: CodeResultProps<T>
 ): ReturnType<React.FC> {
-  const { type, value, variant = 'block', element } = props;
-  const ResultComponent = getResultComponent({ value, variant, type, element });
-
+  const { type, value, variant = 'block', element, tooltip } = props;
+  const ResultComponent = getResultComponent({
+    value,
+    variant,
+    type,
+    element,
+    tooltip,
+  });
   // Does not present result when result is not present, except for type errors.
   if (
     !ResultComponent ||
