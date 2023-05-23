@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import { singular } from 'pluralize';
 import { Type, Unit } from '../type';
 

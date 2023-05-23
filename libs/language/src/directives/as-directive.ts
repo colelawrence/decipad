@@ -1,6 +1,5 @@
 import DeciNumber, { N } from '@decipad/number';
-import produce from 'immer';
-import { getDefined } from '@decipad/utils';
+import { produce, getDefined } from '@decipad/utils';
 import { evaluate, RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
 import { NumberValue, fromJS, Value } from '../value';

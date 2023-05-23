@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import { AST, Context, inferExpression } from '..';
 import { automapTypes } from '../dimtools';
 import { evaluate, Realm } from '../interpreter';

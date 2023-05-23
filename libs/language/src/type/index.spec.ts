@@ -1,5 +1,4 @@
-import produce from 'immer';
-
+import { produce } from '@decipad/utils';
 import { N } from '@decipad/number';
 import { l, u, U } from '../utils';
 import { InferError } from './InferError';

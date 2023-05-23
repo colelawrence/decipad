@@ -1,5 +1,6 @@
 import { dequal, getDefined } from '@decipad/utils';
 import { ONE } from '@decipad/number';
+import { omit } from 'lodash';
 import {
   AST,
   inferBlock,
@@ -212,8 +213,12 @@ describe('error source tracking', () => {
     await inferBlock(program, ctx);
 
     // Both errors came from the same place
-    expect(badStatement.inferredType?.node).toEqual(badExp);
-    expect(badStatement2.inferredType?.node).toEqual(badExp);
+    expect(omit(badStatement.inferredType?.node, 'inferredType')).toEqual(
+      omit(badExp, 'inferredType')
+    );
+    expect(omit(badStatement2.inferredType?.node, 'inferredType')).toEqual(
+      omit(badExp, 'inferredType')
+    );
   });
 });
 
@@ -516,7 +521,7 @@ describe('inferProgram', () => {
         A: t.number(),
         Error: expect.objectContaining({
           errorCause: expect.anything(),
-          node: errorNode,
+          node: omit(errorNode, 'inferredType'),
         }),
         C: t.number(),
       })

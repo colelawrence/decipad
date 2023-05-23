@@ -9,7 +9,7 @@ import {
   Unit,
   unitIsSymbol,
 } from '@decipad/language';
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import type { DeciNumberPart } from './formatNumber';
 
 const numberToSubOrSuperscript: Record<string, string[]> = {

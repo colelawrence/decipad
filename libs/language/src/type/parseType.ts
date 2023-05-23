@@ -1,6 +1,5 @@
-import produce from 'immer';
+import { produce, getDefined, thro } from '@decipad/utils';
 import moo from 'moo';
-import { getDefined, thro } from '@decipad/utils';
 
 import { buildType as t, Type } from '.';
 import type { FunctionSignature } from './narrowing';

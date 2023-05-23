@@ -6,8 +6,7 @@ import {
   Result,
   serializeType,
 } from '@decipad/language';
-import { AnyMapping, timeout } from '@decipad/utils';
-import produce, { setAutoFreeze } from 'immer';
+import { AnyMapping, timeout, produce } from '@decipad/utils';
 import { filter, firstValueFrom } from 'rxjs';
 import { all } from '@decipad/generator-utils';
 import { getExprRef } from '../exprRefs';
@@ -21,8 +20,6 @@ import { ComputeRequestWithExternalData } from '../types';
 import { Computer } from './Computer';
 import { ColumnDesc } from './types';
 import { getResultGenerator } from '../utils';
-
-setAutoFreeze(false);
 
 const testProgram = getIdentifiedBlocks(
   'A = 0',

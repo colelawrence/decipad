@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { immerable } from 'immer';
 import type { Time, Unit } from '..';
 import type { Type } from './Type';

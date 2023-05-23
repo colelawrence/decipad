@@ -67,6 +67,10 @@ module.exports = {
             name: 'fast-deep-equal',
             message: 'Use {deepequal} from @decipad/utils instead of dequal',
           },
+          {
+            name: 'immer',
+            message: 'Use {produce} from @decipad/utils instead of immer',
+          },
         ],
       },
     ],

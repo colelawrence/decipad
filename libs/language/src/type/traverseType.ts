@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import type { SerializedType } from './SerializedType';
 
 export function traverseType(

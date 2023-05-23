@@ -1,6 +1,3 @@
-import { enableMapSet } from 'immer';
-
-enableMapSet();
 export { createLazyOperation } from './LazyOperation';
 export { EmptyColumn } from './EmptyColumn';
 export { createSwappedDimensions } from './SwappedDimensions';

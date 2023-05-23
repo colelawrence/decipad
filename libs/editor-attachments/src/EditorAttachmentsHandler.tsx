@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
-import { produce } from 'immer';
+import { produce } from '@decipad/utils';
 import axios, { AxiosProgressEvent } from 'axios';
 import { useToast } from '@decipad/toast';
 import { UploadProgressModal } from '@decipad/ui';

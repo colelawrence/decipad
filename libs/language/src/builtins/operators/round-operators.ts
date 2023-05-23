@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import DeciNumber, { N, ZERO } from '@decipad/number';
 import { singular } from 'pluralize';
 import { RuntimeError } from '../../interpreter';

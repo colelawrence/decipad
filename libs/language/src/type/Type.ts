@@ -1,5 +1,7 @@
-import { immerable, produce, setAutoFreeze } from 'immer';
-import { PromiseOrType } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { immerable } from 'immer';
+import { PromiseOrType, produce } from '@decipad/utils';
+import { omit } from 'lodash';
 import type { AST, Time } from '..';
 import * as t from './buildType';
 import {
@@ -26,8 +28,6 @@ import { InferError } from './InferError';
 import type { Unit } from './unit-type';
 
 export type PrimitiveTypeName = 'number' | 'string' | 'boolean';
-
-setAutoFreeze(false);
 
 type CombineArg = PromiseOrType<Type> | ((t: Type) => PromiseOrType<Type>);
 
@@ -119,7 +119,9 @@ export class Type {
 
   inNode(node: AST.Node) {
     return produce(this, (newType) => {
-      newType.node = node;
+      // IMPORTANT!: prevent circular structures
+      const sanitizedNode = omit(node, 'inferredType');
+      newType.node = sanitizedNode as AST.Node;
     });
   }
 

@@ -1,10 +1,8 @@
 import { mutateAst, AST, decilang } from '@decipad/language';
-import produce, { setAutoFreeze } from 'immer';
+import { produce } from '@decipad/utils';
 import { Program, ProgramBlock } from '../types';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { getExprRef, isExprRef } from '.';
-
-setAutoFreeze(false);
 
 /** Deal with tech debt: We have places where we refer to whole-columns by writing the column ID.
  * Make sure everyone refers to that by using tableId.ColumnId and then delete this please

@@ -5,14 +5,11 @@ import {
   AST,
   decilang,
 } from '@decipad/language';
-import { memoizePrimitive } from '@decipad/utils';
-import produce, { setAutoFreeze } from 'immer';
+import { memoizePrimitive, produce } from '@decipad/utils';
 import { Program, ProgramBlock } from '../types';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { removeLegacyTableColumnReferences } from './makeNamesFromIdsTechDebt';
 import { assertIsExprRef, getExprRef, isExprRef } from '.';
-
-setAutoFreeze(false);
 
 /**
  * Takes exprRef_xxxx references and replaces them with variable names

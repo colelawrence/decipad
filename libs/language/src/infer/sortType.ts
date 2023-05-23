@@ -1,5 +1,5 @@
 import { unzip, zip } from 'lodash';
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import { Type } from '../type';
 
 export const sortType = (type: Type): Type => {

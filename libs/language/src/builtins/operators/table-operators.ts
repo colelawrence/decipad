@@ -1,5 +1,4 @@
-import { getDefined, dequal } from '@decipad/utils';
-import produce from 'immer';
+import { getDefined, dequal, produce } from '@decipad/utils';
 import { all, findIndex, map } from '@decipad/generator-utils';
 import { sortMap } from '@decipad/column';
 import {

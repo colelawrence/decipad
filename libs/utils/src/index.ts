@@ -15,6 +15,7 @@ export * from './lenient-zip';
 export * from './memoize';
 export * from './memoizePrimitive';
 export * from './noop';
+export * from './produce';
 export * from './PromiseOrType';
 export * from './storage';
 export * from './thro';

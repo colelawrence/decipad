@@ -1,6 +1,5 @@
 import DeciNumber from '@decipad/number';
-import produce from 'immer';
-import { getDefined } from '@decipad/utils';
+import { produce, getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
 import { Unit } from '../type/unit-type';

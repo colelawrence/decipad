@@ -1,4 +1,4 @@
-import { produce } from 'immer';
+import { produce } from '@decipad/utils';
 import type { AST } from '..';
 import type { Type } from '.';
 

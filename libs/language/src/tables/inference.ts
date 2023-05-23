@@ -1,6 +1,4 @@
-import { getDefined } from '@decipad/utils';
-
-import produce from 'immer';
+import { getDefined, produce } from '@decipad/utils';
 import type { AST } from '..';
 import { Type, buildType as t, InferError } from '../type';
 import { getIdentifierString, walkAst } from '../utils';

@@ -8,7 +8,7 @@ import {
   safeNumberForPrecision,
   Unit,
 } from '@decipad/language';
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import pluralize from 'pluralize';
 import {
   formatEdgeCaseNumber,

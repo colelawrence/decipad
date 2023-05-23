@@ -1,5 +1,4 @@
-import { getOnly } from '@decipad/utils';
-import produce from 'immer';
+import { getOnly, produce } from '@decipad/utils';
 import type { AST, Context } from '..';
 import { Type, buildType as t, InferError, typeIsPending } from '../type';
 import { automapTypes, automapTypesForReducer } from '../dimtools';

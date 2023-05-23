@@ -1,5 +1,5 @@
 import { unzip, zip } from 'lodash';
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import { ColumnLikeValue, Table, Value, isTableValue } from '../value';
 import { Type } from '../type';
 

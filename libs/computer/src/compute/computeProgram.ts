@@ -148,6 +148,7 @@ export const computeProgram = async (
 
       resultsToCache.push({ result, value });
     } catch (err) {
+      console.error(err);
       resultsToCache.push({
         result: resultFromError(err as Error, block.id, realm),
       });

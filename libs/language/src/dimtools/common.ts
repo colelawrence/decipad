@@ -1,4 +1,4 @@
-import { produce } from 'immer';
+import { produce } from '@decipad/utils';
 import { DimensionId } from '../lazy';
 import { Type } from '../type';
 

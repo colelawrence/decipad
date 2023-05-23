@@ -1,6 +1,5 @@
 import DeciNumber, { ONE } from '@decipad/number';
-import { produce } from 'immer';
-import { getDefined, identity } from '@decipad/utils';
+import { produce, getDefined, identity } from '@decipad/utils';
 import { UnitOfMeasure, getUnitByName } from '../known-units';
 import { normalizeUnits, Unit } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';

@@ -3,7 +3,7 @@ import {
   inverseExponent,
   serializeType,
 } from '@decipad/language';
-import produce from 'immer';
+import { produce } from '@decipad/utils';
 import { formatType } from './formatType';
 import { formatTypeToBasicString } from './formatTypeBasic';
 import { u, U } from './testUtils';

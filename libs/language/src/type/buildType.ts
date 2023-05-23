@@ -1,12 +1,10 @@
 import { N } from '@decipad/number';
-import { getDefined } from '@decipad/utils';
-import produce, { setAutoFreeze } from 'immer';
+import { getDefined, produce } from '@decipad/utils';
+import { omit } from 'lodash';
 import { InferError, PrimitiveTypeName, Type } from '.';
 import type { AST, Time } from '..';
 import { timeUnitFromUnit } from '../date';
 import { Unit } from './unit-type';
-
-setAutoFreeze(false);
 
 const primitive = (type: PrimitiveTypeName) =>
   produce(new Type(), (t) => {
@@ -150,5 +148,7 @@ export const impossible = (
     }
 
     impossibleType.errorCause = errorCause;
-    impossibleType.node = inNode;
+    // IMPORTANT!: prevent circular structures
+    const sanitized = inNode && omit(inNode, 'inferredType');
+    impossibleType.node = sanitized as AST.Node;
   });

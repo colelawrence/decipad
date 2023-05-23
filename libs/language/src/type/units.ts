@@ -1,6 +1,5 @@
 import DeciNumber, { N, ZERO } from '@decipad/number';
-import { lenientZip } from '@decipad/utils';
-import { produce } from 'immer';
+import { lenientZip, produce } from '@decipad/utils';
 import type { Type } from '..';
 import pluralize from '../langPluralize';
 import {

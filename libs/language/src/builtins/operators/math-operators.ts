@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import produce from 'immer';
 import DeciNumber, { N, ZERO, ONE, TWO } from '@decipad/number';
-import { getDefined } from '@decipad/utils';
+import { getDefined, produce } from '@decipad/utils';
 import { sort } from '@decipad/column';
 import { RuntimeError, Realm } from '../../interpreter';
 import { getInstanceof } from '../../utils';

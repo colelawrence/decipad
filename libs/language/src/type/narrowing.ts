@@ -1,5 +1,4 @@
-import { getDefined, zip } from '@decipad/utils';
-import produce from 'immer';
+import { getDefined, zip, produce } from '@decipad/utils';
 import { deserializeType, SerializedTypes, serializeType, Type } from '.';
 import { equalOrUndefined } from '../utils';
 import { onlyOneIsPercentage } from './percentages';
