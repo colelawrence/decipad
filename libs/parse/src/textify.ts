@@ -10,7 +10,7 @@ const textifyBoolean = (result: Result.Result<'boolean'>): string =>
 const textifyDate = (result: Result.Result<'date'>): string => {
   const res =
     result.value != null
-      ? coerceToDate(new Date(Number(result.value)), result.type.date)
+      ? coerceToDate(result.value, result.type.date)
       : 'date()';
   return res;
 };

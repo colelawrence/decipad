@@ -4,6 +4,7 @@ import DeciNumber, { N } from '@decipad/number';
 import { AST, Unit } from '..';
 import { n, pairwise, getDefined } from '../utils';
 import { DateValue } from '../value';
+import { startOfDate } from '../../../utils/src/date';
 import * as Time from './time-types';
 
 export * from './time-quantities';
@@ -17,12 +18,7 @@ export { Time };
 /**
  * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
-export const toLuxonUTC = async (
-  date: bigint | undefined | number | DateValue | DateTime
-) => {
-  if (date instanceof DateValue) {
-    date = await date.getData();
-  }
+export const toLuxonUTC = (date: bigint | undefined | number | DateTime) => {
   if (typeof date === 'bigint') {
     date = Number(date);
   }
@@ -211,6 +207,9 @@ export const cleanDate = (
   date: bigint | number | undefined,
   specificity: Time.Specificity
 ): bigint | undefined => {
+  if (date == null) {
+    return undefined;
+  }
   const necessarySegments = dateToArray(date).slice(
     0,
     timeUnitToJSTimeIndex[specificity] + 1
@@ -220,9 +219,7 @@ export const cleanDate = (
     // we must treat quarters specially because
     // they must end on the beginning of the first month
     // otherwise, comparisons with roundings will fail.
-    const dateTime = DateTime.fromMillis(Number(date)).toUTC();
-    const startOfQuarter = dateTime.startOf('quarter');
-    return BigInt(startOfQuarter.toMillis());
+    return startOfDate(BigInt(date), specificity);
   }
   return arrayToDate(necessarySegments);
 };

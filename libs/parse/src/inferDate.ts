@@ -1,31 +1,32 @@
-import { format as formatDate, isValid } from 'date-fns';
 import { Time } from '@decipad/computer';
+import { formatDate } from '@decipad/utils';
 import { parseDate } from './parseDate';
 import { CoercibleType, DateGranularity } from './types';
 
+const defaultFormatForSpecificity = (s: Time.Specificity) => {
+  switch (s) {
+    case 'year':
+      return 'yyyy';
+    case 'quarter':
+      return "yyyy'Q'q";
+    case 'month':
+      return 'yyyy-MM';
+    case 'day':
+      return 'yyyy-MM-dd';
+    case 'hour':
+      return 'yyyy-MM-dd HH';
+    case 'minute':
+      return 'yyyy-MM-dd HH:mm';
+    default:
+      return 'yyyy-MM-dd HH:mm:ss';
+  }
+};
+
 export const coerceToDate = (
-  d: Date,
+  d: bigint,
   specificity: Time.Specificity
 ): string => {
-  if (!isValid(d)) {
-    throw new Error('invalid date');
-  }
-  switch (specificity) {
-    case 'year':
-      return `date(${formatDate(d, 'yyyy')})`;
-    case 'quarter':
-      return `date(${formatDate(d, "yyyy'Q'q")})`;
-    case 'month':
-      return `date(${formatDate(d, 'yyyy-MM')})`;
-    case 'day':
-      return `date(${formatDate(d, 'yyyy-MM-dd')})`;
-    case 'hour':
-      return `date(${formatDate(d, 'yyyy-MM-dd HH')})`;
-    case 'minute':
-      return `date(${formatDate(d, 'yyyy-MM-dd HH:mm')})`;
-    default:
-      return `date(${formatDate(d, 'yyyy-MM-dd HH:mm:ss')})`;
-  }
+  return `date(${formatDate(d, defaultFormatForSpecificity(specificity))})`;
 };
 
 export const inferDate = (

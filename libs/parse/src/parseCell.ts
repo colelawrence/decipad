@@ -181,7 +181,7 @@ export const parseCell = memoize(
               ) as AST.Expression;
             }
             case 'date':
-              return dateToAST(cellType, new Date(Number(result.value)));
+              return dateToAST(cellType, result.value as bigint);
 
             case 'boolean':
               return astNode(

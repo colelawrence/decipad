@@ -28,7 +28,7 @@ export const parseSeriesStart = (
       return {
         type,
         granularity: parsedDate.specificity,
-        value: BigInt(parsedDate.date.getTime()),
+        value: parsedDate.date,
       };
     }
     case 'number': {

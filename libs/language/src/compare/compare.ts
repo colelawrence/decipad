@@ -57,8 +57,8 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     }
     return compare(a.toString(), b.toString());
   }
-  if (isDeciNumberInput(a) && isDeciNumberInput(b)) {
-    return N(a).compare(N(b));
+  if (typeof a === 'bigint' && typeof b === 'bigint') {
+    return a - b;
   }
   if (typeof a === 'string' && typeof b === 'string') {
     return a > b ? 1 : a === b ? 0 : -1;
@@ -69,8 +69,8 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   if (typeof a === 'boolean' && typeof b === 'boolean') {
     return Number(a) - Number(b);
   }
-  if (typeof a === 'bigint' && typeof b === 'bigint') {
-    return a - b;
+  if (isDeciNumberInput(a) && isDeciNumberInput(b)) {
+    return N(a).compare(N(b));
   }
   if (a instanceof NumberValue && b instanceof NumberValue) {
     return a.value.compare(b.value);

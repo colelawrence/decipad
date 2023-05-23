@@ -1,8 +1,10 @@
 import type { Time } from '@decipad/computer';
-import { add as addDate, Duration, format as formatDate } from 'date-fns';
+import { Duration } from 'date-fns';
 import { N, ONE } from '@decipad/number';
 import { formatNumber } from '@decipad/format';
 import { SeriesType } from '@decipad/editor-types';
+import { DateTime } from 'luxon';
+import { dateFromMillis, formatDate } from '@decipad/utils';
 import { parseDate } from './parseDate';
 
 const dateGranularityToDateFnsDuration: Record<Time.Specificity, Duration> = {
@@ -30,14 +32,14 @@ export const dateIterator = (
     throw new Error(`Could not parse date ${initialValue}`);
   }
   const { format } = parseResult;
-  let v: Date = parseResult.date;
+  let v: DateTime = dateFromMillis(parseResult.date);
   const g = dateGranularityToDateFnsDuration[granularity];
   return {
     [Symbol.iterator]: () => {
       return {
         next() {
-          v = addDate(v, g);
-          return { value: formatDate(v, format) };
+          v = v.plus(g);
+          return { value: formatDate(BigInt(v.toMillis()), format) };
         },
       };
     },

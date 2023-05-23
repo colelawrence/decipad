@@ -3,25 +3,25 @@ import { DateGranularity } from './types';
 
 describe('dates', () => {
   it.each([
-    ['2020', { kind: 'date', date: 'year' }, '2020-01-01T00:00'],
-    ['22', { kind: 'date', date: 'year' }, '2022-01-01T00:00:00'],
-    ['2020-10', { kind: 'date', date: 'month' }, '2020-10-01T00:00'],
-    ['12/2020', { kind: 'date', date: 'month' }, '2020-12-01T00:00'],
-    ['13/10/2020', { kind: 'date', date: 'day' }, '2020-10-13T00:00'],
-    ['14-10-2020', { kind: 'date', date: 'day' }, '2020-10-14T00:00'],
-    ['2020-10-13', { kind: 'date', date: 'day' }, '2020-10-13T00:00'],
-    ['2020/10/13', { kind: 'date', date: 'day' }, '2020-10-13T00:00'],
-    ['2020/10/13 10:30', { kind: 'date', date: 'minute' }, '2020-10-13T10:30'],
-    ['2020-10-13 1:30', { kind: 'date', date: 'minute' }, '2020-10-13T01:30'],
+    ['2020', { kind: 'date', date: 'year' }, '2020-01-01T00:00Z'],
+    ['22', { kind: 'date', date: 'year' }, '2022-01-01T00:00:00Z'],
+    ['2020-10', { kind: 'date', date: 'month' }, '2020-10-01T00:00Z'],
+    ['12/2020', { kind: 'date', date: 'month' }, '2020-12-01T00:00Z'],
+    ['13/10/2020', { kind: 'date', date: 'day' }, '2020-10-13T00:00Z'],
+    ['14-10-2020', { kind: 'date', date: 'day' }, '2020-10-14T00:00Z'],
+    ['2020-10-13', { kind: 'date', date: 'day' }, '2020-10-13T00:00Z'],
+    ['2020/10/13', { kind: 'date', date: 'day' }, '2020-10-13T00:00Z'],
+    ['2020/10/13 10:30', { kind: 'date', date: 'minute' }, '2020-10-13T10:30Z'],
+    ['2020-10-13 1:30', { kind: 'date', date: 'minute' }, '2020-10-13T01:30Z'],
     [
       '2023-02-01T00:00:00+02:00',
       { kind: 'date', date: 'second' },
-      '2023-01-31T22:00:00.000Z',
+      '2023-01-31T14:00:00.000Z',
     ],
   ])('%s is a good %s', (format, type, result) => {
     const d = parseDate(format, type.date as DateGranularity);
     expect(d).toBeDefined();
-    expect(d?.date).toEqual(new Date(result));
+    expect(d?.date).toEqual(BigInt(new Date(result).getTime()));
   });
 
   it.each([

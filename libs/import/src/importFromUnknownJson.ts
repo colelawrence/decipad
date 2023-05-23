@@ -172,7 +172,7 @@ const internalImportFromUnknownJson = (
         if (date) {
           return {
             type: { ...cohersion },
-            value: BigInt(date.date.getTime()),
+            value: date.date,
           };
         }
       }

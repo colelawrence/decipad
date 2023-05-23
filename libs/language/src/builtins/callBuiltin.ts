@@ -91,8 +91,6 @@ export const callBuiltin = async (
   argTypes: Type[],
   returnType: Type
 ): Promise<Value> => {
-  // console.log(`builtin ${funcName}`);
-
   const op = getDefined(
     getOperatorByName(funcName),
     `panic: builtin not found: ${funcName}`

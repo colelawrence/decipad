@@ -51,7 +51,8 @@ const columnToValue = async function* columnToValue(
         if (!parsed) {
           yield undefined;
         } else {
-          yield cleanDate(BigInt(parsed.date.getTime()), type.date);
+          // eslint-disable-next-line no-await-in-loop
+          yield cleanDate(parsed.date, type.date);
         }
         break;
       }

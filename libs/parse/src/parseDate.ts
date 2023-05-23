@@ -1,5 +1,5 @@
 import { Time } from '@decipad/computer';
-import { parse } from 'date-fns';
+import { parseDate as globalParseDate } from '@decipad/utils';
 import { once } from 'ramda';
 import { DateFormat } from './types';
 
@@ -28,10 +28,6 @@ export const highestTimeSpecificity = (
     }
   }
   return highestG;
-};
-
-const isValidDate = (d: Date | undefined): d is Date => {
-  return d != null && !Number.isNaN(d.valueOf());
 };
 
 const combineFormats = (
@@ -123,7 +119,7 @@ const dateFormatsForSpecificity = (
 interface ParseDateResult {
   format: string;
   specificity: Time.Specificity;
-  date: Date;
+  date: bigint;
 }
 
 export const parseDate = (
@@ -142,12 +138,11 @@ export const parseDate = (
       : specificity
       ? dateFormatsForSpecificity(specificity)
       : dateFormats();
-  const now = new Date();
   for (const spec of Object.keys(formats) as Array<Time.Specificity>) {
     const formatStrings = formats[spec] ?? [];
     for (const format of formatStrings) {
-      const date = parse(value, format, now);
-      if (isValidDate(date)) {
+      const date = globalParseDate(value, format);
+      if (date) {
         return {
           format,
           specificity: spec,
