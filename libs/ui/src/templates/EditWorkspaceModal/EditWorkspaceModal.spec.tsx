@@ -1,7 +1,8 @@
-import { act, render, waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { EditWorkspaceModal } from './EditWorkspaceModal';
+import { renderWithRouter } from '../../test-utils/renderWithRouter';
 
 const props: ComponentProps<typeof EditWorkspaceModal> = {
   name: 'Workspace',
@@ -11,19 +12,19 @@ const props: ComponentProps<typeof EditWorkspaceModal> = {
 };
 
 it('prepopulates the rename field with the old name', () => {
-  const { getByPlaceholderText } = render(
+  const { getByPlaceholderText } = renderWithRouter(
     <EditWorkspaceModal {...props} name="Example Workspace" />
   );
   expect(getByPlaceholderText(/renamed/i)).toHaveValue('Example Workspace');
 });
 
 it('cannot rename to the old name', () => {
-  const { getByText } = render(<EditWorkspaceModal {...props} />);
+  const { getByText } = renderWithRouter(<EditWorkspaceModal {...props} />);
   expect(getByText(/rename/i, { selector: 'button' })).toBeDisabled();
 });
 
 it('cannot rename to an empty name', async () => {
-  const { getByText, getByPlaceholderText } = render(
+  const { getByText, getByPlaceholderText } = renderWithRouter(
     <EditWorkspaceModal {...props} />
   );
   await userEvent.clear(getByPlaceholderText(/renamed/i));
@@ -32,7 +33,7 @@ it('cannot rename to an empty name', async () => {
 
 it('emits a rename event when typing a new workspace name and submitting', async () => {
   const handleRename = jest.fn();
-  const { getByText, getByPlaceholderText } = render(
+  const { getByText, getByPlaceholderText } = renderWithRouter(
     <EditWorkspaceModal {...props} onRename={handleRename} />
   );
 
@@ -46,7 +47,7 @@ it('emits a rename event when typing a new workspace name and submitting', async
 
 describe('with allowDelete', () => {
   it('shows a delete button', () => {
-    const { getByText, queryByText, rerender } = render(
+    const { getByText, queryByText, rerender } = renderWithRouter(
       <EditWorkspaceModal {...props} allowDelete={false} />
     );
     expect(
@@ -58,13 +59,15 @@ describe('with allowDelete', () => {
   });
 
   it('cannot delete without typing the confirmation prompt', () => {
-    const { getByText } = render(<EditWorkspaceModal {...props} allowDelete />);
+    const { getByText } = renderWithRouter(
+      <EditWorkspaceModal {...props} allowDelete />
+    );
     expect(getByText(/delete/i, { selector: 'button' })).toBeDisabled();
   });
 
   it('emits a delete event when typing the workspace name into the confirmation prompt and submitting', async () => {
     const handleDelete = jest.fn();
-    const { getByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = renderWithRouter(
       <EditWorkspaceModal
         {...props}
         name="The Name"
@@ -86,7 +89,7 @@ describe('with allowDelete', () => {
         resolveDeletion = resolve;
       })
     );
-    const { getByText, getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = renderWithRouter(
       <EditWorkspaceModal
         {...props}
         name="The Name"

@@ -1,4 +1,5 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ClosableModalHeader, Modal } from '../../molecules';
 
 type ClosableModalProps = ComponentProps<typeof ClosableModalHeader> &
@@ -6,12 +7,27 @@ type ClosableModalProps = ComponentProps<typeof ClosableModalHeader> &
 
 export const ClosableModal = ({
   children,
+  closeAction,
   ...props
 }: ClosableModalProps): ReturnType<React.FC> => {
+  const navigate = useNavigate();
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsClosing(true);
+    setTimeout(() => {
+      if (typeof closeAction === 'string') {
+        navigate(closeAction);
+      } else {
+        closeAction();
+      }
+    }, 300);
+  }, [closeAction, navigate]);
+
   return (
-    <Modal closeAction={props.closeAction}>
+    <Modal closeAction={handleClose} fadeOut={isClosing}>
       <div css={{ display: 'grid', rowGap: '12px' }}>
-        <ClosableModalHeader {...props} />
+        <ClosableModalHeader {...props} closeAction={handleClose} />
         {children}
       </div>
     </Modal>

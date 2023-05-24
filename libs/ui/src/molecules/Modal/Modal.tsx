@@ -20,6 +20,61 @@ const overlayStyles = css({
   display: 'grid',
 });
 
+const animationsDialog = (fadeOut?: boolean) =>
+  css({
+    '@keyframes fadeInDown': {
+      from: {
+        opacity: 0,
+        transform: 'translate3d(0, -100%, 0)',
+      },
+
+      '50%': {
+        opacity: 1,
+        transform: 'translate3d(0, 0, 0)',
+      },
+    },
+
+    '@keyframes fadeOutUp': {
+      from: {
+        opacity: 1,
+        transform: 'translate3d(0, 0, 0)',
+      },
+      to: {
+        opacity: 0,
+        transform: 'translate3d(0, -100%, 0)',
+      },
+    },
+
+    animationName: fadeOut ? 'fadeOutUp' : 'fadeInDown',
+    animationDuration: '0.3s',
+    animationFillMode: 'both',
+  });
+
+const animationsOverlay = (fadeOut?: boolean) =>
+  css({
+    '@keyframes fadeIn': {
+      from: {
+        opacity: 0,
+      },
+      to: {
+        opacity: 1,
+      },
+    },
+
+    '@keyframes fadeOut': {
+      from: {
+        opacity: 1,
+      },
+      to: {
+        opacity: 0,
+      },
+    },
+
+    animationName: fadeOut ? 'fadeOut' : 'fadeIn',
+    animationDuration: '0.3s',
+    animationFillMode: 'both',
+  });
+
 const dialogStyles = css({
   gridArea: '1 / 1',
   justifySelf: 'center',
@@ -41,18 +96,22 @@ const dialogStyles = css({
 
 type ModalProps = {
   readonly children: ReactNode;
+  readonly fadeOut?: boolean;
 } & ComponentProps<typeof Overlay>;
 
 export const Modal = ({
   children,
   ...props
 }: ModalProps): ReturnType<React.FC> => {
+  const animatedDialog = css(animationsDialog(props.fadeOut), dialogStyles);
+  const animatedOverlay = css(animationsOverlay(props.fadeOut), overlayStyles);
+
   return (
     <div css={pageCoverStyles}>
-      <div css={overlayStyles}>
+      <div css={animatedOverlay}>
         <Overlay {...props} />
       </div>
-      <div role="dialog" css={dialogStyles}>
+      <div role="dialog" css={animatedDialog}>
         {children}
       </div>
     </div>

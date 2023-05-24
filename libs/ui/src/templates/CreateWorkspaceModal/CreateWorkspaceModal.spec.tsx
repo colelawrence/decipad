@@ -1,8 +1,9 @@
 import { timeout } from '@decipad/utils';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { CreateWorkspaceModal } from './CreateWorkspaceModal';
+import { renderWithRouter } from '../../test-utils/renderWithRouter';
 
 const props: ComponentProps<typeof CreateWorkspaceModal> = {
   Heading: 'h1',
@@ -10,13 +11,13 @@ const props: ComponentProps<typeof CreateWorkspaceModal> = {
 };
 
 it('cannot create a workspace in its initial state', () => {
-  const { getByTestId } = render(<CreateWorkspaceModal {...props} />);
+  const { getByTestId } = renderWithRouter(<CreateWorkspaceModal {...props} />);
   expect(getByTestId('btn-create-modal')).toBeDisabled();
 });
 
 it('emits a create event when typings a workspace name and submitting', async () => {
   const handleCreate = jest.fn();
-  const { getByTestId, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText } = renderWithRouter(
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
 
@@ -35,7 +36,7 @@ it('disables workspace creation while already submitting', async () => {
       resolveCreation = resolve;
     })
   );
-  const { getByTestId, getByPlaceholderText } = render(
+  const { getByTestId, getByPlaceholderText } = renderWithRouter(
     <CreateWorkspaceModal {...props} onCreate={handleCreate} />
   );
 

@@ -1,8 +1,9 @@
 import { noop } from '@decipad/utils';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
 import { CreateOrEditSectionModal } from './CreateOrEditSectionModal';
+import { renderWithRouter } from '../../test-utils/renderWithRouter';
 
 const props: ComponentProps<typeof CreateOrEditSectionModal> = {
   onClose: noop,
@@ -10,13 +11,15 @@ const props: ComponentProps<typeof CreateOrEditSectionModal> = {
 };
 
 it('cannot create a section in its initial state', () => {
-  const { getByText } = render(<CreateOrEditSectionModal {...props} />);
+  const { getByText } = renderWithRouter(
+    <CreateOrEditSectionModal {...props} />
+  );
   expect(getByText('Create Section')).toBeDisabled();
 });
 
 it('emits a create event when typings a section name and submitting', async () => {
   const handleCreate = jest.fn();
-  const { getByText, getByPlaceholderText } = render(
+  const { getByText, getByPlaceholderText } = renderWithRouter(
     <CreateOrEditSectionModal {...props} onSubmit={handleCreate} />
   );
 
