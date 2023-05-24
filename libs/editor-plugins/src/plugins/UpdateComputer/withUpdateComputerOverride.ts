@@ -76,7 +76,7 @@ export const withUpdateComputerOverride =
     editor.apply = (op) => {
       apply(op);
       for (const block of affectedBlocks(op)) {
-        if (op.type === 'remove_node' && op.path.length <= 1) {
+        if (op.type === 'remove_node') {
           const { node } = op;
           if (isElement(node)) {
             removeNode((node as MyElement).id);
