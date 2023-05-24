@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import {
   ComponentProps,
   ErrorInfo,
@@ -7,12 +8,22 @@ import {
   useState,
 } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
-import * as Sentry from '@sentry/react';
 import { ErrorPage } from './ErrorPage';
 
 interface ErrorBoundaryProps {
   readonly Heading: ComponentProps<typeof ErrorPage>['Heading'];
   readonly children: ReactNode;
+}
+
+class SentryError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SentryError';
+  }
+
+  setCustomMessage(message: string) {
+    this.message = message;
+  }
 }
 
 export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
@@ -27,19 +38,23 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
     (error: Error, info: ErrorInfo) => {
       setPreviousErrorDate(Date.now());
       console.error(error);
-      // eslint-disable-next-line no-param-reassign
-      error.message = `Page crash: ${
-        error.message
-      }: (${info.componentStack.substring(0, 100)})`;
+      const sentryError = new SentryError(error.message);
+      sentryError.setCustomMessage(
+        `Page crash: ${error.message}: (${info.componentStack.substring(
+          0,
+          100
+        )})`
+      );
+
       try {
-        Sentry.captureException(error, {
+        Sentry.captureException(sentryError, {
           level: 'fatal',
           extra: {
             info,
           },
         });
       } catch (err) {
-        console.error(err);
+        console.error(sentryError);
       }
       if (previousErrorDate && Date.now() - previousErrorDate < 2000) {
         setTimeout(() => setErrorCount((c) => c + 1), 1000);

@@ -5,7 +5,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import format from 'date-fns/format';
 import { FC, useEffect, useState } from 'react';
-import { useDrag, useDragLayer, XYCoord } from 'react-dnd';
+import { XYCoord, useDrag, useDragLayer } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { ColorStatusCircle, MenuItem, TriggerMenuItem } from '../../atoms';
 import * as icons from '../../icons';
@@ -26,9 +26,9 @@ import {
   AvailableSwatchColor,
   ColorStatusNames,
   DNDItemTypes,
-  swatchesThemed,
   TColorStatus,
   UserIconKey,
+  swatchesThemed,
 } from '../../utils';
 import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 
@@ -327,13 +327,13 @@ export const NotebookListItem = ({
                 Download
               </MenuItem>
               <MenuItem
-                icon={<icons.Download />}
+                icon={<icons.GitBranch />}
                 onSelect={() => {
                   onExportBackups();
                   toggleActionsOpen();
                 }}
               >
-                Download Backups
+                Version History
               </MenuItem>
               {page?.type === 'archived' ? (
                 <MenuItem

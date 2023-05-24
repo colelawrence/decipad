@@ -83,6 +83,7 @@ export { Gear } from './Gear/Gear';
 export { Generic } from './Generic/Generic';
 export { GenericCursorAdd } from './GenericCursorAdd/GenericCursorAdd';
 export { GenericTable } from './GenericTable/GenericTable';
+export { GitBranch } from './GitBranch/GitBranch';
 export { Globe } from './Globe/Globe';
 export { Happy } from './Happy/Happy';
 export { Heading } from './Heading/Heading';
