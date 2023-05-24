@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { useMemo } from 'react';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
-import { useEnsureValidVariableName, useNodePath } from '@decipad/editor-hooks';
+import { useNodePath } from '@decipad/editor-hooks';
 import { getNode } from '@udecode/plate';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
@@ -34,7 +34,6 @@ export interface UseTableHeaderCellResult {
   dropTarget: ConnectDropTarget;
   dropDirection: 'left' | 'right' | undefined;
   parseUnit: (text: string) => Promise<Unit[] | null>;
-  errorMessage: string | undefined;
   columnIndex: number | undefined;
   path: Path | undefined;
   inferredType: CellValueType | undefined;
@@ -65,13 +64,6 @@ export const useTableHeaderCell = (
 
   const dropDownNames = useTableHeaderCellDropdownNames(element, path);
 
-  const columnResult = computer.getBlockIdResult$.use(element.id);
-  const errorMessage = useEnsureValidVariableName(
-    element,
-    [columnResult?.id],
-    'Column'
-  );
-
   const inferredType = useTableHeaderCellColumnInferredType(
     element,
     columnIndex
@@ -89,7 +81,6 @@ export const useTableHeaderCell = (
       dropTarget,
       dropDirection: getColumnDropDirection(dropDirection),
       parseUnit,
-      errorMessage,
       columnIndex,
       path,
       inferredType,
@@ -101,7 +92,6 @@ export const useTableHeaderCell = (
       dropDirection,
       dropDownNames,
       dropTarget,
-      errorMessage,
       focused,
       inferredType,
       isDragging,
