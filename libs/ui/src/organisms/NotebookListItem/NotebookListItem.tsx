@@ -169,20 +169,23 @@ export const NotebookListItem = ({
   const href = notebooks({}).notebook({ notebook: { id, name } }).$;
   const [feStatus, setFeStatus] = useState<TColorStatus>(status);
   const [statusOpen, setStatusOpen] = useState(false);
-  const [{ isDragging }, drag, preview] = useDrag(() => ({
-    type: DNDItemTypes.ICON,
-    item: { id, title: name, icon, color: iconColor },
-    end: (item, monitor) => {
-      const dropResult = monitor.getDropResult<DropResult>();
-      if (item && dropResult) {
-        onMoveToSection(item.id, dropResult.id);
-      }
-    },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-      handlerId: monitor.getHandlerId(),
+  const [{ isDragging }, drag, preview] = useDrag(
+    () => ({
+      type: DNDItemTypes.ICON,
+      item: { id, title: name, icon, color: iconColor },
+      end: (item, monitor) => {
+        const dropResult = monitor.getDropResult<DropResult>();
+        if (item && dropResult) {
+          onMoveToSection(item.id, dropResult.id);
+        }
+      },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+        handlerId: monitor.getHandlerId(),
+      }),
     }),
-  }));
+    [id, name, icon, iconColor, onMoveToSection]
+  );
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
