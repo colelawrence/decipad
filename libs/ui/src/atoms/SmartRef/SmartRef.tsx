@@ -9,6 +9,7 @@ type SmartRefProps = {
   readonly defBlockId?: string;
   readonly errorMessage?: string;
   readonly isSelected?: boolean;
+  readonly isInitialized?: boolean;
   readonly hasPreviousContent?: boolean;
   readonly hasNextContent?: boolean;
 };
@@ -34,6 +35,7 @@ export const SmartRef: FC<SmartRefProps> = ({
   defBlockId,
   errorMessage,
   isSelected,
+  isInitialized = false,
   hasPreviousContent,
   hasNextContent,
 }: SmartRefProps) => {
@@ -52,7 +54,9 @@ export const SmartRef: FC<SmartRefProps> = ({
           {symbolName}
         </CodeVariable>
       )}
-      {errorMessage && <CodeError message={errorMessage} url="/docs" />}
+      {isInitialized && errorMessage && (
+        <CodeError message={errorMessage} url="/docs/" />
+      )}
     </span>
   );
 };

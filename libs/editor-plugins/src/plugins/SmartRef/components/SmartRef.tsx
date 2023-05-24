@@ -7,8 +7,13 @@ import { useSmartRef } from '../hooks/useSmartRef';
 export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_SMART_REF);
 
-  const { symbolName, errorMessage, isSelected, siblingContent } =
-    useSmartRef(element);
+  const {
+    symbolName,
+    errorMessage,
+    isInitialized,
+    isSelected,
+    siblingContent,
+  } = useSmartRef(element);
   useReinstateSmartRefBlockId(element);
 
   return (
@@ -17,6 +22,7 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
         defBlockId={element.blockId}
         symbolName={symbolName ?? element.lastSeenVariableName}
         errorMessage={errorMessage}
+        isInitialized={isInitialized}
         isSelected={isSelected}
         hasPreviousContent={siblingContent?.hasPrevious}
         hasNextContent={siblingContent?.hasNext}

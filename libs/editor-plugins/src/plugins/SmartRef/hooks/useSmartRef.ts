@@ -1,14 +1,14 @@
 import {
+  useEditorChange,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
+import {
   ELEMENT_SMART_REF,
   MyElement,
   SmartRefElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  useNodePath,
-  usePathMutatorCallback,
-  useEditorChange,
-} from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
 import {
   getNextNode,
@@ -18,14 +18,15 @@ import {
   isElement,
   isText,
 } from '@udecode/plate';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounceTime, filter } from 'rxjs';
-import { useCallback, useEffect, useMemo } from 'react';
 import { ReactEditor, useSelected } from 'slate-react';
 
 interface UseSmartRefResult {
   symbolName?: string;
   siblingContent: { hasNext: boolean; hasPrevious: boolean };
   errorMessage?: string;
+  isInitialized?: boolean;
   isSelected: boolean;
 }
 
@@ -75,6 +76,9 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
     path,
     'lastSeenVariableName'
   );
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const mutateLastSeenVariableName = useCallback(
     (newLastSeenVariableName: string) => {
       const currentmutateLastSeenVariableNameText = getNodeString(element);
@@ -87,8 +91,11 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       if (element.lastSeenVariableName !== newLastSeenVariableName) {
         setLastSeenVariableName(newLastSeenVariableName);
       }
+      if (!isInitialized) {
+        setIsInitialized(true);
+      }
     },
-    [editor, element, path, setLastSeenVariableName]
+    [editor, element, path, setLastSeenVariableName, isInitialized]
   );
 
   const computer = useComputer();
@@ -133,6 +140,7 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
     element.columnId,
     element.lastSeenVariableName,
     mutateLastSeenVariableName,
+    isInitialized,
   ]);
 
   return useMemo(
@@ -140,8 +148,9 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       symbolName,
       siblingContent,
       errorMessage,
+      isInitialized,
       isSelected,
     }),
-    [errorMessage, isSelected, siblingContent, symbolName]
+    [errorMessage, isSelected, siblingContent, symbolName, isInitialized]
   );
 };
