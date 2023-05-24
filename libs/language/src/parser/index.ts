@@ -1,13 +1,12 @@
+import { BracketCounter, tokenizer } from '../grammar/tokenizer';
 import { isExpression, n } from '../utils';
-import * as AST from './ast-types';
-import * as Parser from './parser-types';
-import { tokenizer, BracketCounter } from '../grammar/tokenizer';
-import { parse as languageParse } from './parser';
 import { SyntaxError } from './SyntaxError';
 import { annotateWithCacheKeys } from './annotateWithCacheKeys';
+import * as AST from './ast-types';
+import { parse as languageParse } from './parser';
+import * as Parser from './parser-types';
 
 export { decilang } from './decilang-tag';
-
 export { AST, Parser, n, SyntaxError };
 
 export function parseBlock(

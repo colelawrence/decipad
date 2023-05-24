@@ -1,5 +1,5 @@
-import stringify from 'json-stringify-safe';
 import { AnyMapping } from '@decipad/utils';
+import stringify from 'json-stringify-safe';
 import { AST, isExpression, Type, validateResult } from '.';
 import { Context, inferBlock, makeContext } from './infer';
 import { Realm, run } from './interpreter';
@@ -46,7 +46,7 @@ export const parseExpressionOrThrow = (
   );
   const item = block.args[0];
   if (!isExpression(item)) {
-    throw new TypeError('Expected expression');
+    throw new TypeError('Expected expression but item was not');
   }
   return item;
 };

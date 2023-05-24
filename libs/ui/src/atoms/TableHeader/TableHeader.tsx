@@ -9,7 +9,7 @@ import {
   ConnectDropTarget,
 } from 'react-dnd';
 import { useMergedRef } from '../../hooks/index';
-import { DragHandle as DragHandleIcon } from '../../icons';
+import { DragHandle as DragHandleIcon, Warning } from '../../icons';
 import {
   cssVar,
   dragHandleHighlight,
@@ -20,13 +20,14 @@ import {
 import { table } from '../../styles';
 import {
   AvailableSwatchColor,
+  Swatch,
+  TableStyleContext,
   getStringType,
   getTypeIcon,
-  Swatch,
   swatchesThemed,
-  TableStyleContext,
 } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 const columnStyles = css(p13Medium, {
   position: 'relative',
@@ -210,16 +211,30 @@ export const TableHeader = ({
           />
         )}
         {showIcon && type.kind !== 'anything' && (
-          <span contentEditable={false} css={iconTypeStyles}>
-            <Icon />
-          </span>
+          <>
+            {error ? (
+              <Tooltip
+                hoverOnly
+                trigger={
+                  <span contentEditable={false} css={iconTypeStyles}>
+                    <Warning />
+                  </span>
+                }
+              >
+                There's a problem with your formulas
+              </Tooltip>
+            ) : (
+              <span contentEditable={false} css={iconTypeStyles}>
+                <Icon />
+              </span>
+            )}
+          </>
         )}
 
         <div css={[childrenWrapperStyles]} spellCheck={false}>
           {children}
         </div>
         {menu}
-        {error}
       </div>
 
       {isEditable && dropDirection === 'right' && (
