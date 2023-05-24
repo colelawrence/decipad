@@ -1,4 +1,5 @@
 import { getExprRef } from '@decipad/computer';
+import { useEditorChange } from '@decipad/editor-hooks';
 import {
   MyElement,
   PlateComponent,
@@ -20,8 +21,8 @@ import { useWindowListener } from '@decipad/react-utils';
 import {
   Button,
   CodeLineFloat,
-  MagicNumber as UIMagicNumber,
   ParagraphFormulaEditor,
+  MagicNumber as UIMagicNumber,
   VoidBlock,
 } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
@@ -30,7 +31,6 @@ import { findNodePath, getNodeString, insertText } from '@udecode/plate';
 import { useCallback, useState } from 'react';
 import { Element } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { useEditorChange } from '@decipad/editor-hooks';
 import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
 
 export const MagicNumber: PlateComponent = ({

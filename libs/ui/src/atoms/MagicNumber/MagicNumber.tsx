@@ -6,7 +6,10 @@ import { FC, ReactNode } from 'react';
 import { Loading } from '../../icons';
 import { CodeResult } from '../../organisms';
 import { cssVar } from '../../primitives';
-import { resultBubbleStyles } from '../../styles/results';
+import {
+  resultBubbleStyles,
+  resultLoadingIconStyles,
+} from '../../styles/results';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -114,15 +117,7 @@ export const MagicNumber = ({
               />
             </span>
           ) : (
-            <span
-              css={css({
-                paddingTop: '3px',
-                minHeight: '19px',
-                display: 'inline-block',
-                margin: 'auto',
-                '> svg': { height: '16px', display: 'block', margin: '0 auto' },
-              })}
-            >
+            <span css={resultLoadingIconStyles}>
               <Loading />
             </span>
           )}

@@ -21,3 +21,11 @@ export const characterLimitStyles = css({
   whiteSpace: 'nowrap',
   fontFeatureSettings: '"tnum"',
 });
+
+export const resultLoadingIconStyles = css({
+  paddingTop: '3px',
+  minHeight: '19px',
+  display: 'inline-block',
+  margin: 'auto',
+  '> svg': { height: '16px', display: 'block', margin: '0 auto' },
+});
