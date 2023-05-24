@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
 import { capitalize } from 'lodash';
 import { create } from 'zustand';
@@ -39,7 +38,7 @@ export const SearchBar = (): ReturnType<FC> => {
   const isRouteAllowed =
     maybeWorkspaceFolder != null &&
     ROUTES_WHITELIST.includes(maybeWorkspaceFolder);
-  const displaySearchBox = isFlagEnabled('DASHBOARD_SEARCH') && isRouteAllowed;
+  const displaySearchBox = isRouteAllowed;
   const noNulls = useMemo(
     () => status.filter((x) => x !== null) as string[],
     [status]

@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
@@ -213,41 +212,39 @@ export const NotebookListItem = ({
           </strong>
           <div css={notebookListTagsStyles}>
             <span css={notebookListInlineTags}>
-              {isFlagEnabled('DASHBOARD_STATUS') ? (
-                <MenuList
-                  root
-                  dropdown
-                  align="end"
-                  side="bottom"
-                  sideOffset={10}
-                  open={statusOpen}
-                  onChangeOpen={setStatusOpen}
-                  trigger={
-                    <div>
-                      <FilterBubbles
-                        description={ColorStatusNames[feStatus]}
-                        iconStyles={css({ transform: 'translateY(1px)' })}
-                        icon={<ColorStatusCircle name={feStatus} />}
-                      />
-                    </div>
-                  }
-                >
-                  {AvailableColorStatus.map((label) => (
-                    <MenuItem
-                      key={label}
-                      icon={<ColorStatusCircle name={label} />}
-                      onSelect={() => {
-                        onChangeStatus(label as TColorStatus);
-                        setFeStatus(label);
-                        setStatusOpen(!statusOpen);
-                      }}
-                      selected={feStatus === label}
-                    >
-                      <span>{ColorStatusNames[label]}</span>
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              ) : null}
+              <MenuList
+                root
+                dropdown
+                align="end"
+                side="bottom"
+                sideOffset={10}
+                open={statusOpen}
+                onChangeOpen={setStatusOpen}
+                trigger={
+                  <div>
+                    <FilterBubbles
+                      description={ColorStatusNames[feStatus]}
+                      iconStyles={css({ transform: 'translateY(1px)' })}
+                      icon={<ColorStatusCircle name={feStatus} />}
+                    />
+                  </div>
+                }
+              >
+                {AvailableColorStatus.map((label) => (
+                  <MenuItem
+                    key={label}
+                    icon={<ColorStatusCircle name={label} />}
+                    onSelect={() => {
+                      onChangeStatus(label as TColorStatus);
+                      setFeStatus(label);
+                      setStatusOpen(!statusOpen);
+                    }}
+                    selected={feStatus === label}
+                  >
+                    <span>{ColorStatusNames[label]}</span>
+                  </MenuItem>
+                ))}
+              </MenuList>
 
               {isPublic ? (
                 <FilterBubbles description="Published" icon={<icons.Globe />} />

@@ -25,17 +25,17 @@ import {
 } from '../../icons';
 import { NavigationList } from '../../molecules';
 import {
+  OpaqueColor,
   cssVar,
   hexToOpaqueColor,
-  OpaqueColor,
   opaqueColorToHex,
   smallScreenQuery,
 } from '../../primitives';
 import { CreateOrEditSectionModal } from '../../templates';
 import {
   AvailableSwatchColor,
-  colorSwatches,
   DNDItemTypes,
+  colorSwatches,
   hexBaseSwatches,
   swatchNames,
 } from '../../utils';
@@ -124,7 +124,7 @@ export const WorkspaceNavigation = ({
 
   const isHomePage = !isArchivePage && !isSharedPage;
 
-  const sectionsEnabled = !isArchivePage && isFlagEnabled('COLOR_SIDEBAR');
+  const sectionsEnabled = !isArchivePage;
 
   const [sectionStore, setSectionStore] = useState({
     name: 'My Section',

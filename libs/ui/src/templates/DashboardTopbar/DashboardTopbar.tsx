@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { useParams } from 'react-router-dom';
@@ -25,8 +24,7 @@ export const DashboardTopbar = ({
   const isRouteAllowed =
     maybeWorkspaceFolder != null &&
     ROUTES_WHITELIST.includes(maybeWorkspaceFolder);
-  const displaySearchBoxBorder =
-    isFlagEnabled('DASHBOARD_SEARCH') && isRouteAllowed;
+  const displaySearchBoxBorder = isRouteAllowed;
 
   return (
     <div
