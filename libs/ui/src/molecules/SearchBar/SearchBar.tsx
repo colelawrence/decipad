@@ -53,7 +53,7 @@ export const SearchBar = (): ReturnType<FC> => {
         <span css={{ height: '18px', width: '18px' }}>
           <icons.Search />
         </span>
-        <span css={css({ width: '100%' })}>
+        <span css={css({ width: '100%' })} data-testid="search-bar">
           <InputField
             type="search"
             placeholder="Search for notebooks, e.g. sales -qbr"

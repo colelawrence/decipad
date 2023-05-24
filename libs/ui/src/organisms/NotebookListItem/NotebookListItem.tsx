@@ -203,6 +203,7 @@ export const NotebookListItem = ({
         ref={drag}
         className="dragitem"
         css={[wrapperStyles, isDragging && notebookIconGrabbingStyles]}
+        data-testid="notebook-list-item"
       >
         <Anchor href={href} css={anchorStyles}>
           <NotebookIcon color={iconColor} icon={icon} />

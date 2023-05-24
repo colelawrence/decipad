@@ -30,7 +30,7 @@ export const NavigationList = ({
             child.type === WorkspaceItem ||
             child.type === WorkspaceItemCreate)
         ) {
-          return <li>{child}</li>;
+          return <li data-testid="navigation-list-item">{child}</li>;
         }
         console.error('Received child that is not a navigation item', child);
         throw new Error('Expected all children to be navigation items');

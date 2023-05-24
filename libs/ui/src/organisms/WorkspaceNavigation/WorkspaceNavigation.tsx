@@ -180,7 +180,9 @@ export const WorkspaceNavigation = ({
           isActive={isHomePage}
           icon={<Home />}
         >
-          <span css={itemTextStyles}>My Notebooks</span>
+          <span css={itemTextStyles} data-testid="my-notebooks-button">
+            My Notebooks
+          </span>
         </NavigationItem>
       </NavigationList>
       {sectionsEnabled

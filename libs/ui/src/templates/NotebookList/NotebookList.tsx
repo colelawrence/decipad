@@ -152,7 +152,7 @@ export const NotebookList = ({
                 <span css={css({ width: 12, height: 12 })}>
                   <Info />
                 </span>
-                <span>
+                <span data-testid="no-correct-search-result">
                   None of the {notebooks.length} matches your search, so we are
                   showing all notebooks that match your filters.
                 </span>
