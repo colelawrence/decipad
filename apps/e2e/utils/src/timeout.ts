@@ -7,8 +7,8 @@ export function timeout(ms: number) {
 export const Timeouts = {
   typing: 100,
   syncDelay: 3000,
-  chartsDelay: 8000,
+  chartsDelay: 6000,
   tableDelay: 550,
   computerDelay: 2000,
-  menuOpenDelay: 1000,
+  menuOpenDelay: 750,
 };

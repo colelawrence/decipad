@@ -1,0 +1,172 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Permissions in table formulas test"
+        }
+      ],
+      "type": "h1",
+      "id": "xxNHjFTqvWRNABGGhcGxj"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Table"
+                }
+              ],
+              "id": "m4XBkqkexiXXUzDYt5zTJ",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "otlj-jidHX_Slj1ocmkgj",
+                  "type": "smart-ref",
+                  "blockId": "SFRYzLio_nvjlQbMFBQW9",
+                  "columnId": null
+                },
+                {
+                  "text": " + 2"
+                }
+              ],
+              "id": "F18GJMiPe0af6CcyTV9Bf",
+              "type": "table-column-formula",
+              "columnId": "tJ3-sNcOYGtRsBHYd3VDa"
+            }
+          ],
+          "id": "fUvl-bmmkmO-pjjjA3GNp",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "A"
+                }
+              ],
+              "id": "SFRYzLio_nvjlQbMFBQW9",
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": null
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "B"
+                }
+              ],
+              "id": "tJ3-sNcOYGtRsBHYd3VDa",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            }
+          ],
+          "id": "mUIApE4ni7F_0GBB1l3t0",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "1"
+                }
+              ],
+              "id": "MoRWfbFpSsEITeWDFWsHj",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "wObt5YrMG_TQQVh2C6MCP",
+              "type": "td"
+            }
+          ],
+          "id": "Tuj5sS_fA8UO_9jcZ-_Ob",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2"
+                }
+              ],
+              "id": "dxpkSaAqXIn4dv30MQZmj",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "jI47WwT7xpjzgaMxQwERn",
+              "type": "td"
+            }
+          ],
+          "id": "ppG2pNMdyZucWFzfWaD7Y",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "3"
+                }
+              ],
+              "id": "qRhJm3qnZDhncmqoQsjkW",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "RN04lj8HRKvli72QbLaNK",
+              "type": "td"
+            }
+          ],
+          "id": "B3_MgjK-DAq4xnwzbxelb",
+          "type": "tr"
+        }
+      ],
+      "id": "1GaxKIs-jrueCoO906CWy",
+      "type": "table",
+      "version": 2,
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "h7FJuWcxeyHeOo9bIVJiW"
+    }
+  ]
+}

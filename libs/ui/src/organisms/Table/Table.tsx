@@ -173,6 +173,7 @@ export const Table = ({
 
   return (
     <table
+      data-testid="editor-table"
       ref={dropRef}
       css={[
         tableBaseStyles,
