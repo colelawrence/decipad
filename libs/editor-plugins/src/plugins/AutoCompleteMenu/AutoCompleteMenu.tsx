@@ -11,6 +11,7 @@ import sortBy from 'lodash/sortBy';
 import { ComponentProps, useCallback, useState } from 'react';
 import { useFocused, useSelected } from 'slate-react';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
+import { useTableCaption } from './useTableCaption';
 
 const localNamesFirst = (names: AutocompleteName[]): AutocompleteName[] =>
   sortBy(names, (name) => (name.isLocal ? 0 : 1));
@@ -107,10 +108,7 @@ const AutoCompleteWrapper = ({
     selectNames,
     blockId
   );
-  const isInTable = useComputer().getAllColumns$.useWithSelectorDebounced(
-    autoCompleteDebounceMs,
-    (cols) => cols.find((t) => t.blockId === blockId)?.tableName
-  );
+  const isInTable = useTableCaption();
 
   if (!identifiers.length) {
     return null;

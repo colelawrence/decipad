@@ -34,6 +34,14 @@ const validate: Validate = <
     throw new Error(`panic: wanted ${kinds.join('/')} and got ${type.kind}`);
   };
 
+  if (value == null) {
+    return Unknown as T;
+  }
+
+  if (value === Unknown) {
+    return value;
+  }
+
   switch (type.kind) {
     case 'number': {
       getTrue(value instanceof DeciNumber, 'panic: expected fraction');
