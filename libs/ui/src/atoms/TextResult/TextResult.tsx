@@ -1,5 +1,5 @@
-import { Tooltip } from '../Tooltip/Tooltip';
 import { characterLimitStyles } from '../../styles/results';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 function TextResult({
   value,
@@ -14,14 +14,20 @@ function TextResult({
     return <span>{value}</span>;
   }
 
+  const fullString = <span>{value}</span>;
+
   const trigger = (
     <span
-      css={[
-        characterLimitStyles,
-        variant === 'inline' ? { maxWidth: '120px' } : { maxWidth: '205px' },
-      ]}
+      data-testid={`text-result:${value}`}
+      data-highlight-changes
+      css={
+        tooltip && [
+          characterLimitStyles,
+          variant === 'inline' ? { maxWidth: '120px' } : { maxWidth: '205px' },
+        ]
+      }
     >
-      {value}
+      {fullString}
     </span>
   );
 

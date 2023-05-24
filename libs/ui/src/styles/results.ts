@@ -15,11 +15,13 @@ export const resultBubbleStyles: CSSObject = {
 };
 
 export const characterLimitStyles = css({
-  display: 'block',
+  display: 'inline-block',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   fontFeatureSettings: '"tnum"',
+  verticalAlign: 'middle',
+  lineHeight: 1.2,
 });
 
 export const resultLoadingIconStyles = css({

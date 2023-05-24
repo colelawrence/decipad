@@ -1,9 +1,9 @@
+import { N } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
 import { FC } from 'react';
-import { N } from '@decipad/number';
+import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { characterLimitStyles } from '../../styles/results';
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,
@@ -15,22 +15,17 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
 
   const formatted = computer.formatNumber(type, N(value));
 
-  const fullResult = (
+  const fullResult = <span>{formatted.asString}</span>;
+  const trigger = (
     <span
+      data-testid={`number-result:${formatted.asString}`}
+      data-highlight-changes
       css={
         tooltip && [
           characterLimitStyles,
           variant === 'inline' ? { maxWidth: '120px' } : { maxWidth: '205px' },
         ]
       }
-    >
-      {formatted.asString}
-    </span>
-  );
-  const trigger = (
-    <span
-      data-testid={`number-result:${formatted.asString}`}
-      data-highlight-changes
     >
       {fullResult}
     </span>

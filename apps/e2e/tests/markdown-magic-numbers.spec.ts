@@ -38,4 +38,13 @@ test.describe('Inputs and magic numbers', () => {
       page.getByTestId('magic-number').getByText('1,337')
     ).toBeVisible();
   });
+
+  test('it can render columns inline', async () => {
+    await keyPress(page, 'Enter');
+    await keyPress(page, 'ArrowDown');
+    await page.keyboard.type('What %[1,2,3,4,5]% .');
+    await keyPress(page, 'Enter');
+    await page.waitForSelector('[data-testid="number-column-separator"]');
+    await page.waitForSelector('[data-testid="number-column-ellipsis"]');
+  });
 });

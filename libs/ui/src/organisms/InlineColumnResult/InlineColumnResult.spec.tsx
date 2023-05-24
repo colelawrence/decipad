@@ -1,5 +1,5 @@
-import { act, render } from '@testing-library/react';
 import { timeout } from '@decipad/utils';
+import { act, render } from '@testing-library/react';
 import { runCode } from '../../test-utils';
 import { InlineColumnResult } from './InlineColumnResult';
 
@@ -21,6 +21,6 @@ describe('InlineColumnResult', () => {
 
     await act(() => timeout(1000));
 
-    expect(container.textContent).toBe('10, 20, 30, ...');
+    expect(container.textContent).toBe('10, 20, 30, …');
   });
 });

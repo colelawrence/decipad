@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
-import { CodeResult } from '../CodeResult/CodeResult';
+import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { useMaterializedColumnResultValue } from '../../utils/useMaterializedColumnResultValue';
+import { CodeResult } from '../CodeResult/CodeResult';
 
 const maxElements = 3;
 
@@ -14,6 +15,7 @@ export const InlineColumnResult = ({
 
   const materializedValue = useMaterializedColumnResultValue(
     value,
+    0,
     maxElements + 1
   );
 
@@ -33,11 +35,25 @@ export const InlineColumnResult = ({
               variant="inline"
               type={cellType}
               element={element}
+              tooltip={false}
             />
-            {rowIndex < materializedValue.length - 1 && ', '}
+            {rowIndex < materializedValue.length - 1 && (
+              <span
+                data-testid={`number-column-separator`}
+                css={[characterLimitStyles, { maxWidth: '120px' }]}
+              >
+                ,{' '}
+              </span>
+            )}
             {rowIndex === maxPresent - 1 &&
-              materializedValue.length > maxElements &&
-              '...'}
+              materializedValue.length > maxElements && (
+                <span
+                  data-testid={`number-column-ellipsis`}
+                  css={[characterLimitStyles, { maxWidth: '120px' }]}
+                >
+                  …
+                </span>
+              )}
           </Fragment>
         );
       })}
