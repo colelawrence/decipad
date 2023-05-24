@@ -298,7 +298,9 @@ export const WorkspaceNavigation = ({
                     onClick={() => setOpenMenu(!openMenu)}
                     icon={<Plus />}
                   >
-                    <span css={itemTextStyles}>New Section</span>
+                    <span css={itemTextStyles} data-testid="new-section-button">
+                      New Section
+                    </span>
                   </NavigationItem>
                 </NavigationList>
 

@@ -36,6 +36,7 @@ export const ColorPicker = ({
     <div
       role="option"
       aria-selected={selected}
+      data-testid="color-section-button"
       css={[
         styles,
         {

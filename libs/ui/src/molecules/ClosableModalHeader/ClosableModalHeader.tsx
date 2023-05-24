@@ -40,7 +40,11 @@ export const ClosableModalHeader = ({
             <Close />
           </Anchor>
         ) : (
-          <button css={closeStyles} onClick={closeAction}>
+          <button
+            css={closeStyles}
+            onClick={closeAction}
+            data-testid="closable-modal"
+          >
             <Close />
           </button>
         )}
