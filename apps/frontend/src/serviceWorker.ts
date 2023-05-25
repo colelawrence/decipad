@@ -5,7 +5,7 @@ if ('serviceWorker' in navigator) {
   (async () => {
     await domLoaded;
     // eslint-disable-next-line no-console
-    console.log('registering service worker...');
+    console.debug('registering service worker...');
     try {
       await navigator.serviceWorker.register('/service-worker.js');
       if (process.env.NODE_ENV === 'production') {

@@ -1,8 +1,8 @@
-import { StoreApi, useStore } from 'zustand';
-import { captureException } from '@sentry/browser';
 import { setErrorReporter } from '@decipad/computer';
-import { NotebookState } from './state';
+import { captureException } from '@sentry/browser';
+import { StoreApi, useStore } from 'zustand';
 import { createNotebookStore } from './oneNotebookState';
+import { NotebookState } from './state';
 
 // set the computer's error reporter
 setErrorReporter((err) => {
@@ -17,7 +17,7 @@ const getNotebookStore = (notebookId: string): StoreApi<NotebookState> => {
   if (!store) {
     const onDestroy = () => {
       // eslint-disable-next-line no-console
-      console.log(`notebook ${notebookId} destroyed`);
+      console.debug(`notebook ${notebookId} destroyed`);
       notebooks.delete(notebookId);
     };
     store = createNotebookStore(onDestroy);

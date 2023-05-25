@@ -10,17 +10,17 @@ import { debounce } from 'lodash';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import * as syncProtocol from 'y-protocols/sync';
 import { Doc as YDoc, mergeUpdates } from 'yjs';
-import { receiver } from './receive';
+import { isValidMessage } from './isValidMessage';
 import { messageHandlers } from './messageHandlers';
+import { printReceivedMessage } from './printReceivedMessage';
+import { receiver } from './receive';
 import {
-  messageAwareness,
   MessageHandler,
-  messageSync,
   MessageType,
   TWebSocketProvider,
+  messageAwareness,
+  messageSync,
 } from './types';
-import { printReceivedMessage } from './printReceivedMessage';
-import { isValidMessage } from './isValidMessage';
 
 export type { TWebSocketProvider };
 
@@ -180,7 +180,7 @@ const setupWS = async (provider: TWebSocketProvider) => {
 
       websocket.onclose = (ev) => {
         // eslint-disable-next-line no-console
-        console.info('WS closed', ev);
+        console.debug('WS closed', ev);
         messageSubscription.unsubscribe();
         provider.ws = undefined;
         provider.wsconnecting = false;
@@ -211,7 +211,7 @@ const setupWS = async (provider: TWebSocketProvider) => {
 
       websocket.onopen = () => {
         // eslint-disable-next-line no-console
-        console.info('WS: opened');
+        console.debug('WS: opened');
         provider.wsLastMessageReceived = time.getUnixTime();
         provider.wsconnecting = false;
         provider.wsconnected = true;
@@ -476,7 +476,7 @@ class WebsocketProvider
       this.shouldConnect = true;
       try {
         // eslint-disable-next-line no-console
-        console.info('WS: closing websocket because offline');
+        console.debug('WS: closing websocket because offline');
         this.ws.close();
       } catch (err) {
         // eslint-disable-next-line no-console

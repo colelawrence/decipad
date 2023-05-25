@@ -1,9 +1,9 @@
-import { ID, PermissionType, User } from '@decipad/backendtypes';
-import { nanoid } from 'nanoid';
 import { queues } from '@architect/functions';
-import tables from '@decipad/tables';
-import { auth as authConfig, app as appConfig } from '@decipad/config';
 import { timestamp } from '@decipad/backend-utils';
+import { ID, PermissionType, User } from '@decipad/backendtypes';
+import { app as appConfig, auth as authConfig } from '@decipad/config';
+import tables from '@decipad/tables';
+import { nanoid } from 'nanoid';
 import { createVerifier } from '../authentication';
 
 export interface INotifyInviteArguments {
@@ -74,7 +74,7 @@ export async function notify(args: INotifyInviteArguments) {
 
   if (process.env.ARC_ENV !== 'production') {
     // eslint-disable-next-line no-console
-    console.info('invitation link:\n\n', acceptLink, '\n\n');
+    console.debug('invitation link:\n\n', acceptLink, '\n\n');
   }
 
   await queues.publish({

@@ -1,8 +1,8 @@
 import { AnyElement, createTPluginFactory } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
-import { Element } from 'slate';
-import { findNode, isElement, nanoid, setNodes } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
+import { findNode, isElement, nanoid, setNodes } from '@udecode/plate';
+import { Element } from 'slate';
 
 const key = 'DEDUPLICATE_ELEMENT_IDS_PLUGIN';
 
@@ -23,7 +23,8 @@ export const createDeduplicateElementIdsPlugin = createTPluginFactory({
     const { apply, normalizeNode } = editor;
 
     const insertNeedsDeduping = (id: string, element: Element) => {
-      console.info('needs deduping', id);
+      // eslint-disable-next-line no-console
+      console.debug('needs deduping', id);
       if (needsDeduping.has(id)) {
         getDefined(needsDeduping.get(id)).push(element);
       } else {
@@ -82,7 +83,8 @@ export const createDeduplicateElementIdsPlugin = createTPluginFactory({
       const elementsNeedingDedup = needsDeduping.get((n as AnyElement).id);
       if (elementsNeedingDedup) {
         if (elementsNeedingDedup.includes(n)) {
-          console.info('fixing deduping', n.id);
+          // eslint-disable-next-line no-console
+          console.debug('fixing deduping', n.id);
           setNodes(editor, { id: nanoid() }, { at: path });
           removeNeedsDeduping((n as AnyElement).id, n);
         }
