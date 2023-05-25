@@ -1,6 +1,5 @@
 import { css } from '@emotion/react';
 import { Children, FC } from 'react';
-import { columns } from '../../styles';
 import { slimBlockWidth } from '../../styles/editor-layout';
 
 const styles = css({
@@ -12,7 +11,6 @@ const styles = css({
 const itemStyles = css({
   flexGrow: 1,
   flexBasis: `calc((${slimBlockWidth}px - 100%) * 999)`,
-  '[aria-label="column-content"]': columns.styles,
 });
 
 export const EditorColumns: FC<React.PropsWithChildren<unknown>> = ({
