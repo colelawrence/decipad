@@ -104,6 +104,7 @@ export type ErrSpec = {
     }
   | {
       errType: 'unknown-reference';
+      refName: string;
     }
   | {
       errType: 'retired-feature';

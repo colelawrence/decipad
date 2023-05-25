@@ -13,7 +13,9 @@ import {
 export function parseElementAsSourceCode(
   blockId: string,
   source: string,
-  sourceKind: 'statement' | 'expression' = 'statement'
+  sourceKind: 'statement' | 'expression' = 'statement',
+  isArtificial = false,
+  artificiallyDerivedFrom: string | undefined = undefined
 ): Program {
   const { solution, error } =
     sourceKind === 'statement'
@@ -32,5 +34,12 @@ export function parseElementAsSourceCode(
     ];
   }
 
-  return [statementToIdentifiedBlock(blockId, solution)];
+  return [
+    statementToIdentifiedBlock(
+      blockId,
+      solution,
+      isArtificial,
+      artificiallyDerivedFrom
+    ),
+  ];
 }

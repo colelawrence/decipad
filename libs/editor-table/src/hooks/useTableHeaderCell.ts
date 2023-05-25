@@ -15,6 +15,7 @@ import { useSelected } from 'slate-react';
 import { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
 import { Unit } from '@decipad/computer';
 import { DropDirection } from '@decipad/editor-components';
+import { useDebounce } from 'use-debounce';
 import { useDragColumn } from './useDragColumn';
 import { useColumnDropDirection, useDropColumn, useTableActions } from '.';
 import { useTableHeaderCellDropdownNames } from './useTableHeaderCellDropdownNames';
@@ -42,7 +43,7 @@ export interface UseTableHeaderCellResult {
 
 export const useTableHeaderCell = (
   element: TableHeaderElement
-): UseTableHeaderCellResult => {
+): UseTableHeaderCellResult | undefined => {
   const computer = useComputer();
   const editor = useTEditorRef();
   const path = useNodePath(element);
@@ -69,38 +70,41 @@ export const useTableHeaderCell = (
     columnIndex
   );
 
-  return useMemo(
-    () => ({
-      readOnly,
-      focused,
-      onChangeColumnType,
-      onRemoveColumn,
-      dragSource,
-      isDragging,
-      isOver,
-      dropTarget,
-      dropDirection: getColumnDropDirection(dropDirection),
-      parseUnit,
-      columnIndex,
-      path,
-      inferredType,
-      dropDownNames,
-    }),
-    [
-      columnIndex,
-      dragSource,
-      dropDirection,
-      dropDownNames,
-      dropTarget,
-      focused,
-      inferredType,
-      isDragging,
-      isOver,
-      onChangeColumnType,
-      onRemoveColumn,
-      parseUnit,
-      path,
-      readOnly,
-    ]
-  );
+  return useDebounce(
+    useMemo(
+      () => ({
+        readOnly,
+        focused,
+        onChangeColumnType,
+        onRemoveColumn,
+        dragSource,
+        isDragging,
+        isOver,
+        dropTarget,
+        dropDirection: getColumnDropDirection(dropDirection),
+        parseUnit,
+        columnIndex,
+        path,
+        inferredType,
+        dropDownNames,
+      }),
+      [
+        columnIndex,
+        dragSource,
+        dropDirection,
+        dropDownNames,
+        dropTarget,
+        focused,
+        inferredType,
+        isDragging,
+        isOver,
+        onChangeColumnType,
+        onRemoveColumn,
+        parseUnit,
+        path,
+        readOnly,
+      ]
+    ),
+    1000
+  )[0];
 };

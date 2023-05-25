@@ -9,6 +9,8 @@ export type IdentifiedBlock = {
   block: AST.Block;
   definesVariable?: string;
   definesTableColumn?: [string, string];
+  isArtificial?: boolean;
+  artificiallyDerivedFrom?: string;
 };
 
 /** A parse error */

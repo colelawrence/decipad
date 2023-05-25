@@ -1,9 +1,6 @@
 import { MyElement, MyEditor } from '@decipad/editor-types';
 import { Computer, ProgramBlock } from '@decipad/computer';
-import {
-  editorToProgram,
-  interactiveElementTypes,
-} from '@decipad/editor-language-elements';
+import { editorToProgram } from '@decipad/editor-language-elements';
 import { debounce } from 'lodash';
 import { findNode, getNode, isElement } from '@udecode/plate';
 import { affectedBlocks } from './affectedBlocks';
@@ -28,7 +25,21 @@ export const withUpdateComputerOverride =
     const programCache = new Map<string, ProgramBlock>();
     let dirtyBlocksSet = new Map<string, MyElement>();
 
+    const removeArtifficialDirtyBlocks = () => {
+      for (const [id, block] of programCache.entries()) {
+        if (
+          block.type === 'identified-block' &&
+          block.isArtificial &&
+          block.artificiallyDerivedFrom != null &&
+          dirtyBlocksSet.has(block.artificiallyDerivedFrom)
+        ) {
+          programCache.delete(id);
+        }
+      }
+    };
+
     const compute = async () => {
+      removeArtifficialDirtyBlocks();
       const dirty = dirtyBlocksSet;
       dirtyBlocksSet = new Map();
       // eslint-disable-next-line no-param-reassign
@@ -71,6 +82,15 @@ export const withUpdateComputerOverride =
       for (const blockId of allBlockIds(editor, id)) {
         programCache.delete(blockId);
         dirtyBlocksSet.delete(blockId);
+        for (const [nodeId, block] of programCache.entries()) {
+          if (
+            block.type === 'identified-block' &&
+            block.isArtificial &&
+            block.artificiallyDerivedFrom === blockId
+          ) {
+            removeNode(nodeId);
+          }
+        }
       }
     };
 
@@ -80,30 +100,26 @@ export const withUpdateComputerOverride =
         apply(op);
       }
       for (const block of affectedBlocks(op)) {
-        if (op.type === 'remove_node') {
-          const { node } = op;
-          if (isElement(node)) {
-            removeNode((node as MyElement).id);
-            if (op.path.length > 1) {
-              const rootBlockEntry = findNode(editor, {
-                at: op.path.slice(0, 1),
-              });
-              if (rootBlockEntry) {
-                const [rootBlock] = rootBlockEntry;
-                if (isElement(rootBlock)) {
-                  dirtyBlocksSet.set(rootBlock.id, rootBlock);
-                }
+        const node = getNode(editor, [block]);
+        if (isElement(node)) {
+          dirtyBlocksSet.set(node.id, node);
+        }
+      }
+      if (op.type === 'remove_node') {
+        const { node } = op;
+        if (isElement(node)) {
+          removeNode((node as MyElement).id);
+          if (op.path.length > 1) {
+            const rootBlockEntry = findNode(editor, {
+              at: op.path.slice(0, 1),
+            });
+            if (rootBlockEntry) {
+              const [rootBlock] = rootBlockEntry;
+              if (isElement(rootBlock)) {
+                dirtyBlocksSet.set(rootBlock.id, rootBlock);
               }
             }
-            continue;
           }
-        }
-        let node = getNode(editor, [block]);
-        if (!node && op.type === 'remove_node') {
-          node = op.node as MyElement;
-        }
-        if (isElement(node) && interactiveElementTypes.has(node.type)) {
-          dirtyBlocksSet.set(node.id, node);
         }
       }
       if (op.type === 'remove_node') {

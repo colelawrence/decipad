@@ -58,12 +58,14 @@ it('can parse a number', async () => {
   expect(interpretedAs).toMatchInlineSnapshot(`"literal"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
+      "artificiallyDerivedFrom": undefined,
       "block": (block
       (assign
         (def TestName)
         1)),
       "definesVariable": "TestName",
       "id": "codelineid",
+      "isArtificial": undefined,
       "type": "identified-block",
     }
   `);
@@ -79,12 +81,14 @@ it('can parse code', async () => {
   expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
+      "artificiallyDerivedFrom": undefined,
       "block": (block
       (assign
         (def TestName)
         (implicit* 1 (ref meter)))),
       "definesVariable": "TestName",
       "id": "codelineid",
+      "isArtificial": undefined,
       "type": "identified-block",
     }
   `);
@@ -100,12 +104,14 @@ it('can parse nothing', async () => {
   expect(interpretedAs).toMatchInlineSnapshot(`"empty"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
+      "artificiallyDerivedFrom": undefined,
       "block": (block
       (assign
         (def TestName)
         0)),
       "definesVariable": "TestName",
       "id": "codelineid",
+      "isArtificial": undefined,
       "type": "identified-block",
     }
   `);
@@ -131,12 +137,14 @@ it('regression: deals with smart refs', async () => {
   expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
+      "artificiallyDerivedFrom": undefined,
       "block": (block
       (assign
         (def TestName)
         (implicit* 1 (ref exprRef_1234)))),
       "definesVariable": "TestName",
       "id": "codelineid",
+      "isArtificial": undefined,
       "type": "identified-block",
     }
   `);
@@ -162,12 +170,14 @@ it('deals with table+column smart refs', async () => {
   expect(interpretedAs).toMatchInlineSnapshot(`"code"`);
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
+      "artificiallyDerivedFrom": undefined,
       "block": (block
       (assign
         (def TestName)
         (implicit* 1 (prop (ref exprRef_tableId).exprRef_columnId)))),
       "definesVariable": "TestName",
       "id": "codelineid",
+      "isArtificial": undefined,
       "type": "identified-block",
     }
   `);

@@ -5,7 +5,6 @@ import {
   ElementType,
   FC,
   PropsWithChildren,
-  ReactNode,
   useState,
 } from 'react';
 import { TableColumnMenu } from '..';
@@ -47,7 +46,7 @@ type TableColumnHeaderProps = PropsWithChildren<
       readOnly?: boolean;
       isForImportedColumn?: boolean;
       attributes?: ElementAttributes;
-      error?: ReactNode;
+      error?: string;
     }
 >;
 

@@ -68,7 +68,9 @@ export const dependencies = (
       case 'column-items':
       case 'generic-list':
       case 'matrix-matchers':
-      case 'range':
+      case 'range': {
+        return unique(node.args).flatMap(findRefs);
+      }
       case 'table-column-assign': {
         return unique((node.args.slice(0, 3) as AST.Node[]).flatMap(findRefs));
       }

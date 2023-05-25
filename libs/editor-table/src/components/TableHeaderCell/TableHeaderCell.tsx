@@ -5,8 +5,11 @@ import {
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { TableColumnHeader, CodeLine } from '@decipad/ui';
-import { assertElementType } from '@decipad/editor-utils';
+import { TableColumnHeader } from '@decipad/ui';
+import {
+  assertElementType,
+  getResultErrorMessage,
+} from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate';
 import { selectErrorFromResult } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
@@ -49,7 +52,7 @@ export const TableHeaderCell: PlateComponent = ({
     path,
     inferredType,
     dropDownNames,
-  } = useTableHeaderCell(element);
+  } = useTableHeaderCell(element) ?? {};
 
   return (
     <TableColumnHeader
@@ -60,11 +63,11 @@ export const TableHeaderCell: PlateComponent = ({
       isFirst={columnIndex === 0}
       onChangeColumnType={useCallback(
         (newType?: TableCellType) =>
-          columnIndex != null && onChangeColumnType(columnIndex, newType),
+          columnIndex != null && onChangeColumnType?.(columnIndex, newType),
         [columnIndex, onChangeColumnType]
       )}
       onRemoveColumn={useCallback(
-        () => onRemoveColumn(element.id),
+        () => onRemoveColumn?.(element.id),
         [element.id, onRemoveColumn]
       )}
       onSelectColumn={useCallback(
@@ -73,7 +76,10 @@ export const TableHeaderCell: PlateComponent = ({
       )}
       parseUnit={parseUnit}
       type={
-        element.cellType?.kind === 'anything' ? inferredType : element.cellType
+        element.cellType?.kind === 'anything' &&
+        inferredType?.kind !== 'type-error'
+          ? inferredType
+          : element.cellType
       }
       draggable={true}
       dragSource={dragSource}
@@ -83,13 +89,11 @@ export const TableHeaderCell: PlateComponent = ({
       dropdownNames={dropDownNames}
       key={element.id}
       error={
-        errorResult &&
-        !formulaIsSelected &&
-        !isHeaderSelected && (
-          <CodeLine variant="table" result={errorResult} element={element}>
-            {' '}
-          </CodeLine>
-        )
+        (errorResult &&
+          !formulaIsSelected &&
+          !isHeaderSelected &&
+          getResultErrorMessage(errorResult)) ||
+        undefined
       }
     >
       {children}

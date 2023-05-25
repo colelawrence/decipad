@@ -22,8 +22,8 @@ export function* allBlockIds(
   editor: MyEditor,
   blockId: string
 ): Iterable<string> {
-  yield blockId;
   for (const id of children(editor, blockId)) {
     yield id;
   }
+  yield blockId;
 }

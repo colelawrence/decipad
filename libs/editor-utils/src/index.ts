@@ -18,6 +18,7 @@ export * from './getNodeEntrySafe';
 export * from './getNotebook';
 export * from './getPointSafe';
 export * from './getRangeSafe';
+export * from './getResultErrorMessage';
 export * from './getSlateFragment';
 export * from './getSyntaxErrorRanges';
 export * from './getUrlComponents';

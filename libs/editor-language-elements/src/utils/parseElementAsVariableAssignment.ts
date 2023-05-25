@@ -11,7 +11,9 @@ import {
 export function parseElementAsVariableAssignment(
   blockId: string,
   varName: string,
-  source: string | AST.Expression
+  source: string | AST.Expression,
+  isArtificial?: boolean,
+  artificiallyDerivedFrom?: string
 ): Program {
   const { solution: expression, error } =
     typeof source === 'string'
@@ -40,5 +42,12 @@ export function parseElementAsVariableAssignment(
       }
     : expression;
 
-  return [statementToIdentifiedBlock(blockId, statement)];
+  return [
+    statementToIdentifiedBlock(
+      blockId,
+      statement,
+      isArtificial,
+      artificiallyDerivedFrom
+    ),
+  ];
 }

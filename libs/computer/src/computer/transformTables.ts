@@ -55,7 +55,12 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
         // Hacking the block ID to be unique here because column assigns
         // don't have a place in the UI to live, but block IDs must be unique
         // or column assigns won't be computed.
-        statementToIdentifiedBlock(`${block.id}_${i}`, columnAssign)
+        statementToIdentifiedBlock(
+          `${block.id}_${i}`,
+          columnAssign,
+          true,
+          block.id
+        )
       );
     });
     return assigns;

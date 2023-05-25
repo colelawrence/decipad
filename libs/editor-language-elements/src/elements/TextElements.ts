@@ -30,7 +30,9 @@ export const Paragraph: InteractiveLanguageElement = {
           return parseElementAsSourceCode(
             magicNumberId(element, index),
             getNodeString(child),
-            'expression'
+            'expression',
+            true,
+            element.id
           );
         }
         return [];

@@ -74,7 +74,9 @@ export const VariableDef: InteractiveLanguageElement = {
               return parseElementAsVariableAssignment(
                 option.id,
                 getExprRef(option.id),
-                dropdownExpression
+                dropdownExpression,
+                true, // isArtificial
+                id // origin block id
               );
             })
           );

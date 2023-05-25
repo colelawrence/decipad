@@ -10,7 +10,7 @@ const errorMessage = (message?: string): string => {
 
 export const selectErrorFromResult = (
   blockResult?: IdentifiedResult | IdentifiedError
-): Result.Result | undefined => {
+): Result.Result<'type-error'> | undefined => {
   if (blockResult?.type === 'identified-error') {
     return {
       type: {
@@ -27,7 +27,7 @@ export const selectErrorFromResult = (
     blockResult?.type === 'computer-result' &&
     blockResult?.result?.type.kind === 'type-error'
   ) {
-    return blockResult.result;
+    return blockResult.result as Result.Result<'type-error'>;
   }
   return undefined;
 };

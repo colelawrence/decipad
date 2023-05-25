@@ -161,7 +161,9 @@ export const identifiedErrorToMessage = (error: IdentifiedError): string => {
 
 export function statementToIdentifiedBlock(
   id: string,
-  stat: AST.Statement
+  stat: AST.Statement,
+  isArtificial?: boolean,
+  artificiallyDerivedFrom?: string
 ): IdentifiedBlock {
   const varName = getDefinedSymbol(stat, true);
   let defs: Partial<IdentifiedBlock> = {};
@@ -178,5 +180,7 @@ export function statementToIdentifiedBlock(
     id,
     block: { id, type: 'block', args: [stat] },
     ...defs,
+    isArtificial,
+    artificiallyDerivedFrom,
   };
 }

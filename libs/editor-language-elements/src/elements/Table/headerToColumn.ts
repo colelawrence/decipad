@@ -91,6 +91,10 @@ const dropdownColumnToColumn = ({
   columnIndex,
   dataRows,
 }: HeaderToColumnProps): ColumnParseReturn => {
+  if (th.cellType.kind !== 'dropdown') {
+    throw new Error('Dropdown column should have dropdown type');
+  }
+
   const errors: IdentifiedError[] = [];
   const cellTexts: string[] = [];
   const cellIds: string[] = [];
@@ -100,10 +104,6 @@ const dropdownColumnToColumn = ({
       cellTexts.push(getNodeString(td));
       cellIds.push(td.id);
     }
-  }
-
-  if (th.cellType.kind !== 'dropdown') {
-    throw new Error('Dropdown column should have dropdown type');
   }
 
   const items = cellTexts.map((text): AST.Expression => {

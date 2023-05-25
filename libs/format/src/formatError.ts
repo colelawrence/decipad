@@ -107,7 +107,7 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
       return 'Need one and only one unit';
     }
     case 'unknown-reference': {
-      return 'Unknown reference';
+      return `Unknown reference: ${spec.refName}`;
     }
     case 'retired-feature': {
       return "You're using a feature that's been retired";

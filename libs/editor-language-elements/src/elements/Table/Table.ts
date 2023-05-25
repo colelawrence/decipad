@@ -56,7 +56,7 @@ export const Table: InteractiveLanguageElement = {
           };
 
           columnAssigns.push(
-            statementToIdentifiedBlock(elementId, columnAssign),
+            statementToIdentifiedBlock(elementId, columnAssign, true, table.id),
             ...errors
           );
         } else {

@@ -2,7 +2,7 @@ import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { FC, ReactNode, forwardRef, useContext } from 'react';
+import { FC, forwardRef, useContext } from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
@@ -160,7 +160,7 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   // drop
   dropTarget?: ConnectDropTarget;
   dropDirection?: 'left' | 'right';
-  error?: ReactNode;
+  error?: string;
 }
 
 export const TableHeader = ({
@@ -221,7 +221,9 @@ export const TableHeader = ({
                   </span>
                 }
               >
-                There's a problem with your formulas
+                {type.kind !== 'table-formula'
+                  ? error
+                  : "There's a problem with your formulas"}
               </Tooltip>
             ) : (
               <span contentEditable={false} css={iconTypeStyles}>

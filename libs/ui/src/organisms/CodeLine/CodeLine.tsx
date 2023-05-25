@@ -3,6 +3,7 @@ import { AnyElement } from '@decipad/editor-types';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
+import type { FC } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -166,7 +167,7 @@ interface CodeLineProps {
   readonly children: ReactNode;
   readonly highlight?: boolean;
   readonly placeholder?: string;
-  readonly result?: Result.Result;
+  readonly result?: Result.AnyResult;
   readonly syntaxError?: ComponentProps<typeof CodeError>;
   readonly isEmpty?: boolean;
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
@@ -178,7 +179,7 @@ interface CodeLineProps {
   readonly element?: AnyElement;
 }
 
-export const CodeLine = ({
+export const CodeLine: FC<CodeLineProps> = ({
   variant = 'standalone',
   children,
   highlight = false,
@@ -193,7 +194,7 @@ export const CodeLine = ({
   hasNextSibling,
   hasPreviousSibling,
   element,
-}: CodeLineProps): ReturnType<React.FC> => {
+}) => {
   const [grabbing, setGrabbing] = useState(false);
 
   const freshResult = useResultInfo({

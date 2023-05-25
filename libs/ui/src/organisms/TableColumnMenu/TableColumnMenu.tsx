@@ -236,7 +236,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                         type: d.type,
                       })
                     }
-                    selected={false}
+                    selected={type.kind === 'dropdown' && type.id === d.id}
                   >
                     {d.value}
                   </MenuItem>
