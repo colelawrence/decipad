@@ -110,7 +110,7 @@ Harvest = {
 }
 ```
 
-You can also access previous values from other columns by using the word `previous`, providing a value for the first cell and the name of the column you want to access. Like this:
+You can also access previous values from other columns by using the word `previous`, providing a value for the first cell and the name of the column you want to access. Here is an [example notebook](https://app.decipad.com/n/X-over-X-example%3A8LC3k8ETOTHfI4bUmt0BV) using previous to calculate the row-over-row change of a value. The basic syntax looks like this:
 
 ```deci live
 Table = {
