@@ -328,10 +328,9 @@ const Workspace: FC = () => {
                   toast('Failed to revoke workspace access.', 'error');
                 })
                 .then(() => {}),
-            onPermissionChange: (id, userId, email, permissionType) =>
+            onPermissionChange: (id, _userId, email, permissionType) =>
               changeWorkspaceAccess({
                 workspaceId: id,
-                userId,
                 email,
                 permissionType: permissionType as any,
                 canComment: true,

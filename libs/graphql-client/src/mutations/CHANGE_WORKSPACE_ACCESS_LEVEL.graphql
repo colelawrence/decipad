@@ -1,6 +1,5 @@
 mutation ChangeWorkspaceAccessLevel(
   $workspaceId: ID!
-  $userId: ID!
   $email: String!
   $permissionType: PermissionType!
   $canComment: Boolean!

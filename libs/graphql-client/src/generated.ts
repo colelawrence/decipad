@@ -812,7 +812,6 @@ export type AttachFileToNotebookMutation = { __typename?: 'Mutation', attachFile
 
 export type ChangeWorkspaceAccessLevelMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
-  userId: Scalars['ID'];
   email: Scalars['String'];
   permissionType: PermissionType;
   canComment: Scalars['Boolean'];
@@ -1283,7 +1282,7 @@ export function useAttachFileToNotebookMutation() {
   return Urql.useMutation<AttachFileToNotebookMutation, AttachFileToNotebookMutationVariables>(AttachFileToNotebookDocument);
 };
 export const ChangeWorkspaceAccessLevelDocument = gql`
-    mutation ChangeWorkspaceAccessLevel($workspaceId: ID!, $userId: ID!, $email: String!, $permissionType: PermissionType!, $canComment: Boolean!) {
+    mutation ChangeWorkspaceAccessLevel($workspaceId: ID!, $email: String!, $permissionType: PermissionType!, $canComment: Boolean!) {
   shareWorkspaceWithEmail(
     id: $workspaceId
     email: $email
