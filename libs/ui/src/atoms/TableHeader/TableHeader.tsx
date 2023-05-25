@@ -233,7 +233,11 @@ export const TableHeader = ({
           </>
         )}
 
-        <div css={[childrenWrapperStyles]} spellCheck={false}>
+        <div
+          data-testid="table-column-name"
+          css={[childrenWrapperStyles]}
+          spellCheck={false}
+        >
           {children}
         </div>
         {menu}

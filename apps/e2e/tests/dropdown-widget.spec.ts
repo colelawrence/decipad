@@ -5,9 +5,9 @@ import {
   waitForEditorToLoad,
 } from '../utils/page/Editor';
 import {
+  clickCell,
   createTable,
   openColumnMenu,
-  clickCell,
   tableCellLocator,
 } from '../utils/page/Table';
 

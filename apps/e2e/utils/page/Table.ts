@@ -1,6 +1,7 @@
 /* eslint-disable playwright/no-force-option */
 import { Page } from '@playwright/test';
 import { Timeouts } from '../src';
+import { keyPress } from './Editor';
 
 export async function createTable(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
@@ -16,6 +17,7 @@ export async function createTable(page: Page) {
 export function tableRowLocator(line: number) {
   const parentType = line === 0 ? 'thead' : 'tbody';
   const lineNumber = line > 0 ? line - 1 : line;
+
   return `table > ${parentType} > tr:nth-child(${lineNumber + 1})`;
 }
 
@@ -28,26 +30,58 @@ export function tableCellTextLocator(line: number, col = 0) {
   return `${tableCellLocator(line, col)} span[data-slate-string="true"]`;
 }
 
+function getTableOrPage(page: Page, tableName?: string) {
+  return tableName
+    ? page
+        .getByRole('textbox')
+        .locator('div')
+        .filter({ hasText: tableName })
+        .first()
+    : page;
+}
+
 export async function getFromTable(
   page: Page,
   line: number,
+  // eslint-disable-next-line default-param-last
   col = 0,
-  formula = false
+  // eslint-disable-next-line default-param-last
+  formula = false,
+  tableName?: string
 ) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  return page
+  return getTableOrPage(page, tableName)
     .locator(
       formula ? tableCellLocator(line, col) : tableCellTextLocator(line, col)
     )
     .textContent();
 }
 
-export async function clickCell(page: Page, line: number, col = 0) {
+export async function clickCell(
+  page: Page,
+  line: number,
+  // eslint-disable-next-line default-param-last
+  col = 0,
+  tableName?: string
+) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  return page
+
+  return getTableOrPage(page, tableName)
     .locator(tableCellLocator(line, col))
+    .click({ force: true, delay: 100 });
+}
+
+export async function clickCalculateFirstColumn(
+  page: Page,
+  tableName?: string
+) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+  return getTableOrPage(page, tableName)
+    .getByRole('cell', { name: 'Calculate' })
+    .first()
     .click({ force: true, delay: 100 });
 }
 
@@ -55,31 +89,44 @@ export async function writeInTable(
   page: Page,
   text: string,
   line: number,
-  col = 0
+  // eslint-disable-next-line default-param-last
+  col = 0,
+  tableName?: string
 ) {
-  await clickCell(page, line, col);
-  await clickCell(page, line, col);
+  await clickCell(page, line, col, tableName);
+  await clickCell(page, line, col, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
   await page.keyboard.type(text);
 }
 
-export function openRowMenu(page: Page, line: number) {
-  return page
+export function openRowMenu(page: Page, line: number, tableName?: string) {
+  return getTableOrPage(page, tableName)
     .locator(`${tableRowLocator(line)} > th > div > button`)
     .click({ force: true });
 }
 
-export function focusOnTable(page: Page) {
-  return page
+export function focusOnTable(page: Page, tableName?: string) {
+  return getTableOrPage(page, tableName)
     .locator('table > tbody > tr:nth-child(1) > td:nth-child(2)')
     .click();
 }
 
-export function addRow(page: Page) {
-  return page
-    .locator('table > tfoot > tr > th > button')
-    .click({ force: true });
+export async function addRow(page: Page, tableName?: string) {
+  focusOnTable(page, tableName);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+  page
+    .getByRole('button', { name: 'Add row' })
+    .click({ force: true, timeout: 500 });
+}
+
+export async function removeRow(page: Page, line: number, tableName?: string) {
+  focusOnTable(page, tableName);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+  await openRowMenu(page, line, tableName);
+  await page.locator('span', { hasText: 'Delete' }).click();
 }
 
 export async function insertRowAbove(page: Page, line: number) {
@@ -92,21 +139,87 @@ export async function insertRowBelow(page: Page, line: number) {
   await page.locator('span', { hasText: 'Insert Below' }).click();
 }
 
-export async function addColumn(page: Page) {
-  // eslint-disable-next-line playwright/no-force-option
-  await page
+export async function addColumn(page: Page, tableName?: string) {
+  focusOnTable(page, tableName);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+  getTableOrPage(page, tableName)
     .locator('button[title="Add Column"]')
     .click({ force: true, timeout: 500 });
 }
 
-export function openColumnMenu(page: Page, col: number) {
-  return page
-    .locator(
-      `${tableRowLocator(0)} > th:nth-child(${
-        col + 2
-      }) button:has-text("Caret down")`
-    )
+export function openColumnMenu(page: Page, col: number, tableName?: string) {
+  return getTableOrPage(page, tableName)
+    .locator(`${tableRowLocator(0)}`)
+    .getByTestId('table-column-menu-button')
+    .nth(col)
     .click();
+}
+
+export function hideTable(page: Page, tableName?: string) {
+  return getTableOrPage(page, tableName)
+    .getByRole('button', { name: 'Hide table' })
+    .click();
+}
+
+export function showTable(page: Page, tableName?: string) {
+  return getTableOrPage(page, tableName)
+    .getByRole('button', { name: 'Show table' })
+    .click();
+}
+
+export function hideFormulasTable(page: Page, tableName?: string) {
+  return getTableOrPage(page, tableName)
+    .getByRole('button', { name: 'Hide formulas' })
+    .click();
+}
+
+export function showFormulasTable(page: Page, tableName?: string) {
+  return getTableOrPage(page, tableName)
+    .getByRole('button', { name: 'Show formulas' })
+    .click();
+}
+
+export async function removeColumn(
+  page: Page,
+  col: number,
+  tableName?: string
+) {
+  await openColumnMenu(page, col, tableName);
+  await page.getByText('Delete column').click();
+}
+
+export async function updateDataType(
+  page: Page,
+  col: number,
+  tableName?: string
+) {
+  await openColumnMenu(page, col, tableName);
+  await page.getByText('Change type').click();
+  await page.getByRole('menuitem', { name: 'Text' }).click();
+}
+
+export async function selectColumnName(
+  page: Page,
+  col: number,
+  tableName?: string
+) {
+  return getTableOrPage(page, tableName)
+    .locator(`${tableRowLocator(0)}`)
+    .getByTestId('table-column-name')
+    .nth(col)
+    .dblclick();
+}
+
+export async function renameColumn(
+  page: Page,
+  col: number,
+  identifier: string,
+  tableName?: string
+) {
+  selectColumnName(page, col, tableName);
+  await keyPress(page, 'Backspace');
+  await page.keyboard.type(identifier);
 }
 
 export async function focusOnTableColumnFormula(
