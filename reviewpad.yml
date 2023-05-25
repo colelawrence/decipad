@@ -114,4 +114,4 @@ workflows:
   - name: Check product pledge checklist
     run:
       - if: $matchString("- \[ \]", $extractMarkdownHeadingContent($description(), "Product Pledge", 2))
-        then: $fail("Product pledge checklist incomplete")
+        then: $error("Product pledge checklist incomplete")
