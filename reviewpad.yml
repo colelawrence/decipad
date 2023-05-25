@@ -101,3 +101,17 @@ workflows:
       - rule: $hasFileExtensions(["package.json", "yarn-lock.json"])
         extra-actions:
           - $addLabel("dependencies")
+
+  # This workflow validates that the PR title follows the conventional commit standard
+  # Also, it automatically adds a label X when the title ends with [X]
+  - name: Pull request title workflow
+    run:
+      - $titleLint()
+      - if: $matchString("\[(\w+)\]$", $title())
+        then: $addLabel($sprintf("%s", $subMatchesString("\[(\w+)\]$", $title())))
+
+  # This workflow checks if there is any missing check item in the Product Pledge section
+  - name: Check product pledge checklist
+    run:
+      - if: $matchString("- \[ \]", $extractMarkdownHeadingContent($description(), "Product Pledge", 2))
+        then: $fail("Product pledge checklist incomplete")
