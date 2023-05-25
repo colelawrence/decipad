@@ -61,6 +61,9 @@ export const MagicNumber: PlateComponent = ({
   const userIsEditing = inlineExpEditorVisible || isEditing;
   const loadingState = isLoading || (hasError && userIsEditing);
 
+  // dont link to tables, because it makes
+  // formulas not be seen `Table.Column`
+  const isTableReference = !exp.includes('.');
   const sourceId = computer.getVarBlockId$.use(exp);
 
   useWindowListener(
@@ -96,7 +99,7 @@ export const MagicNumber: PlateComponent = ({
   }, [magicNumberInput, _text, editor, computer]);
 
   const onClick = useCallback(() => {
-    if (typeof sourceId !== 'string') {
+    if (typeof sourceId !== 'string' || !isTableReference) {
       setInlineExpEditorVisible(true);
       return;
     }
@@ -107,7 +110,7 @@ export const MagicNumber: PlateComponent = ({
       el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       el?.focus();
     }
-  }, [text, editSource, sourceId]);
+  }, [sourceId, isTableReference, editSource, text]);
 
   return (
     <span {...attributes}>
