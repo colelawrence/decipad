@@ -5,8 +5,9 @@ import {
   interactiveElementTypes,
 } from '@decipad/editor-language-elements';
 import { debounce } from 'lodash';
-import { getNode, isElement } from '@udecode/plate';
+import { findNode, getNode, isElement } from '@udecode/plate';
 import { affectedBlocks } from './affectedBlocks';
+import { allBlockIds } from './allBlockIds';
 
 const DEBFAULT_DEBOUNCE_UPDATE_COMPUTER_MS = 500;
 
@@ -39,8 +40,7 @@ export const withUpdateComputerOverride =
       for (const update of programUpdates) {
         programCache.set(update.id, update);
       }
-      const newRequest = { program: Array.from(programCache.values()) };
-      computer.pushCompute(newRequest);
+      computer.pushCompute({ program: Array.from(programCache.values()) });
     };
 
     let computing: Promise<void> | undefined;
@@ -68,19 +68,34 @@ export const withUpdateComputerOverride =
     }
 
     const removeNode = (id: string) => {
-      programCache.delete(id);
-      dirtyBlocksSet.delete(id);
+      for (const blockId of allBlockIds(editor, id)) {
+        programCache.delete(blockId);
+        dirtyBlocksSet.delete(blockId);
+      }
     };
 
     // eslint-disable-next-line no-param-reassign
     editor.apply = (op) => {
-      apply(op);
+      if (op.type !== 'remove_node') {
+        apply(op);
+      }
       for (const block of affectedBlocks(op)) {
         if (op.type === 'remove_node') {
           const { node } = op;
           if (isElement(node)) {
             removeNode((node as MyElement).id);
-            return;
+            if (op.path.length > 1) {
+              const rootBlockEntry = findNode(editor, {
+                at: op.path.slice(0, 1),
+              });
+              if (rootBlockEntry) {
+                const [rootBlock] = rootBlockEntry;
+                if (isElement(rootBlock)) {
+                  dirtyBlocksSet.set(rootBlock.id, rootBlock);
+                }
+              }
+            }
+            continue;
           }
         }
         let node = getNode(editor, [block]);
@@ -90,6 +105,9 @@ export const withUpdateComputerOverride =
         if (isElement(node) && interactiveElementTypes.has(node.type)) {
           dirtyBlocksSet.set(node.id, node);
         }
+      }
+      if (op.type === 'remove_node') {
+        apply(op);
       }
     };
 
