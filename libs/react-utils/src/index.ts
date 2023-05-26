@@ -5,4 +5,5 @@ export * from './selectable-context';
 export * from './useActiveElement';
 export * from './use-behavior-subject';
 export * from './useResolved';
+export * from './useLocalStorage';
 export * from './justStopEventPropagation';

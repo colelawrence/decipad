@@ -40,7 +40,7 @@ interface WorkspaceMenuProps {
   readonly allWorkspaces: ReadonlyArray<ComponentProps<typeof WorkspaceItem>>;
   readonly onCreateWorkspace?: () => void;
   readonly onClickWorkspace?: (id: string) => void;
-  readonly onClose?: () => void;
+  readonly onWorkspaceNavigate?: (id: string) => void;
 }
 
 export const WorkspaceMenu = ({
@@ -48,7 +48,7 @@ export const WorkspaceMenu = ({
   activeWorkspace,
   allWorkspaces,
   onCreateWorkspace = noop,
-  onClose = noop,
+  onWorkspaceNavigate = noop,
 }: WorkspaceMenuProps): ReturnType<FC> => {
   return (
     <nav css={styles}>
@@ -59,7 +59,7 @@ export const WorkspaceMenu = ({
         {allWorkspaces.map((workspace) => (
           <WorkspaceItem
             key={workspace.id}
-            onClose={onClose}
+            onWorkspaceNavigate={onWorkspaceNavigate}
             {...workspace}
             isActive={workspace.id === activeWorkspace.id}
           />

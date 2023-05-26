@@ -1,7 +1,7 @@
 import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Check } from '../../icons';
 import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
@@ -49,7 +49,7 @@ export interface WorkspaceItemProps {
   readonly name: string;
   readonly isActive?: boolean;
   readonly numberOfMembers: number;
-  readonly onClose?: () => void;
+  readonly onWorkspaceNavigate?: (id: string) => void;
 }
 
 export const WorkspaceItem = ({
@@ -57,14 +57,17 @@ export const WorkspaceItem = ({
   name,
   isActive,
   numberOfMembers,
-  onClose = noop,
+  onWorkspaceNavigate = noop,
 }: WorkspaceItemProps): ReturnType<FC> => {
   const workspacePath = workspaces({}).workspace({ workspaceId: id });
+  const handleNavigate = useCallback(() => {
+    onWorkspaceNavigate(id);
+  }, [id, onWorkspaceNavigate]);
 
   return (
     <NavigationItem
       href={workspacePath.$}
-      onLinkClick={onClose}
+      onLinkClick={handleNavigate}
       icon={<Avatar name={name} />}
       iconStyles={avatarStyles}
     >

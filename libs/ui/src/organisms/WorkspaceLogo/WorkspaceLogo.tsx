@@ -1,4 +1,4 @@
-import { useActiveElement } from '@decipad/react-utils';
+import { useActiveElement, useLocalStorage } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useState } from 'react';
 import { WorkspaceMenu } from '..';
@@ -6,9 +6,11 @@ import { Caret } from '../../icons';
 import { cssVar, mediumShadow, p18Regular } from '../../primitives';
 
 type WorkspaceLogoProps = ComponentProps<typeof WorkspaceMenu>;
+const SELECTED_WORKSPACE_KEY = 'selectedWorkspace';
 
 export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
   const [menuIsVisible, setMenuIsVisible] = useState(false);
+  const [, setSelectedWorkspace] = useLocalStorage(SELECTED_WORKSPACE_KEY, '');
 
   const hideMenu = useCallback(
     () => setMenuIsVisible(false),
@@ -28,6 +30,14 @@ export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
     onCreateWorkspace?.();
   }, [onCreateWorkspace, hideMenu]);
 
+  const saveWorkspaceAndHideMenu = useCallback(
+    (id: string) => {
+      hideMenu();
+      setSelectedWorkspace(id);
+    },
+    [hideMenu, setSelectedWorkspace]
+  );
+
   return (
     <div ref={menuRef}>
       {menuIsVisible && (
@@ -36,7 +46,7 @@ export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
             Heading="h1"
             allWorkspaces={props.allWorkspaces}
             onCreateWorkspace={createWorkspaceAndHideMenu}
-            onClose={hideMenu}
+            onWorkspaceNavigate={saveWorkspaceAndHideMenu}
             activeWorkspace={props.activeWorkspace}
           />
         </div>
