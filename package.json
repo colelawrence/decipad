@@ -325,10 +325,10 @@
     "@types/oauth": "0.9.1",
     "@types/pluralize": "0.0.29",
     "@types/ramda": "0.28.15",
-    "@types/react": "18.0.25",
+    "@types/react": "18.2.7",
     "@types/react-copy-to-clipboard": "5.0.4",
     "@types/react-datepicker": "4.11.2",
-    "@types/react-dom": "18.0.10",
+    "@types/react-dom": "18.2.4",
     "@types/react-helmet": "^6.1.6",
     "@types/react-is": "17.0.3",
     "@types/react-portal": "4.0.4",
@@ -404,7 +404,7 @@
     "ws": "8.13.0"
   },
   "resolutions": {
-    "@types/react": "18.0.21",
+    "@types/react": "18.2.7",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
     "@typescript-eslint/eslint-plugin": "5.59.6"
