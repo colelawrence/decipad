@@ -1125,7 +1125,7 @@ export type GetWorkspaceMembersQueryVariables = Exact<{
 }>;
 
 
-export type GetWorkspaceMembersQuery = { __typename?: 'Query', getWorkspaceById?: { __typename?: 'Workspace', access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } | null };
+export type GetWorkspaceMembersQuery = { __typename?: 'Query', getWorkspaceById?: { __typename?: 'Workspace', id: string, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } | null };
 
 export const ExternalDataSourceFragmentFragmentDoc = gql`
     fragment ExternalDataSourceFragment on ExternalDataSource {
@@ -1784,6 +1784,7 @@ export function useGetWorkspacesQuery(options?: Omit<Urql.UseQueryArgs<GetWorksp
 export const GetWorkspaceMembersDocument = gql`
     query GetWorkspaceMembers($workspaceId: ID!) {
   getWorkspaceById(id: $workspaceId) {
+    id
     ...WorkspaceMembers
   }
 }
