@@ -81,7 +81,7 @@
     "@architect/destroy": "3.0.7",
     "@architect/functions": "5.2.2",
     "@babel/runtime": "7.22.3",
-    "@chakra-ui/css-reset": "2.0.11",
+    "@chakra-ui/css-reset": "2.1.1",
     "@docusaurus/core": "2.4.0",
     "@docusaurus/preset-classic": "2.4.0",
     "@docusaurus/utils-validation": "2.4.0",

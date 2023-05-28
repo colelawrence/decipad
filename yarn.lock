@@ -3413,10 +3413,10 @@
   resolved "https://registry.yarnpkg.com/@begin/hashid/-/hashid-1.0.0.tgz#e3e3f9698423cdd74855f99b2411ed50ed6cf041"
   integrity sha512-w+U9klEtRkt7hyW/f+/SvwPgJ4CTMO2ENddisX9dGgLUZKu+iKpb/IhYnQWIt9/Nnm/5DkApmiHGimPs621wwA==
 
-"@chakra-ui/css-reset@2.0.11":
-  version "2.0.11"
-  resolved "https://registry.yarnpkg.com/@chakra-ui/css-reset/-/css-reset-2.0.11.tgz#d2b65a543bac785c9788ce152a9eece157595289"
-  integrity sha512-TnydPIMYaQX8kJ8cKgbXfHaBKLr9wCqZS+UnqUxUo3YzMNRjOUPg4DWVO4n4s+GwuZy860DGsBoJaheLqrilVg==
+"@chakra-ui/css-reset@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/css-reset/-/css-reset-2.1.1.tgz#c61f3d2103c13e62a86fd2d359682092e961852c"
+  integrity sha512-jwEOfIAWmQsnChHQTW/eRE+dfE4MjmhvSvoUug5nkV1pI7veC/20noFlIZxzi82EbiQI8Fs0+Jnusgxr2yaOHA==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
