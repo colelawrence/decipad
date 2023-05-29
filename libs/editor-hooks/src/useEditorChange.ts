@@ -4,20 +4,20 @@ import type { PlateEditor } from '@udecode/plate';
 import { dequal } from '@decipad/utils';
 import { debounce } from 'lodash';
 import { EditorChangeContext } from '@decipad/react-contexts';
-import { MyValue, useTEditorRef } from '@decipad/editor-types';
+import { MyEditor, MyValue, useTEditorRef } from '@decipad/editor-types';
 import { useResolved } from '@decipad/react-utils';
 
 export interface UseEditorChangeOptions {
   debounceTimeMs?: number;
   injectObservable?: Observable<undefined>;
 }
-export function useEditorChange<T>(
-  selector: (editor: PlateEditor<MyValue>) => T,
+export function useExternalEditorChange<T>(
+  editor: MyEditor | undefined,
+  selector: (ed: MyEditor) => T,
   { debounceTimeMs = 100 }: UseEditorChangeOptions = {}
-): T {
-  const editor = useTEditorRef();
+): T | undefined {
   const editorChanges = useContext(EditorChangeContext);
-  const [state, setState] = useState(selector(editor));
+  const [state, setState] = useState(editor && selector(editor));
   const lastState = useRef<T | undefined>();
 
   const setStateSafe = useCallback((v: T) => {
@@ -29,7 +29,9 @@ export function useEditorChange<T>(
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setStateSafe(selector(editor));
+      if (editor) {
+        setStateSafe(selector(editor));
+      }
     }, debounceTimeMs);
     return () => {
       clearTimeout(timeout);
@@ -40,6 +42,9 @@ export function useEditorChange<T>(
   selectorRef.current = selector;
   useEffect(() => {
     const subscriber = debounce(() => {
+      if (!editor) {
+        return;
+      }
       const value = selectorRef.current(editor);
       setStateSafe(value);
     }, debounceTimeMs);
@@ -52,6 +57,13 @@ export function useEditorChange<T>(
   }, [debounceTimeMs, editor, editorChanges, setStateSafe]);
 
   return state;
+}
+
+export function useEditorChange<T>(
+  selector: (editor: MyEditor) => T,
+  options?: UseEditorChangeOptions
+): T {
+  return useExternalEditorChange<T>(useTEditorRef(), selector, options) as T;
 }
 
 export function useEditorChangePromise<T>(

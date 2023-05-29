@@ -7,7 +7,6 @@ import { AddConnection } from '@decipad/editor-database';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   EditorBlockParentRefProvider,
-  EditorChangeContextProvider,
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
@@ -15,8 +14,8 @@ import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate';
 import { EditorLayout } from 'libs/ui/src/atoms';
-import { ReactNode, RefObject, useCallback, useRef, useState } from 'react';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { ReactNode, RefObject, useCallback, useContext, useRef } from 'react';
+import { BehaviorSubject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
@@ -25,6 +24,7 @@ import { NotebookState } from './components/NotebookState/NotebookState';
 import { useAutoAnimate } from './hooks';
 import { useUndo } from './hooks/useUndo';
 import { useWriteLock } from './utils/useWriteLock';
+import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 
 export interface EditorProps {
   notebookId: string;
@@ -79,7 +79,7 @@ export const Editor = (props: EditorProps) => {
   // useCursors(editor);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const [changeSubject] = useState(() => new Subject<undefined>());
+  const changeSubject = useContext(EditorChangeContext);
   const onChange = useDebouncedCallback(
     useCallback(() => {
       // Make sure all components have been updated with the new change.
@@ -111,38 +111,36 @@ export const Editor = (props: EditorProps) => {
     <EditorReadOnlyContext.Provider
       value={{ readOnly: readOnly || isWritingLocked, lockWriting }}
     >
-      <EditorChangeContextProvider changeSubject={changeSubject}>
-        <LoadingFilter loading={isWritingLocked}>
-          <EditorBlockParentRefProvider onRefChange={onRefChange}>
-            <EditorLayout ref={containerRef}>
-              <BlockLengthSynchronizationProvider editor={editor}>
-                <TeleportEditor editor={editor}>
-                  <Plate<MyValue>
-                    editor={editor}
-                    onChange={onChange}
-                    readOnly={
-                      // Only respect write locks here and not the readOnly prop.
-                      // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                      // The rest are controlled via EditorReadOnlyContext.
-                      isWritingLocked
-                    }
-                    disableCorePlugins={{
-                      history: true,
-                    }}
-                  >
-                    <InsidePlate {...props} containerRef={containerRef} />
-                    <AddConnection />
-                    <NotebookState
-                      isSavedRemotely={isSavedRemotely}
-                      isNewNotebook={!!isNewNotebook}
-                    />
-                  </Plate>
-                </TeleportEditor>
-              </BlockLengthSynchronizationProvider>
-            </EditorLayout>
-          </EditorBlockParentRefProvider>
-        </LoadingFilter>
-      </EditorChangeContextProvider>
+      <LoadingFilter loading={isWritingLocked}>
+        <EditorBlockParentRefProvider onRefChange={onRefChange}>
+          <EditorLayout ref={containerRef}>
+            <BlockLengthSynchronizationProvider editor={editor}>
+              <TeleportEditor editor={editor}>
+                <Plate<MyValue>
+                  editor={editor}
+                  onChange={onChange}
+                  readOnly={
+                    // Only respect write locks here and not the readOnly prop.
+                    // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                    // The rest are controlled via EditorReadOnlyContext.
+                    isWritingLocked
+                  }
+                  disableCorePlugins={{
+                    history: true,
+                  }}
+                >
+                  <InsidePlate {...props} containerRef={containerRef} />
+                  <AddConnection />
+                  <NotebookState
+                    isSavedRemotely={isSavedRemotely}
+                    isNewNotebook={!!isNewNotebook}
+                  />
+                </Plate>
+              </TeleportEditor>
+            </BlockLengthSynchronizationProvider>
+          </EditorLayout>
+        </EditorBlockParentRefProvider>
+      </LoadingFilter>
     </EditorReadOnlyContext.Provider>
   );
 };

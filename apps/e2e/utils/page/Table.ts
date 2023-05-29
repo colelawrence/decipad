@@ -116,9 +116,7 @@ export async function addRow(page: Page, tableName?: string) {
   focusOnTable(page, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  page
-    .getByRole('button', { name: 'Add row' })
-    .click({ force: true, timeout: 500 });
+  page.getByRole('button', { name: 'Add row' }).click({ force: true });
 }
 
 export async function removeRow(page: Page, line: number, tableName?: string) {
@@ -145,7 +143,7 @@ export async function addColumn(page: Page, tableName?: string) {
   await page.waitForTimeout(Timeouts.tableDelay);
   getTableOrPage(page, tableName)
     .locator('button[title="Add Column"]')
-    .click({ force: true, timeout: 500 });
+    .click({ force: true });
 }
 
 export function openColumnMenu(page: Page, col: number, tableName?: string) {

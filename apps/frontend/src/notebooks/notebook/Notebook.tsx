@@ -4,6 +4,7 @@ import {
   EditorStylesContext,
   EditorStylesContextValue,
   DeciEditorContextProvider,
+  EditorChangeContextProvider,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
@@ -18,6 +19,7 @@ import {
   useGetWorkspacesIDsQuery,
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
+import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';
@@ -191,4 +193,13 @@ const Notebook: FC = () => {
   );
 };
 
-export default Notebook;
+const ChangesNotebook: FC = () => {
+  const [changeSubject] = useState(() => new Subject<undefined>());
+  return (
+    <EditorChangeContextProvider changeSubject={changeSubject}>
+      <Notebook />
+    </EditorChangeContextProvider>
+  );
+};
+
+export default ChangesNotebook;

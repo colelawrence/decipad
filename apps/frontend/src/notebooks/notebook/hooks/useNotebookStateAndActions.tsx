@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { DocSyncEditor, SyncSource } from '@decipad/docsync';
+import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
@@ -25,9 +25,12 @@ import {
   useUpdatePadPermissionMutation,
   PermissionType,
 } from '@decipad/graphql-client';
+import { useExternalEditorChange } from '@decipad/editor-hooks';
 import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import { useDuplicateNotebook } from './useDuplicateNotebook';
 import EditorIcon from '../EditorIcon';
+
+const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 
 type Icon = ComponentProps<typeof EditorIcon>['icon'];
 type IconColor = ComponentProps<typeof EditorIcon>['color'];
@@ -270,30 +273,19 @@ export const useNotebookStateAndActions = ({
 
   // -------- publishing -------------
 
-  const [hasUnpublishedChanges, setHasUnpublishedChanges] = useState(false);
-
-  // Grabbing the snapshot here so the effect can depend on it instead of the whole notebook. The
-  // notebook appears to be a mutable reference from the local cache and so we'd miss effects.
   const snapshot = notebook?.snapshots.find(
     (s) => s.snapshotName === SNAPSHOT_NAME
   );
-  useEffect(() => {
-    if (!docsync || !snapshot || !isPublic) {
-      return;
-    }
 
-    const onSavedChanges = (source: SyncSource) => {
-      if (source === 'remote') {
-        setHasUnpublishedChanges(
-          !(snapshot?.version && docsync.equals(snapshot?.version))
-        );
-      }
-    };
-
-    docsync.onSaved(onSavedChanges);
-    onSavedChanges('remote');
-    return () => docsync?.offSaved(onSavedChanges);
-  }, [docsync, isPublic, snapshot, setHasUnpublishedChanges]);
+  const hasUnpublishedChanges = useExternalEditorChange(
+    editor,
+    useCallback(() => {
+      return (
+        isPublic && !(snapshot?.version && docsync?.equals(snapshot?.version))
+      );
+    }, [docsync, isPublic, snapshot?.version]),
+    { debounceTimeMs: DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS }
+  );
 
   const setNotebookPublic = useCallback(
     async (newIsPublic: boolean) => {
@@ -331,7 +323,12 @@ export const useNotebookStateAndActions = ({
         console.error(err);
         toast('Error publishing notebook', 'error');
       })
-      .finally(() => setIsPublishing(false));
+      .finally(() => {
+        setTimeout(
+          () => setIsPublishing(false),
+          DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS * 2
+        );
+      });
   }, [createOrUpdateSnapshot, event, notebookId, setNotebookPublic, toast]);
 
   const unpublishNotebook = useCallback(() => {
@@ -396,8 +393,7 @@ export const useNotebookStateAndActions = ({
     isSavedRemotely,
     connectionParams: notebook?.padConnectionParams,
     initialState: notebook?.initialState ?? undefined,
-    hasUnpublishedChanges,
-
+    hasUnpublishedChanges: !!hasUnpublishedChanges,
     duplicate,
     removeLocalChanges,
     setNotebookPublic,
