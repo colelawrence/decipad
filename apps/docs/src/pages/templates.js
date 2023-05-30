@@ -33,6 +33,9 @@ import {
   IconMessage,
   IconHappy,
   Card,
+  IconHeart,
+  IconCompass,
+  IconSunrise,
 } from '@site/src/components/GalleryCards';
 
 export default function Templates() {
@@ -157,6 +160,58 @@ export default function Templates() {
             </GridContainer>
                 */}
             <br></br>
+
+            <h2>New Templates</h2>
+
+            <GridContainer>
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-orange"
+                icon={IconStar}
+                title="Pricing Analysis with PetsApp"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/An-offer-letter-for-startup-employees-template-%3ArpkOOZpHjUQHfm2cDDOKR"
+                description="Learn how PetsApp uses Decipad to drive meaningful ROI conversations with their customers. "
+                newNotebook
+                template
+                avatar={avatarKelly}
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-blue"
+                icon={IconHeart}
+                title="Dynamic Investor Updates "
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/ROI-from-using-PetsApp%3AQpOd1cV8vmHr4WQ0vGh6D"
+                description="Get an inside look at how the Decipad team creates investor updates. "
+                avatar={avatarKelly}
+                newNotebook
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-white"
+                icon={IconCompass}
+                title="Hourly Rate Proposal - Interior Design"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Interior-Design-Proposal%3AQNvrOjVQMlg5Jhb3DoVSh"
+                description="Create an interactive proposal to effectively price your time and services."
+                newNotebook
+                avatar={avatarKelly}
+              />
+              <Card
+                author="Kelly McEttrick"
+                cardColor="--card-yellow"
+                icon={IconSunrise}
+                title="Solar Energy Panels - Cost Effectiveness"
+                img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
+                notebook="https://app.decipad.com/n/Cost-Effectiveness-of-Solar-Panels%3AWcwqaoPRbPL7zmp79aeH1"
+                description="Use this model to better understand the cost breakdown of an investment in solar panels."
+                avatar={avatarKelly}
+                newNotebook
+              />
+            </GridContainer>
+            <br></br>
+
             <h2>Human Resources</h2>
             <GridContainer>
               <Card
@@ -227,7 +282,6 @@ export default function Templates() {
                 description="An interactive commission plan that allows sales to easily explore different scenarios and better understand how their performance impacts their pay."
                 template
                 avatar={avatarKelly}
-                newNotebook
               />
               <Card
                 author="Kelly McEttrick"
@@ -238,7 +292,6 @@ export default function Templates() {
                 notebook="https://app.decipad.com/n/Tips-for-building-a-commission-plan-from-experts%3AyoiYxMLOyZk_GP3QkTl1y"
                 description="Best practices and tips for building a commission plan from experts."
                 avatar={avatarKelly}
-                newNotebook
               />
               <Card
                 author="Peyton Swift"
@@ -250,7 +303,6 @@ export default function Templates() {
                 description="Share interactive commission plans with your sales team so they can better understand how their variable compensation will work."
                 avatar={avatarPeyton}
                 template
-                newNotebook
               />
               <Card
                 author="Peyton Swift"
@@ -262,7 +314,6 @@ export default function Templates() {
                 description="Design a sales commission plan that encourages steady performance throughout the year and offers rewards for sales teams who achieve higher sales during peak seasons."
                 template
                 avatar={avatarPeyton}
-                newNotebook
               />
               <Card
                 author="Kelly McEttrick"
@@ -274,7 +325,6 @@ export default function Templates() {
                 description="A template to monitor your sales pipeline and easily forecast how you are pacing to a sales goal, quota and commission payout."
                 template
                 avatar={avatarKelly}
-                newNotebook
               />
               <Card
                 author="Simão Dias"
@@ -286,7 +336,6 @@ export default function Templates() {
                 description="Pricing configuration can be complicated at times, use this template to explore pricing options."
                 template
                 avatar={avatarSimao}
-                newNotebook
               />
             </GridContainer>
 
@@ -483,7 +532,6 @@ export default function Templates() {
                 notebook="https://app.decipad.com/n/How-much-money-do-I-get-on-a-savings-account-Template%3AynrEw3tTP1a6MVrUYbM_3"
                 description="Some institutions pay interest when you open a savings account. Use this template to check how much money you will get after taxes."
                 template
-                newNotebook
                 avatar={avatarNuno}
               />
               <Card
@@ -495,7 +543,6 @@ export default function Templates() {
                 notebook="https://app.decipad.com/n/-Template-My-Finance-Tracker-2023%3AA5sV922M9Qtn71KoDdHzO"
                 description="Input your expenses and income to get a detailed summary of cashflows using data views."
                 template
-                newNotebook
                 avatar={avatarSimao}
               />
               <Card
@@ -662,7 +709,6 @@ export default function Templates() {
                 notebook="https://app.decipad.com/n/Let-s-do-the-Math-Revenue-from-Twitter-Verification:pFbOpkpXR_5O-hJGIjTSy"
                 description="How much revenue could Twitter bring by charging for verification?"
                 avatar={avatarSimao}
-                newNotebook
               />
             </GridContainer>
 
