@@ -139,6 +139,10 @@ export const tableOverflowStyles = css({
 });
 
 const tableAddColumnButtonWrapperStyles = css({
+  // this is deliberately coded like this
+  // to prevent a unfixable rogue cursor from slate
+  // that otherwise would render
+  paddingRight: 400,
   width: '40px',
   minWidth: '40px',
   paddingLeft: '8px',
