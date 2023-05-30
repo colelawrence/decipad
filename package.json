@@ -166,7 +166,7 @@
     "globby": "11.1.0",
     "graphql": "16.6.0",
     "graphql-scalars": "1.22.1",
-    "graphql-ws": "5.12.0",
+    "graphql-ws": "5.13.1",
     "immer": "10.0.2",
     "is-hotkey": "0.2.0",
     "is-promise": "^4.0.0",
