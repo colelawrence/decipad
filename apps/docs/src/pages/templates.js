@@ -165,7 +165,7 @@ export default function Templates() {
 
             <GridContainer>
               <Card
-                author="Kelly McEttrick"
+                author="Nuno Job"
                 cardColor="--card-orange"
                 icon={IconStar}
                 title="Pricing Analysis with PetsApp"
@@ -174,7 +174,7 @@ export default function Templates() {
                 description="Learn how PetsApp uses Decipad to drive meaningful ROI conversations with their customers. "
                 newNotebook
                 template
-                avatar={avatarKelly}
+                avatar={avatarNuno}
               />
               <Card
                 author="Kelly McEttrick"
