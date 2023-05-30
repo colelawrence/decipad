@@ -6,7 +6,7 @@ import {
   ColumnLikeValue,
   isColumnLike,
   Value,
-  RuntimeError,
+  defaultValue,
 } from '../value';
 
 /**
@@ -46,30 +46,16 @@ export const coerceTableColumnIndices = async (
   tableLength?: number
 ): Promise<ColumnLikeValue> => {
   if (!isColumnLike(value)) {
-    return Column.fromValues(repeat(value, tableLength ?? 1));
-  } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
-    return validateLength(
-      await dimSwapValues(indexName, type, value),
-      tableLength
+    return Column.fromValues(
+      repeat(value, tableLength ?? 1),
+      defaultValue(type)
     );
+  } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
+    return dimSwapValues(indexName, type, value);
   } else {
-    return validateLength(value, tableLength);
+    return value;
   }
 };
 
 const repeat = <T>(value: T, length: number) =>
   Array.from({ length }, () => value);
-
-const validateLength = async <T extends ColumnLikeValue>(
-  value: T,
-  wanted: number | undefined
-): Promise<T> => {
-  const actual = await value.rowCount();
-  if (wanted != null && wanted !== actual) {
-    // UI tables will never place us in this situation
-    throw new RuntimeError(
-      `Inconsistent table column sizes: expected ${wanted} and got ${actual}`
-    );
-  }
-  return value;
-};

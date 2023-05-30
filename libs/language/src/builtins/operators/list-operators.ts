@@ -11,6 +11,7 @@ import {
   reverse,
   Column,
   Scalar,
+  defaultValue,
 } from '../../value';
 import { createConcatenatedColumn, createSwappedDimensions } from '../../lazy';
 import { Type, buildType as t } from '../../type';
@@ -28,8 +29,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     isReducer: true,
     noAutoconvert: true,
     argCardinalities: [2],
-    fnValues: async ([col]: Value[]) =>
-      fromJS(await getColumnLike(col).rowCount()),
+    fnValues: async ([col]: Value[], [type]: Type[] = []) =>
+      fromJS(await getColumnLike(col).rowCount(), defaultValue(type)),
     functionSignature: 'column<A> -> number',
     explanation: 'Size of a column.',
     syntax: 'len(Table.Column)',
@@ -98,7 +99,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
           count += 1;
         }
       }
-      return fromJS(count);
+      return fromJS(count, defaultValue({ kind: 'number' }));
     },
     functionSignature: 'column<boolean> -> number',
     explanation: 'Number of entries on a column that match a condition.',

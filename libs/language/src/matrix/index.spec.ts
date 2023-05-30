@@ -246,14 +246,11 @@ describe('matrix op inference', () => {
 
 describe('assigning multidimensional values', () => {
   it('can eval simple assignment', async () => {
+    const assign = matrixAssign('CoffeePrice', [r('City')], col(1, 2));
+    await inferMatrixAssign(testRealm.inferContext, assign);
     expect(
       await materializeOneResult(
-        await (
-          await evaluateMatrixAssign(
-            testRealm,
-            matrixAssign('CoffeePrice', [r('City')], col(1, 2))
-          )
-        ).getData()
+        await (await evaluateMatrixAssign(testRealm, assign)).getData()
       )
     ).toMatchInlineSnapshot(`
       Array [
@@ -264,18 +261,15 @@ describe('assigning multidimensional values', () => {
   });
 
   it('can eval filtered assignment', async () => {
+    const assign = matrixAssign(
+      'CoffeePrice',
+      [c('==', r('City'), l('Faro'))],
+      col(150)
+    );
+    await inferMatrixAssign(testRealm.inferContext, assign);
     expect(
       await materializeOneResult(
-        await (
-          await evaluateMatrixAssign(
-            testRealm,
-            matrixAssign(
-              'CoffeePrice',
-              [c('==', r('City'), l('Faro'))],
-              col(150)
-            )
-          )
-        ).getData()
+        await (await evaluateMatrixAssign(testRealm, assign)).getData()
       )
     ).toMatchInlineSnapshot(`
       Array [

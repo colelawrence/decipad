@@ -20,6 +20,7 @@ import {
   UnknownValue,
   columnFromDateSequence,
   columnFromSequence,
+  defaultValue,
 } from '../value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
 import { getDateSequenceIncrement } from '../infer/sequence';
@@ -198,7 +199,10 @@ async function internalEvaluate(
         node.args[0].args.map((v) => async () => evaluate(realm, v))
       );
 
-      return Column.fromValues(values);
+      return Column.fromValues(
+        values,
+        defaultValue(getDefined(node.inferredType))
+      );
     }
     case 'table': {
       return evaluateTable(realm, node);

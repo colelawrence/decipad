@@ -15,7 +15,7 @@ const internalCallBuiltinFunctor = async (
   context: Context,
   opName: string,
   givenArguments: Type[],
-  givenValues?: AST.Expression[]
+  givenValues: AST.Expression[]
 ): Promise<Promise<Type> | Type> => {
   // console.log(
   //   `builtin functor ${opName}`,
@@ -114,7 +114,7 @@ export const callBuiltinFunctor = async (
   ...params: CallBuiltinFunctorParams
 ): Promise<Type> => {
   const returnType = await internalCallBuiltinFunctor(
-    ...(params as [Context, string, Type[], AST.Expression[] | undefined])
+    ...(params as [Context, string, Type[], AST.Expression[]])
   );
   if (typeHasError(returnType)) {
     return enrichErrorType(params, returnType);

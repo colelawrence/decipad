@@ -42,7 +42,7 @@ export type Row = {
 export type Number =
   | ({
       readonly kind: 'number';
-      readonly unit: Unit[] | null;
+      readonly unit?: Unit[] | null;
       readonly numberError?: 'month-day-conversion';
       readonly numberFormat?: null;
     } & Common)

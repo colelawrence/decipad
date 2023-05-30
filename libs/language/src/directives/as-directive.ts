@@ -2,7 +2,7 @@ import DeciNumber, { N } from '@decipad/number';
 import { produce, getDefined } from '@decipad/utils';
 import { evaluate, RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
-import { NumberValue, fromJS, Value } from '../value';
+import { NumberValue, fromJS, Value, defaultValue } from '../value';
 import { AST } from '../parser';
 import {
   buildType as t,
@@ -168,7 +168,10 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   return automapValues([expressionType], [expressionValue], async ([value]) => {
     if (value instanceof NumberValue) {
       if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
-        return fromJS((await value.getData()).div(conversionRate));
+        return fromJS(
+          (await value.getData()).div(conversionRate),
+          defaultValue(expressionType)
+        );
       }
 
       const converted = convertBetweenUnits(
@@ -178,7 +181,10 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
         { tolerateImprecision: true }
       );
 
-      return fromJS(converted.div(conversionRate));
+      return fromJS(
+        converted.div(conversionRate),
+        defaultValue(expressionType)
+      );
     }
 
     throw targetUnits

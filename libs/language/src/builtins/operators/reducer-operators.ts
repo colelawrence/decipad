@@ -3,6 +3,7 @@ import type { BuiltinSpec } from '../interfaces';
 import {
   Scalar,
   Value,
+  defaultValue,
   fromJS,
   getColumnLike,
   isColumnLike,
@@ -59,7 +60,7 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
           acc = acc.add(coherceToFraction(await n.getData()));
         }
       }
-      return fromJS(acc);
+      return fromJS(acc, defaultValue('number'));
     },
     functionSignature: 'column<number:R>, column<boolean> -> R',
     explanation: 'Adds all the elements of a column that match condition.',

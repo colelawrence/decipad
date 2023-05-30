@@ -3,41 +3,6 @@ import { typeSnapshotSerializer } from '../testUtils';
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
-it('non-indexed columns must have sizes consistent with the table', async () => {
-  expect(
-    await testGrowTable({ startingColumns: ['A = 1'], newColumn: '[1, 2]' })
-  ).toMatchInlineSnapshot(
-    `"Error: Inconsistent table column sizes: expected 1 and got 2"`
-  );
-
-  expect(
-    await testGrowTable({ startingColumns: ['A = [1]'], newColumn: '[1, 2]' })
-  ).toMatchInlineSnapshot(
-    `"Error: Inconsistent table column sizes: expected 1 and got 2"`
-  );
-
-  expect(
-    await testGrowTable({
-      startingColumns: ['A = [1, 2]'],
-      newColumn: '[1, 2]',
-    })
-  ).toMatchInlineSnapshot(`
-    Object {
-      "type": table<A = number, NewCol = number>,
-      "value": Array [
-        Array [
-          DeciNumber(1),
-          DeciNumber(2),
-        ],
-        Array [
-          DeciNumber(1),
-          DeciNumber(2),
-        ],
-      ],
-    }
-  `);
-});
-
 it('single items (non-col) are expanded to fit the currently known table size', async () => {
   expect(
     await testGrowTable({ startingColumns: ['A = [1, 2]'], newColumn: '1' })
@@ -180,17 +145,6 @@ it('juggles dimensions so the tables dimension is on top (3)', async () => {
       ],
     }
   `);
-});
-
-it('juggles dimensions so the tables dimension is on top (4)', async () => {
-  expect(
-    await testGrowTable({
-      startingColumns: ['X = [1, 2, 3]'],
-      newColumn: 'OtherTable.Nums',
-    })
-  ).toMatchInlineSnapshot(
-    `"Error: Inconsistent table column sizes: expected 3 and got 2"`
-  );
 });
 
 it('usage of previous() does not affect length rules', async () => {

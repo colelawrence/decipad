@@ -7,6 +7,7 @@ import { addTime, getSpecificity } from '../date';
 import { Column, DateValue, Scalar } from './Value';
 import { Value, ColumnLikeValue } from './types';
 import { getInstanceof } from '../utils';
+import { defaultValue } from './defaultValue';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
@@ -44,7 +45,7 @@ export async function columnFromSequence(
     array.push(Scalar.fromValue(i));
   }
 
-  return Column.fromValues(array);
+  return Column.fromValues(array, defaultValue('column'));
 }
 
 export async function columnFromDateSequence(

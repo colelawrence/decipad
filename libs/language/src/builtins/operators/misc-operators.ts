@@ -1,6 +1,13 @@
 import DeciNumber from '@decipad/number';
 import { getDefined, getInstanceof } from '../../utils';
-import { DateValue, Range, fromJS, NumberValue, Value } from '../../value';
+import {
+  DateValue,
+  Range,
+  fromJS,
+  NumberValue,
+  Value,
+  defaultValue,
+} from '../../value';
 import { Type, buildType as t } from '../../type';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { BuiltinSpec } from '../interfaces';
@@ -33,7 +40,8 @@ export const miscOperators: Record<string, BuiltinSpec> = {
           const [aStart, aEnd] = (await a.getData()) as DeciNumber[];
           const bNumber = getInstanceof(await b.getData(), DeciNumber);
           return fromJS(
-            compare(bNumber, aStart) >= 0 && compare(bNumber, aEnd) <= 0
+            compare(bNumber, aStart) >= 0 && compare(bNumber, aEnd) <= 0,
+            defaultValue('boolean')
           );
         },
         functor: async ([a, b]) =>
@@ -50,11 +58,12 @@ export const miscOperators: Record<string, BuiltinSpec> = {
             [a, b].map(extractDateValues)
           );
           if (aDate == null || bDate == null) {
-            return fromJS(false);
+            return fromJS(false, defaultValue('boolean'));
           }
 
           return fromJS(
-            aDate <= bDate && getDefined(aEndDate) >= getDefined(bEndDate)
+            aDate <= bDate && getDefined(aEndDate) >= getDefined(bEndDate),
+            defaultValue('boolean')
           );
         },
         functor: async ([a, b]) =>
@@ -69,10 +78,13 @@ export const miscOperators: Record<string, BuiltinSpec> = {
           );
           const [dateStart, dateEnd] = await extractDateValues(dateD);
           if (!startDate || !endDate || !dateStart || !dateEnd) {
-            return fromJS(false);
+            return fromJS(false, defaultValue('boolean'));
           }
 
-          return fromJS(startDate <= dateStart && endDate >= dateEnd);
+          return fromJS(
+            startDate <= dateStart && endDate >= dateEnd,
+            defaultValue('boolean')
+          );
         },
         functor: async ([range, date]) =>
           Type.combine(range.isRange(), date.isDate(), t.boolean()),

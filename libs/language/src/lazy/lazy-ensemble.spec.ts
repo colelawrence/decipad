@@ -96,34 +96,6 @@ describe.each(
     ).toEqual(3);
   });
 
-  it('bound checks', async () => {
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(-1)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(4)
-    ).rejects.toThrow();
-
-    await expect(async () =>
-      getColumnLike(await lazyThing).atIndex(-1)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).atIndex(4)
-    ).rejects.toThrow();
-  });
-
-  it('validasync async ates keys in lowLevelGet', async () => {
-    // Too few coordinates
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet()
-    ).rejects.toThrow();
-
-    // Too many coordinates
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(0, 0)
-    ).rejects.toThrow();
-  });
-
   it('contains a .dimensions property', async () => {
     expect(await getColumnLike(await lazyThing).dimensions()).toEqual([
       { dimensionLength: 3 },
@@ -269,39 +241,6 @@ describe.each(
         ).atIndex(1)
       )
     ).toEqual(5);
-  });
-
-  it('bound-checks', async () => {
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(-1)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(4)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(0, -1)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(4, 0)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).atIndex(-1)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).atIndex(4)
-    ).rejects.toThrow();
-  });
-
-  it('validates keys in lowLevelGet', async () => {
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet()
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(1)
-    ).rejects.toThrow();
-    await expect(async () =>
-      getColumnLike(await lazyThing).lowLevelGet(1, 2, 3)
-    ).rejects.toThrow();
   });
 
   it('contains a .dimensions property', async () => {

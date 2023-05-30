@@ -1,7 +1,15 @@
 import { N } from '@decipad/number';
 import { from, map } from '@decipad/generator-utils';
 import { Result, Value, Table, Column, SerializedTypes } from '..';
-import { DateValue, fromJS, Range, Row, Scalar, UnknownValue } from '../value';
+import {
+  DateValue,
+  defaultValue,
+  fromJS,
+  Range,
+  Row,
+  Scalar,
+  UnknownValue,
+} from '../value';
 import {
   ResultBoolean,
   ResultColumn,
@@ -66,7 +74,8 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
     case 'materialized-column': {
       const columnValue = value as ResultColumn | ResultMaterializedColumn;
       if (columnValue == null) {
-        return Column.fromValues([fromJS(0)]);
+        const defaultV = defaultValue(type);
+        return Column.fromValues([fromJS(0, defaultV)], defaultV);
       }
       const columnType = type as SerializedTypes.Column;
       let columnGen: ValueGeneratorFunction;

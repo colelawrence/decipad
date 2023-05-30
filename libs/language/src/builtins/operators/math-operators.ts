@@ -5,7 +5,14 @@ import { sort } from '@decipad/column';
 import { RuntimeError, Realm } from '../../interpreter';
 import { getInstanceof } from '../../utils';
 import { InferError, Type, buildType as t } from '../../type';
-import { fromJS, Scalar, Value, isColumnLike, NumberValue } from '../../value';
+import {
+  fromJS,
+  Scalar,
+  Value,
+  isColumnLike,
+  NumberValue,
+  defaultValue,
+} from '../../value';
 import { AST } from '../../parser';
 import { overloadBuiltin } from '../overloadBuiltin';
 import { dateOverloads } from '../dateOverloads';
@@ -111,7 +118,10 @@ const average = async ([value]: Value[]): Promise<Value> => {
   return Scalar.fromValue(acc.div(N(count)));
 };
 
-const median = async ([value]: Value[]): Promise<Value> => {
+const median = async (
+  [value]: Value[],
+  [type]: Type[] = []
+): Promise<Value> => {
   if (!isColumnLike(value)) {
     return Promise.resolve(value);
   }
@@ -123,12 +133,15 @@ const median = async ([value]: Value[]): Promise<Value> => {
     await sortedValues.atIndex(rightCenterPos)
   ).getData();
   if (length % 2 === 1) {
-    return fromJS(rightCenter);
+    return fromJS(rightCenter, defaultValue(type));
   }
   const leftCenter = coherceToFraction(
     await getDefined(await sortedValues.atIndex(rightCenterPos - 1)).getData()
   );
-  return fromJS(leftCenter.add(coherceToFraction(rightCenter)).div(TWO));
+  return fromJS(
+    leftCenter.add(coherceToFraction(rightCenter)).div(TWO),
+    defaultValue(type)
+  );
 };
 
 const secondArgIsPercentage = (types?: Type[]) =>

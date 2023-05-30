@@ -1,4 +1,9 @@
-import { SerializedTypeKind, isColumn, isTable } from '@decipad/computer';
+import {
+  Result,
+  SerializedTypeKind,
+  isColumn,
+  isTable,
+} from '@decipad/computer';
 import { isDeciNumberInput } from '@decipad/number';
 import {
   ColumnResult,
@@ -41,6 +46,14 @@ interface ResultMatcher {
 }
 // Lazy to avoid strange cyclic import bug
 const getResultMatchers = (): ResultMatcher[] => [
+  {
+    component: AnyResult,
+    match: ({ type, value }) =>
+      type.kind === 'anything' ||
+      type.kind === 'nothing' ||
+      (type.kind !== 'type-error' &&
+        (value == null || value === Result.Unknown)),
+  },
   {
     component: NumberResult,
     match: ({ type, value }) =>
@@ -99,10 +112,6 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: PendingResult,
     match: ({ type }) => type.kind === 'pending',
-  },
-  {
-    component: AnyResult,
-    match: ({ type }) => type.kind === 'anything' || type.kind === 'nothing',
   },
 ];
 

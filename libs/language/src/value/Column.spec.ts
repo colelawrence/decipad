@@ -3,7 +3,7 @@ import { materializeOneResult } from '../utils/materializeOneResult';
 
 describe('column value', () => {
   it('can be constructed from values', async () => {
-    const column = Column.fromValues([1, 2, 3].map(fromJS));
+    const column = Column.fromValues([1, 2, 3].map((n) => fromJS(n)));
     expect(await materializeOneResult(await column.getData()))
       .toMatchInlineSnapshot(`
       Array [
@@ -15,8 +15,8 @@ describe('column value', () => {
   });
 
   it('can be constructed from other columns', async () => {
-    const column1 = Column.fromValues([1, 2, 3].map(fromJS));
-    const column2 = Column.fromValues([4, 5, 6].map(fromJS));
+    const column1 = Column.fromValues([1, 2, 3].map((n) => fromJS(n)));
+    const column2 = Column.fromValues([4, 5, 6].map((n) => fromJS(n)));
     const column = Column.fromValues([column1, column2]);
     expect(await materializeOneResult(await column.getData()))
       .toMatchInlineSnapshot(`
@@ -36,7 +36,7 @@ describe('column value', () => {
   });
 
   it('can be sorted', async () => {
-    const originalColumn = Column.fromValues([3, 1, 2].map(fromJS));
+    const originalColumn = Column.fromValues([3, 1, 2].map((n) => fromJS(n)));
     const sortedColumn = await sort(originalColumn);
     expect(await materializeOneResult(await originalColumn.getData()))
       .toMatchInlineSnapshot(`

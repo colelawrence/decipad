@@ -3,7 +3,7 @@ import { getOnly } from '@decipad/utils';
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
-import { Value, fromJS } from '../value';
+import { Value, defaultValue, fromJS } from '../value';
 import { getDefined } from '../utils';
 import { Realm, RuntimeError } from '../interpreter';
 import { convertToMultiplierUnit, Type } from '../type';
@@ -112,7 +112,10 @@ export const callBuiltin = async (
           if (type.type === 'number') {
             const data = await value.getData();
             if (data instanceof DeciNumber) {
-              return fromJS(convertToMultiplierUnit(data, type.unit));
+              return fromJS(
+                convertToMultiplierUnit(data, type.unit),
+                defaultValue('number')
+              );
             }
           }
           return value;

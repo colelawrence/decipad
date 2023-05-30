@@ -1,7 +1,15 @@
 import { getDefined } from '@decipad/utils';
 import { AST } from '..';
 import { refersToOtherColumnsByName } from './inference';
-import { Column, ColumnLikeValue, Row, Scalar, Table, Value } from '../value';
+import {
+  Column,
+  ColumnLikeValue,
+  Row,
+  Scalar,
+  Table,
+  Value,
+  defaultValue,
+} from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
 import {
   walkAst,
@@ -94,7 +102,10 @@ export const evaluateTableColumnIteratively = async (
       }
     );
 
-    return Column.fromValues(cells);
+    return Column.fromValues(
+      cells,
+      defaultValue(getDefined(column.inferredType))
+    );
   });
 
 export const evaluateTable = async (

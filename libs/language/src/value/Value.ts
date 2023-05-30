@@ -177,9 +177,11 @@ export class Range implements Value {
 
 export class Column implements ColumnLikeValue {
   readonly _values: ReadonlyArray<Value>;
+  private defaultValue?: Value;
 
-  constructor(values: ReadonlyArray<Value>) {
+  constructor(values: ReadonlyArray<Value>, defaultValue?: Value) {
     this._values = values;
+    this.defaultValue = defaultValue;
   }
 
   async dimensions() {
@@ -204,6 +206,7 @@ export class Column implements ColumnLikeValue {
    */
   static fromValues(
     values: ReadonlyArray<Value>,
+    defaultValue?: Value,
     innerDimensions?: Dimension[]
   ): ColumnLikeValue {
     if (values.length === 0) {
@@ -213,7 +216,7 @@ export class Column implements ColumnLikeValue {
       }
       throw new Error('panic: Empty columns are forbidden');
     }
-    return new Column(values);
+    return new Column(values, defaultValue);
   }
 
   static fromGenerator(gen: ValueGeneratorFunction): ColumnLikeValue {
@@ -229,9 +232,7 @@ export class Column implements ColumnLikeValue {
   }
 
   async atIndex(i: number): Promise<Value> {
-    return Promise.resolve(
-      getDefined(this._values[i], `no value in position ${i}`)
-    );
+    return this._values[i] ?? this.defaultValue ?? UnknownValue;
   }
 
   async getData(): Promise<OneResult> {
@@ -517,7 +518,7 @@ const validateFromJsArg = (thing: FromJSArg): thing is ValidFromJSArg => {
   return true;
 };
 
-export const fromJS = (thing: FromJSArg): Value => {
+export const fromJS = (thing: FromJSArg, defaultValue?: Value): Value => {
   // TODO this doesn't distinguish Range/Date from Column, and it can't possibly do it!
   if (!validateFromJsArg(thing)) {
     throw new TypeError(`invalid result ${thing?.toString()}`);
@@ -529,7 +530,10 @@ export const fromJS = (thing: FromJSArg): Value => {
     return Scalar.fromValue(thing);
   }
   if (thing.length === 0) {
-    return Column.fromValues([], []);
+    return Column.fromValues([], defaultValue, []);
   }
-  return Column.fromValues(thing.map((t) => fromJS(t)));
+  return Column.fromValues(
+    thing.map((t) => fromJS(t, defaultValue)),
+    defaultValue
+  );
 };

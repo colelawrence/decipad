@@ -6,3 +6,4 @@ export * from './sequences';
 export * from './ValueTransforms';
 export * from './isUnknownValue';
 export * from './tableValueToResultValue';
+export * from './defaultValue';
