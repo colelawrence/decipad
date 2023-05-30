@@ -46,6 +46,7 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'fileattachments',
   'externaldatasources',
   'externaldatasourcekeys',
+  'secrets',
 ];
 
 const observedTables: (keyof DataTables)[] = [

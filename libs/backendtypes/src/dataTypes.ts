@@ -460,6 +460,17 @@ export interface UserGoalRecord extends TableRecordBase {
   fulfilledAt: number;
 }
 
+export interface SecretRecord extends TableRecordBase {
+  name: string;
+  workspace_id: ID;
+  secret: string;
+}
+
+export interface SecretInput {
+  name: string;
+  secret: string;
+}
+
 export interface GoalFulfilmentInput {
   goalName: string;
 }
@@ -531,6 +542,7 @@ export interface EnhancedDataTables {
   externaldatasources: DataTable<ExternalDataSourceRecord>;
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
   usergoals: DataTable<UserGoalRecord>;
+  secrets: EnhancedDataTable<SecretRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -569,7 +581,8 @@ export type ConcreteRecord =
   | SubscriptionRecord
   | DocSyncRecord
   | DocSyncUpdateRecord
-  | DocSyncSnapshotRecord;
+  | DocSyncSnapshotRecord
+  | SecretRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 

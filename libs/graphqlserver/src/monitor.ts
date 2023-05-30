@@ -4,8 +4,6 @@ import type {
 } from 'apollo-server-plugin-base';
 import { withScope, captureException } from '@sentry/serverless';
 import { GraphqlContext } from '@decipad/backendtypes';
-import { boomify } from '@hapi/boom';
-import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 
 const onError = (rc: GraphQLRequestContext) => {
   withScope((scope) => {
@@ -27,21 +25,22 @@ const onError = (rc: GraphQLRequestContext) => {
           });
         }
 
-        const { originalError } = error;
-        if (originalError instanceof Error) {
-          if (
-            originalError instanceof UserInputError ||
-            originalError instanceof ForbiddenError
-          ) {
-            continue;
-          }
-          const boom = boomify(originalError);
-          if (!boom.isServer) {
-            continue;
-          }
-          // eslint-disable-next-line no-console
-          console.error('server error detected by graphql monitor', error);
-        }
+        // const { originalError } = error;
+        // if (originalError instanceof Error) {
+        //   if (
+        //     originalError instanceof UserInputError ||
+        //     originalError instanceof ForbiddenError
+        //   ) {
+        //     continue;
+        //   }
+        // const boom = boomify(originalError);
+        // eslint-disable-next-line no-console
+        console.error(
+          'server error detected by graphql monitor',
+          error,
+          error.originalError
+        );
+        // }
 
         const contextWithUser = rc as unknown as GraphqlContext;
 

@@ -20,6 +20,7 @@ export default gql`
     isPublic: Boolean
     myPermissionType: PermissionType
     access: WorkspaceAccess
+    secrets: [Secret!]!
   }
 
   type WorkspacesChanges {

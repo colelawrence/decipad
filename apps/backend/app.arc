@@ -237,6 +237,12 @@ usergoals
   user_id String
   fulfilledAt Number
 
+secrets
+  id *String # /workspace/:id/secret/#name
+  workspace_id String
+  secret String
+  encrypt true
+
 @tables-indexes
 users
   secret *String
@@ -382,6 +388,10 @@ docsyncsnapshots
   docsync_id *String
   snapshotName **String
   name byDocsyncIdAndSnapshotName
+
+secrets
+  workspace_id *String
+  name byWorkspace
 
 @queues
 sendemail

@@ -15,6 +15,7 @@ import share from './share';
 import tags from './tags';
 import users from './users';
 import workspaces from './workspaces';
+import secrets from './secrets';
 
 type GraphqlModule = {
   typedefs: DocumentNode;
@@ -35,6 +36,7 @@ const modules: GraphqlModule[] = [
   attachments,
   share,
   externalData,
+  secrets,
 ];
 
 if (process.env.NODE_ENV !== 'production') {
