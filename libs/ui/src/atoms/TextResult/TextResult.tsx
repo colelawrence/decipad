@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { characterLimitStyles } from '../../styles/results';
 import { Tooltip } from '../Tooltip/Tooltip';
 

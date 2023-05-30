@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Meta, Story } from '@storybook/react';
 import * as colors from './color';
 import { OpaqueColor } from './color';

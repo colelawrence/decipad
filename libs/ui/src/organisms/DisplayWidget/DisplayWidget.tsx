@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import {

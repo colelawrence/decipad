@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { SerializedType } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';

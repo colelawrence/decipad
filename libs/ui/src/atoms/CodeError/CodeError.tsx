@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { BracketError } from '@decipad/computer';
 import { css } from '@emotion/react';

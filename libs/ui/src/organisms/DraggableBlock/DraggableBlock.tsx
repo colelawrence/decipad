@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { BlocksInUseInformation } from '@decipad/computer';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { css, SerializedStyles } from '@emotion/react';

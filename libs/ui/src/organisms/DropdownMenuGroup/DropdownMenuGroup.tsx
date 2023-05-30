@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC } from 'react';
 import { EditItemsOptions, SelectItem, SelectItems } from '../../atoms';
 import { cssVar, p14Medium } from '../../primitives';

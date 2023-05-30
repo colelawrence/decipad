@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useDelayedValue } from '@decipad/react-utils';

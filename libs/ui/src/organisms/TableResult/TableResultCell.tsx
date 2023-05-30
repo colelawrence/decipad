@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useRef } from 'react';
 import { css } from '@emotion/react';
 import { SerializedType, SerializedTypes } from '@decipad/computer';

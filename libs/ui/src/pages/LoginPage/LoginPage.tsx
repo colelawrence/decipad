@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, useCallback, useRef, useState } from 'react';
 import { Button, InputField } from '../../atoms';

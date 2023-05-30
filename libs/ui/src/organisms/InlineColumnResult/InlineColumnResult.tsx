@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Fragment } from 'react';
 import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';

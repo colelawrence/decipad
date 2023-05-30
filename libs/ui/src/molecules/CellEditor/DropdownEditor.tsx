@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { getExprRef, Result } from '@decipad/computer';
 import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { css } from '@emotion/react';

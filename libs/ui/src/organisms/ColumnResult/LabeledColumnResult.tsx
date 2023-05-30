@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
 import { unnestTableRows, DimensionExplanation } from '@decipad/computer';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { ToastType } from '@decipad/toast';
 import { css } from '@emotion/react';
 import { useEffect, useState } from 'react';

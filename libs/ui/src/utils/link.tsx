@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { SERVER_SIDE_ROUTES } from '@decipad/routing';
 import { SerializedStyles } from '@emotion/react';
 import { AnchorHTMLAttributes, ComponentProps, ReactNode } from 'react';

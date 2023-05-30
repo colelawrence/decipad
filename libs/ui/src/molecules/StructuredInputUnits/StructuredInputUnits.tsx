@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { AST, currencyUnits, UnitOfMeasure } from '@decipad/language';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';

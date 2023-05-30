@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Result } from '@decipad/computer';
 import { useDelayedValue } from '@decipad/react-utils';
 import React, { ComponentProps, ReactNode, useState } from 'react';

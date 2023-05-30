@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { ToastType } from '@decipad/toast';
 import { Meta, Story } from '@storybook/react';
 import { ComponentProps } from 'react';

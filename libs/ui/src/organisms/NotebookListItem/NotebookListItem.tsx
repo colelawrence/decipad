@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';

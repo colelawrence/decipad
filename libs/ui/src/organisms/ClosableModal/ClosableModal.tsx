@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { ComponentProps, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClosableModalHeader, Modal } from '../../molecules';

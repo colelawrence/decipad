@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css, SerializedStyles } from '@emotion/react';
 import { FC, ReactNode, useState } from 'react';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';

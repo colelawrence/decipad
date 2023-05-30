@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { ComponentProps } from 'react';
 import { Display, Divider } from '../../atoms';
 

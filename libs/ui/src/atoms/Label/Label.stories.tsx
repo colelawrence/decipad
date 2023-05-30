@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Meta, Story } from '@storybook/react';
 import { p14Regular, p16Regular } from '../../primitives';

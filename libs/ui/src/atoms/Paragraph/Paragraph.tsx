@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { useIsBlockActive } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';

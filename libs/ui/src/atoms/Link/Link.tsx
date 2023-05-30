@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { SerializedStyles, css } from '@emotion/react';
 import { HTMLPropsAs } from '@udecode/plate';
 import { cssVar } from '../../primitives';

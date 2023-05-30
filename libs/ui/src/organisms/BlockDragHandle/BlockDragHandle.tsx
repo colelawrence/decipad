@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { BlocksInUseInformation } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';

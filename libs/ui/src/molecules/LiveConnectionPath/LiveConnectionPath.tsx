@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC, PropsWithChildren } from 'react';
 import { Label } from '../../atoms';
 

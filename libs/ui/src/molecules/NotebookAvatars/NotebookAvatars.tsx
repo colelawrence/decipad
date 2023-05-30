@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { noop, uniqBy } from 'lodash';

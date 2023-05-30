@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Avatar } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { FC } from 'react';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC, SVGProps } from 'react';
 import { css, keyframes } from '@emotion/react';
 

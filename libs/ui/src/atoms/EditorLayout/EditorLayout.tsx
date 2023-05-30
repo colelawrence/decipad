@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC, forwardRef, ReactNode } from 'react';
 import { slimBlockWidth } from '../../styles/editor-layout';
 

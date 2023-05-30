@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { capitalize } from 'lodash';
 import { create } from 'zustand';

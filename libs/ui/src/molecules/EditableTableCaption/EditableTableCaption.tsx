@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import { MenuItem, TextAndIconButton } from '../../atoms';

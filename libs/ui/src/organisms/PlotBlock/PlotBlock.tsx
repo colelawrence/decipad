@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { noop, zip } from 'lodash';
 import { ComponentProps, ReactNode, useEffect, useState, FC } from 'react';

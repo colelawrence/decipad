@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { css } from '@emotion/react';

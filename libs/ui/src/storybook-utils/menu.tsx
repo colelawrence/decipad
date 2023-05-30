@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import * as RadixDropdown from '@radix-ui/react-dropdown-menu';
 import { DecoratorFn } from '@storybook/react';
 

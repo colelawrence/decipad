@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { Result } from '@decipad/language';
 import { Meta, Story } from '@storybook/react';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FC } from 'react';
 import * as RadixDropdown from '@radix-ui/react-dropdown-menu';
 

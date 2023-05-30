@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
 import { cssVar, p16Regular, smallScreenQuery } from '../../primitives';

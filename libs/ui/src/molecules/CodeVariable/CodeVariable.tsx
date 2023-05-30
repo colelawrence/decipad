@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import type { TableCellType } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { noop } from 'lodash';

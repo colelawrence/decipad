@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { CellValueType } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { SerializedType, tokenRules } from '@decipad/language';

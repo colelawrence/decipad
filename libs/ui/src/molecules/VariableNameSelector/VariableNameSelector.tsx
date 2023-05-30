@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { AutocompleteName } from '@decipad/computer';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useState } from 'react';

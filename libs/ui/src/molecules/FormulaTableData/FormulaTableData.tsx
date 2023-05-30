@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { ComponentProps, FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import { useDelayedValue } from '@decipad/react-utils';

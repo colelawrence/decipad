@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { useMemo, FC } from 'react';
 import { css } from '@emotion/react';
 import pluralize from 'pluralize';

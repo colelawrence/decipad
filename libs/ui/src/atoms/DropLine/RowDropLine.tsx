@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { DropLineDirection } from '@udecode/plate-dnd';
 import { DropLine } from './DropLine';
 import { dropLineWidth } from '../../styles/drop-line';

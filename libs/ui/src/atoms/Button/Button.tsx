@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css, CSSObject } from '@emotion/react';
 import { MouseEvent, ReactNode, useCallback } from 'react';

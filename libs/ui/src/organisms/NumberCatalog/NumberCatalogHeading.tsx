@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ArrowDiagonalTopRight, Heading1, Heading2 } from '../../icons';

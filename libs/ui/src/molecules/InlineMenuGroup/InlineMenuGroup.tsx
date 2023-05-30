@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { css } from '@emotion/react';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';

@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { NotebookAvatar } from '../../molecules/NotebookAvatars/NotebookAvatars';
 import { ellipsis, p12Medium, p14Medium } from '../../primitives';

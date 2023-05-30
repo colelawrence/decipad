@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { cssVar, mediumShadow } from '../../primitives';

@@ -13,7 +13,7 @@
       "off"
     ],
     // "custom-emotion/css-prop-named-variable": "error",
-    "decipad/css-prop-named-variable": "off"
+    "decipad/css-prop-named-variable": "error"
   },
   "overrides": [
     {

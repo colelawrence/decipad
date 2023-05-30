@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect, useState } from 'react';
 import { css } from '@emotion/react';

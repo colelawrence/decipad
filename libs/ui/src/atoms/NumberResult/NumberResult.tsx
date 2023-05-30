@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { N } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
 import { FC } from 'react';
