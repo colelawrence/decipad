@@ -1,14 +1,13 @@
-import { singular } from 'pluralize';
+import DeciNumber, { N, UNKNOWN_ASSTRING } from '@decipad/number';
 import { DateTime } from 'luxon';
-import DeciNumber, { N } from '@decipad/number';
+import { singular } from 'pluralize';
 import { AST, Unit } from '..';
-import { n, pairwise, getDefined } from '../utils';
-import { DateValue } from '../value';
 import { startOfDate } from '../../../utils/src/date';
+import { getDefined, n, pairwise } from '../utils';
+import { DateValue } from '../value';
 import * as Time from './time-types';
 
 export * from './time-quantities';
-
 export { Time };
 
 /*
@@ -332,7 +331,7 @@ export function stringifyDate(
   specificity: Time.Specificity
 ): string {
   if (date == null || typeof date === 'symbol') {
-    return '?';
+    return UNKNOWN_ASSTRING;
   }
   const segments = dateToArray(date);
   let out = String(segments[0]);

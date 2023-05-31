@@ -359,7 +359,7 @@ export class DeciNumber {
 
   toString(decimalPlaces?: number): string {
     if (isUndefined(this)) {
-      return '?';
+      return UNKNOWN_ASSTRING;
     }
     if (isInfinite(this)) {
       return `${this.s < 0 ? '-' : ''}∞`;
@@ -412,3 +412,4 @@ export const UNDEFINED = N(undefined);
 export const ZERO = N(0);
 export const ONE = N(1);
 export const TWO = N(2);
+export const UNKNOWN_ASSTRING = '?';
