@@ -8,11 +8,11 @@ import * as Sentry from '@sentry/react';
 
 interface FallbackProps {
   error: Error;
-  element: MyElement;
+  element?: MyElement;
   resetErrorBoundary: () => void;
 }
 
-const Fallback: FC<FallbackProps> = ({
+const DefaultFallback: FC<FallbackProps> = ({
   error,
   element,
   resetErrorBoundary,
@@ -43,16 +43,18 @@ const Fallback: FC<FallbackProps> = ({
 export function BlockErrorBoundary({
   children,
   element,
+  UserFallback = DefaultFallback,
 }: {
   children: ReactNode;
-  element: MyElement;
+  element?: MyElement;
+  UserFallback?: FC<FallbackProps>;
 }): ReturnType<FC> {
   const onError = useCallback(
     (err: Error, info: ErrorInfo) => {
       const { message } = err;
       console.error(err);
       // eslint-disable-next-line no-param-reassign
-      err.message = `Block crash (${element.type}): ${message}`;
+      err.message = `Block crash (${element?.type ?? 'unknown'}): ${message}`;
       Sentry.captureException(err, {
         level: 'fatal',
         extra: {
@@ -60,13 +62,13 @@ export function BlockErrorBoundary({
         },
       });
     },
-    [element.type]
+    [element?.type]
   );
 
   return (
     <ReactErrorBoundary
       onError={onError}
-      fallbackRender={(props) => <Fallback {...props} element={element} />}
+      fallbackRender={(props) => <UserFallback {...props} element={element} />}
     >
       {children}
     </ReactErrorBoundary>

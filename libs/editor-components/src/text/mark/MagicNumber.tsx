@@ -20,6 +20,7 @@ import {
 import { useWindowListener } from '@decipad/react-utils';
 import {
   Button,
+  CodeError,
   CodeLineFloat,
   ParagraphFormulaEditor,
   MagicNumber as UIMagicNumber,
@@ -32,8 +33,9 @@ import { useCallback, useState } from 'react';
 import { Element } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
+import { BlockErrorBoundary } from '../../BlockErrorBoundary';
 
-export const MagicNumber: PlateComponent = ({
+const UnprotectedMagicNumber: PlateComponent = ({
   attributes,
   element,
   text: _text,
@@ -188,6 +190,16 @@ export const MagicNumber: PlateComponent = ({
         {children}
       </span>
     </span>
+  );
+};
+
+export const MagicNumber: PlateComponent = (props) => {
+  return (
+    <BlockErrorBoundary
+      UserFallback={({ error }) => <CodeError message={error.message} />}
+    >
+      <UnprotectedMagicNumber {...props} />
+    </BlockErrorBoundary>
   );
 };
 

@@ -4,6 +4,7 @@ import { CodeLineFloat, CodeLinePlaceholder } from '@decipad/ui';
 import { noop } from 'lodash';
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 export const DISMISS_KEYS = ['Escape', 'Enter'];
 
@@ -67,7 +68,9 @@ export const CodeLineTeleport: React.FC<
   }
 
   const editable = (
-    <CodeLineFloat offsetTop={codeLine.offsetY}>{children}</CodeLineFloat>
+    <BlockErrorBoundary>
+      <CodeLineFloat offsetTop={codeLine.offsetY}>{children}</CodeLineFloat>
+    </BlockErrorBoundary>
   );
 
   return (
