@@ -141,8 +141,8 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
             )}
 
             <CollabAccessDropdown
+              disable={isTeamMember}
               currentPermission={permission}
-              disableRemove={isTeamMember}
               isActivatedAccount={user.name !== user.email}
               onRemove={() => onRemoveCollaborator(user.id)}
               onChange={(newPerm) => onChangePermission(user.id, newPerm)}

@@ -20,7 +20,7 @@ type CollabAccessDropdownProps = {
   isInvitationPicker?: boolean;
 
   currentPermission: PermissionType;
-  disableRemove?: boolean;
+  disable?: boolean;
   onRemove?: () => void;
   onChange?: (newPermission: PermissionType) => void;
 };
@@ -37,7 +37,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   currentPermission,
   onRemove,
   onChange,
-  disableRemove,
+  disable,
 }) => {
   const permissionLabel =
     !isActivatedAccount && !isInvitationPicker
@@ -54,24 +54,24 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
     onChange?.('WRITE');
   }, [onChange]);
 
+  if (disable) {
+    return <div css={css(p12Medium)}>{permissionLabel}</div>;
+  }
+
+  const triggerElement = (
+    <div css={css(p12Medium)}>
+      <TextAndIconButton
+        text={permissionLabel}
+        onClick={noop}
+        color={isInvitationPicker ? 'transparent' : 'default'}
+      >
+        <Caret variant="down" />
+      </TextAndIconButton>
+    </div>
+  );
+
   return (
-    <MenuList
-      root
-      dropdown
-      align="end"
-      sideOffset={4}
-      trigger={
-        <div css={css(p12Medium)}>
-          <TextAndIconButton
-            text={permissionLabel}
-            onClick={noop}
-            color={isInvitationPicker ? 'transparent' : 'default'}
-          >
-            <Caret variant="down" />
-          </TextAndIconButton>
-        </div>
-      }
-    >
+    <MenuList root dropdown align="end" sideOffset={4} trigger={triggerElement}>
       <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}
@@ -101,19 +101,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         </MenuItem>
       )}
 
-      {disableRemove && (
-        <MenuItem onSelect={noop} disabled={true}>
-          <div css={dropdownDisabledItemStyles}>
-            <p css={dangerOptionStyles}>Remove Collaborator</p>
-            <p css={dropDownItemStyles}>
-              We're in beta. All notebooks are visible to all workspace members
-              by default.
-            </p>
-          </div>
-        </MenuItem>
-      )}
-
-      {onRemove && !disableRemove && (
+      {onRemove && (
         <MenuItem onSelect={onRemove}>
           <p css={dangerOptionStyles}>Remove</p>
         </MenuItem>
