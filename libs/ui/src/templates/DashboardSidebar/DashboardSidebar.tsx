@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { mediumShadow } from '@decipad/ui';
 import { useThemeFromStore } from '@decipad/react-contexts';
+import { useAuthenticationState } from '@decipad/graphql-client';
 import { AccountAvatar } from '../../molecules';
 
 import {
@@ -41,12 +42,14 @@ export const DashboardSidebar = ({
   onLogout,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
-  const showSwitcher = !isFlagEnabled('NO_WORKSPACE_SWITCHER');
+  const { isTeamMember } = useAuthenticationState().currentUser;
+  const enableWorkspaces =
+    isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
   const openUserSettings = useEditUserModalStore((state) => state.open);
 
   const dashboardEl = (
     <div css={dashboardMainSidebarStyles} onPointerEnter={onPointerEnter}>
-      {showSwitcher && (
+      {!enableWorkspaces && (
         <WorkspaceSwitcher
           name={name}
           email={email}
@@ -61,8 +64,8 @@ export const DashboardSidebar = ({
             gridColumn: 'action',
             display: 'grid',
           },
-          dashboardSidebarStyles(showSwitcher),
-          dashboardPartHideOnMobile(showSwitcher),
+          dashboardSidebarStyles(!enableWorkspaces),
+          dashboardPartHideOnMobile(!enableWorkspaces),
           { padding: '12px 16px' },
         ]}
       >
@@ -76,17 +79,17 @@ export const DashboardSidebar = ({
             gridTemplateColumns: 'minmax(150px, 100%)',
           }}
         >
-          {showSwitcher ? (
-            <WorkspaceOptions {...props} />
-          ) : (
+          {enableWorkspaces ? (
             <WorkspaceLogo {...props} />
+          ) : (
+            <WorkspaceOptions {...props} />
           )}
         </div>
       </div>
     </div>
   );
 
-  if (isFlagEnabled('NO_WORKSPACE_SWITCHER')) {
+  if (enableWorkspaces) {
     return (
       <MobileSidebar trigger={<MobileSidebarButton />}>
         {dashboardEl}

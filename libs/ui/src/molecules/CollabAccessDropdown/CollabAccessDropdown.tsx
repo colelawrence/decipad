@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { noop } from 'lodash';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useAuthenticationState } from '@decipad/graphql-client';
 import { TextAndIconButton, MenuItem } from '../../atoms';
 import {
   p12Medium,
@@ -44,7 +45,8 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       ? 'invited'
       : HumanReadablePermission[currentPermission];
 
-  const hideSoonLabel = isFlagEnabled('NO_WORKSPACE_SWITCHER');
+  const { isTeamMember } = useAuthenticationState().currentUser;
+  const hideSoonLabel = isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');

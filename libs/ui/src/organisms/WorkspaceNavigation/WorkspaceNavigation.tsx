@@ -6,7 +6,10 @@ import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { CreateSectionMutation } from '@decipad/graphql-client';
+import {
+  CreateSectionMutation,
+  useAuthenticationState,
+} from '@decipad/graphql-client';
 import {
   Divider,
   Dot,
@@ -116,7 +119,9 @@ export const WorkspaceNavigation = ({
 
   const { sections } = activeWorkspace;
 
-  const showSettingsAndMembers = isFlagEnabled('NO_WORKSPACE_SWITCHER');
+  const { isTeamMember } = useAuthenticationState().currentUser;
+  const showSettingsAndMembers =
+    isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
 
   const navigate = useNavigate();
   const { '*': maybeWorkspaceFolder } = useParams();
