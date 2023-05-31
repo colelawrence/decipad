@@ -64,6 +64,14 @@ export const shareWithEmail = <
 
       const registeredUserId = emailKey?.user_id;
 
+      if (!email.includes('@')) {
+        throw new UserInputError('invalid email');
+      }
+
+      if (actingUser.email === email) {
+        throw new UserInputError('cannot share with yourself');
+      }
+
       const user = registeredUserId
         ? await users.get({ id: registeredUserId })
         : (
