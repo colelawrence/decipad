@@ -60,8 +60,10 @@ export const InlineMenu: FC<InlineMenuProps> = ({
   search = '',
 }) => {
   const groupsWithItemsFiltered = groups.map(({ items, ...group }) => {
-    const matchingItems = items.filter(({ title }) =>
-      title.toLowerCase().match(`\\b${search.toLowerCase()}\\w*`)
+    const matchingItems = items.filter(({ command, title, extraSearchTerms }) =>
+      [command, title, ...extraSearchTerms].some((term) =>
+        term.toLowerCase().includes(search.toLowerCase())
+      )
     );
     return { ...group, matchingItems };
   });
