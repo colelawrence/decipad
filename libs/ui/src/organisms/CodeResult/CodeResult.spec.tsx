@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react';
 import { timeout } from '@decipad/utils';
+import { render } from '@testing-library/react';
 import { runCode } from '../../test-utils';
 import { CodeResult } from './CodeResult';
 
@@ -62,3 +62,10 @@ it.each(['block', 'inline'] as const)(
     expect(container.textContent).toMatch(/Table|A/);
   }
 );
+
+it('renders formula', async () => {
+  const { container } = render(
+    <CodeResult {...await runCode('A(x) = x')} variant="inline" />
+  );
+  expect(container.textContent).toBe('ƒ');
+});

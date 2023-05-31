@@ -18,12 +18,13 @@ import {
   BooleanResult,
   DateResult,
   DefaultFunctionResult,
+  FunctionResult,
   NumberResult,
   PendingResult,
 } from '../../atoms';
+import TextResult from '../../atoms/TextResult/TextResult';
 import { InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
-import TextResult from '../../atoms/TextResult/TextResult';
 
 // Simple result components
 
@@ -49,10 +50,15 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: AnyResult,
     match: ({ type, value }) =>
-      type.kind === 'anything' ||
-      type.kind === 'nothing' ||
-      (type.kind !== 'type-error' &&
-        (value == null || value === Result.Unknown)),
+      type.kind !== 'function' &&
+      (type.kind === 'anything' ||
+        type.kind === 'nothing' ||
+        (type.kind !== 'type-error' &&
+          (value == null || value === Result.Unknown))),
+  },
+  {
+    component: FunctionResult,
+    match: ({ type }) => type.kind === 'function',
   },
   {
     component: NumberResult,
