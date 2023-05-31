@@ -107,17 +107,17 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
         </>
       }
       footer={
-        value.length > MAX_CELLS_PER_PAGE && (
+        all.length > MAX_CELLS_PER_PAGE && (
           <TableRow key="pagination" readOnly={true} tableCellControls={false}>
             <td
-              colSpan={2}
+              colSpan={all.length}
               css={[paginationControlWrapperTdStyles, footerRowStyles]}
             >
               <PaginationControl
                 page={page}
                 onPageChange={setPage}
                 startAt={1}
-                maxPages={Math.ceil(value.length / MAX_CELLS_PER_PAGE)}
+                maxPages={Math.ceil(all.length / MAX_CELLS_PER_PAGE)}
               />
             </td>
           </TableRow>
