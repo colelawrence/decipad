@@ -22,20 +22,20 @@ export const useAccountSettingsState = () => {
   const setName = useCallback(
     async (newName: string) => {
       setIsSubmitting(true);
-      try {
-        await updateUser({
-          props: {
-            name: newName,
-          },
-        });
+      const data = await updateUser({
+        props: { name: newName },
+      });
+      setIsSubmitting(false);
 
+      const updateSuccessful = data?.updateSelf;
+
+      if (updateSuccessful) {
         toast(`Your name changed to ${newName}`, 'success');
-      } catch (err) {
-        console.error('Failed to update user. Error:', err);
+      } else {
         toast('Could not change your name', 'error');
-      } finally {
-        setIsSubmitting(false);
       }
+
+      return !!updateSuccessful;
     },
     [toast, updateUser]
   );
@@ -44,19 +44,18 @@ export const useAccountSettingsState = () => {
     async (newUsername: string) => {
       setIsSubmitting(true);
       const data = await setUsernameMutation({
-        props: {
-          username: newUsername,
-        },
+        props: { username: newUsername },
       });
-      if (data) {
-        const updateSuccessful = data?.setUsername;
-        if (updateSuccessful) {
-          toast(`You are now ${newUsername}`, 'success');
-        } else {
-          toast(`Username ${newUsername} is already taken`, 'error');
-        }
-      }
       setIsSubmitting(false);
+
+      const updateSuccessful = data?.setUsername;
+      if (updateSuccessful) {
+        toast(`You are now ${newUsername}`, 'success');
+      } else {
+        toast(`Username ${newUsername} is already taken`, 'error');
+      }
+
+      return !!updateSuccessful;
     },
     [toast, setUsernameMutation]
   );
@@ -65,10 +64,9 @@ export const useAccountSettingsState = () => {
     async (newDescription: string) => {
       setIsSubmitting(true);
       const data = await updateUser({
-        props: {
-          description: newDescription,
-        },
+        props: { description: newDescription },
       });
+      setIsSubmitting(false);
 
       const updateSuccessful = data?.updateSelf;
       if (updateSuccessful) {
@@ -77,7 +75,7 @@ export const useAccountSettingsState = () => {
         toast('Could not update your bio', 'error');
       }
 
-      setIsSubmitting(false);
+      return !!updateSuccessful;
     },
     [toast, updateUser]
   );

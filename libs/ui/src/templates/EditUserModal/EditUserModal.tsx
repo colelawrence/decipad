@@ -39,18 +39,22 @@ export const EditUserModal: React.FC = () => {
   const handleSubmit = useCallback(
     async (event: React.FormEvent) => {
       event.preventDefault();
+
+      let isSuccessful = true;
       const form = event.target as HTMLFormElement;
       const data = serializeAccountSettingsForm(form);
 
       if (name !== data.name) {
-        await setName(data.name);
+        isSuccessful = isSuccessful && (await setName(data.name));
       }
 
       if (username !== data.username) {
-        await setUsername(data.username);
+        isSuccessful = isSuccessful && (await setUsername(data.username));
       }
 
-      closeModal();
+      if (isSuccessful) {
+        closeModal();
+      }
     },
     [name, username, setUsername, setName, closeModal]
   );
