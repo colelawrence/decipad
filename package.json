@@ -154,7 +154,7 @@
     "discord-api-types": "0.37.11",
     "docusaurus-plugin-segment": "1.0.4",
     "dom-loaded": "3.0.0",
-    "dotenv": "16.0.3",
+    "dotenv": "16.1.1",
     "emotion-normalize": "11.0.1",
     "emotion-reset": "3.0.1",
     "fast-deep-equal": "^3.1.3",
