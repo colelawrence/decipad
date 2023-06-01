@@ -9,7 +9,6 @@ import {
   TColorKeys,
   TColorStatus,
   TopbarPlaceholder,
-  WorkspaceMembersProps,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
 import { sortBy } from 'lodash';
@@ -33,7 +32,6 @@ import {
 } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import {
-  useChangeWorkspaceAccessLevelMutation,
   useCreateNotebookMutation,
   useCreateSectionMutation,
   useCreateWorkspaceMutation,
@@ -45,9 +43,7 @@ import {
   useImportNotebookMutation,
   useMoveNotebookMutation,
   useRenameWorkspaceMutation,
-  useShareWorkspaceWithEmailMutation,
   useUnarchiveNotebookMutation,
-  useUnshareWorkspaceWithUserMutation,
   useUpdateNotebookArchiveMutation,
   useUpdateNotebookStatusMutation,
   useUpdateSectionAddNotebookMutation,
@@ -263,10 +259,6 @@ const Workspace: FC = () => {
     [workspaceData?.padsSharedWithMe?.items]
   );
 
-  const [, shareWorkspace] = useShareWorkspaceWithEmailMutation();
-  const [, unshareWorkspace] = useUnshareWorkspaceWithUserMutation();
-  const [, changeWorkspaceAccess] = useChangeWorkspaceAccessLevelMutation();
-
   const showNotebooks = useMemo(
     () =>
       isSharedPage
@@ -285,76 +277,7 @@ const Workspace: FC = () => {
     ]
   );
 
-  const workspaceMembers: WorkspaceMembersProps | null = useMemo(
-    () =>
-      !currentWorkspace
-        ? null
-        : {
-            workspaceId: currentWorkspace.id,
-            workspaceMembers: [
-              ...(currentWorkspace.access?.users ?? []),
-              ...(currentWorkspace.access?.roles?.flatMap((access) =>
-                access.role.users?.map((roleUser) => ({
-                  permission: access.permission,
-                  user: roleUser,
-                  canComment: true,
-                }))
-              ) ?? []),
-            ],
-            currentUserId: session?.user?.id,
-
-            onInvite: (id, email, permissionType) =>
-              shareWorkspace({
-                workspaceId: id,
-                email,
-                permissionType: permissionType as any,
-                canComment: true,
-              })
-                .catch((err) => {
-                  console.error('Failed to share workspace. Error:', err);
-                  toast('Failed to share workspace.', 'error');
-                })
-                .then(() => {}),
-            onRevoke: (id, userId) =>
-              unshareWorkspace({
-                workspaceId: id,
-                userId,
-              })
-                .catch((err) => {
-                  console.error(
-                    'Failed to revoke workspace access. Error:',
-                    err
-                  );
-                  toast('Failed to revoke workspace access.', 'error');
-                })
-                .then(() => {}),
-            onPermissionChange: (id, _userId, email, permissionType) =>
-              changeWorkspaceAccess({
-                workspaceId: id,
-                email,
-                permissionType: permissionType as any,
-                canComment: true,
-              })
-                .catch((err) => {
-                  console.error(
-                    'Failed to change workspace permission. Error:',
-                    err
-                  );
-                  toast('Failed to change workspace permission.', 'error');
-                })
-                .then(() => {}),
-          },
-    [
-      currentWorkspace,
-      shareWorkspace,
-      unshareWorkspace,
-      changeWorkspaceAccess,
-      session?.user?.id,
-      toast,
-    ]
-  );
-
-  if (!currentWorkspace || !workspaceMembers || !session) {
+  if (!currentWorkspace || !session) {
     return <ErrorPage Heading="h1" wellKnown="404" />;
   }
 
@@ -625,9 +548,8 @@ const Workspace: FC = () => {
               <LazyRoute>
                 <EditMembersModal
                   Heading="h1"
-                  name={currentWorkspace.name}
-                  workspaceMembers={workspaceMembers}
                   closeHref={currentWorkspaceRoute.$}
+                  currentWorkspace={currentWorkspace}
                 />
               </LazyRoute>
             }
@@ -641,4 +563,5 @@ const Workspace: FC = () => {
     </>
   );
 };
+
 export default Workspace;

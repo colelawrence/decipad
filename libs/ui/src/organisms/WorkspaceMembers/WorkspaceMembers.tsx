@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 2 */
-import { css } from '@emotion/react';
 import React, { useCallback, useEffect, useState } from 'react';
+import { css } from '@emotion/react';
+import { useWorkspaceMembersState } from '@decipad/graphql-client';
 import { PermissionType } from '../../types';
 import { Check, Ellipsis, Loading } from '../../icons';
 import {
@@ -21,18 +22,6 @@ export type WorkspaceMembersProps = {
   workspaceId: string;
   workspaceMembers: NotebookAvatar[];
   currentUserId?: string;
-  onInvite: (
-    workspaceId: string,
-    email: string,
-    permission: PermissionType
-  ) => Promise<void>;
-  onRevoke: (workspaceId: string, userId: string) => Promise<void>;
-  onPermissionChange: (
-    workspaceId: string,
-    userId: string,
-    email: string,
-    permission: PermissionType
-  ) => Promise<void>;
 };
 
 const CheckMark = () => <Check width="16px" style={{ marginRight: '6px' }} />;
@@ -41,9 +30,6 @@ const LoadingDots = () => (
 );
 
 export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
-  onInvite,
-  onRevoke,
-  onPermissionChange,
   workspaceId,
   workspaceMembers,
   currentUserId,
@@ -53,23 +39,39 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
   const [success, setSuccess] = useState(false);
   // TODO: fix input floating label
   const [permission, setPermission] = useState<PermissionType>('WRITE');
+  const { invite, revoke, changePermission } = useWorkspaceMembersState();
+
+  const handleRevoke = useCallback(
+    (userId: string) => () => revoke(workspaceId, userId),
+    [revoke, workspaceId]
+  );
 
   const handleAddCollaborator = useCallback(async () => {
     setIsLoading(true);
     setSuccess(false);
 
     try {
-      await onInvite(workspaceId, email, permission);
+      await invite(workspaceId, email, permission);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2000);
     } finally {
       setIsLoading(false);
     }
-  }, [email, onInvite, permission, workspaceId]);
+  }, [email, invite, permission, workspaceId]);
 
   useEffect(() => {
     if (success) setEmail('');
   }, [success]);
+
+  const handleChangePermission = useCallback(
+    (userEmail?: string | null) => async (newPermission: PermissionType) => {
+      if (!userEmail) {
+        throw new Error('User email is not defined');
+      }
+      await changePermission(workspaceId, userEmail, newPermission);
+    },
+    [changePermission, workspaceId]
+  );
 
   return (
     <div css={membersWrapperStyle}>
@@ -121,18 +123,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
               <CollabMembershipDropdown
                 disabled={currentUserId === member.user.id}
                 currentPermission={member.permission}
-                onChange={(newPermission) => {
-                  if (!member.user.email) {
-                    throw new Error('User email is not defined');
-                  }
-
-                  onPermissionChange(
-                    workspaceId,
-                    member.user.id,
-                    member.user.email,
-                    newPermission
-                  );
-                }}
+                onChange={handleChangePermission(member.user.email)}
               />
             </div>
 
@@ -143,7 +134,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
               )}
               {currentUserId !== member.user.id && (
                 <WorkspaceMemberOptions
-                  onRevoke={() => onRevoke(workspaceId, member.user.id)}
+                  onRevoke={handleRevoke(member.user.id)}
                 />
               )}
             </div>
