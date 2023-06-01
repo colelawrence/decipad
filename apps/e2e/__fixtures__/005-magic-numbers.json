@@ -1,0 +1,526 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Alice's number bug"
+        }
+      ],
+      "type": "h1",
+      "id": "w8zBO3zGyooGhz46ewqC1"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Letter"
+            }
+          ],
+          "id": "aeM_vZKPXckgSvFrOucVu",
+          "type": "caption"
+        },
+        {
+          "children": [
+            {
+              "text": "B"
+            }
+          ],
+          "id": "Lx4uT_tSspYWOjuReg8WH",
+          "type": "dropdown",
+          "options": [
+            {
+              "id": "Q090VuCc80MO_a7l2OjcA",
+              "value": "A"
+            },
+            {
+              "id": "cCFCv9jXmF6HhfnmG72e2",
+              "value": "B"
+            },
+            {
+              "id": "aUXXNvjCUmnA1jv-e1Ndq",
+              "value": "C"
+            }
+          ]
+        }
+      ],
+      "id": "5O-KFkNUqNJwlZ1PVwZKu",
+      "type": "def",
+      "variant": "dropdown",
+      "coerceToType": {
+        "kind": "string"
+      }
+    },
+    {
+      "children": [
+        {
+          "text": "I chose the letter "
+        },
+        {
+          "text": "Select.Name",
+          "magicnumberz": true
+        },
+        {
+          "text": " and the value is "
+        },
+        {
+          "text": "Select.Value",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "id": "ix9KCssoSE9sv58npLii4",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Table Column "
+        },
+        {
+          "text": "Select",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "2hvjvMOXlXKr0xH3aKZyV"
+    },
+    {
+      "children": [
+        {
+          "text": "Table "
+        },
+        {
+          "text": "Letters",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "1MyiUGy0av0n3hYuYqJr2"
+    },
+    {
+      "children": [
+        {
+          "text": "Boolean "
+        },
+        {
+          "text": "false",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "50PP9IFptrQ3hEWRd3cct"
+    },
+    {
+      "children": [
+        {
+          "text": "Value "
+        },
+        {
+          "text": "Name",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "keddRUgW8YRUj5-uZCwnt"
+    },
+    {
+      "children": [
+        {
+          "text": "Unit "
+        },
+        {
+          "text": "Name2",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "e4XnSMiXcpfG4bJnOeFH7"
+    },
+    {
+      "children": [
+        {
+          "text": "Formula "
+        },
+        {
+          "text": "Formula",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "D9iSNPY-f0M8v00YmUNR4"
+    },
+    {
+      "children": [
+        {
+          "text": "Advanced formula "
+        },
+        {
+          "text": "exprRef_19gdgVVggXPGAk0IBe0nc",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "-BrJGhHW_gZ86EbNKkr_M"
+    },
+    {
+      "children": [
+        {
+          "text": "Advanced formula with "
+        },
+        {
+          "text": "=",
+          "code": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "exprRef_U8QBrNpNmHanYq2AxQKH6",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "FObGrrJ9yd4TbSA4O-J5p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Letters"
+                }
+              ],
+              "id": "fAhksmWonoPkdWK6YUCgB",
+              "type": "table-var-name"
+            }
+          ],
+          "id": "7s-I_3dj1jWd9_XDTzX5e",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Name"
+                }
+              ],
+              "id": "60ulW_P-8c5fMgBKm4Fio",
+              "type": "th",
+              "cellType": {
+                "kind": "dropdown",
+                "id": "5O-KFkNUqNJwlZ1PVwZKu",
+                "type": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Value"
+                }
+              ],
+              "id": "i7R6CgcIbZd8e8exPugUe",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            }
+          ],
+          "id": "sjq6foyiqj7y3Hk49fGhZ",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "exprRef_Q090VuCc80MO_a7l2OjcA"
+                }
+              ],
+              "id": "wQsXGnMo3jZ2xPNc6k9e_",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1"
+                }
+              ],
+              "id": "AamIblOh7pXjgEbuxOWCW",
+              "type": "td"
+            }
+          ],
+          "id": "mLH5xzKIBnASfAbv3E_Qh",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "exprRef_cCFCv9jXmF6HhfnmG72e2"
+                }
+              ],
+              "id": "98LPrP-8h80_hnpFOFq4l",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "2"
+                }
+              ],
+              "id": "NHHUN_2r5QPageNlzPUx9",
+              "type": "td"
+            }
+          ],
+          "id": "5AEUXGazRMyvbySC6SWFW",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "exprRef_aUXXNvjCUmnA1jv_e1Ndq"
+                }
+              ],
+              "id": "tkmrTP94OHhxvJTAMpzNL",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "3"
+                }
+              ],
+              "id": "VYecbJAmnyathS8R0o3Bp",
+              "type": "td"
+            }
+          ],
+          "id": "pn4kZWisgMbp0-XxWh5Qv",
+          "type": "tr"
+        }
+      ],
+      "id": "iCcoaNikK2CL0MuHH7q1P",
+      "type": "table",
+      "version": 2,
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Select"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "3ZuBYysRFMNDj2YfsIerM"
+        },
+        {
+          "children": [
+            {
+              "text": "lookup("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "FWt01tvXKCh6mJ0I93yJB",
+              "type": "smart-ref",
+              "blockId": "iCcoaNikK2CL0MuHH7q1P",
+              "columnId": null,
+              "lastSeenVariableName": "Letters"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "h6fluDnxSuLMzcBzWdX-H",
+              "type": "smart-ref",
+              "blockId": "5O-KFkNUqNJwlZ1PVwZKu",
+              "columnId": null,
+              "lastSeenVariableName": "Letter"
+            },
+            {
+              "text": ")"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "G3gGcV8eRmCf_0cQ-nc0k"
+        }
+      ],
+      "id": "7bJL2CdSNR5Spz0vUxlxA",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "iS6AAllZPub9PNCzUfDm-"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Name"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "WMMDhSG_Y15GhXWH6QDrt"
+        },
+        {
+          "children": [
+            {
+              "text": "46"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "RRwzZxieg5SItNPnsVKqO"
+        }
+      ],
+      "id": "VUadABzJFX-WV4DnVM3rg",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Name2"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "W51yyBOsctAFAS6YMzbHR"
+        },
+        {
+          "children": [
+            {
+              "text": "2042 seconds"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "mtpACzHVPW6ukKrHs_OAb"
+        }
+      ],
+      "id": "SB1rZrnjPsum6vQrPVSkB",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Formula"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "_nOr0dZISwmnO3BjR5T2T"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "3colL10RtRjDoarBD3ZoD",
+              "type": "smart-ref",
+              "blockId": "VUadABzJFX-WV4DnVM3rg",
+              "columnId": null,
+              "lastSeenVariableName": "Name"
+            },
+            {
+              "text": " + 4"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "SytmcyZz-J25S5de75Kok"
+        }
+      ],
+      "id": "aye3LMf1T2IzbQj4QIlEX",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "60 km/hour"
+        }
+      ],
+      "id": "19gdgVVggXPGAk0IBe0nc",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": "Advanced = 1234"
+        }
+      ],
+      "id": "U8QBrNpNmHanYq2AxQKH6",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "PPdRM6eaPSPROHR2cZbpp"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "ZMAV3TQtyumXYl-SzvZaE"
+    }
+  ]
+}

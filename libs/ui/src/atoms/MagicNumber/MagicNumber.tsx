@@ -109,7 +109,10 @@ export const MagicNumber = ({
           readOnly={readOnly}
         >
           {hasResult ? (
-            <span css={highlightStyles(isReference, readOnly)}>
+            <span
+              css={highlightStyles(isReference, readOnly)}
+              data-testid={`code-result:${String(result.value)}`}
+            >
               <CodeResult
                 tooltip={false}
                 variant="inline"

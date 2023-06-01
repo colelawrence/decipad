@@ -102,6 +102,7 @@ export const CodeLineStructured = ({
                 canGrabStyles,
               grabbing && grabbingStyles,
             ]}
+            data-testid="code-line-result"
             contentEditable={false}
             draggable
             onDragStart={(e) => {
