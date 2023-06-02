@@ -12,7 +12,7 @@ export const structuredInputContainerStyles = css({
   `,
 });
 
-export const childrenStyles = css({
+export const siChildrenStyles = css({
   gridArea: 'children',
 });
 

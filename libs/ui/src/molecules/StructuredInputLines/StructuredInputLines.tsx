@@ -6,8 +6,8 @@ import {
   fadeLineBotRightStyles,
   fadeLineTopLeftStyles,
   fadeLineTopRightStyles,
+  siChildrenStyles,
   structuredInputContainerStyles,
-  childrenStyles,
 } from './styles';
 
 interface StructuredInputLinesProps {
@@ -23,7 +23,7 @@ export const StructuredInputLines = ({
       <span css={borderTopStyles} contentEditable={false}></span>
       <span css={fadeLineTopRightStyles} contentEditable={false}></span>
 
-      <div css={childrenStyles}>{children}</div>
+      <div css={siChildrenStyles}>{children}</div>
 
       <span css={fadeLineBotLeftStyles} contentEditable={false}></span>
       <span css={borderBotStyles} contentEditable={false}></span>

@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { Refresh } from '../../icons';
 import {
   black,
@@ -68,7 +68,7 @@ const iconStyles = css({
 
 type IconButtonProps = {
   readonly children: ReactNode;
-  readonly text: TextChildren;
+  readonly text?: TextChildren;
   readonly color?: 'default' | 'blue' | 'transparent' | 'red';
   readonly iconPosition?: 'left' | 'right';
   readonly href?: string;
@@ -78,10 +78,10 @@ type IconButtonProps = {
 
 export const TextAndIconButton = ({
   children,
-  text,
   onClick,
   href,
   color,
+  text = '',
   iconPosition = 'right',
   animateIcon = false,
 }: IconButtonProps): ReturnType<FC> => {
@@ -90,7 +90,9 @@ export const TextAndIconButton = ({
   const [currentColor, setCurrentColor] = useState(color);
   const [currentIcon, setCurrentIcon] = useState(children);
 
-  const textElement = <span css={buttonTextStyles}>{text}</span>;
+  useEffect(() => setCurrentIcon(children), [children]);
+
+  const textElement = text && <span css={buttonTextStyles}>{text}</span>;
   const iconElement = (
     <span
       css={[

@@ -5,8 +5,10 @@ import React, { ComponentProps, ReactNode, useState } from 'react';
 import { CodeError } from '../../atoms';
 import { StructuredInputLines } from '../../molecules';
 import { grey400 } from '../../primitives';
+import { hideOnPrint } from '../../styles/editor-layout';
 import { CodeResultProps } from '../../types';
 import { useResultInfo } from '../CodeLine/CodeLine';
+import { TableButton } from '../TableButton/TableButton';
 import {
   canGrabStyles,
   codeContainerStyles,
@@ -45,6 +47,7 @@ export const CodeLineStructured = ({
   readOnly = false,
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
+  const [showExpanded, setShowExpanded] = useState(false);
 
   const freshResult = useResultInfo({
     result,
@@ -95,6 +98,28 @@ export const CodeLineStructured = ({
           contentEditable={!readOnly}
           css={codeContainerStyles}
         >
+          {!inline && (
+            <div
+              css={[
+                inlineStyles,
+                { padding: 0 },
+                {
+                  '> *': {
+                    paddingBottom: 0,
+                  },
+                },
+                hideOnPrint,
+              ]}
+              contentEditable={false}
+            >
+              <TableButton
+                setState={setShowExpanded}
+                isInState={showExpanded}
+                captions={['Show data', 'Hide data']}
+                isExpandButton
+              />
+            </div>
+          )}
           <div
             css={[
               inlineStyles,
@@ -120,7 +145,7 @@ export const CodeLineStructured = ({
           {unitPicker}
         </code>
       </div>
-      <div>{expanded}</div>
+      {showExpanded && <div css={showExpanded}>{expanded}</div>}
     </StructuredInputLines>
   );
 };
