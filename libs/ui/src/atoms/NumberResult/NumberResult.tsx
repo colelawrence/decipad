@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { N } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
+import { css } from '@emotion/react';
 import { FC } from 'react';
 import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
@@ -15,6 +16,13 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
   const computer = useComputer();
 
   const formatted = computer.formatNumber(type, N(value));
+  const preciseString = formatted.asStringPrecise;
+  const unitPart = formatted.partsOf.find(
+    (part) => part.type === 'unit'
+  )?.value;
+  const currencyPart = formatted.partsOf.find(
+    (part) => part.type === 'currency'
+  )?.value;
 
   const fullResult = <span>{formatted.asString}</span>;
   const trigger = (
@@ -32,13 +40,26 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
     </span>
   );
 
-  if (!tooltip || formatted.asString === formatted.asStringPrecise) {
+  if (!tooltip || formatted.asString === preciseString) {
     return trigger;
   }
 
   return (
     <Tooltip trigger={trigger} stopClickPropagation>
-      {formatted.asStringPrecise}
+      {unitPart ? (
+        <>
+          <p>
+            {currencyPart}
+            {preciseString}
+          </p>
+          <p css={css({ fontStyle: 'italic' })}>{unitPart}</p>
+        </>
+      ) : (
+        <p>
+          {currencyPart}
+          {preciseString}
+        </p>
+      )}
     </Tooltip>
   );
 };
