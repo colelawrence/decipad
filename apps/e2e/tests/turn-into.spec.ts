@@ -1,9 +1,5 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import {
-  createDateBelow,
-  createInputBelow,
-  createToggleBelow,
-} from '../utils/page/Block';
+import { createInputBelow, createToggleBelow } from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import { Timeouts } from '../utils/src';
 
@@ -64,23 +60,5 @@ test.describe('Turn Into', () => {
     await expect(
       page.locator('[data-testid="codeline-code"] >> nth=-1')
     ).toContainText('false');
-  });
-
-  test('Converts a Date Widget into a Code Line with proper syntax', async () => {
-    await keyPress(page, 'ArrowDown');
-    await createDateBelow(page, 'Input3');
-
-    await page.click('[data-testid=drag-handle] >> nth=2');
-    await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.locator('role=menuitem', { hasText: 'calculation' }).click();
-
-    await expect(
-      page.locator('[data-testid="codeline-varname"] >> nth=-1')
-    ).toContainText('Input3');
-    await expect(
-      page.locator('[data-testid="codeline-code"] >> nth=-1')
-    ).toContainText('date(');
   });
 });

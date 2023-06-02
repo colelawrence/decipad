@@ -46,15 +46,15 @@ export const SmartRef: FC<SmartRefProps> = ({
       contentEditable={false}
       data-testid="smart-ref"
     >
-      {symbolName && (
-        <CodeVariable
-          defBlockId={defBlockId}
-          isSelected={isSelected}
-          provideVariableDefLink
-        >
-          {symbolName}
-        </CodeVariable>
-      )}
+      <CodeVariable
+        defBlockId={defBlockId}
+        isSelected={isSelected}
+        provideVariableDefLink
+        isInitialized={isInitialized}
+      >
+        {symbolName}
+      </CodeVariable>
+
       {isInitialized && errorMessage && (
         <CodeError message={errorMessage} url="/docs/" />
       )}

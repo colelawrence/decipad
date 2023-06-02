@@ -91,11 +91,8 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       if (element.lastSeenVariableName !== newLastSeenVariableName) {
         setLastSeenVariableName(newLastSeenVariableName);
       }
-      if (!isInitialized) {
-        setIsInitialized(true);
-      }
     },
-    [editor, element, path, setLastSeenVariableName, isInitialized]
+    [editor, element, path, setLastSeenVariableName]
   );
 
   const computer = useComputer();
@@ -125,6 +122,9 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       .pipe(filter((name) => !!name));
 
     const sub = symbolName$.subscribe((debouncedSymbolName) => {
+      if (!isInitialized) {
+        setIsInitialized(true);
+      }
       if (
         debouncedSymbolName != null &&
         debouncedSymbolName !== element.lastSeenVariableName

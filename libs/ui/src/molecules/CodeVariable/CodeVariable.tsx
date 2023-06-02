@@ -1,11 +1,12 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { TableCellType } from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { noop } from 'lodash';
 import { ReactNode, useMemo } from 'react';
 import { CodeVariableTooltip } from '..';
+import { Loading } from '../../icons';
 import { cssVar } from '../../primitives';
-import { codeBlock } from '../../styles';
+import { codeBlock, results } from '../../styles';
 import { getTypeIcon } from '../../utils';
 
 const localVarStyles = css({
@@ -43,6 +44,7 @@ interface CodeVariableProps {
   readonly showTooltip?: boolean;
   readonly isSelected?: boolean;
   readonly variableMissing?: boolean;
+  readonly isInitialized?: boolean;
   onGoToDefinition?: () => void;
 }
 
@@ -56,6 +58,7 @@ export const CodeVariable = ({
   type,
   variableScope = 'global',
   variableMissing = false,
+  isInitialized = true,
   defBlockId,
   onGoToDefinition,
   isSelected = false,
@@ -63,7 +66,7 @@ export const CodeVariable = ({
   const Icon = useMemo(() => type && getTypeIcon(type), [type]);
   const decoration = (
     <span
-      onClick={onClick}
+      onClick={isInitialized ? onClick : noop}
       css={
         variableMissing
           ? null
@@ -75,16 +78,24 @@ export const CodeVariable = ({
             ]
       }
     >
-      {Icon && (
+      {isInitialized && Icon && (
         <span css={iconStyles} contentEditable={false}>
           <Icon />
         </span>
       )}
-      {children}
+      {isInitialized || children ? (
+        children
+      ) : (
+        <span
+          css={[results.resultLoadingIconStyles, { verticalAlign: 'middle' }]}
+        >
+          <Loading />
+        </span>
+      )}
     </span>
   );
 
-  if (!showTooltip) {
+  if (!showTooltip || !isInitialized) {
     return decoration;
   }
 
