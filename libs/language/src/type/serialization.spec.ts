@@ -75,6 +75,7 @@ it('can stringify a type', () => {
           "unit": null,
         },
       ],
+      "delegatesIndexTo": undefined,
       "indexName": "Idx",
       "kind": "table",
     }

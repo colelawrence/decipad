@@ -28,7 +28,7 @@ it('accepts multi-d non-indexed columns as having the tables dimension on top', 
     await testGrowTable({ startingColumns: ['A = [[1], [2]]'], newColumn: '1' })
   ).toMatchInlineSnapshot(`
     Object {
-      "type": table<A = column<number>, NewCol = number>,
+      "type": table<A = column<number, indexed by Table>, NewCol = number>,
       "value": Array [
         Array [
           Array [

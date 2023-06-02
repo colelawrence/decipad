@@ -392,15 +392,11 @@ export class Computer {
             : [];
 
         const deserialisedType = deserializeType(result.type);
-        // console.log('deserialisedType', deserialisedType);
         const dimensions = linearizeType(deserialisedType);
-        // console.log('dimensions', dimensions);
 
         dimensions.pop(); // remove tip
 
         const deepLengths = getDeepLengths(result.value);
-
-        // console.log('zip', dimensions, deepLengths);
 
         return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
           return {

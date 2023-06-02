@@ -79,7 +79,13 @@ async function callBuiltinAfterAutoconvert(
     return automapValuesForReducer(onlyArgType, onlyArg, lowerDimFn);
   }
 
-  return automapValues(argTypes, args, lowerDimFn, builtin.argCardinalities);
+  return automapValues(
+    realm.inferContext,
+    argTypes,
+    args,
+    lowerDimFn,
+    builtin.argCardinalities
+  );
 }
 
 const stages = ['autoConvertArguments', 'builtin', 'autoConvertResult'];
@@ -102,7 +108,7 @@ export const callBuiltin = async (
       !!op.autoConvertArgs ||
       (!op.noAutoconvert && (await shouldAutoconvert(argTypes)));
     let args = autoConvert
-      ? await autoconvertArguments(argsBeforeConvert, argTypes)
+      ? await autoconvertArguments(realm, argsBeforeConvert, argTypes)
       : argsBeforeConvert;
 
     if (op.absoluteNumberInput && !returnType.unit) {
@@ -133,7 +139,7 @@ export const callBuiltin = async (
     );
     stage += 1;
     return autoConvert
-      ? autoconvertResult(resultBeforeConvertingBack, returnType)
+      ? autoconvertResult(realm, resultBeforeConvertingBack, returnType)
       : resultBeforeConvertingBack;
   } catch (err) {
     if (

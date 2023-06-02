@@ -58,6 +58,7 @@ export class Type {
   columnTypes: Type[] | null = null;
   columnNames: string[] | null = null;
   rowCount?: number;
+  delegatesIndexTo?: string | null;
 
   rowIndexName: string | null = null;
   rowCellTypes: Type[] | null = null;

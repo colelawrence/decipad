@@ -12,7 +12,7 @@ function TextResult({
   tooltip: boolean;
 }) {
   if (!tooltip) {
-    return <span>{value}</span>;
+    return <span>{value.toString()}</span>;
   }
 
   const fullString = <span>{value}</span>;
@@ -32,7 +32,7 @@ function TextResult({
     </span>
   );
 
-  return <Tooltip trigger={trigger}>{value}</Tooltip>;
+  return <Tooltip trigger={trigger}>{value.toString()}</Tooltip>;
 }
 
 export default TextResult;

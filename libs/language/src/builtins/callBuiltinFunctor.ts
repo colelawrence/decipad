@@ -64,6 +64,7 @@ const internalCallBuiltinFunctor = async (
   }
 
   const resultTypes = await automapTypes(
+    context,
     givenArguments,
     async ([type, ...rest]) =>
       (

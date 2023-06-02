@@ -3,6 +3,7 @@ import { fromJS, getColumnLike } from '../value';
 import { buildType } from '../type';
 import { EmptyColumn } from './EmptyColumn';
 import { materializeOneResult } from '../utils/materializeOneResult';
+import { makeContext } from '../infer';
 
 it('forbids access into it', async () => {
   await expect(async () =>
@@ -19,6 +20,7 @@ it('can be materialized', async () => {
 it('can be materialized by a lazy operation', async () => {
   const lazyOp = getColumnLike(
     await createLazyOperation(
+      makeContext(),
       () => new EmptyColumn([]),
       [fromJS([1, 2, 3])],
       [buildType.column(buildType.number())]
@@ -32,6 +34,7 @@ it('can be materialized by a lazy operation', async () => {
 
   const lazyOpWithInnerDims = getColumnLike(
     await createLazyOperation(
+      makeContext(),
       () => new EmptyColumn([{ dimensionLength: 2 }]),
       [fromJS([1, 2, 3])],
       [buildType.column(buildType.number())]
@@ -45,6 +48,7 @@ it('can be materialized by a lazy operation', async () => {
 it('can be the arg of a lazy operation', async () => {
   const lazyOp = getColumnLike(
     await createLazyOperation(
+      makeContext(),
       () => fromJS(1),
       [new EmptyColumn([])],
       [buildType.column(buildType.number())]
@@ -54,6 +58,7 @@ it('can be the arg of a lazy operation', async () => {
 
   const lazyOp2D = getColumnLike(
     await createLazyOperation(
+      makeContext(),
       () => fromJS(1),
       [fromJS([1, 2]), fromJS([])],
       [

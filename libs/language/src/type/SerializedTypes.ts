@@ -22,12 +22,14 @@ export type MaterializedColumn = {
 export type Table = {
   readonly kind: 'table';
   readonly indexName: string | null;
+  readonly delegatesIndexTo?: string | null;
   readonly columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;
 export type MaterializedTable = {
   readonly kind: 'materialized-table';
   readonly indexName: string | null;
+  readonly delegatesIndexTo?: string | null;
   readonly columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;

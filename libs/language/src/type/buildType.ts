@@ -59,6 +59,7 @@ export const symbol = (symbol: string) =>
 
 interface BuildTableArgs {
   indexName?: string | null;
+  delegatesIndexTo?: string | null;
   columnTypes: Type[];
   columnNames: string[];
 }
@@ -67,9 +68,11 @@ export const table = ({
   indexName,
   columnTypes,
   columnNames,
+  delegatesIndexTo,
 }: BuildTableArgs) => {
   return produce(new Type(), (t) => {
     t.indexName = indexName ?? null;
+    t.delegatesIndexTo = delegatesIndexTo;
     t.columnTypes = columnTypes;
     t.columnNames = columnNames;
   });

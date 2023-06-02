@@ -52,9 +52,13 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
   }
 
   if (representsPercentage(unitExpr)) {
-    return automapTypes([await expressionType.isScalar('number')], (): Type => {
-      return t.number(null, 'percentage');
-    });
+    return automapTypes(
+      ctx,
+      [await expressionType.isScalar('number')],
+      (): Type => {
+        return t.number(null, 'percentage');
+      }
+    );
   }
 
   const unitExpressionType = await (
@@ -72,6 +76,7 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
     });
   }
   const ret = automapTypes(
+    ctx,
     [expressionType],
     ([expressionType]: Type[]): Type => {
       const sourceUnits = expressionType.unit;
@@ -131,6 +136,7 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
 
   if (representsPercentage(unitsExpression)) {
     return automapValues(
+      realm.inferContext,
       [expressionType],
       [expressionValue],
       ([value], [type]) => {
@@ -165,34 +171,39 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
 
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
-  return automapValues([expressionType], [expressionValue], async ([value]) => {
-    if (value instanceof NumberValue) {
-      if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
+  return automapValues(
+    realm.inferContext,
+    [expressionType],
+    [expressionValue],
+    async ([value]) => {
+      if (value instanceof NumberValue) {
+        if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
+          return fromJS(
+            (await value.getData()).div(conversionRate),
+            defaultValue(expressionType)
+          );
+        }
+
+        const converted = convertBetweenUnits(
+          await value.getData(),
+          sourceUnits,
+          targetUnits,
+          { tolerateImprecision: true }
+        );
+
         return fromJS(
-          (await value.getData()).div(conversionRate),
+          converted.div(conversionRate),
           defaultValue(expressionType)
         );
       }
 
-      const converted = convertBetweenUnits(
-        await value.getData(),
-        sourceUnits,
-        targetUnits,
-        { tolerateImprecision: true }
-      );
-
-      return fromJS(
-        converted.div(conversionRate),
-        defaultValue(expressionType)
-      );
+      throw targetUnits
+        ? InferError.cannotConvertToUnit(targetUnits)
+        : new RuntimeError(
+            `Don't know how to convert value to ${value?.getData()?.toString()}`
+          );
     }
-
-    throw targetUnits
-      ? InferError.cannotConvertToUnit(targetUnits)
-      : new RuntimeError(
-          `Don't know how to convert value to ${value?.getData()?.toString()}`
-        );
-  });
+  );
 };
 
 export const as: DirectiveImpl<AST.AsDirective> = {

@@ -12,15 +12,18 @@ import {
 } from './common';
 import { getReductionPlan } from './getReductionPlan';
 import { groupTypesByDimension } from './multidimensional-utils';
+import { Context } from '../infer';
 
 // Minor hack: use the automaptypes function to retrieve the arg types
 // Better solution: Make Hypercube type-aware and pass the types from there.
 const hackilyReduceArgTypes = async (
+  ctx: Context,
   argTypes: Type[],
   expectedCardinalities: number[]
 ) => {
   let argTypesLowerDims: Type[] = [];
   await automapTypes(
+    ctx,
     argTypes,
     (argTypesFromMapTypes) => {
       argTypesLowerDims = argTypesFromMapTypes;
@@ -45,6 +48,7 @@ const hackilyReduceArgTypes = async (
  * [[a, b], [c, d]] calls the function with (a, c) and (b, d)
  * */
 export const automapTypes = async (
+  ctx: Context,
   argTypes: Type[],
   mapFn: (types: Type[]) => Type | Promise<Type>,
   expectedCardinalities = arrayOfOnes(argTypes.length)
@@ -79,6 +83,7 @@ export const automapTypes = async (
     }
 
     const allDimensions = groupTypesByDimension(
+      ctx,
       ...linearTypedArgs.map((item) => item.slice(0, -1))
     );
 
@@ -102,6 +107,7 @@ export const automapTypes = async (
 
 // Extremely symmetrical with the above function
 export const automapValues = async (
+  ctx: Context,
   argTypes: Type[],
   argValues: Value.Value[],
   mapFn: (values: Value.Value[], types: Type[]) => PromiseOrType<Value.Value>,
@@ -113,13 +119,14 @@ export const automapValues = async (
 
   if (expectedCardinalities.every((c) => c === 1)) {
     const reducedArgTypes = await hackilyReduceArgTypes(
+      ctx,
       argTypes,
       expectedCardinalities
     );
     const mapFnAndTypes = async (values: Value.Value[]) =>
       mapFn(values, reducedArgTypes);
 
-    return createLazyOperation(mapFnAndTypes, argValues, argTypes);
+    return createLazyOperation(ctx, mapFnAndTypes, argValues, argTypes);
   } else {
     const whichToReduce = getReductionPlan(argTypes, expectedCardinalities);
 

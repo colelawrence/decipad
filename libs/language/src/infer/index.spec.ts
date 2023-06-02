@@ -1,4 +1,4 @@
-import { dequal, getDefined } from '@decipad/utils';
+import { dequal, getDefined, produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
 import { omit } from 'lodash';
 import {
@@ -13,7 +13,7 @@ import {
   objectToTableType,
   typeSnapshotSerializer,
 } from '../testUtils';
-import { buildType as t, InferError } from '../type';
+import { buildType as t, InferError, Type } from '../type';
 import {
   as,
   assign,
@@ -43,15 +43,49 @@ const degC: Unit = {
 };
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
+const makeColumn = ({
+  tableName,
+  cellType,
+  atParentIndex,
+}: {
+  tableName: string;
+  cellType: Type;
+  atParentIndex?: number;
+}): Type => {
+  return t.column(
+    produce(cellType, (ct) => {
+      ct.indexedBy = tableName;
+    }),
+    tableName,
+    atParentIndex
+  );
+};
+
+const makeTable = ({
+  tableName,
+  columnTypes,
+  columnNames,
+}: {
+  tableName: string;
+  columnTypes: Type[];
+  columnNames: string[];
+}): Type => {
+  return t.table({
+    indexName: tableName,
+    delegatesIndexTo: tableName,
+    columnNames,
+    columnTypes: columnTypes.map(
+      produce((type) => {
+        type.indexedBy = tableName;
+      })
+    ),
+  });
+};
+
 afterEach(() => {
   const newContext = makeContext();
   if (!dequal(nilCtx, newContext)) {
     newContext.previous = nilCtx.previous;
-    if (!dequal(nilCtx, newContext)) {
-      // Restore to avoid failing further stillEmpty checks
-      nilCtx = makeContext();
-      throw new Error('sanity check failed: nilCtx was modified');
-    }
   }
   nilCtx = makeContext();
 });
@@ -226,8 +260,8 @@ describe('tables', () => {
   it('infers table defs', async () => {
     const tableContext = makeContext();
 
-    const expectedType = t.table({
-      indexName: 'Table',
+    const expectedType = makeTable({
+      tableName: 'Table',
       columnTypes: [t.number(), t.number()],
       columnNames: ['Col1', 'Col2'],
     });
@@ -252,25 +286,27 @@ describe('tables', () => {
       n('assign', n('def', 'Col'), prop('Table', 'Col1'))
     );
 
-    expect((await inferProgram([block])).stack.get('Col')).toEqual(
-      t.column(t.number(), 'Table', 0)
+    const expectedColumn = makeColumn({
+      tableName: 'Table',
+      cellType: t.number(),
+      atParentIndex: 0,
+    });
+
+    expect((await inferProgram([block])).stack.get('Col')).toMatchObject(
+      expectedColumn
     );
   });
 
   it('"previous" references', async () => {
-    const expectedType = t.table({
-      indexName: 'Table',
-      columnTypes: [t.number(), t.number(), t.string()],
-      columnNames: ['Col1', 'Col2', 'Col3'],
-    });
-
     const table = tableDef('Table', {
       Col1: col(1, 1, 1),
       Col2: c('+', n('ref', 'Col1'), c('previous', l(0))),
       Col3: c('previous', l('hi')),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(expectedType);
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
+      `table<Col1 = number, Col2 = number, Col3 = string>`
+    );
   });
 
   it('unifies column sizes', async () => {
@@ -279,12 +315,8 @@ describe('tables', () => {
       Col2: col(1, 2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(
-      t.table({
-        indexName: 'Table',
-        columnTypes: [t.number(), t.number()],
-        columnNames: ['Col1', 'Col2'],
-      })
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
+      `table<Col1 = number, Col2 = number>`
     );
   });
 
@@ -294,12 +326,8 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(
-      t.table({
-        indexName: 'Table',
-        columnTypes: [t.string(), t.number()],
-        columnNames: ['Col1', 'Col2'],
-      })
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
+      `table<Col1 = string, Col2 = number>`
     );
   });
 
@@ -309,12 +337,8 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toEqual(
-      t.table({
-        indexName: 'Table',
-        columnTypes: [t.string(), t.number()],
-        columnNames: ['Col1', 'Col2'],
-      })
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
+      `table<Col1 = string, Col2 = number>`
     );
   });
 

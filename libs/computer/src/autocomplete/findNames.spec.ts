@@ -31,6 +31,7 @@ it('finds names', async () => {
         "type": Object {
           "columnNames": Array [],
           "columnTypes": Array [],
+          "delegatesIndexTo": undefined,
           "indexName": "Table1",
           "kind": "table",
         },
@@ -109,6 +110,7 @@ it('places local vars first', async () => {
         "type": Object {
           "columnNames": Array [],
           "columnTypes": Array [],
+          "delegatesIndexTo": undefined,
           "indexName": "Table1",
           "kind": "table",
         },

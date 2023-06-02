@@ -14,21 +14,25 @@ export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
   if (expressionType.errorCause || expressionType.pending) {
     return expressionType;
   }
-  return automapTypes([expressionType], async ([expressionType]: Type[]) => {
-    return (await expressionType.isScalar('number')).mapType((type): Type => {
-      if (!type.unit || type.unit.length !== 1) {
-        return t.impossible(InferError.needOneAndOnlyOneUnit());
-      }
-
-      return produce(type, (t) => {
-        if (t.unit) {
-          t.unit[0] = produce(t.unit[0], (u) => {
-            u.quality = getIdentifierString(quality);
-          });
+  return automapTypes(
+    ctx,
+    [expressionType],
+    async ([expressionType]: Type[]) => {
+      return (await expressionType.isScalar('number')).mapType((type): Type => {
+        if (!type.unit || type.unit.length !== 1) {
+          return t.impossible(InferError.needOneAndOnlyOneUnit());
         }
+
+        return produce(type, (t) => {
+          if (t.unit) {
+            t.unit[0] = produce(t.unit[0], (u) => {
+              u.quality = getIdentifierString(quality);
+            });
+          }
+        });
       });
-    });
-  });
+    }
+  );
 };
 
 export const getValue: DirectiveImpl<AST.OfDirective>['getValue'] = async (

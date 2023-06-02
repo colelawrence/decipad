@@ -8,6 +8,7 @@ import {
   automapValuesForReducer,
 } from './automap';
 import { materializeOneResult } from '../utils/materializeOneResult';
+import { makeContext } from '../infer';
 
 // needed because JSON.stringify(BigInt) does not work
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
@@ -34,7 +35,7 @@ describe('automapTypes', () => {
   it('shallow', async () => {
     const calledOnTypes: Type[][] = [];
 
-    const result = await automapTypes([num, str], ([t1, t2]) => {
+    const result = await automapTypes(makeContext(), [num, str], ([t1, t2]) => {
       calledOnTypes.push([t1, t2]);
       return t1;
     });
@@ -47,10 +48,14 @@ describe('automapTypes', () => {
     const type = t.column(str);
 
     const calledOnTypes: Type[][] = [];
-    const result = await automapTypes([type, type], ([t1, t2]) => {
-      calledOnTypes.push([t1, t2]);
-      return t1;
-    });
+    const result = await automapTypes(
+      makeContext(),
+      [type, type],
+      ([t1, t2]) => {
+        calledOnTypes.push([t1, t2]);
+        return t1;
+      }
+    );
 
     expect(result).toEqual(type);
     expect(calledOnTypes).toEqual([[str, str]]);
@@ -60,10 +65,14 @@ describe('automapTypes', () => {
     const type = t.column(t.column(t.column(str)));
 
     const calledOnTypes: Type[][] = [];
-    const result = await automapTypes([type, str], ([t1, t2]) => {
-      calledOnTypes.push([t1, t2]);
-      return t1;
-    });
+    const result = await automapTypes(
+      makeContext(),
+      [type, str],
+      ([t1, t2]) => {
+        calledOnTypes.push([t1, t2]);
+        return t1;
+      }
+    );
 
     expect(result).toEqual(type);
     expect(calledOnTypes).toEqual([[str, str]]);
@@ -73,10 +82,14 @@ describe('automapTypes', () => {
     const type = t.column(str);
 
     const calledOnTypes: Type[][] = [];
-    const result = await automapTypes([type, str], ([t1, t2]) => {
-      calledOnTypes.push([t1, t2]);
-      return t1;
-    });
+    const result = await automapTypes(
+      makeContext(),
+      [type, str],
+      ([t1, t2]) => {
+        calledOnTypes.push([t1, t2]);
+        return t1;
+      }
+    );
 
     expect(result).toEqual(type);
     expect(calledOnTypes).toEqual([[str, str]]);
@@ -85,7 +98,7 @@ describe('automapTypes', () => {
   const typeId = (t: Type[]) => t[0];
 
   it('ensures that cardinality is high enough for the expectedCardinality array', async () => {
-    const error = await automapTypes([t.number()], typeId, [2]);
+    const error = await automapTypes(makeContext(), [t.number()], typeId, [2]);
     expect(error.errorCause?.spec).toMatchObject({
       errType: 'expected-but-got',
       expectedButGot: [t.column(t.anything()), t.number()],
@@ -96,14 +109,17 @@ describe('automapTypes', () => {
   it.skip('can automap types', async () => {
     const total = async ([a]: Type[]) => a.reduced();
 
-    expect(await automapTypes([t.column(num)], total, [2])).toEqual(num);
+    expect(
+      await automapTypes(makeContext(), [t.column(num)], total, [2])
+    ).toEqual(num);
 
-    expect(await automapTypes([t.column(t.column(num))], total, [2])).toEqual(
-      t.column(num)
-    );
+    expect(
+      await automapTypes(makeContext(), [t.column(t.column(num))], total, [2])
+    ).toEqual(t.column(num));
 
     expect(
       await automapTypes(
+        makeContext(),
         [t.column(num), t.column(num)],
         async ([scalar, col]: Type[]) =>
           Type.combine(scalar.isScalar('number'), col.isColumn(), str),
@@ -111,7 +127,7 @@ describe('automapTypes', () => {
       )
     ).toEqual(t.column(str));
 
-    expect(automapTypes([num], total, [2])).toEqual(
+    expect(automapTypes(makeContext(), [num], total, [2])).toEqual(
       t.impossible('A column is required')
     );
   });
@@ -124,6 +140,7 @@ describe('automapTypes', () => {
     expect(
       (
         await automapTypes(
+          makeContext(),
           [t.column(bool), t.column(str), t.column(num)],
           cond,
           card
@@ -135,6 +152,7 @@ describe('automapTypes', () => {
   it('takes indexedBy of operands into account', async () => {
     expect(
       await automapTypes(
+        makeContext(),
         [t.column(num, 'Idx1'), t.column(num, 'Idx1')],
         () => str
       )
@@ -143,7 +161,9 @@ describe('automapTypes', () => {
     });
 
     const twoIndices = t.column(t.column(str, 'Idx2d'), 'Idx1');
-    expect(await automapTypes([twoIndices], () => str)).toMatchObject({
+    expect(
+      await automapTypes(makeContext(), [twoIndices], () => str)
+    ).toMatchObject({
       indexedBy: 'Idx1',
       cellType: {
         indexedBy: 'Idx2d',
@@ -151,7 +171,9 @@ describe('automapTypes', () => {
     });
 
     const indicesTwo = t.column(t.column(str, 'Idx2d'), 'Idx1');
-    expect(await automapTypes([indicesTwo], () => str)).toMatchObject({
+    expect(
+      await automapTypes(makeContext(), [indicesTwo], () => str)
+    ).toMatchObject({
       indexedBy: 'Idx1',
       cellType: {
         indexedBy: 'Idx2d',
@@ -162,6 +184,7 @@ describe('automapTypes', () => {
   it('Can operate on two higher-dimensional types', async () => {
     expect(
       await automapTypes(
+        makeContext(),
         [
           t.column(t.column(num, 'Index2'), 'Index1'),
           t.column(t.column(num, 'Index1'), 'Index2'),
@@ -181,6 +204,7 @@ describe('automapTypes', () => {
   it('Can heighten dimensions when it sees two index names', async () => {
     expect(
       await automapTypes(
+        makeContext(),
         [t.column(num, 'Index1'), t.column(num, 'Index2')],
         () => str
       )
@@ -193,6 +217,7 @@ describe('automapTypes', () => {
 
     expect(
       await automapTypes(
+        makeContext(),
         [
           t.column(num, 'Index1'),
           t.column(num, 'Index2'),
@@ -215,12 +240,12 @@ describe('automapTypes', () => {
     const table = t.table({ columnNames: [], columnTypes: [] });
     const callee = jest.fn(([x]: Type[]) => x);
 
-    expect(await automapTypes([table], callee)).toEqual(table);
+    expect(await automapTypes(makeContext(), [table], callee)).toEqual(table);
     expect(callee).toHaveBeenCalledWith([table]);
     callee.mockClear();
 
     const col = t.column(table);
-    expect(await automapTypes([col], callee)).toEqual(col);
+    expect(await automapTypes(makeContext(), [col], callee)).toEqual(col);
     expect(callee).toHaveBeenCalledWith([table]);
     callee.mockClear();
   });
@@ -240,6 +265,7 @@ describe('automapValues', () => {
 
     const calledOnValues: Values.Value[] = [];
     const result = await automapValues(
+      makeContext(),
       [t.column(t.column(t.column(t.number()))), t.number()],
       [multiDim, scalar],
       async ([v1, v2]) => {
@@ -314,6 +340,7 @@ describe('automapValues', () => {
 
     it('does not map a column, if mapFn already takes that cardinality', async () => {
       const result = await automapValues(
+        makeContext(),
         [t.number(), t.number()],
         [Values.fromJS(10), Values.fromJS(1)],
         combine,
@@ -327,6 +354,7 @@ describe('automapValues', () => {
       const values = Values.fromJS([1, 2, 4]);
 
       const result = await automapValues(
+        makeContext(),
         [t.column(t.number())],
         [values],
         sumOne,
@@ -344,6 +372,7 @@ describe('automapValues', () => {
       ]);
 
       const result = await automapValues(
+        makeContext(),
         [t.column(t.column(t.number()))],
         [deepValues],
         sumOne,
@@ -359,6 +388,7 @@ describe('automapValues', () => {
 
       const calls: unknown[] = [];
       const result = await automapValues(
+        makeContext(),
         [t.column(t.number()), t.column(t.number())],
         args,
         async ([a1, a2]: Values.Value[]) => {
@@ -392,6 +422,7 @@ describe('automapValues', () => {
       ];
 
       const result = await automapValues(
+        makeContext(),
         [t.column(t.column(t.number(), 'X')), t.column(t.number(), 'X')],
         args,
         combine
@@ -409,6 +440,7 @@ describe('automapValues', () => {
           await materializeOneResult(
             (
               await automapValues(
+                makeContext(),
                 [t.column(t.string(), 'Dimone'), t.column(t.number())],
                 [Values.fromJS(['A', 'B']), Values.fromJS([1, 2, 3])],
                 combine,
@@ -437,6 +469,7 @@ describe('automapValues', () => {
           await materializeOneResult(
             (
               await automapValues(
+                makeContext(),
                 [
                   t.column(t.string(), 'IndexOne'),
                   t.string(),
@@ -473,6 +506,7 @@ describe('automapValues', () => {
           await materializeOneResult(
             (
               await automapValues(
+                makeContext(),
                 [
                   t.column(t.string(), 'DimZero'),
                   t.column(t.number(), 'DimOne'),
@@ -511,6 +545,7 @@ describe('automapValues', () => {
           await materializeOneResult(
             (
               await automapValues(
+                makeContext(),
                 [
                   t.column(t.string(), 'Index1'),
                   t.column(t.string(), 'DiffIndex'),
@@ -546,6 +581,7 @@ describe('automapValues', () => {
         await materializeOneResult(
           (
             await automapValues(
+              makeContext(),
               [
                 t.column(t.column(str, 'Letters'), 'Numbers'),
                 t.column(t.column(str, 'Numbers'), 'Letters'),
@@ -598,9 +634,9 @@ describe('automapValues', () => {
     );
     const callee = jest.fn(() => otherTable);
 
-    expect(await automapValues([table], [tableVal], callee)).toEqual(
-      otherTable
-    );
+    expect(
+      await automapValues(makeContext(), [table], [tableVal], callee)
+    ).toEqual(otherTable);
     expect(callee).toHaveBeenCalledWith([tableVal], [table]);
     callee.mockClear();
 
@@ -608,7 +644,9 @@ describe('automapValues', () => {
     const col = t.column(table);
     expect(
       await materializeOneResult(
-        await (await automapValues([col], [colVal], callee)).getData()
+        await (
+          await automapValues(makeContext(), [col], [colVal], callee)
+        ).getData()
       )
     ).toEqual(
       await materializeOneResult(
@@ -625,7 +663,7 @@ describe('automapValues', () => {
     const type = t.number();
     const value = Values.fromJS(1n);
 
-    await automapValues([type], [value], mapFn);
+    await automapValues(makeContext(), [type], [value], mapFn);
 
     expect(mapFn).toHaveBeenCalledWith([value], [type]);
   });
@@ -638,7 +676,7 @@ describe('automapValues', () => {
     const reducedValue = Values.fromJS(1n);
     const value = Values.Column.fromValues([reducedValue]);
 
-    const hc = await automapValues([type], [value], mapFn);
+    const hc = await automapValues(makeContext(), [type], [value], mapFn);
 
     await hc.getData(); // trigger lazy execution
 

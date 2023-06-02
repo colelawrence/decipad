@@ -79,6 +79,12 @@ export async function inferTableColumn(
     });
   }
 
+  if (!type.indexedBy) {
+    type = produce(type, (t) => {
+      t.indexedBy = tableName;
+    });
+  }
+
   linkToAST(columnAst, type);
 
   if (type.errorCause) {

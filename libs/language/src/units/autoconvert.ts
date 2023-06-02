@@ -1,15 +1,19 @@
 import { getDefined } from '@decipad/utils';
-import type { Type } from '..';
+import type { Realm, Type } from '..';
 import { NumberValue, Value } from '../value';
 import { expandUnits, contractUnits } from './expand';
 import { zip } from '../utils';
 import { automapValues } from '../dimtools';
 
-async function autoconvertArgument(value: Value, type: Type): Promise<Value> {
+async function autoconvertArgument(
+  realm: Realm,
+  value: Value,
+  type: Type
+): Promise<Value> {
   const typeLowestDims = await type.reducedToLowest();
   if (typeLowestDims.unit) {
     const [, expander] = expandUnits(getDefined(typeLowestDims.unit));
-    return automapValues([type], [value], ([value]) => {
+    return automapValues(realm.inferContext, [type], [value], ([value]) => {
       if (value instanceof NumberValue) {
         return NumberValue.fromValue(expander(value.value));
       }
@@ -20,13 +24,14 @@ async function autoconvertArgument(value: Value, type: Type): Promise<Value> {
 }
 
 export async function autoconvertResult(
+  realm: Realm,
   value: Value,
   type: Type
 ): Promise<Value> {
   const typeLowestDims = await type.reducedToLowest();
   if (typeLowestDims.unit) {
     const [, contractor] = contractUnits(getDefined(typeLowestDims.unit));
-    return automapValues([type], [value], ([value]) => {
+    return automapValues(realm.inferContext, [type], [value], ([value]) => {
       if (value instanceof NumberValue) {
         return NumberValue.fromValue(contractor(value.value));
       }
@@ -37,12 +42,13 @@ export async function autoconvertResult(
 }
 
 export async function autoconvertArguments(
+  realm: Realm,
   values: Value[],
   types: Type[]
 ): Promise<Value[]> {
   return Promise.all(
     zip(values, types).map(async ([value, type]) =>
-      autoconvertArgument(value, type)
+      autoconvertArgument(realm, value, type)
     )
   );
 }

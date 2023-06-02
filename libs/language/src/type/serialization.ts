@@ -31,6 +31,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
         indexName: type.indexName,
         columnTypes: type.columnTypes.map((t) => serializeType(t)),
         columnNames: type.columnNames,
+        delegatesIndexTo: type.delegatesIndexTo,
       };
     }
     if (type.rowCellTypes && type.rowCellNames) {
@@ -141,10 +142,11 @@ export function deserializeType(type: Type | SerializedType): Type {
           return t.column(deserializeType(type.cellType), type.indexedBy);
         case 'materialized-table':
         case 'table':
-          const { columnTypes, columnNames } = type;
+          const { columnTypes, columnNames, delegatesIndexTo } = type;
           return t.table({
             columnTypes: columnTypes.map((t) => deserializeType(t)),
             columnNames,
+            delegatesIndexTo,
           });
         case 'row':
           return t.row(

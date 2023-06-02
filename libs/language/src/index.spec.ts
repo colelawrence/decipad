@@ -1,5 +1,6 @@
 // E2e tests
 import { N } from '@decipad/number';
+import { produce } from '@decipad/utils';
 import { date, parseUTCDate } from './date';
 import { runCode } from './run';
 import {
@@ -9,10 +10,51 @@ import {
   runCodeForVariables,
   typeSnapshotSerializer,
 } from './testUtils';
-import { buildType as t, InferError, serializeType } from './type';
+import { buildType as t, InferError, serializeType, Type } from './type';
 import { number } from './type/buildType';
 import { block, c, n, U, u } from './utils';
 import { materializeOneResult } from './utils/materializeOneResult';
+
+const makeColumn = ({
+  tableName,
+  cellType,
+  atParentIndex,
+  cellTypeIndexedBy,
+}: {
+  tableName: string;
+  cellType: Type;
+  atParentIndex?: number;
+  cellTypeIndexedBy?: string;
+}): Type => {
+  return t.column(
+    produce(cellType, (ct) => {
+      ct.indexedBy = cellTypeIndexedBy ?? tableName;
+    }),
+    tableName,
+    atParentIndex
+  );
+};
+
+const makeTable = ({
+  tableName,
+  columnTypes,
+  columnNames,
+}: {
+  tableName: string;
+  columnTypes: Type[];
+  columnNames: string[];
+}): Type => {
+  return t.table({
+    indexName: tableName,
+    delegatesIndexTo: tableName,
+    columnNames,
+    columnTypes: columnTypes.map(
+      produce((type) => {
+        type.indexedBy = tableName;
+      })
+    ),
+  });
+};
 
 expect.addSnapshotSerializer(typeSnapshotSerializer);
 
@@ -257,7 +299,17 @@ describe('Multidimensional operations', () => {
         (X.Col + Y.Col) + (X.Col / 10)
       `)
     ).toMatchObject({
-      type: t.column(t.column(t.number(), 'Y', 0), 'X', 0),
+      type: makeColumn({
+        tableName: 'X',
+        cellType: makeColumn({
+          tableName: 'Y',
+          cellType: t.number(),
+          atParentIndex: 0,
+          cellTypeIndexedBy: 'X',
+        }),
+        cellTypeIndexedBy: 'Y',
+        atParentIndex: 0,
+      }),
       value: [
         [N(1011, 10), N(2011, 10)],
         [N(511, 5), N(1011, 5)],
@@ -272,14 +324,25 @@ describe('Multidimensional operations', () => {
 
         (X.Col + Y.Col) + (Y.Col / 1000)
       `)
-    ).toMatchObject({
-      type: t.column(t.column(t.number(), 'Y', 0), 'X', 0),
-      value: [
-        [N(1011, 10), N(1006, 5)],
-        [N(1021, 10), N(1011, 5)],
-        [N(1031, 10), N(1016, 5)],
-      ],
-    });
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": column<column<number, indexed by Y>, indexed by X>,
+        "value": Array [
+          Array [
+            DeciNumber(101.1),
+            DeciNumber(201.2),
+          ],
+          Array [
+            DeciNumber(102.1),
+            DeciNumber(202.2),
+          ],
+          Array [
+            DeciNumber(103.1),
+            DeciNumber(203.2),
+          ],
+        ],
+      }
+    `);
   });
 
   it('can run Total over multiple dims', async () => {
@@ -420,7 +483,11 @@ describe('Tables', () => {
         Table.Col
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 'Table', 0),
+      type: makeColumn({
+        tableName: 'Table',
+        cellType: t.number(),
+        atParentIndex: 0,
+      }),
       value: [N(1), N(2), N(3)],
     });
   });
@@ -436,7 +503,11 @@ describe('Tables', () => {
         Table.Col2
       `)
     ).toMatchObject({
-      type: t.column(t.number(), 'Table', 1),
+      type: makeColumn({
+        tableName: 'Table',
+        cellType: t.number(),
+        atParentIndex: 1,
+      }),
       value: [N(1), N(1), N(1)],
     });
   });
@@ -1725,8 +1796,8 @@ describe('number units work together', () => {
         [N(1), N(27, 25)], // InterestRate
         [N(4), N(432, 100)], // Price
       ],
-      type: t.table({
-        indexName: 'Fuel',
+      type: makeTable({
+        tableName: 'Fuel',
         columnTypes: [
           t.number(),
           t.number(),

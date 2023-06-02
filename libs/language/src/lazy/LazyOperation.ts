@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { getDefined } from '@decipad/utils';
-import { Type } from '..';
+import { Context, Type } from '..';
 import { isColumnLike, Value } from '../value';
 import { zip } from '../utils';
 import { implementColumnLike } from './LazyAtIndex';
@@ -106,10 +106,11 @@ export const createLazyOperationBase = async (
 };
 
 export const createLazyOperation = async (
+  ctx: Context,
   op: OperationFunction,
   argValues: Value[],
   argTypes: Type[]
 ) => {
-  const args = zip(argValues, argTypes).map(getHypercubeArg);
+  const args = zip(argValues, argTypes).map(getHypercubeArg(ctx));
   return createLazyOperationBase(op, args);
 };

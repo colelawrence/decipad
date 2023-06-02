@@ -1,6 +1,8 @@
 import { produce } from '@decipad/utils';
 import { DimensionId } from '../lazy';
 import { Type } from '../type';
+import { Context } from '../infer';
+import { getDimensionId } from './multidimensional-utils';
 
 export type IndexNames = (string | null)[];
 
@@ -35,9 +37,9 @@ export const deLinearizeType = async (types: Type[]): Promise<Type> => {
   });
 };
 
-export const typeToDimensionIds = (type: Type): DimensionId[] => {
+export const typeToDimensionIds = (ctx: Context, type: Type): DimensionId[] => {
   const linear = linearizeType(type).slice(0, -1);
-  return linear.map((t, i) => t.indexedBy ?? i);
+  return linear.map((t, i) => getDimensionId(ctx, t, i));
 };
 
 /** Place a new item in the head of an array */

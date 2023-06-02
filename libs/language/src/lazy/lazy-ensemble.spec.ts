@@ -21,6 +21,7 @@ import { jsCol } from './testUtils';
 import { OperationFunction } from './types';
 import { createLazyAtIndex } from './LazyAtIndex';
 import { materializeOneResult } from '../utils/materializeOneResult';
+import { makeContext } from '../infer';
 
 const addOne: OperationFunction = ([x]) =>
   fromJS((x as NumberValue).value.add(ONE));
@@ -43,8 +44,14 @@ describe.each(
       jsCol([1, 2, 3]),
       0
     ),
-    createLazyOperation: testLazyOp(addOne, [toAdd], [t.column(t.number())]),
+    createLazyOperation: testLazyOp(
+      makeContext(),
+      addOne,
+      [toAdd],
+      [t.column(t.number())]
+    ),
     'createLazyOperation with named dims': testLazyOp(
+      makeContext(),
       addOne,
       [toAdd],
       [t.column(t.number(), 'X')]
@@ -167,21 +174,25 @@ describe.each(
       1
     ),
     createLazyOperation: testLazyOp(
+      makeContext(),
       addOne,
       [toAdd2D],
       [t.column(t.column(t.number()))]
     ),
     'createLazyOperation with named dims': testLazyOp(
+      makeContext(),
       addOne,
       [toAdd2D],
       [t.column(t.column(t.number(), 'X'), 'Y')]
     ),
     'createLazyOperation with named dims (one unnamed)': testLazyOp(
+      makeContext(),
       addOne,
       [toAdd2D],
       [t.column(t.column(t.number(), 'X'))]
     ),
     'createLazyOperation with named dims (other unnamed)': testLazyOp(
+      makeContext(),
       addOne,
       [toAdd2D],
       [t.column(t.column(t.number()), 'X')]

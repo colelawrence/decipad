@@ -100,14 +100,18 @@ export class ComputationRealm {
       name,
       type,
     ] of this.inferContext.stack.globalVariables.entries()) {
-      const table = this.interpreterRealm.stack.get(name, 'global');
+      const tableOrColumn = this.interpreterRealm.stack.get(name, 'global');
 
-      if (table instanceof Table) {
+      if (tableOrColumn instanceof Table) {
         // eslint-disable-next-line no-await-in-loop
-        await addLabels(name, table.columns[0], type.columnTypes?.[0]);
-      } else if (table != null && isColumnLike(table)) {
+        await addLabels(name, tableOrColumn.columns[0], type.columnTypes?.[0]);
+      } else if (tableOrColumn != null && isColumnLike(tableOrColumn)) {
         // eslint-disable-next-line no-await-in-loop
-        await addLabels(name, table, type.cellType ?? undefined);
+        await addLabels(
+          type.indexedBy ?? name,
+          tableOrColumn,
+          type.cellType ?? undefined
+        );
       }
     }
 

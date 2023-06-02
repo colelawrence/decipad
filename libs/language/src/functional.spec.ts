@@ -452,27 +452,79 @@ ${'' /* Get capital needed */}
       runCode(
         `
           Cars = {
-            Type = ["Electric", "Hybrid"],
-            Cost = [100, 200]
+            Type = ["Electric", "Hybrid"]
           }
 
           Countries = {
-            Name = ["Atlantis", "Wakanda"],
+            Name = ["Atlantis", "Wakanda"]
             Tax = [1, 2]
           }
 
-          Cars.Cost + Countries.Tax
+          Purchase = {
+            CarType = Cars.Type
+            Cost = [100, 200]
+          }
+
+          Maintenance = {
+            CarType = Cars.Type
+            Cost = [10, 20]
+          }
+
+          Purchase.Cost + Maintenance.Cost + Countries.Tax
         `
       )
     );
 
     expect(result).toMatchObject({
       value: [
-        [N(101), N(102)],
-        [N(201), N(202)],
+        [N(111), N(112)],
+        [N(221), N(222)],
       ],
       type: {
-        indexedBy: 'Cars',
+        indexedBy: 'Purchase',
+        cellType: {
+          indexedBy: 'Countries',
+          cellType: {
+            type: 'number',
+          },
+        },
+      },
+    });
+
+    expect(time).toBeLessThanOrEqual(200 * (process.env.CI ? 2 : 1));
+  });
+
+  test('Cars with table column assigns', async () => {
+    const [result, time] = await runAndMeasure(async () =>
+      runCode(
+        `
+          Cars = {}
+          Cars.Type = ["Electric", "Hybrid"]
+
+          Countries = {}
+          Countries.Name = ["Atlantis", "Wakanda"]
+          Countries.Tax = [1, 2]
+
+          Purchase = {}
+          Purchase.CarType = Cars.Type
+          Purchase.Cost = [100, 200]
+
+          Maintenance = {}
+          Maintenance.CarType = Cars.Type
+          Maintenance.Cost = [10, 20]
+
+          Purchase.Cost + Maintenance.Cost + Countries.Tax
+        `
+      )
+    );
+
+    expect(result).toMatchObject({
+      value: [
+        [N(111), N(112)],
+        [N(221), N(222)],
+      ],
+      type: {
+        indexedBy: 'Purchase',
         cellType: {
           indexedBy: 'Countries',
           cellType: {

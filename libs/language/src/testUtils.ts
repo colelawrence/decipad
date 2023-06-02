@@ -1,6 +1,6 @@
 import stringify from 'json-stringify-safe';
 import DeciNumber, { N } from '@decipad/number';
-import { AnyMapping, getDefined, zip } from '@decipad/utils';
+import { AnyMapping, getDefined, zip, produce } from '@decipad/utils';
 import pTime from 'p-time';
 import type { AST } from '.';
 import { inferBlock, inferProgram, makeContext } from './infer';
@@ -144,8 +144,13 @@ export const objectToTableType = (
 ) =>
   t.table({
     indexName,
-    columnTypes: Object.values(obj),
+    columnTypes: Object.values(obj).map(
+      produce((t) => {
+        t.indexedBy = indexName;
+      })
+    ),
     columnNames: Object.keys(obj),
+    delegatesIndexTo: indexName,
   });
 
 export const objectToTableValue = async (obj: Record<string, FromJSArg[]>) => {
