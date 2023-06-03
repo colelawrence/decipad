@@ -1,24 +1,24 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_DATA_VIEW,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
+import { useEditorStylesContext } from '@decipad/react-contexts';
 import {
   AvailableSwatchColor,
-  UserIconKey,
-  DataView as UIDataView,
   DataViewMenu,
+  DataView as UIDataView,
+  UserIconKey,
   VoidBlock,
 } from '@decipad/ui';
-import { useEditorStylesContext } from '@decipad/react-contexts';
-import { DataViewData } from '../DataViewData';
-import { useDataView } from '../../hooks';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
+import { useDataView } from '../../hooks';
 import { DataViewColumnHeader } from '../DataViewColumnHeader';
+import { DataViewData } from '../DataViewData';
 
 export const DataView: PlateComponent<{ variableName: string }> = ({
   attributes,
@@ -100,7 +100,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         onChangeVariableName={onVariableNameChange}
         onChangeIcon={saveIcon}
         onChangeColor={saveColor}
-        icon={(element.icon ?? 'Table') as UserIconKey}
+        icon={(element.icon ?? 'TableSmall') as UserIconKey}
         color={(element.color ?? defaultColor) as AvailableSwatchColor}
         onRotated={saveRotated}
         rotate={rotate}

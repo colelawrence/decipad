@@ -1,25 +1,25 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
-  focusOnBody,
-  setUp,
   ControlPlus,
+  focusOnBody,
   keyPress,
+  setUp,
 } from '../utils/page/Editor';
 import {
-  createTable,
-  writeInTable,
-  getFromTable,
   addColumn,
-  removeColumn,
   addRow,
+  clickCalculateFirstColumn,
+  createTable,
+  getFromTable,
+  hideFormulasTable,
+  hideTable,
+  removeColumn,
   removeRow,
   renameColumn,
-  updateDataType,
-  hideTable,
-  showTable,
-  hideFormulasTable,
   showFormulasTable,
-  clickCalculateFirstColumn,
+  showTable,
+  updateDataType,
+  writeInTable,
 } from '../utils/page/Table';
 
 test.describe('Basic Table Interactions + Collisions', () => {
@@ -47,11 +47,21 @@ test.describe('Basic Table Interactions + Collisions', () => {
   test('creates 2 tables and names them', async () => {
     await focusOnBody(page);
     await createTable(page);
-    await page.getByText('Table1', { exact: true }).dblclick();
+    await page.waitForSelector(
+      '[data-testid="table-name-input"]:has-text("Table1")'
+    );
+    await page
+      .locator('[data-testid="table-name-input"]:has-text("Table1")')
+      .dblclick();
     await page.keyboard.type('NewTableName');
     await expect(page.getByText('NewTableName')).toBeVisible();
     await createTable(page);
-    await page.getByText('Table1', { exact: true }).dblclick();
+    await page.waitForSelector(
+      '[data-testid="table-name-input"]:has-text("Table1")'
+    );
+    await page
+      .locator('[data-testid="table-name-input"]:has-text("Table1")')
+      .dblclick();
     await page.keyboard.type('NewTableName2');
     await expect(page.getByText('NewTableName2')).toBeVisible();
   });

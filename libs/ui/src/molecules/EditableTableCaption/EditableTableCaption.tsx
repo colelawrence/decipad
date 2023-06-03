@@ -50,8 +50,8 @@ const tableTitleWrapperStyles = css({
 
 const tableIconSizeStyles = css({
   display: 'grid',
-  width: '16px',
-  height: '16px',
+  width: '24px',
+  height: '24px',
 });
 
 const placeholderStyles = css(p16Medium, {
@@ -134,6 +134,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             css={[editableTableCaptionStyles, placeholderStyles]}
             spellCheck={false}
             contentEditable={!readOnly}
+            data-testid={'table-name-input'}
           >
             {caption}
           </div>

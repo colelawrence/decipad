@@ -1,4 +1,6 @@
+import { Result } from '@decipad/computer';
 import { DraggableBlock } from '@decipad/editor-components';
+import { useNodePath } from '@decipad/editor-hooks';
 import {
   ELEMENT_TABLE,
   PlateComponent,
@@ -8,7 +10,6 @@ import {
   assertElementType,
   useMaterializedResult,
 } from '@decipad/editor-utils';
-import { useNodePath } from '@decipad/editor-hooks';
 import {
   EditorTableContext,
   EditorTableContextValue,
@@ -17,20 +18,19 @@ import {
   useEditorStylesContext,
 } from '@decipad/react-contexts';
 import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
-import { Result } from '@decipad/computer';
 import { useMemo, useState } from 'react';
-import { WIDE_MIN_COL_COUNT } from '../../constants';
-import { useTableStore } from '../../contexts/tableStore';
-import { useTable, useTableActions } from '../../hooks';
-import { SmartRow } from '../SmartRow';
-import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
-import { useSelectedCells } from './useSelectedCells';
 import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
+import { WIDE_MIN_COL_COUNT } from '../../constants';
 import {
   ColumnInferredTypeContext,
   createDefaultColumnInferredTypeContextValue,
 } from '../../contexts/ColumnInferredTypeContext';
+import { useTableStore } from '../../contexts/tableStore';
+import { useTable, useTableActions } from '../../hooks';
 import { selectTableResult } from '../../utils/selectTableResult';
+import { SmartRow } from '../SmartRow';
+import { TableDndProvider } from '../TableDndProvider/TableDndProvider';
+import { useSelectedCells } from './useSelectedCells';
 
 export const Table: PlateComponent = ({ attributes, children, element }) => {
   assertElementType(element, ELEMENT_TABLE);
@@ -114,7 +114,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
                   onSetCollapsed={onSetCollapsed}
                   hideFormulas={element.hideFormulas}
                   onSetHideFormulas={onSetHideFormulas}
-                  icon={(element.icon ?? 'Table') as UserIconKey}
+                  icon={(element.icon ?? 'TableSmall') as UserIconKey}
                   color={
                     (element.color ?? defaultColor) as AvailableSwatchColor
                   }

@@ -1,10 +1,4 @@
-import { CSSProperties, useMemo } from 'react';
-import {
-  findNode,
-  getBlockAbove,
-  getNodeString,
-  TNodeEntry,
-} from '@udecode/plate';
+import { DragColumnItem, useTable } from '@decipad/editor-table';
 import {
   ELEMENT_TABLE,
   TableCellElement,
@@ -13,7 +7,6 @@ import {
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { DragColumnItem, useTable } from '@decipad/editor-table';
 import {
   EditorTableContext,
   EditorTableContextValue,
@@ -25,6 +18,13 @@ import {
   TableRow,
   UserIconKey,
 } from '@decipad/ui';
+import {
+  TNodeEntry,
+  findNode,
+  getBlockAbove,
+  getNodeString,
+} from '@udecode/plate';
+import { CSSProperties, useMemo } from 'react';
 import { DndCellPreview } from './DndCellPreview';
 
 const previewOpacity = 0.7;
@@ -77,7 +77,7 @@ const ColumnPreview = ({
       <EditorTableContext.Provider value={contextValue}>
         <EditorTable
           previewMode
-          icon={(tableNode.icon ?? 'Table') as UserIconKey}
+          icon={(tableNode.icon ?? 'TableSmall') as UserIconKey}
           color={tableNode.color as AvailableSwatchColor}
         >
           {tableCells.map((cell, index) => {
