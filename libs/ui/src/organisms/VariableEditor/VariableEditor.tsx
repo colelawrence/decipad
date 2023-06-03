@@ -160,10 +160,7 @@ export const VariableEditor = ({
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = swatchesThemed(darkTheme);
 
-  const Icon = useMemo(
-    () => (type && getTypeIcon(type, true)) ?? Virus,
-    [type]
-  );
+  const Icon = useMemo(() => (type && getTypeIcon(type)) ?? Virus, [type]);
   const selected = useSelected();
   return (
     <div

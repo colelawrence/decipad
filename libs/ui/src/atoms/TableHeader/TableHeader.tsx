@@ -211,7 +211,7 @@ export const TableHeader = ({
             onSelectColumn={onSelectColumn}
           />
         )}
-        {showIcon && type.kind !== 'anything' && (
+        {showIcon && (
           <>
             {error ? (
               <Tooltip
