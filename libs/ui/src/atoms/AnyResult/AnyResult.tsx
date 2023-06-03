@@ -1,3 +1,4 @@
+import { UNKNOWN_ASSTRING } from '@decipad/number';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { CodeResultProps } from '../../types';
@@ -14,7 +15,7 @@ const numberResultStyles = css({
 export const AnyResult: FC<CodeResultProps<'anything'>> = () => {
   const trigger = (
     <span data-highlight-changes css={numberResultStyles}>
-      ?
+      {UNKNOWN_ASSTRING}
     </span>
   );
 

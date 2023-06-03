@@ -51,6 +51,7 @@ const getResultMatchers = (): ResultMatcher[] => [
     component: AnyResult,
     match: ({ type, value }) =>
       type.kind !== 'function' &&
+      type.kind !== 'pending' &&
       (type.kind === 'anything' ||
         type.kind === 'nothing' ||
         (type.kind !== 'type-error' &&
