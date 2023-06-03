@@ -28,13 +28,24 @@ const styles = css({
 
 type SpecConfig = VegaProps['spec']['config'];
 
-type Spec = VegaProps['spec'] & {
-  config: SpecConfig & { encoding?: { color: { scheme: string | undefined } } };
-  encoding?: { color: { field: string | undefined; type: string | undefined } };
+export type PlotSpec = VegaProps['spec'] & {
+  config?: SpecConfig & {
+    encoding?: { color?: { scheme?: string | undefined } };
+  };
+  encoding?: {
+    color?: {
+      field?: string | undefined;
+      type?: string | undefined;
+      legend?: {
+        orient?: string;
+        direction?: string;
+      };
+    };
+  };
 };
 
 interface PlotResultProps {
-  spec: NonNullable<Spec>;
+  spec: NonNullable<PlotSpec>;
   data: NonNullable<VegaProps['data']>;
   repeatedColumns?: string[];
   onError?: VegaProps['onError'];
@@ -70,6 +81,7 @@ export const PlotResult = ({
           legend: {
             orient: 'bottom',
             direction: 'horizontal',
+            ...(spec.encoding?.color?.legend || {}),
           },
         },
       },

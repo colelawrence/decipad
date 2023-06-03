@@ -18,6 +18,7 @@ import {
 import type { IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatement } from '../utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
+import { createComputerStats } from './computerStats';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -30,6 +31,7 @@ export class ComputationRealm {
   locCache = new Map<string, CacheContents>();
   errorLocs = new Set<string>();
   epoch = 0n;
+  stats = createComputerStats(this.inferContext, this.interpreterRealm);
 
   setExternalData(externalData: ExternalDataMap) {
     this.interpreterRealm.externalData = externalData;

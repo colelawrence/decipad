@@ -25,6 +25,7 @@
     "editor-hooks": "libs/editor-hooks",
     "editor-language-elements": "libs/editor-language-elements",
     "editor-plugins": "libs/editor-plugins",
+    "editor-stats": "libs/editor-stats",
     "editor-table": "libs/editor-table",
     "editor-tests": "libs/editor-tests",
     "editor-types": "libs/editor-types",

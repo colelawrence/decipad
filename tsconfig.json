@@ -63,6 +63,7 @@
         "libs/editor-language-elements/src/index.ts"
       ],
       "@decipad/editor-plugins": ["libs/editor-plugins/src/index.ts"],
+      "@decipad/editor-stats": ["libs/editor-stats/src/index.ts"],
       "@decipad/editor-table": ["libs/editor-table/src/index.ts"],
       "@decipad/editor-types": ["libs/editor-types/src/index.ts"],
       "@decipad/editor-utils": ["libs/editor-utils/src/index.ts"],

@@ -22,3 +22,8 @@ export { parseNumberWithUnit } from './parseNumberWithUnit';
 export { createProgramFromMultipleStatements } from './parseUtils';
 
 export type { Parseable, ParseableDate } from './astToParseable';
+
+export type {
+  ComputerStat,
+  ComputerExpressionResultStat,
+} from './computerStats';

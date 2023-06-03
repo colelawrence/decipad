@@ -3,8 +3,9 @@ import { Computer, ProgramBlock } from '@decipad/computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { debounce } from 'lodash';
 import { findNode, getNode, isElement } from '@udecode/plate';
-import { affectedBlocks } from './affectedBlocks';
+import { editorStatsStore } from '@decipad/react-contexts';
 import { allBlockIds } from './allBlockIds';
+import { affectedBlocks } from './affectedBlocks';
 
 const DEBFAULT_DEBOUNCE_UPDATE_COMPUTER_MS = 500;
 
@@ -132,6 +133,14 @@ export const withUpdateComputerOverride =
       maybeCompute();
       onChange();
     };
+
+    // push statistics from computer into the notebook state
+    computer.stats.computerRequestStat$.subscribe((newStats) => {
+      editorStatsStore.getState().pushComputerRequestStat(newStats);
+    });
+    computer.stats.computerExpressionResultStat$.subscribe((newStats) => {
+      editorStatsStore.getState().pushComputerExpressionResultStat(newStats);
+    });
 
     maybeCompute();
 

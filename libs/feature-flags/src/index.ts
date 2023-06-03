@@ -22,6 +22,9 @@ export const availableFlags = [
 
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
+
+  // show computer stats when clicking Alt-Shift-s
+  'COMPUTER_STATS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

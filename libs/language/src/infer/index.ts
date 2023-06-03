@@ -30,6 +30,8 @@ import { sortType } from './sortType';
 
 export { makeContext, logRetrievedName };
 export type { Context };
+export type { ContextStats } from './inferStats';
+export { initialInferStats } from './inferStats';
 
 export const linkToAST = (node: Writable<AST.Node>, type: Type) => {
   node.inferredType = type;
@@ -66,6 +68,7 @@ export const inferExpression = wrap(
   // exhaustive switch
   // eslint-disable-next-line consistent-return
   async (ctx: Context, expr: Writable<AST.Expression>): Promise<Type> => {
+    ctx.incrementStatsCounter('inferExpressionCount');
     switch (expr.type) {
       case 'noop': {
         return t.nothing();
@@ -254,6 +257,7 @@ const inferStatementInternal = wrap(
     /* Mutable! */ ctx: Context,
     statement: AST.Statement
   ): Promise<Type> => {
+    ctx.incrementStatsCounter('inferStatementCount');
     switch (statement.type) {
       case 'assign': {
         const [nName, nValue] = statement.args;
@@ -329,9 +333,12 @@ export const inferProgram = async (
   program: AST.Block[],
   ctx = makeContext()
 ): Promise<Context> => {
+  const start = Date.now();
   for (const block of program) {
     // eslint-disable-next-line no-await-in-loop
     await inferBlock(block, ctx);
   }
+  const elapsed = Date.now() - start;
+  ctx.incrementStatsCounter('totalInferProgramTimeMs', elapsed);
   return ctx;
 };

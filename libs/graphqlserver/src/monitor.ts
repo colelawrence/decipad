@@ -25,22 +25,14 @@ const onError = (rc: GraphQLRequestContext) => {
           });
         }
 
-        // const { originalError } = error;
-        // if (originalError instanceof Error) {
-        //   if (
-        //     originalError instanceof UserInputError ||
-        //     originalError instanceof ForbiddenError
-        //   ) {
-        //     continue;
-        //   }
-        // const boom = boomify(originalError);
-        // eslint-disable-next-line no-console
-        console.error(
-          'server error detected by graphql monitor',
-          error,
-          error.originalError
-        );
-        // }
+        if (!process.env.CI) {
+          // eslint-disable-next-line no-console
+          console.error(
+            'error detected by graphql monitor',
+            error,
+            error.originalError
+          );
+        }
 
         const contextWithUser = rc as unknown as GraphqlContext;
 

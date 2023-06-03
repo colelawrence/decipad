@@ -12,6 +12,8 @@ import {
 import { useToast } from '@decipad/toast';
 import { insertLiveConnection } from '@decipad/editor-components';
 import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
+import { EditorStats } from '@decipad/editor-stats';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import {
   EditorUserInteractionsProvider,
@@ -223,6 +225,7 @@ export const Notebook: FC<NotebookProps> = (props) => {
           onAttached={onAttached}
         />
         <InsideNotebookState {...rest} />
+        {isFlagEnabled('COMPUTER_STATS') && <EditorStats />}
       </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>
   );

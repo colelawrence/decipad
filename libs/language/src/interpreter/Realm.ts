@@ -4,6 +4,7 @@ import type { AST, ExternalDataMap, Context } from '..';
 import { Stack, StackNamespaceJoiner, StackNamespaceSplitter } from '../stack';
 import { getDefined } from '../utils';
 import { ExpressionCache } from '../expression-cache';
+import { InterpreterStats, initialInterpreterStats } from './interpreterStats';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
@@ -17,6 +18,7 @@ export class Realm {
   previousStatementValue?: Value;
   statementId?: string;
   expressionCache = new ExpressionCache<Value>();
+  stats: InterpreterStats = initialInterpreterStats();
 
   get externalData() {
     return this.inferContext.externalData;
@@ -58,6 +60,14 @@ export class Realm {
 
   clearCacheForSymbols(symbols: string[]): void {
     this.expressionCache.clearCacheResultsForSymbols(symbols);
+  }
+
+  clearStats() {
+    Object.assign(this.stats, initialInterpreterStats());
+  }
+
+  incrementStatsCounter(key: keyof InterpreterStats, howMuch = 1) {
+    this.stats[key] += howMuch;
   }
 
   constructor(context: Context) {

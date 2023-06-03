@@ -37,6 +37,7 @@ export { RowResult } from './RowResult/RowResult';
 export { Select } from './Select/Select';
 export { SmartColumnCell } from './SmartColumnCell/SmartColumnCell';
 export { SmartRow } from './SmartRow/SmartRow';
+export { StatsPopup } from './StatsPopup/StatsPopup';
 export { Table } from './Table/Table';
 export { TableButton } from './TableButton/TableButton';
 export { TableColumnHeader } from './TableColumnHeader/TableColumnHeader';

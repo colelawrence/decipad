@@ -248,6 +248,7 @@ export async function evaluate(
   realm: Realm,
   node: AST.Statement
 ): Promise<Value> {
+  realm.incrementStatsCounter('evaluateCount');
   const cachedValue = node.cacheKey
     ? realm.expressionCache.getCacheResult(node.cacheKey)
     : undefined;
@@ -267,6 +268,7 @@ export async function evaluateStatement(
   realm: Realm,
   statement: AST.Statement
 ) {
+  realm.incrementStatsCounter('evaluateStatementCount');
   return evaluate(realm, statement);
 }
 

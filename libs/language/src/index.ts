@@ -18,8 +18,9 @@ export {
   inferProgram,
   inferStatement,
   makeContext,
+  initialInferStats,
 } from './infer';
-export type { Context } from './infer';
+export type { Context, ContextStats } from './infer';
 export type { ColumnLikeValue, Value } from './value';
 export {
   isColumnLike,
@@ -33,8 +34,9 @@ export {
   runBlock,
   RuntimeError,
   sortValue,
+  initialInterpreterStats,
 } from './interpreter';
-export type { Interpreter } from './interpreter';
+export type { Interpreter, InterpreterStats } from './interpreter';
 export { Column, DateValue, fromJS, Range, Row, Scalar, Table } from './value';
 export {
   AST,

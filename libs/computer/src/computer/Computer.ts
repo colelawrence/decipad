@@ -100,6 +100,7 @@ export class Computer {
   >(new Map());
   private resultStreams = new ResultStreams();
   public results = this.resultStreams.global;
+  public stats = this.computationRealm.stats;
 
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
@@ -138,7 +139,6 @@ export class Computer {
     this.computeRequests
       .pipe(
         combineLatestWith(this.externalData, this.extraProgramBlocks),
-        // Debounce to give React an easier time
         map(([{ program, ...computeReq }, externalData, extraBlocks]) => ({
           ...computeReq,
           program: [...program, ...[...extraBlocks.values()].flat()],
@@ -147,7 +147,13 @@ export class Computer {
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
-        dropWhileComputing(async (req) => this.computeRequest(req)),
+        dropWhileComputing(async (req) => {
+          const start = Date.now();
+          const result = await this.computeRequest(req);
+          const fullRequestElapsedTimeMs = Date.now() - start;
+          this.stats.pushComputerRequestStat({ fullRequestElapsedTimeMs });
+          return result;
+        }),
         switchMap((item) => (item == null ? [] : [item])),
         shareReplay(1)
       )
@@ -584,6 +590,7 @@ export class Computer {
 
   async expressionResult(expression: AST.Expression): Promise<Result.Result> {
     return this.enqueueComputation(async (): Promise<Result.Result> => {
+      const start = Date.now();
       const type = await inferExpression(
         this.computationRealm.inferContext,
         expression
@@ -614,6 +621,11 @@ export class Computer {
             },
           },
         };
+      } finally {
+        const elapsedMs = Date.now() - start;
+        this.stats.pushComputerExpressionResultStat({
+          expressionResultElapsedTimeMs: elapsedMs,
+        });
       }
     });
   }

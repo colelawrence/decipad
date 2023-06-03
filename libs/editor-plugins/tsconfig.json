@@ -57,6 +57,9 @@
     },
     {
       "path": "../number"
+    },
+    {
+      "path": "../editor-stats"
     }
   ]
 }
