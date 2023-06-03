@@ -38,6 +38,7 @@ const varStyles = (type: 'simple' | 'formula') =>
     alignItems: 'center',
     overflowWrap: 'anywhere',
     maxWidth: '174px',
+    wordBreak: 'break-word',
     whiteSpace: 'normal',
     '@media print': {
       background: 'unset',
