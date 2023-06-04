@@ -258,6 +258,7 @@ const invitationButtonContentStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  whiteSpace: 'nowrap',
 });
 
 const tableHeadStyles = css(p13Medium, {
