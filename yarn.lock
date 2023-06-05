@@ -4844,10 +4844,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@decipad_org/safejs@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@decipad_org/safejs/-/safejs-0.3.2.tgz#dbd973090d6d61ad1519185917d72e4742a58b93"
-  integrity sha512-Tiv+SVVXbik332VxolN3Y/jwh1/xN2Kc3OEdnFyhaI4nVFQu+27NhMTrSkDeXRKmgF2BrNcRoLMwdEGDRndWEw==
+"@decipad_org/safejs@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@decipad_org/safejs/-/safejs-0.3.4.tgz#fc2d5d0261a1de73b3117e3d9cf99bd94e7ae46b"
+  integrity sha512-kTbklRnfhFoa3ID/AR2kKLObBxE0vHYSXQk0UxqmCfkew1dE2T/rvlyeU/07AvZB6iIQBe3UM1ifouUrOk6Z7Q==
 
 "@devexpress/error-stack-parser@^2.0.6":
   version "2.0.6"
