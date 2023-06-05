@@ -9,7 +9,7 @@ import { CodeEditor } from '@decipad/ui';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad_org/safejs';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { useWorker } from '../hooks';
-import { ConnectionProps } from './Connection';
+import { ConnectionProps } from './types';
 
 export const CodeConnection: FC<ConnectionProps> = (props) => {
   const { stage } = useConnectionStore();

@@ -9,7 +9,7 @@ import {
 import type { ResultMessageType } from '@decipad_org/safejs';
 import { MaybeResultFromWorker } from '../utils';
 import { useWorker } from '../hooks';
-import { useIntegrationContext } from './IntegrationBlock';
+import { useIntegrationContext } from '.';
 
 interface CodeIntegrationProps {
   id: string;

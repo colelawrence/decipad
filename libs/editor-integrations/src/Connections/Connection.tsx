@@ -1,12 +1,6 @@
 import { FC } from 'react';
-import { Result } from '@decipad/computer';
-import { ImportElementSource } from '@decipad/editor-types';
 import { CodeConnection } from './CodeConnection';
-
-export interface ConnectionProps {
-  type?: ImportElementSource;
-  setResultPreview: (res: Result.Result | undefined) => void;
-}
+import { ConnectionProps } from './types';
 
 // Component used for different types of connection. A bridge.
 export const Connection: FC<ConnectionProps> = (props) => {

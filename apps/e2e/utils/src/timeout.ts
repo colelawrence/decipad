@@ -11,4 +11,5 @@ export const Timeouts = {
   tableDelay: 550,
   computerDelay: 2000,
   menuOpenDelay: 250,
+  liveBlockDelay: 250,
 };

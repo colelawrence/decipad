@@ -1,11 +1,10 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
-import { codePlaceholders, createWorkspace, Timeouts } from '../utils/src';
+import { Timeouts, codePlaceholders, createWorkspace } from '../utils/src';
 
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
-    await page.getByTestId('paragraph-content').last().click();
-    await page.keyboard.type('/');
+    await page.getByTestId('paragraph-content').last().fill('/');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page.getByTestId('menu-item-open-integration').click();
@@ -62,6 +61,8 @@ test.describe('Make sure our js code templates work', () => {
     expect(allSources.length).toBeGreaterThan(0);
     for (const [i, sourcecode] of allSources.entries()) {
       await executeCode(page, sourcecode, i);
+      // eslint-disable-next-line playwright/no-wait-for-timeout
+      await page.waitForTimeout(Timeouts.liveBlockDelay);
     }
   });
 });
