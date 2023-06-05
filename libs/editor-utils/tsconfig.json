@@ -6,6 +6,7 @@
   },
   "include": ["src"],
   "references": [
+    { "path": "../../libs/config" },
     {
       "path": "../computer"
     },

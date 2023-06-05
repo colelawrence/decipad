@@ -19,7 +19,7 @@ export const availableFlags = [
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
   'LIVE_QUERY',
-
+  'JS_BLOCK',
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
 
@@ -76,6 +76,7 @@ let overrides: Flags = {
   CODE_LINE_NAME_SEPARATED: true,
   EXPR_REFS: true,
   POPULATED_NEW_NOTEBOOK: true,
+  JS_BLOCK: true,
 };
 
 // Unlike overrides flag switcher will have higher priority

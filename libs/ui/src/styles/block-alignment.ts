@@ -14,6 +14,12 @@ interface StyleData {
   typography?: TypographyStyles;
 }
 
+//
+// spacing is not done here
+// spacing is on EditorBlock.tsx (ui)
+// namely, `spacingStyles` using a data attribute
+//
+
 export const title: StyleData = {
   typography: display,
 };
@@ -59,6 +65,8 @@ export const columns: StyleData = {
   spacingTop: '0',
   spacingBottom: '0',
 };
+
+export const live: StyleData = {};
 export const draw: StyleData = {};
 
 export const structured: StyleData = {};

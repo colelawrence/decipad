@@ -22,3 +22,13 @@ export const mainIconButtonStyles = css({
 export const roundedSquareStyles = css({
   borderRadius: '6px',
 });
+
+export const closeButtonStyles = css({
+  width: '16px',
+  height: '16px',
+  display: 'grid',
+  borderRadius: 4,
+  ':hover': {
+    backgroundColor: cssVar('strongHighlightColor'),
+  },
+});

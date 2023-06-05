@@ -62,6 +62,11 @@ module.exports = {
           mainFields: ['module', 'main'],
         })
       );
+
+      config.module.rules.push({
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+      });
       // Configure babel-loader to handle workspace projects as well.
       const babelRuleOneOf = config.module.rules.find((rule) =>
         Object.keys(rule).includes('oneOf')

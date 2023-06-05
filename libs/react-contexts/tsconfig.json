@@ -11,6 +11,7 @@
     { "path": "../utils" },
     { "path": "../client-events/" },
     { "path": "../feature-flags" },
-    { "path": "../interfaces" }
+    { "path": "../interfaces" },
+    { "path": "../config" }
   ]
 }

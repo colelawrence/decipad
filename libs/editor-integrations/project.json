@@ -1,27 +1,27 @@
 {
-  "name": "editor-database",
+  "name": "editor-integrations",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/editor-database/src",
+  "sourceRoot": "libs/editor-integrations/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/editor-database/**/*.ts"],
+        "lintFilePatterns": ["libs/editor-integrations/**/*.ts"],
         "maxWarnings": 0
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "yarn tsc -b libs/editor-database"
+        "command": "yarn tsc -b libs/editor-integrations"
       }
     },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "../../node_modules/.bin/madge --circular src",
-        "cwd": "libs/editor-database"
+        "cwd": "libs/editor-integrations"
       }
     }
   },

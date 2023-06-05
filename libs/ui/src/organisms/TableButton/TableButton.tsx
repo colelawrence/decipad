@@ -2,7 +2,8 @@
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { TextAndIconButton } from '../../atoms';
-import { Chevron, Eye } from '../../icons';
+import { Chevron, Show } from '../../icons';
+import { cssVar, setCssVar, shortAnimationDuration } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const showMoreButtonWrapperStyles = css({
@@ -10,7 +11,7 @@ const showMoreButtonWrapperStyles = css({
   flexDirection: 'row',
   paddingBottom: '5px',
   'div > button > span > svg': {
-    height: '8px',
+    height: '12px',
   },
   padding: '5px',
 });
@@ -57,11 +58,26 @@ export const TableButton: FC<TableButtonProps> = ({
         iconPosition="left"
       >
         {isExpandButton ? (
-          <Chevron type={isInState && isExpandButton ? 'expand' : 'collapse'} />
+          <div css={chevronStyles}>
+            <Chevron
+              type={isInState && isExpandButton ? 'expand' : 'collapse'}
+            />
+          </div>
         ) : (
-          <Eye />
+          <Show />
         )}
       </TextAndIconButton>
     </div>
   );
 };
+
+const chevronStyles = css(
+  setCssVar('currentTextColor', cssVar('weakTextColor')),
+  {
+    width: '8px',
+    transition: `padding-top ease-in-out ${shortAnimationDuration}`,
+    [`:hover &`]: {
+      paddingTop: '4px',
+    },
+  }
+);

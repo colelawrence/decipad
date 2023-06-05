@@ -1,6 +1,7 @@
 export * from './ascii-table';
 export * from './caret';
 export * from './clean-text';
+export * from './code-placeholders';
 export * from './create-workspace';
 export * from './import-notebook';
 export * from './snapshot';

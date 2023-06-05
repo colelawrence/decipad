@@ -45,7 +45,7 @@ export const LiveDataSetVarName: PlateComponent = ({
 }) => {
   assertElementType(element, ELEMENT_LIVE_DATASET_VARIABLE_NAME);
 
-  const store = useConnectionStore();
+  const { changeOpen } = useConnectionStore();
   const editor = useTEditorRef();
   // refactor to useeditorselector
   const parent = useParentNodeEntry<LiveDataSetElement>(element);
@@ -93,8 +93,8 @@ export const LiveDataSetVarName: PlateComponent = ({
   }, [parent, editor]);
 
   const onOptionsPress = useCallback(() => {
-    store.changeOpen(true);
-  }, [store]);
+    changeOpen(true);
+  }, [changeOpen]);
 
   const [{ loading }] = useLiveConnectionStore(parent?.[0]) ?? {};
 

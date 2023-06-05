@@ -1,133 +1,166 @@
+/* eslint decipad/css-prop-named-variable: 0 */
+import { ExecutionContext, useConnectionStore } from '@decipad/react-contexts';
+import {
+  removeFocusFromAllBecauseSlate,
+  useEnterListener,
+} from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
-import { Button } from '../../atoms';
-import { Close } from '../../icons';
-import { cssVar, p15Medium } from '../../primitives';
-import { DbOptions } from './DatabaseConnectionScreen';
+import { FC, ReactNode, useContext } from 'react';
+import { Button, TextAndIconButton } from '../../atoms';
+import { Close, Play } from '../../icons';
+import { Tabs } from '../../molecules/Tabs/Tabs';
+import { cssVar, p15Medium, p16Medium } from '../../primitives';
+import { closeButtonStyles } from '../../styles/buttons';
 
-type Stages = 'pick-source' | 'connect' | 'create-query' | 'map';
+type Stages =
+  | 'pick-integration'
+  | 'connect'
+  | 'create-query'
+  | 'settings'
+  | 'map';
+
 interface WrapperIntegrationModalDialogProps {
-  children: ReactNode;
-  title: string;
+  readonly children: ReactNode;
 
-  showTabs?: boolean;
-  tabStage?: Stages | undefined;
-  onTabClick?: (s: Stages) => void;
+  readonly title: string;
 
-  onAbort: () => void;
+  readonly showTabs: boolean;
+  readonly tabStage?: Stages;
+  readonly onTabClick?: (s: Stages) => void;
 
-  onConnect: () => void;
-  isConnectShown?: boolean;
-  isConnectDisabled?: boolean;
-  dbOptions?: DbOptions;
+  readonly onBack: () => void;
+  readonly onContinue: () => void;
+  readonly setOpen: (open: boolean) => void;
+
+  readonly isEditing?: boolean;
 }
-
-const buttonTitle = {
-  'pick-source': 'Connect',
-  connect: 'Connect',
-  'create-query': 'Execute Query',
-  'execute-query': 'Continue to Preview and Map',
-  map: 'Done',
-};
-
-const shouldDisableButton = (
-  tabStage: string,
-  dbOptions: DbOptions
-): boolean => {
-  const { query, connectionString, host } = dbOptions;
-  switch (tabStage) {
-    case 'pick-source':
-      // TODO: fix this, it should return true if the "import file" field is empty
-      return true;
-    case 'create-query':
-      return !query;
-    case 'connect':
-      return !connectionString && !host;
-    case 'map':
-      return false;
-    default:
-      return true;
-  }
-};
 
 export const WrapperIntegrationModalDialog: FC<
   WrapperIntegrationModalDialogProps
 > = ({
   title,
-  isConnectShown = false,
-  isConnectDisabled = false,
-  onConnect,
-  onAbort,
+  onContinue: onConnect,
+  onBack: onAbort,
   showTabs = false,
-  tabStage = 'pick-source',
+  tabStage = 'pick-source' as Stages,
   onTabClick = noop,
+  setOpen = noop,
+  isEditing = false,
   children,
-  dbOptions,
 }) => {
+  const { onExecute } = useContext(ExecutionContext);
+  const { resultPreview } = useConnectionStore();
+  const hasDataPreview = !!resultPreview;
+
+  const insertIntoNotebook = () => {
+    onConnect();
+    removeFocusFromAllBecauseSlate();
+  };
+
+  const execSource = () => onExecute({ status: 'run' });
+
+  useEnterListener(() => {
+    switch (tabStage) {
+      case 'connect':
+        execSource();
+        return;
+      case 'map':
+        insertIntoNotebook();
+    }
+  });
+
+  const tabs = (
+    <Tabs variant>
+      <TextAndIconButton
+        key="tab-1"
+        size="normal"
+        text="Code"
+        variantHover
+        notSelectedLook={tabStage !== 'connect'}
+        color={tabStage === 'connect' ? 'grey' : 'transparent'}
+        onClick={() => onTabClick('connect')}
+      />
+      <TextAndIconButton
+        key="tab-2"
+        size="normal"
+        text="Preview"
+        variantHover
+        notSelectedLook={tabStage !== 'map'}
+        color={tabStage === 'map' ? 'grey' : 'transparent'}
+        onClick={() => onTabClick('map')}
+      />
+      {false && (
+        <TextAndIconButton
+          key="tab-3"
+          size="normal"
+          text="Settings"
+          variantHover
+          notSelectedLook={tabStage !== 'settings'}
+          color={tabStage === 'settings' ? 'grey' : 'transparent'}
+          onClick={() => onTabClick('settings')}
+        />
+      )}
+    </Tabs>
+  );
+
   return (
-    <div css={wrapperStyles}>
+    <div css={intWrapperStyles}>
       <div css={titleWrapperStyles}>
         <div css={titleStyles}>{title}</div>
-        {showTabs && (
-          <div css={tabStyles}>
-            <div
-              {...([
-                'connect',
-                'pick-source',
-                'create-query',
-                'execute-query',
-              ].includes(tabStage) && { 'aria-selected': true })}
-              onClick={() => onTabClick('connect')}
-            >
-              Connection
-            </div>
-            {dbOptions?.query && (
-              <div
-                {...(tabStage === 'map' && { 'aria-selected': true })}
-                onClick={() => onTabClick('map')}
-              >
-                Mapping
-              </div>
-            )}
-          </div>
-        )}
         <div css={iconStyles}>
-          <div role="button" onClick={onAbort}>
+          <div
+            role="button"
+            css={closeButtonStyles}
+            onClick={() => setOpen(false)}
+          >
             <Close />
           </div>
         </div>
       </div>
-      {children}
-      {tabStage !== 'pick-source' && (
+      <div css={tabsBarStyles}>
+        <div>{showTabs && tabs}</div>
+        <div>
+          {tabStage === 'connect' && (
+            <TextAndIconButton
+              text="Run"
+              size="normal"
+              iconPosition="left"
+              color="brand"
+              onClick={execSource}
+            >
+              <Play />
+            </TextAndIconButton>
+          )}
+        </div>
+      </div>
+      <div css={allChildrenStyles(tabStage)}>{children}</div>
+      {showTabs && (
         <div css={bottomBarStyles}>
-          {(!tabStage || ['pick-source', 'connect'].includes(tabStage)) && (
-            <div>
-              <Button type="secondary" onClick={onAbort}>
-                Close
-              </Button>
-            </div>
-          )}
-          {false && ( // not implemented yet
-            <div>
-              <Button type="text">Contact Support</Button>
-            </div>
-          )}
-          {isConnectShown && (
+          {isEditing ? (
             <div css={connectStyles}>
-              <Button
-                type="primaryBrand"
-                disabled={
-                  isConnectDisabled ||
-                  (dbOptions && shouldDisableButton(tabStage, dbOptions))
-                }
-                onClick={tabStage !== 'map' ? onConnect : onAbort}
-              >
-                {tabStage === 'create-query' && !dbOptions?.query
-                  ? buttonTitle['execute-query']
-                  : buttonTitle[tabStage]}
+              <Button type={'primary'} onClick={insertIntoNotebook}>
+                Save
               </Button>
             </div>
+          ) : (
+            <>
+              <div css={connectStyles}>
+                <Button
+                  type={'primary'}
+                  disabled={!hasDataPreview}
+                  onClick={insertIntoNotebook}
+                  testId={'integration-modal-continue'}
+                >
+                  {tabStage === 'map' ? 'Insert' : 'Continue'}
+                </Button>
+              </div>
+              <div>
+                <Button type="secondary" onClick={onAbort}>
+                  Back
+                </Button>
+              </div>
+            </>
           )}
         </div>
       )}
@@ -135,35 +168,20 @@ export const WrapperIntegrationModalDialog: FC<
   );
 };
 
-const wrapperStyles = css({
+const intWrapperStyles = css({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   width: '740px',
+  height: '740px',
   maxHeight: '600px',
   padding: '32px',
-  gap: '12px',
+  gap: '20px',
 
   border: `1px solid ${cssVar('highlightColor')}`,
-  borderRadius: '12px',
+  borderRadius: '24px',
 
   backgroundColor: cssVar('backgroundColor'),
-});
-
-const tabStyles = css({
-  display: 'flex',
-  cursor: 'pointer',
-  div: {
-    padding: '8px 10px',
-    borderTopLeftRadius: '6px',
-    borderTopRightRadius: '6px',
-    borderBottom: `1px solid ${cssVar('strongerHighlightColor')}`,
-  },
-  'div[aria-selected]': {
-    borderWidth: '1px 1px 0px 1px',
-    borderStyle: 'solid',
-    borderColor: cssVar('strongerHighlightColor'),
-  },
 });
 
 const titleWrapperStyles = css(p15Medium, {
@@ -176,13 +194,16 @@ const titleWrapperStyles = css(p15Medium, {
   alignItems: 'end',
 });
 
-const titleStyles = css({
-  lineHeight: '30px',
-  flexShrink: 0,
-  paddingLeft: '5px',
-  paddingRight: '15px',
-  borderBottom: `1px solid ${cssVar('strongerHighlightColor')}`,
-});
+const titleStyles = css([
+  p16Medium,
+  {
+    color: cssVar('strongTextColor'),
+    lineHeight: '30px',
+    flexShrink: 0,
+    paddingLeft: '5px',
+    paddingRight: '15px',
+  },
+]);
 
 const iconStyles = css({
   marginLeft: 'auto',
@@ -193,12 +214,22 @@ const iconStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'end',
-  borderBottom: `1px solid ${cssVar('strongerHighlightColor')}`,
 
   div: {
     width: '16px',
     height: '16px',
   },
+});
+
+const childrenStyles = css({
+  width: '100%',
+});
+
+const firstChildrenStyle = css({});
+
+const mapChildrenStyles = css({
+  overflow: 'auto',
+  height: '100%',
 });
 
 export const dividerStyles = css({
@@ -208,13 +239,28 @@ export const dividerStyles = css({
 });
 
 const bottomBarStyles = css({
-  marginTop: '100px',
   width: '100%',
+  justifyContent: 'flex-start',
+  marginTop: 'auto',
+  display: 'flex',
+  gap: '8px',
+});
 
+const connectStyles = css({
   display: 'flex',
   gap: '20px',
 });
 
-const connectStyles = css({
-  marginLeft: 'auto',
+const tabsBarStyles = css({
+  display: 'flex',
+  width: '100%',
+  justifyContent: 'space-between',
+  alignItems: 'center',
 });
+
+const allChildrenStyles = (tabStage: string) =>
+  css(
+    childrenStyles,
+    tabStage === 'connect' && firstChildrenStyle,
+    tabStage === 'map' && mapChildrenStyles
+  );

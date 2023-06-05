@@ -23,7 +23,7 @@ import {
   PendingResult,
 } from '../../atoms';
 import TextResult from '../../atoms/TextResult/TextResult';
-import { InlineCodeError } from '../../molecules';
+import { BlockCodeError, InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
 
 // Simple result components
@@ -47,6 +47,16 @@ interface ResultMatcher {
 }
 // Lazy to avoid strange cyclic import bug
 const getResultMatchers = (): ResultMatcher[] => [
+  {
+    component: InlineCodeError,
+    match: ({ type, variant }) =>
+      type.kind === 'type-error' && variant === 'inline',
+  },
+  {
+    component: BlockCodeError,
+    match: ({ type, variant }) =>
+      type.kind === 'type-error' && variant === 'block',
+  },
   {
     component: AnyResult,
     match: ({ type, value }) =>
@@ -110,11 +120,6 @@ const getResultMatchers = (): ResultMatcher[] => [
   {
     component: TextResult,
     match: ({ type }) => type.kind === 'string',
-  },
-  {
-    component: InlineCodeError,
-    match: ({ type, variant }) =>
-      type.kind === 'type-error' && variant === 'inline',
   },
   {
     component: PendingResult,

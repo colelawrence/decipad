@@ -17,6 +17,7 @@ export interface CssVariables {
   readonly cellDateSelected: Property.Color;
   readonly tableFocusColor: Property.Color;
   readonly tableSelectionBackgroundColor: Property.Color;
+  readonly liveDataWeakBackgroundColor: Property.Color;
   readonly liveDataBackgroundColor: Property.Color;
   readonly liveDataTextColor: Property.Color;
   readonly tableFooterBackgroundColor: Property.Color;

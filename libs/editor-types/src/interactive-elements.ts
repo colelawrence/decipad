@@ -7,6 +7,7 @@ import {
   ELEMENT_PLOT,
   EmptyText,
   PlainText,
+  IntegrationTypes,
 } from '.';
 import {
   ELEMENT_CAPTION,
@@ -14,6 +15,7 @@ import {
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_IMPORT,
+  ELEMENT_JS_BLOCK,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ELEMENT_LIVE_DATASET,
@@ -34,6 +36,7 @@ export type { TableElement };
 
 export type ImportElementSource =
   | 'decipad'
+  | 'codeconnection'
   | 'gsheets'
   | 'csv'
   | 'json'
@@ -46,6 +49,33 @@ export type ImportElementSource =
   | 'redshift'
   | 'mssql'
   | 'mariadb';
+
+export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
+  decipad: '',
+  codeconnection: 'Code',
+  gsheets: '',
+  csv: '',
+  json: '',
+  arrow: '',
+  sqlite: '',
+  postgresql: '',
+  mysql: '',
+  oracledb: '',
+  cockroachdb: '',
+  redshift: '',
+  mssql: '',
+  mariadb: '',
+};
+
+export interface JavaScriptBlock extends BaseElement {
+  type: typeof ELEMENT_JS_BLOCK;
+  varName: string;
+  /** The actual JS code */
+  code: string;
+  /** Base 64 stringified result to reduce size */
+  codeResult: string;
+  children: [PlainText];
+}
 
 export interface ImportElement extends BaseElement {
   type: typeof ELEMENT_IMPORT;
@@ -276,6 +306,8 @@ export type InteractiveElement =
   | DisplayElement
   | DeprecatedInputElement
   | VariableDefinitionElement
-  | LiveQueryElement;
+  | LiveQueryElement
+  | JavaScriptBlock
+  | IntegrationTypes.IntegrationBlock;
 
 export type VariableElement = VariableDefinitionElement | VariableSliderElement;

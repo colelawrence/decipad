@@ -3,5 +3,5 @@ const domConfig = require('../../jest-dom.config');
 module.exports = {
   ...domConfig,
   rootDir: __dirname,
-  displayName: 'editor-database',
+  displayName: 'editor-integrations',
 };

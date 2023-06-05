@@ -3,7 +3,7 @@ import {
   NumberCatalog,
   BlockLengthSynchronizationProvider,
 } from '@decipad/editor-components';
-import { AddConnection } from '@decipad/editor-database';
+import { Integrations } from '@decipad/editor-integrations';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   EditorBlockParentRefProvider,
@@ -130,7 +130,7 @@ export const Editor = (props: EditorProps) => {
                   }}
                 >
                   <InsidePlate {...props} containerRef={containerRef} />
-                  <AddConnection />
+                  <Integrations />
                   <NotebookState
                     isSavedRemotely={isSavedRemotely}
                     isNewNotebook={!!isNewNotebook}

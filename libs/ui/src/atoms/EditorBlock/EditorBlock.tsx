@@ -25,6 +25,15 @@ const spacingStyles = css({
     paddingTop: `8px`,
   },
 
+  // Live integrations
+  '&[data-type=live] + *': {
+    paddingTop: `0px`,
+  },
+
+  '&[data-type=live]': {
+    paddingTop: `8px`,
+  },
+
   // Lists
   '&[data-type=list] [data-type=list]': {
     paddingTop: 0,

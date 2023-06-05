@@ -1,5 +1,5 @@
-import DeciNumber from '@decipad/number';
 import { Result, SerializedType } from '@decipad/language';
+import DeciNumber from '@decipad/number';
 import { formatError } from './formatError';
 import { formatNumber } from './formatNumber';
 
@@ -25,7 +25,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     }
 
     case 'string': {
-      return `"${value as string}"`;
+      return `${value as string}`;
     }
 
     case 'date': {

@@ -4,46 +4,6 @@ import { Button } from '../../atoms';
 import { cssVar, p16Regular, smallScreenQuery } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
 
-const centeredFlex = css({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
-const errorBlock = css(centeredFlex, {
-  padding: '16px 24px 16px 24px',
-  gap: 8,
-  borderRadius: 8,
-  width: slimBlockWidth,
-  [smallScreenQuery]: {
-    minWidth: '360px',
-    maxWidth: slimBlockWidth,
-    width: '100%',
-  },
-});
-
-const errorBlockWrapperStyles = css(centeredFlex, {
-  flexDirection: 'column',
-  gap: 12,
-});
-
-const errorMessageStypes = css(p16Regular, {
-  color: cssVar('errorBlockColor'),
-});
-
-const errorBlockRowStyles = css(centeredFlex, {
-  flexDirection: 'row',
-  gap: 8,
-});
-
-const buttonRow = css({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'end',
-  alignItems: 'center',
-  gap: 16,
-});
-
 // complete-error should never happen, but if it does it's when the fallback
 // component cannot determine the path of it.
 export interface ErrorBlockProps {
@@ -114,3 +74,43 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
     </div>
   );
 };
+
+const centeredFlex = css({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+
+const errorBlock = css(centeredFlex, {
+  padding: '16px 24px 16px 24px',
+  gap: 8,
+  borderRadius: 8,
+  width: slimBlockWidth,
+  [smallScreenQuery]: {
+    minWidth: '360px',
+    maxWidth: slimBlockWidth,
+    width: '100%',
+  },
+});
+
+const errorBlockWrapperStyles = css(centeredFlex, {
+  flexDirection: 'column',
+  gap: 12,
+});
+
+const errorMessageStypes = css(p16Regular, {
+  color: cssVar('errorBlockColor'),
+});
+
+const errorBlockRowStyles = css(centeredFlex, {
+  flexDirection: 'row',
+  gap: 8,
+});
+
+const buttonRow = css({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'end',
+  alignItems: 'center',
+  gap: 16,
+});

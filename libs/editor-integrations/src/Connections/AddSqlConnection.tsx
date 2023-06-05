@@ -45,9 +45,10 @@ const providerTitle = {
   cockroachdb: 'Cockroach',
   decipad: 'Decipad',
   sqlite: 'SQL',
+  codeconnection: 'Code',
 };
 
-export const AddConnection: FC = () => {
+export const AddSqlIntegration: FC = () => {
   const liveResultWrapperStyles = css({
     width: '740px',
     maxHeight: '600px',
@@ -199,17 +200,15 @@ export const AddConnection: FC = () => {
       {store.open && (
         <Dialog open={store.open} setOpen={store.changeOpen}>
           <WrapperIntegrationModalDialog
-            onConnect={onConnectDb}
-            isConnectShown={true}
-            isConnectDisabled={false}
+            onContinue={onConnectDb}
             title={connectionTitle}
-            showTabs={store.stage !== 'pick-source'}
+            showTabs={store.stage !== 'pick-integration'}
             tabStage={store.stage}
             onTabClick={store.setStage}
-            onAbort={store.abort}
-            dbOptions={store.dbOptions}
+            onBack={store.abort}
+            setOpen={store.changeOpen}
           >
-            {store.stage === 'pick-source' ? (
+            {store.stage === 'pick-integration' ? (
               <IntegrationModalDialog
                 onSelectSource={(provider) => {
                   if (provider) {

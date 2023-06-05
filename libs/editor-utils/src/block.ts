@@ -13,6 +13,8 @@ import {
   InlineNumberElement,
   MyEditor,
   MyElement,
+  JavaScriptBlock,
+  ELEMENT_JS_BLOCK,
 } from '@decipad/editor-types';
 import {
   getEndPoint,
@@ -137,6 +139,25 @@ export const insertBlockOfTypeBelow = (
   insertNodes<TElement>(
     editor,
     { id: nanoid(), type, children: [{ text: '' }] },
+    { at: requirePathBelowBlock(editor, path) }
+  );
+};
+
+export const insertJavascriptBlockBelow = (
+  editor: MyEditor,
+  path: Path,
+  getAvailableIdentifier: Computer['getAvailableIdentifier']
+): void => {
+  insertNodes<JavaScriptBlock>(
+    editor,
+    {
+      id: nanoid(),
+      type: ELEMENT_JS_BLOCK,
+      code: '',
+      codeResult: 'null',
+      varName: getAvailableIdentifier('JsBlock', 1),
+      children: [{ text: '' }],
+    },
     { at: requirePathBelowBlock(editor, path) }
   );
 };

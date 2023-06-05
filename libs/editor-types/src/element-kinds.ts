@@ -46,6 +46,7 @@ export const ELEMENT_DISPLAY = 'display';
 
 // Interactive
 export const DEPRECATED_ELEMENT_INPUT = 'input';
+export const ELEMENT_JS_BLOCK = 'javascript-block';
 
 // Inlines
 export const ELEMENT_INLINE_NUMBER = 'inline-number';
@@ -66,6 +67,9 @@ export const ELEMENT_DATA_VIEW_CAPTION = 'data-view-caption';
 export const ELEMENT_DATA_VIEW_NAME = 'data-view-name';
 export const ELEMENT_DATA_VIEW_TR = 'data-view-tr';
 export const ELEMENT_DATA_VIEW_TH = 'data-view-th';
+
+// Master integration block
+export const ELEMENT_INTEGRATION = 'integration-block';
 
 // live connection
 export const ELEMENT_LIVE_CONNECTION = 'live-conn';

@@ -13,7 +13,7 @@ import {
   Plot,
   ScatterPlot,
   Settings,
-  Table,
+  TableSmall,
 } from '../../icons';
 import { MenuList } from '../../molecules';
 import {
@@ -286,7 +286,7 @@ export const PlotParams = ({
           onChangeOpen={onChangeOpen('source-table')}
           itemTrigger={
             <TriggerMenuItem
-              icon={<Table />}
+              icon={<TableSmall />}
               selectedPreview={tableVarName?.toString()}
             >
               Source table

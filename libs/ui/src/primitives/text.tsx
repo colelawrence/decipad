@@ -209,6 +209,18 @@ const mFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
   'monospace'
 );
 
+export const jsCode: TypographyStyles = {
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  color: cssVar('currentTextColor'),
+  fontFamily: mFontFamily,
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: `${13 / usualRemPxs}rem`,
+  lineHeight: 1.3,
+  letterSpacing: 'unset',
+  fontFeatureSettings: 'unset',
+};
+
 export const code: TypographyStyles = {
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   color: cssVar('currentTextColor'),
@@ -217,6 +229,18 @@ export const code: TypographyStyles = {
   fontWeight: 'normal',
   fontSize: `${14 / usualRemPxs}rem`,
   lineHeight: 1.4,
+  letterSpacing: 'unset',
+  fontFeatureSettings: 'unset',
+};
+
+export const codeLog: TypographyStyles = {
+  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  color: cssVar('currentTextColor'),
+  fontFamily: mFontFamily,
+  fontStyle: 'normal',
+  fontWeight: 'normal',
+  fontSize: `${12 / usualRemPxs}rem`,
+  lineHeight: 1.2,
   letterSpacing: 'unset',
   fontFeatureSettings: 'unset',
 };

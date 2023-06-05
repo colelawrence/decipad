@@ -30,6 +30,7 @@ import {
   grey500,
   grey600,
   grey700,
+  malibu700,
   offBlack,
   offWhite,
   orange100,
@@ -47,6 +48,7 @@ import {
   purple600,
   purple700,
   purple800,
+  purple900,
   red100,
   red300,
   red400,
@@ -71,7 +73,6 @@ import {
   yellow700,
   yellow800,
   yellow900,
-  malibu700,
 } from '../color';
 import { CssVariables } from '../CssVariables';
 
@@ -193,6 +194,7 @@ export const theme: CssVariables = {
   tableFocusColor: blue500.hex,
   tableFooterBackgroundColor: grey700.hex,
 
+  liveDataWeakBackgroundColor: purple900.hex,
   liveDataBackgroundColor: purple800.hex,
   liveDataTextColor: purple200.hex,
 

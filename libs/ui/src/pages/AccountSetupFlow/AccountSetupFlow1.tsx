@@ -1,14 +1,14 @@
+import { useThemeFromStore } from '@decipad/react-contexts';
+import { useEnterListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { useThemeFromStore } from '@decipad/react-contexts';
 import { Button } from '../../atoms';
 import { Deci } from '../../icons';
 import { h1, p14Medium, p16Regular } from '../../primitives';
 import { AccountSetup } from '../../templates';
-import { backgroundStyles } from './styles';
-import { useEnterListener } from './useEnterListener';
-import calculationImgLight from './onboarding1-light.svg';
 import calculationImgDark from './onboarding1-dark.svg';
+import calculationImgLight from './onboarding1-light.svg';
+import { backgroundStyles } from './styles';
 
 const groupStyles = css({
   display: 'flex',

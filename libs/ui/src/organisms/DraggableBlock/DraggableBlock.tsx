@@ -200,9 +200,7 @@ export const DraggableBlock = ({
               height: 0,
             },
             isCentered && {
-              display: 'flex',
-              alignItems: 'center',
-              height: '100%',
+              marginTop: 8,
               marginLeft: '-32px',
             },
             draggableCss,

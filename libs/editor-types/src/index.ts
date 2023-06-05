@@ -10,6 +10,7 @@ export * from './data-view';
 export * from './decorator-kinds';
 export * from './element-kinds';
 export * from './event-interception';
+export * as IntegrationTypes from './integrations';
 export * from './interactive-elements';
 export * from './mark-kinds';
 export * from './nodes';
@@ -17,6 +18,7 @@ export * from './plate';
 export * from './table';
 export * from './utils';
 export * from './value';
+
 export { markKinds };
 
 import type { TableCellType } from './table';

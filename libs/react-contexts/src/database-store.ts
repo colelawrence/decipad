@@ -1,8 +1,16 @@
+import { Result } from '@decipad/computer';
+import { codePlaceholder } from '@decipad/config';
+import { ImportElementSource } from '@decipad/editor-types';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
-import { ImportElementSource } from '@decipad/editor-types';
 
-type Stage = 'pick-source' | 'connect' | 'create-query' | 'map';
+export type Stage =
+  | 'pick-integration'
+  | 'connect' // Actually connect to your source.
+  | 'create-query' // Mostly for databases, but you might need to specify a query seperate from connection.
+  | 'map' // Map your data into the deci notebook.
+  | 'settings';
+
 type States = {
   connectionState: { type: 'success' | 'error'; message: string } | undefined;
   queryState: { type: 'success' | 'error'; message: string } | undefined;
@@ -29,7 +37,24 @@ export type DbOptions = {
   showQueryResults?: boolean;
 };
 
-interface CreateDataStore {
+const IntegrationSteps: Record<ImportElementSource, Array<Stage>> = {
+  codeconnection: ['connect', 'map'],
+  decipad: [],
+  gsheets: [],
+  csv: [],
+  json: [],
+  arrow: [],
+  sqlite: [],
+  postgresql: [],
+  mysql: [],
+  oracledb: [],
+  cockroachdb: [],
+  redshift: [],
+  mssql: [],
+  mariadb: [],
+};
+
+export interface IntegrationStore {
   open: boolean;
   changeOpen: (v: boolean) => void;
 
@@ -47,12 +72,27 @@ interface CreateDataStore {
   externalDataSource?: string;
   setExternalDataSource: (v: string | undefined) => void;
 
-  /** What step of the process is the user in? */
   stage: Stage;
   setStage: (v: Stage) => void;
 
+  varName: string | undefined;
+  setVarName: (v: string) => void;
+
+  resultPreview?: Result.Result;
+  setResultPreview: (v: Result.Result | undefined) => void;
+
+  /** Method to move to the next stage (This changes depending on the type of integration) */
+  next: () => void;
+  /** Same as above, but to go back */
+  back: () => void;
+
   /** Partially reset the store */
-  abort: () => void;
+  abort: (keepOpen?: boolean) => void;
+
+  // Used when the user has confirmed they want to create integration
+  createIntegration: boolean;
+  existingIntegration: string | undefined;
+  setExistingIntegration: (v: string | undefined) => void;
 }
 
 export type EasyExternalDataProps = {
@@ -61,7 +101,7 @@ export type EasyExternalDataProps = {
   provider: ImportElementSource;
 };
 
-const initialDbOptions: CreateDataStore['dbOptions'] = {
+const initialDbOptions: IntegrationStore['dbOptions'] = {
   query: '',
   connectionString: '',
   host: '',
@@ -75,7 +115,7 @@ const initialDbOptions: CreateDataStore['dbOptions'] = {
   },
 };
 
-const initialStates: CreateDataStore['states'] = {
+const initialStates: IntegrationStore['states'] = {
   connectionState: undefined,
   queryState: undefined,
 };
@@ -91,9 +131,14 @@ const initialStates: CreateDataStore['states'] = {
  *
  * @stage -> Which part of the modal should you click? And what should the 'connect' button do.
  */
-export const useConnectionStore = create<CreateDataStore>((set, get) => ({
+export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   open: false,
-  changeOpen: (v) => set(() => ({ open: v })),
+  changeOpen(v) {
+    set(() => ({ open: v }));
+    if (!v) {
+      get().abort();
+    }
+  },
 
   connectionType: undefined,
   setConnectionType: (v) => set(() => ({ connectionType: v })),
@@ -118,15 +163,96 @@ export const useConnectionStore = create<CreateDataStore>((set, get) => ({
 
   setExternalDataSource: (v) => set(() => ({ externalDataSource: v })),
 
-  stage: 'pick-source',
+  stage: 'pick-integration',
   setStage: (v) => set(() => ({ stage: v })),
 
-  abort: () =>
+  varName: 'Name',
+  setVarName: (v) => set(() => ({ varName: v })),
+
+  resultPreview: undefined,
+  setResultPreview: (v) => set(() => ({ resultPreview: v })),
+
+  next() {
+    const { connectionType, stage, existingIntegration } = get();
+    // If it is the last element, it must be the last, so we do something different.
+    if (
+      connectionType &&
+      IntegrationSteps[connectionType].at(-1) !== stage &&
+      !existingIntegration
+    ) {
+      set((state) => ({
+        stage: state.connectionType
+          ? IntegrationSteps[state.connectionType][
+              IntegrationSteps[state.connectionType].indexOf(state.stage) + 1
+            ]
+          : state.stage,
+      }));
+    } else {
+      // User clicked continue on last page, create integration.
+      set(() => ({ createIntegration: true }));
+    }
+  },
+
+  back() {
+    const { abort, connectionType, stage } = get();
+    if (!connectionType) return;
+    // If we are at one, if means going back will lead us to the "New integrations page".
+    if (IntegrationSteps[connectionType].indexOf(stage) === 1) {
+      abort(true);
+      return;
+    }
+
+    set((state) => ({
+      stage: state.connectionType
+        ? IntegrationSteps[state.connectionType][
+            IntegrationSteps[state.connectionType].indexOf(state.stage) - 1
+          ]
+        : state.stage,
+    }));
+  },
+
+  abort: (keepOpen = false) => {
     set(() => ({
-      stage: 'pick-source',
+      stage: 'pick-integration',
       states: cloneDeep(initialStates),
       dbOptions: cloneDeep(initialDbOptions),
-      open: false,
+      open: keepOpen,
       connectionType: undefined,
+      createIntegration: false,
+      varName: 'Name',
+      resultPreview: undefined,
+      existingIntegration: undefined,
+    }));
+
+    // Reset dependent stores.
+    useCodeConnectionStore.getState().reset();
+  },
+
+  createIntegration: false,
+  existingIntegration: undefined,
+  setExistingIntegration: (v) => set(() => ({ existingIntegration: v })),
+}));
+
+interface CodeConnectionStore {
+  code: string;
+  setCode: (newCode: string) => void;
+  // Latest message from worker.
+  latestResult: string;
+  setLatestResult: (newResult: string) => void;
+
+  reset: () => void;
+}
+
+export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
+  code: codePlaceholder(),
+  setCode: (v) => set(() => ({ code: v })),
+
+  latestResult: '',
+  setLatestResult: (v) => set(() => ({ latestResult: v })),
+
+  reset: () =>
+    set(() => ({
+      code: codePlaceholder(),
+      latestResult: '',
     })),
 }));

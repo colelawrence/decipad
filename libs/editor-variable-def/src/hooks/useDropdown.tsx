@@ -1,19 +1,20 @@
-import { useState, useEffect, useContext, useMemo, useCallback } from 'react';
-import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
+import { ClientEventsContext } from '@decipad/client-events';
 import { ColumnDesc, materializeColumnDesc } from '@decipad/computer';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import { DropdownElement, useTPlateEditorRef } from '@decipad/editor-types';
+import { formatResultPreview } from '@decipad/format';
 import {
   EditorChangeContext,
   useComputer,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
-import { DropdownElement, useTPlateEditorRef } from '@decipad/editor-types';
-import { SelectItems, icons } from '@decipad/ui';
-import { getNodeString, insertText, nanoid } from '@udecode/plate';
-import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
-import { ClientEventsContext } from '@decipad/client-events';
-import { formatResultPreview } from '@decipad/format';
 import { useResolved } from '@decipad/react-utils';
+import { SelectItems, icons } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
+import { getNodeString, insertText, nanoid } from '@udecode/plate';
+import _ from 'lodash';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
 
 interface UseDropdownResult {
   dropdownOpen: boolean;
@@ -187,30 +188,38 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
     if (!materializedColumns) {
       return [];
     }
-    const colValues = materializedColumns.find((c) =>
-      c.blockId
-        ? c.blockId === element.selectedColumn
-        : `${c.tableName}.${c.columnName}` === element.selectedColumn
+    const colValues = materializedColumns.find(
+      (c) => `${c.tableName}.${c.columnName}` === element.selectedColumn
     );
+
     return [
-      ...materializedColumns.map((c) => ({
-        group: 'Table category',
-        item: `${c.tableName}.${c.columnName}`,
-        blockId: c.blockId,
-        type: 'column',
-        focused: element.selectedColumn === c.columnName,
-        icon: <icons.Table />,
-      })),
+      ...materializedColumns
+        .filter((c) =>
+          element.selectedColumn
+            ? element.selectedColumn === `${c.tableName}.${c.columnName}`
+            : true
+        )
+        .map((c) => ({
+          group: 'Table column',
+          item: `${c.tableName}.${c.columnName}`,
+          // blockId: c.blockId,
+          type: 'column',
+          focused: element.selectedColumn === `${c.tableName}.${c.columnName}`,
+          icon: <icons.TableSmall />,
+        })),
       ...(colValues
-        ? [
-            ...colValues.result.value.map((v) => ({
-              group: 'Values',
-              item: formatResultPreview({
-                value: v,
-                type: colValues.result.type.cellType,
-              }),
-            })),
-          ]
+        ? _.uniqBy(
+            [
+              ...colValues.result.value.map((v) => ({
+                group: 'Values',
+                item: formatResultPreview({
+                  value: v,
+                  type: colValues.result.type.cellType,
+                }),
+              })),
+            ],
+            'item'
+          )
         : []),
     ];
   }, [element.selectedColumn, materializedColumns]);
@@ -220,7 +229,6 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
       dropdownOpen,
       setDropdownOpen,
       dropdownIds: [...dropdownIds, ...otherItems],
-      otherItems,
       addOption,
       removeOption,
       editOption,

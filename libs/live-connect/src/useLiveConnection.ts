@@ -195,7 +195,10 @@ function pushPendingResultToComputer(
   ]);
 }
 
-/** Inject a table into the computer so the rest of the notebook can read it */
+/**
+ * Inject a table into the computer so the rest of the notebook can read isTableResult
+ * Pass `computerResult` as `undefined` if you want to erase the result.
+ */
 export function pushResultToComputer(
   computer: Computer,
   blockId: string,

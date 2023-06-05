@@ -38,14 +38,13 @@ interface DatabaseConnectionProps {
   provider?: ImportElementSource;
 }
 
-const placeholderList = {
+const placeholderList: Record<ImportElementSource, string> = {
   mysql: 'mysql://',
   oracledb: 'oracle://',
   gsheets: 'https://',
   json: 'https://',
   postgresql: 'postgresql://',
   mariadb: 'mariadb://',
-  mongodb: 'mongodb://',
   mssql: 'mssql://',
   redshift: 'redshift://',
   arrow: 'https://',
@@ -53,6 +52,7 @@ const placeholderList = {
   cockroachdb: 'postgresql://',
   decipad: 'https://',
   sqlite: 'sql://',
+  codeconnection: 'n/a',
 };
 
 export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({

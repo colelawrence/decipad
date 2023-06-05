@@ -30,10 +30,10 @@ export const DropdownMenuGroup: FC<DropdownMenuGroupProps> = ({
           {title}
         </p>
       )}
-      {items.map((i) => (
+      {items.map((elem, i) => (
         <SelectItem
-          key={i.item}
-          item={i}
+          key={`${elem.item}-${i}`}
+          item={elem}
           isEditAllowed={isEditingAllowed}
           {...itemProps}
         />

@@ -26,3 +26,15 @@ export const hideOnPrint = css({
     display: 'none',
   },
 });
+
+export const integrationBlockStyles = css({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  ' div > span': {
+    maxWidth: 'unset',
+    overflow: 'initial',
+    whiteSpace: 'normal',
+  },
+  gap: 8,
+});

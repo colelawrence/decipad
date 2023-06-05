@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { Close } from '../../icons';
 import { p15Medium } from '../../primitives';
 import { Anchor } from '../../utils';
+import { closeButtonStyles } from '../../styles/buttons';
 
 const styles = css({
   display: 'grid',
@@ -13,11 +14,7 @@ const titleRowStyles = css({
   flexWrap: 'wrap-reverse',
   marginBottom: '12px',
 });
-const closeStyles = css({
-  width: '16px',
-  height: '16px',
-  display: 'grid',
-});
+
 const titleStyles = css(p15Medium, { flexGrow: 1 });
 
 interface ClosableModalHeaderProps {
@@ -36,12 +33,12 @@ export const ClosableModalHeader = ({
       <div css={titleRowStyles}>
         <Heading css={titleStyles}>{title}</Heading>
         {typeof closeAction === 'string' ? (
-          <Anchor css={closeStyles} href={closeAction}>
+          <Anchor css={closeButtonStyles} href={closeAction}>
             <Close />
           </Anchor>
         ) : (
           <button
-            css={closeStyles}
+            css={closeButtonStyles}
             onClick={closeAction}
             data-testid="closable-modal"
           >

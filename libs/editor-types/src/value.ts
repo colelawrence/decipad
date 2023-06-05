@@ -26,6 +26,7 @@ import {
   ELEMENT_UL,
   InteractiveElement,
   MarkKind,
+  IntegrationTypes,
 } from '.';
 import {
   DataViewCaptionElement,
@@ -50,6 +51,8 @@ import {
   ELEMENT_DATA_MAPPING,
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_DATASET,
+  ELEMENT_JS_BLOCK,
+  ELEMENT_INTEGRATION,
 } from './element-kinds';
 import {
   CaptionElement,
@@ -324,6 +327,7 @@ export type MyValue = [
     | InteractiveElement
     | DataViewElement
     | DataMappingElement
+    | IntegrationTypes.IntegrationBlock
   >
 ];
 
@@ -372,4 +376,6 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DRAW,
   ELEMENT_DATA_MAPPING,
   ELEMENT_LIVE_QUERY,
+  ELEMENT_JS_BLOCK,
+  ELEMENT_INTEGRATION,
 ];

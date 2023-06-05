@@ -1,3 +1,4 @@
+export { ASTUnitMenuItem } from './ASTUnitMenuItem/ASTUnitMenuItem';
 export { AccountAvatar } from './AccountAvatar/AccountAvatar';
 export {
   AccountSettingsForm,
@@ -7,6 +8,7 @@ export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { AuthContent } from './AuthContent/AuthContent';
 export { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup/AutoCompleteMenuGroup';
 export { BetaBadge } from './BetaBadge/BetaBadge';
+export { BlockCodeError } from './BlockCodeError/BlockCodeError';
 export { Caption } from './Caption/Caption';
 export { CellEditor } from './CellEditor/CellEditor';
 export { ClosableModalHeader } from './ClosableModalHeader/ClosableModalHeader';
@@ -56,20 +58,19 @@ export { PositiveIntegerInput } from './PositiveIntegerInput/PositiveIntegerInpu
 export { PotentialFormulaHighlight } from './PotentialFormulaHighlight/PotentialFormulaHighlight';
 export { RemoteAvatar } from './RemoteAvatar/RemoteAvatar';
 export { SearchBar, useSearchBarStore } from './SearchBar/SearchBar';
-export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
 export { SignUpContent } from './SignUpContent/SignUpContent';
+export { SignUpConditionsContent } from './SignupConditionsContent/SignupConditionsContent';
 export { StructuredInputLines } from './StructuredInputLines/StructuredInputLines';
 export { StructuredInputUnits } from './StructuredInputUnits/StructuredInputUnits';
 export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighlight';
 export { TableCellControls } from './TableCellControls/TableCellControls';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';
+export { TextInputMenuItem } from './TextInputMenuItem/TextInputMenuItem';
 export { UnitMenuItem } from './UnitMenuItem/UnitMenuItem';
-export { ASTUnitMenuItem } from './ASTUnitMenuItem/ASTUnitMenuItem';
 export { UnorderedList } from './UnorderedList/UnorderedList';
 export { VariableNameSelector } from './VariableNameSelector/VariableNameSelector';
 export { WidgetDisplay } from './WidgetDisplay/WidgetDisplay';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
-export { WorkspaceItemCreate } from './WorkspaceItemCreate/WorkspaceItemCreate';
 export type { WorkspaceItemProps } from './WorkspaceItem/WorkspaceItem';
-export { TextInputMenuItem } from './TextInputMenuItem/TextInputMenuItem';
+export { WorkspaceItemCreate } from './WorkspaceItemCreate/WorkspaceItemCreate';

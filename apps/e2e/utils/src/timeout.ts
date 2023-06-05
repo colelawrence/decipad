@@ -10,5 +10,5 @@ export const Timeouts = {
   chartsDelay: 6000,
   tableDelay: 550,
   computerDelay: 2000,
-  menuOpenDelay: 750,
+  menuOpenDelay: 250,
 };

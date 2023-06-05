@@ -25,7 +25,7 @@ const contentWrapperStyles = css({
   maxWidth: '300px',
   padding: '12px 16px',
   wordBreak: 'break-word',
-  zIndex: '1000',
+  zIndex: '10000',
 });
 
 const darkContentWrapperStyles = css(contentWrapperStyles, {

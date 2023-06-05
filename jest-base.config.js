@@ -20,7 +20,7 @@ module.exports = {
     '^.+\\.mjs$': ['babel-jest', { presets, plugins }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lib0|p-retry|y-protocols|@formkit/auto-animate|.*dnd.*)/)',
+    'node_modules/(?!(lib0|p-retry|y-protocols|@decipad_org/safejs|@formkit/auto-animate|.*dnd.*)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
 

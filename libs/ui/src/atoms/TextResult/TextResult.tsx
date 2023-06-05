@@ -11,11 +11,12 @@ function TextResult({
   variant: string;
   tooltip: boolean;
 }) {
-  if (!tooltip) {
-    return <span>{value.toString()}</span>;
-  }
+  const serialisedValue = value.toString();
+  const fullString = <span>{serialisedValue}</span>;
 
-  const fullString = <span>{value}</span>;
+  if (!tooltip) {
+    return fullString;
+  }
 
   const trigger = (
     <span
@@ -32,7 +33,13 @@ function TextResult({
     </span>
   );
 
-  return <Tooltip trigger={trigger}>{value.toString()}</Tooltip>;
+  return (
+    <Tooltip trigger={trigger}>
+      {serialisedValue.length > 300
+        ? `${serialisedValue.substring(0, 300)}…`
+        : serialisedValue}
+    </Tooltip>
+  );
 }
 
 export default TextResult;

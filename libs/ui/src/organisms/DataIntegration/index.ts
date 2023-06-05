@@ -3,3 +3,4 @@ export * from './DatabaseConnectionScreen';
 export * from './WrapperIntegrationModalDialog';
 export * from './DatabaseQuery';
 export * from './MessageBlock';
+export * from './SelectIntegration';

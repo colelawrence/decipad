@@ -13,7 +13,7 @@ export const TableSmall: FC<TableIconProps> = ({ css }) => (
     xmlns="http://www.w3.org/2000/svg"
     css={css}
   >
-    <title>Table</title>
+    <title>Table Small</title>
     <rect
       x="5"
       y="5"

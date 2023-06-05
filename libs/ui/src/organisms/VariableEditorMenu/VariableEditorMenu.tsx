@@ -9,7 +9,7 @@ import {
   Calendar,
   Number as NumberIcon,
   Shapes,
-  Table,
+  TableSmall,
   Text,
 } from '../../icons';
 import { InputMenuItem, MenuList } from '../../molecules';
@@ -151,11 +151,11 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
           </MenuItem>
           {variant === 'dropdown' && (
             <MenuItem
-              icon={<Table />}
+              icon={<TableSmall />}
               onSelect={onSmartSelection}
               selected={smartSelection}
             >
-              Smart Selection
+              From existing column
             </MenuItem>
           )}
         </MenuList>

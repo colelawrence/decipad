@@ -15,6 +15,7 @@ import {
   insertDividerBelow,
   requireBlockParentPath,
   insertDataMapping,
+  insertJavascriptBlockBelow,
 } from '@decipad/editor-utils';
 import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText } from '@udecode/plate';
@@ -60,6 +61,9 @@ export const execute = ({
   const { changeOpen } = useConnectionStore.getState();
 
   switch (command) {
+    case 'javascript-block':
+      insertJavascriptBlockBelow(editor, path, getAvailableIdentifier);
+      break;
     case 'structured-input':
       insertStructuredCodeLineBelow({
         editor,

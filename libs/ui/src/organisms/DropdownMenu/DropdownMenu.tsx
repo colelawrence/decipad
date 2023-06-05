@@ -190,7 +190,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
                 onExecute={onExecute}
                 onEditOption={onEditOption}
                 onRemoveOption={onRemoveOption}
-                isEditingAllowed={!isReadOnly && isEditingAllowed}
+                isEditingAllowed={isEditingAllowed}
                 focusedItem={focusedItem}
               />
             ))}

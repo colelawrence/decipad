@@ -7,18 +7,13 @@ import { FC, useState } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { Close } from '../../icons';
-import {
-  cssVar,
-  grey500,
-  grey600,
-  p13Medium,
-  setCssVar,
-} from '../../primitives';
+import { cssVar, grey500, p13Medium, setCssVar } from '../../primitives';
+import { closeButtonStyles } from '../../styles/buttons';
 import {
   AvailableSwatchColor,
-  swatchesThemed,
-  swatchNames,
   UserIconKey,
+  swatchNames,
+  swatchesThemed,
   userIconKeys,
 } from '../../utils';
 
@@ -41,12 +36,6 @@ const contentHeaderWrapper = css({
 
 const contentHeaderText = css(p13Medium, {
   ...setCssVar('currentTextColor', grey500.rgb),
-});
-
-const closeIconWrapper = css({
-  ...setCssVar('currentTextColor', grey600.rgb),
-  width: '16px',
-  height: '16px',
 });
 
 const iconsWrapper = css({
@@ -80,7 +69,7 @@ export const IconPopover = ({
         <Popover.Content css={contentWrapper}>
           <div css={contentHeaderWrapper}>
             <h2 css={contentHeaderText}>Pick a style</h2>
-            <Popover.Close css={closeIconWrapper}>
+            <Popover.Close css={closeButtonStyles}>
               <Close />
             </Popover.Close>
           </div>

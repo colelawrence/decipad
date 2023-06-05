@@ -57,6 +57,7 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
           // Also preventing backspace for lists can also lead to a weird behavior
           if (
             document.activeElement?.tagName === 'INPUT' ||
+            document.activeElement?.tagName === 'TEXTAREA' ||
             parentNode.type === ELEMENT_LIC
           )
             return;

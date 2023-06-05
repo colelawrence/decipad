@@ -16,6 +16,7 @@ export const Copy = (): ReturnType<React.FC> => (
       x="8.75"
       y="8.75"
       stroke={cssVar('currentTextColor')}
+      fill={cssVar('highlightColor')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

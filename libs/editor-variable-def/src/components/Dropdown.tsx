@@ -18,7 +18,6 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
     editOption,
     execute,
   } = useDropdown(element);
-
   return (
     <div
       {...attributes}
@@ -30,12 +29,16 @@ export const Dropdown: PlateComponent = ({ attributes, element, children }) => {
         open={dropdownOpen}
         setOpen={setDropdownOpen}
         isReadOnly={readOnly}
-        groups={dropdownIds}
+        groups={
+          readOnly
+            ? dropdownIds.filter((elem) => !elem.group?.includes('Table'))
+            : dropdownIds
+        }
         addOption={addOption}
         onRemoveOption={removeOption}
         onEditOption={editOption}
         onExecute={execute}
-        isEditingAllowed
+        isEditingAllowed={!readOnly && !element.smartSelection}
       >
         <WidgetDisplay
           openMenu={dropdownOpen}

@@ -1,3 +1,5 @@
+import { codePlaceholder as cP } from '@decipad/config';
+
 const CLPlaceholders = [
   '60 km/h * Time',
   'Revenue - Cost',
@@ -9,3 +11,5 @@ const CLPlaceholders = [
 export const placeholderForCalculationLine = () => {
   return CLPlaceholders[Math.floor(Math.random() * CLPlaceholders.length)];
 };
+
+export const codePlaceholder = cP;

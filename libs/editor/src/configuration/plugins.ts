@@ -63,6 +63,7 @@ import {
   createMigrateStructuredInputs,
   createLiveDataSetPlugin,
 } from '@decipad/editor-plugins';
+import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
   createTAutoformatPlugin,
@@ -121,8 +122,8 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
-
       createDataMappingPlugin(),
+      createIntegrationPlugin(),
 
       createNotebookTitlePlugin({
         readOnly,

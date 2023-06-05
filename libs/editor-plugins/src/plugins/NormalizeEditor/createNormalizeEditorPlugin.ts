@@ -27,7 +27,6 @@ const normalizeEditor =
   (editor: MyEditor) =>
   (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
-
     if (isEditor(node)) {
       // Enforce leading H1 even if there are no elements
       if (!node.children.length) {

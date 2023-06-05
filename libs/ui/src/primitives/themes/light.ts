@@ -183,6 +183,7 @@ export const theme: CssVariables = {
   tableFocusColor: teal500.hex,
   tableFooterBackgroundColor: grey100.hex,
 
+  liveDataWeakBackgroundColor: yellow300.hex,
   liveDataBackgroundColor: yellow400.hex,
   liveDataTextColor: yellow800.hex,
 

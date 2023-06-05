@@ -1,14 +1,14 @@
-import stringify from 'json-stringify-safe';
 import { Result, isColumn } from '@decipad/computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
+import stringify from 'json-stringify-safe';
 import type { ImportOptions } from './import';
 import { errorResult } from './utils/errorResult';
+import { normalizeColumnName } from './utils/normalizeColumnName';
+import { rowsToColumns } from './utils/rowsToColumns';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
-import { rowsToColumns } from './utils/rowsToColumns';
-import { normalizeColumnName } from './utils/normalizeColumnName';
 
 const importTableFromArray = (
   arr: Array<unknown>,
