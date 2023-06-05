@@ -35,6 +35,7 @@ any /api/externaldatasources/db/:id/data
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
 any /api/pads/:padid/export
+get /api/pads/:padid/logs
 get /api/pads/:padid/backups/export
 get /api/pads/:padid
 post /api/discord
@@ -228,14 +229,17 @@ allowlist
 superadminusers
   id *String
 
-superadminactionlogs
-  id *String
-  expiresAt TTL
-
 usergoals
   id *String # /user/:id/goal/#tag
   user_id String
   fulfilledAt Number
+
+logs
+  resource *String
+  seq **String
+  user_id String
+  content String
+  expiresAt TTL
 
 secrets
   id *String # /workspace/:id/secret/#name
@@ -404,7 +408,6 @@ usertaggedresources-changes
 fileattachments-changes
 docsyncupdates-changes
 sync-after-connect
-allowlist-changes
 
 @plugins
 s3

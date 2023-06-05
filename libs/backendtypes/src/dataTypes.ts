@@ -493,6 +493,15 @@ export interface ExternalKeyRecord extends TableRecordBase {
   provider: ExternalDataSourceProvider;
 }
 
+export interface LogRecord extends TableRecordBase {
+  resource: string;
+  seq: string;
+  user_id: string;
+  source: string;
+  content: string;
+  expiresAt: number;
+}
+
 export interface DataTable<T extends TableRecordBase> {
   delete(
     key: TableRecordIdentifier | (TableRecordIdentifier & { seq: string }),
@@ -559,7 +568,7 @@ export interface DataTables extends EnhancedDataTables {
   docsyncsnapshots: DataTable<DocSyncSnapshotRecord>;
   allowlist: DataTable<AllowListRecord>;
   superadminusers: DataTable<SuperAdminUserRecord>;
-  superadminactionlogs: DataTable<SuperAdminActionLogRecord>;
+  logs: DataTable<LogRecord>;
 }
 
 export type ConcreteRecord =
@@ -582,6 +591,7 @@ export type ConcreteRecord =
   | DocSyncRecord
   | DocSyncUpdateRecord
   | DocSyncSnapshotRecord
+  | LogRecord
   | SecretRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
@@ -634,14 +644,6 @@ export interface DocSyncSnapshotRecord extends TableRecordBase {
 export type AllowListRecord = TableRecordBase;
 
 export type SuperAdminUserRecord = TableRecordBase;
-
-export type SuperAdminActionLogRecord = TableRecordBase & {
-  user_id: string;
-  subject: string;
-  action: string;
-  args: string;
-  expiresAt: number;
-};
 
 export type VersionedDataTable<T extends VersionedTableRecord> =
   DataTable<T> & {

@@ -21,6 +21,7 @@ import {
 } from '../../react-contexts/src/editor-user-interactions';
 import { InitialSelection } from './InitialSelection';
 import { ExternalDataSourcesProvider } from './ExternalDataSourcesProvider';
+import { NotebookLogs } from './NotebookLogs';
 
 export interface NotebookConnectionParams {
   url: string;
@@ -216,15 +217,19 @@ const InsideNotebookState = ({
 
 export const Notebook: FC<NotebookProps> = (props) => {
   const { getAttachmentForm, onAttached, ...rest } = props;
+  const { notebookId } = rest;
   return (
     <EditorUserInteractionsProvider>
       <EditorPasteInteractionMenuProvider>
         <EditorAttachmentsHandler
-          notebookId={rest.notebookId}
+          notebookId={notebookId}
           getAttachmentForm={getAttachmentForm}
           onAttached={onAttached}
         />
         <InsideNotebookState {...rest} />
+        {isFlagEnabled('SAVE_NOTEBOOK_LOGS') && (
+          <NotebookLogs notebookId={notebookId} />
+        )}
         {isFlagEnabled('COMPUTER_STATS') && <EditorStats />}
       </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>

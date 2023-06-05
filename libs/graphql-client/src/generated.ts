@@ -101,6 +101,17 @@ export type KeyValue = {
   value: Scalars['String'];
 };
 
+export type LogEntry = {
+  content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  source: Scalars['String'];
+};
+
+export type LogInput = {
+  entries: Array<LogEntry>;
+  resource: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addNotebookToSection?: Maybe<Scalars['Boolean']>;
@@ -108,6 +119,7 @@ export type Mutation = {
   addTagToPad?: Maybe<Scalars['Boolean']>;
   attachFileToPad?: Maybe<Attachment>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
+  createLogs?: Maybe<Scalars['Boolean']>;
   createOrUpdateSnapshot: Scalars['Boolean'];
   createPad: Pad;
   createRole: Role;
@@ -180,6 +192,11 @@ export type MutationAttachFileToPadArgs = {
 
 export type MutationCreateExternalDataSourceArgs = {
   dataSource: ExternalDataSourceCreateInput;
+};
+
+
+export type MutationCreateLogsArgs = {
+  input: LogInput;
 };
 
 
@@ -827,6 +844,14 @@ export type CreateExternalDataSourceMutationVariables = Exact<{
 
 export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, name: string, padId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | null };
 
+export type CreateLogsMutationVariables = Exact<{
+  resource: Scalars['String'];
+  entries: Array<LogEntry> | LogEntry;
+}>;
+
+
+export type CreateLogsMutation = { __typename?: 'Mutation', createLogs?: boolean | null };
+
 export type CreateNotebookMutationVariables = Exact<{
   workspaceId: Scalars['ID'];
   name: Scalars['String'];
@@ -1308,6 +1333,15 @@ export const CreateExternalDataSourceDocument = gql`
 
 export function useCreateExternalDataSourceMutation() {
   return Urql.useMutation<CreateExternalDataSourceMutation, CreateExternalDataSourceMutationVariables>(CreateExternalDataSourceDocument);
+};
+export const CreateLogsDocument = gql`
+    mutation CreateLogs($resource: String!, $entries: [LogEntry!]!) {
+  createLogs(input: {resource: $resource, entries: $entries})
+}
+    `;
+
+export function useCreateLogsMutation() {
+  return Urql.useMutation<CreateLogsMutation, CreateLogsMutationVariables>(CreateLogsDocument);
 };
 export const CreateNotebookDocument = gql`
     mutation CreateNotebook($workspaceId: ID!, $name: String!, $sectionId: ID) {
@@ -2058,6 +2092,7 @@ export type GraphCacheOptimisticUpdaters = {
   addTagToPad?: GraphCacheOptimisticMutationResolver<MutationAddTagToPadArgs, Maybe<Scalars['Boolean']>>,
   attachFileToPad?: GraphCacheOptimisticMutationResolver<MutationAttachFileToPadArgs, Maybe<WithTypename<Attachment>>>,
   createExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationCreateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
+  createLogs?: GraphCacheOptimisticMutationResolver<MutationCreateLogsArgs, Maybe<Scalars['Boolean']>>,
   createOrUpdateSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateOrUpdateSnapshotArgs, Scalars['Boolean']>,
   createPad?: GraphCacheOptimisticMutationResolver<MutationCreatePadArgs, WithTypename<Pad>>,
   createRole?: GraphCacheOptimisticMutationResolver<MutationCreateRoleArgs, WithTypename<Role>>,
@@ -2111,6 +2146,7 @@ export type GraphCacheUpdaters = {
     addTagToPad?: GraphCacheUpdateResolver<{ addTagToPad: Maybe<Scalars['Boolean']> }, MutationAddTagToPadArgs>,
     attachFileToPad?: GraphCacheUpdateResolver<{ attachFileToPad: Maybe<WithTypename<Attachment>> }, MutationAttachFileToPadArgs>,
     createExternalDataSource?: GraphCacheUpdateResolver<{ createExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationCreateExternalDataSourceArgs>,
+    createLogs?: GraphCacheUpdateResolver<{ createLogs: Maybe<Scalars['Boolean']> }, MutationCreateLogsArgs>,
     createOrUpdateSnapshot?: GraphCacheUpdateResolver<{ createOrUpdateSnapshot: Scalars['Boolean'] }, MutationCreateOrUpdateSnapshotArgs>,
     createPad?: GraphCacheUpdateResolver<{ createPad: WithTypename<Pad> }, MutationCreatePadArgs>,
     createRole?: GraphCacheUpdateResolver<{ createRole: WithTypename<Role> }, MutationCreateRoleArgs>,

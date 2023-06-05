@@ -56,7 +56,6 @@ const observedTables: (keyof DataTables)[] = [
   'usertaggedresources',
   'fileattachments',
   'docsyncupdates',
-  'allowlist',
 ];
 
 const versionedTables: (keyof VersionedDataTables)[] = ['docsync'];

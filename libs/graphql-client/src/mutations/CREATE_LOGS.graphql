@@ -1,0 +1,3 @@
+mutation CreateLogs($resource: String!, $entries: [LogEntry!]!) {
+  createLogs(input: { resource: $resource, entries: $entries })
+}

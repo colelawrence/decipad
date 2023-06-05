@@ -23,6 +23,8 @@ export const availableFlags = [
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
 
+  // saving notebook logs to the serve
+  'SAVE_NOTEBOOK_LOGS',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
 ] as const;

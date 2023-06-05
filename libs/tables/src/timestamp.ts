@@ -1,3 +1,3 @@
-export function timestamp(): number {
-  return Math.round(Date.now() / 1000);
+export function timestamp(d?: Date): number {
+  return Math.round((d ?? new Date()).getTime() / 1000);
 }

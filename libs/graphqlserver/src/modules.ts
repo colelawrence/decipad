@@ -15,6 +15,7 @@ import share from './share';
 import tags from './tags';
 import users from './users';
 import workspaces from './workspaces';
+import logs from './logs-module';
 import secrets from './secrets';
 
 type GraphqlModule = {
@@ -36,6 +37,7 @@ const modules: GraphqlModule[] = [
   attachments,
   share,
   externalData,
+  logs,
   secrets,
 ];
 
