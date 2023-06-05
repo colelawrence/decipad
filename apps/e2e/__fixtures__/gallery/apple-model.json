@@ -1,0 +1,2672 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] How much is Apple worth? Breaking down a DCF model for AAPL."
+        }
+      ],
+      "type": "h1",
+      "id": "B-CrQ-FDcW1Tlhr5HvWry"
+    },
+    {
+      "children": [
+        {
+          "text": "How much is Apple worth? Breaking down a DCF model for AAPL."
+        }
+      ],
+      "id": "teT0-r54yl-XWPQSjWV-R",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Apple is one of the most valuable companies in the world with a market cap of "
+        },
+        {
+          "text": "exprRef_ZdcR3wIV5UGj71jxz212B",
+          "magicnumberz": true
+        },
+        {
+          "text": " . Have you ever wondered "
+        },
+        {
+          "text": "how",
+          "underline": true
+        },
+        {
+          "text": " Apple is valued or whether its current market price is overvalued or undervalued? "
+        }
+      ],
+      "type": "p",
+      "id": "J1esY15ri6cGbD9zHFR3E"
+    },
+    {
+      "children": [
+        {
+          "text": "One approach to valuing a company like Apple is to use a discounted cash flow (DCF) model, which takes into account the company's future cash flows to estimate it's current value. "
+        }
+      ],
+      "type": "p",
+      "id": "fWf21zPyL4-Jve7o3Qwd_"
+    },
+    {
+      "children": [
+        {
+          "text": "This interactive model breaks down how to build a DCF model for Apple and estimate an intrinsic value per share. Intrinsic value is an estimate of the fair value of a company; not actual market conditions. "
+        }
+      ],
+      "type": "p",
+      "id": "EKx5lfBGdw0u9ZnDzz_Uo"
+    },
+    {
+      "children": [
+        {
+          "text": "Built in Decipad",
+          "bold": true
+        },
+        {
+          "text": ". You can duplicate this model to reuse it or modify it and make it your own. "
+        },
+        {
+          "text": "This is not financial advice",
+          "underline": true
+        },
+        {
+          "text": ". "
+        }
+      ],
+      "type": "callout",
+      "id": "ezJkbKob6z2bgeJSUPgLb",
+      "icon": "Paperclip",
+      "color": "Malibu"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "crAMWAutP00XkzAGC2VcE"
+    },
+    {
+      "children": [
+        {
+          "text": "Step 1: Forecast Future Free Cash"
+        }
+      ],
+      "id": "s-0Rmhfu9HuDOq4pwHenk",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "-ePTX5CGRzjRWpJXmU3Aa",
+      "type": "divider",
+      "colorScheme": "monochrome_blue"
+    },
+    {
+      "children": [
+        {
+          "text": "My first step in constructing this DCF model is to estimate Apple's future cash flows. There are many ways to do this, but one approach is to use historical financials to make assumptions about a company's future revenue growth, margins, and capital expenditures. "
+        }
+      ],
+      "type": "p",
+      "id": "ZhnEqKxzAe35bRBjhLPZj"
+    },
+    {
+      "children": [
+        {
+          "text": "I am going to look back 5 years for Apple. You may want to look back 10 years to capture a broader cycle. "
+        }
+      ],
+      "type": "p",
+      "id": "RDRwI6xfBLyJrfy4608vT"
+    },
+    {
+      "children": [
+        {
+          "text": "Data Source: ",
+          "italic": true
+        },
+        {
+          "children": [
+            {
+              "text": "Seeking Alpha",
+              "italic": true
+            }
+          ],
+          "type": "a",
+          "url": "https://seekingalpha.com/symbol/AAPL",
+          "id": "rDHlwhW4MjCmsidc0Fdch"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "u_RnJrXuGt48Vw-roPTaj"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Historicals"
+                }
+              ],
+              "id": "eUeg3OPTk9ggZ-7o5FYJ8",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "_ytjSoSVKUqyadu3gnoT6",
+                  "type": "smart-ref",
+                  "blockId": "3syUkRqRBnHrZGUZFNd81",
+                  "columnId": null,
+                  "lastSeenVariableName": "EBITDA"
+                },
+                {
+                  "text": " / "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "2m5bc4d9Ud8atepkhwXNM",
+                  "type": "smart-ref",
+                  "blockId": "meXkTfCqaiYESMsiCO3tQ",
+                  "columnId": null,
+                  "lastSeenVariableName": "Revenue"
+                },
+                {
+                  "text": " in %"
+                }
+              ],
+              "id": "hsyXw_qZXOmsZ1JUHPBYM",
+              "type": "table-column-formula",
+              "columnId": "ZIRICXTMDn0skKhkvbCaJ"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "egf0vF3HZTT90X5NXbOuy",
+                  "type": "smart-ref",
+                  "blockId": "3syUkRqRBnHrZGUZFNd81",
+                  "columnId": null,
+                  "lastSeenVariableName": "EBITDA"
+                },
+                {
+                  "text": " - "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "ROxq6BiR3gSkzSAdANpYJ",
+                  "type": "smart-ref",
+                  "blockId": "Vvy_BAZStOxFCqa6HTp27",
+                  "columnId": null,
+                  "lastSeenVariableName": "Capex"
+                },
+                {
+                  "text": " - "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "4Rtgnf4hLrp_J6g5n9JI2",
+                  "type": "smart-ref",
+                  "blockId": "5BJqox0eq_WiBIBkXUcfW",
+                  "columnId": null,
+                  "lastSeenVariableName": "Acquistions"
+                },
+                {
+                  "text": " - "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "AjJO9mRH8Ie0bu4k7HJ5F",
+                  "type": "smart-ref",
+                  "blockId": "C_4-LAklEQTofqBxl6wkW",
+                  "columnId": null,
+                  "lastSeenVariableName": "CashTax"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "RieCxdCJ-piEHMjDzaZ5q",
+              "type": "table-column-formula",
+              "columnId": "xueeITv1HBdZD4oAOLbLs"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "IUof2a76LEzdwjqjohGaK",
+                  "type": "smart-ref",
+                  "blockId": "C_4-LAklEQTofqBxl6wkW",
+                  "columnId": null,
+                  "lastSeenVariableName": "CashTax"
+                },
+                {
+                  "text": " / "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "nd_Qswug7FZTAyuDELVC8",
+                  "type": "smart-ref",
+                  "blockId": "3syUkRqRBnHrZGUZFNd81",
+                  "columnId": null,
+                  "lastSeenVariableName": "EBITDA"
+                },
+                {
+                  "text": " in %"
+                }
+              ],
+              "id": "4YbXsQcR8D28yzyDbNuCM",
+              "type": "table-column-formula",
+              "columnId": "4n4YeVjxXDJzpOR5BaXI8"
+            }
+          ],
+          "id": "vCak_PVx22jdy1cJTfwPF",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Year"
+                }
+              ],
+              "id": "peBJbnUoDKgklpYknG4YV",
+              "type": "th",
+              "cellType": {
+                "kind": "date",
+                "date": "year"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Revenue"
+                }
+              ],
+              "id": "meXkTfCqaiYESMsiCO3tQ",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "EBITDA"
+                }
+              ],
+              "id": "3syUkRqRBnHrZGUZFNd81",
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "exp": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "multiplier": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "known": true,
+                    "unit": "usdollar",
+                    "baseSuperQuantity": "currency",
+                    "baseQuantity": "usdollar"
+                  }
+                ]
+              },
+              "aggregation": "Average"
+            },
+            {
+              "children": [
+                {
+                  "text": "Capex"
+                }
+              ],
+              "id": "Vvy_BAZStOxFCqa6HTp27",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              },
+              "aggregation": "Average"
+            },
+            {
+              "children": [
+                {
+                  "text": "Acquistions"
+                }
+              ],
+              "id": "5BJqox0eq_WiBIBkXUcfW",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "CashTax"
+                }
+              ],
+              "id": "C_4-LAklEQTofqBxl6wkW",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              },
+              "aggregation": "Average"
+            },
+            {
+              "children": [
+                {
+                  "text": "EBITDAMargin"
+                }
+              ],
+              "id": "ZIRICXTMDn0skKhkvbCaJ",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "FreeCashFlows"
+                }
+              ],
+              "id": "xueeITv1HBdZD4oAOLbLs",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "aggregation": "Average"
+            },
+            {
+              "children": [
+                {
+                  "text": "CashTaxRate"
+                }
+              ],
+              "id": "4n4YeVjxXDJzpOR5BaXI8",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            }
+          ],
+          "id": "obrOrGSZ4AzLCILr5O1mc",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2018"
+                }
+              ],
+              "id": "qziVFQwERVcNMyYVcQ_-z",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$265.59  B"
+                }
+              ],
+              "id": "wGyCPC7kpcA7A7lrSnr5k",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$81.80  B"
+                }
+              ],
+              "id": "xkBXtUcQ83L8vZzsIhi_E",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$13.3 B"
+                }
+              ],
+              "id": "aE2X_J1c3f2ggxU2wIoBq",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$721 M"
+                }
+              ],
+              "id": "JBD9HFNiDG-3P1cNDilkx",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$10.41 B"
+                }
+              ],
+              "id": "NzOA0CPmEuS0Elt3meJHh",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "afi63YkflMy1ac6qN8Hy_",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "sQY4gVk8QRNmTCGygPCwx",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "aGnVlg84naKyvP68argbD",
+              "type": "td"
+            }
+          ],
+          "id": "dJL0HqC0ebl-ipWONyZYV",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2019"
+                }
+              ],
+              "id": "1TvRseLRwyJy05G41VSpQ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$260.17 B"
+                }
+              ],
+              "id": "YqTFEsTtxhC_s1QU982VW",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$76.47 B"
+                }
+              ],
+              "id": "ZdNu90EerXe8KPFxHjGx0",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$10.4 B"
+                }
+              ],
+              "id": "d2y3a1-qNffTBUQWii_zq",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$624 M"
+                }
+              ],
+              "id": "VxbkURQwCbEK33T3zVFBn",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$15.26 B"
+                }
+              ],
+              "id": "CFhwRgD3c9xlPMpqBiRVZ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "jJ47cpbQF5AI-5183Ead1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ckWGYd4fMNYEkvJ7CIdza",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "KXI-E1PvBJdK0rZYfqmfE",
+              "type": "td"
+            }
+          ],
+          "id": "Qed1eLFukyPBNs0d8aeBy",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2020"
+                }
+              ],
+              "id": "1qAW1QHCPRVFA7XrfbpRx",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$274.51  B"
+                }
+              ],
+              "id": "OufBLZaYQnDAYaN9WIgE9",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$77.34 B"
+                }
+              ],
+              "id": "hfurG9DVvjZrUDij7FgMg",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$7.3 B"
+                }
+              ],
+              "id": "8j5GUCF15_osJMBPnqSqz",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$1.52 B"
+                }
+              ],
+              "id": "bcNxFxQLj_vy3Md5xxiAf",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$9.50 B"
+                }
+              ],
+              "id": "D19k6XSEJNnfSgeQTtSwK",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ZMRFN13Nqllm6nnRzWtZD",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "tXxgO4cCIOYtLt3bWLKjD",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "0WkS1xw1upv07kAy_h409",
+              "type": "td"
+            }
+          ],
+          "id": "VslRMcPR_iKzTIyBtC6uo",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2021"
+                }
+              ],
+              "id": "4vPbyPvvO7mfE1452s3pQ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$365.81 B"
+                }
+              ],
+              "id": "e17zgk1WkxFM-ozDmD8uJ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$120.23 B"
+                }
+              ],
+              "id": "bhLwVegK91ahdu0-e8-UW",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$11 B"
+                }
+              ],
+              "id": "HGULvFMyD2P05z_2aY47W",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$33 M"
+                }
+              ],
+              "id": "4s4BB5hD4bF67KWICH5Y2",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$25.38 B"
+                }
+              ],
+              "id": "SadfkfHzBHypTCxT5cwMS",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "-m-E36U8FclSSrQfX8LTc",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "VAJa-P0mBy5G5AJMQb_Hp",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "TAhgIdgxDMA53YSABtaYg",
+              "type": "td"
+            }
+          ],
+          "id": "_X3_gwjpQb7a9pGW3Nvrp",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2022"
+                }
+              ],
+              "id": "nBKguy3m_PFBX0vEFJDBo",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$394.32 B"
+                }
+              ],
+              "id": "48VmgkZ7ASk-kLsCYDdqJ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$130.54 B"
+                }
+              ],
+              "id": "1FpvTh3XFPV1JJE9_yQrP",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$10.7  B"
+                }
+              ],
+              "id": "LmUMEFNjMHI6dhX4P4zTs",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$306 M"
+                }
+              ],
+              "id": "DpSLUCJbNuhUhGMtE8IOp",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$19.57 B"
+                }
+              ],
+              "id": "2cae5oXjZJ7OWhXBqPEi_",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Mm9pVInwCL7V5hUwqApzS",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "YmXKlcTRLIEVHIMz-gFkZ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "V-qZeex1XaxF1nFoGoFAT",
+              "type": "td"
+            }
+          ],
+          "id": "guj1AnyzhVF8Nfk91-4ll",
+          "type": "tr"
+        }
+      ],
+      "id": "c9z4Gq_NFAzSQjEzufgxt",
+      "type": "table",
+      "version": 2,
+      "hideFormulas": true,
+      "colorScheme": "monochrome_blue",
+      "isCollapsed": false
+    },
+    {
+      "children": [
+        {
+          "text": "I am going to make some general assumptions to forecast future free cash. "
+        }
+      ],
+      "type": "p",
+      "id": "bTve5KNb7g0X3-Wtww1m1",
+      "colorScheme": "monochrome_blue"
+    },
+    {
+      "children": [
+        {
+          "text": "When looking at key drivers of future free cash such as "
+        },
+        {
+          "text": "EBITDA Margin",
+          "bold": true
+        },
+        {
+          "text": " and my own assumptions on the market, I am going to assume  "
+        },
+        {
+          "text": "exprRef_kHfzniEiUJhjQ882dZRob",
+          "magicnumberz": true
+        },
+        {
+          "text": "   "
+        },
+        {
+          "text": "growth in Apple's future free cash. That free cash will maintain it's post 2020 levels.",
+          "highlight": true
+        }
+      ],
+      "type": "p",
+      "id": "jv4pqQT6BDHTV6G2tRrTb",
+      "colorScheme": "monochrome_blue"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "zotcbBBn5gKIT3bg73gXq",
+      "type": "plot",
+      "title": "Revenue & Free Cash",
+      "sourceVarName": "exprRef_c9z4Gq_NFAzSQjEzufgxt",
+      "xColumnName": "Year",
+      "yColumnName": "Revenue",
+      "markType": "bar",
+      "thetaColumnName": "",
+      "sizeColumnName": "",
+      "colorColumnName": "Acquistions",
+      "y2ColumnName": "FreeCashFlows",
+      "colorScheme": "monochrome_blue"
+    },
+    {
+      "children": [
+        {
+          "text": "To represent this, I will use an average of Apple's free cash flow and EBITDA from the last two years as the future free cash (FFC) and future EBITDA. "
+        }
+      ],
+      "type": "p",
+      "id": "kbavwLATo6m-ztOanbpWz",
+      "colorScheme": "monochrome_blue",
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Future_EBITDA"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "ioYOQiTmdvk7v2eYTE6SY"
+        },
+        {
+          "children": [
+            {
+              "text": "average(filter("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "nfQl1yEtx1FzkaH53jZLC",
+              "type": "smart-ref",
+              "blockId": "c9z4Gq_NFAzSQjEzufgxt",
+              "columnId": null,
+              "lastSeenVariableName": "Historicals"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Io_btvZO_G1MFUljo05Cw",
+              "type": "smart-ref",
+              "blockId": "c9z4Gq_NFAzSQjEzufgxt",
+              "columnId": "peBJbnUoDKgklpYknG4YV",
+              "lastSeenVariableName": "Historicals.Year"
+            },
+            {
+              "text": " > date(2020)).EBITDA) "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "8Q2N2UkHP1EqeQ19vgElN"
+        }
+      ],
+      "id": "XzTVaofGO8IC8uulk1mkS",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Future_FCF"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "zTIUzTDTZrf6h2f7luF3M"
+        },
+        {
+          "children": [
+            {
+              "text": "average(filter("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "nfQl1yEtx1FzkaH53jZLC",
+              "type": "smart-ref",
+              "blockId": "c9z4Gq_NFAzSQjEzufgxt",
+              "columnId": null,
+              "lastSeenVariableName": "Historicals"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Io_btvZO_G1MFUljo05Cw",
+              "type": "smart-ref",
+              "blockId": "c9z4Gq_NFAzSQjEzufgxt",
+              "columnId": "peBJbnUoDKgklpYknG4YV",
+              "lastSeenVariableName": "Historicals.Year"
+            },
+            {
+              "text": " > date(2020)).FreeCashFlows) "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "xdLEwPL9lZ4hVQlT2Xkq3"
+        }
+      ],
+      "id": "QfiJo3JpVukPKwlM5F4a-",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "Forecast 5 years "
+        }
+      ],
+      "type": "p",
+      "id": "u8noqMT4jWGRfjs_H6nH4",
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "5YIaCuawz6rKDC9kHen0v"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "YZfQnpqjSF5gdtfCQiLCA"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "FiveYearForecast"
+                }
+              ],
+              "id": "dbCPzV_lhyXTgtIdTwQWK",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": " previous("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "HHibsx1uc1fEYT5K7EfOn",
+                  "type": "smart-ref",
+                  "blockId": "XzTVaofGO8IC8uulk1mkS",
+                  "columnId": null,
+                  "lastSeenVariableName": "Future_EBITDA"
+                },
+                {
+                  "text": " ) + "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "axurYCpmMvRJoGYpzHTUC",
+                  "type": "smart-ref",
+                  "blockId": "kHfzniEiUJhjQ882dZRob",
+                  "columnId": null,
+                  "lastSeenVariableName": "FreeCash_Growth"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "_SPCu75dx4JskX0klt_qe",
+              "type": "table-column-formula",
+              "columnId": "63U8uAnewq7VlkfMAmwEV"
+            },
+            {
+              "children": [
+                {
+                  "text": "previous("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "JHQLX18bLoZ0y76cytJcK",
+                  "type": "smart-ref",
+                  "blockId": "QfiJo3JpVukPKwlM5F4a-",
+                  "columnId": null,
+                  "lastSeenVariableName": "Future_FCF"
+                },
+                {
+                  "text": ") + "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "axurYCpmMvRJoGYpzHTUC",
+                  "type": "smart-ref",
+                  "blockId": "kHfzniEiUJhjQ882dZRob",
+                  "columnId": null,
+                  "lastSeenVariableName": "FreeCash_Growth"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "6Mu2-_8JR9SQuhLktRsJC",
+              "type": "table-column-formula",
+              "columnId": "KEfapfgiE7iaMEoFsQG1P"
+            }
+          ],
+          "id": "FtMIvxcBNOZ34vHpZQtxh",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Year"
+                }
+              ],
+              "id": "yiii4rf8n6UiM3jLldcme",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "EBITDA"
+                }
+              ],
+              "id": "63U8uAnewq7VlkfMAmwEV",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "FCF"
+                }
+              ],
+              "id": "KEfapfgiE7iaMEoFsQG1P",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            }
+          ],
+          "id": "5TaIeNTlJevu8v762CIRB",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2023"
+                }
+              ],
+              "id": "wMey-pOb233T3vLtsdfCn",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "zQwPRDsPCy3tR1t6Cmz9m",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "fPfqD3QDdn9-xVtA5FS4s",
+              "type": "td"
+            }
+          ],
+          "id": "WvSLxFzkyNyBBI-Q0rzpl",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2024"
+                }
+              ],
+              "id": "UADqKXQojTdMwIwwxz6nd",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Bgm_x35HuTgBuTh4AQZ6C",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "eRvpOdpEQ3VQEe7yiIWuV",
+              "type": "td"
+            }
+          ],
+          "id": "IDf-3zCm4jY50_rBU7iEY",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2025"
+                }
+              ],
+              "id": "8iNgMm-QW0pg_WEruCFqy",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "kRRCAcybBbfJ0z3MXKD1H",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "77Y2MyZ4cUqMsUXc0Yn13",
+              "type": "td"
+            }
+          ],
+          "id": "diiL5pWuUSRhZYPXMadHE",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2026"
+                }
+              ],
+              "id": "m8tu-fW9sN_EfE0zdbmrT",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "thkRyBHflOtbtVn_jt_Fu",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "7oD2S8GRQHX0lZMrPq8X7",
+              "type": "td"
+            }
+          ],
+          "id": "mQxc1ZplGhQ2qipMmC6fo",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2027"
+                }
+              ],
+              "id": "aAfnoyvEphPGKOT2BXhmq",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "jIC_hl_TXCgGLsn71Zify",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "SEJ3_ugQwNCKHE3shAt6w",
+              "type": "td"
+            }
+          ],
+          "id": "1iIjHyE_RazYpOHloElMF",
+          "type": "tr"
+        }
+      ],
+      "id": "_KN5IVb9WS_YH-qcT4C7y",
+      "type": "table",
+      "version": 2,
+      "hideFormulas": true,
+      "isCollapsed": false
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "tPWSEhbf39f9kGUy8Z6Pq"
+    },
+    {
+      "children": [
+        {
+          "text": "Step 2: Calculate Terminal Value"
+        }
+      ],
+      "type": "h2",
+      "id": "yzXN7vNwbRRNaKS3TeKYG"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "eE9B7cUrQgth37H2Ux7kt",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "The "
+        },
+        {
+          "text": "Terminal Value (TV) ",
+          "bold": true
+        },
+        {
+          "text": "represents the estimated value of a company beyond the final year of the explicit forecast period. It creates a more complete picture of a company's value. "
+        }
+      ],
+      "type": "p",
+      "id": "xRegqlVGKARLElPwOBmep"
+    },
+    {
+      "children": [
+        {
+          "text": "There are different ways to calculate TV. One approach is to assume a company's FCF will grow at a constant rate beyond the projection period — "
+        },
+        {
+          "text": "in",
+          "bold": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "perpetuity. ",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "AXFgmKnjXRekJxJDjiQQF",
+      "hideFormulas": false,
+      "isCollapsed": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "TerminalValue"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "72ypWVB8fCtUVDtmO2PHO"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "zNYmkc0bPbNJGeTy0WZ8N",
+              "type": "smart-ref",
+              "blockId": "QfiJo3JpVukPKwlM5F4a-",
+              "columnId": null,
+              "lastSeenVariableName": "Future_FCF"
+            },
+            {
+              "text": " /  "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DSvD1Paz1SB21nGDPnRyJ",
+              "type": "smart-ref",
+              "blockId": "rCz2yWuvpOlarYEg7kFl3",
+              "columnId": null,
+              "lastSeenVariableName": "DiscountRate"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "jGPbW3L8e2cIqyrD-Tccv"
+        }
+      ],
+      "id": "iW-DZKbrENqTAswfdX9XU",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "In this model, TV is the present value of future cash flows in perpetuity. We can estimate TV by using our future free cash flow estimate and dividing by a discount rate. I am going to assume a "
+        },
+        {
+          "text": "discount rate",
+          "bold": true
+        },
+        {
+          "text": " close to the ten year treasury rate."
+        },
+        {
+          "text": "exprRef_4ysQHlP2Ur1RzpWipJRUy",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "p4fymkLXky4lU99JS7ja0"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "9q04mQqchF5Y0RZ6zSsKh"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "TH1u9y4s11FU40RvfRQKh"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "uyUDA3FWBjvoH_6r5EH6H"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "8J_v7kaQ90_lPafcX4AGa"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "2mcot5zhVDndaCcfCXLE5"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "Ozx9yWo0i_pBFI5NplgUK"
+    },
+    {
+      "children": [
+        {
+          "text": "Step 3: Present Value"
+        }
+      ],
+      "type": "h2",
+      "id": "-0JfyONeR4TAkdHdgcBcp"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "twXAXt8zZbgBRHdffdL6h",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Now, we can discount Apple's projected FCF and TV to their present values using the discount rate. This accounts for the fact that money in the future is worth less than money in the present. We're assuming a "
+        },
+        {
+          "text": "discount rate",
+          "bold": true
+        },
+        {
+          "text": " of: "
+        },
+        {
+          "text": "exprRef_rCz2yWuvpOlarYEg7kFl3",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "pku55KymHvbWzYhdEpRrz"
+    },
+    {
+      "children": [
+        {
+          "text": "We can calculate this using the "
+        },
+        {
+          "text": "net present value function (npv)",
+          "bold": true
+        },
+        {
+          "text": " which will calculate the present value of our five year forecasted future cash flows."
+        }
+      ],
+      "type": "p",
+      "id": "61hA61rpJL_COeqJu5xbg"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "PVFC"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "tgjlf5s7O6PrJpGPkShmI"
+        },
+        {
+          "children": [
+            {
+              "text": "npv("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "swuZDWLIzgJtVSnrvthll",
+              "type": "smart-ref",
+              "blockId": "rCz2yWuvpOlarYEg7kFl3",
+              "columnId": null,
+              "lastSeenVariableName": "DiscountRate"
+            },
+            {
+              "text": " , "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "aCy1egw0DwNABdmBhIc6y",
+              "type": "smart-ref",
+              "blockId": "_KN5IVb9WS_YH-qcT4C7y",
+              "columnId": "KEfapfgiE7iaMEoFsQG1P",
+              "lastSeenVariableName": "FiveYearForecast.FCF"
+            },
+            {
+              "text": " )"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "RGh4_P_8C6AXBNbBcZmcj"
+        }
+      ],
+      "id": "ocYZ5vM0-rBQB6FAwtI9C",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "QnGaY9rYi6QBKu8XRRvnY"
+    },
+    {
+      "children": [
+        {
+          "text": "We also have to discount Apple's terminal value to present value. TV is in perpetuity beyond our initial forecast. Using the net present value function, it will be 0 for the first 4 years."
+        }
+      ],
+      "type": "p",
+      "id": "NYGu6UELFODBihC7c-mQ1"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "PVTV"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "iOhkJ-d5es43kZ-Vd4YPT"
+        },
+        {
+          "children": [
+            {
+              "text": "npv("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "iZo7PEym1U8YXSJxPPhND",
+              "type": "smart-ref",
+              "blockId": "rCz2yWuvpOlarYEg7kFl3",
+              "columnId": null,
+              "lastSeenVariableName": "DiscountRate"
+            },
+            {
+              "text": " ,[0,0,0,0,"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "VLTqi4oQ9es28OWxt1Y5o",
+              "type": "smart-ref",
+              "blockId": "iW-DZKbrENqTAswfdX9XU",
+              "columnId": null,
+              "lastSeenVariableName": "TerminalValue"
+            },
+            {
+              "text": "])"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "05ns7gQq_pY07SowFRdAr"
+        }
+      ],
+      "id": "mo9UAF436HRB1nwhrxaq_",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "uePeUueEfYDXUKiKU41Ss"
+    },
+    {
+      "children": [
+        {
+          "text": "4. Estimate Value Per Share"
+        }
+      ],
+      "type": "h2",
+      "id": "cD1PquZ-dAx5yviPEp73C"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "M4FwZuWBItTS5_3vjv1U2",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Now that we have the present value of FCF and TV, we can compute Apple's enterprise value and market value to get an estimated share value: "
+        },
+        {
+          "text": "exprRef_a0Clh7_iqPx7Kz11nKuW_",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "tPiuZYGlD5noffUaV_hxJ"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "EntValue"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "H1NpOdVtORHST6ftt5hq3"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "xst4JsomWMmMB38yUBmze",
+              "type": "smart-ref",
+              "blockId": "ocYZ5vM0-rBQB6FAwtI9C",
+              "columnId": null,
+              "lastSeenVariableName": "PVFC"
+            },
+            {
+              "text": " + "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "FClP-xqsojwKKQBRC8WRP",
+              "type": "smart-ref",
+              "blockId": "mo9UAF436HRB1nwhrxaq_",
+              "columnId": null,
+              "lastSeenVariableName": "PVTV"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "ku2F8s3K4EQ0GPwAM0gEv"
+        }
+      ],
+      "id": "OSa709r7Txv7tCQ7zx3Kt",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "NetDebt"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "z26polHAVVYeCRNnED1_L"
+        },
+        {
+          "children": [
+            {
+              "text": "-54340 millions"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "wSSMdoFGFXi3g1jpdY8QW"
+        }
+      ],
+      "id": "ArTZoPbwG90WVBBjx5xTb",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "MarketValue"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "c9q2W90uQM9RO3QF74OdL"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DkcBrsvIPQZHTsY-KN7kZ",
+              "type": "smart-ref",
+              "blockId": "OSa709r7Txv7tCQ7zx3Kt",
+              "columnId": null,
+              "lastSeenVariableName": "EntValue"
+            },
+            {
+              "text": " - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "6--YoWDXtkns3W6qLWdVW",
+              "type": "smart-ref",
+              "blockId": "ArTZoPbwG90WVBBjx5xTb",
+              "columnId": null,
+              "lastSeenVariableName": "NetDebt"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "4IthNMdAjko2UD2J03g33"
+        }
+      ],
+      "id": "001P6KQ9sBavsIs6AVqLC",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "SharesOutstanding"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "REfwrglgFOFkxtmgS0pE0"
+        },
+        {
+          "children": [
+            {
+              "text": "15842 millions"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "UFbNPaz5O9d1mSS9vt9wQ"
+        }
+      ],
+      "id": "JMTj5YR3w67VH5zPnbjgX",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ValuePerShare"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "914z5rJ02g_bsW-fOZnSX"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "E377Vi_-KKskl8poQ5d0v",
+              "type": "smart-ref",
+              "blockId": "001P6KQ9sBavsIs6AVqLC",
+              "columnId": null,
+              "lastSeenVariableName": "MarketValue"
+            },
+            {
+              "text": " / "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "lmIURbmJKZpmwL3rU8rLK",
+              "type": "smart-ref",
+              "blockId": "JMTj5YR3w67VH5zPnbjgX",
+              "columnId": null,
+              "lastSeenVariableName": "SharesOutstanding"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "R0yfGm2rGiqMa3fKpZaBz"
+        }
+      ],
+      "id": "a0Clh7_iqPx7Kz11nKuW-",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "gUWlowYSEGoWalNoMiCDl"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "gx8PwdIRxm4xqrhZVja2Q"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "Dmry1laTvBRNCZEY-y3Ih"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "W-JHeuZHHEPvquheSGRXG"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "HQ5IropWMsvsANe7M0sIn"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "QN9MfsXJ6lwFfw2ycVe4v"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "8-vu_yBy0MM07Ku987IbF"
+    },
+    {
+      "children": [
+        {
+          "text": "5. Compare Scenarios"
+        }
+      ],
+      "type": "h2",
+      "id": "EI9C0AIDB8NvdZrl8J88C"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "R3j5Gls3atIcMrdV4BwbZ",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "In this model, I've made two main assumptions:"
+        }
+      ],
+      "type": "p",
+      "id": "yv5wJnMS26GdEO7ojairB"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "A discount rate near the ten year treasury rate:"
+                },
+                {
+                  "text": " ",
+                  "italic": true
+                },
+                {
+                  "text": "exprRef_3G9koj6Tuw1OULI2cVj2G",
+                  "magicnumberz": true,
+                  "italic": true
+                },
+                {
+                  "text": " ",
+                  "italic": true
+                }
+              ],
+              "id": "yFKS-w2L80xb6EyB-zMjN",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "FHEs-khNlfzM4D9X2olma"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "No growth in Apple's future free cash: "
+                },
+                {
+                  "text": "exprRef_kHfzniEiUJhjQ882dZRob",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "ZEBI_RwjXHRIfYkh0lA9I",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "fvzavlQ9xFvwcmcCkTOAi"
+        }
+      ],
+      "type": "ol",
+      "id": "fIsrI2OmknG07aA_dkxLG"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "DiscountRate"
+                }
+              ],
+              "id": "5AkVZS31zWR3BzgyXE88l",
+              "type": "caption",
+              "icon": "Percentage"
+            },
+            {
+              "children": [
+                {
+                  "text": "3.2%"
+                }
+              ],
+              "id": "6UR2sCEPSXtMMlzZhnBiA",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "TKI4g6XfSJ-6uW6HGjWPw",
+              "type": "slider",
+              "max": "10",
+              "min": "0",
+              "step": ".1",
+              "value": "3.2"
+            }
+          ],
+          "id": "rCz2yWuvpOlarYEg7kFl3",
+          "type": "def",
+          "variant": "slider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "FreeCash_Growth"
+                }
+              ],
+              "id": "b2AUGBtKHC7hLS0JGBxo9",
+              "type": "caption",
+              "icon": "Percentage"
+            },
+            {
+              "children": [
+                {
+                  "text": "1.5%"
+                }
+              ],
+              "id": "OYdTl7JZwe4uoMQup9i-J",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ulPCItIn0Azr1jawbZTY6",
+              "type": "slider",
+              "max": "10",
+              "min": "0",
+              "step": "0.1",
+              "value": "1.5"
+            }
+          ],
+          "id": "kHfzniEiUJhjQ882dZRob",
+          "type": "def",
+          "variant": "slider",
+          "coerceToType": {
+            "kind": "number",
+            "date": "day"
+          }
+        }
+      ],
+      "id": "TsyVGVhp0ba1dUQ6VOWvn",
+      "type": "columns"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "varName": "",
+          "id": "UPFWsQrc4QqJo32glMc-N",
+          "blockId": "3gdZ9glwPWrc6Mnhk9ra2",
+          "type": "display"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "llD9STsenYaDpq8AnziuT",
+          "blockId": "a0Clh7_iqPx7Kz11nKuW-",
+          "type": "display",
+          "varName": "ValuePerShare"
+        }
+      ],
+      "id": "r4kOehV5Z1n25iF7Tsr53",
+      "type": "columns"
+    },
+    {
+      "children": [
+        {
+          "text": "This results in a value per share for Apple of "
+        },
+        {
+          "text": "(our intrinsic value estimate). ",
+          "italic": true
+        },
+        {
+          "text": "We can compare this to Apple's actual share value of "
+        },
+        {
+          "text": "exprRef_3gdZ9glwPWrc6Mnhk9ra2",
+          "magicnumberz": true
+        },
+        {
+          "text": "  to evaluate if Apple is over or undervalued. "
+        }
+      ],
+      "type": "p",
+      "id": "zTFdZWYBqp0_VuRr4a_GH"
+    },
+    {
+      "children": [
+        {
+          "text": "And, we can play with our two main assumptions around the disc rate and free cash growth rate to see the impact:"
+        }
+      ],
+      "type": "p",
+      "id": "YlWBrVVyRudy08S1agvjf"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "qRHR995cwuD-85F1Wu3g4"
+    },
+    {
+      "children": [
+        {
+          "text": "Built in Decipad",
+          "bold": true
+        },
+        {
+          "text": ". If you have feedback on how I can improve this model, let's chat! kelly@decipad.com."
+        }
+      ],
+      "id": "DEz8VwR8Z-x-bkmf0plZh",
+      "type": "callout",
+      "icon": "Message",
+      "color": "Malibu"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "rfnE5J29UTGX0G4RYq7oZ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "YyYEAAeP-1s6SaQ62cZ0U"
+    },
+    {
+      "children": [
+        {
+          "text": "Appendix: Live data connections"
+        }
+      ],
+      "id": "TmYnmhvRufj_bxQL4emPG",
+      "type": "h2",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "9fM8rZnW2zP_4HcXaQuGm",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "AAPL_SharePrice"
+            }
+          ],
+          "id": "GJZ9qK66CSeDguYYEWgE4",
+          "type": "live-var-name"
+        }
+      ],
+      "id": "ZRB-eiuZmUKrPMbRnjyKa",
+      "type": "live-conn",
+      "url": "https://docs.google.com/spreadsheets/d/1jNY8xLkhzgAcPsSK6wr0Zn2m2XmICpuNWkkHyLm76ug/edit#gid=0",
+      "source": "gsheets",
+      "isFirstRowHeaderRow": true,
+      "columnTypeCoercions": [],
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "AAPL_MarketCap"
+            }
+          ],
+          "id": "Sz7k3U5yxIupUoKLrerOo",
+          "type": "live-var-name"
+        }
+      ],
+      "id": "edz1ZyfkfEDd_7gbHPsHh",
+      "type": "live-conn",
+      "url": "https://docs.google.com/spreadsheets/d/1jNY8xLkhzgAcPsSK6wr0Zn2m2XmICpuNWkkHyLm76ug/edit#gid=809490379",
+      "source": "gsheets",
+      "isFirstRowHeaderRow": true,
+      "columnTypeCoercions": []
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "TenYearTreasury"
+            }
+          ],
+          "id": "somomLPOkqOmm9QmuxdyS",
+          "type": "live-var-name"
+        }
+      ],
+      "id": "ZyuG3RHA7WZoMheYOi_Zi",
+      "type": "live-conn",
+      "url": "https://docs.google.com/spreadsheets/d/1jNY8xLkhzgAcPsSK6wr0Zn2m2XmICpuNWkkHyLm76ug/edit#gid=1025903627",
+      "source": "gsheets",
+      "isFirstRowHeaderRow": true,
+      "columnTypeCoercions": {
+        "1": {
+          "kind": "number",
+          "unit": null
+        }
+      }
+    },
+    {
+      "children": [
+        {
+          "text": "Live variables from data connections",
+          "italic": true
+        }
+      ],
+      "id": "zvenJdBeEiZuam02tnYiY",
+      "type": "p",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Apple_LiveSharePrice⚡"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "AdWEvEY-TrpTUf3YWaL2M"
+        },
+        {
+          "children": [
+            {
+              "text": "lookup("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "vtLjKR8UCzhuvM_RyRhZU",
+              "type": "smart-ref",
+              "blockId": "ZRB-eiuZmUKrPMbRnjyKa",
+              "columnId": null,
+              "lastSeenVariableName": "AAPL_SharePrice"
+            },
+            {
+              "text": ","
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Aaglko3HyPnd5Upz-oEhx",
+              "type": "smart-ref",
+              "blockId": "ZRB-eiuZmUKrPMbRnjyKa",
+              "columnId": "ZRB-eiuZmUKrPMbRnjyKa--0",
+              "lastSeenVariableName": "AAPL_SharePrice.Attribute"
+            },
+            {
+              "text": " ==\"Share Price\").Value"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "4QF_QknfbcGMu0Lg77UP2"
+        }
+      ],
+      "isHidden": true,
+      "id": "3gdZ9glwPWrc6Mnhk9ra2",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ActualMarketCap⚡"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "SR7YoahimDvLeHsNdIXku"
+        },
+        {
+          "children": [
+            {
+              "text": "lookup("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Fo4ep7uNlPgEV7ydEQn0O",
+              "type": "smart-ref",
+              "blockId": "edz1ZyfkfEDd_7gbHPsHh",
+              "columnId": null,
+              "lastSeenVariableName": "AAPL_MarketCap"
+            },
+            {
+              "text": " ,"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "emR7A9h6Bd-XWxyGn32xW",
+              "type": "smart-ref",
+              "blockId": "edz1ZyfkfEDd_7gbHPsHh",
+              "columnId": "edz1ZyfkfEDd_7gbHPsHh--0",
+              "lastSeenVariableName": "AAPL_MarketCap.Attribute"
+            },
+            {
+              "text": "  ==\"market cap\").Value in ⚡"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "UeVIWnOMl1j2537eVbQFI"
+        }
+      ],
+      "isHidden": true,
+      "id": "ZdcR3wIV5UGj71jxz212B",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ActualTenYearTreasury"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "5jdRPuPmXb1JFld6KxB7t"
+        },
+        {
+          "children": [
+            {
+              "text": "lookup("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Vb-svHy0MGFUjg1BlCJ8z",
+              "type": "smart-ref",
+              "blockId": "ZyuG3RHA7WZoMheYOi_Zi",
+              "columnId": null,
+              "lastSeenVariableName": "TenYearTreasury"
+            },
+            {
+              "text": " ,"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "wmvDWFRFe8790l5EXlgT1",
+              "type": "smart-ref",
+              "blockId": "ZyuG3RHA7WZoMheYOi_Zi",
+              "columnId": "ZyuG3RHA7WZoMheYOi_Zi--0",
+              "lastSeenVariableName": "TenYearTreasury.Attribute"
+            },
+            {
+              "text": "  ==\"rate\").Value in %"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "ZeLs-vTrShcHT9Dlh3tLj"
+        }
+      ],
+      "id": "3G9koj6Tuw1OULI2cVj2G",
+      "type": "code_line_v2",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "m-eeMAaV4W8mu8ivUgFxC"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "dHoqzAXKCsM1F3QG7V3-T"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "WrCL4bsHQg9Y5x8PToswr"
+    }
+  ]
+}

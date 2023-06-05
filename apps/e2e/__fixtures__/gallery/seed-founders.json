@@ -1,0 +1,1741 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] Capitalisation table for seed founders"
+        }
+      ],
+      "type": "h1",
+      "id": "jsRtKayaRpbmFtg0mET0U"
+    },
+    {
+      "children": [
+        {
+          "text": "Raising capital is an important step for seed startups as it allows them to scale their business and bring their product or service to market. One key aspect of fundraising is the effect it has on a company's capitalization table, also known as a cap table. A cap table is a record of the equity ownership in a company and is used to track the distribution of shares and equity dilution. "
+        }
+      ],
+      "type": "p",
+      "id": "WVik1BfaRmiA7ir8lbG0E"
+    },
+    {
+      "children": [
+        {
+          "text": "Initial capitalisation"
+        }
+      ],
+      "type": "h3",
+      "id": "uPu9Tlgh8p6bflX85oS9u"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "MTD4PSkb9Hdw4DJAuWewO",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "In this article, we will take a closer look at how a round of fundraising can affect a startup's cap table, including the impact on the ownership structure and valuations."
+        }
+      ],
+      "type": "p",
+      "id": "CMjF_2Juh5fqn6RwD84S1"
+    },
+    {
+      "children": [
+        {
+          "text": "The following is a sample capitalization table that can be used as a reference. It is important to note that this table is for illustrative purposes. However, it can be used as a starting point for founders to edit and "
+        },
+        {
+          "text": "customize to match their own circumstances",
+          "highlight": true
+        },
+        {
+          "text": "."
+        }
+      ],
+      "type": "callout",
+      "id": "l3hdhgF-H1SISdTHGQGHP",
+      "color": "Sun",
+      "icon": "AnnotationWarning"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Founders"
+                }
+              ],
+              "id": "Nd73cowGxU0hgrQcs54ve",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "F6x8o0I9-SZ1NXDv177V_",
+                  "type": "smart-ref",
+                  "blockId": "EOX2cvbsi86pjVhQNRWnd",
+                  "columnId": null,
+                  "lastSeenVariableName": "Shares"
+                },
+                {
+                  "text": " / sum("
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "nugu4WZHpPPNrMwMF_uYh",
+                  "type": "smart-ref",
+                  "blockId": "4VtgkVbL8xGrDW2h7QyWk",
+                  "columnId": "EOX2cvbsi86pjVhQNRWnd",
+                  "lastSeenVariableName": "Founders.Shares"
+                },
+                {
+                  "text": ") in %"
+                }
+              ],
+              "id": "8N4zKHffRyrKHkhWbOstn",
+              "type": "table-column-formula",
+              "columnId": "3W-xxRIkDrF1A_rIjspWZ"
+            }
+          ],
+          "type": "table-caption",
+          "id": "V45ZyMae-yibt8kgjxLnI"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Holder"
+                }
+              ],
+              "type": "th",
+              "id": "9IYycXFXhbQRLGl2hOn-Z",
+              "cellType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Class"
+                }
+              ],
+              "type": "th",
+              "id": "YFdSagNAkdd6r2uBRmQJ_",
+              "cellType": {
+                "kind": "dropdown",
+                "id": "tK81TSfg3fFfR15wMiGYn",
+                "type": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Shares"
+                }
+              ],
+              "type": "th",
+              "id": "EOX2cvbsi86pjVhQNRWnd",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "unit": "shares",
+                    "exp": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "multiplier": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "known": false
+                  }
+                ]
+              },
+              "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": "Percentage"
+                }
+              ],
+              "type": "th",
+              "id": "3W-xxRIkDrF1A_rIjspWZ",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "aggregation": "Sum"
+            }
+          ],
+          "type": "tr",
+          "id": "nTlsMgkcApP_FyXlLQy44"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Sarah Johnson"
+                }
+              ],
+              "type": "td",
+              "id": "S11Pyafll-3mroImdLSfO"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lR_6Ay8LFuu9jui5zL8Jf"
+                }
+              ],
+              "type": "td",
+              "id": "-K54SYKGAjJ7vnevxCH8t"
+            },
+            {
+              "children": [
+                {
+                  "text": "4000000 shares"
+                }
+              ],
+              "type": "td",
+              "id": "SPXpJJ7qtdTcYusyJtakP"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "tB8jRsAK9lsFKgIlVgas5"
+            }
+          ],
+          "type": "tr",
+          "id": "QGNM_66pxw6Owqw0CimJM"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Michael Smith"
+                }
+              ],
+              "type": "td",
+              "id": "cdiysfkLuwT1qJj6YXAN0"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lR_6Ay8LFuu9jui5zL8Jf"
+                }
+              ],
+              "type": "td",
+              "id": "gm9CDTmsVDz7nyNXEamS-"
+            },
+            {
+              "children": [
+                {
+                  "text": "3000000"
+                }
+              ],
+              "type": "td",
+              "id": "bCxwIflCqG-79qKrf4OPe"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "aOsBVFmyT0WZjmVeWF0rF"
+            }
+          ],
+          "type": "tr",
+          "id": "05v2mQ1mvXfpJqHuZ7Xx2"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Alice Williams"
+                }
+              ],
+              "type": "td",
+              "id": "L8Anse2TGKZgerGC297mJ"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lR_6Ay8LFuu9jui5zL8Jf"
+                }
+              ],
+              "type": "td",
+              "id": "1jfWrbFGLNUR0xqiKm8Gn"
+            },
+            {
+              "children": [
+                {
+                  "text": "3000000"
+                }
+              ],
+              "type": "td",
+              "id": "nuCnkWB31xmAXcgNBWJnU"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "eiVr7V118_s5MPliQuHsQ"
+            }
+          ],
+          "type": "tr",
+          "id": "Ita_zFsbaRRDHFRX4KGrC"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "ESOP"
+                }
+              ],
+              "type": "td",
+              "id": "NCfTKFyLDZvxfC8jnJOch"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lR_6Ay8LFuu9jui5zL8Jf"
+                }
+              ],
+              "type": "td",
+              "id": "T869ojU7naYy3iPYKiLlq"
+            },
+            {
+              "children": [
+                {
+                  "text": "1000000"
+                }
+              ],
+              "type": "td",
+              "id": "aYNkuUCO_is5DJ6HH-iSJ"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "EURBMdgDitRqCXC508Xuu"
+            }
+          ],
+          "type": "tr",
+          "id": "1VfSfIU7SFrgfJUVflTFJ"
+        }
+      ],
+      "type": "table",
+      "id": "4VtgkVbL8xGrDW2h7QyWk",
+      "hideFormulas": true,
+      "version": 2
+    },
+    {
+      "children": [
+        {
+          "text": "An Employee Stock Ownership Plan (ESOP) is a benefit plan that allows employees to acquire a stake in the company they work for. In this example, we added the ESOP before the investment because that is the most typical setting in venture funding."
+        }
+      ],
+      "type": "p",
+      "id": "ka1L7GibSzmSSx9Lrdkju"
+    },
+    {
+      "children": [
+        {
+          "text": "When closing a venture round, a startup is essentially selling a percentage of their company in return for an investment amount. The percentage of the company being sold, known as the \"equity stake\", is determined by the valuation of the company. "
+        }
+      ],
+      "type": "p",
+      "id": "h8Ahxmz6jXf2iac57DmSI"
+    },
+    {
+      "children": [
+        {
+          "text": "Your round"
+        }
+      ],
+      "type": "h3",
+      "id": "ztc8nXtG3WDslmKIBI5tG"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "EOtNib5APPuoqHbNBeUf4",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "This document is a smart document powered by Decipad. You can customize it by entering your own inputs. "
+        },
+        {
+          "text": "The document will automatically update all references and accurately reflect your business.",
+          "highlight": true
+        }
+      ],
+      "type": "callout",
+      "id": "2x1h0Z3TvAH6jIBIZbX_p",
+      "color": "Sun",
+      "icon": "AnnotationWarning"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Investment"
+                }
+              ],
+              "id": "GX-xaZNCGyzkLhvLo0WAn",
+              "type": "caption",
+              "icon": "Wallet"
+            },
+            {
+              "children": [
+                {
+                  "text": "5000000 $"
+                }
+              ],
+              "id": "8vqVYY4WCGLAZsuA71thC",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "kuGdePoWPVoauqnZazKYd",
+              "type": "slider",
+              "max": "10000000",
+              "min": "200000",
+              "step": "100000",
+              "value": "5000000"
+            }
+          ],
+          "id": "FTlehV9v3taJF2ArMx0w7",
+          "type": "def",
+          "variant": "slider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "EquityStake"
+                }
+              ],
+              "id": "9q7rZAl4b-6PqVDMI8Jho",
+              "type": "caption",
+              "icon": "Percentage"
+            },
+            {
+              "children": [
+                {
+                  "text": "20%"
+                }
+              ],
+              "id": "tu-LFT7SgdEVU7vehxckn",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "L0R3uR2OMdZ4DLqeHB2nw",
+              "type": "slider",
+              "max": "40",
+              "min": "5",
+              "step": "1",
+              "value": "20"
+            }
+          ],
+          "id": "UVn4tlxsU6V-9JqRy32U6",
+          "type": "def",
+          "variant": "slider"
+        }
+      ],
+      "id": "Ozgf66Lmr263bsnGZoFZq",
+      "type": "columns"
+    },
+    {
+      "children": [
+        {
+          "text": "Valuation is the process of determining the worth of a business. The two key terms to understand in this context are pre-money valuation and post-money valuation."
+        }
+      ],
+      "type": "p",
+      "id": "ySYUkXB51jZuQ93Vfndtr"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Pre-money valuation is the valuation of a company before an investment is made. It represents the value of the company based on its assets, revenue, and future potential."
+                }
+              ],
+              "id": "t9YzAjQgagZF2jpm1gopL",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "IZKurkM404yURWNziJrG6"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Post-money valuation, on the other hand, takes into account the new investment and represents the value of the company after the investment has been made. The post-money valuation is calculated by adding the investment amount to the pre-money valuation."
+                }
+              ],
+              "id": "t9YzAjQgagZF2jpm1gopL",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "LI2m1AMYE5FBw8eudV6MC"
+        }
+      ],
+      "type": "ul",
+      "id": "KUA_AYJGlM4fDXkMMoTCa"
+    },
+    {
+      "children": [
+        {
+          "text": "Therefore, the equity stake being sold is determined by the difference between the post-money and pre-money valuations."
+        }
+      ],
+      "type": "p",
+      "id": "OccvvnnGF3eeLBQdMd-JQ"
+    },
+    {
+      "children": [
+        {
+          "text": "PreMoney = "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "MhP51I_KVw8qysf-yQ_Ve",
+          "type": "smart-ref",
+          "blockId": "FTlehV9v3taJF2ArMx0w7",
+          "lastSeenVariableName": "Investment"
+        },
+        {
+          "text": " / "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "l89eyhedkIX_ou7062yC5",
+          "type": "smart-ref",
+          "blockId": "UVn4tlxsU6V-9JqRy32U6",
+          "lastSeenVariableName": "EquityStake"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "id": "VVb1Tn7QfQN3lofjIYe8Z",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": "PostMoney = "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "8JNP23E6nm6JMziYT1KGf",
+          "type": "smart-ref",
+          "blockId": "VVb1Tn7QfQN3lofjIYe8Z",
+          "lastSeenVariableName": "PreMoney"
+        },
+        {
+          "text": " + "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "DqClhqkAINNHJ7k1uNHaT",
+          "type": "smart-ref",
+          "blockId": "FTlehV9v3taJF2ArMx0w7",
+          "lastSeenVariableName": "Investment"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "id": "ZvQHXWmovBsxTXiheLfId",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": "TotalShares = sum(Founders.Shares )"
+        }
+      ],
+      "id": "AdeVfEKLQqH5y83Cjju5z",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": "PPS = "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "1PgLNOIQadHtPL8w29uuE",
+          "type": "smart-ref",
+          "blockId": "VVb1Tn7QfQN3lofjIYe8Z",
+          "lastSeenVariableName": "PreMoney"
+        },
+        {
+          "text": " / "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "bWvPm-5us13HVgZhln5c5",
+          "type": "smart-ref",
+          "blockId": "AdeVfEKLQqH5y83Cjju5z",
+          "lastSeenVariableName": "TotalShares"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "id": "A-p7hIuz6j-t8-bXvTwk4",
+      "type": "code_line"
+    },
+    {
+      "children": [
+        {
+          "text": "In this example, the company is selling "
+        },
+        {
+          "text": "exprRef_UVn4tlxsU6V_9JqRy32U6",
+          "magicnumberz": true
+        },
+        {
+          "text": " of its equity stake in exchange for an investment of "
+        },
+        {
+          "text": "exprRef_FTlehV9v3taJF2ArMx0w7",
+          "magicnumberz": true
+        },
+        {
+          "text": ". The pre-money valuation of the company is "
+        },
+        {
+          "text": "exprRef_VVb1Tn7QfQN3lofjIYe8Z",
+          "magicnumberz": true
+        },
+        {
+          "text": " and the post-money valuation is "
+        },
+        {
+          "text": "exprRef_ZvQHXWmovBsxTXiheLfId",
+          "magicnumberz": true
+        },
+        {
+          "text": " ."
+        }
+      ],
+      "type": "p",
+      "id": "EqSTkPemtOQtQvKsIy1Xl"
+    },
+    {
+      "children": [
+        {
+          "text": "In a fundraising round, startups typically raise capital from a mix of institutional investors and angel investors. Institutional investors are typically large investment firms or venture capital firms, while angel investors are high net worth individuals who invest their own money in startups. "
+        }
+      ],
+      "type": "p",
+      "id": "Bb9204cJbqN21xYvABu8-"
+    },
+    {
+      "children": [
+        {
+          "text": "A common difference between institutional investors and angel investors is that institutional investors typically receive preference shares, while angel investors do not."
+        }
+      ],
+      "type": "p",
+      "id": "wpDTIp1MnL_K1Bp1ASYuZ"
+    },
+    {
+      "children": [
+        {
+          "text": "The price per share is the value of one share of stock in a company. It is determined by dividing the total value of the company by the total number of shares outstanding (PPS). In this example, the price per share is "
+        },
+        {
+          "text": "exprRef_A_p7hIuz6j_t8_bXvTwk4",
+          "magicnumberz": true
+        },
+        {
+          "text": ". This means that each share of the company is worth "
+        },
+        {
+          "text": "exprRef_A_p7hIuz6j_t8_bXvTwk4",
+          "magicnumberz": true
+        },
+        {
+          "text": "."
+        }
+      ],
+      "type": "p",
+      "id": "2F0cemRyseqR6atj6G19b"
+    },
+    {
+      "children": [
+        {
+          "text": "Preference shares are a type of stock that gives the holder certain rights and privileges over common stockholders. These rights can include priority in receiving dividends or in the event of a liquidation, as well as the ability to convert their shares into common stock at a predetermined price. "
+        }
+      ],
+      "type": "callout",
+      "id": "wFnti1mCZOZHXwn5T3QWN",
+      "color": "Malibu",
+      "icon": "Paperclip"
+    },
+    {
+      "children": [
+        {
+          "text": "It's important to note that preference shares are not a must have in every round, and it will depend on the company and the investors' preferences and negotiation. Also, preference shares can have different rights and privileges depending on the company, it's important to consult with a lawyer or an experienced advisor."
+        }
+      ],
+      "type": "p",
+      "id": "6H46ex7XB_PeFonw6KG9x"
+    },
+    {
+      "children": [
+        {
+          "text": "Allocations"
+        }
+      ],
+      "type": "h3",
+      "id": "12xvrkqCCh8XEpl9xxEIb"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "XLO9aFv5czgVA6Z63invW",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "The allocation table shown below allows users to customize the equity structure of their company to their particular circumstances. They can input the percentage of the company that is sold to institutional investors and the percentage of the company that is sold to angel investors. "
+        }
+      ],
+      "type": "p",
+      "id": "DHcVdOei9JQfZP4hnImCY"
+    },
+    {
+      "children": [
+        {
+          "text": "The table will then automatically update and reflect the new ownership structure of the company. "
+        }
+      ],
+      "type": "p",
+      "id": "RG6RhkBemBOcP-xpyeZ6l"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Allocations"
+                }
+              ],
+              "id": "826F5GrDjtnGKdpjGwojA",
+              "type": "table-var-name"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "a-mGG7P98319PlRXD7url",
+                  "type": "smart-ref",
+                  "blockId": "AdeVfEKLQqH5y83Cjju5z",
+                  "lastSeenVariableName": "TotalShares"
+                },
+                {
+                  "text": "  * "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "jqwDewsMfmLu5bl_ajY6O",
+                  "type": "smart-ref",
+                  "blockId": "UVn4tlxsU6V-9JqRy32U6",
+                  "lastSeenVariableName": "EquityStake"
+                },
+                {
+                  "text": " * "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "8emFjke_S9g2cXCo3fqty",
+                  "type": "smart-ref",
+                  "blockId": "Jpv7N9DdwqWeHnvPMOPk1",
+                  "columnId": null,
+                  "lastSeenVariableName": "Percentage"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "7DAK1Jxc0XYjCPNe2rN4u",
+              "type": "table-column-formula",
+              "columnId": "5BeperCnkNGVsFHx-Zc_1"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "TQ5Np7lQKrvSD9b91NZYw",
+                  "type": "smart-ref",
+                  "blockId": "5BeperCnkNGVsFHx-Zc_1",
+                  "columnId": null,
+                  "lastSeenVariableName": "Shares"
+                },
+                {
+                  "text": " * "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "aZGfWWKjmhE5Kw_-8nEXe",
+                  "type": "smart-ref",
+                  "blockId": "A-p7hIuz6j-t8-bXvTwk4",
+                  "lastSeenVariableName": "PPS"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "id": "dgu7sqAwHS-rvU3AhEn5f",
+              "type": "table-column-formula",
+              "columnId": "KmWJJ1-Ovwnz5qK9Sgo6P"
+            }
+          ],
+          "type": "table-caption",
+          "id": "FAJIWTW_GNcFi2eUDkJet"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Holder"
+                }
+              ],
+              "type": "th",
+              "id": "wkBsNWdLSQCTrPhQIYTs_",
+              "cellType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Class"
+                }
+              ],
+              "type": "th",
+              "id": "qk1zDETbk9-5wpFiPgeim",
+              "cellType": {
+                "kind": "dropdown",
+                "id": "tK81TSfg3fFfR15wMiGYn",
+                "type": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Percentage"
+                }
+              ],
+              "type": "th",
+              "id": "Jpv7N9DdwqWeHnvPMOPk1",
+              "cellType": {
+                "kind": "number",
+                "unit": null
+              },
+              "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": "Shares"
+                }
+              ],
+              "type": "th",
+              "id": "5BeperCnkNGVsFHx-Zc_1",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": "Investment"
+                }
+              ],
+              "type": "th",
+              "id": "KmWJJ1-Ovwnz5qK9Sgo6P",
+              "cellType": {
+                "kind": "table-formula"
+              },
+              "aggregation": "Sum"
+            }
+          ],
+          "type": "tr",
+          "id": "sx4ZTOGIcI710ZlRAwoGE"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Horizon Ventures"
+                }
+              ],
+              "type": "td",
+              "id": "epHlccaizr-_xJCSpHT72"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_GouQyDPKke0fiOZVki3_u"
+                }
+              ],
+              "type": "td",
+              "id": "eAZye0-6r8RKSNl6zyGMo"
+            },
+            {
+              "children": [
+                {
+                  "text": "25 %"
+                }
+              ],
+              "type": "td",
+              "id": "7NfeMMrOfEG3KJ_RrCp9I"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "46Fep5Nk35X0tCPDe1qPA"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "WYoUmCwWwYk4IF9k2jPam"
+            }
+          ],
+          "type": "tr",
+          "id": "LDYartms8DjljLbSchqdP"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Michael Brown "
+                }
+              ],
+              "type": "td",
+              "id": "T7k4Fh0K_nb7TfBldj-kC"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lR_6Ay8LFuu9jui5zL8Jf"
+                }
+              ],
+              "type": "td",
+              "id": "duEUPJ_CXe0fkb5oWpZth"
+            },
+            {
+              "children": [
+                {
+                  "text": "15 %"
+                }
+              ],
+              "type": "td",
+              "id": "Jr02tfwpwDYBzTc3Uwhi-"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "alcWj2qBnH_EQ0lnp3MS5"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "p4qpNDE9ATmzutBBb9zUo"
+            }
+          ],
+          "type": "tr",
+          "id": "UXJz-kbAiYCV5mqq-RmUb"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Tech Growth Capital"
+                }
+              ],
+              "type": "td",
+              "id": "pspvdkbyVBVSam2MpStpi"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_GouQyDPKke0fiOZVki3_u"
+                }
+              ],
+              "type": "td",
+              "id": "RDAk2n7hK85JZ_dzK2peP"
+            },
+            {
+              "children": [
+                {
+                  "text": "20 %"
+                }
+              ],
+              "type": "td",
+              "id": "qP53edRhmBZHm3SOUaE8U"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "oPhphXw4bbY9vRYvMIcaV"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "Ibl0TsmEOnpSu_c2MqXp9"
+            }
+          ],
+          "type": "tr",
+          "id": "Bv9lzPV3OEku25Jb8hDQQ"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Sarah Lee"
+                }
+              ],
+              "type": "td",
+              "id": "3MLgcdZo16kTEZlcY8Vea"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lR_6Ay8LFuu9jui5zL8Jf"
+                }
+              ],
+              "type": "td",
+              "id": "iufs21IXqgkl3jRhvzVFk"
+            },
+            {
+              "children": [
+                {
+                  "text": "15 %"
+                }
+              ],
+              "type": "td",
+              "id": "vn-TaqcQuj8RNuFYtf5_y"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "iRvrj5ssS_GPMc-8yQQ-q"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "E0aI1BdXTbldxQOFWvosp"
+            }
+          ],
+          "type": "tr",
+          "id": "Zghz0qaoEek7OCo6vog0S"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Peak Capital"
+                }
+              ],
+              "type": "td",
+              "id": "vWim37ECueSa9YHa11neU"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_GouQyDPKke0fiOZVki3_u"
+                }
+              ],
+              "type": "td",
+              "id": "R2u_wmsoYVd943UrtbZv0"
+            },
+            {
+              "children": [
+                {
+                  "text": "25 %"
+                }
+              ],
+              "type": "td",
+              "id": "KVBl-tpWAxAyuPq-naB4r"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "XnymwFRF8U2Ic3foQuezt"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "type": "td",
+              "id": "VyEIU8cGFlYva2GLxH1ko"
+            }
+          ],
+          "type": "tr",
+          "id": "E5VtZa4YWFeDiQpCLM8xJ"
+        }
+      ],
+      "type": "table",
+      "id": "oxsvH18KL5Qk8S7Ykjby_",
+      "hideFormulas": true,
+      "version": 2
+    },
+    {
+      "children": [
+        {
+          "text": "New capitalisation table"
+        }
+      ],
+      "type": "h3",
+      "id": "xESwssbrBor9sV8GFccmT"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "UlOO-SOxaN5mOUfC4r14F",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "The table below represents the company's capitalization table after the allocations of the recent fundraising round have been finalised and the round has been closed. "
+        }
+      ],
+      "id": "jX92LlFZTnt3pkqy1SpVv",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "This table shows the distribution of shares and equity among the shareholders, including the company's founders, investors, and employee stock ownership plan (ESOP) participants. It also reflects the changes in the ownership structure and valuation of the company as a result of the recent round of fundraising. "
+        }
+      ],
+      "id": "WH7csQWMcgnkXZ4basPAA",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Cap Table"
+                }
+              ],
+              "id": "mMgBq7M55qHPA_Q2SK_Kl",
+              "type": "data-view-name"
+            }
+          ],
+          "id": "42xS2pTrcG8yr8UlHXdH5",
+          "type": "data-view-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "kDoggGlZRHW7r-NJTUI_k",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "string"
+              },
+              "name": "Type"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "D5TbHt3OdnLmBYM_RUfgb",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "string"
+              },
+              "name": "Holder"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "i-7sfEOXmJy2IJwBGfZYb",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "unit": "shares",
+                    "exp": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "multiplier": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "known": false
+                  }
+                ]
+              },
+              "name": "Shares",
+              "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "8DSGlLe2FGzaxO3w_xx_-",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "number",
+                "numberFormat": "percentage"
+              },
+              "name": "7UUaPUDfA3rI8AuYdxBys",
+              "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "vNW8cXbSjIB7yJfXTIxsk",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "unit": "$",
+                    "exp": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "multiplier": {
+                      "n": "1",
+                      "d": "1",
+                      "s": "1",
+                      "infinite": false
+                    },
+                    "known": true,
+                    "baseQuantity": "USD",
+                    "baseSuperQuantity": "currency"
+                  }
+                ]
+              },
+              "name": "YEJCV0J64018xriTyBP_S",
+              "aggregation": "Sum"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "PToJ-ufUf2XxZ4ubF9uEs",
+              "type": "data-view-th",
+              "cellType": {
+                "kind": "string"
+              },
+              "name": "Class"
+            }
+          ],
+          "id": "BDxgrVxQvoTCFD-9psQsZ",
+          "type": "data-view-tr"
+        }
+      ],
+      "id": "fPQZ3RrPR1bsYb4aP5BNi",
+      "type": "data-view",
+      "expandedGroups": [
+        "5e9eb35e44545b214748145d296ccc3ee25222e4744fcff272a157cb34da235d",
+        "23ae45f425f70190f749315697c51cea6da1e32d0d4da8ae9fd079aa25edbf19"
+      ],
+      "varName": "_lu8bjAbBxiVdA9tIx8Pk"
+    },
+    {
+      "children": [
+        {
+          "text": "Key Takeways"
+        }
+      ],
+      "id": "gKMp0NBppgIPUqwyK1HMz",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "GD7I_dwbSeB-PRvLLHFYI",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "A capitalization table is an essential tool for seed startups to understand the impact of fundraising on their ownership structure and valuations. "
+        }
+      ],
+      "type": "p",
+      "id": "3tvJyqrVmHGpOnLJzpCGC"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "A capitalization table is a record of the equity ownership in a company and is used to track the distribution of shares and equity dilution."
+                }
+              ],
+              "type": "lic",
+              "id": "3tvJyqrVmHGpOnLJzpCGC"
+            }
+          ],
+          "type": "li",
+          "id": "IGJlPqvrxWx9mSUQF4QaK"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Employee Stock Ownership Plans (ESOPs) are a way for employees to acquire a stake in the company they work for, and they can be added before the investment, which is a typical setting in venture funding."
+                }
+              ],
+              "type": "lic",
+              "id": "3tvJyqrVmHGpOnLJzpCGC"
+            }
+          ],
+          "type": "li",
+          "id": "-E9fYoZEhsJk7rj7b_Ugo"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": " Valuation, pre-money and post-money, the type of investors, and preference shares all affect the capitalization table and it's important for founders to understand these concepts in order to make informed decisions about fundraising and equity distribution."
+                }
+              ],
+              "type": "lic",
+              "id": "3tvJyqrVmHGpOnLJzpCGC"
+            }
+          ],
+          "type": "li",
+          "id": "Ip6SS8dwm9gQ4slh4irCl"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "By using a smart document like Decipad, founders can input their own data and simulate their capitalization table while fundraising, which allows them to better understand the impact of fundraising on their ownership structure and valuations."
+                }
+              ],
+              "type": "lic",
+              "id": "3tvJyqrVmHGpOnLJzpCGC"
+            }
+          ],
+          "type": "li",
+          "id": "q4l-RQZMhlQEB0OdvlIOo"
+        }
+      ],
+      "type": "ul",
+      "id": "oxN5ezbUG5OEQQw3xScnu"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "9Ju78ieXmkwAukSnSHDR2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "x-HvCwKuj2aUrFSfM_0pw",
+      "type": "divider",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ShareClass"
+            }
+          ],
+          "id": "HNC1cokJHmgtu-spwZfzF",
+          "type": "caption"
+        },
+        {
+          "children": [
+            {
+              "text": "Select"
+            }
+          ],
+          "id": "9C-IgJATEfxYr_07amDBp",
+          "type": "dropdown",
+          "options": [
+            {
+              "id": "GouQyDPKke0fiOZVki3-u",
+              "value": "Preference"
+            },
+            {
+              "id": "lR-6Ay8LFuu9jui5zL8Jf",
+              "value": "Common"
+            }
+          ]
+        }
+      ],
+      "id": "tK81TSfg3fFfR15wMiGYn",
+      "type": "def",
+      "variant": "dropdown",
+      "coerceToType": {
+        "kind": "string"
+      },
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "InitialStakeHolders = {\n  Holder = Founders.Holder \n  Class = Founders.Class \n  Shares = Founders.Shares \n  Type = if Holder == \"ESOP\" then \"Employee\" else \"Founder\"\n}"
+        }
+      ],
+      "id": "pe_FDBtTOr0n-SSq6fKX_",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "NewRound = {\n  Holder = Allocations.Holder \n  Class = Allocations.Class \n  Shares = Allocations.Shares  \n  Type = \"Investor\"\n}"
+        }
+      ],
+      "id": "jcHzlY3Jjq73U_K878Jdd",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Cap = concatenate("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "LtGy_kcjuHLYl0OGrD-iV",
+          "type": "smart-ref",
+          "blockId": "pe_FDBtTOr0n-SSq6fKX_",
+          "lastSeenVariableName": "InitialStakeHolders"
+        },
+        {
+          "text": ", "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "Sv1WvFNKejZUCyfaTgCdz",
+          "type": "smart-ref",
+          "blockId": "jcHzlY3Jjq73U_K878Jdd",
+          "lastSeenVariableName": "NewRound"
+        },
+        {
+          "text": ")"
+        }
+      ],
+      "id": "_lu8bjAbBxiVdA9tIx8Pk",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "P4HParZLS6V_5FMJYW08n",
+          "type": "smart-ref",
+          "blockId": "_lu8bjAbBxiVdA9tIx8Pk",
+          "lastSeenVariableName": "Cap"
+        },
+        {
+          "text": ".Percentage = Shares / Sum("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "7ZqDPZBcH1tDFhPOzjobA",
+          "type": "smart-ref",
+          "blockId": "_lu8bjAbBxiVdA9tIx8Pk",
+          "lastSeenVariableName": "Cap"
+        },
+        {
+          "text": ".Shares) in %"
+        }
+      ],
+      "id": "7UUaPUDfA3rI8AuYdxBys",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "eT9vYSFw5YYVkw9yaFaFM",
+          "type": "smart-ref",
+          "blockId": "_lu8bjAbBxiVdA9tIx8Pk",
+          "lastSeenVariableName": "Cap"
+        },
+        {
+          "text": ".Value = "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "Z6DoFNNTSVRfBvfYySm5y",
+          "type": "smart-ref",
+          "blockId": "ZvQHXWmovBsxTXiheLfId",
+          "lastSeenVariableName": "PostMoney"
+        },
+        {
+          "text": "  * Percentage"
+        }
+      ],
+      "id": "YEJCV0J64018xriTyBP_S",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "S6jEJ2Jpk3Soq3zjozy7v"
+    }
+  ]
+}

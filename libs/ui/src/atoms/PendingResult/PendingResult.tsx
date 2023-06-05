@@ -6,7 +6,7 @@ import { Tooltip } from '../Tooltip/Tooltip';
 
 export const PendingResult: FC<CodeResultProps<'pending'>> = () => {
   const trigger = (
-    <span css={resultLoadingIconStyles}>
+    <span data-test-id="loading-results" css={resultLoadingIconStyles}>
       <Loading />
     </span>
   );

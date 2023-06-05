@@ -1,0 +1,1284 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] Offer Letter"
+        }
+      ],
+      "type": "h1",
+      "id": "K0SAwU4NOwRwqnPn_kSzD"
+    },
+    {
+      "children": [
+        {
+          "text": "This is sample data only. Duplicate this template for your company. "
+        }
+      ],
+      "type": "callout",
+      "icon": "Beach",
+      "id": "dkmVJMU7RpWtVPD6GcVRB",
+      "color": "Catskill"
+    },
+    {
+      "children": [
+        {
+          "text": "To: "
+        },
+        {
+          "text": "Person",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "2_RqYgzx1nlZ_5kH1ZMXl"
+    },
+    {
+      "children": [
+        {
+          "text": "Congratulations!"
+        }
+      ],
+      "type": "p",
+      "id": "lJg5AayM5xcdnPDh2HI3K"
+    },
+    {
+      "children": [
+        {
+          "text": "We are excited to offer you a position as a "
+        },
+        {
+          "text": "Position",
+          "magicnumberz": true
+        },
+        {
+          "text": " at Company. 🎉 "
+        }
+      ],
+      "type": "p",
+      "id": "h4HXf_ZP0l5X96EfhXIXJ"
+    },
+    {
+      "children": [
+        {
+          "text": "Our team was super impressed by you. We think you will be a great fit for our team and product, and we're excited to start working together."
+        }
+      ],
+      "type": "p",
+      "id": "pkEU8OqAaR70h97wPZXqX"
+    },
+    {
+      "children": [
+        {
+          "text": "-The Company Team"
+        }
+      ],
+      "type": "p",
+      "id": "VxPuaqAsY3yceMCbnl-YE"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "divider",
+      "id": "HOYWO-ucx0oS652H9wrQg"
+    },
+    {
+      "children": [
+        {
+          "text": "Compensation Packages"
+        }
+      ],
+      "type": "h2",
+      "id": "5zS4l9B_L47A4NgZlLn00"
+    },
+    {
+      "children": [
+        {
+          "text": "At Decipad "
+        },
+        {
+          "text": "we believe a small team can have a big impact",
+          "highlight": true
+        },
+        {
+          "text": ".  Equity is the way for you to share the upside of what we achieve together. "
+        }
+      ],
+      "type": "p",
+      "id": "Ky2vA7tV9RCeuz-hRWTIC"
+    },
+    {
+      "children": [
+        {
+          "text": "We even created this notebook on "
+        },
+        {
+          "children": [
+            {
+              "text": "how startup equity works"
+            }
+          ],
+          "type": "a",
+          "url": "https://alpha.decipad.com/n/Understanding-your-stock-options-at-Decipad-%3A7QSPYXQ2V9IhSTjIhi0LL",
+          "id": "u3n9S8koKIeyn5wDpKmO0"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "ngmQFD4RUNZHMKNXZ5bIi"
+    },
+    {
+      "children": [
+        {
+          "text": "At the last round, we had a share price of "
+        },
+        {
+          "text": "SharePrice",
+          "magicnumberz": true
+        },
+        {
+          "text": " . Our pre-funding valuation was about "
+        },
+        {
+          "text": "Valuation",
+          "magicnumberz": true
+        },
+        {
+          "text": " . "
+        }
+      ],
+      "type": "p",
+      "id": "EeiROpp3AAwd0xkFV9lcv"
+    },
+    {
+      "children": [
+        {
+          "text": "SharePrice = $2.50 /option"
+        }
+      ],
+      "type": "code_line",
+      "id": "QNTuai4S-X73LeDGhDeJI"
+    },
+    {
+      "children": [
+        {
+          "text": "Valuation = $100000000 "
+        }
+      ],
+      "type": "code_line",
+      "id": "Rqqj9THVBj5zTl0xUwj8o"
+    },
+    {
+      "children": [
+        {
+          "text": "These are the compensation packages we are willing to offer you. \nEquity Value is a function of our last raise."
+        }
+      ],
+      "type": "p",
+      "id": "fJOQJxR33SuZhsgtiaPxI"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Compensation"
+                }
+              ],
+              "type": "table-var-name",
+              "id": "6r2yPtYAiX23vvNi_64Zm"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "54s6bekBcKwJzy4eN7Ag8",
+                  "type": "smart-ref",
+                  "blockId": "QNTuai4S-X73LeDGhDeJI",
+                  "lastSeenVariableName": "SharePrice"
+                },
+                {
+                  "text": "* "
+                },
+                {
+                  "lastSeenVariableName": "Equity",
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "3_stEWEZ7ZdhXplNii6N2",
+                  "type": "smart-ref",
+                  "blockId": "6qTIoNXNi-wi1k0RnpALE",
+                  "columnId": null
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "table-column-formula",
+              "columnId": "_99sGBPFDhwPH7Cb8ug7Z",
+              "id": "NC3HSxDk2Vtb9YKmZkOP9"
+            }
+          ],
+          "type": "table-caption",
+          "id": "MjLZh2dImHzzbaExzLcrC"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Package"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "string"
+              },
+              "id": "F7p2CbBjL93HDMdHyPnu0"
+            },
+            {
+              "children": [
+                {
+                  "text": "Equity"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "unit": "options",
+                    "exp": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "multiplier": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "known": false
+                  }
+                ]
+              },
+              "id": "6qTIoNXNi-wi1k0RnpALE"
+            },
+            {
+              "children": [
+                {
+                  "text": "Base"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "number",
+                "unit": [
+                  {
+                    "exp": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "multiplier": {
+                      "s": "1",
+                      "n": "1",
+                      "d": "1"
+                    },
+                    "known": true,
+                    "unit": "usdollar",
+                    "baseSuperQuantity": "currency",
+                    "baseQuantity": "usdollar"
+                  }
+                ]
+              },
+              "id": "81w1isdP72QoqeMx6Xr8F"
+            },
+            {
+              "children": [
+                {
+                  "text": "EquityValue"
+                }
+              ],
+              "id": "_99sGBPFDhwPH7Cb8ug7Z",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            }
+          ],
+          "type": "tr",
+          "id": "NyhBpH7oLbyVt6lUJOi56"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Package #1"
+                }
+              ],
+              "type": "td",
+              "id": "arK0wrQRtel6xsNn3Hnd9"
+            },
+            {
+              "children": [
+                {
+                  "text": "25000"
+                }
+              ],
+              "type": "td",
+              "cellType": {
+                "kind": "string"
+              },
+              "id": "Je9XFX4VnhMd-uTj37Qnm"
+            },
+            {
+              "children": [
+                {
+                  "text": "$80 000"
+                }
+              ],
+              "type": "td",
+              "id": "YtRgB2lX94oe0X8XlJXtN"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "axAe0czJI-B2qUQueuUVL",
+              "type": "td",
+              "cellType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "type": "tr",
+          "id": "es2LPCamGa9m8y44z6T_D"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Package #2"
+                }
+              ],
+              "type": "td",
+              "id": "67U6k2b2ouJ8REt1YnhRL"
+            },
+            {
+              "children": [
+                {
+                  "text": "20000"
+                }
+              ],
+              "type": "td",
+              "cellType": {
+                "kind": "string"
+              },
+              "id": "f992Gd6VmvEVhJgpMrPUS"
+            },
+            {
+              "children": [
+                {
+                  "text": "$90 000"
+                }
+              ],
+              "type": "td",
+              "id": "kxCKwmxC-_VXDwaw1E8Y8"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "XB-Q3ksQppvYCIaXgPTXN",
+              "type": "td",
+              "cellType": {
+                "kind": "string"
+              }
+            }
+          ],
+          "type": "tr",
+          "id": "nXIXAzCeIasNCd1Sjy6ZV"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Package #3"
+                }
+              ],
+              "id": "12jUbsgC4L8pJvJq5jIZ2",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "10000"
+                }
+              ],
+              "id": "EBLGUhkiDiK0zA9JRFDyC",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "$100 000"
+                }
+              ],
+              "id": "29lepcIqHLxu_lnj3s3KK",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "A1UcJkH7kgVPODMcnYXt6",
+              "type": "td"
+            }
+          ],
+          "type": "tr",
+          "id": "QfLAmi9SjT5cenvAsF4_x"
+        }
+      ],
+      "type": "table",
+      "color": "Malibu",
+      "icon": "Wallet",
+      "id": "sCUMVRzddIEsZFaBCtkdq",
+      "hideFormulas": true,
+      "version": 2
+    },
+    {
+      "children": [
+        {
+          "text": "The EquityValue is how much an investor had to pay for the same number of shares you get."
+        }
+      ],
+      "type": "callout",
+      "color": "Perfume",
+      "icon": "Announcement",
+      "id": "JgVhohvoNShUmYqUJfBwV"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "HYMQfd-51WhuesOhGJBUS"
+    },
+    {
+      "children": [
+        {
+          "text": "The terms"
+        }
+      ],
+      "type": "h3",
+      "id": "NytwJZZDSDcVqvjF1OD6g"
+    },
+    {
+      "children": [
+        {
+          "text": "Your  "
+        },
+        {
+          "text": "Strike Price",
+          "highlight": true
+        },
+        {
+          "text": " is "
+        },
+        {
+          "text": "StrikePrice",
+          "magicnumberz": true
+        },
+        {
+          "text": " . That means that to acquire "
+        },
+        {
+          "text": "Options",
+          "magicnumberz": true
+        },
+        {
+          "text": " you would have to pay "
+        },
+        {
+          "text": "OptionsPrice",
+          "magicnumberz": true
+        },
+        {
+          "text": " ."
+        }
+      ],
+      "type": "p",
+      "id": "ExWSPoCbC0prk8zHrrrqQ"
+    },
+    {
+      "children": [
+        {
+          "text": "Standard Vesting",
+          "highlight": true
+        },
+        {
+          "text": " happens over 4 years, with a 12-month cliff. 25% of your options will vest 12 months after the vesting commencement date. From then on, you vest 1/48th of your options every month for the remaining three years. "
+        }
+      ],
+      "type": "p",
+      "id": "zj1Z_0MkYmawNjIearcIS"
+    },
+    {
+      "children": [
+        {
+          "text": "How can your equity grow?"
+        }
+      ],
+      "type": "h3",
+      "id": "5X9dx3IOMRZ9mTa9RkBl6"
+    },
+    {
+      "children": [
+        {
+          "text": "We don't know how much Decipad will be worth in the future. Our vision is to build a product that "
+        },
+        {
+          "text": "changes the world's relationship with numbers.",
+          "highlight": true
+        },
+        {
+          "text": " If we do this, we believe value will follow and that early members of the team should share in that success. Below, you can see some potential exit scenarios for your equity: From the expectation of a VC fund to a potential IPO. "
+        }
+      ],
+      "type": "p",
+      "id": "LhPaV6ctEzfsTXM9r626w"
+    },
+    {
+      "children": [
+        {
+          "text": "Play around with different scenarios by changing the multipliers. Or, add a new scenario. The model will automatically update. "
+        }
+      ],
+      "type": "p",
+      "id": "2_OmbdifWhAcXTYUplBik"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "PotentialExit"
+                }
+              ],
+              "type": "table-var-name",
+              "id": "1j6pXpsYni-ivCqsrxHS7"
+            },
+            {
+              "children": [
+                {
+                  "text": " Compensation.Equity * "
+                },
+                {
+                  "lastSeenVariableName": "Multiplier",
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "pwQvjFTm7UnRewZQqi1i4",
+                  "type": "smart-ref",
+                  "blockId": "HgqUyYLRaL-bKrowcTceL",
+                  "columnId": null
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "qi87_ktCHocRguuhplq09",
+              "type": "table-column-formula",
+              "columnId": "ajDKR6sbYsKQeSaEjkS05"
+            },
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "lastSeenVariableName": "Package",
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "y0_o5OeGaupBlhjGlOX0o",
+                  "type": "smart-ref",
+                  "blockId": "ajDKR6sbYsKQeSaEjkS05",
+                  "columnId": null
+                },
+                {
+                  "text": " * "
+                },
+                {
+                  "children": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "id": "O-asjIDz7KutfKUdIetX5",
+                  "type": "smart-ref",
+                  "blockId": "QNTuai4S-X73LeDGhDeJI",
+                  "lastSeenVariableName": "SharePrice"
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "jPz37JxTcgaZA-6D3quBY",
+              "type": "table-column-formula",
+              "columnId": "aedxxcsTzGaN3QpMNgiY9"
+            }
+          ],
+          "type": "table-caption",
+          "id": "DhZnsKYYhDtjAP2uEzswW"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Scenario"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "string"
+              },
+              "id": "nhW48UrpXqpNGc83Nriwa"
+            },
+            {
+              "children": [
+                {
+                  "text": "Multiplier"
+                }
+              ],
+              "type": "th",
+              "cellType": {
+                "kind": "number"
+              },
+              "id": "HgqUyYLRaL-bKrowcTceL"
+            },
+            {
+              "children": [
+                {
+                  "text": "Package"
+                }
+              ],
+              "id": "ajDKR6sbYsKQeSaEjkS05",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Outcome"
+                }
+              ],
+              "id": "aedxxcsTzGaN3QpMNgiY9",
+              "type": "th",
+              "cellType": {
+                "kind": "table-formula"
+              }
+            }
+          ],
+          "type": "tr",
+          "id": "ID9IYsKNdBv7BKscpZRA_"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "💩 Fun while it lasted"
+                }
+              ],
+              "id": "5H-Z3dwI2JebYVKj5Ibdq",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "3"
+                }
+              ],
+              "id": "GCJ3AJIqkgZAxsNQoGaXN",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "9cO8fLUIEhwI0yRyTcLz8",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "vds-T0E0p-jJ5dBDiAsfU",
+              "type": "td"
+            }
+          ],
+          "type": "tr",
+          "id": "IOy1t8AE24ZjJU21vCY0z"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "🌱 Typical VC Return"
+                }
+              ],
+              "type": "td",
+              "id": "PCAJnp4_7gQ698A9mzVwK"
+            },
+            {
+              "children": [
+                {
+                  "text": "10"
+                }
+              ],
+              "type": "td",
+              "id": "EFBINVf7_07jEX_5zLtEm"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "c6UYfm3Sltuq4jnkrFE9M",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "uvmVhM9lp-mvZ0EZ9XItc",
+              "type": "td"
+            }
+          ],
+          "type": "tr",
+          "id": "M-iw7R5orq7GPAWU2MGGC"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "🦄 Unicorn"
+                }
+              ],
+              "type": "td",
+              "id": "pJin2vj3wv4CiClxRinT2"
+            },
+            {
+              "children": [
+                {
+                  "text": "67"
+                }
+              ],
+              "type": "td",
+              "id": "7BqSRIDHR2IChCDGuDGbD"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1nIPkPxmBd4rRcPKzJu_k",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Vw2tkzXiesg393XM0KmjB",
+              "type": "td"
+            }
+          ],
+          "type": "tr",
+          "id": "m5LiPm-lbWHmlcbUTU5Ga"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "🔥 IPO"
+                }
+              ],
+              "type": "td",
+              "id": "gg6fEyfaVCiBWMOXDyqJ4"
+            },
+            {
+              "children": [
+                {
+                  "text": "100"
+                }
+              ],
+              "type": "td",
+              "id": "-_hz8dilKZ07QKeX9QOax"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "hw_eKEdqCGhoKgj4f3Fez",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "JF1vc8kCGKK3YYeWTj0tg",
+              "type": "td"
+            }
+          ],
+          "type": "tr",
+          "id": "-tT0ov6F-HFQ5BG9yIBIp"
+        }
+      ],
+      "type": "table",
+      "id": "x0wSZKqup6Uqs2bJLXJgu",
+      "hideFormulas": true,
+      "version": 2
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "divider",
+      "id": "wwNidUCUFtSgvE0ajb12n"
+    },
+    {
+      "children": [
+        {
+          "text": "FAQ"
+        }
+      ],
+      "type": "h3",
+      "id": "SoGRm9xdu6j8_PzV9kX0G"
+    },
+    {
+      "children": [
+        {
+          "text": "How was the strike price determined?",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "wa639We18misAFAZAQqV_"
+    },
+    {
+      "children": [
+        {
+          "text": "The strike price was calculated by an independent third party. At Decipad we use Carta, a 3rd party partner and platform to manage equity. "
+        }
+      ],
+      "type": "p",
+      "id": "u9EXH5v_LNfBvvPR9Qw8F"
+    },
+    {
+      "children": [
+        {
+          "text": "Can my ownership change?",
+          "bold": true
+        }
+      ],
+      "type": "p",
+      "id": "7NR3VWse4C1SkJHjdLjzv"
+    },
+    {
+      "children": [
+        {
+          "text": "Yes. Subsequent funding rounds may reduce your ownership percentage. However, the expectation is that we use Decipad's funding to build a better business. That normally translates into a higher price per share. "
+        }
+      ],
+      "type": "p",
+      "id": "ivqyihsX-XY9uMH7hxgc1"
+    },
+    {
+      "children": [
+        {
+          "text": "Your ownership may also increase. We may reward options for strong performance."
+        }
+      ],
+      "type": "p",
+      "id": "cnpKHS7Dd1qBMDzgZCNXJ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "Wy0REYUgpCc0u1qzPFwlO"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "divider",
+      "id": "CNZ3bNdyESozU9qHb9MnC"
+    },
+    {
+      "children": [
+        {
+          "text": "Next steps"
+        }
+      ],
+      "type": "h3",
+      "id": "sGAWemK6ABI6xHghLQeMa"
+    },
+    {
+      "children": [
+        {
+          "text": "Thanks for taking the time to speak to us. Review the different offers and let us know which scenario best meets your needs. If you need any clarification, feel free to reach out."
+        }
+      ],
+      "type": "p",
+      "id": "5QUfRzVVAwpp0uCKCeJre"
+    },
+    {
+      "children": [
+        {
+          "text": "We hope you join us. We can't wait to see the things "
+        },
+        {
+          "text": "we will build together",
+          "highlight": true
+        },
+        {
+          "text": "!"
+        }
+      ],
+      "type": "p",
+      "id": "KawbM_przwLXOFyG-F09S"
+    },
+    {
+      "children": [
+        {
+          "text": "—The Team at Decipad"
+        }
+      ],
+      "type": "p",
+      "id": "omyjMu4ILrS80m1wetH1D"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "EdD2f4azmv9IcoLDivBEz"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "HNcmZmc621QpkrzseHlDB"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "iKOFOyaNkffdngaASmxWD"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "mwHp4Ph66eErewCxTBbii"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "XNcolpNUt-fAFGnLTcGwB"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "cSpEPt4fLs5RYIjxFgUZn"
+    },
+    {
+      "children": [
+        {
+          "text": "Modify an offer"
+        }
+      ],
+      "type": "h3",
+      "id": "TREOyZm9sSIfxFCvE52GV"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "divider",
+      "id": "0ViftfYGZB1HTR3QEi2GV"
+    },
+    {
+      "children": [
+        {
+          "text": "You can use the following inputs to adjust this offer letter"
+        }
+      ],
+      "type": "callout",
+      "id": "84PC2ntZhIiTvgvU1F_HW"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Person"
+                }
+              ],
+              "type": "caption",
+              "icon": "Happy",
+              "color": "Perfume",
+              "id": "b50FJFdaFLTACtBsXL61G"
+            },
+            {
+              "children": [
+                {
+                  "text": "\"Amazing Human\""
+                }
+              ],
+              "type": "exp",
+              "id": "gW1O5YJ0YftfYYCW6CyYP"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "bGEQb_TP3o1LcKAg6nn9B"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Position"
+                }
+              ],
+              "type": "caption",
+              "icon": "Heart",
+              "color": "Rose",
+              "id": "bOPzNOQPjtcepH1k2nM07"
+            },
+            {
+              "children": [
+                {
+                  "text": "\"Chief of Numbers\""
+                }
+              ],
+              "type": "exp",
+              "id": "fOSoQtz51XirJUZ8VXvAz"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "lxulf46MLOHUtwMuLkJFV"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "StrikePrice"
+                }
+              ],
+              "type": "caption",
+              "icon": "DollarCircle",
+              "id": "7ZR1xd63MMTDlgF9cGnUr"
+            },
+            {
+              "children": [
+                {
+                  "text": "0.10 usd/option"
+                }
+              ],
+              "type": "exp",
+              "id": "YYSZ9bqjnoUwOWfHN9BaG"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "wkp454kTpSSq-F3PC_cdL"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Options"
+                }
+              ],
+              "type": "caption",
+              "color": "Sun",
+              "icon": "Crown",
+              "id": "1pz09IAArHofiY3UuOphM"
+            },
+            {
+              "children": [
+                {
+                  "text": "10000 options"
+                }
+              ],
+              "type": "exp",
+              "id": "neE4a7Tf8TzVRLHn6scYM"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "CRjgpy8mK3-Gv6YU-RO-h"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "OptionsPrice"
+                }
+              ],
+              "type": "caption",
+              "color": "Catskill",
+              "icon": "Refresh",
+              "id": "3tbqIlnwB9GYxcqOxpMwF"
+            },
+            {
+              "children": [
+                {
+                  "text": "Options * StrikePrice"
+                }
+              ],
+              "type": "exp",
+              "id": "WfAstt_Qg7ByHhfaqpJRu"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "yfdDNMM8NffTwz006MArc"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "StartDate"
+                }
+              ],
+              "type": "caption",
+              "color": "Malibu",
+              "icon": "Clock",
+              "id": "rxCtsF_7-VBJodchwKaPI"
+            },
+            {
+              "children": [
+                {
+                  "text": "date(2022-05-23)"
+                }
+              ],
+              "type": "exp",
+              "id": "xCBErphybhaTOK35c39vT"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "KHsVEqJh67UwdZlWHd1yd"
+        }
+      ],
+      "type": "columns",
+      "id": "zj_z3yg6hH5w_3YM-bTJ4"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "wHxzrZHgz0qSedi0N1lMA"
+    }
+  ]
+}
