@@ -6,10 +6,7 @@ import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import {
-  CreateSectionMutation,
-  useAuthenticationState,
-} from '@decipad/graphql-client';
+import { CreateSectionMutation } from '@decipad/graphql-client';
 import {
   Divider,
   Dot,
@@ -87,6 +84,8 @@ interface WorkspaceNavigationProps {
     sections: Section[];
   };
   readonly showFeedback?: () => void;
+  readonly enableAccountFooter?: boolean;
+  readonly enableSettingsAndMembers?: boolean;
 }
 
 const NavSpacer = () => (
@@ -111,6 +110,8 @@ export const WorkspaceNavigation = ({
   onDeleteSection,
   onCreateSection,
   onUpdateSection,
+  enableAccountFooter = false,
+  enableSettingsAndMembers = false,
   showFeedback,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
   const activeWorkspaceRoute = workspaces({}).workspace({
@@ -118,10 +119,6 @@ export const WorkspaceNavigation = ({
   });
 
   const { sections } = activeWorkspace;
-
-  const { isTeamMember } = useAuthenticationState().currentUser;
-  const showSettingsAndMembers =
-    isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
 
   const navigate = useNavigate();
   const { '*': maybeWorkspaceFolder } = useParams();
@@ -151,7 +148,8 @@ export const WorkspaceNavigation = ({
 
   return (
     <nav css={workspaceNavContainerStyles}>
-      {showSettingsAndMembers && (
+      {/* TODO: cleanup NO_WORKSPACE_SWITCHER flag */}
+      {enableSettingsAndMembers && (
         <>
           <NavigationList key={'workspace-nav-SM'}>
             <NavigationItem
@@ -416,7 +414,8 @@ export const WorkspaceNavigation = ({
         </NavigationItem>
       </NavigationList>
 
-      {showSettingsAndMembers && (
+      {/* TODO: cleanup NO_WORKSPACE_SWITCHER flag */}
+      {enableAccountFooter && (
         <>
           <NavDivider />
           <WorkspaceAccount />

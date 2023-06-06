@@ -202,9 +202,23 @@ const Workspace: FC = () => {
   const { data: workspaceData, fetching: isFetching } = result;
   const fetching = isFetching || !workspaceData;
 
+  const allWorkspaces = useMemo(
+    () =>
+      workspaceData?.workspaces?.map((workspace) => ({
+        ...workspace,
+        href: workspaces({}).workspace({
+          workspaceId: workspace.id,
+        }).$,
+        numberOfMembers:
+          (workspace.access?.users?.length || 0) +
+          (workspace.access?.roles?.length || 0),
+      })) ?? [],
+    [workspaceData?.workspaces]
+  );
+
   const currentWorkspace = useMemo(
-    () => workspaceData?.workspaces.find((w) => w.id === workspaceId),
-    [workspaceData?.workspaces, workspaceId]
+    () => allWorkspaces.find((w) => w.id === workspaceId),
+    [allWorkspaces, workspaceId]
   );
 
   const pageInfo: ComponentProps<typeof NotebookListItem>['page'] =
@@ -298,17 +312,6 @@ const Workspace: FC = () => {
     }
   };
 
-  const allWorkspaces =
-    workspaceData?.workspaces?.map((workspace) => ({
-      ...workspace,
-      href: workspaces({}).workspace({
-        workspaceId: workspace.id,
-      }).$,
-      numberOfMembers:
-        (workspace.access?.users?.length || 0) +
-        (workspace.access?.roles?.length || 0),
-    })) ?? [];
-
   const sidebarWrapper = (
     <Frame
       Heading="h1"
@@ -321,10 +324,7 @@ const Workspace: FC = () => {
         name={user?.self?.name || 'Me'}
         email={session.user?.email || 'me@example.com'}
         onLogout={signoutCallback}
-        activeWorkspace={{
-          ...currentWorkspace,
-          numberOfMembers: 1,
-        }}
+        activeWorkspace={currentWorkspace}
         allWorkspaces={allWorkspaces}
         onCreateWorkspace={() =>
           navigate(currentWorkspaceRoute.createNew({}).$)

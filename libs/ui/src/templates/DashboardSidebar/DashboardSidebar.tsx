@@ -4,7 +4,10 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { mediumShadow } from '@decipad/ui';
 import { useThemeFromStore } from '@decipad/react-contexts';
-import { useAuthenticationState } from '@decipad/graphql-client';
+import {
+  useAuthenticationState,
+  useWorkspacePermission,
+} from '@decipad/graphql-client';
 import { AccountAvatar } from '../../molecules';
 
 import {
@@ -30,7 +33,11 @@ type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
   Omit<ComponentProps<typeof AccountMenu>, 'onOpenSettings'> &
   Pick<
     ComponentProps<typeof WorkspaceNavigation>,
-    'onDeleteSection' | 'onCreateSection' | 'onUpdateSection' | 'showFeedback'
+    | 'onDeleteSection'
+    | 'onCreateSection'
+    | 'onUpdateSection'
+    | 'showFeedback'
+    | 'activeWorkspace'
   > & {
     readonly onPointerEnter?: () => void;
   };
@@ -46,6 +53,9 @@ export const DashboardSidebar = ({
   const enableWorkspaces =
     isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
   const openUserSettings = useEditUserModalStore((state) => state.open);
+
+  const permission = useWorkspacePermission(props.activeWorkspace.id);
+  const showSettingsAndMembers = enableWorkspaces && permission === 'ADMIN';
 
   const dashboardEl = (
     <div css={dashboardMainSidebarStyles} onPointerEnter={onPointerEnter}>
@@ -70,7 +80,11 @@ export const DashboardSidebar = ({
         ]}
       >
         <div css={{ gridRow: 'navigation', display: 'grid' }}>
-          <WorkspaceNavigation {...props} />
+          <WorkspaceNavigation
+            {...props}
+            enableAccountFooter={enableWorkspaces}
+            enableSettingsAndMembers={showSettingsAndMembers}
+          />
         </div>
         <div
           css={{
