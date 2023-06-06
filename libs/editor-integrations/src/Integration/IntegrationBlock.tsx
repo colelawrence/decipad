@@ -36,6 +36,7 @@ import { CodeIntegration } from './CodeIntegration';
 function getIntegrationComponent(
   id: string,
   varName: string,
+  typeMappings: IntegrationTypes.IntegrationBlock['typeMappings'],
   blockOptions: IntegrationTypes.IntegrationBlock['integrationType']
 ): ReactNode {
   switch (blockOptions.type) {
@@ -44,6 +45,7 @@ function getIntegrationComponent(
         <CodeIntegration
           id={id}
           varName={varName}
+          typeMappings={typeMappings}
           blockOptions={blockOptions}
         />
       );
@@ -78,9 +80,15 @@ export const IntegrationBlock: PlateComponent = ({
       getIntegrationComponent(
         element.id,
         element.children[0].text,
+        element.typeMappings,
         element.integrationType
       ),
-    [element.children, element.id, element.integrationType]
+    [
+      element.children,
+      element.id,
+      element.integrationType,
+      element.typeMappings,
+    ]
   );
 
   const computer = useComputer();

@@ -1,8 +1,13 @@
+/* eslint-disable no-param-reassign */
 import { Result } from '@decipad/computer';
 import { codePlaceholder } from '@decipad/config';
-import { ImportElementSource } from '@decipad/editor-types';
+import {
+  ImportElementSource,
+  SimpleTableCellType,
+} from '@decipad/editor-types';
 import { cloneDeep } from 'lodash';
 import { create } from 'zustand';
+import { mapResultType } from './utils';
 
 export type Stage =
   | 'pick-integration'
@@ -80,6 +85,12 @@ export interface IntegrationStore {
 
   resultPreview?: Result.Result;
   setResultPreview: (v: Result.Result | undefined) => void;
+
+  resultTypeMapping: Array<SimpleTableCellType | undefined>;
+  // Index is the index of the column (or if not a column, then defaults to 0)
+  setResultTypeMapping: (index: number, type: SimpleTableCellType) => void;
+  setAllTypeMapping: (v: Array<SimpleTableCellType | undefined>) => void;
+  applyTypeMapping: () => void;
 
   /** Method to move to the next stage (This changes depending on the type of integration) */
   next: () => void;
@@ -172,6 +183,28 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   resultPreview: undefined,
   setResultPreview: (v) => set(() => ({ resultPreview: v })),
 
+  resultTypeMapping: [],
+  setResultTypeMapping(index, type) {
+    const { resultTypeMapping, applyTypeMapping } = get();
+
+    const clonedTypeMappings = [...resultTypeMapping];
+    clonedTypeMappings[index] = type;
+
+    set({ resultTypeMapping: clonedTypeMappings });
+    applyTypeMapping();
+  },
+  setAllTypeMapping(types) {
+    set({ resultTypeMapping: types });
+  },
+
+  applyTypeMapping() {
+    const { resultPreview, resultTypeMapping } = get();
+    if (!resultPreview) return;
+
+    const mappedType = mapResultType(resultPreview, resultTypeMapping);
+    set({ resultPreview: mappedType });
+  },
+
   next() {
     const { connectionType, stage, existingIntegration } = get();
     // If it is the last element, it must be the last, so we do something different.
@@ -222,6 +255,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
       varName: 'Name',
       resultPreview: undefined,
       existingIntegration: undefined,
+      resultTypeMapping: [],
     }));
 
     // Reset dependent stores.

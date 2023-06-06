@@ -4,7 +4,10 @@ import {
   ImportElementSource,
   IntegrationTypes,
 } from '@decipad/editor-types';
-import { useCodeConnectionStore } from '@decipad/react-contexts';
+import {
+  useCodeConnectionStore,
+  useConnectionStore,
+} from '@decipad/react-contexts';
 
 /**
  * Helper function to return the correct new integration,
@@ -20,11 +23,13 @@ export function getNewIntegration(
   switch (type) {
     case 'codeconnection': {
       const codeStore = useCodeConnectionStore.getState();
+      const store = useConnectionStore.getState();
 
       return {
         id: nanoid(),
         type: ELEMENT_INTEGRATION,
         children: [{ text: varName }],
+        typeMappings: store.resultTypeMapping,
         integrationType: {
           type: 'codeconnection',
           code: codeStore.code,
@@ -38,6 +43,7 @@ export function getNewIntegration(
         id: nanoid(),
         type: ELEMENT_INTEGRATION,
         children: [{ text: 'yoname' }],
+        typeMappings: [],
         integrationType: {
           type: 'codeconnection',
           code: '',

@@ -57,6 +57,7 @@ export const TableResult: FC<TableResultProps> = ({
   onDragEnd,
   tooltip = true,
   isLiveResult = false,
+  // isNotEditable = false,
   firstTableRowControls,
   onChangeColumnType,
   element,

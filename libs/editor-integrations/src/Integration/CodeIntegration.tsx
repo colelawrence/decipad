@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { useCallback, useEffect } from 'react';
 import { IntegrationTypes } from '@decipad/editor-types';
 import { pushResultToComputer } from '@decipad/live-connect';
@@ -5,6 +6,7 @@ import {
   useCodeConnectionStore,
   useComputer,
   useConnectionStore,
+  mapResultType,
 } from '@decipad/react-contexts';
 import type { ResultMessageType } from '@decipad_org/safejs';
 import { MaybeResultFromWorker } from '../utils';
@@ -14,6 +16,7 @@ import { useIntegrationContext } from '.';
 interface CodeIntegrationProps {
   id: string;
   varName: string;
+  typeMappings: IntegrationTypes.IntegrationBlock['typeMappings'];
   blockOptions: IntegrationTypes.CodeBlockIntegration;
 }
 
@@ -23,6 +26,7 @@ interface CodeIntegrationProps {
  * pushing it to the computer.
  */
 export const CodeIntegration = function CodeIntegration({
+  typeMappings,
   blockOptions,
   id,
   varName,
@@ -35,10 +39,11 @@ export const CodeIntegration = function CodeIntegration({
 
   useEffect(() => {
     const result = MaybeResultFromWorker(blockOptions.latestResult);
-    if (result) {
-      pushResultToComputer(computer, id, varName, result);
-    }
-  }, [computer, blockOptions.latestResult, id, varName]);
+    if (!result) return;
+
+    const mappedResult = mapResultType(result, typeMappings);
+    pushResultToComputer(computer, id, varName, mappedResult);
+  }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
   useEffect(() => {
     return () => {
@@ -50,11 +55,11 @@ export const CodeIntegration = function CodeIntegration({
     useCallback(
       (msg: ResultMessageType) => {
         const result = MaybeResultFromWorker(msg.result);
-        if (result) {
-          pushResultToComputer(computer, id, varName, result);
-        }
+        if (!result) return;
+        const mappedResult = mapResultType(result, typeMappings);
+        pushResultToComputer(computer, id, varName, mappedResult);
       },
-      [computer, id, varName]
+      [computer, id, varName, typeMappings]
     ),
     useCallback((e) => console.error(e), [])
   );
@@ -71,6 +76,7 @@ export const CodeIntegration = function CodeIntegration({
           store.setConnectionType('codeconnection');
           store.setStage('connect');
           store.setExistingIntegration(id);
+          store.setAllTypeMapping(typeMappings);
           codeStore.setCode(blockOptions.code);
           store.changeOpen(true);
           break;
@@ -80,7 +86,15 @@ export const CodeIntegration = function CodeIntegration({
     return () => {
       sub?.unsubscribe();
     };
-  }, [observable, blockOptions.code, worker, store, codeStore, id]);
+  }, [
+    observable,
+    blockOptions.code,
+    worker,
+    store,
+    codeStore,
+    id,
+    typeMappings,
+  ]);
 
   return null;
 };

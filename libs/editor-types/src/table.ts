@@ -37,12 +37,15 @@ export type TableDropdownType = Readonly<{
   type: 'string' | 'number';
 }>;
 
-export type TableCellType =
+export type SimpleTableCellType =
   | SerializedTypes.Number
   | SerializedTypes.String
   | SerializedTypes.Boolean
   | SerializedTypes.Date
-  | SerializedTypes.Anything
+  | SerializedTypes.Anything;
+
+export type TableCellType =
+  | SimpleTableCellType
   | TableDropdownType
   | Readonly<{ kind: 'table-formula' }>
   | Readonly<{ kind: 'series'; seriesType: SeriesType }>

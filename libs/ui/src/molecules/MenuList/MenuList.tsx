@@ -29,7 +29,7 @@ const undropdownifyContentStyles = css({
 });
 
 const alwaysTopContentStyles = css({
-  zIndex: 3,
+  zIndex: 400,
 });
 
 interface RootMenuListProps {

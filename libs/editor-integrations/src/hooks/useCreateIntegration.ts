@@ -19,8 +19,8 @@ export const useCreateIntegration = () => {
   useEffect(() => {
     if (createIntegration) {
       // Using getState because I don't want the hook to refresh when store is changing.
-      const store = useConnectionStore.getState();
       const codeStore = useCodeConnectionStore.getState();
+      const store = useConnectionStore.getState();
 
       if (!store.connectionType || !store.varName) return;
 
@@ -42,6 +42,7 @@ export const useCreateIntegration = () => {
           editor,
           {
             ...node,
+            typeMappings: store.resultTypeMapping,
             integrationType: {
               code: codeStore.code,
               latestResult: codeStore.latestResult,

@@ -19,6 +19,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   readonly onDragEnd?: (e: DragEvent<HTMLDivElement>) => void;
   readonly tooltip?: boolean;
   readonly isLiveResult?: boolean;
+  readonly isNotEditable?: boolean;
   readonly firstTableRowControls?: ReactNode;
   readonly onChangeColumnType?: (
     columnIndex: number,

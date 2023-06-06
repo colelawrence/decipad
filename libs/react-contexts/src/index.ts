@@ -20,3 +20,4 @@ export * from './editor-styles';
 export * from './editor-paste-interaction-menu-provider';
 export * from './editor-stats';
 export * from './theme';
+export * from './utils';

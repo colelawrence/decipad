@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import type { Constant, Unit } from '@decipad/computer';
 import { getConstantByName } from '@decipad/computer';
 import { noop } from '@decipad/utils';
@@ -63,8 +64,10 @@ const initialState: UnitsState = {
 function reducer(state: UnitsState, action: UnitsAction): UnitsState {
   switch (action.type) {
     case 'text':
+      delete state.constant;
       return { ...state, text: action.value };
     case 'unit':
+      delete state.constant;
       return { ...state, unit: action.value };
     case 'constant':
       return { ...state, constant: action.value };
