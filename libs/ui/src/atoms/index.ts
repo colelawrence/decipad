@@ -1,6 +1,8 @@
 export { AnimatedIcon } from './AnimatedIcon/AnimatedIcon';
 export { AnyResult } from './AnyResult/AnyResult';
+export { AutoCompleteMenuFormulaTooltip } from './AutoCompleteMenuFormulaTooltip/AutoCompleteMenuFormulaTooltip';
 export { AutoCompleteMenuItem } from './AutoCompleteMenuItem/AutoCompleteMenuItem';
+export type { ACItemType } from './AutoCompleteMenuItem/AutoCompleteMenuItem';
 export { Avatar } from './Avatar/Avatar';
 export { Badge } from './Badge/Badge';
 export { Blockquote } from './Blockquote/Blockquote';

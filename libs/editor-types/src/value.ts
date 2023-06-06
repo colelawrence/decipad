@@ -1,9 +1,8 @@
-import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
 import { AST, Unit } from '@decipad/language';
+import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   DEPRECATED_ELEMENT_TABLE_INPUT,
-  ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
   ELEMENT_CODE_LINE,
@@ -24,9 +23,10 @@ import {
   ELEMENT_PLOT,
   ELEMENT_TABLE,
   ELEMENT_UL,
+  ElementKind,
+  IntegrationTypes,
   InteractiveElement,
   MarkKind,
-  IntegrationTypes,
 } from '.';
 import {
   DataViewCaptionElement,
@@ -35,24 +35,23 @@ import {
   DataViewHeaderRowElement,
   DataViewNameElement,
 } from './data-view';
+import { DrawElement, DrawElementDescendant, DrawElements } from './draw';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_DATA_MAPPING,
+  ELEMENT_DATA_MAPPING_ROW,
   ELEMENT_DATA_VIEW,
   ELEMENT_DRAW,
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
+  ELEMENT_LIVE_DATASET,
+  ELEMENT_LIVE_QUERY,
   ELEMENT_SMART_REF,
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
+  ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_VARIABLE_DEF,
-  ELEMENT_DATA_MAPPING_ROW,
-  ELEMENT_DATA_MAPPING,
-  ELEMENT_LIVE_QUERY,
-  ELEMENT_LIVE_DATASET,
-  ELEMENT_JS_BLOCK,
-  ELEMENT_INTEGRATION,
 } from './element-kinds';
 import {
   CaptionElement,
@@ -77,7 +76,6 @@ import {
   TableRowElement,
   TableVariableNameElement,
 } from './table';
-import { DrawElement, DrawElements, DrawElementDescendant } from './draw';
 
 export type { DrawElement, DrawElements, DrawElementDescendant };
 
@@ -206,7 +204,7 @@ export interface SmartRefElement extends BaseElement {
   lastSeenVariableName?: string;
   blockId: string;
   /** Identifies the "column" part of the smart ref, if any. */
-  columnId: string | null;
+  columnId: string | null; // dont change, has to do with migration from undefined
   children: [PlainText];
 }
 
@@ -377,6 +375,4 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DRAW,
   ELEMENT_DATA_MAPPING,
   ELEMENT_LIVE_QUERY,
-  ELEMENT_JS_BLOCK,
-  ELEMENT_INTEGRATION,
 ];

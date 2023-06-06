@@ -3,8 +3,9 @@ import {
   ELEMENT_CODE_LINE,
   MyEditor,
 } from '@decipad/editor-types';
-import { BasePoint } from 'slate';
+import { ACItemType } from '@decipad/ui';
 import { getNodeString, setSelection } from '@udecode/plate';
+import { BasePoint } from 'slate';
 import { commitAutocompleteItem } from './commitAutocompleteItem';
 
 let editor: MyEditor;
@@ -31,7 +32,7 @@ it('inserts the item, surrounded by spaces as necessary', () => {
     {
       identifier: 'INSERTED',
       kind: 'variable',
-      type: '',
+      type: 'string' as ACItemType,
     }
   );
 
@@ -65,7 +66,7 @@ it('removes spaces at the beginning of the line', () => {
     {
       identifier: 'INSERTED',
       kind: 'variable',
-      type: '',
+      type: 'string' as ACItemType,
     }
   );
 
@@ -99,7 +100,7 @@ it('removes spaces after parens', () => {
     {
       identifier: 'INSERTED',
       kind: 'variable',
-      type: '',
+      type: 'string' as ACItemType,
     }
   );
 

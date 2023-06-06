@@ -1,10 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css } from '@emotion/react';
 import { useWindowListener } from '@decipad/react-utils';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { noop } from '@decipad/utils';
-import { Calendar, Formula, Number, Table, Text } from '../../icons';
-import { setCssVar, cssVar, grey400, p12Medium } from '../../primitives';
+import { css } from '@emotion/react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { Calendar, Formula, Number, TableSmall, Text } from '../../icons';
+import { cssVar, grey400, p12Medium, setCssVar } from '../../primitives';
 
 const wrapperStyles = (focused: boolean) =>
   css({
@@ -51,10 +51,18 @@ const identifierStyles = css(p12Medium, {
   overflow: 'hidden',
 });
 
+export type ACItemType =
+  | 'number'
+  | 'string'
+  | 'date'
+  | 'table'
+  | 'column'
+  | 'function';
+
 interface AutoCompleteMenuItemProps {
   readonly kind: string;
   readonly identifier: string;
-  readonly type: string;
+  readonly type: ACItemType;
   readonly explanation?: string;
 
   /**
@@ -67,6 +75,19 @@ interface AutoCompleteMenuItemProps {
 
   readonly onHover?: () => void;
 }
+
+const getAutocompleteIconFor = (type: ACItemType) => {
+  const icons = {
+    number: <Number />,
+    string: <Text />,
+    date: <Calendar />,
+    table: <TableSmall />,
+    column: <TableSmall />,
+    function: <Formula strokeColor={cssVar('weakerTextColor')} />,
+  };
+  const selected = icons[type] || <Number />;
+  return selected;
+};
 
 export const AutoCompleteMenuItem = ({
   identifier,
@@ -126,17 +147,7 @@ export const AutoCompleteMenuItem = ({
         }}
         ref={itemRef}
       >
-        <span css={iconStyles}>
-          {{
-            number: <Number />,
-            string: <Text />,
-            date: <Calendar />,
-            table: (
-              <Table strokeColor={cssVar('weakerTextColor')} noBackground />
-            ),
-            function: <Formula strokeColor={cssVar('weakerTextColor')} />,
-          }[type] || <Number />}
-        </span>
+        <span css={iconStyles}>{getAutocompleteIconFor(type)}</span>
         <div css={textStyles}>
           <strong css={identifierStyles}>{identifier}</strong>
         </div>

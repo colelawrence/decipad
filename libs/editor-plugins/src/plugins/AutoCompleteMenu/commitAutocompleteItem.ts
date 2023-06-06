@@ -49,16 +49,15 @@ export const commitAutocompleteItem = (
     insertText(editor, toInsert);
   } else {
     // item may know how we should smartly refer to it
-    const [blockId, columnId] = item.smartRef ?? [
-      item.blockId,
-      item.columnId ?? null,
-    ];
+    const [blockId, columnId] = item.isCell
+      ? [item.columnId]
+      : [item.blockId, item.columnId];
 
     const smartRef: SmartRefElement = {
       id: nanoid(),
       type: ELEMENT_SMART_REF,
-      blockId,
-      columnId,
+      blockId: blockId || item.blockId,
+      columnId: columnId || null, // dont remove, has to do with legacy migration
       children: [{ text: '' }],
     };
     insertNodes(editor, [smartRef, { text: ' ' }]);

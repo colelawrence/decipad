@@ -6,6 +6,7 @@ import {
   SmartRefElement,
   TableElement,
 } from '@decipad/editor-types';
+import { captureException } from '@sentry/react';
 import {
   ELEMENT_TABLE,
   getNextNode,
@@ -19,7 +20,6 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { BaseEditor, Editor, Location, Path, Point, Range } from 'slate';
-import { captureException } from '@sentry/react';
 import { insertNodes } from './insertNodes';
 import { isElementOfType } from './isElementOfType';
 

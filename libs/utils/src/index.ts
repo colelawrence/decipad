@@ -17,6 +17,7 @@ export * from './identity';
 export * from './isTableIdentifier';
 export * from './last';
 export * from './lenient-zip';
+export * from './match-item-blocks';
 export * from './memoize';
 export * from './memoizePrimitive';
 export * from './noop';

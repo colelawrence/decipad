@@ -71,7 +71,7 @@ it('groups identifiers', () => {
           },
         ],
         "tableName": "Table1",
-        "title": "Table1 Table",
+        "title": "Table1",
       },
     ]
   `);
@@ -131,25 +131,19 @@ it('Places my table columns first', () => {
             "focused": false,
             "identifier": "Column1",
             "inTable": "Table1",
+            "isCell": true,
             "kind": "column",
-            "smartRef": Array [
-              "column1id",
-              null,
-            ],
             "type": "number",
           },
           Object {
             "blockId": "tableid",
             "columnId": "column1id",
-            "explanation": "The column Table1.Column1 as a list",
+            "explanation": "The column Column1 from table Table1 as a list.",
             "focused": false,
             "identifier": "Table1.Column1",
             "inTable": "Table1",
+            "isCell": false,
             "kind": "column",
-            "smartRef": Array [
-              "tableid",
-              "column1id",
-            ],
             "type": "number",
           },
           Object {
@@ -159,30 +153,24 @@ it('Places my table columns first', () => {
             "focused": false,
             "identifier": "Column2",
             "inTable": "Table1",
+            "isCell": true,
             "kind": "column",
-            "smartRef": Array [
-              "column2id",
-              null,
-            ],
             "type": "number",
           },
           Object {
             "blockId": "tableid",
             "columnId": "column2id",
-            "explanation": "The column Table1.Column2 as a list",
+            "explanation": "The column Column2 from table Table1 as a list.",
             "focused": false,
             "identifier": "Table1.Column2",
             "inTable": "Table1",
+            "isCell": false,
             "kind": "column",
-            "smartRef": Array [
-              "tableid",
-              "column2id",
-            ],
             "type": "number",
           },
         ],
         "tableName": "Table1",
-        "title": "Table1 Table",
+        "title": "Table1",
       },
       Object {
         "items": Array [

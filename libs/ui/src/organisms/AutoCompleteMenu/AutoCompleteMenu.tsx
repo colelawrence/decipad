@@ -1,26 +1,32 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { useWindowListener } from '@decipad/react-utils';
+import { docs } from '@decipad/routing';
+import { ItemBlockId, matchItemBlocks } from '@decipad/utils';
 import { css } from '@emotion/react';
+import Fuse from 'fuse.js';
+import { once } from 'ramda';
 import {
   ComponentProps,
   FC,
+  MouseEventHandler,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
-  useContext,
-  MouseEventHandler,
 } from 'react';
-import Fuse from 'fuse.js';
-import { once } from 'ramda';
-import { docs } from '@decipad/routing';
-import { Link, AutoCompleteMenuItem } from '../../atoms';
+import {
+  ACItemType,
+  AutoCompleteMenuFormulaTooltip,
+  AutoCompleteMenuItem,
+  Link,
+} from '../../atoms';
+import {} from '../../atoms/AutoCompleteMenuItem/AutoCompleteMenuItem';
+import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 import { AutoCompleteMenuGroup } from '../../molecules';
 import { cssVar, mediumShadow, p12Medium, setCssVar } from '../../primitives';
 import { groupIdentifiers } from './groupIdentifiers';
-import { AutoCompleteMenuFormulaTooltip } from '../../atoms/AutoCompleteMenuFormulaTooltip/AutoCompleteMenuIFormulaTooltip';
-import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 
 export type AutoCompleteGroup = Omit<
   ComponentProps<typeof AutoCompleteMenuGroup>,
@@ -29,95 +35,12 @@ export type AutoCompleteGroup = Omit<
   readonly items: ReadonlyArray<Identifier>;
 };
 
-const hotKeyStyle = css({
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  lineHeight: '1.5',
-  boxSizing: 'border-box',
-  borderRadius: '6px',
-  padding: '0 4px',
-  border: `1px ${cssVar('strongerHighlightColor')} solid`,
-  backgroundColor: cssVar('backgroundColor'),
-  color: cssVar('weakTextColor'),
-});
-
-const exploreDocsLinkIconStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  float: 'right',
-  borderRadius: '4px',
-  height: '15px',
-  width: '20px',
-  padding: '12px 0px 5px 3px',
-  marginLeft: 'auto',
-  svg: {
-    width: '10px',
-    height: '10px',
-  },
-});
-
-const footerStyles = css(
-  p12Medium,
-  {
-    padding: '2px 0px 4px 6px',
-    width: '100%',
-    bottom: '0px',
-    height: '26px',
-    lineHeight: '24px',
-    background: cssVar('highlightColor'),
-    boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
-    margin: '0px 0px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '4px',
-    zIndex: '4',
-  },
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
-
-const resultStyles = css({
-  display: 'block',
-  maxWidth: '244px',
-  minWidth: '149px',
-  marginTop: '8px',
-});
-
-const styles = (top: boolean) =>
-  css({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    overflowX: 'hidden',
-    top: top ? '26px' : '0px',
-    left: 0,
-    userSelect: 'none',
-
-    backgroundColor: cssVar('backgroundColor'),
-    border: `1px solid ${cssVar('borderColor')}`,
-    borderRadius: '10px',
-    boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
-    position: 'absolute',
-    boxSizing: 'border-box',
-    zIndex: 2,
-  });
-
-const mainStyles = css({
-  padding: '3px 3px 8px 3px',
-  width: '200px',
-  maxHeight: '166px',
-  overflowY: 'auto',
-});
-
 export type Identifier = {
   kind: 'variable' | 'function' | 'column';
   identifier: string;
   blockId?: string;
   columnId?: string;
-  /** If 2 items, {blockId}.{columnId}. If one item, either {columnId} or {blockId} which to a smart ref is the same */
-  smartRef?: [string, string | null];
-  type: string;
+  type: ACItemType;
   inTable?: string;
   editing?: boolean;
   focused?: boolean;
@@ -125,6 +48,7 @@ export type Identifier = {
   syntax?: string;
   example?: string;
   formulaGroup?: string;
+  isCell?: boolean;
 };
 
 export interface AutoCompleteMenuProps {
@@ -146,40 +70,17 @@ interface SearchResultGroup {
   items: AutoCompleteGroup['items'];
 }
 
-type ItemBlockId = {
-  identifier: string;
-  blockId?: string;
-  explanation?: string;
-};
-
 const groupItems = (g: AutoCompleteGroup) => g.items;
 
 const searchOptions = once(
   (): Fuse.IFuseOptions<AutoCompleteGroup['items'][0]> => ({
-    keys: ['identifier'],
+    keys: ['identifier', { name: 'explanation', weight: 0.5 }],
     isCaseSensitive: false,
     shouldSort: true,
-    threshold: 0.0,
+    threshold: 0.3,
+    fieldNormWeight: 2,
   })
 );
-
-const matchBlockIdOrIdentifier = (
-  a: ItemBlockId,
-  b: ItemBlockId | undefined
-) => {
-  if (a.blockId && b?.blockId) {
-    return (
-      a.blockId === b.blockId &&
-      (!a?.identifier || !b?.identifier
-        ? true
-        : a.identifier === b.identifier) &&
-      (!a?.explanation || !b?.explanation
-        ? true
-        : a.explanation === b.explanation)
-    );
-  }
-  return a.identifier === b?.identifier;
-};
 
 /**
  * Currently disabling react exaustive deps because this logic needs to be refactored,
@@ -220,12 +121,12 @@ export const AutoCompleteMenu = ({
   const searchGroups = useMemo(
     () =>
       !!search &&
-      groups.map(
-        (group): SearchGroup => ({
+      groups.map((group): SearchGroup => {
+        return {
           group,
           index: new Fuse(group.items, searchOptions()),
-        })
-      ),
+        };
+      }),
     [groups, search]
   );
 
@@ -246,7 +147,11 @@ export const AutoCompleteMenu = ({
     () =>
       groupsWithItemsFiltered
         .flatMap(groupItems)
-        .map(({ identifier, blockId }) => ({ identifier, blockId })),
+        .map(({ identifier, columnId, blockId }) => ({
+          identifier,
+          blockId,
+          columnId,
+        })),
     [groupsWithItemsFiltered]
   );
 
@@ -272,7 +177,7 @@ export const AutoCompleteMenu = ({
             matchingIdentifiers[
               (focusedItem
                 ? matchingIdentifiers.findIndex((elem) =>
-                    matchBlockIdOrIdentifier(elem, focusedItem)
+                    matchItemBlocks(elem, focusedItem)
                   )
                 : -1) + 1
             ] ?? matchingIdentifiers[0];
@@ -290,7 +195,7 @@ export const AutoCompleteMenu = ({
             matchingIdentifiers[
               (focusedItem
                 ? matchingIdentifiers.findIndex((elem) =>
-                    matchBlockIdOrIdentifier(elem, focusedItem)
+                    matchItemBlocks(elem, focusedItem)
                   )
                 : matchingIdentifiers.length) - 1
             ] ?? matchingIdentifiers.slice(-1)[0];
@@ -385,8 +290,7 @@ export const AutoCompleteMenu = ({
                             : item.identifier
                         }
                         focused={
-                          matchBlockIdOrIdentifier(item, focusedItem) ||
-                          item.focused
+                          matchItemBlocks(item, focusedItem) || item.focused
                         }
                         onExecute={() => onExecuteItem?.(item)}
                         onHover={() => setHoveredItem(item)}
@@ -431,3 +335,84 @@ export const AutoCompleteMenu = ({
     </span>
   );
 };
+
+const hotKeyStyle = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  lineHeight: '1.5',
+  boxSizing: 'border-box',
+  borderRadius: '6px',
+  padding: '0 4px',
+  border: `1px ${cssVar('strongerHighlightColor')} solid`,
+  backgroundColor: cssVar('backgroundColor'),
+  color: cssVar('weakTextColor'),
+});
+
+const exploreDocsLinkIconStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  float: 'right',
+  borderRadius: '4px',
+  height: '15px',
+  width: '20px',
+  padding: '12px 0px 5px 3px',
+  marginLeft: 'auto',
+  svg: {
+    width: '10px',
+    height: '10px',
+  },
+});
+
+const footerStyles = css(
+  p12Medium,
+  {
+    padding: '2px 0px 4px 6px',
+    width: '100%',
+    bottom: '0px',
+    height: '26px',
+    lineHeight: '24px',
+    background: cssVar('highlightColor'),
+    boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
+    margin: '0px 0px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '4px',
+    zIndex: '4',
+  },
+  setCssVar('currentTextColor', cssVar('weakTextColor'))
+);
+
+const resultStyles = css({
+  display: 'block',
+  maxWidth: '244px',
+  minWidth: '149px',
+  marginTop: '8px',
+});
+
+const styles = (top: boolean) =>
+  css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    overflowX: 'hidden',
+    top: top ? '26px' : '0px',
+    left: 0,
+    userSelect: 'none',
+
+    backgroundColor: cssVar('backgroundColor'),
+    border: `1px solid ${cssVar('borderColor')}`,
+    borderRadius: '10px',
+    boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
+    position: 'absolute',
+    boxSizing: 'border-box',
+    zIndex: 2,
+  });
+
+const mainStyles = css({
+  padding: '3px 3px 8px 3px',
+  width: '200px',
+  maxHeight: '166px',
+  overflowY: 'auto',
+});

@@ -35,7 +35,7 @@ export function groupIdentifiers(
   });
 
   const toTableGroup = (idents: Identifier[], tableName: string) => ({
-    title: `${tableName} Table`,
+    title: `${tableName}`,
     tableName,
     items: idents.flatMap((ident): Identifier[] => {
       const { identifier } = ident;
@@ -48,18 +48,15 @@ export function groupIdentifiers(
           {
             ...ident,
             explanation: `The cell ${identifier}`,
-            smartRef: ident.columnId ? [ident.columnId, null] : undefined,
             inTable: tableName,
+            isCell: true,
           },
           {
             ...ident,
             identifier: wholeColumn,
-            smartRef:
-              ident.blockId && ident.columnId
-                ? [ident.blockId, ident.columnId]
-                : undefined,
-            explanation: `The column ${wholeColumn} as a list`,
+            explanation: `The column ${identifier} from table ${tableName} as a list.`,
             inTable: tableName,
+            isCell: false,
           },
         ];
       }

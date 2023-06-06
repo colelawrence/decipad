@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC } from 'react';
 import { css } from '@emotion/react';
-import { cssVar, p13Bold, p12Regular, p12Medium } from '../../primitives';
+import { FC } from 'react';
 import { Formula } from '../../icons';
+import { cssVar, p12Medium, p12Regular, p13Bold } from '../../primitives';
 
 const explanationTextStyles = css(p12Medium, {
   padding: '4px 2px',

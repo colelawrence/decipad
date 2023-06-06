@@ -1,12 +1,12 @@
 import { Meta, Story } from '@storybook/react';
 import { inMenu } from '../../storybook-utils';
-import { AutoCompleteMenuItem } from './AutoCompleteMenuItem';
+import { ACItemType, AutoCompleteMenuItem } from './AutoCompleteMenuItem';
 
 const args = {
   title: 'Title',
   kind: 'variable',
   identifier: 'MyVariable',
-  type: 'number',
+  type: 'number' as ACItemType,
 };
 
 export default {

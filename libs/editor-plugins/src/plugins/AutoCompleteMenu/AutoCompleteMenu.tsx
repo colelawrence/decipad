@@ -6,7 +6,10 @@ import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
-import { AutoCompleteMenu as UIAutoCompleteMenu } from '@decipad/ui';
+import {
+  ACItemType,
+  AutoCompleteMenu as UIAutoCompleteMenu,
+} from '@decipad/ui';
 import sortBy from 'lodash/sortBy';
 import { ComponentProps, useCallback, useState } from 'react';
 import { useFocused, useSelected } from 'slate-react';
@@ -26,7 +29,7 @@ const selectNames = (
       kind: n.kind,
       identifier: n.name,
       inTable: n.inTable,
-      type: n.type.kind,
+      type: n.type.kind as ACItemType,
       blockId: n.blockId,
       columnId: n.columnId,
       explanation: n.explanation,

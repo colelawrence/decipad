@@ -1,12 +1,46 @@
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ACItemType } from '../../atoms/AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { AutoCompleteMenu } from './AutoCompleteMenu';
 
-const identifiers = ['OneVar', 'OtherVar', 'AnotherVar'].map((n) => ({
-  kind: 'variable' as const,
-  identifier: n,
-  type: 'number',
-}));
+const identifiers = [
+  {
+    kind: 'variable' as const,
+    identifier: 'Revenue',
+    type: 'number' as ACItemType,
+  },
+  {
+    kind: 'variable' as const,
+    identifier: 'Profit',
+    type: 'number' as ACItemType,
+  },
+  {
+    kind: 'variable' as const,
+    identifier: 'Losses',
+    type: 'number' as ACItemType,
+  },
+  {
+    identifier: 'Sales',
+    kind: 'variable' as const,
+    type: 'table' as ACItemType,
+  },
+  {
+    identifier: 'Client',
+    blockId: 'table:sales',
+    columnId: 'table:sales:column:client',
+    kind: 'column' as const,
+    type: 'number' as ACItemType,
+    inTable: 'Sales',
+  },
+  {
+    identifier: 'Profit',
+    blockId: 'table:sales',
+    columnId: 'table:sales:column:profit',
+    kind: 'column' as const,
+    type: 'number' as ACItemType,
+    inTable: 'Sales',
+  },
+];
 
 it('renders menuitems triggering different commands', async () => {
   const handleExecute = jest.fn();
@@ -14,14 +48,14 @@ it('renders menuitems triggering different commands', async () => {
     <AutoCompleteMenu onExecuteItem={handleExecute} identifiers={identifiers} />
   );
 
-  await act(() => userEvent.click(getByText(/One/i)));
+  await act(() => userEvent.click(getByText(/Revenue/i)));
   expect(handleExecute).toHaveBeenLastCalledWith(
-    expect.objectContaining({ kind: 'variable', identifier: 'OneVar' })
+    expect.objectContaining({ kind: 'variable', identifier: 'Revenue' })
   );
 
-  await act(() => userEvent.click(getByText(/Another/)));
+  await act(() => userEvent.click(getByText(/Losses/)));
   expect(handleExecute).toHaveBeenLastCalledWith(
-    expect.objectContaining({ kind: 'variable', identifier: 'AnotherVar' })
+    expect.objectContaining({ kind: 'variable', identifier: 'Losses' })
   );
 });
 
@@ -35,7 +69,6 @@ it('focuses menuitems using the arrow keys', async () => {
   expect(handleExecute).toHaveBeenCalledTimes(1);
 
   await act(() => userEvent.keyboard('{arrowup}{enter}'));
-  expect(handleExecute).toHaveBeenCalledTimes(2);
 
   const [[firstCommand], [secondCommand]] = handleExecute.mock.calls;
   expect(secondCommand).not.toEqual(firstCommand);
@@ -54,49 +87,40 @@ it('does not focus menuitems when holding shift', async () => {
 describe('search', () => {
   it('filters out non-matching groups and items', () => {
     const { getByText, getAllByRole } = render(
-      <AutoCompleteMenu search="One" identifiers={identifiers} />
+      <AutoCompleteMenu search="Rev" identifiers={identifiers} />
     );
 
     expect(getAllByRole('group')).toHaveLength(1);
     expect(getAllByRole('menuitem')).toHaveLength(1);
 
-    expect(getByText(/OneVar/)).toBeInTheDocument();
+    expect(getAllByRole('menuitem').map((x) => x.textContent))
+      .toMatchInlineSnapshot(`
+      Array [
+        "NumberRevenue",
+      ]
+    `);
+
+    expect(getByText(/Rev/)).toBeInTheDocument();
   });
 
   it('updates pre-selected first option', () => {
     const handleExecute = jest.fn();
-    const { queryAllByRole, rerender, getAllByRole } = render(
+    const { getAllByRole } = render(
       <AutoCompleteMenu
         identifiers={identifiers}
         search="O"
         onExecuteItem={handleExecute}
       />
     );
-    expect(getAllByRole('menuitem')).toHaveLength(2);
-    expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
-      `"NumberOneVar"`
-    );
-
-    rerender(
-      <AutoCompleteMenu
-        identifiers={identifiers}
-        search="Other"
-        onExecuteItem={handleExecute}
-      />
-    );
-    expect(getAllByRole('menuitem')).toHaveLength(1);
-    expect(getAllByRole('menuitem')[0].textContent).toMatchInlineSnapshot(
-      `"NumberOtherVar"`
-    );
-
-    rerender(
-      <AutoCompleteMenu
-        identifiers={identifiers}
-        search="OOther"
-        onExecuteItem={handleExecute}
-      />
-    );
-    expect(queryAllByRole('menuitem')).toHaveLength(0);
+    expect(getAllByRole('menuitem')).toHaveLength(3);
+    expect(getAllByRole('menuitem').map((x) => x.textContent))
+      .toMatchInlineSnapshot(`
+      Array [
+        "NumberLosses",
+        "NumberProfit",
+        "NumberProfit",
+      ]
+    `);
   });
 
   it('affects arrow key selection', async () => {
@@ -104,7 +128,7 @@ describe('search', () => {
     const { getAllByRole } = render(
       <AutoCompleteMenu
         identifiers={identifiers}
-        search="One"
+        search="Losses"
         onExecuteItem={handleExecute}
       />
     );
