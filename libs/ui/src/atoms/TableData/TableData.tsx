@@ -21,33 +21,15 @@ import {
   Opacity,
   cssVar,
   p12Medium,
-  p14Medium,
   purple100,
   setCssVar,
   transparency,
 } from '../../primitives';
 import { table } from '../../styles';
+import { tdBaseStyles } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
 
 const lineNumberWidth = '22px';
-
-const tdBaseStyles = css(p14Medium, {
-  position: 'relative',
-  alignItems: 'center',
-
-  caretColor: cssVar('tableFocusColor'),
-
-  background: cssVar('backgroundColor'),
-
-  minHeight: table.tdMinHeight,
-  minWidth: table.tdMinWidth,
-  maxWidth: table.tdMaxWidth,
-  whiteSpace: 'break-spaces',
-  cursor: 'default',
-  verticalAlign: 'middle',
-  paddingTop: table.tdVerticalPadding,
-  paddingBottom: table.tdVerticalPadding,
-});
 
 const tdPlaceholderStyles = css({
   // Show line numbers on the first cell of each row.
@@ -55,7 +37,7 @@ const tdPlaceholderStyles = css({
   minWidth: '0',
 
   '&:first-of-type': {
-    paddingLeft: '34px',
+    paddingLeft: table.firstTdPaddingLeft,
   },
 
   '&:first-of-type::before': {

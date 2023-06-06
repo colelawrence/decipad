@@ -4,11 +4,12 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
+import { tdBaseStyles } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
 
 const lineNumberWidth = '22px';
 
-const tdBaseStyles = css(p14Medium, {
+const functionTdBaseStyles = css(p14Medium, {
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: cssVar('tintedBackgroundColor'),
@@ -24,7 +25,7 @@ const tdBaseStyles = css(p14Medium, {
 
 const tdCounterStyles = css({
   '&:first-of-type': {
-    paddingLeft: lineNumberWidth,
+    paddingLeft: table.firstTdPaddingLeft,
   },
   '&:first-of-type::before': {
     ...setCssVar('normalTextColor', cssVar('weakTextColor')),
@@ -63,7 +64,11 @@ export const TableFormulaCell = ({
   return (
     <td
       {...attributes}
-      css={[tdBaseStyles, !hiddenCounter && tdCounterStyles]}
+      css={[
+        tdBaseStyles,
+        functionTdBaseStyles,
+        !hiddenCounter && tdCounterStyles,
+      ]}
       className={className}
     >
       {children}

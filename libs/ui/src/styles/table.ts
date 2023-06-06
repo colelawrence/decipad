@@ -1,6 +1,6 @@
 import { SerializedType } from '@decipad/computer';
 import { css, CSSObject } from '@emotion/react';
-import { cssVar, setCssVar } from '../primitives';
+import { cssVar, p14Medium, setCssVar } from '../primitives';
 import { isTabularType } from '../utils';
 
 export const buttonColumnWidth = '44px';
@@ -14,6 +14,8 @@ export const tdMinWidth = '120px';
 export const tdMaxWidth = '240px';
 export const tdVerticalPadding = '8px';
 export const tdHorizontalPadding = '12px';
+
+export const firstTdPaddingLeft = '34px';
 
 export const smartRowHorizontalPadding = '5px';
 
@@ -52,3 +54,21 @@ export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({
 });
 
 export const defaultMaxRows = 10;
+
+export const tdBaseStyles = css(p14Medium, {
+  position: 'relative',
+  alignItems: 'center',
+
+  caretColor: cssVar('tableFocusColor'),
+
+  background: cssVar('backgroundColor'),
+
+  minHeight: tdMinHeight,
+  minWidth: tdMinWidth,
+  maxWidth: tdMaxWidth,
+  whiteSpace: 'break-spaces',
+  cursor: 'default',
+  verticalAlign: 'middle',
+  paddingTop: tdVerticalPadding,
+  paddingBottom: tdVerticalPadding,
+});
