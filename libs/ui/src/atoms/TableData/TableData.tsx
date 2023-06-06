@@ -214,17 +214,16 @@ export const TableData = forwardRef(
           element={element}
           {...dropdownOptions}
         >
-          {parseError ? (
-            <SyntaxErrorHighlight
-              variant="custom"
-              error={parseError}
-              hideError={!parseError}
-            >
-              {children}
-            </SyntaxErrorHighlight>
-          ) : (
-            <>{children}</>
-          )}
+          {/* Retain DOM structure for error highlighting
+     To avoid jumping cursor when an error is fixed or caused around it.
+     This keeps happening. Please do not undo. */}
+          <SyntaxErrorHighlight
+            variant="custom"
+            error={parseError}
+            hideError={!parseError}
+          >
+            {children}
+          </SyntaxErrorHighlight>
         </CellEditor>
       </Component>
     );
