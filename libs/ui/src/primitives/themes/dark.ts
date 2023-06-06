@@ -168,9 +168,6 @@ export const theme: CssVariables = {
 
   errorPageGradientEnd: dark500.hex,
 
-  bubbleColor: teal200.hex,
-  bubbleBackground: teal800.hex,
-
   mutationAnimationColor: yellow700.hex,
 
   currentTextColor: dark200.hex,
@@ -180,11 +177,24 @@ export const theme: CssVariables = {
   linkDangerColor: red500.hex,
   linkDangerHoverColor: red700.hex,
 
-  structuredCalculationSimpleColor: brand800.hex,
-  structuredCalculationVariableColor: yellow800.hex,
+  bubbleColor: teal200.hex,
+  bubbleBackground: teal800.hex,
+
+  bubbleColumnSelectedColor: teal500.hex,
+  bubbleColumnColor: dark600.hex,
+  bubbleFormulaColor: dark600.hex,
+  bubbleBackgroundColor: dark400.hex,
+
+  bubbleColumnTextSelectedColor: dark600.hex,
+  bubbleColumnTextColor: teal500.hex,
+  bubbleFormulaTextColor: teal500.hex,
+  bubbleTextColor: teal800.hex,
 
   variableHighlightColor: teal800.hex,
   variableHighlightTextColor: dark100.hex,
+
+  bubbleTableFormulaColor: dark700.hex,
+  bubbleTableFormulaTextColor: dark400.hex,
 
   selectionColor: blue700.hex,
 

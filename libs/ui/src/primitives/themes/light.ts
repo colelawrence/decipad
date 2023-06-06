@@ -50,6 +50,7 @@ import {
   teal100,
   teal200,
   teal300,
+  teal50,
   teal500,
   teal600,
   teal700,
@@ -157,9 +158,6 @@ export const theme: CssVariables = {
 
   errorPageGradientEnd: grey200.hex,
 
-  bubbleColor: teal800.hex,
-  bubbleBackground: teal200.hex,
-
   mutationAnimationColor: yellow200.hex,
 
   currentTextColor: grey600.hex,
@@ -169,13 +167,32 @@ export const theme: CssVariables = {
   linkDangerColor: red500.hex,
   linkDangerHoverColor: red700.hex,
 
-  variableHighlightColor: grey200.hex,
-  variableHighlightTextColor: teal600.hex,
-
   selectionColor: grey300.hex,
 
-  structuredCalculationVariableColor: teal200.hex,
-  structuredCalculationSimpleColor: brand400.hex,
+  bubbleColor: teal800.hex,
+  bubbleBackground: teal200.hex,
+
+  // usage of variables Foo
+  variableHighlightColor: teal50.hex,
+  variableHighlightTextColor: teal500.hex,
+
+  // columns of tables Table1.Dogs
+  bubbleColumnSelectedColor: blue500.hex,
+  bubbleColumnColor: blue50.hex,
+  bubbleColumnTextSelectedColor: blue50.hex,
+  bubbleColumnTextColor: blue500.hex,
+
+  // formula definitions x = f + 1
+  bubbleFormulaColor: teal200.hex,
+  bubbleFormulaTextColor: grey600.hex,
+
+  // formula definitions in tables
+  bubbleTableFormulaColor: grey100.hex,
+  bubbleTableFormulaTextColor: grey500.hex,
+
+  // variables definition x = 1
+  bubbleBackgroundColor: teal600.hex,
+  bubbleTextColor: white.hex,
 
   magicNumberTextColor: teal600.hex,
 

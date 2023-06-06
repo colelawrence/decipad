@@ -12,7 +12,7 @@ export const variableStyles: CSSObject = {
 };
 
 export const varStyles = css(variableStyles, {
-  padding: '4px 6px',
+  padding: '4px 8px',
   borderRadius: '6px',
   fontSize: '13px',
   maxWidth: 'min(30vw, 174px)',

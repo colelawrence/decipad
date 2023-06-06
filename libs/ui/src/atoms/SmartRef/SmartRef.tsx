@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { isTableIdentifier } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { CodeVariable } from '../../molecules';
@@ -40,6 +41,7 @@ export const SmartRef: FC<SmartRefProps> = ({
   hasPreviousContent,
   hasNextContent,
 }: SmartRefProps) => {
+  const [tableName, columnName] = isTableIdentifier(symbolName);
   return (
     <span
       css={smartRefWrapperStyles(!!hasPreviousContent, !!hasNextContent)}
@@ -50,9 +52,11 @@ export const SmartRef: FC<SmartRefProps> = ({
         defBlockId={defBlockId}
         isSelected={isSelected}
         provideVariableDefLink
+        tableName={tableName} // maybe undefined
+        columnName={columnName} // maybe undefined
         isInitialized={isInitialized}
       >
-        {symbolName}
+        {columnName || symbolName}
       </CodeVariable>
 
       {isInitialized && errorMessage && (

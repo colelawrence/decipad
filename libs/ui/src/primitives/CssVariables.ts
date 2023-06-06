@@ -112,8 +112,16 @@ export interface CssVariables {
   readonly variableHighlightTextColor: Property.Color;
   readonly variableHighlightColor: Property.Color;
 
-  readonly structuredCalculationSimpleColor: Property.Color;
-  readonly structuredCalculationVariableColor: Property.Color;
+  readonly bubbleColumnSelectedColor: Property.Color;
+  readonly bubbleColumnTextSelectedColor: Property.Color;
+  readonly bubbleColumnColor: Property.Color;
+  readonly bubbleBackgroundColor: Property.Color;
+  readonly bubbleTableFormulaColor: Property.Color;
+  readonly bubbleFormulaColor: Property.Color;
+  readonly bubbleTextColor: Property.Color;
+  readonly bubbleColumnTextColor: Property.Color;
+  readonly bubbleFormulaTextColor: Property.Color;
+  readonly bubbleTableFormulaTextColor: Property.Color;
 
   //
   // UI

@@ -7,13 +7,25 @@ export default {
   component: SmartRef,
   decorators: [
     (St) => (
-      <div style={{ margin: '5px' }}>
-        We need 500g (or <St /> in 🇺🇸) of butter for this recipe.
-      </div>
+      <code style={{ margin: '5px' }}>
+        <St /> + 100
+      </code>
     ),
   ],
 } as Meta;
 
 export const Normal: Story<ComponentProps<typeof SmartRef>> = (props) => (
-  <SmartRef {...props} />
+  <SmartRef symbolName={'Ounces'} {...props} />
+);
+
+export const NotInitialised: Story<ComponentProps<typeof SmartRef>> = () => (
+  <SmartRef isInitialized={false} />
+);
+
+export const Column: Story<ComponentProps<typeof SmartRef>> = () => (
+  <SmartRef symbolName={'People.Salary'} isInitialized />
+);
+
+export const ColumnSelected: Story<ComponentProps<typeof SmartRef>> = () => (
+  <SmartRef symbolName={'People.Salary'} isInitialized isSelected />
 );

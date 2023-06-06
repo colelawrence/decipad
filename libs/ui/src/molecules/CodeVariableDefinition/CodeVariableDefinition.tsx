@@ -3,6 +3,15 @@ import { SerializedType } from '@decipad/computer';
 import { CellValueType, MyEditor } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import {
+  TElement,
+  eventEditorSelectors,
+  findEventRange,
+  findNodePath,
+  focusEditor,
+  getStartPoint,
+  someNode,
+} from '@udecode/plate';
+import {
   HTMLAttributes,
   MouseEvent,
   MouseEventHandler,
@@ -10,18 +19,9 @@ import {
   useMemo,
   useState,
 } from 'react';
-import {
-  eventEditorSelectors,
-  findEventRange,
-  findNodePath,
-  focusEditor,
-  getStartPoint,
-  someNode,
-  TElement,
-} from '@udecode/plate';
 import { Location } from 'slate';
 import { Formula, Number } from '../../icons';
-import { cssVar } from '../../primitives';
+import { cssVar, setCssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { getTypeIcon } from '../../utils';
@@ -30,10 +30,14 @@ const varStyles = (type: 'simple' | 'formula') =>
   css(codeBlock.structuredVariableStyles, {
     padding: '4px 8px',
     borderRadius: '6px',
+    color:
+      type === 'formula'
+        ? cssVar('bubbleFormulaTextColor')
+        : cssVar('bubbleTextColor'),
     background:
       type === 'formula'
-        ? cssVar('structuredCalculationVariableColor')
-        : cssVar('structuredCalculationSimpleColor'),
+        ? cssVar('bubbleFormulaColor')
+        : cssVar('bubbleBackgroundColor'),
     display: 'flex',
     alignItems: 'center',
     overflowWrap: 'anywhere',
@@ -52,6 +56,18 @@ const iconStyles = css({
   width: '16px',
   marginRight: '4px',
 });
+
+const iconColorStyles = (type: 'simple' | 'formula') =>
+  css({
+    svg: {
+      ...setCssVar(
+        'currentTextColor',
+        type === 'formula'
+          ? cssVar('bubbleFormulaTextColor')
+          : cssVar('bubbleTextColor')
+      ),
+    },
+  });
 
 const emptyStyles = css({
   '::after': {
@@ -173,6 +189,7 @@ export const CodeVariableDefinition = ({
   const [grabbing, setGrabbing] = useState(false);
   const Icon = useMemo(() => (type ? getTypeIcon(type) : Number), [type]);
 
+  const elementType = isValue ? 'simple' : 'formula';
   const rootProps: HTMLAttributes<HTMLSpanElement> = useMemo(
     () =>
       getCodeVariableDefinitionRootProps({
@@ -188,7 +205,7 @@ export const CodeVariableDefinition = ({
   return (
     <span
       css={[
-        varStyles(isValue ? 'simple' : 'formula'),
+        varStyles(elementType),
         empty && emptyStyles,
         !contentEditable &&
           onDragStartInlineResult && {
@@ -200,11 +217,14 @@ export const CodeVariableDefinition = ({
       {...rootProps}
     >
       {!isValue && (
-        <span css={[formulaIconStyles]}>
+        <span css={[formulaIconStyles, iconColorStyles(elementType)]}>
           <Formula />
         </span>
       )}
-      <span css={Icon && [hideOnPrint, iconStyles]} contentEditable={false}>
+      <span
+        css={Icon && [hideOnPrint, iconStyles, iconColorStyles(elementType)]}
+        contentEditable={false}
+      >
         {Icon && <Icon />}
       </span>
       <span>{children}</span>
