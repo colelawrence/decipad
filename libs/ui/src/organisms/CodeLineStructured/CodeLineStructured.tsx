@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Result } from '@decipad/computer';
 import { useDelayedValue } from '@decipad/react-utils';
-import React, { ComponentProps, ReactNode, useState } from 'react';
+import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import { CodeError } from '../../atoms';
 import { StructuredInputLines } from '../../molecules';
 import { grey400 } from '../../primitives';
@@ -48,6 +48,10 @@ export const CodeLineStructured = ({
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
   const [showExpanded, setShowExpanded] = useState(false);
+
+  const toggleExpanded = useCallback(() => {
+    setShowExpanded(() => !showExpanded);
+  }, [showExpanded]);
 
   const freshResult = useResultInfo({
     result,
@@ -113,8 +117,8 @@ export const CodeLineStructured = ({
               contentEditable={false}
             >
               <TableButton
-                setState={setShowExpanded}
-                isInState={showExpanded}
+                setState={toggleExpanded}
+                isInState={!showExpanded}
                 captions={['Show data', 'Hide data']}
                 isExpandButton
               />
