@@ -17,7 +17,7 @@ type ResourceLogEntries = {
 };
 
 const entrySize = (current: number, next: LogEntry): number =>
-  current + next.content.length;
+  current + (next.content?.length ?? 0);
 
 const DEBOUNCE_PUSH_TO_REMOTE_MS = 5_000;
 const MAX_PAYLOAD_SIZE = 200_000;
@@ -76,11 +76,13 @@ const pushConsoleCall = (
   args: unknown[],
   createLogs: CreateLogsFn
 ) => {
-  const newEntries = args.map((arg) => ({
-    content: stringify(arg),
-    createdAt: new Date(),
-    source: method,
-  }));
+  const newEntries = args
+    .map((arg) => ({
+      content: stringify(arg),
+      createdAt: new Date(),
+      source: method,
+    }))
+    .filter((entry) => entry.content);
   entries.push({ resource, entries: newEntries });
   pushToRemote(createLogs);
 };
