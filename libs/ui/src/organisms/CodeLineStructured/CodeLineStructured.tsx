@@ -27,6 +27,8 @@ interface CodeLineStructuredProps {
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onDragEnd?: (e: React.DragEvent) => void;
   readonly onClickedResult?: (arg0: Result.Result) => void;
+  readonly setShowResult: (showResult: boolean) => void;
+  readonly showResult?: boolean;
   readonly variableNameChild: ReactNode;
   readonly codeChild: ReactNode;
   readonly unitPicker: ReactNode;
@@ -45,13 +47,13 @@ export const CodeLineStructured = ({
   codeChild,
   unitPicker,
   readOnly = false,
+  showResult = false,
+  setShowResult,
 }: CodeLineStructuredProps): ReturnType<React.FC> => {
   const [grabbing, setGrabbing] = useState(false);
-  const [showExpanded, setShowExpanded] = useState(false);
-
   const toggleExpanded = useCallback(() => {
-    setShowExpanded(() => !showExpanded);
-  }, [showExpanded]);
+    setShowResult(!showResult);
+  }, [setShowResult, showResult]);
 
   const freshResult = useResultInfo({
     result,
@@ -118,7 +120,7 @@ export const CodeLineStructured = ({
             >
               <TableButton
                 setState={toggleExpanded}
-                isInState={!showExpanded}
+                isInState={!showResult}
                 captions={['Show data', 'Hide data']}
                 isExpandButton
               />
@@ -149,7 +151,7 @@ export const CodeLineStructured = ({
           {unitPicker}
         </code>
       </div>
-      {showExpanded && <div css={showExpanded}>{expanded}</div>}
+      {showResult && <div css={showResult}>{expanded}</div>}
     </StructuredInputLines>
   );
 };

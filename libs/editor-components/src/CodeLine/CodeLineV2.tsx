@@ -22,7 +22,11 @@ import {
   insertNodes,
   isStructuredElement,
 } from '@decipad/editor-utils';
-import { useEnsureValidVariableName, useNodeText } from '@decipad/editor-hooks';
+import {
+  useEnsureValidVariableName,
+  useNodeText,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import {
   useComputer,
   useEditorTeleportContext,
@@ -185,6 +189,12 @@ export const CodeLineV2: PlateComponent = ({
 
   const isPortalVisible = teleport != null && portal != null;
 
+  const setShowResult = usePathMutatorCallback<CodeLineV2Element, 'showResult'>(
+    editor,
+    path,
+    'showResult'
+  );
+
   const unitPicker = simpleValue != null && (
     <StructuredInputUnits
       unit={simpleValue.unit}
@@ -236,6 +246,8 @@ export const CodeLineV2: PlateComponent = ({
             codeChild={childrenArray[1]}
             unitPicker={unitPicker}
             readOnly={isReadOnly}
+            showResult={element.showResult}
+            setShowResult={setShowResult}
           />
         )}
       </CodeLineTeleport>
