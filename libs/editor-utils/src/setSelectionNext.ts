@@ -1,5 +1,6 @@
 import { MyEditor, MyElementEntry } from '@decipad/editor-types';
-import { getNextNode, getNodeString, setSelection } from '@udecode/plate';
+import { getNextNode, getNodeString } from '@udecode/plate';
+import { setSelection } from './setSelection';
 
 /**
  * Sets the selection onto either, the end of the current text, or

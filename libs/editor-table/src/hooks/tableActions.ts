@@ -17,6 +17,7 @@ import {
   getNodeEntrySafe,
   insertNodes,
   isElementOfType,
+  setSelection,
   withPath,
 } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
@@ -32,7 +33,7 @@ import {
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
-import { BaseEditor, Path, Transforms } from 'slate';
+import { Path } from 'slate';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 
@@ -168,6 +169,7 @@ export const useTableActions = (
   const onDelete = useCallback(() => {
     withPath(editor, element, (path) => {
       withoutNormalizing(editor, () => {
+        setSelection(editor, null);
         removeNodes(editor, { at: path });
       });
     });
@@ -190,15 +192,26 @@ export const useTableActions = (
   const computer = useComputer();
 
   const path = useNodePath(element ?? undefined);
-  const onSetHideFormulas = usePathMutatorCallback(
+  const onSetHideFormulasMutator = usePathMutatorCallback(
     editor,
     path,
     'hideFormulas'
   );
 
+  const onSetHideFormulas = useCallback(
+    (newHideFormulas: boolean) => {
+      withoutNormalizing(editor, () => {
+        setSelection(editor, null);
+        onSetHideFormulasMutator(newHideFormulas);
+      });
+    },
+    [editor, onSetHideFormulasMutator]
+  );
+
   const onChangeColumnType = useCallback(
     (columnIndex: number, cellType?: TableCellType) => {
       withoutNormalizing(editor, () => {
+        setSelection(editor, null);
         onSetHideFormulas(false);
         if (path) {
           changeColumnType(editor, path, cellType, columnIndex, computer);
@@ -216,6 +229,7 @@ export const useTableActions = (
       const columnHeaderPath = [...path, 1, columnIndex];
       if (hasNode(editor, columnHeaderPath)) {
         withoutNormalizing(editor, () => {
+          setSelection(editor, null);
           setNodes<TableHeaderElement>(
             editor,
             { aggregation },
@@ -234,6 +248,7 @@ export const useTableActions = (
       return;
     }
     withoutNormalizing(editor, () => {
+      setSelection(editor, null);
       addColumn(editor, {
         tablePath: path,
       });
@@ -246,7 +261,7 @@ export const useTableActions = (
     (newValue: boolean | undefined) => {
       if (newValue === true) {
         // Prevent a crash caused by the cursor being in a table cell
-        Transforms.deselect(editor as BaseEditor);
+        setSelection(editor, null);
       }
       mutateIsCollapsed(newValue);
     },
@@ -270,6 +285,7 @@ export const useTableActions = (
 
       if (columnIndex >= 0) {
         withoutNormalizing(editor, () => {
+          setSelection(editor, null);
           const children = Array.from(getNodeChildren(editor, path));
           children.forEach(([, childPath], childIndex) => {
             if (childIndex === 0) {
@@ -298,6 +314,7 @@ export const useTableActions = (
         return;
       }
       withoutNormalizing(editor, () => {
+        setSelection(editor, null);
         addRow(editor, path, {
           at: [...path, below ? rowNumber + 1 : rowNumber],
         });
@@ -311,6 +328,7 @@ export const useTableActions = (
       return;
     }
     withoutNormalizing(editor, () => {
+      setSelection(editor, null);
       addRow(editor, path);
     });
   }, [editor, path]);
@@ -329,6 +347,7 @@ export const useTableActions = (
       const rowIndex = rows.findIndex((row) => row.id === id);
       const rowPath = [...path, rowIndex];
       if (hasNode(editor, rowPath)) {
+        setSelection(editor, null);
         withoutNormalizing(editor, () => {
           removeNodes(editor, { at: rowPath });
         });
@@ -343,6 +362,7 @@ export const useTableActions = (
         return;
       }
       withoutNormalizing(editor, () => {
+        setSelection(editor, null);
         let childIndex = -1;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         for (const _row of getNodeChildren(editor, path)) {

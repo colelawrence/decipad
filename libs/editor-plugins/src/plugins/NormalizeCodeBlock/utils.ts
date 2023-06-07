@@ -1,10 +1,6 @@
-import { CodeLineElement, MyEditor } from '@decipad/editor-types';
+import { CodeLineElement } from '@decipad/editor-types';
 import { Path, Selection } from 'slate';
-import {
-  getNodeString,
-  hasNode,
-  setSelection as plateSetSelection,
-} from '@udecode/plate';
+import { getNodeString } from '@udecode/plate';
 
 export function getCodeLineText(node: CodeLineElement): string {
   return getNodeString(node);
@@ -32,10 +28,4 @@ export function cloneSelection(sel: Selection): Selection {
       offset: sel.focus.offset,
     },
   };
-}
-
-export function setSelection(editor: MyEditor, sel: Selection): void {
-  if (sel && hasNode(editor, sel.anchor.path)) {
-    plateSetSelection(editor, sel);
-  }
 }

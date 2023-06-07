@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, MouseEvent, ReactNode } from 'react';
 import { p16Regular } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
@@ -77,6 +77,10 @@ interface EditorBlockProps {
   readonly [prop: string]: unknown;
 }
 
+const onClick = (ev: MouseEvent) => {
+  ev.stopPropagation();
+};
+
 export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
   HTMLDivElement,
   EditorBlockProps
@@ -94,6 +98,7 @@ export const EditorBlock: React.FC<EditorBlockProps> = forwardRef<
       ]}
       data-type={blockKind}
       ref={ref}
+      onClick={onClick}
     >
       {children}
     </div>

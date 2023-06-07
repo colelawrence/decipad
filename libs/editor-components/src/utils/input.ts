@@ -15,8 +15,12 @@ import {
   VariableDropdownElement,
   VariableSliderElement,
 } from '@decipad/editor-types';
-import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { getEndPoint, getStartPoint, setSelection } from '@udecode/plate';
+import {
+  insertNodes,
+  requirePathBelowBlock,
+  setSelection,
+} from '@decipad/editor-utils';
+import { getEndPoint, getStartPoint } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 

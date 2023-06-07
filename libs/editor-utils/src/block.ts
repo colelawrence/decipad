@@ -20,7 +20,6 @@ import {
   getEndPoint,
   getNextNode,
   getNode,
-  setSelection,
   TDescendant,
   TElement,
 } from '@udecode/plate';
@@ -33,6 +32,7 @@ import {
   requirePathBelowBlock,
 } from './path';
 import { getPathContainingSelection } from './selection';
+import { setSelection } from './setSelection';
 
 export const closestBlockAncestorHasType = (
   editor: MyEditor,

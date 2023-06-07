@@ -3,7 +3,6 @@ import {
   getNodeString,
   insertText,
   isElement,
-  setSelection,
   TNodeEntry,
 } from '@udecode/plate';
 import {
@@ -25,6 +24,7 @@ import { enumerate, dequal } from '@decipad/utils';
 import { NodeEntry } from 'slate';
 import { Computer } from '@decipad/computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
+import { setSelection } from '@decipad/editor-utils';
 
 const tableIsSquare = ({
   children: [, headerRow, ...dataRows],

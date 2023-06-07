@@ -1,7 +1,8 @@
 import { MyEditor } from '@decipad/editor-types';
 import { Path } from 'slate';
-import { getEndPoint, getNode, isVoid, setSelection } from '@udecode/plate';
+import { getEndPoint, getNode, isVoid } from '@udecode/plate';
 import { ReactEditor } from 'slate-react';
+import { setSelection } from './setSelection';
 
 export const focusAndSetSelection = (editor: MyEditor, path: Path) => {
   const node = getNode(editor, path);

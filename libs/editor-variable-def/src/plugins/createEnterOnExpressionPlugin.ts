@@ -4,12 +4,12 @@ import {
   ELEMENT_EXPRESSION,
   ELEMENT_CAPTION,
 } from '@decipad/editor-types';
+import { setSelection } from '@decipad/editor-utils';
 import {
   getNextNode,
   getNodeString,
   getParentNode,
   isSelectionExpanded,
-  setSelection,
 } from '@udecode/plate';
 
 export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({

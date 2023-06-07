@@ -110,8 +110,7 @@ test.describe('Simple does publish work test', () => {
   test('it can re-publish', async () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
-    await page.getByRole('button', { name: 'Publish' }).click();
-    await page.locator('text=Publish New Changes').click();
+    await page.locator('[data-testid=publish-changes]').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
   });

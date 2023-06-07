@@ -3,7 +3,7 @@ import {
   MyEditor,
   SmartRefElement,
 } from '@decipad/editor-types';
-import { insertNodes } from '@decipad/editor-utils';
+import { insertNodes, setSelection } from '@decipad/editor-utils';
 import {
   deleteText,
   getEditorString,
@@ -12,7 +12,6 @@ import {
   insertText,
   nanoid,
   select,
-  setSelection,
 } from '@udecode/plate';
 import { BasePoint, Range } from 'slate';
 import type { MenuItem } from './AutoCompleteMenu';

@@ -1,11 +1,7 @@
 import { MyEditor } from '@decipad/editor-types';
-import {
-  getNodeEntries,
-  getRange,
-  isBlock,
-  setSelection,
-} from '@udecode/plate';
+import { getNodeEntries, getRange, isBlock } from '@udecode/plate';
 import { Location, Range } from 'slate';
+import { setSelection } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 
 const getEntries = (editor: MyEditor, at: Location) => {

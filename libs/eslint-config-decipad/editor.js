@@ -48,6 +48,12 @@ module.exports = {
             message:
               'Should use the safe version getNodeEntrySafe in @decipad/editor-utils',
           },
+          {
+            name: '@udecode/plate',
+            importNames: ['setSelection'],
+            message:
+              'Should use the safe version setSelection in @decipad/editor-utils',
+          },
         ],
       },
     ],

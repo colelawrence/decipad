@@ -5,9 +5,8 @@ import {
   isCollapsed,
   isText,
   removeNodes,
-  setSelection,
 } from '@udecode/plate';
-import { getNodeEntrySafe } from '@decipad/editor-utils';
+import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';
 

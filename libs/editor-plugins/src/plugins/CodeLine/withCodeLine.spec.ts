@@ -4,7 +4,7 @@ import {
   ELEMENT_CODE_LINE,
   MyEditor,
 } from '@decipad/editor-types';
-import { setSelection } from '@udecode/plate';
+import { setSelection } from '@decipad/editor-utils';
 import { createCodeLinePlugin } from './createCodeLinePlugin';
 import { codeLine } from '../NormalizeCodeBlock/testUtils';
 

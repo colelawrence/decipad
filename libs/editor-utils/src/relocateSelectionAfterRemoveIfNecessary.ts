@@ -1,11 +1,7 @@
 import { MyEditor } from '@decipad/editor-types';
-import {
-  getParentNode,
-  getStartPoint,
-  hasNode,
-  setSelection,
-} from '@udecode/plate';
+import { getParentNode, getStartPoint, hasNode } from '@udecode/plate';
 import { Path } from 'slate';
+import { setSelection } from './setSelection';
 
 export const relocateSelectionAfterRemoveIfNecessary = (
   editor: MyEditor,

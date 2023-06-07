@@ -1,10 +1,10 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
+import { setSelection } from '@decipad/editor-utils';
 import {
   findNodePath,
   focusEditor,
   getStartPoint,
   hasNode,
-  setSelection,
 } from '@udecode/plate';
 
 export const focusEditorForColumnDnd = (

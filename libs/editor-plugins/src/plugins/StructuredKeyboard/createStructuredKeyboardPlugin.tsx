@@ -9,6 +9,7 @@ import {
 import {
   insertStructuredCodeLineBelow,
   isElementOfType,
+  setSelection,
 } from '@decipad/editor-utils';
 import {
   getEndPoint,
@@ -21,7 +22,6 @@ import {
 import { KeyboardEvent } from 'react';
 import { BaseEditor, Editor, Path, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
-import { setSelection } from '../NormalizeCodeBlock/utils';
 import { filterStatementSeparator } from '../CodeLine/filterStatementSeparator';
 import utils from './structured_utils';
 

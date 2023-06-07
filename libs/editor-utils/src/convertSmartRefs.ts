@@ -15,13 +15,13 @@ import {
   insertText,
   isElement,
   removeNodes,
-  setSelection,
   withoutNormalizing,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { BaseEditor, Editor, Location, Path, Point, Range } from 'slate';
 import { insertNodes } from './insertNodes';
 import { isElementOfType } from './isElementOfType';
+import { setSelection } from './setSelection';
 
 export const convertCodeSmartRefs = (
   editor: MyEditor,

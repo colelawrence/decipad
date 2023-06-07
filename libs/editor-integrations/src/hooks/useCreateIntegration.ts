@@ -3,8 +3,9 @@ import {
   useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
-import { findNode, insertNodes, setNodes, setSelection } from '@udecode/plate';
+import { findNode, insertNodes, setNodes } from '@udecode/plate';
 import { useEffect } from 'react';
+import { setSelection } from '@decipad/editor-utils';
 import { getNewIntegration } from '../utils';
 
 /**

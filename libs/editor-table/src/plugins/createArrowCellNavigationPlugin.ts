@@ -5,12 +5,12 @@ import {
   ELEMENT_TH,
   MyEditor,
 } from '@decipad/editor-types';
+import { setSelection } from '@decipad/editor-utils';
 import {
   getBlockAbove,
   getEndPoint,
   hasNode,
   moveSelectionFromCell,
-  setSelection,
 } from '@udecode/plate';
 import { Path } from 'slate';
 
