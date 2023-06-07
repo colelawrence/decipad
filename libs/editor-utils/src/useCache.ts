@@ -1,6 +1,6 @@
 import stringify from 'json-stringify-safe';
-import { PromiseOrType } from '@decipad/utils';
-import { identity } from 'ramda';
+import type { PromiseOrType } from '@decipad/utils';
+import { identity } from '@decipad/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface UseCacheProps<V> {

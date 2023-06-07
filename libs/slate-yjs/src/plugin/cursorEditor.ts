@@ -1,7 +1,7 @@
 import { TEditor } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import { Awareness } from 'y-protocols/awareness';
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { Session } from 'next-auth';
 import { YjsEditor } from './yjsEditor';
 import { jsonify } from '../utils/jsonify';

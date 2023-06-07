@@ -25,7 +25,7 @@ import { LazyRoute } from '../meta';
 import { PreOnboardingPath } from './RequireOnboard';
 import { useRequiresOnboarding } from './useRequiresOnboarding';
 
-export const Onboard = () => {
+const Onboard = () => {
   const navigate = useNavigate();
   const session = useSession();
   const toast = useToast();
@@ -204,3 +204,5 @@ export const Onboard = () => {
     </Routes>
   );
 };
+
+export default Onboard;

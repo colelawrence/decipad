@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { FC, useState } from 'react';
 import { MenuItem } from '../../atoms';
 import { Crown, DragHandle } from '../../icons/index';

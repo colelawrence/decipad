@@ -13,29 +13,53 @@ module.exports = () => {
       'workspace-topbar',
       'sidebar',
       'notebook-list',
-      'create-workspace-modal',
-      'edit-workspace-modal',
       'notebook-topbar',
       'notebook-editor-icon',
       'notebook-editor',
-      'static/media/ABCDiatype-BoldItalic.woff',
-      'static/media/ABCDiatype-Medium.woff',
-      'static/media/ABCDiatype-Bold.woff',
-      'static/media/ABCDiatype-RegularItalic.woff',
-      'static/media/ABCDiatype-Regular.woff',
-      'static/media/ABCDiatypeMono-Regular.woff',
-      'static/media/ABCDiatype-BoldItalic.woff2',
-      'static/media/ABCDiatype-Medium.woff2',
-      'static/media/ABCDiatype-Bold.woff2',
-      'static/media/ABCDiatype-RegularItalic.woff2',
-      'static/media/ABCDiatype-Regular.woff2',
-      'static/media/ABCDiatypeMono-Regular.woff2',
+      'onboarding',
     ],
     dontCacheBustURLsMatching: /\/static\/js\/[^.]+\.[^.]+\.chunk\.(js|css)$/,
     cleanupOutdatedCaches: true,
     maximumFileSizeToCacheInBytes: 20_000_000,
+    runtimeCaching: [
+      {
+        urlPattern: ({ request }) =>
+          ['script', 'font', 'image', 'manifest', 'style', 'worker'].includes(
+            request.destination
+          ),
+        handler: 'StaleWhileRevalidate',
+        options: {
+          cacheName: 'immutable-assets-cache',
+          expiration: {
+            maxAgeSeconds: 60 * 70 * 24 * 30, // 1 month
+          },
+          matchOptions: {
+            ignoreVary: true,
+          },
+        },
+      },
+      {
+        urlPattern: ({ url }) =>
+          url.pathname.startsWith('/api') ||
+          url.pathname.startsWith('/graphql'),
+        handler: 'NetworkOnly',
+      },
+    ],
+    importScriptsViaChunks: [
+      'app-with-meta',
+      'workspaces',
+      'workspace',
+      'notebooks',
+      'workspace-topbar',
+      'sidebar',
+      'notebook-list',
+      'notebook-topbar',
+      'notebook-editor-icon',
+      'notebook-editor',
+      'onboarding',
+    ],
+    swDest: 'service-worker.js',
   };
-  // eslint-disable-next-line no-console
-  console.log('SW options', options);
+
   return new GenerateSW(options);
 };

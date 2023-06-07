@@ -9,7 +9,6 @@ import {
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
 import { deleteText, getEditorString, isText, wrapNodes } from '@udecode/plate';
-import { allPass } from 'ramda';
 import { BasePoint } from 'slate';
 import { getTrailingImage } from '../../utils/image';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
@@ -76,7 +75,8 @@ export const autoformatImages: MyAutoformatRule[] = [
     type: ELEMENT_IMAGE,
     triggerAtBlockStart: false,
     match: TRIGGER,
-    query: allPass([doesSelectionAllowTextStyling, doesTriggerCompleteImage]),
+    query: (editor) =>
+      doesSelectionAllowTextStyling(editor) && doesTriggerCompleteImage(editor),
     format: convertPrecedingTextWithTriggerToImage,
   },
 ];

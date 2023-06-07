@@ -9,7 +9,7 @@ import { PlotElement, useTEditorRef } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { colorSchemes } from '@decipad/ui';
-import _ from 'lodash';
+import uniq from 'lodash.uniq';
 import { useEffect, useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
 import { defaultPlotSpec } from './defaultPlotSpec';
@@ -143,7 +143,7 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     if (element.markType === 'arc') {
       return [element.thetaColumnName];
     }
-    return _.uniq([element.y2ColumnName, element.yColumnName])
+    return uniq([element.y2ColumnName, element.yColumnName])
       .filter((word) => word !== 'None')
       .filter(Boolean);
   }, [element]);

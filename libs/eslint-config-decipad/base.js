@@ -1,6 +1,8 @@
 const {
   defaults: { testMatch },
+  // eslint-disable-next-line import/no-extraneous-dependencies
 } = require('jest-config');
+
 const testFiles = [...testMatch, '**/*{{t,T}est,{s,S}pec}*.{js,jsx,ts,tsx}'];
 
 module.exports = {
@@ -70,6 +72,11 @@ module.exports = {
           {
             name: 'immer',
             message: 'Use {produce} from @decipad/utils instead of immer',
+          },
+          {
+            name: 'lodash',
+            message:
+              'Use @decipad/utils or specific lodash functions like lodash.maxby',
           },
         ],
       },

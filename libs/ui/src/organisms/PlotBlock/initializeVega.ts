@@ -1,5 +1,5 @@
 import { scheme } from 'vega';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { colorSchemes } from '@decipad/ui';
 
 export const initializeVega = once(() => {

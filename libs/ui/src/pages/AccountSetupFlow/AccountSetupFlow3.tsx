@@ -4,7 +4,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import md5 from 'md5';
 import Gravatar from 'react-gravatar';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { FormEvent, useCallback } from 'react';
 import { Button, TextareaField } from '../../atoms';

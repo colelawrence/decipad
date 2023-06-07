@@ -1,7 +1,6 @@
-import { noop } from 'lodash';
 import { useCallback, useEffect, useMemo } from 'react';
 import { create } from 'zustand';
-import { THEME_PREFERENCE_LOCAL_STORAGE_KEY } from '@decipad/utils';
+import { THEME_PREFERENCE_LOCAL_STORAGE_KEY, noop } from '@decipad/utils';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 

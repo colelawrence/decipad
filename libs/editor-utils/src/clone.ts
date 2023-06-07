@@ -1,10 +1,10 @@
 import stringify from 'json-stringify-safe';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { isElement } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { MyElement, MyNode } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
-import { identity } from 'ramda';
+import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 
 const traverseElements = <T extends MyElement>(

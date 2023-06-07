@@ -1,4 +1,4 @@
-import { camelCase } from 'lodash';
+import camelCase from 'lodash.camelcase';
 
 const capitalize = (str: string): string =>
   (str[0]?.toUpperCase() ?? '') + str.slice(1);

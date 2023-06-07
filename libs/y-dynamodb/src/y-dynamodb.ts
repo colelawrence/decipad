@@ -11,7 +11,7 @@ import { getDefined, noop } from '@decipad/utils';
 import { fnQueue } from '@decipad/fnqueue';
 import tables, { allPages } from '@decipad/tables';
 import { nanoid } from 'nanoid';
-import { pick } from 'lodash';
+import pick from 'lodash.pick';
 
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
 const MAX_ALLOWED_RECORD_SIZE_BYTES = 150_000;
@@ -170,29 +170,27 @@ export class DynamodbPersistence extends Observable<string> {
     }
     await this.whenSynced;
     const data = await tables();
-    console.log('getting all updates');
     const updates = allPages(data.docsyncupdates, {
       KeyConditionExpression: 'id = :id',
       ExpressionAttributeValues: {
         ':id': this.name,
       },
     });
-    console.log('got all updates');
     let merged: Uint8Array | undefined;
     let toDelete: Array<{ id: string; seq: string }> = [];
 
     const mergedSize = () => merged?.length ?? 0;
 
     const pushToDataBase = async () => {
-      console.log(
-        `compaction: will compact ${toDelete.length} records`,
-        toDelete
-      );
       if (toDelete.length > 1) {
+        console.log(
+          `compaction: will compact ${toDelete.length} records`,
+          toDelete
+        );
         await this.storeUpdate(getDefined(merged), 'compaction', true);
         data.docsyncupdates.batchDelete(toDelete);
+        console.log(`compaction: compacted ${toDelete.length} records`);
       }
-      console.log(`compaction: compacted ${toDelete.length} records`);
       merged = undefined;
       toDelete = [];
     };

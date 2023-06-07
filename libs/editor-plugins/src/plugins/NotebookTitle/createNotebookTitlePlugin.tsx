@@ -1,13 +1,8 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { setSelectionNext } from '@decipad/editor-utils';
+import { setSelectionNext, getNodeEntrySafe } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';
-import {
-  ELEMENT_H1,
-  getNodeEntry,
-  getNodeString,
-  hasNode,
-} from '@udecode/plate';
-import { debounce } from 'lodash';
+import { ELEMENT_H1, getNodeString, hasNode } from '@udecode/plate';
+import debounce from 'lodash.debounce';
 import { createEventInterceptorPluginFactory } from '../../pluginFactories';
 
 export interface UseNotebookTitlePluginOptions {
@@ -39,12 +34,15 @@ export const createNotebookTitlePlugin = ({
       if (!readOnly) {
         try {
           if (hasNode(editor, [0, 0])) {
-            const [node] = getNodeEntry(editor, [0, 0]);
-            const newTitle = getNodeString(node);
+            const nodeEntry = getNodeEntrySafe(editor, [0, 0]);
+            if (nodeEntry) {
+              const [node] = nodeEntry;
+              const newTitle = getNodeString(node);
 
-            if (newTitle !== lastNotebookTitle) {
-              lastNotebookTitle = newTitle;
-              onNotebookTitleChangeDebounced(newTitle);
+              if (newTitle !== lastNotebookTitle) {
+                lastNotebookTitle = newTitle;
+                onNotebookTitleChangeDebounced(newTitle);
+              }
             }
           }
         } catch (err) {

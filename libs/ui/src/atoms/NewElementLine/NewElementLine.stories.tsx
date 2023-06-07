@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react';
-import { noop } from 'lodash';
+import { noop } from '@decipad/utils';
 import { NewElementLine } from './NewElementLine';
 
 interface Args {}

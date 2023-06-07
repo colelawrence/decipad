@@ -4,7 +4,7 @@ import {
   EnhancedDataTable,
 } from '@decipad/backendtypes';
 import { awsRetry, retry } from '@decipad/retry';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { tables } from './tables';
 import { TableRecordBase } from '../../backendtypes/src/index';
 

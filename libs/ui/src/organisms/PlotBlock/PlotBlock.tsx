@@ -1,7 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { noop, zip } from 'lodash';
+import zip from 'lodash.zip';
 import { ComponentProps, ReactNode, useEffect, useState, FC } from 'react';
+import { noop } from '@decipad/utils';
 import { CellInput, ErrorMessage, Label, Toast } from '../../atoms';
 import { Plot as PlotIcon } from '../../icons';
 import { cssVar, p12Medium } from '../../primitives';

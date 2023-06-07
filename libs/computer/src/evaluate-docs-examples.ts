@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import stringify from 'json-stringify-safe';
 import { formatError, formatResult } from '@decipad/format';
-import { maxBy } from 'lodash';
+import maxBy from 'lodash.maxby';
 import {
   deserializeType,
   materializeOneResult,

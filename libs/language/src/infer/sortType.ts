@@ -1,4 +1,5 @@
-import { unzip, zip } from 'lodash';
+import unzip from 'lodash.unzip';
+import zip from 'lodash.zip';
 import { produce } from '@decipad/utils';
 import { Type } from '../type';
 

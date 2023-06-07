@@ -2,10 +2,9 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { useWindowListener } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
-import { ItemBlockId, matchItemBlocks } from '@decipad/utils';
+import { ItemBlockId, matchItemBlocks, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import Fuse from 'fuse.js';
-import { once } from 'ramda';
 import {
   ComponentProps,
   FC,
@@ -17,12 +16,11 @@ import {
   useState,
 } from 'react';
 import {
+  Link,
+  AutoCompleteMenuItem,
   ACItemType,
   AutoCompleteMenuFormulaTooltip,
-  AutoCompleteMenuItem,
-  Link,
 } from '../../atoms';
-import {} from '../../atoms/AutoCompleteMenuItem/AutoCompleteMenuItem';
 import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 import { AutoCompleteMenuGroup } from '../../molecules';
 import { cssVar, mediumShadow, p12Medium, setCssVar } from '../../primitives';

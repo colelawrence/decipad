@@ -5,7 +5,7 @@ import {
   ImportElementSource,
   SimpleTableCellType,
 } from '@decipad/editor-types';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { create } from 'zustand';
 import { mapResultType } from './utils';
 

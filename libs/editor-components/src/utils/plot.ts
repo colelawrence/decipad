@@ -3,7 +3,7 @@ import { Path } from 'slate';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
-import { clone } from 'lodash';
+import clone from 'lodash.clonedeep';
 
 const getPlotElement = (
   markType: MarkType = 'bar',

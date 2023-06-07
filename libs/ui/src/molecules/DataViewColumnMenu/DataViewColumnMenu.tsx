@@ -1,6 +1,6 @@
 import type { SerializedType } from '@decipad/computer';
 import { css } from '@emotion/react';
-import { capitalize } from 'lodash';
+import capitalize from 'lodash.capitalize';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { Caret, Code, Trash } from '../../icons';

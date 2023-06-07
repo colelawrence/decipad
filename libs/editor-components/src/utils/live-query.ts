@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { findNode, focusEditor, nanoid, TEditor } from '@udecode/plate';
-import { clone } from 'lodash';
+import clone from 'lodash.clonedeep';
 import { Path } from 'slate';
 
 const getInitialLiveQueryElement = (

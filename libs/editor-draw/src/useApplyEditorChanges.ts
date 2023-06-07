@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { useEditorChangeCallback } from '@decipad/editor-hooks';
 import { findNodePath, getNode } from '@udecode/plate';
-import { cloneDeep, extend } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { useCallback, useRef } from 'react';
 import { DrawElementsDiff } from './types';
 import { findElementsDiff } from './findElementsDiff';
@@ -31,7 +31,7 @@ export const useApplyEditorChanges = (
       for (const m of diff.modified) {
         const el = newScene.find((e) => e.id === m.id);
         if (el) {
-          extend(el, m);
+          Object.assign(el, m);
         }
       }
       updateScene(newScene.filter((el) => !diff.removed.includes(el.id)));

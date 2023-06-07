@@ -1,4 +1,4 @@
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { ImportElementSource } from '@decipad/editor-types';
 import type { InsertLiveConnectionProps } from '../InteractiveParagraph/insertLiveConnection';
 

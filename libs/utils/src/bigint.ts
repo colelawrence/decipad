@@ -1,4 +1,4 @@
-import { once } from 'ramda';
+import { once } from './once';
 
 export function toJSON(this: bigint): string {
   return this.toString();

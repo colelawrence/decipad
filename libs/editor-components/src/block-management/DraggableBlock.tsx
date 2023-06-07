@@ -47,7 +47,6 @@ import {
   setSelection,
 } from '@udecode/plate';
 import copyToClipboard from 'copy-to-clipboard';
-import { noop } from 'lodash';
 import { nanoid } from 'nanoid';
 import {
   ComponentProps,
@@ -60,6 +59,7 @@ import {
   useState,
 } from 'react';
 import { useSelected } from 'slate-react';
+import { noop } from '@decipad/utils';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';

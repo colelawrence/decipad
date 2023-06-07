@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { Type, buildType as t } from '../../type';
 import { BuiltinSpec } from '../interfaces';
 

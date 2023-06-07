@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import merge from 'lodash.merge';
 import modules from './modules';
 
 const allResolvers = modules.map(({ resolvers }) => resolvers || {});

@@ -4,8 +4,8 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { TEditor } from '@udecode/plate';
-import { noop } from 'lodash';
 import { Computer } from '@decipad/computer';
+import { noop } from '@decipad/utils';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 

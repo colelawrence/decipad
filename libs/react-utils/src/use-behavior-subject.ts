@@ -1,4 +1,4 @@
-import { identity } from 'ramda';
+import { identity } from '@decipad/utils';
 import { useEffect, useState } from 'react';
 import { BehaviorSubject, Observable } from 'rxjs';
 

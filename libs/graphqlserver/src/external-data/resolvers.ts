@@ -12,7 +12,7 @@ import tables, { paginate } from '@decipad/tables';
 import Resource from '@decipad/graphqlresource';
 import { app } from '@decipad/config';
 import { resource } from '@decipad/backend-resources';
-import { identity } from 'ramda';
+import { identity } from '@decipad/utils';
 
 const isDatabaseSource = new Set<ExternalDataSourceProvider>([
   'sqlite',

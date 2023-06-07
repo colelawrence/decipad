@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import AnalyticsClient from 'analytics-node';
 import { analytics } from '@decipad/config';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 
 const { secretKey } = analytics();
 export const analyticsClient = once(

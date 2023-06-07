@@ -2,9 +2,7 @@ import { createTPluginFactory, ELEMENT_PLOT } from '@decipad/editor-types';
 import { createEventInterceptorPluginFactory } from '../../pluginFactories';
 import { lazyElementComponent } from '../../utils/lazyElement';
 
-const LazyPlot = lazyElementComponent(
-  () => import(/* webpackChunkName: "editor-plot" */ './Plot')
-);
+const LazyPlot = lazyElementComponent(() => import('./Plot'));
 
 export const createPlotPlugin = createTPluginFactory({
   key: ELEMENT_PLOT,

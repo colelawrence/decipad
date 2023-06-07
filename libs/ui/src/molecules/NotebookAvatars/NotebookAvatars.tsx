@@ -1,9 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { noop, uniqBy } from 'lodash';
+import uniqBy from 'lodash.uniqby';
 import { FC, useCallback, useState, useContext } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
+import { noop } from '@decipad/utils';
 import { Avatar, Tooltip } from '../../atoms';
 import { PermissionType } from '../../types';
 import { NotebookInvitationPopUp } from '../../organisms';

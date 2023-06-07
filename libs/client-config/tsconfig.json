@@ -3,5 +3,6 @@
   "compilerOptions": {
     "lib": ["esnext"]
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [{ "path": "../utils" }]
 }

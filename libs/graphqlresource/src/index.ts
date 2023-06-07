@@ -6,7 +6,7 @@ import {
   ID,
   PermissionType,
 } from '@decipad/backendtypes';
-import { identity } from 'ramda';
+import { identity } from '@decipad/utils';
 import { access, Access } from './access';
 import { create } from './create';
 import { getById } from './get-by-id';

@@ -1,4 +1,4 @@
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
 import { defaultBlockResults } from '../resultStreams/defaultBlockResults';
 import { IdentifiedError, IdentifiedResult } from '../types';

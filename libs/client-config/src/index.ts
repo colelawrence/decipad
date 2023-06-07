@@ -1,4 +1,4 @@
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { defaultEnv, SupportedEnvKey } from './default';
 
 export { defaultEnv };

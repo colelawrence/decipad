@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { MouseEvent, forwardRef, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { DownArrow, DragHandle, Trash, UpArrow } from '../../icons/index';

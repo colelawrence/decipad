@@ -1,6 +1,6 @@
 import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
-import { omit } from 'lodash';
+import omit from 'lodash.omit';
 import { AST } from '.';
 import { isNode, walkAst } from '../utils';
 

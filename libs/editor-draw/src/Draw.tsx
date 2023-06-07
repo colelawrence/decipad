@@ -7,7 +7,7 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { Draw as UIDraw } from '@decipad/ui/src/organisms/Draw/Draw';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
 import { dequal } from '@decipad/utils';

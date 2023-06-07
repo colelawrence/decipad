@@ -1,5 +1,5 @@
 import type { Document } from '@decipad/editor-types';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import welcomeNotebook from './welcomeNotebook.json';
 import tutorialNotebook from './tutorialNotebook.json';
 import businessNotebook from './businessNotebook.json';

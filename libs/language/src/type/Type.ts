@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { immerable } from 'immer';
 import { PromiseOrType, produce } from '@decipad/utils';
-import { omit } from 'lodash';
+import omit from 'lodash.omit';
 import type { AST, Time } from '..';
 import * as t from './buildType';
 import {

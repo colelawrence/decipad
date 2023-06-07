@@ -14,7 +14,6 @@ import {
   isText,
   wrapNodes,
 } from '@udecode/plate';
-import { allPass } from 'ramda';
 import { BasePoint, Path } from 'slate';
 import { getTrailingLink } from '../../utils/link';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
@@ -94,7 +93,8 @@ export const autoformatLinks: MyAutoformatRule[] = [
     type: ELEMENT_LINK,
     triggerAtBlockStart: false,
     match: TRIGGER,
-    query: allPass([doesSelectionAllowTextStyling, doesTriggerCompleteLink]),
+    query: (editor) =>
+      doesSelectionAllowTextStyling(editor) && doesTriggerCompleteLink(editor),
     format: convertPrecedingTextWithTriggerToLink,
   },
 ];

@@ -138,7 +138,7 @@ export default function adaptReqRes(handle: NextApiHandler) {
       try {
         handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
       } catch (err) {
-        console.log('caught', err);
+        console.error('caught', err);
         const boomed = boomify(err as Error);
         statusCode = boomed.output.statusCode;
         reply(boomed.output.payload);

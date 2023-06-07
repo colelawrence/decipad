@@ -5,7 +5,7 @@ import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 import { FC, MouseEvent, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, Dot, Toggle, Tooltip } from '../../atoms';

@@ -6,7 +6,7 @@ import { jwt } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
-import { extend, pick } from 'lodash';
+import pick from 'lodash.pick';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import adaptReqRes from './adapt-req-res';
 import { adapter } from './db-adapter';
@@ -72,11 +72,13 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
         const hmac = createHmac('sha256', process.env.INTERCOM_SECRET_ID || '');
         hmac.update(user.email!);
 
-        extend(
-          session.user,
-          { intercomUserHash: hmac.digest('hex') },
-          pick(user, 'id', 'email', 'name', 'image', 'description')
-        );
+        if (session.user) {
+          Object.assign(
+            session.user,
+            { intercomUserHash: hmac.digest('hex') },
+            pick(user, 'id', 'email', 'name', 'image', 'description')
+          );
+        }
 
         const userKeys = (
           await data.userkeys.query({
@@ -91,13 +93,12 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
         if (userKeys.length) {
           const [userKey] = userKeys;
           const username = userKey.id.split(':')[1];
-          if (username) {
-            extend(session.user, {
+          if (username && session.user) {
+            Object.assign(session.user, {
               username: `@${username}`,
             });
           }
         }
-        console.log(userKeys);
       }
       return session;
     },

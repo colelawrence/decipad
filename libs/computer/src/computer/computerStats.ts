@@ -6,7 +6,7 @@ import {
   initialInferStats,
   initialInterpreterStats,
 } from '@decipad/language';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { BehaviorSubject } from 'rxjs';
 
 export type ComputerStat = ComputerRequestStat &

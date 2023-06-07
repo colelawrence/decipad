@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { fromJS, UnknownValue, Value } from '../value';
 import { Type, buildType as t } from '../type';
 import { u } from '../utils';

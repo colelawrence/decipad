@@ -1,9 +1,9 @@
 import { ShadowCalcPortal } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { CodeLineFloat, CodeLinePlaceholder } from '@decipad/ui';
-import { noop } from 'lodash';
 import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { noop } from '@decipad/utils';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 export const DISMISS_KEYS = ['Escape', 'Enter'];

@@ -11,7 +11,7 @@ import {
   TopbarPlaceholder,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash.sortby';
 import { signOut, useSession } from 'next-auth/react';
 import {
   ComponentProps,

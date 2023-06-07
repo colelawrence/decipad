@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { getDefined, produce } from '@decipad/utils';
-import { omit } from 'lodash';
+import omit from 'lodash.omit';
 import { InferError, PrimitiveTypeName, Type } from '.';
 import type { AST, Time } from '..';
 import { timeUnitFromUnit } from '../date';

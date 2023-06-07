@@ -1,7 +1,7 @@
 import { MyEditor, MyPlatePlugin } from '@decipad/editor-types';
 import { CursorEditor } from '@decipad/slate-yjs';
 import { jsonify } from 'libs/slate-yjs/src/utils/jsonify';
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { cursorStore } from '../../stores/cursorStore';
 import { cursorColor } from './cursorColor';
 

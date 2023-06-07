@@ -13,7 +13,7 @@ import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
-import { Onboard } from './Onboard/Onboard';
+import { Onboard } from './Onboard/LazyOnboard';
 import { RequireOnboard } from './Onboard/RequireOnboard';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 

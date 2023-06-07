@@ -14,7 +14,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "BUILD_PATH='../../dist/apps/frontend' DISABLE_ESLINT_PLUGIN=true TSC_COMPILE_ON_ERROR=true craco build",
+        "command": "BUILD_PATH='../../dist/apps/frontend' DISABLE_ESLINT_PLUGIN=true TSC_COMPILE_ON_ERROR=true ../../node_modules/.bin/craco build",
         "cwd": "apps/frontend"
       }
     },

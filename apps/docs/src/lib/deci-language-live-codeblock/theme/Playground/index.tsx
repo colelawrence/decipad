@@ -5,7 +5,7 @@ import './pollute-global';
 import { useState, useEffect, FC } from 'react';
 import Editor from 'react-simple-code-editor';
 import Highlight, { Prism } from 'prism-react-renderer';
-import { identity } from 'ramda';
+import { identity } from '@decipad/utils';
 // eslint-disable-next-line import/no-unresolved
 import useIsBrowser from '@docusaurus/useIsBrowser';
 // eslint-disable-next-line import/no-unresolved
@@ -20,8 +20,8 @@ import {
 import { useComputer, ComputerContextProvider } from '@decipad/react-contexts';
 import { formatError } from '@decipad/format';
 import { CodeResult } from '@decipad/ui/src/organisms/CodeResult/CodeResult';
+import maxBy from 'lodash.maxby';
 import styles from './styles.module.css';
-import { maxBy } from 'lodash';
 
 interface PreviewProps {
   result: Result.Result;
@@ -41,7 +41,7 @@ const Preview: FC<PreviewProps> = ({ result }) => {
 export const getMaxIdObject = (
   objects: Readonly<IdentifiedError | IdentifiedResult>[]
 ): Readonly<IdentifiedError | IdentifiedResult> | undefined => {
-  return maxBy(objects, (obj) => parseInt(obj.id.split('_')[0]));
+  return maxBy(objects, (obj) => parseInt(obj.id.split('_')[0], 10));
 };
 
 interface LiveErrorProps {

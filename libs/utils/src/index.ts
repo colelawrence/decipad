@@ -21,6 +21,7 @@ export * from './match-item-blocks';
 export * from './memoize';
 export * from './memoizePrimitive';
 export * from './noop';
+export * from './once';
 export * from './produce';
 export * from './storage';
 export * from './thro';

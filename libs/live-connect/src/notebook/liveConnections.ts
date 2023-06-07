@@ -7,7 +7,7 @@ import {
   LiveQueryElement,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 import { BehaviorSubject, SubscriptionLike } from 'rxjs';
 import { ConnectionResult, Observe } from '../types';
 

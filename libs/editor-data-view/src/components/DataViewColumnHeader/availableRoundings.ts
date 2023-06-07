@@ -1,5 +1,5 @@
 import { SerializedType } from '@decipad/computer';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 
 interface Rounding {
   id: string;

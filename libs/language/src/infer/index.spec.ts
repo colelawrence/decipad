@@ -1,6 +1,6 @@
 import { dequal, getDefined, produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
-import { omit } from 'lodash';
+import omit from 'lodash.omit';
 import {
   AST,
   inferBlock,

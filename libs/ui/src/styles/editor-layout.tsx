@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { once } from 'ramda';
+import { once } from '@decipad/utils';
 import { DragHandle } from '../icons';
 import { p14Regular } from '../primitives';
 import { getSvgAspectRatio } from '../utils';

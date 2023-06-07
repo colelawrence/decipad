@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { noop } from 'lodash';
 import { FC } from 'react';
+import { noop } from '@decipad/utils';
 import { normalOpacity, transparency } from '../../primitives';
 import { statusColors } from '../../utils';
 import { ColorStatusCircle } from './ColorStatusCircle';

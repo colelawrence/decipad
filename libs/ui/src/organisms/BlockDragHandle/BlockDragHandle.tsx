@@ -1,8 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { BlocksInUseInformation } from '@decipad/computer';
-import { noop } from '@decipad/utils';
+import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { once } from 'ramda';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import {

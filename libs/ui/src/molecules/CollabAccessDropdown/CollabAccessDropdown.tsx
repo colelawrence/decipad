@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
-import { noop } from 'lodash';
+import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useAuthenticationState } from '@decipad/graphql-client';
 import { TextAndIconButton, MenuItem } from '../../atoms';

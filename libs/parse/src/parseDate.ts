@@ -1,6 +1,5 @@
 import { Time } from '@decipad/computer';
-import { parseDate as globalParseDate } from '@decipad/utils';
-import { once } from 'ramda';
+import { parseDate as globalParseDate, once } from '@decipad/utils';
 import { DateFormat } from './types';
 
 const granularityRank = new Map(

@@ -1,7 +1,7 @@
 import { MyElement, MyEditor } from '@decipad/editor-types';
 import { Computer, ProgramBlock } from '@decipad/computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import { findNode, getNode, isElement } from '@udecode/plate';
 import { editorStatsStore } from '@decipad/react-contexts';
 import { allBlockIds } from './allBlockIds';

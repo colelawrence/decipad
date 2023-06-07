@@ -8,7 +8,7 @@ import {
   Trigger,
 } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { noop } from 'lodash';
+import { noop } from '@decipad/utils';
 import { FC, MouseEventHandler, useCallback } from 'react';
 import {
   cssVar,

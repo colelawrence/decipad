@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { findNodePath } from '@udecode/plate';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { MutableRefObject, useCallback, useRef } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { DrawElement, MyEditor, DrawElements } from '@decipad/editor-types';

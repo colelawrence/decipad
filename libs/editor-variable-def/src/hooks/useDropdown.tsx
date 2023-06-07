@@ -12,7 +12,7 @@ import { useResolved } from '@decipad/react-utils';
 import { SelectItems, icons } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
 import { getNodeString, insertText, nanoid } from '@udecode/plate';
-import _ from 'lodash';
+import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
 
@@ -208,7 +208,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
           icon: <icons.TableSmall />,
         })),
       ...(colValues
-        ? _.uniqBy(
+        ? uniqBy(
             [
               ...colValues.result.value.map((v) => ({
                 group: 'Values',
