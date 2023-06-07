@@ -62,7 +62,7 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
     >
       <div css={errorBlockWrapperStyles}>
         <div css={errorBlockRowStyles}>
-          <span css={errorMessageStypes}>
+          <span data-testid="error-block" css={errorMessageStypes}>
             {`Oops something is broken, and that's on us. The rest of your notebook should be fine.`}
             {getText()}
           </span>

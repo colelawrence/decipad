@@ -3,7 +3,7 @@
     {
       "children": [
         {
-          "text": "[Template] How much is Apple worth? Breaking down a DCF model for AAPL."
+          "text": "[Template] How much is Apple worth? Breaking down a DCF model."
         }
       ],
       "type": "h1",
@@ -12,16 +12,7 @@
     {
       "children": [
         {
-          "text": "How much is Apple worth? Breaking down a DCF model for AAPL."
-        }
-      ],
-      "id": "teT0-r54yl-XWPQSjWV-R",
-      "type": "p"
-    },
-    {
-      "children": [
-        {
-          "text": "Apple is one of the most valuable companies in the world with a market cap of "
+          "text": "Apple is one of the most valuable companies in the world with a current market cap of "
         },
         {
           "text": "exprRef_ZdcR3wIV5UGj71jxz212B",
@@ -44,7 +35,7 @@
     {
       "children": [
         {
-          "text": "One approach to valuing a company like Apple is to use a discounted cash flow (DCF) model, which takes into account the company's future cash flows to estimate it's current value. "
+          "text": "One approach to valuing a company like Apple is to use a discounted cash flow model (DCF), which takes into account the company's future cash flows to estimate it's current value. "
         }
       ],
       "type": "p",
@@ -53,7 +44,7 @@
     {
       "children": [
         {
-          "text": "This interactive model breaks down how to build a DCF model for Apple and estimate an intrinsic value per share. Intrinsic value is an estimate of the fair value of a company; not actual market conditions. "
+          "text": "This interactive model breaks down how to build a DCF model for Apple and estimate an intrinsic value per share. We can then compare that to Apple's actual share price. Intrinsic value is our model's estimate of the fair value of a company; not actual market conditions. "
         }
       ],
       "type": "p",
@@ -66,14 +57,14 @@
           "bold": true
         },
         {
-          "text": ". You can duplicate this model to reuse it or modify it and make it your own. "
+          "text": ". This is a template for building a DCF model. "
         },
         {
-          "text": "This is not financial advice",
+          "text": "Not financial advice",
           "underline": true
         },
         {
-          "text": ". "
+          "text": ". You can duplicate this model to reuse it or modify it to your own assumptions. "
         }
       ],
       "type": "callout",
@@ -84,11 +75,167 @@
     {
       "children": [
         {
+          "text": "How the model is structured "
+        }
+      ],
+      "type": "h2",
+      "id": "ojduTrD-4dVXgKqvNuN4y"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "RvGtkv_AKhrN_jTxvjs-K",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "This model is broken down into five areas:"
+        }
+      ],
+      "id": "ry3nstRhPtOKMkaVe_Lm0",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Forecasting Apple's Future Free Cash Flows",
+                  "bold": true
+                },
+                {
+                  "text": ". I use historical data to make assumptions about the future. I assume "
+                },
+                {
+                  "text": "exprRef_kHfzniEiUJhjQ882dZRob",
+                  "magicnumberz": true
+                },
+                {
+                  "text": "  "
+                },
+                {
+                  "text": "growth in future free cash",
+                  "highlight": true
+                },
+                {
+                  "text": ". But, you can explore different scenarios around growth."
+                }
+              ],
+              "id": "b3K63cWCqpCJGDjRNjP9R",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "u0iYzpgCDwXR3qjDBL09m"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Terminal Value",
+                  "bold": true
+                },
+                {
+                  "text": ": By calculating a terminal value, we can capture a more complete picture of Apple's overall value. Here I use the perpetuity approach."
+                }
+              ],
+              "id": "UAgku0Mrli9tNYOzOube3",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "IFmHnX5j68g-T5-Kxm1pq"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Discounting to the Present Value",
+                  "bold": true
+                },
+                {
+                  "text": ": Discounting Apple's future free cash to the present using a "
+                },
+                {
+                  "text": "discount rate in-line with the 10 Year Treasury",
+                  "highlight": true
+                },
+                {
+                  "text": ". "
+                },
+                {
+                  "text": "exprRef_3G9koj6Tuw1OULI2cVj2G",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "id": "UzN6jAeDQG9ddtK2gNJz6",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "hMtE7_z5yDtBs1IG4S3NK"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Market Value: ",
+                  "bold": true
+                },
+                {
+                  "text": "Calculating Apple's theoretical enterprise value and market value based on our assumptions to estimate a value per share. "
+                }
+              ],
+              "id": "M99_XuHBC7qM5U7bMXTsq",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "WV1F8cmIAjbXqZ_eSUbBL"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Final Summary & Scenarios:",
+                  "bold": true
+                },
+                {
+                  "text": " Comparing our model's intrinsic value per share to Apple's actual share price and exploring scenarios around our "
+                }
+              ],
+              "id": "t1cg6Jksz1RcQgIWc905l",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "2jPKLFKlBxiWjeqR4yeXR"
+        }
+      ],
+      "type": "ol",
+      "id": "JDfR2gQC0xftQvg8C0MH5"
+    },
+    {
+      "children": [
+        {
           "text": ""
         }
       ],
       "type": "p",
-      "id": "crAMWAutP00XkzAGC2VcE"
+      "id": "6aGtgeF8Uqtnyo0GNFS7D"
     },
     {
       "children": [
@@ -112,7 +259,7 @@
     {
       "children": [
         {
-          "text": "My first step in constructing this DCF model is to estimate Apple's future cash flows. There are many ways to do this, but one approach is to use historical financials to make assumptions about a company's future revenue growth, margins, and capital expenditures. "
+          "text": "My first step in constructing this model is to estimate Apple's future cash flows. There are many ways to do this, but one approach is to use historical financials to make assumptions about a company's future revenue growth, margins, and capital expenditures. "
         }
       ],
       "type": "p",
@@ -125,7 +272,8 @@
         }
       ],
       "type": "p",
-      "id": "RDRwI6xfBLyJrfy4608vT"
+      "id": "RDRwI6xfBLyJrfy4608vT",
+      "colorScheme": "monochrome_blue"
     },
     {
       "children": [
@@ -149,7 +297,8 @@
         }
       ],
       "type": "p",
-      "id": "u_RnJrXuGt48Vw-roPTaj"
+      "id": "u_RnJrXuGt48Vw-roPTaj",
+      "colorScheme": "monochrome_blue"
     },
     {
       "children": [
@@ -896,46 +1045,28 @@
       "id": "c9z4Gq_NFAzSQjEzufgxt",
       "type": "table",
       "version": 2,
-      "hideFormulas": true,
-      "colorScheme": "monochrome_blue",
-      "isCollapsed": false
-    },
-    {
-      "children": [
-        {
-          "text": "I am going to make some general assumptions to forecast future free cash. "
-        }
-      ],
-      "type": "p",
-      "id": "bTve5KNb7g0X3-Wtww1m1",
+      "hideFormulas": false,
       "colorScheme": "monochrome_blue"
     },
     {
       "children": [
         {
-          "text": "When looking at key drivers of future free cash such as "
+          "text": "I am going to make some general assumptions to forecast future free cash. When looking at key drivers of future free cash such as "
         },
         {
           "text": "EBITDA Margin",
           "bold": true
         },
         {
-          "text": " and my own assumptions on the market, I am going to assume  "
+          "text": " and my own assumptions on the market, "
         },
         {
-          "text": "exprRef_kHfzniEiUJhjQ882dZRob",
-          "magicnumberz": true
-        },
-        {
-          "text": "   "
-        },
-        {
-          "text": "growth in Apple's future free cash. That free cash will maintain it's post 2020 levels.",
+          "text": "I am going to assume no expansion in Apple's future free cash. That free cash will maintain it's post 2020 highs.",
           "highlight": true
         }
       ],
       "type": "p",
-      "id": "jv4pqQT6BDHTV6G2tRrTb",
+      "id": "gd8vsqNagrZxaIIy1lVSy",
       "colorScheme": "monochrome_blue"
     },
     {
@@ -965,8 +1096,7 @@
       ],
       "type": "p",
       "id": "kbavwLATo6m-ztOanbpWz",
-      "colorScheme": "monochrome_blue",
-      "hideFormulas": false
+      "colorScheme": "monochrome_blue"
     },
     {
       "children": [
@@ -1020,7 +1150,8 @@
         }
       ],
       "id": "XzTVaofGO8IC8uulk1mkS",
-      "type": "code_line_v2"
+      "type": "code_line_v2",
+      "colorScheme": "monochrome_blue"
     },
     {
       "children": [
@@ -1079,30 +1210,12 @@
     {
       "children": [
         {
-          "text": "Forecast 5 years "
+          "text": "I am going to project out this assumption for 5 years as Apple is a fairly steady state business. Since I am assuming no growth in free cash, the forecast for EBITDA and FCF is the same YoY.  At the end of this model, you can explore what would happen if free cash grew or contracted. "
         }
       ],
       "type": "p",
       "id": "u8noqMT4jWGRfjs_H6nH4",
-      "hideFormulas": false
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "5YIaCuawz6rKDC9kHen0v"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "YZfQnpqjSF5gdtfCQiLCA"
+      "hideFormulas": true
     },
     {
       "children": [
@@ -1147,7 +1260,7 @@
                   "type": "smart-ref",
                   "blockId": "kHfzniEiUJhjQ882dZRob",
                   "columnId": null,
-                  "lastSeenVariableName": "FreeCash_Growth"
+                  "lastSeenVariableName": "FC_YoYChange"
                 },
                 {
                   "text": " "
@@ -1187,7 +1300,7 @@
                   "type": "smart-ref",
                   "blockId": "kHfzniEiUJhjQ882dZRob",
                   "columnId": null,
-                  "lastSeenVariableName": "FreeCash_Growth"
+                  "lastSeenVariableName": "FC_YoYChange"
                 },
                 {
                   "text": " "
@@ -1412,7 +1525,7 @@
       "id": "_KN5IVb9WS_YH-qcT4C7y",
       "type": "table",
       "version": 2,
-      "hideFormulas": true,
+      "hideFormulas": false,
       "isCollapsed": false
     },
     {
@@ -1422,7 +1535,8 @@
         }
       ],
       "type": "p",
-      "id": "tPWSEhbf39f9kGUy8Z6Pq"
+      "id": "tPWSEhbf39f9kGUy8Z6Pq",
+      "colorScheme": "monochrome_blue"
     },
     {
       "children": [
@@ -1461,7 +1575,7 @@
     {
       "children": [
         {
-          "text": "There are different ways to calculate TV. One approach is to assume a company's FCF will grow at a constant rate beyond the projection period — "
+          "text": "There are different ways to calculate TV, but one common approach is to assume that a company's FCF will stay constant beyond the projection period — "
         },
         {
           "text": "in",
@@ -1476,9 +1590,30 @@
         }
       ],
       "type": "p",
-      "id": "AXFgmKnjXRekJxJDjiQQF",
-      "hideFormulas": false,
-      "isCollapsed": true
+      "id": "AXFgmKnjXRekJxJDjiQQF"
+    },
+    {
+      "children": [
+        {
+          "text": "In this model, TV is the present value of future cash flows in perpetuity. We can estimate TV by using our future free cash flow estimate and dividing by a discount rate. I am going to assume a "
+        },
+        {
+          "text": "discount rate",
+          "bold": true
+        },
+        {
+          "text": " close to the ten year treasury rate: "
+        },
+        {
+          "text": "exprRef_rCz2yWuvpOlarYEg7kFl3",
+          "magicnumberz": true
+        },
+        {
+          "text": " . "
+        }
+      ],
+      "type": "p",
+      "id": "p4fymkLXky4lU99JS7ja0"
     },
     {
       "children": [
@@ -1489,7 +1624,7 @@
             }
           ],
           "type": "structured_varname",
-          "id": "72ypWVB8fCtUVDtmO2PHO"
+          "id": "meMjX06397MIOZL34QbfE"
         },
         {
           "children": [
@@ -1502,14 +1637,14 @@
                   "text": ""
                 }
               ],
-              "id": "zNYmkc0bPbNJGeTy0WZ8N",
+              "id": "RfktHQxBOjN-F6JtfzwTr",
               "type": "smart-ref",
               "blockId": "QfiJo3JpVukPKwlM5F4a-",
               "columnId": null,
               "lastSeenVariableName": "Future_FCF"
             },
             {
-              "text": " /  "
+              "text": " / "
             },
             {
               "children": [
@@ -1517,7 +1652,7 @@
                   "text": ""
                 }
               ],
-              "id": "DSvD1Paz1SB21nGDPnRyJ",
+              "id": "jzQPJU3pGxbsYYKqnXEgh",
               "type": "smart-ref",
               "blockId": "rCz2yWuvpOlarYEg7kFl3",
               "columnId": null,
@@ -1528,79 +1663,11 @@
             }
           ],
           "type": "code_line_v2_code",
-          "id": "jGPbW3L8e2cIqyrD-Tccv"
+          "id": "HvxkjLnBH3jSASmzZrPbi"
         }
       ],
-      "id": "iW-DZKbrENqTAswfdX9XU",
+      "id": "6N8YN4U3cC3BD6gjpIBMk",
       "type": "code_line_v2"
-    },
-    {
-      "children": [
-        {
-          "text": "In this model, TV is the present value of future cash flows in perpetuity. We can estimate TV by using our future free cash flow estimate and dividing by a discount rate. I am going to assume a "
-        },
-        {
-          "text": "discount rate",
-          "bold": true
-        },
-        {
-          "text": " close to the ten year treasury rate."
-        },
-        {
-          "text": "exprRef_4ysQHlP2Ur1RzpWipJRUy",
-          "magicnumberz": true
-        },
-        {
-          "text": " "
-        }
-      ],
-      "type": "p",
-      "id": "p4fymkLXky4lU99JS7ja0"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "9q04mQqchF5Y0RZ6zSsKh"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "TH1u9y4s11FU40RvfRQKh"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "uyUDA3FWBjvoH_6r5EH6H"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "8J_v7kaQ90_lPafcX4AGa"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "2mcot5zhVDndaCcfCXLE5"
     },
     {
       "children": [
@@ -1677,7 +1744,7 @@
             }
           ],
           "type": "structured_varname",
-          "id": "tgjlf5s7O6PrJpGPkShmI"
+          "id": "RdInGwu-1mJnhi2ct_YGy"
         },
         {
           "children": [
@@ -1690,14 +1757,14 @@
                   "text": ""
                 }
               ],
-              "id": "swuZDWLIzgJtVSnrvthll",
+              "id": "5jIz_KbkCgNJsKBAtvOFV",
               "type": "smart-ref",
               "blockId": "rCz2yWuvpOlarYEg7kFl3",
               "columnId": null,
               "lastSeenVariableName": "DiscountRate"
             },
             {
-              "text": " , "
+              "text": ","
             },
             {
               "children": [
@@ -1705,31 +1772,22 @@
                   "text": ""
                 }
               ],
-              "id": "aCy1egw0DwNABdmBhIc6y",
+              "id": "pSTN1n4EEcttjDuytfum0",
               "type": "smart-ref",
               "blockId": "_KN5IVb9WS_YH-qcT4C7y",
               "columnId": "KEfapfgiE7iaMEoFsQG1P",
               "lastSeenVariableName": "FiveYearForecast.FCF"
             },
             {
-              "text": " )"
+              "text": ")"
             }
           ],
           "type": "code_line_v2_code",
-          "id": "RGh4_P_8C6AXBNbBcZmcj"
+          "id": "6e7bmqjWRGkhEjPJyrqym"
         }
       ],
-      "id": "ocYZ5vM0-rBQB6FAwtI9C",
+      "id": "Ku17RB_U7h_r09rQ5DY7E",
       "type": "code_line_v2"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "QnGaY9rYi6QBKu8XRRvnY"
     },
     {
       "children": [
@@ -1762,7 +1820,7 @@
                   "text": ""
                 }
               ],
-              "id": "iZo7PEym1U8YXSJxPPhND",
+              "id": "uYKbUo7x_lgM19VtzLyXe",
               "type": "smart-ref",
               "blockId": "rCz2yWuvpOlarYEg7kFl3",
               "columnId": null,
@@ -1777,9 +1835,9 @@
                   "text": ""
                 }
               ],
-              "id": "VLTqi4oQ9es28OWxt1Y5o",
+              "id": "tLB6-qU3MH7wHH3TOza9B",
               "type": "smart-ref",
-              "blockId": "iW-DZKbrENqTAswfdX9XU",
+              "blockId": "6N8YN4U3cC3BD6gjpIBMk",
               "columnId": null,
               "lastSeenVariableName": "TerminalValue"
             },
@@ -1824,10 +1882,10 @@
     {
       "children": [
         {
-          "text": "Now that we have the present value of FCF and TV, we can compute Apple's enterprise value and market value to get an estimated share value: "
+          "text": "Now that we have the present value of FCF and TV, we can compute Apple's enterprise value: "
         },
         {
-          "text": "exprRef_a0Clh7_iqPx7Kz11nKuW_",
+          "text": "exprRef_Kw__Ibhf4MpWjPkLDRTY_",
           "magicnumberz": true
         },
         {
@@ -1842,11 +1900,11 @@
         {
           "children": [
             {
-              "text": "EntValue"
+              "text": "ENT_Value"
             }
           ],
           "type": "structured_varname",
-          "id": "H1NpOdVtORHST6ftt5hq3"
+          "id": "s-V2Wxjt2tE9cC-hgaOML"
         },
         {
           "children": [
@@ -1859,9 +1917,9 @@
                   "text": ""
                 }
               ],
-              "id": "xst4JsomWMmMB38yUBmze",
+              "id": "dIP4hlSiNeXALHQboZ-Rj",
               "type": "smart-ref",
-              "blockId": "ocYZ5vM0-rBQB6FAwtI9C",
+              "blockId": "Ku17RB_U7h_r09rQ5DY7E",
               "columnId": null,
               "lastSeenVariableName": "PVFC"
             },
@@ -1874,7 +1932,7 @@
                   "text": ""
                 }
               ],
-              "id": "FClP-xqsojwKKQBRC8WRP",
+              "id": "MsBn6auplwqWYyIGZDclZ",
               "type": "smart-ref",
               "blockId": "mo9UAF436HRB1nwhrxaq_",
               "columnId": null,
@@ -1885,11 +1943,46 @@
             }
           ],
           "type": "code_line_v2_code",
-          "id": "ku2F8s3K4EQ0GPwAM0gEv"
+          "id": "mgc3I6I1uDed9AztPbV7p"
         }
       ],
-      "id": "OSa709r7Txv7tCQ7zx3Kt",
+      "id": "xJSBPgz6T2nB7ko-z2Sis",
       "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "Let's adjust for net debt to calculate market value: "
+        },
+        {
+          "text": "exprRef_Kw__Ibhf4MpWjPkLDRTY_",
+          "magicnumberz": true
+        },
+        {
+          "text": " . "
+        },
+        {
+          "text": "(note: you can pull net debt from a company's balance sheet: ",
+          "italic": true
+        },
+        {
+          "children": [
+            {
+              "text": "source",
+              "italic": true
+            }
+          ],
+          "type": "a",
+          "url": "https://seekingalpha.com/symbol/AAPL/balance-sheet",
+          "id": "KiYLHbkNo7zpgZaCdFhRc"
+        },
+        {
+          "text": ")",
+          "italic": true
+        }
+      ],
+      "type": "p",
+      "id": "ta6CUZ_3g_3HFIHJc7UfY"
     },
     {
       "children": [
@@ -1900,19 +1993,19 @@
             }
           ],
           "type": "structured_varname",
-          "id": "z26polHAVVYeCRNnED1_L"
+          "id": "kq4UNABTqgeTggahRtOex"
         },
         {
           "children": [
             {
-              "text": "-54340 millions"
+              "text": "-54340 million"
             }
           ],
           "type": "code_line_v2_code",
-          "id": "wSSMdoFGFXi3g1jpdY8QW"
+          "id": "b3uBCH1UiZfzecD7GXCG6"
         }
       ],
-      "id": "ArTZoPbwG90WVBBjx5xTb",
+      "id": "jdgVlnwVMEGPytZ71fHHl",
       "type": "code_line_v2"
     },
     {
@@ -1924,7 +2017,7 @@
             }
           ],
           "type": "structured_varname",
-          "id": "c9q2W90uQM9RO3QF74OdL"
+          "id": "4xGuydUqUEGWcNBQxq2jP"
         },
         {
           "children": [
@@ -1937,11 +2030,11 @@
                   "text": ""
                 }
               ],
-              "id": "DkcBrsvIPQZHTsY-KN7kZ",
+              "id": "UTbX6b8ns-BBf7z8InoJN",
               "type": "smart-ref",
-              "blockId": "OSa709r7Txv7tCQ7zx3Kt",
+              "blockId": "xJSBPgz6T2nB7ko-z2Sis",
               "columnId": null,
-              "lastSeenVariableName": "EntValue"
+              "lastSeenVariableName": "ENT_Value"
             },
             {
               "text": " - "
@@ -1952,9 +2045,9 @@
                   "text": ""
                 }
               ],
-              "id": "6--YoWDXtkns3W6qLWdVW",
+              "id": "Axm9CINqfHXhnL-jt2QOA",
               "type": "smart-ref",
-              "blockId": "ArTZoPbwG90WVBBjx5xTb",
+              "blockId": "jdgVlnwVMEGPytZ71fHHl",
               "columnId": null,
               "lastSeenVariableName": "NetDebt"
             },
@@ -1963,11 +2056,89 @@
             }
           ],
           "type": "code_line_v2_code",
-          "id": "4IthNMdAjko2UD2J03g33"
+          "id": "BUBo19UOII-xVc-2Ww2_V"
         }
       ],
-      "id": "001P6KQ9sBavsIs6AVqLC",
+      "id": "Kw-_Ibhf4MpWjPkLDRTY_",
       "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "Let's grab Apple's latest share price using a live query and get the total shares outstanding from their latest filing "
+        },
+        {
+          "text": "(note: you can find total shares outstanding in a company's balance sheet. ",
+          "italic": true
+        },
+        {
+          "children": [
+            {
+              "text": "source",
+              "italic": true
+            }
+          ],
+          "type": "a",
+          "url": "https://seekingalpha.com/symbol/AAPL/balance-sheet",
+          "id": "mSHkGGEEEsGEig8EA31Nr"
+        },
+        {
+          "text": ")",
+          "italic": true
+        }
+      ],
+      "type": "p",
+      "id": "S3m0NDUxXm9uAdzRVtu78"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Share Price (NSADAQ):  "
+                },
+                {
+                  "text": "exprRef_3gdZ9glwPWrc6Mnhk9ra2",
+                  "magicnumberz": true
+                },
+                {
+                  "text": ". "
+                }
+              ],
+              "type": "lic",
+              "id": "teIz8GLe0YZk23_OWG9Ok"
+            }
+          ],
+          "type": "li",
+          "id": "kWea3iOrcV9_KkkrNEN4j"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Shares outstanding: "
+                },
+                {
+                  "text": "exprRef_il1XrkiiGhYUtYt6XzQUh",
+                  "magicnumberz": true
+                },
+                {
+                  "text": "  "
+                }
+              ],
+              "type": "lic",
+              "id": "84iQyzM6hzkstO5JzkrpC"
+            }
+          ],
+          "type": "li",
+          "id": "mKuMnqLCDIRtWIL424F7d"
+        }
+      ],
+      "type": "ul",
+      "id": "KRVjNG4FCXbCVZqI0y0JW"
     },
     {
       "children": [
@@ -1978,31 +2149,48 @@
             }
           ],
           "type": "structured_varname",
-          "id": "REfwrglgFOFkxtmgS0pE0"
+          "id": "qlOCuufHURsQcaDvsQsR0"
         },
         {
           "children": [
             {
-              "text": "15842 millions"
+              "text": "15943 million"
             }
           ],
           "type": "code_line_v2_code",
-          "id": "UFbNPaz5O9d1mSS9vt9wQ"
+          "id": "ahZLvDtK3_WkgndGzwX0R"
         }
       ],
-      "id": "JMTj5YR3w67VH5zPnbjgX",
-      "type": "code_line_v2"
+      "id": "il1XrkiiGhYUtYt6XzQUh",
+      "type": "code_line_v2",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Finally, let's calculate Apple's value per share based on our assumptions about the future: "
+        },
+        {
+          "text": "exprRef_qLAV_ocydr_ZJZnxkQ8R3",
+          "magicnumberz": true
+        },
+        {
+          "text": " . "
+        }
+      ],
+      "type": "p",
+      "id": "_rWNPs6DfOjRqsblXtNgq"
     },
     {
       "children": [
         {
           "children": [
             {
-              "text": "ValuePerShare"
+              "text": "EstValuePerShare"
             }
           ],
           "type": "structured_varname",
-          "id": "914z5rJ02g_bsW-fOZnSX"
+          "id": "xdvpHv07YKUcHRWE9r2Zx"
         },
         {
           "children": [
@@ -2015,9 +2203,9 @@
                   "text": ""
                 }
               ],
-              "id": "E377Vi_-KKskl8poQ5d0v",
+              "id": "lyEqcUZzOq2S1i71bpMlP",
               "type": "smart-ref",
-              "blockId": "001P6KQ9sBavsIs6AVqLC",
+              "blockId": "Kw-_Ibhf4MpWjPkLDRTY_",
               "columnId": null,
               "lastSeenVariableName": "MarketValue"
             },
@@ -2030,9 +2218,9 @@
                   "text": ""
                 }
               ],
-              "id": "lmIURbmJKZpmwL3rU8rLK",
+              "id": "AwaTFH4PGCCrUvjhPic7i",
               "type": "smart-ref",
-              "blockId": "JMTj5YR3w67VH5zPnbjgX",
+              "blockId": "il1XrkiiGhYUtYt6XzQUh",
               "columnId": null,
               "lastSeenVariableName": "SharesOutstanding"
             },
@@ -2041,65 +2229,11 @@
             }
           ],
           "type": "code_line_v2_code",
-          "id": "R0yfGm2rGiqMa3fKpZaBz"
+          "id": "t2BVpGvWR3CgNZ_AZDawR"
         }
       ],
-      "id": "a0Clh7_iqPx7Kz11nKuW-",
+      "id": "qLAV-ocydr_ZJZnxkQ8R3",
       "type": "code_line_v2"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "gUWlowYSEGoWalNoMiCDl"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "gx8PwdIRxm4xqrhZVja2Q"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "Dmry1laTvBRNCZEY-y3Ih"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "W-JHeuZHHEPvquheSGRXG"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "HQ5IropWMsvsANe7M0sIn"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "QN9MfsXJ6lwFfw2ycVe4v"
     },
     {
       "children": [
@@ -2113,7 +2247,7 @@
     {
       "children": [
         {
-          "text": "5. Compare Scenarios"
+          "text": "5. Final Summary & Scenarios"
         }
       ],
       "type": "h2",
@@ -2196,6 +2330,29 @@
     {
       "children": [
         {
+          "text": "These assumptions result in an estimated value per share of "
+        },
+        {
+          "text": "exprRef_qLAV_ocydr_ZJZnxkQ8R3",
+          "magicnumberz": true
+        },
+        {
+          "text": " , compared to Apple's actual share price of "
+        },
+        {
+          "text": "exprRef_3gdZ9glwPWrc6Mnhk9ra2",
+          "magicnumberz": true
+        },
+        {
+          "text": " . Let's play with those assumptions:"
+        }
+      ],
+      "type": "p",
+      "id": "3Nnc_AC9OINRgFDdFbW13"
+    },
+    {
+      "children": [
+        {
           "children": [
             {
               "children": [
@@ -2210,7 +2367,7 @@
             {
               "children": [
                 {
-                  "text": "3.2%"
+                  "text": "4.2%"
                 }
               ],
               "id": "6UR2sCEPSXtMMlzZhnBiA",
@@ -2227,7 +2384,7 @@
               "max": "10",
               "min": "0",
               "step": ".1",
-              "value": "3.2"
+              "value": "4.2"
             }
           ],
           "id": "rCz2yWuvpOlarYEg7kFl3",
@@ -2239,7 +2396,7 @@
             {
               "children": [
                 {
-                  "text": "FreeCash_Growth"
+                  "text": "FC_YoYChange"
                 }
               ],
               "id": "b2AUGBtKHC7hLS0JGBxo9",
@@ -2249,36 +2406,23 @@
             {
               "children": [
                 {
-                  "text": "1.5%"
+                  "text": "10%"
                 }
               ],
               "id": "OYdTl7JZwe4uoMQup9i-J",
               "type": "exp"
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "ulPCItIn0Azr1jawbZTY6",
-              "type": "slider",
-              "max": "10",
-              "min": "0",
-              "step": "0.1",
-              "value": "1.5"
             }
           ],
           "id": "kHfzniEiUJhjQ882dZRob",
           "type": "def",
-          "variant": "slider",
+          "variant": "expression",
           "coerceToType": {
             "kind": "number",
             "date": "day"
           }
         }
       ],
-      "id": "TsyVGVhp0ba1dUQ6VOWvn",
+      "id": "IJTgptBHKZRgytkfvsmsJ",
       "type": "columns"
     },
     {
@@ -2300,46 +2444,14 @@
               "text": ""
             }
           ],
-          "id": "llD9STsenYaDpq8AnziuT",
-          "blockId": "a0Clh7_iqPx7Kz11nKuW-",
+          "id": "oIpU3psV3tmmekTk_G_ER",
+          "blockId": "qLAV-ocydr_ZJZnxkQ8R3",
           "type": "display",
-          "varName": "ValuePerShare"
+          "varName": "EstValuePerShare"
         }
       ],
-      "id": "r4kOehV5Z1n25iF7Tsr53",
+      "id": "fLhrGdhFYjHptIz5nRJfe",
       "type": "columns"
-    },
-    {
-      "children": [
-        {
-          "text": "This results in a value per share for Apple of "
-        },
-        {
-          "text": "(our intrinsic value estimate). ",
-          "italic": true
-        },
-        {
-          "text": "We can compare this to Apple's actual share value of "
-        },
-        {
-          "text": "exprRef_3gdZ9glwPWrc6Mnhk9ra2",
-          "magicnumberz": true
-        },
-        {
-          "text": "  to evaluate if Apple is over or undervalued. "
-        }
-      ],
-      "type": "p",
-      "id": "zTFdZWYBqp0_VuRr4a_GH"
-    },
-    {
-      "children": [
-        {
-          "text": "And, we can play with our two main assumptions around the disc rate and free cash growth rate to see the impact:"
-        }
-      ],
-      "type": "p",
-      "id": "YlWBrVVyRudy08S1agvjf"
     },
     {
       "children": [
@@ -2481,7 +2593,7 @@
         {
           "children": [
             {
-              "text": "Apple_LiveSharePrice⚡"
+              "text": "ActualSharePrice⚡"
             }
           ],
           "type": "structured_varname",
@@ -2520,7 +2632,7 @@
               "lastSeenVariableName": "AAPL_SharePrice.Attribute"
             },
             {
-              "text": " ==\"Share Price\").Value"
+              "text": " ==\"Share Price\").Value in ⚡"
             }
           ],
           "type": "code_line_v2_code",
@@ -2648,25 +2760,7 @@
         }
       ],
       "type": "p",
-      "id": "m-eeMAaV4W8mu8ivUgFxC"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "dHoqzAXKCsM1F3QG7V3-T"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "WrCL4bsHQg9Y5x8PToswr"
+      "id": "accIN2Q5_oWA9JmyhK9yp"
     }
   ]
 }

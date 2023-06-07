@@ -78,6 +78,7 @@ export const CodeError: FC<CodeErrorProps> = ({
         <span
           css={[iconWrapperStyles, variant === 'smol' && smolStylez]}
           title={message}
+          data-testid="code-line-warning"
         >
           <Warning />
         </span>

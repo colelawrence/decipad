@@ -28,28 +28,18 @@ export const checkForErrorsStep = (
   notebookTitle?: string
 ) =>
   test.step(`Check errors on ${notebookId} (${notebookTitle})`, async () => {
-    // note: This will stop picking up errors if we change the icon of loading
-    const hasMagicErrors = await page.locator(
-      'p span >svg title:has-text("Loading")'
-    );
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
 
-    // note: This will stop picking up errors if we change the icon of errors
-    const hasCodelineErrors = await page.locator(
-      'output span >svg title:has-text("Warning")'
-    );
+    const hasCodelineErrors = await page.getByTestId('code-line-warning');
 
-    // note: This will stop picking up errors if we change the text of an error block
-    const hasErrorBlock = await page.locator('text=Delete this block');
+    const hasErrorBlock = await page.getByTestId('error-block');
 
-    const isLoading = await page.locator('[data-testid="loading-results"]');
+    const isLoading = await page.getByTestId('loading-results');
 
-    const mEC = await hasMagicErrors.count();
     const cEC = await hasCodelineErrors.count();
     const bEC = await hasErrorBlock.count();
     const lEC = await isLoading.count();
-
-    // See if it has magic errors
-    expect.soft(mEC, `magic errors`).toBe(0);
 
     // See if it has errors in calculations
     expect.soft(cEC, `calculation errors`).toBe(0);
@@ -57,6 +47,6 @@ export const checkForErrorsStep = (
     // See if it has error blocks
     expect.soft(bEC, `broken blocks`).toBe(0);
 
-    // See if it has results that didn't load
+    // See if it has results that didn't load or magic errors
     expect.soft(lEC, `broken blocks`).toBe(0);
   });
