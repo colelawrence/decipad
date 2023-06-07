@@ -119,12 +119,12 @@ module.exports = function configureWebpack(config) {
         })
       );
     }
+    // add service worker plugin
+    config.plugins.push(serviceWorkerConfig());
   }
-  // add service worker plugin
-  config.plugins.push(serviceWorkerConfig());
 
   // add webpack bundle analyzer plugin
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production' && process.env.ANALYZE) {
     config.plugins.push(new BundleAnalyzerPlugin());
   }
 
