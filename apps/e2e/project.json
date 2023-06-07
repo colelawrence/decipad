@@ -22,6 +22,13 @@
       "options": {
         "command": "yarn tsc -b apps/e2e"
       }
+    },
+    "play": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/playwright test",
+        "cwd": "apps/e2e"
+      }
     }
   },
   "tags": [],

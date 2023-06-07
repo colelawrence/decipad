@@ -168,17 +168,13 @@ yarn e2e
 
 ### Running individual e2e tests
 
-**Important:** use npx and cd to e2e folder before running the command.
-
-`cd` to the `apps/e2e` folder, and run:
-
 ```bash
-npx playwright test <<test-name-pattern>>  [--debug]
+nx play e2e <<test-name-pattern>>  [--debug] [--ui]
 ```
 
-> To run the E2E tests individually you will need the local sandbox server running (which you can start with `yarn serve:all` on a different terminal).
+> Interesting options are `--debug` (to play visually) and `--ui` (start an interactive visual test runner)
 
-Interesting options are `--headless` (don't show a window) and `--watch` (don't close after running).
+> To run the E2E tests individually you will need the local sandbox server running (which you can start with `yarn serve:all:e2e` on a different terminal).
 
 ## If your deployment failed
 
