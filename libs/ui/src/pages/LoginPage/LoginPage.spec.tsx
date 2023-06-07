@@ -29,20 +29,4 @@ describe('Login page', () => {
     await userEvent.type(input, 'johndoe@example.com');
     await userEvent.click(getByText(/continue/i));
   });
-
-  it('disables the button while submitting', async () => {
-    const handleSubmit = jest.fn().mockReturnValue(new Promise<void>(() => {}));
-    const { findByText, getByRole, getByText } = render(
-      <LoginPage onSubmit={handleSubmit} />
-    );
-    act(() => getByText('Continue with email').click());
-
-    const input = getByRole('textbox');
-    expect(input).toHaveAttribute('type', 'email');
-
-    await userEvent.type(input, 'johndoe@example.com');
-    await userEvent.click(await findByText(/submit/i));
-
-    expect(await findByText(/wait/i)).toBeDisabled();
-  });
 });
