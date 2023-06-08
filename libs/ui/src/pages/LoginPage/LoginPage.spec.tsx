@@ -4,8 +4,10 @@ import { LoginPage } from './LoginPage';
 
 describe('Login page', () => {
   it('disables the button when the input value is not a valid email', async () => {
-    const { getByRole, getByText } = render(<LoginPage onSubmit={jest.fn()} />);
-    act(() => getByText('Continue with email').click());
+    const { getByRole, findByText } = render(
+      <LoginPage onSubmit={jest.fn()} />
+    );
+    await act(async () => (await findByText('Continue with email')).click());
 
     const input = getByRole('textbox');
     const submitButton = getByRole('button');
@@ -20,8 +22,10 @@ describe('Login page', () => {
   });
 
   it('emits a submit event when typing an email and clicking continue', async () => {
-    const { getByText, getByRole } = render(<LoginPage onSubmit={jest.fn()} />);
-    act(() => getByText('Continue with email').click());
+    const { getByText, getByRole, findByText } = render(
+      <LoginPage onSubmit={jest.fn()} />
+    );
+    await act(async () => (await findByText('Continue with email')).click());
 
     const input = getByRole('textbox');
     expect(input).toHaveAttribute('type', 'email');

@@ -53,6 +53,7 @@ import {
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_VARIABLE_DEF,
+  ELEMENT_JS_BLOCK,
 } from './element-kinds';
 import {
   CaptionElement,
@@ -376,5 +377,6 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DRAW,
   ELEMENT_DATA_MAPPING,
   ELEMENT_LIVE_QUERY,
+  ELEMENT_JS_BLOCK,
   ELEMENT_INTEGRATION,
 ];
