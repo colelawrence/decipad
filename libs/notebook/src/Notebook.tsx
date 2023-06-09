@@ -227,7 +227,7 @@ export const Notebook: FC<NotebookProps> = (props) => {
           onAttached={onAttached}
         />
         <InsideNotebookState {...rest} />
-        {isFlagEnabled('SAVE_NOTEBOOK_LOGS') && (
+        {!props.readOnly && isFlagEnabled('SAVE_NOTEBOOK_LOGS') && (
           <NotebookLogs notebookId={notebookId} />
         )}
         {isFlagEnabled('COMPUTER_STATS') && <EditorStats />}
