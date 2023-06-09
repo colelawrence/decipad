@@ -30,6 +30,7 @@ interface WrapperIntegrationModalDialogProps {
   readonly onTabClick?: (s: Stages) => void;
 
   readonly onBack: () => void;
+  readonly onReset?: () => void;
   readonly onContinue: () => void;
   readonly setOpen: (open: boolean) => void;
 
@@ -42,6 +43,7 @@ export const WrapperIntegrationModalDialog: FC<
   title,
   onContinue: onConnect,
   onBack: onAbort,
+  onReset = noop,
   showTabs = false,
   tabStage = 'pick-source' as Stages,
   onTabClick = noop,
@@ -156,8 +158,11 @@ export const WrapperIntegrationModalDialog: FC<
                 </Button>
               </div>
               <div>
-                <Button type="secondary" onClick={onAbort}>
-                  Back
+                <Button
+                  type="secondary"
+                  onClick={tabStage === 'map' ? onAbort : onReset}
+                >
+                  {tabStage === 'map' ? 'Back' : 'Reset'}
                 </Button>
               </div>
             </>

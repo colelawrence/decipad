@@ -1,6 +1,7 @@
 import {
   ExecutionContext,
   TExecution,
+  useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
 import { Dialog, WrapperIntegrationModalDialog } from '@decipad/ui';
@@ -9,6 +10,7 @@ import { useCreateIntegration, useIntegrationScreenFactory } from '../hooks';
 
 export const Integrations: FC = () => {
   const store = useConnectionStore();
+  const codeStore = useCodeConnectionStore();
 
   // TODO: Remove this from here, but for now it works.
   const [info, onExecute] = useState<TExecution<boolean>>({
@@ -27,6 +29,7 @@ export const Integrations: FC = () => {
           showTabs={store.stage !== 'pick-integration'}
           onTabClick={(stage) => store.setStage(stage)}
           onBack={store.back}
+          onReset={codeStore.reset}
           onContinue={store.next}
           setOpen={store.changeOpen}
           isEditing={!!store.existingIntegration}
