@@ -11,7 +11,17 @@ import { timestamp } from '@decipad/backend-utils';
 
 const MAX_DATA_SIZE_BYTES = 100_000;
 
-const currentEpoque = () => format(new Date(), 'yyyy-MM-dd:HH O');
+const BACKUP_GRANULARITY_MS = 1000 * 60 * 10; // 10 minutes
+
+const currentEpochTimestamp = () => {
+  const now = Date.now();
+  const remainder = now % BACKUP_GRANULARITY_MS;
+  return now - remainder;
+};
+
+const currentEpoque = () => {
+  return format(currentEpochTimestamp(), 'yyyy-MM-dd:HH:mm O');
+};
 
 export const needsBackup = async (
   epoque: string,
