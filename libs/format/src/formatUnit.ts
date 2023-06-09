@@ -225,7 +225,7 @@ export const formatUnitArgs = (
       // but when you have more previousLength = 0
       // you use international system like `m.s-1`
       //
-      if (unitsLength === 2 && N(unit.exp).compare(N(-1)) === 0) {
+      if (N(unit.exp).compare(N(-1)) === 0) {
         if (prettify) {
           if (unitIsSymbol(unit.unit)) {
             parts.push({
@@ -252,7 +252,7 @@ export const formatUnitArgs = (
         });
         stringifyUnit(produceExp(unit), prettify).forEach((x) => parts.push(x));
       }
-    } else if (unitsLength === 1 && N(unit.exp).compare(N(-1)) === 0) {
+    } else if (N(unit.exp).compare(N(-1)) === 0) {
       parts.push({ type: 'unit-literal', value: ' ' });
       parts.push({
         type: 'unit-group',

@@ -14,7 +14,7 @@ describe('base unit tests', () => {
   it('runs a single test', () => {
     expect(
       formatUnit(locale, U([u('meter'), u('kg'), inverseExponent(u('s'))]))
-    ).toEqual('meters·kg·s⁻¹');
+    ).toEqual('meters·kg/s');
   });
 
   it('crazy multipliers', () => {
@@ -55,7 +55,7 @@ describe('base unit tests', () => {
     expect(formatUnit(locale, U([u('$')]))).toEqual('$');
     expect(
       formatUnit(locale, U([u('meters'), u('kg'), inverseExponent(u('s'))]))
-    ).toEqual('meters·kg·s⁻¹');
+    ).toEqual('meters·kg/s');
     expect(formatUnit(locale, U([cm, cm, cm]))).toEqual('micrometers³');
     expect(formatUnit(locale, U([u('f', { multiplier: N(1, 100) })]))).toEqual(
       'cF'

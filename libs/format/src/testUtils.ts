@@ -37,6 +37,12 @@ export const metersPerDay: Unit[] = [u('meters'), u('days', { exp: N(-1) })];
 
 export const bananasPerDay: Unit[] = [u('banana'), u('days', { exp: N(-1) })];
 
+export const usdPerMonthPerWorker: Unit[] = [
+  ...usd,
+  u('month', { exp: N(-1) }),
+  u('worker', { exp: N(-1) }),
+];
+
 export const perDay: Unit[] = [u('days', { exp: N(-1) })];
 
 export const perBanana: Unit[] = [u('banana', { exp: N(-1) })];

@@ -15,6 +15,7 @@ import {
   F,
   usd,
   usdPerDay,
+  usdPerMonthPerWorker,
 } from './testUtils';
 
 const locale = 'en-US';
@@ -1083,6 +1084,10 @@ describe('formatNumber', () => {
         const [nr, unit] = makeFractionUnitTuple(F(1000000000), 'usd');
         const { asString } = formatNumber(locale, unit, nr);
         expect(asString).toEqual('$1B');
+      });
+      it('100 usd / month / worker = $100 per month per worker', () => {
+        const { asString } = formatNumber(locale, usdPerMonthPerWorker, F(100));
+        expect(asString).toEqual('$100 per month per worker');
       });
     });
 
