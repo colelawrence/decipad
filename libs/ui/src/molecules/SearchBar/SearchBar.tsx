@@ -11,7 +11,7 @@ import { MenuList } from '../MenuList/MenuList';
 import { AvailableColorStatus, ColorStatusNames } from '../../utils';
 import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
 
-const ROUTES_WHITELIST = ['', 'edit', 'members'];
+const ROUTES_WHITELIST = ['', 'edit', 'members', 'connections'];
 
 export const useSearchBarStore = create<{
   search: string;

@@ -55,5 +55,6 @@ export type { WorkspaceMembersProps } from './WorkspaceMembers/WorkspaceMembers'
 export { WorkspaceMenu } from './WorkspaceMenu/WorkspaceMenu';
 export { WorkspaceNavigation } from './WorkspaceNavigation/WorkspaceNavigation';
 export { WorkspaceOptions } from './WorkspaceOptions/WorkspaceOptions';
+export { WorkspaceSecrets } from './WorkspaceSecrets/WorkspaceSecrets';
 export { WorkspaceSelector } from './WorkspaceSelector/WorkspaceSelector';
 export { WorkspaceSwitcher } from './WorkspaceSwitcher/WorkspaceSwitcher';

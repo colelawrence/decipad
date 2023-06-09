@@ -8,7 +8,7 @@ import { SearchBar } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { dashboard, notebookList } from '../../styles';
 
-const ROUTES_WHITELIST = ['', 'edit', 'members'];
+const ROUTES_WHITELIST = ['', 'edit', 'members', 'connections'];
 
 type DashboardTopbarProps = {
   readonly onCreateNotebook?: () => void;

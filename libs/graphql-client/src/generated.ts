@@ -123,6 +123,7 @@ export type Mutation = {
   createOrUpdateSnapshot: Scalars['Boolean'];
   createPad: Pad;
   createRole: Role;
+  createSecret: Secret;
   createUserViaMagicLink: User;
   createWorkspace: Workspace;
   doNothing?: Maybe<Scalars['Boolean']>;
@@ -137,6 +138,7 @@ export type Mutation = {
   removeExternalDataSource?: Maybe<Scalars['Boolean']>;
   removePad?: Maybe<Scalars['Boolean']>;
   removeRole?: Maybe<Scalars['Boolean']>;
+  removeSecret: Scalars['Boolean'];
   removeSectionFromWorkspace?: Maybe<Scalars['Boolean']>;
   removeSelfFromRole?: Maybe<Scalars['Boolean']>;
   removeTagFromPad?: Maybe<Scalars['Boolean']>;
@@ -161,6 +163,7 @@ export type Mutation = {
   unshareWorkspaceWithUser?: Maybe<Workspace>;
   updateExternalDataSource?: Maybe<ExternalDataSource>;
   updatePad: Pad;
+  updateSecret: Secret;
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']>;
   updateSelf: User;
   updateWorkspace: Workspace;
@@ -215,6 +218,12 @@ export type MutationCreatePadArgs = {
 
 export type MutationCreateRoleArgs = {
   role?: InputMaybe<RoleInput>;
+};
+
+
+export type MutationCreateSecretArgs = {
+  secret: SecretInput;
+  workspaceId: Scalars['ID'];
 };
 
 
@@ -288,6 +297,11 @@ export type MutationRemovePadArgs = {
 
 export type MutationRemoveRoleArgs = {
   roleId: Scalars['ID'];
+};
+
+
+export type MutationRemoveSecretArgs = {
+  secretId: Scalars['ID'];
 };
 
 
@@ -443,6 +457,12 @@ export type MutationUpdatePadArgs = {
 };
 
 
+export type MutationUpdateSecretArgs = {
+  secret: Scalars['String'];
+  secretId: Scalars['ID'];
+};
+
+
 export type MutationUpdateSectionInWorkspaceArgs = {
   section: SectionInput;
   sectionId: Scalars['ID'];
@@ -564,6 +584,7 @@ export type Query = {
   getExternalDataSources: PagedResult;
   getPadById?: Maybe<Pad>;
   getWorkspaceById?: Maybe<Workspace>;
+  getWorkspaceSecrets: Array<Secret>;
   me?: Maybe<User>;
   pads: PagedPadResult;
   padsByTag: PagedPadResult;
@@ -596,6 +617,11 @@ export type QueryGetPadByIdArgs = {
 
 export type QueryGetWorkspaceByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetWorkspaceSecretsArgs = {
+  workspaceId: Scalars['ID'];
 };
 
 
@@ -655,10 +681,22 @@ export type RoleInvitation = {
   user: User;
 };
 
+export type Secret = {
+  __typename?: 'Secret';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  workspace?: Maybe<Workspace>;
+};
+
 export type SecretAccess = {
   __typename?: 'SecretAccess';
   canComment: Scalars['Boolean'];
   permission: PermissionType;
+  secret: Scalars['String'];
+};
+
+export type SecretInput = {
+  name: Scalars['String'];
   secret: Scalars['String'];
 };
 
@@ -795,6 +833,7 @@ export type Workspace = {
   name: Scalars['String'];
   pads: PagedPadResult;
   roles: Array<Role>;
+  secrets: Array<Secret>;
   sections: Array<Section>;
 };
 
@@ -885,6 +924,14 @@ export type CreateWorkspaceMutationVariables = Exact<{
 
 export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } };
 
+export type CreateWorkspaceSecretMutationVariables = Exact<{
+  workspaceId: Scalars['ID'];
+  secret: SecretInput;
+}>;
+
+
+export type CreateWorkspaceSecretMutation = { __typename?: 'Mutation', createSecret: { __typename?: 'Secret', id: string, name: string } };
+
 export type DeleteNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -906,6 +953,13 @@ export type DeleteWorkspaceMutationVariables = Exact<{
 
 
 export type DeleteWorkspaceMutation = { __typename?: 'Mutation', removeWorkspace?: boolean | null };
+
+export type DeleteWorkspaceSecretMutationVariables = Exact<{
+  secretId: Scalars['ID'];
+}>;
+
+
+export type DeleteWorkspaceSecretMutation = { __typename?: 'Mutation', removeSecret: boolean };
 
 export type DuplicateNotebookMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1152,6 +1206,13 @@ export type GetWorkspaceMembersQueryVariables = Exact<{
 
 export type GetWorkspaceMembersQuery = { __typename?: 'Query', getWorkspaceById?: { __typename?: 'Workspace', id: string, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } | null };
 
+export type GetWorkspaceSecretsQueryVariables = Exact<{
+  workspaceId: Scalars['ID'];
+}>;
+
+
+export type GetWorkspaceSecretsQuery = { __typename?: 'Query', getWorkspaceSecrets: Array<{ __typename?: 'Secret', id: string, name: string }> };
+
 export const ExternalDataSourceFragmentFragmentDoc = gql`
     fragment ExternalDataSourceFragment on ExternalDataSource {
   id
@@ -1393,6 +1454,18 @@ export const CreateWorkspaceDocument = gql`
 export function useCreateWorkspaceMutation() {
   return Urql.useMutation<CreateWorkspaceMutation, CreateWorkspaceMutationVariables>(CreateWorkspaceDocument);
 };
+export const CreateWorkspaceSecretDocument = gql`
+    mutation CreateWorkspaceSecret($workspaceId: ID!, $secret: SecretInput!) {
+  createSecret(workspaceId: $workspaceId, secret: $secret) {
+    id
+    name
+  }
+}
+    `;
+
+export function useCreateWorkspaceSecretMutation() {
+  return Urql.useMutation<CreateWorkspaceSecretMutation, CreateWorkspaceSecretMutationVariables>(CreateWorkspaceSecretDocument);
+};
 export const DeleteNotebookDocument = gql`
     mutation DeleteNotebook($id: ID!) {
   removePad(id: $id)
@@ -1419,6 +1492,15 @@ export const DeleteWorkspaceDocument = gql`
 
 export function useDeleteWorkspaceMutation() {
   return Urql.useMutation<DeleteWorkspaceMutation, DeleteWorkspaceMutationVariables>(DeleteWorkspaceDocument);
+};
+export const DeleteWorkspaceSecretDocument = gql`
+    mutation DeleteWorkspaceSecret($secretId: ID!) {
+  removeSecret(secretId: $secretId)
+}
+    `;
+
+export function useDeleteWorkspaceSecretMutation() {
+  return Urql.useMutation<DeleteWorkspaceSecretMutation, DeleteWorkspaceSecretMutationVariables>(DeleteWorkspaceSecretDocument);
 };
 export const DuplicateNotebookDocument = gql`
     mutation DuplicateNotebook($id: ID!, $targetWorkspace: ID!, $document: String) {
@@ -1827,6 +1909,18 @@ export const GetWorkspaceMembersDocument = gql`
 export function useGetWorkspaceMembersQuery(options: Omit<Urql.UseQueryArgs<GetWorkspaceMembersQueryVariables>, 'query'>) {
   return Urql.useQuery<GetWorkspaceMembersQuery, GetWorkspaceMembersQueryVariables>({ query: GetWorkspaceMembersDocument, ...options });
 };
+export const GetWorkspaceSecretsDocument = gql`
+    query GetWorkspaceSecrets($workspaceId: ID!) {
+  getWorkspaceSecrets(workspaceId: $workspaceId) {
+    id
+    name
+  }
+}
+    `;
+
+export function useGetWorkspaceSecretsQuery(options: Omit<Urql.UseQueryArgs<GetWorkspaceSecretsQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetWorkspaceSecretsQuery, GetWorkspaceSecretsQueryVariables>({ query: GetWorkspaceSecretsDocument, ...options });
+};
 export type WithTypename<T extends { __typename?: any }> = Partial<T> & { __typename: NonNullable<T['__typename']> };
 
 export type GraphCacheKeysConfig = {
@@ -1847,6 +1941,7 @@ export type GraphCacheKeysConfig = {
   Role?: (data: WithTypename<Role>) => null | string,
   RoleAccess?: (data: WithTypename<RoleAccess>) => null | string,
   RoleInvitation?: (data: WithTypename<RoleInvitation>) => null | string,
+  Secret?: (data: WithTypename<Secret>) => null | string,
   SecretAccess?: (data: WithTypename<SecretAccess>) => null | string,
   Section?: (data: WithTypename<Section>) => null | string,
   SectionChanges?: (data: WithTypename<SectionChanges>) => null | string,
@@ -1870,6 +1965,7 @@ export type GraphCacheResolvers = {
     getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, WithTypename<PagedResult> | string>,
     getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
     getWorkspaceById?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceByIdArgs, WithTypename<Workspace> | string>,
+    getWorkspaceSecrets?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceSecretsArgs, Array<WithTypename<Secret> | string>>,
     me?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
     padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
@@ -1999,6 +2095,11 @@ export type GraphCacheResolvers = {
     role?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, WithTypename<Role> | string>,
     user?: GraphCacheResolver<WithTypename<RoleInvitation>, Record<string, never>, WithTypename<User> | string>
   },
+  Secret?: {
+    id?: GraphCacheResolver<WithTypename<Secret>, Record<string, never>, Scalars['ID'] | string>,
+    name?: GraphCacheResolver<WithTypename<Secret>, Record<string, never>, Scalars['String'] | string>,
+    workspace?: GraphCacheResolver<WithTypename<Secret>, Record<string, never>, WithTypename<Workspace> | string>
+  },
   SecretAccess?: {
     canComment?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, Scalars['Boolean'] | string>,
     permission?: GraphCacheResolver<WithTypename<SecretAccess>, Record<string, never>, PermissionType | string>,
@@ -2073,6 +2174,7 @@ export type GraphCacheResolvers = {
     name?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['String'] | string>,
     pads?: GraphCacheResolver<WithTypename<Workspace>, WorkspacePadsArgs, WithTypename<PagedPadResult> | string>,
     roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>,
+    secrets?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Secret> | string>>,
     sections?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Section> | string>>
   },
   WorkspaceAccess?: {
@@ -2096,6 +2198,7 @@ export type GraphCacheOptimisticUpdaters = {
   createOrUpdateSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateOrUpdateSnapshotArgs, Scalars['Boolean']>,
   createPad?: GraphCacheOptimisticMutationResolver<MutationCreatePadArgs, WithTypename<Pad>>,
   createRole?: GraphCacheOptimisticMutationResolver<MutationCreateRoleArgs, WithTypename<Role>>,
+  createSecret?: GraphCacheOptimisticMutationResolver<MutationCreateSecretArgs, WithTypename<Secret>>,
   createUserViaMagicLink?: GraphCacheOptimisticMutationResolver<MutationCreateUserViaMagicLinkArgs, WithTypename<User>>,
   createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
@@ -2110,6 +2213,7 @@ export type GraphCacheOptimisticUpdaters = {
   removeExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationRemoveExternalDataSourceArgs, Maybe<Scalars['Boolean']>>,
   removePad?: GraphCacheOptimisticMutationResolver<MutationRemovePadArgs, Maybe<Scalars['Boolean']>>,
   removeRole?: GraphCacheOptimisticMutationResolver<MutationRemoveRoleArgs, Maybe<Scalars['Boolean']>>,
+  removeSecret?: GraphCacheOptimisticMutationResolver<MutationRemoveSecretArgs, Scalars['Boolean']>,
   removeSectionFromWorkspace?: GraphCacheOptimisticMutationResolver<MutationRemoveSectionFromWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   removeSelfFromRole?: GraphCacheOptimisticMutationResolver<MutationRemoveSelfFromRoleArgs, Maybe<Scalars['Boolean']>>,
   removeTagFromPad?: GraphCacheOptimisticMutationResolver<MutationRemoveTagFromPadArgs, Maybe<Scalars['Boolean']>>,
@@ -2134,6 +2238,7 @@ export type GraphCacheOptimisticUpdaters = {
   unshareWorkspaceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareWorkspaceWithUserArgs, Maybe<WithTypename<Workspace>>>,
   updateExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationUpdateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
   updatePad?: GraphCacheOptimisticMutationResolver<MutationUpdatePadArgs, WithTypename<Pad>>,
+  updateSecret?: GraphCacheOptimisticMutationResolver<MutationUpdateSecretArgs, WithTypename<Secret>>,
   updateSectionInWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateSectionInWorkspaceArgs, Maybe<Scalars['Boolean']>>,
   updateSelf?: GraphCacheOptimisticMutationResolver<MutationUpdateSelfArgs, WithTypename<User>>,
   updateWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateWorkspaceArgs, WithTypename<Workspace>>
@@ -2150,6 +2255,7 @@ export type GraphCacheUpdaters = {
     createOrUpdateSnapshot?: GraphCacheUpdateResolver<{ createOrUpdateSnapshot: Scalars['Boolean'] }, MutationCreateOrUpdateSnapshotArgs>,
     createPad?: GraphCacheUpdateResolver<{ createPad: WithTypename<Pad> }, MutationCreatePadArgs>,
     createRole?: GraphCacheUpdateResolver<{ createRole: WithTypename<Role> }, MutationCreateRoleArgs>,
+    createSecret?: GraphCacheUpdateResolver<{ createSecret: WithTypename<Secret> }, MutationCreateSecretArgs>,
     createUserViaMagicLink?: GraphCacheUpdateResolver<{ createUserViaMagicLink: WithTypename<User> }, MutationCreateUserViaMagicLinkArgs>,
     createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
@@ -2164,6 +2270,7 @@ export type GraphCacheUpdaters = {
     removeExternalDataSource?: GraphCacheUpdateResolver<{ removeExternalDataSource: Maybe<Scalars['Boolean']> }, MutationRemoveExternalDataSourceArgs>,
     removePad?: GraphCacheUpdateResolver<{ removePad: Maybe<Scalars['Boolean']> }, MutationRemovePadArgs>,
     removeRole?: GraphCacheUpdateResolver<{ removeRole: Maybe<Scalars['Boolean']> }, MutationRemoveRoleArgs>,
+    removeSecret?: GraphCacheUpdateResolver<{ removeSecret: Scalars['Boolean'] }, MutationRemoveSecretArgs>,
     removeSectionFromWorkspace?: GraphCacheUpdateResolver<{ removeSectionFromWorkspace: Maybe<Scalars['Boolean']> }, MutationRemoveSectionFromWorkspaceArgs>,
     removeSelfFromRole?: GraphCacheUpdateResolver<{ removeSelfFromRole: Maybe<Scalars['Boolean']> }, MutationRemoveSelfFromRoleArgs>,
     removeTagFromPad?: GraphCacheUpdateResolver<{ removeTagFromPad: Maybe<Scalars['Boolean']> }, MutationRemoveTagFromPadArgs>,
@@ -2188,6 +2295,7 @@ export type GraphCacheUpdaters = {
     unshareWorkspaceWithUser?: GraphCacheUpdateResolver<{ unshareWorkspaceWithUser: Maybe<WithTypename<Workspace>> }, MutationUnshareWorkspaceWithUserArgs>,
     updateExternalDataSource?: GraphCacheUpdateResolver<{ updateExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationUpdateExternalDataSourceArgs>,
     updatePad?: GraphCacheUpdateResolver<{ updatePad: WithTypename<Pad> }, MutationUpdatePadArgs>,
+    updateSecret?: GraphCacheUpdateResolver<{ updateSecret: WithTypename<Secret> }, MutationUpdateSecretArgs>,
     updateSectionInWorkspace?: GraphCacheUpdateResolver<{ updateSectionInWorkspace: Maybe<Scalars['Boolean']> }, MutationUpdateSectionInWorkspaceArgs>,
     updateSelf?: GraphCacheUpdateResolver<{ updateSelf: WithTypename<User> }, MutationUpdateSelfArgs>,
     updateWorkspace?: GraphCacheUpdateResolver<{ updateWorkspace: WithTypename<Workspace> }, MutationUpdateWorkspaceArgs>

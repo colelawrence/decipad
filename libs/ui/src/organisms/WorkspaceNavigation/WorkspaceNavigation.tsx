@@ -20,6 +20,7 @@ import {
   Docs,
   Gear,
   Home,
+  Key,
   Plus,
   Sparkles,
   Users,
@@ -170,6 +171,17 @@ export const WorkspaceNavigation = ({
               icon={<Gear />}
             >
               <span css={itemTextStyles}>Workspace settings</span>
+            </NavigationItem>
+          </NavigationList>
+
+          <NavigationList key={'workspace-nav-DC'}>
+            <NavigationItem
+              key={'folder-0'}
+              href={activeWorkspaceRoute.connections({}).$}
+              isActive={isSharedPage}
+              icon={<Key />}
+            >
+              <span css={itemTextStyles}>Data connections</span>
             </NavigationItem>
           </NavigationList>
 

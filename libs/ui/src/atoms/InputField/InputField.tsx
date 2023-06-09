@@ -47,6 +47,7 @@ export type InputFieldProps = {
   readonly disabled?: boolean;
   readonly small?: boolean;
 
+  readonly testId?: string;
   readonly label?: string;
   readonly placeholder?: string;
   readonly name?: string;
@@ -64,6 +65,7 @@ export const InputField = ({
   disabled = false,
   small,
 
+  testId,
   label,
   placeholder,
   name,
@@ -83,6 +85,7 @@ export const InputField = ({
   const inputEl = (
     <input
       id={id}
+      data-testid={testId}
       autoFocus={autoFocus}
       disabled={disabled}
       css={[

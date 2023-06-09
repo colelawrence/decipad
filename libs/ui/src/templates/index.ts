@@ -8,6 +8,7 @@ export { DataViewColumnHeader } from './DataViewColumnHeader/DataViewColumnHeade
 export { EditorIcon } from './EditorIcon/EditorIcon';
 export { EditMembersModal } from './EditMembersModal/EditMembersModal';
 export { EditUserModal } from './EditUserModal/EditUserModal';
+export { EditSecretsModal } from './EditSecretsModal/EditSecretsModal';
 export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
 export { ErrorModal } from './ErrorModal/ErrorModal';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
