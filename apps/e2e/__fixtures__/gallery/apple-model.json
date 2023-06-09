@@ -15,7 +15,7 @@
           "text": "Apple is one of the most valuable companies in the world with a current market cap of "
         },
         {
-          "text": "exprRef_ZdcR3wIV5UGj71jxz212B",
+          "text": "ActualMarketCap⚡",
           "magicnumberz": true
         },
         {
@@ -172,7 +172,7 @@
                   "text": ". "
                 },
                 {
-                  "text": "exprRef_3G9koj6Tuw1OULI2cVj2G",
+                  "text": "ActualTenYearTreasury",
                   "magicnumberz": true
                 },
                 {
@@ -2100,7 +2100,7 @@
                   "text": "Share Price (NSADAQ):  "
                 },
                 {
-                  "text": "exprRef_3gdZ9glwPWrc6Mnhk9ra2",
+                  "text": "ActualSharePrice⚡",
                   "magicnumberz": true
                 },
                 {
@@ -2285,13 +2285,12 @@
                   "italic": true
                 },
                 {
-                  "text": "exprRef_3G9koj6Tuw1OULI2cVj2G",
-                  "magicnumberz": true,
-                  "italic": true
+                  "text": "ActualTenYearTreasury",
+                  "italic": true,
+                  "magicnumberz": true
                 },
                 {
-                  "text": " ",
-                  "italic": true
+                  "text": " "
                 }
               ],
               "id": "yFKS-w2L80xb6EyB-zMjN",
@@ -2340,7 +2339,7 @@
           "text": " , compared to Apple's actual share price of "
         },
         {
-          "text": "exprRef_3gdZ9glwPWrc6Mnhk9ra2",
+          "text": "ActualSharePrice⚡",
           "magicnumberz": true
         },
         {
@@ -2428,30 +2427,13 @@
     {
       "children": [
         {
-          "children": [
-            {
-              "text": ""
-            }
-          ],
-          "varName": "",
-          "id": "UPFWsQrc4QqJo32glMc-N",
-          "blockId": "3gdZ9glwPWrc6Mnhk9ra2",
-          "type": "display"
-        },
-        {
-          "children": [
-            {
-              "text": ""
-            }
-          ],
-          "id": "oIpU3psV3tmmekTk_G_ER",
-          "blockId": "qLAV-ocydr_ZJZnxkQ8R3",
-          "type": "display",
-          "varName": "EstValuePerShare"
+          "text": ""
         }
       ],
-      "id": "fLhrGdhFYjHptIz5nRJfe",
-      "type": "columns"
+      "id": "oIpU3psV3tmmekTk_G_ER",
+      "blockId": "qLAV-ocydr_ZJZnxkQ8R3",
+      "type": "display",
+      "varName": "EstValuePerShare"
     },
     {
       "children": [
@@ -2489,15 +2471,6 @@
     {
       "children": [
         {
-          "text": ""
-        }
-      ],
-      "type": "p",
-      "id": "YyYEAAeP-1s6SaQ62cZ0U"
-    },
-    {
-      "children": [
-        {
           "text": "Appendix: Live data connections"
         }
       ],
@@ -2508,140 +2481,27 @@
     {
       "children": [
         {
-          "text": ""
-        }
-      ],
-      "id": "9fM8rZnW2zP_4HcXaQuGm",
-      "type": "divider"
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "text": "AAPL_SharePrice"
-            }
-          ],
-          "id": "GJZ9qK66CSeDguYYEWgE4",
-          "type": "live-var-name"
-        }
-      ],
-      "id": "ZRB-eiuZmUKrPMbRnjyKa",
-      "type": "live-conn",
-      "url": "https://docs.google.com/spreadsheets/d/1jNY8xLkhzgAcPsSK6wr0Zn2m2XmICpuNWkkHyLm76ug/edit#gid=0",
-      "source": "gsheets",
-      "isFirstRowHeaderRow": true,
-      "columnTypeCoercions": [],
-      "isHidden": false
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "text": "AAPL_MarketCap"
-            }
-          ],
-          "id": "Sz7k3U5yxIupUoKLrerOo",
-          "type": "live-var-name"
-        }
-      ],
-      "id": "edz1ZyfkfEDd_7gbHPsHh",
-      "type": "live-conn",
-      "url": "https://docs.google.com/spreadsheets/d/1jNY8xLkhzgAcPsSK6wr0Zn2m2XmICpuNWkkHyLm76ug/edit#gid=809490379",
-      "source": "gsheets",
-      "isFirstRowHeaderRow": true,
-      "columnTypeCoercions": []
-    },
-    {
-      "children": [
-        {
-          "children": [
-            {
-              "text": "TenYearTreasury"
-            }
-          ],
-          "id": "somomLPOkqOmm9QmuxdyS",
-          "type": "live-var-name"
-        }
-      ],
-      "id": "ZyuG3RHA7WZoMheYOi_Zi",
-      "type": "live-conn",
-      "url": "https://docs.google.com/spreadsheets/d/1jNY8xLkhzgAcPsSK6wr0Zn2m2XmICpuNWkkHyLm76ug/edit#gid=1025903627",
-      "source": "gsheets",
-      "isFirstRowHeaderRow": true,
-      "columnTypeCoercions": {
-        "1": {
-          "kind": "number",
-          "unit": null
-        }
-      }
-    },
-    {
-      "children": [
-        {
-          "text": "Live variables from data connections",
-          "italic": true
-        }
-      ],
-      "id": "zvenJdBeEiZuam02tnYiY",
-      "type": "p",
-      "isHidden": true
-    },
-    {
-      "children": [
-        {
           "children": [
             {
               "text": "ActualSharePrice⚡"
             }
           ],
           "type": "structured_varname",
-          "id": "AdWEvEY-TrpTUf3YWaL2M"
+          "id": "BXiuS-f73HHLZdfiWQFp9"
         },
         {
           "children": [
             {
-              "text": "lookup("
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "vtLjKR8UCzhuvM_RyRhZU",
-              "type": "smart-ref",
-              "blockId": "ZRB-eiuZmUKrPMbRnjyKa",
-              "columnId": null,
-              "lastSeenVariableName": "AAPL_SharePrice"
-            },
-            {
-              "text": ","
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "Aaglko3HyPnd5Upz-oEhx",
-              "type": "smart-ref",
-              "blockId": "ZRB-eiuZmUKrPMbRnjyKa",
-              "columnId": "ZRB-eiuZmUKrPMbRnjyKa--0",
-              "lastSeenVariableName": "AAPL_SharePrice.Attribute"
-            },
-            {
-              "text": " ==\"Share Price\").Value in ⚡"
+              "text": "180.57"
             }
           ],
           "type": "code_line_v2_code",
-          "id": "4QF_QknfbcGMu0Lg77UP2"
+          "id": "d8luLsRuNEMiV8AVXzWtA"
         }
       ],
-      "isHidden": true,
-      "id": "3gdZ9glwPWrc6Mnhk9ra2",
-      "type": "code_line_v2"
+      "id": "sHecIkiyvfimb8Q9KwwQ-",
+      "type": "code_line_v2",
+      "isHidden": true
     },
     {
       "children": [
@@ -2652,51 +2512,21 @@
             }
           ],
           "type": "structured_varname",
-          "id": "SR7YoahimDvLeHsNdIXku"
+          "id": "6KE1N7QjGxMfKllzbZwZL"
         },
         {
           "children": [
             {
-              "text": "lookup("
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "Fo4ep7uNlPgEV7ydEQn0O",
-              "type": "smart-ref",
-              "blockId": "edz1ZyfkfEDd_7gbHPsHh",
-              "columnId": null,
-              "lastSeenVariableName": "AAPL_MarketCap"
-            },
-            {
-              "text": " ,"
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "emR7A9h6Bd-XWxyGn32xW",
-              "type": "smart-ref",
-              "blockId": "edz1ZyfkfEDd_7gbHPsHh",
-              "columnId": "edz1ZyfkfEDd_7gbHPsHh--0",
-              "lastSeenVariableName": "AAPL_MarketCap.Attribute"
-            },
-            {
-              "text": "  ==\"market cap\").Value in ⚡"
+              "text": "2.84 * 10^12"
             }
           ],
           "type": "code_line_v2_code",
-          "id": "UeVIWnOMl1j2537eVbQFI"
+          "id": "Ccl9ax6p6UH0o1NLZkM_z"
         }
       ],
-      "isHidden": true,
-      "id": "ZdcR3wIV5UGj71jxz212B",
-      "type": "code_line_v2"
+      "id": "-liwlYWm19MI3XGxD-eYr",
+      "type": "code_line_v2",
+      "isHidden": true
     },
     {
       "children": [
@@ -2707,49 +2537,19 @@
             }
           ],
           "type": "structured_varname",
-          "id": "5jdRPuPmXb1JFld6KxB7t"
+          "id": "o7tO_FcAqEt-FpfGLGPMO"
         },
         {
           "children": [
             {
-              "text": "lookup("
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "Vb-svHy0MGFUjg1BlCJ8z",
-              "type": "smart-ref",
-              "blockId": "ZyuG3RHA7WZoMheYOi_Zi",
-              "columnId": null,
-              "lastSeenVariableName": "TenYearTreasury"
-            },
-            {
-              "text": " ,"
-            },
-            {
-              "children": [
-                {
-                  "text": ""
-                }
-              ],
-              "id": "wmvDWFRFe8790l5EXlgT1",
-              "type": "smart-ref",
-              "blockId": "ZyuG3RHA7WZoMheYOi_Zi",
-              "columnId": "ZyuG3RHA7WZoMheYOi_Zi--0",
-              "lastSeenVariableName": "TenYearTreasury.Attribute"
-            },
-            {
-              "text": "  ==\"rate\").Value in %"
+              "text": "4%"
             }
           ],
           "type": "code_line_v2_code",
-          "id": "ZeLs-vTrShcHT9Dlh3tLj"
+          "id": "muG-A8Y6J1CME26DnJV1K"
         }
       ],
-      "id": "3G9koj6Tuw1OULI2cVj2G",
+      "id": "b9t0HiCu1bGJ4OTz_UuRH",
       "type": "code_line_v2",
       "isHidden": true
     },
