@@ -115,6 +115,7 @@ const justInsertLiveDataSet = async ({
           },
           {
             type: ELEMENT_LIVE_QUERY_QUERY,
+            connectionBlockId: blockId,
             id: nanoid(),
             children: [{ text: 'SELECT 1 + 1 as result' }],
             isHidden: true,
@@ -200,6 +201,7 @@ const identifyIslandsAndThenInsertLiveDataSet = async ({
               },
               {
                 type: ELEMENT_LIVE_QUERY_QUERY,
+                connectionBlockId: blockId,
                 id: nanoid(),
                 children: [{ text: 'SELECT 1 + 1 as result' }],
               },

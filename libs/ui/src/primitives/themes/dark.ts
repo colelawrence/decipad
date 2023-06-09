@@ -60,6 +60,7 @@ import {
   red900,
   teal200,
   teal400,
+  teal50,
   teal500,
   teal600,
   teal800,
@@ -86,7 +87,8 @@ export const theme: CssVariables = {
 
   formulaUnitBackground: black.hex,
 
-  errorColor: red500.hex,
+  errorColor: red100.hex,
+  errorColorLight: red500.hex,
 
   borderColor: dark500.hex,
   borderHighlightColor: purple700.hex,
@@ -217,6 +219,11 @@ export const theme: CssVariables = {
   importDataIconBgColor: orange100.hex,
   importDataIconDarkStrokeColor: orange600.hex,
   importDataIconAccentColor: orange300.hex,
+
+  // AI UI
+  aiTextColor: teal500.hex,
+  aiBubbleBackgroundColor: teal50.hex,
+  aiSendButtonColor: grey500.hex,
 
   // chart themes
   chartThemeMonochromePurple1: purple600.hex,

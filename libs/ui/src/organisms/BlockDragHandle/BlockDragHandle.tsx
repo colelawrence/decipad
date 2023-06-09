@@ -3,7 +3,7 @@ import { BlocksInUseInformation } from '@decipad/computer';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
-import { MenuItem, Tooltip } from '../../atoms';
+import { Badge, MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,
   DragHandle,
@@ -12,6 +12,7 @@ import {
   Link,
   Plus,
   Show,
+  Sparkles,
 } from '../../icons';
 import { DeleteWithDepsMenuItem, MenuList } from '../../molecules';
 import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
@@ -82,7 +83,26 @@ interface BlockDragHandleProps {
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onCopyHref?: () => void;
+  readonly aiPanel?: {
+    text: string;
+    visible: boolean;
+    toggle: () => void;
+  };
 }
+
+const aiAssitanceCss = css({
+  ...setCssVar('currentTextColor', cssVar('aiTextColor')), // set stroke color
+  color: cssVar('aiTextColor'),
+  svg: {
+    fill: cssVar('aiTextColor'),
+  },
+});
+
+const aiAssitanceCssNew = css({
+  background: cssVar('aiBubbleBackgroundColor'),
+  color: cssVar('aiTextColor'),
+  marginLeft: 8,
+});
 
 export const BlockDragHandle = ({
   children,
@@ -98,6 +118,7 @@ export const BlockDragHandle = ({
   onDuplicate = noop,
   onCopyHref,
   dependenciesForBlock,
+  aiPanel,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -142,6 +163,16 @@ export const BlockDragHandle = ({
     </button>
   );
 
+  const aiButton = aiPanel ? (
+    <MenuItem
+      icon={<Sparkles />}
+      onSelect={aiPanel.toggle}
+      css={aiAssitanceCss}
+    >
+      AI assistance<Badge styles={aiAssitanceCssNew}>New</Badge>
+    </MenuItem>
+  ) : null;
+
   return (
     <div css={[gridStyles(), hideOnPrint]} onMouseDown={onMouseDown}>
       {showAddBlock && (
@@ -171,6 +202,7 @@ export const BlockDragHandle = ({
             </MenuItem>
           )}
           {children}
+          {aiButton}
           <MenuItem disabled>
             <hr css={{ color: cssVar('highlightColor') }} />
           </MenuItem>

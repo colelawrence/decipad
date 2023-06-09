@@ -14,24 +14,27 @@ import { Path } from 'slate';
 const getInitialLiveQueryElement = (
   blockId: string | undefined,
   varName: string | undefined
-): LiveQueryElement => ({
-  type: ELEMENT_LIVE_QUERY,
-  id: nanoid(),
-  connectionBlockId: blockId,
-  columnTypeCoercions: {},
-  children: [
-    {
-      type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-      id: nanoid(),
-      children: [{ text: varName ?? '' }],
-    },
-    {
-      type: ELEMENT_LIVE_QUERY_QUERY,
-      id: nanoid(),
-      children: [{ text: 'SELECT 1 + 1 as result' }],
-    },
-  ],
-});
+): LiveQueryElement => {
+  return {
+    type: ELEMENT_LIVE_QUERY,
+    id: nanoid(),
+    connectionBlockId: blockId,
+    columnTypeCoercions: {},
+    children: [
+      {
+        type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+        id: nanoid(),
+        children: [{ text: varName ?? '' }],
+      },
+      {
+        type: ELEMENT_LIVE_QUERY_QUERY,
+        connectionBlockId: blockId,
+        id: nanoid(),
+        children: [{ text: 'SELECT 1 + 1 as result' }],
+      },
+    ],
+  };
+};
 
 export const insertLiveQueryBelow = (
   editor: TEditor,

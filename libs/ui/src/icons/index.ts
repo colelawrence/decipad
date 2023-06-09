@@ -143,6 +143,7 @@ export { Scale } from './Scale/Scale';
 export { ScatterPlot } from './ScatterPlot/ScatterPlot';
 export { ScatterPlotSlash } from './ScatterPlotSlash/ScatterPlotSlash';
 export { Search } from './Search/Search';
+export { Send } from './Send/Send';
 export { Server } from './Server/Server';
 export { Settings } from './Settings/Settings';
 export { Shapes } from './Shapes/Shapes';

@@ -80,6 +80,7 @@ export const theme: CssVariables = {
   thumbColor: white.hex,
 
   errorColor: red500.hex,
+  errorColorLight: red100.hex,
 
   borderColor: grey200.hex,
   borderHighlightColor: grey300.hex,
@@ -213,6 +214,11 @@ export const theme: CssVariables = {
   importDataIconBgColor: orange100.hex,
   importDataIconDarkStrokeColor: orange600.hex,
   importDataIconAccentColor: orange300.hex,
+
+  // AI UI
+  aiTextColor: teal600.hex,
+  aiBubbleBackgroundColor: teal50.hex,
+  aiSendButtonColor: grey400.hex,
 
   chartThemeMonochromePurple1: purple300.hex,
   chartThemeMonochromePurple2: purple200.hex,

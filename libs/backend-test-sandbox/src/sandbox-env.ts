@@ -85,6 +85,7 @@ export async function createSandboxEnv(
     REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
     JWT_SECRET: process.env.JWT_SECRET || nanoid(),
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   };
 
   // the final sandbox environment:

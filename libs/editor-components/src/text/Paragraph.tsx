@@ -6,15 +6,27 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { getRangeSafe, isDragAndDropHorizontal } from '@decipad/editor-utils';
-import { useNodePath, useEditorChange } from '@decipad/editor-hooks';
+import {
+  useNodePath,
+  useNodeText,
+  useEditorChange,
+} from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { ParagraphPlaceholder, Paragraph as UIParagraph } from '@decipad/ui';
-import { isElementEmpty, isSelectionExpanded } from '@udecode/plate';
+import {
+  insertText,
+  isElementEmpty,
+  isSelectionExpanded,
+  findNodePath,
+} from '@udecode/plate';
 import { Range } from 'slate';
+import { useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
+import { ParagraphAIPanel } from '../AIPanel';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const isSelected = (editor: MyEditor, element: MyElement) => {
   if (!editor.selection) {
@@ -36,6 +48,8 @@ export const Paragraph: PlateComponent = ({
   if (!element) {
     throw new Error('Paragraph is not a leaf');
   }
+  const paragraph = useNodeText(element);
+
   const readOnly = useIsEditorReadOnly();
 
   // Performance improvement as opposed to use something like `useTEditorState()`.
@@ -61,6 +75,10 @@ export const Paragraph: PlateComponent = ({
   const isHorizontal = isDragAndDropHorizontal(false, editor, path);
   const getAxis = useDragAndDropGetAxis({ isHorizontal });
   const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
+  const [showAiPanel, setShowAiPanel] = useState(false);
+  const toggleAiPanel = () => {
+    setShowAiPanel((t) => !t);
+  };
 
   return (
     <DraggableBlock
@@ -69,10 +87,29 @@ export const Paragraph: PlateComponent = ({
       accept={isHorizontal ? COLUMN_KINDS : undefined}
       getAxis={getAxis}
       onDrop={onDrop}
+      aiPanel={
+        isFlagEnabled('AI_FEATURES')
+          ? {
+              text: 'Rewrite with AI',
+              visible: showAiPanel,
+              toggle: toggleAiPanel,
+            }
+          : undefined
+      }
       {...turnIntoProps}
       {...attributes}
     >
       <UIParagraph placeholder={placeholder}>{children}</UIParagraph>
+      {showAiPanel && (
+        <ParagraphAIPanel
+          paragraph={paragraph || ''}
+          toggle={toggleAiPanel}
+          updateParagraph={(s) => {
+            insertText(editor, s, { at: findNodePath(editor, element) });
+            toggleAiPanel();
+          }}
+        />
+      )}
     </DraggableBlock>
   );
 };

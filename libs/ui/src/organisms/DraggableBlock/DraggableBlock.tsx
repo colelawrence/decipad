@@ -82,6 +82,12 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly showLine?: boolean;
 
   readonly onTurnInto?: (value: string) => void;
+  readonly aiPanel?: {
+    text: string;
+    readonly visible: boolean;
+    readonly toggle: () => void;
+  };
+
   readonly turnInto?: { title: string; value: string }[];
 
   readonly children: ReactNode;
@@ -126,6 +132,8 @@ export const DraggableBlock = ({
   disableDrag = false,
   isCentered = false,
   hasPreviousSibling,
+
+  aiPanel,
 
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
@@ -220,6 +228,7 @@ export const DraggableBlock = ({
               showEyeLabel={showEyeLabel}
               showAddBlock={!isHidden}
               onCopyHref={onCopyHref}
+              aiPanel={aiPanel}
             >
               {turnInto != null && turnInto.length > 0 && (
                 <MenuList

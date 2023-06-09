@@ -1,17 +1,18 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, p16Medium, setCssVar, red100, red500 } from '../../primitives';
 import { Warning } from '../../icons/Warning/Warning';
+import { cssVar, p16Medium, setCssVar } from '../../primitives';
 import { CodeError } from '../CodeError/CodeError';
 
 const errorStyles = css(
   p16Medium,
-  setCssVar('currentTextColor', cssVar('errorColor'))
+  setCssVar('currentTextColor', cssVar('errorColor')),
+  { display: 'flex', alignItems: 'center', gap: 4 }
 );
 
 const iconWrapperStyles = css({
-  ...setCssVar('iconBackgroundColor', red100.rgb),
-  ...setCssVar('currentTextColor', red500.rgb),
+  ...setCssVar('iconBackgroundColor', cssVar('errorColorLight')),
+  ...setCssVar('currentTextColor', cssVar('errorColor')),
 
   display: 'inline-flex',
   //
@@ -34,12 +35,12 @@ export const ErrorMessage = ({
   error,
 }: ErrorMessageProps): ReturnType<FC> =>
   variant === 'default' ? (
-    <p contentEditable={false} css={errorStyles}>
+    <div contentEditable={false} css={errorStyles}>
       <span css={iconWrapperStyles}>
         <Warning />
       </span>{' '}
-      {error instanceof Error ? error.message : error}
-    </p>
+      <span>{error instanceof Error ? error.message : error}</span>
+    </div>
   ) : (
     <CodeError message={error instanceof Error ? error.message : error} />
   );

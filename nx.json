@@ -49,7 +49,8 @@
           "echo DECI_GOOGLESHEETS_CLIENT_SECRET=$DECI_GOOGLESHEETS_CLIENT_SECRET",
           "echo DISCORD_PUBLIC_KEY=$DISCORD_PUBLIC_KEY",
           "echo DISCORD_APP_ID=$DISCORD_APP_ID",
-          "echo ARC_STATIC_SPA=$ARC_STATIC_SPA"
+          "echo ARC_STATIC_SPA=$ARC_STATIC_SPA",
+          "echo OPENAI_API_KEY=$OPENAI_API_KEY"
         ],
         "parallel": 3
       }

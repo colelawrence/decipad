@@ -57,6 +57,7 @@ jobs:
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'
           JWT_SECRET: '${{secrets.JWT_SECRET}}'
+          OPENAI_API_KEY: '${{secrets.OPENAI_API_KEY}}'
           SENTRY_DSN: '${{secrets.SENTRY_DSN}}'
           SENTRY_ORG: '${{secrets.SENTRY_ORG}}'
           SENTRY_PROJECT: '${{secrets.SENTRY_PROJECT}}'

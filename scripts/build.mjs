@@ -39,6 +39,7 @@ const envVarNames = [
   'NODE_OPTIONS',
   'ARC_STATIC_SPA',
   'INTERCOM_SECRET_ID',
+  'OPENAI_API_KEY',
 ];
 
 function getEnvVar(name) {

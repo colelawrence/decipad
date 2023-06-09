@@ -1,3 +1,4 @@
+export * from './AIPanel';
 export * from './block-management';
 export * from './BlockErrorBoundary';
 export * from './BlockLengthSynchronization/BlockLengthSynchronizationProvider';

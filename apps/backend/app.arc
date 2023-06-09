@@ -32,6 +32,8 @@ get /api/externaldatasources/:id/auth
 get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 any /api/externaldatasources/db/:id/data
+any /api/ai/generate-sql/:id
+any /api/ai/rewrite-paragraph
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
 any /api/pads/:padid/export

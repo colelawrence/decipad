@@ -7,7 +7,7 @@ import {
 import { pluginStore } from '@decipad/editor-utils';
 import { useNodePath } from '@decipad/editor-hooks';
 import { useComputer } from '@decipad/react-contexts';
-import { LiveConnectionResult, LiveError, Spinner } from '@decipad/ui';
+import { Button, LiveConnectionResult, LiveError, Spinner } from '@decipad/ui';
 import { varNamify } from '@decipad/utils';
 import { getNodeString, insertText, setNodes } from '@udecode/plate';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -34,9 +34,10 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   const computer = useComputer();
   const path = useNodePath(element);
 
-  const { error, result, retry } = useLiveQuery({
+  const liveQuery = useLiveQuery({
     element,
   });
+  const { runQuery, status } = liveQuery;
 
   const onChangeColumnType = useCallback(
     (columnIndex: number, type?: TableCellType) => {
@@ -58,7 +59,7 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
 
   // sync connection metadata title if needed
   useEffect(() => {
-    if (path && result) {
+    if (path && status === 'success') {
       const caption = element.children[0];
       const currentTitle = getNodeString(caption);
       if (!currentTitle) {
@@ -70,7 +71,7 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
         );
       }
     }
-  }, [computer, editor, element.children, path, result]);
+  }, [computer, editor, element.children, path, status]);
 
   // persist results
 
@@ -83,29 +84,39 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
 
   useEffect(() => {
     const persistedResult = store.get(element);
-    if (result && persistedResult?.result !== result) {
-      store.set(element, { result, error });
+    if (status === 'success' && persistedResult?.result !== liveQuery.result) {
+      store.set(element, { result: liveQuery.result, error: undefined });
       setVersion((v) => v + 1);
-    } else if (error && persistedResult?.error !== error) {
+    } else if (
+      status === 'error' &&
+      persistedResult?.error !== liveQuery.error
+    ) {
       store.set(element, {
         result: undefined,
-        error,
+        error: liveQuery.error,
       });
       setVersion((v) => v + 1);
     }
-  }, [element, error, result, store]);
+  }, [element, status, store]);
 
-  const { result: persistedResult = result, error: persistedError = error } =
-    store.get(element) ?? {};
+  const {
+    result: persistedResult = liveQuery.status === 'success'
+      ? liveQuery.result
+      : undefined,
+    error: persistedError = liveQuery.status === 'error'
+      ? liveQuery.error
+      : undefined,
+  } = store.get(element) ?? {};
 
   const clearCacheAndRetry = useCallback(() => {
     store.set(element, { result: undefined, error: undefined });
     setVersion((v) => v + 1);
-    retry();
-  }, [element, retry, store]);
+    runQuery();
+  }, [element, runQuery, store]);
 
   return (
     <div contentEditable={false}>
+      <Button onClick={runQuery}>Run Query</Button>
       {persistedResult && (
         <LiveConnectionResult
           result={persistedResult}
@@ -121,7 +132,7 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
           onRetry={clearCacheAndRetry}
         />
       ) : null}
-      {!persistedError && !persistedResult && (
+      {status === 'loading' && (
         <div>
           <Spinner />
         </div>

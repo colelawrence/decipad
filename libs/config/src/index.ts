@@ -137,6 +137,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.JWT_MAX_AGE);
     case 'JWT_SECRET':
       return valueOrDefault(name, process.env.JWT_SECRET);
+    case 'OPENAI_API_KEY':
+      return valueOrDefault(name, process.env.OPENAI_API_KEY);
     case 'NEXTAUTH_URL':
       return valueOrDefault(name, process.env.NEXTAUTH_URL);
     case 'REACT_APP_ANALYTICS_WRITE_KEY':
@@ -245,6 +247,9 @@ export function thirdParty() {
         clientId: env('DECI_GOOGLESHEETS_CLIENT_ID'),
         clientSecret: env('DECI_GOOGLESHEETS_CLIENT_SECRET'),
       },
+    },
+    openai: {
+      apiKey: env('OPENAI_API_KEY'),
     },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')

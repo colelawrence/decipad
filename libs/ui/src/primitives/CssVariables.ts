@@ -36,9 +36,18 @@ export interface CssVariables {
   readonly importDataIconBgColor: Property.Color;
 
   //
+  // AI UI
+  //
+  readonly aiTextColor: Property.Color;
+  readonly aiBubbleBackgroundColor: Property.Color;
+  readonly aiSendButtonColor: Property.Color;
+
+  //
   // Errors
   //
   readonly errorColor: Property.Color;
+  readonly errorColorLight: Property.Color;
+
   readonly errorBlockColor: Property.Color;
   readonly errorBlockWarning: Property.Color;
   readonly errorBlockAnnotationWarning: Property.Color;

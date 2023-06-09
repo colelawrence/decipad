@@ -5,19 +5,32 @@ import { LiveQueryElement } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { importFromUnknown } from '@decipad/import';
 import { fetch } from '@decipad/fetch';
-import { useDebounce } from 'use-debounce';
-import { getDatabaseUrl } from '../utils/getDatabaseUrl';
+import { useLiveConnectionUrl } from './useLiveConnectionUrl';
 import { errorFromFetchResult } from '../utils/errorFromFetchResult';
 
 interface UseLiveQueryParams {
   element: LiveQueryElement;
 }
 
-interface UseLiveQueryResult {
-  result?: Result.Result;
-  error?: string;
-  retry: () => void;
-}
+type RemoteData =
+  | {
+      status: 'not asked';
+    }
+  | {
+      status: 'loading';
+    }
+  | {
+      status: 'success';
+      result: Result.Result | undefined;
+    }
+  | {
+      status: 'error';
+      error: string;
+    };
+
+type UseLiveQueryResult = {
+  runQuery: () => void;
+} & RemoteData;
 
 const MAX_LIVE_QUERY_RESULT_CELL_COUNT = 50_000; // fow now
 
@@ -26,37 +39,19 @@ export const useLiveQuery = ({
 }: UseLiveQueryParams): UseLiveQueryResult => {
   const computer = useComputer();
 
-  const databaseResult = computer.getBlockIdResult$.use(
-    element.connectionBlockId
-  );
+  const url = useLiveConnectionUrl(element, computer);
 
-  const [url, setUrl] = useState<string | undefined>(undefined);
+  const [rd, setRd] = useState<RemoteData>({ status: 'not asked' });
 
-  // getDatabaseUrl must be async because the result is async
-  useEffect(() => {
-    if (databaseResult?.result && !url) {
-      getDatabaseUrl(databaseResult.result).then((dbUrl) => {
-        if (dbUrl) {
-          setUrl(dbUrl);
-        }
-      });
-    }
-  }, [databaseResult?.result, url]);
+  const query = getNodeString(element.children[1]).trim();
 
-  const [generation, setGeneration] = useState(0n);
-  const [fetchError, setFetchError] = useState<Error | undefined>();
-  const [result, setResult] = useState<Result.Result | undefined>();
-  const [debouncedBody] = useDebounce(
-    getNodeString(element.children[1]).trim(),
-    2000
-  );
-
-  useEffect(() => {
+  const runQuery = useCallback(() => {
+    setRd({ status: 'loading' });
     const abort = new AbortController();
     let aborted = false;
-    if (url && debouncedBody) {
+    if (url && query) {
       fetch(url, {
-        body: debouncedBody,
+        body: query,
         signal: abort.signal,
         method: 'POST',
       })
@@ -72,12 +67,17 @@ export const useLiveQuery = ({
           throw error;
         })
         .then((importResult) => {
-          setResult(importResult[0]?.result);
-          setFetchError(undefined);
+          setRd({
+            status: 'success',
+            result: importResult[0]?.result,
+          });
         })
         .catch((err) => {
           if (!aborted) {
-            setFetchError(err);
+            setRd({
+              status: 'error',
+              error: err,
+            });
           }
         });
     }
@@ -85,21 +85,22 @@ export const useLiveQuery = ({
       aborted = true;
       abort.abort();
     };
-  }, [element, url, generation, computer, debouncedBody]);
+  }, [url, computer, query]);
 
   useEffect(() => {
-    if (result?.value != null && typeof result.value !== 'symbol') {
-      computer.pushExternalDataUpdate(element.id, [[element.id, result]]);
+    if (
+      rd.status === 'success' &&
+      rd.result != null &&
+      typeof rd.result.value !== 'string'
+    ) {
+      computer.pushExternalDataUpdate(element.id, [[element.id, rd.result]]);
     } else {
       computer.pushExternalDataDelete(element.id);
     }
-  }, [computer, element.id, result]);
+  }, [computer, element.id, rd]);
 
   return {
-    error: databaseResult?.error?.message ?? fetchError?.message,
-    retry: useCallback(() => {
-      setGeneration((g) => g + 1n);
-    }, []),
-    result,
+    ...rd,
+    runQuery,
   };
 };

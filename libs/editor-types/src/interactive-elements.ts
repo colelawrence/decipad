@@ -140,6 +140,7 @@ export interface LiveQueryVarNameElement extends BaseElement {
 
 export interface LiveQueryQueryElement extends BaseElement {
   type: typeof ELEMENT_LIVE_QUERY_QUERY;
+  connectionBlockId?: string;
   children: [PlainText];
   isHidden?: boolean;
 }

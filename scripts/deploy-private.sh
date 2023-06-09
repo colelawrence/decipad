@@ -45,6 +45,7 @@ arc env staging NEXTAUTH_URL "${DECI_APP_URL_BASE}/api/auth"
 arc env staging GITHUB_CLIENT_ID "$GITHUB_CLIENT_ID"
 arc env staging GITHUB_CLIENT_SECRET "$GITHUB_CLIENT_SECRET"
 arc env staging JWT_SECRET "$JWT_SECRET"
+arc env staging OPENAI_API_KEY "$OPENAI_API_KEY"
 arc env staging DECI_SES_ACCESS_KEY_ID "$DECI_SES_ACCESS_KEY_ID"
 arc env staging DECI_SES_SECRET_ACCESS_KEY "$DECI_SES_SECRET_ACCESS_KEY"
 arc env staging DECI_S3_ENDPOINT s3.eu-west-2.amazonaws.com
