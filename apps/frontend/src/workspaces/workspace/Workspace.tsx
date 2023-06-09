@@ -9,6 +9,7 @@ import {
   TColorKeys,
   TColorStatus,
   TopbarPlaceholder,
+  LoadingLogo,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
 import sortBy from 'lodash.sortby';
@@ -290,6 +291,10 @@ const Workspace: FC = () => {
       sectionId,
     ]
   );
+
+  if (fetching) {
+    return <LoadingLogo />;
+  }
 
   if (!currentWorkspace || !session) {
     return <ErrorPage Heading="h1" wellKnown="404" />;
