@@ -50,6 +50,7 @@ export function groupIdentifiers(
             explanation: `The cell ${identifier}`,
             inTable: tableName,
             isCell: true,
+            decoration: 'cell',
           },
           {
             ...ident,

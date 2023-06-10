@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
-import { css } from '@emotion/react';
 import { InlineMenuItem } from '../../atoms';
 import { cssVar, p13Medium, setCssVar } from '../../primitives';
 
@@ -26,7 +26,7 @@ export const InlineMenuGroup = ({
   children,
 }: InlineMenuGroupProps): ReturnType<FC> => {
   return (
-    <div role="group" css={{ minWidth: '270px' }}>
+    <div role="group">
       {title && <div css={titleStyles}>{title}</div>}
       <div css={itemsStyles}>
         {Children.map(children, (child) => {

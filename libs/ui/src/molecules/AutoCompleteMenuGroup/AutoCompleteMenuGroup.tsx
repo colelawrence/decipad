@@ -34,7 +34,7 @@ export const AutoCompleteMenuGroup = ({
   children,
 }: AutoCompleteMenuGroupProps): ReturnType<FC> => {
   return (
-    <div css={styles} role="group">
+    <div css={styles} role="group" data-testid={`autocomplete-group:${title}`}>
       {!isOnlyGroup && title && <div css={titleStyles}>{title}</div>}
       <div css={itemsStyles}>
         {Children.map(children, (child) => {

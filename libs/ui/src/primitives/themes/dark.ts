@@ -59,10 +59,12 @@ import {
   red800,
   red900,
   teal200,
+  teal300,
   teal400,
   teal50,
   teal500,
   teal600,
+  teal700,
   teal800,
   teal900,
   white,
@@ -129,10 +131,37 @@ export const theme: CssVariables = {
   tooltipBackground: dark300.hex,
   tooltipCodeBackground: offBlack.hex,
 
-  // slash icons
+  // legacy slash command colours
+  // used in other stuff for now
   weakerSlashIconColor: blue100.hex,
   weakSlashIconColor: blue200.hex,
   strongSlashIconColor: blue500.hex,
+
+  // slash command default colors
+  // overriden with setCssVar
+  slashColorLight: grey700.hex,
+  slashColorNormal: grey400.hex,
+  slashColorHeavy: grey300.hex,
+
+  slashColorOceanLight: blue700.hex,
+  slashColorOceanNormal: blue400.hex,
+  slashColorOceanHeavy: blue300.hex,
+
+  slashColorMintLight: teal700.hex,
+  slashColorMintNormal: teal400.hex,
+  slashColorMintHeavy: teal300.hex,
+
+  slashColorOrangeLight: orange700.hex,
+  slashColorOrangeNormal: orange400.hex,
+  slashColorOrangeHeavy: orange300.hex,
+
+  slashColorWineLight: purple700.hex,
+  slashColorWineNormal: purple400.hex,
+  slashColorWineHeavy: purple300.hex,
+
+  slashColorDaffodilLight: yellow700.hex,
+  slashColorDaffodilNormal: yellow400.hex,
+  slashColorDaffodilHeavy: yellow300.hex,
 
   buttonPrimaryText: dark700.hex,
   buttonPrimaryBackground: dark400.hex,

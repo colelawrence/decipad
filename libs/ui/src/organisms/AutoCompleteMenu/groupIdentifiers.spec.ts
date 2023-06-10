@@ -127,6 +127,7 @@ it('Places my table columns first', () => {
           Object {
             "blockId": "tableid",
             "columnId": "column1id",
+            "decoration": "cell",
             "explanation": "The cell Column1",
             "focused": false,
             "identifier": "Column1",
@@ -149,6 +150,7 @@ it('Places my table columns first', () => {
           Object {
             "blockId": "tableid",
             "columnId": "column2id",
+            "decoration": "cell",
             "explanation": "The cell Column2",
             "focused": false,
             "identifier": "Column2",

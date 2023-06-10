@@ -201,12 +201,19 @@ export interface InlineNumberElement extends BaseElement {
   children: [EmptyText];
 }
 
+//
+// for now just cell, you can add more
+// decorations here
+//
+export type SmartRefDecoration = 'cell';
+
 export interface SmartRefElement extends BaseElement {
   type: typeof ELEMENT_SMART_REF;
   lastSeenVariableName?: string;
   blockId: string;
   /** Identifies the "column" part of the smart ref, if any. */
   columnId: string | null; // dont change, has to do with migration from undefined
+  decoration?: SmartRefDecoration;
   children: [PlainText];
 }
 

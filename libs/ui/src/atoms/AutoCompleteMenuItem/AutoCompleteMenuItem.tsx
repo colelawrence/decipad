@@ -148,7 +148,7 @@ export const AutoCompleteMenuItem = ({
         ref={itemRef}
       >
         <span css={iconStyles}>{getAutocompleteIconFor(type)}</span>
-        <div css={textStyles}>
+        <div css={textStyles} data-testid={`autocomplete-item:${identifier}`}>
           <strong css={identifierStyles}>{identifier}</strong>
         </div>
       </button>

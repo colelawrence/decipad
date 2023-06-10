@@ -21,6 +21,7 @@ export const commitAutocompleteItem = (
   at: Range,
   item: MenuItem
 ) => {
+  const { decoration } = item;
   const pointBefore = Range.start(at);
   const characterBefore = getCharacterBeforeCursor(editor, pointBefore);
 
@@ -57,6 +58,7 @@ export const commitAutocompleteItem = (
       type: ELEMENT_SMART_REF,
       blockId: blockId || item.blockId,
       columnId: columnId || null, // dont remove, has to do with legacy migration
+      decoration,
       children: [{ text: '' }],
     };
     insertNodes(editor, [smartRef, { text: ' ' }]);

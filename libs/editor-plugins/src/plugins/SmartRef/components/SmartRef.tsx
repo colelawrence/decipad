@@ -24,6 +24,7 @@ export const SmartRef: PlateComponent = ({ attributes, children, element }) => {
         errorMessage={errorMessage}
         isInitialized={isInitialized}
         isSelected={isSelected}
+        decoration={element.decoration}
         hasPreviousContent={siblingContent?.hasPrevious}
         hasNextContent={siblingContent?.hasNext}
       />

@@ -1,20 +1,21 @@
 import { FC } from 'react';
-import { orange100, orange500 } from '../../primitives';
+import { cssVar, strongOpacity } from '../../primitives';
 
 export const PieChartSlash = (): ReturnType<FC> => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="40" height="40" rx="6" fill={orange100.rgb} />
+    <rect width="40" height="40" rx="6" fill={cssVar('slashColorLight')} />
     <path
       d="M27.368 23.1146C26.8591 24.3185 26.0631 25.3793 25.0496 26.2044C24.0361 27.0294 22.8359 27.5936 21.5541 27.8475C20.2722 28.1015 18.9477 28.0375 17.6963 27.6611C16.4449 27.2847 15.3048 26.6075 14.3755 25.6885C13.4462 24.7696 12.7562 23.6369 12.3656 22.3896C11.9751 21.1423 11.896 19.8182 12.1352 18.5332C12.3744 17.2483 12.9247 16.0414 13.7379 15.0183C14.5511 13.9952 15.6026 13.1869 16.8002 12.6642M28 20.0019C28 18.951 27.7931 17.9105 27.3911 16.9397C26.989 15.9689 26.3998 15.0867 25.6569 14.3437C24.914 13.6007 24.0322 13.0112 23.0616 12.6091C22.091 12.207 21.0507 12 20.0002 12V20.0019H28Z"
-      stroke={orange500.rgb}
+      stroke={cssVar('slashColorHeavy')}
       strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M28 20C28 18.9494 27.7931 17.9091 27.391 16.9385C26.989 15.9679 26.3997 15.086 25.6569 14.3431C24.914 13.6003 24.0321 13.011 23.0615 12.609C22.0909 12.2069 21.0506 12 20 12V20H28Z"
-      fill="white"
-      stroke={orange500.rgb}
+      fill={cssVar('backgroundColor')}
+      fillOpacity={strongOpacity}
+      stroke={cssVar('slashColorHeavy')}
       strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"

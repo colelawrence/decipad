@@ -21,12 +21,12 @@ test.describe('Import Menu', () => {
     await keyPress(page, 'Enter');
     await page.keyboard.type('hello world');
     await keyPress(page, 'Enter');
-    await page.keyboard.type('/');
-
+    await page.keyboard.type('/t');
     await expect(page.locator('[data-testid="menu-item-table"]')).toBeVisible();
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
       3
     );
+    await keyPress(page, 'Backspace');
 
     await page.keyboard.type('integrations');
     await keyPress(page, 'Enter');

@@ -82,6 +82,31 @@ export interface CssVariables {
   readonly weakerSlashIconColor: Property.Color;
   readonly weakSlashIconColor: Property.Color;
   readonly strongSlashIconColor: Property.Color;
+
+  readonly slashColorLight: Property.Color;
+  readonly slashColorNormal: Property.Color;
+  readonly slashColorHeavy: Property.Color;
+
+  readonly slashColorOceanLight: Property.Color;
+  readonly slashColorOceanNormal: Property.Color;
+  readonly slashColorOceanHeavy: Property.Color;
+
+  readonly slashColorMintLight: Property.Color;
+  readonly slashColorMintNormal: Property.Color;
+  readonly slashColorMintHeavy: Property.Color;
+
+  readonly slashColorOrangeLight: Property.Color;
+  readonly slashColorOrangeNormal: Property.Color;
+  readonly slashColorOrangeHeavy: Property.Color;
+
+  readonly slashColorWineLight: Property.Color;
+  readonly slashColorWineNormal: Property.Color;
+  readonly slashColorWineHeavy: Property.Color;
+
+  readonly slashColorDaffodilLight: Property.Color;
+  readonly slashColorDaffodilNormal: Property.Color;
+  readonly slashColorDaffodilHeavy: Property.Color;
+
   readonly iconBackgroundColor: Property.Color;
   readonly iconColorDark: Property.Color;
   readonly iconColorLight: Property.Color;

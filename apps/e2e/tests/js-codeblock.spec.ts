@@ -1,10 +1,10 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
-import { Timeouts, codePlaceholders, createWorkspace } from '../utils/src';
+import { codePlaceholders, createWorkspace, Timeouts } from '../utils/src';
 
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
-    await page.getByTestId('paragraph-content').last().fill('/');
+    await page.getByTestId('paragraph-content').last().fill('/i');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page.getByTestId('menu-item-open-integration').click();

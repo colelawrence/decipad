@@ -22,7 +22,8 @@ export const snapshot = async (
 
   try {
     await percySnapshot(page as Page2, name, {
-      widths: [options.mobile && 375, 1280].filter((n): n is number =>
+      // dont change the width, messes up screenshots
+      widths: [options.mobile && 375, 1380].filter((n): n is number =>
         Number.isInteger(n)
       ),
     });

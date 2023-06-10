@@ -30,7 +30,7 @@ const tdCounterStyles = css({
   '&:first-of-type::before': {
     ...setCssVar('normalTextColor', cssVar('weakTextColor')),
     ...p12Medium,
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: 'transparent',
 
     counterIncrement: tableRowCounter,
     content: `counter(${tableRowCounter})`,

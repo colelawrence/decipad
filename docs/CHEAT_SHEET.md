@@ -26,7 +26,7 @@ yarn install # install deps, needed often when new stuff is added
 npm run build:grammar # builds the grammar
 yarn repl # runs the repl, for easy debugging without browser (you can attach the inspector)
 
-nx e2e client-e2e # Run e2e tests
+nx play e2e [--debug] [--ui] # Run e2e tests
 nx run ui:storybook # See the design system (storybook)
 nx test sync-connection-lambdas
 ```

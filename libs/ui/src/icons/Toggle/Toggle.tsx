@@ -1,20 +1,43 @@
 import { FC } from 'react';
-import { teal100, teal200, teal500 } from '../../primitives';
+import { cssVar, strongOpacity } from '../../primitives';
 
 export const Toggle: FC = () => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clipPath="url(#clip0_3618_49203)">
-      <rect width="40" height="40" rx="6" fill={teal100.rgb} />
-      <rect x="8" y="15" width="20" height="11" rx="5.5" fill={teal200.rgb} />
+      <rect width="40" height="40" rx="6" fill={cssVar('slashColorLight')} />
+      <rect
+        x="8"
+        y="15"
+        width="20"
+        height="11"
+        rx="5.5"
+        fill={cssVar('slashColorNormal')}
+      />
       <g filter="url(#filter0_dd_3618_49203)">
-        <rect x="20" y="14" width="12" height="12" rx="6" fill="white" />
+        <rect
+          x="20"
+          y="14"
+          width="12"
+          height="12"
+          rx="6"
+          fill={cssVar('slashColorLight')}
+        />
+        <rect
+          x="20"
+          y="14"
+          width="12"
+          height="12"
+          rx="6"
+          fill={cssVar('backgroundColor')}
+          fillOpacity={strongOpacity}
+        />
         <rect
           x="19.35"
           y="13.35"
           width="13.3"
           height="13.3"
           rx="6.65"
-          stroke={teal500.rgb}
+          stroke={cssVar('slashColorHeavy')}
           strokeWidth="1.3"
         />
       </g>

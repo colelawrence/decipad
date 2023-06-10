@@ -1,22 +1,22 @@
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line no-restricted-imports
 import DeciNumber, {
-  isDeciNumberInput,
-  N,
   DeciNumberInput,
+  N,
+  isDeciNumberInput,
 } from '@decipad/number';
 import { zip } from '@decipad/utils';
 import { DeepReadonly } from 'utility-types';
 import {
-  RuntimeError,
-  Value,
-  Column,
-  NumberValue,
-  StringValue,
   BooleanValue,
+  Column,
   DateValue,
-  UnknownValue,
+  NumberValue,
+  RuntimeError,
+  StringValue,
   Unknown,
+  UnknownValue,
+  Value,
 } from '../value';
 
 export type CompareResult = -1 | 0 | 1;
@@ -118,7 +118,7 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
 
     return lengthComparison;
   }
-  console.log(a, b);
+
   throw new RuntimeError(
     `Don't know how to compare ${a.toString()} (${typeof a}) against ${b.toString()} (${typeof b})`
   );

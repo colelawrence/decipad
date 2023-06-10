@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { TableCellType } from '@decipad/editor-types';
+import type { SmartRefDecoration, TableCellType } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
@@ -22,6 +22,7 @@ interface CodeVariableProps {
   readonly tableName?: string;
   readonly columnName?: string;
   readonly isInitialized?: boolean;
+  readonly decoration?: SmartRefDecoration;
   onGoToDefinition?: () => void;
 }
 
@@ -41,8 +42,10 @@ export const CodeVariable = ({
   isSelected = false,
   tableName,
   columnName,
+  decoration,
 }: CodeVariableProps): ReturnType<React.FC> => {
   const isColumn = !!(tableName && columnName);
+  const isCell = decoration === 'cell';
 
   const Icon = useMemo(() => type && getTypeIcon(type), [type]);
 
@@ -57,7 +60,7 @@ export const CodeVariable = ({
       </span>
     );
 
-  const decoration = (
+  const decorated = (
     <span
       onClick={isInitialized ? onClick : noop}
       css={
@@ -70,6 +73,8 @@ export const CodeVariable = ({
               isSelected && selectedStyles,
               isColumn && columnStyles,
               isSelected && isColumn && isSelectedColumnStyles,
+              isCell && cellStyles,
+              isSelected && isCell && isSelectedCellStyles,
             ]
       }
     >
@@ -97,7 +102,7 @@ export const CodeVariable = ({
   );
 
   if (!showTooltip) {
-    return decoration;
+    return decorated;
   }
 
   return (
@@ -107,7 +112,7 @@ export const CodeVariable = ({
       provideDefinitionLink={provideVariableDefLink}
       onGoToDefinition={onGoToDefinition}
     >
-      {decoration}
+      {decorated}
     </CodeVariableTooltip>
   );
 };
@@ -169,6 +174,16 @@ const columnStyles = css({
 });
 
 const isSelectedColumnStyles = css({
+  color: cssVar('bubbleColumnTextSelectedColor'),
+  backgroundColor: cssVar('bubbleColumnSelectedColor'),
+});
+
+const cellStyles = css({
+  backgroundColor: cssVar('bubbleColumnColor'),
+  color: cssVar('bubbleColumnTextColor'),
+});
+
+const isSelectedCellStyles = css({
   color: cssVar('bubbleColumnTextSelectedColor'),
   backgroundColor: cssVar('bubbleColumnSelectedColor'),
 });

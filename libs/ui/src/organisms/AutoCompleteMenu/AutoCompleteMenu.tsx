@@ -1,5 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
+import { SmartRefDecoration } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
 import { ItemBlockId, matchItemBlocks, once } from '@decipad/utils';
@@ -34,26 +35,30 @@ export type AutoCompleteGroup = Omit<
 };
 
 export type Identifier = {
-  kind: 'variable' | 'function' | 'column';
-  identifier: string;
-  blockId?: string;
-  columnId?: string;
-  type: ACItemType;
-  inTable?: string;
-  editing?: boolean;
-  focused?: boolean;
-  explanation?: string;
-  syntax?: string;
-  example?: string;
-  formulaGroup?: string;
-  isCell?: boolean;
+  readonly kind: 'variable' | 'function' | 'column';
+  readonly identifier: string;
+  readonly blockId?: string;
+  readonly columnId?: string;
+  readonly type: ACItemType;
+  readonly inTable?: string;
+  readonly editing?: boolean;
+  readonly focused?: boolean;
+  readonly explanation?: string;
+  readonly syntax?: string;
+  readonly example?: string;
+  readonly formulaGroup?: string;
+  readonly isCell?: boolean;
+  readonly decoration?: SmartRefDecoration;
 };
 
 export interface AutoCompleteMenuProps {
   readonly isInTable?: string;
   readonly identifiers: Identifier[];
   readonly search?: string;
-  readonly onExecuteItem?: (identifier: Identifier) => void;
+  readonly onExecuteItem?: (
+    identifier: Identifier,
+    ref?: SmartRefDecoration
+  ) => void;
   readonly top?: boolean;
   readonly result?: string | null;
 }

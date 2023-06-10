@@ -21,7 +21,7 @@ test.describe('Slash commands', () => {
     await keyPress(page, 'Enter');
     await page.keyboard.type('hello world');
     await keyPress(page, 'Enter');
-    await page.keyboard.type('/');
+    await page.keyboard.type('/t');
 
     await expect(page.locator('[data-testid="menu-item-table"]')).toBeVisible();
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(

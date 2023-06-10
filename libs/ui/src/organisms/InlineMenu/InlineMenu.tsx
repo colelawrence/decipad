@@ -14,7 +14,7 @@ import {
 
 const styles = css({
   maxWidth: '80vw',
-  maxHeight: '33vh',
+  maxHeight: '50vh',
   overflowX: 'hidden',
   overflowY: 'scroll',
   display: 'grid',
@@ -61,9 +61,14 @@ export const InlineMenu: FC<InlineMenuProps> = ({
 }) => {
   const groupsWithItemsFiltered = groups.map(({ items, ...group }) => {
     const matchingItems = items.filter(({ command, title, extraSearchTerms }) =>
-      [command, title, ...extraSearchTerms].some((term) =>
-        term.toLowerCase().includes(search.toLowerCase())
-      )
+      [command, title, ...extraSearchTerms].some((term) => {
+        const { title: groupTitle } = group;
+        return search === ''
+          ? term.toLowerCase().includes(search.toLowerCase())
+          : groupTitle &&
+              !groupTitle.includes('Most') &&
+              term.toLowerCase().includes(search.toLowerCase());
+      })
     );
     return { ...group, matchingItems };
   });
@@ -115,23 +120,33 @@ export const InlineMenu: FC<InlineMenuProps> = ({
     [focusedCommand, matchingCommands]
   );
   useWindowListener('keydown', onKeyDown, true);
+
+  let foundFocusedItem = false;
+
   return (
     <div role="menu" aria-orientation="vertical" css={styles}>
-      {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) =>
-        matchingItems.length ? (
+      {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) => {
+        return matchingItems.length ? (
           <InlineMenuGroup key={i} {...group}>
-            {matchingItems.map(({ command, extraSearchTerms, ...item }) => (
-              <InlineMenuItem
-                {...item}
-                data-testid={`menu-item-${command}`}
-                key={command}
-                focused={focusedCommand === command}
-                onExecute={() => onExecute(command)}
-              />
-            ))}
+            {matchingItems.map(({ command, extraSearchTerms, ...item }) => {
+              const setFocus = focusedCommand === command && !foundFocusedItem;
+              const focusedItem = (
+                <InlineMenuItem
+                  {...item}
+                  data-testid={`menu-item-${command}`}
+                  key={command}
+                  focused={setFocus}
+                  onExecute={() => onExecute(command)}
+                />
+              );
+              if (setFocus) {
+                foundFocusedItem = true;
+              }
+              return focusedItem;
+            })}
           </InlineMenuGroup>
-        ) : null
-      )}
+        ) : null;
+      })}
     </div>
   );
 };

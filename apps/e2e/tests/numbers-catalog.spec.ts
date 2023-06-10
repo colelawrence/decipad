@@ -18,7 +18,10 @@ test.describe('Tests the number catalog', () => {
   });
 
   test('screenshots the number catalog and first article', async () => {
-    await page.locator('.notebookList > li').nth(1).click();
+    await page
+      .locator('[data-testid="list-notebook-title"]:has-text("Starting")')
+      .first()
+      .click();
     await waitForEditorToLoad(page);
     await snapshot(page as Page, 'Notebook: Number Catalog');
   });

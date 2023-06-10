@@ -209,7 +209,10 @@ export const NotebookListItem = ({
         <Anchor href={href} css={anchorStyles}>
           <NotebookIcon color={iconColor} icon={icon} />
 
-          <strong css={[nameStyles, name || noNameNameStyles]}>
+          <strong
+            data-testid="list-notebook-title"
+            css={[nameStyles, name || noNameNameStyles]}
+          >
             {name || 'My notebook title'}
           </strong>
           <div css={notebookListTagsStyles}>
