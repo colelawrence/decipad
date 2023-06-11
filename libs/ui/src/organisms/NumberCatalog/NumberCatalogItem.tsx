@@ -1,10 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { isTable } from '@decipad/computer';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { isTable } from '@decipad/computer';
 import { DragHandle, NestIndicator } from '../../icons';
 import {
   black,
@@ -45,6 +45,22 @@ export const NumberCatalogItem = ({
   const baseSwatches = swatchesThemed(darkTheme);
 
   if (!result?.result) {
+    return null;
+  }
+
+  const { type } = result.result;
+  const { kind } = type;
+
+  // only display supported types
+  if (
+    !(
+      kind === 'boolean' ||
+      kind === 'date' ||
+      kind === 'number' ||
+      kind === 'string' ||
+      kind === 'table'
+    )
+  ) {
     return null;
   }
 
