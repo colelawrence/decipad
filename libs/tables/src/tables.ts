@@ -147,6 +147,7 @@ function putReplacer<T extends ConcreteRecord>(
       await retry(() => arc.queues.publish(event), awsRetry, {
         maxTimeout: 5000,
       });
+      debug('tables.%s: published`', event);
     } else {
       debug('tables.%s: NOT publishing event', tableName);
     }

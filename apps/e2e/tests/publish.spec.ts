@@ -23,9 +23,6 @@ test.describe('Simple does publish work test', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = await page.context();
-    incognito = await browser.newContext();
-    randomUser = await browser.newContext();
-    incognitoPage = await incognito.newPage();
 
     await setUp({ page, context });
     await waitForEditorToLoad(page);
@@ -67,9 +64,15 @@ test.describe('Simple does publish work test', () => {
     ).toString();
     expect(clipboardText).toContain('My-notebook-title');
     sharedPageLocation = clipboardText;
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.syncDelay);
   });
 
-  test('[incognito] navigates to published notebook link', async () => {
+  test('[incognito] navigates to published notebook link', async ({
+    browser,
+  }) => {
+    incognito = await browser.newContext();
+    incognitoPage = await incognito.newPage();
     await incognitoPage.goto(sharedPageLocation!);
     await waitForNotebookToLoad(incognitoPage);
     await expect(
@@ -81,7 +84,10 @@ test.describe('Simple does publish work test', () => {
     await incognitoPage.waitForSelector('text=Try Decipad');
   });
 
-  test('[another user] navigates to published notebook link', async () => {
+  test('[another user] navigates to published notebook link', async ({
+    browser,
+  }) => {
+    randomUser = await browser.newContext();
     const randomPage = await randomUser.newPage();
     await withTestUser({ context: randomUser, page: randomPage });
 
