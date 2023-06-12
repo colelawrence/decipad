@@ -6,6 +6,7 @@ export * from './common-errors';
 export * from './create-workspace';
 export * from './import-notebook';
 export * from './snapshot';
+export * from './styles';
 export * from './timeout';
 export * from './types';
 export * from './users';
