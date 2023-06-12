@@ -16,13 +16,12 @@ function valueOrDefault(
 
 export const codePlaceholders = [
   `// Convert currency
-  const from = 'ILS';
-  const to = 'GBP';
-  const result = await fetch(\`https://api.exchangerate-api.com/v4/latest/\${from}\`);
-  const data = await result.json();
-  const fxRate = data.rates[to];
-  return fxRate;
-  `,
+const from = 'ILS';
+const to = 'GBP';
+const result = await fetch(\`https://api.exchangerate-api.com/v4/latest/\${from}\`);
+const data = await result.json();
+const fxRate = data.rates[to];
+return fxRate;`,
   `// list 20 pokemons
 const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=20');
 const data = await res.json();
@@ -55,7 +54,7 @@ const allRates = Object.keys(rates).map((rateName) => {
   const current = rates[rateName];
   return {
     name: current.name,
-    value: \`\${current.value} \${current.unit} per BTC\`
+    value: \`\${current.value}\`
   }
 }).filter((rate) => rate.name !== 'Bitcoin')
 return allRates;`,

@@ -26,7 +26,7 @@ export const LiveCode = ({ children, text, error }: LiveCodeProps) => {
     </Tooltip>
   );
   return (
-    <div css={liveCodeWrapperStyles}>
+    <div css={liveCodeWrapperStyles} data-testid="live-code">
       <div css={liveInputStyles}>{children}</div>
       <div css={labelStyles} contentEditable="false">
         <span css={liveIconStyles}>
