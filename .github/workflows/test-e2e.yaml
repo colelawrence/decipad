@@ -45,6 +45,12 @@ jobs:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
         run: ./scripts/e2e.sh
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: /home/runner/actions-runner/_work/decipad/decipad/playwright-report
+          retention-days: 30
 
   notify:
     name: Discord Notification

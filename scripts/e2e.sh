@@ -25,7 +25,7 @@ services_setup
 echo "running E2E tests and snapshots..."
 cd apps/e2e
 if [ -n "${CI:-}" ]; then
-  npx percy exec -v -- npx playwright test --retries=3 --reporter line
+  npx percy exec -v -- npx playwright test --retries=3 --reporter line --reporter=html
 else
   npx playwright test --retries=3 $@
 fi
