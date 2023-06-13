@@ -238,7 +238,6 @@ export const plugins = ({
 
       // selection
       createPersistSelectionPlugin(),
-      createPreventInvalidSelectionPlugin(),
 
       // drawings
       createDrawPlugin(),
@@ -251,6 +250,7 @@ export const plugins = ({
 
       // Migrations
       createMigrateStructuredInputs(),
+      createPreventInvalidSelectionPlugin(),
     ],
     {
       components: components(computer),

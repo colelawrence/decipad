@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   ELEMENT_DATA_VIEW_TR,
   MyEditor,
@@ -6,17 +6,16 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType, matchNodeType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import {
-  useEditorChange,
-  useEditorChangeCallback,
-} from '@decipad/editor-hooks';
+import { useEditorChange } from '@decipad/editor-hooks';
 import { SerializedType, AutocompleteName } from '@decipad/computer';
 import { findNode, findNodePath } from '@udecode/plate';
 import { Path } from 'slate';
-import { useDataViewActions, useSortColumns } from '.';
+import { useResolved } from '@decipad/react-utils';
+import { useDataViewActions } from '.';
 import { AggregationKind, Column } from '../types';
 import { useAvailableColumns } from './useAvailableColumns';
 import { useSourceTableNames } from './useSourceTableNames';
+import { sortColumns } from '../utils/sortColumns';
 
 interface UseDataViewProps {
   editor: MyEditor;
@@ -57,45 +56,46 @@ export const useDataView = ({
 
   const availableColumns = useAvailableColumns(element.varName ?? '');
 
-  const [sortedColumns, setSortedColumns] = useState<Column[] | undefined>();
-
-  const sortColumns = useSortColumns({
-    sortedColumns,
-    setSortedColumns,
-    availableColumns,
-  });
-
-  const selectColumnOrder = useCallback((): number[] | undefined => {
-    if (!availableColumns) {
-      return;
-    }
-    const dataViewPath = findNodePath(editor, element);
-
-    if (dataViewPath) {
-      const columnRowEntry = findNode(editor, {
-        at: dataViewPath,
-        match: matchNodeType(ELEMENT_DATA_VIEW_TR),
-      });
-      if (columnRowEntry) {
-        const [columnRow] = columnRowEntry;
-        assertElementType(columnRow, ELEMENT_DATA_VIEW_TR);
-        const columnHeaders = columnRow.children;
-        return columnHeaders
-          .map((column) =>
-            availableColumns.findIndex(
-              (c) => c.name === column.name || c.blockId === column.name
-            )
-          )
-          .filter(greaterOrEqualToZero);
+  const columnOrder = useEditorChange(
+    useCallback((): number[] | undefined => {
+      if (!availableColumns) {
+        return;
       }
-    }
-    return undefined;
-  }, [availableColumns, editor, element]);
+      const dataViewPath = findNodePath(editor, element);
 
-  useEditorChangeCallback(selectColumnOrder, sortColumns, {
-    injectObservable: columnChanges$,
-    debounceTimeMs: 2000,
-  });
+      if (dataViewPath) {
+        const columnRowEntry = findNode(editor, {
+          at: dataViewPath,
+          match: matchNodeType(ELEMENT_DATA_VIEW_TR),
+        });
+        if (columnRowEntry) {
+          const [columnRow] = columnRowEntry;
+          assertElementType(columnRow, ELEMENT_DATA_VIEW_TR);
+          const columnHeaders = columnRow.children;
+          const order = columnHeaders
+            .map((column) =>
+              availableColumns.findIndex(
+                (c) => c.name === column.name || c.blockId === column.name
+              )
+            )
+            .filter(greaterOrEqualToZero);
+          return order;
+        }
+      }
+      return undefined;
+    }, [availableColumns, editor, element]),
+    {
+      injectObservable: columnChanges$,
+      debounceTimeMs: 2000,
+    }
+  );
+
+  const sortedColumns = useResolved(
+    useMemo(
+      () => columnOrder && sortColumns(availableColumns, columnOrder),
+      [availableColumns, columnOrder]
+    )
+  );
 
   const selectedAggregationTypes = useEditorChange(
     useCallback(

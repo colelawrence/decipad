@@ -1,4 +1,4 @@
-import { useState, FC } from 'react';
+import { useState, FC, useCallback } from 'react';
 import { useRdFetch } from './hooks';
 import {
   AIPanelSuggestion,
@@ -20,12 +20,19 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
 }) => {
   const [prompt, setPrompt] = useState('');
   const [rd, fetch] = useRdFetch<'generate-sql'>(`/api/ai/generate-sql/${id}`);
+  const handleSubmit = useCallback(() => {
+    fetch(prompt);
+  }, [fetch, prompt]);
+  const makeUseOfSuggestion = useCallback(
+    (s: string) => {
+      toggle();
+      updateQueryText(s);
+    },
+    [toggle, updateQueryText]
+  );
   if (!id) {
     return null;
   }
-  const handleSubmit = () => {
-    fetch(prompt);
-  };
 
   return (
     <AIPanelContainer toggle={toggle}>
@@ -38,10 +45,7 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
       />
       <AIPanelSuggestion
         completionRd={rd}
-        useSuggestion={(s) => {
-          toggle();
-          updateQueryText(s);
-        }}
+        makeUseOfSuggestion={makeUseOfSuggestion}
       />
     </AIPanelContainer>
   );

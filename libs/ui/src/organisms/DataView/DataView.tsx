@@ -5,7 +5,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, FC, ReactNode, useCallback } from 'react';
-import { Invisible } from '../../atoms';
+import { Invisible, Spinner } from '../../atoms';
 import { Bolt, CircularArrow } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
 import { cssVar, p14Regular, smallScreenQuery } from '../../primitives';
@@ -253,22 +253,26 @@ export const DataView: FC<DataViewProps> = ({
         <div css={dataViewTableWrapperStyles} contentEditable={false}>
           <div css={dataViewTableOverflowStyles} contentEditable={false} />
           <div css={tableScroll}>
-            <table
-              css={[
-                dataViewTableStyles,
-                alternateRotation && dataViewAlternateRotationTableStyles,
-              ]}
-              contentEditable={false}
-            >
-              <thead>
-                {rotate && !alternateRotation ? (
-                  <Invisible>{thead}</Invisible>
-                ) : (
-                  thead
-                )}
-              </thead>
-              <tbody aria-roledescription="data view data">{data}</tbody>
-            </table>
+            {data ? (
+              <table
+                css={[
+                  dataViewTableStyles,
+                  alternateRotation && dataViewAlternateRotationTableStyles,
+                ]}
+                contentEditable={false}
+              >
+                <thead>
+                  {rotate && !alternateRotation ? (
+                    <Invisible>{thead}</Invisible>
+                  ) : (
+                    thead
+                  )}
+                </thead>
+                <tbody aria-roledescription="data view data">{data}</tbody>
+              </table>
+            ) : variableName ? (
+              <Spinner />
+            ) : null}
             {variableName && addNewColumnComponent}
           </div>
         </div>

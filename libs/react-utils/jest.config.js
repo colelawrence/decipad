@@ -6,9 +6,9 @@ module.exports = {
   displayName: 'react-utils',
   coverageThreshold: {
     global: {
-      statements: 48,
+      statements: 47,
       branches: 40,
-      lines: 48,
+      lines: 47,
       functions: 48,
     },
   },

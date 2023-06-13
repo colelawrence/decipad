@@ -49,20 +49,20 @@ export const useColumnsInferredTypes = (
 ): CellValueType[] | undefined => {
   const computer = useComputer();
 
-  const inferColumnsTypes = useCallback(
-    (editor: MyEditor): Promise<CellValueType[]> => {
-      const columnsData = collectColumnsData(editor, element);
-      const headerCells = element.children[1].children;
-      return Promise.all(
-        columnsData.map((columnData, columnIndex) =>
-          inferColumn(computer, columnData, {
-            userType: headerCells[columnIndex]?.cellType,
-          })
-        )
-      );
-    },
-    [computer, element]
+  return useEditorChangePromise(
+    useCallback(
+      (editor: MyEditor): Promise<CellValueType[]> => {
+        const columnsData = collectColumnsData(editor, element);
+        const headerCells = element.children[1].children;
+        return Promise.all(
+          columnsData.map((columnData, columnIndex) =>
+            inferColumn(computer, columnData, {
+              userType: headerCells[columnIndex]?.cellType,
+            })
+          )
+        );
+      },
+      [computer, element]
+    )
   );
-
-  return useEditorChangePromise(async (editor) => inferColumnsTypes(editor));
 };

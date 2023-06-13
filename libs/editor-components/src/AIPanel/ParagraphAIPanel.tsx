@@ -38,7 +38,7 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
       />
       <AIPanelSuggestion
         completionRd={rd}
-        useSuggestion={updateParagraph}
+        makeUseOfSuggestion={updateParagraph}
         regenerate={handleSubmit}
       />
     </AIPanelContainer>

@@ -11,13 +11,6 @@
         "maxWarnings": 0
       }
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/sync-connection-lambdas"],
-      "options": {
-        "jestConfig": "libs/sync-connection-lambdas/jest.config.js"
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

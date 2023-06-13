@@ -1,28 +1,44 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { PromiseOrType } from '@decipad/utils';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import isPromise from 'is-promise';
-import { dequal } from '@decipad/utils';
+import { PromiseOrType, dequal } from '@decipad/utils';
 
-export const useResolved = <T>(_p?: PromiseOrType<T>): T | undefined => {
-  const p = useMemo(() => (isPromise(_p) ? _p : Promise.resolve(_p)), [_p]);
+export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
   const lastP = useRef(p);
   lastP.current = p;
   const [result, setResult] = useState<T | undefined>();
   const lastResult = useRef<T | undefined>();
-  useEffect(() => {
-    let canceled = false;
-    p.then((r) => {
-      if (lastP.current === p && !canceled && !dequal(lastResult.current, r)) {
+  const lastResultP = useRef<PromiseOrType<T> | undefined>();
+
+  const setResultSafe = useCallback(
+    (r: T) => {
+      if (lastP.current === p && !dequal(lastResult, r)) {
         lastResult.current = r;
+        lastResultP.current = p;
         setResult(r);
       }
-    }).catch((err) => {
-      console.error(err);
-    });
+    },
+    [p]
+  );
+
+  useEffect(() => {
+    let canceled = false;
+    if (lastResultP.current !== p) {
+      if (isPromise(p)) {
+        p.then((r) => {
+          if (!canceled) {
+            setResultSafe(r);
+          }
+        }).catch((err: Error) => {
+          console.error(err);
+        });
+      } else if (p != null) {
+        setResultSafe(p);
+      }
+    }
 
     return () => {
       canceled = true;
     };
-  }, [p]);
+  }, [p, setResultSafe]);
   return result;
 };

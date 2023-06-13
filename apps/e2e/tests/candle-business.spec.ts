@@ -1,6 +1,6 @@
 import stringify from 'json-stringify-safe';
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import startingACandleBusiness from '../__fixtures__/starting-a-candle-business';
+import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
 import { setUp } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
 import { createWorkspace, importNotebook, Timeouts } from '../utils/src';

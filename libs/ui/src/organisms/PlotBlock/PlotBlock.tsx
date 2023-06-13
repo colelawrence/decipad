@@ -159,11 +159,15 @@ const TableSearch = ({
   return (
     <div>
       <SelectInput labelText="Select a table" value={value} setValue={setValue}>
-        <option value=""></option>
-        {tables.map(([varName, exprRef]) => {
+        <option value="" key="none"></option>
+        {tables.map(([varName, exprRef], i) => {
           if (varName === undefined || exprRef === undefined) return undefined;
 
-          return <option value={exprRef}>{varName}</option>;
+          return (
+            <option value={exprRef} key={i}>
+              {varName}
+            </option>
+          );
         })}
       </SelectInput>
     </div>

@@ -48,7 +48,7 @@ const undefinedBehaviourSubject = new BehaviorSubject<ObservableColumnType>(
   undefined
 );
 
-export const useColumnInferredType = (
+export const useColumnInferredTypeFromContext = (
   columnIndex?: number
 ): ObservableColumnType => {
   const context = useContext(ColumnInferredTypeContext);

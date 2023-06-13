@@ -58,7 +58,6 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
     editor,
     element,
   });
-
   const wideTable = (sortedColumns?.length || 0) >= WIDE_MIN_COL_COUNT;
 
   const { color: defaultColor } = useEditorStylesContext();
@@ -107,7 +106,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
         alternateRotation={element.alternateRotation ?? false}
         onChangeAlternateRotation={saveAlternateRotation}
         data={
-          (sortedColumns && tableName && (
+          sortedColumns && tableName ? (
             <DataViewData
               tableName={tableName}
               columns={sortedColumns}
@@ -119,8 +118,7 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
               headers={headers}
               alternateRotation={element.alternateRotation ?? false}
             />
-          )) ||
-          null
+          ) : null
         }
       >
         {children}

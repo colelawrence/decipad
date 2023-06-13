@@ -22,13 +22,13 @@ const buttonContainerCss = css({
 
 type AIPanelSuggestionProps = {
   completionRd: RemoteData<{ completion: string }>;
-  useSuggestion: (s: string) => void;
+  makeUseOfSuggestion: (s: string) => void;
   regenerate?: () => void;
 };
 
 export const AIPanelSuggestion: FC<AIPanelSuggestionProps> = ({
   completionRd,
-  useSuggestion,
+  makeUseOfSuggestion,
   regenerate,
 }) => {
   switch (completionRd.status) {
@@ -39,7 +39,7 @@ export const AIPanelSuggestion: FC<AIPanelSuggestionProps> = ({
           <div css={buttonContainerCss}>
             <Button
               onClick={() => {
-                useSuggestion(completionRd.result.completion);
+                makeUseOfSuggestion(completionRd.result.completion);
               }}
               size="extraExtraSlim"
             >

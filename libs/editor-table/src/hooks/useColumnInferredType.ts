@@ -5,12 +5,11 @@ import {
   TableCellElement,
   CellValueType,
   TableHeaderElement,
-  useTEditorRef,
 } from '@decipad/editor-types';
 import { inferColumn } from '@decipad/parse';
 import { Computer } from '@decipad/computer';
-import { useResolved } from '@decipad/react-utils';
-import { useMemo } from 'react';
+import { useCallback } from 'react';
+import { useEditorChangePromise } from '@decipad/editor-hooks';
 
 type UseColumnInferredTypeResult = CellValueType | undefined;
 
@@ -58,12 +57,11 @@ export const getColumnInferredType = async (
 export const useColumnInferredType = (
   element?: TableHeaderElement
 ): UseColumnInferredTypeResult => {
-  const editor = useTEditorRef();
   const computer = useComputer();
-  return useResolved(
-    useMemo(
-      () => getColumnInferredType(editor, computer, element),
-      [computer, editor, element]
+  return useEditorChangePromise(
+    useCallback(
+      (editor: MyEditor) => getColumnInferredType(editor, computer, element),
+      [computer, element]
     )
   );
 };

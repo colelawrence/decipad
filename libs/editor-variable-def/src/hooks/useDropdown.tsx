@@ -178,11 +178,9 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   ]);
 
   // materialize columns
-  const materializedColumnsP = useMemo(
-    () => Promise.all(columns.map(materializeColumnDesc)),
-    [columns]
+  const materializedColumns = useResolved(
+    useMemo(() => Promise.all(columns.map(materializeColumnDesc)), [columns])
   );
-  const materializedColumns = useResolved(materializedColumnsP);
 
   const otherItems = useMemo((): SelectItems[] => {
     if (!materializedColumns) {

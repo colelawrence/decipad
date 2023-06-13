@@ -38,7 +38,7 @@ test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
 
     execute({
       editor,
-      path: [0, 0],
+      path: [0],
       command,
       getAvailableIdentifier,
       select: false,

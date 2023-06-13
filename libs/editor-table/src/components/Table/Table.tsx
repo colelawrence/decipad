@@ -18,7 +18,7 @@ import {
   useEditorStylesContext,
 } from '@decipad/react-contexts';
 import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
 import {
@@ -65,10 +65,12 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
   );
 
   const computer = useComputer();
-  const blockResult = computer.getBlockIdResult$.use(blockId)?.result;
-  const tableResult = useMemo(
-    () => selectTableResult(blockResult, columns),
-    [blockResult, columns]
+  const tableResult = computer.getBlockIdResult$.useWithSelector(
+    useCallback(
+      (blockResult) => selectTableResult(blockResult?.result, columns),
+      [columns]
+    ),
+    blockId
   );
   const materializedTableResult = useMaterializedResult(
     tableResult as Result.AnyResult

@@ -34,25 +34,29 @@ export const useDataViewLayoutData = ({
   });
 
   return useResolved(
-    useMemo(() => {
-      return layoutPowerData({
-        columns: columns.map((column) => ({
-          ...column,
-          value: ColumnImpl.fromValues(column.value as OneMaterializedResult[]),
-        })),
+    useMemo(
+      () =>
+        layoutPowerData({
+          columns: columns.map((column) => ({
+            ...column,
+            value: ColumnImpl.fromValues(
+              column.value as OneMaterializedResult[]
+            ),
+          })),
+          aggregationTypes,
+          expandedGroups,
+          includeTotal,
+          preventExpansion,
+          rotate,
+        }),
+      [
         aggregationTypes,
+        columns,
         expandedGroups,
         includeTotal,
         preventExpansion,
         rotate,
-      });
-    }, [
-      aggregationTypes,
-      columns,
-      expandedGroups,
-      includeTotal,
-      preventExpansion,
-      rotate,
-    ])
+      ]
+    )
   );
 };

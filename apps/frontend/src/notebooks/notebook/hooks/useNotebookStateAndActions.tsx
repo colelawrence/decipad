@@ -284,7 +284,9 @@ export const useNotebookStateAndActions = ({
         isPublic && !(snapshot?.version && docsync?.equals(snapshot?.version))
       );
     }, [docsync, isPublic, snapshot?.version]),
-    { debounceTimeMs: DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS }
+    {
+      debounceTimeMs: DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS,
+    }
   );
 
   const setNotebookPublic = useCallback(

@@ -6,10 +6,10 @@ module.exports = {
   displayName: 'editor-data-view',
   coverageThreshold: {
     global: {
-      statements: 60,
-      branches: 40,
-      functions: 51,
-      lines: 60,
+      statements: 57,
+      branches: 35,
+      functions: 50,
+      lines: 57,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

@@ -103,7 +103,7 @@ export async function createDataViewBelow(page: Page, identifier: string) {
 
   await page.locator('role=menuitem', { hasText: 'data' }).click();
 
-  await page.getByText('Data view').last().dblclick();
+  await page.getByText('Data view').last().click();
 
   await keyPress(page, 'Backspace');
 

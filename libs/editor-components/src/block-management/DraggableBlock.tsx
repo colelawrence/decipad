@@ -8,7 +8,6 @@ import {
   MyEditor,
   MyElement,
   MyElementOrText,
-  MyReactEditor,
   alwaysWritableElementTypes,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -17,6 +16,7 @@ import {
   getCodeLineSource,
   insertNodes,
   requirePathBelowBlock,
+  setSelection,
 } from '@decipad/editor-utils';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { isFlagEnabled } from '@decipad/feature-flags';
@@ -44,7 +44,6 @@ import {
   insertText,
   removeNodes,
   select,
-  setSelection,
 } from '@udecode/plate';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
@@ -91,7 +90,7 @@ const placeHolders = {
 };
 
 const defaultOnDelete = (
-  editor: MyReactEditor,
+  editor: MyEditor,
   element: MyElement,
   parentOnDelete?: OnDelete
 ): void => {

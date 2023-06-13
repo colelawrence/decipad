@@ -3,4 +3,3 @@ export * from './useDragColumn';
 export * from './useDropColumn';
 export * from './useDataView';
 export * from './useDataViewLayoutData';
-export * from './useSortColumns';
