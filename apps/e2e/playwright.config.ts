@@ -56,6 +56,7 @@ const config: PlaywrightTestConfig = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        trace: 'retain-on-failure',
         contextOptions: {
           // chromium-specific permissions
           permissions: ['clipboard-read', 'clipboard-write'],
