@@ -51,6 +51,11 @@ folder public
 @ws
 
 @tables
+workspacesubscriptions
+  id *String
+  workspace_id String
+  client_reference_id String
+
 users
   id *String
   name String

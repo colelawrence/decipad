@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable-next-line import/no-extraneous-dependencies */
 import arc from '@architect/functions';
 import {
   ConcreteDataTable,
@@ -47,6 +47,7 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'externaldatasources',
   'externaldatasourcekeys',
   'secrets',
+  'workspacesubscriptions',
 ];
 
 const observedTables: (keyof DataTables)[] = [
@@ -212,6 +213,7 @@ function enhance(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table.create = async function create(doc: any, noEvents = false) {
     if (!doc.createdAt) {
+      /* eslint-disable-next-line no-param-reassign */
       doc.createdAt = timestamp();
     }
 
@@ -219,7 +221,7 @@ function enhance(
   };
 
   table.batchGet = async function batchGet(ids: string[]) {
-    debug(tableName + ':batchGet', ids);
+    debug(`${tableName}:batchGet`, ids);
     const uniqueIds = unique(ids);
     if (uniqueIds.length < 1) {
       return [];
@@ -236,7 +238,7 @@ function enhance(
   };
 
   table.batchDelete = async (selectors) => {
-    debug(tableName + ':batchDelete', selectors);
+    debug(`${tableName}:batchDelete`, selectors);
     if (selectors.length < 1) {
       return;
     }

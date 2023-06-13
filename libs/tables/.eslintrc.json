@@ -1,0 +1,11 @@
+{
+  "extends": ["../../libs/eslint-config-decipad/react"],
+  "ignorePatterns": ["!**/*", "**/*.js"],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
+    "no-use-before-define": "off",
+    "no-shadow": "off",
+    "no-console": "off"
+  }
+}

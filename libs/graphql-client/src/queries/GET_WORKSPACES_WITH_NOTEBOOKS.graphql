@@ -58,6 +58,9 @@ fragment DashboardWorkspace on Workspace {
       ...WorkspaceNotebook
     }
   }
+  subscription {
+
+  }
   sections {
     ...WorkspaceSection
   }

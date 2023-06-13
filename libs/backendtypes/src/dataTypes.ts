@@ -464,6 +464,10 @@ export interface SecretRecord extends TableRecordBase {
   workspace_id: ID;
   secret: string;
 }
+export interface WorkspaceSubscriptionRecord extends TableRecordBase {
+  workspace_id: ID;
+  client_reference_id: string;
+}
 
 export interface SecretInput {
   name: string;
@@ -551,6 +555,7 @@ export interface EnhancedDataTables {
   externaldatasourcekeys: DataTable<ExternalKeyRecord>;
   usergoals: DataTable<UserGoalRecord>;
   secrets: EnhancedDataTable<SecretRecord>;
+  workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -591,7 +596,8 @@ export type ConcreteRecord =
   | DocSyncUpdateRecord
   | DocSyncSnapshotRecord
   | LogRecord
-  | SecretRecord;
+  | SecretRecord
+  | WorkspaceSubscriptionRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
