@@ -77,7 +77,7 @@ export function groupIdentifiers(
       ...Object.entries(tableGroups).map(([tbl, idents]) =>
         toTableGroup(idents, tbl)
       ),
-      toGroup(functions, 'Formulas'),
+      toGroup(functions, 'Functions'),
     ],
     (g) => {
       if (isInTable === g.tableName) {

@@ -1,0 +1,142 @@
+---
+sidebar_position: 8
+---
+
+import { ReleasePost } from '@site/src/components/ReleasePost';
+import ImageAnnotation from '@site/src/components/ImageAnnotation/ImageAnnotation';
+import CustomFormulaImage from './img/CustomFormula.png';
+import CustomFormulaAdvancedImage from './img/CustomFormulaAdvanced.png';
+import CustomFormulaAdvancedExpandedImage from './img/CustomFormulaAdvancedExpanded.png';
+
+# Custom Functions
+
+Define custom functions to reuse throughout your notebook, making calculations easier to understand.
+
+If you don't want to define your own, Decipad already supports a list of basic functions out of the box: <br/>
+[Decipad Functions List →](/docs/functions-list)
+
+## Create Custom Functions
+
+:::tip Syntax
+
+`CustomFormulaName (first argument, ..., last argument) = your custom expression`
+
+:::
+
+To create a custom function in Decipad:
+
+1. Add an Advanced formula block by clicking the `+` button next to an empty line and selecting "Advanced formula".
+
+2. Choose a unique name for your custom function that differs from any variables or unit name.
+
+3. Specify the arguments for your custom function by separating them with commas and enclosing them in parentheses `(first argument, ..., last argument)`. These arguments are the variables that can be reused in your formulas.
+
+4. Define your custom function using an equal sign, followed by your custom expression `= your custom expression`.
+
+5. You can now reuse your custom function in other formula blocks by calling it as `YourCustomFunction(YourArguments)`.
+
+<br />
+
+### Example
+
+Let's consider an example where you want a custom function that always applies a 10% discount to a price.
+
+<ImageAnnotation
+  alt="Custom Formula Example"
+  isOnlyOnHover
+  steps={[
+    {
+      src: CustomFormulaImage,
+      xPercent: 8,
+      yPercent: 3,
+      widthPercent: 79,
+      heightPercent: 35,
+      value: 1,
+      description: `Start by defining your custom function <code>applyDiscount(Price) = Price - 10%</code> on an Advanced Formula block.`,
+    },
+    {
+      src: CustomFormulaImage,
+      xPercent: 45,
+      yPercent: 58,
+      value: '💡',
+      tooltip: `Define variables to make your calculations easier to follow.`,
+    },
+    {
+      src: CustomFormulaImage,
+      xPercent: 8,
+      yPercent: 66,
+      widthPercent: 45,
+      heightPercent: 20,
+      value: 2,
+      description: `Then reuse it on any formula block just by calling its name and passing the arguments. <br/> In this case: <code>Price</code>.`,
+    },
+  ]}
+/>
+
+<ImageAnnotation
+  alt="Custom Formula Example"
+  caption="Custom functions can have more that one argument. Just separate them with a comma."
+  isOnlyOnHover
+  steps={[
+    {
+      src: CustomFormulaAdvancedImage,
+      xPercent: 8,
+      yPercent: 3,
+      widthPercent: 79,
+      heightPercent: 54,
+      value: 3,
+      description: `On this example lets consider a special discount for your VIP clients. Add an extra argument to help with your custom formula logic called <code>ClientTier</code>.`,
+    },
+    {
+      src: CustomFormulaAdvancedImage,
+      xPercent: 8,
+      yPercent: 60,
+      widthPercent: 79,
+      heightPercent: 35,
+      value: 4,
+      description: `Reuse your custom function  <code>ApplyDiscount(Price, ClientTier)</code> in any other formula block. <br/> For a <code>Price = $100</code> the discount will be <code>20%</code>, totalling <code>$80</code>.`,
+    },
+    {
+      src: CustomFormulaAdvancedImage,
+      xPercent: 73,
+      yPercent: 84,
+      value: '💡',
+      tooltip: `Define your arguments when you call a formula. <br/><b>ClientTier = "VIP"</b>`,
+    },
+  ]}
+/>
+
+<ImageAnnotation
+  alt="Custom Formula Example"
+  caption="The advantage of custom functions is that you can reuse your calculations with different inputs."
+  isOnlyOnHover
+  steps={[
+    {
+      src: CustomFormulaAdvancedExpandedImage,
+      xPercent: 8,
+      yPercent: 58,
+      widthPercent: 79,
+      heightPercent: 10.5,
+      value: 5,
+      description: `For example, when you apply a discount for a regular customer on a <code>Price</code> of <code>$100</code>, they will pay <code>$90</code>. <br/> A <code>10%</code> discount.`,
+    },
+    {
+      src: CustomFormulaAdvancedExpandedImage,
+      xPercent: 8,
+      yPercent: 78,
+      widthPercent: 79,
+      heightPercent: 10.5,
+      value: 6,
+      description: `Your VIP customer will pay <code>$160</code> on a purchase of <code>$200</code>. A <code>20%</code> discount.`,
+    },
+  ]}
+/>
+
+<!--
+```deci live
+even (n) = n mod 2 == 0
+even(10)
+==> true
+```
+
+-->

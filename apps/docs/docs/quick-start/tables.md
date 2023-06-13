@@ -1,75 +1,139 @@
 ---
-sidebar_position: 8
+sidebar_position: 4
 toc_min_heading_level: 2
 ---
 
-# Create a Table
+# Tables
 
-Tables help you organize your numbers.
+Tables help you organize data, making it easier to read and understand. You can also use tables to perform calculations using formulas.
 
-## Learn Decipad tables in 3 minutes
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
-<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/embed/cb7d3e18401d4f289ea7e7c9eeaf08d9" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
-</div>
+<YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png"/>
 
-## Create a new Table
+## Create a Table
 
-To **add a new table** to your notebook:
+**To create a new table**, go to your notebook, click the `+` button next to an empty line and select `Table` from the menu, or you can open the block menu by typing `/` on an empty paragraph, select `Table` using the `arrow keys`, and press `enter`.
 
-1.  Click the `+` button next to an empty line,
-2.  Select `Table` from the menu.
+1. **Add Formulas to a Table**:
 
-Alternatively, to add a table with the keyboard, open up the block menu by typing `/` on an empty paragraph, select `Table` using the `arrow keys`, and press `enter`.
+   - You can add formulas to a table by clicking on any cell and starting with the equals sign (`=`).
+   - Alternatively, you can add formulas to a column by clicking on the column `▼` and selecting `Formula`.
 
-To **delete a table**, hover over the table, click the **`⸬`** button that appears on the left, and then click `Delete`.
+2. **Add Quick Calculation Insights**:
 
-<br />
+   - Click the `Calculate` button at the end of your table to perform quick calculations.
+   - Select the desired calculation based on the data type in the column (e.g., sum, count).
+   - The available calculations depend on the type of data in your table.
 
-## Update a Table Name
+   You can easily drag and drop these calculations results:
 
-New tables are assigned default names when created(Table1, Table2, ... ) <br />
-Update your table name, so it is easy to identify.
+   - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-numbers)
+   - Into your formulas to reuse them. [Learn more about Formulas →](/docs/formulas)
 
-- To **update a table name**, replace the old name on the top left of the table.
+3. **Add Units to Table Values**:
 
-## Update a Column Name
+   - To add units to table values, include them as text in the respective cell.
+   - For example, you can enter `$10` or `5oz` to indicate a currency or measurement.
+   - Alternatively, you can format a column to display units by clicking on the column `▼` and adding your custom unit.
 
-New columns are always assigned default names (Column1, Column2, ... ) <br />
-Update your column names to make them easier to identify on your calculations.
+4. **Add Units to Columns**:
 
-- To **update a column name**, replace the old name by clicking it and picking a new one.
+   - Click the down triangle button on a column, select `Change type`, and enter a new unit in the `create custom` field.
 
-## Update a Table Color and Icon
+5. **Update Table and Column Names**:
 
-New tables are assigned default colors and icons. <br />
-Pick new table colors and icons to give personality to your notebook without impacting your model.
+   - After creating a table, you can update its default name by replacing it in the top left corner of the table.
+   - To update column names, click on the existing name and select a new one.
 
-- To **update a table color and icon**, click the grid icon next to the table name, and choose a new color and icon from the menu.
+6. **Add and Delete Columns and Rows**:
 
-## Add Table Columns and Rows
+   - Add new columns by clicking the `+` button on the right side of the table.
+   - Delete a column by clicking the upside-down triangle button on the column and selecting `Delete column`.
+   - Add new rows by clicking the `+ Add row` button at the end of the table.
+   - Delete rows or insert new ones by hovering over a row, clicking the `⸬` button, and selecting the desired action.
 
-Expand your table size with new columns and rows.
+7. **Rearrange Table Columns and Rows**:
 
-- To **add a column**, click the `+` button on the right of the table.
+   - You can rearrange table columns and rows by dragging and dropping them within the same table.
+   - To move a row, click and hold the `⸬` button on the left side of the row and drag it to a new position.
+   - To move a column, click and hold the `⸬` button on the left side of the column name and drag it to a new position.
 
-To **delete a column**, click the upside-down triangle button on a column and select `Delete column`.
+8. **Update Column Data Types**:
 
-- To **add a row**, click the `+ Add row` button at the end of the table.
+   - Click the down triangle button on a column, select `Change type`, and choose a new column type from the list.
 
-To **delete a row**, hover a row, click the **`⸬`** button that appears on the left, and then click `Delete row`.
+9. **Add Column Series**:
 
-## Rearrange Table Columns and Rows
+   - Create a column series by selecting `Series` and then `Date` in the column's `Change type` menu. Specify the starting point, and subsequent dates will be calculated automatically.
 
-Move your table columns and rows to rearrange your table.
+10. **Hide Table Formulas**:
 
-- To **move a row**, hover over any row, click and hold the **`⸬`** button that appears on the left, and drag them to a new position inside the same table.
-- To **move a column**, click and hold the **`⸬`** button on the left of any column name and drag them to a new position inside the same table.
+    - Click the `Hide formulas` button on top of the table to hide table formulas. Click the `Show formulas` button to display them again.
 
-<br />
+11. **Customizing Table Appearance**:
 
----
+    - Change the color and icon of your table by clicking the grid icon next to the table name.
+    - Select a new color and icon from the menu to give your table a unique personality.
 
-# Continue Exploring:
+## Referencing Columns
 
-- Create more advanced tables with [Language Tables](/docs/advanced-concepts/language-tables)
+You can easily reuse and incorporate values from any column in your calculations.
+
+To reference a table column in a calculation, follow these steps:
+
+1. Type the table name.
+2. Use a dot `.` to indicate the specific column within the table.
+3. Append the column name after the dot.
+
+For example, if your table is named "Table" and you want to access the "Column" within it, write it as:
+
+`Table.Column`
+
+### Example: Summing a Column
+
+Let's consider an example where you want to sum the values in a sales table.
+
+Assuming you have a table named "SalesData" with a column named "SalesPrice", you can calculate the sum using this syntax: `sum(SalesData.SalesPrice)`. This calculation can be used in a **formula block** or another **column formula**.
+
+This syntax can be customized for other calculations as well. For instance, you can calculate the **average**, **minimum**, **maximum**, or apply other mathematical operations to the column values. [Learn more about Formulas for Tables→](/docs/formulas)
+
+You can expand on this by incorporating additional calculations, such as calculating the tax for all sales:
+
+`sum(SalesData.SalesPrice) + tax`
+
+### Compact Format: Referencing Columns in the Same Table
+
+Within the same table, it is easy to reference other columns and reuse their values.
+
+Let's continue with the example of a sales table. If you want to calculate the tax per item instead of the tax for all sales, you can add a new formula column and write `SalesData.SalesPrice + tax`. This calculation will determine the tax for each individual item based on its row.
+
+Since you are working within the same table, you can use the compact format that only requires a reference to the column name: `SalesPrice + tax`. Decipad will automatically calculate the tax for each row, considering the values from the respective rows in the table.
+
+## Code Tables (Legacy)
+
+Code tables are an alternative to low-code tables. They only work with **Advanced formula** blocks.
+
+:::tip Syntax
+
+```
+TableName = {
+  Column1 = [Value1, Value2, ...]
+  Column2 = [Value1, Value2, ...]
+  Column2 = [Value1, Value2, ...]
+}
+
+```
+
+:::
+
+:::note Example
+
+```
+MyTable = {
+  A = [1, 2, 3]
+  B = [4, 5, 6]
+}
+```
+
+:::

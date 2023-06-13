@@ -1,137 +1,89 @@
 ---
-sidebar_position: 3
-sidebar_class_name: new
+sidebar_position: 1
 ---
 
-import {
-  avatarFabio,
-  avatarGiulia,
-  avatarSimao,
-  avatarPeyton,
-  avatarKelly,
-  avatarJohn,
-  avatarNuno,
-  avatarAnna,
-  templateBadge,
-  educationBadge,
-  IconAnnouncement,
-  IconHeart,
-  IconPin,
-  IconShoppingCart,
-  IconCoffee,
-  IconWorld,
-  IconTable,
-  IconAnnotationWarning,
-  IconFrame,
-  IconPaperclip,
-  IconWallet,
-  IconStar,
-  IconCrown,
-  IconBattery,
-  IconHappy,
-  IconKey,
-  IconMoon,
-  IconLightBulb,
-  IconHealth,
-  IconCard,
-  IconMusic,
-  IconMovie,
-  IconPeople,
-  IconServer,
-  IconLeaf,
-  IconClock,
-  IconPercentage,
-  IconBolt,
-  IconCar,
-  IconMessage,
-  IconSunrise,
-  IconCompass,
-  IconTrophy,
-  IconVirus,
-  IconPlane,
-  IconEducation,
-  IconSpider,
-  IconRocket,
-  IconSparkles,
-  IconBeach,
-  newNotebookBadge,
-  GridContainer,
-  Card,
-} from '@site/src/components/GalleryCards';
+# Formulas
 
-# Create a Formula
+Formulas are dynamic calculations that are easy to follow and update.
 
-Create inline calculations in your notebook with `Formula Blocks`, they can help you:
+## Create a Formula
 
-- Label your data clearly - instead of using "$A$1", you can use formulas that read like a story
-- Define the base values of your model so you can build from them and avoid accidentally overwriting your input data.
-- Rearrange your formulas as you please - either in a compact list or placed where they make the most sense contextually, like cells but unchained.
+**To create a new Formula Block**, Click the `+` button next to an empty line in your notebook and select `Formula` from the menu that appears. Alternatively, you can use the shortcut by typing `=` on an empty paragraph.
 
-## Add a Formula Block to you Notebook
+1. **Create a Calculation**:
 
-To **add a new formula** to your notebook:
+   - Just type any calculation or formulas and check its result on the right.
 
-1.  Click the `+` button next to an empty line,
-2.  Select `Formula` from the menu.
+2. **Define a Variable Name**:
 
-Alternatively, use the shorcut by typing `=` on an empty paragraph.
+   - Assign variable names to your formulas to make them easier to read and reuse.
+   - Variable names are case-sensitive.
+   - Variable names cannot include spaces.
+   - Variable names cannot start with a number.
+   - Variable names must be unique.
 
-### Pick a Variable Name for a Formula
+3. **Supported Operations**:
 
-Assign variable names to your formulas to reuse on other calculations. Variables make formulas easier to read and recall. On spreadsheets, these are coordinates, for example, A1, B2, etc.
+   - Formulas support common mathematical operations such as addition `+`, subtraction `-`, multiplication `*`, division `/`, and exponents `**`.
+   - Parentheses can be used to group operators and define evaluation order. Example: `($100 + 5%) / $200`.
 
-![Formula Block](./img/SI_EXAMPLES6.png)
+4. **Percentages**:
 
-**Here are the rules when picking variable names**:
+   - Percentages are fully supported in formulas. Simply add a `%` symbol to any number to define a percentage. Example: `5%`
+   - Convert a calculation result into a percentage with the keyword `in`. Example: ` 30/200 in %`.
+   - Apply a percentage using multiplication. Example: `400$ * 5%`
+   - Add a percentage using addition. Example: `400$ + 5%`
+   - Subtract a percentage using subtraction. Example: `400$ - 5%`
+   - Combine percentages using addition or subtraction. Example: `10% + 5%`
 
-- Emojis can be used as variable names 😎.
-- Variable names are case-sensitive. For Instance, `Discount` is a different variable from `discount`.
-- Variable names can’t include spaces.
-- Variable names can’t start with a number.
-- Variables names are unique, you can’t assign the same one to different values.
+5. **Shorthand Notation**:
 
-### Supported Operations for Formulas
+   - Formulas support abbreviated ways of representing numbers and writing expressions:
+   - You can use number multipliers, including thousands `K`, millions `M`, and billions `B`.
+   - You can use currency symbols such as `$5` or `5$` to represent different currencies. <br/>
+     [Check Supported Currencies →](/docs/advanced-concepts/units)
 
-Decipad supports all the operations you would except. `Addition`, `Subtraction`, `Multiplication`, `Division` and `Exponents`.
+6. **Built-in Functions**:
 
-![Formula Block](./img/SI_EXAMPLES5.png)
+   - Decipad has a series of built-in function that you can use to simplify your calculations. <br/>
+     [Learn more about Built-in Functions →](/docs/functions-list)
 
-### Percentages Work Out-of-the-Box
+7. **Add Units**:
 
-Percentages are supported in formulas. Just use them as you would with normal numbers.
+   - To add units you can just type them. For example enter `$10` or `5oz` to indicate a currency or measurement. <br/>
+     [Learn more about Units →](/docs/advanced-concepts/units)
 
-![Formula Block](./img/SI_EXAMPLES3.png)
+8. **Reference Results**:
 
-## Create Numbers Inputs to Reuse
+   - You can easily drag and drop these calculations into your text to explain them. <br/>[Learn more about Inline Results →](/docs/quick-start/inline-numbers)
+   - You can easily drag and drop these calculations into your formulas to reuse them.
 
-Add `Number Inputs` to define numbers that you can reuse with your formulas. These numbers have variable names that help you add context and make them easier to reause across your model.
+9. **Create a Result Widget**:
+   - Click the formula result to create a result widget on your notebook to showcases an important number.
 
-![Formula Block](./img/SI_EXAMPLES2.png)
+## Number Inputs
 
-Take a look at this example:
+You can define number inputs to reuse on your calculations to make your calculations easier to follow and update.
 
-![Formula Block](./img/SI_EXAMPLES.png)
+**To create a new Number Input Block**, Click the `+` button next to an empty line in your notebook and select `Number Input` from the menu that appears. Alternatively, you can use the shortcut by typing `=` on an empty paragraph.
 
-Your `FinalSalary` is your `Salary` plus your `Bonus`.
+1. **Add a Unit**:
 
-### Pick a Unit for Your Numbers
+   - To add units to number inputs, just type them as text next to your numbers.
+   - For example, you can enter `$10` or `5oz` to indicate a currency or measurement.
+   - Alternatively, you can click on the unit picker `▼` and select one from the list or define custom one on the `add custom unit` field.
 
-Specify the units of any number to add extra context to your calculations.
+2. **Define a Variable Name**:
 
-To add units to a number:
+   - Assign variable names to your formulas to make them easier to read and reuse.
+   - Variable names are case-sensitive.
+   - Variable names cannot include spaces.
+   - Variable names cannot start with a number.
+   - Variable names must be unique.
 
-1. Click the dropdown picker to select a new unit.
-2. To **add custom units to a number**, click the dropdown picker and add them to the `add custom unit` field.
+## Formulas on Tables
 
-![Formula Block](./img/SI_EXAMPLES4.png)
+- You can add formulas to a table by clicking on any cell and starting with the equals sign (`=`).
+- Alternatively, you can add formulas to a column by clicking on the column `▼` and selecting `Formula`.
 
-Check the [list of units Decipad supports by default](/docs/basic-concepts/supported-units).
-
-<br />
-
----
-
-# Continue Exploring:
-
-- For more complex calculations, check out Decipad’s [Built-in Formulas](/docs/formulas)
-- [Create Calculations on Tables](/docs/quick-start/table-calculations)
+[Learn more about Formulas on Tables →](/docs/quick-start/tables)

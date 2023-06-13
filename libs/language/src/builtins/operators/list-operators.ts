@@ -103,8 +103,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
     },
     functionSignature: 'column<boolean> -> number',
     explanation: 'Number of entries on a column that match a condition.',
-    example: 'countif(Table.Column > 100)',
-    syntax: 'countif(Flights.Passengers > 100)',
+    example: 'countif(Flights.Passengers > 100)',
+    syntax: 'countif(Table.Column > 100)',
     formulaGroup: 'Columns',
   },
   stepgrowth: {

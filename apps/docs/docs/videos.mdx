@@ -1,7 +1,10 @@
 ---
-sidebar_position: 101
-hide_table_of_contents: false
-sidebar_class_name: gallery-icon
+sidebar_position: 1
+hide_table_of_contents: true
+sidebar_class_name: video-icon
+pagination_next: null
+pagination_prev: null
+title: Videos
 ---
 
 import {
@@ -10,26 +13,54 @@ import {
   Card,
 } from '@site/src/components/GalleryCards';
 
-# Videos
+import { VideoGridContainer, VideoCard } from '@site/src/components/VideoCards';
 
-<GridContainer>
-              <Card
-                img2="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                title="Get started with Decipad"
-                notebook="/docs/quick-start/notebooks#video-create-your-first-notebook"
-                description="Decipad is an interactive notebook where you can create and explain calculations, empowering you to make better decisions with numbers."
-              />
-              <Card
-                img2="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                title="Create Tables on Decipad"
-                notebook="/docs/quick-start/tables"
-                description="Tables help you organize your numbers and create quick calculations."
-              />
-              <Card
-                img2="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
-                title="Explore data with Data Views"
-                notebook="/docs/basic-concepts/data-views#learn-data-views-in-3-minutes"
-                description="Data views are a quick and easy way to create summarized snapshots from a table to help you present meaningful insights"
-              />
-            </GridContainer>
+# Discover Decipad: Mastering the Basics
 
+<VideoGridContainer>
+  <VideoCard
+    img2="/docs/img/thumbnails/thumbnail-first-notebook.png"
+    title="Get started with Decipad"
+    notebook="/docs/quick-start/notebooks#video-create-your-first-notebook"
+    description="Decipad is an interactive notebook where you can create and explain calculations, empowering you to make better decisions with numbers."
+  />
+  <VideoCard
+    img2="/docs/img/thumbnails/thumbnail-drag.png"
+    title="Drag and Drop! Build models faster"
+    notebook="https://www.youtube.com/watch?v=PRmx0TnYtSA"
+    description="The drag and drop feature in Decipad allows you to easily organize and manipulate your data to do calculations and explain results."
+  />
+  <VideoCard
+    img2="/docs/img/thumbnails/thumbnail-tables.png"
+    title="Create Tables on Decipad"
+    notebook="/docs/quick-start/tables"
+    description="Tables help you organize your numbers and create quick calculations."
+  />
+  <VideoCard
+    img2="/docs/img/thumbnails/thumbnail-data-views.png"
+    title="Explore data with Data Views"
+    notebook="/docs/quick-start/data-views"
+    description="Data views are a quick and easy way to create summarized snapshots from a table to help you present meaningful insights."
+  />
+</VideoGridContainer>
+
+<br />
+
+# Step-by-Step Guide to Building on Decipad
+
+<br />
+
+<VideoGridContainer>
+  <VideoCard
+    img2="/docs/img/thumbnails/thumbnail-dcf-apple.png"
+    title="Apple Discounted Cash Flow (DCF) Valuation"
+    notebook="https://www.youtube.com/watch?v=l2ezat74lus"
+    description="Learn how to create your own DCF model on Decipad using Apple's ($AAPL) stock as a an example."
+  />
+  <VideoCard
+    img2="/docs/img/thumbnails/thumbnail-sales-comission.png"
+    title="A tiered rate sales commission plan on Decipad"
+    notebook="https://www.youtube.com/watch?v=h7KmNJ85FEw"
+    description="Create interactive commission plans to help your sales team understand their variable compensation better."
+  />
+</VideoGridContainer>

@@ -1,31 +1,31 @@
 ---
-sidebar_position: 21
+sidebar_position: 22
 hide_table_of_contents: false
 ---
 
 # Keyboard Shortcuts
 
-Keyboard shortcuts make editing and writing faster.
+Keyboard shortcuts can significantly improve your editing and writing speed in Decipad.
 
 ## Shortcuts to Create Blocks
 
-- **Heading**, type `#` followed by a `space` <br />
-- **Sub-heading**, type `##` followed by a `space` <br />
-- **Calculations Block**, type `=` or <code>\`\`\`</code> followed by a`space` <br />
-- **Bullet List**, type `-` or `*` followed by a `space` <br />
-- **Numbered List**, type `1.` followed by a `space` <br />
-- **Block Quote**, type`>` followed by a `space` <br />
-- **Callout**, type `>!` followed by a `space` <br />
-- **Divider**, type `---` followed by a `space` <br />
+- **Heading**: Type `#` followed by a space.
+- **Sub-heading**: Type `##` followed by a space.
+- **Calculations Block**: Type `=` or <code>\`\`\`</code> followed by a space.
+- **Bullet List**: Type `-` or `*` followed by a space.
+- **Numbered List**: Type `1.` followed by a space.
+- **Block Quote**: Type `>` followed by a space.
+- **Callout**: Type `>!` followed by a space.
+- **Divider**: Type `---` followed by a space.
 
 ## Shortcuts to Format Text
 
-- For **Italic**, wrap any words between `*` and `*` or `_` and `_`
-- For **Bold**, wrap any words between `**` and `**`
-- For **Strike-through**, wrap any words between `~~` and `~~`
-- For **Highlight**, wrap words between `==` and `==`
-- For **Inline Code**, wrap words between `` ` `` and `` ` ``
-- To create a **Magic Number**, wrap a variable name between `%`
-- You can mark **Spoilers** by wrapping text between `||` and `||`.
-- For **a Link**, use the notation `[link name](url)`
-- To add an **Image**, use the notation `![Alt text](https://media.giphy.com/media/krkrHAEodHgzP72rTI/giphy.gif)`
+- **Italic**: Wrap words between `*` or `_`.
+- **Bold**: Wrap words between `**`.
+- **Strike-through**: Wrap words between `~~`.
+- **Highlight**: Wrap words between `==`.
+- **Inline Code**: Wrap words between `` ` ``.
+- **Magic Number**: Wrap a variable name between `%`.
+- **Spoilers**: Wrap text between `||`.
+- **Link**: Use the notation `[link name](url)`.
+- **Image**: Use the notation `![Alt text](image URL)`.

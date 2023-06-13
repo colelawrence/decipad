@@ -85,7 +85,7 @@ export const AutoCompleteMenuFormulaTooltip = ({
               <Formula strokeColor={cssVar('weakTextColor')} />
             </span>
             <span css={[explanationTextStyles, titleTextStyles, maxSpace]}>
-              Formula for {formulaGroup}
+              Function for {formulaGroup}
             </span>
           </span>
         )}

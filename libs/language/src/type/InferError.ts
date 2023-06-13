@@ -309,8 +309,8 @@ export class InferError extends Error {
 
   get url() {
     if (this.spec.errType === 'retired-feature') {
-      return `/docs/basic-concepts/retired-features#${this.spec.featureName}`;
+      return `/docs`;
     }
-    return `/docs/basic-concepts/language-errors#${this.spec.errType}`;
+    return `/docs`;
   }
 }

@@ -15,6 +15,18 @@ const plugins = [
       /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
     },
   ],
+  [
+    '@docusaurus/plugin-client-redirects',
+    {
+      redirects: [
+        // redirect from older docs landing page, used on early access emails and notebooks
+        {
+          to: '/quick-start/',
+          from: '/quick-start/get-started-with-decipad/',
+        },
+      ],
+    },
+  ],
 ];
 
 // Reverse the sidebar items ordering (including nested category items)
@@ -44,7 +56,7 @@ const baseName = require('./base.config');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Decipad',
+  title: 'Decipad Help Center',
   tagline: 'Make sense of numbers',
   url: baseName(),
   baseUrl: '/docs/',
@@ -62,7 +74,7 @@ const config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
-          breadcrumbs: false,
+          breadcrumbs: true,
           /* editUrl: 'https://github.com/decipad/documentation/edit/main', */
           async sidebarItemsGenerator({
             defaultSidebarItemsGenerator,
@@ -82,7 +94,7 @@ const config = {
 
   themes: ['./src/lib/deci-language-live-codeblock'],
 
-  plugins: plugins,
+  plugins,
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -103,21 +115,20 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'quick-start/get-started-with-decipad',
+            to: 'quick-start',
             position: 'left',
-            label: 'Getting started',
+            label: 'Quick Start',
+            docId: 'quick-start',
+          },
+          {
+            to: 'gallery',
+            position: 'left',
+            label: 'Templates',
           },
           {
             to: 'videos',
             position: 'left',
             label: 'Videos',
-          },
-          {
-            type: 'doc',
-            docId: 'gallery',
-            position: 'left',
-            label: 'Templates',
           },
           {
             to: 'help',
@@ -129,6 +140,11 @@ const config = {
             position: 'left',
             label: 'Releases',
           },
+          {
+            href: 'https://app.decipad.com',
+            label: 'Return to Decipad',
+            position: 'right',
+          },
         ],
       },
       footer: {
@@ -139,7 +155,7 @@ const config = {
             items: [
               {
                 label: 'Getting Started',
-                to: '/docs/quick-start/get-started-with-decipad',
+                to: '/docs/quick-start',
               },
               {
                 label: 'Create a Notebook',
@@ -167,10 +183,6 @@ const config = {
                 label: 'Discord',
                 href: 'https://discordapp.com/invite/HwDMqwbGmc',
               },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/decipad',
-              },
             ],
           },
           {
@@ -179,6 +191,14 @@ const config = {
               {
                 label: 'Blog',
                 href: 'https://decipad.com/blog',
+              },
+              {
+                label: 'Twitter',
+                href: 'https://twitter.com/decipad',
+              },
+              {
+                label: 'Youtube',
+                href: 'https://www.youtube.com/@decipad',
               },
             ],
           },
