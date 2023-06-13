@@ -94,7 +94,7 @@ const containerStyles = css({
 });
 
 const nameStyles = css(p18Regular, {
-  maxWidth: '200px',
+  maxWidth: '300px',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',

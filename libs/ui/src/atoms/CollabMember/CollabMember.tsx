@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
+import { Avatar } from '..';
 import { NotebookAvatar } from '../../molecules/NotebookAvatars/NotebookAvatars';
 import { ellipsis, p12Medium, p14Medium } from '../../primitives';
-import { Avatar } from '..';
 
 export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
   avatar: { user },
@@ -38,6 +38,7 @@ const avatarStyles = css({
 });
 
 const userDetailsStyles = css({
-  flex: 1,
+  maxWidth: 225,
+  flex: '1 0 auto',
   minWidth: 0,
 });
