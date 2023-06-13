@@ -62,7 +62,6 @@ test.describe('Make sure auto-complete works', () => {
     await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page.getByTestId('menu-item-structured-code-line').click();
     await page.getByTestId('codeline-code').last().fill('Monies');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
     await page
       .getByTestId('autocomplete-group:Variables')
       .getByTestId('autocomplete-item:Monies')
@@ -75,20 +74,13 @@ test.describe('Make sure auto-complete works', () => {
   test('Enter table formula and checks for proper output', async () => {
     await writeInTable(page, '=', 1, 2);
     await page.getByTestId('code-line').last().fill('Monies');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page
       .getByTestId('autocomplete-group:Variables')
       .getByTestId('autocomplete-item:Monies')
       .click();
     await page.getByTestId('code-line').last().click();
     await page.keyboard.type(' + revenue');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page
-      .getByTestId('autocomplete-group:Table1')
-      .getByTestId('autocomplete-item:Revenue')
-      .click();
+    await page.getByText('Revenue').first().click();
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
@@ -128,9 +120,9 @@ test.describe('Make sure auto-complete works', () => {
     await page.getByTestId('menu-item-table').first().click();
     await page.getByTestId('table-name-input').last();
 
-    await page.getByText('Column1').fill('name');
+    await page.getByText('Column1').last().fill('name');
     await page.getByText('Column2').fill('RevenueNew');
-    await page.getByText('Column3').fill('total');
+    await page.getByText('Column3').last().fill('total');
 
     await writeInTable(page, 'one', 1, 0, 'Table2');
     await writeInTable(page, 'two', 2, 0, 'Table2');
