@@ -3,8 +3,22 @@ name: Run Tests
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '.github/**'
+      - '.husky/**'
+      - '.vscode/**'
+      - '.yarn/**'
+      - 'apps/docs/**'
+      - 'apps/e2e/**'
   pull_request:
     types: [opened, reopened, synchronize]
+    paths-ignore:
+      - '.github/**'
+      - '.husky/**'
+      - '.vscode/**'
+      - '.yarn/**'
+      - 'apps/docs/**'
+      - 'apps/e2e/**'
 
 jobs:
   build:
