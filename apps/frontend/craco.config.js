@@ -24,8 +24,6 @@ if (shouldOpen) {
 if (e2e) {
   devServer = {
     ...devServer,
-    hot: false,
-    liveReload: false,
     webSocketServer: false,
   };
 }
