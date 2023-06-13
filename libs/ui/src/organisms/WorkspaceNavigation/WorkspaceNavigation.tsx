@@ -18,6 +18,7 @@ import {
   Archive,
   Chat,
   Docs,
+  DollarCircle,
   Gear,
   Home,
   Key,
@@ -83,6 +84,7 @@ interface WorkspaceNavigationProps {
   readonly activeWorkspace: {
     id: string;
     sections: Section[];
+    isPremium?: boolean | null;
   };
   readonly showFeedback?: () => void;
   readonly enableAccountFooter?: boolean;
@@ -105,6 +107,10 @@ const NavDivider = () => (
     <Divider />
   </div>
 );
+
+const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_7sI16U2EX4xcgVO000';
+const STRIPE_CUSTOMER_PORTAL_LINK =
+  'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000';
 
 export const WorkspaceNavigation = ({
   activeWorkspace,
@@ -146,6 +152,11 @@ export const WorkspaceNavigation = ({
   const clientEvent = useContext(ClientEventsContext);
 
   const isSharedSectionEnabled = isFlagEnabled('SHARE_PAD_WITH_EMAIL');
+  const isPremiumButtonEnabled =
+    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && !activeWorkspace.isPremium;
+  const isCustomerPortalEnabled =
+    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && activeWorkspace.isPremium;
+  const paymentLink = `${STRIPE_PAYMENT_LINK}?client_reference_id=${activeWorkspace.id}`;
 
   return (
     <nav css={workspaceNavContainerStyles}>
@@ -154,7 +165,6 @@ export const WorkspaceNavigation = ({
         <>
           <NavigationList key={'workspace-nav-SM'}>
             <NavigationItem
-              key={'folder-0'}
               href={activeWorkspaceRoute.members({}).$}
               isActive={isSharedPage}
               icon={<Users />}
@@ -163,9 +173,27 @@ export const WorkspaceNavigation = ({
             </NavigationItem>
           </NavigationList>
 
+          {isPremiumButtonEnabled && (
+            <NavigationList key={'workspace-nav-PR'}>
+              <NavigationItem icon={<DollarCircle />} href={paymentLink}>
+                <span css={itemTextStyles}>Upgrade to Premium</span>
+              </NavigationItem>
+            </NavigationList>
+          )}
+
+          {isCustomerPortalEnabled && (
+            <NavigationList key={'workspace-nav-CP'}>
+              <NavigationItem
+                icon={<DollarCircle />}
+                href={STRIPE_CUSTOMER_PORTAL_LINK}
+              >
+                <span css={itemTextStyles}>Billing settings</span>
+              </NavigationItem>
+            </NavigationList>
+          )}
+
           <NavigationList key={'workspace-nav-ST'}>
             <NavigationItem
-              key={'folder-0'}
               href={activeWorkspaceRoute.edit({}).$}
               isActive={isSharedPage}
               icon={<Gear />}

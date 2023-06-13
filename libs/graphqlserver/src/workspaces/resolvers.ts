@@ -222,7 +222,7 @@ export default {
       return roles.sort(byDesc('name'));
     },
 
-    access: async (workspace: Workspace) => {
+    async access(workspace: Workspace) {
       const workspaceResourceName = `/workspaces/${workspace.id}`;
       const data = await tables();
       const permissions = (
@@ -261,11 +261,11 @@ export default {
       };
     },
 
-    myPermissionType: async (
+    async myPermissionType(
       parent: WorkspaceRecord,
       _: unknown,
       context: GraphqlContext
-    ) => {
+    ) {
       const workspaceResourceName = `/workspaces/${parent.id}`;
       const data = await tables();
       const { user } = context;
@@ -300,6 +300,11 @@ export default {
         return maximumPermissionType(permissions);
       }
       return undefined;
+    },
+
+    async isPremium(_: unknown, __: unknown, context: GraphqlContext) {
+      const { user } = context;
+      return !!user?.email?.endsWith('@n1n.co');
     },
 
     async pads(

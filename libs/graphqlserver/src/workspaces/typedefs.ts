@@ -18,6 +18,7 @@ export default gql`
     sections: [Section!]!
     createdAt: DateTime
     isPublic: Boolean
+    isPremium: Boolean
     myPermissionType: PermissionType
     access: WorkspaceAccess
     secrets: [Secret!]!

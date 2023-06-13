@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import capitalize from 'lodash.capitalize';
 import { create } from 'zustand';
-import { FC, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as icons from '../../icons';
 import { smallestDesktop } from '../../primitives';
@@ -10,6 +10,10 @@ import { FilterBubbles } from '../FilterBubbles/FilterBubbles';
 import { MenuList } from '../MenuList/MenuList';
 import { AvailableColorStatus, ColorStatusNames } from '../../utils';
 import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
+
+type SearchBarProps = {
+  compact?: boolean;
+};
 
 const ROUTES_WHITELIST = ['', 'edit', 'members', 'connections'];
 
@@ -29,7 +33,7 @@ export const useSearchBarStore = create<{
   setVisibility: (visibility: string) => set({ visibility }),
 }));
 
-export const SearchBar = (): ReturnType<FC> => {
+export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
   const { search, setSearch, status, setStatus, visibility, setVisibility } =
     useSearchBarStore();
   const [statusOpen, setStatusOpen] = useState(false);
@@ -48,22 +52,25 @@ export const SearchBar = (): ReturnType<FC> => {
   if (!displaySearchBox) {
     return <div />;
   }
+
+  const wrapperStyles = compact ? compactSearchBarStyles : searchBarStyles;
+
   return (
-    <div css={searchBarStyles}>
-      <div css={css({ display: 'flex', gap: 12, width: 'calc(100% - 300px)' })}>
+    <div css={wrapperStyles}>
+      <div css={inputStyles}>
         <span css={{ height: '18px', width: '18px' }}>
           <icons.Search />
         </span>
         <span css={css({ width: '100%' })} data-testid="search-bar">
           <InputField
             type="search"
-            placeholder="Search for notebooks, e.g. sales -qbr"
+            placeholder="Search notebook"
             value={search}
             onChange={setSearch}
           />
         </span>
       </div>
-      <div css={css({ display: 'inline-flex', gap: 8 })}>
+      <div css={filtersStyles}>
         <MenuList
           root
           dropdown
@@ -191,4 +198,27 @@ const searchBarStyles = css({
   [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
     display: 'none',
   },
+});
+
+const compactSearchBarStyles = css({
+  display: 'inline-flex',
+  gap: 8,
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  alignContent: 'flex-start',
+  justifyContent: 'space-between',
+  height: '24px',
+});
+
+const filtersStyles = css({
+  display: 'inline-flex',
+  gap: 8,
+});
+
+const inputStyles = css({
+  display: 'flex',
+  gap: 12,
+  flex: 1,
+  minWidth: '24ch',
 });

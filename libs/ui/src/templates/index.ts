@@ -4,6 +4,7 @@ export { CreateWorkspaceModal } from './CreateWorkspaceModal/CreateWorkspaceModa
 export { DashboardPlaceholder } from './DashboardPlaceholder/DashboardPlaceholder';
 export { DashboardSidebar } from './DashboardSidebar/DashboardSidebar';
 export { DashboardTopbar } from './DashboardTopbar/DashboardTopbar';
+export { BigAssTopbar } from './BigAssTopbar/BigAssTopbar';
 export { DataViewColumnHeader } from './DataViewColumnHeader/DataViewColumnHeader';
 export { EditorIcon } from './EditorIcon/EditorIcon';
 export { EditMembersModal } from './EditMembersModal/EditMembersModal';

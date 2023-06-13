@@ -52,6 +52,7 @@ fragment WorkspaceMembers on Workspace {
 fragment DashboardWorkspace on Workspace {
   id
   name
+  isPremium
   pads(page: { maxItems: 10000 }) {
     items {
       ...WorkspaceNotebook

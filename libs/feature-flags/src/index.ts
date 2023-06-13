@@ -8,6 +8,7 @@ export const availableFlags = [
   'PERSISTENT_EXAMPLE',
   'EXPR_REFS',
   'WORKSPACE_MEMBERS',
+  'WORKSPACE_PREMIUM_FEATURES',
   'NO_WORKSPACE_SWITCHER',
   'ONBOARDING_ACCOUNT_SETUP',
   'SHARE_PAD_WITH_EMAIL',
@@ -80,7 +81,9 @@ let overrides: Flags = {
 };
 
 // Unlike overrides flag switcher will have higher priority
-const flagDefaults: Flags = {};
+const flagDefaults: Flags = {
+  WORKSPACE_PREMIUM_FEATURES: false,
+};
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 

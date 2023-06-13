@@ -51,6 +51,7 @@ import {
   useUpdateSectionMutation,
   useUserQuery,
 } from '@decipad/graphql-client';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
@@ -58,6 +59,9 @@ import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 const loadTopbar = () =>
   import(/* webpackChunkName: "workspace-topbar" */ './Topbar');
 const Topbar = lazy(loadTopbar);
+const loadBigAssTopbar = () =>
+  import(/* webpackChunkName: "big-ass-topbar" */ './BigAssTopbar');
+const BigAssTopbar = lazy(loadBigAssTopbar);
 const loadSidebar = () => import(/* webpackChunkName: "sidebar" */ './Sidebar');
 const Sidebar = lazy(loadSidebar);
 const loadNotebookList = () =>
@@ -295,6 +299,8 @@ const Workspace: FC = () => {
     ]
   );
 
+  const showBigAssTopbar = isFlagEnabled('WORKSPACE_PREMIUM_FEATURES');
+
   if (fetching) {
     return <LoadingLogo />;
   }
@@ -364,7 +370,7 @@ const Workspace: FC = () => {
     </Frame>
   );
 
-  const topBarWrapper = (
+  const topBarWrapper = showBigAssTopbar ? null : (
     <Frame Heading="h1" title={null} suspenseFallback={<TopbarPlaceholder />}>
       <Topbar
         onCreateNotebook={handleCreateNotebook}
@@ -379,6 +385,15 @@ const Workspace: FC = () => {
       title={null}
       suspenseFallback={<NotebookListPlaceholder />}
     >
+      {showBigAssTopbar && (
+        <BigAssTopbar
+          name={currentWorkspace.name}
+          isPremium={!!currentWorkspace.isPremium}
+          numberOfMembers={currentWorkspace.numberOfMembers}
+          onCreateNotebook={handleCreateNotebook}
+          membersHref={currentWorkspaceRoute.members({}).$}
+        />
+      )}
       <NotebookList
         Heading="h1"
         notebooks={showNotebooks}
@@ -462,7 +477,7 @@ const Workspace: FC = () => {
           })
         }
         onCTADismiss={onCTADismiss}
-        showCTA={!ctaDismissed}
+        showCTA={!ctaDismissed && !showBigAssTopbar}
         onPointerEnter={loadNotebooks}
       />
     </Frame>

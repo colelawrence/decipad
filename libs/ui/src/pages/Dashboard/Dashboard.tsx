@@ -41,6 +41,14 @@ const sidebarStyles = css({
   },
 });
 
+const listStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '24px',
+
+  overflowY: 'auto',
+});
+
 interface DashboardProps {
   readonly sidebar: ReactNode;
   readonly topbar: ReactNode;
@@ -53,7 +61,7 @@ export const Dashboard = ({
 }: DashboardProps): ReturnType<FC> => {
   return (
     <div css={styles} data-testid="dashboard">
-      <main css={{ gridArea: 'notebook-list', overflowY: 'auto' }}>
+      <main css={[{ gridArea: 'notebook-list' }, listStyles]}>
         {notebookList}
       </main>
       <header css={{ gridArea: 'topbar' }}>{topbar}</header>
