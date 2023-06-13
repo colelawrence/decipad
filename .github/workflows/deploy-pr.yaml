@@ -3,11 +3,17 @@ name: Deploy PR
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+    paths-ignore:
+      - '.github/**'
+      - '.husky/**'
+      - '.vscode/**'
+      - '.yarn/**'
+      - 'apps/e2e/**'
 
 jobs:
   deploy:
     timeout-minutes: 45
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     concurrency:
       group: 'deploy-pr-${{ github.event.pull_request.number }}'
       cancel-in-progress: false
