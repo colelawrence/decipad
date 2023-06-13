@@ -21,12 +21,14 @@ if (shouldOpen) {
   };
 }
 
-devServer = {
-  ...devServer,
-  hot: !e2e,
-  liveReload: !e2e,
-  webSocketServer: !e2e,
-};
+if (e2e) {
+  devServer = {
+    ...devServer,
+    hot: false,
+    liveReload: false,
+    webSocketServer: false,
+  };
+}
 
 devServer.proxy = {
   '/api': {
