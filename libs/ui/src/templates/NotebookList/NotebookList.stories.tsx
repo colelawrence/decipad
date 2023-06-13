@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { NotebookList } from './NotebookList';
@@ -18,7 +18,7 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<typeof args> = ({ numberOfNotebooks }) => (
+export const Normal: StoryFn<typeof args> = ({ numberOfNotebooks }) => (
   <DndProvider backend={HTML5Backend}>
     <NotebookList
       otherWorkspaces={[]}

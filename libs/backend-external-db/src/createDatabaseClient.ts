@@ -1,10 +1,9 @@
-import stringify from 'json-stringify-safe';
-import knex from 'knex';
-import type { Knex } from 'knex';
 import Boom from '@hapi/boom';
+import stringify from 'json-stringify-safe';
+import type { Knex } from 'knex';
+import knex from 'knex';
 
 const supportedClients = new Set([
-  'sqlite',
   'postgresql',
   'mysql',
   'mariadb',
@@ -15,7 +14,6 @@ const supportedClients = new Set([
 ]);
 
 const driverForClient: Record<string, string> = {
-  sqlite: 'better-sqlite3',
   postgresql: 'pg',
   cockroachdb: 'pg',
   redshift: 'pg',
@@ -58,10 +56,9 @@ export const createDatabaseClient = (_url: string): [Knex, Knex.Config] => {
     connection: {
       user: url.username,
       password: url.password,
-      host: client === 'sqlite' ? undefined : url.hostname,
-      port: client === 'sqlite' || !url.port ? undefined : Number(url.port),
-      database: client !== 'sqlite' ? url.pathname.substring(1) : undefined,
-      filename: client === 'sqlite' ? url.pathname : undefined,
+      host: url.hostname,
+      port: !url.port ? undefined : Number(url.port),
+      database: url.pathname.substring(1),
       ssl: {
         rejectUnauthorized: false,
       },

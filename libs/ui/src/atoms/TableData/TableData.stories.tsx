@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { TableData } from './TableData';
 
 export default {
@@ -9,6 +9,6 @@ export default {
   },
 } as Meta;
 
-export const WithRowNumber: Story<typeof TableData> = (args) => (
+export const WithRowNumber: StoryFn<typeof TableData> = (args) => (
   <TableData {...(args as any)} />
 );

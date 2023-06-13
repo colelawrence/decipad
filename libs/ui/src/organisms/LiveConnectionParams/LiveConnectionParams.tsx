@@ -1,13 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { ImportElementSource } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
-import { ImportElementSource } from '@decipad/editor-types';
+import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { Settings } from '../../icons';
 import { MenuList, TextInputMenuItem } from '../../molecules';
 import { cssVar, p13Medium } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { JsonPath, JsonPathMenuItem } from './JsonPathMenuItem';
-import { MenuItem, TriggerMenuItem } from '../../atoms';
 
 const wrapperContainerStyles = css({
   marginBottom: '20px',
@@ -58,7 +58,6 @@ const sourceTypes: ImportElementSource[] = [
   'csv',
   'json',
   'arrow',
-  'sqlite',
   'postgresql',
   'mysql',
   'oracledb',

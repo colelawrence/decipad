@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Spoiler } from './Spoiler';
 
 export default {
@@ -19,6 +19,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args) => (
   <Spoiler {...args} />
 );

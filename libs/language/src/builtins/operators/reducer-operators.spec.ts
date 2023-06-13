@@ -1,8 +1,11 @@
 import { getDefined } from '@decipad/utils';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { fromJS } from '../../value';
 import { buildType as t } from '../../type';
 import { parseFunctor } from '../parseFunctor';
 import { reducerOperators as operators } from './reducer-operators';
+
+setupDeciNumberSnapshotSerializer();
 
 const sumif = parseFunctor(getDefined(operators.sumif.functionSignature));
 
@@ -19,7 +22,12 @@ describe('reducer operators', () => {
       ])
     ).toMatchInlineSnapshot(`
       NumberValue {
-        "value": DeciNumber(4),
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 4n,
+          "s": 1n,
+        },
       }
     `);
   });

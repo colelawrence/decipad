@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { MenuSeparator } from './MenuSeparator';
 
 interface Args {
@@ -10,4 +10,4 @@ export default {
   component: MenuSeparator,
 } as Meta<Args>;
 
-export const Normal: Story = () => <MenuSeparator />;
+export const Normal: StoryFn = () => <MenuSeparator />;

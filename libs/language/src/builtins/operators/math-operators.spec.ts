@@ -1,4 +1,4 @@
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import { inferExpression, makeContext } from '../../infer';
 import { AST } from '../../parser';
@@ -6,6 +6,8 @@ import { buildType as t, InferError } from '../../type';
 import { c, col, l, n, U } from '../../utils';
 import { fromJS } from '../../value';
 import { mathOperators, mathOperators as operators } from './math-operators';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('math operators', () => {
   it('max of a list of numbers', async () => {
@@ -41,7 +43,12 @@ describe('math operators', () => {
       ])
     ).toMatchInlineSnapshot(`
       NumberValue {
-        "value": DeciNumber(2),
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
       }
     `);
   });

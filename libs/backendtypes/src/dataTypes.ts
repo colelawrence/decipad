@@ -1,6 +1,6 @@
+import type { PromiseOrType } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-import type { PromiseOrType } from '@decipad/utils';
 
 /* Basic */
 
@@ -206,7 +206,6 @@ export type ExternalDataSourceProvider =
   | 'csv'
   | 'json'
   | 'arrow'
-  | 'sqlite'
   | 'postgresql'
   | 'mysql'
   | 'mssql'

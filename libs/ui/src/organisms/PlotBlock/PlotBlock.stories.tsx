@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { PlotBlock } from './PlotBlock';
 
@@ -79,12 +79,12 @@ export default {
   component: PlotBlock,
 } as Meta;
 
-export const Normal: Story = () => <PlotBlock {...props} />;
+export const Normal: StoryFn = () => <PlotBlock {...props} />;
 
 const withMessageArgs = {
   errorMessage: 'Something awful just happened',
 };
-export const WithErrorMessage: Story<typeof withMessageArgs> = (extraProps) => (
-  <PlotBlock {...props} {...extraProps} />
-);
+export const WithErrorMessage: StoryFn<typeof withMessageArgs> = (
+  extraProps
+) => <PlotBlock {...props} {...extraProps} />;
 WithErrorMessage.args = withMessageArgs;

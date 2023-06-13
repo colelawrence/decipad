@@ -1,6 +1,9 @@
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { materialize } from './materialize';
 import { createSwappedDimensions } from './SwappedDimensions';
 import { jsCol } from './testUtils';
+
+setupDeciNumberSnapshotSerializer();
 
 const multiDimX = jsCol([1n, 2n, 3n]);
 
@@ -18,8 +21,18 @@ it('can swap dimensions of a hypercube', async () => {
     .toMatchInlineSnapshot(`
     Array [
       Array [
-        DeciNumber(11),
-        DeciNumber(12),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 11n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 12n,
+          "s": 1n,
+        },
       ],
     ]
   `);
@@ -30,10 +43,20 @@ it('or left alone', async () => {
     .toMatchInlineSnapshot(`
     Array [
       Array [
-        DeciNumber(11),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 11n,
+          "s": 1n,
+        },
       ],
       Array [
-        DeciNumber(12),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 12n,
+          "s": 1n,
+        },
       ],
     ]
   `);
@@ -43,9 +66,24 @@ it('can swap nothing if the dimension is 1D', async () => {
   expect(await materialize(createSwappedDimensions(multiDimX, 0)))
     .toMatchInlineSnapshot(`
     Array [
-      DeciNumber(1),
-      DeciNumber(2),
-      DeciNumber(3),
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      },
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 2n,
+        "s": 1n,
+      },
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 3n,
+        "s": 1n,
+      },
     ]
   `);
 });
@@ -56,14 +94,44 @@ it('can work with 3d', async () => {
     Array [
       Array [
         Array [
-          DeciNumber(11),
-          DeciNumber(101),
-          DeciNumber(1001),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 11n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 101n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1001n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(12),
-          DeciNumber(102),
-          DeciNumber(1002),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 12n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 102n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1002n,
+            "s": 1n,
+          },
         ],
       ],
     ]
@@ -74,16 +142,46 @@ it('can work with 3d', async () => {
     Array [
       Array [
         Array [
-          DeciNumber(11),
-          DeciNumber(101),
-          DeciNumber(1001),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 11n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 101n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1001n,
+            "s": 1n,
+          },
         ],
       ],
       Array [
         Array [
-          DeciNumber(12),
-          DeciNumber(102),
-          DeciNumber(1002),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 12n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 102n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1002n,
+            "s": 1n,
+          },
         ],
       ],
     ]
@@ -94,20 +192,50 @@ it('can work with 3d', async () => {
     Array [
       Array [
         Array [
-          DeciNumber(11),
-          DeciNumber(12),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 11n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 12n,
+            "s": 1n,
+          },
         ],
       ],
       Array [
         Array [
-          DeciNumber(101),
-          DeciNumber(102),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 101n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 102n,
+            "s": 1n,
+          },
         ],
       ],
       Array [
         Array [
-          DeciNumber(1001),
-          DeciNumber(1002),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1001n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1002n,
+            "s": 1n,
+          },
         ],
       ],
     ]

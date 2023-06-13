@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { inMenu } from '../../storybook-utils';
 import { UnitMenuItem } from './UnitMenuItem';
 
@@ -12,4 +12,4 @@ export default {
   decorators: [inMenu],
 } as Meta<Args>;
 
-export const Normal: Story = () => <UnitMenuItem parseUnit={() => []} />;
+export const Normal: StoryFn = () => <UnitMenuItem parseUnit={() => []} />;

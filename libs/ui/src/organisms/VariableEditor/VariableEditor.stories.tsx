@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { Slider } from '../../atoms';
 import { Caption, Expression } from '../../molecules';
@@ -9,7 +9,7 @@ export default {
   component: VariableEditor,
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof VariableEditor>> = () => {
+export const Normal: StoryFn<ComponentProps<typeof VariableEditor>> = () => {
   return (
     <VariableEditor>
       <Caption>Variable</Caption>
@@ -18,7 +18,7 @@ export const Normal: Story<ComponentProps<typeof VariableEditor>> = () => {
   );
 };
 
-export const SliderVariant: Story<
+export const SliderVariant: StoryFn<
   ComponentProps<typeof VariableEditor>
 > = () => {
   return (
@@ -30,7 +30,7 @@ export const SliderVariant: Story<
   );
 };
 
-export const Anything: Story<ComponentProps<typeof VariableEditor>> = () => {
+export const Anything: StoryFn<ComponentProps<typeof VariableEditor>> = () => {
   return (
     <VariableEditor variant="slider" type={{ kind: 'anything' }}>
       <Caption>Variable</Caption>

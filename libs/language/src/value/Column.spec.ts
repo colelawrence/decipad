@@ -1,5 +1,8 @@
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { Column, fromJS, slice, sort, unique } from '.';
 import { materializeOneResult } from '../utils/materializeOneResult';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('column value', () => {
   it('can be constructed from values', async () => {
@@ -7,9 +10,24 @@ describe('column value', () => {
     expect(await materializeOneResult(await column.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -22,14 +40,44 @@ describe('column value', () => {
       .toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(1),
-          DeciNumber(2),
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(4),
-          DeciNumber(5),
-          DeciNumber(6),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 4n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -41,17 +89,47 @@ describe('column value', () => {
     expect(await materializeOneResult(await originalColumn.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(3),
-        DeciNumber(1),
-        DeciNumber(2),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
       ]
     `);
     expect(await materializeOneResult(await sortedColumn.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -62,27 +140,102 @@ describe('column value', () => {
     expect(await materializeOneResult(await originalColumn.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(3),
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
-        DeciNumber(3),
-        DeciNumber(5),
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
-        DeciNumber(0),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 5n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 0n,
+          "s": 1n,
+        },
       ]
     `);
 
     expect(await materializeOneResult(await uniqueValuesColumn.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(0),
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
-        DeciNumber(5),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 0n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 5n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -94,31 +247,106 @@ describe('column value', () => {
     expect(await materializeOneResult(await originalColumn.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
-        DeciNumber(4),
-        DeciNumber(5),
-        DeciNumber(6),
-        DeciNumber(7),
-        DeciNumber(8),
-        DeciNumber(9),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 4n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 5n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 6n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 7n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 8n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 9n,
+          "s": 1n,
+        },
       ]
     `);
     expect(await materializeOneResult(await slice1.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(4),
-        DeciNumber(5),
-        DeciNumber(6),
-        DeciNumber(7),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 4n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 5n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 6n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 7n,
+          "s": 1n,
+        },
       ]
     `);
     expect(await materializeOneResult(await slice2.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(8),
-        DeciNumber(9),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 8n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 9n,
+          "s": 1n,
+        },
       ]
     `);
   });

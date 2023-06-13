@@ -8,7 +8,6 @@ import {
 } from '@decipad/editor-types';
 
 const databaseSources = new Set<ImportElementSource | undefined>([
-  'sqlite',
   'postgresql',
   'mysql',
 ]);

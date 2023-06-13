@@ -1,8 +1,7 @@
-import { gsheets } from './gsheets';
 import { decipad } from './decipad';
-import { sqlite } from './sqlite';
-import { postgresql } from './postgresql';
+import { gsheets } from './gsheets';
 import { mysql } from './mysql';
+import { postgresql } from './postgresql';
 
-export default [gsheets, decipad, sqlite, postgresql, mysql];
-export { gsheets, decipad, sqlite, postgresql, mysql };
+export default [gsheets, decipad, postgresql, mysql];
+export { gsheets, decipad, postgresql, mysql };

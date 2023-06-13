@@ -1,7 +1,9 @@
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { l, genericIdent, ne, U, u } from '../utils';
 import { getType, getValue } from './of-directive';
 import { testGetType, testGetValue } from './testUtils';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('getType', () => {
   it('cannot set unit quality on unitless number', async () => {
@@ -25,7 +27,12 @@ describe('getValue', () => {
     expect(await testGetValue(getValue, l(1), genericIdent('flour')))
       .toMatchInlineSnapshot(`
       NumberValue {
-        "value": DeciNumber(1),
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
       }
     `);
   });

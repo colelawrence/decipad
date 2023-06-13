@@ -1,7 +1,7 @@
 @lexer tokenizer
 @{%
 
-import DeciNumber, { N } from '@decipad/number';
+import { N } from '@decipad/number';
 
 function makeNumber(parentNode, n, numberFormat = undefined) {
   const fraction = N(n);

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { PlotParams } from './PlotParams';
 
@@ -42,4 +42,4 @@ export default {
   args: params,
 } as Meta;
 
-export const Normal: Story = () => <PlotParams {...params} />;
+export const Normal: StoryFn = () => <PlotParams {...params} />;

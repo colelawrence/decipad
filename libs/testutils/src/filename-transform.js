@@ -3,6 +3,6 @@ const { basename } = require('path');
 
 module.exports = {
   process(_src, filename) {
-    return `module.exports = ${stringify(basename(filename))};`;
+    return { code: `module.exports = ${stringify(basename(filename))};` };
   },
 };

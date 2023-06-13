@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Modal } from './Modal';
 
 const args = {
@@ -11,4 +11,4 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => <Modal {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => <Modal {...props} />;

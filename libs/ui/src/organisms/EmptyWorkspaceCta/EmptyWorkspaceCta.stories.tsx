@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { EmptyWorkspaceCta } from './EmptyWorkspaceCta';
 
 export default {
@@ -6,5 +6,5 @@ export default {
   component: EmptyWorkspaceCta,
 } as Meta;
 
-export const Normal: Story = () => <EmptyWorkspaceCta />;
+export const Normal: StoryFn = () => <EmptyWorkspaceCta />;
 Normal.storyName = 'Empty Workspace CTA';

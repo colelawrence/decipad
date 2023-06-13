@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { SyntaxErrorHighlight } from './SyntaxErrorHighlight';
 
@@ -7,7 +7,7 @@ export default {
   component: SyntaxErrorHighlight,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <>
     <span>[1, 2,</span>
     <SyntaxErrorHighlight>,</SyntaxErrorHighlight>
@@ -15,21 +15,21 @@ export const Normal: Story = () => (
   </>
 );
 
-export const NeverOpened: Story = () => (
+export const NeverOpened: StoryFn = () => (
   <>
     <span>[1, 2, 3]</span>
     <SyntaxErrorHighlight variant="never-opened">]</SyntaxErrorHighlight>
   </>
 );
 
-export const NeverClosed: Story = () => (
+export const NeverClosed: StoryFn = () => (
   <>
     <SyntaxErrorHighlight variant="never-closed">[</SyntaxErrorHighlight>
     <span>[1, 2, 3]</span>
   </>
 );
 
-export const MismatchedBrackets: Story = () => (
+export const MismatchedBrackets: StoryFn = () => (
   <>
     <SyntaxErrorHighlight variant="mismatched-brackets">(</SyntaxErrorHighlight>
     <span>1, 2, 3</span>

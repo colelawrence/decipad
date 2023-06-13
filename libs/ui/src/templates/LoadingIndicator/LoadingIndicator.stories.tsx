@@ -1,8 +1,8 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { LoadingIndicator } from './LoadingIndicator';
 
 export default {
   title: 'Templates / Loading Indicator',
 } as Meta;
 
-export const Normal: Story = () => <LoadingIndicator />;
+export const Normal: StoryFn = () => <LoadingIndicator />;

@@ -8,7 +8,10 @@ import {
 import { Computer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
 import { insertNodes, removeNodes } from '@udecode/plate';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { withUpdateComputerOverride } from './withUpdateComputerOverride';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('withUpdateComputerOverride', () => {
   let editor: MyEditor;
@@ -48,7 +51,12 @@ describe('withUpdateComputerOverride', () => {
               "kind": "number",
               "unit": null,
             },
-            "value": DeciNumber(1),
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
           },
           "type": "computer-result",
           "usedNames": Array [],
@@ -91,7 +99,12 @@ describe('withUpdateComputerOverride', () => {
               "kind": "number",
               "unit": null,
             },
-            "value": DeciNumber(1),
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
           },
           "type": "computer-result",
           "usedNames": Array [],
@@ -111,7 +124,12 @@ describe('withUpdateComputerOverride', () => {
               "kind": "number",
               "unit": null,
             },
-            "value": DeciNumber(2),
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
           },
           "type": "computer-result",
           "usedNames": Array [],
@@ -135,7 +153,12 @@ describe('withUpdateComputerOverride', () => {
               "kind": "number",
               "unit": null,
             },
-            "value": DeciNumber(3),
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 3n,
+              "s": 1n,
+            },
           },
           "type": "computer-result",
           "usedNames": Array [
@@ -193,7 +216,12 @@ describe('withUpdateComputerOverride', () => {
               "kind": "number",
               "unit": null,
             },
-            "value": DeciNumber(2),
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
           },
           "type": "computer-result",
           "usedNames": Array [],
@@ -217,14 +245,29 @@ describe('withUpdateComputerOverride', () => {
               "kind": "number",
               "unit": Array [
                 Object {
-                  "exp": DeciNumber(1),
+                  "exp": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
                   "known": false,
-                  "multiplier": DeciNumber(1),
+                  "multiplier": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
                   "unit": "_A",
                 },
               ],
             },
-            "value": DeciNumber(3),
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 3n,
+              "s": 1n,
+            },
           },
           "type": "computer-result",
           "usedNames": Array [

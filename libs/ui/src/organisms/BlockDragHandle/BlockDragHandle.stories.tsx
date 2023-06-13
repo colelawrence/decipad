@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { BlockDragHandle } from './BlockDragHandle';
 
 const argTypes = {
@@ -12,9 +12,9 @@ export default {
   argTypes,
 } as Meta;
 
-export const MenuClosed: Story = (props) => (
+export const MenuClosed: StoryFn = (props) => (
   <BlockDragHandle {...props} menuOpen={false} />
 );
-export const MenuOpen: Story = (props) => (
+export const MenuOpen: StoryFn = (props) => (
   <BlockDragHandle {...props} menuOpen />
 );

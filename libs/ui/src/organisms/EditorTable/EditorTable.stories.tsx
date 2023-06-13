@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { EditorTable } from './EditorTable';
 
@@ -21,6 +21,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof EditorTable>> = (args) => (
+export const Normal: StoryFn<ComponentProps<typeof EditorTable>> = (args) => (
   <EditorTable {...args} />
 );

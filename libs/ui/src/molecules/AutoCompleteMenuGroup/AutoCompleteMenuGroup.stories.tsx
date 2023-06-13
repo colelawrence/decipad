@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AutoCompleteMenuItem } from '../../atoms';
 import { inMenu } from '../../storybook-utils';
 import { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup';
@@ -15,7 +15,7 @@ export default {
   decorators: [inMenu],
 } as Meta;
 
-export const Normal: Story<typeof args> = ({ numberOfItems, ...props }) => (
+export const Normal: StoryFn<typeof args> = ({ numberOfItems, ...props }) => (
   <AutoCompleteMenuGroup {...props}>
     {Array(numberOfItems)
       .fill(null)

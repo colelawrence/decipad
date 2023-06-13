@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { EditorColumns } from './EditorColumns';
 
 const lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -17,7 +17,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <EditorColumns>
     {Array.from({ length: props.numberOfColumns }).map((_, i) => (
       <span key={i}>{lorem}</span>

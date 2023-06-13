@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AccountSetupFlow2 } from './AccountSetupFlow2';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: AccountSetupFlow2,
 } as Meta;
 
-export const Normal: Story = () => <AccountSetupFlow2 />;
+export const Normal: StoryFn = () => <AccountSetupFlow2 />;

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { WorkspaceMenu } from './WorkspaceMenu';
 
 const args = {
@@ -11,7 +11,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = ({ numberOfallWorkspaces }) => (
+export const Normal: StoryFn<typeof args> = ({ numberOfallWorkspaces }) => (
   <WorkspaceMenu
     Heading="h1"
     activeWorkspace={{

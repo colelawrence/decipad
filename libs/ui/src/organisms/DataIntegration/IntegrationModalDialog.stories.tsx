@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { IntegrationModalDialog } from './IntegrationModalDialog';
 
@@ -7,7 +7,7 @@ export default {
   component: IntegrationModalDialog,
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof IntegrationModalDialog>> = (
+export const Normal: StoryFn<ComponentProps<typeof IntegrationModalDialog>> = (
   props
 ) => {
   return <IntegrationModalDialog {...props} />;

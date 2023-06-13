@@ -1,11 +1,13 @@
 import { makeContext } from '@decipad/language';
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { Column, Table, DateValue, fromJS } from '../../value';
 import { buildType as t, Type } from '../../type';
 import { tableOperators as operators } from './table-operators';
 import { U } from '../../utils';
 import { Realm, RuntimeError } from '../../interpreter';
 import { materializeOneResult } from '../../utils/materializeOneResult';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('table operators', () => {
   it('concatenates tables', async () => {
@@ -26,10 +28,30 @@ describe('table operators', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(1),
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(4),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 4n,
+            "s": 1n,
+          },
         ],
         Array [
           "Hello",
@@ -58,12 +80,42 @@ describe('table operators', () => {
     expect(await result).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(1),
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(4),
-          DeciNumber(5),
-          DeciNumber(6),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 4n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
         ],
         Array [
           "a",
@@ -129,14 +181,44 @@ describe('table operators', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(4),
-          DeciNumber(5),
-          DeciNumber(6),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 4n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -174,9 +256,24 @@ describe('table operators', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(6),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 6n,
+            "s": 1n,
+          },
         ],
         Array [
           true,

@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
+import fetch from 'jest-fetch-mock';
 import { SessionProvider } from 'next-auth/react';
 import { ComponentProps } from 'react';
-import fetch from 'jest-fetch-mock';
 import { runCode } from '../../test-utils';
 import { CodeLine } from './CodeLine';
 
@@ -49,21 +49,20 @@ describe('CodeLine', () => {
       expect(getByRole('table')).toBeVisible();
     });
 
-    it('should not render the result inline', () => {
-      const { getByRole, getAllByRole, queryByRole } = render(
+    it('should not render the result inline', async () => {
+      const { getByRole, getAllByRole, findAllByRole } = render(
         <SessionProvider>
           <CodeLine {...tabularProps} highlight />
         </SessionProvider>
       );
 
-      const queryInlineResultElement = () =>
-        queryByRole(
-          (content, element) =>
-            content === 'status' && element!.textContent === '1, 2, 3'
-        );
+      const queryInlineResultElement = async () =>
+        (await findAllByRole('status')).find(
+          (element) => element!.textContent === '1, 2, 3'
+        ) as HTMLElement;
 
       expect(getAllByRole('status')).toHaveLength(1);
-      expect(queryInlineResultElement()).toBeNull();
+      expect(await queryInlineResultElement()).toBe(undefined);
       expect(getByRole('table')).toBeVisible();
     });
   });

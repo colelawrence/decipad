@@ -1,5 +1,5 @@
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Paragraph } from './Paragraph';
 
 const lorem =
@@ -10,19 +10,19 @@ export default {
   component: Paragraph,
 } as Meta;
 
-export const Normal: Story<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args) => (
   <Paragraph {...args} />
 );
 Normal.args = { children: lorem };
 
-export const Active: Story<{ children: string }> = (args) => (
+export const Active: StoryFn<{ children: string }> = (args) => (
   <BlockIsActiveProvider>
     <Paragraph {...args} />
   </BlockIsActiveProvider>
 );
 Active.args = { children: lorem };
 
-export const Placeholder: Story<{ placeholder: string }> = (args) => (
+export const Placeholder: StoryFn<{ placeholder: string }> = (args) => (
   <Paragraph {...args}>{null}</Paragraph>
 );
 Placeholder.args = { placeholder: 'Press "/" for options' };

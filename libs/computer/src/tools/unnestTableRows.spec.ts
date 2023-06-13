@@ -3,11 +3,13 @@ import { getDefined, timeout } from '@decipad/utils';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import AsciiTable from 'ascii-table';
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { all } from '@decipad/generator-utils';
 import { Computer } from '../computer/Computer';
 import { getIdentifiedBlocks } from '../testUtils';
 import { unnestTableRows } from './unnestTableRows';
+
+setupDeciNumberSnapshotSerializer();
 
 it('unnests table rows', async () => {
   const explanation = [
@@ -47,7 +49,12 @@ it('unnests table rows', async () => {
             "kind": "number",
             "unit": null,
           },
-          "value": DeciNumber(1),
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         },
       },
       Object {
@@ -66,7 +73,12 @@ it('unnests table rows', async () => {
             "kind": "number",
             "unit": null,
           },
-          "value": DeciNumber(2),
+          "value": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         },
       },
     ]

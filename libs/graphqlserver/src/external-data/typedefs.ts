@@ -7,7 +7,6 @@ export default gql`
     csv
     json
     arrow
-    sqlite
     postgresql
     mysql
     oracledb

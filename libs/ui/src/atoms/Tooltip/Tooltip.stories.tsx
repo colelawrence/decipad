@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { cssVar } from '../../primitives';
 import { Tooltip } from './Tooltip';
 
@@ -14,7 +14,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <Tooltip
     {...props}
     trigger={
@@ -30,7 +30,7 @@ export const Normal: Story<typeof args> = (props) => (
   />
 );
 
-export const Small: Story<typeof args> = (props) => (
+export const Small: StoryFn<typeof args> = (props) => (
   <Tooltip
     {...props}
     variant="small"

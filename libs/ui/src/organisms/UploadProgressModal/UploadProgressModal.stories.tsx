@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { UploadProgressModal } from './UploadProgressModal';
 
@@ -7,7 +7,9 @@ export default {
   component: UploadProgressModal,
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof UploadProgressModal>> = () => {
+export const Normal: StoryFn<
+  ComponentProps<typeof UploadProgressModal>
+> = () => {
   return (
     <UploadProgressModal
       files={[

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ClosableModalHeader } from './ClosableModalHeader';
 
 const args = {
@@ -11,6 +11,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <ClosableModalHeader Heading="h1" {...props} closeAction="" />
 );

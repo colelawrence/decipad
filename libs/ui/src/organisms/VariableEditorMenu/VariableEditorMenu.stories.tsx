@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { VariableEditorMenu } from './VariableEditorMenu';
 
 export default {
@@ -6,13 +6,13 @@ export default {
   component: VariableEditorMenu,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <VariableEditorMenu
     variant="expression"
     trigger={<button>click me</button>}
   />
 );
 
-export const SliderVariant: Story = () => (
+export const SliderVariant: StoryFn = () => (
   <VariableEditorMenu variant="slider" trigger={<button>click me</button>} />
 );

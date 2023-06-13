@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ErrorMessage } from './ErrorMessage';
 
 const args = {
@@ -11,4 +11,4 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story = () => <ErrorMessage {...args} />;
+export const Normal: StoryFn = () => <ErrorMessage {...args} />;

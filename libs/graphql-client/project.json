@@ -5,7 +5,7 @@
   "projectType": "library",
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/graphql-client/**/*.ts"],
         "maxWarnings": 0
@@ -25,6 +25,10 @@
       }
     }
   },
-  "references": [{ "path": "../toast" }],
+  "references": [
+    {
+      "path": "../toast"
+    }
+  ],
   "tags": []
 }

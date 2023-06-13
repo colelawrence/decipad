@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { LiveCode } from './LiveCode';
 
 export default {
@@ -7,7 +7,7 @@ export default {
   component: LiveCode,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <LiveCode>
     <span>Live Code</span>
   </LiveCode>

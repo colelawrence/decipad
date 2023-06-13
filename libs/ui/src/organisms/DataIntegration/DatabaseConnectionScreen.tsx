@@ -51,7 +51,6 @@ const placeholderList: Record<ImportElementSource, string> = {
   csv: 'https://',
   cockroachdb: 'postgresql://',
   decipad: 'https://',
-  sqlite: 'sql://',
   codeconnection: 'n/a',
 };
 

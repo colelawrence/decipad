@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Caption } from './Caption';
 
 const args = {
@@ -11,4 +11,4 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => <Caption {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => <Caption {...props} />;

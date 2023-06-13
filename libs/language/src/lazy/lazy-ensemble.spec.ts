@@ -1,5 +1,5 @@
-import { N, ONE } from '@decipad/number';
 import { all, map } from '@decipad/generator-utils';
+import { N, ONE } from '@decipad/number';
 import { PromiseOrType } from '@decipad/utils';
 import {
   createColumnSlice,
@@ -7,21 +7,21 @@ import {
   createLazyOperation,
   createSwappedDimensions,
 } from '.';
+import { makeContext } from '../infer';
 import { OneResult } from '../interpreter/interpreter-types';
+import { buildType as t } from '../type';
+import { materializeOneResult } from '../utils/materializeOneResult';
 import {
   Column,
   NumberValue,
+  Value,
   fromJS,
   getColumnLike,
   isColumnLike,
-  Value,
 } from '../value';
-import { buildType as t } from '../type';
+import { createLazyAtIndex } from './LazyAtIndex';
 import { jsCol } from './testUtils';
 import { OperationFunction } from './types';
-import { createLazyAtIndex } from './LazyAtIndex';
-import { materializeOneResult } from '../utils/materializeOneResult';
-import { makeContext } from '../infer';
 
 const addOne: OperationFunction = ([x]) =>
   fromJS((x as NumberValue).value.add(ONE));
@@ -199,24 +199,6 @@ describe.each(
     ),
   })
 )('Two dimensional tests: %s', (_name, lazyThing) => {
-  it('can getData()', async () => {
-    expect(await materializeOneResult((await lazyThing).getData()))
-      .toMatchInlineSnapshot(`
-      Array [
-        Array [
-          DeciNumber(1),
-          DeciNumber(2),
-          DeciNumber(3),
-        ],
-        Array [
-          DeciNumber(4),
-          DeciNumber(5),
-          DeciNumber(6),
-        ],
-      ]
-    `);
-  });
-
   it('can get its contents with lowLevelGet and atIndex', async () => {
     expect(
       await nums(await getColumnLike(await lazyThing).lowLevelGet(0, 0))

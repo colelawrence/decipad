@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Bold } from './Bold';
 
 export default {
@@ -16,4 +16,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<{ children: string }> = (args) => <Bold {...args} />;
+export const Normal: StoryFn<{ children: string }> = (args) => (
+  <Bold {...args} />
+);

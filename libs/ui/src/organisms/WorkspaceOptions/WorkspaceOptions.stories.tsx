@@ -1,12 +1,12 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { WorkspaceOptions } from './WorkspaceOptions';
 
 export default {
-  title: 'Organisms / UI / Workspace / Settings',
+  title: 'Organisms / UI / Workspace / Options',
   component: WorkspaceOptions,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <WorkspaceOptions
     Heading="h1"
     activeWorkspace={{

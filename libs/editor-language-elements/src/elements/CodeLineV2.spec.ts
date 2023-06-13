@@ -1,4 +1,4 @@
-import { AST, Computer, prettyPrintAST } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -11,11 +11,6 @@ import {
 } from '@decipad/editor-types';
 import { getOnly } from '@decipad/utils';
 import { parseStructuredCodeLine } from './CodeLineV2';
-
-expect.addSnapshotSerializer({
-  test: (val) => val && typeof val.type === 'string' && Array.isArray(val.args),
-  print: (val) => prettyPrintAST(val as AST.Node),
-});
 
 const createTestCodeLine = (
   code: string | CodeLineV2ElementCode['children']
@@ -59,10 +54,35 @@ it('can parse a number', async () => {
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
       "artificiallyDerivedFrom": undefined,
-      "block": (block
-      (assign
-        (def TestName)
-        1)),
+      "block": Object {
+        "args": Array [
+          Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "TestName",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  "number",
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
+                ],
+                "type": "literal",
+              },
+            ],
+            "type": "assign",
+          },
+        ],
+        "id": "codelineid",
+        "type": "block",
+      },
       "definesVariable": "TestName",
       "id": "codelineid",
       "isArtificial": undefined,
@@ -82,10 +102,107 @@ it('can parse code', async () => {
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
       "artificiallyDerivedFrom": undefined,
-      "block": (block
-      (assign
-        (def TestName)
-        (implicit* 1 (ref meter)))),
+      "block": Object {
+        "args": Array [
+          Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "TestName",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      "implicit*",
+                    ],
+                    "end": Object {
+                      "char": 6,
+                      "column": 7,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "funcref",
+                  },
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "number",
+                          DeciNumber {
+                            "d": 1n,
+                            "infinite": false,
+                            "n": 1n,
+                            "s": 1n,
+                          },
+                        ],
+                        "end": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "type": "literal",
+                      },
+                      Object {
+                        "args": Array [
+                          "meter",
+                        ],
+                        "end": Object {
+                          "char": 6,
+                          "column": 7,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 2,
+                          "column": 3,
+                          "line": 1,
+                        },
+                        "type": "ref",
+                      },
+                    ],
+                    "end": Object {
+                      "char": 6,
+                      "column": 7,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "argument-list",
+                  },
+                ],
+                "end": Object {
+                  "char": 6,
+                  "column": 7,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "function-call",
+              },
+            ],
+            "type": "assign",
+          },
+        ],
+        "id": "codelineid",
+        "type": "block",
+      },
       "definesVariable": "TestName",
       "id": "codelineid",
       "isArtificial": undefined,
@@ -105,10 +222,35 @@ it('can parse nothing', async () => {
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
       "artificiallyDerivedFrom": undefined,
-      "block": (block
-      (assign
-        (def TestName)
-        0)),
+      "block": Object {
+        "args": Array [
+          Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "TestName",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  "number",
+                  DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 0n,
+                    "s": 1n,
+                  },
+                ],
+                "type": "literal",
+              },
+            ],
+            "type": "assign",
+          },
+        ],
+        "id": "codelineid",
+        "type": "block",
+      },
       "definesVariable": "TestName",
       "id": "codelineid",
       "isArtificial": undefined,
@@ -138,10 +280,107 @@ it('regression: deals with smart refs', async () => {
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
       "artificiallyDerivedFrom": undefined,
-      "block": (block
-      (assign
-        (def TestName)
-        (implicit* 1 (ref exprRef_1234)))),
+      "block": Object {
+        "args": Array [
+          Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "TestName",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      "implicit*",
+                    ],
+                    "end": Object {
+                      "char": 13,
+                      "column": 14,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "funcref",
+                  },
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "number",
+                          DeciNumber {
+                            "d": 1n,
+                            "infinite": false,
+                            "n": 1n,
+                            "s": 1n,
+                          },
+                        ],
+                        "end": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "type": "literal",
+                      },
+                      Object {
+                        "args": Array [
+                          "exprRef_1234",
+                        ],
+                        "end": Object {
+                          "char": 13,
+                          "column": 14,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 2,
+                          "column": 3,
+                          "line": 1,
+                        },
+                        "type": "ref",
+                      },
+                    ],
+                    "end": Object {
+                      "char": 13,
+                      "column": 14,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "argument-list",
+                  },
+                ],
+                "end": Object {
+                  "char": 13,
+                  "column": 14,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "function-call",
+              },
+            ],
+            "type": "assign",
+          },
+        ],
+        "id": "codelineid",
+        "type": "block",
+      },
       "definesVariable": "TestName",
       "id": "codelineid",
       "isArtificial": undefined,
@@ -171,10 +410,138 @@ it('deals with table+column smart refs', async () => {
   expect(getOnly(programChunk)).toMatchInlineSnapshot(`
     Object {
       "artificiallyDerivedFrom": undefined,
-      "block": (block
-      (assign
-        (def TestName)
-        (implicit* 1 (prop (ref exprRef_tableId).exprRef_columnId)))),
+      "block": Object {
+        "args": Array [
+          Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "TestName",
+                ],
+                "type": "def",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      "implicit*",
+                    ],
+                    "end": Object {
+                      "char": 33,
+                      "column": 34,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "funcref",
+                  },
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "number",
+                          DeciNumber {
+                            "d": 1n,
+                            "infinite": false,
+                            "n": 1n,
+                            "s": 1n,
+                          },
+                        ],
+                        "end": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "type": "literal",
+                      },
+                      Object {
+                        "args": Array [
+                          Object {
+                            "args": Array [
+                              "exprRef_tableId",
+                            ],
+                            "end": Object {
+                              "char": 16,
+                              "column": 17,
+                              "line": 1,
+                            },
+                            "start": Object {
+                              "char": 2,
+                              "column": 3,
+                              "line": 1,
+                            },
+                            "type": "ref",
+                          },
+                          Object {
+                            "args": Array [
+                              "exprRef_columnId",
+                            ],
+                            "end": Object {
+                              "char": 33,
+                              "column": 34,
+                              "line": 1,
+                            },
+                            "start": Object {
+                              "char": 18,
+                              "column": 19,
+                              "line": 1,
+                            },
+                            "type": "colref",
+                          },
+                        ],
+                        "end": Object {
+                          "char": 33,
+                          "column": 34,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 2,
+                          "column": 3,
+                          "line": 1,
+                        },
+                        "type": "property-access",
+                      },
+                    ],
+                    "end": Object {
+                      "char": 33,
+                      "column": 34,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "argument-list",
+                  },
+                ],
+                "end": Object {
+                  "char": 33,
+                  "column": 34,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "function-call",
+              },
+            ],
+            "type": "assign",
+          },
+        ],
+        "id": "codelineid",
+        "type": "block",
+      },
       "definesVariable": "TestName",
       "id": "codelineid",
       "isArtificial": undefined,

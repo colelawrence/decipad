@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { SearchBar } from './SearchBar';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: SearchBar,
 } as Meta;
 
-export const Normal: Story = () => <SearchBar />;
+export const Normal: StoryFn = () => <SearchBar />;

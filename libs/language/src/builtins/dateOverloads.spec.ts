@@ -1,4 +1,4 @@
-import { ONE } from '@decipad/number';
+import { ONE, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { buildType as t } from '../type';
 import { DateValue as IDate, NumberValue } from '../value';
 import { Time, parseUTCDate } from '../date';
@@ -10,6 +10,8 @@ import {
 } from './dateOverloads';
 import { U } from '../utils';
 import { materializeOneResult } from '../utils/materializeOneResult';
+
+setupDeciNumberSnapshotSerializer();
 
 const plus = overloadBuiltin('+', 2, dateOverloads['+']);
 const minus = overloadBuiltin('-', 2, dateOverloads['-']);
@@ -114,9 +116,15 @@ describe('date overloads', () => {
           ),
           new NumberValue(ONE),
         ],
+
         [t.date('day'), t.number(U('month'))]
       )
-    ).toMatchInlineSnapshot(`DateValue(day 2020-02-01)`);
+    ).toMatchInlineSnapshot(`
+      DateValue {
+        "moment": 1580515200000n,
+        "specificity": "day",
+      }
+    `);
   });
 
   it('date - number', async () => {
@@ -137,28 +145,53 @@ describe('date overloads', () => {
 
         [t.date('minute'), t.number(U('minute'))]
       )
-    ).toMatchInlineSnapshot(`DateValue(minute 2020-01-01 09:30)`);
+    ).toMatchInlineSnapshot(`
+      DateValue {
+        "moment": 1577871000000n,
+        "specificity": "minute",
+      }
+    `);
   });
 
   it('date - date => time-quantity', async () => {
     expect((await minus.functor!([t.date('day'), t.date('day')])).unit)
       .toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "exp": DeciNumber(1),
-        "known": true,
-        "multiplier": DeciNumber(1),
-        "unit": "day",
-      },
-    ]
-  `);
+      Array [
+        Object {
+          "exp": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          "known": true,
+          "multiplier": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          "unit": "day",
+        },
+      ]
+    `);
     expect((await minus.functor!([t.date('minute'), t.date('minute')])).unit)
       .toMatchInlineSnapshot(`
       Array [
         Object {
-          "exp": DeciNumber(1),
+          "exp": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           "known": true,
-          "multiplier": DeciNumber(1),
+          "multiplier": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           "unit": "minute",
         },
       ]
@@ -188,29 +221,65 @@ describe('date overloads', () => {
         )?.getData()
       );
 
-    expect(
-      await testDateMinus('2021-01', 'year', '2021-01', 'year')
-    ).toMatchInlineSnapshot(`DeciNumber(0)`);
+    expect(await testDateMinus('2021-01', 'year', '2021-01', 'year'))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 0n,
+        "s": 1n,
+      }
+    `);
 
-    expect(
-      await testDateMinus('2022-01', 'year', '2021-01', 'year')
-    ).toMatchInlineSnapshot(`DeciNumber(12)`);
+    expect(await testDateMinus('2022-01', 'year', '2021-01', 'year'))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 12n,
+        "s": 1n,
+      }
+    `);
 
-    expect(
-      await testDateMinus('2021-02', 'month', '2021-01', 'month')
-    ).toMatchInlineSnapshot(`DeciNumber(1)`);
+    expect(await testDateMinus('2021-02', 'month', '2021-01', 'month'))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
 
-    expect(
-      await testDateMinus('2022-02', 'month', '2021-01', 'month')
-    ).toMatchInlineSnapshot(`DeciNumber(13)`);
+    expect(await testDateMinus('2022-02', 'month', '2021-01', 'month'))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 13n,
+        "s": 1n,
+      }
+    `);
 
-    expect(
-      await testDateMinus('2021-02-01', 'day', '2021-01-01', 'day')
-    ).toMatchInlineSnapshot(`DeciNumber(2678400)`);
+    expect(await testDateMinus('2021-02-01', 'day', '2021-01-01', 'day'))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 2678400n,
+        "s": 1n,
+      }
+    `);
 
-    expect(
-      await testDateMinus('2021-02-01', 'day', '2022-01-01', 'day')
-    ).toMatchInlineSnapshot(`DeciNumber(-28857600)`);
+    expect(await testDateMinus('2021-02-01', 'day', '2022-01-01', 'day'))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 28857600n,
+        "s": -1n,
+      }
+    `);
 
     expect(
       await testDateMinus(
@@ -219,6 +288,13 @@ describe('date overloads', () => {
         '2021-02-01T10:31',
         'millisecond'
       )
-    ).toMatchInlineSnapshot(`DeciNumber(-60)`);
+    ).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 60n,
+        "s": -1n,
+      }
+    `);
   });
 });

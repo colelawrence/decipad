@@ -8,11 +8,7 @@ import {
   parseExpressionOrThrow,
   Unit,
 } from '..';
-import {
-  objectToMap,
-  objectToTableType,
-  typeSnapshotSerializer,
-} from '../testUtils';
+import { objectToMap, objectToTableType } from '../testUtils';
 import { buildType as t, InferError, Type } from '../type';
 import {
   as,
@@ -41,7 +37,6 @@ const degC: Unit = {
   multiplier: ONE,
   known: true,
 };
-expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 const makeColumn = ({
   tableName,
@@ -304,9 +299,129 @@ describe('tables', () => {
       Col3: c('previous', l('hi')),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
-      `table<Col1 = number, Col2 = number, Col3 = string>`
-    );
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": null,
+        "cellType": null,
+        "columnNames": Array [
+          "Col1",
+          "Col2",
+          "Col3",
+        ],
+        "columnTypes": Array [
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "string",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+        ],
+        "date": null,
+        "delegatesIndexTo": "Table",
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": "Table",
+        "indexedBy": null,
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
 
   it('unifies column sizes', async () => {
@@ -315,9 +430,99 @@ describe('tables', () => {
       Col2: col(1, 2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
-      `table<Col1 = number, Col2 = number>`
-    );
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": null,
+        "cellType": null,
+        "columnNames": Array [
+          "Col1",
+          "Col2",
+        ],
+        "columnTypes": Array [
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+        ],
+        "date": null,
+        "delegatesIndexTo": "Table",
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": "Table",
+        "indexedBy": null,
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
 
   it('Supports single items tables', async () => {
@@ -326,9 +531,99 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
-      `table<Col1 = string, Col2 = number>`
-    );
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": null,
+        "cellType": null,
+        "columnNames": Array [
+          "Col1",
+          "Col2",
+        ],
+        "columnTypes": Array [
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "string",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+        ],
+        "date": null,
+        "delegatesIndexTo": "Table",
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": "Table",
+        "indexedBy": null,
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
 
   it('Supports previous in single item tables', async () => {
@@ -337,9 +632,99 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(
-      `table<Col1 = string, Col2 = number>`
-    );
+    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": null,
+        "cellType": null,
+        "columnNames": Array [
+          "Col1",
+          "Col2",
+        ],
+        "columnTypes": Array [
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "string",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+        ],
+        "date": null,
+        "delegatesIndexTo": "Table",
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": "Table",
+        "indexedBy": null,
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
 
   it('Errors cause the column to not be present', async () => {
@@ -438,9 +823,12 @@ describe('Property access', () => {
     expect(
       (await inferExpression(scopeWithTable, prop('Table', 'A'))).errorCause
         ?.spec
-    ).toMatchInlineSnapshot(
-      `ErrSpec:free-form("message" => "A column named A does not exist in Table")`
-    );
+    ).toMatchInlineSnapshot(`
+      Object {
+        "errType": "free-form",
+        "message": "A column named A does not exist in Table",
+      }
+    `);
 
     expect(
       (await inferExpression(scopeWithTable, prop('NotATable', 'Col')))
@@ -451,10 +839,58 @@ describe('Property access', () => {
       (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
         .errorCause?.spec
     ).toMatchInlineSnapshot(`
-      ErrSpec:expected-but-got("expectedButGot" => Array [
-        "table or row",
-        MissingVar,
-      ])
+      Object {
+        "errType": "expected-but-got",
+        "expectedButGot": Array [
+          "table or row",
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": null,
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": Array [
+              Object {
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": false,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "MissingVar",
+              },
+            ],
+            Symbol(immer-draftable): true,
+          },
+        ],
+      }
     `);
   });
 });
@@ -474,9 +910,43 @@ describe('refs', () => {
       autoGeneratedVarNames: new Set(['AutoGenerated']),
     });
 
-    expect(
-      await inferExpression(scopeWithVariable, r('AutoGenerated'))
-    ).toMatchInlineSnapshot(`InferError unknown-reference`);
+    expect(await inferExpression(scopeWithVariable, r('AutoGenerated')))
+      .toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": null,
+        "cellType": null,
+        "columnNames": null,
+        "columnTypes": null,
+        "date": null,
+        "delegatesIndexTo": undefined,
+        "errorCause": [Error: Inference Error: unknown-reference],
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": null,
+        "indexedBy": null,
+        "node": Object {
+          "args": Array [
+            "AutoGenerated",
+          ],
+          "type": "ref",
+        },
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
 });
 

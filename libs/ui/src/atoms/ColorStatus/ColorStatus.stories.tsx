@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { ColorStatus } from './ColorStatus';
 
@@ -20,7 +20,7 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <>
     <ColorStatus {...props} name={'draft'} />
     <ColorStatus {...props} name={'review'} />
@@ -28,7 +28,7 @@ export const Normal: Story<typeof args> = (props) => (
   </>
 );
 
-export const Selected: Story<typeof args> = (props) => (
+export const Selected: StoryFn<typeof args> = (props) => (
   <>
     <ColorStatus {...props} selected={true} name={'draft'} />
     <ColorStatus {...props} selected={true} name={'review'} />

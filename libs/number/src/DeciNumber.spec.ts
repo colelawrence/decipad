@@ -1,432 +1,1097 @@
-import { fromNumber } from '.';
+import { fromNumber, setupDeciNumberSnapshotSerializer } from '.';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('Deci number', () => {
   it('can be constructed from a fraction-like number', () => {
-    expect(fromNumber({ n: 1, d: 2, s: -1 })).toMatchInlineSnapshot(
-      `DeciNumber(-0.5)`
-    );
-    expect(fromNumber({ n: 1n, d: '2', s: -1n })).toMatchInlineSnapshot(
-      `DeciNumber(-0.5)`
-    );
+    expect(fromNumber({ n: 1, d: 2, s: -1 })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": -1n,
+      }
+    `);
+    expect(fromNumber({ n: 1n, d: '2', s: -1n })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber({ n: '1', d: '2', s: '-1' })).toMatchInlineSnapshot(
-      `DeciNumber(-0.5)`
-    );
+    expect(fromNumber({ n: '1', d: '2', s: '-1' })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(3)).toMatchInlineSnapshot(`DeciNumber(3)`);
+    expect(fromNumber(3)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 3n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(3, 2)).toMatchInlineSnapshot(`DeciNumber(1.5)`);
+    expect(fromNumber(3, 2)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 3n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(Infinity)).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(Infinity, Infinity)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(Infinity, Infinity)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(Infinity, 0)).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity, 0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-Infinity)).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber({ n: Infinity })).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber({ n: Infinity })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber({ n: 1, d: Infinity })).toMatchInlineSnapshot(
-      `DeciNumber(0)`
-    );
+    expect(fromNumber({ n: 1, d: Infinity })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 0n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber({ n: 1, d: -Infinity })).toMatchInlineSnapshot(
-      `DeciNumber(-0)`
-    );
+    expect(fromNumber({ n: 1, d: -Infinity })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 0n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber({ n: -1, d: -Infinity })).toMatchInlineSnapshot(
-      `DeciNumber(0)`
-    );
+    expect(fromNumber({ n: -1, d: -Infinity })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 0n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber({ n: Infinity, d: Infinity })).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber({ n: Infinity, d: Infinity })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(0, 0)).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(0, 0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber({ n: 0, d: 0 })).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber({ n: 0, d: 0 })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber({ n: 0, d: 0, s: 1 })).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber({ n: 0, d: 0, s: 1 })).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(undefined)).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(NaN)).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(NaN)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
   });
 
   test('abs', () => {
-    expect(fromNumber(-10).abs()).toMatchInlineSnapshot(`DeciNumber(10)`);
-    expect(fromNumber(undefined).abs()).toMatchInlineSnapshot(`DeciNumber(?)`);
-    expect(fromNumber(-Infinity).abs()).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-10).abs()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 10n,
+        "s": 1n,
+      }
+    `);
+    expect(fromNumber(undefined).abs()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
+    expect(fromNumber(-Infinity).abs()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
   });
 
   test('neg', () => {
-    expect(fromNumber(10).neg()).toMatchInlineSnapshot(`DeciNumber(-10)`);
+    expect(fromNumber(10).neg()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 10n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(-10).neg()).toMatchInlineSnapshot(`DeciNumber(10)`);
+    expect(fromNumber(-10).neg()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 10n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).neg()).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).neg()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(-Infinity).neg()).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(-Infinity).neg()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(Infinity).neg()).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(Infinity).neg()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
   });
 
   test('add', () => {
-    expect(fromNumber(10).add(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(15)`
-    );
+    expect(fromNumber(10).add(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 15n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).add(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).add(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).add(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).add(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).add(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).add(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).add(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).add(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).add(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).add(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('sub', () => {
-    expect(fromNumber(10).sub(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(5)`
-    );
+    expect(fromNumber(10).sub(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 5n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).sub(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).sub(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).sub(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).sub(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).sub(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).sub(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).sub(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).sub(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).sub(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).sub(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('mul', () => {
-    expect(fromNumber(10).mul(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(50)`
-    );
+    expect(fromNumber(10).mul(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 50n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-10).mul(fromNumber(-5))).toMatchInlineSnapshot(
-      `DeciNumber(50)`
-    );
+    expect(fromNumber(-10).mul(fromNumber(-5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 50n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(10).mul(fromNumber(-5))).toMatchInlineSnapshot(
-      `DeciNumber(-50)`
-    );
+    expect(fromNumber(10).mul(fromNumber(-5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 50n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).mul(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).mul(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).mul(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).mul(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).mul(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).mul(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).mul(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).mul(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).mul(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).mul(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('div', () => {
-    expect(fromNumber(5).div(fromNumber(10))).toMatchInlineSnapshot(
-      `DeciNumber(0.5)`
-    );
+    expect(fromNumber(5).div(fromNumber(10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-5).div(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(0.5)`
-    );
+    expect(fromNumber(-5).div(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(5).div(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(-0.5)`
-    );
+    expect(fromNumber(5).div(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).div(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).div(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).div(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).div(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).div(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(-Infinity).div(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).div(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).div(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).div(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).div(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('pow', () => {
-    expect(fromNumber(5).pow(fromNumber(10))).toMatchInlineSnapshot(
-      `DeciNumber(9765625)`
-    );
+    expect(fromNumber(5).pow(fromNumber(10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 9765625n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-5).pow(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(0.0000001024)`
-    );
+    expect(fromNumber(-5).pow(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 9765625n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(5).pow(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(0.0000001024)`
-    );
+    expect(fromNumber(5).pow(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 9765625n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).pow(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).pow(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).pow(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).pow(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).pow(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).pow(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).pow(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).pow(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).pow(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).pow(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('gcd', () => {
-    expect(fromNumber(5).gcd(fromNumber(10))).toMatchInlineSnapshot(
-      `DeciNumber(5)`
-    );
+    expect(fromNumber(5).gcd(fromNumber(10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 5n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-5).gcd(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(5)`
-    );
+    expect(fromNumber(-5).gcd(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 5n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(5).gcd(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(5)`
-    );
+    expect(fromNumber(5).gcd(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 5n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).gcd(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).gcd(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).gcd(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).gcd(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).gcd(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).gcd(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).gcd(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).gcd(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).gcd(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).gcd(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('lcm', () => {
-    expect(fromNumber(7).lcm(fromNumber(10))).toMatchInlineSnapshot(
-      `DeciNumber(70)`
-    );
+    expect(fromNumber(7).lcm(fromNumber(10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 70n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-7).lcm(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(70)`
-    );
+    expect(fromNumber(-7).lcm(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 70n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(7).lcm(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(70)`
-    );
+    expect(fromNumber(7).lcm(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 70n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).lcm(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).lcm(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).lcm(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).lcm(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).lcm(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).lcm(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).lcm(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).lcm(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).lcm(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).lcm(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('mod', () => {
-    expect(fromNumber(17).mod(fromNumber(10))).toMatchInlineSnapshot(
-      `DeciNumber(7)`
-    );
+    expect(fromNumber(17).mod(fromNumber(10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 7n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-17).mod(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(-7)`
-    );
+    expect(fromNumber(-17).mod(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 7n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(17).mod(fromNumber(-10))).toMatchInlineSnapshot(
-      `DeciNumber(7)`
-    );
+    expect(fromNumber(17).mod(fromNumber(-10))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 7n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).mod(fromNumber(5))).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).mod(fromNumber(5))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).mod(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).mod(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(-Infinity).mod(fromNumber(Infinity))
-    ).toMatchInlineSnapshot(`DeciNumber(-∞)`);
+    expect(fromNumber(-Infinity).mod(fromNumber(Infinity)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(
-      fromNumber(undefined).mod(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(?)`);
+    expect(fromNumber(undefined).mod(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(
-      fromNumber(Infinity).mod(fromNumber(undefined))
-    ).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).mod(fromNumber(undefined)))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('ceil', () => {
-    expect(fromNumber(17).ceil()).toMatchInlineSnapshot(`DeciNumber(17)`);
+    expect(fromNumber(17).ceil()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 17n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(17, 10).ceil(0)).toMatchInlineSnapshot(`DeciNumber(2)`);
+    expect(fromNumber(17, 10).ceil(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 2n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-17).ceil(0)).toMatchInlineSnapshot(`DeciNumber(-17)`);
+    expect(fromNumber(-17).ceil(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 17n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).ceil(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).ceil(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(-Infinity).ceil(0)).toMatchInlineSnapshot(
-      `DeciNumber(-∞)`
-    );
+    expect(fromNumber(-Infinity).ceil(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).ceil(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).ceil(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(Infinity).ceil(0)).toMatchInlineSnapshot(`DeciNumber(∞)`);
+    expect(fromNumber(Infinity).ceil(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('floor', () => {
-    expect(fromNumber(17).floor()).toMatchInlineSnapshot(`DeciNumber(17)`);
+    expect(fromNumber(17).floor()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 17n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(17, 10).floor(0)).toMatchInlineSnapshot(`DeciNumber(1)`);
+    expect(fromNumber(17, 10).floor(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-17).floor(0)).toMatchInlineSnapshot(`DeciNumber(-17)`);
+    expect(fromNumber(-17).floor(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 17n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).floor(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).floor(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(-Infinity).floor(0)).toMatchInlineSnapshot(
-      `DeciNumber(-∞)`
-    );
+    expect(fromNumber(-Infinity).floor(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).floor(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).floor(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(Infinity).floor(0)).toMatchInlineSnapshot(
-      `DeciNumber(∞)`
-    );
+    expect(fromNumber(Infinity).floor(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('round', () => {
-    expect(fromNumber(17).round()).toMatchInlineSnapshot(`DeciNumber(17)`);
+    expect(fromNumber(17).round()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 17n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(17, 10).round(0)).toMatchInlineSnapshot(`DeciNumber(2)`);
+    expect(fromNumber(17, 10).round(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 2n,
+        "s": 1n,
+      }
+    `);
 
-    expect(fromNumber(-17).round(0)).toMatchInlineSnapshot(`DeciNumber(-17)`);
+    expect(fromNumber(-17).round(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 17n,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).round(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).round(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(-Infinity).round(0)).toMatchInlineSnapshot(
-      `DeciNumber(-∞)`
-    );
+    expect(fromNumber(-Infinity).round(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
 
-    expect(fromNumber(undefined).round(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
+    expect(fromNumber(undefined).round(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
 
-    expect(fromNumber(Infinity).round(0)).toMatchInlineSnapshot(
-      `DeciNumber(∞)`
-    );
+    expect(fromNumber(Infinity).round(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
   });
 
   test('inverse', () => {
-    expect(fromNumber(-10, 15).inverse()).toMatchInlineSnapshot(
-      `DeciNumber(-1.5)`
-    );
-    expect(fromNumber(undefined).inverse()).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
-    expect(fromNumber(-Infinity).inverse()).toMatchInlineSnapshot(
-      `DeciNumber(-∞)`
-    );
+    expect(fromNumber(-10, 15).inverse()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 3n,
+        "s": -1n,
+      }
+    `);
+    expect(fromNumber(undefined).inverse()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
+    expect(fromNumber(-Infinity).inverse()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
   });
 
   test('simplify', () => {
-    expect(fromNumber(-10, 15).simplify()).toMatchInlineSnapshot(
-      `DeciNumber(-0.(6))`
-    );
-    expect(fromNumber(-20, 15).simplify(1)).toMatchInlineSnapshot(
-      `DeciNumber(-1)`
-    );
-    expect(fromNumber(undefined).simplify(0)).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
-    expect(fromNumber(-Infinity).inverse()).toMatchInlineSnapshot(
-      `DeciNumber(-∞)`
-    );
+    expect(fromNumber(-10, 15).simplify()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 3n,
+        "infinite": false,
+        "n": 2n,
+        "s": -1n,
+      }
+    `);
+    expect(fromNumber(-20, 15).simplify(1)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": -1n,
+      }
+    `);
+    expect(fromNumber(undefined).simplify(0)).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
+    expect(fromNumber(-Infinity).inverse()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
   });
 
   test('equals', () => {
@@ -555,15 +1220,37 @@ describe('Deci number', () => {
   });
 
   test('clone', () => {
-    expect(fromNumber(-10, 15).clone()).toMatchInlineSnapshot(
-      `DeciNumber(-0.(6))`
-    );
-    expect(fromNumber(undefined).clone()).toMatchInlineSnapshot(
-      `DeciNumber(?)`
-    );
-    expect(fromNumber(Infinity).clone()).toMatchInlineSnapshot(`DeciNumber(∞)`);
-    expect(fromNumber(-Infinity).clone()).toMatchInlineSnapshot(
-      `DeciNumber(-∞)`
-    );
+    expect(fromNumber(-10, 15).clone()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 3n,
+        "infinite": false,
+        "n": 2n,
+        "s": -1n,
+      }
+    `);
+    expect(fromNumber(undefined).clone()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": false,
+        "n": undefined,
+        "s": undefined,
+      }
+    `);
+    expect(fromNumber(Infinity).clone()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": 1n,
+      }
+    `);
+    expect(fromNumber(-Infinity).clone()).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": undefined,
+        "infinite": true,
+        "n": undefined,
+        "s": -1n,
+      }
+    `);
   });
 });

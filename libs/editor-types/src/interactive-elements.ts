@@ -2,12 +2,12 @@ import type { SerializedType } from '@decipad/computer';
 import {
   BaseElement,
   BlockElement,
-  ELEMENT_FETCH,
   DEPRECATED_ELEMENT_INPUT,
+  ELEMENT_FETCH,
   ELEMENT_PLOT,
   EmptyText,
-  PlainText,
   IntegrationTypes,
+  PlainText,
 } from '.';
 import {
   ELEMENT_CAPTION,
@@ -27,9 +27,9 @@ import {
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import type {
+  DeprecatedTableInputElement,
   TableCellType,
   TableElement,
-  DeprecatedTableInputElement,
 } from './table';
 
 export type { TableElement };
@@ -41,7 +41,6 @@ export type ImportElementSource =
   | 'csv'
   | 'json'
   | 'arrow'
-  | 'sqlite'
   | 'postgresql'
   | 'mysql'
   | 'oracledb'
@@ -57,7 +56,6 @@ export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   csv: '',
   json: '',
   arrow: '',
-  sqlite: '',
   postgresql: '',
   mysql: '',
   oracledb: '',

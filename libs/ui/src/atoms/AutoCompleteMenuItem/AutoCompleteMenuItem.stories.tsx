@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { inMenu } from '../../storybook-utils';
 import { ACItemType, AutoCompleteMenuItem } from './AutoCompleteMenuItem';
 
@@ -16,10 +16,10 @@ export default {
   decorators: [inMenu],
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <AutoCompleteMenuItem {...props} />
 );
 
-export const Active: Story<typeof args> = (props) => (
+export const Active: StoryFn<typeof args> = (props) => (
   <AutoCompleteMenuItem focused={true} {...props} />
 );

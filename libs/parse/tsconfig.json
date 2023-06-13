@@ -6,19 +6,19 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../../libs/computer"
+      "path": "../computer"
     },
     {
-      "path": "../../libs/utils"
+      "path": "../utils"
     },
     {
-      "path": "../../libs/editor-types"
+      "path": "../editor-types"
     },
     {
-      "path": "../../libs/format"
+      "path": "../format"
     },
     {
-      "path": "../../libs/fraction"
+      "path": "../fraction"
     }
   ]
 }

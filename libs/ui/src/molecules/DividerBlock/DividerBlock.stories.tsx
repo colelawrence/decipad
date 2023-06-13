@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DividerBlock } from './DividerBlock';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: DividerBlock,
 } as Meta;
 
-export const Normal: Story = () => <DividerBlock />;
+export const Normal: StoryFn = () => <DividerBlock />;

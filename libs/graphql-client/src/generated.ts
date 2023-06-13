@@ -87,8 +87,7 @@ export enum ExternalProvider {
   Mysql = 'mysql',
   Oracledb = 'oracledb',
   Postgresql = 'postgresql',
-  Redshift = 'redshift',
-  Sqlite = 'sqlite'
+  Redshift = 'redshift'
 }
 
 export type GoalFulfilmentInput = {

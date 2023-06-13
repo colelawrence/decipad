@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { AvailableColorStatus, TColorStatus, UserIconKey } from '../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
@@ -16,7 +16,7 @@ const args: Pick<
 
 export default {
   title: 'Organisms / UI / Notebook List / Item',
-  component: NotebookListItem,
+  component: NotebookListItem as any,
   argTypes: {
     iconColor: { options: swatchNames, control: { type: 'radio' } },
     status: { options: AvailableColorStatus, control: { type: 'radio' } },
@@ -35,6 +35,6 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <NotebookListItem {...props} id="nb" />
 );

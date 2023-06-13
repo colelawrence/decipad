@@ -103,7 +103,7 @@ const types: [string, TableCellType, string][] = [
   ['date year', getDateType('year'), 'Year'],
 ];
 it.each(types)('highlights selected type %s', async (_, type, textContent) => {
-  const { findByRole, findAllByRole, findByText } = render(
+  const { findAllByRole, findByText } = render(
     <TableColumnMenu trigger={<button>trigger</button>} type={type} open />
   );
 
@@ -131,16 +131,14 @@ it.each(types)('highlights selected type %s', async (_, type, textContent) => {
 
   cleanup = await applyCssVars();
 
-  const menuItem = await findByRole(
-    (role, element) =>
-      role === 'menuitem' && element?.textContent?.includes(textContent)
-  );
+  const menuItems = await findAllByRole('menuitem');
+  const menuItem = menuItems.find((element) =>
+    element?.textContent?.includes(textContent)
+  ) as HTMLElement;
 
-  const [otherMenuItem] = await findAllByRole(
-    (role, element) =>
-      role === 'menuitem' &&
-      element?.textContent?.includes(textContent) === false
-  );
+  const otherMenuItem = menuItems.find(
+    (element) => element?.textContent?.includes(textContent) === false
+  ) as HTMLElement;
 
   const { backgroundColor: normalBackgroundColor } = findParentWithStyle(
     otherMenuItem,
@@ -203,7 +201,7 @@ it('Expands the series menu without any other menu opening', async () => {
 it('Successfully changes column type upon click', async () => {
   const mockOnChangeColumnType = jest.fn((type) => type);
 
-  const { findByRole, findByText } = render(
+  const { queryAllByRole, findByText } = render(
     <TableColumnMenu
       trigger={<button>trigger</button>}
       type={getNumberType()}
@@ -216,10 +214,10 @@ it('Successfully changes column type upon click', async () => {
     pointerEventsCheck: 0,
   });
 
-  const menuItem = await findByRole(
-    (role, element) =>
-      role === 'menuitem' && element?.textContent?.includes('Text')
-  );
+  const menuItems = queryAllByRole('menuitem');
+  const menuItem = menuItems.find((element) =>
+    element?.textContent?.includes('Text')
+  ) as HTMLElement;
 
   expect(mockOnChangeColumnType).not.toHaveBeenCalled();
 

@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
 import { noop } from '@decipad/utils';
+import { Meta, StoryFn } from '@storybook/react';
 import { NewElementLine } from './NewElementLine';
 
 interface Args {}
@@ -10,7 +10,7 @@ export default {
   args: {},
 } as Meta<Args>;
 
-export const Normal: Story<Args> = () => (
+export const Normal: StoryFn<Args> = () => (
   <>
     <p>Hover under me</p>
     <NewElementLine onAdd={noop} show={true} />

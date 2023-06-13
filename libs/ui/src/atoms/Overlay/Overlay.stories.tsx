@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Overlay } from './Overlay';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: Overlay,
 } as Meta;
 
-export const Normal: Story = () => <Overlay />;
+export const Normal: StoryFn = () => <Overlay />;

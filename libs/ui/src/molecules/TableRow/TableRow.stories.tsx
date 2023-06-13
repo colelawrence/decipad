@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { TableData } from '../../atoms';
 import { table } from '../../styles';
 import { TableRow } from './TableRow';
@@ -13,7 +13,7 @@ export default {
   component: TableRow,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <table>
     <TableRow>
       <TableData>
@@ -29,7 +29,7 @@ export const Normal: Story = () => (
   </table>
 );
 
-export const ReadOnly: Story = () => (
+export const ReadOnly: StoryFn = () => (
   <table>
     <TableRow readOnly>
       <TableData>

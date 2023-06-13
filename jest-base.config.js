@@ -13,20 +13,19 @@ module.exports = {
   coveragePathIgnorePatterns: ['^((?!<rootDir>).)*$'],
 
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'mjs'],
-  resolver: require.resolve('@nrwl/jest/plugins/resolver'),
+  resolver: require.resolve('@nx/jest/plugins/resolver'),
 
   transform: {
     '^.+\\.[jt]sx?$': ['babel-jest', { presets, plugins }],
     '^.+\\.mjs$': ['babel-jest', { presets, plugins }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lib0|p-retry|y-protocols|@decipad_org/safejs|@formkit/auto-animate|.*dnd.*)/)',
+    'node_modules/(?!(lib0|p-retry|y-protocols|@udecode/plate|@udecode/plate-core|nanoid|@decipad_org/safejs|@formkit/auto-animate|.*dnd.*)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
 
   setupFilesAfterEnv: [
     require.resolve('./libs/testutils/src/serialize-big-int.js'),
-    require.resolve('./libs/testutils/src/deci-number-snapshot-serializer.js'),
     require.resolve('./libs/testutils/src/feature-flags-setup-after-env.js'),
     require.resolve('./libs/testutils/src/suppress-console-warnings.js'),
   ],

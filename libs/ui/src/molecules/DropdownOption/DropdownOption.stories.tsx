@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DropdownAddOptionProps, DropdownOption } from './DropdownOption';
 
 const args: DropdownAddOptionProps = {
@@ -11,4 +11,4 @@ export default {
   component: DropdownOption,
 } as Meta;
 
-export const Normal: Story = () => <DropdownOption {...args} />;
+export const Normal: StoryFn = () => <DropdownOption {...args} />;

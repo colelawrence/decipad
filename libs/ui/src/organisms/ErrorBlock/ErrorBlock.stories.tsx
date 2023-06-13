@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ErrorBlock, ErrorBlockProps } from './ErrorBlock';
 
 export default {
@@ -13,6 +13,6 @@ export default {
   },
 } as Meta<ErrorBlockProps>;
 
-export const Normal: Story<ErrorBlockProps> = (args) => (
+export const Normal: StoryFn<ErrorBlockProps> = (args) => (
   <ErrorBlock {...args} />
 );

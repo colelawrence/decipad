@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { TableData, TableHeader } from '../../atoms';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { table } from '../../styles';
@@ -65,14 +65,14 @@ const body = (
 );
 
 export default {
-  title: 'Organisms / Editor / Table',
+  title: 'Organisms / UI / Table',
   component: Table,
 } as Meta;
 
-export const Normal: Story = () => <Table body={body} />;
+export const Normal: StoryFn = () => <Table body={body} />;
 
-export const NormalWithHeaders: Story = () => (
+export const NormalWithHeaders: StoryFn = () => (
   <Table head={headers} body={body} />
 );
 
-export const InnerBorders: Story = () => <Table border="inner" body={body} />;
+export const InnerBorders: StoryFn = () => <Table border="inner" body={body} />;

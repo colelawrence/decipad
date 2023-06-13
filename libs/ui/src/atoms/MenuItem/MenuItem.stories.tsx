@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { circleIcon, inMenu } from '../../storybook-utils';
 import { MenuItem } from './MenuItem';
 
@@ -15,14 +15,16 @@ export default {
   decorators: [inMenu],
 } as Meta<Args>;
 
-export const TextOnly: Story<Args> = (args) => <MenuItem {...args} />;
+export const TextOnly: StoryFn<Args> = (args) => <MenuItem {...args} />;
 
-export const Selected: Story<Args> = (args) => <MenuItem selected {...args} />;
+export const Selected: StoryFn<Args> = (args) => (
+  <MenuItem selected {...args} />
+);
 
-export const Icon: Story<Args> = (args) => (
+export const Icon: StoryFn<Args> = (args) => (
   <MenuItem icon={circleIcon} {...args} />
 );
 
-export const IconSelected: Story<Args> = (args) => (
+export const IconSelected: StoryFn<Args> = (args) => (
   <MenuItem icon={circleIcon} selected {...args} />
 );

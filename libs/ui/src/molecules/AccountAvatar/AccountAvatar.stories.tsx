@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AccountAvatar } from './AccountAvatar';
 
 export default {
@@ -9,6 +9,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<{ menuOpen: boolean }> = ({ menuOpen }) => (
+export const Normal: StoryFn<{ menuOpen: boolean }> = ({ menuOpen }) => (
   <AccountAvatar name="John Doe" menuOpen={menuOpen} />
 );

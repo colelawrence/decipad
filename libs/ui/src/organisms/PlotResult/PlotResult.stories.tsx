@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import type { ComponentProps } from 'react';
 import { PlotResult } from './PlotResult';
 
@@ -40,4 +40,4 @@ export default {
   args: params,
 } as Meta;
 
-export const Normal: Story = () => <PlotResult {...params} />;
+export const Normal: StoryFn = () => <PlotResult {...params} />;

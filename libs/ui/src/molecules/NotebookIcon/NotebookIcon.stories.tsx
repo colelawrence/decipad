@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AvailableSwatchColor, TColorStatus, UserIconKey } from '../../utils';
 import { NotebookIcon } from './NotebookIcon';
 
@@ -14,4 +14,4 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = () => <NotebookIcon {...args} />;
+export const Normal: StoryFn<typeof args> = () => <NotebookIcon {...args} />;

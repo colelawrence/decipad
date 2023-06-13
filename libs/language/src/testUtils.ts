@@ -18,7 +18,6 @@ import {
   Type,
   Unit,
 } from './type';
-import { isSerializedType } from './type/SerializedType';
 import { materializeOneResult } from './utils/materializeOneResult';
 
 export const runAST = async (
@@ -263,12 +262,12 @@ export const fromDate = (s: string): bigint => {
   }
 };
 
-export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
-  test: (item) => item instanceof Type || isSerializedType(item),
-  serialize: (item: Type) => {
-    return snapshotType(item);
-  },
-};
+// export const typeSnapshotSerializer: jest.SnapshotSerializerPlugin = {
+//   test: (item) => item instanceof Type || isSerializedType(item),
+//   serialize: (item: Type) => {
+//     return snapshotType(item);
+//   },
+// };
 
 export const runAndMeasure = async <T>(
   fn: () => Promise<T>

@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CSSProperties } from 'react';
 import * as Icons from '.';
 import { UserIconKey, userIconKeys } from '../utils';
@@ -67,7 +67,7 @@ export default {
   title: 'Atoms / UI / Icons',
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <>
     <div>
       <p>User Icons</p>

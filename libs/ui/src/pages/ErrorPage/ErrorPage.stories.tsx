@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ErrorPage } from './ErrorPage';
 
 const args = {
@@ -11,12 +11,12 @@ export default {
   args,
 } as Meta;
 
-export const Error404: Story<typeof args> = (props) => (
+export const Error404: StoryFn<typeof args> = (props) => (
   <ErrorPage {...props} Heading="h1" wellKnown="404" />
 );
-export const Error500: Story<typeof args> = (props) => (
+export const Error500: StoryFn<typeof args> = (props) => (
   <ErrorPage {...props} Heading="h1" wellKnown="500" />
 );
-export const Unknown: Story<typeof args> = (props) => (
+export const Unknown: StoryFn<typeof args> = (props) => (
   <ErrorPage {...props} Heading="h1" />
 );

@@ -1,4 +1,4 @@
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { buildType as t, Unit } from '..';
 import { U } from '../utils';
 import { InferError } from './InferError';
@@ -7,6 +7,8 @@ import {
   SerializedType,
   serializeType,
 } from './serialization';
+
+setupDeciNumberSnapshotSerializer();
 
 const meter: Unit = { unit: 'meter', exp: N(1), multiplier: N(1), known: true };
 const errorCause = InferError.expectedButGot('A', 'B');
@@ -23,9 +25,19 @@ it('can stringify a type', () => {
       "kind": "number",
       "unit": Array [
         Object {
-          "exp": DeciNumber(1),
+          "exp": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           "known": true,
-          "multiplier": DeciNumber(1),
+          "multiplier": DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           "unit": "meter",
         },
       ],
@@ -117,10 +129,13 @@ it('can stringify a type', () => {
     `);
   expect(serializeType(t.impossible(errorCause))).toMatchInlineSnapshot(`
     Object {
-      "errorCause": ErrSpec:expected-but-got("expectedButGot" => Array [
-        "A",
-        "B",
-      ]),
+      "errorCause": Object {
+        "errType": "expected-but-got",
+        "expectedButGot": Array [
+          "A",
+          "B",
+        ],
+      },
       "errorLocation": undefined,
       "kind": "type-error",
     }

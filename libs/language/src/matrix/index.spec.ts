@@ -1,3 +1,4 @@
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import {
   evaluateMatrixAssign,
   evaluateMatrixRef,
@@ -10,6 +11,8 @@ import { fromJS } from '../value';
 import { buildType as t, InferError } from '../type';
 import { c, col, l, matrixAssign, matrixRef, r } from '../utils';
 import { materializeOneResult } from '../utils/materializeOneResult';
+
+setupDeciNumberSnapshotSerializer();
 
 let testRealm: Realm;
 let testContext: Context;
@@ -40,8 +43,18 @@ describe('matrix op evaluation', () => {
       )
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(70),
-        DeciNumber(90),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 70n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 90n,
+          "s": 1n,
+        },
       ]
     `);
 
@@ -56,7 +69,12 @@ describe('matrix op evaluation', () => {
       )
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(70),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 70n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -73,8 +91,18 @@ describe('matrix op evaluation', () => {
       )
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(123),
-        DeciNumber(123),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 123n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 123n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -95,8 +123,18 @@ describe('matrix op evaluation', () => {
       )
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(123),
-        DeciNumber(90),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 123n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 90n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -254,8 +292,18 @@ describe('assigning multidimensional values', () => {
       )
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(1),
-        DeciNumber(2),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -273,8 +321,18 @@ describe('assigning multidimensional values', () => {
       )
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(70),
-        DeciNumber(150),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 70n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 150n,
+          "s": 1n,
+        },
       ]
     `);
   });

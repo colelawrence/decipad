@@ -1,14 +1,11 @@
 import { inferStatement, makeContext } from '../infer';
 import { buildType as t } from '../type';
 import { c, col, l, r, tableColAssign } from '../utils';
-import { typeSnapshotSerializer } from '../testUtils';
 import { evaluateColumnAssign, inferColumnAssign } from './column-assign';
 import { Realm } from '../interpreter';
 import { AST, parseExpressionOrThrow, Table } from '..';
 import { jsCol } from '../lazy/testUtils';
 import { materializeOneResult } from '../utils/materializeOneResult';
-
-expect.addSnapshotSerializer(typeSnapshotSerializer);
 
 let ctx = makeContext();
 beforeEach(() => {
@@ -24,34 +21,260 @@ describe('Column assignment inference', () => {
       ctx,
       tableColAssign('Table', 'Col2', col(123))
     );
-    expect(table).toMatchInlineSnapshot(`column<number, indexed by Table>`);
+    expect(table).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": 1,
+        "cellType": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "Table",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": "number",
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "columnNames": null,
+        "columnTypes": null,
+        "date": null,
+        "delegatesIndexTo": undefined,
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": null,
+        "indexedBy": "Table",
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
   it('can create a new column with scalar number', async () => {
     const expandedNum = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', l(1))
     );
-    expect(expandedNum).toMatchInlineSnapshot(
-      `column<number, indexed by Table>`
-    );
+    expect(expandedNum).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": 1,
+        "cellType": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "Table",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": "number",
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "columnNames": null,
+        "columnTypes": null,
+        "date": null,
+        "delegatesIndexTo": undefined,
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": null,
+        "indexedBy": "Table",
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
   it('can create a new column with a formula', async () => {
     const expandedFormula = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', r('Col1'), l(1)))
     );
-    expect(expandedFormula).toMatchInlineSnapshot(
-      `column<number, indexed by Table>`
-    );
+    expect(expandedFormula).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": 1,
+        "cellType": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "Table",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": "number",
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "columnNames": null,
+        "columnTypes": null,
+        "date": null,
+        "delegatesIndexTo": undefined,
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": null,
+        "indexedBy": "Table",
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
   it('can create a new column with a formula using previous', async () => {
     const usingPrevious = await inferColumnAssign(
       ctx,
       tableColAssign('Table', 'Col2', c('+', c('previous', l(1)), l(1)))
     );
-    expect(usingPrevious).toMatchInlineSnapshot(
-      `column<number, indexed by Table>`
-    );
+    expect(usingPrevious).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": 1,
+        "cellType": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "Table",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": "number",
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "columnNames": null,
+        "columnTypes": null,
+        "date": null,
+        "delegatesIndexTo": undefined,
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": null,
+        "indexedBy": "Table",
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
   });
 
   it('only works in global scope', async () => {
@@ -61,9 +284,12 @@ describe('Column assignment inference', () => {
         tableColAssign('Table', 'Col2', col(1, 2))
       );
 
-      expect(error.errorCause?.spec).toMatchInlineSnapshot(
-        `ErrSpec:forbidden-inside-function("forbiddenThing" => "table")`
-      );
+      expect(error.errorCause?.spec).toMatchInlineSnapshot(`
+        Object {
+          "errType": "forbidden-inside-function",
+          "forbiddenThing": "table",
+        }
+      `);
     });
   });
 

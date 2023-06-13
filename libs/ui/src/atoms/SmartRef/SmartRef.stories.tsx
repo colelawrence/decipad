@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { SmartRef } from './SmartRef';
 
@@ -14,18 +14,18 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof SmartRef>> = (props) => (
+export const Normal: StoryFn<ComponentProps<typeof SmartRef>> = (props) => (
   <SmartRef symbolName={'Ounces'} {...props} />
 );
 
-export const NotInitialised: Story<ComponentProps<typeof SmartRef>> = () => (
+export const NotInitialised: StoryFn<ComponentProps<typeof SmartRef>> = () => (
   <SmartRef isInitialized={false} />
 );
 
-export const Column: Story<ComponentProps<typeof SmartRef>> = () => (
+export const Column: StoryFn<ComponentProps<typeof SmartRef>> = () => (
   <SmartRef symbolName={'People.Salary'} isInitialized />
 );
 
-export const ColumnSelected: Story<ComponentProps<typeof SmartRef>> = () => (
+export const ColumnSelected: StoryFn<ComponentProps<typeof SmartRef>> = () => (
   <SmartRef symbolName={'People.Salary'} isInitialized isSelected />
 );

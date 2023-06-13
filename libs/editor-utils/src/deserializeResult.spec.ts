@@ -1,6 +1,10 @@
 import { Unit } from '@decipad/computer';
 import { OneResult } from 'libs/language/src/result';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { deserializeResult } from './deserializeResult';
+// eslint-disable-next-line import/no-relative-packages
+
+setupDeciNumberSnapshotSerializer();
 
 describe('deserialize result', () => {
   it('works for numbers and units', () => {
@@ -37,20 +41,45 @@ describe('deserialize result', () => {
               "aliasFor": Array [
                 Object {
                   "aliasFor": undefined,
-                  "exp": DeciNumber(1),
+                  "exp": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
                   "known": false,
-                  "multiplier": DeciNumber(1),
+                  "multiplier": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
                   "unit": "bananas",
                 },
               ],
-              "exp": DeciNumber(1),
+              "exp": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
               "known": false,
-              "multiplier": DeciNumber(1),
+              "multiplier": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
               "unit": "bananas",
             },
           ],
         },
-        "value": DeciNumber(1),
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
       }
     `);
   });
@@ -97,15 +126,35 @@ describe('deserialize result', () => {
                 "aliasFor": Array [
                   Object {
                     "aliasFor": undefined,
-                    "exp": DeciNumber(1),
+                    "exp": DeciNumber {
+                      "d": 1n,
+                      "infinite": false,
+                      "n": 1n,
+                      "s": 1n,
+                    },
                     "known": false,
-                    "multiplier": DeciNumber(1),
+                    "multiplier": DeciNumber {
+                      "d": 1n,
+                      "infinite": false,
+                      "n": 1n,
+                      "s": 1n,
+                    },
                     "unit": "bananas",
                   },
                 ],
-                "exp": DeciNumber(1),
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
                 "known": false,
-                "multiplier": DeciNumber(1),
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
                 "unit": "bananas",
               },
             ],
@@ -114,8 +163,18 @@ describe('deserialize result', () => {
           "kind": "materialized-column",
         },
         "value": Array [
-          DeciNumber(1),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
       }
     `);
@@ -172,15 +231,35 @@ describe('deserialize result', () => {
                   "aliasFor": Array [
                     Object {
                       "aliasFor": undefined,
-                      "exp": DeciNumber(1),
+                      "exp": DeciNumber {
+                        "d": 1n,
+                        "infinite": false,
+                        "n": 1n,
+                        "s": 1n,
+                      },
                       "known": false,
-                      "multiplier": DeciNumber(1),
+                      "multiplier": DeciNumber {
+                        "d": 1n,
+                        "infinite": false,
+                        "n": 1n,
+                        "s": 1n,
+                      },
                       "unit": "bananas",
                     },
                   ],
-                  "exp": DeciNumber(1),
+                  "exp": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
                   "known": false,
-                  "multiplier": DeciNumber(1),
+                  "multiplier": DeciNumber {
+                    "d": 1n,
+                    "infinite": false,
+                    "n": 1n,
+                    "s": 1n,
+                  },
                   "unit": "bananas",
                 },
               ],
@@ -191,8 +270,18 @@ describe('deserialize result', () => {
         },
         "value": Array [
           Array [
-            DeciNumber(1),
-            DeciNumber(2),
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
           ],
         ],
       }

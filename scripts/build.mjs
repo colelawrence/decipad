@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import stringify from 'json-stringify-safe';
-import globby from 'globby';
-import esbuild from 'esbuild';
-import { join, dirname } from 'path';
 import { exec } from 'child_process';
-import { promisify } from 'util';
+import esbuild from 'esbuild';
+import globby from 'globby';
+import stringify from 'json-stringify-safe';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { promisify } from 'util';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -86,10 +86,11 @@ async function esBuildOptions(env) {
     external: [
       'aws-sdk',
       'sharp',
+      'better-sqlite3',
+      'sqlite3',
       '@vue/compiler-sfc',
       'mock-aws-s3',
       'nock',
-      'sqlite3',
       'pg-query-stream',
       'mysql2',
       'pg-native',

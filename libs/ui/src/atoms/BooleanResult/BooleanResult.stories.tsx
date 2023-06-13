@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { BooleanResult } from './BooleanResult';
@@ -8,12 +8,12 @@ export default {
   component: BooleanResult,
 } as Meta;
 
-export const Selected: Story<ComponentProps<typeof BooleanResult>> = (
+export const Selected: StoryFn<ComponentProps<typeof BooleanResult>> = (
   props
 ) => <BooleanResult {...props} />;
 Selected.decorators = [withCode('true')];
 
-export const Unselected: Story<ComponentProps<typeof BooleanResult>> = (
+export const Unselected: StoryFn<ComponentProps<typeof BooleanResult>> = (
   props
 ) => <BooleanResult {...props} />;
 Unselected.decorators = [withCode('false')];

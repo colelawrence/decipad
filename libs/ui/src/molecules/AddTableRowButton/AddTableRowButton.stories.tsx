@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { AddTableRowButton } from './AddTableRowButton';
 
@@ -10,6 +10,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof AddTableRowButton>> = (
+export const Normal: StoryFn<ComponentProps<typeof AddTableRowButton>> = (
   args
 ) => <AddTableRowButton {...args} />;

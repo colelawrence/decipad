@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Display } from './Display';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: Display,
 } as Meta;
 
-export const Normal: Story<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args) => (
   <Display Heading="h1" {...args} />
 );
 Normal.args = {
@@ -14,7 +14,7 @@ Normal.args = {
     'Meet Decipad. We want to change the world’s relationship with numbers',
 };
 
-export const Placeholder: Story<{ placeholder: string }> = (args) => (
+export const Placeholder: StoryFn<{ placeholder: string }> = (args) => (
   <Display Heading="h1" {...args}>
     {null}
   </Display>

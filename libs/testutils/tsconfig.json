@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src"],
+  "include": ["src", "../number/src/deci-number-snapshot-serializer.ts"],
   "compilerOptions": {
     "lib": ["esnext", "dom"]
   },

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CodeSyntax, TokenType } from './CodeSyntax';
 
 export const NormalArgs = {
@@ -10,7 +10,7 @@ export default {
   component: CodeSyntax,
 } as Meta;
 
-export const Normal: Story<typeof NormalArgs> = (props) => (
+export const Normal: StoryFn<typeof NormalArgs> = (props) => (
   <CodeSyntax {...props} />
 );
 Normal.args = {
@@ -18,7 +18,7 @@ Normal.args = {
   children: '4 * 5',
 };
 
-export const Identifier: Story<typeof NormalArgs> = (props) => (
+export const Identifier: StoryFn<typeof NormalArgs> = (props) => (
   <CodeSyntax {...props} />
 );
 Identifier.args = {

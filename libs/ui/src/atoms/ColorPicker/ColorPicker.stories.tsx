@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { baseSwatches } from '../../utils';
 import { ColorPicker } from './ColorPicker';
@@ -21,7 +21,7 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <>
     <ColorPicker {...props} color={baseSwatches.Malibu} />
     <ColorPicker {...props} color={baseSwatches.Sun} />
@@ -32,7 +32,7 @@ export const Normal: Story<typeof args> = (props) => (
   </>
 );
 
-export const Selected: Story<typeof args> = (props) => (
+export const Selected: StoryFn<typeof args> = (props) => (
   <>
     <ColorPicker {...props} selected={true} color={baseSwatches.Malibu} />
     <ColorPicker {...props} selected={true} color={baseSwatches.Sun} />

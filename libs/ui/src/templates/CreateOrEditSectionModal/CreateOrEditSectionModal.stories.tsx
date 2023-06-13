@@ -1,5 +1,5 @@
 import { noop } from '@decipad/utils';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CreateOrEditSectionModal } from './CreateOrEditSectionModal';
 
 export default {
@@ -7,6 +7,6 @@ export default {
   component: CreateOrEditSectionModal,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <CreateOrEditSectionModal onClose={noop} onSubmit={noop} />
 );

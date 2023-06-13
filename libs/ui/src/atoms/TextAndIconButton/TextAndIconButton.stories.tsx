@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Code, Settings, Show } from '../../icons';
 import { TextAndIconButton } from './TextAndIconButton';
 
@@ -7,31 +7,31 @@ export default {
   component: TextAndIconButton,
 } as Meta;
 
-export const Normal: Story<{ children: string }> = () => (
+export const Normal: StoryFn<{ children: string }> = () => (
   <TextAndIconButton key="1" text={'Code'}>
     <Code />
   </TextAndIconButton>
 );
 
-export const Animated: Story<{ children: string }> = () => (
+export const Animated: StoryFn<{ children: string }> = () => (
   <TextAndIconButton key="1" text={'Code'} animateIcon>
     <Code />
   </TextAndIconButton>
 );
 
-export const Lefty: Story<{ children: string }> = () => (
+export const Lefty: StoryFn<{ children: string }> = () => (
   <TextAndIconButton key="1" text={'Code'} iconPosition="left">
     <Code />
   </TextAndIconButton>
 );
 
-export const Transparent: Story<{ children: string }> = () => (
+export const Transparent: StoryFn<{ children: string }> = () => (
   <TextAndIconButton key="1" text={'Code'} color="transparent">
     <Code />
   </TextAndIconButton>
 );
 
-export const Everything: Story<{ children: string }> = () => (
+export const Everything: StoryFn<{ children: string }> = () => (
   <TextAndIconButton
     key="1"
     text={'Code'}
@@ -43,7 +43,7 @@ export const Everything: Story<{ children: string }> = () => (
   </TextAndIconButton>
 );
 
-export const Nested: Story<{ children: string }> = () => (
+export const Nested: StoryFn<{ children: string }> = () => (
   <div>
     {' '}
     <TextAndIconButton
@@ -58,7 +58,7 @@ export const Nested: Story<{ children: string }> = () => (
   </div>
 );
 
-export const NestedThree: Story<{ children: string }> = () => (
+export const NestedThree: StoryFn<{ children: string }> = () => (
   <div>
     <TextAndIconButton key="1" text="Code">
       <Code />

@@ -1,10 +1,12 @@
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { buildType as t } from '../type';
 import { c, col, l, U, u, ne, r, n } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
 import { makeContext } from '../infer';
+
+setupDeciNumberSnapshotSerializer();
 
 const year = u('years');
 
@@ -70,7 +72,12 @@ describe('getValue', () => {
     expect(await testGetValue(getValue, ne(2.5, 'hours'), ne(1, 'minutes')))
       .toMatchInlineSnapshot(`
       NumberValue {
-        "value": DeciNumber(150),
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 150n,
+          "s": 1n,
+        },
       }
     `);
   });
@@ -85,7 +92,12 @@ describe('getValue', () => {
     expect(await testGetValue(getValue, subtractDates, ne(1, 'year')))
       .toMatchInlineSnapshot(`
       NumberValue {
-        "value": DeciNumber(2),
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
       }
     `);
   });
@@ -97,9 +109,24 @@ describe('getValue', () => {
       await (await testGetValue(getValue, quantity, ne(1, 'watts'))).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(3),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -123,14 +150,26 @@ describe('getValue', () => {
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(0.1),
+        DeciNumber {
+          "d": 10n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
       ]
     `);
     expect(
       await (
         await testGetValue(getValue, l(10), n('generic-identifier', '%'))
       ).getData()
-    ).toMatchInlineSnapshot(`DeciNumber(10)`);
+    ).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 10n,
+        "s": 1n,
+      }
+    `);
   });
 
   it('works on a unitful column', async () => {
@@ -140,9 +179,24 @@ describe('getValue', () => {
       await (await testGetValue(getValue, quantity, ne(1, 'miles'))).getData()
     ).toMatchInlineSnapshot(`
       Array [
-        DeciNumber(0.6(213711922373339696174341843633182215859381)),
-        DeciNumber(1.(242742384474667939234868368726636443171876)),
-        DeciNumber(1.8(641135767120019088523025530899546647578143)),
+        DeciNumber {
+          "d": 25146n,
+          "infinite": false,
+          "n": 15625n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 12573n,
+          "infinite": false,
+          "n": 15625n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 8382n,
+          "infinite": false,
+          "n": 15625n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -152,6 +206,13 @@ describe('getValue', () => {
       await (
         await testGetValue(getValue, ne(30, 'days'), ne(1, 'months'))
       ).getData()
-    ).toMatchInlineSnapshot(`DeciNumber(1)`);
+    ).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
   });
 });

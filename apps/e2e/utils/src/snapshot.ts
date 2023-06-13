@@ -1,6 +1,5 @@
 import percySnapshot from '@percy/playwright';
 import { Page } from '@playwright/test';
-import { Page as Page2 } from 'playwright';
 
 const PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS = 10_000;
 
@@ -21,8 +20,7 @@ export const snapshot = async (
   await page.evaluate(() => document.fonts.ready);
 
   try {
-    await percySnapshot(page as Page2, name, {
-      // dont change the width, messes up screenshots
+    await percySnapshot(page as Page, name, {
       widths: [options.mobile && 375, 1380].filter((n): n is number =>
         Number.isInteger(n)
       ),

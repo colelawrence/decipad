@@ -1,5 +1,5 @@
 import { Result } from '@decipad/language';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { InlineCodeError } from './InlineCodeError';
 
 const args = {
@@ -16,6 +16,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => (
   <InlineCodeError {...props} />
 );

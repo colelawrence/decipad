@@ -1,10 +1,11 @@
 {
-  "root": "libs/number",
+  "name": "number",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/number/src",
   "projectType": "library",
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/number/**/*.ts"],
         "maxWarnings": 0
@@ -24,7 +25,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["coverage/libs/number"],
       "options": {
         "jestConfig": "libs/number/jest.config.js"

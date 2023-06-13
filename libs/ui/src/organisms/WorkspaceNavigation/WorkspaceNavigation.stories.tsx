@@ -1,5 +1,5 @@
 import { noop } from '@decipad/utils';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { WorkspaceNavigation } from './WorkspaceNavigation';
 
 export default {
@@ -7,7 +7,7 @@ export default {
   component: WorkspaceNavigation,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <WorkspaceNavigation
     onDeleteSection={noop}
     onCreateSection={() => new Promise(noop)}

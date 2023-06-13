@@ -1,7 +1,8 @@
 const open = require('open');
 const configureWebpack = require('./configureWebpack');
 
-const shouldOpen = !process.env.DECI_E2E;
+const e2e = !!process.env.DECI_E2E;
+const shouldOpen = !e2e;
 let devServer;
 if (shouldOpen) {
   devServer = {
@@ -19,6 +20,13 @@ if (shouldOpen) {
     open: false,
   };
 }
+
+devServer = {
+  ...devServer,
+  hot: !e2e,
+  liveReload: !e2e,
+  webSocketServer: !e2e,
+};
 
 devServer.proxy = {
   '/api': {

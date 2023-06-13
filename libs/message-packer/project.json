@@ -5,7 +5,7 @@
   "projectType": "library",
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/message-packer/src/**/*.ts"],
         "maxWarnings": 0
@@ -25,7 +25,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["coverage/libs/message-packer"],
       "options": {
         "jestConfig": "libs/message-packer/jest.config.js"

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Counter } from './Counter';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: Counter,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <>
     <span>Count is</span> <Counter n={5} />
   </>

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { TableResult } from './TableResult';
@@ -13,6 +13,8 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof TableResult>> = (props) => {
+export const Normal: StoryFn<ComponentProps<typeof TableResult>> = (
+  props: any
+) => {
   return <TableResult {...props} />;
 };

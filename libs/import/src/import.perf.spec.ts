@@ -4,7 +4,10 @@ import path from 'path';
 import handler from 'serve-handler';
 import getPort from 'get-port';
 import { getDefined } from '@decipad/utils';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { tryImport } from '.';
+
+setupDeciNumberSnapshotSerializer();
 
 const timeoutMultiplier = process.env.CI ? 2 : 1;
 

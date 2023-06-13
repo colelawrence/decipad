@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Placeholder } from './Placeholder';
 
 export default {
@@ -6,5 +6,5 @@ export default {
   component: Placeholder,
 } as Meta;
 
-export const Normal: Story = () => <Placeholder />;
-export const LessRound: Story = () => <Placeholder lessRound />;
+export const Normal: StoryFn = () => <Placeholder />;
+export const LessRound: StoryFn = () => <Placeholder lessRound />;

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: NotebookListItemPlaceholder,
 } as Meta;
 
-export const Normal: Story = () => <NotebookListItemPlaceholder />;
+export const Normal: StoryFn = () => <NotebookListItemPlaceholder />;

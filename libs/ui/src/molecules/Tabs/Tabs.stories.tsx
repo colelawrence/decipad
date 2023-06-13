@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Button, TextAndIconButton } from '../../atoms';
 import { Code, Key, People, Settings, Show } from '../../icons';
 import { Tabs } from './Tabs';
@@ -8,7 +8,7 @@ export default {
   component: Tabs,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <Tabs>
     <Button key="1" children={'Code'} size={'extraSlim'} />
     <Button key="2" children={'Preview'} disabled size={'extraSlim'} />
@@ -16,7 +16,7 @@ export const Normal: Story = () => (
   </Tabs>
 );
 
-export const WithIcons: Story = () => (
+export const WithIcons: StoryFn = () => (
   <Tabs>
     <TextAndIconButton key="1" text="Code" size="normal" iconPosition="left">
       <Code />
@@ -44,7 +44,7 @@ export const WithIcons: Story = () => (
   </Tabs>
 );
 
-export const Sidebar: Story = () => (
+export const Sidebar: StoryFn = () => (
   <Tabs>
     <TextAndIconButton key="1" text="Insert" size="normal" />
     <TextAndIconButton
@@ -63,7 +63,7 @@ export const Sidebar: Story = () => (
   </Tabs>
 );
 
-export const TeamOrPrivate: Story = () => (
+export const TeamOrPrivate: StoryFn = () => (
   <Tabs>
     <TextAndIconButton key="1" text="Team" size="normal" iconPosition="left">
       <People />

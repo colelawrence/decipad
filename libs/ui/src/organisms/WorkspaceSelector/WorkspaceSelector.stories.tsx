@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { WorkspaceSelector } from './WorkspaceSelector';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: WorkspaceSelector,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <WorkspaceSelector
     activeWorkspace={{ name: 'Active Workspace', id: '42', numberOfMembers: 1 }}
     allWorkspaces={[{ id: '0', name: 'Other Workspace', numberOfMembers: 2 }]}

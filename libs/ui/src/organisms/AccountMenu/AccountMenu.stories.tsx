@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AccountMenu, AccountMenuProps } from './AccountMenu';
 
 export default {
@@ -10,6 +10,6 @@ export default {
   },
 } as Meta<AccountMenuProps>;
 
-export const Normal: Story<AccountMenuProps> = (args) => (
+export const Normal: StoryFn<AccountMenuProps> = (args) => (
   <AccountMenu {...args} />
 );

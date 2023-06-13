@@ -11,7 +11,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["apps/e2e/**/*.{js,ts}"],
         "maxWarnings": 0

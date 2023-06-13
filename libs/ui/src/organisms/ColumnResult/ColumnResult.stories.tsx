@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { ColumnResult } from './ColumnResult';
@@ -9,6 +9,6 @@ export default {
   decorators: [withCode('[1, 2, 3]')],
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof ColumnResult>> = (props) => {
+export const Normal: StoryFn<ComponentProps<typeof ColumnResult>> = (props) => {
   return <ColumnResult {...props} />;
 };

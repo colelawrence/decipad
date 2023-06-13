@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CodeError } from './CodeError';
 
 const args = {
@@ -12,7 +12,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => <CodeError {...props} />;
-export const Smol: Story<typeof args> = (props) => (
+export const Normal: StoryFn<typeof args> = (props) => <CodeError {...props} />;
+export const Smol: StoryFn<typeof args> = (props) => (
   <CodeError {...props} variant="smol" />
 );

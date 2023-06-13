@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { NotebookPublishingPopUp } from './NotebookPublishingPopUp';
 
 const args = {
@@ -22,18 +22,18 @@ export default {
   },
 } as Meta<typeof args>;
 
-export const Unpublished: Story<typeof args> = (props) => (
+export const Unpublished: StoryFn<typeof args> = (props) => (
   <NotebookPublishingPopUp {...props} />
 );
 
-export const Published: Story<typeof args> = (props) => (
+export const Published: StoryFn<typeof args> = (props) => (
   <NotebookPublishingPopUp {...props} />
 );
 Published.args = {
   isPublished: true,
 };
 
-export const Republish: Story<typeof args> = (props) => (
+export const Republish: StoryFn<typeof args> = (props) => (
   <NotebookPublishingPopUp {...props} />
 );
 Republish.args = {

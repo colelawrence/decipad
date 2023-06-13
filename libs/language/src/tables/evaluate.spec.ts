@@ -1,8 +1,11 @@
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { AST, runAST } from '..';
 import { n, c, l, block, assign, col, r, tableDef, prop } from '../utils';
 import { materializeOneResult } from '../utils/materializeOneResult';
 
 import { usesRecursion } from './evaluate';
+
+setupDeciNumberSnapshotSerializer();
 
 it('can find a previous symbol', () => {
   expect(usesRecursion(c('previous', l(1)))).toEqual(true);
@@ -34,10 +37,30 @@ describe('evaluateTableColumn', () => {
     expect(await testEvaluate(c('*', l(2), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(2),
-        DeciNumber(4),
-        DeciNumber(8),
-        DeciNumber(16),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 4n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 8n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 16n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -46,10 +69,30 @@ describe('evaluateTableColumn', () => {
     expect(await testEvaluate(c('*', n('ref', 'numbers'), c('previous', l(1)))))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(1),
-        DeciNumber(2),
-        DeciNumber(6),
-        DeciNumber(24),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 2n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 6n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 24n,
+          "s": 1n,
+        },
       ]
     `);
   });

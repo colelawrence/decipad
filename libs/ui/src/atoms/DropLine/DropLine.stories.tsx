@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DropLine } from './DropLine';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: DropLine,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <>
     (above)
     <DropLine />
@@ -14,7 +14,7 @@ export const Normal: Story = () => (
   </>
 );
 
-export const Inline: Story = () => (
+export const Inline: StoryFn = () => (
   <span>
     (above)
     <DropLine variant="inline" />

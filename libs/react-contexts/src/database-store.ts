@@ -49,7 +49,6 @@ const IntegrationSteps: Record<ImportElementSource, Array<Stage>> = {
   csv: [],
   json: [],
   arrow: [],
-  sqlite: [],
   postgresql: [],
   mysql: [],
   oracledb: [],

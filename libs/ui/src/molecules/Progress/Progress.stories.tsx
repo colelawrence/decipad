@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Progress, ProgressProps } from './Progress';
 
 const args: ProgressProps = {
@@ -12,4 +12,6 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<ProgressProps> = (props) => <Progress {...props} />;
+export const Normal: StoryFn<ProgressProps> = (props) => (
+  <Progress {...props} />
+);

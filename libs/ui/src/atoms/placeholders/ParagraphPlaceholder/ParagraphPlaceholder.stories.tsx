@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ParagraphPlaceholder } from './ParagraphPlaceholder';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: ParagraphPlaceholder,
 } as Meta;
 
-export const Normal: Story = () => <ParagraphPlaceholder />;
+export const Normal: StoryFn = () => <ParagraphPlaceholder />;

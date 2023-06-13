@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import * as colors from './color';
 import { OpaqueColor } from './color';
 
@@ -146,7 +146,7 @@ export default {
   title: 'Primitives / Color',
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <div style={wrapperStyle}>
     {Object.keys(colorNames).map((colorName) => (
       <div

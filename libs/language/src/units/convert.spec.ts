@@ -1,7 +1,9 @@
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { U, u } from '../utils';
 import { Unit } from '../type';
 import { convertBetweenUnits, normalizeUnitName } from '.';
+
+setupDeciNumberSnapshotSerializer();
 
 describe('convert', () => {
   it('throws when from unit is unknown', () => {
@@ -628,35 +630,82 @@ describe('imprecise conversions', () => {
     convertBetweenUnits(N(f), from, to, { tolerateImprecision: true });
 
   it('converts months to days', () => {
-    expect(loose(-1, U('month'), U('day'))).toMatchInlineSnapshot(
-      `DeciNumber(-30)`
-    );
-    expect(loose(1, U('month'), U('day'))).toMatchInlineSnapshot(
-      `DeciNumber(30)`
-    );
-    expect(loose(1.5, U('month'), U('day'))).toMatchInlineSnapshot(
-      `DeciNumber(45)`
-    );
-    expect(loose(2, U('month'), U('day'))).toMatchInlineSnapshot(
-      `DeciNumber(60)`
-    );
-    expect(loose(1, U('month'), U('second'))).toMatchInlineSnapshot(
-      `DeciNumber(2592000)`
-    );
-    expect(
-      loose(30, U('month', { exp: N(-1n) }), U('day', { exp: N(-1n) }))
-    ).toMatchInlineSnapshot(`DeciNumber(1)`);
+    expect(loose(-1, U('month'), U('day'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 30n,
+        "s": -1n,
+      }
+    `);
+    expect(loose(1, U('month'), U('day'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 30n,
+        "s": 1n,
+      }
+    `);
+    expect(loose(1.5, U('month'), U('day'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 45n,
+        "s": 1n,
+      }
+    `);
+    expect(loose(2, U('month'), U('day'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 60n,
+        "s": 1n,
+      }
+    `);
+    expect(loose(1, U('month'), U('second'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 2592000n,
+        "s": 1n,
+      }
+    `);
+    expect(loose(30, U('month', { exp: N(-1n) }), U('day', { exp: N(-1n) })))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
   });
 
   it('converts days to months', () => {
-    expect(loose(30, U('day'), U('month'))).toMatchInlineSnapshot(
-      `DeciNumber(1)`
-    );
-    expect(loose(15, U('day'), U('month'))).toMatchInlineSnapshot(
-      `DeciNumber(0.5)`
-    );
-    expect(
-      loose(1, U('day', { exp: N(-1n) }), U('month', { exp: N(-1n) }))
-    ).toMatchInlineSnapshot(`DeciNumber(30)`);
+    expect(loose(30, U('day'), U('month'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
+    expect(loose(15, U('day'), U('month'))).toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 2n,
+        "infinite": false,
+        "n": 1n,
+        "s": 1n,
+      }
+    `);
+    expect(loose(1, U('day', { exp: N(-1n) }), U('month', { exp: N(-1n) })))
+      .toMatchInlineSnapshot(`
+      DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 30n,
+        "s": 1n,
+      }
+    `);
   });
 });

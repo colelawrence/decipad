@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { LoginPage, LoginPageProps } from './LoginPage';
 
 export default {
@@ -11,4 +11,6 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<LoginPageProps> = (args) => <LoginPage {...args} />;
+export const Normal: StoryFn<LoginPageProps> = (args) => (
+  <LoginPage {...args} />
+);

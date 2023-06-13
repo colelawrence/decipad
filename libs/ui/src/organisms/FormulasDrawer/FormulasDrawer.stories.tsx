@@ -1,6 +1,6 @@
 import { SerializedType } from '@decipad/language';
 import { docs } from '@decipad/routing';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CodeLine } from '..';
 import { FormulasDrawer } from './FormulasDrawer';
 
@@ -30,7 +30,7 @@ export default {
   component: FormulasDrawer,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <FormulasDrawer>
     <CodeLine {...lines[0]}>42 + 1337;</CodeLine>
     <CodeLine {...lines[1]}>

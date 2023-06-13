@@ -1,5 +1,5 @@
 import { noop } from '@decipad/utils';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Create } from '../../icons';
 import { circleIcon } from '../../storybook-utils';
 import { IconButton } from './IconButton';
@@ -9,22 +9,22 @@ export default {
   component: IconButton,
 } as Meta;
 
-export const Default: Story = () => (
+export const Default: StoryFn = () => (
   <IconButton href="">
     <Create />
   </IconButton>
 );
 
-export const Round: Story = () => (
+export const Round: StoryFn = () => (
   <IconButton onClick={noop}>{circleIcon}</IconButton>
 );
 
-export const RoundedSquare: Story = () => (
+export const RoundedSquare: StoryFn = () => (
   <IconButton roundedSquare onClick={noop}>
     {circleIcon}
   </IconButton>
 );
 
-export const AsLink: Story = () => (
+export const AsLink: StoryFn = () => (
   <IconButton href="">{circleIcon}</IconButton>
 );

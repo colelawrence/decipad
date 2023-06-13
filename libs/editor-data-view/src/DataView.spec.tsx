@@ -26,9 +26,12 @@ import handler from 'serve-handler';
 import getPort from 'get-port';
 import { tryImport } from '@decipad/import';
 import { getDefined, timeout } from '@decipad/utils';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { createDataViewPlugin } from './plugins';
 import { useDataView, useDataViewLayoutData } from './hooks';
 import { Column, AggregationKind } from './types';
+
+setupDeciNumberSnapshotSerializer();
 
 type TestValue = [H1Element, DataViewElement];
 type TestEditor = PlateEditor<TestValue>;

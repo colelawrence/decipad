@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { TableFormulaCell } from './TableFormulaCell';
 
 export default {
@@ -9,6 +9,6 @@ export default {
   },
 } as Meta;
 
-export const WithRowNumber: Story<typeof TableFormulaCell> = (args) => (
+export const WithRowNumber: StoryFn<typeof TableFormulaCell> = (args) => (
   <TableFormulaCell {...args} />
 );

@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { noop } from '@decipad/utils';
 import { Result } from '@decipad/language';
-import { Meta, Story } from '@storybook/react';
+import { noop } from '@decipad/utils';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { DisplayWidget } from './DisplayWidget';
@@ -21,7 +21,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<
+export const Normal: StoryFn<
   ComponentProps<typeof DisplayWidget> & Result.Result
 > = ({ type, value, ...props }) => {
   return (

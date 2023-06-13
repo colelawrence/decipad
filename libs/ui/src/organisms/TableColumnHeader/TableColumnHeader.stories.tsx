@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { TableHeaderRow } from '../../molecules';
 import { getStringType } from '../../utils';
 import { TableColumnHeader } from './TableColumnHeader';
@@ -8,7 +8,7 @@ export default {
   component: TableHeaderRow,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <table>
     <TableColumnHeader type={getStringType()} />
   </table>

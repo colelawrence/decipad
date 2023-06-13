@@ -6,7 +6,10 @@ import {
 } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { pushResultToComputer } from './useLiveConnection';
+
+setupDeciNumberSnapshotSerializer();
 
 it('can push a new table into the computer', async () => {
   // We need a first request for the computer to function
@@ -36,28 +39,48 @@ it('can push a new table into the computer', async () => {
       )
     )
   ).toMatchInlineSnapshot(`
-    Array [
-      Array [
+    [
+      [
         "blockid",
-        Array [
-          Array [
-            DeciNumber(1),
+        [
+          [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
           ],
-          Array [
-            DeciNumber(2),
+          [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
           ],
         ],
       ],
-      Array [
+      [
         "blockid--0",
-        Array [
-          DeciNumber(1),
+        [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
       ],
-      Array [
+      [
         "blockid--1",
-        Array [
-          DeciNumber(2),
+        [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
       ],
     ]

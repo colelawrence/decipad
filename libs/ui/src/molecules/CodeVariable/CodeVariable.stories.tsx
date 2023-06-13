@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { CodeVariable } from './CodeVariable';
 
@@ -10,14 +10,14 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof CodeVariable>> = (args) => (
+export const Normal: StoryFn<ComponentProps<typeof CodeVariable>> = (args) => (
   <CodeVariable {...args} />
 );
 
-export const VariableMissing: Story<ComponentProps<typeof CodeVariable>> = (
+export const VariableMissing: StoryFn<ComponentProps<typeof CodeVariable>> = (
   args
 ) => <CodeVariable {...args} variableMissing />;
 
-export const NotInitialized: Story<ComponentProps<typeof CodeVariable>> = (
+export const NotInitialized: StoryFn<ComponentProps<typeof CodeVariable>> = (
   args
 ) => <CodeVariable {...args} isInitialized={false} />;

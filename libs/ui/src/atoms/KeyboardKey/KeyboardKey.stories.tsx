@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { KeyboardKey } from './KeyboardKey';
 
 const args = {
@@ -18,4 +18,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<typeof args> = () => <KeyboardKey>ESC</KeyboardKey>;
+export const Normal: StoryFn<typeof args> = () => (
+  <KeyboardKey>ESC</KeyboardKey>
+);

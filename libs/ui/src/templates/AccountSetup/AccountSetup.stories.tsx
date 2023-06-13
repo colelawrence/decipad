@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AccountSetup } from './AccountSetup';
 
 export default {
@@ -6,6 +6,6 @@ export default {
   component: AccountSetup,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <AccountSetup left={'Left Side'} right={'Right Side'} />
 );

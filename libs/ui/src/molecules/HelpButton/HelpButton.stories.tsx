@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { HelpButton } from './HelpButton';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: HelpButton,
 } as Meta;
 
-export const Normal: Story = () => <HelpButton />;
+export const Normal: StoryFn = () => <HelpButton />;

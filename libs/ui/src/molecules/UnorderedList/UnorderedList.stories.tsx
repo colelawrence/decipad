@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ListItemContent } from '../../atoms';
 import { UnorderedList } from './UnorderedList';
 
@@ -12,7 +12,7 @@ export default {
   args,
 } as Meta;
 
-export const Normal: Story<typeof args> = ({ numberOfItems }) => (
+export const Normal: StoryFn<typeof args> = ({ numberOfItems }) => (
   <UnorderedList>
     {Array.from({ length: numberOfItems }, (_, i) => (
       <ListItemContent key={i}>Item {i + 1}</ListItemContent>
@@ -21,7 +21,7 @@ export const Normal: Story<typeof args> = ({ numberOfItems }) => (
 );
 
 const nestedArgs = { numberOfItems: 2, levels: 2 };
-export const Nested: Story<typeof nestedArgs> = (
+export const Nested: StoryFn<typeof nestedArgs> = (
   { numberOfItems, levels },
   context
 ) => (

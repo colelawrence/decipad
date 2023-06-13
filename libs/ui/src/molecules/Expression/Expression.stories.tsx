@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Expression } from './Expression';
 
 const args = {
@@ -15,12 +15,14 @@ export default {
   component: Expression,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => <Expression {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => (
+  <Expression {...props} />
+);
 Normal.args = {
   children: <span>1 m/s</span>,
 };
 
-export const Error: Story<typeof args> = (props) => <Expression {...props} />;
+export const Error: StoryFn<typeof args> = (props) => <Expression {...props} />;
 Error.args = {
   children: <span>Boinkster</span>,
   error: {
@@ -29,7 +31,7 @@ Error.args = {
   },
 };
 
-export const Placeholder: Story<typeof args> = (props) => (
+export const Placeholder: StoryFn<typeof args> = (props) => (
   <Expression {...props} />
 );
 Placeholder.args = {

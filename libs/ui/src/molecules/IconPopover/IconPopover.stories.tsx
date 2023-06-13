@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AvailableSwatchColor } from '../../utils';
 import { IconPopover } from './IconPopover';
 
@@ -13,4 +13,6 @@ export default {
   args,
 } as Meta<typeof args>;
 
-export const Normal: Story<typeof args> = (props) => <IconPopover {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => (
+  <IconPopover {...props} />
+);

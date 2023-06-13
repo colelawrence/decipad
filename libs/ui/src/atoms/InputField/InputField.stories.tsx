@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { InputField, InputFieldProps } from './InputField';
 
 const args: InputFieldProps = {
@@ -12,4 +12,6 @@ export default {
   args,
 } as Meta<InputFieldProps>;
 
-export const Normal: Story<typeof args> = (props) => <InputField {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => (
+  <InputField {...props} />
+);

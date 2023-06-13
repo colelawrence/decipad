@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CreateWorkspaceModal } from './CreateWorkspaceModal';
 
 export default {
@@ -6,6 +6,6 @@ export default {
   component: CreateWorkspaceModal,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <CreateWorkspaceModal Heading="h1" closeHref="" />
 );

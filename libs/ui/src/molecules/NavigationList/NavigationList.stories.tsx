@@ -1,5 +1,5 @@
 import { noop } from '@decipad/utils';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { NavigationItem } from '../../atoms';
 import { NavigationList } from './NavigationList';
 
@@ -8,7 +8,7 @@ export default {
   component: NavigationList,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <NavigationList>
     <NavigationItem onClick={noop}>Item 1</NavigationItem>
     <NavigationItem onClick={noop}>Item 2</NavigationItem>

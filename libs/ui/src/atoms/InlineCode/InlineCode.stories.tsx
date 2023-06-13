@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { InlineCode } from './InlineCode';
 
 export default {
@@ -17,6 +17,6 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<{ children: string }> = (args) => (
+export const Normal: StoryFn<{ children: string }> = (args) => (
   <InlineCode {...args} />
 );

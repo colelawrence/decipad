@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { NotebookListHeader } from './NotebookListHeader';
 
 export default {
@@ -9,8 +9,8 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<{ numberOfNotebooks?: number }> = (args) => (
+export const Normal: StoryFn<{ numberOfNotebooks?: number }> = (args) => (
   <NotebookListHeader Heading="h1" {...args} />
 );
 
-export const Loading: Story = () => <NotebookListHeader Heading="h1" />;
+export const Loading: StoryFn = () => <NotebookListHeader Heading="h1" />;

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { AccountSetupFlow3 } from './AccountSetupFlow3';
 
 export default {
@@ -6,9 +6,11 @@ export default {
   component: AccountSetupFlow3,
 } as Meta;
 
-export const Normal: Story = () => <AccountSetupFlow3 email="nobody@foo.bar" />;
+export const Normal: StoryFn = () => (
+  <AccountSetupFlow3 email="nobody@foo.bar" />
+);
 
-export const WithGravatar: Story = () => (
+export const WithGravatar: StoryFn = () => (
   <AccountSetupFlow3
     email="kelly@n1n.co"
     name="Kelly McEttrick"
@@ -16,7 +18,7 @@ export const WithGravatar: Story = () => (
   />
 );
 
-export const WithDescription: Story = () => (
+export const WithDescription: StoryFn = () => (
   <AccountSetupFlow3
     description="Product and go-to-market guru"
     email="kelly@n1n.co"

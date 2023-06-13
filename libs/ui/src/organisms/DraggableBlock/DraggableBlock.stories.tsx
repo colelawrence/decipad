@@ -1,4 +1,4 @@
-import { ArgTypes, Meta, Story } from '@storybook/react';
+import { ArgTypes, Meta, StoryFn } from '@storybook/react';
 import { blockAlignment } from '../../styles';
 import { DraggableBlock } from './DraggableBlock';
 
@@ -17,20 +17,20 @@ export default {
   argTypes,
 } as Meta;
 
-export const Normal: Story<Args> = (props) => (
+export const Normal: StoryFn<Args> = (props) => (
   <DraggableBlock {...props}>block</DraggableBlock>
 );
-export const BeingDragged: Story<Args> = (props) => (
+export const BeingDragged: StoryFn<Args> = (props) => (
   <DraggableBlock {...props} isBeingDragged>
     block
   </DraggableBlock>
 );
-export const DragHoveringAbove: Story<Args> = (props) => (
+export const DragHoveringAbove: StoryFn<Args> = (props) => (
   <DraggableBlock {...props} dropLine="top">
     block
   </DraggableBlock>
 );
-export const DragHoveringBelow: Story<Args> = (props) => (
+export const DragHoveringBelow: StoryFn<Args> = (props) => (
   <DraggableBlock {...props} dropLine="bottom">
     block
   </DraggableBlock>

@@ -1,12 +1,12 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { WorkspaceLogo } from './WorkspaceLogo';
 
 export default {
-  title: 'Organisms / UI / Workspace / Settings',
+  title: 'Organisms / UI / Workspace / Logo',
   component: WorkspaceLogo,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <WorkspaceLogo
     Heading="h1"
     activeWorkspace={{

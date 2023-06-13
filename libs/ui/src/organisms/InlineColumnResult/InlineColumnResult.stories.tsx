@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { InlineColumnResult } from './InlineColumnResult';
@@ -9,6 +9,6 @@ export default {
   decorators: [withCode('[10, 20, 30]')],
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof InlineColumnResult>> = (
+export const Normal: StoryFn<ComponentProps<typeof InlineColumnResult>> = (
   args
 ) => <InlineColumnResult {...args} />;

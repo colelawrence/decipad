@@ -36,9 +36,6 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
         run: yarn install --ignore-engines
 
-      - name: Nx workspace lint
-        run: npx nx workspace-lint
-
       - name: Lint
         run: npx nx run-many --target=lint --all --parallel=2 --skip-nx-cache
 

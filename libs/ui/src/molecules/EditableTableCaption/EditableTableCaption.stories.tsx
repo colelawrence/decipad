@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { EditableTableCaption } from './EditableTableCaption';
 
@@ -10,7 +10,7 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof EditableTableCaption>> = (
+export const Normal: StoryFn<ComponentProps<typeof EditableTableCaption>> = (
   args
 ) => (
   <table style={{ width: '100%' }}>

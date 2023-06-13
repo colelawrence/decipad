@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.json",
   "include": ["src"],
-  "references": [{ "path": "../fraction" }, { "path": "../../libs/utils" }]
+  "references": [{ "path": "../fraction" }, { "path": "../utils" }]
 }

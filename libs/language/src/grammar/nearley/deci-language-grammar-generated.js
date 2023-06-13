@@ -116,9 +116,9 @@ function addLoc(node, start, end = start) {
   if (typeof node.start !== 'number' || typeof node.end !== 'number') {
     throw new Error(
       'Bad start or end at ' +
-        stringify(node, null, 2) +
+        JSON.stringify(node, null, 2) +
         '\n\n-- given: ' +
-        stringify({ start, end }, null, 2) +
+        JSON.stringify({ start, end }, null, 2) +
         ''
     );
   } else {
@@ -174,9 +174,9 @@ function addArrayLoc(node, locArray) {
   if (typeof node.start !== 'number' || typeof node.end !== 'number') {
     throw new Error(
       'Bad start or end at ' +
-        stringify(node, null, 2) +
+        JSON.stringify(node, null, 2) +
         '\n\n-- given: ' +
-        stringify({ start, end }, null, 2) +
+        JSON.stringify({ start, end }, null, 2) +
         ''
     );
   } else {

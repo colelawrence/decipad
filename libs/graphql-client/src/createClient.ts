@@ -1,4 +1,4 @@
-import type { ClientOptions } from 'urql';
+import type { Client, ClientOptions } from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import {
@@ -27,5 +27,5 @@ const defaultClientOpts = () => ({
 export const clientOptions = (options: Partial<ClientOptions>): ClientOptions =>
   merge(defaultClientOpts(), options);
 
-export const createClient = (options: Partial<ClientOptions> = {}) =>
+export const createClient = (options: Partial<ClientOptions> = {}): Client =>
   urqlCreateClient(clientOptions(options));

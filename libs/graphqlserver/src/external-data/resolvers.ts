@@ -1,21 +1,20 @@
-import { nanoid } from 'nanoid';
+import { resource } from '@decipad/backend-resources';
 import {
   ExternalDataSourceCreateInput,
-  ExternalDataSourceUpdateInput,
+  ExternalDataSourceProvider,
   ExternalDataSourceRecord,
+  ExternalDataSourceUpdateInput,
   GraphqlContext,
   PageInput,
   PagedResult,
-  ExternalDataSourceProvider,
 } from '@decipad/backendtypes';
-import tables, { paginate } from '@decipad/tables';
-import Resource from '@decipad/graphqlresource';
 import { app } from '@decipad/config';
-import { resource } from '@decipad/backend-resources';
+import Resource from '@decipad/graphqlresource';
+import tables, { paginate } from '@decipad/tables';
 import { identity } from '@decipad/utils';
+import { nanoid } from 'nanoid';
 
 const isDatabaseSource = new Set<ExternalDataSourceProvider>([
-  'sqlite',
   'postgresql',
   'mysql',
   'oracledb',

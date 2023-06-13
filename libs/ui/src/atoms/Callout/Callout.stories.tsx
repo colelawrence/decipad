@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
-import { swatchNames, UserIconKey } from '../../utils';
+import { Meta, StoryFn } from '@storybook/react';
+import { UserIconKey, swatchNames } from '../../utils';
 import { Callout } from './Callout';
 
 const args = { children: 'You can edit interactive inputs!' };
@@ -21,4 +21,4 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => <Callout {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => <Callout {...props} />;

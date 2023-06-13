@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Button } from './Button';
 
 export default {
@@ -41,4 +41,4 @@ interface Args {
   disabled: boolean;
 }
 
-export const Normal: Story<Args> = (props) => <Button {...props} />;
+export const Normal: StoryFn<Args> = (props) => <Button {...props} />;

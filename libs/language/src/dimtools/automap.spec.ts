@@ -1,4 +1,8 @@
-import DeciNumber, { N, ZERO } from '@decipad/number';
+import DeciNumber, {
+  N,
+  ZERO,
+  setupDeciNumberSnapshotSerializer,
+} from '@decipad/number';
 import * as Values from '../value';
 import { Type, buildType as t } from '../type';
 import {
@@ -9,6 +13,8 @@ import {
 } from './automap';
 import { materializeOneResult } from '../utils/materializeOneResult';
 import { makeContext } from '../infer';
+
+setupDeciNumberSnapshotSerializer();
 
 // needed because JSON.stringify(BigInt) does not work
 (BigInt.prototype as unknown as { toJSON: () => string }).toJSON =
@@ -282,16 +288,46 @@ describe('automapValues', () => {
       Array [
         Array [
           Array [
-            DeciNumber(4),
-            DeciNumber(8),
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 4n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 8n,
+              "s": 1n,
+            },
           ],
           Array [
-            DeciNumber(16),
-            DeciNumber(32),
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 16n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 32n,
+              "s": 1n,
+            },
           ],
           Array [
-            DeciNumber(64),
-            DeciNumber(128),
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 64n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 128n,
+              "s": 1n,
+            },
           ],
         ],
       ]
@@ -303,28 +339,88 @@ describe('automapValues', () => {
     ).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(4),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 4n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(8),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 8n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(16),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 16n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(32),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 32n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(64),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 64n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -746,7 +842,14 @@ describe('automap for reducers', () => {
             )
           )?.getData()
         )
-      ).toMatchInlineSnapshot(`DeciNumber(3)`);
+      ).toMatchInlineSnapshot(`
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        }
+      `);
     });
 
     it('automapValuesForReducer can reduce', async () => {
@@ -761,8 +864,18 @@ describe('automap for reducers', () => {
         )
       ).toMatchInlineSnapshot(`
         Array [
-          DeciNumber(1),
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ]
       `);
     });
@@ -783,7 +896,12 @@ describe('automap for reducers', () => {
         )
       ).toMatchInlineSnapshot(`
         Array [
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ]
       `);
     });

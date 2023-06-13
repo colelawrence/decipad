@@ -1,4 +1,7 @@
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { fasterNumber } from './fasterNumber';
+
+setupDeciNumberSnapshotSerializer();
 
 const numbers = (count: number) =>
   Array.from({ length: count }).map((_, index) => index);

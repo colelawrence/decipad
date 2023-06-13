@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DashboardPlaceholder } from './DashboardPlaceholder';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: DashboardPlaceholder,
 } as Meta;
 
-export const Normal: Story = () => <DashboardPlaceholder />;
+export const Normal: StoryFn = () => <DashboardPlaceholder />;

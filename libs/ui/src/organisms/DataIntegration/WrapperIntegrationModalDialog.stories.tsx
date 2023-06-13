@@ -1,18 +1,18 @@
 import { noop } from '@decipad/utils';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps, useState } from 'react';
 import {
-  DatabaseConnectionScreen as UIDatabaseConnection,
   DatabaseQuery,
   DbOptions,
   IntegrationModalDialog,
   IntegrationModalDialogProps,
+  DatabaseConnectionScreen as UIDatabaseConnection,
 } from '.';
 import { Close } from '../../icons';
 import { WrapperIntegrationModalDialog } from './WrapperIntegrationModalDialog';
 
 export default {
-  title: 'Organisms / UI / Data Integrations / Data Integrations Model',
+  title: 'Organisms / UI / Integrations / Integrations Modal',
   component: WrapperIntegrationModalDialog,
   argTypes: {
     isConnectDisabled: {
@@ -89,13 +89,13 @@ const ProviderList: IntegrationModalDialogProps['dataSources'] = [
   },
 ];
 
-export const Normal: Story<
+export const Normal: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
 > = (props) => {
   return <WrapperIntegrationModalDialog {...props} />;
 };
 
-export const DataIntegrationScreen: Story<
+export const DataIntegrationScreen: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
 > = (props) => {
   return (
@@ -122,7 +122,7 @@ let existingConn: DbOptions = {
   dbConnType: undefined,
   query: '',
 };
-export const DatabaseConnectionScreen: Story<
+export const DatabaseConnectionScreen: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
 > = (props) => {
   return (
@@ -144,7 +144,7 @@ export const DatabaseConnectionScreen: Story<
   );
 };
 
-export const DatabaseConnectionScreenError: Story<
+export const DatabaseConnectionScreenError: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
 > = (props) => {
   return (
@@ -167,7 +167,7 @@ export const DatabaseConnectionScreenError: Story<
   );
 };
 
-export const DatabaseQueryScreen: Story<
+export const DatabaseQueryScreen: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
 > = (props) => {
   const [query, setQuery] = useState('');

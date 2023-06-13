@@ -1,4 +1,4 @@
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import {
   astNode,
   buildType as t,
@@ -20,6 +20,8 @@ import { ComputeRequestWithExternalData } from '../types';
 import { Computer } from './Computer';
 import { ColumnDesc } from './types';
 import { getResultGenerator } from '../utils';
+
+setupDeciNumberSnapshotSerializer();
 
 const testProgram = getIdentifiedBlocks(
   'A = 0',
@@ -357,7 +359,14 @@ it('can accept program bits', async () => {
   expect(
     computer.getBlockIdResult('block-0')?.result?.value
     // undefined
-  ).toMatchInlineSnapshot(`DeciNumber(1)`);
+  ).toMatchInlineSnapshot(`
+    DeciNumber {
+      "d": 1n,
+      "infinite": false,
+      "n": 1n,
+      "s": 1n,
+    }
+  `);
 
   computer.pushExtraProgramBlocks('new-stuff', [
     {
@@ -371,7 +380,14 @@ it('can accept program bits', async () => {
   expect(
     computer.getBlockIdResult('block-0')?.result?.value
     // Var1 is defined now
-  ).toMatchInlineSnapshot(`DeciNumber(42)`);
+  ).toMatchInlineSnapshot(`
+    DeciNumber {
+      "d": 1n,
+      "infinite": false,
+      "n": 42n,
+      "s": 1n,
+    }
+  `);
 
   computer.pushExtraProgramBlocksDelete('new-stuff');
   await timeout(0); // give time to compute
@@ -379,7 +395,14 @@ it('can accept program bits', async () => {
   expect(
     computer.getBlockIdResult('block-0')?.result?.value
     // undefined again
-  ).toMatchInlineSnapshot(`DeciNumber(1)`);
+  ).toMatchInlineSnapshot(`
+    DeciNumber {
+      "d": 1n,
+      "infinite": false,
+      "n": 1n,
+      "s": 1n,
+    }
+  `);
 });
 
 describe('tooling data', () => {
@@ -621,7 +644,12 @@ it('can list tables and columns', async () => {
             "kind": "column",
           },
           "value": Array [
-            DeciNumber(1),
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
           ],
         },
         "tableName": "table",

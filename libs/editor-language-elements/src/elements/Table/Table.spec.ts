@@ -1,4 +1,4 @@
-import { AST, Computer, prettyPrintAST } from '@decipad/computer';
+import { Computer } from '@decipad/computer';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -14,15 +14,6 @@ import { N } from '@decipad/number';
 import { createPlateEditor } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
 import { Table } from './Table';
-
-expect.addSnapshotSerializer({
-  test: (value) =>
-    typeof value === 'object' &&
-    value !== null &&
-    'type' in value &&
-    'args' in value,
-  print: (value) => prettyPrintAST(value as AST.Node),
-});
 
 const getParsedBlockFromElement = getDefined(Table.getParsedBlockFromElement);
 
@@ -162,22 +153,300 @@ describe('Table', () => {
       Array [
         Object {
           "blockId": "table1",
-          "column": (table tableVariableName),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                  3,
+                ],
+                "type": "tabledef",
+              },
+            ],
+            "type": "table",
+          },
           "errors": false,
         },
         Object {
           "blockId": "th1",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (implicit* 1 (ref bananas)) (implicit* 2 (ref bananas)) (implicit* 3 (ref bananas))) 0),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "column1",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          Object {
+                            "args": Array [
+                              "implicit*",
+                            ],
+                            "type": "funcref",
+                          },
+                          Object {
+                            "args": Array [
+                              Object {
+                                "args": Array [
+                                  "number",
+                                  DeciNumber {
+                                    "d": 1n,
+                                    "infinite": false,
+                                    "n": 1n,
+                                    "s": 1n,
+                                  },
+                                ],
+                                "type": "literal",
+                              },
+                              Object {
+                                "args": Array [
+                                  "bananas",
+                                ],
+                                "end": Object {
+                                  "char": 6,
+                                  "column": 7,
+                                  "line": 1,
+                                },
+                                "start": Object {
+                                  "char": 0,
+                                  "column": 1,
+                                  "line": 1,
+                                },
+                                "type": "ref",
+                              },
+                            ],
+                            "type": "argument-list",
+                          },
+                        ],
+                        "type": "function-call",
+                      },
+                      Object {
+                        "args": Array [
+                          Object {
+                            "args": Array [
+                              "implicit*",
+                            ],
+                            "type": "funcref",
+                          },
+                          Object {
+                            "args": Array [
+                              Object {
+                                "args": Array [
+                                  "number",
+                                  DeciNumber {
+                                    "d": 1n,
+                                    "infinite": false,
+                                    "n": 2n,
+                                    "s": 1n,
+                                  },
+                                ],
+                                "type": "literal",
+                              },
+                              Object {
+                                "args": Array [
+                                  "bananas",
+                                ],
+                                "end": Object {
+                                  "char": 6,
+                                  "column": 7,
+                                  "line": 1,
+                                },
+                                "start": Object {
+                                  "char": 0,
+                                  "column": 1,
+                                  "line": 1,
+                                },
+                                "type": "ref",
+                              },
+                            ],
+                            "type": "argument-list",
+                          },
+                        ],
+                        "type": "function-call",
+                      },
+                      Object {
+                        "args": Array [
+                          Object {
+                            "args": Array [
+                              "implicit*",
+                            ],
+                            "type": "funcref",
+                          },
+                          Object {
+                            "args": Array [
+                              Object {
+                                "args": Array [
+                                  "number",
+                                  DeciNumber {
+                                    "d": 1n,
+                                    "infinite": false,
+                                    "n": 3n,
+                                    "s": 1n,
+                                  },
+                                ],
+                                "type": "literal",
+                              },
+                              Object {
+                                "args": Array [
+                                  "bananas",
+                                ],
+                                "end": Object {
+                                  "char": 6,
+                                  "column": 7,
+                                  "line": 1,
+                                },
+                                "start": Object {
+                                  "char": 0,
+                                  "column": 1,
+                                  "line": 1,
+                                },
+                                "type": "ref",
+                              },
+                            ],
+                            "type": "argument-list",
+                          },
+                        ],
+                        "type": "function-call",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              0,
+            ],
+            "type": "table-column-assign",
+          },
           "errors": false,
         },
         Object {
           "blockId": "th2",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (column "string 1" "string 2" "string 3") 1),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "column2",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "string",
+                          "string 1",
+                        ],
+                        "type": "literal",
+                      },
+                      Object {
+                        "args": Array [
+                          "string",
+                          "string 2",
+                        ],
+                        "type": "literal",
+                      },
+                      Object {
+                        "args": Array [
+                          "string",
+                          "string 3",
+                        ],
+                        "type": "literal",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              1,
+            ],
+            "type": "table-column-assign",
+          },
           "errors": false,
         },
         Object {
           "blockId": "th3",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column3) (column (date year 2022 month 1 day 1) (date year 2022 month 2 day 1) (date year 2022 month 3 day 1)) 2),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "column3",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "year",
+                          2022n,
+                          "month",
+                          1n,
+                          "day",
+                          1n,
+                        ],
+                        "type": "date",
+                      },
+                      Object {
+                        "args": Array [
+                          "year",
+                          2022n,
+                          "month",
+                          2n,
+                          "day",
+                          1n,
+                        ],
+                        "type": "date",
+                      },
+                      Object {
+                        "args": Array [
+                          "year",
+                          2022n,
+                          "month",
+                          3n,
+                          "day",
+                          1n,
+                        ],
+                        "type": "date",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              2,
+            ],
+            "type": "table-column-assign",
+          },
           "errors": false,
         },
       ]
@@ -257,17 +526,169 @@ describe('Table', () => {
       Array [
         Object {
           "blockId": "table1",
-          "column": (table tableVariableName),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                  1,
+                ],
+                "type": "tabledef",
+              },
+            ],
+            "type": "table",
+          },
           "errors": false,
         },
         Object {
           "blockId": "th1",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column "Hello") 0),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "column1",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "string",
+                          "Hello",
+                        ],
+                        "type": "literal",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              0,
+            ],
+            "type": "table-column-assign",
+          },
           "errors": false,
         },
         Object {
           "blockId": "th2",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column2) (+ 1 1) 1),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "column2",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      "+",
+                    ],
+                    "end": Object {
+                      "char": 2,
+                      "column": 3,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 2,
+                      "column": 3,
+                      "line": 1,
+                    },
+                    "type": "funcref",
+                  },
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "number",
+                          DeciNumber {
+                            "d": 1n,
+                            "infinite": false,
+                            "n": 1n,
+                            "s": 1n,
+                          },
+                        ],
+                        "end": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 0,
+                          "column": 1,
+                          "line": 1,
+                        },
+                        "type": "literal",
+                      },
+                      Object {
+                        "args": Array [
+                          "number",
+                          DeciNumber {
+                            "d": 1n,
+                            "infinite": false,
+                            "n": 1n,
+                            "s": 1n,
+                          },
+                        ],
+                        "end": Object {
+                          "char": 4,
+                          "column": 5,
+                          "line": 1,
+                        },
+                        "start": Object {
+                          "char": 4,
+                          "column": 5,
+                          "line": 1,
+                        },
+                        "type": "literal",
+                      },
+                    ],
+                    "end": Object {
+                      "char": 4,
+                      "column": 5,
+                      "line": 1,
+                    },
+                    "start": Object {
+                      "char": 0,
+                      "column": 1,
+                      "line": 1,
+                    },
+                    "type": "argument-list",
+                  },
+                ],
+                "end": Object {
+                  "char": 4,
+                  "column": 5,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 0,
+                  "column": 1,
+                  "line": 1,
+                },
+                "type": "function-call",
+              },
+              1,
+            ],
+            "type": "table-column-assign",
+          },
           "errors": false,
         },
       ]
@@ -342,12 +763,68 @@ describe('Table', () => {
       Array [
         Object {
           "blockId": "table1",
-          "column": (table tableVariableName),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                  2,
+                ],
+                "type": "tabledef",
+              },
+            ],
+            "type": "table",
+          },
           "errors": false,
         },
         Object {
           "blockId": "th1",
-          "column": (table-column-assign (tablepartialdef tableVariableName) (coldef column1) (column (date year 2020 month 1) (date year 2020 month 2)) 0),
+          "column": Object {
+            "args": Array [
+              Object {
+                "args": Array [
+                  "tableVariableName",
+                ],
+                "type": "tablepartialdef",
+              },
+              Object {
+                "args": Array [
+                  "column1",
+                ],
+                "type": "coldef",
+              },
+              Object {
+                "args": Array [
+                  Object {
+                    "args": Array [
+                      Object {
+                        "args": Array [
+                          "year",
+                          2020n,
+                          "month",
+                          1n,
+                        ],
+                        "type": "date",
+                      },
+                      Object {
+                        "args": Array [
+                          "year",
+                          2020n,
+                          "month",
+                          2n,
+                        ],
+                        "type": "date",
+                      },
+                    ],
+                    "type": "column-items",
+                  },
+                ],
+                "type": "column",
+              },
+              0,
+            ],
+            "type": "table-column-assign",
+          },
           "errors": false,
         },
       ]

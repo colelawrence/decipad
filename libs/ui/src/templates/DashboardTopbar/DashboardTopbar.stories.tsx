@@ -1,8 +1,8 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DashboardTopbar } from './DashboardTopbar';
 
 export default {
   title: 'Templates / Dashboard / Topbar',
 } as Meta;
 
-export const Normal: Story = () => <DashboardTopbar />;
+export const Normal: StoryFn = () => <DashboardTopbar />;

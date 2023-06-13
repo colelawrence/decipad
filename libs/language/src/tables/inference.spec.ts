@@ -38,11 +38,13 @@ it('forbids tables inside functions', async () => {
     const tbl = table('TableName', {
       Calculated: n('ref', 'SomeCol'),
     });
-    expect(
-      (await inferTable(nilCtx, tbl)).errorCause?.spec
-    ).toMatchInlineSnapshot(
-      `ErrSpec:forbidden-inside-function("forbiddenThing" => "table")`
-    );
+    expect((await inferTable(nilCtx, tbl)).errorCause?.spec)
+      .toMatchInlineSnapshot(`
+      Object {
+        "errType": "forbidden-inside-function",
+        "forbiddenThing": "table",
+      }
+    `);
   });
 });
 

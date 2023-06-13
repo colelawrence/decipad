@@ -1,11 +1,15 @@
-import DeciNumber, { N } from '@decipad/number';
+import DeciNumber, {
+  N,
+  setupDeciNumberSnapshotSerializer,
+} from '@decipad/number';
 import { createLazyOperationBase, HypercubeArg } from './LazyOperation';
 import { NumberValue, fromJS, Value, getColumnLike } from '../value';
 import { getInstanceof } from '../utils';
-
 import { hcArg } from './testUtils';
 import { uniqDimensions } from './uniqDimensions';
 import { materializeOneResult } from '../utils/materializeOneResult';
+
+setupDeciNumberSnapshotSerializer();
 
 type WithLazyOperationArgs = {
   args: HypercubeArg[];
@@ -66,9 +70,24 @@ describe('nesting', () => {
     expect(await materializeOneResult(nested3.getData()))
       .toMatchInlineSnapshot(`
       Array [
-        DeciNumber(101),
-        DeciNumber(202),
-        DeciNumber(303),
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 101n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 202n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 303n,
+          "s": 1n,
+        },
       ]
     `);
   });
@@ -96,11 +115,26 @@ describe('nesting', () => {
 
     expect(await materializeOneResult(operateWithOneD.getData()))
       .toMatchInlineSnapshot(`
-    Array [
-      DeciNumber(101),
-      DeciNumber(102),
-      DeciNumber(103),
-    ]
+      Array [
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 101n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 102n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 103n,
+          "s": 1n,
+        },
+      ]
     `);
 
     const operateWithOneDReversed = await createLazyOperationBase(
@@ -110,11 +144,26 @@ describe('nesting', () => {
 
     expect(await materializeOneResult(operateWithOneDReversed.getData()))
       .toMatchInlineSnapshot(`
-    Array [
-      DeciNumber(101),
-      DeciNumber(102),
-      DeciNumber(103),
-    ]
+      Array [
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 101n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 102n,
+          "s": 1n,
+        },
+        DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 103n,
+          "s": 1n,
+        },
+      ]
     `);
   });
 });

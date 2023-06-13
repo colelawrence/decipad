@@ -1,6 +1,6 @@
 import { Result } from '@decipad/language';
 import { docs } from '@decipad/routing';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { withCode } from '../../storybook-utils';
 import { CodeLine } from './CodeLine';
@@ -14,13 +14,13 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<ComponentProps<typeof CodeLine> & Result.Result> = ({
-  type,
-  value,
-  ...props
-}) => <CodeLine {...props} result={{ type, value }} />;
+export const Normal: StoryFn<
+  ComponentProps<typeof CodeLine> & Result.Result
+> = ({ type, value, ...props }) => (
+  <CodeLine {...props} result={{ type, value }} />
+);
 
-export const WithHighlightedLine: Story<
+export const WithHighlightedLine: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
 > = ({ type, value, ...props }) => (
   <CodeLine {...props} result={{ type, value }} />
@@ -29,7 +29,7 @@ WithHighlightedLine.args = {
   highlight: true,
 };
 
-export const WithExpandedResult: Story<
+export const WithExpandedResult: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
 > = ({ type, value, ...props }) => (
   <CodeLine {...props} result={{ type, value }} />
@@ -39,7 +39,7 @@ WithExpandedResult.args = {
   children: '[1, 2, 3]',
 };
 
-export const WithError: Story<
+export const WithError: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
 > = ({ type, value, ...props }) => (
   <CodeLine {...props} result={{ type, value }} />
@@ -49,7 +49,7 @@ WithError.args = {
   syntaxError: { message: 'Syntax Error', url: docs({}).$ },
 };
 
-export const WithPlaceholder: Story<
+export const WithPlaceholder: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
 > = ({ type, value, ...props }) => <CodeLine {...props} />;
 WithPlaceholder.args = {

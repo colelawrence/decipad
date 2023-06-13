@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Normal as DashboardSidebar } from '../../templates/DashboardSidebar/DashboardSidebar.stories';
 import { Normal as DashboardTopbar } from '../../templates/DashboardTopbar/DashboardTopbar.stories';
 import { Normal as NotebookList } from '../../templates/NotebookList/NotebookList.stories';
@@ -9,7 +9,7 @@ export default {
   component: Dashboard,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <Dashboard
     topbar={<DashboardTopbar />}
     sidebar={<DashboardSidebar />}

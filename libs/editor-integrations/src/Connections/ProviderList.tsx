@@ -6,7 +6,6 @@ import {
   MsSql,
   MySql,
   Oracle,
-  OtherSql,
   PostgreSql,
   Redshift,
   WebApi,
@@ -64,10 +63,5 @@ export const ProviderList: Array<DataSource> = [
     name: 'MariaDB',
     icon: <img alt="Maria Db" src={MariaDb} />,
     provider: ExternalProvider.Mariadb,
-  },
-  {
-    name: 'Other SQL',
-    icon: <img alt="Other Sql" src={OtherSql} />,
-    provider: ExternalProvider.Sqlite,
   },
 ];

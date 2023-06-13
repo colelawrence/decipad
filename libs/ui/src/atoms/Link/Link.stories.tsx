@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Link } from './Link';
 
 const args = {
@@ -19,4 +19,4 @@ export default {
   ],
 } as Meta;
 
-export const Normal: Story<typeof args> = (props) => <Link {...props} />;
+export const Normal: StoryFn<typeof args> = (props) => <Link {...props} />;

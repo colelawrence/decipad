@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { Divider } from './Divider';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: Divider,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <>
     <p>
       This is just the beginning. We’ll be sharing more of our journey with our

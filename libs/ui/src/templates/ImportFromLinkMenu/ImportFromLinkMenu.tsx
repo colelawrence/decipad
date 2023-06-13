@@ -14,7 +14,6 @@ const sourceToName: Record<ImportElementSource, string> = {
   gsheets: 'Google Sheets',
   json: 'a JSON API',
   arrow: 'an Arrow file',
-  sqlite: 'a SQL database',
   postgresql: 'a PostgreSQL database',
   mysql: 'a MySQL database',
   oracledb: 'an OracleDB database',
@@ -26,7 +25,6 @@ const sourceToName: Record<ImportElementSource, string> = {
 };
 
 const databases = [
-  'sqlite',
   'postgresql',
   'mysql',
   'oracledb',

@@ -1,5 +1,5 @@
 import { noop } from '@decipad/utils';
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { DashboardSidebar } from './DashboardSidebar';
 
 export default {
@@ -7,7 +7,7 @@ export default {
   component: DashboardSidebar,
 } as Meta;
 
-export const Normal: Story = () => (
+export const Normal: StoryFn = () => (
   <DashboardSidebar
     name="John Doe"
     email="john.doe@example.com"

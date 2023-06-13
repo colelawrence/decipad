@@ -34,55 +34,50 @@ it('migrates from the old to the new format and sets the version', () => {
     match: (n) => isElementOfType(n, ELEMENT_TABLE_COLUMN_FORMULA),
   });
 
-  expect(found?.[0].children).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "text": "",
-      },
-      Object {
-        "blockId": "id_Table_headers_one",
-        "children": Array [
-          Object {
-            "text": "",
-          },
-        ],
-        "columnId": null,
-        "id": "nanoid()",
-        "type": "smart-ref",
-      },
-      Object {
-        "text": " + ",
-      },
-      Object {
-        "blockId": "id_Table",
-        "children": Array [
-          Object {
-            "text": "",
-          },
-        ],
-        "columnId": null,
-        "id": "nanoid()",
-        "type": "smart-ref",
-      },
-      Object {
-        "text": " + ",
-      },
-      Object {
-        "blockId": "id_Table",
-        "children": Array [
-          Object {
-            "text": "",
-          },
-        ],
-        "columnId": "id_Table_headers_one",
-        "id": "nanoid()",
-        "type": "smart-ref",
-      },
-      Object {
-        "text": "",
-      },
-    ]
-  `);
+  expect(found?.[0].children).toMatchObject([
+    {
+      text: '',
+    },
+    {
+      blockId: 'id_Table_headers_one',
+      children: [
+        {
+          text: '',
+        },
+      ],
+      columnId: null,
+      type: 'smart-ref',
+    },
+    {
+      text: ' + ',
+    },
+    {
+      blockId: 'id_Table',
+      children: [
+        {
+          text: '',
+        },
+      ],
+      columnId: null,
+      type: 'smart-ref',
+    },
+    {
+      text: ' + ',
+    },
+    {
+      blockId: 'id_Table',
+      children: [
+        {
+          text: '',
+        },
+      ],
+      columnId: 'id_Table_headers_one',
+      type: 'smart-ref',
+    },
+    {
+      text: '',
+    },
+  ]);
 });
 
 const mkTable = (): TableElement => ({

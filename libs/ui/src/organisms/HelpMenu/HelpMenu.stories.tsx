@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { HelpMenu } from './HelpMenu';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: HelpMenu,
 } as Meta;
 
-export const Normal: Story = () => <HelpMenu />;
+export const Normal: StoryFn = () => <HelpMenu />;

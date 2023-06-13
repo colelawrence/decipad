@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { EditorPlaceholder } from './EditorPlaceholder';
 
 export default {
@@ -6,4 +6,4 @@ export default {
   component: EditorPlaceholder,
 } as Meta;
 
-export const Normal: Story = () => <EditorPlaceholder />;
+export const Normal: StoryFn = () => <EditorPlaceholder />;

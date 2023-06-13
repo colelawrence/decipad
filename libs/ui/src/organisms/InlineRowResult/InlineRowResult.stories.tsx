@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
-import { withCode, WithCodeProps } from '../../storybook-utils';
+import { Meta, StoryFn } from '@storybook/react';
+import { WithCodeProps, withCode } from '../../storybook-utils';
 import { InlineRowResult } from './InlineRowResult';
 
 const code = `
@@ -18,6 +18,6 @@ export default {
   decorators: [withCode(code)],
 } as Meta;
 
-export const Normal: Story<WithCodeProps<'row'>> = (args) => (
+export const Normal: StoryFn<WithCodeProps<'row'>> = (args) => (
   <InlineRowResult {...args} />
 );

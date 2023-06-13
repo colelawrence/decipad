@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { MenuList } from '../../molecules';
 import { circleIcon } from '../../storybook-utils';
 import { MenuItem } from '../index';
@@ -16,14 +16,14 @@ export default {
   },
 } as Meta<Args>;
 
-export const TextOnly: Story<Args> = (args) => (
+export const TextOnly: StoryFn<Args> = (args) => (
   <MenuList root open>
     <MenuList itemTrigger={<TriggerMenuItem {...args} />}>
       <MenuItem {...args} />
     </MenuList>
   </MenuList>
 );
-export const Icon: Story<Args> = (args) => (
+export const Icon: StoryFn<Args> = (args) => (
   <MenuList root open>
     <MenuList itemTrigger={<TriggerMenuItem icon={circleIcon} {...args} />}>
       <MenuItem {...args} />

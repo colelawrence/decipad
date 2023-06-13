@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { CellInput, CellInputProps } from './CellInput';
 
 export default {
@@ -9,16 +9,18 @@ export default {
   },
 } as Meta;
 
-export const Normal: Story<CellInputProps> = (args) => <CellInput {...args} />;
+export const Normal: StoryFn<CellInputProps> = (args) => (
+  <CellInput {...args} />
+);
 
-export const HeadingVariant: Story<CellInputProps> = (args) => (
+export const HeadingVariant: StoryFn<CellInputProps> = (args) => (
   <CellInput variant="heading" {...args} />
 );
 
-export const HeaderVariant: Story<CellInputProps> = (args) => (
+export const HeaderVariant: StoryFn<CellInputProps> = (args) => (
   <CellInput variant="header" {...args} />
 );
 
-export const DataVariant: Story<CellInputProps> = (args) => (
+export const DataVariant: StoryFn<CellInputProps> = (args) => (
   <CellInput variant="data" {...args} />
 );

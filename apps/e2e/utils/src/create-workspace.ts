@@ -1,5 +1,5 @@
+import { Page } from '@playwright/test';
 import stringify from 'json-stringify-safe';
-import { Page } from 'playwright-core';
 
 export const createWorkspace = async (p: Page): Promise<string> => {
   const resp = await (

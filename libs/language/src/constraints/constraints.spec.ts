@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { N } from '@decipad/number';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import {
   or,
   and,
@@ -15,6 +15,8 @@ import {
   fail,
 } from '.';
 
+setupDeciNumberSnapshotSerializer();
+
 describe('constraints', () => {
   it('can equal a var to a number', () => {
     const x = lvar('X');
@@ -22,7 +24,12 @@ describe('constraints', () => {
     expect(run(g, x)).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -35,7 +42,12 @@ describe('constraints', () => {
     expect(run(g, [x])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(5),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -51,8 +63,18 @@ describe('constraints', () => {
     expect(run(g, [x, y])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(10),
-          DeciNumber(18),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 10n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 18n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -71,13 +93,33 @@ describe('constraints', () => {
       Array [
         Array [
           Domain {
-            "max": DeciNumber(8.4),
-            "min": DeciNumber(3.2),
+            "max": DeciNumber {
+              "d": 5n,
+              "infinite": false,
+              "n": 42n,
+              "s": 1n,
+            },
+            "min": DeciNumber {
+              "d": 5n,
+              "infinite": false,
+              "n": 16n,
+              "s": 1n,
+            },
             "type": "domain",
           },
           Domain {
-            "max": DeciNumber(108.5),
-            "min": DeciNumber(103.3),
+            "max": DeciNumber {
+              "d": 2n,
+              "infinite": false,
+              "n": 217n,
+              "s": 1n,
+            },
+            "min": DeciNumber {
+              "d": 10n,
+              "infinite": false,
+              "n": 1033n,
+              "s": 1n,
+            },
             "type": "domain",
           },
         ],
@@ -95,9 +137,19 @@ describe('constraints', () => {
     expect(run(g1, [x, y, z])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(5),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -112,14 +164,39 @@ describe('constraints', () => {
     expect(run(g2, [x, y, z])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(0.(3)),
+          DeciNumber {
+            "d": 3n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(2),
-          DeciNumber(0.(6)),
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 3n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -130,19 +207,54 @@ describe('constraints', () => {
     expect(run(g, [x, y, z])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(5),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 5n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(0.(3)),
+          DeciNumber {
+            "d": 3n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(2),
-          DeciNumber(0.(6)),
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 3n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -160,8 +272,18 @@ describe('constraints', () => {
     expect(run(g1, [x, z])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -170,9 +292,19 @@ describe('constraints', () => {
     expect(run(g2, [x, y, z])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -188,19 +320,54 @@ describe('constraints', () => {
     expect(run(g3, [x, y, z])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(3),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
           undefined,
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
         Array [
-          DeciNumber(2),
-          DeciNumber(3),
-          DeciNumber(-1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": -1n,
+          },
         ],
       ]
     `);
@@ -217,8 +384,18 @@ describe('constraints', () => {
     expect(run(implies(g1, g2, g3), [x, y])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(0),
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 0n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
       ]
     `);
@@ -226,15 +403,30 @@ describe('constraints', () => {
       Array [
         Array [
           undefined,
-          DeciNumber(2),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 2n,
+            "s": 1n,
+          },
         ],
       ]
     `);
     expect(run(implies(g1, g2), [x, y])).toMatchInlineSnapshot(`
       Array [
         Array [
-          DeciNumber(0),
-          DeciNumber(1),
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 0n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
         ],
       ]
     `);

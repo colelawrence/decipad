@@ -5,7 +5,7 @@
   "projectType": "library",
   "targets": {
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/editor-variable-def/**/*.ts"],
         "maxWarnings": 0
@@ -25,7 +25,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/editor-variable-def"],
       "options": {
         "jestConfig": "libs/editor-variable-def/jest.config.js"
