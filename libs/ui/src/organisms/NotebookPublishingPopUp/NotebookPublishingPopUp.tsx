@@ -5,7 +5,6 @@ import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { format } from 'date-fns';
-import isEmpty from 'lodash.isempty';
 import { FC, MouseEvent, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, Dot, Toggle, Tooltip } from '../../atoms';
@@ -277,36 +276,34 @@ export const NotebookPublishingPopUp = ({
                   </div>
                 </div>
               )}
-              {isPublished &&
-                hasUnpublishedChanges &&
-                !isEmpty(notebook.snapshots) && (
-                  <div css={groupStyles}>
-                    {(currentSnapshot?.createdAt ||
-                      currentSnapshot?.updatedAt) && (
-                      <p css={descriptionStyles} data-testid="version-date">
-                        Previous version from{' '}
-                        {format(
-                          new Date(
-                            currentSnapshot.updatedAt ??
-                              currentSnapshot.createdAt ??
-                              ''
-                          ),
-                          'LLL do, HH:mm'
-                        )}
-                      </p>
-                    )}
-                    <div css={horizontalGroupStyles}>
-                      <Button
-                        type="primaryBrand"
-                        onClick={onPublish}
-                        disabled={isPublishing}
-                        testId="publish-changes"
-                      >
-                        {isPublishing ? 'Publishing...' : 'Publish New Changes'}
-                      </Button>
-                    </div>
+              {hasUnpublishedChanges && (
+                <div css={groupStyles}>
+                  {(currentSnapshot?.createdAt ||
+                    currentSnapshot?.updatedAt) && (
+                    <p css={descriptionStyles} data-testid="version-date">
+                      Previous version from{' '}
+                      {format(
+                        new Date(
+                          currentSnapshot.updatedAt ??
+                            currentSnapshot.createdAt ??
+                            ''
+                        ),
+                        'LLL do, HH:mm'
+                      )}
+                    </p>
+                  )}
+                  <div css={horizontalGroupStyles}>
+                    <Button
+                      type="primaryBrand"
+                      onClick={onPublish}
+                      disabled={isPublishing}
+                      testId="publish-changes"
+                    >
+                      {isPublishing ? 'Publishing...' : 'Publish New Changes'}
+                    </Button>
                   </div>
-                )}
+                </div>
+              )}
             </div>
           </div>
         )}

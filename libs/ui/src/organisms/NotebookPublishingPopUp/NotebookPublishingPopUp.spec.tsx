@@ -198,7 +198,6 @@ describe('NotebookPublishingPopUp organism', () => {
 
     expect(publishButton?.getAttribute('disabled')).toBeNull();
     expect(getByRole('checkbox').getAttribute('aria-checked')).toBe('false');
-    expect(queryByTestId('publish-changes')).toBeNull();
   });
 
   it('should render the proper notebook popup when it is being published', async () => {
@@ -227,8 +226,5 @@ describe('NotebookPublishingPopUp organism', () => {
 
     expect(publishButton?.getAttribute('disabled')).toBeNull();
     expect(getByRole('checkbox').getAttribute('aria-checked')).toBe('true');
-    expect(
-      queryByTestId('publish-changes')?.getAttribute('disabled')
-    ).toBeUndefined();
   });
 });
