@@ -1,17 +1,17 @@
 /* eslint-disable no-param-reassign */
-import { useCallback, useEffect } from 'react';
 import { IntegrationTypes } from '@decipad/editor-types';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
+  mapResultType,
   useCodeConnectionStore,
   useComputer,
   useConnectionStore,
-  mapResultType,
 } from '@decipad/react-contexts';
 import type { ResultMessageType } from '@decipad_org/safejs';
-import { MaybeResultFromWorker } from '../utils';
-import { useWorker } from '../hooks';
+import { useCallback, useEffect } from 'react';
 import { useIntegrationContext } from '.';
+import { useWorker } from '../hooks';
+import { MaybeResultFromWorker } from '../utils';
 
 interface CodeIntegrationProps {
   id: string;
@@ -76,8 +76,12 @@ export const CodeIntegration = function CodeIntegration({
           store.setConnectionType('codeconnection');
           store.setStage('connect');
           store.setExistingIntegration(id);
+
           store.setAllTypeMapping(typeMappings);
           codeStore.setCode(blockOptions.code);
+          if (varName !== 'Name') {
+            store.setVarName(varName);
+          }
           store.changeOpen(true);
           break;
         }
@@ -92,6 +96,7 @@ export const CodeIntegration = function CodeIntegration({
     worker,
     store,
     codeStore,
+    varName,
     id,
     typeMappings,
   ]);

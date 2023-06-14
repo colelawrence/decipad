@@ -252,7 +252,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
       connectionType: undefined,
       createIntegration: false,
       varName: 'Name',
-      resultPreview: undefined,
+      // resultPreview: undefined,
       existingIntegration: undefined,
       resultTypeMapping: [],
     }));
