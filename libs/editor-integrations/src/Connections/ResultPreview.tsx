@@ -1,5 +1,6 @@
-import { Result } from '@decipad/computer';
+import { ErrSpec, Result } from '@decipad/computer';
 import { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
+import { formatError } from '@decipad/format';
 import {
   IntegrationStore,
   useCodeConnectionStore,
@@ -8,6 +9,7 @@ import {
 import {
   CodeResult,
   ContentEditableInput,
+  ErrorMessage,
   LiveCode,
   TableColumnMenu,
   cssVar,
@@ -32,6 +34,16 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
   setName,
   setTypeMapping,
 }) => {
+  const [foundError, setFoundError] = useState<ErrSpec | null>(null);
+  const foundErrorOnce = useCallback(
+    (newFound: ErrSpec) => {
+      if (foundError) {
+        return;
+      }
+      return setFoundError(newFound);
+    },
+    [foundError]
+  );
   const onChangeColumnType = useCallback(
     (index: number, type: TableCellType | undefined) => {
       if (!type) return;
@@ -58,6 +70,23 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
 
   const [open, setOpen] = useState(false);
 
+  // happens when you return a list of different deci results
+  // into a table
+  //
+  // e.g. Banana = 1
+  //      Apple = "1"
+  //      (now they are bound to `this` in the block)
+  //      return {col1: this}
+  if (result?.type.kind === 'materialized-table') {
+    const { columnTypes } = result.type;
+    columnTypes.forEach((ct) => {
+      if (ct.kind === 'type-error') {
+        foundErrorOnce(ct.errorCause);
+      }
+    });
+  }
+
+  const shouldDisplayPreview = !foundError && result;
   const isVariableResult = result && result.type.kind !== 'materialized-table';
 
   useEffect(() => {
@@ -81,22 +110,8 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
 
   return (
     <div
-      css={css(
-        {
-          display: 'flex',
-          gap: 8,
-          border: `1px solid ${cssVar('highlightColor')}`,
-          borderRadius: 12,
-          padding: 16,
-          div: {
-            margin: 0,
-          },
-          ' div > span': {
-            maxWidth: 'unset',
-            overflow: 'initial',
-            whiteSpace: 'normal',
-          },
-        },
+      css={[
+        resultPreviewContainerStyles,
         isVariableResult && {
           flexDirection: 'row',
           width: '100%',
@@ -104,10 +119,10 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
         !isVariableResult && {
           flexDirection: 'column',
           height: '100%',
-        }
-      )}
+        },
+      ]}
     >
-      {result && (
+      {shouldDisplayPreview && (
         <LiveCode type={result.type.kind} timeOfLastRun={timeOfLastRun}>
           <ContentEditableInput
             value={name}
@@ -117,8 +132,8 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
           />
         </LiveCode>
       )}
-      <div css={css(isVariableResult && variableResultStyles)}>
-        {result ? (
+      <div css={isVariableResult && variableResultStyles}>
+        {shouldDisplayPreview ? (
           <>
             <CodeResult
               type={result.type}
@@ -152,6 +167,13 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
               />
             )}
           </>
+        ) : foundError != null ? (
+          <ErrorMessage
+            error={`We found an error while executing: ${formatError(
+              'en-US',
+              foundError
+            )}`}
+          />
         ) : (
           'No results to preview. Did you forget to run?'
         )}
@@ -188,4 +210,20 @@ const variableResultStyles = css({
   gap: 8,
   alignItems: 'center',
   justifyContent: 'space-between',
+});
+
+const resultPreviewContainerStyles = css({
+  display: 'flex',
+  gap: 8,
+  border: `1px solid ${cssVar('highlightColor')}`,
+  borderRadius: 12,
+  padding: 16,
+  div: {
+    margin: 0,
+  },
+  ' div > span': {
+    maxWidth: 'unset',
+    overflow: 'initial',
+    whiteSpace: 'normal',
+  },
 });

@@ -29,6 +29,7 @@ const AutoplayLoopVideo = ({ src, playbackSpeed }) => {
     return () => {
       videoElement.removeEventListener('click', handleVideoClick);
       if (containerRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         containerRef.current.removeEventListener('click', handleContainerClick);
       }
     };
@@ -87,15 +88,8 @@ const AutoplayLoopVideo = ({ src, playbackSpeed }) => {
 
 export default AutoplayLoopVideo;
 
-/*{
+/* {
 Example
-
 import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
-
 <AutoplayLoopVideo src="/docs/video/VideoTest.mov" playbackSpeed={1}/>
-
-
-
-
-
-}*/
+} */
