@@ -1,8 +1,8 @@
 diff --git a/node_modules/yjs/src/structs/Item.js b/node_modules/yjs/src/structs/Item.js
-index 704dcd3..a968c75 100644
+index 7e1bc92..477de53 100644
 --- a/node_modules/yjs/src/structs/Item.js
 +++ b/node_modules/yjs/src/structs/Item.js
-@@ -454,7 +454,7 @@ export class Item extends AbstractStruct {
+@@ -459,7 +459,7 @@ export class Item extends AbstractStruct {
          // Let c in conflictingItems, b in itemsBeforeOrigin
          // ***{origin}bbbb{this}{c,b}{c,b}{o}***
          // Note that conflictingItems is a subset of itemsBeforeOrigin

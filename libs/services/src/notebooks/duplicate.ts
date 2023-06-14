@@ -16,7 +16,7 @@ function setTitle(doc: YDoc, newTitle: string): void {
   }
   const h1 = doc.getArray().get(0) as YMap<YArray<YMap<YText>>>;
   if (!h1.get('children')) {
-    h1.set('children', new YArray());
+    h1.set('children', new YArray() as YArray<YMap<YText>>);
   }
   const children = getDefined(h1.get('children'));
   if (!children.get(0)) {
