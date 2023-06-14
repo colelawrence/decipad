@@ -37,7 +37,10 @@ jobs:
         run: yarn install --ignore-engines
 
       - name: Lint
-        run: npx nx run-many --target=lint --all --parallel=2 --skip-nx-cache
+        run:
+          npx nx affected --target=lint --parallel=2 --skip-nx-cache
+          # Runs command only for nx tasks on affected files based on file changes:
+          # npx nx run-many --target=lint --parallel=2 --skip-nx-cache
 
       - name: Typecheck
         run: yarn typecheck
