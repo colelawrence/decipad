@@ -17,6 +17,8 @@ export type RemoteData<T> =
       error: string;
     };
 
+export type RemoteDataStatus = RemoteData<any>['status'];
+
 type Endpoints = {
   'generate-sql': {
     endpoint: `/api/ai/generate-sql/${string}`;

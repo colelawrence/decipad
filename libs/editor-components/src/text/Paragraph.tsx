@@ -27,6 +27,9 @@ import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 import { ParagraphAIPanel } from '../AIPanel';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { getAnalytics } from '@decipad/client-events';
+
+const analytics = getAnalytics();
 
 const isSelected = (editor: MyEditor, element: MyElement) => {
   if (!editor.selection) {
@@ -77,6 +80,9 @@ export const Paragraph: PlateComponent = ({
   const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = () => {
+    if (analytics) {
+      analytics.track('Opening paragraph AI panel');
+    }
     setShowAiPanel((t) => !t);
   };
 

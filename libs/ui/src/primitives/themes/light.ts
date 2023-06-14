@@ -243,8 +243,13 @@ export const theme: CssVariables = {
 
   // AI UI
   aiTextColor: teal600.hex,
+  aiPanelBorderColor: grey300.hex,
   aiBubbleBackgroundColor: teal50.hex,
-  aiSendButtonColor: grey400.hex,
+  aiSendButtonStrokeColor: teal600.hex,
+  aiSendButtonBgColor: teal100.hex,
+  aiSendButtonDisabledStrokeColor: grey400.hex,
+  aiInsertButtonColor: grey600.hex,
+  aiInsertButtonBgColor: grey100.hex,
 
   chartThemeMonochromePurple1: purple300.hex,
   chartThemeMonochromePurple2: purple200.hex,

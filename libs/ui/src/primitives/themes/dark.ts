@@ -58,10 +58,10 @@ import {
   red700,
   red800,
   red900,
+  teal100,
   teal200,
   teal300,
   teal400,
-  teal50,
   teal500,
   teal600,
   teal700,
@@ -251,8 +251,13 @@ export const theme: CssVariables = {
 
   // AI UI
   aiTextColor: teal500.hex,
-  aiBubbleBackgroundColor: teal50.hex,
-  aiSendButtonColor: grey500.hex,
+  aiPanelBorderColor: dark500.hex,
+  aiBubbleBackgroundColor: teal800.hex,
+  aiSendButtonStrokeColor: teal100.hex,
+  aiSendButtonBgColor: teal700.hex,
+  aiSendButtonDisabledStrokeColor: dark500.hex,
+  aiInsertButtonColor: dark200.hex,
+  aiInsertButtonBgColor: dark500.hex,
 
   // chart themes
   chartThemeMonochromePurple1: purple600.hex,

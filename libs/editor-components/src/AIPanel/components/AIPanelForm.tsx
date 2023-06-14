@@ -1,6 +1,20 @@
-import { Button, InputField, cssVar, grey300, setCssVar } from '@decipad/ui';
+import { Button, InputField, Spinner, cssVar, setCssVar } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Send } from 'libs/ui/src/icons';
+import { RemoteDataStatus } from '../hooks';
+
+// Used for submit button css too
+const spinnerCss = css({
+  width: 24,
+  height: 24,
+  padding: 0,
+  background: cssVar('aiSendButtonBgColor'),
+  marginRight: 8,
+  borderRadius: 4,
+  display: 'grid',
+  placeItems: 'center',
+  ...setCssVar('currentTextColor', cssVar('aiSendButtonStrokeColor')),
+});
 
 const formCss = css({
   marginBottom: 15,
@@ -8,7 +22,7 @@ const formCss = css({
     display: 'flex',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: grey300.rgb,
+    borderColor: cssVar('aiPanelBorderColor'),
     borderRadius: 8,
     borderStyle: 'solid',
   },
@@ -16,12 +30,21 @@ const formCss = css({
     padding: '8px 12px',
     border: 'none',
   },
-  button: {
-    ...setCssVar('currentTextColor', cssVar('aiSendButtonColor')),
-    svg: {
-      width: 16,
+  button: [
+    spinnerCss,
+    {
+      '&:disabled': {
+        ...setCssVar(
+          'currentTextColor',
+          cssVar('aiSendButtonDisabledStrokeColor')
+        ),
+        background: 'none',
+      },
+      svg: {
+        width: 16,
+      },
     },
-  },
+  ],
 });
 
 type AIPanelFormProps = {
@@ -29,15 +52,15 @@ type AIPanelFormProps = {
   handleSubmit: () => void;
   prompt: string;
   setPrompt: (s: string) => void;
-  disabled: boolean;
+  status: RemoteDataStatus;
 };
 
 export const AIPanelForm = ({
   handleSubmit,
   prompt,
   setPrompt,
-  disabled,
   placeholder,
+  status,
 }: AIPanelFormProps) => {
   return (
     <form
@@ -48,7 +71,7 @@ export const AIPanelForm = ({
       css={formCss}
       contentEditable={false}
     >
-      <fieldset disabled={disabled}>
+      <fieldset disabled={status === 'loading'}>
         <InputField
           type="text"
           placeholder={placeholder}
@@ -56,15 +79,22 @@ export const AIPanelForm = ({
           onChange={(s) => setPrompt(s)}
           autoFocus
         />
-        <Button
-          type="text" // prevents handleSubmit being fired twice
-          submit={false}
-          onClick={() => {
-            handleSubmit();
-          }}
-        >
-          <Send />
-        </Button>
+        {status === 'loading' ? (
+          <div css={spinnerCss}>
+            <Spinner />
+          </div>
+        ) : (
+          <Button
+            type="text" // prevents handleSubmit being fired twice
+            submit={false}
+            onClick={() => {
+              handleSubmit();
+            }}
+            disabled={prompt.length === 0}
+          >
+            <Send />
+          </Button>
+        )}
       </fieldset>
     </form>
   );
