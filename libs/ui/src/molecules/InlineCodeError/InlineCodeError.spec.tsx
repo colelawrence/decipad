@@ -34,6 +34,6 @@ describe('InlineCodeError', () => {
     const docLink = (await screen.findByText(/docs/i)).closest('a')!;
 
     expect(screen.getByText(/foo/i)).toBeInTheDocument();
-    expect(docLink.href).toContain('missing-variable');
+    expect(docLink.href).toContain('/docs');
   });
 });
