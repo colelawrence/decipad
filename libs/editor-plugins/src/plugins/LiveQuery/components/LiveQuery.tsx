@@ -9,6 +9,9 @@ import { assertElementType } from '@decipad/editor-utils';
 import { useParentNode } from '@decipad/editor-hooks';
 import { LiveQueryCore } from './LiveQueryCore';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { getAnalytics } from '@decipad/client-events';
+
+const analytics = getAnalytics();
 
 export const AIPanelContext = createContext({
   showAiPanel: false,
@@ -22,6 +25,9 @@ const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
   const parent = useParentNode<LiveDataSetElement>(element);
   const [showAiPanel, setShowAiPanel] = useState(false);
   const toggleAiPanel = useCallback(() => {
+    if (analytics) {
+      analytics.track('Opening live query AI panel');
+    }
     setShowAiPanel((t) => !t);
   }, [setShowAiPanel]);
 

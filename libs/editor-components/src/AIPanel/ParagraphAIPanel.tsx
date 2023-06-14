@@ -6,12 +6,27 @@ import {
   AIPanelContainer,
 } from './components';
 import { useRdFetch } from './hooks';
+import {
+  PromptSuggestion,
+  PromptSuggestions,
+} from './components/PromptSuggestions';
+import { CheckboxSelected, Edit } from 'libs/ui/src/icons';
+import { getAnalytics } from '@decipad/client-events';
 
 type ParagraphAIPanelProps = {
   paragraph: string;
   updateParagraph: (s: string) => void;
   toggle: () => void;
 };
+
+const promptSuggestions: PromptSuggestion[] = [
+  { icon: <Edit />, name: 'Simplify', prompt: 'to be simpler' },
+  {
+    icon: <CheckboxSelected />,
+    name: 'Fix any mistakes',
+    prompt: 'with any mistakes fixed',
+  },
+];
 
 export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   paragraph,
@@ -24,17 +39,29 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   );
 
   const handleSubmit = () => {
+    const analytics = getAnalytics();
+    if (analytics) {
+      analytics.track('submit AI paragraph rewrite', { prompt });
+    }
     fetch({ prompt, paragraph });
   };
 
   return (
     <AIPanelContainer toggle={toggle}>
       <AIPanelTitle>Rewrite paragraph with AI</AIPanelTitle>
+      <PromptSuggestions
+        prompts={promptSuggestions}
+        disabled={rd.status === 'loading'}
+        runPrompt={(prompt) => {
+          setPrompt(prompt);
+          handleSubmit();
+        }}
+      />
       <AIPanelForm
         handleSubmit={handleSubmit}
         prompt={prompt}
         setPrompt={setPrompt}
-        disabled={rd.status === 'loading'}
+        status={rd.status}
       />
       <AIPanelSuggestion
         completionRd={rd}

@@ -39,8 +39,13 @@ export interface CssVariables {
   // AI UI
   //
   readonly aiTextColor: Property.Color;
+  readonly aiPanelBorderColor: Property.Color;
   readonly aiBubbleBackgroundColor: Property.Color;
-  readonly aiSendButtonColor: Property.Color;
+  readonly aiSendButtonDisabledStrokeColor: Property.Color;
+  readonly aiSendButtonStrokeColor: Property.Color;
+  readonly aiSendButtonBgColor: Property.Color;
+  readonly aiInsertButtonColor: Property.Color;
+  readonly aiInsertButtonBgColor: Property.Color;
 
   //
   // Errors

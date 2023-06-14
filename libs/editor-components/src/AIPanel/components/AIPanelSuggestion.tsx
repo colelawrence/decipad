@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Button, ErrorMessage, Spinner, cssVar, p16Regular } from '@decipad/ui';
+import { Button, ErrorMessage, cssVar, p16Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { RemoteData } from '../hooks';
 
@@ -16,7 +16,9 @@ const buttonContainerCss = css({
   gridGap: 8,
   button: {
     flex: 'none',
-    background: cssVar('highlightColor'),
+    color: cssVar('aiInsertButtonColor'),
+    background: cssVar('aiInsertButtonBgColor'),
+    radius: 4,
   },
 });
 
@@ -43,7 +45,7 @@ export const AIPanelSuggestion: FC<AIPanelSuggestionProps> = ({
               }}
               size="extraExtraSlim"
             >
-              Use this
+              Insert
             </Button>
             {regenerate && (
               <Button size="extraExtraSlim" onClick={regenerate}>
@@ -57,9 +59,7 @@ export const AIPanelSuggestion: FC<AIPanelSuggestionProps> = ({
     case 'error': {
       return <ErrorMessage error={completionRd.error} />;
     }
-    case 'loading': {
-      return <Spinner />;
-    }
+    case 'loading':
     case 'not asked': {
       return null;
     }

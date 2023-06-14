@@ -38,10 +38,10 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
     <AIPanelContainer toggle={toggle}>
       <AIPanelTitle>Generate SQL query with AI</AIPanelTitle>
       <AIPanelForm
+        status={rd.status}
         handleSubmit={handleSubmit}
         prompt={prompt}
         setPrompt={setPrompt}
-        disabled={rd.status === 'loading'}
       />
       <AIPanelSuggestion
         completionRd={rd}
