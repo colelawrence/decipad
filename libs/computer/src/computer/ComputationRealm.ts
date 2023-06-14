@@ -5,6 +5,7 @@ import {
   isColumnLike,
   makeContext as makeInferContext,
   Realm,
+  sortValue,
   stringifyDate,
   Table,
   Type,
@@ -105,8 +106,19 @@ export class ComputationRealm {
       const tableOrColumn = this.interpreterRealm.stack.get(name, 'global');
 
       if (tableOrColumn instanceof Table) {
-        // eslint-disable-next-line no-await-in-loop
-        await addLabels(name, tableOrColumn.columns[0], type.columnTypes?.[0]);
+        const tableType = this.inferContext.stack.get(name, 'global');
+        if (tableType) {
+          const [sortedTableType, sortedTableValue] = sortValue(
+            tableType,
+            tableOrColumn
+          );
+          // eslint-disable-next-line no-await-in-loop
+          await addLabels(
+            name,
+            sortedTableValue.columns[0],
+            sortedTableType.columnTypes?.[0]
+          );
+        }
       } else if (tableOrColumn != null && isColumnLike(tableOrColumn)) {
         // eslint-disable-next-line no-await-in-loop
         await addLabels(
