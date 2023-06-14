@@ -334,7 +334,7 @@
     "@nx/storybook": "16.3.2",
     "@nx/web": "16.3.2",
     "@nx/workspace": "16.3.2",
-    "@percy/cli": "^1.25.0",
+    "@percy/cli": "^1.26.0",
     "@percy/playwright": "^1.0.4",
     "@sentry/webpack-plugin": "^1.20.0",
     "@storybook/addon-a11y": "7.0.20",
