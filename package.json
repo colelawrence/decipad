@@ -364,7 +364,7 @@
     "@types/node": "18.14.2",
     "@types/oauth": "0.9.1",
     "@types/pluralize": "0.0.29",
-    "@types/ramda": "0.28.15",
+    "@types/ramda": "0.29.2",
     "@types/react": "18.0.28",
     "@types/react-copy-to-clipboard": "5.0.4",
     "@types/react-datepicker": "4.11.2",
