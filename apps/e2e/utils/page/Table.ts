@@ -156,25 +156,25 @@ export function openColumnMenu(page: Page, col: number, tableName?: string) {
 
 export function hideTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
-    .getByRole('button', { name: 'Hide table' })
+    .getByTestId('segment-button-trigger-table')
     .click();
 }
 
 export function showTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
-    .getByRole('button', { name: 'Show table' })
+    .getByTestId('segment-button-trigger-table')
     .click();
 }
 
 export function hideFormulasTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
-    .getByRole('button', { name: 'Hide formulas' })
+    .getByTestId('segment-button-trigger-formula')
     .click();
 }
 
 export function showFormulasTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
-    .getByRole('button', { name: 'Show formulas' })
+    .getByTestId('segment-button-trigger-formula')
     .click();
 }
 

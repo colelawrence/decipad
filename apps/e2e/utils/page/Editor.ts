@@ -20,7 +20,7 @@ export async function waitForEditorToLoad(page: Page) {
   if (!isOnPlayground(page)) {
     if (await page.isVisible('text=/clear all/i')) {
       await page.click('text=/clear all/i');
-      await page.locator('[data-testid="notebook-title"]').click({
+      await page.locator('[data-testid="notebook-title"]').first().click({
         timeout: 50_000,
       });
     }

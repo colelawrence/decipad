@@ -50,8 +50,8 @@ Series can be spaced in years, months, or days (YYYY, YYYY/MM, YYYY/MM/DD).
 
 ### Hide Table Formulas
 
-- To **hide table formulas**, click the `Hide formulas` button on top of the table.
-- To **show table formulas**, click the `Show formulas` button on top of the table.
+- To **hide table formulas**, click the `f` icon on top of the table.
+- To **show table formulas**, click the `f` icon on top of the table.
 
 <br />
 

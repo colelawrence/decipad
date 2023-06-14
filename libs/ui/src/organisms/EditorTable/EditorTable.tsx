@@ -9,7 +9,7 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { Table } from '..';
-import { Add } from '../../icons';
+import { Create } from '../../icons';
 import { AddTableRowButton } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -143,8 +143,8 @@ const tableAddColumnButtonWrapperStyles = css({
   // to prevent a unfixable rogue cursor from slate
   // that otherwise would render
   paddingRight: 400,
-  width: '40px',
-  minWidth: '40px',
+  width: '32px',
+  minWidth: '32px',
   paddingLeft: '8px',
   position: 'relative',
   marginLeft: `calc(${scrollRightOffset} *-1)`,
@@ -154,8 +154,7 @@ const tableAddColumnButtonWrapperStyles = css({
 });
 
 const tableAddColumnButtonStyles = css({
-  width: '40px',
-  minWidth: '40px',
+  width: '32px',
   backgroundColor: cssVar('highlightColor'),
   borderRadius: '8px',
   padding: '8px',
@@ -308,7 +307,7 @@ export const EditorTable: FC<EditorTableProps> = ({
                   ]}
                   title="Add Column"
                 >
-                  <Add />
+                  <Create />
                 </button>
               </div>
             </div>

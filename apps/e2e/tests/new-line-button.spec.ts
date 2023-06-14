@@ -1,7 +1,7 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { focusOnBody, setUp } from '../utils/page/Editor';
-import { createTable, writeInTable, getFromTable } from '../utils/page/Table';
 import { createCodeLineV2Below } from '../utils/page/Block';
+import { focusOnBody, keyPress, setUp } from '../utils/page/Editor';
+import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 
 test.describe('Basic + button to insert new line', () => {
   test.describe.configure({ mode: 'serial' });
@@ -32,6 +32,7 @@ test.describe('Basic + button to insert new line', () => {
   });
 
   test('creates table', async () => {
+    await keyPress(page, 'Enter');
     await createTable(page);
   });
 

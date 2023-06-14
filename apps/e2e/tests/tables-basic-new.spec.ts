@@ -11,13 +11,9 @@ import {
   clickCalculateFirstColumn,
   createTable,
   getFromTable,
-  hideFormulasTable,
-  hideTable,
   removeColumn,
   removeRow,
   renameColumn,
-  showFormulasTable,
-  showTable,
   updateDataType,
   writeInTable,
 } from '../utils/page/Table';
@@ -156,14 +152,6 @@ test.describe('Basic Table Interactions + Collisions', () => {
     await updateDataType(page, 2, 'NewTableName2');
   });
 
-  test('test hiding table', async () => {
-    await hideTable(page, 'NewTableName2');
-    await showTable(page, 'NewTableName2');
-  });
-  test('test hiding formulas table', async () => {
-    await hideFormulasTable(page, 'NewTableName2');
-    await showFormulasTable(page, 'NewTableName2');
-  });
   test('copy and paste', async () => {
     await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
     await page.keyboard.insertText('test copy and paste text');

@@ -1,9 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
-import { MenuItem, TextAndIconButton } from '../../atoms';
+import { MenuItem, SegmentButtons, TextAndIconButton } from '../../atoms';
+
 import * as icons from '../../icons';
-import { FormulasDrawer, TableButton } from '../../organisms';
+import { FormulasDrawer } from '../../organisms';
 import {
   markTypeIcons,
   markTypeNames,
@@ -39,6 +40,7 @@ const tableCaptionInnerStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   gap: '9px',
+  marginBottom: '8px',
   lineBreak: 'unset',
 });
 
@@ -54,6 +56,13 @@ const tableIconSizeStyles = css({
   height: '24px',
 });
 
+const buttonRowStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+  gap: '4px',
+  alignItems: 'center',
+});
+
 const placeholderStyles = css(p16Medium, {
   cursor: 'text',
   display: 'flex',
@@ -66,6 +75,8 @@ const placeholderStyles = css(p16Medium, {
     opacity: placeholderOpacity,
   },
 });
+
+const wrapperStyle = css({ display: 'flex' });
 
 const editableTableCaptionStyles = css(p16Medium);
 type EditableTableCaptionProps = PropsWithChildren<{
@@ -139,28 +150,15 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             {caption}
           </div>
         </div>
-        <div css={css({ display: 'inline-flex' })} contentEditable={false}>
-          {showToggleCollapsedButton && setCollapsed ? (
-            <TableButton
-              setState={setCollapsed}
-              isInState={isCollapsed}
-              captions={['Show table', 'Hide table']}
-              isExpandButton
-            />
-          ) : null}
-          {!hideAddDataViewButton && setHideFormulas ? (
-            <TableButton
-              setState={setHideFormulas}
-              isInState={hideFormulas}
-              captions={['Show formulas', 'Hide formulas']}
-              isExpandButton
-            />
-          ) : null}
+        <div css={buttonRowStyles} contentEditable={false}>
           {hideAddDataViewButton || readOnly ? null : (
-            <TableButton
-              onClick={onAddDataViewButtonPress}
-              captions={['Create view']}
-            />
+            <TextAndIconButton
+              text="Pivot view"
+              iconPosition="left"
+              onClick={() => onAddDataViewButtonPress()}
+            >
+              <icons.TableRows />
+            </TextAndIconButton>
           )}
           {hideAddDataViewButton ||
           readOnly ||
@@ -169,8 +167,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               root
               dropdown
               trigger={
-                <button css={css([{ padding: '5px' }, hideOnPrint])}>
-                  <TextAndIconButton text="Create chart" iconPosition="left">
+                <button
+                  data-testid={'create-chart-from-table-button'}
+                  css={css([hideOnPrint])}
+                >
+                  <TextAndIconButton text="Chart" iconPosition="left">
                     <icons.Plot />
                   </TextAndIconButton>
                 </button>
@@ -198,6 +199,29 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               })}
             </MenuList>
           )}
+          <div css={wrapperStyle}>
+            {showToggleCollapsedButton &&
+              setCollapsed &&
+              !hideAddDataViewButton &&
+              setHideFormulas && (
+                <SegmentButtons
+                  buttons={[
+                    {
+                      children: <icons.Formula />,
+                      tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
+                      onClick: () => setHideFormulas(!hideFormulas),
+                      testId: 'formula',
+                    },
+                    {
+                      children: isCollapsed ? <icons.Hide /> : <icons.Show />,
+                      tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
+                      onClick: () => setCollapsed(!isCollapsed),
+                      testId: 'table',
+                    },
+                  ]}
+                />
+              )}
+          </div>
         </div>
       </div>
 

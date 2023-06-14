@@ -15,6 +15,8 @@ import {
   AnimatedIcon,
   CodeResult,
   LiveCode,
+  SegmentButtons,
+  TextAndIconButton,
   cssVar,
   p12Medium,
 } from '@decipad/ui';
@@ -137,38 +139,40 @@ export const IntegrationBlock: PlateComponent = ({
             <div contentEditable={false}>{specificIntegration}</div>
 
             <div contentEditable={false} css={controlStyles}>
-              <div
+              <TextAndIconButton
+                text="View source"
+                iconPosition="left"
                 onClick={() => {
                   observable.current.next('show-source');
                   removeFocusFromAllBecauseSlate();
                 }}
-              >
-                <span>View source</span>
-              </div>
-              <div css={controlIconStyles}>
-                <figure
-                  role="button"
-                  onClick={() => {
-                    setAnimated(true);
-                    setTimeout(() => {
-                      setAnimated(false);
-                    }, 1000);
-                    observable.current.next('refresh');
-                    removeFocusFromAllBecauseSlate();
-                  }}
-                >
-                  <AnimatedIcon icon={<Refresh />} animated={animated} />
-                </figure>
-                <figure
-                  role="button"
-                  onClick={() => {
-                    setShowData(!showData);
-                    removeFocusFromAllBecauseSlate();
-                  }}
-                >
-                  {showData ? <Hide /> : <Show />}
-                </figure>
-              </div>
+              ></TextAndIconButton>
+              <SegmentButtons
+                buttons={[
+                  {
+                    children: (
+                      <AnimatedIcon icon={<Refresh />} animated={animated} />
+                    ),
+                    onClick: () => {
+                      setAnimated(true);
+                      setTimeout(() => {
+                        setAnimated(false);
+                      }, 1000);
+                      observable.current.next('refresh');
+                      removeFocusFromAllBecauseSlate();
+                    },
+                    tooltip: 'Refresh data',
+                  },
+                  {
+                    children: showData ? <Hide /> : <Show />,
+                    onClick: () => {
+                      setShowData(!showData);
+                      removeFocusFromAllBecauseSlate();
+                    },
+                    tooltip: `${showData ? 'Hide' : 'Show'} table`,
+                  },
+                ]}
+              />
             </div>
           </div>
 
@@ -195,26 +199,6 @@ const controlStyles = css(p12Medium, {
   marginLeft: 'auto',
   display: 'flex',
   cursor: 'pointer',
-  gap: '4px',
+  gap: '6px',
   color: cssVar('normalTextColor'),
-  '& div': {
-    borderRadius: '6px',
-    outline: `1px solid ${cssVar('borderHighlightColor')}`,
-    backgroundColor: cssVar('highlightColor'),
-  },
-  '& div:first-of-type': {
-    padding: '4px 8px',
-  },
-});
-
-const controlIconStyles = css({
-  display: 'flex',
-  '& figure:last-of-type': {
-    borderLeft: `1px solid ${cssVar('borderHighlightColor')}`,
-  },
-  '& svg': {
-    margin: '4px',
-    width: '16px',
-    height: '16px',
-  },
 });

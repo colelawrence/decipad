@@ -164,6 +164,7 @@ export { Sunrise } from './Sunrise/Sunrise';
 export { Switch } from './Switch/Switch';
 export { TV } from './TV/TV';
 export { Table } from './Table/Table';
+export { TableRows } from './TableRows/TableRows';
 export { TableSlash } from './TableSlash/TableSlash';
 export { TableSmall } from './TableSmall/TableSmall';
 export { Text } from './Text/Text';

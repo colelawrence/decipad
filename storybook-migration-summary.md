@@ -24,7 +24,7 @@ the Storybook automigration scripts could run successfully. The changes that wer
 The following commands failed and your Storybook configuration for these projects was not
 migrated to the latest version 7:
 
-- `npx storybook@latest automigrate --config-dir libs/ui/storybook --renderer @storybook/react`
+- `npx storybook@latest automigrate --config-dir libs/ui/storybook --renderer undefined`
 
 You can run these commands again, manually, and follow the instructions in the
 output of these commands to migrate your Storybook configuration to the latest version 7.

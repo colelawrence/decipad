@@ -5,11 +5,11 @@ export function timeout(ms: number) {
 }
 
 export const Timeouts = {
-  typing: 100,
+  typing: 75,
   syncDelay: 3000,
-  chartsDelay: 6000,
-  tableDelay: 550,
+  chartsDelay: 5000,
+  tableDelay: 300,
   computerDelay: 2000,
-  menuOpenDelay: 250,
-  liveBlockDelay: 250,
+  menuOpenDelay: 200,
+  liveBlockDelay: 200,
 };

@@ -48,7 +48,7 @@ test.describe('Data Views', () => {
   });
 
   test('creates a data view', async () => {
-    await page.locator('text=Create view').click();
+    await page.locator('text=Pivot view').click();
 
     await page.evaluate(() =>
       window.scrollTo(0, document.body.scrollHeight * 2)

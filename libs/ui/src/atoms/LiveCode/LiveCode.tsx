@@ -10,7 +10,8 @@ import {
   Text,
   Warning,
 } from '../../icons';
-import { cssVar, p10Medium, p12Medium, setCssVar } from '../../primitives';
+import { cssVar, p10Medium, setCssVar } from '../../primitives';
+import { codeBlock } from '../../styles';
 import { CodeError } from '../CodeError/CodeError';
 
 type LiveCodeProps = {
@@ -92,7 +93,7 @@ export const LiveCode = ({
   );
 };
 
-const liveCodeWrapperStyles = css({
+const liveCodeWrapperStyles = css(codeBlock.structuredVariableStyles, {
   display: 'flex',
   gap: 2,
   backgroundColor: cssVar('highlightColor'),
@@ -101,9 +102,16 @@ const liveCodeWrapperStyles = css({
   marginBottom: 8,
   borderRadius: 6,
   margin: 'auto 0',
+  overflowWrap: 'anywhere',
+  maxWidth: '174px',
+  wordBreak: 'break-word',
+  whiteSpace: 'normal',
+  '@media print': {
+    background: 'unset',
+  },
 });
 
-const liveInputStyles = css(p12Medium, {
+const liveInputStyles = css({
   display: 'flex',
   padding: '0px 4px',
   alignItems: 'center',
@@ -115,7 +123,7 @@ const labelStyles = css(p10Medium, {
   backgroundColor: cssVar('liveDataWeakBackgroundColor'),
   borderRadius: 4,
   alignItems: 'center',
-  padding: '2px 4px',
+  padding: 4,
   cursor: 'default',
   gap: 4,
 });
