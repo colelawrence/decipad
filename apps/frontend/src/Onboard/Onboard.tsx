@@ -48,10 +48,6 @@ const Onboard = () => {
   });
 
   const [username, setUsername] = useState(session?.data?.user?.username ?? '');
-  const setUsernameInLowercase = useCallback(
-    (value: string) => setUsername(value.toLowerCase()),
-    [setUsername]
-  );
 
   const [description, setDescription] = useState(
     userResult.data?.self?.description ?? ''
@@ -107,21 +103,9 @@ const Onboard = () => {
               name={name}
               username={username}
               onChangeName={setName}
-              onChangeUsername={setUsernameInLowercase}
+              onChangeUsername={setUsername}
               isSubmitting={isSubmitting}
               next={() => {
-                // username can contain only lower case characters and numbers
-                const usernameRegex = /^[a-z0-9]+$/;
-                const usernameIsValid = usernameRegex.test(username);
-
-                if (!usernameIsValid) {
-                  toast(
-                    'Username must be lower case and contain only numbers or letters',
-                    'error'
-                  );
-                  return;
-                }
-
                 setIsSubmitting(true);
 
                 Promise.allSettled([
@@ -129,37 +113,26 @@ const Onboard = () => {
                   updateUsername({ props: { username } }),
                 ])
                   .then(([userUpdate, usernameUpdate]) => {
-                    const nameUpdateFailed =
+                    if (
                       userUpdate.status === 'rejected' ||
                       (userUpdate.status === 'fulfilled' &&
-                        userUpdate.value.error);
-                    const nameUpdateError =
-                      userUpdate.status === 'rejected'
-                        ? userUpdate.reason
-                        : userUpdate.value.error;
-
-                    const usernameUpdateFailed =
-                      usernameUpdate.status === 'rejected' ||
-                      (usernameUpdate.status === 'fulfilled' &&
-                        usernameUpdate.value.error);
-                    const usernameUpdateError = String(
-                      usernameUpdate.status === 'rejected'
-                        ? usernameUpdate.reason
-                        : usernameUpdate.value.error
-                    ).replace('[GraphQL] ', '');
-
-                    if (nameUpdateFailed) {
-                      console.error(
-                        'Failed to update name. Error:',
-                        nameUpdateError
-                      );
+                        userUpdate.value.error)
+                    ) {
+                      const error =
+                        userUpdate.status === 'rejected'
+                          ? userUpdate.reason
+                          : userUpdate.value.error;
+                      console.error('Failed to update name. Error:', error);
                       toast('Could not change your name', 'error');
-                    } else if (username.trim() !== '' && usernameUpdateFailed) {
-                      console.error(
-                        'Failed to update user name. Error:',
-                        usernameUpdateError
+                    } else if (
+                      usernameUpdate.status === 'fulfilled' &&
+                      username.trim() !== '' &&
+                      usernameUpdate.value?.data?.setUsername !== true
+                    ) {
+                      toast(
+                        'That username is already taken, please change it',
+                        'error'
                       );
-                      toast(usernameUpdateError, 'error');
                     } else {
                       next();
                     }
