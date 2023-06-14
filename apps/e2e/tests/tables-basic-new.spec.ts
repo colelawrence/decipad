@@ -21,6 +21,7 @@ import {
   updateDataType,
   writeInTable,
 } from '../utils/page/Table';
+import { Timeouts } from '../utils/src';
 
 test.describe('Basic Table Interactions + Collisions', () => {
   test.describe.configure({ mode: 'serial' });
@@ -55,6 +56,8 @@ test.describe('Basic Table Interactions + Collisions', () => {
       .dblclick();
     await page.keyboard.type('NewTableName');
     await expect(page.getByText('NewTableName')).toBeVisible();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay); // IMPORTANT
     await createTable(page);
     await page.waitForSelector(
       '[data-testid="table-name-input"]:has-text("Table1")'
