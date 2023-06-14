@@ -1,6 +1,7 @@
 export * from './counter';
 export * from './dnd';
 export * from './heading';
+export * from './isValidUrl';
 export * from './link';
 export * from './notebookStatus';
 export * from './props';

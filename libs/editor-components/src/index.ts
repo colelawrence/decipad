@@ -16,3 +16,4 @@ export * from './Media/MediaEmbed';
 export * from './NumberCatalog';
 export * from './text';
 export * from './utils';
+export * from './UploadFile';

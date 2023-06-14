@@ -16,6 +16,7 @@ import {
   FormulaSlash,
   Heading1,
   Heading2,
+  Image,
   ImportTable,
   Input,
   LineChartSlash,
@@ -284,6 +285,14 @@ const writingGroup = {
       icon: paintIcon(<Heading2 />, 'Ocean'),
       enabled: true,
       extraSearchTerms: ['h2', '##'],
+    },
+    {
+      command: 'upload-image',
+      title: 'Image',
+      description: 'Upload an image',
+      icon: paintIcon(<Image />, 'Ocean'),
+      enabled: isFlagEnabled('UPLOAD_IMAGE'),
+      extraSearchTerms: ['upload', 'image', 'media'],
     },
     {
       command: 'callout',

@@ -93,6 +93,7 @@ export { Heart } from './Heart/Heart';
 export { Hide } from './Hide/Hide';
 export { Highlight } from './Highlight/Highlight';
 export { Home } from './Home/Home';
+export { Image } from './Image/Image';
 export { Import } from './Import/Import';
 export { ImportRangeCopies } from './ImportRangeCopies/ImportRangeCopies';
 export { ImportTable } from './ImportTable/ImportTable';

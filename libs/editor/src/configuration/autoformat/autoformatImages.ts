@@ -40,7 +40,6 @@ const convertPrecedingTextWithTriggerToImage = (editor: MyEditor): void => {
   const image = getTrailingImage(
     getTextBeforeCursorWithTrigger(editor, cursor)
   );
-
   if (image === null) {
     throw new Error(
       'Trigger does not complete a image given the preceding text. Check doesTriggerCompleteImage first.'

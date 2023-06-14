@@ -47,7 +47,6 @@ export const handler = handle(async (event) => {
       output += outputEntry(entry);
     }
   }
-  // console.log('entries:', entries);
 
   return {
     statusCode: 200,

@@ -13,6 +13,7 @@ describe('InlineCodeError', () => {
     fetch.disableMocks();
   });
 
+  // this test is unstable after jest upgrade
   it('renders error in tooltip', async () => {
     render(
       <SessionProvider>

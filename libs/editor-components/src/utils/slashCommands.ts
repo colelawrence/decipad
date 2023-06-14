@@ -5,21 +5,25 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
+  FileType,
   MyEditor,
 } from '@decipad/editor-types';
 import {
   insertBlockOfTypeBelow,
-  insertStructuredCodeLineBelow,
   insertCodeLineBelow,
   insertDividerBelow,
   insertDataMapping,
   insertJavascriptBlockBelow,
   setSelection,
+  insertStructuredCodeLineBelow,
 } from '@decipad/editor-utils';
+import {
+  useConnectionStore,
+  useFileUploadStore,
+} from '@decipad/react-contexts';
 import { SlashCommandsMenu } from '@decipad/ui';
 import { ComponentProps } from 'react';
 import { Location, Path, Range } from 'slate';
-import { useConnectionStore } from '@decipad/react-contexts';
 import { deleteText, removeNodes, withoutNormalizing } from '@udecode/plate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
@@ -29,9 +33,9 @@ import {
   insertInputBelow,
   insertSliderInputBelow,
 } from './input';
+import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
-import { insertLiveQueryBelow } from './live-query';
 
 type SlashCommandHandler = Exclude<
   ComponentProps<typeof SlashCommandsMenu>['onExecute'],
@@ -58,6 +62,7 @@ export const execute = ({
   select = false,
 }: ExecuteProps): void => {
   const { changeOpen } = useConnectionStore.getState();
+  const { setDialogOpen, setFileType } = useFileUploadStore.getState();
 
   withoutNormalizing(editor, () => {
     setSelection(editor, null as unknown as Range);
@@ -152,6 +157,10 @@ export const execute = ({
         break;
       case 'sketch':
         insertDrawBelow(editor, path);
+        break;
+      case 'upload-image':
+        setFileType('image' as FileType);
+        setDialogOpen(true);
         break;
     }
 

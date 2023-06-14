@@ -1,7 +1,8 @@
 import {
-  TeleportEditor,
-  NumberCatalog,
   BlockLengthSynchronizationProvider,
+  NumberCatalog,
+  TeleportEditor,
+  UploadFile,
 } from '@decipad/editor-components';
 import { Integrations } from '@decipad/editor-integrations';
 import { MyEditor, MyValue } from '@decipad/editor-types';
@@ -18,13 +19,13 @@ import { ReactNode, RefObject, useCallback, useContext, useRef } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
+import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { NotebookState } from './components/NotebookState/NotebookState';
 import { useAutoAnimate } from './hooks';
 import { useUndo } from './hooks/useUndo';
 import { useWriteLock } from './utils/useWriteLock';
-import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 
 export interface EditorProps {
   notebookId: string;
@@ -130,6 +131,7 @@ export const Editor = (props: EditorProps) => {
                   }}
                 >
                   <InsidePlate {...props} containerRef={containerRef} />
+                  <UploadFile />
                   <Integrations />
                   <NotebookState
                     isSavedRemotely={isSavedRemotely}
