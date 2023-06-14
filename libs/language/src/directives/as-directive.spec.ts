@@ -1,10 +1,11 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { buildType as t } from '../type';
-import { c, col, l, U, u, ne, r, n } from '../utils';
+import { c, col, l, U, u, ne, r, n, sortedTable, prop } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
 import { makeContext } from '../infer';
+import { runASTAndGetContext } from '..';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -65,11 +66,134 @@ describe('getType', () => {
       await testGetType(getType, ne(1, 'month'), ne(1, 'days'))
     ).toMatchObject(t.number(U('days'), undefined, 'month-day-conversion'));
   });
+
+  it('converts index-less column to table', async () => {
+    const table = await testGetType(getType, col(1), ne(1, 'table'));
+    expect(table).toMatchObject(
+      t.table({
+        indexName: 'Value',
+        columnNames: ['Value'],
+        columnTypes: [t.number(null)],
+      })
+    );
+  });
+
+  it('converts indexed column to table', async () => {
+    const { context } = await runASTAndGetContext({
+      type: 'block',
+      id: 'table-block',
+      args: [
+        sortedTable('Table1', [
+          ['Col1', col('a', 'b', 'c')],
+          ['Col2', col(4, 5, 6)],
+        ]),
+      ],
+    });
+    const tableType = await testGetType(
+      getType,
+      context,
+      prop('Table1', 'Col2'),
+      ne(1, 'table')
+    );
+    expect(tableType).toMatchInlineSnapshot(`
+      Type {
+        "anythingness": false,
+        "atParentIndex": null,
+        "cellType": null,
+        "columnNames": Array [
+          "Col1",
+          "Value",
+        ],
+        "columnTypes": Array [
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table1",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "string",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "Table1",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+        ],
+        "date": null,
+        "delegatesIndexTo": undefined,
+        "errorCause": null,
+        "functionArgCount": undefined,
+        "functionName": undefined,
+        "functionness": false,
+        "indexName": "Col1",
+        "indexedBy": null,
+        "node": null,
+        "nothingness": false,
+        "numberError": null,
+        "numberFormat": null,
+        "pending": false,
+        "rangeOf": null,
+        "rowCellNames": null,
+        "rowCellTypes": null,
+        "rowCount": undefined,
+        "rowIndexName": null,
+        "symbol": null,
+        "type": null,
+        "unit": null,
+        Symbol(immer-draftable): true,
+      }
+    `);
+  });
 });
 
 describe('getValue', () => {
   it('converts number to number', async () => {
-    expect(await testGetValue(getValue, ne(2.5, 'hours'), ne(1, 'minutes')))
+    expect(await testGetValue(getValue, [ne(2.5, 'hours'), ne(1, 'minutes')]))
       .toMatchInlineSnapshot(`
       NumberValue {
         "value": DeciNumber {
@@ -89,7 +213,7 @@ describe('getValue', () => {
       date('2020-01', 'month')
     );
 
-    expect(await testGetValue(getValue, subtractDates, ne(1, 'year')))
+    expect(await testGetValue(getValue, [subtractDates, ne(1, 'year')]))
       .toMatchInlineSnapshot(`
       NumberValue {
         "value": DeciNumber {
@@ -106,7 +230,7 @@ describe('getValue', () => {
     const quantity = col(l(1), l(2), l(3));
 
     expect(
-      await (await testGetValue(getValue, quantity, ne(1, 'watts'))).getData()
+      await (await testGetValue(getValue, [quantity, ne(1, 'watts')])).getData()
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber {
@@ -146,7 +270,7 @@ describe('getValue', () => {
 
     expect(
       await (
-        await testGetValue(getValue, quantity, n('generic-identifier', '%'))
+        await testGetValue(getValue, [quantity, n('generic-identifier', '%')])
       ).getData()
     ).toMatchInlineSnapshot(`
       Array [
@@ -160,7 +284,7 @@ describe('getValue', () => {
     `);
     expect(
       await (
-        await testGetValue(getValue, l(10), n('generic-identifier', '%'))
+        await testGetValue(getValue, [l(10), n('generic-identifier', '%')])
       ).getData()
     ).toMatchInlineSnapshot(`
       DeciNumber {
@@ -176,7 +300,7 @@ describe('getValue', () => {
     const quantity = col(ne(1, 'kmeter'), ne(2, 'kmeter'), ne(3, 'kmeter'));
 
     expect(
-      await (await testGetValue(getValue, quantity, ne(1, 'miles'))).getData()
+      await (await testGetValue(getValue, [quantity, ne(1, 'miles')])).getData()
     ).toMatchInlineSnapshot(`
       Array [
         DeciNumber {
@@ -204,7 +328,7 @@ describe('getValue', () => {
   it('converts imprecisely', async () => {
     expect(
       await (
-        await testGetValue(getValue, ne(30, 'days'), ne(1, 'months'))
+        await testGetValue(getValue, [ne(30, 'days'), ne(1, 'months')])
       ).getData()
     ).toMatchInlineSnapshot(`
       DeciNumber {
@@ -212,6 +336,137 @@ describe('getValue', () => {
         "infinite": false,
         "n": 1n,
         "s": 1n,
+      }
+    `);
+  });
+
+  it('converts column to table', async () => {
+    const table = await testGetValue(getValue, [col(1, 2, 3), ne(1, 'table')]);
+    expect(table).toMatchInlineSnapshot(`
+      Table {
+        "columnNames": Array [
+          "Value",
+        ],
+        "columns": Array [
+          Column {
+            "_values": Array [
+              NumberValue {
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+              },
+              NumberValue {
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 2n,
+                  "s": 1n,
+                },
+              },
+              NumberValue {
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 3n,
+                  "s": 1n,
+                },
+              },
+            ],
+            "defaultValue": ColumnLikeMixin {
+              "_dimensions": Array [
+                Object {
+                  "dimensionLength": 0,
+                },
+              ],
+            },
+          },
+        ],
+      }
+    `);
+  });
+
+  it('converts indexed column to table', async () => {
+    const { realm } = await runASTAndGetContext({
+      type: 'block',
+      id: 'table-block',
+      args: [
+        sortedTable('Table1', [
+          ['Col1', col('a', 'b', 'c')],
+          ['Col2', col(4, 5, 6)],
+        ]),
+      ],
+    });
+    const tableType = await testGetValue(
+      getValue,
+      [prop('Table1', 'Col2'), ne(1, 'table')],
+      realm
+    );
+    expect(tableType).toMatchInlineSnapshot(`
+      Table {
+        "columnNames": Array [
+          "Col1",
+          "Value",
+        ],
+        "columns": Array [
+          Column {
+            "_values": Array [
+              StringValue {
+                "value": "a",
+              },
+              StringValue {
+                "value": "b",
+              },
+              StringValue {
+                "value": "c",
+              },
+            ],
+            "defaultValue": ColumnLikeMixin {
+              "_dimensions": Array [
+                Object {
+                  "dimensionLength": 0,
+                },
+              ],
+            },
+          },
+          Column {
+            "_values": Array [
+              NumberValue {
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 4n,
+                  "s": 1n,
+                },
+              },
+              NumberValue {
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 5n,
+                  "s": 1n,
+                },
+              },
+              NumberValue {
+                "value": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 6n,
+                  "s": 1n,
+                },
+              },
+            ],
+            "defaultValue": ColumnLikeMixin {
+              "_dimensions": Array [
+                Object {
+                  "dimensionLength": 0,
+                },
+              ],
+            },
+          },
+        ],
       }
     `);
   });

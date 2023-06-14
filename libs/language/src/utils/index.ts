@@ -146,6 +146,19 @@ export function table(
   return n('table', ...args);
 }
 
+export function sortedTable(
+  name: string,
+  items: Array<[string, AST.Expression]>
+): AST.Table {
+  const args: AST.Table['args'] = [n('tabledef', name)];
+
+  for (const [key, value] of Object.values(items)) {
+    args.push(n('table-column', n('coldef', key), value));
+  }
+
+  return n('table', ...args);
+}
+
 export function tableDef(
   name: string,
   columns: Record<string, AST.Expression>

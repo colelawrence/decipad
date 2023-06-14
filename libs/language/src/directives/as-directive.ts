@@ -1,4 +1,4 @@
-import DeciNumber, { N } from '@decipad/number';
+import DeciNumber, { N, ONE } from '@decipad/number';
 import { produce, getDefined } from '@decipad/utils';
 import { evaluate, RuntimeError } from '../interpreter';
 import { automapTypes, automapValues } from '../dimtools';
@@ -16,6 +16,11 @@ import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
 import type { DirectiveImpl } from './types';
 import { getIdentifierString, getInstanceof, U } from '../utils';
 import { inferExpression } from '../infer';
+import {
+  isTypeCoercionTarget,
+  coerceType,
+  coerceValue,
+} from '../type-coercion';
 
 function isUserUnit(exp: AST.Expression, targetUnit: Unit[]) {
   if (exp.type !== 'ref') {
@@ -23,6 +28,25 @@ function isUserUnit(exp: AST.Expression, targetUnit: Unit[]) {
   }
   const unit: Unit[] = [parseUnit(getIdentifierString(exp))];
   return !matchUnitArrays(unit, targetUnit);
+}
+
+function singleUnitRef(unit?: Unit): string | undefined {
+  if (!unit || !unit.exp.equals(ONE) || !unit.multiplier.equals(ONE)) {
+    return undefined;
+  }
+  return unit.unit;
+}
+
+function isTypeCoercion(units: Unit[]): boolean {
+  if (units.length !== 1) {
+    return false;
+  }
+  const [unit] = units;
+  const ref = singleUnitRef(unit);
+  if (!ref) {
+    return false;
+  }
+  return isTypeCoercionTarget(ref);
 }
 
 function multiplyUnitMultipliers(units: Unit[] | null | undefined): DeciNumber {
@@ -75,6 +99,11 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
       aliasFor: unit,
     });
   }
+
+  if (unit != null && isTypeCoercion(unit)) {
+    return coerceType(ctx, expressionType, getDefined(singleUnitRef(unit[0])));
+  }
+
   const ret = automapTypes(
     ctx,
     [expressionType],
@@ -149,16 +178,31 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
     );
   }
 
+  const targetUnitExpressionType = await (
+    await inferExpression(realm.inferContext, unitsExpression)
+  ).isScalar('number');
+  const { unit: targetUnit } =
+    (targetUnitExpressionType.errorCause == null &&
+      (await targetUnitExpressionType.reducedToLowest())) ||
+    {};
+
+  // type coercions
+  if (targetUnit != null && isTypeCoercion(targetUnit)) {
+    return coerceValue(
+      realm,
+      expressionType,
+      expressionValue,
+      getDefined(singleUnitRef(targetUnit[0]))
+    );
+  }
+
+  const returnExpressionType = realm.getTypeAt(root);
+
   const targetUnitsEvalResult = await evaluate(realm, unitsExpression);
   const targetUnitsData = getInstanceof(
     await targetUnitsEvalResult.getData(),
     DeciNumber,
     `units needs to be a number:`
-  );
-
-  const returnExpressionType = realm.getTypeAt(root);
-  const returnTypeDivider = multiplyUnitMultipliersIfNeedsEnforcing(
-    inlineUnitAliases(returnExpressionType.unit)
   );
 
   const targetUnitsExpressionType = realm.getTypeAt(unitsExpression);
@@ -169,6 +213,9 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
     targetUnitsMultiplier
   );
 
+  const returnTypeDivider = multiplyUnitMultipliersIfNeedsEnforcing(
+    inlineUnitAliases(returnExpressionType.unit)
+  );
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
   return automapValues(

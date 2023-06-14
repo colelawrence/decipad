@@ -54,6 +54,7 @@ export const parseExpressionOrThrow = (
 interface RunAstOptions {
   externalData?: AnyMapping<Result>;
   ctx?: Context;
+  realm?: Realm;
   throwOnError?: boolean;
   doNotValidateResults?: boolean;
   doNotMaterialiseResults?: boolean;
@@ -63,17 +64,22 @@ interface RunAstResult {
   type: Type;
   value: OneResult;
 }
+type RunAstAndGetContextResult = RunAstResult & {
+  context: Context;
+  realm: Realm;
+};
 
-export const runAST = async (
+export const runASTAndGetContext = async (
   block: AST.Block,
   {
     externalData,
     ctx = makeContext({ externalData }),
+    realm: _realm,
     throwOnError,
     doNotValidateResults,
     doNotMaterialiseResults,
   }: RunAstOptions = {}
-): Promise<RunAstResult> => {
+): Promise<RunAstAndGetContextResult> => {
   const type = await inferBlock(block, ctx);
 
   const erroredType = type.errorCause != null ? type : null;
@@ -81,14 +87,10 @@ export const runAST = async (
     throw new TypeError(`Type error: ${stringify(erroredType)}`);
   }
 
-  const results = await run(
-    [block],
-    [0],
-    new Realm(ctx),
-    doNotMaterialiseResults
-  );
+  const realm = _realm || new Realm(ctx);
+  const results = await run([block], [0], realm, doNotMaterialiseResults);
   if (doNotMaterialiseResults) {
-    return { type, value: results[0] };
+    return { type, value: results[0], context: ctx, realm };
   }
   const [value] = await Promise.all(results.map(materializeOneResult));
 
@@ -96,10 +98,26 @@ export const runAST = async (
     validateResult(type, value);
   }
 
+  return { type, value, context: ctx, realm };
+};
+
+export const runAST = async (
+  block: AST.Block,
+  options?: RunAstOptions
+): Promise<RunAstResult> => {
+  const { type, value } = await runASTAndGetContext(block, options);
   return { type, value };
 };
 
 export const runCode = async (source: string, opts: RunAstOptions = {}) => {
   const block = parseBlockOrThrow(source);
   return runAST(block, opts);
+};
+
+export const runCodeAndGetContext = async (
+  source: string,
+  opts: RunAstOptions = {}
+) => {
+  const block = parseBlockOrThrow(source);
+  return runASTAndGetContext(block, opts);
 };

@@ -16,10 +16,11 @@ export const directiveFor = (args: AST.Node[]): AST.Directive => {
 
 export const testGetValue = async (
   getValue: DirectiveImpl['getValue'],
-  ...args: AST.Node[]
+  args: AST.Node[],
+  _realm?: Realm
 ): Promise<Value> => {
-  const ctx = makeContext();
-  const realm = new Realm(ctx);
+  const realm = _realm || new Realm(makeContext());
+  const ctx = realm.inferContext;
   const root = directiveFor(args);
   root.inferredType = buildType.number();
 

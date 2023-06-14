@@ -95,6 +95,7 @@ const validate: Validate = <
     case 'table': {
       const columnValues = getArray(value as Interpreter.ResultTable);
       if (columnValues.length !== type.columnTypes.length) {
+        console.log('columnValues', columnValues);
         throw new Error(
           `table has inconsistent number of columns: expected ${type.columnTypes.length} and has ${columnValues.length}`
         );

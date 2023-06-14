@@ -24,7 +24,7 @@ describe('getType', () => {
 
 describe('getValue', () => {
   it('returns left side value', async () => {
-    expect(await testGetValue(getValue, l(1), genericIdent('flour')))
+    expect(await testGetValue(getValue, [l(1), genericIdent('flour')]))
       .toMatchInlineSnapshot(`
       NumberValue {
         "value": DeciNumber {

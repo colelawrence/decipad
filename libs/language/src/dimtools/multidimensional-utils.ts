@@ -2,7 +2,10 @@ import { enumerate } from '../utils';
 import type { Type } from '../type';
 import { Context } from '../infer';
 
-const resolveIndexDelegation = (ctx: Context, _indexName: string): string => {
+export const resolveIndexDelegation = (
+  ctx: Context,
+  _indexName: string
+): string => {
   let indexName = _indexName;
   const sourceType = ctx.stack.get(indexName, 'function');
   if (
