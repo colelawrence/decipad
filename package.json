@@ -126,6 +126,7 @@
     "@storybook/react": "7.0.20",
     "@testing-library/react-hooks": "^8.0.1",
     "@types/apache-arrow": "npm:@apache-arrow/ts@11.0.0",
+    "@types/debug": "^4.1.8",
     "@types/lodash": "4.14.186",
     "@types/lodash.camelcase": "^4.3.7",
     "@types/lodash.capitalize": "^4.2.7",

@@ -6,6 +6,7 @@ import Boom from '@hapi/boom';
 import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { decode as decodeJWT } from 'next-auth/jwt';
 import { parse as parseCookie } from 'simple-cookie';
+import { debug } from './debug';
 import { jwt as jwtConf } from './jwt';
 
 export type AuthResult = {
@@ -25,7 +26,7 @@ type SessionTokenResult = {
   gotFromSecProtocolHeader?: boolean;
 };
 
-type Request = APIGatewayProxyEvent & {
+export type Request = APIGatewayProxyEvent & {
   cookies?: string[] | null;
 };
 
@@ -42,6 +43,7 @@ export function isValidAuthResult(authResult: AuthResult): boolean {
 
 export async function authenticate(event: Request): Promise<AuthResult[]> {
   const tokens = getSessionTokens(event);
+  debug('tokens', tokens);
   return (await Promise.all(tokens.map(authenticateOneToken))).filter(
     isValidAuthResult
   );
@@ -54,6 +56,7 @@ export async function authenticateOneToken({
   token: string;
   gotFromSecProtocolHeader?: boolean;
 }): Promise<AuthResult> {
+  debug('authenticateOneToken', token);
   if (token === 'guest' || (await secretExists(token))) {
     return {
       secret: token,
@@ -71,6 +74,7 @@ export async function authenticateOneToken({
         ...jwtConf,
         token,
       });
+      debug('decoded token', decoded);
 
       if (decoded?.accessToken) {
         const userWithSecret = await findUserByAccessToken(

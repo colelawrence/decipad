@@ -45,6 +45,7 @@ jobs:
       - name: Deploy
         env:
           DEPLOY_NAME: 'alpha'
+          DEBUG: '@decipad/*'
           NODE_ENV: 'production'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_ALPHA_CERTIFICATE_ARN}}'
@@ -78,7 +79,7 @@ jobs:
           REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.ALPHA_ANALYTICS_WRITE_KEY}}'
           REACT_APP_INTERCOM_APP_ID: '${{secrets.ALPHA_INTERCOM_APP_ID}}'
           INTERCOM_SECRET_ID: '${{secrets.ALPHA_INTERCOM_SECRET_ID}}'
-          NODE_OPTIONS: '--enable-source-maps'
+          NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           GIT_COMMIT_HASH: '${{github.sha}}'
 
         run: |
@@ -87,7 +88,7 @@ jobs:
 
           cd apps/backend
           export PATH=./node_modules/.bin:$PATH
-          arc env staging NODE_OPTIONS --enable-source-maps
+          arc env staging NODE_OPTIONS --enable-source-maps --max_old_space_size=16384
           cd ../..
 
           yarn deploy:prod

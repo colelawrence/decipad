@@ -245,9 +245,9 @@ prefs.arc
 apps/client/.env.production
 
 # Backend lambda bundles
-apps/backend/src/http/*/index.js*
-apps/backend/src/ws/*/index.js*
-apps/backend/src/queues/*/index.js*
+apps/backend/src/http/*/*.js
+apps/backend/src/ws
+apps/backend/src/queues
 
 # Backend shared dir
 apps/backend/src/shared
@@ -285,6 +285,14 @@ test-results
 
 # Obsidian Vaults
 .obsidian
+
+# SSR
+apps/backend/src/http/*/static
+apps/backend/src/http/*/index.html
+apps/backend/src/http/*/*.ts
+apps/backend/src/http/*/asset-manifest.json
+apps/backend/src/http/*/*.map
+libs/server-side-rendering/build
 
 # SQLite test DBs
 *.sqlite

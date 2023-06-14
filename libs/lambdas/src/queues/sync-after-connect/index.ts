@@ -4,6 +4,11 @@ import handle from '../handle';
 
 EventEmitter.defaultMaxListeners = 1000;
 
-export const handler = handle(async (event) => {
+export interface AfterConnectPayload {
+  connectionId: string;
+  resource: string;
+}
+
+export const handler = handle(async (event: AfterConnectPayload) => {
   await afterConnect(event);
 });

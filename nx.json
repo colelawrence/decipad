@@ -13,7 +13,8 @@
           "test",
           "e2e",
           "build-storybook",
-          "deploy"
+          "deploy",
+          "depcheck"
         ],
         "runtimeCacheInputs": [
           "node -v",

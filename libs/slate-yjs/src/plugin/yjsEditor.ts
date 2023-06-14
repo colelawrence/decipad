@@ -1,3 +1,4 @@
+import { noop } from '@decipad/utils';
 import {
   isHistoryEditor,
   TEditor,
@@ -100,13 +101,15 @@ function applyLocalOperations(editor: YjsEditor): void {
   const ops = localOperations(editor);
   const editorLocalOperations = Array.from(ops).flat();
 
-  applySlateOps(
-    YjsEditor.sharedType(editor),
-    editorLocalOperations,
-    slateYjsSymbol
-  );
-
-  ops.clear();
+  try {
+    applySlateOps(
+      YjsEditor.sharedType(editor),
+      editorLocalOperations,
+      slateYjsSymbol
+    );
+  } finally {
+    ops.clear();
+  }
 }
 
 /**
@@ -163,7 +166,7 @@ export function withYjs<T extends TEditor>(
   const observer = (events: Y.YEvent<any>[]) => applyRemoteYjsEvents(e, events);
   sharedType.observeDeep(observer);
 
-  const { apply, onChange, destroy } = e;
+  const { apply, onChange, destroy = noop } = e;
 
   e.apply = (op: TOperation) => {
     trackLocalOperations(e, op);

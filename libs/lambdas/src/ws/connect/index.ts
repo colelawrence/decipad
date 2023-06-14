@@ -10,18 +10,17 @@ import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import EventEmitter from 'events';
 import { resource } from '@decipad/backend-resources';
 import { docIdFromPath } from '../path';
+import { TWSRequestEvent } from '../../types';
 
 EventEmitter.defaultMaxListeners = 1000;
 
 const notebooks = resource('notebook');
 
-export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
-  event
-) {
+const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
   try {
     const authResult = (await authenticate(event)).filter(isValidAuthResult);
 
-    const connId = event.requestContext.connectionId;
+    const connId = getDefined(event.requestContext.connectionId);
     const qs = getDefined(event.queryStringParameters);
     const docId = docIdFromPath(qs.doc || '');
     if (!docId) {
@@ -32,7 +31,7 @@ export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
       throw new Error(`Invalid protocol version ${protocol}`);
     }
     const resources = await notebooks.getResourceIds(docId);
-    const versionName = qs.version;
+    const versionName = qs.version ?? '';
     await onConnect({
       connId,
       resources,
@@ -50,9 +49,9 @@ export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
       statusCode: 200,
       headers: wsProtocol
         ? {
-            'Sec-WebSocket-Protocol': wsProtocol,
+            'Sec-WebSocket-Protocol': getDefined(wsProtocol),
           }
-        : {},
+        : undefined,
     };
   } catch (err) {
     const e = boomify(err as Error);
@@ -64,4 +63,6 @@ export const handler: APIGatewayProxyHandlerV2 = trace(async function ws(
       statusCode: e.output.statusCode,
     };
   }
-});
+};
+
+export const handler: APIGatewayProxyHandlerV2 = trace(handle);

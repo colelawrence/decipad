@@ -23,11 +23,7 @@ export default function createHandler(): Handler {
   /* eslint-disable no-param-reassign */
 
   return trace(
-    (
-      event: APIGatewayProxyEvent,
-      context: Context,
-      _callback: APIGatewayProxyCallback
-    ) => {
+    (event, context: Context, _callback: APIGatewayProxyCallback) => {
       let calledBack = false;
       const callback = (
         err: Error | null | undefined | string,
@@ -78,5 +74,5 @@ export default function createHandler(): Handler {
         );
       }
     }
-  );
+  ) as Handler;
 }

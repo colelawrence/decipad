@@ -18,7 +18,7 @@ export interface CursorEditor extends YjsEditor {
 export const CursorEditor = {
   awareness(editor: CursorEditor): Awareness {
     const awareness = AWARENESS.get(editor);
-    invariant(awareness, 'CursorEditor without attaches awareness');
+    invariant(awareness, 'CursorEditor without attached awareness');
     return awareness;
   },
 

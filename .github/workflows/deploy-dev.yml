@@ -53,6 +53,7 @@ jobs:
       - name: Deploy
         env:
           NODE_ENV: 'production'
+          DEBUG: '@decipad/*'
           NEXTAUTH_URL: 'https://dev.decipad.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'
@@ -79,7 +80,7 @@ jobs:
           DECI_GOOGLESHEETS_CLIENT_SECRET: '${{secrets.DECI_GOOGLESHEETS_CLIENT_SECRET}}'
           DISCORD_PUBLIC_KEY: '${{secrets.DISCORD_PUBLIC_KEY}}'
           DISCORD_APP_ID: '${{secrets.DISCORD_APP_ID}}'
-          NODE_OPTIONS: '--enable-source-maps'
+          NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
           REACT_APP_INTERCOM_APP_ID: '${{secrets.DEV_INTERCOM_APP_ID}}'
           INTERCOM_SECRET_ID: '${{secrets.DEV_INTERCOM_SECRET_ID}}'
@@ -90,7 +91,7 @@ jobs:
 
           cd apps/backend
           export PATH=./node_modules/.bin:$PATH
-          arc env staging NODE_OPTIONS --enable-source-maps
+          arc env staging NODE_OPTIONS --enable-source-maps --max_old_space_size=16384
           cd ../..
           scripts/push-sam.sh
 

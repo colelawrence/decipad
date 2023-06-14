@@ -1,8 +1,14 @@
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
-import { Context, Handler, APIGatewayProxyResultV2 } from 'aws-lambda';
+import {
+  Context,
+  Handler,
+  APIGatewayProxyResultV2,
+  APIGatewayProxyEventV2WithRequestContext,
+  APIGatewayEventRequestContextV2,
+} from 'aws-lambda';
 import { boomify } from '@hapi/boom';
-import { WSRequest } from '@decipad/backendtypes';
 import { monitor as monitorConfig } from '@decipad/config';
+import { getDefined } from '@decipad/utils';
 import { captureException, initTrace, TraceOptions } from './captureException';
 
 const {
@@ -15,22 +21,25 @@ const lastHandlerOptions = {
   captureTimeoutWarning: true,
 };
 
-function handleErrors(handle: Handler): Handler {
-  return SentryAWSLambda.wrapHandler(
-    async (
-      event: WSRequest,
-      context: Context
-    ): Promise<APIGatewayProxyResultV2> => {
+const handleErrors = <
+  TReqContext extends APIGatewayEventRequestContextV2 = APIGatewayEventRequestContextV2,
+  TReq extends APIGatewayProxyEventV2WithRequestContext<TReqContext> = APIGatewayProxyEventV2WithRequestContext<TReqContext>,
+  TRes extends APIGatewayProxyResultV2 = APIGatewayProxyResultV2
+>(
+  handle: Handler<TReq, TRes>
+): Handler<TReq, TRes> =>
+  SentryAWSLambda.wrapHandler(
+    async (event: TReq, context: Context): Promise<TRes> => {
       try {
-        const resp = await new Promise((resolve, reject) => {
+        const resp = await new Promise<TRes>((resolve, reject) => {
           const callback = (
-            err: Error | null | string | undefined,
-            response: APIGatewayProxyResultV2
+            err?: Error | null | string | undefined,
+            response?: TRes
           ) => {
             if (err) {
               return reject(err);
             }
-            resolve(response);
+            resolve(getDefined(response));
           };
           const r = handle(event, context, callback);
           if (r && r.then)
@@ -40,7 +49,7 @@ function handleErrors(handle: Handler): Handler {
               }
             }).catch((err) => reject(err));
         });
-        return resp as APIGatewayProxyResultV2;
+        return resp;
       } catch (err) {
         const boomed = boomify(err as Error);
         if (boomed.isServer) {
@@ -50,14 +59,20 @@ function handleErrors(handle: Handler): Handler {
         }
         return {
           statusCode: boomed.output.statusCode,
-        };
+        } as TRes;
       }
     },
     lastHandlerOptions
   );
-}
 
-export const trace = (handle: Handler, options: TraceOptions = {}): Handler => {
+export const trace = <
+  TReqContext extends APIGatewayEventRequestContextV2 = APIGatewayEventRequestContextV2,
+  TReq extends APIGatewayProxyEventV2WithRequestContext<TReqContext> = APIGatewayProxyEventV2WithRequestContext<TReqContext>,
+  TRes extends APIGatewayProxyResultV2 = APIGatewayProxyResultV2
+>(
+  handle: Handler<TReq, TRes>,
+  options: TraceOptions = {}
+): Handler<TReq, TRes> => {
   initTrace(options);
   return handleErrors(handle);
 };

@@ -11,6 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const envVarNames = [
+  'DEBUG',
   'NEXTAUTH_URL',
   'REACT_APP_ANALYTICS_WRITE_KEY',
   'REACT_APP_HOTJAR_SITE_ID',

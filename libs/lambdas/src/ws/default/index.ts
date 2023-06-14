@@ -2,15 +2,16 @@ import Boom, { boomify } from '@hapi/boom';
 import { onMessage } from '@decipad/sync-connection-lambdas';
 import tables from '@decipad/tables';
 import { trace } from '@decipad/backend-trace';
-import { Buffer } from 'buffer';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import EventEmitter from 'events';
+import { getDefined } from '@decipad/utils';
+import { TWSRequestContext } from '../../types';
+import { getBody } from '../getBody';
 
 EventEmitter.defaultMaxListeners = 1000;
 
-export const handler: APIGatewayProxyHandlerV2 = trace(
+export const handler = trace<TWSRequestContext>(
   async (event) => {
-    const connId = event.requestContext.connectionId;
+    const connId = getDefined(event.requestContext.connectionId);
     if (!event.body) {
       // do nothing
       return { statusCode: 200 };
@@ -21,21 +22,8 @@ export const handler: APIGatewayProxyHandlerV2 = trace(
       throw Boom.resourceGone();
     }
 
-    const { body } = event;
-    if (
-      !(body instanceof Uint8Array) &&
-      !Buffer.isBuffer(body) &&
-      typeof body !== 'string'
-    ) {
-      throw new Error(`Unsupported body type ${typeof body}`);
-    }
-    const message =
-      body instanceof Uint8Array || Buffer.isBuffer(body)
-        ? Buffer.from(body)
-        : Buffer.from(body, 'base64');
-
     try {
-      return await onMessage(connId, message);
+      return await onMessage(connId, getBody(event.body));
     } catch (err) {
       if (err instanceof Error) {
         const boom = boomify(err);

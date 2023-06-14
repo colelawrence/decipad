@@ -14,9 +14,6 @@ export const ToastContext = createContext(
       'but there is no way of showing toasts provided. Toast message:',
       message
     );
-    throw new Error(
-      'Attempted to create a toast but there is no way of showing toasts provided.'
-    );
   }
 );
 
