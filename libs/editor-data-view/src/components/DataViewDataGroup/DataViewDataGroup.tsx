@@ -73,6 +73,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
 
   return element.elementType === 'group' ? (
     <Header
+      tableName={tableName}
       type={element.type}
       value={element.value}
       rowSpan={element.rowspan}
@@ -90,6 +91,10 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       global={element.global}
       rotate={rotate}
       isFirstLevelHeader={isFirstLevel}
+      aggregationType={aggregationType}
+      column={element.column}
+      previousColumns={element.previousColumns}
+      roundings={roundings}
     />
   ) : (
     <SmartCell

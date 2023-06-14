@@ -5,8 +5,8 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { DragEvent, FC, useCallback } from 'react';
-import { CodeResult } from '../../organisms';
-import { cssVar, p12Medium, p14Medium } from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
+import { Aggregation } from '../../molecules';
 
 const smartCellStyles = css(p14Medium, {
   position: 'relative',
@@ -17,10 +17,6 @@ const smartCellStyles = css(p14Medium, {
 
 const smartCellHoverCellStyles = css({
   backgroundColor: cssVar('highlightColor'),
-});
-
-const smartCellLabelStyles = css(p12Medium, {
-  color: cssVar('weakerTextColor'),
 });
 
 const smartCellAlignRightStyles = css({
@@ -91,17 +87,16 @@ export function SmartCell({
       rowSpan={rowSpan}
       colSpan={colSpan}
       draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >
-      <span css={smartCellLabelStyles}>
-        {(aggregationType && `${aggregationType}: `) || null}
-      </span>
-      {result ? (
-        <CodeResult variant="inline" {...result} element={element} />
-      ) : null}
+      <Aggregation
+        aggregationType={aggregationType}
+        result={result}
+        element={element}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      />
     </td>
   );
 }

@@ -4,7 +4,7 @@ import { AnyElement } from '@decipad/editor-types';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
-import type { FC } from 'react';
+import type { DragEvent, FC } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -210,6 +210,22 @@ export const CodeLine: FC<CodeLineProps> = ({
     freshResult.errored === true
   );
 
+  const onDragStart = useCallback(
+    (e: DragEvent) => {
+      onDragStartInlineResult?.(e);
+      setGrabbing(true);
+    },
+    [onDragStartInlineResult]
+  );
+
+  const onLocalDragEnd = useCallback(
+    (e: DragEvent) => {
+      onDragEnd?.(e);
+      setGrabbing(false);
+    },
+    [onDragEnd]
+  );
+
   return (
     <div
       css={[
@@ -235,14 +251,8 @@ export const CodeLine: FC<CodeLineProps> = ({
           ]}
           contentEditable={false}
           draggable
-          onDragStart={(e) => {
-            onDragStartInlineResult?.(e);
-            setGrabbing(true);
-          }}
-          onDragEnd={(e) => {
-            onDragEnd?.(e);
-            setGrabbing(false);
-          }}
+          onDragStart={onDragStart}
+          onDragEnd={onLocalDragEnd}
         >
           {inline}
         </div>

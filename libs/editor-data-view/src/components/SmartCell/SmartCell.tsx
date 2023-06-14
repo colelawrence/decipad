@@ -1,26 +1,12 @@
-import {
-  DragEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { DragEvent, FC, useCallback } from 'react';
 import { SmartCell as UISmartCell } from '@decipad/ui';
-import { useComputer } from '@decipad/react-contexts';
-import { Result } from '@decipad/computer';
-import { debounceTime, EMPTY } from 'rxjs';
 import { css } from '@emotion/react';
-import { textify } from '@decipad/parse';
 import { useTEditorRef } from '@decipad/editor-types';
-import { useDebounce } from 'use-debounce';
-import { maybeAggregate } from '../../utils/maybeAggregate';
+import { useComputer } from '@decipad/react-contexts';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 import { SmartProps } from '../../types';
 import { useOnDragEnd } from '../../../../editor-components/src/utils/useDnd';
-
-const DEBOUNCE_EXPRESSION_MS = 500;
-const DEBOUNCE_RESULT_MS = 100;
+import { useAggregation } from '../../hooks/useAggregation';
 
 const emptyCellStyles = css({
   borderBottom: 0,
@@ -42,62 +28,16 @@ export const SmartCell: FC<SmartProps> = ({
   global = false,
   rotate,
 }: SmartProps) => {
-  const computer = useComputer();
   const editor = useTEditorRef();
-  const [result, setResult] = useState<Result.Result | null>(null);
+  const computer = useComputer();
 
-  const expressionFilter = useMemo(() => {
-    return (
-      (column &&
-        previousColumns.reduce((previous, current, index) => {
-          const rounding = roundings[index];
-          const filterSubject = previous
-            ? `${previous}.${current.name}`
-            : `${tableName}.${current.name}`;
-          const roundedFilterSubject = rounding
-            ? `round(${filterSubject}, ${rounding})`
-            : filterSubject;
-          const escapedValue = textify({
-            type: current.type,
-            value: current.value as Result.Result['value'],
-          });
-          return previous === ''
-            ? `filter(${tableName}, ${roundedFilterSubject} == ${escapedValue})`
-            : `filter(${previous}, ${roundedFilterSubject} == ${escapedValue})`;
-        }, '')) ||
-      tableName
-    );
-  }, [column, previousColumns, roundings, tableName]);
-
-  const [expression] = useDebounce(
-    useMemo(() => {
-      return (
-        column &&
-        expressionFilter &&
-        maybeAggregate(
-          `${expressionFilter}.${column.name}`,
-          column.type,
-          aggregationType,
-          {
-            sum: `sum(${tableName}.${column.name})`,
-          }
-        )
-      );
-    }, [aggregationType, column, expressionFilter, tableName]),
-    DEBOUNCE_EXPRESSION_MS
-  );
-
-  useEffect(() => {
-    const sub = (
-      (typeof expression === 'string' &&
-        expression &&
-        computer
-          .expressionResultFromText$(expression)
-          .pipe(debounceTime(DEBOUNCE_RESULT_MS))) ||
-      EMPTY
-    ).subscribe(setResult);
-    return () => sub.unsubscribe();
-  }, [computer, expression]);
+  const { result, expression } = useAggregation({
+    tableName,
+    column,
+    aggregationType,
+    roundings,
+    previousColumns,
+  });
 
   const onDragStart = useCallback(
     (ev: DragEvent) => {

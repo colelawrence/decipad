@@ -31,5 +31,6 @@ export const generateTotalGroup = ({
     collapsible: false,
     columnIndex: -1,
     global: true,
+    previousColumns: [],
   };
 };

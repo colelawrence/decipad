@@ -1,7 +1,12 @@
 import { SerializedType } from '@decipad/computer';
 import { BehaviorSubject } from 'rxjs';
 import { Comparable } from '@decipad/universal-compare';
-import { DataGroup, PreviousColumns, VirtualColumn } from '../../types';
+import {
+  DataGroup,
+  PreviousColumns,
+  SmartRowColumn,
+  VirtualColumn,
+} from '../../types';
 import type { GenerateGroups, GenerateSubSmartRow } from './generateGroups';
 
 interface SliceToGroupProps {
@@ -61,10 +66,22 @@ export const sliceToGroup = async ({
       })) ||
     null;
 
-  const children = [
+  let children = [
     smartRow,
     ...(isExpanded || !expandable ? newGroups : []),
   ].filter(Boolean) as DataGroup[];
+
+  if (isExpanded) {
+    children = children.map((child, index) => {
+      if (index > 0 && child.elementType === 'group') {
+        return {
+          ...child,
+          column: undefined,
+        };
+      }
+      return child;
+    });
+  }
 
   return {
     elementType: 'group',
@@ -76,5 +93,7 @@ export const sliceToGroup = async ({
     selfHighlight$,
     parentHighlight$,
     columnIndex,
+    previousColumns,
+    column: previousColumns[previousColumns.length - 1] as SmartRowColumn,
   };
 };

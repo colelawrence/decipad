@@ -5,6 +5,7 @@ export {
   serializeAccountSettingsForm,
 } from './AccountSettingsForm/AccountSettingsForm';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
+export { Aggregation } from './Aggregation/Aggregation';
 export { AuthContent } from './AuthContent/AuthContent';
 export { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup/AutoCompleteMenuGroup';
 export { BetaBadge } from './BetaBadge/BetaBadge';

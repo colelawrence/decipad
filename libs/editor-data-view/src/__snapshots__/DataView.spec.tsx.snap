@@ -4164,6 +4164,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 36129n,
+            "infinite": false,
+            "n": 174121550000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4176,6 +4190,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370044800n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 36129n,
+              "infinite": false,
+              "n": 174121550000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4198,10 +4242,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370044800n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370044800n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4227,6 +4301,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1919817n,
+            "infinite": false,
+            "n": 9347675000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4239,6 +4327,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370045100n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1919817n,
+              "infinite": false,
+              "n": 9347675000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4261,10 +4379,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370045100n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370045100n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4290,6 +4438,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1941909n,
+            "infinite": false,
+            "n": 9369235000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4302,6 +4464,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370045400n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1941909n,
+              "infinite": false,
+              "n": 9369235000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4324,10 +4516,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370045400n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370045400n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4353,6 +4575,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 9133637n,
+            "infinite": false,
+            "n": 44296030000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4365,6 +4601,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370045700n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 9133637n,
+              "infinite": false,
+              "n": 44296030000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4387,10 +4653,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370045700n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370045700n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4416,6 +4712,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 5458927n,
+            "infinite": false,
+            "n": 26411380000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4428,6 +4738,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370046000n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 5458927n,
+              "infinite": false,
+              "n": 26411380000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4450,10 +4790,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370046000n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370046000n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4479,6 +4849,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 565783n,
+            "infinite": false,
+            "n": 2757857500000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4491,6 +4875,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370046300n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 565783n,
+              "infinite": false,
+              "n": 2757857500000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4513,10 +4927,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370046300n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370046300n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4542,6 +4986,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 352757n,
+            "infinite": false,
+            "n": 1721990000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4554,6 +5012,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370046600n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 352757n,
+              "infinite": false,
+              "n": 1721990000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4576,10 +5064,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370046600n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370046600n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4605,6 +5123,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 6426467n,
+            "infinite": false,
+            "n": 31380280000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4617,6 +5149,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370046900n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 6426467n,
+              "infinite": false,
+              "n": 31380280000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4639,10 +5201,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370046900n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370046900n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4668,6 +5260,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 1055697n,
+            "infinite": false,
+            "n": 5194900000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4680,6 +5286,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370047200n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1055697n,
+              "infinite": false,
+              "n": 5194900000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4702,10 +5338,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370047200n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370047200n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4731,6 +5397,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 294451n,
+            "infinite": false,
+            "n": 1443290000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4743,6 +5423,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370047500n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 294451n,
+              "infinite": false,
+              "n": 1443290000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4765,10 +5475,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370047500n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370047500n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4794,6 +5534,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 4611133n,
+            "infinite": false,
+            "n": 22470765000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4806,6 +5560,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370047800n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 4611133n,
+              "infinite": false,
+              "n": 22470765000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4828,10 +5612,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370047800n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370047800n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4857,6 +5671,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 3430841n,
+            "infinite": false,
+            "n": 16788445000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4869,6 +5697,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370048100n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 3430841n,
+              "infinite": false,
+              "n": 16788445000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4891,10 +5749,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370048100n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370048100n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4920,6 +5808,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 2346449n,
+            "infinite": false,
+            "n": 11448437500000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4932,6 +5834,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370048400n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 2346449n,
+              "infinite": false,
+              "n": 11448437500000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4954,10 +5886,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370048400n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370048400n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4983,6 +5945,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 383363n,
+            "infinite": false,
+            "n": 1874630000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -4995,6 +5971,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370048700n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 383363n,
+              "infinite": false,
+              "n": 1874630000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5017,10 +6023,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370048700n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370048700n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5046,6 +6082,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 3692187n,
+            "infinite": false,
+            "n": 18136945000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -5058,6 +6108,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370049000n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 3692187n,
+              "infinite": false,
+              "n": 18136945000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5080,10 +6160,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370049000n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370049000n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5109,6 +6219,20 @@ Array [
       Object {
         "children": Array [],
         "collapsible": false,
+        "column": Object {
+          "blockId": undefined,
+          "name": "B",
+          "type": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "value": DeciNumber {
+            "d": 4863311n,
+            "infinite": false,
+            "n": 23832430000000n,
+            "s": 1n,
+          },
+        },
         "columnIndex": 1,
         "elementType": "group",
         "id": "",
@@ -5121,6 +6245,36 @@ Array [
           "observers": Array [],
           "thrownError": null,
         },
+        "previousColumns": Array [
+          Object {
+            "blockId": undefined,
+            "name": "A",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1370049300n,
+              "s": 1n,
+            },
+          },
+          Object {
+            "blockId": undefined,
+            "name": "B",
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 4863311n,
+              "infinite": false,
+              "n": 23832430000000n,
+              "s": 1n,
+            },
+          },
+        ],
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5143,10 +6297,40 @@ Array [
       },
     ],
     "collapsible": false,
+    "column": Object {
+      "blockId": undefined,
+      "name": "A",
+      "type": Object {
+        "kind": "number",
+        "unit": null,
+      },
+      "value": DeciNumber {
+        "d": 1n,
+        "infinite": false,
+        "n": 1370049300n,
+        "s": 1n,
+      },
+    },
     "columnIndex": 0,
     "elementType": "group",
     "id": "",
     "parentHighlight$": undefined,
+    "previousColumns": Array [
+      Object {
+        "blockId": undefined,
+        "name": "A",
+        "type": Object {
+          "kind": "number",
+          "unit": null,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 1370049300n,
+          "s": 1n,
+        },
+      },
+    ],
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5291,6 +6475,7 @@ Array [
     "elementType": "group",
     "global": true,
     "id": "total",
+    "previousColumns": Array [],
     "type": Object {
       "kind": "string",
     },

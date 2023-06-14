@@ -6,8 +6,6 @@ const localEnvs = ['development', 'testing'];
 const isLocalDevelopment =
   process.env.NODE_ENV && localEnvs.includes(process.env.NODE_ENV);
 
-console.log('isLocalDevelopment:', isLocalDevelopment, process.env.NODE_ENV);
-
 // local dev version of batchDelete
 // this must be different because apparently our
 // emulation of DynamoDB does not support batched delete requests

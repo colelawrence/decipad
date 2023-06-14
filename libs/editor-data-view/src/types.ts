@@ -28,6 +28,14 @@ export interface SmartProps {
 }
 
 export interface HeaderProps {
+  tableName: string;
+  column?: {
+    type: SerializedType;
+    value: ColumnLike<Comparable>;
+    name: string;
+  };
+  previousColumns: PreviousColumns;
+  roundings: Array<string | undefined>;
   type?: SerializedType;
   value?: ValueCell;
   rowSpan?: number;
@@ -45,6 +53,7 @@ export interface HeaderProps {
   global?: boolean;
   rotate: boolean;
   isFirstLevelHeader: boolean;
+  aggregationType?: string;
 }
 
 export interface SmartRowColumn {
@@ -82,8 +91,13 @@ export interface DataGroupElement extends BaseElement {
   value?: ValueCell;
   children: DataGroup[];
   collapsible?: boolean;
-  column?: never;
+  column?: SmartRowColumn;
   global?: boolean;
+  previousColumns: {
+    type: SerializedType;
+    value: Comparable | undefined;
+    name: string;
+  }[];
 }
 
 export type DataGroup = DataGroupElement | SmartRowElement;

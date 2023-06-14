@@ -10,6 +10,7 @@ import { css } from '@emotion/react';
 import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import { deselect } from '@udecode/plate';
 import { HeaderProps } from '../../types';
+import { GroupAggregation } from '../GroupAggregation/GroupAggregation';
 
 const iconStyles = css({
   height: '24px',
@@ -21,6 +22,10 @@ interface DataViewTableHeaderProps extends HeaderProps {
 }
 
 export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
+  tableName,
+  column,
+  previousColumns,
+  roundings,
   type,
   value,
   rowSpan = 1,
@@ -36,6 +41,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
   element,
   rotate,
   isFirstLevelHeader,
+  aggregationType,
 }) => {
   const editor = useTEditorRef();
   const handleCollapseGroupButtonPress = useEventNoEffect(
@@ -74,6 +80,10 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
     },
   });
 
+  const groupAggregationWrapper = css({
+    display: 'block',
+  });
+
   return (
     <DataViewTableHeaderUI
       hover={hover}
@@ -100,6 +110,18 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
           )}
         </>
       </div>
+      {aggregationType && (!collapsible || !groupIsExpanded) && (
+        <div css={groupAggregationWrapper}>
+          <GroupAggregation
+            tableName={tableName}
+            aggregationType={aggregationType}
+            element={element}
+            column={column}
+            previousColumns={previousColumns.slice(0, -1)}
+            roundings={roundings}
+          />
+        </div>
+      )}
     </DataViewTableHeaderUI>
   );
 };
