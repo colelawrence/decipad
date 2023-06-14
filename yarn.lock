@@ -26670,10 +26670,10 @@ new-date@^1.0.3:
   dependencies:
     "@segment/isodate" "1.0.3"
 
-next-auth@4.20.0:
-  version "4.20.0"
-  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.20.0.tgz#c311bdc12fd0c4fa3c7cdd96d4360929cb6da870"
-  integrity sha512-Ff8Otk76rkZd230GVlf6oyj6K6Hz3Y8A0xr3AmRX1bOPagUWhlb2TBtgmktQlHrPI6QoINfPiAgsAOKTax1z3A==
+next-auth@4.22.1:
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-4.22.1.tgz#1ea5084e38867966dc6492a71c6729c8f5cfa96b"
+  integrity sha512-NTR3f6W7/AWXKw8GSsgSyQcDW6jkslZLH8AiZa5PQ09w1kR8uHtR9rez/E9gAq/o17+p0JYHE8QjF3RoniiObA==
   dependencies:
     "@babel/runtime" "^7.20.13"
     "@panva/hkdf" "^1.0.2"
