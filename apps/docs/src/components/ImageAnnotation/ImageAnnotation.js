@@ -99,7 +99,6 @@ const BottomNavigationArrow = ({
   steps,
   hoveredNumber,
 }) => {
-  const circleColor = 'var(--ifm-color-primary-light)';
   const circleTextColor = 'white';
 
   const handlePreviousClick = () => {
@@ -312,15 +311,7 @@ const ImageAnnotation = ({
         />
         {steps.map((number, index) => {
           const isHovered = hoveredNumber === number;
-          const {
-            xPercent,
-            yPercent,
-            value,
-            tooltip,
-            description,
-            widthPercent,
-            heightPercent,
-          } = number;
+          const { widthPercent, heightPercent } = number;
           if (widthPercent && heightPercent) {
             // Render rectangle annotation
             return (

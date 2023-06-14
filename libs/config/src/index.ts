@@ -264,5 +264,16 @@ export function discord() {
 }
 
 export function codePlaceholder() {
-  return codePlaceholders[Math.floor(Math.random() * codePlaceholders.length)];
+  const easterEgg = `//
+//
+// experimental feature:
+//   const availableDecipadNumbers = this;
+//   const { Banana } = this; 
+//
+//   you can then do a request, or base your logic
+//   on your decipad notebook`;
+  const maybeEaster = Math.random() > 0.8 ? `\n${easterEgg}` : '';
+  const source =
+    codePlaceholders[Math.floor(Math.random() * codePlaceholders.length)];
+  return `${source}${maybeEaster}`;
 }

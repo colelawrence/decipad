@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   TExecution,
   useCodeConnectionStore,
+  useComputer,
   useConnectionStore,
 } from '@decipad/react-contexts';
 import { CodeEditor } from '@decipad/ui';
@@ -19,6 +20,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
     [] as TExecution<boolean>[]
   );
   const { setResultPreview } = props;
+  const computer = useComputer();
 
   useEffect(() => {
     if (stage === 'connect') {
@@ -26,6 +28,39 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
       setLog([]);
     }
   }, [onExecute, stage]);
+
+  /**
+   * We take the results from the computer
+   * Do some restrictions on the type that can go through
+   * And then we have an array of JS objects.
+   */
+  const deciVarDefs = computer.results$.useWithSelector((resObject) => {
+    return Object.fromEntries(
+      Object.values(resObject.blockResults)
+        .map((r) => {
+          if (r.type === 'identified-error') {
+            return undefined;
+          }
+
+          switch (r.result.type.kind) {
+            case 'string':
+            case 'number':
+            case 'boolean': {
+              const varName = computer.getSymbolDefinedInBlock(r.id);
+              if (!varName) return undefined;
+              return [varName, r.result.value?.valueOf()] as const;
+            }
+          }
+          return undefined;
+        })
+        .reduce((map, current) => {
+          if (!current) return map;
+          map.set(current[0], current[1]);
+          return map;
+        }, new Map<string, any>())
+        .entries()
+    );
+  });
 
   const msgStream = useCallback(
     (msg: WorkerMessageType) => {
@@ -49,6 +84,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
       setLatestResult(msg.result);
       try {
         let jsonMsg = JSON.parse(msg.result);
+
         if (jsonMsg == null) {
           setResultPreview(undefined);
           return onExecute({ status: 'warning', err: 'No value returned' });
@@ -95,13 +131,13 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
 
   const runCode = useCallback(() => {
     try {
-      worker?.execute(code);
+      worker?.execute(code, deciVarDefs);
     } catch (err) {
       console.error(err);
       setResultPreview(undefined);
       onExecute({ status: 'error', err: err as Error });
     }
-  }, [worker, code, setResultPreview, onExecute]);
+  }, [worker, code, setResultPreview, onExecute, deciVarDefs]);
 
   useEffect(() => {
     if (info.status === 'run') {
