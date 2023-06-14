@@ -158,8 +158,11 @@ export const NotebookPublishingPopUp = ({
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
     useState(false);
+
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const clientEvent = useContext(ClientEventsContext);
+
+  const [toggleState, setToggleState] = useState(isPublished);
 
   const handleClickOutside = () => {
     setShareMenuOpen(false);
@@ -177,6 +180,7 @@ export const NotebookPublishingPopUp = ({
 
   const onPublishToggle = useCallback(
     (newIsPublished: boolean) => {
+      setToggleState(newIsPublished);
       newIsPublished ? onPublish() : onUnpublish();
     },
     [onPublish, onUnpublish]
@@ -219,10 +223,12 @@ export const NotebookPublishingPopUp = ({
             <div css={innerPopUpStyles}>
               <div css={groupStyles}>
                 <div css={titleAndToggleStyles}>
-                  <p css={css(p14Medium)}>Publish Notebook</p>
+                  <p css={css(p14Medium)}>
+                    Publish{isPublishing ? 'ing…' : isPublished ? 'ed' : ''}
+                  </p>
                   <Toggle
                     ariaRoleDescription="enable publishing"
-                    active={isPublished}
+                    active={toggleState}
                     onChange={onPublishToggle}
                     disabled={isPublishing}
                   />

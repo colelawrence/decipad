@@ -68,7 +68,7 @@ const LoginForm = ({ onSubmit }: LoginPageProps) => {
           event.preventDefault();
           setIsSubmitting(true);
           try {
-            await onSubmit(email);
+            onSubmit(email);
           } finally {
             setIsSubmitting(false);
           }

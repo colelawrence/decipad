@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { FC, SVGProps } from 'react';
 import { css, keyframes } from '@emotion/react';
+import { FC, SVGProps } from 'react';
 
 const breathing = keyframes`
   0% {

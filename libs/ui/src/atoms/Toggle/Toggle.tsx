@@ -3,11 +3,11 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { cssVar, shortAnimationDuration } from '../../primitives';
 import {
   BooleanCheckboxSelected,
   BooleanCheckboxUnselected,
 } from '../../icons';
+import { cssVar, shortAnimationDuration } from '../../primitives';
 
 // Skinny = true means the toggle will be in a table.
 // Therefore needs to be smaller
@@ -44,6 +44,10 @@ const makeToggle = css({
   padding: '2px',
   transition: `background-color ${shortAnimationDuration} ease-in-out`,
   position: 'relative',
+});
+
+const disabledSwitchBgStyles = css({
+  backgroundColor: cssVar('weakerTextColor'),
 });
 
 const activeSwitchBgStyles = css({
@@ -117,6 +121,7 @@ export const Toggle = ({
         skinny
           ? active && activeCheckboxBgStyles
           : active && activeSwitchBgStyles,
+        !skinny && disabled && disabledSwitchBgStyles,
       ]}
       onClick={() => {
         onChange(!active);

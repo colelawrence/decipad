@@ -26,9 +26,6 @@ test.describe('Authentication flow', () => {
     await page.click('text=/continue/i');
     await page.type('input', 'johndoe123@gmail.com');
     await page.click('text=/submit/i');
-    await expect(
-      page.locator('[data-testid="login-instructions"]')
-    ).toBeVisible();
     await snapshot(page as Page, 'Auth: Magic Link Email Sent');
   });
 

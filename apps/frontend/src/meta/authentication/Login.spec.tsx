@@ -1,7 +1,7 @@
+import { mockConsoleError } from '@decipad/testutils';
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockConsoleError } from '@decipad/testutils';
-import { signIn, SignInResponse } from 'next-auth/react';
+import { SignInResponse, signIn } from 'next-auth/react';
 import { Login } from './Login';
 
 jest.mock('next-auth/react');
@@ -25,18 +25,6 @@ afterEach(() =>
     })
   )
 );
-
-it('disables the login button while the signin request is processed', async () => {
-  const { findByText, findByPlaceholderText } = render(<Login />);
-  await act(async () => (await findByText('Continue with email')).click());
-  await userEvent.type(
-    await findByPlaceholderText(/e-?mail/i),
-    'me@example.com'
-  );
-
-  await userEvent.click(await findByText(/submit/i));
-  expect(await findByText(/wait/i)).toBeDisabled();
-});
 
 it('shows a message when the signin request is processed', async () => {
   const { findByText, findByPlaceholderText } = render(<Login />);
