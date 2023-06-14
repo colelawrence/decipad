@@ -25,7 +25,6 @@ export const availableFlags = [
   'JS_BLOCK',
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
-  'AI_FEATURES',
   // saving notebook logs to the serve
   'SAVE_NOTEBOOK_LOGS',
   // show computer stats when clicking Alt-Shift-s

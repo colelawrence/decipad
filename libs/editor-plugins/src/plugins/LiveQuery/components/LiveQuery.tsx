@@ -8,7 +8,6 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useParentNode } from '@decipad/editor-hooks';
 import { LiveQueryCore } from './LiveQueryCore';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { getAnalytics } from '@decipad/client-events';
 
 const analytics = getAnalytics();
@@ -38,15 +37,11 @@ const LiveQuery: PlateComponent = ({ attributes, children, element }) => {
       {...attributes}
       onceDeleted={onceDeleted}
       dependencyId={element.id}
-      aiPanel={
-        isFlagEnabled('AI_FEATURES')
-          ? {
-              text: 'Generate query with AI',
-              visible: showAiPanel,
-              toggle: toggleAiPanel,
-            }
-          : undefined
-      }
+      aiPanel={{
+        text: 'Generate query with AI',
+        visible: showAiPanel,
+        toggle: toggleAiPanel,
+      }}
     >
       <AIPanelContext.Provider value={{ showAiPanel, toggle: toggleAiPanel }}>
         {children}

@@ -26,7 +26,6 @@ import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 import { ParagraphAIPanel } from '../AIPanel';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { getAnalytics } from '@decipad/client-events';
 
 const analytics = getAnalytics();
@@ -93,15 +92,11 @@ export const Paragraph: PlateComponent = ({
       accept={isHorizontal ? COLUMN_KINDS : undefined}
       getAxis={getAxis}
       onDrop={onDrop}
-      aiPanel={
-        isFlagEnabled('AI_FEATURES')
-          ? {
-              text: 'Rewrite with AI',
-              visible: showAiPanel,
-              toggle: toggleAiPanel,
-            }
-          : undefined
-      }
+      aiPanel={{
+        text: 'Rewrite with AI',
+        visible: showAiPanel,
+        toggle: toggleAiPanel,
+      }}
       {...turnIntoProps}
       {...attributes}
     >
