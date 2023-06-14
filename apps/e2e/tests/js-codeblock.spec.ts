@@ -81,6 +81,6 @@ test.describe('Make sure our js code templates work', () => {
       allSources[allSources.length - 1],
       allSources.length - 1
     );
-    await expect(page.getByTestId('code-line-warning')).toBeVisible();
+    await expect(page.getByTestId('code-line-warning').first()).toBeVisible();
   });
 });
