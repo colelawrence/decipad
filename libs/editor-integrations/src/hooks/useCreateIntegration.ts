@@ -1,11 +1,11 @@
 import { IntegrationTypes, useTEditorRef } from '@decipad/editor-types';
+import { setSelection } from '@decipad/editor-utils';
 import {
   useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
 import { findNode, insertNodes, setNodes } from '@udecode/plate';
 import { useEffect } from 'react';
-import { setSelection } from '@decipad/editor-utils';
 import { getNewIntegration } from '../utils';
 
 /**
@@ -47,6 +47,7 @@ export const useCreateIntegration = () => {
             integrationType: {
               code: codeStore.code,
               latestResult: codeStore.latestResult,
+              timeOfLastRun: codeStore.timeOfLastRun,
               type: 'codeconnection',
             } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
           },

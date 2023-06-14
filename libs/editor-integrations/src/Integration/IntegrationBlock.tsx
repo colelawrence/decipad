@@ -94,6 +94,7 @@ export const IntegrationBlock: PlateComponent = ({
   const computer = useComputer();
   const blockResult = computer.getBlockIdResult$.use(element.id);
 
+  const { timeOfLastRun } = element.integrationType;
   const [showData, setShowData] = useState(false);
 
   const resultType = blockResult?.result?.type;
@@ -104,6 +105,16 @@ export const IntegrationBlock: PlateComponent = ({
     err?.errType === 'duplicated-name'
       ? 'Variable name is duplicated. Change it.'
       : 'An error has occured';
+
+  const blockType = useMemo(
+    () => blockResult?.result?.type.kind,
+    [blockResult?.result?.type.kind]
+  );
+
+  const liveText = useMemo(
+    () => ImportElementSourcePretty[element.integrationType.type],
+    [element.integrationType.type]
+  );
 
   return (
     <IntegrationBlockContext.Provider value={observable.current}>
@@ -116,8 +127,10 @@ export const IntegrationBlock: PlateComponent = ({
         <div css={integrationBlockStyles}>
           <div css={css({ display: 'flex', alignItems: 'center' })}>
             <LiveCode
+              timeOfLastRun={timeOfLastRun}
               error={err && new Error(errCause)}
-              text={ImportElementSourcePretty[element.integrationType.type]}
+              type={blockType}
+              text={liveText}
             >
               {children}
             </LiveCode>

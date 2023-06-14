@@ -123,6 +123,8 @@ export const NumberCatalogItem = ({
             >
               {isTable(result.result.type) ? (
                 'Table'
+              ) : result.result.type.kind === 'type-error' ? (
+                <CodeResult variant="inline" {...result.result} />
               ) : (
                 <CodeResult {...result.result} />
               )}

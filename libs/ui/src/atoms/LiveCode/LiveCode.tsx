@@ -1,7 +1,15 @@
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { Tooltip } from '..';
-import { Bolt } from '../../icons';
+import {
+  Bolt,
+  Calendar,
+  CheckboxSelected,
+  Number,
+  TableSmall,
+  Text,
+  Warning,
+} from '../../icons';
 import { cssVar, p10Medium, p12Medium, setCssVar } from '../../primitives';
 import { CodeError } from '../CodeError/CodeError';
 
@@ -9,20 +17,66 @@ type LiveCodeProps = {
   readonly children?: ReactNode;
   readonly error?: Error;
   readonly text?: string;
+  readonly type?: Kind;
+  readonly timeOfLastRun: string | null;
 };
 
-export const LiveCode = ({ children, text, error }: LiveCodeProps) => {
+type Kind =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'function'
+  | 'column'
+  | 'materialized-column'
+  | 'table'
+  | 'materialized-table'
+  | 'row'
+  | 'date'
+  | 'range'
+  | 'pending'
+  | 'nothing'
+  | 'anything'
+  | 'type-error';
+
+const getIconForType = (type?: Kind): ReactNode => {
+  switch (type) {
+    case 'number':
+      return <Number />;
+    case 'boolean':
+      return <CheckboxSelected />;
+    case 'string':
+      return <Text />;
+    case 'date':
+      return <Calendar />;
+    case 'materialized-column':
+    case 'materialized-table':
+    case 'column':
+    case 'table':
+      return <TableSmall />;
+    case 'type-error':
+      return <Warning />;
+    default:
+      return <Bolt />;
+  }
+};
+
+export const LiveCode = ({
+  children,
+  text,
+  type,
+  error,
+  timeOfLastRun,
+}: LiveCodeProps) => {
   const nonErrorTooltip = (
     <Tooltip
       hoverOnly
       trigger={
         // eslint-disable-next-line decipad/css-prop-named-variable
-        <span css={{ cursor: 'pointer' }}>
-          <Bolt />
-        </span>
+        <span css={{ cursor: 'pointer' }}>{getIconForType(type)}</span>
       }
     >
       <p>Live code result</p>
+      {timeOfLastRun && <p>Last run: {timeOfLastRun}</p>}
     </Tooltip>
   );
   return (
@@ -61,9 +115,9 @@ const labelStyles = css(p10Medium, {
   backgroundColor: cssVar('liveDataWeakBackgroundColor'),
   borderRadius: 4,
   alignItems: 'center',
-  padding: 2,
+  padding: '2px 4px',
   cursor: 'default',
-  gap: 1,
+  gap: 4,
 });
 
 const liveIconStyles = css({

@@ -10,6 +10,7 @@ export interface CodeBlockIntegration {
   code: string;
   /** Base64 encoded */
   latestResult: string;
+  timeOfLastRun: string | null;
 }
 
 type IntegrationTypes = CodeBlockIntegration;

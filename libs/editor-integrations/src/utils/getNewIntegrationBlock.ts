@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import {
   ELEMENT_INTEGRATION,
   ImportElementSource,
@@ -8,6 +7,7 @@ import {
   useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
+import { nanoid } from 'nanoid';
 
 /**
  * Helper function to return the correct new integration,
@@ -34,6 +34,7 @@ export function getNewIntegration(
           type: 'codeconnection',
           code: codeStore.code,
           latestResult: codeStore.latestResult,
+          timeOfLastRun: codeStore.timeOfLastRun,
         },
       };
     }
@@ -48,6 +49,7 @@ export function getNewIntegration(
           type: 'codeconnection',
           code: '',
           latestResult: '',
+          timeOfLastRun: null,
         },
       };
     }

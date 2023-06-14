@@ -51,7 +51,7 @@ export type ImportElementSource =
 
 export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   decipad: '',
-  codeconnection: 'Code',
+  codeconnection: 'JS',
   gsheets: '',
   csv: '',
   json: '',

@@ -273,6 +273,8 @@ interface CodeConnectionStore {
   latestResult: string;
   setLatestResult: (newResult: string) => void;
 
+  timeOfLastRun: string | null;
+
   reset: () => void;
 }
 
@@ -281,11 +283,17 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
   setCode: (v) => set(() => ({ code: v })),
 
   latestResult: '',
-  setLatestResult: (v) => set(() => ({ latestResult: v })),
+  setLatestResult: (v) =>
+    set(() => {
+      return { latestResult: v, timeOfLastRun: new Date().toISOString() };
+    }),
+
+  timeOfLastRun: null,
 
   reset: () =>
     set(() => ({
       code: codePlaceholder(),
       latestResult: '',
+      timeOfLastRun: null,
     })),
 }));
