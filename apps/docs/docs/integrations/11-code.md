@@ -6,7 +6,7 @@ sidebar_class_name: new
 # Code: Data from APIs
 
 <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-  <iframe src="https://www.loom.com/share/ba7b55cabaf1403fab00183f2ad8bfb7" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+  <iframe src="https://www.loom.com/embed/ba7b55cabaf1403fab00183f2ad8bfb7" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
 </div>
 
 There is a whole buffet of public web services that offer live data. With our Code Integration, you can fetch any of that data and easily make it available in Decipad for your modeling needs. In order to create a code integration, create a new integration block and choose "Code" (see [Integration Basics](/docs/integrations/basics) for details). You will see a code editor with a working example that fetches data from a public web api:
