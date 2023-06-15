@@ -1,7 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
-import { useThemeFromStore } from '@decipad/react-contexts';
+import {
+  useEditorTableContext,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC, forwardRef, useContext } from 'react';
 import {
@@ -10,7 +13,13 @@ import {
   ConnectDropTarget,
 } from 'react-dnd';
 import { useMergedRef } from '../../hooks/index';
-import { DragHandle as DragHandleIcon, Warning } from '../../icons';
+import {
+  DragHandle as DragHandleIcon,
+  Warning,
+  AlignArrowLeft,
+  AlignArrowRight,
+  Delete,
+} from '../../icons';
 import {
   cssVar,
   dragHandleHighlight,
@@ -29,19 +38,27 @@ import {
 } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 import { Tooltip } from '../Tooltip/Tooltip';
+import DropdownMenu from '../DropdownMenu/DropdownMenu';
 
 const columnStyles = css(p13Medium, {
   position: 'relative',
 
   minHeight: table.thMinHeight,
-  paddingLeft: table.tdHorizontalPadding,
-  paddingRight: '8px',
+  padding: `${table.tdVerticalPadding} ${table.tdHorizontalPadding}`,
+
+  ':hover .table-drag-handle': {
+    display: 'block',
+  },
+
+  ':hover .table-caret': {
+    opacity: 1,
+  },
 });
 
 const headerWrapperStyles = css({
   display: 'flex',
+  flexDirection: 'row',
   alignItems: 'center',
-  minHeight: '30px',
   gap: '6px',
   position: 'relative',
 });
@@ -70,12 +87,11 @@ const childrenWrapperStyles = css({
 });
 
 const dragHandleStyles = css({
-  width: '8px',
+  width: 9,
   height: 9,
   transform: 'translateY(50%)',
   display: 'block',
   margin: 'auto',
-  cursor: 'grab',
   pointerEvents: 'all',
   marginTop: 0,
   mixBlendMode: 'luminosity',
@@ -86,9 +102,9 @@ const dragHandleStyles = css({
 
 const DragHandle = () => {
   return (
-    <button css={dragHandleStyles} contentEditable={false}>
+    <div css={dragHandleStyles} contentEditable={false}>
       <DragHandleIcon />
-    </button>
+    </div>
   );
 };
 
@@ -103,20 +119,21 @@ const DropSourceAndTarget = forwardRef<
 >(({ draggingOver, onSelectColumn }, ref) => {
   return (
     <div
-      css={css([
+      className="table-drag-handle"
+      css={[
         columnTypeStyles,
         {
-          pointerEvents: draggingOver ? 'all' : 'none', // IMPORTANT!
-          height: '18px',
-          width: '18px',
-          display: 'flex',
-          alignItems: 'center',
+          pointerEvents: !draggingOver ? 'all' : 'none', // IMPORTANT!
+          width: '16px',
+          height: '16px',
+          display: 'none',
           borderRadius: '6px',
+          cursor: 'grab',
           ':hover': {
             background: dragHandleHighlight,
           },
         },
-      ])}
+      ]}
       ref={ref}
       contentEditable={false}
       onClick={onSelectColumn}
@@ -154,6 +171,9 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   attributes?: ElementAttributes;
   isEditable?: boolean;
   showIcon?: boolean;
+  onRemoveColumn?: () => void;
+  onAddColRight?: () => void;
+  onAddColLeft?: () => void;
   // drag
   draggable?: boolean;
   dragSource?: ConnectDragSource;
@@ -161,7 +181,9 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   // drop
   dropTarget?: ConnectDropTarget;
   dropDirection?: 'left' | 'right';
+  onSelectColumn?: () => void;
   error?: string;
+  isFirst?: boolean;
 }
 
 export const TableHeader = ({
@@ -174,26 +196,59 @@ export const TableHeader = ({
   showIcon = true,
   draggable = false,
   draggingOver = false,
+  onAddColLeft,
+  onAddColRight,
+  onRemoveColumn,
   dragSource,
   dropTarget,
   dropDirection,
   onSelectColumn,
+  isFirst,
   error,
 }: TableHeaderProps): ReturnType<FC> => {
   const Icon = getTypeIcon(type);
-
   const [darkTheme] = useThemeFromStore();
   const { color } = useContext(TableStyleContext);
   const baseSwatches = swatchesThemed(darkTheme);
 
+  const editorTableContext = useEditorTableContext();
+  const { length } = editorTableContext.cellTypes;
+
   const thRef = useMergedRef(attributes?.ref, dropTarget);
+
+  const columOptionItems = [
+    {
+      label: 'Add column left',
+      onClick: onAddColLeft,
+      icon: <AlignArrowLeft />,
+      disabled: isFirst,
+    },
+    {
+      label: 'Add column right',
+      onClick: onAddColRight,
+      icon: <AlignArrowRight />,
+      disabled: isFirst,
+    },
+    {
+      label: 'Remove column',
+      onClick: onRemoveColumn,
+      icon: <Delete />,
+      disabled: length === 1,
+    },
+  ];
 
   return (
     <th
       {...attributes}
+      data-testid="table-header"
       css={[
         columnStyles,
         thStyles(color as AvailableSwatchColor, darkTheme, baseSwatches),
+        isEditable && {
+          ':hover .table-icon': {
+            display: 'none',
+          },
+        },
       ]}
       ref={thRef}
       data-highlight={highlight}
@@ -204,35 +259,46 @@ export const TableHeader = ({
       )}
 
       <div css={headerWrapperStyles}>
-        {isEditable && draggable && dragSource && (
-          <DropSourceAndTarget
-            ref={dragSource}
-            draggingOver={draggingOver}
-            onSelectColumn={onSelectColumn}
-          />
-        )}
-        {showIcon && (
-          <>
-            {error ? (
-              <Tooltip
-                hoverOnly
-                trigger={
-                  <span contentEditable={false} css={iconTypeStyles}>
-                    <Warning />
-                  </span>
-                }
-              >
-                {type.kind !== 'table-formula'
-                  ? error
-                  : "There's a problem with your formulas"}
-              </Tooltip>
-            ) : (
-              <span contentEditable={false} css={iconTypeStyles}>
-                <Icon />
-              </span>
-            )}
-          </>
-        )}
+        <span css={{ width: '16px', height: '16px' }} contentEditable={false}>
+          {draggable && dragSource && !error && isEditable && (
+            <DropdownMenu
+              items={columOptionItems}
+              testId="table-add-remove-column-button"
+              trigger={
+                <DropSourceAndTarget
+                  ref={dragSource}
+                  draggingOver={draggingOver}
+                  onSelectColumn={onSelectColumn}
+                />
+              }
+            />
+          )}
+
+          {error && (
+            <Tooltip
+              hoverOnly
+              trigger={
+                <span contentEditable={false} css={iconTypeStyles}>
+                  <Warning />
+                </span>
+              }
+            >
+              {type.kind !== 'table-formula'
+                ? error
+                : "There's a problem with your formulas"}
+            </Tooltip>
+          )}
+
+          {showIcon && !error && (
+            <span
+              contentEditable={false}
+              css={iconTypeStyles}
+              className="table-icon"
+            >
+              <Icon />
+            </span>
+          )}
+        </span>
 
         <div
           data-testid="table-column-name"

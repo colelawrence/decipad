@@ -59,9 +59,11 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
    - To move a row, click and hold the `⸬` button on the left side of the row and drag it to a new position.
    - To move a column, click and hold the `⸬` button on the left side of the column name and drag it to a new position.
 
+To **delete a column**, click the **`⸬`** button on a column and select `Delete column`.
+
 8. **Update Column Data Types**:
 
-   - Click the down triangle button on a column, select `Change type`, and choose a new column type from the list.
+   - Hover over the column header, click the drop-down triangle button on a column, and choose a new column type from the list.
 
 9. **Add Column Series**:
 

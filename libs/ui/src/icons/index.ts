@@ -2,6 +2,8 @@ export { Actions } from './Actions/Actions';
 export { Add } from './Add/Add';
 export { AddToWorkspace } from './AddToWorkspace/AddToWorkspace';
 export { All } from './All/All';
+export { AlignArrowLeft } from './AlignArrowLeft/AlignArrowLeft';
+export { AlignArrowRight } from './AlignArrowRight/AlignArrowRight';
 export { AnnotationWarning } from './AnnotationWarning/AnnotationWarning';
 export { Announcement } from './Announcement/Announcement';
 export { Archive } from './Archive/Archive';

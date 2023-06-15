@@ -7,7 +7,7 @@ import {
 import {
   clickCell,
   createTable,
-  openColumnMenu,
+  openColTypeMenu,
   tableCellLocator,
 } from '../utils/page/Table';
 
@@ -81,8 +81,7 @@ test.describe('Dropdown widget', () => {
 
   test('Dropdown option should appear in table column manu', async () => {
     await createTable(page);
-    await openColumnMenu(page, 2);
-    await page.click('[role="menuitem"]:has-text("Change type")');
+    await openColTypeMenu(page, 2);
 
     const dropdownMenu = page.locator(
       '[role="menuitem"]:has-text("Categories")'

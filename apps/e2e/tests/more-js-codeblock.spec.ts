@@ -55,7 +55,7 @@ test.describe('More JS codeblock checks', () => {
       .getByRole('cell', { name: 'value' })
       .getByTestId('table-column-menu-button')
       .click();
-    await page.getByText('Change type').click();
+
     await page.getByText('Number').nth(1).click();
 
     await page.getByTestId('integration-modal-continue').click();

@@ -30,7 +30,7 @@ export function tableCellTextLocator(line: number, col = 0) {
   return `${tableCellLocator(line, col)} span[data-slate-string="true"]`;
 }
 
-function getTableOrPage(page: Page, tableName?: string) {
+export function getTableOrPage(page: Page, tableName?: string) {
   return tableName
     ? page
         .getByRole('textbox')
@@ -103,7 +103,7 @@ export async function writeInTable(
 export function openRowMenu(page: Page, line: number, tableName?: string) {
   return getTableOrPage(page, tableName)
     .locator(`${tableRowLocator(line)} > th > div > button`)
-    .click({ force: true });
+    .click({ force: true, delay: 100 });
 }
 
 export function focusOnTable(page: Page, tableName?: string) {
@@ -146,12 +146,23 @@ export async function addColumn(page: Page, tableName?: string) {
     .click({ force: true });
 }
 
-export function openColumnMenu(page: Page, col: number, tableName?: string) {
+export function openColTypeMenu(page: Page, col: number, tableName?: string) {
   return getTableOrPage(page, tableName)
     .locator(`${tableRowLocator(0)}`)
     .getByTestId('table-column-menu-button')
     .nth(col)
     .click();
+}
+
+export async function openColMenu(page: Page, col: number, tableName?: string) {
+  const table = getTableOrPage(page, tableName);
+  const columnHeader = table
+    .locator(`${tableRowLocator(0)}`)
+    .getByTestId('table-header')
+    .nth(col);
+
+  await columnHeader.hover();
+  await columnHeader.getByTestId('table-add-remove-column-button').click();
 }
 
 export function hideTable(page: Page, tableName?: string) {
@@ -183,8 +194,18 @@ export async function removeColumn(
   col: number,
   tableName?: string
 ) {
-  await openColumnMenu(page, col, tableName);
-  await page.getByText('Delete column').click();
+  await openColMenu(page, col, tableName);
+  await page.getByText('Remove column').click();
+}
+
+export async function addColRight(page: Page, col: number, tableName?: string) {
+  await openColMenu(page, col, tableName);
+  await page.getByText('Add column right').click();
+}
+
+export async function addColLeft(page: Page, col: number, tableName?: string) {
+  await openColMenu(page, col, tableName);
+  await page.getByText('Add column left').click();
 }
 
 export async function updateDataType(
@@ -192,8 +213,7 @@ export async function updateDataType(
   col: number,
   tableName?: string
 ) {
-  await openColumnMenu(page, col, tableName);
-  await page.getByText('Change type').click();
+  await openColTypeMenu(page, col, tableName);
   await page.getByRole('menuitem', { name: 'Text' }).click();
 }
 

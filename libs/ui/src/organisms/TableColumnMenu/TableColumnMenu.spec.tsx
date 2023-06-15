@@ -66,9 +66,6 @@ it('shows the sub menu', async () => {
       open
     />
   );
-  await userEvent.click(await findByText(/change type/i), {
-    pointerEventsCheck: 0,
-  });
   await userEvent.click(await findByText(/date/i), {
     pointerEventsCheck: 0,
   });
@@ -108,10 +105,6 @@ it.each(types)('highlights selected type %s', async (_, type, textContent) => {
   );
 
   // Open every dropdown level
-  await userEvent.click(await findByText(/change type/i), {
-    pointerEventsCheck: 0,
-  });
-
   if (
     type.kind === 'number' &&
     type.unit &&
@@ -156,16 +149,14 @@ const expandableCols: [string, string][] = [
 it.each(expandableCols)(
   'Expands %s without any other menu open',
   async (col, content) => {
-    const { getByText, findByText, queryByText } = render(
+    const { getByText, queryByText } = render(
       <TableColumnMenu
         trigger={<button>trigger</button>}
         type={getNumberType()}
         open
       />
     );
-    await userEvent.click(await findByText(/change type/i), {
-      pointerEventsCheck: 0,
-    });
+
     await userEvent.click(getByText(col));
     expect(getByText(content)).toBeVisible();
     expandableCols.forEach(([column, columnContent]) => {
@@ -180,16 +171,13 @@ it.each(expandableCols)(
 // Cannot do this in the test above because there would be 2 elements with the
 // text content 'Date', so it's cleaner to duplicate the text.
 it('Expands the series menu without any other menu opening', async () => {
-  const { getAllByText, queryByText, getByText, findByText } = render(
+  const { getAllByText, queryByText, getByText } = render(
     <TableColumnMenu
       trigger={<button>trigger</button>}
       type={getNumberType()}
       open
     />
   );
-  await userEvent.click(await findByText(/change type/i), {
-    pointerEventsCheck: 0,
-  });
   await userEvent.click(getByText('Sequence'));
   getAllByText('Date').forEach((el) => expect(el).toBeVisible());
   expect(getAllByText('Date')).toHaveLength(2);
@@ -201,7 +189,7 @@ it('Expands the series menu without any other menu opening', async () => {
 it('Successfully changes column type upon click', async () => {
   const mockOnChangeColumnType = jest.fn((type) => type);
 
-  const { queryAllByRole, findByText } = render(
+  const { queryAllByRole } = render(
     <TableColumnMenu
       trigger={<button>trigger</button>}
       type={getNumberType()}
@@ -209,10 +197,6 @@ it('Successfully changes column type upon click', async () => {
       onChangeColumnType={mockOnChangeColumnType}
     />
   );
-
-  await userEvent.click(await findByText(/change type/i), {
-    pointerEventsCheck: 0,
-  });
 
   const menuItems = queryAllByRole('menuitem');
   const menuItem = menuItems.find((element) =>

@@ -10,14 +10,14 @@ import {
 import { TableColumnMenu } from '..';
 import { TableHeader } from '../../atoms';
 import { Caret } from '../../icons';
-import { table } from '../../styles';
 import { getStringType } from '../../utils';
 
 const rightSlotStyles = css({
+  // opacity is being set to 1 on hover by the parent
+  opacity: 0,
   display: 'grid',
   alignItems: 'center',
   width: '16px',
-  minHeight: table.thMinHeight,
 });
 
 type TableColumnHeaderProps = PropsWithChildren<
@@ -31,14 +31,13 @@ type TableColumnHeaderProps = PropsWithChildren<
     | 'dragPreview'
     | 'draggable'
     | 'onSelectColumn'
+    | 'onRemoveColumn'
+    | 'onAddColRight'
+    | 'onAddColLeft'
   > &
     Pick<
       ComponentProps<typeof TableColumnMenu>,
-      | 'onChangeColumnType'
-      | 'onRemoveColumn'
-      | 'parseUnit'
-      | 'isFirst'
-      | 'dropdownNames'
+      'onChangeColumnType' | 'parseUnit' | 'isFirst' | 'dropdownNames'
     > & {
       as?: ElementType;
       empty?: boolean;
@@ -53,6 +52,8 @@ type TableColumnHeaderProps = PropsWithChildren<
 export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   onChangeColumnType,
   onRemoveColumn,
+  onAddColLeft,
+  onAddColRight,
   parseUnit,
   isFirst,
   type = getStringType(),
@@ -67,13 +68,18 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   return (
     <TableHeader
       {...props}
+      onRemoveColumn={onRemoveColumn}
+      onAddColLeft={onAddColLeft}
+      onAddColRight={onAddColRight}
       isEditable={!readOnly}
+      isFirst={isFirst}
       menu={
         !readOnly && (
           <TableColumnMenu
             trigger={
               <button
                 data-testid="table-column-menu-button"
+                className="table-caret"
                 css={rightSlotStyles}
               >
                 <Caret variant="down" />
@@ -82,7 +88,6 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
             open={isMenuOpen}
             onChangeOpen={setMenuOpen}
             onChangeColumnType={onChangeColumnType}
-            onRemoveColumn={onRemoveColumn}
             parseUnit={parseUnit}
             isFirst={isFirst}
             type={type}

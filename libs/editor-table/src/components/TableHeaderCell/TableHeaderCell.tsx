@@ -41,6 +41,7 @@ export const TableHeaderCell: PlateComponent = ({
     readOnly,
     focused,
     onChangeColumnType,
+    onAddColumnHere,
     onRemoveColumn,
     dragSource,
     isDragging,
@@ -66,6 +67,8 @@ export const TableHeaderCell: PlateComponent = ({
           columnIndex != null && onChangeColumnType?.(columnIndex, newType),
         [columnIndex, onChangeColumnType]
       )}
+      onAddColRight={() => columnIndex && onAddColumnHere?.(columnIndex)}
+      onAddColLeft={() => columnIndex && onAddColumnHere?.(columnIndex, true)}
       onRemoveColumn={useCallback(
         () => onRemoveColumn?.(element.id),
         [element.id, onRemoveColumn]

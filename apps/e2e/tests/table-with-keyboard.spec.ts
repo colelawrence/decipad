@@ -13,7 +13,7 @@ import {
   focusOnTable,
   focusOnTableColumnFormula,
   getFromTable,
-  openColumnMenu,
+  openColTypeMenu,
   openRowMenu,
   writeInTable,
 } from '../utils/page/Table';
@@ -85,8 +85,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
   });
 
   test('can change column type to a formula', async () => {
-    await openColumnMenu(page, 2);
-    await page.locator('[role="menuitem"]:has-text("Change type")').click();
+    await openColTypeMenu(page, 2);
     await page.locator('[role="menuitem"]:has-text("Formula")').click();
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
@@ -113,8 +112,8 @@ test.describe('Adding tables with keyboard (and more)', () => {
   });
 
   test('add some numbers', async () => {
-    await openColumnMenu(page, 3);
-    await page.click('[role="menuitem"]:has-text("Change type")');
+    await openColTypeMenu(page, 3);
+
     await page.click('[role="menuitem"]:has-text("Number")');
 
     await writeInTable(page, '1', 1, 3);
@@ -128,8 +127,8 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
   test('can add a formula on those numbers', async () => {
     await addColumn(page);
-    await openColumnMenu(page, 4);
-    await page.click('[role="menuitem"]:has-text("Change type")');
+    await openColTypeMenu(page, 4);
+
     await page.click('[role="menuitem"]:has-text("Formula")');
     const codeBlock = await page.waitForSelector(
       'section:has-text("Column5 =")'

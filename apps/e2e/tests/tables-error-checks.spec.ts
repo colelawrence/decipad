@@ -79,7 +79,6 @@ test.describe('Number Parcing Checks', () => {
       .getByRole('cell', { name: 'Column2' })
       .getByTestId('table-column-menu-button')
       .click();
-    await page.getByRole('menuitem', { name: 'Change type' }).click();
     await page.getByRole('menuitem', { name: 'Number' }).click();
     await focusOnBody(page);
     // eslint-disable-next-line playwright/no-wait-for-timeout

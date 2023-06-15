@@ -49,8 +49,9 @@ describe('readOnly prop', () => {
     );
 
     const getPopupButton = () => queryAllByTestId('table-column-menu-button');
+
     expect(getPopupButton()).toHaveLength(1);
-    expect(getPopupButton()[0]).toBeVisible();
+    expect(getPopupButton()[0]).toBeInTheDocument();
 
     rerender(
       <table>

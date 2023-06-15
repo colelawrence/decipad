@@ -51,6 +51,7 @@ export interface TableActions {
     newColumnAggregation: string | undefined
   ) => void;
   onAddColumn: () => void;
+  onAddColumnHere: (columnIndex: number, left?: boolean) => void;
   onRemoveColumn: (columnId: string) => void;
   onAddRowHere: (rowNumber: number, below?: boolean) => void;
   onAddRow: () => void;
@@ -65,9 +66,11 @@ export const addColumn = (
   {
     tablePath,
     cellType = { kind: 'anything' },
+    position,
   }: {
     tablePath: Path;
     cellType?: TableCellType;
+    position?: number;
   }
 ) => {
   const headerRowPath = [...tablePath, 1];
@@ -83,6 +86,7 @@ export const addColumn = (
   if (!isElementOfType(table, ELEMENT_TABLE)) {
     return;
   }
+
   const [, , ...body] = table.children;
   const columnName = getColumnName(editor, tablePath, columnCount + 1);
   withoutNormalizing(editor, () => {
@@ -95,7 +99,7 @@ export const addColumn = (
         children: [{ text: columnName }],
       },
       {
-        at: [...tablePath, 1, columnCount],
+        at: [...tablePath, 1, position || columnCount],
       }
     );
 
@@ -108,7 +112,7 @@ export const addColumn = (
           children: [{ text: '' }],
         },
         {
-          at: [...tablePath, rowIndex + 2, columnCount],
+          at: [...tablePath, rowIndex + 2, position || columnCount],
         }
       );
     });
@@ -255,6 +259,28 @@ export const useTableActions = (
     });
   }, [editor, path]);
 
+  /**
+   * Action for adding column to the left or right of the current column.
+   * @param left, if you want to add to the left send true, otherwise
+   * it will default to adding to the right.
+   */
+
+  const onAddColumnHere = useCallback(
+    (columnIndex: number, left?: boolean) => {
+      if (!path) {
+        return;
+      }
+
+      withoutNormalizing(editor, () => {
+        addColumn(editor, {
+          tablePath: path,
+          position: left ? columnIndex : columnIndex + 1,
+        });
+      });
+    },
+    [editor, path]
+  );
+
   // here is the crash i think
   const mutateIsCollapsed = usePathMutatorCallback(editor, path, 'isCollapsed');
   const onSetCollapsed = useCallback(
@@ -388,6 +414,7 @@ export const useTableActions = (
     onChangeColumnType,
     onChangeColumnAggregation,
     onAddColumn,
+    onAddColumnHere,
     onRemoveColumn,
     onAddRowHere,
     onAddRow,

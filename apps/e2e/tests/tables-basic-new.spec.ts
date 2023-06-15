@@ -6,11 +6,14 @@ import {
   setUp,
 } from '../utils/page/Editor';
 import {
+  addColLeft,
+  addColRight,
   addColumn,
   addRow,
   clickCalculateFirstColumn,
   createTable,
   getFromTable,
+  getTableOrPage,
   removeColumn,
   removeRow,
   renameColumn,
@@ -100,6 +103,22 @@ test.describe('Basic Table Interactions + Collisions', () => {
   test('adds 2 columns to second table', async () => {
     await addColumn(page, 'NewTableName2');
     await addColumn(page, 'NewTableName2');
+  });
+
+  test('adds col to the right', async () => {
+    await addColRight(page, 2, 'NewTableName2');
+    const table = getTableOrPage(page, 'NewTableName2');
+    const headersCount = await table.getByTestId('table-header').count();
+
+    expect(headersCount).toBe(6);
+  });
+
+  test('adds col to the left', async () => {
+    await addColLeft(page, 2, 'NewTableName2');
+    const table = getTableOrPage(page, 'NewTableName2');
+    const headersCount = await table.getByTestId('table-header').count();
+
+    expect(headersCount).toBe(7);
   });
 
   test('remove 2 columns from first table', async () => {
