@@ -9,7 +9,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import {
   AnimatedIcon,
@@ -23,7 +23,10 @@ import {
 import { css } from '@emotion/react';
 import { getPreviousNode } from '@udecode/plate';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
-import { integrationBlockStyles } from 'libs/ui/src/styles/editor-layout';
+import {
+  hideOnPrint,
+  integrationBlockStyles,
+} from 'libs/ui/src/styles/editor-layout';
 import {
   ReactNode,
   createContext,
@@ -96,7 +99,10 @@ export const IntegrationBlock: PlateComponent = ({
   const computer = useComputer();
   const blockResult = computer.getBlockIdResult$.use(element.id);
 
+  const readOnly = useIsEditorReadOnly();
+
   const { timeOfLastRun } = element.integrationType;
+
   const [showData, setShowData] = useState(false);
 
   const resultType = blockResult?.result?.type;
@@ -139,14 +145,18 @@ export const IntegrationBlock: PlateComponent = ({
             <div contentEditable={false}>{specificIntegration}</div>
 
             <div contentEditable={false} css={controlStyles}>
-              <TextAndIconButton
-                text="View source"
-                iconPosition="left"
-                onClick={() => {
-                  observable.current.next('show-source');
-                  removeFocusFromAllBecauseSlate();
-                }}
-              ></TextAndIconButton>
+              {readOnly ? (
+                <div css={{ visibility: 'hidden' }} />
+              ) : (
+                <TextAndIconButton
+                  text="View source"
+                  iconPosition="left"
+                  onClick={() => {
+                    observable.current.next('show-source');
+                    removeFocusFromAllBecauseSlate();
+                  }}
+                ></TextAndIconButton>
+              )}
               <SegmentButtons
                 buttons={[
                   {
@@ -162,6 +172,7 @@ export const IntegrationBlock: PlateComponent = ({
                       removeFocusFromAllBecauseSlate();
                     },
                     tooltip: 'Refresh data',
+                    visible: !readOnly,
                   },
                   {
                     children: showData ? <Hide /> : <Show />,
@@ -194,7 +205,7 @@ const codeResultStyles = css({
   display: 'flex',
 });
 
-const controlStyles = css(p12Medium, {
+const controlStyles = css(p12Medium, hideOnPrint, {
   // Shifts whole div to the right.
   marginLeft: 'auto',
   display: 'flex',

@@ -22,11 +22,11 @@ import {
 import { Range } from 'slate';
 import { useState } from 'react';
 import { ReactEditor } from 'slate-react';
+import { getAnalytics } from '@decipad/client-events';
 import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';
 import { ParagraphAIPanel } from '../AIPanel';
-import { getAnalytics } from '@decipad/client-events';
 
 const analytics = getAnalytics();
 

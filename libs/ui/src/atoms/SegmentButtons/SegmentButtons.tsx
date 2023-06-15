@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, setCssVar } from '../../primitives';
@@ -9,6 +10,7 @@ interface SegmentButton {
   readonly onClick: (event: React.MouseEvent<HTMLElement>) => void;
   readonly tooltip?: string;
   readonly testId?: string;
+  readonly visible?: boolean;
 }
 
 interface SegmentButtonsProps {
@@ -16,10 +18,22 @@ interface SegmentButtonsProps {
 }
 
 export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
+  // visible is undefined by default, so !== false is the right
+  // thing to do.
+  const visibleButtons = buttons.filter((btn) => btn.visible !== false);
   return (
-    <div css={segmentButtonsStyles}>
+    <div
+      css={[
+        segmentButtonsStyles,
+        visibleButtons.length > 1 && {
+          '& figure:last-of-type': {
+            borderLeft: `1px solid ${cssVar('borderHighlightColor')}`,
+          },
+        },
+      ]}
+    >
       {buttons.map((button, i) => {
-        const { children, onClick, tooltip, testId } = button;
+        const { children, onClick, tooltip, testId, visible = true } = button;
         const hasTooltip = !!tooltip;
         const trigger = (
           <figure
@@ -32,12 +46,16 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
             {children}
           </figure>
         );
-        return hasTooltip ? (
-          <Tooltip side="top" trigger={trigger}>
-            {tooltip}
-          </Tooltip>
+        return visible ? (
+          hasTooltip ? (
+            <Tooltip side="top" trigger={trigger}>
+              {tooltip}
+            </Tooltip>
+          ) : (
+            trigger
+          )
         ) : (
-          trigger
+          <div css={{ visibility: 'hidden' }} />
         );
       })}
     </div>
@@ -51,9 +69,6 @@ const segmentButtonsStyles = css(hideOnPrint, {
   padding: 1,
   border: `1px solid ${cssVar('borderColor')}`,
   backgroundColor: cssVar('tintedBackgroundColor'),
-  '& figure:last-of-type': {
-    borderLeft: `1px solid ${cssVar('borderHighlightColor')}`,
-  },
   '& svg': {
     ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     margin: '4px',

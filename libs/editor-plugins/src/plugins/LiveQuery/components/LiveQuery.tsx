@@ -7,8 +7,8 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useParentNode } from '@decipad/editor-hooks';
-import { LiveQueryCore } from './LiveQueryCore';
 import { getAnalytics } from '@decipad/client-events';
+import { LiveQueryCore } from './LiveQueryCore';
 
 const analytics = getAnalytics();
 
