@@ -28,6 +28,12 @@ if (e2e) {
   };
 }
 
+// Disable error overlay
+devServer.client = {
+  ...devServer.client,
+  overlay: false,
+};
+
 devServer.proxy = {
   '/api': {
     target: 'http://localhost:3333',
