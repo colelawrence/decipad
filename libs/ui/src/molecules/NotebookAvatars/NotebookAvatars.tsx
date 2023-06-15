@@ -1,10 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useWindowListener } from '@decipad/react-utils';
+import {
+  useStripeCollaborationRules,
+  useWindowListener,
+} from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import uniqBy from 'lodash.uniqby';
 import { FC, useCallback, useState, useContext } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { Avatar, Tooltip } from '../../atoms';
 import { PermissionType } from '../../types';
 import { NotebookInvitationPopUp } from '../../organisms';
@@ -92,6 +96,11 @@ export const NotebookAvatars = ({
   const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
   const clientEvent = useContext(ClientEventsContext);
 
+  const { canInvite } = useStripeCollaborationRules(
+    usersWithAccess,
+    usersFromTeam
+  );
+
   const allUsers = uniqBy(
     [
       ...usersFromTeam.map((user) => ({ ...user, isTeamMember: true })),
@@ -103,6 +112,8 @@ export const NotebookAvatars = ({
   const toggleInvitePopup = useCallback(() => {
     setShowInvitePopup((show) => !show);
   }, [setShowInvitePopup]);
+
+  const hasPaywall = isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && !canInvite;
 
   const handleClickOutside = useCallback(
     (ev: MouseEvent) => {
@@ -186,6 +197,7 @@ export const NotebookAvatars = ({
       {showInvitePopup && (
         <div className="notebook-invitation-popup" css={popupWrapperStyles}>
           <NotebookInvitationPopUp
+            hasPaywall={hasPaywall}
             usersWithAccess={allUsers}
             {...sharingProps}
           />

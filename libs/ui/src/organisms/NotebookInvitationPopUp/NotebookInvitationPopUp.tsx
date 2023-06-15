@@ -105,6 +105,7 @@ const LoadingDots = () => (
 );
 
 interface NotebookSharingPopUpProps {
+  hasPaywall?: boolean;
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
   usersWithAccess?: NotebookAvatar[] | null;
   onRemove?: (userId: string) => Promise<void>;
@@ -118,6 +119,7 @@ interface NotebookSharingPopUpProps {
  * @returns The notebook sharing pop up.
  */
 export const NotebookInvitationPopUp = ({
+  hasPaywall,
   usersWithAccess,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
@@ -191,6 +193,7 @@ export const NotebookInvitationPopUp = ({
               value={email}
               onChange={setEmail}
               onEnter={handleAddCollaborator}
+              disabled={hasPaywall}
             />
 
             <span css={inputAccessPickerStyles}>
@@ -205,6 +208,7 @@ export const NotebookInvitationPopUp = ({
           <Button
             size="extraSlim"
             onClick={handleAddCollaborator}
+            disabled={hasPaywall}
             testId="send-invitation"
           >
             <div css={invitationButtonContentStyles}>
@@ -213,6 +217,12 @@ export const NotebookInvitationPopUp = ({
               Send invitation
             </div>
           </Button>
+
+          {hasPaywall && (
+            <Button type="lightYellow">
+              Upgrade to Pro to invite more people
+            </Button>
+          )}
         </div>
 
         <CollabMembersRights

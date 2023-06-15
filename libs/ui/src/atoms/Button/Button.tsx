@@ -8,6 +8,7 @@ import {
   grey700,
   offBlack,
   orange300,
+  orange700,
   orange800,
   p13Bold,
   red200,
@@ -17,6 +18,12 @@ import {
   setCssVar,
   transparency,
   white,
+  yellow100,
+  yellow200,
+  yellow300,
+  yellow400,
+  yellow500,
+  yellow900,
 } from '../../primitives';
 import { Anchor } from '../../utils';
 
@@ -106,6 +113,32 @@ const typeStyles: Record<
       ...setCssVar('currentTextColor', white.rgb),
     },
   },
+  yellow: {
+    enabled: {
+      backgroundColor: yellow500.rgb,
+      ...setCssVar('currentTextColor', yellow900.rgb),
+      ':hover, :focus': {
+        backgroundColor: yellow400.rgb,
+      },
+    },
+    disabled: {
+      backgroundColor: yellow200.rgb,
+      ...setCssVar('currentTextColor', yellow900.rgb),
+    },
+  },
+  lightYellow: {
+    enabled: {
+      backgroundColor: yellow100.rgb,
+      ...setCssVar('currentTextColor', orange700.rgb),
+      ':hover, :focus': {
+        backgroundColor: yellow300.rgb,
+      },
+    },
+    disabled: {
+      backgroundColor: 'transparent',
+      ...setCssVar('currentTextColor', orange700.rgb),
+    },
+  },
   text: {
     enabled: {
       ...setCssVar('currentTextColor', offBlack.rgb),
@@ -167,6 +200,8 @@ type ButtonProps = {
     | 'primaryBrand'
     | 'secondary'
     | 'danger'
+    | 'yellow'
+    | 'lightYellow'
     | 'text'
     | 'darkDanger'
     | 'darkWarning'

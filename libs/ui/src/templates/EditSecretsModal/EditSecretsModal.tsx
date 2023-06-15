@@ -1,11 +1,12 @@
 import { ComponentProps } from 'react';
 import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
 import { ClosableModal, WorkspaceSecrets } from '../../organisms';
+import { ClosableModalHeader } from '../../molecules';
 
 type EditSecretsModalProps = {
   readonly closeHref: string;
   readonly currentWorkspace: DashboardWorkspaceFragment;
-} & Pick<ComponentProps<typeof ClosableModal>, 'Heading'>;
+} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
 
 export const EditSecretsModal: React.FC<EditSecretsModalProps> = ({
   closeHref,

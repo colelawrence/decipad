@@ -2,12 +2,15 @@ import { ComponentProps, useMemo } from 'react';
 import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
 import { useSession } from 'next-auth/react';
 import { User } from '@decipad/interfaces';
+import { useStripeLinks } from '@decipad/react-utils';
 import { ClosableModal, WorkspaceMembers } from '../../organisms';
+import { EditMembersPaywall } from './EditMembersPaywall.private';
+import { ClosableModalHeader } from '../../molecules';
 
 type EditWorkspaceModalProps = {
   readonly closeHref: string;
   readonly currentWorkspace: DashboardWorkspaceFragment;
-} & Pick<ComponentProps<typeof ClosableModal>, 'Heading'>;
+} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
 
 export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
   closeHref,
@@ -18,6 +21,7 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
   const { data: session } = useSession();
   const user = session?.user as User;
   const currentUserId = user?.id;
+  const { paymentLink } = useStripeLinks(currentWorkspace);
 
   const members = useMemo(
     () => [
@@ -32,6 +36,12 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
     ],
     [currentWorkspace]
   );
+
+  if (paymentLink) {
+    return (
+      <EditMembersPaywall closeHref={closeHref} paymentHref={paymentLink} />
+    );
+  }
 
   return (
     <ClosableModal

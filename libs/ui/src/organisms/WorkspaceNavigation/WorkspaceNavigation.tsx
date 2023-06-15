@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useActiveElement } from '@decipad/react-utils';
+import { useActiveElement, useStripeLinks } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
@@ -108,10 +108,6 @@ const NavDivider = () => (
   </div>
 );
 
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_7sI16U2EX4xcgVO000';
-const STRIPE_CUSTOMER_PORTAL_LINK =
-  'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000';
-
 export const WorkspaceNavigation = ({
   activeWorkspace,
   onDeleteSection,
@@ -152,11 +148,7 @@ export const WorkspaceNavigation = ({
   const clientEvent = useContext(ClientEventsContext);
 
   const isSharedSectionEnabled = isFlagEnabled('SHARE_PAD_WITH_EMAIL');
-  const isPremiumButtonEnabled =
-    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && !activeWorkspace.isPremium;
-  const isCustomerPortalEnabled =
-    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && activeWorkspace.isPremium;
-  const paymentLink = `${STRIPE_PAYMENT_LINK}?client_reference_id=${activeWorkspace.id}`;
+  const { paymentLink, customerPortalLink } = useStripeLinks(activeWorkspace);
 
   return (
     <nav css={workspaceNavContainerStyles}>
@@ -173,7 +165,7 @@ export const WorkspaceNavigation = ({
             </NavigationItem>
           </NavigationList>
 
-          {isPremiumButtonEnabled && (
+          {paymentLink && (
             <NavigationList key={'workspace-nav-PR'}>
               <NavigationItem icon={<DollarCircle />} href={paymentLink}>
                 <span css={itemTextStyles}>Upgrade to Premium</span>
@@ -181,12 +173,9 @@ export const WorkspaceNavigation = ({
             </NavigationList>
           )}
 
-          {isCustomerPortalEnabled && (
+          {customerPortalLink && (
             <NavigationList key={'workspace-nav-CP'}>
-              <NavigationItem
-                icon={<DollarCircle />}
-                href={STRIPE_CUSTOMER_PORTAL_LINK}
-              >
+              <NavigationItem icon={<DollarCircle />} href={customerPortalLink}>
                 <span css={itemTextStyles}>Billing settings</span>
               </NavigationItem>
             </NavigationList>

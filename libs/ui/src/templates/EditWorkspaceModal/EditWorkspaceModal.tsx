@@ -7,6 +7,7 @@ import React, { ComponentProps, useCallback, useState } from 'react';
 import { Button, InputField } from '../../atoms';
 import { People } from '../../icons';
 import { ClosableModal } from '../../organisms';
+import { ClosableModalHeader } from '../../molecules';
 import { cssVar, p13Medium, p13Regular, setCssVar } from '../../primitives';
 
 type EditWorkspaceModalProps = {
@@ -18,9 +19,9 @@ type EditWorkspaceModalProps = {
   readonly membersHref: string;
   readonly onRename?: (newName: string) => void | Promise<void>;
   readonly onDelete?: () => void | Promise<void>;
-} & Pick<ComponentProps<typeof ClosableModal>, 'Heading'>;
+} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
 
-export const EditWorkspaceModal = ({
+export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
   name,
 
   allowDelete,
@@ -31,7 +32,7 @@ export const EditWorkspaceModal = ({
   onDelete = noop,
 
   ...props
-}: EditWorkspaceModalProps): ReturnType<React.FC> => {
+}) => {
   const [newName, setNewName] = useState(name);
   const [deletionConfirmationPrompt, setDeletionConfirmationPrompt] =
     useState('');

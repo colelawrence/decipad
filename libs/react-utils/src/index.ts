@@ -4,6 +4,7 @@ export * from './justStopEventPropagation';
 export * from './removeFocus';
 export * from './selectable-context';
 export * from './state';
+export * from './useStripe';
 export * from './use-behavior-subject';
 export * from './useActiveElement';
 export * from './useEventListener';

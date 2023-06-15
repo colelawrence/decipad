@@ -3,8 +3,14 @@ import { ComponentProps, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClosableModalHeader, Modal } from '../../molecules';
 
-type ClosableModalProps = ComponentProps<typeof ClosableModalHeader> &
-  ComponentProps<typeof Modal>;
+type ClosableModalProps = ComponentProps<typeof Modal> &
+  (
+    | ({ title: string } & ComponentProps<typeof ClosableModalHeader>)
+    | ({ noHeader: true } & Pick<
+        ComponentProps<typeof ClosableModalHeader>,
+        'closeAction'
+      >)
+  );
 
 export const ClosableModal = ({
   children,
@@ -25,10 +31,15 @@ export const ClosableModal = ({
     }, 300);
   }, [closeAction, navigate]);
 
+  const header =
+    'title' in props ? (
+      <ClosableModalHeader {...props} closeAction={handleClose} />
+    ) : null;
+
   return (
     <Modal closeAction={handleClose} fadeOut={isClosing}>
       <div css={{ display: 'grid', rowGap: '12px' }}>
-        <ClosableModalHeader {...props} closeAction={handleClose} />
+        {header}
         {children}
       </div>
     </Modal>

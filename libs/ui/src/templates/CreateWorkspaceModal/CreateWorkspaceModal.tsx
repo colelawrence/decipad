@@ -5,11 +5,12 @@ import { css } from '@emotion/react';
 import { ComponentProps, useCallback, useState } from 'react';
 import { Button, InputField } from '../../atoms';
 import { ClosableModal } from '../../organisms';
+import { ClosableModalHeader } from '../../molecules';
 
 type CreateWorkspaceModalProps = {
   readonly closeHref: string;
   readonly onCreate?: (name: string) => void | Promise<void>;
-} & Pick<ComponentProps<typeof ClosableModal>, 'Heading'>;
+} & Pick<ComponentProps<typeof ClosableModalHeader>, 'Heading'>;
 
 export const CreateWorkspaceModal = ({
   closeHref,
