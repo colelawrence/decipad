@@ -9,7 +9,7 @@ import {
   Resizable,
   useMediaStore,
 } from '@udecode/plate';
-import { ComponentProps, FC, ReactNode } from 'react';
+import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import type {
   MediaEmbedElement,
   MyElement,
@@ -31,7 +31,7 @@ import {
   resizableStyles,
   rootStyles,
 } from './styles';
-import { Div, FigCaption } from '../../utils/resizing';
+import { FigCaption } from '../../utils/resizing';
 
 type Component = PlateComponent<{
   draggableBlock: FC<
@@ -99,13 +99,16 @@ export const MediaEmbed: Component = ({
               css={[resizableStyles, isSelected && resizableSelectedStyles]}
               maxWidth={provider === 'twitter' ? 550 : '100%'}
               minWidth={provider === 'twitter' ? 330 : 150}
-              handleComponent={{
-                left: (
+              renderHandleLeft={useCallback(
+                () => (
                   <Box
                     css={[handleLeftStyles, isSelected && handleSelectedStyles]}
                   />
                 ),
-                right: (
+                [isSelected]
+              )}
+              renderHandleRight={useCallback(
+                () => (
                   <Box
                     css={[
                       handleRightStyles,
@@ -113,9 +116,10 @@ export const MediaEmbed: Component = ({
                     ]}
                   />
                 ),
-              }}
+                [isSelected]
+              )}
               readOnly={readOnly}
-              as={Div}
+              asAlias="div"
             >
               <div
                 css={css`

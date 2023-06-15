@@ -10,10 +10,10 @@ import {
   Resizable,
   mediaFloatingOptions,
 } from '@udecode/plate';
-import { ComponentProps, FC, ReactNode } from 'react';
+import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import { useFocused, useSelected } from 'slate-react';
 import { cssVar } from '../../primitives';
-import { Div, FigCaption } from '../../utils/resizing';
+import { FigCaption } from '../../utils/resizing';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
 import { FloatingMedia } from '../FloatingMedia/FloatingMedia';
 import {
@@ -112,13 +112,16 @@ export const Image: ImageComponent = ({
                 imagePlaceholderStyles,
                 isSelected && resizableImagePlaceholderStyles,
               ]}
-              handleComponent={{
-                left: (
+              renderHandleLeft={useCallback(
+                () => (
                   <Box
                     css={[handleLeftStyles, isSelected && handleSelectedStyles]}
                   />
                 ),
-                right: (
+                [isSelected]
+              )}
+              renderHandleRight={useCallback(
+                () => (
                   <Box
                     css={[
                       handleRightStyles,
@@ -126,11 +129,11 @@ export const Image: ImageComponent = ({
                     ]}
                   />
                 ),
-              }}
+                [isSelected]
+              )}
               readOnly={readOnly}
               minWidth={200}
-              minHeight={200}
-              as={Div}
+              asAlias="div"
             >
               <PlateImage
                 css={imgStyles}
