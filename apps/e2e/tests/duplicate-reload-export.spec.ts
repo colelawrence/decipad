@@ -53,10 +53,7 @@ test.describe('Duplicating a notebook', () => {
   test('Can reload', async () => {
     await page.reload();
     await waitForEditorToLoad(page);
-    const lastParagraph = await page.waitForSelector(
-      'text=this is the third paragraph'
-    );
-    expect(await lastParagraph.isVisible()).toBeTruthy();
+    await expect(page.getByText('this is the third paragraph')).toBeVisible();
     await navigateToWorkspacePage(page);
   });
 
