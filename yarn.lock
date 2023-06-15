@@ -17975,10 +17975,10 @@ csstype@^3.0.2, csstype@^3.0.4, csstype@^3.0.6:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
-csv-parse@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.3.0.tgz#85cc02fc9d1c89bd1b02e69069c960f8b8064322"
-  integrity sha512-UXJCGwvJ2fep39purtAn27OUYmxB1JQto+zhZ4QlJpzsirtSFbzLvip1aIgziqNdZp/TptvsKEV5BZSxe10/DQ==
+csv-parse@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.4.0.tgz#6793210a4a49a9a74b3fde3f9d00f3f52044fd89"
+  integrity sha512-JiQosUWiOFgp4hQn0an+SBoV9IKdqzhROM0iiN4LB7UpfJBlsSJlWl9nq4zGgxgMAzHJ6V4t29VAVD+3+2NJAg==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
