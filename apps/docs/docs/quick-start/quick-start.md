@@ -69,7 +69,7 @@ Card,
               />
               <Card
                 title="Inline Results"
-                notebook="/docs/quick-start/inline-numbers"
+                notebook="/docs/quick-start/inline-results"
                 description="Explain results and conclusions."
               />
              <Card

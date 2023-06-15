@@ -28,7 +28,7 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
    You can easily drag and drop these calculations results:
 
-   - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-numbers)
+   - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-results)
    - Into your formulas to reuse them. [Learn more about Formulas →](/docs/formulas)
 
 3. **Add Units to Table Values**:
