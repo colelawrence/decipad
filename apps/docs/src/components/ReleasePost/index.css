@@ -1,16 +1,16 @@
-.release-post img{
+.release-post img {
   width: 98%;
   margin: auto;
-  filter: drop-shadow(0px 2px 16px rgba(0, 0, 0, 0.06));
+  /*filter: drop-shadow(0px 2px 16px rgba(0, 0, 0, 0.06));*/
   border-radius: 18px;
-  border: 1px solid #ECF0F6;
+  border: 1px solid #ecf0f6;
 }
 
-.release-post p +ul {
+.release-post p + ul {
   margin-top: -15px;
 }
 
-.release-post p>img {
+.release-post p > img {
   margin-bottom: -10px;
 }
 
