@@ -95,6 +95,7 @@ export const DataViewDataGroupElement: FC<DataViewDataGroupElementProps> = ({
       column={element.column}
       previousColumns={element.previousColumns}
       roundings={roundings}
+      replicaCount={element.replicaCount}
     />
   ) : (
     <SmartCell

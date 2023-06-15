@@ -54,6 +54,7 @@ export interface HeaderProps {
   rotate: boolean;
   isFirstLevelHeader: boolean;
   aggregationType?: string;
+  replicaCount: number;
 }
 
 export interface SmartRowColumn {
@@ -98,6 +99,7 @@ export interface DataGroupElement extends BaseElement {
     value: Comparable | undefined;
     name: string;
   }[];
+  replicaCount: number;
 }
 
 export type DataGroup = DataGroupElement | SmartRowElement;

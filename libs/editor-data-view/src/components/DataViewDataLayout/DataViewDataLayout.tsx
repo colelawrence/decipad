@@ -72,6 +72,7 @@ export const DataViewDataLayout: FC<DataViewLayoutProps> = ({
           children: pageGroups,
           columnIndex: -1,
           previousColumns: [],
+          replicaCount: 1,
         },
         {
           rotate,

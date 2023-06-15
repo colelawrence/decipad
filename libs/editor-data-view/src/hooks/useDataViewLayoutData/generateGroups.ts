@@ -112,6 +112,7 @@ export const generateGroups = async ({
         generateSmartRow: subGenerateSmartRow,
         preventExpansion,
         rotate,
+        replicaCount: end - start + 1,
       });
     })
   );

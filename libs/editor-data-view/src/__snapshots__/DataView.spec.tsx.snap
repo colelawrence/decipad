@@ -4220,6 +4220,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4276,6 +4277,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4357,6 +4359,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4413,6 +4416,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4494,6 +4498,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4550,6 +4555,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4631,6 +4637,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4687,6 +4694,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4768,6 +4776,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4824,6 +4833,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -4905,6 +4915,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -4961,6 +4972,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5042,6 +5054,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5098,6 +5111,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5179,6 +5193,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5235,6 +5250,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5316,6 +5332,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5372,6 +5389,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5453,6 +5471,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5509,6 +5528,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5590,6 +5610,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5646,6 +5667,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5727,6 +5749,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5783,6 +5806,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -5864,6 +5888,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -5920,6 +5945,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -6001,6 +6027,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -6057,6 +6084,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -6138,6 +6166,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -6194,6 +6223,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -6275,6 +6305,7 @@ Array [
             },
           },
         ],
+        "replicaCount": 1,
         "selfHighlight$": BehaviorSubject {
           "_value": false,
           "closed": false,
@@ -6331,6 +6362,7 @@ Array [
         },
       },
     ],
+    "replicaCount": 1,
     "selfHighlight$": BehaviorSubject {
       "_value": false,
       "closed": false,
@@ -6476,6 +6508,7 @@ Array [
     "global": true,
     "id": "total",
     "previousColumns": Array [],
+    "replicaCount": 1,
     "type": Object {
       "kind": "string",
     },

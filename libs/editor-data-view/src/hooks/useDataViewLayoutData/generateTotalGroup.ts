@@ -32,5 +32,6 @@ export const generateTotalGroup = ({
     columnIndex: -1,
     global: true,
     previousColumns: [],
+    replicaCount: 1,
   };
 };

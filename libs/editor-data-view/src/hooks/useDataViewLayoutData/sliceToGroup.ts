@@ -23,6 +23,7 @@ interface SliceToGroupProps {
   generateSmartRow: GenerateSubSmartRow;
   preventExpansion: boolean;
   rotate: boolean;
+  replicaCount: number;
 }
 
 export const sliceToGroup = async ({
@@ -39,6 +40,7 @@ export const sliceToGroup = async ({
   generateSmartRow,
   preventExpansion,
   rotate,
+  replicaCount,
 }: SliceToGroupProps): Promise<DataGroup> => {
   const selfHighlight$ = new BehaviorSubject<boolean>(false);
 
@@ -95,5 +97,6 @@ export const sliceToGroup = async ({
     columnIndex,
     previousColumns,
     column: previousColumns[previousColumns.length - 1] as SmartRowColumn,
+    replicaCount,
   };
 };
