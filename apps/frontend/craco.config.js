@@ -1,5 +1,5 @@
 const open = require('open');
-const configureWebpack = require('./configureWebpack');
+const configureWebpack = require('../../libs/webpack-config/webpackConfig');
 
 const e2e = !!process.env.DECI_E2E;
 const shouldOpen = !e2e;
@@ -41,7 +41,10 @@ devServer.proxy = {
 
 module.exports = {
   webpack: {
-    configure: configureWebpack,
+    configure: configureWebpack({
+      configureSentry: true,
+      configureServiceWorker: process.env.NODE_ENV === 'production',
+    }),
   },
   eslint: { enable: false },
   typescript: { enableTypeChecking: false },

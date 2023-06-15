@@ -16,13 +16,11 @@ import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import { Onboard } from './Onboard/LazyOnboard';
 import { RequireOnboard } from './Onboard/RequireOnboard';
 import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
+import Notebooks from './notebooks/Notebooks';
 
 export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
 const Workspaces = lazy(loadWorkspaces);
-export const loadNotebooks = () =>
-  import(/* webpackChunkName: "notebooks" */ './notebooks/Notebooks');
-const Notebooks = lazy(loadNotebooks);
 export const loadPlayground = () =>
   import(/* webpackChunkName: "playground" */ './playground/Playground');
 const Playground = lazy(loadPlayground);

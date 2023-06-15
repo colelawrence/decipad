@@ -24,10 +24,8 @@ import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
+import Topbar from './Topbar';
 
-const loadTopbar = () =>
-  import(/* webpackChunkName: "notebook-topbar" */ './Topbar');
-const Topbar = lazy(loadTopbar);
 const loadEditorIcon = () =>
   import(/* webpackChunkName: "notebook-editor-icon" */ './EditorIcon');
 const EditorIcon = lazy(loadEditorIcon);
@@ -36,7 +34,7 @@ const loadEditor = () =>
 const Editor = lazy(loadEditor);
 
 // prefetch
-loadTopbar().then(loadEditorIcon).then(loadEditor);
+loadEditorIcon().then(loadEditor);
 
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();

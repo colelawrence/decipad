@@ -10,6 +10,8 @@ import {
   TColorStatus,
   TopbarPlaceholder,
   LoadingLogo,
+  NotebookList,
+  DashboardSidebar,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
 import sortBy from 'lodash.sortby';
@@ -62,11 +64,6 @@ const Topbar = lazy(loadTopbar);
 const loadBigAssTopbar = () =>
   import(/* webpackChunkName: "big-ass-topbar" */ './BigAssTopbar');
 const BigAssTopbar = lazy(loadBigAssTopbar);
-const loadSidebar = () => import(/* webpackChunkName: "sidebar" */ './Sidebar');
-const Sidebar = lazy(loadSidebar);
-const loadNotebookList = () =>
-  import(/* webpackChunkName: "notebook-list" */ './NotebookList');
-const NotebookList = lazy(loadNotebookList);
 const loadCreateWorkspaceModal = () =>
   import(
     /* webpackChunkName: "create-workspace-modal" */ './CreateWorkspaceModal'
@@ -85,9 +82,6 @@ const loadEditUserModal = () =>
   import(/* webpackChunkName: "edit-user-modal" */ './EditUserModal');
 const EditUserModal = lazy(loadEditUserModal);
 
-export const loadNotebooks = () =>
-  import(/* webpackChunkName: "notebooks" */ '../../notebooks/Notebooks');
-
 const preloadModals = () => {
   timeout(3000)
     .then(loadCreateWorkspaceModal)
@@ -97,7 +91,7 @@ const preloadModals = () => {
 };
 
 // prefetch
-loadTopbar().then(loadNotebookList).then(loadSidebar).then(preloadModals);
+loadTopbar().then(preloadModals);
 
 const Workspace: FC = () => {
   const { show, showNewMessage } = useIntercom();
@@ -332,7 +326,7 @@ const Workspace: FC = () => {
       title={null}
       suspenseFallback={<DashboardSidebarPlaceholder />}
     >
-      <Sidebar
+      <DashboardSidebar
         showFeedback={showFeedback}
         Heading="h1"
         name={user?.self?.name || 'Me'}
@@ -372,10 +366,7 @@ const Workspace: FC = () => {
 
   const topBarWrapper = showBigAssTopbar ? null : (
     <Frame Heading="h1" title={null} suspenseFallback={<TopbarPlaceholder />}>
-      <Topbar
-        onCreateNotebook={handleCreateNotebook}
-        onPointerEnter={loadNotebooks}
-      />
+      <Topbar onCreateNotebook={handleCreateNotebook} />
     </Frame>
   );
 
@@ -478,7 +469,6 @@ const Workspace: FC = () => {
         }
         onCTADismiss={onCTADismiss}
         showCTA={!ctaDismissed && !showBigAssTopbar}
-        onPointerEnter={loadNotebooks}
       />
     </Frame>
   );
