@@ -86,6 +86,8 @@ export async function createSandboxEnv(
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
     JWT_SECRET: process.env.JWT_SECRET || nanoid(),
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    STRIPE_API_KEY: process.env.STRIPE_API_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   };
 
   // the final sandbox environment:

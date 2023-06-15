@@ -146,6 +146,10 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.SENTRY_DSN);
     case 'INTERCOM_SECRET_ID':
       return valueOrDefault(name, process.env.INTERCOM_SECRET_ID);
+    case 'STRIPE_API_KEY':
+      return valueOrDefault(name, process.env.STRIPE_API_KEY);
+    case 'STRIPE_WEBHOOK_SECRET':
+      return valueOrDefault(name, process.env.STRIPE_WEBHOOK_SECRET);
   }
 }
 
@@ -250,6 +254,10 @@ export function thirdParty() {
     openai: {
       apiKey: env('OPENAI_API_KEY'),
     },
+    stripe: {
+      webhookSecret: env('STRIPE_WEBHOOK_SECRET'),
+      apiKey: env('STRIPE_API_KEY'),
+    },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')
     ),
@@ -268,7 +276,7 @@ export function codePlaceholder() {
 //
 // experimental feature:
 //   const availableDecipadNumbers = this;
-//   const { Banana } = this; 
+//   const { Banana } = this;
 //
 //   you can then do a request, or base your logic
 //   on your decipad notebook`;

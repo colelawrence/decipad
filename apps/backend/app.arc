@@ -45,6 +45,9 @@ get /api/ws
 get /api/import/url
 get /api/clear
 
+# Stripe endpoints
+post /api/stripe/webhook
+
 @static
 folder public
 
@@ -52,9 +55,12 @@ folder public
 
 @tables
 workspacesubscriptions
-  id *String
+  id *String # Stripe's subscription id
   workspace_id String
   client_reference_id String
+  payment_link String
+  payment_status String
+  email String
 
 users
   id *String
@@ -341,6 +347,8 @@ verificationrequests
 workspaceroles
   workspace_id *String
   name byWorkspaceId
+  payment_link String
+
 
 subscriptions
   user_id *String

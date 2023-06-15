@@ -53,6 +53,10 @@ const defaultEnvValues = {
   DECI_TEST_USER_SECRET: '8VZFow-238xbFlfKJewgmPLdwIqEPhQvpb7voaWmeI',
 
   INTERCOM_SECRET_ID: '',
+
+  STRIPE_WEBHOOK_SECRET: 'whsec_5OFckdB3UAvB6IzPG3FRZ9693S46b5SE',
+  STRIPE_API_KEY:
+    'pk_test_51J3IJaB0kCiHMJmLLVOuP3EvQydQUapNq7cUlEJs7WxIuv6AOFix7iz7urY9vJu8mQR0q6D9KIRb5zbf9184ykzJ00w67LiHvu',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

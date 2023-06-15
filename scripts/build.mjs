@@ -41,6 +41,8 @@ const envVarNames = [
   'ARC_STATIC_SPA',
   'INTERCOM_SECRET_ID',
   'OPENAI_API_KEY',
+  'STRIPE_API_KEY',
+  'STRIPE_WEBHOOK_SECRET',
 ];
 
 function getEnvVar(name) {

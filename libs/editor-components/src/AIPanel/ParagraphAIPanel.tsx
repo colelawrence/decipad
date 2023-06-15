@@ -52,8 +52,8 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
       <PromptSuggestions
         prompts={promptSuggestions}
         disabled={rd.status === 'loading'}
-        runPrompt={(prompt) => {
-          setPrompt(prompt);
+        runPrompt={(prmpt) => {
+          setPrompt(prmpt);
           handleSubmit();
         }}
       />

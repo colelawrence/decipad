@@ -70,6 +70,7 @@ export type Workspace = {
   id: ID;
   name: string;
   isPublic?: boolean;
+  isPremium?: boolean;
   roles: Role[];
 };
 
@@ -338,6 +339,7 @@ export interface SectionRecord extends TableRecordBase {
 export interface WorkspaceRecord extends TableRecordBase {
   name: string;
   isPublic?: boolean;
+  isPremium?: boolean;
 }
 
 export interface TagRecord extends TableRecordBase {
@@ -467,6 +469,9 @@ export interface SecretRecord extends TableRecordBase {
 export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   workspace_id: ID;
   client_reference_id: string;
+  payment_link: string;
+  payment_status: string;
+  email: string;
 }
 
 export interface SecretInput {

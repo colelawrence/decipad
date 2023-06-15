@@ -302,11 +302,6 @@ export default {
       return undefined;
     },
 
-    async isPremium(_: unknown, __: unknown, context: GraphqlContext) {
-      const { user } = context;
-      return !!user?.email?.endsWith('@n1n.co');
-    },
-
     async pads(
       workspace: Workspace,
       { page }: { page: PageInput }
