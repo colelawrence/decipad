@@ -270,7 +270,7 @@
     "rxjs": "7.8.0",
     "rxjs-hooks": "0.7.0",
     "search-query-parser": "^1.6.0",
-    "sharp": "^0.31.3",
+    "sharp": "^0.32.1",
     "simple-cookie": "1.0.13",
     "slate": "0.94.1",
     "slate-history": "0.93.0",
