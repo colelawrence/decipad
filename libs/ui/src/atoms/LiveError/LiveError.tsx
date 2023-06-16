@@ -4,6 +4,7 @@ import { ComponentProps, FC } from 'react';
 import * as icons from '../../icons';
 import { CodeError } from '../CodeError/CodeError';
 import { TextAndIconButton } from '../TextAndIconButton/TextAndIconButton';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 interface LiveErrorProps {
   error: Error;
@@ -88,15 +89,24 @@ export const LiveError: FC<LiveErrorProps> = ({
         color: 'red',
       } as IconInfo);
 
-  return (
+  const btn = (
     <TextAndIconButton
       color={color}
       iconPosition="left"
       text={label}
       onClick={action}
-      animateIcon
+      animateIcon={!isFailedAuth}
+      disabled={isFailedAuth}
     >
       {icon}
     </TextAndIconButton>
+  );
+  return isFailedAuth ? (
+    <Tooltip hoverOnly trigger={<span>{btn}</span>}>
+      Sorry, we can't access your private document right now. We are waiting for
+      google to approve our app.
+    </Tooltip>
+  ) : (
+    btn
   );
 };
