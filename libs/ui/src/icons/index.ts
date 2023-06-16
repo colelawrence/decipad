@@ -1,9 +1,9 @@
 export { Actions } from './Actions/Actions';
 export { Add } from './Add/Add';
 export { AddToWorkspace } from './AddToWorkspace/AddToWorkspace';
-export { All } from './All/All';
 export { AlignArrowLeft } from './AlignArrowLeft/AlignArrowLeft';
 export { AlignArrowRight } from './AlignArrowRight/AlignArrowRight';
+export { All } from './All/All';
 export { AnnotationWarning } from './AnnotationWarning/AnnotationWarning';
 export { Announcement } from './Announcement/Announcement';
 export { Archive } from './Archive/Archive';
@@ -86,6 +86,7 @@ export { GenericCursorAdd } from './GenericCursorAdd/GenericCursorAdd';
 export { GenericTable } from './GenericTable/GenericTable';
 export { GitBranch } from './GitBranch/GitBranch';
 export { Globe } from './Globe/Globe';
+export { Google } from './Google/Google';
 export { Happy } from './Happy/Happy';
 export { Heading } from './Heading/Heading';
 export { Heading1 } from './Heading1/Heading1';

@@ -65,7 +65,7 @@ export const LiveError: FC<LiveErrorProps> = ({
   console.error(error.message);
   const isPermissionErr = isPermissionError(error);
   const isFailedAuth = isFlagEnabled('INTEGRATIONS_AUTH') && isPermissionErr;
-  const label = isFailedAuth ? 'Authenticate' : 'Retry';
+  const label = isFailedAuth ? 'Authenticate with google' : 'Retry';
   const action = isFailedAuth ? onAuthenticate : onRetry;
 
   const defaultErr = (
@@ -80,7 +80,7 @@ export const LiveError: FC<LiveErrorProps> = ({
   const specialErrs = Object.keys(errIcons);
   const maybeMatchErr = specialErrs.find((thing) => errMsg.includes(thing));
   const { icon, color } = isPermissionErr
-    ? ({ icon: <icons.Refresh />, color: 'default' } as IconInfo)
+    ? ({ icon: <icons.Google />, color: 'default' } as IconInfo)
     : maybeMatchErr
     ? errIcons[maybeMatchErr]
     : ({
