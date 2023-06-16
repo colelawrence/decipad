@@ -299,7 +299,7 @@
     "wait-for-expect": "^3.0.2",
     "web-vitals": "3.3.0",
     "workbox-routing": "^6.5.4",
-    "workbox-webpack-plugin": "6.5.4",
+    "workbox-webpack-plugin": "6.6.0",
     "y-protocols": "1.0.5",
     "yjs": "13.6.2",
     "zustand": "4.3.1"
