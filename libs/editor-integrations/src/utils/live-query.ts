@@ -1,32 +1,32 @@
 import { Computer } from '@decipad/computer';
 import { insertExternalData } from '@decipad/editor-components';
 import {
-  ELEMENT_LIVE_QUERY_QUERY,
-  ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-  MyEditor,
-  ImportElementSource,
-  LiveDataSetElement,
   ELEMENT_LIVE_DATASET,
   ELEMENT_LIVE_DATASET_VARIABLE_NAME,
   ELEMENT_LIVE_QUERY,
+  ELEMENT_LIVE_QUERY_QUERY,
+  ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+  ImportElementSource,
+  LiveDataSetElement,
+  MyEditor,
 } from '@decipad/editor-types';
 import {
+  getNotebook,
+  getURLComponents,
   insertNodes,
   requirePathBelowBlock,
-  getURLComponents,
-  getNotebook,
 } from '@decipad/editor-utils';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
 import { getDefined, noop, timeout } from '@decipad/utils';
 import {
-  findNode,
-  nanoid,
-  isCollapsed,
-  withoutNormalizing,
   TEditor,
+  findNode,
   getChildren,
   insertText,
+  isCollapsed,
+  nanoid,
+  withoutNormalizing,
 } from '@udecode/plate';
 import { needsToCreateExternalData } from 'libs/editor-components/src/utils/needsToCreateExternalData';
 import { Path } from 'slate';
@@ -84,7 +84,7 @@ const justInsertLiveDataSet = async ({
   }
   const blockId = nanoid();
   const availableIdentifier = computer.getAvailableIdentifier(
-    connectionName || 'LiveConnection',
+    connectionName || 'Name',
     1
   );
   const liveConnEl: LiveDataSetElement = {
@@ -140,7 +140,7 @@ const identifyIslandsAndThenInsertLiveDataSet = async ({
 }: InsertLiveDataSetProps): Promise<void> => {
   const selection = getDefined(editor.selection);
   const availableIdentifier = computer.getAvailableIdentifier(
-    connectionName || 'LiveConnection',
+    connectionName || 'Name',
     1
   );
 

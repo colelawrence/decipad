@@ -50,19 +50,19 @@ export type ImportElementSource =
   | 'mariadb';
 
 export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
-  decipad: '',
+  decipad: 'Decipad',
   codeconnection: 'JS',
-  gsheets: '',
-  csv: '',
-  json: '',
-  arrow: '',
-  postgresql: '',
-  mysql: '',
-  oracledb: '',
-  cockroachdb: '',
-  redshift: '',
-  mssql: '',
-  mariadb: '',
+  gsheets: 'Google Sheets',
+  csv: 'CSV',
+  json: 'JSON',
+  arrow: 'Arrow',
+  postgresql: 'Postgres',
+  mysql: 'MySQL',
+  oracledb: 'Oracle',
+  cockroachdb: 'CockroachDB',
+  redshift: 'RedShift',
+  mssql: 'MySQL',
+  mariadb: 'MariaDB',
 };
 
 export interface JavaScriptBlock extends BaseElement {

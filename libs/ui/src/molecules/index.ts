@@ -40,6 +40,7 @@ export { ImportTableFirstRowControls } from './ImportTableFirstRowControls/Impor
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { InlineMenuGroup } from './InlineMenuGroup/InlineMenuGroup';
 export { InputMenuItem } from './InputMenuItem/InputMenuItem';
+export { IntegrationBlock } from './IntegrationBlock/IntegrationBlock';
 export { LabeledSelect } from './LabeledSelect/LabeledSelect';
 export { LiveConnectionPath } from './LiveConnectionPath/LiveConnectionPath';
 export { LiveQueryQuery } from './LiveQueryQuery/LiveQueryQuery';

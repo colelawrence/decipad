@@ -5,7 +5,7 @@ import {
   LiveDataSetElement,
 } from '@decipad/editor-types';
 import { assertElementMultipleType } from '@decipad/editor-utils';
-import { LiveConnectionResult, LiveError } from '@decipad/ui';
+import { LiveError } from '@decipad/ui';
 import { FC } from 'react';
 import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
 
@@ -23,30 +23,13 @@ export const LiveConnectionCore: FC<LiveConnectionCoreProps> = ({
     ELEMENT_LIVE_DATASET,
   ]);
 
-  const {
-    result,
-    error,
-    authenticate,
-    setIsFirstRowHeader,
-    onChangeColumnType,
-    clearCacheAndRetry,
-  } = useLiveConnectionCore({
+  const { error, authenticate, clearCacheAndRetry } = useLiveConnectionCore({
     element,
     deleted,
   });
 
   return (
     <div contentEditable={false}>
-      {result && (
-        <LiveConnectionResult
-          result={result}
-          isFirstRowHeaderRow={element.isFirstRowHeaderRow}
-          setIsFirstRowHeader={setIsFirstRowHeader}
-          onChangeColumnType={onChangeColumnType}
-          element={element}
-          showLiveQueryResults={!element.hideLiveQueryResults}
-        ></LiveConnectionResult>
-      )}
       {error ? (
         <LiveError
           error={error}

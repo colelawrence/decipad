@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { Tooltip } from '..';
 import {
   Bolt,
   Calendar,
   CheckboxSelected,
+  Loading,
   Number,
   TableSmall,
   Text,
@@ -14,12 +15,17 @@ import { cssVar, p10Medium, setCssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { CodeError } from '../CodeError/CodeError';
 
+type Meta = {
+  readonly label: string;
+  readonly value: string;
+};
+
 type LiveCodeProps = {
   readonly children?: ReactNode;
   readonly error?: Error;
   readonly text?: string;
   readonly type?: Kind;
-  readonly timeOfLastRun: string | null;
+  readonly meta: Meta[];
 };
 
 type Kind =
@@ -56,6 +62,8 @@ const getIconForType = (type?: Kind): ReactNode => {
       return <TableSmall />;
     case 'type-error':
       return <Warning />;
+    case 'pending':
+      return <Loading />;
     default:
       return <Bolt />;
   }
@@ -66,18 +74,22 @@ export const LiveCode = ({
   text,
   type,
   error,
-  timeOfLastRun,
+  meta,
 }: LiveCodeProps) => {
+  const trigg = useMemo(
+    // eslint-disable-next-line decipad/css-prop-named-variable
+    () => <span css={{ cursor: 'pointer' }}>{getIconForType(type)}</span>,
+    [type]
+  );
   const nonErrorTooltip = (
-    <Tooltip
-      hoverOnly
-      trigger={
-        // eslint-disable-next-line decipad/css-prop-named-variable
-        <span css={{ cursor: 'pointer' }}>{getIconForType(type)}</span>
-      }
-    >
-      <p>Live code result</p>
-      {timeOfLastRun && <p>Last run: {timeOfLastRun}</p>}
+    <Tooltip hoverOnly trigger={trigg}>
+      <p>Live code</p>
+      {meta.map((m, i) => (
+        <p css={metaStyles} key={`meta-live-code-${i}`}>
+          {m.label}:<br />
+          {m.value}
+        </p>
+      ))}
     </Tooltip>
   );
   return (
@@ -103,7 +115,7 @@ const liveCodeWrapperStyles = css(codeBlock.structuredVariableStyles, {
   borderRadius: 6,
   margin: 'auto 0',
   overflowWrap: 'anywhere',
-  maxWidth: '174px',
+  maxWidth: '375px',
   wordBreak: 'break-word',
   whiteSpace: 'normal',
   '@media print': {
@@ -147,4 +159,8 @@ const liveIconStyles = css({
 const liveSpanStyles = css({
   paddingRight: 2,
   textTransform: 'uppercase',
+});
+
+const metaStyles = css({
+  maxWidth: 150,
 });

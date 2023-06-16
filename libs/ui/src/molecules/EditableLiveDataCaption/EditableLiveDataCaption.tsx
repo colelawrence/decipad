@@ -96,7 +96,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
             (loading ? <Spinner /> : isUiIntegration ? <Data /> : <Zap />)}
         </div>
         <div
-          aria-placeholder={empty ? 'LiveConnection' : ''}
+          aria-placeholder={empty ? 'Name' : ''}
           css={[editableTableCaptionStyles, !selected && notSelectedAriaStyles]}
         >
           {caption}

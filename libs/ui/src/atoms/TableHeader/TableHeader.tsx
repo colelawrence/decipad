@@ -14,11 +14,11 @@ import {
 } from 'react-dnd';
 import { useMergedRef } from '../../hooks/index';
 import {
-  DragHandle as DragHandleIcon,
-  Warning,
   AlignArrowLeft,
   AlignArrowRight,
   Delete,
+  DragHandle as DragHandleIcon,
+  Warning,
 } from '../../icons';
 import {
   cssVar,
@@ -37,8 +37,8 @@ import {
   swatchesThemed,
 } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
-import { Tooltip } from '../Tooltip/Tooltip';
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 const columnStyles = css(p13Medium, {
   position: 'relative',
@@ -48,10 +48,6 @@ const columnStyles = css(p13Medium, {
 
   ':hover .table-drag-handle': {
     display: 'block',
-  },
-
-  ':hover .table-caret': {
-    opacity: 1,
   },
 });
 
@@ -164,26 +160,27 @@ const thStyles = (
       `inset 0px -2px 0px ${baseSwatches[color as AvailableSwatchColor].rgb}`,
   });
 export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
-  children?: React.ReactNode;
-  highlight?: boolean;
-  type?: CellValueType;
-  menu?: React.ReactNode;
-  attributes?: ElementAttributes;
-  isEditable?: boolean;
-  showIcon?: boolean;
-  onRemoveColumn?: () => void;
-  onAddColRight?: () => void;
-  onAddColLeft?: () => void;
+  readonly children?: React.ReactNode;
+  readonly highlight?: boolean;
+  readonly type?: CellValueType;
+  readonly menu?: React.ReactNode;
+  readonly attributes?: ElementAttributes;
+  readonly isEditable?: boolean;
+  readonly showIcon?: boolean;
+  readonly isLiveResult?: boolean;
+  readonly onRemoveColumn?: () => void;
+  readonly onAddColRight?: () => void;
+  readonly onAddColLeft?: () => void;
   // drag
-  draggable?: boolean;
-  dragSource?: ConnectDragSource;
-  dragPreview?: ConnectDragPreview;
+  readonly draggable?: boolean;
+  readonly dragSource?: ConnectDragSource;
+  readonly dragPreview?: ConnectDragPreview;
   // drop
-  dropTarget?: ConnectDropTarget;
-  dropDirection?: 'left' | 'right';
-  onSelectColumn?: () => void;
-  error?: string;
-  isFirst?: boolean;
+  readonly dropTarget?: ConnectDropTarget;
+  readonly dropDirection?: 'left' | 'right';
+  readonly onSelectColumn?: () => void;
+  readonly error?: string;
+  readonly isFirst?: boolean;
 }
 
 export const TableHeader = ({
@@ -196,6 +193,7 @@ export const TableHeader = ({
   showIcon = true,
   draggable = false,
   draggingOver = false,
+  isLiveResult = false,
   onAddColLeft,
   onAddColRight,
   onRemoveColumn,
@@ -249,12 +247,17 @@ export const TableHeader = ({
             display: 'none',
           },
         },
+        isLiveResult && {
+          ':hover .table-icon': {
+            display: 'block',
+          },
+        },
       ]}
       ref={thRef}
       data-highlight={highlight}
       contentEditable={isEditable}
     >
-      {isEditable && dropDirection === 'left' && (
+      {(isEditable || isLiveResult) && dropDirection === 'left' && (
         <ColumnDropLine dropDirection={dropDirection} />
       )}
 
@@ -310,7 +313,7 @@ export const TableHeader = ({
         {menu}
       </div>
 
-      {isEditable && dropDirection === 'right' && (
+      {(isEditable || isLiveResult) && dropDirection === 'right' && (
         <ColumnDropLine dropDirection={dropDirection} />
       )}
     </th>

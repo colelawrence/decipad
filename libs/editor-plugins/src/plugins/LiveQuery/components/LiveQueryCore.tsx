@@ -1,15 +1,13 @@
 import { Result } from '@decipad/computer';
+import { useNodePath } from '@decipad/editor-hooks';
 import {
   LiveQueryElement,
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
-import { useNodePath } from '@decipad/editor-hooks';
-import { useComputer } from '@decipad/react-contexts';
 import { Button, LiveConnectionResult, LiveError, Spinner } from '@decipad/ui';
-import { varNamify } from '@decipad/utils';
-import { getNodeString, insertText, setNodes } from '@udecode/plate';
+import { setNodes } from '@udecode/plate';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiveQuery } from '../hooks/useLiveQuery';
 
@@ -31,7 +29,6 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   showLiveQueryResults = false,
 }) => {
   const editor = useTEditorRef();
-  const computer = useComputer();
   const path = useNodePath(element);
 
   const liveQuery = useLiveQuery({
@@ -57,22 +54,6 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
     [editor, element.columnTypeCoercions, path]
   );
 
-  // sync connection metadata title if needed
-  useEffect(() => {
-    if (path && status === 'success') {
-      const caption = element.children[0];
-      const currentTitle = getNodeString(caption);
-      if (!currentTitle) {
-        const newTitle = 'LiveConnection';
-        insertText(
-          editor,
-          computer.getAvailableIdentifier(varNamify(newTitle), 1),
-          { at: [...path, 0] }
-        );
-      }
-    }
-  }, [computer, editor, element.children, path, status]);
-
   // persist results
 
   const store = useMemo(
@@ -83,21 +64,22 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   const [, setVersion] = useState(0);
 
   useEffect(() => {
+    const { error, result } = liveQuery;
+    if (!error && !result) {
+      return;
+    }
     const persistedResult = store.get(element);
-    if (status === 'success' && persistedResult?.result !== liveQuery.result) {
-      store.set(element, { result: liveQuery.result, error: undefined });
+    if (status === 'success' && persistedResult?.result !== result) {
+      store.set(element, { result, error: undefined });
       setVersion((v) => v + 1);
-    } else if (
-      status === 'error' &&
-      persistedResult?.error !== liveQuery.error
-    ) {
+    } else if (status === 'error' && persistedResult?.error !== error) {
       store.set(element, {
         result: undefined,
-        error: liveQuery.error,
+        error,
       });
       setVersion((v) => v + 1);
     }
-  }, [element, status, store]);
+  }, [element, liveQuery, status, store]);
 
   const {
     result: persistedResult = liveQuery.status === 'success'

@@ -11,20 +11,20 @@ import {
 import {
   insertBlockOfTypeBelow,
   insertCodeLineBelow,
-  insertDividerBelow,
   insertDataMapping,
+  insertDividerBelow,
   insertJavascriptBlockBelow,
-  setSelection,
   insertStructuredCodeLineBelow,
+  setSelection,
 } from '@decipad/editor-utils';
 import {
   useConnectionStore,
   useFileUploadStore,
 } from '@decipad/react-contexts';
 import { SlashCommandsMenu } from '@decipad/ui';
+import { deleteText, removeNodes, withoutNormalizing } from '@udecode/plate';
 import { ComponentProps } from 'react';
 import { Location, Path, Range } from 'slate';
-import { deleteText, removeNodes, withoutNormalizing } from '@udecode/plate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
 import {

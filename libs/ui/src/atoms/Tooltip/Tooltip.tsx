@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { noop } from '@decipad/utils';
 import { css, SerializedStyles } from '@emotion/react';
 import {
   Arrow,
@@ -8,7 +9,6 @@ import {
   Trigger,
 } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
-import { noop } from '@decipad/utils';
 import { FC, MouseEventHandler, useCallback } from 'react';
 import {
   cssVar,

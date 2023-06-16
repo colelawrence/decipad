@@ -1,22 +1,23 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useMemo, FC } from 'react';
 import { css } from '@emotion/react';
 import pluralize from 'pluralize';
+import { FC, useMemo } from 'react';
+import { SimpleTableCellType } from '@decipad/editor-types';
 import { PaginationControl, Table } from '..';
 import { TableHeader } from '../../atoms';
+import { useMaterializedResult } from '../../hooks/useMaterializedResult';
 import { TableHeaderRow, TableRow } from '../../molecules';
+import { cssVar, p13Regular } from '../../primitives';
 import { tableControlWidth } from '../../styles/table';
 import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
+import { usePagination } from '../../utils/usePagination';
 import {
   tableOverflowStyles,
   tableWrapperStyles,
 } from '../EditorTable/EditorTable';
 import { TableColumnHeader } from '../TableColumnHeader/TableColumnHeader';
 import { TableResultCell } from './TableResultCell';
-import { cssVar, p13Regular } from '../../primitives';
-import { usePagination } from '../../utils/usePagination';
-import { useMaterializedResult } from '../../hooks/useMaterializedResult';
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -119,9 +120,13 @@ export const TableResult: FC<TableResultProps> = ({
                   key={index}
                   type={toTableHeaderType(type.columnTypes[index])}
                   isFirst={index === 0}
+                  isLiveResult
                   isForImportedColumn={isLiveResult}
                   onChangeColumnType={(columnType) =>
-                    onChangeColumnType?.(index, columnType)
+                    onChangeColumnType?.(
+                      index,
+                      columnType as SimpleTableCellType
+                    )
                   }
                 >
                   {columnName}

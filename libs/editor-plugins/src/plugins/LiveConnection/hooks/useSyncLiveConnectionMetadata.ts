@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
-import { getNodeString, insertText } from '@udecode/plate';
-import { varNamify } from '@decipad/utils';
-import { ImportResult } from '@decipad/import';
 import {
   LiveConnectionElement,
   LiveDataSetElement,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { ImportResult } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
+import { varNamify } from '@decipad/utils';
+import { getNodeString, insertText } from '@udecode/plate';
+import { useEffect, useRef } from 'react';
 import { Path } from 'slate';
 
 interface UseSyncLiveConnectionMetadataProps {
@@ -23,17 +23,22 @@ export const useSyncLiveConnectionMetadata = ({
 }: UseSyncLiveConnectionMetadataProps) => {
   const editor = useTEditorRef();
   const computer = useComputer();
+  const mutated = useRef(false);
 
   // sync connection metadata title if needed
   useEffect(() => {
-    if (path && result) {
+    if (path && result && !mutated.current) {
       const caption = element.children[0];
       const currentTitle = getNodeString(caption);
-      if (!currentTitle) {
-        const newTitle = result.meta?.title || 'LiveConnection';
+      if (
+        (!currentTitle || currentTitle.startsWith('Name')) &&
+        result.meta?.title
+      ) {
+        const newTitle = result.meta.title;
+        mutated.current = true;
         insertText(
           editor,
-          computer.getAvailableIdentifier(varNamify(newTitle), 1),
+          computer.getAvailableIdentifier(varNamify(newTitle), 1, true),
           { at: [...path, 0] }
         );
       }

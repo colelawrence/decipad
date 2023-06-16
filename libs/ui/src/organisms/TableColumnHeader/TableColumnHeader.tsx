@@ -14,7 +14,7 @@ import { getStringType } from '../../utils';
 
 const rightSlotStyles = css({
   // opacity is being set to 1 on hover by the parent
-  opacity: 0,
+  opacity: 1,
   display: 'grid',
   alignItems: 'center',
   width: '16px',
@@ -39,13 +39,14 @@ type TableColumnHeaderProps = PropsWithChildren<
       ComponentProps<typeof TableColumnMenu>,
       'onChangeColumnType' | 'parseUnit' | 'isFirst' | 'dropdownNames'
     > & {
-      as?: ElementType;
-      empty?: boolean;
-      focused?: boolean;
-      readOnly?: boolean;
-      isForImportedColumn?: boolean;
-      attributes?: ElementAttributes;
-      error?: string;
+      readonly as?: ElementType;
+      readonly empty?: boolean;
+      readonly focused?: boolean;
+      readonly readOnly?: boolean;
+      readonly isForImportedColumn?: boolean;
+      readonly attributes?: ElementAttributes;
+      readonly error?: string;
+      readonly isLiveResult?: boolean;
     }
 >;
 
@@ -61,6 +62,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
   isForImportedColumn = false,
   children,
   dropdownNames = [],
+  isLiveResult = false,
   error,
   ...props
 }) => {
@@ -73,6 +75,7 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
       onAddColRight={onAddColRight}
       isEditable={!readOnly}
       isFirst={isFirst}
+      isLiveResult={isLiveResult}
       menu={
         !readOnly && (
           <TableColumnMenu

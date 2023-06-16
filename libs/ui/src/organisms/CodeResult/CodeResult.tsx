@@ -143,13 +143,21 @@ function getResultComponent<T extends SerializedTypeKind>(
 export function CodeResult<T extends SerializedTypeKind>(
   props: CodeResultProps<T>
 ): ReturnType<React.FC> {
-  const { type, value, variant = 'block', element, tooltip } = props;
+  const {
+    type,
+    value,
+    variant = 'block',
+    element,
+    tooltip,
+    isLiveResult,
+  } = props;
   const ResultComponent = getResultComponent({
     value,
     variant,
     type,
     element,
     tooltip,
+    isLiveResult,
   });
   // Does not present result when result is not present, except for type errors.
   if (

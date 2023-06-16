@@ -6,6 +6,7 @@ import {
   IntegrationTypes,
   MyElement,
   PlateComponent,
+  SimpleTableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
@@ -13,23 +14,14 @@ import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import {
   AnimatedIcon,
-  CodeResult,
-  LiveCode,
-  SegmentButtons,
-  TextAndIconButton,
-  cssVar,
-  p12Medium,
+  IntegrationBlock as UIIntegrationBlock,
 } from '@decipad/ui';
-import { css } from '@emotion/react';
-import { getPreviousNode } from '@udecode/plate';
+import { getPreviousNode, setNodes } from '@udecode/plate';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
-import {
-  hideOnPrint,
-  integrationBlockStyles,
-} from 'libs/ui/src/styles/editor-layout';
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useRef,
@@ -124,6 +116,21 @@ export const IntegrationBlock: PlateComponent = ({
     [element.integrationType.type]
   );
 
+  const onChangeColumnType = useCallback(
+    (columnIndex: number, colType?: SimpleTableCellType) => {
+      const typeMappings = element.typeMappings.slice(0);
+      typeMappings[columnIndex] = colType;
+      setNodes(
+        editor,
+        {
+          typeMappings,
+        },
+        { at: path }
+      );
+    },
+    [editor, element.typeMappings, path]
+  );
+
   return (
     <IntegrationBlockContext.Provider value={observable.current}>
       <DraggableBlock
@@ -132,84 +139,50 @@ export const IntegrationBlock: PlateComponent = ({
         blockKind="live"
         hasPreviousSibling={isStructuredElement(prevElement?.[0])}
       >
-        <div css={integrationBlockStyles}>
-          <div css={css({ display: 'flex', alignItems: 'center' })}>
-            <LiveCode
-              timeOfLastRun={timeOfLastRun}
-              error={err && new Error(errCause)}
-              type={blockType}
-              text={liveText}
-            >
-              {children}
-            </LiveCode>
-            <div contentEditable={false}>{specificIntegration}</div>
-
-            <div contentEditable={false} css={controlStyles}>
-              {readOnly ? (
-                <div css={{ visibility: 'hidden' }} />
-              ) : (
-                <TextAndIconButton
-                  text="View source"
-                  iconPosition="left"
-                  onClick={() => {
-                    observable.current.next('show-source');
-                    removeFocusFromAllBecauseSlate();
-                  }}
-                ></TextAndIconButton>
-              )}
-              <SegmentButtons
-                buttons={[
-                  {
-                    children: (
-                      <AnimatedIcon icon={<Refresh />} animated={animated} />
-                    ),
-                    onClick: () => {
-                      setAnimated(true);
-                      setTimeout(() => {
-                        setAnimated(false);
-                      }, 1000);
-                      observable.current.next('refresh');
-                      removeFocusFromAllBecauseSlate();
-                    },
-                    tooltip: 'Refresh data',
-                    visible: !readOnly,
-                  },
-                  {
-                    children: showData ? <Hide /> : <Show />,
-                    onClick: () => {
-                      setShowData(!showData);
-                      removeFocusFromAllBecauseSlate();
-                    },
-                    tooltip: `${showData ? 'Hide' : 'Show'} table`,
-                  },
-                ]}
-              />
-            </div>
-          </div>
-
-          <div contentEditable={false} css={codeResultStyles}>
-            {showData && blockResult?.result && (
-              <CodeResult
-                value={blockResult?.result?.value}
-                type={blockResult?.result?.type}
-              />
-            )}
-          </div>
-        </div>
+        <UIIntegrationBlock
+          meta={
+            timeOfLastRun ? [{ label: 'Last run', value: timeOfLastRun }] : []
+          }
+          error={err && new Error(errCause)}
+          type={blockType}
+          text={liveText}
+          children={children} // text input
+          onChangeColumnType={onChangeColumnType}
+          integrationChildren={specificIntegration}
+          actionButton={{
+            text: 'View source',
+            onClick: () => {
+              observable.current.next('show-source');
+              removeFocusFromAllBecauseSlate();
+            },
+          }}
+          buttons={[
+            {
+              children: <AnimatedIcon icon={<Refresh />} animated={animated} />,
+              onClick: () => {
+                setAnimated(true);
+                setTimeout(() => {
+                  setAnimated(false);
+                }, 1000);
+                observable.current.next('refresh');
+                removeFocusFromAllBecauseSlate();
+              },
+              tooltip: 'Refresh data',
+              visible: !readOnly,
+            },
+            {
+              children: showData ? <Hide /> : <Show />,
+              onClick: () => {
+                setShowData(!showData);
+                removeFocusFromAllBecauseSlate();
+              },
+              tooltip: `${showData ? 'Hide' : 'Show'} table`,
+            },
+          ]}
+          displayResults={showData}
+          result={blockResult?.result}
+        />
       </DraggableBlock>
     </IntegrationBlockContext.Provider>
   );
 };
-
-const codeResultStyles = css({
-  display: 'flex',
-});
-
-const controlStyles = css(p12Medium, hideOnPrint, {
-  // Shifts whole div to the right.
-  marginLeft: 'auto',
-  display: 'flex',
-  cursor: 'pointer',
-  gap: '6px',
-  color: cssVar('normalTextColor'),
-});

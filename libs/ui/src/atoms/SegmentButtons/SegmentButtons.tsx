@@ -48,14 +48,21 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
         );
         return visible ? (
           hasTooltip ? (
-            <Tooltip side="top" trigger={trigger}>
+            <Tooltip
+              side="top"
+              key={`figure-segment-tooltip-${i}`}
+              trigger={trigger}
+            >
               {tooltip}
             </Tooltip>
           ) : (
             trigger
           )
         ) : (
-          <div css={{ visibility: 'hidden' }} />
+          <div
+            key={`figure-segment-invisible-${i}`}
+            css={{ visibility: 'hidden' }}
+          />
         );
       })}
     </div>

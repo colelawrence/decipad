@@ -11,7 +11,7 @@ import {
 import { editorLayout } from '../../styles';
 import { importTableDragHandleStyles } from '../../styles/table';
 
-export interface ImportTableRowControlsProps {
+export interface ImportTableFirstRowControlsProps {
   readonly isFirstRow?: boolean;
   readonly toggleFirstRowIsHeader: (isFirstRow: boolean) => void;
 }
@@ -36,10 +36,9 @@ const importTableRowControlsWrapperStyles = css({
   verticalAlign: 'middle',
 });
 
-export const ImportTableFirstRowControls: FC<ImportTableRowControlsProps> = ({
-  isFirstRow = false,
-  toggleFirstRowIsHeader,
-}) => {
+export const ImportTableFirstRowControls: FC<
+  ImportTableFirstRowControlsProps
+> = ({ isFirstRow = false, toggleFirstRowIsHeader }) => {
   const menuButton = (
     <button
       onClick={() => toggleFirstRowIsHeader(true)}

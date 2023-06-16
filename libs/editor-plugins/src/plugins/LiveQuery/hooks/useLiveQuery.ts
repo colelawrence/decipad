@@ -12,23 +12,15 @@ interface UseLiveQueryParams {
   element: LiveQueryElement;
 }
 
-type RemoteData =
-  | {
-      status: 'not asked';
-    }
-  | {
-      status: 'loading';
-    }
-  | {
-      status: 'success';
-      result: Result.Result | undefined;
-    }
-  | {
-      status: 'error';
-      error: string;
-    };
+export type RemoteDataStatus = 'not asked' | 'loading' | 'success' | 'error';
 
-type UseLiveQueryResult = {
+export type RemoteData = {
+  status: RemoteDataStatus;
+  error?: string;
+  result?: Result.Result;
+};
+
+export type UseLiveQueryResult = {
   runQuery: () => void;
 } & RemoteData;
 

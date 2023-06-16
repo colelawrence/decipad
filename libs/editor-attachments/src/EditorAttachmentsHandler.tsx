@@ -26,6 +26,7 @@ import { Path } from 'slate';
 import { dndStore as plateDndStore } from '@udecode/plate-dnd';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { DropZoneDetector } from './DropZoneDetector';
+import { maybeSourceFromFileType } from './maybeSourceFromFileType';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,
@@ -121,7 +122,12 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         if (file.type.startsWith('image/')) {
           insertImageBelow(editor, insertAt, url, file.name);
         } else {
-          insertLiveConnection({ computer, editor, url });
+          insertLiveConnection({
+            computer,
+            editor,
+            url,
+            source: maybeSourceFromFileType(file.type) ?? undefined,
+          });
         }
       });
     },

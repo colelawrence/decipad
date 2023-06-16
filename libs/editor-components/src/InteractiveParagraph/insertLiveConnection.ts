@@ -14,14 +14,14 @@ import {
   insertNodes,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
+import { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
 import { getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { ExternalProvider } from '@decipad/graphql-client';
-import { needsToCreateExternalData } from '../utils/needsToCreateExternalData';
 import { insertExternalData } from '../utils/insertExternalData';
+import { needsToCreateExternalData } from '../utils/needsToCreateExternalData';
 
 const nextBlock = (path: Path): Path => {
   const [block, ...rest] = path;
@@ -43,6 +43,7 @@ const justInsertLiveConnection = async ({
   editor,
   source,
   url,
+  computer,
 }: InsertLiveConnectionProps): Promise<string | undefined> => {
   if (source === 'decipad' && url) {
     const { docId } = getURLComponents(url);
@@ -62,6 +63,7 @@ const justInsertLiveConnection = async ({
   if (selection == null || url == null) {
     return;
   }
+  const name = computer.getAvailableIdentifier('Name', 1, true);
   const liveConnEl: LiveConnectionElement = {
     id: nanoid(),
     type: ELEMENT_LIVE_CONNECTION,
@@ -73,7 +75,7 @@ const justInsertLiveConnection = async ({
       {
         id: nanoid(),
         type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-        children: [{ text: '' }],
+        children: [{ text: name }],
       },
     ],
   };

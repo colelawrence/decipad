@@ -8,7 +8,7 @@ export default {
 } as Meta;
 
 export const Normal: StoryFn = () => (
-  <LiveCode timeOfLastRun={null}>
+  <LiveCode meta={[]}>
     <span>Live Code</span>
   </LiveCode>
 );

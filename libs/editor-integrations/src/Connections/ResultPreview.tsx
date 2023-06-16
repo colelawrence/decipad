@@ -109,21 +109,14 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
   }, [onChangeType, result]);
 
   return (
-    <div
-      css={[
-        resultPreviewContainerStyles,
-        isVariableResult && {
-          flexDirection: 'row',
-          width: '100%',
-        },
-        !isVariableResult && {
-          flexDirection: 'column',
-          height: '100%',
-        },
-      ]}
-    >
+    <div css={resultPreviewWrapperStyles(!!isVariableResult)}>
       {shouldDisplayPreview && (
-        <LiveCode type={result.type.kind} timeOfLastRun={timeOfLastRun}>
+        <LiveCode
+          type={result.type.kind}
+          meta={
+            timeOfLastRun ? [{ label: 'Last run', value: timeOfLastRun }] : []
+          }
+        >
           <ContentEditableInput
             value={name}
             onChange={(newValue) => {
@@ -132,7 +125,7 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
           />
         </LiveCode>
       )}
-      <div css={isVariableResult && variableResultStyles}>
+      <div css={[isVariableResult && variableResultStyles, maxWidthParaStyles]}>
         {shouldDisplayPreview ? (
           <>
             <CodeResult
@@ -221,8 +214,24 @@ const resultPreviewContainerStyles = css({
   div: {
     margin: 0,
   },
-  ' div > span': {
-    maxWidth: 'unset',
+});
+
+const resultPreviewWrapperStyles = (isVariableResult: boolean) =>
+  css(
+    resultPreviewContainerStyles,
+    isVariableResult && {
+      flexDirection: 'row',
+      width: '100%',
+    },
+    !isVariableResult && {
+      flexDirection: 'column',
+      height: '100%',
+    }
+  );
+
+const maxWidthParaStyles = css({
+  span: {
+    maxWidth: 400,
     overflow: 'initial',
     whiteSpace: 'normal',
   },
