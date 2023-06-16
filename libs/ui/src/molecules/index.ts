@@ -36,7 +36,7 @@ export { FloatingLink } from './FloatingLink/FloatingLink';
 export { FormulaTableData } from './FormulaTableData/FormulaTableData';
 export { HelpButton } from './HelpButton/HelpButton';
 export { IconPopover } from './IconPopover/IconPopover';
-export { ImportTableRowControls } from './ImportTableRowControls/ImportTableRowControls';
+export { ImportTableFirstRowControls } from './ImportTableFirstRowControls/ImportTableFirstRowControls';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';
 export { InlineMenuGroup } from './InlineMenuGroup/InlineMenuGroup';
 export { InputMenuItem } from './InputMenuItem/InputMenuItem';

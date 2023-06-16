@@ -9,7 +9,7 @@ import type {
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { ImportTableRowControls } from '../../molecules';
+import { ImportTableFirstRowControls } from '../../molecules';
 import { CodeResult, DatabaseConnection } from '../../organisms';
 import { code } from '../../primitives';
 import { isDatabaseConnection } from '../../utils/isDatabaseConnection';
@@ -44,7 +44,7 @@ export const LiveConnectionResult: FC<LiveConnectionResultProps> = ({
           variant="block"
           isLiveResult
           firstTableRowControls={
-            <ImportTableRowControls
+            <ImportTableFirstRowControls
               isFirstRow={!isFirstRowHeaderRow}
               toggleFirstRowIsHeader={setIsFirstRowHeader}
             />

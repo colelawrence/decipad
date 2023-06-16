@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css } from '@emotion/react';
 import { once } from '@decipad/utils';
+import { css } from '@emotion/react';
 import { MouseEvent, forwardRef, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { DownArrow, DragHandle, Trash, UpArrow } from '../../icons/index';
@@ -13,7 +13,7 @@ import {
   shortAnimationDuration,
 } from '../../primitives';
 import { editorLayout } from '../../styles';
-import { importTableDragHandleStyles } from '../../styles/table';
+import { normalDragHandleStyles } from '../../styles/table';
 import { MenuList } from '../MenuList/MenuList';
 
 export interface TableCellControlsProps {
@@ -60,7 +60,7 @@ export const TableCellControls = forwardRef<
   );
 
   const menuButton = (
-    <button onClick={handleMenuClick} css={importTableDragHandleStyles}>
+    <button onClick={handleMenuClick} css={normalDragHandleStyles}>
       <DragHandle />
     </button>
   );

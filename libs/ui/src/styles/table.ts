@@ -36,6 +36,19 @@ export const tableParentStyles = css({
 
 export const importTableDragHandleStyles = css({
   gridArea: 'handle',
+  cursor: 'pointer',
+  borderRadius: '6px 0 0px 6px',
+  backgroundColor: cssVar('tableLiveMakeHeaderButton'),
+  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+  ...setCssVar('slashColorLight', 'transparent'),
+  ':hover': {
+    ...setCssVar('slashColorLight', 'transparent'),
+    backgroundColor: cssVar('tableLiveMakeHeaderButtonHover'),
+  },
+});
+
+export const normalDragHandleStyles = css({
+  gridArea: 'handle',
   cursor: 'grab',
   width: '18px',
   height: '18px',

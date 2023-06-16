@@ -173,6 +173,8 @@ export interface CssVariables {
   readonly borderColor: Property.Color;
   readonly borderHighlightColor: Property.Color;
   readonly borderTable: Property.Color;
+  readonly tableLiveMakeHeaderButton: Property.Color;
+  readonly tableLiveMakeHeaderButtonHover: Property.Color;
   readonly thumbColor: Property.Color;
 
   //

@@ -227,6 +227,9 @@ export const theme: CssVariables = {
   tableFocusColor: teal500.hex,
   tableFooterBackgroundColor: grey100.hex,
 
+  tableLiveMakeHeaderButton: purple200.hex,
+  tableLiveMakeHeaderButtonHover: purple300.hex,
+
   liveDataWeakBackgroundColor: yellow300.hex,
   liveDataBackgroundColor: yellow400.hex,
   liveDataTextColor: yellow800.hex,
