@@ -1,4 +1,5 @@
 import { ImportElementSource } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { ComponentProps, FC } from 'react';
 import {
   ConnectRanges,
@@ -54,38 +55,40 @@ const groups = (
             },
           ]
         : [
-            source === 'gsheets' && {
-              command: 'connect-islands',
-              title: 'Connect to table ranges',
-              description: `Tries to find tables in your google sheets and create a live connection`,
-              icon: <ConnectRanges />,
-              enabled: true,
-              extraSearchTerms: ['connect', 'live'],
-            },
             {
               command: 'connect-all',
-              title: `Connect to ${sourceName}`,
-              description: `Connect to live data from this ${sourceName}`,
+              title: `${sourceName} Integration`,
+              description: `Live data integration from ${sourceName}. You cannot edit the data.`,
               icon: <ConnectTable />,
               enabled: true,
               extraSearchTerms: ['connect', 'live'],
             },
-            source === 'gsheets' && {
-              command: 'import-islands',
-              title: 'Import table ranges',
-              description: `Tries to find tables in your google sheets and import them`,
-              icon: <ImportRangeCopies />,
-              enabled: true,
-              extraSearchTerms: ['import', 'google', 'sheets'],
-            },
             {
               command: 'import-all',
-              title: `Import from ${sourceName}`,
-              description: `Import all data in this ${sourceName}`,
+              title: `Paste from ${sourceName}`,
+              description: `Make a copy from ${sourceName} and edit in Decipad. Edits are allowed.`,
               icon: <ImportTable />,
               enabled: true,
               extraSearchTerms: ['import', 'google', 'sheets'],
             },
+            isFlagEnabled('SHEETS_ISLANDS') &&
+              source === 'gsheets' && {
+                command: 'connect-islands',
+                title: 'Connect to table ranges',
+                description: `Tries to find tables in your google sheets and create a live connection`,
+                icon: <ConnectRanges />,
+                enabled: true,
+                extraSearchTerms: ['connect', 'live'],
+              },
+            isFlagEnabled('SHEETS_ISLANDS') &&
+              source === 'gsheets' && {
+                command: 'import-islands',
+                title: 'Import table ranges',
+                description: `Tries to find tables in your google sheets and import them`,
+                icon: <ImportRangeCopies />,
+                enabled: true,
+                extraSearchTerms: ['import', 'google', 'sheets'],
+              },
           ].filter(Boolean),
     },
   ] as ComponentProps<typeof InlineMenu>['groups'];

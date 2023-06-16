@@ -21,7 +21,7 @@ export const availableFlags = [
   'LIVE_CONN_OPTIONS',
   'LIVE_QUERY',
   'UPLOAD_IMAGE',
-
+  'SHEETS_ISLANDS',
   'JS_BLOCK',
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',

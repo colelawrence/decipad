@@ -1,20 +1,20 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { removeNodes, withoutNormalizing, findNodePath } from '@udecode/plate';
+import { isTableResult } from '@decipad/computer';
 import { ImportElement, useTEditorRef } from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
+import { formatError } from '@decipad/format';
 import { ImportResult, tryImport } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
-import { formatError } from '@decipad/format';
-import { useSession } from 'next-auth/react';
 import { Spinner } from '@decipad/ui';
-import { isTableResult } from '@decipad/computer';
+import { findNodePath, removeNodes, withoutNormalizing } from '@udecode/plate';
+import { useSession } from 'next-auth/react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { importTable } from './importTable';
 
 interface SuspendedImportProps {
   element: ImportElement;
 }
 
-const MAX_IMPORT_CELL_COUNT = 300;
+const MAX_IMPORT_CELL_COUNT = 1000;
 
 export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
   const editor = useTEditorRef();
