@@ -48,7 +48,6 @@ export const VerifyEmail = ({ email }: { email: string }): ReturnType<FC> => {
           title="Check your inbox!"
           description={`Open the link sent to ${email}`}
         />
-
         <div css={buttonWrapperStyles}>
           <Button href="/">Back to log in</Button>
         </div>

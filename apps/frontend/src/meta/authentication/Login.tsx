@@ -1,63 +1,44 @@
-import { FC, useState } from 'react';
+import { LoginPage, VerifyEmail } from '@decipad/ui';
 import { signIn } from 'next-auth/react';
-import { ErrorPage, LoginPage, VerifyEmail } from '@decipad/ui';
+import { FC, useState } from 'react';
 import { loadWorkspaces } from '../../App';
+import { loadOnboarding } from '../../Onboard/LazyOnboard';
+import { loadEditor } from '../../notebooks/notebook/Notebook';
 
-type Status =
+type Page =
   | {
       kind: 'initial';
     }
   | {
-      kind: 'success';
+      kind: 'email-sent';
       email: string;
-    }
-  | {
-      kind: 'error';
-      error: string;
     };
 
-const errorMessage = (error: string) => {
-  if (error.startsWith('Error:')) {
-    return error.substring('Error:'.length);
-  }
-  return error;
-};
-
 export const Login: FC = () => {
-  const [status, setStatus] = useState<Status>({ kind: 'initial' });
+  const [page, setPage] = useState<Page>({ kind: 'initial' });
 
-  switch (status.kind) {
+  switch (page.kind) {
     case 'initial':
       return (
         // proper back to login without url change
         <LoginPage
           onSubmit={async (email) => {
             try {
+              setPage({ kind: 'email-sent', email });
               const resp = await signIn('email', { email, redirect: false });
-              if (!resp) {
-                setStatus({ kind: 'error', error: 'No response' });
-              } else if (resp.ok) {
-                setStatus({ kind: 'success', email });
-                // User will likely click the link in the email now, so let's get workspaces cached already for faster load
+              if (resp && resp.ok) {
+                // Aggressively pre-load stuff for user
+                loadOnboarding();
                 loadWorkspaces();
-              } else {
-                setStatus({
-                  kind: 'error',
-                  error: resp.error
-                    ? errorMessage(resp.error.trim())
-                    : 'Unknown error',
-                });
+                loadEditor();
               }
             } catch (error) {
               console.error('Failed to log in', error);
-              setStatus({ kind: 'error', error: (error as Error).message });
             }
           }}
         />
       );
-    case 'success':
-      return <VerifyEmail email={status.email} />;
-    case 'error':
-      return <ErrorPage Heading="h1" messages={status.error.split('.')} />;
+    case 'email-sent':
+      return <VerifyEmail email={page.email} />;
   }
 };

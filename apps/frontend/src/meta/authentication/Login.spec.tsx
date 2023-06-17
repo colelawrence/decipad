@@ -1,4 +1,3 @@
-import { mockConsoleError } from '@decipad/testutils';
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SignInResponse, signIn } from 'next-auth/react';
@@ -6,12 +5,10 @@ import { Login } from './Login';
 
 jest.mock('next-auth/react');
 let resolveSignIn!: (resp: SignInResponse) => void;
-let rejectSignIn!: (error: Error) => void;
 beforeEach(() => {
   (signIn as jest.MockedFunction<typeof signIn>).mockReturnValue(
-    new Promise<SignInResponse>((resolve, reject) => {
+    new Promise<SignInResponse>((resolve) => {
       resolveSignIn = resolve;
-      rejectSignIn = reject;
     })
   );
 });
@@ -39,21 +36,4 @@ it('shows a message when the signin request is processed', async () => {
     resolveSignIn({ ok: true, error: undefined, status: 200, url: null })
   );
   expect(await findByText(/open.+link/i)).toBeVisible();
-});
-
-describe('if the signin request fails', () => {
-  mockConsoleError();
-
-  it('shows an error message if the signin request fails', async () => {
-    const { findByText, findByPlaceholderText } = render(<Login />);
-    await act(async () => (await findByText('Continue with email')).click());
-    await userEvent.type(
-      await findByPlaceholderText(/e-?mail/i),
-      'me@example.com'
-    );
-    await userEvent.click(await findByText(/submit/i));
-
-    rejectSignIn(new Error('oopsie'));
-    expect(await findByText(/oopsie/i)).toBeVisible();
-  });
 });

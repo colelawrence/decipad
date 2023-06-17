@@ -29,7 +29,7 @@ import Topbar from './Topbar';
 const loadEditorIcon = () =>
   import(/* webpackChunkName: "notebook-editor-icon" */ './EditorIcon');
 const EditorIcon = lazy(loadEditorIcon);
-const loadEditor = () =>
+export const loadEditor = () =>
   import(/* webpackChunkName: "notebook-editor" */ './Editor');
 const Editor = lazy(loadEditor);
 
