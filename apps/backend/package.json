@@ -18,7 +18,7 @@
     "graphql-ws": "5.13.1",
     "lodash.chunk": "4.2.0",
     "lodash.merge": "4.6.2",
-    "mkdirp": "1.0.4"
+    "mkdirp": "3.0.1"
   },
   "devDependencies": {
     "@apollo/client": "3.7.0",
