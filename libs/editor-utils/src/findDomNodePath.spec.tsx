@@ -10,7 +10,7 @@ describe('findDomNodePath', () => {
     const { getByText } = render(
       <Slate
         editor={editor as never}
-        value={[{ text: 'text' }]}
+        initialValue={[{ text: 'text' }]}
         onChange={noop}
       >
         <Editable />

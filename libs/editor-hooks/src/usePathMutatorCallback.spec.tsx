@@ -47,7 +47,7 @@ describe('usePathMutatorCallback', () => {
     const { getByText, getByLabelText } = render(
       <Slate
         editor={editor as never}
-        value={
+        initialValue={
           [
             { type: 'a', id: 'asdf', url: '', children: [{ text: '' }] },
           ] as MyElement[]

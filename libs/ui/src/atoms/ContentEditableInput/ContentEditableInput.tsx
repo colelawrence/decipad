@@ -48,7 +48,7 @@ export const ContentEditableInput = ({
       css={containerStyles}
       data-testid={'result-preview-input'}
     >
-      <Slate editor={editor} value={initialValue}>
+      <Slate editor={editor} initialValue={initialValue}>
         <Editable onKeyDown={handleKeyDown} />
       </Slate>
     </div>
