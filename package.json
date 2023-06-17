@@ -252,7 +252,7 @@
     "react-dnd-touch-backend": "16.0.1",
     "react-dom": "18.2.0",
     "react-email": "1.9.3",
-    "react-error-boundary": "3.1.4",
+    "react-error-boundary": "4.0.10",
     "react-gravatar": "^2.6.3",
     "react-helmet": "^6.1.0",
     "react-icons": "4.9.0",
