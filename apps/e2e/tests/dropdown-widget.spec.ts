@@ -86,7 +86,7 @@ test.describe('Dropdown widget', () => {
     const dropdownMenu = page.locator(
       '[role="menuitem"]:has-text("Categories")'
     );
-    expect(await dropdownMenu.isVisible()).toBeTruthy();
+    await expect(dropdownMenu).toBeVisible();
   });
 
   test('You can open dropdown in the cell', async () => {

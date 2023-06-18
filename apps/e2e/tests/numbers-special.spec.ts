@@ -52,12 +52,9 @@ test.describe('Formula highlighting', () => {
   test('editable when TAB pressed', async () => {
     await keyPress(page, 'Tab');
     // Wait for line to be floaty before we start editing
-    const editor = await page.waitForSelector(
-      '[data-testid="inline-formula-editor"]'
-    );
-    await waitForExpect(async () =>
-      expect(await editor.textContent()).toBe('3')
-    );
+    await expect(
+      page.locator('[data-testid="inline-formula-editor"]')
+    ).toHaveText('3');
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);

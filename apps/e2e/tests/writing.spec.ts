@@ -30,12 +30,9 @@ test.describe('Writing in the editor', () => {
   test('allows changing the first paragraph on the body', async () => {
     await focusOnBody(page);
     await page.keyboard.type('this is the content for the first paragraph');
-    const firstParagraph = await page.waitForSelector(
-      '[data-testid="paragraph-wrapper"] >> nth=0'
-    );
-    expect(await firstParagraph.textContent()).toBe(
-      'this is the content for the first paragraph'
-    );
+    await expect(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=0')
+    ).toHaveText('this is the content for the first paragraph');
   });
 
   test('can make test bold, italic', async () => {
