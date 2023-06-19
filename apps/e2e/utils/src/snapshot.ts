@@ -14,7 +14,7 @@ export const snapshot = async (
     return;
   }
   snapshotsTaken.add(name);
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('load');
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(PAGE_SETTLE_TIMEOUT_BEFORE_SNAPSHOT_MS);
   await page.evaluate(() => document.fonts.ready);

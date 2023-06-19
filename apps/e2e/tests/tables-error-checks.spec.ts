@@ -33,7 +33,7 @@ test.describe('Number Parcing Checks', () => {
   // can't make copy and paste work on our tests
   // eslint-disable-next-line playwright/no-skipped-test
   test.skip('copy google sheet table', async () => {
-    url = await page.url();
+    url = page.url();
     await page.goto(
       'https://docs.google.com/spreadsheets/d/1CimD6WcVrqqyqI7u7LqOmDIbfDYdh6SIhyUdLfnPQM0/edit#gid=0'
     );
@@ -47,7 +47,7 @@ test.describe('Number Parcing Checks', () => {
     await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
     await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
     await page.locator('#waffle-rich-text-editor').press('Shift+ArrowRight');
-    await page.locator('#waffle-rich-text-editor');
+    page.locator('#waffle-rich-text-editor');
     await ControlPlus(page, 'C');
     await page.goto(url);
     await focusOnBody(page);

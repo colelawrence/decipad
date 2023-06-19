@@ -24,20 +24,20 @@ test.describe('Turn Into', () => {
     await keyPress(page, 'ArrowDown');
     await createInputBelow(page, 'Input1', 'true');
 
-    await expect(await page.getByRole('slider')).toBeHidden();
-    await expect(await page.getByRole('checkbox')).toBeHidden();
+    await expect(page.getByRole('slider')).toBeHidden();
+    await expect(page.getByRole('checkbox')).toBeHidden();
 
     await page.click('[data-testid=drag-handle]');
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
     await page.locator('role=menuitem', { hasText: 'slider' }).click();
 
-    await expect(await page.getByRole('slider')).toBeVisible();
+    await expect(page.getByRole('slider')).toBeVisible();
 
     await page.click('[data-testid=drag-handle]');
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
     await page.locator('role=menuitem', { hasText: 'toggle' }).click();
 
-    await expect(await page.getByRole('checkbox')).toBeVisible();
+    await expect(page.getByRole('checkbox')).toBeVisible();
   });
 
   test('Converts a Widget into a structured input', async () => {
@@ -47,17 +47,13 @@ test.describe('Turn Into', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
 
-    await expect(
-      await page.getByText('Off', { exact: true }).first()
-    ).toBeVisible();
+    await expect(page.getByText('Off', { exact: true }).first()).toBeVisible();
 
     await page.click('[data-testid=drag-handle] >> nth=1');
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
     await page.locator('role=menuitem', { hasText: 'calculation' }).click();
 
-    await expect(
-      await page.getByText('Off', { exact: true }).first()
-    ).toBeHidden();
+    await expect(page.getByText('Off', { exact: true }).first()).toBeHidden();
     await expect(
       page.locator('[data-testid="codeline-varname"] >> nth=-1')
     ).toContainText('Input2');

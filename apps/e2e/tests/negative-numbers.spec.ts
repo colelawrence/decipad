@@ -49,17 +49,17 @@ test.describe('Loading and snapshot of notebook with charts', () => {
 
   test('checks for errors', async () => {
     // note: This will stop picking up errors if we change the icon of loading
-    const hasMagicErrors = await page.locator(
+    const hasMagicErrors = page.locator(
       'p span >svg title:has-text("Loading")'
     );
 
     // note: This will stop picking up errors if we change the icon of errors
-    const hasCodelineErrors = await page.locator(
+    const hasCodelineErrors = page.locator(
       'output span >svg title:has-text("Warning")'
     );
 
     // note: This will stop picking up errors if we change the text of an error block
-    const hasErrorBlock = await page.locator('text=Delete this block');
+    const hasErrorBlock = page.locator('text=Delete this block');
 
     const mEC = await hasMagicErrors.count();
     const cEC = await hasCodelineErrors.count();

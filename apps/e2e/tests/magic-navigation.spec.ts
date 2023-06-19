@@ -60,7 +60,7 @@ test.describe('Navigating with magic numbers', () => {
     await createCodeLineV2Below(page, 'Price', 'Fees + 30£');
 
     await page.waitForSelector('text=is £35');
-    const magic = await page.locator('span[title="35"]');
+    const magic = page.locator('span[title="35"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();
     await page.waitForSelector('span[title="35"] >> visible=false');

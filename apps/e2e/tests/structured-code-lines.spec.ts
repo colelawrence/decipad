@@ -120,17 +120,17 @@ test.describe('Calculation Blocks v2', () => {
     lineNo += 1;
     const dropLineNo = lineNo;
 
-    await (
-      await getResults(page).nth(dragLineNo)
-    ).dragTo(getCodeV2CodeContainers(page).nth(dropLineNo));
+    await getResults(page)
+      .nth(dragLineNo)
+      .dragTo(getCodeV2CodeContainers(page).nth(dropLineNo));
 
     // Drag origin and drop target have 555! yay
     await expect(getResults(page).nth(dragLineNo)).toHaveText(/560/);
 
     // Drag into a paragraph -> creates a magic number
-    await (
-      await getResults(page).nth(dragLineNo)
-    ).dragTo(page.locator('[data-testid="paragraph-wrapper"] >> nth=-1'));
+    await getResults(page)
+      .nth(dragLineNo)
+      .dragTo(page.locator('[data-testid="paragraph-wrapper"] >> nth=-1'));
 
     await expect(
       page.locator(

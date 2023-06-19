@@ -89,9 +89,7 @@ export async function createResultBelow(page: Page) {
 
   await page.locator('role=menuitem', { hasText: 'result' }).click();
 
-  await page
-    .locator('[data-testid="widget-caption"] >> text=/Unnammed/')
-    .last();
+  page.locator('[data-testid="widget-caption"] >> text=/Unnammed/').last();
 }
 
 export async function createDataViewBelow(page: Page, identifier: string) {

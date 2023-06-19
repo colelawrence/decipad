@@ -90,12 +90,8 @@ test.describe('Make sure auto-complete works', () => {
   });
 
   test('Styles of bubbles are different for columns and variables', async () => {
-    const ref1 = await page
-      .locator('[data-testid="smart-ref"] > span > span')
-      .nth(0);
-    const ref2 = await page
-      .locator('[data-testid="smart-ref"] > span > span')
-      .nth(1);
+    const ref1 = page.locator('[data-testid="smart-ref"] > span > span').nth(0);
+    const ref2 = page.locator('[data-testid="smart-ref"] > span > span').nth(1);
     const color1 = await getStyle(ref1, 'background-color');
     const color2 = await getStyle(ref2, 'background-color');
     expect(color1).not.toBe(color2);
@@ -118,7 +114,7 @@ test.describe('Make sure auto-complete works', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page.getByTestId('menu-item-table').first().click();
-    await page.getByTestId('table-name-input').last();
+    page.getByTestId('table-name-input').last();
 
     await page.getByText('Column1').last().fill('name');
     await page.getByText('Column2').fill('RevenueNew');

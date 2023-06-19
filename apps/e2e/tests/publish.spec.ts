@@ -130,6 +130,6 @@ test.describe('Simple does publish work test', () => {
   });
 
   test("it shouldn't ask people to republish if no changes exist", async () => {
-    await expect(await page.locator('text=Publish New Changes')).toHaveCount(0);
+    await expect(page.locator('text=Publish New Changes')).toHaveCount(0);
   });
 });
