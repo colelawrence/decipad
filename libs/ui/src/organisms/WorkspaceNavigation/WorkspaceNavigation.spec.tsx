@@ -18,7 +18,10 @@ it('renders navigation links', async () => {
         <DndProvider backend={HTML5Backend}>
           <BrowserRouter>
             <WorkspaceNavigation
-              activeWorkspace={{ id: '42', sections: [] }}
+              activeWorkspace={{
+                id: '42',
+                sections: [],
+              }}
               onDeleteSection={noop}
               onCreateSection={() => new Promise(noop)}
               onUpdateSection={() => new Promise(noop)}

@@ -43,15 +43,85 @@ export const processSessionComplete = async (event: Stripe.Event) => {
   // update Stripe subscription
   await data.workspacesubscriptions.put({
     id: subscriptionId,
-    workspace_id: workspace?.id || '',
-    client_reference_id,
-    payment_link: paymentLink,
-    payment_status,
+    workspace_id: workspace.id,
+    clientReferenceId: client_reference_id,
+    paymentLink,
+    paymentStatus: payment_status,
     email: customer_details?.email || '',
   });
 
   return {
     statusCode: 200,
     body: `webhook succeeded: ${client_reference_id}`,
+  };
+};
+
+export const processSubscriptionDeleted = async (event: Stripe.Event) => {
+  const { id, status } = event.data.object as Stripe.Subscription;
+  const data = await tables();
+
+  const wsSubscription = await data.workspacesubscriptions.get({
+    id,
+  });
+
+  if (!wsSubscription) {
+    throw Boom.badRequest(`Subscription des not exist: ${id}`);
+  }
+
+  const workspace = await data.workspaces.get({
+    id: wsSubscription.workspace_id,
+  });
+
+  if (!workspace) {
+    throw Boom.badRequest(`Workspace does not exist: ${id}`);
+  }
+
+  if (status === 'canceled') {
+    await data.workspacesubscriptions.delete({ id });
+
+    await data.workspaces.put({
+      ...workspace,
+      isPremium: false,
+    });
+  }
+
+  return {
+    statusCode: 200,
+    body: `webhook succeeded! Subscription deleted: ${id}`,
+  };
+};
+
+export const processSubscriptionUpdated = async (event: Stripe.Event) => {
+  const { id, status } = event.data.object as Stripe.Subscription;
+  const data = await tables();
+
+  const wsSubscription = await data.workspacesubscriptions.get({
+    id,
+  });
+
+  if (!wsSubscription) {
+    throw Boom.badRequest(`Subscription des not exist: ${id}`);
+  }
+
+  const workspace = await data.workspaces.get({
+    id: wsSubscription.workspace_id,
+  });
+
+  if (!workspace) {
+    throw Boom.badRequest(
+      `Workspace des not exist: ${wsSubscription.workspace_id}`
+    );
+  }
+
+  if (status === 'active') {
+    await data.workspaces.put({
+      ...workspace,
+      isPremium: true,
+    });
+  }
+
+  return {
+    statusCode: 200,
+    body: `webhook succeeded! Subscription updated: ${id}`,
   };
 };

@@ -49,6 +49,10 @@ fragment WorkspaceMembers on Workspace {
   }
 }
 
+fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
+  paymentLink
+}
+
 fragment DashboardWorkspace on Workspace {
   id
   name
@@ -58,8 +62,8 @@ fragment DashboardWorkspace on Workspace {
       ...WorkspaceNotebook
     }
   }
-  subscription {
-
+  workspaceSubscription {
+    ...WorkspaceSubscriptionWithData
   }
   sections {
     ...WorkspaceSection

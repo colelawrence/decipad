@@ -56,11 +56,6 @@ folder public
 @tables
 workspacesubscriptions
   id *String # Stripe's subscription id
-  workspace_id String
-  client_reference_id String
-  payment_link String
-  payment_status String
-  email String
 
 users
   id *String
@@ -261,6 +256,10 @@ secrets
   encrypt true
 
 @tables-indexes
+workspacesubscriptions
+  workspace_id *String
+  name byWorkspace
+
 users
   secret *String
   name bySecret

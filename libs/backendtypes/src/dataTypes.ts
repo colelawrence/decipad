@@ -468,9 +468,9 @@ export interface SecretRecord extends TableRecordBase {
 }
 export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   workspace_id: ID;
-  client_reference_id: string;
-  payment_link: string;
-  payment_status: string;
+  clientReferenceId: string;
+  paymentLink: string;
+  paymentStatus: string;
   email: string;
 }
 

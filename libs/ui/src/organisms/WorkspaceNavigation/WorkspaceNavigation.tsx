@@ -148,7 +148,7 @@ export const WorkspaceNavigation = ({
   const clientEvent = useContext(ClientEventsContext);
 
   const isSharedSectionEnabled = isFlagEnabled('SHARE_PAD_WITH_EMAIL');
-  const { paymentLink, customerPortalLink } = useStripeLinks(activeWorkspace);
+  const { customerPortalLink, paymentLink } = useStripeLinks(activeWorkspace);
 
   return (
     <nav css={workspaceNavContainerStyles}>

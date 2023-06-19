@@ -4,7 +4,11 @@ import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/config';
 import handle from '../handle';
-import { processSessionComplete } from './processStripeEvents';
+import {
+  processSessionComplete,
+  processSubscriptionUpdated,
+  processSubscriptionDeleted,
+} from './processStripeEvents';
 
 const stripeConfig = thirdParty().stripe;
 
@@ -30,8 +34,11 @@ export const handler = handle(async (event: APIGatewayProxyEventV2) => {
     switch (stripeEvent.type) {
       case 'checkout.session.completed':
         return processSessionComplete(stripeEvent);
+      case 'customer.subscription.updated':
+        return processSubscriptionUpdated(stripeEvent);
+      case 'customer.subscription.deleted':
+        return processSubscriptionDeleted(stripeEvent);
       default:
-        // TODO: implement other supported stripe events
         throw Boom.teapot(`webhook ignored: ${stripeEvent.type}`);
     }
   } catch (err: any) {

@@ -12,6 +12,9 @@ export const Normal: StoryFn = () => (
     onDeleteSection={noop}
     onCreateSection={() => new Promise(noop)}
     onUpdateSection={() => new Promise(noop)}
-    activeWorkspace={{ id: '42', sections: [] }}
+    activeWorkspace={{
+      id: '42',
+      sections: [],
+    }}
   />
 );
