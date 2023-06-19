@@ -133,11 +133,13 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
           {activeTab === 'embed' && (
             <>
               <input
+                data-testid="upload-link-input"
                 css={inputStyles}
                 value={fileName}
                 onChange={(e) => setFileName(e.target.value)}
               />
               <Button
+                testId="embed-csv-button"
                 type="primary"
                 onClick={() => {
                   onUpload(fileName, 'embed');

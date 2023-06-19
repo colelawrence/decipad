@@ -32,7 +32,7 @@ export const Loading = (
     viewBox="0 0 16 16"
     {...props}
   >
-    <title>Loading</title>
+    <title data-testid="loading-animation">Loading</title>
     <circle
       fill={cssVar('currentTextColor')}
       stroke="none"
