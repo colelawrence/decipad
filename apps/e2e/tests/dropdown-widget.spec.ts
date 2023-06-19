@@ -91,7 +91,7 @@ test.describe('Dropdown widget', () => {
 
   test('You can open dropdown in the cell', async () => {
     await page.click('[role="menuitem"]:has-text("Categories")');
-    await page.click('[role="menuitem"]:has-text("Dropdown1")');
+    await page.click('[role="menuitem"]:has-text("Dropdown")');
 
     await page.waitForSelector('[aria-roledescription="dropdown-editor"]');
     await clickCell(page, 1, 2);

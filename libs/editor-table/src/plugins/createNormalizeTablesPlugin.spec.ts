@@ -9,10 +9,10 @@ import {
   ELEMENT_TR,
 } from '@decipad/editor-types';
 import {
-  createPlateEditor,
-  normalizeEditor,
   TEditor,
   TElement,
+  createPlateEditor,
+  normalizeEditor,
 } from '@udecode/plate';
 import { createTablePlugin } from './createTablePlugin';
 
@@ -49,7 +49,7 @@ it('normalizes empty table', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "Table1",
+                    "text": "Table",
                   },
                 ],
                 "id": "id-0",
@@ -129,7 +129,7 @@ it('inserts tds and ths if needed', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "Table1",
+                    "text": "Table",
                   },
                 ],
                 "id": "id-0",
@@ -211,7 +211,7 @@ it('removes strange types of nodes inside a table', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "Table1",
+                    "text": "Table",
                   },
                 ],
                 "id": "id-0",
@@ -334,7 +334,7 @@ it('makes all rows the same size as header row', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "Table1",
+                    "text": "Table",
                   },
                 ],
                 "type": "table-var-name",
@@ -511,7 +511,7 @@ it('makes th and td elements contain only text elements', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "Table1",
+                    "text": "Table",
                   },
                 ],
                 "type": "table-var-name",
@@ -643,7 +643,7 @@ it('makes table have at least one row', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "Table1",
+                    "text": "Table",
                   },
                 ],
                 "type": "table-var-name",

@@ -1,8 +1,9 @@
 import { Computer, identifierRegExpGlobal } from '@decipad/computer';
 import { MyElement, PlainText, useTEditorRef } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { useBehaviorSubject } from '@decipad/react-utils';
-import { timeout } from '@decipad/utils';
+import { generateVarName, timeout } from '@decipad/utils';
 import { findNodePath, getNodeString, insertText } from '@udecode/plate';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
@@ -22,7 +23,7 @@ import { useSelected } from 'slate-react';
 export function useEnsureValidVariableName(
   element: MyElement & { children: [PlainText] },
   blockIds: Array<string | undefined> = [],
-  defaultVarName = 'Unnamed'
+  defaultVarName = generateVarName(isFlagEnabled('SILLY_NAMES'))
 ): string | undefined {
   const editor = useTEditorRef();
   const computer = useComputer();
@@ -57,7 +58,7 @@ export function useEnsureValidVariableName(
             /\d+$/,
             ''
           ) || defaultVarName;
-        const newName = computer.getAvailableIdentifier(tentativeNewName, 2);
+        const newName = computer.getAvailableIdentifier(tentativeNewName);
 
         insertText(editor, newName, { at: path });
       }

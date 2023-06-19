@@ -46,7 +46,7 @@ it('clones while using a different varname', () => {
     Object {
       "children": Array [
         Object {
-          "text": "helloCopy1 = \\"world\\"",
+          "text": "helloCopy = \\"world\\"",
         },
       ],
       "id": "mock-nanoid",
@@ -79,7 +79,7 @@ it('clones while using a different varname (2)', () => {
         Object {
           "children": Array [
             Object {
-              "text": "helloCopy1",
+              "text": "helloCopy",
             },
           ],
           "id": "mock-nanoid",

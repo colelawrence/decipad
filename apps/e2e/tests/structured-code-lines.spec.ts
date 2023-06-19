@@ -1,12 +1,10 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
   createCodeLineV2Below,
-  getCodeLineV2VarName,
   getCodeV2CodeContainers,
-  getResult,
-  getResults,
 } from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
+import { getClearText, Timeouts } from '../utils/src';
 
 // eslint-disable-next-line playwright/no-skipped-test
 test.describe('Calculation Blocks v2', () => {
@@ -15,12 +13,9 @@ test.describe('Calculation Blocks v2', () => {
   let page: Page;
   let context: BrowserContext;
 
-  let lineNo = -1;
-
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = await page.context();
-    lineNo = -1;
     await setUp(
       { page, context },
       {
@@ -35,102 +30,124 @@ test.describe('Calculation Blocks v2', () => {
   });
 
   test('Calculates 1 + 1', async () => {
-    await createCodeLineV2Below(page, 'Name1', '1 + 1');
-    lineNo += 1;
-
-    await expect(async () => {
-      const result = await getResult(page, lineNo);
-      expect(await result.allTextContents()).toMatchObject([
-        expect.stringMatching(/2/i),
-      ]);
-
-      await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name1/);
-    }).toPass();
+    await createCodeLineV2Below(page, 'Name', '1 + 1');
+    await page.waitForSelector('[data-testid="number-result:2"]');
+    await expect(
+      await page.locator('[data-testid="codeline-varname"]').textContent()
+    ).toContain('Name');
   });
 
   test('Ensures variable name is unique', async () => {
-    await createCodeLineV2Below(page, 'Name2', '1 + 1');
-    lineNo += 1;
+    await createCodeLineV2Below(page, 'Name1', '1 + 1');
 
-    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name2/);
+    await expect(
+      await page
+        .locator('[data-testid="codeline-varname"]')
+        .nth(1)
+        .textContent()
+    ).toContain('Name');
 
-    await page.click(
-      '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
-    );
+    await page.locator('[data-testid="codeline-varname"]').nth(1).click();
     await keyPress(page, 'End');
     await keyPress(page, 'Backspace');
-    await page.keyboard.type('1');
 
-    // Not done editing, name is invalid and it's "Name1"
-    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name1/);
+    await expect(
+      await page
+        .locator('[data-testid="codeline-varname"]')
+        .nth(1)
+        .textContent()
+    ).toContain('Name');
 
-    // Blur the variable name to make it realize the name is bad
     await keyPress(page, 'Tab');
 
-    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name2/);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
+    const innerText = await page.evaluate(
+      getClearText,
+      await page.locator('[data-testid="codeline-varname"]').nth(1).innerHTML()
+    );
+    await expect(innerText).toContain('Name2');
   });
 
-  test('Ensures variable name is not empty', async () => {
-    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Name2/);
+  let generatedVarName;
 
-    await getCodeLineV2VarName(page, lineNo).dblclick();
+  test('Ensures variable name is not empty', async () => {
+    await page.locator('[data-testid="codeline-varname"]').nth(1).dblclick();
     await keyPress(page, 'Backspace');
 
-    await expect(getCodeLineV2VarName(page, lineNo)).not.toHaveText(/Unnamed/);
+    const innerText = await page.evaluate(
+      getClearText,
+      await page.locator('[data-testid="codeline-varname"]').nth(1).innerHTML()
+    );
+
+    await expect(innerText).not.toContain('Name2');
 
     // Blur it so it auto-fills some name into it
     await keyPress(page, 'Tab');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
 
-    await expect(getCodeLineV2VarName(page, lineNo)).toHaveText(/Unnamed/);
+    generatedVarName = await page.evaluate(
+      getClearText,
+      await page.locator('[data-testid="codeline-varname"]').nth(1).innerHTML()
+    );
+
+    await expect(
+      await page
+        .locator('[data-testid="codeline-varname"]')
+        .nth(1)
+        .textContent()
+    ).toMatch(/[a-zA-Z_$][a-zA-Z0-9_$]*/);
   });
 
   test('supports smartrefs', async () => {
-    await createCodeLineV2Below(page, 'Name3', '100 + Name1 ');
-    lineNo += 1;
+    await createCodeLineV2Below(page, 'Name3', `100 + ${generatedVarName} `);
 
-    await expect(page.locator('[data-testid="smart-ref"]')).toHaveText(/Name1/);
+    await expect(page.locator('[data-testid="smart-ref"]')).toHaveText(
+      generatedVarName
+    );
 
-    await expect(async () => {
-      const result = await getResult(page, lineNo);
-      expect(await result.allTextContents()).toMatchObject([
-        expect.stringMatching(/102/i),
-      ]);
-    }).toPass();
+    await page.waitForSelector('[data-testid="number-result:102"]');
   });
 
   test('lets you delete smartrefs', async () => {
     await keyPress(page, 'Backspace');
     await keyPress(page, 'Backspace');
 
-    // "Name1" is selected and exists
+    // "Name2" is selected and exists
     await expect(page.locator('[data-testid="smart-ref"]')).toBeVisible();
 
     await keyPress(page, 'Backspace');
 
-    // "Name1" was DECIMATED
+    // "Name2" was DECIMATED
     await expect(page.locator('[data-testid="smart-ref"]')).toBeHidden();
   });
 
   test('lets you drag results into code lines and paragraphs', async () => {
     await createCodeLineV2Below(page, 'DragMe', '555 + 5');
-    lineNo += 1;
-    const dragLineNo = lineNo;
 
-    await createCodeLineV2Below(page, 'DropMe', '');
-    lineNo += 1;
-    const dropLineNo = lineNo;
+    await createCodeLineV2Below(page, 'DropMe', '2');
 
-    await getResults(page)
-      .nth(dragLineNo)
-      .dragTo(getCodeV2CodeContainers(page).nth(dropLineNo));
+    await page.waitForSelector('[data-testid="number-result:560"]');
 
-    // Drag origin and drop target have 555! yay
-    await expect(getResults(page).nth(dragLineNo)).toHaveText(/560/);
+    const original = page.getByRole('textbox').getByTestId('number-result:560');
+
+    await original.dragTo(page.getByTestId('codeline-code').nth(4));
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
+    // Drag origin and drop target have 2 * DragMe ! yay
+    await expect(
+      (
+        await page.getByRole('textbox').getByTestId('number-result:1,120').all()
+      ).length
+    ).toBe(1);
 
     // Drag into a paragraph -> creates a magic number
-    await getResults(page)
-      .nth(dragLineNo)
-      .dragTo(page.locator('[data-testid="paragraph-wrapper"] >> nth=-1'));
+    await original.dragTo(
+      page.locator('[data-testid="paragraph-wrapper"] >> nth=-1')
+    );
 
     await expect(
       page.locator(
@@ -141,12 +158,11 @@ test.describe('Calculation Blocks v2', () => {
 
   test('applies unit from unit picker', async () => {
     await createCodeLineV2Below(page, 'Units', '100');
-    lineNo += 1;
 
     await page.locator('[data-testid="unit-picker-button"] >> nth=-1').click();
     await page.locator('[data-testid="unit-picker-percentage"]').click();
 
-    await expect(getCodeV2CodeContainers(page).nth(lineNo)).toHaveText(/100%/);
+    await expect(getCodeV2CodeContainers(page).nth(5)).toHaveText(/100%/);
   });
 
   test('changing unit changes the text of the codeline', async () => {
@@ -154,8 +170,6 @@ test.describe('Calculation Blocks v2', () => {
     await page.locator('[data-testid="unit-picker-Weight"]').click();
     await page.locator('[data-testid="unit-picker-Weight-kilogram"]').click();
 
-    await expect(getCodeV2CodeContainers(page).nth(lineNo)).toHaveText(
-      /kilogram/
-    );
+    await expect(getCodeV2CodeContainers(page).nth(5)).toHaveText(/kilogram/);
   });
 });

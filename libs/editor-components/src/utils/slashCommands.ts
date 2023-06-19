@@ -43,7 +43,7 @@ type SlashCommandHandler = Exclude<
 >;
 export type SlashCommand = Parameters<SlashCommandHandler>[0];
 
-export type GetAvailableIdentifier = (prefix: string, start: number) => string;
+export type GetAvailableIdentifier = (prefix: string, start?: number) => string;
 export interface ExecuteProps {
   editor: MyEditor;
   path: Path;

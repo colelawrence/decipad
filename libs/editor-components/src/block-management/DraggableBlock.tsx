@@ -1,5 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { Computer, parseSimpleValue } from '@decipad/computer';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -18,7 +19,6 @@ import {
   requirePathBelowBlock,
   setSelection,
 } from '@decipad/editor-utils';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   dndPreviewActions,
@@ -30,6 +30,7 @@ import {
   DraggableBlock as UIDraggableBlock,
   useMergedRef,
 } from '@decipad/ui';
+import { generateVarName, noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
   findNodePath,
@@ -58,7 +59,6 @@ import {
   useState,
 } from 'react';
 import { useSelected } from 'slate-react';
-import { noop } from '@decipad/utils';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
@@ -339,7 +339,9 @@ const insertSameNodeType = (
     case ELEMENT_CODE_LINE_V2: {
       const prevNodeText = getCodeLineSource(prevNode.children[1]);
       const isSimpleValue = !!parseSimpleValue(prevNodeText);
-      const autoVarName = computer.getAvailableIdentifier('Unnamed', 1);
+      const autoVarName = computer.getAvailableIdentifier(
+        generateVarName(isFlagEnabled('SILLY_NAMES'))
+      );
 
       return createStructuredCodeLine({
         id,

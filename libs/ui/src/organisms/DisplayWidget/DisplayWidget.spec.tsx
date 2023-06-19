@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
+import { ComponentProps } from 'react';
 import { runCode } from '../../test-utils';
 import { DisplayWidget } from './DisplayWidget';
 
@@ -54,8 +54,8 @@ it('dropdown menu not present', async () => {
 });
 
 it('shows 0 as a placeholder', () => {
-  const { getByText } = render(<DisplayWidget {...props} result={null} />);
+  const { getByText } = render(<DisplayWidget {...props} />);
 
   expect(getByText('0')).toBeVisible();
-  expect(getByText('Name')).toBeVisible();
+  expect(getByText('Result')).toBeVisible();
 });

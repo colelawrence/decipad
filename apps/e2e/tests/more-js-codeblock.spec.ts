@@ -1,6 +1,11 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
-import { Timeouts, codePlaceholders, createWorkspace } from '../utils/src';
+import {
+  codePlaceholders,
+  createWorkspace,
+  getClearText,
+  Timeouts,
+} from '../utils/src';
 
 test.describe('More JS codeblock checks', () => {
   test.describe.configure({ mode: 'serial' });
@@ -46,7 +51,16 @@ test.describe('More JS codeblock checks', () => {
     await page.getByTestId('text-icon-button:Run').click();
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();
     await page.getByTestId('integration-modal-continue').click();
-    await page.getByTestId('result-preview-input').getByText('Name').dblclick();
+
+    const generatedVarName = await page.evaluate(
+      getClearText,
+      await page.getByTestId('result-preview-input').innerHTML()
+    );
+
+    await page
+      .getByTestId('result-preview-input')
+      .getByText(generatedVarName)
+      .dblclick();
     await page.keyboard.press('Backspace');
     await page.keyboard.type('F');
 

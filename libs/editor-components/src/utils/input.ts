@@ -20,6 +20,11 @@ import {
   requirePathBelowBlock,
   setSelection,
 } from '@decipad/editor-utils';
+import {
+  generateDropdownName,
+  generateInputName,
+  generateSliderName,
+} from '@decipad/utils';
 import { getEndPoint, getStartPoint } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -76,7 +81,7 @@ export const insertInputBelow = (
   getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): void => {
   const [variant, placeholder] = getVariantAndHolder(kind);
-  const name = getAvailableIdentifier('Input', 1);
+  const name = getAvailableIdentifier(generateInputName());
 
   const input = getInitialInputElement({
     kind,
@@ -132,7 +137,9 @@ export const insertSliderInputBelow = (
   getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): void => {
   const input = getSliderInputElement();
-  input.children[0].children[0].text = getAvailableIdentifier('Slider', 1);
+  input.children[0].children[0].text = getAvailableIdentifier(
+    generateSliderName()
+  );
   insertNodes<VariableSliderElement>(
     editor,
     input as unknown as VariableSliderElement,
@@ -153,6 +160,7 @@ const getDisplayElement = () => {
 
 export const insertDisplayBelow = (editor: MyEditor, path: Path): void => {
   const display = getDisplayElement();
+  display.varName = 'Result';
   insertNodes(editor, display, {
     at: requirePathBelowBlock(editor, path),
   });
@@ -170,7 +178,7 @@ const getDropdownElement = () =>
       {
         id: nanoid(),
         type: ELEMENT_CAPTION,
-        children: [{ text: 'Dropdown' }],
+        children: [{ text: generateDropdownName() }],
       },
       {
         id: nanoid(),
@@ -187,7 +195,10 @@ export const insertDropdownBelow = (
   getAvailableIdentifier: Computer['getAvailableIdentifier']
 ): void => {
   const dropdown = getDropdownElement();
-  dropdown.children[0].children[0].text = getAvailableIdentifier('Dropdown', 1);
+  dropdown.children[0].children[0].text = getAvailableIdentifier(
+    generateDropdownName(),
+    1
+  );
   insertNodes(editor, dropdown, {
     at: requirePathBelowBlock(editor, path),
   });

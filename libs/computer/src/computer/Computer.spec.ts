@@ -1,25 +1,25 @@
-import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import {
-  astNode,
-  buildType as t,
-  parseBlockOrThrow,
-  Result,
-  serializeType,
-} from '@decipad/language';
-import { AnyMapping, timeout, produce } from '@decipad/utils';
-import { filter, firstValueFrom } from 'rxjs';
 import { all } from '@decipad/generator-utils';
+import {
+  Result,
+  astNode,
+  parseBlockOrThrow,
+  serializeType,
+  buildType as t,
+} from '@decipad/language';
+import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
+import { AnyMapping, produce, timeout } from '@decipad/utils';
+import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
 import {
   getIdentifiedBlock,
   getIdentifiedBlocks,
-  simplifyComputeResponse,
   testProgram as makeTestProgram,
+  simplifyComputeResponse,
 } from '../testUtils';
 import { ComputeRequestWithExternalData } from '../types';
+import { getResultGenerator } from '../utils';
 import { Computer } from './Computer';
 import { ColumnDesc } from './types';
-import { getResultGenerator } from '../utils';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -253,16 +253,16 @@ describe('expr refs', () => {
 
 it('creates new, unused identifiers', async () => {
   expect(computer.getAvailableIdentifier('Name', 1)).toMatchInlineSnapshot(
-    `"Name1"`
+    `"Name"`
   );
 
   await computeOnTestComputer({
-    program: getIdentifiedBlocks('AlreadyUsed1 = 1'),
+    program: getIdentifiedBlocks('AlreadyUsed = 1'),
   });
 
   expect(
     computer.getAvailableIdentifier('AlreadyUsed', 1)
-  ).toMatchInlineSnapshot(`"AlreadyUsed2"`);
+  ).toMatchInlineSnapshot(`"AlreadyUsed1"`);
 });
 
 describe('uses previous value', () => {

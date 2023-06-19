@@ -14,9 +14,10 @@ import {
   insertNodes,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
-import { getDefined, noop, timeout } from '@decipad/utils';
+import { generateVarName, getDefined, noop, timeout } from '@decipad/utils';
 import { isCollapsed, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -63,7 +64,10 @@ const justInsertLiveConnection = async ({
   if (selection == null || url == null) {
     return;
   }
-  const name = computer.getAvailableIdentifier('Name', 1, true);
+
+  const name = computer.getAvailableIdentifier(
+    generateVarName(isFlagEnabled('SILLY_NAMES'))
+  );
   const liveConnEl: LiveConnectionElement = {
     id: nanoid(),
     type: ELEMENT_LIVE_CONNECTION,

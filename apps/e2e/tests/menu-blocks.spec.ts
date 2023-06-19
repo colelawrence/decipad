@@ -1,21 +1,21 @@
-import { BrowserContext, Page, test, expect } from '@playwright/test';
-import { focusOnBody, setUp } from '../utils/page/Editor';
+import { BrowserContext, Page, expect, test } from '@playwright/test';
 import {
-  createNumberInputBelow,
-  createCodeLineV2Below,
-  createCalculationBlockBelow,
-  createDataViewBelow,
-  createPieChartBelow,
-  createLineChartBelow,
-  createBarChartBelow,
   createAreaChartBelow,
-  createScatterChartBelow,
-  createInputBelow,
-  createToggleBelow,
-  createSliderBelow,
-  createResultBelow,
+  createBarChartBelow,
+  createCalculationBlockBelow,
+  createCodeLineV2Below,
+  createDataViewBelow,
   createDropdownBelow,
+  createInputBelow,
+  createLineChartBelow,
+  createNumberInputBelow,
+  createPieChartBelow,
+  createResultBelow,
+  createScatterChartBelow,
+  createSliderBelow,
+  createToggleBelow,
 } from '../utils/page/Block';
+import { focusOnBody, setUp } from '../utils/page/Editor';
 
 import { createTable } from '../utils/page/Table';
 
@@ -59,7 +59,7 @@ test.describe('Test Menu Blocks', () => {
 
   test('creates table', async () => {
     await createTable(page);
-    await page.getByText('Table1', { exact: true }).dblclick();
+    await page.getByTestId('table-name-input').dblclick();
     await page.keyboard.type('FourthBlock');
     await expect(page.getByText('FourthBlock')).toBeVisible();
   });

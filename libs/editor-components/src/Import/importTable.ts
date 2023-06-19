@@ -1,7 +1,11 @@
 /* eslint-disable no-loop-func */
-import { Path } from 'slate';
-import { nanoid } from 'nanoid';
-import { format } from 'date-fns';
+import {
+  Computer,
+  Result,
+  SerializedType,
+  isTableResult,
+  materializeResult,
+} from '@decipad/computer';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -15,16 +19,12 @@ import {
   TableElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import {
-  Computer,
-  Result,
-  SerializedType,
-  isTableResult,
-  materializeResult,
-} from '@decipad/computer';
-import { ImportResult } from '@decipad/import';
-import { getDefined, varNamify } from '@decipad/utils';
 import { insertNodes } from '@decipad/editor-utils';
+import { ImportResult } from '@decipad/import';
+import { generateTableName, getDefined, varNamify } from '@decipad/utils';
+import { format } from 'date-fns';
+import { nanoid } from 'nanoid';
+import { Path } from 'slate';
 
 interface ImportTableProps {
   editor: MyEditor;
@@ -155,7 +155,9 @@ const tableElement = (
               {
                 text: meta?.title
                   ? varNamify(meta.title)
-                  : computer.getAvailableIdentifier('ImportedTable', 1),
+                  : computer.getAvailableIdentifier(
+                      generateTableName('Imported')
+                    ),
               },
             ],
           },

@@ -1,6 +1,6 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
-import { createTable, writeInTable, getFromTable } from '../utils/page/Table';
+import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
 
 test.describe('Data Views', () => {
   test.describe.configure({ mode: 'serial' });
@@ -58,7 +58,7 @@ test.describe('Data Views', () => {
   });
 
   test('renames a data view', async () => {
-    await page.getByText('Data view for Table1', { exact: true }).dblclick();
+    await page.getByText('Data view for Table', { exact: true }).dblclick();
     await page.keyboard.type('NewDataView');
     await expect(page.getByText('NewDataView')).toBeVisible();
   });

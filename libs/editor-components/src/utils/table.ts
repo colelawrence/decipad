@@ -9,6 +9,7 @@ import {
   TableElement,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
+import { generateTableName } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import type { GetAvailableIdentifier } from './slashCommands';
@@ -97,8 +98,7 @@ export const insertTableBelow = (
 ): void => {
   const table = initialTableElement();
   table.children[0].children[0].children[0].text = getAvailableIdentifier(
-    'Table',
-    1
+    generateTableName()
   );
   insertNodes(editor, table, {
     at: requirePathBelowBlock(editor, path),

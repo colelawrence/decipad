@@ -5,6 +5,7 @@ import {
   useDragAndDropOnDrop,
   useUnnamedResults,
 } from '@decipad/editor-components';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   COLUMN_KINDS,
   ELEMENT_DISPLAY,
@@ -12,7 +13,6 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isDragAndDropHorizontal, safeDelete } from '@decipad/editor-utils';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   useComputer,
   useIsEditorReadOnly,
@@ -186,7 +186,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
               openMenu={openMenu}
               onChangeOpen={setOpenMenu}
               lineResult={res}
-              result={element.varName || 'Unnamed'}
+              result={element.varName}
               readOnly={readOnly}
               icon={element.icon as UserIconKey}
               saveIcon={saveIcon}

@@ -20,6 +20,7 @@ import {
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { ShadowCalcReference } from '@decipad/react-contexts';
+import { generateVarName } from '@decipad/utils';
 import {
   getBlockAbove,
   getEndPoint,
@@ -88,7 +89,9 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
             }
 
             if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
-              const autoVarName = computer.getAvailableIdentifier('Unnamed', 1);
+              const autoVarName = computer.getAvailableIdentifier(
+                generateVarName(isFlagEnabled('SILLY_NAMES'))
+              );
               const newCodeLine = createStructuredCodeLine({
                 varName: autoVarName,
                 code: '100$',
@@ -178,7 +181,9 @@ const commitPotentialFormula = (
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier('Unnamed', 1),
+    varName: computer.getAvailableIdentifier(
+      generateVarName(isFlagEnabled('SILLY_NAMES'))
+    ),
     code: '100$',
   });
 

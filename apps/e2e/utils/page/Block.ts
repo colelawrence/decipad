@@ -44,7 +44,7 @@ export async function createInputBelow(
   await page.click('[data-testid="menu-item-input"]');
 
   await page
-    .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
+    .locator('[data-testid="widget-caption"] >> text=/Input/')
     .last()
     .dblclick();
 
@@ -73,7 +73,7 @@ export async function createDropdownBelow(page: Page, identifier: string) {
 
   await page.locator('role=menuitem', { hasText: 'dropdown' }).click();
 
-  await page.getByText('Dropdown1', { exact: true }).last().dblclick();
+  await page.getByText('Dropdown', { exact: true }).last().dblclick();
 
   await keyPress(page, 'Backspace');
 
@@ -198,7 +198,7 @@ export async function createToggleBelow(page: Page, identifier: string) {
   await page.locator('role=menuitem', { hasText: 'toggle' }).click();
 
   await page
-    .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
+    .locator('[data-testid="widget-caption"] >> text=/Input/')
     .last()
     .dblclick();
 
@@ -221,7 +221,7 @@ export async function createSliderBelow(
   await page.locator('role=menuitem', { hasText: 'slider' }).click();
 
   await page
-    .locator('[data-testid="widget-caption"] >> text=/Slider[0-9]+/')
+    .locator('[data-testid="widget-caption"] >> text=/Slider/')
     .last()
     .dblclick();
 
@@ -251,7 +251,7 @@ export async function createDateBelow(page: Page, identifier: string) {
   await page.locator('role=menuitem', { hasText: 'date' }).click();
 
   await page
-    .locator('[data-testid="widget-caption"] >> text=/Input[0-9]+/')
+    .locator('[data-testid="widget-caption"] >> text=/Input/')
     .last()
     .dblclick();
 

@@ -5,6 +5,7 @@ import {
   ImportElementSource,
   SimpleTableCellType,
 } from '@decipad/editor-types';
+import { generateVarName } from '@decipad/utils';
 import cloneDeep from 'lodash.clonedeep';
 import { create } from 'zustand';
 import { mapResultType } from './utils';
@@ -175,7 +176,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   stage: 'pick-integration',
   setStage: (v) => set(() => ({ stage: v })),
 
-  varName: 'Name',
+  varName: generateVarName(true),
   setVarName: (v) => set(() => ({ varName: v })),
 
   resultPreview: undefined,
@@ -250,7 +251,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
       open: keepOpen,
       connectionType: undefined,
       createIntegration: false,
-      varName: 'Name',
+      varName: generateVarName(true),
       // resultPreview: undefined,
       existingIntegration: undefined,
       resultTypeMapping: [],

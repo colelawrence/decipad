@@ -1,13 +1,13 @@
-import { MyEditor, TableElement } from '@decipad/editor-types';
-import { insertTableBelow } from '@decipad/editor-components';
-import { createTEditor } from '@udecode/plate';
 import { Computer } from '@decipad/computer';
+import { insertTableBelow } from '@decipad/editor-components';
+import { MyEditor, TableElement } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
+import { createTEditor } from '@udecode/plate';
 import { NodeEntry } from 'slate';
 import { normalizeTable } from './normalizeTable';
 
-const getAvailableIdentifier = (prefix: string, start: number) =>
+const getAvailableIdentifier = (prefix: string, start?: number) =>
   `${prefix}${start}`;
 
 describe('normalizeTable', () => {

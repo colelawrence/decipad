@@ -30,15 +30,13 @@ export const useSyncLiveConnectionMetadata = ({
     if (path && result && !mutated.current) {
       const caption = element.children[0];
       const currentTitle = getNodeString(caption);
-      if (
-        (!currentTitle || currentTitle.startsWith('Name')) &&
-        result.meta?.title
-      ) {
+      if (!currentTitle && result.meta?.title) {
         const newTitle = result.meta.title;
+        if (currentTitle.includes(newTitle)) return;
         mutated.current = true;
         insertText(
           editor,
-          computer.getAvailableIdentifier(varNamify(newTitle), 1, true),
+          computer.getAvailableIdentifier(varNamify(newTitle)),
           { at: [...path, 0] }
         );
       }

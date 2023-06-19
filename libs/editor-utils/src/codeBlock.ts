@@ -1,5 +1,7 @@
 import { Computer } from '@decipad/computer';
 import { ELEMENT_CODE_LINE_V2, MyEditor } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { generateVarName } from '@decipad/utils';
 import { deleteText, getEditorString } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { BaseEditor, Path, Transforms } from 'slate';
@@ -38,7 +40,10 @@ export const insertStructuredCodeLineBelow = ({
   const newId = nanoid();
   const elm = createStructuredCodeLine({
     id: newId,
-    varName: getAvailableIdentifier(varName ?? 'Unnamed', 1),
+    varName: getAvailableIdentifier(
+      varName ?? generateVarName(isFlagEnabled('SILLY_NAMES')),
+      1
+    ),
     code,
   });
 

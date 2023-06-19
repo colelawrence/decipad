@@ -16,9 +16,10 @@ import {
   insertNodes,
   requirePathBelowBlock,
 } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
-import { getDefined, noop, timeout } from '@decipad/utils';
+import { generateVarName, getDefined, noop, timeout } from '@decipad/utils';
 import {
   TEditor,
   findNode,
@@ -83,8 +84,10 @@ const justInsertLiveDataSet = async ({
     return;
   }
   const blockId = nanoid();
+  const defaultName = generateVarName(true);
+
   const availableIdentifier = computer.getAvailableIdentifier(
-    connectionName || 'Name',
+    connectionName || defaultName,
     1
   );
   const liveConnEl: LiveDataSetElement = {
@@ -139,8 +142,10 @@ const identifyIslandsAndThenInsertLiveDataSet = async ({
   connectionName,
 }: InsertLiveDataSetProps): Promise<void> => {
   const selection = getDefined(editor.selection);
+  const defaultName = generateVarName(isFlagEnabled('SILLY_NAMES'));
+
   const availableIdentifier = computer.getAvailableIdentifier(
-    connectionName || 'Name',
+    connectionName || defaultName,
     1
   );
 

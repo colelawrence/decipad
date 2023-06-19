@@ -16,13 +16,14 @@ import {
   insertNodes,
   isElementOfType,
 } from '@decipad/editor-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   ShadowCalcReference,
   useComputer,
   useEditorTeleportContext,
 } from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
-import { noop } from '@decipad/utils';
+import { generateVarName, noop } from '@decipad/utils';
 import {
   findNodePath,
   getEndPoint,
@@ -111,7 +112,9 @@ export const commitPotentialFormula = (
 
   const codeLineBelow = createStructuredCodeLine({
     id,
-    varName: computer.getAvailableIdentifier('Unnamed', 1),
+    varName: computer.getAvailableIdentifier(
+      generateVarName(isFlagEnabled('SILLY_NAMES'))
+    ),
     code: getNodeString(leaf as RichText),
   });
 

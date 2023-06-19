@@ -27,7 +27,7 @@ test.describe('Results widgets', () => {
     await focusOnBody(page);
     await page.keyboard.type('/result');
     await page.locator('[role="menuitem"] >> span >> svg').click();
-    await expect(page.getByText('Unnamed')).toHaveCount(1);
+    await expect(page.getByText('Result')).toHaveCount(1);
   });
 
   test('shows the available calculations', async () => {

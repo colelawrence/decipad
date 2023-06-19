@@ -71,7 +71,7 @@ interface DisplayWidgetDropdownProps {
   readonly openMenu: boolean;
   readonly onChangeOpen: (arg0: boolean) => void;
   readonly lineResult?: IdentifiedResult | IdentifiedError;
-  readonly result: string | null;
+  readonly result?: string;
   readonly readOnly: boolean;
   readonly children: ReactNode;
   readonly icon?: UserIconKey;
@@ -83,7 +83,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   openMenu,
   onChangeOpen,
   lineResult,
-  result,
+  result = 'Result',
   readOnly,
   children,
   icon = 'Paperclip',
@@ -99,7 +99,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         !lineResult?.result && { color: cssVar('weakerTextColor') },
       ]}
     >
-      {result ?? 'Name'}
+      {result}
     </p>
   );
 
@@ -122,7 +122,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           />
         )}
         <div css={textWrapperStyles}>
-          <Tooltip trigger={fullVarName}>{result ?? 'Name'}</Tooltip>
+          <Tooltip trigger={fullVarName}>{result}</Tooltip>
         </div>
       </div>
       {children}

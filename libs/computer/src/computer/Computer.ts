@@ -1,3 +1,4 @@
+import { fnQueue } from '@decipad/fnqueue';
 import {
   DeciNumberRep,
   formatError,
@@ -7,30 +8,29 @@ import {
 import {
   AST,
   AutocompleteName,
-  deserializeType,
   ErrSpec,
-  evaluateStatement,
   ExternalDataMap,
+  Result,
+  SerializedType,
+  SerializedTypes,
+  Unit,
+  deserializeType,
+  evaluateStatement,
   inferExpression,
   linearizeType,
   materializeOneResult,
   parseExpression,
   parseExpressionOrThrow,
-  Result,
-  SerializedType,
-  SerializedTypes,
   serializeType,
-  Unit,
 } from '@decipad/language';
 import DeciNumber from '@decipad/number';
 import {
   anyMappingToMap,
+  dequal,
   getDefined,
   identity,
   zip,
-  dequal,
 } from '@decipad/utils';
-import { fnQueue } from '@decipad/fnqueue';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
@@ -49,6 +49,7 @@ import {
 import { getExprRef, makeNamesFromIds } from '../exprRefs';
 import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
+import { ResultStreams } from '../resultStreams';
 import { dropWhileComputing } from '../tools/dropWhileComputing';
 import type {
   ComputeRequest,
@@ -65,18 +66,17 @@ import {
   getIdentifierString,
   isTableResult,
 } from '../utils';
-import { astToParseable } from './astToParseable';
+import { isColumn } from '../utils/isColumn';
+import { isTable } from '../utils/isTable';
 import { ComputationRealm } from './ComputationRealm';
+import { astToParseable } from './astToParseable';
+import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { defaultComputerResults } from './defaultComputerResults';
+import { emptyBlockResultSubject } from './emptyBlockSubject';
 import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 import { flattenTableDeclarations } from './transformTables';
 import { ColumnDesc, DimensionExplanation, TableDesc } from './types';
-import { deduplicateColumnResults } from './deduplicateColumnResults';
-import { isTable } from '../utils/isTable';
-import { isColumn } from '../utils/isColumn';
-import { ResultStreams } from '../resultStreams';
-import { emptyBlockResultSubject } from './emptyBlockSubject';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -762,8 +762,8 @@ export class Computer {
    */
   getAvailableIdentifier(
     prefix: string,
-    start: number,
-    attemptNumberless = false
+    start = 2,
+    attemptNumberless = true
   ): string {
     const existingVars = new Set([
       ...this.computationRealm.inferContext.stack.globalVariables.keys(),

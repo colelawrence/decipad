@@ -19,8 +19,7 @@ function deduplicateVarNameInDef(
   e: VariableDefinitionElement
 ) {
   e.children[0].children[0].text = computer.getAvailableIdentifier(
-    `${getNodeString(e.children[0])}Copy`,
-    1
+    `${getNodeString(e.children[0])}Copy`
   );
 }
 
@@ -29,7 +28,7 @@ function deduplicateAssignmentVarName(computer: Computer, e: CodeLineElement) {
   const parsed = parseStatement(code);
   if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
     const varName = parsed.solution.args[0].args[0];
-    const newVarName = computer.getAvailableIdentifier(`${varName}Copy`, 1);
+    const newVarName = computer.getAvailableIdentifier(`${varName}Copy`);
     e.children[0].text = code.replace(varName, newVarName);
   }
 }
@@ -39,8 +38,7 @@ function deduplicateVarNameInCodeLineV2(
   e: CodeLineV2Element
 ) {
   e.children[0].children[0].text = computer.getAvailableIdentifier(
-    `${getNodeString(e.children[0])}Copy`,
-    1
+    `${getNodeString(e.children[0])}Copy`
   );
 }
 
@@ -49,8 +47,7 @@ function deduplicateVarNameInStructuredIn(
   e: StructuredInputElement
 ) {
   e.children[0].children[0].text = computer.getAvailableIdentifier(
-    `${getNodeString(e.children[0])}Copy`,
-    1
+    `${getNodeString(e.children[0])}Copy`
   );
 }
 
@@ -58,8 +55,7 @@ function deduplicateTableVarName(computer: Computer, e: TableElement) {
   const captionEl = e.children[0].children[0];
   const varName = getNodeString(captionEl);
   e.children[0].children[0].children[0].text = computer.getAvailableIdentifier(
-    `${varName}Copy`,
-    1
+    `${varName}Copy`
   );
 }
 

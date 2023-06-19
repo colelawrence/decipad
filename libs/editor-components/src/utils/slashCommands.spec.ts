@@ -1,5 +1,5 @@
 import {
-  createTPlateEditor,
+  ELEMENT_CODE_LINE,
   ELEMENT_FETCH,
   ELEMENT_H2,
   ELEMENT_H3,
@@ -8,10 +8,10 @@ import {
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
   ElementKind,
-  ELEMENT_CODE_LINE,
+  createTPlateEditor,
 } from '@decipad/editor-types';
 import { createCodeBlockPlugin } from '@udecode/plate';
-import { execute, SlashCommand } from './slashCommands';
+import { SlashCommand, execute } from './slashCommands';
 
 const expectedTypes = {
   table: ELEMENT_TABLE,
@@ -23,8 +23,8 @@ const expectedTypes = {
   input: ELEMENT_VARIABLE_DEF,
 };
 
-const getAvailableIdentifier = (prefix: string, start: number) =>
-  `${prefix}${start}`;
+const getAvailableIdentifier = (prefix: string, start?: number) =>
+  `${prefix}${start || '2'}`;
 
 test.each(Object.entries(expectedTypes) as [SlashCommand, ElementKind][])(
   'command "%s" replaces the block with a "%s" block',

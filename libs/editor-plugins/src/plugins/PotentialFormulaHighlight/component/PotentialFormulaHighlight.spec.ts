@@ -1,13 +1,13 @@
+import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   DECORATE_POTENTIAL_FORMULA,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { TEditor } from '@udecode/plate';
-import { Computer } from '@decipad/computer';
 import { noop } from '@decipad/utils';
-import { commitPotentialFormula } from './PotentialFormulaHighlight';
+import { TEditor } from '@udecode/plate';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
+import { commitPotentialFormula } from './PotentialFormulaHighlight';
 
 let editor: TEditor;
 let computer: Computer;
@@ -45,17 +45,16 @@ it('turns a decoration into a magic number and a code line', () => {
   // It has code line in the end
   expect(editor.children[1]).toMatchInlineSnapshot(
     {
-      children: [{ id: expect.any(String) }, { id: expect.any(String) }],
+      children: [
+        { id: expect.any(String), children: expect.any(Array) },
+        { id: expect.any(String) },
+      ],
     },
     `
     Object {
       "children": Array [
         Object {
-          "children": Array [
-            Object {
-              "text": "Unnamed1",
-            },
-          ],
+          "children": Any<Array>,
           "id": Any<String>,
           "type": "structured_varname",
         },

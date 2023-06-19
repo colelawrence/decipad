@@ -1,6 +1,11 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
-import { codePlaceholders, createWorkspace, Timeouts } from '../utils/src';
+import {
+  codePlaceholders,
+  createWorkspace,
+  getClearText,
+  Timeouts,
+} from '../utils/src';
 
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
@@ -21,7 +26,16 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
     await page.getByTestId('text-icon-button:Run').click();
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();
     await page.getByTestId('integration-modal-continue').click();
-    await page.getByTestId('result-preview-input').getByText('Name').dblclick();
+
+    const generatedVarName = await page.evaluate(
+      getClearText,
+      await page.getByTestId('result-preview-input').innerHTML()
+    );
+
+    await page
+      .getByTestId('result-preview-input')
+      .getByText(generatedVarName)
+      .dblclick();
     await page.keyboard.press('Backspace');
     await page.keyboard.type(String.fromCharCode(x + 65));
     await page.getByTestId('integration-modal-continue').click();

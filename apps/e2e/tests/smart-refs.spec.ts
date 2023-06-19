@@ -65,7 +65,7 @@ test.describe('SmartRefs in low code tables', () => {
     await page.waitForSelector('[data-testid=smart-ref]:has-text("Column1")');
     const text = await page.locator('[data-testid=smart-ref]').textContent();
     expect(cleanText(text)).toContain('Column1');
-    expect(cleanText(text)).toContain('Table1');
+    expect(cleanText(text)).toContain('Table');
   });
 });
 

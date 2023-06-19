@@ -2,11 +2,11 @@ import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
 import {
   createTable,
-  writeInTable,
-  getFromTable,
   focusOnTable,
+  getFromTable,
   insertRowAbove,
   insertRowBelow,
+  writeInTable,
 } from '../utils/page/Table';
 
 test.describe('Basic Table', () => {
@@ -55,7 +55,7 @@ test.describe('Basic Table', () => {
   });
 
   test('updates table name', async () => {
-    await page.getByText('Table1', { exact: true }).dblclick();
+    await page.getByTestId('table-name-input').dblclick();
     await page.keyboard.type('NewTableName');
     await expect(page.getByText('NewTableName')).toBeVisible();
   });

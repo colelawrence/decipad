@@ -10,6 +10,7 @@ export * from './deepequal';
 export * from './enumerate';
 export * from './first';
 export * from './formatUTCDate';
+export * from './generateBlockNames';
 export * from './get-defined';
 export * from './get-defined-promise';
 export * from './get-only';

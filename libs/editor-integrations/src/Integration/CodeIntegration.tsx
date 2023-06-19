@@ -79,9 +79,8 @@ export const CodeIntegration = function CodeIntegration({
 
           store.setAllTypeMapping(typeMappings);
           codeStore.setCode(blockOptions.code);
-          if (varName !== 'Name') {
-            store.setVarName(varName);
-          }
+          // code review: does this cycle?
+          store.setVarName(varName);
           store.changeOpen(true);
           break;
         }

@@ -30,6 +30,7 @@ export const availableFlags = [
   'SAVE_NOTEBOOK_LOGS',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
+  'SILLY_NAMES',
   // Allow for secrets in JS
   'SECRETS_IN_JS',
 ] as const;
@@ -84,6 +85,7 @@ let overrides: Flags = {
   EXPR_REFS: true,
   POPULATED_NEW_NOTEBOOK: true,
   JS_BLOCK: true,
+  SILLY_NAMES: false,
 };
 
 // Unlike overrides flag switcher will have higher priority

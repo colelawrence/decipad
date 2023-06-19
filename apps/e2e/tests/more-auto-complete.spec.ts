@@ -61,6 +61,9 @@ test.describe('Make sure auto-complete works', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.menuOpenDelay);
     await page.getByTestId('menu-item-structured-code-line').click();
+    await page.getByTestId('codeline-varname').nth(1).dblclick();
+    await page.keyboard.press('Backspace');
+    await page.keyboard.type('Another');
     await page.getByTestId('codeline-code').last().fill('Monies');
     await page
       .getByTestId('autocomplete-group:Variables')

@@ -1,3 +1,5 @@
+import { Computer } from '@decipad/computer';
+import { NormalizerReturnValue } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -20,7 +22,13 @@ import {
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
 import {
+  enumerate,
+  generateColumnName,
+  generateTableName,
+} from '@decipad/utils';
+import {
   ChildOf,
+  TNodeEntry,
   deleteText,
   getChildren,
   getNodeChildren,
@@ -28,17 +36,13 @@ import {
   isElement,
   isText,
   setNodes,
-  TNodeEntry,
   unwrapNodes,
   wrapNodes,
 } from '@udecode/plate';
-import { enumerate } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
-import { Computer } from '@decipad/computer';
-import { NormalizerReturnValue } from '@decipad/editor-plugins';
-import { createTableCaption } from './createTableCaption';
 import { convertLegacyType } from './convertLegacyType';
+import { createTableCaption } from './createTableCaption';
 
 const normalizeTableStructure = (
   editor: MyEditor,
@@ -144,7 +148,7 @@ const normalizeTableCaption = (
   const [varName] = getChildren(caption);
   const [varNameText] = getChildren(varName);
   return normalizeIdentifierElement(editor, varNameText, () =>
-    computer.getAvailableIdentifier('Table', 1)
+    computer.getAvailableIdentifier(generateTableName())
   );
 };
 
@@ -213,7 +217,7 @@ const normalizeTableHeaderCell = (
 
   const [text] = getChildren([th, path]);
   return normalizeIdentifierElement(editor, text, () =>
-    computer.getAvailableIdentifier('Column', path[2] + 1)
+    computer.getAvailableIdentifier(generateColumnName(), path[2] + 1, false)
   );
 };
 

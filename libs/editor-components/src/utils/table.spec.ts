@@ -2,8 +2,8 @@ import { ELEMENT_TABLE, MyEditor } from '@decipad/editor-types';
 import { createTEditor } from '@udecode/plate';
 import { insertTableBelow } from './table';
 
-const getAvailableIdentifier = (prefix: string, start: number) =>
-  `${prefix}${start}`;
+const getAvailableIdentifier = (prefix: string, start?: number) =>
+  `${prefix}${start || 2}`;
 
 describe('insertTableBelow', () => {
   let editor!: MyEditor;

@@ -57,12 +57,14 @@ const iconStyles = css({
   marginRight: '4px',
 });
 
-const iconColorStyles = (type: 'simple' | 'formula') =>
+const iconColorStyles = (type: 'simple' | 'formula', hasErrors = false) =>
   css({
     svg: {
       ...setCssVar(
         'currentTextColor',
-        type === 'formula'
+        hasErrors
+          ? cssVar('buttonDangerHeavy')
+          : type === 'formula'
           ? cssVar('bubbleFormulaTextColor')
           : cssVar('bubbleTextColor')
       ),
@@ -188,6 +190,7 @@ export const CodeVariableDefinition = ({
 }: NonInteractiveCodeVariableProps) => {
   const [grabbing, setGrabbing] = useState(false);
   const Icon = useMemo(() => (type ? getTypeIcon(type) : Number), [type]);
+  const hasErrors = type?.kind === 'type-error';
 
   const elementType = isValue ? 'simple' : 'formula';
   const rootProps: HTMLAttributes<HTMLSpanElement> = useMemo(
@@ -222,7 +225,13 @@ export const CodeVariableDefinition = ({
         </span>
       )}
       <span
-        css={Icon && [hideOnPrint, iconStyles, iconColorStyles(elementType)]}
+        css={
+          Icon && [
+            hideOnPrint,
+            iconStyles,
+            iconColorStyles(elementType, hasErrors),
+          ]
+        }
         contentEditable={false}
       >
         {Icon && <Icon />}

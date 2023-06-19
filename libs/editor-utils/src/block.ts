@@ -1,27 +1,28 @@
 import { Computer } from '@decipad/computer';
 import {
   DataMappingElement,
-  ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
   ELEMENT_DATA_MAPPING,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_NUMBER,
+  ELEMENT_JS_BLOCK,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
+  ElementKind,
   InlineNumberElement,
+  JavaScriptBlock,
   MyEditor,
   MyElement,
-  JavaScriptBlock,
-  ELEMENT_JS_BLOCK,
 } from '@decipad/editor-types';
+import { generateVarName } from '@decipad/utils';
 import {
+  TDescendant,
+  TElement,
   getEndPoint,
   getNextNode,
   getNode,
-  TDescendant,
-  TElement,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
@@ -155,7 +156,7 @@ export const insertJavascriptBlockBelow = (
       type: ELEMENT_JS_BLOCK,
       code: '',
       codeResult: 'null',
-      varName: getAvailableIdentifier('JsBlock', 1),
+      varName: getAvailableIdentifier(generateVarName(true)),
       children: [{ text: '' }],
     },
     { at: requirePathBelowBlock(editor, path) }
@@ -177,7 +178,7 @@ export const insertDataMapping = (
         {
           type: ELEMENT_STRUCTURED_VARNAME,
           id: nanoid(),
-          children: [{ text: getAvailableIdentifier('DataMapping', 1) }],
+          children: [{ text: getAvailableIdentifier(generateVarName(true)) }],
         },
       ],
     } as DataMappingElement,
