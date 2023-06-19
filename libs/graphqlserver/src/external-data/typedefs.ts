@@ -6,7 +6,6 @@ export default gql`
     gsheets
     csv
     json
-    arrow
     postgresql
     mysql
     oracledb

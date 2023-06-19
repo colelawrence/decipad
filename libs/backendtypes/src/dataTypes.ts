@@ -206,7 +206,6 @@ export type ExternalDataSourceProvider =
   | 'gsheets'
   | 'csv'
   | 'json'
-  | 'arrow'
   | 'postgresql'
   | 'mysql'
   | 'mssql'

@@ -48,7 +48,6 @@ const IntegrationSteps: Record<ImportElementSource, Array<Stage>> = {
   gsheets: [],
   csv: [],
   json: [],
-  arrow: [],
   postgresql: [],
   mysql: [],
   oracledb: [],

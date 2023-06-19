@@ -14,7 +14,6 @@ const sourceToName: Record<ImportElementSource, string> = {
   csv: 'CSV',
   gsheets: 'Google Sheets',
   json: 'a JSON API',
-  arrow: 'an Arrow file',
   postgresql: 'a PostgreSQL database',
   mysql: 'a MySQL database',
   oracledb: 'an OracleDB database',

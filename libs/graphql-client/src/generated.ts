@@ -7,45 +7,47 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
 };
 
 export type Attachment = {
   __typename?: 'Attachment';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  fileName: Scalars['String'];
-  fileSize: Scalars['Int'];
-  fileType: Scalars['String'];
-  id: Scalars['ID'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  fileName: Scalars['String']['output'];
+  fileSize: Scalars['Int']['output'];
+  fileType: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   pad?: Maybe<Pad>;
   uploadedBy?: Maybe<User>;
-  url: Scalars['String'];
+  url: Scalars['String']['output'];
 };
 
 export type CreateAttachmentForm = {
   __typename?: 'CreateAttachmentForm';
   fields: Array<KeyValue>;
-  handle: Scalars['String'];
-  url: Scalars['String'];
+  handle: Scalars['String']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type ExternalDataSource = {
   __typename?: 'ExternalDataSource';
   access: ExternalDataSourceAccess;
-  authUrl?: Maybe<Scalars['String']>;
-  dataUrl?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
+  authUrl?: Maybe<Scalars['String']['output']>;
+  dataUrl?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   keys: Array<ExternalKey>;
-  name: Scalars['String'];
-  padId: Scalars['ID'];
+  name: Scalars['String']['output'];
+  padId: Scalars['ID']['output'];
   provider: ExternalProvider;
 };
 
@@ -56,27 +58,26 @@ export type ExternalDataSourceAccess = {
 };
 
 export type ExternalDataSourceCreateInput = {
-  externalId: Scalars['String'];
-  name: Scalars['String'];
-  padId: Scalars['ID'];
+  externalId: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
   provider: ExternalProvider;
 };
 
 export type ExternalDataSourceUpdateInput = {
-  name?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ExternalKey = {
   __typename?: 'ExternalKey';
-  createdAt: Scalars['DateTime'];
-  expiresAt?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
-  lastError?: Maybe<Scalars['String']>;
-  lastUsedAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  lastError?: Maybe<Scalars['String']['output']>;
+  lastUsedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export enum ExternalProvider {
-  Arrow = 'arrow',
   Cockroachdb = 'cockroachdb',
   Csv = 'csv',
   Decipad = 'decipad',
@@ -91,104 +92,104 @@ export enum ExternalProvider {
 }
 
 export type GoalFulfilmentInput = {
-  goalName: Scalars['String'];
+  goalName: Scalars['String']['input'];
 };
 
 export type KeyValue = {
   __typename?: 'KeyValue';
-  key: Scalars['String'];
-  value: Scalars['String'];
+  key: Scalars['String']['output'];
+  value: Scalars['String']['output'];
 };
 
 export type LogEntry = {
-  content: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  source: Scalars['String'];
+  content: Scalars['String']['input'];
+  createdAt: Scalars['DateTime']['input'];
+  source: Scalars['String']['input'];
 };
 
 export type LogInput = {
   entries: Array<LogEntry>;
-  resource: Scalars['String'];
+  resource: Scalars['String']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addNotebookToSection?: Maybe<Scalars['Boolean']>;
+  addNotebookToSection?: Maybe<Scalars['Boolean']['output']>;
   addSectionToWorkspace?: Maybe<Section>;
-  addTagToPad?: Maybe<Scalars['Boolean']>;
+  addTagToPad?: Maybe<Scalars['Boolean']['output']>;
   attachFileToPad?: Maybe<Attachment>;
   createExternalDataSource?: Maybe<ExternalDataSource>;
-  createLogs?: Maybe<Scalars['Boolean']>;
-  createOrUpdateSnapshot: Scalars['Boolean'];
+  createLogs?: Maybe<Scalars['Boolean']['output']>;
+  createOrUpdateSnapshot: Scalars['Boolean']['output'];
   createPad: Pad;
   createRole: Role;
   createSecret: Secret;
   createUserViaMagicLink: User;
   createWorkspace: Workspace;
-  doNothing?: Maybe<Scalars['Boolean']>;
+  doNothing?: Maybe<Scalars['Boolean']['output']>;
   duplicatePad: Pad;
-  fulfilGoal: Scalars['Boolean'];
+  fulfilGoal: Scalars['Boolean']['output'];
   getCreateAttachmentForm: CreateAttachmentForm;
   importPad: Pad;
   inviteUserToRole: Array<RoleInvitation>;
   movePad: Pad;
-  pretendUser?: Maybe<Scalars['Boolean']>;
-  removeAttachmentFromPad?: Maybe<Scalars['Boolean']>;
-  removeExternalDataSource?: Maybe<Scalars['Boolean']>;
-  removePad?: Maybe<Scalars['Boolean']>;
-  removeRole?: Maybe<Scalars['Boolean']>;
-  removeSecret: Scalars['Boolean'];
-  removeSectionFromWorkspace?: Maybe<Scalars['Boolean']>;
-  removeSelfFromRole?: Maybe<Scalars['Boolean']>;
-  removeTagFromPad?: Maybe<Scalars['Boolean']>;
-  removeUserFromRole?: Maybe<Scalars['Boolean']>;
-  removeWorkspace?: Maybe<Scalars['Boolean']>;
-  resendRegistrationMagicLinkEmail?: Maybe<Scalars['Boolean']>;
-  setPadPublic: Scalars['Boolean'];
-  setUsername: Scalars['Boolean'];
+  pretendUser?: Maybe<Scalars['Boolean']['output']>;
+  removeAttachmentFromPad?: Maybe<Scalars['Boolean']['output']>;
+  removeExternalDataSource?: Maybe<Scalars['Boolean']['output']>;
+  removePad?: Maybe<Scalars['Boolean']['output']>;
+  removeRole?: Maybe<Scalars['Boolean']['output']>;
+  removeSecret: Scalars['Boolean']['output'];
+  removeSectionFromWorkspace?: Maybe<Scalars['Boolean']['output']>;
+  removeSelfFromRole?: Maybe<Scalars['Boolean']['output']>;
+  removeTagFromPad?: Maybe<Scalars['Boolean']['output']>;
+  removeUserFromRole?: Maybe<Scalars['Boolean']['output']>;
+  removeWorkspace?: Maybe<Scalars['Boolean']['output']>;
+  resendRegistrationMagicLinkEmail?: Maybe<Scalars['Boolean']['output']>;
+  setPadPublic: Scalars['Boolean']['output'];
+  setUsername: Scalars['Boolean']['output'];
   shareExternalDataSourceWithEmail?: Maybe<ExternalDataSource>;
-  shareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
+  shareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']['output']>;
   shareExternalDataSourceWithUser?: Maybe<ExternalDataSource>;
   sharePadWithEmail: Pad;
-  sharePadWithRole?: Maybe<Scalars['Boolean']>;
-  sharePadWithSecret: Scalars['String'];
+  sharePadWithRole?: Maybe<Scalars['Boolean']['output']>;
+  sharePadWithSecret: Scalars['String']['output'];
   sharePadWithUser?: Maybe<Pad>;
   shareWorkspaceWithEmail: Workspace;
-  unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']>;
+  unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']['output']>;
   unshareExternalDataSourceWithUser: ExternalDataSource;
-  unshareNotebookWithSecret?: Maybe<Scalars['Boolean']>;
-  unsharePadWithRole?: Maybe<Scalars['Boolean']>;
+  unshareNotebookWithSecret?: Maybe<Scalars['Boolean']['output']>;
+  unsharePadWithRole?: Maybe<Scalars['Boolean']['output']>;
   unsharePadWithUser?: Maybe<Pad>;
   unshareWorkspaceWithUser?: Maybe<Workspace>;
   updateExternalDataSource?: Maybe<ExternalDataSource>;
   updatePad: Pad;
   updateSecret: Secret;
-  updateSectionInWorkspace?: Maybe<Scalars['Boolean']>;
+  updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
   updateSelf: User;
   updateWorkspace: Workspace;
 };
 
 
 export type MutationAddNotebookToSectionArgs = {
-  notebookId: Scalars['ID'];
-  sectionId: Scalars['ID'];
+  notebookId: Scalars['ID']['input'];
+  sectionId: Scalars['ID']['input'];
 };
 
 
 export type MutationAddSectionToWorkspaceArgs = {
   section: SectionInput;
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type MutationAddTagToPadArgs = {
-  padId: Scalars['ID'];
-  tag: Scalars['String'];
+  padId: Scalars['ID']['input'];
+  tag: Scalars['String']['input'];
 };
 
 
 export type MutationAttachFileToPadArgs = {
-  handle: Scalars['ID'];
+  handle: Scalars['ID']['input'];
 };
 
 
@@ -203,15 +204,15 @@ export type MutationCreateLogsArgs = {
 
 
 export type MutationCreateOrUpdateSnapshotArgs = {
-  notebookId: Scalars['ID'];
-  snapshotName: Scalars['String'];
+  notebookId: Scalars['ID']['input'];
+  snapshotName: Scalars['String']['input'];
 };
 
 
 export type MutationCreatePadArgs = {
   pad: PadInput;
-  sectionId?: InputMaybe<Scalars['ID']>;
-  workspaceId: Scalars['ID'];
+  sectionId?: InputMaybe<Scalars['ID']['input']>;
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -222,12 +223,12 @@ export type MutationCreateRoleArgs = {
 
 export type MutationCreateSecretArgs = {
   secret: SecretInput;
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type MutationCreateUserViaMagicLinkArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -237,9 +238,9 @@ export type MutationCreateWorkspaceArgs = {
 
 
 export type MutationDuplicatePadArgs = {
-  document?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  targetWorkspace: Scalars['ID'];
+  document?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  targetWorkspace: Scalars['ID']['input'];
 };
 
 
@@ -249,97 +250,97 @@ export type MutationFulfilGoalArgs = {
 
 
 export type MutationGetCreateAttachmentFormArgs = {
-  fileName: Scalars['String'];
-  fileType: Scalars['String'];
-  padId: Scalars['ID'];
+  fileName: Scalars['String']['input'];
+  fileType: Scalars['String']['input'];
+  padId: Scalars['ID']['input'];
 };
 
 
 export type MutationImportPadArgs = {
-  source: Scalars['String'];
-  workspaceId: Scalars['ID'];
+  source: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type MutationInviteUserToRoleArgs = {
   permission: PermissionType;
-  roleId: Scalars['ID'];
-  userId: Scalars['ID'];
+  roleId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationMovePadArgs = {
-  id: Scalars['ID'];
-  workspaceId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type MutationPretendUserArgs = {
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveAttachmentFromPadArgs = {
-  attachmentId: Scalars['ID'];
+  attachmentId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveExternalDataSourceArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationRemovePadArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveRoleArgs = {
-  roleId: Scalars['ID'];
+  roleId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveSecretArgs = {
-  secretId: Scalars['ID'];
+  secretId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveSectionFromWorkspaceArgs = {
-  sectionId: Scalars['ID'];
-  workspaceId: Scalars['ID'];
+  sectionId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveSelfFromRoleArgs = {
-  roleId: Scalars['ID'];
+  roleId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveTagFromPadArgs = {
-  padId: Scalars['ID'];
-  tag: Scalars['String'];
+  padId: Scalars['ID']['input'];
+  tag: Scalars['String']['input'];
 };
 
 
 export type MutationRemoveUserFromRoleArgs = {
-  roleId: Scalars['ID'];
-  userId: Scalars['ID'];
+  roleId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationRemoveWorkspaceArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationResendRegistrationMagicLinkEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationSetPadPublicArgs = {
-  id: Scalars['ID'];
-  isPublic: Scalars['Boolean'];
+  id: Scalars['ID']['input'];
+  isPublic: Scalars['Boolean']['input'];
 };
 
 
@@ -349,123 +350,123 @@ export type MutationSetUsernameArgs = {
 
 
 export type MutationShareExternalDataSourceWithEmailArgs = {
-  email?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
+  email?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
 };
 
 
 export type MutationShareExternalDataSourceWithRoleArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
-  roleId: Scalars['ID'];
+  roleId: Scalars['ID']['input'];
 };
 
 
 export type MutationShareExternalDataSourceWithUserArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationSharePadWithEmailArgs = {
-  canComment: Scalars['Boolean'];
-  email: Scalars['String'];
-  id: Scalars['ID'];
+  canComment: Scalars['Boolean']['input'];
+  email: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
 };
 
 
 export type MutationSharePadWithRoleArgs = {
-  canComment: Scalars['Boolean'];
-  id: Scalars['ID'];
+  canComment: Scalars['Boolean']['input'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
-  roleId: Scalars['ID'];
+  roleId: Scalars['ID']['input'];
 };
 
 
 export type MutationSharePadWithSecretArgs = {
-  canComment: Scalars['Boolean'];
-  id: Scalars['ID'];
+  canComment: Scalars['Boolean']['input'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
 };
 
 
 export type MutationSharePadWithUserArgs = {
-  canComment: Scalars['Boolean'];
-  id: Scalars['ID'];
+  canComment: Scalars['Boolean']['input'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationShareWorkspaceWithEmailArgs = {
-  canComment: Scalars['Boolean'];
-  email: Scalars['String'];
-  id: Scalars['ID'];
+  canComment: Scalars['Boolean']['input'];
+  email: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
 };
 
 
 export type MutationUnshareExternalDataSourceWithRoleArgs = {
-  id: Scalars['ID'];
-  roleId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  roleId: Scalars['ID']['input'];
 };
 
 
 export type MutationUnshareExternalDataSourceWithUserArgs = {
-  id: Scalars['ID'];
-  userId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationUnshareNotebookWithSecretArgs = {
-  id: Scalars['ID'];
-  secret: Scalars['String'];
+  id: Scalars['ID']['input'];
+  secret: Scalars['String']['input'];
 };
 
 
 export type MutationUnsharePadWithRoleArgs = {
-  id: Scalars['ID'];
-  roleId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  roleId: Scalars['ID']['input'];
 };
 
 
 export type MutationUnsharePadWithUserArgs = {
-  id: Scalars['ID'];
-  userId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationUnshareWorkspaceWithUserArgs = {
-  id: Scalars['ID'];
-  userId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdateExternalDataSourceArgs = {
   dataSource: ExternalDataSourceUpdateInput;
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdatePadArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   pad: PadInput;
 };
 
 
 export type MutationUpdateSecretArgs = {
-  secret: Scalars['String'];
-  secretId: Scalars['ID'];
+  secret: Scalars['String']['input'];
+  secretId: Scalars['ID']['input'];
 };
 
 
 export type MutationUpdateSectionInWorkspaceArgs = {
   section: SectionInput;
-  sectionId: Scalars['ID'];
-  workspaceId: Scalars['ID'];
+  sectionId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -475,27 +476,27 @@ export type MutationUpdateSelfArgs = {
 
 
 export type MutationUpdateWorkspaceArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   workspace: WorkspaceInput;
 };
 
 export type Pad = {
   __typename?: 'Pad';
   access: PadAccess;
-  archived?: Maybe<Scalars['Boolean']>;
+  archived?: Maybe<Scalars['Boolean']['output']>;
   attachments: Array<Attachment>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  icon?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  initialState?: Maybe<Scalars['String']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  icon?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  initialState?: Maybe<Scalars['String']['output']>;
+  isPublic?: Maybe<Scalars['Boolean']['output']>;
   myPermissionType?: Maybe<PermissionType>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   padConnectionParams: PadConnectionParams;
   section?: Maybe<Section>;
   snapshots: Array<PadSnapshot>;
-  status?: Maybe<Scalars['String']>;
-  tags: Array<Scalars['String']>;
+  status?: Maybe<Scalars['String']['output']>;
+  tags: Array<Scalars['String']['output']>;
   workspace?: Maybe<Workspace>;
 };
 
@@ -509,64 +510,64 @@ export type PadAccess = {
 export type PadChanges = {
   __typename?: 'PadChanges';
   added: Array<Pad>;
-  removed: Array<Scalars['ID']>;
+  removed: Array<Scalars['ID']['output']>;
   updated: Array<Pad>;
 };
 
 export type PadConnectionParams = {
   __typename?: 'PadConnectionParams';
-  token: Scalars['String'];
-  url: Scalars['String'];
+  token: Scalars['String']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type PadInput = {
-  archived?: InputMaybe<Scalars['Boolean']>;
-  icon?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  section_id?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
-  tags?: InputMaybe<Array<Scalars['String']>>;
+  archived?: InputMaybe<Scalars['Boolean']['input']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  section_id?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type PadSnapshot = {
   __typename?: 'PadSnapshot';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  data?: Maybe<Scalars['String']>;
-  snapshotName: Scalars['String'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  version?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  data?: Maybe<Scalars['String']['output']>;
+  snapshotName: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  version?: Maybe<Scalars['String']['output']>;
 };
 
 export type PageInput = {
-  cursor?: InputMaybe<Scalars['String']>;
-  maxItems: Scalars['Int'];
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  maxItems: Scalars['Int']['input'];
 };
 
 export type Pageable = ExternalDataSource | SharedResource;
 
 export type PagedPadResult = {
   __typename?: 'PagedPadResult';
-  count: Scalars['Int'];
-  cursor?: Maybe<Scalars['String']>;
-  hasNextPage: Scalars['Boolean'];
+  count: Scalars['Int']['output'];
+  cursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
   items: Array<Pad>;
 };
 
 export type PagedResult = {
   __typename?: 'PagedResult';
-  count: Scalars['Int'];
-  cursor?: Maybe<Scalars['String']>;
-  hasNextPage: Scalars['Boolean'];
+  count: Scalars['Int']['output'];
+  cursor?: Maybe<Scalars['String']['output']>;
+  hasNextPage: Scalars['Boolean']['output'];
   items: Array<Pageable>;
 };
 
 export type Permission = {
   __typename?: 'Permission';
-  canComment: Scalars['Boolean'];
-  createdAt?: Maybe<Scalars['DateTime']>;
+  canComment: Scalars['Boolean']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   givenBy: User;
-  id: Scalars['ID'];
-  resource: Scalars['String'];
+  id: Scalars['ID']['output'];
+  resource: Scalars['String']['output'];
   type: PermissionType;
   user: User;
 };
@@ -590,50 +591,50 @@ export type Query = {
   padsSharedWithMe: PagedPadResult;
   sections: Array<Section>;
   self?: Maybe<User>;
-  selfFulfilledGoals: Array<Scalars['String']>;
-  tags: Array<Scalars['String']>;
-  version?: Maybe<Scalars['String']>;
+  selfFulfilledGoals: Array<Scalars['String']['output']>;
+  tags: Array<Scalars['String']['output']>;
+  version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
 };
 
 
 export type QueryGetExternalDataSourceArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetExternalDataSourcesArgs = {
-  notebookId: Scalars['ID'];
+  notebookId: Scalars['ID']['input'];
   page: PageInput;
 };
 
 
 export type QueryGetPadByIdArgs = {
-  id: Scalars['ID'];
-  snapshotName?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  snapshotName?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryGetWorkspaceByIdArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetWorkspaceSecretsArgs = {
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type QueryPadsArgs = {
   page: PageInput;
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type QueryPadsByTagArgs = {
   page: PageInput;
-  tag: Scalars['String'];
-  workspaceId: Scalars['ID'];
+  tag: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -643,94 +644,94 @@ export type QueryPadsSharedWithMeArgs = {
 
 
 export type QuerySectionsArgs = {
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type QueryTagsArgs = {
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 export type Role = {
   __typename?: 'Role';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   users: Array<User>;
   workspace: Workspace;
 };
 
 export type RoleAccess = {
   __typename?: 'RoleAccess';
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
   role: Role;
 };
 
 export type RoleInput = {
-  name: Scalars['String'];
-  workspaceId: Scalars['ID'];
+  name: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 export type RoleInvitation = {
   __typename?: 'RoleInvitation';
-  expires_at?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
+  expires_at?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
   role: Role;
   user: User;
 };
 
 export type Secret = {
   __typename?: 'Secret';
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   workspace?: Maybe<Workspace>;
 };
 
 export type SecretAccess = {
   __typename?: 'SecretAccess';
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
-  secret: Scalars['String'];
+  secret: Scalars['String']['output'];
 };
 
 export type SecretInput = {
-  name: Scalars['String'];
-  secret: Scalars['String'];
+  name: Scalars['String']['input'];
+  secret: Scalars['String']['input'];
 };
 
 export type Section = {
   __typename?: 'Section';
-  color: Scalars['String'];
-  createdAt?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  color: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
   pads: Array<Pad>;
-  workspace_id: Scalars['ID'];
+  workspace_id: Scalars['ID']['output'];
 };
 
 export type SectionChanges = {
   __typename?: 'SectionChanges';
   added: Array<Section>;
-  removed: Array<Scalars['ID']>;
+  removed: Array<Scalars['ID']['output']>;
   updated: Array<Section>;
 };
 
 export type SectionInput = {
-  color?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
+  color?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ShareInvitation = {
   __typename?: 'ShareInvitation';
-  email?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']['output']>;
 };
 
 export type SharedResource = {
   __typename?: 'SharedResource';
-  canComment?: Maybe<Scalars['Boolean']>;
+  canComment?: Maybe<Scalars['Boolean']['output']>;
   permission: PermissionType;
-  resource: Scalars['String'];
+  resource: Scalars['String']['output'];
 };
 
 export type SharedWith = {
@@ -742,41 +743,41 @@ export type SharedWith = {
 
 export type SharedWithRole = {
   __typename?: 'SharedWithRole';
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['output'];
   permissionType: PermissionType;
   role: Role;
 };
 
 export type SharedWithUser = {
   __typename?: 'SharedWithUser';
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['output'];
   permissionType: PermissionType;
   user: User;
 };
 
 export type Subscription = {
   __typename?: 'Subscription';
-  hello?: Maybe<Scalars['String']>;
+  hello?: Maybe<Scalars['String']['output']>;
   padsChanged: PadChanges;
   sectionsChanged: SectionChanges;
-  subscribeToNothing?: Maybe<Scalars['Boolean']>;
+  subscribeToNothing?: Maybe<Scalars['Boolean']['output']>;
   tagsChanged: TagChanges;
   workspacesChanged: WorkspacesChanges;
 };
 
 
 export type SubscriptionPadsChangedArgs = {
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type SubscriptionSectionsChangedArgs = {
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
 export type SubscriptionTagsChangedArgs = {
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 export enum SubscriptionPaymentStatus {
@@ -798,50 +799,50 @@ export type TagChanges = {
 
 export type TagRecord = {
   __typename?: 'TagRecord';
-  tag: Scalars['String'];
-  workspaceId: Scalars['ID'];
+  tag: Scalars['String']['output'];
+  workspaceId: Scalars['ID']['output'];
 };
 
 export type User = {
   __typename?: 'User';
-  createdAt?: Maybe<Scalars['DateTime']>;
-  description?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  hideChecklist?: Maybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  image?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  onboarded?: Maybe<Scalars['Boolean']>;
-  username?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  hideChecklist?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  onboarded?: Maybe<Scalars['Boolean']['output']>;
+  username?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserAccess = {
   __typename?: 'UserAccess';
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['output'];
   permission: PermissionType;
   user: User;
 };
 
 export type UserInput = {
-  description?: InputMaybe<Scalars['String']>;
-  hideChecklist?: InputMaybe<Scalars['Boolean']>;
-  name?: InputMaybe<Scalars['String']>;
-  onboarded?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  hideChecklist?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  onboarded?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UsernameInput = {
-  username: Scalars['String'];
+  username: Scalars['String']['input'];
 };
 
 export type Workspace = {
   __typename?: 'Workspace';
   access?: Maybe<WorkspaceAccess>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
-  isPremium?: Maybe<Scalars['Boolean']>;
-  isPublic?: Maybe<Scalars['Boolean']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  isPremium?: Maybe<Scalars['Boolean']['output']>;
+  isPublic?: Maybe<Scalars['Boolean']['output']>;
   myPermissionType?: Maybe<PermissionType>;
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   pads: PagedPadResult;
   roles: Array<Role>;
   secrets: Array<Secret>;
@@ -861,13 +862,13 @@ export type WorkspaceAccess = {
 };
 
 export type WorkspaceInput = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
-  id?: Maybe<Scalars['String']>;
-  paymentLink?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
+  paymentLink?: Maybe<Scalars['String']['output']>;
   paymentStatus?: Maybe<SubscriptionPaymentStatus>;
   status?: Maybe<SubscriptionStatus>;
   workspace?: Maybe<Workspace>;
@@ -876,22 +877,22 @@ export type WorkspaceSubscription = {
 export type WorkspacesChanges = {
   __typename?: 'WorkspacesChanges';
   added: Array<Workspace>;
-  removed: Array<Scalars['ID']>;
+  removed: Array<Scalars['ID']['output']>;
   updated: Array<Workspace>;
 };
 
 export type AttachFileToNotebookMutationVariables = Exact<{
-  handle: Scalars['ID'];
+  handle: Scalars['ID']['input'];
 }>;
 
 
 export type AttachFileToNotebookMutation = { __typename?: 'Mutation', attachFileToPad?: { __typename?: 'Attachment', url: string } | null };
 
 export type ChangeWorkspaceAccessLevelMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  email: Scalars['String'];
+  workspaceId: Scalars['ID']['input'];
+  email: Scalars['String']['input'];
   permissionType: PermissionType;
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['input'];
 }>;
 
 
@@ -905,7 +906,7 @@ export type CreateExternalDataSourceMutationVariables = Exact<{
 export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, name: string, padId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | null };
 
 export type CreateLogsMutationVariables = Exact<{
-  resource: Scalars['String'];
+  resource: Scalars['String']['input'];
   entries: Array<LogEntry> | LogEntry;
 }>;
 
@@ -913,40 +914,40 @@ export type CreateLogsMutationVariables = Exact<{
 export type CreateLogsMutation = { __typename?: 'Mutation', createLogs?: boolean | null };
 
 export type CreateNotebookMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  name: Scalars['String'];
-  sectionId?: InputMaybe<Scalars['ID']>;
+  workspaceId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  sectionId?: InputMaybe<Scalars['ID']['input']>;
 }>;
 
 
 export type CreateNotebookMutation = { __typename?: 'Mutation', createPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
 export type CreateSectionMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  name: Scalars['String'];
-  color: Scalars['String'];
+  workspaceId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  color: Scalars['String']['input'];
 }>;
 
 
 export type CreateSectionMutation = { __typename?: 'Mutation', addSectionToWorkspace?: { __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null } | null };
 
 export type CreateOrUpdateNotebookSnapshotMutationVariables = Exact<{
-  notebookId: Scalars['ID'];
-  snapshotName: Scalars['String'];
+  notebookId: Scalars['ID']['input'];
+  snapshotName: Scalars['String']['input'];
 }>;
 
 
 export type CreateOrUpdateNotebookSnapshotMutation = { __typename?: 'Mutation', createOrUpdateSnapshot: boolean };
 
 export type CreateWorkspaceMutationVariables = Exact<{
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 }>;
 
 
 export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentLink?: string | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } };
 
 export type CreateWorkspaceSecretMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
   secret: SecretInput;
 }>;
 
@@ -954,38 +955,38 @@ export type CreateWorkspaceSecretMutationVariables = Exact<{
 export type CreateWorkspaceSecretMutation = { __typename?: 'Mutation', createSecret: { __typename?: 'Secret', id: string, name: string } };
 
 export type DeleteNotebookMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteNotebookMutation = { __typename?: 'Mutation', removePad?: boolean | null };
 
 export type DeleteSectionMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  sectionId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
+  sectionId: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteSectionMutation = { __typename?: 'Mutation', removeSectionFromWorkspace?: boolean | null };
 
 export type DeleteWorkspaceMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteWorkspaceMutation = { __typename?: 'Mutation', removeWorkspace?: boolean | null };
 
 export type DeleteWorkspaceSecretMutationVariables = Exact<{
-  secretId: Scalars['ID'];
+  secretId: Scalars['ID']['input'];
 }>;
 
 
 export type DeleteWorkspaceSecretMutation = { __typename?: 'Mutation', removeSecret: boolean };
 
 export type DuplicateNotebookMutationVariables = Exact<{
-  id: Scalars['ID'];
-  targetWorkspace: Scalars['ID'];
-  document?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  targetWorkspace: Scalars['ID']['input'];
+  document?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -999,49 +1000,49 @@ export type FulfilGoalMutationVariables = Exact<{
 export type FulfilGoalMutation = { __typename?: 'Mutation', fulfilGoal: boolean };
 
 export type GetCreateAttachmentFormMutationVariables = Exact<{
-  notebookId: Scalars['ID'];
-  fileName: Scalars['String'];
-  fileType: Scalars['String'];
+  notebookId: Scalars['ID']['input'];
+  fileName: Scalars['String']['input'];
+  fileType: Scalars['String']['input'];
 }>;
 
 
 export type GetCreateAttachmentFormMutation = { __typename?: 'Mutation', getCreateAttachmentForm: { __typename?: 'CreateAttachmentForm', url: string, handle: string, fields: Array<{ __typename?: 'KeyValue', key: string, value: string }> } };
 
 export type ImportNotebookMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  source: Scalars['String'];
+  workspaceId: Scalars['ID']['input'];
+  source: Scalars['String']['input'];
 }>;
 
 
 export type ImportNotebookMutation = { __typename?: 'Mutation', importPad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
 export type MoveNotebookMutationVariables = Exact<{
-  id: Scalars['ID'];
-  workspaceId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 }>;
 
 
 export type MoveNotebookMutation = { __typename?: 'Mutation', movePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }>, section?: { __typename?: 'Section', id: string, name: string } | null } };
 
 export type RenameNotebookMutationVariables = Exact<{
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
 }>;
 
 
 export type RenameNotebookMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string } };
 
 export type RenameWorkspaceMutationVariables = Exact<{
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
 }>;
 
 
 export type RenameWorkspaceMutation = { __typename?: 'Mutation', updateWorkspace: { __typename?: 'Workspace', id: string, name: string } };
 
 export type SetNotebookPublicMutationVariables = Exact<{
-  id: Scalars['ID'];
-  isPublic: Scalars['Boolean'];
+  id: Scalars['ID']['input'];
+  isPublic: Scalars['Boolean']['input'];
 }>;
 
 
@@ -1055,111 +1056,111 @@ export type SetUsernameMutationVariables = Exact<{
 export type SetUsernameMutation = { __typename?: 'Mutation', setUsername: boolean };
 
 export type ShareNotebookWithSecretMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
   permissionType: PermissionType;
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['input'];
 }>;
 
 
 export type ShareNotebookWithSecretMutation = { __typename?: 'Mutation', sharePadWithSecret: string };
 
 export type SharePadWithEmailMutationVariables = Exact<{
-  padId: Scalars['ID'];
-  email: Scalars['String'];
+  padId: Scalars['ID']['input'];
+  email: Scalars['String']['input'];
   permissionType: PermissionType;
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['input'];
 }>;
 
 
 export type SharePadWithEmailMutation = { __typename?: 'Mutation', sharePadWithEmail: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null } } };
 
 export type ShareWorkspaceWithEmailMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  email: Scalars['String'];
+  workspaceId: Scalars['ID']['input'];
+  email: Scalars['String']['input'];
   permissionType: PermissionType;
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['input'];
 }>;
 
 
 export type ShareWorkspaceWithEmailMutation = { __typename?: 'Mutation', shareWorkspaceWithEmail: { __typename?: 'Workspace', id: string, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } };
 
 export type UnarchiveNotebookMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type UnarchiveNotebookMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
 
 export type UnshareNotebookWithSecretMutationVariables = Exact<{
-  id: Scalars['ID'];
-  secret: Scalars['String'];
+  id: Scalars['ID']['input'];
+  secret: Scalars['String']['input'];
 }>;
 
 
 export type UnshareNotebookWithSecretMutation = { __typename?: 'Mutation', unshareNotebookWithSecret?: boolean | null };
 
 export type UnsharePadWithUserMutationVariables = Exact<{
-  padId: Scalars['ID'];
-  userId: Scalars['ID'];
+  padId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 }>;
 
 
 export type UnsharePadWithUserMutation = { __typename?: 'Mutation', unsharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null } } | null };
 
 export type UnshareWorkspaceWithUserMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  userId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 }>;
 
 
 export type UnshareWorkspaceWithUserMutation = { __typename?: 'Mutation', unshareWorkspaceWithUser?: { __typename?: 'Workspace', id: string, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } | null };
 
 export type UpdateNotebookArchiveMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }>;
 
 
 export type UpdateNotebookArchiveMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
 
 export type UpdateNotebookIconMutationVariables = Exact<{
-  id: Scalars['ID'];
-  icon: Scalars['String'];
+  id: Scalars['ID']['input'];
+  icon: Scalars['String']['input'];
 }>;
 
 
 export type UpdateNotebookIconMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
 
 export type UpdateNotebookStatusMutationVariables = Exact<{
-  id: Scalars['ID'];
-  status: Scalars['String'];
+  id: Scalars['ID']['input'];
+  status: Scalars['String']['input'];
 }>;
 
 
 export type UpdateNotebookStatusMutation = { __typename?: 'Mutation', updatePad: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } };
 
 export type UpdatePadPermissionMutationVariables = Exact<{
-  padId: Scalars['ID'];
-  userId: Scalars['ID'];
+  padId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
   permissionType: PermissionType;
-  canComment: Scalars['Boolean'];
+  canComment: Scalars['Boolean']['input'];
 }>;
 
 
 export type UpdatePadPermissionMutation = { __typename?: 'Mutation', unsharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null } } | null, sharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null } } | null };
 
 export type UpdateSectionMutationVariables = Exact<{
-  workspaceId: Scalars['ID'];
-  sectionId: Scalars['ID'];
-  name: Scalars['String'];
-  color: Scalars['String'];
+  workspaceId: Scalars['ID']['input'];
+  sectionId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  color: Scalars['String']['input'];
 }>;
 
 
 export type UpdateSectionMutation = { __typename?: 'Mutation', updateSectionInWorkspace?: boolean | null };
 
 export type UpdateSectionAddNotebookMutationVariables = Exact<{
-  sectionId: Scalars['ID'];
-  notebookId: Scalars['ID'];
+  sectionId: Scalars['ID']['input'];
+  notebookId: Scalars['ID']['input'];
 }>;
 
 
@@ -1175,7 +1176,7 @@ export type UpdateUserMutation = { __typename?: 'Mutation', updateSelf: { __type
 export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, name: string, padId: string, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> };
 
 export type GetExternalDataSourcesQueryVariables = Exact<{
-  notebookId: Scalars['ID'];
+  notebookId: Scalars['ID']['input'];
 }>;
 
 
@@ -1188,8 +1189,8 @@ export type CollaboratorFragment = { __typename?: 'User', id: string, image?: st
 export type EditorNotebookFragment = { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, isPublic?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null } }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> };
 
 export type GetNotebookByIdQueryVariables = Exact<{
-  id: Scalars['ID'];
-  snapshotName?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID']['input'];
+  snapshotName?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1223,14 +1224,14 @@ export type GetWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentLink?: string | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
 
 export type GetWorkspaceMembersQueryVariables = Exact<{
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 }>;
 
 
 export type GetWorkspaceMembersQuery = { __typename?: 'Query', getWorkspaceById?: { __typename?: 'Workspace', id: string, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } | null };
 
 export type GetWorkspaceSecretsQueryVariables = Exact<{
-  workspaceId: Scalars['ID'];
+  workspaceId: Scalars['ID']['input'];
 }>;
 
 

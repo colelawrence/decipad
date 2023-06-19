@@ -1,6 +1,5 @@
 import { Computer, Result, isColumn } from '@decipad/computer';
 import type { ImportOptions } from './import';
-import { importFromArrow } from './importFromArrow';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
 import { ImportResult } from './types';
@@ -48,8 +47,6 @@ const importFromUnknownResponse = async (
       rawResult,
       options
     )) as Result.Result;
-  } else if (contentType?.startsWith('application/vnd.apache.arrow')) {
-    result = await importFromArrow(resp);
   } else {
     rawResult = await resp.text();
     result = {

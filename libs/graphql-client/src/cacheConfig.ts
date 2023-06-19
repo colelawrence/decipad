@@ -56,7 +56,9 @@ export const graphCacheConfig: GraphCacheConfig = {
     PadSnapshot: {
       createdAt: (parent) => {
         // Correct server timestamps
-        return new Date(new Date(parent.createdAt).getTime() * 1000);
+        return new Date(
+          new Date(parent.createdAt).getTime() * 1000
+        ).toISOString();
       },
     },
   },
@@ -102,7 +104,7 @@ export const graphCacheConfig: GraphCacheConfig = {
         addSectionToItsWorkspace(
           cache,
           result.addSectionToWorkspace as Section,
-          args.workspaceId
+          args.workspaceId as string
         );
       },
       createOrUpdateSnapshot: (_result, args, cache) => {

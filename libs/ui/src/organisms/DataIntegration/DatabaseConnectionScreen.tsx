@@ -47,7 +47,6 @@ const placeholderList: Record<ImportElementSource, string> = {
   mariadb: 'mariadb://',
   mssql: 'mssql://',
   redshift: 'redshift://',
-  arrow: 'https://',
   csv: 'https://',
   cockroachdb: 'postgresql://',
   decipad: 'https://',

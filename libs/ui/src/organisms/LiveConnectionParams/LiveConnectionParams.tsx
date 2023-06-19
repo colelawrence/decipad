@@ -57,7 +57,6 @@ const sourceTypes: ImportElementSource[] = [
   'gsheets',
   'csv',
   'json',
-  'arrow',
   'postgresql',
   'mysql',
   'oracledb',

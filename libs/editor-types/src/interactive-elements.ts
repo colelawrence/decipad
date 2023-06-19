@@ -40,7 +40,6 @@ export type ImportElementSource =
   | 'gsheets'
   | 'csv'
   | 'json'
-  | 'arrow'
   | 'postgresql'
   | 'mysql'
   | 'oracledb'
@@ -55,7 +54,6 @@ export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   gsheets: 'Google Sheets',
   csv: 'CSV',
   json: 'JSON',
-  arrow: 'Arrow',
   postgresql: 'Postgres',
   mysql: 'MySQL',
   oracledb: 'Oracle',

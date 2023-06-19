@@ -2,13 +2,11 @@ import { ImportElementSource } from '@decipad/editor-types';
 
 const supportedPathTerminations = new Map<string, ImportElementSource>([
   ['.csv', 'csv'],
-  ['.arrow', 'arrow'],
   ['.json', 'json'],
 ]);
 const supportedContentTypes = new Map<string, ImportElementSource>([
   ['text/csv', 'csv'],
   ['application/json', 'json'],
-  ['application/vnd.apache.arrow', 'arrow'],
 ]);
 
 export const isRandomImportUrl = async (

@@ -6,8 +6,6 @@ export const maybeSourceFromFileType = (
   switch (fileType) {
     case 'text/csv':
       return 'csv';
-    case 'application/vnd.apache.arrow':
-      return 'arrow';
     case 'application/json':
       return 'json';
   }

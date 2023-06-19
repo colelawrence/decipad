@@ -608,12 +608,6 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "arrow",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "cockroachdb",
             "description": null,
             "isDeprecated": false,

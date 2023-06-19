@@ -41,7 +41,6 @@ const providerTitle = {
   redshift: 'Redshift',
   postgresql: 'Postgres',
   oracledb: 'Oracle',
-  arrow: 'Arrow',
   cockroachdb: 'Cockroach',
   decipad: 'Decipad',
   codeconnection: 'Code',
