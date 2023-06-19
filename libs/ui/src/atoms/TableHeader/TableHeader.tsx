@@ -267,6 +267,7 @@ export const TableHeader = ({
             <DropdownMenu
               items={columOptionItems}
               testId="table-add-remove-column-button"
+              readonly={!isEditable}
               trigger={
                 <DropSourceAndTarget
                   ref={dragSource}
@@ -278,18 +279,25 @@ export const TableHeader = ({
           )}
 
           {error && (
-            <Tooltip
-              hoverOnly
+            <DropdownMenu
+              items={columOptionItems}
+              testId="table-add-remove-column-button"
+              readonly={!isEditable}
               trigger={
-                <span contentEditable={false} css={iconTypeStyles}>
-                  <Warning />
-                </span>
+                <Tooltip
+                  hoverOnly
+                  trigger={
+                    <span contentEditable={false} css={iconTypeStyles}>
+                      <Warning />
+                    </span>
+                  }
+                >
+                  {type.kind !== 'table-formula'
+                    ? error
+                    : "There's a problem with your formulas"}
+                </Tooltip>
               }
-            >
-              {type.kind !== 'table-formula'
-                ? error
-                : "There's a problem with your formulas"}
-            </Tooltip>
+            />
           )}
 
           {showIcon && !error && (

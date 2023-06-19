@@ -15,9 +15,15 @@ interface DropdownMenuProps {
   trigger: ReactElement<any, any>;
   items: DropdownItem[];
   testId?: string;
+  readonly?: boolean;
 }
 
-const DropdownMenu = ({ trigger, items, testId }: DropdownMenuProps) => {
+const DropdownMenu = ({
+  trigger,
+  items,
+  testId,
+  readonly = false,
+}: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,7 +38,7 @@ const DropdownMenu = ({ trigger, items, testId }: DropdownMenuProps) => {
   return (
     <div data-testid={testId} ref={ref} onClick={() => setIsOpen(!isOpen)}>
       {trigger}
-      {isOpen && (
+      {isOpen && !readonly && (
         <div css={dropdownStyles}>
           {items.map((item) => (
             <div
