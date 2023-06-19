@@ -1,19 +1,16 @@
 import { insertLiveQueryBelow } from '@decipad/editor-components';
 
-import {
-  useParentNodeEntry,
-  usePathMutatorCallback,
-} from '@decipad/editor-hooks';
+import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ImportElementSourcePretty,
   LiveConnectionElement,
+  MyEditor,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType, isDatabaseConnection } from '@decipad/editor-utils';
-import { getDefined } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { SourceUrlParseResponse, parseSourceUrl } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
@@ -23,9 +20,12 @@ import {
   TableButton,
   IntegrationBlock as UIIntegrationBlock,
 } from '@decipad/ui';
+import { getDefined } from '@decipad/utils';
 import { css } from '@emotion/react';
+import { TNodeEntry, findNodePath, getParentNode } from '@udecode/plate';
 import { Hide, Show } from 'libs/ui/src/icons';
 import { useCallback, useMemo, useState } from 'react';
+import { Path } from 'slate';
 import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
 
 const captionWrapperStyles = css({
@@ -46,18 +46,22 @@ export const LiveConnectionVarName: PlateComponent = ({
   children,
 }) => {
   assertElementType(element, ELEMENT_LIVE_CONNECTION_VARIABLE_NAME);
-  const editor = useTEditorRef();
-  const parent = useParentNodeEntry<LiveConnectionElement>(element);
-  // code from @pgte im not sure should be here or if line above was enough?
-  // const path = findNodePath(editor, element);
-  // const parent = path && getParentNode(editor, path);
+  const editor: MyEditor = useTEditorRef();
+  const path = findNodePath(editor, element);
+  const parent: TNodeEntry<LiveConnectionElement> | undefined =
+    path && getParentNode(editor, path);
+  const parentElem = parent?.[0] as LiveConnectionElement;
+  const parentPath = parent?.[1] as Path;
+  if (!parentElem || !parentPath) {
+    throw new Error('Issue with finding parent. Contact support.');
+  }
   if (parent) {
-    assertElementType(parent[0], ELEMENT_LIVE_CONNECTION);
+    assertElementType(parentElem, ELEMENT_LIVE_CONNECTION);
   }
   const setIsFirstRowHeader = usePathMutatorCallback<
     LiveConnectionElement,
     'isFirstRowHeaderRow'
-  >(editor, parent?.[1], 'isFirstRowHeaderRow');
+  >(editor, parentPath, 'isFirstRowHeaderRow');
 
   const isFirstRowHeaderRow = parent?.[0].isFirstRowHeaderRow;
 
@@ -68,13 +72,13 @@ export const LiveConnectionVarName: PlateComponent = ({
   const [showData, setShowData] = useState(false);
 
   const { sourceName, url, returnRange } = useMemo(() => {
-    const source = parent?.[0].source ?? '';
-    const parentUrl = parent?.[0].url;
+    const source = parentElem.source ?? '';
+    const parentUrl = parentElem.url;
 
     const sourceParams: SourceUrlParseResponse | undefined =
       (source &&
         parentUrl != null &&
-        !parent?.[0].externalDataSourceId &&
+        !parentElem.externalDataSourceId &&
         parseSourceUrl(source, parentUrl)) ||
       (parentUrl != null && { userUrl: parentUrl }) ||
       undefined;
@@ -91,7 +95,7 @@ export const LiveConnectionVarName: PlateComponent = ({
       rangeExplanation,
       returnRange: subsheetName && subsheetName !== '0' ? formattedRange : '',
     };
-  }, [parent]);
+  }, [parentElem.externalDataSourceId, parentElem.source, parentElem.url]);
 
   const computer = useComputer();
 
@@ -99,15 +103,15 @@ export const LiveConnectionVarName: PlateComponent = ({
     if (parent) {
       insertLiveQueryBelow(
         editor,
-        parent[1],
+        parentPath,
         computer.getAvailableIdentifier.bind(computer),
-        parent[0].id
+        parentElem.id
       );
     }
-  }, [computer, editor, parent]);
+  }, [computer, editor, parent, parentElem.id, parentPath]);
 
   const { loading, result, error } = useLiveConnectionCore({
-    element: getDefined(parent?.[0]),
+    element: getDefined(parentElem),
     deleted: false,
   });
 
@@ -158,7 +162,7 @@ export const LiveConnectionVarName: PlateComponent = ({
 
       {isFlagEnabled('LIVE_QUERY') &&
         parent &&
-        isDatabaseConnection(parent[0]) && (
+        isDatabaseConnection(parentElem) && (
           <div css={tableButtonWrapperStyles}>
             <TableButton
               onClick={onCreateQueryPress}

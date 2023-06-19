@@ -159,6 +159,14 @@ const integrationsGroups = {
       enabled: isFlagEnabled('LIVE_QUERY'),
       extraSearchTerms: ['sql', 'db', 'database'],
     },
+    {
+      command: 'upload-csv',
+      title: 'CSV',
+      description: 'Upload an CSV file',
+      icon: paintIcon(<ImportTable />, 'Daffodil'),
+      enabled: isFlagEnabled('UPLOAD_CSV'),
+      extraSearchTerms: ['upload', 'csv', 'data', 'excel'],
+    },
   ],
 };
 

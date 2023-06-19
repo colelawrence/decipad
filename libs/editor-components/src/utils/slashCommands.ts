@@ -162,6 +162,10 @@ export const execute = ({
         setFileType('image' as FileType);
         setDialogOpen(true);
         break;
+      case 'upload-csv':
+        setFileType('data' as FileType);
+        setDialogOpen(true);
+        break;
     }
 
     let newElementPath: Path;

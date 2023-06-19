@@ -2,7 +2,6 @@ import {
   BlockLengthSynchronizationProvider,
   NumberCatalog,
   TeleportEditor,
-  UploadFile,
 } from '@decipad/editor-components';
 import { Integrations } from '@decipad/editor-integrations';
 import { MyEditor, MyValue } from '@decipad/editor-types';
@@ -12,6 +11,7 @@ import {
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
+import { UploadFile } from '@decipad/editor-attachments';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate';
 import { EditorLayout } from 'libs/ui/src/atoms';

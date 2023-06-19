@@ -1,4 +1,3 @@
-import { nanoid } from 'nanoid';
 import {
   createTPluginFactory,
   ELEMENT_LIVE_CONNECTION,
@@ -16,7 +15,8 @@ import {
   assertElementType,
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
-import { insertNodes, removeNodes, getChildren } from '@udecode/plate';
+import { getChildren, insertNodes, removeNodes } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 import {
   createNormalizerPlugin,
   NormalizerReturnValue,
@@ -60,9 +60,6 @@ export const createLiveConnectionPlugin = createTPluginFactory({
                 },
                 { at: [...path, 1] }
               );
-          }
-          if (element.children.length > 1) {
-            return () => removeNodes(editor, { at: [...path, 1] });
           }
           return false;
         },

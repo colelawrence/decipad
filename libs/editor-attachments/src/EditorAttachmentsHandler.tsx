@@ -1,31 +1,32 @@
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import { DropTargetMonitor, useDrop } from 'react-dnd';
-import { NativeTypes } from 'react-dnd-html5-backend';
-import { produce } from '@decipad/utils';
-import axios, { AxiosProgressEvent } from 'axios';
-import { useToast } from '@decipad/toast';
-import { UploadProgressModal } from '@decipad/ui';
 import {
   canDropFile,
   dndStore,
   insertLiveConnection,
   validateItemAndGetFile,
 } from '@decipad/editor-components';
-import { useComputer } from '@decipad/react-contexts';
+import { insertImageBelow } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';
+import { useComputer } from '@decipad/react-contexts';
+import { useDelayedTrue } from '@decipad/react-utils';
+import { useToast } from '@decipad/toast';
+import { UploadProgressModal } from '@decipad/ui';
+import { produce } from '@decipad/utils';
+import { css } from '@emotion/react';
 import {
   focusEditor,
   getStartPoint,
   isCollapsed,
   withoutNormalizing,
 } from '@udecode/plate';
-import { css } from '@emotion/react';
-import { useDelayedTrue } from '@decipad/react-utils';
-import { insertImageBelow } from '@decipad/editor-utils';
-import { Path } from 'slate';
 import { dndStore as plateDndStore } from '@udecode/plate-dnd';
-import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
+import axios, { AxiosProgressEvent } from 'axios';
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { DropTargetMonitor, useDrop } from 'react-dnd';
+import { NativeTypes } from 'react-dnd-html5-backend';
+import { Path } from 'slate';
 import { DropZoneDetector } from './DropZoneDetector';
+import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
+import { attachGenericFile } from './attachGeneric';
 import { maybeSourceFromFileType } from './maybeSourceFromFileType';
 
 const uploadProgressWrapperStyles = css({
@@ -72,22 +73,12 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
 
   const attachGeneric = useCallback(
     async (file: File): Promise<undefined | { url: string }> => {
-      const attForm = await getAttachmentForm(file);
-      if (!attForm) {
-        return;
-      }
-      const [target, form, handle] = attForm;
-      form.append('file', file);
-      await axios.post(target.toString(), form, {
-        onUploadProgress: onUploadProgress(file),
-      });
-      const onAttachedResponse = await onAttached(handle);
-      if (!onAttachedResponse) {
-        return;
-      }
-      return {
-        url: onAttachedResponse.url.toString(),
-      };
+      return attachGenericFile(
+        file,
+        onUploadProgress,
+        getAttachmentForm,
+        onAttached
+      );
     },
     [getAttachmentForm, onAttached, onUploadProgress]
   );

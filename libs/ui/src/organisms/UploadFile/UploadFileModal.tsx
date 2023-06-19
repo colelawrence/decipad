@@ -38,9 +38,8 @@ const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
     case 'data':
       return {
         title: 'Upload a data file',
-        maxSize: 500_000,
-        accept:
-          '.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
+        maxSize: 1_000_000,
+        accept: '.csv, application/vnd.apache.arrow',
       };
     default:
       return { title: 'Upload a file', maxSize: 5_000_000 };

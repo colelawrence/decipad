@@ -48,6 +48,9 @@
     },
     {
       "path": "../editor-integrations"
+    },
+    {
+      "path": "../editor-attachments"
     }
   ]
 }
