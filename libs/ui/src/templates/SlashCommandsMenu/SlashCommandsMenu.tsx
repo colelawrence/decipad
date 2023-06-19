@@ -299,7 +299,7 @@ const writingGroup = {
       title: 'Image',
       description: 'Upload an image',
       icon: paintIcon(<Image />, 'Ocean'),
-      enabled: isFlagEnabled('UPLOAD_IMAGE'),
+      enabled: true,
       extraSearchTerms: ['upload', 'image', 'media'],
     },
     {

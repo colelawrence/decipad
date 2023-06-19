@@ -201,7 +201,7 @@ const variableResultStyles = css({
   display: 'flex',
   flexGrow: '1',
   gap: 8,
-  alignItems: 'center',
+  alignItems: 'flex-start',
   justifyContent: 'space-between',
 });
 

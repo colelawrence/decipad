@@ -1,10 +1,14 @@
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import {
-  EditorStylesContext,
-  EditorStylesContextValue,
+  useGetWorkspacesIDsQuery,
+  useRenameNotebookMutation,
+} from '@decipad/graphql-client';
+import {
   DeciEditorContextProvider,
   EditorChangeContextProvider,
+  EditorStylesContext,
+  EditorStylesContextValue,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
@@ -15,10 +19,6 @@ import {
   TopbarPlaceholder,
 } from '@decipad/ui';
 import { FC, lazy, useCallback, useMemo, useState } from 'react';
-import {
-  useGetWorkspacesIDsQuery,
-  useRenameNotebookMutation,
-} from '@decipad/graphql-client';
 import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -76,6 +76,8 @@ const Notebook: FC = () => {
   const [userWorkspaces] = useGetWorkspacesIDsQuery();
 
   const [, renameNotebook] = useRenameNotebookMutation();
+
+  const workspaceId = notebook?.workspace?.id;
 
   useAnimateMutations();
 
@@ -135,6 +137,7 @@ const Notebook: FC = () => {
                   notebookTitle={notebook?.name ?? ''}
                   onNotebookTitleChange={onNotebookTitleChange}
                   notebookId={notebookId}
+                  workspaceId={workspaceId}
                   readOnly={isReadOnly}
                   secret={secret}
                   connectionParams={connectionParams}

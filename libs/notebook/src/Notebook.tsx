@@ -1,26 +1,26 @@
-import { FC, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useSession } from 'next-auth/react';
 import { DocSyncEditor } from '@decipad/docsync';
 import { Editor, useEditorPlugins } from '@decipad/editor';
+import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
+import { insertLiveConnection } from '@decipad/editor-components';
+import { EditorStats } from '@decipad/editor-stats';
 import { MyEditor } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 import { useNotebookState } from '@decipad/notebook-state';
 import {
   ComputerContextProvider,
   EditorPasteInteractionMenuProvider,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { insertLiveConnection } from '@decipad/editor-components';
-import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
-import { EditorStats } from '@decipad/editor-stats';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import type { ExternalDataSourcesContextValue } from '@decipad/interfaces';
+import { useSession } from 'next-auth/react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   EditorUserInteractionsProvider,
   useEditorUserInteractionsContext,
 } from '../../react-contexts/src/editor-user-interactions';
-import { InitialSelection } from './InitialSelection';
 import { ExternalDataSourcesProvider } from './ExternalDataSourcesProvider';
+import { InitialSelection } from './InitialSelection';
 import { NotebookLogs } from './NotebookLogs';
 
 export interface NotebookConnectionParams {
@@ -30,6 +30,7 @@ export interface NotebookConnectionParams {
 
 export interface NotebookProps {
   notebookId: string;
+  workspaceId?: string;
   notebookMetaLoaded: boolean;
   notebookTitle: string;
   onNotebookTitleChange: (newValue: string) => void;
@@ -55,6 +56,7 @@ type InsideNodebookStateProps = Omit<
 
 const InsideNotebookState = ({
   notebookId,
+  workspaceId,
   notebookMetaLoaded,
   notebookTitle,
   onNotebookTitleChange,
@@ -196,6 +198,7 @@ const InsideNotebookState = ({
         <ComputerContextProvider computer={computer}>
           <Editor
             notebookId={notebookId}
+            workspaceId={workspaceId}
             loaded={loaded}
             isSavedRemotely={editor.isSavedRemotely()}
             editor={editor}
@@ -218,6 +221,7 @@ const InsideNotebookState = ({
 export const Notebook: FC<NotebookProps> = (props) => {
   const { getAttachmentForm, onAttached, ...rest } = props;
   const { notebookId } = rest;
+
   return (
     <EditorUserInteractionsProvider>
       <EditorPasteInteractionMenuProvider>

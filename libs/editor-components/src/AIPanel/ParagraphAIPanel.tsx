@@ -1,4 +1,6 @@
 import { useState, FC } from 'react';
+import { CheckboxSelected, Edit } from 'libs/ui/src/icons';
+import { getAnalytics } from '@decipad/client-events';
 import {
   AIPanelSuggestion,
   AIPanelForm,
@@ -10,8 +12,6 @@ import {
   PromptSuggestion,
   PromptSuggestions,
 } from './components/PromptSuggestions';
-import { CheckboxSelected, Edit } from 'libs/ui/src/icons';
-import { getAnalytics } from '@decipad/client-events';
 
 type ParagraphAIPanelProps = {
   paragraph: string;

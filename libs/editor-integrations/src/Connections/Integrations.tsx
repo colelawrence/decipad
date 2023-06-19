@@ -8,7 +8,12 @@ import { Dialog, WrapperIntegrationModalDialog } from '@decipad/ui';
 import { FC, useState } from 'react';
 import { useCreateIntegration, useIntegrationScreenFactory } from '../hooks';
 
-export const Integrations: FC = () => {
+interface IntegrationProps {
+  readonly workspaceId?: string;
+  readonly notebookId?: string;
+}
+
+export const Integrations: FC<IntegrationProps> = ({ workspaceId }) => {
   const store = useConnectionStore();
   const codeStore = useCodeConnectionStore();
 
@@ -25,6 +30,7 @@ export const Integrations: FC = () => {
       <Dialog open={store.open} setOpen={store.changeOpen}>
         <WrapperIntegrationModalDialog
           title="Connect to your data"
+          workspaceId={workspaceId}
           tabStage={store.stage}
           showTabs={store.stage !== 'pick-integration'}
           onTabClick={(stage) => store.setStage(stage)}

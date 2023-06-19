@@ -1,7 +1,9 @@
-import React from 'react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { WorkspaceSecretsTable } from './WorkspaceSecretsTable.private';
+import { css } from '@emotion/react';
+import React from 'react';
+import { p12Medium } from '../../primitives';
 import { WorkspaceSecretsAddForm } from './WorkspaceSecretsAddForm.private';
+import { WorkspaceSecretsTable } from './WorkspaceSecretsTable.private';
 
 export type WorkspaceSecretsProps = {
   workspaceId: string;
@@ -14,8 +16,14 @@ export const WorkspaceSecrets: React.FC<WorkspaceSecretsProps> = ({
 
   return (
     <div>
+      <p css={paraSecretStyles}>
+        You can define secrets to so that you can access services securely from
+        your integrations
+      </p>{' '}
       <WorkspaceSecretsAddForm onAdd={add} />
       <WorkspaceSecretsTable secrets={secrets} onRemove={remove} />
     </div>
   );
 };
+
+const paraSecretStyles = css(p12Medium, { paddingBottom: 12 });

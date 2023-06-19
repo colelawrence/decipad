@@ -1,17 +1,23 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { ExecutionContext, useConnectionStore } from '@decipad/react-contexts';
 import {
   removeFocusFromAllBecauseSlate,
   useEnterListener,
 } from '@decipad/react-utils';
+import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useContext } from 'react';
-import { Button, TextAndIconButton } from '../../atoms';
-import { Close, Play } from '../../icons';
+import { FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Divider, MenuItem, TextAndIconButton } from '../../atoms';
+import { ArrowDiagonalTopRight, Caret, Close, Play } from '../../icons';
+import { MenuList } from '../../molecules';
 import { Tabs } from '../../molecules/Tabs/Tabs';
-import { cssVar, p15Medium, p16Medium } from '../../primitives';
+import { cssVar, p13Medium, p15Medium, p16Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 type Stages =
   | 'pick-integration'
@@ -24,6 +30,7 @@ interface WrapperIntegrationModalDialogProps {
   readonly children: ReactNode;
 
   readonly title: string;
+  readonly workspaceId?: string;
 
   readonly showTabs: boolean;
   readonly tabStage?: Stages;
@@ -50,15 +57,34 @@ export const WrapperIntegrationModalDialog: FC<
   setOpen = noop,
   isEditing = false,
   children,
+  workspaceId,
 }) => {
   const { onExecute } = useContext(ExecutionContext);
   const { resultPreview } = useConnectionStore();
   const hasDataPreview = !!resultPreview;
 
+  interface SecretInfo {
+    readonly id: string;
+    readonly name: string;
+  }
+
+  const [secretsOpen, setSecretsOpen] = useState(false);
+  const [secret, setOrAddSecret] = useState<SecretInfo | undefined>();
+  const navigate = useNavigate();
   const insertIntoNotebook = () => {
     onConnect();
     removeFocusFromAllBecauseSlate();
   };
+
+  useEffect(() => {
+    if (secret) onExecute({ status: 'secret', ...secret });
+  }, [onExecute, secret]);
+
+  let { secrets } = useWorkspaceSecrets(workspaceId || '');
+
+  if (!secrets) {
+    secrets = [];
+  }
 
   const execSource = () => onExecute({ status: 'run' });
 
@@ -122,17 +148,84 @@ export const WrapperIntegrationModalDialog: FC<
       </div>
       <div css={tabsBarStyles}>
         <div>{showTabs && tabs}</div>
-        <div>
+        <div css={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           {tabStage === 'connect' && (
-            <TextAndIconButton
-              text="Run"
-              size="normal"
-              iconPosition="left"
-              color="brand"
-              onClick={execSource}
-            >
-              <Play />
-            </TextAndIconButton>
+            <>
+              {isFlagEnabled('SECRETS_IN_JS') && (
+                <div css={css({ display: 'inline-block', cursor: 'pointer' })}>
+                  <MenuList
+                    root
+                    dropdown
+                    open={secretsOpen}
+                    sideOffset={12}
+                    onChangeOpen={setSecretsOpen}
+                    trigger={
+                      <span css={categoryAndCaretStyles}>
+                        <span css={p13Medium}>
+                          {/* Without text the icon has no line height, and so floats
+                upwards, hence the non-breaking space */}
+                          {'\uFEFF'}
+                          Insert Secret
+                        </span>
+                        <span
+                          css={{
+                            width: 18,
+                            display: 'grid',
+                          }}
+                          data-testid="insert-secret-button"
+                        >
+                          <Caret variant="down" />
+                        </span>
+                      </span>
+                    }
+                  >
+                    {secrets.map((secretElem, i) => (
+                      <MenuItem
+                        key={`secret-${i}`}
+                        onSelect={() => {
+                          setOrAddSecret(secretElem);
+                        }}
+                      >
+                        <span>{secretElem.name}</span>
+                      </MenuItem>
+                    ))}
+                    {secrets.length > 0 && (
+                      <div role="presentation" css={hrStyles}>
+                        <Divider />
+                      </div>
+                    )}
+
+                    <MenuItem
+                      icon={<ArrowDiagonalTopRight />}
+                      onSelect={() => {
+                        if (workspaceId) {
+                          navigate(
+                            workspaces({})
+                              .workspace({
+                                workspaceId,
+                              })
+                              .connections({}).$,
+                            { replace: true }
+                          );
+                        }
+                      }}
+                    >
+                      <span>Integration Secrets</span>
+                    </MenuItem>
+                  </MenuList>
+                </div>
+              )}
+
+              <TextAndIconButton
+                text="Run"
+                size="normal"
+                iconPosition="left"
+                color="brand"
+                onClick={execSource}
+              >
+                <Play />
+              </TextAndIconButton>
+            </>
           )}
         </div>
       </div>
@@ -269,3 +362,24 @@ const allChildrenStyles = (tabStage: string) =>
     tabStage === 'connect' && firstChildrenStyle,
     tabStage === 'map' && mapChildrenStyles
   );
+
+const categoryAndCaretStyles = css([
+  hideOnPrint,
+  {
+    width: '100%',
+    borderRadius: '16px',
+    display: 'inline-flex',
+    justifyContent: 'space-between',
+    paddingLeft: '8px',
+  },
+]);
+
+const hrStyles = css({
+  padding: '4px 0px',
+  textOverflow: 'ellipsis',
+  transform: 'translateX(0px)',
+  width: '100%',
+  hr: {
+    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+  },
+});

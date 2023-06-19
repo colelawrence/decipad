@@ -30,6 +30,8 @@ export const availableFlags = [
   'SAVE_NOTEBOOK_LOGS',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
+  // Allow for secrets in JS
+  'SECRETS_IN_JS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

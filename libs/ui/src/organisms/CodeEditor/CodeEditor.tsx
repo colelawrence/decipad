@@ -6,7 +6,7 @@ import {
   useThemeFromStore,
 } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import CodeMirror from '@uiw/react-codemirror';
+import CodeMirror, { useCodeMirror } from '@uiw/react-codemirror';
 import {
   ComponentProps,
   Dispatch,
@@ -16,6 +16,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import { Tooltip } from '../../atoms';
@@ -47,6 +48,14 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   setLog,
 }) => {
   const { onExecute, info } = useContext(ExecutionContext);
+  const [isDarkMode] = useThemeFromStore();
+
+  const theme = useMemo(() => {
+    return isDarkMode ? deciCodeThemeDark : deciCodeThemeLight;
+  }, [isDarkMode]);
+
+  const [userCopyPastedCode, setUserCopyPastedCode] = useState(false);
+  const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
   const handleCode = useCallback<
     NonNullable<ComponentProps<typeof CodeMirror>['onChange']>
@@ -59,19 +68,60 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   );
 
   useEffect(() => {
-    if (info.status !== 'unset') {
+    if (!(info.status === 'unset' || info.status === 'secret')) {
       setLog((logEntries: TExecution<boolean>[]) => [...logEntries, info]);
     }
   }, [info, info.status, setLog]);
 
-  const [isDarkMode] = useThemeFromStore();
+  const editor = useRef<HTMLDivElement | null>(null);
 
-  const theme = useMemo(() => {
-    return isDarkMode ? deciCodeThemeDark : deciCodeThemeLight;
-  }, [isDarkMode]);
+  const { setContainer, view } = useCodeMirror({
+    container: editor.current,
+    value: isE2E ? '' : code,
+    extensions: [javascript()],
+    height: `${
+      log.length > 0 ? editorHeight : editorHeight + logDetailHeight
+    }px`,
+    theme,
+    onChange: handleCode,
+    basicSetup: isE2E
+      ? false
+      : {
+          autocompletion: false,
+          highlightActiveLineGutter: false,
+          highlightActiveLine: false,
+        },
+  });
 
-  const [userCopyPastedCode, setUserCopyPastedCode] = useState(false);
-  const isE2E = 'navigator' in globalThis && navigator.webdriver;
+  useEffect(() => {
+    if (editor.current) {
+      setContainer(editor.current);
+    }
+  }, [setContainer]);
+
+  const handleAddSecret = useCallback(
+    (secretId: string) => {
+      if (!editor.current || !view) return;
+      const secretCode = `this.API_KEY = '${secretId}'`;
+      const { state } = view;
+      const range = state.selection.ranges[0];
+      view.dispatch({
+        changes: {
+          from: range.from,
+          to: range.to,
+          insert: secretCode,
+        },
+        selection: { anchor: range.from + 1 },
+      });
+    },
+    [view]
+  );
+
+  useEffect(() => {
+    if (info.status === 'secret') {
+      handleAddSecret(info.id);
+    }
+  }, [handleAddSecret, info, info.status]);
 
   return (
     <>
@@ -97,25 +147,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
       </div>
 
       <div css={mainStyles(log.length > 0)}>
-        <CodeMirror
-          data-testid="code-mirror"
-          value={isE2E ? '' : code}
-          height={`${
-            log.length > 0 ? editorHeight : editorHeight + logDetailHeight
-          }px`}
-          extensions={[javascript()]}
-          onChange={handleCode}
-          theme={theme}
-          basicSetup={
-            isE2E
-              ? false
-              : {
-                  autocompletion: false,
-                  highlightActiveLineGutter: false,
-                  highlightActiveLine: false,
-                }
-          }
-        />
+        <div data-testid="code-mirror" ref={editor} />
         {log.length > 0 && (
           <div css={outputWrapperStyles}>
             <div

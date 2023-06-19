@@ -1,12 +1,12 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { CreateSectionMutation } from '@decipad/graphql-client';
 import { useActiveElement, useStripeLinks } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { FC, useContext, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { CreateSectionMutation } from '@decipad/graphql-client';
 import {
   Divider,
   Dot,
@@ -191,16 +191,18 @@ export const WorkspaceNavigation = ({
             </NavigationItem>
           </NavigationList>
 
-          <NavigationList key={'workspace-nav-DC'}>
-            <NavigationItem
-              key={'folder-0'}
-              href={activeWorkspaceRoute.connections({}).$}
-              isActive={isSharedPage}
-              icon={<Key />}
-            >
-              <span css={itemTextStyles}>Data connections</span>
-            </NavigationItem>
-          </NavigationList>
+          {isFlagEnabled('SECRETS_IN_JS') && (
+            <NavigationList key={'workspace-nav-DC'}>
+              <NavigationItem
+                key={'folder-0'}
+                href={activeWorkspaceRoute.connections({}).$}
+                isActive={isSharedPage}
+                icon={<Key />}
+              >
+                <span css={itemTextStyles}>Integration Secrets</span>
+              </NavigationItem>
+            </NavigationList>
+          )}
 
           <NavDivider />
         </>

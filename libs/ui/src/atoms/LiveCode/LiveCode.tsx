@@ -114,6 +114,7 @@ const liveCodeWrapperStyles = css(codeBlock.structuredVariableStyles, {
   marginBottom: 8,
   borderRadius: 6,
   margin: 'auto 0',
+  maxHeight: 28,
   overflowWrap: 'anywhere',
   maxWidth: '375px',
   wordBreak: 'break-word',

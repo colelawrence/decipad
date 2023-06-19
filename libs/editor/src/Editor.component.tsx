@@ -29,6 +29,7 @@ import { useWriteLock } from './utils/useWriteLock';
 
 export interface EditorProps {
   notebookId: string;
+  workspaceId?: string;
   loaded: boolean;
   isSavedRemotely: BehaviorSubject<boolean>;
   readOnly: boolean;
@@ -74,7 +75,15 @@ const InsidePlate = ({
  * TODO: remove Plate.id after plate patch
  */
 export const Editor = (props: EditorProps) => {
-  const { loaded, isSavedRemotely, editor, readOnly, isNewNotebook } = props;
+  const {
+    loaded,
+    isSavedRemotely,
+    editor,
+    readOnly,
+    isNewNotebook,
+    workspaceId,
+    notebookId,
+  } = props;
 
   // Cursor remote presence
   // useCursors(editor);
@@ -132,7 +141,10 @@ export const Editor = (props: EditorProps) => {
                 >
                   <InsidePlate {...props} containerRef={containerRef} />
                   <UploadFile />
-                  <Integrations />
+                  <Integrations
+                    workspaceId={workspaceId}
+                    notebookId={notebookId}
+                  />
                   <NotebookState
                     isSavedRemotely={isSavedRemotely}
                     isNewNotebook={!!isNewNotebook}
