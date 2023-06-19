@@ -2,6 +2,7 @@ import {
   deserializeType,
   serializeType,
   linearizeType,
+  materializeOneResult,
 } from '@decipad/language';
 import type { Result } from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
@@ -38,10 +39,12 @@ export async function* unnestTableRows(
 
   async function* recurseDimensions(
     dims: DimensionExplanation[],
-    deepValue: Result.OneResult,
+    _deepValue: Result.OneResult,
     labelInfo: LabelInfo[] = []
   ): AsyncIterable<ResultAndLabelInfo> {
+    const deepValue = await materializeOneResult(_deepValue);
     if (Array.isArray(deepValue) !== dims.length > 0) {
+      console.error({ deepValue, dims });
       throw new Error('panic: DimensionExplanation does not match reality');
     }
 

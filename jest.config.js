@@ -27,7 +27,6 @@ module.exports = {
     '<rootDir>/libs/editor-variable-def',
     '<rootDir>/libs/editor-data-view',
     '<rootDir>/libs/editor-utils',
-    '<rootDir>/libs/editor-tests',
     '<rootDir>/libs/editor-hooks',
     '<rootDir>/libs/graphql-client',
     '<rootDir>/libs/y-websocket',

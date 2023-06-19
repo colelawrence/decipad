@@ -1,5 +1,8 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useComputer } from '@decipad/react-contexts';
+import { useObservable } from 'rxjs-hooks';
+import { concatMap, distinctUntilChanged } from 'rxjs';
+import { dequal } from '@decipad/utils';
 import { CodeResultProps } from '../../types';
 import { LabeledColumnResult } from './LabeledColumnResult';
 import { SimpleColumnResult } from './SimpleColumnResult';
@@ -11,7 +14,14 @@ export const ColumnResult = ({
 }: CodeResultProps<'materialized-column'>): ReturnType<FC> => {
   const computer = useComputer();
 
-  const labels = computer.explainDimensions$.use({ type, value });
+  const result = useMemo(() => ({ type, value }), [type, value]);
+
+  const labels = useObservable(() =>
+    computer.explainDimensions$.observe(result).pipe(
+      concatMap((p) => p),
+      distinctUntilChanged((a, b) => dequal(a, b))
+    )
+  );
 
   return labels ? (
     <LabeledColumnResult

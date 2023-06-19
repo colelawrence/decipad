@@ -13,6 +13,7 @@ import {
   ExternalDataMap,
   inferExpression,
   linearizeType,
+  materializeOneResult,
   parseExpression,
   parseExpressionOrThrow,
   Result,
@@ -385,36 +386,40 @@ export class Computer {
    */
   explainDimensions$ = listenerHelper(
     this.results,
-    (
+    async (
       results,
       result: Result.Result<'materialized-column'>
-    ): DimensionExplanation[] | undefined => {
-      try {
-        // We now have a column or matrix
+    ): Promise<DimensionExplanation[] | undefined> => {
+      // We now have a column or matrix
 
-        const getDeepLengths = (value: Result.OneResult): number[] =>
-          Array.isArray(value)
-            ? [value.length, ...getDeepLengths(value[0])]
-            : [];
+      const getDeepLengths = async (
+        value: Result.OneResult
+      ): Promise<number[]> => {
+        const materializedResult = await materializeOneResult(value);
+        return Array.isArray(materializedResult)
+          ? [
+              materializedResult.length,
+              ...(await getDeepLengths(materializedResult[0])),
+            ]
+          : [];
+      };
 
-        const deserialisedType = deserializeType(result.type);
-        const dimensions = linearizeType(deserialisedType);
+      const deserialisedType = deserializeType(result.type);
+      const dimensions = linearizeType(deserialisedType);
+      dimensions.pop(); // remove tip
 
-        dimensions.pop(); // remove tip
-
-        const deepLengths = getDeepLengths(result.value);
-
-        return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
-          return {
-            indexedBy: type.indexedBy ?? undefined,
-            labels: results.indexLabels.get(type.indexedBy ?? ''),
-            dimensionLength,
-          };
-        });
-      } catch (err) {
-        // TODO: fix this
+      const deepLengths = await getDeepLengths(result.value);
+      if (dimensions.length !== deepLengths.length) {
         return undefined;
       }
+
+      return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
+        return {
+          indexedBy: type.indexedBy ?? undefined,
+          labels: results.indexLabels.get(type.indexedBy ?? ''),
+          dimensionLength,
+        };
+      });
     }
   );
 

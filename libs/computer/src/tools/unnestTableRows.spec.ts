@@ -97,9 +97,9 @@ describe('can provide information for rendering matrices', () => {
     await timeout(0);
   });
 
-  it('can retrieve labels', () => {
+  it('can retrieve labels', async () => {
     expect(
-      computer.explainDimensions$.get(
+      await computer.explainDimensions$.get(
         computer.getBlockIdResult$.get('block-1')
           ?.result as Result.Result<'materialized-column'>
       )
@@ -127,7 +127,9 @@ describe('can provide information for rendering matrices', () => {
     const result = getDefined(
       computer.getBlockIdResult$.get('block-1')?.result
     ) as Result.Result<'materialized-column'>;
-    const dimExplanation = getDefined(computer.explainDimensions$.get(result));
+    const dimExplanation = getDefined(
+      await computer.explainDimensions$.get(result)
+    );
 
     const aTable = new AsciiTable('Matrix');
 
@@ -160,4 +162,49 @@ describe('can provide information for rendering matrices', () => {
       '-------------------------------'"
     `);
   });
+});
+
+it('can provide dimension information for rendering product of 2 tables', async () => {
+  const computer = new Computer({
+    initialProgram: getIdentifiedBlocks(
+      `Table1 = {
+            Label1 = ["a", "b", "c"]
+            Xs = [10, 20, 30]
+          }`,
+      `Table2 = {
+            Label2 = ["d", "e", "f"]
+            Ys = [40, 50, 60]
+          }`,
+      `Matrix = Table1.Xs * Table2.Ys`
+    ),
+  });
+  await timeout(0);
+
+  const explanation = await computer.explainDimensions$.get(
+    getDefined(computer.getBlockIdResult$.get('block-2'))
+      .result as Result.Result<'materialized-column'>
+  );
+
+  expect(explanation).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "dimensionLength": 3,
+        "indexedBy": "Table1",
+        "labels": Array [
+          "a",
+          "b",
+          "c",
+        ],
+      },
+      Object {
+        "dimensionLength": 3,
+        "indexedBy": "Table2",
+        "labels": Array [
+          "d",
+          "e",
+          "f",
+        ],
+      },
+    ]
+  `);
 });
