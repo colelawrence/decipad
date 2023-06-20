@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ClosableModal } from '../../organisms';
 import { cssVar, p14Bold, p14Regular, p32Medium } from '../../primitives';
 import { Button } from '../../atoms';
-import { EditMembersDecoration } from './EditMembersDecoration.private';
+import { DeciBoxes } from '../../icons';
 
 type EditMembersPaywallProps = {
   closeHref: string;
@@ -21,7 +21,7 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           <Paragraph>$15 per seat per month</Paragraph>
         </Section>
 
-        <DeciDecoration children={<EditMembersDecoration />} />
+        <DeciDecoration children={<DeciBoxes />} />
 
         <FeaturesCard>
           <Section>
@@ -67,6 +67,8 @@ const ModalContent = styled.div({
   flexDirection: 'column',
   gap: '16px',
   padding: '8px 40px',
+  position: 'relative',
+  overflow: 'hidden',
 });
 
 const FeaturesCard = styled.div({

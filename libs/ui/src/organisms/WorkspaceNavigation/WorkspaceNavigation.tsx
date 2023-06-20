@@ -43,6 +43,7 @@ import {
   swatchNames,
 } from '../../utils';
 import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
+import { DeciBoxes } from '../../icons/DeciBoxes/DeciBoxes';
 
 const workspaceNavContainerStyles = css({
   display: 'flex',
@@ -167,8 +168,11 @@ export const WorkspaceNavigation = ({
 
           {paymentLink && (
             <NavigationList key={'workspace-nav-PR'}>
-              <NavigationItem icon={<DollarCircle />} href={paymentLink}>
-                <span css={itemTextStyles}>Upgrade to Premium</span>
+              <NavigationItem
+                icon={<DeciBoxes />}
+                href={activeWorkspaceRoute.members({}).$}
+              >
+                <span css={itemTextStyles}>Upgrade to Pro</span>
               </NavigationItem>
             </NavigationList>
           )}
