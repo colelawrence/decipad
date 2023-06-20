@@ -19,7 +19,7 @@ import { getNodeString } from '@udecode/plate';
 import { PromiseOrType } from '@decipad/utils';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';
-import { simpleError } from './common';
+import { simpleArtifficialError } from './common';
 
 interface HeaderToColumnProps {
   computer: Computer;
@@ -57,7 +57,13 @@ const tableFormulaColumnToColumn = ({
   return {
     elementId: th.id,
     columnName,
-    errors: [simpleError(th.id, 'Could not find a formula for this column')],
+    errors: [
+      simpleArtifficialError(
+        th.id,
+        'Could not find a formula for this column',
+        th.id
+      ),
+    ],
   };
 };
 
@@ -76,7 +82,8 @@ const seriesColumnToColumn = async ({
     th.cellType.seriesType,
     content,
     dataRows.length,
-    dataRows.map((dataRow) => dataRow.children[columnIndex].id)
+    dataRows.map((dataRow) => dataRow.children[columnIndex].id),
+    th.id
   );
   return {
     elementId: th.id,
@@ -151,7 +158,9 @@ const dataColumnToColumn = async ({
     cellTexts.map(async (text, index) => {
       let parsed = await parseCell(computer, columnType, text);
       if (parsed instanceof Error) {
-        errors.push(simpleError(cellIds[index], parsed.message));
+        errors.push(
+          simpleArtifficialError(cellIds[index], parsed.message, th.id)
+        );
         parsed = null;
       }
       if (!parsed) {

@@ -8,14 +8,15 @@ import {
 import { astColumn, astNode } from '@decipad/editor-utils';
 import { enumerate, getDefined } from '@decipad/utils';
 import { parseCell, parseSeriesStart, seriesIterator } from '@decipad/parse';
-import { simpleError } from './common';
+import { simpleArtifficialError } from './common';
 
 export async function seriesColumn(
   computer: Computer,
   type: SeriesType,
   firstCell: string,
   rowCount: number,
-  ids: string[]
+  ids: string[],
+  parentBlockId: string
 ): Promise<[AST.Expression | undefined, IdentifiedError[]]> {
   try {
     const { granularity } = parseSeriesStart(type, firstCell);
@@ -33,7 +34,13 @@ export async function seriesColumn(
       ) as SerializedType;
       const cell = await parseCell(computer, cellType, source);
       if (cell instanceof Error || cell == null) {
-        errors.push(simpleError(id, cell ? cell.message : 'Error'));
+        errors.push(
+          simpleArtifficialError(
+            id,
+            cell ? cell.message : 'Error',
+            parentBlockId
+          )
+        );
       } else {
         cells.push(cell);
       }
@@ -63,7 +70,13 @@ export async function seriesColumn(
     );
     return [
       astColumn(...items),
-      [simpleError(ids[0], e instanceof Error ? e.message : 'Error')],
+      [
+        simpleArtifficialError(
+          ids[0],
+          e instanceof Error ? e.message : 'Error',
+          parentBlockId
+        ),
+      ],
     ];
   }
 }

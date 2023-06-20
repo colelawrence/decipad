@@ -25,6 +25,8 @@ type BaseParseError = {
   block?: undefined;
   definesVariable?: string;
   definesTableColumn?: [string, string];
+  isArtificial?: boolean;
+  artificiallyDerivedFrom?: string;
 };
 export type IdentifiedError =
   | (BaseParseError & {

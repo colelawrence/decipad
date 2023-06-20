@@ -4,8 +4,8 @@ import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { findNode, getNode, isElement } from '@udecode/plate';
 import { editorStatsStore } from '@decipad/react-contexts';
+import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
-import { affectedBlocks } from './affectedBlocks';
 
 const DEBFAULT_DEBOUNCE_UPDATE_COMPUTER_MS = 500;
 
@@ -26,10 +26,12 @@ export const withUpdateComputerOverride =
     const programCache = new Map<string, ProgramBlock>();
     let dirtyBlocksSet = new Map<string, MyElement>();
 
-    const removeArtifficialDirtyBlocks = () => {
+    const removeDirtyBlocks = () => {
+      for (const el of dirtyBlocksSet.values()) {
+        programCache.delete(el.id);
+      }
       for (const [id, block] of programCache.entries()) {
         if (
-          block.type === 'identified-block' &&
           block.isArtificial &&
           block.artificiallyDerivedFrom != null &&
           dirtyBlocksSet.has(block.artificiallyDerivedFrom)
@@ -40,7 +42,7 @@ export const withUpdateComputerOverride =
     };
 
     const compute = async () => {
-      removeArtifficialDirtyBlocks();
+      removeDirtyBlocks();
       const dirty = dirtyBlocksSet;
       dirtyBlocksSet = new Map();
       // eslint-disable-next-line no-param-reassign
@@ -100,8 +102,8 @@ export const withUpdateComputerOverride =
       if (op.type !== 'remove_node') {
         apply(op);
       }
-      for (const block of affectedBlocks(op)) {
-        const node = getNode(editor, [block]);
+      for (const path of affectedPaths(op)) {
+        const node = getNode(editor, path);
         if (isElement(node)) {
           dirtyBlocksSet.set(node.id, node);
         }

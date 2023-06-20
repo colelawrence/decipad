@@ -1,9 +1,15 @@
 import { IdentifiedError } from '@decipad/computer';
 
-export const simpleError = (id: string, message: string): IdentifiedError => ({
+export const simpleArtifficialError = (
+  id: string,
+  message: string,
+  derivedFromBlockId: string
+): IdentifiedError => ({
   type: 'identified-error',
   errorKind: 'parse-error',
   id,
   error: { message },
   source: '',
+  isArtificial: true,
+  artificiallyDerivedFrom: derivedFromBlockId,
 });

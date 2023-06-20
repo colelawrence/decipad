@@ -48,7 +48,9 @@ export const TriggerMenuItem: FC<TriggerMenuItemProps> = ({
   return (
     <DropdownMenuTriggerElement css={menu.itemStyles} data-selected={selected}>
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
-      <span css={childrenWrapperStyles}>{children}</span>
+      <span css={childrenWrapperStyles} data-testid="trigger-menu-item">
+        {children}
+      </span>
       {selectedPreview && (
         <span css={selectedPreviewStyles}>{selectedPreview}</span>
       )}
