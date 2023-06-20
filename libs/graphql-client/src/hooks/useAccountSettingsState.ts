@@ -44,7 +44,7 @@ export const useAccountSettingsState = () => {
     async (newUsername: string) => {
       setIsSubmitting(true);
       const data = await setUsernameMutation({
-        props: { username: newUsername },
+        props: { username: newUsername.toLowerCase() },
       });
       setIsSubmitting(false);
 

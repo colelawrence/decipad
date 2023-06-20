@@ -110,7 +110,9 @@ const Onboard = () => {
 
                 Promise.allSettled([
                   updateUser({ props: { name } }),
-                  updateUsername({ props: { username } }),
+                  updateUsername({
+                    props: { username: username.toLowerCase() },
+                  }),
                 ])
                   .then(([userUpdate, usernameUpdate]) => {
                     if (
