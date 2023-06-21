@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { ComponentProps, FC, ReactNode } from 'react';
-import { css } from '@emotion/react';
 import { useDelayedValue } from '@decipad/react-utils';
-import { cssVar, p14Medium } from '../../primitives';
+import { css } from '@emotion/react';
+import { ComponentProps, FC, ReactNode } from 'react';
 import { TableFormulaCell } from '../../atoms';
+import { cssVar, p14Medium } from '../../primitives';
 
 const tdLineStyles = css(p14Medium);
 
@@ -18,6 +18,7 @@ export type FormulaTableDataProps = ComponentProps<typeof TableFormulaCell> & {
   resultType?: string;
   selected?: boolean;
   firstChildren?: ReactNode;
+  dropDirection?: 'left' | 'right';
 };
 
 export const FormulaTableData = ({

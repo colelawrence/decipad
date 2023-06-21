@@ -1,8 +1,8 @@
-import { DropTargetMonitor } from 'react-dnd';
-import { findNodePath, getNodeChildren } from '@udecode/plate';
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { DragColumnItem } from '../types';
+import { findNodePath, getNodeChildren } from '@udecode/plate';
+import { DropTargetMonitor } from 'react-dnd';
 import { getHoverDirection } from '.';
+import { DragColumnItem } from '../types';
 
 export const findSwappableColumns = (
   {
@@ -50,9 +50,7 @@ export const findSwappableColumns = (
     if (swappableColumns[0] < swappableColumns[1]) {
       swappableColumns = [swappableColumns[0], swappableColumns[1] - 1];
     }
-    if (swappableColumns[0] === swappableColumns[1]) {
-      return null;
-    }
+
     return swappableColumns;
   }
   return null;

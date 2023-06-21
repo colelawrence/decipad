@@ -8,26 +8,32 @@ const dropStyles = css({
   height: 'calc(100% + 1px)',
 });
 
-const leftDropStyles = css({
-  left: -1,
-});
+const leftDropStyles = (adjustLeftByPx: number) =>
+  css({
+    left: -1 + adjustLeftByPx,
+  });
 
-const rightDropStyles = css({
-  right: 0,
-});
+const rightDropStyles = (adjustRightByPx: number) =>
+  css({
+    right: 0 + adjustRightByPx,
+  });
 
 export const ColumnDropLine = ({
   dropDirection,
+  adjustLeft = 0,
+  adjustRight = 0,
 }: {
   dropDirection: 'left' | 'right';
+  adjustLeft?: number;
+  adjustRight?: number;
 }) => {
   return (
     <div
       css={[
         dropStyles,
 
-        dropDirection === 'left' && leftDropStyles,
-        dropDirection === 'right' && rightDropStyles,
+        dropDirection === 'left' && leftDropStyles(adjustLeft),
+        dropDirection === 'right' && rightDropStyles(adjustRight),
       ]}
       contentEditable={false}
     >

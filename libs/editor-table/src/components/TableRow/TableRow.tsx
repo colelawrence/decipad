@@ -92,6 +92,7 @@ export const TableRow: PlateComponent = ({ attributes, children, element }) => {
       onAddRowAbove={() => path && onAddRowHere(path[1])}
       onAddRowBelow={() => path && onAddRowHere(path[1], true)}
       dragRef={dragRef}
+      dropLine={dropLine}
       previewRef={previewRef}
       ref={trRef}
       isBeingDragged={isDragging}

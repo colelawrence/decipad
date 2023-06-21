@@ -257,8 +257,8 @@ export const TableHeader = ({
       data-highlight={highlight}
       contentEditable={isEditable}
     >
-      {(isEditable || isLiveResult) && dropDirection === 'left' && (
-        <ColumnDropLine dropDirection={dropDirection} />
+      {dropDirection === 'left' && (
+        <ColumnDropLine dropDirection={dropDirection} adjustLeft={1} />
       )}
 
       <div css={headerWrapperStyles}>
@@ -321,7 +321,7 @@ export const TableHeader = ({
         {menu}
       </div>
 
-      {(isEditable || isLiveResult) && dropDirection === 'right' && (
+      {dropDirection === 'right' && (
         <ColumnDropLine dropDirection={dropDirection} />
       )}
     </th>

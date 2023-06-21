@@ -6,6 +6,7 @@ import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tdBaseStyles } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
+import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 
 const lineNumberWidth = '22px';
 
@@ -47,6 +48,7 @@ export interface TableDataProps {
   className?: string;
   children?: ReactNode;
   attributes?: PlateComponentAttributes;
+  dropDirection?: 'left' | 'right';
   hiddenCounter?: boolean;
 }
 
@@ -54,6 +56,7 @@ export const TableFormulaCell = ({
   attributes,
   className,
   children,
+  dropDirection,
   hiddenCounter,
 }: TableDataProps): ReturnType<FC> => {
   // IMPORTANT NOTE: do not remove the children elements from rendering.
@@ -71,7 +74,13 @@ export const TableFormulaCell = ({
       ]}
       className={className}
     >
+      {dropDirection === 'left' && (
+        <ColumnDropLine dropDirection={dropDirection} />
+      )}
       {children}
+      {dropDirection === 'right' && (
+        <ColumnDropLine dropDirection={dropDirection} />
+      )}
     </td>
   );
 };

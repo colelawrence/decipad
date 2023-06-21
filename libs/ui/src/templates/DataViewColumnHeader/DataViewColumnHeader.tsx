@@ -57,7 +57,7 @@ const dataViewColumnHeaderStyles = css({
   '&::before, &::after': {
     display: 'block',
     content: ' attr(aria-placeholder)',
-    width: '1px',
+    width: '2px',
     background: 'transparent',
     height: 'calc(100% - 12px)',
     position: 'absolute',
@@ -69,7 +69,7 @@ const dataViewColumnHeaderStyles = css({
 
 const dataViewColumnHeaderBorderLeftStyles = css({
   '&::before': {
-    background: 'blue',
+    background: cssVar('droplineColor'),
     translate: '-8px',
   },
 });
@@ -123,7 +123,7 @@ export const DataViewColumnHeader = forwardRef<
 
   const borderRightStyles = css({
     '&::after': {
-      background: 'blue',
+      background: cssVar('droplineColor'),
       translate: getBorderRightTranslation(),
     },
   });

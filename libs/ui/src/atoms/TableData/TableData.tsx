@@ -28,6 +28,7 @@ import {
 import { table } from '../../styles';
 import { tdBaseStyles } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
+import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 
 const lineNumberWidth = '22px';
 
@@ -117,6 +118,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   onChangeValue?: ComponentProps<typeof CellEditor>['onChangeValue'];
   unit?: string;
   dropTarget?: ConnectDropTarget;
+  dropDirection?: 'left' | 'right';
   parseError?: string;
   firstChildren?: ReactNode;
   dropdownOptions?: Pick<
@@ -151,6 +153,7 @@ export const TableData = forwardRef(
       children,
       parseError,
       firstChildren,
+      dropDirection,
       dropdownOptions,
       element,
       ...props
@@ -204,7 +207,13 @@ export const TableData = forwardRef(
             error={parseError}
             hideError={!parseError}
           >
+            {dropDirection === 'left' && (
+              <ColumnDropLine dropDirection={dropDirection} />
+            )}
             {children}
+            {dropDirection === 'right' && (
+              <ColumnDropLine dropDirection={dropDirection} />
+            )}
           </SyntaxErrorHighlight>
         </CellEditor>
       </Component>

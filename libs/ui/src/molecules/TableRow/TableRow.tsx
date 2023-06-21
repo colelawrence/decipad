@@ -7,6 +7,7 @@ import { noop } from 'rxjs';
 import { useMergedRef } from '../../hooks';
 import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
 import { regularBorder } from '../../organisms/Table/Table';
+import { cssVar } from '../../primitives';
 import {
   TableCellControls,
   TableCellControlsProps,
@@ -57,6 +58,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       isBeingDragged = false,
       isVisible = true,
       tableCellControls,
+      dropLine,
       onAddRowAbove = noop,
       onAddRowBelow = noop,
     },
@@ -71,6 +73,8 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
         css={[
           tableRowStyles(isBeingDragged),
           !isVisible && invisibleTableRowStyles,
+          dropLine === 'bottom' && bottomDroplineStyles,
+          dropLine === 'top' && topDroplineStyles,
         ]}
       >
         {!previewMode &&
@@ -86,8 +90,17 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
               onAddRowBelow={onAddRowBelow}
             />
           ))}
+
         {children}
       </tr>
     );
   }
 );
+
+const bottomDroplineStyles = css({
+  td: { boxShadow: `0 2px 0 ${cssVar('droplineColor')}` },
+});
+
+const topDroplineStyles = css({
+  td: { boxShadow: `0 -2px 0 ${cssVar('droplineColor')}` },
+});

@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ELEMENT_TD, ELEMENT_TH, PlateComponent } from '@decipad/editor-types';
+import {
+  ELEMENT_TD,
+  ELEMENT_TH,
+  PlateComponent,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
+import { useColumnDropDirection } from '../../hooks';
 import { useTableCell } from '../../hooks/useTableCell';
+import { sanitizeColumnDropDirection } from '../../utils';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
 
 export const TableCell: PlateComponent = ({
@@ -38,6 +45,9 @@ export const TableCell: PlateComponent = ({
     dropdownResult,
   } = useTableCell(element);
 
+  const editor = useTEditorRef();
+  const dropDirection = useColumnDropDirection(editor, element);
+
   if (cellType?.kind === 'table-formula') {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
     // Even though they're one element with an empty text property, their absence triggers
@@ -52,6 +62,7 @@ export const TableCell: PlateComponent = ({
         resultType={formulaResult && formulaResult.type.kind}
         {...attributes}
         selected={selected}
+        dropDirection={sanitizeColumnDropDirection(dropDirection)}
       >
         {children}
       </FormulaTableData>
@@ -75,6 +86,7 @@ export const TableCell: PlateComponent = ({
       onChangeValue={onChangeValue}
       alignRight={isCellAlignRight(cellType)}
       parseError={showParseError ? parseErrorMessage : undefined}
+      dropDirection={sanitizeColumnDropDirection(dropDirection)}
       dropdownOptions={{
         dropdownOptions,
         dropdownResult,

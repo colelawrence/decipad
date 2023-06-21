@@ -1,28 +1,25 @@
-import {
-  TableHeaderElement,
-  ColumnMenuDropdown,
-  TableElement,
-  useTEditorRef,
-  TableCellType,
-  CellValueType,
-} from '@decipad/editor-types';
-import { useMemo } from 'react';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
+import { Unit } from '@decipad/computer';
 import { useNodePath } from '@decipad/editor-hooks';
+import {
+  CellValueType,
+  ColumnMenuDropdown,
+  TableCellType,
+  TableElement,
+  TableHeaderElement,
+  useTEditorRef,
+} from '@decipad/editor-types';
+import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
 import { getNode } from '@udecode/plate';
+import { useMemo } from 'react';
+import { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
-import { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
-import { Unit } from '@decipad/computer';
-import { DropDirection } from '@decipad/editor-components';
 import { useDebounce } from 'use-debounce';
-import { useDragColumn } from './useDragColumn';
 import { useColumnDropDirection, useDropColumn, useTableActions } from '.';
-import { useTableHeaderCellDropdownNames } from './useTableHeaderCellDropdownNames';
+import { sanitizeColumnDropDirection } from '../utils';
+import { useDragColumn } from './useDragColumn';
 import { useTableHeaderCellColumnInferredType } from './useTableHeaderCellColumnInferredType';
-
-const getColumnDropDirection = (dir: DropDirection) =>
-  dir == null || dir === 'left' || dir === 'right' ? dir : undefined;
+import { useTableHeaderCellDropdownNames } from './useTableHeaderCellDropdownNames';
 
 export interface UseTableHeaderCellResult {
   readOnly: boolean;
@@ -84,7 +81,7 @@ export const useTableHeaderCell = (
         isDragging,
         isOver,
         dropTarget,
-        dropDirection: getColumnDropDirection(dropDirection),
+        dropDirection: sanitizeColumnDropDirection(dropDirection),
         parseUnit,
         columnIndex,
         path,
@@ -109,6 +106,6 @@ export const useTableHeaderCell = (
         readOnly,
       ]
     ),
-    1000
+    100
   )[0];
 };
