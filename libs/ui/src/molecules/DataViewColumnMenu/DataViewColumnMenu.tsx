@@ -2,8 +2,9 @@ import type { SerializedType } from '@decipad/computer';
 import { css } from '@emotion/react';
 import capitalize from 'lodash.capitalize';
 import { FC, useCallback, useEffect, useState } from 'react';
-import { MenuItem, TriggerMenuItem } from '../../atoms';
-import { Caret, Code, Trash } from '../../icons';
+import { Divider, MenuItem, TriggerMenuItem } from '../../atoms';
+import { Aggregate, Caret, Cluster, Trash } from '../../icons';
+import { cssVar } from '../../primitives';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { MenuList } from '../MenuList/MenuList';
 
@@ -76,9 +77,6 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
         </button>
       }
     >
-      <MenuItem onSelect={() => onDeleteColumn()} icon={<Trash />}>
-        Remove column
-      </MenuItem>
       {availableAggregations.length > 0 ? (
         <MenuList
           key="aggregate"
@@ -89,7 +87,7 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
             }
           }}
           itemTrigger={
-            <TriggerMenuItem icon={<Code />}>Aggregate</TriggerMenuItem>
+            <TriggerMenuItem icon={<Aggregate />}>Aggregate</TriggerMenuItem>
           }
         >
           <MenuItem
@@ -120,7 +118,9 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
               setSubMenuOpened('round');
             }
           }}
-          itemTrigger={<TriggerMenuItem icon={<Code />}>Round</TriggerMenuItem>}
+          itemTrigger={
+            <TriggerMenuItem icon={<Cluster />}>Cluster</TriggerMenuItem>
+          }
         >
           <MenuItem
             onSelect={() => onRoundingChange(undefined)}
@@ -141,6 +141,19 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
           })}
         </MenuList>
       ) : null}
+      <div role="presentation" css={hrStyles}>
+        <Divider />
+      </div>
+      <MenuItem onSelect={onDeleteColumn} icon={<Trash />}>
+        Remove column
+      </MenuItem>
     </MenuList>
   );
 };
+
+const hrStyles = css({
+  textOverflow: 'ellipsis',
+  hr: {
+    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+  },
+});

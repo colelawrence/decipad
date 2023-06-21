@@ -26,6 +26,7 @@ import {
   Sparkles,
   Users,
 } from '../../icons';
+import { DeciBoxes } from '../../icons/DeciBoxes/DeciBoxes';
 import { NavigationList } from '../../molecules';
 import {
   OpaqueColor,
@@ -43,7 +44,6 @@ import {
   swatchNames,
 } from '../../utils';
 import { WorkspaceAccount } from '../WorkspaceAccount/WorkspaceAccount';
-import { DeciBoxes } from '../../icons/DeciBoxes/DeciBoxes';
 
 const workspaceNavContainerStyles = css({
   display: 'flex',
