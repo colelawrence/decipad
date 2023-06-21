@@ -51,6 +51,11 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
       .getByTestId('code-line')
       .last()
       .fill(String.fromCharCode(x + 65));
+    await page
+      .getByTestId('auto-complete-variable-drawer')
+      .getByText(String.fromCharCode(x + 65), { exact: true })
+      .last()
+      .click();
     await expect(page.getByTitle('Error')).toBeHidden();
   });
 

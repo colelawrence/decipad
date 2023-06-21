@@ -275,6 +275,7 @@ export const AutoCompleteMenu = ({
                 overflowY: 'scroll',
               },
             ]}
+            data-testid="auto-complete-variable-drawer"
           >
             {groupsWithItemsFiltered.map(({ items, group }, i) =>
               items.length ? (
