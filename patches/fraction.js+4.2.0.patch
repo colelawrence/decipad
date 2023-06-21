@@ -63,7 +63,7 @@ index 0000000..020409d
 +  clone(): Fraction;
 +}
 diff --git a/node_modules/fraction.js/bigfraction.js b/node_modules/fraction.js/bigfraction.js
-index 2e504d7..31b2320 100644
+index 2e504d7..f5fbca0 100644
 --- a/node_modules/fraction.js/bigfraction.js
 +++ b/node_modules/fraction.js/bigfraction.js
 @@ -353,21 +353,51 @@
@@ -128,3 +128,18 @@ index 2e504d7..31b2320 100644
    }
  
    /**
+@@ -725,8 +755,12 @@
+      * Ex: new Fraction("100.'91823'").valueOf() => 100.91823918239183
+      **/
+     'valueOf': function() {
+-      // Best we can do so far
+-      return Number(this["s"] * this["n"]) / Number(this["d"]);
++      var res = Number(this["s"] * this["n"]) / Number(this["d"]);
++      if (Number.isNaN(res)) {
++        // TODO: Hack
++        return Number(this["toString"]().replaceAll('(', '').replaceAll(')', ''))
++      }
++      return res;
+     },
+ 
+     /**
