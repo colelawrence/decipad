@@ -1,39 +1,4 @@
-import stringify from 'json-stringify-safe';
-import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
-import { useToast } from '@decipad/toast';
-import {
-  Dashboard,
-  DashboardSidebarPlaceholder,
-  NotebookListItem,
-  NotebookListPlaceholder,
-  TColorKeys,
-  TColorStatus,
-  TopbarPlaceholder,
-  LoadingLogo,
-  NotebookList,
-  DashboardSidebar,
-} from '@decipad/ui';
-import { timeout } from '@decipad/utils';
-import sortBy from 'lodash.sortby';
-import { signOut, useSession } from 'next-auth/react';
-import {
-  ComponentProps,
-  FC,
-  lazy,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import {
-  matchPath,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
-import { useIntercom } from 'react-use-intercom';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   useCreateNotebookMutation,
   useCreateSectionMutation,
@@ -53,7 +18,42 @@ import {
   useUpdateSectionMutation,
   useUserQuery,
 } from '@decipad/graphql-client';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
+import { useToast } from '@decipad/toast';
+import {
+  Dashboard,
+  DashboardSidebar,
+  DashboardSidebarPlaceholder,
+  LoadingLogo,
+  NotebookList,
+  NotebookListItem,
+  NotebookListPlaceholder,
+  TColorKeys,
+  TColorStatus,
+  TopbarPlaceholder,
+} from '@decipad/ui';
+import { timeout } from '@decipad/utils';
+import stringify from 'json-stringify-safe';
+import sortBy from 'lodash.sortby';
+import { signOut, useSession } from 'next-auth/react';
+import {
+  ComponentProps,
+  FC,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  Outlet,
+  Route,
+  Routes,
+  matchPath,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
@@ -122,7 +122,7 @@ const Workspace: FC = () => {
   const toast = useToast();
 
   const [result, refetch] = useGetWorkspacesQuery({
-    requestPolicy: 'network-only',
+    requestPolicy: 'cache-first',
   });
 
   const createNotebook = useMutationResultHandler(

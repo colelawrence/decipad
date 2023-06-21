@@ -1,13 +1,11 @@
-import type { Client, ClientOptions } from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
-import {
-  dedupExchange,
-  fetchExchange,
-  createClient as urqlCreateClient,
-} from 'urql';
 import merge from 'deepmerge';
+import type { Client, ClientOptions } from 'urql';
+import { fetchExchange, createClient as urqlCreateClient } from 'urql';
 import { graphCacheConfig } from './cacheConfig';
+
+const cache = cacheExchange(graphCacheConfig);
 
 const defaultClientOpts = () => ({
   url: new URL(`/graphql`, window.location.origin).toString(),
@@ -16,12 +14,7 @@ const defaultClientOpts = () => ({
     headers: {},
   },
   suspense: true, // React Suspense
-  exchanges: [
-    devtoolsExchange,
-    dedupExchange,
-    cacheExchange(graphCacheConfig),
-    fetchExchange,
-  ],
+  exchanges: [devtoolsExchange, cache, fetchExchange],
 });
 
 export const clientOptions = (options: Partial<ClientOptions>): ClientOptions =>
