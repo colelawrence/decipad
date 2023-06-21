@@ -1,34 +1,10 @@
-import { resource } from '@decipad/backend-resources';
+import { GraphqlContext, Workspace } from '@decipad/backendtypes';
 import {
-  GraphqlContext,
-  Workspace,
-  WorkspaceSubscriptionRecord,
-} from '@decipad/backendtypes';
-import tables from '@decipad/tables';
-
-const workspaces = resource('workspace');
-
-const getWorkspaceSubscription = async (
-  workspaceId: string,
-  context: GraphqlContext
-): Promise<WorkspaceSubscriptionRecord | undefined> => {
-  await workspaces.expectAuthorizedForGraphql({
-    context,
-    recordId: workspaceId,
-    minimumPermissionType: 'READ',
-  });
-
-  const data = await tables();
-  return (
-    await data.workspacesubscriptions.query({
-      IndexName: 'byWorkspace',
-      KeyConditionExpression: 'workspace_id = :workspace_id',
-      ExpressionAttributeValues: {
-        ':workspace_id': workspaceId,
-      },
-    })
-  ).Items[0];
-};
+  findSubscriptionByWorkspaceId,
+  getWorkspaceSubscription,
+  updateStripeIfNeeded,
+} from './subscription.helpers';
+import { getWorkspaceMembersCount } from '../workspaces/workspace.helpers';
 
 export default {
   Workspace: {
@@ -38,6 +14,17 @@ export default {
       context: GraphqlContext
     ) {
       return getWorkspaceSubscription(workspace.id, context);
+    },
+  },
+
+  Mutation: {
+    syncWorkspaceSeats: async (_: unknown, args: { id: string }) => {
+      const workspaceId = args.id;
+      const sub = await findSubscriptionByWorkspaceId(workspaceId);
+      const newQuantity = await getWorkspaceMembersCount(workspaceId);
+
+      await updateStripeIfNeeded(sub.id, newQuantity);
+      return sub;
     },
   },
 };

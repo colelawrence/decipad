@@ -18,6 +18,11 @@ export default gql`
     paymentStatus: SubscriptionPaymentStatus
     paymentLink: String
     workspace: Workspace
+    seats: Int
+  }
+
+  extend type Mutation {
+    syncWorkspaceSeats(id: ID!): WorkspaceSubscription!
   }
 
   extend type Workspace {

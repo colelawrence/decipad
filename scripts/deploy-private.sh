@@ -52,6 +52,7 @@ arc env staging NODE_OPTIONS "--enable-source-maps --max_old_space_size=16384"
 arc env staging GIT_COMMIT_HASH "${GIT_COMMIT_HASH:=$(git rev-parse HEAD)}"
 arc env staging INTERCOM_SECRET_ID "${INTERCOM_SECRET_ID}"
 arc env staging STRIPE_API_KEY "${STRIPE_API_KEY}"
+arc env staging STRIPE_SECRET_KEY "${STRIPE_SECRET_KEY}"
 arc env staging STRIPE_WEBHOOK_SECRET "${STRIPE_WEBHOOK_SECRET}"
 
 arc deploy --prune --no-hydrate --name "$DEPLOY_NAME"

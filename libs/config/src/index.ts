@@ -150,6 +150,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_API_KEY);
     case 'STRIPE_WEBHOOK_SECRET':
       return valueOrDefault(name, process.env.STRIPE_WEBHOOK_SECRET);
+    case 'STRIPE_SECRET_KEY':
+      return valueOrDefault(name, process.env.STRIPE_SECRET_KEY);
   }
 }
 
@@ -256,7 +258,8 @@ export function thirdParty() {
     },
     stripe: {
       webhookSecret: env('STRIPE_WEBHOOK_SECRET'),
-      apiKey: env('STRIPE_API_KEY'),
+      secretKey: env('STRIPE_SECRET_KEY'), // 'sk_test_...
+      apiKey: env('STRIPE_API_KEY'), // 'pk_test_...
     },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')

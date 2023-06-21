@@ -22,6 +22,7 @@ export default gql`
     myPermissionType: PermissionType
     access: WorkspaceAccess
     secrets: [Secret!]!
+    membersCount: Int!
   }
 
   type WorkspacesChanges {

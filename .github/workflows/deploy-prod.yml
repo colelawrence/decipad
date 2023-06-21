@@ -80,6 +80,7 @@ jobs:
           REACT_APP_INTERCOM_APP_ID: '${{secrets.ALPHA_INTERCOM_APP_ID}}'
           INTERCOM_SECRET_ID: '${{secrets.ALPHA_INTERCOM_SECRET_ID}}'
           STRIPE_API_KEY: '${{secrets.ALPHA_STRIPE_API_KEY}}'
+          STRIPE_SECRET_KEY: '${{secrets.ALPHA_STRIPE_SECRET_KEY}}'
           STRIPE_WEBHOOK_SECRET: '${{secrets.ALPHA_STRIPE_WEBHOOK_SECRET}}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           GIT_COMMIT_HASH: '${{github.sha}}'

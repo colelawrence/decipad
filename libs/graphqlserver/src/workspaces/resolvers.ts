@@ -24,6 +24,8 @@ import { resource } from '@decipad/backend-resources';
 import { isAuthorized, loadUser, requireUser } from '../authorization';
 import by from '../../../graphqlresource/src/utils/by';
 import { workspaceResource } from './workspaceResource';
+import { withSubscriptionSideEffects } from './workspaceStripeEffects';
+import { getWorkspaceMembersCount } from './workspace.helpers';
 
 const workspaces = resource('workspace');
 
@@ -85,8 +87,12 @@ export default {
   },
 
   Mutation: {
-    shareWorkspaceWithEmail: workspaceResource.shareWithEmail,
-    unshareWorkspaceWithUser: workspaceResource.unshareWithUser,
+    shareWorkspaceWithEmail: withSubscriptionSideEffects(
+      workspaceResource.shareWithEmail
+    ),
+    unshareWorkspaceWithUser: withSubscriptionSideEffects(
+      workspaceResource.unshareWithUser
+    ),
     async createWorkspace(
       _: unknown,
       { workspace }: { workspace: WorkspaceInput },
@@ -259,6 +265,10 @@ export default {
         roles: roleAccesses,
         users: userAccesses,
       };
+    },
+
+    async membersCount(workspace: Workspace) {
+      return getWorkspaceMembersCount(workspace.id);
     },
 
     async myPermissionType(

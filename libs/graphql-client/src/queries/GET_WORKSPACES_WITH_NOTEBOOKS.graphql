@@ -65,6 +65,7 @@ fragment DashboardWorkspace on Workspace {
   workspaceSubscription {
     ...WorkspaceSubscriptionWithData
   }
+  membersCount
   sections {
     ...WorkspaceSection
   }
