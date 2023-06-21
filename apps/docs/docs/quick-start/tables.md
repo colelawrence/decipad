@@ -29,7 +29,7 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
    You can easily drag and drop these calculations results:
 
    - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-results)
-   - Into your formulas to reuse them. [Learn more about Formulas →](/docs/formulas)
+   - Into your formulas to reuse them. [Learn more about Formulas →](/docs/quick-start/formulas)
 
 3. **Add Units to Table Values**:
 
@@ -98,7 +98,7 @@ Let's consider an example where you want to sum the values in a sales table.
 
 Assuming you have a table named "SalesData" with a column named "SalesPrice", you can calculate the sum using this syntax: `sum(SalesData.SalesPrice)`. This calculation can be used in a **formula block** or another **column formula**.
 
-This syntax can be customized for other calculations as well. For instance, you can calculate the **average**, **minimum**, **maximum**, or apply other mathematical operations to the column values. [Learn more about Formulas for Tables→](/docs/formulas)
+This syntax can be customized for other calculations as well. For instance, you can calculate the **average**, **minimum**, **maximum**, or apply other mathematical operations to the column values. [Learn more about Formulas for Tables→](/docs/quick-start/formulas)
 
 You can expand on this by incorporating additional calculations, such as calculating the tax for all sales:
 

@@ -225,15 +225,18 @@ const DescriptionList = ({
               >
                 <div
                   style={{
-                    minWidth: '24px',
-                    height: '24px',
+                    marginTop: '3px',
+                    minWidth: '20px',
+                    height: '20px',
                     borderRadius: '50%',
-                    backgroundColor: isHovered ? circleHoverColor : circleColor,
+                    backgroundColor: isHovered ? circleHoverColor : 'inherit',
+                    border: `1.2px solid ${
+                      isHovered ? circleHoverColor : circleColor
+                    }`,
+                    color: `${isHovered ? circleTextColor : circleColor}`,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    color: circleTextColor,
-                    fontWeight: 'bold',
                     marginRight: '8px',
                   }}
                 >
@@ -257,6 +260,7 @@ const ImageAnnotation = ({
   noNumbers,
   firstSelectedByDefault,
   navigationButtons,
+  noImage,
 }) => {
   const [hoveredNumber, setHoveredNumber] = useState(null);
 
@@ -288,66 +292,68 @@ const ImageAnnotation = ({
 
   return (
     <div style={{ marginBottom: '38px' }}>
-      <div
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          marginBottom: caption ? '5px' : '24px',
-        }}
-      >
-        {navigationButtons && (
-          <BottomNavigationArrow
-            isFirstLiSelected={isFirstLiSelected}
-            isLastLiSelected={isLastLiSelected}
-            handleNumberMouseEnter={handleNumberMouseEnter}
-            steps={steps}
-            hoveredNumber={hoveredNumber}
-          />
-        )}
-        <img
-          src={hoveredNumber ? hoveredNumber.src : steps[0].src}
-          alt={hoveredNumber ? hoveredNumber.alt : steps[0].alt}
-          className="annotation-img"
-        />
-        {steps.map((number, index) => {
-          const isHovered = hoveredNumber === number;
-          const { widthPercent, heightPercent } = number;
-          if (widthPercent && heightPercent) {
-            // Render rectangle annotation
-            return (
-              <span
-                style={{
-                  display: isOnlyOnHover && !isHovered ? 'none' : 'inherit',
-                }}
-              >
-                <RenderRectangleAnnotation
-                  key={index}
-                  isHovered={isHovered}
-                  number={number}
-                  handleNumberMouseEnter={handleNumberMouseEnter}
-                  handleNumberMouseLeave={handleNumberMouseLeave}
-                  circleColor={circleColor}
-                  circleHoverColor={circleHoverColor}
-                  circleTextColor={circleTextColor}
-                />
-              </span>
-            );
-          }
-          // Render circle annotation
-          return (
-            <RenderCircleAnnotation
-              key={index}
-              isHovered={isHovered}
-              number={number}
+      {!noImage && (
+        <div
+          style={{
+            position: 'relative',
+            display: 'inline-block',
+            marginBottom: caption ? '5px' : '24px',
+          }}
+        >
+          {navigationButtons && (
+            <BottomNavigationArrow
+              isFirstLiSelected={isFirstLiSelected}
+              isLastLiSelected={isLastLiSelected}
               handleNumberMouseEnter={handleNumberMouseEnter}
-              handleNumberMouseLeave={handleNumberMouseLeave}
-              circleColor={circleColor}
-              circleHoverColor={circleHoverColor}
-              circleTextColor={circleTextColor}
+              steps={steps}
+              hoveredNumber={hoveredNumber}
             />
-          );
-        })}
-      </div>
+          )}
+          <img
+            src={hoveredNumber ? hoveredNumber.src : steps[0].src}
+            alt={hoveredNumber ? hoveredNumber.alt : steps[0].alt}
+            className="annotation-img"
+          />
+          {steps.map((number, index) => {
+            const isHovered = hoveredNumber === number;
+            const { widthPercent, heightPercent } = number;
+            if (widthPercent && heightPercent) {
+              // Render rectangle annotation
+              return (
+                <span
+                  style={{
+                    display: isOnlyOnHover && !isHovered ? 'none' : 'inherit',
+                  }}
+                >
+                  <RenderRectangleAnnotation
+                    key={index}
+                    isHovered={isHovered}
+                    number={number}
+                    handleNumberMouseEnter={handleNumberMouseEnter}
+                    handleNumberMouseLeave={handleNumberMouseLeave}
+                    circleColor={circleColor}
+                    circleHoverColor={circleHoverColor}
+                    circleTextColor={circleTextColor}
+                  />
+                </span>
+              );
+            }
+            // Render circle annotation
+            return (
+              <RenderCircleAnnotation
+                key={index}
+                isHovered={isHovered}
+                number={number}
+                handleNumberMouseEnter={handleNumberMouseEnter}
+                handleNumberMouseLeave={handleNumberMouseLeave}
+                circleColor={circleColor}
+                circleHoverColor={circleHoverColor}
+                circleTextColor={circleTextColor}
+              />
+            );
+          })}
+        </div>
+      )}
       {caption && <p dangerouslySetInnerHTML={{ __html: caption }} />}
       <DescriptionList
         steps={steps}

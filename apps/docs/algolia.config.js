@@ -14,6 +14,7 @@ const configs = {
     apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.alpha.decipad.com',
     contextualSearch: false,
+    exclusionPatterns: ['**/releases', '**/releases/**'],
   },
 };
 

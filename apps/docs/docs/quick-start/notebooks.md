@@ -9,6 +9,7 @@ Decipad Notebooks combine numbers and narrative to share insights on data.
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 import ImageAnnotation from '@site/src/components/ImageAnnotation/ImageAnnotation';
 import NewNotebook from './img/NewNotebook.png';
+import NewNotebook1 from './img/NewNotebook1.png';
 import AddBlocks from './img/AddBlocks.png';
 import BlockOptions from './img/BlockOptions.png';
 import MoveBlock from './img/MoveBlock.png';
@@ -92,13 +93,21 @@ firstSelectedByDefault
 steps={[
 {
 src: NewNotebook,
-xPercent: 80,
+xPercent: 83,
 yPercent: 1,
-widthPercent: 17,
+widthPercent: 14,
 heightPercent: 6.5,
 value: "1",
-description: `<b>To create a new notebook</b>, go to your workspace and click on <code>+ New Notebook</code> on the top right. <br/>
-Once you have created a notebook, you can start adding blocks to explore and showcase your data`,
+description: `<b>To create a new notebook</b>, click <code>+ New Notebook</code> on the top right of your workspace.`,
+},
+{
+src: NewNotebook1,
+xPercent: 78,
+yPercent: 82,
+widthPercent: 18,
+heightPercent: 15,
+value: "2",
+description: `Once you are in the new notebook, click on <code>Clear All</code> at the bottom right corner to begin with an <b>empty notebook.</b>`,
 },
 ]}
 />
@@ -326,6 +335,23 @@ heightPercent: 6.5,
 value: 6,
 description: `<b>Delete a block</b>`,
 },
+]}
+/>
+
+## Upload Files
+
+<ImageAnnotation
+noImage
+alt="Custom Formula Example"
+steps={[
+{
+value: "1",
+description: `<b>Upload .CSV files</b>: Drag and drop your .CSV files directly into a notebook or use the slash command "/csv" on an empty paragraph.`,
+},
+{
+value: "2",
+description: `<b>Upload images</b>: Add visual elements and context to your notebooks by dragging and dropping image files or using the slash command "/image" on an empty paragraph.`,
+}
 ]}
 />
 

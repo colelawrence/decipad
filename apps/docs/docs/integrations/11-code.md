@@ -28,3 +28,17 @@ On the preview pane you will see the result and the format it will be available 
 ## Private Keys (Coming Soon)
 
 We have a future update planned that will introduce the option to specify private keys, ensuring secure reuse within your code. With this feature, you will be able to protect your API setup and restrict access from unauthorized users. Stay tuned for more information on how to utilize private keys effectively or contact us via [support@decipad.com](mailto:support@decipad.com).
+
+<!--
+## Private Keys
+
+Private keys provide secure access control for your code by restricting unauthorized users.
+
+1. **To set up a new key**:
+
+   - Go to your workspace and click on "Integration Secrets". You can add a new value or remove old keys.
+   - Alternatively, click on "Insert Secret" in the JavaScript code editor within your integrations panel.
+
+2. **To reuse your private key**:
+   - Click on "Insert Secret" in the JavaScript code editor and select the desired secret. A line of code will be automatically added to your script.
+-->

@@ -15,4 +15,4 @@ The main data types in Decipad are:
 
 - **Strings:** Sequences of characters used to represent text data. Strings are enclosed in double quotation marks. For example, `"Hello, World!"` or `"Decipad"`.
 
-- **Booleans:** Logical values that can be true or false. Booleans are often used in conditional statements or logical operations. For example, `true` or `false`. <br/> [Learn more about Booleans and Conditions →](/docs/advanced-concepts/conditionals)
+- **Booleans:** Logical values that can be true or false. Booleans are often used in conditional statements or logical operations. For example, `true` or `false`. <br/> [Learn more about Booleans and Conditions →](/docs/advanced/conditions)
