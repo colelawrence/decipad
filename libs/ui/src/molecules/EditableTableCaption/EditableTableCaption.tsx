@@ -213,7 +213,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                       testId: 'formula',
                     },
                     {
-                      children: isCollapsed ? <icons.Hide /> : <icons.Show />,
+                      children: isCollapsed ? <icons.Show /> : <icons.Hide />,
                       tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
                       onClick: () => setCollapsed(!isCollapsed),
                       testId: 'table',
