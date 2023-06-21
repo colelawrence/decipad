@@ -26,7 +26,7 @@ const loadWorkspaceCta = () =>
 const WorkspaceCta = lazy(loadWorkspaceCta);
 
 const fuseOptions = {
-  minMatchCharLength: 2,
+  minMatchCharLength: 1,
   useExtendedSearch: true,
   keys: ['name', 'isPublic', 'status'],
 };
