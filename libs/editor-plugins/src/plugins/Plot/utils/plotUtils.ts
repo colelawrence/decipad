@@ -181,6 +181,7 @@ export function specFromType(
   // if we want to compare multiple columns in the same chart
   if (
     displayProps.y2ColumnName &&
+    displayProps.y2ColumnName !== 'None' &&
     comparableChartTypes.includes(displayProps.markType)
   ) {
     encoding.color = {
