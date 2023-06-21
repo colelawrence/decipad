@@ -1,27 +1,27 @@
 /* eslint-disable no-underscore-dangle */
+import { SerializedType } from '@decipad/computer';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
-  ELEMENT_DATA_VIEW_TH,
-  MyEditor,
   DataViewElement,
   DataViewHeader,
   DataViewHeaderRowElement,
+  ELEMENT_DATA_VIEW_TH,
+  MyEditor,
 } from '@decipad/editor-types';
-import { withPath, insertNodes } from '@decipad/editor-utils';
-import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
-import { useCallback, useMemo } from 'react';
+import { insertNodes, withPath } from '@decipad/editor-utils';
 import {
   deleteText,
   findNodePath,
   getNode,
-  isText,
-  setNodes,
-  withoutNormalizing,
   hasNode,
+  isText,
   moveNodes,
   removeNodes,
+  setNodes,
+  withoutNormalizing,
 } from '@udecode/plate';
-import { SerializedType } from '@decipad/computer';
 import { nanoid } from 'nanoid';
+import { useCallback, useMemo } from 'react';
 import { Observable, Subject } from 'rxjs';
 import { Path } from 'slate';
 import { Column } from '../types';
@@ -31,7 +31,11 @@ export interface TableActions {
   onVariableNameChange: (newName: string) => void;
   setDataColumns: (columns: Column[]) => void;
   onMoveColumn: (colIndex: number, newColIndex: number) => void;
-  onInsertColumn: (columnName: string, serializedType: SerializedType) => void;
+  onInsertColumn: (
+    columnName: string,
+    label: string,
+    serializedType: SerializedType
+  ) => void;
   onDeleteColumn: (dataViewHeaderPath: Path) => void;
   columnChanges$: Observable<undefined>;
 }
@@ -169,7 +173,7 @@ export const useDataViewActions = (
   );
 
   const onInsertColumn = useCallback(
-    (columnName: string, serializedType: SerializedType) => {
+    (columnName: string, label: string, serializedType: SerializedType) => {
       const headerRow = element?.children[1];
       const headerRowPath = headerRow && findNodePath(editor, headerRow);
 
@@ -196,6 +200,7 @@ export const useDataViewActions = (
               id: nanoid(),
               type: ELEMENT_DATA_VIEW_TH,
               cellType: serializedType,
+              label,
               name: columnName,
               children: [{ text: '' }],
             },

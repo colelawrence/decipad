@@ -1,21 +1,21 @@
-import {
-  ELEMENT_DATA_VIEW_TH,
-  PlateComponent,
-  DataViewElement,
-  useTEditorRef,
-  TableCellType,
-} from '@decipad/editor-types';
-import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
-import { usePathMutatorCallback, useNodePath } from '@decipad/editor-hooks';
-import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
-import { Path } from 'slate';
-import { useCallback, useMemo, useRef } from 'react';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   columnAggregationTypes,
   isCellAlignRight,
 } from '@decipad/editor-table';
+import {
+  DataViewElement,
+  ELEMENT_DATA_VIEW_TH,
+  PlateComponent,
+  TableCellType,
+  useTEditorRef,
+} from '@decipad/editor-types';
+import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
+import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { isFirstChild } from '@udecode/plate';
+import { useCallback, useMemo, useRef } from 'react';
+import { Path } from 'slate';
 import { useDataViewActions, useDragColumn, useDropColumn } from '../../hooks';
 import { availableRoundings } from './availableRoundings';
 
@@ -78,8 +78,10 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   }, [onDeleteColumn, actualPath]);
 
   const computer = useComputer();
-  const columnName =
-    computer.getColumnNameDefinedInBlock$.use(element.name) || element.name;
+
+  const columnName = element.label
+    ? element.label
+    : computer.getColumnNameDefinedInBlock$.use(element.name) || element.name;
 
   // roundings
   const roundings = useMemo(
@@ -87,10 +89,6 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     [element]
   );
   const onRoundingChange = usePathMutatorCallback(editor, path, 'rounding');
-
-  if (!columnName) {
-    return null;
-  }
 
   return (
     <UIDataViewColumnHeader

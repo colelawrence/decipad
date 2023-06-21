@@ -7,8 +7,8 @@ import { MenuItem } from '../../atoms';
 import { Add } from '../../icons';
 import { cssVar } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { MenuList } from '../MenuList/MenuList';
 import { getTypeIcon } from '../../utils/table';
+import { MenuList } from '../MenuList/MenuList';
 
 // Data
 
@@ -20,7 +20,11 @@ export type Column = {
 
 export interface DataViewMenuProps {
   availableColumns: Column[] | undefined;
-  onInsertColumn: (name: string, serializedType: SerializedType) => void;
+  onInsertColumn: (
+    name: string,
+    label: string,
+    serializedType: SerializedType
+  ) => void;
 }
 
 const dataViewMenuWrapperStyles = css({
@@ -91,12 +95,13 @@ export const DataViewMenu = ({
                 <MenuItem
                   testid={`data-view-menu-item-${availableColumn.name}`}
                   key={index}
-                  onSelect={() =>
-                    onInsertColumn(
+                  onSelect={() => {
+                    return onInsertColumn(
                       availableColumn.blockId ?? availableColumn.name,
+                      availableColumn.name,
                       availableColumn.type
-                    )
-                  }
+                    );
+                  }}
                 >
                   {availableColumn.type.kind !== 'anything' && (
                     <div css={iconTypeStyles}>

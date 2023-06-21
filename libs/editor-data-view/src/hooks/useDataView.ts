@@ -1,21 +1,21 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { AutocompleteName, SerializedType } from '@decipad/computer';
+import { useEditorChange } from '@decipad/editor-hooks';
 import {
+  DataViewElement,
   ELEMENT_DATA_VIEW_TR,
   MyEditor,
-  DataViewElement,
 } from '@decipad/editor-types';
 import { assertElementType, matchNodeType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import { useEditorChange } from '@decipad/editor-hooks';
-import { SerializedType, AutocompleteName } from '@decipad/computer';
-import { findNode, findNodePath } from '@udecode/plate';
-import { Path } from 'slate';
 import { useResolved } from '@decipad/react-utils';
+import { findNode, findNodePath } from '@udecode/plate';
+import { useCallback, useEffect, useMemo } from 'react';
+import { Path } from 'slate';
 import { useDataViewActions } from '.';
 import { AggregationKind, Column } from '../types';
+import { sortColumns } from '../utils/sortColumns';
 import { useAvailableColumns } from './useAvailableColumns';
 import { useSourceTableNames } from './useSourceTableNames';
-import { sortColumns } from '../utils/sortColumns';
 
 interface UseDataViewProps {
   editor: MyEditor;
@@ -26,7 +26,11 @@ interface UseDataViewReturnType {
   variableNames: AutocompleteName[];
   tableName?: string;
   onDelete: () => void;
-  onInsertColumn: (name: string, serializedType: SerializedType) => void;
+  onInsertColumn: (
+    name: string,
+    label: string,
+    serializedType: SerializedType
+  ) => void;
   onDeleteColumn: (dataViewHeaderPath: Path) => void;
   onVariableNameChange: (newName: string) => void;
   availableColumns: Column[] | undefined;
@@ -73,9 +77,12 @@ export const useDataView = ({
           assertElementType(columnRow, ELEMENT_DATA_VIEW_TR);
           const columnHeaders = columnRow.children;
           const order = columnHeaders
-            .map((column) =>
+            .map((dataViewColumn) =>
               availableColumns.findIndex(
-                (c) => c.name === column.name || c.blockId === column.name
+                // label is used for newer data-views
+                (column) =>
+                  column.name === dataViewColumn.label ||
+                  column.blockId === dataViewColumn.name
               )
             )
             .filter(greaterOrEqualToZero);

@@ -1,9 +1,7 @@
 import {
-  createTPlateEditor,
   DataViewElement,
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
-  ELEMENT_TR,
   ELEMENT_DATA_VIEW_NAME,
   ELEMENT_DATA_VIEW_TH,
   ELEMENT_DATA_VIEW_TR,
@@ -13,9 +11,11 @@ import {
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TD,
   ELEMENT_TH,
+  ELEMENT_TR,
   TableElement,
+  createTPlateEditor,
 } from '@decipad/editor-types';
-import { findNode, normalizeEditor, TEditor } from '@udecode/plate';
+import { TEditor, findNode, normalizeEditor } from '@udecode/plate';
 import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 
 describe('createNormalizeDataViewPlugin', () => {
@@ -131,6 +131,7 @@ describe('createNormalizeDataViewPlugin', () => {
                 id: 'dvth1',
                 cellType: { kind: 'number' },
                 name: 'bad-and-wrong-table-formula-id',
+                label: 'BadWrong',
                 children: [{ text: '' }],
               },
             ],

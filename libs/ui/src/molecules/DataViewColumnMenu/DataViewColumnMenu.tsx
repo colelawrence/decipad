@@ -4,8 +4,8 @@ import capitalize from 'lodash.capitalize';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import { Caret, Code, Trash } from '../../icons';
-import { MenuList } from '../MenuList/MenuList';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import { MenuList } from '../MenuList/MenuList';
 
 interface Rounding {
   id: string;

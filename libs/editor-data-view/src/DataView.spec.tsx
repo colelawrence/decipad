@@ -1,35 +1,35 @@
-import { FC, PropsWithChildren, useEffect } from 'react';
-import { act, render } from '@testing-library/react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Computer } from '@decipad/computer';
-import { ComputerContextProvider } from '@decipad/react-contexts';
 import {
-  createPlateEditor,
-  ELEMENT_H1,
-  Plate,
-  PlateEditor,
-} from '@udecode/plate';
-import {
+  DataViewElement,
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
-  ELEMENT_DATA_VIEW_TR,
   ELEMENT_DATA_VIEW_TH,
-  DataViewElement,
+  ELEMENT_DATA_VIEW_TR,
   H1Element,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { createServer, Server } from 'http';
-import path from 'path';
-import handler from 'serve-handler';
-import getPort from 'get-port';
 import { tryImport } from '@decipad/import';
-import { getDefined, timeout } from '@decipad/utils';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { createDataViewPlugin } from './plugins';
+import { ComputerContextProvider } from '@decipad/react-contexts';
+import { getDefined, timeout } from '@decipad/utils';
+import { act, render } from '@testing-library/react';
+import {
+  ELEMENT_H1,
+  Plate,
+  PlateEditor,
+  createPlateEditor,
+} from '@udecode/plate';
+import getPort from 'get-port';
+import { Server, createServer } from 'http';
+import path from 'path';
+import { FC, PropsWithChildren, useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import handler from 'serve-handler';
 import { useDataView, useDataViewLayoutData } from './hooks';
-import { Column, AggregationKind } from './types';
+import { createDataViewPlugin } from './plugins';
+import { AggregationKind, Column } from './types';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -72,7 +72,8 @@ const createEditor = (): TestEditor => {
               id: 'th1',
               type: ELEMENT_DATA_VIEW_TH,
               cellType: { kind: 'number', unit: null },
-              name: 'A',
+              label: 'A',
+              name: 'exprRef_123',
               aggregation: 'sum',
               children: [{ text: '' }],
             },
@@ -80,7 +81,8 @@ const createEditor = (): TestEditor => {
               id: 'th1',
               type: ELEMENT_DATA_VIEW_TH,
               cellType: { kind: 'number', unit: null },
-              name: 'B',
+              label: 'B',
+              name: 'exprRef_234',
               aggregation: 'max',
               children: [{ text: '' }],
             },

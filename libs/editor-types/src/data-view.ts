@@ -1,13 +1,13 @@
 import type { SerializedType } from '@decipad/language';
+import type { BaseElement } from '.';
 import { EmptyText, Text } from '.';
 import {
   ELEMENT_DATA_VIEW,
-  ELEMENT_DATA_VIEW_TR,
-  ELEMENT_DATA_VIEW_TH,
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_DATA_VIEW_NAME,
+  ELEMENT_DATA_VIEW_TH,
+  ELEMENT_DATA_VIEW_TR,
 } from './element-kinds';
-import type { BaseElement } from '.';
 
 export interface DataViewHeaderRowElement extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TR;
@@ -20,6 +20,7 @@ export interface DataViewHeader extends BaseElement {
   aggregation?: 'average' | 'max' | 'median' | 'min' | 'span' | 'sum';
   rounding?: string;
   name: string;
+  label: string;
   children: [EmptyText];
 }
 
