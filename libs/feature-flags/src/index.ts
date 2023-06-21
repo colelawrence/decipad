@@ -86,6 +86,7 @@ let overrides: Flags = {
   POPULATED_NEW_NOTEBOOK: true,
   JS_BLOCK: true,
   SILLY_NAMES: false,
+  UPLOAD_CSV: true,
 };
 
 // Unlike overrides flag switcher will have higher priority
