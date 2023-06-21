@@ -208,6 +208,7 @@ const variableResultStyles = css({
 const resultPreviewContainerStyles = css({
   display: 'flex',
   gap: 8,
+  overflow: 'auto',
   border: `1px solid ${cssVar('highlightColor')}`,
   borderRadius: 12,
   padding: 16,
