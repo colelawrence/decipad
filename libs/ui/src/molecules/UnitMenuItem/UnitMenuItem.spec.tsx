@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { U } from 'libs/language/src/utils';
 import { MenuWrapper as wrapper } from '../../test-utils';
 import { UnitMenuItem } from './UnitMenuItem';
 
@@ -15,20 +16,17 @@ it('renders the children', () => {
 });
 
 it('renders a button when parse is successful', async () => {
-  // Parse always fails.
+  // Parse always returns month.
   const { rerender } = render(
-    <UnitMenuItem parseUnit={() => Promise.resolve(null)} />,
+    <UnitMenuItem parseUnit={() => Promise.resolve(U('month'))} />,
     {
       wrapper,
     }
   );
 
-  expect(screen.queryByRole('button')).toBeNull();
+  await user.type(screen.getByRole('textbox'), 'month');
 
-  await user.type(screen.getByRole('textbox'), 'm/s');
-
-  // Parse always succedes.
-  rerender(<UnitMenuItem parseUnit={() => []} />);
+  rerender(<UnitMenuItem parseUnit={() => Promise.resolve(U('month'))} />);
 
   expect(await screen.findByRole('button')).toBeInTheDocument();
 });

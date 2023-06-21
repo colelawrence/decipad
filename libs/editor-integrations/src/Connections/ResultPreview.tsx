@@ -4,7 +4,6 @@ import { formatError } from '@decipad/format';
 import {
   IntegrationStore,
   useCodeConnectionStore,
-  useComputer,
 } from '@decipad/react-contexts';
 import {
   CodeResult,
@@ -19,7 +18,7 @@ import {
 import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 interface ResultPreviewProps {
   result?: Result.Result;
@@ -58,12 +57,6 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
       onChangeColumnType(0, type);
     },
     [onChangeColumnType]
-  );
-
-  const computer = useComputer();
-  const parseUnit = useMemo(
-    () => computer.getUnitFromText.bind(computer),
-    [computer]
   );
 
   const { timeOfLastRun } = useCodeConnectionStore();
@@ -138,7 +131,7 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
             {isVariableResult && (
               <TableColumnMenu
                 trigger={
-                  <div css={categoryAndCaretIntegrationStyles}>
+                  <button css={categoryAndCaretIntegrationStyles}>
                     <span
                       css={{
                         width: 14,
@@ -149,14 +142,13 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
                       <Settings />
                     </span>
                     <span>Settings</span>
-                  </div>
+                  </button>
                 }
                 open={open}
                 onChangeOpen={setOpen}
                 onChangeColumnType={onChangeType}
                 isForImportedColumn={true}
                 type={result.type || getStringType()}
-                parseUnit={parseUnit}
               />
             )}
           </>

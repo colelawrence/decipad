@@ -3,7 +3,7 @@ import type { Constant, Unit } from '@decipad/computer';
 import { getConstantByName } from '@decipad/computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useEffect, useReducer, useRef } from 'react';
+import { FC, useMemo, useReducer, useRef } from 'react';
 import { MenuItem } from '../../atoms';
 import { cssVar, p12Medium, p13Medium, setCssVar } from '../../primitives';
 import { menu } from '../../styles';
@@ -88,28 +88,32 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
   placeholder = 'Create a custom unit',
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  useEffect(() => {
-    (async () => {
-      if (state.text.length > 0) {
-        const constant = getConstantByName(state.text);
 
-        if (constant) {
-          dispatch({
-            type: 'constant',
-            value: constant,
-          });
-          return;
-        }
-        try {
-          const unit = await parseUnit(state.text);
-          dispatch({ type: 'unit', value: unit });
-        } catch (err) {
-          console.error(err);
-          dispatch({ type: 'unit', value: null });
-        }
+  const showCommitBtn = useMemo(() => {
+    return state.unit != null || state.constant != null;
+  }, [state]);
+
+  const handleKeyDown = async (newUnit: string) => {
+    if (newUnit.length > 0) {
+      const constant = getConstantByName(newUnit);
+
+      if (constant) {
+        dispatch({
+          type: 'constant',
+          value: constant,
+        });
+        return;
       }
-    })();
-  }, [state.text, parseUnit]);
+
+      try {
+        const unit = await parseUnit(newUnit);
+        dispatch({ type: 'unit', value: unit });
+      } catch (err) {
+        console.error(err);
+        dispatch({ type: 'unit', value: null });
+      }
+    }
+  };
 
   const inputRef = useRef<HTMLInputElement>(null);
   const unitOrConstant: UnitsAction | undefined = state.constant
@@ -130,12 +134,13 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
           onClick={(e) => {
             // Prevent propagation to the MenuItem which will try to select itself
             // as an option and close the dropdown
-
             e.stopPropagation();
           }}
           ref={inputRef}
           onChange={(e) => {
-            dispatch({ type: 'text', value: e.target.value });
+            const newUnit = e.target.value;
+            dispatch({ type: 'text', value: newUnit });
+            handleKeyDown(newUnit);
           }}
           onMouseLeave={() => inputRef.current?.focus()}
           onKeyDown={(e) => {
@@ -147,9 +152,9 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
           }}
           placeholder={placeholder}
         />
-        {(state.unit != null || state.constant != null) && (
+        {showCommitBtn && (
           <button css={buttonStyles} onClick={() => onSelect(unitOrConstant)}>
-            Add new
+            Add
           </button>
         )}
       </div>

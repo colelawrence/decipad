@@ -5,12 +5,17 @@ import type {
   ColumnMenuDropdown,
   TableCellType,
 } from '@decipad/editor-types';
-import {} from '@decipad/language';
 import { N, ONE } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { ComponentProps, ReactNode, useCallback, useState } from 'react';
+import {
+  ComponentProps,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   AddToWorkspace,
@@ -24,6 +29,7 @@ import {
   Text,
 } from '../../icons';
 import { MenuList, UnitMenuItem } from '../../molecules';
+import { UnitsAction } from '../../molecules/UnitMenuItem/UnitMenuItem';
 import {
   getBooleanType,
   getDateType,
@@ -32,7 +38,6 @@ import {
   getStringType,
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
-import { UnitsAction } from '../../molecules/UnitMenuItem/UnitMenuItem';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
 
 const tableColumnMenuStyles = css({
@@ -85,7 +90,6 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   open,
   onChangeOpen,
   onChangeColumnType = noop,
-  parseUnit,
   isFirst = false,
   trigger,
   type,
@@ -93,6 +97,10 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
   dropdownNames = [],
 }) => {
   const computer = useComputer();
+  const parseUnit = useMemo(
+    () => computer.getUnitFromText.bind(computer),
+    [computer]
+  );
 
   const [currentOpen, setCurrentOpen] = useState<ExpandableColumns>(null);
   const onColumnExpand = (current: ExpandableColumns) => {
