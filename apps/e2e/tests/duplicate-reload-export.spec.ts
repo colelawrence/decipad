@@ -29,23 +29,22 @@ test.describe('Duplicating a notebook', () => {
   });
 
   test('Makes up a notebook', async () => {
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
-    await page.keyboard.type('pad title here');
-    await page.keyboard.press('Enter');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
-    await page.keyboard.type('this is the first paragraph');
-    await page.keyboard.press('Enter');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
-    await page.keyboard.type('this is the second paragraph');
-    await page.keyboard.press('Enter');
-    await page.keyboard.type('this is the third paragraph');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
+    await page.getByTestId('notebook-title').first().fill('pad title here');
 
-    await page.waitForSelector('text=this is the third paragraph');
+    await page
+      .getByTestId('paragraph-content')
+      .last()
+      .fill('this is the first paragraph');
+
+    await page
+      .getByTestId('paragraph-content')
+      .last()
+      .fill('this is the second paragraph');
+
+    await page
+      .getByTestId('paragraph-content')
+      .last()
+      .fill('this is the third paragraph');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay * 2);
   });
@@ -53,14 +52,15 @@ test.describe('Duplicating a notebook', () => {
   test('Can reload', async () => {
     await page.reload();
     await waitForEditorToLoad(page);
-    await expect(page.getByText('this is the third paragraph')).toBeVisible();
+    await expect(page.getByTestId('notebook-title')).toBeVisible();
     await navigateToWorkspacePage(page);
   });
 
   test('Check if notebook has 4 paragraphs', async () => {
-    await page.waitForSelector('text=My notebook titlepad title here');
-
-    await page.click('text=My notebook titlepad title here');
+    await page.waitForSelector('text=pad title here');
+    await page.click('text=pad title here');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
     await expect(
       page.locator('text=this is the third paragraph')
     ).toBeVisible();
@@ -71,12 +71,9 @@ test.describe('Duplicating a notebook', () => {
   });
 
   test('Notebook is listed', async () => {
-    await page.waitForSelector('text=My notebook titlepad title here');
+    await page.waitForSelector('text=pad title here');
     const pads = await getPadList(page);
-    padToCopyIndex = pads.findIndex(
-      (pad) => pad.name === 'My notebook titlepad title here'
-    );
-
+    padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
   });
 
@@ -84,12 +81,10 @@ test.describe('Duplicating a notebook', () => {
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     await duplicatePad(page, padToCopyIndex);
 
-    await page.waitForSelector('text=Copy of My notebook titlepad title here');
+    await page.waitForSelector('text=Copy of pad title here');
     const pads = await getPadList(page);
     padCopyIndex = pads.findIndex(
-      (pad) =>
-        pad.name.toLocaleLowerCase() ===
-        'copy of my notebook titlepad title here'
+      (pad) => pad.name.toLocaleLowerCase() === 'copy of pad title here'
     );
 
     expect(padCopyIndex).toBeGreaterThanOrEqual(0);
@@ -98,9 +93,9 @@ test.describe('Duplicating a notebook', () => {
     await expect(
       page
         .getByRole('heading', {
-          name: 'Copy of My notebook titlepad title here',
+          name: 'Copy of pad title here',
         })
-        .getByText('Copy of My notebook titlepad title here')
+        .getByText('Copy of pad title here')
     ).toBeVisible();
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
       4
@@ -109,10 +104,10 @@ test.describe('Duplicating a notebook', () => {
   });
 
   test('Notebook is listed again', async () => {
-    await page.waitForSelector('text=My notebook titlepad title here');
+    await page.waitForSelector('text=pad title here');
     const pads = await getPadList(page);
     padToCopyIndex = pads.findIndex(
-      (pad) => pad.name === 'Copy of My notebook titlepad title here'
+      (pad) => pad.name === 'Copy of pad title here'
     );
 
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
@@ -126,7 +121,7 @@ test.describe('Duplicating a notebook', () => {
         {
           children: [
             {
-              text: 'Copy of My notebook titlepad title here',
+              text: 'Copy of pad title here',
             },
           ],
           type: 'h1',

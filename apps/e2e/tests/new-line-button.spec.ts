@@ -76,8 +76,6 @@ test.describe('Basic + button to insert new line', () => {
       .click();
 
     // Check only two structure inputs were created and no structured input was added when we press the + button after the table
-    await expect(
-      page.locator('span').filter({ hasText: /^Formula$/ })
-    ).toHaveCount(2);
+    await expect(page.getByTestId('codeline-code')).toHaveCount(2);
   });
 });

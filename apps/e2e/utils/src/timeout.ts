@@ -12,4 +12,5 @@ export const Timeouts = {
   computerDelay: 2000,
   menuOpenDelay: 200,
   liveBlockDelay: 200,
+  redirectDelay: 2000,
 };

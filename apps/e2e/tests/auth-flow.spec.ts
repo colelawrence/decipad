@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Home';
-import { snapshot, withTestUser } from '../utils/src';
+import { snapshot, withTestUser, Timeouts } from '../utils/src';
 
 test.describe('Authentication flow', () => {
   test.beforeEach(async ({ page }) => {
@@ -9,6 +9,8 @@ test.describe('Authentication flow', () => {
 
   test('Should display welcome message', async ({ page }) => {
     await page.goto('/');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
     await page.waitForSelector('text=/make/i');
     await snapshot(page as Page, 'Auth: Login Window');
   });
