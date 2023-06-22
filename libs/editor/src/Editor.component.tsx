@@ -1,3 +1,4 @@
+import { UploadFile } from '@decipad/editor-attachments';
 import {
   BlockLengthSynchronizationProvider,
   NumberCatalog,
@@ -11,7 +12,6 @@ import {
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
-import { UploadFile } from '@decipad/editor-attachments';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate';
 import { EditorLayout } from 'libs/ui/src/atoms';
@@ -116,6 +116,7 @@ export const Editor = (props: EditorProps) => {
   if (!loaded || !editor) {
     return <EditorPlaceholder />;
   }
+  window.dispatchEvent(new Event('hashchange'));
 
   return (
     <EditorReadOnlyContext.Provider

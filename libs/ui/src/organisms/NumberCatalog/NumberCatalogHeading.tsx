@@ -23,7 +23,14 @@ export const NumberCatalogHeading = ({
 }: NumberCatalogHeadingProps) => {
   const [darkTheme] = useThemeFromStore();
   return (
-    <a href={`#${blockId}`}>
+    <a
+      href={`#${blockId}`}
+      onClick={(ev) => {
+        ev.preventDefault();
+        window.history.pushState(null, '', `#${blockId}`);
+        window.dispatchEvent(new Event('hashchange'));
+      }}
+    >
       <span css={numberCatalogListStyles(darkTheme)}>
         <span
           css={css({

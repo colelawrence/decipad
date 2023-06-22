@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { mobileQuery, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
 
@@ -46,9 +46,29 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
   notebookIcon,
   notebook,
 }) => {
+  const scrollToRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const { hash } = window.location;
+      if (hash && scrollToRef.current) {
+        const targetElement = document.querySelector(hash);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
   return (
     <article css={styles}>
-      <main css={notebookStyles}>
+      <main css={notebookStyles} ref={scrollToRef}>
         {notebookIcon}
         {notebook}
       </main>
