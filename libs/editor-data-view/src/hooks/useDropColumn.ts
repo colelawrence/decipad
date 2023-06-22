@@ -11,6 +11,7 @@ import {
 } from 'libs/editor-table/src/contexts/TableDndContext';
 import { MutableRefObject, useState } from 'react';
 import { ConnectDropTarget, useDrop } from 'react-dnd';
+import { dndStore } from '@udecode/plate-dnd';
 import { useDataViewActions } from './useDataViewActions';
 
 interface CollectedProps {
@@ -59,6 +60,15 @@ export const useDropColumn = (
             ref: columnHeaderRef,
           })
         );
+        // hack: we do not use the dnd store
+        // for handling data views drags,
+        // but that store is set dragging
+        // after the drag stops.
+        // Probably related to the slate errors
+        // on the drag handlers...
+        dndStore.set.isDragging(false);
+        // eslint-disable-next-line no-param-reassign
+        editor.isDragging = false;
       },
       drop: (columnItem, monitor) => {
         const columns =
@@ -66,6 +76,11 @@ export const useDropColumn = (
           findSwappableColumns(swapCtx, columnItem, monitor, hoverDirection);
         if (columns) {
           onMoveColumn(...columns);
+
+          // see above comnent about the plate dnd store
+          dndStore.set.isDragging(false);
+          // eslint-disable-next-line no-param-reassign
+          editor.isDragging = false;
         }
       },
     } // every 0.5 seconds this reavaluates
