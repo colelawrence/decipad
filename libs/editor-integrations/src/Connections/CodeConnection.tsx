@@ -1,4 +1,6 @@
+import { safeNumberForPrecision } from '@decipad/computer';
 import { importFromUnknownJson, tableFlip } from '@decipad/import';
+import DeciNumber from '@decipad/number';
 import {
   ExecutionContext,
   TExecution,
@@ -44,11 +46,18 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
 
           switch (r.result.type.kind) {
             case 'string':
-            case 'number':
             case 'boolean': {
               const varName = computer.getSymbolDefinedInBlock(r.id);
               if (!varName) return undefined;
               return [varName, r.result.value?.valueOf()] as const;
+            }
+            case 'number': {
+              const varName = computer.getSymbolDefinedInBlock(r.id);
+              if (!varName) return undefined;
+              const resVal = r.result.value as DeciNumber;
+              if (!resVal) return undefined;
+              const [, valOf] = safeNumberForPrecision(resVal);
+              return [varName, valOf] as const;
             }
           }
           return undefined;

@@ -1,19 +1,21 @@
+import { safeNumberForPrecision } from '@decipad/language';
+
 export type {
-  IdentifiedResult,
+  ComputeRequest,
   IdentifiedError,
+  IdentifiedResult,
+  NotebookResults,
   Program,
   ProgramBlock,
-  ComputeRequest,
-  NotebookResults,
 } from '../types';
 
 export { Computer, getUsedIdentifiers } from './Computer';
+export type { TokenPos } from './getUsedIdentifiers';
 export type {
   ColumnDesc,
   DimensionExplanation,
   MaterializedColumnDesc,
 } from './types';
-export type { TokenPos } from './getUsedIdentifiers';
 
 export { defaultComputerResults } from './defaultComputerResults';
 
@@ -24,6 +26,8 @@ export { createProgramFromMultipleStatements } from './parseUtils';
 export type { Parseable, ParseableDate } from './astToParseable';
 
 export type {
-  ComputerStat,
   ComputerExpressionResultStat,
+  ComputerStat,
 } from './computerStats';
+
+export { safeNumberForPrecision };

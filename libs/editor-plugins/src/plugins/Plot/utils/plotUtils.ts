@@ -3,6 +3,7 @@ import {
   convertToMultiplierUnit,
   materializeResult,
   Result,
+  safeNumberForPrecision,
   SerializedType,
 } from '@decipad/computer';
 import { PlotElement } from '@decipad/editor-types';
@@ -288,9 +289,12 @@ function toPlotColumn(
     return column as Array<AllowedPlotValue>;
   }
   if (type.kind === 'number') {
-    return (column as Array<DeciNumber>).map((f) =>
-      convertToMultiplierUnit(f, type.unit).valueOf()
-    );
+    return (column as Array<DeciNumber>).map((f) => {
+      const [rounded] = safeNumberForPrecision(
+        convertToMultiplierUnit(f, type.unit)
+      );
+      return rounded;
+    });
   }
   if (type.kind === 'date') {
     return (column as Array<bigint>).map((d) => formatResult('en-US', d, type));

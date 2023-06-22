@@ -344,6 +344,13 @@ export class DeciNumber {
     );
   }
 
+  //
+  // calling this function can be unprecise in very large numbers
+  // do not call valueOf() unless for user presentation of calculation results
+  // never for the operations, use fractions for that.
+  //
+  // use something like `safeNumberForPrecision` if possible
+  //
   valueOf(): number {
     if (isUndefined(this)) {
       return NaN;
