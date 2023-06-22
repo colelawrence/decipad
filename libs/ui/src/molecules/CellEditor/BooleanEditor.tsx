@@ -39,7 +39,7 @@ export const BooleanEditor: FC<BooleanEditorProps> = ({
         parentType={parentType}
       />
       <span css={parentType === 'input' ? p24Medium : p12Medium}>
-        {parentType !== 'input' ? '' : value === 'true' ? 'On' : 'Off'}
+        {parentType !== 'input' ? '' : value === 'true' ? 'true' : 'false'}
       </span>
       <div css={hiddenChildrenStyles}>{children}</div>
     </div>

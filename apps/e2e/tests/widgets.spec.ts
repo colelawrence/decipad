@@ -29,19 +29,29 @@ test.describe('Test Toggle Widget', () => {
   test('can create a toggle', async () => {
     await focusOnBody(page);
     await createToggleBelow(page, 'Input2');
+    const widgetEditor = page.getByTestId('widget-editor');
     await keyPress(page, 'ArrowRight');
     await expect(page.locator('text=Input2')).toBeVisible();
-    await expect(page.locator('text=Off')).toBeVisible();
+    await expect(widgetEditor.getByRole('checkbox')).not.toBeChecked();
+    await expect(
+      page.getByText('false', { exact: true }).first()
+    ).toBeVisible();
   });
 
   test('can turn on toggle', async () => {
-    await page.getByTestId('widget-editor').getByRole('button').nth(2).click();
-    await expect(page.locator('text=On')).toBeVisible();
+    const widgetEditor = page.getByTestId('widget-editor');
+    await widgetEditor.getByRole('button').nth(2).click();
+    await expect(widgetEditor.getByRole('checkbox')).toBeChecked();
+    await expect(page.getByText('true', { exact: true }).first()).toBeVisible();
   });
 
   test('can turn off toggle', async () => {
-    await page.getByTestId('widget-editor').getByRole('button').nth(2).click();
-    await expect(page.locator('text=Off')).toBeVisible();
+    const widgetEditor = page.getByTestId('widget-editor');
+    await widgetEditor.getByRole('button').nth(2).click();
+    await expect(widgetEditor.getByRole('checkbox')).not.toBeChecked();
+    await expect(
+      page.getByText('false', { exact: true }).first()
+    ).toBeVisible();
   });
 });
 

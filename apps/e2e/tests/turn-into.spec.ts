@@ -47,13 +47,14 @@ test.describe('Turn Into', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
 
-    await expect(page.getByText('Off', { exact: true }).first()).toBeVisible();
+    await expect(
+      page.getByText('false', { exact: true }).first()
+    ).toBeVisible();
 
     await page.click('[data-testid=drag-handle] >> nth=1');
     await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
     await page.locator('role=menuitem', { hasText: 'calculation' }).click();
 
-    await expect(page.getByText('Off', { exact: true }).first()).toBeHidden();
     await expect(
       page.locator('[data-testid="codeline-varname"] >> nth=-1')
     ).toContainText('Input2');
