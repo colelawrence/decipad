@@ -147,7 +147,7 @@
     "@types/lodash.zip": "^4.2.7",
     "@types/md5": "^2.3.2",
     "@types/react-gravatar": "^2.6.10",
-    "@udecode/plate": "21.3.4",
+    "@udecode/plate": "21.4.0",
     "@udecode/plate-dnd": "21.3.2",
     "@udecode/plate-juice": "21.3.2",
     "@udecode/plate-selection": "21.3.2",
