@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - '.github/**'
       - '.husky/**'
       - '.vscode/**'
       - '.yarn/**'
@@ -13,7 +12,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
     paths-ignore:
-      - '.github/**'
       - '.husky/**'
       - '.vscode/**'
       - '.yarn/**'
@@ -63,7 +61,7 @@ jobs:
       - name: Test
         env:
           NODE_OPTIONS: --max_old_space_size=16384
-        run: npx nx run-many --all --parallel=3 --ci --skip-nx-cache --target test --code-coverage
+        run: npx nx affected --parallel=3 --ci --skip-nx-cache --target test --code-coverage
 
   notify:
     name: Discord Notification
