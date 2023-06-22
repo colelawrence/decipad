@@ -33,6 +33,7 @@ export type NavigationItemProps = {
   readonly dndInfo?: DNDType;
   readonly isActive?: boolean;
   readonly onLinkClick?: () => void;
+  readonly sameTab?: boolean;
 } & (
   | {
       readonly href?: string;
@@ -54,7 +55,7 @@ export type NavigationItemProps = {
 export const NavigationItem = ({
   children,
   icon,
-
+  sameTab,
   href,
   exact,
   dndInfo,
@@ -174,6 +175,7 @@ export const NavigationItem = ({
           href={href}
           exact={exact}
           onClick={onLinkClick}
+          sameTab={sameTab}
         >
           {leftSide}
           {maybeRightSide}

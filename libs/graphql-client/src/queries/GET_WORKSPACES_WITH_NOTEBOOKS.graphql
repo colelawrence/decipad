@@ -50,7 +50,7 @@ fragment WorkspaceMembers on Workspace {
 }
 
 fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
-  paymentLink
+  paymentStatus
 }
 
 fragment DashboardWorkspace on Workspace {

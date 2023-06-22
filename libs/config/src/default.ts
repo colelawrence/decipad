@@ -59,6 +59,10 @@ const defaultEnvValues = {
     'pk_test_51J3IJaB0kCiHMJmLLVOuP3EvQydQUapNq7cUlEJs7WxIuv6AOFix7iz7urY9vJu8mQR0q6D9KIRb5zbf9184ykzJ00w67LiHvu',
   STRIPE_SECRET_KEY:
     'sk_test_51J3IJaB0kCiHMJmL1UViJeQBjwEvCoDKBEtN2xLyCpjEKB6s6FF3PGcwNC4G5xCZSCtqbOgneM9vORbwrrRh29t200ySTx8I57',
+
+  STRIPE_PAYMENT_LINK: 'https://buy.stripe.com/test_7sI16U2EX4xcgVO000',
+  STRIPE_CUSTOMER_PORTAL_LINK:
+    'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

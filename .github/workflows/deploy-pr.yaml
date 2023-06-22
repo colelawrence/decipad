@@ -95,6 +95,8 @@ jobs:
           STRIPE_SECRET_KEY: '${{secrets.DEV_STRIPE_SECRET_KEY}}'
           STRIPE_WEBHOOK_SECRET: '${{secrets.DEV_STRIPE_WEBHOOK_SECRET}}'
           GIT_COMMIT_HASH: '${{github.sha}}'
+          STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
+          STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh

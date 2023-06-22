@@ -37,6 +37,7 @@ type AnchorProps = {
   // hrefs may conditionally be undefined, but the prop is mandatory so it cannot be forgotten
   readonly href: string | undefined;
   readonly className?: string;
+  readonly sameTab?: boolean;
 } & (
   | ({
       // Non-nav HashLink
@@ -71,6 +72,7 @@ export const Anchor: React.FC<AnchorProps> = ({
   activeStyles,
   exact,
   className,
+  sameTab,
   ...props
 }) => {
   /*
@@ -139,7 +141,7 @@ export const Anchor: React.FC<AnchorProps> = ({
       {...props}
       className={className}
       href={resolved}
-      target={sameApp ? undefined : '_blank'}
+      target={sameApp || sameTab ? undefined : '_blank'}
       rel={internal ? undefined : 'noreferrer noopener'}
     />
   );

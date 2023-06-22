@@ -2767,7 +2767,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Subscription",
+                "name": "WorkspaceSubscription",
                 "ofType": null
               }
             },
@@ -5943,6 +5943,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "no_payment_required",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "paid",
             "description": null,
             "isDeprecated": false,
@@ -5973,6 +5979,36 @@
           },
           {
             "name": "canceled",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "incomplete",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "incomplete_expired",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "past_due",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "paused",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "trialing",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -6679,6 +6715,18 @@
         "name": "WorkspaceSubscription",
         "description": null,
         "fields": [
+          {
+            "name": "customer_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "id",
             "description": null,

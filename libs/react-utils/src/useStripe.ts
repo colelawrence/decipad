@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { thirdParty } from '@decipad/config';
 
 type WorkspaceTrait = {
   id: string;
@@ -12,9 +13,8 @@ type NotebookAvatarTrait = {
 };
 
 const MAX_NOTEBOOK_COLLABORATORS = 3;
-const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/test_7sI16U2EX4xcgVO000';
-const STRIPE_CUSTOMER_PORTAL_LINK =
-  'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000';
+const STRIPE_PAYMENT_LINK = thirdParty().stripe.paymentLink;
+const STRIPE_CUSTOMER_PORTAL_LINK = thirdParty().stripe.customerPortalLink;
 
 export const useStripeLinks = (workspace: WorkspaceTrait) => {
   const canSubscribe =

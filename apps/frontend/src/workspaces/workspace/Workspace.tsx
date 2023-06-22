@@ -319,7 +319,6 @@ const Workspace: FC = () => {
       );
     }
   };
-
   const sidebarWrapper = (
     <Frame
       Heading="h1"

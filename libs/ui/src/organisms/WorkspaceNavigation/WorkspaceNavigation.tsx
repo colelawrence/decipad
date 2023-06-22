@@ -171,6 +171,7 @@ export const WorkspaceNavigation = ({
               <NavigationItem
                 icon={<DeciBoxes />}
                 href={activeWorkspaceRoute.members({}).$}
+                sameTab // change this to false if you want to work on payments locally
               >
                 <span css={itemTextStyles}>Upgrade to Pro</span>
               </NavigationItem>

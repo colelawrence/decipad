@@ -4,6 +4,8 @@ import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { tables } from 'libs/tables/src/tables';
 
+const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
+
 export const processSessionComplete = async (event: Stripe.Event) => {
   const {
     client_reference_id,
@@ -94,6 +96,7 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
 export const processSubscriptionUpdated = async (event: Stripe.Event) => {
   const { id, status } = event.data.object as Stripe.Subscription;
   const data = await tables();
+  let isPremium = false;
 
   const wsSubscription = await data.workspacesubscriptions.get({
     id,
@@ -113,12 +116,13 @@ export const processSubscriptionUpdated = async (event: Stripe.Event) => {
     );
   }
 
-  if (status === 'active') {
-    await data.workspaces.put({
-      ...workspace,
-      isPremium: true,
-    });
+  if (VALID_SUBSCRIPTION_STATES.includes(status)) {
+    isPremium = true;
   }
+  await data.workspaces.put({
+    ...workspace,
+    isPremium,
+  });
 
   return {
     statusCode: 200,

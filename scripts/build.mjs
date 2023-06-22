@@ -43,6 +43,8 @@ const envVarNames = [
   'OPENAI_API_KEY',
   'STRIPE_API_KEY',
   'STRIPE_WEBHOOK_SECRET',
+  'STRIPE_PAYMENT_LINK',
+  'STRIPE_CUSTOMER_PORTAL_LINK',
 ];
 
 function getEnvVar(name) {

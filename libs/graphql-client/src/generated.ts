@@ -155,7 +155,7 @@ export type Mutation = {
   sharePadWithSecret: Scalars['String']['output'];
   sharePadWithUser?: Maybe<Pad>;
   shareWorkspaceWithEmail: Workspace;
-  syncWorkspaceSeats: Subscription;
+  syncWorkspaceSeats: WorkspaceSubscription;
   unshareExternalDataSourceWithRole?: Maybe<Scalars['Boolean']['output']>;
   unshareExternalDataSourceWithUser: ExternalDataSource;
   unshareNotebookWithSecret?: Maybe<Scalars['Boolean']['output']>;
@@ -787,6 +787,7 @@ export type SubscriptionTagsChangedArgs = {
 };
 
 export enum SubscriptionPaymentStatus {
+  NoPaymentRequired = 'no_payment_required',
   Paid = 'paid',
   Unpaid = 'unpaid'
 }
@@ -794,6 +795,11 @@ export enum SubscriptionPaymentStatus {
 export enum SubscriptionStatus {
   Active = 'active',
   Canceled = 'canceled',
+  Incomplete = 'incomplete',
+  IncompleteExpired = 'incomplete_expired',
+  PastDue = 'past_due',
+  Paused = 'paused',
+  Trialing = 'trialing',
   Unpaid = 'unpaid'
 }
 
@@ -874,6 +880,7 @@ export type WorkspaceInput = {
 
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
+  customer_id?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   paymentLink?: Maybe<Scalars['String']['output']>;
   paymentStatus?: Maybe<SubscriptionPaymentStatus>;
@@ -952,7 +959,7 @@ export type CreateWorkspaceMutationVariables = Exact<{
 }>;
 
 
-export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentLink?: string | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } };
+export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null } };
 
 export type CreateWorkspaceSecretMutationVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -1222,14 +1229,14 @@ export type WorkspaceSectionFragment = { __typename?: 'Section', id: string, nam
 
 export type WorkspaceMembersFragment = { __typename?: 'Workspace', access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null };
 
-export type WorkspaceSubscriptionWithDataFragment = { __typename?: 'WorkspaceSubscription', paymentLink?: string | null };
+export type WorkspaceSubscriptionWithDataFragment = { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null };
 
-export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentLink?: string | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null };
+export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null };
 
 export type GetWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentLink?: string | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
+export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null }> } }> | null } | null }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
 
 export type GetWorkspaceMembersQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -1335,7 +1342,7 @@ export const WorkspaceNotebookFragmentDoc = gql`
     `;
 export const WorkspaceSubscriptionWithDataFragmentDoc = gql`
     fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
-  paymentLink
+  paymentStatus
 }
     `;
 export const WorkspaceSectionFragmentDoc = gql`
@@ -2229,6 +2236,7 @@ export type GraphCacheResolvers = {
     users?: GraphCacheResolver<WithTypename<WorkspaceAccess>, Record<string, never>, Array<WithTypename<UserAccess> | string>>
   },
   WorkspaceSubscription?: {
+    customer_id?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     paymentLink?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, Scalars['String'] | string>,
     paymentStatus?: GraphCacheResolver<WithTypename<WorkspaceSubscription>, Record<string, never>, SubscriptionPaymentStatus | string>,
@@ -2285,7 +2293,7 @@ export type GraphCacheOptimisticUpdaters = {
   sharePadWithSecret?: GraphCacheOptimisticMutationResolver<MutationSharePadWithSecretArgs, Scalars['String']>,
   sharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationSharePadWithUserArgs, Maybe<WithTypename<Pad>>>,
   shareWorkspaceWithEmail?: GraphCacheOptimisticMutationResolver<MutationShareWorkspaceWithEmailArgs, WithTypename<Workspace>>,
-  syncWorkspaceSeats?: GraphCacheOptimisticMutationResolver<MutationSyncWorkspaceSeatsArgs, WithTypename<Subscription>>,
+  syncWorkspaceSeats?: GraphCacheOptimisticMutationResolver<MutationSyncWorkspaceSeatsArgs, WithTypename<WorkspaceSubscription>>,
   unshareExternalDataSourceWithRole?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithRoleArgs, Maybe<Scalars['Boolean']>>,
   unshareExternalDataSourceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareExternalDataSourceWithUserArgs, WithTypename<ExternalDataSource>>,
   unshareNotebookWithSecret?: GraphCacheOptimisticMutationResolver<MutationUnshareNotebookWithSecretArgs, Maybe<Scalars['Boolean']>>,
@@ -2343,7 +2351,7 @@ export type GraphCacheUpdaters = {
     sharePadWithSecret?: GraphCacheUpdateResolver<{ sharePadWithSecret: Scalars['String'] }, MutationSharePadWithSecretArgs>,
     sharePadWithUser?: GraphCacheUpdateResolver<{ sharePadWithUser: Maybe<WithTypename<Pad>> }, MutationSharePadWithUserArgs>,
     shareWorkspaceWithEmail?: GraphCacheUpdateResolver<{ shareWorkspaceWithEmail: WithTypename<Workspace> }, MutationShareWorkspaceWithEmailArgs>,
-    syncWorkspaceSeats?: GraphCacheUpdateResolver<{ syncWorkspaceSeats: WithTypename<Subscription> }, MutationSyncWorkspaceSeatsArgs>,
+    syncWorkspaceSeats?: GraphCacheUpdateResolver<{ syncWorkspaceSeats: WithTypename<WorkspaceSubscription> }, MutationSyncWorkspaceSeatsArgs>,
     unshareExternalDataSourceWithRole?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithRole: Maybe<Scalars['Boolean']> }, MutationUnshareExternalDataSourceWithRoleArgs>,
     unshareExternalDataSourceWithUser?: GraphCacheUpdateResolver<{ unshareExternalDataSourceWithUser: WithTypename<ExternalDataSource> }, MutationUnshareExternalDataSourceWithUserArgs>,
     unshareNotebookWithSecret?: GraphCacheUpdateResolver<{ unshareNotebookWithSecret: Maybe<Scalars['Boolean']> }, MutationUnshareNotebookWithSecretArgs>,

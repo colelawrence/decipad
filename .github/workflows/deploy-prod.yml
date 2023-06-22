@@ -82,6 +82,8 @@ jobs:
           STRIPE_API_KEY: '${{secrets.ALPHA_STRIPE_API_KEY}}'
           STRIPE_SECRET_KEY: '${{secrets.ALPHA_STRIPE_SECRET_KEY}}'
           STRIPE_WEBHOOK_SECRET: '${{secrets.ALPHA_STRIPE_WEBHOOK_SECRET}}'
+          STRIPE_PAYMENT_LINK: '${{secrets.ALPHA_STRIPE_PAYMENT_LINK}}'
+          STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.ALPHA_STRIPE_CUSTOMER_PORTAL_LINK}}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           GIT_COMMIT_HASH: '${{github.sha}}'
 
