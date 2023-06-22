@@ -29,6 +29,7 @@ jobs:
       matrix:
         node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        shard: [1, 2]
 
     steps:
       - uses: actions/checkout@v3
@@ -46,7 +47,7 @@ jobs:
         run: yarn install --ignore-engines
 
       - name: Install Playwright
-        run: npx playwright install
+        run: npx playwright install --with-deps chromium
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -55,11 +56,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      - name: Run end-to-end and visual regression tests
+      - name: Run end-to-end and visual regression tests (${{ matrix.shard }}/${{ strategy.job-total }})
         env:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
-        run: ./scripts/e2e.sh
+        run: ./scripts/e2e.sh ${{ matrix.shard }} ${{ strategy.job-total }}
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
