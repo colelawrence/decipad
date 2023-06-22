@@ -20,6 +20,7 @@ export { CollabMember } from './CollabMember/CollabMember';
 export { ColorPicker } from './ColorPicker/ColorPicker';
 export { ColorStatus } from './ColorStatus/ColorStatus';
 export { ColorStatusCircle } from './ColorStatus/ColorStatusCircle';
+export { ColumnDndPreview } from './ColumnDndPreview/ColumnDndPreview';
 export { ContentEditableInput } from './ContentEditableInput/ContentEditableInput';
 export { ContentSeparator } from './ContentSeparator/ContentSeparator';
 export { Counter } from './Counter/Counter';

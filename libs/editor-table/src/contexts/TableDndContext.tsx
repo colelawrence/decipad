@@ -1,9 +1,11 @@
+import type { MyElement, TableHeaderElement } from '@decipad/editor-types';
 import { createContext } from 'react';
 import { DropTargetMonitor } from 'react-dnd';
-import type { MyElement, TableHeaderElement } from '@decipad/editor-types';
 import type { ColumnDndDirection, DragColumnItem } from '..';
 
+export type GoodToDragColumns = 'column' | 'DataViewColumn';
 export const DRAG_ITEM_COLUMN = 'column';
+export const DRAG_ITEM_DATAVIEW_COLUMN = 'DataViewColumn';
 
 export type CellDndProps = {
   dragItem: DragColumnItem;

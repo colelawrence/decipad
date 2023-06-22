@@ -16,6 +16,7 @@ import { Path } from 'slate';
 import { useSelected } from 'slate-react';
 import { useDebounce } from 'use-debounce';
 import { useColumnDropDirection, useDropColumn, useTableActions } from '.';
+import { DRAG_ITEM_COLUMN } from '../contexts/TableDndContext';
 import { sanitizeColumnDropDirection } from '../utils';
 import { useDragColumn } from './useDragColumn';
 import { useTableHeaderCellColumnInferredType } from './useTableHeaderCellColumnInferredType';
@@ -53,7 +54,11 @@ export const useTableHeaderCell = (
   const focused = useSelected();
   const readOnly = useIsEditorReadOnly();
 
-  const { dragSource, isDragging } = useDragColumn(editor, element);
+  const { dragSource, isDragging } = useDragColumn(
+    editor,
+    element,
+    DRAG_ITEM_COLUMN
+  );
   const [{ isOver }, dropTarget] = useDropColumn(editor, element);
   const dropDirection = useColumnDropDirection(editor, element);
 

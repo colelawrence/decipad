@@ -189,7 +189,8 @@ export const theme: CssVariables = {
   buttonHoverBackgroundHover: dark500.hex,
 
   // dropline
-  droplineColor: blue300.hex,
+  droplineBgColor: blue900.hex,
+  droplineColor: blue600.hex,
   droplineGreyColor: purple600.hex,
 
   errorBlockColor: red50.hex,

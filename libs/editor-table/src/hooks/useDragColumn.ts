@@ -1,22 +1,27 @@
-import { useContext, useMemo } from 'react';
 import {
+  DataViewHeader,
   MyEditor,
   TableCellElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useDragNode } from '@udecode/plate-dnd';
-import { DRAG_ITEM_COLUMN, TableDndContext } from '../contexts/TableDndContext';
+import { useContext, useMemo } from 'react';
+import { getEmptyImage } from 'react-dnd-html5-backend';
+import {
+  GoodToDragColumns,
+  TableDndContext,
+} from '../contexts/TableDndContext';
 
 export const useDragColumn = (
   editor: MyEditor,
-  element: TableHeaderElement | TableCellElement
+  element: TableHeaderElement | TableCellElement | DataViewHeader,
+  elementType: GoodToDragColumns
 ) => {
   const tableDnd = useContext(TableDndContext);
 
   const [{ isDragging }, dragSource, dragPreview] = useDragNode(editor, {
     id: element.id,
-    type: DRAG_ITEM_COLUMN,
+    type: elementType,
     end: tableDnd.onCellDragEnd,
   });
 

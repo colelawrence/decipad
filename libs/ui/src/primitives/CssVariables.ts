@@ -66,6 +66,7 @@ export interface CssVariables {
   //
   // Drag&Drop: Dropline
   //
+  readonly droplineBgColor: Property.Color;
   readonly droplineColor: Property.Color;
   readonly droplineGreyColor: Property.Color;
 

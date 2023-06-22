@@ -1,10 +1,11 @@
-import { usePreview } from 'react-dnd-preview';
 import { DRAG_ITEM_COLUMN, DragColumnItem } from '@decipad/editor-table';
-import { useEditorRef } from '@udecode/plate';
-import { useEffect, useRef } from 'react';
+import { useDndPreviewSelectors } from '@decipad/react-contexts';
 import { cssVar, setCssVar } from '@decipad/ui';
 import { varStyles } from '@decipad/ui/src/styles/code-block';
-import { useDndPreviewSelectors } from '@decipad/react-contexts';
+import { useEditorRef } from '@udecode/plate';
+import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
+import { useEffect, useRef } from 'react';
+import { usePreview } from 'react-dnd-preview';
 import { DndColumnPreview } from './DndColumnPreview';
 
 export const DndPreview = () => {
@@ -24,6 +25,9 @@ export const DndPreview = () => {
   return (
     <>
       {display && preview.itemType === DRAG_ITEM_COLUMN && (
+        <DndColumnPreview {...preview} />
+      )}
+      {display && preview.itemType === DRAG_ITEM_DATAVIEW_COLUMN && (
         <DndColumnPreview {...preview} />
       )}
       <div

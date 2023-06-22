@@ -1,106 +1,40 @@
-import { DragColumnItem, useTable } from '@decipad/editor-table';
+import { DragColumnItem } from '@decipad/editor-table';
 import {
-  ELEMENT_TABLE,
-  TableCellElement,
-  TableCellType,
-  TableElement,
+  DataViewHeader,
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  EditorTableContext,
-  EditorTableContextValue,
-} from '@decipad/react-contexts';
-import {
-  AvailableSwatchColor,
-  EditorTable,
-  TableColumnHeader,
-  TableRow,
-  UserIconKey,
-} from '@decipad/ui';
-import {
-  TNodeEntry,
-  findNode,
-  getBlockAbove,
-  getNodeString,
-} from '@udecode/plate';
+import { ColumnDndPreview as UIColumnDndPreview } from '@decipad/ui';
+import { TNodeEntry, findNode } from '@udecode/plate';
 import { CSSProperties, useMemo } from 'react';
-import { DndCellPreview } from './DndCellPreview';
 
 const previewOpacity = 0.7;
 
 const ColumnPreview = ({
   thEntry,
-  tableEntry,
   style,
 }: {
   style: CSSProperties;
-  thEntry: TNodeEntry<TableHeaderElement>;
-  tableEntry: TNodeEntry<TableElement>;
+  thEntry: TNodeEntry<TableHeaderElement | DataViewHeader>;
 }) => {
-  const [, thPath] = thEntry;
-  const [tableNode] = tableEntry;
+  const [thElement] = thEntry;
 
-  const colIndex = thPath[thPath.length - 1];
+  // table heading?
+  let label = thElement.children[0].text;
 
-  const tableCells: TableCellElement[] = useMemo(() => {
-    const cells = [{ type: 'caption', children: [{ text: '' }] } as any];
-
-    tableNode.children.forEach((row, rowIndex) => {
-      row.children.forEach((cell, cellIndex) => {
-        if (rowIndex === 0) return;
-
-        if (cellIndex === colIndex) {
-          cells.push(cell as TableCellElement);
-        }
-      });
-    });
-
-    return cells;
-  }, [colIndex, tableNode.children]);
-
-  const { columns } = useTable(tableNode);
-
-  const blockId = tableNode.id;
-
-  const contextValue: EditorTableContextValue = useMemo(() => {
-    return {
-      blockId,
-      cellTypes: columns.map((col) => col.cellType),
-      columnBlockIds: columns.map((col) => col.blockId),
-      isCollapsed: false,
-    };
-  }, [blockId, columns]);
-
+  // dataview?
+  if (!label) {
+    label = typeof thElement.label === 'string' ? thElement.label : 'Column'; // or schema is broken...
+  }
   return (
-    <div style={{ ...style, opacity: previewOpacity, zIndex: 1 }}>
-      <EditorTableContext.Provider value={contextValue}>
-        <EditorTable
-          previewMode
-          icon={(tableNode.icon ?? 'TableSmall') as UserIconKey}
-          color={tableNode.color as AvailableSwatchColor}
-        >
-          {tableCells.map((cell, index) => {
-            const children = getNodeString(cell);
-
-            return (
-              <TableRow key={cell.id} previewMode>
-                {index === 1 && (
-                  <TableColumnHeader type={cell.cellType as TableCellType}>
-                    {children}
-                  </TableColumnHeader>
-                )}
-
-                {index > 1 && (
-                  <DndCellPreview colIndex={colIndex} element={cell}>
-                    {children}
-                  </DndCellPreview>
-                )}
-              </TableRow>
-            );
-          })}
-        </EditorTable>
-      </EditorTableContext.Provider>
+    <div
+      style={{
+        ...style,
+        opacity: previewOpacity,
+        zIndex: 1,
+      }}
+    >
+      <UIColumnDndPreview label={label} />
     </div>
   );
 };
@@ -115,24 +49,14 @@ export const DndColumnPreview = (props: {
 
   const thEntry = useMemo(
     () =>
-      findNode<TableHeaderElement>(editor, {
+      findNode<TableHeaderElement | DataViewHeader>(editor, {
         match: { id: item.id },
         at: [],
       }),
     [editor, item.id]
   );
 
-  const tableEntry = useMemo(
-    () =>
-      thEntry &&
-      getBlockAbove<TableElement>(editor, {
-        match: { type: ELEMENT_TABLE },
-        at: thEntry[1],
-      }),
-    [editor, thEntry]
-  );
+  if (!thEntry) return null;
 
-  if (!thEntry || !tableEntry) return null;
-
-  return <ColumnPreview {...props} thEntry={thEntry} tableEntry={tableEntry} />;
+  return <ColumnPreview {...props} thEntry={thEntry} />;
 };

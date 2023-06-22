@@ -14,9 +14,11 @@ import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
 import { isFirstChild } from '@udecode/plate';
+import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
+import { useDragColumn } from 'libs/editor-table/src/hooks/useDragColumn';
 import { useCallback, useMemo, useRef } from 'react';
 import { Path } from 'slate';
-import { useDataViewActions, useDragColumn, useDropColumn } from '../../hooks';
+import { useDataViewActions, useDropColumn } from '../../hooks';
 import { availableRoundings } from './availableRoundings';
 
 export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
@@ -27,10 +29,10 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
 }) => {
   assertElementType(element, ELEMENT_DATA_VIEW_TH);
   const editor = useTEditorRef();
-  const [, connectDragSource, connectDragPreview] = useDragColumn(
+  const { dragSource, dragPreview } = useDragColumn(
     editor,
-    element.id,
-    'DataViewColumn'
+    element,
+    DRAG_ITEM_DATAVIEW_COLUMN
   );
   const path = useNodePath(element);
   const actualPath = overridePath ?? path;
@@ -50,7 +52,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     dataView,
     element,
     columnHeaderRef,
-    'DataViewColumn'
+    DRAG_ITEM_DATAVIEW_COLUMN
   );
 
   const availableAggregations = useMemo(() => {
@@ -102,8 +104,8 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
       onRoundingChange={onRoundingChange}
       selectedRounding={element.rounding}
       onDeleteColumn={handleColumnDelete}
-      connectDragSource={connectDragSource}
-      connectDragPreview={connectDragPreview}
+      connectDragSource={dragSource}
+      connectDragPreview={dragPreview}
       connectDropTarget={connectDropTarget}
       hoverDirection={hoverDirection}
       isOverCurrent={isOverCurrent}

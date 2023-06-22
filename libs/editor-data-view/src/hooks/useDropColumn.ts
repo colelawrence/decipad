@@ -1,14 +1,17 @@
-import { MyEditor, MyElement, DataViewElement } from '@decipad/editor-types';
-import { ConnectDropTarget, useDrop } from 'react-dnd';
 import {
   ColumnDndDirection,
   DragColumnItem,
   findSwappableColumns,
   getHoverDirection,
 } from '@decipad/editor-table';
+import { DataViewElement, MyEditor, MyElement } from '@decipad/editor-types';
+import {
+  DRAG_ITEM_DATAVIEW_COLUMN,
+  GoodToDragColumns,
+} from 'libs/editor-table/src/contexts/TableDndContext';
 import { MutableRefObject, useState } from 'react';
+import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { useDataViewActions } from './useDataViewActions';
-import { ColumnType } from './useDragColumn';
 
 interface CollectedProps {
   isOver: boolean;
@@ -22,7 +25,7 @@ export const useDropColumn = (
   table: DataViewElement | undefined,
   column: MyElement,
   columnHeaderRef: MutableRefObject<HTMLTableCellElement | null>,
-  columnType: ColumnType = 'TableColumn'
+  columnType: GoodToDragColumns = DRAG_ITEM_DATAVIEW_COLUMN
 ): [CollectedProps, ConnectDropTarget, 'left' | 'right' | undefined] => {
   const { onMoveColumn } = useDataViewActions(editor, table);
   const [hoverDirection, setHoverDirection] = useState<
