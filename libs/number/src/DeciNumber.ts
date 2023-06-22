@@ -86,25 +86,6 @@ export const fromNumber = (
   throw new Error(`Could not convert ${n} of type ${typeof n} to number`);
 };
 
-export const pow = (a: DeciNumber, b: DeciNumber): Fraction => {
-  const result = N(
-    Fraction.prototype.pow.call(
-      a as unknown as Fraction,
-      b as unknown as Fraction
-    )
-  );
-  if (result == null || isZero(result)) {
-    const resultNumber = a.valueOf() ** b.valueOf();
-    if (Number.isNaN(resultNumber)) {
-      throw new TypeError(
-        `**: result of raising to ${b.toString()} is not rational`
-      );
-    }
-    return N(resultNumber) as unknown as Fraction;
-  }
-  return result as unknown as Fraction;
-};
-
 export const N = fromNumber;
 
 export class DeciNumber {
@@ -255,11 +236,17 @@ export class DeciNumber {
     return Fraction.prototype.round.call(roundResult, 0).div(powPart);
   }
 
-  private internalPow(b: DeciNumber) {
-    const result = Fraction.prototype.pow.call(
-      this as unknown as Fraction,
-      b as unknown as Fraction
-    );
+  private internalPow(b: DeciNumber): Fraction {
+    let result: Fraction | undefined;
+    if (b.compare(ZERO) < 0) {
+      return this.internalPow(b.neg()).inverse();
+    }
+    if (b.d === 1n) {
+      result = Fraction.prototype.pow.call(
+        this as unknown as Fraction,
+        b as unknown as Fraction
+      );
+    }
     if (result == null || isZero(result)) {
       const resultNumber = this.valueOf() ** b.valueOf();
       if (Number.isNaN(resultNumber)) {
