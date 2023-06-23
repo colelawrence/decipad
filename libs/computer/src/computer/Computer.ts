@@ -77,6 +77,7 @@ import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from './topologicalSort';
 import { flattenTableDeclarations } from './transformTables';
 import { ColumnDesc, DimensionExplanation, TableDesc } from './types';
+import { programToProgramByBlockId } from '../utils/programToProgramByBlockId';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -87,6 +88,7 @@ interface ComputerOpts {
 export class Computer {
   private locale = 'en-US';
   private latestProgram: ProgramBlock[] = [];
+  private latestProgramByBlockId: Map<string, ProgramBlock> = new Map();
   private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
   private externalData = new BehaviorSubject<
@@ -230,7 +232,7 @@ export class Computer {
   );
 
   getSymbolDefinedInBlock(blockId: string): string | undefined {
-    const parsed = this.latestProgram.find((p) => p.id === blockId);
+    const parsed = this.latestProgramByBlockId.get(blockId);
     if (parsed && parsed.type === 'identified-block') {
       const firstNode = parsed.block.args[0];
       if (firstNode) {
@@ -252,21 +254,21 @@ export class Computer {
     (_, blockId: string, columnId: string | null) => {
       // Find "Table.Column"
       if (columnId) {
-        const column = this.latestProgram.find((p) => p.id === columnId);
+        const column = this.latestProgramByBlockId.get(columnId);
         if (column?.definesTableColumn) {
           return column.definesTableColumn.join('.');
         }
       }
 
       // Find just "Column" (or "Table.Column" when referred outside)
-      const column = this.latestProgram.find((p) => p.id === blockId);
+      const column = this.latestProgramByBlockId.get(blockId);
       if (column?.definesTableColumn) {
         return columnId
           ? column.definesTableColumn.join('.')
           : column.definesTableColumn[1];
       }
 
-      const programBlock = this.latestProgram.find((p) => p.id === blockId);
+      const programBlock = this.latestProgramByBlockId.get(blockId);
       return (
         programBlock?.definesVariable || this.getSymbolDefinedInBlock(blockId)
       );
@@ -277,7 +279,7 @@ export class Computer {
   getBlockIdAndColumnId$ = listenerHelper(
     this.results,
     (_, blockId: string): [string, string | null] | undefined => {
-      const programBlock = this.latestProgram.find((p) => p.id === blockId);
+      const programBlock = this.latestProgramByBlockId.get(blockId);
 
       if (programBlock?.definesTableColumn) {
         const [tableName] = programBlock.definesTableColumn;
@@ -324,7 +326,7 @@ export class Computer {
   );
 
   getParseableTypeInBlock(blockId: string) {
-    const parsed = this.latestProgram.find((p) => p.id === blockId);
+    const parsed = this.latestProgramByBlockId.get(blockId);
     if (parsed && parsed.type === 'identified-block') {
       return astToParseable(parsed.block.args[0]);
     }
@@ -478,8 +480,8 @@ export class Computer {
                 }
               );
             } else {
-              const statement = this.latestProgram.find((p) => p.id === b.id)
-                ?.block?.args[0];
+              const statement = this.latestProgramByBlockId.get(b.id)?.block
+                ?.args[0];
               if (
                 (statement?.type !== 'table' && statement?.type !== 'assign') ||
                 !b.result?.value ||
@@ -510,8 +512,8 @@ export class Computer {
               );
             }
           } else if (isColumn(b.result?.type)) {
-            const statement = this.latestProgram.find((p) => p.id === b.id)
-              ?.block?.args[0];
+            const statement = this.latestProgramByBlockId.get(b.id)?.block
+              ?.args[0];
             if (statement?.type !== 'table-column-assign') {
               return [];
             }
@@ -544,8 +546,8 @@ export class Computer {
     (blockId: string) => this.resultStreams.blockSubject(blockId),
     (block): string | undefined => {
       if (isColumn(block?.result?.type)) {
-        const statement = this.latestProgram.find((p) => p.id === block.id)
-          ?.block?.args[0];
+        const statement = this.latestProgramByBlockId.get(block.id)?.block
+          ?.args[0];
         if (statement?.type === 'table-column-assign') {
           return getIdentifierString(statement.args[1]);
         }
@@ -663,6 +665,7 @@ export class Computer {
     this.computationRealm.setExternalData(newExternalData);
     this.latestExternalData = newExternalData;
     this.latestProgram = sortedParse;
+    this.latestProgramByBlockId = programToProgramByBlockId(sortedParse);
 
     return sortedParse;
   }
@@ -747,9 +750,7 @@ export class Computer {
   }
 
   getStatement(blockId: string): AST.Statement | undefined {
-    const block = this.latestProgram.find(
-      (block) => block.id === blockId
-    )?.block;
+    const block = this.latestProgramByBlockId.get(blockId)?.block;
 
     return block?.args[0];
   }
