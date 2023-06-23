@@ -1,6 +1,7 @@
-import { FC, useMemo } from 'react';
 import { ComputerExpressionResultStat, ComputerStat } from '@decipad/computer';
-import { PlotResult, PlotSpec } from '../PlotResult/PlotResult';
+import { FC, useMemo } from 'react';
+import { PlotResult } from '../PlotResult/PlotResult';
+import { PlotSpec } from '../PlotResult/PlotResult.types';
 
 export interface StatsGraphProps {
   computerRequestStatSamples: ComputerStat[];

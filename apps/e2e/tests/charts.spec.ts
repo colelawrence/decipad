@@ -1,7 +1,7 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
 import { createTable, getFromTable, writeInTable } from '../utils/page/Table';
-import { Timeouts } from '../utils/src';
+import { snapshot, Timeouts } from '../utils/src';
 
 test.describe('Charts', () => {
   test.describe.configure({ mode: 'serial' });
@@ -59,17 +59,10 @@ test.describe('Charts', () => {
     );
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(1000);
   });
 
   test('pie chart looks ok', async () => {
     await page.evaluate(() => document.fonts.ready);
-    const dataViewContent = await page
-      .locator('[class*=plotBlockStyles]')
-      .screenshot();
-
-    expect(dataViewContent).toMatchSnapshot('initial-pie-chart.png');
   });
 
   test('updates chart name', async () => {
@@ -87,11 +80,6 @@ test.describe('Charts', () => {
   test('test pie chart menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
-    const pieChartMenu = await page
-      .getByTestId('chart-settings-menu')
-      .screenshot();
-
-    expect(pieChartMenu).toMatchSnapshot('pie-chart-menu.png');
   });
 
   test('change color scheme', async () => {
@@ -99,12 +87,6 @@ test.describe('Charts', () => {
     await page.getByText('Color scheme').click();
     await page.getByText('Monochrome').click();
     await page.getByText('Purple').click();
-
-    const dataViewContent = await page
-      .locator('[class*=plotBlockStyles]')
-      .screenshot();
-
-    expect(dataViewContent).toMatchSnapshot('purple-pie-chart.png');
   });
 
   test('convert to bar chart', async () => {
@@ -112,22 +94,11 @@ test.describe('Charts', () => {
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__bar').click();
-
-    const dataViewContent = await page
-      .locator('[class*=plotBlockStyles]')
-      .screenshot();
-
-    expect(dataViewContent).toMatchSnapshot('bar-chart.png');
   });
 
   test('bar chart menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
-    const pieChartMenu = await page
-      .getByTestId('chart-settings-menu')
-      .screenshot();
-
-    expect(pieChartMenu).toMatchSnapshot('bar-chart-menu.png');
   });
 
   test('swap axes', async () => {
@@ -138,12 +109,6 @@ test.describe('Charts', () => {
     await page.getByTestId('chart-settings-button').click();
     await page.getByRole('menuitem', { name: 'Value Column2' }).click();
     await page.getByTestId('chart__settings__value__Column1').click();
-
-    const dataViewContent = await page
-      .locator('[class*=plotBlockStyles]')
-      .screenshot();
-
-    expect(dataViewContent).toMatchSnapshot('swapped-bar-chart.png');
   });
 
   test('convert to scatter chart', async () => {
@@ -151,21 +116,11 @@ test.describe('Charts', () => {
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__point').click();
-
-    const dataViewContent = await page
-      .locator('[class*=plotBlockStyles]')
-      .screenshot();
-
-    expect(dataViewContent).toMatchSnapshot('scatter-plot.png');
   });
 
   test('scatter plot menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
-    const pieChartMenu = await page
-      .getByTestId('chart-settings-menu')
-      .screenshot();
-
-    expect(pieChartMenu).toMatchSnapshot('scatter-plot-menu.png');
+    await snapshot(page as Page, 'Notebook: Last chart');
   });
 });

@@ -1,6 +1,7 @@
-import { FC, useMemo } from 'react';
 import { DataViewStat } from '@decipad/react-contexts';
-import { PlotResult, PlotSpec } from '../PlotResult/PlotResult';
+import { FC, useMemo } from 'react';
+import { PlotResult } from '../PlotResult/PlotResult';
+import { PlotSpec } from '../PlotResult/PlotResult.types';
 
 export interface StatsGraphProps {
   stats: DataViewStat[];

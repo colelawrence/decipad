@@ -185,28 +185,37 @@ export function specFromType(
     displayProps.y2ColumnName !== 'None' &&
     comparableChartTypes.includes(displayProps.markType)
   ) {
-    encoding.color = {
-      datum: { repeat: 'layer' },
-    };
+    const { field } = encoding.x || {};
 
-    encoding.y = {
-      aggregate: 'sum',
-      field: { repeat: 'layer' },
-      type: 'quantitative',
-      title: '',
-      axis: {},
-    };
+    if (field) {
+      encoding.color = {
+        datum: { repeat: 'layer' },
+      };
 
-    encoding.xOffset = {
-      datum: { repeat: 'layer' },
-      type: 'nominal',
-    };
+      encoding.y = {
+        aggregate: 'sum',
+        field: { repeat: 'layer' },
+        type: 'quantitative',
+        title: '',
+        axis: {},
+      };
 
-    encoding.x = {
-      field: encoding.x?.field,
-      type: 'nominal',
-      title: '',
-    };
+      const extraOffset =
+        displayProps.markType === 'bar'
+          ? { datum: { repeat: 'layer' } }
+          : { field: 'repeat' };
+
+      encoding.xOffset = {
+        ...extraOffset,
+        type: 'nominal',
+      };
+
+      encoding.x = {
+        field,
+        type: 'nominal',
+        title: '',
+      };
+    }
   }
 
   //
@@ -394,13 +403,15 @@ export function enhanceSpecFromWideData(
   if (spec.mark.type !== 'arc') {
     for (const encValue of Object.values(spec?.encoding)) {
       if (encValue) {
-        const { field } = encValue;
-        const domain = findWideDataDomain(field, data.table);
-        if (domain) {
-          if (!encValue.scale) {
-            encValue.scale = {};
+        const { field, type } = encValue;
+        if (type === 'quantitative') {
+          const domain = findWideDataDomain(field, data.table);
+          if (domain) {
+            if (!encValue.scale) {
+              encValue.scale = {};
+            }
+            encValue.scale.domain = domain;
           }
-          encValue.scale.domain = domain;
         }
       }
     }

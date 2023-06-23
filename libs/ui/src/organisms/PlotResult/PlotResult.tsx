@@ -3,53 +3,13 @@ import { icons } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useRef } from 'react';
-import { VegaLite, VisualizationSpec } from 'react-vega';
-import type { VegaProps } from 'react-vega/lib/Vega';
-import { Field } from 'vega-lite/build/src/channeldef';
-import { InlineData } from 'vega-lite/build/src/data';
-import { LayerSpec } from 'vega-lite/build/src/spec';
-import { LayerRepeatMapping } from 'vega-lite/build/src/spec/repeat';
+import { VegaLite } from 'react-vega';
 import { TextAndIconButton } from '../../atoms';
 import { mobileQuery } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
+import { PlotResultProps } from './PlotResult.types';
+import { serializeVisualisationSpec } from './serializeVisualisationSpec';
 import { usePlotTheme } from './usePlotTheme';
-
-const styles = css({
-  width: '100%',
-  height: 365,
-  // Couldn't find another way to attach styles to the underlying SVG for responsiveness.
-  '& > canvas': {
-    maxWidth: '100%',
-  },
-  [mobileQuery]: {
-    height: 225,
-  },
-});
-
-type SpecConfig = VegaProps['spec']['config'];
-
-export type PlotSpec = VegaProps['spec'] & {
-  config?: SpecConfig & {
-    encoding?: { color?: { scheme?: string | undefined } };
-  };
-  encoding?: {
-    color?: {
-      field?: string | undefined;
-      type?: string | undefined;
-      legend?: {
-        orient?: string;
-        direction?: string;
-      };
-    };
-  };
-};
-
-interface PlotResultProps {
-  spec: NonNullable<PlotSpec>;
-  data: NonNullable<VegaProps['data']>;
-  repeatedColumns?: string[];
-  onError?: VegaProps['onError'];
-}
 
 export const PlotResult = ({
   spec,
@@ -60,33 +20,11 @@ export const PlotResult = ({
   const chartRef = useRef<HTMLDivElement>(null);
 
   // For some reason, react-vega seems to add 10px to the width.
-  const specObject: VisualizationSpec = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    data: {
-      values: data.table,
-    } as InlineData,
-    width: 'container',
-    height: 'container',
-    view: { stroke: 'transparent' },
-    repeat: (repeatedColumns
-      ? { layer: repeatedColumns }
-      : undefined) as LayerRepeatMapping,
-    spec: {
-      ...spec,
-      encoding: {
-        ...(spec.encoding || {}),
-
-        color: {
-          ...(spec.encoding?.color || {}),
-          legend: {
-            orient: 'bottom',
-            direction: 'horizontal',
-            ...(spec.encoding?.color?.legend || {}),
-          },
-        },
-      },
-    } as LayerSpec<Field>,
-  };
+  const specObject = serializeVisualisationSpec({
+    spec,
+    data,
+    repeatedColumns,
+  });
 
   const handleExportPNG = () => {
     if (chartRef.current) {
@@ -123,3 +61,15 @@ export const PlotResult = ({
     </>
   );
 };
+
+const styles = css({
+  width: '100%',
+  height: 365,
+  // Couldn't find another way to attach styles to the underlying SVG for responsiveness.
+  '& > canvas': {
+    maxWidth: '100%',
+  },
+  [mobileQuery]: {
+    height: 225,
+  },
+});
