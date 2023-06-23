@@ -9,7 +9,7 @@ import { notify as notifyInvitee } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
 import { app } from '@decipad/config';
 import tables from '@decipad/tables';
-import { track } from '@decipad/backend-analytics';
+import { track, identify } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { Resource } from '.';
@@ -107,7 +107,10 @@ export const shareWithEmail = <
         resourceName:
           'name' in record ? record.name : `<Random ${resourceType.humanName}>`,
       });
-
+      await identify(actingUser.id, {
+        email: actingUser.email,
+        fullName: actingUser.name,
+      });
       await track({
         event: 'share with email',
         properties: {
