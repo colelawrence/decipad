@@ -1,7 +1,8 @@
 import { getDefined } from '@decipad/utils';
 import { isAssignment } from '@decipad/language';
 import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
-import { dependencies, TableNamespaces, findAllTables } from './dependencies';
+import { dependencies, findAllTables } from './dependencies';
+import { getIdentifierString } from '../utils';
 
 interface Node {
   entity: string | null;
@@ -37,7 +38,7 @@ const blockEntity = ({ block }: IdentifiedBlock): string | null => {
   }
 
   const arg0 = statement.args[0];
-  return arg0.args[0];
+  return getIdentifierString(arg0);
 };
 
 const blockToNode = (block: IdentifiedBlock): Node => {
@@ -52,12 +53,14 @@ const blockToNode = (block: IdentifiedBlock): Node => {
 const notSelf = (entity: string) => (node: Node | undefined) =>
   !node || node.entity !== entity;
 
+type GetDepsFunction = (node: Node) => string[];
+
 const drawEdges = (
   node: Node,
   allNodes: EntityNodeMap,
-  namespaces: TableNamespaces
+  getDeps: GetDepsFunction
 ): void => {
-  const deps = dependencies(node.value.block, namespaces);
+  const deps = getDeps(node);
 
   // Filter out builtin functions etc.
   let edges = deps
@@ -92,6 +95,7 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   const errored = blocks.filter(badBlock);
   const sorted: IdentifiedBlock[] = [];
 
+  // get nodes
   const goodBlocks = blocks.filter(goodBlock);
   const nodes = goodBlocks.map(blockToNode);
 
@@ -136,9 +140,35 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     sorted.push(n.value);
   };
 
+  // draw edges
   const depNamespaces = findAllTables(goodBlocks.map((b) => b.block));
+  const tableToFirstColMap = new Map<string, Node>();
+  const getDeps = (node: Node) => {
+    const deps = dependencies(node.value.block, depNamespaces);
+    const statement = node.value.block.args[0];
+
+    // a table column depends implicitly on the first column (which defines the table size)
+    if (
+      statement.type === 'table-column-assign' &&
+      node.value.definesTableColumn
+    ) {
+      const parentPos = statement.args[3];
+      if (parentPos === 0) {
+        tableToFirstColMap.set(node.value.definesTableColumn[0], node);
+      } else {
+        // this column is not the first, so it depends on the first column
+        const tableToFirstCol = tableToFirstColMap.get(
+          node.value.definesTableColumn[0]
+        );
+        if (tableToFirstCol?.entity) {
+          deps.push(tableToFirstCol.entity);
+        }
+      }
+    }
+    return deps;
+  };
   for (const node of nodes) {
-    drawEdges(node, identifiersToNode, depNamespaces);
+    drawEdges(node, identifiersToNode, getDeps);
   }
 
   // Make a dictionary of all the tables and their columns

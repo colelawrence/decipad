@@ -95,15 +95,28 @@ it('can sort complex column dependencies correctly', () => {
   const sorted = topologicalSort(transformed);
 
   expect(sorted).toHaveLength(transformed.length);
-  expect(
-    sorted.map((b) => b.definesTableColumn || b.definesVariable)
-  ).toMatchObject([
-    'Table1',
-    ['Table1', 'Column1'],
-    'Table2',
-    ['Table2', 'Column2'],
-    ['Table1', 'Column2'],
-    ['Table2', 'Column1'],
-    'Table3',
-  ]);
+  expect(sorted.map((b) => b.definesTableColumn || b.definesVariable))
+    .toMatchInlineSnapshot(`
+    Array [
+      "Table1",
+      Array [
+        "Table1",
+        "Column1",
+      ],
+      "Table2",
+      Array [
+        "Table2",
+        "Column1",
+      ],
+      Array [
+        "Table2",
+        "Column2",
+      ],
+      Array [
+        "Table1",
+        "Column2",
+      ],
+      "Table3",
+    ]
+  `);
 });

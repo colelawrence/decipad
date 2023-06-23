@@ -47,9 +47,15 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
 
     tableColumns.forEach((column, i) => {
       const [colDef, expression] = column.args;
-      const columnAssign = decilang<TableColumnAssign>`${{
-        name: tableName,
-      }}.${{ name: colDef.args[0] }} = ${expression}`;
+      const columnAssign: TableColumnAssign = {
+        type: 'table-column-assign',
+        args: [
+          { type: 'tablepartialdef', args: [tableName] },
+          { type: 'coldef', args: [colDef.args[0]] },
+          expression,
+          i,
+        ],
+      };
 
       assigns.push(
         // Hacking the block ID to be unique here because column assigns
