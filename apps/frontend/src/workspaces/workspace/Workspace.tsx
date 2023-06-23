@@ -18,7 +18,7 @@ import {
   useUpdateSectionMutation,
   useUserQuery,
 } from '@decipad/graphql-client';
-import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
+import { docs, notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
   Dashboard,
@@ -28,6 +28,7 @@ import {
   NotebookList,
   NotebookListItem,
   NotebookListPlaceholder,
+  PaymentSubscriptionStatusModal,
   TColorKeys,
   TColorStatus,
   TopbarPlaceholder,
@@ -92,8 +93,11 @@ const preloadModals = () => {
 
 // prefetch
 loadTopbar().then(preloadModals);
+type WorkspaceProps = {
+  readonly isRedirectFromStripe?: boolean;
+};
 
-const Workspace: FC = () => {
+const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const { show, showNewMessage } = useIntercom();
 
   const showFeedback = useCallback(() => {
@@ -192,7 +196,6 @@ const Workspace: FC = () => {
       window.location.pathname = '/';
     });
   }, []);
-
   const [ctaDismissed, setCtaDismissed] = useState(
     () => global.localStorage.getItem(workspaceCtaDismissKey) === '1'
   );
@@ -291,6 +294,11 @@ const Workspace: FC = () => {
       isSharedPage,
       sectionId,
     ]
+  );
+
+  const paymentStatus = useMemo(
+    () => currentWorkspace?.workspaceSubscription?.paymentStatus,
+    [currentWorkspace?.workspaceSubscription?.paymentStatus]
   );
 
   const showBigAssTopbar = isFlagEnabled('WORKSPACE_PREMIUM_FEATURES');
@@ -584,6 +592,14 @@ const Workspace: FC = () => {
       <LazyRoute>
         <EditUserModal />
       </LazyRoute>
+      {isRedirectFromStripe && (
+        <LazyRoute>
+          <PaymentSubscriptionStatusModal
+            paymentSubscriptionStatus={paymentStatus || ''}
+            templatesHref={docs({}).page({ name: 'gallery' }).$}
+          />
+        </LazyRoute>
+      )}
     </>
   );
 };

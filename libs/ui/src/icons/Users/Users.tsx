@@ -1,21 +1,36 @@
 import { cssVar } from '../../primitives';
 
 export const Users: React.FC = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
     <path
-      stroke={cssVar('weakTextColor')}
+      stroke={cssVar('currentTextColor')}
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={1.2}
-      d="M10.35 11.5h1.95a.98.98 0 0 0 .989-1C13.22 8.333 12.767 7 9.8 7c-.524 0-1.1.2-1.3.3M10.049 7a2.25 2.25 0 1 0-2.17-2.848"
-    />
+      strokeWidth="1.5"
+      d="M5.78168 19.25H13.2183C13.7828 19.25 14.227 18.7817 14.1145 18.2285C13.804 16.7012 12.7897 14 9.5 14C6.21031 14 5.19605 16.7012 4.88549 18.2285C4.773 18.7817 5.21718 19.25 5.78168 19.25Z"
+    ></path>
     <path
-      fill={cssVar('iconBackgroundColor')}
-      stroke={cssVar('normalTextColor')}
+      stroke={cssVar('currentTextColor')}
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={1.2}
-      d="M8.799 6a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0ZM6.549 8.75c-2.968 0-3.993 1.333-4.205 3.501-.054.55.403.999.955.999h6.5c.552 0 1.009-.45.955-.999-.213-2.168-1.237-3.501-4.205-3.501Z"
-    />
+      strokeWidth="1.5"
+      d="M15.75 14C17.8288 14 18.6802 16.1479 19.0239 17.696C19.2095 18.532 18.5333 19.25 17.6769 19.25H16.75"
+    ></path>
+    <circle
+      cx="9.5"
+      cy="7.5"
+      r="2.75"
+      stroke={cssVar('currentTextColor')}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+    ></circle>
+    <path
+      stroke={cssVar('currentTextColor')}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      d="M14.75 10.25C16.2688 10.25 17.25 9.01878 17.25 7.5C17.25 5.98122 16.2688 4.75 14.75 4.75"
+    ></path>
   </svg>
 );

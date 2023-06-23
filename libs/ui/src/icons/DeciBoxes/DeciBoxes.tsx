@@ -1,8 +1,10 @@
+import { cssVar } from '../../primitives';
+
 export const DeciBoxes: React.FC = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <title>Date</title>
+    <title>Decipad Boxes</title>
     <path
-      fill="#C1FA6B"
+      fill={cssVar('currentTextColor')}
       d="M2.181 10.91h8.73a2.182 2.182 0 0 0 2.18-2.18V2.18A2.182 2.182 0 0 1 15.274 0h6.546A2.181 2.181 0 0 1 24 2.181V8.73a2.18 2.18 0 0 1-2.181 2.18h-6.546a2.181 2.181 0 0 0-2.181 2.182v8.73a2.182 2.182 0 0 1-2.181 2.18H2.18A2.181 2.181 0 0 1 0 21.823v-8.73a2.181 2.181 0 0 1 2.181-2.181Z"
     />
   </svg>

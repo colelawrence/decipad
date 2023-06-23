@@ -11,6 +11,7 @@ export { EditMembersModal } from './EditMembersModal/EditMembersModal';
 export { EditUserModal } from './EditUserModal/EditUserModal';
 export { EditSecretsModal } from './EditSecretsModal/EditSecretsModal';
 export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
+export { PaymentSubscriptionStatusModal } from './PaymentSubscriptionStatusModal/PaymentSubscriptionStatusModal';
 export { ErrorModal } from './ErrorModal/ErrorModal';
 export { GlobalStyles } from './GlobalStyles/GlobalStyles';
 export { ImportFromLinkMenu } from './ImportFromLinkMenu/ImportFromLinkMenu';

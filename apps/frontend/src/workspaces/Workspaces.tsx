@@ -1,6 +1,6 @@
 import { workspaces } from '@decipad/routing';
 import { lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useSearchParams } from 'react-router-dom';
 import { ErrorPage, LazyRoute } from '../meta';
 import RedirectToDefaultWorkspace from './RedirectToDefaultWorkspace';
 
@@ -12,6 +12,8 @@ const Workspace = lazy(loadWorkspace);
 loadWorkspace();
 
 const Workspaces: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const isRedirectFromStripe = !!searchParams.get('fromStripe');
   return (
     <Routes>
       <Route
@@ -26,7 +28,7 @@ const Workspaces: React.FC = () => {
         path={`${workspaces({}).workspace.template}/*`}
         element={
           <LazyRoute>
-            <Workspace />
+            <Workspace isRedirectFromStripe={isRedirectFromStripe} />
           </LazyRoute>
         }
       />

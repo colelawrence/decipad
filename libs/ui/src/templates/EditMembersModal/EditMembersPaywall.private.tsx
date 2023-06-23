@@ -1,6 +1,12 @@
 import styled from '@emotion/styled';
 import { ClosableModal } from '../../organisms';
-import { cssVar, p14Bold, p14Regular, p32Medium } from '../../primitives';
+import {
+  cssVar,
+  p14Bold,
+  p14Regular,
+  p32Medium,
+  setCssVar,
+} from '../../primitives';
 import { Button } from '../../atoms';
 import { DeciBoxes } from '../../icons';
 
@@ -54,7 +60,11 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           </Section>
         </FeaturesCard>
 
-        <Button type="yellow" href={paymentHref}>
+        <Button
+          type="yellow"
+          href={paymentHref}
+          sameTab={true} // change this to false if you want to work on payments locally
+        >
           Upgrade to Pro
         </Button>
       </ModalContent>
@@ -116,4 +126,7 @@ const DeciDecoration = styled.div({
   height: '24px',
   width: '24px',
   pointerEvents: 'none',
+  svg: {
+    ...setCssVar('currentTextColor', cssVar('buttonBrandBackground')),
+  },
 });

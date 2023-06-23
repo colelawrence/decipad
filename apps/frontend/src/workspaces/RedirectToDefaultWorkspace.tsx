@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { LoadingLogo } from '@decipad/ui';
 import { useLocalStorage } from '@decipad/react-utils';
@@ -15,6 +15,8 @@ const RedirectToDefaultWorkspace: FC = () => {
   const [selectedWorkspace] = useLocalStorage(SELECTED_WORKSPACE_KEY, '');
 
   const allWorkspaces = results.data?.workspaces || [];
+  const [searchParams] = useSearchParams();
+  const isRedirectFromStripe = !!searchParams.get('fromStripe');
 
   if (results.error) {
     throw results.error;
@@ -31,7 +33,11 @@ const RedirectToDefaultWorkspace: FC = () => {
     throw new Error('No user workspaces with write permissions found');
   }
 
-  return <Navigate replace to={workspaces({}).workspace({ workspaceId }).$} />;
+  const redirectTo = isRedirectFromStripe
+    ? `${workspaces({}).workspace({ workspaceId }).$}?fromStripe=true`
+    : workspaces({}).workspace({ workspaceId }).$;
+
+  return <Navigate replace to={redirectTo} />;
 };
 
 const findExistingWorkspace = (

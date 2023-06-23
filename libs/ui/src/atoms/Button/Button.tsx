@@ -215,6 +215,7 @@ type ButtonProps = {
   readonly autoFocus?: boolean;
   readonly onClick?: () => void;
   readonly submit?: boolean;
+  readonly sameTab?: boolean;
 };
 
 export const Button = ({
@@ -228,6 +229,7 @@ export const Button = ({
   children,
   onClick = noop,
   href,
+  sameTab,
 }: ButtonProps): ReturnType<React.FC> => {
   const onButtonClick = useCallback(
     (ev: MouseEvent) => {
@@ -248,6 +250,7 @@ export const Button = ({
         disabled ? disabledStyles : enabledStyles,
       ])}
       onClick={onClick}
+      sameTab={sameTab}
     >
       {children}
     </Anchor>

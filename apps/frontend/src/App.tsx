@@ -10,7 +10,7 @@ import { FeatureFlagsSwitcher, HelpMenu } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
 import { FC, lazy, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import { Onboard } from './Onboard/LazyOnboard';
@@ -34,10 +34,17 @@ export const App: FC = () => {
     showNewMessage();
   }, [show, showNewMessage]);
 
+  const [searchParams] = useSearchParams();
+  const isRedirectFromStripe = !!searchParams.get('fromStripe');
+
+  const redirectTo = isRedirectFromStripe
+    ? `${workspaces({}).$}?fromStripe=true`
+    : workspaces({}).$;
+
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate replace to={workspaces({}).$} />} />
+        <Route path="/" element={<Navigate replace to={redirectTo} />} />
         <Route
           path="/workspaces/:workspaceId/pads/*"
           element={<NotebookRedirect />}
