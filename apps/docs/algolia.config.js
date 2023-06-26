@@ -7,15 +7,26 @@ const configs = {
     apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.dev.decipad.com',
     contextualSearch: false,
-    exclusionPatterns: ['**/releases', '**/releases/**'],
+    exclusionPatterns: [
+      '**/releases',
+      '**/releases/**',
+      '**/releases**',
+      '**/releases**/**',
+    ],
   },
   'docs.alpha.decipad.com': {
     appId: 'TV8XZ0RFSZ',
     // Public API key: it is safe to commit it
     apiKey: 'db6e12842f8c0c9dded465872fe17d54',
-    indexName: 'docs.alpha.decipad.com',
+    indexName: 'docs.app.decipad.com',
     contextualSearch: false,
-    exclusionPatterns: ['**/releases', '**/releases/**'],
+    exclusionPatterns: [
+      '**/releases',
+      '**/releases/**',
+      '**/releases**',
+      '**/releases**/**',
+    ],
+    insights: true,
   },
 };
 
