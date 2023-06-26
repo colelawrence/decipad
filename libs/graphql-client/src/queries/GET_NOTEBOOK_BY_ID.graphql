@@ -32,6 +32,7 @@ fragment EditorNotebook on Pad {
   workspace {
     id
     name
+    isPremium
   }
   padConnectionParams {
     url

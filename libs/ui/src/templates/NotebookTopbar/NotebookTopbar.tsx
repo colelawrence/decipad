@@ -94,7 +94,7 @@ export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookPublishingPopUp> & {
     permission?: PermissionType | null;
     userWorkspaces?: Array<{ id: string; name: string }>;
-    workspace?: { id: string; name: string } | null;
+    workspace?: { id: string; name: string; isPremium?: boolean | null } | null;
     workspaceAccess?: PermissionType | null;
     isSharedNotebook?: boolean;
     onDuplicateNotebook?: () => void;
@@ -241,6 +241,7 @@ export const NotebookTopbar = ({
         <NotebookAvatars
           allowInvitation={allowInvitation}
           isWriter={isWriter}
+          isPremiumWorkspace={Boolean(workspace?.isPremium)}
           usersWithAccess={usersWithAccess}
           usersFromTeam={usersFromTeam}
           notebook={notebook}

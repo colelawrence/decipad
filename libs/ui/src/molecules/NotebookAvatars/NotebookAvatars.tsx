@@ -79,6 +79,7 @@ export type NotebookAvatarsProps = {
   usersWithAccess?: NotebookAvatar[];
   usersFromTeam?: NotebookAvatar[];
   allowInvitation?: boolean;
+  isPremiumWorkspace?: boolean;
 
   notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
   onInvite?: (email: string, permission: PermissionType) => Promise<void>;
@@ -91,6 +92,7 @@ export const NotebookAvatars = ({
   usersWithAccess = [],
   usersFromTeam = [],
   allowInvitation,
+  isPremiumWorkspace,
   ...sharingProps
 }: NotebookAvatarsProps): ReturnType<FC> => {
   const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
@@ -113,7 +115,10 @@ export const NotebookAvatars = ({
     setShowInvitePopup((show) => !show);
   }, [setShowInvitePopup]);
 
-  const hasPaywall = isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && !canInvite;
+  const hasPaywall =
+    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') &&
+    !canInvite &&
+    !isPremiumWorkspace;
 
   const handleClickOutside = useCallback(
     (ev: MouseEvent) => {
