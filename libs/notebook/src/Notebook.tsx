@@ -21,9 +21,7 @@ export const Notebook: FC<NotebookProps> = (props) => {
           onAttached={onAttached}
         />
         <NotebookLoader key={notebookId} {...rest} />
-        {!props.readOnly && isFlagEnabled('SAVE_NOTEBOOK_LOGS') && (
-          <NotebookLogs notebookId={notebookId} />
-        )}
+        {!props.readOnly && <NotebookLogs notebookId={notebookId} />}
         {isFlagEnabled('COMPUTER_STATS') && <EditorStats />}
       </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>

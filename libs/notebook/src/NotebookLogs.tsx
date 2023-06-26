@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { LogEntry, useCreateLogsMutation } from '@decipad/graphql-client';
 import { getDefined } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
@@ -93,10 +92,6 @@ const override = <F extends Fn>(
   name: string,
   createLogs: CreateLogsFn
 ): F => {
-  if (!isFlagEnabled('SAVE_NOTEBOOK_LOGS')) {
-    return fn;
-  }
-
   return ((...args) => {
     const [arg] = args;
     if (typeof arg !== 'string' || !arg.startsWith('Warning')) {
