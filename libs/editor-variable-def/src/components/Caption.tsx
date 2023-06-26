@@ -29,8 +29,8 @@ export const Caption: PlateComponent = ({ attributes, element, children }) => {
   const userEvents = useContext(ClientEventsContext);
 
   const path = useNodePath(element);
-  const setIcon = usePathMutatorCallback(editor, path, 'icon');
-  const setColor = usePathMutatorCallback(editor, path, 'color');
+  const setIcon = usePathMutatorCallback(editor, path, 'icon', 'Caption');
+  const setColor = usePathMutatorCallback(editor, path, 'color', 'Caption');
 
   // Captions are not editable in read mode.
   const isEditable = !useIsEditorReadOnly();

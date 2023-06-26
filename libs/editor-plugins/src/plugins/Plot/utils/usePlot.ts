@@ -105,7 +105,12 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     [computer, data, element, isDarkMode, source?.type]
   );
 
-  const setMarkType = usePathMutatorCallback(editor, path, 'markType');
+  const setMarkType = usePathMutatorCallback(
+    editor,
+    path,
+    'markType',
+    'usePlot'
+  );
 
   const shape = useMemo(() => {
     if (shapes.includes(element.markType as Shape)) {
@@ -117,27 +122,51 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
   const setSourceVarName = usePathMutatorCallback(
     editor,
     path,
-    'sourceVarName'
+    'sourceVarName',
+    'usePlot'
   );
-  const setXColumnName = usePathMutatorCallback(editor, path, 'xColumnName');
-  const setYColumnName = usePathMutatorCallback(editor, path, 'yColumnName');
+  const setXColumnName = usePathMutatorCallback(
+    editor,
+    path,
+    'xColumnName',
+    'usePlot'
+  );
+  const setYColumnName = usePathMutatorCallback(
+    editor,
+    path,
+    'yColumnName',
+    'usePlot'
+  );
   const setSizeColumnName = usePathMutatorCallback(
     editor,
     path,
-    'sizeColumnName'
+    'sizeColumnName',
+    'usePlot'
   );
   const setColorColumnName = usePathMutatorCallback(
     editor,
     path,
-    'colorColumnName'
+    'colorColumnName',
+    'usePlot'
   );
   const setThetaColumnName = usePathMutatorCallback(
     editor,
     path,
-    'thetaColumnName'
+    'thetaColumnName',
+    'usePlot'
   );
-  const setY2ColumnName = usePathMutatorCallback(editor, path, 'y2ColumnName');
-  const setColorScheme = usePathMutatorCallback(editor, path, 'colorScheme');
+  const setY2ColumnName = usePathMutatorCallback(
+    editor,
+    path,
+    'y2ColumnName',
+    'usePlot'
+  );
+  const setColorScheme = usePathMutatorCallback(
+    editor,
+    path,
+    'colorScheme',
+    'usePlot'
+  );
 
   const repeatedColumns = useMemo(() => {
     if (element.markType === 'arc') {

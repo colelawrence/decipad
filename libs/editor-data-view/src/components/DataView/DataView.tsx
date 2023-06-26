@@ -30,18 +30,25 @@ export const DataView: PlateComponent<{ variableName: string }> = ({
   const editor = useTEditorRef();
 
   const path = useNodePath(element);
-  const saveIcon = usePathMutatorCallback(editor, path, 'icon');
-  const saveColor = usePathMutatorCallback(editor, path, 'color');
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'DataView');
+  const saveColor = usePathMutatorCallback(editor, path, 'color', 'DataView');
   const saveExpandedGroups = usePathMutatorCallback(
     editor,
     path,
-    'expandedGroups'
+    'expandedGroups',
+    'DataView'
   );
-  const saveRotated = usePathMutatorCallback(editor, path, 'rotate');
+  const saveRotated = usePathMutatorCallback(
+    editor,
+    path,
+    'rotate',
+    'DataView'
+  );
   const saveAlternateRotation = usePathMutatorCallback(
     editor,
     path,
-    'alternateRotation'
+    'alternateRotation',
+    'DataView'
   );
 
   const {

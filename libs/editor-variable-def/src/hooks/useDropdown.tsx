@@ -46,7 +46,12 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
     [element, selected]
   );
 
-  const elementChangeOptions = usePathMutatorCallback(editor, path, 'options');
+  const elementChangeOptions = usePathMutatorCallback(
+    editor,
+    path,
+    'options',
+    'useDropdown'
+  );
 
   const addOption = useCallback(
     (newOption: string) => {
@@ -87,7 +92,8 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const elementChangeColumn = usePathMutatorCallback(
     editor,
     path,
-    'selectedColumn'
+    'selectedColumn',
+    'useDropdown'
   );
 
   // Return true when the option was changes, false when it wasn't

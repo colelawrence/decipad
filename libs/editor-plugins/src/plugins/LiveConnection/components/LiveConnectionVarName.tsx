@@ -61,7 +61,7 @@ export const LiveConnectionVarName: PlateComponent = ({
   const setIsFirstRowHeader = usePathMutatorCallback<
     LiveConnectionElement,
     'isFirstRowHeaderRow'
-  >(editor, parentPath, 'isFirstRowHeaderRow');
+  >(editor, parentPath, 'isFirstRowHeaderRow', 'LiveConnectionVarName');
 
   const isFirstRowHeaderRow = parent?.[0].isFirstRowHeaderRow;
 

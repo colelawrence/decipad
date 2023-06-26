@@ -42,7 +42,8 @@ export const useCoreLiveConnectionActions = ({
   const setIsFirstRowHeader = usePathMutatorCallback(
     editor,
     path,
-    'isFirstRowHeaderRow'
+    'isFirstRowHeaderRow',
+    'useCoreLiveConnectionActions'
   );
 
   const beforeAuthenticate = useCallback(

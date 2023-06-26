@@ -68,7 +68,8 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   const onAggregationChange = usePathMutatorCallback(
     editor,
     path,
-    'aggregation'
+    'aggregation',
+    'DataViewColumnHeader'
   );
 
   const { onDeleteColumn } = useDataViewActions(editor, dataView);
@@ -90,7 +91,12 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
     () => (element ? availableRoundings(element.cellType) : []),
     [element]
   );
-  const onRoundingChange = usePathMutatorCallback(editor, path, 'rounding');
+  const onRoundingChange = usePathMutatorCallback(
+    editor,
+    path,
+    'rounding',
+    'DataViewColumnHeader'
+  );
 
   return (
     <UIDataViewColumnHeader

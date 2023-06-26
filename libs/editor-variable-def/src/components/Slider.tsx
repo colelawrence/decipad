@@ -16,7 +16,7 @@ export const Slider: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTPlateEditorRef();
 
   const path = useNodePath(element);
-  const onValueChange = usePathMutatorCallback(editor, path, 'value');
+  const onValueChange = usePathMutatorCallback(editor, path, 'value', 'Slider');
 
   const onChange = useCallback(
     (newValue: number) => {

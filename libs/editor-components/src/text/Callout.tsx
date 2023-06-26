@@ -22,8 +22,8 @@ export const Callout: PlateComponent = ({ attributes, children, element }) => {
   const editor = useTEditorRef();
 
   const path = useNodePath(element);
-  const saveIcon = usePathMutatorCallback(editor, path, 'icon');
-  const saveColor = usePathMutatorCallback(editor, path, 'color');
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Callout');
+  const saveColor = usePathMutatorCallback(editor, path, 'color', 'Callout');
   const { color: defaultColor } = useEditorStylesContext();
 
   const turnIntoProps = useTurnIntoProps(element);

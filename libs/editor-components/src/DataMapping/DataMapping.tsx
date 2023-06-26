@@ -57,9 +57,24 @@ export const DataMapping: PlateComponent = ({
   const computer = useComputer();
   const path = useNodePath(element);
 
-  const changeSource = usePathMutatorCallback(editor, path, 'source');
-  const changeSourceType = usePathMutatorCallback(editor, path, 'sourceType');
-  const changeUnit = usePathMutatorCallback(editor, path, 'unit');
+  const changeSource = usePathMutatorCallback(
+    editor,
+    path,
+    'source',
+    'DataMapping'
+  );
+  const changeSourceType = usePathMutatorCallback(
+    editor,
+    path,
+    'sourceType',
+    'DataMapping'
+  );
+  const changeUnit = usePathMutatorCallback(
+    editor,
+    path,
+    'unit',
+    'DataMapping'
+  );
 
   const definedResult = computer.getBlockIdResult$.use(element.id);
 

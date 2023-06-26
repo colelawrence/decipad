@@ -49,9 +49,19 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const editor = useTEditorRef();
   const path = useNodePath(element);
 
-  const saveIcon = usePathMutatorCallback(editor, path, 'icon');
-  const changeBlockId = usePathMutatorCallback(editor, path, 'blockId');
-  const changeVarName = usePathMutatorCallback(editor, path, 'varName');
+  const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Display');
+  const changeBlockId = usePathMutatorCallback(
+    editor,
+    path,
+    'blockId',
+    'Display'
+  );
+  const changeVarName = usePathMutatorCallback(
+    editor,
+    path,
+    'varName',
+    'Display'
+  );
 
   const res = useResult(element.blockId);
   const computer = useComputer();

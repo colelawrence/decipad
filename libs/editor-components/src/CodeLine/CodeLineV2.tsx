@@ -192,7 +192,8 @@ export const CodeLineV2: PlateComponent = ({
   const setShowResult = usePathMutatorCallback<CodeLineV2Element, 'showResult'>(
     editor,
     path,
-    'showResult'
+    'showResult',
+    'CodeLineV2'
   );
 
   const unitPicker = simpleValue != null && (

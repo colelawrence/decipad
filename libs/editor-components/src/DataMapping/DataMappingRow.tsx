@@ -33,13 +33,19 @@ export const DataMappingRow: PlateComponent = ({
   const computer = useComputer();
   const editor = useTEditorRef();
   const path = useNodePath(element);
-  const onChangeUnit = usePathMutatorCallback(editor, path, 'unit');
+  const onChangeUnit = usePathMutatorCallback(
+    editor,
+    path,
+    'unit',
+    'DataMappingRow'
+  );
 
   const parent = useParentNode<DataMappingElement>(element);
   const changeSourceColumn = usePathMutatorCallback(
     editor,
     path,
-    'sourceColumn'
+    'sourceColumn',
+    'DataMappingRow'
   );
 
   const [, lineResult] = computer.getBlockIdResult$.useWithSelectorDebounced(

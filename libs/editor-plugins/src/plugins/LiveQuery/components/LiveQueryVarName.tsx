@@ -59,7 +59,8 @@ export const LiveQueryVarName: PlateComponent = ({
         onChangeVariableName={usePathMutatorCallback(
           editor,
           parent?.[1],
-          'connectionBlockId'
+          'connectionBlockId',
+          'LiveQueryVarName'
         )}
       />
     </div>

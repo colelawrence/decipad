@@ -149,7 +149,12 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const dependenciesForBlock = computer.blocksInUse$.use(...dependencyArray);
     const selected = useSelected();
     const path = useNodePath(element);
-    const setIsHidden = usePathMutatorCallback(editor, path, 'isHidden');
+    const setIsHidden = usePathMutatorCallback(
+      editor,
+      path,
+      'isHidden',
+      'DraggableBlock'
+    );
 
     const blockRef = useRef<HTMLDivElement>(null);
     const previewRef = useRef<HTMLDivElement>(null);
@@ -234,14 +239,14 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     const onShowHide = useCallback(
       (a: 'show' | 'hide') => {
         if (a === 'show') {
-          setIsHidden(false);
+          setIsHidden(false, 'showing');
           event({
             type: 'action',
             action: 'show block',
             props: { blockType: element.type },
           });
         } else {
-          setIsHidden(true);
+          setIsHidden(true, 'hiding');
           event({
             type: 'action',
             action: 'hide block',

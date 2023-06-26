@@ -199,7 +199,8 @@ export const useTableActions = (
   const onSetHideFormulasMutator = usePathMutatorCallback(
     editor,
     path,
-    'hideFormulas'
+    'hideFormulas',
+    'tableActions'
   );
 
   const onSetHideFormulas = useCallback(
@@ -282,7 +283,12 @@ export const useTableActions = (
   );
 
   // here is the crash i think
-  const mutateIsCollapsed = usePathMutatorCallback(editor, path, 'isCollapsed');
+  const mutateIsCollapsed = usePathMutatorCallback(
+    editor,
+    path,
+    'isCollapsed',
+    'tableActions'
+  );
   const onSetCollapsed = useCallback(
     (newValue: boolean | undefined) => {
       if (newValue === true) {
@@ -294,8 +300,18 @@ export const useTableActions = (
     [mutateIsCollapsed, editor]
   );
 
-  const onSaveIcon = usePathMutatorCallback(editor, path, 'icon');
-  const onSaveColor = usePathMutatorCallback(editor, path, 'color');
+  const onSaveIcon = usePathMutatorCallback(
+    editor,
+    path,
+    'icon',
+    'tableActions'
+  );
+  const onSaveColor = usePathMutatorCallback(
+    editor,
+    path,
+    'color',
+    'tableActions'
+  );
 
   const onRemoveColumn = useCallback(
     (columnHeaderId: string) => {

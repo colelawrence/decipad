@@ -34,7 +34,12 @@ export const useTableHeaderCellDropdownNames = (
     }, [editor.children])
   );
 
-  const mutateDropdownType = usePathMutatorCallback(editor, path, 'cellType');
+  const mutateDropdownType = usePathMutatorCallback(
+    editor,
+    path,
+    'cellType',
+    'useTableHeaderCellDropdownNames'
+  );
   useEffect(() => {
     if (element.cellType.kind === 'dropdown') {
       const selectedDropdown = dropDownNames.find((d) => {

@@ -68,19 +68,31 @@ export const VariableDef: PlateComponent = ({
     (element as VariableSliderElement).children[2]
   );
   // Slider
-  const onChangeMax = usePathMutatorCallback(editor, sliderElementPath, 'max');
-  const onChangeMin = usePathMutatorCallback(editor, sliderElementPath, 'min');
+  const onChangeMax = usePathMutatorCallback(
+    editor,
+    sliderElementPath,
+    'max',
+    'VariableDef'
+  );
+  const onChangeMin = usePathMutatorCallback(
+    editor,
+    sliderElementPath,
+    'min',
+    'VariableDef'
+  );
   const onChangeStep = usePathMutatorCallback(
     editor,
     sliderElementPath,
-    'step'
+    'step',
+    'VariableDef'
   );
 
   const dropDownElementPath = useNodePath(element.children[1]);
   const onChangeSmartSelection = usePathMutatorCallback(
     editor,
     dropDownElementPath,
-    'smartSelection'
+    'smartSelection',
+    'VariableDef'
   );
 
   const inferredType = useTextTypeInference(element);
@@ -88,7 +100,8 @@ export const VariableDef: PlateComponent = ({
   const onChangeTypeMutator = usePathMutatorCallback(
     editor,
     path,
-    'coerceToType'
+    'coerceToType',
+    'VariableDef'
   );
   const onChangeType = useCallback(
     (type: SerializedType | 'smart-selection' | undefined): void => {

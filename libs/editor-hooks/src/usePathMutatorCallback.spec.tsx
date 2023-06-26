@@ -22,6 +22,7 @@ describe('usePathMutatorCallback', () => {
       editor,
       findNodePath(editor, element as MyElement),
       'url',
+      'test',
       sideEffects
     );
     return (

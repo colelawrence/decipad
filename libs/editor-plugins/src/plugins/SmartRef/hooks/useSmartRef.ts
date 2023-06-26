@@ -74,7 +74,8 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
   const setLastSeenVariableName = usePathMutatorCallback(
     editor,
     path,
-    'lastSeenVariableName'
+    'lastSeenVariableName',
+    'useSmartRef'
   );
 
   const [isInitialized, setIsInitialized] = useState(false);

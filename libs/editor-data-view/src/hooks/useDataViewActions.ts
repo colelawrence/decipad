@@ -113,7 +113,12 @@ export const useDataViewActions = (
   );
 
   const path = useNodePath(element);
-  const setVarName = usePathMutatorCallback(editor, path, 'varName');
+  const setVarName = usePathMutatorCallback(
+    editor,
+    path,
+    'varName',
+    'useDataViewActions'
+  );
 
   const clearColumns = useCallback(() => {
     if (!editor.withoutCapturingUndo) {
