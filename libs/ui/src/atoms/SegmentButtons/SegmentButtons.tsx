@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, setCssVar } from '../../primitives';
@@ -11,6 +12,7 @@ interface SegmentButton {
   readonly tooltip?: string;
   readonly testId?: string;
   readonly visible?: boolean;
+  readonly disabled?: boolean;
 }
 
 interface SegmentButtonsProps {
@@ -33,21 +35,28 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
       ]}
     >
       {buttons.map((button, i) => {
-        const { children, onClick, tooltip, testId, visible = true } = button;
+        const {
+          children,
+          onClick,
+          tooltip,
+          testId,
+          visible = true,
+          disabled = false,
+        } = button;
         const hasTooltip = !!tooltip;
         const trigger = (
           <figure
             role="button"
-            onClick={onClick}
+            onClick={disabled ? noop : onClick}
             key={`figure-segment-${i}`}
             data-testid={`segment-button-trigger${testId ? `-${testId}` : ''}`}
-            css={segmentButtonStyle}
+            css={disabled ? segmentDisabledButtonStyle : segmentButtonStyle}
           >
             {children}
           </figure>
         );
         return visible ? (
-          hasTooltip ? (
+          hasTooltip && !disabled ? (
             <Tooltip
               side="top"
               key={`figure-segment-tooltip-${i}`}
@@ -89,4 +98,9 @@ const segmentButtonStyle = css({
     backgroundColor: cssVar('strongHighlightColor'),
     borderRadius: 4,
   },
+});
+
+const segmentDisabledButtonStyle = css({
+  cursor: 'not-allowed',
+  '& svg': { ...setCssVar('currentTextColor', cssVar('strongHighlightColor')) },
 });

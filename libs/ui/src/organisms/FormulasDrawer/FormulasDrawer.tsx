@@ -7,7 +7,14 @@ const formulasDrawerStyles = css({
   border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '10px',
   margin: '4px 0 16px',
-  padding: '6px 0',
+  pre: {
+    'div:first-child': {
+      borderRadius: '10px 10px 0 0',
+    },
+    'div:last-child': {
+      borderRadius: '0 0 10px 10px',
+    },
+  },
 });
 
 interface FormulasDrawerProps {

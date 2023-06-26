@@ -40,6 +40,9 @@ const trackStyles = css({
   flexGrow: 1,
   borderRadius: '9999px',
   height: trackHeight,
+  ':hover': {
+    cursor: 'pointer',
+  },
 });
 
 const rangeStyles = css({

@@ -188,11 +188,6 @@ export const theme: CssVariables = {
   buttonHoverBackground: dark600.hex,
   buttonHoverBackgroundHover: dark500.hex,
 
-  // dropline
-  droplineBgColor: blue900.hex,
-  droplineColor: blue600.hex,
-  droplineGreyColor: purple600.hex,
-
   errorBlockColor: red50.hex,
   errorBlockWarning: orange700.hex,
   errorBlockAnnotationWarning: yellow700.hex,
@@ -213,8 +208,8 @@ export const theme: CssVariables = {
   bubbleBackground: teal800.hex,
 
   bubbleColumnSelectedColor: teal500.hex,
-  bubbleColumnColor: dark600.hex,
-  bubbleFormulaColor: dark600.hex,
+  bubbleColumnColor: dark700.hex,
+  bubbleFormulaColor: dark700.hex,
   bubbleBackgroundColor: dark400.hex,
 
   bubbleColumnTextSelectedColor: dark600.hex,
@@ -232,8 +227,13 @@ export const theme: CssVariables = {
 
   magicNumberTextColor: dark100.hex,
 
-  tableSelectionBackgroundColor: blue700.hex,
-  tableFocusColor: blue500.hex,
+  // dropline
+  droplineBgColor: blue900.hex,
+  droplineColor: blue600.hex,
+  droplineGreyColor: purple600.hex,
+
+  tableSelectionBackgroundColor: blue900.hex,
+  tableFocusColor: blue600.hex,
   tableFooterBackgroundColor: grey700.hex,
 
   tableLiveMakeHeaderButton: purple700.hex,

@@ -31,6 +31,8 @@ export const availableFlags = [
   'SILLY_NAMES',
   // Allow for secrets in JS
   'SECRETS_IN_JS',
+  // make codelines greyscale when they are not focused
+  'MUTED_CODELINES',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

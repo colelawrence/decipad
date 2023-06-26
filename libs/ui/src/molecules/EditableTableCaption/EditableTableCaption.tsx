@@ -210,6 +210,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                       children: <icons.Formula />,
                       tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
                       onClick: () => setHideFormulas(!hideFormulas),
+                      disabled: isCollapsed,
                       testId: 'formula',
                     },
                     {

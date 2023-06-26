@@ -90,7 +90,7 @@ export const CodeLineStructured = ({
   };
 
   return (
-    <StructuredInputLines>
+    <StructuredInputLines highlight={highlight}>
       <div
         css={[codeLineStyles, highlight && highlightedLineStyles]}
         spellCheck={false}

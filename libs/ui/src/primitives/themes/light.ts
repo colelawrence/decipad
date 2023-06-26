@@ -174,11 +174,6 @@ export const theme: CssVariables = {
   buttonHoverBackground: grey200.hex,
   buttonHoverBackgroundHover: grey300.hex,
 
-  // dropline
-  droplineBgColor: blue100.hex,
-  droplineColor: blue300.hex,
-  droplineGreyColor: grey300.hex,
-
   errorBlockColor: orange700.hex,
   errorBlockWarning: orange50.hex,
   errorBlockAnnotationWarning: yellow100.hex,
@@ -224,8 +219,13 @@ export const theme: CssVariables = {
 
   magicNumberTextColor: teal600.hex,
 
-  tableSelectionBackgroundColor: teal100.hex,
-  tableFocusColor: teal500.hex,
+  // dropline
+  droplineBgColor: blue100.hex,
+  droplineColor: blue300.hex,
+  droplineGreyColor: grey300.hex,
+
+  tableSelectionBackgroundColor: blue50.hex,
+  tableFocusColor: blue300.hex,
   tableFooterBackgroundColor: grey100.hex,
 
   tableLiveMakeHeaderButton: purple200.hex,

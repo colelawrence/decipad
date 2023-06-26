@@ -1,15 +1,7 @@
-import { PlateComponent, RichText, useTEditorRef } from '@decipad/editor-types';
+import { PlateComponent, RichText } from '@decipad/editor-types';
+import { VariableInfo } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { CodeVariable as UICodeVariable } from '@decipad/ui';
-import { useCallback } from 'react';
-import {
-  findNodePath,
-  focusEditor,
-  getEndPoint,
-  setSelection,
-  toSlateNode,
-} from '@udecode/plate';
-import { VariableInfo } from '@decipad/editor-utils';
 
 type VariableScope = 'local' | 'global' | 'undefined';
 
@@ -53,24 +45,6 @@ export const CodeVariable: CodeLeaf = ({
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';
 
-  const editor = useTEditorRef();
-  const goToDefinition = useCallback(() => {
-    if (provideVariableDefLink && defBlockId) {
-      const el = document.getElementById(defBlockId);
-      if (el) {
-        const slateNode = toSlateNode(editor, el);
-        if (slateNode) {
-          const path = findNodePath(editor, slateNode);
-          if (path) {
-            focusEditor(editor);
-            const anchor = getEndPoint(editor, path);
-            setSelection(editor, { anchor, focus: anchor });
-          }
-        }
-      }
-    }
-  }, [defBlockId, editor, provideVariableDefLink]);
-
   if (!text) {
     return <span {...attributes}>{children}</span>;
   }
@@ -82,7 +56,6 @@ export const CodeVariable: CodeLeaf = ({
         variableScope={variableScope}
         variableMissing={variableMissing && !isDeclaration}
         defBlockId={defBlockId}
-        onGoToDefinition={goToDefinition}
       >
         {children}
       </UICodeVariable>

@@ -38,7 +38,6 @@ export const CodeVariable = ({
   variableMissing = false,
   isInitialized = true,
   defBlockId,
-  onGoToDefinition,
   isSelected = false,
   tableName,
   columnName,
@@ -48,6 +47,8 @@ export const CodeVariable = ({
   const isCell = decoration === 'cell';
 
   const Icon = useMemo(() => type && getTypeIcon(type), [type]);
+
+  const isFormulaHeading = type?.kind === 'table-formula';
 
   const lazyChildren =
     isInitialized || children ? (
@@ -72,15 +73,17 @@ export const CodeVariable = ({
               variableScope === 'local' && localVarStyles,
               isSelected && selectedStyles,
               isColumn && columnStyles,
-              isSelected && isColumn && isSelectedColumnStyles,
               isCell && cellStyles,
               isSelected && isCell && isSelectedCellStyles,
+              isSelected && isColumn && isSelectedColumnStyles,
+              isSelected && { userSelect: 'none' },
+              isFormulaHeading && { userSelect: 'none' },
             ]
       }
     >
       {isColumn ? (
         <span css={{ marginLeft: -4, whiteSpace: 'nowrap' }}>
-          <span css={labelStyles} contentEditable="false">
+          <span css={labelStyles} contentEditable={false}>
             <span css={[liveIconStyles, iconStyles]}>
               <List />
             </span>
@@ -110,7 +113,6 @@ export const CodeVariable = ({
       variableMissing={variableMissing}
       defBlockId={defBlockId}
       provideDefinitionLink={provideVariableDefLink}
-      onGoToDefinition={onGoToDefinition}
     >
       {decorated}
     </CodeVariableTooltip>
@@ -173,17 +175,17 @@ const columnStyles = css({
   backgroundColor: cssVar('bubbleColumnColor'),
 });
 
-const isSelectedColumnStyles = css({
-  color: cssVar('bubbleColumnTextSelectedColor'),
-  backgroundColor: cssVar('bubbleColumnSelectedColor'),
-});
-
 const cellStyles = css({
   backgroundColor: cssVar('bubbleColumnColor'),
   color: cssVar('bubbleColumnTextColor'),
 });
 
 const isSelectedCellStyles = css({
+  color: cssVar('bubbleColumnTextSelectedColor'),
+  backgroundColor: cssVar('bubbleColumnSelectedColor'),
+});
+
+const isSelectedColumnStyles = css({
   color: cssVar('bubbleColumnTextSelectedColor'),
   backgroundColor: cssVar('bubbleColumnSelectedColor'),
 });

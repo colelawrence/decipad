@@ -1,10 +1,9 @@
-import { FC, ReactNode } from 'react';
-import { css } from '@emotion/react';
-import { noop } from '@decipad/utils';
 import { useComputer } from '@decipad/react-contexts';
+import { css } from '@emotion/react';
+import { FC, ReactNode } from 'react';
 import { Tooltip } from '../../atoms';
-import { p8Regular } from '../../primitives';
 import { CodeResult } from '../../organisms';
+import { p8Regular } from '../../primitives';
 
 const goToDefStyles = css(p8Regular);
 
@@ -13,7 +12,6 @@ interface CodeVariableTooltipProps {
   children: ReactNode;
   defBlockId?: string | null;
   provideDefinitionLink: boolean;
-  onGoToDefinition?: () => void;
 }
 
 const tooltipDebounceMs = 500;
@@ -23,7 +21,6 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
   children,
   defBlockId,
   provideDefinitionLink,
-  onGoToDefinition = noop,
 }) => {
   const hasValue = useComputer().getBlockIdResult$.useWithSelectorDebounced(
     tooltipDebounceMs,
@@ -35,7 +32,15 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
     <TooltipResult defBlockId={defBlockId ?? ''} />
   );
   const goToDefinition = provideDefinitionLink && defBlockId && (
-    <a css={goToDefStyles} href={`#${defBlockId}`} onClick={onGoToDefinition}>
+    <a
+      css={goToDefStyles}
+      href={`#${defBlockId}`}
+      onClick={(ev) => {
+        ev.preventDefault();
+        window.history.pushState(null, '', `#${defBlockId}`);
+        window.dispatchEvent(new Event('hashchange'));
+      }}
+    >
       Go to definition &rarr;
     </a>
   );

@@ -46,7 +46,11 @@ export const FormulaTableData = ({
   // Also, be careful with the element structure:
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
-    <TableFormulaCell {...props} css={[selected ? selectedStyles : null]}>
+    <TableFormulaCell
+      selected={selected}
+      {...props}
+      css={[selected ? selectedStyles : null]}
+    >
       {firstChildren}
       <span css={noEditingStyles} contentEditable={false}>
         {children}

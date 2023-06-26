@@ -3,8 +3,8 @@ import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import type { DragEvent, FC } from 'react';
+import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -18,6 +18,7 @@ import {
   wiggle,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
+import { mutedCodeblockStyles } from '../../styles/code-block';
 import { resultBubbleStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { isTabularType } from '../../utils';
@@ -25,8 +26,14 @@ import { isTabularType } from '../../utils';
 const { lineHeight } = codeBlock;
 
 const highlightedLineStyles = {
-  borderColor: cssVar('borderHighlightColor'),
+  borderColor: cssVar('droplineColor'),
 };
+
+const formulaDrawerHighlightLineStyles = css({
+  borderColor: 'revert',
+  backgroundColor: cssVar('highlightColor'),
+  borderRadius: 0,
+});
 
 const codeLineStyles = (
   variant: CodeLineProps['variant'],
@@ -57,7 +64,6 @@ const codeLineStyles = (
         }
       : {}),
 
-    ':hover': highlightedLineStyles,
     position: 'relative',
 
     ...(variant === 'standalone'
@@ -231,6 +237,8 @@ export const CodeLine: FC<CodeLineProps> = ({
       css={[
         codeLineStyles(variant, hasNextSibling, hasPreviousSibling),
         highlight && highlightedLineStyles,
+        variant === 'table' && highlight && formulaDrawerHighlightLineStyles,
+        !highlight && mutedCodeblockStyles,
       ]}
       spellCheck={false}
       data-testid="code-line"

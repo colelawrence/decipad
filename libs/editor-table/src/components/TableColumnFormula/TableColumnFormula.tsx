@@ -1,4 +1,5 @@
 import { selectErrorFromResult } from '@decipad/computer';
+import { useAutoConvertToSmartRef } from '@decipad/editor-components';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   PlateComponent,
@@ -7,7 +8,7 @@ import { assertElementType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { CodeLine, CodeVariable } from '@decipad/ui';
 import { Node } from 'slate';
-import { useAutoConvertToSmartRef } from '@decipad/editor-components';
+import { useSelected } from 'slate-react';
 import { useTableColumnHeaderOfTableAbove } from '../../hooks';
 
 const errorDebounceMs = 500;
@@ -21,10 +22,17 @@ export const TableColumnFormula: PlateComponent = ({ children, element }) => {
     element.columnId
   );
 
+  const selected = useSelected();
+
   useAutoConvertToSmartRef(element);
 
   return (
-    <CodeLine variant="table" result={errorResult} element={element}>
+    <CodeLine
+      variant="table"
+      result={errorResult}
+      highlight={selected}
+      element={element}
+    >
       <span contentEditable={false}>
         <CodeVariable type={{ kind: 'table-formula' }} showTooltip={false}>
           {header && Node.string(header)}

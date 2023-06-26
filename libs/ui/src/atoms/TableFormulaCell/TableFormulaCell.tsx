@@ -44,12 +44,17 @@ const tdCounterStyles = css({
   },
 });
 
-export interface TableDataProps {
+const selectedStyles = css({
+  backgroundColor: cssVar('tableSelectionBackgroundColor'),
+});
+
+export interface TableFormulaCellProps {
   className?: string;
   children?: ReactNode;
   attributes?: PlateComponentAttributes;
   dropDirection?: 'left' | 'right';
   hiddenCounter?: boolean;
+  selected?: boolean;
 }
 
 export const TableFormulaCell = ({
@@ -58,7 +63,8 @@ export const TableFormulaCell = ({
   children,
   dropDirection,
   hiddenCounter,
-}: TableDataProps): ReturnType<FC> => {
+  selected,
+}: TableFormulaCellProps): ReturnType<FC> => {
   // IMPORTANT NOTE: do not remove the children elements from rendering.
   // Even though they're one element with an empty text property, their absence triggers
   // an uncaught exception in slate-react.
@@ -71,6 +77,7 @@ export const TableFormulaCell = ({
         tdBaseStyles,
         functionTdBaseStyles,
         !hiddenCounter && tdCounterStyles,
+        selected && selectedStyles,
       ]}
       className={className}
     >
