@@ -53,7 +53,6 @@ jobs:
       - name: Deploy
         env:
           NODE_ENV: 'production'
-          DEBUG: '@decipad/*'
           NEXTAUTH_URL: 'https://dev.decipad.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'

@@ -45,7 +45,6 @@ jobs:
       - name: Deploy
         env:
           DEPLOY_NAME: 'alpha'
-          DEBUG: '@decipad/*'
           NODE_ENV: 'production'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
           DECI_CERTIFICATE_ARN: '${{secrets.DECI_ALPHA_CERTIFICATE_ARN}}'
