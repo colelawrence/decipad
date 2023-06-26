@@ -8,6 +8,9 @@ import { NotebookLogs } from './NotebookLogs';
 import { NotebookLoader } from './NotebookLoader';
 import type { NotebookProps } from './types';
 
+const inLocalDev =
+  'location' in globalThis && /localhost/.test(globalThis.location.hostname);
+
 export const Notebook: FC<NotebookProps> = (props) => {
   const { getAttachmentForm, onAttached, ...rest } = props;
   const { notebookId } = rest;
@@ -21,7 +24,9 @@ export const Notebook: FC<NotebookProps> = (props) => {
           onAttached={onAttached}
         />
         <NotebookLoader key={notebookId} {...rest} />
-        {!props.readOnly && <NotebookLogs notebookId={notebookId} />}
+        {!props.readOnly && !inLocalDev && (
+          <NotebookLogs notebookId={notebookId} />
+        )}
         {isFlagEnabled('COMPUTER_STATS') && <EditorStats />}
       </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>
