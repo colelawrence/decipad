@@ -8,15 +8,182 @@ import {
   useComputer,
   useConnectionStore,
 } from '@decipad/react-contexts';
-import { CodeEditor } from '@decipad/ui';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad_org/safejs';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { useWorker } from '../hooks';
 import { ConnectionProps } from './types';
+import {
+  Button,
+  CodeEditor,
+  InputField,
+  Spinner,
+  TextareaField,
+  cssVar,
+  setCssVar,
+} from '@decipad/ui';
+import {
+  RemoteData,
+  useRdFetch,
+} from 'libs/editor-components/src/AIPanel/hooks';
+import { css } from '@emotion/react';
+
+const fieldsetStyles = css({
+  display: 'grid',
+  gridTemplateColumns: '1fr min-content',
+  gridGap: 8,
+  marginBottom: 20,
+});
+
+const fetchButtonStyles = css({
+  backgroundColor: cssVar('aiSendButtonStrokeColor'),
+  whiteSpace: 'nowrap',
+  gridGap: 8,
+  '&:disabled': {
+    backgroundColor: cssVar('aiInsertButtonBgColor'),
+    ...setCssVar('normalTextColor', cssVar('buttonPrimaryDisabledText')),
+  },
+});
+const textAreaStyles = css({
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  marginBottom: 20,
+  textarea: {
+    flex: 1,
+  },
+});
+
+type AiPanelProps = {
+  url: string;
+  setUrl: (s: string) => void;
+  exampleRes: string;
+  setExampleRes: (s: string) => void;
+  prompt: string;
+  setPrompt: (s: string) => void;
+  onSubmit: () => void;
+  generationRD: RemoteData<any>;
+};
+
+const AiPanel = ({
+  url,
+  setUrl,
+  exampleRes,
+  setExampleRes,
+  prompt,
+  setPrompt,
+  onSubmit,
+  generationRD,
+}: AiPanelProps) => {
+  const [res, setRes] = useState<RemoteData<string>>({
+    status: 'not asked',
+  });
+
+  const fetchRes = useCallback(() => {
+    setRes({ status: 'loading' });
+
+    fetch(url)
+      .then(async (res) => {
+        let result = await res.text();
+        setRes({ status: 'success', result });
+      })
+      .catch(() => {
+        setRes({
+          status: 'error',
+          error:
+            'Failed to fetch example response. Either retry or enter data manually below.',
+        });
+      });
+  }, [url, setExampleRes, setRes]);
+
+  useEffect(() => {
+    if (res.status === 'success') {
+      let { result } = res;
+      // Attempt to format JSON if possible
+      try {
+        result = JSON.stringify(JSON.parse(result), null, 2);
+      } catch (e) {}
+      setExampleRes(result);
+    }
+  }, [res]);
+
+  const loading = res.status === 'loading' || generationRD.status === 'loading';
+  const createCodeButton = (
+    <Button type="primary" styles={fetchButtonStyles} disabled={loading}>
+      {generationRD.status === 'loading' ? (
+        <>
+          <Spinner />
+          Generating
+        </>
+      ) : (
+        'Create Code'
+      )}
+    </Button>
+  );
+
+  return (
+    <>
+      <form
+        css={fieldsetStyles}
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetchRes();
+        }}
+      >
+        <InputField
+          label="API Endpoint URL"
+          autoFocus
+          type="url"
+          small
+          error={res.status === 'error' ? res.error : undefined}
+          submitButton={
+            <Button
+              disabled={!url || loading}
+              type="primary"
+              styles={fetchButtonStyles}
+            >
+              Fetch Data
+            </Button>
+          }
+          value={url}
+          onChange={setUrl}
+          disabled={loading}
+        />
+      </form>
+      <TextareaField
+        label="Example Response"
+        value={exampleRes}
+        onChange={setExampleRes}
+        disabled={loading}
+        styles={textAreaStyles}
+      />
+      <form
+        css={fieldsetStyles}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
+        <InputField
+          label="Instructions"
+          small
+          type="text"
+          value={prompt}
+          onChange={setPrompt}
+          disabled={loading}
+          submitButton={createCodeButton}
+          error={
+            generationRD.status === 'error' ? generationRD.error : undefined
+          }
+        />
+      </form>
+    </>
+  );
+};
 
 export const CodeConnection: FC<ConnectionProps> = (props) => {
   const { stage } = useConnectionStore();
-  const { setCode, setLatestResult, code } = useCodeConnectionStore();
+  const { setCode, setLatestResult, code, showAi, toggleShowAi } =
+    useCodeConnectionStore();
   const { onExecute, info } = useContext(ExecutionContext);
   const [log, setLog] = useState<TExecution<boolean>[]>(
     [] as TExecution<boolean>[]
@@ -156,12 +323,57 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
     }
   }, [info.status, onExecute, runCode]);
 
+  const [rd, fetchRd] = useRdFetch('/api/ai/generate-fetch-js');
+
+  const [url, setUrl] = useState('');
+  const [exampleRes, setExampleRes] = useState('');
+  const [prompt, setPrompt] = useState('');
+  useEffect(() => {
+    switch (rd.status) {
+      case 'error': {
+        console.error(rd.error);
+        return;
+      }
+      case 'loading': {
+        return;
+      }
+      case 'not asked': {
+        return;
+      }
+      case 'success': {
+        toggleShowAi(false);
+        setCode(rd.result?.completion?.replace(/\n  /g, '\n'));
+      }
+    }
+  }, [rd]);
+
   return (
-    <CodeEditor
-      code={code}
-      setCode={(sourcecode) => setCode(sourcecode)}
-      log={log}
-      setLog={setLog}
-    />
+    <>
+      {showAi ? (
+        <AiPanel
+          url={url}
+          setUrl={setUrl}
+          exampleRes={exampleRes}
+          setExampleRes={setExampleRes}
+          prompt={prompt}
+          setPrompt={setPrompt}
+          onSubmit={() => {
+            fetchRd({
+              url,
+              exampleRes,
+              prompt,
+            });
+          }}
+          generationRD={rd}
+        />
+      ) : (
+        <CodeEditor
+          code={code}
+          setCode={(sourcecode) => setCode(sourcecode)}
+          log={log}
+          setLog={setLog}
+        />
+      )}
+    </>
   );
 };

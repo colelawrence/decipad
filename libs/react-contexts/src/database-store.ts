@@ -276,6 +276,9 @@ interface CodeConnectionStore {
   timeOfLastRun: string | null;
 
   reset: () => void;
+
+  showAi: boolean;
+  toggleShowAi: (b?: boolean) => void;
 }
 
 export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
@@ -296,4 +299,8 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
       latestResult: '',
       timeOfLastRun: null,
     })),
+
+  showAi: false,
+  toggleShowAi: (b) =>
+    set(({ showAi }) => ({ showAi: b === undefined ? !showAi : b })),
 }));

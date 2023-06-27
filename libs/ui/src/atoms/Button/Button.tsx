@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
-import { css, CSSObject } from '@emotion/react';
+import { css, CSSObject, SerializedStyles } from '@emotion/react';
 import { MouseEvent, ReactNode, useCallback } from 'react';
 import {
   cssVar,
@@ -215,6 +215,7 @@ type ButtonProps = {
   readonly autoFocus?: boolean;
   readonly onClick?: () => void;
   readonly submit?: boolean;
+  readonly styles?: SerializedStyles;
   readonly sameTab?: boolean;
 };
 
@@ -229,6 +230,7 @@ export const Button = ({
   children,
   onClick = noop,
   href,
+  styles: extraStyles,
   sameTab,
 }: ButtonProps): ReturnType<React.FC> => {
   const onButtonClick = useCallback(
@@ -248,6 +250,7 @@ export const Button = ({
         typeStyles[type][disabled ? 'disabled' : 'enabled'],
         sizeStyles[size],
         disabled ? disabledStyles : enabledStyles,
+        extraStyles,
       ])}
       onClick={onClick}
       sameTab={sameTab}
@@ -264,6 +267,7 @@ export const Button = ({
         typeStyles[type][disabled ? 'disabled' : 'enabled'],
         sizeStyles[size],
         disabled ? disabledStyles : enabledStyles,
+        extraStyles,
       ])}
       tabIndex={tabIndex}
       onClick={submit ? onClick : onButtonClick}

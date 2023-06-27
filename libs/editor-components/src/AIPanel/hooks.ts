@@ -37,6 +37,17 @@ type Endpoints = {
       completion: string;
     };
   };
+  'generate-fetch-js': {
+    endpoint: '/api/ai/generate-fetch-js';
+    body: {
+      url: string;
+      exampleRes: string;
+      prompt: string;
+    };
+    response: {
+      completion: string;
+    };
+  };
 };
 const notAsked = Symbol('not asked');
 
@@ -78,6 +89,12 @@ export const useRdFetch = <Name extends keyof Endpoints>(
       body: bodyStr,
     })
       .then(async (res) => {
+        if (res.status !== 200) {
+          console.error(`Error generating code (${res.status})`, res);
+          setRd({ status: 'error', error: 'Failed to generate code' });
+          return;
+        }
+
         let result: Response;
         try {
           result = await res.json();
@@ -91,7 +108,7 @@ export const useRdFetch = <Name extends keyof Endpoints>(
         setRd({ status: 'success', result });
       })
       .catch((error) => {
-        console.error(error);
+        console.error('an error has happened', error);
         captureException(error);
         setRd({ status: 'error', error });
       });

@@ -19,6 +19,7 @@ import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const gridStyles = once(() =>
   css({
@@ -202,7 +203,7 @@ export const BlockDragHandle = ({
             </MenuItem>
           )}
           {children}
-          {aiButton}
+          {isFlagEnabled('CODE_INTEGRATIONS_AI_BUTTON') && aiButton}
           <MenuItem disabled>
             <hr css={{ color: cssVar('highlightColor') }} />
           </MenuItem>

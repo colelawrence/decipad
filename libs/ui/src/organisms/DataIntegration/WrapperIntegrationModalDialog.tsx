@@ -1,7 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import {
+  ExecutionContext,
+  useCodeConnectionStore,
+  useConnectionStore,
+} from '@decipad/react-contexts';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { ExecutionContext, useConnectionStore } from '@decipad/react-contexts';
 import {
   removeFocusFromAllBecauseSlate,
   useEnterListener,
@@ -12,7 +16,13 @@ import { css } from '@emotion/react';
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Divider, MenuItem, TextAndIconButton } from '../../atoms';
-import { ArrowDiagonalTopRight, Caret, Close, Play } from '../../icons';
+import {
+  ArrowDiagonalTopRight,
+  Caret,
+  Close,
+  Play,
+  Sparkles,
+} from '../../icons';
 import { MenuList } from '../../molecules';
 import { Tabs } from '../../molecules/Tabs/Tabs';
 import { cssVar, p13Medium, p15Medium, p16Medium } from '../../primitives';
@@ -60,8 +70,14 @@ export const WrapperIntegrationModalDialog: FC<
   workspaceId,
 }) => {
   const { onExecute } = useContext(ExecutionContext);
-  const { resultPreview } = useConnectionStore();
+  const { resultPreview, stage, connectionType } = useConnectionStore();
+  const codeStore = useCodeConnectionStore();
   const hasDataPreview = !!resultPreview;
+
+  const showAiButton =
+    stage === 'connect' &&
+    connectionType === 'codeconnection' &&
+    !codeStore.showAi;
 
   interface SecretInfo {
     readonly id: string;
@@ -148,9 +164,22 @@ export const WrapperIntegrationModalDialog: FC<
       </div>
       <div css={tabsBarStyles}>
         <div>{showTabs && tabs}</div>
-        <div css={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div css={rightButtonsContainerStyles}>
           {tabStage === 'connect' && (
             <>
+              {showAiButton && (
+                <TextAndIconButton
+                  text="AI assistance"
+                  size="normal"
+                  iconPosition="left"
+                  color="transparent-green"
+                  onClick={() => {
+                    codeStore.toggleShowAi();
+                  }}
+                >
+                  <Sparkles />
+                </TextAndIconButton>
+              )}
               {isFlagEnabled('SECRETS_IN_JS') && (
                 <div css={css({ display: 'inline-block', cursor: 'pointer' })}>
                   <MenuList
@@ -253,9 +282,23 @@ export const WrapperIntegrationModalDialog: FC<
               <div>
                 <Button
                   type="secondary"
-                  onClick={tabStage === 'map' ? onAbort : onReset}
+                  onClick={() => {
+                    const AIPanelOpen = !showAiButton;
+                    if (tabStage === 'map') {
+                      onAbort();
+                    } else if (tabStage === 'connect') {
+                      if (AIPanelOpen) {
+                        codeStore.toggleShowAi();
+                      } else {
+                        onReset();
+                      }
+                    }
+                  }}
                 >
-                  {tabStage === 'map' ? 'Back' : 'Reset'}
+                  {tabStage === 'map' ||
+                  (tabStage === 'connect' && !showAiButton)
+                    ? 'Back'
+                    : 'Reset'}
                 </Button>
               </div>
             </>
@@ -271,8 +314,8 @@ const intWrapperStyles = css({
   flexDirection: 'column',
   alignItems: 'center',
   width: '740px',
-  height: '740px',
-  maxHeight: '600px',
+  height: '632px',
+  maxHeight: 'calc(100vh - 40px)',
   padding: '32px',
   gap: '20px',
 
@@ -321,6 +364,9 @@ const iconStyles = css({
 
 const childrenStyles = css({
   width: '100%',
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 const firstChildrenStyle = css({});
@@ -353,6 +399,12 @@ const tabsBarStyles = css({
   display: 'flex',
   width: '100%',
   justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+const rightButtonsContainerStyles = css({
+  display: 'flex',
+  gap: 10,
   alignItems: 'center',
 });
 

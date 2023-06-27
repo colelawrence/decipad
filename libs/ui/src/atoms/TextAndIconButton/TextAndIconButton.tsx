@@ -4,7 +4,13 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Refresh } from '../../icons';
-import { black, cssVar, p13Medium, transparency } from '../../primitives';
+import {
+  black,
+  cssVar,
+  p13Medium,
+  setCssVar,
+  transparency,
+} from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
@@ -15,6 +21,7 @@ type IconButtonProps = {
     | 'default'
     | 'blue'
     | 'transparent'
+    | 'transparent-green'
     | 'red'
     | 'grey'
     | 'brand';
@@ -72,6 +79,8 @@ export const TextAndIconButton = ({
           currentColor === 'red' && redBackgroundStyles(disabled),
           currentColor === 'transparent' &&
             transparentBackgroundStyles(disabled),
+          currentColor === 'transparent-green' &&
+            transparentGreenBackgroundStyles(disabled),
           currentColor === 'grey' && greyBackgroundStyles(disabled),
           currentColor === 'brand' && brandBackgroundStyles(disabled),
         ]
@@ -79,6 +88,8 @@ export const TextAndIconButton = ({
           color === 'blue' && blueBackgroundStyles(disabled),
           color === 'red' && redBackgroundStyles(disabled),
           color === 'transparent' && transparentBackgroundStyles(disabled),
+          currentColor === 'transparent-green' &&
+            transparentGreenBackgroundStyles(disabled),
           color === 'grey' && greyBackgroundStyles(disabled),
           color === 'brand' && brandBackgroundStyles(disabled),
         ],
@@ -198,6 +209,23 @@ const transparentBackgroundStyles = (_disabled: boolean) =>
     backgroundColor: 'transparent',
     border: `solid 1px transparent`,
 
+    ':hover, :focus': {
+      backgroundColor: 'transparent',
+    },
+  });
+
+const transparentGreenBackgroundStyles = (_disabled: boolean) =>
+  css({
+    backgroundColor: 'transparent',
+    border: `solid 1px transparent`,
+    color: cssVar('aiTextColor'),
+    ...setCssVar('currentTextColor', cssVar('aiTextColor')), // set stroke color
+    span: {
+      color: cssVar('aiTextColor'),
+    },
+    svg: {
+      fill: cssVar('aiTextColor'),
+    },
     ':hover, :focus': {
       backgroundColor: 'transparent',
     },

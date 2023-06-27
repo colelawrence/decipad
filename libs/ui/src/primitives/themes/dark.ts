@@ -259,6 +259,8 @@ export const theme: CssVariables = {
   aiBubbleBackgroundColor: teal800.hex,
   aiSendButtonStrokeColor: teal100.hex,
   aiSendButtonBgColor: teal700.hex,
+  aiFetchButtonBgColor: teal100.hex,
+  aiFetchButtonDisabledBgColor: dark500.hex,
   aiSendButtonDisabledStrokeColor: dark500.hex,
   aiInsertButtonColor: dark200.hex,
   aiInsertButtonBgColor: dark500.hex,

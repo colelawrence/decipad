@@ -24,6 +24,7 @@ export const availableFlags = [
   'UPLOAD_CSV',
   'SHEETS_ISLANDS',
   'JS_BLOCK',
+  'CODE_INTEGRATIONS_AI_BUTTON',
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
   // show computer stats when clicking Alt-Shift-s

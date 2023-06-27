@@ -1,21 +1,33 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { cssVar, p14Regular, setCssVar, p13Medium } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 
 const containerStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
+  display: 'grid',
+  gap: 8,
+  gridTemplateColumns: 'auto 1fr auto',
+  gridTemplateRows: 'auto auto',
+  gridTemplateAreas: `
+    "label error error"
+    "input input button"
+  `,
+  button: {
+    gridArea: 'button',
+  },
+  '& > *:only-child': {
+    gridArea: '1 / 1 / 3 / 4',
+  },
 });
 
 const inputStyles = css({
   padding: '12px',
 
   backgroundColor: cssVar('backgroundColor'),
+  gridArea: 'input',
 
   ...p14Regular,
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
@@ -31,6 +43,12 @@ const inputStylesSmall = css(inputStyles, {
 
   ...p13Medium,
 });
+
+const labelStyles = css([{ gridArea: 'label' }, inputLabel]);
+const errorStyles = css([
+  inputLabel,
+  { gridArea: 'error', color: cssVar('errorColor') },
+]);
 
 type FieldType =
   | 'text'
@@ -53,6 +71,8 @@ export type InputFieldProps = {
   readonly name?: string;
 
   readonly value: string;
+  readonly error?: string;
+  readonly submitButton?: ReactNode;
   readonly tabIndex?: number;
   readonly onChange?: (newValue: string) => void;
   readonly onEnter?: () => void;
@@ -71,16 +91,20 @@ export const InputField = ({
   name,
 
   value,
+  error,
+  submitButton = null,
   tabIndex,
   onChange = noop,
   onEnter = noop,
 }: InputFieldProps): ReturnType<FC> => {
   const id = `input-${useState(nanoid)[0]}`;
   const labelEl = label ? (
-    <label htmlFor={id} css={inputLabel}>
+    <label htmlFor={id} css={labelStyles}>
       {label}
     </label>
   ) : null;
+
+  const errorEl = error ? <span css={errorStyles}>{error}</span> : null;
 
   const inputEl = (
     <input
@@ -115,7 +139,9 @@ export const InputField = ({
   return (
     <div css={containerStyles}>
       {labelEl}
+      {errorEl}
       {inputEl}
+      {submitButton}
     </div>
   );
 };

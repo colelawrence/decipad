@@ -44,6 +44,8 @@ export interface CssVariables {
   readonly aiSendButtonDisabledStrokeColor: Property.Color;
   readonly aiSendButtonStrokeColor: Property.Color;
   readonly aiSendButtonBgColor: Property.Color;
+  readonly aiFetchButtonBgColor: Property.Color;
+  readonly aiFetchButtonDisabledBgColor: Property.Color;
   readonly aiInsertButtonColor: Property.Color;
   readonly aiInsertButtonBgColor: Property.Color;
 
