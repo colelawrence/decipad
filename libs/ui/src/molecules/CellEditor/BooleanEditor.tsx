@@ -34,7 +34,7 @@ export const BooleanEditor: FC<BooleanEditorProps> = ({
   return (
     <div contentEditable={false} css={wrapperStyles}>
       <Toggle
-        active={value !== 'false' && value.trim() !== ''}
+        active={value === 'true'}
         onChange={(newValue) => onChangeValue(newValue ? 'true' : 'false')}
         parentType={parentType}
       />
