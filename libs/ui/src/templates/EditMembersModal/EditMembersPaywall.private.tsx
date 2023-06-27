@@ -1,12 +1,6 @@
 import styled from '@emotion/styled';
 import { ClosableModal } from '../../organisms';
-import {
-  cssVar,
-  p14Bold,
-  p14Regular,
-  p32Medium,
-  setCssVar,
-} from '../../primitives';
+import { cssVar, p14Bold, p14Regular, p32Medium } from '../../primitives';
 import { Button } from '../../atoms';
 import { DeciBoxes } from '../../icons';
 
@@ -126,7 +120,4 @@ const DeciDecoration = styled.div({
   height: '24px',
   width: '24px',
   pointerEvents: 'none',
-  svg: {
-    ...setCssVar('currentTextColor', cssVar('buttonBrandBackground')),
-  },
 });

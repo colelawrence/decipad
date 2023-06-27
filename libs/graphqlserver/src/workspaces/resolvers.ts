@@ -26,6 +26,7 @@ import by from '../../../graphqlresource/src/utils/by';
 import { workspaceResource } from './workspaceResource';
 import { withSubscriptionSideEffects } from './workspaceStripeEffects';
 import { getWorkspaceMembersCount } from './workspace.helpers';
+import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
 
 const workspaces = resource('workspace');
 
@@ -159,6 +160,12 @@ export default {
           },
         })
       ).Items;
+
+      const workspace = await data.workspaces.get({ id });
+
+      if (workspace?.isPremium) {
+        await cancelSubscriptionFromWorkspaceId(id);
+      }
 
       // TODO should we use Promise.all?
       /* eslint-disable no-await-in-loop */

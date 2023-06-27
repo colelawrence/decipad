@@ -1,4 +1,5 @@
 import tables from '@decipad/tables';
+import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
 
 export const getWorkspaceMembersCount = async (workspaceId: string) => {
   const data = await tables();
@@ -13,4 +14,10 @@ export const getWorkspaceMembersCount = async (workspaceId: string) => {
   });
 
   return members.Count;
+};
+
+export const cancelWorkspaceSubscriptionPayment = async (
+  workspaceId: string
+) => {
+  await cancelSubscriptionFromWorkspaceId(workspaceId);
 };

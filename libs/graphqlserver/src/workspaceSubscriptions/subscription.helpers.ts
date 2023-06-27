@@ -4,6 +4,7 @@ import { thirdParty } from '@decipad/config';
 import { resource } from '@decipad/backend-resources';
 import {
   GraphqlContext,
+  ID,
   WorkspaceSubscriptionRecord,
 } from '@decipad/backendtypes';
 
@@ -74,4 +75,24 @@ export const updateStripeIfNeeded = async (
   await stripe.subscriptionItems.update(subscriptionItemID, {
     quantity: newQuantity,
   });
+};
+
+export const cancelStripeSubscription = async (subscriptionId: ID) => {
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+
+  if (!subscription) {
+    throw new Error('Stripe Subscription does not exist');
+  }
+
+  await stripe.subscriptions.cancel(subscriptionId);
+};
+
+export const cancelSubscriptionFromWorkspaceId = async (workspaceId: ID) => {
+  const subscription = await findSubscriptionByWorkspaceId(workspaceId);
+
+  if (!subscription) {
+    throw new Error('Stripe Subscription does not exist');
+  }
+
+  await cancelStripeSubscription(subscription.id);
 };
