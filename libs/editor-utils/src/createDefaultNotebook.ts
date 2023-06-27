@@ -18,7 +18,7 @@ export function createDefaultNotebook(editor: MyEditor) {
       editor,
       {
         type: ELEMENT_H1,
-        children: [{ text: 'My notebook title' }],
+        children: [{ text: 'My notebook' }],
         id: nanoid(),
       },
       { at: [0] }

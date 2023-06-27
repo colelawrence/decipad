@@ -60,10 +60,11 @@ const message = (errorCode: ErrorPageProps['wellKnown']): string => {
 interface ErrorPageProps {
   readonly Heading: 'h1';
   readonly messages?: string[];
-  readonly wellKnown?: '403' | '404' | '500';
+  readonly wellKnown?: '403' | '404' | '500' | '508';
   readonly authenticated?: boolean;
   readonly backUrl?: string;
   readonly backCall?: string;
+  readonly retry?: () => void;
 }
 
 export const ErrorPage = ({
@@ -73,6 +74,7 @@ export const ErrorPage = ({
   authenticated = false,
   backUrl,
   backCall,
+  retry,
 }: ErrorPageProps): ReturnType<FC> => {
   return (
     <main css={styles}>
@@ -97,6 +99,16 @@ export const ErrorPage = ({
                 removed
               </p>
             </>
+          ) : wellKnown === '508' ? (
+            <>
+              <p css={subHeadingStyles}>
+                We had an issue problem with our notebook and couldn't
+                automatically recover from that error.
+              </p>
+              <p css={subHeadingStyles}>
+                You can retry, refresh this page, or contact support.
+              </p>
+            </>
           ) : (
             <>
               <p css={subHeadingStyles}>
@@ -108,14 +120,27 @@ export const ErrorPage = ({
         </>
       )}
       <div css={buttonStyles} data-testid="errorPageBacklink">
-        <Button
-          type="primaryBrand"
-          size="extraLarge"
-          href={backUrl || (authenticated ? '/' : 'https://decipad.com')}
-        >
-          {backCall ||
-            (authenticated ? 'Back to workspace' : 'Back to our website')}
-        </Button>
+        {authenticated && retry ? (
+          <Button
+            type="primaryBrand"
+            size="extraLarge"
+            onClick={() => {
+              retry();
+              window.location.reload();
+            }}
+          >
+            Retry
+          </Button>
+        ) : (
+          <Button
+            type="primaryBrand"
+            size="extraLarge"
+            href={backUrl || (authenticated ? '/' : 'https://decipad.com')}
+          >
+            {backCall ||
+              (authenticated ? 'Back to workspace' : 'Back to our website')}
+          </Button>
+        )}
         <Button
           type="secondary"
           size="extraLarge"

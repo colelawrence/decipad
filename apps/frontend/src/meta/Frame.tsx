@@ -7,6 +7,7 @@ type FrameProps = {
   readonly title: string | null; // explicit null, omitting prop not allowed to make sure title is not forgotten when adding a page
   readonly children: ReactNode;
   readonly suspenseFallback: ReactNode;
+  readonly Heading: 'h1';
 } & ComponentProps<typeof ErrorBoundary>;
 
 export const Frame: React.FC<FrameProps> = ({

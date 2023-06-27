@@ -19,4 +19,4 @@ export const Placeholder: StoryFn<{ placeholder: string }> = (args) => (
     {null}
   </Display>
 );
-Placeholder.args = { placeholder: 'My notebook title' };
+Placeholder.args = { placeholder: 'My notebook' };

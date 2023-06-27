@@ -1,17 +1,16 @@
 import * as Sentry from '@sentry/react';
 import {
-  ComponentProps,
   ErrorInfo,
   FC,
   ReactNode,
   useCallback,
+  useEffect,
   useState,
 } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from './ErrorPage';
 
 interface ErrorBoundaryProps {
-  readonly Heading: ComponentProps<typeof ErrorPage>['Heading'];
   readonly children: ReactNode;
 }
 
@@ -26,17 +25,26 @@ class SentryError extends Error {
   }
 }
 
-export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
-  children,
-  Heading,
-}) => {
+const ErrorRender: FC<{
+  errorCount: number;
+  error: Error;
+  resetErrorBoundary: () => void;
+}> = ({ errorCount, resetErrorBoundary }) => {
+  useEffect(() => {
+    if (errorCount < 1) {
+      resetErrorBoundary();
+    }
+  }, [errorCount, resetErrorBoundary]);
+
+  return <ErrorPage Heading="h1" wellKnown="508" retry={resetErrorBoundary} />;
+};
+
+export const ErrorBoundary: FC<ErrorBoundaryProps> = ({ children }) => {
   const [errorCount, setErrorCount] = useState(0);
-  const [previousErrorDate, setPreviousErrorDate] = useState<
-    number | undefined
-  >();
+
   const onError = useCallback(
     (error: Error, info: ErrorInfo) => {
-      setPreviousErrorDate(Date.now());
+      setErrorCount(errorCount + 1);
       console.error(error);
       const sentryError = new SentryError(error.message);
       sentryError.setCustomMessage(
@@ -48,26 +56,28 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({
 
       try {
         Sentry.captureException(sentryError, {
-          level: 'fatal',
+          level: errorCount > 1 ? 'fatal' : 'error',
           extra: {
             info,
+            errorCount,
           },
         });
       } catch (err) {
         console.error(sentryError);
       }
-      if (previousErrorDate && Date.now() - previousErrorDate < 2000) {
-        setTimeout(() => setErrorCount((c) => c + 1), 1000);
-      }
     },
-    [previousErrorDate]
+    [errorCount]
   );
 
   return (
     <ReactErrorBoundary
       onError={onError}
-      fallbackRender={() => <ErrorPage Heading={Heading} />}
-      resetKeys={[errorCount]}
+      fallbackRender={useCallback(
+        (props) => (
+          <ErrorRender {...props} errorCount={errorCount} />
+        ),
+        [errorCount]
+      )}
     >
       {children}
     </ReactErrorBoundary>

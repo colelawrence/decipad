@@ -213,7 +213,7 @@ export const NotebookListItem = ({
             data-testid="list-notebook-title"
             css={[nameStyles, name || noNameNameStyles]}
           >
-            {name || 'My notebook title'}
+            {name || 'My notebook'}
           </strong>
           <div css={notebookListTagsStyles}>
             <span css={notebookListInlineTags}>

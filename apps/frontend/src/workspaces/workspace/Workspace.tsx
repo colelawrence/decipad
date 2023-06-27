@@ -315,7 +315,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     const args = {
       workspaceId,
       sectionId,
-      name: 'My notebook title',
+      name: 'My notebook',
     };
 
     const createdNotebookData = await createNotebook(args);

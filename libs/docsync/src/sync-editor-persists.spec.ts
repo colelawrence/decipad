@@ -1,8 +1,8 @@
-import waitForExpect from 'wait-for-expect';
-import { getDefined } from '@decipad/utils';
-import { TElement } from '@udecode/plate';
 import { createTPlateEditor } from '@decipad/editor-types';
 import { disable } from '@decipad/feature-flags';
+import { getDefined } from '@decipad/utils';
+import { TElement } from '@udecode/plate';
+import waitForExpect from 'wait-for-expect';
 import { createDocSyncEditor, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
@@ -87,7 +87,7 @@ describe('pad editor persistence', () => {
       {
         children: [
           {
-            text: 'My notebook title',
+            text: 'My notebook',
           },
         ],
         type: 'h1',
@@ -132,7 +132,7 @@ describe('pad editor persistence', () => {
       {
         children: [
           {
-            text: 'My notebook title',
+            text: 'My notebook',
           },
         ],
         type: 'h1',

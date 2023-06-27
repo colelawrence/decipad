@@ -1,18 +1,18 @@
 import { ELEMENT_H1 } from '@decipad/editor-types';
+import { findDomNodePath } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';
 import { render, waitFor } from '@testing-library/react';
 import {
+  Plate,
+  PlateEditor,
+  PlateProps,
   createHeadingPlugin,
   createPlateEditor,
   createPlugins,
   deleteText,
   insertText,
-  Plate,
-  PlateEditor,
-  PlateProps,
   select,
 } from '@udecode/plate';
-import { findDomNodePath } from '@decipad/editor-utils';
 import { Title } from './Title';
 
 let plateProps: PlateProps;
@@ -54,6 +54,6 @@ it('shows a placeholder only when empty', async () => {
   await waitFor(() => expect(h1Element).toHaveTextContent(/^$/));
   expect(h1Element).toHaveAttribute(
     'aria-placeholder',
-    expect.stringMatching(/title/i)
+    expect.stringMatching(/notebook/i)
   );
 });
