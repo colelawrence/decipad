@@ -3,6 +3,7 @@ import { BlocksInUseInformation } from '@decipad/computer';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { Badge, MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,
@@ -19,7 +20,6 @@ import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 const gridStyles = once(() =>
   css({
