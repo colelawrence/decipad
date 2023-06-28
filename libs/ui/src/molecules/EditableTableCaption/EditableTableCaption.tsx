@@ -79,6 +79,18 @@ const placeholderStyles = css(p16Medium, {
 const wrapperStyle = css({ display: 'flex' });
 
 const editableTableCaptionStyles = css(p16Medium);
+
+const toggleFormulaStyles = (
+  hideFormulas: boolean,
+  isCollapsed: boolean,
+  tableFormulasEditorsLength: number
+) => ({
+  display:
+    hideFormulas || isCollapsed || tableFormulasEditorsLength === 0
+      ? 'none'
+      : 'block',
+});
+
 type EditableTableCaptionProps = PropsWithChildren<{
   onAddDataViewButtonPress: () => void;
   onAddChartViewButtonPress?: (type: typeof markTypes[number]) => void;
@@ -97,7 +109,6 @@ export const shouldShowFormulaDrawer = (
 
 export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   empty,
-  formulaEditor = true,
   isForWideTable = false,
   readOnly = false,
   onAddDataViewButtonPress,
@@ -109,7 +120,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     color,
     icon,
     isCollapsed,
-    hideFormulas,
+    hideFormulas = true,
     setIcon,
     setColor,
     setCollapsed,
@@ -119,6 +130,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
 
   const Icon = icons[icon];
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
+
   return (
     <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
       <div css={[tableCaptionInnerStyles, tableCaptionSlimStyles]}>
@@ -209,8 +221,10 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                     {
                       children: <icons.Formula />,
                       tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
-                      onClick: () => setHideFormulas(!hideFormulas),
-                      disabled: isCollapsed,
+                      onClick: () =>
+                        tableFormulaEditors.length !== 0
+                          ? setHideFormulas(!hideFormulas)
+                          : null,
                       testId: 'formula',
                     },
                     {
@@ -226,17 +240,17 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
         </div>
       </div>
 
-      {shouldShowFormulaDrawer(
-        formulaEditor,
-        !!isCollapsed,
-        tableFormulaEditors
-      ) && (
-        <div css={hideFormulas ? { display: 'none' } : { display: 'block' }}>
-          <FormulasDrawer readOnly={readOnly}>
-            {tableFormulaEditors}
-          </FormulasDrawer>
-        </div>
-      )}
+      <div
+        css={toggleFormulaStyles(
+          !!hideFormulas,
+          !!isCollapsed,
+          tableFormulaEditors.length
+        )}
+      >
+        <FormulasDrawer readOnly={readOnly}>
+          {tableFormulaEditors}
+        </FormulasDrawer>
+      </div>
     </div>
   );
 };

@@ -168,6 +168,13 @@ const mouseOverAddColumnButtonStyles = css({
   visibility: 'unset',
 });
 
+const toggleTableStyles = (isCollapsed: boolean) => ({
+  // Casting string to its own type to avoid ts(2322) errors
+  visibility: isCollapsed
+    ? ('collapse' as 'collapse')
+    : ('visible' as 'visible'),
+});
+
 interface EditorTableProps {
   readonly id?: string;
   readonly icon: UserIconKey;
@@ -257,61 +264,60 @@ export const EditorTable: FC<EditorTableProps> = ({
         <div>
           {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 
-          {!isCollapsed ? (
-            <div
-              css={[
-                !isDragging
-                  ? tableWrapperTransformStyles
-                  : tableWrapperDraggingStyles,
-                tableWrapperDefaultStyles,
-              ]}
-            >
-              {!isDragging && (
-                <div css={tableOverflowStyles} contentEditable={false} />
-              )}
-              <div css={tableScroll}>
-                <Table
-                  isReadOnly={false}
-                  dropRef={dropRef}
-                  tableWidth={tableWidth}
-                  isSelectingCell={isSelectingCell}
-                  head={thead}
-                  body={tbody}
-                  previewMode={previewMode}
-                  addTable={
-                    <AddTableRowButton
-                      mouseOver={mouseOver}
-                      onAddRow={onAddRow}
-                    />
-                  }
-                  smartRow={smartRow}
-                  onMouseOver={setMouseOver}
-                ></Table>
-              </div>
-
-              <div
-                css={tableAddColumnButtonWrapperStyles}
-                contentEditable={false}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-              >
-                <button
-                  onClick={onAddColumnClick}
-                  css={[
-                    tableAddColumnButtonStyles,
-                    mouseOver && mouseOverAddColumnButtonStyles,
-                    // this is deliberately coded like this
-                    // to prevent a unfixable rogue cursor from slate
-                    // that otherwise would render
-                    (previewMode || readOnly) && { visibility: 'hidden' },
-                  ]}
-                  title="Add Column"
-                >
-                  <Create />
-                </button>
-              </div>
+          <div
+            css={[
+              !isDragging
+                ? tableWrapperTransformStyles
+                : tableWrapperDraggingStyles,
+              tableWrapperDefaultStyles,
+              toggleTableStyles(!!isCollapsed),
+            ]}
+          >
+            {!isDragging && (
+              <div css={tableOverflowStyles} contentEditable={false} />
+            )}
+            <div css={tableScroll}>
+              <Table
+                isReadOnly={false}
+                dropRef={dropRef}
+                tableWidth={tableWidth}
+                isSelectingCell={isSelectingCell}
+                head={thead}
+                body={tbody}
+                previewMode={previewMode}
+                addTable={
+                  <AddTableRowButton
+                    mouseOver={mouseOver}
+                    onAddRow={onAddRow}
+                  />
+                }
+                smartRow={smartRow}
+                onMouseOver={setMouseOver}
+              ></Table>
             </div>
-          ) : null}
+
+            <div
+              css={tableAddColumnButtonWrapperStyles}
+              contentEditable={false}
+              onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
+            >
+              <button
+                onClick={onAddColumnClick}
+                css={[
+                  tableAddColumnButtonStyles,
+                  mouseOver && mouseOverAddColumnButtonStyles,
+                  // this is deliberately coded like this
+                  // to prevent a unfixable rogue cursor from slate
+                  // that otherwise would render
+                  (previewMode || readOnly) && { visibility: 'hidden' },
+                ]}
+                title="Add Column"
+              >
+                <Create />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </TableStyleContext.Provider>
