@@ -1,4 +1,5 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
+import waitForExpect from 'wait-for-expect';
 import { setUp } from '../utils/page/Editor';
 import {
   clickNewPadButton,
@@ -6,7 +7,7 @@ import {
   getPadList,
   removePad,
 } from '../utils/page/Workspace';
-import { snapshot, Timeouts } from '../utils/src';
+import { snapshot } from '../utils/src';
 
 const byName = (a: { name: string }, b: { name: string }): number => {
   return a.name.localeCompare(b.name);
@@ -90,29 +91,31 @@ test.describe('Dashboard operations', () => {
     expect(padIndex).toBeGreaterThanOrEqual(0);
     await removePad(page, padIndex);
 
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
-    const pads = await getPadList(page);
-    // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
-    process.env.CI
-      ? expect(pads).toHaveLength(3)
-      : expect(pads).toHaveLength(5);
+    await waitForExpect(async () => {
+      const pads = await getPadList(page);
+      // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
+      process.env.CI
+        ? expect(pads).toHaveLength(3)
+        : expect(pads).toHaveLength(5);
+    });
   });
 
   test('can duplicate pad', async () => {
     await duplicatePad(page, 0);
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
 
-    let pads = await getPadList(page);
-    // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
-    process.env.CI
-      ? expect(pads).toHaveLength(4)
-      : expect(pads).toHaveLength(6);
+    await waitForExpect(async () => {
+      let pads = await getPadList(page);
+      // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
+      process.env.CI
+        ? expect(pads).toHaveLength(4)
+        : expect(pads).toHaveLength(6);
 
-    pads = await getPadList(page);
-    const copyIndex = pads.findIndex((pad) => pad.name?.startsWith('Copy of'));
-    expect(copyIndex).toBeGreaterThanOrEqual(0);
+      pads = await getPadList(page);
+      const copyIndex = pads.findIndex((pad) =>
+        pad.name?.startsWith('Copy of')
+      );
+      expect(copyIndex).toBeGreaterThanOrEqual(0);
+    });
   });
 
   test('can navigate to pad detail', async () => {
