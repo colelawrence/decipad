@@ -1,17 +1,15 @@
-import { ComponentProps, useMemo } from 'react';
+import { DraggableBlock } from '@decipad/editor-components';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_PLOT,
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
+import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { PlotBlock } from '@decipad/ui/src/organisms/PlotBlock/PlotBlock';
-import { DraggableBlock } from '@decipad/editor-components';
-import { assertElementType } from '@decipad/editor-utils';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import { ComponentProps, useMemo } from 'react';
 import { usePlot } from './utils/usePlot';
-
-const DEFAULT_TITLE = 'Plot';
 
 type PlotBlockProps = ComponentProps<typeof PlotBlock>;
 type PlotParamsProps = PlotBlockProps['plotParams'];
@@ -55,7 +53,7 @@ const Plot: PlateComponent = ({ attributes, element, children }) => {
           readOnly={readOnly}
           plotParams={plot.plotParams as unknown as PlotParamsProps}
           result={result}
-          title={element.title || DEFAULT_TITLE}
+          title={element.title}
           onTitleChange={onTitleChange}
         />
       )}

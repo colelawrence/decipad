@@ -22,7 +22,6 @@ import {
   grey400,
   monochromeColorSchemes,
   multicolorColorSchemes,
-  p13Medium,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
@@ -115,11 +114,6 @@ const buttonStyles = css({
 
 const iconStyles = css({
   width: '12px',
-});
-
-const buttonTextStyles = css(p13Medium, {
-  whiteSpace: 'nowrap',
-  padding: '0 4px',
 });
 
 type SubMenuKey =
@@ -276,7 +270,6 @@ export const PlotParams = ({
         trigger={
           <button css={buttonStyles} data-testid="chart-settings-button">
             <span css={iconStyles}>{<Settings />}</span>
-            <span css={buttonTextStyles}>Settings</span>
           </button>
         }
       >

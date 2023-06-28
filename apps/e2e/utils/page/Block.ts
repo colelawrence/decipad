@@ -92,7 +92,7 @@ export async function createResultBelow(page: Page) {
   page.locator('[data-testid="widget-caption"] >> text=/Unnammed/').last();
 }
 
-export async function createDataViewBelow(page: Page, identifier: string) {
+export async function createDataViewBelow(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/data view');
@@ -100,15 +100,9 @@ export async function createDataViewBelow(page: Page, identifier: string) {
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
   await page.locator('role=menuitem', { hasText: 'data' }).click();
-
-  await page.getByText('Data view').last().click();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
-export async function createPieChartBelow(page: Page, identifier: string) {
+export async function createPieChartBelow(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/pie chart');
@@ -116,15 +110,9 @@ export async function createPieChartBelow(page: Page, identifier: string) {
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
   await page.locator('role=menuitem', { hasText: 'chart' }).click();
-
-  await page.getByPlaceholder('Chart title').last().dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
-export async function createLineChartBelow(page: Page, identifier: string) {
+export async function createLineChartBelow(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/line chart');
@@ -132,15 +120,9 @@ export async function createLineChartBelow(page: Page, identifier: string) {
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
   await page.locator('role=menuitem', { hasText: 'chart' }).click();
-
-  await page.getByPlaceholder('Chart title').last().dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
-export async function createBarChartBelow(page: Page, identifier: string) {
+export async function createBarChartBelow(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/bar chart');
@@ -148,15 +130,9 @@ export async function createBarChartBelow(page: Page, identifier: string) {
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
   await page.locator('role=menuitem', { hasText: 'chart' }).click();
-
-  await page.getByPlaceholder('Chart title').last().dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
-export async function createAreaChartBelow(page: Page, identifier: string) {
+export async function createAreaChartBelow(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/area chart');
@@ -164,15 +140,9 @@ export async function createAreaChartBelow(page: Page, identifier: string) {
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
   await page.locator('role=menuitem', { hasText: 'chart' }).click();
-
-  await page.getByPlaceholder('Chart title').last().dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
-export async function createScatterChartBelow(page: Page, identifier: string) {
+export async function createScatterChartBelow(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/scatter plot');
@@ -180,12 +150,6 @@ export async function createScatterChartBelow(page: Page, identifier: string) {
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
   await page.locator('role=menuitem', { hasText: 'plot' }).click();
-
-  await page.getByPlaceholder('Chart title').last().dblclick();
-
-  await keyPress(page, 'Backspace');
-
-  await page.keyboard.type(identifier);
 }
 
 export async function createToggleBelow(page: Page, identifier: string) {

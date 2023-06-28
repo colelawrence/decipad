@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { BlocksInUseInformation } from '@decipad/computer';
+import { BlocksInUseInformation } from '@decipad/computer';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { Badge, MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,

@@ -65,16 +65,10 @@ test.describe('Charts', () => {
     await page.evaluate(() => document.fonts.ready);
   });
 
-  test('updates chart name', async () => {
-    await page.getByPlaceholder('Chart title').dblclick();
-    await page.keyboard.type('NewChartName');
-    await page.isVisible("text='NewChartName'");
-  });
-
-  test('puts old chart name back', async () => {
-    await page.getByPlaceholder('Chart title').dblclick();
-    await page.keyboard.type('Chart');
-    await page.isVisible("text='Chart'");
+  test('updates chart caption', async () => {
+    await page.getByPlaceholder('Chart caption').dblclick();
+    await page.keyboard.type('I like this caption');
+    await page.isVisible("text='I like this caption'");
   });
 
   test('test pie chart menu', async () => {

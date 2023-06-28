@@ -85,34 +85,6 @@ const plotParams: (
   setShape: setter('shape'),
 });
 
-const plotParamsNoSources: (
-  markType: MarkType
-) => ComponentProps<typeof PlotBlock>['plotParams'] = (markType) => ({
-  sourceVarName: '',
-  sourceExprRefOptions: [],
-  sourceVarNameOptions: [],
-  columnNameOptions: ['column name option 1', 'column name option 2'],
-  markType,
-  xColumnName: 'x column name',
-  yColumnName: 'y column name',
-  y2ColumnName: 'y2 column name',
-  sizeColumnName: 'size column name',
-  colorColumnName: 'color column name',
-  thetaColumnName: 'color column name',
-  colorScheme: 'color scheme',
-  setSourceVarName: setter('sourceVarName'),
-  setMarkType: setter('markType'),
-  setXColumnName: setter('xColumnName'),
-  setYColumnName: setter('yColumnName'),
-  setY2ColumnName: setter('y2ColumnName'),
-  setSizeColumnName: setter('sizeColumnName'),
-  setColorColumnName: setter('colorColumnName'),
-  setThetaColumnName: setter('thetaColumnName'),
-  setColorScheme: setter('colorScheme'),
-  shape: '',
-  setShape: setter('shape'),
-});
-
 const plotProps: (
   markType: MarkType,
   sourceVarName?: string
@@ -124,28 +96,11 @@ const plotProps: (
 });
 
 it('displays the "Select a table" component if no table selected', () => {
-  const { queryByLabelText } = render(
+  const { queryByText } = render(
     <PlotBlock {...plotProps('arc', '')} readOnly={false} />
   );
 
-  expect(queryByLabelText(/select a table/i)).toBeInTheDocument();
-});
-
-it('displays a warning if no tables exist', () => {
-  const plotPropsNoSources: ComponentProps<typeof PlotBlock> = {
-    title: 'Title',
-    readOnly: false,
-    result,
-    plotParams: plotParamsNoSources('arc'),
-  };
-
-  const { queryByText } = render(
-    <PlotBlock {...plotPropsNoSources} readOnly={false} />
-  );
-
-  const text =
-    "You can't create a chart because this document does not include any tables";
-  expect(queryByText(text)).toBeInTheDocument();
+  expect(queryByText(/select a table/i)).toBeInTheDocument();
 });
 
 it('displays the plot settings for a line plot unless readonly', async () => {
@@ -189,8 +144,8 @@ it('displays the plot settings for a scatter plot unless readonly', async () => 
 });
 
 it('shows a given error message', () => {
-  const { getByText } = render(
+  const { getByTestId } = render(
     <PlotBlock {...plotProps('line')} errorMessage="Oopsie whoopsie." />
   );
-  expect(getByText('Oopsie whoopsie.')).toBeVisible();
+  expect(getByTestId('error-block')).toBeVisible();
 });

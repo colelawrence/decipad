@@ -57,6 +57,7 @@ export interface CssVariables {
 
   readonly errorBlockColor: Property.Color;
   readonly errorBlockWarning: Property.Color;
+  readonly errorBlockInfo: Property.Color;
   readonly errorBlockAnnotationWarning: Property.Color;
   readonly errorBlockError: Property.Color;
 

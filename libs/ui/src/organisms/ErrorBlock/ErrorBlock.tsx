@@ -7,22 +7,27 @@ import { slimBlockWidth } from '../../styles/editor-layout';
 // complete-error should never happen, but if it does it's when the fallback
 // component cannot determine the path of it.
 export interface ErrorBlockProps {
-  readonly type: 'complete-error' | 'error' | 'warning';
+  readonly type: 'complete-error' | 'error' | 'warning' | 'info';
   readonly onDelete?: () => void;
   readonly onUndo?: () => void;
+  readonly message?: string;
 }
 
 export const ErrorBlock: React.FC<ErrorBlockProps> = ({
   type,
   onDelete = () => {},
   onUndo = () => {},
+  message = '',
 }: ErrorBlockProps) => {
   const getText = () => {
     if (type === 'error') {
-      return `Delete this block or contact support. We've been notified of the error! What now?`;
+      return `Delete this block or contact support. We've been notified of the error! ${message}`;
     }
     if (type === 'warning') {
-      return `Undo, delete this block or contact support. We've been notified of the error! What now?`;
+      return `Undo, delete this block or contact support. We've been notified of the error! ${message}`;
+    }
+    if (type === 'info') {
+      return message;
     }
     return '';
   };
@@ -55,6 +60,8 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
       css={[
         type === 'warning'
           ? { backgroundColor: cssVar('errorBlockWarning') }
+          : type === 'info'
+          ? { backgroundColor: cssVar('errorBlockInfo') }
           : { backgroundColor: cssVar('errorBlockError') },
         errorBlock,
       ]}
@@ -62,14 +69,23 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
     >
       <div css={errorBlockWrapperStyles}>
         <div css={errorBlockRowStyles}>
-          <span data-testid="error-block" css={errorMessageStypes}>
-            {`Oops something is broken, and that's on us. The rest of your notebook should be fine.`}
+          <span
+            data-testid="error-block"
+            css={[
+              errorMessageStypes,
+              type === 'info' && { color: cssVar('normalTextColor') },
+            ]}
+          >
+            {type !== 'info' &&
+              `Oops something is broken, and that's on us. The rest of your notebook should be fine. `}
             {getText()}
           </span>
         </div>
-        <div css={buttonRow}>
-          <div css={centeredFlex}>{getButtons()}</div>
-        </div>
+        {type !== 'info' && (
+          <div css={buttonRow}>
+            <div css={centeredFlex}>{getButtons()}</div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -95,6 +111,7 @@ const errorBlock = css(centeredFlex, {
 
 const errorBlockWrapperStyles = css(centeredFlex, {
   flexDirection: 'column',
+  width: '100%',
   gap: 12,
 });
 

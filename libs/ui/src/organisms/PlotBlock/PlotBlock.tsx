@@ -1,86 +1,38 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css } from '@emotion/react';
-import zip from 'lodash.zip';
-import { ComponentProps, ReactNode, useEffect, useState, FC } from 'react';
 import { noop } from '@decipad/utils';
-import { CellInput, ErrorMessage, Label, Toast } from '../../atoms';
-import { Plot as PlotIcon } from '../../icons';
-import { cssVar, p12Medium } from '../../primitives';
+import { css } from '@emotion/react';
+import { ComponentProps, FC, useMemo } from 'react';
+import { CellInput } from '../../atoms';
+import { ErrorBlock } from '../ErrorBlock/ErrorBlock';
+import { captionStyles, captionTextareaStyles } from '../MediaEmbed/styles';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
 import { initializeVega } from './initializeVega';
 
-type StringSetter<T extends string | undefined = string> = (str: T) => void;
-
-const plotIconSizeStyles = css({
-  display: 'grid',
-  width: '22px',
-  height: '22px',
-});
-
 const plotTitleStyles = css({
-  // TODO: title styles
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4,
+  position: 'absolute',
+  zIndex: 9,
+  right: 18,
+  top: 18,
+  button: {
+    float: 'right',
+  },
 });
 
 const plotBlockStyles = css({
   display: 'grid',
-  rowGap: '16px',
 });
 
 const plotStyles = css({
   alignSelf: 'center',
 });
 
-interface SelectInputProps {
-  readonly labelText: string;
-  readonly children: ReactNode;
-  readonly value: string;
-  readonly setValue: StringSetter;
-}
-
-const selectFontStyles = css(p12Medium);
-
-const selectStyles = css({
-  backgroundColor: cssVar('highlightColor'),
-  width: '100%',
-  maxWidth: '140px',
-});
-
-const SelectInput = ({
-  labelText,
-  children,
-  value,
-  setValue,
-}: SelectInputProps): ReturnType<FC> => {
-  return (
-    <Label
-      renderContent={(id) => (
-        <select
-          css={[selectFontStyles, selectStyles]}
-          id={id}
-          onChange={(ev) => {
-            setValue(ev.target.value);
-          }}
-          value={value}
-        >
-          {children}
-        </select>
-      )}
-    >
-      <span css={selectFontStyles}>{labelText}:</span>
-    </Label>
-  );
-};
-
 interface PlotBlockProps {
   readOnly?: boolean;
   errorMessage?: string;
   plotParams: ComponentProps<typeof PlotParams>;
   result?: ComponentProps<typeof PlotResult>;
-  title: string;
+  title?: string;
   onTitleChange?: (newValue: string) => void;
 }
 
@@ -92,84 +44,64 @@ export const PlotBlock = ({
   title,
   onTitleChange = noop,
 }: PlotBlockProps): ReturnType<FC> => {
+  const caption = useMemo(() => title || '', [title]);
   initializeVega();
+  const hasOptions = plotParams.sourceVarNameOptions.length > 0;
+  const displayError = useMemo(
+    () => (!plotParams.sourceVarName && !readOnly) || errorMessage,
+    [errorMessage, plotParams.sourceVarName, readOnly]
+  );
+  const errorDisplay = (
+    <ErrorBlock
+      type={errorMessage ? 'error' : 'info'}
+      message={
+        errorMessage ||
+        (hasOptions
+          ? 'Please select a table to base the chart on'
+          : "You can't create a chart because this document does not include any tables. Please delete this block and try again when you have a table.")
+      }
+    />
+  );
   return (
     <section
       data-test-id="chart-styles"
       css={plotBlockStyles}
       contentEditable={false}
     >
-      <div css={plotTitleStyles}>
-        <div css={plotIconSizeStyles}>
-          <PlotIcon />
-        </div>
-        <CellInput
-          value={title}
-          onChange={onTitleChange}
-          placeholder="Chart title"
-        />
-        {!readOnly && <PlotParams {...plotParams} />}
+      <div css={{ position: 'relative' }}>
+        {!readOnly && (!displayError || hasOptions) && (
+          <div css={plotTitleStyles}>
+            <PlotParams {...plotParams} />
+          </div>
+        )}
+        {displayError
+          ? errorDisplay
+          : result && (
+              <output css={plotStyles}>
+                <PlotResult {...result} />
+              </output>
+            )}
       </div>
-      <>
-        {errorMessage && <ErrorMessage error={errorMessage} />}
-        {result && (
-          <output css={plotStyles}>
-            <PlotResult {...result} />
-          </output>
-        )}
 
-        {!plotParams.sourceVarName && (
-          <TableSearch
-            varNames={plotParams.sourceVarNameOptions as readonly string[]}
-            exprRefs={plotParams.sourceExprRefOptions as readonly string[]}
-            setTable={plotParams.setSourceVarName}
-          />
-        )}
-      </>
+      {!displayError && (
+        <div
+          css={[
+            captionStyles,
+            { input: captionTextareaStyles },
+            { input: { fontVariantNumeric: 'unset' } },
+          ]}
+        >
+          {(readOnly && caption === '') ||
+          !plotParams.sourceVarName ? undefined : (
+            <CellInput
+              value={caption}
+              readOnly={readOnly}
+              onChange={onTitleChange}
+              placeholder="Chart caption"
+            />
+          )}
+        </div>
+      )}
     </section>
-  );
-};
-
-const TableSearch = ({
-  varNames,
-  exprRefs,
-  setTable,
-}: {
-  varNames: readonly string[];
-  exprRefs: readonly string[];
-  setTable: (s: string) => void;
-}) => {
-  const [value, setValue] = useState('');
-  const tables = zip(varNames, exprRefs);
-  useEffect(() => {
-    if (value !== '') {
-      setTable(value);
-    }
-  }, [value, setTable]);
-
-  if (exprRefs.length === 0) {
-    return (
-      <Toast appearance="warning">
-        You can't create a chart because this document does not include any
-        tables
-      </Toast>
-    );
-  }
-
-  return (
-    <div>
-      <SelectInput labelText="Select a table" value={value} setValue={setValue}>
-        <option value="" key="none"></option>
-        {tables.map(([varName, exprRef], i) => {
-          if (varName === undefined || exprRef === undefined) return undefined;
-
-          return (
-            <option value={exprRef} key={i}>
-              {varName}
-            </option>
-          );
-        })}
-      </SelectInput>
-    </div>
   );
 };

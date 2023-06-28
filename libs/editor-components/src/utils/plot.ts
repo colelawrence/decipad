@@ -1,9 +1,9 @@
 import { ELEMENT_PLOT, MyEditor, PlotElement } from '@decipad/editor-types';
-import { Path } from 'slate';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { nanoid } from 'nanoid';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import cloneDeep from 'lodash.clonedeep';
+import { nanoid } from 'nanoid';
+import { Path } from 'slate';
 
 const getPlotElement = (
   markType: MarkType = 'bar',
@@ -11,7 +11,7 @@ const getPlotElement = (
 ): PlotElement => ({
   id: nanoid(),
   type: ELEMENT_PLOT,
-  title: 'Chart',
+  title: '',
   sourceVarName,
   xColumnName: '',
   yColumnName: '',

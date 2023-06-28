@@ -190,6 +190,7 @@ export const theme: CssVariables = {
 
   errorBlockColor: red50.hex,
   errorBlockWarning: orange700.hex,
+  errorBlockInfo: grey700.hex,
   errorBlockAnnotationWarning: yellow700.hex,
   errorBlockError: red700.hex,
 
