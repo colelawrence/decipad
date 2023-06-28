@@ -148,7 +148,7 @@ interface VariableEditorProps
 export const VariableEditor = ({
   children,
   readOnly = false,
-  color = 'Sulu',
+  color = 'Catskill',
   type,
   onChangeType = noop,
   value,

@@ -96,7 +96,7 @@ export const useNotebookStateAndActions = ({
   const [error, setError] = useState<Error | undefined>();
   const [notebook, setNotebook] = useState<Notebook | undefined>();
   const [icon, setIcon] = useState<Icon | undefined>();
-  const [iconColor, setIconColor] = useState<IconColor>(() => 'Sulu');
+  const [iconColor, setIconColor] = useState<IconColor>(() => 'Catskill');
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(

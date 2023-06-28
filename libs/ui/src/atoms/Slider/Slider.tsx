@@ -93,7 +93,7 @@ export const Slider = ({
 }: SliderProps): ReturnType<FC> => {
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = swatchesThemed(darkTheme);
-  const color = baseSwatches[colorName || 'Sulu'];
+  const color = baseSwatches[colorName || 'Catskill'];
   return (
     <div css={sliderWrapperStyles}>
       <SliderUI.Root

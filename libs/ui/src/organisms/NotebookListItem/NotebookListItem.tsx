@@ -162,7 +162,7 @@ export const NotebookListItem = ({
   onUnarchive = noop,
   onChangeStatus = noop,
   icon = 'Rocket',
-  iconColor = 'Sulu',
+  iconColor = 'Catskill',
   page,
   otherWorkspaces,
 }: NotebookListItemProps): ReturnType<FC> => {

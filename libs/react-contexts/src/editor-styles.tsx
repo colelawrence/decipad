@@ -5,7 +5,7 @@ export type EditorStylesContextValue = Readonly<{
 }>;
 
 const defaultValue: EditorStylesContextValue = {
-  color: 'Sulu',
+  color: 'Catskill',
 };
 
 export const EditorStylesContext =

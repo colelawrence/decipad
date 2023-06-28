@@ -79,7 +79,7 @@ const placeholderStyles = css(
 export const Caption = ({
   empty = false,
   children,
-  color = 'Sulu',
+  color = 'Catskill',
   icon = 'Frame',
   onChangeColor = noop,
   onChangeIcon = noop,
