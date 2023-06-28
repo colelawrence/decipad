@@ -72,36 +72,40 @@ export const CodeError: FC<CodeErrorProps> = ({
   variant = 'default',
 }) => {
   const clientEvent = useContext(ClientEventsContext);
-  return (
-    <Tooltip
-      trigger={
-        <span
-          css={[iconWrapperStyles, variant === 'smol' && smolStylez]}
-          title={message}
-          data-testid="code-line-warning"
-        >
-          <Warning />
-        </span>
-      }
-    >
-      <p css={messageStyles}>{message}</p>
-      {detailMessage && <p css={messageStyles}>{detailMessage}</p>}
-      {bracketError && (
-        <p css={messageStyles}>{bracketErrorMessage(bracketError)}</p>
-      )}
-      <Anchor
-        css={urlStyles}
-        href={url}
-        // Analytics
-        onClick={() =>
-          clientEvent({
-            type: 'action',
-            action: 'notebook code error docs link clicked',
-          })
+  // Muting "expected expression" when the codeLine is empty
+  if (message !== 'Expected expression') {
+    return (
+      <Tooltip
+        trigger={
+          <span
+            css={[iconWrapperStyles, variant === 'smol' && smolStylez]}
+            title={message}
+            data-testid="code-line-warning"
+          >
+            <Warning />
+          </span>
         }
       >
-        {defaultDocsMessage}
-      </Anchor>
-    </Tooltip>
-  );
+        <p css={messageStyles}>{message}</p>
+        {detailMessage && <p css={messageStyles}>{detailMessage}</p>}
+        {bracketError && (
+          <p css={messageStyles}>{bracketErrorMessage(bracketError)}</p>
+        )}
+        <Anchor
+          css={urlStyles}
+          href={url}
+          // Analytics
+          onClick={() =>
+            clientEvent({
+              type: 'action',
+              action: 'notebook code error docs link clicked',
+            })
+          }
+        >
+          {defaultDocsMessage}
+        </Anchor>
+      </Tooltip>
+    );
+  }
+  return <></>;
 };

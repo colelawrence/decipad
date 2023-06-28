@@ -263,22 +263,26 @@ export const TableHeader = ({
 
       <div css={headerWrapperStyles}>
         <span css={{ width: '16px', height: '16px' }} contentEditable={false}>
-          {draggable && dragSource && !error && isEditable && (
-            <DropdownMenu
-              items={columOptionItems}
-              testId="table-add-remove-column-button"
-              readonly={!isEditable}
-              trigger={
-                <DropSourceAndTarget
-                  ref={dragSource}
-                  draggingOver={draggingOver}
-                  onSelectColumn={onSelectColumn}
-                />
-              }
-            />
-          )}
+          {draggable &&
+            dragSource &&
+            (!error || error === 'Expected expression') &&
+            isEditable && (
+              <DropdownMenu
+                items={columOptionItems}
+                testId="table-add-remove-column-button"
+                readonly={!isEditable}
+                trigger={
+                  <DropSourceAndTarget
+                    ref={dragSource}
+                    draggingOver={draggingOver}
+                    onSelectColumn={onSelectColumn}
+                  />
+                }
+              />
+            )}
 
-          {error && (
+          {/* Muting "expected expression" when the codeLine is empty */}
+          {error && error !== 'Expected expression' && (
             <DropdownMenu
               items={columOptionItems}
               testId="table-add-remove-column-button"
@@ -300,7 +304,8 @@ export const TableHeader = ({
             />
           )}
 
-          {showIcon && !error && (
+          {/* Muting "expected expression" when the codeLine is empty */}
+          {showIcon && (!error || error === 'Expected expression') && (
             <span
               contentEditable={false}
               css={iconTypeStyles}
