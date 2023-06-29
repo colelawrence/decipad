@@ -6,7 +6,7 @@ import { BigAssTopbarHeader } from './BigAssTopbarHeader.private';
 type BigAssTopbarProps = {
   name: string;
   isPremium: boolean;
-  numberOfMembers: number;
+  membersCount: number;
   membersHref?: string;
   onCreateNotebook?: () => void;
 };
@@ -14,12 +14,12 @@ type BigAssTopbarProps = {
 export const BigAssTopbar: React.FC<BigAssTopbarProps> = ({
   name,
   isPremium,
-  numberOfMembers,
+  membersCount,
   membersHref,
   onCreateNotebook,
 }) => {
   const plan = isPremium ? <RainbowText>Pro Plan</RainbowText> : 'Free plan';
-  const members = <MembersCounter number={numberOfMembers} />;
+  const members = <MembersCounter number={membersCount} />;
 
   return (
     <Container>

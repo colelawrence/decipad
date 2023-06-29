@@ -12,9 +12,9 @@ export const Normal: StoryFn = () => (
     activeWorkspace={{
       name: 'Active Workspace',
       id: '42',
-      numberOfMembers: 1,
+      membersCount: 1,
       sections: [],
     }}
-    allWorkspaces={[{ id: '0', name: 'Other Workspace', numberOfMembers: 2 }]}
+    allWorkspaces={[{ id: '0', name: 'Other Workspace', membersCount: 2 }]}
   />
 );

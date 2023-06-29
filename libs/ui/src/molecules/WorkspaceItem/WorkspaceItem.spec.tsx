@@ -7,7 +7,7 @@ import { WorkspaceItem } from './WorkspaceItem';
 const props: ComponentProps<typeof WorkspaceItem> = {
   id: '42',
   name: 'Some Workspace',
-  numberOfMembers: 2,
+  membersCount: 2,
 };
 
 it('shows the workspace name', () => {
@@ -32,11 +32,11 @@ it.each([
   [0, 'members'],
   [1, 'member'],
   [2, 'members'],
-])('shows that there is/are %i member(s)', (numberOfMembers, pluralization) => {
+])('shows that there is/are %i member(s)', (membersCount, pluralization) => {
   render(
     <DndProvider backend={HTML5Backend}>
-      <WorkspaceItem {...props} numberOfMembers={numberOfMembers} />
+      <WorkspaceItem {...props} membersCount={membersCount} />
     </DndProvider>
   );
-  expect(screen.getByText(`${numberOfMembers} ${pluralization}`)).toBeVisible();
+  expect(screen.getByText(`${membersCount} ${pluralization}`)).toBeVisible();
 });

@@ -4,7 +4,7 @@ import { WorkspaceItem } from './WorkspaceItem';
 const args = {
   id: '42',
   name: "John Doe's Workspace",
-  numberOfMembers: 1,
+  membersCount: 1,
 };
 export default {
   title: 'Molecules / UI / Workspace / Item',

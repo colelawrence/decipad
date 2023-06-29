@@ -8,7 +8,7 @@ export default {
 
 export const Normal: StoryFn = () => (
   <WorkspaceSelector
-    activeWorkspace={{ name: 'Active Workspace', id: '42', numberOfMembers: 1 }}
-    allWorkspaces={[{ id: '0', name: 'Other Workspace', numberOfMembers: 2 }]}
+    activeWorkspace={{ name: 'Active Workspace', id: '42', membersCount: 1 }}
+    allWorkspaces={[{ id: '0', name: 'Other Workspace', membersCount: 2 }]}
   />
 );

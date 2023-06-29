@@ -49,7 +49,7 @@ export interface WorkspaceItemProps {
   readonly id: string;
   readonly name: string;
   readonly isActive?: boolean;
-  readonly numberOfMembers: number;
+  readonly membersCount?: number;
   readonly onWorkspaceNavigate?: (id: string) => void;
 }
 
@@ -57,7 +57,7 @@ export const WorkspaceItem = ({
   id,
   name,
   isActive,
-  numberOfMembers,
+  membersCount,
   onWorkspaceNavigate = noop,
 }: WorkspaceItemProps): ReturnType<FC> => {
   const workspacePath = workspaces({}).workspace({ workspaceId: id });
@@ -94,7 +94,7 @@ export const WorkspaceItem = ({
               color: cssVar('weakTextColor'),
             })}
           >
-            {numberOfMembers} member{numberOfMembers === 1 ? '' : 's'}
+            {membersCount} member{membersCount === 1 ? '' : 's'}
           </span>
         </span>
 

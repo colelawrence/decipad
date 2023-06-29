@@ -49,7 +49,7 @@ const sampleWorkspace = {
 
 const aWorkspace = {
   ...sampleWorkspace,
-  numberOfMembers: 1,
+  membersCount: 1,
   sections: [],
   isActive: false,
 };
@@ -64,7 +64,7 @@ const props: ComponentProps<typeof DashboardSidebar> = {
   allWorkspaces: [aWorkspace].map((workspace) => ({
     ...workspace,
     href: `/w/${aWorkspace.id}`,
-    numberOfMembers: 1,
+    membersCount: 1,
   })),
 };
 

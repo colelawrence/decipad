@@ -13,7 +13,7 @@ const props: ComponentProps<typeof WorkspaceMenu> = {
   activeWorkspace: {
     id: '42',
     name: 'Active Workspace',
-    numberOfMembers: 1,
+    membersCount: 1,
     sections: [],
   },
   allWorkspaces: [],
@@ -80,12 +80,12 @@ it('links to the other workspaces', () => {
         allWorkspaces={[
           {
             id: '42',
-            numberOfMembers: 2,
+            membersCount: 2,
             name: 'Some Workspace',
           },
           {
             id: '1337',
-            numberOfMembers: 2,
+            membersCount: 2,
             name: 'Other Workspace',
           },
         ]}

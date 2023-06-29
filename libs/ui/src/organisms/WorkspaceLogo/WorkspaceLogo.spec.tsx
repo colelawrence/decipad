@@ -10,7 +10,7 @@ const props: ComponentProps<typeof WorkspaceLogo> = {
     id: '42',
     name: 'Active Workspace',
     sections: [],
-    numberOfMembers: 2,
+    membersCount: 2,
   },
   allWorkspaces: [],
 };

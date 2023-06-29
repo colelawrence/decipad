@@ -17,7 +17,7 @@ export const Normal: StoryFn<typeof args> = ({ numberOfallWorkspaces }) => (
     activeWorkspace={{
       name: 'Active Workspace',
       id: '42',
-      numberOfMembers: 1,
+      membersCount: 1,
       sections: [],
     }}
     allWorkspaces={Array(numberOfallWorkspaces)
@@ -26,7 +26,7 @@ export const Normal: StoryFn<typeof args> = ({ numberOfallWorkspaces }) => (
         id: String(i),
         name: `Workspace ${i + 1}`,
         href: '',
-        numberOfMembers: 2,
+        membersCount: 2,
       }))}
   />
 );

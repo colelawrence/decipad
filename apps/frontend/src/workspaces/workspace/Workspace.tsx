@@ -216,9 +216,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         href: workspaces({}).workspace({
           workspaceId: workspace.id,
         }).$,
-        numberOfMembers:
-          (workspace.access?.users?.length || 0) +
-          (workspace.access?.roles?.length || 0),
       })) ?? [],
     [workspaceData?.workspaces]
   );
@@ -396,7 +393,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         <BigAssTopbar
           name={currentWorkspace.name}
           isPremium={!!currentWorkspace.isPremium}
-          numberOfMembers={currentWorkspace.numberOfMembers}
+          membersCount={currentWorkspace.membersCount}
           onCreateNotebook={handleCreateNotebook}
           membersHref={currentWorkspaceRoute.members({}).$}
         />

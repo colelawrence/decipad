@@ -18,7 +18,7 @@ export const Normal: StoryFn = () => (
     activeWorkspace={{
       name: 'Active Workspace',
       id: '42',
-      numberOfMembers: 1,
+      membersCount: 1,
       sections: [],
     }}
     allWorkspaces={[]}
