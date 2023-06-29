@@ -15,5 +15,6 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
 
     'no-await-in-loop': 'off',
+    'playwright/expect-expect': 'off',
   },
 };

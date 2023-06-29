@@ -29,6 +29,7 @@ export const checkForErrorsStep = (
   notebookTitle?: string
 ) =>
   test.step(`Check errors on ${notebookId} (${notebookTitle})`, async () => {
+    // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(
       async () => {
         // eslint-disable-next-line playwright/no-wait-for-timeout

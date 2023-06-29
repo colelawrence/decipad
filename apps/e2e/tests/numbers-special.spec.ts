@@ -58,6 +58,7 @@ test.describe('Formula highlighting', () => {
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
+    // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(async () => {
       const potentialFormula = await getMagicNumberContent(page);
       expect(potentialFormula).toEqual('4');

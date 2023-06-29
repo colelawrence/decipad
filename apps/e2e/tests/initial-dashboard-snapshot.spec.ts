@@ -91,6 +91,7 @@ test.describe('Dashboard operations', () => {
     expect(padIndex).toBeGreaterThanOrEqual(0);
     await removePad(page, padIndex);
 
+    // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(async () => {
       const pads = await getPadList(page);
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
@@ -103,6 +104,7 @@ test.describe('Dashboard operations', () => {
   test('can duplicate pad', async () => {
     await duplicatePad(page, 0);
 
+    // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(async () => {
       let pads = await getPadList(page);
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test

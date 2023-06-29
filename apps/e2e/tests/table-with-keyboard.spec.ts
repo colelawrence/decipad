@@ -97,6 +97,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await focusOnTableColumnFormula(page);
     await page.keyboard.type('1 + 1');
 
+    // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(async () => {
       const codeBlock = await page.waitForSelector(
         'section:has-text("Column3 =")'
@@ -133,6 +134,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
     const codeBlock = await page.waitForSelector(
       'section:has-text("Column5 =")'
     );
+    // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(async () => {
       await expect(await codeBlock.innerText()).toContain('Column5 =');
     });

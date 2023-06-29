@@ -19842,10 +19842,10 @@ eslint-plugin-jsx-a11y@^6.5.1:
     object.fromentries "^2.0.6"
     semver "^6.3.0"
 
-eslint-plugin-playwright@0.14.0:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.14.0.tgz#c3ad1d5de01bef734720a1cd29fd936996979871"
-  integrity sha512-LEin7QeBdnyTINJ4ZTpn5EzJUIqEkLr8o041Ed69wStkW7KvB4UcL3eTJBO3Jgh3PH1FlExdVXnMao1mKrUX1g==
+eslint-plugin-playwright@0.15.2:
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-playwright/-/eslint-plugin-playwright-0.15.2.tgz#88328dc5fe2b2af39d88abb495ed9bfc562c896b"
+  integrity sha512-Q2jQ7ORjZscvwxR6MEgITZy23vxlnYlJlMR7aICFczWVMijTCZPGvvMoZaLWkAzx5J6fciulwbg+JJeRjMkTig==
 
 eslint-plugin-prettier@4.2.1:
   version "4.2.1"
