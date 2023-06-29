@@ -173,10 +173,11 @@ addSubOp      -> addSubOp _ additiveOperator _ divMulOp {%
 
 
 
-divMulOp           -> ofExp                             {% id %}
-divMulOp           -> divMulOp _ divMulOperator _ ofExp {% basicBinop %}
-divMulOp           -> divMulOp ref                      {% implicitMultHandler %}
-divMulOp           -> divMulOp __  ofExp                {% implicitMultHandler %}
+divMulOp           -> impMulOp                          {% id %}
+divMulOp           -> divMulOp _ divMulOperator _ impMulOp {% basicBinop %}
+impMulOp           -> ofExp                             {% id %}
+impMulOp           -> impMulOp ref                      {% implicitMultHandler %}
+impMulOp           -> impMulOp __  ofExp                {% implicitMultHandler %}
 
 ofExp         -> powOp                                  {% id %}
 ofExp         -> ofExp _ "of" _ genericIdentifier       {%

@@ -1719,20 +1719,21 @@ let ParserRules = [
       return basicBinop(d);
     },
   },
-  { name: 'divMulOp', symbols: ['ofExp'], postprocess: id },
+  { name: 'divMulOp', symbols: ['impMulOp'], postprocess: id },
   {
     name: 'divMulOp',
-    symbols: ['divMulOp', '_', 'divMulOperator', '_', 'ofExp'],
+    symbols: ['divMulOp', '_', 'divMulOperator', '_', 'impMulOp'],
     postprocess: basicBinop,
   },
+  { name: 'impMulOp', symbols: ['ofExp'], postprocess: id },
   {
-    name: 'divMulOp',
-    symbols: ['divMulOp', 'ref'],
+    name: 'impMulOp',
+    symbols: ['impMulOp', 'ref'],
     postprocess: implicitMultHandler,
   },
   {
-    name: 'divMulOp',
-    symbols: ['divMulOp', '__', 'ofExp'],
+    name: 'impMulOp',
+    symbols: ['impMulOp', '__', 'ofExp'],
     postprocess: implicitMultHandler,
   },
   { name: 'ofExp', symbols: ['powOp'], postprocess: id },

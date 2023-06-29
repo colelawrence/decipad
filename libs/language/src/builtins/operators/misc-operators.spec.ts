@@ -481,7 +481,7 @@ it('removes the value and shows only the units', async () => {
               "d": 1n,
               "infinite": false,
               "n": 1n,
-              "s": 1n,
+              "s": -1n,
             },
             "known": true,
             "multiplier": DeciNumber {

@@ -2732,7 +2732,7 @@ describe('percentages', () => {
   it('propagates units correctly', async () => {
     expect(await runCode('3% / 2 meters')).toMatchObject({
       value: N(15, 1000),
-      type: t.number(U('meters')),
+      type: t.number(U('meters', { exp: N(-1) })),
     });
     expect(await runCode('8 meters * 50%')).toMatchObject({
       value: N(4),
