@@ -59,15 +59,15 @@ workflows:
     description: Label pull request based on the number of lines changed
     always-run: true
     if:
-      - rule: $size() < 100
+      - rule: $size() < 300
         extra-actions:
           - $removeLabels(["medium", "large"])
           - $addLabel("small")
-      - rule: $size() >= 100 && $size() < 300
+      - rule: $size() >= 300 && $size() < 1000
         extra-actions:
           - $removeLabels(["small", "large"])
           - $addLabel("medium")
-      - rule: $size() >= 300
+      - rule: $size() >= 1000
         extra-actions:
           - $removeLabels(["small", "medium"])
           - $addLabel("large")
