@@ -1,3 +1,7 @@
+import {
+  useEditorStylesContext,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
 import { Tooltip } from '..';
@@ -11,8 +15,10 @@ import {
   Text,
   Warning,
 } from '../../icons';
-import { cssVar, p10Medium, setCssVar } from '../../primitives';
+import { cssVar, p10Medium } from '../../primitives';
 import { codeBlock } from '../../styles';
+import { AvailableSwatchColor } from '../../utils';
+import { bubbleColors } from '../../utils/bubbleColors';
 import { CodeError } from '../CodeError/CodeError';
 
 type Meta = {
@@ -92,11 +98,31 @@ export const LiveCode = ({
       ))}
     </Tooltip>
   );
+
+  const { color } = useEditorStylesContext();
+  const [isDarkTheme] = useThemeFromStore();
+  const { backgroundColor, filters, hover, textColor } = bubbleColors({
+    color: color as AvailableSwatchColor,
+    isDarkTheme,
+  });
+  const liveLabelStyles = css(labelStyles, {
+    backgroundColor: backgroundColor.hex,
+    color: textColor.hex,
+    svg: {
+      ...filters,
+    },
+  });
+  const liveIconAllStyles = css(liveIconStyles, {
+    ':hover': {
+      ...hover,
+    },
+  });
+
   return (
     <div css={liveCodeWrapperStyles} data-testid="live-code">
       <div css={liveInputStyles}>{children}</div>
-      <div css={labelStyles} contentEditable={false}>
-        <span css={liveIconStyles}>
+      <div css={liveLabelStyles} contentEditable={false}>
+        <span css={liveIconAllStyles}>
           {error ? <CodeError message={error.message} /> : nonErrorTooltip}
         </span>
         <span css={liveSpanStyles}>{text || 'LIVE CODE'}</span>
@@ -132,8 +158,6 @@ const liveInputStyles = css({
 });
 const labelStyles = css(p10Medium, {
   display: 'flex',
-  color: cssVar('liveDataIconDarkStrokeColor'),
-  backgroundColor: cssVar('liveDataWeakBackgroundColor'),
   borderRadius: 4,
   alignItems: 'center',
   padding: 4,
@@ -143,17 +167,8 @@ const labelStyles = css(p10Medium, {
 
 const liveIconStyles = css({
   svg: {
-    ...setCssVar('currentTextColor', cssVar('liveDataIconDarkStrokeColor')),
-    ...setCssVar('iconBackgroundColor', cssVar('liveDataWeakBackgroundColor')),
     height: 16,
     width: 16,
-  },
-  ':hover': {
-    backgroundColor: cssVar('liveDataIconStrokeColor'),
-    borderRadius: 3,
-    svg: {
-      ...setCssVar('iconBackgroundColor', cssVar('liveDataIconStrokeColor')),
-    },
   },
 });
 

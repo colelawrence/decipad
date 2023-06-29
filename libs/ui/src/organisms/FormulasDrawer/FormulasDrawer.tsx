@@ -9,10 +9,10 @@ const formulasDrawerStyles = css({
   margin: '4px 0 16px',
   pre: {
     'div:first-of-type': {
-      borderRadius: '10px 10px 0 0',
+      borderRadius: '9px 9px 0 0',
     },
     'div:last-of-type': {
-      borderRadius: '0 0 10px 10px',
+      borderRadius: '0 0 9px 9px',
     },
   },
 });

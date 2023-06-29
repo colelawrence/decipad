@@ -72,22 +72,18 @@ export const CodeVariable = ({
               type && typeStyles,
               variableScope === 'local' && localVarStyles,
               isSelected && selectedStyles,
-              isColumn && columnStyles,
-              isCell && cellStyles,
-              isSelected && isCell && isSelectedCellStyles,
-              isSelected && isColumn && isSelectedColumnStyles,
               isSelected && { userSelect: 'none' },
               isFormulaHeading && { userSelect: 'none' },
             ]
       }
     >
-      {isColumn ? (
+      {isColumn || isCell ? (
         <span css={{ marginLeft: -4, whiteSpace: 'nowrap' }}>
-          <span css={labelStyles} contentEditable={false}>
-            <span css={[liveIconStyles, iconStyles]}>
+          <span css={isColumn && labelStyles} contentEditable={false}>
+            <span css={iconStyles}>
               <List />
             </span>
-            <span css={liveSpanStyles}>{tableName}</span>
+            {isColumn && <span css={liveSpanStyles}>{tableName} |</span>}
           </span>
           {lazyChildren}
         </span>
@@ -124,18 +120,9 @@ const labelStyles = css({
   paddingTop: 4,
   marginBottom: -8,
   paddingBottom: 8,
-  borderRight: `1px solid ${cssVar('backgroundColor')}`,
   padding: 'auto',
   marginRight: 4,
   paddingRight: 4,
-});
-
-const liveIconStyles = css({
-  svg: {
-    ...setCssVar('currentTextColor', cssVar('bubbleColumnTextColor')),
-    ...setCssVar('strongTextColor', cssVar('bubbleColumnTextColor')),
-    ...setCssVar('iconBackgroundColor', cssVar('bubbleColumnColor')),
-  },
 });
 
 const liveSpanStyles = css({
@@ -147,6 +134,7 @@ const localVarStyles = css({
 });
 
 const iconStyles = css({
+  mixBlendMode: 'luminosity',
   display: 'inline-block',
   verticalAlign: 'text-top',
   height: '16px',
@@ -155,9 +143,7 @@ const iconStyles = css({
 });
 
 const typeStyles = css({
-  borderWidth: '1px',
-  borderStyle: 'solid',
-  borderColor: cssVar('bubbleTableFormulaTextColor'),
+  outline: `solid 1px ${cssVar('strongHighlightColor')}`,
   color: cssVar('bubbleTableFormulaTextColor'),
   backgroundColor: cssVar('bubbleTableFormulaColor'),
   svg: {
@@ -166,26 +152,6 @@ const typeStyles = css({
 });
 
 const selectedStyles = css({
-  backgroundColor: cssVar('bubbleBackground'),
-  color: cssVar('bubbleColor'),
-});
-
-const columnStyles = css({
-  color: cssVar('bubbleColumnTextColor'),
-  backgroundColor: cssVar('bubbleColumnColor'),
-});
-
-const cellStyles = css({
-  backgroundColor: cssVar('bubbleColumnColor'),
-  color: cssVar('bubbleColumnTextColor'),
-});
-
-const isSelectedCellStyles = css({
-  color: cssVar('bubbleColumnTextSelectedColor'),
-  backgroundColor: cssVar('bubbleColumnSelectedColor'),
-});
-
-const isSelectedColumnStyles = css({
-  color: cssVar('bubbleColumnTextSelectedColor'),
-  backgroundColor: cssVar('bubbleColumnSelectedColor'),
+  backgroundColor: cssVar('variableHighlightTextColor'),
+  color: cssVar('variableHighlightColor'),
 });

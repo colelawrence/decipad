@@ -1,6 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
+import {
+  useEditorStylesContext,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
@@ -11,6 +15,8 @@ import {
   resultBubbleStyles,
   resultLoadingIconStyles,
 } from '../../styles/results';
+import { AvailableSwatchColor } from '../../utils';
+import { bubbleColors } from '../../utils/bubbleColors';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -37,7 +43,6 @@ const highlightStyles = (isReference: boolean, readOnly: boolean) =>
     resultBubbleStyles,
     {
       display: 'inline-block',
-      color: cssVar('magicNumberTextColor'),
       padding: '1px 6px 0px 6px',
       lineHeight: '1.3',
       '@media print': {
@@ -90,6 +95,12 @@ export const MagicNumber = ({
 }: MagicNumberProps): ReturnType<React.FC> => {
   const hasResult = !!result && !loadingState;
   const noEffectOnClick = useEventNoEffect(onClick);
+  const { color } = useEditorStylesContext();
+  const [isDarkTheme] = useThemeFromStore();
+  const { magicNumberColor } = bubbleColors({
+    color: color as AvailableSwatchColor,
+    isDarkTheme,
+  });
 
   return (
     <span
@@ -110,7 +121,10 @@ export const MagicNumber = ({
         >
           {hasResult ? (
             <span
-              css={highlightStyles(isReference, readOnly)}
+              css={[
+                highlightStyles(isReference, readOnly),
+                { color: magicNumberColor.hex },
+              ]}
               data-testid={`code-result:${String(result.value)}`}
             >
               <CodeResult

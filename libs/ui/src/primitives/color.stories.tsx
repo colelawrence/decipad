@@ -112,29 +112,6 @@ const colorNames: Record<ColorId, string> = {
   dark600: 'Dark 600',
   dark700: 'Dark 700',
 
-  sulu700: 'Color Swatch Sulu 700',
-  sulu900: 'Color Swatch Sulu 900',
-
-  pink200: 'Color Swatch Rose 200',
-  pink700: 'Color Swatch Rose 700',
-  pink900: 'Color Swatch Rose 900',
-
-  perfume200: 'Color Swatch Perfume 200',
-  perfume700: 'Color Swatch Perfume 700',
-  perfume900: 'Color Swatch Perfume 900',
-
-  malibu200: 'Color Swatch Malibu 200',
-  malibu700: 'Color Swatch Malibu 700',
-  malibu900: 'Color Swatch Malibu 900',
-
-  sun500: 'Color Swatch Sun 500',
-  sun700: 'Color Swatch Sun 700',
-  sun900: 'Color Swatch Sun 900',
-
-  lavender000: 'Lavender 000',
-
-  gleb700: 'Gleb 700',
-
   normalOpacity: 'Normal Opacity',
   weakOpacity: 'Weak Opacity',
   strongOpacity: 'Strong Opacity',

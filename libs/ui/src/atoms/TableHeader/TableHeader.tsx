@@ -262,7 +262,10 @@ export const TableHeader = ({
       )}
 
       <div css={headerWrapperStyles}>
-        <span css={{ width: '16px', height: '16px' }} contentEditable={false}>
+        <span
+          css={{ width: '16px', height: '16px', mixBlendMode: 'luminosity' }}
+          contentEditable={false}
+        >
           {draggable &&
             dragSource &&
             (!error || error === 'Expected expression') &&

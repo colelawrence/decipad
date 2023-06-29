@@ -1,14 +1,19 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useCallback } from 'react';
+import { FC, ReactNode, useCallback, useContext } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useAutoAnimate } from '../../hooks';
-import { cssVar } from '../../primitives';
-import { tableRowCounter } from '../../utils';
+import { cssVar, setCssVar } from '../../primitives';
+import {
+  AvailableSwatchColor,
+  TableStyleContext,
+  swatchesThemed,
+  tableRowCounter,
+} from '../../utils';
 
 export const regularBorder = `1px solid ${cssVar('borderTable')}`;
-const liveResultBorder = `1px solid ${cssVar('borderTable')}`;
 const borderRadius = '8px';
 
 const tableBaseStyles = css({
@@ -97,7 +102,13 @@ const borderRadiusStyles = css({
   },
 });
 
-const allBorderStyles = (outerBorder: string, innerBorder: string) =>
+const allBorderStyles = ({
+  outerBorder,
+  innerBorder,
+}: {
+  outerBorder: string;
+  innerBorder: string;
+}) =>
   css({
     '': {
       borderRight: innerBorder,
@@ -110,6 +121,10 @@ const allBorderStyles = (outerBorder: string, innerBorder: string) =>
       {
         borderLeft: outerBorder,
       },
+    '> thead > tr > th:nth-last-of-type(1), > tbody > tr > td:nth-last-of-type(1), > tfoot > tr > td:nth-last-of-type(1)':
+      {
+        borderRight: outerBorder,
+      },
   });
 
 const hiddenSelectionStyles = css({
@@ -119,12 +134,6 @@ const hiddenSelectionStyles = css({
 });
 
 const liveResultStyles = css({
-  '> thead > tr > th': {
-    borderTop: liveResultBorder,
-  },
-  '> thead > tr > th:last-of-type, > tbody > tr > td:last-of-type': {
-    borderRight: liveResultBorder,
-  },
   '> tbody > tr:last-of-type > td, > tfoot > tr > td:last-of-type': {
     border: 0,
   },
@@ -182,9 +191,14 @@ export const Table = ({
   onMouseOver = noop,
 }: TableProps): ReturnType<FC> => {
   const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
-  const border = isLiveResult ? liveResultBorder : regularBorder;
   const onMouseEnter = useCallback(() => onMouseOver(true), [onMouseOver]);
   const onMouseLeave = useCallback(() => onMouseOver(false), [onMouseOver]);
+
+  const { color } = useContext(TableStyleContext);
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = swatchesThemed(darkTheme);
+  const darkBorderColor =
+    baseSwatches[(color || 'Catskill') as AvailableSwatchColor].hex;
 
   return (
     <table
@@ -195,15 +209,19 @@ export const Table = ({
         b === 'all' &&
           !isReadOnly && [
             borderRadiusStyles,
-            allBorderStyles(border, regularBorder),
+            allBorderStyles({
+              innerBorder: regularBorder,
+              outerBorder: regularBorder,
+            }),
           ],
         tableWidth === 'WIDE' && wideTableStyles,
         isSelectingCell && hiddenSelectionStyles,
         isLiveResult && liveResultStyles,
         b === 'inner' && nestedStyles,
         isReadOnly && readOnlyTableStyles,
-        !head && { borderTop: border },
+        !head && { borderTop: regularBorder },
         footer && footerStyles,
+        darkTheme && { ...setCssVar('borderTable', darkBorderColor) },
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

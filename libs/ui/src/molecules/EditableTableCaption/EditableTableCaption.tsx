@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import { MenuItem, SegmentButtons, TextAndIconButton } from '../../atoms';
-
 import * as icons from '../../icons';
 import { FormulasDrawer } from '../../organisms';
 import {
@@ -11,19 +11,15 @@ import {
   markTypes,
   shapes,
 } from '../../organisms/PlotParams/PlotParams';
-import {
-  cssVar,
-  display,
-  p16Medium,
-  placeholderOpacity,
-  setCssVar,
-} from '../../primitives';
+import { display, p14Regular, placeholderOpacity } from '../../primitives';
+import { codeBlock } from '../../styles';
 import {
   hideOnPrint,
   slimBlockWidth,
   wideBlockWidth,
 } from '../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
+import { bubbleColors } from '../../utils/bubbleColors';
 import { IconPopover } from '../IconPopover/IconPopover';
 import { MenuList } from '../MenuList/MenuList';
 
@@ -43,6 +39,20 @@ const tableCaptionInnerStyles = css({
   lineBreak: 'unset',
 });
 
+const tableVarStyles = css(codeBlock.structuredVariableStyles, {
+  padding: '4px 8px',
+  borderRadius: '6px',
+  display: 'flex',
+  alignItems: 'center',
+  overflowWrap: 'anywhere',
+  maxWidth: '174px',
+  wordBreak: 'break-word',
+  whiteSpace: 'normal',
+  '@media print': {
+    background: 'unset',
+  },
+});
+
 const tableTitleWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
@@ -52,8 +62,8 @@ const tableTitleWrapperStyles = css({
 
 const tableIconSizeStyles = css({
   display: 'grid',
-  width: '24px',
-  height: '24px',
+  width: 16,
+  height: 16,
 });
 
 const buttonRowStyles = css({
@@ -63,13 +73,12 @@ const buttonRowStyles = css({
   alignItems: 'center',
 });
 
-const placeholderStyles = css(p16Medium, {
+const placeholderStyles = css(codeBlock.structuredVariableStyles, {
   cursor: 'text',
   display: 'flex',
   '&::before': {
     ...display,
-    ...p16Medium,
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+    ...p14Regular,
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
     opacity: placeholderOpacity,
@@ -80,7 +89,7 @@ const placeholderStyles = css(p16Medium, {
 
 const wrapperStyle = css({ display: 'flex', textAlign: 'center' });
 
-const editableTableCaptionStyles = css(p16Medium);
+const editableTableCaptionStyles = css(codeBlock.structuredVariableStyles);
 
 const toggleFormulaStyles = (
   hideFormulas: boolean,
@@ -118,6 +127,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   children,
   showToggleCollapsedButton = false,
 }) => {
+  const [isDarkTheme] = useThemeFromStore();
   const {
     color,
     icon,
@@ -131,13 +141,27 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   } = useContext(TableStyleContext);
 
   const Icon = icons[icon];
+  const { backgroundColor, filters, textColor } = bubbleColors({
+    color: color as AvailableSwatchColor,
+    isDarkTheme,
+  });
+
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
   return (
     <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
       <div css={[tableCaptionInnerStyles, tableCaptionSlimStyles]}>
-        <div css={tableTitleWrapperStyles}>
-          <div contentEditable={false} css={tableIconSizeStyles}>
+        <div
+          css={[
+            tableTitleWrapperStyles,
+            tableVarStyles,
+            {
+              backgroundColor: backgroundColor.hex,
+            },
+            filters,
+          ]}
+        >
+          <div contentEditable={false} css={[tableIconSizeStyles, filters]}>
             {readOnly ? (
               <Icon />
             ) : (
@@ -156,7 +180,13 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           <div
             aria-placeholder={empty ? 'Name your table' : ''}
             aria-roledescription="table name"
-            css={[placeholderStyles, editableTableCaptionStyles]}
+            css={[
+              placeholderStyles,
+              editableTableCaptionStyles,
+              {
+                color: textColor.hex,
+              },
+            ]}
             spellCheck={false}
             contentEditable={!readOnly}
             data-testid={'table-name-input'}

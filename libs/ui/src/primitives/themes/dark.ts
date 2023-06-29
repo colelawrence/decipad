@@ -30,7 +30,6 @@ import {
   grey500,
   grey600,
   grey700,
-  malibu700,
   offBlack,
   offWhite,
   orange100,
@@ -200,8 +199,8 @@ export const theme: CssVariables = {
 
   currentTextColor: dark200.hex,
 
-  linkNormalColor: malibu700.hex,
-  linkNormalHoverColor: malibu700.hex,
+  linkNormalColor: blue700.hex,
+  linkNormalHoverColor: blue700.hex,
   linkDangerColor: red500.hex,
   linkDangerHoverColor: red700.hex,
 
@@ -218,7 +217,7 @@ export const theme: CssVariables = {
   bubbleFormulaTextColor: teal500.hex,
   bubbleTextColor: teal800.hex,
 
-  variableHighlightColor: teal800.hex,
+  variableHighlightColor: dark700.hex,
   variableHighlightTextColor: dark100.hex,
 
   bubbleTableFormulaColor: dark700.hex,

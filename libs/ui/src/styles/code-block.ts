@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { css, CSSObject } from '@emotion/react';
 import { code, cssVar, p14Regular, setCssVar } from '../primitives';
 
@@ -44,11 +43,3 @@ export const pIconStyles = css({
   pointerEvents: 'none',
   userSelect: 'none',
 });
-
-export const mutedCodeblockStyles = css(
-  isFlagEnabled('MUTED_CODELINES')
-    ? {
-        filter: 'saturate(500%) hue-rotate(315deg) grayscale(75%)',
-      }
-    : {}
-);

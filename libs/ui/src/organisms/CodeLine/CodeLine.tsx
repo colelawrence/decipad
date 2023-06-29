@@ -1,10 +1,20 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
+import {
+  useEditorStylesContext,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import type { DragEvent, FC } from 'react';
-import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
+import React, {
+  ComponentProps,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import { CodeResult } from '..';
 import { CodeError } from '../../atoms';
 import {
@@ -15,23 +25,23 @@ import {
   p14Regular,
   setCssVar,
   smallScreenQuery,
+  transparency,
   wiggle,
 } from '../../primitives';
 import { codeBlock } from '../../styles';
-import { mutedCodeblockStyles } from '../../styles/code-block';
 import { resultBubbleStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
-import { isTabularType } from '../../utils';
+import {
+  AvailableSwatchColor,
+  TableStyleContext,
+  isTabularType,
+} from '../../utils';
+import { bubbleColors } from '../../utils/bubbleColors';
 
 const { lineHeight } = codeBlock;
 
-const highlightedLineStyles = {
-  borderColor: cssVar('droplineColor'),
-};
-
 const formulaDrawerHighlightLineStyles = css({
   borderColor: 'revert',
-  backgroundColor: cssVar('highlightColor'),
   borderRadius: 0,
 });
 
@@ -43,9 +53,11 @@ const codeLineStyles = (
   css({
     ...(variant === 'standalone'
       ? {
-          border: `1px solid ${cssVar('borderColor')}`,
+          borderTop: `1px solid ${cssVar('borderColor')}`,
+          borderLeft: `1px solid ${cssVar('borderColor')}`,
+          borderRight: `1px solid ${cssVar('borderColor')}`,
 
-          backgroundColor: cssVar('highlightColor'),
+          backgroundColor: cssVar('backgroundColor'),
           padding: '6px 12px',
         }
       : {
@@ -63,7 +75,11 @@ const codeLineStyles = (
           borderBottomRightRadius: '10px',
         }
       : {}),
-
+    ...(!hasNext && variant === 'standalone'
+      ? {
+          borderBottom: `1px solid ${cssVar('borderColor')}`,
+        }
+      : {}),
     position: 'relative',
 
     ...(variant === 'standalone'
@@ -203,6 +219,16 @@ export const CodeLine: FC<CodeLineProps> = ({
   element,
 }) => {
   const [grabbing, setGrabbing] = useState(false);
+  // refactor before merge
+  const { color: tableColor } = useContext(TableStyleContext);
+  const { color: defaultColor } = useEditorStylesContext();
+  const color = tableColor || defaultColor;
+  const [isDarkTheme] = useThemeFromStore();
+  const { backgroundColor } = bubbleColors({
+    color: color as AvailableSwatchColor,
+    isDarkTheme,
+    variant: 'highlighted',
+  });
 
   const freshResult = useResultInfo({
     result,
@@ -236,9 +262,10 @@ export const CodeLine: FC<CodeLineProps> = ({
     <div
       css={[
         codeLineStyles(variant, hasNextSibling, hasPreviousSibling),
-        highlight && highlightedLineStyles,
         variant === 'table' && highlight && formulaDrawerHighlightLineStyles,
-        !highlight && mutedCodeblockStyles,
+        highlight && {
+          backgroundColor: transparency(backgroundColor, 0.16).rgba,
+        },
       ]}
       spellCheck={false}
       data-testid="code-line"

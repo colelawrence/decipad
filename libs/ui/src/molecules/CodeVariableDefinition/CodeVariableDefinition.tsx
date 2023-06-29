@@ -1,6 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SerializedType } from '@decipad/computer';
 import { CellValueType, MyEditor } from '@decipad/editor-types';
+import {
+  useEditorStylesContext,
+  useThemeFromStore,
+} from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import {
   TElement,
@@ -21,33 +25,24 @@ import {
 } from 'react';
 import { Location } from 'slate';
 import { Formula, Number } from '../../icons';
-import { cssVar, setCssVar } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { getTypeIcon } from '../../utils';
+import { AvailableSwatchColor, getTypeIcon } from '../../utils';
+import { bubbleColors } from '../../utils/bubbleColors';
 
-const varStyles = (type: 'simple' | 'formula') =>
-  css(codeBlock.structuredVariableStyles, {
-    padding: '4px 8px',
-    borderRadius: '6px',
-    color:
-      type === 'formula'
-        ? cssVar('bubbleFormulaTextColor')
-        : cssVar('bubbleTextColor'),
-    background:
-      type === 'formula'
-        ? cssVar('bubbleFormulaColor')
-        : cssVar('bubbleBackgroundColor'),
-    display: 'flex',
-    alignItems: 'center',
-    overflowWrap: 'anywhere',
-    maxWidth: '174px',
-    wordBreak: 'break-word',
-    whiteSpace: 'normal',
-    '@media print': {
-      background: 'unset',
-    },
-  });
+const varStyles = css(codeBlock.structuredVariableStyles, {
+  padding: '4px 8px',
+  borderRadius: '6px',
+  display: 'flex',
+  alignItems: 'center',
+  overflowWrap: 'anywhere',
+  maxWidth: '174px',
+  wordBreak: 'break-word',
+  whiteSpace: 'normal',
+  '@media print': {
+    background: 'unset',
+  },
+});
 
 const iconStyles = css({
   display: 'inline-flex',
@@ -56,20 +51,6 @@ const iconStyles = css({
   width: '16px',
   marginRight: '4px',
 });
-
-const iconColorStyles = (type: 'simple' | 'formula', hasErrors = false) =>
-  css({
-    svg: {
-      ...setCssVar(
-        'currentTextColor',
-        hasErrors
-          ? cssVar('buttonDangerHeavy')
-          : type === 'formula'
-          ? cssVar('bubbleFormulaTextColor')
-          : cssVar('bubbleTextColor')
-      ),
-    },
-  });
 
 const emptyStyles = css({
   '::after': {
@@ -190,9 +171,21 @@ export const CodeVariableDefinition = ({
 }: NonInteractiveCodeVariableProps) => {
   const [grabbing, setGrabbing] = useState(false);
   const Icon = useMemo(() => (type ? getTypeIcon(type) : Number), [type]);
-  const hasErrors = type?.kind === 'type-error';
 
-  const elementType = isValue ? 'simple' : 'formula';
+  const { color } = useEditorStylesContext();
+  const [isDarkTheme] = useThemeFromStore();
+  const { backgroundColor, filters, textColor } = bubbleColors({
+    color: color as AvailableSwatchColor,
+    isDarkTheme,
+  });
+
+  const varThemeStyles = {
+    backgroundColor: backgroundColor.hex,
+    color: textColor.hex,
+  };
+
+  const iconColorStyles = filters;
+
   const rootProps: HTMLAttributes<HTMLSpanElement> = useMemo(
     () =>
       getCodeVariableDefinitionRootProps({
@@ -207,8 +200,10 @@ export const CodeVariableDefinition = ({
 
   return (
     <span
+      className="codevardef"
       css={[
-        varStyles(elementType),
+        varStyles,
+        varThemeStyles,
         empty && emptyStyles,
         !contentEditable &&
           onDragStartInlineResult && {
@@ -220,18 +215,12 @@ export const CodeVariableDefinition = ({
       {...rootProps}
     >
       {!isValue && (
-        <span css={[formulaIconStyles, iconColorStyles(elementType)]}>
+        <span css={[formulaIconStyles, iconColorStyles]}>
           <Formula />
         </span>
       )}
       <span
-        css={
-          Icon && [
-            hideOnPrint,
-            iconStyles,
-            iconColorStyles(elementType, hasErrors),
-          ]
-        }
+        css={Icon && [hideOnPrint, iconStyles, iconColorStyles]}
         contentEditable={false}
       >
         {Icon && <Icon />}

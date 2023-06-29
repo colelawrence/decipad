@@ -1,7 +1,7 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { addColumn, writeInTable } from '../utils/page/Table';
-import { Timeouts, createWorkspace, getStyle } from '../utils/src';
+import { Timeouts, createWorkspace } from '../utils/src';
 
 test.describe('Make sure auto-complete works', () => {
   test.describe.configure({ mode: 'serial' });
@@ -90,14 +90,6 @@ test.describe('Make sure auto-complete works', () => {
     await expect(
       page.getByTestId('editor-table').getByTestId('number-result:101')
     ).toBeVisible();
-  });
-
-  test('Styles of bubbles are different for columns and variables', async () => {
-    const ref1 = page.locator('[data-testid="smart-ref"] > span > span').nth(0);
-    const ref2 = page.locator('[data-testid="smart-ref"] > span > span').nth(1);
-    const color1 = await getStyle(ref1, 'background-color');
-    const color2 = await getStyle(ref2, 'background-color');
-    expect(color1).not.toBe(color2);
   });
 
   test('New table with revenueNew', async () => {

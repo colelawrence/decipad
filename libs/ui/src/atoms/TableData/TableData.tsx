@@ -17,14 +17,7 @@ import {
 import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
 import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
-import {
-  Opacity,
-  cssVar,
-  p12Medium,
-  purple100,
-  setCssVar,
-  transparency,
-} from '../../primitives';
+import { cssVar, p12Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
 import { tdBaseStyles } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
@@ -71,12 +64,6 @@ const tdDisabledStyles = css({
 
 const alignRightStyles = css({
   textAlign: 'right',
-});
-
-const liveResultOpacity: Opacity = 0.4;
-
-const liveResultStyles = css({
-  background: transparency(purple100, liveResultOpacity).rgba,
 });
 
 const selectedStyles = css({
@@ -180,7 +167,6 @@ export const TableData = forwardRef(
           selected && selectedStyles,
           focused && focusedStyles,
           alignRight && alignRightStyles,
-          isLiveResult && liveResultStyles,
           draggable && draggableStyles,
           !isEditable && nonContentEditableStyles,
         ]}

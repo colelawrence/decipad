@@ -6,6 +6,7 @@ import {
   blue50,
   blue500,
   blue600,
+  blue700,
   brand100,
   brand200,
   brand300,
@@ -21,7 +22,6 @@ import {
   grey500,
   grey600,
   grey700,
-  malibu700,
   offBlack,
   offWhite,
   orange100,
@@ -186,8 +186,8 @@ export const theme: CssVariables = {
 
   currentTextColor: grey600.hex,
 
-  linkNormalColor: malibu700.hex,
-  linkNormalHoverColor: malibu700.hex,
+  linkNormalColor: blue700.hex,
+  linkNormalHoverColor: blue700.hex,
   linkDangerColor: red500.hex,
   linkDangerHoverColor: red700.hex,
 
@@ -197,8 +197,8 @@ export const theme: CssVariables = {
   bubbleBackground: teal200.hex,
 
   // usage of variables Foo
-  variableHighlightColor: teal50.hex,
-  variableHighlightTextColor: teal500.hex,
+  variableHighlightColor: grey200.hex,
+  variableHighlightTextColor: grey600.hex,
 
   // columns of tables Table1.Dogs
   bubbleColumnSelectedColor: blue500.hex,
@@ -208,7 +208,7 @@ export const theme: CssVariables = {
 
   // formula definitions x = f + 1
   bubbleFormulaColor: teal200.hex,
-  bubbleFormulaTextColor: grey600.hex,
+  bubbleFormulaTextColor: teal800.hex,
 
   // formula definitions in tables
   bubbleTableFormulaColor: grey100.hex,
