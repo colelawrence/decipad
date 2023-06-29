@@ -1,4 +1,9 @@
-import { FileType } from '@decipad/editor-types';
+import {
+  FileType,
+  MAX_UPLOAD_FILE_SIZE,
+  SubscriptionPlan,
+} from '@decipad/editor-types';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { isValidURL } from '@decipad/ui';
 import { css } from '@emotion/react';
@@ -6,7 +11,7 @@ import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
 import { Button, TextAndIconButton } from '../../atoms';
 import { Close } from '../../icons';
 import { Tabs } from '../../molecules/Tabs/Tabs';
-import { cssVar, p12Medium, p13Bold, p15Medium } from '../../primitives';
+import { cssVar, p12Medium, p15Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 
 interface UploadFileModalProps {
@@ -21,24 +26,27 @@ interface FileCfg {
   accept?: string;
 }
 
-const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
+const getConfigForFileType = (
+  fileType: FileType | undefined,
+  plan: SubscriptionPlan
+): FileCfg => {
   switch (fileType) {
     case 'image':
       return {
-        title: 'Upload an image',
-        maxSize: 1_000_000,
+        title: 'Insert image',
+        maxSize: MAX_UPLOAD_FILE_SIZE.image[plan],
         accept: 'image/jpeg, image/png, image/gif',
       };
     case 'media':
       return {
-        title: 'Upload a video',
-        maxSize: 5_000_000,
+        title: 'Insert video',
+        maxSize: MAX_UPLOAD_FILE_SIZE.media[plan],
         accept: 'video/*',
       };
     case 'data':
       return {
         title: 'Upload a data file',
-        maxSize: 1_000_000,
+        maxSize: MAX_UPLOAD_FILE_SIZE.data[plan],
         accept: '.csv, application/vnd.apache.arrow',
       };
     default:
@@ -51,7 +59,10 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   onCancel,
   onUpload,
 }) => {
-  const { title, maxSize, accept } = getConfigForFileType(fileType);
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
+
+  const { title, maxSize, accept } = getConfigForFileType(fileType, plan);
   const MAX_LABEL = `${maxSize / 1_000_000}MB`;
 
   const [activeTab, setActiveTab] = useState('upload');
@@ -60,8 +71,8 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
 
   const stringPerUploadFileType = useMemo(() => {
     return activeTab === 'upload'
-      ? { button: 'Choose file', label: 'Upload a file from your computer' }
-      : { button: 'Embed', label: 'Paste a URL from the Web' };
+      ? { button: 'Choose file' }
+      : { button: 'Embed' };
   }, [activeTab]);
 
   const handleFileChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -119,16 +130,6 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
         </Tabs>
       </div>
       <div css={importFileWrapperStyles}>
-        <div css={importFileTopbarStyles}>
-          <span>
-            <span css={p13Bold}>{stringPerUploadFileType.label}</span>
-            <span css={p12Medium}>
-              {' '}
-              (you can also drag & drop, or copy & paste directly into the
-              notebook)
-            </span>
-          </span>
-        </div>
         <div css={importFileActionStyles}>
           {activeTab === 'embed' && (
             <>
@@ -165,6 +166,9 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
             </>
           )}
         </div>
+        <span css={p12Medium}>
+          You can also drag & drop, or copy & paste directly into the notebook.
+        </span>
       </div>
     </div>
   );
@@ -189,13 +193,6 @@ const iconStyles = css({
   },
 });
 
-const importFileTopbarStyles = css({
-  width: '100%',
-
-  display: 'flex',
-  justifyContent: 'space-between',
-});
-
 const inputStyles = css({
   background: cssVar('backgroundColor'),
   borderRadius: '6px',
@@ -206,8 +203,6 @@ const inputStyles = css({
 });
 
 const importFileActionStyles = css({
-  paddingTop: '8px',
-
   display: 'flex',
   gap: '8px',
 

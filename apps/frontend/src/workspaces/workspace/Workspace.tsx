@@ -34,6 +34,7 @@ import {
   TopbarPlaceholder,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import stringify from 'json-stringify-safe';
 import sortBy from 'lodash.sortby';
 import { signOut, useSession } from 'next-auth/react';
@@ -99,6 +100,7 @@ type WorkspaceProps = {
 
 const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const { show, showNewMessage } = useIntercom();
+  const { setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
 
   const showFeedback = useCallback(() => {
     show();
@@ -225,6 +227,13 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     () => allWorkspaces.find((w) => w.id === workspaceId),
     [allWorkspaces, workspaceId]
   );
+
+  useEffect(() => {
+    setCurrentWorkspaceInfo({
+      id: currentWorkspace?.id,
+      isPremium: !!currentWorkspace?.isPremium,
+    });
+  }, [currentWorkspace, setCurrentWorkspaceInfo]);
 
   const pageInfo: ComponentProps<typeof NotebookListItem>['page'] =
     useMemo(() => {

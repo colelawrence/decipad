@@ -25,3 +25,4 @@ export * from './editor-context';
 export * from './database-store';
 export * from './file-upload-store';
 export * from './utils';
+export * from './current-workspace-store';

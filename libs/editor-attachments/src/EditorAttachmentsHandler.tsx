@@ -6,7 +6,7 @@ import {
 } from '@decipad/editor-components';
 import { insertImageBelow } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
 import { UploadProgressModal } from '@decipad/ui';
@@ -20,6 +20,7 @@ import {
 } from '@udecode/plate';
 import { dndStore as plateDndStore } from '@udecode/plate-dnd';
 import axios, { AxiosProgressEvent } from 'axios';
+import { SubscriptionPlan } from '@decipad/editor-types';
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
@@ -51,6 +52,8 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
   const computer = useComputer();
   const { editor } = useNotebookState(notebookId);
 
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
   const [attachments, setAttachments] = useState(
     defaultEditorAttachmentsContextValue
   );
@@ -187,7 +190,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
       Array.from(items).forEach(async (item) => {
         // Async fire and forget
         try {
-          const file = validateItemAndGetFile(item);
+          const file = validateItemAndGetFile(item, plan);
           if (file instanceof File) {
             onAttach(file);
           }
@@ -196,7 +199,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         }
       });
     },
-    canDrop: canDropFile,
+    canDrop: (data: DataTransfer) => canDropFile(data, plan),
     collect: (monitor: DropTargetMonitor) => {
       return {
         canDrop: monitor.canDrop(),

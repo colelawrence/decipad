@@ -1,10 +1,17 @@
+import {
+  SubscriptionPlan,
+  MAX_UPLOAD_FILE_SIZE,
+  FileType,
+} from '@decipad/editor-types';
+
 const acceptableFileTypes = ['text/csv', 'application/json', 'image/'];
 const validFileType = (type: string) =>
   acceptableFileTypes.some((prefix) => type.startsWith(prefix));
 
-const maxFileSizeBytes = 1_000_000;
-
-export const validateItemAndGetFile = (item: DataTransferItem): File | true => {
+export const validateItemAndGetFile = (
+  item: DataTransferItem,
+  plan: SubscriptionPlan
+): File | true => {
   if (item.kind !== 'file') throw new Error(`Item kind is not a file`);
 
   const file = item.getAsFile();
@@ -14,6 +21,8 @@ export const validateItemAndGetFile = (item: DataTransferItem): File | true => {
     }
     return true;
   }
+  const fileType = file.type.split('/')[0] as FileType;
+  const maxFileSizeBytes = MAX_UPLOAD_FILE_SIZE[fileType][plan];
 
   if (!validFileType(file.type)) {
     console.warn(

@@ -31,7 +31,7 @@ export const DropZoneDetector: FC<DropZoneProps> = ({
             Upload images or data
           </h1>
           <span css={css(p14Medium, { color: cssVar('weakerSlashIconColor') })}>
-            .csv, .json, .gif, .jpg, 1MB max
+            .csv, .json, .gif, .jpg, .jpeg, .png
           </span>
         </div>
       )}

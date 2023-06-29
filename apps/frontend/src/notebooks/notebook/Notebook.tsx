@@ -9,6 +9,7 @@ import {
   EditorChangeContextProvider,
   EditorStylesContext,
   EditorStylesContextValue,
+  useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
 import {
@@ -18,7 +19,7 @@ import {
   NotebookPage,
   TopbarPlaceholder,
 } from '@decipad/ui';
-import { FC, lazy, useCallback, useMemo, useState } from 'react';
+import { FC, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
@@ -39,6 +40,7 @@ loadEditorIcon().then(loadEditor);
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
+  const { setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
 
   const {
     notebook: { id: notebookId },
@@ -77,7 +79,15 @@ const Notebook: FC = () => {
 
   const [, renameNotebook] = useRenameNotebookMutation();
 
-  const workspaceId = notebook?.workspace?.id;
+  const workspace = notebook?.workspace;
+  const workspaceId = workspace?.id;
+
+  useEffect(() => {
+    setCurrentWorkspaceInfo({
+      id: workspace?.id,
+      isPremium: !!workspace?.isPremium,
+    });
+  }, [workspace, setCurrentWorkspaceInfo]);
 
   useAnimateMutations();
 
