@@ -5,6 +5,7 @@ import {
   createCalculationBlockBelow,
   createCodeLineV2Below,
   createDataViewBelow,
+  createDateBelow,
   createDropdownBelow,
   createInputBelow,
   createLineChartBelow,
@@ -64,28 +65,24 @@ test.describe('Test Menu Blocks', () => {
     await expect(page.getByText('FourthBlock')).toBeVisible();
   });
 
-  test('creates data view', async () => {
-    await createDataViewBelow(page, 'FifthBlock');
-  });
-
   test('creates pie chart', async () => {
-    await createPieChartBelow(page, 'SixthBlock');
+    await createPieChartBelow(page);
   });
 
   test('creates line chart', async () => {
-    await createLineChartBelow(page, 'SeventhBlock');
+    await createLineChartBelow(page);
   });
 
   test('creates bar chart', async () => {
-    await createBarChartBelow(page, 'EightBlock');
+    await createBarChartBelow(page);
   });
 
   test('creates area chart', async () => {
-    await createAreaChartBelow(page, 'NinethBlock');
+    await createAreaChartBelow(page);
   });
 
   test('creates scatter chart', async () => {
-    await createScatterChartBelow(page, 'TenthBlock');
+    await createScatterChartBelow(page);
   });
 
   test('creates input widget', async () => {
@@ -97,7 +94,7 @@ test.describe('Test Menu Blocks', () => {
   });
 
   test('creates date widget', async () => {
-    await createDataViewBelow(page, 'ThirteenthBlock');
+    await createDateBelow(page, 'DateThing');
   });
 
   test('creates slider widget', async () => {
@@ -110,6 +107,10 @@ test.describe('Test Menu Blocks', () => {
 
   test('creates dropdown widget', async () => {
     await createDropdownBelow(page, 'SixteenthBlock');
+  });
+
+  test('creates data view', async () => {
+    await createDataViewBelow(page);
   });
 
   // missing text blocks

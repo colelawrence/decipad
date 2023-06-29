@@ -40,7 +40,6 @@ const tableCaptionInnerStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   gap: '9px',
-  marginBottom: '8px',
   lineBreak: 'unset',
 });
 
@@ -48,6 +47,7 @@ const tableTitleWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
+  textAlign: 'center',
 });
 
 const tableIconSizeStyles = css({
@@ -74,9 +74,11 @@ const placeholderStyles = css(p16Medium, {
     content: 'attr(aria-placeholder)',
     opacity: placeholderOpacity,
   },
+  lineHeight: '24px',
+  paddingTop: '2px',
 });
 
-const wrapperStyle = css({ display: 'flex' });
+const wrapperStyle = css({ display: 'flex', textAlign: 'center' });
 
 const editableTableCaptionStyles = css(p16Medium);
 
@@ -154,7 +156,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           <div
             aria-placeholder={empty ? 'Name your table' : ''}
             aria-roledescription="table name"
-            css={[editableTableCaptionStyles, placeholderStyles]}
+            css={[placeholderStyles, editableTableCaptionStyles]}
             spellCheck={false}
             contentEditable={!readOnly}
             data-testid={'table-name-input'}

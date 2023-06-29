@@ -6,20 +6,18 @@ import { Label } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
-const selectFontStyles = css(p12Medium);
+const selectFontStyles = css(p12Medium, {
+  color: cssVar('normalTextColor'),
+});
 
 const hoveredStyles = css({
   backgroundColor: cssVar('strongHighlightColor'),
 });
 
 const selectStyles = css({
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('tintedBackgroundColor'),
   fontWeight: 'bold',
   ':hover': { ...hoveredStyles },
-});
-
-const unselectedValueStyles = css({
-  color: cssVar('evenStrongerHighlightColor'),
 });
 
 interface SelectInputProps {
@@ -41,12 +39,7 @@ const SelectInput = ({
       onHover={setHovered}
       renderContent={(id) => (
         <select
-          css={[
-            selectFontStyles,
-            selectStyles,
-            !value && unselectedValueStyles,
-            hovered && hoveredStyles,
-          ]}
+          css={[selectFontStyles, selectStyles, hovered && hoveredStyles]}
           id={id}
           onChange={(ev) => {
             setValue(ev.target.value);
@@ -57,7 +50,7 @@ const SelectInput = ({
         </select>
       )}
     >
-      <span css={selectFontStyles}>{labelText}:</span>
+      <span css={selectFontStyles}>{labelText}</span>
     </Label>
   );
 };

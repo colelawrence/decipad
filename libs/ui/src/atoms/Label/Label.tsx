@@ -24,9 +24,8 @@ const hoveredBubbleStyles = css({
 const bubbleStyles = css(codeBlock.variableStyles, {
   padding: '4px 8px',
   borderRadius: '8px',
-
-  backgroundColor: cssVar('highlightColor'),
-  border: `solid 1px ${cssVar('strongerHighlightColor')}`,
+  backgroundColor: cssVar('tintedBackgroundColor'),
+  border: `1px solid ${cssVar('borderColor')}`,
   ':hover': {
     ...hoveredBubbleStyles,
   },

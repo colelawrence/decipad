@@ -47,6 +47,7 @@ const tableCaptionWrapperStyles = css({
     maxWidth: `calc(100vw - ${gutterWidth})`,
     minWidth: '0',
   },
+  marginBottom: '8px',
 });
 
 const tableWrapperTransformStyles = css({

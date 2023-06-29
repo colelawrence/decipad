@@ -53,7 +53,7 @@ export const LiveQueryVarName: PlateComponent = ({
         {children}
       </EditableLiveDataCaption>
       <VariableNameSelector
-        label="Source"
+        label="Source:"
         variableNames={useSourceLiveConnections()}
         selectedVariableName={parent?.[0].connectionBlockId}
         onChangeVariableName={usePathMutatorCallback(

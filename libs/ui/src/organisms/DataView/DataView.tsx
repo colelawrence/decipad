@@ -4,9 +4,9 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { Children, FC, ReactNode, useCallback } from 'react';
-import { Invisible, Spinner } from '../../atoms';
-import { Bolt, CircularArrow } from '../../icons';
+import { Children, FC, ReactNode } from 'react';
+import { Invisible, SegmentButtons, Spinner } from '../../atoms';
+import { Move, Transpose } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
 import { cssVar, p14Regular, smallScreenQuery } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -15,7 +15,6 @@ import {
   TableStyleContext,
   UserIconKey,
 } from '../../utils';
-import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const dataViewWrapperStyles = css({
   display: 'flex',
@@ -23,29 +22,20 @@ const dataViewWrapperStyles = css({
 });
 
 const dataViewControlsStyles = css({
+  alignItems: 'center',
   display: 'flex',
-  flexFlow: 'row wrap',
+  justifyContent: 'space-between',
+  gap: '9px',
+  lineBreak: 'unset',
+});
+
+const buttonRowStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
   gap: '4px',
 });
 
-const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
-const totalWidth = '100vw';
-const halfTotalWidth = '50vw';
-const wideToSlimBlockWidthDifference = `${
-  editorLayout.wideBlockWidth - editorLayout.slimBlockWidth
-}px`;
 const gutterWidth = '60px';
-const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
-const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
-
-const tableCaptionWrapperStyles = css({
-  maxWidth: restWidthBlock,
-  display: 'inline-block',
-  [smallScreenQuery]: {
-    maxWidth: `calc(100vw - ${gutterWidth})`,
-    minWidth: '0',
-  },
-});
 
 const dataViewTableStyles = css(p14Regular, {
   tableLayout: 'auto',
@@ -144,23 +134,6 @@ const dataViewTableOverflowStyles = css({
   minWidth: `calc((100vw - 700px) / 2)`,
 });
 
-const iconWrapperStyles = css({
-  display: 'inline-flex',
-  //
-  // strange safari bug makes errors not show
-  // if this is replaced with simply height and width
-  //
-  '> svg': {
-    height: '16px',
-    width: '16px',
-  },
-});
-
-const selectedIconWrapperStyles = css({
-  border: `solid 1px ${cssVar('strongerHighlightColor')}`,
-  borderRadius: '8px',
-});
-
 interface DataViewProps {
   readonly availableVariableNames: AutocompleteName[];
   readonly variableName: string;
@@ -195,17 +168,6 @@ export const DataView: FC<DataViewProps> = ({
   const [caption, thead, addNewColumnComponent] = Children.toArray(children);
   const readOnly = useIsEditorReadOnly();
 
-  const onRotatedChange = useEventNoEffect(
-    useCallback(() => onRotated(!rotate), [onRotated, rotate])
-  );
-
-  const onAlternateRotationChange = useEventNoEffect(
-    useCallback(
-      () => onChangeAlternateRotation(!alternateRotation),
-      [alternateRotation, onChangeAlternateRotation]
-    )
-  );
-
   return (
     <TableStyleContext.Provider
       value={{
@@ -217,37 +179,41 @@ export const DataView: FC<DataViewProps> = ({
       }}
     >
       <div css={dataViewWrapperStyles} aria-roledescription="data view">
-        <div css={dataViewControlsStyles}>
-          <div css={tableCaptionWrapperStyles}>{caption}</div>
+        <div
+          css={[dataViewControlsStyles, !readOnly && { marginBottom: '8px' }]}
+        >
+          <div css={css({ display: 'none' })}>{caption}</div>
           {!readOnly && (
             <VariableNameSelector
-              label="Source"
+              label=""
               variableNames={availableVariableNames}
               selectedVariableName={variableName}
               onChangeVariableName={onChangeVariableName}
             />
           )}
-          {isFlagEnabled('ROTATED_DATA_VIEW') && (
-            <button
-              css={rotate && selectedIconWrapperStyles}
-              onClick={onRotatedChange}
-              title="Rotate data view"
-            >
-              <span css={iconWrapperStyles}>
-                <CircularArrow />
-              </span>
-            </button>
-          )}
-          {isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
-            <button
-              onClick={onAlternateRotationChange}
-              title="Zig-zag"
-              css={alternateRotation && selectedIconWrapperStyles}
-            >
-              <span css={iconWrapperStyles}>
-                <Bolt />
-              </span>
-            </button>
+          {!readOnly && (
+            <div css={buttonRowStyles}>
+              {isFlagEnabled('ROTATED_DATA_VIEW') &&
+                isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
+                  <SegmentButtons
+                    buttons={[
+                      {
+                        children: <Transpose />,
+                        tooltip: `Flip`,
+                        onClick: () => onRotated(!rotate),
+                        testId: 'formula',
+                      },
+                      {
+                        children: <Move />,
+                        tooltip: `Drilldown`,
+                        onClick: () =>
+                          onChangeAlternateRotation(!alternateRotation),
+                        testId: 'table',
+                      },
+                    ]}
+                  />
+                )}
+            </div>
           )}
         </div>
         <div css={dataViewTableWrapperStyles} contentEditable={false}>

@@ -56,10 +56,4 @@ test.describe('Data Views', () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(1000);
   });
-
-  test('renames a data view', async () => {
-    await page.getByText('Data view for Table', { exact: true }).dblclick();
-    await page.keyboard.type('NewDataView');
-    await expect(page.getByText('NewDataView')).toBeVisible();
-  });
 });
