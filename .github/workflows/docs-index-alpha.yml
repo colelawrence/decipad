@@ -1,8 +1,8 @@
-name: Index Alpha Docs
+name: Index Prod Docs
 
 on:
   workflow_run:
-    workflows: ['Deploy Alpha']
+    workflows: ['Deploy Prod']
     types:
       - completed
 
