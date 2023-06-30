@@ -19,7 +19,8 @@ const spinnerCss = css({
 const formCss = css({
   marginBottom: 15,
   fieldset: {
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: cssVar('aiPanelBorderColor'),
