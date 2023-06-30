@@ -3,14 +3,13 @@ import {
   defaultConvertInto,
   defaultTextConversions,
 } from '@decipad/editor-utils';
-import { findNodePath } from '@udecode/plate';
 import { useMemo } from 'react';
 
 export const useTurnIntoProps = (element: MyElement) => {
   const editor = useTEditorRef();
 
   const onTurnInto = useMemo(
-    () => defaultConvertInto(editor, findNodePath(editor, element)),
+    () => defaultConvertInto(editor, element),
     [editor, element]
   );
   const turnInto = useMemo(

@@ -21,7 +21,6 @@ import {
   setNodes,
 } from '@udecode/plate';
 import { useMemo } from 'react';
-import { Path } from 'slate';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Input', value: 'expression' },
@@ -32,12 +31,13 @@ export const defaultWidgetConversions: { title: string; value: string }[] = [
   { title: 'Dropdown', value: 'dropdown' },
 ];
 
-export const defaultConvertInto =
-  (editor: MyEditor, at?: Path, result?: Result.Result) => (value: string) => {
+export const convertInto =
+  (editor: MyEditor, element: MyElement, result?: Result.Result) =>
+  (value: string) => {
+    const at = findNodePath(editor, element);
     if (!at) {
       return;
     }
-
     if (value === 'calculation' && result) {
       let code: string;
       try {
@@ -94,7 +94,7 @@ export const useTurnIntoProps = (element: MyElement) => {
   );
 
   const onTurnInto = useMemo(
-    () => defaultConvertInto(editor, findNodePath(editor, element), result),
+    () => convertInto(editor, element, result),
     [editor, element, result]
   );
   const turnInto = useMemo(

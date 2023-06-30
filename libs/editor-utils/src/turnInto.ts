@@ -6,9 +6,9 @@ import {
   ELEMENT_H3,
   ELEMENT_PARAGRAPH,
   MyEditor,
+  MyElement,
 } from '@decipad/editor-types';
-import { focusEditor, setNodes } from '@udecode/plate';
-import { Path } from 'slate';
+import { findNodePath, focusEditor, setNodes } from '@udecode/plate';
 
 export const defaultTextConversions: { title: string; value: string }[] = [
   { title: 'Calculation', value: ELEMENT_CODE_LINE },
@@ -20,7 +20,7 @@ export const defaultTextConversions: { title: string; value: string }[] = [
 ];
 
 export const defaultConvertInto =
-  (editor: MyEditor, at?: Path) => (value: string) => {
-    setNodes(editor, { type: value }, { at });
+  (editor: MyEditor, element: MyElement) => (value: string) => {
+    setNodes(editor, { type: value }, { at: findNodePath(editor, element) });
     focusEditor(editor);
   };
