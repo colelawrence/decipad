@@ -34260,10 +34260,10 @@ vega-label@~1.2.1:
     vega-scenegraph "^4.9.2"
     vega-util "^1.15.2"
 
-vega-lite@5.11.0:
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.11.0.tgz#ce7113f91753f96c17cf4b37c9ed5f98c2409c3e"
-  integrity sha512-2PmF7bbgNDDDcBWS4uZ3+I7aaQ3j9G+WaJTDtKMEBzkhADwei5CuYrwBcVk63hRZqvfeuIXxk4DBOlSW3hRx8Q==
+vega-lite@5.12.0:
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/vega-lite/-/vega-lite-5.12.0.tgz#8bfa9019a80d83f24d7eb86ac4cd609cca5599c9"
+  integrity sha512-mc0vavCp77B7wJwfVbNrJTmFuAUAornyi1nTw7UjBOFlCY6S4FKpUH9OToYC1o8rzv8HZ+QAFjz6MzmxIWfH7A==
   dependencies:
     "@types/clone" "~2.1.1"
     clone "~2.1.2"
