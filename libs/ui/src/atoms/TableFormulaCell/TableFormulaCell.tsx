@@ -18,7 +18,6 @@ const functionTdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
   cursor: 'default',
   caretColor: 'transparent',
-  padding: '0 8px',
 
   // Show line numbers on the first cell of each row.
   position: 'relative',

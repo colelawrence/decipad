@@ -219,7 +219,7 @@ export const Table = ({
         isLiveResult && liveResultStyles,
         b === 'inner' && nestedStyles,
         isReadOnly && readOnlyTableStyles,
-        !head && { borderTop: regularBorder },
+        !head && { borderTop: regularBorder, borderRadius: 8 },
         footer && footerStyles,
         darkTheme && { ...setCssVar('borderTable', darkBorderColor) },
       ]}

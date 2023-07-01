@@ -84,6 +84,7 @@ const draggableStyles = css({
 
 const nonContentEditableStyles = css({
   whiteSpace: 'nowrap',
+  backgroundColor: 'transparent',
 });
 
 export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {

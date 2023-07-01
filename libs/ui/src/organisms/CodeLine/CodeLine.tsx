@@ -90,7 +90,7 @@ const codeLineStyles = (
           gridTemplate: `
   "code            inline-res  " 1fr
   "expanded-res    expanded-res" auto
-  /minmax(0, 66%) 1fr
+  /minmax(0, 80%) 1fr
 `,
         }
       : {

@@ -5,7 +5,9 @@ import { ComponentProps, FC, ReactNode } from 'react';
 import { TableFormulaCell } from '../../atoms';
 import { cssVar, p14Medium } from '../../primitives';
 
-const tdLineStyles = css(p14Medium);
+const tdLineStyles = css(p14Medium, {
+  padding: '0 13px',
+});
 
 const selectedStyles = css({
   backgroundColor: cssVar('selectionColor'),
@@ -32,7 +34,12 @@ export const FormulaTableData = ({
   const isError = resultType === 'nothing' || resultType === 'type-error';
   const delayedResult = useDelayedValue(
     <span
-      css={resultType !== 'table' ? tdLineStyles : null}
+      css={css(
+        resultType !== 'table' && resultType !== 'column' && tdLineStyles,
+        resultType === 'column' && {
+          backgroundColor: 'transparent',
+        }
+      )}
       contentEditable={false}
     >
       {result}
@@ -49,7 +56,19 @@ export const FormulaTableData = ({
     <TableFormulaCell
       selected={selected}
       {...props}
-      css={[selected ? selectedStyles : null]}
+      css={css(
+        selected && selectedStyles,
+        resultType === 'column' && {
+          padding: 0,
+          table: {
+            borderTop: 0,
+            boxShadow: `inset -1px 0px 0px 0px ${cssVar(
+              'backgroundColor'
+            )}, inset -2px 0px 0px 0px ${cssVar('borderColor')}`,
+            borderRadius: 0,
+          },
+        }
+      )}
     >
       {firstChildren}
       <span css={noEditingStyles} contentEditable={false}>

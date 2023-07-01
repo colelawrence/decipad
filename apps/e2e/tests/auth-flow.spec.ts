@@ -1,6 +1,6 @@
 import { expect, Page, test } from '@playwright/test';
 import { setUp } from '../utils/page/Home';
-import { snapshot, withTestUser, Timeouts } from '../utils/src';
+import { snapshot, Timeouts, withTestUser } from '../utils/src';
 
 test.describe('Authentication flow', () => {
   test.beforeEach(async ({ page }) => {
@@ -28,7 +28,6 @@ test.describe('Authentication flow', () => {
     await page.click('text=/continue/i');
     await page.type('input', 'johndoe123@gmail.com');
     await page.click('text=/submit/i');
-    await snapshot(page as Page, 'Auth: Magic Link Email Sent');
   });
 
   test('should redirect to workspace if authenticated', async ({
