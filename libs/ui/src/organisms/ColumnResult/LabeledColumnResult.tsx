@@ -35,12 +35,19 @@ type LabeledColumnResultProps = CodeResultProps<'materialized-column'> & {
   labels: DimensionExplanation[];
 };
 
+const targetPageSize = (labels: DimensionExplanation[]) => {
+  const mult =
+    labels.slice(1).reduce((acc, label) => acc * label.dimensionLength, 1) || 1;
+  return Math.ceil(MAX_CELLS_PER_PAGE / mult) * mult;
+};
+
 export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
   type,
   value,
   element,
   labels,
 }) => {
+  const pageSize = targetPageSize(labels);
   const all =
     useResolved(
       useMemo(
@@ -52,9 +59,9 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
       )
     ) ?? [];
 
-  const { page, offset, setPage } = useSimplePagination({
+  const { page, setPage, valuesForPage } = useSimplePagination({
     all,
-    maxRowsPerPage: MAX_CELLS_PER_PAGE,
+    maxRowsPerPage: pageSize,
   });
 
   return (
@@ -62,52 +69,50 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
       isReadOnly={true}
       body={
         <>
-          {all
-            .slice(offset, offset + MAX_CELLS_PER_PAGE)
-            .map((matrixValue, index) => {
-              return (
-                <TableRow readOnly key={index}>
-                  {matrixValue.labelInfo.map((labelInfo, i) => {
-                    return labelInfo.indexesOfRemainingLengthsAreZero ? (
-                      <TableData
-                        key={i}
-                        as="td"
-                        rowSpan={labelInfo.productOfRemainingLengths}
-                        showPlaceholder={false}
-                        element={element}
+          {valuesForPage.map((matrixValue, index) => {
+            return (
+              <TableRow readOnly key={index}>
+                {matrixValue.labelInfo.map((labelInfo, i) => {
+                  return index === 0 ||
+                    labelInfo.indexesOfRemainingLengthsAreZero ? (
+                    <TableData
+                      key={i}
+                      as="td"
+                      rowSpan={labelInfo.productOfRemainingLengths}
+                      showPlaceholder={false}
+                      element={element}
+                    >
+                      <span
+                        css={[
+                          css(table.getCellWrapperStyles(type.cellType)),
+                          // In case there is a nested dimension but no labels (ie. the nested dimension
+                          // will render in the first column), we need to give it some space from the row
+                          // number
+                          !labels && table.cellLeftPaddingStyles,
+                          rowLabelStyles,
+                        ]}
                       >
-                        <span
-                          css={[
-                            css(table.getCellWrapperStyles(type.cellType)),
-                            // In case there is a nested dimension but no labels (ie. the nested dimension
-                            // will render in the first column), we need to give it some space from the row
-                            // number
-                            !labels && table.cellLeftPaddingStyles,
-                            rowLabelStyles,
-                          ]}
-                        >
-                          {labelInfo.label ??
-                            labelInfo.indexAtThisDimension + 1}
-                        </span>
-                      </TableData>
-                    ) : null;
-                  })}
-                  <TableData as="td" showPlaceholder={false} element={element}>
-                    <span css={rowLabelStyles}>
-                      <CodeResult
-                        type={matrixValue.result.type}
-                        value={matrixValue.result.value}
-                        element={element}
-                      />
-                    </span>
-                  </TableData>
-                </TableRow>
-              );
-            })}
+                        {labelInfo.label ?? labelInfo.indexAtThisDimension + 1}
+                      </span>
+                    </TableData>
+                  ) : null;
+                })}
+                <TableData as="td" showPlaceholder={false} element={element}>
+                  <span css={rowLabelStyles}>
+                    <CodeResult
+                      type={matrixValue.result.type}
+                      value={matrixValue.result.value}
+                      element={element}
+                    />
+                  </span>
+                </TableData>
+              </TableRow>
+            );
+          })}
         </>
       }
       footer={
-        all.length > MAX_CELLS_PER_PAGE && (
+        all.length > pageSize && (
           <TableRow key="pagination" readOnly={true} tableCellControls={false}>
             <td
               colSpan={all.length}
@@ -117,7 +122,7 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
                 page={page}
                 onPageChange={setPage}
                 startAt={1}
-                maxPages={Math.ceil(all.length / MAX_CELLS_PER_PAGE)}
+                maxPages={Math.ceil(all.length / pageSize)}
               />
             </td>
           </TableRow>
