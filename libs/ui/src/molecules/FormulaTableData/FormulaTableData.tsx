@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { TableFormulaCell } from '../../atoms';
 import { cssVar, p14Medium } from '../../primitives';
+import { innerTablesNoTopBorderStyles } from '../../styles/table';
 
 const tdLineStyles = css(p14Medium, {
   padding: '0 13px',
@@ -54,6 +55,7 @@ export const FormulaTableData = ({
   // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
   return (
     <TableFormulaCell
+      className={`formula-cell:${resultType}`}
       selected={selected}
       {...props}
       css={css(
@@ -61,11 +63,8 @@ export const FormulaTableData = ({
         resultType === 'column' && {
           padding: 0,
           table: {
-            borderTop: 0,
-            boxShadow: `inset -1px 0px 0px 0px ${cssVar(
-              'backgroundColor'
-            )}, inset -2px 0px 0px 0px ${cssVar('borderColor')}`,
-            borderRadius: 0,
+            height: '100%',
+            ...innerTablesNoTopBorderStyles,
           },
         }
       )}

@@ -19,7 +19,11 @@ import { useMergedRef } from '../../hooks';
 import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
 import { cssVar, p12Medium, setCssVar } from '../../primitives';
 import { table } from '../../styles';
-import { tdBaseStyles } from '../../styles/table';
+import {
+  innerTablesNoBottomBorderStyles,
+  innerTablesNoTopBorderStyles,
+  tdBaseStyles,
+} from '../../styles/table';
 import { tableRowCounter } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 
@@ -113,6 +117,7 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
     ComponentProps<typeof CellEditor>,
     'dropdownOptions' | 'dropdownResult'
   >;
+  width?: number;
   element?: AnyElement;
 }
 
@@ -143,6 +148,7 @@ export const TableData = forwardRef(
       firstChildren,
       dropDirection,
       dropdownOptions,
+      width,
       element,
       ...props
     }: TableDataProps,
@@ -170,6 +176,15 @@ export const TableData = forwardRef(
           alignRight && alignRightStyles,
           draggable && draggableStyles,
           !isEditable && nonContentEditableStyles,
+          {
+            table: {
+              height: '100%',
+              // fixme: there's an issue we can't set height to 100%
+              // because it's a table inside a td
+              ...innerTablesNoTopBorderStyles,
+              ...innerTablesNoBottomBorderStyles,
+            },
+          },
         ]}
         {...props}
       >
@@ -178,6 +193,7 @@ export const TableData = forwardRef(
         <CellEditor
           focused={focused}
           isEditable={isEditable}
+          width={width}
           type={type}
           value={value}
           unit={unit}

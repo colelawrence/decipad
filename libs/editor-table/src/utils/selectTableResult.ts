@@ -31,6 +31,7 @@ const fixTableResult = (
           name: col.name,
           cellType: result.type.columnTypes[columnIndex] ?? col.cellType,
           value: result.value[columnIndex],
+          width: col.width,
         }
       : createEmptyColumnResult(col);
   });

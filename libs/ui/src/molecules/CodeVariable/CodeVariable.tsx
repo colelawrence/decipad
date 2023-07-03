@@ -23,6 +23,7 @@ interface CodeVariableProps {
   readonly columnName?: string;
   readonly isInitialized?: boolean;
   readonly decoration?: SmartRefDecoration;
+  readonly injectErrorChildren?: ReactNode;
   onGoToDefinition?: () => void;
 }
 
@@ -42,6 +43,7 @@ export const CodeVariable = ({
   tableName,
   columnName,
   decoration,
+  injectErrorChildren,
 }: CodeVariableProps): ReturnType<React.FC> => {
   const isColumn = !!(tableName && columnName);
   const isCell = decoration === 'cell';
@@ -49,7 +51,6 @@ export const CodeVariable = ({
   const Icon = useMemo(() => type && getTypeIcon(type), [type]);
 
   const isFormulaHeading = type?.kind === 'table-formula';
-
   const lazyChildren =
     isInitialized || children ? (
       children
@@ -80,18 +81,16 @@ export const CodeVariable = ({
       {isColumn || isCell ? (
         <span css={{ marginLeft: -4, whiteSpace: 'nowrap' }}>
           <span css={isColumn && labelStyles} contentEditable={false}>
-            <span css={iconStyles}>
-              <List />
-            </span>
+            <span css={iconStyles}>{injectErrorChildren || <List />}</span>
             {isColumn && <span css={liveSpanStyles}>{tableName} |</span>}
           </span>
           {lazyChildren}
         </span>
       ) : (
         <>
-          {isInitialized && Icon && (
-            <span css={iconStyles} contentEditable={false}>
-              <Icon />
+          {isInitialized && (injectErrorChildren || Icon) && (
+            <span css={css(iconStyles)} contentEditable={false}>
+              {injectErrorChildren || (Icon && <Icon />)}
             </span>
           )}
           {lazyChildren}

@@ -30,6 +30,10 @@ import {
 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { resultBubbleStyles } from '../../styles/results';
+import {
+  innerTablesNoBottomBorderStyles,
+  innerTablesNoTopBorderStyles,
+} from '../../styles/table';
 import { CodeResultProps } from '../../types';
 import {
   AvailableSwatchColor,
@@ -166,6 +170,10 @@ const expandedResultStyles = css(p14Medium, {
   display: 'grid',
   marginTop: '4px',
   overflowX: 'auto',
+  'td table': {
+    ...innerTablesNoTopBorderStyles,
+    ...innerTablesNoBottomBorderStyles,
+  },
 });
 
 const canGrabStyles = css({

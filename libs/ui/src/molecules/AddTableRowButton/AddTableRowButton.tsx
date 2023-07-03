@@ -12,8 +12,8 @@ const buttonStyles = css(p13Medium, {
   alignItems: 'center',
   gap: '6px',
   width: 'auto',
-  padding: `6px ${table.tdHorizontalPadding}`,
-  marginTop: `${table.smartRowHorizontalPadding}`,
+  padding: `6px ${table.tdHorizontalPadding}px`,
+  marginTop: `${table.smartRowHorizontalPadding}px`,
   borderRadius: '6px',
 
   backgroundColor: cssVar('highlightColor'),

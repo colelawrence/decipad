@@ -14,7 +14,7 @@ const functionTdBaseStyles = css(p14Medium, {
   alignItems: 'center',
   justifyContent: 'center',
   backgroundColor: cssVar('tintedBackgroundColor'),
-  minHeight: table.tdMinHeight,
+  height: table.tdMinHeight,
   verticalAlign: 'middle',
   cursor: 'default',
   caretColor: 'transparent',
@@ -72,16 +72,20 @@ export const TableFormulaCell = ({
   return (
     <td
       {...attributes}
-      css={[
+      css={css(
         tdBaseStyles,
+        { padding: 0 },
         functionTdBaseStyles,
         !hiddenCounter && tdCounterStyles,
-        selected && selectedStyles,
-      ]}
+        selected && selectedStyles
+      )}
       className={className}
     >
       {dropDirection === 'left' && (
-        <ColumnDropLine dropDirection={dropDirection} />
+        <ColumnDropLine
+          dropDirection={dropDirection}
+          leftStyles={css({ left: -1 })}
+        />
       )}
       {children}
       {dropDirection === 'right' && (

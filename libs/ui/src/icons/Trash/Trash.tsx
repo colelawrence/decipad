@@ -21,7 +21,7 @@ export const Trash = (): ReturnType<FC> => (
     />
     <path
       d="M2.00128 4.35884H14"
-      stroke={cssVar('weakTextColor')}
+      stroke={cssVar('normalTextColor')}
       strokeWidth="1.1"
       strokeLinecap="round"
       strokeLinejoin="round"

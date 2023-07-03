@@ -20,6 +20,7 @@ export const useTableInfo = (
           blockId: th.id,
           name: getNodeString(th),
           cellType: columnTypes[index] ?? { kind: 'nothing' },
+          width: th.width,
         })) ?? [],
       rowCount: element.children.length - 2,
     };

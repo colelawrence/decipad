@@ -28,6 +28,7 @@ export interface TableColumn {
   blockId: string;
   name: string;
   cellType: CellValueType;
+  width: number | undefined;
 }
 
 export interface TableInfo {

@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { SimpleTableCellType } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import pluralize from 'pluralize';
 import { FC, useMemo } from 'react';
-import { SimpleTableCellType } from '@decipad/editor-types';
 import { PaginationControl, Table } from '..';
 import { TableHeader } from '../../atoms';
 import { useMaterializedResult } from '../../hooks/useMaterializedResult';
@@ -26,7 +26,7 @@ const liveTableWrapperStyles = css({
 });
 
 const liveTableOverflowStyles = css({
-  minWidth: `calc(((100vw - 700px) / 2) - (${tableControlWidth} * -2))`,
+  minWidth: `calc(((100vw - 700px) / 2) - (${tableControlWidth}px * -2))`,
 });
 
 const liveTableEmptyCellStyles = css({
@@ -98,6 +98,7 @@ export const TableResult: FC<TableResultProps> = ({
       css={[
         isLiveResult && tableWrapperStyles,
         isLiveResult && liveTableWrapperStyles,
+        { overflow: 'auto' }, // cause of nested tables
       ]}
     >
       <div
@@ -107,7 +108,6 @@ export const TableResult: FC<TableResultProps> = ({
         ]}
         contentEditable={false}
       />
-
       <Table
         border={isNested ? 'inner' : 'all'}
         isReadOnly={!isLiveResult}

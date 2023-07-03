@@ -32,7 +32,7 @@ const gutterWidth = '60px';
 const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
 const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
 
-const scrollRightOffset = `(((100vw - 610px) / 2) + ${tableControlWidth})`;
+const scrollRightOffset = `(((100vw - 610px) / 2) + ${tableControlWidth}px)`;
 
 const wrapperStyles = css({
   margin: '0',
@@ -52,7 +52,7 @@ const tableCaptionWrapperStyles = css({
 
 const tableWrapperTransformStyles = css({
   position: 'relative',
-  transform: `translateX(calc((((100vw - 580px) / 2) + ${tableControlWidth}) * -1 ))`,
+  transform: `translateX(calc((((100vw - 580px) / 2) + ${tableControlWidth}px) * -1 ))`,
   left: tableControlWidth,
 });
 
@@ -136,7 +136,7 @@ export const tableScroll = css({
 export const tableOverflowStyles = css({
   display: 'inline-block',
   height: '20px',
-  minWidth: `calc(((100vw - 580px) / 2) - ${tableControlWidth})`,
+  minWidth: `calc(((100vw - 580px) / 2) - ${tableControlWidth}px)`,
 });
 
 const tableAddColumnButtonWrapperStyles = css({

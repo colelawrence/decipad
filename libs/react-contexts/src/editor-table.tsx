@@ -5,12 +5,14 @@ export type EditorTableContextValue = Readonly<{
   blockId: string;
   cellTypes: CellValueType[];
   columnBlockIds: string[];
+  columnWidths: Array<number | undefined>;
 }>;
 
 const defaultValue = {
   blockId: '',
   cellTypes: [],
   columnBlockIds: [],
+  columnWidths: [],
 };
 
 export const EditorTableContext =

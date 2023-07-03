@@ -1,5 +1,5 @@
 import { Unit } from '@decipad/computer';
-import { useNodePath } from '@decipad/editor-hooks';
+import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   CellValueType,
   ColumnMenuDropdown,
@@ -38,6 +38,8 @@ export interface UseTableHeaderCellResult {
   path: Path | undefined;
   inferredType: CellValueType | undefined;
   dropDownNames: ColumnMenuDropdown[];
+  width?: number;
+  setWidth: (width: number) => void;
 }
 
 export const useTableHeaderCell = (
@@ -74,6 +76,9 @@ export const useTableHeaderCell = (
     columnIndex
   );
 
+  const { width } = element;
+  const setWidth = usePathMutatorCallback(editor, path, 'width', 'TableHeader');
+
   return useDebounce(
     useMemo(
       () => ({
@@ -92,6 +97,8 @@ export const useTableHeaderCell = (
         path,
         inferredType,
         dropDownNames,
+        width,
+        setWidth,
       }),
       [
         columnIndex,
@@ -109,6 +116,8 @@ export const useTableHeaderCell = (
         parseUnit,
         path,
         readOnly,
+        width,
+        setWidth,
       ]
     ),
     100

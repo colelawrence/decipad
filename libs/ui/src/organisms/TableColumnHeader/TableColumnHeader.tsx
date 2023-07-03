@@ -1,4 +1,5 @@
 import { ElementAttributes } from '@decipad/editor-types';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
   ComponentProps,
@@ -24,6 +25,8 @@ type TableColumnHeaderProps = PropsWithChildren<
   Pick<
     ComponentProps<typeof TableHeader>,
     | 'type'
+    | 'setWidth'
+    | 'width'
     | 'draggingOver'
     | 'dropDirection'
     | 'dragSource'
@@ -50,12 +53,21 @@ type TableColumnHeaderProps = PropsWithChildren<
     }
 >;
 
-export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
+type OptionalSetWidthTableColumnHeaderProps = Omit<
+  TableColumnHeaderProps,
+  'setWidth'
+> & {
+  setWidth?: TableColumnHeaderProps['setWidth'];
+};
+
+export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
   onChangeColumnType,
   onRemoveColumn,
   onAddColLeft,
   onAddColRight,
   parseUnit,
+  setWidth = noop,
+  width,
   isFirst,
   type = getStringType(),
   readOnly = false,
@@ -74,6 +86,9 @@ export const TableColumnHeader: FC<TableColumnHeaderProps> = ({
       onAddColLeft={onAddColLeft}
       onAddColRight={onAddColRight}
       isEditable={!readOnly}
+      setWidth={setWidth}
+      width={width}
+      readOnly={readOnly}
       isFirst={isFirst}
       isLiveResult={isLiveResult}
       menu={

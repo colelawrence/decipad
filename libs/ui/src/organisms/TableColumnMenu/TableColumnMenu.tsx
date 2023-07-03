@@ -41,7 +41,6 @@ import { getFormulaType } from '../../utils/table';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
 
 const tableColumnMenuStyles = css({
-  marginLeft: 'auto',
   mixBlendMode: 'luminosity',
 });
 

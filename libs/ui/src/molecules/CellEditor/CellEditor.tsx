@@ -1,6 +1,8 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { Result } from '@decipad/computer';
 import { useWindowListener } from '@decipad/react-utils';
+import { css } from '@emotion/react';
 import React, {
   FC,
   ReactNode,
@@ -45,6 +47,7 @@ interface CellEditorProps {
   ) => void;
   dropdownOptions?: Array<{ id: string; value: string; focused?: boolean }>;
   dropdownResult?: Result.Result;
+  width?: number;
   element?: AnyElement;
 }
 
@@ -59,6 +62,7 @@ export const CellEditor: FC<CellEditorProps> = ({
   dropdownOptions,
   dropdownResult,
   parentType = 'input',
+  width,
   element,
 }) => {
   const [opened, setOpened] = useState(false);
@@ -138,7 +142,12 @@ export const CellEditor: FC<CellEditorProps> = ({
   }, [type]);
 
   return (
-    <div ref={wrapperRef} onClick={onClick} className="mycelleditorwrapper">
+    <div
+      ref={wrapperRef}
+      onClick={onClick}
+      css={[cellEditorStyles, width && { width }]}
+      className="mycelleditorwrapper"
+    >
       <EditorComponent
         open={opened}
         focused={focused}
@@ -157,3 +166,5 @@ export const CellEditor: FC<CellEditorProps> = ({
     </div>
   );
 };
+
+const cellEditorStyles = css({ display: 'block' });

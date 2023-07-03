@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { SerializedType } from '@decipad/computer';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
@@ -43,6 +44,7 @@ export const TableCell: PlateComponent = ({
     parseErrorMessage,
     dropdownOptions,
     dropdownResult,
+    width,
   } = useTableCell(element);
 
   const editor = useTEditorRef();
@@ -57,7 +59,13 @@ export const TableCell: PlateComponent = ({
     return (
       <FormulaTableData
         result={
-          formulaResult && <CodeResult {...formulaResult} element={element} />
+          formulaResult && (
+            <CodeResult
+              parentType={{ kind: 'table' } as SerializedType}
+              {...formulaResult}
+              element={element}
+            />
+          )
         }
         resultType={formulaResult && formulaResult.type.kind}
         {...attributes}
@@ -73,6 +81,7 @@ export const TableCell: PlateComponent = ({
     <TableData
       isEditable={editable}
       disabled={disabled}
+      width={width}
       isUserContent
       as="td"
       attributes={attributes}

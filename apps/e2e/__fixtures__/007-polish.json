@@ -16,7 +16,7 @@
 						{
 							"children": [
 								{
-									"text": "Table"
+									"text": "Errors"
 								}
 							],
 							"id": "Bd9CnS7pOyU7yLR7kNGxb",
@@ -25,22 +25,7 @@
 						{
 							"children": [
 								{
-									"text": " "
-								},
-								{
-									"children": [
-										{
-											"text": ""
-										}
-									],
-									"id": "csx5M2XKtbN4WOeq68DIH",
-									"type": "smart-ref",
-									"blockId": "mNnP-WVkTvIiebYxHHymf",
-									"columnId": null,
-									"lastSeenVariableName": "Variable"
-								},
-								{
-									"text": " "
+									"text": " Variable"
 								}
 							],
 							"id": "Fn90402OR2VroHbEuUPjU",
@@ -206,7 +191,8 @@
 			"id": "YNG3vx0MXIsmcpduCizTi",
 			"type": "table",
 			"version": 2,
-			"hideFormulas": false
+			"hideFormulas": false,
+			"color": "Rose"
 		},
 		{
 			"children": [
@@ -272,7 +258,7 @@
 						{
 							"children": [
 								{
-									"text": "Table2"
+									"text": "OneTwoThree"
 								}
 							],
 							"id": "F31fEVa1gHVqtLopjT_Gw",
@@ -457,7 +443,8 @@
 			"id": "sXMWBSxFIyH2Zd-xcU3w-",
 			"type": "table",
 			"version": 2,
-			"hideFormulas": false
+			"hideFormulas": false,
+			"color": "Perfume"
 		},
 		{
 			"children": [
@@ -883,7 +870,8 @@
 							"type": "th",
 							"cellType": {
 								"kind": "table-formula"
-							}
+							},
+							"width": 204
 						},
 						{
 							"children": [
@@ -1073,7 +1061,8 @@
 			"type": "table",
 			"id": "x0wSZKqup6Uqs2bJLXJgu",
 			"hideFormulas": false,
-			"version": 2
+			"version": 2,
+			"color": "Sulu"
 		},
 		{
 			"children": [
@@ -2227,7 +2216,8 @@
 			"icon": "Server",
 			"isCollapsed": false,
 			"hideFormulas": false,
-			"version": 2
+			"version": 2,
+			"color": "Sun"
 		},
 		{
 			"children": [
@@ -2693,7 +2683,1092 @@
 			],
 			"id": "mXcNC5A5vvqmEba_6GVTj",
 			"type": "callout",
-			"icon": "Rocket"
+			"icon": "Rocket",
+			"colorScheme": "monochrome_purple"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Cereal"
+								}
+							],
+							"id": "gqRTfrGoagqPd0D1fk1Wj",
+							"type": "table-var-name"
+						}
+					],
+					"id": "EQRxSTPtX9Wte8Tfn7tXD",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Name"
+								}
+							],
+							"id": "b_5GHMs4HhePZXfW1_yQQ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 147
+						},
+						{
+							"children": [
+								{
+									"text": "Sugar"
+								}
+							],
+							"id": "n59u1aIw6kSodOGLs2dPG",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 145
+						}
+					],
+					"id": "4TEQSY9ksF-sTtvfKaYZW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Chocapic"
+								}
+							],
+							"id": "Wy0vmINvecJN277X9p3ix",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "42 g"
+								}
+							],
+							"id": "0LUW5a9SWzogI6zAsKJ5c",
+							"type": "td"
+						}
+					],
+					"id": "A7NCvONqSy-d6gROfHgTB",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Cerelac"
+								}
+							],
+							"id": "1BF3y1Wpnz28jsesfCicV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "53"
+								}
+							],
+							"id": "j2c6qe-wkAwf7c-iwVv3z",
+							"type": "td"
+						}
+					],
+					"id": "tfoH15WtvLvRtUHsF_G9h",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Nestum"
+								}
+							],
+							"id": "6ul9U7ZaWJSZQsRiHZIvU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "53"
+								}
+							],
+							"id": "FxpR8o5F9zMwgdxqCXExG",
+							"type": "td"
+						}
+					],
+					"id": "4Iqk24beVahge8i8rOUMF",
+					"type": "tr"
+				}
+			],
+			"id": "B6sewEG4M9klrHZmtJeVI",
+			"type": "table",
+			"version": 2,
+			"color": "Perfume"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MeaningOfLife"
+						}
+					],
+					"type": "structured_varname",
+					"id": "cv0fJ-7Tga_7-qUeArMZI"
+				},
+				{
+					"children": [
+						{
+							"text": "[45, 54]"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QI3zWEk7LwN1Z5riyXy7D"
+				}
+			],
+			"id": "t-USODGh1N15irVLbfAex",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "4ftX8qUZy7ZWe4qyGUo41",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NestedMagic"
+								}
+							],
+							"id": "XMR-nor8uDi9Aey38BHSb",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "eFNQT-dv404a5A_DdHeIR",
+									"type": "smart-ref",
+									"blockId": "t-USODGh1N15irVLbfAex",
+									"columnId": null,
+									"lastSeenVariableName": "MeaningOfLife"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "t9Kw_PjJXphBWIhdhtGoY",
+									"type": "smart-ref",
+									"blockId": "JCIwoah8y1LMpg87VxUiY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Column1"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "Zv2tpCNc0O2v5TWo_lpax",
+							"type": "table-column-formula",
+							"columnId": "xMalwrteUsulxtyGzNlrB"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zQAA130j_ETAbAs5mgLYB",
+									"type": "smart-ref",
+									"blockId": "t-USODGh1N15irVLbfAex",
+									"columnId": null,
+									"lastSeenVariableName": "MeaningOfLife"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BjKESQIAvaz8TmcT3MoxZ",
+									"type": "smart-ref",
+									"blockId": "JCIwoah8y1LMpg87VxUiY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Column1"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "9OVidbUUNySic_SpHVADX",
+							"type": "table-column-formula",
+							"columnId": "dRT9_QNxjma43pbQqKyms"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BBKL2mhRe1jZ9Dv-vOLNb",
+									"type": "smart-ref",
+									"blockId": "B6sewEG4M9klrHZmtJeVI",
+									"columnId": null,
+									"lastSeenVariableName": "Cereal"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "0f8PY-qSQxsChVxvEkOAr",
+							"type": "table-column-formula",
+							"columnId": "n6ysFKylJmmanDtB6zAZ7"
+						}
+					],
+					"id": "7z6nhMwSkksE4oTao_284",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Column1"
+								}
+							],
+							"id": "JCIwoah8y1LMpg87VxUiY",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column2"
+								}
+							],
+							"id": "xMalwrteUsulxtyGzNlrB",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column3"
+								}
+							],
+							"id": "n6ysFKylJmmanDtB6zAZ7",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column4"
+								}
+							],
+							"id": "dRT9_QNxjma43pbQqKyms",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "CqqIIOVvwTwMVtmxqG_kX",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "1"
+								}
+							],
+							"id": "MkXl9_6_AmTrhqPMUgkLs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XaqJl3Ly0fMaubVEIpgc7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "y3F1rDUUYo9fdJfUtV-0n",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CkVtJtbpcP4yvfRd-P7fj",
+							"type": "td"
+						}
+					],
+					"id": "QU5dNBNN5bmtAK122Yivf",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"id": "ELHKQHFq8DK7UyqERSEs2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HE34Jt_JZuGciff2DBbk6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rCtJUgzQAqXLCwVwEGRA0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TY3R30fMZnQIY5EJZuYtU",
+							"type": "td"
+						}
+					],
+					"id": "fiZtkJ6BItEYFxe42ZmOD",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "inwTDEyhPCFitTrrl8mUO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_XBzPCoOeDCSeQVxb0eD0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l487yS0s_81gY5q9rK2Y9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "PQVi3DWVzv5evY_WB1Op2",
+							"type": "td"
+						}
+					],
+					"id": "8Yon-4H-PjKOqe8gDZxUL",
+					"type": "tr"
+				}
+			],
+			"id": "fNLBxy00QNEAPKwI2v8Iv",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"color": "Grapefruit"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InlineResult"
+						}
+					],
+					"type": "structured_varname",
+					"id": "q0kSlnbWdUUKcGbQiu52R"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yU2FaPY5EbkMIvwuPFOSz",
+							"type": "smart-ref",
+							"blockId": "fNLBxy00QNEAPKwI2v8Iv",
+							"columnId": null,
+							"lastSeenVariableName": "NestedMagic"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "KGG8f5LbOgoiQhhucIegi"
+				}
+			],
+			"id": "aitwHE0hYzVNlZyk3UKwV",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Ridiculous"
+								}
+							],
+							"id": "4XDNBxlPAm_8LzTv-4icB",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IQluKkvntCMHz04jyKvyf",
+									"type": "smart-ref",
+									"blockId": "aitwHE0hYzVNlZyk3UKwV",
+									"columnId": null,
+									"lastSeenVariableName": "InlineResult"
+								},
+								{
+									"text": "  "
+								}
+							],
+							"id": "oc4Yy5ZTHjyJq-0Jx64ou",
+							"type": "table-column-formula",
+							"columnId": "NH-B5OY9XpXt8oIIRBfpy"
+						}
+					],
+					"id": "JdguuXL_EpNbUAZzV6O4t",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Column1"
+								}
+							],
+							"id": "fLPN7u93L7GySTzmi1XOs",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column2"
+								}
+							],
+							"id": "NH-B5OY9XpXt8oIIRBfpy",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "Y-621_5z0WohoUTHGZLxH",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "21"
+								}
+							],
+							"id": "xFbuPv5j7uQOUwS46pYTx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "62E-FxSMeo8YXO3ZdPtpV",
+							"type": "td"
+						}
+					],
+					"id": "h_rZu40qV1hfnhXE5a2pu",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "r-hsotipRmzxnolc5fvwn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ILb9VegCV6dxAgYGCoSik",
+							"type": "td"
+						}
+					],
+					"id": "ZhGQjxqkBx4LsTIheUSZX",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "EruFXJivlXagtsb-4Q1Uu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Y1Oqs9eUpEVBEIpI1oG2-",
+							"type": "td"
+						}
+					],
+					"id": "Ox6zgJj6ngFAqRkj_FO77",
+					"type": "tr"
+				}
+			],
+			"id": "MZpL0_wOy4mPtTGBoRuDR",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Lol"
+								}
+							],
+							"id": "fhOiucTtKxIIaxEru7T2c",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ly4LAurf5lb6ukHbouwLl",
+									"type": "smart-ref",
+									"blockId": "fNLBxy00QNEAPKwI2v8Iv",
+									"columnId": null,
+									"lastSeenVariableName": "NestedMagic"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "7k4atN6_eFdIn7qjPw-Vi",
+							"type": "table-column-formula",
+							"columnId": "bEcxewVpxJ0L0JHcdY2XN"
+						}
+					],
+					"id": "TMExKknpzeLz50BVLYaYN",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Column1"
+								}
+							],
+							"id": "JF1ear-dJ4kM0VeyXtlqQ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column2"
+								}
+							],
+							"id": "bEcxewVpxJ0L0JHcdY2XN",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column3"
+								}
+							],
+							"id": "S5po-lUayROth0GN8Ohbs",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "cMHOs0s-u9gz1xBQqLc2K",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "1"
+								}
+							],
+							"id": "KfW5Dch2KmV0syeF6s_G9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CLiPhrzz3tVkd61FLdPbG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zYbpYJ40UYf0MsZr97gK7",
+							"type": "td"
+						}
+					],
+					"id": "D6NQSdGG29gdqBbLBVQj6",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "Br-7evp7MXchzk18h2w4h",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vuZMxhUNGPNOx1ABJrMkF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2xU8xNvU58NLzc1uaOyH-",
+							"type": "td"
+						}
+					],
+					"id": "4HyfRChZqyM3cWyfBgiFz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "l-jwc1O0BkMJ2AJjA_as2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "47kMWRadkTiyfUFgcRXfN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Tqg_GKQshq2s3o-wdwCSS",
+							"type": "td"
+						}
+					],
+					"id": "wu974Lil-q9kxXf1NxDtx",
+					"type": "tr"
+				}
+			],
+			"id": "ZkFw9quIohfD8zOt5Qopu",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"text": "SalaryTable = {\n  years = [1.. 60]\n  growthrate = if first then  0 * years / years else  previous( "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "XxHswJ2M9kFLfP9jnXcJF",
+					"type": "smart-ref",
+					"blockId": "_PhaoICkAjitgzQ5F_POe",
+					"columnId": "wt-LbmoPdCxcJFeHJtv8w",
+					"lastSeenVariableName": "ScenarioAssumptions.SalaryGrowth"
+				},
+				{
+					"text": " ) + "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "LmhNNYbyD162kqSqJFeqw",
+					"type": "smart-ref",
+					"blockId": "_PhaoICkAjitgzQ5F_POe",
+					"columnId": "wt-LbmoPdCxcJFeHJtv8w",
+					"lastSeenVariableName": "ScenarioAssumptions.SalaryGrowth"
+				},
+				{
+					"text": "  * years / years \n  salary = ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "7gGBE7PpmS4DZXSzeiGpk",
+					"type": "smart-ref",
+					"blockId": "_PhaoICkAjitgzQ5F_POe",
+					"columnId": "YOWME-BvCYDbAk_eQF0ST",
+					"lastSeenVariableName": "ScenarioAssumptions.StartSalary"
+				},
+				{
+					"text": " * years / years ) + ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "7gGBE7PpmS4DZXSzeiGpk",
+					"type": "smart-ref",
+					"blockId": "_PhaoICkAjitgzQ5F_POe",
+					"columnId": "YOWME-BvCYDbAk_eQF0ST",
+					"lastSeenVariableName": "ScenarioAssumptions.StartSalary"
+				},
+				{
+					"text": " * years / years) * growthrate\n}"
+				}
+			],
+			"id": "3esxDC_4MDftv__5eDSg_",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ScenarioAssumptions"
+								}
+							],
+							"id": "2i0caamnX5_TCqPw3aazy",
+							"type": "table-var-name"
+						}
+					],
+					"id": "nbmxb5KfIAP95X8sSbOLM",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "ypCOQqPpxz-ThquWS8sJH",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "StartSalary"
+								}
+							],
+							"id": "YOWME-BvCYDbAk_eQF0ST",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "SalaryGrowth"
+								}
+							],
+							"id": "wt-LbmoPdCxcJFeHJtv8w",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							}
+						}
+					],
+					"id": "DI2_7oatXk9QP2_ZCormW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Conservative"
+								}
+							],
+							"id": "uRjeua7C17opPNSe9xATc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "€18K"
+								}
+							],
+							"id": "FFa1NyNRGEwv6V_uL14Vi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1.5%"
+								}
+							],
+							"id": "oLTUPrgCj6rxPuM063HhC",
+							"type": "td"
+						}
+					],
+					"id": "9ueojwyMMEC0vyEis-49s",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Mid"
+								}
+							],
+							"id": "tHXxCO0BhtdhH55QQtA_i",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "€20K"
+								}
+							],
+							"id": "PoELCRdT2_2BL3mbHgcGI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1.5%"
+								}
+							],
+							"id": "LcJOteqoT08Ib1F0iC16T",
+							"type": "td"
+						}
+					],
+					"id": "5g-VXozz7oSwI5OJMl1XW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Good"
+								}
+							],
+							"id": "4oGLuNcZLdLfhcu6FwuVL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "€25K"
+								}
+							],
+							"id": "dewY7iflk46r7Xa72kjdg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1.5%"
+								}
+							],
+							"id": "j0Tp348nzJFDA9WnO8Upj",
+							"type": "td"
+						}
+					],
+					"id": "bb7yX_fPf5lDSbBlq9Hs2",
+					"type": "tr"
+				}
+			],
+			"id": "_PhaoICkAjitgzQ5F_POe",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
 		},
 		{
 			"children": [
@@ -2702,7 +3777,16 @@
 				}
 			],
 			"type": "p",
-			"id": "riGHmcyP9V4AMB4Vd0OC7"
+			"id": "4NYkPbwFpYO88KI7g0xRy"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "p-RKHrGtiQF5qpkepf6XX"
 		}
 	]
 }

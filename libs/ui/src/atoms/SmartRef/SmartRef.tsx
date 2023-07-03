@@ -3,9 +3,9 @@ import { SmartRefDecoration } from '@decipad/editor-types';
 import { isTableIdentifier } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
+import { Warning } from '../../icons';
 import { CodeVariable } from '../../molecules';
 import { cssVar } from '../../primitives';
-import { CodeError } from '../CodeError/CodeError';
 
 type SmartRefProps = {
   readonly symbolName?: string;
@@ -44,13 +44,14 @@ export const SmartRef: FC<SmartRefProps> = ({
         columnName={columnName} // maybe undefined
         isInitialized={isInitialized}
         decoration={decoration}
+        injectErrorChildren={
+          isInitialized && errorMessage && errorMessage !== '' ? (
+            <Warning />
+          ) : undefined
+        }
       >
         {columnName || symbolName}
       </CodeVariable>
-
-      {isInitialized && errorMessage && (
-        <CodeError message={errorMessage} url="/docs/" />
-      )}
     </span>
   );
 };

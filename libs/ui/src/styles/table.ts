@@ -3,23 +3,18 @@ import { css, CSSObject } from '@emotion/react';
 import { cssVar, p14Medium, setCssVar } from '../primitives';
 import { isTabularType } from '../utils';
 
-export const buttonColumnWidth = '44px';
+export const tableControlWidth = 20;
 
-export const tableControlWidth = '20px';
+export const thMinHeight = 32;
+export const tdMinHeight = 36;
+export const tdMinWidth = 75;
+export const tdMaxWidth = 240;
+export const tdVerticalPadding = 8;
+export const tdHorizontalPadding = 12;
 
-export const thMinHeight = '32px';
-export const thMinWidth = '269px';
-export const tdMinHeight = '36px';
-export const tdMinWidth = '120px';
-export const tdMaxWidth = '240px';
-export const tdVerticalPadding = '8px';
-export const tdHorizontalPadding = '12px';
+export const firstTdPaddingLeft = 34;
 
-export const firstTdPaddingLeft = '34px';
-
-export const smartRowHorizontalPadding = '5px';
-
-export const firstTdLeftPadding = '20px';
+export const smartRowHorizontalPadding = 5;
 
 export const cellLeftPaddingStyles = css({
   paddingLeft: tdHorizontalPadding,
@@ -63,7 +58,7 @@ export const normalDragHandleStyles = css({
 export const getCellWrapperStyles = (type: SerializedType): CSSObject => ({
   padding: isTabularType(type)
     ? undefined
-    : `${tdVerticalPadding} ${tdHorizontalPadding}`,
+    : `${tdVerticalPadding}px ${tdHorizontalPadding}px`,
 });
 
 export const defaultMaxRows = 10;
@@ -77,7 +72,7 @@ export const tdBaseStyles = css(p14Medium, {
   background: cssVar('backgroundColor'),
 
   minHeight: tdMinHeight,
-  minWidth: tdMinWidth,
+  minWidth: tdMinWidth + 50,
   maxWidth: tdMaxWidth,
   whiteSpace: 'break-spaces',
   cursor: 'default',
@@ -85,3 +80,15 @@ export const tdBaseStyles = css(p14Medium, {
   paddingTop: tdVerticalPadding,
   paddingBottom: tdVerticalPadding,
 });
+
+export const innerTablesNoTopBorderStyles = {
+  borderTop: 0,
+  borderTopLeftRadius: '0 !important',
+  borderTopRightRadius: '0 !important',
+};
+
+export const innerTablesNoBottomBorderStyles = {
+  borderBottom: 0,
+  borderBottomLeftRadius: '0 !important',
+  borderBottomRightRadius: '0 !important',
+};

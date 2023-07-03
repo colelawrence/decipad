@@ -53,12 +53,16 @@ export const TableHeaderCell: PlateComponent = ({
     path,
     inferredType,
     dropDownNames,
+    width,
+    setWidth,
   } = useTableHeaderCell(element) ?? {};
 
   return (
     <TableColumnHeader
       attributes={attributes}
       readOnly={readOnly}
+      width={width}
+      setWidth={setWidth}
       empty={getNodeString(element).length === 0}
       focused={focused}
       isFirst={columnIndex === 0}

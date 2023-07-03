@@ -7,6 +7,10 @@ import { ConnectDropTarget } from 'react-dnd';
 import { useAutoAnimate } from '../../hooks';
 import { cssVar, setCssVar } from '../../primitives';
 import {
+  innerTablesNoBottomBorderStyles,
+  innerTablesNoTopBorderStyles,
+} from '../../styles/table';
+import {
   AvailableSwatchColor,
   TableStyleContext,
   swatchesThemed,
@@ -51,8 +55,11 @@ const tableBaseStyles = css({
 
 const nestedStyles = css({
   borderBottom: 0,
+  th: {
+    ...innerTablesNoTopBorderStyles,
+  },
   'tr:last-child td': {
-    borderBottom: 0,
+    ...innerTablesNoBottomBorderStyles,
   },
   'td:first-of-type': {
     borderLeft: 0,
@@ -217,16 +224,16 @@ export const Table = ({
         tableWidth === 'WIDE' && wideTableStyles,
         isSelectingCell && hiddenSelectionStyles,
         isLiveResult && liveResultStyles,
-        b === 'inner' && nestedStyles,
         isReadOnly && readOnlyTableStyles,
         !head && { borderTop: regularBorder, borderRadius: 8 },
         footer && footerStyles,
+        b === 'inner' && nestedStyles,
         darkTheme && { ...setCssVar('borderTable', darkBorderColor) },
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      {head && <thead>{head}</thead>}
+      {head && <thead css={{ position: 'relative' }}>{head}</thead>}
       <tbody ref={animateBody}>{body}</tbody>
 
       <tfoot>

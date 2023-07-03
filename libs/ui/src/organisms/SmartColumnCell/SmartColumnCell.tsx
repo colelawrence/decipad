@@ -52,11 +52,9 @@ const smartColumnCellStyles = css(p12Regular, {
   padding: '0 6px 0 10px',
   alignItems: 'center',
   position: 'relative',
-  maxWidth: table.tdMaxWidth,
-  minWidth: table.tdMinWidth,
   width: '100%',
   justifyContent: 'space-between',
-  marginTop: `${table.smartRowHorizontalPadding}`,
+  marginTop: table.smartRowHorizontalPadding,
 });
 
 interface SmartColumnCellProps {

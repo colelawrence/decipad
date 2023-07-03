@@ -30,6 +30,7 @@ import {
 import { useTableStore } from '../contexts/tableStore';
 import { DropdownOption } from '../types';
 import { useDropdownConsumer } from './useDropdownConsumer';
+import { useTableCellWidth } from './useTableCellWidth';
 
 interface UseTableCellResult {
   cellType: CellValueType | undefined;
@@ -48,6 +49,7 @@ interface UseTableCellResult {
   dropdownResult: Result.Result | undefined;
   dropdownOptions: DropdownOption[];
   nodeText: string;
+  width?: number;
 }
 
 const debounceParseErrorMs = 500;
@@ -63,6 +65,8 @@ export const useTableCell = (
   const [, dropTarget] = useDropColumn(editor, element!);
 
   const formulaResult = useTableColumnFormulaResultForCell(element);
+
+  const width = useTableCellWidth(element);
 
   // series
   const cellType = useCellType(element);
@@ -149,6 +153,7 @@ export const useTableCell = (
       dropdownResult,
       dropdownOptions,
       nodeText,
+      width,
     }),
     [
       cellType,
@@ -167,6 +172,7 @@ export const useTableCell = (
       showParseError,
       unit,
       nodeText,
+      width,
     ]
   );
 };

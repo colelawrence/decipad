@@ -92,6 +92,7 @@ export interface TableHeaderElement extends BaseElement {
   cellType: TableCellType;
   autoCreated?: boolean;
   aggregation?: string;
+  width?: number;
   children: [Text];
 }
 

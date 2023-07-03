@@ -5,8 +5,18 @@ import {
   useEditorTableContext,
   useThemeFromStore,
 } from '@decipad/react-contexts';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, forwardRef, useContext } from 'react';
+import {
+  FC,
+  MouseEvent,
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from 'react';
 import {
   ConnectDragPreview,
   ConnectDragSource,
@@ -18,6 +28,7 @@ import {
   AlignArrowRight,
   Delete,
   DragHandle as DragHandleIcon,
+  Text,
   Warning,
 } from '../../icons';
 import {
@@ -28,6 +39,7 @@ import {
   transparency,
 } from '../../primitives';
 import { table } from '../../styles';
+import { tdMinWidth } from '../../styles/table';
 import {
   AvailableSwatchColor,
   Swatch,
@@ -40,126 +52,16 @@ import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { Tooltip } from '../Tooltip/Tooltip';
 
-const columnStyles = css(p13Medium, {
-  position: 'relative',
-
-  minHeight: table.thMinHeight,
-  padding: `${table.tdVerticalPadding} ${table.tdHorizontalPadding}`,
-
-  ':hover .table-drag-handle': {
-    display: 'block',
-  },
-});
-
-const headerWrapperStyles = css({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: '6px',
-  position: 'relative',
-});
-
-const columnTypeStyles = css({
-  display: 'inline-block',
-  width: '16px',
-  height: '16px',
-});
-
-const iconTypeStyles = css(columnTypeStyles, {
-  svg: {
-    width: '16px',
-    height: '16px',
-  },
-});
-
-const childrenWrapperStyles = css({
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textAlign: 'left',
-  minWidth: '5px',
-  padding: '0 4px',
-  borderRadius: '6px',
-  mixBlendMode: 'luminosity',
-});
-
-const dragHandleStyles = css({
-  width: 9,
-  height: 9,
-  transform: 'translateY(50%)',
-  display: 'block',
-  margin: 'auto',
-  pointerEvents: 'all',
-  marginTop: 0,
-  mixBlendMode: 'luminosity',
-  'svg > rect': {
-    fill: 'transparent',
-  },
-});
-
-const DragHandle = () => {
-  return (
-    <div css={dragHandleStyles} contentEditable={false}>
-      <DragHandleIcon />
-    </div>
-  );
-};
-
 interface DropSourceAndTargetProps {
-  draggingOver: boolean;
-  onSelectColumn?: () => void;
+  readonly draggingOver: boolean;
+  readonly toggleOpen: () => void;
+  readonly onSelectColumn?: () => void;
+  readonly icon?: ReactNode;
 }
 
-const DropSourceAndTarget = forwardRef<
-  HTMLDivElement,
-  DropSourceAndTargetProps
->(({ draggingOver, onSelectColumn }, ref) => {
-  return (
-    <div
-      className="table-drag-handle"
-      css={[
-        columnTypeStyles,
-        {
-          pointerEvents: !draggingOver ? 'all' : 'none', // IMPORTANT!
-          width: '16px',
-          height: '16px',
-          display: 'none',
-          borderRadius: '6px',
-          cursor: 'grab',
-          ':hover': {
-            background: dragHandleHighlight,
-          },
-        },
-      ]}
-      ref={ref}
-      contentEditable={false}
-      onClick={onSelectColumn}
-    >
-      <DragHandle />
-    </div>
-  );
-});
-
-const thStyles = (
-  color: AvailableSwatchColor,
-  darkMode: boolean,
-  baseSwatches: Swatch
-) =>
-  css({
-    backgroundColor: color
-      ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
-          .rgba
-      : cssVar('strongHighlightColor'),
-    // Keep hover effect when hovered, focused or the dropdown menu is opened.
-    '&:hover, &:focus-within, &[data-highlight="true"]': {
-      backgroundColor:
-        color && swatchesThemed(darkMode)[color as AvailableSwatchColor].rgb,
-    },
-
-    boxShadow:
-      color &&
-      `inset 0px -2px 0px ${baseSwatches[color as AvailableSwatchColor].rgb}`,
-  });
 export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
+  width?: number;
+  setWidth?: (width: number) => void;
   readonly children?: React.ReactNode;
   readonly highlight?: boolean;
   readonly type?: CellValueType;
@@ -181,13 +83,68 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   readonly onSelectColumn?: () => void;
   readonly error?: string;
   readonly isFirst?: boolean;
+  readonly readOnly?: boolean;
 }
+
+const DragHandle = () => {
+  return (
+    <div css={dragHandleStyles} contentEditable={false}>
+      <DragHandleIcon />
+    </div>
+  );
+};
+
+const DropSourceAndTarget = forwardRef<
+  HTMLDivElement,
+  DropSourceAndTargetProps
+>(({ draggingOver, onSelectColumn, toggleOpen, icon = <Text /> }, ref) => {
+  return (
+    <div
+      css={[
+        {
+          pointerEvents: !draggingOver ? 'all' : 'none', // IMPORTANT!
+          borderRadius: '6px',
+          cursor: 'grab',
+          'span:first-of-type': {
+            display: 'block',
+          },
+          'span:last-of-type': {
+            display: 'none',
+          },
+          ':hover, :active, :focus': {
+            background: dragHandleHighlight,
+            'span:first-of-type': {
+              display: 'none',
+            },
+            'span:last-of-type': {
+              display: 'block',
+            },
+          },
+        },
+      ]}
+      ref={ref}
+      contentEditable={false}
+      onClick={() => {
+        onSelectColumn?.();
+        toggleOpen();
+      }}
+    >
+      <span>{icon}</span>
+      <span>
+        <DragHandle />
+      </span>
+    </div>
+  );
+});
 
 export const TableHeader = ({
   children,
   highlight = false,
   type = getStringType(),
   menu,
+  width,
+  setWidth,
+  readOnly = false,
   attributes,
   isEditable = false,
   showIcon = true,
@@ -204,6 +161,13 @@ export const TableHeader = ({
   isFirst,
   error,
 }: TableHeaderProps): ReturnType<FC> => {
+  const tempWidth = useRef<number | undefined>(undefined);
+  const [open, onChangeOpen] = useState(false);
+
+  const toggleOpen = useCallback(() => {
+    onChangeOpen(!open);
+  }, [open]);
+
   const Icon = getTypeIcon(type);
   const [darkTheme] = useThemeFromStore();
   const { color } = useContext(TableStyleContext);
@@ -213,7 +177,42 @@ export const TableHeader = ({
   const { length } = editorTableContext.cellTypes;
 
   const thRef = useMergedRef(attributes?.ref, dropTarget);
+  const sizeRef = useRef<HTMLDivElement>(null);
 
+  const handleResize = (mouseDownEvent: MouseEvent) => {
+    if (readOnly) {
+      return;
+    }
+
+    mouseDownEvent.preventDefault();
+    mouseDownEvent.stopPropagation();
+
+    document.body.style.cursor = 'col-resize';
+
+    const startSize =
+      tempWidth.current ?? sizeRef.current?.offsetWidth ?? width ?? 150;
+    const startPosition = mouseDownEvent.pageX;
+
+    const onMouseMove = (mouseMoveEvent: MouseEvent) => {
+      const newWidth = startSize - startPosition + mouseMoveEvent.pageX;
+      if (newWidth < tdMinWidth) {
+        return;
+      }
+      tempWidth.current = newWidth;
+      setWidth?.(tempWidth.current);
+    };
+
+    const onMouseUp = () => {
+      // @ts-ignore
+      document.body.removeEventListener('mousemove', onMouseMove);
+      tempWidth.current = undefined;
+      document.body.style.cursor = 'auto';
+    };
+
+    // @ts-ignore
+    document.body.addEventListener('mousemove', onMouseMove);
+    document.body.addEventListener('mouseup', onMouseUp, { once: true });
+  };
   const columOptionItems = [
     {
       label: 'Add column left',
@@ -235,6 +234,46 @@ export const TableHeader = ({
     },
   ];
 
+  const showDragMenuToTheLeft = draggable && dragSource && isEditable;
+
+  const hasErrors = error && error !== 'Expected expression';
+  const chosenIcon = hasErrors ? (
+    <Tooltip onClick={toggleOpen} trigger={<Warning />}>
+      {type.kind !== 'table-formula'
+        ? error
+        : "There's a problem with your formulas"}
+    </Tooltip>
+  ) : showIcon ? (
+    <Icon />
+  ) : (
+    <></>
+  );
+  const overrideWithUserSetWith = css({
+    width: tempWidth.current ?? width,
+  });
+
+  const leftSide = showDragMenuToTheLeft ? (
+    <DropdownMenu
+      items={columOptionItems}
+      testId="table-add-remove-column-button"
+      styles={css(iconTypeStyles)}
+      className="table-drag-handle"
+      open={open}
+      onChangeOpen={onChangeOpen}
+      trigger={
+        <DropSourceAndTarget
+          ref={dragSource}
+          draggingOver={draggingOver}
+          onSelectColumn={onSelectColumn}
+          toggleOpen={toggleOpen}
+          icon={chosenIcon}
+        />
+      }
+    />
+  ) : (
+    chosenIcon
+  );
+
   return (
     <th
       {...attributes}
@@ -249,89 +288,148 @@ export const TableHeader = ({
         },
         isLiveResult && {
           ':hover .table-icon': {
-            display: 'block',
+            display: 'inline-block',
           },
         },
+        overrideWithUserSetWith,
       ]}
       ref={thRef}
       data-highlight={highlight}
       contentEditable={isEditable}
     >
-      {dropDirection === 'left' && (
-        <ColumnDropLine dropDirection={dropDirection} adjustLeft={1} />
-      )}
-
-      <div css={headerWrapperStyles}>
+      <div ref={sizeRef} css={[tableHeaderStyles, headerWrapperStyles]}>
+        {dropDirection === 'left' && (
+          <ColumnDropLine
+            dropDirection={dropDirection}
+            leftStyles={absoluteLeftAdjustment}
+          />
+        )}
+        {dropDirection === 'right' && (
+          <ColumnDropLine
+            dropDirection={dropDirection}
+            rightStyles={absoluteRightAdjustment}
+          />
+        )}
         <span
-          css={{ width: '16px', height: '16px', mixBlendMode: 'luminosity' }}
+          onMouseDown={isEditable ? handleResize : noop}
           contentEditable={false}
-        >
-          {draggable &&
-            dragSource &&
-            (!error || error === 'Expected expression') &&
-            isEditable && (
-              <DropdownMenu
-                items={columOptionItems}
-                testId="table-add-remove-column-button"
-                readonly={!isEditable}
-                trigger={
-                  <DropSourceAndTarget
-                    ref={dragSource}
-                    draggingOver={draggingOver}
-                    onSelectColumn={onSelectColumn}
-                  />
-                }
-              />
-            )}
-
-          {/* Muting "expected expression" when the codeLine is empty */}
-          {error && error !== 'Expected expression' && (
-            <DropdownMenu
-              items={columOptionItems}
-              testId="table-add-remove-column-button"
-              readonly={!isEditable}
-              trigger={
-                <Tooltip
-                  hoverOnly
-                  trigger={
-                    <span contentEditable={false} css={iconTypeStyles}>
-                      <Warning />
-                    </span>
-                  }
-                >
-                  {type.kind !== 'table-formula'
-                    ? error
-                    : "There's a problem with your formulas"}
-                </Tooltip>
-              }
-            />
-          )}
-
-          {/* Muting "expected expression" when the codeLine is empty */}
-          {showIcon && (!error || error === 'Expected expression') && (
-            <span
-              contentEditable={false}
-              css={iconTypeStyles}
-              className="table-icon"
-            >
-              <Icon />
-            </span>
-          )}
-        </span>
+          css={[resizeStyles, readOnly && { cursor: 'initial' }]}
+        ></span>
+        <div css={tableHeaderMenuStyles} contentEditable={false}>
+          {leftSide}
+        </div>
 
         <div
           data-testid="table-column-name"
-          css={[childrenWrapperStyles]}
+          css={[
+            childrenWrapperStyles,
+            width && { maxWidth: tempWidth.current ?? width - 40 },
+          ]}
           spellCheck={false}
         >
           {children}
         </div>
-        {menu}
-      </div>
 
-      {dropDirection === 'right' && (
-        <ColumnDropLine dropDirection={dropDirection} />
-      )}
+        <div css={tableHeaderMenuStyles} contentEditable={false}>
+          {menu}
+        </div>
+      </div>
     </th>
   );
 };
+const absoluteRightAdjustment = css({
+  top: -13,
+  right: -12, // cell padding of 12px + border, left aligned
+  height: 'calc(100% + 26px)', // yeah its the padding and borders again
+});
+
+const absoluteLeftAdjustment = css(absoluteRightAdjustment, {
+  right: 'unset',
+  left: -12,
+});
+
+const resizeStyles = css(absoluteRightAdjustment, {
+  position: 'absolute',
+  width: '1px',
+  cursor: 'col-resize',
+});
+
+const thStyles = (
+  color: AvailableSwatchColor,
+  darkMode: boolean,
+  baseSwatches: Swatch
+) =>
+  css({
+    backgroundColor: color
+      ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
+          .rgba
+      : cssVar('strongHighlightColor'),
+    // Keep hover effect when hovered, focused or the dropdown menu is opened.
+    '&:hover, &:focus-within, &[data-highlight="true"]': {
+      backgroundColor:
+        color && swatchesThemed(darkMode)[color as AvailableSwatchColor].rgb,
+    },
+    minWidth: tdMinWidth,
+    boxShadow:
+      color &&
+      `inset 0px -2px 0px ${baseSwatches[color as AvailableSwatchColor].rgb}`,
+  });
+
+const columnStyles = css(p13Medium, {
+  minHeight: table.thMinHeight,
+  padding: `${table.tdVerticalPadding}px ${table.tdHorizontalPadding}px`,
+});
+
+const headerWrapperStyles = css({
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
+const iconTypeStyles = {
+  display: 'inline-block',
+  width: '16px',
+  height: '16px',
+};
+
+const childrenWrapperStyles = css({
+  overflow: 'hidden',
+  borderRadius: '6px',
+  mixBlendMode: 'luminosity',
+});
+
+const dragHandleStyles = css({
+  display: 'block',
+  pointerEvents: 'all',
+  height: 16,
+  width: 16,
+
+  svg: {
+    width: 9,
+    height: 9,
+    margin: 'auto',
+    transform: 'translateY(45%)',
+  },
+  'svg > rect': {
+    fill: 'transparent',
+  },
+});
+
+const tableHeaderStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  gap: 10,
+  width: '100%',
+  position: 'relative',
+});
+
+const tableHeaderMenuStyles = css({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  mixBlendMode: 'luminosity',
+  svg: {
+    width: 16,
+    height: 16,
+  },
+});
