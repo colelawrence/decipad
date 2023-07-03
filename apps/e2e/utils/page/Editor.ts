@@ -52,10 +52,7 @@ export async function setUp(
   const newUser = await withTestUser({ page, context });
   await navigateToWorkspacePage(page);
   if (createAndNavigateToNewPad) {
-    await Promise.all([
-      page.waitForNavigation({ url: isOnNotebook }),
-      clickNewPadButton(page),
-    ]);
+    await Promise.all([page.waitForURL(isOnNotebook), clickNewPadButton(page)]);
     await waitForEditorToLoad(page);
   }
   if (featureFlags) {

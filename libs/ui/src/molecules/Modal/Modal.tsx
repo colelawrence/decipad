@@ -97,17 +97,19 @@ const dialogStyles = css({
 type ModalProps = {
   readonly children: ReactNode;
   readonly fadeOut?: boolean;
+  readonly testId?: string;
 } & ComponentProps<typeof Overlay>;
 
 export const Modal = ({
   children,
+  testId,
   ...props
 }: ModalProps): ReturnType<React.FC> => {
   const animatedDialog = css(animationsDialog(props.fadeOut), dialogStyles);
   const animatedOverlay = css(animationsOverlay(props.fadeOut), overlayStyles);
 
   return (
-    <div css={pageCoverStyles}>
+    <div css={pageCoverStyles} data-testid={testId}>
       <div css={animatedOverlay}>
         <Overlay {...props} />
       </div>

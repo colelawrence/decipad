@@ -33,6 +33,7 @@ export const PaymentSubscriptionStatusModal: React.FC<
     <ClosableModal
       title={modalData.title}
       Heading="h1"
+      testId="subscription_status_modal"
       closeAction={() => {
         closeModal(true);
       }}

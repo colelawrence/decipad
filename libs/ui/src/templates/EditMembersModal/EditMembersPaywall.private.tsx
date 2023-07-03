@@ -58,6 +58,7 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           type="yellow"
           href={paymentHref}
           sameTab={true} // change this to false if you want to work on payments locally
+          testId="paywall_upgrade_pro"
         >
           Upgrade to Pro
         </Button>

@@ -15,6 +15,7 @@ type ClosableModalProps = ComponentProps<typeof Modal> &
 export const ClosableModal = ({
   children,
   closeAction,
+  testId,
   ...props
 }: ClosableModalProps): ReturnType<React.FC> => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export const ClosableModal = ({
     ) : null;
 
   return (
-    <Modal closeAction={handleClose} fadeOut={isClosing}>
+    <Modal closeAction={handleClose} fadeOut={isClosing} testId={testId}>
       <div css={{ display: 'grid', rowGap: '12px' }}>
         {header}
         {children}

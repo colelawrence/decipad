@@ -171,7 +171,9 @@ export const WorkspaceNavigation = ({
                 icon={<DeciBoxes />}
                 href={activeWorkspaceRoute.members({}).$}
               >
-                <span css={itemTextStyles}>Upgrade to Pro</span>
+                <span css={itemTextStyles} data-testid="workspace_upgrade_pro">
+                  Upgrade to Pro
+                </span>
               </NavigationItem>
             </NavigationList>
           )}

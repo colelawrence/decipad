@@ -97,7 +97,9 @@ const flagDefaults: Flags = {
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 
-const testOverrides: Flags = { CODE_LINE_NAME_SEPARATED: true };
+const testOverrides: Flags = {
+  CODE_LINE_NAME_SEPARATED: true,
+};
 
 const queryStringOverrides: Flags = getQueryStringOverrides();
 

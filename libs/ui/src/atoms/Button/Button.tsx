@@ -254,6 +254,7 @@ export const Button = ({
       ])}
       onClick={onClick}
       sameTab={sameTab}
+      data-testid={testId}
     >
       {children}
     </Anchor>
