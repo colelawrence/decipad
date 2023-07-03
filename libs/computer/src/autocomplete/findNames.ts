@@ -1,26 +1,52 @@
 import { AST, AutocompleteName, serializeType } from '@decipad/language';
-import { getDefined } from '@decipad/utils';
-import { getDefinedSymbol } from '../utils';
-import { ComputationRealm } from '../computer/ComputationRealm';
-import { getExprRef } from '../exprRefs';
+import { getDefinedSymbol, getIdentifierString } from '../utils';
+import { getExprRef, isExprRef } from '../exprRefs';
+import type { Computer, Program } from '..';
+
+export function* findNames(
+  computer: Computer,
+  program: Readonly<Program>,
+  ignoreNames: Set<string>,
+  inBlockId?: string
+): Iterable<AutocompleteName> {
+  for (const name of internalFindNames(
+    computer,
+    program,
+    ignoreNames,
+    inBlockId
+  )) {
+    if (!isExprRef(name.name)) {
+      yield name;
+    }
+  }
+}
 
 /** Finds names accessible `inBlockId`. `isLocal` is adjusted if we're talking about local variables, and so is the column name if we're in a table (IE we don't need TableName.ColumnName) */
-export function* findNames(
-  realm: ComputationRealm,
-  program: AST.Block[],
+function* internalFindNames(
+  computer: Computer,
+  program: Readonly<Program>,
   ignoreNames: Set<string>,
   inBlockId?: string
 ): Iterable<AutocompleteName> {
   const seenSymbols = new Set<string>();
 
-  const [ownTableName, ownVariableName] =
-    realm.inferContext.stack.getNsNameFromId(getExprRef(inBlockId ?? '')) ?? [];
+  const translateName = (name: string): string => {
+    const tableBlock = computer.latestVarNameToBlockMap.get(name);
+    return (tableBlock && tableBlock.definesVariable) ?? name;
+  };
+
+  const [_ownTableName, ownVariableName] =
+    computer.computationRealm.inferContext.stack.getNsNameFromId(
+      getExprRef(inBlockId ?? '')
+    ) ?? [];
+
+  const ownTableName = _ownTableName && translateName(_ownTableName);
 
   const tableIdsByName = new Map<string, string>(
     program.flatMap((b) => {
-      if (b.args[0]?.type === 'table') {
-        const [tName] = b.args[0].args;
-        return [[tName.args[0], b.id]];
+      if (b.block?.args[0]?.type === 'table') {
+        const tName = getIdentifierString(b.block.args[0].args[0]);
+        return [[translateName(tName), b.id]];
       } else {
         return [];
       }
@@ -28,7 +54,7 @@ export function* findNames(
   );
 
   for (const block of program) {
-    for (const statement of block.args) {
+    for (const statement of block.block?.args ?? []) {
       const symbol = getSymbolOrColumn(statement);
       const type = statement.inferredType;
 
@@ -46,7 +72,7 @@ export function* findNames(
         yield {
           kind: 'variable',
           type: serializeType(type),
-          name: statement.args[0].args[0],
+          name: translateName(statement.args[0].args[0]),
           blockId: block.id,
         };
       }
@@ -57,7 +83,7 @@ export function* findNames(
         yield {
           kind: 'variable',
           type: serializeType(type),
-          name: tName.args[0],
+          name: translateName(tName.args[0]),
           blockId: block.id,
         };
 
@@ -65,7 +91,9 @@ export function* findNames(
           const colType = col.inferredType;
 
           if (colType) {
-            const tableName = statement.args[0].args[0];
+            const tableName = translateName(
+              getIdentifierString(statement.args[0])
+            );
             const columnName = col.args[0].args[0];
             const isLocal = ownTableName === tableName;
             const name = isLocal ? columnName : `${tableName}.${columnName}`;
@@ -80,10 +108,8 @@ export function* findNames(
             };
           }
         }
-      }
-
-      if (statement.type === 'table-column-assign') {
-        const tableName = statement.args[0].args[0];
+      } else if (statement.type === 'table-column-assign') {
+        const tableName = translateName(getIdentifierString(statement.args[0]));
         const columnName = statement.args[1].args[0];
         const isLocal = ownTableName === tableName;
 
@@ -100,18 +126,16 @@ export function* findNames(
           kind: 'column',
           type: serializeType(type),
           name,
-          blockId: getDefined(tableIdsByName.get(tableName)),
+          blockId: tableIdsByName.get(tableName),
           columnId: block.id,
           inTable: tableName,
           isLocal,
         };
-      }
-
-      if (statement.type === 'function-definition') {
+      } else if (statement.type === 'function-definition') {
         yield {
           kind: 'function',
           type: serializeType(type),
-          name: statement.args[0].args[0],
+          name: translateName(getIdentifierString(statement.args[0])),
           blockId: block.id,
         };
       }

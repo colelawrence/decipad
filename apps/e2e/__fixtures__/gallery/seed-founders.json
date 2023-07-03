@@ -636,7 +636,22 @@
     {
       "children": [
         {
-          "text": "TotalShares = sum(Founders.Shares )"
+          "text": "TotalShares = sum("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "2boH__-4y5BYXqSqtKN-x",
+          "type": "smart-ref",
+          "blockId": "4VtgkVbL8xGrDW2h7QyWk",
+          "columnId": "EOX2cvbsi86pjVhQNRWnd",
+          "lastSeenVariableName": "Founders.Shares"
+        },
+        {
+          "text": "  )"
         }
       ],
       "id": "AdeVfEKLQqH5y83Cjju5z",
@@ -865,14 +880,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "8emFjke_S9g2cXCo3fqty",
+                  "id": "daf26PVjJvI-l6SSsoDKQ",
                   "type": "smart-ref",
                   "blockId": "Jpv7N9DdwqWeHnvPMOPk1",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "Percentage"
                 },
                 {
-                  "text": " "
+                  "text": "  "
                 }
               ],
               "id": "7DAK1Jxc0XYjCPNe2rN4u",
@@ -890,14 +906,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "TQ5Np7lQKrvSD9b91NZYw",
+                  "id": "Bz-F44EBTGifcsjR2EQd7",
                   "type": "smart-ref",
                   "blockId": "5BeperCnkNGVsFHx-Zc_1",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "Shares"
                 },
                 {
-                  "text": " * "
+                  "text": "  * "
                 },
                 {
                   "children": [
@@ -1316,11 +1333,12 @@
                   "text": ""
                 }
               ],
-              "id": "kDoggGlZRHW7r-NJTUI_k",
+              "id": "EXSgAeeAvo1h7UI329bJa",
               "type": "data-view-th",
               "cellType": {
                 "kind": "string"
               },
+              "label": "Type",
               "name": "Type"
             },
             {
@@ -1329,11 +1347,12 @@
                   "text": ""
                 }
               ],
-              "id": "D5TbHt3OdnLmBYM_RUfgb",
+              "id": "3YfI72d1THh-Pjyi044bA",
               "type": "data-view-th",
               "cellType": {
                 "kind": "string"
               },
+              "label": "Holder",
               "name": "Holder"
             },
             {
@@ -1342,7 +1361,7 @@
                   "text": ""
                 }
               ],
-              "id": "i-7sfEOXmJy2IJwBGfZYb",
+              "id": "KWb_oj-ues5WUuPUcvBA3",
               "type": "data-view-th",
               "cellType": {
                 "kind": "number",
@@ -1350,21 +1369,22 @@
                   {
                     "unit": "shares",
                     "exp": {
+                      "infinite": false,
                       "n": "1",
                       "d": "1",
-                      "s": "1",
-                      "infinite": false
+                      "s": "1"
                     },
                     "multiplier": {
+                      "infinite": false,
                       "n": "1",
                       "d": "1",
-                      "s": "1",
-                      "infinite": false
+                      "s": "1"
                     },
                     "known": false
                   }
                 ]
               },
+              "label": "Shares",
               "name": "Shares",
               "aggregation": "Sum"
             },
@@ -1374,22 +1394,23 @@
                   "text": ""
                 }
               ],
-              "id": "8DSGlLe2FGzaxO3w_xx_-",
+              "id": "ubL0-4ZaT-Mu0jGQws-5e",
               "type": "data-view-th",
               "cellType": {
                 "kind": "number",
                 "numberFormat": "percentage"
               },
-              "name": "7UUaPUDfA3rI8AuYdxBys",
-              "aggregation": "Sum"
+              "label": "Percentage",
+              "name": "7UUaPUDfA3rI8AuYdxBys"
             },
             {
+              "aggregation": "Sum",
               "children": [
                 {
                   "text": ""
                 }
               ],
-              "id": "vNW8cXbSjIB7yJfXTIxsk",
+              "id": "FApXM8htPROpZ3j-5ia7V",
               "type": "data-view-th",
               "cellType": {
                 "kind": "number",
@@ -1397,16 +1418,16 @@
                   {
                     "unit": "$",
                     "exp": {
+                      "infinite": false,
                       "n": "1",
                       "d": "1",
-                      "s": "1",
-                      "infinite": false
+                      "s": "1"
                     },
                     "multiplier": {
+                      "infinite": false,
                       "n": "1",
                       "d": "1",
-                      "s": "1",
-                      "infinite": false
+                      "s": "1"
                     },
                     "known": true,
                     "baseQuantity": "USD",
@@ -1414,8 +1435,8 @@
                   }
                 ]
               },
-              "name": "YEJCV0J64018xriTyBP_S",
-              "aggregation": "Sum"
+              "label": "Value",
+              "name": "YEJCV0J64018xriTyBP_S"
             },
             {
               "children": [
@@ -1423,11 +1444,12 @@
                   "text": ""
                 }
               ],
-              "id": "PToJ-ufUf2XxZ4ubF9uEs",
+              "id": "wnT67Xa2TBahPwakwMORN",
               "type": "data-view-th",
               "cellType": {
                 "kind": "string"
               },
+              "label": "Class",
               "name": "Class"
             }
           ],

@@ -48,11 +48,12 @@ const tableFormulaColumnToColumn = ({
   );
 
   if (isElementOfType(formula, ELEMENT_TABLE_COLUMN_FORMULA)) {
-    return formulaSourceToColumnAssign(
+    const ret = formulaSourceToColumnAssign(
       columnName,
       th.id,
       getCodeLineSource(formula)
     );
+    return ret;
   }
   return {
     elementId: th.id,

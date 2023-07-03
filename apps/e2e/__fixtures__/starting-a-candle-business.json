@@ -313,8 +313,8 @@
               ],
               "type": "th",
               "cellType": {
-                "kind": "date",
-                "date": "year"
+                "kind": "series",
+                "seriesType": "date"
               },
               "id": "c6FNo_imJSEDtWBsgNrXZ"
             },
@@ -631,7 +631,8 @@
       ],
       "type": "table",
       "id": "ddTJXSKZzWh56A8NMCZmM",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -1188,7 +1189,8 @@
       "type": "table",
       "id": "HFm_s7Zp8559ZZsUzDnbH",
       "hideFormulas": false,
-      "isCollapsed": false
+      "isCollapsed": false,
+      "version": 2
     },
     {
       "children": [
@@ -1297,10 +1299,11 @@
                       "text": ""
                     }
                   ],
-                  "id": "IAwKHM2Dp0gqkPCRYd6hI",
+                  "id": "vUhvQfbXAbDj3rcZ0H1pG",
                   "type": "smart-ref",
                   "blockId": "6sMXx81_zzoy-RYoNmAr8",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "COGS"
                 },
                 {
@@ -1643,7 +1646,8 @@
       ],
       "type": "table",
       "id": "hOM1pr8pzdFI19V4lubQD",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -2509,7 +2513,8 @@
       ],
       "type": "table",
       "id": "NOnNrYjbMXL7-mNf0_HYD",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -2594,25 +2599,28 @@
                       "text": ""
                     }
                   ],
-                  "id": "zXEtXLFmmp_AG2FGdCDAB",
+                  "id": "ZINb49VPVDp_jqqMWvHdj",
                   "type": "smart-ref",
                   "blockId": "85eSX9Ze_QsLmnEoRi4Z9",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "GrossProfit"
                 },
                 {
-                  "text": " - "
+                  "text": " -"
                 },
                 {
+                  "lastSeenVariableName": "OPEX",
                   "children": [
                     {
                       "text": ""
                     }
                   ],
-                  "id": "ZKDLiJjDFO_tjQauOaUdb",
+                  "id": "vyuYPQNFJzV4ze4MHJQBJ",
                   "type": "smart-ref",
-                  "blockId": "NOnNrYjbMXL7-mNf0_HYD",
-                  "lastSeenVariableName": "OPEX"
+                  "blockId": "-lcY3eNESmKI33Qw5g7P7",
+                  "columnId": null,
+                  "decoration": "cell"
                 },
                 {
                   "text": " "
@@ -3063,7 +3071,8 @@
       ],
       "type": "table",
       "id": "-farwyIZskJw6c8lgrotZ",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -3161,9 +3170,11 @@
                       "text": ""
                     }
                   ],
-                  "id": "yw0uRjgPB1u0cM54UX8FP",
+                  "id": "oqG_WCpYTRML5H5wwlkqV",
                   "type": "smart-ref",
-                  "blockId": "-farwyIZskJw6c8lgrotZ",
+                  "blockId": "3WOOVaQ3eBiKoJeXPclDa",
+                  "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "EBIT"
                 },
                 {
@@ -3175,9 +3186,11 @@
                       "text": ""
                     }
                   ],
-                  "id": "7T92JbyM_l1QHKl7TfuCj",
+                  "id": "z0mlfrK73_ILus6bPlep4",
                   "type": "smart-ref",
-                  "blockId": "-farwyIZskJw6c8lgrotZ",
+                  "blockId": "3WOOVaQ3eBiKoJeXPclDa",
+                  "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "EBIT"
                 },
                 {
@@ -3468,7 +3481,8 @@
       ],
       "type": "table",
       "id": "Kqjhk4bqXwF7Y4lKcLZIH",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -3489,6 +3503,7 @@
       "id": "QSzvEHKJ6_ykiEkp5ClcB"
     },
     {
+      "version": 2,
       "children": [
         {
           "children": [

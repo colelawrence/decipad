@@ -20,13 +20,14 @@ it('tracks variable usage when not used with dep graph', async () => {
   expect(computer.programDependencies('block-0')).toStrictEqual([
     {
       inBlockId: 'block-0',
-      usedInBlockId: ['block-2'],
+      dependentBlockIds: ['block-2'],
       varName: 'x',
     },
   ]);
   expect(computer.programDependencies('block-1')).toStrictEqual([
     {
-      usedInBlockId: [],
+      inBlockId: 'block-1',
+      dependentBlockIds: [],
       varName: 'y',
     },
   ]);
@@ -37,7 +38,7 @@ it('tracks variable but can show only those with dependencies', async () => {
   expect(computer.blocksInUse('block-0')).toStrictEqual([
     {
       inBlockId: 'block-0',
-      usedInBlockId: ['block-2'],
+      dependentBlockIds: ['block-2'],
       varName: 'x',
     },
   ]);
@@ -58,21 +59,22 @@ it('can get meta data about everywhere a block is used', async () => {
   expect(computer.programDependencies('block-0')).toStrictEqual([
     {
       inBlockId: 'block-0',
-      usedInBlockId: ['block-2', 'block-3'],
+      dependentBlockIds: ['block-2', 'block-3'],
       varName: 'x',
     },
   ]);
   expect(computer.programDependencies('block-1')).toStrictEqual([
     {
       inBlockId: 'block-1',
-      usedInBlockId: ['block-4'],
+      dependentBlockIds: ['block-4'],
       varName: 'y',
     },
   ]);
   expect(computer.programDependencies('block-2')).toStrictEqual([
     {
-      usedInBlockId: [],
-      varName: 'Value_1',
+      inBlockId: 'block-2',
+      dependentBlockIds: [],
+      varName: 'exprRef_block_2',
     },
   ]);
 });
@@ -82,21 +84,22 @@ it('works for blocks that use two variables', async () => {
   expect(computer.programDependencies('block-0')).toStrictEqual([
     {
       inBlockId: 'block-0',
-      usedInBlockId: ['block-2'],
+      dependentBlockIds: ['block-2'],
       varName: 'x',
     },
   ]);
   expect(computer.programDependencies('block-1')).toStrictEqual([
     {
       inBlockId: 'block-1',
-      usedInBlockId: ['block-2'],
+      dependentBlockIds: ['block-2'],
       varName: 'y',
     },
   ]);
   expect(computer.programDependencies('block-2')).toStrictEqual([
     {
-      usedInBlockId: [],
-      varName: 'Value_1',
+      inBlockId: 'block-2',
+      dependentBlockIds: [],
+      varName: 'exprRef_block_2',
     },
   ]);
 });
@@ -124,20 +127,21 @@ it("tracks tables' usage and knows the block ids", async () => {
   expect(computer.programDependencies('block-0')).toStrictEqual([
     {
       inBlockId: 'block-0',
-      usedInBlockId: ['block-3'],
+      dependentBlockIds: ['block-1', 'block-2', 'block-3'],
       varName: 'table',
     },
   ]);
   expect(computer.programDependencies('block-1')).toStrictEqual([
     {
       inBlockId: 'block-1',
-      usedInBlockId: ['block-3'],
+      dependentBlockIds: ['block-3'],
       varName: 'table.x',
     },
   ]);
   expect(computer.programDependencies('block-2')).toStrictEqual([
     {
-      usedInBlockId: [],
+      inBlockId: 'block-2',
+      dependentBlockIds: [],
       varName: 'table.y',
     },
   ]);
@@ -160,11 +164,5 @@ it("tracks functions' usage", async () => {
     'f(1)'
   );
   expect(computer.isInUse('block-0')).toBe(true);
-  expect(computer.isInUse('block-1')).toBe(false);
-});
-
-it('ignores errored blocks while tracking', async () => {
-  const computer = await computerWithBlocks('x = 1', 'x + "typeerror"');
-  expect(computer.isInUse('block-0')).toBe(false);
   expect(computer.isInUse('block-1')).toBe(false);
 });

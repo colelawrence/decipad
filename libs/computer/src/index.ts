@@ -77,7 +77,12 @@ export * from './computer';
 
 export * from './reporting';
 
-export { getExprRef } from './exprRefs';
-export type { IdentifiedBlock, BlocksInUseInformation } from './types';
+export { getExprRef, isExprRef } from './exprRefs';
+export type {
+  IdentifiedBlock,
+  BlockDependents,
+  DimensionExplanation,
+  ColumnDesc,
+} from './types';
 
 export * from './result';

@@ -16,7 +16,7 @@
  * If they don't pass, then surely existing models will break
  */
 
-import { Computer, materializeResult } from '@decipad/computer';
+import { Computer, getExprRef, materializeResult } from '@decipad/computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import {
   createTPlateEditor,
@@ -75,8 +75,8 @@ it('supports a variable name with the same name as a table', async () => {
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -92,7 +92,7 @@ it('supports a variable name with the same name as a table', async () => {
             DeciNumber {
               "d": 1n,
               "infinite": false,
-              "n": 2n,
+              "n": 11n,
               "s": 1n,
             },
           ],
@@ -104,7 +104,7 @@ it('supports a variable name with the same name as a table', async () => {
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -122,14 +122,14 @@ it('supports a variable name with the same name as a table', async () => {
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
           DeciNumber {
             "d": 1n,
             "infinite": false,
-            "n": 2n,
+            "n": 11n,
             "s": 1n,
           },
         ],
@@ -158,8 +158,8 @@ it('supports a table column named the same as the table (1 - does not refer to i
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -187,7 +187,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -205,7 +205,7 @@ it('supports a table column named the same as the table (1 - does not refer to i
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -241,8 +241,8 @@ it('supports a table column named the same as the table (2 - tricky name used in
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -270,7 +270,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -288,7 +288,7 @@ it('supports a table column named the same as the table (2 - tricky name used in
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -331,8 +331,8 @@ it('supports a table column named the same as the table (3 - defined before)', a
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -368,7 +368,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -386,7 +386,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -404,7 +404,7 @@ it('supports a table column named the same as the table (3 - defined before)', a
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -454,8 +454,8 @@ it('supports a table column named the same as the table (4 - defined after)', as
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -491,7 +491,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -509,7 +509,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -527,7 +527,7 @@ it('supports a table column named the same as the table (4 - defined after)', as
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -549,7 +549,9 @@ it('supports a table column named the same as the table (5 - defined after)', as
       mkTable(
         'TableName',
         'TableName',
-        'lookup(TableName, TableName.Column1 == 1).Column1 + 41'
+        `lookup(${getExprRef('id_TableName')}, ${getExprRef(
+          'id_TableName'
+        )}.Column1 == 1).Column1 + 41`
       )
     )
   ).toMatchInlineSnapshot(`
@@ -570,8 +572,8 @@ it('supports a table column named the same as the table (5 - defined after)', as
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -599,7 +601,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -617,7 +619,7 @@ it('supports a table column named the same as the table (5 - defined after)', as
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -658,8 +660,8 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
               "unit": null,
             },
           ],
-          "delegatesIndexTo": "TableName",
-          "indexName": "TableName",
+          "delegatesIndexTo": "exprRef_id_TableName",
+          "indexName": "exprRef_id_TableName",
           "kind": "table",
         },
         "value": Array [
@@ -687,7 +689,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -705,7 +707,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [
@@ -723,7 +725,7 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
             "kind": "number",
             "unit": null,
           },
-          "indexedBy": "TableName",
+          "indexedBy": "exprRef_id_TableName",
           "kind": "column",
         },
         "value": Array [

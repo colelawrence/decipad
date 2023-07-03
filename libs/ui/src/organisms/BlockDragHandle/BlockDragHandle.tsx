@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { BlocksInUseInformation } from '@decipad/computer';
+import { BlockDependents } from '@decipad/computer';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -18,8 +18,8 @@ import {
 import { DeleteWithDepsMenuItem, MenuList } from '../../molecules';
 import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
 import { editorLayout } from '../../styles';
-import { hideOnPrint } from '../../styles/editor-layout';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import { hideOnPrint } from '../../styles/editor-layout';
 
 const gridStyles = once(() =>
   css({
@@ -73,7 +73,7 @@ const plusStyle = css(handleButtonStyle, {
 interface BlockDragHandleProps {
   readonly children?: ReactNode;
   readonly menuOpen?: boolean;
-  readonly dependenciesForBlock?: BlocksInUseInformation[];
+  readonly dependenciesForBlock?: BlockDependents[];
   readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;

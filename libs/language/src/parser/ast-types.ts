@@ -43,6 +43,8 @@ export interface CatDef extends BasicNode {
 export interface Ref extends BasicNode {
   type: 'ref';
   args: [varName: string];
+  previousVarName?: string;
+  isMissing?: boolean;
 }
 
 export interface ExternalRef extends BasicNode {
@@ -275,6 +277,7 @@ export interface Block extends BasicNode {
   type: 'block';
   id: string;
   args: Statement[];
+  hasDuplicateName?: string;
 }
 
 export type GenericAssignment =

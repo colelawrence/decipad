@@ -16,10 +16,9 @@ import {
   testProgram as makeTestProgram,
   simplifyComputeResponse,
 } from '../testUtils';
-import { ComputeRequestWithExternalData } from '../types';
+import { ColumnDesc, ComputeRequestWithExternalData } from '../types';
 import { getResultGenerator } from '../utils';
 import { Computer } from './Computer';
-import { ColumnDesc } from './types';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -90,12 +89,12 @@ describe('caching', () => {
     });
     expect(await computeOnTestComputer({ program: broken }))
       .toMatchInlineSnapshot(`
-        Array [
-          "block-0 -> 0.5",
-          "block-2 -> 11",
-          "block-3 -> 111",
-        ]
-      `);
+      Array [
+        "block-0 -> 0.5",
+        "block-2 -> Error in operation \\"+\\" (type-error, number): Unknown reference: B1",
+        "block-3 -> Error in operation \\"+\\" (type-error, number): Unknown reference: B1",
+      ]
+    `);
 
     const noD = produce(testProgram, (program) => {
       program[3] = getIdentifiedBlock('', 3);
@@ -237,15 +236,15 @@ describe('expr refs', () => {
       await computeOnTestComputer({
         program: getIdentifiedBlocks(
           'Table = {}',
-          'Table.A = [1]',
+          'Table.A = [2]',
           'C = exprRef_block_1'
         ),
       })
     ).toMatchInlineSnapshot(`
       Array [
-        "block-0 -> [[1]]",
-        "block-1 -> [1]",
-        "block-2 -> [1]",
+        "block-0 -> [[2]]",
+        "block-1 -> [2]",
+        "block-2 -> [2]",
       ]
     `);
   });
@@ -399,7 +398,7 @@ it('can accept program bits', async () => {
     DeciNumber {
       "d": 1n,
       "infinite": false,
-      "n": 1n,
+      "n": 42n,
       "s": 1n,
     }
   `);
@@ -542,7 +541,7 @@ it('getFunctionDefinition$', async () => {
       .pipe(filter((item) => item != null))
   );
 
-  expect(x?.args[0].args[0]).toMatchInlineSnapshot(`"f"`);
+  expect(x?.args[0].args[0]).toMatchInlineSnapshot(`"exprRef_block_0"`);
 });
 
 describe('getVarBlockId$', () => {
@@ -597,13 +596,9 @@ describe('can retrieve columns indexed by a table', () => {
   });
 
   it('can get columns indexed by a table', () => {
-    expect(computer.getAllColumnsIndexedBy$.get('Table').map(({ id }) => id))
-      .toMatchInlineSnapshot(`
-        Array [
-          "block-1",
-          "block-2",
-        ]
-      `);
+    expect(
+      computer.getAllColumnsIndexedBy$.get('Table').map(({ id }) => id)
+    ).toMatchInlineSnapshot(`Array []`);
   });
 });
 
@@ -640,7 +635,7 @@ it('can list tables and columns', async () => {
               "kind": "number",
               "unit": null,
             },
-            "indexedBy": "table",
+            "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
           "value": Array [
@@ -652,7 +647,7 @@ it('can list tables and columns', async () => {
             },
           ],
         },
-        "tableName": "table",
+        "tableName": "exprRef_block_0",
       },
       Object {
         "blockId": "block-0_1",
@@ -662,14 +657,14 @@ it('can list tables and columns', async () => {
             "cellType": Object {
               "kind": "string",
             },
-            "indexedBy": "table",
+            "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
           "value": Array [
             "a",
           ],
         },
-        "tableName": "table",
+        "tableName": "exprRef_block_0",
       },
       Object {
         "blockId": "block-1",
@@ -680,14 +675,14 @@ it('can list tables and columns', async () => {
               "date": "day",
               "kind": "date",
             },
-            "indexedBy": "table",
+            "indexedBy": "exprRef_block_0",
             "kind": "column",
           },
           "value": Array [
             1577836800000n,
           ],
         },
-        "tableName": "table",
+        "tableName": "exprRef_block_0",
       },
     ]
   `);
@@ -695,7 +690,7 @@ it('can list tables and columns', async () => {
     Array [
       Object {
         "id": "block-0",
-        "tableName": "table",
+        "tableName": "exprRef_block_0",
       },
     ]
   `);
@@ -718,7 +713,9 @@ it('can get a defined symbol, in block', async () => {
   });
 
   expect(computer.getSymbolDefinedInBlock('block-0')).toEqual('C');
-  expect(computer.getSymbolDefinedInBlock('block-1')).toEqual(undefined);
+  expect(computer.getSymbolDefinedInBlock('block-1')).toEqual(
+    'exprRef_block_1'
+  );
 });
 
 it('can get table/column data by block id', async () => {

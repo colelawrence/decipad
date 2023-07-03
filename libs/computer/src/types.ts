@@ -59,9 +59,9 @@ export type Program = ProgramBlock[];
 export interface ComputeRequest {
   program: Program;
 }
-export interface BlocksInUseInformation {
+export interface BlockDependents {
   varName: string;
-  usedInBlockId: string[];
+  dependentBlockIds: string[];
   inBlockId?: string;
 }
 
@@ -78,3 +78,28 @@ export interface NotebookResults {
 }
 
 export type NotebookResultStream = BehaviorSubject<NotebookResults>;
+
+export interface ColumnDesc {
+  tableName: string;
+  columnName: string;
+  result: Result.Result<'column'>;
+  blockId?: string;
+}
+
+export interface TableDesc {
+  id: string;
+  tableName: string;
+}
+
+export interface MaterializedColumnDesc {
+  tableName: string;
+  columnName: string;
+  result: Result.Result<'materialized-column'>;
+  blockId?: string;
+}
+
+export interface DimensionExplanation {
+  indexedBy: string | undefined;
+  labels: readonly string[] | undefined;
+  dimensionLength: number;
+}

@@ -39,14 +39,14 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
-import { findNames } from '../autocomplete/findNames';
+import { findNames } from '../autocomplete';
 import { computeProgram } from '../compute/computeProgram';
+import { blocksInUse, isInUse, programDependencies } from '../dependencies';
 import {
-  blocksInUse,
-  isInUse,
-  programDependencies,
-} from '../dependencies/dependencies';
-import { getExprRef, makeNamesFromIds } from '../exprRefs';
+  getExprRef,
+  programWithAbstractNamesAndReferences,
+  statementWithAbstractRefs,
+} from '../exprRefs';
 import { listenerHelper } from '../hooks';
 import { captureException } from '../reporting';
 import { ResultStreams } from '../resultStreams';
@@ -74,15 +74,19 @@ import { deduplicateColumnResults } from './deduplicateColumnResults';
 import { defaultComputerResults } from './defaultComputerResults';
 import { emptyBlockResultSubject } from './emptyBlockSubject';
 import { updateChangedProgramBlocks } from './parseUtils';
-import { topologicalSort } from './topologicalSort';
+import { topologicalSort } from '../topological-sort';
 import { flattenTableDeclarations } from './transformTables';
-import { ColumnDesc, DimensionExplanation, TableDesc } from './types';
+import { ColumnDesc, DimensionExplanation, TableDesc } from '../types';
 import { programToProgramByBlockId } from '../utils/programToProgramByBlockId';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
 interface ComputerOpts {
   initialProgram?: Program;
+}
+
+interface IngestComputeRequestResponse {
+  program: Program;
 }
 
 export class Computer {
@@ -95,6 +99,9 @@ export class Computer {
     Map<string, [id: string, injectedResult: Result.Result][]>
   >(new Map());
   private automaticallyGeneratedNames = new Set<string>();
+  public latestVarNameToBlockMap = new Map<string, ProgramBlock>();
+  public latestExprRefToVarNameMap = new Map<string, string>();
+  public latestBlockDependents = new Map<string, string[]>();
 
   // streams
   private readonly computeRequests = new Subject<ComputeRequest>();
@@ -171,10 +178,8 @@ export class Computer {
     return this.latestProgram.find((p) => {
       if (varName === getExprRef(p.id)) {
         return true;
-      } else if (p.type === 'identified-block' && p.block.args.length > 0) {
-        return getDefinedSymbol(p.block.args[0]) === mainIdentifier;
       } else {
-        return false;
+        return p.definesVariable === mainIdentifier;
       }
     })?.id;
   }
@@ -233,20 +238,7 @@ export class Computer {
 
   getSymbolDefinedInBlock(blockId: string): string | undefined {
     const parsed = this.latestProgramByBlockId.get(blockId);
-    if (parsed && parsed.type === 'identified-block') {
-      const firstNode = parsed.block.args[0];
-      if (firstNode) {
-        const symbol = getDefinedSymbol(firstNode);
-        if (symbol) {
-          if (!this.automaticallyGeneratedNames.has(symbol)) {
-            return symbol;
-          }
-        }
-      }
-    } else if (parsed?.type === 'identified-error') {
-      return parsed.definesVariable;
-    }
-    return undefined;
+    return parsed?.definesVariable;
   }
 
   getSymbolOrTableDotColumn$ = listenerHelper(
@@ -344,16 +336,16 @@ export class Computer {
   getNamesDefined(inBlockId?: string): AutocompleteName[] {
     const program = getGoodBlocks(this.latestProgram);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
-    return Array.from(
-      findNames(this.computationRealm, program, toIgnore, inBlockId)
-    );
+    return Array.from(findNames(this, program, toIgnore, inBlockId));
   }
 
   getNamesDefined$ = listenerHelper(this.results, (_, inBlockId?: string) =>
     this.getNamesDefined(inBlockId)
   );
 
-  getFunctionDefinition(funcName: string): AST.FunctionDefinition | undefined {
+  getFunctionDefinition(_funcName: string): AST.FunctionDefinition | undefined {
+    const blockId = this.latestVarNameToBlockMap.get(_funcName)?.id;
+    const funcName = blockId ? getExprRef(blockId) : _funcName;
     return this.computationRealm.inferContext.functionDefinitions.get(funcName);
   }
 
@@ -416,9 +408,17 @@ export class Computer {
       }
 
       return zip(dimensions, deepLengths).map(([type, dimensionLength]) => {
+        const { indexedBy: tableAbstractName } = type;
+        const tableUserBlock =
+          tableAbstractName &&
+          this.latestVarNameToBlockMap.get(tableAbstractName);
+        const indexedBy =
+          (tableUserBlock && tableUserBlock.definesVariable) ??
+          tableAbstractName ??
+          undefined;
         return {
-          indexedBy: type.indexedBy ?? undefined,
-          labels: results.indexLabels.get(type.indexedBy ?? ''),
+          indexedBy,
+          labels: results.indexLabels.get(indexedBy ?? ''),
           dimensionLength,
         };
       });
@@ -595,8 +595,12 @@ export class Computer {
     });
   }
 
-  async expressionResult(expression: AST.Expression): Promise<Result.Result> {
+  async expressionResult(_expression: AST.Expression): Promise<Result.Result> {
     return this.enqueueComputation(async (): Promise<Result.Result> => {
+      const [expression] = statementWithAbstractRefs(
+        _expression,
+        this.latestVarNameToBlockMap
+      );
       const start = Date.now();
       const type = await inferExpression(
         this.computationRealm.inferContext,
@@ -649,25 +653,44 @@ export class Computer {
   private ingestComputeRequest({
     program,
     externalData,
-  }: ComputeRequestWithExternalData) {
-    const newParse = updateChangedProgramBlocks(program, this.latestProgram);
-    const sortedParse = topologicalSort(newParse);
-
+  }: ComputeRequestWithExternalData): IngestComputeRequestResponse {
+    // console.log('newProgram', program);
+    const {
+      program: newProgram,
+      varNameToBlockMap,
+      blockDependents,
+    } = programWithAbstractNamesAndReferences(
+      topologicalSort(flattenTableDeclarations(program))
+    );
+    const newParse = topologicalSort(
+      updateChangedProgramBlocks(newProgram, this.latestProgram)
+    );
+    // console.log('newParse', prettyPrintProgram(newParse));
     const newExternalData = anyMappingToMap(externalData ?? new Map());
 
     this.computationRealm.evictCache({
       oldBlocks: getGoodBlocks(this.latestProgram),
-      newBlocks: getGoodBlocks(sortedParse),
+      newBlocks: getGoodBlocks(newParse),
       oldExternalData: this.latestExternalData,
       newExternalData,
     });
 
     this.computationRealm.setExternalData(newExternalData);
     this.latestExternalData = newExternalData;
-    this.latestProgram = sortedParse;
-    this.latestProgramByBlockId = programToProgramByBlockId(sortedParse);
+    this.latestProgram = newParse;
+    this.latestProgramByBlockId = programToProgramByBlockId(newParse);
+    this.latestVarNameToBlockMap = varNameToBlockMap;
+    this.latestExprRefToVarNameMap = new Map(
+      Array.from(varNameToBlockMap.entries()).map(([varName, block]) => [
+        getExprRef(block.id),
+        block.definesVariable ?? varName,
+      ])
+    );
+    this.latestBlockDependents = blockDependents;
 
-    return sortedParse;
+    return {
+      program: newParse,
+    };
   }
 
   public async computeRequest(
@@ -677,25 +700,18 @@ export class Computer {
       this.computationRealm.epoch += 1n;
       /* istanbul ignore catch */
       try {
-        const programWithFlattenedTables = flattenTableDeclarations(
-          req.program
-        );
-        const [programWithPrettyNames, automaticallyGeneratedNames] =
-          makeNamesFromIds(programWithFlattenedTables);
-        this.automaticallyGeneratedNames = automaticallyGeneratedNames;
-        this.computationRealm.inferContext.autoGeneratedVarNames =
-          automaticallyGeneratedNames;
-
-        const blocks = this.ingestComputeRequest({
-          ...req,
-          program: programWithPrettyNames,
-        });
+        const { program: blocks } = this.ingestComputeRequest(req);
         const goodBlocks = getGoodBlocks(blocks);
 
         const computeResults = await computeProgram(
-          goodBlocks,
-          this.computationRealm
+          goodBlocks.map((b) => b.block),
+          this
         );
+
+        // console.log(
+        //   'new result',
+        //   this.latestProgram.map((pb) => pb.block?.args[0])
+        // );
 
         const updates: (IdentifiedError | IdentifiedResult)[] = [];
 
@@ -711,7 +727,9 @@ export class Computer {
           blockResults: Object.fromEntries(
             updates.map((result) => [result.id, result])
           ),
-          indexLabels: await this.computationRealm.getIndexLabels(),
+          indexLabels: await this.computationRealm.getIndexLabels(
+            this.latestVarNameToBlockMap
+          ),
         };
       } catch (error) {
         console.error(error);
@@ -798,7 +816,11 @@ export class Computer {
     if (!ast) {
       return null;
     }
-    const expr = await inferExpression(this.computationRealm.inferContext, ast);
+    const [stmt] = statementWithAbstractRefs(ast, this.latestVarNameToBlockMap);
+    const expr = await inferExpression(
+      this.computationRealm.inferContext,
+      stmt
+    );
     return expr.unit;
   }
 

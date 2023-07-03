@@ -1,3 +1,4 @@
+import { isExprRef } from '@decipad/computer';
 import {
   useEditorChange,
   useNodePath,
@@ -85,7 +86,8 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       const currentmutateLastSeenVariableNameText = getNodeString(element);
       if (
         path &&
-        currentmutateLastSeenVariableNameText !== newLastSeenVariableName
+        currentmutateLastSeenVariableNameText !== newLastSeenVariableName &&
+        !isExprRef(newLastSeenVariableName)
       ) {
         insertText(editor, newLastSeenVariableName, { at: path });
       }
@@ -128,7 +130,8 @@ export const useSmartRef = (element: SmartRefElement): UseSmartRefResult => {
       }
       if (
         debouncedSymbolName != null &&
-        debouncedSymbolName !== element.lastSeenVariableName
+        debouncedSymbolName !== element.lastSeenVariableName &&
+        !isExprRef(debouncedSymbolName)
       ) {
         mutateLastSeenVariableName(debouncedSymbolName);
       }

@@ -10,7 +10,7 @@ import DeciNumber from '@decipad/number';
 import { getOnly, timeout } from '@decipad/utils';
 import { all } from '@decipad/generator-utils';
 import { Result } from 'libs/language/src/result';
-import { AST, Computer, prettyPrintAST } from '.';
+import { AST, Computer, Program, prettyPrintAST } from '.';
 import {
   IdentifiedBlock,
   IdentifiedError,
@@ -23,6 +23,13 @@ import {
   getIdentifierString,
   getResultGenerator,
 } from './utils';
+
+export const testProgramBlocks = (...blocks: (AST.Block | string)[]): Program =>
+  testBlocks(...blocks).map((block) => ({
+    id: block.id,
+    type: 'identified-block',
+    block,
+  }));
 
 export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {
@@ -94,7 +101,7 @@ export const programContainingError = testBlocks(
   'Error + 1'
 );
 
-export function getIdentifiedBlocks(...sources: string[]) {
+export function getIdentifiedBlocks(...sources: string[]): Program {
   return sources.map((source, i) => getIdentifiedBlock(source, i));
 }
 
@@ -183,3 +190,18 @@ export const simplifyComputeResponse = async (
     )
   ).flat();
 };
+
+export const prettyPrintWholeProgramBlock = (
+  programBlock: ProgramBlock
+): unknown => {
+  if (programBlock.type === 'identified-error') {
+    return programBlock;
+  }
+  return {
+    ...programBlock,
+    block: prettyPrintAST(programBlock.block),
+  };
+};
+
+export const prettyPrintProgram = (program: Program): unknown =>
+  program.map(prettyPrintWholeProgramBlock);

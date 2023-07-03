@@ -18,6 +18,8 @@ import { timeout } from '@decipad/utils';
 import { BaseEditor, Editor } from 'slate';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
 
+type VarAndCol = [string, string?];
+
 jest.mock('nanoid', () => ({
   nanoid: () => 'nanoid()',
 }));
@@ -69,13 +71,25 @@ it('can turn text into smartrefs', async () => {
     ...editor.children,
     createCodeLine({ id: '2', code: 'var' }),
   ];
-
   computer.pushCompute({
     program: await editorToProgram(editor, editor.children, computer),
   });
   await timeout(0);
 
-  convertCodeSmartRefs(editor, [2], computer);
+  const names = computer
+    .getNamesDefined()
+    .flatMap((n): [VarAndCol, VarAndCol][] => {
+      if (n.kind === 'variable' && n.blockId) {
+        return [[[n.name], [n.blockId]]];
+      }
+      if (n.kind === 'column' && n.blockId && n.columnId) {
+        return [
+          [n.name.split('.') as [string, string], [n.blockId, n.columnId]],
+        ];
+      }
+      return [];
+    });
+  convertCodeSmartRefs(editor, [2], names);
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`
     Object {
@@ -103,7 +117,20 @@ it('can turn text into smartrefs (columns edition)', async () => {
   });
   await timeout(0);
 
-  convertCodeSmartRefs(editor, [2], computer);
+  const names = computer
+    .getNamesDefined()
+    .flatMap((n): [VarAndCol, VarAndCol][] => {
+      if (n.kind === 'variable' && n.blockId) {
+        return [[[n.name], [n.blockId]]];
+      }
+      if (n.kind === 'column' && n.blockId && n.columnId) {
+        return [
+          [n.name.split('.') as [string, string], [n.blockId, n.columnId]],
+        ];
+      }
+      return [];
+    });
+  convertCodeSmartRefs(editor, [2], names);
 
   expect(editor.children[2].children[1]).toMatchInlineSnapshot(`
     Object {

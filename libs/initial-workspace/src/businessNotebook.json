@@ -631,7 +631,8 @@
       ],
       "type": "table",
       "id": "ddTJXSKZzWh56A8NMCZmM",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -1188,7 +1189,8 @@
       "type": "table",
       "id": "HFm_s7Zp8559ZZsUzDnbH",
       "hideFormulas": false,
-      "isCollapsed": false
+      "isCollapsed": false,
+      "version": 2
     },
     {
       "children": [
@@ -1643,7 +1645,8 @@
       ],
       "type": "table",
       "id": "hOM1pr8pzdFI19V4lubQD",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -2509,7 +2512,8 @@
       ],
       "type": "table",
       "id": "NOnNrYjbMXL7-mNf0_HYD",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -2594,14 +2598,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "zXEtXLFmmp_AG2FGdCDAB",
+                  "id": "3LgVZk8c9X5hd0LhEX26O",
                   "type": "smart-ref",
                   "blockId": "85eSX9Ze_QsLmnEoRi4Z9",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "GrossProfit"
                 },
                 {
-                  "text": " - "
+                  "text": "  - "
                 },
                 {
                   "children": [
@@ -2609,9 +2614,11 @@
                       "text": ""
                     }
                   ],
-                  "id": "ZKDLiJjDFO_tjQauOaUdb",
+                  "id": "yMRs9X2Zht-Z5blzolQop",
                   "type": "smart-ref",
-                  "blockId": "NOnNrYjbMXL7-mNf0_HYD",
+                  "blockId": "-lcY3eNESmKI33Qw5g7P7",
+                  "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "OPEX"
                 },
                 {
@@ -3063,7 +3070,8 @@
       ],
       "type": "table",
       "id": "-farwyIZskJw6c8lgrotZ",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -3161,13 +3169,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "yw0uRjgPB1u0cM54UX8FP",
+                  "id": "VtNkt2Oe7sJWUW9psUPie",
                   "type": "smart-ref",
-                  "blockId": "-farwyIZskJw6c8lgrotZ",
+                  "blockId": "3WOOVaQ3eBiKoJeXPclDa",
+                  "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "EBIT"
                 },
                 {
-                  "text": " > 0 then "
+                  "text": "  > 0 then "
                 },
                 {
                   "children": [
@@ -3175,13 +3185,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "7T92JbyM_l1QHKl7TfuCj",
+                  "id": "KQUwPa564g7w12G3wJno9",
                   "type": "smart-ref",
-                  "blockId": "-farwyIZskJw6c8lgrotZ",
+                  "blockId": "3WOOVaQ3eBiKoJeXPclDa",
+                  "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "EBIT"
                 },
                 {
-                  "text": " * "
+                  "text": "  * "
                 },
                 {
                   "children": [
@@ -3468,7 +3480,8 @@
       ],
       "type": "table",
       "id": "Kqjhk4bqXwF7Y4lKcLZIH",
-      "hideFormulas": false
+      "hideFormulas": false,
+      "version": 2
     },
     {
       "children": [
@@ -3489,6 +3502,7 @@
       "id": "QSzvEHKJ6_ykiEkp5ClcB"
     },
     {
+      "version": 2,
       "children": [
         {
           "children": [
@@ -3562,10 +3576,11 @@
                       "text": ""
                     }
                   ],
-                  "id": "uiA4zVihtWOM49lEItawM",
+                  "id": "qT_BFqaVn4IvofTUudIcg",
                   "type": "smart-ref",
                   "blockId": "oqFDAfdh8Tg4fmy1_8kbu",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "OperatingIncome"
                 },
                 {
@@ -3577,14 +3592,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "hGm8z9s-B4D4cA-GOzaVj",
+                  "id": "UnQ6uRD7yer99LmVJeRBF",
                   "type": "smart-ref",
                   "blockId": "oNqXPFl_emZTsl3UyDOCh",
                   "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "Taxes"
                 },
                 {
-                  "text": ""
+                  "text": " "
                 }
               ],
               "type": "table-column-formula",

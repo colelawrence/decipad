@@ -1,14 +1,16 @@
 import { getDefined } from '@decipad/utils';
 import { isAssignment } from '@decipad/language';
 import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
-import { dependencies, findAllTables } from './dependencies';
+import { dependencies, findAllTables } from '../dependencies';
 import { getIdentifierString } from '../utils';
+import { getExprRef } from '../exprRefs';
+import { prettyPrintProgramBlock } from '../testUtils';
 
 interface Node {
-  entity: string | null;
+  entities: Set<string>;
   temporaryMark: boolean;
   permanentMark: boolean;
-  edges?: Node[];
+  edges?: Set<Node>;
   value: IdentifiedBlock;
 }
 
@@ -22,36 +24,41 @@ const goodBlock = (block: ProgramBlock): block is IdentifiedBlock => {
   return block.type !== 'identified-error';
 };
 
-const blockEntity = ({ block }: IdentifiedBlock): string | null => {
+const blockEntities = ({ block }: IdentifiedBlock): Set<string> => {
   if (block.args.length < 1) {
-    return null;
+    return new Set();
   }
   const statement = block.args[0];
   if (!statement || !isAssignment(statement)) {
-    return null;
+    return new Set();
   }
+
+  const entities = new Set<string>();
 
   // we have a statement if we've made it this far
   if (statement.type === 'table-column-assign') {
     const [tablePartialDef, colDef] = statement.args;
-    return `${tablePartialDef.args[0]}::${colDef.args[0]}`;
+    entities.add(`${tablePartialDef.args[0]}::${colDef.args[0]}`);
+  } else {
+    const arg0 = statement.args[0];
+    entities.add(getIdentifierString(arg0));
   }
+  entities.add(getExprRef(block.id));
 
-  const arg0 = statement.args[0];
-  return getIdentifierString(arg0);
+  return entities;
 };
 
 const blockToNode = (block: IdentifiedBlock): Node => {
   return {
-    entity: blockEntity(block),
+    entities: blockEntities(block),
     temporaryMark: false,
     permanentMark: false,
     value: block,
   };
 };
 
-const notSelf = (entity: string) => (node: Node | undefined) =>
-  !node || node.entity !== entity;
+const notSelf = (entities: string[]) => (node: Node | undefined) =>
+  !node || entities.every((ent) => !node.entities.has(ent));
 
 type GetDepsFunction = (node: Node) => string[];
 
@@ -78,11 +85,9 @@ const drawEdges = (
     })
     .filter(Boolean);
 
-  const { entity } = node;
-  if (entity != null) {
-    edges = edges.filter(notSelf(entity)) as Node[];
-  }
-  node.edges = edges as Node[];
+  const { entities } = node;
+  edges = edges.filter(notSelf(Array.from(entities))) as Node[];
+  node.edges = new Set(edges) as Set<Node>;
 };
 
 const identifiedErrorFromNode = (id: string): IdentifiedError => ({
@@ -90,6 +95,8 @@ const identifiedErrorFromNode = (id: string): IdentifiedError => ({
   id,
   errorKind: 'dependency-cycle',
 });
+
+const isTesting = !!process.env.JEST_WORKER_ID;
 
 export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   const errored = blocks.filter(badBlock);
@@ -100,9 +107,9 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   const nodes = goodBlocks.map(blockToNode);
 
   const identifiersToNode = nodes.reduce<EntityNodeMap>((map, node) => {
-    if (node.entity !== null) {
-      const existing = map.get(node.entity) ?? [];
-      map.set(node.entity, existing.concat(node));
+    for (const entity of node.entities) {
+      const existing = map.get(entity) ?? [];
+      map.set(entity, existing.concat(node));
     }
 
     return map;
@@ -114,8 +121,22 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     }
     if (n.temporaryMark) {
       // Circular dep
-      const errorNode = identifiedErrorFromNode(n.value.id);
+      if (!isTesting) {
+        console.error(
+          'node has a dependency cycle',
+          n.value.id,
+          prettyPrintProgramBlock(n.value)
+        );
+        console.error(
+          'node depends on',
+          Array.from(n.edges ?? []).map((edge) => [
+            prettyPrintProgramBlock(edge.value),
+            Array.from(edge.edges ?? []).map((edge) => edge.value.id),
+          ])
+        );
+      }
       if (!n.permanentMark) {
+        const errorNode = identifiedErrorFromNode(n.value.id);
         n.permanentMark = true;
         errored.push(errorNode);
       }
@@ -143,7 +164,7 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   // draw edges
   const depNamespaces = findAllTables(goodBlocks.map((b) => b.block));
   const tableToFirstColMap = new Map<string, Node>();
-  const getDeps = (node: Node) => {
+  const getDeps: GetDepsFunction = (node) => {
     const deps = dependencies(node.value.block, depNamespaces);
     const statement = node.value.block.args[0];
 
@@ -160,8 +181,10 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
         const tableToFirstCol = tableToFirstColMap.get(
           node.value.definesTableColumn[0]
         );
-        if (tableToFirstCol?.entity) {
-          deps.push(tableToFirstCol.entity);
+        if (tableToFirstCol) {
+          for (const entity of tableToFirstCol.entities) {
+            deps.push(entity);
+          }
         }
       }
     }
@@ -174,35 +197,51 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   // Make a dictionary of all the tables and their columns
   const tables: { [tableName: string]: Node[] } = {};
   for (const node of nodes) {
-    const split = node.entity?.split('::');
-    if (split?.length !== 2) continue;
+    for (const entity of node.entities) {
+      const split = entity.split('::');
+      if (split?.length !== 2) continue;
 
-    const [table] = split;
-    if (tables[table] === undefined) {
-      tables[table] = [node];
-    } else {
-      tables[table].push(node);
+      const [table] = split;
+      if (tables[table] === undefined) {
+        tables[table] = [node];
+      } else {
+        tables[table].push(node);
+      }
     }
   }
+
+  const nodeIsTable = (node: Node): [string, Node[]] | undefined => {
+    for (const entity of node.entities) {
+      const table = tables[entity];
+      if (table) {
+        return [entity, table];
+      }
+    }
+    return undefined;
+  };
 
   // if some node A has a table as a dep, and A is not a property of that table, add all the table's columns as a dep
   for (const node of nodes) {
     if (!node.edges) continue;
     for (const edge of node.edges) {
-      const cols = edge.entity !== null && tables[edge.entity];
-      if (!cols) continue;
-
-      // if node is a column declaration, and edge is the table of that column then we skip
-      let match: RegExpExecArray | null;
-      if (node.entity && (match = /^(.+)::.+$/.exec(node.entity))) {
-        const [, tableName] = match;
-        if (tableName === edge.entity) {
-          continue;
-        }
+      const pointsToTable = nodeIsTable(edge);
+      if (!pointsToTable) {
+        continue;
       }
-
-      for (const col of cols) {
-        node.edges.push(col);
+      const [table, columns] = pointsToTable;
+      const tableOrColumnEntities: Set<string> = new Set([
+        table,
+        ...columns.flatMap((n) => Array.from(n.entities)),
+      ]);
+      if (
+        node.entities.size > 0 &&
+        Array.from(node.entities).every(
+          (nodeEnt) => !tableOrColumnEntities.has(nodeEnt)
+        )
+      ) {
+        for (const col of columns) {
+          node.edges.add(col);
+        }
       }
     }
   }

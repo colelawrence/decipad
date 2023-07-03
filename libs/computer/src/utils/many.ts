@@ -5,8 +5,15 @@ import type {
   IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
+  Program,
   ProgramBlock,
 } from '../types';
+
+export const getBlock = (program: AST.Block[], blockId: string): AST.Block =>
+  getDefined(
+    program.find((b) => b.id === blockId),
+    `ComputationGraph: Could not find code line at ${blockId}`
+  );
 
 export const getStatement = (
   program: AST.Block[],
@@ -14,6 +21,16 @@ export const getStatement = (
 ): AST.Statement => {
   return getDefined(
     program.find((b) => b.id === blockId)?.args[0],
+    `ComputationGraph: Could not find code line at ${blockId}`
+  );
+};
+
+export const getStatementFromProgram = (
+  program: Program,
+  blockId: string
+): AST.Statement => {
+  return getDefined(
+    program.find((b) => b.id === blockId)?.block?.args[0],
     `ComputationGraph: Could not find code line at ${blockId}`
   );
 };
@@ -61,7 +78,7 @@ export const getDefinedSymbol = (
 
 export const getGoodBlocks = (parsed: ProgramBlock[]) =>
   parsed.flatMap((b) => {
-    if (b.type === 'identified-block') return [b.block];
+    if (b.type === 'identified-block') return [b];
     else return [];
   });
 

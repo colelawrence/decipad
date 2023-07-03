@@ -238,29 +238,12 @@ describe('withUpdateComputerOverride', () => {
           },
         },
         "id5": Object {
-          "epoch": 3n,
+          "epoch": 2n,
           "id": "id5",
           "result": Object {
             "type": Object {
               "kind": "number",
-              "unit": Array [
-                Object {
-                  "exp": DeciNumber {
-                    "d": 1n,
-                    "infinite": false,
-                    "n": 1n,
-                    "s": 1n,
-                  },
-                  "known": false,
-                  "multiplier": DeciNumber {
-                    "d": 1n,
-                    "infinite": false,
-                    "n": 1n,
-                    "s": 1n,
-                  },
-                  "unit": "_A",
-                },
-              ],
+              "unit": null,
             },
             "value": DeciNumber {
               "d": 1n,
@@ -273,11 +256,17 @@ describe('withUpdateComputerOverride', () => {
           "usedNames": Array [
             Array [
               "",
+              "_A",
+            ],
+            Array [
+              "",
               "_B",
             ],
           ],
           "visibleVariables": Object {
             "global": Set {
+              "exprRef_id3",
+              "_A",
               "exprRef_id4",
               "_B",
               "exprRef_id5",

@@ -1,4 +1,4 @@
-import { Computer, getUsedIdentifiers, tokenize } from '@decipad/computer';
+import { getUsedIdentifiers, tokenize } from '@decipad/computer';
 import {
   ELEMENT_SMART_REF,
   MyEditor,
@@ -26,16 +26,26 @@ import { setSelection } from './setSelection';
 export const convertCodeSmartRefs = (
   editor: MyEditor,
   path: Path,
-  computer: Computer
+  names: [VarAndCol, VarAndCol][]
 ) => {
+  const namesToIds = names;
+  const idsToNames = names.map((n) => [n[1], n[0]] as [VarAndCol, VarAndCol]);
+
   try {
     const keepGoing = true;
     outer: while (keepGoing) {
-      const children = Array.from(getNodeChildren(editor, path));
-      for (const lineChild of children) {
+      for (const lineChild of getNodeChildren(editor, path)) {
         const [lineChildNode, lineChildPath] = lineChild;
         // add or extend smart refs
-        if (handleNode(lineChildNode, lineChildPath, editor, computer)) {
+        if (
+          handleNode(
+            lineChildNode,
+            lineChildPath,
+            editor,
+            namesToIds,
+            idsToNames
+          )
+        ) {
           continue outer;
         }
       }
@@ -47,35 +57,15 @@ export const convertCodeSmartRefs = (
   }
 };
 
-type VarAndCol = [string, string | null];
+type VarAndCol = [string, string?];
 
-export const handleNode = (
+const handleNode = (
   node: MyNode,
   path: Path,
   editor: MyEditor,
-  computer: Computer
+  namesToIds: [VarAndCol, VarAndCol][],
+  idsToNames: [VarAndCol, VarAndCol][]
 ) => {
-  const names = computer
-    .getNamesDefined()
-    .flatMap((n): [VarAndCol, VarAndCol][] => {
-      if (n.kind === 'variable' && n.blockId) {
-        return [
-          [
-            [n.name, null],
-            [n.blockId, null],
-          ],
-        ];
-      }
-      if (n.kind === 'column' && n.blockId && n.columnId) {
-        return [
-          [n.name.split('.') as [string, string], [n.blockId, n.columnId]],
-        ];
-      }
-      return [];
-    });
-  const namesToIds = names;
-  const idsToNames = names.map((n) => [n[1], n[0]] as [VarAndCol, VarAndCol]);
-
   const inTableId =
     Editor.above<TableElement>(editor as BaseEditor, {
       at: path,
@@ -100,7 +90,7 @@ const handleSmartRefNode = (
   editor: MyEditor,
   idsToNames: [VarAndCol, VarAndCol][]
 ) => {
-  const curName = find(idsToNames, node.blockId, node.columnId);
+  const curName = find(idsToNames, node.blockId, node.columnId ?? undefined);
   if (
     !curName ||
     node.columnId ===
@@ -140,22 +130,24 @@ const handleTextNode = (
 
   for (const token of identifs) {
     let blockIdAndColumn;
-    if (!token.isDeclaration && token.tableColumn) {
-      blockIdAndColumn = find(
-        namesToIds,
-        token.tableColumn[0],
-        token.tableColumn[1]
-      );
-    } else if (!token.isDeclaration && !token.isBeforeDot) {
-      blockIdAndColumn =
-        find(namesToIds, token.text, null) ??
-        namesToIds.flatMap(([[, columnName], [tableId, columnId]]) =>
-          inTableId != null &&
-          tableId === inTableId &&
-          columnName === token.text
-            ? [[columnId, null] as VarAndCol]
-            : []
-        )?.[0];
+    if (!token.isDeclaration) {
+      if (token.tableColumn) {
+        blockIdAndColumn = find(
+          namesToIds,
+          token.tableColumn[0],
+          token.tableColumn[1]
+        );
+      } else if (!token.isBeforeDot) {
+        blockIdAndColumn =
+          find(namesToIds, token.text) ??
+          namesToIds.flatMap(([[, columnName], [tableId, columnId]]) =>
+            inTableId != null &&
+            tableId === inTableId &&
+            columnName === token.text
+              ? [[columnId] as VarAndCol]
+              : []
+          )?.[0];
+      }
     }
 
     if (blockIdAndColumn) {
@@ -192,11 +184,11 @@ export const smartRefToText = (
 
 const find = (
   items: [VarAndCol, VarAndCol][],
-  block: string,
-  column: string | null
+  symbol: string,
+  column?: string
 ) => {
   for (const item of items) {
-    if (item[0][0] === block && item[0][1] === column) {
+    if (item[0][0] === symbol && item[0][1] === column) {
       return item[1];
     }
   }
@@ -207,13 +199,13 @@ const replaceTextWithSmartRef = (
   editor: MyEditor,
   textRange: Range,
   blockId: string,
-  columnId: string | null
+  columnId?: string
 ) => {
   const smartRef: SmartRefElement = {
     id: nanoid(),
     type: ELEMENT_SMART_REF,
     blockId,
-    columnId,
+    columnId: columnId ?? null,
     children: [{ text: '' }],
   };
   insertNodes(editor, [{ text: '' }, smartRef, { text: '' }], {

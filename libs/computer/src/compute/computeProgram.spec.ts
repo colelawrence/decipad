@@ -6,6 +6,7 @@ import {
   simplifyInBlockResults,
 } from '../testUtils';
 import { ComputationRealm } from '../computer/ComputationRealm';
+import { Computer } from '../computer';
 
 it('creates a result from an error', () => {
   const realm = new ComputationRealm();
@@ -37,7 +38,7 @@ it('creates a result from an error', () => {
 });
 
 const testCompute = async (program: AST.Block[]) =>
-  simplifyInBlockResults(await computeProgram(program, new ComputationRealm()));
+  simplifyInBlockResults(await computeProgram(program, new Computer()));
 
 it('infers+evaluates a deep program', async () => {
   expect(await testCompute(deeperProgram)).toMatchInlineSnapshot(`

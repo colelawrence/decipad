@@ -32,15 +32,20 @@ export const CodeVariable: CodeLeaf = ({
   children,
   leaf: { variableName, blockId, isDeclaration, text },
 }) => {
+  // console.log('variableName', variableName);
   const computer = useComputer();
   const defBlockId = computer.getVarBlockId$.use(variableName);
+  // console.log('defBlockId', defBlockId);
   const visibleVariables = computer.getBlockIdResult$.useWithSelector(
     (x) => x?.visibleVariables,
     blockId
   );
+  // console.log('visibleVariables', visibleVariables);
 
   const variableScope = getVariableScope(variableName, visibleVariables);
+  // console.log('variableScope', variableScope);
   const variableMissing = variableScope === 'undefined';
+  // console.log('variableMissing', variableMissing);
 
   const provideVariableDefLink =
     !isDeclaration && !variableMissing && typeof defBlockId === 'string';

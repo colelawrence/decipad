@@ -592,13 +592,14 @@
               "text": ""
             }
           ],
-          "id": "ZbD-g7uNQPl7HivvSuYMO",
+          "id": "9bnUTDabBJllZ3Seo664u",
           "type": "smart-ref",
           "blockId": "lY73gvGtpjMaywcS7khHV",
+          "columnId": null,
           "lastSeenVariableName": "Close_Probability"
         },
         {
-          "text": ", "
+          "text": " , "
         },
         {
           "children": [
@@ -712,13 +713,15 @@
                       "text": ""
                     }
                   ],
-                  "id": "tqYksx_YMY3YAdoJgRVdq",
+                  "id": "-3asJvYHmS-slu1mvUJXh",
                   "type": "smart-ref",
-                  "blockId": "YbXGHaYUWa9xBBhMOzUVa",
+                  "blockId": "oEisi-cwkS8f8e4BZVCXN",
+                  "columnId": null,
+                  "decoration": "cell",
                   "lastSeenVariableName": "Revenue_Opportunity"
                 },
                 {
-                  "text": " * probability("
+                  "text": "  * probability("
                 },
                 {
                   "children": [
@@ -1616,6 +1619,15 @@
       "isCollapsed": false,
       "hideFormulas": false,
       "version": 2
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "1uB9kW-MkJDd-Uvy8XwOs"
     },
     {
       "children": [

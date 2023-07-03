@@ -53,6 +53,15 @@ export const prettyPrintAST = (node: AST.Node, indent = 0): string => {
       });
       break;
     }
+    case 'ref': {
+      fname = 'ref';
+      printedArgs = [
+        `${getIdentifierString(node)}${
+          node.previousVarName ? ` <prev=${node.previousVarName}>` : ''
+        }`,
+      ];
+      break;
+    }
     default: {
       fname = node.type;
       printedArgs = (node.args as (AST.Node | unknown)[]).flatMap(

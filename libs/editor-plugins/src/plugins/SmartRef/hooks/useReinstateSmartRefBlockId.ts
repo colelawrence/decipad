@@ -1,8 +1,10 @@
 import { findNodePath, setNodes } from '@udecode/plate';
-import { Subscription, filter } from 'rxjs';
+import { Subscription, debounceTime, filter } from 'rxjs';
 import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { SmartRefElement, useTEditorRef } from '@decipad/editor-types';
+
+const debounceTimeMs = 5_000;
 
 // reinstate symbol name if found elsewhere on the notebook
 export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
@@ -13,7 +15,10 @@ export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
   useEffect(() => {
     const undefinedSymbolName$ = computer.getSymbolOrTableDotColumn$
       .observe(element.blockId, element.columnId)
-      .pipe(filter((name) => !name));
+      .pipe(
+        debounceTime(debounceTimeMs),
+        filter((name) => !name)
+      );
 
     const sub = undefinedSymbolName$.subscribe(
       (debouncedUndefinedSymbolName) => {
@@ -38,6 +43,10 @@ export const useReinstateSmartRefBlockId = (element: SmartRefElement) => {
         if (newBlockId) {
           const elPath = findNodePath(editor, element);
           if (elPath) {
+            // eslint-disable-next-line no-console
+            console.log(
+              '>>>>>>>>>>>>>>> setting new reference to smart ref because the old one was missing'
+            );
             setNodes(editor, { blockId: newBlockId }, { at: elPath });
             setMissingRef(false);
           }

@@ -1,6 +1,5 @@
 import { all } from '@decipad/generator-utils';
-import { ColumnDesc } from '../computer';
-import { MaterializedColumnDesc } from '../computer/types';
+import { ColumnDesc, MaterializedColumnDesc } from '../types';
 
 export const materializeColumnDesc = async (
   columnDesc: ColumnDesc

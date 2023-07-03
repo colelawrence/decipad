@@ -3,7 +3,6 @@ import {
   buildType as t,
   Context,
   evaluateStatement,
-  inferStatement,
   RuntimeError,
   serializeResult,
   validateResult,
@@ -11,15 +10,17 @@ import {
   Result,
   Type,
   buildType,
+  inferBlock,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
 import { IdentifiedResult } from '../types';
-import { getStatement } from '../utils';
+import { getBlock } from '../utils';
 import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 import { getExprRef } from '../exprRefs';
 import { identifiedResultForTable } from './identifiedResultForTable';
+import { Computer } from '../computer';
 
 /*
  - Skip cached stuff
@@ -29,8 +30,9 @@ import { identifiedResultForTable } from './identifiedResultForTable';
 const computeStatement = async (
   program: AST.Block[],
   blockId: string,
-  realm: ComputationRealm
+  computer: Computer
 ): Promise<[IdentifiedResult, Value | undefined]> => {
+  const realm = computer.computationRealm;
   const cachedResult = realm.getFromCache(blockId);
   let value: Value | undefined;
 
@@ -38,14 +40,23 @@ const computeStatement = async (
     return [getDefined(cachedResult.result), cachedResult.value];
   }
 
-  const statement = getStatement(program, blockId);
+  const block = getBlock(program, blockId);
+  const statement = block.args[0];
 
   realm.inferContext.statementId = getExprRef(blockId);
   const [_valueType, usedNames] = await inferWhileRetrievingNames(
     realm.inferContext,
-    statement
+    block
   );
   const valueType = _valueType;
+
+  const getUsedNames = (): (readonly [string, string])[] | undefined =>
+    usedNames?.map(
+      (names): readonly [string, string] =>
+        names.map(
+          (name) => computer.latestExprRefToVarNameMap.get(name) ?? name
+        ) as [string, string]
+    );
 
   if (valueType.pending) {
     value = Result.UnknownValue;
@@ -67,9 +78,10 @@ const computeStatement = async (
           visibleVariables: getVisibleVariables(
             program,
             blockId,
-            realm.inferContext
+            realm.inferContext,
+            computer.latestExprRefToVarNameMap
           ),
-          usedNames,
+          usedNames: getUsedNames(),
         },
         undefined,
       ];
@@ -97,9 +109,14 @@ const computeStatement = async (
       return serializeResult(valueType, data);
     },
     get visibleVariables() {
-      return getVisibleVariables(program, blockId, realm.inferContext);
+      return getVisibleVariables(
+        program,
+        blockId,
+        realm.inferContext,
+        computer.latestExprRefToVarNameMap
+      );
     },
-    usedNames,
+    usedNames: getUsedNames(),
   };
   return [result, value];
 };
@@ -130,8 +147,9 @@ export const resultFromError = (
 
 export const computeProgram = async (
   program: AST.Block[],
-  realm: ComputationRealm
+  computer: Computer
 ): Promise<IdentifiedResult[]> => {
+  const realm = computer.computationRealm;
   realm.inferContext.previousStatement = undefined;
   realm.interpreterRealm.previousStatementValue = undefined;
 
@@ -141,7 +159,11 @@ export const computeProgram = async (
   for (const block of program) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const [result, value] = await computeStatement(program, block.id, realm);
+      const [result, value] = await computeStatement(
+        program,
+        block.id,
+        computer
+      );
 
       realm.inferContext.previousStatement = result.result.type;
       realm.interpreterRealm.previousStatementValue = value;
@@ -174,11 +196,11 @@ export const computeProgram = async (
 
 const inferWhileRetrievingNames = async (
   ctx: Context,
-  statement: AST.Statement
+  block: AST.Block
 ): Promise<[Type, Context['usedNames']]> => {
   try {
     ctx.usedNames = [];
-    const valueType = await inferStatement(ctx, statement);
+    const valueType = await inferBlock(block, ctx);
     const { usedNames } = ctx;
     return [valueType, usedNames];
   } finally {

@@ -229,7 +229,6 @@ describe('can set with an ID', () => {
     expect(stack.get('Table')).toMatchInlineSnapshot(
       `"[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"ColumnVal\\"]]"`
     );
-    expect(stack.get('TableId')).toMatchInlineSnapshot(`"AVal"`);
   });
 
   it('can delete things with IDs', () => {

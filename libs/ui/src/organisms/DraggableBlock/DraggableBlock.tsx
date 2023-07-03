@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { BlocksInUseInformation } from '@decipad/computer';
+import { BlockDependents } from '@decipad/computer';
 import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { css, SerializedStyles } from '@emotion/react';
 import {
@@ -68,7 +68,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly dragSource?: ConnectDragSource;
   readonly blockRef?: Ref<HTMLDivElement>;
   readonly previewRef?: Ref<HTMLDivElement>;
-  readonly dependenciesForBlock?: BlocksInUseInformation[];
+  readonly dependenciesForBlock?: BlockDependents[];
 
   readonly draggableCss?: SerializedStyles;
 

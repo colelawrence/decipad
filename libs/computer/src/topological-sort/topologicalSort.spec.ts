@@ -1,6 +1,6 @@
 import { getIdentifiedBlocks } from '../testUtils';
 import { topologicalSort } from './topologicalSort';
-import { flattenTableDeclarations } from './transformTables';
+import { flattenTableDeclarations } from '../computer/transformTables';
 
 it('sorts two dependencies', () => {
   const program = getIdentifiedBlocks('A = B + 1', 'B = 42');

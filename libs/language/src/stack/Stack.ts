@@ -175,16 +175,19 @@ export class Stack<T> {
   ) {
     let asSplitNs;
     if (ns === '' && (asSplitNs = this.namespaceSplitter(value))) {
+      // console.log(`split into `, value, asSplitNs);
       this.createNamespace(name);
       for (const [colName, value] of asSplitNs) {
-        this.setNamespaced([name, colName], value, varGroup, id);
+        this.setNamespaced([name, colName], value, varGroup);
       }
       return;
     }
 
     if (id && this.isInGlobalScope && !this.temporaryScopes.length) {
       // Only set the ID if we're not in a global scope
-      this.idMap.set(id, [ns, name]);
+      if (ns || name !== id) {
+        this.idMap.set(id, [ns, name]);
+      }
     }
 
     const map = this.getAssignmentScope(varGroup);
@@ -222,17 +225,19 @@ export class Stack<T> {
     return false;
   }
 
-  get(varName: string, varGroup: VarGroup = 'lexical') {
-    return this.getNamespaced(['', varName], varGroup);
+  get(varName: string, varGroup: VarGroup = 'lexical', depth = 0) {
+    return this.getNamespaced(['', varName], varGroup, depth);
   }
 
   getNamespaced(
     [ns, name]: readonly [namespace: string, name: string],
-    varGroup: VarGroup
+    varGroup: VarGroup,
+    depth = 0
   ): T | null {
+    // console.log('[ns, name]', [ns, name]);
     const foundWithId = ns === '' && this.idMap.get(name);
-    if (foundWithId) {
-      return this.getNamespaced(foundWithId, varGroup);
+    if (foundWithId && depth < 3) {
+      return this.getNamespaced(foundWithId, varGroup, depth + 1);
     }
 
     for (const scope of this.getVisibleScopes(varGroup)) {
@@ -245,7 +250,7 @@ export class Stack<T> {
         if (ns !== '') {
           value = this.namespaceRetriever(
             value,
-            getDefined(this.get(ns, varGroup))
+            getDefined(this.get(ns, varGroup, depth))
           );
         }
         return getDefined(value);

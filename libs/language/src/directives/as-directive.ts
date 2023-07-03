@@ -94,7 +94,7 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
   const { unit } = await unitExpressionType.reducedToLowest();
   let targetUnit = unit;
   if (unitExpr.type === 'ref' && unit && isUserUnit(unitExpr, unit)) {
-    targetUnit = U(getIdentifierString(unitExpr), {
+    targetUnit = U(unitExpr.previousVarName ?? getIdentifierString(unitExpr), {
       known: false,
       aliasFor: unit,
     });

@@ -11,13 +11,18 @@ type MutateFn = (node: AST.Node, path: number[]) => AST.Node;
 export const DEFAULT_PRECISION = 10;
 export const MAX_PRECISION = 15;
 
-export const walkAst = (node: AST.Node, fn: WalkFn, path: number[] = []) => {
+export const walkAst = (
+  node: AST.Node,
+  fn: WalkFn,
+  path: number[] = [],
+  parents: AST.Node[] = []
+) => {
   fn(node, path);
 
   for (let index = 0; index < node.args.length; index++) {
     const arg = node.args[index];
     if (isNode(arg)) {
-      walkAst(arg, fn, [...path, index]);
+      walkAst(arg, fn, [...path, index], [...parents, node]);
     }
   }
 };
@@ -303,7 +308,7 @@ const assignmentTypesSet = new Set([
   'table-column-assign',
 ]);
 
-export const isAssignment = (value: unknown): value is AST.GenericAssignment =>
+export const isAssignment = (value: AST.Node): value is AST.GenericAssignment =>
   isNode(value) && assignmentTypesSet.has(value.type);
 
 /** complete list of identifiers. It's a record so that TS will assert that all identifiers are covered. */

@@ -11,11 +11,6 @@ export type {
 
 export { Computer, getUsedIdentifiers } from './Computer';
 export type { TokenPos } from './getUsedIdentifiers';
-export type {
-  ColumnDesc,
-  DimensionExplanation,
-  MaterializedColumnDesc,
-} from './types';
 
 export { defaultComputerResults } from './defaultComputerResults';
 

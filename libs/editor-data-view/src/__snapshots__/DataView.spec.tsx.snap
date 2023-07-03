@@ -4152,7 +4152,7 @@ Object {
       ],
     },
   ],
-  "tableName": undefined,
+  "tableName": "exprRef_data_source",
   "variableNames": Array [],
 }
 `;

@@ -1,5 +1,4 @@
 import {
-  AST,
   ColumnLikeValue,
   ExternalDataMap,
   isColumnLike,
@@ -16,10 +15,11 @@ import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
 } from '../caching/getStatementsToEvict';
-import type { IdentifiedResult } from '../types';
-import { getDefinedSymbol, getStatement } from '../utils';
+import type { IdentifiedResult, ProgramBlock } from '../types';
+import { getDefinedSymbol, getStatementFromProgram } from '../utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { createComputerStats } from './computerStats';
+import { VarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -49,11 +49,11 @@ export class ComputationRealm {
     }
   }
 
-  evictStatement(program: AST.Block[], blockId: string) {
+  evictStatement(program: ProgramBlock[], blockId: string) {
     this.errorLocs.delete(blockId);
     this.locCache.delete(blockId);
 
-    const sym = getDefinedSymbol(getStatement(program, blockId));
+    const sym = getDefinedSymbol(getStatementFromProgram(program, blockId));
     if (sym) {
       this.interpreterRealm.stack.delete(sym, 'global');
       this.inferContext.stack.delete(sym, 'global');
@@ -68,17 +68,20 @@ export class ComputationRealm {
   }
 
   /** Retrieve labels (first column) for each table, indexed by table name. */
-  async getIndexLabels(): Promise<Map<string, string[]>> {
+  async getIndexLabels(
+    varNameToBlockMap: VarNameToBlockMap = new Map()
+  ): Promise<Map<string, string[]>> {
     const labels = new Map();
 
     const addLabels = async (
-      name: string,
+      _name: string,
       column?: ColumnLikeValue,
       cellType?: Type
     ) => {
       if (!column || !cellType) {
         return;
       }
+      const name = varNameToBlockMap.get(_name)?.definesVariable ?? _name;
 
       const data = getResultGenerator(await column.getData());
 

@@ -1,5 +1,5 @@
 import { dequal } from '@decipad/utils';
-import { AST } from '..';
+import { AST, ProgramBlock } from '..';
 
 type Arg = AST.Node['args'][number];
 const areArgsEqual = (a: Arg, b: Arg) => {
@@ -61,3 +61,8 @@ export const areBlocksEqual = (
     a.args.every((arg, i) => areNodesEqual(arg, b.args[i]))
   );
 };
+
+export const areProgramBlocksEqual = (
+  a: ProgramBlock | undefined,
+  b: ProgramBlock | undefined
+) => areBlocksEqual(a?.block, b?.block);

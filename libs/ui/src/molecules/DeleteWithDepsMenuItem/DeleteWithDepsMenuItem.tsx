@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { BlocksInUseInformation } from '@decipad/computer';
+import { BlockDependents } from '@decipad/computer';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -18,7 +18,7 @@ import {
 } from '../../primitives';
 
 interface DeleteWithDepsMenuItemProps {
-  readonly blockInfo: BlocksInUseInformation;
+  readonly blockInfo: BlockDependents;
   readonly onSelect?: () => void;
 }
 
@@ -26,8 +26,8 @@ export const DeleteWithDepsMenuItem: FC<DeleteWithDepsMenuItemProps> = ({
   blockInfo,
   onSelect = noop,
 }) => {
-  const nextBlockIdToFix = blockInfo.usedInBlockId[0];
-  const blocksAffected = blockInfo.usedInBlockId.length;
+  const nextBlockIdToFix = blockInfo.dependentBlockIds[0];
+  const blocksAffected = blockInfo.dependentBlockIds.length;
   const [isDarkMode] = useThemeFromStore();
   const selectedColor = isDarkMode ? purple700 : purple300;
   const boxShadowSpread = 15;

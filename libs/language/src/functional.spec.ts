@@ -1268,3 +1268,222 @@ ${'' /* Get capital needed */}
     });
   });
 });
+
+describe('column assignment integration', () => {
+  it('works on derived table', async () => {
+    expect(
+      await runCode(`
+      T1 = {}
+      T1.A = [1, 2, 3 ]
+      T2 = {}
+      T2.A =  [4, 5, 6 ]
+      T3 = concatenate(T1, T2)
+      T3.Col1 = [1, 2, 3]
+      T3`)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": Array [
+            "A",
+            "Col1",
+          ],
+          "columnTypes": Array [
+            Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgCount": undefined,
+              "functionName": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "T1",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "type": "number",
+              "unit": null,
+              Symbol(immer-draftable): true,
+            },
+            Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgCount": undefined,
+              "functionName": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "T3",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "type": "number",
+              "unit": null,
+              Symbol(immer-draftable): true,
+            },
+          ],
+          "date": null,
+          "delegatesIndexTo": "T1",
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": "T3",
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          Array [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 3n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 4n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 5n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 6n,
+              "s": 1n,
+            },
+          ],
+          Array [
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 2n,
+              "s": 1n,
+            },
+            DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 3n,
+              "s": 1n,
+            },
+          ],
+        ],
+      }
+    `);
+  });
+
+  it('works on filtered table', async () => {
+    expect(
+      await runCode(`
+      T1 = {}
+      T1.A = [ "a", "b", "c" ]
+      T1.B = [ 4, 5, 6 ]
+      myfun(s) = sum(filter(T1, T1.A == s).B)
+      myfun("b")
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": "number",
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 5n,
+          "s": 1n,
+        },
+      }
+    `);
+  });
+});

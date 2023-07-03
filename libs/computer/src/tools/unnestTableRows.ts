@@ -7,8 +7,8 @@ import {
 import type { Result } from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
-import type { DimensionExplanation } from '..';
 import { getResultGenerator } from '../utils';
+import { DimensionExplanation } from '../types';
 
 export type LabelInfo = {
   indexName?: string;

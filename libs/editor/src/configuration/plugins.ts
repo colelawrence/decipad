@@ -199,11 +199,6 @@ export const plugins = ({
       createAutoPairsPlugin(computer),
       createNavigationPlugin(),
       createSmartRefPlugin(),
-      // createConvertSmartRefsCursorPlugin(computer, [
-      //   ELEMENT_CODE_LINE,
-      //   ELEMENT_CODE_LINE_V2_CODE,
-      //   ELEMENT_TABLE_COLUMN_FORMULA,
-      // ]),
 
       // language
       createCodeLinePlugin(computer),

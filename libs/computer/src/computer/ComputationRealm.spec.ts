@@ -8,7 +8,7 @@ import {
   buildType,
   parseUTCDate,
 } from '@decipad/language';
-import { testBlocks } from '../testUtils';
+import { testProgramBlocks } from '../testUtils';
 import { ComputationRealm } from './ComputationRealm';
 
 let realm: ComputationRealm;
@@ -16,7 +16,7 @@ beforeEach(() => {
   realm = new ComputationRealm();
 });
 
-const program = testBlocks('A = 1', 'Unused = 1', 'Func(x) = 1');
+const program = testProgramBlocks('A = 1', 'Unused = 1', 'Func(x) = 1');
 
 it('evictStatement', () => {
   realm.locCache.set('block-1', 'something' as any);

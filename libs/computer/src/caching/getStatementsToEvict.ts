@@ -9,9 +9,10 @@ import {
   iterProgram,
   setIntersection,
 } from '../utils';
-import { areBlocksEqual } from './areBlocksEqual';
+import { areProgramBlocksEqual } from './areBlocksEqual';
+import { Program, ProgramBlock } from '../types';
 
-const getChangedMapKeys = <T>(
+export const getChangedMapKeys = <T>(
   oldMap: Map<string, T>,
   newMap: Map<string, T>,
   equals: (a: T | undefined, b: T | undefined) => boolean
@@ -28,14 +29,45 @@ const getChangedMapKeys = <T>(
   });
 };
 
-const mapify = (blocks: AST.Block[]) => new Map(blocks.map((b) => [b.id, b]));
+const programToBlocks = (program: Program): AST.Block[] =>
+  program.map((pb) => pb.block).filter(Boolean) as AST.Block[];
+
+const mapify = (blocks: ProgramBlock[]) =>
+  new Map(blocks.map((b) => [b.id, b]));
+
 export const getChangedBlocks = (
-  oldBlocks: AST.Block[],
-  newBlocks: AST.Block[]
-) =>
-  new Set(
-    getChangedMapKeys(mapify(oldBlocks), mapify(newBlocks), areBlocksEqual)
-  );
+  oldBlocks: ProgramBlock[],
+  newBlocks: ProgramBlock[]
+): Set<string> => {
+  const oldBlocksMap = mapify(oldBlocks);
+  const newBlocksMap = mapify(newBlocks);
+
+  const changedNameBlockIds = newBlocks
+    .filter((newBlock) => {
+      if (newBlock.definesVariable) {
+        const old = oldBlocksMap.get(newBlock.id);
+        if (old && old.definesVariable !== newBlock.definesVariable) {
+          return true;
+        }
+      }
+      if (newBlock.definesTableColumn) {
+        const old = oldBlocksMap.get(newBlock.id);
+        if (
+          old?.definesTableColumn &&
+          !dequal(old?.definesTableColumn, newBlock.definesTableColumn)
+        ) {
+          return true;
+        }
+      }
+      return false;
+    })
+    .map((pb) => pb.id);
+
+  return new Set([
+    ...changedNameBlockIds,
+    ...getChangedMapKeys(oldBlocksMap, newBlocksMap, areProgramBlocksEqual),
+  ]);
+};
 
 /**
  * Find reassigned variables, variables being used before being defined
@@ -73,10 +105,9 @@ export const findSymbolErrors = (program: AST.Block[]) => {
 
 export const findSymbolsAffectedByChange = (
   oldBlocks: AST.Block[],
-  newBlocks: AST.Block[]
+  newBlocks: AST.Block[],
+  changedBlockIds: Set<string>
 ) => {
-  const changedBlockIds = getChangedBlocks(oldBlocks, newBlocks);
-
   const codeWhichChanged = Array.from(oldBlocks)
     .concat(Array.from(newBlocks))
     .filter(
@@ -84,14 +115,12 @@ export const findSymbolsAffectedByChange = (
         changedBlockIds.has(block.id) ||
         !oldBlocks.some((b) => b.id === block.id)
     );
-  const affectedSymbols = new Set(getAllSymbolsDefined(codeWhichChanged));
-
-  return affectedSymbols;
+  return new Set(getAllSymbolsDefined(codeWhichChanged));
 };
 
 export interface GetStatementsToEvictArgs {
-  oldBlocks: AST.Block[];
-  newBlocks: AST.Block[];
+  oldBlocks: ProgramBlock[];
+  newBlocks: ProgramBlock[];
   oldExternalData?: ExternalDataMap;
   newExternalData?: ExternalDataMap;
 }
@@ -104,17 +133,19 @@ export const getStatementsToEvict = ({
 }: GetStatementsToEvictArgs) => {
   const changedBlockIds = getChangedBlocks(oldBlocks, newBlocks);
 
-  const dirtyLocs = new Set(getExistingBlockIds(oldBlocks, changedBlockIds));
+  const old = programToBlocks(oldBlocks);
+  const nu = programToBlocks(newBlocks);
+  const dirtyLocs = new Set(getExistingBlockIds(old, changedBlockIds));
 
   const dirtySymbols = new Set([
     ...getChangedMapKeys(oldExternalData, newExternalData, dequal),
-    ...findSymbolsAffectedByChange(oldBlocks, newBlocks),
-    ...findSymbolErrors(oldBlocks),
-    ...findSymbolErrors(newBlocks),
+    ...findSymbolsAffectedByChange(old, nu, changedBlockIds),
+    ...findSymbolErrors(old),
+    ...findSymbolErrors(nu),
   ]);
 
   const dependentsOfBlocksAndSymbols = getDependents(
-    oldBlocks,
+    old,
     Array.from(dirtyLocs),
     dirtySymbols
   );
@@ -123,7 +154,7 @@ export const getStatementsToEvict = ({
     dirtyLocs.add(dep);
   }
 
-  const toEvict = oldBlocks.flatMap((b) => (dirtyLocs.has(b.id) ? b.id : []));
+  const toEvict = old.flatMap((b) => (dirtyLocs.has(b.id) ? b.id : []));
 
   return toEvict;
 };
