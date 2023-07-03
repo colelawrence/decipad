@@ -4,6 +4,14 @@ import type {
 } from 'apollo-server-plugin-base';
 import { withScope, captureException } from '@sentry/serverless';
 import { GraphqlContext } from '@decipad/backendtypes';
+import { GraphQLError } from 'graphql';
+import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
+import { Class } from 'utility-types';
+
+const UserErrors: Array<Class<Error>> = [ForbiddenError, UserInputError];
+
+const isUserError = (error: GraphQLError) =>
+  UserErrors.some((UserError) => error.originalError instanceof UserError);
 
 const onError = (rc: GraphQLRequestContext) => {
   withScope((scope) => {
@@ -42,7 +50,9 @@ const onError = (rc: GraphQLRequestContext) => {
             id: userId,
           });
         }
-        captureException(error, scope);
+        if (!isUserError(error)) {
+          captureException(error, scope);
+        }
       }
     }
   });
