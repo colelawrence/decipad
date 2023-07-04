@@ -14,8 +14,8 @@ import {
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
-import { IdentifiedResult } from '../types';
-import { getBlock } from '../utils';
+import { IdentifiedResult, Program } from '../types';
+import { getBlockFromProgram } from '../utils';
 import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
 import { getExprRef } from '../exprRefs';
@@ -28,7 +28,7 @@ import { Computer } from '../computer';
  - Evaluate the statement if it's not a type error
  */
 const computeStatement = async (
-  program: AST.Block[],
+  program: Program,
   blockId: string,
   computer: Computer
 ): Promise<[IdentifiedResult, Value | undefined]> => {
@@ -36,11 +36,15 @@ const computeStatement = async (
   const cachedResult = realm.getFromCache(blockId);
   let value: Value | undefined;
 
-  if (cachedResult) {
-    return [getDefined(cachedResult.result), cachedResult.value];
+  const block = getBlockFromProgram(program, blockId);
+  if (block && cachedResult) {
+    if (block?.inferredType) {
+      return [getDefined(cachedResult.result), cachedResult.value];
+    } else {
+      realm.evictStatement(program, blockId);
+    }
   }
 
-  const block = getBlock(program, blockId);
   const statement = block.args[0];
 
   realm.inferContext.statementId = getExprRef(blockId);
@@ -146,7 +150,7 @@ export const resultFromError = (
 };
 
 export const computeProgram = async (
-  program: AST.Block[],
+  program: Program,
   computer: Computer
 ): Promise<IdentifiedResult[]> => {
   const realm = computer.computationRealm;

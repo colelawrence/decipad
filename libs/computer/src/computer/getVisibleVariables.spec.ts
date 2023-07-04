@@ -1,10 +1,13 @@
 import { inferProgram } from '@decipad/language';
+import { getDefined } from '@decipad/utils';
 import { getVisibleVariables } from './getVisibleVariables';
-import { testBlocks } from '../testUtils';
+import { testProgram } from '../testUtils';
 
 it('finds variables that are in the context', async () => {
-  const program = testBlocks('MissingVar', 'A = 1', 'Table = { Col = Ref }');
-  const inferContext = await inferProgram(program);
+  const program = testProgram('MissingVar', 'A = 1', 'Table = { Col = Ref }');
+  const inferContext = await inferProgram(
+    program.map((b) => getDefined(b.block))
+  );
 
   expect(getVisibleVariables(program, 'block-2', inferContext))
     .toMatchInlineSnapshot(`
@@ -25,8 +28,10 @@ it('finds variables that are in the context', async () => {
 });
 
 it('finds variables visible in a table column assign', async () => {
-  const program = testBlocks('Table = {}', 'Table.Col = 2', 'Table.Col2 = 2');
-  const inferContext = await inferProgram(program);
+  const program = testProgram('Table = {}', 'Table.Col = 2', 'Table.Col2 = 2');
+  const inferContext = await inferProgram(
+    program.map((b) => getDefined(b.block))
+  );
 
   expect(getVisibleVariables(program, 'block-1', inferContext))
     .toMatchInlineSnapshot(`

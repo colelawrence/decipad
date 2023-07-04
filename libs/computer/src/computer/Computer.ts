@@ -703,10 +703,7 @@ export class Computer {
         const { program: blocks } = this.ingestComputeRequest(req);
         const goodBlocks = getGoodBlocks(blocks);
 
-        const computeResults = await computeProgram(
-          goodBlocks.map((b) => b.block),
-          this
-        );
+        const computeResults = await computeProgram(goodBlocks, this);
 
         // console.log(
         //   'new result',

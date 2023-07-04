@@ -337,6 +337,7 @@ export const inferBlock = async (
     // eslint-disable-next-line no-await-in-loop
     last = await inferStatement(ctx, stmt);
   }
+  block.inferredType = last;
   return getDefined(last, 'Unexpected empty block');
 };
 

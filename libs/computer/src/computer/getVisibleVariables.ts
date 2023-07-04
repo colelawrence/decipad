@@ -1,7 +1,9 @@
-import type { AST, Context } from '@decipad/language';
+import type { Context } from '@decipad/language';
+import { getDefined } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';
-import { getDefinedSymbol } from '../utils';
+import { getDefinedSymbol, getGoodBlocks } from '../utils';
 import { ExprRefToVarNameMap } from '../internalTypes';
+import { Program } from '../types';
 
 export interface VisibleVariables {
   global: ReadonlySet<string>;
@@ -9,11 +11,12 @@ export interface VisibleVariables {
 }
 
 export const getVisibleVariables = (
-  program: AST.Block[],
+  _program: Program,
   blockId: string,
   inferContext: Context,
   exprRefToVarNameMap: ExprRefToVarNameMap = new Map()
 ): VisibleVariables => {
+  const program = getGoodBlocks(_program);
   const toUserSymbol = (symbol: string | null): string | null => {
     if (!symbol) {
       return symbol;
@@ -29,7 +32,9 @@ export const getVisibleVariables = (
     };
   }
 
-  const localSymbol = getDefinedSymbol(program[index].args[0]);
+  const localSymbol = getDefinedSymbol(
+    getDefined(program[index].block).args[0]
+  );
   const localSymbols = new Set([localSymbol, toUserSymbol(localSymbol)]);
 
   const globalVars = new Set<string>();
@@ -38,7 +43,9 @@ export const getVisibleVariables = (
   for (const block of program) {
     const {
       id: blockId,
-      args: [stat],
+      block: {
+        args: [stat],
+      },
     } = block;
 
     globalVars.add(getExprRef(blockId));

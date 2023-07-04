@@ -9,6 +9,17 @@ import type {
   ProgramBlock,
 } from '../types';
 
+export const getBlockFromProgram = (
+  program: Program,
+  blockId: string
+): AST.Block =>
+  getDefined(
+    getDefined(
+      program.find((b) => b.id === blockId),
+      `ComputationGraph: Could not find code line at ${blockId}`
+    ).block
+  );
+
 export const getBlock = (program: AST.Block[], blockId: string): AST.Block =>
   getDefined(
     program.find((b) => b.id === blockId),
