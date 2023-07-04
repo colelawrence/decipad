@@ -156,6 +156,7 @@ const withNormalizerOverride = (
           (err as Error).message
         }`;
         captureException(err);
+        return undefined;
       }
       return normalizeNode(entry);
     };
