@@ -53,7 +53,7 @@ test.describe('Make sure auto-complete works', () => {
     await page.getByTestId('codeline-code').fill('100');
     await page.getByTestId('codeline-varname').dblclick();
     await page.keyboard.press('Backspace');
-    await page.keyboard.type('Monies');
+    await page.keyboard.type('Revenue');
   });
 
   test('Checks if the revenue variable is linked properly', async () => {
@@ -64,10 +64,10 @@ test.describe('Make sure auto-complete works', () => {
     await page.getByTestId('codeline-varname').nth(1).dblclick();
     await page.keyboard.press('Backspace');
     await page.keyboard.type('Another');
-    await page.getByTestId('codeline-code').last().fill('Monies');
+    await page.getByTestId('codeline-code').last().fill('Revenue');
     await page
       .getByTestId('autocomplete-group:Variables')
-      .getByTestId('autocomplete-item:Monies')
+      .getByTestId('autocomplete-item:Revenue')
       .click();
     await expect(
       page.getByTestId('codeline-code').last().getByText('100')
@@ -76,15 +76,17 @@ test.describe('Make sure auto-complete works', () => {
 
   test('Enter table formula and checks for proper output', async () => {
     await writeInTable(page, '=', 1, 2);
-    await page.getByTestId('code-line').last().fill('Monies');
+    await page.getByTestId('code-line').last().fill('Revenue');
     await page
       .getByTestId('autocomplete-group:Variables')
-      .getByTestId('autocomplete-item:Monies')
+      .getByTestId('autocomplete-item:Revenue')
       .click();
     await page.getByTestId('code-line').last().click();
-    await page.keyboard.type(' + revenue');
-    await page.getByText('Revenue').first().click();
-
+    await page.keyboard.type(' + Revenue');
+    await page
+      .getByTestId('autocomplete-group:Table')
+      .getByTestId('autocomplete-item:Revenue')
+      .click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
     await expect(
@@ -102,7 +104,7 @@ test.describe('Make sure auto-complete works', () => {
     await page.getByTestId('codeline-code').last().fill('100');
     await page.getByTestId('codeline-varname').last().dblclick();
     await page.keyboard.press('Backspace');
-    await page.keyboard.type('revenueNew');
+    await page.keyboard.type('RevenueNew');
 
     // Creates a new table and fills it
     await page.getByTestId('paragraph-content').last().fill('/');
@@ -129,12 +131,25 @@ test.describe('Make sure auto-complete works', () => {
     await writeInTable(page, '=', 1, 2, 'Table2');
     await page.getByTestId('code-line').last().click();
     await page.keyboard.type('sum(Table2.RevenueNew)');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.tableDelay);
+    await expect(page.getByTitle('Error')).toBeHidden();
 
     // Checks previous()
     await addColumn(page, 'Table2');
     await writeInTable(page, '=', 1, 3, 'Table2');
     await page.getByTestId('code-line').last().click();
-    await page.keyboard.type('(RevenueNew / previous(0, RevenueNew)) - 1 in %');
+    await page.keyboard.type('(RevenueNew');
+    await page
+      .getByTestId('autocomplete-group:Variables')
+      .getByTestId('autocomplete-item:RevenueNew')
+      .click();
+    await page.keyboard.type('/ previous(0, RevenueNew');
+    await page
+      .getByTestId('autocomplete-group:Table2')
+      .getByTestId('autocomplete-item:RevenueNew')
+      .click();
+    await page.keyboard.type(')) - 1 in %');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);
     // Any error in the formulas will fail this test
