@@ -7,8 +7,8 @@ import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { GenericTable } from '../../icons';
-import { emptywRapperStyles } from '../../templates/NotebookList/NotebookList';
 import { DashboardDialogCTA } from '../DashboardDialogCTA/DashboardDialogCTA';
+import { cssVar } from '../../primitives';
 
 const acceptableFileTypes = ['application/json', 'application/zip'];
 
@@ -55,6 +55,20 @@ const dropStyles = css({
   zIndex: 2,
 });
 
+const dndAreaStyles = css({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  height: '100%',
+  width: '100%',
+  backgroundColor: cssVar('backgroundColor'),
+  zIndex: 1000,
+});
+
 interface DragAndDropImportNotebookProps {
   readonly enabled?: boolean;
   readonly onImport?: (source: string) => void;
@@ -94,18 +108,17 @@ export const DragAndDropImportNotebook = ({
       };
     },
   });
+
   return !enabled ? (
     <div>{children}</div>
   ) : (
     <div css={isOver && canDrop && dropStyles} ref={drop}>
       {isOver ? (
-        <div css={emptywRapperStyles(false)}>
+        <div css={dndAreaStyles}>
           <DashboardDialogCTA
             icon={<GenericTable />}
-            primaryText={'Drag and drop your notebooks here'}
-            secondaryText={
-              'Quickly import decipad notebooks, csv, and other files...'
-            }
+            primaryText="Drag and drop your notebooks here"
+            secondaryText="Quickly import decipad notebooks, csv, and other files..."
           />
         </div>
       ) : (
