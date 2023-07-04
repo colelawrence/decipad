@@ -363,7 +363,7 @@
     "@types/jsdom": "^21.1.0",
     "@types/json-stringify-safe": "^5.0.0",
     "@types/jsonpath": "^0.2.0",
-    "@types/luxon": "3.2.0",
+    "@types/luxon": "3.3.0",
     "@types/mdast": "3.0.10",
     "@types/mkdirp": "1.0.2",
     "@types/moo": "0.5.5",
