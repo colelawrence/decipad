@@ -1,16 +1,17 @@
 import {
   APIGatewayProxyCallback,
-  APIGatewayProxyEvent,
+  APIGatewayProxyEventV2,
   APIGatewayProxyResult,
   Context as LambdaContext,
   Handler,
 } from 'aws-lambda';
 import { trace } from '@decipad/backend-trace';
 import createServer from './server';
+import { debug } from './debug';
 
 type AdditionalContext = {
   additionalHeaders?: Map<string, string>;
-  event?: APIGatewayProxyEvent;
+  event?: APIGatewayProxyEventV2;
 };
 type Context = LambdaContext & AdditionalContext;
 
@@ -33,18 +34,18 @@ export default function createHandler(): Handler {
           return;
         }
         calledBack = true;
-        if (!context.additionalHeaders) {
+        if (!context?.additionalHeaders) {
           throw new Error('missing additional headers');
         }
         if (!reply) {
           throw new Error('missing reply');
         }
 
-        if (!err && context.additionalHeaders.size > 0) {
+        if (!err && context?.additionalHeaders.size > 0) {
           if (!reply.headers) {
             reply.headers = {};
           }
-          for (const [key, value] of context.additionalHeaders) {
+          for (const [key, value] of context?.additionalHeaders ?? []) {
             reply.headers[key] = value;
           }
         }
@@ -55,19 +56,25 @@ export default function createHandler(): Handler {
         _callback(err, reply);
       };
 
-      context.event = event;
-      context.additionalHeaders = new Map();
+      if (context) {
+        context.event = event;
+        context.additionalHeaders = new Map();
+      }
 
-      event.httpMethod = event.httpMethod
-        ? event.httpMethod
-        : (event.requestContext as unknown as { http: { method: string } }).http
-            .method;
+      const adaptedEvent = {
+        ...event,
+        httpMethod:
+          'httpMethod' in event && event.httpMethod
+            ? event.httpMethod
+            : (event.requestContext as unknown as { http: { method: string } })
+                .http.method,
+        path: (event.requestContext as unknown as { http: { path: string } })
+          .http.path,
+      };
 
-      event.path = (
-        event.requestContext as unknown as { http: { path: string } }
-      ).http.path;
+      debug('adaptedEvent: %j', adaptedEvent);
 
-      const p = handler(event, context, callback);
+      const p = handler(adaptedEvent, context as Context, callback);
       if (p) {
         p.then((result) => callback(null, result)).catch((err) =>
           callback(err)

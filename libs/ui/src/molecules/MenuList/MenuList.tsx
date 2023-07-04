@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { useCanUseDom } from '@decipad/react-utils';
 import { css, SerializedStyles } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { createContext, FC, ReactElement, ReactNode, useContext } from 'react';
@@ -103,7 +104,7 @@ const DropdownMenuPortalElement = ({
   container,
   children,
 }: MenuListPortalComponentProps): ReactElement<MenuListPortalComponentProps> => {
-  if (portal) {
+  if (useCanUseDom() && portal) {
     return (
       <RadixDropdownMenu.Portal container={container}>
         {children}

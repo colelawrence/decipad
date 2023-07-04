@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import type { CellValueType } from '../../editor-types/src';
+import type { CellValueType } from '@decipad/editor-types';
 
 export type EditorTableContextValue = Readonly<{
   blockId: string;

@@ -29,6 +29,7 @@ import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { attachGenericFile } from './attachGeneric';
 import { maybeSourceFromFileType } from './maybeSourceFromFileType';
+import { isServerSideRendering } from '../../support/src/isServerSideRendering';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,
@@ -222,10 +223,12 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
 
   return (
     <>
-      <DropZoneDetector
-        connectDropTarget={connectDropTarget}
-        isOver={canDropState}
-      />
+      {!isServerSideRendering() && (
+        <DropZoneDetector
+          connectDropTarget={connectDropTarget}
+          isOver={canDropState}
+        />
+      )}
       {children}
       {showUploading ? (
         <div css={uploadProgressWrapperStyles}>

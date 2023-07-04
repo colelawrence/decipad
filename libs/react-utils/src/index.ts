@@ -7,6 +7,7 @@ export * from './state';
 export * from './useStripe';
 export * from './use-behavior-subject';
 export * from './useActiveElement';
+export * from './useCanUseDom';
 export * from './useEventListener';
 export * from './useLocalStorage';
 export * from './useResolved';

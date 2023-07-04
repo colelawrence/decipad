@@ -24,11 +24,15 @@ const sentryInitOptions: SentryOptions = {
 
 let sentryInitialized = false;
 
-export const initTrace = (options: TraceOptions = {}) => {
+export const initTrace = (options: TraceOptions = {}): boolean => {
+  if (!sentryDSN) {
+    return false;
+  }
   if (sentryDSN && !sentryInitialized) {
     SentryAWSLambda.init({ ...sentryInitOptions, ...options });
     sentryInitialized = true;
   }
+  return true;
 };
 
 export const captureException = async (err: Error): Promise<Boom> => {

@@ -10,6 +10,7 @@
     { "path": "../ui" },
     { "path": "../react-contexts" },
     { "path": "../editor" },
+    { "path": "../editor-config" },
     { "path": "../editor-plugins" },
     { "path": "../toast" },
     { "path": "../docsync" },

@@ -1,6 +1,7 @@
 import { User } from '@decipad/backendtypes';
 import { authenticate, AuthResult } from '@decipad/services/authentication';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { debug } from './debug';
 
 function hasUser(authResult: AuthResult): boolean {
   return !!authResult.user;
@@ -16,6 +17,7 @@ export default () =>
     const userCred = credentials.find(hasUser);
     if (userCred) {
       context.user = userCred.user;
+      debug('user', context.user);
     } else {
       context.user = undefined;
     }

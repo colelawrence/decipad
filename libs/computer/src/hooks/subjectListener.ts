@@ -85,7 +85,7 @@ export function listenerHelper<
     useSyncExternalStoreWithSelector(
       rootSubscribe(a),
       rootGet(a),
-      undefined,
+      rootGet(a),
       (item) => pick(select(item, ...a)),
       dequal
     );
@@ -98,7 +98,7 @@ export function listenerHelper<
     useSyncExternalStoreWithSelector(
       rootSubscribeDebounced(debounceTimeMs, a),
       rootGet(a),
-      undefined,
+      rootGet(a),
       (item) => pick(select(item, ...a)),
       dequal
     );

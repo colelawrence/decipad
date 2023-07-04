@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { useCanUseDom } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css, SerializedStyles } from '@emotion/react';
 import {
@@ -161,29 +162,33 @@ export const Tooltip = ({
       >
         {trigger}
       </Trigger>
-      <Portal>
-        <Content
-          side={side}
-          align={align}
-          css={[
-            theme === 'light' ? lightWrapperStyles : darkContentWrapperStyles,
-            variant === 'small' && smallVariantStyles(side),
-            onClick && clickableStyles,
-            wrapperStyles,
-          ]}
-          onClick={handleClick}
-        >
-          <Arrow
-            css={theme === 'dark' ? darkArrowStyles : lightArrowStyles}
-            width={18}
-            height={9}
-            offset={6}
-          />
-          <div css={theme === 'dark' ? darkContentStyles : lightContentStyles}>
-            {children}
-          </div>
-        </Content>
-      </Portal>
+      {useCanUseDom() && (
+        <Portal>
+          <Content
+            side={side}
+            align={align}
+            css={[
+              theme === 'light' ? lightWrapperStyles : darkContentWrapperStyles,
+              variant === 'small' && smallVariantStyles(side),
+              onClick && clickableStyles,
+              wrapperStyles,
+            ]}
+            onClick={handleClick}
+          >
+            <Arrow
+              css={theme === 'dark' ? darkArrowStyles : lightArrowStyles}
+              width={18}
+              height={9}
+              offset={6}
+            />
+            <div
+              css={theme === 'dark' ? darkContentStyles : lightContentStyles}
+            >
+              {children}
+            </div>
+          </Content>
+        </Portal>
+      )}
     </Root>
   );
 };

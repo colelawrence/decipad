@@ -4,6 +4,7 @@ import {
   NotebookPage,
 } from '@decipad/ui';
 import { ComponentProps, lazy, useState } from 'react';
+import { isServerSideRendering } from '@decipad/support';
 import { Frame } from '../meta';
 import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';
 
@@ -28,13 +29,15 @@ const Playground: React.FC = () => {
   return (
     <NotebookPage
       notebook={
-        <Frame
-          Heading="h1"
-          title={null}
-          suspenseFallback={<EditorPlaceholder />}
-        >
-          <Editor />
-        </Frame>
+        <div data-editorloaded data-hydrated={!isServerSideRendering()}>
+          <Frame
+            Heading="h1"
+            title={null}
+            suspenseFallback={<EditorPlaceholder />}
+          >
+            <Editor />
+          </Frame>
+        </div>
       }
       notebookIcon={
         <Frame

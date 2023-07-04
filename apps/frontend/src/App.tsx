@@ -1,4 +1,5 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useCanUseDom } from '@decipad/react-utils';
 import {
   docs,
   notebooks,
@@ -8,10 +9,9 @@ import {
 } from '@decipad/routing';
 import { FeatureFlagsSwitcher, HelpMenu } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { FC, lazy, useCallback } from 'react';
+import { FC, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
-import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import { Onboard } from './Onboard/LazyOnboard';
 import { RequireOnboard } from './Onboard/RequireOnboard';
@@ -26,13 +26,8 @@ export const loadPlayground = () =>
 const Playground = lazy(loadPlayground);
 
 export const App: FC = () => {
-  const { show, showNewMessage } = useIntercom();
   const session = useSession();
-
-  const showFeedback = useCallback(() => {
-    show();
-    showNewMessage();
-  }, [show, showNewMessage]);
+  const canUseDom = useCanUseDom();
 
   const [searchParams] = useSearchParams();
   const isRedirectFromStripe = !!searchParams.get('fromStripe');
@@ -67,13 +62,12 @@ export const App: FC = () => {
         <Route
           path={`${notebooks.template}/*`}
           element={
-            <LazyRoute>
-              <RequireOnboard>
-                <Notebooks />
-              </RequireOnboard>
-            </LazyRoute>
+            <RequireOnboard>
+              <Notebooks />
+            </RequireOnboard>
           }
         />
+
         <Route
           path={playground.template}
           element={
@@ -98,18 +92,17 @@ export const App: FC = () => {
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
 
-      {session.status === 'authenticated' && (
+      {canUseDom && session.status === 'authenticated' && (
         <HelpMenu
           discordUrl="https://discord.gg/CUtKEd3rBn"
           docsUrl={docs({}).$}
           releaseUrl={docs({}).page({ name: 'releases' }).$}
-          onSelectSupport={show}
-          onSelectFeedback={showFeedback}
         />
       )}
       {/* Feature flagging the feature flag switcher makes it unreacheable in
       production, even if you press the shortcut, unless you know how */}
-      {isFlagEnabled('FEATURE_FLAG_SWITCHER') &&
+      {canUseDom &&
+        isFlagEnabled('FEATURE_FLAG_SWITCHER') &&
         createPortal(<FeatureFlagsSwitcher />, document.body)}
     </>
   );

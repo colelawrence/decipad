@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src", "public"],
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react"
+  },
+  "references": [
+    { "path": "../../apps/frontend" },
+    { "path": "../config" },
+    { "path": "../utils" },
+    { "path": "../backendtypes" },
+    { "path": "../fetch" },
+    { "path": "../backend-trace" }
+  ]
+}

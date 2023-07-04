@@ -5,11 +5,11 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { useDragNode } from '@udecode/plate-dnd';
+import { getEmptyImage } from '@decipad/editor-utils';
 import { useContext, useMemo } from 'react';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import {
-  GoodToDragColumns,
   TableDndContext,
+  GoodToDragColumns,
 } from '../contexts/TableDndContext';
 
 export const useDragColumn = (

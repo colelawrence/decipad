@@ -1,9 +1,16 @@
 const { workerFor } = require('./workers');
+const { getEnv } = require('./get-env');
+
+const DEFAULT_TIMEOUT = 60000;
 
 module.exports = function invokeByRunning(params, callback) {
-  const { options, request, timeout, update } = params;
-  const { env, cwd } = options;
-  const functionPath = `${cwd}/index.js`;
+  const {
+    event,
+    ports,
+    lambda: { handlerFile },
+    update,
+    timeout = DEFAULT_TIMEOUT,
+  } = params;
   const headers = {
     'content-type': 'text/html; charset=utf8;',
     'cache-control':
@@ -11,8 +18,8 @@ module.exports = function invokeByRunning(params, callback) {
   };
   let returned = false;
 
-  const event = JSON.parse(request);
-  const worker = workerFor(functionPath, env, update);
+  const env = getEnv(ports);
+  const worker = workerFor(handlerFile, env, update);
   worker.work(event, (err, response) => {
     returned = true;
     done(err, response);
@@ -21,9 +28,7 @@ module.exports = function invokeByRunning(params, callback) {
   // Set an execution timeout
   const to = setTimeout(function timedOut() {
     const duration = `${timeout / 1000}s`;
-    update.warn(
-      `${functionPath} timed out after hitting its ${duration} timeout!`
-    );
+    update.warn(`timed out after hitting its ${duration} timeout!`);
     done(new Error(`${duration} timeout`));
   }, timeout);
 
@@ -41,7 +46,7 @@ module.exports = function invokeByRunning(params, callback) {
     } else if (returned) {
       const apiType = process.env.ARC_API_TYPE;
       if (apiType === 'http') {
-        callback(null, response);
+        callback(null, response || '');
       } else if (response) {
         // If it's an error pretty print it
         if (response.name && response.message && response.stack) {
@@ -60,7 +65,7 @@ module.exports = function invokeByRunning(params, callback) {
           statusCode: 500,
           headers,
           body: `<h1>Async error</h1>
-<p><strong>Lambda <code>${functionPath}</code> ran without executing the completion callback or returning a value.</strong></p>
+<p><strong>Lambda <code>${handlerFile}</code> ran without executing the completion callback or returning a value.</strong></p>
 
 <p>Dependency-free functions, or functions that use <code>@architect/functions arc.http.async()</code> must return a correctly formatted response object.</p>
 

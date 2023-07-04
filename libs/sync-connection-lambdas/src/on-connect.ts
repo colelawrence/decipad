@@ -38,7 +38,7 @@ function secretFromAny(authResults: AuthResult[]): string | undefined {
 interface ConnectParams {
   connId: string;
   resources: string[];
-  versionName: string;
+  versionName?: string;
   auth: AuthResult[];
   protocol: number;
 }

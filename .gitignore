@@ -245,9 +245,9 @@ prefs.arc
 apps/client/.env.production
 
 # Backend lambda bundles
-apps/backend/src/http/*/*.js
-apps/backend/src/ws
-apps/backend/src/queues
+apps/backend/src/http/*/*.js*
+apps/backend/src/ws/*/*.js*
+apps/backend/src/queues/*/*.js*
 
 # Backend shared dir
 apps/backend/src/shared
@@ -296,3 +296,5 @@ libs/server-side-rendering/build
 
 # SQLite test DBs
 *.sqlite
+
+.temp_cache

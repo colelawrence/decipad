@@ -1,18 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
+import type { FC, ReactNode } from 'react';
+import { css } from '@emotion/react';
+import type { IdentifiedError, IdentifiedResult } from '@decipad/computer';
 import {
-  AvailableSwatchColor,
   CodeResult,
+  AvailableSwatchColor,
   IconPopover,
   Tooltip,
   UserIconKey,
 } from '@decipad/ui';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
-import { FC, ReactNode } from 'react';
-import * as icons from '../../icons';
 import { Caret } from '../../icons';
+import * as icons from '../../icons';
 import { cssVar, p14Regular, p24Medium, setCssVar } from '../../primitives';
 
 const wrapperStyles = css({

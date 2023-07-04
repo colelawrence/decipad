@@ -1,5 +1,9 @@
-export function timeout(ms: number): Promise<void> {
+export function timeout(ms: number, s?: AbortSignal): Promise<void> {
   return new Promise((resolve) => {
-    setTimeout(resolve, ms);
+    const t = setTimeout(resolve, ms);
+    s?.addEventListener('abort', () => {
+      clearTimeout(t);
+      resolve();
+    });
   });
 }

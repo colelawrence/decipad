@@ -3,7 +3,7 @@ import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { Result } from '@decipad/computer';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import React, {
+import {
   FC,
   ReactNode,
   useCallback,
@@ -11,6 +11,7 @@ import React, {
   useMemo,
   useRef,
   useState,
+  MouseEvent as RMouseEvent,
 } from 'react';
 import { BooleanEditor } from './BooleanEditor';
 import { DateEditor } from './DateEditor';
@@ -28,11 +29,11 @@ interface SpecificEditorProps {
   element?: AnyElement;
 }
 
-const editorComponents: Record<string, FC<SpecificEditorProps>> = {
+const editorComponents = (): Record<string, FC<SpecificEditorProps>> => ({
   boolean: BooleanEditor,
   date: DateEditor,
   dropdown: DropdownEditor,
-};
+});
 
 interface CellEditorProps {
   focused?: boolean;
@@ -124,7 +125,7 @@ export const CellEditor: FC<CellEditorProps> = ({
   useWindowListener('click', onGlobalClick, true);
 
   const onClick = useCallback(
-    (event: React.MouseEvent) => {
+    (event: RMouseEvent) => {
       if (event.currentTarget.getAttribute('class')?.includes('datepicker')) {
         event.stopPropagation();
         return;
@@ -138,7 +139,7 @@ export const CellEditor: FC<CellEditorProps> = ({
     if (type?.kind === 'dropdown') {
       return DropdownEditor;
     }
-    return (type && editorComponents[type.kind]) || DateEditor;
+    return (type && editorComponents()[type.kind]) || DateEditor;
   }, [type]);
 
   return (

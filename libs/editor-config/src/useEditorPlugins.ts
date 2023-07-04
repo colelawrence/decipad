@@ -1,9 +1,9 @@
-import { ClientEventsContext } from '@decipad/client-events';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 import { Computer } from '@decipad/computer';
 import { MyPlatePlugin } from '@decipad/editor-types';
-import { useContext, useEffect, useMemo, useRef } from 'react';
-import { UserInteraction } from '@decipad/react-contexts';
+import type { UserInteraction } from '@decipad/react-contexts';
 import { Subject } from 'rxjs';
+import { ClientEventsContext } from '@decipad/client-events';
 import * as configuration from './configuration';
 
 export interface CreateEditorProps {
@@ -34,7 +34,7 @@ export const useEditorPlugins = ({
 
   return useMemo(
     () =>
-      !computer || !events
+      !computer
         ? undefined
         : configuration.plugins({
             readOnly,

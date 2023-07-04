@@ -2,6 +2,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext, useState } from 'react';
+import { useIntercom } from 'react-use-intercom';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
 import { HelpButton, MenuList } from '../../molecules';
 import {
@@ -171,19 +172,21 @@ interface HelpMenuProps {
   readonly discordUrl?: string;
   readonly docsUrl?: string;
   readonly releaseUrl?: string;
-  readonly onSelectSupport?: () => void;
-  readonly onSelectFeedback?: () => void;
 }
 
 export const HelpMenu = ({
   discordUrl,
   docsUrl,
   releaseUrl,
-  onSelectSupport,
-  onSelectFeedback,
 }: HelpMenuProps) => {
   const clientEvent = useContext(ClientEventsContext);
   const [open, setOpen] = useState(false);
+
+  const { show, showNewMessage } = useIntercom();
+  const showFeedback = useCallback(() => {
+    show();
+    showNewMessage();
+  }, [show, showNewMessage]);
 
   return (
     <MenuList
@@ -208,7 +211,7 @@ export const HelpMenu = ({
       sideOffset={8}
     >
       <CustomMenuItem
-        onSelect={onSelectSupport}
+        onSelect={show}
         title="Contact Live Support"
         description="Chat with our team"
         icon={statusIcon}
@@ -248,7 +251,7 @@ export const HelpMenu = ({
         }
       />
       <CustomMenuItem
-        onSelect={onSelectFeedback}
+        onSelect={showFeedback}
         title="Share Feedback"
         icon={<Chat />}
         onClick={() => {

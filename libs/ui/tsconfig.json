@@ -54,6 +54,9 @@
     },
     {
       "path": "../generator-utils"
+    },
+    {
+      "path": "../support"
     }
   ]
 }

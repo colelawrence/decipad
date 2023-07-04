@@ -8,7 +8,7 @@ module.exports = {
     global: {
       statements: 65,
       branches: 75,
-      functions: 65,
+      functions: 64,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

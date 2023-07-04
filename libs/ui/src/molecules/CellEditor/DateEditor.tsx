@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { SerializedTypes } from '@decipad/computer';
 import { CellValueType } from '@decipad/editor-types';
+import { useCanUseDom } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { format, parse } from 'date-fns';
 import {
@@ -108,6 +109,8 @@ export const DateEditor: FC<DateEditorProps> = ({
     </span>
   );
 
+  const portalId = useCanUseDom() ? 'date-picker-portal' : undefined;
+
   return (
     <span
       onClick={onClick}
@@ -126,7 +129,7 @@ export const DateEditor: FC<DateEditorProps> = ({
           }
           showMonthYearPicker={type?.kind === 'date' && type.date === 'month'}
           showYearPicker={type?.kind === 'date' && type.date === 'year'}
-          portalId="date-picker-portal"
+          portalId={portalId}
           todayButton="Today"
           timeClassName={() => 'deci-datepicker-selectable'}
         ></DatePicker>

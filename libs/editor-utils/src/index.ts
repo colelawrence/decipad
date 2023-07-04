@@ -14,6 +14,7 @@ export * from './focusAndSetSelection';
 export * from './generateHash';
 export * from './getAboveNodeSafe';
 export * from './getCodeLineSource';
+export * from './getEmptyImage';
 export * from './getNodeEntrySafe';
 export * from './getNotebook';
 export * from './getPointSafe';

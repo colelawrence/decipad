@@ -1,4 +1,3 @@
-import { ImportElementSource } from '@decipad/editor-types';
 import {
   createContext,
   FC,
@@ -10,6 +9,7 @@ import {
 } from 'react';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import type { ImportElementSource } from '@decipad/editor-types';
 
 export interface PastedLinkUserInteraction {
   type: 'pasted-link';

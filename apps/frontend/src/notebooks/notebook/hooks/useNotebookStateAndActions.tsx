@@ -93,8 +93,13 @@ export const useNotebookStateAndActions = ({
   const toast = useToast();
 
   // ------- state -------
+  const [getNotebookResult] = useGetNotebookByIdQuery({
+    variables: {
+      id: notebookId,
+    },
+  });
+  const notebook = getNotebookResult.data?.getPadById;
   const [error, setError] = useState<Error | undefined>();
-  const [notebook, setNotebook] = useState<Notebook | undefined>();
   const [icon, setIcon] = useState<Icon | undefined>();
   const [iconColor, setIconColor] = useState<IconColor>(() => 'Catskill');
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
@@ -109,11 +114,6 @@ export const useNotebookStateAndActions = ({
   );
 
   // ------- remote api -------
-  const [getNotebookResult] = useGetNotebookByIdQuery({
-    variables: {
-      id: notebookId,
-    },
-  });
   const [remoteDuplicateNotebook] = useDuplicateNotebook({
     id: notebookId,
     editor,
@@ -191,13 +191,6 @@ export const useNotebookStateAndActions = ({
       setError(getNotebookResult.error);
     }
   }, [error, getNotebookResult]);
-
-  useEffect(() => {
-    // set / unset notebook
-    if (getNotebookResult.data !== notebook) {
-      setNotebook(getNotebookResult.data?.getPadById);
-    }
-  }, [error, getNotebookResult, notebook]);
 
   useEffect(() => {
     if (notebook) {

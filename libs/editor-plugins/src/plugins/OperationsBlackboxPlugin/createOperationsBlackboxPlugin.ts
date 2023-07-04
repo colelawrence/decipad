@@ -1,3 +1,4 @@
+import { isServerSideRendering } from '@decipad/support';
 import { createOverrideApplyPluginFactory } from '../../pluginFactories';
 
 const logsColor = `
@@ -7,7 +8,10 @@ const logsColor = `
 export const createOperationsBlackboxPlugin = createOverrideApplyPluginFactory({
   name: 'OPERATIONS_BLACKBOX_PLUGIN',
   plugin: (editor, apply) => {
-    if (process.env.NODE_ENV === 'test' && !process.env.DEBUG) {
+    if (
+      (process.env.NODE_ENV === 'test' && !process.env.DEBUG) ||
+      isServerSideRendering()
+    ) {
       return apply;
     }
     // eslint-disable-next-line no-console

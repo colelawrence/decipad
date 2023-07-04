@@ -1,11 +1,17 @@
 export function fetch(
-  url: string,
-  options?: RequestInit
+  _url: string | URL,
+  init?: RequestInit
 ): ReturnType<typeof global.fetch> {
-  const base =
-    'location' in global
-      ? global.location.origin
-      : process.env.DECI_APP_URL_BASE || 'http://localhost:3000';
-  const { href } = new URL(url, base);
-  return global.fetch(href, options);
+  let url: URL;
+  if (typeof _url === 'string') {
+    const base =
+      'window' in global && 'location' in window
+        ? window.location.origin
+        : process.env.DECI_APP_URL_BASE || 'http://localhost:3000';
+    url = new URL(_url, base);
+  } else {
+    url = _url;
+  }
+  const { href } = url;
+  return global.fetch(href, init);
 }

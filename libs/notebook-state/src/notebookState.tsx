@@ -1,8 +1,11 @@
-import { setErrorReporter } from '@decipad/computer';
 import { captureException } from '@sentry/browser';
-import { StoreApi, useStore } from 'zustand';
+import { setErrorReporter } from '@decipad/computer';
+import { useStore } from 'zustand';
+import type { StoreApi } from 'zustand';
+import type { NotebookState } from './state';
 import { createNotebookStore } from './oneNotebookState';
-import { NotebookState } from './state';
+
+const NOTEBOOK_DESTROY_DELAY_MS = 5_000;
 
 // set the computer's error reporter
 setErrorReporter((err) => {
@@ -16,9 +19,13 @@ const getNotebookStore = (notebookId: string): StoreApi<NotebookState> => {
   let store = notebooks.get(notebookId);
   if (!store) {
     const onDestroy = () => {
-      // eslint-disable-next-line no-console
-      console.debug(`notebook ${notebookId} destroyed`);
-      notebooks.delete(notebookId);
+      setTimeout(() => {
+        if (store?.getState().destroyed) {
+          // eslint-disable-next-line no-console
+          console.log(`notebook ${notebookId} destroyed`);
+          notebooks.delete(notebookId);
+        }
+      }, NOTEBOOK_DESTROY_DELAY_MS);
     };
     store = createNotebookStore(onDestroy);
     notebooks.set(notebookId, store);

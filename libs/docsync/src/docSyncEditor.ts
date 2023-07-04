@@ -21,15 +21,15 @@ supportBigIntToJSON();
 export function docSyncEditor<E extends MyEditor>(
   editor: E & YjsEditor & CursorEditor,
   doc: YDoc,
-  store: IndexeddbPersistence,
+  store?: IndexeddbPersistence,
   ws?: TWebSocketProvider
 ): E & DocSyncEditor {
   const events = new EventEmitter();
 
-  store.on('synced', function onStoreSynced() {
+  store?.on('synced', function onStoreSynced() {
     events.emit('loaded', 'local');
   });
-  store.on(
+  store?.on(
     'saved',
     function onStoreSaved(_provider: IndexeddbPersistence, isLocal?: boolean) {
       const source: SyncSource = isLocal ? 'local' : 'remote';
@@ -62,7 +62,7 @@ export function docSyncEditor<E extends MyEditor>(
   const hasLocalChanges = new BehaviorSubject<boolean>(false);
   const isSavedRemotely = new BehaviorSubject<boolean>(false);
 
-  store.once('synced', () => {
+  const onceStoreSynced = () => {
     let savedCount = 0;
     events.on('saved', (source: SyncSource) => {
       savedCount += 1;
@@ -74,12 +74,19 @@ export function docSyncEditor<E extends MyEditor>(
         }
       }
     });
-  });
+  };
+  if (store) {
+    store.once('synced', onceStoreSynced);
+  } else {
+    onceStoreSynced();
+  }
 
   let destroyed = false;
   events.once('destroyed', () => {
     destroyed = true;
   });
+
+  const { destroy } = editor;
 
   const useEditor = Object.assign(editor, {
     onLoaded(cb: OnLoadedCallback) {
@@ -107,8 +114,9 @@ export function docSyncEditor<E extends MyEditor>(
       events.emit('destroyed');
       events.removeAllListeners();
       doc.destroy();
-      store.destroy();
+      store?.destroy();
       ws?.destroy();
+      destroy.call(editor);
     },
     connect() {
       ws?.connect();
@@ -123,14 +131,16 @@ export function docSyncEditor<E extends MyEditor>(
       return isSavedRemotely;
     },
     removeLocalChanges() {
-      return store.remove();
+      return store?.remove() || Promise.resolve();
     },
     setLoadedRemotely() {
       events.emit('loaded', 'remote');
     },
     isDocSyncEnabled: true,
-    markVersion: (version: string) => store.markVersion(version),
-    sameVersion: (version: string) => store.sameVersion(version),
+    markVersion: (version: string) =>
+      store?.markVersion(version) || Promise.resolve(),
+    sameVersion: (version: string) =>
+      store?.sameVersion(version) || Promise.resolve(false),
     equals: (checksumRemote: string) => {
       const canonicalizedObj = canonicalize(toSlateDoc(doc.getArray()));
       const checksumLocal = md5(canonicalizedObj);

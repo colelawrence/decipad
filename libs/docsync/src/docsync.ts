@@ -1,3 +1,6 @@
+import { Session } from 'next-auth';
+import { Awareness } from 'y-protocols/awareness';
+import { applyUpdate, Doc as YDoc } from 'yjs';
 import stringify from 'json-stringify-safe';
 import { fetch } from '@decipad/fetch';
 import { SyncElement, withCursor, withYjs } from '@decipad/slate-yjs';
@@ -6,11 +9,9 @@ import {
   TWebSocketProvider,
   createWebsocketProvider,
 } from '@decipad/y-websocket';
-import { Awareness } from 'y-protocols/awareness';
-import { applyUpdate, Doc as YDoc } from 'yjs';
 import { MyEditor } from '@decipad/editor-types';
+import { supports } from '@decipad/support';
 import { PlateEditor } from '@udecode/plate';
-import { Session } from 'next-auth';
 import { docSyncEditor } from './docSyncEditor';
 import { ensureInitialDocument } from './utils/ensureInitialDocument';
 import { setupUndo } from './setupUndo';
@@ -72,7 +73,9 @@ export function createDocSyncEditor(
 ) {
   (editor as PlateEditor).children = [];
   const doc = new YDoc();
-  const store = new IndexeddbPersistence(docId, doc, { readOnly });
+  const store = supports('indexeddb')
+    ? new IndexeddbPersistence(docId, doc, { readOnly })
+    : undefined;
   const initialTokenTime = Date.now();
 
   const isInitialTokenStale = () =>
@@ -96,7 +99,8 @@ export function createDocSyncEditor(
   let wsp: TWebSocketProvider | undefined;
   let awareness: Awareness | undefined;
 
-  const startWebsocket = ws && (!readOnly || initialState == null);
+  const startWebsocket =
+    ws && supports('websockets') && (!readOnly || initialState == null);
   if (startWebsocket) {
     wsp = createWebsocketProvider(doc, {
       WebSocketPolyfill,
@@ -121,7 +125,7 @@ export function createDocSyncEditor(
   let destroyed = false;
   let synced = false;
 
-  store.once('synced', () => {
+  const onceSynced = () => {
     if (synced) {
       return;
     }
@@ -131,7 +135,11 @@ export function createDocSyncEditor(
         try {
           const update = Buffer.from(initialState, 'base64');
           applyUpdate(doc, update);
-          syncEditor.setLoadedRemotely();
+          setTimeout(() => {
+            if (!destroyed) {
+              syncEditor.setLoadedRemotely();
+            }
+          }, 0);
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error('Error applying initial update', err);
@@ -139,7 +147,17 @@ export function createDocSyncEditor(
       }
       wsp?.connect();
     }
-  });
+  };
+
+  if (store) {
+    store.once('synced', onceSynced);
+  } else {
+    setTimeout(() => {
+      if (!destroyed) {
+        onceSynced();
+      }
+    }, 0);
+  }
 
   // Cursor editor
   const cursorEditor = withCursor(yjsEditor, awareness, getSession);
@@ -150,10 +168,12 @@ export function createDocSyncEditor(
 
   // Sync editor
   let syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
+  const { destroy } = syncEditor;
   syncEditor.destroy = () => {
     destroyed = true;
     store?.destroy();
     wsp?.destroy();
+    destroy.call(syncEditor);
   };
 
   syncEditor.isDocSyncEnabled = true;

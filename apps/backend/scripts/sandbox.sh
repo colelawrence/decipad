@@ -24,11 +24,15 @@ teardown () {
 
 trap "teardown" EXIT
 
-if [[ -z "${CI:-}" ]]; then
+if [[ -z "${DECI_E2E:-}" ]]; then
+  ## NO_SSR = true because we'll build SSR using the server-side-rendering server
+  # NO_SSR=true yarn build:backend:watch&
   yarn build:backend:watch&
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
-else
-  yarn build:backend
+  # if [[ -z "${NO_SSR:-}" ]]; then
+  #   nx serve server-side-rendering&
+  #   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
+  # fi
 fi
 
 cd apps/backend

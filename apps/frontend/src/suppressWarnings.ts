@@ -1,7 +1,6 @@
 const { warn, error } = console;
 
 const suppressMessagesBeginnings = [
-  'Warning: validateDOMNesting',
   'Warning: Function components cannot be given refs',
   'Warning: A component is `contentEditable` and contains `children` managed by React',
   'Warning: React does not recognize the',

@@ -5,7 +5,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react"
   },
-  "include": ["src", "storybook"],
+  "include": ["src", "storybook", "../editor-config/src/useEditorPlugins.ts"],
   "references": [
     {
       "path": "../ui"
@@ -20,9 +20,6 @@
       "path": "../react-contexts"
     },
     {
-      "path": "../utils"
-    },
-    {
       "path": "../editor-types"
     },
     {
@@ -32,16 +29,22 @@
       "path": "../editor-plugins"
     },
     {
-      "path": "../client-events"
+      "path": "../editor-table"
+    },
+    {
+      "path": "../editor-data-view"
+    },
+    {
+      "path": "../editor-variable-def"
     },
     {
       "path": "../editor-components"
     },
     {
-      "path": "../editor-table"
+      "path": "../editor-config"
     },
     {
-      "path": "../editor-variable-def"
+      "path": "../support"
     },
     {
       "path": "../editor-data-view"

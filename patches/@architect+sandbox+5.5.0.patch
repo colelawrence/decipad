@@ -17,6 +17,25 @@ index 147ed9b..6649913 100644
 -  else res.end(body)
 +  else res.end(body || '')
  }
+diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/get-env.js b/node_modules/@architect/sandbox/src/invoke-lambda/get-env.js
+new file mode 100644
+index 0000000..045c30e
+--- /dev/null
++++ b/node_modules/@architect/sandbox/src/invoke-lambda/get-env.js
+@@ -0,0 +1,13 @@
++const defaultEnv = (ports) => ({
++  'ARC_WSS_URL': `ws://localhost:${ports.http}/ws`
++})
++
++module.exports.getEnv = function getEnv(ports) {
++  const env = process.env;
++  for (const [key, value] of Object.entries(defaultEnv(ports))) {
++    if (!env[key]) {
++      env[key] = value;
++    }
++  }
++  return env;
++}
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/index.js b/node_modules/@architect/sandbox/src/invoke-lambda/index.js
 index 5e416fc..6474c5e 100644
 --- a/node_modules/@architect/sandbox/src/invoke-lambda/index.js
@@ -96,6 +115,99 @@ index 5e416fc..6474c5e 100644
 -  return existsSync(handlerFile)
 -}
 +module.exports = require('./nodelambda/invoke');
+diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/invoke.js b/node_modules/@architect/sandbox/src/invoke-lambda/invoke.js
+new file mode 100644
+index 0000000..378ad51
+--- /dev/null
++++ b/node_modules/@architect/sandbox/src/invoke-lambda/invoke.js
+@@ -0,0 +1,87 @@
++const { workerFor } = require('./workers');
++const { getEnv } = require('./get-env');
++
++const DEFAULT_TIMEOUT = 60000;
++
++module.exports = function invokeByRunning(params, callback) {
++  const {
++    event,
++    ports,
++    lambda: { handlerFile },
++    update,
++    timeout = DEFAULT_TIMEOUT,
++  } = params;
++  const headers = {
++    'content-type': 'text/html; charset=utf8;',
++    'cache-control':
++      'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
++  };
++  let returned = false;
++
++  const env = getEnv(ports);
++  const worker = workerFor(handlerFile, env, update);
++  worker.work(event, (err, response) => {
++    returned = true;
++    done(err, response);
++  });
++
++  // Set an execution timeout
++  const to = setTimeout(function timedOut() {
++    const duration = `${timeout / 1000}s`;
++    update.warn(`timed out after hitting its ${duration} timeout!`);
++    done(new Error(`${duration} timeout`));
++  }, timeout);
++
++  // End execution
++  function done(error, response) {
++    clearTimeout(to); // ensure the timeout doesn't block
++    if (error) {
++      callback(null, {
++        statusCode: 502,
++        headers,
++        body: `<h1>Requested function is missing or not defined, or unknown error</h1>
++        <p>${error}</p>
++        `,
++      });
++    } else if (returned) {
++      const apiType = process.env.ARC_API_TYPE;
++      if (apiType === 'http') {
++        callback(null, response || '');
++      } else if (response) {
++        // If it's an error pretty print it
++        if (response.name && response.message && response.stack) {
++          response.body = `
++          <h1>${response.name}</h1>
++          <p>${response.message}</p>
++          <pre>${response.stack}</pre>
++          `;
++          response.code = 500;
++          response.type = 'text/html';
++        }
++        // otherwise just return the command line
++        callback(null, response);
++      } else {
++        callback(null, {
++          statusCode: 500,
++          headers,
++          body: `<h1>Async error</h1>
++<p><strong>Lambda <code>${handlerFile}</code> ran without executing the completion callback or returning a value.</strong></p>
++
++<p>Dependency-free functions, or functions that use <code>@architect/functions arc.http.async()</code> must return a correctly formatted response object.</p>
++
++<p>Functions that utilize <code>@architect/functions arc.http()</code> must ensure <code>res</code> gets called</p>
++
++<p>Learn more about <a href="https://arc.codes/primitives/http">dependency-free responses</a>, or about using <code><a href="https://arc.codes/reference/functions/http/node/classic">arc.http()</a></code> and <code><a href="https://arc.codes/reference/functions/http/node/async">arc.http.async()</a></code></p>.
++          `,
++        });
++      }
++    } else {
++      callback(null, {
++        statusCode: 500,
++        headers,
++        body: `<h1>Error</h1>
++        <p>Process exited<p>`,
++      });
++    }
++  }
++};
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/get-env.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/get-env.js
 new file mode 100644
 index 0000000..045c30e
@@ -117,7 +229,7 @@ index 0000000..045c30e
 +}
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/invoke.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/invoke.js
 new file mode 100644
-index 0000000..d035d82
+index 0000000..7950efc
 --- /dev/null
 +++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/invoke.js
 @@ -0,0 +1,83 @@
@@ -184,7 +296,7 @@ index 0000000..d035d82
 +          statusCode: 500,
 +          headers,
 +          body: `<h1>Async error</h1>
-+<p><strong>Lambda <code>${functionPath}</code> ran without executing the completion callback or returning a value.</strong></p>
++<p><strong>Lambda <code> ran without executing the completion callback or returning a value.</strong></p>
 +
 +<p>Dependency-free functions, or functions that use <code>@architect/functions arc.http.async()</code> must return a correctly formatted response object.</p>
 +
@@ -206,20 +318,24 @@ index 0000000..d035d82
 +};
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/run.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/run.js
 new file mode 100644
-index 0000000..76dd75d
+index 0000000..7a99b0f
 --- /dev/null
 +++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/run.js
-@@ -0,0 +1,67 @@
+@@ -0,0 +1,81 @@
 +/* eslint-disable no-console */
 +const { parentPort, workerData } = require('worker_threads');
 +const { join } = require('path');
 +const { existsSync: exists, readFileSync: read } = require('fs');
 +
-+const { functionPath } = workerData;
++let { functionPath } = workerData;
++
++if (functionPath.endsWith('.mjs')) {
++  functionPath = functionPath.substring(0, functionPath.indexOf('.mjs')) + '.js';
++}
 +
 +const handlerFunction = 'handler';
 +const cwd = process.cwd();
-+const fn = loadFunction();
++let fn = loadFunction();
 +
 +/* Enumerate package files */
 +const pkg = (dir) =>
@@ -248,6 +364,13 @@ index 0000000..76dd75d
 +      callback(err, result);
 +    }
 +  };
++  if (!fn) {
++    fn = loadFunction();
++  }
++  if (!fn) {
++    callbackGuard(new Error('Could not find handler for function ' + functionPath));
++    return;
++  }
 +  const context = {};
 +  const result = fn(event, context, callbackGuard);
 +  if (result instanceof Promise) {
@@ -263,6 +386,9 @@ index 0000000..76dd75d
 +
 +function loadFunction() {
 +  try {
++    const resolved = require.resolve(functionPath);
++    // always fresh
++    delete require.cache[resolved];
 +    // eslint-disable-next-line import/no-dynamic-require
 +    const func = require(functionPath)[handlerFunction]; // eslint-disable-line global-require
 +    if (typeof func !== 'function') {
@@ -274,14 +400,230 @@ index 0000000..76dd75d
 +    return func;
 +  } catch (err) {
 +    console.error(err);
-+    throw err;
++    return undefined;
 +  }
 +}
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/workers.js b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/workers.js
 new file mode 100644
-index 0000000..9232634
+index 0000000..3f3764b
 --- /dev/null
 +++ b/node_modules/@architect/sandbox/src/invoke-lambda/nodelambda/workers.js
+@@ -0,0 +1,123 @@
++const { Worker } = require('worker_threads');
++const assert = require('assert');
++const watch = require('node-watch');
++
++const workerPath = `${__dirname}/run.js`;
++const workers = new Map();
++
++function createWorkerFor(functionName, env, update) {
++  const workQueue = [];
++  const replyQueue = [];
++
++  if (functionName.endsWith('.mjs')) {
++    functionName = functionName.substring(0, functionName.indexOf('.mjs')) + '.js';
++  }
++
++  const workerData = {
++    functionPath: functionName,
++  };
++
++  const workerOptions = {
++    env,
++    workerData,
++    stdout: true,
++    stderr: true,
++  };
++
++  const fn = {
++    worker: new Worker(workerPath, workerOptions),
++    ready: false,
++    working: false,
++    terminating: false,
++    work,
++  };
++
++  const dir = functionName.slice(0, functionName.lastIndexOf('/'));
++
++  const w = watch(dir, {
++    recursive: true,
++  }, () => {
++    update.status(`function ${functionName} changed`);
++    w.close();
++    fn.terminating = true;
++    fn.worker.terminate();
++  });
++
++  fn.worker.on('message', (message) => {
++    if (message === 'ready') {
++      assert(!fn.ready, 'worker is already ready');
++      fn.ready = true;
++      maybeWork();
++      return;
++    }
++    assert(fn.ready, 'should be ready when getting a response message');
++    assert(
++      fn.working,
++      'worker should be working when getting a response message'
++    );
++    replyWith(null, message || '');
++  });
++
++  fn.worker.once('error', (err) => {
++    update.error(`worker ${functionName} error:\n${err.stack}`);
++    while (replyQueue.length > 0) {
++      replyWith(err);
++    }
++  });
++
++  fn.worker.once('exit', () => {
++    let err;
++    if (!fn.terminating) {
++      update.error(`worker exited prematurely: ${functionName} `, functionName);
++      err = new Error('Worker exited prematurely');
++    } else {
++      err = new Error('Worker exited without reply');
++      update.status(`worker exited: ${functionName} `, functionName);
++    }
++    while (replyQueue.length > 0) {
++      replyWith(err);
++    }
++    workers.delete(functionName);
++  });
++
++  fn.worker.stderr.on('data', (d) => {
++    update.error(`${functionName}:\n${d}`);
++  });
++  fn.worker.stdout.on('data', (d) => {
++    update.status(`${functionName}:\n${d}`);
++  });
++
++  return fn;
++
++  function maybeWork() {
++    if (workQueue.length === 0 || !fn.ready || fn.working) {
++      return;
++    }
++    fn.working = true;
++    const nextWork = workQueue.splice(0, 1)[0];
++    fn.worker.postMessage(nextWork);
++  }
++
++  function replyWith(error, response) {
++    fn.working = false;
++    const reply = replyQueue.splice(0, 1)[0];
++    reply(error, response || '');
++    maybeWork();
++  }
++
++  function work(request, callback) {
++    workQueue.push(request);
++    replyQueue.push(callback);
++    maybeWork();
++  }
++}
++
++module.exports.workerFor = function workerFor(functionName, env, update) {
++  let fn = workers.get(functionName);
++  if (!fn) {
++    fn = createWorkerFor(functionName, env, update);
++    workers.set(functionName, fn);
++  }
++
++  return fn;
++};
+diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/run.js b/node_modules/@architect/sandbox/src/invoke-lambda/run.js
+new file mode 100644
+index 0000000..7a99b0f
+--- /dev/null
++++ b/node_modules/@architect/sandbox/src/invoke-lambda/run.js
+@@ -0,0 +1,81 @@
++/* eslint-disable no-console */
++const { parentPort, workerData } = require('worker_threads');
++const { join } = require('path');
++const { existsSync: exists, readFileSync: read } = require('fs');
++
++let { functionPath } = workerData;
++
++if (functionPath.endsWith('.mjs')) {
++  functionPath = functionPath.substring(0, functionPath.indexOf('.mjs')) + '.js';
++}
++
++const handlerFunction = 'handler';
++const cwd = process.cwd();
++let fn = loadFunction();
++
++/* Enumerate package files */
++const pkg = (dir) =>
++  exists(join(dir, 'package.json')) &&
++  JSON.parse(read(join(dir, 'package.json')));
++const lambdaPackage = pkg(cwd);
++
++const debug = [{ note: 'Execution metadata', cwd, lambdaPackage }];
++
++function callback(err, result) {
++  if (err) console.log(err);
++  const payload = err
++    ? { name: err.name, message: err.message, stack: err.stack }
++    : result;
++  if (payload) payload.__DEP_ISSUES__ = [];
++  if (payload) payload.__DEP_DEBUG__ = debug;
++
++  parentPort.postMessage(payload);
++}
++
++parentPort.on('message', (event) => {
++  let calledback = false;
++  const callbackGuard = (err, result) => {
++    if (!calledback) {
++      calledback = true;
++      callback(err, result);
++    }
++  };
++  if (!fn) {
++    fn = loadFunction();
++  }
++  if (!fn) {
++    callbackGuard(new Error('Could not find handler for function ' + functionPath));
++    return;
++  }
++  const context = {};
++  const result = fn(event, context, callbackGuard);
++  if (result instanceof Promise) {
++    result
++      .then((res) => callbackGuard(null, res))
++      .catch((err) => callbackGuard(err));
++  } else if (typeof result !== 'undefined') {
++    callbackGuard(null, result);
++  }
++});
++
++parentPort.postMessage('ready');
++
++function loadFunction() {
++  try {
++    const resolved = require.resolve(functionPath);
++    // always fresh
++    delete require.cache[resolved];
++    // eslint-disable-next-line import/no-dynamic-require
++    const func = require(functionPath)[handlerFunction]; // eslint-disable-line global-require
++    if (typeof func !== 'function') {
++      throw new Error(
++        `${functionPath} is not a function: ${typeof func}, ${func}`
++      );
++    }
++
++    return func;
++  } catch (err) {
++    console.error(err);
++    return undefined;
++  }
++}
+diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/workers.js b/node_modules/@architect/sandbox/src/invoke-lambda/workers.js
+new file mode 100644
+index 0000000..9232634
+--- /dev/null
++++ b/node_modules/@architect/sandbox/src/invoke-lambda/workers.js
 @@ -0,0 +1,115 @@
 +const { Worker } = require('worker_threads');
 +const assert = require('assert');

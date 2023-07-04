@@ -1,9 +1,9 @@
-import { ShadowCalcPortal } from '@decipad/react-contexts';
-import { useWindowListener } from '@decipad/react-utils';
-import { CodeLineFloat, CodeLinePlaceholder } from '@decipad/ui';
-import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { noop } from '@decipad/utils';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { noop } from 'lodash';
+import { useWindowListener, useCanUseDom } from '@decipad/react-utils';
+import { ShadowCalcPortal } from '@decipad/react-contexts';
+import { CodeLineFloat, CodeLinePlaceholder } from '@decipad/ui';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 
 export const DISMISS_KEYS = ['Escape', 'Enter'];
@@ -63,6 +63,8 @@ export const CodeLineTeleport: React.FC<
     setContentHeight(currentHeight);
   }, [isVisible, currentHeight, setContentHeight]);
 
+  const canUseDom = useCanUseDom();
+
   if (!isVisible) {
     return <span ref={codeLineRef}>{children}</span>;
   }
@@ -76,7 +78,7 @@ export const CodeLineTeleport: React.FC<
   return (
     <>
       <CodeLinePlaceholder height={contentHeight} onBringBack={onBringBack} />
-      {createPortal(editable, portal)}
+      {canUseDom && createPortal(editable, portal)}
     </>
   );
 };

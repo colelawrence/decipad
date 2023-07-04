@@ -45,6 +45,13 @@ devServer.proxy = {
   },
 };
 
+// if (!process.env.NO_SSR) {
+//   devServer.proxy['/n'] = {
+//     target: 'http://localhost:3333',
+//     changeOrigin: true,
+//   };
+// }
+
 module.exports = {
   webpack: {
     configure: configureWebpack({

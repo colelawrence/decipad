@@ -31,6 +31,7 @@
     "noUnusedParameters": true,
     "noErrorTruncation": true,
     "paths": {
+      "@decipad/frontend": ["apps/frontend/src/index.tsx"],
       "@decipad/backend-analytics": ["libs/backend-analytics/src/index.ts"],
       "@decipad/backend-external-db": ["libs/backend-external-db/src/index.ts"],
       "@decipad/backend-resources": ["libs/backend-resources/src/index.ts"],
@@ -53,6 +54,7 @@
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
+      "@decipad/editor-config": ["libs/editor-config/src/index.ts"],
       "@decipad/editor-attachments": ["libs/editor-attachments/src/index.ts"],
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],
       "@decipad/editor-data-view": ["libs/editor-data-view/src/index.ts"],
@@ -105,6 +107,9 @@
       "@decipad/react-utils": ["libs/react-utils/src/index.ts"],
       "@decipad/retry": ["libs/retry/src/index.ts"],
       "@decipad/routing": ["libs/routing/src/index.ts"],
+      "@decipad/server-side-rendering": [
+        "libs/server-side-rendering/src/index.ts"
+      ],
       "@decipad/services": ["libs/services/src/index.ts"],
       "@decipad/services/authentication": ["libs/services/src/authentication"],
       "@decipad/services/authorization": ["libs/services/src/authorization"],

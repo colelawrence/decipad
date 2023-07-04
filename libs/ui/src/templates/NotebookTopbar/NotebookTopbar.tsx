@@ -3,6 +3,7 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { docs, workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
+import { isServerSideRendering } from '@decipad/support';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC, useCallback, useContext } from 'react';
@@ -249,7 +250,7 @@ export const NotebookTopbar = ({
         />
 
         {sessionStatus === 'authenticated' ? (
-          isAdmin ? (
+          isAdmin && !isServerSideRendering() ? (
             <NotebookPublishingPopUp notebook={notebook} {...sharingProps} />
           ) : (
             <Button onClick={onDuplicateNotebook}>Duplicate notebook</Button>

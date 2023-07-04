@@ -2,60 +2,65 @@ import type {
   ApolloServerPlugin,
   GraphQLRequestContext,
 } from 'apollo-server-plugin-base';
-import { withScope, captureException } from '@sentry/serverless';
+import {
+  setTag,
+  setExtra,
+  addBreadcrumb,
+  setExtras,
+  setUser,
+} from '@sentry/serverless';
 import { GraphqlContext } from '@decipad/backendtypes';
 import { GraphQLError } from 'graphql';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { Class } from 'utility-types';
+import { captureException } from '@decipad/backend-trace';
 
 const UserErrors: Array<Class<Error>> = [ForbiddenError, UserInputError];
 
 const isUserError = (error: GraphQLError) =>
   UserErrors.some((UserError) => error.originalError instanceof UserError);
 
-const onError = (rc: GraphQLRequestContext) => {
-  withScope((scope) => {
-    scope.clear();
-    scope.setTag('kind', rc.operationName);
-    scope.setExtra('query', rc.request.query);
-    scope.setExtra('variables', rc.request.variables);
-    if (rc.errors) {
-      for (const error of rc.errors) {
+const onError = async (rc: GraphQLRequestContext) => {
+  setTag('kind', rc.operationName);
+  setExtra('query', rc.request.query);
+  setExtra('variables', rc.request.variables);
+  if (rc.errors) {
+    for (const error of rc.errors) {
+      // eslint-disable-next-line no-console
+      if (error.path || error.name !== 'GraphQLError') {
+        addBreadcrumb({
+          category: 'query-path',
+          message: error?.path?.join(' > '),
+          level: 'debug',
+        });
+        setExtras({
+          path: error.path,
+        });
+      }
+
+      if (!process.env.CI) {
         // eslint-disable-next-line no-console
-        if (error.path || error.name !== 'GraphQLError') {
-          scope.addBreadcrumb({
-            category: 'query-path',
-            message: error?.path?.join(' > '),
-            level: 'debug',
-          });
-          scope.setExtras({
-            path: error.path,
-          });
-        }
+        console.error(
+          'error detected by graphql monitor',
+          error,
+          error.originalError
+        );
+      }
 
-        if (!process.env.CI) {
-          // eslint-disable-next-line no-console
-          console.error(
-            'error detected by graphql monitor',
-            error,
-            error.originalError
-          );
-        }
+      const contextWithUser = rc as unknown as GraphqlContext;
 
-        const contextWithUser = rc as unknown as GraphqlContext;
-
-        const userId = contextWithUser.user?.id;
-        if (userId) {
-          scope.setUser({
-            id: userId,
-          });
-        }
-        if (!isUserError(error)) {
-          captureException(error, scope);
-        }
+      const userId = contextWithUser.user?.id;
+      if (userId) {
+        setUser({
+          id: userId,
+        });
+      }
+      if (!isUserError(error)) {
+        // eslint-disable-next-line no-await-in-loop
+        await captureException(error);
       }
     }
-  });
+  }
 };
 
 export const monitor: ApolloServerPlugin = {
@@ -65,7 +70,7 @@ export const monitor: ApolloServerPlugin = {
     }
     return {
       async didEncounterErrors(): Promise<void> {
-        onError(rc);
+        await onError(rc);
       },
     };
   },

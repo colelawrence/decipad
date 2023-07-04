@@ -39,7 +39,7 @@ export const createNotebookTitlePlugin = ({
               const [node] = nodeEntry;
               const newTitle = getNodeString(node);
 
-              if (newTitle !== lastNotebookTitle) {
+              if (newTitle.trim() !== lastNotebookTitle) {
                 lastNotebookTitle = newTitle;
                 onNotebookTitleChangeDebounced(newTitle);
               }

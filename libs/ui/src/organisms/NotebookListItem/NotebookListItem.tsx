@@ -6,7 +6,6 @@ import { css } from '@emotion/react';
 import format from 'date-fns/format';
 import { FC, useEffect, useState } from 'react';
 import { XYCoord, useDrag, useDragLayer } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend';
 import { ColorStatusCircle, MenuItem, TriggerMenuItem } from '../../atoms';
 import * as icons from '../../icons';
 import { FilterBubbles, MenuList, NotebookIcon } from '../../molecules';
@@ -26,9 +25,10 @@ import {
   AvailableSwatchColor,
   ColorStatusNames,
   DNDItemTypes,
+  getEmptyImage,
+  swatchesThemed,
   TColorStatus,
   UserIconKey,
-  swatchesThemed,
 } from '../../utils';
 import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 

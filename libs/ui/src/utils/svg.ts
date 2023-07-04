@@ -1,6 +1,9 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 
 export const getSvgAspectRatio = (element: React.ReactElement): number => {
+  if (typeof document === 'undefined') {
+    return 1;
+  }
   const markup = renderToStaticMarkup(element);
 
   const container = document.createElement('div');

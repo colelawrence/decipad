@@ -20,6 +20,7 @@ any /graphql
 
 get /api/version
 
+# Auth
 post /api/auth/signin/:provider
 get /api/auth/callback/:provider
 get /api/auth/token
@@ -45,6 +46,9 @@ post /api/discord
 get /api/ws
 get /api/import/url
 get /api/clear
+
+# Server-side rendering
+# get /n/:notebookid
 
 # Stripe endpoints
 post /api/stripe/webhook

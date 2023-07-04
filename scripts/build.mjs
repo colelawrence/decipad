@@ -1,17 +1,18 @@
 #!/usr/bin/env node
-import { exec } from 'child_process';
-import esbuild from 'esbuild';
-import globby from 'globby';
 import stringify from 'json-stringify-safe';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import globby from 'globby';
+import esbuild from 'esbuild';
+import { join, dirname } from 'path';
+import { exec, spawn } from 'child_process';
 import { promisify } from 'util';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const pExec = promisify(exec);
+
 const envVarNames = [
-  'DEBUG',
   'NEXTAUTH_URL',
   'REACT_APP_ANALYTICS_WRITE_KEY',
   'REACT_APP_HOTJAR_SITE_ID',
@@ -91,6 +92,8 @@ async function esBuildOptions(env) {
     external: [
       'aws-sdk',
       'sharp',
+      'canvas',
+      'jsdom',
       'better-sqlite3',
       'sqlite3',
       '@vue/compiler-sfc',
@@ -108,6 +111,12 @@ async function esBuildOptions(env) {
     define: envVarDefines(env),
     minify: !process.env.DEBUG && !!process.env.MINIFY,
     watch,
+    loader: {
+      '.woff': 'file',
+      '.woff2': 'file',
+      '.svg': 'file',
+      '.png': 'file',
+    },
   };
 }
 
@@ -116,12 +125,10 @@ printEnv(env);
 console.log('');
 
 const installLambdaDependencies = async () => {
-  await promisify(exec)(
-    join(__dirname, '..', 'apps', 'backend', 'scripts', 'build.mjs')
-  );
+  await pExec(join(__dirname, '..', 'apps', 'backend', 'scripts', 'build.mjs'));
 };
 
-const buildLambdas = async () => {
+const buildTraditionalLambdas = async () => {
   const { watch, ...buildOptions } = await esBuildOptions(env);
 
   if (watch) {
@@ -136,7 +143,22 @@ const buildLambdas = async () => {
   }
 };
 
+const buildSSRLambdas = async (watch) => {
+  spawn('nx', ['build', 'server-side-rendering'], {
+    stdio: [process.stdin, process.stdout, process.stderr],
+  }).once('close', (code) => {
+    if (code) {
+      console.error('done with error code ' + code);
+    } else {
+      console.log('Done building server-side rendering.');
+    }
+  });
+};
+
 (async () => {
   await installLambdaDependencies();
-  await buildLambdas();
+  await buildTraditionalLambdas();
+  // if (!process.env.NO_SSR) {
+  //   await buildSSRLambdas();
+  // }
 })();

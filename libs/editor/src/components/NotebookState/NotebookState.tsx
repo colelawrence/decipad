@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import { removeNodes, withoutNormalizing } from '@udecode/plate';
 
 interface NotebookStateProps {
-  isSavedRemotely: BehaviorSubject<boolean>;
+  isSavedRemotely?: BehaviorSubject<boolean>;
   isNewNotebook: boolean;
 }
 
@@ -25,9 +25,9 @@ export const NotebookState: FC<NotebookStateProps> = ({
 
   useEffect(() => {
     const sub = isSavedRemotely
-      .pipe(debounceTime(DEBOUNCE_TIME))
+      ?.pipe(debounceTime(DEBOUNCE_TIME))
       .subscribe((newSaved) => setSaved(newSaved));
-    return () => sub.unsubscribe();
+    return () => sub?.unsubscribe();
   }, [isSavedRemotely]);
 
   // State editor because this component needs to re-render on state changes.

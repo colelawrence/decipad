@@ -20,14 +20,14 @@ import {
 } from '@decipad/react-contexts';
 import {
   DisplayWidget,
+  VariableEditor,
   DropdownMenu,
   SelectItems,
   UserIconKey,
-  VariableEditor,
 } from '@decipad/ui';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { Number } from 'libs/ui/src/icons';
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 const displayDebounceNamesDefinedMs = 500;
 

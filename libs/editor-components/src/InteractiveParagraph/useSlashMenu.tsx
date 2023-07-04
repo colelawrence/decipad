@@ -1,12 +1,8 @@
 import { ParagraphElement, useTEditorRef } from '@decipad/editor-types';
 import { useNodePath, useSelection } from '@decipad/editor-hooks';
 import { useWindowListener } from '@decipad/react-utils';
-import {
-  getEndPoint,
-  getNodeString,
-  isCollapsed,
-  setSelection,
-} from '@udecode/plate';
+import { getEndPoint, getNodeString, isCollapsed } from '@udecode/plate';
+import { setSelection } from '@decipad/editor-utils';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { BaseRange, Range, Location, Path } from 'slate';
 import { useFocused, useSelected } from 'slate-react';

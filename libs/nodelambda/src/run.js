@@ -3,12 +3,18 @@ const { parentPort, workerData } = require('worker_threads');
 const { join } = require('path');
 const { existsSync: exists, readFileSync: read } = require('fs');
 
-const { arcConfig, arcContext, functionPath } = workerData;
+let { functionPath } = workerData;
 
-const { handlerFunction, shared } = arcConfig;
-const context = arcContext;
+if (functionPath.endsWith('.mjs')) {
+  functionPath = `${functionPath.substring(
+    0,
+    functionPath.indexOf('.mjs')
+  )}.js`;
+}
+
+const handlerFunction = 'handler';
 const cwd = process.cwd();
-const fn = loadFunction();
+let fn = loadFunction();
 
 /* Enumerate package files */
 const pkg = (dir) =>
@@ -16,7 +22,7 @@ const pkg = (dir) =>
   JSON.parse(read(join(dir, 'package.json')));
 const lambdaPackage = pkg(cwd);
 
-const debug = [{ note: 'Execution metadata', cwd, lambdaPackage, shared }];
+const debug = [{ note: 'Execution metadata', cwd, lambdaPackage }];
 
 function callback(err, result) {
   if (err) console.log(err);
@@ -37,6 +43,16 @@ parentPort.on('message', (event) => {
       callback(err, result);
     }
   };
+  if (!fn) {
+    fn = loadFunction();
+  }
+  if (!fn) {
+    callbackGuard(
+      new Error(`Could not find handler for function ${functionPath}`)
+    );
+    return;
+  }
+  const context = {};
   const result = fn(event, context, callbackGuard);
   if (result instanceof Promise) {
     result
@@ -51,6 +67,9 @@ parentPort.postMessage('ready');
 
 function loadFunction() {
   try {
+    const resolved = require.resolve(functionPath);
+    // always fresh
+    delete require.cache[resolved];
     // eslint-disable-next-line import/no-dynamic-require
     const func = require(functionPath)[handlerFunction]; // eslint-disable-line global-require
     if (typeof func !== 'function') {
@@ -62,6 +81,6 @@ function loadFunction() {
     return func;
   } catch (err) {
     console.error(err);
-    throw err;
+    return undefined;
   }
 }

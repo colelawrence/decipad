@@ -8,12 +8,17 @@ interface InitNotebookStateOptions {
   plugins: MyPlatePlugin[];
 }
 
+export type EnhancedPromise<T> = typeof Promise & {
+  resolved?: T;
+};
+
 export interface NotebookState {
+  notebookLoadedPromise: EnhancedPromise<DocSyncEditor>;
+  resolveNotebookLoadedPromise: () => (e: DocSyncEditor) => void;
   notebookId?: string | undefined;
   syncClientState: 'idle' | 'created';
   editor?: DocSyncEditor | undefined;
   computer: Computer | undefined;
-  initComputer: () => void;
   initEditor: (
     notebookId: string,
     options: InitNotebookStateOptions,
@@ -27,5 +32,6 @@ export interface NotebookState {
   notebookHref?: string;
   setInitialFocusDone: () => void;
   initialFocusDone: boolean;
+  destroyed?: boolean;
   isNewNotebook: boolean;
 }

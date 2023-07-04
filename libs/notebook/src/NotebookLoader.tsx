@@ -1,14 +1,18 @@
-import { Editor, useEditorPlugins } from '@decipad/editor';
-import { insertLiveConnection } from '@decipad/editor-components';
-import { useNotebookState } from '@decipad/notebook-state';
-import { ComputerContextProvider } from '@decipad/react-contexts';
-import { useToast } from '@decipad/toast';
+import { FC, Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
-import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useEditorUserInteractionsContext } from '../../react-contexts/src/editor-user-interactions';
+import { lastValueFrom } from 'rxjs';
+import {
+  ComputerContextProvider,
+  useEditorUserInteractionsContext,
+} from '@decipad/react-contexts';
+import { useEditorPlugins } from '@decipad/editor-config';
+import { useNotebookState } from '@decipad/notebook-state';
+import { isServerSideRendering } from '@decipad/support';
+import { EditorPlaceholder } from '@decipad/ui';
+import { useNotebookWarning } from './useNotebookWarning';
+import { SuspendedNotebook } from './SuspendedNotebook';
 import { ExternalDataSourcesProvider } from './ExternalDataSourcesProvider';
-import { InitialSelection } from './InitialSelection';
 import type { NotebookProps } from './types';
 
 type NotebookLoaderProps = Omit<
@@ -30,22 +34,20 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   onDocsync,
   useExternalDataSources,
 }) => {
-  // User warning
-  const toast = useToast();
   const { data: session } = useSession();
 
   const {
-    initComputer,
+    notebookLoadedPromise,
     initEditor,
     editor,
     computer,
     loadedFromRemote,
     timedOutLoadingFromRemote,
-    hasLocalChanges,
     destroy,
     isNewNotebook,
   } = useNotebookState(notebookId);
 
+  const loaded = loadedFromRemote || timedOutLoadingFromRemote;
   const interactions = useEditorUserInteractionsContext();
 
   const plugins = useEditorPlugins({
@@ -56,7 +58,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     onNotebookTitleChange,
     interactions,
   });
-  const loaded = loadedFromRemote || timedOutLoadingFromRemote;
 
   useEffect(() => {
     if (editor) {
@@ -64,10 +65,8 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     }
   }, [editor, onEditor]);
 
-  useEffect(() => {
-    if (!computer) {
-      initComputer();
-    } else if (notebookMetaLoaded && plugins) {
+  const init = useCallback(() => {
+    if (notebookMetaLoaded && plugins) {
       initEditor(
         notebookId,
         {
@@ -84,10 +83,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
       );
     }
   }, [
-    computer,
     connectionParams,
-    editor,
-    initComputer,
     initEditor,
     initialState,
     notebookId,
@@ -97,6 +93,15 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     secret,
     session,
   ]);
+
+  // notebook initialization: client-side rendering
+  useEffect(init, [init]);
+
+  // notebook initialization: SSR
+  if (isServerSideRendering()) {
+    // we need this for SSR
+    init();
+  }
 
   const location = useLocation();
 
@@ -112,44 +117,27 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     }
   }, [editor, onDocsync]);
 
-  // changes warning
+  useNotebookWarning({ notebookId });
 
-  const warning: string | false =
-    readOnly &&
-    `Changes to this notebook are not saved${
-      (session?.user &&
-        '. Please duplicate to customize and make it your own.') ||
-      ''
-    }`;
-  const [toastedWarning, setToastedWarning] = useState(false);
-
-  useEffect(() => {
-    if (warning && hasLocalChanges && !toastedWarning) {
-      setToastedWarning(true);
-      toast(warning as string, 'warning', { autoDismiss: false });
-    }
-  }, [editor, hasLocalChanges, toast, toastedWarning, warning]);
-
-  // import external doc
-  const { search } = useLocation();
-  const qs = useMemo(() => new URLSearchParams(search), [search]);
-  useEffect(() => {
-    const importThing = qs.get('import');
-    if (loaded && computer && editor && importThing) {
-      (async () => {
-        try {
-          await insertLiveConnection({
-            computer,
-            editor,
-            source: 'gsheets',
-            url: importThing,
-          });
-        } catch (err) {
-          toast((err as Error).message, 'error');
+  const readOrSuspendEditor = useMemo(
+    () => ({
+      read: () => {
+        if (notebookLoadedPromise.resolved) {
+          return notebookLoadedPromise.resolved;
         }
-      })();
-    }
-  }, [computer, editor, loaded, qs, toast]);
+        throw notebookLoadedPromise;
+      },
+    }),
+    [notebookLoadedPromise]
+  );
+
+  if (
+    isServerSideRendering() &&
+    computer &&
+    !computer?.results$.get().blockResults
+  ) {
+    throw lastValueFrom(computer.results);
+  }
 
   if (editor) {
     return (
@@ -158,21 +146,22 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
         useExternalDataSources={useExternalDataSources}
       >
         <ComputerContextProvider computer={computer}>
-          <Editor
-            notebookId={notebookId}
-            workspaceId={workspaceId}
-            loaded={loaded}
-            isSavedRemotely={editor.isSavedRemotely()}
-            editor={editor}
-            readOnly={readOnly}
-            isNewNotebook={isNewNotebook}
-          >
-            <InitialSelection
-              notebookId={notebookId}
-              loaded={loaded}
-              editor={editor}
-            />
-          </Editor>
+          <Suspense fallback={<EditorPlaceholder />}>
+            <div
+              data-editorloaded={loaded}
+              data-hydrated={!isServerSideRendering() && loaded}
+            >
+              <SuspendedNotebook
+                notebookId={notebookId}
+                workspaceId={workspaceId}
+                loaded={loaded}
+                isSavedRemotely={editor.isSavedRemotely()}
+                editor={readOrSuspendEditor}
+                readOnly={readOnly}
+                isNewNotebook={isNewNotebook}
+              />
+            </div>
+          </Suspense>
         </ComputerContextProvider>
       </ExternalDataSourcesProvider>
     );

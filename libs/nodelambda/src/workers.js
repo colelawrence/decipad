@@ -1,7 +1,6 @@
 const { Worker } = require('worker_threads');
 const assert = require('assert');
 const watch = require('node-watch');
-const { existsSync } = require('fs');
 
 const workerPath = `${__dirname}/run.js`;
 const workers = new Map();
@@ -10,9 +9,14 @@ function createWorkerFor(functionName, env, update) {
   const workQueue = [];
   const replyQueue = [];
 
+  if (functionName.endsWith('.mjs')) {
+    // eslint-disable-next-line no-param-reassign
+    functionName =
+      // eslint-disable-next-line prefer-template
+      functionName.substring(0, functionName.indexOf('.mjs')) + '.js';
+  }
+
   const workerData = {
-    arcConfig: JSON.parse(env.__ARC_CONFIG__),
-    arcContext: JSON.parse(env.__ARC_CONTEXT__),
     functionPath: functionName,
   };
 
@@ -31,14 +35,20 @@ function createWorkerFor(functionName, env, update) {
     work,
   };
 
-  if (existsSync(functionName)) {
-    const w = watch(functionName, () => {
+  const dir = functionName.slice(0, functionName.lastIndexOf('/'));
+
+  const w = watch(
+    dir,
+    {
+      recursive: true,
+    },
+    () => {
       update.status(`function ${functionName} changed`);
       w.close();
       fn.terminating = true;
       fn.worker.terminate();
-    });
-  }
+    }
+  );
 
   fn.worker.on('message', (message) => {
     if (message === 'ready') {
@@ -56,9 +66,6 @@ function createWorkerFor(functionName, env, update) {
   });
 
   fn.worker.once('error', (err) => {
-    if (err.message.startsWith('Uncaught')) {
-      return;
-    }
     update.error(`worker ${functionName} error:\n${err.stack}`);
     while (replyQueue.length > 0) {
       replyWith(err);
@@ -101,7 +108,7 @@ function createWorkerFor(functionName, env, update) {
   function replyWith(error, response) {
     fn.working = false;
     const reply = replyQueue.splice(0, 1)[0];
-    reply(error, response);
+    reply(error, response || '');
     maybeWork();
   }
 

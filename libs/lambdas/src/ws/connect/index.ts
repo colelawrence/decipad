@@ -44,7 +44,6 @@ const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
       event.headers['sec-websocket-protocol'] ||
       event.headers['Sec-WebSocket-Protocol'];
 
-    console.log('RETURNING 200');
     return {
       statusCode: 200,
       headers: wsProtocol

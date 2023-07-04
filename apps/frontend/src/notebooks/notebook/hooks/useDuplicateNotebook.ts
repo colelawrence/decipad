@@ -20,19 +20,18 @@ export const useDuplicateNotebook = ({
 }: UseDuplicateNotebookArgs) => {
   const toast = useToast();
   const navigate = useNavigate();
-  const [result] = useGetWorkspacesIDsQuery();
+  const [{ data, error }] = useGetWorkspacesIDsQuery();
   const [, duplicateNotebook] = useDuplicateNotebookMutation();
 
-  const { data, error } = result;
-
   if (error) {
-    toast('Could not fetch workspaces', 'error');
+    console.error(error);
+    throw new Error('Could not fetch workspaces');
   }
 
   const mutate = useCallback(async () => {
     if (!editor || !data) {
       console.error(
-        'Failed to duplicate notebook. Missing editor or workspaces.'
+        'Failed to duplicate notebook. Missing editor or workspaces data.'
       );
       toast('Failed to duplicate notebook', 'error');
       return;

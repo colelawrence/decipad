@@ -5,7 +5,7 @@ import { useInitialSelection } from './useInitialSelection';
 interface InitialSelectionProps {
   notebookId: string;
   loaded: boolean;
-  editor: MyEditor;
+  editor?: MyEditor;
 }
 
 export const InitialSelection: FC<InitialSelectionProps> = ({

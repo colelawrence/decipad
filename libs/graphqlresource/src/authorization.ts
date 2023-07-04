@@ -2,6 +2,7 @@ import { PermissionType, User } from '@decipad/backendtypes';
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
 import { ForbiddenError } from 'apollo-server-lambda';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { debug } from './debug';
 
 type Context = {
   user?: User;
@@ -28,6 +29,7 @@ export async function isAuthorized(
   permissionType: PermissionType = 'READ'
 ): Promise<PermissionType | null> {
   const user = loadUser(context);
+  debug('user', user);
   const secret = loadSecret(context);
 
   return isAuthorizedBase({

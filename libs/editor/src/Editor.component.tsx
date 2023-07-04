@@ -10,7 +10,7 @@ import {
   EditorBlockParentRefProvider,
   EditorReadOnlyContext,
 } from '@decipad/react-contexts';
-import { useWindowListener } from '@decipad/react-utils';
+import { useWindowListener, useCanUseDom } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate';
@@ -33,7 +33,7 @@ export interface EditorProps {
   loaded: boolean;
   isSavedRemotely: BehaviorSubject<boolean>;
   readOnly: boolean;
-  editor: MyEditor;
+  editor?: MyEditor;
   children?: ReactNode;
   isNewNotebook?: boolean;
 }
@@ -76,7 +76,6 @@ const InsidePlate = ({
  */
 export const Editor = (props: EditorProps) => {
   const {
-    loaded,
     isSavedRemotely,
     editor,
     readOnly,
@@ -113,10 +112,14 @@ export const Editor = (props: EditorProps) => {
     true
   );
 
-  if (!loaded || !editor) {
+  const canUseDom = useCanUseDom();
+
+  if (!editor) {
     return <EditorPlaceholder />;
   }
-  window.dispatchEvent(new Event('hashchange'));
+  if (canUseDom) {
+    window.dispatchEvent(new Event('hashchange'));
+  }
 
   return (
     <EditorReadOnlyContext.Provider

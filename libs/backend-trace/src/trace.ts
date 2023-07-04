@@ -72,7 +72,9 @@ export const trace = <
 >(
   handle: Handler<TReq, TRes>,
   options: TraceOptions = {}
-): Handler<TReq, TRes> => {
-  initTrace(options);
-  return handleErrors(handle);
+) => {
+  if (initTrace(options)) {
+    return handleErrors(handle);
+  }
+  return handle;
 };

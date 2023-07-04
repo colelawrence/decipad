@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import { format } from 'date-fns';
 import { FC, MouseEvent, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { isServerSideRendering } from '@decipad/support';
 import { Button, Dot, Toggle, Tooltip } from '../../atoms';
 import { Link } from '../../icons';
 import {
@@ -169,10 +170,12 @@ export const NotebookPublishingPopUp = ({
   };
   useWindowListener('click', handleClickOutside);
 
-  const link = new URL(
-    notebooks({}).notebook({ notebook }).$,
-    window.location.origin
-  ).toString();
+  const link = isServerSideRendering()
+    ? ''
+    : new URL(
+        notebooks({}).notebook({ notebook }).$,
+        window.location.origin
+      ).toString();
 
   const buttonProps = {
     onClick: () => setShareMenuOpen(!shareMenuOpen),

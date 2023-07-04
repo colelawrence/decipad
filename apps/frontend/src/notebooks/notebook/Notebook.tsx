@@ -12,6 +12,7 @@ import {
   useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import { notebooks, useRouteParams } from '@decipad/routing';
+import { isServerSideRendering } from '@decipad/support';
 import {
   EditorPlaceholder,
   LoadingLogo,
@@ -93,18 +94,20 @@ const Notebook: FC = () => {
 
   const onNotebookTitleChange = useCallback(
     (newName: string) => {
-      const nameTrimmed = newName.trim();
-      renameNotebook({
-        id: notebookId,
-        name: nameTrimmed,
-      });
-      window.history.replaceState(
-        {},
-        nameTrimmed,
-        notebooks({}).notebook({
-          notebook: { id: notebookId, name: nameTrimmed },
-        }).$
-      );
+      if (!isServerSideRendering()) {
+        const nameTrimmed = newName.trim();
+        renameNotebook({
+          id: notebookId,
+          name: nameTrimmed,
+        });
+        window.history.replaceState(
+          {},
+          nameTrimmed,
+          notebooks({}).notebook({
+            notebook: { id: notebookId, name: nameTrimmed },
+          }).$
+        );
+      }
     },
     [notebookId, renameNotebook]
   );

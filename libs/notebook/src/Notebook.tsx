@@ -1,33 +1,40 @@
-import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
-import { EditorStats } from '@decipad/editor-stats';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { EditorPasteInteractionMenuProvider } from '@decipad/react-contexts';
 import { FC } from 'react';
-import { EditorUserInteractionsProvider } from '../../react-contexts/src/editor-user-interactions';
-import { NotebookLogs } from './NotebookLogs';
+import {
+  EditorPasteInteractionMenuProvider,
+  EditorUserInteractionsProvider,
+} from '@decipad/react-contexts';
+import { EditorAttachmentsHandler } from '@decipad/editor-attachments';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { EditorStats } from '@decipad/editor-stats';
+import { useCanUseDom } from '@decipad/react-utils';
 import { NotebookLoader } from './NotebookLoader';
+import { NotebookLogs } from './NotebookLogs';
 import type { NotebookProps } from './types';
 
 const inLocalDev =
   'location' in globalThis && /localhost/.test(globalThis.location.hostname);
 
-export const Notebook: FC<NotebookProps> = (props) => {
-  const { getAttachmentForm, onAttached, ...rest } = props;
+export const Notebook: FC<NotebookProps> = ({
+  getAttachmentForm,
+  onAttached,
+  ...rest
+}) => {
   const { notebookId } = rest;
+  const canUseDom = useCanUseDom();
 
   return (
     <EditorUserInteractionsProvider>
       <EditorPasteInteractionMenuProvider>
         <EditorAttachmentsHandler
-          notebookId={notebookId}
+          notebookId={rest.notebookId}
           getAttachmentForm={getAttachmentForm}
           onAttached={onAttached}
         />
         <NotebookLoader key={notebookId} {...rest} />
-        {!props.readOnly && !inLocalDev && (
+        {!rest.readOnly && !inLocalDev && (
           <NotebookLogs notebookId={notebookId} />
         )}
-        {isFlagEnabled('COMPUTER_STATS') && <EditorStats />}
+        {isFlagEnabled('COMPUTER_STATS') && canUseDom && <EditorStats />}
       </EditorPasteInteractionMenuProvider>
     </EditorUserInteractionsProvider>
   );
