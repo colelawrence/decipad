@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { BlockDependents } from '@decipad/computer';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
@@ -203,7 +202,7 @@ export const BlockDragHandle = ({
             </MenuItem>
           )}
           {children}
-          {isFlagEnabled('CODE_INTEGRATIONS_AI_BUTTON') && aiButton}
+          {aiButton}
           <MenuItem disabled>
             <hr css={{ color: cssVar('highlightColor') }} />
           </MenuItem>

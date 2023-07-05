@@ -167,7 +167,7 @@ export const WrapperIntegrationModalDialog: FC<
         <div css={rightButtonsContainerStyles}>
           {tabStage === 'connect' && (
             <>
-              {showAiButton && (
+              {isFlagEnabled('CODE_INTEGRATIONS_AI_BUTTON') && showAiButton && (
                 <TextAndIconButton
                   text="AI assistance"
                   size="normal"
