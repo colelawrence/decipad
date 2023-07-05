@@ -6,7 +6,7 @@ import waitForExpect from 'wait-for-expect';
 import { createDocSyncEditor, DocSyncEditor } from '.';
 
 describe('pad editor persistence', () => {
-  let editor: DocSyncEditor | undefined;
+  let editor: DocSyncEditor;
   let onLoadedImpl: ((source: string) => void) | undefined;
   const onLoaded = (source: string) => {
     if (onLoadedImpl) {
@@ -40,7 +40,7 @@ describe('pad editor persistence', () => {
   });
 
   test('loads', async () => {
-    let loaded = false;
+    let loaded = editor.isLoadedLocally;
     onLoadedImpl = (source: string) => {
       expect(source).toBe('local');
       loaded = true;

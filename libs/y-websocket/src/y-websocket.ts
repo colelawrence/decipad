@@ -179,8 +179,10 @@ const setupWS = async (provider: TWebSocketProvider) => {
       };
 
       websocket.onclose = (ev) => {
-        // eslint-disable-next-line no-console
-        console.debug('WS closed', ev);
+        if (!ev.wasClean) {
+          // eslint-disable-next-line no-console
+          console.debug('WS closed uncleanly', ev.code, ev.reason);
+        }
         messageSubscription.unsubscribe();
         provider.ws = undefined;
         provider.wsconnecting = false;

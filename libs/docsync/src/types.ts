@@ -20,6 +20,8 @@ export type DocSyncEditor = MyEditor &
   YjsEditor &
   CursorEditor & {
     isReadOnly?: boolean;
+    isLoadedLocally: boolean;
+    isLoadedRemotely: boolean;
     onLoaded: (cb: OnLoadedCallback) => void;
     offLoaded: (cb: OnLoadedCallback) => void;
     onSaved: (cb: OnSavedCallback) => void;

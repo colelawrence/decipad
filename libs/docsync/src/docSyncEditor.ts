@@ -137,6 +137,8 @@ export function docSyncEditor<E extends MyEditor>(
       events.emit('loaded', 'remote');
     },
     isDocSyncEnabled: true,
+    isLoadedLocally: false,
+    isLoadedRemotely: false,
     markVersion: (version: string) =>
       store?.markVersion(version) || Promise.resolve(),
     sameVersion: (version: string) =>

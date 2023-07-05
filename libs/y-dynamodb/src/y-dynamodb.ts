@@ -183,13 +183,8 @@ export class DynamodbPersistence extends Observable<string> {
 
     const pushToDataBase = async () => {
       if (toDelete.length > 1) {
-        console.log(
-          `compaction: will compact ${toDelete.length} records`,
-          toDelete
-        );
         await this.storeUpdate(getDefined(merged), 'compaction', true);
         data.docsyncupdates.batchDelete(toDelete);
-        console.log(`compaction: compacted ${toDelete.length} records`);
       }
       merged = undefined;
       toDelete = [];

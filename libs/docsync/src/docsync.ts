@@ -191,9 +191,11 @@ export function createDocSyncEditor(
       ensureInitialDocument(editor);
     }
     if (source === 'remote') {
+      syncEditor.isLoadedRemotely = true;
       loadedRemotely = true;
     }
     if (source === 'local') {
+      syncEditor.isLoadedLocally = true;
       loadedLocally = true;
     }
     if (loadedRemotely && loadedLocally) {
