@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import { createContext, FC, ReactNode, useContext } from 'react';
 import { Computer } from '@decipad/computer';
 
 export type ComputerContextValue = Computer;
@@ -9,9 +9,8 @@ export const ComputerContextProvider: FC<{
   children?: ReactNode;
   computer?: Computer;
 }> = ({ children, computer }) => {
-  const [value] = useState(() => computer ?? new Computer());
   return (
-    <ComputerContext.Provider value={value}>
+    <ComputerContext.Provider value={computer ?? new Computer()}>
       {children}
     </ComputerContext.Provider>
   );
