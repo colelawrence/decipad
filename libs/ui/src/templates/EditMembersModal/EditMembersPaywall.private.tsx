@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ClosableModal } from '../../organisms';
 import { cssVar, p14Bold, p14Regular, p32Medium } from '../../primitives';
 import { Button } from '../../atoms';
-import { DeciBoxes } from '../../icons';
+import { DeciBoxesFilled } from '../../icons';
 
 type EditMembersPaywallProps = {
   closeHref: string;
@@ -21,7 +21,7 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           <Paragraph>$15 per seat per month</Paragraph>
         </Section>
 
-        <DeciDecoration children={<DeciBoxes />} />
+        <DeciDecoration children={<DeciBoxesFilled />} />
 
         <FeaturesCard>
           <Section>
@@ -38,8 +38,8 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           <Section>
             <SubHeading>Data Integrations</SubHeading>
             <List>
-              <li>CSV Uploads: up to 300k cells</li>
-              <li>Media Uploads: Unlimited</li>
+              <li>CSV Uploads: up to 30k cells</li>
+              <li>Media Uploads: up to 10MB</li>
               <li>Live Connections: 500 queries / month</li>
             </List>
           </Section>

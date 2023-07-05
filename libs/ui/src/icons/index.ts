@@ -60,6 +60,7 @@ export { Date } from './Date/Date';
 export { DatePicker } from './DatePicker/DatePicker';
 export { Deci } from './Deci/Deci';
 export { DeciBoxes } from './DeciBoxes/DeciBoxes';
+export { DeciBoxesFilled } from './DeciBoxes/DeciBoxesFilled';
 export { Delete } from './Delete/Delete';
 export { Discord } from './Discord/Discord';
 export { Disk } from './Disk/Disk';

@@ -10,7 +10,7 @@ export * from './data-view';
 export * from './decorator-kinds';
 export * from './element-kinds';
 export * from './event-interception';
-export * from './files';
+export * from './import-data';
 export * as IntegrationTypes from './integrations';
 export * from './interactive-elements';
 export * from './mark-kinds';

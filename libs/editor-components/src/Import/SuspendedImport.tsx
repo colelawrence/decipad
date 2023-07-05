@@ -1,9 +1,14 @@
 import { isTableResult } from '@decipad/computer';
-import { ImportElement, useTEditorRef } from '@decipad/editor-types';
+import {
+  ImportElement,
+  SubscriptionPlan,
+  useTEditorRef,
+  MAX_IMPORT_CELL_COUNT,
+} from '@decipad/editor-types';
 import { requirePathBelowBlock } from '@decipad/editor-utils';
 import { formatError } from '@decipad/format';
 import { ImportResult, tryImport } from '@decipad/import';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { Spinner } from '@decipad/ui';
 import { findNodePath, removeNodes, withoutNormalizing } from '@udecode/plate';
 import { useSession } from 'next-auth/react';
@@ -13,8 +18,6 @@ import { importTable } from './importTable';
 interface SuspendedImportProps {
   element: ImportElement;
 }
-
-const MAX_IMPORT_CELL_COUNT = 1000;
 
 export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
   const editor = useTEditorRef();
@@ -27,6 +30,9 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
   const session = useSession();
   const [promise, setPromise] = useState<Promise<ImportResult[]> | undefined>();
   const insertedTable = useRef(false);
+  const { workspaceInfo } = useCurrentWorkspaceStore();
+
+  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
 
   if (!fetched && fetching && promise) {
     throw promise;
@@ -47,7 +53,7 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
           const p = tryImport(
             { computer, url: new URL(element.url), provider: element.source },
             {
-              maxCellCount: MAX_IMPORT_CELL_COUNT,
+              maxCellCount: MAX_IMPORT_CELL_COUNT[plan],
             }
           );
           setPromise(p);
@@ -76,6 +82,7 @@ export const SuspendedImport: FC<SuspendedImportProps> = ({ element }) => {
     element.url,
     fetched,
     fetching,
+    plan,
     session.data?.user?.id,
   ]);
 
