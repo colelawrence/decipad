@@ -1,0 +1,1855 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] Decipad Investor Update: Mar 2023"
+        }
+      ],
+      "type": "h1",
+      "id": "c10g-eEVoLLAS9QtsCdNa"
+    },
+    {
+      "children": [
+        {
+          "text": "Date: "
+        },
+        {
+          "text": "exprRef_VCURlwKn2niclsc265c1M",
+          "magicnumberz": true
+        },
+        {
+          "text": " \nAuthors: "
+        },
+        {
+          "text": "exprRef_GCaZKPjQRk3Z0rfkCeIq9",
+          "magicnumberz": true
+        },
+        {
+          "text": " \nRunway: "
+        },
+        {
+          "text": "exprRef_ivIKhvT4117HMlqWDBM10",
+          "magicnumberz": true
+        },
+        {
+          "text": " \nCash: "
+        },
+        {
+          "text": "exprRef_EM2KzSOJ4HS_ZlYQFp0La",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "id": "BejumXHeJkniwlbJNk0yQ",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "tl;dr:"
+        }
+      ],
+      "type": "h2",
+      "id": "KsY_13AqhZuEqmbG_DaIl"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "nh-XJMpb52A8UCv9sCBkN",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Tracking to exit private beta in June and launch paid plans for pros & teams. "
+                }
+              ],
+              "type": "lic",
+              "id": "rjMLZQ8JQObNMdBgVnYKb"
+            }
+          ],
+          "type": "li",
+          "id": "uPigH9ZphfCCKiEpghBzj"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "We are 100% focused on working alongside our design partners to enable priority use cases, close critical feature gaps and smash their expectations."
+                }
+              ],
+              "type": "lic",
+              "id": "XFTyrScTzqnsNAARb8jLd"
+            }
+          ],
+          "type": "li",
+          "id": "xZssdJ2zqsnpnghuXgJyH"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Initial explorations kicked-off with Notion on an integration. "
+                }
+              ],
+              "type": "lic",
+              "id": "1eCOrD0dIClZZzEsKvaxl"
+            }
+          ],
+          "type": "li",
+          "id": "aLKpFFeYHyZWlMsgrQaMA"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Interviewing marketing agencies and freelancers who specialize in content marketing (e.g. articles/SEO) if you recommend anyone great. "
+                }
+              ],
+              "type": "lic",
+              "id": "13N-JvXR2CVeTp2MKue4X"
+            }
+          ],
+          "type": "li",
+          "id": "mCvp09QC5nkyhYPNn5l-i"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "We did an extensive model with our design partner YLD for them to analyse purchase offers from private equity. We anonymized the model and shared it here "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "https://app.decipad.com/n/PE-Offer-Analysis%3AIC7uyhYnAztqQYx4FxF6S"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://app.decipad.com/n/PE-Offer-Analysis%3AIC7uyhYnAztqQYx4FxF6S",
+                  "id": "U44njpCNvkroT9azTRXl8"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "MqNw48LMLi3aCwJyml9qZ"
+            }
+          ],
+          "type": "li",
+          "id": "4fWZt0pR3ON0hPh6v4UTd"
+        }
+      ],
+      "type": "ul",
+      "id": "uf9HCy4dFiCfOKYT2hLBT"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "ok4W3-d1zV53BEWIfXA_2"
+    },
+    {
+      "children": [
+        {
+          "text": "Design Partners"
+        }
+      ],
+      "type": "h2",
+      "id": "LlqGSBRVKnrUcWjCzVFEk"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "8_ag6pZokz7EOeQn6kfAV",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Partner Spotlight: ",
+                  "bold": true
+                },
+                {
+                  "text": "SPAN Energy "
+                }
+              ],
+              "type": "lic",
+              "id": "9h-xUrv_imx2gsSDxftgf"
+            }
+          ],
+          "type": "li",
+          "id": "0lqjiRAcGjndrX4Nji9I5"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "See Model in Decipad: ",
+                  "bold": true
+                },
+                {
+                  "text": "Confidential "
+                },
+                {
+                  "children": [
+                    {
+                      "text": "[Here]"
+                    }
+                  ],
+                  "type": "a",
+                  "url": "https://app.decipad.com/n/SPAN-Cost-Analysis%3AvzLYO8W_tEh0QtEXpkM3N",
+                  "id": "vTfdA_y3ilSUXIwno6Mo9"
+                },
+                {
+                  "text": ""
+                }
+              ],
+              "type": "lic",
+              "id": "2CqMte-lYxmuoRU6YvFvO"
+            }
+          ],
+          "type": "li",
+          "id": "TLNN990P7h_E0EmGRP3MX"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Champion:",
+                  "bold": true
+                },
+                {
+                  "text": " Regional Sales Manager"
+                }
+              ],
+              "type": "lic",
+              "id": "QF5F2pZ4c4P-r0Upxjszu"
+            }
+          ],
+          "type": "li",
+          "id": "7ccXgq3LZa_LsUB3fSelO"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Use Case Type:",
+                  "bold": true
+                },
+                {
+                  "text": " Proposal / Cost Savings Calculator"
+                }
+              ],
+              "type": "lic",
+              "id": "SJPr9ccXOAeeoH17EODmg"
+            }
+          ],
+          "type": "li",
+          "id": "mjq-NKv0v4H1-dqvC0y8w"
+        }
+      ],
+      "type": "ul",
+      "id": "YBvs8CVxdRGqdWxWQtdCQ"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "img",
+      "url": "https://app.decipad.com/api/pads/vzLYO8W_tEh0QtEXpkM3N/attachments/1TQzQz8Y59ZPcTj0diNEX",
+      "id": "I0oSrnYTMuPhDaqO5svzK",
+      "width": 389
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Goal:",
+                  "bold": true
+                },
+                {
+                  "text": " Help prospective customers understand the long term savings of investing in SPAN solar panels; higher upfront cost relative to competitors."
+                }
+              ],
+              "type": "lic",
+              "id": "KohGbBbfB3XHc8Kjwpe1t"
+            }
+          ],
+          "type": "li",
+          "id": "eN3DnAQI2zSqvO2Hg1ymG"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Why Decipad",
+                  "bold": true
+                },
+                {
+                  "text": ": Currently using a spreadsheet for this use case, but it's not optimal for explaining scenarios to clients in a friendly way"
+                }
+              ],
+              "type": "lic",
+              "id": "dNCMmEvMw67svqIK7ROVD"
+            }
+          ],
+          "type": "li",
+          "id": "KFGdmLs8zLCi62bPr4r8b"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Challenge:",
+                  "bold": true
+                },
+                {
+                  "text": " Not data sophisticated. Unlike our product manager and data analyst design partners, this persona is not self sufficient. "
+                }
+              ],
+              "type": "lic",
+              "id": "bMkF0koMZS09AHFWnwIh8"
+            }
+          ],
+          "type": "li",
+          "id": "J0C26R_FdIv80QY5NPZ89"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Next Steps",
+                  "bold": true
+                },
+                {
+                  "text": ": Testing effectiveness with clients and other sellers. "
+                }
+              ],
+              "type": "lic",
+              "id": "JRzpyN83qeL2KdwlhPoiQ"
+            }
+          ],
+          "type": "li",
+          "id": "0p-_Bta-vHi3szvQMPSrQ"
+        }
+      ],
+      "type": "ul",
+      "id": "3T08H6mi-V3-SF22y9K0A"
+    },
+    {
+      "children": [
+        {
+          "text": "Use the below dropdown to see status of other Design Partners.",
+          "italic": true
+        }
+      ],
+      "type": "callout",
+      "id": "qxw6LlfY9vHZxzdvFoSZs",
+      "color": "Catskill",
+      "icon": "Paperclip"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "DesignPartner"
+            }
+          ],
+          "id": "3DaDytJ9qbBdZyS8AzV3t",
+          "type": "caption",
+          "icon": "People"
+        },
+        {
+          "children": [
+            {
+              "text": "YLD"
+            }
+          ],
+          "id": "CTQ3kLbuQkGVmMzvMbKvb",
+          "type": "dropdown",
+          "options": [
+            {
+              "id": "KVuvVbLHWKhn26dHOC6Dh",
+              "value": "Spotify"
+            },
+            {
+              "id": "ndEwtO9hRt9kiELui_jTw",
+              "value": "PetsApp"
+            },
+            {
+              "id": "a4u6kLWqwhNcFJWwmwndm",
+              "value": "Djinni"
+            },
+            {
+              "id": "SmI6M2V_jSm0u3DiMaEap",
+              "value": "Span"
+            },
+            {
+              "id": "emsZ4AcyZd3YbuOWfmqGD",
+              "value": "YLD"
+            },
+            {
+              "id": "ym8QbbBzxS2AaRMaomFcW",
+              "value": "Subvisual"
+            },
+            {
+              "id": "wiItPsay7YUpX-CJKGat_",
+              "value": "U-Trust"
+            }
+          ]
+        }
+      ],
+      "id": "H5JZhz0Xhd7LduiTZM45B",
+      "type": "def",
+      "variant": "dropdown",
+      "coerceToType": {
+        "kind": "string"
+      }
+    },
+    {
+      "children": [
+        {
+          "text": "With "
+        },
+        {
+          "text": "Selected.Name",
+          "magicnumberz": true
+        },
+        {
+          "text": " we are on the "
+        },
+        {
+          "text": "Selected.Stage",
+          "magicnumberz": true
+        },
+        {
+          "text": " stage. The use case is "
+        },
+        {
+          "text": "Selected.UseCase",
+          "magicnumberz": true
+        },
+        {
+          "text": " and our champion is a "
+        },
+        {
+          "text": "Selected.Champion",
+          "magicnumberz": true
+        },
+        {
+          "text": ". "
+        }
+      ],
+      "id": "P23tv-LH-2_cW-H1ngOBc",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Top needs to support use case: "
+        }
+      ],
+      "type": "p",
+      "id": "wq6xlmK7SVS0avnzqg_HV"
+    },
+    {
+      "children": [
+        {
+          "text": " "
+        },
+        {
+          "text": "exprRef_7cOMmBRgke50wo6GUaihB",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "nm_7edOooRg2tg61calvI"
+    },
+    {
+      "children": [
+        {
+          "text": "Built by the Community"
+        }
+      ],
+      "type": "h3",
+      "id": "1OlWgcF0sLY98SWJMXUCS"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "kQ8qRlfV7fpiQifFA1m3s",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Note: We are limiting access to select, advanced waitlist users while we improve usability"
+        }
+      ],
+      "id": "FeAYsTHrGgaaYgRBgRNxy",
+      "type": "callout",
+      "icon": "Paperclip",
+      "color": "Catskill"
+    },
+    {
+      "children": [
+        {
+          "text": "Weekly Budget Tracker by Issac ["
+        },
+        {
+          "children": [
+            {
+              "text": "Here"
+            }
+          ],
+          "type": "a",
+          "url": "https://app.decipad.com/n/Weekly-Budget%3AW_KZIy2UYBFW67k3CT5n9",
+          "id": "RXgrjyegUyr8RdrGsaHaO"
+        },
+        {
+          "text": "]"
+        }
+      ],
+      "type": "p",
+      "id": "QtzPAdd4-4rPG79VilfW0"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "img",
+      "url": "https://pbs.twimg.com/media/Fq2NoJfXgAEaRNL?format=jpg&name=medium",
+      "id": "_HZZ0-3Q9ntmOZC_HaeeX"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "bdIr-SMtWxLc7ZuM9MCG9"
+    },
+    {
+      "children": [
+        {
+          "text": "Product"
+        }
+      ],
+      "type": "h3",
+      "id": "7Eu4HoXs2ZAyvXG6_7Bzx"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "sHJDrAEhXFnQP7vWgKxNp",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Focused on making priority use cases feasible and delightful"
+        }
+      ],
+      "id": "SjpxUMvoxUelDBrUa02yv",
+      "type": "callout",
+      "icon": "Compass",
+      "color": "Catskill"
+    },
+    {
+      "children": [
+        {
+          "text": "Modeling / Reporting"
+        }
+      ],
+      "id": "ROFKn2ReDKAQh7XYjq2lp",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Data",
+                  "bold": true
+                },
+                {
+                  "text": " "
+                },
+                {
+                  "text": "Integrations:",
+                  "bold": true
+                },
+                {
+                  "text": " Prioritizing based on design partner needs [Target: Q2]"
+                }
+              ],
+              "type": "lic",
+              "id": "xQ_mlHvJBdWovOKgGfoL1"
+            }
+          ],
+          "type": "li",
+          "id": "OR3sX_944PkekenMDMaus"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Extracting data from a data set:",
+                  "bold": true
+                },
+                {
+                  "text": " Currently requires advanced knowledge of the language. Exploring drag and drop interactions.  [Target: Q2]"
+                }
+              ],
+              "type": "lic",
+              "id": "kacIDpMBUy2MMhTuuWe0m"
+            }
+          ],
+          "type": "li",
+          "id": "1-gk6zAgSM64LBBem8-X-"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Working with Time Series:",
+                  "bold": true
+                },
+                {
+                  "text": " Critical to support foundational reporting metrics (e.g. month-over-month % change) [Target: Q2]"
+                }
+              ],
+              "type": "lic",
+              "id": "c0xf38OdlRHHMSqIwLBjd"
+            }
+          ],
+          "type": "li",
+          "id": "NXr574l7ITKj8coked9QE"
+        }
+      ],
+      "type": "ul",
+      "id": "dH3sNagfEDGfhgMZyfirQ"
+    },
+    {
+      "children": [
+        {
+          "text": "Platform "
+        }
+      ],
+      "type": "p",
+      "id": "eCvJjS16zd4OJkyeo8ET7"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Workspaces",
+                  "bold": true
+                },
+                {
+                  "text": ": A shared space for teams [April/May; in-progress]"
+                }
+              ],
+              "type": "lic",
+              "id": "TwlNWFHyY3l8v5bU2pBZP"
+            }
+          ],
+          "type": "li",
+          "id": "f2Bc2a2VS3ycLZWyUELle"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Commenting:",
+                  "bold": true
+                },
+                {
+                  "text": " A way for team members to collaborate on a shared notebook [May; not started]"
+                }
+              ],
+              "type": "lic",
+              "id": "9rAaVA7OyJQ68jiVppe9R"
+            }
+          ],
+          "type": "li",
+          "id": "QMOTdxZfGByoIMf8e_Tzv"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Payments:",
+                  "bold": true
+                },
+                {
+                  "text": " Launch paid plans for pros and teams [June; not started]"
+                }
+              ],
+              "type": "lic",
+              "id": "7c_lBYcEDjBo2-MO8G3np"
+            }
+          ],
+          "type": "li",
+          "id": "M7Re8KOWHKbQlgYI1Pelk"
+        }
+      ],
+      "type": "ul",
+      "id": "N5Wsq4JxNOBxPxBfRD_x2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "d1mhQF6qaCWZ80xLMaJzv"
+    },
+    {
+      "children": [
+        {
+          "text": "People & Financials"
+        }
+      ],
+      "type": "h3",
+      "id": "FPzUwpgDmq2v9YQzGwzqj"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "9ME5nibQzXLJVQJsbTlpG",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "We tightened our budget and let two of our collaborators go. Over the next month we will let two more go. This has been long in the making, as we attempted to have a team that is full time and centralised around London. We have "
+        },
+        {
+          "text": "exprRef_ivIKhvT4117HMlqWDBM10",
+          "magicnumberz": true
+        },
+        {
+          "text": " runway. February management reports available in "
+        },
+        {
+          "children": [
+            {
+              "text": "Dropbox"
+            }
+          ],
+          "type": "a",
+          "url": "https://www.dropbox.com/s/sclid2fmq3apwrk/N1N%20Ltd%20-%20Management%20Report%20February%202023.pdf?dl=0",
+          "id": "dDwm6HVD4CTK3pua1PZch"
+        },
+        {
+          "text": "."
+        }
+      ],
+      "type": "p",
+      "id": "gJsEk6kLQG507pHmkE6O8"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "AvgBurn"
+                }
+              ],
+              "id": "Ey_FLa29WvsIpUXfisnQz",
+              "type": "caption",
+              "icon": "Battery"
+            },
+            {
+              "children": [
+                {
+                  "text": "£100000 per month"
+                }
+              ],
+              "id": "7eSn8xPN8SgKBu2QtDu0C",
+              "type": "exp"
+            }
+          ],
+          "id": "EIBwjrcsK3sDkozJyGg46",
+          "type": "def",
+          "variant": "expression",
+          "coerceToType": {
+            "kind": "number",
+            "date": "day"
+          },
+          "isHidden": true
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Cash"
+                }
+              ],
+              "id": "z-1vgIrF0HnoLCTnViZaE",
+              "type": "caption",
+              "icon": "Wallet"
+            },
+            {
+              "children": [
+                {
+                  "text": "£1370000"
+                }
+              ],
+              "id": "15N_BSJgW8Ya5oCp0dCGq",
+              "type": "exp"
+            }
+          ],
+          "id": "EM2KzSOJ4HS-ZlYQFp0La",
+          "type": "def",
+          "variant": "expression",
+          "coerceToType": {
+            "kind": "number",
+            "date": "day"
+          },
+          "isHidden": true
+        }
+      ],
+      "id": "96_pLvPH-Ru-eVBXX9v2t",
+      "type": "columns"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "lGg7jAgDlBKw3TO3Yo275",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Helpful calculations"
+        }
+      ],
+      "id": "yDApYUKz24u0PB98Qqf-J",
+      "type": "h3",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "e2yeviX_fzEc7ufa-eTqv",
+      "type": "divider",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Today = date(2023-04-07)"
+        }
+      ],
+      "id": "VCURlwKn2niclsc265c1M",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Authors = [\"Kelly\", \"Nuno\"]"
+        }
+      ],
+      "isHidden": true,
+      "type": "code_line",
+      "id": "GCaZKPjQRk3Z0rfkCeIq9"
+    },
+    {
+      "children": [
+        {
+          "text": "Runway_Months = round("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "CJKM4LrldSvalc3SgocDq",
+          "type": "smart-ref",
+          "blockId": "EM2KzSOJ4HS-ZlYQFp0La",
+          "lastSeenVariableName": "Cash"
+        },
+        {
+          "text": " / "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "edaMzp2hcxMAstCCoO6M9",
+          "type": "smart-ref",
+          "blockId": "EIBwjrcsK3sDkozJyGg46",
+          "lastSeenVariableName": "AvgBurn"
+        },
+        {
+          "text": ")"
+        }
+      ],
+      "type": "code_line",
+      "id": "ivIKhvT4117HMlqWDBM10",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Runway_EndDate = "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "2C7QWlv4MSP89APPVoyu7",
+          "type": "smart-ref",
+          "blockId": "VCURlwKn2niclsc265c1M",
+          "lastSeenVariableName": "Today"
+        },
+        {
+          "text": " + "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "ZyDbXcKjKnb3eHHAiyl9J",
+          "type": "smart-ref",
+          "blockId": "ivIKhvT4117HMlqWDBM10",
+          "lastSeenVariableName": "Runway_Months"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "id": "dDVmy0FiE5iRUYfm9OEXx",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "DesignPartners"
+                }
+              ],
+              "id": "nRzLh7IB-zlEfwkc3nGUV",
+              "type": "table-var-name"
+            }
+          ],
+          "id": "7ZPhp8JUwkoBNsOmgvP-g",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Name"
+                }
+              ],
+              "id": "0-_yn9mX4jX6OYeDiDtkN",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Stage"
+                }
+              ],
+              "id": "M8Afz9KF1mXP2KqszoQur",
+              "type": "th",
+              "cellType": {
+                "kind": "dropdown",
+                "id": "JSF8K_jpKGU7-eQ4Ce-yx",
+                "type": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Description"
+                }
+              ],
+              "id": "lzDpGoXpCrM4W7JRMOsfw",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "UseCase"
+                }
+              ],
+              "id": "vYwzwY5yJ7OxQHfYoJW9b",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Requirements"
+                }
+              ],
+              "id": "KcH7xihvOC2OpZYDys8OP",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "OtherUseCases"
+                }
+              ],
+              "id": "FIVCYXHnk9s-B-41B1z7O",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Source"
+                }
+              ],
+              "id": "8mjd4ZSEV6Yd_T0GCxPGb",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Industry"
+                }
+              ],
+              "id": "Tnfk5S8MH22sQoD8OiXHq",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Champion"
+                }
+              ],
+              "id": "D3NGphbfuAGptWJzr16rW",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            }
+          ],
+          "id": "zkgTI7J-xix9scfY18ORb",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Spotify"
+                }
+              ],
+              "id": "OHRKHgKeKlp2-b0Y5UvI1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_dxBS3Psocmp5ZV7dP6HqM"
+                }
+              ],
+              "id": "4qt_GFxYwJEEIkp2X9CJO",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Weekly reporting used by internal teams to inform product decisions. Spotify converted into a Design Partner by using our tool in a PLG motion. The champion found it better suited to large teams. Spotify sees an oppty for Decipad to replace a matrix of tooling they are currently using to communicate reports/updates: BigQuerry > gSheets > Thought Spot > Metabase"
+                }
+              ],
+              "id": "Pad0ymM-5Pmu_E8AJyJ8i",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Weekly Product Reporting (Internal)"
+                }
+              ],
+              "id": "5snb1m-akgJhxr8uxurTs",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1. Integrations (BigQuery)\n2. Collaboration with private sharing\n3. Charts that support use case\n4. Support for time series comparisons (e.g. MoM % Change Comparison)\n\n\n"
+                }
+              ],
+              "id": "ihuDBsJn2eOJY9c-ORfhi",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "No other use cases identified"
+                }
+              ],
+              "id": "UHwzp8jyyS7mOewDPQCAb",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "PLG for individual use, found better fit to use Decipad for work use cases."
+                }
+              ],
+              "id": "fYN74bjkdptsCumLcE4Ke",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Tech (Music)"
+                }
+              ],
+              "id": "MQ0xbqI4n3-Ulp0vHhfAF",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Product Manager"
+                }
+              ],
+              "id": "f_VA78MHg6AKPjv9xb-im",
+              "type": "td"
+            }
+          ],
+          "id": "-pqYhilKX2bft2KwllQgr",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "YLD"
+                }
+              ],
+              "id": "dXhuoXW1k2aN_h9StuIJk",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lJ3N9mOTWaZ8mP1vC6_US"
+                }
+              ],
+              "id": "sXb_q52AfUEuy56mWzzYH",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Working on their client balanced score cards that enable the business to keep track of profitability and resource utilisation."
+                }
+              ],
+              "id": "v61Y_5ZDM-i_zgHbkp0wE",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Weekly Reporting (Internal)"
+                }
+              ],
+              "id": "TKWKhpoHFKR8Xjo_vDLqV",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1. Integrations (Harvest, Xero),\n2. Collaboration with private sharing\n3. Charts that support use cases"
+                }
+              ],
+              "type": "td",
+              "id": "WQaCLk5xIX90p6wzctEh-"
+            },
+            {
+              "children": [
+                {
+                  "text": "Other use cases include:  Pricing and Customer proposals (made from same data). Business planning, Salary review cycles, Commission planning"
+                }
+              ],
+              "id": "GSShx3LYF3UQO6X4Hyft1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Founders/employees network."
+                }
+              ],
+              "id": "g4PaTP8grzOQwkq22yh9S",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Tech (Consultancy)"
+                }
+              ],
+              "id": "6nlMOb10Yb50QmcOb4hAY",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Head of Commercial"
+                }
+              ],
+              "id": "5WV0YM1hng4xL8b657Bjc",
+              "type": "td"
+            }
+          ],
+          "id": "R_bGaxixAZNVRv8yPxG4y",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Djinni"
+                }
+              ],
+              "id": "BsEj4gB7yRtfHCB-J6GYX",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_dxBS3Psocmp5ZV7dP6HqM"
+                }
+              ],
+              "id": "SnMbNVZPoGND1to6_XADs",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Helping them automate and be more efficient with their monthly hiring reports to executive team and specific clients"
+                }
+              ],
+              "id": "UbQ5j3YFaZo0CYDpYHgdP",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Monthly Reporting (Teams, and Clients)"
+                }
+              ],
+              "id": "xM8Loz8-Hf2vKS1d-0LGM",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1. Integrations (Google sheets), better charts\n2. 4. Support for calculating time comparisons (e.g. MoM % Change Comparison)"
+                }
+              ],
+              "id": "Yr6yMkGg6sgm34x7WdxBW",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "No other use cases identified"
+                }
+              ],
+              "id": "oHDhGD0ggEMRshhmsTNC1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Founders/employees network."
+                }
+              ],
+              "id": "ksiigim0gjl_uCkogOeFz",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Tech (Recruitment)"
+                }
+              ],
+              "id": "mlaMP0t8OMXvJBWP5gfFA",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Data Analyst"
+                }
+              ],
+              "id": "HizxwQ8T7bbWQKIMmJCcz",
+              "type": "td"
+            }
+          ],
+          "id": "iCCLMZ8nUZ_jLii74r9-g",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "PetsApp"
+                }
+              ],
+              "id": "rrD9d7SI2wZVKc1m_ygG8",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lJ3N9mOTWaZ8mP1vC6_US"
+                }
+              ],
+              "id": "hJ-0QADM9ZSdmsW1-TX2_",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Currently selecting the first use case to chase together. their use cases"
+                }
+              ],
+              "id": "6ca-GuCPBPzVlLFS_m2A0",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Business Planning"
+                }
+              ],
+              "id": "_OSB96fMAtkFdG4SoDGvu",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "No improvements identified yet"
+                }
+              ],
+              "id": "iDQnOciTHLOQSUdY3eGo6",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Other use cases include:   Business planning, OKR tracking, incentive plans, cap table management and SDR compensation letters. "
+                }
+              ],
+              "id": "gKkCkgBBMzheg2e-OK-rP",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Founders/employees network."
+                }
+              ],
+              "id": "LglFtXhoM-hyMrj_Cmk4G",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Tech (Pets)"
+                }
+              ],
+              "id": "yI1nkyyqCfMN7G0PQjf9f",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Co-founder"
+                }
+              ],
+              "id": "1AJgAi8abOfmeJDQtKjms",
+              "type": "td"
+            }
+          ],
+          "id": "lzr3gDEafHmMsiLwUpdXb",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Subvisual"
+                }
+              ],
+              "id": "336Ua8srof2fn3tkeTDve",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_dxBS3Psocmp5ZV7dP6HqM"
+                }
+              ],
+              "id": "2dTQiK1aTyokq1Z37MEe1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Wants to use Decipad to create a operating system for all group companies. They are trying to see where best to start, suggested salary raises and interactive letters to measure the impact of a raise + benefits on net salary compensation"
+                }
+              ],
+              "id": "9XDU_AVqeVsI7wwXQTEnZ",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Business Planning"
+                }
+              ],
+              "id": "b7m491HFLnb61CnwbiNLD",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "No improvements identified yet"
+                }
+              ],
+              "id": "sIcTg6-YDdvRp7SuLOxOd",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Other use cases include:  Business planning, Financial transparency, Salary increases, Salary calculators for employees"
+                }
+              ],
+              "id": "z0nnPmM2ckfDcXkh9QrN3",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Founders/employees network."
+                }
+              ],
+              "id": "78UytPKJjBhDeMkqO00sb",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Tech (Incubator)"
+                }
+              ],
+              "id": "FjDbH1YL41YhATIZaG5Mv",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Head of Operations"
+                }
+              ],
+              "id": "qSf2QQjW5HOGxnKG6xJ4r",
+              "type": "td"
+            }
+          ],
+          "id": "mEsb2YXsaA_jjy0ekwBSQ",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Span"
+                }
+              ],
+              "id": "4hNAabQQAHxREiI8mArtH",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_lJ3N9mOTWaZ8mP1vC6_US"
+                }
+              ],
+              "id": "xB2ZirE1tdYjcHStzW3eH",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Want to use Decipad to demonstrate the ROI of investing in SPAN Solar panels Currently, using GSheets, but feel it's not a friendly medium for explaining ROI scenarios to clients. "
+                }
+              ],
+              "id": "ZAaTzyvaUal-jKBNZZTbb",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Sales Proposals "
+                }
+              ],
+              "id": "sXsLJ6Kj4pr4MJuxVTDKs",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1. More controls to hide/lock data in a published notebook.\n2. Controls to hide/lock in a shared notebook\n3. Controlling customer access to the document"
+                }
+              ],
+              "id": "QBklsWfxQMDCPWY42j59J",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "No other use cases identified"
+                }
+              ],
+              "id": "P6SJ0jGn_VOUSs55Quggs",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Waitlist"
+                }
+              ],
+              "id": "w6DWe2Ukbm7RGxQ1pMHEM",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Energy"
+                }
+              ],
+              "id": "wE9hGfuRzzlWRt91faQtM",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Regional Sales Manager"
+                }
+              ],
+              "id": "1XkPGyBx9FN1RFOeDlRIk",
+              "type": "td"
+            }
+          ],
+          "id": "AfrH9MJ9cfReFiT3SixjK",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "U-Trust"
+                }
+              ],
+              "id": "Uop1h1_L23OEC1JfLzi5y",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "exprRef_dxBS3Psocmp5ZV7dP6HqM"
+                }
+              ],
+              "id": "TKLpMgL8OZrGB0T91KjK8",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Pipeline analysis and product level reporting and insights. A better way for sales, marketing, product to stay aligned. "
+                }
+              ],
+              "id": "vFLYGGHNztrYqzEWdFsAI",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Product and revenue reporting"
+                }
+              ],
+              "id": "2vR-b5BS_Q9jlFDVl_KrO",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1. Integrations into CRM (Pipedrive)\n2. Integrations to product systems (Mixpanel)\n3. Charts that support use cases\n4. Support for time series comparisons (e.g. MoM % Change Comparison)"
+                }
+              ],
+              "id": "I18uvSvWKrMbTCvTV67qB",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "No other use cases identified"
+                }
+              ],
+              "id": "c0Vt7PlBjyOVAyL-sRtW1",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Founders/employees network."
+                }
+              ],
+              "id": "MjefdHu2CpZXaO0Z1cR9Z",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "Crypto"
+                }
+              ],
+              "id": "Ir3FKP9OviYO223oOO6Ls",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "CMO"
+                }
+              ],
+              "id": "BoA5LgRo5PTVpjTT9MgFJ",
+              "type": "td"
+            }
+          ],
+          "id": "oPTl_muFl6zhHKFna019x",
+          "type": "tr"
+        }
+      ],
+      "id": "-rcJZ08ZgyGCvhPjmVssk",
+      "type": "table",
+      "isHidden": true,
+      "version": 2,
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Stage"
+            }
+          ],
+          "id": "PCswsz7fIV-gF8tbrpe0r",
+          "type": "caption"
+        },
+        {
+          "children": [
+            {
+              "text": "Product development"
+            }
+          ],
+          "id": "31qbdREJZmskjTzeXUbJt",
+          "type": "dropdown",
+          "options": [
+            {
+              "id": "dxBS3Psocmp5ZV7dP6HqM",
+              "value": "Initial setup"
+            },
+            {
+              "id": "lJ3N9mOTWaZ8mP1vC6_US",
+              "value": "Product development"
+            }
+          ]
+        }
+      ],
+      "id": "JSF8K_jpKGU7-eQ4Ce-yx",
+      "type": "def",
+      "variant": "dropdown",
+      "coerceToType": {
+        "kind": "string"
+      },
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Selected = lookup("
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "RhEQ28JTZ5ZIeYWiddvG3",
+          "type": "smart-ref",
+          "blockId": "-rcJZ08ZgyGCvhPjmVssk",
+          "lastSeenVariableName": "DesignPartners"
+        },
+        {
+          "text": ", "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "4T9WP9Gxm53KBlNPB8oCX",
+          "type": "smart-ref",
+          "blockId": "H5JZhz0Xhd7LduiTZM45B",
+          "columnId": null,
+          "lastSeenVariableName": "DesignPartner"
+        },
+        {
+          "text": ")"
+        }
+      ],
+      "type": "code_line",
+      "id": "EncfTIol3M-L0Hz25p8m2",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Requirements = Selected.Requirements"
+        }
+      ],
+      "id": "7cOMmBRgke50wo6GUaihB",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "KoH-7Lm-8JGBDpML3daqZ"
+    }
+  ]
+}

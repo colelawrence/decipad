@@ -45,6 +45,15 @@ test.describe('Dashboard snapshot', () => {
         )
       : expect(pads).toMatchObject(
           [
+            '[Template] Capitalisation table for seed founders',
+            '[Template] Decipad Investor Update: Mar 2023',
+            '[Template] How much is Apple worth? Breaking down a DCF model.',
+            '[Template] Offer Letter',
+            '[Template] Performance summary letter',
+            '[Template] Sales Report: Monthly Pipeline Update',
+            '[Template] Shilling Founders Fund | An innovative approach to profit sharing',
+            '[Template] Sprint Capacity Calculation for Scrum Teams',
+            '[Template] Understanding stock options at an early stage startup',
             'Everything, everywhere, all at once',
             'Very weird loading when editing',
             'Welcome to Decipad!',
@@ -97,7 +106,7 @@ test.describe('Dashboard operations', () => {
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
       process.env.CI
         ? expect(pads).toHaveLength(3)
-        : expect(pads).toHaveLength(5);
+        : expect(pads).toHaveLength(14);
     });
   });
 
@@ -110,7 +119,7 @@ test.describe('Dashboard operations', () => {
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
       process.env.CI
         ? expect(pads).toHaveLength(4)
-        : expect(pads).toHaveLength(6);
+        : expect(pads).toHaveLength(15);
 
       pads = await getPadList(page);
       const copyIndex = pads.findIndex((pad) =>
