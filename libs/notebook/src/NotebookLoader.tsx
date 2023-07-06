@@ -1,6 +1,5 @@
 import { FC, Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
-import { useLocation } from 'react-router-dom';
 import { lastValueFrom } from 'rxjs';
 import {
   ComputerContextProvider,
@@ -103,11 +102,15 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     init();
   }
 
-  const location = useLocation();
-
   useEffect(() => {
-    return destroy; // always destroy the editor on unmount
-  }, [destroy, location]);
+    return () => {
+      const { pathname } = window.location;
+      const match = pathname.match(/^\/n\/.*%3A(.*)$/);
+      if (!match || match[1] !== notebookId) {
+        destroy(); // destroy the editor on unmount
+      }
+    };
+  }, [destroy, notebookId]);
 
   // docSync
 
