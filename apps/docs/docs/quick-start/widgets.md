@@ -10,11 +10,11 @@ Widgets are interactive blocks that allow readers to explore your notebook assum
 
 To **create a new widget**, click on the `+` button next to an empty line and select the type of widget you want to create from the dropdown menu. You can also create a widget with the keyboard by typing `/` on an empty paragraph, selecting the widget type using the arrow keys, and pressing enter.
 
-1. **Update widgets name**: When you create a new widget, it's assigned a default name, such as Input1 or Slider1. To update a widget name, replace the old name with a new one in the top left corner of the widget. This will make it easier to identify your widget.
+1.  **Update widgets name**: When you create a new widget, it's assigned a default name, such as Input1 or Slider1. To update a widget name, replace the old name with a new one in the top left corner of the widget. This will make it easier to identify your widget.
 
-2. **Update widget colors and icons**. To change the widget's color and icon, click the pencil icon next to the widget name, and select a new color and icon from the menu.
+2.  **Update widget colors and icons**. To change the widget's color and icon, click the pencil icon next to the widget name, and select a new color and icon from the menu.
 
-3. **Place widgets side by side** to save space. Hover over the widget you want to move, hold the `⸬` button that appears on the left, and move the widget to the side of another widget. A blue vertical line should appear to confirm the new location. Release the `⸬` button to place the widget in its new location.
+3.  **Place widgets side by side** to save space. Hover over the widget you want to move, hold the `⸬` button that appears on the left, and move the widget to the side of another widget. A blue vertical line should appear to confirm the new location. Release the `⸬` button to place the widget in its new location.
 
 ## Widget Types
 

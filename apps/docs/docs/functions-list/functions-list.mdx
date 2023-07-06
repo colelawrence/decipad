@@ -1,0 +1,85 @@
+---
+sidebar_position: 90
+sidebar_class_name: formula-icon
+pagination_next: null
+pagination_prev: null
+---
+
+# Functions List
+
+Here you can find all functions supported on Decipad.
+
+import { FunctionsListTable } from '@site/src/components/FunctionsListTable';
+
+## Date Functions
+
+<FunctionsListTable>
+
+| Name                 | Syntax                        | Description                                                                                                                               |
+| -------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [contains](contains) | [Range] contains [Date]       | Checks if a specific date is within a given range.                                                                                        |
+| [pick()](pick)       | pick(Date, [year/month/day])  | Extracts the year, month, or day from a given date.                                                                                       |
+| [round()](round)     | round(Date, [year/month/day]) | Adjusts the precision of a date. It is useful when you want to perform calculations based on the month or year instead of a specific day. |
+
+</FunctionsListTable>
+
+## Finance Functions
+
+<FunctionsListTable>
+
+| Name                                   | Syntax                                                  | Description                                                                                                                                    |
+| -------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [compoundrate()](compound)              | compoundrate(Rate, Number of Periods)                   | Calculates the compound rate over a specified number of periods based on a constant rate.                                                      |
+| [futurevalue()](future-value)          | futurevalue(Rate, Number of Periods, Initial Amount)    | Calculates the future value of an investment considering the total number of periods, initial amount, and a constant interest rate.            |
+| [netpresentvalue()](net-present-value) | netpresentvalue(Discount Rate, Future Cashflows Column) | Calculates the net present value of an investment based on a list or column of periodic cash flows and a discount rate.                        |
+| [paymentamounts()](payment-amounts)    | paymentamounts(Rate, Number of Periods, Amount)         | Calculates the annual payment amount of a loan considering the borrowed amount, the number of repayment periods, and a constant interest rate. |
+
+</FunctionsListTable>
+
+## Number Functions
+
+<FunctionsListTable>
+
+| Name                               | Syntax                     | Description                                                                             |
+| ---------------------------------- | -------------------------- | --------------------------------------------------------------------------------------- |
+| [abs()](absolute-number)           | abs(Number)                | Returns the absolute value of a number, removing the negative sign if present.          |
+| [acos()](/functions-list/trigonometric-functions#cos--acos)  | acos(Angle)                | Computes trigonometric functions for angles.                                            |
+| [asin()](/functions-list/trigonometric-functions#sin--asin)  | asin(Angle)                | Computes trigonometric functions for angles.                                            |
+| [atan()](/functions-list/trigonometric-functions#tan--atan)  | atan(Angle)                | Computes trigonometric functions for angles.                                            |
+| [cos()](/functions-list/trigonometric-functions#cos--acos)   | cos(Angle)                 | Computes trigonometric functions for angles.                                            |
+| [factorial()](factorial)           | factorial(Number)          | Computes factorials, which are commonly used in probability calculations.               |
+| [getunit()](get-number-units)      | getunit(Number)            | Removes the units from a number, allowing you to work with the numbers alone.           |
+| [ln()](natural-logarithm)          | ln(Number)                 | Calculates the natural logarithm of a given number.                                     |
+| [mod](division-remainder)          | [Number] mod [Number]      | Calculates the remainder when one number is divided by another.                         |
+| [round()](round)                   | round(Number, [Precision]) | Rounds a number to a specified number of decimal places or to the nearest whole number. |
+| [sin()](/functions-list/trigonometric-functions#sin--asin)   | sin(Angle)                 | Computes trigonometric functions for angles.                                            |
+| [sqrt()](square-root)              | sqrt(Number)               | Calculates the square root of a given number.                                           |
+| [stripunit()](remove-number-units) | stripunit(Number)          | Retrieves the units of a given number.                                                  |
+| [tan()](/functions-list/trigonometric-functions#tan--atan)   | tan(Angle)                 | Computes trigonometric functions for angles.                                            |
+
+</FunctionsListTable>
+
+## Table Functions
+
+<FunctionsListTable>
+
+| Name                       | Syntax                           | Description                                                                                            |
+| -------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [average()](average)       | average(Column)                  | Calculates the average of a column.                                                                    |
+| [concatenate()](concatenate)       | concatenate(Table, Table)                | Combines two tables into a new table.                                                                  |
+| [count()](count)           | count(Column)                    | Counts the number of rows in a column.                                                                 |
+| [filter()](filter)         | filter(Table, Condition)         | Filters table rows based on a condition.                                                               |
+| [first()](first)           | first(Column)                    | Extracts the first element from a column.                                                              |
+| [grow()](grow)             | grow(Initial, Rate, Column)      | Calculates the compound growth of an initial value across rows.                                        |
+| [last()](last)             | last(Table.Column)               | Extracts the last element from a column.                                                               |
+| [lookup()](lookup)         | lookup(Table, Condition)         | Finds a row that matches a condition from a table.                                                     |
+| [max()](max)               | max(Column)                      | Calculates the largest number from a column of numbers or the most recent date from a column of dates. |
+| [min()](min)               | min(Column)                      | Calculates the smallest number from a column of numbers or the earliest date from a column of dates.   |
+| [previous()](previous)     | previous(InitialValue, [Column]) | References the previous value within a table.                                                          |
+| [reverse()](reverse)       | reverse(Table)                   | Reverses the order of rows or a single column.                                                         |
+| [sort()](sort)             | sort(Column)                     | Reorders a column in ascending order.                                                                  |
+| [stepgrowth()](stepgrowth) | stepgrowth(Column)               | Calculates the change between values in a column.                                                      |
+| [sum()](sum)               | sum(Column)                      | Calculates the sum of a column.                                                                        |
+| [unique()](unique)         | unique(Column)                   | Extracts the unique values from a column.                                                              |
+
+</FunctionsListTable>

@@ -14,9 +14,9 @@ Decipad is an interactive notebook that helps everyone tell stories using data.
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
-<YouTubePlayer videoId="fFm_EjSJmmc" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png"/>
+<YouTubePlayer videoId="fFm_EjSJmmc" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png" />
 
-<br/>
+<br />
 
 ## Start Exploring
 
@@ -27,54 +27,23 @@ Card,
 } from '@site/src/components/GalleryCards';
 
 <GridContainer>
-              <Card
-                title="Templates"
-                notebook="/docs/gallery"
-                description="Notebooks to get you started."
-              />
-              <Card
-                title="Videos"
-                notebook="/docs/videos"
-                description="Watch quick videos on all things Decipad."
-              />
-              <Card
-                title="Notebooks"
-                notebook="/docs/quick-start/formulas"
-                description="Combine numbers and narrative to share insights on data."
-              />
-              <Card
-                title="Formulas"
-                notebook="/docs/quick-start/formulas"
-                description="Create quick calculations people can follow."
-              />
-              <Card
-                title="Tables"
-                notebook="/docs/quick-start/tables"
-                description="Organize data and create quick calculations."
-              />
-              <Card
-                title="Charts"
-                notebook="/docs/quick-start/charts"
-                description="Create quick visualizations for your data."
-              />
-              <Card
-                title="Data Views"
-                notebook="/docs/quick-start/data-views"
-                description="Pivot your data to quickly highlight information."
-              />
-              <Card
-                title="Interactive Widgets"
-                notebook="/docs/quick-start/widgets"
-                description="Explore data in real-time and create interactive notebooks."
-              />
-              <Card
-                title="Inline Results"
-                notebook="/docs/quick-start/inline-results"
-                description="Explain results and conclusions."
-              />
-             <Card
-                title="Data Integrations"
-                notebook="/docs/integrations/basics"
-                description="Quickly import data to analyze and visualize."
-              />
-            </GridContainer>
+  <Card title="Templates" notebook="/docs/gallery" description="Notebooks to get you started." />
+
+  <Card title="Videos" notebook="/docs/videos" description="Watch quick videos on all things Decipad." />
+
+  <Card title="Notebooks" notebook="/docs/quick-start/formulas" description="Combine numbers and narrative to share insights on data." />
+
+  <Card title="Formulas" notebook="/docs/quick-start/formulas" description="Create quick calculations people can follow." />
+
+  <Card title="Tables" notebook="/docs/quick-start/tables" description="Organize data and create quick calculations." />
+
+  <Card title="Charts" notebook="/docs/quick-start/charts" description="Create quick visualizations for your data." />
+
+  <Card title="Data Views" notebook="/docs/quick-start/data-views" description="Pivot your data to quickly highlight information." />
+
+  <Card title="Interactive Widgets" notebook="/docs/quick-start/widgets" description="Explore data in real-time and create interactive notebooks." />
+
+  <Card title="Inline Results" notebook="/docs/quick-start/inline-results" description="Explain results and conclusions." />
+
+  <Card title="Data Integrations" notebook="/docs/integrations/basics" description="Quickly import data to analyze and visualize." />
+</GridContainer>

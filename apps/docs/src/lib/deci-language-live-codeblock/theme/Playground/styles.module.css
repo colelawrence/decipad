@@ -1,7 +1,7 @@
 .playgroundContainer {
   margin-bottom: var(--ifm-leading);
   border-radius: var(--ifm-global-radius);
-  box-shadow: var(--ifm-global-shadow-lw);
+  border: 1px solid #AAB1BD;
   overflow: hidden;
 }
 
@@ -23,9 +23,10 @@
 .playgroundEditor {
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace) !important;
+    font-family: ABCDiatypeMono-Regular;
   /*rtl:ignore*/
   direction: ltr;
-  background-color: rgb(41, 45, 62);
+  background-color: #323B49;
   padding: 0.75rem;
   caret-color: white;
 }
@@ -36,14 +37,36 @@ img {
 
 .playgroundPreview {
   padding: 0.75rem;
-  background-color: rgb(250, 250, 250);
-  color: black;
+  color: #323B49;
 }
 
 .playgroundError {
   padding: 0.75rem;
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace) !important;
-  background-color: rgb(200, 100, 100);
-  color: rgb(220, 220, 220);
+  color: rgb(221, 149, 149);
+  background-color: white;
+  white-space: initial;
+}
+
+.playgroundFooter {
+  display: flex;
+  padding: 5px 10px 15px 10px;
+}
+
+.playgroundMessage {
+  font-size: 10pt;
+  display: flex;
+  color: #AAB1BD;
+  font-family: Inter;
+  border-top: 1px solid #eee;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 10px 5px 0px 5px;
+}
+
+.playgroundContainer table{
+  border: 0px;
+  --deci-borderTable: #eee;
 }

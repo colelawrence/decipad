@@ -51,10 +51,10 @@ Additionally, in tables, you can use the keyword `first` with the If-Then-Else s
 
 :::note Examples
 
-Showcase a different message on the first row: <br/>
+Showcase a different message on the first row: <br />
 `if first then "I am the first row" else "I am not the first row"`
 
-Compute income increases based on a set value from a slider: <br/>
+Compute income increases based on a set value from a slider: <br />
 `if first then IncomeSlider else previous(0) + 5%`
 
 :::

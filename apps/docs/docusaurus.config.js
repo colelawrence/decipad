@@ -16,6 +16,16 @@ const plugins = [
     },
   ],
   [
+    '@docusaurus/plugin-content-docs',
+    {
+      id: 'language',
+      path: 'language',
+      routeBasePath: 'language',
+      sidebarPath: require.resolve('./sidebars.js'),
+      // ... other options
+    },
+  ],
+  [
     '@docusaurus/plugin-client-redirects',
     {
       redirects: [
@@ -129,6 +139,12 @@ const config = {
             to: 'videos',
             position: 'left',
             label: 'Videos',
+          },
+          {
+            to: 'language/overview',
+            position: 'left',
+            label: 'Developer Docs',
+            docId: 'language',
           },
           {
             to: 'help',

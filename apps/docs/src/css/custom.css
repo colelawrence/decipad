@@ -20,6 +20,11 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: ABCDiatypeMono-Regular;
+  src: url(ABCDiatypeMono-Regular.woff2);
+}
+
 :root {
   /* font-family */
   --ifm-font-family-base: 'Inter';
@@ -57,6 +62,9 @@
   /* Gray 200 */
   --ifm-color-primary-lightest: rgba(245, 247, 250, 1);
   --ifm-code-font-size: 95%;
+
+  /* tables */
+  --ifm-table-stripe-background: var(--ifm-table-background);
 }
 
 html[data-theme='dark'] {
@@ -250,11 +258,15 @@ hr {
   content: url("data:image/svg+xml,%3Csvg width='16' height='15' viewBox='0 0 16 15' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.16089 9.74757L3.99598 9.87833C4.61244 9.97488 5.05269 10.5395 5.00729 11.1756L4.94576 12.0378C4.92784 12.2889 5.06165 12.5254 5.28326 12.6348L5.90092 12.9391C6.12254 13.0485 6.38716 13.0075 6.56816 12.8371L7.1888 12.2504C7.64637 11.8178 8.35243 11.8178 8.8106 12.2504L9.43124 12.8371C9.61224 13.0082 9.87627 13.0485 10.0985 12.9391L10.7173 12.6342C10.9384 12.5254 11.0716 12.2896 11.0536 12.039L10.9921 11.1756C10.9467 10.5395 11.387 9.97488 12.0034 9.87833L12.8385 9.74757C13.0816 9.70968 13.2776 9.52331 13.3325 9.27767L13.4848 8.59451C13.5398 8.34886 13.4424 8.09405 13.2393 7.95229L12.5422 7.46406C12.0279 7.10353 11.8708 6.3996 12.1814 5.84659L12.6026 5.09744C12.725 4.87929 12.7047 4.60615 12.5512 4.40939L12.1241 3.86128C11.9706 3.66452 11.7149 3.58325 11.4795 3.65718L10.6719 3.91016C10.0752 4.09714 9.43901 3.78367 9.20963 3.19034L8.9002 2.38802C8.80941 2.15338 8.58779 1.99939 8.34108 2L7.65652 2.00183C7.40982 2.00245 7.1888 2.15765 7.0992 2.39291L6.79754 3.18606C6.57055 3.78306 5.93139 4.09898 5.33284 3.91077L4.49178 3.64679C4.25583 3.57225 3.99897 3.65413 3.84545 3.85211L3.42133 4.40084C3.26781 4.59943 3.2493 4.87318 3.37414 5.09133L3.80483 5.84232C4.12202 6.39593 3.96671 7.10659 3.44941 7.46894L2.76067 7.95168C2.55757 8.09405 2.4602 8.34886 2.51516 8.5939L2.66748 9.27706C2.72184 9.52331 2.91777 9.70968 3.16089 9.74757Z' fill='%23ECF0F6' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M9.06071 6.43929C9.64643 7.025 9.64643 7.975 9.06071 8.56071C8.475 9.14643 7.525 9.14643 6.93929 8.56071C6.35357 7.975 6.35357 7.025 6.93929 6.43929C7.525 5.85357 8.475 5.85357 9.06071 6.43929Z' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E ") !important;
 }
 
-.formula-icon a::before {
+.formula-icon .menu__list-item-collapsible a::before {
   width: 16px;
   height: 16px;
   margin-right: 6px;
   content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.4852 12.0591C3.831 13.9024 7.35628 14.3859 7.75919 11.4481C8.01706 9.56797 7.98188 6.87604 8.25049 4.91755C8.36101 4.11169 8.95715 2.06737 12.4018 3.13846' stroke='%234D5664' stroke-width='1.4' stroke-linecap='round'/%3E%3Cpath d='M5.28607 6.69739H11.2166' stroke='%23777E89' stroke-width='1.39083' stroke-linecap='round'/%3E%3C/svg%3E ") !important;
+}
+
+.formula-icon .clean-btn {
+  display: none;
 }
 
 .guides-icon .menu__list-item-collapsible a::before {
@@ -345,11 +357,6 @@ table thead svg {
 
 .theme-doc-markdown p {
   max-width: var(--deci-max-width);
-}
-
-/* Tables */
-table tr:nth-child(2n) {
-  background-color: rgba(204, 204, 204, 0.3);
 }
 
 /* Cards */
@@ -468,4 +475,55 @@ summary {
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+/* Tables*/
+
+table {
+  border-radius: 8px;
+  border: 1px solid #e5e9f0;
+  font-size: 9pt;
+}
+
+table tr {
+  border-top: 0px;
+  width: 100%;
+}
+
+table td {
+  padding: 8px 12px;
+  border-left: 0px;
+  border-color: #ecf0f6;
+}
+
+table th {
+  padding: 8px 12px;
+  border-top: 0px;
+  background-color: #f5f7fa;
+  text-align: left;
+  border-left: 1px;
+  color: #4d5664;
+  font-weight: 500;
+}
+
+table td:last-child {
+  border-right: 0px;
+}
+
+table th:last-child {
+  border-right: 0px;
+}
+
+tbody {
+  vertical-align: initial;
+}
+
+/*
+table tr:nth-child(2n) {
+  background-color: rgba(204, 204, 204, 0.3);
+}
+*/
+
+pre {
+  font-family: ABCDiatypeMono-Regular;
 }

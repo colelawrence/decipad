@@ -7,9 +7,9 @@ sidebar_class_name: new
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
-<YouTubePlayer videoId="RMrxUdhKVlE" thumbnailUrl="/docs/img/thumbnails/thumbnail-code-integrations.png"/>
+<YouTubePlayer videoId="RMrxUdhKVlE" thumbnailUrl="/docs/img/thumbnails/thumbnail-code-integrations.png" />
 
-<br/>
+<br />
 
 Retrieve data from web APIs and import it into Decipad using our Code Integration feature. To create a code integration, add a new integration block and choose "Code" (see [Integration Basics](/docs/integrations/basics) for details). In the code editor, you'll find an example that showcases how to fetch data from a public web API:
 

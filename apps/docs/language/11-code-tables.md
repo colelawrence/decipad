@@ -1,0 +1,242 @@
+---
+pagination_next: null
+pagination_prev: null
+---
+
+# Define a Code Table
+
+A table is a set of values indexed by name. You can define a table in the UI and in the language.
+
+```deci live
+MyTable = {
+  A = [1, 2, 3],
+  B = [4, 5, 6]
+}
+==> {
+  A = [1, 2, 3],
+  B = [4, 5, 6]
+}
+```
+
+## Units of columns
+
+Here, each column is a list with the same length. As with lists, you can specify the units of a given column:
+
+```deci live
+MyTable = {
+  A = [1, 2, 3] bananas,
+  B = [4, 5, 6] oranges
+}
+==> {
+  A = [1 bananas, 2 bananas, 3 bananas],
+  B = [4 oranges, 5 oranges, 6 oranges]
+}
+```
+
+## Columns with ranges
+
+You can also declare a column like this:
+
+```deci live
+MyTable = {
+  ArrivalDate = [date(2022-02-20) through date(2022-02-24) by day]
+}
+==> {
+  ArrivalDate = [2022-02-20, 2022-02-21, 2022-02-22, 2022-02-23, 2022-02-24]
+}
+```
+
+## Columns with calculations
+
+Instead of manually inputting values, each cell in a column can be based on the outputs of other cells:
+
+```deci live
+MyTable = {
+  ArrivalDate = [date(2022-02-20) through date(2022-02-24) by day],
+  DepartureDate = ArrivalDate + 7 days
+}
+==> {
+  ArrivalDate = [2022-02-20, 2022-02-21, 2022-02-22, 2022-02-23, 2022-02-24],
+  DepartureDate = [2022-02-27, 2022-02-28, 2022-03-01, 2022-03-02, 2022-03-03]
+}
+```
+
+## Using columns as a whole
+
+Sometimes, when deriving a column from another with an expression, you might want to use the whole column at once instead of doing your calculations on a row-by-row basis. For example, when you want to know the maximum of a column:
+
+```deci live
+Table = {
+  TestResults = [1, 2, 0, -3],
+  ComparedToMax = TestResults - max(Table.TestResults)
+}
+==> {
+  TestResults = [1, 2, 0, -3],
+  ComparedToMax = [-1, 0, -2, -5]
+}
+```
+
+Or analyze changes to your profits:
+
+```deci live
+InitialProfit = 500
+Table = {
+  Months = [date(2020-01) through date(2020-04) by month],
+  Profit = [InitialProfit, 300, 125, 230] GBP,
+  RelativeChangeInProfit = stepgrowth(Table.Profit),
+  PercentOfProfit = round(Profit / total(Table.Profit) in 1/100)
+}
+==> {
+  Months = [2020-01, 2020-02, 2020-03, 2020-04],
+  Profit = [500 £, 300 £, 125 £, 230 £],
+  RelativeChangeInProfit = [500 £, -200 £, -175 £, 105 £],
+  PercentOfProfit =
+
+ [43, 26, 11, 20]
+}
+```
+
+## Using previous values
+
+You can access previous column values by using the word `previous` and providing a value for the first cell, like this:
+
+```deci live
+Harvest = {
+  Date = [date(2022-02-20) through date(2022-03-05) by day],
+  Oranges = [10 oranges, 15, 20, 9, 4, 54, 23, 45, 53, 63, 54, 12, 0, 1],
+  Count = previous(0) + Oranges
+}
+==> {
+  Date = [2022-02-20, 2022-02-21, 2022-02-22, 2022-02-23, 2022-02-24, 2022-02-25, 2022-02-26, 2022-02-27, 2022-02-28, 2022-03-01, 2022-03-02, 2022-03-03, 2022-03-04, 2022-03-05],
+  Oranges = [10 oranges, 15 oranges, 20 oranges, 9 oranges, 4 oranges, 54 oranges, 23 oranges, 45 oranges, 53 oranges, 63 oranges, 54 oranges, 12 oranges, 0 oranges, 1 oranges],
+  Count = [1 oranges, 2 oranges, 3 oranges, 4 oranges, 5 oranges, 6 oranges, 7 oranges, 8 oranges, 9 oranges, 10 oranges, 11 oranges, 12 oranges, 13 oranges, 14 oranges]
+}
+```
+
+You can also access previous values from other columns by using the word `previous`, providing a value for the first cell and the name of the column you want to access. Here is an [example notebook](https://app.decipad.com/n/X-over-X-example%3A8LC3k8ETOTHfI4bUmt0BV) using `previous` to calculate the row-over-row change of a value. The basic syntax looks like this:
+
+```deci live
+Table = {
+  Column1 = [1, 2, 3, 4],
+  Column2 = previous(0, Column1)
+}
+==> {
+  Column1 = [1, 2, 3, 4],
+  Column2 = [0, 1, 2, 3]
+}
+```
+
+## Access columns
+
+You can access the table columns individually:
+
+```deci live
+Table = {
+  A = [1, 2, 3] bananas,
+  B = [4, 5, 6] oranges
+}
+
+Table.B
+==> [4 oranges, 5 oranges, 6 oranges]
+```
+
+You can then use them as lists:
+
+```deci live
+Table = {
+  A = [1, 2, 3] bananas,
+  B = [4, 5, 6] oranges
+}
+
+Table.A / Table.B
+==> [0.25 bananas per orange, 0.4 bananas per orange, 0.5 bananas per orange]
+```
+
+Even inside your table, you can refer to its previous columns if you need to aggregate them:
+
+```deci live
+Table = {
+  A = [1, 2, 3] bananas,
+  AverageBananas = total(Table.A) / len(Table.A)
+}
+==> {
+  A = [1 bananas, 2 bananas, 3 bananas],
+  AverageBananas =
+
+ [2 bananas, 2 bananas, 2 bananas]
+}
+```
+
+## Add columns
+
+Add new columns to a defined table with `.` followed by their name. Their sizes must match the existing table columns.
+
+```deci live
+MyTable = {
+  A = [1, 2, 3],
+  B = [4, 5, 6]
+}
+MyTable.C = [7, 8, 9]
+MyTable
+==> {
+  A = [1, 2, 3],
+  B = [4, 5, 6],
+  C = [7, 8, 9]
+}
+```
+
+## Index column
+
+You can use the first column as an index for the row by using cells of text:
+
+```deci live
+Flights = {
+  Number = ["TP123", "BA456", "EJ789"],
+  PassengerCount = [100, 150, 200]
+}
+==> {
+  Number = ['TP123', 'BA456', 'EJ789'],
+  PassengerCount = [100, 150, 200]
+}
+```
+
+When you extract a column, it remembers the original index:
+
+```deci live
+Flights = {
+  Number = ["TP123", "BA456", "EJ789"],
+  PassengerCount = [100, 150, 200]
+}
+
+Flights.PassengerCount
+==> [100, 150, 200]
+```
+
+You can still perform operations on that column, and it will still remember the original index:
+
+```deci live
+Flights = {
+  Number = ["TP123", "BA456", "EJ789"],
+  PassengerCount = [100, 150, 200]
+}
+
+Flights.PassengerCount - 100
+==> [0, 50, 100]
+```
+
+## Defining a first value in a column
+
+If you want to set an initial value in a column, you can use the `first` keyword. This only works in table formulas.
+
+```deci live
+Initial = 7
+
+Table = {
+  Id = [1 .. 10],
+  Total = if first then Initial else previous(0) + Initial
+}
+==> {
+  Id = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  Total = [7, 14, 21, 28, 35, 42, 49, 56, 63, 70]
+}
+```

@@ -1,0 +1,788 @@
+---
+sidebar_position: 90
+hide_table_of_contents: true
+sidebar_class_name: formula-icon
+pagination_next: null
+pagination_prev: null
+draft: true
+---
+
+# Functions List
+
+<!--
+import TOCInline from '@theme/TOCInline';
+
+<TOCInline toc={toc.filter((node) => node.level === 3)} minHeadingLevel={3} />
+-->
+
+import {
+  newNotebookBadge,
+  GridContainer,
+  Card,
+} from '@site/src/components/GalleryCards';
+
+---
+
+<br />
+
+### Round a Number
+
+:::tip Syntax
+
+`round(Number, [Precision])`
+
+:::
+
+Rounds a number to a specified number of decimal places or to the nearest whole number. You can also round a number down with `floor()` or `rounddown()` and round a number up with `ceil()` or `roundup()`.
+
+:::note Examples
+
+`round(3.145)` returns `3`. <br/>
+`roundup(3.145, 2)` return `3.15`. <br/>
+
+:::
+
+<br />
+
+### Square Root
+
+:::tip Syntax
+
+`sqrt(Number)`
+
+:::
+
+Calculates the square root of a given number.
+
+:::note Examples
+
+`sqrt(9)` returns the square root of 9, which is `3`.
+
+:::
+
+<br />
+
+### Absolute Number
+
+:::tip Syntax
+
+`abs(Number)` <br/>
+`abs(Table.Column)`
+
+:::
+
+Returns the absolute value of a number, removing the negative sign if present. You can also use the `abs()` formula to obtain the absolute values from a column of numbers.
+
+:::note Examples
+
+`abs(-20)` gives you the absolute value of -20, which is 20.
+
+:::
+
+<br />
+
+### Trigonometric Functions
+
+:::tip Syntax
+
+`sin(Angle)` / `asin(Angle)`: Computes the sine and inverse sine of an angle. <br/>
+`cos(Angle)` / `acos(Angle)`: Computes the cosine and inverse cosine of an angle. <br/>
+`tan(Angle)` / `atan(Angle)`: Computes the tangent and inverse tangent of an angle.<br/>
+
+:::
+
+Trigonometric functions can be used to calculate distances or angles.
+
+:::note Examples
+
+`sin(2 rad)` <br/>
+`sin(45 degrees)`
+
+:::
+
+<br />
+
+### Factorial
+
+:::tip Syntax
+
+`factorial(Number)`
+
+:::
+
+Computes factorials, which are commonly used in probability calculations.
+
+:::note Examples
+
+`factorial(3)`
+
+:::
+
+<br />
+
+### Natural Logarithm
+
+:::tip Syntax
+
+`ln(Number)`
+
+:::
+
+Calculates the natural logarithm of a given number.
+
+:::note Examples
+
+`ln(1)`
+
+:::
+
+### Division Remainder
+
+:::tip Syntax
+
+`[Number] mod [Number]`
+
+:::
+
+Calculates the remainder when one number is divided by another.
+
+:::note Examples
+
+`7 mod 3` = `1` <br/>
+`10 mod 2` = `2`
+
+:::
+
+<br />
+
+### Get Number Units
+
+:::tip Syntax
+
+`getunit(Number)`
+
+:::
+
+Removes the units from a number, allowing you to work with the numbers alone.
+
+:::note Examples
+
+`stripunit(5$ per mug)` will return `5`.
+
+:::
+
+<br />
+
+### Remove Number Units
+
+:::tip Syntax
+
+`stripunit(Number)`
+
+:::
+
+Retrieves the units of a given number.
+
+:::note Examples
+
+`getunit(10$)` will return `$`.
+
+:::
+
+<br />
+
+### Sum Rows
+
+:::tip Syntax
+
+`sum(Table.Column)` <br/>
+`total(Table.Column)`
+
+:::
+
+Calculates the sum of your column.
+
+:::note Examples
+
+`sum(Prices)` <br/>
+`sum(Sales.Prices)`
+
+:::
+
+<br />
+
+### Sum Rows that Meet a Condition
+
+:::tip Syntax
+
+`sumif(Table.Column, Table Column Condition)`
+
+:::
+
+Calculates the sum of an entire column based on your specified condition.
+
+:::note Examples
+
+`sumif(Sales.Prices, Sales.Discount > 10) `
+
+:::
+
+<br />
+
+### Column Average
+
+:::tip Syntax
+`average(Table.Column)`
+
+:::
+
+Calculate the average of a column. You can also use alternative syntaxes for improved readability: `avg()` and `mean()`.
+
+:::note Examples
+
+`average(Sales.Prices)`
+
+:::
+
+<br />
+
+### Column Average that Meet a Condition
+
+:::tip Syntax
+
+`averageif(Table.Column, Table Column Condition)`
+
+:::
+
+Calculate average of a column of numbers that meet your specified condition. You can also use alternative syntaxes for improved readability: `avgif()` and `meanif()`.
+
+:::note Examples
+
+`average(Sales.Prices, Sales.Discount > 10) `
+
+:::
+
+<br />
+
+### Count Rows
+
+:::tip Syntax
+
+`count(Table.Column)`
+
+:::
+
+Counts the number of rows in a column.
+
+:::note Examples
+
+`count(Sales.Entries)`
+
+:::
+
+<br />
+
+### Count Rows that Meet a Condition
+
+:::tip Syntax
+
+`countif(Table.Column, Condition)`
+
+:::
+
+Counts the number of rows on a column that satisfy the specified condition.
+
+:::note Examples
+
+`countif(Flights.Passengers > 100)`
+
+:::
+
+<br />
+
+### First Column Value
+
+:::tip Syntax
+
+`first(Table.Column)`
+
+:::
+
+Extracts the first element from a column.
+
+:::note Examples
+
+`first(Flights.Seats)`
+
+:::
+
+<br />
+
+### Last Column Value
+
+:::tip Syntax
+
+`last(Table.Column)`
+
+:::
+
+Extracts the last element from a column.
+
+:::note Examples
+
+`last(Flights.Seats)`
+
+:::
+
+<br />
+
+### Sort Table Rows
+
+:::tip Syntax
+
+`sort(Table.Column)`
+
+:::
+
+Reorders a column in ascending order.
+
+:::note Examples
+
+`sort(Flight.Prices)`
+
+:::
+
+<br />
+
+### Sort Table Rows by Column
+
+:::tip Syntax
+
+`sortby(Table, Column)`
+
+:::
+
+Reorder table rows based on a specific column.
+
+:::note Examples
+
+`sortby(Prices, Prices.Discount)`
+
+:::
+
+<br />
+
+### Reverse Table Rows Order
+
+:::tip Syntax
+
+`reverse(Table)`
+
+:::
+
+Reverses the order of rows. Also works with single columns: `reverse(Table.Column)`.
+
+:::note Examples
+
+`reverse(Purchases)` <br/>
+`reverse(Purchases.Dates)`
+
+:::
+
+<br />
+
+### Column Size
+
+:::tip Syntax
+
+`len(Table.Column)`
+
+:::
+
+Returns the number of elements in a column.
+
+:::note Examples
+
+`len(Sales.Entries)`
+
+:::
+
+<br />
+
+### Column Max Value
+
+:::tip Syntax
+
+`max(Table.Column)`
+
+:::
+
+Calculate the largest number from a column of numbers or the most recent date from a column of dates.
+
+:::note Examples
+
+`max(Prices.Discount) ` <br/>
+`max([date(2050-Jan-01), date(2025-Jun-01)])` <br/>
+`max(Sales.Dates)`
+
+:::
+
+<br />
+
+### Column Min Value
+
+:::tip Syntax
+
+`min(Table.Column)`
+
+:::
+
+Calculate the smallest number from a column of numbers or the earliest date from a column of dates.
+
+:::note Examples
+
+`min(Prices.Discount) ` <br/>
+`min([date(2050-Jan-01), date(2025-Jun-01)])` <br/>
+`min(Sales.Dates)`
+
+:::
+
+<br />
+
+### Unique Values
+
+:::tip Syntax
+
+`unique(Column)`
+
+:::
+
+Extracts the uniques values from a column.
+
+:::note Examples
+
+`unique(Sales.ClientsID)`
+
+:::
+
+<br />
+
+### Forecast Growth
+
+:::tip Syntax
+
+`grow(Initial, Rate, Table.Column)`
+
+:::
+
+Calculates the compound growth of an initial value across your rows.
+
+:::note Examples
+
+`grow($10k, 5%, Investment.Years)`
+
+:::
+
+<br />
+
+### Step Growth
+
+:::tip Syntax
+
+`stepgrowth(Table.Column)`
+
+:::
+
+Calculates the change between values in a column.
+
+:::note Examples
+
+`stepgrowth(SalaryYears.Amount)`
+
+:::
+
+<br />
+
+### Combine Tables
+
+:::tip Syntax
+
+`cat(Table, Table)`
+
+:::
+
+Combines two tables into a new table.
+
+:::note Examples
+
+`cat(SalesDay1, SalesDay2)`
+
+:::
+
+<br />
+
+### Combine Columns
+
+:::tip Syntax
+
+`cat(Table.Column, Table.Column)`
+
+:::
+
+This formula joins two columns (of the same type) together, resulting in a new column. It can also add an element to the end or beginning of a column `cat(Item, Column)`.
+
+:::note Examples
+
+`cat(Day1.Sales, Day2.Sales)` <br/>
+`cat(5$, Day2.Sales)`
+
+:::
+
+<br />
+
+### Reference Previous Values
+
+:::tip Syntax
+
+`previous(InitialValue, [Table.Column])`
+
+:::
+
+References the previous value within a table. The first argument is the initial value, and if you want to reference the previous result in another column, you can pass its name as the second argument.
+
+:::note Examples
+
+`previous($10) + 5%` adds `$10` to the first row and adds `5%` to each subsequent row, taking into account the previous value.
+
+<GridContainer>
+  <Card
+    title="Demo notebook"
+    notebook="https://app.decipad.com/n/Previous-Function-for-Tables%3AQYek8urK8OpHyy1FeSpPy"
+    description="Interactive Demo that uses the previous function on tables."
+  />
+</GridContainer>
+
+:::
+
+<br />
+
+### Table Lookups
+
+:::tip Syntax
+
+`lookup(Table, Table Column Condition)`
+
+:::
+
+Find a row that matches a condition from a table.
+
+:::note Examples
+
+`lookup(Prices, Prices.Discount == 10%)`
+
+<!--
+<GridContainer>
+  <Card
+    title="Learn table lookups & filters"
+    notebook="/docs/advanced-concepts/lookups"
+    description="Lookups and filters are powerful techniques for accessing tables."
+  />
+</GridContainer>
+-->
+
+:::
+
+<br />
+
+### Filter a Table
+
+:::tip Syntax
+
+`filter(Table, Table Column Condition)`
+
+:::
+
+Filter table rows based on a condition.
+
+:::note Examples
+
+`filter(Prices, Prices.Discount > 20%)`
+
+<!--
+<GridContainer>
+  <Card
+    title="Learn table lookups & filters"
+    notebook="/docs/advanced-concepts/lookups"
+    description="Lookups and filters are powerful techniques for accessing tables."
+  />
+</GridContainer>
+-->
+
+:::
+
+<br />
+
+### Compound Rate
+
+:::tip Syntax
+
+`compoundrate(Rate, Number of Periods)`
+
+:::
+
+Calculates the compound rate over a specified number of periods based on a constant rate.
+
+:::note Examples
+
+`compoundrate(5%, 36 months)`
+
+:::
+
+<br />
+
+### Future Value
+
+:::tip Syntax
+
+`futurevalue(Rate, Number of Periods, Initial Amount)`
+
+:::
+
+Calculates the future value of an investment considering the total number of periods, initial amount, and a constant interest rate. `fv()` is the compact format for readability.
+
+:::note Examples
+
+`futurevalue(5%, 36 months, $50k)`
+
+:::
+
+<br />
+
+### Net Present Value
+
+:::tip Syntax
+
+`netpresentvalue(Discount Rate, Future Cashflows Column)`
+
+:::
+
+Calculates the net present value of an investment based on a list or column of periodic cash flows and a discount rate. `npv()` is the compact format for readability.
+
+:::note Examples
+
+`netpresentvalue(5%, Table.Column)`
+
+:::
+
+<br />
+
+### Payment Amounts
+
+:::tip Syntax
+
+`paymentamounts(Rate, Number of Periods, Amount)`
+
+:::
+
+Calculates the annual payment amount of a loan considering the borrowed amount, the number of repayment periods, and a constant interest rate. `pmt()` is the compact format for readability.
+
+:::note Examples
+
+`paymentamounts(3%, 36 months, $10k)`
+
+:::
+
+<br />
+
+### Check if a Range Contains a Date
+
+:::tip Syntax
+
+`[Range] contains [Date]`
+
+:::
+
+Checks if a specific date is within a given range.
+
+:::note Examples
+
+`range(date(2050-Jan-01) through date(2050-Dec-31)) contains date(2050-Feb-02 15:30)`
+
+:::
+
+<br />
+
+### Get Year, Month, or Day from Date
+
+:::tip Syntax
+
+`pick(Date, [year/month/day])`
+
+:::
+
+Extracts the year, month, or day from a given date.
+
+:::note Examples
+
+`pick(date(2050-Jan-01), year)`
+
+:::
+
+<br />
+
+### Date Precision
+
+:::tip Syntax
+
+`round(Date, [year/month/day])`
+
+:::
+
+Adjusts the precision of a date. It is useful when you want to perform calculations based on the month or year instead of a specific day.
+
+:::note Examples
+
+`round(date(2050-Jan-01), month)`
+
+:::
+
+| Name                                 | Syntax                                                                                         | Description                                                                                                                                    |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Round a Number                       | `round(Number, [Precision])`                                                                   | Rounds a number to a specified number of decimal places or to the nearest whole number.                                                        |
+| Square Root                          | `sqrt(Number)`                                                                                 | Calculates the square root of a given number.                                                                                                  |
+| Absolute Number                      | `abs(Number)`<br/>`abs(Table.Column)`                                                          | Returns the absolute value of a number, removing the negative sign if present.                                                                 |
+| Trigonometric Functions              | `sin(Angle)` / `asin(Angle)`<br/>`cos(Angle)` / `acos(Angle)`<br/>`tan(Angle)` / `atan(Angle)` | Computes trigonometric functions for angles.                                                                                                   |
+| Factorial                            | `factorial(Number)`                                                                            | Computes factorials, which are commonly used in probability calculations.                                                                      |
+| Natural Logarithm                    | `ln(Number)`                                                                                   | Calculates the natural logarithm of a given number.                                                                                            |
+| Division Remainder                   | `[Number] mod [Number]`                                                                        | Calculates the remainder when one number is divided by another.                                                                                |
+| Get Number Units                     | `getunit(Number)`                                                                              | Removes the units from a number, allowing you to work with the numbers alone.                                                                  |
+| Remove Number Units                  | `stripunit(Number)`                                                                            | Retrieves the units of a given number.                                                                                                         |
+| Sum Rows                             | `sum(Table.Column)`<br/>`total(Table.Column)`                                                  | Calculates the sum of a column.                                                                                                                |
+| Sum Rows that Meet a Condition       | `sumif(Table.Column, Table Column Condition)`                                                  | Calculates the sum of a column based on a specified condition.                                                                                 |
+| Column Average                       | `average(Table.Column)`                                                                        | Calculates the average of a column.                                                                                                            |
+| Column Average that Meet a Condition | `averageif(Table.Column, Table Column Condition)`                                              | Calculates the average of a column based on a specified condition.                                                                             |
+| Count Rows                           | `count(Table.Column)`                                                                          | Counts the number of rows in a column.                                                                                                         |
+| Count Rows that Meet a Condition     | `countif(Table.Column, Condition)`                                                             | Counts the number of rows in a column that satisfy a specified condition.                                                                      |
+| First Column Value                   | `first(Table.Column)`                                                                          | Extracts the first element from a column.                                                                                                      |
+| Last Column Value                    | `last(Table.Column)`                                                                           | Extracts the last element from a column.                                                                                                       |
+| Sort Table Rows                      | `sort(Table.Column)`                                                                           | Reorders a column in ascending order.                                                                                                          |
+| Sort Table Rows by Column            | `sortby(Table, Column)`                                                                        | Reorders table rows based on a specific column.                                                                                                |
+| Reverse Table Rows Order             | `reverse(Table)`<br/>`reverse(Table.Column)`                                                   | Reverses the order of rows or a single column.                                                                                                 |
+| Column Size                          | `len(Table.Column)`                                                                            | Returns the number of elements in a column.                                                                                                    |
+| Column Max Value                     | `max(Table.Column)`                                                                            | Calculates the largest number from a column of numbers or the most recent date from a column of dates.                                         |
+| Column Min Value                     | `min(Table.Column)`                                                                            | Calculates the smallest number from a column of numbers or the earliest date from a column of dates.                                           |
+| Unique Values                        | `unique(Column)`                                                                               | Extracts the unique values from a column.                                                                                                      |
+| Forecast Growth                      | `grow(Initial, Rate, Table.Column)`                                                            | Calculates the compound growth of an initial value across rows.                                                                                |
+| Step Growth                          | `stepgrowth(Table.Column)`                                                                     | Calculates the change between values in a column.                                                                                              |
+| Combine Tables                       | `cat(Table, Table)`                                                                            | Combines two tables into a new table.                                                                                                          |
+| Combine Columns                      | `cat(Table.Column, Table.Column)`                                                              | Joins two columns (of the same type) together, resulting in a new column.                                                                      |
+| Reference Previous Values            | `previous(InitialValue, [Table.Column])`                                                       | References the previous value within a table.                                                                                                  |
+| Table Lookups                        | `lookup(Table, Table Column Condition)`                                                        | Finds a row that matches a condition from a table.                                                                                             |
+| Filter a Table                       | `filter(Table, Table Column Condition)`                                                        | Filters table rows based on a condition.                                                                                                       |
+| Compound Rate                        | `compoundrate(Rate, Number of Periods)`                                                        | Calculates the compound rate over a specified number of periods based on a constant rate.                                                      |
+| Future Value                         | `futurevalue(Rate, Number of Periods, Initial Amount)`                                         | Calculates the future value of an investment considering the total number of periods, initial amount, and a constant interest rate.            |
+| Net Present Value                    | `netpresentvalue(Discount Rate, Future Cashflows Column)`                                      | Calculates the net present value of an investment based on a list or column of periodic cash flows and a discount rate.                        |
+| Payment Amounts                      | `paymentamounts(Rate, Number of Periods, Amount)`                                              | Calculates the annual payment amount of a loan considering the borrowed amount, the number of repayment periods, and a constant interest rate. |
+| Check if a Range Contains a Date     | `[Range] contains [Date]`                                                                      | Checks if a specific date is within a given range.                                                                                             |
+| Get Year, Month, or Day from Date    | `pick(Date, [year/month/day])`                                                                 | Extracts the year, month, or day from a given date.                                                                                            |
+| Date Precision                       | `round(Date, [year/month/day])`                                                                | Adjusts the precision of a date. It is useful when you want to perform calculations based on the month or year instead of a specific day.      |

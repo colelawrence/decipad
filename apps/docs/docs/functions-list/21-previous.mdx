@@ -1,0 +1,41 @@
+---
+hide_table_of_contents: true
+sidebar_class_name: hide-from-sidebar
+pagination_next: null
+pagination_prev: null
+---
+
+import {
+  newNotebookBadge,
+  GridContainer,
+  Card,
+} from '@site/src/components/GalleryCards';
+
+
+# Reference Previous Values
+
+
+**Syntax**:
+
+`previous(InitialValue, [Table.Column])`
+
+References the previous value within a table. The first argument is the initial value, and if you want to reference the previous result in another column, you can pass its name as the second argument.
+
+### Examples
+
+`previous($10) + 5%` adds `$10` to the first row and adds `5%` to each subsequent row, taking into account the previous value.
+
+```deci live
+Sales={
+  Year=[date(2020)..date(2023)]
+  Growth=previous($10) + 5%
+}
+```
+
+<GridContainer>
+  <Card
+    title="Demo notebook"
+    notebook="https://app.decipad.com/n/Previous-Function-for-Tables%3AQYek8urK8OpHyy1FeSpPy"
+    description="Interactive Demo that uses the previous function on tables."
+  />
+</GridContainer>

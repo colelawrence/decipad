@@ -9,65 +9,65 @@ Tables help you organize data, making it easier to read and understand. You can 
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
-<YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png"/>
+<YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png" />
 
 ## Create a Table
 
 **To create a new table**, go to your notebook, click the `+` button next to an empty line and select `Table` from the menu, or you can open the block menu by typing `/` on an empty paragraph, select `Table` using the `arrow keys`, and press `enter`.
 
-1. **Add Formulas to a Table**:
+1.  **Add Formulas to a Table**:
 
-   - You can add formulas to a table by clicking on any cell and starting with the equals sign (`=`).
-   - Alternatively, you can add formulas to a column by clicking on the column `▼` and selecting `Formula`.
+    - You can add formulas to a table by clicking on any cell and starting with the equals sign (`=`).
+    - Alternatively, you can add formulas to a column by clicking on the column `▼` and selecting `Formula`.
 
-2. **Add Quick Calculation Insights**:
+2.  **Add Quick Calculation Insights**:
 
-   - Click the `Calculate` button at the end of your table to perform quick calculations.
-   - Select the desired calculation based on the data type in the column (e.g., sum, count).
-   - The available calculations depend on the type of data in your table.
+    - Click the `Calculate` button at the end of your table to perform quick calculations.
+    - Select the desired calculation based on the data type in the column (e.g., sum, count).
+    - The available calculations depend on the type of data in your table.
 
-   You can easily drag and drop these calculations results:
+    You can easily drag and drop these calculations results:
 
-   - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-results)
-   - Into your formulas to reuse them. [Learn more about Formulas →](/docs/quick-start/formulas)
+    - Into your text to explain them. [Learn more about Inline Results →](/docs/quick-start/inline-results)
+    - Into your formulas to reuse them. [Learn more about Formulas →](/docs/quick-start/formulas)
 
-3. **Add Units to Table Values**:
+3.  **Add Units to Table Values**:
 
-   - To add units to table values, include them as text in the respective cell.
-   - For example, you can enter `$10` or `5oz` to indicate a currency or measurement.
-   - Alternatively, you can format a column to display units by clicking on the column `▼` and adding your custom unit.
+    - To add units to table values, include them as text in the respective cell.
+    - For example, you can enter `$10` or `5oz` to indicate a currency or measurement.
+    - Alternatively, you can format a column to display units by clicking on the column `▼` and adding your custom unit.
 
-4. **Add Units to Columns**:
+4.  **Add Units to Columns**:
 
-   - Click the down triangle button on a column, select `Change type`, and enter a new unit in the `create custom` field.
+    - Click the down triangle button on a column, select `Change type`, and enter a new unit in the `create custom` field.
 
-5. **Update Table and Column Names**:
+5.  **Update Table and Column Names**:
 
-   - After creating a table, you can update its default name by replacing it in the top left corner of the table.
-   - To update column names, click on the existing name and select a new one.
+    - After creating a table, you can update its default name by replacing it in the top left corner of the table.
+    - To update column names, click on the existing name and select a new one.
 
-6. **Add and Delete Columns and Rows**:
+6.  **Add and Delete Columns and Rows**:
 
-   - Add new columns by clicking the `+` button on the right side of the table.
-   - Delete a column by clicking the upside-down triangle button on the column and selecting `Delete column`.
-   - Add new rows by clicking the `+ Add row` button at the end of the table.
-   - Delete rows or insert new ones by hovering over a row, clicking the `⸬` button, and selecting the desired action.
+    - Add new columns by clicking the `+` button on the right side of the table.
+    - Delete a column by clicking the upside-down triangle button on the column and selecting `Delete column`.
+    - Add new rows by clicking the `+ Add row` button at the end of the table.
+    - Delete rows or insert new ones by hovering over a row, clicking the `⸬` button, and selecting the desired action.
 
-7. **Rearrange Table Columns and Rows**:
+7.  **Rearrange Table Columns and Rows**:
 
-   - You can rearrange table columns and rows by dragging and dropping them within the same table.
-   - To move a row, click and hold the `⸬` button on the left side of the row and drag it to a new position.
-   - To move a column, click and hold the `⸬` button on the left side of the column name and drag it to a new position.
+    - You can rearrange table columns and rows by dragging and dropping them within the same table.
+    - To move a row, click and hold the `⸬` button on the left side of the row and drag it to a new position.
+    - To move a column, click and hold the `⸬` button on the left side of the column name and drag it to a new position.
 
 To **delete a column**, click the **`⸬`** button on a column and select `Delete column`.
 
-8. **Update Column Data Types**:
+8.  **Update Column Data Types**:
 
-   - Hover over the column header, click the drop-down triangle button on a column, and choose a new column type from the list.
+    - Hover over the column header, click the drop-down triangle button on a column, and choose a new column type from the list.
 
-9. **Add Column Series**:
+9.  **Add Column Series**:
 
-   - Create a column series by selecting `Series` and then `Date` in the column's `Change type` menu. Specify the starting point, and subsequent dates will be calculated automatically.
+    - Create a column series by selecting `Series` and then `Date` in the column's `Change type` menu. Specify the starting point, and subsequent dates will be calculated automatically.
 
 10. **Hide Table Formulas**:
 
@@ -84,9 +84,9 @@ You can easily reuse and incorporate values from any column in your calculations
 
 To reference a table column in a calculation, follow these steps:
 
-1. Type the table name.
-2. Use a dot `.` to indicate the specific column within the table.
-3. Append the column name after the dot.
+1.  Type the table name.
+2.  Use a dot `.` to indicate the specific column within the table.
+3.  Append the column name after the dot.
 
 For example, if your table is named "Table" and you want to access the "Column" within it, write it as:
 
