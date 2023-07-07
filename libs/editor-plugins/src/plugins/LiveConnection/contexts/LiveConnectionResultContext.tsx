@@ -1,4 +1,6 @@
-import { ImportResult } from '@decipad/import';
+import { LiveConnectionResult } from '@decipad/live-connect';
+import { useBehaviorSubject } from '@decipad/react-utils';
+import { noop } from '@decipad/utils';
 import {
   FC,
   PropsWithChildren,
@@ -8,20 +10,31 @@ import {
 } from 'react';
 import { BehaviorSubject } from 'rxjs';
 
-type LiveConnectionResult$ = BehaviorSubject<ImportResult> | undefined;
+type LiveConnectionResult$ = BehaviorSubject<LiveConnectionResult>;
 
-export const LiveConnectionResultContext = createContext<
-  LiveConnectionResult$ | undefined
->(undefined);
+const defaultImportResult: LiveConnectionResult = {
+  retry: noop,
+  authenticate: noop,
+  result: {
+    loading: true,
+  },
+};
 
-export const useLiveConnectionResult = (): LiveConnectionResult$ | undefined =>
+export const LiveConnectionResultContext = createContext<LiveConnectionResult$>(
+  new BehaviorSubject(defaultImportResult)
+);
+
+export const useLiveConnectionResult$ = (): LiveConnectionResult$ =>
   useContext(LiveConnectionResultContext);
+
+export const useLiveConnectionResult = (): LiveConnectionResult =>
+  useBehaviorSubject(useLiveConnectionResult$());
 
 export const LiveConnectionResultContextProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
   const resultContextValue = useMemo(
-    () => new BehaviorSubject<ImportResult>({ loading: true }),
+    () => new BehaviorSubject<LiveConnectionResult>(defaultImportResult),
     []
   );
 

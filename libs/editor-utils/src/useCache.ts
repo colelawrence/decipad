@@ -19,7 +19,7 @@ const fetchValue = <V>(key: string): V | undefined => {
       return JSON.parse(serializedValue) as V;
     }
   } catch (err) {
-    console.error('Error fetching value:', err);
+    console.warn('Error fetching cached value:', (err as Error).message);
   }
   return undefined;
 };
@@ -29,7 +29,7 @@ const saveValue = <V>(key: string, value: V): void => {
     const serializedValue = stringify(value);
     localStorage.setItem(key, serializedValue);
   } catch (err) {
-    console.error('Error storing value:', err);
+    console.warn('Error storing cache value:', (err as Error).message);
   }
 };
 

@@ -20,13 +20,13 @@ import {
   TableButton,
   IntegrationBlock as UIIntegrationBlock,
 } from '@decipad/ui';
-import { getDefined } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { TNodeEntry, findNodePath, getParentNode } from '@udecode/plate';
 import { Hide, Show } from 'libs/ui/src/icons';
 import { useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
-import { useLiveConnectionCore } from '../hooks/useLiveConnectionCore';
+import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
+import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
 
 const captionWrapperStyles = css({
   display: 'flex',
@@ -110,9 +110,14 @@ export const LiveConnectionVarName: PlateComponent = ({
     }
   }, [computer, editor, parent, parentElem.id, parentPath]);
 
-  const { loading, result, error } = useLiveConnectionCore({
-    element: getDefined(parentElem),
-    deleted: false,
+  const {
+    result: { loading, result },
+    error,
+  } = useLiveConnectionResult();
+
+  const { onChangeColumnType } = useCoreLiveConnectionActions({
+    path: parentPath,
+    element: parentElem,
   });
 
   const meta = [];
@@ -158,6 +163,7 @@ export const LiveConnectionVarName: PlateComponent = ({
             toggleFirstRowIsHeader={toggleFirstRowIsHeader}
           />
         }
+        onChangeColumnType={onChangeColumnType}
       />
 
       {isFlagEnabled('LIVE_QUERY') &&

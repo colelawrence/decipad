@@ -2,7 +2,6 @@
 import { SimpleTableCellType } from '@decipad/editor-types';
 import { Result } from '@decipad/language';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { LiveCode, SegmentButtons, TextAndIconButton } from '../../atoms';
@@ -27,7 +26,7 @@ type IntegrationBlockProps = {
   readonly result?: Result.Result;
   readonly integrationChildren?: ReactNode;
   readonly firstTableRowControls?: ReactNode;
-  readonly onChangeColumnType?: (
+  readonly onChangeColumnType: (
     columnIndex: number,
     colType?: SimpleTableCellType
   ) => void;
@@ -56,7 +55,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   displayResults,
   result,
   firstTableRowControls,
-  onChangeColumnType = noop,
+  onChangeColumnType,
 }) => {
   const readOnly = useIsEditorReadOnly();
 

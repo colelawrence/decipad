@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { getNodeString } from '@udecode/plate';
 import {
   LiveConnectionElement,
@@ -15,11 +15,9 @@ import {
   useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import { Result } from '@decipad/computer';
-import { useSyncLiveConnectionResultToContext } from './useSyncLiveConnectionResultToContext';
-import { useLiveConnectionPersistResult } from './useLiveConnectionPersistResult';
-import { useLiveConnectionStore } from '../store/liveConnectionStore';
 import { useCoreLiveConnectionActions } from './useCoreLiveConnectionActions';
 import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';
+import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';
 
 interface UseLiveConnectionCoreProps {
   element: LiveConnectionElement | LiveDataSetElement;
@@ -50,7 +48,7 @@ export const useLiveConnectionCore = ({
       path,
       element,
     });
-  const { error, result, retry, authenticate } = useLiveConnection(computer, {
+  const liveConnectionResult = useLiveConnection(computer, {
     blockId: element.id,
     variableName: getNodeString(element.children[0]),
     url: element.url,
@@ -65,15 +63,15 @@ export const useLiveConnectionCore = ({
     beforeAuthenticate,
     externalDataSourceContext: ExternalDataSourceContext,
   });
-  useSyncLiveConnectionMetadata({ path, element, result });
-  useLiveConnectionPersistResult({ element, result, error });
-  useSyncLiveConnectionResultToContext({ element });
-  const [, store] = useLiveConnectionStore(element);
 
-  const clearCacheAndRetry = useCallback(() => {
-    store({ result: undefined, error: undefined, loading: false });
-    retry();
-  }, [retry, store]);
+  const { error, result, retry, authenticate } = liveConnectionResult;
+
+  useSyncLiveConnectionMetadata({ path, element, result });
+
+  const result$ = useLiveConnectionResult$();
+  useEffect(() => {
+    result$?.next(liveConnectionResult);
+  }, [liveConnectionResult, result$]);
 
   return useMemo(
     () => ({
@@ -83,15 +81,15 @@ export const useLiveConnectionCore = ({
       loading: result.loading ?? false,
       onChangeColumnType,
       setIsFirstRowHeader,
-      clearCacheAndRetry,
+      clearCacheAndRetry: retry,
     }),
     [
       authenticate,
-      clearCacheAndRetry,
       error,
       onChangeColumnType,
       result.loading,
       result.result,
+      retry,
       setIsFirstRowHeader,
     ]
   );

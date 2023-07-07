@@ -22,9 +22,10 @@ import {
 import { css } from '@emotion/react';
 import { getNodeString, setNodes } from '@udecode/plate';
 import pluralize from 'pluralize';
-import { useCallback, useMemo } from 'react';
-import { useLiveConnectionStore } from '../store/liveConnectionStore';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { map } from 'rxjs';
 import LiveDataSetCaption from './LiveDataSetCaption';
+import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';
 
 const captionWrapperStyles = css({
   display: 'flex',
@@ -96,7 +97,18 @@ export const LiveDataSetVarName: PlateComponent = ({
     changeOpen(true);
   }, [changeOpen]);
 
-  const [{ loading }] = useLiveConnectionStore(parent?.[0]) ?? {};
+  const [loading, setLoading] = useState(false);
+  const result$ = useLiveConnectionResult$();
+  useEffect(() => {
+    if (!result$) {
+      return;
+    }
+    const sub = result$
+      .pipe(map((r) => r.result.loading))
+      .subscribe(setLoading);
+
+    return () => sub.unsubscribe();
+  }, [result$]);
 
   const caption = (
     <div {...attributes} css={captionWrapperStyles}>
