@@ -93,7 +93,7 @@ export const useDataView = ({
     }, [availableColumns, editor, element]),
     {
       injectObservable: columnChanges$,
-      debounceTimeMs: 2000,
+      debounceTimeMs: 500,
     }
   );
 
