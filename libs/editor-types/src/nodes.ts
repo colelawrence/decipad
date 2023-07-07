@@ -9,12 +9,15 @@ import {
   EText,
   ETextEntry,
   PlateEditor,
+  TOperation,
   TReactEditor,
 } from '@udecode/plate';
 import { RefObject } from 'react';
 import { UndoManager } from 'yjs';
+import { Observable, Subject } from 'rxjs';
 import { EventInterceptor } from './event-interception';
 import { MyValue } from './value';
+import { ElementKind } from '.';
 
 /**
  * Node
@@ -32,10 +35,24 @@ export type UndoEditor = {
   withoutCapturingUndo?: (cb: () => void) => void;
 };
 
+export interface EditorObserverMessage<T extends MyElement = MyElement> {
+  opType: TOperation['type'];
+  element: T;
+}
+
 export type MyEditor = PlateEditor<MyValue> & {
   isDragging?: boolean;
   interceptEvent?: EventInterceptor;
   previewRef?: RefObject<HTMLDivElement>;
+  elementObserverPool?: Map<
+    ElementKind,
+    { observer: Observable<EditorObserverMessage>; subsribers: number }
+  >;
+  specificElementObserverPool?: Map<
+    string,
+    { observer: Observable<EditorObserverMessage>; subsribers: number }
+  >;
+  changeObserver$?: Subject<EditorObserverMessage>;
 } & UndoEditor;
 export type MyReactEditor = TReactEditor<MyValue>;
 
@@ -44,6 +61,7 @@ export type MyReactEditor = TReactEditor<MyValue>;
  */
 
 export type MyElement = EElement<MyValue>;
+
 export type MyElementEntry = EElementEntry<MyValue>;
 
 /**

@@ -24,6 +24,7 @@ export * from './memoizePrimitive';
 export * from './noop';
 export * from './once';
 export * from './produce';
+export * from './rxjs';
 export * from './storage';
 export * from './thro';
 export * from './timeout';

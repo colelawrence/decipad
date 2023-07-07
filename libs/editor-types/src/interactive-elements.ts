@@ -302,6 +302,7 @@ export type InteractiveElement =
   | PlotElement
   | DisplayElement
   | DeprecatedInputElement
+  | ExpressionElement
   | VariableDefinitionElement
   | LiveQueryElement
   | JavaScriptBlock

@@ -14,5 +14,8 @@ export * from './InteractiveParagraph';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';
 export * from './NumberCatalog';
+
+export * from './ElementChange';
+
 export * from './text';
 export * from './utils';

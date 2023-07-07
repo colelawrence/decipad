@@ -65,6 +65,7 @@ import {
 } from '@decipad/editor-plugins';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import { createTablePlugin } from '@decipad/editor-table';
+import { createElementChangePlugin } from '@decipad/editor-components';
 import {
   createTAutoformatPlugin,
   ELEMENT_DRAW,
@@ -246,6 +247,8 @@ export const plugins = ({
       // Migrations
       createMigrateStructuredInputs(),
       createPreventInvalidSelectionPlugin(),
+
+      createElementChangePlugin(),
     ],
     {
       components: components(computer),

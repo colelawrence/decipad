@@ -54,6 +54,9 @@
     },
     {
       "path": "../graphql-client"
+    },
+    {
+      "path": "../utils"
     }
   ]
 }
