@@ -20,9 +20,9 @@ test.describe('Editor markdown marks', () => {
     await keyPress(page, 'Enter');
     await expect(page.locator('svg title:has-text("Hide")')).toHaveCount(0);
     await page.keyboard.type('The sentence meaning of life.');
-    await page.waitForSelector('[data-slate-editor] h2');
+    await page.locator('[data-slate-editor] h2').waitFor();
     await page.getByTestId('drag-handle').nth(1).click();
-    await page.locator('[role="menuitem"] >> text=Hide from reader').click();
+    await page.getByRole('menuitem').getByText('Hide from reader').click();
     await expect(page.locator('svg title:has-text("Hide")')).toHaveCount(1);
   });
 

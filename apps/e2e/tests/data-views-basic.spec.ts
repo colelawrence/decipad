@@ -10,7 +10,7 @@ test.describe('Data Views', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },
@@ -48,7 +48,7 @@ test.describe('Data Views', () => {
   });
 
   test('creates a data view', async () => {
-    await page.locator('text=Pivot view').click();
+    await page.getByText('Pivot view').click();
 
     await page.evaluate(() =>
       window.scrollTo(0, document.body.scrollHeight * 2)

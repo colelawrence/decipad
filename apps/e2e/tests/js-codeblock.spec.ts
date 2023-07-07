@@ -10,8 +10,7 @@ import {
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
     await page.getByTestId('paragraph-content').last().fill('/i');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
+    await page.getByTestId('menu-item-open-integration').waitFor();
     await page.getByTestId('menu-item-open-integration').click();
     await page.getByTestId('select-integration:Code').click();
 
@@ -44,8 +43,7 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
 
     // Making a formula to test them
     await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
+    await page.getByTestId('menu-item-calculation-block').waitFor();
     await page.getByTestId('menu-item-calculation-block').click();
     await page
       .getByTestId('code-line')
@@ -66,7 +64,7 @@ test.describe('Make sure our js code templates work', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },

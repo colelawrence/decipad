@@ -3,7 +3,6 @@ import { createInputBelow } from '../utils/page/Block';
 import {
   focusOnBody,
   goToPlayground,
-  keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
 
@@ -25,26 +24,26 @@ test.describe('Inputs and magic numbers', () => {
   test('can create an input', async () => {
     await focusOnBody(page);
     await createInputBelow(page, 'Foo', 1337);
-    await keyPress(page, 'ArrowRight');
-    await expect(page.locator('text=1337')).toBeVisible();
+    await page.keyboard.press('ArrowRight');
+    await expect(page.getByText('1337')).toBeVisible();
   });
 
   test('can retrieve the value of an interactive input', async () => {
-    await keyPress(page, 'Enter');
-    await keyPress(page, 'ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('ArrowDown');
     await page.keyboard.type('That foo is %Foo% .');
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await expect(
       page.getByTestId('magic-number').getByText('1,337')
     ).toBeVisible();
   });
 
   test('it can render columns inline', async () => {
-    await keyPress(page, 'Enter');
-    await keyPress(page, 'ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('ArrowDown');
     await page.keyboard.type('What %[1,2,3,4,5]% .');
-    await keyPress(page, 'Enter');
-    await page.waitForSelector('[data-testid="number-column-separator"]');
-    await page.waitForSelector('[data-testid="number-column-ellipsis"]');
+    await page.keyboard.press('Enter');
+    await page.getByTestId('number-column-separator').last().waitFor();
+    await page.getByTestId('number-column-ellipsis').last().waitFor();
   });
 });

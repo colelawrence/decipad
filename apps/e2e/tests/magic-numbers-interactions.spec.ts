@@ -16,14 +16,9 @@ test.describe('Testing magic numbers', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
+    await setUp({ page, context });
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,
@@ -47,9 +42,7 @@ test.describe('Testing magic numbers', () => {
     await page.getByTestId('unnamed-label').click();
 
     // Waiting for code line to load correctly
-    await expect(
-      page.getByTestId('code-line-result').getByText('B')
-    ).toBeVisible();
+    await expect(page.getByTestId('code-line-result:B')).toBeVisible();
 
     await page.getByTestId('code-result:B').click();
 

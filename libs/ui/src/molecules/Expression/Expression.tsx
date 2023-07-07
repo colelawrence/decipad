@@ -115,7 +115,7 @@ export const Expression = ({
         ]}
         aria-placeholder={placeholder}
       >
-        <span data-test-id="widget-input" css={lineStyles} ref={inputRef}>
+        <span data-testid="widget-input" css={lineStyles} ref={inputRef}>
           {children}
         </span>
       </div>

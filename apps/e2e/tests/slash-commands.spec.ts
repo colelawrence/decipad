@@ -8,7 +8,7 @@ test.describe('Slash commands', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp({ page, context });
   });
@@ -18,15 +18,13 @@ test.describe('Slash commands', () => {
   });
 
   test('screenshots the slash commands', async () => {
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await page.keyboard.type('hello world');
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await page.keyboard.type('/t');
 
-    await expect(page.locator('[data-testid="menu-item-table"]')).toBeVisible();
-    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
-      3
-    );
+    await expect(page.getByTestId('menu-item-table')).toBeVisible();
+    await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(3);
 
     await snapshot(page as Page, 'Notebook: Slash Command');
 

@@ -27,7 +27,7 @@ for (const file of jsonFiles) {
     let context: BrowserContext;
     test.beforeAll(async ({ browser }) => {
       page = await browser.newPage();
-      context = await page.context();
+      context = page.context();
 
       await setUp(
         { page, context },

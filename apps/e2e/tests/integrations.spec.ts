@@ -1,5 +1,5 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { keyPress, setUp } from '../utils/page/Editor';
+import { setUp } from '../utils/page/Editor';
 import { snapshot } from '../utils/src';
 
 test.describe('Import Menu', () => {
@@ -8,7 +8,7 @@ test.describe('Import Menu', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp({ page, context });
   });
@@ -18,21 +18,16 @@ test.describe('Import Menu', () => {
   });
 
   test('screenshots the import menu', async () => {
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await page.keyboard.type('hello world');
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await page.keyboard.type('/t');
-    await expect(page.locator('[data-testid="menu-item-table"]')).toBeVisible();
-    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
-      3
-    );
-    await keyPress(page, 'Backspace');
-
+    await expect(page.getByTestId('menu-item-table')).toBeVisible();
+    await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(3);
+    await page.keyboard.press('Backspace');
     await page.keyboard.type('integrations');
-    await keyPress(page, 'Enter');
-
+    await page.keyboard.press('Enter');
     await snapshot(page as Page, 'Notebook: Import Menu');
-
-    await keyPress(page, 'Backspace');
+    await page.keyboard.press('Backspace');
   });
 });

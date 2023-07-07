@@ -22,7 +22,7 @@ test.describe('Simple does publish work test', () => {
   let incognitoPage: Page;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp({ page, context });
     await waitForEditorToLoad(page);
@@ -33,23 +33,21 @@ test.describe('Simple does publish work test', () => {
   });
 
   test('starts empty', async () => {
-    await expect(page.locator('[data-testid=paragraph-content]')).toHaveText(
-      ''
-    );
+    await expect(page.getByTestId('paragraph-content')).toHaveText('');
   });
 
   test('can write some stuff', async () => {
     await focusOnBody(page);
     await page.keyboard.type(someText);
-    await expect(
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=0')
-    ).toHaveText(someText);
-    await keyPress(page, 'Enter');
+    await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+      someText
+    );
+    await page.keyboard.press('Enter');
     await page.keyboard.type(moreText);
-    await expect(
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
-    ).toHaveText(moreText);
-    await keyPress(page, 'Enter');
+    await expect(page.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+      moreText
+    );
+    await page.keyboard.press('Enter');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
@@ -58,7 +56,7 @@ test.describe('Simple does publish work test', () => {
   test('it can share', async () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
-    await page.locator('[data-test-id="copy-published-link"]').click();
+    await page.getByTestId('copy-published-link').click();
     const clipboardText = (
       (await page.evaluate('navigator.clipboard.readText()')) as string
     ).toString();
@@ -76,12 +74,12 @@ test.describe('Simple does publish work test', () => {
     await incognitoPage.goto(sharedPageLocation!);
     await waitForNotebookToLoad(incognitoPage);
     await expect(
-      incognitoPage.locator('[data-testid="paragraph-wrapper"] >> nth=0')
+      incognitoPage.getByTestId('paragraph-wrapper').nth(0)
     ).toHaveText(someText);
     await expect(
-      incognitoPage.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+      incognitoPage.getByTestId('paragraph-wrapper').nth(1)
     ).toHaveText(moreText);
-    await incognitoPage.waitForSelector('text=Try Decipad');
+    await incognitoPage.getByText('Try Decipad').waitFor();
   });
 
   test('[another user] navigates to published notebook link', async ({
@@ -94,29 +92,29 @@ test.describe('Simple does publish work test', () => {
     await randomPage.goto(sharedPageLocation!);
 
     await waitForNotebookToLoad(randomPage);
-    await expect(
-      randomPage.locator('[data-testid="paragraph-wrapper"] >> nth=0')
-    ).toHaveText(someText);
-    await expect(
-      randomPage.locator('[data-testid="paragraph-wrapper"] >> nth=1')
-    ).toHaveText(moreText);
-    await randomPage.waitForSelector('text=Duplicate');
+    await expect(randomPage.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+      someText
+    );
+    await expect(randomPage.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+      moreText
+    );
+    await randomPage.getByText('Duplicate').waitFor();
   });
 
   test('can write one more paragraph', async () => {
     await focusOnBody(page);
     await keyPress(page, 'Enter');
     await page.keyboard.type(justOneMore);
-    await expect(
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
-    ).toHaveText(justOneMore);
+    await expect(page.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+      justOneMore
+    );
     await keyPress(page, 'Enter');
   });
 
   test('it can re-publish', async () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
-    await page.locator('[data-testid=publish-changes]').click();
+    await page.getByTestId('publish-changes').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
   });
@@ -125,11 +123,11 @@ test.describe('Simple does publish work test', () => {
     await incognitoPage.goto(sharedPageLocation!);
     await waitForNotebookToLoad(incognitoPage);
     await expect(
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=1')
+      incognitoPage.getByTestId('paragraph-wrapper').nth(1)
     ).toHaveText(justOneMore);
   });
 
   test("it shouldn't ask people to republish if no changes exist", async () => {
-    await expect(page.locator('text=Publish New Changes')).toHaveCount(0);
+    await expect(page.getByText('Publish New Changes')).toHaveCount(0);
   });
 });

@@ -49,23 +49,15 @@ test.describe.skip('Basic Table Interactions + Collisions', () => {
   test('creates 2 tables and names them', async () => {
     await focusOnBody(page);
     await createTable(page);
-    await page.waitForSelector(
-      '[data-testid="table-name-input"]:has-text("Table1")'
-    );
-    await page
-      .locator('[data-testid="table-name-input"]:has-text("Table1")')
-      .dblclick();
+    await page.getByTestId('table-name-input').getByText('Table1').waitFor();
+    await page.getByTestId('table-name-input').getByText('Table1').dblclick();
     await page.keyboard.type('NewTableName');
     await expect(page.getByText('NewTableName')).toBeVisible();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay); // IMPORTANT
     await createTable(page);
-    await page.waitForSelector(
-      '[data-testid="table-name-input"]:has-text("Table1")'
-    );
-    await page
-      .locator('[data-testid="table-name-input"]:has-text("Table1")')
-      .dblclick();
+    await page.getByTestId('table-name-input').getByText('Table1').waitFor();
+    await page.getByTestId('table-name-input').getByText('Table1').dblclick();
     await page.keyboard.type('NewTableName2');
     await expect(page.getByText('NewTableName2')).toBeVisible();
   });
@@ -174,7 +166,7 @@ test.describe.skip('Basic Table Interactions + Collisions', () => {
   });
 
   test('copy and paste', async () => {
-    await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+    await page.getByTestId('paragraph-wrapper').nth(-1).click();
     await page.keyboard.insertText('test copy and paste text');
     await ControlPlus(page, 'A');
     await ControlPlus(page, 'C');

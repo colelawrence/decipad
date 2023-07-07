@@ -11,7 +11,7 @@ test.describe('Turn Into', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
     await setUp({ page, context });
     await waitForEditorToLoad(page);
   });
@@ -21,21 +21,21 @@ test.describe('Turn Into', () => {
   });
 
   test('Converts between widgets with different elements and sizes', async () => {
-    await keyPress(page, 'ArrowDown');
+    await page.keyboard.press('ArrowDown');
     await createInputBelow(page, 'Input1', 'true');
 
     await expect(page.getByRole('slider')).toBeHidden();
     await expect(page.getByRole('checkbox')).toBeHidden();
 
-    await page.click('[data-testid=drag-handle]');
-    await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
-    await page.locator('role=menuitem', { hasText: 'slider' }).click();
+    await page.getByTestId('drag-handle').first().click();
+    await page.getByRole('menuitem').getByText('turn into').hover();
+    await page.getByRole('menuitem').getByText('slider').click();
 
     await expect(page.getByRole('slider')).toBeVisible();
 
-    await page.click('[data-testid=drag-handle]');
-    await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
-    await page.locator('role=menuitem', { hasText: 'toggle' }).click();
+    await page.getByTestId('drag-handle').first().click();
+    await page.getByRole('menuitem').getByText('turn into').hover();
+    await page.getByRole('menuitem').getByText('toggle').click();
 
     await expect(page.getByRole('checkbox')).toBeVisible();
   });
@@ -51,15 +51,15 @@ test.describe('Turn Into', () => {
       page.getByText('false', { exact: true }).first()
     ).toBeVisible();
 
-    await page.click('[data-testid=drag-handle] >> nth=1');
-    await page.locator('role=menuitem', { hasText: 'turn into' }).hover();
-    await page.locator('role=menuitem', { hasText: 'calculation' }).click();
+    await page.getByTestId('drag-handle').nth(1).click();
+    await page.getByRole('menuitem').getByText('turn into').hover();
+    await page.getByRole('menuitem').getByText('calculation').click();
 
-    await expect(
-      page.locator('[data-testid="codeline-varname"] >> nth=-1')
-    ).toContainText('Input2');
-    await expect(
-      page.locator('[data-testid="codeline-code"] >> nth=-1')
-    ).toContainText('false');
+    await expect(page.getByTestId('codeline-varname').nth(-1)).toContainText(
+      'Input2'
+    );
+    await expect(page.getByTestId('codeline-code').nth(-1)).toContainText(
+      'false'
+    );
   });
 });

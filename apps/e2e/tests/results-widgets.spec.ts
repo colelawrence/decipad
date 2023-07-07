@@ -3,10 +3,8 @@ import { createCalculationBlockBelow } from '../utils/page/Block';
 import {
   focusOnBody,
   goToPlayground,
-  keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
-import { Timeouts } from '../utils/src';
 
 test.describe('Results widgets', () => {
   test.describe.configure({ mode: 'serial' });
@@ -35,35 +33,34 @@ test.describe('Results widgets', () => {
     await createCalculationBlockBelow(page, 'Hello = 5 + 1');
     await createCalculationBlockBelow(page, 'World = 5 + 3');
 
-    await page.locator('[data-testid="result-widget"]').click();
+    await page.getByTestId('result-widget').click();
 
     await expect(
-      page.locator('[aria-roledescription="dropdownOption"]:has-text("Hello")')
+      page.locator('[aria-roledescription="dropdownOption"]').getByText('Hello')
     ).toBeVisible();
     await expect(
-      page.locator('[aria-roledescription="dropdownOption"]:has-text("World")')
+      page.locator('[aria-roledescription="dropdownOption"]').getByText('World')
     ).toBeVisible();
   });
 
   test('shows the result of a calculation', async () => {
     await page
-      .locator('[aria-roledescription="dropdownOption"]:has-text("Hello")')
+      .locator('[aria-roledescription="dropdownOption"]')
+      .getByText('Hello')
       .click();
 
     await expect(
-      page.locator('[data-testid="result-widget"]:has-text("6")')
+      page.getByTestId('result-widget').getByText('6')
     ).toBeVisible();
   });
 
   test('updates the result when calculation changes', async () => {
-    await page.locator('text=Hello = 5 + 1').click();
-    await keyPress(page, 'End');
+    await page.getByText('Hello = 5 + 1').click();
+    await page.keyboard.press('End');
     await page.keyboard.type(' + 4');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
 
     await expect(
-      page.locator('[data-testid="result-widget"]:has-text("10")')
+      page.getByTestId('result-widget').getByText('10')
     ).toBeVisible();
   });
 
@@ -71,7 +68,7 @@ test.describe('Results widgets', () => {
     await createCalculationBlockBelow(page, 'table = { hello = [1, 2, 3] }');
     await createCalculationBlockBelow(page, 'f(x) = x + 10');
 
-    await page.locator('[data-testid="result-widget"]').click();
+    await page.getByTestId('result-widget').click();
     // only one different variable available
     await expect(
       page.locator('[aria-roledescription="dropdownOption"]')

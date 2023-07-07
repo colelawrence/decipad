@@ -3,7 +3,6 @@ import waitForExpect from 'wait-for-expect';
 import {
   focusOnBody,
   goToPlayground,
-  keyPress,
   waitForEditorToLoad,
 } from '../utils/page/Editor';
 import {
@@ -39,7 +38,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
     await focusOnBody(page);
     await page.keyboard.insertText('This is some text.');
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('Enter');
     await createTable(page);
   });
 
@@ -86,7 +85,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
   test('can change column type to a formula', async () => {
     await openColTypeMenu(page, 2);
-    await page.locator('[role="menuitem"]:has-text("Formula")').click();
+    await page.getByText('Formula').nth(2).click();
 
     const codeBlock = await page.waitForSelector('section:has-text("=")');
 

@@ -1,5 +1,5 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { keyPress, setUp } from '../utils/page/Editor';
+import { setUp } from '../utils/page/Editor';
 import { createWorkspace, getClearText, Timeouts } from '../utils/src';
 
 test.describe('More JS codeblock checks', () => {
@@ -9,7 +9,7 @@ test.describe('More JS codeblock checks', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },
@@ -28,23 +28,21 @@ test.describe('More JS codeblock checks', () => {
   let generatedVarName: string;
 
   test('Create a variable', async () => {
-    await keyPress(page, 'Enter');
-    await keyPress(page, '=');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('=');
 
-    await page.waitForSelector(
-      '[data-slate-editor] [data-testid="codeline-varname"]'
-    );
+    await page
+      .locator('[data-slate-editor]')
+      .getByTestId('codeline-varname')
+      .waitFor();
 
     generatedVarName = await page.evaluate(
       getClearText,
-      await page.locator('[data-testid="codeline-varname"]').nth(0).innerHTML()
+      await page.getByTestId('codeline-varname').nth(0).innerHTML()
     );
 
     await expect(
-      await page
-        .locator('[data-testid="codeline-varname"]')
-        .nth(0)
-        .textContent()
+      await page.getByTestId('codeline-varname').nth(0).textContent()
     ).toMatch(/[a-zA-Z_$][a-zA-Z0-9_$]*/);
   });
 
@@ -56,8 +54,7 @@ return this.${generatedVarName};`;
     await page.waitForTimeout(Timeouts.computerDelay);
 
     await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
+    await page.getByTestId('menu-item-open-integration').first().waitFor();
     await page.getByTestId('menu-item-open-integration').first().click();
     await page.getByTestId('select-integration:Code').click();
 

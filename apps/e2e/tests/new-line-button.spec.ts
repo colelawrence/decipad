@@ -11,7 +11,7 @@ test.describe('Basic + button to insert new line', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },

@@ -21,7 +21,7 @@ test.describe('Icons on the editor title', () => {
 
   test('changes the icon', async ({ page }) => {
     await page.locator('button[aria-haspopup="dialog"]').click();
-    await page.locator('[data-testid="icon-picker-Moon"]').click();
+    await page.getByTestId('icon-picker-Moon').click();
 
     await expect(
       page.locator('button[aria-haspopup="dialog"] title')
@@ -30,7 +30,7 @@ test.describe('Icons on the editor title', () => {
 
   test('changes the color of the icon', async ({ page }) => {
     await page.locator('button[aria-haspopup="dialog"]').click();
-    await page.locator('[data-testid="icon-color-picker-Sulu"]').click();
+    await page.getByTestId('icon-color-picker-Sulu').click();
 
     await snapshot(page as Page, 'Notebook: Icon selection');
   });

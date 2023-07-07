@@ -73,9 +73,9 @@ test.describe('Formula highlighting', () => {
   });
 
   test('result could be dragged out', async () => {
-    await keyPress(page, 'ArrowDown');
-    await keyPress(page, 'ArrowDown');
-    await keyPress(page, 'ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
 
     const selector = '[data-type="paragraph"]:last-child';
     const lastParagraphNode = page.locator(selector);

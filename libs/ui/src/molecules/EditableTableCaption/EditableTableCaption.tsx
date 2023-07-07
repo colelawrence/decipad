@@ -212,7 +212,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               dropdown
               trigger={
                 <button
-                  data-testid={'create-chart-from-table-button'}
+                  data-testid="create-chart-from-table-button"
                   css={css([hideOnPrint])}
                 >
                   <TextAndIconButton text="Chart" iconPosition="left">
@@ -234,7 +234,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                   >
                     <div
                       css={{ minWidth: '160px' }}
-                      data-test-id={`create-chart__${mark}`}
+                      data-testid={`create-chart:${mark}`}
                     >
                       {markTypeNames[mark]}
                     </div>

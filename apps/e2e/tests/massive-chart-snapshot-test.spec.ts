@@ -28,16 +28,11 @@ test.describe('Loading and snapshot of notebook with charts', () => {
   let randomUser: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
     incognito = await browser.newContext();
     randomUser = await browser.newContext();
 
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
+    await setUp({ page, context });
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,
@@ -56,7 +51,7 @@ test.describe('Loading and snapshot of notebook with charts', () => {
     await waitForEditorToLoad(page);
     expect(await getPadName(page)).toBe('Testing Visual Regression Charts');
 
-    await page.waitForSelector('text="Start Test Here"');
+    await page.getByText('Start Test Here').waitFor();
 
     await page.isVisible('[data-testid="chart-styles"]');
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -67,12 +62,12 @@ test.describe('Loading and snapshot of notebook with charts', () => {
   test('click publish button and extract text', async () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
-    await page.waitForSelector('[data-test-id="copy-published-link"]');
+    await page.getByTestId('copy-published-link').waitFor();
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
   test('navigates to published notebook link', async () => {
-    await page.waitForSelector('[data-test-id="copy-published-link"]');
+    await page.getByTestId('copy-published-link').waitFor();
 
     publishedNotebookPage = await randomUser.newPage();
 
@@ -87,12 +82,12 @@ test.describe('Loading and snapshot of notebook with charts', () => {
 
   // eslint-disable-next-line playwright/no-skipped-test
   test('a random user can duplicate', async () => {
-    await publishedNotebookPage.click('text=Duplicate notebook');
+    await publishedNotebookPage.getByText('Duplicate notebook').click();
 
     await waitForNotebookToLoad(publishedNotebookPage);
-    await publishedNotebookPage.waitForSelector(
-      'text="Testing Visual Regression Charts"'
-    );
+    await publishedNotebookPage
+      .getByText('Testing Visual Regression Charts')
+      .waitFor();
   });
 
   // TODO: ENG-1891 fix this test

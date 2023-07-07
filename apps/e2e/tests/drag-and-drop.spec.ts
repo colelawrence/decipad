@@ -10,7 +10,7 @@ test.describe('Section creation', () => {
     page = await browser.newPage();
     // Search bar hidden under 1280
     page.setViewportSize({ width: 1300, height: 720 });
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },

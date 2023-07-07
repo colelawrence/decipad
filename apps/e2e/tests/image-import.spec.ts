@@ -10,7 +10,7 @@ test.describe('Make sure importing images work', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },
@@ -28,8 +28,7 @@ test.describe('Make sure importing images work', () => {
 
   test('Importing image through file explorer', async () => {
     await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
+    await page.getByTestId('menu-item-upload-image').first().waitFor();
     await page.getByTestId('menu-item-upload-image').first().click();
     const fileChooserPromise = page.waitForEvent('filechooser');
     await page.getByText('Choose file').click();

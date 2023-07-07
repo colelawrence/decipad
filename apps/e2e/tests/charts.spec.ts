@@ -49,10 +49,8 @@ test.describe('Charts', () => {
   });
 
   test('creates a pie chart', async () => {
-    await page
-      .locator('[data-testid="create-chart-from-table-button"]')
-      .click();
-    await page.locator('[data-test-id="create-chart__arc"]').click();
+    await page.getByTestId('create-chart-from-table-button').click();
+    await page.getByTestId('create-chart:arc').click();
 
     await page.evaluate(() =>
       window.scrollTo(0, document.body.scrollHeight * 2)

@@ -1,15 +1,12 @@
 import { expect, Page, test } from '@playwright/test';
-import {
-  focusOnBody,
-  goToPlayground,
-  waitForEditorToLoad,
-} from '../utils/page/Editor';
+import { goToPlayground, waitForEditorToLoad } from '../utils/page/Editor';
 import {
   clickCell,
   createTable,
   openColTypeMenu,
   tableCellLocator,
 } from '../utils/page/Table';
+import { createDropdownBelow } from '../utils/page/Block';
 
 test.describe('Dropdown widget', () => {
   test.describe.configure({ mode: 'serial' });
@@ -27,20 +24,13 @@ test.describe('Dropdown widget', () => {
   });
 
   test('creates an empty dropdown widget', async () => {
-    await focusOnBody(page);
-    await page.keyboard.type('/dropdown');
-    await page.locator('[data-testid="menu-item-dropdown"]').click();
-
-    const result = page.locator('text=Dropdown');
-    expect(await result.count()).toBe(1);
+    await createDropdownBelow(page, 'Dropdown');
+    expect(await page.getByText('Dropdown').count()).toBe(1);
   });
 
   test('Open dropdown and view box to add option', async () => {
-    const dropdown = page.locator('text=Select');
-    await dropdown.click();
-
-    const input = page.locator('div >> div >> input');
-    await expect(input).toBeVisible();
+    await page.getByText('Select').click();
+    await expect(page.locator('div >> div >> input')).toBeVisible();
   });
 
   test('New option gets added to list', async () => {
@@ -55,7 +45,7 @@ test.describe('Dropdown widget', () => {
   });
 
   test('Add another option to dropdown', async () => {
-    const addNew = page.locator('text=Add new');
+    const addNew = page.getByText('Add new');
     await addNew.click();
 
     // Dropdown should autofocus on input
@@ -69,7 +59,7 @@ test.describe('Dropdown widget', () => {
   });
 
   test('Select option', async () => {
-    const textEl = page.locator('text=50%');
+    const textEl = page.getByText('50%');
     await textEl.click();
     const dropdownOptions = page.locator(
       '[aria-roledescription="dropdownOption"]'
@@ -79,19 +69,17 @@ test.describe('Dropdown widget', () => {
     expect(await dropdownOptions.count()).toBe(0);
   });
 
-  test('Dropdown option should appear in table column manu', async () => {
+  test('Dropdown option should appear in table column menu', async () => {
     await createTable(page);
     await openColTypeMenu(page, 2);
-
-    const dropdownMenu = page.locator(
-      '[role="menuitem"]:has-text("Categories")'
-    );
-    await expect(dropdownMenu).toBeVisible();
+    await expect(
+      page.getByRole('menuitem').getByText('Categories')
+    ).toBeVisible();
   });
 
   test('You can open dropdown in the cell', async () => {
-    await page.click('[role="menuitem"]:has-text("Categories")');
-    await page.click('[role="menuitem"]:has-text("Dropdown")');
+    await page.getByRole('menuitem').getByText('Categories').click();
+    await page.getByRole('menuitem').getByText('Dropdown').click();
 
     await page.waitForSelector('[aria-roledescription="dropdown-editor"]');
     await clickCell(page, 1, 2);
@@ -100,9 +88,10 @@ test.describe('Dropdown widget', () => {
       '[aria-roledescription="dropdownOption"]'
     );
     expect(await dropdownOptions.count()).toBe(2);
-
-    await page.click('[aria-roledescription="dropdownOption"]:has-text("50%")');
-
+    await page
+      .locator('[aria-roledescription="dropdownOption"]')
+      .getByText('50%')
+      .click();
     await expect(dropdownOptions).toBeHidden();
     await expect(page.locator(tableCellLocator(1, 2))).toContainText('50%');
   });
@@ -111,7 +100,8 @@ test.describe('Dropdown widget', () => {
     await page.locator('[aria-roledescription="dropdown-open"]').click();
 
     await page
-      .locator('[aria-roledescription="dropdownOption"]:has-text("50%")')
+      .locator('[aria-roledescription="dropdownOption"]')
+      .getByText('50%')
       .hover();
 
     await page

@@ -1,7 +1,7 @@
 import { BrowserContext, Page, test, expect } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { Timeouts, createWorkspace } from '../utils/src';
-import { clickCell, writeInTable } from '../utils/page/Table';
+import { createTable, clickCell, writeInTable } from '../utils/page/Table';
 
 const checkForError = (page: Page, value: string, row: number, col: number) =>
   test.step(`Checking for error`, async () => {
@@ -28,7 +28,7 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },
@@ -45,12 +45,7 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
   });
 
   test('Creates a table and sets a value', async () => {
-    // Creates a table and fills it
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-table').first().click();
-
+    await createTable(page);
     await writeInTable(page, '13.21', 1);
     await changeToGBP(page, 0);
   });
@@ -76,7 +71,7 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
       .evaluate((element) =>
         window.getComputedStyle(element).getPropertyValue('color')
       );
-    await expect(color).toBe('rgb(192, 55, 55)');
+    expect(color).toBe('rgb(192, 55, 55)');
   });
 
   test('Checks other cells', async () => {
@@ -104,6 +99,6 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
       .evaluate((element) =>
         window.getComputedStyle(element).getPropertyValue('color')
       );
-    await expect(color).not.toBe('rgb(192, 55, 55)');
+    expect(color).not.toBe('rgb(192, 55, 55)');
   });
 });

@@ -28,11 +28,10 @@ test.describe('Navigating with magic numbers', () => {
     await page.keyboard.type('Should you buy a house?');
     await keyPress(page, 'Enter');
     await page.keyboard.type('Price is %Price');
-    await keyPress(page, '%');
-    await keyPress(page, 'Enter');
+    await page.keyboard.press('%');
+    await page.keyboard.press('Enter');
     await createCalculationBlockBelow(page, 'Fees = 5£');
-
-    await page.waitForSelector('text=Should you buy a house?');
+    await page.getByText('Should you buy a house?').waitFor();
   });
 
   test('goes all the way down to australia', async () => {
@@ -58,8 +57,7 @@ test.describe('Navigating with magic numbers', () => {
     await keyPress(page, '=');
 
     await createCodeLineV2Below(page, 'Price', 'Fees + 30£');
-
-    await page.waitForSelector('text=is £35');
+    await page.getByText('is £35').waitFor();
     const magic = page.locator('span[title="35"]');
     await magic.scrollIntoViewIfNeeded();
     await magic.click();

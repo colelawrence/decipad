@@ -20,12 +20,7 @@ test.describe('Loading and snapshot of notebook with charts', () => {
     page = await browser.newPage();
     context = await page.context();
 
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
+    await setUp({ page, context });
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,

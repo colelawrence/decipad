@@ -1,6 +1,7 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { Timeouts } from '../utils/src';
+import { createCSVBelow } from '../utils/page/Block';
 
 test.describe('Testing CSV imports', () => {
   test.describe.configure({ mode: 'serial' });
@@ -9,7 +10,7 @@ test.describe('Testing CSV imports', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },
@@ -24,10 +25,7 @@ test.describe('Testing CSV imports', () => {
   });
 
   test('Importing CSV through csv panel', async () => {
-    await page.getByTestId('paragraph-content').last().fill('/c');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-upload-csv').first().click();
+    await createCSVBelow(page);
     await page.getByRole('button', { name: 'Choose file' }).first().click();
     await page.getByTestId('text-icon-button:Embed link').click();
     await page

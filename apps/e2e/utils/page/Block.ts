@@ -289,6 +289,16 @@ export async function createCodeLineV2Below(
   await page.waitForSelector('[data-slate-editor] code >> nth=-1');
 }
 
+export async function createCSVBelow(page: Page) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/csv');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.locator('role=menuitem', { hasText: 'csv' }).click();
+}
+
 export function getCodeLineBlockLocator(page: Page) {
   return page.locator('//*[@data-slate-editor][//code]') as Locator;
 }

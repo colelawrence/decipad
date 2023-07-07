@@ -8,7 +8,7 @@ test.describe('Tests the number catalog', () => {
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp({ page, context }, { createAndNavigateToNewPad: false });
   });
@@ -19,7 +19,8 @@ test.describe('Tests the number catalog', () => {
 
   test('screenshots the number catalog and first article', async () => {
     await page
-      .locator('[data-testid="list-notebook-title"]:has-text("Starting")')
+      .getByTestId('list-notebook-title')
+      .getByText('Starting')
       .first()
       .click();
     await waitForEditorToLoad(page);

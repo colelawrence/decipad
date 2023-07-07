@@ -45,6 +45,7 @@ test.describe('Duplicating a notebook', () => {
       .getByTestId('paragraph-content')
       .last()
       .fill('this is the third paragraph');
+
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay * 2);
   });
@@ -57,21 +58,15 @@ test.describe('Duplicating a notebook', () => {
   });
 
   test('Check if notebook has 4 paragraphs', async () => {
-    await page.waitForSelector('text=pad title here');
-    await page.click('text=pad title here');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.redirectDelay);
-    await expect(
-      page.locator('text=this is the third paragraph')
-    ).toBeVisible();
-    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
-      4
-    );
+    await page.getByText('pad title here').waitFor();
+    await page.getByText('pad title here').click();
+    await expect(page.getByText('this is the third paragraph')).toBeVisible();
+    await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
     await navigateToWorkspacePage(page);
   });
 
   test('Notebook is listed', async () => {
-    await page.waitForSelector('text=pad title here');
+    await page.getByText('pad title here').waitFor();
     const pads = await getPadList(page);
     padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
@@ -80,8 +75,7 @@ test.describe('Duplicating a notebook', () => {
   test('It can duplicate a pad', async () => {
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     await duplicatePad(page, padToCopyIndex);
-
-    await page.waitForSelector('text=Copy of pad title here');
+    await page.getByText('Copy of pad title here').waitFor();
     const pads = await getPadList(page);
     padCopyIndex = pads.findIndex(
       (pad) => pad.name.toLocaleLowerCase() === 'copy of pad title here'
@@ -97,14 +91,12 @@ test.describe('Duplicating a notebook', () => {
         })
         .getByText('Copy of pad title here')
     ).toBeVisible();
-    await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
-      4
-    );
+    await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
     await navigateToWorkspacePage(page);
   });
 
   test('Notebook is listed again', async () => {
-    await page.waitForSelector('text=pad title here');
+    await page.getByText('pad title here').last().waitFor();
     const pads = await getPadList(page);
     padToCopyIndex = pads.findIndex(
       (pad) => pad.name === 'Copy of pad title here'

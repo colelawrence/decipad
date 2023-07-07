@@ -8,7 +8,7 @@ test.describe('Section creation', () => {
   let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
 
     await setUp(
       { page, context },
@@ -23,17 +23,17 @@ test.describe('Section creation', () => {
   });
 
   test('Creating a new section', async () => {
-    await page.locator('[data-testid="new-section-button"]').click();
+    await page.getByTestId('new-section-button').click();
     await page.getByPlaceholder('My section').fill('Section Creation Test 1');
-    await page.locator('[data-testid="color-section-button"]').nth(2).click();
+    await page.getByTestId('color-section-button').nth(2).click();
     await page.getByRole('button', { name: 'Create Section' }).click();
-    await expect(page.locator('text="Section Creation Test 1"')).toBeVisible();
+    await expect(page.getByText('Section Creation Test 1')).toBeVisible();
   });
 
   test('Cancelling a new section', async () => {
-    await page.locator('[data-testid="new-section-button"]').click();
+    await page.getByTestId('new-section-button').click();
     await page.getByPlaceholder('My section').fill('Section Creation Test 2');
-    await page.locator('[data-testid="closable-modal"]').click();
-    await expect(page.locator('text="Section Creation Test 2"')).toBeHidden();
+    await page.getByTestId('closable-modal').click();
+    await expect(page.getByText('Section Creation Test 2')).toBeHidden();
   });
 });

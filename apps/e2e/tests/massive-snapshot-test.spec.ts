@@ -28,16 +28,11 @@ test.describe('Loading and snapshot of big notebook', () => {
   let randomUser: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
     incognito = await browser.newContext();
     randomUser = await browser.newContext();
 
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
+    await setUp({ page, context });
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,
@@ -57,13 +52,12 @@ test.describe('Loading and snapshot of big notebook', () => {
     expect(await getPadName(page)).toBe('Everything, everywhere, all at once');
 
     expect(
-      // eslint-disable-next-line playwright/no-element-handle
-      await page.$(
-        'text=You can change the participation and multiplier above, and it will be reflected in the calculation below'
+      page.getByText(
+        'You can change the participation and multiplier above, and it will be reflected in the calculation below'
       )
     ).toBeDefined();
 
-    await page.waitForSelector('text="This is a string"');
+    await page.getByText('This is a string').first().waitFor();
 
     await snapshot(page as Page, 'Notebook: All elements');
   });
@@ -71,7 +65,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   test('click publish button and extract text', async () => {
     await page.getByRole('button', { name: 'Publish' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
-    await page.waitForSelector('[data-test-id="copy-published-link"]');
+    await page.getByTestId('copy-published-link').waitFor();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.chartsDelay);
     await snapshot(page as Page, 'Notebook: Publish Popover');
@@ -79,7 +73,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
   // eslint-disable-next-line playwright/no-skipped-test
   test('navigates to published notebook link', async () => {
-    await page.waitForSelector('[data-test-id="copy-published-link"]');
+    await page.getByTestId('copy-published-link').waitFor();
 
     publishedNotebookPage = await randomUser.newPage();
 
@@ -118,8 +112,8 @@ test.describe('Loading and snapshot of big notebook', () => {
     expect(publishedNotebookPage).toBeDefined();
 
     // Magic numbers are delayed
-    await page.waitForSelector('text="This is a string"');
-    await page.waitForSelector('text="ם עוד. על בקר"');
+    await page.getByText('This is a string').first().waitFor();
+    await page.getByText('ם עוד. על בקר').first().waitFor();
 
     // wait for charts to load before snapshot
     await page.isVisible('[data-testid="chart-styles"]');

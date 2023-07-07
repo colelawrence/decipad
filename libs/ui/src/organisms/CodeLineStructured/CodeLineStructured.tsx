@@ -133,7 +133,7 @@ export const CodeLineStructured = ({
                 canGrabStyles,
               grabbing && grabbingStyles,
             ]}
-            data-testid="code-line-result"
+            data-testid={`code-line-result:${String(result?.value)}`}
             contentEditable={false}
             draggable
             onDragStart={(e) => {

@@ -25,7 +25,7 @@ test.describe('Loading reference notebook', () => {
   let randomUser: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
+    context = page.context();
     incognito = await browser.newContext();
     randomUser = await browser.newContext();
 

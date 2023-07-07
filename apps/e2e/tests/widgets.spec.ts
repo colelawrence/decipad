@@ -29,10 +29,11 @@ test.describe('Test Toggle Widget', () => {
   test('can create a toggle', async () => {
     await focusOnBody(page);
     await createToggleBelow(page, 'Input2');
-    const widgetEditor = page.getByTestId('widget-editor');
-    await keyPress(page, 'ArrowRight');
-    await expect(page.locator('text=Input2')).toBeVisible();
-    await expect(widgetEditor.getByRole('checkbox')).not.toBeChecked();
+    await page.keyboard.press('ArrowRight');
+    await expect(page.getByText('Input2')).toBeVisible();
+    await expect(
+      page.getByTestId('widget-editor').getByRole('checkbox')
+    ).not.toBeChecked();
     await expect(
       page.getByText('false', { exact: true }).first()
     ).toBeVisible();
@@ -74,7 +75,7 @@ test.describe('Tests Date Widget', () => {
     await keyPress(page, 'ArrowDown');
     await createDateBelow(page, 'Input3');
 
-    await page.locator('[data-test-id="widget-input"]').click();
+    await page.getByTestId('widget-input').click();
     await page.getByText('Today').click();
 
     const today = new Date();
@@ -84,9 +85,7 @@ test.describe('Tests Date Widget', () => {
     const day = String(today.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
 
-    await expect(page.locator('[data-test-id="widget-input"]')).toContainText(
-      formattedDate
-    );
+    await expect(page.getByTestId('widget-input')).toContainText(formattedDate);
   });
 });
 
@@ -110,7 +109,7 @@ test.describe('Tests Slider Widget', () => {
     await createSliderBelow(page, 'Input3', '$5 per hotdog');
     await page.getByRole('slider').click();
     await keyPress(page, 'ArrowRight');
-    await expect(page.locator('[data-test-id="widget-input"]')).toContainText(
+    await expect(page.getByTestId('widget-input')).toContainText(
       '$6 per hotdog'
     );
   });
