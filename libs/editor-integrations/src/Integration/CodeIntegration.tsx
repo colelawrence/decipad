@@ -76,6 +76,7 @@ export const CodeIntegration = function CodeIntegration({
           store.setConnectionType('codeconnection');
           store.setStage('connect');
           store.setExistingIntegration(id);
+          store.setResultPreview(undefined);
 
           store.setAllTypeMapping(typeMappings);
           codeStore.setCode(blockOptions.code);

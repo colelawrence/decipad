@@ -263,7 +263,11 @@ export const WrapperIntegrationModalDialog: FC<
         <div css={bottomBarStyles}>
           {isEditing ? (
             <div css={connectStyles}>
-              <Button type={'primary'} onClick={insertIntoNotebook}>
+              <Button
+                type={'primary'}
+                disabled={!hasDataPreview}
+                onClick={insertIntoNotebook}
+              >
                 Save
               </Button>
             </div>
