@@ -75,6 +75,7 @@ export { RemoteAvatarOverlay } from './RemoteAvatarOverlay/RemoteAvatarOverlay';
 export { RemoveNodeButton } from './RemoveNodeButton/RemoveNodeButton';
 export { SegmentButtons } from './SegmentButtons/SegmentButtons';
 export * from './SelectItem/SelectItem';
+export { SidebarIcon } from './SidebarIcon';
 export { Slider } from './Slider/Slider';
 export { SmartRef } from './SmartRef/SmartRef';
 export { Spinner } from './Spinner/Spinner';

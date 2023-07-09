@@ -48,6 +48,7 @@ export interface ExecuteProps {
   editor: MyEditor;
   path: Path;
   deleteFragment?: Location;
+  deleteBlock?: boolean;
   command: SlashCommand;
   getAvailableIdentifier: GetAvailableIdentifier;
   select?: boolean;
@@ -60,6 +61,7 @@ export const execute = ({
   getAvailableIdentifier,
   deleteFragment,
   select = false,
+  deleteBlock = true,
 }: ExecuteProps): void => {
   const { changeOpen } = useConnectionStore.getState();
   const { setDialogOpen, setFileType } = useFileUploadStore.getState();
@@ -169,12 +171,16 @@ export const execute = ({
     }
 
     let newElementPath: Path;
-    if (deleteFragment) {
-      newElementPath = [path[0] + 1];
-      deleteText(editor, { at: deleteFragment });
+    if (deleteBlock) {
+      if (deleteFragment) {
+        newElementPath = [path[0] + 1];
+        deleteText(editor, { at: deleteFragment });
+      } else {
+        newElementPath = path;
+        removeNodes(editor, { at: path });
+      }
     } else {
       newElementPath = path;
-      removeNodes(editor, { at: path });
     }
 
     if (select) {

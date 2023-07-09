@@ -1,14 +1,14 @@
-import { FC, useCallback } from 'react';
+import { Result } from '@decipad/computer';
+import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import {
   CodeResult,
   DataViewTableHeader as DataViewTableHeaderUI,
   useEventNoEffect,
 } from '@decipad/ui';
-import { Result } from '@decipad/computer';
-import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { css } from '@emotion/react';
-import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import { deselect } from '@udecode/plate';
+import { Folder, FolderOpen } from 'libs/ui/src/icons';
+import { FC, useCallback } from 'react';
 import { HeaderProps } from '../../types';
 import { GroupAggregation } from '../GroupAggregation/GroupAggregation';
 
@@ -105,7 +105,7 @@ export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({
             element={element}
           />
           {collapsible && (
-            <span css={iconStyles} data-test-id="data-view-row-expander">
+            <span css={iconStyles} data-testid="data-view-row-expander">
               {groupIsExpanded ? <FolderOpen /> : <Folder />}
             </span>
           )}

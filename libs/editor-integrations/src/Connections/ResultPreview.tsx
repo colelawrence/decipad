@@ -18,6 +18,7 @@ import {
 import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
+import { deciOverflowStyles } from 'libs/ui/src/styles/scrollbars';
 import { FC, useCallback, useEffect, useState } from 'react';
 
 interface ResultPreviewProps {
@@ -197,17 +198,19 @@ const variableResultStyles = css({
   justifyContent: 'space-between',
 });
 
-const resultPreviewContainerStyles = css({
-  display: 'flex',
-  gap: 8,
-  overflow: 'auto',
-  border: `1px solid ${cssVar('highlightColor')}`,
-  borderRadius: 12,
-  padding: 16,
-  div: {
-    margin: 0,
+const resultPreviewContainerStyles = css(
+  {
+    display: 'flex',
+    gap: 8,
+    border: `1px solid ${cssVar('highlightColor')}`,
+    borderRadius: 12,
+    padding: 16,
+    div: {
+      margin: 0,
+    },
   },
-});
+  deciOverflowStyles
+);
 
 const resultPreviewWrapperStyles = (isVariableResult: boolean) =>
   css(

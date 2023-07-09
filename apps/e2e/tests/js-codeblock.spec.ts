@@ -10,8 +10,14 @@ import {
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
     await page.getByTestId('paragraph-content').last().fill('/i');
-    await page.getByTestId('menu-item-open-integration').waitFor();
-    await page.getByTestId('menu-item-open-integration').click();
+    await page
+      .locator('article')
+      .getByTestId('menu-item-open-integration')
+      .waitFor();
+    await page
+      .locator('article')
+      .getByTestId('menu-item-open-integration')
+      .click();
     await page.getByTestId('select-integration:Code').click();
 
     // First line of the CodeMirror
@@ -42,9 +48,19 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
     await page.waitForTimeout(Timeouts.liveBlockDelay);
 
     // Making a formula to test them
-    await page.getByTestId('paragraph-content').last().fill('/');
-    await page.getByTestId('menu-item-calculation-block').waitFor();
-    await page.getByTestId('menu-item-calculation-block').click();
+    await page
+      .locator('article')
+      .getByTestId('paragraph-content')
+      .last()
+      .fill('/');
+    await page
+      .locator('article')
+      .getByTestId('menu-item-calculation-block')
+      .waitFor();
+    await page
+      .locator('article')
+      .getByTestId('menu-item-calculation-block')
+      .click();
     await page
       .getByTestId('code-line')
       .last()

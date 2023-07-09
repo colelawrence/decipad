@@ -21,7 +21,7 @@ interface RemoteAvatarProps {
   email?: string;
   top: number;
   left: number;
-  backgroundColor: OpaqueColor;
+  cursorColor: OpaqueColor;
 }
 
 export const RemoteAvatar: FC<RemoteAvatarProps> = ({
@@ -29,7 +29,7 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
   email,
   top,
   left,
-  backgroundColor,
+  cursorColor,
 }) => {
   const rightDisplacement = Math.max(
     Math.min(left, slimBlockWidth) - slimBlockWidth,
@@ -42,10 +42,16 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
         {
           top: `${top}px`,
           right: `calc((-${avatarSize} - ${avatarMarginLeft} - ${rightDisplacement}px))`,
+          zIndex: 3,
         },
       ]}
     >
-      <Avatar name={name} email={email} backgroundColor={backgroundColor} />
+      <Avatar
+        name={name}
+        email={email}
+        cursorColor={cursorColor}
+        useSecondLetter={false}
+      />
     </div>
   );
 };

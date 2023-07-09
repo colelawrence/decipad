@@ -1,15 +1,15 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import capitalize from 'lodash.capitalize';
-import { create } from 'zustand';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { create } from 'zustand';
+import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
 import * as icons from '../../icons';
-import { smallestDesktop } from '../../primitives';
+import { tabletScreenQuery } from '../../primitives';
+import { AvailableColorStatus, ColorStatusNames } from '../../utils';
 import { FilterBubbles } from '../FilterBubbles/FilterBubbles';
 import { MenuList } from '../MenuList/MenuList';
-import { AvailableColorStatus, ColorStatusNames } from '../../utils';
-import { ColorStatusCircle, InputField, MenuItem } from '../../atoms';
 
 type SearchBarProps = {
   compact?: boolean;
@@ -195,7 +195,7 @@ const searchBarStyles = css({
   alignContent: 'center',
   justifyContent: 'space-between',
   height: '100%',
-  [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
+  [tabletScreenQuery]: {
     display: 'none',
   },
 });

@@ -1,31 +1,48 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
-import { noop } from '@decipad/utils';
 import { isServerSideRendering } from '@decipad/support';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import uniqBy from 'lodash.uniqby';
 import { useSession } from 'next-auth/react';
-import { ComponentProps, FC, useCallback, useContext } from 'react';
+import {
+  ComponentProps,
+  FC,
+  MouseEventHandler,
+  useCallback,
+  useContext,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
-import { Button, IconButton, Link } from '../../atoms';
-import { Deci, Cards, LeftArrowShort } from '../../icons';
-import { BetaBadge, NotebookAvatars, NotebookPath } from '../../molecules';
+import { Button, IconButton, Link, SegmentButtons, Tooltip } from '../../atoms';
+import { Cards, Deci, LeftArrowShort, Show, SidebarOpen } from '../../icons';
+import {
+  BetaBadge,
+  NotebookAvatar,
+  NotebookAvatars,
+  NotebookPath,
+} from '../../molecules';
 import { NotebookPublishingPopUp } from '../../organisms';
-import { cssVar, p13Bold, smallScreenQuery } from '../../primitives';
+import {
+  cssVar,
+  p13Bold,
+  p13Medium,
+  smallScreenQuery,
+  tinyPhone,
+} from '../../primitives';
+import { closeButtonStyles } from '../../styles/buttons';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
 
-const wrapperStyles = css({
+const topBarWrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   rowGap: '8px',
 
   padding: '16px 0',
-
-  borderBottom: '1px solid',
-  borderColor: cssVar('highlightColor'),
 });
 
 const leftSideStyles = css({
@@ -58,16 +75,16 @@ const linksStyles = css({
   display: 'flex',
   gap: '12px',
   height: '32px',
-  backgroundColor: cssVar('buttonHoverBackground'),
+  backgroundColor: cssVar('strongerHighlightColor'),
   ':hover': {
-    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+    filter: 'brightness(95%)',
   },
   borderRadius: 6,
   justifyContent: 'center',
   alignItems: 'center',
   padding: '8px',
 });
-const helpLinkStyles = css(p13Bold);
+const topbarButtonStyles = css(p13Bold);
 
 const iconStyles = css({
   display: 'grid',
@@ -104,6 +121,8 @@ export type NotebookTopbarProps = Pick<
     onInvite?: (email: string, permission: PermissionType) => Promise<void>;
     onChange?: (userId: string, permission: PermissionType) => Promise<void>;
     hasLocalChanges?: BehaviorSubject<boolean>;
+    toggleSidebar?: MouseEventHandler<HTMLSpanElement>;
+    sidebarOpen: boolean;
   };
 
 export const NotebookTopbar = ({
@@ -118,6 +137,9 @@ export const NotebookTopbar = ({
   isSharedNotebook,
   workspaceAccess,
   hasLocalChanges: hasLocalChanges$,
+  toggleSidebar,
+  sidebarOpen,
+
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
   const { status: sessionStatus } = useSession();
@@ -177,8 +199,30 @@ export const NotebookTopbar = ({
     }
   }, [navigate, workspace, userWorkspaces, workspaceAccess, isSharedNotebook]);
 
+  const { canInvite } = useStripeCollaborationRules(
+    usersWithAccess,
+    usersFromTeam
+  );
+
+  const allUsers: NotebookAvatar[] = uniqBy(
+    [
+      ...(usersFromTeam || []).map((user) => ({
+        ...user,
+        isTeamMember: true,
+      })),
+      ...(usersWithAccess || []),
+    ],
+    (access) => access.user.id
+  );
+
+  const isPremiumWorkspace = Boolean(workspace?.isPremium);
+  const hasPaywall =
+    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') &&
+    !canInvite &&
+    !isPremiumWorkspace;
+
   return (
-    <div css={wrapperStyles}>
+    <div css={topBarWrapperStyles}>
       {/* Left side */}
       <div css={leftSideStyles}>
         {workspaceAccess || isSharedNotebook ? (
@@ -188,7 +232,13 @@ export const NotebookTopbar = ({
             </IconButton>
           </div>
         ) : (
-          <span css={{ display: 'grid', height: '16px', width: '16px' }}>
+          <span
+            css={{
+              display: 'grid',
+              height: '16px',
+              width: '16px',
+            }}
+          >
             <Link href="https://decipad.com">
               <Deci />
             </Link>
@@ -214,7 +264,7 @@ export const NotebookTopbar = ({
             }}
           >
             <div css={[linksStyles, hideForSmallScreenStyles]}>
-              <em css={helpLinkStyles}>
+              <em css={topbarButtonStyles}>
                 <Anchor
                   href={docs({}).page({ name: 'gallery' }).$}
                   // Analytics
@@ -236,29 +286,94 @@ export const NotebookTopbar = ({
                 </Anchor>
               </em>
             </div>
+            <SegmentButtons
+              variant="topbar"
+              buttons={[
+                {
+                  children: <SidebarOpen />,
+                  onClick: toggleSidebar || noop,
+                  selected: sidebarOpen,
+                  tooltip: 'Open the sidebar',
+                  testId: 'top-bar-sidebar',
+                },
+              ]}
+            />
           </div>
         )}
         {isWriter && <VerticalDivider />}
+        {sessionStatus === 'authenticated' ? (
+          isWriter && !isServerSideRendering() ? null : (
+            <div
+              css={css(p13Medium, {
+                color: cssVar('weakTextColor'),
+                display: 'flex',
+              })}
+            >
+              <Tooltip
+                side="bottom"
+                hoverOnly
+                trigger={
+                  <span
+                    css={{
+                      cursor: 'pointer',
+                      width: 16,
+                      height: 16,
+                      ':hover': {
+                        ...closeButtonStyles,
+                      },
+                    }}
+                  >
+                    <Show />
+                  </span>
+                }
+              >
+                Ask to be a collaborator to save your changes
+              </Tooltip>
+              <span css={css({ [tinyPhone]: { display: 'none' } })}>
+                You are in reading mode
+              </span>
+            </div>
+          )
+        ) : (
+          <p
+            css={css(p13Medium, {
+              color: cssVar('weakTextColor'),
+              [tinyPhone]: {
+                display: 'none',
+              },
+            })}
+          >
+            Authors behind this notebook
+          </p>
+        )}
         <NotebookAvatars
           allowInvitation={allowInvitation}
           isWriter={isWriter}
-          isPremiumWorkspace={Boolean(workspace?.isPremium)}
-          usersWithAccess={usersWithAccess}
-          usersFromTeam={usersFromTeam}
+          allUsers={allUsers}
           notebook={notebook}
           {...sharingProps}
         />
 
         {sessionStatus === 'authenticated' ? (
           isAdmin && !isServerSideRendering() ? (
-            <NotebookPublishingPopUp notebook={notebook} {...sharingProps} />
+            <NotebookPublishingPopUp
+              notebook={notebook}
+              {...sharingProps}
+              hasPaywall={hasPaywall}
+              allUsers={allUsers}
+              allowInvitation={allowInvitation}
+              {...sharingProps}
+            />
           ) : (
-            <Button onClick={onDuplicateNotebook}>Duplicate notebook</Button>
+            <Button type="primaryBrand" onClick={onDuplicateNotebook}>
+              Duplicate notebook
+            </Button>
           )
         ) : (
           <Button
             href="/"
             // Analytics
+            type={'primaryBrand'}
             onClick={onTryDecipadClick}
           >
             Try Decipad

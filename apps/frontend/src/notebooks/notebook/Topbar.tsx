@@ -1,15 +1,15 @@
+import { useWorkspaceMembers } from '@decipad/graphql-client';
 import { NotebookTopbar } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import { useWorkspaceMembers } from '@decipad/graphql-client';
-import { ComponentProps, FC } from 'react';
-import { BehaviorSubject } from 'rxjs';
 import { PermissionType } from 'libs/ui/src/types';
 import { useSession } from 'next-auth/react';
+import { ComponentProps, FC } from 'react';
+import { BehaviorSubject } from 'rxjs';
 import { Notebook } from './hooks/useNotebookStateAndActions';
 
 type TopbarProps = Pick<
   ComponentProps<typeof NotebookTopbar>,
-  'userWorkspaces'
+  'userWorkspaces' | 'toggleSidebar'
 > & {
   readonly notebook: Notebook;
   readonly hasLocalChanges: BehaviorSubject<boolean> | undefined;
@@ -28,6 +28,7 @@ type TopbarProps = Pick<
   readonly removeEditorById?: (userId: string) => Promise<void>;
   readonly publishNotebook?: () => void;
   readonly unpublishNotebook?: () => void;
+  readonly sidebarOpen: boolean;
 };
 
 const Topbar: FC<TopbarProps> = ({
@@ -43,6 +44,8 @@ const Topbar: FC<TopbarProps> = ({
   inviteEditorByEmail = () => Promise.resolve(),
   changeEditorAccess = () => Promise.resolve(),
   removeEditorById = () => Promise.resolve(),
+  toggleSidebar,
+  sidebarOpen,
 }) => {
   const workspaceId = notebook?.workspace?.id || '';
   const { data: session } = useSession();
@@ -54,6 +57,7 @@ const Topbar: FC<TopbarProps> = ({
 
   return (
     <NotebookTopbar
+      sidebarOpen={sidebarOpen}
       notebook={notebook}
       userWorkspaces={userWorkspaces}
       workspace={notebook.workspace}
@@ -85,6 +89,7 @@ const Topbar: FC<TopbarProps> = ({
       onInvite={inviteEditorByEmail}
       onRemove={removeEditorById}
       onChange={changeEditorAccess}
+      toggleSidebar={toggleSidebar}
     />
   );
 };

@@ -54,7 +54,7 @@ test.describe('Simple does publish work test', () => {
   });
 
   test('it can share', async () => {
-    await page.getByRole('button', { name: 'Publish' }).click();
+    await page.getByRole('button', { name: 'Share' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     await page.getByTestId('copy-published-link').click();
     const clipboardText = (
@@ -114,6 +114,7 @@ test.describe('Simple does publish work test', () => {
   test('it can re-publish', async () => {
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
+    await page.getByRole('button').getByText('Share').click();
     await page.getByTestId('publish-changes').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);
@@ -128,6 +129,6 @@ test.describe('Simple does publish work test', () => {
   });
 
   test("it shouldn't ask people to republish if no changes exist", async () => {
-    await expect(page.getByText('Publish New Changes')).toHaveCount(0);
+    await expect(page.getByText('Share with new changes')).toHaveCount(0);
   });
 });

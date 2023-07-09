@@ -22,12 +22,14 @@ export const NumberCatalogHeading = ({
   name,
 }: NumberCatalogHeadingProps) => {
   const [darkTheme] = useThemeFromStore();
+  // #h{id} is because of css query selectors, dont remove the h
+  const cssSelector = `#h${blockId}`;
   return (
     <a
-      href={`#${blockId}`}
+      href={cssSelector}
       onClick={(ev) => {
         ev.preventDefault();
-        window.history.pushState(null, '', `#${blockId}`);
+        window.history.pushState(null, '', cssSelector);
         window.dispatchEvent(new Event('hashchange'));
       }}
     >
@@ -87,7 +89,7 @@ export const NumberCatalogHeading = ({
 
 export const numberCatalogListStyles = (darkTheme: boolean) =>
   css(p14Medium, {
-    padding: '11px 0px 9px 15px',
+    padding: '11px 0px 9px 0px',
     display: 'grid',
     gridTemplateColumns: 'minmax(0, 1fr) 24px',
     alignItems: 'center',

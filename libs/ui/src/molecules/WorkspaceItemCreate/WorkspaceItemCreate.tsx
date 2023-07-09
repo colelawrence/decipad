@@ -12,7 +12,7 @@ export const WorkspaceItemCreate: React.FC<WorkspaceItemCreateProps> = ({
   return (
     <NavigationItem
       onClick={onClick}
-      icon={<Avatar name="+" backgroundColor={grey200} />}
+      icon={<Avatar name="+" cursorColor={grey200} />}
       iconStyles={avatarStyles}
     >
       <div data-testid="create-workspace-button" css={textStyle}>

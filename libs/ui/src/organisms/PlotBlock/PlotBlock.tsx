@@ -64,7 +64,7 @@ export const PlotBlock = ({
   );
   return (
     <section
-      data-test-id="chart-styles"
+      data-testid="chart-styles"
       css={plotBlockStyles}
       contentEditable={false}
     >

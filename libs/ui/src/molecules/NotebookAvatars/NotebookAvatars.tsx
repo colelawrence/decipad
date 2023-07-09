@@ -1,41 +1,27 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import {
-  useStripeCollaborationRules,
-  useWindowListener,
-} from '@decipad/react-utils';
+import { cursorStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
-import uniqBy from 'lodash.uniqby';
-import { FC, useCallback, useState, useContext } from 'react';
-import { ClientEventsContext } from '@decipad/client-events';
-import { noop } from '@decipad/utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
+import { FC } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
+import {
+  OpaqueColor,
+  cssVar,
+  p12Regular,
+  p13Medium,
+  setCssVar,
+} from '../../primitives';
 import { PermissionType } from '../../types';
-import { NotebookInvitationPopUp } from '../../organisms';
-import { cssVar, p12Regular, p13Medium, setCssVar } from '../../primitives';
-
-export interface NotebookAvatar {
-  isTeamMember?: boolean;
-  user: {
-    id: string;
-    name: string;
-    email?: string | null;
-    image?: string | null;
-    username?: string | null;
-    onboarded?: boolean | null;
-  };
-  permission: PermissionType;
-  onClick?: () => void;
-}
+import { Cursor, NotebookAvatar } from './NotebookAvatars.types';
+import { sortAvatars } from './sortAvatars';
 
 const genRole = (permission: PermissionType) => {
   switch (permission) {
     case 'ADMIN':
-      return 'Owner';
+      return 'Author';
     case 'WRITE':
-      return 'Can Edit';
+      return 'Collaborator';
     case 'READ':
-      return 'View Only';
+      return 'Reader';
   }
 };
 
@@ -43,27 +29,18 @@ const avatarsWrapperStyles = css({
   position: 'relative',
   display: 'flex',
   alignItems: 'center',
-  marginLeft: '6px',
+  marginLeft: '8px',
   zIndex: 2,
-});
-
-const popupWrapperStyles = css({
-  position: 'absolute',
-  top: '42px',
-  right: '-88px',
 });
 
 const avatarStyles = css({
   width: '28px',
   height: '28px',
-  marginLeft: '-6px',
+  marginLeft: '-8px',
+  position: 'relative',
 });
 
-const plusAvatarStyles = css(avatarStyles, {
-  cursor: 'pointer',
-});
-
-const tooltipNameStyles = css({
+export const tooltipNameStyles = css({
   ...p13Medium,
   ...setCssVar('currentTextColor', cssVar('backgroundColor')),
   marginBottom: '3px',
@@ -78,108 +55,70 @@ export type NotebookAvatarsProps = {
   isWriter?: boolean;
   usersWithAccess?: NotebookAvatar[];
   usersFromTeam?: NotebookAvatar[];
+  allUsers: NotebookAvatar[] | null;
   allowInvitation?: boolean;
   isPremiumWorkspace?: boolean;
 
-  notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
+  notebook?: { id: string; name: string; snapshots?: { createdAt?: string }[] };
   onInvite?: (email: string, permission: PermissionType) => Promise<void>;
   onChange?: (userId: string, permission: PermissionType) => Promise<void>;
   onRemove?: (userId: string) => Promise<void>;
 };
 
+interface EmailLookup {
+  [key: string]: OpaqueColor;
+}
+
 export const NotebookAvatars = ({
   isWriter,
-  usersWithAccess = [],
-  usersFromTeam = [],
-  allowInvitation,
-  isPremiumWorkspace,
-  ...sharingProps
+  allUsers,
 }: NotebookAvatarsProps): ReturnType<FC> => {
-  const [showInvitePopup, setShowInvitePopup] = useState<boolean>(false);
-  const clientEvent = useContext(ClientEventsContext);
+  const showHowMany = 3;
+  const users = sortAvatars(allUsers || []);
+  const firstThree = users.slice(0, showHowMany).reverse();
+  const showPlus = users.length > showHowMany;
+  const cursors = cursorStore.use.cursors();
 
-  const { canInvite } = useStripeCollaborationRules(
-    usersWithAccess,
-    usersFromTeam
-  );
-
-  const allUsers = uniqBy(
-    [
-      ...usersFromTeam.map((user) => ({ ...user, isTeamMember: true })),
-      ...usersWithAccess,
-    ],
-    (access) => access.user.id
-  );
-
-  const toggleInvitePopup = useCallback(() => {
-    setShowInvitePopup((show) => !show);
-  }, [setShowInvitePopup]);
-
-  const hasPaywall =
-    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') &&
-    !canInvite &&
-    !isPremiumWorkspace;
-
-  const handleClickOutside = useCallback(
-    (ev: MouseEvent) => {
-      const target = ev.target as HTMLElement;
-      const isAvatarClick = target.closest('.notebook-avatars');
-      const isPopupClick = target.closest('.notebook-invitation-popup');
-
-      const isHtmlClick = target.tagName === 'HTML';
-      const isPopoverClick = target.closest(
-        '[data-radix-popper-content-wrapper]'
-      );
-
-      if (!isAvatarClick && !isPopupClick && !isPopoverClick && !isHtmlClick) {
-        setShowInvitePopup(false);
+  const backgroundColorFor = Object.entries(cursors)
+    .filter(([cursorName]) => cursorName !== 'drag')
+    .map(([, cursor]) => cursor)
+    .reduce((previous: EmailLookup, current) => {
+      const cursor = current as Cursor;
+      const {
+        data: { user, style },
+      } = cursor;
+      const { _backgroundColor } = style;
+      const { email } = user;
+      if (email && email !== '') {
+        // eslint-disable-next-line no-param-reassign
+        previous[email] = _backgroundColor;
       }
-    },
-    [setShowInvitePopup]
-  );
-
-  useWindowListener('click', showInvitePopup ? handleClickOutside : noop);
+      return previous;
+    }, {});
 
   return (
-    <div css={avatarsWrapperStyles} className="notebook-avatars">
-      {allowInvitation && (
-        <Tooltip
-          trigger={
-            <div
-              key="invite"
-              css={plusAvatarStyles}
-              onClick={() => {
-                toggleInvitePopup();
-                clientEvent({
-                  type: 'action',
-                  action: 'click invite button',
-                });
-              }}
-              data-testid="avatar-invite"
-            >
-              <Avatar name={showInvitePopup ? '×' : '+'} greyedOut={true} />
-            </div>
-          }
-          open={showInvitePopup ? false : undefined}
-        >
-          <div css={{ textAlign: 'center' }}>
-            <p css={tooltipNameStyles}>Click to invite others</p>
-          </div>
-        </Tooltip>
+    <div data-testid="notebook-avatars" css={avatarsWrapperStyles}>
+      {showPlus && (
+        <div css={avatarStyles}>
+          <Avatar name={`+${users.length - showHowMany}`} greyedOut={true} />
+        </div>
       )}
-      {allUsers?.map((avatar, index) => {
+      {firstThree?.map((avatar, index) => {
         const email = avatar.user.email || avatar.user.name;
-
+        const cursorColor = backgroundColorFor[email] || null;
         return isWriter ? (
           <Tooltip
             key={index}
+            hoverOnly
+            side={'right'}
             trigger={
               <div css={avatarStyles}>
                 <Avatar
                   name={avatar.user.name}
+                  cursorColor={cursorColor}
                   email={email}
-                  greyedOut={avatar.permission !== 'ADMIN'}
                   onClick={avatar.onClick}
+                  useSecondLetter={false}
                 />
               </div>
             }
@@ -194,20 +133,11 @@ export const NotebookAvatars = ({
             <Avatar
               name={avatar.user.name}
               email={email}
-              greyedOut={avatar.permission !== 'ADMIN'}
+              useSecondLetter={false}
             />
           </div>
         );
       })}
-      {showInvitePopup && (
-        <div className="notebook-invitation-popup" css={popupWrapperStyles}>
-          <NotebookInvitationPopUp
-            hasPaywall={hasPaywall}
-            usersWithAccess={allUsers}
-            {...sharingProps}
-          />
-        </div>
-      )}
     </div>
   );
 };

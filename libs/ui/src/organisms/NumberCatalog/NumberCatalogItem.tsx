@@ -16,21 +16,18 @@ import {
   weakOpacity,
   white,
 } from '../../primitives';
-import { AvailableSwatchColor, swatchesThemed } from '../../utils';
 import { CodeResult } from '../CodeResult/CodeResult';
 
 interface NumberProps {
   name: string;
   blockId: string;
-  color: string;
-  onDragStart: SmartRefDragCallback;
+  onDragStart?: SmartRefDragCallback;
   onDragEnd?: (e: React.DragEvent) => void;
 }
 
 export const NumberCatalogItem = ({
   name,
   blockId,
-  color,
   onDragStart,
   onDragEnd,
 }: NumberProps) => {
@@ -42,7 +39,6 @@ export const NumberCatalogItem = ({
     undebouncedResult?.result == null
   );
   const [darkTheme] = useThemeFromStore();
-  const baseSwatches = swatchesThemed(darkTheme);
 
   if (!result?.result) {
     return null;
@@ -70,12 +66,15 @@ export const NumberCatalogItem = ({
     <div>
       <div
         draggable
-        onDragStart={onDragStart({
-          blockId,
-          asText,
-          computer,
-          result: result.result,
-        })}
+        onDragStart={
+          onDragStart &&
+          onDragStart({
+            blockId,
+            asText,
+            computer,
+            result: result.result,
+          })
+        }
         onDragEnd={onDragEnd}
         css={numberCatalogListItemStyles(darkTheme)}
       >
@@ -96,7 +95,7 @@ export const NumberCatalogItem = ({
                 transform: 'translateY(-4px)',
               },
               'svg > path': {
-                stroke: baseSwatches[color as AvailableSwatchColor].rgb,
+                stroke: cssVar('strongHighlightColor'),
               },
             })}
           >
@@ -159,7 +158,7 @@ const dragHandleStyles = css({
 
 export const numberCatalogListItemStyles = (darkTheme: boolean) =>
   css(p14Medium, {
-    padding: '11px 0px 9px 15px',
+    padding: '11px 0px 9px 0px',
     display: 'grid',
     gridTemplateColumns: 'minmax(0, 1fr) 24px',
     alignItems: 'center',

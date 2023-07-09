@@ -8,6 +8,7 @@ import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
 import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
+import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { DropdownMenuGroup } from '../DropdownMenuGroup/DropdownMenuGroup';
 
 export type { SelectItems } from '../../atoms';
@@ -32,14 +33,16 @@ const styles = css({
   boxSizing: 'border-box',
 });
 
-const mainStyles = css({
-  padding: '6px',
-  marginTop: '2px',
-  marginBottom: '2px',
-  width: '100%',
-  overflowY: 'auto',
-  maxHeight: '300px',
-});
+const mainStyles = css(
+  {
+    padding: '6px',
+    marginTop: '2px',
+    marginBottom: '2px',
+    width: '100%',
+    maxHeight: '300px',
+  },
+  deciOverflowYStyles
+);
 
 const footerStyles = css(
   p13Medium,

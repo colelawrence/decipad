@@ -8,10 +8,10 @@ import {
   grey200,
   OpaqueColor,
   p12Medium,
-  purple300,
   shortAnimationDuration,
   transparency,
 } from '../../primitives';
+import { avatarColor } from '../../utils';
 
 const containerStyles = (variant: boolean) =>
   css([
@@ -37,8 +37,6 @@ const containerStyles = (variant: boolean) =>
       },
     },
   ]);
-
-const baseColors = [purple300];
 
 interface InitialBackgroundStylesProps {
   color: OpaqueColor;
@@ -78,21 +76,14 @@ interface AvatarProps {
   readonly roundedSquare?: boolean;
   readonly hoverSelector?: string;
   readonly greyedOut?: boolean;
-  readonly backgroundColor?: OpaqueColor;
+  readonly cursorColor?: OpaqueColor;
   readonly variant?: boolean;
   readonly title?: string;
   readonly onClick?: () => void;
+  readonly useSecondLetter?: boolean;
 }
 
-const DEFAULT_LETTER = '?';
-
-const getAvatarColor = (name = '?') => {
-  const hashString = name
-    .split('')
-    .map((c: string) => c.charCodeAt(0))
-    .reduce((a: number, b: number) => a + b, 0);
-  return baseColors[hashString % baseColors.length];
-};
+const DEFAULT_WORD = 'Abacus';
 
 export const Avatar = ({
   name,
@@ -100,14 +91,19 @@ export const Avatar = ({
   roundedSquare = false,
   hoverSelector,
   greyedOut = false,
-  backgroundColor,
+  cursorColor,
   variant = false,
   onClick,
   title,
+  useSecondLetter = true,
 }: AvatarProps): ReturnType<FC> => {
-  const firstLetter = name?.[0]?.toUpperCase() || DEFAULT_LETTER;
-  const secondLetter = name?.[1]?.toLocaleLowerCase() || '';
-  const avatarColor = backgroundColor ?? getAvatarColor(name);
+  const selectedWord =
+    name ||
+    (email !== 'thisemaildoesnthaveagravatar@n1n.co' && email) ||
+    DEFAULT_WORD;
+  const firstLetter = selectedWord?.[0]?.toUpperCase();
+  const secondLetter = selectedWord?.[1]?.toLocaleLowerCase() || '';
+  const color = avatarColor(name);
 
   return (
     <div
@@ -118,10 +114,15 @@ export const Avatar = ({
     >
       <div css={{ display: 'flex', height: '100%', width: '100%' }}>
         <div
+          data-testid={'avatar-img'}
           css={[
             { width: '100%', borderRadius: roundedSquare ? '8px' : '50%' },
             variant && {
               border: `1px solid ${cssVar('borderColor')}`,
+            },
+            cursorColor && {
+              borderRadius: '50%',
+              boxShadow: `0 0 0 2px ${cursorColor.hex}`,
             },
           ]}
         >
@@ -137,7 +138,7 @@ export const Avatar = ({
               width="100"
               height="100"
               css={initialBackgroundStyles({
-                color: avatarColor,
+                color,
                 greyedOut,
                 variant,
                 hoverSelector,
@@ -155,7 +156,7 @@ export const Avatar = ({
               ])}
             >
               {firstLetter}
-              {secondLetter}
+              {useSecondLetter && secondLetter !== '@' && secondLetter}
             </text>
           </svg>
         </div>

@@ -1,3 +1,5 @@
+import { getExprRef } from '@decipad/computer';
+import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
@@ -5,8 +7,14 @@ import {
   MyEditor,
   MyText,
 } from '@decipad/editor-types';
-import React from 'react';
 import {
+  getSlateFragment,
+  getVariableRanges,
+  selectEventRange,
+} from '@decipad/editor-utils';
+import { cursorStore } from '@decipad/react-contexts';
+import {
+  TElement,
   findNode,
   focusEditor,
   getBlockAbove,
@@ -16,17 +24,9 @@ import {
   getPointBefore,
   isDefined,
   isEditorFocused,
-  TElement,
 } from '@udecode/plate';
-import {
-  getSlateFragment,
-  getVariableRanges,
-  selectEventRange,
-} from '@decipad/editor-utils';
-import { DRAG_INLINE_RESULT } from '@decipad/editor-components';
-import { getExprRef } from '@decipad/computer';
 import { dndStore } from '@udecode/plate-dnd';
-import { cursorStore } from '../../stores/cursorStore';
+import React from 'react';
 
 export const onDropInlineResult =
   (editor: MyEditor) => (event: React.DragEvent) => {

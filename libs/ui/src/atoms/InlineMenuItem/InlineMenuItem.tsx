@@ -6,10 +6,10 @@ import { FC, ReactNode, useCallback, useRef } from 'react';
 import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
 import { soonStyles } from '../../styles/menu';
 
-const styles = css({
+const inlineMenuStyles = css({
   display: 'grid',
+  alignItems: 'start',
   gridTemplateColumns: 'auto 1fr',
-  alignItems: 'center',
   columnGap: '12px',
 
   clipPath: 'inset(-8px -8px -8px -8px round 8px)',
@@ -105,7 +105,7 @@ export const InlineMenuItem = ({
     <button
       role="menuitem"
       data-testid={testId}
-      css={styles}
+      css={inlineMenuStyles}
       onMouseDown={(event) => {
         enabled && onExecute();
         event.stopPropagation();

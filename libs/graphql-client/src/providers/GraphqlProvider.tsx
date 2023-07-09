@@ -1,15 +1,15 @@
 /* eslint-disable no-underscore-dangle */
+import { produce } from '@decipad/utils';
 import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
-import { produce } from '@decipad/utils';
 import { FC, ReactNode, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-  createClient,
-  fetchExchange,
-  Provider as UrqlProvider,
   ClientOptions,
+  Provider as UrqlProvider,
+  createClient,
   ssrExchange as createSsrExchange,
+  fetchExchange,
 } from 'urql';
 import { graphCacheConfig } from '../cacheConfig';
 
@@ -37,6 +37,7 @@ const defaultClientOpts = () => {
       credentials: 'same-origin',
       headers: {},
     },
+    requestPolicy: 'cache-and-network',
     suspense: true, // React Suspense
     exchanges: [
       devtoolsExchange,

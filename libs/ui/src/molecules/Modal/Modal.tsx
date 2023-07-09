@@ -9,10 +9,10 @@ const pageCoverStyles = css({
   height: '100%',
   top: 0,
   left: 0,
-
   display: 'grid',
   gridTemplate: '100% / 100%',
   overflow: 'hidden',
+  backdropFilter: 'blur(3px) brightness(75%)',
 });
 
 const overlayStyles = css({

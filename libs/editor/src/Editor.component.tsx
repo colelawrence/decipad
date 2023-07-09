@@ -1,7 +1,6 @@
 import { UploadFile } from '@decipad/editor-attachments';
 import {
   BlockLengthSynchronizationProvider,
-  NumberCatalog,
   TeleportEditor,
 } from '@decipad/editor-components';
 import { Integrations } from '@decipad/editor-integrations';
@@ -41,7 +40,6 @@ export interface EditorProps {
 const InsidePlate = ({
   containerRef,
   children,
-  readOnly,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
 }) => {
@@ -58,11 +56,6 @@ const InsidePlate = ({
       <ErrorBoundary fallback={<></>}>
         <RemoteAvatarOverlay containerRef={containerRef} />
       </ErrorBoundary>
-      {readOnly ? null : (
-        <ErrorBoundary fallback={<></>}>
-          <NumberCatalog />
-        </ErrorBoundary>
-      )}
       <ErrorBoundary fallback={<></>}>
         <DndPreview />
       </ErrorBoundary>

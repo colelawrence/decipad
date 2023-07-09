@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useState } from 'react';
 import { nanoid } from 'nanoid';
-import { cssVar, p14Regular, setCssVar, p13Medium } from '../../primitives';
+import { FC, ReactNode, useState } from 'react';
+import { cssVar, p13Medium, p14Regular, setCssVar } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 
 const containerStyles = css({
@@ -49,6 +49,11 @@ const errorStyles = css([
   inputLabel,
   { gridArea: 'error', color: cssVar('errorColor') },
 ]);
+
+const disabledStyles = css({
+  backgroundColor: cssVar('tintedBackgroundColor'),
+  cursor: 'not-allowed',
+});
 
 type FieldType =
   | 'text'
@@ -120,6 +125,7 @@ export const InputField = ({
               borderRadius: '6px',
             }
           : { width: '100%', padding: 0 },
+        disabled && disabledStyles,
       ]}
       type={type}
       required={required}
@@ -137,7 +143,7 @@ export const InputField = ({
   );
 
   return (
-    <div css={containerStyles}>
+    <div className="input-field-container" css={containerStyles}>
       {labelEl}
       {errorEl}
       {inputEl}

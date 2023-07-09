@@ -5,8 +5,8 @@ import { SessionProvider } from 'next-auth/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { QueryParamProvider } from 'use-query-params';
 import { BrowserRouter } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
 
@@ -23,6 +23,7 @@ const props: ComponentProps<typeof NotebookTopbar> = {
       permission: 'ADMIN',
     },
   ],
+  sidebarOpen: true,
 };
 
 interface WithProvidersProps {
@@ -58,7 +59,7 @@ const WithProviders: FC<WithProvidersProps> = ({ children, noSession }) => (
 describe('Notebook Topbar', () => {
   mockConsoleError();
 
-  it('renders the try decipad button only for non authenticated userz', () => {
+  it('renders the try decipad button only for non authenticated users', () => {
     {
       const { queryByText } = render(
         <WithProviders>
@@ -66,6 +67,7 @@ describe('Notebook Topbar', () => {
         </WithProviders>
       );
       expect(queryByText(/try decipad/i)).not.toBeInTheDocument();
+      expect(queryByText(/reading mode/i)).toBeInTheDocument();
     }
 
     {
@@ -88,6 +90,8 @@ describe('Notebook Topbar', () => {
       </WithProviders>
     );
     expect(queryByText(/dup/i)).not.toBeInTheDocument();
+    expect(queryByText(/templates/i)).toBeInTheDocument();
+    expect(queryByText(/sidebar/i)).toBeInTheDocument();
 
     rerender(
       <WithProviders>
@@ -103,20 +107,30 @@ describe('Notebook Topbar', () => {
         <NotebookTopbar {...props} permission="READ" />
       </WithProviders>
     );
-    expect(queryByText(/publish/i, {})).toBeNull();
+    expect(queryByText(/share/i, {})).toBeNull();
 
     rerender(
       <WithProviders>
         <NotebookTopbar {...props} permission="WRITE" />
       </WithProviders>
     );
-    expect(queryByText(/publish/i)).toBeNull();
+    expect(queryByText(/share/i)).toBeNull();
 
     rerender(
       <WithProviders>
         <NotebookTopbar {...props} permission="ADMIN" />
       </WithProviders>
     );
-    expect(getByText(/publish/i)).toBeVisible();
+    expect(getByText(/share/i)).toBeVisible();
   });
+});
+
+it('renders well for writers', () => {
+  const { queryByText } = render(
+    <WithProviders>
+      <NotebookTopbar {...props} permission="WRITE" />
+    </WithProviders>
+  );
+  expect(queryByText(/try decipad/i)).not.toBeInTheDocument();
+  expect(queryByText(/reading mode/i)).not.toBeInTheDocument();
 });

@@ -1,8 +1,8 @@
+import type { EditorStatsStore } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { FC, useState } from 'react';
-import type { EditorStatsStore } from '@decipad/react-contexts';
-import { black, cssVar, h1, h2, transparency } from '../../primitives';
+import { cssVar, h1, h2, smallShadow } from '../../primitives';
 import { ComputerStats } from './ComputerStats';
 import { DataViewStats } from './DataViewStats';
 
@@ -18,7 +18,7 @@ const styles = css({
 
   borderRadius: ' 16px 0 0 16px',
   padding: '24px',
-  boxShadow: `0 0 16px 0 ${transparency(black, 0.06).rgba}`,
+  boxShadow: `0 0 16px 0 ${smallShadow.rgba}`,
 
   background: cssVar('backgroundColor'),
   overflowY: 'scroll',

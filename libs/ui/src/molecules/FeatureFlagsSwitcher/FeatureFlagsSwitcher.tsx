@@ -1,4 +1,3 @@
-import stringify from 'json-stringify-safe';
 import {
   availableFlags,
   FEATURE_FLAGS_KEY,
@@ -9,9 +8,10 @@ import {
 import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import stringify from 'json-stringify-safe';
 import { useState } from 'react';
 import { Button } from '../../atoms';
-import { black, cssVar, h2, transparency } from '../../primitives';
+import { cssVar, h2, smallShadow } from '../../primitives';
 
 const setItem =
   'localStorage' in global
@@ -26,7 +26,7 @@ const styles = css({
 
   borderRadius: '0 16px 16px',
   padding: '24px 40px',
-  boxShadow: `2px 2px 16px 0px ${transparency(black, 0.06).rgba}`,
+  boxShadow: `2px 2px 16px 0px ${smallShadow.rgba}`,
 
   background: cssVar('backgroundColor'),
 });

@@ -12,7 +12,7 @@ import { Table } from '..';
 import { Create } from '../../icons';
 import { AddTableRowButton } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
-import { editorLayout } from '../../styles';
+import { editorLayout, scrollbars } from '../../styles';
 import { tableControlWidth } from '../../styles/table';
 import {
   AvailableSwatchColor,
@@ -60,66 +60,22 @@ const tableWrapperDraggingStyles = css({
   left: `-${tableControlWidth}`,
 });
 
-const tableWrapperDefaultStyles = css({
-  width: '100vw',
-  minWidth: editorLayout.slimBlockWidth,
-  overflowX: 'auto',
-  overflowY: 'hidden',
-  scrollbarWidth: 'none',
-  msOverflowStyle: 'none',
-  position: 'relative',
-  whiteSpace: 'nowrap',
-  display: 'flex',
-  '&:hover': {
-    scrollbarWidth: 'inherit',
-    msOverflowStyle: 'inherit',
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: cssVar('highlightColor'),
+const tableWrapperDefaultStyles = css(
+  {
+    width: '100vw',
+    minWidth: editorLayout.slimBlockWidth,
+    overflowY: 'hidden',
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    display: 'flex',
+    [smallScreenQuery]: {
+      maxWidth: `calc(100vw - ${gutterWidth})`,
+      transform: `translateX(-40px)`,
+      minWidth: '0',
     },
   },
-  '&::-webkit-scrollbar': {
-    width: '100px',
-    height: '8px',
-  },
-
-  '&::-webkit-scrollbar-thumb': {
-    width: '3px',
-    height: '3px',
-    backgroundColor: 'transparent',
-    borderRadius: '8px',
-  },
-
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: 'transparent',
-    height: '3px',
-  },
-
-  '&::-webkit-scrollbar-button': {
-    width: `calc((100vw - 580px)/4)`,
-  },
-
-  '&::-ms-scrollbar-thumb': {
-    width: '3px',
-    height: '3px',
-    backgroundColor: cssVar('highlightColor'),
-    borderRadius: '8px',
-  },
-
-  '&::-ms-scrollbar-track': {
-    backgroundColor: 'transparent',
-    height: '3px',
-  },
-
-  '&::-ms-scrollbar-button': {
-    width: `calc((100vw - 580px)/4)`,
-  },
-
-  [smallScreenQuery]: {
-    maxWidth: `calc(100vw - ${gutterWidth})`,
-    transform: `translateX(-40px)`,
-    minWidth: '0',
-  },
-});
+  scrollbars.deciInsideNotebookOverflowXStyles
+);
 
 export const tableWrapperStyles = css([
   tableWrapperTransformStyles,

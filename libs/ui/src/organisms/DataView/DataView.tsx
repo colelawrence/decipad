@@ -8,8 +8,8 @@ import { Children, FC, ReactNode } from 'react';
 import { Invisible, SegmentButtons, Spinner } from '../../atoms';
 import { Move, Transpose } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
-import { cssVar, p14Regular, smallScreenQuery } from '../../primitives';
-import { editorLayout } from '../../styles';
+import { p14Regular, smallScreenQuery } from '../../primitives';
+import { editorLayout, scrollbars } from '../../styles';
 import {
   AvailableSwatchColor,
   TableStyleContext,
@@ -54,66 +54,23 @@ const dataViewAlternateRotationTableStyles = css({
   },
 });
 
-const dataViewTableWrapperStyles = css({
-  transform: `translateX(calc((((100vw - 580px) / 2)) * -1 ))`,
-  width: '100vw',
-  minWidth: editorLayout.slimBlockWidth,
-  overflowX: 'auto',
-  scrollbarWidth: 'none',
-  msOverflowStyle: 'none',
-  paddingBottom: '12px',
-  position: 'relative',
-  whiteSpace: 'nowrap',
-  display: 'flex',
-  '&:hover': {
-    scrollbarWidth: 'inherit',
-    msOverflowStyle: 'inherit',
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: cssVar('highlightColor'),
+const dataViewTableWrapperStyles = css(
+  {
+    transform: `translateX(calc((((100vw - 580px) / 2)) * -1 ))`,
+    width: '100vw',
+    minWidth: editorLayout.slimBlockWidth,
+    paddingBottom: '12px',
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    display: 'flex',
+    [smallScreenQuery]: {
+      maxWidth: `calc(100vw - ${gutterWidth})`,
+      minWidth: '0',
+      transform: `translateX(0)`,
     },
   },
-  '&::-webkit-scrollbar': {
-    width: '100px',
-    height: '8px',
-  },
-
-  '&::-webkit-scrollbar-thumb': {
-    width: '3px',
-    height: '3px',
-    backgroundColor: 'transparent',
-    borderRadius: '8px',
-  },
-
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: 'transparent',
-    height: '3px',
-  },
-
-  '&::-webkit-scrollbar-button': {
-    width: `calc((100vw - 580px)/4)`,
-  },
-
-  '&::-ms-scrollbar-thumb': {
-    width: '3px',
-    height: '3px',
-    backgroundColor: cssVar('highlightColor'),
-    borderRadius: '8px',
-  },
-
-  '&::-ms-scrollbar-track': {
-    backgroundColor: 'transparent',
-    height: '3px',
-  },
-
-  '&::-ms-scrollbar-button': {
-    width: `calc((100vw - 580px)/4)`,
-  },
-  [smallScreenQuery]: {
-    maxWidth: `calc(100vw - ${gutterWidth})`,
-    minWidth: '0',
-    transform: `translateX(0)`,
-  },
-});
+  scrollbars.deciInsideNotebookOverflowXStyles
+);
 
 const scrollRightOffset = `(((100vw - 1055px) / 2) + 200px)`;
 

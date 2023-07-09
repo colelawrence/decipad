@@ -1,38 +1,30 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { useWindowListener } from '@decipad/react-utils';
 import { notebooks } from '@decipad/routing';
+import { isServerSideRendering } from '@decipad/support';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import * as Popover from '@radix-ui/react-popover';
 import { format } from 'date-fns';
-import { FC, MouseEvent, useCallback, useContext, useState } from 'react';
+import { FC, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { isServerSideRendering } from '@decipad/support';
 import { Button, Dot, Toggle, Tooltip } from '../../atoms';
-import { Link } from '../../icons';
+import { Link, World } from '../../icons';
+import { NotebookAvatar } from '../../molecules';
 import {
-  black,
   cssVar,
   p13Regular,
   p14Medium,
   setCssVar,
   smallScreenQuery,
-  transparency,
+  smallShadow,
 } from '../../primitives';
-
-const wrapperStyles = css({
-  position: 'relative',
-  zIndex: 3,
-});
+import { NotebookInvitationPopUp } from '../NotebookInvitationPopUp/NotebookInvitationPopUp';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
  */
 const popUpStyles = css({
-  position: 'absolute',
-  right: 0,
-  top: 50,
-
   width: '310px',
   padding: '16px',
   [smallScreenQuery]: {
@@ -43,7 +35,7 @@ const popUpStyles = css({
   border: '1px solid',
   borderColor: cssVar('strongHighlightColor'),
   borderRadius: '8px',
-  boxShadow: `0px 2px 16px -4px ${transparency(black, 0.06)}`,
+  boxShadow: `0px 2px 16px -4px ${smallShadow.rgba}`,
 });
 
 /**
@@ -66,6 +58,18 @@ const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
 
 const titleAndToggleStyles = css(horizontalGroupStyles, {
   justifyContent: 'space-between',
+  padding: 8,
+  alignItems: 'flex-start',
+  backgroundColor: cssVar('highlightColor'),
+  borderRadius: 8,
+  button: {
+    height: 18,
+    width: 34,
+  },
+  'button span': {
+    height: 14,
+    width: 14,
+  },
 });
 
 /**
@@ -85,7 +89,7 @@ const clipboardWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: '12px',
+  gap: '6px',
   whiteSpace: 'nowrap',
 });
 
@@ -125,6 +129,9 @@ const padLinkTextStyles = css(
 );
 
 interface NotebookSharingPopUpProps {
+  hasPaywall?: boolean;
+  allUsers?: NotebookAvatar[] | null;
+  allowInvitation?: boolean;
   notebook: {
     id: string;
     name: string;
@@ -144,6 +151,21 @@ interface NotebookSharingPopUpProps {
 
 const SNAPSHOT_NAME = 'Published 1';
 
+const HorizontalDivider = () => (
+  <div
+    css={[
+      {
+        width: '100%',
+        height: '1px',
+        backgroundColor: cssVar('strongerHighlightColor'),
+        [smallScreenQuery]: {
+          display: 'none',
+        },
+      },
+    ]}
+  />
+);
+
 /**
  * A component that handles the rendering of the notebook sharing pop up and the toggle logic.
  * @param link The notebook link to be rendered in the text box and copied to the clipboard on button click.
@@ -155,7 +177,11 @@ export const NotebookPublishingPopUp = ({
   isPublished = false,
   isPublishing = false,
   onPublish = noop,
+  hasPaywall,
+  allUsers,
+  allowInvitation = false,
   onUnpublish = noop,
+  ...sharingProps
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
     useState(false);
@@ -165,21 +191,12 @@ export const NotebookPublishingPopUp = ({
 
   const [toggleState, setToggleState] = useState(isPublished);
 
-  const handleClickOutside = () => {
-    setShareMenuOpen(false);
-  };
-  useWindowListener('click', handleClickOutside);
-
   const link = isServerSideRendering()
     ? ''
     : new URL(
         notebooks({}).notebook({ notebook }).$,
         window.location.origin
       ).toString();
-
-  const buttonProps = {
-    onClick: () => setShareMenuOpen(!shareMenuOpen),
-  };
 
   const onPublishToggle = useCallback(
     (newIsPublished: boolean) => {
@@ -189,134 +206,181 @@ export const NotebookPublishingPopUp = ({
     [onPublish, onUnpublish]
   );
 
+  const toggleMenuOpen = useCallback(() => {
+    setShareMenuOpen(!shareMenuOpen);
+  }, [shareMenuOpen]);
+
   const currentSnapshot = notebook.snapshots?.find(
     (ss) => ss.snapshotName === SNAPSHOT_NAME
   );
 
-  return (
-    <div
-      css={wrapperStyles}
-      onClick={useCallback((ev: MouseEvent) => ev.stopPropagation(), [])}
-    >
-      {isPublished ? (
-        hasUnpublishedChanges ? (
-          <Dot top={-5} right={-5}>
-            <Button
-              type="primaryBrand"
-              {...buttonProps}
-              testId="publish-button"
+  const popoverDiv = (
+    <div css={popUpStyles}>
+      <div css={innerPopUpStyles}>
+        {allowInvitation && (
+          <>
+            <div css={groupStyles} className="notebook-invitation-popup">
+              <NotebookInvitationPopUp
+                notebook={notebook}
+                hasPaywall={hasPaywall}
+                usersWithAccess={allUsers}
+                {...sharingProps}
+              />
+            </div>
+            <HorizontalDivider />
+          </>
+        )}
+        <div css={groupStyles}>
+          <div
+            css={[
+              titleAndToggleStyles,
+              toggleState && {
+                'button span': { left: `calc(100% - 15px) !important` },
+              },
+            ]}
+          >
+            <span
+              css={{
+                display: 'flex',
+                gap: 4,
+                alignItems: 'center',
+                svg: {
+                  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+                },
+              }}
             >
-              Publish
-            </Button>
-          </Dot>
-        ) : (
-          <Button type="secondary" {...buttonProps} testId="publish-button">
-            Publish
-          </Button>
-        )
-      ) : (
-        <Button type="primaryBrand" {...buttonProps} testId="publish-button">
-          Publish
-        </Button>
-      )}
+              <span css={{ display: 'grid', width: 16, height: 16 }}>
+                <World />
+              </span>
+              <p
+                css={css(
+                  p14Medium,
+                  setCssVar('currentTextColor', cssVar('weakTextColor'))
+                )}
+              >
+                {isPublishing
+                  ? 'Creating link...'
+                  : isPublished
+                  ? 'Anyone with link can view'
+                  : 'Anyone with link can view'}
+              </p>
+            </span>
 
-      <div>
-        {shareMenuOpen && (
-          <div css={[popUpStyles]}>
-            <div css={innerPopUpStyles}>
-              <div css={groupStyles}>
-                <div css={titleAndToggleStyles}>
-                  <p css={css(p14Medium)}>
-                    Publish{isPublishing ? 'ing…' : isPublished ? 'ed' : ''}
-                  </p>
-                  <Toggle
-                    ariaRoleDescription="enable publishing"
-                    active={toggleState}
-                    onChange={onPublishToggle}
-                    disabled={isPublishing}
-                  />
-                </div>
-                <p css={descriptionStyles}>
-                  {isPublished
-                    ? 'Anyone with this link can view your notebook.'
-                    : 'Notebook is only visible to you.'}
-                </p>
-              </div>
+            <Toggle
+              ariaRoleDescription="enable publishing"
+              active={toggleState}
+              onChange={onPublishToggle}
+              disabled={isPublishing}
+            />
+          </div>
+          <p css={descriptionStyles}>
+            {isPublished ? 'Anyone with this link can view your notebook.' : ''}
+          </p>
+        </div>
 
-              {isPublished && (
-                <div css={groupStyles}>
-                  <div css={clipboardWrapperStyles}>
-                    <Tooltip
-                      variant="small"
-                      open={copiedPublicStatusVisible}
-                      trigger={
-                        <div>
-                          <CopyToClipboard
-                            text={link}
-                            onCopy={() => {
-                              setCopiedPublicStatusVisible(true);
-                              setTimeout(() => {
-                                setCopiedPublicStatusVisible(false);
-                              }, 1000);
-                              // Analytics
-                              clientEvent({
-                                type: 'action',
-                                action: 'notebook share link copied',
-                              });
-                            }}
-                          >
-                            <button
-                              css={copyButtonStyles}
-                              aria-roledescription="copy url to clipboard"
-                              data-testid="copy-published-link"
-                            >
-                              <span css={copyButtonIconStyles}>
-                                <Link />
-                              </span>{' '}
-                              Copy
-                            </button>
-                          </CopyToClipboard>
-                        </div>
-                      }
+        {isPublished && (
+          <div css={groupStyles}>
+            <div css={clipboardWrapperStyles}>
+              <Tooltip
+                variant="small"
+                open={copiedPublicStatusVisible}
+                usePortal={false}
+                trigger={
+                  <div>
+                    <CopyToClipboard
+                      text={link}
+                      onCopy={() => {
+                        setCopiedPublicStatusVisible(true);
+                        setTimeout(() => {
+                          setCopiedPublicStatusVisible(false);
+                          setShareMenuOpen(false);
+                        }, 1000);
+                        // Analytics
+                        clientEvent({
+                          type: 'action',
+                          action: 'notebook share link copied',
+                        });
+                      }}
                     >
-                      <p>Copied!</p>
-                    </Tooltip>
-                    <p css={padLinkTextStyles}>{link}</p>
+                      <button
+                        css={copyButtonStyles}
+                        aria-roledescription="copy url to clipboard"
+                        data-testid="copy-published-link"
+                      >
+                        <span css={copyButtonIconStyles}>
+                          <Link />
+                        </span>{' '}
+                        Copy
+                      </button>
+                    </CopyToClipboard>
                   </div>
-                </div>
-              )}
-              {hasUnpublishedChanges && (
-                <div css={groupStyles}>
-                  {(currentSnapshot?.createdAt ||
-                    currentSnapshot?.updatedAt) && (
-                    <p css={descriptionStyles} data-testid="version-date">
-                      Previous version from{' '}
-                      {format(
-                        new Date(
-                          currentSnapshot.updatedAt ??
-                            currentSnapshot.createdAt ??
-                            ''
-                        ),
-                        'LLL do, HH:mm'
-                      )}
-                    </p>
-                  )}
-                  <div css={horizontalGroupStyles}>
-                    <Button
-                      type="primaryBrand"
-                      onClick={onPublish}
-                      disabled={isPublishing}
-                      testId="publish-changes"
-                    >
-                      {isPublishing ? 'Publishing...' : 'Publish New Changes'}
-                    </Button>
-                  </div>
-                </div>
-              )}
+                }
+              >
+                <p>Copied!</p>
+              </Tooltip>
+              <p css={padLinkTextStyles}>{link.replace(/https?:\/\//, '')}</p>
+            </div>
+          </div>
+        )}
+        {hasUnpublishedChanges && (
+          <div css={groupStyles}>
+            {(currentSnapshot?.createdAt || currentSnapshot?.updatedAt) && (
+              <p css={descriptionStyles} data-testid="version-date">
+                Previous version from{' '}
+                {format(
+                  new Date(
+                    currentSnapshot.updatedAt ?? currentSnapshot.createdAt ?? ''
+                  ),
+                  'LLL do, HH:mm'
+                )}
+              </p>
+            )}
+            <div css={horizontalGroupStyles}>
+              <Button
+                type="primaryBrand"
+                onClick={onPublish}
+                disabled={isPublishing}
+                testId="publish-changes"
+              >
+                {isPublishing ? 'Sharing...' : 'Share with new changes'}
+              </Button>
             </div>
           </div>
         )}
       </div>
     </div>
+  );
+
+  return (
+    <Popover.Root
+      defaultOpen
+      open={shareMenuOpen}
+      onOpenChange={setShareMenuOpen}
+    >
+      <Popover.Trigger asChild>
+        {isPublished && hasUnpublishedChanges ? (
+          <Button
+            type="primaryBrand"
+            onClick={toggleMenuOpen}
+            testId="publish-button"
+          >
+            <div css={{ position: 'relative' }}>
+              <Dot top={-13} right={-20}>
+                Share
+              </Dot>
+            </div>
+          </Button>
+        ) : (
+          <Button
+            type="primaryBrand"
+            onClick={toggleMenuOpen}
+            testId="publish-button"
+          >
+            Share
+          </Button>
+        )}
+      </Popover.Trigger>
+      <Popover.Content sideOffset={15}>{popoverDiv}</Popover.Content>
+    </Popover.Root>
   );
 };

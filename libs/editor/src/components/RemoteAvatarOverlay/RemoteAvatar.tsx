@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { MyValue, useTEditorRef } from '@decipad/editor-types';
-import { OpaqueColor, RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
-import { Session } from 'next-auth';
-import { FC, RefObject } from 'react';
-import { Range } from 'slate';
-import { getNodeEntries, isElement, toDOMNode } from '@udecode/plate';
 import {
   isPotentiallyWideElement,
   isTopLevelBlock,
 } from '@decipad/editor-utils';
+import { OpaqueColor, RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
+import { getNodeEntries, isElement, toDOMNode } from '@udecode/plate';
+import { Session } from 'next-auth';
+import { FC, RefObject } from 'react';
+import { Range } from 'slate';
 
 const MIN_VERTICAL_DISPLACEMENT = 50;
 
@@ -57,10 +57,11 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
   const verticallyCenterOnBlock =
     !isElement(block) || !isPotentiallyWideElement(block);
 
+  const collabName = user?.name || user?.email;
   return (
-    (user?.name && (
+    (collabName && (
       <UIRemoteAvatar
-        name={user.name}
+        name={collabName}
         email={user.email ?? undefined}
         top={
           verticallyCenterOnBlock
@@ -68,7 +69,7 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
             : y - containerVerticalDisplacement + MIN_VERTICAL_DISPLACEMENT
         }
         left={width}
-        backgroundColor={cursor.data.style?._backgroundColor}
+        cursorColor={cursor.data.style?._backgroundColor}
       />
     )) ||
     null

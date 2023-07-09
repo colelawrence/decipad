@@ -42,6 +42,8 @@ type Action =
   | { action: 'number created with ='; props?: undefined }
   | { action: 'code line teleported'; props?: undefined }
   | { action: 'code line teleported back'; props?: undefined }
+  // sidebar
+  | { action: 'sidebar block add'; props: { command: string } }
   // Generic code actions
   | {
       action: 'user code error';

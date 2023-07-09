@@ -15,9 +15,12 @@ const styles = (
   size: number,
   variant: boolean,
   square: boolean,
-  transform: boolean
+  transform: boolean,
+  strokeColor?: OpaqueColor
 ) => {
-  const stroke = variant
+  const stroke = strokeColor
+    ? strokeColor.hex
+    : variant
     ? transparency(black, 0.3).rgba
     : cssVar('backgroundColor');
   const strokeWidth = variant ? '1.11px' : '2px';
@@ -55,6 +58,7 @@ type DotProps = {
   readonly visible?: boolean;
   readonly drunkMode?: boolean;
   readonly color?: OpaqueColor;
+  readonly strokeColor?: OpaqueColor;
 };
 
 export const Dot = ({
@@ -68,12 +72,13 @@ export const Dot = ({
   visible = true,
   square = false,
   drunkMode = false,
+  strokeColor,
   children,
 }: DotProps) => {
   const elem = (
     <span
       css={[
-        styles(color, size, variant, square, false),
+        styles(color, size, variant, square, false, strokeColor),
         !visible && css({ '::before': { opacity: 0 } }),
         css({ '::before': { top, left, right, bottom } }),
       ]}

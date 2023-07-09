@@ -30,6 +30,7 @@ import {
 } from '../../primitives';
 import { codeBlock } from '../../styles';
 import { resultBubbleStyles } from '../../styles/results';
+import { deciInsideNotebookOverflowXStyles } from '../../styles/scrollbars';
 import {
   innerTablesNoBottomBorderStyles,
   innerTablesNoTopBorderStyles,
@@ -169,7 +170,7 @@ const expandedResultStyles = css(p14Medium, {
   gridArea: 'expanded-res',
   display: 'grid',
   marginTop: '4px',
-  overflowX: 'auto',
+  ...deciInsideNotebookOverflowXStyles,
   'td table': {
     ...innerTablesNoTopBorderStyles,
     ...innerTablesNoBottomBorderStyles,

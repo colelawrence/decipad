@@ -1,21 +1,19 @@
 export * from './AIPanel';
-export * from './block-management';
 export * from './BlockErrorBoundary';
 export * from './BlockLengthSynchronization/BlockLengthSynchronizationProvider';
 export * from './BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 export * from './BlockSelection/BlockSelectable';
-export * from './TeleportEditor';
 export * from './CodeLine';
 export * from './DataMapping';
 export * from './Display';
-export * from './hooks';
+export * from './EditorSidebar';
+export * from './ElementChange';
 export * from './Import/Import';
 export * from './InteractiveParagraph';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';
-export * from './NumberCatalog';
-
-export * from './ElementChange';
-
+export * from './TeleportEditor';
+export * from './block-management';
+export * from './hooks';
 export * from './text';
 export * from './utils';

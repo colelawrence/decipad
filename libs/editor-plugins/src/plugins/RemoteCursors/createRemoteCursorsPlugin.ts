@@ -1,8 +1,8 @@
 import { MyEditor, MyPlatePlugin } from '@decipad/editor-types';
+import { cursorStore } from '@decipad/react-contexts';
 import { CursorEditor } from '@decipad/slate-yjs';
 import { jsonify } from 'libs/slate-yjs/src/utils/jsonify';
 import debounce from 'lodash.debounce';
-import { cursorStore } from '../../stores/cursorStore';
 import { cursorColor } from './cursorColor';
 
 const RETRY_INTERVAL_MS = 1000;
@@ -44,7 +44,7 @@ const schedule = (_editor: MyEditor) => {
                 style: {
                   _backgroundColor: color,
                   backgroundColor: color.rgb,
-                  width: 2,
+                  width: 3,
                 },
               },
             };

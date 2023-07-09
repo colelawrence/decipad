@@ -1,3 +1,4 @@
+import { Computer } from '@decipad/computer';
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
 import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
@@ -19,6 +20,7 @@ export interface NotebookProps {
   initialState?: string;
   onEditor: (editor: MyEditor) => void;
   onDocsync: (docsync: DocSyncEditor) => void;
+  onComputer: (computer: Computer) => void;
   getAttachmentForm: (
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;

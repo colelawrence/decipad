@@ -3,8 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { NotebookAvatars, NotebookAvatarsProps } from './NotebookAvatars';
 
 const props: NotebookAvatarsProps = {
-  notebook: {} as any,
-  usersWithAccess: [
+  allUsers: [
     {
       user: {
         id: '0',
@@ -50,19 +49,19 @@ describe('NotebookAvatars Molecule', () => {
 
     expect(screen.queryByText('Chris Doe')).toBeNull();
 
-    await userEvent.hover(screen.getByText('Ch'));
+    await userEvent.hover(screen.getByText('C'));
 
     expect(await screen.findByText('Chris Doe')).toBeInTheDocument();
-    expect(await screen.findByText('Owner')).toBeInTheDocument();
+    expect(await screen.findByText('Author')).toBeInTheDocument();
 
-    await userEvent.hover(screen.getByText('Jo'));
+    await userEvent.hover(screen.getByText('J'));
 
     expect(await screen.findByText('John Doe')).toBeInTheDocument();
-    expect(await screen.findByText('Can Edit')).toBeInTheDocument();
+    expect(await screen.findByText('Collaborator')).toBeInTheDocument();
 
-    await userEvent.hover(screen.getByText('Bl'));
+    await userEvent.hover(screen.getByText('B'));
 
     expect(await screen.findByText('Blake Doe')).toBeInTheDocument();
-    expect(await screen.findByText('View Only')).toBeInTheDocument();
+    expect(await screen.findByText('Reader')).toBeInTheDocument();
   });
 });

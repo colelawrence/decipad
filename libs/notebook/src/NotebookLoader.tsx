@@ -31,6 +31,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   initialState,
   onEditor,
   onDocsync,
+  onComputer,
   useExternalDataSources,
 }) => {
   const { data: session } = useSession();
@@ -101,6 +102,12 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     // we need this for SSR
     init();
   }
+
+  useEffect(() => {
+    if (computer) {
+      onComputer(computer);
+    }
+  }, [computer, onComputer]);
 
   useEffect(() => {
     return () => {

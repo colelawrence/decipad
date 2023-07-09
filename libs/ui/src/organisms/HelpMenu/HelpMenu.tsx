@@ -4,23 +4,23 @@ import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext, useState } from 'react';
 import { useIntercom } from 'react-use-intercom';
 import { Link, MenuItem, MenuSeparator } from '../../atoms';
+import {
+  ArrowDiagonalTopRight,
+  Chat,
+  Discord,
+  Docs,
+  LightBulb,
+} from '../../icons';
 import { HelpButton, MenuList } from '../../molecules';
 import {
+  offBlack,
   p12Regular,
   p14Medium,
   setCssVar,
   transparency,
   weakOpacity,
-  offBlack,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
-import {
-  ArrowDiagonalTopRight,
-  Docs,
-  Discord,
-  Chat,
-  LightBulb,
-} from '../../icons';
 
 const menuItemWrapperStyles = css({
   display: 'flex',
@@ -41,7 +41,7 @@ const helpMenuStyles = css({
   position: 'fixed',
   bottom: '16px',
   right: '16px',
-  zIndex: 2,
+  zIndex: 666,
 });
 
 const pulse = keyframes`

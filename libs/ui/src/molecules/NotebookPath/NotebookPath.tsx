@@ -1,13 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, mobileQuery, p14Medium } from '../../primitives';
+import { cssVar, p14Medium, smallScreenQuery } from '../../primitives';
 
 const wrapperStyles = css({
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
-  [mobileQuery]: {
+  [smallScreenQuery]: {
     display: 'none',
   },
 });
@@ -38,18 +38,16 @@ export const NotebookPath = ({
   workspaceName,
   href,
 }: NotebookPathProps): ReturnType<FC> => {
-  const notebookName = _notebookName || '<unnamed-notebook>';
-  const link = href ? (
-    <a css={anchorStyles} href={href}>
-      <em css={[notebookNameStyles, anchorStyles]}>{notebookName}</em>
-    </a>
-  ) : (
-    <em css={notebookNameStyles}>{notebookName}</em>
-  );
+  const notebookName = _notebookName || 'Unnamed notebook';
   return (
     <div css={wrapperStyles}>
-      {workspaceName && <em css={workspaceNameStyles}>{workspaceName} / </em>}
-      {link}
+      {href ? (
+        <a css={anchorStyles} href={href}>
+          <em css={[notebookNameStyles, anchorStyles]}>{notebookName}</em>
+        </a>
+      ) : (
+        <em css={workspaceNameStyles}>{workspaceName}</em>
+      )}
     </div>
   );
 };

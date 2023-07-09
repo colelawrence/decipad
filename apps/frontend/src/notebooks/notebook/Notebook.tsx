@@ -1,10 +1,13 @@
+import { Computer } from '@decipad/computer';
 import { DocSyncEditor } from '@decipad/docsync';
+import { EditorSidebar } from '@decipad/editor-components';
 import { MyEditor } from '@decipad/editor-types';
 import {
   useGetWorkspacesIDsQuery,
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import {
+  ComputerContextProvider,
   DeciEditorContextProvider,
   EditorChangeContextProvider,
   EditorStylesContext,
@@ -20,13 +23,14 @@ import {
   NotebookPage,
   TopbarPlaceholder,
 } from '@decipad/ui';
+import { SelectedTab } from 'libs/ui/src/organisms/EditorSidebar/types';
 import { FC, lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
+import Topbar from './Topbar';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
-import Topbar from './Topbar';
 
 const loadEditorIcon = () =>
   import(/* webpackChunkName: "notebook-editor-icon" */ './EditorIcon');
@@ -41,6 +45,12 @@ loadEditorIcon().then(loadEditor);
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
+  const [sidebarTab, setSidebarTab] = useState<SelectedTab>('block');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(!sidebarOpen);
+  }, [setSidebarOpen, sidebarOpen]);
+
   const { setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
 
   const {
@@ -117,6 +127,8 @@ const Notebook: FC = () => {
     [iconColor]
   ) as EditorStylesContextValue;
 
+  const [computer, setComputer] = useState<Computer>(new Computer());
+
   if (error) {
     if (/no such/i.test(error?.message))
       return <ErrorPage Heading="h1" wellKnown="404" />;
@@ -132,77 +144,93 @@ const Notebook: FC = () => {
 
   return (
     <DeciEditorContextProvider value={docsync}>
-      <EditorStylesContext.Provider value={styles}>
-        <Frame
-          Heading="h1"
-          title={notebook?.name ?? ''}
-          suspenseFallback={<LoadingLogo />}
-        >
-          <NotebookPage
-            notebook={
-              <Frame
-                Heading="h1"
-                title={null}
-                suspenseFallback={<EditorPlaceholder />}
-              >
-                <Editor
-                  notebookMetaLoaded={notebook != null}
-                  notebookTitle={notebook?.name ?? ''}
-                  onNotebookTitleChange={onNotebookTitleChange}
-                  notebookId={notebookId}
-                  workspaceId={workspaceId}
-                  readOnly={isReadOnly}
-                  secret={secret}
-                  connectionParams={connectionParams}
-                  initialState={initialState}
-                  onEditor={setEditor}
-                  onDocsync={setDocsync}
-                  getAttachmentForm={getAttachmentForm}
-                  onAttached={onAttached}
-                  useExternalDataSources={useExternalDataSources}
-                />
-              </Frame>
-            }
-            notebookIcon={
-              <Frame
-                Heading="h1"
-                title={null}
-                suspenseFallback={<NotebookIconPlaceholder />}
-              >
-                <EditorIcon
-                  color={iconColor}
-                  icon={icon ?? 'Rocket'}
-                  onChangeIcon={updateIcon}
-                  onChangeColor={updateIconColor}
-                  readOnly={isReadOnly}
-                />
-              </Frame>
-            }
-            topbar={
-              <Frame
-                Heading="h1"
-                title={null}
-                suspenseFallback={<TopbarPlaceholder />}
-              >
-                <Topbar
-                  userWorkspaces={userWorkspaces.data?.workspaces}
-                  notebook={notebook}
-                  hasLocalChanges={hasLocalChanges}
-                  hasUnpublishedChanges={hasUnpublishedChanges}
-                  isPublishing={isPublishing}
-                  duplicateNotebook={duplicate}
-                  removeLocalChanges={removeLocalChanges}
-                  publishNotebook={publishNotebook}
-                  unpublishNotebook={unpublishNotebook}
-                  inviteEditorByEmail={inviteEditorByEmail}
-                  removeEditorById={removeEditorById}
-                  changeEditorAccess={changeEditorAccess}
-                />
-              </Frame>
-            }
-          />
-        </Frame>
-      </EditorStylesContext.Provider>
+      <ComputerContextProvider computer={computer}>
+        <EditorStylesContext.Provider value={styles}>
+          <Frame
+            Heading="h1"
+            title={notebook?.name ?? ''}
+            suspenseFallback={<LoadingLogo />}
+          >
+            <NotebookPage
+              sidebarOpen={sidebarOpen}
+              notebook={
+                <Frame
+                  Heading="h1"
+                  title={null}
+                  suspenseFallback={<EditorPlaceholder />}
+                >
+                  <Editor
+                    notebookMetaLoaded={notebook != null}
+                    notebookTitle={notebook?.name ?? ''}
+                    onNotebookTitleChange={onNotebookTitleChange}
+                    notebookId={notebookId}
+                    workspaceId={workspaceId}
+                    readOnly={isReadOnly}
+                    secret={secret}
+                    connectionParams={connectionParams}
+                    initialState={initialState}
+                    onEditor={setEditor}
+                    onDocsync={setDocsync}
+                    onComputer={setComputer}
+                    getAttachmentForm={getAttachmentForm}
+                    onAttached={onAttached}
+                    useExternalDataSources={useExternalDataSources}
+                  />
+                </Frame>
+              }
+              sidebar={
+                isReadOnly ? null : (
+                  <EditorSidebar
+                    sidebarTab={sidebarTab}
+                    setSidebarTab={setSidebarTab}
+                    sidebarOpen={sidebarOpen}
+                    setSidebarOpen={setSidebarOpen}
+                  />
+                )
+              }
+              notebookIcon={
+                <Frame
+                  Heading="h1"
+                  title={null}
+                  suspenseFallback={<NotebookIconPlaceholder />}
+                >
+                  <EditorIcon
+                    color={iconColor}
+                    icon={icon ?? 'Rocket'}
+                    onChangeIcon={updateIcon}
+                    onChangeColor={updateIconColor}
+                    readOnly={isReadOnly}
+                  />
+                </Frame>
+              }
+              topbar={
+                <Frame
+                  Heading="h1"
+                  title={null}
+                  suspenseFallback={<TopbarPlaceholder />}
+                >
+                  <Topbar
+                    userWorkspaces={userWorkspaces.data?.workspaces}
+                    notebook={notebook}
+                    hasLocalChanges={hasLocalChanges}
+                    hasUnpublishedChanges={hasUnpublishedChanges}
+                    isPublishing={isPublishing}
+                    duplicateNotebook={duplicate}
+                    removeLocalChanges={removeLocalChanges}
+                    publishNotebook={publishNotebook}
+                    unpublishNotebook={unpublishNotebook}
+                    inviteEditorByEmail={inviteEditorByEmail}
+                    removeEditorById={removeEditorById}
+                    changeEditorAccess={changeEditorAccess}
+                    toggleSidebar={toggleSidebar}
+                    sidebarOpen={sidebarOpen}
+                  />
+                </Frame>
+              }
+            />
+          </Frame>
+        </EditorStylesContext.Provider>
+      </ComputerContextProvider>
     </DeciEditorContextProvider>
   );
 };

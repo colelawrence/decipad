@@ -1,10 +1,9 @@
+import { Computer, Result, SerializedTypes } from '@decipad/computer';
 import {
   CodeLineElement,
   CodeLineV2Element,
   MyEditor,
 } from '@decipad/editor-types';
-import React from 'react';
-import { Computer, Result, SerializedTypes } from '@decipad/computer';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 

@@ -36,7 +36,7 @@ const sectionStyles = css({
 
 const maxSpace = css({
   maxHeight: '200px',
-  overflowY: 'auto',
+  overflowY: 'hidden',
 });
 
 const FormulaTooltipBoxStyles = css(p12Regular, {

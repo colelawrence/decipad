@@ -60,7 +60,7 @@ test.describe('Loading and snapshot of notebook with charts', () => {
   });
 
   test('click publish button and extract text', async () => {
-    await page.getByRole('button', { name: 'Publish' }).click();
+    await page.getByRole('button', { name: 'Share' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     await page.getByTestId('copy-published-link').waitFor();
   });

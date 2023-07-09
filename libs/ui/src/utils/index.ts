@@ -1,5 +1,7 @@
+export * from './avatarColor';
 export * from './counter';
 export * from './dnd';
+export * from './getEmptyImage';
 export * from './heading';
 export * from './isValidUrl';
 export * from './link';
@@ -13,4 +15,3 @@ export * from './swatches';
 export * from './table';
 export * from './user-icons';
 export * from './viewport';
-export * from './getEmptyImage';

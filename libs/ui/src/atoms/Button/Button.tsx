@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css, CSSObject, SerializedStyles } from '@emotion/react';
-import { MouseEvent, ReactNode, useCallback } from 'react';
+import { forwardRef, MouseEvent, ReactNode, useCallback } from 'react';
 import {
   cssVar,
   grey400,
@@ -219,62 +219,68 @@ type ButtonProps = {
   readonly sameTab?: boolean;
 };
 
-export const Button = ({
-  type = 'secondary',
-  size = 'normal',
-  submit = type === 'primary' || type === 'primaryBrand',
-  disabled = false,
-  autoFocus,
-  testId = '',
-  tabIndex,
-  children,
-  onClick = noop,
-  href,
-  styles: extraStyles,
-  sameTab,
-}: ButtonProps): ReturnType<React.FC> => {
-  const onButtonClick = useCallback(
-    (ev: MouseEvent) => {
-      ev.stopPropagation();
-      ev.preventDefault();
-      onClick();
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      type = 'secondary',
+      size = 'normal',
+      submit = type === 'primary' || type === 'primaryBrand',
+      disabled = false,
+      autoFocus,
+      testId = '',
+      tabIndex,
+      children,
+      onClick = noop,
+      href,
+      styles: extraStyles,
+      sameTab,
     },
-    [onClick]
-  );
+    ref
+  ) => {
+    const onButtonClick = useCallback(
+      (ev: MouseEvent) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        onClick();
+      },
+      [onClick]
+    );
 
-  return href ? (
-    <Anchor
-      href={disabled ? '' : href}
-      css={css([
-        styles,
-        typeStyles[type][disabled ? 'disabled' : 'enabled'],
-        sizeStyles[size],
-        disabled ? disabledStyles : enabledStyles,
-        extraStyles,
-      ])}
-      onClick={onClick}
-      sameTab={sameTab}
-      data-testid={testId}
-    >
-      {children}
-    </Anchor>
-  ) : (
-    <button
-      autoFocus={autoFocus}
-      disabled={disabled}
-      type={submit ? 'submit' : 'button'}
-      css={css([
-        styles,
-        typeStyles[type][disabled ? 'disabled' : 'enabled'],
-        sizeStyles[size],
-        disabled ? disabledStyles : enabledStyles,
-        extraStyles,
-      ])}
-      tabIndex={tabIndex}
-      onClick={submit ? onClick : onButtonClick}
-      data-testid={testId}
-    >
-      {children}
-    </button>
-  );
-};
+    return href ? (
+      <Anchor
+        href={disabled ? '' : href}
+        css={css([
+          styles,
+          typeStyles[type][disabled ? 'disabled' : 'enabled'],
+          sizeStyles[size],
+          disabled ? disabledStyles : enabledStyles,
+          extraStyles,
+        ])}
+        onClick={onClick}
+        sameTab={sameTab}
+        data-testid={testId}
+      >
+        {children}
+      </Anchor>
+    ) : (
+      <button
+        ref={ref}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        type={submit ? 'submit' : 'button'}
+        css={css([
+          styles,
+          typeStyles[type][disabled ? 'disabled' : 'enabled'],
+          sizeStyles[size],
+          disabled ? disabledStyles : enabledStyles,
+          extraStyles,
+        ])}
+        tabIndex={tabIndex}
+        onClick={submit ? onClick : onButtonClick}
+        data-testid={testId}
+      >
+        {children}
+      </button>
+    );
+  }
+);

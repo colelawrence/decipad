@@ -1,8 +1,10 @@
-import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { ReactEditor } from 'slate-react';
-import { Subject } from 'rxjs';
-import { createPlateEditor, Plate } from '@udecode/plate';
-import { EditorLayout, LoadingFilter } from '@decipad/ui';
+import { ClientEventsContext } from '@decipad/client-events';
+import {
+  BlockLengthSynchronizationProvider,
+  TeleportEditor,
+} from '@decipad/editor-components';
+import { plugins } from '@decipad/editor-config';
+import type { MyValue } from '@decipad/editor-types';
 import {
   ComputerContextProvider,
   EditorChangeContextProvider,
@@ -10,14 +12,11 @@ import {
   useComputer,
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
-import { MyValue } from '@decipad/editor-types';
-import {
-  TeleportEditor,
-  NumberCatalog,
-  BlockLengthSynchronizationProvider,
-} from '@decipad/editor-components';
-import { ClientEventsContext } from '@decipad/client-events';
-import { plugins } from '@decipad/editor-config';
+import { EditorLayout, LoadingFilter } from '@decipad/ui';
+import { Plate, createPlateEditor } from '@udecode/plate';
+import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { Subject } from 'rxjs';
+import { ReactEditor } from 'slate-react';
 import { Tooltip } from './components';
 import { emptyNotebook, introNotebook } from './exampleNotebooks';
 import { POPULATE_PLAYGROUND } from './utils/storage';
@@ -75,7 +74,6 @@ export const NoDocSyncEditorInternal: FC = () => {
                   }
                   readOnly={isWritingLocked}
                 >
-                  <NumberCatalog />
                   <Tooltip />
                 </Plate>
               </TeleportEditor>

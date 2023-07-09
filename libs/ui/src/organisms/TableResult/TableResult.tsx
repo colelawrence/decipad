@@ -8,6 +8,7 @@ import { TableHeader } from '../../atoms';
 import { useMaterializedResult } from '../../hooks/useMaterializedResult';
 import { TableHeaderRow, TableRow } from '../../molecules';
 import { cssVar, p13Regular } from '../../primitives';
+import { deciOverflowStyles } from '../../styles/scrollbars';
 import { tableControlWidth } from '../../styles/table';
 import { CodeResultProps } from '../../types';
 import { isTabularType, toTableHeaderType } from '../../utils';
@@ -98,7 +99,7 @@ export const TableResult: FC<TableResultProps> = ({
       css={[
         isLiveResult && tableWrapperStyles,
         isLiveResult && liveTableWrapperStyles,
-        { overflow: 'auto' }, // cause of nested tables
+        deciOverflowStyles, // cause of nested tables
       ]}
     >
       <div

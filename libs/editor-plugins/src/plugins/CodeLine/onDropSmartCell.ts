@@ -7,11 +7,11 @@ import {
   MyEditor,
   MyText,
 } from '@decipad/editor-types';
-import React from 'react';
-import { getBlockAbove } from '@udecode/plate';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
+import { cursorStore } from '@decipad/react-contexts';
+import { getBlockAbove } from '@udecode/plate';
 import { dndStore } from '@udecode/plate-dnd';
-import { cursorStore } from '../../stores/cursorStore';
+import React from 'react';
 
 export const DRAG_SMART_CELL = 'smart-cell';
 

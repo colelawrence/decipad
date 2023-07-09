@@ -1,10 +1,10 @@
+import { isServerSideRendering } from '@decipad/support';
 import {
   EditorPlaceholder,
   NotebookIconPlaceholder,
   NotebookPage,
 } from '@decipad/ui';
 import { ComponentProps, lazy, useState } from 'react';
-import { isServerSideRendering } from '@decipad/support';
 import { Frame } from '../meta';
 import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';
 
@@ -28,6 +28,7 @@ const Playground: React.FC = () => {
 
   return (
     <NotebookPage
+      sidebarOpen={true}
       notebook={
         <div data-editorloaded data-hydrated={!isServerSideRendering()}>
           <Frame

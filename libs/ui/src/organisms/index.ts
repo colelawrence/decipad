@@ -16,6 +16,7 @@ export { DisplayWidget } from './DisplayWidget/DisplayWidget';
 export { DragAndDropImportNotebook } from './DragAndDropImportNotebook/DragAndDropImportNotebook';
 export { DraggableBlock } from './DraggableBlock/DraggableBlock';
 export { DropdownMenu } from './DropdownMenu/DropdownMenu';
+export { EditorSidebar } from './EditorSidebar';
 export { EditorTable } from './EditorTable/EditorTable';
 export { EmptyWorkspaceCta } from './EmptyWorkspaceCta/EmptyWorkspaceCta';
 export { ErrorBlock } from './ErrorBlock/ErrorBlock';

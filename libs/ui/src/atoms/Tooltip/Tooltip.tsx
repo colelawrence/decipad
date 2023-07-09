@@ -102,6 +102,8 @@ interface TooltipProps {
   readonly onChangeOpen?: (open: boolean) => void;
 
   readonly wrapperStyles?: SerializedStyles;
+
+  readonly usePortal?: boolean;
 }
 
 export const Tooltip = ({
@@ -117,6 +119,7 @@ export const Tooltip = ({
   theme = 'dark',
   align,
   wrapperStyles = css(),
+  usePortal = true,
 }: TooltipProps): ReturnType<FC> => {
   const isDragging = useIsDragging();
   // eslint-disable-next-line no-param-reassign
@@ -133,6 +136,30 @@ export const Tooltip = ({
       onClick?.(e);
     },
     [onClick, stopClickPropagation]
+  );
+
+  const content = (
+    <Content
+      side={side}
+      align={align}
+      css={[
+        theme === 'light' ? lightWrapperStyles : darkContentWrapperStyles,
+        variant === 'small' && smallVariantStyles(side),
+        onClick && clickableStyles,
+        wrapperStyles,
+      ]}
+      onClick={handleClick}
+    >
+      <Arrow
+        css={theme === 'dark' ? darkArrowStyles : lightArrowStyles}
+        width={18}
+        height={9}
+        offset={6}
+      />
+      <div css={theme === 'dark' ? darkContentStyles : lightContentStyles}>
+        {children}
+      </div>
+    </Content>
   );
 
   return (
@@ -162,33 +189,8 @@ export const Tooltip = ({
       >
         {trigger}
       </Trigger>
-      {useCanUseDom() && (
-        <Portal>
-          <Content
-            side={side}
-            align={align}
-            css={[
-              theme === 'light' ? lightWrapperStyles : darkContentWrapperStyles,
-              variant === 'small' && smallVariantStyles(side),
-              onClick && clickableStyles,
-              wrapperStyles,
-            ]}
-            onClick={handleClick}
-          >
-            <Arrow
-              css={theme === 'dark' ? darkArrowStyles : lightArrowStyles}
-              width={18}
-              height={9}
-              offset={6}
-            />
-            <div
-              css={theme === 'dark' ? darkContentStyles : lightContentStyles}
-            >
-              {children}
-            </div>
-          </Content>
-        </Portal>
-      )}
+      {useCanUseDom() && usePortal && <Portal>{content}</Portal>}
+      {useCanUseDom() && !usePortal && content}
     </Root>
   );
 };

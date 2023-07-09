@@ -55,7 +55,7 @@ export const AccountMenu = ({
           Account Settings
         </NavigationItem>
         <NavigationItem icon={<Logout />} onClick={onLogout}>
-          <span data-test-id="log out">Log out</span>
+          <span data-testid="log out">Log out</span>
         </NavigationItem>
       </NavigationList>
     </nav>

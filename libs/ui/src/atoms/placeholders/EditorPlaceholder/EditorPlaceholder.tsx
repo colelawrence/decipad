@@ -1,5 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
+import { editorLayout } from 'libs/ui/src/styles';
 import { FC } from 'react';
 import { slimBlockWidth } from '../../../styles/editor-layout';
 import { Divider } from '../../Divider/Divider';
@@ -9,7 +10,9 @@ import { ParagraphPlaceholder } from '../ParagraphPlaceholder/ParagraphPlacehold
 const wrapperStyles = css({
   paddingTop: '24px',
   minWidth: `${slimBlockWidth}px`,
-  margin: '0 auto',
+  display: 'grid',
+  gridTemplateColumns: `min(100%, ${editorLayout.slimBlockWidth}px)`,
+  justifyContent: 'center',
 });
 
 const titleStyles = css({

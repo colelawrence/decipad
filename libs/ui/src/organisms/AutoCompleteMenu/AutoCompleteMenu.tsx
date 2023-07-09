@@ -17,14 +17,15 @@ import {
   useState,
 } from 'react';
 import {
-  Link,
-  AutoCompleteMenuItem,
   ACItemType,
   AutoCompleteMenuFormulaTooltip,
+  AutoCompleteMenuItem,
+  Link,
 } from '../../atoms';
 import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 import { AutoCompleteMenuGroup } from '../../molecules';
 import { cssVar, mediumShadow, p12Medium, setCssVar } from '../../primitives';
+import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { groupIdentifiers } from './groupIdentifiers';
 
 export type AutoCompleteGroup = Omit<
@@ -414,9 +415,11 @@ const styles = (top: boolean) =>
     zIndex: 2,
   });
 
-const mainStyles = css({
-  padding: '3px 3px 8px 3px',
-  width: '200px',
-  maxHeight: '166px',
-  overflowY: 'auto',
-});
+const mainStyles = css(
+  {
+    padding: '3px 3px 8px 3px',
+    width: '200px',
+    maxHeight: '166px',
+  },
+  deciOverflowYStyles
+);

@@ -31,6 +31,7 @@ const undropdownifyContentStyles = css({
 
 const alwaysTopContentStyles = css({
   zIndex: 400,
+  position: 'absolute',
 });
 
 interface RootMenuListProps {

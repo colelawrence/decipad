@@ -1,7 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, smallestDesktop, smallScreenQuery } from '../../primitives';
+import { cssVar, smallScreenQuery, smallestDesktop } from '../../primitives';
+import { deciOverflowYStyles } from '../../styles/scrollbars';
 
 const crossBarsQuery = `@media (min-width: ${smallestDesktop.portrait.width}px)`;
 const styles = css({
@@ -41,13 +42,14 @@ const sidebarStyles = css({
   },
 });
 
-const listStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '24px',
-
-  overflowY: 'auto',
-});
+const listStyles = css(
+  {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
+  },
+  deciOverflowYStyles
+);
 
 interface DashboardProps {
   readonly sidebar: ReactNode;

@@ -27,8 +27,9 @@ export const Heading1 = ({
   id,
 }: Heading1Props): ReturnType<React.FC> => {
   const isBlockActive = useIsBlockActive();
+  // h{id} is because of css query selectors, dont remove the h
   return (
-    <Heading id={id} css={[styles, isBlockActive && activeStyles]}>
+    <Heading id={`h${id}`} css={[styles, isBlockActive && activeStyles]}>
       {children}
     </Heading>
   );

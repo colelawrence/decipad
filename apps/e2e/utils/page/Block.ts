@@ -13,7 +13,11 @@ export async function createNumberInputBelow(
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'number input' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('number input')
+    .click();
 
   await page.dblclick(
     '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
@@ -71,7 +75,12 @@ export async function createDropdownBelow(page: Page, identifier: string) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'dropdown' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('Dropdown')
+    .nth(1)
+    .click();
 
   await page.getByText('Dropdown', { exact: true }).last().dblclick();
 
@@ -87,7 +96,12 @@ export async function createResultBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'result' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('result')
+    .nth(1)
+    .click();
 
   page.locator('[data-testid="widget-caption"] >> text=/Unnammed/').last();
 }
@@ -99,7 +113,12 @@ export async function createDataViewBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'data' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('data view')
+    .nth(0)
+    .click();
 }
 
 export async function createPieChartBelow(page: Page) {
@@ -109,7 +128,12 @@ export async function createPieChartBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('chart')
+    .nth(0)
+    .click();
 }
 
 export async function createLineChartBelow(page: Page) {
@@ -119,7 +143,12 @@ export async function createLineChartBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('chart')
+    .nth(0)
+    .click();
 }
 
 export async function createBarChartBelow(page: Page) {
@@ -129,7 +158,12 @@ export async function createBarChartBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('chart')
+    .nth(0)
+    .click();
 }
 
 export async function createAreaChartBelow(page: Page) {
@@ -139,7 +173,12 @@ export async function createAreaChartBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'chart' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('chart')
+    .nth(0)
+    .click();
 }
 
 export async function createScatterChartBelow(page: Page) {
@@ -149,7 +188,12 @@ export async function createScatterChartBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'plot' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('plot')
+    .nth(0)
+    .click();
 }
 
 export async function createToggleBelow(page: Page, identifier: string) {
@@ -159,7 +203,11 @@ export async function createToggleBelow(page: Page, identifier: string) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'toggle' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('toggle')
+    .click();
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input/')
@@ -182,7 +230,7 @@ export async function createSliderBelow(
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'slider' }).click();
+  await page.locator('role=menuitem', { hasText: 'slider' }).nth(0).click();
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Slider/')
@@ -212,7 +260,7 @@ export async function createDateBelow(page: Page, identifier: string) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'date' }).click();
+  await page.locator('role=menuitem', { hasText: 'date' }).nth(0).click();
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input/')
@@ -241,8 +289,11 @@ export async function createCalculationBlockBelow(
 
   await page.keyboard.insertText('/advanced');
 
-  await page.locator('role=menuitem', { hasText: 'Advanced' }).click();
-
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('advanced')
+    .click();
   await page.waitForSelector('[data-testid="code-line"]');
 
   await page.keyboard.type(decilang);
@@ -296,7 +347,12 @@ export async function createCSVBelow(page: Page) {
 
   await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
 
-  await page.locator('role=menuitem', { hasText: 'csv' }).click();
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('CSV')
+    .nth(0)
+    .click();
 }
 
 export function getCodeLineBlockLocator(page: Page) {

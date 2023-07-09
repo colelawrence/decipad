@@ -1,15 +1,16 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { css } from '@emotion/react';
-import { ComponentProps, FC } from 'react';
-import { mediumShadow } from '@decipad/ui';
-import { useThemeFromStore } from '@decipad/react-contexts';
 import {
   useAuthenticationState,
   useWorkspacePermission,
 } from '@decipad/graphql-client';
+import { useThemeFromStore } from '@decipad/react-contexts';
+import { mediumShadow } from '@decipad/ui';
+import { css } from '@emotion/react';
+import { ComponentProps, FC } from 'react';
 import { AccountAvatar } from '../../molecules';
 
+import { Sidebar } from '../../icons/Sidebar/Sidebar';
 import {
   AccountMenu,
   WorkspaceLogo,
@@ -17,16 +18,15 @@ import {
   WorkspaceOptions,
   WorkspaceSwitcher,
 } from '../../organisms';
+import { MobileSidebar } from '../../organisms/MobileSidebar/MobileSidebar';
 import {
+  black,
   cssVar,
   smallScreenQuery,
   transparency,
-  black,
 } from '../../primitives';
 import { dashboard } from '../../styles';
 import { useEditUserModalStore } from '../EditUserModal/EditUserModal';
-import { MobileSidebar } from '../../organisms/MobileSidebar/MobileSidebar';
-import { Sidebar } from '../../icons/Sidebar/Sidebar';
 
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
   Pick<ComponentProps<typeof AccountAvatar>, 'name'> &
@@ -124,7 +124,7 @@ const MobileSidebarButton: React.FC = () => {
   );
 };
 
-const dashboardButtonStyles = (isDarkMode: boolean) =>
+export const dashboardButtonStyles = (isDarkMode: boolean) =>
   css({
     height: '48px',
     width: '48px',

@@ -42,10 +42,10 @@ export const DropZoneDetector: FC<DropZoneProps> = ({
 
 const dropZoneWrapperStyles = css({
   position: 'fixed',
-  top: 0,
-  left: 0,
+  top: 64,
+  borderRadius: 16,
   height: '100vh',
-  width: '100%',
+  width: 'calc(100% - 300px - 48px)',
 });
 
 const warningForDNDStyles = css({
@@ -72,9 +72,9 @@ const isOverDropZoneStyles = css({
 });
 
 const dropZoneBorderDetector = css({
-  position: 'absolute',
+  //  position: 'absolute',
   zIndex: 3,
-  top: 0,
-  left: 0,
+  //  top: 0,
+  // left: 0,
   width: '100%',
 });

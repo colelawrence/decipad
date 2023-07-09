@@ -1,4 +1,4 @@
-import { BrowserContext, Page, test, expect } from '@playwright/test';
+import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { createWorkspace } from '../utils/src';
 
@@ -28,15 +28,14 @@ test.describe('Make sure the toggle conversion works', () => {
   test('Checks all the files', async () => {
     await page.getByTestId('paragraph-content').last().fill('/i');
 
-    await page.getByTestId('menu-item-input').waitFor();
-    await page.getByTestId('menu-item-input').click();
-    await page.getByTestId('drag-handle').first().click();
+    await page.locator('article').getByTestId('menu-item-input').waitFor();
+    await page.locator('article').getByTestId('menu-item-input').click();
+    await page.locator('article').getByTestId('drag-handle').first().click();
 
     page.getByText('Turn into').waitFor();
     await page.getByText('Turn into').click();
-
-    await page.getByText('Toggle').waitFor();
-    await page.getByText('Toggle').click();
+    await page.getByRole('menuitem').getByText('Toggle').waitFor();
+    await page.getByRole('menuitem').getByText('Toggle').click();
 
     await expect(page.getByTestId('widget-editor:false')).toBeHidden();
   });

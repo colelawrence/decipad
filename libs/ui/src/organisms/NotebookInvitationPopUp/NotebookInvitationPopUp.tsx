@@ -1,36 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { FC, useCallback, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { InputField, Button } from '../../atoms';
+import { FC, useCallback, useState } from 'react';
+import { Button, InputField } from '../../atoms';
 import { Check, Loading } from '../../icons';
-import {
-  black,
-  cssVar,
-  p13Regular,
-  p14Medium,
-  setCssVar,
-  smallScreenQuery,
-  transparency,
-} from '../../primitives';
-import { NotebookAvatar } from '../../molecules/NotebookAvatars/NotebookAvatars';
-import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
+import { NotebookAvatar } from '../../molecules';
 import { CollabAccessDropdown } from '../../molecules/CollabAccessDropdown/CollabAccessDropdown';
+import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
+import { cssVar, p13Regular, p14Medium, setCssVar } from '../../primitives';
 import { PermissionType } from '../../types';
-
-const popUpStyles = css({
-  width: '310px',
-  padding: '16px',
-  [smallScreenQuery]: {
-    width: '250px',
-  },
-
-  background: cssVar('backgroundColor'),
-  border: '1px solid',
-  borderColor: cssVar('strongHighlightColor'),
-  borderRadius: '8px',
-  boxShadow: `0px 2px 16px -4px ${transparency(black, 0.06).rgba}`,
-});
 
 /**
  * The styles for the content rendered without the need for the toggle to be activated. This is also the parent of the toggle component.
@@ -129,7 +107,6 @@ export const NotebookInvitationPopUp = ({
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  // TODO: fix input floating label
   const [permission, setPermission] = useState<PermissionType>('WRITE');
 
   const isInvalidEmail = !email.includes('@') || email === session?.user?.email;
@@ -144,7 +121,7 @@ export const NotebookInvitationPopUp = ({
     onInvite(email, permission).finally(() => {
       setIsLoading(false);
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 2000);
+      setTimeout(() => setSuccess(false), 4000);
     });
   }, [
     email,
@@ -175,36 +152,38 @@ export const NotebookInvitationPopUp = ({
   );
 
   return (
-    <div css={[popUpStyles]}>
-      <div css={innerPopUpStyles}>
-        <div css={groupStyles}>
-          <div css={titleAndToggleStyles}>
-            <p css={css(p14Medium)}>Invite others to this notebook</p>
-          </div>
-          <p css={descriptionStyles}>
-            Invited users will receive an email to the provided email address.
-          </p>
+    <div css={innerPopUpStyles}>
+      <div css={groupStyles}>
+        <div css={titleAndToggleStyles}>
+          <p css={css(p14Medium)}>Invite others to this notebook</p>
+        </div>
+        <p css={descriptionStyles}>Invited users will receive an email.</p>
+      </div>
+
+      <div css={invitationFormStyles}>
+        <div css={inputContainerStyles}>
+          <InputField
+            placeholder="Enter email address"
+            value={email}
+            onChange={setEmail}
+            onEnter={handleAddCollaborator}
+            disabled={hasPaywall}
+          />
+
+          <span css={inputAccessPickerStyles}>
+            <CollabAccessDropdown
+              isInvitationPicker
+              currentPermission={permission}
+              onChange={setPermission}
+            />
+          </span>
         </div>
 
-        <div css={invitationFormStyles}>
-          <div css={inputContainerStyles}>
-            <InputField
-              placeholder="Enter email address"
-              value={email}
-              onChange={setEmail}
-              onEnter={handleAddCollaborator}
-              disabled={hasPaywall}
-            />
-
-            <span css={inputAccessPickerStyles}>
-              <CollabAccessDropdown
-                isInvitationPicker
-                currentPermission={permission}
-                onChange={setPermission}
-              />
-            </span>
-          </div>
-
+        {hasPaywall ? (
+          <Button size="extraSlim" type={'primary'} href="/">
+            Upgrade to Pro to invite more people
+          </Button>
+        ) : (
           <Button
             size="extraSlim"
             onClick={handleAddCollaborator}
@@ -214,23 +193,17 @@ export const NotebookInvitationPopUp = ({
             <div css={invitationButtonContentStyles}>
               {success && <CheckMark />}
               {loading && <LoadingDots />}
-              Send invitation
+              Send invite
             </div>
           </Button>
-
-          {hasPaywall && (
-            <Button type="lightYellow">
-              Upgrade to Pro to invite more people
-            </Button>
-          )}
-        </div>
-
-        <CollabMembersRights
-          usersWithAccess={usersWithAccess}
-          onRemoveCollaborator={handleRemoveCollaborator}
-          onChangePermission={handleChangePermission}
-        />
+        )}
       </div>
+
+      <CollabMembersRights
+        usersWithAccess={usersWithAccess}
+        onRemoveCollaborator={handleRemoveCollaborator}
+        onChangePermission={handleChangePermission}
+      />
     </div>
   );
 };

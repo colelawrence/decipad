@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
-import { slimBlockWidth } from '../../styles/editor-layout';
 import { smallestDesktop } from '../../primitives';
+import { slimBlockWidth } from '../../styles/editor-layout';
 
 const remoteAvatarOverlayWrapperStyles = css({
   position: 'absolute',
@@ -32,7 +32,7 @@ const invisibleOnSmallScreens = css({
 export const RemoteAvatarOverlay: FC<PropsWithChildren> = ({ children }) => {
   return (
     <div css={[invisibleOnSmallScreens, remoteAvatarOverlayWrapperStyles]}>
-      <div css={remoteAvatarOverlayStyles}>{children}</div>
+      <div css={remoteAvatarOverlayStyles}>{children} </div>
     </div>
   );
 };

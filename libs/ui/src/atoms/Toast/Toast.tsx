@@ -9,12 +9,11 @@ import {
   cssVar,
   grey200,
   grey600,
-  offBlack,
+  mediumShadow,
   p14Regular,
   red200,
   red700,
   toastTransitionDelay,
-  transparency,
   yellow200,
   yellow700,
 } from '../../primitives';
@@ -82,7 +81,7 @@ const baseStyles = css(p14Regular, {
   alignItems: 'center',
 
   borderRadius: '8px',
-  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
+  boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
 
   padding: '6px 12px',
   // HACK: So the toast is above the help button and undo component.

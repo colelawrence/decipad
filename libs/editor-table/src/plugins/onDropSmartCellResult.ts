@@ -1,4 +1,3 @@
-import { DragEvent } from 'react';
 import {
   CodeLineElement,
   ELEMENT_CODE_LINE,
@@ -15,10 +14,11 @@ import {
   insertNodes,
   selectEventRange,
 } from '@decipad/editor-utils';
+import { cursorStore } from '@decipad/react-contexts';
 import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
-import { nanoid } from 'nanoid';
-import { cursorStore } from '@decipad/editor-plugins';
 import { dndStore } from '@udecode/plate-dnd';
+import { nanoid } from 'nanoid';
+import { DragEvent } from 'react';
 import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmartCellResultStarted';
 
 type DragCellData = string;

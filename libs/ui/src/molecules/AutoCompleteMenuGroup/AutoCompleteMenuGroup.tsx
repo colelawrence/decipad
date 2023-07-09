@@ -16,7 +16,7 @@ const titleStyles = css(p13Bold, {
   padding: '6px 5px 2px 5px',
   color: cssVar('weakTextColor'),
   maxWidth: '200px',
-  overflowX: 'auto',
+  overflowX: 'hidden',
 });
 
 const itemsStyles = css({

@@ -60,7 +60,7 @@ export const WorkspaceSelector = ({
           trigger={
             <div
               css={createWorkspaceButton}
-              data-test-id="create-workspace-button"
+              data-testid="create-workspace-button"
             >
               <IconButton roundedSquare onClick={onCreateWorkspace}>
                 <Create />

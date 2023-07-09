@@ -1,4 +1,4 @@
-import { expect, Page, test, BrowserContext } from '@playwright/test';
+import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
 
 test.describe('Sharing pad with email', () => {
@@ -30,29 +30,25 @@ test.describe('Sharing pad with email', () => {
     await expect(page.locator('.notebook-invitation-popup')).toHaveCount(0);
 
     // Is shown when clicking on the plus avatar
-    await page.getByTestId('avatar-invite').click();
+    await page.getByRole('button').getByText('Share').click();
     await expect(page.locator('.notebook-invitation-popup')).toHaveCount(1);
     await expect(page.locator('.notebook-invitation-popup')).toBeVisible();
   });
 
   test('invites an unregistered user', async () => {
-    const avatarsCountBeforeInvitation = await page
-      .locator('.notebook-avatars > div')
-      .count();
-
     await page
       .locator('.notebook-invitation-popup input')
       .fill('invited-lama@ranch.org');
     await page.getByTestId('send-invitation').click();
 
     const avatarsCountAfterInvitation = await page
-      .locator('.notebook-avatars > div')
+      .getByTestId('avatar-img')
       .count();
+
+    expect(avatarsCountAfterInvitation).toBe(2);
 
     // TODO: do we need to show avatars for unregistered users?
     // TODO: how do we communicate that user is added? (toast?)
-    // expect(avatarsCountAfterInvitation).toBe(avatarsCountBeforeInvitation + 1);
-    expect(avatarsCountAfterInvitation).toBe(avatarsCountBeforeInvitation);
   });
 
   test('an registered user can collaborate after registration', async () => {

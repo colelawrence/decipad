@@ -4,13 +4,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as SliderUI from '@radix-ui/react-slider';
 import { FC, InputHTMLAttributes } from 'react';
-import {
-  brand400,
-  cssVar,
-  grey700,
-  offBlack,
-  transparency,
-} from '../../primitives';
+import { brand400, cssVar } from '../../primitives';
 import { AvailableSwatchColor, swatchesThemed } from '../../utils';
 
 const thumbBorderWidth = 1.28;
@@ -54,8 +48,6 @@ const rangeStyles = css({
 
 const thumbStyles = css({
   all: 'unset',
-  boxShadow: `0px 2px 20px ${transparency(grey700, 1)},
-  0px 2px 8px ${transparency(offBlack, 0.02)}`,
 
   border: `${thumbBorderWidth}px solid ${cssVar('borderColor')}`,
   borderRadius: '8px',

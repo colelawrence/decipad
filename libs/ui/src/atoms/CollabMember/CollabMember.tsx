@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Avatar } from '..';
-import { NotebookAvatar } from '../../molecules/NotebookAvatars/NotebookAvatars';
+import { NotebookAvatar } from '../../molecules';
 import { ellipsis, p12Medium, p14Medium } from '../../primitives';
 
 export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
@@ -10,7 +10,11 @@ export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
   return (
     <>
       <div css={avatarStyles}>
-        <Avatar name={user.name} email={user.email || ''} />
+        <Avatar
+          name={user.name}
+          email={user.email || ''}
+          useSecondLetter={false}
+        />
       </div>
       {user.email === user.name ? (
         <div css={userDetailsStyles}>

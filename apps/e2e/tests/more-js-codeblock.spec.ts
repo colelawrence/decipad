@@ -70,7 +70,7 @@ test.describe('More JS codeblock checks', () => {
       .getByTestId('table-column-menu-button')
       .click();
 
-    await page.getByText('Number').nth(1).click();
+    await page.getByRole('menuitem').getByText('Number').nth(1).click();
 
     await page.getByTestId('integration-modal-continue').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout

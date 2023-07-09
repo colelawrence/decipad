@@ -22,9 +22,11 @@ export const tableBorderColor = 'rgba(0, 0, 0, 0.1)';
 export const dragHandleHighlight = 'rgba(0, 0, 0, 0.05)';
 export const placeholderOpacity: Opacity = 0.4;
 
-export const smallestMobile = device(360, 640);
+export const smallestMobile = device(375, 640);
 export const smallestDesktop = device(1279, 720);
 export const largestDesktop = device(3840, 2160);
 
+export const tabletScreenQuery = `@media (max-width: ${smallestDesktop.landscape.width}px)`;
 export const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 export const mobileQuery = `@media (max-width: ${smallestMobile.landscape.width}px)`;
+export const tinyPhone = `@media (max-width: ${smallestMobile.portrait.width}px)`;

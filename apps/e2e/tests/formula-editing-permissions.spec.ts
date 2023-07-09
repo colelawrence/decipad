@@ -51,7 +51,7 @@ test.describe('Loading reference notebook', () => {
     await navigateToNotebook(page, notebookId);
     await waitForEditorToLoad(page);
     await expect(
-      page.getByTestId('[data-test-id="editor-table"]')
+      page.getByTestId('[data-testid="editor-table"]')
     ).toBeDefined();
   });
 
@@ -62,7 +62,7 @@ test.describe('Loading reference notebook', () => {
   });
 
   test('Publish notebook and navigate to it as a random user', async () => {
-    await page.getByRole('button', { name: 'Publish' }).click();
+    await page.getByRole('button', { name: 'Share' }).click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
 
     publishedNotebookPage = await randomUser.newPage();

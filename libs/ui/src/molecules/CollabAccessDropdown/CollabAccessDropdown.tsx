@@ -1,19 +1,19 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { css } from '@emotion/react';
-import { FC, useCallback } from 'react';
-import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useAuthenticationState } from '@decipad/graphql-client';
-import { TextAndIconButton, MenuItem } from '../../atoms';
+import { noop } from '@decipad/utils';
+import { css } from '@emotion/react';
+import { FC, useCallback } from 'react';
+import { MenuList } from '..';
+import { MenuItem, TextAndIconButton } from '../../atoms';
+import { Caret } from '../../icons/Caret/Caret';
 import {
+  cssVar,
   p12Medium,
   p14Medium,
-  red500,
-  cssVar,
   p8Medium,
+  red500,
 } from '../../primitives';
-import { Caret } from '../../icons/Caret/Caret';
-import { MenuList } from '..';
 import { PermissionType } from '../../types';
 
 type CollabAccessDropdownProps = {
@@ -27,9 +27,9 @@ type CollabAccessDropdownProps = {
 };
 
 const HumanReadablePermission: Record<PermissionType, string> = {
-  READ: 'reader',
-  WRITE: 'collaborator',
-  ADMIN: 'owner',
+  READ: 'Reader',
+  WRITE: 'Collaborator',
+  ADMIN: 'Author',
 };
 
 export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
@@ -73,7 +73,14 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   );
 
   return (
-    <MenuList root dropdown align="end" sideOffset={4} trigger={triggerElement}>
+    <MenuList
+      portal={false}
+      root
+      dropdown
+      align="end"
+      sideOffset={4}
+      trigger={triggerElement}
+    >
       <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}

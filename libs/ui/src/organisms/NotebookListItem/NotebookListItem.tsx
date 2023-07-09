@@ -15,7 +15,7 @@ import {
   p14Medium,
   setCssVar,
   shortAnimationDuration,
-  smallestDesktop,
+  tabletScreenQuery,
 } from '../../primitives';
 import { notebookList } from '../../styles';
 import { mainIconButtonStyles } from '../../styles/buttons';
@@ -25,10 +25,10 @@ import {
   AvailableSwatchColor,
   ColorStatusNames,
   DNDItemTypes,
-  getEmptyImage,
-  swatchesThemed,
   TColorStatus,
   UserIconKey,
+  getEmptyImage,
+  swatchesThemed,
 } from '../../utils';
 import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 
@@ -431,7 +431,7 @@ const notebookListTagsStyles = css({
   gridArea: 'tags',
   display: 'grid',
   paddingLeft: 36,
-  [`@media (max-width: ${smallestDesktop.landscape.width}px)`]: {
+  [tabletScreenQuery]: {
     display: 'none',
   },
 });

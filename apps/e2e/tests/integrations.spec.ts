@@ -22,7 +22,9 @@ test.describe('Import Menu', () => {
     await page.keyboard.type('hello world');
     await page.keyboard.press('Enter');
     await page.keyboard.type('/t');
-    await expect(page.getByTestId('menu-item-table')).toBeVisible();
+    await expect(
+      page.locator('article').getByTestId('menu-item-table')
+    ).toBeVisible();
     await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(3);
     await page.keyboard.press('Backspace');
     await page.keyboard.type('integrations');

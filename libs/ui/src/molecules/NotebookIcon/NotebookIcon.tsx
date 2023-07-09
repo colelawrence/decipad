@@ -3,8 +3,8 @@ import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import * as icons from '../../icons';
-import { cssVar, offBlack, setCssVar, transparency } from '../../primitives';
-import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
+import { cssVar, mediumShadow, setCssVar } from '../../primitives';
+import { AvailableSwatchColor, UserIconKey, swatchesThemed } from '../../utils';
 
 export interface NotebookIconProps {
   readonly icon: UserIconKey;
@@ -49,5 +49,5 @@ const notebookIconStyles = css({
   backgroundColor: cssVar('backgroundColor'),
   ...setCssVar('currentTextColor', cssVar('iconColorDark')),
 
-  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
+  boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
 });

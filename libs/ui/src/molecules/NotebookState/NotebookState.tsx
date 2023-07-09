@@ -1,17 +1,16 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
-import { FC, useState, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Tooltip } from '../../atoms';
 import { CircularArrow, CurvedArrow } from '../../icons';
 import {
   cssVar,
   grey500,
+  p13Bold,
   red100,
   red200,
   red500,
-  mediumShadow,
-  p13Bold,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
@@ -22,10 +21,9 @@ const wrapperStyles = css({
   gap: '4px',
   position: 'fixed',
   height: '42px',
-  boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
   borderRadius: '8px',
   bottom: '11px',
-  zIndex: 2,
+  zIndex: 666,
 });
 
 const buttonStyles = css({

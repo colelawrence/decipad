@@ -1,28 +1,29 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { docs } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import md5 from 'md5';
-import Gravatar from 'react-gravatar';
 import isEmpty from 'lodash.isempty';
-import { useThemeFromStore } from '@decipad/react-contexts';
+import md5 from 'md5';
 import { FormEvent, useCallback } from 'react';
+import Gravatar from 'react-gravatar';
 import { Button, TextareaField } from '../../atoms';
+import { Date, Loading, Sheet } from '../../icons';
 import {
-  h1,
-  p12Medium,
-  p16Regular,
   cssVar,
-  setCssVar,
+  h1,
   p10Regular,
-  purple300,
+  p12Medium,
   p14Medium,
   p14Regular,
+  p16Regular,
+  purple300,
+  setCssVar,
+  smallShadow,
 } from '../../primitives';
 import { AccountSetup } from '../../templates';
 import modelDark from './model3_dark.png';
 import model3Light from './model3_light.png';
-import { Date, Sheet, Loading } from '../../icons';
 import { backgroundStyles } from './styles';
 
 const leftStyles = css({
@@ -48,7 +49,7 @@ const linkStyles = css({
 const avatarStyles = css({
   position: 'relative',
 
-  boxShadow: `0px 2px 16px -4px rgba(0, 0, 0, 0.06)`,
+  boxShadow: `0px 2px 16px -4px ${smallShadow.rgba}`,
   border: `1px solid ${cssVar('backgroundColor')}`,
   borderRadius: '100px',
 

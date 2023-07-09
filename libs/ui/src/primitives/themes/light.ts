@@ -125,11 +125,14 @@ export const theme: CssVariables = {
   weakSlashIconColor: blue200.hex,
   strongSlashIconColor: blue500.hex,
 
+  // scrollbar color
+  scrollbarColor: grey300.hex,
+
   // slash command default colors
   // overriden with setCssVar
-  slashColorLight: grey100.hex,
-  slashColorNormal: grey200.hex,
-  slashColorHeavy: grey500.hex,
+  slashColorLight: grey200.hex,
+  slashColorNormal: grey500.hex,
+  slashColorHeavy: grey600.hex,
 
   slashColorOceanLight: blue100.hex,
   slashColorOceanNormal: blue200.hex,
@@ -229,8 +232,8 @@ export const theme: CssVariables = {
   tableFocusColor: blue300.hex,
   tableFooterBackgroundColor: grey100.hex,
 
-  tableLiveMakeHeaderButton: purple200.hex,
-  tableLiveMakeHeaderButtonHover: purple300.hex,
+  tableLiveMakeHeaderButton: blue200.hex,
+  tableLiveMakeHeaderButtonHover: blue300.hex,
 
   liveDataWeakBackgroundColor: yellow300.hex,
   liveDataBackgroundColor: yellow400.hex,

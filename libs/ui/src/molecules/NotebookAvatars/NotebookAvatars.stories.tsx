@@ -4,7 +4,7 @@ import { NotebookAvatars } from './NotebookAvatars';
 
 const args: ComponentProps<typeof NotebookAvatars> = {
   notebook: {} as any,
-  usersWithAccess: [
+  allUsers: [
     {
       user: {
         id: '0',

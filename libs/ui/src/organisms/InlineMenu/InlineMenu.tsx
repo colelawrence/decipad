@@ -4,34 +4,42 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { InlineMenuItem } from '../../atoms';
 import { InlineMenuGroup } from '../../molecules';
-import {
-  cssVar,
-  offBlack,
-  p14Regular,
-  setCssVar,
-  transparency,
-} from '../../primitives';
+import { cssVar, mediumShadow, p14Regular, setCssVar } from '../../primitives';
+import { deciOverflowYStyles } from '../../styles/scrollbars';
 
-const styles = css({
-  maxWidth: '80vw',
-  maxHeight: '50vh',
-  overflowX: 'hidden',
-  overflowY: 'scroll',
-  display: 'grid',
-  gridTemplateColumns: 'fit-content(75vw)',
-  padding: '12px',
+const styles = css(
+  {
+    maxWidth: '80vw',
+    maxHeight: '50vh',
+    overflowX: 'hidden',
+    display: 'grid',
+    gridTemplateColumns: 'fit-content(75vw)',
+    padding: '12px',
 
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
-  borderRadius: '8px',
-  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, 0.08).rgba}`,
+    backgroundColor: cssVar('backgroundColor'),
+    border: `1px solid ${cssVar('borderColor')}`,
+    borderRadius: '8px',
+    boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
 
-  ':empty::before': {
-    ...p14Regular,
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-    content: '"No matching items found"',
+    ':empty::before': {
+      ...p14Regular,
+      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+      content: '"No matching items found"',
+    },
   },
-});
+  deciOverflowYStyles
+);
+
+const inlineStyles = css(
+  {
+    maxHeight: 'unset',
+    backgroundColor: 'transparent',
+    boxShadow: 'unset',
+    border: 'unset',
+    overflowX: 'hidden',
+  },
+  deciOverflowYStyles
+);
 
 type InlineMenuCommand = string;
 
@@ -53,11 +61,13 @@ interface InlineMenuProps {
   readonly onExecute?: (command: InlineMenuCommand) => void;
   readonly groups: Array<MenuCommandGroup>;
   readonly search?: string;
+  readonly variant?: 'block' | 'inline';
 }
 export const InlineMenu: FC<InlineMenuProps> = ({
   groups,
   onExecute = noop,
   search = '',
+  variant = 'block',
 }) => {
   const groupsWithItemsFiltered = groups.map(({ items, ...group }) => {
     const matchingItems = items.filter(({ command, title, extraSearchTerms }) =>
@@ -81,11 +91,14 @@ export const InlineMenu: FC<InlineMenuProps> = ({
 
   const firstMatch = matchingCommands[0];
   useEffect(() => {
-    setFocusedCommand(firstMatch);
-  }, [firstMatch]);
+    variant === 'block' && setFocusedCommand(firstMatch);
+  }, [firstMatch, variant]);
 
   const onKeyDown = useCallback(
     (event: KeyboardEvent) => {
+      if (variant !== 'block') {
+        return;
+      }
       switch (true) {
         case event.key === 'ArrowDown' && !event.shiftKey:
         case event.key === 'Tab' && !event.shiftKey:
@@ -117,19 +130,24 @@ export const InlineMenu: FC<InlineMenuProps> = ({
           break;
       }
     },
-    [focusedCommand, matchingCommands]
+    [focusedCommand, matchingCommands, variant]
   );
   useWindowListener('keydown', onKeyDown, true);
 
   let foundFocusedItem = false;
 
+  const slashContainerStyles = [styles, variant === 'inline' && inlineStyles];
+
   return (
-    <div role="menu" aria-orientation="vertical" css={styles}>
+    <div role="menu" aria-orientation="vertical" css={slashContainerStyles}>
       {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) => {
         return matchingItems.length ? (
           <InlineMenuGroup key={i} {...group}>
             {matchingItems.map(({ command, extraSearchTerms, ...item }) => {
-              const setFocus = focusedCommand === command && !foundFocusedItem;
+              const setFocus =
+                variant === 'block' &&
+                focusedCommand === command &&
+                !foundFocusedItem;
               const focusedItem = (
                 <InlineMenuItem
                   {...item}

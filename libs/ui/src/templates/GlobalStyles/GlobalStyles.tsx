@@ -235,7 +235,7 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
         '.excalidraw .Island.App-toolbar': {
           padding: '4px',
           border: `1px solid ${cssVar('borderColor')}`,
-          boxShadow: `0px 2px 24px -4px ${mediumShadow}`,
+          boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
           borderRadius: '8px',
         },
         // other stuff

@@ -1,9 +1,9 @@
 import DeciNumber, { ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import { BuiltinSpec } from '../interfaces';
 import { Type } from '../../type';
 import { getInstanceof } from '../../utils';
 import { Scalar, getColumnLike } from '../../value';
+import { BuiltinSpec } from '../interfaces';
 
 export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   compoundrate: {

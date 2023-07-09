@@ -12,6 +12,7 @@ import {
   insertNodes,
   selectEventRange,
 } from '@decipad/editor-utils';
+import { cursorStore } from '@decipad/react-contexts';
 import {
   focusEditor,
   getBlockAbove,
@@ -19,11 +20,10 @@ import {
   isEditorFocused,
   isElement,
 } from '@udecode/plate';
+import { dndStore } from '@udecode/plate-dnd';
 import React from 'react';
 import { BasePoint, Path } from 'slate';
-import { dndStore } from '@udecode/plate-dnd';
 import { insertSmartRef } from './insertSmartRef';
-import { cursorStore } from '../../../stores/cursorStore';
 
 export const onDropSmartRef =
   (computer: Computer) => (editor: MyEditor) => (event: React.DragEvent) => {

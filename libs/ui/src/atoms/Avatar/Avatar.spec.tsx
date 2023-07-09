@@ -15,12 +15,12 @@ it("shows the user's first initial", () => {
 it('works even if typescript convention violated', () => {
   const brokenName = undefined as unknown as string;
   const { container } = render(<Avatar name={brokenName} />);
-  expect(container).toHaveTextContent('?');
+  expect(container).toHaveTextContent('A');
 });
 
 it('works with an empty string', () => {
   const { container } = render(<Avatar name="" />);
-  expect(container).toHaveTextContent('?');
+  expect(container).toHaveTextContent('A');
 });
 
 describe('roundedSquare', () => {

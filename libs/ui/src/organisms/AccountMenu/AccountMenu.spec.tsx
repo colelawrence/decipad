@@ -1,9 +1,9 @@
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ComponentProps } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { AccountMenu } from './AccountMenu';
 
 const props: ComponentProps<typeof AccountMenu> = {
@@ -38,7 +38,7 @@ it('allows logging out', async () => {
   );
 
   await userEvent.click(
-    getByText(/log.*out/i, { selector: '[data-test-id="log out"]' })
+    getByText(/log.*out/i, { selector: '[data-testid="log out"]' })
   );
   expect(handleLogout).toHaveBeenCalled();
 });

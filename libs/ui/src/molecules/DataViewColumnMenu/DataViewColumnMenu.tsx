@@ -71,7 +71,7 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
         <button
           css={triggerStyles}
           onClick={onTriggerClick}
-          data-test-id={`data-view-options-menu-${columnName}`}
+          data-testid={`data-view-options-menu-${columnName}`}
         >
           <Caret color="normal" variant="down" />
         </button>

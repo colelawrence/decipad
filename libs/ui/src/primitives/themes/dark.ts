@@ -118,6 +118,8 @@ export const theme: CssVariables = {
   strongerHighlightColor: dark400.hex,
   evenStrongerHighlightColor: dark300.hex,
 
+  scrollbarColor: dark400.hex,
+
   weakerTextColor: dark400.hex,
   weakTextColor: dark300.hex,
   normalTextColor: dark200.hex,
@@ -236,8 +238,8 @@ export const theme: CssVariables = {
   tableFocusColor: blue600.hex,
   tableFooterBackgroundColor: grey700.hex,
 
-  tableLiveMakeHeaderButton: purple700.hex,
-  tableLiveMakeHeaderButtonHover: purple600.hex,
+  tableLiveMakeHeaderButton: blue700.hex,
+  tableLiveMakeHeaderButtonHover: blue500.hex,
 
   liveDataWeakBackgroundColor: purple900.hex,
   liveDataBackgroundColor: purple800.hex,

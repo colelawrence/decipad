@@ -2,7 +2,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, setCssVar } from '../../primitives';
+import { cssVar, setCssVar, smallScreenQuery } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -13,13 +13,22 @@ interface SegmentButton {
   readonly testId?: string;
   readonly visible?: boolean;
   readonly disabled?: boolean;
+  readonly selected?: boolean;
 }
 
-interface SegmentButtonsProps {
+type SegmentButtonsProps = {
   readonly buttons: SegmentButton[];
-}
+  readonly variant?: 'default' | 'editor-sidebar' | 'topbar';
+};
 
-export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
+export const SegmentButtons: FC<SegmentButtonsProps> = ({
+  buttons,
+  variant = 'default',
+}) => {
+  const lastBorder = variant === 'default';
+  const side = variant === 'editor-sidebar' ? 'bottom' : 'top';
+  const selectedColor =
+    variant === 'topbar' ? 'strongerHighlightColor' : 'highlightColor';
   // visible is undefined by default, so !== false is the right
   // thing to do.
   const visibleButtons = buttons.filter((btn) => btn.visible !== false);
@@ -27,9 +36,33 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
     <div
       css={[
         segmentButtonsStyles,
-        visibleButtons.length > 1 && {
-          '& figure:last-of-type': {
-            borderLeft: `1px solid ${cssVar('borderHighlightColor')}`,
+        variant === 'topbar' && { gap: 6 },
+        visibleButtons.length > 1 &&
+          lastBorder && {
+            '& figure:last-of-type': {
+              borderLeft: `1px solid ${cssVar('borderHighlightColor')}`,
+            },
+          },
+        variant === 'editor-sidebar' && {
+          backgroundColor: 'transparent',
+          border: 0,
+          svg: { margin: 0, height: 20, width: 20 },
+        },
+        variant === 'topbar' && {
+          backgroundColor: 'transparent',
+          border: 0,
+          figure: {
+            height: 30,
+            width: 30,
+          },
+          svg: {
+            height: 16,
+            width: 16,
+            margin: 'auto',
+            marginTop: 6,
+          },
+          [smallScreenQuery]: {
+            display: 'none',
           },
         },
       ]}
@@ -42,7 +75,9 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
           testId,
           visible = true,
           disabled = false,
+          selected = false,
         } = button;
+
         const hasTooltip = !!tooltip;
         const trigger = (
           <figure
@@ -50,7 +85,28 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
             onClick={disabled ? noop : onClick}
             key={`figure-segment-${i}`}
             data-testid={`segment-button-trigger${testId ? `-${testId}` : ''}`}
-            css={disabled ? segmentDisabledButtonStyle : segmentButtonStyle}
+            css={[
+              disabled ? segmentDisabledButtonStyle : segmentButtonStyle,
+              variant === 'editor-sidebar' && {
+                borderRadius: 6,
+                ':hover, :focus': {
+                  backgroundColor: 'initial',
+                  color: cssVar('strongTextColor'),
+                },
+              },
+              variant === 'topbar' && {
+                borderRadius: 4,
+                ':hover, :focus': {
+                  filter: 'brightness(95%)',
+                },
+              },
+              selected && {
+                backgroundColor: cssVar(selectedColor),
+                ':hover, :focus': {
+                  backgroundColor: cssVar(selectedColor),
+                },
+              },
+            ]}
           >
             {children}
           </figure>
@@ -58,7 +114,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({ buttons }) => {
         return visible ? (
           hasTooltip && !disabled ? (
             <Tooltip
-              side="top"
+              side={side}
               key={`figure-segment-tooltip-${i}`}
               trigger={trigger}
             >
@@ -86,7 +142,6 @@ const segmentButtonsStyles = css(hideOnPrint, {
   border: `1px solid ${cssVar('borderColor')}`,
   backgroundColor: cssVar('tintedBackgroundColor'),
   '& svg': {
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     margin: '4px',
     width: '16px',
     height: '16px',
@@ -96,7 +151,6 @@ const segmentButtonsStyles = css(hideOnPrint, {
 const segmentButtonStyle = css({
   ':hover, :focus': {
     backgroundColor: cssVar('strongHighlightColor'),
-    borderRadius: 4,
   },
 });
 

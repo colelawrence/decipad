@@ -146,6 +146,8 @@ export interface CssVariables {
   readonly buttonDangerLight: Property.Color;
   readonly buttonDangerHeavy: Property.Color;
 
+  readonly scrollbarColor: Property.Color;
+
   //
   // Numbers & Bubbles
   //
