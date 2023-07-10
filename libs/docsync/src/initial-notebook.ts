@@ -3,14 +3,12 @@ import { nanoid } from 'nanoid';
 
 const profitId = nanoid();
 
+export const title = 'Welcome to Decipad!';
+
 export default {
   children: [
     {
-      children: [
-        {
-          text: 'Welcome to Decipad!',
-        },
-      ],
+      children: [{ text: title }],
       type: 'h1',
       id: '5ZAKkX2AIKRbpz09IdghY',
     },

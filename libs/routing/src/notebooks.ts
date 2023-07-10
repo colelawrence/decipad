@@ -14,4 +14,6 @@ const acceptInvite = route(
   {}
 );
 
-export default route('/n', {}, { notebook, acceptInvite });
+const welcomeNotebook = route(`/welcome`, {}, {});
+
+export default route('/n', {}, { notebook, acceptInvite, welcomeNotebook });

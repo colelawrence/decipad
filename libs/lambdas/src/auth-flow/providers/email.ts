@@ -27,15 +27,10 @@ async function sendVerificationRequest(
 ) {
   const {
     identifier: email,
-    url,
+    url: originalUrl,
     token,
     expires: expiresAt,
   } = verificationRequest;
-
-  if (process.env.ARC_ENV !== 'production') {
-    console.log('validation link:');
-    console.log(url);
-  }
 
   const data = await tables();
   const key = await data.userkeys.get({ id: `email:${email}` });
@@ -43,6 +38,13 @@ async function sendVerificationRequest(
   if (key) {
     const user = await data.users.get({ id: key.user_id });
     firstTime = !user?.first_login;
+  }
+
+  const url = getRedirectLink(originalUrl, firstTime);
+
+  if (process.env.ARC_ENV !== 'production') {
+    console.log('validation link:');
+    console.log(url);
   }
 
   const expires = `${differenceInHours(expiresAt, new Date())} hours`;
@@ -74,3 +76,13 @@ async function sendVerificationRequest(
     properties: payload,
   });
 }
+
+const getRedirectLink = (originalUrl: string, isFirstLogin: boolean) => {
+  const url = new URL(originalUrl);
+
+  if (isFirstLogin) {
+    url.searchParams.set('callbackUrl', '/n/welcome');
+  }
+
+  return url.toString();
+};

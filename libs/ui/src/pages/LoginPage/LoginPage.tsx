@@ -1,8 +1,15 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useRef, useState } from 'react';
+import { css } from '@emotion/react';
 import { Button, InputField } from '../../atoms';
 import { AuthContent, SignUpConditionsContent } from '../../molecules';
 import { LoginBox } from '../../organisms/LoginBox/LoginBox';
+
+const formStyle = css({
+  justifySelf: 'stretch',
+
+  display: 'grid',
+  gridGap: '16px',
+});
 
 const LoginForm = ({ onSubmit }: LoginPageProps) => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -22,12 +29,7 @@ const LoginForm = ({ onSubmit }: LoginPageProps) => {
     <>
       <form
         ref={formRef}
-        css={{
-          justifySelf: 'stretch',
-
-          display: 'grid',
-          gridGap: '16px',
-        }}
+        css={formStyle}
         onSubmit={async (event) => {
           event.preventDefault();
           setIsSubmitting(true);

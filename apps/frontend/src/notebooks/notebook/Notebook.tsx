@@ -3,6 +3,7 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { EditorSidebar } from '@decipad/editor-components';
 import { MyEditor } from '@decipad/editor-types';
 import {
+  useFinishOnboarding,
   useGetWorkspacesIDsQuery,
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
@@ -101,6 +102,7 @@ const Notebook: FC = () => {
   }, [workspace, setCurrentWorkspaceInfo]);
 
   useAnimateMutations();
+  useFinishOnboarding();
 
   const onNotebookTitleChange = useCallback(
     (newName: string) => {
