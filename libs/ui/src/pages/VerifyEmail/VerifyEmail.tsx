@@ -1,9 +1,9 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Button } from '../../atoms';
-import { AuthContent } from '../../molecules';
+import { AuthContent, SignUpConditionsContent } from '../../molecules';
 import { cssVar, setCssVar } from '../../primitives';
+import { LoginBox } from '../../organisms';
 
 const buttonWrapperStyles = css({
   width: '100%',
@@ -12,46 +12,20 @@ const buttonWrapperStyles = css({
   ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
 
-const outerBorderStyles = css({
-  border: `1px solid ${cssVar('borderColor')}`,
-  boxShadow: `0px 2px 16px ${cssVar('highlightColor')}`,
-  borderRadius: '8px',
-});
-
-const outerWrapperStyles = css({
-  display: 'grid',
-  justifyItems: 'center',
-  alignContent: 'center',
-
-  padding: '16px',
-});
-
-const wrapperStyles = css({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '100%',
-  maxWidth: '440px',
-
-  gridGap: '12px',
-
-  padding: '24px 12px',
-});
-
 export const VerifyEmail = ({ email }: { email: string }): ReturnType<FC> => {
   return (
-    <div css={outerWrapperStyles}>
-      <div
-        data-testid="login-instructions"
-        css={[wrapperStyles, outerBorderStyles]}
-      >
-        <AuthContent
-          title="Check your inbox!"
-          description={`Open the link sent to ${email}`}
-        />
-        <div css={buttonWrapperStyles}>
-          <Button href="/">Back to log in</Button>
-        </div>
+    <LoginBox>
+      <AuthContent
+        title="Check your inbox!"
+        description={`Open the link sent to ${email}. No email? Check spam folder.`}
+      />
+      <div css={buttonWrapperStyles}>
+        <Button type="primary" href="https://decipad.com">
+          Go back to website
+        </Button>
       </div>
-    </div>
+
+      <SignUpConditionsContent />
+    </LoginBox>
   );
 };

@@ -9,8 +9,11 @@ describe('Email confirmation page', () => {
   });
 
   it('renders a back to login page button', () => {
-    const { getByRole } = render(<VerifyEmail email="foobar@decipad.com" />);
+    const { getByText } = render(<VerifyEmail email="foobar@decipad.com" />);
 
-    expect(getByRole('link')).toHaveAttribute('href', '/');
+    expect(getByText('Go back to website')).toHaveAttribute(
+      'href',
+      'https://decipad.com/'
+    );
   });
 });

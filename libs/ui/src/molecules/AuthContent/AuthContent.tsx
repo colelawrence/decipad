@@ -2,26 +2,13 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Deci } from '../../icons';
-import {
-  cssVar,
-  brand500,
-  brand400,
-  setCssVar,
-  transparency,
-  p14Regular,
-  p24Medium,
-} from '../../primitives';
+import { cssVar, setCssVar, p14Regular, p24Medium } from '../../primitives';
 
 const deciLogoWrapper = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  width: '60px',
-  height: '60px',
-  background: `linear-gradient(145.97deg, ${brand500.rgb} 10.08%, ${
-    transparency(brand400, 0.8).rgba
-  } 75.32%, ${brand500.rgb} 94.81%)`,
-  borderRadius: '12px',
-  padding: '12px',
-  marginBottom: '16px',
+  width: '40px',
+  height: '40px',
+  marginBottom: '10px',
 });
 
 const authContentWrapperStyles = css({
@@ -29,15 +16,12 @@ const authContentWrapperStyles = css({
   justifyContent: 'center',
   justifyItems: 'center',
   alignContent: 'center',
+  gap: '6px',
 });
 
 const headingStyles = css(
   p24Medium,
-  setCssVar('currentTextColor', cssVar('strongTextColor')),
-  {
-    paddingBottom: '6px',
-    textAlign: 'center',
-  }
+  setCssVar('currentTextColor', cssVar('strongTextColor'))
 );
 
 const descriptionStyles = css(p14Regular, {
@@ -47,7 +31,7 @@ const descriptionStyles = css(p14Regular, {
 
 export interface AuthContentProps {
   title: string;
-  description: string;
+  description?: string;
 }
 
 export const AuthContent = ({
@@ -60,7 +44,7 @@ export const AuthContent = ({
         <Deci />
       </div>
       <h1 css={headingStyles}>{title}</h1>
-      <p css={css(descriptionStyles)}>{description}</p>
+      {description && <p css={css(descriptionStyles)}>{description}</p>}
     </div>
   );
 };

@@ -29,6 +29,7 @@ export { InlineMenu } from './InlineMenu/InlineMenu';
 export { InlineRowResult } from './InlineRowResult/InlineRowResult';
 export { LiveConnectionParams } from './LiveConnectionParams/LiveConnectionParams';
 export { LiveDataSetParams } from './LiveDataSetParams/LiveDataSetParams';
+export { LoginBox } from './LoginBox/LoginBox';
 export { MediaEmbed } from './MediaEmbed/MediaEmbed';
 export { MobileSidebar } from './MobileSidebar/MobileSidebar';
 export { NotebookInvitationPopUp } from './NotebookInvitationPopUp/NotebookInvitationPopUp';

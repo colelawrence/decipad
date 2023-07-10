@@ -11,23 +11,21 @@ test.describe('Authentication flow', () => {
     await page.goto('/');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.redirectDelay);
-    await page.waitForSelector('text=/make/i');
+    await page.waitForSelector('text=/Welcome to Deci/i');
     await snapshot(page as Page, 'Auth: Login Window');
   });
 
   test('should allow the user to type their email for login', async ({
     page,
   }) => {
-    await page.click('text=/continue/i');
     await page.type('input', 'johndoe123@gmail.com');
     const inputValue = await page.inputValue('input');
     expect(inputValue).toBe('johndoe123@gmail.com');
   });
 
   test('should show confirmation email on login attempt', async ({ page }) => {
-    await page.click('text=/continue/i');
     await page.type('input', 'johndoe123@gmail.com');
-    await page.click('text=/submit/i');
+    await page.click('text=/Continue with email/i');
   });
 
   test('should redirect to workspace if authenticated', async ({

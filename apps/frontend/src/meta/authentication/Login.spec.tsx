@@ -30,7 +30,7 @@ it('shows a message when the signin request is processed', async () => {
     await findByPlaceholderText(/e-?mail/i),
     'me@example.com'
   );
-  await userEvent.click(await findByText(/submit/i));
+  await userEvent.click(await findByText(/Continue with email/i));
 
   await act(() =>
     resolveSignIn({ ok: true, error: undefined, status: 200, url: null })
