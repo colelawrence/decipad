@@ -72,7 +72,7 @@ export default {
 
     async updateSecret(
       _: unknown,
-      { secretId, newSecret }: { secretId: string; newSecret: string },
+      { secretId, secret: newSecret }: { secretId: string; secret: string },
       context: GraphqlContext
     ): Promise<SecretRecord> {
       const data = await tables();
