@@ -418,6 +418,7 @@ export interface VerificationRequestRecord extends TableRecordBase {
   token: string;
   expires: number;
   resourceLink?: string;
+  openTokenForTestsOnly?: string;
 }
 
 interface SubscriptionRecord extends TableRecordBase {

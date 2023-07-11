@@ -11,6 +11,7 @@ export default gql`
     createdAt: DateTime
     hideChecklist: Boolean
     onboarded: Boolean
+    emailValidatedAt: DateTime
   }
 
   enum PermissionType {

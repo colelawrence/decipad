@@ -84,9 +84,17 @@ export const adapter = (adapterOpts: AdapterOptions): Adapter => {
       const data = await tables();
       if (user.emailVerified) {
         const verifiedAt = new Date(user.emailVerified);
-        const userkey = await data.userkeys.get({
-          id: `email:${user.email}`,
-        });
+        const userKeys = (
+          await data.userkeys.query({
+            IndexName: 'byUserId',
+            KeyConditionExpression: 'user_id = :user_id',
+            ExpressionAttributeValues: {
+              ':user_id': user.id,
+            },
+          })
+        ).Items.filter((key) => key.id.startsWith('email:'));
+
+        const [userkey] = userKeys;
 
         if (userkey) {
           userkey.validated_at = verifiedAt.getTime();

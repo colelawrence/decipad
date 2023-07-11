@@ -1,4 +1,9 @@
-import { GraphqlContext, PermissionRecord, User } from '@decipad/backendtypes';
+import {
+  GraphqlContext,
+  PermissionRecord,
+  User,
+  UserRecord,
+} from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 
 export default {
@@ -46,6 +51,27 @@ export default {
       const [userKey] = userKeys;
       const username = userKey.id.split(':')[1];
       return username;
+    },
+    async emailValidatedAt(user: UserRecord): Promise<Date | undefined> {
+      const data = await tables();
+      const userKeys = (
+        await data.userkeys.query({
+          IndexName: 'byUserId',
+          KeyConditionExpression: 'user_id = :user_id',
+          ExpressionAttributeValues: {
+            ':user_id': user.id,
+          },
+        })
+      ).Items.filter((key) => key.id.startsWith('email:'));
+
+      if (userKeys.length === 0) {
+        return;
+      }
+      const [userKey] = userKeys;
+      return (
+        (userKey.validated_at != null && new Date(userKey.validated_at)) ||
+        undefined
+      );
     },
   },
 };

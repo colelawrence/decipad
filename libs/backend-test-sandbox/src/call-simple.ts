@@ -13,11 +13,13 @@ interface CallSimple {
   withAuth(
     token: string
   ): (url: string, options?: IOptions) => ReturnType<typeof fetch>;
+  origin: string;
 }
 
 export default ({ apiPort }: { apiPort: number }): CallSimple => {
   const origin = baseUrl(apiPort);
   return {
+    origin,
     fetch: justFetch,
     call,
     withAuthOptions,

@@ -12,6 +12,7 @@ interface AdapterOptions {
 interface VerificationRequest {
   identifier: string;
   token: string;
+  openTokenForTestsOnly?: string;
 }
 
 export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
@@ -20,6 +21,7 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
   }
 
   return {
+    hashToken,
     async createVerificationToken(
       verification: VerificationRequest & {
         expires: Date;
@@ -34,8 +36,14 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
         id: hashToken(`${identifier}:${hashedToken}`),
         identifier,
         token: hashedToken,
+
         expires: Math.round(expires.getTime() / 1000),
         resourceLink,
+        ...(process.env.NODE_ENV === 'production'
+          ? {}
+          : {
+              openTokenForTestsOnly: verification.openTokenForTestsOnly,
+            }),
       };
 
       await data.verificationrequests.put(newVerificationRequest);

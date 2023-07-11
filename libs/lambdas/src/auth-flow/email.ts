@@ -19,7 +19,6 @@ export async function signInEmail(
     console.log(`user ${email} not allowed to log in`);
     return false;
   }
-  console.log(`user ${email} IS allowed to log in`);
 
   let existingUser;
   const data = await tables();
