@@ -1,5 +1,6 @@
 query User {
   self {
+    id
     name
     username
     description

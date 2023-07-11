@@ -51,6 +51,9 @@ export const graphCacheConfig: GraphCacheConfig = {
     UserAccess() {
       return null;
     },
+    WorkspaceAccess() {
+      return null;
+    },
   },
   resolvers: {
     PadSnapshot: {

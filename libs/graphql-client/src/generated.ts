@@ -1214,7 +1214,7 @@ export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __type
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', name: string, username?: string | null, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null } | null };
+export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', id: string, name: string, username?: string | null, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null } | null };
 
 export type WorkspaceSwitcherWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, myPermissionType?: PermissionType | null };
 
@@ -1907,6 +1907,7 @@ export function useGetNotebookByIdQuery(options: Omit<Urql.UseQueryArgs<GetNoteb
 export const UserDocument = gql`
     query User {
   self {
+    id
     name
     username
     description
