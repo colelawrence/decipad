@@ -20,6 +20,7 @@ import {
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { captureException } from '@decipad/backend-trace';
 import { ConnectionRecord } from '@decipad/backendtypes';
+import pSeries from 'p-series';
 
 const send = async (conn: ConnectionRecord, message: Buffer) => {
   const messages: string[] = [];
@@ -52,8 +53,10 @@ async function broadcast(
     })
   ).Items;
 
-  await Promise.all(
-    conns.filter((conn) => conn.id !== from).map((conn) => send(conn, message))
+  await pSeries(
+    conns
+      .filter((conn) => conn.id !== from)
+      .map((conn) => () => send(conn, message))
   );
 }
 
