@@ -57,7 +57,7 @@ const tableWrapperTransformStyles = css({
 });
 
 const tableWrapperDraggingStyles = css({
-  left: `-${tableControlWidth}`,
+  left: `-${tableControlWidth}px`,
 });
 
 const tableWrapperDefaultStyles = css(

@@ -73,7 +73,6 @@ export const tdBaseStyles = css(p14Medium, {
 
   minHeight: tdMinHeight,
   minWidth: tdMinWidth + 50,
-  maxWidth: tdMaxWidth,
   whiteSpace: 'break-spaces',
   cursor: 'default',
   verticalAlign: 'middle',
