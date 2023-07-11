@@ -24,8 +24,10 @@ export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({ onAdd }) => {
 
       if (isDisabled) return;
 
+      const secretName = name.replaceAll(' ', '_');
+
       setLoading(true);
-      onAdd({ name, secret })
+      onAdd({ name: secretName, secret })
         .then(() => {
           setName('');
           setSecret('');

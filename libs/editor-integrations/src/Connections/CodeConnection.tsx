@@ -10,8 +10,6 @@ import {
 } from '@decipad/react-contexts';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad_org/safejs';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
-import { useWorker } from '../hooks';
-import { ConnectionProps } from './types';
 import {
   Button,
   CodeEditor,
@@ -26,6 +24,8 @@ import {
   useRdFetch,
 } from 'libs/editor-components/src/AIPanel/hooks';
 import { css } from '@emotion/react';
+import { useWorker } from '../hooks';
+import { ConnectionProps } from './types';
 
 const fieldsetStyles = css({
   display: 'grid',
@@ -82,8 +82,8 @@ const AiPanel = ({
     setRes({ status: 'loading' });
 
     fetch(url)
-      .then(async (res) => {
-        let result = await res.text();
+      .then(async (r) => {
+        const result = await r.text();
         setRes({ status: 'success', result });
       })
       .catch(() => {
@@ -93,7 +93,7 @@ const AiPanel = ({
             'Failed to fetch example response. Either retry or enter data manually below.',
         });
       });
-  }, [url, setExampleRes, setRes]);
+  }, [url, setRes]);
 
   useEffect(() => {
     if (res.status === 'success') {
@@ -101,10 +101,12 @@ const AiPanel = ({
       // Attempt to format JSON if possible
       try {
         result = JSON.stringify(JSON.parse(result), null, 2);
-      } catch (e) {}
+      } catch (e) {
+        // do nothing
+      }
       setExampleRes(result);
     }
-  }, [res]);
+  }, [res, setExampleRes]);
 
   const loading = res.status === 'loading' || generationRD.status === 'loading';
   const createCodeButton = (
@@ -342,10 +344,10 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
       }
       case 'success': {
         toggleShowAi(false);
-        setCode(rd.result?.completion?.replace(/\n  /g, '\n'));
+        setCode(rd.result?.completion?.replace(/\n {2}/g, '\n'));
       }
     }
-  }, [rd]);
+  }, [rd, setCode, toggleShowAi]);
 
   return (
     <>

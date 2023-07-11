@@ -1,5 +1,7 @@
+import { useTEditorRef } from '@decipad/editor-types';
+import { BackendUrl } from '@decipad/utils';
 import { SafeJs } from '@decipad_org/safejs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Use to register a worker with an ID, used to avoid creating extra threads.
@@ -14,10 +16,20 @@ export function useWorker(
   const workerRef = useRef<SafeJs | undefined>(undefined);
   const [worker, setWorker] = useState<SafeJs | undefined>(undefined);
 
+  const editor = useTEditorRef();
+
+  const workerOptions = useMemo(
+    () => ({
+      ...initOptions,
+      fetchProxyUrl: BackendUrl.fetchProxy(editor.id).toString(),
+    }),
+    [editor.id, initOptions]
+  );
+
   // Clean up the worker when component unmounts.
   useEffect(() => {
     if (!workerRef.current) {
-      const w = new SafeJs(msgCallback, errorCallback, initOptions);
+      const w = new SafeJs(msgCallback, errorCallback, workerOptions);
       setWorker(w);
       workerRef.current = w;
     }
@@ -29,7 +41,7 @@ export function useWorker(
         setWorker(undefined);
       }
     };
-  }, [errorCallback, initOptions, msgCallback]);
+  }, [errorCallback, initOptions, msgCallback, workerOptions]);
 
   return worker;
 }

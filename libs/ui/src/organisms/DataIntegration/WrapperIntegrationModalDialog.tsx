@@ -10,24 +10,14 @@ import {
   removeFocusFromAllBecauseSlate,
   useEnterListener,
 } from '@decipad/react-utils';
-import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Divider, MenuItem, TextAndIconButton } from '../../atoms';
-import {
-  ArrowDiagonalTopRight,
-  Caret,
-  Close,
-  Play,
-  Sparkles,
-} from '../../icons';
-import { MenuList } from '../../molecules';
+import { FC, ReactNode, useContext } from 'react';
+import { Button, TextAndIconButton } from '../../atoms';
+import { Close, Play, Sparkles } from '../../icons';
 import { Tabs } from '../../molecules/Tabs/Tabs';
-import { cssVar, p13Medium, p15Medium, p16Medium } from '../../primitives';
+import { cssVar, p15Medium, p16Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
-import { hideOnPrint } from '../../styles/editor-layout';
 
 type Stages =
   | 'pick-integration'
@@ -52,6 +42,8 @@ interface WrapperIntegrationModalDialogProps {
   readonly setOpen: (open: boolean) => void;
 
   readonly isEditing?: boolean;
+
+  readonly secretsMenu: ReactNode;
 }
 
 export const WrapperIntegrationModalDialog: FC<
@@ -68,6 +60,8 @@ export const WrapperIntegrationModalDialog: FC<
   isEditing = false,
   children,
   workspaceId,
+
+  secretsMenu,
 }) => {
   const { onExecute } = useContext(ExecutionContext);
   const { resultPreview, stage, connectionType } = useConnectionStore();
@@ -79,22 +73,10 @@ export const WrapperIntegrationModalDialog: FC<
     connectionType === 'codeconnection' &&
     !codeStore.showAi;
 
-  interface SecretInfo {
-    readonly id: string;
-    readonly name: string;
-  }
-
-  const [secretsOpen, setSecretsOpen] = useState(false);
-  const [secret, setOrAddSecret] = useState<SecretInfo | undefined>();
-  const navigate = useNavigate();
   const insertIntoNotebook = () => {
     onConnect();
     removeFocusFromAllBecauseSlate();
   };
-
-  useEffect(() => {
-    if (secret) onExecute({ status: 'secret', ...secret });
-  }, [onExecute, secret]);
 
   let { secrets } = useWorkspaceSecrets(workspaceId || '');
 
@@ -180,71 +162,7 @@ export const WrapperIntegrationModalDialog: FC<
                   <Sparkles />
                 </TextAndIconButton>
               )}
-              {isFlagEnabled('SECRETS_IN_JS') && (
-                <div css={css({ display: 'inline-block', cursor: 'pointer' })}>
-                  <MenuList
-                    root
-                    dropdown
-                    open={secretsOpen}
-                    sideOffset={12}
-                    onChangeOpen={setSecretsOpen}
-                    trigger={
-                      <span css={categoryAndCaretStyles}>
-                        <span css={p13Medium}>
-                          {/* Without text the icon has no line height, and so floats
-                upwards, hence the non-breaking space */}
-                          {'\uFEFF'}
-                          Insert Secret
-                        </span>
-                        <span
-                          css={{
-                            width: 18,
-                            display: 'grid',
-                          }}
-                          data-testid="insert-secret-button"
-                        >
-                          <Caret variant="down" />
-                        </span>
-                      </span>
-                    }
-                  >
-                    {secrets.map((secretElem, i) => (
-                      <MenuItem
-                        key={`secret-${i}`}
-                        onSelect={() => {
-                          setOrAddSecret(secretElem);
-                        }}
-                      >
-                        <span>{secretElem.name}</span>
-                      </MenuItem>
-                    ))}
-                    {secrets.length > 0 && (
-                      <div role="presentation" css={hrStyles}>
-                        <Divider />
-                      </div>
-                    )}
-
-                    <MenuItem
-                      icon={<ArrowDiagonalTopRight />}
-                      onSelect={() => {
-                        if (workspaceId) {
-                          navigate(
-                            workspaces({})
-                              .workspace({
-                                workspaceId,
-                              })
-                              .connections({}).$,
-                            { replace: true }
-                          );
-                        }
-                      }}
-                    >
-                      <span>Integration Secrets</span>
-                    </MenuItem>
-                  </MenuList>
-                </div>
-              )}
-
+              {secretsMenu}
               <TextAndIconButton
                 text="Run"
                 size="normal"
@@ -418,24 +336,3 @@ const allChildrenStyles = (tabStage: string) =>
     tabStage === 'connect' && firstChildrenStyle,
     tabStage === 'map' && mapChildrenStyles
   );
-
-const categoryAndCaretStyles = css([
-  hideOnPrint,
-  {
-    width: '100%',
-    borderRadius: '16px',
-    display: 'inline-flex',
-    justifyContent: 'space-between',
-    paddingLeft: '8px',
-  },
-]);
-
-const hrStyles = css({
-  padding: '4px 0px',
-  textOverflow: 'ellipsis',
-  transform: 'translateX(0px)',
-  width: '100%',
-  hr: {
-    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
-  },
-});

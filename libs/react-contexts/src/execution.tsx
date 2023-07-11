@@ -12,7 +12,7 @@ export type TExecution<T> =
   | { status: 'log'; log: string }
   | { status: 'unset' } // initial
   | { status: 'run' } // run has been requested
-  | { status: 'secret'; id: string; name: string };
+  | { status: 'secret'; name: string };
 
 export type TExecutionContext<T> = {
   onExecute: Dispatch<SetStateAction<TExecution<T>>>;

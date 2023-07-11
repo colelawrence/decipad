@@ -12,7 +12,7 @@ import handle from '../handle';
 const notebooks = resource('notebook');
 
 type MyRequest = Omit<Request, 'body' | 'headers'> & {
-  body: string;
+  body?: string;
   isBase64Encoded?: boolean;
   method: Request['method'];
   headers: Record<string, string>;
@@ -62,15 +62,15 @@ const replaceRequestWithSecrets = (
   request: MyRequest,
   secrets: Record<string, string>
 ): MyRequest => {
-  const body = request.body
-    ? request.isBase64Encoded
+  const body =
+    request.body && request.isBase64Encoded
       ? Buffer.from(request.body, 'base64').toString('base64')
-      : request.body
-    : request.body;
+      : request.body;
+
   return {
     ...request,
     url: replaceWithSecrets(request.url, secrets),
-    body: body && replaceWithSecrets(body, secrets),
+    ...(body && { body: replaceWithSecrets(body, secrets) }),
     headers:
       request.headers &&
       toRecord(request.headers, ([key, value]) => [
@@ -120,6 +120,7 @@ export const handler = handle(
     if (ourRequest.url.includes('decipad.com')) {
       throw Boom.notAcceptable('invalid domain');
     }
+
     const response = await fetch(ourRequest.url, ourRequest);
     const responseBody = await response.arrayBuffer();
     return {

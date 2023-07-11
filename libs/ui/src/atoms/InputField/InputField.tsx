@@ -74,6 +74,8 @@ export type InputFieldProps = {
   readonly label?: string;
   readonly placeholder?: string;
   readonly name?: string;
+  readonly pattern?: string;
+  readonly title?: string;
 
   readonly value: string;
   readonly error?: string;
@@ -94,6 +96,8 @@ export const InputField = ({
   label,
   placeholder,
   name,
+  pattern,
+  title,
 
   value,
   error,
@@ -132,6 +136,8 @@ export const InputField = ({
       placeholder={placeholder}
       name={name}
       value={value}
+      pattern={pattern}
+      title={title}
       tabIndex={tabIndex}
       onChange={(event) => onChange(event.currentTarget.value)}
       onKeyDown={(event) => {

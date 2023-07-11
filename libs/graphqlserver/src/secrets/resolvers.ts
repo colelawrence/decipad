@@ -59,6 +59,11 @@ export default {
       if (!name) {
         throw new UserInputError('secret name needs to be filled');
       }
+
+      if (name.replaceAll(' ', '') !== name) {
+        throw new UserInputError('secret name cannot have spaces');
+      }
+
       const newSecret: SecretRecord = {
         id: `/workspaces/${workspaceId}/secrets/${name}`,
         workspace_id: workspaceId,

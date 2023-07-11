@@ -5072,10 +5072,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@decipad_org/safejs@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@decipad_org/safejs/-/safejs-0.4.0.tgz#bbc62f00c371c014b1054075221580244607e40c"
-  integrity sha512-u6T21GK/c8aV/HYnSjYN6vupVulf/Yf7eEN4NqkbVL5Ttsu93OzvBnOgbEVIx8s2dOtnTb+jrk++70mdxWELdw==
+"@decipad_org/safejs@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@decipad_org/safejs/-/safejs-0.6.3.tgz#e621fd7b1846bc67bf439f7fae94e1993b383a88"
+  integrity sha512-gdHKWmlXXNOA8U+uXKQ6tKMuakHpYKry3B9rSNQE/DjbbnfO4vTLtUOUX58n6nCocWaScaeCS6nTrYtNDXPzJw==
 
 "@dependents/detective-less@^3.0.1":
   version "3.0.2"

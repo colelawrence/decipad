@@ -4,7 +4,11 @@ import {
   useCodeConnectionStore,
   useConnectionStore,
 } from '@decipad/react-contexts';
-import { Dialog, WrapperIntegrationModalDialog } from '@decipad/ui';
+import {
+  Dialog,
+  SecretsMenu,
+  WrapperIntegrationModalDialog,
+} from '@decipad/ui';
 import { FC, useState } from 'react';
 import { useCreateIntegration, useIntegrationScreenFactory } from '../hooks';
 
@@ -13,7 +17,7 @@ interface IntegrationProps {
   readonly notebookId?: string;
 }
 
-export const Integrations: FC<IntegrationProps> = ({ workspaceId }) => {
+export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   const store = useConnectionStore();
   const codeStore = useCodeConnectionStore();
 
@@ -39,6 +43,17 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId }) => {
           onContinue={store.next}
           setOpen={store.changeOpen}
           isEditing={!!store.existingIntegration}
+          secretsMenu={
+            <SecretsMenu
+              workspaceId={workspaceId}
+              onAddSecret={(secretName) =>
+                onExecute({
+                  status: 'secret',
+                  name: secretName,
+                })
+              }
+            />
+          }
         >
           {screen}
         </WrapperIntegrationModalDialog>

@@ -100,9 +100,9 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   }, [setContainer]);
 
   const handleAddSecret = useCallback(
-    (secretId: string) => {
+    (secretName: string) => {
       if (!editor.current || !view) return;
-      const secretCode = `this.API_KEY = '${secretId}'`;
+      const secretCode = `{{ secrets.${secretName} }}`;
       const { state } = view;
       const range = state.selection.ranges[0];
       view.dispatch({
@@ -119,7 +119,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
 
   useEffect(() => {
     if (info.status === 'secret') {
-      handleAddSecret(info.id);
+      handleAddSecret(info.name);
     }
   }, [handleAddSecret, info, info.status]);
 

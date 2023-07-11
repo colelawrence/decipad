@@ -205,6 +205,7 @@ export const AddSqlIntegration: FC = () => {
             onTabClick={store.setStage}
             onBack={store.abort}
             setOpen={store.changeOpen}
+            secretsMenu={null}
           >
             {store.stage === 'pick-integration' ? (
               <IntegrationModalDialog
