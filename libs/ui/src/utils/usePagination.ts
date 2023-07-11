@@ -48,11 +48,12 @@ export const usePagination = <B, T extends Array<B>>({
 };
 
 export const useSimplePagination = <T>({
-  all = [],
+  all: _all = [],
   maxRowsPerPage,
 }: UsePaginationProps<T>): UseSimplePaginationResult<T> => {
+  let all = _all;
   if (!Array.isArray(all)) {
-    throw new Error('all is not an array');
+    all = [all];
   }
   const [page, setPage] = useState(1);
   const offset = useMemo(
