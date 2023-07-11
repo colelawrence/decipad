@@ -3,7 +3,7 @@ import { getOnly } from '@decipad/utils';
 import { getOperatorByName } from './operators';
 import { automapValues, automapValuesForReducer } from '../dimtools';
 
-import { Value, defaultValue, fromJS } from '../value';
+import { Unknown, UnknownValue, Value, defaultValue, fromJS } from '../value';
 import { getDefined } from '../utils';
 import { Realm, RuntimeError } from '../interpreter';
 import { convertToMultiplierUnit, Type } from '../type';
@@ -41,11 +41,17 @@ async function callBuiltinAfterAutoconvert(
     return builtin.fnValuesNoAutomap(args, argTypes, realm);
   }
 
-  const lowerDimFn = async (argsLowerDims: Value[], typesLowerDims: Type[]) => {
+  const lowerDimFn = async (
+    argsLowerDims: Value[],
+    typesLowerDims: Type[]
+  ): Promise<Value> => {
     if (builtin.fn != null) {
       const argData = await Promise.all(
         argsLowerDims.map(async (a) => a.getData())
       );
+      if (argData.some((d) => d === Unknown)) {
+        return UnknownValue;
+      }
       try {
         return fromJS(builtin.fn(argData, typesLowerDims));
       } catch (err) {
