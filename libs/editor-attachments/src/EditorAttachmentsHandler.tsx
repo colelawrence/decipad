@@ -200,7 +200,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         }
       });
     },
-    canDrop: (data: DataTransfer) => canDropFile(data, plan),
+    canDrop: (data: DataTransfer) => canDropFile(data),
     collect: (monitor: DropTargetMonitor) => {
       return {
         canDrop: monitor.canDrop(),

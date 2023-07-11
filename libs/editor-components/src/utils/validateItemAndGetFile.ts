@@ -1,11 +1,12 @@
 import {
-  SubscriptionPlan,
-  MAX_UPLOAD_FILE_SIZE,
   FileType,
+  MAX_UPLOAD_FILE_SIZE,
+  SUPPORTED_FILE_TYPES,
+  SubscriptionPlan,
 } from '@decipad/editor-types';
 
 const acceptableFileTypes = ['text/csv', 'application/json', 'image/'];
-const validFileType = (type: string) =>
+export const validFileType = (type: string) =>
   acceptableFileTypes.some((prefix) => type.startsWith(prefix));
 
 export const validateItemAndGetFile = (
@@ -22,7 +23,13 @@ export const validateItemAndGetFile = (
     return true;
   }
   const fileType = file.type.split('/')[0] as FileType;
-  const maxFileSizeBytes = MAX_UPLOAD_FILE_SIZE[fileType][plan];
+
+  let maxFileSizeBytes;
+  if (!SUPPORTED_FILE_TYPES.includes(fileType)) {
+    maxFileSizeBytes = MAX_UPLOAD_FILE_SIZE.data[plan];
+  } else {
+    maxFileSizeBytes = MAX_UPLOAD_FILE_SIZE[fileType][plan];
+  }
 
   if (!validFileType(file.type)) {
     console.warn(

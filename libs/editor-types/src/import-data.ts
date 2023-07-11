@@ -23,6 +23,8 @@ export const MAX_UPLOAD_FILE_SIZE = {
   },
 };
 
+export const SUPPORTED_FILE_TYPES = Object.keys(MAX_UPLOAD_FILE_SIZE);
+
 export const MAX_IMPORT_CELL_COUNT = {
   free: 10000,
   pro: 30000,

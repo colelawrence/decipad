@@ -5,8 +5,7 @@ export const createAttachmentPlugin = (): MyPlatePlugin => ({
   key: 'attachment',
   handlers: {
     onDragOver: () => (event) => {
-      // the most permissive plan but this should be handled by react components
-      canDropFile(event.dataTransfer, 'pro');
+      canDropFile(event.dataTransfer);
     },
   },
 });
