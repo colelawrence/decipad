@@ -9,6 +9,7 @@ import {
   getEditorString,
   getPointBefore,
   getStartPoint,
+  hasNode,
   insertText,
   nanoid,
   select,
@@ -74,11 +75,24 @@ export const commitAutocompleteItem = (
   }
 };
 
+const charactersThatDontNeedSpaceAfter: ReadonlySet<string> = new Set([
+  '',
+  ' ',
+  '(',
+  ')',
+  '[',
+  ']',
+  '{',
+  '}',
+]);
+
 const needsSpaceAfter = (character: string) =>
-  !['', ' ', '(', ')', '[', ']', '{', '}'].includes(character);
+  !charactersThatDontNeedSpaceAfter.has(character);
 
 const getCharacterBeforeCursor = (editor: MyEditor, cursor: BasePoint) =>
-  getEditorString(editor, {
-    anchor: getStartPoint(editor, cursor.path),
-    focus: { path: cursor.path, offset: cursor.offset },
-  }).slice(-1);
+  cursor.path && hasNode(editor, cursor.path)
+    ? getEditorString(editor, {
+        anchor: getStartPoint(editor, cursor.path),
+        focus: { path: cursor.path, offset: cursor.offset },
+      }).slice(-1)
+    : '';
