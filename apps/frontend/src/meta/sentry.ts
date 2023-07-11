@@ -1,14 +1,13 @@
-import { useEffect } from 'react';
+import { isSupportedBrowser } from '@decipad/support';
+import { AnalyticsBrowser } from '@segment/analytics-next';
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
+import { useEffect } from 'react';
 import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
   useNavigationType,
 } from 'react-router-dom';
-import { AnalyticsBrowser } from '@segment/analytics-next';
-import { isSupportedBrowser } from '@decipad/support';
 
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 
@@ -49,8 +48,11 @@ export const initSentry = () => {
       return event;
     },
     dsn: sentryDsn,
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
     integrations: [
-      new BrowserTracing({
+      new Sentry.Replay({ maskAllText: true, blockAllMedia: true }),
+      new Sentry.BrowserTracing({
         routingInstrumentation: Sentry.reactRouterV6Instrumentation(
           useEffect,
           useLocation,
