@@ -8,8 +8,7 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
-import Boom from '@hapi/boom';
-import { AuthenticationError } from 'apollo-server-lambda';
+import { AuthenticationError, UserInputError } from 'apollo-server-lambda';
 import { loadUser, requireUser } from '../authorization';
 import { forbiddenUsernamePrefixes } from './forbiddenUsernamePrefixes';
 
@@ -110,12 +109,12 @@ export default {
         username = username.replace(/^@(.*)/, '$1');
       }
       if (!username.match(/^[a-z,0-9]+$/)) {
-        throw Boom.notAcceptable(
+        throw new UserInputError(
           `Username must be lower case and contain only numbers or letters`
         );
       }
       if (username.length < minimumUsernameCharCount) {
-        throw Boom.notAcceptable(
+        throw new UserInputError(
           `Username must have at least ${minimumUsernameCharCount} letters or numbers`
         );
       }
@@ -125,7 +124,7 @@ export default {
           username.startsWith(forbiddenPrefix)
         )
       ) {
-        throw Boom.notAcceptable(`Selected username is reserved`);
+        throw new UserInputError(`Selected username is reserved`);
       }
 
       const key = `username:${username}`;
