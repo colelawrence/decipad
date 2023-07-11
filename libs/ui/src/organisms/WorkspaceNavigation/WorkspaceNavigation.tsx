@@ -35,6 +35,7 @@ import {
   opaqueColorToHex,
   smallScreenQuery,
 } from '../../primitives';
+import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { CreateOrEditSectionModal } from '../../templates';
 import {
   AvailableSwatchColor,
@@ -234,9 +235,10 @@ export const WorkspaceNavigation = ({
                   { paddingTop: 6 },
                   sections.length > 5 && {
                     overflow: 'hidden',
-                    overflowY: 'auto',
+
                     height: '185px', // about five items
                   },
+                  deciOverflowYStyles,
                 ])
               }
               key={'sections-list'}
