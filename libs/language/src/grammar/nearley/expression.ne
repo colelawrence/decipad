@@ -170,14 +170,45 @@ addSubOp      -> addSubOp _ additiveOperator _ divMulOp {%
                                                         }
                                                         %}
 
+# e.g. 1 / 2
+divMulOp        -> fraction                          {% id %}
+# any implicit multiplication that isn't _just_ a fraction e.g. 1kg, 1/2kg
+divMulOp        -> notFracImpMulOp                   {% id %}
+#  one or more "/" operations that cannot parse as a fraction e.g. 1/kg, kg/1, kg/kg, but not 1/2
+divMulOp        -> slashOp                           {% id %}
+# any explicit multiplication/division operation expression that doesn't start with the "/" operator (can include "per" etc.)
+divMulOp        -> noSlashMulOp                      {% id %}
 
+# division/multiplication operations that don't use "/" at the start
+noSlashMulOp    -> fraction _ nonSlashDivMulOperator _ notFracImpMulOp {% basicBinop %}
+noSlashMulOp    -> notFracImpMulOp _ nonSlashDivMulOperator _ notFracImpMulOp {% basicBinop %}
+noSlashMulOp    -> slashOp _ nonSlashDivMulOperator _ notFracImpMulOp         {% basicBinop %}
+noSlashMulOp    -> noSlashMulOp _ divMulOperator _ notFracImpMulOp            {% basicBinop %}
 
+# We can allow `notNum (/ notNum)+`, `num / notNum` here, but must be careful to avoid 
+# `num / num` as that is handled as a fraction.
+slashOp            -> notNumImpMulOp _ slashOperator _ notFracImpMulOp    {% basicBinop %}
+slashOp            -> number _ slashOperator _ notNumPowOp                {% basicBinop %}
+slashOp            -> slashOp _ slashOperator _ notFracImpMulOp           {% basicBinop %}
 
-divMulOp           -> impMulOp                          {% id %}
-divMulOp           -> divMulOp _ divMulOperator _ impMulOp {% basicBinop %}
-impMulOp           -> ofExp                             {% id %}
-impMulOp           -> impMulOp ref                      {% implicitMultHandler %}
-impMulOp           -> impMulOp __  ofExp                {% implicitMultHandler %}
+# We use this in place of mulOp where using ordinary mulOp could cause ambiguity e.g. in kg/2/3
+notFracImpMulOp    -> ofExp                             {% id %}
+notFracImpMulOp    -> fraction ref                      {% implicitMultHandler %}
+notFracImpMulOp    -> notFracImpMulOp ref               {% implicitMultHandler %}
+notFracImpMulOp    -> fraction __ ofExp                 {% implicitMultHandler %}
+notFracImpMulOp    -> notFracImpMulOp __ ofExp          {% implicitMultHandler %}
+
+# There must be at least one "/" for fraction otherwise it's ambiguous with notFracImpMulOp
+fraction           -> number _ slashOperator _ number             {% basicBinop %}
+fraction           -> fraction _ slashOperator _ number           {% basicBinop %}
+
+# notNumImpMulOp contain a number (e.g. 1kg) but is not entirely a number (e.g. 1) it's used
+# at the start of slashOp to ensure that it's not ambiguous with fraction
+notNumImpMulOp      -> notNumOfExp                       {% id %}
+notNumImpMulOp      -> number ref                       {% implicitMultHandler %}
+notNumImpMulOp      -> notNumImpMulOp ref               {% implicitMultHandler %}
+notNumImpMulOp      -> number  __ ofExp                 {% implicitMultHandler %}
+notNumImpMulOp      -> notNumImpMulOp  __  ofExp        {% implicitMultHandler %}
 
 ofExp         -> powOp                                  {% id %}
 ofExp         -> ofExp _ "of" _ genericIdentifier       {%
@@ -189,22 +220,38 @@ ofExp         -> ofExp _ "of" _ genericIdentifier       {%
                                                         }
                                                         %}
 
+notNumOfExp    -> notNumPowOp                             {% id %}
+notNumOfExp    -> notNumOfExp _ "of" _ genericIdentifier  {%
+                                                        (d) => {
+                                                          return addArrayLoc({
+                                                            type: 'directive',
+                                                            args: ['of', d[0], d[4]]
+                                                          }, d)
+                                                        }
+                                                        %}
 
 powOp              -> primary                           {% id %}
 powOp              -> primary _ powOperator _ powOp     {% powHandler %}
 
-primary            -> literal                           {% id %}
-primary            -> functionCall                      {% id %}
-primary            -> select                            {% id %}
-primary            -> matrixRef                         {% id %}
-primary            -> ref                               {% id %}
-primary            -> currency                          {% id %}
-primary            -> parenthesizedExpression           {% id %}
+notNumPowOp         -> noNumPrimary                           {% id %}
+notNumPowOp         -> primary _ powOperator _ powOp          {% powHandler %}
+notNumPowOp         -> noNumPrimary _ powOperator _ powOp     {% powHandler %}
 
-primary            -> "-" _ parenthesizedExpression     {% unaryMinusHandler %}
-primary            -> "-" _ ref                         {% unaryMinusHandler %}
+primary            -> number                            {% id %}
+primary            -> noNumPrimary                      {% id %}
 
-primary            -> ("!" | "not") _ expression        {%
+noNumPrimary       -> noNumLiteral                      {% id %}
+noNumPrimary       -> functionCall                      {% id %}
+noNumPrimary       -> select                            {% id %}
+noNumPrimary       -> matrixRef                         {% id %}
+noNumPrimary       -> ref                               {% id %}
+noNumPrimary       -> currency                          {% id %}
+noNumPrimary       -> parenthesizedExpression           {% id %}
+
+noNumPrimary       -> "-" _ parenthesizedExpression     {% unaryMinusHandler %}
+noNumPrimary       -> "-" _ ref                         {% unaryMinusHandler %}
+
+noNumPrimary       -> ("!" | "not") _ expression        {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'function-call',
@@ -222,7 +269,7 @@ primary            -> ("!" | "not") _ expression        {%
                                                         }
                                                         %}
 
-primary       -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
+noNumPrimary       -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',
@@ -259,8 +306,12 @@ eqDiffOperator     -> ("==" | "!=")                     {% simpleOperator %}
 cmpOperator        -> (">" | "<" | "<=" | ">=")         {% simpleOperator %}
 smoothOperator     -> ("smooth")                        {% simpleOperator %}
 additiveOperator   -> ("-" | "+")                       {% simpleOperator %}
-divMulOperator     -> ("for" | "*" | "/" | "per" | "contains")  {% simpleOperator %}
-divMulOperator     -> __ ("mod" | "modulo")             {%
+divMulOperator     -> slashOperator                     {% id %}
+divMulOperator     -> nonSlashDivMulOperator            {% id %}
+# Believe it or not the () around "/" are significant, don't remove them!
+slashOperator      -> ("/")                               {% simpleOperator %}
+nonSlashDivMulOperator -> ("for" | "*" | "per" | "contains")  {% simpleOperator %}
+nonSlashDivMulOperator -> __ ("mod" | "modulo")             {%
                                                         (d) => {
                                                           return addArrayLoc({ name: 'mod' }, d)
                                                         }

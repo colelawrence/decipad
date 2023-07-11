@@ -32,8 +32,8 @@ func(a b) = a + b`,
 
 it('perceives the correct precedence between operators', () => {
   testParse(
-    '1 + 2 / 1 - 2 ** 5 / 42',
-    c('-', c('+', l(1), c('/', l(2), l(1))), c('/', c('**', l(2), l(5)), l(42)))
+    '1 + 2 / 3 - 2 ** 5 / 42',
+    c('-', c('+', l(1), c('/', l(2), l(3))), c('/', c('**', l(2), l(5)), l(42)))
   );
 });
 

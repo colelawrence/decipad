@@ -4,16 +4,18 @@
 ### Literal ###
 ###############
 
-literal     -> boolean                                  {% id %}
-literal     -> string                                   {% id %}
-literal     -> number                                   {% id %}
-literal     -> percentage                               {% id %}
-literal     -> permille                                 {% id %}
-literal     -> permyriad                                {% id %}
-literal     -> column                                   {% id %}
-literal     -> date                                     {% id %}
-literal     -> range                                    {% id %}
-literal     -> sequence                                 {% id %}
+literal          -> number                                   {% id %}
+literal          -> noNumLiteral                             {% id %}
+
+noNumLiteral     -> boolean                                  {% id %}
+noNumLiteral     -> string                                   {% id %}
+noNumLiteral     -> percentage                               {% id %}
+noNumLiteral     -> permille                                 {% id %}
+noNumLiteral     -> permyriad                                {% id %}
+noNumLiteral     -> column                                   {% id %}
+noNumLiteral     -> date                                     {% id %}
+noNumLiteral     -> range                                    {% id %}
+noNumLiteral     -> sequence                                 {% id %}
 
 boolean     -> "true"                                   {%
                                                         (d) => addLoc({
