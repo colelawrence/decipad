@@ -125,12 +125,11 @@ const mouseOverAddColumnButtonStyles = css({
   visibility: 'unset',
 });
 
-const toggleTableStyles = (isCollapsed: boolean) => ({
-  // Casting string to its own type to avoid ts(2322) errors
-  visibility: isCollapsed
-    ? ('collapse' as 'collapse')
-    : ('visible' as 'visible'),
-});
+const toggleTableStyles = (isCollapsed: boolean) =>
+  // visibility collapsed doesnt work in safari
+  isCollapsed
+    ? { height: 0, overflow: 'hidden' }
+    : { height: 'initial', overflow: 'auto' };
 
 interface EditorTableProps {
   readonly id?: string;
