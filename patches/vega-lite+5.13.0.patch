@@ -1,0 +1,17 @@
+diff --git a/node_modules/vega-lite/src/util.ts b/node_modules/vega-lite/src/util.ts
+index 4968765..23bdaeb 100644
+--- a/node_modules/vega-lite/src/util.ts
++++ b/node_modules/vega-lite/src/util.ts
+@@ -45,9 +45,9 @@ export function omit<T extends object, K extends keyof T>(obj: T, props: readonl
+ /**
+  * Monkey patch Set so that `stringify` produces a string representation of sets.
+  */
+-Set.prototype['toJSON'] = function () {
+-  return `Set(${[...this].map(x => stableStringify(x)).join(',')})`;
+-};
++// Set.prototype['toJSON'] = function () {
++//  return `Set(${[...this].map(x => stableStringify(x)).join(',')})`;
++//};
+ 
+ /**
+  * Converts any object to a string representation that can be consumed by humans.
