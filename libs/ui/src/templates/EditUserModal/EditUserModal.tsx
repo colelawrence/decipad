@@ -75,7 +75,7 @@ export const EditUserModal: React.FC = () => {
         <div>
           <h3 css={inputLabel}>Profile picture</h3>
           <p css={css(p13Regular)}>
-            If you want to setup your account avatar go to{' '}
+            Please upload and manage your avatar at{' '}
             <a
               css={{
                 color: cssVar('droplineColor'),
@@ -86,8 +86,8 @@ export const EditUserModal: React.FC = () => {
               rel="noreferrer"
             >
               Gravatar.com
-            </a>{' '}
-            to set it up.
+            </a>
+            .
           </p>
         </div>
 
