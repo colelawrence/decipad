@@ -22,6 +22,9 @@ export class Column<T extends Comparable> implements ColumnLike<T> {
   readonly _values: ReadonlyArray<T>;
 
   constructor(values: T[]) {
+    if (!Array.isArray(values)) {
+      throw new TypeError('expected values to be array');
+    }
     this._values = values as ReadonlyArray<T>;
   }
   atIndex(i: number): Promise<T | undefined> {
