@@ -1,7 +1,7 @@
 import Boom, { boomify } from '@hapi/boom';
 import { onMessage } from '@decipad/sync-connection-lambdas';
 import tables from '@decipad/tables';
-import { trace } from '@decipad/backend-trace';
+import { captureException, trace } from '@decipad/backend-trace';
 import EventEmitter from 'events';
 import { getDefined } from '@decipad/utils';
 import { TWSRequestContext } from '../../types';
@@ -28,8 +28,9 @@ export const handler = trace<TWSRequestContext>(
       if (err instanceof Error) {
         const boom = boomify(err);
         if (boom.isServer) {
-          throw boom;
+          await captureException(err);
         }
+        return { statusCode: boom.output.statusCode };
       }
       return { statusCode: 200 };
     }
