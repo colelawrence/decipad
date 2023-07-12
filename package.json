@@ -205,7 +205,7 @@
     "jsonpath": "^1.1.1",
     "jsurl": "^0.1.5",
     "just-permutations": "2.2.0",
-    "knex": "^2.4.2",
+    "knex": "^2.5.0",
     "lib0": "0.2.52",
     "lodash.camelcase": "^4.3.0",
     "lodash.capitalize": "^4.2.1",
