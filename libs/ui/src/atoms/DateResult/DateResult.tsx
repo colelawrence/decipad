@@ -29,6 +29,18 @@ export const DateResult = ({
       format = 'MMM d yyyy';
       break;
     }
+    case 'hour': {
+      format = 'MMM d yyyy HH';
+      break;
+    }
+    case 'minute': {
+      format = 'MMM d yyyy HH:mm';
+      break;
+    }
+    case 'second': {
+      format = 'MMM d yyyy HH:mm:ss';
+      break;
+    }
     default: {
       if (date.getUTCSeconds() === 0 && date.getUTCMilliseconds() === 0) {
         fullUTC = true;
@@ -38,8 +50,9 @@ export const DateResult = ({
     }
   }
 
-  const string = format
+  const dateAsString = format
     ? formatUTCDate(date, format, fullUTC)
     : date.toISOString();
-  return <span data-highlight-changes>{string}</span>;
+
+  return <span data-highlight-changes>{dateAsString}</span>;
 };
