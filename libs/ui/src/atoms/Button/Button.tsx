@@ -191,7 +191,7 @@ const sizeStyles: Record<NonNullable<ButtonProps['size']>, CSSObject> = {
 };
 
 const enabledStyles = css({ cursor: 'pointer' });
-const disabledStyles = css({ cursor: 'unset' });
+const disabledStyles = css({ cursor: 'not-allowed' });
 
 type ButtonProps = {
   readonly type?:

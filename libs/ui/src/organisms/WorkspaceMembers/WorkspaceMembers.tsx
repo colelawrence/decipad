@@ -1,15 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 2 */
-import React, { useCallback, useEffect, useState } from 'react';
-import { css } from '@emotion/react';
 import { useWorkspaceMembersState } from '@decipad/graphql-client';
-import { PermissionType } from '../../types';
+import { css } from '@emotion/react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, CollabMember, InputField, MenuItem } from '../../atoms';
 import { Check, Ellipsis, Loading } from '../../icons';
 import {
   CollabMembershipDropdown,
   MenuList,
   NotebookAvatar,
 } from '../../molecules';
-import { Button, CollabMember, InputField, MenuItem } from '../../atoms';
 import {
   cssVar,
   p12Medium,
@@ -17,6 +16,7 @@ import {
   p14Medium,
   red500,
 } from '../../primitives';
+import { PermissionType } from '../../types';
 
 export type WorkspaceMembersProps = {
   workspaceId: string;
@@ -128,8 +128,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
             </div>
 
             <div css={columnInviteStatusStyles}>
-              {/* TODO: use member.user.onboarded */}
-              {member.user.name === member.user.email && (
+              {member.user.emailValidatedAt == null && (
                 <span css={pendingInviteStyles}>invite pending</span>
               )}
               {currentUserId !== member.user.id && (

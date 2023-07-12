@@ -13,6 +13,7 @@ fragment Collaborator on User {
   email
   username
   onboarded
+  emailValidatedAt
 }
 
 fragment EditorNotebook on Pad {

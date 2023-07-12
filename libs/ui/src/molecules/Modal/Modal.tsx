@@ -12,7 +12,7 @@ const pageCoverStyles = css({
   display: 'grid',
   gridTemplate: '100% / 100%',
   overflow: 'hidden',
-  backdropFilter: 'blur(3px) brightness(75%)',
+  backdropFilter: 'brightness(50%)',
 });
 
 const overlayStyles = css({

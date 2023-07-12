@@ -83,12 +83,23 @@ const LoadingDots = () => (
 );
 
 interface NotebookSharingPopUpProps {
-  hasPaywall?: boolean;
-  notebook: { id: string; name: string; snapshots?: { createdAt?: string }[] };
-  usersWithAccess?: NotebookAvatar[] | null;
-  onRemove?: (userId: string) => Promise<void>;
-  onInvite?: (email: string, permission: PermissionType) => Promise<void>;
-  onChange?: (userId: string, permission: PermissionType) => Promise<void>;
+  readonly hasPaywall?: boolean;
+  readonly notebook: {
+    id: string;
+    name: string;
+    snapshots?: { createdAt?: string }[];
+  };
+  readonly isAdmin: boolean;
+  readonly usersWithAccess?: NotebookAvatar[] | null;
+  readonly onRemove?: (userId: string) => Promise<void>;
+  readonly onInvite?: (
+    email: string,
+    permission: PermissionType
+  ) => Promise<void>;
+  readonly onChange?: (
+    userId: string,
+    permission: PermissionType
+  ) => Promise<void>;
 }
 
 /**
@@ -99,6 +110,7 @@ interface NotebookSharingPopUpProps {
 export const NotebookInvitationPopUp = ({
   hasPaywall,
   usersWithAccess,
+  isAdmin,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
   onChange = () => Promise.resolve(),
@@ -151,6 +163,8 @@ export const NotebookInvitationPopUp = ({
     [loading, onChange, setIsLoading]
   );
 
+  const disabled = hasPaywall || !isAdmin;
+
   return (
     <div css={innerPopUpStyles}>
       <div css={groupStyles}>
@@ -167,7 +181,7 @@ export const NotebookInvitationPopUp = ({
             value={email}
             onChange={setEmail}
             onEnter={handleAddCollaborator}
-            disabled={hasPaywall}
+            disabled={disabled}
           />
 
           <span css={inputAccessPickerStyles}>
@@ -187,7 +201,7 @@ export const NotebookInvitationPopUp = ({
           <Button
             size="extraSlim"
             onClick={handleAddCollaborator}
-            disabled={hasPaywall}
+            disabled={disabled}
             testId="send-invitation"
           >
             <div css={invitationButtonContentStyles}>
@@ -203,6 +217,7 @@ export const NotebookInvitationPopUp = ({
         usersWithAccess={usersWithAccess}
         onRemoveCollaborator={handleRemoveCollaborator}
         onChangePermission={handleChangePermission}
+        disabled={!isAdmin}
       />
     </div>
   );

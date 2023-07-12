@@ -144,9 +144,8 @@ export const NotebookTopbar = ({
 }: NotebookTopbarProps): ReturnType<FC> => {
   const { status: sessionStatus } = useSession();
   const isAdmin = permission === 'ADMIN';
-  const isWriter = permission === 'ADMIN' || permission === 'WRITE';
-  const allowInvitation =
-    permission === 'ADMIN' && isFlagEnabled('SHARE_PAD_WITH_EMAIL');
+  const isWriter =
+    permission === 'ADMIN' || permission === 'WRITE' || workspaceAccess;
 
   const clientEvent = useContext(ClientEventsContext);
   const onGalleryClick = useCallback(
@@ -214,6 +213,8 @@ export const NotebookTopbar = ({
     ],
     (access) => access.user.id
   );
+
+  const oneAdminUser = allUsers.filter((u) => u.permission === 'ADMIN')[0];
 
   const isPremiumWorkspace = Boolean(workspace?.isPremium);
   const hasPaywall =
@@ -327,7 +328,11 @@ export const NotebookTopbar = ({
                   </span>
                 }
               >
-                Ask to be a collaborator to save your changes
+                {`Ask ${
+                  oneAdminUser && oneAdminUser.user.name
+                    ? oneAdminUser.user.name
+                    : 'an admin'
+                } to change this`}
               </Tooltip>
               <span css={css({ [tinyPhone]: { display: 'none' } })}>
                 You are in reading mode
@@ -347,21 +352,21 @@ export const NotebookTopbar = ({
           </p>
         )}
         <NotebookAvatars
-          allowInvitation={allowInvitation}
-          isWriter={isWriter}
+          allowInvitation={isAdmin}
+          isWriter={!!isWriter}
           allUsers={allUsers}
           notebook={notebook}
           {...sharingProps}
         />
 
         {sessionStatus === 'authenticated' ? (
-          isAdmin && !isServerSideRendering() ? (
+          (isAdmin || isWriter) && !isServerSideRendering() ? (
             <NotebookPublishingPopUp
               notebook={notebook}
               {...sharingProps}
               hasPaywall={hasPaywall}
               allUsers={allUsers}
-              allowInvitation={allowInvitation}
+              isAdmin={isAdmin}
               {...sharingProps}
             />
           ) : (

@@ -8,9 +8,13 @@ import { ellipsis, p12Medium, p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
 
 type CollabMembersRightsProps = {
-  usersWithAccess?: NotebookAvatar[] | null;
-  onRemoveCollaborator?: (userId: string) => void;
-  onChangePermission?: (userId: string, permission: PermissionType) => void;
+  readonly usersWithAccess?: NotebookAvatar[] | null;
+  readonly onRemoveCollaborator?: (userId: string) => void;
+  readonly onChangePermission?: (
+    userId: string,
+    permission: PermissionType
+  ) => void;
+  readonly disabled: boolean;
 };
 
 const collaboratorStyles = css({
@@ -46,6 +50,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   usersWithAccess,
   onRemoveCollaborator = noop,
   onChangePermission = noop,
+  disabled = false,
 }) => {
   if (!usersWithAccess?.length) {
     return null;
@@ -95,9 +100,9 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
             )}
 
             <CollabAccessDropdown
-              disable={isTeamMember}
+              disable={isTeamMember || disabled}
               currentPermission={permission}
-              isActivatedAccount={user.name !== user.email}
+              isActivatedAccount={user.emailValidatedAt != null}
               onRemove={() => onRemoveCollaborator(user.id)}
               onChange={(newPerm) => onChangePermission(user.id, newPerm)}
             />

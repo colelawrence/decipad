@@ -114,7 +114,7 @@ describe('Notebook Topbar', () => {
         <NotebookTopbar {...props} permission="WRITE" />
       </WithProviders>
     );
-    expect(queryByText(/share/i)).toBeNull();
+    expect(queryByText(/share/i)).toBeVisible();
 
     rerender(
       <WithProviders>

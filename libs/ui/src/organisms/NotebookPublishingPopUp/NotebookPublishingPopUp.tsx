@@ -131,7 +131,7 @@ const padLinkTextStyles = css(
 interface NotebookSharingPopUpProps {
   hasPaywall?: boolean;
   allUsers?: NotebookAvatar[] | null;
-  allowInvitation?: boolean;
+  isAdmin?: boolean;
   notebook: {
     id: string;
     name: string;
@@ -179,7 +179,7 @@ export const NotebookPublishingPopUp = ({
   onPublish = noop,
   hasPaywall,
   allUsers,
-  allowInvitation = false,
+  isAdmin = false,
   onUnpublish = noop,
   ...sharingProps
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
@@ -217,66 +217,70 @@ export const NotebookPublishingPopUp = ({
   const popoverDiv = (
     <div css={popUpStyles}>
       <div css={innerPopUpStyles}>
-        {allowInvitation && (
+        <div css={groupStyles} className="notebook-invitation-popup">
+          <NotebookInvitationPopUp
+            notebook={notebook}
+            hasPaywall={hasPaywall}
+            usersWithAccess={allUsers}
+            isAdmin={isAdmin}
+            {...sharingProps}
+          />
+        </div>
+
+        {isAdmin && (
           <>
-            <div css={groupStyles} className="notebook-invitation-popup">
-              <NotebookInvitationPopUp
-                notebook={notebook}
-                hasPaywall={hasPaywall}
-                usersWithAccess={allUsers}
-                {...sharingProps}
-              />
-            </div>
             <HorizontalDivider />
+            <div css={groupStyles}>
+              <div
+                css={[
+                  titleAndToggleStyles,
+                  toggleState && {
+                    'button span': { left: `calc(100% - 15px) !important` },
+                  },
+                ]}
+              >
+                <span
+                  css={{
+                    display: 'flex',
+                    gap: 4,
+                    alignItems: 'center',
+                    svg: {
+                      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+                    },
+                  }}
+                >
+                  <span css={{ display: 'grid', width: 16, height: 16 }}>
+                    <World />
+                  </span>
+                  <p
+                    css={css(
+                      p14Medium,
+                      setCssVar('currentTextColor', cssVar('weakTextColor'))
+                    )}
+                  >
+                    {isPublishing
+                      ? 'Creating link...'
+                      : isPublished
+                      ? 'Anyone with link can view'
+                      : 'Anyone with link can view'}
+                  </p>
+                </span>
+
+                <Toggle
+                  ariaRoleDescription="enable publishing"
+                  active={toggleState}
+                  onChange={onPublishToggle}
+                  disabled={isPublishing}
+                />
+              </div>
+              <p css={descriptionStyles}>
+                {isPublished
+                  ? 'Anyone with this link can view your notebook.'
+                  : ''}
+              </p>
+            </div>
           </>
         )}
-        <div css={groupStyles}>
-          <div
-            css={[
-              titleAndToggleStyles,
-              toggleState && {
-                'button span': { left: `calc(100% - 15px) !important` },
-              },
-            ]}
-          >
-            <span
-              css={{
-                display: 'flex',
-                gap: 4,
-                alignItems: 'center',
-                svg: {
-                  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-                },
-              }}
-            >
-              <span css={{ display: 'grid', width: 16, height: 16 }}>
-                <World />
-              </span>
-              <p
-                css={css(
-                  p14Medium,
-                  setCssVar('currentTextColor', cssVar('weakTextColor'))
-                )}
-              >
-                {isPublishing
-                  ? 'Creating link...'
-                  : isPublished
-                  ? 'Anyone with link can view'
-                  : 'Anyone with link can view'}
-              </p>
-            </span>
-
-            <Toggle
-              ariaRoleDescription="enable publishing"
-              active={toggleState}
-              onChange={onPublishToggle}
-              disabled={isPublishing}
-            />
-          </div>
-          <p css={descriptionStyles}>
-            {isPublished ? 'Anyone with this link can view your notebook.' : ''}
-          </p>
-        </div>
 
         {isPublished && (
           <div css={groupStyles}>
@@ -322,7 +326,7 @@ export const NotebookPublishingPopUp = ({
             </div>
           </div>
         )}
-        {hasUnpublishedChanges && (
+        {isAdmin && hasUnpublishedChanges && (
           <div css={groupStyles}>
             {(currentSnapshot?.createdAt || currentSnapshot?.updatedAt) && (
               <p css={descriptionStyles} data-testid="version-date">

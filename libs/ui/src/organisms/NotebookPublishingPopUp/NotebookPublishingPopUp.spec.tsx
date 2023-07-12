@@ -1,8 +1,12 @@
 import { noop } from '@decipad/utils';
 import { act, render } from '@testing-library/react';
-import { ComponentProps } from 'react';
 import fetch from 'jest-fetch-mock';
+import { ComponentProps } from 'react';
 import { NotebookPublishingPopUp } from './NotebookPublishingPopUp';
+
+jest.mock('../NotebookInvitationPopUp/NotebookInvitationPopUp', () => ({
+  NotebookInvitationPopUp: () => null,
+}));
 
 describe('NotebookPublishingPopUp organism', () => {
   beforeAll(() => {
@@ -18,6 +22,7 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: false,
       isPublished: true,
       isPublishing: false,
+      isAdmin: true,
       onPublish: () => noop,
       onRestore: () => noop,
       onUnpublish: () => noop,
@@ -53,6 +58,7 @@ describe('NotebookPublishingPopUp organism', () => {
       },
       hasUnpublishedChanges: true,
       isPublished: true,
+      isAdmin: true,
       isPublishing: false,
       onPublish: () => noop,
       onRestore: () => noop,
@@ -86,6 +92,7 @@ describe('NotebookPublishingPopUp organism', () => {
           },
         ],
       },
+      isAdmin: true,
       hasUnpublishedChanges: true,
       isPublished: true,
       isPublishing: false,
@@ -121,6 +128,7 @@ describe('NotebookPublishingPopUp organism', () => {
       },
       hasUnpublishedChanges: true,
       isPublished: true,
+      isAdmin: true,
       isPublishing: false,
       onPublish: () => noop,
       onRestore: () => noop,
@@ -154,6 +162,7 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isPublishing: false,
+      isAdmin: true,
       onPublish: () => noop,
       onRestore: () => noop,
       onUnpublish: () => noop,
@@ -181,6 +190,7 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: false,
       isPublishing: false,
+      isAdmin: true,
       onPublish: () => noop,
       onRestore: () => noop,
       onUnpublish: () => noop,
@@ -208,6 +218,7 @@ describe('NotebookPublishingPopUp organism', () => {
       },
       hasUnpublishedChanges: true,
       isPublished: true,
+      isAdmin: true,
       isPublishing: true,
       onPublish: () => noop,
       onRestore: () => noop,
