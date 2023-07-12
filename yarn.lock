@@ -32720,10 +32720,10 @@ taskgroup@^5.0.0:
     safeps "7.0.1"
     unbounded "^1.2.0"
 
-tedious@^16.1.0:
-  version "16.1.0"
-  resolved "https://registry.yarnpkg.com/tedious/-/tedious-16.1.0.tgz#0fc6686542fec3cbdafcd20a5e967ff74c4df10c"
-  integrity sha512-5W+shTkUoAyrB/Bbx89k6Q8Cb400OHzS6XDXQdsTp/obe1cFyOhNc1KI4FI6TOzklDGJWyLnEEfUSBVMpugnjA==
+tedious@^16.2.0:
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/tedious/-/tedious-16.2.0.tgz#d95374aa4a945c00ce48f20c271c6cd6a1506753"
+  integrity sha512-mUQnrnGeuAMREYUvCesWVIhP6lbir0baEoZv4OcBmAHtpaIbR64QHaww+OjyJbO1N7PpHbCfrMhpItJXFUlgmQ==
   dependencies:
     "@azure/identity" "^2.0.4"
     "@azure/keyvault-keys" "^4.4.0"
