@@ -14,11 +14,24 @@ import { GraphQLError } from 'graphql';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { Class } from 'utility-types';
 import { captureException } from '@decipad/backend-trace';
+import { boomify } from '@hapi/boom';
 
 const UserErrors: Array<Class<Error>> = [ForbiddenError, UserInputError];
 
-const isUserError = (error: GraphQLError) =>
-  UserErrors.some((UserError) => error.originalError instanceof UserError);
+const isGraphqlUserError = (error: Error): boolean =>
+  UserErrors.some((UserError) => error instanceof UserError);
+
+const isServerError = (error: Error): boolean => {
+  const b = boomify(error);
+  return b.isServer;
+};
+
+const isUserError = (error: GraphQLError): boolean =>
+  isGraphqlUserError(error) ||
+  !isServerError(error) ||
+  (error.originalError instanceof Error &&
+    (isGraphqlUserError(error.originalError) ||
+      !isServerError(error.originalError)));
 
 const onError = async (rc: GraphQLRequestContext) => {
   setTag('kind', rc.operationName);
