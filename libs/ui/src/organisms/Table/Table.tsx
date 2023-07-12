@@ -140,12 +140,6 @@ const hiddenSelectionStyles = css({
   },
 });
 
-const liveResultStyles = css({
-  '> tbody > tr:last-of-type > td, > tfoot > tr > td:last-of-type': {
-    border: 0,
-  },
-});
-
 const footerStyles = css({
   '> tbody > tr:last-of-type > td:first-of-type': {
     borderBottomLeftRadius: 0,
@@ -194,7 +188,6 @@ export const Table = ({
   tableWidth,
   isSelectingCell,
   isReadOnly = false,
-  isLiveResult = false,
   onMouseOver = noop,
 }: TableProps): ReturnType<FC> => {
   const [animateBody] = useAutoAnimate<HTMLTableSectionElement>();
@@ -223,7 +216,6 @@ export const Table = ({
           ],
         tableWidth === 'WIDE' && wideTableStyles,
         isSelectingCell && hiddenSelectionStyles,
-        isLiveResult && liveResultStyles,
         isReadOnly && readOnlyTableStyles,
         !head && { borderTop: regularBorder, borderRadius: 8 },
         footer && footerStyles,
