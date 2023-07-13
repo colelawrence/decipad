@@ -34,6 +34,8 @@ export const availableFlags = [
   'SECRETS_IN_JS',
   // make codelines greyscale when they are not focused
   'MUTED_CODELINES',
+  // SQL Connections from workspace
+  'WORKSPACE_CONNECTIONS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
