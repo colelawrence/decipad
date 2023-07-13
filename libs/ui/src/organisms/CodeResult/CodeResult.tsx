@@ -23,6 +23,7 @@ import {
   PendingResult,
 } from '../../atoms';
 import TextResult from '../../atoms/TextResult/TextResult';
+import { useMaterializedResult } from '../../hooks';
 import { BlockCodeError, InlineCodeError } from '../../molecules';
 import { CodeResultProps } from '../../types';
 
@@ -151,8 +152,13 @@ export function CodeResult<T extends SerializedTypeKind>(
     tooltip,
     isLiveResult,
   } = props;
+  const materializedValue = useMaterializedResult(value) as
+    | CodeResultProps<T>['value']
+    | undefined;
+  const shouldUseMaterializedValue =
+    isLiveResult && value != null && materializedValue;
   const ResultComponent = getResultComponent({
-    value,
+    value: shouldUseMaterializedValue ? materializedValue : value,
     variant,
     type,
     element,

@@ -1,4 +1,4 @@
-import { BrowserContext, Page, test, expect } from '@playwright/test';
+import { BrowserContext, Page, expect, test } from '@playwright/test';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
 import {
   editorTitleLocator,

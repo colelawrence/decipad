@@ -8,7 +8,7 @@ import {
 import { useComputer, useFileUploadStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { Dialog, UploadFileModal } from '@decipad/ui';
-import { getDefined, noop } from '@decipad/utils';
+import { noop } from '@decipad/utils';
 import { getStartPoint } from '@udecode/plate';
 import axios from 'axios';
 import { FC, useCallback } from 'react';
@@ -26,7 +26,13 @@ export const UploadFile: FC = () => {
         case 'image':
           return insertImageBelow(editor, path, url);
         case 'data':
-          return insertLiveConnection({ computer, editor, url, source: 'csv' });
+          return insertLiveConnection({
+            computer,
+            editor,
+            url,
+            path,
+            source: 'csv',
+          });
         default:
           // not implemented yet
           return noop;
@@ -42,15 +48,11 @@ export const UploadFile: FC = () => {
 
   const insertByUrl = useCallback(
     (fileUrl: string): void => {
-      let path;
-      const selection = getDefined(editor.selection);
-
-      if (selection == null) {
-        const point = getStartPoint(editor, [editor.children.length - 1]);
-        path = point.path;
-      } else {
-        path = selection.anchor.path.slice(0, 1);
-      }
+      const { selection } = editor;
+      const point =
+        selection?.anchor ??
+        getStartPoint(editor, [editor.children.length - 1]);
+      const path = point.path.slice(0, 1);
 
       insertFunctionForFileType(editor, path, fileUrl);
     },

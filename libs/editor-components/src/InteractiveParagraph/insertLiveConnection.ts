@@ -35,6 +35,7 @@ export interface InsertLiveConnectionProps {
   source?: ImportElementSource;
   url?: string;
   identifyIslands?: boolean;
+  path?: Path;
 }
 
 /**
@@ -44,6 +45,7 @@ const justInsertLiveConnection = async ({
   editor,
   source,
   url,
+  path,
   computer,
 }: InsertLiveConnectionProps): Promise<string | undefined> => {
   if (source === 'decipad' && url) {
@@ -61,7 +63,7 @@ const justInsertLiveConnection = async ({
     }
   }
   const { selection } = editor;
-  if (selection == null || url == null) {
+  if ((selection == null && !path) || url == null) {
     return;
   }
 
@@ -83,9 +85,15 @@ const justInsertLiveConnection = async ({
       },
     ],
   };
-  insertNodes(editor, liveConnEl, {
-    at: requirePathBelowBlock(editor, selection.anchor.path),
-  });
+
+  const insertAtPath = path || selection?.anchor.path;
+
+  if (insertAtPath) {
+    insertNodes(editor, liveConnEl, {
+      at: requirePathBelowBlock(editor, insertAtPath),
+    });
+  }
+
   return liveConnEl.id;
 };
 
@@ -94,11 +102,12 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
   editor,
   source,
   url,
+  path,
   identifyIslands,
 }: InsertLiveConnectionProps): Promise<void> => {
-  const selection = getDefined(editor.selection);
+  const { selection } = editor;
 
-  let blockPath = [selection.anchor.path[0]];
+  let blockPath = path || ([selection?.anchor.path[0]] as Path);
 
   const nextPath = () => {
     blockPath = nextBlock(blockPath);
@@ -162,9 +171,9 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
 export const insertLiveConnection = async (
   props: InsertLiveConnectionProps
 ): Promise<string | undefined> => {
-  const { editor, url, identifyIslands } = props;
+  const { editor, url, identifyIslands, path } = props;
   const { selection } = editor;
-  if (isCollapsed(selection) && selection?.anchor && url) {
+  if ((isCollapsed(selection) && selection?.anchor && url) || path) {
     if (identifyIslands) {
       await identifyIslandsAndThenInsertLiveConnection(props);
       return;
