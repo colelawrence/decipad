@@ -84,7 +84,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
               onChange={(newValue) => {
                 setSearch(newValue.toLocaleLowerCase());
               }}
-              small
+              size="small"
               placeholder={
                 sidebarTab === 'variable'
                   ? 'Search for variables...'

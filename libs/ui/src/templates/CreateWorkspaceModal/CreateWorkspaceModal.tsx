@@ -41,7 +41,7 @@ export const CreateWorkspaceModal = ({
     >
       <form css={formWrapperStyle} onSubmit={handleSubmit}>
         <InputField
-          small
+          size="small"
           required
           placeholder="Team workspace"
           label="Name of Workspace"

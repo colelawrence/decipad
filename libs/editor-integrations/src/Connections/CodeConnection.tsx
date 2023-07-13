@@ -135,7 +135,7 @@ const AiPanel = ({
           label="API Endpoint URL"
           autoFocus
           type="url"
-          small
+          size="small"
           error={res.status === 'error' ? res.error : undefined}
           submitButton={
             <Button
@@ -167,7 +167,7 @@ const AiPanel = ({
       >
         <InputField
           label="Instructions"
-          small
+          size="small"
           type="text"
           value={prompt}
           onChange={setPrompt}

@@ -8,7 +8,7 @@ import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import fetch from 'isomorphic-fetch';
-import { checkNotebookAccess } from './checkNotebookAccess';
+import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 import { debug } from './debug';
 
 const fetchExternalDataSource = async (
@@ -87,7 +87,11 @@ export const data: Handler = async (event) => {
     };
   }
 
-  await checkNotebookAccess(externalDataSource.padId, event);
+  await checkNotebookOrWorkspaceAccess({
+    workspaceId: externalDataSource.workspace_id,
+    notebookId: externalDataSource.padId,
+    event,
+  });
 
   const key = await getAccessKey(externalDataSource);
   if (!key) {

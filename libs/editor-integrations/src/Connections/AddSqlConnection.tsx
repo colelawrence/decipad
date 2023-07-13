@@ -16,7 +16,7 @@ import {
   WrapperIntegrationModalDialog,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { findNode, getNodeString } from '@udecode/plate';
+import { findNode } from '@udecode/plate';
 import { LiveQueryCore } from 'libs/editor-plugins/src/plugins/LiveQuery/components/LiveQueryCore';
 import { useSession } from 'next-auth/react';
 import { ProviderList } from '.';
@@ -62,11 +62,6 @@ export const AddSqlIntegration: FC = () => {
   const session = useSession();
 
   const liveConnections = useEditorElements(ELEMENT_LIVE_CONNECTION);
-
-  const liveConnectionIDs: Array<[string, string]> = useMemo(
-    () => liveConnections.map((v) => [v.id, getNodeString(v.children[0])]),
-    [liveConnections]
-  );
 
   const connectionTitle = useMemo(() => {
     return (
@@ -220,17 +215,7 @@ export const AddSqlIntegration: FC = () => {
                 dataSources={ProviderList}
               />
             ) : store.stage === 'connect' ? (
-              <DatabaseConnectionScreen
-                error={
-                  store.states.connectionState?.type === 'error'
-                    ? store.states.connectionState?.message
-                    : undefined
-                }
-                existingConnections={liveConnectionIDs}
-                values={store.dbOptions}
-                setValues={store.setDbOptions}
-                provider={store.connectionType}
-              />
+              <DatabaseConnectionScreen workspaceId="hello" />
             ) : ['create-query', 'execute-query'].includes(store.stage) ? (
               <DatabaseQuery
                 connection={store.states.connectionState?.type}

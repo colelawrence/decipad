@@ -1,6 +1,7 @@
 fragment ExternalDataSourceFragment on ExternalDataSource {
   id
   name
+  workspaceId
   padId
   provider
   dataUrl
@@ -15,6 +16,17 @@ fragment ExternalDataSourceFragment on ExternalDataSource {
 
 query GetExternalDataSources($notebookId: ID!) {
   getExternalDataSources(notebookId: $notebookId, page: { maxItems: 10000 }) {
+    items {
+      ...ExternalDataSourceFragment
+    }
+  }
+}
+
+query GetExternalDataSourcesWorkspace($workspaceId: ID!) {
+  getExternalDataSourcesWorkspace(
+    workspaceId: $workspaceId
+    page: { maxItems: 10000 }
+  ) {
     items {
       ...ExternalDataSourceFragment
     }

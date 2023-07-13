@@ -9,7 +9,7 @@ export { DataViewColumnHeader } from './DataViewColumnHeader/DataViewColumnHeade
 export { EditorIcon } from './EditorIcon/EditorIcon';
 export { EditMembersModal } from './EditMembersModal/EditMembersModal';
 export { EditUserModal } from './EditUserModal/EditUserModal';
-export { EditSecretsModal } from './EditSecretsModal/EditSecretsModal';
+export { EditDataConnectionsModal } from './EditDataConnectionsModal/EditDataConnectionsModal';
 export { EditWorkspaceModal } from './EditWorkspaceModal/EditWorkspaceModal';
 export { PaymentSubscriptionStatusModal } from './PaymentSubscriptionStatusModal/PaymentSubscriptionStatusModal';
 export { ErrorModal } from './ErrorModal/ErrorModal';

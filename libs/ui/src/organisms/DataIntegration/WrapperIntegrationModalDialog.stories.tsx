@@ -3,7 +3,6 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps, useState } from 'react';
 import {
   DatabaseQuery,
-  DbOptions,
   IntegrationModalDialog,
   IntegrationModalDialogProps,
   DatabaseConnectionScreen as UIDatabaseConnection,
@@ -108,38 +107,12 @@ export const DataIntegrationScreen: StoryFn<
   );
 };
 
-let existingConn: DbOptions = {
-  connectionString: '',
-  host: '',
-  port: '',
-  username: '',
-  password: '',
-  database: '',
-  existingConn: {
-    name: '',
-    id: '',
-  },
-  dbConnType: undefined,
-  query: '',
-};
 export const DatabaseConnectionScreen: StoryFn<
   ComponentProps<typeof WrapperIntegrationModalDialog>
 > = (props) => {
   return (
     <WrapperIntegrationModalDialog {...props}>
-      <UIDatabaseConnection
-        values={existingConn}
-        setValues={(v) => {
-          existingConn = {
-            ...existingConn,
-            ...v,
-          };
-        }}
-        existingConnections={[
-          ['con-id-1', 'Connection 1'],
-          ['con-id-2', 'Conn2'],
-        ]}
-      />
+      <UIDatabaseConnection workspaceId="workspace_id" />
     </WrapperIntegrationModalDialog>
   );
 };
@@ -149,20 +122,7 @@ export const DatabaseConnectionScreenError: StoryFn<
 > = (props) => {
   return (
     <WrapperIntegrationModalDialog {...props}>
-      <UIDatabaseConnection
-        values={existingConn}
-        setValues={(v) => {
-          existingConn = {
-            ...existingConn,
-            ...v,
-          };
-        }}
-        existingConnections={[
-          ['con-id-1', 'Connection 1'],
-          ['con-id-2', 'Conn2'],
-        ]}
-        error="This is an error!"
-      />
+      <UIDatabaseConnection workspaceId="workspaceid" />
     </WrapperIntegrationModalDialog>
   );
 };

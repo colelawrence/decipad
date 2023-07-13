@@ -15,7 +15,7 @@ export const WorkspaceSecrets: React.FC<WorkspaceSecretsProps> = ({
   const { secrets, add, remove } = useWorkspaceSecrets(workspaceId);
 
   return (
-    <div>
+    <div css={fullWidth}>
       <p css={paraSecretStyles}>
         You can define secrets to so that you can access services securely from
         your integrations
@@ -27,3 +27,6 @@ export const WorkspaceSecrets: React.FC<WorkspaceSecretsProps> = ({
 };
 
 const paraSecretStyles = css(p12Medium, { paddingBottom: 12 });
+const fullWidth = css({
+  width: '100%',
+});

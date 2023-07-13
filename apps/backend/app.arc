@@ -214,7 +214,7 @@ fileattachments
 
 externaldatasources
   id *String
-  padId: String
+  encrypt true
 
 externaldatasourcekeys
   id *String
@@ -395,6 +395,10 @@ fileattachments
 externaldatasources
   padId *String
   name byPadId
+
+externaldatasources
+  workspace_id *String
+  name byWorkspace
 
 externaldatasourcekeys
   resource_uri *String

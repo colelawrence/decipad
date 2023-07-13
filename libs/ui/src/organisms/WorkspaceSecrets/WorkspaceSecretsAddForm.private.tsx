@@ -47,6 +47,7 @@ export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({ onAdd }) => {
       <form css={secretFormStyles} onSubmit={handleAddSecret}>
         <InputField
           required
+          size="full"
           testId="input-secret-name"
           placeholder="Name of secret"
           value={name}
@@ -55,6 +56,7 @@ export const WorkspaceSecretsAddForm: React.FC<AddFormProps> = ({ onAdd }) => {
 
         <InputField
           required
+          size="full"
           testId="input-secret-value"
           placeholder="Value"
           value={secret}

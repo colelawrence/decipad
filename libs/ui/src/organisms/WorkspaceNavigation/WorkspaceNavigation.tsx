@@ -201,11 +201,11 @@ export const WorkspaceNavigation = ({
             <NavigationList key={'workspace-nav-DC'}>
               <NavigationItem
                 key={'folder-0'}
-                href={activeWorkspaceRoute.connections({}).$}
+                href={activeWorkspaceRoute.connections({}).codeSecrets({}).$}
                 isActive={isSharedPage}
                 icon={<Key />}
               >
-                <span css={itemTextStyles}>Integration Secrets</span>
+                <span css={itemTextStyles}>Data Connections</span>
               </NavigationItem>
             </NavigationList>
           )}

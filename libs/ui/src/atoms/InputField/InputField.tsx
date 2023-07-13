@@ -55,6 +55,10 @@ const disabledStyles = css({
   cursor: 'not-allowed',
 });
 
+const fullWidth = css({
+  width: '100%',
+});
+
 type FieldType =
   | 'text'
   | 'search'
@@ -68,7 +72,7 @@ export type InputFieldProps = {
   readonly required?: boolean;
   readonly autoFocus?: boolean;
   readonly disabled?: boolean;
-  readonly small?: boolean;
+  readonly size?: 'small' | 'regular' | 'full';
 
   readonly testId?: string;
   readonly label?: string;
@@ -90,7 +94,7 @@ export const InputField = ({
   required = false,
   autoFocus = false,
   disabled = false,
-  small,
+  size,
 
   testId,
   label,
@@ -122,7 +126,8 @@ export const InputField = ({
       autoFocus={autoFocus}
       disabled={disabled}
       css={[
-        small ? inputStylesSmall : inputStyles,
+        size === 'small' ? inputStylesSmall : inputStyles,
+        size === 'full' && fullWidth,
         type !== 'search'
           ? {
               border: `1px solid ${cssVar('borderColor')}`,

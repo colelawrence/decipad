@@ -10,7 +10,7 @@ import {
 import { nanoid } from 'nanoid';
 import { OAuth2 } from 'oauth';
 import { stringify as encodeCookie } from 'simple-cookie';
-import { checkNotebookAccess } from './checkNotebookAccess';
+import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 
 export const auth = async (
   event: APIGatewayProxyEvent
@@ -26,7 +26,11 @@ export const auth = async (
     throw Boom.notFound();
   }
 
-  await checkNotebookAccess(externalDataSource.padId, event, 'WRITE');
+  await checkNotebookOrWorkspaceAccess({
+    workspaceId: externalDataSource.workspace_id,
+    notebookId: externalDataSource.padId,
+    event,
+  });
 
   const provider = externalDataProvider(externalDataSource.provider);
 

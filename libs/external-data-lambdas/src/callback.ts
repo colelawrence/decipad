@@ -13,7 +13,7 @@ import { OAuth2 } from 'oauth';
 import { parse as decodeCookie } from 'simple-cookie';
 import { getDefined } from '@decipad/utils';
 import { HttpError, timestamp } from '@decipad/backend-utils';
-import { checkNotebookAccess } from './checkNotebookAccess';
+import { checkNotebookOrWorkspaceAccess } from './checkAccess';
 
 export const callback = async (
   event: APIGatewayProxyEvent
@@ -35,11 +35,12 @@ export const callback = async (
     throw Boom.notFound();
   }
 
-  const user = await checkNotebookAccess(
-    externalDataSource.padId,
+  const user = await checkNotebookOrWorkspaceAccess({
+    workspaceId: externalDataSource.workspace_id,
+    notebookId: externalDataSource.padId,
     event,
-    'WRITE'
-  );
+    permissionType: 'READ',
+  });
   if (!user) {
     throw Boom.forbidden();
   }

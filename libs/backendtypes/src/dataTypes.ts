@@ -191,9 +191,11 @@ export interface ExternalDataSourceUpdateInput {
 export interface ExternalDataSourceCreateInput
   extends ExternalDataSourceUpdateInput {
   id: ID;
-  padId: ID;
+  padId?: ID;
+  workspace_id?: ID;
   provider: ExternalDataSourceProvider;
   externalId: string;
+  dataSourceName?: string;
 }
 
 export interface ExternalDataSource extends ExternalDataSourceCreateInput {
@@ -448,9 +450,11 @@ export interface ConnectionRecord extends TableRecordBase {
 
 export interface ExternalDataSourceRecord extends TableRecordBase {
   name: string;
-  padId: ID;
+  padId?: ID;
+  workspace_id?: ID;
   provider: ExternalDataSourceProvider;
   externalId: string;
+  dataSourceName?: string;
 }
 
 // User goals

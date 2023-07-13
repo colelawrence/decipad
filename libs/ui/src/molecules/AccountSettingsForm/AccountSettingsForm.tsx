@@ -26,7 +26,7 @@ export const AccountSettingsForm = ({
     <div css={formWrapperStyle}>
       <InputField
         required
-        small
+        size="small"
         label="Name"
         name="name"
         placeholder="Aspen Vaccaro"
@@ -34,7 +34,7 @@ export const AccountSettingsForm = ({
         onChange={setName}
       />
       <InputField
-        small
+        size="small"
         label="Username"
         name="username"
         placeholder="@aspen"

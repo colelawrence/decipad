@@ -4,8 +4,19 @@ const createNew = route('/create-new', {}, {});
 const edit = route('/edit', {}, {});
 const members = route('/members', {}, {});
 const archived = route('/archived', {}, {});
-const connections = route('/connections', {}, {});
 const shared = route('/shared', {}, {});
+
+const codeSecrets = route('/code-secrets', {}, {});
+const sqlConnections = route('/sql-connections', {}, {});
+
+export const connections = route(
+  '/connections',
+  {},
+  {
+    codeSecrets,
+    sqlConnections,
+  }
+);
 
 const section = route('/section/:sectionId', { sectionId: stringParser }, {});
 

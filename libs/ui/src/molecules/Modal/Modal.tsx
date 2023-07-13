@@ -79,7 +79,6 @@ const dialogStyles = css({
   gridArea: '1 / 1',
   justifySelf: 'center',
   alignSelf: 'center',
-  maxWidth: 'min(100% - 24px, 480px)',
   maxHeight: '75%',
   overflowY: 'auto',
 
@@ -87,7 +86,6 @@ const dialogStyles = css({
   backgroundColor: cssVar('backgroundColor'),
   border: `1px solid ${cssVar('borderColor')}`,
   borderRadius: '24px',
-  width: '480px',
   boxShadow: `
     0px 2px 20px ${transparency(grey700, 0.04).rgba},
     0px 2px 8px ${transparency(offBlack, 0.02).rgba}

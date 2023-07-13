@@ -39,6 +39,7 @@ function authUrlFor(externalDataSource: ExternalDataSourceRecord): string {
 }
 
 const notebooks = resource('notebook');
+const workspaces = resource('workspace');
 
 const externalDataResource = Resource({
   resourceTypeName: 'externaldatasources',
@@ -50,12 +51,14 @@ const externalDataResource = Resource({
   }: {
     dataSource: ExternalDataSourceCreateInput;
   }) => {
-    const eds = {
+    const eds: ExternalDataSourceRecord = {
       id: nanoid(),
       name: dataSource.name,
       padId: dataSource.padId,
+      workspace_id: dataSource.workspace_id,
       provider: dataSource.provider,
       externalId: dataSource.externalId,
+      dataSourceName: dataSource.dataSourceName,
     };
     return eds;
   },
@@ -92,6 +95,31 @@ const resolvers = {
           KeyConditionExpression: 'padId = :padId',
           ExpressionAttributeValues: {
             ':padId': notebookId,
+          },
+        },
+        page,
+        { gqlType: 'ExternalDataSource' }
+      );
+    },
+    getExternalDataSourcesWorkspace: async (
+      _: unknown,
+      { workspaceId, page }: { workspaceId: string; page: PageInput },
+      context: GraphqlContext
+    ): Promise<PagedResult<ExternalDataSourceRecord>> => {
+      await workspaces.expectAuthorizedForGraphql({
+        context,
+        recordId: workspaceId,
+        minimumPermissionType: 'READ',
+      });
+      const data = await tables();
+
+      return paginate(
+        data.externaldatasources,
+        {
+          IndexName: 'byWorkspace',
+          KeyConditionExpression: 'workspace_id = :workspaceId',
+          ExpressionAttributeValues: {
+            ':workspaceId': workspaceId,
           },
         },
         page,

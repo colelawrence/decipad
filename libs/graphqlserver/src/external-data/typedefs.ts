@@ -25,13 +25,16 @@ export default gql`
 
   input ExternalDataSourceCreateInput {
     name: String!
-    padId: ID!
+    workspace_id: ID
+    padId: ID
     provider: ExternalProvider!
     externalId: String!
+    dataSourceName: String
   }
 
   input ExternalDataSourceUpdateInput {
     name: String
+    dataSourceName: String
   }
 
   type ExternalDataSourceAccess {
@@ -42,7 +45,8 @@ export default gql`
   type ExternalDataSource {
     id: ID!
     name: String!
-    padId: ID!
+    workspaceId: ID
+    padId: ID
     provider: ExternalProvider!
     dataUrl: String
     authUrl: String
@@ -53,6 +57,10 @@ export default gql`
   extend type Query {
     getExternalDataSource(id: ID!): ExternalDataSource!
     getExternalDataSources(notebookId: ID!, page: PageInput!): PagedResult!
+    getExternalDataSourcesWorkspace(
+      workspaceId: ID!
+      page: PageInput!
+    ): PagedResult!
   }
 
   extend type Mutation {

@@ -42,7 +42,7 @@ const LoginForm = ({ onSubmit }: LoginPageProps) => {
       >
         <InputField
           autoFocus
-          small
+          size="small"
           placeholder="Enter your email"
           type="email"
           required

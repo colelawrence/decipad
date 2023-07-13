@@ -74,9 +74,11 @@ const CreateWorkspaceModal = lazy(loadCreateWorkspaceModal);
 const loadEditMembersModal = () =>
   import(/* webpackChunkName: "edit-members-modal" */ './EditMembersModal');
 const EditMembersModal = lazy(loadEditMembersModal);
-const loadEditSecretsModal = () =>
-  import(/* webpackChunkName: "edit-secrets-modal" */ './EditSecretsModal');
-const EditSecretsModal = lazy(loadEditSecretsModal);
+const loadEditDataConnectionsModal = () =>
+  import(
+    /* webpackChunkName: "edit-secrets-modal" */ './EditDataConnectionsModal'
+  );
+const EditDataConnectionsModal = lazy(loadEditDataConnectionsModal);
 const loadEditWorkspaceModal = () =>
   import(/* webpackChunkName: "edit-workspace-modal" */ './EditWorkspaceModal');
 const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
@@ -581,10 +583,10 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             }
           />
           <Route
-            path={currentWorkspaceRoute.connections.template}
+            path={`${currentWorkspaceRoute.connections.template}/*`}
             element={
               <LazyRoute>
-                <EditSecretsModal
+                <EditDataConnectionsModal
                   Heading="h1"
                   closeHref={currentWorkspaceRoute.$}
                   currentWorkspace={currentWorkspace}
