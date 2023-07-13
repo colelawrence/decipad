@@ -19,7 +19,7 @@ import type { IdentifiedResult, ProgramBlock } from '../types';
 import { getDefinedSymbol, getStatementFromProgram } from '../utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { createComputerStats } from './computerStats';
-import { VarNameToBlockMap } from '../internalTypes';
+import { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {
   result: IdentifiedResult;
@@ -69,7 +69,7 @@ export class ComputationRealm {
 
   /** Retrieve labels (first column) for each table, indexed by table name. */
   async getIndexLabels(
-    varNameToBlockMap: VarNameToBlockMap = new Map()
+    varNameToBlockMap: ReadOnlyVarNameToBlockMap = new Map()
   ): Promise<Map<string, string[]>> {
     const labels = new Map();
 

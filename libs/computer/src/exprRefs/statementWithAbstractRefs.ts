@@ -2,13 +2,13 @@ import { walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { type AST } from '..';
 import { getIdentifierString } from '../utils';
-import { VarNameToBlockMap } from '../internalTypes';
+import { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 import { maybeReplaceIdentifierWith } from './maybeReplaceIdentifierWith';
 import { isExprRef } from '.';
 
 export const statementWithAbstractRefs = <T extends AST.Statement>(
   stmt: T,
-  varNameToBlockMap: VarNameToBlockMap,
+  varNameToBlockMap: ReadOnlyVarNameToBlockMap,
   toUserlandRef: (ref: string) => string = (ref: string) => {
     const block = varNameToBlockMap.get(ref);
     if (block) {

@@ -99,7 +99,7 @@ export class Computer {
     Map<string, [id: string, injectedResult: Result.Result][]>
   >(new Map());
   private automaticallyGeneratedNames = new Set<string>();
-  public latestVarNameToBlockMap = new Map<string, ProgramBlock>();
+  public latestVarNameToBlockMap: ReadonlyMap<string, ProgramBlock> = new Map();
   public latestExprRefToVarNameMap = new Map<string, string>();
   public latestBlockDependents = new Map<string, string[]>();
 

@@ -1,25 +1,24 @@
-import { AST, isAssignment } from '@decipad/language';
+import { isAssignment } from '@decipad/language';
 import uniq from 'lodash.uniq';
 import {
   getExprRef,
-  isExprRef,
   type IdentifiedBlock,
   type Program,
   type ProgramBlock,
 } from '..';
 import { getIdentifierString } from '../utils';
 import { statementWithAbstractRefs } from './statementWithAbstractRefs';
-import { BlockDependentsMap, VarNameToBlockMap } from '../internalTypes';
 import {
-  ColDef,
-  TablePartialDef,
-} from '../../../language/src/parser/ast-types';
+  BlockDependentsMap,
+  ReadOnlyVarNameToBlockMap,
+} from '../internalTypes';
 import { maybeReplaceIdentifierWith } from './maybeReplaceIdentifierWith';
+import { programToVarNameToBlockMap } from './programToVarNameToBlockMap';
 
 const identifiedBlockWithAbstractNamesAndReferences = (
-  varNameToBlockMap: VarNameToBlockMap,
+  varNameToBlockMap: ReadOnlyVarNameToBlockMap,
   blockDependents: BlockDependentsMap,
-  tableToColumnsMap: Map<string, Set<string>>
+  tableToColumnsMap: ReadonlyMap<string, Set<string>>
 ) => {
   const toUserlandRef = (ref: string) => {
     const block = varNameToBlockMap.get(ref);
@@ -29,32 +28,12 @@ const identifiedBlockWithAbstractNamesAndReferences = (
     return ref;
   };
 
-  const getDefinedName = (statement: AST.GenericAssignment): string => {
-    if (statement.type === 'table-column-assign') {
-      return (statement.args.slice(0, 2) as [TablePartialDef, ColDef])
-        .map(getIdentifierString)
-        .map(toUserlandRef)
-        .join('.');
-    }
-    const [def] = statement.args;
-    return toUserlandRef(getIdentifierString(def));
-  };
-
   const maybeReplaceIdentifier = maybeReplaceIdentifierWith(varNameToBlockMap);
 
   const addDependent = (blockId: string, dependent: string) => {
     const dependents = blockDependents.get(blockId) ?? [];
     dependents.push(dependent);
     blockDependents.set(blockId, uniq(dependents));
-  };
-
-  const addTableColumn = (tableName?: string, columnName?: string) => {
-    if (tableName && columnName) {
-      const tableColumns =
-        tableToColumnsMap.get(tableName) ?? new Set<string>();
-      tableColumns.add(columnName);
-      tableToColumnsMap.set(tableName, tableColumns);
-    }
   };
 
   return (block: IdentifiedBlock): IdentifiedBlock => {
@@ -66,39 +45,16 @@ const identifiedBlockWithAbstractNamesAndReferences = (
     const [statement] = block.block.args;
     const definesExprRef = getExprRef(block.id);
 
-    // fill `definesVariable` and `definesTableColumn` in block
-    if (!block.definesVariable && statement.type !== 'table-column-assign') {
-      if (isAssignment(statement)) {
-        block.definesVariable = toUserlandRef(
-          getIdentifierString(statement.args[0])
-        );
-      } else {
-        block.definesVariable = definesExprRef;
-      }
-    }
     if (statement.type === 'table-column-assign') {
-      block.definesTableColumn = [
-        toUserlandRef(getIdentifierString(statement.args[0])),
-        toUserlandRef(getIdentifierString(statement.args[1])),
-      ];
-
       const tableName = toUserlandRef(getIdentifierString(statement.args[0]));
       const tableBlock = varNameToBlockMap.get(tableName);
       if (tableBlock) {
         addDependent(tableBlock.id, block.id);
       }
-      addTableColumn(...block.definesTableColumn);
     }
 
     // replace assignments with expression ref assignments
     if (isAssignment(statement)) {
-      const definesName = getDefinedName(statement);
-      if (!isExprRef(definesName)) {
-        block.block.hasDuplicateName = varNameToBlockMap.has(definesName)
-          ? definesName
-          : undefined;
-      }
-      varNameToBlockMap.set(definesName, block);
       maybeReplaceIdentifier(statement.args[0]);
     } else if (statement.type !== 'categories') {
       // turn into assignment
@@ -113,14 +69,6 @@ const identifiedBlockWithAbstractNamesAndReferences = (
           statement,
         ],
       };
-    }
-
-    varNameToBlockMap.set(definesExprRef, block);
-    if (block.definesVariable) {
-      varNameToBlockMap.set(block.definesVariable, block);
-    }
-    if (block.definesTableColumn) {
-      varNameToBlockMap.set(block.definesTableColumn.join('.'), block);
     }
 
     const tableColumns =
@@ -143,7 +91,7 @@ const identifiedBlockWithAbstractNamesAndReferences = (
 };
 
 const blockWithAbstractNamesAndReferences = (
-  varNameToBlockMap: VarNameToBlockMap,
+  varNameToBlockMap: ReadOnlyVarNameToBlockMap,
   blockDependencies: BlockDependentsMap,
   tableColumns: Map<string, Set<string>>
 ) => {
@@ -163,17 +111,22 @@ const blockWithAbstractNamesAndReferences = (
 
 interface ProgramWithAbstractNamesAndReferencesResult {
   program: Program;
-  varNameToBlockMap: VarNameToBlockMap;
+  varNameToBlockMap: ReadOnlyVarNameToBlockMap;
   blockDependents: BlockDependentsMap;
 }
 
 export const programWithAbstractNamesAndReferences = (
   program: Program
 ): ProgramWithAbstractNamesAndReferencesResult => {
-  const varNameToBlockMap = new Map<string, ProgramBlock>();
   const blockDependents = new Map<string, string[]>();
-  const tableToColumnsMap = new Map<string, Set<string>>();
+  const { varNameToBlockMap, tableToColumnsMap } =
+    programToVarNameToBlockMap(program);
+
   return {
+    // we have to map the program twice because some identifiers on varNameToBlockMap
+    // will not have been pre-populated on the first pass.
+    // So, first pass will populate the references, the second will make sure
+    // all the references are definitely switched to abstract references.
     program: program.map(
       blockWithAbstractNamesAndReferences(
         varNameToBlockMap,

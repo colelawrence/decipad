@@ -1,9 +1,9 @@
-import { VarNameToBlockMap } from '../internalTypes';
+import { type ReadOnlyVarNameToBlockMap } from '../internalTypes';
 import { type AST, getExprRef } from '..';
 import { getIdentifierString } from '../utils';
 
 export const maybeReplaceIdentifierWith =
-  (varNameToBlockMap: VarNameToBlockMap) =>
+  (varNameToBlockMap: ReadOnlyVarNameToBlockMap) =>
   (identifier: AST.Identifier): string | false => {
     const name = getIdentifierString(identifier);
     const block = varNameToBlockMap.get(name);
