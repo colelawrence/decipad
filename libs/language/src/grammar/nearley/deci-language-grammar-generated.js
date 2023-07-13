@@ -1863,11 +1863,6 @@ let ParserRules = [
     symbols: ['primary', '_', 'powOperator', '_', 'powOp'],
     postprocess: powHandler,
   },
-  {
-    name: 'notNumPowOp',
-    symbols: ['noNumPrimary', '_', 'powOperator', '_', 'powOp'],
-    postprocess: powHandler,
-  },
   { name: 'primary', symbols: ['number'], postprocess: id },
   { name: 'primary', symbols: ['noNumPrimary'], postprocess: id },
   { name: 'noNumPrimary', symbols: ['noNumLiteral'], postprocess: id },

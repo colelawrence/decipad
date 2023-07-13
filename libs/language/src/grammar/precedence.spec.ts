@@ -266,6 +266,40 @@ describe('operator/implicit mul precedence', () => {
             (/ 1 (prop (ref Animals).Speed)))"
       `);
   });
+
+  it("should parse 'mile^2/s' correctly", () => {
+    expect(prettyParse('mile^2/s')).toMatchInlineSnapshot(`
+      "(block
+        (/ (^ (ref mile) 2) (ref s)))"
+    `);
+  });
+  it("should parse 'mile^2/2' correctly", () => {
+    expect(prettyParse('mile^2/2')).toMatchInlineSnapshot(`
+      "(block
+        (/ (^ (ref mile) 2) 2))"
+    `);
+  });
+
+  it("should parse 'mile^s/s' correctly", () => {
+    expect(prettyParse('mile^s/s')).toMatchInlineSnapshot(`
+      "(block
+        (/ (^ (ref mile) (ref s)) (ref s)))"
+    `);
+  });
+
+  it("should parse 'mile^s/2' correctly", () => {
+    expect(prettyParse('mile^s/2')).toMatchInlineSnapshot(`
+      "(block
+        (/ (^ (ref mile) (ref s)) 2))"
+    `);
+  });
+
+  it("should parse '10 s/kmeter^2 in kmeter^2/s' correctly", () => {
+    expect(prettyParse('10 s/kmeter^2 in kmeter^2/s')).toMatchInlineSnapshot(`
+      "(block
+        (directive as (/ (implicit* 10 (ref s)) (^ (ref kmeter) 2)) (/ (^ (ref kmeter) 2) (ref s))))"
+    `);
+  });
 });
 
 async function check(sourceCode: string) {

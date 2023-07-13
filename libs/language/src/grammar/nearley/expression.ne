@@ -204,7 +204,7 @@ fraction           -> fraction _ slashOperator _ number           {% basicBinop 
 
 # notNumImpMulOp contain a number (e.g. 1kg) but is not entirely a number (e.g. 1) it's used
 # at the start of slashOp to ensure that it's not ambiguous with fraction
-notNumImpMulOp      -> notNumOfExp                       {% id %}
+notNumImpMulOp      -> notNumOfExp                      {% id %}
 notNumImpMulOp      -> number ref                       {% implicitMultHandler %}
 notNumImpMulOp      -> notNumImpMulOp ref               {% implicitMultHandler %}
 notNumImpMulOp      -> number  __ ofExp                 {% implicitMultHandler %}
@@ -235,7 +235,6 @@ powOp              -> primary _ powOperator _ powOp     {% powHandler %}
 
 notNumPowOp         -> noNumPrimary                           {% id %}
 notNumPowOp         -> primary _ powOperator _ powOp          {% powHandler %}
-notNumPowOp         -> noNumPrimary _ powOperator _ powOp     {% powHandler %}
 
 primary            -> number                            {% id %}
 primary            -> noNumPrimary                      {% id %}
