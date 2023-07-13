@@ -1,5 +1,10 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
+import {
+  editorTitleLocator,
+  setUp,
+  waitForEditorToLoad,
+  editorLocator,
+} from '../utils/page/Editor';
 import {
   duplicatePad,
   exportPad,
@@ -29,7 +34,7 @@ test.describe('Duplicating a notebook', () => {
   });
 
   test('Makes up a notebook', async () => {
-    await page.getByTestId('notebook-title').first().fill('pad title here');
+    await page.locator(editorTitleLocator()).first().fill('pad title here');
 
     await page
       .getByTestId('paragraph-content')
@@ -53,7 +58,7 @@ test.describe('Duplicating a notebook', () => {
   test('Can reload', async () => {
     await page.reload();
     await waitForEditorToLoad(page);
-    await expect(page.getByTestId('notebook-title')).toBeVisible();
+    await expect(page.locator(editorLocator())).toBeVisible();
     await navigateToWorkspacePage(page);
   });
 

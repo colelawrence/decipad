@@ -1,6 +1,7 @@
 import { BrowserContext, Page, test, expect } from '@playwright/test';
 import notebookSource from '../__fixtures__/005-magic-numbers.json';
 import {
+  editorTitleLocator,
   navigateToNotebook,
   setUp,
   waitForEditorToLoad,
@@ -99,7 +100,7 @@ test.describe('Testing magic numbers', () => {
       .fill('AdvancedChanged');
 
     // Unfocusing magic number menu
-    await page.getByTestId('notebook-title').click();
+    await page.locator(editorTitleLocator()).click();
 
     await page.getByText('AdvancedChanged').click();
   });

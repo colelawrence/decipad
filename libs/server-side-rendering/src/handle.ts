@@ -12,7 +12,7 @@ export const handle =
     const abortTimeout = new AbortController();
 
     const timeoutHandler = async () => {
-      await timeout(RENDER_TIMEOUT_MS, abortTimeout.signal);
+      await timeout(RENDER_TIMEOUT_MS * 2, abortTimeout.signal);
       if (replied) {
         return;
       }

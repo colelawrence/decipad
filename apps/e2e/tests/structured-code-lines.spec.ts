@@ -64,7 +64,7 @@ test.describe('Calculation Blocks v2', () => {
     expect(innerText).toContain('Name2');
   });
 
-  let generatedVarName;
+  let generatedVarName: string;
 
   test('Ensures variable name is not empty', async () => {
     await page.getByTestId('codeline-varname').nth(1).dblclick();

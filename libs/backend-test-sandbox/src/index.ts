@@ -15,6 +15,8 @@ import auth from './auth';
 import { websocketURL } from './websocket-url';
 import { createWebsocket } from './websocket';
 
+export type { AuthReturnValue } from './auth';
+
 interface DoneCallback {
   (...args: unknown[]): unknown;
   fail(error?: string | { message: string }): unknown;

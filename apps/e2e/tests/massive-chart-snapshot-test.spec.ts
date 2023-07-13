@@ -1,7 +1,7 @@
 import stringify from 'json-stringify-safe';
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
-  getPadName,
+  editorTitleLocator,
   navigateToNotebook,
   setUp,
   waitForEditorToLoad,
@@ -49,7 +49,9 @@ test.describe('Loading and snapshot of notebook with charts', () => {
     await navigateToNotebook(page, notebookId);
     // some time for the notebook to render
     await waitForEditorToLoad(page);
-    expect(await getPadName(page)).toBe('Testing Visual Regression Charts');
+    await expect(page.locator(editorTitleLocator())).toHaveText(
+      'Testing Visual Regression Charts'
+    );
 
     await page.getByText('Start Test Here').waitFor();
 

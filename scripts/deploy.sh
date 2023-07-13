@@ -29,7 +29,7 @@ mkdir -p apps/backend/public/docs
 cp -rT apps/docs/build/. apps/backend/public/docs
 
 echo "Building the backend..."
-yarn build:backend
+yarn build:backend:ssr
 
 echo "Clearing sourcemaps..."
 (find apps/backend/public/ | grep '\.map$' | xargs -r rm) || true

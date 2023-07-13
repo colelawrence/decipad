@@ -6,7 +6,7 @@ const hostFromReq = (req: APIGatewayProxyEvent) => {
   if (!host) {
     throw new Error('Need a host header');
   }
-  if (host?.startsWith('localhost') && !host.endsWith(':3000')) {
+  if (host?.startsWith('localhost') && host.endsWith(':3333')) {
     host = 'localhost:3000';
   }
   return host;

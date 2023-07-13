@@ -39,5 +39,6 @@ module.exports = {
     '<rootDir>/libs/message-packer',
     '<rootDir>/libs/live-connect',
     '<rootDir>/libs/column',
+    '<rootDir>/libs/server-side-rendering',
   ],
 };

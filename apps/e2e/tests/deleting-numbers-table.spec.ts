@@ -1,11 +1,11 @@
 import { BrowserContext, Page, test, expect } from '@playwright/test';
-import { setUp } from '../utils/page/Editor';
+import { setUp, editorTitleLocator } from '../utils/page/Editor';
 import { Timeouts, createWorkspace } from '../utils/src';
 import { createTable, clickCell, writeInTable } from '../utils/page/Table';
 
 const checkForError = (page: Page, value: string, row: number, col: number) =>
   test.step(`Checking for error`, async () => {
-    await page.getByTestId('notebook-title').click();
+    await page.locator(editorTitleLocator()).click();
     await writeInTable(page, value, row, col);
     await page.getByText(value).hover();
     // eslint-disable-next-line playwright/no-wait-for-timeout

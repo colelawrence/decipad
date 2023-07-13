@@ -148,7 +148,7 @@ const buildSSRLambdas = async (watch) => {
     stdio: [process.stdin, process.stdout, process.stderr],
   }).once('close', (code) => {
     if (code) {
-      console.error('done with error code ' + code);
+      throw new Error('done with error code ' + code);
     } else {
       console.log('Done building server-side rendering.');
     }
@@ -158,7 +158,7 @@ const buildSSRLambdas = async (watch) => {
 (async () => {
   await installLambdaDependencies();
   await buildTraditionalLambdas();
-  // if (!process.env.NO_SSR) {
-  //   await buildSSRLambdas();
-  // }
+  if (process.env.DECI_SSR) {
+    await buildSSRLambdas();
+  }
 })();

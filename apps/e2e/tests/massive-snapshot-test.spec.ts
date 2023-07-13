@@ -2,7 +2,7 @@ import { BrowserContext, Page, expect, test } from '@playwright/test';
 import stringify from 'json-stringify-safe';
 import notebookSource from '../__fixtures__/001-notebook.json';
 import {
-  getPadName,
+  editorTitleLocator,
   navigateToNotebook,
   setUp,
   waitForEditorToLoad,
@@ -49,15 +49,11 @@ test.describe('Loading and snapshot of big notebook', () => {
     await navigateToNotebook(page, notebookId);
     // some time for the notebook to render
     await waitForEditorToLoad(page);
-    expect(await getPadName(page)).toBe('Everything, everywhere, all at once');
-
-    expect(
-      page.getByText(
-        'You can change the participation and multiplier above, and it will be reflected in the calculation below'
-      )
-    ).toBeDefined();
-
-    await page.getByText('This is a string').first().waitFor();
+    // eslint-disable-next-line playwright/valid-expect
+    await expect(page.locator(editorTitleLocator())).toHaveText(
+      'Everything, everywhere, all at once'
+    );
+    await page.waitForSelector('text="ם עוד. על בקר"');
 
     await snapshot(page as Page, 'Notebook: All elements');
   });
@@ -82,18 +78,19 @@ test.describe('Loading and snapshot of big notebook', () => {
     await navigateToNotebook(publishedNotebookPage, notebookId);
 
     await waitForNotebookToLoad(publishedNotebookPage);
-    // make sure screenshot is captured
-    expect(publishedNotebookPage).toBeDefined();
+
+    await publishedNotebookPage.waitForSelector('text="ם עוד. על בקר"');
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
   test('a random user can duplicate', async () => {
     await publishedNotebookPage.click('text=Duplicate notebook');
 
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(2_000);
+
     await waitForNotebookToLoad(publishedNotebookPage);
-    await publishedNotebookPage.waitForSelector(
-      'text="Everything, everywhere, all at once"'
-    );
+    await publishedNotebookPage.waitForSelector('text="ם עוד. על בקר"');
 
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
       24

@@ -7,23 +7,28 @@ import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
 
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
-  featureFlags?: Record<Flag, boolean>;
+  featureFlags?: Partial<Record<Flag, boolean>>;
 }
 
+export const editorLocator = (): string => {
+  return '[data-editorloaded][data-hydrated]';
+};
+
+export const editorTitleLocator = (): string => {
+  return `${editorLocator()} [data-testid="notebook-title"]`;
+};
+
 export async function waitForEditorToLoad(page: Page) {
-  await page.waitForSelector(
-    '[data-editorloaded][data-hydrated] [data-testid="notebook-title"]',
-    {
-      timeout: 50_000,
-    }
-  );
-  await page.locator('[data-testid="notebook-title"]').click({
+  await page.waitForSelector(editorTitleLocator(), {
+    timeout: 50_000,
+  });
+  await page.locator(editorTitleLocator()).click({
     timeout: 50_000,
   });
   if (!isOnPlayground(page)) {
     if (await page.isVisible('text=/clear all/i')) {
       await page.click('text=/clear all/i');
-      await page.locator('[data-testid="notebook-title"]').first().click({
+      await page.locator(editorTitleLocator()).first().click({
         timeout: 50_000,
       });
     }
@@ -31,7 +36,7 @@ export async function waitForEditorToLoad(page: Page) {
 }
 
 export async function waitForNotebookToLoad(page: Page) {
-  await page.waitForSelector('[data-testid="notebook-title"]', {
+  await page.waitForSelector(editorTitleLocator(), {
     timeout: 50_000,
   });
 }
@@ -83,10 +88,10 @@ export async function goToPlayground(page: Page) {
 }
 
 export async function getPadName(page: Page) {
-  await page.waitForSelector('[data-slate-editor] h1');
+  await page.waitForSelector(editorTitleLocator());
   // eslint-disable-next-line playwright/no-element-handle
   const name = await page.$('[data-slate-editor] h1');
-  return (await name!.textContent())!.trim();
+  return (await name?.textContent())?.trim();
 }
 
 export async function focusOnBody(page: Page, paragraphNumber = 0) {
@@ -112,14 +117,4 @@ export async function ControlPlus(page: Page, key: string) {
 
 export async function navigateToNotebook(page: Page, notebookId: string) {
   await page.goto(`/n/pad-title:${notebookId}`);
-}
-
-export async function navigateToNotebookWithClassicUrl(
-  page: Page,
-  notebookId: string,
-  searchParams = ''
-) {
-  await page.goto(
-    `/workspaces/ignoredWorkspaceId/pads/pad-title:${notebookId}${searchParams}`
-  );
 }

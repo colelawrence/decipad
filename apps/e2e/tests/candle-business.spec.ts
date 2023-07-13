@@ -1,7 +1,7 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import stringify from 'json-stringify-safe';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
-import { setUp } from '../utils/page/Editor';
+import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
 import { createWorkspace, importNotebook } from '../utils/src';
 
@@ -40,7 +40,8 @@ test.describe('Use case: building a candle business', () => {
 
     await page.goto(`/n/${notebookId}`);
 
-    await page.waitForSelector('[data-slate-editor] h1');
+    await waitForEditorToLoad(page);
+
     await page.waitForSelector('[data-testid="number-result:$6,913.8"]');
 
     expect(await fetchTable(page, '[id="ddTJXSKZzWh56A8NMCZmM"]')).toBe(

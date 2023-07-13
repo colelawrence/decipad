@@ -294,7 +294,15 @@ Within the app, use Cmd+Shift+F to pop up a feature flag switcher with checkboxe
 
 # Enabling server-side rendering
 
-In dev mode you can enable server-side rendering by starting the dev services like this:
+In dev mode you can enable server-side rendering by:
+
+- Building the server-side lambdas:
+
+```bash
+yarn build:backend:ssr
+```
+
+- Starting the services like this:
 
 ```bash
 yarn serve:all:ssr

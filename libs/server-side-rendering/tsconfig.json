@@ -12,6 +12,7 @@
     { "path": "../utils" },
     { "path": "../backendtypes" },
     { "path": "../fetch" },
-    { "path": "../backend-trace" }
+    { "path": "../backend-trace" },
+    { "path": "../backend-test-sandbox" }
   ]
 }

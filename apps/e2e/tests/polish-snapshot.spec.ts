@@ -1,7 +1,7 @@
 import { BrowserContext, Page, test } from '@playwright/test';
 import stringify from 'json-stringify-safe';
 import polish from '../__fixtures__/007-polish.json';
-import { setUp } from '../utils/page/Editor';
+import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import {
   Timeouts,
   createWorkspace,
@@ -42,7 +42,7 @@ test.describe('Use case: building a candle business', () => {
 
     await page.goto(`/n/${notebookId}`);
 
-    await page.waitForSelector('[data-slate-editor] h1');
+    await waitForEditorToLoad(page);
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.chartsDelay + Timeouts.computerDelay);

@@ -8,8 +8,7 @@ export interface Manifest {
     'main.js': string;
   } & Record<string, string>;
 }
-
-export const loadManifest = async (
+const tryLoadingRemoteManifest = async (
   req: APIGatewayProxyEvent
 ): Promise<Manifest> => {
   const base = baseUrlFromReq(req);
@@ -21,4 +20,20 @@ export const loadManifest = async (
     throw new Error(`Error requesting manifest: ${await res.text()}`);
   }
   return res.json();
+};
+
+export const loadManifest = async (
+  req: APIGatewayProxyEvent
+): Promise<Manifest> => {
+  try {
+    return await tryLoadingRemoteManifest(req);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn('failed loading manifest from remote');
+    return {
+      files: {
+        'main.js': '/static/js/bundle.js',
+      },
+    };
+  }
 };

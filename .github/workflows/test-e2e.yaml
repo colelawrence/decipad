@@ -54,8 +54,6 @@ jobs:
           aws-region: eu-west-2
 
       - name: Build back-end
-        env:
-          NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
         run: yarn build:backend
 
       - name: Run end-to-end and visual regression tests

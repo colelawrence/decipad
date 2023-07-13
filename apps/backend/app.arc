@@ -49,7 +49,7 @@ get /api/import/url
 get /api/clear
 
 # Server-side rendering
-# get /n/:notebookid
+get /n/:notebookid
 
 # Stripe endpoints
 post /api/stripe/webhook

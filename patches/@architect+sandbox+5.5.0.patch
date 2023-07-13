@@ -1,8 +1,17 @@
 diff --git a/node_modules/@architect/sandbox/src/http/invoke-http/index.js b/node_modules/@architect/sandbox/src/http/invoke-http/index.js
-index 147ed9b..6649913 100644
+index 147ed9b..2efe3b0 100644
 --- a/node_modules/@architect/sandbox/src/http/invoke-http/index.js
 +++ b/node_modules/@architect/sandbox/src/http/invoke-http/index.js
-@@ -81,12 +81,12 @@ function end (res, body = '', opts) {
+@@ -73,6 +73,8 @@ module.exports = function invokeHTTP (params) {
+           }
+         }
+       }
++      res.setHeader = () => {};
++      res.end = () => {};
+     })
+   }
+ }
+@@ -81,12 +83,12 @@ function end (res, body = '', opts) {
    let { livereload, ports } = opts
    let MB = 1000 * 1000
    let itBeChonky = 6 * MB // Max Lambda payload size

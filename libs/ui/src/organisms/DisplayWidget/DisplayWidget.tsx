@@ -114,9 +114,9 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           <IconPopover
             color={'Malibu'}
             trigger={
-              <button css={iconWrapperStyles}>
+              <div css={iconWrapperStyles}>
                 <Icon />
-              </button>
+              </div>
             }
             onChangeIcon={saveIcon}
           />

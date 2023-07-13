@@ -37,6 +37,13 @@
         "command": "../../node_modules/.bin/craco start",
         "cwd": "libs/server-side-rendering"
       }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/server-side-rendering"],
+      "options": {
+        "jestConfig": "libs/server-side-rendering/jest.config.js"
+      }
     }
   },
   "tags": []
