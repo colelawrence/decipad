@@ -757,7 +757,7 @@ export default function Templates() {
                 title="Bitcoins, or burgers?"
                 img="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
                 notebook="https://app.decipad.com/n/Bitcoins-or-Burgers-%3AuMSqYhchnox64XIQm4iwe"
-                description="Find how many hambuergers you can buy with your Bitcoin."
+                description="Find how many hamburgers you can buy with your Bitcoin."
                 avatar={avatarSimao}
               />
               {/*
