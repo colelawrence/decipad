@@ -75,7 +75,7 @@ Computes the tangent and inverse tangent of an angle.
 
 ```deci live
 tan(pi)
-==> 0
+==> -0
 ```
 
 ```deci live

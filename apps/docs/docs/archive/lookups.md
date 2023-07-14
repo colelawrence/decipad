@@ -14,7 +14,7 @@ For Financial planning and analysis models you often need to:
 
 You can achieve this using `lookup`and `previous`.
 
-```deci live
+```deci
 Cashflow = {
   Month = [date(2023-01), date(2023-02), date(2023-03), date(2023-04), date(2023-05)]
   Expenses = [500 GBP, 500 GBP, 600 GBP, 700 GBP, 700 GBP]
@@ -31,7 +31,7 @@ Cashflow = {
 
 Here's how to find in what month you turn cashflow positive.
 
-```deci live
+```deci
 Cashflow = {
   Month = [date(2023-01), date(2023-02), date(2023-03), date(2023-04), date(2023-05)]
   Expenses = [500 GBP, 500 GBP, 600 GBP, 700 GBP, 700 GBP]
@@ -47,7 +47,7 @@ lookup(Cashflow, Cashflow.Profit >= 0).Month
 
 Sometimes however you need to keep count of profits, or headcount.
 
-```deci live
+```deci
 InitialInvestment = 100 £
 Cashflow = {
   Month = [date(2023-01) .. date(2023-05) by month]
@@ -59,15 +59,15 @@ Cashflow = {
 ==> {
   Month = [ 2023-01, 2023-02, 2023-03, 2023-04, 2023-05 ],
   Expenses = [ 500 £, 500 £, 600 £, 700 £, 700 £ ],
-  Income = [ 0 £, 400 £, 800 £, 2000 £, 3000 £ ],
   Profit = [ -500 £, -100 £, 200 £, 1300 £, 2300 £ ],
+  Income = [ 0 £, 400 £, 800 £, 2000 £, 3000 £ ],
   BankBalance = [ -400 £, -500 £, -300 £, 1000 £, 3300 £ ]
 }
 ```
 
 You can use the `previous` function and find the month when you break even.
 
-```deci live
+```deci
 InitialInvestment = 100 £
 Cashflow = {
   Month = [date(2023-01) .. date(2023-05) by month]
@@ -83,7 +83,7 @@ lookup(Cashflow, Cashflow.BankBalance >= 0).Month
 
 If you want to calculate how much of a interest free loan or extra investment you need:
 
-```deci live
+```deci
 InitialInvestment = 100 £
 Cashflow = {
   Month = [date(2023-01) .. date(2023-05) by month]

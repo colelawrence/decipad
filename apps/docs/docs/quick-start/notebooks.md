@@ -63,23 +63,6 @@ Card,
               />
             </GridContainer>
 
-<!--
-1. **Add Formulas**: You can use formulas to perform calculations on data, such as adding or multiplying numbers together. Formulas are useful for displaying information in a clear and organized way.
-
-2. **Add Tables**: Tables help you organize data, making it easier to read and understand. You can also use tables to perform calculations using formulas.
-
-3. **Add Charts**: Charts are visual representations of data that can help you understand trends or patterns in the data. You can add charts to display table data in a way that is easy to read and interpret.
-
-4. **Add Data Views**: Data Views allow you to group and pivot your table data in various ways. This feature is particularly useful when dealing with large data sets, as it allows you to quickly identify the information that is most relevant to your analysis.
-
-5. **Drag Numbers Inline to Explain**: You can drag numbers into your text to provide additional context or explanation about how they are used in the formulas. This helps to make your explanations more clear and understandable.
-
-6. **Add Interactive Widgets**: Interactive widgets are elements within the notebook that allow you to input or change data in real-time. You can use these widgets to create interactive notebooks or explore scenarios.
-
-7. **Import Data**: You can easily import data into your notebook from various sources, including CSV and Google Sheets. This allows you to quickly analyze and visualize data without having to manually enter it into your notebook.
-
--->
-
 <br/>
 
 ## Create a New Notebook
@@ -354,67 +337,3 @@ description: `<b>Upload images</b>: Add visual elements and context to your note
 }
 ]}
 />
-
-<!--
-
-
-## Notebook Blocks
-
-On Decipad everything is a block, that you can combine to present and analyze your data.
-
-**Add a Block**:
-
-1. Click the `+` button located next to an empty line.
-2. Select the desired block from the menu that appears.
-   - Alternatively, use the keyboard shortcut by typing `/` on a new empty line, writing the name of the block, and pressing `Enter` to add it to your notebook.
-
-**Move a Block**:
-
-1. Hover over the block you want to move.
-2. Hold the `⸬` button that appears on the left of the block.
-3. Drag the block to the desired position indicated by a blue line.
-4. Release the `⸬` button to place the block in its new position.
-
-**Delete a Block**:
-
-1. Hover over the block you want to delete.
-2. Click the `⸬` button that appears on the left of the block.
-3. Select `Delete` from the options.
-
-**Duplicate a Block**:
-
-1. Hover over the block you want to duplicate.
-2. Click the `⸬` button that appears on the left of the block.
-3. Select `Duplicate` from the options.
-
-**Stack Blocks Side-by-Side**
-
-You can stack widgets, paragraphs, callouts, quotes, and images.
-
-1. Hover over the block you want to stack.
-2. Hold the `⸬` button that appears on the left of the block.
-3. Drag the block to the desired position indicated by a blue line.
-4. When you see a vertical line indicating alignment, release the block.
-
-**Hide a Block from a Reader**
-
-1. Hover over the block you want to hide.
-2. Click the `⸬` button that appears on the left of the block.
-3. Select `Hide from reader` from the options.
-   - The block will fade, and a hidden icon will appear on the left of the block.
-
-
-
-## Manage Notebooks
-
-- **Duplicate your notebook**: Go to your workspace, hover over the notebook you want to duplicate, click the `•••` button on the right, and select `Duplicate`.
-
-- **Archive a notebook**: Go to your workspace, hover over the notebook you want to archive, click the `•••` button on the right, and select `Archive`.
-
-- **Delete a notebook**: Go to your workspace, click on the archived notebooks section, hover over the notebook you want to delete, click the `•••` button on the right, and select `Delete`.
-
-- **Download a notebook**: Go to your workspace, hover over the notebook you want to export, click the `•••` button, and click `Download`. To import a notebook, drag the `.zip` file into any Decipad workspace.
-
-- **Duplicate a notebook**: Make sure you're logged in. Go to the published notebook you want to duplicate, then click `Duplicate Notebook` on the top right. Find examples to duplicate in our [Gallery of examples](/gallery).
-
--->

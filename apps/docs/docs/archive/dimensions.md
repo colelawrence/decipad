@@ -131,12 +131,10 @@ Year = [date(2020) .. date(2025) by year]
 Which we now can use to calculate an interest rate and the price of fuel per year:
 
 ```deci live
-Year = [date(2020) .. date(2025) by year]
-
 BaseFuelPrice = 4 USD/gallon
 
 Fuel = {
-  Year,
+  Year = [date(2020) .. date(2025) by year],
   InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
   Price = round(BaseFuelPrice * InterestRateFromYear, 2)
 }
@@ -155,12 +153,10 @@ Cars = {
   FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon]
 }
 
-Year = [date(2020) .. date(2025) by year]
-
 BaseFuelPrice = 4 USD/gallon
 
 Fuel = {
-  Year,
+  Year = [date(2020) .. date(2025) by year],
   InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
   Price = round(BaseFuelPrice * InterestRateFromYear, 2)
 }

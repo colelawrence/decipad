@@ -18,7 +18,7 @@ import { IdentifiedResult, Program } from '../types';
 import { getBlockFromProgram } from '../utils';
 import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
-import { getExprRef } from '../exprRefs';
+import { getExprRef, toUserlandResult } from '../exprRefs';
 import { identifiedResultForTable } from './identifiedResultForTable';
 import { Computer } from '../computer';
 
@@ -27,7 +27,7 @@ import { Computer } from '../computer';
  - Infer this statement
  - Evaluate the statement if it's not a type error
  */
-const computeStatement = async (
+const internalComputeStatement = async (
   program: Program,
   blockId: string,
   computer: Computer
@@ -122,6 +122,20 @@ const computeStatement = async (
     },
     usedNames: getUsedNames(),
   };
+  return [result, value];
+};
+
+const computeStatement = async (
+  program: Program,
+  blockId: string,
+  computer: Computer
+): Promise<[IdentifiedResult, Value | undefined]> => {
+  const [resultWithAbstractRefs, value] = await internalComputeStatement(
+    program,
+    blockId,
+    computer
+  );
+  const result = toUserlandResult(resultWithAbstractRefs, computer);
   return [result, value];
 };
 

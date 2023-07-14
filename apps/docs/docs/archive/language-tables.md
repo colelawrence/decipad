@@ -176,8 +176,8 @@ Add new columns to a defined table with `.` followed by their name. Their sizes 
  MyTable
 ==> {
   A = [ 1, 2, 3 ],
-  B = [ 4, 5, 6 ],
-  C = [ 7, 8, 9 ]
+  C = [ 7, 8, 9 ],
+  B = [ 4, 5, 6 ]
 }
 ```
 

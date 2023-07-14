@@ -235,6 +235,8 @@ export interface Categories extends BasicNode {
 export interface GenericIdentifier extends BasicNode {
   type: 'generic-identifier';
   args: [name: string];
+  previousVarName?: string;
+  isMissing?: boolean;
 }
 
 export interface GenericList extends BasicNode {

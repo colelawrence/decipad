@@ -524,5 +524,146 @@ describe('abstract refs', () => {
     `);
   });
 
+  it('over works', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      `Cars = {
+        Type = ["suv", "hybrid", "standard"],
+        FuelConsumption = [ 23 miles/gallon, 45 miles/gallon, 28 miles/gallon]
+      }`,
+      `BaseFuelPrice = 4 USD/gallon`,
+      `Fuel = {
+        Year = [date(2020) .. date(2025) by year],
+        InterestRateFromYear = 1.08 ** (Year - date(2020) as years),
+        Price = round(BaseFuelPrice * InterestRateFromYear, 2)
+      }`,
+      `EstimatedUsage = 100000 miles`,
+      `GallonsSpent = (1 / Cars.FuelConsumption) * EstimatedUsage`,
+      `DollarsSpentPerYear = round(Fuel.Price * GallonsSpent)`,
+      `total(DollarsSpentPerYear over Cars)`
+    );
+
+    const results = getDefined(await computer.computeRequest({ program }));
+    const result = await materializeResult(
+      getDefined(results.blockResults['block-6']?.result)
+    );
+    expect(result).toMatchInlineSnapshot(`
+      Object {
+        "type": Object {
+          "cellType": Object {
+            "kind": "number",
+            "unit": Array [
+              Object {
+                "baseQuantity": "USD",
+                "baseSuperQuantity": "currency",
+                "exp": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "known": true,
+                "multiplier": DeciNumber {
+                  "d": 1n,
+                  "infinite": false,
+                  "n": 1n,
+                  "s": 1n,
+                },
+                "unit": "USD",
+              },
+            ],
+          },
+          "indexedBy": "exprRef_block_0",
+          "kind": "column",
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 127608n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 65223n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 104823n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('custom units work', async () => {
+    const computer = new Computer();
+    const program = getIdentifiedBlocks(
+      `flour = 2 kg of flour`,
+      `butter = 150 g of butter`,
+      `ratio = butter / flour`
+    );
+
+    const results = getDefined(await computer.computeRequest({ program }));
+    const result = await materializeResult(
+      getDefined(results.blockResults['block-2']?.result)
+    );
+    expect(result).toMatchInlineSnapshot(`
+      Object {
+        "type": Object {
+          "kind": "number",
+          "unit": Array [
+            Object {
+              "exp": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": -1n,
+              },
+              "known": true,
+              "multiplier": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1000n,
+                "s": 1n,
+              },
+              "quality": "flour",
+              "unit": "g",
+            },
+            Object {
+              "baseQuantity": "mass",
+              "baseSuperQuantity": "mass",
+              "exp": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              "known": true,
+              "multiplier": DeciNumber {
+                "d": 1n,
+                "infinite": false,
+                "n": 1n,
+                "s": 1n,
+              },
+              "quality": "butter",
+              "unit": "g",
+            },
+          ],
+        },
+        "value": DeciNumber {
+          "d": 40n,
+          "infinite": false,
+          "n": 3n,
+          "s": 1n,
+        },
+      }
+    `);
+  });
+
   it.todo('column name with spaces works');
 });

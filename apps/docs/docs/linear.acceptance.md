@@ -258,7 +258,7 @@ round(1/2 pint in ml)
 
 ```deci live
 10 banana/s/meter in banana/meter/s
-==> 10 bananas·meter⁻¹·s⁻¹
+==> 10 bananas per meter/s
 ```
 
 ## [ENG-281](https://linear.app/decipad/issue/ENG-281)
@@ -296,4 +296,11 @@ DatezA = last(Datez.Year)
 DatezFoo = date(2025)
 DatezA == DatezFoo
 ==> true
+```
+
+## dividing with units
+
+```deci live
+1 banana / 2 peach
+==> 0.5 bananas per peach
 ```

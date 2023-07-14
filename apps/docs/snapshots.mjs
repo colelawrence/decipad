@@ -149,7 +149,7 @@ async function testOneFile(resultsContext, fileName, relativeFileName) {
 }
 
 async function runDocTests() {
-  const files = glob.sync('docs/**/retired-features.md', { cwd: docsDir });
+  const files = glob.sync('docs/**/*.md', { cwd: docsDir });
   const codeNodesPerFile = new Map();
   for (const file of files) {
     // eslint-disable-next-line no-await-in-loop

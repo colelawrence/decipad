@@ -21,6 +21,7 @@
     "nrwl.angular-console",
     "esbenp.prettier-vscode",
     "kamikillerto.vscode-colorize",
-    "figma.figma-vscode-extension"
+    "figma.figma-vscode-extension",
+    "stateful.runme"
   ]
 }

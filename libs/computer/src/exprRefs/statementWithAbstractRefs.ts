@@ -34,6 +34,7 @@ export const statementWithAbstractRefs = <T extends AST.Statement>(
         maybeReplaceIdentifier(node);
         break;
       }
+      case 'generic-identifier':
       case 'ref': {
         const originalRef = getIdentifierString(node);
         const refName = toUserlandRef(originalRef);

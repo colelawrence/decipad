@@ -22,6 +22,7 @@ There are two roles you can assign to your teammate:
 
 1. Click the `+` button near your avatar on the top bar of your notebook.
 2. Use the role dropdown to update the permissions.
+3. f
 
 ## Remove Access to Your Notebook
 

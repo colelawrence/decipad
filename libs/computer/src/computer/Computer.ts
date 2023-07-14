@@ -705,12 +705,7 @@ export class Computer {
 
         const computeResults = await computeProgram(goodBlocks, this);
 
-        // console.log(
-        //   'new result',
-        //   this.latestProgram.map((pb) => pb.block?.args[0])
-        // );
-
-        const updates: (IdentifiedError | IdentifiedResult)[] = [];
+        const updates: Array<IdentifiedError | IdentifiedResult> = [];
 
         for (const block of blocks) {
           if (block.type === 'identified-error') {
