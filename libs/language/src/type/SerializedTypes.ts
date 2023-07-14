@@ -12,7 +12,7 @@ type Common = { symbol?: string; node?: AST.Statement | AST.Expression };
 export type Column = {
   readonly kind: 'column';
   readonly indexedBy: string | null;
-  readonly cellType: SerializedType;
+  cellType: SerializedType;
 } & Common;
 export type MaterializedColumn = {
   readonly kind: 'materialized-column';
@@ -23,14 +23,14 @@ export type Table = {
   readonly kind: 'table';
   readonly indexName: string | null;
   readonly delegatesIndexTo?: string | null;
-  readonly columnTypes: SerializedType[];
+  columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;
 export type MaterializedTable = {
   readonly kind: 'materialized-table';
   readonly indexName: string | null;
   readonly delegatesIndexTo?: string | null;
-  readonly columnTypes: SerializedType[];
+  columnTypes: SerializedType[];
   readonly columnNames: string[];
 } & Common;
 export type Row = {
@@ -44,7 +44,7 @@ export type Row = {
 export type Number =
   | ({
       readonly kind: 'number';
-      readonly unit?: Unit[] | null;
+      unit?: Unit[] | null;
       readonly numberError?: 'month-day-conversion';
       readonly numberFormat?: null;
     } & Common)
@@ -77,7 +77,7 @@ export type Function = {
 } & Common;
 export type TypeError = {
   readonly kind: 'type-error';
-  readonly errorCause: ErrSpec;
+  errorCause: ErrSpec;
   readonly errorLocation?: {
     start?: Pos;
     end?: Pos;
