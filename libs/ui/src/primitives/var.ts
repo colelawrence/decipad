@@ -11,6 +11,10 @@ export function cssVarHex<V extends keyof CssVariables>(name: V) {
   return defaults[name];
 }
 
+export function cssVarName<V extends keyof CssVariables>(name: V) {
+  return `${cssVariablePrefix}${name}`;
+}
+
 export function cssVar<V extends keyof CssVariables>(
   name: V
 ): Exclude<CssVariables[V], undefined> {

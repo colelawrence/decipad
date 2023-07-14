@@ -13,6 +13,7 @@ import { Create } from '../../icons';
 import { AddTableRowButton } from '../../molecules';
 import { cssVar, smallScreenQuery } from '../../primitives';
 import { editorLayout, scrollbars } from '../../styles';
+import { slimBlockWidth } from '../../styles/editor-layout';
 import { tableControlWidth } from '../../styles/table';
 import {
   AvailableSwatchColor,
@@ -23,7 +24,7 @@ import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { TableWidth } from '../Table/Table';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
-const totalWidth = '100vw';
+const totalWidth = cssVar('editorWidth');
 const halfTotalWidth = '50vw';
 const wideToSlimBlockWidthDifference = `${
   editorLayout.wideBlockWidth - editorLayout.slimBlockWidth
@@ -32,7 +33,9 @@ const gutterWidth = '60px';
 const leftMargin = `calc(${halfTotalWidth} - ${halfSlimBlockWidth} - ${wideToSlimBlockWidthDifference})`;
 const restWidthBlock = `calc(${totalWidth} - ${leftMargin} - ${gutterWidth} - ${gutterWidth})`;
 
-const scrollRightOffset = `(((100vw - 610px) / 2) + ${tableControlWidth}px)`;
+const scrollRightOffset = `(((${cssVar(
+  'editorWidth'
+)} - 610px) / 2) + ${tableControlWidth}px)`;
 
 const wrapperStyles = css({
   margin: '0',
@@ -44,7 +47,7 @@ const tableCaptionWrapperStyles = css({
   maxWidth: restWidthBlock,
   display: 'inline-block',
   [smallScreenQuery]: {
-    maxWidth: `calc(100vw - ${gutterWidth})`,
+    maxWidth: cssVar('editorWidth'),
     minWidth: '0',
   },
   marginBottom: '8px',
@@ -52,7 +55,9 @@ const tableCaptionWrapperStyles = css({
 
 const tableWrapperTransformStyles = css({
   position: 'relative',
-  transform: `translateX(calc((((100vw - 580px) / 2) + ${tableControlWidth}px) * -1 ))`,
+  transform: `translateX(calc((((${cssVar(
+    'editorWidth'
+  )} - ${slimBlockWidth}px) / 2) + ${tableControlWidth}px) * -1 ))`,
   left: tableControlWidth,
 });
 
@@ -62,14 +67,14 @@ const tableWrapperDraggingStyles = css({
 
 const tableWrapperDefaultStyles = css(
   {
-    width: '100vw',
+    width: cssVar('editorWidth'),
     minWidth: editorLayout.slimBlockWidth,
     overflowY: 'hidden',
     position: 'relative',
     whiteSpace: 'nowrap',
     display: 'flex',
     [smallScreenQuery]: {
-      maxWidth: `calc(100vw - ${gutterWidth})`,
+      maxWidth: cssVar('editorWidth'),
       transform: `translateX(-40px)`,
       minWidth: '0',
     },
@@ -92,7 +97,9 @@ export const tableScroll = css({
 export const tableOverflowStyles = css({
   display: 'inline-block',
   height: '20px',
-  minWidth: `calc(((100vw - 580px) / 2) - ${tableControlWidth}px)`,
+  minWidth: `calc(((${cssVar(
+    'editorWidth'
+  )} - ${slimBlockWidth}px) / 2) - ${tableControlWidth}px)`,
 });
 
 const tableAddColumnButtonWrapperStyles = css({

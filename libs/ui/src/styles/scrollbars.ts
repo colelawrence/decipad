@@ -1,5 +1,8 @@
 import { css } from '@emotion/react';
 import { cssVar } from '../primitives';
+import { slimBlockWidth } from './editor-layout';
+
+export const defaultScrollbarWidth = 8;
 
 export const noTrackScrollbarStyles = css({
   '&:hover': {
@@ -11,13 +14,13 @@ export const noTrackScrollbarStyles = css({
   },
   '&::-webkit-scrollbar': {
     backgroundColor: 'transparent',
-    width: '8px',
-    height: '8px',
+    width: defaultScrollbarWidth,
+    height: defaultScrollbarWidth,
   },
 
   '&::-webkit-scrollbar-thumb': {
     backgroundColor: 'transparent',
-    borderRadius: '8px',
+    borderRadius: defaultScrollbarWidth,
   },
 
   '&::-webkit-scrollbar-track': {
@@ -26,7 +29,7 @@ export const noTrackScrollbarStyles = css({
 
   '&::-ms-scrollbar-thumb': {
     backgroundColor: cssVar('scrollbarColor'),
-    borderRadius: '8px',
+    borderRadius: defaultScrollbarWidth,
   },
 
   '&::-ms-scrollbar-track': {
@@ -44,14 +47,14 @@ export const insideNotebookScrollbarStyles = css({
   },
   '&::-webkit-scrollbar': {
     width: '100px',
-    height: '8px',
+    height: defaultScrollbarWidth,
   },
 
   '&::-webkit-scrollbar-thumb': {
     width: '3px',
     height: '3px',
     backgroundColor: 'transparent',
-    borderRadius: '8px',
+    borderRadius: defaultScrollbarWidth,
   },
 
   '&::-webkit-scrollbar-track': {
@@ -60,14 +63,14 @@ export const insideNotebookScrollbarStyles = css({
   },
 
   '&::-webkit-scrollbar-button': {
-    width: `calc((100vw - 580px)/4)`,
+    width: `calc((100vw - ${slimBlockWidth}px)/4)`,
   },
 
   '&::-ms-scrollbar-thumb': {
     width: '3px',
     height: '3px',
     backgroundColor: cssVar('scrollbarColor'),
-    borderRadius: '8px',
+    borderRadius: defaultScrollbarWidth,
   },
 
   '&::-ms-scrollbar-track': {
@@ -76,7 +79,7 @@ export const insideNotebookScrollbarStyles = css({
   },
 
   '&::-ms-scrollbar-button': {
-    width: `calc((100vw - 580px)/4)`,
+    width: `calc((100vw - ${slimBlockWidth}px)/4)`,
   },
 });
 

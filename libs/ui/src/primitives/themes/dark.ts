@@ -435,4 +435,6 @@ export const theme: CssVariables = {
   chartThemeMulticolorOrange9: grey600.hex,
   chartThemeMulticolorOrange10: orange500.hex,
   chartThemeMulticolorOrange11: red700.hex,
+
+  editorWidth: '100vw',
 };

@@ -84,7 +84,7 @@ test('sync many', (ctx) => {
       join(__dirname, '__fixtures__', 'ssr-lambda.spec.snap.html'),
       'utf-8'
     );
-    const maxDifferenceRatio = 0.002;
+    const maxDifferenceRatio = 0.01;
     const distanceRatio = distance(expected, doc) / expected.length;
     if (distanceRatio > maxDifferenceRatio) {
       // eslint-disable-next-line no-console

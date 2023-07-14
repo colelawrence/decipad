@@ -1,9 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   cssVar,
+  cssVarName,
   mediumShadow,
+  setCssVar,
   shortAnimationDuration,
   smallScreenQuery,
   tabletScreenQuery,
@@ -106,6 +108,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
   sidebarOpen,
 }) => {
   const scrollToRef = useRef<HTMLDivElement>(null);
+  const articleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -126,12 +129,38 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
     };
   }, []);
 
+  const [editorWidth, setEditorWidth] = useState(
+    setCssVar('editorWidth', '100vw')
+  );
+  useEffect(() => {
+    // const refWidth = articleRef.current?.offsetWidth;
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const refWidth = entry.contentRect.width;
+        setEditorWidth(setCssVar('editorWidth', `${refWidth.toString()}px`));
+        const root = document.documentElement;
+        root.style.setProperty(cssVarName('editorWidth'), `${refWidth}px`);
+      }
+    });
+
+    if (articleRef.current) {
+      resizeObserver.observe(articleRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   return (
     <div css={layoutAppContainerStyles}>
       <main css={layoutEditorAndSidebarContainerStyles} ref={scrollToRef}>
         <div css={layoutArticleWrapperStyles}>
-          <article css={layoutNotebookFixedHeightContainerStyles}>
-            <div css={layoutNotebookScrollerStyles}>
+          <article
+            ref={articleRef}
+            css={layoutNotebookFixedHeightContainerStyles}
+          >
+            <div css={css(layoutNotebookScrollerStyles, editorWidth)}>
               {notebookIcon}
               {notebook}
             </div>

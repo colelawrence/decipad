@@ -390,4 +390,6 @@ export interface CssVariables {
   readonly chartThemeMonochromeOrange9: Property.Color;
   readonly chartThemeMonochromeOrange10: Property.Color;
   readonly chartThemeMonochromeOrange11: Property.Color;
+
+  readonly editorWidth: string;
 }

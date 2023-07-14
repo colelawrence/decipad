@@ -27,7 +27,9 @@ const liveTableWrapperStyles = css({
 });
 
 const liveTableOverflowStyles = css({
-  minWidth: `calc(((100vw - 700px) / 2) - (${tableControlWidth}px * -2))`,
+  minWidth: `calc(((${cssVar(
+    'editorWidth'
+  )} - 700px) / 2) - (${tableControlWidth}px * -2))`,
 });
 
 const liveTableEmptyCellStyles = css({
