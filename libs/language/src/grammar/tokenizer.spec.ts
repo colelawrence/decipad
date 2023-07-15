@@ -37,8 +37,7 @@ it('can find numbers', () => {
 });
 
 it('can find numbers with basic thousands separators', () => {
-  expect(testTokenizer('100 000')).toMatchInlineSnapshot(`"number(100000)"`);
-  expect(testTokenizer('100 _ 000')).toMatchInlineSnapshot(`"number(100000)"`);
+  expect(testTokenizer('100_000')).toMatchInlineSnapshot(`"number(100000)"`);
 });
 
 it('accepts some currencies', () => {

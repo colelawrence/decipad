@@ -63,15 +63,15 @@ Its called `tiers` and it slices a number into different levels of tiers, so you
 Here's an example for a sales comission scenario.
 
 ```deci live
-YourSales = $120 000
+YourSales = $120_000
 
 tiers YourSales  {
-   $50 000 : tier * 5%
-  $100 000 : tier * 7%
-  $150 000 : tier * 10%
+   $50_000 : tier * 5%
+  $100_000 : tier * 7%
+  $150_000 : tier * 10%
   rest     : tier * 15%
-  max      : $500 000
-  min      : $5 000
+  max      : $500_000
+  min      : $5_000
 }
 ==> 8000 $
 ```

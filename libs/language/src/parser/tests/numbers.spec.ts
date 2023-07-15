@@ -22,13 +22,8 @@ runTests({
     sourceMap: false,
     ast: [c('*', c('implicit*', r('$'), l(2)), r('Var'))],
   },
-  'space thousands separation': {
-    source: '100 000',
-    sourceMap: false,
-    ast: [l(100_000)],
-  },
   'underscore thousands separation': {
-    source: '100 _ 000',
+    source: '100_000',
     sourceMap: false,
     ast: [l(100_000)],
   },
