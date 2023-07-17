@@ -9,9 +9,10 @@ import {
   DRAG_ITEM_DATAVIEW_COLUMN,
   GoodToDragColumns,
 } from 'libs/editor-table/src/contexts/TableDndContext';
-import { MutableRefObject, useState } from 'react';
+import { MutableRefObject, useState, useMemo } from 'react';
 import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { dndStore } from '@udecode/plate-dnd';
+import { findNodePath } from '@udecode/plate';
 import { useDataViewActions } from './useDataViewActions';
 
 interface CollectedProps {
@@ -33,9 +34,14 @@ export const useDropColumn = (
     'left' | 'right' | undefined
   >(undefined);
 
-  const swapCtx = table && {
+  const tablePath = useMemo(
+    () => table && findNodePath(editor, table),
+    [editor, table]
+  );
+
+  const swapCtx = tablePath && {
     editor,
-    table,
+    tablePath,
     column,
   };
 

@@ -1,5 +1,6 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { findNodePath, getNodeChildren } from '@udecode/plate';
+import { getNodeChildren } from '@udecode/plate';
+import { Path } from 'slate';
 import { DropTargetMonitor } from 'react-dnd';
 import { getHoverDirection } from '.';
 import { DragColumnItem } from '../types';
@@ -8,22 +9,19 @@ export const findSwappableColumns = (
   {
     editor,
     column,
-    table,
+    tablePath,
   }: {
     editor: MyEditor;
     column: MyElement;
-    table: MyElement;
+    tablePath: Path | undefined;
   },
   dragItem: DragColumnItem,
   monitor: DropTargetMonitor,
   hoverDirection?: 'left' | 'right'
 ): [number, number] | null => {
-  const path = findNodePath(editor, table);
+  if (!tablePath) return null;
 
-  if (!path) {
-    return null;
-  }
-  const children = Array.from(getNodeChildren(editor, path));
+  const children = Array.from(getNodeChildren(editor, tablePath));
   const firstRow = children[1];
   if (!firstRow) {
     return null;

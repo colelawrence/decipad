@@ -1,21 +1,22 @@
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import { MyEditor } from '@decipad/editor-types';
 import { findColumnByCell } from '@decipad/editor-table';
+import { Path } from 'slate';
 import { CellDndProps } from '../contexts/TableDndContext';
 
 export const findColumnAndDragItem = (
   editor: MyEditor,
-  table: MyElement,
+  tablePath: Path | undefined,
   { dragItem: dragItemCell, cell }: CellDndProps
 ) => {
-  const column = findColumnByCell(editor, table, cell);
-  const dragItem = findColumnByCell(editor, table, dragItemCell);
+  const column = findColumnByCell(editor, tablePath, cell);
+  const dragItem = findColumnByCell(editor, tablePath, dragItemCell);
 
   if (!column) return;
   if (!dragItem) return;
 
   const swapCtx = {
     editor,
-    table,
+    tablePath,
     column,
   };
 

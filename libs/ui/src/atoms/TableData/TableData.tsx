@@ -14,7 +14,6 @@ import {
   ReactNode,
   forwardRef,
 } from 'react';
-import { ConnectDropTarget } from 'react-dnd';
 import { useMergedRef } from '../../hooks';
 import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
 import { cssVar, p12Medium, setCssVar } from '../../primitives';
@@ -109,7 +108,6 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   value?: string;
   onChangeValue?: ComponentProps<typeof CellEditor>['onChangeValue'];
   unit?: string;
-  dropTarget?: ConnectDropTarget;
   dropDirection?: 'left' | 'right';
   parseError?: string;
   firstChildren?: ReactNode;
@@ -135,7 +133,6 @@ export const TableData = forwardRef(
       selected,
       focused,
       collapsed,
-      dropTarget,
       rowSpan,
       disabled = false,
       type,
@@ -156,7 +153,7 @@ export const TableData = forwardRef(
   ): ReturnType<FC> => {
     const existingRef =
       attributes && 'ref' in attributes ? attributes.ref : undefined;
-    const tdRef = useMergedRef(existingRef, ref, dropTarget);
+    const tdRef = useMergedRef(existingRef, ref);
     const additionalProps = isEditable ? {} : { contentEditable: false };
 
     return (

@@ -1,16 +1,16 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { findNodePath, getNodeChildren } from '@udecode/plate';
+import { getNodeChildren } from '@udecode/plate';
+import { Path } from 'slate';
 import { DragColumnItem } from '../types';
 
 export const findColumnByCell = (
   editor: MyEditor,
-  table: MyElement,
+  tablePath: Path | undefined,
   cell: DragColumnItem
 ): MyElement | null => {
-  const path = findNodePath(editor, table);
-  if (!path) return null;
+  if (!tablePath) return null;
 
-  const children = Array.from(getNodeChildren(editor, path));
+  const children = Array.from(getNodeChildren(editor, tablePath));
   const firstRow = children[1];
 
   if (!firstRow) return null;

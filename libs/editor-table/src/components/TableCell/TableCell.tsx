@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useState } from 'react';
 import { SerializedType } from '@decipad/computer';
 import {
   ELEMENT_TD,
@@ -8,16 +9,21 @@ import {
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
+import { dndStore } from '@udecode/plate-dnd';
 import { useColumnDropDirection } from '../../hooks';
 import { useTableCell } from '../../hooks/useTableCell';
 import { sanitizeColumnDropDirection } from '../../utils';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
+import { TableCellDropColumnEffect } from './TableCellDropColumnEffect';
 
 export const TableCell: PlateComponent = ({
   attributes,
   children,
   element,
 }) => {
+  const [tableDataElement, tableDataRef] =
+    useState<HTMLTableCellElement | null>(null);
+
   if (
     !isElementOfType(element, ELEMENT_TH) &&
     !isElementOfType(element, ELEMENT_TD)
@@ -32,7 +38,6 @@ export const TableCell: PlateComponent = ({
     selected,
     editable,
     disabled,
-    dropTarget,
     selectedCells,
     focused,
     unit,
@@ -49,6 +54,7 @@ export const TableCell: PlateComponent = ({
 
   const editor = useTEditorRef();
   const dropDirection = useColumnDropDirection(editor, element);
+  const isDragging = dndStore.use.isDragging();
 
   if (cellType?.kind === 'table-formula') {
     // IMPORTANT NOTE: do not remove the children elements from rendering.
@@ -78,31 +84,40 @@ export const TableCell: PlateComponent = ({
   }
 
   return (
-    <TableData
-      isEditable={editable}
-      disabled={disabled}
-      width={width}
-      isUserContent
-      as="td"
-      attributes={attributes}
-      dropTarget={dropTarget}
-      selected={selected}
-      focused={selectedCells && selectedCells.length > 1 ? false : focused}
-      collapsed={collapsed}
-      unit={unit}
-      type={cellType}
-      value={nodeText}
-      onChangeValue={onChangeValue}
-      alignRight={isCellAlignRight(cellType)}
-      parseError={showParseError ? parseErrorMessage : undefined}
-      dropDirection={sanitizeColumnDropDirection(dropDirection)}
-      dropdownOptions={{
-        dropdownOptions,
-        dropdownResult,
-      }}
-      element={element}
-    >
-      {children}
-    </TableData>
+    <>
+      {isDragging && (
+        <TableCellDropColumnEffect
+          element={element}
+          dropTarget={tableDataElement}
+        />
+      )}
+
+      <TableData
+        ref={tableDataRef}
+        isEditable={editable}
+        disabled={disabled}
+        width={width}
+        isUserContent
+        as="td"
+        attributes={attributes}
+        selected={selected}
+        focused={selectedCells && selectedCells.length > 1 ? false : focused}
+        collapsed={collapsed}
+        unit={unit}
+        type={cellType}
+        value={nodeText}
+        onChangeValue={onChangeValue}
+        alignRight={isCellAlignRight(cellType)}
+        parseError={showParseError ? parseErrorMessage : undefined}
+        dropDirection={sanitizeColumnDropDirection(dropDirection)}
+        dropdownOptions={{
+          dropdownOptions,
+          dropdownResult,
+        }}
+        element={element}
+      >
+        {children}
+      </TableData>
+    </>
   );
 };

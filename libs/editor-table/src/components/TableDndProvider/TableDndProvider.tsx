@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 
 import {
   findSwappableColumns,
@@ -11,6 +11,8 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { dndStore } from '@udecode/plate-dnd';
+import { findNodePath } from '@udecode/plate';
+import { Path } from 'slate';
 import {
   CellDndProps,
   ColumnDropLine,
@@ -18,6 +20,11 @@ import {
 } from '../../contexts/TableDndContext';
 import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
+
+// TODO: Refactor or replace with alternative solution
+const useMemoPath = <
+  T extends Path | null | undefined
+>(path: T): T => useMemo(() => path, path || []);
 
 export const TableDndProvider = ({
   editor,
@@ -33,9 +40,13 @@ export const TableDndProvider = ({
   );
   const dropLine = columnDropLine?.direction;
 
+  const tablePath = useMemoPath(
+    useMemo(() => findNodePath(editor, table), [editor, table])
+  );
+
   const onCellHover = useCallback(
     (props: CellDndProps) => {
-      const dnd = findColumnAndDragItem(editor, table, props);
+      const dnd = findColumnAndDragItem(editor, tablePath, props);
       if (!dnd) return;
 
       const direction = getHoverDirection(editor, {
@@ -56,14 +67,14 @@ export const TableDndProvider = ({
       );
       if (!columns) return;
 
-      focusEditorForColumnDnd(editor, table, columns);
+      focusEditorForColumnDnd(editor, tablePath, columns);
     },
-    [dropLine, editor, table]
+    [dropLine, editor, tablePath]
   );
 
   const onCellDrop = useCallback(
     (props: CellDndProps) => {
-      const dnd = findColumnAndDragItem(editor, table, props);
+      const dnd = findColumnAndDragItem(editor, tablePath, props);
       if (!dnd) return;
 
       const columns = findSwappableColumns(
@@ -76,7 +87,7 @@ export const TableDndProvider = ({
         onMoveColumn(...columns);
       }
     },
-    [editor, onMoveColumn, table]
+    [editor, onMoveColumn, tablePath]
   );
 
   const onCellDragEnd = useCallback(() => {
@@ -86,12 +97,17 @@ export const TableDndProvider = ({
     setColumnDropLine(null);
   }, [editor]);
 
-  const tableDndContextValue = {
+  const tableDndContextValue = React.useMemo(() => ({
     onCellHover,
     onCellDrop,
     onCellDragEnd,
     columnDropLine,
-  };
+  }), [
+    onCellHover,
+    onCellDrop,
+    onCellDragEnd,
+    columnDropLine,
+  ]);
 
   return (
     <TableDndContext.Provider value={tableDndContextValue}>

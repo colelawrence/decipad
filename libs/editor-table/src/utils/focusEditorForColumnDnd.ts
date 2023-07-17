@@ -1,20 +1,15 @@
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import { MyEditor } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-import {
-  findNodePath,
-  focusEditor,
-  getStartPoint,
-  hasNode,
-} from '@udecode/plate';
+import { focusEditor, getStartPoint, hasNode } from '@udecode/plate';
+import { Path } from 'slate';
 
 export const focusEditorForColumnDnd = (
   editor: MyEditor,
-  table: MyElement,
+  tablePath: Path | undefined,
   columns: [number, number]
 ) => {
   focusEditor(editor);
 
-  const tablePath = findNodePath(editor, table);
   if (!tablePath) return;
 
   const thPath = [...tablePath, 1, columns[1]];

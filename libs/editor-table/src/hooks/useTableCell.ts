@@ -19,14 +19,8 @@ import {
   isCollapsed,
 } from '@udecode/plate';
 import { useCallback, useMemo } from 'react';
-import { ConnectDropTarget } from 'react-dnd';
 import { useSelected } from 'slate-react';
-import {
-  useCellType,
-  useDropColumn,
-  useIsCellSelected,
-  useIsColumnSelected,
-} from '.';
+import { useCellType, useIsCellSelected, useIsColumnSelected } from '.';
 import { useTableStore } from '../contexts/tableStore';
 import { DropdownOption } from '../types';
 import { useDropdownConsumer } from './useDropdownConsumer';
@@ -40,7 +34,6 @@ interface UseTableCellResult {
   editable: boolean;
   disabled: boolean;
   selectedCells: TElement[] | null;
-  dropTarget: ConnectDropTarget;
   formulaResult: Result.Result | undefined;
   unit: string | undefined;
   parseErrorMessage: string | undefined;
@@ -62,8 +55,8 @@ export const useTableCell = (
   const focused = useSelected();
   const collapsed = isCollapsed(useSelection());
   const selectedCells = useTableStore().get.selectedCells();
-  const [, dropTarget] = useDropColumn(editor, element!);
 
+  // FIXME: Causes re-render on unrelated computer update
   const formulaResult = useTableColumnFormulaResultForCell(element);
 
   const width = useTableCellWidth(element);
@@ -144,7 +137,6 @@ export const useTableCell = (
       editable,
       disabled,
       selectedCells,
-      dropTarget,
       formulaResult,
       unit,
       parseErrorMessage,
@@ -159,7 +151,6 @@ export const useTableCell = (
       cellType,
       collapsed,
       disabled,
-      dropTarget,
       dropdownOptions,
       dropdownResult,
       editable,
