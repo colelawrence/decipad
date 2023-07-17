@@ -53,7 +53,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
           table-layout: fixed;
         }
   
-        @media only screen and (max-width: 480px) {
+        @media only screen and (max-width: 520px) {
           br.hidden {
             display: block !important;
           }
@@ -67,7 +67,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
           }
         }
   
-        @media only screen and (max-device-width: 480px) {
+        @media only screen and (max-device-width: 520px) {
           br.hidden {
             display: block !important;
           }
@@ -118,7 +118,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
           border-collapse: collapse;
         }
   
-        @media only screen and (max-width: 480px) {
+        @media only screen and (max-width: 520px) {
           br.hidden {
             display: block !important;
           }
@@ -132,7 +132,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
           }
         }
   
-        @media only screen and (max-device-width: 480px) {
+        @media only screen and (max-device-width: 520px) {
           br.hidden {
             display: block !important;
           }
@@ -603,7 +603,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
                   border-collapse: collapse;
                   margin: auto;
                   width: 100%;
-                  max-width: 480px;
+                  max-width: 520px;
                   min-width: 320px;
                 "
                 class="main-wrap"
@@ -680,7 +680,7 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
                                         font-size: 15px;
                                         line-height: 22px;
                                         overflow: hidden;
-                                        padding: 70px 0px 30px;
+                                        padding: 70px 20px 30px 20px;
                                       "
                                     >
                                       <table
@@ -783,15 +783,19 @@ const authMagiclinkFirst: EmailGenerator<{ url: string }> = ({ url }) => ({
                                         </tbody>
                                       </table>
   
-                                      <p>
-                                        Alternatively, you can use this link:
-                                        <a
+                                      <p style="margin-bottom: 5px">
+                                      Alternatively, you can use this link:
+                                    </p>
+                                    <p style="padding: 12px 16px; background-color: #F5F7FA; border-radius:10px; font-size: 14px;">
+                                      <code
+                                        ><a
                                           href="${url}"
                                           target="_blank"
                                           class="content-link"
                                           >${url}
-                                        </a>
-                                      </p>
+                                        </a></code
+                                      >
+                                    </p>
   
                                       <p>
                                         If you didn't try to log in, you can
