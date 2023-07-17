@@ -1,12 +1,12 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import md5 from 'md5';
-import { FC } from 'react';
+import { ComponentProps, FC } from 'react';
 import Gravatar from 'react-gravatar';
 import {
+  OpaqueColor,
   cssVar,
   grey200,
-  OpaqueColor,
   p12Medium,
   shortAnimationDuration,
   transparency,
@@ -70,7 +70,7 @@ const initialTextStyles = css({
   fontSize: '1.2em',
 });
 
-interface AvatarProps {
+type AvatarProps = {
   readonly name: string;
   readonly email?: string;
   readonly roundedSquare?: boolean;
@@ -81,7 +81,10 @@ interface AvatarProps {
   readonly title?: string;
   readonly onClick?: () => void;
   readonly useSecondLetter?: boolean;
-}
+  readonly gravatarBackdrop?:
+    | ComponentProps<typeof Gravatar>['default']
+    | 'robohash';
+};
 
 const DEFAULT_WORD = 'Abacus';
 
@@ -96,6 +99,7 @@ export const Avatar = ({
   onClick,
   title,
   useSecondLetter = true,
+  gravatarBackdrop = 'blank',
 }: AvatarProps): ReturnType<FC> => {
   const selectedWord =
     name ||
@@ -155,8 +159,11 @@ export const Avatar = ({
                   : { fill: cssVar('iconColorDark') },
               ])}
             >
-              {firstLetter}
-              {useSecondLetter && secondLetter !== '@' && secondLetter}
+              {gravatarBackdrop === 'blank' && firstLetter}
+              {gravatarBackdrop === 'blank' &&
+                useSecondLetter &&
+                secondLetter !== '@' &&
+                secondLetter}
             </text>
           </svg>
         </div>
@@ -165,7 +172,7 @@ export const Avatar = ({
         <Gravatar
           md5={md5(email, { encoding: 'binary' })}
           style={{ borderRadius: roundedSquare ? '8px' : '50%', zIndex: 2 }}
-          default={'blank'}
+          default={gravatarBackdrop as any} // bug in type definitions, robohash is allowed see https://en.gravatar.com/site/implement/images/#default-image
         />
       </div>
     </div>

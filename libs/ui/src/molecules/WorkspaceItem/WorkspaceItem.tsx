@@ -69,7 +69,7 @@ export const WorkspaceItem = ({
     <NavigationItem
       href={workspacePath.$}
       onLinkClick={handleNavigate}
-      icon={<Avatar name={name} />}
+      icon={<Avatar name={name} email={name} gravatarBackdrop={'robohash'} />}
       iconStyles={avatarStyles}
     >
       <div css={gridStyles}>

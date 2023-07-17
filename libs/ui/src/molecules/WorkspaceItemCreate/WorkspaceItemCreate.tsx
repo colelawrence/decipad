@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
-import { Avatar, NavigationItem } from '../../atoms';
-import { cssVar, grey200, p14Medium } from '../../primitives';
+import { NavigationItem } from '../../atoms';
+import { Plus } from '../../icons';
+import { cssVar, p14Medium } from '../../primitives';
 
 type WorkspaceItemCreateProps = {
   readonly onClick: () => void;
@@ -12,7 +13,11 @@ export const WorkspaceItemCreate: React.FC<WorkspaceItemCreateProps> = ({
   return (
     <NavigationItem
       onClick={onClick}
-      icon={<Avatar name="+" cursorColor={grey200} />}
+      icon={
+        <span css={addWorkspacePlusStyles}>
+          <Plus />
+        </span>
+      }
       iconStyles={avatarStyles}
     >
       <div data-testid="create-workspace-button" css={textStyle}>
@@ -36,4 +41,10 @@ const textStyle = css(p14Medium, {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   color: cssVar('weakTextColor'),
+});
+
+const addWorkspacePlusStyles = css({
+  height: avatarSize,
+  width: avatarSize,
+  padding: 4,
 });

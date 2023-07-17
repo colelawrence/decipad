@@ -19,15 +19,6 @@ it('shows the workspace name', () => {
   expect(screen.getByText('Some Workspace')).toBeVisible();
 });
 
-it('renders an avatar with the initial of the workspace', () => {
-  render(
-    <DndProvider backend={HTML5Backend}>
-      <WorkspaceItem {...props} name="Some Workspace" />
-    </DndProvider>
-  );
-  expect(screen.getByLabelText(/avatar/i)).toHaveTextContent(/^so$/i);
-});
-
 it.each([
   [0, 'members'],
   [1, 'member'],
