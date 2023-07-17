@@ -6,8 +6,8 @@ import { css } from '@emotion/react';
 import React, { ComponentProps, useCallback, useState } from 'react';
 import { Button, InputField } from '../../atoms';
 import { People } from '../../icons';
-import { ClosableModal } from '../../organisms';
 import { ClosableModalHeader } from '../../molecules';
+import { ClosableModal } from '../../organisms';
 import { cssVar, p13Medium, p13Regular, setCssVar } from '../../primitives';
 
 type EditWorkspaceModalProps = {
@@ -136,6 +136,7 @@ const headingStyles = css(
 const modalStyles = css({
   display: 'grid',
   rowGap: '24px',
+  minWidth: '300px',
 });
 
 const membersStyle = css({
