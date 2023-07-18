@@ -21,7 +21,7 @@ export const UploadFile: FC = () => {
     useFileUploadStore();
 
   const insertFunctionForFileType = useCallback(
-    (editor: MyEditor, path: Path, url: string) => {
+    (editor: MyEditor, path: Path, url: string, fileName?: string) => {
       switch (fileType) {
         case 'image':
           return insertImageBelow(editor, path, url);
@@ -31,6 +31,7 @@ export const UploadFile: FC = () => {
             editor,
             url,
             path,
+            fileName,
             source: 'csv',
           });
         default:
@@ -47,14 +48,14 @@ export const UploadFile: FC = () => {
   const toast = useToast();
 
   const insertByUrl = useCallback(
-    (fileUrl: string): void => {
+    (fileUrl: string, fileName?: string): void => {
       const { selection } = editor;
       const point =
         selection?.anchor ??
         getStartPoint(editor, [editor.children.length - 1]);
       const path = point.path.slice(0, 1);
 
-      insertFunctionForFileType(editor, path, fileUrl);
+      insertFunctionForFileType(editor, path, fileUrl, fileName);
     },
     [editor, insertFunctionForFileType]
   );
@@ -65,7 +66,7 @@ export const UploadFile: FC = () => {
       const response = await axios.post(targetURL, file);
       const url = response.data;
 
-      insertByUrl(url);
+      insertByUrl(url, file.name);
     },
     [arcEndpoint, editor?.id, insertByUrl]
   );
@@ -135,7 +136,7 @@ export const UploadFile: FC = () => {
                     'warning'
                   );
                 }
-                insertByUrl(response.url);
+                insertByUrl(response.url, fileInfo.name);
               })
               .catch((err) => {
                 console.error(err);

@@ -2,15 +2,10 @@
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
-import { MenuItem, SegmentButtons, TextAndIconButton } from '../../atoms';
+import { SegmentButtons, TextAndIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { FormulasDrawer } from '../../organisms';
-import {
-  markTypeIcons,
-  markTypeNames,
-  markTypes,
-  shapes,
-} from '../../organisms/PlotParams/PlotParams';
+import { markTypes } from '../../organisms/PlotParams/PlotParams';
 import { display, p14Regular, placeholderOpacity } from '../../primitives';
 import { codeBlock } from '../../styles';
 import {
@@ -20,8 +15,8 @@ import {
 } from '../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { bubbleColors } from '../../utils/bubbleColors';
+import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { IconPopover } from '../IconPopover/IconPopover';
-import { MenuList } from '../MenuList/MenuList';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -69,7 +64,7 @@ const tableIconSizeStyles = css({
 const buttonRowStyles = css({
   display: 'flex',
   flexDirection: 'row',
-  gap: '4px',
+  gap: '6px',
   alignItems: 'center',
 });
 
@@ -194,7 +189,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             {caption}
           </div>
         </div>
-        <div css={buttonRowStyles} contentEditable={false}>
+        <div css={css(buttonRowStyles, hideOnPrint)} contentEditable={false}>
           {hideAddDataViewButton || readOnly ? null : (
             <TextAndIconButton
               text="Pivot view"
@@ -207,41 +202,9 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           {hideAddDataViewButton ||
           readOnly ||
           !onAddChartViewButtonPress ? null : (
-            <MenuList
-              root
-              dropdown
-              trigger={
-                <button
-                  data-testid="create-chart-from-table-button"
-                  css={css([hideOnPrint])}
-                >
-                  <TextAndIconButton text="Chart" iconPosition="left">
-                    <icons.Plot />
-                  </TextAndIconButton>
-                </button>
-              }
-            >
-              {markTypes.map((mark) => {
-                const type = shapes.includes(mark) ? 'point' : mark;
-
-                return (
-                  <MenuItem
-                    key={type}
-                    onSelect={() => {
-                      onAddChartViewButtonPress(mark);
-                    }}
-                    icon={markTypeIcons[mark]}
-                  >
-                    <div
-                      css={{ minWidth: '160px' }}
-                      data-testid={`create-chart:${mark}`}
-                    >
-                      {markTypeNames[mark]}
-                    </div>
-                  </MenuItem>
-                );
-              })}
-            </MenuList>
+            <CreateChartMenu
+              onAddChartViewButtonPress={onAddChartViewButtonPress}
+            />
           )}
           <div css={wrapperStyle}>
             {showToggleCollapsedButton &&

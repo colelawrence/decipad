@@ -22,7 +22,7 @@ on:
 
 jobs:
   build:
-    timeout-minutes: 60
+    timeout-minutes: 35
     runs-on: buildjet-4vcpu-ubuntu-2204
 
     strategy:

@@ -1173,7 +1173,7 @@ describe('Deci number', () => {
 
   test('toString', () => {
     expect(fromNumber(-10, 15).toString()).toMatchInlineSnapshot(`"-0.(6)"`);
-    expect(fromNumber(undefined).toString()).toMatchInlineSnapshot(`"?"`);
+    expect(fromNumber(undefined).toString()).toMatchInlineSnapshot(`"—"`);
     expect(fromNumber(Infinity).toString()).toMatchInlineSnapshot(`"∞"`);
     expect(fromNumber(-Infinity).toString()).toMatchInlineSnapshot(`"-∞"`);
   });
@@ -1182,14 +1182,14 @@ describe('Deci number', () => {
     expect(fromNumber(-10, 15).toLatex()).toMatchInlineSnapshot(
       `"-\\\\frac{2}{3}"`
     );
-    expect(fromNumber(undefined).toLatex()).toMatchInlineSnapshot(`"?"`);
+    expect(fromNumber(undefined).toLatex()).toMatchInlineSnapshot(`"—"`);
     expect(fromNumber(Infinity).toLatex()).toMatchInlineSnapshot(`"∞"`);
     expect(fromNumber(-Infinity).toLatex()).toMatchInlineSnapshot(`"-∞"`);
   });
 
   test('toFraction', () => {
     expect(fromNumber(-10, 15).toFraction()).toMatchInlineSnapshot(`"-2/3"`);
-    expect(fromNumber(undefined).toFraction()).toMatchInlineSnapshot(`"?"`);
+    expect(fromNumber(undefined).toFraction()).toMatchInlineSnapshot(`"—"`);
     expect(fromNumber(Infinity).toFraction()).toMatchInlineSnapshot(`"∞"`);
     expect(fromNumber(-Infinity).toFraction()).toMatchInlineSnapshot(`"-∞"`);
   });

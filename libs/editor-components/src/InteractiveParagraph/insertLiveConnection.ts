@@ -30,12 +30,13 @@ const nextBlock = (path: Path): Path => {
 };
 
 export interface InsertLiveConnectionProps {
-  computer: Computer;
-  editor: MyEditor;
-  source?: ImportElementSource;
-  url?: string;
-  identifyIslands?: boolean;
-  path?: Path;
+  readonly computer: Computer;
+  readonly editor: MyEditor;
+  readonly source?: ImportElementSource;
+  readonly fileName?: string;
+  readonly url?: string;
+  readonly identifyIslands?: boolean;
+  readonly path?: Path;
 }
 
 /**
@@ -47,6 +48,7 @@ const justInsertLiveConnection = async ({
   url,
   path,
   computer,
+  fileName,
 }: InsertLiveConnectionProps): Promise<string | undefined> => {
   if (source === 'decipad' && url) {
     const { docId } = getURLComponents(url);
@@ -68,7 +70,9 @@ const justInsertLiveConnection = async ({
   }
 
   const name = computer.getAvailableIdentifier(
-    generateVarName(isFlagEnabled('SILLY_NAMES'))
+    fileName
+      ? fileName.replace(/[^A-Za-z0-9_]/g, '_').slice(0, 10)
+      : generateVarName(isFlagEnabled('SILLY_NAMES'))
   );
   const liveConnEl: LiveConnectionElement = {
     id: nanoid(),

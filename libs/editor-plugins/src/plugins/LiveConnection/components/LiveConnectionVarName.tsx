@@ -1,5 +1,10 @@
-import { insertLiveQueryBelow } from '@decipad/editor-components';
+import {
+  insertDataViewBelow,
+  insertLiveQueryBelow,
+  insertPlotBelow,
+} from '@decipad/editor-components';
 
+import { getExprRef } from '@decipad/computer';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_CONNECTION,
@@ -19,11 +24,19 @@ import {
   ImportTableFirstRowControls,
   TableButton,
   IntegrationBlock as UIIntegrationBlock,
+  icons,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { TNodeEntry, findNodePath, getParentNode } from '@udecode/plate';
+import {
+  TNodeEntry,
+  findNodePath,
+  getNodeChild,
+  getNodeString,
+  getParentNode,
+} from '@udecode/plate';
 import { Hide, Show } from 'libs/ui/src/icons';
-import { useCallback, useMemo, useState } from 'react';
+import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
+import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
@@ -39,6 +52,11 @@ const tableButtonWrapperStyles = css({
   marginTop: '-5px',
   marginLeft: '-5px',
 });
+
+type IntegrationButtons = Pick<
+  ComponentProps<typeof UIIntegrationBlock>,
+  'actionButtons'
+>;
 
 export const LiveConnectionVarName: PlateComponent = ({
   element,
@@ -110,6 +128,45 @@ export const LiveConnectionVarName: PlateComponent = ({
     }
   }, [computer, editor, parent, parentElem.id, parentPath]);
 
+  const onAddDataViewButtonPress = useCallback(() => {
+    if (!parent) {
+      return;
+    }
+
+    const [tableElement] = parent;
+
+    return (
+      path &&
+      insertDataViewBelow(
+        editor,
+        parentPath,
+        tableElement.id,
+        getNodeString(getNodeChild(element, 0))
+      )
+    );
+  }, [editor, element, parent, parentPath, path]);
+
+  const onAddChartViewButtonPress = useCallback(
+    (markType: MarkType) => {
+      if (!parent) {
+        return;
+      }
+
+      const [tableElement] = parent;
+
+      return (
+        path &&
+        insertPlotBelow(
+          editor,
+          parentPath,
+          markType,
+          getExprRef(tableElement.id)
+        )
+      );
+    },
+    [editor, parent, parentPath, path]
+  );
+
   const {
     result: { loading, result },
     error,
@@ -136,6 +193,29 @@ export const LiveConnectionVarName: PlateComponent = ({
   const prettySourceName: string = sourceName
     ? ImportElementSourcePretty[sourceName]
     : 'Live';
+
+  const canBePlotted =
+    result?.type.kind === 'materialized-column' ||
+    result?.type.kind === 'column' ||
+    result?.type.kind === 'table' ||
+    result?.type.kind === 'materialized-table';
+
+  const { actionButtons }: IntegrationButtons = {
+    actionButtons: canBePlotted
+      ? [
+          {
+            type: 'button',
+            text: 'Pivot view',
+            onClick: onAddDataViewButtonPress,
+            icon: <icons.TableRows />,
+          },
+          {
+            type: 'chart',
+            onClick: onAddChartViewButtonPress,
+          },
+        ]
+      : [],
+  };
   return (
     <div {...attributes} css={captionWrapperStyles}>
       <UIIntegrationBlock
@@ -144,6 +224,7 @@ export const LiveConnectionVarName: PlateComponent = ({
         children={children}
         text={prettySourceName}
         type={loading ? 'pending' : 'table'}
+        actionButtons={actionButtons}
         buttons={[
           {
             children: showData ? <Hide /> : <Show />,

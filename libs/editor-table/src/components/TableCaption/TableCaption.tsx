@@ -1,5 +1,9 @@
 import { getExprRef } from '@decipad/computer';
-import { insertPlotBelow } from '@decipad/editor-components';
+import {
+  insertDataViewBelow,
+  insertPlotBelow,
+} from '@decipad/editor-components';
+import { useEnsureValidVariableName } from '@decipad/editor-hooks';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -10,14 +14,12 @@ import {
 import { assertElementType, getAboveNodeSafe } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditableTableCaption, Tooltip } from '@decipad/ui';
-import { useEnsureValidVariableName } from '@decipad/editor-hooks';
 import {
   findNodePath,
   getNodeChild,
   getNodeString,
   isElement,
 } from '@udecode/plate';
-import { insertDataViewBelow } from 'libs/editor-components/src/utils/data-view';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import { useCallback } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';

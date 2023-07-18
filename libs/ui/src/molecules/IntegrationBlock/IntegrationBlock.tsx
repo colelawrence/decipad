@@ -6,21 +6,29 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { LiveCode, SegmentButtons, TextAndIconButton } from '../../atoms';
 import { CodeResult } from '../../organisms';
+import { MarkType } from '../../organisms/PlotParams/PlotParams';
 import { cssVar, p12Medium } from '../../primitives';
 import {
   hideOnPrint,
   integrationBlockStyles,
 } from '../../styles/editor-layout';
+import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 
-interface IntegrationButton {
-  readonly onClick: () => void;
-  readonly text: string;
-  readonly icon?: ReactNode;
-}
+type IntegrationButton =
+  | {
+      readonly type: 'button';
+      readonly onClick: () => void;
+      readonly text: string;
+      readonly icon?: ReactNode;
+    }
+  | {
+      readonly type: 'chart';
+      readonly onClick: (mark: MarkType) => void;
+    };
 
 type IntegrationBlockProps = {
   readonly children: ReactNode;
-  readonly actionButton?: IntegrationButton;
+  readonly actionButtons?: IntegrationButton[];
   readonly displayResults: boolean;
   readonly error?: string;
   readonly result?: Result.Result;
@@ -51,7 +59,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   error,
   text,
   buttons,
-  actionButton,
+  actionButtons = [],
   displayResults,
   result,
   firstTableRowControls,
@@ -73,16 +81,26 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
         <div contentEditable={false}>{integrationChildren}</div>
 
         <div contentEditable={false} css={controlStyles}>
-          {readOnly || !actionButton ? (
+          {readOnly || actionButtons.length === 0 ? (
             <div css={{ visibility: 'hidden' }} />
           ) : (
-            <TextAndIconButton
-              text={actionButton.text}
-              iconPosition="left"
-              onClick={actionButton.onClick}
-            >
-              {actionButton.icon}
-            </TextAndIconButton>
+            actionButtons.map((button, i) => {
+              return button.type === 'chart' ? (
+                <CreateChartMenu
+                  key={`create-chart-button-integration-block-${i}`}
+                  onAddChartViewButtonPress={button.onClick}
+                />
+              ) : (
+                <TextAndIconButton
+                  key={button.text}
+                  text={button.text}
+                  iconPosition="left"
+                  onClick={button.onClick}
+                >
+                  {button.icon}
+                </TextAndIconButton>
+              );
+            })
           )}
           <SegmentButtons buttons={buttons} />
         </div>

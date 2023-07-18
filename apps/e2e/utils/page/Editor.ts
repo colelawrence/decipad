@@ -20,16 +20,16 @@ export const editorTitleLocator = (): string => {
 
 export async function waitForEditorToLoad(page: Page) {
   await page.waitForSelector(editorTitleLocator(), {
-    timeout: 50_000,
+    timeout: Timeouts.maxSelectorWaitTime,
   });
   await page.locator(editorTitleLocator()).click({
-    timeout: 50_000,
+    timeout: Timeouts.maxSelectorWaitTime,
   });
   if (!isOnPlayground(page)) {
     if (await page.isVisible('text=/clear all/i')) {
       await page.click('text=/clear all/i');
       await page.locator(editorTitleLocator()).first().click({
-        timeout: 50_000,
+        timeout: Timeouts.maxSelectorWaitTime,
       });
     }
   }
@@ -37,7 +37,7 @@ export async function waitForEditorToLoad(page: Page) {
 
 export async function waitForNotebookToLoad(page: Page) {
   await page.waitForSelector(editorTitleLocator(), {
-    timeout: 50_000,
+    timeout: Timeouts.maxSelectorWaitTime,
   });
 }
 

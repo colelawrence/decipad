@@ -59,5 +59,5 @@ it('formats cell value according to the column type', () => {
       },
       'invalid text'
     )
-  ).toBe('? bananas');
+  ).toBe('— bananas');
 });

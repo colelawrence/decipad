@@ -13,7 +13,7 @@ import { devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   testDir: './tests',
   /* Maximum time one test can run for. */
-  timeout: 90_000,
+  timeout: 60_000,
 
   expect: {
     /**
@@ -41,7 +41,7 @@ const config: PlaywrightTestConfig = {
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 20_000,
+    actionTimeout: 10_000,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: process.env.CI ? undefined : 'retain-on-failure',
@@ -63,54 +63,7 @@ const config: PlaywrightTestConfig = {
         },
       },
     },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: {
-    //     ...devices['Pixel 5'],
-    //   },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: {
-    //     ...devices['iPhone 12'],
-    //   },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: {
-    //     channel: 'msedge',
-    //   },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: {
-    //     channel: 'chrome',
-    //   },
-    // },
   ],
-
-  /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  // outputDir: 'test-results/',
-
-  /* Run your local dev server before starting the tests */
-  // webServer: [
-  //   {
-  //     command: 'nx serve frontend',
-  //     port: 3000,
-  //     timeout: 120 * 1000,
-  //     reuseExistingServer: !process.env.CI,
-  //   },
-  //   {
-  //     command: 'nx serve backend',
-  //     port: 3333,
-  //     timeout: 120 * 1000,
-  //     reuseExistingServer: !process.env.CI,
-  //   },
-  // ],
 };
 
 export default config;

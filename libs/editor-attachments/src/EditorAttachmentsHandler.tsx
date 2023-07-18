@@ -4,6 +4,7 @@ import {
   insertLiveConnection,
   validateItemAndGetFile,
 } from '@decipad/editor-components';
+import { SubscriptionPlan } from '@decipad/editor-types';
 import { insertImageBelow } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';
 import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
@@ -20,16 +21,15 @@ import {
 } from '@udecode/plate';
 import { dndStore as plateDndStore } from '@udecode/plate-dnd';
 import axios, { AxiosProgressEvent } from 'axios';
-import { SubscriptionPlan } from '@decipad/editor-types';
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { Path } from 'slate';
+import { isServerSideRendering } from '../../support/src/isServerSideRendering';
 import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { attachGenericFile } from './attachGeneric';
 import { maybeSourceFromFileType } from './maybeSourceFromFileType';
-import { isServerSideRendering } from '../../support/src/isServerSideRendering';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,
@@ -122,6 +122,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
             editor,
             url,
             source: maybeSourceFromFileType(file.type) ?? undefined,
+            fileName: file.name,
           });
         }
       });

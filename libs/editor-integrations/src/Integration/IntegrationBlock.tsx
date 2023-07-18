@@ -1,4 +1,9 @@
-import { DraggableBlock } from '@decipad/editor-components';
+import { getExprRef } from '@decipad/computer';
+import {
+  DraggableBlock,
+  insertDataViewBelow,
+  insertPlotBelow,
+} from '@decipad/editor-components';
 import { useNodePath } from '@decipad/editor-hooks';
 import {
   ELEMENT_INTEGRATION,
@@ -15,10 +20,13 @@ import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import {
   AnimatedIcon,
   IntegrationBlock as UIIntegrationBlock,
+  icons,
 } from '@decipad/ui';
 import { getPreviousNode, setNodes } from '@udecode/plate';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
+import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import {
+  ComponentProps,
   ReactNode,
   createContext,
   useCallback,
@@ -51,6 +59,10 @@ function getIntegrationComponent(
   }
 }
 
+type IntegrationButtons = Pick<
+  ComponentProps<typeof UIIntegrationBlock>,
+  'actionButtons'
+>;
 type ContextActions = 'refresh' | 'show-source';
 const IntegrationBlockContext = createContext<
   Subject<ContextActions> | undefined
@@ -131,6 +143,53 @@ export const IntegrationBlock: PlateComponent = ({
     [editor, element.typeMappings, path]
   );
 
+  const onAddDataViewButtonPress = useCallback(() => {
+    return (
+      path &&
+      insertDataViewBelow(editor, path, element.id, getExprRef(element.id))
+    );
+  }, [editor, element, path]);
+
+  const onAddChartViewButtonPress = useCallback(
+    (markType: MarkType) => {
+      return (
+        path && insertPlotBelow(editor, path, markType, getExprRef(element.id))
+      );
+    },
+    [editor, element.id, path]
+  );
+
+  const canBePlotted =
+    resultType?.kind === 'materialized-column' ||
+    resultType?.kind === 'column' ||
+    resultType?.kind === 'table' ||
+    resultType?.kind === 'materialized-table';
+  const editButton = {
+    type: 'button' as 'button',
+    text: 'Edit',
+    onClick: () => {
+      observable.current.next('show-source');
+      removeFocusFromAllBecauseSlate();
+    },
+    icon: <icons.Frame />,
+  };
+  const { actionButtons }: IntegrationButtons = {
+    actionButtons: canBePlotted
+      ? [
+          editButton,
+          {
+            type: 'button',
+            text: 'Pivot view',
+            onClick: onAddDataViewButtonPress,
+            icon: <icons.TableRows />,
+          },
+          {
+            type: 'chart',
+            onClick: onAddChartViewButtonPress,
+          },
+        ]
+      : [editButton],
+  };
   return (
     <IntegrationBlockContext.Provider value={observable.current}>
       <DraggableBlock
@@ -149,13 +208,7 @@ export const IntegrationBlock: PlateComponent = ({
           children={children} // text input
           onChangeColumnType={onChangeColumnType}
           integrationChildren={specificIntegration}
-          actionButton={{
-            text: 'View source',
-            onClick: () => {
-              observable.current.next('show-source');
-              removeFocusFromAllBecauseSlate();
-            },
-          }}
+          actionButtons={actionButtons}
           buttons={[
             {
               children: <AnimatedIcon icon={<Refresh />} animated={animated} />,

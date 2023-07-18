@@ -1,3 +1,4 @@
+import { insertDataViewBelow } from '@decipad/editor-components';
 import {
   ELEMENT_DATA_VIEW_CAPTION,
   ELEMENT_TABLE,
@@ -14,7 +15,6 @@ import {
   getNodeString,
   isElement,
 } from '@udecode/plate';
-import { insertDataViewBelow } from 'libs/editor-components/src/utils/data-view';
 import { useCallback } from 'react';
 
 export const DataViewCaption: PlateComponent = ({

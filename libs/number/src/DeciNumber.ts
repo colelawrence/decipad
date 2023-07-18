@@ -406,4 +406,4 @@ export const UNDEFINED = N(undefined);
 export const ZERO = N(0);
 export const ONE = N(1);
 export const TWO = N(2);
-export const UNKNOWN_ASSTRING = '?';
+export const UNKNOWN_ASSTRING = '—';

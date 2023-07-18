@@ -13,4 +13,5 @@ export const Timeouts = {
   menuOpenDelay: 200,
   liveBlockDelay: 200,
   redirectDelay: 2000,
+  maxSelectorWaitTime: 30_000,
 };

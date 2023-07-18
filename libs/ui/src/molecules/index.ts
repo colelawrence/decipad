@@ -19,6 +19,7 @@ export { CodeVariableTooltip } from './CodeVariableTooltip/CodeVariableTooltip';
 export { CollabAccessDropdown } from './CollabAccessDropdown/CollabAccessDropdown';
 export { CollabMembershipDropdown } from './CollabMembershipDropdown/CollabMembershipDropdown';
 export { ColorThemeSwitch } from './ColorThemeSwitch/ColorThemeSwitch';
+export { CreateChartMenu } from './CreateChartMenu/CreateChartMenu';
 export { DataViewColumnMenu } from './DataViewColumnMenu/DataViewColumnMenu';
 export { DataViewMenu } from './DataViewMenu/DataViewMenu';
 export { DataViewRow } from './DataViewRow/DataViewRow';
