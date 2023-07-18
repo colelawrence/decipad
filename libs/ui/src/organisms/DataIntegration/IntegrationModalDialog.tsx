@@ -54,7 +54,7 @@ export const IntegrationModalDialog: FC<IntegrationModalDialogProps> = ({
             </span>
             <span>
               <span css={p12Medium}>
-                We currently support CSV or XLS up to a file size of 10MB.
+                We currently support CSV or XLS up to a file size of 500kB.
               </span>
             </span>
           </div>
@@ -68,7 +68,7 @@ export const IntegrationModalDialog: FC<IntegrationModalDialogProps> = ({
         type="annotationWarning"
         icon={<AnnotationWarning />}
         title="Current Data Import Limits"
-        message="We support data up to a maximum size of 200.000 cells (e.g. 10.000 rows by 20 columns, or 20.000 rows by 10 columns, etc.). If you want to import a larger dataset, contact us directly."
+        message="We support data up to a maximum size of 10.000 cells (e.g. 1.000 rows by 10 columns, or 10 rows by 1.000 columns, etc.). If you want to import a larger dataset, contact us directly."
         overrideTextColor={true}
       />
     </div>

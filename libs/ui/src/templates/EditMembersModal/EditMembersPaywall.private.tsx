@@ -38,8 +38,8 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
           <Section>
             <SubHeading>Data Integrations</SubHeading>
             <List>
-              <li>CSV Uploads: up to 30k cells</li>
-              <li>Media Uploads: up to 10MB</li>
+              <li>CSV Uploads: up to 10k cells</li>
+              <li>Media Uploads: up to 5MB</li>
               <li>Live Connections: 500 queries / month</li>
             </List>
           </Section>

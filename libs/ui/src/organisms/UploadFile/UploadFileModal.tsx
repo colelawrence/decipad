@@ -1,9 +1,4 @@
-import {
-  FileType,
-  MAX_UPLOAD_FILE_SIZE,
-  SubscriptionPlan,
-} from '@decipad/editor-types';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { FileType, MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { isValidURL } from '@decipad/ui';
 import { css } from '@emotion/react';
@@ -26,27 +21,24 @@ interface FileCfg {
   accept?: string;
 }
 
-const getConfigForFileType = (
-  fileType: FileType | undefined,
-  plan: SubscriptionPlan
-): FileCfg => {
+const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
   switch (fileType) {
     case 'image':
       return {
         title: 'Insert image',
-        maxSize: MAX_UPLOAD_FILE_SIZE.image[plan],
+        maxSize: MAX_UPLOAD_FILE_SIZE.image,
         accept: 'image/jpeg, image/png, image/gif',
       };
     case 'media':
       return {
         title: 'Insert video',
-        maxSize: MAX_UPLOAD_FILE_SIZE.media[plan],
+        maxSize: MAX_UPLOAD_FILE_SIZE.media,
         accept: 'video/*',
       };
     case 'data':
       return {
         title: 'Upload a data file',
-        maxSize: MAX_UPLOAD_FILE_SIZE.data[plan],
+        maxSize: MAX_UPLOAD_FILE_SIZE.data,
         accept: '.csv, application/vnd.apache.arrow',
       };
     default:
@@ -59,10 +51,7 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   onCancel,
   onUpload,
 }) => {
-  const { workspaceInfo } = useCurrentWorkspaceStore();
-  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
-
-  const { title, maxSize, accept } = getConfigForFileType(fileType, plan);
+  const { title, maxSize, accept } = getConfigForFileType(fileType);
   const MAX_LABEL = `${maxSize / 1_000_000}MB`;
 
   const [activeTab, setActiveTab] = useState('upload');

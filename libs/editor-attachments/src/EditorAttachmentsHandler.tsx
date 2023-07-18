@@ -4,10 +4,9 @@ import {
   insertLiveConnection,
   validateItemAndGetFile,
 } from '@decipad/editor-components';
-import { SubscriptionPlan } from '@decipad/editor-types';
 import { insertImageBelow } from '@decipad/editor-utils';
 import { useNotebookState } from '@decipad/notebook-state';
-import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
 import { useToast } from '@decipad/toast';
 import { UploadProgressModal } from '@decipad/ui';
@@ -52,9 +51,6 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
   const toast = useToast();
   const computer = useComputer();
   const { editor } = useNotebookState(notebookId);
-
-  const { workspaceInfo } = useCurrentWorkspaceStore();
-  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
   const [attachments, setAttachments] = useState(
     defaultEditorAttachmentsContextValue
   );
@@ -192,7 +188,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
       Array.from(items).forEach(async (item) => {
         // Async fire and forget
         try {
-          const file = validateItemAndGetFile(item, plan);
+          const file = validateItemAndGetFile(item);
           if (file instanceof File) {
             onAttach(file);
           }

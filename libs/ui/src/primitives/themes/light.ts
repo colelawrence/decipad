@@ -190,6 +190,7 @@ export const theme: CssVariables = {
   currentTextColor: grey600.hex,
 
   linkNormalColor: blue700.hex,
+  linkLighterColor: blue500.hex,
   linkNormalHoverColor: blue700.hex,
   linkDangerColor: red500.hex,
   linkDangerHoverColor: red700.hex,

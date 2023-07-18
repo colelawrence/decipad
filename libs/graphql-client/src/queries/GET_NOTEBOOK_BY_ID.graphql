@@ -16,6 +16,11 @@ fragment Collaborator on User {
   emailValidatedAt
 }
 
+fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
+  queryCount
+  quotaLimit
+}
+
 fragment EditorNotebook on Pad {
   id
   name
@@ -34,6 +39,9 @@ fragment EditorNotebook on Pad {
     id
     name
     isPremium
+    workspaceExecutedQuery {
+      ...WorkspaceExecutedQueryData
+    }
   }
   padConnectionParams {
     url

@@ -98,6 +98,8 @@ const Notebook: FC = () => {
     setCurrentWorkspaceInfo({
       id: workspace?.id,
       isPremium: !!workspace?.isPremium,
+      quotaLimit: workspace?.workspaceExecutedQuery?.quotaLimit,
+      queryCount: workspace?.workspaceExecutedQuery?.queryCount,
     });
   }, [workspace, setCurrentWorkspaceInfo]);
 

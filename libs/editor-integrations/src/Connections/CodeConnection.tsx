@@ -7,6 +7,7 @@ import {
   useCodeConnectionStore,
   useComputer,
   useConnectionStore,
+  useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad_org/safejs';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
@@ -19,11 +20,12 @@ import {
   cssVar,
   setCssVar,
 } from '@decipad/ui';
+import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
+import { css } from '@emotion/react';
 import {
   RemoteData,
   useRdFetch,
 } from 'libs/editor-components/src/AIPanel/hooks';
-import { css } from '@emotion/react';
 import { useWorker } from '../hooks';
 import { ConnectionProps } from './types';
 
@@ -62,6 +64,7 @@ type AiPanelProps = {
   setPrompt: (s: string) => void;
   onSubmit: () => void;
   generationRD: RemoteData<any>;
+  maxQueryExecution: boolean;
 };
 
 const AiPanel = ({
@@ -73,6 +76,7 @@ const AiPanel = ({
   setPrompt,
   onSubmit,
   generationRD,
+  maxQueryExecution,
 }: AiPanelProps) => {
   const [res, setRes] = useState<RemoteData<string>>({
     status: 'not asked',
@@ -110,7 +114,11 @@ const AiPanel = ({
 
   const loading = res.status === 'loading' || generationRD.status === 'loading';
   const createCodeButton = (
-    <Button type="primary" styles={fetchButtonStyles} disabled={loading}>
+    <Button
+      type="primary"
+      styles={fetchButtonStyles}
+      disabled={loading || maxQueryExecution}
+    >
       {generationRD.status === 'loading' ? (
         <>
           <Spinner />
@@ -139,7 +147,7 @@ const AiPanel = ({
           error={res.status === 'error' ? res.error : undefined}
           submitButton={
             <Button
-              disabled={!url || loading}
+              disabled={!url || loading || maxQueryExecution}
               type="primary"
               styles={fetchButtonStyles}
             >
@@ -192,6 +200,17 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
   );
   const { setResultPreview } = props;
   const computer = useComputer();
+  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const { quotaLimit, queryCount, id } = workspaceInfo;
+  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
+  const [maxQueryExecution, setMaxQueryExecution] = useState(
+    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
+  );
+  const updateQueryExecutionCount = useCallback(async () => {
+    return updateQueryExecCount({
+      id: id || '',
+    });
+  }, [id, updateQueryExecCount]);
 
   useEffect(() => {
     if (stage === 'connect') {
@@ -349,6 +368,30 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
     }
   }, [rd, setCode, toggleShowAi]);
 
+  const onSubmitAi = async () => {
+    const result = await updateQueryExecutionCount();
+    const newExecutedQueryData = result.data?.incrementQueryCount;
+    const errors = result.error?.graphQLErrors;
+    const limitExceededError = errors?.find(
+      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
+    );
+
+    if (newExecutedQueryData) {
+      fetchRd({
+        url,
+        exampleRes,
+        prompt,
+      });
+      setCurrentWorkspaceInfo({
+        ...workspaceInfo,
+        queryCount: newExecutedQueryData.queryCount,
+        quotaLimit: newExecutedQueryData.quotaLimit,
+      });
+    } else if (limitExceededError) {
+      setMaxQueryExecution(true);
+    }
+  };
+
   return (
     <>
       {showAi ? (
@@ -359,14 +402,9 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
           setExampleRes={setExampleRes}
           prompt={prompt}
           setPrompt={setPrompt}
-          onSubmit={() => {
-            fetchRd({
-              url,
-              exampleRes,
-              prompt,
-            });
-          }}
+          onSubmit={onSubmitAi}
           generationRD={rd}
+          maxQueryExecution={maxQueryExecution}
         />
       ) : (
         <CodeEditor

@@ -231,6 +231,8 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     setCurrentWorkspaceInfo({
       id: currentWorkspace?.id,
       isPremium: !!currentWorkspace?.isPremium,
+      quotaLimit: currentWorkspace?.workspaceExecutedQuery?.quotaLimit,
+      queryCount: currentWorkspace?.workspaceExecutedQuery?.queryCount,
     });
   }, [currentWorkspace, setCurrentWorkspaceInfo]);
 

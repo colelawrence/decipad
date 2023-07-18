@@ -17,8 +17,8 @@ echo "REACT_APP_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}" >> apps/frontend/.env.
 echo "REACT_APP_ANALYTICS_WRITE_KEY=${REACT_APP_ANALYTICS_WRITE_KEY:-}" >> apps/frontend/.env.production
 echo "REACT_APP_GOOGLE_SHEETS_KEY=${REACT_APP_GOOGLE_SHEETS_KEY:-}" >> apps/frontend/.env.production
 echo "INTERCOM_SECRET_ID=${INTERCOM_SECRET_ID:-}" >> apps/frontend/.env.production
-echo "STRIPE_PAYMENT_LINK"=${STRIPE_PAYMENT_LINK:-} >> apps/frontend/.env.production
-echo "STRIPE_CUSTOMER_PORTAL_LINK"=${STRIPE_CUSTOMER_PORTAL_LINK:-} >> apps/frontend/.env.production
+echo "REACT_APP_STRIPE_PAYMENT_LINK"=${REACT_APP_STRIPE_PAYMENT_LINK:-} >> apps/frontend/.env.production
+echo "REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK"=${REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK:-} >> apps/frontend/.env.production
 
 echo "Building frontend..."
 yarn build:frontend

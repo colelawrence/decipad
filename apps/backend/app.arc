@@ -63,6 +63,9 @@ folder public
 workspacesubscriptions
   id *String # Stripe's subscription id
 
+workspacexecutedqueries
+  id *String
+
 users
   id *String
   name String
@@ -265,6 +268,9 @@ secrets
 workspacesubscriptions
   workspace_id *String
   name byWorkspace
+
+workspacexecutedqueries
+  id *String
 
 users
   secret *String

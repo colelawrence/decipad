@@ -479,6 +479,12 @@ export interface WorkspaceSubscriptionRecord extends TableRecordBase {
   email: string;
 }
 
+export interface WorkspaceExecutedQueryRecord extends TableRecordBase {
+  queryCount: number;
+  query_reset_date?: number;
+  quotaLimit: number;
+}
+
 export interface SecretInput {
   name: string;
   secret: string;
@@ -566,6 +572,7 @@ export interface EnhancedDataTables {
   usergoals: DataTable<UserGoalRecord>;
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
+  workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -607,7 +614,8 @@ export type ConcreteRecord =
   | DocSyncSnapshotRecord
   | LogRecord
   | SecretRecord
-  | WorkspaceSubscriptionRecord;
+  | WorkspaceSubscriptionRecord
+  | WorkspaceExecutedQueryRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 

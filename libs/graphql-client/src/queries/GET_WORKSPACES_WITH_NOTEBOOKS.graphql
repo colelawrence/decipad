@@ -55,6 +55,11 @@ fragment WorkspaceSubscriptionWithData on WorkspaceSubscription {
   paymentStatus
 }
 
+fragment WorkspaceExecutedQueryData on WorkspaceExecutedQuery {
+  queryCount
+  quotaLimit
+}
+
 fragment DashboardWorkspace on Workspace {
   id
   name
@@ -66,6 +71,9 @@ fragment DashboardWorkspace on Workspace {
   }
   workspaceSubscription {
     ...WorkspaceSubscriptionWithData
+  }
+  workspaceExecutedQuery {
+    ...WorkspaceExecutedQueryData
   }
   membersCount
   sections {

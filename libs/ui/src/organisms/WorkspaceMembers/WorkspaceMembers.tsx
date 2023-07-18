@@ -12,6 +12,7 @@ import {
 import {
   cssVar,
   p12Medium,
+  p12Regular,
   p13Medium,
   p14Medium,
   red500,
@@ -75,6 +76,14 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
 
   return (
     <div css={membersWrapperStyle}>
+      <p css={pricingWrapper}>
+        You will be charged for each member added. Visit our{' '}
+        <a css={pricingLink} href="https://www.decipad.com/pricing">
+          pricing guide
+        </a>{' '}
+        for more information on how we bill.
+      </p>
+      <p css={inputLabelStyles}>Invite collaborators</p>
       <div css={invitationFormStyles}>
         <div css={inputContainerStyles}>
           <InputField
@@ -165,6 +174,24 @@ const WorkspaceMemberOptions: React.FC<{ onRevoke(): void }> = ({
     </MenuItem>
   </MenuList>
 );
+
+const pricingWrapper = css({
+  ...p12Regular,
+  backgroundColor: cssVar('highlightColor'),
+  padding: '12px 16px',
+  marginBottom: '8px',
+  borderRadius: '8px',
+  color: cssVar('strongTextColor'),
+});
+
+const pricingLink = css({
+  color: cssVar('linkLighterColor'),
+});
+
+const inputLabelStyles = css({
+  ...p12Medium,
+  marginBottom: '8px',
+});
 
 const membersWrapperStyle = css({
   marginBottom: '42px',

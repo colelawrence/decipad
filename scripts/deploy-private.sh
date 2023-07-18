@@ -54,7 +54,5 @@ arc env staging INTERCOM_SECRET_ID "${INTERCOM_SECRET_ID}"
 arc env staging STRIPE_API_KEY "${STRIPE_API_KEY}"
 arc env staging STRIPE_SECRET_KEY "${STRIPE_SECRET_KEY}"
 arc env staging STRIPE_WEBHOOK_SECRET "${STRIPE_WEBHOOK_SECRET}"
-arc env staging STRIPE_PAYMENT_LINK "${STRIPE_PAYMENT_LINK}"
-arc env staging STRIPE_CUSTOMER_PORTAL_LINK "${STRIPE_CUSTOMER_PORTAL_LINK}"
 
 arc deploy --prune --no-hydrate --name "$DEPLOY_NAME"

@@ -3,20 +3,41 @@ import {
   ExecutionContext,
   useCodeConnectionStore,
   useConnectionStore,
+  useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useWorkspaceSecrets } from '@decipad/graphql-client';
+import {
+  useWorkspaceSecrets,
+  useIncrementQueryCountMutation,
+} from '@decipad/graphql-client';
 import {
   removeFocusFromAllBecauseSlate,
   useEnterListener,
 } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useContext } from 'react';
+import { getAnalytics } from '@decipad/client-events';
+import { workspaces } from '@decipad/routing';
+import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, TextAndIconButton } from '../../atoms';
 import { Close, Play, Sparkles } from '../../icons';
 import { Tabs } from '../../molecules/Tabs/Tabs';
-import { cssVar, p15Medium, p16Medium } from '../../primitives';
+import {
+  cssVar,
+  p13Medium,
+  p13Regular,
+  p15Medium,
+  p16Medium,
+} from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 
 type Stages =
@@ -46,6 +67,8 @@ interface WrapperIntegrationModalDialogProps {
   readonly secretsMenu: ReactNode;
 }
 
+const analytics = getAnalytics();
+
 export const WrapperIntegrationModalDialog: FC<
   WrapperIntegrationModalDialogProps
 > = ({
@@ -67,6 +90,41 @@ export const WrapperIntegrationModalDialog: FC<
   const { resultPreview, stage, connectionType } = useConnectionStore();
   const codeStore = useCodeConnectionStore();
   const hasDataPreview = !!resultPreview;
+  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const { quotaLimit, queryCount } = workspaceInfo;
+  const navigate = useNavigate();
+  const [maxQueryExecution, setMaxQueryExecution] = useState(
+    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
+  );
+  const [runButtonDisabled, setRunButtonDisabled] = useState(maxQueryExecution);
+  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
+  const [nrQueriesLeft, setNrQueriesLeft] = useState(
+    quotaLimit && queryCount ? quotaLimit - queryCount : null
+  );
+  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
+    !!nrQueriesLeft &&
+      !!quotaLimit &&
+      nrQueriesLeft > 0 &&
+      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
+  );
+
+  useEffect(() => {
+    if (queryCount && quotaLimit) {
+      setNrQueriesLeft(quotaLimit - queryCount);
+      setShowQueryQuotaLimit(
+        !!nrQueriesLeft &&
+          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
+          nrQueriesLeft > 0
+      );
+      setMaxQueryExecution(quotaLimit <= queryCount);
+    }
+  }, [quotaLimit, queryCount, nrQueriesLeft]);
+
+  const updateQueryExecutionCount = useCallback(async () => {
+    return updateQueryExecCount({
+      id: workspaceId || '',
+    });
+  }, [workspaceId, updateQueryExecCount]);
 
   const showAiButton =
     stage === 'connect' &&
@@ -84,7 +142,43 @@ export const WrapperIntegrationModalDialog: FC<
     secrets = [];
   }
 
-  const execSource = () => onExecute({ status: 'run' });
+  const execSource = async () => {
+    setRunButtonDisabled(true);
+    const result = await updateQueryExecutionCount();
+
+    const newExecutedQueryData = result.data?.incrementQueryCount;
+    const errors = result.error?.graphQLErrors;
+    const limitExceededError = errors?.find(
+      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
+    );
+
+    if (newExecutedQueryData) {
+      onExecute({ status: 'run' });
+      setCurrentWorkspaceInfo({
+        ...workspaceInfo,
+        queryCount: newExecutedQueryData.queryCount,
+        quotaLimit: newExecutedQueryData.quotaLimit,
+      });
+      setRunButtonDisabled(false);
+    } else if (limitExceededError) {
+      setMaxQueryExecution(true);
+      setRunButtonDisabled(true);
+      analytics?.track('query limit exceeded', {
+        type: 'LIMIT_EXCEEDED',
+        name: result.error?.name,
+        stack: result.error?.stack,
+        url: global.location.pathname,
+      });
+    } else {
+      setRunButtonDisabled(false);
+      analytics?.track('error', {
+        type: result?.error?.cause,
+        name: result?.error?.name,
+        stack: result?.error?.stack,
+        url: global.location.pathname,
+      });
+    }
+  };
 
   useEnterListener(() => {
     switch (tabStage) {
@@ -163,20 +257,48 @@ export const WrapperIntegrationModalDialog: FC<
                 </TextAndIconButton>
               )}
               {secretsMenu}
-              <TextAndIconButton
-                text="Run"
-                size="normal"
-                iconPosition="left"
-                color="brand"
-                onClick={execSource}
-              >
-                <Play />
-              </TextAndIconButton>
             </>
           )}
         </div>
       </div>
       <div css={allChildrenStyles(tabStage)}>{children}</div>
+      {(showQueryQuotaLimit || maxQueryExecution) && (
+        <div css={upgradeProStyles}>
+          {maxQueryExecution && (
+            <p>
+              You have used all of your {quotaLimit} credits.{<br />}
+              Upgrade to Pro for more credits.
+            </p>
+          )}
+          {showQueryQuotaLimit && (
+            <p>
+              You are about to reach the limit of {quotaLimit} credits.{<br />}
+              Upgrade to Pro for more credits.
+            </p>
+          )}
+          <div>
+            <Button
+              type="yellow"
+              onClick={() => {
+                if (workspaceId) {
+                  navigate(
+                    workspaces({})
+                      .workspace({
+                        workspaceId,
+                      })
+                      .members({}).$,
+                    { replace: true }
+                  );
+                }
+              }}
+              sameTab={true} // change this to false if you want to work on payments locally
+              testId="integration_upgrade_pro"
+            >
+              Upgrade to Pro
+            </Button>
+          </div>
+        </div>
+      )}
       {showTabs && (
         <div css={bottomBarStyles}>
           {isEditing ? (
@@ -191,7 +313,7 @@ export const WrapperIntegrationModalDialog: FC<
             </div>
           ) : (
             <>
-              <div css={connectStyles}>
+              <div css={[connectStyles, buttonWrapperStyles]}>
                 <Button
                   type={'primary'}
                   disabled={!hasDataPreview}
@@ -201,7 +323,7 @@ export const WrapperIntegrationModalDialog: FC<
                   {tabStage === 'map' ? 'Insert' : 'Continue'}
                 </Button>
               </div>
-              <div>
+              <div css={buttonWrapperStyles}>
                 <Button
                   type="secondary"
                   onClick={() => {
@@ -223,6 +345,21 @@ export const WrapperIntegrationModalDialog: FC<
                     : 'Reset'}
                 </Button>
               </div>
+              <TextAndIconButton
+                text="Run"
+                size="normal"
+                iconPosition="left"
+                color="brand"
+                onClick={execSource}
+                disabled={runButtonDisabled}
+              >
+                <Play />
+              </TextAndIconButton>
+              {showQueryQuotaLimit && (
+                <p css={queriesLeftStyles}>
+                  {nrQueriesLeft} of {quotaLimit} credits left
+                </p>
+              )}
             </>
           )}
         </div>
@@ -231,12 +368,33 @@ export const WrapperIntegrationModalDialog: FC<
   );
 };
 
+const buttonWrapperStyles = css({
+  button: {
+    height: '32px',
+  },
+});
+
+const queriesLeftStyles = css({
+  ...p13Regular,
+  paddingLeft: '5px',
+});
+
+const upgradeProStyles = css({
+  ...p13Medium,
+  backgroundColor: cssVar('errorBlockAnnotationWarning'),
+  padding: '12px 16px',
+  display: 'flex',
+  width: '100%',
+  gap: '20px',
+  justifyContent: 'space-between',
+});
+
 const intWrapperStyles = css({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   width: '740px',
-  height: '632px',
+  height: '662px',
   maxHeight: 'calc(100vh - 40px)',
   padding: '32px',
   gap: '20px',
@@ -307,6 +465,7 @@ export const dividerStyles = css({
 const bottomBarStyles = css({
   width: '100%',
   justifyContent: 'flex-start',
+  alignItems: 'center',
   marginTop: 'auto',
   display: 'flex',
   gap: '8px',

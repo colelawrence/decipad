@@ -152,10 +152,13 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_WEBHOOK_SECRET);
     case 'STRIPE_SECRET_KEY':
       return valueOrDefault(name, process.env.STRIPE_SECRET_KEY);
-    case 'STRIPE_PAYMENT_LINK':
-      return valueOrDefault(name, process.env.STRIPE_PAYMENT_LINK);
-    case 'STRIPE_CUSTOMER_PORTAL_LINK':
-      return valueOrDefault(name, process.env.STRIPE_CUSTOMER_PORTAL_LINK);
+    case 'REACT_APP_STRIPE_PAYMENT_LINK':
+      return valueOrDefault(name, process.env.REACT_APP_STRIPE_PAYMENT_LINK);
+    case 'REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK':
+      return valueOrDefault(
+        name,
+        process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK
+      );
   }
 }
 
@@ -250,6 +253,9 @@ export function email() {
 
 export function thirdParty() {
   return {
+    intercom: {
+      secretId: env('INTERCOM_SECRET_ID'),
+    },
     google: {
       sheets: {
         apiKey: env('DECI_GOOGLESHEETS_API_KEY'),
@@ -264,8 +270,6 @@ export function thirdParty() {
       webhookSecret: env('STRIPE_WEBHOOK_SECRET'),
       secretKey: env('STRIPE_SECRET_KEY'), // 'sk_test_...
       apiKey: env('STRIPE_API_KEY'), // 'pk_test_...
-      paymentLink: env('STRIPE_PAYMENT_LINK'),
-      customerPortalLink: env('STRIPE_CUSTOMER_PORTAL_LINK'),
     },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')

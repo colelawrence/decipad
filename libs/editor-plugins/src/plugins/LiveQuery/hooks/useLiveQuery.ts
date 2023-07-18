@@ -1,12 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getNodeString } from '@udecode/plate';
 import { Result } from '@decipad/computer';
-import {
-  LiveQueryElement,
-  MAX_IMPORT_CELL_COUNT,
-  SubscriptionPlan,
-} from '@decipad/editor-types';
-import { useComputer, useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { LiveQueryElement, MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
+import { useComputer } from '@decipad/react-contexts';
 import { importFromUnknown } from '@decipad/import';
 import { fetch } from '@decipad/fetch';
 import { useLiveConnectionUrl } from './useLiveConnectionUrl';
@@ -38,8 +34,6 @@ export const useLiveQuery = ({
   const [rd, setRd] = useState<RemoteData>({ status: 'not asked' });
 
   const query = getNodeString(element.children[1]).trim();
-  const { workspaceInfo } = useCurrentWorkspaceStore();
-  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
 
   const runQuery = useCallback(() => {
     setRd({ status: 'loading' });
@@ -54,7 +48,7 @@ export const useLiveQuery = ({
         .then(async (fetchResult) => {
           if (fetchResult.ok) {
             return importFromUnknown(computer, fetchResult, {
-              maxCellCount: MAX_IMPORT_CELL_COUNT[plan],
+              maxCellCount: MAX_IMPORT_CELL_COUNT,
             });
           }
           const error =
@@ -81,7 +75,7 @@ export const useLiveQuery = ({
       aborted = true;
       abort.abort();
     };
-  }, [url, computer, query, plan]);
+  }, [url, computer, query]);
 
   useEffect(() => {
     if (

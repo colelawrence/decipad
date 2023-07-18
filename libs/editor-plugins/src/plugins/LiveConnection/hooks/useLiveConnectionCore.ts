@@ -4,7 +4,6 @@ import {
   LiveConnectionElement,
   LiveDataSetElement,
   MAX_IMPORT_CELL_COUNT,
-  SubscriptionPlan,
   TableCellType,
 } from '@decipad/editor-types';
 import { useNodePath } from '@decipad/editor-hooks';
@@ -12,7 +11,6 @@ import { useLiveConnection } from '@decipad/live-connect';
 import {
   useComputer,
   ExternalDataSourceContext,
-  useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
 import { Result } from '@decipad/computer';
 import { useCoreLiveConnectionActions } from './useCoreLiveConnectionActions';
@@ -40,9 +38,6 @@ export const useLiveConnectionCore = ({
 }: UseLiveConnectionCoreProps): UseLiveConnectionCoreResult => {
   const computer = useComputer();
   const path = useNodePath(element);
-
-  const { workspaceInfo } = useCurrentWorkspaceStore();
-  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
   const { onChangeColumnType, setIsFirstRowHeader, beforeAuthenticate } =
     useCoreLiveConnectionActions({
       path,
@@ -58,7 +53,7 @@ export const useLiveConnectionCore = ({
     columnTypeCoercions: element.columnTypeCoercions,
     jsonPath: element.jsonPath,
     delimiter: element.delimiter,
-    maxCellCount: MAX_IMPORT_CELL_COUNT[plan],
+    maxCellCount: MAX_IMPORT_CELL_COUNT,
     deleted,
     beforeAuthenticate,
     externalDataSourceContext: ExternalDataSourceContext,

@@ -3,6 +3,8 @@ import { create } from 'zustand';
 export type WorkspaceInfo = {
   id?: string;
   isPremium: boolean;
+  quotaLimit?: number;
+  queryCount?: number;
 };
 
 interface CurrentWorkspaceStore {
@@ -15,6 +17,8 @@ export const useCurrentWorkspaceStore = create<CurrentWorkspaceStore>(
     workspaceInfo: {
       id: undefined,
       isPremium: false,
+      quotaLimit: 0,
+      queryCount: 0,
     },
     setCurrentWorkspaceInfo: (wsi: WorkspaceInfo) =>
       set(() => ({ workspaceInfo: wsi })),

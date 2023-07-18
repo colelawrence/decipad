@@ -218,6 +218,7 @@ export interface CssVariables {
 
   readonly linkNormalColor: Property.Color;
   readonly linkNormalHoverColor: Property.Color;
+  readonly linkLighterColor: Property.Color;
   readonly linkDangerColor: Property.Color;
   readonly linkDangerHoverColor: Property.Color;
 

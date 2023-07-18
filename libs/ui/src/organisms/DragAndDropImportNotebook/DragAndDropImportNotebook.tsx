@@ -1,8 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { MAX_UPLOAD_FILE_SIZE, SubscriptionPlan } from '@decipad/editor-types';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
@@ -12,11 +11,8 @@ import { cssVar } from '../../primitives';
 
 const acceptableFileTypes = ['application/json', 'application/zip'];
 
-const validateItemAndGetFile = (
-  item: DataTransferItem,
-  plan: SubscriptionPlan
-): File | undefined => {
-  const maxFileSizeBytes = MAX_UPLOAD_FILE_SIZE.notebook[plan];
+const validateItemAndGetFile = (item: DataTransferItem): File | undefined => {
+  const maxFileSizeBytes = MAX_UPLOAD_FILE_SIZE.notebook;
   const file = item.getAsFile();
 
   if (!file) {
@@ -80,15 +76,12 @@ export const DragAndDropImportNotebook = ({
   enabled = true,
   children,
 }: DragAndDropImportNotebookProps): ReturnType<FC> => {
-  const { workspaceInfo } = useCurrentWorkspaceStore();
-  const plan: SubscriptionPlan = workspaceInfo.isPremium ? 'pro' : 'free';
-
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: [NativeTypes.FILE],
     drop: (data: DataTransfer) => {
       const items = data?.items || [];
       Array.from(items).forEach(async (item) => {
-        const file = validateItemAndGetFile(item, plan);
+        const file = validateItemAndGetFile(item);
         if (file) {
           const contents = Buffer.from(await file.arrayBuffer());
           onImport(contents.toString('base64'));
@@ -98,7 +91,7 @@ export const DragAndDropImportNotebook = ({
     canDrop: (data: DataTransfer) => {
       const items = data?.items || [];
       return Array.from(items).some(
-        (item) => validateItemAndGetFile(item, plan) != null
+        (item) => validateItemAndGetFile(item) != null
       );
     },
     collect: (monitor: DropTargetMonitor) => {

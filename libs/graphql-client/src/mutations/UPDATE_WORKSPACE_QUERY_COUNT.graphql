@@ -1,0 +1,6 @@
+mutation IncrementQueryCount($id: ID!) {
+  incrementQueryCount(id: $id) {
+    queryCount
+    quotaLimit
+  }
+}

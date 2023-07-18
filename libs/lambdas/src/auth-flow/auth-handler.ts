@@ -1,7 +1,7 @@
 import { createHmac } from 'crypto';
 import { identify, track } from '@decipad/backend-analytics';
 import { UserWithSecret } from '@decipad/backendtypes';
-import { app, auth as authConfig } from '@decipad/config';
+import { app, auth as authConfig, thirdParty } from '@decipad/config';
 import { jwt } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
@@ -69,7 +69,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
           return session;
         }
         const [user] = users;
-        const hmac = createHmac('sha256', process.env.INTERCOM_SECRET_ID || '');
+        const hmac = createHmac('sha256', thirdParty().intercom.secretId || '');
         hmac.update(user.email!);
 
         if (session.user) {
