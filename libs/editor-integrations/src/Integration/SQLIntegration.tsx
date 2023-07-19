@@ -1,12 +1,12 @@
 import { FC, useEffect } from 'react';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
-  mapResultType,
   useComputer,
   useConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { IntegrationTypes } from '@decipad/editor-types';
+import { mapResultType } from '@decipad/computer';
 import { useIntegrationContext } from '.';
 import { MaybeResultFromWorker, fetchQuery } from '../utils';
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Result } from '@decipad/computer';
+import { Result, mapResultType } from '@decipad/computer';
 import { codePlaceholder } from '@decipad/config';
 import {
   ImportElementSource,
@@ -7,7 +7,6 @@ import {
 } from '@decipad/editor-types';
 import { generateVarName } from '@decipad/utils';
 import { create } from 'zustand';
-import { mapResultType } from './utils';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];

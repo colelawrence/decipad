@@ -2,12 +2,12 @@
 import { IntegrationTypes } from '@decipad/editor-types';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
-  mapResultType,
   useCodeConnectionStore,
   useComputer,
   useConnectionStore,
 } from '@decipad/react-contexts';
 import type { ResultMessageType } from '@decipad_org/safejs';
+import { mapResultType } from '@decipad/computer';
 import { useCallback, useEffect } from 'react';
 import { useIntegrationContext } from '.';
 import { useWorker } from '../hooks';

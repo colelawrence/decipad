@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { Result } from '@decipad/computer';
-import { SimpleTableCellType } from '@decipad/editor-types';
 import { produce } from '@decipad/utils';
+import { Result, SerializedType } from '..';
 
 /**
  * Takes a result and a type mapping (Array of types),
@@ -9,7 +8,7 @@ import { produce } from '@decipad/utils';
  */
 export function mapResultType(
   result: Result.Result,
-  typeMapping: Array<SimpleTableCellType | undefined>
+  typeMapping: Array<SerializedType | undefined>
 ): Result.Result {
   switch (result.type.kind) {
     case 'materialized-table': {
@@ -22,14 +21,29 @@ export function mapResultType(
       });
       return tableResult as Result.Result;
     }
+    case 'materialized-column':
+    case 'column':
+      if (!typeMapping.at(0)) return result;
+      const newResult = produce(
+        result as Result.Result<'column'>,
+        (draftState) => {
+          if (typeMapping[0]) {
+            // eslint-disable-next-line prefer-destructuring
+            draftState.type.cellType = typeMapping[0];
+          }
+        }
+      );
+      return newResult as Result.Result;
     case 'date':
     case 'string':
     case 'number':
     case 'boolean': {
       if (!typeMapping.at(0)) return result;
       result = produce(result, (draftState) => {
-        // eslint-disable-next-line prefer-destructuring
-        draftState.type = typeMapping[0] as SimpleTableCellType;
+        if (typeMapping[0]) {
+          // eslint-disable-next-line prefer-destructuring
+          draftState.type = typeMapping[0];
+        }
       });
       return result;
     }
