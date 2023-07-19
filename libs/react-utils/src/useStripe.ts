@@ -14,7 +14,7 @@ type NotebookAvatarTrait = {
 const MAX_NOTEBOOK_COLLABORATORS = 3;
 const STRIPE_PAYMENT_LINK = process.env.REACT_APP_STRIPE_PAYMENT_LINK;
 const STRIPE_CUSTOMER_PORTAL_LINK =
-  process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL;
+  process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK;
 
 export const useStripeLinks = (workspace: WorkspaceTrait) => {
   const canSubscribe =
