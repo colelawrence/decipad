@@ -106,7 +106,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   const handleAddSecret = useCallback(
     (secretName: string) => {
       if (!editor.current || !view) return;
-      const secretCode = `{{ secrets.${secretName} }}`;
+      const secretCode = `{{secrets.${secretName}}}`;
       const { state } = view;
       const range = state.selection.ranges[0];
       view.dispatch({
