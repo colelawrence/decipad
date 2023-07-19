@@ -38,6 +38,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const editor = useTEditorRef();
 
+  const [tableFrozen, setTableFrozen] = useState(false);
   const {
     onDelete,
     onAddRow,
@@ -61,8 +62,10 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
       columnWidths: columns.map((col) => col.width),
       cellTypes: columns.map((col) => col.cellType),
       columnBlockIds: columns.map((col) => col.blockId),
+      tableFrozen,
+      setTableFrozen,
     }),
-    [blockId, columns]
+    [blockId, columns, tableFrozen, setTableFrozen]
   );
 
   const computer = useComputer();

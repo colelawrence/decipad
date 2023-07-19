@@ -9,7 +9,7 @@ import {
   useSelection,
   useTableColumnFormulaResultForCell,
 } from '@decipad/editor-hooks';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
 import {
   TElement,
@@ -55,6 +55,7 @@ export const useTableCell = (
   const focused = useSelected();
   const collapsed = isCollapsed(useSelection());
   const selectedCells = useTableStore().get.selectedCells();
+  const { tableFrozen } = useEditorTableContext();
 
   // FIXME: Causes re-render on unrelated computer update
   const formulaResult = useTableColumnFormulaResultForCell(element);
@@ -67,15 +68,18 @@ export const useTableCell = (
   const isColumnSelected = useIsColumnSelected(element);
   const isSeriesColumn = useMemo(() => cellType?.kind === 'series', [cellType]);
   const editable = useMemo(() => {
+    if (tableFrozen) return false;
     const path = findNodePath(editor, element);
+
     if (path && path[path.length - 2] !== 2 && isSeriesColumn) {
       // first data row
       return false;
     }
     return true;
-  }, [editor, element, isSeriesColumn]);
+  }, [editor, element, isSeriesColumn, tableFrozen]);
 
   const disabled = useMemo(() => {
+    if (tableFrozen) return true;
     const path = findNodePath(editor, element);
     return (
       (isSeriesColumn &&
@@ -84,7 +88,7 @@ export const useTableCell = (
         isColumnSelected) ??
       false
     );
-  }, [editor, element, isColumnSelected, isSeriesColumn]);
+  }, [editor, element, isColumnSelected, isSeriesColumn, tableFrozen]);
 
   const computer = useComputer();
   // Displaying the unit on an empty cell creates a visual glitch

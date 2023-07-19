@@ -34,9 +34,7 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   toggle,
 }) => {
   const [prompt, setPrompt] = useState('');
-  const [rd, fetch] = useRdFetch<'rewrite-paragraph'>(
-    '/api/ai/rewrite-paragraph'
-  );
+  const [rd, fetch] = useRdFetch('rewrite-paragraph');
 
   const handleSubmit = () => {
     const analytics = getAnalytics();

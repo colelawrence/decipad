@@ -38,14 +38,28 @@ SELECT
 `;
 };
 
+type Body = { externalDataSourceId: string; prompt: string };
+
 export const handler = handle(async (event) => {
-  const externalDataSourceId = getDefined(getDefined(event.pathParameters).id);
+  const rawRequestBody = event.body;
+  if (!event.isBase64Encoded || !rawRequestBody) {
+    throw Boom.internal('Invalid request body.');
+  }
+  let requestBody: Body;
+  try {
+    requestBody = JSON.parse(
+      Buffer.from(rawRequestBody, 'base64').toString('utf8')
+    );
+  } catch (e) {
+    throw Boom.internal('Request body not valid JSON.');
+  }
+
   const externalDataSource = await fetchExternalDataSource(
-    externalDataSourceId
+    requestBody.externalDataSourceId
   );
   if (!externalDataSource) {
     throw Boom.notFound(
-      `Could not find external data source with id ${externalDataSourceId}`
+      `Could not find external data source with id ${requestBody.externalDataSourceId}`
     );
   }
 
@@ -55,17 +69,9 @@ export const handler = handle(async (event) => {
     user: await getAuthenticatedUser(event),
   });
 
-  let { body: requestBody } = event;
-  if (event.isBase64Encoded && requestBody) {
-    requestBody = Buffer.from(requestBody, 'base64').toString('utf8');
-  }
-  if (!requestBody) {
-    throw Boom.notFound(`Missing request body`);
-  }
-
   const schemaString = await getSchemaString(externalDataSource.externalId);
 
-  const prompt = createPrompt(schemaString, requestBody);
+  const prompt = createPrompt(schemaString, requestBody.prompt);
 
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',

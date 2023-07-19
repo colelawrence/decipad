@@ -9,6 +9,7 @@ interface DropdownItem {
   readonly icon?: ReactNode;
   readonly onClick?: () => void;
   readonly disabled?: boolean;
+  readonly isNew?: boolean;
 }
 
 interface DropdownMenuProps {
@@ -49,6 +50,7 @@ const DropdownMenu = ({
             key={`column-menu-left-${i}`}
             icon={item.icon}
             onSelect={item.onClick}
+            isNew={item.isNew}
           >
             {item.label}
           </MenuItem>

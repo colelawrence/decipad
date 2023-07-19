@@ -35,6 +35,7 @@ type TableColumnHeaderProps = PropsWithChildren<
     | 'draggable'
     | 'onSelectColumn'
     | 'onRemoveColumn'
+    | 'onPopulateColumn'
     | 'onAddColRight'
     | 'onAddColLeft'
   > &
@@ -63,6 +64,7 @@ type OptionalSetWidthTableColumnHeaderProps = Omit<
 export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
   onChangeColumnType,
   onRemoveColumn,
+  onPopulateColumn,
   onAddColLeft,
   onAddColRight,
   parseUnit,
@@ -83,6 +85,7 @@ export const TableColumnHeader: FC<OptionalSetWidthTableColumnHeaderProps> = ({
     <TableHeader
       {...props}
       onRemoveColumn={onRemoveColumn}
+      onPopulateColumn={onPopulateColumn}
       onAddColLeft={onAddColLeft}
       onAddColRight={onAddColRight}
       isEditable={!readOnly}

@@ -1,8 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
+import { Badge } from '@decipad/ui';
 import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import { menu } from '../../styles';
+import { cssVar, setCssVar } from '../../primitives';
 
 const iconWrapperStyles = css({
   display: 'grid',
@@ -13,6 +15,20 @@ const iconWrapperStyles = css({
 
 const childrenWrapperStyles = css({
   flexGrow: 1,
+});
+
+const newBadgeStyles = css({
+  background: cssVar('aiBubbleBackgroundColor'),
+  color: cssVar('aiTextColor'),
+  marginLeft: 8,
+});
+
+const newCss = css({
+  ...setCssVar('currentTextColor', cssVar('aiTextColor')), // set stroke color
+  color: cssVar('aiTextColor'),
+  svg: {
+    fill: cssVar('aiTextColor'),
+  },
 });
 
 export type MenuItemProps = {
@@ -27,6 +43,7 @@ export type MenuItemProps = {
   readonly selected?: boolean;
   readonly itemAlignment?: 'left' | 'right' | 'center';
   readonly testid?: string;
+  readonly isNew?: boolean;
 } & ComponentProps<typeof RadixDropdownMenu.Item>;
 
 export const MenuItem: FC<MenuItemProps> = ({
@@ -39,6 +56,7 @@ export const MenuItem: FC<MenuItemProps> = ({
   disabled,
   itemAlignment,
   testid = '',
+  isNew,
   ...rest
 }) => {
   const onSelectItem = useCallback(
@@ -52,7 +70,10 @@ export const MenuItem: FC<MenuItemProps> = ({
   );
   return (
     <RadixDropdownMenu.Item
-      css={disabled ? menu.itemDisabledStyles : menu.itemStyles}
+      css={[
+        disabled ? menu.itemDisabledStyles : menu.itemStyles,
+        isNew && newCss,
+      ]}
       onSelect={onSelectItem}
       data-selected={selected}
       onPointerMove={onPointerMove}
@@ -71,6 +92,7 @@ export const MenuItem: FC<MenuItemProps> = ({
         ]}
       >
         {children}
+        {isNew && <Badge styles={newBadgeStyles}>New</Badge>}
       </span>
     </RadixDropdownMenu.Item>
   );

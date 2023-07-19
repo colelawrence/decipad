@@ -27,6 +27,7 @@ export interface UseTableHeaderCellResult {
   focused: boolean;
   onChangeColumnType: (columnIndex: number, cellType?: TableCellType) => void;
   onRemoveColumn: (columnId: string) => void;
+  onPopulateColumn: (columnId: string) => void;
   onAddColumnHere: (columnIndex: number, left?: boolean) => void;
   dragSource: ConnectDragSource;
   isDragging: boolean;
@@ -51,8 +52,12 @@ export const useTableHeaderCell = (
   const columnIndex = path?.[path.length - 1];
   const tablePath = path && Path.parent(Path.parent(path));
   const table = tablePath && getNode<TableElement>(editor, tablePath);
-  const { onChangeColumnType, onRemoveColumn, onAddColumnHere } =
-    useTableActions(editor, table);
+  const {
+    onChangeColumnType,
+    onRemoveColumn,
+    onAddColumnHere,
+    onPopulateColumn,
+  } = useTableActions(editor, table);
   const focused = useSelected();
   const readOnly = useIsEditorReadOnly();
 
@@ -87,6 +92,7 @@ export const useTableHeaderCell = (
         onChangeColumnType,
         onAddColumnHere,
         onRemoveColumn,
+        onPopulateColumn,
         dragSource,
         isDragging,
         isOver,
@@ -113,6 +119,7 @@ export const useTableHeaderCell = (
         onChangeColumnType,
         onAddColumnHere,
         onRemoveColumn,
+        onPopulateColumn,
         parseUnit,
         path,
         readOnly,

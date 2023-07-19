@@ -3,7 +3,7 @@ import { BlockDependents } from '@decipad/computer';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
-import { Badge, MenuItem, Tooltip } from '../../atoms';
+import { MenuItem, Tooltip } from '../../atoms';
 import {
   Delete,
   DragHandle,
@@ -90,20 +90,6 @@ interface BlockDragHandleProps {
   };
 }
 
-const aiAssitanceCss = css({
-  ...setCssVar('currentTextColor', cssVar('aiTextColor')), // set stroke color
-  color: cssVar('aiTextColor'),
-  svg: {
-    fill: cssVar('aiTextColor'),
-  },
-});
-
-const aiAssitanceCssNew = css({
-  background: cssVar('aiBubbleBackgroundColor'),
-  color: cssVar('aiTextColor'),
-  marginLeft: 8,
-});
-
 export const BlockDragHandle = ({
   children,
   menuOpen = false,
@@ -164,12 +150,8 @@ export const BlockDragHandle = ({
   );
 
   const aiButton = aiPanel ? (
-    <MenuItem
-      icon={<Sparkles />}
-      onSelect={aiPanel.toggle}
-      css={aiAssitanceCss}
-    >
-      AI assistance<Badge styles={aiAssitanceCssNew}>New</Badge>
+    <MenuItem icon={<Sparkles />} onSelect={aiPanel.toggle} isNew>
+      AI assistance
     </MenuItem>
   ) : null;
 

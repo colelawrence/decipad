@@ -19,9 +19,9 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
   toggle,
 }) => {
   const [prompt, setPrompt] = useState('');
-  const [rd, fetch] = useRdFetch<'generate-sql'>(`/api/ai/generate-sql/${id}`);
+  const [rd, fetch] = useRdFetch(`generate-sql`);
   const handleSubmit = useCallback(() => {
-    fetch(prompt);
+    fetch({ externalDataSourceId: id, prompt });
   }, [fetch, prompt]);
   const makeUseOfSuggestion = useCallback(
     (s: string) => {

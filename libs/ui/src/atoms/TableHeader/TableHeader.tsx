@@ -28,6 +28,7 @@ import {
   AlignArrowRight,
   Delete,
   DragHandle as DragHandleIcon,
+  Sparkles,
   Text,
   Warning,
 } from '../../icons';
@@ -72,6 +73,7 @@ export interface TableHeaderProps extends Partial<DropSourceAndTargetProps> {
   readonly isLiveResult?: boolean;
   readonly onRemoveColumn?: () => void;
   readonly onAddColRight?: () => void;
+  readonly onPopulateColumn?: () => void;
   readonly onAddColLeft?: () => void;
   // drag
   readonly draggable?: boolean;
@@ -154,6 +156,7 @@ export const TableHeader = ({
   onAddColLeft,
   onAddColRight,
   onRemoveColumn,
+  onPopulateColumn,
   dragSource,
   dropTarget,
   dropDirection,
@@ -214,6 +217,13 @@ export const TableHeader = ({
     document.body.addEventListener('mouseup', onMouseUp, { once: true });
   };
   const columOptionItems = [
+    {
+      label: 'Populate column',
+      onClick: onPopulateColumn,
+      icon: <Sparkles />,
+      badgeText: 'New',
+      isNew: true,
+    },
     {
       label: 'Add column left',
       onClick: onAddColLeft,

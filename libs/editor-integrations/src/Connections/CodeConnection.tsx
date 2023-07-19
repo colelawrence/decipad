@@ -344,7 +344,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
     }
   }, [info.status, onExecute, runCode]);
 
-  const [rd, fetchRd] = useRdFetch('/api/ai/generate-fetch-js');
+  const [rd, fetchRd] = useRdFetch('generate-fetch-js');
 
   const [url, setUrl] = useState('');
   const [exampleRes, setExampleRes] = useState('');

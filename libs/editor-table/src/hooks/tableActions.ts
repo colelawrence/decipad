@@ -11,6 +11,7 @@ import {
   TableCellType,
   TableElement,
   TableHeaderElement,
+  TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
 import {
@@ -20,7 +21,7 @@ import {
   setSelection,
   withPath,
 } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
+import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import {
   InsertNodesOptions,
   getNodeChildren,
@@ -32,8 +33,10 @@ import {
   withoutNormalizing,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Path } from 'slate';
+import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
+import { useToast } from '@decipad/toast';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 
@@ -53,6 +56,7 @@ export interface TableActions {
   onAddColumn: () => void;
   onAddColumnHere: (columnIndex: number, left?: boolean) => void;
   onRemoveColumn: (columnId: string) => void;
+  onPopulateColumn: (columnId: string) => void;
   onAddRowHere: (rowNumber: number, below?: boolean) => void;
   onAddRow: () => void;
   onRemoveRow: (rowIndex: string) => void;
@@ -398,6 +402,107 @@ export const useTableActions = (
     [editor, path]
   );
 
+  const [rd, fetchRd] = useRdFetch('complete-column');
+  const toast = useToast();
+
+  const { setTableFrozen } = useEditorTableContext();
+  // populate column
+  useEffect(() => {
+    switch (rd.status) {
+      case 'loading': {
+        setTableFrozen(true);
+        return;
+      }
+      case 'error': {
+        setTableFrozen(false);
+        return toast('Unable to populate column.', 'error');
+      }
+      case 'success': {
+        setTableFrozen(false);
+        const suggestions = rd.result;
+
+        const isValid =
+          Array.isArray(suggestions) &&
+          suggestions.every(
+            (s) => typeof s.id === 'string' && typeof s.suggestion === 'string'
+          );
+
+        if (!isValid) {
+          throw new Error('JSON does not have expected type');
+        }
+
+        if (!path) return;
+        const [, , ...rows] = Array.from(getNodeChildren(editor, path));
+
+        rows.forEach((row, i) => {
+          const { id: rowId } = row[0];
+          const suggestion = suggestions.find(({ id }) => rowId === id);
+          if (!suggestion) return;
+
+          const columnCellPath = [...path, i + 2, suggestion.columnIndex];
+          if (hasNode(editor, columnCellPath)) {
+            insertText(editor, suggestion.suggestion, {
+              at: columnCellPath,
+            });
+          }
+        });
+        return;
+      }
+      default: {
+        setTableFrozen(false);
+      }
+    }
+  }, [rd, setTableFrozen, editor, path, toast]);
+
+  const onPopulateColumn = useCallback(
+    async (columnHeaderId: string) => {
+      if (!path) {
+        return;
+      }
+
+      // get the column header name
+      const [, header, ...rows] = Array.from(getNodeChildren(editor, path));
+
+      const headerArray = header[0].children.map((h) => {
+        return (h as TableHeaderRowElement).children[0].text as string;
+      });
+
+      const columnIndex = header[0].children.findIndex(
+        (a) => (a as TableHeaderRowElement).id === columnHeaderId
+      );
+      const columnName = headerArray[columnIndex];
+
+      const rowsArray = rows.map((row) => {
+        const { children, id: rowId } = row[0];
+        const cells = children.map((cell) => {
+          return (cell as TableRowElement).children[0].text as string;
+        });
+
+        return { cells, rowId };
+      });
+
+      const unpopulated = rowsArray.filter((row) => {
+        return row.cells[columnIndex].trim() === '';
+      });
+
+      if (unpopulated.length === 0) {
+        toast('No empty cells to populate.', 'error');
+        return;
+      }
+      const rearranged = unpopulated;
+
+      const body = {
+        columnName,
+        headerArray,
+        columnIndex,
+        table: rearranged,
+      };
+
+      fetchRd(body);
+    },
+    [editor, path, fetchRd, toast]
+  );
+
   const onMoveColumn = useCallback(
     (fromIndex: number, toIndex: number) => {
       if (!path) {
@@ -432,6 +537,7 @@ export const useTableActions = (
     onAddColumn,
     onAddColumnHere,
     onRemoveColumn,
+    onPopulateColumn,
     onAddRowHere,
     onAddRow,
     onRemoveRow,

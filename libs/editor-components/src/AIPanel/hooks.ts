@@ -19,16 +19,17 @@ export type RemoteData<T> =
 
 export type RemoteDataStatus = RemoteData<any>['status'];
 
-type Endpoints = {
+export type Endpoints = {
   'generate-sql': {
-    endpoint: `/api/ai/generate-sql/${string}`;
-    body: string;
+    body: {
+      externalDataSourceId: string;
+      prompt: string;
+    };
     response: {
       completion: string;
     };
   };
   'rewrite-paragraph': {
-    endpoint: `/api/ai/rewrite-paragraph`;
     body: {
       prompt: string;
       paragraph: string;
@@ -38,7 +39,6 @@ type Endpoints = {
     };
   };
   'generate-fetch-js': {
-    endpoint: '/api/ai/generate-fetch-js';
     body: {
       url: string;
       exampleRes: string;
@@ -48,12 +48,26 @@ type Endpoints = {
       completion: string;
     };
   };
+  'complete-column': {
+    body: {
+      columnName: string;
+      columnIndex: number;
+      headerArray: string[];
+      table: {
+        cells: string[];
+        rowId: string;
+      }[];
+    };
+    response: {
+      id: string;
+      columnIndex: number;
+      suggestion: string;
+    }[];
+  };
 };
 const notAsked = Symbol('not asked');
 
-export const useRdFetch = <Name extends keyof Endpoints>(
-  url: Endpoints[Name]['endpoint']
-) => {
+export const useRdFetch = <Name extends keyof Endpoints>(endpoint: Name) => {
   type Endpoint = Endpoints[Name];
   type Response = Endpoint['response'];
   type Body = Endpoint['body'];
@@ -62,6 +76,7 @@ export const useRdFetch = <Name extends keyof Endpoints>(
   const [rd, setRd] = useState<RemoteData<Response>>({
     status: 'not asked',
   });
+  const url = `/api/ai/${endpoint}`;
 
   useEffect(() => {
     if (body === notAsked) {
@@ -76,7 +91,7 @@ export const useRdFetch = <Name extends keyof Endpoints>(
       setRd({ status: 'error', error: 'Something went wrong' });
       console.error('could not stringify body');
       captureException(
-        new Error(`Could not stringify body when submitting to ${url}`)
+        new Error(`Could not stringify body when submitting to '${url}'`)
       );
       return;
     }
@@ -90,8 +105,8 @@ export const useRdFetch = <Name extends keyof Endpoints>(
     })
       .then(async (res) => {
         if (res.status !== 200) {
-          console.error(`Error generating code (${res.status})`, res);
-          setRd({ status: 'error', error: 'Failed to generate code' });
+          console.error(`Request failed (${res.status})`, res);
+          setRd({ status: 'error', error: 'Request failed.' });
           return;
         }
 

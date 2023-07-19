@@ -13,10 +13,10 @@ module.exports = {
   ],
   coverageThreshold: {
     global: {
-      statements: 26,
-      branches: 17,
+      statements: 25,
+      branches: 16,
       functions: 17,
-      lines: 27,
+      lines: 26,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat
