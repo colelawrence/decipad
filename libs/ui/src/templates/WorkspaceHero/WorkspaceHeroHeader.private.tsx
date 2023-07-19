@@ -4,12 +4,12 @@ import { cssVar } from '../../primitives';
 import { SearchBar } from '../../molecules';
 import { Plus, Users } from '../../icons';
 
-type BigAssTopbarHeaderProps = {
+type WorkspaceHeroHeaderProps = {
   membersHref?: string;
   onCreateNotebook?: () => void;
 };
 
-export const BigAssTopbarHeader: React.FC<BigAssTopbarHeaderProps> = ({
+export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
   membersHref,
   onCreateNotebook,
 }) => {

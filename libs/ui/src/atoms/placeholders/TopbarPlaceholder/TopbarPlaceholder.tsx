@@ -1,13 +1,11 @@
-import React from 'react';
 import { css } from '@emotion/react';
+import React from 'react';
 import { cssVar } from '../../../primitives';
 
 const containerStyle = css({
   width: '100%',
   display: 'flex',
   padding: '16px 0',
-  borderBottom: '1px solid',
-  borderColor: `${cssVar('highlightColor')}`,
   justifyContent: 'space-between',
 });
 
@@ -15,7 +13,7 @@ const backButtonStyles = css({
   height: '32px',
   width: '32px',
   borderRadius: '32px',
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('strongerHighlightColor')}`,
 });
 
 const rightPanel = css({
@@ -30,14 +28,14 @@ const avatarPlaceholderStyles = css({
   height: '24px',
   width: '24px',
   borderRadius: '24px',
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('strongerHighlightColor')}`,
 });
 
 const shareButtonPlaceholderStyles = css({
   height: '33.68px',
   width: '64px',
   borderRadius: '6px',
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('strongerHighlightColor')}`,
 });
 
 export const TopbarPlaceholder: React.FC = () => (

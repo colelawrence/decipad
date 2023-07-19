@@ -2,6 +2,7 @@ import { useActiveElement, useLocalStorage } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useState } from 'react';
 import { WorkspaceMenu } from '..';
+import { Avatar } from '../../atoms';
 import { Caret } from '../../icons';
 import { cssVar, mediumShadow, p18Regular } from '../../primitives';
 
@@ -56,10 +57,18 @@ export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
         onClick={toggleMenu}
         data-testid="workspace-selector-button"
       >
-        <span css={nameStyles}>
-          <strong>{props.activeWorkspace.name}</strong>
-        </span>
-
+        <div css={nameStyles}>
+          <span css={avatarStyles}>
+            <Avatar
+              useSecondLetter={false}
+              name={props.activeWorkspace.name}
+              email={props.activeWorkspace.name}
+            />
+          </span>
+          <span css={nameTextStyles}>
+            <strong>{props.activeWorkspace.name}</strong>
+          </span>
+        </div>
         <span css={arrowDownButtonStyles}>
           <Caret variant="down" />
         </span>
@@ -93,8 +102,13 @@ const containerStyles = css({
   justifyContent: 'space-between',
 });
 
-const nameStyles = css(p18Regular, {
-  maxWidth: '300px',
+const nameStyles = css({
+  maxWidth: '276px',
+  display: 'flex',
+  gap: 12,
+});
+
+const nameTextStyles = css(p18Regular, {
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -107,4 +121,9 @@ const arrowDownButtonStyles = css({
   width: '24px',
   padding: '2px',
   flexShrink: 0,
+});
+
+const avatarStyles = css({
+  height: 24,
+  width: 24,
 });

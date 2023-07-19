@@ -1,24 +1,24 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { getAnalytics } from '@decipad/client-events';
+import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import {
+  useIncrementQueryCountMutation,
+  useWorkspaceSecrets,
+} from '@decipad/graphql-client';
 import {
   ExecutionContext,
   useCodeConnectionStore,
   useConnectionStore,
   useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import {
-  useWorkspaceSecrets,
-  useIncrementQueryCountMutation,
-} from '@decipad/graphql-client';
 import {
   removeFocusFromAllBecauseSlate,
   useEnterListener,
 } from '@decipad/react-utils';
+import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { getAnalytics } from '@decipad/client-events';
-import { workspaces } from '@decipad/routing';
-import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
 import {
   FC,
   ReactNode,
@@ -33,10 +33,12 @@ import { Close, Play, Sparkles } from '../../icons';
 import { Tabs } from '../../molecules/Tabs/Tabs';
 import {
   cssVar,
+  mobileQuery,
   p13Medium,
   p13Regular,
   p15Medium,
   p16Medium,
+  smallestMobile,
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 
@@ -390,6 +392,7 @@ const intWrapperStyles = css({
   borderRadius: '24px',
 
   backgroundColor: cssVar('backgroundColor'),
+  [mobileQuery]: { width: smallestMobile.landscape.width },
 });
 
 const titleWrapperStyles = css(p15Medium, {

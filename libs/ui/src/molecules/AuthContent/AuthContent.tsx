@@ -2,12 +2,13 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Deci } from '../../icons';
-import { cssVar, setCssVar, p14Regular, p24Medium } from '../../primitives';
+import { cssVar, p14Regular, p24Medium, setCssVar } from '../../primitives';
 
 const deciLogoWrapper = css({
   ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  width: '40px',
-  height: '40px',
+  display: 'grid',
+  width: '60px',
+  height: '60px',
   marginBottom: '10px',
 });
 

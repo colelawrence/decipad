@@ -246,9 +246,7 @@ export const NotebookTopbar = ({
           </span>
         )}
         <NotebookPath
-          notebookName={
-            isWriter ? notebook.name : 'Decipad — interactive notebook'
-          }
+          notebookName={isWriter ? notebook.name : 'Decipad — smart document'}
           workspaceName={workspaceName}
           href={!isWriter ? 'https://decipad.com' : undefined}
         />

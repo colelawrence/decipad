@@ -200,7 +200,7 @@ const Notebook: FC = () => {
                 >
                   <EditorIcon
                     color={iconColor}
-                    icon={icon ?? 'Rocket'}
+                    icon={icon ?? 'Deci'}
                     onChangeIcon={updateIcon}
                     onChangeColor={updateIconColor}
                     readOnly={isReadOnly}

@@ -136,7 +136,6 @@ const headingStyles = css(
 const modalStyles = css({
   display: 'grid',
   rowGap: '24px',
-  minWidth: '300px',
 });
 
 const membersStyle = css({

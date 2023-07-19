@@ -11,7 +11,9 @@ test.describe('Icons on the editor title', () => {
   test('renders the initial color and icon', async ({ page }) => {
     const notebookIconButton = page.getByTestId('notebook-icon');
 
-    await expect(notebookIconButton.locator('title')).toHaveText('Rocket');
+    await expect(notebookIconButton.locator('title')).toHaveText(
+      'Decipad Logo'
+    );
     const initialColor = await notebookIconButton.evaluate((el) => {
       return getComputedStyle(el).backgroundColor;
     });

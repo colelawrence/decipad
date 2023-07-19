@@ -3,6 +3,7 @@ import {
   EditorPlaceholder,
   NotebookIconPlaceholder,
   NotebookPage,
+  PlaygroundTopBar,
 } from '@decipad/ui';
 import { ComponentProps, lazy, useState } from 'react';
 import { Frame } from '../meta';
@@ -20,7 +21,7 @@ loadEditorIcon().then(loadEditor);
 
 const Playground: React.FC = () => {
   const [icon, setIcon] =
-    useState<ComponentProps<typeof EditorIcon>['icon']>('Rocket');
+    useState<ComponentProps<typeof EditorIcon>['icon']>('Deci');
   const [iconColor, setIconColor] =
     useState<ComponentProps<typeof EditorIcon>['color']>('Catskill');
 
@@ -28,7 +29,8 @@ const Playground: React.FC = () => {
 
   return (
     <NotebookPage
-      sidebarOpen={true}
+      sidebarOpen={false}
+      topbar={<PlaygroundTopBar />}
       notebook={
         <div data-editorloaded data-hydrated={!isServerSideRendering()}>
           <Frame

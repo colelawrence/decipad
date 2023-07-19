@@ -161,7 +161,7 @@ export const NotebookListItem = ({
   onExportBackups = noop,
   onUnarchive = noop,
   onChangeStatus = noop,
-  icon = 'Rocket',
+  icon = 'Deci',
   iconColor = 'Catskill',
   page,
   otherWorkspaces,

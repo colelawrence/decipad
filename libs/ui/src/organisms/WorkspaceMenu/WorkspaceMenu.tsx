@@ -2,22 +2,26 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 
 import { noop } from '@decipad/utils';
-import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 import { NavigationList, WorkspaceItem } from '../../molecules';
+import { WorkspaceItemCreate } from '../../molecules/WorkspaceItemCreate/WorkspaceItemCreate';
 import { cssVar, p14Medium } from '../../primitives';
 import { card } from '../../styles';
-import { WorkspaceItemCreate } from '../../molecules/WorkspaceItemCreate/WorkspaceItemCreate';
+import { deciOverflowYStyles } from '../../styles/scrollbars';
+import { Section } from '../WorkspaceNavigation/WorkspaceNavigation';
 
-const styles = css(card.styles, {
-  maxHeight: '50vh',
-  overflowY: 'auto',
-  padding: '16px',
+const styles = css(
+  card.styles,
+  {
+    maxHeight: '50vh',
+    padding: '16px',
 
-  display: 'grid',
-  rowGap: '8px',
+    display: 'grid',
+    rowGap: '8px',
 
-  border: 0,
-});
+    border: 0,
+  },
+  deciOverflowYStyles
+);
 
 const headerStyles = css({
   paddingTop: '4px',

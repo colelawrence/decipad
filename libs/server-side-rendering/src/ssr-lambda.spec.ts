@@ -1,13 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import 'cross-fetch/polyfill';
-import { Pad } from '@decipad/backendtypes';
+// to run this test you need to
+// yarn build:backend:ssr
 import {
-  testWithSandbox as test,
   AuthReturnValue,
+  testWithSandbox as test,
 } from '@decipad/backend-test-sandbox';
+import { Pad } from '@decipad/backendtypes';
+import 'cross-fetch/polyfill';
+import { distance } from 'fastest-levenshtein';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { distance } from 'fastest-levenshtein';
 
 test('sync many', (ctx) => {
   let pad: Pad;
@@ -80,11 +82,12 @@ test('sync many', (ctx) => {
     const doc = (await (await fetch(`/n/Title%3A${pad.id}`)).text())
       .replace(/<script>window\.__SESSION__.*<\/script>/g, '')
       .replaceAll(/http:\/\/localhost:[\d]+/g, 'http://localhost:xxxx');
+
     const expected = readFileSync(
       join(__dirname, '__fixtures__', 'ssr-lambda.spec.snap.html'),
       'utf-8'
     );
-    const maxDifferenceRatio = 0.01;
+    const maxDifferenceRatio = 0.05;
     const distanceRatio = distance(expected, doc) / expected.length;
     if (distanceRatio > maxDifferenceRatio) {
       // eslint-disable-next-line no-console

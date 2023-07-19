@@ -1,8 +1,8 @@
-import React from 'react';
 import Layout from '@theme/Layout';
+import React from 'react';
 
 import { DocSearch } from '@docsearch/react';
-import { GridContainer, Card } from '@site/src/components/GalleryCards';
+import { Card, GridContainer } from '@site/src/components/GalleryCards';
 
 import '@docsearch/css';
 
@@ -46,7 +46,7 @@ export default function Hello() {
             img2="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
             title="Get started with Decipad"
             notebook="/docs/quick-start/notebooks#video-create-your-first-notebook"
-            description="Decipad is an interactive notebook where you can create and explain calculations, empowering you to make better decisions with numbers."
+            description="Decipad is a smart document where you can create and explain calculations, empowering you to make better decisions with numbers."
           />
           <Card
             img2="https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed3-45ee-a6e0-475d1b018053.png"
@@ -85,12 +85,11 @@ export default function Hello() {
 
         <br />
 
-<h2>Browse by category</h2>
+        <h2>Browse by category</h2>
 
+        <h2>Popular Articles</h2>
 
-<h2>Popular Articles</h2>
-
-<h2>Recent Releases</h2>
+        <h2>Recent Releases</h2>
       </div>
     </Layout>
   );

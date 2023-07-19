@@ -9,6 +9,7 @@ import * as icons from '../../icons';
 import { Close } from '../../icons';
 import { cssVar, grey500, p13Medium, setCssVar } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
+import { deciOverflowXStyles } from '../../styles/scrollbars';
 import {
   AvailableSwatchColor,
   UserIconKey,
@@ -38,13 +39,18 @@ const contentHeaderText = css(p13Medium, {
   ...setCssVar('currentTextColor', grey500.rgb),
 });
 
-const iconsWrapper = css({
-  paddingTop: '12px',
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-  gap: '6px',
-});
+const iconsWrapper = css(
+  {
+    height: 175,
+    paddingTop: '12px',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: '6px',
+    flexDirection: 'column',
+  },
+  deciOverflowXStyles
+);
 
 type IconPopoverProps = {
   readonly color: AvailableSwatchColor;

@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import { cssVar, p14Medium, p32Medium } from '../../primitives';
 import { Deci } from '../../icons';
-import { BigAssTopbarHeader } from './BigAssTopbarHeader.private';
+import { cssVar, p14Medium, p32Medium } from '../../primitives';
+import { RainbowText } from '../../styles/card';
+import { WorkspaceHeroHeader } from './WorkspaceHeroHeader.private';
 
-type BigAssTopbarProps = {
+type WorkspaceHeroProps = {
   name: string;
   isPremium: boolean;
   membersCount: number;
@@ -11,19 +12,23 @@ type BigAssTopbarProps = {
   onCreateNotebook?: () => void;
 };
 
-export const BigAssTopbar: React.FC<BigAssTopbarProps> = ({
+export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   name,
   isPremium,
   membersCount,
   membersHref,
   onCreateNotebook,
 }) => {
-  const plan = isPremium ? <RainbowText>Pro Plan</RainbowText> : 'Free plan';
+  const plan = !isPremium ? (
+    <span css={RainbowText}>Pro Plan</span>
+  ) : (
+    'Free plan'
+  );
   const members = <MembersCounter number={membersCount} />;
 
   return (
     <Container>
-      <BigAssTopbarHeader
+      <WorkspaceHeroHeader
         membersHref={membersHref}
         onCreateNotebook={onCreateNotebook}
       />
@@ -66,10 +71,4 @@ const Title = styled.h2(p32Medium, {
 const StatusLine = styled.div(p14Medium, {
   marginTop: '8px',
   color: cssVar('weakTextColor'),
-});
-
-const RainbowText = styled.span({
-  background: `linear-gradient(268.09deg, #C1FA6B -0.35%, #A9FF28 -0.34%, #E9C711 85.21%)`,
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
 });

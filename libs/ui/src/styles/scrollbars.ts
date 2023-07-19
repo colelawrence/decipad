@@ -103,6 +103,15 @@ export const deciOverflowYStyles = css(
   noTrackScrollbarStyles
 );
 
+export const deciOverflowXStyles = css(
+  {
+    overflowX: 'auto',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
+  },
+  noTrackScrollbarStyles
+);
+
 export const deciOverflowStyles = css(
   {
     overflow: 'auto',

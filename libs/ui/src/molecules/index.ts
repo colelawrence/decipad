@@ -57,6 +57,7 @@ export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/Noteb
 export { NotebookPath } from './NotebookPath/NotebookPath';
 export { NotebookState } from './NotebookState/NotebookState';
 export { OrderedList } from './OrderedList/OrderedList';
+export { PlaygroundTopBar } from './PlaygroundTopBar/PlaygroundTopBar';
 export { PositiveIntegerInput } from './PositiveIntegerInput/PositiveIntegerInput';
 export { PotentialFormulaHighlight } from './PotentialFormulaHighlight/PotentialFormulaHighlight';
 export { RemoteAvatar } from './RemoteAvatar/RemoteAvatar';

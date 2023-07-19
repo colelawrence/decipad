@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
 import { Button, TextAndIconButton } from '../../atoms';
 import { Close } from '../../icons';
+import { modalDialogStyles } from '../../molecules/Modal/Modal';
 import { Tabs } from '../../molecules/Tabs/Tabs';
 import { cssVar, p12Medium, p15Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
@@ -85,7 +86,7 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   };
 
   return (
-    <div css={wrapperStyles}>
+    <div css={allWrapperStyles}>
       <div css={titleWrapperStyles}>
         <div css={titleStyles}>{title}</div>
         <div css={iconStyles}>
@@ -216,15 +217,8 @@ const wrapperStyles = css({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '740px',
-  maxHeight: '600px',
   padding: '32px',
   gap: '12px',
-
-  border: `1px solid ${cssVar('highlightColor')}`,
-  borderRadius: '12px',
-
-  backgroundColor: cssVar('backgroundColor'),
 });
 
 const titleStyles = css(p15Medium, {
@@ -246,3 +240,5 @@ const titleWrapperStyles = css({
 const tabWrapStyles = css({
   width: '100%',
 });
+
+const allWrapperStyles = [wrapperStyles, modalDialogStyles];

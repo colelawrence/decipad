@@ -10,7 +10,7 @@ image: https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed
 
 # Quick Start
 
-Decipad is an interactive notebook that helps everyone tell stories using data.
+Decipad is a smart document that helps everyone tell stories using data.
 
 import YouTubePlayer from '@site/src/components/VideoCards/videos';
 

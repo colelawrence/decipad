@@ -18,6 +18,7 @@ import {
   useUpdateSectionMutation,
   useUserQuery,
 } from '@decipad/graphql-client';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { docs, notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
@@ -34,7 +35,6 @@ import {
   TopbarPlaceholder,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import stringify from 'json-stringify-safe';
 import sortBy from 'lodash.sortby';
 import { signOut, useSession } from 'next-auth/react';
@@ -63,9 +63,9 @@ import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 const loadTopbar = () =>
   import(/* webpackChunkName: "workspace-topbar" */ './Topbar');
 const Topbar = lazy(loadTopbar);
-const loadBigAssTopbar = () =>
-  import(/* webpackChunkName: "big-ass-topbar" */ './BigAssTopbar');
-const BigAssTopbar = lazy(loadBigAssTopbar);
+const loadWorkspaceHero = () =>
+  import(/* webpackChunkName: "workspace-hero" */ './WorkspaceHero');
+const WorkspaceHero = lazy(loadWorkspaceHero);
 const loadCreateWorkspaceModal = () =>
   import(
     /* webpackChunkName: "create-workspace-modal" */ './CreateWorkspaceModal'
@@ -394,7 +394,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
       suspenseFallback={<NotebookListPlaceholder />}
     >
       {showBigAssTopbar && (
-        <BigAssTopbar
+        <WorkspaceHero
           name={currentWorkspace.name}
           isPremium={!!currentWorkspace.isPremium}
           membersCount={currentWorkspace.membersCount}

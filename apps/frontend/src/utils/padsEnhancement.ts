@@ -2,7 +2,7 @@ import { exportNotebook, exportNotebookBackups } from './exportNotebook';
 import { parseIconColorFromIdentifier } from './parseIconColorFromIdentifier';
 
 export const makeIcons = (notebook: any) => {
-  const { icon = 'Rocket', iconColor = 'Catskill' } =
+  const { icon = 'Deci', iconColor = 'Catskill' } =
     parseIconColorFromIdentifier(notebook?.icon);
   const status: string = notebook?.status || 'draft';
   return {
