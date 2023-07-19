@@ -226,6 +226,7 @@ const pendingInviteStyles = css(p12Medium, {
   backgroundColor: cssVar('highlightColor'),
   padding: '4px 8px',
   display: 'inline-block',
+  whiteSpace: 'nowrap',
 });
 
 const threeDotsButtonStyles = css(p12Medium, {

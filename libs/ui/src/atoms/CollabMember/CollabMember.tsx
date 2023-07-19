@@ -1,4 +1,3 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Avatar } from '..';
 import { NotebookAvatar } from '../../molecules';
@@ -18,16 +17,16 @@ export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
       </div>
       {user.email === user.name ? (
         <div css={userDetailsStyles}>
-          <div css={css(p12Medium, ellipsis)} title={user.email ?? undefined}>
+          <div css={smallTextStyles} title={user.email ?? undefined}>
             {user.email}
           </div>
         </div>
       ) : (
         <div css={userDetailsStyles}>
-          <div css={css(p14Medium, ellipsis)} title={user.name}>
+          <div css={mediumTextStyles} title={user.name}>
             {user.name}
           </div>
-          <div css={css(p12Medium, ellipsis)} title={user.email ?? undefined}>
+          <div css={smallTextStyles} title={user.email ?? undefined}>
             {user.email}
           </div>
         </div>
@@ -45,4 +44,12 @@ const userDetailsStyles = css({
   maxWidth: 225,
   flex: '1 0 auto',
   minWidth: 0,
+});
+
+const smallTextStyles = css(p12Medium, ellipsis, {
+  maxWidth: '18ch',
+});
+
+const mediumTextStyles = css(p14Medium, ellipsis, {
+  maxWidth: '18ch',
 });
