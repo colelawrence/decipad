@@ -1,4 +1,3 @@
-export * from './AddSqlConnection';
 export * from './Connection';
 export * from './ProviderList';
 export * from './Integrations';

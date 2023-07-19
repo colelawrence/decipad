@@ -68,14 +68,8 @@ const InsidePlate = ({
  * TODO: remove Plate.id after plate patch
  */
 export const Editor = (props: EditorProps) => {
-  const {
-    isSavedRemotely,
-    editor,
-    readOnly,
-    isNewNotebook,
-    workspaceId,
-    notebookId,
-  } = props;
+  const { isSavedRemotely, editor, readOnly, isNewNotebook, workspaceId } =
+    props;
 
   // Cursor remote presence
   // useCursors(editor);
@@ -138,10 +132,7 @@ export const Editor = (props: EditorProps) => {
                 >
                   <InsidePlate {...props} containerRef={containerRef} />
                   <UploadFile />
-                  <Integrations
-                    workspaceId={workspaceId}
-                    notebookId={notebookId}
-                  />
+                  <Integrations workspaceId={workspaceId} />
                   <NotebookState
                     isSavedRemotely={isSavedRemotely}
                     isNewNotebook={!!isNewNotebook}

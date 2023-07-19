@@ -6,7 +6,9 @@ import {
 import {
   useCodeConnectionStore,
   useConnectionStore,
+  useSQLConnectionStore,
 } from '@decipad/react-contexts';
+import { getDefined } from '@decipad/utils';
 import { nanoid } from 'nanoid';
 
 /**
@@ -35,6 +37,25 @@ export function getNewIntegration(
           code: codeStore.code,
           latestResult: codeStore.latestResult,
           timeOfLastRun: codeStore.timeOfLastRun,
+        },
+      };
+    }
+    case 'mysql': {
+      const sqlStore = useSQLConnectionStore.getState();
+      const store = useConnectionStore.getState();
+
+      return {
+        id: nanoid(),
+        type: ELEMENT_INTEGRATION,
+        children: [{ text: varName }],
+        typeMappings: store.resultTypeMapping,
+        integrationType: {
+          type: 'mysql',
+          query: sqlStore.Query,
+          latestResult: sqlStore.latestResult,
+          timeOfLastRun: null,
+          externalDataUrl: getDefined(sqlStore.ExternalDataId),
+          externalDataName: getDefined(sqlStore.ExternalDataName),
         },
       };
     }

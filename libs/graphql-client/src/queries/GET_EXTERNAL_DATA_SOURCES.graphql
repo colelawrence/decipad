@@ -1,11 +1,13 @@
 fragment ExternalDataSourceFragment on ExternalDataSource {
   id
+  dataSourceName
   name
-  workspaceId
+  workspace_id
   padId
   provider
   dataUrl
   authUrl
+  externalId
   keys {
     lastError
     createdAt

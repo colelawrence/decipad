@@ -410,6 +410,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
         <CodeEditor
           code={code}
           setCode={(sourcecode) => setCode(sourcecode)}
+          lang="javascript"
           log={log}
           setLog={setLog}
         />

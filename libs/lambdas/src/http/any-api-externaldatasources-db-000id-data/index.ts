@@ -10,6 +10,7 @@ import handle from '../handle';
 import { ExternalDataSourceRecord } from '../../types';
 
 const notebook = resource('notebook');
+const workspace = resource('workspace');
 
 const fetchExternalDataSource = async (
   id: string
@@ -29,11 +30,23 @@ export const handler = handle(async (event) => {
     );
   }
 
-  await notebook.expectAuthorized({
-    minimumPermissionType: 'READ',
-    recordId: getDefined(externalDataSource?.padId),
-    user: await getAuthenticatedUser(event),
-  });
+  if (externalDataSource.workspace_id) {
+    await workspace.expectAuthorized({
+      minimumPermissionType: 'READ',
+      recordId: externalDataSource.workspace_id,
+      user: await getAuthenticatedUser(event),
+    });
+  } else if (externalDataSource.padId) {
+    await notebook.expectAuthorized({
+      minimumPermissionType: 'READ',
+      recordId: externalDataSource.padId,
+      user: await getAuthenticatedUser(event),
+    });
+  } else {
+    throw Boom.illegal(
+      'External data source should have a workspace_id or padId'
+    );
+  }
 
   let { body: requestBody } = event;
   if (event.isBase64Encoded && requestBody) {

@@ -33,6 +33,7 @@ get /api/externaldatasources/:id/auth
 get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 any /api/externaldatasources/db/:id/data
+any /api/externaldatasources/db/testconn
 any /api/ai/generate-sql/:id
 any /api/ai/rewrite-paragraph
 any /api/ai/generate-fetch-js

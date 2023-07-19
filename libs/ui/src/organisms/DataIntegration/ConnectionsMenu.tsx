@@ -1,34 +1,41 @@
-import { FC, useCallback, useState } from 'react';
+import { useWorkspaceExternalData } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
-import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
+import { FC, useCallback, useState } from 'react';
+import { Divider, MenuItem } from '../../atoms';
 import { MenuList } from '../../molecules';
 import { ArrowDiagonalTopRight, Caret } from '../../icons';
-import { editorLayout } from '../../styles';
 import { cssVar, p13Medium } from '../../primitives';
-import { Divider, MenuItem } from '../../atoms';
+import { editorLayout } from '../../styles';
 
-interface SecretsMenuProps {
+interface ConnectionMenuProps {
   workspaceId: string;
-  onAddSecret: (secretName: string) => void;
+  selectedDataSource: string | undefined;
+  onSelectConnection: (connectionId: string, connectionName: string) => void;
 }
 
-export const SecretsMenu: FC<SecretsMenuProps> = ({
+export const ConnectionsMenu: FC<ConnectionMenuProps> = ({
   workspaceId,
-  onAddSecret,
+  selectedDataSource,
+  onSelectConnection,
 }) => {
-  const [secretsOpen, setSecretsOpen] = useState(false);
-
-  const { secrets } = useWorkspaceSecrets(workspaceId);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const onNavigateToSecrets = useCallback(() => {
-    setSecretsOpen(false);
+  const { workspaceExternalData } = useWorkspaceExternalData(workspaceId);
+
+  const onNavigateToConnections = useCallback(() => {
+    setOpen(false);
     setTimeout(() => {
-      navigate(workspaces({}).workspace({ workspaceId }).connections({}).$, {
-        replace: true,
-      });
+      navigate(
+        workspaces({})
+          .workspace({
+            workspaceId,
+          })
+          .connections({})
+          .sqlConnections({}).$
+      );
     }, 0);
   }, [navigate, workspaceId]);
 
@@ -37,36 +44,40 @@ export const SecretsMenu: FC<SecretsMenuProps> = ({
       <MenuList
         root
         dropdown
-        open={secretsOpen}
+        open={open}
         sideOffset={12}
-        onChangeOpen={setSecretsOpen}
+        onChangeOpen={setOpen}
         trigger={
           <span css={categoryAndCaretStyles}>
             <span css={p13Medium}>
               {/* Without text the icon has no line height, and so floats
                             upwards, hence the non-breaking space */}
               {'\uFEFF'}
-              Insert Secret
+              {selectedDataSource ?? 'Data Connections'}
             </span>
-            <span css={iconStyles} data-testid="insert-secret-button">
+            <span css={iconStyles} data-testid="insert-data-connections-button">
               <Caret variant="down" />
             </span>
           </span>
         }
       >
-        {secrets &&
-          secrets.map(({ name }) => (
+        {workspaceExternalData &&
+          workspaceExternalData.map((source) => (
             <MenuItem
-              key={name}
+              key={source.id}
               onSelect={() => {
-                onAddSecret(name);
+                if (source.dataUrl && source.dataSourceName) {
+                  onSelectConnection(source.dataUrl, source.dataSourceName);
+                } else {
+                  throw new Error('DATA URL NOT FOUND OR NO NAME');
+                }
               }}
             >
-              <span>{name}</span>
+              <span>{source.dataSourceName}</span>
             </MenuItem>
           ))}
 
-        {secrets && secrets.length > 0 && (
+        {workspaceExternalData && workspaceExternalData.length > 0 && (
           <div role="presentation" css={hrStyles}>
             <Divider />
           </div>
@@ -74,9 +85,9 @@ export const SecretsMenu: FC<SecretsMenuProps> = ({
 
         <MenuItem
           icon={<ArrowDiagonalTopRight />}
-          onSelect={onNavigateToSecrets}
+          onSelect={onNavigateToConnections}
         >
-          <span>Integration Secrets</span>
+          <span>Connection Management</span>
         </MenuItem>
       </MenuList>
     </div>

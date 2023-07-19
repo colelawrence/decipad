@@ -5,15 +5,24 @@ import {
   SimpleTableCellType,
 } from '.';
 
-export interface CodeBlockIntegration {
-  type: 'codeconnection';
-  code: string;
-  /** Base64 encoded */
+interface BlockIntegration {
   latestResult: string;
   timeOfLastRun: string | null;
 }
 
-type IntegrationTypes = CodeBlockIntegration;
+export interface CodeBlockIntegration extends BlockIntegration {
+  type: 'codeconnection';
+  code: string;
+}
+
+export interface SQLBlockIntegration extends BlockIntegration {
+  type: 'mysql';
+  query: string;
+  externalDataUrl: string;
+  externalDataName: string;
+}
+
+type IntegrationTypes = CodeBlockIntegration | SQLBlockIntegration;
 
 export interface IntegrationBlock extends BaseElement {
   type: typeof ELEMENT_INTEGRATION;

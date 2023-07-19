@@ -6,57 +6,11 @@ import {
   SimpleTableCellType,
 } from '@decipad/editor-types';
 import { generateVarName } from '@decipad/utils';
-import cloneDeep from 'lodash.clonedeep';
 import { create } from 'zustand';
 import { mapResultType } from './utils';
 
-export type Stage =
-  | 'pick-integration'
-  | 'connect' // Actually connect to your source.
-  | 'create-query' // Mostly for databases, but you might need to specify a query seperate from connection.
-  | 'map' // Map your data into the deci notebook.
-  | 'settings';
-
-type States = {
-  connectionState: { type: 'success' | 'error'; message: string } | undefined;
-  queryState: { type: 'success' | 'error'; message: string } | undefined;
-};
-
-export type DbOptions = {
-  connectionString: string;
-
-  // Credential connection
-  host: string;
-  username: string;
-  password: string;
-  database: string;
-  port: string;
-
-  existingConn: {
-    name: string;
-    id: string;
-  };
-
-  dbConnType?: 'url' | 'credentials' | 'existing-conn';
-
-  query: string;
-  showQueryResults?: boolean;
-};
-
-const IntegrationSteps: Record<ImportElementSource, Array<Stage>> = {
-  codeconnection: ['connect', 'map'],
-  decipad: [],
-  gsheets: [],
-  csv: [],
-  json: [],
-  postgresql: [],
-  mysql: [],
-  oracledb: [],
-  cockroachdb: [],
-  redshift: [],
-  mssql: [],
-  mariadb: [],
-};
+const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
+export type Stage = typeof IntegrationSteps[number];
 
 export interface IntegrationStore {
   open: boolean;
@@ -64,17 +18,6 @@ export interface IntegrationStore {
 
   connectionType?: ImportElementSource;
   setConnectionType: (v: ImportElementSource | undefined) => void;
-
-  dbOptions: DbOptions;
-  setDbOptions: (v: Partial<DbOptions>) => void;
-
-  /** Deals with error states and success states, and messages for both */
-  states: States;
-  setStates: (v: Partial<States>) => void;
-
-  /** Reference to the backend proxy url, through which we query external data */
-  externalDataSource?: string;
-  setExternalDataSource: (v: string | undefined) => void;
 
   stage: Stage;
   setStage: (v: Stage) => void;
@@ -111,33 +54,10 @@ export type EasyExternalDataProps = {
   provider: ImportElementSource;
 };
 
-const initialDbOptions: IntegrationStore['dbOptions'] = {
-  query: '',
-  connectionString: '',
-  host: '',
-  username: '',
-  password: '',
-  database: '',
-  port: '',
-  existingConn: {
-    name: '',
-    id: '',
-  },
-};
-
-const initialStates: IntegrationStore['states'] = {
-  connectionState: undefined,
-  queryState: undefined,
-};
-
 /**
  * Returns the zustand store for the data integrations creation.
  *
  * The store handles connection options, errors and current stages of the modal.
- *
- * @dbOptions -> Handles everything database related, except errors.
- * @states -> Is the connection ok? is the query ok? each one is undefined
- * if it hasn't been attempted yet.
  *
  * @stage -> Which part of the modal should you click? And what should the 'connect' button do.
  */
@@ -152,26 +72,6 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
 
   connectionType: undefined,
   setConnectionType: (v) => set(() => ({ connectionType: v })),
-
-  dbOptions: initialDbOptions,
-  setDbOptions: (v) =>
-    set(() => ({
-      dbOptions: {
-        ...get().dbOptions,
-        ...v,
-      },
-    })),
-
-  states: initialStates,
-  setStates: (v) =>
-    set(() => ({
-      states: {
-        ...get().states,
-        ...v,
-      },
-    })),
-
-  setExternalDataSource: (v) => set(() => ({ externalDataSource: v })),
 
   stage: 'pick-integration',
   setStage: (v) => set(() => ({ stage: v })),
@@ -205,49 +105,43 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   },
 
   next() {
-    const { connectionType, stage, existingIntegration } = get();
-    // If it is the last element, it must be the last, so we do something different.
-    if (
-      connectionType &&
-      IntegrationSteps[connectionType].at(-1) !== stage &&
-      !existingIntegration
-    ) {
-      set((state) => ({
-        stage: state.connectionType
-          ? IntegrationSteps[state.connectionType][
-              IntegrationSteps[state.connectionType].indexOf(state.stage) + 1
-            ]
-          : state.stage,
-      }));
-    } else {
+    const { stage, setStage } = get();
+
+    const index = IntegrationSteps.indexOf(stage);
+    if (index === -1) {
+      throw new Error(
+        `Could not find the current stage in IntegrationSteps: ${stage}`
+      );
+    }
+
+    if (index === IntegrationSteps.length - 1) {
       // User clicked continue on last page, create integration.
       set(() => ({ createIntegration: true }));
+    } else {
+      setStage(IntegrationSteps[index + 1]);
     }
   },
 
   back() {
-    const { abort, connectionType, stage } = get();
-    if (!connectionType) return;
-    // If we are at one, if means going back will lead us to the "New integrations page".
-    if (IntegrationSteps[connectionType].indexOf(stage) === 1) {
-      abort(true);
-      return;
+    const { stage, setStage, abort } = get();
+
+    const index = IntegrationSteps.indexOf(stage);
+    if (index === -1) {
+      throw new Error(
+        `Could not find the current stage in IntegrationSteps: ${stage}`
+      );
     }
 
-    set((state) => ({
-      stage: state.connectionType
-        ? IntegrationSteps[state.connectionType][
-            IntegrationSteps[state.connectionType].indexOf(state.stage) - 1
-          ]
-        : state.stage,
-    }));
+    if (index === 0) {
+      abort(false);
+    } else {
+      setStage(IntegrationSteps[index - 1]);
+    }
   },
 
   abort: (keepOpen = false) => {
     set(() => ({
       stage: 'pick-integration',
-      states: cloneDeep(initialStates),
-      dbOptions: cloneDeep(initialDbOptions),
       open: keepOpen,
       connectionType: undefined,
       createIntegration: false,
@@ -266,14 +160,16 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   setExistingIntegration: (v) => set(() => ({ existingIntegration: v })),
 }));
 
-interface CodeConnectionStore {
+interface ConnectionStore {
+  /* Latest result from the connection, so we can fallback on it. */
+  latestResult: string;
+  timeOfLastRun: string | null;
+}
+
+interface CodeConnectionStore extends ConnectionStore {
   code: string;
   setCode: (newCode: string) => void;
-  // Latest message from worker.
-  latestResult: string;
   setLatestResult: (newResult: string) => void;
-
-  timeOfLastRun: string | null;
 
   reset: () => void;
 
@@ -303,4 +199,27 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
   showAi: false,
   toggleShowAi: (b) =>
     set(({ showAi }) => ({ showAi: b === undefined ? !showAi : b })),
+}));
+
+interface SQLConnectionStore extends ConnectionStore {
+  ExternalDataId: string | undefined;
+  ExternalDataName: string | undefined;
+  Query: string;
+
+  Set: (NewState: Partial<SQLConnectionStore>) => void;
+}
+
+export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
+  /* Generic Connection Fields */
+  latestResult: '',
+  timeOfLastRun: null,
+
+  /* SQL Specific Fields */
+  ExternalDataId: undefined,
+  ExternalDataName: undefined,
+  Query: '',
+
+  Set(NewState) {
+    set(() => NewState);
+  },
 }));

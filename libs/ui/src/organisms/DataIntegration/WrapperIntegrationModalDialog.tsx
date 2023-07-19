@@ -40,12 +40,7 @@ import {
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 
-type Stages =
-  | 'pick-integration'
-  | 'connect'
-  | 'create-query'
-  | 'settings'
-  | 'map';
+type Stages = 'pick-integration' | 'connect' | 'map';
 
 interface WrapperIntegrationModalDialogProps {
   readonly children: ReactNode;
@@ -64,7 +59,10 @@ interface WrapperIntegrationModalDialogProps {
 
   readonly isEditing?: boolean;
 
-  readonly secretsMenu: ReactNode;
+  /** Display custom react component to perform some actions
+   * Currently being used for SecretsMenu or ConnectionsMenu
+   */
+  readonly actionMenu: ReactNode;
 }
 
 const analytics = getAnalytics();
@@ -84,7 +82,7 @@ export const WrapperIntegrationModalDialog: FC<
   children,
   workspaceId,
 
-  secretsMenu,
+  actionMenu,
 }) => {
   const { onExecute } = useContext(ExecutionContext);
   const { resultPreview, stage, connectionType } = useConnectionStore();
@@ -210,17 +208,6 @@ export const WrapperIntegrationModalDialog: FC<
         color={tabStage === 'map' ? 'grey' : 'transparent'}
         onClick={() => onTabClick('map')}
       />
-      {false && (
-        <TextAndIconButton
-          key="tab-3"
-          size="normal"
-          text="Settings"
-          variantHover
-          notSelectedLook={tabStage !== 'settings'}
-          color={tabStage === 'settings' ? 'grey' : 'transparent'}
-          onClick={() => onTabClick('settings')}
-        />
-      )}
     </Tabs>
   );
 
@@ -256,9 +243,9 @@ export const WrapperIntegrationModalDialog: FC<
                   <Sparkles />
                 </TextAndIconButton>
               )}
-              {secretsMenu}
             </>
           )}
+          {actionMenu}
         </div>
       </div>
       <div css={allChildrenStyles(tabStage)}>{children}</div>
@@ -345,16 +332,6 @@ export const WrapperIntegrationModalDialog: FC<
                     : 'Reset'}
                 </Button>
               </div>
-              <TextAndIconButton
-                text="Run"
-                size="normal"
-                iconPosition="left"
-                color="brand"
-                onClick={execSource}
-                disabled={runButtonDisabled}
-              >
-                <Play />
-              </TextAndIconButton>
               {showQueryQuotaLimit && (
                 <p css={queriesLeftStyles}>
                   {nrQueriesLeft} of {quotaLimit} credits left
@@ -362,6 +339,16 @@ export const WrapperIntegrationModalDialog: FC<
               )}
             </>
           )}
+          <TextAndIconButton
+            text="Run"
+            size="normal"
+            iconPosition="left"
+            color="brand"
+            onClick={execSource}
+            disabled={runButtonDisabled}
+          >
+            <Play />
+          </TextAndIconButton>
         </div>
       )}
     </div>

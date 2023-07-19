@@ -258,7 +258,31 @@
             "deprecationReason": null
           },
           {
+            "name": "dataSourceName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dataUrl",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "externalId",
             "description": null,
             "args": [],
             "type": {
@@ -354,7 +378,7 @@
             "deprecationReason": null
           },
           {
-            "name": "workspaceId",
+            "name": "workspace_id",
             "description": null,
             "args": [],
             "type": {
@@ -533,6 +557,18 @@
         "inputFields": [
           {
             "name": "dataSourceName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "externalId",
             "description": null,
             "type": {
               "kind": "SCALAR",

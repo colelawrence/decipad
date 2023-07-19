@@ -1,5 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { javascript } from '@codemirror/lang-javascript';
+import { sql } from '@codemirror/lang-sql';
 import {
   ExecutionContext,
   TExecution,
@@ -33,6 +34,7 @@ import {
 interface CodeEditorProps {
   code: string;
   setCode: (newCode: string) => void;
+  lang: 'javascript' | 'sql';
 
   log: TExecution<boolean>[];
   setLog: Dispatch<SetStateAction<TExecution<boolean>[]>>;
@@ -44,6 +46,7 @@ const editorHeight = 252;
 export const CodeEditor: FC<CodeEditorProps> = ({
   code,
   setCode,
+  lang,
   log,
   setLog,
 }) => {
@@ -78,7 +81,8 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   const { setContainer, view } = useCodeMirror({
     container: editor.current,
     value: isE2E ? '' : code,
-    extensions: [javascript()],
+    extensions: [lang === 'sql' ? sql() : javascript()],
+    lang,
     height: `${
       log.length > 0 ? editorHeight : editorHeight + logDetailHeight
     }px`,

@@ -3,9 +3,11 @@ import { setSelection } from '@decipad/editor-utils';
 import {
   useCodeConnectionStore,
   useConnectionStore,
+  useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { findNode, insertNodes, setNodes } from '@udecode/plate';
 import { useEffect } from 'react';
+import { getDefined } from '@decipad/utils';
 import { getNewIntegration } from '../utils';
 
 /**
@@ -20,7 +22,6 @@ export const useCreateIntegration = () => {
   useEffect(() => {
     if (createIntegration) {
       // Using getState because I don't want the hook to refresh when store is changing.
-      const codeStore = useCodeConnectionStore.getState();
       const store = useConnectionStore.getState();
 
       if (!store.connectionType || !store.varName) return;
@@ -39,20 +40,43 @@ export const useCreateIntegration = () => {
         const [node, path] = integrationBlock;
 
         // We were editing the integration
-        setNodes(
-          editor,
-          {
-            ...node,
-            typeMappings: store.resultTypeMapping,
-            integrationType: {
-              code: codeStore.code,
-              latestResult: codeStore.latestResult,
-              timeOfLastRun: codeStore.timeOfLastRun,
-              type: 'codeconnection',
-            } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
-          },
-          { at: path }
-        );
+        if (node.integrationType.type === 'codeconnection') {
+          const codeStore = useCodeConnectionStore.getState();
+          setNodes(
+            editor,
+            {
+              ...node,
+              typeMappings: store.resultTypeMapping,
+              integrationType: {
+                code: codeStore.code,
+                latestResult: codeStore.latestResult,
+                timeOfLastRun: codeStore.timeOfLastRun,
+                type: 'codeconnection',
+              } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
+            },
+            { at: path }
+          );
+        } else if (node.integrationType.type === 'mysql') {
+          const sqlStore = useSQLConnectionStore.getState();
+          setNodes(
+            editor,
+            {
+              ...node,
+              typeMappings: store.resultTypeMapping,
+              integrationType: {
+                query: sqlStore.Query,
+                latestResult: sqlStore.latestResult,
+                timeOfLastRun: sqlStore.timeOfLastRun,
+                type: 'mysql',
+                externalDataName: getDefined(sqlStore.ExternalDataName),
+                externalDataUrl: getDefined(sqlStore.ExternalDataId),
+              } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
+            },
+            { at: path }
+          );
+        } else {
+          throw new Error('NOT SUPPORTED YET');
+        }
         store.abort();
         return;
       }

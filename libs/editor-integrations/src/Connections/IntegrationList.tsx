@@ -9,6 +9,7 @@ import {
   icons,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const store = useConnectionStore.getState();
 export const IntegrationList: ComponentProps<
@@ -26,6 +27,17 @@ export const IntegrationList: ComponentProps<
     enabled: true,
   },
   {
+    icon: <img alt="SQL" src={OtherSql} />,
+    title: 'SQL',
+    description:
+      'Effortlessly access data from SQL databases through simple queries.',
+    onClick: () => {
+      store.setConnectionType('mysql');
+      store.setStage('connect');
+    },
+    enabled: isFlagEnabled('WORKSPACE_CONNECTIONS'),
+  },
+  {
     icon: <img alt="Google Sheet" src={GoogleSheet} />,
     title: 'Google sheet',
     description: 'Import, collaborate, and analyze Google Sheets data.',
@@ -36,14 +48,6 @@ export const IntegrationList: ComponentProps<
     icon: <icons.Paperclip />,
     title: 'CSV',
     description: 'Loads a CSV to Decipad',
-    onClick: noop,
-    enabled: false,
-  },
-  {
-    icon: <img alt="SQL" src={OtherSql} />,
-    title: 'SQL',
-    description:
-      'Effortlessly access data from SQL databases through simple queries.',
     onClick: noop,
     enabled: false,
   },

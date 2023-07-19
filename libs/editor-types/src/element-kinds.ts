@@ -46,7 +46,6 @@ export const ELEMENT_DISPLAY = 'display';
 
 // Interactive
 export const DEPRECATED_ELEMENT_INPUT = 'input';
-export const ELEMENT_JS_BLOCK = 'javascript-block';
 
 // Inlines
 export const ELEMENT_INLINE_NUMBER = 'inline-number';

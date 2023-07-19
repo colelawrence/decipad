@@ -1,0 +1,3 @@
+mutation DeleteExternalData($id: ID!) {
+  removeExternalDataSource(id: $id)
+}

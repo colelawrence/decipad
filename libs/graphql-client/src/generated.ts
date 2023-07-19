@@ -43,13 +43,15 @@ export type ExternalDataSource = {
   __typename?: 'ExternalDataSource';
   access: ExternalDataSourceAccess;
   authUrl?: Maybe<Scalars['String']['output']>;
+  dataSourceName?: Maybe<Scalars['String']['output']>;
   dataUrl?: Maybe<Scalars['String']['output']>;
+  externalId?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   keys: Array<ExternalKey>;
   name: Scalars['String']['output'];
   padId?: Maybe<Scalars['ID']['output']>;
   provider: ExternalProvider;
-  workspaceId?: Maybe<Scalars['ID']['output']>;
+  workspace_id?: Maybe<Scalars['ID']['output']>;
 };
 
 export type ExternalDataSourceAccess = {
@@ -69,6 +71,7 @@ export type ExternalDataSourceCreateInput = {
 
 export type ExternalDataSourceUpdateInput = {
   dataSourceName?: InputMaybe<Scalars['String']['input']>;
+  externalId?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -947,7 +950,7 @@ export type CreateExternalDataSourceMutationVariables = Exact<{
 }>;
 
 
-export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, name: string, workspaceId?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | null };
+export type CreateExternalDataSourceMutation = { __typename?: 'Mutation', createExternalDataSource?: { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | null };
 
 export type CreateLogsMutationVariables = Exact<{
   resource: Scalars['String']['input'];
@@ -1019,6 +1022,13 @@ export type DeleteWorkspaceMutationVariables = Exact<{
 
 
 export type DeleteWorkspaceMutation = { __typename?: 'Mutation', removeWorkspace?: boolean | null };
+
+export type DeleteExternalDataMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteExternalDataMutation = { __typename?: 'Mutation', removeExternalDataSource?: boolean | null };
 
 export type DeleteWorkspaceSecretMutationVariables = Exact<{
   secretId: Scalars['ID']['input'];
@@ -1159,6 +1169,14 @@ export type UnshareWorkspaceWithUserMutationVariables = Exact<{
 
 export type UnshareWorkspaceWithUserMutation = { __typename?: 'Mutation', unshareWorkspaceWithUser?: { __typename?: 'Workspace', id: string, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null } | null };
 
+export type UpdateExternalDataMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  dataSource: ExternalDataSourceUpdateInput;
+}>;
+
+
+export type UpdateExternalDataMutation = { __typename?: 'Mutation', updateExternalDataSource?: { __typename?: 'ExternalDataSource', id: string } | null };
+
 export type UpdateNotebookArchiveMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1224,21 +1242,21 @@ export type IncrementQueryCountMutationVariables = Exact<{
 
 export type IncrementQueryCountMutation = { __typename?: 'Mutation', incrementQueryCount: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } };
 
-export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, name: string, workspaceId?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> };
+export type ExternalDataSourceFragmentFragment = { __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> };
 
 export type GetExternalDataSourcesQueryVariables = Exact<{
   notebookId: Scalars['ID']['input'];
 }>;
 
 
-export type GetExternalDataSourcesQuery = { __typename?: 'Query', getExternalDataSources: { __typename?: 'PagedResult', items: Array<{ __typename?: 'ExternalDataSource', id: string, name: string, workspaceId?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | { __typename?: 'SharedResource' }> } };
+export type GetExternalDataSourcesQuery = { __typename?: 'Query', getExternalDataSources: { __typename?: 'PagedResult', items: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | { __typename?: 'SharedResource' }> } };
 
 export type GetExternalDataSourcesWorkspaceQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
 }>;
 
 
-export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: { __typename?: 'PagedResult', items: Array<{ __typename?: 'ExternalDataSource', id: string, name: string, workspaceId?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | { __typename?: 'SharedResource' }> } };
+export type GetExternalDataSourcesWorkspaceQuery = { __typename?: 'Query', getExternalDataSourcesWorkspace: { __typename?: 'PagedResult', items: Array<{ __typename?: 'ExternalDataSource', id: string, dataSourceName?: string | null, name: string, workspace_id?: string | null, padId?: string | null, provider: ExternalProvider, dataUrl?: string | null, authUrl?: string | null, externalId?: string | null, keys: Array<{ __typename?: 'ExternalKey', lastError?: string | null, createdAt: any, expiresAt?: any | null, lastUsedAt?: any | null }> } | { __typename?: 'SharedResource' }> } };
 
 export type NotebookSnapshotFragment = { __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null };
 
@@ -1300,12 +1318,14 @@ export type GetWorkspaceSecretsQuery = { __typename?: 'Query', getWorkspaceSecre
 export const ExternalDataSourceFragmentFragmentDoc = gql`
     fragment ExternalDataSourceFragment on ExternalDataSource {
   id
+  dataSourceName
   name
-  workspaceId
+  workspace_id
   padId
   provider
   dataUrl
   authUrl
+  externalId
   keys {
     lastError
     createdAt
@@ -1607,6 +1627,15 @@ export const DeleteWorkspaceDocument = gql`
 export function useDeleteWorkspaceMutation() {
   return Urql.useMutation<DeleteWorkspaceMutation, DeleteWorkspaceMutationVariables>(DeleteWorkspaceDocument);
 };
+export const DeleteExternalDataDocument = gql`
+    mutation DeleteExternalData($id: ID!) {
+  removeExternalDataSource(id: $id)
+}
+    `;
+
+export function useDeleteExternalDataMutation() {
+  return Urql.useMutation<DeleteExternalDataMutation, DeleteExternalDataMutationVariables>(DeleteExternalDataDocument);
+};
 export const DeleteWorkspaceSecretDocument = gql`
     mutation DeleteWorkspaceSecret($secretId: ID!) {
   removeSecret(secretId: $secretId)
@@ -1834,6 +1863,17 @@ export const UnshareWorkspaceWithUserDocument = gql`
 
 export function useUnshareWorkspaceWithUserMutation() {
   return Urql.useMutation<UnshareWorkspaceWithUserMutation, UnshareWorkspaceWithUserMutationVariables>(UnshareWorkspaceWithUserDocument);
+};
+export const UpdateExternalDataDocument = gql`
+    mutation UpdateExternalData($id: ID!, $dataSource: ExternalDataSourceUpdateInput!) {
+  updateExternalDataSource(id: $id, dataSource: $dataSource) {
+    id
+  }
+}
+    `;
+
+export function useUpdateExternalDataMutation() {
+  return Urql.useMutation<UpdateExternalDataMutation, UpdateExternalDataMutationVariables>(UpdateExternalDataDocument);
 };
 export const UpdateNotebookArchiveDocument = gql`
     mutation UpdateNotebookArchive($id: ID!) {
@@ -2142,13 +2182,15 @@ export type GraphCacheResolvers = {
   ExternalDataSource?: {
     access?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, WithTypename<ExternalDataSourceAccess> | string>,
     authUrl?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
+    dataSourceName?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
     dataUrl?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
+    externalId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>,
     keys?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Array<WithTypename<ExternalKey> | string>>,
     name?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['String'] | string>,
     padId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>,
     provider?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, ExternalProvider | string>,
-    workspaceId?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>
+    workspace_id?: GraphCacheResolver<WithTypename<ExternalDataSource>, Record<string, never>, Scalars['ID'] | string>
   },
   ExternalDataSourceAccess?: {
     roles?: GraphCacheResolver<WithTypename<ExternalDataSourceAccess>, Record<string, never>, Array<WithTypename<RoleAccess> | string>>,

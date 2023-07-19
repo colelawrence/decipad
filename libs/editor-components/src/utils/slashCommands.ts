@@ -13,7 +13,6 @@ import {
   insertCodeLineBelow,
   insertDataMapping,
   insertDividerBelow,
-  insertJavascriptBlockBelow,
   insertStructuredCodeLineBelow,
   setSelection,
 } from '@decipad/editor-utils';
@@ -69,9 +68,6 @@ export const execute = ({
   withoutNormalizing(editor, () => {
     setSelection(editor, null as unknown as Range);
     switch (command) {
-      case 'javascript-block':
-        insertJavascriptBlockBelow(editor, path, getAvailableIdentifier);
-        break;
       case 'structured-input':
         insertStructuredCodeLineBelow({
           editor,

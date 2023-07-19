@@ -1,41 +1,33 @@
-/* eslint-disable no-param-reassign */
-import { IntegrationTypes } from '@decipad/editor-types';
+import { FC, useEffect } from 'react';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
   mapResultType,
-  useCodeConnectionStore,
   useComputer,
   useConnectionStore,
+  useSQLConnectionStore,
 } from '@decipad/react-contexts';
-import type { ResultMessageType } from '@decipad_org/safejs';
-import { useCallback, useEffect } from 'react';
+import { IntegrationTypes } from '@decipad/editor-types';
 import { useIntegrationContext } from '.';
-import { useWorker } from '../hooks';
-import { MaybeResultFromWorker } from '../utils';
+import { MaybeResultFromWorker, fetchQuery } from '../utils';
 
-interface CodeIntegrationProps {
+interface SQLIntegrationProps {
   id: string;
   varName: string;
   typeMappings: IntegrationTypes.IntegrationBlock['typeMappings'];
-  blockOptions: IntegrationTypes.CodeBlockIntegration;
+  blockOptions: IntegrationTypes.SQLBlockIntegration;
 }
 
-/**
- * Code block integration, child of the regular IntegrationBlock
- * This component handles the execution of user code, and also
- * pushing it to the computer.
- */
-export const CodeIntegration = function CodeIntegration({
+export const SQLIntegration: FC<SQLIntegrationProps> = ({
   typeMappings,
   blockOptions,
   id,
   varName,
-}: CodeIntegrationProps): null {
+}): null => {
   const computer = useComputer();
   const observable = useIntegrationContext();
 
   const store = useConnectionStore();
-  const codeStore = useCodeConnectionStore();
+  const sqlStore = useSQLConnectionStore();
 
   useEffect(() => {
     const result = MaybeResultFromWorker(blockOptions.latestResult);
@@ -51,36 +43,33 @@ export const CodeIntegration = function CodeIntegration({
     };
   }, [computer, id, varName]);
 
-  const worker = useWorker(
-    useCallback(
-      (msg: ResultMessageType) => {
-        const result = MaybeResultFromWorker(msg.result);
-        if (!result) return;
-        const mappedResult = mapResultType(result, typeMappings);
-        pushResultToComputer(computer, id, varName, mappedResult);
-      },
-      [computer, id, varName, typeMappings]
-    ),
-    useCallback((e) => console.error(e), [])
-  );
-
   // REFACTOR: Depending on store and codeStore is inefficient and clunky.
   useEffect(() => {
     const sub = observable?.subscribe((action) => {
       switch (action) {
         case 'refresh':
-          worker?.execute(blockOptions.code);
+          fetchQuery(blockOptions.externalDataUrl, blockOptions.query).then(
+            (res) => {
+              if (res?.type === 'success') {
+                const result = MaybeResultFromWorker(JSON.stringify(res.data));
+                if (!result) return;
+
+                const mappedResult = mapResultType(result, typeMappings);
+                pushResultToComputer(computer, id, varName, mappedResult);
+              }
+              // TODO: Handle error case
+            }
+          );
           break;
         case 'show-source': {
           store.abort();
-          store.setConnectionType('codeconnection');
+          store.setConnectionType('mysql');
           store.setStage('connect');
           store.setExistingIntegration(id);
           store.setResultPreview(undefined);
 
           store.setAllTypeMapping(typeMappings);
-          codeStore.setCode(blockOptions.code);
-          // code review: does this cycle?
+          sqlStore.Set({ Query: blockOptions.query });
           store.setVarName(varName);
           store.changeOpen(true);
           break;
@@ -92,13 +81,14 @@ export const CodeIntegration = function CodeIntegration({
     };
   }, [
     observable,
-    blockOptions.code,
-    worker,
     store,
-    codeStore,
+    sqlStore,
     varName,
     id,
     typeMappings,
+    blockOptions.query,
+    blockOptions.externalDataUrl,
+    computer,
   ]);
 
   return null;

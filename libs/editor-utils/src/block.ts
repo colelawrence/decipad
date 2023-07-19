@@ -6,13 +6,11 @@ import {
   ELEMENT_DATA_MAPPING,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_NUMBER,
-  ELEMENT_JS_BLOCK,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   ELEMENT_STRUCTURED_VARNAME,
   ElementKind,
   InlineNumberElement,
-  JavaScriptBlock,
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
@@ -140,25 +138,6 @@ export const insertBlockOfTypeBelow = (
   insertNodes<TElement>(
     editor,
     { id: nanoid(), type, children: [{ text: '' }] },
-    { at: requirePathBelowBlock(editor, path) }
-  );
-};
-
-export const insertJavascriptBlockBelow = (
-  editor: MyEditor,
-  path: Path,
-  getAvailableIdentifier: Computer['getAvailableIdentifier']
-): void => {
-  insertNodes<JavaScriptBlock>(
-    editor,
-    {
-      id: nanoid(),
-      type: ELEMENT_JS_BLOCK,
-      code: '',
-      codeResult: 'null',
-      varName: getAvailableIdentifier(generateVarName(true)),
-      children: [{ text: '' }],
-    },
     { at: requirePathBelowBlock(editor, path) }
   );
 };

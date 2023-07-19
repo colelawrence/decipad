@@ -79,7 +79,6 @@ const dialogStyles = css({
   gridArea: '1 / 1',
   justifySelf: 'center',
   alignSelf: 'center',
-  maxHeight: '75%',
   overflowY: 'auto',
 
   padding: '24px',

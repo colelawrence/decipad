@@ -79,7 +79,7 @@ const modalWrapper = css({
   flexDirection: 'column',
   alignItems: 'center',
   width: '740px',
-  height: '632px',
+  height: '580px',
   gap: '20px',
 });
 

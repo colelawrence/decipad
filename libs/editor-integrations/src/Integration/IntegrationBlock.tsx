@@ -37,6 +37,7 @@ import {
 } from 'react';
 import { Subject } from 'rxjs';
 import { CodeIntegration } from './CodeIntegration';
+import { SQLIntegration } from './SQLIntegration';
 
 function getIntegrationComponent(
   id: string,
@@ -48,6 +49,15 @@ function getIntegrationComponent(
     case 'codeconnection':
       return (
         <CodeIntegration
+          id={id}
+          varName={varName}
+          typeMappings={typeMappings}
+          blockOptions={blockOptions}
+        />
+      );
+    case 'mysql':
+      return (
+        <SQLIntegration
           id={id}
           varName={varName}
           typeMappings={typeMappings}

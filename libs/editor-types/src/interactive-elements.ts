@@ -15,7 +15,6 @@ import {
   ELEMENT_DROPDOWN,
   ELEMENT_EXPRESSION,
   ELEMENT_IMPORT,
-  ELEMENT_JS_BLOCK,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
   ELEMENT_LIVE_DATASET,
@@ -62,16 +61,6 @@ export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   mssql: 'MySQL',
   mariadb: 'MariaDB',
 };
-
-export interface JavaScriptBlock extends BaseElement {
-  type: typeof ELEMENT_JS_BLOCK;
-  varName: string;
-  /** The actual JS code */
-  code: string;
-  /** Base 64 stringified result to reduce size */
-  codeResult: string;
-  children: [PlainText];
-}
 
 export interface ImportElement extends BaseElement {
   type: typeof ELEMENT_IMPORT;
@@ -305,7 +294,6 @@ export type InteractiveElement =
   | ExpressionElement
   | VariableDefinitionElement
   | LiveQueryElement
-  | JavaScriptBlock
   | IntegrationTypes.IntegrationBlock;
 
 export type VariableElement = VariableDefinitionElement | VariableSliderElement;

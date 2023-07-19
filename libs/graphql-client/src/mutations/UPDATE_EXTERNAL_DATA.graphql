@@ -1,0 +1,8 @@
+mutation UpdateExternalData(
+  $id: ID!
+  $dataSource: ExternalDataSourceUpdateInput!
+) {
+  updateExternalDataSource(id: $id, dataSource: $dataSource) {
+    id
+  }
+}

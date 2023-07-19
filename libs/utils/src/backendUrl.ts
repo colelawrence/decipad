@@ -8,4 +8,7 @@ export const BackendUrl = {
   fetchProxy(notebookId: string): URL {
     return new URL(`/api/pads/${notebookId}/fetch`, baseUrl);
   },
+  pingDatabase(): URL {
+    return new URL(`/api/externaldatasources/db/testconn`, baseUrl);
+  },
 };

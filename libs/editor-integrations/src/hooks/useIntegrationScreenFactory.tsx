@@ -1,13 +1,18 @@
 import { ReactNode, useMemo } from 'react';
-import { SelectIntegration } from '@decipad/ui';
-import { IntegrationStore, useConnectionStore } from '@decipad/react-contexts';
+import { ConnectionsMenu, SecretsMenu, SelectIntegration } from '@decipad/ui';
+import {
+  IntegrationStore,
+  TExecution,
+  useConnectionStore,
+  useSQLConnectionStore,
+} from '@decipad/react-contexts';
 import { IntegrationList, Connection, ResultPreview } from '../Connections';
 
 /**
  * Factory method to return different integrations based on state.
  * Used to abstract away the selection of integration screens.
  */
-export const useIntegrationScreenFactory = () => {
+export const useIntegrationScreenFactory = (): ReactNode => {
   const store = useConnectionStore((state) => ({
     connectionType: state.connectionType,
     resultPreview: state.resultPreview,
@@ -21,14 +26,12 @@ export const useIntegrationScreenFactory = () => {
   const componentMap: Record<IntegrationStore['stage'], ReactNode> = useMemo(
     () => ({
       'pick-integration': <SelectIntegration integrations={IntegrationList} />,
-      'pick-source': null,
       connect: (
         <Connection
           type={store.connectionType}
           setResultPreview={store.setResultPreview}
         />
       ),
-      'create-query': null,
       map: (
         <ResultPreview
           result={store.resultPreview}
@@ -37,10 +40,47 @@ export const useIntegrationScreenFactory = () => {
           setTypeMapping={store.setResultTypeMapping}
         />
       ),
-      settings: null,
     }),
     [store]
   );
 
   return useMemo(() => componentMap[store.stage], [componentMap, store.stage]);
 };
+
+export function useConnectionActionMenu(
+  workspaceId: string,
+  onExecute: (arg: TExecution<boolean>) => void
+): ReactNode {
+  const connectionType = useConnectionStore((state) => state.connectionType);
+  const sqlStore = useSQLConnectionStore();
+
+  switch (connectionType) {
+    case 'codeconnection':
+      return (
+        <SecretsMenu
+          workspaceId={workspaceId}
+          onAddSecret={(secretName) =>
+            onExecute({
+              status: 'secret',
+              name: secretName,
+            })
+          }
+        />
+      );
+    case 'mysql':
+      return (
+        <ConnectionsMenu
+          workspaceId={workspaceId}
+          selectedDataSource={sqlStore.ExternalDataName}
+          onSelectConnection={(ExternalDataId, ExternalDataName) => {
+            sqlStore.Set({
+              ExternalDataId,
+              ExternalDataName,
+            });
+          }}
+        />
+      );
+    default:
+      return null;
+  }
+}

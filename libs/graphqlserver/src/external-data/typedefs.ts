@@ -35,6 +35,7 @@ export default gql`
   input ExternalDataSourceUpdateInput {
     name: String
     dataSourceName: String
+    externalId: String
   }
 
   type ExternalDataSourceAccess {
@@ -45,11 +46,13 @@ export default gql`
   type ExternalDataSource {
     id: ID!
     name: String!
-    workspaceId: ID
+    dataSourceName: String
+    workspace_id: ID
     padId: ID
     provider: ExternalProvider!
     dataUrl: String
     authUrl: String
+    externalId: String
     access: ExternalDataSourceAccess!
     keys: [ExternalKey!]!
   }
