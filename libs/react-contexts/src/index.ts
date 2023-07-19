@@ -1,4 +1,3 @@
-export * from './block';
 export * from './computer';
 export * from './current-workspace-store';
 export * from './cursor-store';

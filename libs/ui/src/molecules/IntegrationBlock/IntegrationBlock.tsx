@@ -68,7 +68,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
   const readOnly = useIsEditorReadOnly();
 
   return (
-    <div css={integrationBlockStyles}>
+    <div className={'block-table'} css={integrationBlockStyles}>
       <div css={css({ display: 'flex', alignItems: 'center' })}>
         <LiveCode
           meta={meta}

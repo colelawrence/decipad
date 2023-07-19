@@ -1,4 +1,3 @@
-import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, StoryFn } from '@storybook/react';
 import { Blockquote } from './Blockquote';
 
@@ -15,10 +14,4 @@ export default {
 
 export const Normal: StoryFn<typeof args> = (props) => (
   <Blockquote {...props} />
-);
-
-export const Active: StoryFn<typeof args> = (props) => (
-  <BlockIsActiveProvider>
-    <Blockquote {...props} />
-  </BlockIsActiveProvider>
 );

@@ -1,4 +1,3 @@
-import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, StoryFn } from '@storybook/react';
 import { Paragraph } from './Paragraph';
 
@@ -16,9 +15,7 @@ export const Normal: StoryFn<{ children: string }> = (args) => (
 Normal.args = { children: lorem };
 
 export const Active: StoryFn<{ children: string }> = (args) => (
-  <BlockIsActiveProvider>
-    <Paragraph {...args} />
-  </BlockIsActiveProvider>
+  <Paragraph {...args} />
 );
 Active.args = { children: lorem };
 

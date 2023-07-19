@@ -35,6 +35,7 @@ export const StructuredInputLines = ({
   });
   return (
     <div
+      className={'block-p'}
       css={[
         structuredInputContainerStyles,
         {

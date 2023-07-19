@@ -2,10 +2,10 @@
 import { SerializedType } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
+import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { useSelected } from 'slate-react';
-import { noop } from '@decipad/utils';
 import { VariableEditorMenu } from '..';
 import { Ellipsis, Virus } from '../../icons';
 import { CellEditor } from '../../molecules';
@@ -165,6 +165,7 @@ export const VariableEditor = ({
   return (
     <div
       aria-label="column-content"
+      className={'block-table'}
       css={wrapperStyles(
         { variant: menuProps.variant },
         menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb

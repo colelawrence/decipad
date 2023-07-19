@@ -1,4 +1,3 @@
-import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, StoryFn } from '@storybook/react';
 import { ListItemContent } from './ListItemContent';
 
@@ -17,7 +16,5 @@ export const Normal: StoryFn<typeof args> = (props) => (
 );
 
 export const Active: StoryFn<typeof args> = (props) => (
-  <BlockIsActiveProvider>
-    <ListItemContent {...props} />
-  </BlockIsActiveProvider>
+  <ListItemContent {...props} />
 );

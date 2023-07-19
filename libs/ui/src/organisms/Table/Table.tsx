@@ -29,7 +29,6 @@ const tableBaseStyles = css({
   tableLayout: 'auto',
   counterReset: tableRowCounter,
   display: 'inline-table',
-  backgroundColor: cssVar('backgroundColor'),
   'tr td': {
     borderBottom: regularBorder,
   },

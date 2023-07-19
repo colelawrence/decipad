@@ -269,6 +269,7 @@ export const CodeLine: FC<CodeLineProps> = ({
 
   return (
     <div
+      className={'block-code'}
       css={[
         codeLineStyles(variant, hasNextSibling, hasPreviousSibling),
         variant === 'table' && highlight && formulaDrawerHighlightLineStyles,

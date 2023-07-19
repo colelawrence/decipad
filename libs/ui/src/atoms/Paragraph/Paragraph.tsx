@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useIsBlockActive } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { cssVar, p16Regular, setCssVar } from '../../primitives';
@@ -27,12 +26,6 @@ const styles = css(blockAlignment.paragraph.typography, placeholderStyles, {
   wordBreak: 'break-word',
 });
 
-const activeStyles = css({
-  backgroundColor: cssVar('highlightColor'),
-  boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
-  clipPath: `inset(0 -8px 0 -8px round 8px)`,
-});
-
 interface ParagraphProps {
   readonly children: ReactNode;
   /**
@@ -47,12 +40,11 @@ export const Paragraph = ({
   children,
   placeholder,
 }: ParagraphProps): ReturnType<React.FC> => {
-  const isBlockActive = useIsBlockActive();
-
   return (
     <div
       aria-label="column-content"
-      css={[styles, isBlockActive && activeStyles]}
+      className="block-p"
+      css={styles}
       data-testid="paragraph-wrapper"
     >
       <label data-testid="paragraph-placeholder" contentEditable={false}>

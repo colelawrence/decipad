@@ -59,6 +59,7 @@ export const Callout = ({
   const [darkTheme] = useThemeFromStore();
   return (
     <p
+      className={'block-figure'}
       aria-label="column-content"
       css={[
         styles,

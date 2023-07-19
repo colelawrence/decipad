@@ -1,4 +1,3 @@
-import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { Meta, StoryFn } from '@storybook/react';
 import { Heading1 } from './Heading1';
 
@@ -15,7 +14,5 @@ export const Normal: StoryFn<typeof args> = (props) => (
 );
 
 export const Active: StoryFn<typeof args> = (props) => (
-  <BlockIsActiveProvider>
-    <Heading1 id="1" Heading="h2" {...props} />
-  </BlockIsActiveProvider>
+  <Heading1 id="1" Heading="h2" {...props} />
 );

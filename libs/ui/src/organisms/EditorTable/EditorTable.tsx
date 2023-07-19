@@ -223,7 +223,7 @@ export const EditorTable: FC<EditorTableProps> = ({
 
   return (
     <TableStyleContext.Provider value={tableStyleContextValue}>
-      <div css={wrapperStyles}>
+      <div className={'block-table'} css={wrapperStyles}>
         <div>
           {!previewMode && <div css={tableCaptionWrapperStyles}>{caption}</div>}
 

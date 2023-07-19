@@ -7,6 +7,7 @@ import {
   MyElement,
   PlateComponent,
 } from '@decipad/editor-types';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { THEME } from '@excalidraw/excalidraw';
@@ -15,7 +16,6 @@ import {
   ExcalidrawElement,
   ExcalidrawElementProps,
 } from '@udecode/plate-ui-excalidraw';
-import { useThemeFromStore } from '@decipad/react-contexts';
 import {
   ComponentProps,
   FC,
@@ -135,7 +135,7 @@ export const Draw: DrawComponent = ({
       draggableCss={drawStyles}
       {...attributes}
     >
-      <div onClick={stopClickPropagation}>
+      <div className={'block-figure'} onClick={stopClickPropagation}>
         <ExcalidrawElementWithRef
           css={[
             excalidrawContainerStyles,

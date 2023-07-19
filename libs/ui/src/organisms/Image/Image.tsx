@@ -102,6 +102,7 @@ export const Image: ImageComponent = ({
           onDrop={onDrop}
         >
           <figure
+            className={'block-figure'}
             aria-label="column-content"
             css={figureStyles}
             contentEditable={false}

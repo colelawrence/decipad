@@ -1,16 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { BlockDependents } from '@decipad/computer';
-import { BlockIsActiveProvider } from '@decipad/react-contexts';
 import { css, SerializedStyles } from '@emotion/react';
-import {
-  ComponentProps,
-  FC,
-  Fragment,
-  HTMLProps,
-  ReactNode,
-  Ref,
-  useState,
-} from 'react';
+import { ComponentProps, FC, HTMLProps, ReactNode, Ref, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';
 import { BlockDragHandle } from '..';
 import { DropLine, EditorBlock, MenuItem, TriggerMenuItem } from '../../atoms';
@@ -18,6 +9,8 @@ import { NewElementLine } from '../../atoms/NewElementLine/NewElementLine';
 import { CircularArrow } from '../../icons';
 import { MenuList } from '../../molecules';
 import {
+  cssVar,
+  largestDesktop,
   mouseMovingOverTransitionDelay,
   Opacity,
   shortAnimationDuration,
@@ -138,7 +131,6 @@ export const DraggableBlock = ({
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const BlockActiveProvider = menuOpen ? BlockIsActiveProvider : Fragment;
 
   const { typography } = blockAlignment[blockKind];
 
@@ -267,10 +259,40 @@ export const DraggableBlock = ({
             show={showLine}
             hasPreviousSibling={hasPreviousSibling}
           />
-          <BlockActiveProvider>{children}</BlockActiveProvider>
+          <div css={selectedBlockStyles(menuOpen)}>{children}</div>
+
           {(dropLine === 'bottom' || dropLine === 'right') && dropLineEl}
         </div>
       </div>
     </EditorBlock>
   );
 };
+
+const selectedBlockStyles = (menuOpen: boolean) =>
+  css(
+    menuOpen && {
+      'blockquote, h2, h3, .block-p': {
+        backgroundColor: cssVar('highlightColor'),
+        boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+        clipPath: `inset(0 -8px 0 -8px round 8px)`,
+      },
+      '.block-table': {
+        backgroundColor: cssVar('highlightColor'),
+        boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+        clipPath: `inset(0 -${largestDesktop.landscape.width}px 0 -20px round 8px)`,
+      },
+      '.block-code': {
+        backgroundColor: cssVar('highlightColor'),
+        clipPath: `inset(0 -8px 0 -8px round 8px)`,
+      },
+      '.block-figure': {
+        clipPath: `inset(0 -8px 0 -8px round 8px)`,
+        filter: 'brightness(0.9)',
+      },
+      '.block-li': {
+        backgroundColor: cssVar('highlightColor'),
+        boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+        clipPath: 'inset(-2px -8px -2px -8px round 8px)',
+      },
+    }
+  );

@@ -28,6 +28,10 @@ const dropLineVerticalStyles = ({ variant }: DropLineProps = {}) =>
       top: '0',
       width: `${dropLineWidth}px`,
     },
+    variant === 'block' && {
+      width: 300,
+      height: 200,
+    },
   ]);
 
 export type DropLineProps =

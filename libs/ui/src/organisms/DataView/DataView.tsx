@@ -135,7 +135,11 @@ export const DataView: FC<DataViewProps> = ({
         hideAddDataViewButton: true,
       }}
     >
-      <div css={dataViewWrapperStyles} aria-roledescription="data view">
+      <div
+        className={'block-table'}
+        css={dataViewWrapperStyles}
+        aria-roledescription="data view"
+      >
         <div
           css={[dataViewControlsStyles, !readOnly && { marginBottom: '8px' }]}
         >
