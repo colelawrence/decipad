@@ -104,7 +104,7 @@ export default function Terms() {
                     color: '#5f6486',
                   }}
                 >
-                  Date of Last Revision: November 8, 2022
+                  Date of Last Revision: July 21, 2023
                 </p>
               </center>
             </div>
