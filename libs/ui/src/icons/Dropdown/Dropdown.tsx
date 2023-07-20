@@ -1,35 +1,34 @@
 import { FC } from 'react';
-import { cssVar, strongOpacity } from '../../primitives';
+import { cssVar } from '../../primitives';
 
 export const Dropdown: FC = () => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>Dropdown</title>
-    <rect width="40" height="40" rx="6" fill={cssVar('slashColorLight')} />
+    <rect width="40" height="40" rx="8" fill={cssVar('slashColorLight')} />
+
     <rect
-      x="8.65"
-      y="10.65"
-      width="22.7"
-      height="7.7"
+      x="9.65"
+      y="11.65"
+      width="20.7"
+      height="6.7"
       rx="2.35"
       fill={cssVar('backgroundColor')}
-      fillOpacity={strongOpacity}
       stroke={cssVar('slashColorHeavy')}
       strokeWidth="1.3"
     />
     <path
-      d="M22.65 10.65H29C30.2979 10.65 31.35 11.7021 31.35 13V16C31.35 17.2979 30.2979 18.35 29 18.35H22.65V10.65Z"
+      d="M22.65 11.65H28C29.2979 11.65 30.35 12.7021 30.35 14V16C30.35 17.2979 29.2979 18.35 28 18.35H22.65V11.65Z"
       fill={cssVar('backgroundColor')}
-      fillOpacity={strongOpacity}
       stroke={cssVar('slashColorHeavy')}
       strokeWidth="1.3"
     />
     <rect
-      x="11"
-      y="14"
-      width="8"
-      height="1.3"
-      rx="0.65"
-      fill={cssVar('slashColorLight')}
+      x="13"
+      y="14.5"
+      width="7"
+      height="1"
+      rx="0.5"
+      fill={cssVar('slashColorNormal')}
     />
     <rect
       x="11"
@@ -41,14 +40,14 @@ export const Dropdown: FC = () => (
     />
     <rect
       x="11"
-      y="28"
+      y="28.3"
       width="18"
       height="1.3"
       rx="0.65"
       fill={cssVar('slashColorNormal')}
     />
     <path
-      d="M26 15L26.8586 14.1414C26.9367 14.0633 27.0633 14.0633 27.1414 14.1414L28 15"
+      d="M25.5 15.5L26.3586 14.6414C26.4367 14.5633 26.5633 14.5633 26.6414 14.6414L27.5 15.5"
       stroke={cssVar('slashColorHeavy')}
       strokeLinecap="round"
     />

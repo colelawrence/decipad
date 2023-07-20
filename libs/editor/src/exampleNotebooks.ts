@@ -267,7 +267,7 @@ export const introNotebook = (): MyValue => [
                 ],
                 type: 'a',
                 id: nanoid(),
-                url: 'https://discord.gg/CUtKEd3rBn',
+                url: 'http://discord.gg/decipad',
               },
               {
                 text: '',

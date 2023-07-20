@@ -11,7 +11,7 @@ import { distance } from 'fastest-levenshtein';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-test('sync many', (ctx) => {
+test('ssr many', (ctx) => {
   let pad: Pad;
   let userAuth: AuthReturnValue;
 

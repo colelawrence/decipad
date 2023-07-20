@@ -53,7 +53,7 @@ export const CreateOrEditSectionModal = ({
           }}
         >
           {op === 'create' && (
-            <p css={css(p13Regular)}>
+            <p css={css(p13Regular, { maxWidth: 350 })}>
               Sections are how you can organize your documents within a
               workspace. For instance, you can create a <em>personal</em> and a{' '}
               <em>work</em> section in your default workspace.

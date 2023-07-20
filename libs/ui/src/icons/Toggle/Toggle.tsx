@@ -1,42 +1,33 @@
 import { FC } from 'react';
-import { cssVar, strongOpacity } from '../../primitives';
+import { cssVar } from '../../primitives';
 
 export const Toggle: FC = () => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clipPath="url(#clip0_3618_49203)">
-      <rect width="40" height="40" rx="6" fill={cssVar('slashColorLight')} />
+    <rect width="40" height="40" rx="8" fill={cssVar('slashColorLight')} />
+    <g clipPath="url(#clip0_507_34783)">
       <rect
-        x="8"
+        x="9"
         y="15"
-        width="20"
-        height="11"
-        rx="5.5"
+        width="17"
+        height="10"
+        rx="5"
         fill={cssVar('slashColorNormal')}
       />
-      <g filter="url(#filter0_dd_3618_49203)">
+      <g filter="url(#filter0_dd_507_34783)">
         <rect
-          x="20"
-          y="14"
-          width="12"
-          height="12"
-          rx="6"
-          fill={cssVar('slashColorLight')}
-        />
-        <rect
-          x="20"
-          y="14"
-          width="12"
-          height="12"
-          rx="6"
+          x="19"
+          y="15"
+          width="10"
+          height="10"
+          rx="5"
           fill={cssVar('backgroundColor')}
-          fillOpacity={strongOpacity}
         />
         <rect
-          x="19.35"
-          y="13.35"
-          width="13.3"
-          height="13.3"
-          rx="6.65"
+          x="18.35"
+          y="14.35"
+          width="11.3"
+          height="11.3"
+          rx="5.65"
           stroke={cssVar('slashColorHeavy')}
           strokeWidth="1.3"
         />
@@ -44,11 +35,11 @@ export const Toggle: FC = () => (
     </g>
     <defs>
       <filter
-        id="filter0_dd_3618_49203"
-        x="7.7002"
-        y="2.80001"
-        width="36.5996"
-        height="36.6"
+        id="filter0_dd_507_34783"
+        x="6.7002"
+        y="3.80001"
+        width="34.5996"
+        height="34.6"
         filterUnits="userSpaceOnUse"
         colorInterpolationFilters="sRGB"
       >
@@ -69,7 +60,7 @@ export const Toggle: FC = () => (
         <feBlend
           mode="normal"
           in2="BackgroundImageFix"
-          result="effect1_dropShadow_3618_49203"
+          result="effect1_dropShadow_507_34783"
         />
         <feColorMatrix
           in="SourceAlpha"
@@ -86,16 +77,26 @@ export const Toggle: FC = () => (
         />
         <feBlend
           mode="normal"
-          in2="effect1_dropShadow_3618_49203"
-          result="effect2_dropShadow_3618_49203"
+          in2="effect1_dropShadow_507_34783"
+          result="effect2_dropShadow_507_34783"
         />
         <feBlend
           mode="normal"
           in="SourceGraphic"
-          in2="effect2_dropShadow_3618_49203"
+          in2="effect2_dropShadow_507_34783"
           result="shape"
         />
       </filter>
+      <clipPath id="clip0_507_34783">
+        <rect
+          x="8"
+          y="8"
+          width="24"
+          height="24"
+          rx="6"
+          fill={cssVar('backgroundColor')}
+        />
+      </clipPath>
     </defs>
   </svg>
 );

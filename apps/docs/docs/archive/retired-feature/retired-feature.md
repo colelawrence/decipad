@@ -61,4 +61,4 @@ You can achieve the same result with data views.
 
 - **Via Chat:** Click the **?** on the bottom right of your notebook to talk to the team
 - **Via Email:** [support@decipad.com](mailto:support@decipad.com)
-- **On Discord:** Join our discord [here](https://discord.gg/CUtKEd3rBn)
+- **On Discord:** Join our discord [here](http://discord.gg/decipad)

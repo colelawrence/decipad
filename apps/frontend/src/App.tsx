@@ -12,11 +12,11 @@ import { useSession } from 'next-auth/react';
 import { FC, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
-import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import { Onboard } from './Onboard/LazyOnboard';
 import { RequireOnboard } from './Onboard/RequireOnboard';
-import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
+import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import Notebooks from './notebooks/Notebooks';
+import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
 export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
@@ -94,7 +94,7 @@ export const App: FC = () => {
 
       {canUseDom && session.status === 'authenticated' && (
         <HelpMenu
-          discordUrl="https://discord.gg/CUtKEd3rBn"
+          discordUrl="http://discord.gg/decipad"
           docsUrl={docs({}).$}
           releaseUrl={docs({}).page({ name: 'releases' }).$}
         />

@@ -85,7 +85,7 @@ const LoginForm = ({ onSubmit }: LoginPageProps) => {
         />
         <Button
           submit
-          type="primaryBrand"
+          type="primary"
           disabled={!signUpRedirect && (!formValid || isSubmitting)}
         >
           Continue

@@ -68,7 +68,7 @@ export default function Hello() {
           />
           <Card
             title="Join our community"
-            notebook="https://discord.gg/CUtKEd3rBn"
+            notebook="https://discord.gg/decipad"
             description="Get a closer look behind the scenes by joining our Discord channel, where the team is always a click away."
           />
           <Card
@@ -78,7 +78,7 @@ export default function Hello() {
           />
           <Card
             title="Join our community"
-            notebook="https://discord.gg/CUtKEd3rBn"
+            notebook="http://discord.gg/decipad"
             description="Get a closer look behind the scenes by joining our Discord channel, where the team is always a click away."
           />
         </GridContainer>

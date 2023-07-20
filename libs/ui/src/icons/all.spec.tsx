@@ -753,7 +753,7 @@ it('renders a h1 icon', () => {
 
 it('renders a table icon for slash commands', () => {
   render(<TableSlash />);
-  expect(screen.getByTitle(/tableslash/i)).toBeInTheDocument();
+  expect(screen.getByTitle(/table slash/i)).toBeInTheDocument();
 });
 
 it('renders a drag handle', () => {

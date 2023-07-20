@@ -22,11 +22,8 @@ const inlineMenuStyles = css({
 const iconStyles = css({
   width: '40px',
   height: '40px',
-
   display: 'grid',
-
-  backgroundColor: cssVar('iconBackgroundColor'),
-  borderRadius: '6px',
+  borderRadius: 8,
 });
 
 const textStyles = css({

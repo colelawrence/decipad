@@ -5,6 +5,7 @@ import {
   AreaChartSlash,
   BarChartSlash,
   Blockquote,
+  CSV,
   Calculations,
   Callout,
   ConnectTable,
@@ -168,7 +169,7 @@ const integrationsGroups = (paint: boolean) => ({
       command: 'upload-csv',
       title: 'CSV',
       description: 'Upload an CSV file',
-      icon: paintIcon(<ImportTable />, paint ? 'Daffodil' : undefined),
+      icon: paintIcon(<CSV />, paint ? 'Daffodil' : undefined),
       enabled: true,
       extraSearchTerms: ['upload', 'csv', 'data', 'excel'],
     },
@@ -355,13 +356,12 @@ const groups = (paint: boolean) => [
 type SlashCommandsMenuProps = Pick<
   ComponentProps<typeof InlineMenu>,
   'onExecute' | 'search' | 'variant'
->;
+> & {
+  readonly colorize?: boolean;
+};
 
 export const SlashCommandsMenu: FC<SlashCommandsMenuProps> = (props) => {
   // It's a function because feature flags can change for each test.
-  const menuGroups = useMemo(
-    () => groups(props.variant !== 'inline'),
-    [props.variant]
-  );
+  const menuGroups = useMemo(() => groups(false), []);
   return <InlineMenu {...props} groups={menuGroups} />;
 };

@@ -11,6 +11,7 @@ import {
 import { ImportFromLinkMenu, SlashCommandsMenu } from '@decipad/ui';
 
 import { assertElementType } from '@decipad/editor-utils';
+import { useThemeFromStore } from '@decipad/react-contexts';
 import { execute } from '../utils/slashCommands';
 import { useInteractiveMenu } from './useInteractiveMenu';
 import { useSlashMenu } from './useSlashMenu';
@@ -23,6 +24,7 @@ export const InteractiveParagraph =
 
     const editor = useTEditorRef();
     const clientEvent = useContext(ClientEventsContext);
+    const [isDarkTheme] = useThemeFromStore();
 
     // slash commands menu
     const { showSlashCommands, menuRef, elementPath, deleteFragment, search } =
@@ -47,6 +49,7 @@ export const InteractiveParagraph =
             }}
           >
             <SlashCommandsMenu
+              colorize={!!isDarkTheme}
               onExecute={(command) => {
                 elementPath &&
                   execute({

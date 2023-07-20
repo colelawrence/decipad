@@ -30,6 +30,7 @@ export { BuildingStore } from './BuildingStore/BuildingStore';
 export { Buildings } from './Buildings';
 export { Bullet } from './Bullet/Bullet';
 export { CPU } from './CPU';
+export { CSV } from './CSV/CSV';
 export { Calculations } from './Calculations/Calculations';
 export { Calendar } from './Calendar/Calendar';
 export { Callout } from './Callout/Callout';

@@ -140,9 +140,9 @@ export const theme: CssVariables = {
 
   // slash command default colors
   // overriden with setCssVar
-  slashColorLight: grey700.hex,
-  slashColorNormal: grey400.hex,
-  slashColorHeavy: grey300.hex,
+  slashColorLight: dark600.hex,
+  slashColorNormal: dark500.hex,
+  slashColorHeavy: dark400.hex,
 
   slashColorOceanLight: blue700.hex,
   slashColorOceanNormal: blue400.hex,

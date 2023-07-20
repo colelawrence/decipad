@@ -1,35 +1,33 @@
 import { FC } from 'react';
-import { cssVar, strongOpacity } from '../../primitives';
+import { cssVar } from '../../primitives';
 
 export const Calculations = (): ReturnType<FC> => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <title>SlashCommandCal</title>
-    <rect width="40" height="40" rx="6" fill={cssVar('slashColorLight')} />
+    <rect width="40" height="40" rx="8" fill={cssVar('slashColorLight')} />
+
     <path
-      d="M23 28.3125V24.5625C23 23.6996 23.6996 23 24.5625 23H28.3125C29.1754 23 29.875 23.6996 29.875 24.5625V28.3125C29.875 29.1754 29.1754 29.875 28.3125 29.875H24.5625C23.6996 29.875 23 29.1754 23 28.3125Z"
+      d="M22 27V23C22 22.4477 22.4477 22 23 22H27C27.5523 22 28 22.4477 28 23V27C28 27.5523 27.5523 28 27 28H23C22.4477 28 22 27.5523 22 27Z"
       fill={cssVar('backgroundColor')}
-      fillOpacity={strongOpacity}
       stroke={cssVar('slashColorHeavy')}
       strokeWidth="1.3"
     />
     <path
-      d="M11.7499 29.9307V22.9014C11.7499 22.6642 12.0038 22.5135 12.2121 22.6271L18.16 25.8714C18.3688 25.9853 18.3788 26.2816 18.1781 26.4094L12.2302 30.1944C12.0222 30.3268 11.7499 30.1773 11.7499 29.9307Z"
+      d="M12 28.4346V22.5232C12 22.2867 12.2525 22.1359 12.4607 22.248L17.5276 24.9764C17.7385 25.09 17.7485 25.3888 17.5457 25.5162L12.4787 28.6993C12.2706 28.83 12 28.6804 12 28.4346Z"
+      fill={cssVar('slashColorLight')}
       stroke={cssVar('slashColorNormal')}
-      fill={cssVar('backgroundColor')}
-      fillOpacity={strongOpacity}
       strokeWidth="1.3"
     />
     <circle
-      cx="14.875"
-      cy="14.875"
-      r="3.725"
+      cx={15}
+      cy={15}
+      r="3.35"
       fill={cssVar('backgroundColor')}
-      fillOpacity={strongOpacity}
       stroke={cssVar('slashColorHeavy')}
       strokeWidth="1.3"
     />
     <path
-      d="M22.375 18.625L30.5 10.5M22.375 10.5L30.5 18.625"
+      d="M22 18L29 11M22 11L29 18"
       stroke={cssVar('slashColorNormal')}
       strokeWidth="1.3"
       strokeLinejoin="round"
