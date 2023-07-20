@@ -15,8 +15,8 @@ Invite your team to collaborate, expand data imports and schedule query executio
 | Widgets, Charts, and Data Visualizations | Yes                | Yes                    | Yes                                   |
 | Unit Conversions                         | Yes                | Yes                    | Yes                                   |
 | Dimensions                               | Yes                | Yes                    | Yes                                   |
-| CSV Uploads                              | up to 10k cells    | up to 10k cells        | Custom                                |
-| Media Uploads                            | up to 1MB per file | up to 1MB per file     | Unlimited                             |
+| CSV Uploads                              | 500kB              | 500kB                  | Custom                                |
+| Image Uploads                            | up to 5MB per file | up to 5MB per file     | Unlimited                             |
 | Live Connections                         | 50 queries / month | 500 queries/month      | Custom                                |
 | Query scheduling                         | No                 | Yes                    | Yes                                   |
 | Unlimited Notebooks                      | Yes                | Yes                    | Yes                                   |
