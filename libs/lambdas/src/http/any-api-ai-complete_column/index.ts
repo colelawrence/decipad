@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/config';
+import zip from 'lodash.zip';
 import handle from '../handle';
 
 const configuration = new Configuration({
@@ -146,8 +147,7 @@ export const handler = handle(async (event) => {
 
   if (
     !parsedArgs.suggestions ||
-    !parsedArgs.suggestions.every((s) => typeof s === 'string') ||
-    parsedArgs.suggestions.length !== requestBody.table.length
+    !parsedArgs.suggestions.every((s) => typeof s === 'string')
   ) {
     throw new Error(
       `Badly formed ChatGPT response to submit_completion: \n\n${JSON.stringify(
@@ -158,24 +158,30 @@ export const handler = handle(async (event) => {
     );
   }
 
-  const indexArgs = parsedArgs.suggestions.map((suggestion, i) => {
-    const id = table[i].rowId;
-    if (!id) {
-      throw new Error('Badly formed ChatGPT response to submit_completion.');
-    }
+  type Row = {
+    cells: string[];
+    rowId: string;
+  };
+  type Pair = [string | undefined, Row | undefined];
+  type StrictPair = [string, Row];
 
-    return {
-      id,
-      suggestion,
-      columnIndex: requestBody.columnIndex,
-    };
-  });
+  // We're being very permissive here. If the lengths of the suggestion and table arrays aren't
+  // we naively match as many as we can and discard the rest.
+  const indexedSuggestions = zip(parsedArgs.suggestions, requestBody.table)
+    .filter((pair: Pair): pair is StrictPair => !pair.includes(undefined))
+    .map(([suggestion, row]) => {
+      return {
+        id: row.rowId,
+        suggestion,
+        columnIndex: requestBody.columnIndex,
+      };
+    });
 
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(indexArgs),
+    body: JSON.stringify(indexedSuggestions),
   };
 });
