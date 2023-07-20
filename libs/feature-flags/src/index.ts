@@ -1,37 +1,27 @@
 export const availableFlags = [
-  'INPUT_COPY',
-  'DOWNLOAD_CHART',
-  'INLINE_BUBBLES',
-  'CODE_LINE_NAME_SEPARATED',
-  'SKETCH',
+  // Allows user to copy reference from block, and use it in others.
   'COPY_HREF',
   'PERSISTENT_EXAMPLE',
-  'EXPR_REFS',
-  'WORKSPACE_MEMBERS',
-  'WORKSPACE_PREMIUM_FEATURES',
+  // allows the user to download a chart as a PNG image
+  'DOWNLOAD_CHART',
   'NO_WORKSPACE_SWITCHER',
   'ONBOARDING_ACCOUNT_SETUP',
-  'SHARE_PAD_WITH_EMAIL',
   'FEATURE_FLAG_SWITCHER',
   'DATA_MAPPINGS',
+  // A pre-populated notebook instead of a big empty one.
   'POPULATED_NEW_NOTEBOOK',
   'ROTATED_DATA_VIEW',
   'ALTERNATE_ROTATION_DATA_VIEW',
   'INTEGRATIONS_AUTH',
   'LIVE_CONN_OPTIONS',
   'LIVE_QUERY',
-  'UPLOAD_IMAGE',
-  'UPLOAD_CSV',
   'SHEETS_ISLANDS',
-  'JS_BLOCK',
   'CODE_INTEGRATIONS_AI_BUTTON',
   // The pop up modal that allows users to create connections and queries.
   'INTEGRATIONS_MODEL_DIALOG',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
   'SILLY_NAMES',
-  // Allow for secrets in JS
-  'SECRETS_IN_JS',
   // make codelines greyscale when they are not focused
   'MUTED_CODELINES',
   // SQL Connections from workspace
@@ -83,30 +73,17 @@ export const getQueryStringOverrides = (): Flags => {
 // Overrides will always have the highest priority
 let overrides: Flags = {
   ONBOARDING_ACCOUNT_SETUP: true,
-  SHARE_PAD_WITH_EMAIL: true,
-  CODE_LINE_NAME_SEPARATED: true,
-  EXPR_REFS: true,
   POPULATED_NEW_NOTEBOOK: true,
-  JS_BLOCK: true,
   SILLY_NAMES: false,
-  UPLOAD_CSV: true,
 
   // For July 2023 launch, could be removed after.
   CODE_INTEGRATIONS_AI_BUTTON: true,
-  SECRETS_IN_JS: true,
   WORKSPACE_CONNECTIONS: true,
-};
-
-// Unlike overrides flag switcher will have higher priority
-const flagDefaults: Flags = {
-  WORKSPACE_PREMIUM_FEATURES: false,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();
 
-const testOverrides: Flags = {
-  CODE_LINE_NAME_SEPARATED: true,
-};
+const testOverrides: Flags = {};
 
 const queryStringOverrides: Flags = getQueryStringOverrides();
 
@@ -122,7 +99,6 @@ export const isFlagEnabled = (flag: Flag): boolean =>
   overrides[flag] ??
   localStorageOverrides[flag] ??
   queryStringOverrides[flag] ??
-  flagDefaults[flag] ??
   (inJest || inE2E ? testOverrides[flag] : undefined) ??
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   (!inE2E &&

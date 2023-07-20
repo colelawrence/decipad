@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { CreateSectionMutation } from '@decipad/graphql-client';
 import { useActiveElement, useStripeLinks } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
@@ -148,7 +147,6 @@ export const WorkspaceNavigation = ({
   const location = useLocation();
   const clientEvent = useContext(ClientEventsContext);
 
-  const isSharedSectionEnabled = isFlagEnabled('SHARE_PAD_WITH_EMAIL');
   const { customerPortalLink, paymentLink } = useStripeLinks(activeWorkspace);
 
   return (
@@ -197,7 +195,7 @@ export const WorkspaceNavigation = ({
             </NavigationItem>
           </NavigationList>
 
-          {isFlagEnabled('SECRETS_IN_JS') && (
+          {
             <NavigationList key={'workspace-nav-DC'}>
               <NavigationItem
                 key={'folder-0'}
@@ -208,7 +206,7 @@ export const WorkspaceNavigation = ({
                 <span css={itemTextStyles}>Data Connections</span>
               </NavigationItem>
             </NavigationList>
-          )}
+          }
 
           <NavDivider />
         </>
@@ -398,18 +396,16 @@ export const WorkspaceNavigation = ({
 
       <NavDivider />
 
-      {isSharedSectionEnabled && (
-        <NavigationList key={'workspace-nav-S'}>
-          <NavigationItem
-            key={'folder-0'}
-            href={activeWorkspaceRoute.shared({}).$}
-            isActive={isSharedPage}
-            icon={<Users />}
-          >
-            <span css={itemTextStyles}>Shared with me</span>
-          </NavigationItem>
-        </NavigationList>
-      )}
+      <NavigationList key={'workspace-nav-S'}>
+        <NavigationItem
+          key={'folder-0'}
+          href={activeWorkspaceRoute.shared({}).$}
+          isActive={isSharedPage}
+          icon={<Users />}
+        >
+          <span css={itemTextStyles}>Shared with me</span>
+        </NavigationItem>
+      </NavigationList>
 
       <div key="div-empty-grid-spaces" role="presentation" />
       <NavigationList key={'navigation-footer-0'}>

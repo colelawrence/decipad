@@ -2,7 +2,6 @@
 import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
-  ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_PARAGRAPH,
@@ -11,7 +10,6 @@ import {
   MyElement,
   MyPlatePlugin,
 } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import React from 'react';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
@@ -35,19 +33,17 @@ const makeParagraph = (text = ''): MyElement[] =>
   ] as MyElement[];
 
 const makeCodeLine = (): MyElement =>
-  isFlagEnabled('CODE_LINE_NAME_SEPARATED')
-    ? ({
-        type: ELEMENT_CODE_LINE_V2,
-        children: [
-          {
-            type: ELEMENT_STRUCTURED_VARNAME,
-          },
-          {
-            type: ELEMENT_CODE_LINE_V2_CODE,
-          },
-        ],
-      } as MyElement)
-    : ({ type: ELEMENT_CODE_LINE } as MyElement);
+  ({
+    type: ELEMENT_CODE_LINE_V2,
+    children: [
+      {
+        type: ELEMENT_STRUCTURED_VARNAME,
+      },
+      {
+        type: ELEMENT_CODE_LINE_V2_CODE,
+      },
+    ],
+  } as MyElement);
 
 const renderEditorParagraph = (text: string) => {
   editor.children = makeParagraph(text) as never;

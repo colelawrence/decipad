@@ -1,4 +1,3 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   useCreateNotebookMutation,
   useCreateSectionMutation,
@@ -32,7 +31,6 @@ import {
   PaymentSubscriptionStatusModal,
   TColorKeys,
   TColorStatus,
-  TopbarPlaceholder,
 } from '@decipad/ui';
 import { timeout } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
@@ -45,7 +43,6 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useState,
 } from 'react';
 import {
   Outlet,
@@ -57,12 +54,9 @@ import {
 } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
-import { filterPads, makeIcons, workspaceCtaDismissKey } from '../../utils';
+import { filterPads, makeIcons } from '../../utils';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 
-const loadTopbar = () =>
-  import(/* webpackChunkName: "workspace-topbar" */ './Topbar');
-const Topbar = lazy(loadTopbar);
 const loadWorkspaceHero = () =>
   import(/* webpackChunkName: "workspace-hero" */ './WorkspaceHero');
 const WorkspaceHero = lazy(loadWorkspaceHero);
@@ -95,7 +89,7 @@ const preloadModals = () => {
 };
 
 // prefetch
-loadTopbar().then(preloadModals);
+preloadModals();
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
 };
@@ -199,13 +193,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     signOut({ redirect: false }).then(() => {
       window.location.pathname = '/';
     });
-  }, []);
-  const [ctaDismissed, setCtaDismissed] = useState(
-    () => global.localStorage.getItem(workspaceCtaDismissKey) === '1'
-  );
-  const onCTADismiss = useCallback(() => {
-    global.localStorage.setItem(workspaceCtaDismissKey, '1');
-    setCtaDismissed(true);
   }, []);
 
   const { data: workspaceData, fetching: isFetching } = result;
@@ -311,8 +298,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     [currentWorkspace?.workspaceSubscription?.paymentStatus]
   );
 
-  const showBigAssTopbar = isFlagEnabled('WORKSPACE_PREMIUM_FEATURES');
-
   if (fetching) {
     return <LoadingLogo />;
   }
@@ -381,19 +366,13 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     </Frame>
   );
 
-  const topBarWrapper = showBigAssTopbar ? null : (
-    <Frame Heading="h1" title={null} suspenseFallback={<TopbarPlaceholder />}>
-      <Topbar onCreateNotebook={handleCreateNotebook} />
-    </Frame>
-  );
-
   const notebookListWrapper = (
     <Frame
       Heading="h1"
       title={null}
       suspenseFallback={<NotebookListPlaceholder />}
     >
-      {showBigAssTopbar && (
+      {
         <WorkspaceHero
           name={currentWorkspace.name}
           isPremium={!!currentWorkspace.isPremium}
@@ -401,7 +380,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           onCreateNotebook={handleCreateNotebook}
           membersHref={currentWorkspaceRoute.members({}).$}
         />
-      )}
+      }
       <NotebookList
         Heading="h1"
         notebooks={showNotebooks}
@@ -484,8 +463,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             toast('Failed to move notebook to all notebooks.', 'error');
           })
         }
-        onCTADismiss={onCTADismiss}
-        showCTA={!ctaDismissed && !showBigAssTopbar}
+        showCTA={false}
       />
     </Frame>
   );
@@ -499,7 +477,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
             <LazyRoute title={currentWorkspace.name}>
               <Dashboard
                 sidebar={sidebarWrapper}
-                topbar={topBarWrapper}
+                topbar={null}
                 notebookList={notebookListWrapper}
               />
               <Outlet />

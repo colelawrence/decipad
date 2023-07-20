@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useSafeState } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -37,8 +36,6 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
   const [deletionConfirmationPrompt, setDeletionConfirmationPrompt] =
     useState('');
   const [isSubmitting, setIsSubmitting] = useSafeState(false);
-
-  const membersEnabled = isFlagEnabled('WORKSPACE_MEMBERS');
 
   const renameWorkspace = useCallback(
     async (event: React.FormEvent) => {
@@ -89,7 +86,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
             Rename
           </Button>
         </form>
-        {membersEnabled && (
+        {
           <div css={membersStyle}>
             <h3 css={headingStyles}>Workspace members</h3>
             <Button type="secondary" href={membersHref}>
@@ -99,7 +96,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
               Manage members
             </Button>
           </div>
-        )}
+        }
         {allowDelete && (
           <form css={formStyles} onSubmit={deleteWorkspace}>
             <h3 css={headingStyles}>Delete Workspace</h3>

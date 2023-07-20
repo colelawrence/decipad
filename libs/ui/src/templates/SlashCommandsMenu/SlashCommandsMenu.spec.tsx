@@ -1,14 +1,6 @@
-import { enable, reset } from '@decipad/feature-flags';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SlashCommandsMenu } from './SlashCommandsMenu';
-
-beforeEach(() => {
-  reset();
-  // TODO: This is a feature flag that is disabled by default
-  // and affects this test
-  enable('CODE_LINE_NAME_SEPARATED');
-});
 
 it('renders menuitems triggering different commands', async () => {
   const handleExecute = jest.fn();

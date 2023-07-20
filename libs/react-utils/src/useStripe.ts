@@ -1,6 +1,4 @@
 /* istanbul ignore file */
-import { isFlagEnabled } from '@decipad/feature-flags';
-
 type WorkspaceTrait = {
   id: string;
   isPremium?: boolean | null;
@@ -17,15 +15,12 @@ const STRIPE_CUSTOMER_PORTAL_LINK =
   process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK;
 
 export const useStripeLinks = (workspace: WorkspaceTrait) => {
-  const canSubscribe =
-    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && !workspace.isPremium;
-  const canManage =
-    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') && workspace.isPremium;
-
   const paymentLink = `${STRIPE_PAYMENT_LINK}?client_reference_id=${workspace.id}`;
   return {
-    paymentLink: canSubscribe ? paymentLink : undefined,
-    customerPortalLink: canManage ? STRIPE_CUSTOMER_PORTAL_LINK : undefined,
+    paymentLink: !workspace.isPremium ? paymentLink : undefined,
+    customerPortalLink: workspace.isPremium
+      ? STRIPE_CUSTOMER_PORTAL_LINK
+      : undefined,
   };
 };
 

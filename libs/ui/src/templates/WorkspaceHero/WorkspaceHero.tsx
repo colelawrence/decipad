@@ -34,11 +34,13 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
       />
 
       <DeciLogo children={<Deci />} />
-      <Title>
-        Welcome to
-        <br />
-        {name}
-      </Title>
+      <div data-testid="workspace-hero-title">
+        <Title>
+          Welcome to
+          <br />
+          {name}
+        </Title>
+      </div>
 
       <StatusLine>
         {members} • {plan}

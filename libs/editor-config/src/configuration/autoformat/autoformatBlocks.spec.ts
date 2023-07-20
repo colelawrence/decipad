@@ -9,8 +9,7 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
-import { createPlateEditor, ELEMENT_CODE_LINE, select } from '@udecode/plate';
+import { createPlateEditor, select } from '@udecode/plate';
 import { autoformatBlocks } from './autoformatBlocks';
 
 let editor: MyEditor;
@@ -81,9 +80,7 @@ describe('inserting a code block', () => {
         children: [{ text: 'text' }],
       },
       {
-        type: isFlagEnabled('CODE_LINE_NAME_SEPARATED')
-          ? ELEMENT_CODE_LINE_V2
-          : ELEMENT_CODE_LINE,
+        type: ELEMENT_CODE_LINE_V2,
       },
     ]);
   });

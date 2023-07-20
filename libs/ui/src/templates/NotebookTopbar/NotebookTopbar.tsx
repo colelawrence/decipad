@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { workspaces } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
@@ -217,10 +216,7 @@ export const NotebookTopbar = ({
   const oneAdminUser = allUsers.filter((u) => u.permission === 'ADMIN')[0];
 
   const isPremiumWorkspace = Boolean(workspace?.isPremium);
-  const hasPaywall =
-    isFlagEnabled('WORKSPACE_PREMIUM_FEATURES') &&
-    !canInvite &&
-    !isPremiumWorkspace;
+  const hasPaywall = !canInvite && !isPremiumWorkspace;
 
   return (
     <div css={topBarWrapperStyles}>

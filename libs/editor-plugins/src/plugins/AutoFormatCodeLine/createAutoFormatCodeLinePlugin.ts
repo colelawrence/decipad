@@ -88,27 +88,17 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
               analytics.track('convert paragraph to code line because =');
             }
 
-            if (isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
-              const autoVarName = computer.getAvailableIdentifier(
-                generateVarName(isFlagEnabled('SILLY_NAMES'))
-              );
-              const newCodeLine = createStructuredCodeLine({
-                varName: autoVarName,
-                code: '100$',
-              });
+            const autoVarName = computer.getAvailableIdentifier(
+              generateVarName(isFlagEnabled('SILLY_NAMES'))
+            );
+            const newCodeLine = createStructuredCodeLine({
+              varName: autoVarName,
+              code: '100$',
+            });
 
-              insertNodes(editor, newCodeLine, { at: paragraphPath });
-              const codeTextPath = [...paragraphPath, 1];
-              select(editor, codeTextPath);
-              return;
-            }
-
-            setNodes(editor, { type: ELEMENT_CODE_LINE });
-
-            store.lastFormattedBlock = {
-              id: node.id,
-              oldText: nodeText,
-            };
+            insertNodes(editor, newCodeLine, { at: paragraphPath });
+            const codeTextPath = [...paragraphPath, 1];
+            select(editor, codeTextPath);
           } else if (textBefore.endsWith(' =')) {
             event.preventDefault();
 

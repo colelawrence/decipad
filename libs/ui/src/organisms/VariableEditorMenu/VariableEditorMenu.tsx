@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { CellValueType } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { SerializedType, tokenRules } from '@decipad/language';
 import { noop } from '@decipad/utils';
 import { ComponentProps, ReactNode, useCallback } from 'react';
@@ -199,9 +198,7 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
           </MenuList>
         )
       )}
-      {isFlagEnabled('INPUT_COPY') && (
-        <MenuItem onSelect={onCopy}>Copy</MenuItem>
-      )}
+      <MenuItem onSelect={onCopy}>Copy</MenuItem>
 
       <MenuItem onSelect={onDelete}>
         <div css={{ minWidth: '165px' }}>Delete</div>

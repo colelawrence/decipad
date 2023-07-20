@@ -16,12 +16,7 @@ test.describe('Calculation Blocks v2', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = page.context();
-    await setUp(
-      { page, context },
-      {
-        featureFlags: { CODE_LINE_NAME_SEPARATED: true },
-      }
-    );
+    await setUp({ page, context });
     await waitForEditorToLoad(page);
   });
 

@@ -3,7 +3,6 @@ import {
   allowsTextStyling,
   getPathContainingSelection,
 } from '@decipad/editor-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   createBoldPlugin,
   createCodePlugin,
@@ -69,13 +68,9 @@ const spoilerPlugin = () =>
   withHotkeyRestrictedToAllowedBlocks(createSpoilerPlugin() as StrictPlugin);
 
 const valueBubblePlugin = () =>
-  !isFlagEnabled('INLINE_BUBBLES')
-    ? []
-    : [
-        withHotkeyRestrictedToAllowedBlocks(
-          createInlineNumberPlugin() as StrictPlugin
-        ),
-      ];
+  withHotkeyRestrictedToAllowedBlocks(
+    createInlineNumberPlugin() as StrictPlugin
+  );
 
 export const createMarksPlugins = (): StrictPlugin[] => [
   boldPlugin(),
@@ -86,5 +81,5 @@ export const createMarksPlugins = (): StrictPlugin[] => [
   highlightPlugin(),
   magicNumberPlugin(),
   spoilerPlugin(),
-  ...valueBubblePlugin(),
+  valueBubblePlugin(),
 ];

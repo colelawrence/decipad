@@ -1,6 +1,6 @@
 import { Computer } from '@decipad/computer';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
-import { enable, reset } from '@decipad/feature-flags';
+import { reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
 import { getSmartRef, getStructuredCalc } from './test_utils';
 
@@ -8,7 +8,6 @@ describe('Structured input basic keyboard shortcuts', () => {
   let editor: MyEditor;
   const computer = new Computer();
   beforeEach(() => {
-    enable('CODE_LINE_NAME_SEPARATED');
     editor = createTPlateEditor({
       plugins: [createStructuredKeyboard(computer)],
     });
@@ -262,7 +261,6 @@ describe('Works with smart refs', () => {
   let editor: MyEditor;
   const computer = new Computer();
   beforeEach(() => {
-    enable('CODE_LINE_NAME_SEPARATED');
     editor = createTPlateEditor({
       plugins: [createStructuredKeyboard(computer)],
     });

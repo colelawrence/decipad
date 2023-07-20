@@ -18,9 +18,7 @@ test.describe('Workspace flows', () => {
     await page.click('aside nav > ul > li a span:has-text("Archived")');
     await page.click(ellipsisSelector(0)); // click first ellipsis
     await page.click('div[role="menuitem"] span:has-text("Delete")');
-    await expect(
-      page.locator('button:has-text("Start with new notebook")')
-    ).toBeVisible();
+    await expect(page.getByText('No documents to list')).toBeVisible();
   });
 
   test('Create a workspace', async ({ page }) => {
@@ -29,7 +27,9 @@ test.describe('Workspace flows', () => {
     await page.getByPlaceholder('Team workspace').click();
     await page.getByPlaceholder('Team workspace').fill('Wtf');
     await page.getByRole('button', { name: 'Create Workspace' }).click();
-    await expect(page.getByText('Wtf')).toBeVisible();
+    await expect(page.getByTestId('workspace-hero-title')).toHaveText(
+      'Welcome toWtf'
+    );
   });
 
   test('user can logout', async ({ page }) => {

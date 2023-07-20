@@ -7,7 +7,6 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 export interface CreateCodeLineOptions {
   /** Pass this in when it's important to have the same ID as before */
@@ -31,10 +30,6 @@ export const createStructuredCodeLine = ({
   varName = '',
   code = '',
 }: CreateCodeLineOptions): CodeLineElement | CodeLineV2Element => {
-  if (!isFlagEnabled('CODE_LINE_NAME_SEPARATED')) {
-    return createCodeLine({ id, varName, code });
-  }
-
   return {
     id: id ?? nanoid(),
     type: ELEMENT_CODE_LINE_V2,

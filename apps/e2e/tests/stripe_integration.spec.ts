@@ -17,7 +17,7 @@ test.describe('Stripe integration', () => {
         createAndNavigateToNewPad: false,
       }
     );
-    await page.goto('/?WORKSPACE_PREMIUM_FEATURES=true');
+    await page.goto('/');
   });
 
   test.afterAll(async () => {
@@ -33,7 +33,7 @@ test.describe('Stripe integration', () => {
         const mockedResponse = {
           status: 200,
           contentType: 'text/html',
-          body: `<h1>Mocked Stripe Checkout Page</h1><button id="redirect_button" onClick="window.location.replace('${currentRoute}?WORKSPACE_PREMIUM_FEATURES=true&fromStripe=true')">Redirect do Decipad</button>`,
+          body: `<h1>Mocked Stripe Checkout Page</h1><button id="redirect_button" onClick="window.location.replace('${currentRoute}?fromStripe=true')">Redirect do Decipad</button>`,
         };
         route.fulfill(mockedResponse);
       } else {
@@ -49,9 +49,7 @@ test.describe('Stripe integration', () => {
     // redirect the user back to Deci
     await page.click('#redirect_button');
     // wait for the redirect back
-    await page.waitForURL(
-      `${currentRoute}?WORKSPACE_PREMIUM_FEATURES=true&fromStripe=true`
-    );
+    await page.waitForURL(`${currentRoute}?fromStripe=true`);
 
     // ensure we display a popup
     // TODO: find a way to mock our graphQL queries on client side
