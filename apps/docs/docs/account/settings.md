@@ -1,10 +1,9 @@
 ---
 sidebar_position: 1
 pagination_prev: null
-draft: true
 ---
 
-# --Account Settings
+# Account Settings
 
 ## Change Your Name
 
