@@ -11,7 +11,6 @@ import {
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 
 const pageCoverStyles = css({
-  zIndex: 666,
   position: 'fixed',
   width: '100%',
   height: '100%',

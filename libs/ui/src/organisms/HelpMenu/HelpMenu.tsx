@@ -41,7 +41,6 @@ const helpMenuStyles = css({
   position: 'fixed',
   bottom: '16px',
   right: '16px',
-  zIndex: 666,
 });
 
 const pulse = keyframes`
