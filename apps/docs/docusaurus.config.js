@@ -197,7 +197,7 @@ const config = {
             items: [
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/HwDMqwbGmc',
+                href: 'http://discord.gg/decipad',
               },
             ],
           },

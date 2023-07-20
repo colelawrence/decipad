@@ -230,6 +230,13 @@ hr {
   content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 5.52381C2.5 4.68223 3.17929 4 4.01724 4H8.94828C9.78623 4 10.4655 4.68223 10.4655 5.52381V10.4762C10.4655 11.3178 9.78623 12 8.94828 12H4.01724C3.17929 12 2.5 11.3178 2.5 10.4762V5.52381Z' fill='%23EDF0F5'/%3E%3Cpath d='M10.6552 6.47619L13.5 4.7619V11.2381L10.6552 9.52381M4.01724 12H8.94828C9.78623 12 10.4655 11.3178 10.4655 10.4762V5.52381C10.4655 4.68223 9.78623 4 8.94828 4H4.01724C3.17929 4 2.5 4.68223 2.5 5.52381V10.4762C2.5 11.3178 3.17929 12 4.01724 12Z' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
 }
 
+.ai-icon a::before {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.66699 6.66667C2.66699 5.19391 3.8609 4 5.33366 4H9.66699C11.1398 4 12.3337 5.19391 12.3337 6.66667V9C12.3337 10.4728 11.1398 11.6667 9.66699 11.6667H5.33366C3.8609 11.6667 2.66699 10.4728 2.66699 9V6.66667Z' fill='%23ECF0F6' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M7.5 3.66667V2' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M6.35672 6.60463C6.35672 6.92022 6.10089 7.17606 5.7853 7.17606C5.4697 7.17606 5.21387 6.92022 5.21387 6.60463C5.21387 6.28904 5.4697 6.0332 5.7853 6.0332C6.10089 6.0332 6.35672 6.28904 6.35672 6.60463Z' fill='%234D5664' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M9.78544 6.60463C9.78544 6.92022 9.5296 7.17606 9.21401 7.17606C8.89842 7.17606 8.64258 6.92022 8.64258 6.60463C8.64258 6.28904 8.89842 6.0332 9.21401 6.0332C9.5296 6.0332 9.78544 6.28904 9.78544 6.60463Z' fill='%234D5664' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M6.66699 9.66797H8.33366' stroke='%234D5664' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
 .share-icon .menu__list-item-collapsible a::before {
   width: 16px;
   height: 16px;
