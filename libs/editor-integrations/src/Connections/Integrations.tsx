@@ -5,7 +5,7 @@ import {
   useConnectionStore,
 } from '@decipad/react-contexts';
 import { Dialog, WrapperIntegrationModalDialog } from '@decipad/ui';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   useConnectionActionMenu,
   useCreateIntegration,
@@ -16,9 +16,26 @@ interface IntegrationProps {
   readonly workspaceId?: string;
 }
 
+/** When you navigate to the workspace, you might `leave` the store open.
+ * So we need to clean up after the user.
+ */
+function useAbortOnMount() {
+  const abort = useConnectionStore((store) => store.abort);
+
+  useEffect(() => {
+    abort();
+
+    return () => {
+      abort();
+    };
+  }, [abort]);
+}
+
 export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
   const store = useConnectionStore();
   const codeStore = useCodeConnectionStore();
+
+  useAbortOnMount();
 
   // TODO: Remove this from here, but for now it works.
   const [info, onExecute] = useState<TExecution<boolean>>({
