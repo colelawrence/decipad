@@ -96,4 +96,5 @@ export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';
 export { Underline } from './Underline/Underline';
 export { UpdatePrompt } from './UpdatePrompt/UpdatePrompt';
 export { VoidBlock } from './VoidBlock/VoidBlock';
+export { UpgradePlanWarning } from './UpgradePlanWarning/UpgradePlanWarning';
 export * from './placeholders';

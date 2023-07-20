@@ -219,6 +219,12 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
     }
   }, [onExecute, stage]);
 
+  useEffect(() => {
+    setMaxQueryExecution(
+      !!quotaLimit && !!queryCount && quotaLimit <= queryCount
+    );
+  }, [quotaLimit, queryCount]);
+
   /**
    * We take the results from the computer
    * Do some restrictions on the type that can go through

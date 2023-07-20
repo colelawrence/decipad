@@ -24,9 +24,7 @@ test.describe('Stripe integration', () => {
     await page.close();
   });
 
-  // TODO: check with Pedro if Ci has access to process.ENV variables
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('testing Stripe Checkout integration', async () => {
+  test('testing Stripe Checkout integration', async () => {
     const currentRoute = page.url();
 
     await context.route('**/*', (route) => {

@@ -54,6 +54,7 @@ type AIPanelFormProps = {
   prompt: string;
   setPrompt: (s: string) => void;
   status: RemoteDataStatus;
+  disableSubmitButton?: boolean;
 };
 
 export const AIPanelForm = ({
@@ -62,6 +63,7 @@ export const AIPanelForm = ({
   setPrompt,
   placeholder,
   status,
+  disableSubmitButton = false,
 }: AIPanelFormProps) => {
   return (
     <form
@@ -91,7 +93,7 @@ export const AIPanelForm = ({
             onClick={() => {
               handleSubmit();
             }}
-            disabled={prompt.length === 0}
+            disabled={prompt.length === 0 || disableSubmitButton}
           >
             <Send />
           </Button>

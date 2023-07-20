@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { getAnalytics } from '@decipad/client-events';
 import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -16,7 +15,6 @@ import {
   removeFocusFromAllBecauseSlate,
   useEnterListener,
 } from '@decipad/react-utils';
-import { workspaces } from '@decipad/routing';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
@@ -27,14 +25,12 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, TextAndIconButton } from '../../atoms';
+import { Button, TextAndIconButton, UpgradePlanWarning } from '../../atoms';
 import { Close, Play, Sparkles } from '../../icons';
 import { Tabs } from '../../molecules/Tabs/Tabs';
 import {
   cssVar,
   mobileQuery,
-  p13Medium,
   p13Regular,
   p15Medium,
   p16Medium,
@@ -70,8 +66,6 @@ interface WrapperIntegrationModalDialogProps {
   readonly actionMenu: ReactNode;
 }
 
-const analytics = getAnalytics();
-
 export const WrapperIntegrationModalDialog: FC<
   WrapperIntegrationModalDialogProps
 > = ({
@@ -96,7 +90,6 @@ export const WrapperIntegrationModalDialog: FC<
   const hasDataPreview = !!resultPreview;
   const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount } = workspaceInfo;
-  const navigate = useNavigate();
   const [maxQueryExecution, setMaxQueryExecution] = useState(
     !!quotaLimit && !!queryCount && quotaLimit <= queryCount
   );
@@ -167,20 +160,8 @@ export const WrapperIntegrationModalDialog: FC<
     } else if (limitExceededError) {
       setMaxQueryExecution(true);
       setRunButtonDisabled(true);
-      analytics?.track('query limit exceeded', {
-        type: 'LIMIT_EXCEEDED',
-        name: result.error?.name,
-        stack: result.error?.stack,
-        url: global.location.pathname,
-      });
     } else {
       setRunButtonDisabled(false);
-      analytics?.track('error', {
-        type: result?.error?.cause,
-        name: result?.error?.name,
-        stack: result?.error?.stack,
-        url: global.location.pathname,
-      });
     }
   };
 
@@ -255,43 +236,16 @@ export const WrapperIntegrationModalDialog: FC<
         </div>
       </div>
       <div css={allChildrenStyles(tabStage)}>{children}</div>
-      {(showQueryQuotaLimit || maxQueryExecution) && (
-        <div css={upgradeProStyles}>
-          {maxQueryExecution && (
-            <p>
-              You have used all of your {quotaLimit} credits.{<br />}
-              Upgrade to Pro for more credits.
-            </p>
-          )}
-          {showQueryQuotaLimit && (
-            <p>
-              You are about to reach the limit of {quotaLimit} credits.{<br />}
-              Upgrade to Pro for more credits.
-            </p>
-          )}
-          <div>
-            <Button
-              type="yellow"
-              onClick={() => {
-                if (workspaceId) {
-                  navigate(
-                    workspaces({})
-                      .workspace({
-                        workspaceId,
-                      })
-                      .members({}).$,
-                    { replace: true }
-                  );
-                }
-              }}
-              sameTab={true} // change this to false if you want to work on payments locally
-              testId="integration_upgrade_pro"
-            >
-              Upgrade to Pro
-            </Button>
-          </div>
-        </div>
-      )}
+      {(showQueryQuotaLimit || maxQueryExecution) &&
+        workspaceId &&
+        quotaLimit && (
+          <UpgradePlanWarning
+            workspaceId={workspaceId}
+            showQueryQuotaLimit={showQueryQuotaLimit}
+            maxQueryExecution={maxQueryExecution}
+            quotaLimit={quotaLimit}
+          />
+        )}
       {showTabs && (
         <div css={bottomBarStyles}>
           {isEditing ? (
@@ -372,16 +326,6 @@ const buttonWrapperStyles = css({
 const queriesLeftStyles = css({
   ...p13Regular,
   paddingLeft: '5px',
-});
-
-const upgradeProStyles = css({
-  ...p13Medium,
-  backgroundColor: cssVar('errorBlockAnnotationWarning'),
-  padding: '12px 16px',
-  display: 'flex',
-  width: '100%',
-  gap: '20px',
-  justifyContent: 'space-between',
 });
 
 const intWrapperStyles = css({

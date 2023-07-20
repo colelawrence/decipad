@@ -1,12 +1,24 @@
+import { getAnalytics } from '@decipad/client-events';
 import { Result } from '@decipad/computer';
 import { useNodePath } from '@decipad/editor-hooks';
 import {
   LiveQueryElement,
   TableCellType,
   useTEditorRef,
+  WARNING_CREDITS_LEFT_PERCENTAGE,
 } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
-import { Button, LiveConnectionResult, LiveError, Spinner } from '@decipad/ui';
+import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
+import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import {
+  Button,
+  LiveConnectionResult,
+  LiveError,
+  p13Regular,
+  Spinner,
+  UpgradePlanWarning,
+} from '@decipad/ui';
+import { css } from '@emotion/react';
 import { setNodes } from '@udecode/plate';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiveQuery } from '../hooks/useLiveQuery';
@@ -63,6 +75,40 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
 
   const [, setVersion] = useState(0);
 
+  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const { quotaLimit, queryCount } = workspaceInfo;
+  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
+  const [maxQueryExecution, setMaxQueryExecution] = useState(
+    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
+  );
+  const [nrQueriesLeft, setNrQueriesLeft] = useState(
+    quotaLimit && queryCount ? quotaLimit - queryCount : null
+  );
+  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
+    !!nrQueriesLeft &&
+      !!quotaLimit &&
+      nrQueriesLeft > 0 &&
+      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
+  );
+
+  const updateQueryExecutionCount = useCallback(async () => {
+    return updateQueryExecCount({
+      id: workspaceInfo.id || '',
+    });
+  }, [workspaceInfo.id, updateQueryExecCount]);
+
+  useEffect(() => {
+    if (queryCount && quotaLimit) {
+      setNrQueriesLeft(quotaLimit - queryCount);
+      setShowQueryQuotaLimit(
+        !!nrQueriesLeft &&
+          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
+          nrQueriesLeft > 0
+      );
+      setMaxQueryExecution(quotaLimit <= queryCount);
+    }
+  }, [quotaLimit, queryCount, nrQueriesLeft]);
+
   useEffect(() => {
     const { error, result } = liveQuery;
     if (!error && !result) {
@@ -96,9 +142,35 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
     runQuery();
   }, [element, runQuery, store]);
 
+  const onRunQuery = async () => {
+    const analytics = getAnalytics();
+    if (analytics) {
+      analytics.track('run live query', { prompt });
+    }
+    const result = await updateQueryExecutionCount();
+    const newExecutedQueryData = result.data?.incrementQueryCount;
+    const errors = result.error?.graphQLErrors;
+    const limitExceededError = errors?.find(
+      (err) => err.extensions.code === 'LIMIT_EXCEEDED'
+    );
+
+    if (newExecutedQueryData) {
+      runQuery();
+      setCurrentWorkspaceInfo({
+        ...workspaceInfo,
+        queryCount: newExecutedQueryData.queryCount,
+        quotaLimit: newExecutedQueryData.quotaLimit,
+      });
+    } else if (limitExceededError) {
+      setMaxQueryExecution(true);
+    }
+  };
+
   return (
     <div contentEditable={false}>
-      <Button onClick={runQuery}>Run Query</Button>
+      <Button onClick={onRunQuery} disabled={maxQueryExecution}>
+        Run Query
+      </Button>
       {persistedResult && (
         <LiveConnectionResult
           result={persistedResult}
@@ -119,6 +191,26 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
           <Spinner />
         </div>
       )}
+      {(showQueryQuotaLimit || maxQueryExecution) &&
+        workspaceInfo.id &&
+        quotaLimit && (
+          <UpgradePlanWarning
+            workspaceId={workspaceInfo.id}
+            showQueryQuotaLimit={showQueryQuotaLimit}
+            maxQueryExecution={maxQueryExecution}
+            quotaLimit={quotaLimit}
+          />
+        )}
+      {showQueryQuotaLimit && (
+        <p css={queriesLeftStyles}>
+          {nrQueriesLeft} of {quotaLimit} credits left
+        </p>
+      )}
     </div>
   );
 };
+
+const queriesLeftStyles = css({
+  ...p13Regular,
+  paddingLeft: '5px',
+});

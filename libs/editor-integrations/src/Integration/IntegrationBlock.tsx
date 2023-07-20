@@ -13,15 +13,24 @@ import {
   PlateComponent,
   SimpleTableCellType,
   useTEditorRef,
+  WARNING_CREDITS_LEFT_PERCENTAGE,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
-import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
+import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
+import {
+  useComputer,
+  useCurrentWorkspaceStore,
+  useIsEditorReadOnly,
+} from '@decipad/react-contexts';
 import { removeFocusFromAllBecauseSlate } from '@decipad/react-utils';
 import {
   AnimatedIcon,
   IntegrationBlock as UIIntegrationBlock,
   icons,
+  p13Regular,
+  UpgradePlanWarning,
 } from '@decipad/ui';
+import { css } from '@emotion/react';
 import { getPreviousNode, setNodes } from '@udecode/plate';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
@@ -34,6 +43,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useEffect,
 } from 'react';
 import { Subject } from 'rxjs';
 import { CodeIntegration } from './CodeIntegration';
@@ -93,6 +103,38 @@ export const IntegrationBlock: PlateComponent = ({
   const editor = useTEditorRef();
   const path = useNodePath(element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
+  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const { quotaLimit, queryCount, id } = workspaceInfo;
+  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
+  const [maxQueryExecution, setMaxQueryExecution] = useState(
+    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
+  );
+  const [nrQueriesLeft, setNrQueriesLeft] = useState(
+    quotaLimit && queryCount ? quotaLimit - queryCount : null
+  );
+  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
+    !!nrQueriesLeft &&
+      !!quotaLimit &&
+      nrQueriesLeft > 0 &&
+      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
+  );
+
+  useEffect(() => {
+    if (queryCount && quotaLimit) {
+      setNrQueriesLeft(quotaLimit - queryCount);
+      setShowQueryQuotaLimit(
+        !!nrQueriesLeft &&
+          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
+          nrQueriesLeft > 0
+      );
+      setMaxQueryExecution(quotaLimit <= queryCount);
+    }
+  }, [quotaLimit, queryCount, nrQueriesLeft]);
+  const updateQueryExecutionCount = useCallback(async () => {
+    return updateQueryExecCount({
+      id: id || '',
+    });
+  }, [id, updateQueryExecCount]);
 
   const specificIntegration = useMemo(
     () =>
@@ -200,6 +242,33 @@ export const IntegrationBlock: PlateComponent = ({
         ]
       : [editButton],
   };
+
+  const handleClick = async () => {
+    setAnimated(true);
+    const result = await updateQueryExecutionCount();
+    const newExecutedQueryData = result.data?.incrementQueryCount;
+    const errors = result.error?.graphQLErrors;
+    const limitExceededError = errors?.find(
+      (error) => error.extensions.code === 'LIMIT_EXCEEDED'
+    );
+    setTimeout(() => {
+      setAnimated(false);
+    }, 1000);
+    setAnimated(true);
+
+    if (newExecutedQueryData) {
+      observable.current.next('refresh');
+      setCurrentWorkspaceInfo({
+        ...workspaceInfo,
+        queryCount: newExecutedQueryData.queryCount,
+        quotaLimit: newExecutedQueryData.quotaLimit,
+      });
+    } else if (limitExceededError) {
+      setMaxQueryExecution(true);
+    }
+    removeFocusFromAllBecauseSlate();
+  };
+
   return (
     <IntegrationBlockContext.Provider value={observable.current}>
       <DraggableBlock
@@ -222,14 +291,7 @@ export const IntegrationBlock: PlateComponent = ({
           buttons={[
             {
               children: <AnimatedIcon icon={<Refresh />} animated={animated} />,
-              onClick: () => {
-                setAnimated(true);
-                setTimeout(() => {
-                  setAnimated(false);
-                }, 1000);
-                observable.current.next('refresh');
-                removeFocusFromAllBecauseSlate();
-              },
+              onClick: handleClick,
               tooltip: 'Refresh data',
               visible: !readOnly,
             },
@@ -245,7 +307,27 @@ export const IntegrationBlock: PlateComponent = ({
           displayResults={showData}
           result={blockResult?.result}
         />
+        {(showQueryQuotaLimit || maxQueryExecution) &&
+          workspaceInfo.id &&
+          quotaLimit && (
+            <UpgradePlanWarning
+              workspaceId={workspaceInfo.id}
+              showQueryQuotaLimit={showQueryQuotaLimit}
+              maxQueryExecution={maxQueryExecution}
+              quotaLimit={quotaLimit}
+            />
+          )}
+        {showQueryQuotaLimit && (
+          <p css={queriesLeftStyles}>
+            {nrQueriesLeft} of {quotaLimit} credits left
+          </p>
+        )}
       </DraggableBlock>
     </IntegrationBlockContext.Provider>
   );
 };
+
+const queriesLeftStyles = css({
+  ...p13Regular,
+  paddingLeft: '5px',
+});

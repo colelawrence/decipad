@@ -64,6 +64,8 @@ jobs:
           NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
           PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
+          REACT_APP_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
+          REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
         run: ./scripts/e2e.sh ${{ matrix.shard }} ${{ strategy.job-total }}
       - uses: actions/upload-artifact@v3
         if: failure()
