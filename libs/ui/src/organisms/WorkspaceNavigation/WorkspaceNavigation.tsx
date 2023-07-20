@@ -415,7 +415,7 @@ export const WorkspaceNavigation = ({
       <div key="div-empty-grid-spaces" role="presentation" />
       <NavigationList key={'navigation-footer-0'}>
         <NavigationItem
-          href={docs({}).page({ name: 'gallery' }).$}
+          href={'http://www.decipad.com/templates'}
           key={'navfoot-docs-0'}
           icon={<Sparkles />}
         >

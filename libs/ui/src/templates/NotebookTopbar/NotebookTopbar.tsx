@@ -2,7 +2,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useStripeCollaborationRules } from '@decipad/react-utils';
-import { docs, workspaces } from '@decipad/routing';
+import { workspaces } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -265,7 +265,7 @@ export const NotebookTopbar = ({
             <div css={[linksStyles, hideForSmallScreenStyles]}>
               <em css={topbarButtonStyles}>
                 <Anchor
-                  href={docs({}).page({ name: 'gallery' }).$}
+                  href={'http://www.decipad.com/templates'}
                   // Analytics
                   onClick={onGalleryClick}
                 >

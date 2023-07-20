@@ -131,14 +131,14 @@ const config = {
             docId: 'quick-start',
           },
           {
-            to: 'gallery',
-            position: 'left',
-            label: 'Templates',
-          },
-          {
             to: 'videos',
             position: 'left',
             label: 'Videos',
+          },
+          {
+            href: 'http://www.decipad.com/templates',
+            position: 'left',
+            label: 'Templates',
           },
           {
             to: 'language/overview',
