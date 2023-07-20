@@ -1,7 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { useSession } from 'next-auth/react';
 import { FC, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, InputField } from '../../atoms';
 import { Check, Loading } from '../../icons';
 import { NotebookAvatar } from '../../molecules';
@@ -88,6 +90,9 @@ interface NotebookSharingPopUpProps {
     id: string;
     name: string;
     snapshots?: { createdAt?: string }[];
+    workspace?: {
+      id: string;
+    };
   };
   readonly isAdmin: boolean;
   readonly usersWithAccess?: NotebookAvatar[] | null;
@@ -114,14 +119,17 @@ export const NotebookInvitationPopUp = ({
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
   onChange = () => Promise.resolve(),
+  notebook,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const { data: session } = useSession();
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [permission, setPermission] = useState<PermissionType>('WRITE');
+  const navigate = useNavigate();
 
   const isInvalidEmail = !email.includes('@') || email === session?.user?.email;
+  const workspaceId = notebook.workspace?.id;
 
   const handleAddCollaborator = useCallback(() => {
     if (loading) return;
@@ -194,7 +202,22 @@ export const NotebookInvitationPopUp = ({
         </div>
 
         {hasPaywall ? (
-          <Button size="extraSlim" type={'primary'} href="/">
+          <Button
+            size="extraSlim"
+            type={'primary'}
+            onClick={() => {
+              if (workspaceId) {
+                navigate(
+                  workspaces({})
+                    .workspace({
+                      workspaceId,
+                    })
+                    .members({}).$,
+                  { replace: true }
+                );
+              }
+            }}
+          >
             Upgrade to Pro to invite more people
           </Button>
         ) : (
