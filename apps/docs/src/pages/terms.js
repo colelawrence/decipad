@@ -362,6 +362,25 @@ export default function Terms() {
             </p>
 
             <p>
+              <b>Payment Processing:</b> Payment processing services for Decipad
+              may be provided by our third-party payment processors, which may
+              include Stripe, Inc ("Stripe"). You agree to provide Stripe with
+              current, accurate, and complete information about you and your
+              payment methods (billing address, credit card number, expiration
+              date, etc.). The processing of credit card charges or credits, as
+              applicable, relating to your use of the Service will be subject to
+              Stripe's then-current Services Agreement (the “Stripe Services
+              Agreement”). You hereby agree to be bound by the Stripe Services
+              Agreement, which may be modified by Stripe from time to time as
+              set forth therein. Further, you authorize Decipad to share such
+              information and transaction information with Decipad's payment
+              processing services provider, and you authorize the payment
+              processing services provider to process that information in
+              accordance with its privacy policy. Stripe Inc.'s privacy policy
+              is available at https://stripe.com/privacy.
+            </p>
+
+            <p>
               <b>Special Notice for International Use;</b> Export Controls:
               Software (defined below) available in connection with the Service
               and the transmission of applicable data, if any, is subject to

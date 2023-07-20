@@ -103,7 +103,7 @@ export default function Terms() {
                     color: '#5f6486',
                   }}
                 >
-                  Last Updated: May 16, 2023
+                  Last Updated: July 21, 2023
                 </p>
               </center>
             </div>
@@ -377,7 +377,15 @@ export default function Terms() {
                 our affiliates, partners, you, or other third parties.
               </li>
             </ul>
-
+            <p>
+              <b>Payment Processing.</b>Any payments made via the Service are
+              processed by Stripe, and we do not directly collect, store, or
+              maintain any payment card information provided. You can read
+              Stripe's Privacy Policy at: https://stripe.com/privacy.
+              Accordingly, in addition to this Privacy Policy and our Terms of
+              Service, information related to your purchases is also processed
+              according to Stripe's Services Agreement and Privacy Policy.
+            </p>
             <p>
               <b>Aggregated or Anonymized Information.</b> We may collect or
               generate aggregated and/or anonymized Personal Data and use the
@@ -577,7 +585,98 @@ export default function Terms() {
               the laws in effect in the country in which you are located.
             </p>
             <br></br>
-            <h2>11. CHANGES TO THE PRIVACY POLICY</h2>
+
+            <h2>11. INTERNATIONAL PRIVACY RIGHTS</h2>
+
+            <p>
+              If you reside in Canada, the United Kingdom, the European Economic
+              Area, or certain other jurisdictions you may have the right to
+              exercise certain privacy rights available to you under applicable
+              data protection laws, including one or more of the rights listed
+              below. We will process your request in accordance with applicable
+              data protection laws, provided that may need to retain certain
+              information for record-keeping purposes or to complete
+              transactions that you began prior to requesting any deletion.
+            </p>
+
+            <ul>
+              <li>
+                <b>Right not to provide consent or to withdraw consent.</b> We
+                may seek to rely on your consent in order to process certain
+                Personal Data. Where we do so, you have the right not to provide
+                your consent or to withdraw your consent at any time. This does
+                not affect the lawfulness of the processing based on consent
+                before its withdrawal.
+              </li>
+              <br />
+              <li>
+                <b>Right of access and/or portability.</b> You may have the
+                right to access the Personal Data that we hold about you and, in
+                some limited circumstances, have that data provided to you so
+                that you can provide or “port” that data to another provider.
+              </li>
+              <br />
+              <li>
+                <b>Right of erasure.</b> In certain circumstances, you may have
+                the right to the erasure of Personal Data that we hold about you
+                (for example if it is no longer necessary for the purposes for
+                which it was originally collected).
+              </li>
+              <br />
+              <li>
+                <b>Right to object to processing.</b>You may have the right to
+                request that we stop processing your Personal Data and/or to
+                stop sending you marketing communications.
+              </li>
+              <br />
+              <li>
+                <b>Right to rectification.</b>You may have the right to require
+                us to correct any inaccurate or incomplete Personal Data.
+              </li>
+              <br />
+              <li>
+                <b>Right to restrict processing.</b>You may have the right to
+                request that we restrict processing of your Personal Data in
+                certain circumstances (for example, where you believe that the
+                Personal Data we hold about you is not accurate or lawfully
+                held).
+              </li>
+              <br />
+              <li>
+                <b>
+                  Right to lodge a complaint to your local Data Protection
+                  Authority.
+                </b>
+                If you are an EEA resident, you have the right to submit a
+                complaint to a data protection authority about our collection
+                and use of your Personal Data.
+              </li>
+            </ul>
+            <br />
+            <p>
+              <b>How to Exercise Your Rights. </b> To submit a request to
+              exercise any of the rights above, contact us at
+              privacy@decipad.com. Please identify yourself and specify your
+              request. If you have a password protected account, we may
+              generally use your account information to verify your identity. If
+              not, we may ask you to provide additional verification
+              information. What we request will depend on the nature of your
+              request, how sensitive the information is, and how harmful
+              unauthorized disclosure or deletion would be.
+            </p>
+            <p>
+              We use commercially reasonable efforts to delete your Personal
+              Data as required but may retain records necessary to comply with a
+              governmental authority or applicable federal, state, or local law.
+              Where legally permitted, we may decline to process requests,
+              including requests that are unreasonably repetitive or systematic,
+              require disproportionate technical effort, or jeopardize the
+              privacy of others.
+            </p>
+
+            <br></br>
+
+            <h2>12. CHANGES TO THE PRIVACY POLICY</h2>
 
             <p>
               The Service, and our business may change from time to time. As a
@@ -590,7 +689,8 @@ export default function Terms() {
               practices described in it.
             </p>
             <br></br>
-            <h2>12. CONTACT US</h2>
+
+            <h2>13. CONTACT US</h2>
 
             <p>
               If you have any questions about our Privacy Policy or information
