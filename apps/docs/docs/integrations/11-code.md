@@ -21,10 +21,14 @@ In order to get data from a code integration into your document, you need to fir
 
 ## Previewing Data
 
-![code editor](./img/code-preview.png)
+![result preview](./img/code-preview.png)
 
 On the preview pane you will see the result and the format it will be available in in your document. Here you can change the type of the columns or simple result, and make sure that you actually got the data you wanted. Once done with this step, the "Insert"-button will give you a new integration block that you can re-use in your document just like any other variable (see [Integration Basics](/docs/integrations/basics) for details).
 
-## Private Keys (Coming Soon)
+## Private Keys
 
-We have a future update planned that will introduce the option to specify private keys, ensuring secure reuse within your code. With this feature, you will be able to protect your API setup and restrict access from unauthorized users. Stay tuned for more information on how to utilize private keys effectively or contact us via [support@decipad.com](mailto:support@decipad.com).
+To query against a private API, you can use our API secret feature to make sure that your actual credentials are not exposed when publishing or sharing your notebook. To add an API secret go to your workspace and select "Data Connections" from the sidebar menu. After saving your API key, it will the be available for insertion in all notebooks in your workspace.
+
+:::note Examples
+For security reasons, API secrets can only be used directly in a `fetch()` statement. You can not assign them to variables or use them arbitrarily.
+:::
