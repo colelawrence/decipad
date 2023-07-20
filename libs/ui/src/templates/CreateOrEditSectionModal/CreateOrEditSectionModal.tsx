@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Button, ColorPicker, InputField } from '../../atoms';
 import { ClosableModal } from '../../organisms';
 import { OpaqueColor, p13Regular } from '../../primitives';
-import { AvailableSwatchColor, swatchesThemed, swatchNames } from '../../utils';
+import { AvailableSwatchColor, swatchNames, swatchesThemed } from '../../utils';
 
 type CreateSectionModalProps = {
   readonly onClose: () => void;
@@ -32,68 +32,70 @@ export const CreateOrEditSectionModal = ({
   const baseSwatches = swatchesThemed(darkTheme);
 
   return (
-    <ClosableModal
-      {...props}
-      Heading="h1"
-      title={`${term} section`}
-      closeAction={onClose}
-    >
-      <form
-        css={{ display: 'grid', rowGap: '12px' }}
-        onSubmit={async (event) => {
-          event.preventDefault();
-          setIsSubmitting(true);
-          try {
-            await onSubmit(name, baseSwatches[color as AvailableSwatchColor]);
-          } finally {
-            setIsSubmitting(false);
-            onClose();
-          }
-        }}
+    <div css={{ zIndex: 999, position: 'absolute' }}>
+      <ClosableModal
+        {...props}
+        Heading="h1"
+        title={`${term} section`}
+        closeAction={onClose}
       >
-        {op === 'create' && (
-          <p css={css(p13Regular)}>
-            Sections are how you can organize your documents within a workspace.
-            For instance, you can create a <em>personal</em> and a <em>work</em>{' '}
-            section in your default workspace.
-          </p>
-        )}
-        <InputField
-          required
-          placeholder="My section"
-          value={name}
-          onChange={setName}
-        />
-        <div
-          css={{
-            display: 'inline-flex',
-            flexDirection: 'row',
-            gap: 5,
-            flexWrap: 'nowrap',
+        <form
+          css={{ display: 'grid', rowGap: '12px' }}
+          onSubmit={async (event) => {
+            event.preventDefault();
+            setIsSubmitting(true);
+            try {
+              await onSubmit(name, baseSwatches[color as AvailableSwatchColor]);
+            } finally {
+              setIsSubmitting(false);
+              onClose();
+            }
           }}
         >
-          {swatchNames.map((key) => {
-            return (
-              <div
-                key={key}
-                aria-label={key}
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  setColor(key);
-                }}
-              >
-                <ColorPicker
-                  color={baseSwatches[key]}
-                  selected={key === color}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <Button type="secondary" submit disabled={!name || isSubmitting}>
-          {term} Section
-        </Button>
-      </form>
-    </ClosableModal>
+          {op === 'create' && (
+            <p css={css(p13Regular)}>
+              Sections are how you can organize your documents within a
+              workspace. For instance, you can create a <em>personal</em> and a{' '}
+              <em>work</em> section in your default workspace.
+            </p>
+          )}
+          <InputField
+            required
+            placeholder="My section"
+            value={name}
+            onChange={setName}
+          />
+          <div
+            css={{
+              display: 'inline-flex',
+              flexDirection: 'row',
+              gap: 5,
+              flexWrap: 'nowrap',
+            }}
+          >
+            {swatchNames.map((key) => {
+              return (
+                <div
+                  key={key}
+                  aria-label={key}
+                  onClick={(ev) => {
+                    ev.preventDefault();
+                    setColor(key);
+                  }}
+                >
+                  <ColorPicker
+                    color={baseSwatches[key]}
+                    selected={key === color}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <Button type="secondary" submit disabled={!name || isSubmitting}>
+            {term} Section
+          </Button>
+        </form>
+      </ClosableModal>
+    </div>
   );
 };

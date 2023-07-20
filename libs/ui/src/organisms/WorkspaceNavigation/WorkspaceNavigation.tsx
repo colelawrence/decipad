@@ -347,7 +347,6 @@ export const WorkspaceNavigation = ({
                     </span>
                   </NavigationItem>
                 </NavigationList>
-
                 {openMenu && (
                   <CreateOrEditSectionModal
                     onClose={() => setOpenMenu(!openMenu)}

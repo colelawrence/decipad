@@ -5,7 +5,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import format from 'date-fns/format';
 import { FC, useEffect, useState } from 'react';
-import { XYCoord, useDrag, useDragLayer } from 'react-dnd';
+import { XYCoord, useDrag as useCustomDrag, useDragLayer } from 'react-dnd';
 import { ColorStatusCircle, MenuItem, TriggerMenuItem } from '../../atoms';
 import * as icons from '../../icons';
 import { FilterBubbles, MenuList, NotebookIcon } from '../../molecules';
@@ -169,7 +169,7 @@ export const NotebookListItem = ({
   const href = notebooks({}).notebook({ notebook: { id, name } }).$;
   const [feStatus, setFeStatus] = useState<TColorStatus>(status);
   const [statusOpen, setStatusOpen] = useState(false);
-  const [{ isDragging }, drag, preview] = useDrag(
+  const [{ isDragging }, drag, preview] = useCustomDrag(
     () => ({
       type: DNDItemTypes.ICON,
       item: { id, title: name, icon, color: iconColor },
@@ -188,7 +188,11 @@ export const NotebookListItem = ({
   );
 
   useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true });
+    const img = getEmptyImage();
+    img.setAttribute('hidden', 'true');
+    preview(getEmptyImage(), {
+      captureDraggingState: true,
+    });
   }, [preview]);
 
   const canArchive = page?.type !== 'shared';
