@@ -19,7 +19,7 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   membersHref,
   onCreateNotebook,
 }) => {
-  const plan = !isPremium ? (
+  const plan = isPremium ? (
     <span css={RainbowText}>Pro Plan</span>
   ) : (
     'Free plan'
