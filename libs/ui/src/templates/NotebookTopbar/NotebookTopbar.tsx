@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { ClientEventsContext } from '@decipad/client-events';
+import { ClientActions, ClientEventsContext } from '@decipad/client-events';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useStripeCollaborationRules } from '@decipad/react-utils';
 import { docs, workspaces } from '@decipad/routing';
@@ -189,6 +189,7 @@ export const NotebookTopbar = ({
             .shared({}).$
         : null;
 
+    ClientActions.next('notebook-to-workspace');
     if (redirectToWorkspace) {
       navigate(redirectToWorkspace);
     } else if (redirectToShared) {

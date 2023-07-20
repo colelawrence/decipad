@@ -5,7 +5,7 @@ import {
   useConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
-import { findNode, insertNodes, setNodes } from '@udecode/plate';
+import { findNode, insertNodes, insertText, setNodes } from '@udecode/plate';
 import { useEffect } from 'react';
 import { getDefined } from '@decipad/utils';
 import { getNewIntegration } from '../utils';
@@ -38,6 +38,8 @@ export const useCreateIntegration = () => {
 
         if (!integrationBlock) return;
         const [node, path] = integrationBlock;
+
+        insertText(editor, store.varName, { at: path });
 
         // We were editing the integration
         if (node.integrationType.type === 'codeconnection') {

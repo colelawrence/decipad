@@ -51,8 +51,16 @@ export function useConnectionActionMenu(
   workspaceId: string,
   onExecute: (arg: TExecution<boolean>) => void
 ): ReactNode {
-  const connectionType = useConnectionStore((state) => state.connectionType);
+  const [connectionType, stage] = useConnectionStore((state) => [
+    state.connectionType,
+    state.stage,
+  ]);
   const sqlStore = useSQLConnectionStore();
+
+  // Currently, we only need action menus in the connect stage.
+  if (stage !== 'connect') {
+    return null;
+  }
 
   switch (connectionType) {
     case 'codeconnection':

@@ -61,6 +61,9 @@ interface WrapperIntegrationModalDialogProps {
 
   readonly isEditing?: boolean;
 
+  // REFACTOR: Remove this.
+  readonly isCode: boolean;
+
   /** Display custom react component to perform some actions
    * Currently being used for SecretsMenu or ConnectionsMenu
    */
@@ -83,6 +86,7 @@ export const WrapperIntegrationModalDialog: FC<
   isEditing = false,
   children,
   workspaceId,
+  isCode,
 
   actionMenu,
 }) => {
@@ -320,10 +324,12 @@ export const WrapperIntegrationModalDialog: FC<
                     if (tabStage === 'map') {
                       onAbort();
                     } else if (tabStage === 'connect') {
-                      if (AIPanelOpen) {
+                      if (AIPanelOpen && isCode) {
                         codeStore.toggleShowAi();
-                      } else {
+                      } else if (isCode) {
                         onReset();
+                      } else {
+                        onAbort();
                       }
                     }
                   }}

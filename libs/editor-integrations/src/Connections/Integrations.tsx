@@ -44,6 +44,7 @@ export const Integrations: FC<IntegrationProps> = ({ workspaceId = '' }) => {
           setOpen={store.changeOpen}
           isEditing={!!store.existingIntegration}
           actionMenu={actionMenu}
+          isCode={store.connectionType === 'codeconnection'}
         >
           {screen}
         </WrapperIntegrationModalDialog>

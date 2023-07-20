@@ -66,12 +66,22 @@ export const SQLIntegration: FC<SQLIntegrationProps> = ({
           store.setConnectionType('mysql');
           store.setStage('connect');
           store.setExistingIntegration(id);
-          store.setResultPreview(undefined);
+
+          const res = MaybeResultFromWorker(blockOptions.latestResult);
+          if (res) {
+            store.setResultPreview(res);
+          }
 
           store.setAllTypeMapping(typeMappings);
-          sqlStore.Set({ Query: blockOptions.query });
           store.setVarName(varName);
           store.changeOpen(true);
+
+          sqlStore.Set({
+            Query: blockOptions.query,
+            latestResult: blockOptions.latestResult,
+            ExternalDataName: blockOptions.externalDataName,
+            ExternalDataId: blockOptions.externalDataUrl,
+          });
           break;
         }
       }
@@ -86,8 +96,7 @@ export const SQLIntegration: FC<SQLIntegrationProps> = ({
     varName,
     id,
     typeMappings,
-    blockOptions.query,
-    blockOptions.externalDataUrl,
+    blockOptions,
     computer,
   ]);
 

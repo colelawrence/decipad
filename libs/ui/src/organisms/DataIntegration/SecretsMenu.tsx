@@ -1,12 +1,12 @@
 import { FC, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { useNavigate } from 'react-router-dom';
-import { workspaces } from '@decipad/routing';
+import { useNavigate, Link } from 'react-router-dom';
+import { workspaces, docs } from '@decipad/routing';
 import { MenuList } from '../../molecules';
 import { ArrowDiagonalTopRight, Caret } from '../../icons';
 import { editorLayout } from '../../styles';
-import { cssVar, p13Medium } from '../../primitives';
+import { cssVar, p12Bold, p12Medium, p13Medium } from '../../primitives';
 import { Divider, MenuItem } from '../../atoms';
 
 interface SecretsMenuProps {
@@ -54,6 +54,21 @@ export const SecretsMenu: FC<SecretsMenuProps> = ({
           </span>
         }
       >
+        <div css={secretsWarning}>
+          Secrets may only be used directly in the{' '}
+          <strong css={p12Bold}>fetch() </strong>
+          statement. Learn more{' '}
+          <Link
+            to={`${
+              docs({}).page({
+                name: 'integrations',
+              }).$
+            }/code`}
+          >
+            <span>in our documentation</span>
+          </Link>
+        </div>
+
         {secrets &&
           secrets.map(({ name }) => (
             <MenuItem
@@ -76,7 +91,7 @@ export const SecretsMenu: FC<SecretsMenuProps> = ({
           icon={<ArrowDiagonalTopRight />}
           onSelect={onNavigateToSecrets}
         >
-          <span>Integration Secrets</span>
+          <span>API Secrets</span>
         </MenuItem>
       </MenuList>
     </div>
@@ -112,4 +127,14 @@ const hrStyles = css({
 const iconStyles = css({
   width: 18,
   display: 'grid',
+});
+
+const secretsWarning = css(p12Medium, {
+  maxWidth: '132px',
+  backgroundColor: cssVar('mutationAnimationColor'),
+  borderRadius: '6px',
+  padding: '6px',
+  span: {
+    textDecoration: 'underline',
+  },
 });

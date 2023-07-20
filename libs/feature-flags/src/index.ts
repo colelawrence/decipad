@@ -90,6 +90,11 @@ let overrides: Flags = {
   JS_BLOCK: true,
   SILLY_NAMES: false,
   UPLOAD_CSV: true,
+
+  // For July 2023 launch, could be removed after.
+  CODE_INTEGRATIONS_AI_BUTTON: true,
+  SECRETS_IN_JS: true,
+  WORKSPACE_CONNECTIONS: true,
 };
 
 // Unlike overrides flag switcher will have higher priority

@@ -76,13 +76,18 @@ export const CodeIntegration = function CodeIntegration({
           store.setConnectionType('codeconnection');
           store.setStage('connect');
           store.setExistingIntegration(id);
-          store.setResultPreview(undefined);
+
+          const res = MaybeResultFromWorker(blockOptions.latestResult);
+          if (res) {
+            store.setResultPreview(res);
+          }
 
           store.setAllTypeMapping(typeMappings);
-          codeStore.setCode(blockOptions.code);
-          // code review: does this cycle?
           store.setVarName(varName);
           store.changeOpen(true);
+
+          codeStore.setCode(blockOptions.code);
+          codeStore.setLatestResult(blockOptions.latestResult);
           break;
         }
       }
@@ -99,6 +104,7 @@ export const CodeIntegration = function CodeIntegration({
     varName,
     id,
     typeMappings,
+    blockOptions.latestResult,
   ]);
 
   return null;

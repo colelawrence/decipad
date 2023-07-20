@@ -34,7 +34,7 @@ export const EditDataConnectionsModal: React.FC<
   return (
     <ClosableModal
       {...modalProps}
-      title="Live connection secrets"
+      title="Data Connections"
       closeAction={closeHref}
     >
       <div css={modalWrapper}>
@@ -42,7 +42,7 @@ export const EditDataConnectionsModal: React.FC<
           <Tabs variant>
             <TextAndIconButton
               size="normal"
-              text="Code Secrets"
+              text="API Secrets"
               variantHover
               notSelectedLook={pathname !== connections.codeSecrets({}).$}
               color={

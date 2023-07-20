@@ -12,7 +12,7 @@ import { workspaces } from '@decipad/routing';
 import { BackendUrl } from '@decipad/utils';
 import { MessageBlock, inputStyles } from '.';
 import { Caret, Edit, Loading, Trash, Warning } from '../../icons';
-import { cssVar, p13Bold, p16Bold, p16Regular } from '../../primitives';
+import { cssVar, p13Bold, p14Medium, p16Bold } from '../../primitives';
 import { Button, MenuItem, TextAndIconButton } from '../../atoms';
 import { MenuList } from '../../molecules';
 import { Tabs } from '../../molecules/Tabs/Tabs';
@@ -62,7 +62,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
   return (
     <div css={mainWrapperStyles}>
       <div>
-        <p css={p16Regular}>
+        <p css={p14Medium}>
           SQL Connections defined here are available to anyone in the workspace
           for use in Code Integrations, without the actual credentials being
           exposed.
@@ -74,7 +74,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
         </Button>
       </div>
 
-      <div>Existing Connections</div>
+      <span css={p14Medium}>Existing Connections</span>
       {workspaceExternalData == null && (
         <div css={{ display: 'flex' }}>
           Loading

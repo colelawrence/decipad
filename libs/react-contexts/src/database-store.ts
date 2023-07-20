@@ -6,6 +6,7 @@ import {
   SimpleTableCellType,
 } from '@decipad/editor-types';
 import { generateVarName } from '@decipad/utils';
+import { ClientActions } from '@decipad/client-events';
 import { create } from 'zustand';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
@@ -152,6 +153,7 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
 
     // Reset dependent stores.
     useCodeConnectionStore.getState().reset();
+    useSQLConnectionStore.getState().reset();
   },
 
   createIntegration: false,
@@ -205,6 +207,7 @@ interface SQLConnectionStore extends ConnectionStore {
   ExternalDataName: string | undefined;
   Query: string;
 
+  reset: () => void;
   Set: (NewState: Partial<SQLConnectionStore>) => void;
 }
 
@@ -218,7 +221,24 @@ export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
   ExternalDataName: undefined,
   Query: '',
 
+  reset() {
+    set(() => ({
+      Query: '',
+      latestResult: '',
+      timeOfLastRun: null,
+      ExternalDataId: undefined,
+      ExternalDataName: undefined,
+    }));
+  },
+
   Set(NewState) {
     set(() => NewState);
   },
 }));
+
+// Abort store state on notebook exit.
+ClientActions.subscribe((event) => {
+  if (event === 'notebook-to-workspace') {
+    useConnectionStore.getState().abort();
+  }
+});

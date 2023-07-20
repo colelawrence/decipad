@@ -1,6 +1,6 @@
 import { Secret } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
-import { cssVar, p13Medium } from '../../primitives';
+import { p14Medium } from '../../primitives';
 import { WorkspaceSecretsRow } from './WorkspaceSecretsRow.private';
 
 type TableProps = {
@@ -47,6 +47,4 @@ const rowStyles = css({
   gap: '16px',
 });
 
-const tableHeadStyles = css(p13Medium, {
-  color: cssVar('weakerTextColor'),
-});
+const tableHeadStyles = css(p14Medium);
