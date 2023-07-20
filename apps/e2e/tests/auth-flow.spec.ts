@@ -25,7 +25,7 @@ test.describe('Authentication flow', () => {
 
   test('should show confirmation email on login attempt', async ({ page }) => {
     await page.type('input', 'johndoe123@gmail.com');
-    await page.click('text=/Continue with email/i');
+    await page.click('text=/Continue/i');
   });
 
   test('should redirect to workspace if authenticated', async ({

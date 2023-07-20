@@ -19,11 +19,11 @@ const linkStyles = css({
 export const SignUpConditionsContent: FC = () => {
   return (
     <div css={conditionLinksWrapperStyles}>
-      By logging in, you agree to our{' '}
+      <>By submitting this form, you agree to our </>
       <a target="_blank" css={linkStyles} href="/docs/terms">
         Terms of Service
-      </a>{' '}
-      and{' '}
+      </a>
+      <> and </>
       <a target="_blank" css={linkStyles} href="/docs/privacy">
         Privacy Policy
       </a>

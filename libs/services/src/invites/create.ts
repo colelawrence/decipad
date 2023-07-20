@@ -105,5 +105,20 @@ async function generateAuthLink(args: INotifyInviteArguments) {
     expirationSeconds: inviteExpirationSeconds,
   });
 
-  return loginLink;
+  let signUpMessage;
+  const { name } = args.invitedByUser;
+
+  if (name && name !== '' && !name.includes('@')) {
+    signUpMessage = `${name} invited you to workspace ${args.resourceName}`;
+  } else {
+    signUpMessage = `You have been invited to ${args.resourceName}`;
+  }
+  const params = new URLSearchParams({
+    email: args.email,
+    // invitedBy: args.invitedByUser.email || args.invitedByUser.name,
+    message: signUpMessage,
+    redirect: loginLink,
+  });
+
+  return `${urlBase}/w?${params.toString()}`;
 }

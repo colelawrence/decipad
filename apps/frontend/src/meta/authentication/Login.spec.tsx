@@ -1,6 +1,7 @@
 import { act, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SignInResponse, signIn } from 'next-auth/react';
+import { MemoryRouter } from 'react-router-dom';
 import { Login } from './Login';
 
 jest.mock('next-auth/react');
@@ -24,13 +25,17 @@ afterEach(() =>
 );
 
 it('shows a message when the signin request is processed', async () => {
-  const { findByText, findByPlaceholderText } = render(<Login />);
-  await act(async () => (await findByText('Continue with email')).click());
+  const { findByText, findByPlaceholderText } = render(
+    <MemoryRouter>
+      <Login />
+    </MemoryRouter>
+  );
+  await act(async () => (await findByText('Continue')).click());
   await userEvent.type(
     await findByPlaceholderText(/e-?mail/i),
     'me@example.com'
   );
-  await userEvent.click(await findByText(/Continue with email/i));
+  await userEvent.click(await findByText(/Continue/i));
 
   await act(() =>
     resolveSignIn({ ok: true, error: undefined, status: 200, url: null })
