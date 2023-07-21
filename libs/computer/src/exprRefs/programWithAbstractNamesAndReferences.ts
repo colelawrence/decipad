@@ -18,7 +18,8 @@ import { programToVarNameToBlockMap } from './programToVarNameToBlockMap';
 const identifiedBlockWithAbstractNamesAndReferences = (
   varNameToBlockMap: ReadOnlyVarNameToBlockMap,
   blockDependents: BlockDependentsMap,
-  tableToColumnsMap: ReadonlyMap<string, Set<string>>
+  tableToColumnsMap: ReadonlyMap<string, Set<string>>,
+  previousVarNameToBlockMap: ReadOnlyVarNameToBlockMap
 ) => {
   const toUserlandRef = (ref: string) => {
     const block = varNameToBlockMap.get(ref);
@@ -81,7 +82,8 @@ const identifiedBlockWithAbstractNamesAndReferences = (
       varNameToBlockMap,
       toUserlandRef,
       maybeReplaceIdentifier,
-      tableColumns
+      tableColumns,
+      previousVarNameToBlockMap
     );
     for (const dep of dependencies) {
       addDependent(dep, block.id);
@@ -93,13 +95,15 @@ const identifiedBlockWithAbstractNamesAndReferences = (
 const blockWithAbstractNamesAndReferences = (
   varNameToBlockMap: ReadOnlyVarNameToBlockMap,
   blockDependencies: BlockDependentsMap,
-  tableColumns: Map<string, Set<string>>
+  tableColumns: Map<string, Set<string>>,
+  previousVarNameToBlockMap: ReadOnlyVarNameToBlockMap
 ) => {
   const toIdentifiedBlockWithAbstractNamesAndReferences =
     identifiedBlockWithAbstractNamesAndReferences(
       varNameToBlockMap,
       blockDependencies,
-      tableColumns
+      tableColumns,
+      previousVarNameToBlockMap
     );
   return (block: ProgramBlock) => {
     if (block.type === 'identified-error') {
@@ -116,7 +120,8 @@ interface ProgramWithAbstractNamesAndReferencesResult {
 }
 
 export const programWithAbstractNamesAndReferences = (
-  program: Program
+  program: Program,
+  previousVarNameToBlockMap: ReadOnlyVarNameToBlockMap = new Map()
 ): ProgramWithAbstractNamesAndReferencesResult => {
   const blockDependents = new Map<string, string[]>();
   const { varNameToBlockMap, tableToColumnsMap } =
@@ -131,7 +136,8 @@ export const programWithAbstractNamesAndReferences = (
       blockWithAbstractNamesAndReferences(
         varNameToBlockMap,
         blockDependents,
-        tableToColumnsMap
+        tableToColumnsMap,
+        previousVarNameToBlockMap
       )
     ),
     varNameToBlockMap,

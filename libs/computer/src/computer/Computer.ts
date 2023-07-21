@@ -108,7 +108,7 @@ export class Computer {
   private readonly extraProgramBlocks = new BehaviorSubject<
     Map<string, ProgramBlock[]>
   >(new Map());
-  private resultStreams = new ResultStreams();
+  private resultStreams = new ResultStreams(this);
   public results = this.resultStreams.global;
   public stats = this.computationRealm.stats;
 
@@ -654,14 +654,15 @@ export class Computer {
     program,
     externalData,
   }: ComputeRequestWithExternalData): IngestComputeRequestResponse {
-    // console.log('newProgram', program);
     const {
       program: newProgram,
       varNameToBlockMap,
       blockDependents,
     } = programWithAbstractNamesAndReferences(
-      topologicalSort(flattenTableDeclarations(program))
+      topologicalSort(flattenTableDeclarations(program)),
+      this.latestVarNameToBlockMap
     );
+    // console.log('newProgram', program);
     const newParse = topologicalSort(
       updateChangedProgramBlocks(newProgram, this.latestProgram)
     );

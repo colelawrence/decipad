@@ -394,14 +394,7 @@ it('can accept program bits', async () => {
   expect(
     computer.getBlockIdResult('block-0')?.result?.value
     // undefined again
-  ).toMatchInlineSnapshot(`
-    DeciNumber {
-      "d": 1n,
-      "infinite": false,
-      "n": 42n,
-      "s": 1n,
-    }
-  `);
+  ).toMatchInlineSnapshot(`Symbol(unknown)`);
 });
 
 describe('tooling data', () => {

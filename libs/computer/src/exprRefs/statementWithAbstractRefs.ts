@@ -19,7 +19,8 @@ export const statementWithAbstractRefs = <T extends AST.Statement>(
   maybeReplaceIdentifier: (
     identifier: AST.Identifier
   ) => string | false = maybeReplaceIdentifierWith(varNameToBlockMap),
-  localIdentifiers = new Set<string>()
+  localIdentifiers = new Set<string>(),
+  previousVarNameToBlockMap: ReadOnlyVarNameToBlockMap = new Map()
 ): [T, string[]] => {
   const blockDependencies: string[] = [];
 
@@ -45,7 +46,10 @@ export const statementWithAbstractRefs = <T extends AST.Statement>(
           if (definedInBlock.definesVariable && !node.previousVarName) {
             node.previousVarName = definedInBlock.definesVariable;
           }
-        } else if (node.previousVarName) {
+        } else if (
+          node.previousVarName &&
+          !previousVarNameToBlockMap.has(originalRef)
+        ) {
           node.args[0] = node.previousVarName;
         }
         if (

@@ -47,6 +47,7 @@ const UnprotectedMagicNumber: PlateComponent = ({
   const exp = getNodeString(text);
 
   const blockId = useMagicNumberId(text);
+
   const shadow = useShadowCodeLine(blockId);
 
   const result = useResult(blockId)?.result;

@@ -98,15 +98,26 @@ describe('abstract refs', () => {
     expect(result && (await materializeResult(result))).toMatchInlineSnapshot(`
       Object {
         "type": Object {
-          "kind": "number",
-          "unit": null,
+          "errorCause": Object {
+            "context": "in operation \\"+\\" (type-error, number)",
+            "errType": "unknown-reference",
+            "refName": "_A",
+          },
+          "errorLocation": Object {
+            "end": Object {
+              "char": 6,
+              "column": 7,
+              "line": 1,
+            },
+            "start": Object {
+              "char": 5,
+              "column": 6,
+              "line": 1,
+            },
+          },
+          "kind": "type-error",
         },
-        "value": DeciNumber {
-          "d": 1n,
-          "infinite": false,
-          "n": 5n,
-          "s": 1n,
-        },
+        "value": Symbol(unknown),
       }
     `);
   });

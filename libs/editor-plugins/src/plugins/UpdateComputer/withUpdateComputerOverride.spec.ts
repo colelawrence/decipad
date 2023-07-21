@@ -238,35 +238,35 @@ describe('withUpdateComputerOverride', () => {
           },
         },
         "id5": Object {
-          "epoch": 2n,
+          "epoch": 3n,
           "id": "id5",
           "result": Object {
             "type": Object {
-              "kind": "number",
-              "unit": null,
+              "errorCause": Object {
+                "context": "in operation \\"+\\" (type-error, number)",
+                "errType": "unknown-reference",
+                "refName": "_A",
+              },
+              "errorLocation": Object {
+                "end": Object {
+                  "char": 6,
+                  "column": 7,
+                  "line": 1,
+                },
+                "start": Object {
+                  "char": 5,
+                  "column": 6,
+                  "line": 1,
+                },
+              },
+              "kind": "type-error",
             },
-            "value": DeciNumber {
-              "d": 1n,
-              "infinite": false,
-              "n": 3n,
-              "s": 1n,
-            },
+            "value": Symbol(unknown),
           },
           "type": "computer-result",
-          "usedNames": Array [
-            Array [
-              "",
-              "_A",
-            ],
-            Array [
-              "",
-              "_B",
-            ],
-          ],
+          "usedNames": Array [],
           "visibleVariables": Object {
             "global": Set {
-              "exprRef_id3",
-              "_A",
               "exprRef_id4",
               "_B",
               "exprRef_id5",

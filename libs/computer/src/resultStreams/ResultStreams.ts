@@ -1,4 +1,6 @@
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { InferError, Result } from '@decipad/language';
+import type { Computer } from '..';
 import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type {
   IdentifiedError,
@@ -13,12 +15,17 @@ import { areBlockResultsEqual } from '../utils/areBlockResultsEqual';
 export class ResultStreams {
   global: NotebookResultStream = new BehaviorSubject(defaultComputerResults);
   private blocks: Map<string, BlockResultStream> = new Map();
+  private computer: Computer;
+
+  constructor(computer: Computer) {
+    this.computer = computer;
+  }
 
   blockSubject(blockId: string): BlockResultStream {
     let blockResult$: BlockResultStream | undefined = this.blocks.get(blockId);
     if (!blockResult$) {
       blockResult$ = new BehaviorSubject<IdentifiedResult | IdentifiedError>(
-        defaultBlockResults(blockId)
+        defaultBlockResults(blockId, this.computer.computationRealm.epoch)
       );
       this.blocks.set(blockId, blockResult$);
     }
@@ -42,12 +49,29 @@ export class ResultStreams {
     this.global.next(results);
     // remove blocks that no longer exist
     for (const toDeleteBlockId of existingBlockIds.keys()) {
-      this.close(toDeleteBlockId);
+      this.close(toDeleteBlockId, true);
     }
   }
 
-  close(blockId: string) {
+  close(blockId: string, pushVariableNotFoundError = false) {
     const $ = this.blockSubject(blockId);
+    if (pushVariableNotFoundError) {
+      const previous = $.getValue();
+      $.next({
+        type: 'computer-result',
+        id: blockId,
+        result: {
+          type: {
+            kind: 'type-error',
+            errorCause: InferError.missingVariable(
+              previous.usedNames?.[0]?.[0] ?? 'unknown'
+            ).spec,
+          },
+          value: Result.Unknown,
+        },
+        epoch: this.computer.computationRealm.epoch,
+      });
+    }
     $.complete();
     this.blocks.delete(blockId);
   }

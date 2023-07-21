@@ -154,7 +154,5 @@ export const getStatementsToEvict = ({
     dirtyLocs.add(dep);
   }
 
-  const toEvict = old.flatMap((b) => (dirtyLocs.has(b.id) ? b.id : []));
-
-  return toEvict;
+  return old.flatMap((b) => (dirtyLocs.has(b.id) ? b.id : []));
 };

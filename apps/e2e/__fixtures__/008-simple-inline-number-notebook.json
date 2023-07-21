@@ -1,0 +1,155 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Check notebook references"
+        }
+      ],
+      "type": "h1",
+      "id": "x9pyCIpYwxTO9s5WbE7Je"
+    },
+    {
+      "children": [
+        {
+          "text": " With "
+        },
+        {
+          "text": "exprRef_kT1ZqQHcnuC6gTGvtrxNZ",
+          "magicnumberz": true
+        },
+        {
+          "text": " sold we can make "
+        },
+        {
+          "text": "exprRef_ndwHXKQ02Y8IMLfZidDHW",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "type": "p",
+      "id": "hiyB3YWnOELub-ptqDr3-"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "yhvjlF5BSvPdOjjAy4_LP"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Cost"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "hXDVFuDpSS5TzpUwWb8QP"
+        },
+        {
+          "children": [
+            {
+              "text": "12$ per unit"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "mWCh3o5QKx6FOUSzht8Ct"
+        }
+      ],
+      "id": "j1CJzp4uyy-WukSpQUpUi",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "unitssold"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "yZ5DeEvSNbujgIKor0bUb"
+        },
+        {
+          "children": [
+            {
+              "text": "1000 units"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "TRq4NSbRFy__4lC9zfm-a"
+        }
+      ],
+      "id": "kT1ZqQHcnuC6gTGvtrxNZ",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "revenue"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "N1U545pjZtgt0jUClUejk"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "HSJBhab7_rcRaolNXWUfe",
+              "type": "smart-ref",
+              "blockId": "kT1ZqQHcnuC6gTGvtrxNZ",
+              "columnId": null,
+              "lastSeenVariableName": "unitssold"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "sfFYF2Dx2ta-07_XJ9et_",
+              "type": "smart-ref",
+              "blockId": "j1CJzp4uyy-WukSpQUpUi",
+              "columnId": null
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "F3OlI0Qg4x1lnyNPg3udk"
+        }
+      ],
+      "id": "ndwHXKQ02Y8IMLfZidDHW",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "QEYxHkjOjbkDwGZufcusB"
+    }
+  ]
+}
