@@ -584,7 +584,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         <LazyRoute>
           <PaymentSubscriptionStatusModal
             paymentSubscriptionStatus={paymentStatus || ''}
-            templatesHref={docs({}).page({ name: 'gallery' }).$}
+            templatesHref={'https://www.decipad.com/templates'}
           />
         </LazyRoute>
       )}
