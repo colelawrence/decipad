@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 // eslint-disable-next-line import/no-extraneous-dependencies
-import pRetry from 'p-retry';
 import type { Options } from 'p-retry';
 import { timeout } from '../../utils/src/timeout';
 
@@ -12,11 +11,12 @@ interface RetryOptions {
   maxTimeout?: number;
 }
 
-export const retry = <TReturn, TError>(
+export const retry = async <TReturn, TError>(
   fn: () => Promise<TReturn>,
   shouldRetry?: RetryFn<TError>,
   options: RetryOptions = {}
 ): Promise<TReturn> => {
+  const pRetry = (await import('p-retry')).default;
   const controller = new AbortController();
   const pRetryOptions: Options & { signal: AbortSignal } = {
     ...options,

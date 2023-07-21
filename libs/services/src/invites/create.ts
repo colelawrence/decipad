@@ -90,7 +90,7 @@ export async function notify(args: INotifyInviteArguments) {
   });
 }
 
-async function generateAuthLink(args: INotifyInviteArguments) {
+export async function generateAuthLink(args: INotifyInviteArguments) {
   const { jwt: jwtConfig, inviteExpirationSeconds } = authConfig();
   const { urlBase } = appConfig();
 

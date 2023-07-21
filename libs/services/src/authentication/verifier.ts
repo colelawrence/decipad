@@ -51,15 +51,12 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
       return verification;
     },
 
-    async createStandaloneVerificationToken({
-      email,
-      resourceLink,
-      expirationSeconds,
-    }: {
+    async createStandaloneVerificationToken(verification: {
       email: string;
       resourceLink: string;
       expirationSeconds: number;
     }) {
+      const { email, resourceLink, expirationSeconds } = verification;
       const token = randomString(32);
       const hashedToken = await hashToken(token);
 
@@ -68,6 +65,11 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
         identifier: email,
         expires: new Date(Date.now() + 1000 * expirationSeconds),
         resourceLink,
+        ...(process.env.NODE_ENV === 'production'
+          ? {}
+          : {
+              openTokenForTestsOnly: token,
+            }),
       });
 
       const loginLink = `${baseUrl}/api/auth/callback/email?callbackUrl=${encodeURIComponent(
