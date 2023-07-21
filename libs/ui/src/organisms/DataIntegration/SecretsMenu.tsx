@@ -1,13 +1,14 @@
 import { FC, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { useNavigate, Link } from 'react-router-dom';
-import { workspaces, docs } from '@decipad/routing';
+import { useNavigate } from 'react-router-dom';
+import { workspaces } from '@decipad/routing';
 import { MenuList } from '../../molecules';
 import { ArrowDiagonalTopRight, Caret } from '../../icons';
 import { editorLayout } from '../../styles';
 import { cssVar, p12Bold, p12Medium, p13Medium } from '../../primitives';
 import { Divider, MenuItem } from '../../atoms';
+import { Anchor } from '../../utils';
 
 interface SecretsMenuProps {
   workspaceId: string;
@@ -58,15 +59,24 @@ export const SecretsMenu: FC<SecretsMenuProps> = ({
           Secrets may only be used directly in the{' '}
           <strong css={p12Bold}>fetch() </strong>
           statement. Learn more{' '}
-          <Link
-            to={`${
-              docs({}).page({
-                name: 'integrations',
-              }).$
-            }/code`}
+          {/*
+              Ok, this is very bad.
+              The problem is that the `MenuList`, has a `onClick={e => e.preventDefault()}`,
+              Which is preventing the regular browser behavior.
+              Removing it is mostly ok EXCEPT for the workspace, clicking on the options menu on the notebook lists.
+              But this is tech debt, we should remove onclick and fix the notebook workspace one instead.
+          */}
+          <Anchor
+            href="https://app.decipad.com/docs/integrations/code"
+            onClick={() => {
+              window.open(
+                'https://app.decipad.com/docs/integrations/code',
+                '_blank'
+              );
+            }}
           >
             <span>in our documentation</span>
-          </Link>
+          </Anchor>
         </div>
 
         {secrets &&
