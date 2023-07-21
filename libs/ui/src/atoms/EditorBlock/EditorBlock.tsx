@@ -27,7 +27,7 @@ const spacingStyles = css({
 
   // Live integrations
   '&[data-type=live] + *': {
-    paddingTop: `0px`,
+    paddingTop: `40px`,
   },
 
   '&[data-type=live]': {

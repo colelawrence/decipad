@@ -43,6 +43,7 @@ const paginationControlWrapperTdStyles = css({
 
 const pageDescriptionStyles = css(p13Regular, {
   color: cssVar('normalTextColor'),
+  padding: '0 8px',
 });
 
 const footerRowStyles = css({

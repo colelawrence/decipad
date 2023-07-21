@@ -194,7 +194,7 @@ const variableResultStyles = css({
   display: 'flex',
   flexGrow: '1',
   gap: 8,
-  alignItems: 'flex-start',
+  alignItems: 'center',
   justifyContent: 'space-between',
 });
 
