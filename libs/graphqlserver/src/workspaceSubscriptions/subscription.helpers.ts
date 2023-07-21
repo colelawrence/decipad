@@ -7,6 +7,7 @@ import {
   ID,
   WorkspaceSubscriptionRecord,
 } from '@decipad/backendtypes';
+import { track } from '@decipad/backend-analytics';
 
 const stripeConfig = thirdParty().stripe;
 const stripe = new Stripe(stripeConfig.secretKey, {
@@ -93,6 +94,15 @@ export const cancelSubscriptionFromWorkspaceId = async (workspaceId: ID) => {
   if (!subscription) {
     throw new Error('Stripe Subscription does not exist');
   }
+
+  track({
+    event: 'Stripe subscription cancelled',
+    properties: {
+      id: subscription.id,
+      workspaceId: subscription.workspace_id,
+      billingEmail: subscription.email,
+    },
+  });
 
   await cancelStripeSubscription(subscription.id);
 };

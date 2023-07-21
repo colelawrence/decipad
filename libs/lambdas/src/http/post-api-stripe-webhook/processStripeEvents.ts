@@ -2,6 +2,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
+import { track } from '@decipad/backend-analytics';
 import { tables } from 'libs/tables/src/tables';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
@@ -52,6 +53,15 @@ export const processSessionComplete = async (event: Stripe.Event) => {
     email: customer_details?.email || '',
   });
 
+  track({
+    event: 'Stripe subscription created',
+    properties: {
+      id: subscriptionId,
+      workspaceId: workspace.id,
+      billingEmail: customer_details?.email || '',
+    },
+  });
+
   return {
     statusCode: 200,
     body: `webhook succeeded: ${client_reference_id}`,
@@ -84,6 +94,15 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
     await data.workspaces.put({
       ...workspace,
       isPremium: false,
+    });
+
+    track({
+      event: 'Stripe subscription deleted',
+      properties: {
+        id,
+        workspaceId: wsSubscription.workspace_id,
+        billingEmail: wsSubscription.email,
+      },
     });
   }
 

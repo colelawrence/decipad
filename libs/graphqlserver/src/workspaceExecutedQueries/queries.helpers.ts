@@ -6,6 +6,7 @@ import {
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
+import { track } from '@decipad/backend-analytics';
 import { isSameMonth, addMonths } from 'date-fns';
 import { GraphQLError } from 'graphql';
 
@@ -68,6 +69,13 @@ export const incrementQueryCount = async (
   const { queryCount, query_reset_date } = executedQuery;
 
   if (queryCount >= maxCreditsPerPlan) {
+    track({
+      event: 'Query execution limit exceeded',
+      properties: {
+        workspaceId,
+        isPremium: workspace.isPremium,
+      },
+    });
     throw new GraphQLError(
       `Query execution limit of ${maxCreditsPerPlan}/month exceeded.`,
       {
