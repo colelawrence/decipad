@@ -79,6 +79,7 @@ let overrides: Flags = {
   // For July 2023 launch, could be removed after.
   CODE_INTEGRATIONS_AI_BUTTON: true,
   WORKSPACE_CONNECTIONS: true,
+  NO_WORKSPACE_SWITCHER: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

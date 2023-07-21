@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useAuthenticationState } from '@decipad/graphql-client';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
@@ -45,8 +44,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       ? 'invited'
       : HumanReadablePermission[currentPermission];
 
-  const { isTeamMember } = useAuthenticationState().currentUser;
-  const hideSoonLabel = isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
+  const hideSoonLabel = isFlagEnabled('NO_WORKSPACE_SWITCHER');
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');

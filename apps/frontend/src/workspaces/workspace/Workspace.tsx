@@ -18,7 +18,7 @@ import {
   useUserQuery,
 } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
-import { docs, notebooks, useRouteParams, workspaces } from '@decipad/routing';
+import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
   Dashboard,

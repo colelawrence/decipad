@@ -11,7 +11,6 @@ export const useAuthenticationState = () => {
   const userUsername = user?.self?.username || '';
   const userBio = user?.self?.description || '';
   const userId = 'me'; // TODO: fix user id
-  const isTeamMember = userEmail.endsWith('@n1n.co');
 
   const signOutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -30,18 +29,9 @@ export const useAuthenticationState = () => {
         username: userUsername,
         email: userEmail,
         bio: userBio,
-        isTeamMember,
       },
       signOutCallback,
     }),
-    [
-      userId,
-      userName,
-      userUsername,
-      userEmail,
-      userBio,
-      isTeamMember,
-      signOutCallback,
-    ]
+    [userId, userName, userUsername, userEmail, userBio, signOutCallback]
   );
 };

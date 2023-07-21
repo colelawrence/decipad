@@ -1,9 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { isFlagEnabled } from '@decipad/feature-flags';
-import {
-  useAuthenticationState,
-  useWorkspacePermission,
-} from '@decipad/graphql-client';
+import { useWorkspacePermission } from '@decipad/graphql-client';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { mediumShadow } from '@decipad/ui';
 import { css } from '@emotion/react';
@@ -49,9 +46,7 @@ export const DashboardSidebar = ({
   onLogout,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
-  const { isTeamMember } = useAuthenticationState().currentUser;
-  const enableWorkspaces =
-    isFlagEnabled('NO_WORKSPACE_SWITCHER') || isTeamMember;
+  const enableWorkspaces = isFlagEnabled('NO_WORKSPACE_SWITCHER');
   const openUserSettings = useEditUserModalStore((state) => state.open);
 
   const permission = useWorkspacePermission(props.activeWorkspace.id);
