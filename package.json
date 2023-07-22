@@ -305,7 +305,7 @@
     "use-sync-external-store": "1.2.0",
     "utility-types": "3.10.0",
     "vega": "5.25.0",
-    "vega-lite": "5.13.0",
+    "vega-lite": "5.14.1",
     "vega-themes": "^2.14.0",
     "wait-for-expect": "^3.0.2",
     "web-vitals": "3.4.0",
