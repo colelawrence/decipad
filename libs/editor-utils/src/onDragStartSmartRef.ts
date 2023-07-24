@@ -32,7 +32,7 @@ export const onDragStartSmartRef =
 
     const id = element?.id ?? blockId!;
 
-    if (element) {
+    if (element || asText) {
       if (editor.previewRef?.current && result.type.kind === 'number') {
         const formatted = computer.formatNumber(
           result.type as SerializedTypes.Number,
@@ -41,6 +41,9 @@ export const onDragStartSmartRef =
 
         dndPreviewActions.previewText(formatted.asString);
 
+        e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
+      } else if (editor.previewRef?.current && asText !== '') {
+        dndPreviewActions.previewText(asText);
         e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
       }
     }
