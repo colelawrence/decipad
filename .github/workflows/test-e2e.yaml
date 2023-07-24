@@ -21,9 +21,21 @@ on:
       - 'apps/docs/**'
 
 jobs:
+  # run this job first
+  nonce:
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    outputs:
+      result: ${{ steps.nonce.outputs.result }}
+    steps:
+      - id: nonce
+        run: echo "::set-output name=result::${{ github.run_id }}-$(date +%s)"
+
   build:
     timeout-minutes: 35
     runs-on: buildjet-4vcpu-ubuntu-2204
+    needs: nonce
+    env:
+      PERCY_PARALLEL_NONCE: ${{ needs.nonce.outputs.result }}
 
     strategy:
       matrix:

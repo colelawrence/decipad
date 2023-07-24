@@ -4,6 +4,8 @@ set -euo pipefail
 
 export DECI_E2E=1
 export REACT_APP_E2E=1
+export PERCY_PARALLEL_TOTAL=2
+# export PERCY_PARALLEL_NONCE=123456
 
 
 # Load our local nx binary into the PATH, and the lib to start up the services
@@ -26,7 +28,7 @@ services_setup
 echo "running E2E tests and snapshots..."
 cd apps/e2e
 if [ -n "${CI:-}" ]; then
-  npx percy exec -v -- npx playwright test --retries=3 --reporter line --reporter=html --shard=$1/$2
+  npx percy exec --parallel -v -- playwright test --config=./playwright.config.ts --retries=3 --reporter line --reporter=html --shard=$1/$2
 else
   npx playwright test --retries=3 $@
 fi
