@@ -17,7 +17,6 @@ import {
   Heading1,
   Heading2,
   Image,
-  ImportTable,
   Input,
   Integrations,
   LineChartSlash,
@@ -136,14 +135,6 @@ const dataItems = (paint: boolean) => {
       icon: paintIcon(<Calculations />, color),
       enabled: true,
       extraSearchTerms: ['decipad', 'calculation', 'language', 'formula'],
-    },
-    {
-      command: 'data-mapping',
-      title: 'Data Mapping',
-      description: 'Map data into variables',
-      icon: paintIcon(<ImportTable />, color),
-      enabled: isFlagEnabled('DATA_MAPPINGS'),
-      extraSearchTerms: [],
     },
   ];
 };

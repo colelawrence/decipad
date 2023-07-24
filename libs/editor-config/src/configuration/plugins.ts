@@ -59,7 +59,6 @@ import {
   createUserEventPlugin,
   createWithDocSyncHistoryPlugin,
   createDeduplicateElementIdsPlugin,
-  createDataMappingPlugin,
   createMigrateStructuredInputs,
   createLiveDataSetPlugin,
 } from '@decipad/editor-plugins';
@@ -123,7 +122,6 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
-      createDataMappingPlugin(),
       createIntegrationPlugin(),
 
       createNotebookTitlePlugin({

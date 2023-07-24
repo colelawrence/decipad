@@ -38,10 +38,6 @@ export const ELEMENT_SLIDER = 'slider';
 export const ELEMENT_STRUCTURED_IN = 'structured_input';
 export const ELEMENT_STRUCTURED_IN_CHILD = 'structured_input_child';
 
-// -- Data set elements -- //
-export const ELEMENT_DATA_MAPPING = 'data-set';
-export const ELEMENT_DATA_MAPPING_ROW = 'data-set-row';
-
 export const ELEMENT_DISPLAY = 'display';
 
 // Interactive

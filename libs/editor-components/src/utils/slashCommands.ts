@@ -11,7 +11,6 @@ import {
 import {
   insertBlockOfTypeBelow,
   insertCodeLineBelow,
-  insertDataMapping,
   insertDividerBelow,
   insertStructuredCodeLineBelow,
   setSelection,
@@ -131,9 +130,6 @@ export const execute = ({
         break;
       case 'scatter-plot':
         insertPlotBelow(editor, path, 'point');
-        break;
-      case 'data-mapping':
-        insertDataMapping(editor, path, getAvailableIdentifier);
         break;
       case 'import':
         insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);

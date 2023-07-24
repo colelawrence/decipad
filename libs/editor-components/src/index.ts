@@ -4,7 +4,6 @@ export * from './BlockLengthSynchronization/BlockLengthSynchronizationProvider';
 export * from './BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 export * from './BlockSelection/BlockSelectable';
 export * from './CodeLine';
-export * from './DataMapping';
 export * from './Display';
 export * from './EditorSidebar';
 export * from './ElementChange';

@@ -7,8 +7,6 @@ export const availableFlags = [
   'NO_WORKSPACE_SWITCHER',
   'ONBOARDING_ACCOUNT_SETUP',
   'FEATURE_FLAG_SWITCHER',
-  'DATA_MAPPINGS',
-  // A pre-populated notebook instead of a big empty one.
   'POPULATED_NEW_NOTEBOOK',
   'ROTATED_DATA_VIEW',
   'ALTERNATE_ROTATION_DATA_VIEW',

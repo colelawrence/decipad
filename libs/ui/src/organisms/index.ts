@@ -9,7 +9,6 @@ export { CodeResult } from './CodeResult/CodeResult';
 export { ColumnResult } from './ColumnResult/ColumnResult';
 export { DashboardDialogCTA } from './DashboardDialogCTA/DashboardDialogCTA';
 export * from './DataIntegration';
-export { DataMapping } from './DataMapping/DataMapping';
 export { DataView } from './DataView/DataView';
 export { DatabaseConnection } from './DatabaseConnection/DatabaseConnection';
 export { DisplayWidget } from './DisplayWidget/DisplayWidget';

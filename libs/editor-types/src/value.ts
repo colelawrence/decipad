@@ -1,4 +1,4 @@
-import { AST, Unit } from '@decipad/language';
+import { Unit } from '@decipad/language';
 import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
@@ -40,8 +40,6 @@ import { DrawElement, DrawElementDescendant, DrawElements } from './draw';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_DATA_MAPPING,
-  ELEMENT_DATA_MAPPING_ROW,
   ELEMENT_DATA_VIEW,
   ELEMENT_DRAW,
   ELEMENT_IMPORT,
@@ -226,22 +224,6 @@ export interface ColumnsElement extends BaseElement {
   ];
 }
 
-// -- Data set elements -- //
-export interface DataMappingElement extends BaseElement {
-  type: typeof ELEMENT_DATA_MAPPING;
-  sourceType?: 'notebook-table' | 'live-connection' | 'notebook-var';
-  source?: string;
-  unit?: AST.Expression | '%' | undefined;
-  children: [StructuredVarnameElement, ...Array<DataMappingRowElement>];
-}
-
-export interface DataMappingRowElement extends BaseElement {
-  type: typeof ELEMENT_DATA_MAPPING_ROW;
-  sourceColumn: string | null;
-  unit?: AST.Expression | '%' | undefined;
-  children: [StructuredVarnameElement];
-}
-
 // Overall node types
 
 export type EmptyText = {
@@ -303,9 +285,7 @@ export type BlockElement =
   | StructuredInputElementChildren
   | TableColumnFormulaElement
   // Draw Elements
-  | DrawElementDescendant
-  | DataMappingElement
-  | DataMappingRowElement;
+  | DrawElementDescendant;
 
 type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
@@ -333,7 +313,6 @@ export type MyValue = [
     | ColumnsElement
     | InteractiveElement
     | DataViewElement
-    | DataMappingElement
     | IntegrationTypes.IntegrationBlock
   >
 ];
@@ -381,7 +360,6 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_LIVE_DATASET,
   ELEMENT_IMPORT,
   ELEMENT_DRAW,
-  ELEMENT_DATA_MAPPING,
   ELEMENT_LIVE_QUERY,
   ELEMENT_INTEGRATION,
 ];
