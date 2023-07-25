@@ -8,7 +8,6 @@ import {
   CSV,
   Calculations,
   Callout,
-  ConnectTable,
   DataView,
   DatePicker,
   Divider,
@@ -148,14 +147,6 @@ const integrationsGroups = (paint: boolean) => ({
   title: 'Integrations',
   items: [
     integrationCmd(paint ? 'Daffodil' : undefined),
-    {
-      command: 'live-query',
-      title: 'SQL',
-      description: 'Query a SQL database',
-      icon: paintIcon(<ConnectTable />, paint ? 'Daffodil' : undefined),
-      enabled: isFlagEnabled('LIVE_QUERY'),
-      extraSearchTerms: ['sql', 'db', 'database'],
-    },
     {
       command: 'upload-csv',
       title: 'CSV',
