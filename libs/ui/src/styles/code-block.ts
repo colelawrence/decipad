@@ -1,12 +1,11 @@
 import { css, CSSObject } from '@emotion/react';
-import { code, cssVar, p14Regular, setCssVar } from '../primitives';
+import { code, cssVar, p14Regular } from '../primitives';
 
 export const lineHeight = '36px';
 
 export const variableStyles: CSSObject = {
   ...code,
-  ...setCssVar('currentTextColor', cssVar('variableHighlightTextColor')),
-  backgroundColor: cssVar('variableHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
   fontWeight: 500,
   fontSize: '13px',
 };
@@ -18,7 +17,7 @@ export const varStyles = css(variableStyles, {
   maxWidth: 'min(30vw, 174px)',
   '@media print': {
     background: 'unset',
-    color: cssVar('normalTextColor'),
+    color: cssVar('textDefault'),
   },
 });
 

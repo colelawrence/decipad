@@ -24,7 +24,6 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
       contentEditable={readOnly ? false : undefined}
     >
       <EditorTitle
-        Heading="h1"
         placeholder={
           isElementEmpty(editor, element) && !readOnly
             ? 'My notebook'

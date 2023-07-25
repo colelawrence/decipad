@@ -29,7 +29,6 @@ export { DataViewHeader } from './DataViewHeader/DataViewHeader';
 export { DataViewTableHeader } from './DataViewTableHeader/DataViewTableHeader';
 export { DateResult } from './DateResult/DateResult';
 export { DefaultFunctionResult } from './DefaultFunctionResult/DefaultFunctionResult';
-export { Display } from './Display/Display';
 export { Divider } from './Divider/Divider';
 export { Dot } from './Dot/Dot';
 export { ColumnDropLine } from './DropLine/ColumnDropLine';

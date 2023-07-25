@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { blockAlignment } from '../../styles';
 
 const styles = css(blockAlignment.heading1.typography, {
@@ -9,19 +9,12 @@ const styles = css(blockAlignment.heading1.typography, {
 
 interface Heading1Props {
   readonly children: ReactNode;
-  readonly Heading: 'h2';
   readonly id: string;
 }
 
-export const Heading1 = ({
-  children,
-  Heading,
-  id,
-}: Heading1Props): ReturnType<React.FC> => {
+export const Heading1: FC<Heading1Props> = ({ children, id }) => (
   // h{id} is because of css query selectors, dont remove the h
-  return (
-    <Heading id={`h${id}`} css={styles}>
-      {children}
-    </Heading>
-  );
-};
+  <h2 id={`h${id}`} css={styles}>
+    {children}
+  </h2>
+);

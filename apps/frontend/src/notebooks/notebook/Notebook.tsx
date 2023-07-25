@@ -23,6 +23,7 @@ import {
   NotebookIconPlaceholder,
   NotebookPage,
   TopbarPlaceholder,
+  GlobalThemeStyles,
 } from '@decipad/ui';
 import { SelectedTab } from 'libs/ui/src/organisms/EditorSidebar/types';
 import { FC, lazy, useCallback, useEffect, useMemo, useState } from 'react';
@@ -126,10 +127,10 @@ const Notebook: FC = () => {
     [notebookId, renameNotebook]
   );
 
-  const styles = useMemo(
+  const styles = useMemo<EditorStylesContextValue>(
     () => ({ color: iconColor }),
     [iconColor]
-  ) as EditorStylesContextValue;
+  );
 
   const [computer, setComputer] = useState<Computer>(new Computer());
 
@@ -150,6 +151,7 @@ const Notebook: FC = () => {
     <DeciEditorContextProvider value={docsync}>
       <ComputerContextProvider computer={computer}>
         <EditorStylesContext.Provider value={styles}>
+          <GlobalThemeStyles color={iconColor} />
           <Frame
             Heading="h1"
             title={notebook?.name ?? ''}

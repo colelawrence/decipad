@@ -1,4 +1,4 @@
-import { GlobalStyles, ToastDisplay } from '@decipad/ui';
+import { ToastDisplay } from '@decipad/ui';
 import { FC, ReactNode } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -21,9 +21,7 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
         <QueryParamProvider adapter={ReactRouter6Adapter}>
           <AnalyticsProvider>
             <IntercomProvider>
-              <DndProvider backend={backendForDND()}>
-                <GlobalStyles>{children}</GlobalStyles>
-              </DndProvider>
+              <DndProvider backend={backendForDND()}>{children}</DndProvider>
             </IntercomProvider>
           </AnalyticsProvider>
         </QueryParamProvider>

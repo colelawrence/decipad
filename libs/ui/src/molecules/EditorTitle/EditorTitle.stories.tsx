@@ -6,6 +6,4 @@ export default {
   component: EditorTitle,
 } as Meta;
 
-export const Normal: StoryFn = () => (
-  <EditorTitle Heading="h1">Text</EditorTitle>
-);
+export const Normal: StoryFn = () => <EditorTitle>Text</EditorTitle>;

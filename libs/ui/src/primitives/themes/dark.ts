@@ -9,6 +9,7 @@ import {
   blue700,
   blue800,
   blue900,
+  brand100,
   brand300,
   brand400,
   brand500,
@@ -49,6 +50,7 @@ import {
   purple800,
   purple900,
   red100,
+  red200,
   red300,
   red400,
   red50,
@@ -80,6 +82,47 @@ import { CssVariables } from '../CssVariables';
 
 export const theme: CssVariables = {
   theme: 'dark',
+
+  textDisabled: dark100.hex,
+  textSubdued: dark200.hex,
+  textDefault: dark300.hex,
+  textHeavy: dark200.hex,
+  textTitle: dark200.hex,
+
+  backgroundMain: dark700.hex,
+  backgroundSubdued: dark600.hex,
+  backgroundDefault: dark600.hex,
+  backgroundHeavy: dark700.hex,
+
+  borderSubdued: dark500.hex,
+  borderDefault: dark500.hex,
+
+  themeTextSubdued: teal500.hex,
+  themeTextDefault: teal200.hex,
+  themeBackgroundSubdued: teal800.hex,
+  themeBackgroundDefault: teal800.hex,
+  themeBackgroundHeavy: teal700.hex,
+
+  stateDangerBackground: red500.hex,
+  stateDangerText: white.hex,
+  stateDangerIconBackground: red200.hex,
+  stateDangerIconOutline: red700.hex,
+
+  stateWarningBackground: yellow600.hex,
+  stateWarningText: offBlack.hex,
+  stateWarningIconBackground: yellow200.hex,
+  stateWarningIconOutline: yellow700.hex,
+
+  stateOkBackground: brand300.hex,
+  stateOkText: offBlack.hex,
+  stateOkIconBackground: brand100.hex,
+  stateOkIconOutline: brand700.hex,
+
+  stateNeutralBackground: offBlack.hex,
+  stateNeutralText: white.hex,
+  stateNeutralIconBackground: grey200.hex,
+  stateNeutralIconOutline: grey600.hex,
+
   toastOk: brand700.hex,
   toastDanger: red600.hex,
   toastWarning: yellow700.hex,

@@ -104,6 +104,7 @@ const colorNames: Record<ColorId, string> = {
   blue800: 'Blue 800',
   blue900: 'Blue 900',
 
+  dark50: 'Dark 50',
   dark100: 'Dark 100',
   dark200: 'Dark 200',
   dark300: 'Dark 300',

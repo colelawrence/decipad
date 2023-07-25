@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
 import { CodeVariableTooltip } from '..';
 import { List, Loading } from '../../icons';
-import { cssVar, setCssVar } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { codeBlock, results } from '../../styles';
 import { getTypeIcon } from '../../utils';
 
@@ -129,7 +129,7 @@ const liveSpanStyles = css({
 });
 
 const localVarStyles = css({
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
 });
 
 const iconStyles = css({
@@ -142,15 +142,12 @@ const iconStyles = css({
 });
 
 const typeStyles = css({
-  outline: `solid 1px ${cssVar('strongHighlightColor')}`,
-  color: cssVar('bubbleTableFormulaTextColor'),
-  backgroundColor: cssVar('bubbleTableFormulaColor'),
-  svg: {
-    ...setCssVar('normalTextColor', cssVar('bubbleTableFormulaTextColor')),
-  },
+  outline: `solid 1px ${cssVar('borderDefault')}`,
+  color: cssVar('textDefault'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 const selectedStyles = css({
-  backgroundColor: cssVar('variableHighlightTextColor'),
-  color: cssVar('variableHighlightColor'),
+  backgroundColor: cssVar('textDefault'),
+  color: cssVar('backgroundDefault'),
 });

@@ -1,11 +1,4 @@
-/* eslint decipad/css-prop-named-variable: 0 */
-import {
-  useEditorStylesContext,
-  useThemeFromStore,
-} from '@decipad/react-contexts';
 import { ReactNode } from 'react';
-import { AvailableSwatchColor } from '../../utils';
-import { bubbleColors } from '../../utils/bubbleColors';
 import {
   borderBotStyles,
   borderTopStyles,
@@ -24,28 +17,9 @@ interface StructuredInputLinesProps {
 
 export const StructuredInputLines = ({
   children,
-  highlight = false,
 }: StructuredInputLinesProps): ReturnType<React.FC> => {
-  const { color } = useEditorStylesContext();
-  const [isDarkTheme] = useThemeFromStore();
-  const { backgroundColor, textColor } = bubbleColors({
-    color: color as AvailableSwatchColor,
-    isDarkTheme,
-    variant: highlight ? 'highlighted' : 'normal',
-  });
   return (
-    <div
-      className={'block-p'}
-      css={[
-        structuredInputContainerStyles,
-        {
-          'code .codevardef': {
-            backgroundColor: backgroundColor.hex,
-            color: textColor.hex,
-          },
-        },
-      ]}
-    >
+    <div className={'block-p'} css={structuredInputContainerStyles}>
       <span css={fadeLineTopLeftStyles} contentEditable={false}></span>
       <span css={borderTopStyles} contentEditable={false}></span>
       <span css={fadeLineTopRightStyles} contentEditable={false}></span>

@@ -198,6 +198,7 @@ export const red900 = color(48, 14, 14);
 //
 // dark shades
 //
+export const dark50 = color(249, 248, 251);
 export const dark100 = color(242, 241, 248);
 export const dark200 = color(229, 228, 241);
 export const dark300 = color(198, 197, 221);

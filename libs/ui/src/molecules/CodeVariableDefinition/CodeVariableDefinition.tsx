@@ -1,11 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SerializedType } from '@decipad/computer';
 import { CellValueType, MyEditor } from '@decipad/editor-types';
-import {
-  useEditorStylesContext,
-  useThemeFromStore,
-} from '@decipad/react-contexts';
-import { css } from '@emotion/react';
+import { SerializedStyles, css } from '@emotion/react';
 import {
   TElement,
   eventEditorSelectors,
@@ -27,8 +23,8 @@ import { Location } from 'slate';
 import { Formula, Number } from '../../icons';
 import { codeBlock } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
-import { AvailableSwatchColor, getTypeIcon } from '../../utils';
-import { bubbleColors } from '../../utils/bubbleColors';
+import { getTypeIcon } from '../../utils';
+import { cssVar } from '../../primitives';
 
 const varStyles = css(codeBlock.structuredVariableStyles, {
   padding: '4px 8px',
@@ -172,19 +168,12 @@ export const CodeVariableDefinition = ({
   const [grabbing, setGrabbing] = useState(false);
   const Icon = useMemo(() => (type ? getTypeIcon(type) : Number), [type]);
 
-  const { color } = useEditorStylesContext();
-  const [isDarkTheme] = useThemeFromStore();
-  const { backgroundColor, filters, textColor } = bubbleColors({
-    color: color as AvailableSwatchColor,
-    isDarkTheme,
+  const varThemeStyles: SerializedStyles = css({
+    backgroundColor: contentEditable
+      ? cssVar('themeBackgroundHeavy')
+      : cssVar('themeBackgroundSubdued'),
+    color: cssVar('themeTextDefault'),
   });
-
-  const varThemeStyles = {
-    backgroundColor: backgroundColor.hex,
-    color: textColor.hex,
-  };
-
-  const iconColorStyles = filters;
 
   const rootProps: HTMLAttributes<HTMLSpanElement> = useMemo(
     () =>
@@ -215,12 +204,27 @@ export const CodeVariableDefinition = ({
       {...rootProps}
     >
       {!isValue && (
-        <span css={[formulaIconStyles, iconColorStyles]}>
+        <span
+          css={[
+            formulaIconStyles,
+            {
+              mixBlendMode: 'luminosity',
+            },
+          ]}
+        >
           <Formula />
         </span>
       )}
       <span
-        css={Icon && [hideOnPrint, iconStyles, iconColorStyles]}
+        css={
+          Icon && [
+            hideOnPrint,
+            iconStyles,
+            {
+              mixBlendMode: 'luminosity',
+            },
+          ]
+        }
         contentEditable={false}
       >
         {Icon && <Icon />}

@@ -14,7 +14,6 @@ export type TypographyStyles = Readonly<
   Required<
     Pick<
       CSSObject,
-      | '--deci-currentTextColor'
       | 'color'
       | 'fontFamily'
       | 'fontStyle'
@@ -37,8 +36,7 @@ const hFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
   'sans-serif'
 );
 const hDefault: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  color: cssVar('currentTextColor'),
+  color: cssVar('textHeavy'),
   fontFamily: hFontFamily,
   fontStyle: 'normal',
   fontWeight: 500,
@@ -222,8 +220,7 @@ export const jsCode: TypographyStyles = {
 };
 
 export const code: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  color: cssVar('currentTextColor'),
+  color: cssVar('textHeavy'),
   fontFamily: mFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',

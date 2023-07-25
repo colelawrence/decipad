@@ -10,9 +10,9 @@ export default {
 } as Meta;
 
 export const Normal: StoryFn<typeof args> = (props) => (
-  <Heading2 id="1" Heading="h3" {...props} />
+  <Heading2 id="1" {...props} />
 );
 
 export const Active: StoryFn<typeof args> = (props) => (
-  <Heading2 id="1" Heading="h3" {...props} />
+  <Heading2 id="1" {...props} />
 );

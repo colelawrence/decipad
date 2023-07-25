@@ -144,11 +144,11 @@ const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
   css([
     {
       borderRadius: '6px',
-      border: `1px solid ${cssVar('borderColor')}`,
-      backgroundColor: cssVar('tintedBackgroundColor'),
+      border: `1px solid ${cssVar('borderDefault')}`,
+      backgroundColor: cssVar('backgroundSubdued'),
 
       ':hover, :focus': {
-        backgroundColor: cssVar('strongHighlightColor'),
+        backgroundColor: cssVar('backgroundHeavy'),
       },
       display: 'flex',
       flexDirection: 'row',
@@ -158,10 +158,10 @@ const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
     size === 'normal' && { height: 32, padding: 14 },
     variantHover && {
       ':hover, :focus': {
-        backgroundColor: cssVar('tintedBackgroundColor'),
+        backgroundColor: cssVar('backgroundSubdued'),
       },
       ':hover': {
-        color: cssVar('normalTextColor'),
+        color: cssVar('textDefault'),
       },
     },
   ]);
@@ -175,11 +175,11 @@ const buttonTextStyles = (size: 'fit' | 'normal', notSelectedLook: boolean) =>
     },
     size === 'normal' &&
       !notSelectedLook && {
-        color: cssVar('strongTextColor'), // used in integration tabs
+        color: cssVar('textHeavy'), // used in integration tabs
       },
     notSelectedLook && {
       ':hover': {
-        color: cssVar('strongTextColor'),
+        color: cssVar('textHeavy'),
       },
     },
   ]);

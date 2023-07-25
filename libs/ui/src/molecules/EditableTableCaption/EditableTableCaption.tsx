@@ -1,20 +1,23 @@
-/* eslint decipad/css-prop-named-variable: 0 */
-import { useThemeFromStore } from '@decipad/react-contexts';
+/* eslint-disable decipad/css-prop-named-variable */
 import { css } from '@emotion/react';
 import { Children, FC, PropsWithChildren, useContext } from 'react';
 import { SegmentButtons, TextAndIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { FormulasDrawer } from '../../organisms';
 import { markTypes } from '../../organisms/PlotParams/PlotParams';
-import { display, p14Regular, placeholderOpacity } from '../../primitives';
-import { codeBlock } from '../../styles';
+import {
+  cssVar,
+  display,
+  p14Regular,
+  placeholderOpacity,
+} from '../../primitives';
+import { codeBlock, getThemeColor } from '../../styles';
 import {
   hideOnPrint,
   slimBlockWidth,
   wideBlockWidth,
 } from '../../styles/editor-layout';
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
-import { bubbleColors } from '../../utils/bubbleColors';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { IconPopover } from '../IconPopover/IconPopover';
 
@@ -122,7 +125,6 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   children,
   showToggleCollapsedButton = false,
 }) => {
-  const [isDarkTheme] = useThemeFromStore();
   const {
     color,
     icon,
@@ -136,11 +138,6 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   } = useContext(TableStyleContext);
 
   const Icon = icons[icon];
-  const { backgroundColor, filters, textColor } = bubbleColors({
-    color: color as AvailableSwatchColor,
-    isDarkTheme,
-  });
-
   const [caption, ...tableFormulaEditors] = Children.toArray(children);
 
   return (
@@ -151,12 +148,22 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             tableTitleWrapperStyles,
             tableVarStyles,
             {
-              backgroundColor: backgroundColor.hex,
+              backgroundColor: color
+                ? getThemeColor(color).Background.Subdued
+                : cssVar('themeBackgroundSubdued'),
+              mixBlendMode: 'luminosity',
             },
-            filters,
           ]}
         >
-          <div contentEditable={false} css={[tableIconSizeStyles, filters]}>
+          <div
+            contentEditable={false}
+            css={[
+              tableIconSizeStyles,
+              {
+                mixBlendMode: 'luminosity',
+              },
+            ]}
+          >
             {readOnly ? (
               <Icon />
             ) : (
@@ -179,7 +186,9 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               placeholderStyles,
               editableTableCaptionStyles,
               {
-                color: textColor.hex,
+                color: color
+                  ? getThemeColor(color).Text.Default
+                  : cssVar('themeTextDefault'),
               },
             ]}
             spellCheck={false}
