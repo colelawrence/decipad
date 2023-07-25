@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { useWorkspacePermission } from '@decipad/graphql-client';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { mediumShadow } from '@decipad/ui';
@@ -13,7 +12,6 @@ import {
   WorkspaceLogo,
   WorkspaceNavigation,
   WorkspaceOptions,
-  WorkspaceSwitcher,
 } from '../../organisms';
 import { MobileSidebar } from '../../organisms/MobileSidebar/MobileSidebar';
 import {
@@ -23,7 +21,6 @@ import {
   transparency,
 } from '../../primitives';
 import { dashboard } from '../../styles';
-import { useEditUserModalStore } from '../EditUserModal/EditUserModal';
 
 type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
   Pick<ComponentProps<typeof AccountAvatar>, 'name'> &
@@ -46,38 +43,25 @@ export const DashboardSidebar = ({
   onLogout,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
-  const enableWorkspaces = isFlagEnabled('NO_WORKSPACE_SWITCHER');
-  const openUserSettings = useEditUserModalStore((state) => state.open);
-
   const permission = useWorkspacePermission(props.activeWorkspace.id);
-  const showSettingsAndMembers = enableWorkspaces && permission === 'ADMIN';
+  const showSettingsAndMembers = permission === 'ADMIN';
 
   const dashboardEl = (
     <div css={dashboardMainSidebarStyles} onPointerEnter={onPointerEnter}>
-      {!enableWorkspaces && (
-        <WorkspaceSwitcher
-          name={name}
-          email={email}
-          onLogout={onLogout}
-          {...props}
-          onOpenSettings={openUserSettings}
-        />
-      )}
       <div
         css={[
           {
             gridColumn: 'action',
             display: 'grid',
           },
-          dashboardSidebarStyles(!enableWorkspaces),
-          dashboardPartHideOnMobile(!enableWorkspaces),
+          dashboardSidebarStyles(),
+          dashboardPartHideOnMobile(),
           { padding: '12px 16px' },
         ]}
       >
         <div css={{ gridRow: 'navigation', display: 'grid' }}>
           <WorkspaceNavigation
             {...props}
-            enableAccountFooter={enableWorkspaces}
             enableSettingsAndMembers={showSettingsAndMembers}
           />
         </div>
@@ -88,25 +72,17 @@ export const DashboardSidebar = ({
             gridTemplateColumns: 'minmax(150px, 100%)',
           }}
         >
-          {enableWorkspaces ? (
-            <WorkspaceLogo {...props} />
-          ) : (
-            <WorkspaceOptions {...props} />
-          )}
+          <WorkspaceLogo {...props} />
         </div>
       </div>
     </div>
   );
 
-  if (enableWorkspaces) {
-    return (
-      <MobileSidebar trigger={<MobileSidebarButton />}>
-        {dashboardEl}
-      </MobileSidebar>
-    );
-  }
-
-  return dashboardEl;
+  return (
+    <MobileSidebar trigger={<MobileSidebarButton />}>
+      {dashboardEl}
+    </MobileSidebar>
+  );
 };
 
 const MobileSidebarButton: React.FC = () => {
@@ -140,39 +116,28 @@ export const dashboardButtonStyles = (isDarkMode: boolean) =>
     },
   });
 
-const dashboardSidebarStyles = (rounded: boolean) =>
-  css(
-    {
-      padding: dashboard.topPadding,
-
-      display: 'grid',
-      gridTemplateRows: '[switcher] auto [navigation] 1fr',
-      rowGap: '20px',
-      backgroundColor: cssVar('backgroundColor'),
-      [smallScreenQuery]: {
-        padding: `${dashboard.topPadding} 24px 0px`,
-
-        minHeight: '100vh',
-        height: '100%',
-      },
-    },
-    rounded && {
-      borderTopLeftRadius: '20px',
-      borderBottomLeftRadius: '20px',
-      borderLeft: `1px solid ${cssVar('borderColor')}`,
-    }
-  );
-
-const dashboardPartHideOnMobile = (legacySwitcher: boolean) =>
+const dashboardSidebarStyles = () =>
   css({
-    [smallScreenQuery]: legacySwitcher
-      ? {
-          display: 'none',
-        }
-      : {
-          minWidth: '272px',
-          padding: '16px',
-        },
+    padding: dashboard.topPadding,
+
+    display: 'grid',
+    gridTemplateRows: '[switcher] auto [navigation] 1fr',
+    rowGap: '20px',
+    backgroundColor: cssVar('backgroundColor'),
+    [smallScreenQuery]: {
+      padding: `${dashboard.topPadding} 24px 0px`,
+
+      minHeight: '100vh',
+      height: '100%',
+    },
+  });
+
+const dashboardPartHideOnMobile = () =>
+  css({
+    [smallScreenQuery]: {
+      minWidth: '272px',
+      padding: '16px',
+    },
   });
 
 const dashboardMainSidebarStyles = css({

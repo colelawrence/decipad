@@ -1,11 +1,8 @@
 export const availableFlags = [
   // Allows user to copy reference from block, and use it in others.
   'COPY_HREF',
-  'PERSISTENT_EXAMPLE',
   // allows the user to download a chart as a PNG image
   'DOWNLOAD_CHART',
-  'NO_WORKSPACE_SWITCHER',
-  'ONBOARDING_ACCOUNT_SETUP',
   'FEATURE_FLAG_SWITCHER',
   'POPULATED_NEW_NOTEBOOK',
   'ROTATED_DATA_VIEW',
@@ -14,16 +11,9 @@ export const availableFlags = [
   'LIVE_CONN_OPTIONS',
   'LIVE_QUERY',
   'SHEETS_ISLANDS',
-  'CODE_INTEGRATIONS_AI_BUTTON',
-  // The pop up modal that allows users to create connections and queries.
-  'INTEGRATIONS_MODEL_DIALOG',
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
   'SILLY_NAMES',
-  // make codelines greyscale when they are not focused
-  'MUTED_CODELINES',
-  // SQL Connections from workspace
-  'WORKSPACE_CONNECTIONS',
 ] as const;
 
 export type Flag = typeof availableFlags[number];
@@ -70,14 +60,8 @@ export const getQueryStringOverrides = (): Flags => {
 
 // Overrides will always have the highest priority
 let overrides: Flags = {
-  ONBOARDING_ACCOUNT_SETUP: true,
   POPULATED_NEW_NOTEBOOK: true,
   SILLY_NAMES: false,
-
-  // For July 2023 launch, could be removed after.
-  CODE_INTEGRATIONS_AI_BUTTON: true,
-  WORKSPACE_CONNECTIONS: true,
-  NO_WORKSPACE_SWITCHER: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

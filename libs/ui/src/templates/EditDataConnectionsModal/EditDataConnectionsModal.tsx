@@ -3,7 +3,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import { workspaces } from '@decipad/routing';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { ClosableModal } from '../../organisms';
 import { ClosableModalHeader } from '../../molecules';
 import { Tabs } from '../../molecules/Tabs/Tabs';
@@ -52,20 +51,18 @@ export const EditDataConnectionsModal: React.FC<
               }
               onClick={() => navigate(connections.codeSecrets({}).$)}
             />
-            {isFlagEnabled('WORKSPACE_CONNECTIONS') && (
-              <TextAndIconButton
-                size="normal"
-                text="SQL Connections"
-                variantHover
-                notSelectedLook={pathname !== connections.sqlConnections({}).$}
-                color={
-                  pathname === connections.sqlConnections({}).$
-                    ? 'grey'
-                    : 'transparent'
-                }
-                onClick={() => navigate(connections.sqlConnections({}).$)}
-              />
-            )}
+            <TextAndIconButton
+              size="normal"
+              text="SQL Connections"
+              variantHover
+              notSelectedLook={pathname !== connections.sqlConnections({}).$}
+              color={
+                pathname === connections.sqlConnections({}).$
+                  ? 'grey'
+                  : 'transparent'
+              }
+              onClick={() => navigate(connections.sqlConnections({}).$)}
+            />
           </Tabs>
         </div>
         <Outlet />

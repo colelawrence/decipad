@@ -1,18 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { MenuList } from '..';
 import { MenuItem, TextAndIconButton } from '../../atoms';
 import { Caret } from '../../icons/Caret/Caret';
-import {
-  cssVar,
-  p12Medium,
-  p14Medium,
-  p8Medium,
-  red500,
-} from '../../primitives';
+import { p12Medium, p14Medium, red500 } from '../../primitives';
 import { PermissionType } from '../../types';
 
 type CollabAccessDropdownProps = {
@@ -43,8 +36,6 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
     !isActivatedAccount && !isInvitationPicker
       ? 'invited'
       : HumanReadablePermission[currentPermission];
-
-  const hideSoonLabel = isFlagEnabled('NO_WORKSPACE_SWITCHER');
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');
@@ -95,18 +86,6 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
         <p css={p14Medium}>Notebook collaborator</p>
         <p css={dropDownItemStyles}>Can edit only this notebook</p>
       </MenuItem>
-      {!hideSoonLabel && (
-        <MenuItem onSelect={noop} disabled={true}>
-          <div css={dropdownDisabledItemStyles}>
-            <p css={p14Medium}>
-              Workspace member <SoonLabel />
-            </p>
-            <p css={dropDownItemStyles}>
-              Can edit and publish all notebooks in this workspace
-            </p>
-          </div>
-        </MenuItem>
-      )}
 
       {onRemove && (
         <MenuItem onSelect={onRemove}>
@@ -117,27 +96,9 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   );
 };
 
-const SoonLabel: React.FC = () => (
-  <span
-    css={{
-      ...p8Medium,
-      padding: '2px 4px',
-      borderRadius: '4px',
-      backgroundColor: cssVar('buttonHoverBackground'),
-      textTransform: 'uppercase',
-    }}
-  >
-    soon
-  </span>
-);
-
 const dropDownItemStyles = css({
   marginTop: '6px',
   maxWidth: '224px',
-});
-
-const dropdownDisabledItemStyles = css(dropDownItemStyles, {
-  opacity: 0.5,
 });
 
 const dangerOptionStyles = css({

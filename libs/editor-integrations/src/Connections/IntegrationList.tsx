@@ -9,7 +9,6 @@ import {
   icons,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 const store = useConnectionStore.getState();
 export const IntegrationList: ComponentProps<
@@ -35,7 +34,7 @@ export const IntegrationList: ComponentProps<
       store.setConnectionType('mysql');
       store.setStage('connect');
     },
-    enabled: isFlagEnabled('WORKSPACE_CONNECTIONS'),
+    enabled: true,
   },
   {
     icon: <img alt="Google Sheet" src={GoogleSheet} />,

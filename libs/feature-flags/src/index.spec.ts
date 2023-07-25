@@ -18,15 +18,15 @@ afterEach(() => {
 
 it('disables flags in unknown environments', () => {
   process.env.NODE_ENV = 'unknown';
-  expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(false);
+  expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
 });
 it('disables flags without an environment', () => {
   process.env.NODE_ENV = undefined;
-  expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(false);
+  expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
 });
 it.each(['test', 'development'])('enables flags in %s', (nodeEnv) => {
   process.env.NODE_ENV = nodeEnv;
-  expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(true);
+  expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
 });
 describe('in production builds', () => {
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe('in production builds', () => {
 
   it('disables flags', () => {
     mockGetLocation.mockReturnValue(new URL('https://alpha.decipad.com'));
-    expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(false);
+    expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
   });
   it.each([
     'http://localhost:1234',
@@ -44,7 +44,7 @@ describe('in production builds', () => {
     'https://420.dev.decipad.com',
   ])('enables flags if hosted on %s', (host) => {
     mockGetLocation.mockReturnValue(new URL(host));
-    expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(true);
+    expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
   });
 });
 
@@ -55,24 +55,24 @@ describe('in test', () => {
 
   describe('disable', () => {
     it('disables a flag', () => {
-      disable('PERSISTENT_EXAMPLE');
-      expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(false);
+      disable('FEATURE_FLAG_SWITCHER');
+      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
     });
 
     it('changes the overrides identity', () => {
       const prevOverrides = getOverrides();
-      disable('PERSISTENT_EXAMPLE');
+      disable('FEATURE_FLAG_SWITCHER');
       expect(getOverrides()).not.toBe(prevOverrides);
     });
   });
 
   describe('reset', () => {
     it('undoes disable', () => {
-      disable('PERSISTENT_EXAMPLE');
-      expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(false);
+      disable('FEATURE_FLAG_SWITCHER');
+      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
 
       reset();
-      expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(true);
+      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
     });
 
     it('changes the overrides identity', () => {
@@ -84,12 +84,12 @@ describe('in test', () => {
 
   describe('the Jest environment configuration', () => {
     test('[leaves a modified state]', () => {
-      disable('PERSISTENT_EXAMPLE');
-      expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(false);
+      disable('FEATURE_FLAG_SWITCHER');
+      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(false);
     });
 
     it('automatically resets between tests', () => {
-      expect(isFlagEnabled('PERSISTENT_EXAMPLE')).toBe(true);
+      expect(isFlagEnabled('FEATURE_FLAG_SWITCHER')).toBe(true);
     });
   });
 

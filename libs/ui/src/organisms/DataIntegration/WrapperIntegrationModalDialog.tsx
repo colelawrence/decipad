@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   useIncrementQueryCountMutation,
   useWorkspaceSecrets,
@@ -217,7 +216,7 @@ export const WrapperIntegrationModalDialog: FC<
         <div css={rightButtonsContainerStyles}>
           {tabStage === 'connect' && (
             <>
-              {isFlagEnabled('CODE_INTEGRATIONS_AI_BUTTON') && showAiButton && (
+              {showAiButton && (
                 <TextAndIconButton
                   text="AI assistance"
                   size="normal"

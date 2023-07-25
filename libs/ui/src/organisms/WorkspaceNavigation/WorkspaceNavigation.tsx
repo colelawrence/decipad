@@ -87,7 +87,6 @@ interface WorkspaceNavigationProps {
     isPremium?: boolean | null;
   };
   readonly showFeedback?: () => void;
-  readonly enableAccountFooter?: boolean;
   readonly enableSettingsAndMembers?: boolean;
 }
 
@@ -113,7 +112,6 @@ export const WorkspaceNavigation = ({
   onDeleteSection,
   onCreateSection,
   onUpdateSection,
-  enableAccountFooter = false,
   enableSettingsAndMembers = false,
   showFeedback,
 }: WorkspaceNavigationProps): ReturnType<FC> => {
@@ -151,7 +149,6 @@ export const WorkspaceNavigation = ({
 
   return (
     <nav css={workspaceNavContainerStyles}>
-      {/* TODO: cleanup NO_WORKSPACE_SWITCHER flag */}
       {enableSettingsAndMembers && (
         <>
           <NavigationList key={'workspace-nav-SM'}>
@@ -446,14 +443,8 @@ export const WorkspaceNavigation = ({
           <span css={itemTextStyles}>Feedback</span>
         </NavigationItem>
       </NavigationList>
-
-      {/* TODO: cleanup NO_WORKSPACE_SWITCHER flag */}
-      {enableAccountFooter && (
-        <>
-          <NavDivider />
-          <WorkspaceAccount />
-        </>
-      )}
+      <NavDivider />
+      <WorkspaceAccount />
 
       {openRenameMenu && (
         <div key="div-section-modal" role="presentation">
