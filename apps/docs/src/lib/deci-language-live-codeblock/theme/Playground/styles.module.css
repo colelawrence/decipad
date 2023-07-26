@@ -1,7 +1,7 @@
 .playgroundContainer {
   margin-bottom: var(--ifm-leading);
   border-radius: var(--ifm-global-radius);
-  border: 1px solid #AAB1BD;
+  border: 1px solid #aab1bd;
   overflow: hidden;
 }
 
@@ -23,10 +23,10 @@
 .playgroundEditor {
   font: var(--ifm-code-font-size) / var(--ifm-pre-line-height)
     var(--ifm-font-family-monospace) !important;
-    font-family: ABCDiatypeMono-Regular;
+  font-family: ABCDiatypeMono-Regular;
   /*rtl:ignore*/
   direction: ltr;
-  background-color: #323B49;
+  background-color: #323b49;
   padding: 0.75rem;
   caret-color: white;
 }
@@ -37,7 +37,7 @@ img {
 
 .playgroundPreview {
   padding: 0.75rem;
-  color: #323B49;
+  color: #323b49;
 }
 
 .playgroundError {
@@ -57,16 +57,17 @@ img {
 .playgroundMessage {
   font-size: 10pt;
   display: flex;
-  color: #AAB1BD;
+  color: #aab1bd;
   font-family: Inter;
   border-top: 1px solid #eee;
   gap: 8px;
   align-items: center;
   width: 100%;
   padding: 10px 5px 0px 5px;
+  flex-wrap: wrap;
 }
 
-.playgroundContainer table{
+.playgroundContainer table {
   border: 0px;
   --deci-borderTable: #eee;
 }

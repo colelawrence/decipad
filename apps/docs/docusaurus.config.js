@@ -21,7 +21,7 @@ const plugins = [
       id: 'language',
       path: 'language',
       routeBasePath: 'language',
-      sidebarPath: require.resolve('./sidebars.js'),
+      sidebarPath: require.resolve('./sidebarsdeveloper.js'),
       // ... other options
     },
   ],

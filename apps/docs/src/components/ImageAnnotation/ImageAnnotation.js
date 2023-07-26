@@ -132,23 +132,27 @@ const BottomNavigationArrow = ({
       <div
         style={{
           position: 'absolute',
-          bottom: '8px',
-          left: '18px',
+          bottom: '12px',
+          left: '15px',
           transform: 'translateY(-50%)',
           opacity: isFirstLiSelected ? 0.3 : 0.6,
+          display: isFirstLiSelected ? 'none' : 'inherit',
+          userSelect: 'none',
         }}
       >
         <div
           style={{
-            minWidth: '32px',
-            height: '32px',
-            borderRadius: '8px',
+            minWidth: '22px',
+            height: '22px',
+            borderRadius: '50%',
             backgroundColor: 'black',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: circleTextColor,
             fontWeight: 'bold',
+            fontSize: '10px',
+            paddingRight: '2px',
             cursor: isFirstLiSelected ? 'not-allowed' : 'pointer',
             opacity: isFirstLiSelected ? 0.3 : isHoveredBack ? 0.8 : 0.6,
           }}
@@ -162,23 +166,27 @@ const BottomNavigationArrow = ({
       <div
         style={{
           position: 'absolute',
-          bottom: '8px',
-          left: '55px',
+          bottom: '12px',
+          right: '32px',
           transform: 'translateY(-50%)',
           opacity: isLastLiSelected ? 0.3 : 0.6,
+          display: isLastLiSelected ? 'none' : 'inherit',
+          userSelect: 'none',
         }}
       >
         <div
           style={{
-            minWidth: '32px',
-            height: '32px',
-            borderRadius: '8px',
+            minWidth: '22px',
+            height: '22px',
+            borderRadius: '50%',
             backgroundColor: 'black',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             color: circleTextColor,
             fontWeight: 'bold',
+            fontSize: '10px',
+            paddingLeft: '2px',
             cursor: isLastLiSelected ? 'not-allowed' : 'pointer',
             opacity: isLastLiSelected ? 0.3 : isHoveredNext ? 0.8 : 0.6,
           }}
@@ -199,10 +207,6 @@ const DescriptionList = ({
   handleNumberMouseEnter,
   handleNumberMouseLeave,
 }) => {
-  const circleColor = 'var(--ifm-color-primary-light)';
-  const circleHoverColor = 'var(--ifm-menu-color-active)';
-  const circleTextColor = 'white';
-
   return (
     <>
       {steps.some((number) => number.description) && (
@@ -211,7 +215,6 @@ const DescriptionList = ({
             if (!number.description) {
               return null; // Skip rendering if description is not present
             }
-            const isHovered = hoveredNumber === number;
             return (
               <li
                 key={index}
@@ -228,19 +231,16 @@ const DescriptionList = ({
                     marginTop: '3px',
                     minWidth: '20px',
                     height: '20px',
-                    borderRadius: '50%',
-                    backgroundColor: isHovered ? circleHoverColor : 'inherit',
-                    border: `1.2px solid ${
-                      isHovered ? circleHoverColor : circleColor
-                    }`,
-                    color: `${isHovered ? circleTextColor : circleColor}`,
+                    color: 'black',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginRight: '8px',
+                    fontWeight: '600',
+                    fontSize: '16px',
                   }}
                 >
-                  {number.value}
+                  {number.value}.
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: number.description }} />
               </li>

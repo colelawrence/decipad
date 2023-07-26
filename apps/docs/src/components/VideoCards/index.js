@@ -1301,9 +1301,12 @@ export const VideoCard = ({
             lineHeight: '22px',
             letterSpacing: '-0.004em',
             marginBottom: '0px',
+            textDecoration: 'none',
           }}
         >
-          {title}
+          <a style={{ textDecoration: 'none' }} href={notebook}>
+            {title}
+          </a>
         </h2>
         {author && (
           <span
