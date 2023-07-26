@@ -99,7 +99,7 @@
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.0",
     "@formkit/auto-animate": "1.0.0-beta.3",
-    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/cli": "^5.0.0",
     "@graphql-tools/schema": "10.0.0",
     "@hapi/boom": "10.0.0",
     "@mixer/postmessage-rpc": "1.1.4",
