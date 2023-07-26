@@ -53,6 +53,11 @@ export const processSessionComplete = async (event: Stripe.Event) => {
     email: customer_details?.email || '',
   });
 
+  await data.workspaces.put({
+    ...workspace,
+    isPremium: payment_status === 'paid',
+  });
+
   track({
     event: 'Stripe subscription created',
     properties: {
