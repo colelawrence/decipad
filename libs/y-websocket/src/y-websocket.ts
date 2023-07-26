@@ -179,7 +179,7 @@ const setupWS = async (provider: TWebSocketProvider) => {
       };
 
       websocket.onclose = (ev) => {
-        if (!ev.wasClean) {
+        if (!ev.wasClean && !process.env.CI) {
           // eslint-disable-next-line no-console
           console.debug('WS closed uncleanly', ev.code, ev.reason);
         }
@@ -212,8 +212,10 @@ const setupWS = async (provider: TWebSocketProvider) => {
       };
 
       websocket.onopen = () => {
-        // eslint-disable-next-line no-console
-        console.debug('WS: opened');
+        if (!process.env.CI) {
+          // eslint-disable-next-line no-console
+          console.debug('WS: opened');
+        }
         provider.wsLastMessageReceived = time.getUnixTime();
         provider.wsconnecting = false;
         provider.wsconnected = true;

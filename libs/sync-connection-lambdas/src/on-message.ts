@@ -81,7 +81,7 @@ async function maybeStoreMessage(
             seq: `${Date.now()}:${nanoid()}`,
             data: Buffer.from(update).toString('base64'),
           },
-          0.2
+          0.1
         );
       }
     }

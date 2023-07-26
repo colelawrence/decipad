@@ -131,9 +131,11 @@ function putReplacer<T extends ConcreteRecord>(
     });
 
     const publishEvent =
-      typeof eventProbability === 'boolean'
+      (tableName !== 'docsyncupdates' ||
+        !process.env.DECI_NO_DOCSYNC_UPDATE_CHANGES) &&
+      (typeof eventProbability === 'boolean'
         ? eventProbability
-        : randomPublish(eventProbability);
+        : randomPublish(eventProbability));
 
     if (publishEvent) {
       const event = {

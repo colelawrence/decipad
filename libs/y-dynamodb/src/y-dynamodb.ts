@@ -152,7 +152,7 @@ export class DynamodbPersistence extends Observable<string> {
             )}:${nanoid()}`,
             data: Buffer.from(update).toString('base64'),
           },
-          skipNotif ? false : 0.2
+          skipNotif ? false : 0.1
         );
         this.emit('saved', [this]);
       } finally {
