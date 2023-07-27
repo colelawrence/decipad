@@ -11,6 +11,7 @@ import {
   tabletScreenQuery,
 } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
+import { useDraggingScroll } from '../../hooks';
 
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
@@ -152,6 +153,9 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
     };
   }, []);
 
+  const overflowingDiv = useRef<HTMLDivElement>(null);
+  const { onDragEnd, onDragOver } = useDraggingScroll(overflowingDiv);
+
   return (
     <div css={layoutAppContainerStyles}>
       <main css={layoutEditorAndSidebarContainerStyles} ref={scrollToRef}>
@@ -159,8 +163,13 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
           <article
             ref={articleRef}
             css={layoutNotebookFixedHeightContainerStyles}
+            onDragEnd={onDragEnd}
+            onDragOver={onDragOver}
           >
-            <div css={css(layoutNotebookScrollerStyles, editorWidth)}>
+            <div
+              css={css(layoutNotebookScrollerStyles, editorWidth)}
+              ref={overflowingDiv}
+            >
               {notebookIcon}
               {notebook}
             </div>
