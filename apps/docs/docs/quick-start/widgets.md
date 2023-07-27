@@ -6,6 +6,10 @@ sidebar_position: 6
 
 Widgets are interactive blocks that allow readers to explore your notebook assumptions.
 
+ <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+   <iframe src="https://www.loom.com/embed/d73a117c873848e4a96f11e0c5d1e79a?sid=1a890853-8d23-480b-85f5-5d41e50a0da4" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+ </div>
+
 ## Create a Widget
 
 To **create a new widget**, click on the `+` button next to an empty line and select the type of widget you want to create from the dropdown menu. You can also create a widget with the keyboard by typing `/` on an empty paragraph, selecting the widget type using the arrow keys, and pressing enter.
