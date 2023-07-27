@@ -15,7 +15,7 @@ import {
   getStatementsToEvict,
   GetStatementsToEvictArgs,
 } from '../caching/getStatementsToEvict';
-import type { IdentifiedResult, ProgramBlock } from '../types';
+import type { ComputerProgram, IdentifiedResult } from '../types';
 import { getDefinedSymbol, getStatementFromProgram } from '../utils';
 import { getResultGenerator } from '../utils/getResultGenerator';
 import { createComputerStats } from './computerStats';
@@ -39,17 +39,17 @@ export class ComputationRealm {
     this.inferContext.externalData = externalData;
   }
 
-  evictCache({ oldBlocks, ...rest }: GetStatementsToEvictArgs) {
+  evictCache({ oldProgram, ...rest }: GetStatementsToEvictArgs) {
     for (const loc of this.errorLocs) {
-      this.evictStatement(oldBlocks, loc);
+      this.evictStatement(oldProgram, loc);
     }
 
-    for (const blockId of getStatementsToEvict({ oldBlocks, ...rest })) {
-      this.evictStatement(oldBlocks, blockId);
+    for (const blockId of getStatementsToEvict({ oldProgram, ...rest })) {
+      this.evictStatement(oldProgram, blockId);
     }
   }
 
-  evictStatement(program: ProgramBlock[], blockId: string) {
+  evictStatement(program: ComputerProgram, blockId: string) {
     this.errorLocs.delete(blockId);
     this.locCache.delete(blockId);
 

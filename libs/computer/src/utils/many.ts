@@ -2,20 +2,20 @@ import { walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import type { AST, SyntaxError, BracketError } from '@decipad/language';
 import type {
+  ComputerProgram,
   IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
   Program,
-  ProgramBlock,
 } from '../types';
 
 export const getBlockFromProgram = (
-  program: Program,
+  program: ComputerProgram,
   blockId: string
 ): AST.Block =>
   getDefined(
     getDefined(
-      program.find((b) => b.id === blockId),
+      program.asBlockIdMap.get(blockId),
       `ComputationGraph: Could not find code line at ${blockId}`
     ).block
   );
@@ -37,11 +37,11 @@ export const getStatement = (
 };
 
 export const getStatementFromProgram = (
-  program: Program,
+  program: ComputerProgram,
   blockId: string
 ): AST.Statement => {
   return getDefined(
-    program.find((b) => b.id === blockId)?.block?.args[0],
+    program.asBlockIdMap.get(blockId)?.block?.args[0],
     `ComputationGraph: Could not find code line at ${blockId}`
   );
 };
@@ -87,7 +87,7 @@ export const getDefinedSymbol = (
   }
 };
 
-export const getGoodBlocks = (parsed: ProgramBlock[]) =>
+export const getGoodBlocks = (parsed: Program) =>
   parsed.flatMap((b) => {
     if (b.type === 'identified-block') return [b];
     else return [];

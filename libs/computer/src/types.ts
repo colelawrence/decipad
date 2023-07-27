@@ -59,6 +59,12 @@ export type Program = ProgramBlock[];
 export interface ComputeRequest {
   program: Program;
 }
+
+export interface ComputerProgram {
+  asSequence: Program;
+  asBlockIdMap: Map<string, ProgramBlock>;
+}
+
 export interface BlockDependents {
   varName: string;
   dependentBlockIds: string[];

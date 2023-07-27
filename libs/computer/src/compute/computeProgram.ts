@@ -14,7 +14,7 @@ import {
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
-import { IdentifiedResult, Program } from '../types';
+import { ComputerProgram, IdentifiedResult } from '../types';
 import { getBlockFromProgram } from '../utils';
 import { CacheContents, ComputationRealm } from '../computer/ComputationRealm';
 import { getVisibleVariables } from '../computer/getVisibleVariables';
@@ -28,7 +28,7 @@ import { Computer } from '../computer';
  - Evaluate the statement if it's not a type error
  */
 const internalComputeStatement = async (
-  program: Program,
+  program: ComputerProgram,
   blockId: string,
   computer: Computer
 ): Promise<[IdentifiedResult, Value | undefined]> => {
@@ -126,7 +126,7 @@ const internalComputeStatement = async (
 };
 
 const computeStatement = async (
-  program: Program,
+  program: ComputerProgram,
   blockId: string,
   computer: Computer
 ): Promise<[IdentifiedResult, Value | undefined]> => {
@@ -164,7 +164,7 @@ export const resultFromError = (
 };
 
 export const computeProgram = async (
-  program: Program,
+  program: ComputerProgram,
   computer: Computer
 ): Promise<IdentifiedResult[]> => {
   const realm = computer.computationRealm;
@@ -174,7 +174,7 @@ export const computeProgram = async (
   // console.log('compute program', program.map(prettyPrintAST));
 
   let resultsToCache: CacheContents[] = [];
-  for (const block of program) {
+  for (const block of program.asSequence) {
     try {
       // eslint-disable-next-line no-await-in-loop
       const [result, value] = await computeStatement(
@@ -205,7 +205,7 @@ export const computeProgram = async (
     value: result.value,
   }));
 
-  for (const [block, result] of zip(program, resultsToCache)) {
+  for (const [block, result] of zip(program.asSequence, resultsToCache)) {
     realm.addToCache(block.id, result);
   }
   // same here:

@@ -10,7 +10,7 @@ import {
   setIntersection,
 } from '../utils';
 import { areProgramBlocksEqual } from './areBlocksEqual';
-import { Program, ProgramBlock } from '../types';
+import { ComputerProgram } from '../types';
 
 export const getChangedMapKeys = <T>(
   oldMap: Map<string, T>,
@@ -29,20 +29,17 @@ export const getChangedMapKeys = <T>(
   });
 };
 
-const programToBlocks = (program: Program): AST.Block[] =>
-  program.map((pb) => pb.block).filter(Boolean) as AST.Block[];
-
-const mapify = (blocks: ProgramBlock[]) =>
-  new Map(blocks.map((b) => [b.id, b]));
+const programToBlocks = (program: ComputerProgram): AST.Block[] =>
+  program.asSequence.map((pb) => pb.block).filter(Boolean) as AST.Block[];
 
 export const getChangedBlocks = (
-  oldBlocks: ProgramBlock[],
-  newBlocks: ProgramBlock[]
+  oldProgram: ComputerProgram,
+  newProgram: ComputerProgram
 ): Set<string> => {
-  const oldBlocksMap = mapify(oldBlocks);
-  const newBlocksMap = mapify(newBlocks);
+  const oldBlocksMap = oldProgram.asBlockIdMap;
+  const newBlocksMap = newProgram.asBlockIdMap;
 
-  const changedNameBlockIds = newBlocks
+  const changedNameBlockIds = newProgram.asSequence
     .filter((newBlock) => {
       if (newBlock.definesVariable) {
         const old = oldBlocksMap.get(newBlock.id);
@@ -119,22 +116,22 @@ export const findSymbolsAffectedByChange = (
 };
 
 export interface GetStatementsToEvictArgs {
-  oldBlocks: ProgramBlock[];
-  newBlocks: ProgramBlock[];
+  oldProgram: ComputerProgram;
+  newProgram: ComputerProgram;
   oldExternalData?: ExternalDataMap;
   newExternalData?: ExternalDataMap;
 }
 
 export const getStatementsToEvict = ({
-  oldBlocks,
-  newBlocks,
+  oldProgram,
+  newProgram,
   oldExternalData = new Map(),
   newExternalData = new Map(),
 }: GetStatementsToEvictArgs) => {
-  const changedBlockIds = getChangedBlocks(oldBlocks, newBlocks);
+  const changedBlockIds = getChangedBlocks(oldProgram, newProgram);
 
-  const old = programToBlocks(oldBlocks);
-  const nu = programToBlocks(newBlocks);
+  const old = programToBlocks(oldProgram);
+  const nu = programToBlocks(newProgram);
   const dirtyLocs = new Set(getExistingBlockIds(old, changedBlockIds));
 
   const dirtySymbols = new Set([

@@ -8,6 +8,7 @@ import {
 import { ComputationRealm } from '../computer/ComputationRealm';
 import { Computer } from '../computer';
 import { IdentifiedBlock } from '..';
+import { programToComputerProgram } from '../utils/programToComputerProgram';
 
 it('creates a result from an error', () => {
   const realm = new ComputationRealm();
@@ -41,12 +42,14 @@ it('creates a result from an error', () => {
 const testCompute = async (program: AST.Block[]) =>
   simplifyInBlockResults(
     await computeProgram(
-      program.map(
-        (b): IdentifiedBlock => ({
-          id: b.id,
-          type: 'identified-block',
-          block: b,
-        })
+      programToComputerProgram(
+        program.map(
+          (b): IdentifiedBlock => ({
+            id: b.id,
+            type: 'identified-block',
+            block: b,
+          })
+        )
       ),
       new Computer()
     )

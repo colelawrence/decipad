@@ -12,6 +12,7 @@ import { all } from '@decipad/generator-utils';
 import { Result } from 'libs/language/src/result';
 import { AST, Computer, Program, prettyPrintAST } from '.';
 import {
+  ComputerProgram,
   IdentifiedBlock,
   IdentifiedError,
   IdentifiedResult,
@@ -23,13 +24,18 @@ import {
   getIdentifierString,
   getResultGenerator,
 } from './utils';
+import { programToComputerProgram } from './utils/programToComputerProgram';
 
-export const testProgramBlocks = (...blocks: (AST.Block | string)[]): Program =>
-  testBlocks(...blocks).map((block) => ({
-    id: block.id,
-    type: 'identified-block',
-    block,
-  }));
+export const testProgramBlocks = (
+  ...blocks: (AST.Block | string)[]
+): ComputerProgram =>
+  programToComputerProgram(
+    testBlocks(...blocks).map((block) => ({
+      id: block.id,
+      type: 'identified-block',
+      block,
+    }))
+  );
 
 export const testBlocks = (...blocks: (AST.Block | string)[]): AST.Block[] => {
   return blocks.map((item, index) => {

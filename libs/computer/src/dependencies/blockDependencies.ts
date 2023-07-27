@@ -1,10 +1,10 @@
 import type { Computer } from '../computer/Computer';
-import { BlockDependents, Program } from '../types';
+import { BlockDependents, ComputerProgram } from '../types';
 
 const blockDependents =
-  (computer: Computer, program: Program) =>
+  (computer: Computer, program: ComputerProgram) =>
   (blockId: string): BlockDependents | undefined => {
-    const block = program.find((block) => block.id === blockId);
+    const block = program.asBlockIdMap.get(blockId);
     if (!block) {
       return undefined;
     }
@@ -21,7 +21,7 @@ const blockDependents =
 
 export const programDependencies = (
   computer: Computer,
-  program: Program,
+  program: ComputerProgram,
   ...blockIds: string[]
 ): BlockDependents[] =>
   blockIds
@@ -30,7 +30,7 @@ export const programDependencies = (
 
 export const blocksInUse = (
   computer: Computer,
-  program: Program,
+  program: ComputerProgram,
   ...blockIds: string[]
 ): BlockDependents[] => {
   const blocksInUseForBlockIds = programDependencies(
@@ -45,7 +45,7 @@ export const blocksInUse = (
 
 export const isInUse = (
   computer: Computer,
-  program: Program,
+  program: ComputerProgram,
   ...blockIds: string[]
 ): boolean => {
   return blocksInUse(computer, program, ...blockIds).length !== 0;

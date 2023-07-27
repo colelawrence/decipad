@@ -3,7 +3,7 @@ import { getDefined } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';
 import { getDefinedSymbol, getGoodBlocks } from '../utils';
 import { ExprRefToVarNameMap } from '../internalTypes';
-import { Program } from '../types';
+import { ComputerProgram } from '../types';
 
 export interface VisibleVariables {
   global: ReadonlySet<string>;
@@ -11,12 +11,12 @@ export interface VisibleVariables {
 }
 
 export const getVisibleVariables = (
-  _program: Program,
+  _program: ComputerProgram,
   blockId: string,
   inferContext: Context,
   exprRefToVarNameMap: ExprRefToVarNameMap = new Map()
 ): VisibleVariables => {
-  const program = getGoodBlocks(_program);
+  const program = getGoodBlocks(_program.asSequence);
   const toUserSymbol = (symbol: string | null): string | null => {
     if (!symbol) {
       return symbol;

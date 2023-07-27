@@ -54,6 +54,7 @@ import { dropWhileComputing } from '../tools/dropWhileComputing';
 import type {
   ComputeRequest,
   ComputeRequestWithExternalData,
+  ComputerProgram,
   IdentifiedError,
   IdentifiedResult,
   NotebookResults,
@@ -77,7 +78,8 @@ import { updateChangedProgramBlocks } from './parseUtils';
 import { topologicalSort } from '../topological-sort';
 import { flattenTableDeclarations } from './transformTables';
 import { ColumnDesc, DimensionExplanation, TableDesc } from '../types';
-import { programToProgramByBlockId } from '../utils/programToProgramByBlockId';
+import { programToComputerProgram } from '../utils/programToComputerProgram';
+import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -86,13 +88,12 @@ interface ComputerOpts {
 }
 
 interface IngestComputeRequestResponse {
-  program: Program;
+  program: ComputerProgram;
 }
 
 export class Computer {
   private locale = 'en-US';
-  private latestProgram: ProgramBlock[] = [];
-  private latestProgramByBlockId: Map<string, ProgramBlock> = new Map();
+  private latestProgram: ComputerProgram = emptyComputerProgram();
   private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
   private externalData = new BehaviorSubject<
@@ -175,7 +176,7 @@ export class Computer {
       ? varName.split('.')[0]
       : varName;
 
-    return this.latestProgram.find((p) => {
+    return this.latestProgram.asSequence.find((p) => {
       if (varName === getExprRef(p.id)) {
         return true;
       } else {
@@ -237,7 +238,7 @@ export class Computer {
   );
 
   getSymbolDefinedInBlock(blockId: string): string | undefined {
-    const parsed = this.latestProgramByBlockId.get(blockId);
+    const parsed = this.latestProgram.asBlockIdMap.get(blockId);
     return parsed?.definesVariable;
   }
 
@@ -246,21 +247,21 @@ export class Computer {
     (_, blockId: string, columnId: string | null) => {
       // Find "Table.Column"
       if (columnId) {
-        const column = this.latestProgramByBlockId.get(columnId);
+        const column = this.latestProgram.asBlockIdMap.get(columnId);
         if (column?.definesTableColumn) {
           return column.definesTableColumn.join('.');
         }
       }
 
       // Find just "Column" (or "Table.Column" when referred outside)
-      const column = this.latestProgramByBlockId.get(blockId);
+      const column = this.latestProgram.asBlockIdMap.get(blockId);
       if (column?.definesTableColumn) {
         return columnId
           ? column.definesTableColumn.join('.')
           : column.definesTableColumn[1];
       }
 
-      const programBlock = this.latestProgramByBlockId.get(blockId);
+      const programBlock = this.latestProgram.asBlockIdMap.get(blockId);
       return (
         programBlock?.definesVariable || this.getSymbolDefinedInBlock(blockId)
       );
@@ -271,7 +272,7 @@ export class Computer {
   getBlockIdAndColumnId$ = listenerHelper(
     this.results,
     (_, blockId: string): [string, string | null] | undefined => {
-      const programBlock = this.latestProgramByBlockId.get(blockId);
+      const programBlock = this.latestProgram.asBlockIdMap.get(blockId);
 
       if (programBlock?.definesTableColumn) {
         const [tableName] = programBlock.definesTableColumn;
@@ -318,7 +319,7 @@ export class Computer {
   );
 
   getParseableTypeInBlock(blockId: string) {
-    const parsed = this.latestProgramByBlockId.get(blockId);
+    const parsed = this.latestProgram.asBlockIdMap.get(blockId);
     if (parsed && parsed.type === 'identified-block') {
       return astToParseable(parsed.block.args[0]);
     }
@@ -334,7 +335,7 @@ export class Computer {
    * Get names for the autocomplete, and information about them
    */
   getNamesDefined(inBlockId?: string): AutocompleteName[] {
-    const program = getGoodBlocks(this.latestProgram);
+    const program = getGoodBlocks(this.latestProgram.asSequence);
     const toIgnore = new Set(this.automaticallyGeneratedNames);
     return Array.from(findNames(this, program, toIgnore, inBlockId));
   }
@@ -355,7 +356,7 @@ export class Computer {
 
   /** Does `name` exist? Ignores a block ID if you pass the second argument */
   variableExists(name: string, inBlockIds?: string[]) {
-    return this.latestProgram.some((p) => {
+    return this.latestProgram.asSequence.some((p) => {
       // Skip own block
       if (inBlockIds?.includes(p.id)) {
         return false;
@@ -480,7 +481,7 @@ export class Computer {
                 }
               );
             } else {
-              const statement = this.latestProgramByBlockId.get(b.id)?.block
+              const statement = this.latestProgram.asBlockIdMap.get(b.id)?.block
                 ?.args[0];
               if (
                 (statement?.type !== 'table' && statement?.type !== 'assign') ||
@@ -512,7 +513,7 @@ export class Computer {
               );
             }
           } else if (isColumn(b.result?.type)) {
-            const statement = this.latestProgramByBlockId.get(b.id)?.block
+            const statement = this.latestProgram.asBlockIdMap.get(b.id)?.block
               ?.args[0];
             if (statement?.type !== 'table-column-assign') {
               return [];
@@ -546,7 +547,7 @@ export class Computer {
     (blockId: string) => this.resultStreams.blockSubject(blockId),
     (block): string | undefined => {
       if (isColumn(block?.result?.type)) {
-        const statement = this.latestProgramByBlockId.get(block.id)?.block
+        const statement = this.latestProgram.asBlockIdMap.get(block.id)?.block
           ?.args[0];
         if (statement?.type === 'table-column-assign') {
           return getIdentifierString(statement.args[1]);
@@ -558,7 +559,7 @@ export class Computer {
 
   getSetOfNamesDefined$ = listenerHelper(this.results, (): Set<string> => {
     const names = new Set<string>();
-    for (const block of this.latestProgram) {
+    for (const block of this.latestProgram.asSequence) {
       if (block.definesVariable) {
         names.add(block.definesVariable);
       }
@@ -662,24 +663,34 @@ export class Computer {
       topologicalSort(flattenTableDeclarations(program)),
       this.latestVarNameToBlockMap
     );
+
     // console.log('newProgram', program);
     const newParse = topologicalSort(
-      updateChangedProgramBlocks(newProgram, this.latestProgram)
+      updateChangedProgramBlocks(
+        programToComputerProgram(newProgram),
+        this.latestProgram
+      )
     );
     // console.log('newParse', prettyPrintProgram(newParse));
     const newExternalData = anyMappingToMap(externalData ?? new Map());
 
+    const newComputerProgram = programToComputerProgram(newParse);
+    const newGoodBlocksComputerProgram = programToComputerProgram(
+      getGoodBlocks(newParse)
+    );
+
     this.computationRealm.evictCache({
-      oldBlocks: getGoodBlocks(this.latestProgram),
-      newBlocks: getGoodBlocks(newParse),
+      oldProgram: programToComputerProgram(
+        getGoodBlocks(this.latestProgram.asSequence)
+      ),
+      newProgram: newGoodBlocksComputerProgram,
       oldExternalData: this.latestExternalData,
       newExternalData,
     });
 
     this.computationRealm.setExternalData(newExternalData);
     this.latestExternalData = newExternalData;
-    this.latestProgram = newParse;
-    this.latestProgramByBlockId = programToProgramByBlockId(newParse);
+    this.latestProgram = newComputerProgram;
     this.latestVarNameToBlockMap = varNameToBlockMap;
     this.latestExprRefToVarNameMap = new Map(
       Array.from(varNameToBlockMap.entries()).map(([varName, block]) => [
@@ -690,7 +701,7 @@ export class Computer {
     this.latestBlockDependents = blockDependents;
 
     return {
-      program: newParse,
+      program: newComputerProgram,
     };
   }
 
@@ -701,14 +712,17 @@ export class Computer {
       this.computationRealm.epoch += 1n;
       /* istanbul ignore catch */
       try {
-        const { program: blocks } = this.ingestComputeRequest(req);
-        const goodBlocks = getGoodBlocks(blocks);
+        const { program } = this.ingestComputeRequest(req);
+        const goodBlocks = getGoodBlocks(program.asSequence);
 
-        const computeResults = await computeProgram(goodBlocks, this);
+        const computeResults = await computeProgram(
+          programToComputerProgram(goodBlocks),
+          this
+        );
 
         const updates: Array<IdentifiedError | IdentifiedResult> = [];
 
-        for (const block of blocks) {
+        for (const block of program.asSequence) {
           if (block.type === 'identified-error') {
             updates.push(block);
           }
@@ -752,7 +766,7 @@ export class Computer {
    * Reset computer's state -- called when it panicks
    */
   reset() {
-    this.latestProgram = [];
+    this.latestProgram = emptyComputerProgram();
     this.latestExternalData = new Map();
     this.computationRealm = new ComputationRealm();
     this.results = new BehaviorSubject<NotebookResults>(defaultComputerResults);
@@ -761,7 +775,7 @@ export class Computer {
   }
 
   getStatement(blockId: string): AST.Statement | undefined {
-    const block = this.latestProgramByBlockId.get(blockId)?.block;
+    const block = this.latestProgram.asBlockIdMap.get(blockId)?.block;
 
     return block?.args[0];
   }
@@ -780,7 +794,7 @@ export class Computer {
     const existingVars = new Set([
       ...this.computationRealm.inferContext.stack.globalVariables.keys(),
       ...this.computationRealm.inferContext.externalData.keys(),
-      ...this.latestProgram.map((block) => block.definesVariable),
+      ...this.latestProgram.asSequence.map((block) => block.definesVariable),
     ]);
     let num = start;
     const firstProposal = prefix;
@@ -818,7 +832,7 @@ export class Computer {
   }
 
   getLatestProgram(): Readonly<Program> {
-    return this.latestProgram;
+    return this.latestProgram.asSequence;
   }
 
   // locale

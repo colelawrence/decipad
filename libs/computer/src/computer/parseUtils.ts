@@ -1,16 +1,17 @@
 import { dequal } from '@decipad/utils';
 import { astNode, decilang, parseBlock } from '@decipad/language';
-import { Program, ProgramBlock } from '../types';
+import { ComputerProgram, Program, ProgramBlock } from '../types';
+import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 
 /**
  * For each item, returns the same AST if the block didn't change.
  */
 export const updateChangedProgramBlocks = (
-  program: Program,
-  previousBlocks: ProgramBlock[] = []
-): ProgramBlock[] => {
-  return program.map((block) => {
-    const prev = previousBlocks.find((prev) => prev.id === block.id);
+  program: ComputerProgram,
+  previousProgram: ComputerProgram = emptyComputerProgram()
+): Program => {
+  return program.asSequence.map((block) => {
+    const prev = previousProgram.asBlockIdMap.get(block.id);
 
     if (prev && dequal(block, prev)) {
       return prev;

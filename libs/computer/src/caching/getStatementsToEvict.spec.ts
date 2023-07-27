@@ -9,7 +9,8 @@ import {
   GetStatementsToEvictArgs,
 } from './getStatementsToEvict';
 import { testBlocks, testProgramBlocks } from '../testUtils';
-import { ProgramBlock } from '../types';
+import { ComputerProgram } from '../types';
+import { programToComputerProgram } from '../utils/programToComputerProgram';
 
 describe('findSymbolErrors', () => {
   it('finds variables which are reassigned', () => {
@@ -128,24 +129,24 @@ describe('evictCache', () => {
   /* eslint-disable jest/expect-expect */
   it('evicts location and symbol cache for changed stuff and dependent stuff', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'B = A + 10', 'B + 9', 'A + 1'),
-      newBlocks: testProgramBlocks('A = 1', 'B = A + 99', 'B + 9', 'A + 1'),
+      oldProgram: testProgramBlocks('A = 1', 'B = A + 10', 'B + 9', 'A + 1'),
+      newProgram: testProgramBlocks('A = 1', 'B = A + 99', 'B + 9', 'A + 1'),
       expectEvicted: [1, 2],
     });
   });
 
   it('evicts non-symbol usages', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'A + 1'),
-      newBlocks: testProgramBlocks('A = 9', 'A + 1'),
+      oldProgram: testProgramBlocks('A = 1', 'A + 1'),
+      newProgram: testProgramBlocks('A = 9', 'A + 1'),
       expectEvicted: [0, 1],
     });
   });
 
   it('evicts non-symbol locs which changed', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'A + 1'),
-      newBlocks: testProgramBlocks('A = 1', 'A + 9'),
+      oldProgram: testProgramBlocks('A = 1', 'A + 1'),
+      newProgram: testProgramBlocks('A = 1', 'A + 9'),
 
       expectEvicted: [1],
     });
@@ -153,8 +154,8 @@ describe('evictCache', () => {
 
   it('propagates to deps of disappearing variables', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'A + 1'),
-      newBlocks: testProgramBlocks('NotA = 1', 'A + 9'),
+      oldProgram: testProgramBlocks('A = 1', 'A + 1'),
+      newProgram: testProgramBlocks('NotA = 1', 'A + 9'),
 
       expectEvicted: [0, 1],
     });
@@ -162,8 +163,8 @@ describe('evictCache', () => {
 
   it('propagates to deps of disappearing variables (2)', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'A + 1'),
-      newBlocks: testProgramBlocks('NotA = 1', 'A + 1'),
+      oldProgram: testProgramBlocks('A = 1', 'A + 1'),
+      newProgram: testProgramBlocks('NotA = 1', 'A + 1'),
 
       expectEvicted: [0, 1],
     });
@@ -171,20 +172,20 @@ describe('evictCache', () => {
 
   it('propagates through indirect deps', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 0', 'C = B + 10', 'D = C + 100'),
-      newBlocks: testProgramBlocks('A = 0', 'B = A + 1', 'C = B + 10', ''),
+      oldProgram: testProgramBlocks('A = 0', 'C = B + 10', 'D = C + 100'),
+      newProgram: testProgramBlocks('A = 0', 'B = A + 1', 'C = B + 10', ''),
 
       expectEvicted: [1, 2],
     });
 
     testEvictBlocks({
-      oldBlocks: testProgramBlocks(
+      oldProgram: testProgramBlocks(
         'A = 0',
         'B = A + 1',
         'C = B + 10',
         'D = C + 100'
       ),
-      newBlocks: testProgramBlocks('A = 0', 'C = B + 10', ''),
+      newProgram: testProgramBlocks('A = 0', 'C = B + 10', ''),
 
       expectEvicted: [1, 2, 3],
     });
@@ -192,8 +193,8 @@ describe('evictCache', () => {
 
   it('deals with a variable being moved elsewhere', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'B = 2', 'A + 1'),
-      newBlocks: testProgramBlocks('B = 2', 'A = 1', 'A + 1'),
+      oldProgram: testProgramBlocks('A = 1', 'B = 2', 'A + 1'),
+      newProgram: testProgramBlocks('B = 2', 'A = 1', 'A + 1'),
 
       expectEvicted: [0, 1, 2],
     });
@@ -201,8 +202,8 @@ describe('evictCache', () => {
 
   it('deals with a variable with the same name appearing', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'B = 2', 'A + 1'),
-      newBlocks: testProgramBlocks('A = 1', 'A = 9', 'A + 1'),
+      oldProgram: testProgramBlocks('A = 1', 'B = 2', 'A + 1'),
+      newProgram: testProgramBlocks('A = 1', 'A = 9', 'A + 1'),
 
       expectEvicted: [0, 1, 2],
     });
@@ -210,8 +211,8 @@ describe('evictCache', () => {
 
   it('deals with a variable with the same name appearing (2)', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = 1', 'A + 1'),
-      newBlocks: testProgramBlocks('A = 1', 'A + 1', 'A = 9'),
+      oldProgram: testProgramBlocks('A = 1', 'A + 1'),
+      newProgram: testProgramBlocks('A = 1', 'A + 1', 'A = 9'),
 
       expectEvicted: [0, 1], // block 2 doesn't exist in the old program
     });
@@ -219,8 +220,8 @@ describe('evictCache', () => {
 
   it('deals with a dependency loop', () => {
     testEvictBlocks({
-      oldBlocks: testProgramBlocks('A = B', 'B = A'),
-      newBlocks: testProgramBlocks('A = B + 9', 'B = A + 9'),
+      oldProgram: testProgramBlocks('A = B', 'B = A'),
+      newProgram: testProgramBlocks('A = B + 9', 'B = A + 9'),
 
       expectEvicted: [0, 1],
     });
@@ -229,13 +230,13 @@ describe('evictCache', () => {
   describe('tables', () => {
     it('evicts table columns', () => {
       testEvictBlocks({
-        oldBlocks: testProgramBlocks(
+        oldProgram: testProgramBlocks(
           'Table = {}',
           'Table.Column = [1, 2, 3]',
           'Table2 = {}',
           'Table2.Column = Table.Column'
         ),
-        newBlocks: testProgramBlocks(
+        newProgram: testProgramBlocks(
           'Table = {}',
           'Table.Column = [1, 2, 4]',
           'Table2 = {}',
@@ -250,12 +251,12 @@ describe('evictCache', () => {
   describe('sets/matrices', () => {
     it('deals with matrices', () => {
       testEvictBlocks({
-        oldBlocks: testProgramBlocks(
+        oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix[Cat]'
         ),
-        newBlocks: testProgramBlocks(
+        newProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 2',
           'Matrix[Cat]'
@@ -265,12 +266,12 @@ describe('evictCache', () => {
       });
 
       testEvictBlocks({
-        oldBlocks: testProgramBlocks(
+        oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix'
         ),
-        newBlocks: testProgramBlocks(
+        newProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 2',
           'Matrix'
@@ -282,11 +283,11 @@ describe('evictCache', () => {
 
     it('propagates changes in the set', () => {
       testEvictBlocks({
-        oldBlocks: testProgramBlocks(
+        oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1'
         ),
-        newBlocks: testProgramBlocks(
+        newProgram: testProgramBlocks(
           'Cat = categories [1, 2, 3]',
           'Matrix[Cat] = 1'
         ),
@@ -295,11 +296,11 @@ describe('evictCache', () => {
       });
 
       testEvictBlocks({
-        oldBlocks: testProgramBlocks(
+        oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1'
         ),
-        newBlocks: testProgramBlocks(
+        newProgram: testProgramBlocks(
           'Cat = categories [1, 2, 3]',
           'Matrix[Cat] = 2'
         ),
@@ -308,12 +309,12 @@ describe('evictCache', () => {
       });
 
       testEvictBlocks({
-        oldBlocks: testProgramBlocks(
+        oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
           'Matrix[Cat] = 1',
           'Matrix[Cat]'
         ),
-        newBlocks: testProgramBlocks(
+        newProgram: testProgramBlocks(
           'Cat = categories [1, 2, 3]',
           'Matrix[Cat] = 1',
           'Matrix[Cat]'
@@ -331,8 +332,8 @@ describe('evictCache', () => {
         'Matrix[Cat]'
       );
       testEvictBlocks({
-        oldBlocks: old,
-        newBlocks: [...old],
+        oldProgram: old,
+        newProgram: programToComputerProgram([...old.asSequence]),
 
         expectEvicted: [],
       });
@@ -347,7 +348,7 @@ describe('evictCache', () => {
       extDataId: 2 as unknown as Result.Result,
     });
 
-    const useExternalData: ProgramBlock[] = [
+    const useExternalData: ComputerProgram = programToComputerProgram([
       {
         id: 'block-0',
         type: 'identified-block',
@@ -357,11 +358,11 @@ describe('evictCache', () => {
           args: [astNode('externalref', 'extDataId')],
         },
       },
-    ];
+    ]);
 
     testEvictBlocks({
-      oldBlocks: useExternalData,
-      newBlocks: useExternalData,
+      oldProgram: useExternalData,
+      newProgram: useExternalData,
       oldExternalData: externalDataMap1,
       newExternalData: externalDataMap1,
 
@@ -370,8 +371,8 @@ describe('evictCache', () => {
 
     // Now it evicts the first block
     testEvictBlocks({
-      oldBlocks: useExternalData,
-      newBlocks: useExternalData,
+      oldProgram: useExternalData,
+      newProgram: useExternalData,
       oldExternalData: externalDataMap1,
       newExternalData: externalDataMap2,
 
@@ -380,8 +381,8 @@ describe('evictCache', () => {
 
     // And also if it got removed
     testEvictBlocks({
-      oldBlocks: useExternalData,
-      newBlocks: useExternalData,
+      oldProgram: useExternalData,
+      newProgram: useExternalData,
       oldExternalData: externalDataMap1,
       newExternalData: new Map(),
 
