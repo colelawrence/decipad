@@ -232,8 +232,8 @@ export const NotebookTopbar = ({
           <span
             css={{
               display: 'grid',
-              height: '16px',
-              width: '16px',
+              height: '32px',
+              width: '32px',
             }}
           >
             <Link href="https://decipad.com">

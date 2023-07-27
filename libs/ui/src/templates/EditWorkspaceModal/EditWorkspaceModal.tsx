@@ -116,7 +116,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
               submit
               disabled={deletionConfirmationPrompt !== name || isSubmitting}
             >
-              Delete
+              Permanently Delete
             </Button>
           </form>
         )}
