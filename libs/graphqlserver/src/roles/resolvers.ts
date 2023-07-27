@@ -10,7 +10,7 @@ import {
   User,
 } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
-import { auth as authConfig, app as appConfig } from '@decipad/config';
+import { auth as authConfig, app as appConfig } from '@decipad/backend-config';
 import { timestamp } from '@decipad/backend-utils';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';

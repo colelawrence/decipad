@@ -1,4 +1,4 @@
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import { Page } from '@playwright/test';
 
 export const signOut = async (page: Page) => {

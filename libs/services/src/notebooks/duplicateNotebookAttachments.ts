@@ -1,5 +1,5 @@
 import { FileAttachmentRecord } from '@decipad/backendtypes';
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import {

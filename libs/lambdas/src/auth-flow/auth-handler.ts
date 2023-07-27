@@ -1,7 +1,7 @@
 import { createHmac } from 'crypto';
 import { identify, track } from '@decipad/backend-analytics';
 import { UserWithSecret } from '@decipad/backendtypes';
-import { app, auth as authConfig, thirdParty } from '@decipad/config';
+import { app, auth as authConfig, thirdParty } from '@decipad/backend-config';
 import { jwt } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';

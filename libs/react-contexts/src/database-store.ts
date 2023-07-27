@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { Result, mapResultType } from '@decipad/computer';
-import { codePlaceholder } from '@decipad/config';
+import { codePlaceholder } from '@decipad/frontend-config';
 import {
   ImportElementSource,
   SimpleTableCellType,

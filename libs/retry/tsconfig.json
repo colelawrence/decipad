@@ -13,7 +13,7 @@
       "path": "../backend-test-sandbox"
     },
     {
-      "path": "../config"
+      "path": "../backend-config"
     }
   ]
 }

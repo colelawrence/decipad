@@ -15,7 +15,7 @@
       "path": "../tables"
     },
     {
-      "path": "../config"
+      "path": "../backend-config"
     },
     {
       "path": "../dynamodb-lock"

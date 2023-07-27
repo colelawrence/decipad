@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import AnalyticsClient from 'analytics-node';
-import { analytics } from '@decipad/config';
+import { analytics } from '@decipad/backend-config';
 import { once } from '@decipad/utils';
 
 const { secretKey } = analytics();

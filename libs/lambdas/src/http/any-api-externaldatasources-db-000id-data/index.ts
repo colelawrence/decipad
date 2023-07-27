@@ -1,7 +1,7 @@
 import stringify from 'json-stringify-safe';
 import { pingDatabase, runUserQuery } from '@decipad/backend-external-db';
 import { getDefined } from '@decipad/utils';
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';

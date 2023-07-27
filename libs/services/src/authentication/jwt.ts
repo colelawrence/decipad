@@ -1,5 +1,5 @@
 import { encode, decode } from 'next-auth/jwt';
-import { auth as authConfig } from '@decipad/config';
+import { auth as authConfig } from '@decipad/backend-config';
 
 const config = authConfig().jwt;
 

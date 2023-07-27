@@ -12,7 +12,7 @@
       "path": "../utils"
     },
     {
-      "path": "../config"
+      "path": "../frontend-config"
     }
   ]
 }

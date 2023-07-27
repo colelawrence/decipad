@@ -4,7 +4,7 @@ import { getDefined } from '@decipad/utils';
 import { User } from '@decipad/backendtypes';
 import { APIGatewayProxyResultV2 as HttpResponse } from 'aws-lambda';
 import Boom from '@hapi/boom';
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import { create as createNotebook } from '@decipad/services/notebooks';
 import { ensurePrivateWorkspaceForUser } from '@decipad/services/workspaces';
 import { resource } from '@decipad/backend-resources';

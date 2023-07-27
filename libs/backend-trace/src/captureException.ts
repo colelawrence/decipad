@@ -1,7 +1,7 @@
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import '@sentry/tracing';
 import { Boom, boomify } from '@hapi/boom';
-import { monitor as monitorConfig } from '@decipad/config';
+import { monitor as monitorConfig } from '@decipad/backend-config';
 import meta from '@decipad/meta';
 
 export type TraceOptions = Partial<{

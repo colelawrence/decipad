@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { app } from '../../../libs/config/src/index';
+import { app } from '@decipad/backend-config';
 import { setUp } from '../utils/page/Home';
 import { ellipsisSelector } from '../utils/page/Workspace';
 import { withTestUser, Timeouts } from '../utils/src';

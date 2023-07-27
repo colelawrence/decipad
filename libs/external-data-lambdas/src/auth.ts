@@ -1,4 +1,4 @@
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';

@@ -1,4 +1,4 @@
-import { app, auth as authConfig } from '@decipad/config';
+import { app, auth as authConfig } from '@decipad/backend-config';
 import { APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { createAuthHandler, testUserAuth } from '../../auth-flow';
 

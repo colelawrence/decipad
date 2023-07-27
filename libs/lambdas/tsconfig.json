@@ -17,7 +17,7 @@
     { "path": "../utils" },
     { "path": "../externaldata" },
     { "path": "../sync-connection-lambdas" },
-    { "path": "../config" },
+    { "path": "../backend-config" },
     { "path": "../discord-customerservice-lambda" },
     { "path": "../y-dynamodb" },
     { "path": "../backend-trace" },

@@ -7,7 +7,7 @@ import {
   APIGatewayEventRequestContextV2,
 } from 'aws-lambda';
 import { boomify } from '@hapi/boom';
-import { monitor as monitorConfig } from '@decipad/config';
+import { monitor as monitorConfig } from '@decipad/backend-config';
 import { getDefined } from '@decipad/utils';
 import { captureException, initTrace, TraceOptions } from './captureException';
 

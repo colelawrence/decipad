@@ -8,7 +8,7 @@ import {
   PageInput,
   PagedResult,
 } from '@decipad/backendtypes';
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import Resource from '@decipad/graphqlresource';
 import tables, { paginate } from '@decipad/tables';
 import { identity } from '@decipad/utils';

@@ -8,7 +8,7 @@
   },
   "references": [
     { "path": "../../apps/frontend" },
-    { "path": "../config" },
+    { "path": "../backend-config" },
     { "path": "../utils" },
     { "path": "../backendtypes" },
     { "path": "../fetch" },

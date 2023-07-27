@@ -1,4 +1,4 @@
-import { app, auth } from '@decipad/config';
+import { app, auth } from '@decipad/backend-config';
 import { BrowserContext, Page } from '@playwright/test';
 import { randomEmail } from '.';
 

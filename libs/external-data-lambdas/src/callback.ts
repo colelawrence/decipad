@@ -1,5 +1,5 @@
 import { ExternalKeyRecord } from '@decipad/backendtypes';
-import { app, thirdParty as thirdPartyConfig } from '@decipad/config';
+import { app, thirdParty as thirdPartyConfig } from '@decipad/backend-config';
 import { provider as externalDataProvider } from '@decipad/externaldata';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';

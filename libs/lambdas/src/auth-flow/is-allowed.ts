@@ -1,5 +1,5 @@
 import tables from '@decipad/tables';
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 
 const DISABLE_WAITING_LIST = true;
 

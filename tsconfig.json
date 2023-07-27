@@ -45,7 +45,8 @@
       "@decipad/client-events": ["libs/client-events/src/index.ts"],
       "@decipad/column": ["libs/column/src/index.ts"],
       "@decipad/computer": ["libs/computer/src/index.ts"],
-      "@decipad/config": ["libs/config/src/index.ts"],
+      "@decipad/backend-config": ["libs/backend-config/src/index.ts"],
+      "@decipad/frontend-config": ["libs/frontend-config/src/index.ts"],
       "@decipad/discord-customerservice-lambda": [
         "libs/discord-customerservice-lambda/src/index.ts"
       ],

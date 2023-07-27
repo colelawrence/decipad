@@ -1,6 +1,6 @@
 import arc from '@architect/functions';
 import { track } from '@decipad/backend-analytics';
-import { auth } from '@decipad/config';
+import { auth } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { differenceInHours } from 'date-fns';
 import Email from 'next-auth/providers/email';

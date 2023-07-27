@@ -1,6 +1,6 @@
 import { Configuration, OpenAIApi } from 'openai';
 import Boom from '@hapi/boom';
-import { thirdParty } from '@decipad/config';
+import { thirdParty } from '@decipad/backend-config';
 import zip from 'lodash.zip';
 import handle from '../handle';
 

@@ -1,4 +1,4 @@
-import { codePlaceholder as cP } from '@decipad/config';
+import { codePlaceholder as cP } from '@decipad/frontend-config';
 
 const CLPlaceholders = [
   '60 km/h * Time',

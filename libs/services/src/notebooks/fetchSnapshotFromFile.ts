@@ -1,5 +1,5 @@
 import S3 from 'aws-sdk/clients/s3';
-import { s3 as s3Config } from '@decipad/config';
+import { s3 as s3Config } from '@decipad/backend-config';
 
 export const fetchSnapshotFromFile = async (
   path: string

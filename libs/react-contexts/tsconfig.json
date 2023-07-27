@@ -12,6 +12,6 @@
     { "path": "../client-events" },
     { "path": "../feature-flags" },
     { "path": "../interfaces" },
-    { "path": "../config" }
+    { "path": "../frontend-config" }
   ]
 }

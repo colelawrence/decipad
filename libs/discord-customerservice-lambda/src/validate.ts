@@ -6,7 +6,7 @@ import {
 } from 'aws-lambda';
 import Boom from '@hapi/boom';
 import nacl from 'tweetnacl';
-import { discord, discord as discordConfig } from '@decipad/config';
+import { discord, discord as discordConfig } from '@decipad/backend-config';
 import { getHeader } from './utils';
 import type { Command } from './command';
 

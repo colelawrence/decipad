@@ -1,7 +1,7 @@
 import Zip from 'adm-zip';
 import Boom from '@hapi/boom';
 import { PadRecord, User } from '@decipad/backendtypes';
-import { app as getAppConfig } from '@decipad/config';
+import { app as getAppConfig } from '@decipad/backend-config';
 import { nanoid } from 'nanoid';
 import { importNotebookContent } from './importNotebookContents';
 import { NotebookMeta } from './notebookMeta';

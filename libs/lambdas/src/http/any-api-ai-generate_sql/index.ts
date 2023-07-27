@@ -4,7 +4,7 @@ import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';
 import { getAuthenticatedUser } from '@decipad/services/authentication';
-import { thirdParty } from '@decipad/config';
+import { thirdParty } from '@decipad/backend-config';
 import handle from '../handle';
 import { ExternalDataSourceRecord } from '../../types';
 import { getSchemaString } from './getSchemaString';

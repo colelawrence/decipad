@@ -6,13 +6,13 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../../libs/backendtypes" },
-    { "path": "../../libs/backend-utils" },
-    { "path": "../../libs/config" },
-    { "path": "../../libs/services" },
-    { "path": "../../libs/tables" },
-    { "path": "../../libs/utils" },
-    { "path": "../../libs/externaldata" },
-    { "path": "../../libs/backend-resources" }
+    { "path": "../backendtypes" },
+    { "path": "../backend-utils" },
+    { "path": "../backend-config" },
+    { "path": "../services" },
+    { "path": "../tables" },
+    { "path": "../utils" },
+    { "path": "../externaldata" },
+    { "path": "../backend-resources" }
   ]
 }

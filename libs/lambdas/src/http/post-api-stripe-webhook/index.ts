@@ -2,7 +2,7 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
-import { thirdParty } from '@decipad/config';
+import { thirdParty } from '@decipad/backend-config';
 import handle from '../handle';
 import {
   processSessionComplete,

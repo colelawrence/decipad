@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { SESV2 } from 'aws-sdk';
-import { email as emailConfig } from '@decipad/config';
+import { email as emailConfig } from '@decipad/backend-config';
 
 const { ses: sesConfig, senderEmailAddress } = emailConfig();
 

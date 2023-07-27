@@ -6,7 +6,8 @@
   },
   "include": ["./utils", "./__fixtures__/*.json", "./tests"],
   "references": [
-    { "path": "../../libs/config" },
+    { "path": "../../libs/backend-config" },
+    { "path": "../../libs/frontend-config" },
     { "path": "../../libs/utils" },
     { "path": "../../libs/feature-flags" },
     { "path": "../../libs/initial-workspace" }

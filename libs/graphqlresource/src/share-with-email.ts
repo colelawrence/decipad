@@ -7,7 +7,7 @@ import {
 } from '@decipad/backendtypes';
 import { notify as notifyInvitee } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
-import { app } from '@decipad/config';
+import { app } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { track, identify } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';

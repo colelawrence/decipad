@@ -1,6 +1,6 @@
 import tables from '@decipad/tables';
 import { Stripe } from 'stripe';
-import { thirdParty } from '@decipad/config';
+import { thirdParty } from '@decipad/backend-config';
 import { resource } from '@decipad/backend-resources';
 import {
   GraphqlContext,

@@ -1,27 +1,27 @@
 {
-  "name": "config",
+  "name": "frontend-config",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/config/src",
+  "sourceRoot": "libs/frontend-config/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/config/src/**/*.ts"],
+        "lintFilePatterns": ["libs/frontend-config/src/**/*.ts"],
         "maxWarnings": 0
       }
     },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "yarn tsc -b libs/config"
+        "command": "yarn tsc -b libs/frontend-config"
       }
     },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {
         "command": "../../node_modules/.bin/madge --circular src",
-        "cwd": "libs/config"
+        "cwd": "libs/frontend-config"
       }
     }
   },

@@ -1,4 +1,4 @@
-import { thirdParty } from '@decipad/config';
+import { thirdParty } from '@decipad/backend-config';
 import { Provider } from '.';
 
 export const gsheets = (): Provider => {

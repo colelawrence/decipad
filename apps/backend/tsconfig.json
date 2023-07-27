@@ -21,7 +21,7 @@
       "path": "../../libs/utils"
     },
     {
-      "path": "../../libs/config"
+      "path": "../../libs/backend-config"
     }
   ]
 }
