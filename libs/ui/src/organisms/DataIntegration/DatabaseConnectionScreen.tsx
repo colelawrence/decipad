@@ -10,7 +10,7 @@ import { useToast } from '@decipad/toast';
 import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { BackendUrl } from '@decipad/utils';
-import { MessageBlock, inputStyles } from '.';
+import { MessageBlock } from '.';
 import { Caret, Edit, Loading, Trash, Warning } from '../../icons';
 import { cssVar, p13Bold, p14Medium, p16Bold } from '../../primitives';
 import { Button, MenuItem, TextAndIconButton } from '../../atoms';
@@ -265,7 +265,7 @@ function NewDataConnection({
       name: `data-source/${workspaceId}/${protocol}/${url}`,
       externalId: url,
       workspace_id: workspaceId,
-      padId: undefined, // Resource belongs to the workspace, and not a spefic notebook
+      padId: undefined, // Resource belongs to the workspace, and not a specific notebook
       provider: ExternalProvider.Postgresql,
       dataSourceName: name,
     }).then((success) => {
@@ -528,4 +528,13 @@ const existingConStyle = css({
   padding: '4px',
   gap: '4px',
   alignItems: 'center',
+});
+
+const inputStyles = css({
+  background: cssVar('backgroundColor'),
+  borderRadius: '6px',
+  padding: '6px 12px',
+  border: `1px solid ${cssVar('strongerHighlightColor')}`,
+
+  width: '100%',
 });

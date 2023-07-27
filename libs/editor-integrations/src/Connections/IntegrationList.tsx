@@ -6,7 +6,6 @@ import {
   OtherSql,
   SelectIntegration,
   WebApi,
-  icons,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 
@@ -40,13 +39,6 @@ export const IntegrationList: ComponentProps<
     icon: <img alt="Google Sheet" src={GoogleSheet} />,
     title: 'Google sheet',
     description: 'Import, collaborate, and analyze Google Sheets data.',
-    onClick: noop,
-    enabled: false,
-  },
-  {
-    icon: <icons.Paperclip />,
-    title: 'CSV',
-    description: 'Loads a CSV to Decipad',
     onClick: noop,
     enabled: false,
   },
