@@ -9,6 +9,11 @@ do
   if [[ -z "$stack" ]]; then
     echo "please tell me a stack name"
   else
+    if [[ $stack == "DecipadBackendStaging" || $stack == "DecipadBackendStagingAlpha" ]]; then
+      echo "Invalid stack name ${stack}"
+      return 1
+    fi
+
     echo "removing stack \"$stack\"..."
 
     aws cloudformation delete-stack --stack-name  "$stack" # --retain-resources "StaticBucket"

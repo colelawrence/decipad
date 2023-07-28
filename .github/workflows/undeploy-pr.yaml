@@ -32,6 +32,7 @@ jobs:
           export SAM_LOCATION="s3://decipad-backend-sam/${{ github.event.pull_request.number }}.dev.decipad.com"
 
           ./scripts/aws-delete-stack.sh DecipadBackendStaging${{ github.event.pull_request.number }}
+          ./scripts/aws-delete-parameters.sh DecipadBackendStaging${{ github.event.pull_request.number }}
           scripts/destroy-sam.sh
 
   #### Notify
