@@ -53,6 +53,7 @@ module.exports = {
     'no-cond-assign': ['error', 'except-parens'],
     'no-continue': 'off',
     'no-case-declarations': 'off',
+    'import/order': 'off',
     'no-restricted-imports': [
       'error',
       {
