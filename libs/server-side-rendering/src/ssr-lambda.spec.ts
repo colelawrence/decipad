@@ -94,6 +94,7 @@ test('ssr many', (ctx) => {
       console.error(
         `The distance from the snapshot in __fixtures__/ssr-lambda.spec.snap.html is too big: ${distanceRatio}. Please update the fixture or change this thresold.`
       );
+      console.log('current doc is:\n', doc);
     }
     expect(distanceRatio).toBeLessThanOrEqual(maxDifferenceRatio);
   });
