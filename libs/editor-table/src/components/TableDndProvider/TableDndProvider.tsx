@@ -23,7 +23,7 @@ import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
 
 // TODO: Refactor or replace with alternative solution
 const useMemoPath = <T extends Path | null | undefined>(path: T): T =>
-  useMemo(() => path, path || []);
+  useMemo(() => path, [path]);
 
 export const TableDndProvider = ({
   editor,
