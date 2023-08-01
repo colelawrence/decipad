@@ -131,9 +131,10 @@ test('secrets', (ctx) => {
       omit(Object.fromEntries(Array.from(result.headers.entries())), 'date')
     ).toMatchInlineSnapshot(`
       {
-        "connection": "close",
+        "connection": "keep-alive",
         "content-length": "652",
         "content-type": "text/plain; charset=utf-8",
+        "keep-alive": "timeout=5",
       }
     `);
     const resultJson = await result.json();

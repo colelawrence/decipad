@@ -11,7 +11,6 @@ import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
 import { Subscription } from 'rxjs';
-import { awsRetry, retry } from '@decipad/retry';
 import { MessageSender, sender } from './send';
 
 interface Options {
@@ -173,8 +172,9 @@ const broadcastMessage = async (
 
 const isSeriousError = (err: Error) => {
   const isGone =
-    (err as ErrorWithCode)?.code?.match('Gone') ||
-    (err as Error).message.includes('Gone');
+    (err as ErrorWithCode)?.code?.includes('Gone') ||
+    (err as Error).message.includes('Gone') ||
+    err.name.includes('Gone');
   return !isGone;
 };
 
@@ -183,7 +183,7 @@ export const trySend = async (
   payload: string
 ): Promise<void> => {
   try {
-    await retry(() => ws.send({ id: connId, payload }), awsRetry);
+    await ws.send({ id: connId, payload });
   } catch (err) {
     if (err instanceof Error && isSeriousError(err)) {
       throw err;

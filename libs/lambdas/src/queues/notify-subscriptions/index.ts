@@ -1,7 +1,6 @@
 import arc from '@architect/functions';
 import { Changes, TableRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { awsRetry, retry } from '@decipad/retry';
 import handle from '../handle';
 
 type NotifySubscriptionsArgs = {
@@ -50,24 +49,16 @@ async function notifySubscriptions(args: NotifySubscriptionsArgs) {
           [sub.gqltype]: sendChanges,
         },
       };
-      await retry(
-        () =>
-          arc.ws.send({
-            id: sub.connection_id,
-            payload: { id: sub.id, type: 'next', payload },
-          }),
-        awsRetry
-      );
+      await arc.ws.send({
+        id: sub.connection_id,
+        payload: { id: sub.id, type: 'next', payload },
+      });
 
       if (process.env.NODE_ENV !== 'production' && !inTesting) {
-        await retry(
-          () =>
-            arc.ws.send({
-              id: sub.connection_id,
-              payload: { id: sub.id, type: 'data', payload },
-            }),
-          awsRetry
-        );
+        await arc.ws.send({
+          id: sub.connection_id,
+          payload: { id: sub.id, type: 'data', payload },
+        });
       }
     }
   }

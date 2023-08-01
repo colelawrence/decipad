@@ -51,7 +51,9 @@ const onError = async (rc: GraphQLRequestContext) => {
         });
       }
 
-      if (!process.env.CI) {
+      const shouldCaptureError = !isUserError(error);
+
+      if (shouldCaptureError) {
         // eslint-disable-next-line no-console
         console.error(
           'error detected by graphql monitor',
@@ -68,7 +70,7 @@ const onError = async (rc: GraphQLRequestContext) => {
           id: userId,
         });
       }
-      if (!isUserError(error)) {
+      if (shouldCaptureError) {
         // eslint-disable-next-line no-await-in-loop
         await captureException(error);
       }

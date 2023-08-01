@@ -1,15 +1,17 @@
+import { parse as qsParse, ParsedUrlQuery } from 'querystring';
 import stringify from 'json-stringify-safe';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 import { parse as parseCookie } from 'simple-cookie';
-import { parse as qsParse, ParsedUrlQuery } from 'querystring';
-import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';
 import { boomify } from '@hapi/boom';
+import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';
+import { debug } from '../debug';
 
 export default function adaptReqRes(handle: NextApiHandler) {
   return async function respondWithAuth(
     req: APIGatewayProxyEventV2
   ): Promise<APIGatewayProxyResultV2> {
+    debug('auth request', req);
     return new Promise((resolve) => {
       const { method, path } = req.requestContext.http;
       const url = req.rawPath;
@@ -131,6 +133,8 @@ export default function adaptReqRes(handle: NextApiHandler) {
             cookies.length === 0 ? {} : { 'Set-Cookie': cookies },
           body: replyBody,
         };
+
+        debug('auth response', response);
 
         resolve(response);
       }

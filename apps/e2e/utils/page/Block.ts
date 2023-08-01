@@ -278,14 +278,15 @@ export async function createCalculationBlockBelow(
 ) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+  await page
+    .locator('[data-testid="paragraph-wrapper"] >> nth=-1')
+    .click({ timeout: Timeouts.maxSelectorWaitTime });
 
-  await page.waitForSelector(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
-  );
-  await page.click(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
-  );
+  await page
+    .locator(
+      '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
+    )
+    .click();
 
   await page.keyboard.insertText('/advanced');
 

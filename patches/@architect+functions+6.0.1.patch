@@ -1,0 +1,115 @@
+diff --git a/node_modules/@architect/functions/src/discovery/index.js b/node_modules/@architect/functions/src/discovery/index.js
+index 6345b24..a4732bc 100644
+--- a/node_modules/@architect/functions/src/discovery/index.js
++++ b/node_modules/@architect/functions/src/discovery/index.js
+@@ -26,7 +26,7 @@ module.exports = function lookup (callback) {
+   if (local) {
+     let port = 2222
+     if (ARC_SANDBOX) {
+-      let { ports } = JSON.parse(ARC_SANDBOX)
++      let { ports = { _arc: 2222} } = JSON.parse(ARC_SANDBOX || '{}')
+       if (!ports._arc) {
+         return callback(ReferenceError('Sandbox internal port not found'))
+       }
+diff --git a/node_modules/@architect/functions/src/events/publish.js b/node_modules/@architect/functions/src/events/publish.js
+index 4ef878e..9e25c9e 100644
+--- a/node_modules/@architect/functions/src/events/publish.js
++++ b/node_modules/@architect/functions/src/events/publish.js
+@@ -73,12 +73,20 @@ function _publishSandbox (type, params, callback) {
+   req.end('\n')
+ }
+ 
++const clientOptions = {
++  marshallOptions: {
++    removeUndefinedValues: true
++  },
++  maxAttempts: 10,
++    retryMode: 'adaptive',
++};
++
+ function eventFactory (arc) {
+   return function live ({ name, payload }, callback) {
+     let method
+     if (isNode18) {
+       let { SNS } = require('@aws-sdk/client-sns')
+-      let sns = new SNS
++      let sns = new SNS(clientOptions)
+       method = (params, callback) => {
+         return sns.publish(params, callback)
+       }
+diff --git a/node_modules/@architect/functions/src/index.js b/node_modules/@architect/functions/src/index.js
+index 70f27a8..67506f9 100644
+--- a/node_modules/@architect/functions/src/index.js
++++ b/node_modules/@architect/functions/src/index.js
+@@ -13,9 +13,6 @@ if (!ARC_ENV) {
+ if (!validEnvs.includes(ARC_ENV)) {
+   throw ReferenceError(`ARC_ENV env var is required for use with @architect/functions`)
+ }
+-if (ARC_SANDBOX && !sandboxVersionAtLeast('5.0.0')) {
+-  throw ReferenceError('Incompatible version: please upgrade to Sandbox >=5.x or Architect >=10.x')
+-}
+ 
+ let http = require('./http')
+ let _static = require('./static')
+diff --git a/node_modules/@architect/functions/src/tables/dynamo.js b/node_modules/@architect/functions/src/tables/dynamo.js
+index adfe2e3..391fd6f 100644
+--- a/node_modules/@architect/functions/src/tables/dynamo.js
++++ b/node_modules/@architect/functions/src/tables/dynamo.js
+@@ -5,6 +5,14 @@ let { getPorts, isNode18, useAWS } = require('../lib')
+  */
+ let db, doc
+ 
++const clientOptions = {
++  marshallOptions: {
++    removeUndefinedValues: true
++  },
++  maxAttempts: 10,
++  retryMode: 'adaptive',
++};
++
+ function getDynamo (type, callback) {
+ 
+   if (!type)
+@@ -49,7 +57,7 @@ function getDynamo (type, callback) {
+       }
+     }
+     db = new DB(config)
+-    doc = isNode18 ? Doc.from(db) : new Doc(config)
++    doc = isNode18 ? Doc.from(db, clientOptions) : new Doc(config)
+     return callback(null, type === 'db' ? db : doc)
+   }
+   else {
+@@ -73,7 +81,7 @@ function getDynamo (type, callback) {
+           })
+         }
+         db = new DB(config)
+-        doc = isNode18 ? Doc.from(db) : new Doc(config)
++        doc = isNode18 ? Doc.from(db, clientOptions) : new Doc(config)
+         return callback(null, type === 'db' ? db : doc)
+       }
+     })
+diff --git a/node_modules/@architect/functions/src/ws/index.js b/node_modules/@architect/functions/src/ws/index.js
+index d018a21..2786a81 100644
+--- a/node_modules/@architect/functions/src/ws/index.js
++++ b/node_modules/@architect/functions/src/ws/index.js
+@@ -33,6 +33,11 @@ function instantiateAPI () {
+       apiVersion: '2018-11-29',
+       endpoint: `http://localhost:${port}/_arc/ws`,
+       region: AWS_REGION || 'us-west-2',
++      marshallOptions: {
++        removeUndefinedValues: true
++      },
++      maxAttempts: 10,
++      retryMode: 'adaptive',
+     })
+   }
+ 
+@@ -86,7 +91,7 @@ function send ({ id, payload }, callback) {
+   instantiateAPI()
+   return _send({
+     ConnectionId: id,
+-    Data: JSON.stringify(payload)
++    Data: Buffer.isBuffer(payload) ? payload : JSON.stringify(payload)
+   }, callback)
+ }
+ 

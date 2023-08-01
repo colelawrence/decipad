@@ -1,21 +1,21 @@
 import { CreateAttachmentFormResult } from '@decipad/backendtypes';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import S3 from 'aws-sdk/clients/s3';
+import {
+  CopyObjectCommand,
+  DeleteObjectCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { nanoid } from 'nanoid';
 import { s3 as s3Config, app as getAppConfig } from '@decipad/backend-config';
 import { URL } from 'url';
 
 const { buckets, ...config } = s3Config();
-const options = {
-  ...config,
-  // @ts-expect-error Architect uses env name testing instead of the conventional test
-  sslEnabled: process.env.NODE_ENV !== 'testing',
-  s3ForcePathStyle: true,
-  signatureVersion: 'v4',
-};
-
 const Bucket = buckets.attachments;
-const s3 = new S3(options);
+const s3 = new S3Client(config);
 
 const fixURL = (urlString: string): string => {
   const url = new URL(urlString);
@@ -47,13 +47,11 @@ export const attachmentUrl = (padId: string, attachmentId: string): string => {
 export const getAttachmentContent = async (
   fileName: string
 ): Promise<Buffer> => {
-  const result = await s3
-    .getObject({
-      Bucket,
-      Key: fileName,
-    })
-    .promise();
-
+  const command = new GetObjectCommand({
+    Bucket,
+    Key: fileName,
+  });
+  const result = await s3.send(command);
   const content = result.Body;
   if (!Buffer.isBuffer(content)) {
     throw new Error('Expected buffer as response from s3.getObject');
@@ -62,80 +60,52 @@ export const getAttachmentContent = async (
   return content;
 };
 
-export function getCreateAttachmentForm(
+export async function getCreateAttachmentForm(
   padId: string,
   fileName: string,
   fileType: string
 ): Promise<CreateAttachmentFormResult> {
-  return new Promise((resolve, reject) => {
-    const key = attachmentFilePath(padId, fileName, nanoid());
-    try {
-      s3.createPresignedPost(
-        {
-          Bucket,
-          Fields: {
-            key,
-            'Content-Type': fileType,
-          },
-          Expires: maxAttachmentUploadTokenExpirationSeconds,
-          Conditions: [['content-length-range', 0, maxAttachmentSize]],
-        },
-        (err, { url, ...data }) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve({
-              ...data,
-              url: fixURL(url),
-              fileName: key,
-              fileType,
-            });
-          }
-        }
-      );
-    } catch (err) {
-      reject(err);
-    }
-  });
+  const key = attachmentFilePath(padId, fileName, nanoid());
+  return createPresignedPost(s3, {
+    Key: key,
+    Bucket,
+    Fields: {
+      key,
+      'Content-Type': fileType,
+    },
+    Expires: maxAttachmentUploadTokenExpirationSeconds,
+    Conditions: [['content-length-range', 0, maxAttachmentSize]],
+  }).then(({ url, ...data }) => ({
+    ...data,
+    url: fixURL(url),
+    fileName: key,
+    fileType,
+  }));
 }
 
-export const getSize = (fileName: string): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    try {
-      s3.headObject(
-        {
-          Bucket,
-          Key: fileName,
-        },
-        (err, data) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          if (!data) {
-            throw new Error(`Attachment file with name ${fileName} not found`);
-          }
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          resolve(data.ContentLength!);
-        }
-      );
-    } catch (err) {
-      reject(err);
-    }
+export const getSize = async (fileName: string): Promise<number> => {
+  const command = new HeadObjectCommand({
+    Bucket,
+    Key: fileName,
   });
+  const result = await s3.send(command);
+  if (!result.ContentLength) {
+    throw new Error(`Attachment file with name ${fileName} not found`);
+  }
+  return result.ContentLength;
 };
 
 export const getURL = (fileName: string): Promise<string> => {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
-  return s3
-    .getSignedUrlPromise('getObject', {
-      Bucket,
-      Key: fileName,
-      Expires: maxAttachmentDownloadTokenExpirationSeconds,
-    })
-    .then(fixURL);
+  const command = new GetObjectCommand({
+    Bucket,
+    Key: fileName,
+  });
+  return getSignedUrl(s3, command, {
+    expiresIn: maxAttachmentDownloadTokenExpirationSeconds,
+  }).then(fixURL);
 };
 
 export const remove = async (fileName: string) => {
@@ -143,18 +113,19 @@ export const remove = async (fileName: string) => {
     fileName = fileName.substring(1);
   }
 
-  await s3.deleteObject({
+  const command = new DeleteObjectCommand({
     Bucket,
     Key: fileName,
   });
+
+  await s3.send(command);
 };
 
 export const duplicate = (from: string, to: string) => {
-  return s3
-    .copyObject({
-      Bucket,
-      CopySource: `${Bucket}/${from}`,
-      Key: to,
-    })
-    .promise();
+  const command = new CopyObjectCommand({
+    Bucket,
+    CopySource: `${Bucket}/${from}`,
+    Key: to,
+  });
+  return s3.send(command);
 };

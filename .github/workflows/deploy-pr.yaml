@@ -22,7 +22,7 @@ jobs:
       #### Prepare
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -32,7 +32,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: yarn
 
       - name: Install
@@ -56,7 +56,6 @@ jobs:
       - name: Deploy
         env:
           NODE_ENV: 'production'
-          DEBUG: '@decipad/*'
           DEPLOY_NAME: '${{ github.event.pull_request.number }}'
           DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.dev.decipad.com'
           DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'

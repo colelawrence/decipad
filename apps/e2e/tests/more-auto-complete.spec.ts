@@ -151,7 +151,7 @@ test.describe('Make sure auto-complete works', () => {
     await page
       .getByTestId('autocomplete-group:Table2')
       .getByTestId('autocomplete-item:RevenueNew')
-      .click();
+      .click({ timeout: Timeouts.maxSelectorWaitTime });
     await page.keyboard.type(')) - 1 in %');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.tableDelay);

@@ -1,6 +1,4 @@
-import { promisify } from 'util';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { tables } from '@architect/functions';
 import {
   VersionedDataTables,
@@ -21,11 +19,11 @@ interface ErrorWithCode extends Error {
 }
 
 export function withLock<RecordType extends VersionedTableRecord>(
-  docs: DocumentClient,
+  docs: DynamoDBDocument,
   tableName: string & keyof VersionedDataTables
 ): WithLock<RecordType> {
-  const getDoc = promisify(docs.get.bind(docs));
-  const putDoc = promisify(docs.put.bind(docs));
+  const getDoc = docs.get.bind(docs);
+  const putDoc = docs.put.bind(docs);
 
   return async function _withLock(
     id: string,
@@ -74,7 +72,7 @@ export function withLock<RecordType extends VersionedTableRecord>(
       });
     } catch (_err) {
       const err = _err as ErrorWithCode;
-      if (err.code === 'ConditionalCheckFailedException') {
+      if (err.name === 'ConditionalCheckFailedException') {
         // retry
         return _withLock(id, fn);
       }

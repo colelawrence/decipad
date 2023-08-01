@@ -1,3 +1,4 @@
+import { inspect } from 'util';
 import stringify from 'json-stringify-safe';
 import { boomify } from '@hapi/boom';
 import {
@@ -5,17 +6,19 @@ import {
   APIGatewayProxyResultV2,
   APIGatewayProxyStructuredResultV2,
 } from 'aws-lambda';
+import chalk from 'chalk';
 import { Handler } from '@decipad/backendtypes';
 import { captureException, trace } from '@decipad/backend-trace';
-import chalk from 'chalk';
-import { inspect } from 'util';
+import { debug } from '../debug';
 
 export default (handler: Handler) => {
   return trace(
     async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
+      debug('request', req);
       try {
         let body = await handler(req);
         if (isFullReturnObject(body)) {
+          debug('response', body);
           return body;
         }
 
@@ -29,11 +32,14 @@ export default (handler: Handler) => {
           body = stringify(body);
         }
 
-        return {
+        const response = {
           statusCode,
           body: body ?? '',
           headers,
         };
+        debug('response', response);
+
+        return response;
       } catch (_err) {
         const err = boomify(_err as Error);
         if (err.isServer) {

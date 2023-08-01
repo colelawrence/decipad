@@ -1,4 +1,6 @@
 import { Buffer } from 'buffer';
+import { S3ClientConfig } from '@aws-sdk/client-s3';
+import { SESClientConfig } from '@aws-sdk/client-ses';
 import { defaultEnv, SupportedEnvKey } from './default';
 
 export { defaultEnv };
@@ -111,48 +113,6 @@ function env(name: SupportedEnvKey): string {
   }
 }
 
-const defaultPort = () => (process.env.NODE_ENV === 'production' ? 443 : 80);
-
-const awsEndpoint = (_url: string) => {
-  let url = _url;
-  if (!url.startsWith('http')) {
-    url =
-      (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + url;
-  }
-  const parsed = new URL(url);
-  const href = parsed.href.endsWith('/')
-    ? parsed.href.slice(0, -1)
-    : parsed.href;
-  const port = Number(parsed.port);
-  return {
-    host: parsed.host,
-    hostname: parsed.hostname,
-    href,
-    protocol: parsed.protocol,
-    port: Number.isNaN(port) ? defaultPort() : port,
-  };
-};
-
-export function s3() {
-  return {
-    endpoint: awsEndpoint(env('DECI_S3_ENDPOINT')),
-    accessKeyId: env('DECI_S3_ACCESS_KEY_ID'),
-    secretAccessKey: env('DECI_S3_SECRET_ACCESS_KEY'),
-    buckets: {
-      pads: env('DECI_S3_PADS_BUCKET'),
-      attachments: env('DECI_S3_ATTACHMENTS_BUCKET'),
-    },
-  };
-}
-
-export function monitor() {
-  return {
-    sentry: {
-      dsn: env('SENTRY_DSN'),
-    },
-  };
-}
-
 export function app() {
   return {
     urlBase: env('DECI_APP_URL_BASE'),
@@ -165,6 +125,49 @@ export function app() {
       maxAttachmentDownloadTokenExpirationSeconds: Number(
         env('DECI_MAX_ATTACHMENT_DOWNLOAD_TOKEN_EXPIRATION_SECONDS')
       ),
+    },
+  };
+}
+
+const isLocalDev = () => app().urlBase.includes('localhost');
+
+const awsEndpoint = (_url: string) => {
+  let urlString = _url;
+  if (!urlString.startsWith('http')) {
+    urlString = (isLocalDev() ? 'http://' : 'https://') + urlString;
+  }
+  return urlString;
+};
+
+export interface BucketsConfig {
+  pads: string;
+  attachments: string;
+}
+
+export function s3(): S3ClientConfig & { buckets: BucketsConfig } {
+  const credentials = {
+    accessKeyId: env('DECI_S3_ACCESS_KEY_ID'),
+    secretAccessKey: env('DECI_S3_SECRET_ACCESS_KEY'),
+  };
+  return {
+    endpoint: awsEndpoint(env('DECI_S3_ENDPOINT')),
+    ...(credentials.accessKeyId && credentials.secretAccessKey
+      ? { credentials }
+      : {}),
+    region: env('AWS_REGION'),
+    tls: !isLocalDev(),
+    forcePathStyle: true,
+    buckets: {
+      pads: env('DECI_S3_PADS_BUCKET'),
+      attachments: env('DECI_S3_ATTACHMENTS_BUCKET'),
+    },
+  };
+}
+
+export function monitor() {
+  return {
+    sentry: {
+      dsn: env('SENTRY_DSN'),
     },
   };
 }
@@ -189,11 +192,21 @@ export function auth() {
   };
 }
 
-export function email() {
+export interface EmailConfig {
+  senderEmailAddress: string;
+  ses: SESClientConfig;
+}
+
+export function email(): EmailConfig {
+  const credentials = {
+    accessKeyId: env('DECI_SES_ACCESS_KEY_ID'),
+    secretAccessKey: env('DECI_SES_SECRET_ACCESS_KEY'),
+  };
   return {
     ses: {
-      accessKeyId: env('DECI_SES_ACCESS_KEY_ID'),
-      secretAccessKey: env('DECI_SES_SECRET_ACCESS_KEY'),
+      ...(credentials.accessKeyId && credentials.secretAccessKey
+        ? { credentials }
+        : {}),
       region: env('AWS_REGION'),
     },
     senderEmailAddress: env('DECI_FROM_EMAIL_ADDRESS'),

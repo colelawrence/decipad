@@ -1,5 +1,6 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
 import arc from '@architect/functions';
+import waitForExpect from 'wait-for-expect';
 import { focusOnBody, setUp } from '../utils/page/Editor';
 import { createCalculationBlockBelow } from '../utils/page/Block';
 
@@ -68,32 +69,39 @@ test.describe('Sharing pad with email', () => {
     publishedNotebookPage = (await incognito.newPage()) as Page;
 
     const data = await arc.tables();
-    const verificationRequests = (
-      await data.verificationrequests.query({
-        IndexName: 'byIdentifier',
-        KeyConditionExpression: 'identifier = :email',
-        ExpressionAttributeValues: {
-          ':email': 'invited-lama@ranch.org',
-        },
-      })
-    ).Items;
 
-    expect(verificationRequests).toHaveLength(1);
-    const [verificationRequest] = verificationRequests;
-    expect(verificationRequest).toBeDefined();
-    const { origin } = new URL(page.url());
-    const authLink = `${origin}/api/auth/callback/email?callbackUrl=%2Fn%2Fwelcome&token=${encodeURIComponent(
-      verificationRequest.openTokenForTestsOnly ?? ''
-    )}&email=${encodeURIComponent(verificationRequest.identifier)}`;
+    let authLink: string | undefined;
+    // eslint-disable-next-line playwright/valid-expect
+    await waitForExpect(async () => {
+      const verificationRequests = (
+        await data.verificationrequests.query({
+          IndexName: 'byIdentifier',
+          KeyConditionExpression: 'identifier = :email',
+          ExpressionAttributeValues: {
+            ':email': 'invited-lama@ranch.org',
+          },
+        })
+      ).Items;
 
-    publishedNotebookPage.goto(authLink);
+      expect(verificationRequests).toHaveLength(1);
+      const [verificationRequest] = verificationRequests;
+      expect(verificationRequest).toBeDefined();
+      const { origin } = new URL(page.url());
+      authLink = `${origin}/api/auth/callback/email?callbackUrl=%2Fn%2Fwelcome&token=${encodeURIComponent(
+        verificationRequest.openTokenForTestsOnly ?? ''
+      )}&email=${encodeURIComponent(verificationRequest.identifier)}`;
+    });
 
-    publishedNotebookPage.getByTestId('notebook-title').waitFor();
+    expect(authLink).toBeDefined();
+    publishedNotebookPage.goto(authLink!);
+
+    publishedNotebookPage
+      .getByTestId('notebook-title')
+      .waitFor({ timeout: 60000 });
 
     await createCalculationBlockBelow(publishedNotebookPage, 'Test = 68');
-    const count = await publishedNotebookPage.getByTestId('code-line').count();
-    // eslint-disable-next-line playwright/no-conditional-in-test
-    const acceptableCount = count === 4 || count === 2;
-    expect(acceptableCount).toBe(true);
+    await expect(
+      publishedNotebookPage.getByTestId('codeline-varname')
+    ).toHaveCount(5);
   });
 });

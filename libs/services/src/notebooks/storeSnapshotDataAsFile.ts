@@ -1,4 +1,4 @@
-import S3 from 'aws-sdk/clients/s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { s3 as s3Config } from '@decipad/backend-config';
 
 export const storeSnapshotDataAsFile = async (
@@ -6,23 +6,15 @@ export const storeSnapshotDataAsFile = async (
   data: Buffer
 ): Promise<void> => {
   const { buckets, ...config } = s3Config();
-  const options = {
-    ...config,
-    // @ts-expect-error Architect uses env name testing instead of the conventional test
-    sslEnabled: process.env.NODE_ENV !== 'testing',
-    s3ForcePathStyle: true,
-    signatureVersion: 'v4',
-  };
 
   const Bucket = buckets.pads;
-  const s3 = new S3(options);
+  const s3 = new S3Client(config);
 
-  await s3
-    .putObject({
-      Bucket,
-      Key: path,
-      Body: data,
-      ContentType: 'application/x-deci-snapshot',
-    })
-    .promise();
+  const command = new PutObjectCommand({
+    Bucket,
+    Key: path,
+    Body: data,
+    ContentType: 'application/x-deci-snapshot',
+  });
+  await s3.send(command);
 };

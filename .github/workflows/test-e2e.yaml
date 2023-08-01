@@ -31,7 +31,7 @@ jobs:
         run: echo "::set-output name=result::${{ github.run_id }}-$(date +%s)"
 
   build:
-    timeout-minutes: 35
+    timeout-minutes: 60
     runs-on: buildjet-4vcpu-ubuntu-2204
     needs: nonce
     env:
@@ -39,7 +39,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         shard: [1, 2]
 
@@ -78,6 +78,9 @@ jobs:
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           REACT_APP_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
           REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
+          DECI_VERBOSE: true
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: ./scripts/e2e.sh ${{ matrix.shard }} ${{ strategy.job-total }}
       - uses: actions/upload-artifact@v3
         if: failure()

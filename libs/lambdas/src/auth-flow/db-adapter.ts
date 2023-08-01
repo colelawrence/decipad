@@ -3,6 +3,7 @@ import { UserInput } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { create as createUser } from '@decipad/services/users';
 import { createVerifier } from '@decipad/services/authentication';
+import omit from 'lodash.omit';
 import { isAllowedToLogIn } from './is-allowed';
 
 // Next-Auth does not expose some types
@@ -105,7 +106,7 @@ export const adapter = (adapterOpts: AdapterOptions): Adapter => {
 
       const previousUser = await data.users.get({ id: user.id });
       const name = user.name || previousUser?.name || 'unknown';
-      const newUser = { ...previousUser, ...user, name };
+      const newUser = { ...previousUser, ...omit(user, 'emailVerified'), name };
       await data.users.put(newUser);
       return newUser;
     },

@@ -16,9 +16,8 @@ import {
 } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
 import { unique } from '@decipad/utils';
-import { awsRetry, retry } from '@decipad/retry';
 import assert from 'assert';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { timestamp } from './timestamp';
 import { debug } from './debug';
 import { batchDelete } from './batchDelete';
@@ -126,9 +125,7 @@ function putReplacer<T extends ConcreteRecord>(
       args,
       eventProbability
     );
-    const ret = await retry(() => method.call(table, args), awsRetry, {
-      maxTimeout: 5000,
-    });
+    const ret = method.call(table, args);
 
     const publishEvent =
       (tableName !== 'docsyncupdates' ||
@@ -147,9 +144,7 @@ function putReplacer<T extends ConcreteRecord>(
         },
       };
       debug('tables.%s: publishing event `%j`', event);
-      await retry(() => arc.queues.publish(event), awsRetry, {
-        maxTimeout: 5000,
-      });
+      await arc.queues.publish(event);
       debug('tables.%s: published`', event);
     } else {
       debug('tables.%s: NOT publishing event', tableName);
@@ -172,20 +167,15 @@ function deleteReplacer<T extends ConcreteRecord>(
     await method.call(table, args);
 
     if (!noEvents) {
-      await retry(
-        () =>
-          arc.queues.publish({
-            name: `${tableName}-changes`,
-            payload: {
-              table: tableName,
-              action: 'delete',
-              args,
-              recordBeforeDelete,
-            },
-          }),
-        awsRetry,
-        { maxTimeout: 5000 }
-      );
+      await arc.queues.publish({
+        name: `${tableName}-changes`,
+        payload: {
+          table: tableName,
+          action: 'delete',
+          args,
+          recordBeforeDelete,
+        },
+      });
     }
   };
 }
@@ -193,7 +183,7 @@ function deleteReplacer<T extends ConcreteRecord>(
 function enhance(
   dataTables: DataTables,
   tableName: TableName,
-  db: DocumentClient,
+  db: DynamoDBDocument,
   services: ArcServices
 ): EnhancedDataTable<any> {
   const table = dataTables[
@@ -235,7 +225,6 @@ function enhance(
     };
     return db
       .batchGet(query)
-      .promise()
       .then((data) => data.Responses?.[realTableName] ?? []);
   };
 
@@ -252,7 +241,7 @@ function enhance(
 
 function withWithVersion(
   dataTables: DataTables,
-  db: DocumentClient,
+  db: DynamoDBDocument,
   tableName: keyof VersionedDataTables
 ): VersionedDataTable<VersionedTableRecord> {
   assert(db, 'need a db');

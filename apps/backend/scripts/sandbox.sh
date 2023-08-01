@@ -27,7 +27,7 @@ trap "teardown" EXIT
 if [[ -z "${DECI_E2E:-}" ]]; then
   yarn build:backend:watch&
   SERVICE_PIDS="${SERVICE_PIDS} ${!}"
-  if "${DECI_SSR:-}"; then
+  if [ -n "${DECI_SSR:-}" ]; then
     nx serve server-side-rendering&
     SERVICE_PIDS="${SERVICE_PIDS} ${!}"
   fi

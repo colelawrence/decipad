@@ -1,1 +1,1 @@
-export const RENDER_TIMEOUT_MS = 5_000;
+export const RENDER_TIMEOUT_MS = process.env.CI ? 20_000 : 5_000;

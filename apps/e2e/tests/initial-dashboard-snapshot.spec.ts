@@ -33,7 +33,7 @@ test.describe('Dashboard snapshot', () => {
     const pads = await (await getPadList(page)).sort(byName);
 
     // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
-    process.env.CI
+    process.env.CI || process.env.DECI_E2E
       ? expect(pads).toMatchObject(
           [
             'Welcome to Decipad!',
@@ -104,7 +104,7 @@ test.describe('Dashboard operations', () => {
     await waitForExpect(async () => {
       const pads = await getPadList(page);
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
-      process.env.CI
+      process.env.CI || process.env.DECI_E2E
         ? expect(pads).toHaveLength(3)
         : expect(pads).toHaveLength(14);
     });

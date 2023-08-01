@@ -2,6 +2,7 @@ import { track } from '@decipad/backend-analytics';
 import templates from '@decipad/emails';
 import { sendEmail } from '@decipad/services/email';
 import handle from '../handle';
+import { debug } from '../../debug';
 
 // TODO restructure and use input validation to check parameters are correct for the given template, making it possible to type without any
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -27,13 +28,17 @@ async function handleSendEmail({
 
   const { subject, body } = template(params as any);
 
-  await sendEmail({
-    to: params.email || params.to.email,
-    body,
-    subject,
-  });
-
-  await track({ event: 'email sent', properties: params });
+  try {
+    await sendEmail({
+      to: params.email || params.to.email,
+      body,
+      subject,
+    });
+    debug('email sent', params);
+    await track({ event: 'email sent', properties: params });
+  } catch (err) {
+    console.error('Error sending email', err);
+  }
 }
 
 export const handler = handle(handleSendEmail);

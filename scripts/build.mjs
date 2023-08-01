@@ -46,6 +46,7 @@ const envVarNames = [
   'STRIPE_WEBHOOK_SECRET',
   'REACT_APP_STRIPE_PAYMENT_LINK',
   'REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK',
+  'DEBUG',
 ];
 
 function getEnvVar(name) {
@@ -91,6 +92,7 @@ async function esBuildOptions(env) {
     format: 'cjs',
     external: [
       'aws-sdk',
+      '@aws-sdk/*',
       'sharp',
       'canvas',
       'jsdom',

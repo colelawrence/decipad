@@ -1,6 +1,6 @@
 import type { PromiseOrType } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 /* Basic */
 
@@ -576,7 +576,7 @@ export interface EnhancedDataTables {
 }
 
 export interface DataTables extends EnhancedDataTables {
-  _doc: DocumentClient;
+  _doc: DynamoDBDocument;
   tags: DataTable<TagRecord>;
   usertaggedresources: DataTable<UserTaggedResourceRecord>;
   usertags: DataTable<UserTagRecord>;

@@ -1,4 +1,4 @@
-import S3 from 'aws-sdk/clients/s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { s3 as s3Config } from '@decipad/backend-config';
 
 export const save = async (
@@ -6,24 +6,21 @@ export const save = async (
   data: Buffer,
   contentType: string
 ): Promise<void> => {
-  const { buckets, ...config } = s3Config();
-  const options = {
-    ...config,
-    // @ts-expect-error Architect uses env name testing instead of the conventional test
-    sslEnabled: process.env.NODE_ENV !== 'testing',
-    s3ForcePathStyle: true,
-    signatureVersion: 'v4',
-  };
+  try {
+    const { buckets, ...config } = s3Config();
+    const Bucket = buckets.attachments;
+    const s3 = new S3Client(config);
 
-  const Bucket = buckets.attachments;
-  const s3 = new S3(options);
-
-  await s3
-    .putObject({
+    const command = new PutObjectCommand({
       Bucket,
       Key: path,
       Body: data,
       ContentType: contentType,
-    })
-    .promise();
+    });
+    await s3.send(command);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error saving file', err);
+    throw err;
+  }
 };

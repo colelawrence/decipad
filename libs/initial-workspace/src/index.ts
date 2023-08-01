@@ -31,7 +31,10 @@ export interface InitialWorkspace {
   sections: Array<Section>;
 }
 
-const isTesting = once(() => !!process.env.JEST_WORKER_ID || !!process.env.CI);
+const isTesting = once(
+  () =>
+    !!process.env.JEST_WORKER_ID || !!process.env.CI || !!process.env.DECI_E2E
+);
 // eslint-disable-next-line no-underscore-dangle
 const isLocalDev = once(() => {
   const url = process.env.DECI_APP_URL_BASE;

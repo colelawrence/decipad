@@ -1,6 +1,7 @@
 import { captureException, trace } from '@decipad/backend-trace';
 import { timeout } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { debug } from '../debug';
 
 type RecordHandler<T> = (payload: T) => Promise<void>;
 
@@ -18,7 +19,9 @@ const processAllRecords = async <T>(
 ): Promise<void> => {
   const results = await Promise.allSettled(
     (event as unknown as EventWithRecord).Records?.map(async (record) => {
-      await userHandler(JSON.parse(record.body));
+      const payload = JSON.parse(record.body);
+      debug('payload', payload);
+      await userHandler(payload);
     }) ?? []
   );
   for (const result of results) {

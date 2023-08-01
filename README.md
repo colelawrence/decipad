@@ -19,7 +19,7 @@
 
 ## Set up
 
-For you to be able to run Deci locally, you need to have Node.js version 16 installed, at least v16.14.
+For you to be able to run Deci locally, you need to have Node.js version 18 installed, at least v18.17.
 
 If you don't already, you can go to [the Node.js official website](https://nodejs.org/en/) to download and run the installer.
 

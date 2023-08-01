@@ -26,7 +26,7 @@
     "play": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "../../node_modules/.bin/playwright test",
+        "command": "DECI_E2E=1 ../../node_modules/.bin/playwright test",
         "cwd": "apps/e2e"
       }
     }

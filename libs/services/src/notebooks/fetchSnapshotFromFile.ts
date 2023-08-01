@@ -1,26 +1,19 @@
-import S3 from 'aws-sdk/clients/s3';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { s3 as s3Config } from '@decipad/backend-config';
 
 export const fetchSnapshotFromFile = async (
   path: string
 ): Promise<Buffer | undefined> => {
   const { buckets, ...config } = s3Config();
-  const options: S3.Types.ClientConfiguration = {
-    ...config,
-    // @ts-expect-error Architect uses env name testing instead of the conventional test
-    sslEnabled: process.env.NODE_ENV !== 'testing',
-    s3ForcePathStyle: true,
-  };
 
   const Bucket = buckets.pads;
-  const s3 = new S3(options);
+  const s3 = new S3Client(config);
 
-  const { Body: body } = await s3
-    .getObject({
-      Bucket,
-      Key: path,
-    })
-    .promise();
+  const command = new GetObjectCommand({
+    Bucket,
+    Key: path,
+  });
+  const { Body: body } = await s3.send(command);
   if (!body) {
     return undefined;
   }

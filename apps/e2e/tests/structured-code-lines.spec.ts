@@ -40,6 +40,8 @@ test.describe('Calculation Blocks v2', () => {
     ).toContain('Name');
 
     await page.getByTestId('codeline-varname').nth(1).click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
     await keyPress(page, 'End');
     await keyPress(page, 'Backspace');
 

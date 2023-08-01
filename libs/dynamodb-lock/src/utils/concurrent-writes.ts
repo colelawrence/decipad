@@ -1,9 +1,8 @@
-import { promisify } from 'util';
 import { nanoid } from 'nanoid';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Endpoint } from 'aws-sdk';
 import { tables } from '@architect/functions';
 import { DocSyncRecord } from '@decipad/backendtypes';
 import { timeout, getDefined } from '../../../utils/src';
@@ -11,15 +10,18 @@ import { withLock } from '..';
 
 /* Client */
 
-function createClient(): DocumentClient {
+function createClient(): DynamoDBDocument {
   const port = getDefined(
     process.env.ARC_TABLES_PORT,
     'need process.env.ARC_TABLES_PORT'
   );
-  return new DocumentClient({
-    endpoint: new Endpoint(`http://localhost:${port}`),
+  const client = new DynamoDBClient({
+    endpoint: { url: new URL(`http://localhost:${port}`) },
     region: process.env.AWS_REGION || 'us-west-2',
+    maxAttempts: 10,
+    retryMode: 'adaptive',
   });
+  return DynamoDBDocument.from(client);
 }
 
 /* Writers */
@@ -61,7 +63,7 @@ class Reader {
 
   async read(): Promise<DocSyncRecord | undefined> {
     const client = createClient();
-    const getDoc = promisify(client.get.bind(client));
+    const getDoc = client.get.bind(client);
     const data = (await tables()) as unknown as {
       reflect: () => Promise<Record<string, string>>;
     };

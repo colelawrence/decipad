@@ -2,8 +2,8 @@ import stringify from 'json-stringify-safe';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse as parseDotEnv } from 'dotenv';
-import AWS from 'aws-sdk';
 import { nanoid } from 'nanoid';
+import { fromIni, fromEnv } from '@aws-sdk/credential-providers';
 import { Config } from './config';
 import baseUrl from './base-url';
 import getPorts from './get-ports';
@@ -11,23 +11,40 @@ import getPorts from './get-ports';
 export type Env = NodeJS.ProcessEnv & Record<string, string | undefined>;
 type ISandboxEnvReturn = [Env, Config];
 
-function loadAWSConfig(): Promise<Record<string, string>> {
-  return new Promise((resolve, reject) => {
-    AWS.config.getCredentials((err, credentials) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (!credentials?.accessKeyId || !credentials?.secretAccessKey) {
-          return reject(new Error('Could not load AWS credentials'));
-        }
-        resolve({
-          AWS_ACCESS_KEY_ID: credentials?.accessKeyId,
-          AWS_SECRET_ACCESS_KEY: credentials?.secretAccessKey,
-        });
-      }
-    });
-  });
-}
+const getAwsCredentialsFromIni = async () => {
+  try {
+    const credentials = await fromIni({ profile: 'default' })();
+    return {
+      AWS_ACCESS_KEY_ID: credentials.accessKeyId,
+      AWS_SECRET_ACCESS_KEY: credentials.secretAccessKey,
+    };
+  } catch (err) {
+    if (!process.env.CI) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  }
+  return undefined;
+};
+
+const getAwsCredentialsFromEnv = async () => {
+  try {
+    const credentials = await fromEnv()();
+    return {
+      AWS_ACCESS_KEY_ID: credentials.accessKeyId,
+      AWS_SECRET_ACCESS_KEY: credentials.secretAccessKey,
+    };
+  } catch (err) {
+    if (!process.env.CI) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  }
+  return undefined;
+};
+
+const getAwsCredentials = async () =>
+  (await getAwsCredentialsFromIni()) ?? getAwsCredentialsFromEnv();
 
 export async function createSandboxEnv(
   workerId: number
@@ -35,12 +52,9 @@ export async function createSandboxEnv(
   // read the testing env config file
   const envConfigFilePath =
     process.env.DECI_ENV_CONFIG_FILE_PATH || join('tests', '.testing.env');
-  const awsConfig = await loadAWSConfig();
   const baseConfig = parseDotEnv(readFileSync(envConfigFilePath));
 
-  // we have to inject some of these variables into the worker
-  // process so that some libraries that run on the tests work.
-  Object.assign(process.env, baseConfig);
+  const credentials = await getAwsCredentials();
 
   const envBaseConfig = {
     PATH: process.env.PATH,
@@ -89,12 +103,13 @@ export async function createSandboxEnv(
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    DECI_BACKEND_TEST: 'true',
   };
 
   // the final sandbox environment:
   const env = {
-    ...awsConfig,
     ...baseConfig,
+    ...credentials,
     ...envBaseConfig,
     ...appConfig,
   };

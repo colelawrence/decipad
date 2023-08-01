@@ -4,9 +4,5 @@
     "lib": ["esnext"]
   },
   "include": ["src"],
-  "references": [
-    { "path": "../backendtypes" },
-    { "path": "../dynamodb-lock" },
-    { "path": "../retry" }
-  ]
+  "references": [{ "path": "../backendtypes" }, { "path": "../dynamodb-lock" }]
 }

@@ -20,7 +20,7 @@ export default async function getPorts(
   workerId: number,
   portCount: number
 ): Promise<string[]> {
-  const rangeStart = 3333 + workerId * 1000;
+  const rangeStart = 3333 + workerId * 1000 + Math.round(Math.random() * 5000);
   const rangeEnd = rangeStart + 999;
   const portRange = getRandomPort.makeRange(rangeStart, rangeEnd);
   const portBase = await getRandomPort({ port: portRange });

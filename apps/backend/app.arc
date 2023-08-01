@@ -58,6 +58,7 @@ post /api/stripe/webhook
 
 @static
 folder public
+spa true
 
 @ws
 
@@ -448,4 +449,4 @@ custom-domain
 @aws
 region eu-west-2
 timeout 60
-runtime nodejs16.x
+runtime nodejs18.x

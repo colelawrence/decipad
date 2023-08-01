@@ -7,10 +7,6 @@
     {
       "matchSourceUrlPrefixes": ["https://github.com/udecode/plate"],
       "groupName": "Plate monorepo packages"
-    },
-    {
-      "matchPackageNames": ["aws-sdk"],
-      "enabled": false
     }
   ],
   "patch": {

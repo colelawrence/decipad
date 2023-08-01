@@ -9,7 +9,9 @@ test.describe('Workspace flows', () => {
     await setUp(page);
     await withTestUser({ page, context });
     await page.goto('/');
-    await page.waitForSelector('text=/Workspace/i');
+    await page.waitForSelector('text=/Workspace/i', {
+      timeout: Timeouts.maxSelectorWaitTime,
+    });
   });
 
   test('Archive & delete a notebook', async ({ page }) => {

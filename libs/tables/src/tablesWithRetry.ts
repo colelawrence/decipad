@@ -5,7 +5,6 @@ import {
   EnhancedDataTable,
   TableRecordBase,
 } from '@decipad/backendtypes';
-import { awsRetry, retry } from '@decipad/retry';
 import { once } from '@decipad/utils';
 import { tables } from './tables';
 
@@ -22,6 +21,7 @@ export const tablesWithRetry = async (): Promise<DataTables> => {
     get(target, prop) {
       const property = prop as keyof DataTables | 'then';
       if (property === '_doc') {
+        // eslint-disable-next-line no-underscore-dangle
         return data._doc;
       }
       if (property === 'then') {
@@ -38,47 +38,31 @@ export const tablesWithRetry = async (): Promise<DataTables> => {
       }
       const table: typeof sourceTable = {
         ...sourceTable,
-        get: (...args) => retry(() => sourceTable.get(...args), awsRetry),
-        delete: (...args) => retry(() => sourceTable.delete(...args), awsRetry),
-        query: (...args) => retry(() => sourceTable.query(...args), awsRetry),
+        get: (...args) => sourceTable.get(...args),
+        delete: (...args) => sourceTable.delete(...args),
+        query: (...args) => sourceTable.query(...args),
         put: (doc: TableRecordBase, eventProbability?: boolean | number) =>
-          retry(
-            () =>
-              (sourceTable.put as DataTable<TableRecordBase>['put'])(
-                doc,
-                eventProbability
-              ),
-            awsRetry
+          (sourceTable.put as DataTable<TableRecordBase>['put'])(
+            doc,
+            eventProbability
           ),
       };
       if ('batchGet' in sourceTable) {
         (table as EnhancedDataTable<TableRecordBase>).batchGet = (...args) =>
-          retry(
-            () =>
-              (
-                sourceTable.batchGet as EnhancedDataTable<TableRecordBase>['batchGet']
-              )(...args),
-            awsRetry
-          );
+          (
+            sourceTable.batchGet as EnhancedDataTable<TableRecordBase>['batchGet']
+          )(...args);
       }
       if ('batchDelete' in sourceTable) {
         (table as EnhancedDataTable<TableRecordBase>).batchDelete = (...args) =>
-          retry(
-            () =>
-              (
-                sourceTable.batchDelete as EnhancedDataTable<TableRecordBase>['batchDelete']
-              )(...args),
-            awsRetry
-          );
+          (
+            sourceTable.batchDelete as EnhancedDataTable<TableRecordBase>['batchDelete']
+          )(...args);
       }
       if ('create' in sourceTable) {
         (table as EnhancedDataTable<TableRecordBase>).create = (...args) =>
-          retry(
-            () =>
-              (
-                sourceTable.create as EnhancedDataTable<TableRecordBase>['create']
-              )(...args),
-            awsRetry
+          (sourceTable.create as EnhancedDataTable<TableRecordBase>['create'])(
+            ...args
           );
       }
       cache[property] = table as any;

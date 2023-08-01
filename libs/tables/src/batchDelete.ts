@@ -1,5 +1,8 @@
 import { chunks, noop } from '@decipad/utils';
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import {
+  DynamoDBDocument,
+  BatchWriteCommandInput,
+} from '@aws-sdk/lib-dynamodb';
 import { debug } from './debug';
 
 const localEnvs = ['development', 'testing'];
@@ -10,7 +13,7 @@ const isLocalDevelopment =
 // this must be different because apparently our
 // emulation of DynamoDB does not support batched delete requests
 const localBatchDelete = (
-  db: DocumentClient,
+  db: DynamoDBDocument,
   tableName: string,
   selectors: Array<{ id: string; seq?: string }>
 ): Promise<void> => {
@@ -26,14 +29,14 @@ const localBatchDelete = (
 };
 
 const realBatchDelete = async (
-  db: DocumentClient,
+  db: DynamoDBDocument,
   tableName: string,
   selectors: Array<{ id: string; seq?: string }>
 ): Promise<void> => {
   debug('realBatchDelete', { tableName, selectors });
 
   for (const batch of chunks(selectors, 25)) {
-    const query: DocumentClient.BatchWriteItemInput = {
+    const query: BatchWriteCommandInput = {
       RequestItems: {
         [tableName]: batch.map((selector) => ({
           DeleteRequest: {
@@ -42,7 +45,8 @@ const realBatchDelete = async (
         })),
       },
     };
-    await db.batchWrite(query).promise();
+    // eslint-disable-next-line no-await-in-loop
+    await db.batchWrite(query);
   }
 };
 
