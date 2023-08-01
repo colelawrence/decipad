@@ -1,13 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import {
-  grey200,
-  normalOpacity,
-  OpaqueColor,
-  transparency,
-} from '../../primitives';
-import { baseSwatches } from '../../utils';
+import { cssVar, grey200 } from '../../primitives';
 
 const buttonStyles = css({
   width: '24px',
@@ -32,22 +26,26 @@ const iconSize = css({
 type IconButtonProps = {
   readonly onClick?: () => void;
   readonly children: ReactNode;
-  readonly color?: OpaqueColor;
+  readonly isDefaultBackground: boolean;
 };
 
 export const NotebookIconButton: FC<IconButtonProps> = ({
   children,
   onClick,
-  color = baseSwatches.Catskill,
+  isDefaultBackground,
 }) => {
   return (
     <div
       css={[
         buttonStyles,
         css({
-          backgroundColor: transparency(color, normalOpacity).rgba,
+          backgroundColor: isDefaultBackground
+            ? cssVar('backgroundSubdued')
+            : cssVar('themeBackgroundSubdued'),
           ':hover, :focus': {
-            backgroundColor: color.rgb,
+            backgroundColor: isDefaultBackground
+              ? cssVar('backgroundHeavy')
+              : cssVar('themeBackgroundHeavy'),
           },
         }),
       ]}

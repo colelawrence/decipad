@@ -5,6 +5,7 @@ import { NotebookIconButton } from './NotebookIconButton';
 
 const args: ComponentProps<typeof NotebookIconButton> = {
   children: <Rocket />,
+  isDefaultBackground: false,
 };
 
 export default {

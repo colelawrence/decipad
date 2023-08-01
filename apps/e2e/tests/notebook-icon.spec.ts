@@ -18,7 +18,7 @@ test.describe('Icons on the editor title', () => {
       return getComputedStyle(el).backgroundColor;
     });
 
-    expect(initialColor).toBe('rgb(236, 240, 246)'); // grey200
+    expect(initialColor).toBe('rgb(250, 252, 255)'); // grey100
   });
 
   test('changes the icon', async ({ page }) => {

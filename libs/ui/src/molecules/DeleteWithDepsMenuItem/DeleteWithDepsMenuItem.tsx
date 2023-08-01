@@ -134,7 +134,7 @@ ${animationTwoColours(
   cssVar('stateDangerBackground'),
   cssVar('stateDangerBackground')
 )} 0.5s ease-in-out`,
-    color: cssVar('textDefault'),
+    color: componentCssVars('TooltipText'),
   },
 
   ':hover:after': {

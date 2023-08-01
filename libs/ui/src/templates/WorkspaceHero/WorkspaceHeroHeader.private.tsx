@@ -29,7 +29,7 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
 
         <Button type="primaryBrand" onClick={onCreateNotebook}>
           <TextWithIcon>
-            <Plus />
+            <Plus variant="black" />
             <span>New Notebook</span>
           </TextWithIcon>
         </Button>

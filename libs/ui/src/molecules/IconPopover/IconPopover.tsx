@@ -66,6 +66,7 @@ export const IconPopover = ({
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = swatchesThemed(darkTheme);
   const [open, setOpen] = useState(false);
+
   return (
     <Popover.Root onOpenChange={setOpen}>
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>
@@ -115,7 +116,7 @@ export const IconPopover = ({
                   data-testid={`icon-picker-${choice}`}
                 >
                   <NotebookIconButton
-                    color={baseSwatches[color]}
+                    isDefaultBackground={color === 'Catskill'}
                     onClick={() => {
                       onChangeIcon(choice);
                     }}

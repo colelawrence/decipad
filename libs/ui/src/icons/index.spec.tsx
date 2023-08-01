@@ -12,11 +12,13 @@ describe.each(iconExports)('the %s icon', (_name, Icon) => {
     render(
       <Icon
         // some props that will fulfill every icons mandatory props interface
-        type="expand"
-        direction="right"
-        variant="down"
-        active={true}
-        title="foonar"
+        {...({
+          type: 'expand',
+          direction: 'right',
+          variant: 'down',
+          active: true,
+          title: 'foonar',
+        } as any)}
       />
     );
     expect(screen.getByTitle(/.+/)).toBeInTheDocument();
@@ -26,11 +28,13 @@ describe.each(iconExports)('the %s icon', (_name, Icon) => {
     const { container } = render(
       <Icon
         // some props that will fulfill every icons mandatory props interface
-        type="expand"
-        direction="right"
-        variant="down"
-        active={true}
-        title="foomnar"
+        {...({
+          type: 'expand',
+          direction: 'right',
+          variant: 'down',
+          active: true,
+          title: 'foonar',
+        } as any)}
       />
     );
     const svg = container.querySelector('svg, span');

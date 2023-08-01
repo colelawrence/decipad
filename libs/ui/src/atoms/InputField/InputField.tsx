@@ -124,6 +124,11 @@ export const InputField = ({
       autoFocus={autoFocus}
       disabled={disabled}
       css={[
+        {
+          '::placeholder': {
+            color: cssVar('textDefault'),
+          },
+        },
         size === 'small' ? inputStylesSmall : inputStyles,
         size === 'full' && fullWidth,
         type !== 'search'

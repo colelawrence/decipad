@@ -3,7 +3,12 @@ import { cursorStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Avatar, Tooltip } from '../../atoms';
-import { OpaqueColor, p12Regular, p13Medium } from '../../primitives';
+import {
+  OpaqueColor,
+  componentCssVars,
+  p12Regular,
+  p13Medium,
+} from '../../primitives';
 import { PermissionType } from '../../types';
 import { Cursor, NotebookAvatar } from './NotebookAvatars.types';
 import { sortAvatars } from './sortAvatars';
@@ -38,10 +43,12 @@ export const tooltipNameStyles = css({
   ...p13Medium,
 
   marginBottom: '3px',
+  color: componentCssVars('TooltipText'),
 });
 
 const tooltipRoleStyles = css({
   ...p12Regular,
+  color: componentCssVars('TooltipText'),
 });
 
 export type NotebookAvatarsProps = {

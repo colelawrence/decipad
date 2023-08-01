@@ -1,12 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules';
-import { p14Regular, shortAnimationDuration } from '../../primitives';
+import { cssVar, p14Regular, shortAnimationDuration } from '../../primitives';
 import { editorLayout } from '../../styles';
-import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
+import { AvailableSwatchColor, UserIconKey } from '../../utils';
 
 const blockStyles = css({
   display: 'grid',
@@ -46,11 +45,12 @@ type EditorIconProps = {
 export const EditorIcon = ({
   readOnly = false,
   icon,
+  color,
   ...props
 }: EditorIconProps): ReturnType<FC> => {
   const Icon = icons[icon];
-  const [darkTheme] = useThemeFromStore();
-  const baseSwatches = swatchesThemed(darkTheme);
+
+  const isDefaultColor = color === 'Catskill';
 
   const iconElement = (
     <button
@@ -58,7 +58,9 @@ export const EditorIcon = ({
       css={[
         iconWrapperStyles,
         {
-          backgroundColor: baseSwatches[props.color].rgb,
+          backgroundColor: isDefaultColor
+            ? cssVar('backgroundSubdued')
+            : cssVar('themeBackgroundSubdued'),
           cursor: readOnly ? 'default' : 'pointer',
         },
       ]}
@@ -73,7 +75,7 @@ export const EditorIcon = ({
   }
   return (
     <div css={blockStyles}>
-      <IconPopover {...props} trigger={iconElement} />
+      <IconPopover {...props} color={color} trigger={iconElement} />
     </div>
   );
 };
