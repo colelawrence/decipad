@@ -4,7 +4,7 @@ const path = require('path');
 const TsConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const { ProvidePlugin, optimize } = require('webpack');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const SentryPlugin = require('@sentry/webpack-plugin');
+const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const serviceWorkerConfig = require('./service-worker.config');
 
@@ -115,7 +115,7 @@ module.exports =
     if (configureSentry && process.env.NODE_ENV === 'production') {
       if (process.env.SENTRY_DSN) {
         config.plugins.push(
-          new SentryPlugin({
+          sentryWebpackPlugin({
             release: process.env.GIT_COMMIT_HASH,
             dsn: process.env.SENTRY_DSN,
             include: '../../dist/apps/frontend',
