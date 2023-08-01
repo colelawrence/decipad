@@ -51,7 +51,7 @@ WithError.args = {
 
 export const WithPlaceholder: StoryFn<
   ComponentProps<typeof CodeLine> & Result.Result
-> = ({ type, value, ...props }) => <CodeLine {...props} />;
+> = (props) => <CodeLine {...props} />;
 WithPlaceholder.args = {
   children: '',
   isEmpty: true,

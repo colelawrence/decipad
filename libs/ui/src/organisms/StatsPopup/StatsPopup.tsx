@@ -20,7 +20,7 @@ const styles = css({
   padding: '24px',
   boxShadow: `0 0 16px 0 ${smallShadow.rgba}`,
 
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
   overflowY: 'scroll',
 });
 

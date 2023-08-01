@@ -61,7 +61,7 @@ const dndAreaStyles = css({
   left: 0,
   height: '100%',
   width: '100%',
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   zIndex: 1000,
 });
 

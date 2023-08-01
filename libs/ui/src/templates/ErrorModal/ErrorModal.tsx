@@ -2,13 +2,10 @@
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
 import { Modal } from '../../molecules';
-import { grey500, p15Regular, p20Medium, setCssVar } from '../../primitives';
+import { p15Regular, p20Medium } from '../../primitives';
 
 const headingStyles = css(p20Medium);
-const paragraphStyles = css(
-  p15Regular,
-  setCssVar('currentTextColor', grey500.rgb)
-);
+const paragraphStyles = css(p15Regular);
 
 interface ErrorModalProps {
   readonly Heading: 'h1';

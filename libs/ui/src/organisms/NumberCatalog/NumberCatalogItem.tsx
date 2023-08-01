@@ -89,19 +89,7 @@ export const NumberCatalogItem = ({
             },
           })}
         >
-          <span
-            css={css({
-              svg: {
-                transform: 'translateY(-4px)',
-              },
-              'svg > path': {
-                stroke: cssVar('strongHighlightColor'),
-              },
-            })}
-          >
-            <NestIndicator />
-          </span>
-
+          <NestIndicator />
           <span
             css={css(p14Medium, {
               position: 'relative',
@@ -117,7 +105,7 @@ export const NumberCatalogItem = ({
               css={css(p12Medium, {
                 marginLeft: '8px',
                 alignSelf: 'center',
-                color: cssVar('weakTextColor'),
+                color: cssVar('textSubdued'),
               })}
             >
               {isTable(result.result.type) ? (
@@ -151,9 +139,6 @@ const dragHandleStyles = css({
     width: '10px',
     height: '10px',
   },
-  'svg > path': {
-    fill: cssVar('weakTextColor'),
-  },
 });
 
 export const numberCatalogListItemStyles = (darkTheme: boolean) =>
@@ -176,7 +161,7 @@ export const numberCatalogListItemStyles = (darkTheme: boolean) =>
       },
       'span:last-child span': {
         mixBlendMode: 'initial',
-        color: cssVar('magicNumberTextColor'),
+        color: cssVar('themeTextSubdued'),
       },
     },
   });

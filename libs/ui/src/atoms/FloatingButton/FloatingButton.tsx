@@ -14,7 +14,7 @@ export const floatingButtonStyles = css({
   cursor: 'pointer',
   transition: 'background-color 0.2s ease-out',
   '&:hover': {
-    backgroundColor: `${cssVar('highlightColor')}`,
+    backgroundColor: `${cssVar('backgroundDefault')}`,
   },
   '> div > svg > path': {
     transition: 'stroke 0.2s ease-out',
@@ -23,7 +23,7 @@ export const floatingButtonStyles = css({
 
 const activeFloatingButtonStyles = css({
   '> div > svg > path': {
-    stroke: `${cssVar('normalTextColor')}`,
+    stroke: `${cssVar('textDefault')}`,
     strokeWidth: '2',
   },
 });

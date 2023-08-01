@@ -5,13 +5,9 @@ import { css } from '@emotion/react';
 import { FC, useContext } from 'react';
 import { Tooltip } from '..';
 import { Warning } from '../../icons';
-import { red100, red500, setCssVar } from '../../primitives';
 import { Anchor } from '../../utils';
 
 const iconWrapperStyles = css({
-  ...setCssVar('iconBackgroundColor', red100.rgb),
-  ...setCssVar('currentTextColor', red500.rgb),
-
   display: 'inline-flex',
   //
   // strange safari bug makes errors not show

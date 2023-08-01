@@ -7,12 +7,12 @@ import { useSelected } from 'slate-react';
 import { Spinner, Tag } from '../../atoms';
 import { Data, Zap } from '../../icons';
 import {
-  cssVar,
   normalOpacity,
   offBlack,
   p13Medium,
-  setCssVar,
   transparency,
+  yellow400,
+  yellow800,
 } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
 
@@ -27,7 +27,7 @@ const tableTitleWrapper = css({
   gap: '9px',
   lineBreak: 'unset',
   width: 'min-content',
-  background: cssVar('liveDataBackgroundColor'),
+  background: yellow400.hex,
   borderRadius: '6px',
   padding: '2px 8px',
   marginTop: '2px',
@@ -49,13 +49,12 @@ const iconWrapperStyles = css({
 
 const editableTableCaptionStyles = css({
   ...p13Medium,
-  color: cssVar('liveDataTextColor'),
+  color: yellow800.hex,
   minWidth: '1rem',
 });
 
 const notSelectedAriaStyles = css({
   '::before': {
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
     content: 'attr(aria-placeholder)',
   },
 });

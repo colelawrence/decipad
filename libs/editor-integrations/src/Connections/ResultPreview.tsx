@@ -170,11 +170,11 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
 
 const buttonLook = {
   borderRadius: '6px',
-  border: `1px solid ${cssVar('borderColor')}`,
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
   cursor: 'pointer',
   ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 };
 
@@ -202,7 +202,7 @@ const resultPreviewContainerStyles = css(
   {
     display: 'flex',
     gap: 8,
-    border: `1px solid ${cssVar('highlightColor')}`,
+    border: `1px solid ${cssVar('backgroundDefault')}`,
     borderRadius: 12,
     padding: 16,
     div: {

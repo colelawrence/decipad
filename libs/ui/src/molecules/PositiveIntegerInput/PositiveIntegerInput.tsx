@@ -12,7 +12,7 @@ import { cssVar, p12Regular } from '../../primitives';
 
 const inputStyles = css(p12Regular, {
   width: '50px',
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   border: 0,
   fontVariantNumeric: 'tabular-nums',
   textAlign: 'center',

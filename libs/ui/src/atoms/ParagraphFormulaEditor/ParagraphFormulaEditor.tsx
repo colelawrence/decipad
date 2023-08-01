@@ -26,7 +26,7 @@ export const ParagraphFormulaEditor = ({
           css={[
             pFormulaEditStyles,
             disabled && {
-              backgroundColor: cssVar('strongerHighlightColor'),
+              backgroundColor: cssVar('borderSubdued'),
               cursor: 'not-allowed',
             },
           ]}
@@ -50,10 +50,10 @@ const pUnitsStyle = css({
   boxSizing: 'border-box',
   maxHeight: '40px',
   height: '40px',
-  color: cssVar('currentTextColor'),
-  background: cssVar('formulaUnitBackground'),
+  color: cssVar('textDefault'),
+  background: cssVar('backgroundMain'),
   paddingRight: 4,
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
@@ -78,8 +78,8 @@ const pFormulaEditStyles = css({
   flexDirection: 'row',
   padding: '6px 12px',
   minHeight: '40px',
-  background: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
+  background: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
   flex: 'none',
   order: 0,

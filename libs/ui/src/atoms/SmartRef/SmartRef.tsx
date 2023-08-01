@@ -69,5 +69,5 @@ const smartRefWrapperStyles = (hasPrevious: boolean, hasNext: boolean) =>
         }
       : {}),
     cursor: 'pointer',
-    color: cssVar('variableHighlightTextColor'),
+    color: cssVar('textDefault'),
   });

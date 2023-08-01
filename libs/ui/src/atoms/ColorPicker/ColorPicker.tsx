@@ -42,7 +42,7 @@ export const ColorPicker = ({
         styles,
         {
           backgroundColor: color.hex,
-          border: `1px solid ${cssVar('backgroundColor')}`,
+          border: `1px solid ${cssVar('backgroundMain')}`,
           boxShadow: `inset 0 0 0 1px ${
             transparency(offBlack, weakOpacity).rgba
           }`,

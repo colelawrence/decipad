@@ -15,7 +15,7 @@ const wrapperStyles = css({
   paddingRight: '6px',
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '6px',
 });
 
@@ -24,7 +24,7 @@ const inputOptionStyles = css(p13Medium, {
   padding: '6px 6px 6px 8px',
   width: '100%',
   height: '32px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',

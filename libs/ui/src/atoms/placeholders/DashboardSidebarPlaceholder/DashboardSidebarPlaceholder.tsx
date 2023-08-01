@@ -16,13 +16,13 @@ const avatarPlaceholderStyles = css({
   borderRadius: '8px',
   marginTop: '8px',
   marginBottom: '8px',
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('backgroundDefault')}`,
 });
 
 const buttonPlaceholderStyles = css({
   height: '35.59px',
   borderRadius: '8px',
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('backgroundDefault')}`,
 });
 
 export const DashboardSidebarPlaceholder: React.FC = () => (

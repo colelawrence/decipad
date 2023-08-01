@@ -4,7 +4,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Calendar, Formula, Number, TableSmall, Text } from '../../icons';
-import { cssVar, grey400, p12Medium, setCssVar } from '../../primitives';
+import { cssVar, p12Medium } from '../../primitives';
 
 const wrapperStyles = (focused: boolean) =>
   css({
@@ -14,11 +14,11 @@ const wrapperStyles = (focused: boolean) =>
     justifyContent: 'space-between',
     padding: '4px',
     ':hover': {
-      backgroundColor: cssVar('tintedBackgroundColor'),
+      backgroundColor: cssVar('backgroundSubdued'),
       borderRadius: '6px',
     },
     ...(focused && {
-      backgroundColor: cssVar('highlightColor'),
+      backgroundColor: cssVar('backgroundDefault'),
       borderRadius: '6px',
     }),
   });
@@ -31,7 +31,7 @@ const styles = css({
   columnGap: '4px',
 });
 
-const iconStyles = css(setCssVar('currentTextColor', grey400.rgb), {
+const iconStyles = css({
   width: '16px',
   height: '16px',
   display: 'grid',
@@ -44,7 +44,7 @@ const textStyles = css({
 });
 
 const identifierStyles = css(p12Medium, {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   position: 'relative',
@@ -83,7 +83,7 @@ const getAutocompleteIconFor = (type: ACItemType) => {
     date: <Calendar />,
     table: <TableSmall />,
     column: <TableSmall />,
-    function: <Formula strokeColor={cssVar('weakerTextColor')} />,
+    function: <Formula strokeColor={cssVar('textDisabled')} />,
   };
   const selected = icons[type] || <Number />;
   return selected;

@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p13Bold, p13Regular, setCssVar } from '../../primitives';
+import { cssVar, p13Bold, p13Regular } from '../../primitives';
 import { soonStyles } from '../../styles/menu';
 
 interface SelectIntegrationProps {
@@ -34,7 +34,6 @@ export const SelectIntegration: FC<SelectIntegrationProps> = ({
             css={[
               p13Bold,
               {
-                ...setCssVar('normalTextColor', cssVar('strongTextColor')),
                 flexBasis: '125px',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -61,7 +60,7 @@ const childrenStyles = css({
   width: '100%',
   height: '42px',
   borderRadius: '8px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   display: 'flex',
   gap: '12px',
   alignItems: 'center',
@@ -80,23 +79,23 @@ const childrenStyles = css({
   },
 
   span: {
-    color: cssVar('normalTextColor'),
+    color: cssVar('textDefault'),
   },
 
   ':hover': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });
 
 const disabledStylez = {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
   span: {
-    color: cssVar('weakerTextColor'),
+    color: cssVar('textDisabled'),
   },
   img: {
     filter: 'grayscale(100%)',
   },
   ':hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 };

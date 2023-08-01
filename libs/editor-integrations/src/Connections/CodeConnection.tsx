@@ -17,8 +17,8 @@ import {
   InputField,
   Spinner,
   TextareaField,
+  componentCssVars,
   cssVar,
-  setCssVar,
 } from '@decipad/ui';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
@@ -37,12 +37,11 @@ const fieldsetStyles = css({
 });
 
 const fetchButtonStyles = css({
-  backgroundColor: cssVar('aiSendButtonStrokeColor'),
+  backgroundColor: componentCssVars('AiSendButtonStrokeColor'),
   whiteSpace: 'nowrap',
   gridGap: 8,
   '&:disabled': {
-    backgroundColor: cssVar('aiInsertButtonBgColor'),
-    ...setCssVar('normalTextColor', cssVar('buttonPrimaryDisabledText')),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 });
 const textAreaStyles = css({

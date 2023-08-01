@@ -7,7 +7,7 @@ export const DrawingPin: FC<{ isOutline?: boolean }> = ({ isOutline }) => (
     {isOutline ? (
       <path
         d="m12.599 7.883.753-2.261 4.9 4.899-2.262.754-3.203 4.71-.188 1.696-6.407-6.406 1.696-.189 4.71-3.203ZM9.207 14.666 4.873 19"
-        stroke={cssVar('currentTextColor')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth={1.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -16,15 +16,15 @@ export const DrawingPin: FC<{ isOutline?: boolean }> = ({ isOutline }) => (
       <>
         <path
           d="m12.599 7.883.753-2.261 4.9 4.899-2.262.754-3.203 4.71-.188 1.696-6.407-6.406 1.696-.189 4.71-3.203Z"
-          fill={cssVar('currentTextColor')}
-          stroke={cssVar('currentTextColor')}
+          fill={cssVar('iconColorHeavy')}
+          stroke={cssVar('iconColorHeavy')}
           strokeWidth={1.5}
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M9.207 14.666 4.873 19"
-          stroke={cssVar('currentTextColor')}
+          stroke={cssVar('iconColorHeavy')}
           strokeWidth={1.5}
           strokeLinecap="round"
           strokeLinejoin="round"

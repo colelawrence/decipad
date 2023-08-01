@@ -1,6 +1,6 @@
 import { FC, ReactNode, Children, createContext, useContext } from 'react';
 import { css } from '@emotion/react';
-import { cssVar, p16Regular, setCssVar } from '../../primitives';
+import { p16Regular } from '../../primitives';
 import { Bullet } from '../../icons';
 
 const Depth = createContext(0);
@@ -30,7 +30,6 @@ const bulletStyles = css({
 
   display: 'grid',
   alignContent: 'center',
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
 
 type UnorderedListProps = {

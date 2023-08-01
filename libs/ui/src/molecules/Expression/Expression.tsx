@@ -8,7 +8,6 @@ import {
   cssVar,
   display,
   p24Medium,
-  setCssVar,
   smallScreenQuery,
 } from '../../primitives';
 
@@ -21,7 +20,6 @@ const baseWrapperStyles = css({
 });
 
 const expressionInputStyles = css({
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   borderRadius: '8px',
   minWidth: 0,
   padding: '0 8px',
@@ -29,12 +27,12 @@ const expressionInputStyles = css({
   minHeight: '40px',
   alignItems: 'center',
   ':hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 });
 
 const focusedExpressionInputStyles = css({
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 const placeholderOpacity: Opacity = 0.4;
@@ -50,7 +48,7 @@ const placeholderStyles = css({
   '::before': {
     ...display,
     ...p24Medium,
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
     pointerEvents: 'none',
     content: 'attr(aria-placeholder)',
     opacity: placeholderOpacity,
@@ -108,7 +106,7 @@ export const Expression = ({
           (type?.kind === 'date' || type?.kind === 'string') && {
             fontWeight: 500,
             fontSize: 24,
-            color: cssVar('strongTextColor'),
+            color: cssVar('textHeavy'),
           },
           placeholderStyles,
           focused && focusedExpressionInputStyles,

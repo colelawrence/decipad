@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { create } from 'zustand';
-import { THEME_PREFERENCE_LOCAL_STORAGE_KEY, noop } from '@decipad/utils';
+import {
+  THEME_PREFERENCE_LOCAL_STORAGE_KEY,
+  noop,
+  themeStore,
+} from '@decipad/utils';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
@@ -31,16 +34,6 @@ const defaultTheme = (): boolean => {
 
   return themePreference === 'dark';
 };
-
-interface ThemeStore {
-  theme: boolean;
-  setTheme: (isDarkTheme: boolean) => void;
-}
-
-export const themeStore = create<ThemeStore>((set) => ({
-  theme: defaultTheme(),
-  setTheme: (isDarkTheme: boolean) => set({ theme: isDarkTheme }),
-}));
 
 export const useThemeFromStore = (): [
   boolean,

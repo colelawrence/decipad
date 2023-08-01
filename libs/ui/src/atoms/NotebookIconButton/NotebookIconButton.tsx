@@ -5,14 +5,11 @@ import {
   grey200,
   normalOpacity,
   OpaqueColor,
-  setCssVar,
   transparency,
-  cssVar,
 } from '../../primitives';
 import { baseSwatches } from '../../utils';
 
 const buttonStyles = css({
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   width: '24px',
   height: '24px',
   borderRadius: '4px',

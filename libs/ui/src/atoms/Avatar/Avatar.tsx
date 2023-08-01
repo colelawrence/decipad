@@ -54,7 +54,7 @@ const initialBackgroundStyles = ({
   return css({
     transition: `fill ${shortAnimationDuration} ease-in-out`,
     fill: variant
-      ? cssVar('backgroundColor')
+      ? cssVar('backgroundMain')
       : greyedOut
       ? grey200.rgb
       : color.rgb,
@@ -68,6 +68,7 @@ const initialTextStyles = css({
   dominantBaseline: 'central',
   textAnchor: 'middle',
   fontSize: '1.2em',
+  color: cssVar('textDefault'),
 });
 
 type AvatarProps = {
@@ -122,7 +123,7 @@ export const Avatar = ({
           css={[
             { width: '100%', borderRadius: roundedSquare ? '8px' : '50%' },
             variant && {
-              border: `1px solid ${cssVar('borderColor')}`,
+              border: `1px solid ${cssVar('borderSubdued')}`,
             },
             cursorColor && {
               borderRadius: '50%',
@@ -148,17 +149,7 @@ export const Avatar = ({
                 hoverSelector,
               })}
             />
-            <text
-              x="50%"
-              y="50%"
-              css={css([
-                p12Medium,
-                initialTextStyles,
-                variant
-                  ? { fill: cssVar('currentTextColor') }
-                  : { fill: cssVar('iconColorDark') },
-              ])}
-            >
+            <text x="50%" y="50%" css={[p12Medium, initialTextStyles]}>
               {gravatarBackdrop === 'blank' && firstLetter}
               {gravatarBackdrop === 'blank' &&
                 useSecondLetter &&

@@ -337,15 +337,15 @@ const intWrapperStyles = css({
   padding: '32px',
   gap: '20px',
 
-  border: `1px solid ${cssVar('highlightColor')}`,
+  border: `1px solid ${cssVar('backgroundDefault')}`,
   borderRadius: '24px',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   [mobileQuery]: { width: smallestMobile.landscape.width },
 });
 
 const titleWrapperStyles = css(p15Medium, {
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
   height: '30px',
 
   width: '100%',
@@ -357,7 +357,7 @@ const titleWrapperStyles = css(p15Medium, {
 const titleStyles = css([
   p16Medium,
   {
-    color: cssVar('strongTextColor'),
+    color: cssVar('textHeavy'),
     lineHeight: '30px',
     flexShrink: 0,
     paddingLeft: '5px',
@@ -397,7 +397,7 @@ const mapChildrenStyles = css({
 
 export const dividerStyles = css({
   width: '100%',
-  border: `1px solid ${cssVar('highlightColor')}`,
+  border: `1px solid ${cssVar('backgroundDefault')}`,
   borderRadius: '4px',
 });
 

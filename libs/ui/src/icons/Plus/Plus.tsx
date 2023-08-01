@@ -7,13 +7,13 @@ export const Plus = (): ReturnType<FC> => {
       <title>Plus</title>
       <path
         d="M10 6.5V14.5"
-        stroke={cssVar('currentTextColor')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth="1.5"
         strokeLinecap="round"
       />
       <path
         d="M6 10.5H14"
-        stroke={cssVar('currentTextColor')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -22,7 +22,7 @@ const styles = (
     ? strokeColor.hex
     : variant
     ? transparency(black, 0.3).rgba
-    : cssVar('backgroundColor');
+    : cssVar('backgroundMain');
   const strokeWidth = variant ? '1.11px' : '2px';
   return css({
     position: 'absolute',

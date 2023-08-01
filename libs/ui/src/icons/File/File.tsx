@@ -5,8 +5,8 @@ export const File = (): ReturnType<React.FC> => (
     <title>File</title>
     <path
       d="M3.33333 0H0V10H8V4.375H3.33333V0Z"
-      fill={cssVar('currentTextColor')}
+      fill={cssVar('iconColorHeavy')}
     />
-    <path d="M4.66667 0V3.125H8L4.66667 0Z" fill={cssVar('currentTextColor')} />
+    <path d="M4.66667 0V3.125H8L4.66667 0Z" fill={cssVar('iconColorHeavy')} />
   </svg>
 );

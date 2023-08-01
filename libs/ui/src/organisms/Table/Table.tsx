@@ -1,23 +1,17 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useCallback, useContext } from 'react';
+import { FC, ReactNode, useCallback } from 'react';
 import { ConnectDropTarget } from 'react-dnd';
 import { useAutoAnimate } from '../../hooks';
-import { cssVar, setCssVar } from '../../primitives';
+import { cssVar } from '../../primitives';
 import {
   innerTablesNoBottomBorderStyles,
   innerTablesNoTopBorderStyles,
 } from '../../styles/table';
-import {
-  AvailableSwatchColor,
-  TableStyleContext,
-  swatchesThemed,
-  tableRowCounter,
-} from '../../utils';
+import { tableRowCounter } from '../../utils';
 
-export const regularBorder = `1px solid ${cssVar('borderTable')}`;
+export const regularBorder = `1px solid ${cssVar('borderSubdued')}`;
 const borderRadius = '8px';
 
 const tableBaseStyles = css({
@@ -193,12 +187,6 @@ export const Table = ({
   const onMouseEnter = useCallback(() => onMouseOver(true), [onMouseOver]);
   const onMouseLeave = useCallback(() => onMouseOver(false), [onMouseOver]);
 
-  const { color } = useContext(TableStyleContext);
-  const [darkTheme] = useThemeFromStore();
-  const baseSwatches = swatchesThemed(darkTheme);
-  const darkBorderColor =
-    baseSwatches[(color || 'Catskill') as AvailableSwatchColor].hex;
-
   return (
     <table
       data-testid="editor-table"
@@ -219,7 +207,6 @@ export const Table = ({
         !head && { borderTop: regularBorder, borderRadius: 8 },
         footer && footerStyles,
         b === 'inner' && nestedStyles,
-        darkTheme && { ...setCssVar('borderTable', darkBorderColor) },
       ]}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

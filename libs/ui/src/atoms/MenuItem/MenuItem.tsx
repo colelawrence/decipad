@@ -4,7 +4,7 @@ import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Badge } from '@decipad/ui';
 import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import { menu } from '../../styles';
-import { cssVar, setCssVar } from '../../primitives';
+import { componentCssVars } from '../../primitives';
 
 const iconWrapperStyles = css({
   display: 'grid',
@@ -18,16 +18,15 @@ const childrenWrapperStyles = css({
 });
 
 const newBadgeStyles = css({
-  background: cssVar('aiBubbleBackgroundColor'),
-  color: cssVar('aiTextColor'),
+  background: componentCssVars('AiBubbleBackgroundColor'),
+  color: componentCssVars('AiTextColor'),
   marginLeft: 8,
 });
 
 const newCss = css({
-  ...setCssVar('currentTextColor', cssVar('aiTextColor')), // set stroke color
-  color: cssVar('aiTextColor'),
+  color: componentCssVars('AiTextColor'),
   svg: {
-    fill: cssVar('aiTextColor'),
+    fill: componentCssVars('AiTextColor'),
   },
 });
 

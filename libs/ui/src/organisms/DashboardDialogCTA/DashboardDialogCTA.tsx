@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Button } from '../../atoms';
 
-import { cssVar, h2, p14Regular, setCssVar } from '../../primitives';
+import { h2, p14Regular } from '../../primitives';
 
 const dashboardDialogCTAStyles = css({
   display: 'flex',
@@ -42,7 +42,6 @@ export const DashboardDialogCTA = ({
       {secondaryText && (
         <p
           css={css(p14Regular, {
-            ...setCssVar('currentTextColor', cssVar('weakTextColor')),
             gridRow: 'text',
           })}
         >

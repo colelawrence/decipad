@@ -18,7 +18,7 @@ export const sidebarWrapperStyles = css(
     right: 0,
     alignItems: 'center',
     padding: 14,
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: cssVar('backgroundMain'),
   },
   deciOverflowYStyles
 );
@@ -78,7 +78,7 @@ export const sidebarSearchBoxStyles = css({
   gap: 10,
   borderRadius: 6,
   border: regularBorder,
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   input: {
     borderRadius: 0,
     border: 0,

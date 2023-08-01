@@ -5,13 +5,13 @@ export const Close = (): ReturnType<React.FC> => (
     <title>Close</title>
     <path
       d="M10.8284 5.17157L5.17151 10.8284"
-      stroke={cssVar('weakerTextColor')}
+      stroke={cssVar('textDisabled')}
       strokeWidth="1.2"
       strokeLinecap="round"
     />
     <path
       d="M5.17163 5.17157L10.8285 10.8284"
-      stroke={cssVar('weakerTextColor')}
+      stroke={cssVar('textDisabled')}
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"

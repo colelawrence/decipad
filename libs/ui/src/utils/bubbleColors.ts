@@ -24,8 +24,8 @@ export const bubbleColors = ({
   variant = 'normal',
 }: bubbleColorsProps) => {
   const baseSwatches = bubblesThemed(isDarkTheme, variant);
-  const fallbackBgColor = cssVar('strongHighlightColor');
-  const fallbackColor = cssVar('strongTextColor');
+  const fallbackBgColor = cssVar('backgroundHeavy');
+  const fallbackColor = cssVar('textHeavy');
   const bubbleBgColor =
     color && color !== 'Catskill'
       ? baseSwatches[color].backgroundColor

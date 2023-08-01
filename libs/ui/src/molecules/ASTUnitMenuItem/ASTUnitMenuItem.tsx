@@ -4,15 +4,15 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useRef, useState } from 'react';
 import { MenuItem } from '../../atoms';
-import { cssVar, p12Medium, p13Medium, setCssVar } from '../../primitives';
+import { cssVar, p12Medium, p13Medium } from '../../primitives';
 import { menu } from '../../styles';
 
 const menuItemStyles = css({
-  background: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
+  background: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
   ':hover, :focus-within': {
-    borderColor: `${cssVar('strongerHighlightColor')}`,
+    borderColor: `${cssVar('borderSubdued')}`,
   },
 
   display: 'flex',
@@ -21,11 +21,8 @@ const menuItemStyles = css({
 });
 
 const inputStyles = css(p13Medium, {
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  ':focus-within': {
-    ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-  },
-  background: cssVar('highlightColor'),
+  ':focus-within': {},
+  background: cssVar('backgroundDefault'),
   borderRadius: '6px',
   padding: '6px 12px',
 
@@ -36,7 +33,7 @@ const inputStyles = css(p13Medium, {
 
 const buttonStyles = css(p12Medium, {
   ':hover, :focus': {
-    background: cssVar('strongHighlightColor'),
+    background: cssVar('backgroundHeavy'),
   },
 
   borderRadius: '6px',

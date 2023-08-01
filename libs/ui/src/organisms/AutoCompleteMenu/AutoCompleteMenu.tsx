@@ -24,7 +24,7 @@ import {
 } from '../../atoms';
 import { ArrowDiagonalTopRight } from '../../icons/ArrowDiagonalTopRight/ArrowDiagonalTopRight';
 import { AutoCompleteMenuGroup } from '../../molecules';
-import { cssVar, mediumShadow, p12Medium, setCssVar } from '../../primitives';
+import { cssVar, mediumShadow, p12Medium } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { groupIdentifiers } from './groupIdentifiers';
 
@@ -349,9 +349,9 @@ const hotKeyStyle = css({
   boxSizing: 'border-box',
   borderRadius: '6px',
   padding: '0 4px',
-  border: `1px ${cssVar('strongerHighlightColor')} solid`,
-  backgroundColor: cssVar('backgroundColor'),
-  color: cssVar('weakTextColor'),
+  border: `1px ${cssVar('borderSubdued')} solid`,
+  backgroundColor: cssVar('backgroundMain'),
+  color: cssVar('textSubdued'),
 });
 
 const exploreDocsLinkIconStyles = css({
@@ -369,25 +369,21 @@ const exploreDocsLinkIconStyles = css({
   },
 });
 
-const footerStyles = css(
-  p12Medium,
-  {
-    padding: '2px 0px 4px 6px',
-    width: '100%',
-    bottom: '0px',
-    height: '26px',
-    lineHeight: '24px',
-    background: cssVar('highlightColor'),
-    boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
-    margin: '0px 0px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '4px',
-    zIndex: '4',
-  },
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
+const footerStyles = css(p12Medium, {
+  padding: '2px 0px 4px 6px',
+  width: '100%',
+  bottom: '0px',
+  height: '26px',
+  lineHeight: '24px',
+  background: cssVar('backgroundDefault'),
+  boxShadow: `0px -1px 0px ${cssVar('borderSubdued')}`,
+  margin: '0px 0px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: '4px',
+  zIndex: '4',
+});
 
 const resultStyles = css({
   display: 'block',
@@ -406,8 +402,8 @@ const styles = (top: boolean) =>
     left: 0,
     userSelect: 'none',
 
-    backgroundColor: cssVar('backgroundColor'),
-    border: `1px solid ${cssVar('borderColor')}`,
+    backgroundColor: cssVar('backgroundMain'),
+    border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: '10px',
     boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
     position: 'absolute',

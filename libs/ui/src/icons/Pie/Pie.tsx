@@ -8,13 +8,13 @@ export const Pie = (): ReturnType<FC> => (
       cx={12}
       cy={12}
       r="7.25"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
     />
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

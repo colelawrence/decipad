@@ -6,7 +6,7 @@ export const NestIndicator = (): ReturnType<FC> => (
     <title>Nest Indicator</title>
     <path
       d="M1 2V10C1 12.2091 2.79086 14 5 14H13"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.3px"

@@ -12,7 +12,7 @@ import { useMergedRef } from '../../hooks';
 import { DragHandle as DragHandleIcon } from '../../icons';
 import { DataViewColumnMenu } from '../../molecules';
 import { DataViewColumnMenuProps } from '../../molecules/DataViewColumnMenu/DataViewColumnMenu';
-import { cssVar } from '../../primitives';
+import { componentCssVars, cssVar } from '../../primitives';
 
 const dragHandleStyles = css({
   width: '8px',
@@ -64,12 +64,12 @@ const dataViewColumnHeaderStyles = css({
     top: 0,
   },
   borderBottom: '1px solid',
-  borderBottomColor: cssVar('evenStrongerHighlightColor'),
+  borderBottomColor: cssVar('borderDefault'),
 });
 
 const dataViewColumnHeaderBorderLeftStyles = css({
   '&::before': {
-    background: cssVar('droplineColor'),
+    background: componentCssVars('DroplineColor'),
     translate: '-8px',
   },
 });
@@ -85,12 +85,12 @@ const dataViewColumnHeaderAlignRightStyles = css({
 });
 
 const dataViewColumnHeaderGlobalStyles = {
-  color: cssVar('weakTextColor'),
-  backgroundColor: cssVar('highlightColor'),
+  color: cssVar('textSubdued'),
+  backgroundColor: cssVar('backgroundDefault'),
 };
 
 const dataViewColumnHeaderRotateStyles = css({
-  borderColor: cssVar('strongerHighlightColor'),
+  borderColor: cssVar('borderSubdued'),
 });
 
 export const DataViewColumnHeader = forwardRef<
@@ -123,7 +123,7 @@ export const DataViewColumnHeader = forwardRef<
 
   const borderRightStyles = css({
     '&::after': {
-      background: cssVar('droplineColor'),
+      background: componentCssVars('DroplineColor'),
       translate: getBorderRightTranslation(),
     },
   });

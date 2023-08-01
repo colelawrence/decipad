@@ -8,7 +8,7 @@ import {
 } from 'libs/ui/src/primitives';
 
 export const wrapperStyles = css({
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, weakOpacity).rgba}`,
   borderRadius: '6px',
   border: `1px solid ${offWhite.rgb}`,

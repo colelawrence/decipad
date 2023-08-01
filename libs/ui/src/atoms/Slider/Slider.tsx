@@ -29,7 +29,7 @@ const sliderStyles = css({
 });
 
 const trackStyles = css({
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   position: 'relative',
   flexGrow: 1,
   borderRadius: '9999px',
@@ -49,13 +49,13 @@ const rangeStyles = css({
 const thumbStyles = css({
   all: 'unset',
 
-  border: `${thumbBorderWidth}px solid ${cssVar('borderColor')}`,
+  border: `${thumbBorderWidth}px solid ${cssVar('borderSubdued')}`,
   borderRadius: '8px',
 
   height: `10px`,
   width: `25px`,
 
-  backgroundColor: cssVar('thumbColor'),
+  backgroundColor: cssVar('backgroundMain'),
 
   cursor: 'pointer',
   display: 'block',

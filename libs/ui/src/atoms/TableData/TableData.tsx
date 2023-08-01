@@ -16,7 +16,7 @@ import {
 } from 'react';
 import { useMergedRef } from '../../hooks';
 import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
-import { cssVar, p12Medium, setCssVar } from '../../primitives';
+import { componentCssVars, p12Medium } from '../../primitives';
 import { table } from '../../styles';
 import {
   innerTablesNoBottomBorderStyles,
@@ -38,7 +38,6 @@ const tdPlaceholderStyles = css({
   },
 
   '&:first-of-type::before': {
-    ...setCssVar('normalTextColor', cssVar('weakTextColor')),
     ...p12Medium,
     backgroundColor: 'transparent',
 
@@ -61,20 +60,18 @@ const editableStyles = css({
   paddingRight: '12px',
 });
 
-const tdDisabledStyles = css({
-  ...setCssVar('normalTextColor', cssVar('weakerTextColor')),
-});
+const tdDisabledStyles = css({});
 
 const alignRightStyles = css({
   textAlign: 'right',
 });
 
 const selectedStyles = css({
-  backgroundColor: cssVar('tableSelectionBackgroundColor'),
+  backgroundColor: componentCssVars('TableSelectionBackgroundColor'),
 });
 
 const focusedStyles = css({
-  boxShadow: `0 0 0 2px ${cssVar('tableFocusColor')} inset`,
+  boxShadow: `0 0 0 2px ${componentCssVars('TableFocusColor')} inset`,
 });
 
 const draggableStyles = css({
@@ -125,14 +122,11 @@ export const TableData = forwardRef(
       as: Component = 'div',
       isEditable = false,
       isUserContent = false,
-      isLiveResult = false,
       attributes,
       showPlaceholder = true,
       draggable,
-      grabbing,
       selected,
       focused,
-      collapsed,
       rowSpan,
       disabled = false,
       type,

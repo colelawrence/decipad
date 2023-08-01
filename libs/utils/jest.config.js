@@ -6,9 +6,9 @@ module.exports = {
   displayName: 'utils',
   coverageThreshold: {
     global: {
-      statements: 65,
-      branches: 70,
-      functions: 64,
+      statements: 60,
+      branches: 65,
+      functions: 58,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

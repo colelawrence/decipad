@@ -2,11 +2,11 @@ import { css } from '@emotion/react';
 import { ChangeEvent, FC, PropsWithChildren, useCallback, useRef } from 'react';
 import { justStopPropagation } from '@decipad/react-utils';
 import { Label, MenuItem } from '../../atoms';
-import { cssVar, p13Medium, setCssVar } from '../../primitives';
+import { cssVar, p13Medium } from '../../primitives';
 import { menu } from '../../styles';
 
 const menuItemStyles = css({
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
 
   display: 'flex',
 
@@ -14,11 +14,8 @@ const menuItemStyles = css({
 });
 
 const inputStyles = css(p13Medium, {
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  ':focus-within': {
-    ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-  },
-  background: cssVar('highlightColor'),
+  ':focus-within': {},
+  background: cssVar('backgroundDefault'),
   borderRadius: '6px',
 
   // Make input adjust alongside button

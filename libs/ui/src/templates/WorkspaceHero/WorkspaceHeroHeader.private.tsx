@@ -20,7 +20,7 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
       </SearchBarRestyle>
 
       <Buttons>
-        <Button href={membersHref}>
+        <Button href={membersHref} type="secondary">
           <TextWithIcon>
             <Users />
             <span>Invite team</span>
@@ -64,7 +64,7 @@ const SearchBarRestyle = styled.div({
     display: 'flex',
   },
   input: {
-    backgroundColor: cssVar('tintedBackgroundColor'),
+    backgroundColor: cssVar('backgroundSubdued'),
   },
   'span:has(> svg)': {
     display: 'none',

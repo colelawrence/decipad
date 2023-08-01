@@ -74,7 +74,7 @@ const secretRowStyles = css(rowStyles, {
   margin: '0 -8px',
 
   ':hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 
   svg: { opacity: 0.4 },

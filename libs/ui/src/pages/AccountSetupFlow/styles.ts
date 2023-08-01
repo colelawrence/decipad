@@ -9,5 +9,5 @@ export const backgroundStyles = css({
 
   height: '100%',
   width: '100%',
-  background: `repeat url(${gridTile}), ${cssVar('highlightColor')}`,
+  background: `repeat url(${gridTile}), ${cssVar('backgroundDefault')}`,
 });

@@ -66,8 +66,8 @@ const excalidrawContainerStyles = css({
   },
   '.excalidraw': {
     '--color-primary': blue300.rgb,
-    '--icon-fill-color': cssVar('normalTextColor'),
-    '--button-gray-1': cssVar('highlightColor'),
+    '--icon-fill-color': cssVar('textDefault'),
+    '--button-gray-1': cssVar('backgroundDefault'),
     '--button-gray-2': blue200.rgb,
     '--theme-filter': 'none',
   },

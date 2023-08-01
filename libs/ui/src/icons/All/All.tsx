@@ -6,7 +6,7 @@ export const All = (): ReturnType<FC> => (
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    stroke={cssVar('currentTextColor')}
+    stroke={cssVar('iconColorHeavy')}
   >
     <title>All</title>
     <path

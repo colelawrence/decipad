@@ -25,7 +25,7 @@ const driverForClient: Record<string, string> = {
 
 const filterConfig = (config: Knex.Config): Knex.Config => {
   const { connection = {} } = config;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
   const { password = undefined, ...restOfConnection } =
     typeof connection === 'object' ? (connection as Knex.ConnectionConfig) : {};
   return {

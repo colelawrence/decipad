@@ -3,7 +3,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { nanoid } from 'nanoid';
 import { FC, ReactNode, useState } from 'react';
-import { cssVar, p13Medium, p14Regular, setCssVar } from '../../primitives';
+import { cssVar, p13Medium, p14Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 
 const containerStyles = css({
@@ -26,20 +26,18 @@ const containerStyles = css({
 const inputStyles = css({
   padding: '12px',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   gridArea: 'input',
 
   ...p14Regular,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  '&::placeholder': {
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  },
+
+  '&::placeholder': {},
 });
 
 const inputStylesSmall = css(inputStyles, {
   height: '32px',
   padding: '10px 12px',
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
 
   ...p13Medium,
 });
@@ -47,11 +45,11 @@ const inputStylesSmall = css(inputStyles, {
 const labelStyles = css([{ gridArea: 'label' }, inputLabel]);
 const errorStyles = css([
   inputLabel,
-  { gridArea: 'error', color: cssVar('errorColor') },
+  { gridArea: 'error', color: cssVar('stateDangerBackground') },
 ]);
 
 const disabledStyles = css({
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  backgroundColor: cssVar('backgroundSubdued'),
   cursor: 'not-allowed',
 });
 
@@ -130,7 +128,7 @@ export const InputField = ({
         size === 'full' && fullWidth,
         type !== 'search'
           ? {
-              border: `1px solid ${cssVar('borderColor')}`,
+              border: `1px solid ${cssVar('borderSubdued')}`,
               borderRadius: '6px',
             }
           : { width: '100%', padding: 0 },

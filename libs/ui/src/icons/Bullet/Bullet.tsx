@@ -1,9 +1,9 @@
 import { cssVar } from '../../primitives';
 
 const shapes = [
-  <circle cx="3" cy="3.5" r="3" fill={cssVar('currentTextColor')} />,
-  <circle cx="3" cy="3.5" r="2.5" stroke={cssVar('currentTextColor')} />,
-  <rect y="0.5" width="6" height="6" fill={cssVar('currentTextColor')} />,
+  <circle cx="3" cy="3.5" r="3" fill={cssVar('iconColorHeavy')} />,
+  <circle cx="3" cy="3.5" r="2.5" stroke={cssVar('iconColorHeavy')} />,
+  <rect y="0.5" width="6" height="6" fill={cssVar('iconColorHeavy')} />,
 ];
 
 interface BulletProps {

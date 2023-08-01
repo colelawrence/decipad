@@ -7,7 +7,7 @@ import { FC, useState } from 'react';
 import { ColorPicker, Divider, NotebookIconButton } from '../../atoms';
 import * as icons from '../../icons';
 import { Close } from '../../icons';
-import { cssVar, grey500, p13Medium, setCssVar } from '../../primitives';
+import { cssVar, p13Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { deciOverflowXStyles } from '../../styles/scrollbars';
 import {
@@ -20,12 +20,12 @@ import {
 
 const contentWrapper = css({
   marginTop: '6px',
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   padding: '12px',
   borderRadius: '8px',
   maxWidth: '272px',
-  boxShadow: `0px 1px 2px ${cssVar('highlightColor')}, 0px 2px 12px ${cssVar(
-    'highlightColor'
+  boxShadow: `0px 1px 2px ${cssVar('backgroundDefault')}, 0px 2px 12px ${cssVar(
+    'backgroundDefault'
   )}`,
 });
 
@@ -35,9 +35,7 @@ const contentHeaderWrapper = css({
   alignItems: 'center',
 });
 
-const contentHeaderText = css(p13Medium, {
-  ...setCssVar('currentTextColor', grey500.rgb),
-});
+const contentHeaderText = css(p13Medium, {});
 
 const iconsWrapper = css(
   {

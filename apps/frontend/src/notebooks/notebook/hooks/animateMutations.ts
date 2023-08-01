@@ -1,4 +1,4 @@
-import { cssVar } from '@decipad/ui';
+import { componentCssVars } from '@decipad/ui';
 
 const isHtmlElement = (node: Node): node is HTMLElement => {
   return node instanceof HTMLElement && !(node instanceof Text);
@@ -19,8 +19,8 @@ const animate = (node: Node) => {
     const beforeStyle = node.getAttribute('style');
     node.setAttribute(
       'style',
-      `background-color: ${cssVar(
-        'mutationAnimationColor'
+      `background-color: ${componentCssVars(
+        'MutationAnimationColor'
       )}; transition: background-color 0.5s ease-in-out`
     );
     setTimeout(() => {

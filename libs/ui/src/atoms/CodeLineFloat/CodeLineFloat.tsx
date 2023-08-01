@@ -65,8 +65,8 @@ const wrapperStyle = (offsetTop: number, translateX: number) =>
       transition: 'opacity 60ms ease-in, transform 60ms ease-in',
 
       borderRadius: '12px',
-      border: `1px solid ${cssVar('borderHighlightColor')}`,
-      backgroundColor: cssVar('highlightColor'),
+      border: `1px solid ${cssVar('borderDefault')}`,
+      backgroundColor: cssVar('backgroundDefault'),
 
       boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
     },

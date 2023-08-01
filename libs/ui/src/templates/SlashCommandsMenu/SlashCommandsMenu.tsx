@@ -28,18 +28,11 @@ import {
   Value,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
-import { cssVar, setCssVar } from '../../primitives';
 
 type Theme = 'Ocean' | 'Mint' | 'Orange' | 'Wine' | 'Daffodil';
 
 const paintIcon = (icon: ReactNode, theme?: Theme): ReactNode => {
-  const groupIcon = theme
-    ? css({
-        ...setCssVar('slashColorLight', cssVar(`slashColor${theme}Light`)),
-        ...setCssVar('slashColorNormal', cssVar(`slashColor${theme}Normal`)),
-        ...setCssVar('slashColorHeavy', cssVar(`slashColor${theme}Heavy`)),
-      })
-    : {};
+  const groupIcon = theme ? css({}) : {};
   return <span css={groupIcon}>{icon}</span>;
 };
 

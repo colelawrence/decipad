@@ -18,10 +18,10 @@ const buttonStyles = css({
   alignItems: 'center',
   padding: '4px',
   borderRadius: '6px',
-  border: `1px solid ${cssVar('borderColor')}`,
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
   ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });
 

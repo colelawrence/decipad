@@ -2,11 +2,11 @@ import {
   DataTable,
   DataTables,
   EnhancedDataTable,
+  TableRecordBase,
 } from '@decipad/backendtypes';
 import { awsRetry, retry } from '@decipad/retry';
 import { once } from '@decipad/utils';
 import { tables } from './tables';
-import { TableRecordBase } from '../../backendtypes/src/index';
 
 const globalTablesWithoutRetry = once(() => tables());
 
@@ -33,7 +33,7 @@ export const tablesWithRetry = async (): Promise<DataTables> => {
 
       const sourceTable = target[property];
       if (!sourceTable) {
-        throw new Error('Could not find table named ' + property);
+        throw new Error(`Could not find table named ${property}`);
       }
       const table: typeof sourceTable = {
         ...sourceTable,

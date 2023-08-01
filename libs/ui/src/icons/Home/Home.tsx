@@ -5,14 +5,14 @@ export const Home = (): ReturnType<FC> => (
   <svg fill="none" viewBox="0 0 24 24">
     <title>Home</title>
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
       d="M6.75024 19.2502H17.2502C18.3548 19.2502 19.2502 18.3548 19.2502 17.2502V9.75025L12.0002 4.75024L4.75024 9.75025V17.2502C4.75024 18.3548 5.64568 19.2502 6.75024 19.2502Z"
     />
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

@@ -4,17 +4,17 @@ import { ReactNode, useState } from 'react';
 import { cssVar } from '../../primitives';
 
 const spoilerStyles = css({
-  backgroundColor: cssVar('spoilerColor'),
+  backgroundColor: cssVar('textHeavy'),
   color: 'transparent',
   // why you ask? because kelly put an emoji and i wanted to hide an emoji
-  textShadow: `0 0 0 ${cssVar('spoilerColor')}`,
+  textShadow: `0 0 0 ${cssVar('textHeavy')}`,
   borderRadius: '2px',
   cursor: 'pointer',
 });
 
 const milkIsSpoiledStyles = css({
-  backgroundColor: cssVar('strongHighlightColor'),
-  color: cssVar('normalTextColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
+  color: cssVar('textDefault'),
   cursor: 'text',
 });
 

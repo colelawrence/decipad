@@ -93,7 +93,7 @@ const themeButtonStyles = css({
 });
 
 const labelStyles = css(p13Regular, {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
 
   width: '100%',
   marginLeft: '8px',
@@ -104,7 +104,7 @@ const themePreviewStyles = css({
   width: '100%',
   borderRadius: '12px',
 
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   backgroundColor: grey100.rgb,
 
   cursor: 'pointer',

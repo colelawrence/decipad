@@ -20,7 +20,7 @@ export const SidebarIcon: FC<SidebarIconProps> = ({ icon, description }) => {
 
 const sidebarIconDescriptionStyles = css(p12Medium, {
   textTransform: 'capitalize',
-  color: cssVar('strongTextColor'),
+  color: cssVar('textHeavy'),
   textAlign: 'center',
   userSelect: 'none',
 });

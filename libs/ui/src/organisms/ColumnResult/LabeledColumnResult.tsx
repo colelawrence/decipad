@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { unnestTableRows, DimensionExplanation } from '@decipad/computer';
 import { all as allElements } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
-import { cssVar, setCssVar } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { TableData } from '../../atoms';
 import { TableRow } from '../../molecules';
 import { CodeResult, Table, PaginationControl } from '..';
@@ -14,8 +14,7 @@ import { cellLeftPaddingStyles } from '../../styles/table';
 import { useSimplePagination } from '../../utils/usePagination';
 
 const rowLabelStyles = css(cellLeftPaddingStyles, {
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  color: cssVar('currentTextColor'),
+  color: cssVar('textDefault'),
   display: 'inline-block',
   lineHeight: 1.2,
 });
@@ -26,7 +25,7 @@ const paginationControlWrapperTdStyles = css({
 });
 
 const footerRowStyles = css({
-  backgroundColor: cssVar('tableFooterBackgroundColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 const MAX_CELLS_PER_PAGE = 10;

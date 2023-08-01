@@ -23,10 +23,10 @@ const keyboardKeyStyles = (variant: boolean) => {
     justifyContent: 'center',
     borderRadius: '6px',
     border: `1px solid ${
-      variant ? cssVar('weakTextColor') : cssVar('borderHighlightColor')
+      variant ? cssVar('textSubdued') : cssVar('borderDefault')
     }`,
-    background: variant ? cssVar('normalTextColor') : cssVar('backgroundColor'),
-    color: variant ? cssVar('weakerTextColor') : cssVar('normalTextColor'),
+    background: variant ? cssVar('textDefault') : cssVar('backgroundMain'),
+    color: variant ? cssVar('textDisabled') : cssVar('textDefault'),
     margin: '0 2px',
   });
 };

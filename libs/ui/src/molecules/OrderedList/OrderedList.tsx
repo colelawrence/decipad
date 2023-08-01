@@ -1,7 +1,7 @@
 import { FC, ReactNode, Children } from 'react';
 import { css } from '@emotion/react';
 import { listItemCounter } from '../../utils';
-import { cssVar, p16Regular, setCssVar } from '../../primitives';
+import { p16Regular } from '../../primitives';
 
 // Note on counters: This could just be counter-reset on the ol, counter-increment on the li::before, but Safari can't handle pseudo elements
 
@@ -23,7 +23,7 @@ const itemStyles = css({
 
   '::before': {
     ...p16Regular,
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
     textAlign: 'center',
 
     content: `counter(${listItemCounter}) "."`,

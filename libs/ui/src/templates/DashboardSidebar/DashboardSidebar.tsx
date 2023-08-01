@@ -38,9 +38,6 @@ type DashboardSidebarProps = ComponentProps<typeof WorkspaceOptions> &
 
 export const DashboardSidebar = ({
   onPointerEnter,
-  name,
-  email,
-  onLogout,
   ...props
 }: DashboardSidebarProps): ReturnType<FC> => {
   const permission = useWorkspacePermission(props.activeWorkspace.id);
@@ -123,7 +120,7 @@ const dashboardSidebarStyles = () =>
     display: 'grid',
     gridTemplateRows: '[switcher] auto [navigation] 1fr',
     rowGap: '20px',
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: cssVar('backgroundMain'),
     [smallScreenQuery]: {
       padding: `${dashboard.topPadding} 24px 0px`,
 
@@ -142,7 +139,7 @@ const dashboardPartHideOnMobile = () =>
 
 const dashboardMainSidebarStyles = css({
   display: 'grid',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 
   gridTemplateColumns: '[workspaceselector] auto [action] 1fr',
   [smallScreenQuery]: {

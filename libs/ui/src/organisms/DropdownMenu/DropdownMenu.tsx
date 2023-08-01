@@ -7,7 +7,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
-import { cssVar, mediumShadow, p13Medium, setCssVar } from '../../primitives';
+import { cssVar, mediumShadow, p13Medium } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { DropdownMenuGroup } from '../DropdownMenuGroup/DropdownMenuGroup';
 
@@ -23,8 +23,8 @@ const styles = css({
   userSelect: 'none',
 
   marginTop: '8px',
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '12px',
   boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
   width: '100%',
@@ -44,22 +44,18 @@ const mainStyles = css(
   deciOverflowYStyles
 );
 
-const footerStyles = css(
-  p13Medium,
-  {
-    padding: '6px 0px 8px 16px',
-    width: '100%',
-    bottom: '0px',
-    height: '32px',
-    lineHeight: '24px',
-    background: cssVar('highlightColor'),
-    boxShadow: `0px -1px 0px ${cssVar('borderColor')}`,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-  },
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
+const footerStyles = css(p13Medium, {
+  padding: '6px 0px 8px 16px',
+  width: '100%',
+  bottom: '0px',
+  height: '32px',
+  lineHeight: '24px',
+  background: cssVar('backgroundDefault'),
+  boxShadow: `0px -1px 0px ${cssVar('borderSubdued')}`,
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+});
 
 const hotKeyStyle = css({
   display: 'inline-flex',
@@ -69,9 +65,9 @@ const hotKeyStyle = css({
   boxSizing: 'border-box',
   borderRadius: '6px',
   padding: '0 6px',
-  border: `1px ${cssVar('strongerHighlightColor')} solid`,
-  backgroundColor: cssVar('backgroundColor'),
-  color: cssVar('weakTextColor'),
+  border: `1px ${cssVar('borderSubdued')} solid`,
+  backgroundColor: cssVar('backgroundMain'),
+  color: cssVar('textSubdued'),
 });
 
 export type DropdownMenuProps = EditItemsOptions & {

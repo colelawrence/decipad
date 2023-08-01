@@ -1,8 +1,8 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SerializedStyles, css } from '@emotion/react';
 import { HTMLPropsAs } from '@udecode/plate';
-import { cssVar } from '../../primitives';
 import { Anchor } from '../../utils';
+import { componentCssVars } from '../../primitives';
 
 type LinkColor = 'default' | 'danger';
 
@@ -17,18 +17,18 @@ const underlineStyles = css({
 
 const styleColors: Record<LinkColor, SerializedStyles> = {
   default: css({
-    color: cssVar('linkNormalColor'),
+    color: componentCssVars('LinkDefaultColor'),
     ':hover,:visited:hover': {
-      color: cssVar('linkNormalHoverColor'),
+      color: componentCssVars('LinkDefaultHoverColor'),
     },
-    ':visited': { color: cssVar('linkNormalHoverColor') },
+    ':visited': { color: componentCssVars('LinkDefaultHoverColor') },
   }),
   danger: css({
-    color: cssVar('linkDangerColor'),
+    color: componentCssVars('LinkDangerColor'),
     ':hover,:visited:hover': {
-      color: cssVar('linkDangerHoverColor'),
+      color: componentCssVars('LinkDangerHoverColor'),
     },
-    ':visited': { color: cssVar('linkDangerColor') },
+    ':visited': { color: componentCssVars('LinkDangerHoverColor') },
   }),
 };
 

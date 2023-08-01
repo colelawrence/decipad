@@ -5,34 +5,34 @@ export const Globe = (): ReturnType<React.FC> => (
     <title>Globe</title>
     <path
       d="M6 2L3 4.5L4 7H5L6 6L8 5.5L9 5L10 3.5V2.5L6 2Z"
-      fill={cssVar('strongHighlightColor')}
+      fill={cssVar('iconBackground')}
     />
     <path
       d="M11 9L12.5 10L13.5 10.5L13 11.5L12 12.5L11 13.5L8.5 14V13L8 12L7 11L7.5 9.5L8 8.5H9.5L11 9Z"
-      fill={cssVar('strongHighlightColor')}
+      fill={cssVar('iconBackground')}
     />
     <path
       d="M8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M13.3874 10.65L9.99368 8.56249C9.93526 8.52493 9.86895 8.5014 9.79993 8.49374L8.36868 8.29999C8.26189 8.28466 8.15304 8.30518 8.05917 8.35834C7.9653 8.41149 7.89171 8.49428 7.84993 8.59374L6.99368 10.5125C6.95342 10.6017 6.94026 10.7008 6.95581 10.7975C6.97137 10.8942 7.01496 10.9841 7.08118 11.0562L8.25618 12.325C8.30929 12.3834 8.34821 12.4532 8.36989 12.5291C8.39157 12.605 8.39544 12.6849 8.38118 12.7625L8.13743 14"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M4.06261 3.47501L3.50011 4.80001C3.45111 4.91764 3.44888 5.04953 3.49386 5.16876L4.21261 7.08126C4.2407 7.16097 4.28878 7.23214 4.35225 7.28795C4.41572 7.34376 4.49246 7.38234 4.57511 7.40001L5.91261 7.68751C5.98684 7.70252 6.05656 7.73463 6.11623 7.78128C6.1759 7.82792 6.22388 7.88784 6.25636 7.95626L6.49386 8.45001C6.53606 8.53349 6.6003 8.60383 6.67962 8.65341C6.75895 8.70299 6.85033 8.72991 6.94386 8.73126H7.78761"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M9.53135 2.19376L10.1126 3.24376C10.1663 3.34247 10.1856 3.45623 10.1675 3.56713C10.1494 3.67802 10.0949 3.77974 10.0126 3.85626L8.33135 5.37501C8.3032 5.40188 8.27169 5.42499 8.2376 5.44376L7.46885 5.86876C7.39557 5.90764 7.31428 5.92903 7.23135 5.93126H5.89385C5.79532 5.93176 5.69907 5.961 5.61692 6.0154C5.53477 6.0698 5.47027 6.14699 5.43135 6.23751L4.9126 7.46876"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
     />

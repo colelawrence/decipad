@@ -4,12 +4,7 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules';
-import {
-  black,
-  p14Regular,
-  setCssVar,
-  shortAnimationDuration,
-} from '../../primitives';
+import { p14Regular, shortAnimationDuration } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { AvailableSwatchColor, swatchesThemed, UserIconKey } from '../../utils';
 
@@ -34,7 +29,6 @@ const iconWrapperStyles = css({
 });
 
 const iconStyles = css(p14Regular, {
-  ...setCssVar('currentTextColor', black.rgb),
   width: '24px',
   height: '24px',
   mixBlendMode: 'luminosity',

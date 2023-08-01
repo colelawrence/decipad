@@ -13,7 +13,7 @@ const paginationControlWrapperStyles = css({
   flexGrow: 0,
   display: 'flex',
   flexDirection: 'row',
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
   overflow: 'hidden',
   height: '25px',
@@ -27,8 +27,8 @@ const iconWrapperStyles = css({
 
 const inputWrapperStyles = css({
   flexGrow: 0,
-  borderLeft: `1px solid ${cssVar('strongerHighlightColor')}`,
-  borderRight: `1px solid ${cssVar('strongerHighlightColor')}`,
+  borderLeft: `1px solid ${cssVar('borderSubdued')}`,
+  borderRight: `1px solid ${cssVar('borderSubdued')}`,
 });
 
 const leftButtonWrapperStyles = css({

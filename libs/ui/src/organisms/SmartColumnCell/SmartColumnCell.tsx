@@ -3,13 +3,7 @@ import { Result } from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { DragEvent, FC, ReactNode, RefObject, useState } from 'react';
-import {
-  antiwiggle,
-  cssVar,
-  p12Regular,
-  setCssVar,
-  wiggle,
-} from '../../primitives';
+import { antiwiggle, cssVar, p12Regular, wiggle } from '../../primitives';
 import { table } from '../../styles';
 import { resultBubbleStyles } from '../../styles/results';
 import { CodeResult } from '../CodeResult/CodeResult';
@@ -42,12 +36,10 @@ const inlineResultStyles = css(resultBubbleStyles, {
   whiteSpace: 'nowrap',
 
   padding: '2px 8px',
-
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
 
 const smartColumnCellStyles = css(p12Regular, {
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
   display: 'inline-flex',
   padding: '0 6px 0 10px',
   alignItems: 'center',

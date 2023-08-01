@@ -5,7 +5,7 @@ export const Minus = (): ReturnType<React.FC> => (
     <title>Minus</title>
     <path
       d="M4 8H12"
-      stroke={cssVar('normalTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.4"
       strokeLinecap="round"
       strokeLinejoin="round"

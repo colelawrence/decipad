@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { cssVar, p16Regular, setCssVar } from '../../primitives';
+import { p16Regular } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
 const placeholderStyles = css({
@@ -15,7 +15,6 @@ const placeholderStyles = css({
 
   label: {
     ...p16Regular,
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
     pointerEvents: 'none',
     userSelect: 'none',

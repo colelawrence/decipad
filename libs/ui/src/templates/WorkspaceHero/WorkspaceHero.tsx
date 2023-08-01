@@ -54,8 +54,8 @@ const MembersCounter: React.FC<{ number: number }> = ({ number }) =>
 
 const Container = styled.div({
   padding: '14px 16px 64px 42px',
-  backgroundColor: cssVar('tintedBackgroundColor'),
-  borderBottom: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
+  borderBottom: `1px solid ${cssVar('borderSubdued')}`,
 });
 
 const DeciLogo = styled.div({
@@ -66,11 +66,11 @@ const DeciLogo = styled.div({
 });
 
 const Title = styled.h2(p32Medium, {
-  color: cssVar('spoilerColor'),
+  color: cssVar('textHeavy'),
   lineHeight: 1.1,
 });
 
 const StatusLine = styled.div(p14Medium, {
   marginTop: '8px',
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
 });

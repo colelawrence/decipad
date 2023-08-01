@@ -22,8 +22,8 @@ const wrapperStyle = css([
     borderRadius: '10px',
     padding: '6px 12px',
 
-    border: `1px solid ${cssVar('borderColor')}`,
-    backgroundColor: cssVar('highlightColor'),
+    border: `1px solid ${cssVar('borderSubdued')}`,
+    backgroundColor: cssVar('backgroundDefault'),
 
     display: 'flex',
     alignItems: 'center',

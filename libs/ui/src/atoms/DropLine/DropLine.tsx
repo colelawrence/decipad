@@ -1,10 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { cssVar } from '../../primitives';
 import { dropLineWidth } from '../../styles/drop-line';
+import { componentCssVars } from '../../primitives';
 
 const dropLineCommonStyles = css({
-  backgroundColor: cssVar('droplineColor'),
+  backgroundColor: componentCssVars('DroplineColor'),
   zIndex: 1,
 });
 
@@ -12,7 +12,7 @@ const dropLineBlockStyles = css({
   height: `${dropLineWidth}px`,
   border: 'none',
   borderRadius: '4px',
-  backgroundColor: cssVar('droplineColor'),
+  backgroundColor: componentCssVars('DroplineColor'),
 });
 
 const dropLineTableStyles = css({

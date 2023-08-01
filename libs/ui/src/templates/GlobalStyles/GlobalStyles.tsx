@@ -8,6 +8,8 @@ import {
   cssVar,
   darkTheme,
   GlobalTextStyles,
+  GlobalComponentStyles,
+  lightTheme,
   mediumShadow,
   p12Medium,
   p13Medium,
@@ -23,19 +25,25 @@ const DarkThemeStyles = (): ReturnType<React.FC> => {
         ':root': darkTheme,
       }}
     />
-  ) : null;
+  ) : (
+    <Global
+      styles={{
+        ':root': lightTheme,
+      }}
+    />
+  );
 };
 
 const dateCellStyles = {
-  backgroundColor: cssVar('cellDateSelected'),
+  backgroundColor: cssVar('stateOkBackground'),
   color: 'black',
 };
 
 const calendarHeaderStyles = {
   ...p13Medium,
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
   paddingBottom: '16px',
-  borderBottom: `solid 1px ${cssVar('highlightColor')}`,
+  borderBottom: `solid 1px ${cssVar('backgroundDefault')}`,
   margin: 'auto 10px',
 };
 
@@ -50,7 +58,7 @@ const DatePickerStyles: FC = () => {
         'div.react-datepicker': {
           padding: '8px 0',
           borderRadius: '8px',
-          border: `1px solid ${cssVar('borderColor')}`,
+          border: `1px solid ${cssVar('borderSubdued')}`,
         },
         'button.react-datepicker__navigation': {
           width: '4px',
@@ -58,7 +66,7 @@ const DatePickerStyles: FC = () => {
           border: 'none',
           padding: '22px 2px',
           margin: '0 10px',
-          color: cssVar('normalTextColor'),
+          color: cssVar('textDefault'),
         },
         'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle':
           {
@@ -70,19 +78,19 @@ const DatePickerStyles: FC = () => {
           },
         'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle::before':
           {
-            borderBottomColor: cssVar('strongerHighlightColor'),
+            borderBottomColor: cssVar('borderSubdued'),
           },
         'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle::before':
           {
-            borderTopColor: cssVar('strongerHighlightColor'),
+            borderTopColor: cssVar('borderSubdued'),
           },
         'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle::after':
           {
-            borderBottomColor: cssVar('backgroundColor'),
+            borderBottomColor: cssVar('backgroundMain'),
           },
         'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle::after':
           {
-            borderTopColor: cssVar('backgroundColor'),
+            borderTopColor: cssVar('backgroundMain'),
           },
         '.react-datepicker__year-text.react-datepicker__year-text--keyboard-selected':
           dateCellStyles,
@@ -106,7 +114,7 @@ const DatePickerStyles: FC = () => {
           datePickerHeaderStyles,
         '.react-datepicker .react-datepicker__header': {
           borderBottom: '1px solid',
-          borderBottomColor: cssVar('highlightColor'),
+          borderBottomColor: cssVar('backgroundDefault'),
         },
         'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__current-month':
           calendarHeaderStyles,
@@ -119,7 +127,7 @@ const DatePickerStyles: FC = () => {
         'div.react-datepicker__time-container.react-datepicker__time-container--with-today-button > div.react-datepicker__time':
           {
             borderRadius: '8px',
-            border: `1px solid ${cssVar('borderColor')}`,
+            border: `1px solid ${cssVar('borderSubdued')}`,
           },
         'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__day-names':
           {
@@ -127,24 +135,24 @@ const DatePickerStyles: FC = () => {
           },
         'div.react-datepicker .react-datepicker__header': { border: 'none' },
         '.react-datepicker__day--outside-month': {
-          color: `${cssVar('strongHighlightColor')} !important`,
+          color: `${cssVar('backgroundHeavy')} !important`,
           pointerEvents: 'none',
         },
         '.react-datepicker .react-datepicker__time-container': {
           border: `none`,
           right: '-95px',
-          backgroundColor: cssVar('backgroundColor'),
+          backgroundColor: cssVar('backgroundMain'),
           ...p12Medium,
         },
         '.react-datepicker .react-datepicker__day-name , .react-datepicker .react-datepicker__time-name':
           {
             ...p14Medium,
-            color: cssVar('weakerTextColor'),
+            color: cssVar('textDisabled'),
           },
         'div.react-datepicker__today-button': {
           border: 'none',
           ...p13Medium,
-          backgroundColor: cssVar('backgroundColor'),
+          backgroundColor: cssVar('backgroundMain'),
         },
       }}
     />
@@ -176,17 +184,17 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
 
           position: 'relative',
 
-          backgroundColor: cssVar('backgroundColor'),
+          backgroundColor: cssVar('backgroundMain'),
         },
         'button, [type="button"], [type="reset"], [type="submit"]': {
           WebkitAppearance: 'none',
         },
-        '::selection': {
-          backgroundColor: cssVar('selectionColor'),
+        '::-moz-selection, ::selection': {
+          backgroundColor: cssVar('backgroundHeavy'),
         },
 
         '.slate-selection-area': {
-          background: cssVar('selectionColor'),
+          background: cssVar('backgroundHeavy'),
           borderRadius: 8,
           opacity: strongOpacity,
         },
@@ -213,14 +221,14 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
             display: 'none',
           },
         '.excalidraw main': {
-          backgroundColor: cssVar('backgroundColor'),
+          backgroundColor: cssVar('backgroundMain'),
           width: '100%',
           height: '100%',
         },
         '.excalidraw div .ToolIcon__icon': {
           width: '32px',
           height: '32px',
-          backgroundColor: cssVar('highlightColor'),
+          backgroundColor: cssVar('backgroundDefault'),
           borderRadius: 6,
         },
         'div.App-bottom-bar > div.Island, div.App-bottom-bar > div.Island > footer.App-toolbar':
@@ -230,11 +238,11 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
             backgroundColor: 'transparent',
           },
         '.excalidraw button.ToolIcon': {
-          border: `1px solid ${cssVar('borderColor')}`,
+          border: `1px solid ${cssVar('borderSubdued')}`,
         },
         '.excalidraw .Island.App-toolbar': {
           padding: '4px',
-          border: `1px solid ${cssVar('borderColor')}`,
+          border: `1px solid ${cssVar('borderSubdued')}`,
           boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
           borderRadius: '8px',
         },
@@ -247,6 +255,7 @@ export const GlobalStyles: React.FC<React.PropsWithChildren<unknown>> = ({
     <GlobalTextStyles />
     <DarkThemeStyles />
     <DatePickerStyles />
+    <GlobalComponentStyles />
     {children}
   </>
 );

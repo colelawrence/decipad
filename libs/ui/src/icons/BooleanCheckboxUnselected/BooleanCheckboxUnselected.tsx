@@ -9,11 +9,11 @@ export const BooleanCheckboxUnselected = (): ReturnType<React.FC> => (
       width="15"
       height="15"
       rx="3.5"
-      stroke={cssVar('weakerTextColor')}
+      stroke={cssVar('textDisabled')}
     />
     <path
       d="M4.5 7.75L7 10.25L11.5 5.75"
-      stroke={cssVar('iconBackgroundColor')}
+      stroke={cssVar('iconBackground')}
       strokeWidth="1.5"
       strokeLinejoin="round"
     />

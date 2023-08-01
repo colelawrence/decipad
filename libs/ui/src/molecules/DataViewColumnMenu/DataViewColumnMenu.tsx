@@ -154,6 +154,6 @@ export const DataViewColumnMenu: FC<DataViewColumnMenuProps> = ({
 const hrStyles = css({
   textOverflow: 'ellipsis',
   hr: {
-    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+    boxShadow: `0 0 0 0.5px ${cssVar('borderSubdued')}`,
   },
 });

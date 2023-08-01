@@ -1,7 +1,3 @@
-import {
-  useEditorStylesContext,
-  useThemeFromStore,
-} from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ReactNode, useMemo } from 'react';
 import { Tooltip } from '..';
@@ -17,8 +13,6 @@ import {
 } from '../../icons';
 import { cssVar, p10Medium } from '../../primitives';
 import { codeBlock } from '../../styles';
-import { AvailableSwatchColor } from '../../utils';
-import { bubbleColors } from '../../utils/bubbleColors';
 import { CodeError } from '../CodeError/CodeError';
 
 type Meta = {
@@ -99,30 +93,11 @@ export const LiveCode = ({
     </Tooltip>
   );
 
-  const { color } = useEditorStylesContext();
-  const [isDarkTheme] = useThemeFromStore();
-  const { backgroundColor, filters, hover, textColor } = bubbleColors({
-    color: color as AvailableSwatchColor,
-    isDarkTheme,
-  });
-  const liveLabelStyles = css(labelStyles, {
-    backgroundColor: backgroundColor.hex,
-    color: textColor.hex,
-    svg: {
-      ...filters,
-    },
-  });
-  const liveIconAllStyles = css(liveIconStyles, {
-    ':hover': {
-      ...hover,
-    },
-  });
-
   return (
     <div css={liveCodeWrapperStyles} data-testid="live-code">
       <div css={liveInputStyles}>{children}</div>
-      <div css={liveLabelStyles} contentEditable={false}>
-        <span css={liveIconAllStyles}>
+      <div css={labelStyles} contentEditable={false}>
+        <span css={liveIconStyles}>
           {error ? <CodeError message={error.message} /> : nonErrorTooltip}
         </span>
         <span css={liveSpanStyles}>{text || 'LIVE CODE'}</span>
@@ -134,7 +109,7 @@ export const LiveCode = ({
 const liveCodeWrapperStyles = css(codeBlock.structuredVariableStyles, {
   display: 'flex',
   gap: 2,
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   padding: '2px 2px 2px 6px',
   width: 'fit-content',
   marginBottom: 8,
@@ -154,7 +129,7 @@ const liveInputStyles = css({
   display: 'flex',
   padding: '0px 4px',
   alignItems: 'center',
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
 });
 const labelStyles = css(p10Medium, {
   display: 'flex',
@@ -163,9 +138,12 @@ const labelStyles = css(p10Medium, {
   padding: 4,
   cursor: 'default',
   gap: 4,
+  backgroundColor: cssVar('themeBackgroundDefault'),
+  color: cssVar('themeTextDefault'),
 });
 
 const liveIconStyles = css({
+  mixBlendMode: 'luminosity',
   svg: {
     height: 16,
     width: 16,

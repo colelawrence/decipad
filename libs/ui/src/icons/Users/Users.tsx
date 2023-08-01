@@ -3,14 +3,14 @@ import { cssVar } from '../../primitives';
 export const Users: React.FC = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
       d="M5.78168 19.25H13.2183C13.7828 19.25 14.227 18.7817 14.1145 18.2285C13.804 16.7012 12.7897 14 9.5 14C6.21031 14 5.19605 16.7012 4.88549 18.2285C4.773 18.7817 5.21718 19.25 5.78168 19.25Z"
     ></path>
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
@@ -20,13 +20,13 @@ export const Users: React.FC = () => (
       cx="9.5"
       cy="7.5"
       r="2.75"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
     ></circle>
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

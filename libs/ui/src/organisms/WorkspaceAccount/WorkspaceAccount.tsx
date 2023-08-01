@@ -49,7 +49,7 @@ const accountButtonStyles = css({
   borderRadius: '8px',
 
   ':hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 });
 
@@ -58,7 +58,7 @@ const settingsButtonStyles = css({
   width: '28px',
   borderRadius: '8px',
   padding: '6px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 
   cursor: 'pointer',
   opacity: 0.5,

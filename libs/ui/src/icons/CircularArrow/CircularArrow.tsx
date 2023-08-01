@@ -4,8 +4,8 @@ import { cssVar } from '../../primitives';
 export interface CircularArrowProps {}
 
 export const CircularArrow: FC<CircularArrowProps> = () => {
-  const strokeTop = cssVar('weakTextColor');
-  const strokeBottom = cssVar('normalTextColor');
+  const strokeTop = cssVar('iconColorDefault');
+  const strokeBottom = cssVar('iconColorHeavy');
 
   return (
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

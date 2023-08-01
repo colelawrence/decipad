@@ -9,7 +9,7 @@ import {
 import { PlotElement } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import DeciNumber from '@decipad/number';
-import { cssVarHex } from '@decipad/ui';
+import { componentCssVarHex, componentCssVars, cssVarHex } from '@decipad/ui';
 import { ResultMaterializedTable } from 'libs/language/src/interpreter/interpreter-types';
 import {
   AllowedPlotValue,
@@ -55,7 +55,7 @@ const markTypeToFill = (
     case 'bar':
     case 'area':
     case 'point':
-      return cssVarHex('chartThemeMonochromeBlue5');
+      return componentCssVars('ChartBlueColor');
     case 'circle':
     case 'square':
       return 'white';
@@ -240,15 +240,15 @@ export function specFromType(
   }
   if (encoding.y && encoding.y.axis) {
     encoding.y.axis.labelAngle = 0;
-    encoding.y.axis.tickColor = cssVarHex('strongHighlightColor');
-    encoding.y.axis.labelColor = cssVarHex('weakerTextColor');
+    encoding.y.axis.tickColor = cssVarHex('textDefault');
+    encoding.y.axis.labelColor = cssVarHex('textSubdued');
     encoding.y.axis.labelFontWeight = 700;
-    encoding.y.axis.gridColor = cssVarHex('highlightColor');
+    encoding.y.axis.gridColor = cssVarHex('backgroundDefault');
   }
   if (encoding.x && encoding.x.axis) {
-    encoding.x.axis.domainColor = cssVarHex('strongHighlightColor');
-    encoding.x.axis.tickColor = cssVarHex('strongHighlightColor');
-    encoding.x.axis.labelColor = cssVarHex('weakerTextColor');
+    encoding.x.axis.domainColor = cssVarHex('textDefault');
+    encoding.x.axis.tickColor = cssVarHex('textSubdued');
+    encoding.x.axis.labelColor = cssVarHex('backgroundDefault');
     encoding.x.axis.labelAngle = 0;
     encoding.x.axis.labelFontWeight = 700;
     encoding.x.axis.grid = false;
@@ -280,7 +280,7 @@ export function specFromType(
       mark: {
         stroke:
           displayProps.markType !== 'arc' && !encoding.color
-            ? cssVarHex('chartThemeMonochromeBlue5')
+            ? componentCssVarHex('ChartBlueColor')
             : undefined,
         fill: markTypeToFill(displayProps.markType),
         strokeWidth: 3,

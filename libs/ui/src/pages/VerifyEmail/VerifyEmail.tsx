@@ -2,14 +2,12 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Button } from '../../atoms';
 import { AuthContent, SignUpConditionsContent } from '../../molecules';
-import { cssVar, setCssVar } from '../../primitives';
 import { LoginBox } from '../../organisms';
 
 const buttonWrapperStyles = css({
   width: '100%',
   marginTop: '12px',
   textDecoration: 'none',
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });
 
 export const VerifyEmail = ({ email }: { email: string }): ReturnType<FC> => {

@@ -6,7 +6,13 @@ import { workspaces } from '@decipad/routing';
 import { MenuList } from '../../molecules';
 import { ArrowDiagonalTopRight, Caret } from '../../icons';
 import { editorLayout } from '../../styles';
-import { cssVar, p12Bold, p12Medium, p13Medium } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Bold,
+  p12Medium,
+  p13Medium,
+} from '../../primitives';
 import { Divider, MenuItem } from '../../atoms';
 import { Anchor } from '../../utils';
 
@@ -130,7 +136,7 @@ const hrStyles = css({
   transform: 'translateX(0px)',
   width: '100%',
   hr: {
-    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+    boxShadow: `0 0 0 0.5px ${cssVar('borderSubdued')}`,
   },
 });
 
@@ -141,7 +147,7 @@ const iconStyles = css({
 
 const secretsWarning = css(p12Medium, {
   maxWidth: '132px',
-  backgroundColor: cssVar('mutationAnimationColor'),
+  backgroundColor: componentCssVars('SecretsWarningBackground'),
   borderRadius: '6px',
   padding: '6px',
   span: {

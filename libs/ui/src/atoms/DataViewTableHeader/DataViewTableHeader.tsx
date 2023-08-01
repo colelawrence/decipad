@@ -25,12 +25,12 @@ const dataViewTableHeaderAlignRightStyles = css({
 });
 
 const dataViewTableHeaderGlobalStyles = css({
-  color: cssVar('weakTextColor'),
-  backgroundColor: cssVar('highlightColor'),
+  color: cssVar('textSubdued'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 const dataViewTableHeaderRotatedStyles = css({
-  borderRight: `1px solid ${cssVar('borderColor')}`,
+  borderRight: `1px solid ${cssVar('borderSubdued')}`,
 });
 
 export const DataViewTableHeader: FC<DataViewTableHeaderProps> = ({

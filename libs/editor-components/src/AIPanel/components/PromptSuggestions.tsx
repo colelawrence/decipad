@@ -17,12 +17,12 @@ type PromptSuggestionsProps = {
 const buttonCss = css({
   display: 'flex',
   gridGap: 5.5,
-  background: cssVar('highlightColor'),
+  background: cssVar('backgroundDefault'),
   padding: '6px 12px 6px 9px',
   borderRadius: 6,
   fontSize: 12,
   '&:hover': {
-    background: cssVar('strongHighlightColor'),
+    background: cssVar('backgroundHeavy'),
   },
   svg: {
     width: 13,

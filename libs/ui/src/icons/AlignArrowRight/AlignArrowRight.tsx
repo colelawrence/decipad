@@ -5,21 +5,21 @@ export const AlignArrowRight = () => (
     <title>Align Arrow Right</title>
     <path
       d="M3.16699 3.1665V12.8332"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M5.83301 8H12.833"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M10.5 5.8335L12.8333 8.00016L10.5 10.1668"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"

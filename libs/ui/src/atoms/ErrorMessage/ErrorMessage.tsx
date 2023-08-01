@@ -1,19 +1,16 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Warning } from '../../icons/Warning/Warning';
-import { cssVar, p16Medium, setCssVar } from '../../primitives';
+import { p16Medium } from '../../primitives';
 import { CodeError } from '../CodeError/CodeError';
 
 const errorStyles = css(
   p16Medium,
-  setCssVar('currentTextColor', cssVar('errorColor')),
+
   { display: 'flex', alignItems: 'center', gap: 4 }
 );
 
 const iconWrapperStyles = css({
-  ...setCssVar('iconBackgroundColor', cssVar('errorColorLight')),
-  ...setCssVar('currentTextColor', cssVar('errorColor')),
-
   display: 'inline-flex',
   //
   // strange safari bug makes errors not show

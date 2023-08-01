@@ -8,14 +8,14 @@ export const UpArrow: FC = () => (
       strokeLinejoin="round"
       strokeWidth="1.5"
       d="M17.25 10.25L12 4.75L6.75 10.25"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
     />
     <path
       d="M12 19.25V5.75"
       strokeLinejoin="round"
       strokeWidth="1.5"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
     />
   </svg>

@@ -31,6 +31,7 @@ import {
   p13Medium,
   smallScreenQuery,
   tinyPhone,
+  componentCssVars,
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { PermissionType } from '../../types';
@@ -71,12 +72,14 @@ const hideForSmallScreenStyles = css({
 });
 
 const linksStyles = css({
+  backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryDefaultText'),
   display: 'flex',
   gap: '12px',
   height: '32px',
-  backgroundColor: cssVar('strongerHighlightColor'),
   ':hover': {
-    filter: 'brightness(95%)',
+    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
+    color: componentCssVars('ButtonTertiaryHoverText'),
   },
   borderRadius: 6,
   justifyContent: 'center',
@@ -97,7 +100,7 @@ const VerticalDivider = () => (
       {
         width: '1px',
         height: '100%',
-        backgroundColor: cssVar('strongerHighlightColor'),
+        backgroundColor: cssVar('borderSubdued'),
       },
       hideForSmallScreenStyles,
     ]}
@@ -129,13 +132,11 @@ export const NotebookTopbar = ({
   workspace,
   notebook,
   onDuplicateNotebook = noop,
-  onRevertChanges = noop,
   usersWithAccess,
   usersFromTeam,
   permission,
   isSharedNotebook,
   workspaceAccess,
-  hasLocalChanges: hasLocalChanges$,
   toggleSidebar,
   sidebarOpen,
 
@@ -271,6 +272,7 @@ export const NotebookTopbar = ({
                       gridTemplateColumns: '1fr auto',
                       gap: '8px',
                       alignItems: 'center',
+                      color: cssVar('textHeavy'),
                     }}
                   >
                     <span css={iconStyles}>
@@ -300,7 +302,7 @@ export const NotebookTopbar = ({
           isWriter && !isServerSideRendering() ? null : (
             <div
               css={css(p13Medium, {
-                color: cssVar('weakTextColor'),
+                color: cssVar('textSubdued'),
                 display: 'flex',
               })}
             >
@@ -336,7 +338,7 @@ export const NotebookTopbar = ({
         ) : (
           <p
             css={css(p13Medium, {
-              color: cssVar('weakTextColor'),
+              color: cssVar('textSubdued'),
               [tinyPhone]: {
                 display: 'none',
               },

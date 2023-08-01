@@ -44,7 +44,7 @@ const highlightStyles = (isReference: boolean, readOnly: boolean) =>
       },
     },
     !isReference && {
-      color: cssVar('normalTextColor'),
+      color: cssVar('textDefault'),
     },
     !isReference &&
       readOnly && {

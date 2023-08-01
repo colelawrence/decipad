@@ -77,9 +77,7 @@ To unsubscribe, you should do the following:
 subscription.unsubscribe(); // observable won't be called again after this
 ```
 
-
 ### Notebooks
-
 
 #### Editing a notebooks's contents
 

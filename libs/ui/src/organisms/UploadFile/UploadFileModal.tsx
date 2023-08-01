@@ -184,10 +184,10 @@ const iconStyles = css({
 });
 
 const inputStyles = css({
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
   borderRadius: '6px',
   padding: '6px 12px',
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
 
   width: '100%',
 });
@@ -204,7 +204,7 @@ const importFileActionStyles = css({
 const importFileWrapperStyles = css({
   width: '100%',
 
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '6px',
 
   display: 'flex',
@@ -229,7 +229,7 @@ const titleStyles = css(p15Medium, {
 });
 
 const titleWrapperStyles = css({
-  color: cssVar('strongTextColor'),
+  color: cssVar('textHeavy'),
   height: '30px',
   width: '100%',
   display: 'flex',

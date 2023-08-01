@@ -51,14 +51,16 @@ const workspaceNavContainerStyles = css({
   gap: '2px',
 });
 
-const itemTextStyles = css({ padding: '8px 0' });
+const itemTextStyles = css({
+  padding: '8px 0',
+});
 const hrStyles = css({
   padding: '12px 0',
   textOverflow: 'ellipsis',
   transform: 'translateX(-15px)',
   width: 'calc(100% + 30px)',
   hr: {
-    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+    boxShadow: `0 0 0 0.5px ${cssVar('borderSubdued')}`,
   },
 });
 export interface Section {
@@ -216,7 +218,10 @@ export const WorkspaceNavigation = ({
           isActive={isHomePage}
           icon={<Home />}
         >
-          <span css={itemTextStyles} data-testid="my-notebooks-button">
+          <span
+            css={[itemTextStyles, isHomePage && { color: cssVar('textTitle') }]}
+            data-testid="my-notebooks-button"
+          >
             My Notebooks
           </span>
         </NavigationItem>
@@ -327,10 +332,10 @@ export const WorkspaceNavigation = ({
                     wrapperStyles={css({
                       'div[aria-label="lefty"]': { paddingLeft: 16 },
                       'button div': {
-                        color: cssVar('weakerTextColor'),
+                        color: cssVar('textDisabled'),
                       },
                       'button div span svg path': {
-                        stroke: cssVar('weakerTextColor'),
+                        stroke: cssVar('textDisabled'),
                       },
                     })}
                     iconStyles={css({ width: 12, height: 12 })}
@@ -385,7 +390,14 @@ export const WorkspaceNavigation = ({
           href={activeWorkspaceRoute.archived({}).$}
           isActive={isArchivePage}
         >
-          <span css={itemTextStyles}>Archived</span>
+          <span
+            css={[
+              itemTextStyles,
+              isArchivePage && { color: cssVar('textTitle') },
+            ]}
+          >
+            Archived
+          </span>
         </NavigationItem>
       </NavigationList>
 
@@ -400,7 +412,14 @@ export const WorkspaceNavigation = ({
           isActive={isSharedPage}
           icon={<Users />}
         >
-          <span css={itemTextStyles}>Shared with me</span>
+          <span
+            css={[
+              itemTextStyles,
+              isSharedPage && { color: cssVar('textTitle') },
+            ]}
+          >
+            Shared with me
+          </span>
         </NavigationItem>
       </NavigationList>
 

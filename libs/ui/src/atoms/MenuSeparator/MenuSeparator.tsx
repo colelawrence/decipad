@@ -4,7 +4,7 @@ import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
 import { cssVar } from '../../primitives';
 
 const styles = css({
-  backgroundColor: cssVar('strongerHighlightColor'),
+  backgroundColor: cssVar('borderSubdued'),
   height: 1,
   margin: '6px 6px',
 });

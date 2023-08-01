@@ -242,7 +242,7 @@ const noSearchWarningStyles = css(p13Medium, {
   padding: 16,
   display: 'flex',
   whiteSpace: 'nowrap',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: 8,
   justifyContent: 'center',
   alignItems: 'center',

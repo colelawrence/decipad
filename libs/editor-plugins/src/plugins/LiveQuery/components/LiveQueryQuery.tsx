@@ -9,9 +9,9 @@ import { css } from '@emotion/react';
 import { LiveQueryAIPanel } from '@decipad/editor-components';
 import { useContext } from 'react';
 import { insertText, findNodePath } from '@udecode/plate';
+import { useComputer } from '@decipad/react-contexts';
 import { AIPanelContext } from './LiveQuery';
 import { useLiveConnectionUrl } from '../hooks/useLiveConnectionUrl';
-import { useComputer } from '@decipad/react-contexts';
 
 const hideElement = css({
   display: 'none',

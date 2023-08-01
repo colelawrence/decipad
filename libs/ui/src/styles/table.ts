@@ -1,6 +1,6 @@
 import { SerializedType } from '@decipad/computer';
 import { css, CSSObject } from '@emotion/react';
-import { cssVar, p14Medium, setCssVar } from '../primitives';
+import { componentCssVars, cssVar, p14Medium } from '../primitives';
 import { isTabularType } from '../utils';
 
 export const tableControlWidth = 20;
@@ -33,12 +33,10 @@ export const importTableDragHandleStyles = css({
   gridArea: 'handle',
   cursor: 'pointer',
   borderRadius: '6px 0 0px 6px',
-  backgroundColor: cssVar('tableLiveMakeHeaderButton'),
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  ...setCssVar('slashColorLight', 'transparent'),
+  backgroundColor: componentCssVars('TableFocusColor'),
+
   ':hover': {
-    ...setCssVar('slashColorLight', 'transparent'),
-    backgroundColor: cssVar('tableLiveMakeHeaderButtonHover'),
+    backgroundColor: componentCssVars('TableFocusColor'),
   },
 });
 
@@ -48,10 +46,10 @@ export const normalDragHandleStyles = css({
   width: '18px',
   height: '18px',
   borderRadius: '6px',
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   padding: '5px',
   ':hover': {
-    background: cssVar('highlightColor'),
+    background: cssVar('backgroundDefault'),
   },
 });
 
@@ -67,9 +65,9 @@ export const tdBaseStyles = css(p14Medium, {
   position: 'relative',
   alignItems: 'center',
 
-  caretColor: cssVar('tableFocusColor'),
+  caretColor: componentCssVars('TableFocusColor'),
 
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
 
   minHeight: tdMinHeight,
   minWidth: tdMinWidth + 50,

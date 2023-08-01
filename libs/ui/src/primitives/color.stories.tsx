@@ -112,6 +112,7 @@ const colorNames: Record<ColorId, string> = {
   dark500: 'Dark 500',
   dark600: 'Dark 600',
   dark700: 'Dark 700',
+  dark800: 'Dark 800',
 
   normalOpacity: 'Normal Opacity',
   weakOpacity: 'Weak Opacity',
@@ -119,6 +120,8 @@ const colorNames: Record<ColorId, string> = {
   boldOpacity: 'Bold Opacity',
   smallShadow: 'SmallShadow',
   mediumShadow: 'MediumShadow',
+  blackWhiteBlack: 'BlackWhiteBlack',
+  fullTransparent: 'Transparent',
 };
 export default {
   title: 'Primitives / Color',

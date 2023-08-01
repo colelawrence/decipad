@@ -7,11 +7,11 @@ export const Clock = (): ReturnType<React.FC> => (
       cx="12"
       cy="12"
       r="7.25"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
     />
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       d="M12 8V12L14 14"
     />

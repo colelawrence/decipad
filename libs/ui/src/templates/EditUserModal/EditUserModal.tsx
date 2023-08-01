@@ -7,7 +7,7 @@ import {
 } from '@decipad/graphql-client';
 import { useCallback } from 'react';
 import { ClosableModal } from '../../organisms';
-import { cssVar, p13Regular } from '../../primitives';
+import { componentCssVars, p13Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 import { Button } from '../../atoms';
 import { ColorThemeSwitch } from '../../molecules';
@@ -78,7 +78,7 @@ export const EditUserModal: React.FC = () => {
             Please upload and manage your avatar at{' '}
             <a
               css={{
-                color: cssVar('droplineColor'),
+                color: componentCssVars('DroplineColor'),
                 textDecoration: 'underline',
               }}
               href="https://gravatar.com"

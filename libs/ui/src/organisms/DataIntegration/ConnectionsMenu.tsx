@@ -49,7 +49,7 @@ export const ConnectionsMenu: FC<ConnectionMenuProps> = ({
         onChangeOpen={setOpen}
         trigger={
           <span css={categoryAndCaretStyles}>
-            <span css={p13Medium}>
+            <span css={titleStyles}>
               {/* Without text the icon has no line height, and so floats
                             upwards, hence the non-breaking space */}
               {'\uFEFF'}
@@ -116,7 +116,7 @@ const hrStyles = css({
   transform: 'translateX(0px)',
   width: '100%',
   hr: {
-    boxShadow: `0 0 0 0.5px ${cssVar('borderColor')}`,
+    boxShadow: `0 0 0 0.5px ${cssVar('borderSubdued')}`,
   },
 });
 
@@ -124,3 +124,5 @@ const iconStyles = css({
   width: 18,
   display: 'grid',
 });
+
+const titleStyles = css(p13Medium, { color: cssVar('textTitle') });

@@ -6,7 +6,7 @@ const styles = css({
   display: 'flex',
   minHeight: '8px',
 
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '4px',
 });
 const lessRoundStyles = css({

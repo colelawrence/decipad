@@ -115,7 +115,7 @@ const addButtonContentStyles = css({
 });
 
 const tableHeadStyles = css(p13Medium, {
-  color: cssVar('weakerTextColor'),
+  color: cssVar('textDisabled'),
 });
 
 const addSecretButtonStyles = css({

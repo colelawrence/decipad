@@ -1,12 +1,13 @@
 import { SerializedStyles, css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p12Medium, setCssVar } from '../../primitives';
+import { componentCssVars, p12Medium } from '../../primitives';
 
 const defaultStyles = css(
   p12Medium,
-  setCssVar('currentTextColor', cssVar('iconColorDark')),
+
   {
-    backgroundColor: cssVar('buttonBrandBackground'),
+    color: componentCssVars('ButtonPrimaryDefaultText'),
+    backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
     padding: '4px 8px',
     borderRadius: '6px',
   }

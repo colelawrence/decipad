@@ -16,6 +16,7 @@ import {
   p13Medium,
   p14Medium,
   red500,
+  componentCssVars,
 } from '../../primitives';
 import { PermissionType } from '../../types';
 
@@ -177,15 +178,15 @@ const WorkspaceMemberOptions: React.FC<{ onRevoke(): void }> = ({
 
 const pricingWrapper = css({
   ...p12Regular,
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   padding: '12px 16px',
   marginBottom: '8px',
   borderRadius: '8px',
-  color: cssVar('strongTextColor'),
+  color: cssVar('textHeavy'),
 });
 
 const pricingLink = css({
-  color: cssVar('linkLighterColor'),
+  color: componentCssVars('LinkLighterColor'),
 });
 
 const inputLabelStyles = css({
@@ -223,7 +224,7 @@ const membersTableStyles = css({
 
 const pendingInviteStyles = css(p12Medium, {
   borderRadius: '6px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   padding: '4px 8px',
   display: 'inline-block',
   whiteSpace: 'nowrap',
@@ -236,7 +237,7 @@ const threeDotsButtonStyles = css(p12Medium, {
   display: 'inline-block',
   marginLeft: '8px',
   ':hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 });
 
@@ -289,7 +290,7 @@ const invitationButtonContentStyles = css({
 });
 
 const tableHeadStyles = css(p13Medium, {
-  color: cssVar('weakerTextColor'),
+  color: cssVar('textDisabled'),
 });
 
 const sendInvitationButtonStyles = css({

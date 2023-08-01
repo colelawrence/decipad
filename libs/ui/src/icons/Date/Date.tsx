@@ -3,8 +3,8 @@ import { cssVar } from '../../primitives';
 export const Date = () => (
   <svg
     viewBox="0 0 16 16"
-    fill={cssVar('strongHighlightColor')}
-    stroke={cssVar('strongTextColor')}
+    fill={cssVar('iconBackground')}
+    stroke={cssVar('textHeavy')}
     xmlns="http://www.w3.org/2000/svg"
   >
     <title>Date</title>

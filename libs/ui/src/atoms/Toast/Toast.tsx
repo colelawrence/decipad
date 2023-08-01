@@ -119,23 +119,23 @@ const collapsedBaseStyles = css(baseStyles, {
 });
 
 const errorStyle = css(baseStyles, {
-  backgroundColor: cssVar('toastDanger'),
-  color: cssVar('backgroundColor'),
+  backgroundColor: cssVar('stateDangerBackground'),
+  color: cssVar('stateDangerText'),
 });
 
 const infoStyle = css(baseStyles, {
-  backgroundColor: cssVar('strongTextColor'),
-  color: cssVar('backgroundColor'),
+  backgroundColor: cssVar('stateNeutralBackground'),
+  color: cssVar('stateNeutralText'),
 });
 
 const successStyle = css(baseStyles, {
-  backgroundColor: cssVar('toastOk'),
-  color: cssVar('strongTextColor'),
+  backgroundColor: cssVar('stateOkBackground'),
+  color: cssVar('stateOkText'),
 });
 
 const warningStyle = css(baseStyles, {
-  backgroundColor: cssVar('toastWarning'),
-  color: cssVar('strongTextColor'),
+  backgroundColor: cssVar('stateWarningBackground'),
+  color: cssVar('stateWarningText'),
 });
 
 const iconStyles = css({

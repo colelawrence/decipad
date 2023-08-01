@@ -9,7 +9,7 @@ import { Check, Loading } from '../../icons';
 import { NotebookAvatar } from '../../molecules';
 import { CollabAccessDropdown } from '../../molecules/CollabAccessDropdown/CollabAccessDropdown';
 import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
-import { cssVar, p13Regular, p14Medium, setCssVar } from '../../primitives';
+import { p13Regular, p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
 
 /**
@@ -37,9 +37,7 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
 /**
  * The styles for the description of the pop up.
  */
-const descriptionStyles = css(p13Regular, {
-  ...setCssVar('currentTextColor', cssVar('weakerTextColor')),
-});
+const descriptionStyles = css(p13Regular, {});
 
 const invitationButtonContentStyles = css({
   height: '20px',

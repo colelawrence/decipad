@@ -3,9 +3,11 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from '../../atoms';
 import { CodeResult } from '../../organisms';
-import { p8Regular } from '../../primitives';
+import { componentCssVars, p8Regular } from '../../primitives';
 
-const goToDefStyles = css(p8Regular);
+const goToDefStyles = css(p8Regular, {
+  color: componentCssVars('TooltipText'),
+});
 
 interface CodeVariableTooltipProps {
   variableMissing?: boolean;

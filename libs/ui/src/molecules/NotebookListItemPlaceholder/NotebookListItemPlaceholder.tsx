@@ -43,7 +43,7 @@ const tagStyle = css({
   width: '60px',
   borderRadius: '4px',
   border: '1px solid',
-  borderColor: cssVar('highlightColor'),
+  borderColor: cssVar('backgroundDefault'),
 });
 
 const seedRandom = (seed = 1) => {

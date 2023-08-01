@@ -28,7 +28,7 @@ import {
   deciCodeThemeDark,
   deciCodeThemeLight,
   jsCode,
-  setCssVar,
+  componentCssVars,
 } from '../../primitives';
 
 interface CodeEditorProps {
@@ -225,9 +225,7 @@ const mainStyles = (hasLogs: boolean) =>
   css(jsCode, {
     width: '100%',
     borderRadius: '0 0 12px 12px',
-    borderBottom: hasLogs
-      ? 'unset'
-      : `1px solid ${cssVar('borderHighlightColor')}`,
+    borderBottom: hasLogs ? 'unset' : `1px solid ${cssVar('borderDefault')}`,
     '.cm-focused': {
       outline: 0,
     },
@@ -244,9 +242,9 @@ const outputWrapperStyles = css(codeLog, {
   overflow: 'auto',
   overflowX: 'hidden',
   height: logDetailHeight + 1, // as per design
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '0 0 12px 12px',
-  borderBottom: `1px solid ${cssVar('borderHighlightColor')}`,
+  borderBottom: `1px solid ${cssVar('borderDefault')}`,
   padding: '10px',
 });
 
@@ -264,27 +262,27 @@ const outputStyles = css({
 
 const successExecutionStyles = css({
   color: 'transparent',
-  textShadow: `0 0 0 ${cssVar('variableHighlightTextColor')}`,
+  textShadow: `0 0 0 ${cssVar('backgroundHeavy')}`,
 });
 
 const warningExecutionStyles = css({
   color: 'transparent',
-  textShadow: `0 0 0 ${cssVar('toastWarning')}`,
+  textShadow: `0 0 0 ${cssVar('stateWarningBackground')}`,
 });
 
 const logExecutionStyles = css({
   color: 'transparent',
-  textShadow: `0 0 0 ${cssVar('strongSlashIconColor')}`,
+  textShadow: `0 0 0 ${componentCssVars('StrongSlashIconColor')}`,
 });
 
 const runExecutionStyles = css({
   color: 'transparent',
-  textShadow: `0 0 0 ${cssVar('strongSlashIconColor')}`,
+  textShadow: `0 0 0 ${componentCssVars('StrongSlashIconColor')}`,
 });
 
 const outputErrorLabel = css({
   color: 'transparent',
-  textShadow: `0 0 0 ${cssVar('errorColor')}`,
+  textShadow: `0 0 0 ${cssVar('stateDangerBackground')}`,
 });
 
 const copyPasteWrapperStyle = css({
@@ -294,16 +292,15 @@ const copyPasteWrapperStyle = css({
   position: 'absolute',
   top: 150,
   right: 50,
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   zIndex: 13,
   cursor: 'pointer',
   ':hover': {
-    backgroundColor: cssVar('tintedBackgroundColor'),
-    outline: `solid 1px ${cssVar('strongHighlightColor')}`,
+    backgroundColor: cssVar('backgroundSubdued'),
+    outline: `solid 1px ${cssVar('backgroundHeavy')}`,
   },
 });
 const copyPasteButtonStyle = css({
   width: 20,
   height: 20,
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 });

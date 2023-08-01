@@ -1,4 +1,10 @@
-import { Button, InputField, Spinner, cssVar, setCssVar } from '@decipad/ui';
+import {
+  Button,
+  InputField,
+  Spinner,
+  componentCssVars,
+  cssVar,
+} from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Send } from 'libs/ui/src/icons';
 import { RemoteDataStatus } from '../hooks';
@@ -8,12 +14,11 @@ const spinnerCss = css({
   width: 24,
   height: 24,
   padding: 0,
-  background: cssVar('aiSendButtonBgColor'),
+  background: componentCssVars('AiSendButtonBgColor'),
   marginRight: 8,
   borderRadius: 4,
   display: 'grid',
   placeItems: 'center',
-  ...setCssVar('currentTextColor', cssVar('aiSendButtonStrokeColor')),
 });
 
 const formCss = css({
@@ -23,7 +28,7 @@ const formCss = css({
     gridTemplateColumns: '1fr auto',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: cssVar('aiPanelBorderColor'),
+    borderColor: cssVar('borderDefault'),
     borderRadius: 8,
     borderStyle: 'solid',
   },
@@ -35,10 +40,7 @@ const formCss = css({
     spinnerCss,
     {
       '&:disabled': {
-        ...setCssVar(
-          'currentTextColor',
-          cssVar('aiSendButtonDisabledStrokeColor')
-        ),
+        color: cssVar('textDisabled'),
         background: 'none',
       },
       svg: {

@@ -18,14 +18,14 @@ const labelContainerStyles = css({
 });
 
 const hoveredBubbleStyles = css({
-  backgroundColor: cssVar('strongHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
 });
 
 const bubbleStyles = css(codeBlock.variableStyles, {
   padding: '4px 8px',
   borderRadius: '8px',
-  backgroundColor: cssVar('tintedBackgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
   ':hover': {
     ...hoveredBubbleStyles,
   },

@@ -33,7 +33,7 @@ const layoutEditorAndSidebarContainerStyles = css(
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-end',
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundAccent'),
 
     [smallScreenQuery]: {
       paddingTop: 0,
@@ -47,13 +47,13 @@ const layoutHeaderContainerStyles = css({
   width: '100%',
   position: 'sticky',
   padding: '0 32px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundAccent'),
 });
 
 const layoutNotebookFixedHeightContainerStyles = css(
   {
     borderRadius: 16,
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: cssVar('backgroundMain'),
   },
   !isE2E && { height: 'calc(100vh - 75px)' }
 );
@@ -73,7 +73,7 @@ const layoutArticleWrapperStyles = css({
   margin: '0 24px',
   width: '100%',
   [smallScreenQuery]: {
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: cssVar('backgroundMain'),
     margin: 0,
     padding: '0 24px',
     borderRadius: 16,
@@ -189,7 +189,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
                 },
                 [tabletScreenQuery]: {
                   position: 'fixed',
-                  border: `solid 1px ${cssVar('aiPanelBorderColor')}`,
+                  border: `solid 1px ${cssVar('borderDefault')}`,
                   boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
                   zIndex: 9,
                 },

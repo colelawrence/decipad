@@ -32,7 +32,7 @@ const grabbingStyles = css({
 });
 
 const aggregationLabelStyles = css(p12Medium, {
-  color: cssVar('weakerTextColor'),
+  color: cssVar('textDisabled'),
 });
 
 interface AggregationProps {

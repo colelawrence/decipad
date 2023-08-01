@@ -14,16 +14,16 @@ interface TableRowProps {
 }
 
 const dataViewRowStyles = css({
-  borderBottom: `1px solid ${cssVar('borderColor')}`,
+  borderBottom: `1px solid ${cssVar('borderSubdued')}`,
 
   '&:last-of-type': {
-    borderBottomColor: cssVar('normalTextColor'),
+    borderBottomColor: cssVar('textDefault'),
   },
 });
 
 const dataViewRowGlobalStyles = css({
-  color: cssVar('weakTextColor'),
-  backgroundColor: cssVar('highlightColor'),
+  color: cssVar('textSubdued'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 export const DataViewRow = ({

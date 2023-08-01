@@ -1,10 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { useThemeFromStore } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import * as icons from '../../icons';
-import { cssVar, mediumShadow, setCssVar } from '../../primitives';
-import { AvailableSwatchColor, UserIconKey, swatchesThemed } from '../../utils';
+import { cssVar, mediumShadow, useThemeColor } from '../../primitives';
+import { AvailableSwatchColor, UserIconKey } from '../../utils';
 
 export interface NotebookIconProps {
   readonly icon: UserIconKey;
@@ -15,13 +14,20 @@ export const NotebookIcon = ({
   icon,
   color = 'Catskill',
 }: NotebookIconProps): ReturnType<FC> => {
-  const [darkTheme] = useThemeFromStore();
-  const baseSwatches = swatchesThemed(darkTheme);
   const Icon = icons[icon];
+  const theme = useThemeColor(color);
 
   return (
     <div
-      css={[notebookIconStyles, { backgroundColor: baseSwatches[color].hex }]}
+      css={[
+        notebookIconStyles,
+        {
+          backgroundColor:
+            color !== 'Catskill'
+              ? theme.Background.Default
+              : cssVar('backgroundHeavy'),
+        },
+      ]}
     >
       <Icon />
     </div>
@@ -46,8 +52,7 @@ const notebookIconStyles = css({
   },
 
   borderRadius: '4px',
-  backgroundColor: cssVar('backgroundColor'),
-  ...setCssVar('currentTextColor', cssVar('iconColorDark')),
+  backgroundColor: cssVar('backgroundMain'),
 
   boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
 });

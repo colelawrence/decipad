@@ -13,7 +13,7 @@ const spinnerStyles = css({
 });
 
 const circleStyles = css({
-  stroke: cssVar('normalTextColor'),
+  stroke: cssVar('textDefault'),
   strokeLinecap: 'round',
   animation: 'dash 1.5s ease-in-out infinite',
   '@keyframes rotate': {

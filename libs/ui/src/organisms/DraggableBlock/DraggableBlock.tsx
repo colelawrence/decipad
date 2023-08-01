@@ -272,17 +272,17 @@ const selectedBlockStyles = (menuOpen: boolean) =>
   css(
     menuOpen && {
       'blockquote, h2, h3, .block-p': {
-        backgroundColor: cssVar('highlightColor'),
-        boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+        backgroundColor: cssVar('backgroundDefault'),
+        boxShadow: `0px 0px 0px 100vmin ${cssVar('backgroundDefault')}`,
         clipPath: `inset(0 -8px 0 -8px round 8px)`,
       },
       '.block-table': {
-        backgroundColor: cssVar('highlightColor'),
-        boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+        backgroundColor: cssVar('backgroundDefault'),
+        boxShadow: `0px 0px 0px 100vmin ${cssVar('backgroundDefault')}`,
         clipPath: `inset(0 -${largestDesktop.landscape.width}px 0 -20px round 8px)`,
       },
       '.block-code': {
-        backgroundColor: cssVar('highlightColor'),
+        backgroundColor: cssVar('backgroundDefault'),
         clipPath: `inset(0 -8px 0 -8px round 8px)`,
       },
       '.block-figure': {
@@ -290,8 +290,8 @@ const selectedBlockStyles = (menuOpen: boolean) =>
         filter: 'brightness(0.9)',
       },
       '.block-li': {
-        backgroundColor: cssVar('highlightColor'),
-        boxShadow: `0px 0px 0px 100vmin ${cssVar('highlightColor')}`,
+        backgroundColor: cssVar('backgroundDefault'),
+        boxShadow: `0px 0px 0px 100vmin ${cssVar('backgroundDefault')}`,
         clipPath: 'inset(-2px -8px -2px -8px round 8px)',
       },
     }

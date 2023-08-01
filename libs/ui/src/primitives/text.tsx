@@ -1,6 +1,6 @@
 import { css, CSSObject, Global } from '@emotion/react';
 import { abcDiatype, abcDiatypeMono } from '../fonts';
-import { cssVar, setCssVar } from './var';
+import { cssVar } from './var';
 
 /** When the browser is being automated by a test driver, use the fallback font */
 const simpleFontIfTesting = (font: string, fallback: string) => {
@@ -74,8 +74,7 @@ const pFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
 );
 
 const pDefault: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-  color: cssVar('currentTextColor'),
+  color: cssVar('textDefault'),
   fontFamily: pFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
@@ -87,7 +86,7 @@ const pDefault: TypographyStyles = {
 
 export const p8Regular: TypographyStyles = {
   ...pDefault,
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   fontSize: `${8 / usualRemPxs}rem`,
   lineHeight: 1,
 };
@@ -97,7 +96,7 @@ export const p8Medium: TypographyStyles = {
 };
 export const p10Regular: TypographyStyles = {
   ...pDefault,
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   fontSize: `${10 / usualRemPxs}rem`,
   lineHeight: 1,
 };
@@ -107,7 +106,7 @@ export const p10Medium: TypographyStyles = {
 };
 export const p12Regular: TypographyStyles = {
   ...pDefault,
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   fontSize: `${12 / usualRemPxs}rem`,
   lineHeight: 1.4,
 };
@@ -157,7 +156,7 @@ export const p15Regular: TypographyStyles = {
 };
 export const p15Medium: TypographyStyles = {
   ...p15Regular,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
   fontWeight: 500,
   lineHeight: 1,
 };
@@ -184,7 +183,7 @@ export const p18Medium: TypographyStyles = {
 };
 export const p20Medium: TypographyStyles = {
   ...pDefault,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
   fontWeight: 500,
 };
 export const p24Medium: TypographyStyles = {
@@ -208,8 +207,7 @@ const mFontFamily: TypographyStyles['fontFamily'] = simpleFontIfTesting(
 );
 
 export const jsCode: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  color: cssVar('currentTextColor'),
+  color: cssVar('textDefault'),
   fontFamily: mFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
@@ -231,8 +229,7 @@ export const code: TypographyStyles = {
 };
 
 export const codeLog: TypographyStyles = {
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  color: cssVar('currentTextColor'),
+  color: cssVar('textDefault'),
   fontFamily: mFontFamily,
   fontStyle: 'normal',
   fontWeight: 'normal',
@@ -244,7 +241,7 @@ export const codeLog: TypographyStyles = {
 
 export const inputLabel = css({
   ...p13Medium,
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
   marginBottom: '8px',
 });
 

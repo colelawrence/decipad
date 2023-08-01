@@ -13,7 +13,7 @@ import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { Caret } from '../../icons';
 import * as icons from '../../icons';
-import { cssVar, p14Regular, p24Medium, setCssVar } from '../../primitives';
+import { cssVar, p14Regular, p24Medium } from '../../primitives';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -35,11 +35,11 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
     marginTop: '4px',
-    ...(selected && { backgroundColor: cssVar('highlightColor') }),
+    ...(selected && { backgroundColor: cssVar('backgroundDefault') }),
     ...(!readOnly && {
-      border: `1px solid ${cssVar('borderColor')}`,
+      border: `1px solid ${cssVar('borderSubdued')}`,
       ':hover': {
-        backgroundColor: cssVar('highlightColor'),
+        backgroundColor: cssVar('backgroundDefault'),
       },
       cursor: 'pointer',
     }),
@@ -52,7 +52,6 @@ const textWrapperStyles = css({
 });
 
 const iconWrapperStyles = css({
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   alignItems: 'center',
   display: 'grid',
   height: `20px`,
@@ -96,7 +95,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
       css={[
         p14Regular,
         charLimit,
-        !lineResult?.result && { color: cssVar('weakerTextColor') },
+        !lineResult?.result && { color: cssVar('textDisabled') },
       ]}
     >
       {result}
@@ -131,7 +130,7 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
         onClick={() => !readOnly && onChangeOpen(!openMenu)}
         data-testid="result-widget"
       >
-        <span css={[p24Medium, { color: cssVar('strongTextColor') }]}>
+        <span css={[p24Medium, { color: cssVar('textHeavy') }]}>
           {lineResult?.result?.type.kind !== 'type-error' &&
           lineResult?.result ? (
             <CodeResult {...lineResult.result} />

@@ -28,7 +28,7 @@ const styles = css({
   padding: '24px 40px',
   boxShadow: `2px 2px 16px 0px ${smallShadow.rgba}`,
 
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
 });
 
 const flagsStyles = css({

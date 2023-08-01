@@ -7,15 +7,15 @@ import { cssVar, p12Medium } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const selectFontStyles = css(p12Medium, {
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
 });
 
 const hoveredStyles = css({
-  backgroundColor: cssVar('strongHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
 });
 
 const selectStyles = css({
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  backgroundColor: cssVar('backgroundSubdued'),
   fontWeight: 'bold',
   ':hover': { ...hoveredStyles },
 });

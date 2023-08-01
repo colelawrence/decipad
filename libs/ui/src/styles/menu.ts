@@ -12,9 +12,9 @@ export const itemStyles = css(p14Regular, {
   padding: '6px',
   borderRadius: '6px',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   '&:hover, &:focus, &[data-selected="true"]': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 
   outline: 'none',
@@ -23,15 +23,15 @@ export const itemStyles = css(p14Regular, {
 export const itemDisabledStyles = css(itemStyles, {
   cursor: 'default',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   '&:hover, &:focus, &[data-selected="true"]': {
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: cssVar('backgroundMain'),
   },
 });
 
 export const soonStyles = css(p8Medium, {
   padding: '2px 4px',
   borderRadius: '4px',
-  backgroundColor: cssVar('strongHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
   height: '12px',
 });

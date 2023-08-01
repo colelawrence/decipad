@@ -15,7 +15,6 @@ import {
   cssVar,
   p13Regular,
   p14Medium,
-  setCssVar,
   smallScreenQuery,
   smallShadow,
 } from '../../primitives';
@@ -31,9 +30,9 @@ const popUpStyles = css({
     width: '250px',
   },
 
-  background: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   border: '1px solid',
-  borderColor: cssVar('strongHighlightColor'),
+  borderColor: cssVar('borderDefault'),
   borderRadius: '8px',
   boxShadow: `0px 2px 16px -4px ${smallShadow.rgba}`,
 });
@@ -60,7 +59,7 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
   justifyContent: 'space-between',
   padding: 8,
   alignItems: 'flex-start',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: 8,
   button: {
     height: 18,
@@ -75,16 +74,14 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
 /**
  * The styles for the description of the pop up.
  */
-const descriptionStyles = css(p13Regular, {
-  ...setCssVar('currentTextColor', cssVar('weakerTextColor')),
-});
+const descriptionStyles = css(p13Regular, {});
 
 /**
  * The styles for the parent div that wraps the copy button and the text box.
  */
 const clipboardWrapperStyles = css({
   border: '1px solid',
-  borderColor: cssVar('highlightColor'),
+  borderColor: cssVar('backgroundDefault'),
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -99,7 +96,7 @@ const clipboardWrapperStyles = css({
 const copyButtonStyles = css(p13Regular, {
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   padding: '6px 12px',
   borderRadius: '6px',
 });
@@ -111,7 +108,7 @@ const copyButtonIconStyles = css({
   width: '18px',
   height: '18px',
   marginRight: '3px',
-  '> svg > path': { stroke: cssVar('currentTextColor') },
+  '> svg > path': { stroke: cssVar('textDefault') },
 });
 
 /**
@@ -119,7 +116,7 @@ const copyButtonIconStyles = css({
  */
 const padLinkTextStyles = css(
   p13Regular,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   {
     userSelect: 'all',
 
@@ -157,7 +154,7 @@ const HorizontalDivider = () => (
       {
         width: '100%',
         height: '1px',
-        backgroundColor: cssVar('strongerHighlightColor'),
+        backgroundColor: cssVar('borderSubdued'),
         [smallScreenQuery]: {
           display: 'none',
         },
@@ -244,20 +241,13 @@ export const NotebookPublishingPopUp = ({
                     display: 'flex',
                     gap: 4,
                     alignItems: 'center',
-                    svg: {
-                      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-                    },
+                    svg: {},
                   }}
                 >
                   <span css={{ display: 'grid', width: 16, height: 16 }}>
                     <World />
                   </span>
-                  <p
-                    css={css(
-                      p14Medium,
-                      setCssVar('currentTextColor', cssVar('weakTextColor'))
-                    )}
-                  >
+                  <p css={css(p14Medium)}>
                     {isPublishing
                       ? 'Creating link...'
                       : isPublished

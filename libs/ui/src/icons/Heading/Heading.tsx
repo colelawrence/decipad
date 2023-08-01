@@ -6,7 +6,7 @@ export const Heading = (): ReturnType<FC> => (
     <title>Heading</title>
     <path
       d="M4.20312 13.0277V2.97229H5.42077V7.45009H10.7824V2.97229H12V13.0277H10.7824V8.53026H5.42077V13.0277H4.20312Z"
-      fill={cssVar('currentTextColor')}
+      fill={cssVar('iconColorHeavy')}
     />
   </svg>
 );

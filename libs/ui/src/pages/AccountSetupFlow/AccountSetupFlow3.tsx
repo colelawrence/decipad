@@ -18,7 +18,6 @@ import {
   p14Regular,
   p16Regular,
   purple300,
-  setCssVar,
   smallShadow,
 } from '../../primitives';
 import { AccountSetup } from '../../templates';
@@ -50,7 +49,7 @@ const avatarStyles = css({
   position: 'relative',
 
   boxShadow: `0px 2px 16px -4px ${smallShadow.rgba}`,
-  border: `1px solid ${cssVar('backgroundColor')}`,
+  border: `1px solid ${cssVar('backgroundMain')}`,
   borderRadius: '100px',
 
   '& + &': {
@@ -88,7 +87,7 @@ const inputStyles = css({
 
 const termsAndPrivacyStyles = css(
   p10Regular,
-  setCssVar('currentTextColor', cssVar('weakerTextColor')),
+
   {}
 );
 
@@ -103,7 +102,7 @@ const bottomStyles = css({
 
 const stepStyles = css(
   p12Medium,
-  setCssVar('currentTextColor', cssVar('weakerTextColor')),
+
   {
     flexGrow: 100,
     display: 'flex',
@@ -138,19 +137,13 @@ const backCardStyles = css({
   display: 'flex',
   flexDirection: 'column',
 
-  background: cssVar('highlightColor'),
+  background: cssVar('backgroundDefault'),
   boxShadow: '0px 3px 24px -10px black',
 });
 
-const nameStyles = css(
-  p14Medium,
-  setCssVar('currentTextColor', cssVar('strongTextColor'))
-);
+const nameStyles = css(p14Medium);
 
-const usernameStyles = css(
-  p14Regular,
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
+const usernameStyles = css(p14Regular);
 
 const backCardAvatarStyles = css({
   flexGrow: 100,
@@ -173,29 +166,26 @@ const frontCardStyles = css({
   flexDirection: 'column',
   gap: '6px',
 
-  background: cssVar('highlightColor'),
+  background: cssVar('backgroundDefault'),
   boxShadow: '0px 3px 24px -10px black',
 });
 
 const descriptionStyles = css(
   p14Regular,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   {
-    border: `1px dashed ${cssVar('weakerTextColor')}`,
+    border: `1px dashed ${cssVar('textDisabled')}`,
     borderRadius: '8px',
     padding: '8px 12px',
     minHeight: '80px',
   }
 );
 
-const placeholderStyles = css(
-  descriptionStyles,
-  setCssVar('currentTextColor', cssVar('weakerTextColor'))
-);
+const placeholderStyles = css(descriptionStyles);
 
 const frontCardBottomStyles = css(
   p14Regular,
-  setCssVar('currentTextColor', cssVar('normalTextColor')),
+
   {
     display: 'flex',
     gap: '8px',

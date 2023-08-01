@@ -3,7 +3,7 @@ import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useCallback, useRef } from 'react';
-import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
+import { cssVar, p12Regular, p14Medium } from '../../primitives';
 import { soonStyles } from '../../styles/menu';
 
 const inlineMenuStyles = css({
@@ -14,8 +14,8 @@ const inlineMenuStyles = css({
 
   clipPath: 'inset(-8px -8px -8px -8px round 8px)',
   ':hover, &[data-focused="true"]': {
-    backgroundColor: cssVar('highlightColor'),
-    boxShadow: `0px 0px 0px 8px ${cssVar('highlightColor')}`,
+    backgroundColor: cssVar('backgroundDefault'),
+    boxShadow: `0px 0px 0px 8px ${cssVar('backgroundDefault')}`,
   },
 });
 
@@ -37,21 +37,8 @@ const inlineStyles = css({
   gap: '8px',
 });
 
-const titleStyles = css(
-  p14Medium,
-  setCssVar('currentTextColor', 'strongTextColor')
-);
+const titleStyles = css(p14Medium, { color: cssVar('textTitle') });
 const descriptionStyles = css(p12Regular);
-
-const disabledStyles = css(
-  setCssVar('currentTextColor', cssVar('weakerTextColor'))
-);
-const enabledStyles = css(
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
-const blackFontStyles = css(
-  setCssVar('currentTextColor', cssVar('strongTextColor'))
-);
 
 interface InlineMenuItemProps {
   readonly icon: ReactNode;
@@ -116,18 +103,10 @@ export const InlineMenuItem = ({
       </span>
       <div css={textStyles}>
         <div css={inlineStyles}>
-          <strong
-            css={[titleStyles, enabled ? blackFontStyles : disabledStyles]}
-          >
-            {title}
-          </strong>
+          <strong css={titleStyles}>{title}</strong>
           {!enabled && <span css={soonStyles}>SOON</span>}
         </div>
-        <span
-          css={[descriptionStyles, enabled ? enabledStyles : disabledStyles]}
-        >
-          {description}
-        </span>
+        <span css={descriptionStyles}>{description}</span>
       </div>
     </button>
   );

@@ -96,6 +96,8 @@ export const grey700 = color(50, 59, 73);
 
 export const offBlack = color(22, 31, 44);
 export const black = color(0, 0, 0);
+export const blackWhiteBlack = color(22, 31, 44);
+export const fullTransparent = transparency(blackWhiteBlack, 0);
 
 //
 // brand
@@ -206,6 +208,7 @@ export const dark400 = color(155, 154, 172);
 export const dark500 = color(106, 104, 133);
 export const dark600 = color(41, 40, 58);
 export const dark700 = color(27, 26, 40);
+export const dark800 = color(20, 19, 30);
 
 //
 // Opacity

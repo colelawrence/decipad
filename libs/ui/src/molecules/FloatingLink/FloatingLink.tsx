@@ -15,7 +15,7 @@ const IconWrapper = styled.div`
   padding-left: 8px;
   padding-right: 8px;
   align-items: center;
-  color: ${cssVar('weakerTextColor')};
+  color: ${cssVar('textDisabled')};
 `;
 
 const InputWrapper = styled.div`
@@ -41,11 +41,10 @@ const inputCss = css`
 `;
 
 export const floatingLinkRootCss = css`
-  background: ${cssVar('backgroundColor')};
+  background: ${cssVar('backgroundMain')};
+  border: 1px solid ${cssVar('borderDefault')};
   z-index: 20 !important;
-  border-radius: 4px;
-  box-shadow: rgb(15 15 15 / 5%) 0 0 0 1px, rgb(15 15 15 / 10%) 0 3px 6px,
-    rgb(15 15 15 / 20%) 0 9px 24px;
+  border-radius: 6px;
 `;
 
 const VerticalDivider = () => (
@@ -53,7 +52,7 @@ const VerticalDivider = () => (
     css={css`
       margin-left: 0.5rem;
       margin-right: 0.5rem;
-      background-color: ${cssVar('strongHighlightColor')};
+      background-color: ${cssVar('backgroundHeavy')};
       width: 1px;
       height: 1.25rem;
     `}
@@ -71,13 +70,13 @@ const buttonCss = css`
   font-weight: 500;
   border-width: 0;
   cursor: pointer;
-  background-color: ${cssVar('backgroundColor')};
+  background-color: ${cssVar('backgroundMain')};
 
   :hover {
-    background-color: ${cssVar('tintedBackgroundColor')};
+    background-color: ${cssVar('backgroundSubdued')};
   }
   :active {
-    background-color: ${cssVar('tintedBackgroundColor')};
+    background-color: ${cssVar('backgroundSubdued')};
   }
 
   font-family: inherit;
@@ -99,13 +98,13 @@ const iconButtonCss = [
   plateButtonCss,
   css`
     padding: 4px;
-    background-color: ${cssVar('backgroundColor')};
+    background-color: ${cssVar('backgroundMain')};
 
     :hover {
-      background-color: ${cssVar('tintedBackgroundColor')};
+      background-color: ${cssVar('backgroundSubdued')};
     }
     :active {
-      background-color: ${cssVar('tintedBackgroundColor')};
+      background-color: ${cssVar('backgroundSubdued')};
     }
   `,
 ];
@@ -131,7 +130,7 @@ export const FloatingLink = () => {
 
       <div
         css={css`
-          background-color: ${cssVar('strongHighlightColor')};
+          background-color: ${cssVar('backgroundHeavy')};
           height: 1px;
         `}
       />

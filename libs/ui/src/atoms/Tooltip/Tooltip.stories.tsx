@@ -20,7 +20,7 @@ export const Normal: StoryFn<typeof args> = (props) => (
     trigger={
       <div
         css={css({
-          color: cssVar('strongTextColor'),
+          color: cssVar('textHeavy'),
           textAlign: 'center',
         })}
       >
@@ -37,7 +37,7 @@ export const Small: StoryFn<typeof args> = (props) => (
     trigger={
       <div
         css={css({
-          color: cssVar('strongTextColor'),
+          color: cssVar('textHeavy'),
           textAlign: 'center',
         })}
       >

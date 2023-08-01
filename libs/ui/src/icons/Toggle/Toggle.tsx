@@ -3,7 +3,7 @@ import { cssVar } from '../../primitives';
 
 export const Toggle: FC = () => (
   <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="40" height="40" rx="8" fill={cssVar('slashColorLight')} />
+    <rect width="40" height="40" rx="8" fill={cssVar('iconBackground')} />
     <g clipPath="url(#clip0_507_34783)">
       <rect
         x="9"
@@ -11,7 +11,7 @@ export const Toggle: FC = () => (
         width="17"
         height="10"
         rx="5"
-        fill={cssVar('slashColorNormal')}
+        fill={cssVar('iconColorDefault')}
       />
       <g filter="url(#filter0_dd_507_34783)">
         <rect
@@ -20,7 +20,7 @@ export const Toggle: FC = () => (
           width="10"
           height="10"
           rx="5"
-          fill={cssVar('backgroundColor')}
+          fill={cssVar('iconColorMain')}
         />
         <rect
           x="18.35"
@@ -28,7 +28,7 @@ export const Toggle: FC = () => (
           width="11.3"
           height="11.3"
           rx="5.65"
-          stroke={cssVar('slashColorHeavy')}
+          stroke={cssVar('iconColorHeavy')}
           strokeWidth="1.3"
         />
       </g>
@@ -94,7 +94,7 @@ export const Toggle: FC = () => (
           width="24"
           height="24"
           rx="6"
-          fill={cssVar('backgroundColor')}
+          fill={cssVar('iconColorMain')}
         />
       </clipPath>
     </defs>

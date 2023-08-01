@@ -38,7 +38,7 @@ const styles = css({
 });
 const sidebarStyles = css({
   [crossBarsQuery]: {
-    borderRight: `1px solid ${cssVar('borderColor')}`,
+    borderRight: `1px solid ${cssVar('borderSubdued')}`,
   },
 });
 

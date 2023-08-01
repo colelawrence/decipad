@@ -2,8 +2,8 @@ import { CSSObject, css } from '@emotion/react';
 import { cssVar } from '../primitives';
 
 export const styles: CSSObject = {
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '8px',
 };
 

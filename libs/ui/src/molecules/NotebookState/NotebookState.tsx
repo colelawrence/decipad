@@ -11,6 +11,7 @@ import {
   red100,
   red200,
   red500,
+  componentCssVars,
 } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
@@ -29,7 +30,7 @@ const wrapperStyles = css({
 const buttonStyles = css({
   width: '32px',
   height: '32px',
-  backgroundColor: cssVar('buttonHoverBackground'),
+  backgroundColor: cssVar('backgroundHeavy'),
   borderRadius: 6,
   display: 'flex',
   justifyContent: 'center',
@@ -45,9 +46,9 @@ const activeStyles = {
 };
 
 const activeButtonStyles = css({
-  backgroundColor: cssVar('buttonHoverBackground'),
+  backgroundColor: cssVar('backgroundDefault'),
   ':hover': {
-    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });
 
@@ -62,18 +63,18 @@ const revertChangesStyles = css([
     gap: '4px',
     borderRadius: '6px',
     height: '32px',
-    color: cssVar('weakerTextColor'),
-    backgroundColor: cssVar('buttonHoverBackground'),
+    color: cssVar('textDisabled'),
+    backgroundColor: cssVar('backgroundDefault'),
     ':hover': {
-      backgroundColor: cssVar('buttonHoverBackgroundHover'),
+      backgroundColor: cssVar('backgroundHeavy'),
     },
   },
 ]);
 
 const activeRevertChangesStyles = css({
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
   ':hover': {
-    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });
 
@@ -90,23 +91,23 @@ const getColour = (
   switch (state) {
     case 'saved':
       return {
-        background: cssVar('notebookStateOkLight'),
-        foreground: cssVar('notebookStateOkHeavy'),
+        background: componentCssVars('StatusIndicatorSavedBackground'),
+        foreground: componentCssVars('StatusIndicatorSavedForeground'),
       };
     case 'unsaved':
       return {
-        background: cssVar('notebookStateWarningLight'),
-        foreground: cssVar('notebookStateWarningHeavy'),
+        background: componentCssVars('StatusIndicatorUnsavedBackground'),
+        foreground: componentCssVars('StatusIndicatorUnsavedForeground'),
       };
     case 'offline':
       return {
-        background: cssVar('notebookStateDisabledLight'),
-        foreground: cssVar('notebookStateDisabledHeavy'),
+        background: componentCssVars('StatusIndicatorOfflineBackground'),
+        foreground: componentCssVars('StatusIndicatorOfflineForeground'),
       };
     case 'error':
       return {
-        background: cssVar('notebookStateDangerLight'),
-        foreground: cssVar('notebookStateDangerHeavy'),
+        background: componentCssVars('StatusIndicatorErrorBackground'),
+        foreground: componentCssVars('StatusIndicatorErrorForeground'),
       };
   }
 };
@@ -121,7 +122,7 @@ const stateStyles = (state: State) => {
     justifyContent: 'center',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
-    backgroundColor: cssVar('buttonHoverBackground'),
+    backgroundColor: cssVar('backgroundHeavy'),
     ':hover': {
       backgroundColor: colours.background,
     },

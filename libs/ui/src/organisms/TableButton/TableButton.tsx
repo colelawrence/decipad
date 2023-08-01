@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { TextAndIconButton } from '../../atoms';
 import { Chevron, Show } from '../../icons';
-import { cssVar, setCssVar, shortAnimationDuration } from '../../primitives';
+import { shortAnimationDuration } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 
 const showMoreButtonWrapperStyles = css({
@@ -71,13 +71,10 @@ export const TableButton: FC<TableButtonProps> = ({
   );
 };
 
-const chevronStyles = css(
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
-  {
-    width: '8px',
-    transition: `padding-top ease-in-out ${shortAnimationDuration}`,
-    [`:hover &`]: {
-      paddingTop: '4px',
-    },
-  }
-);
+const chevronStyles = css({
+  width: '8px',
+  transition: `padding-top ease-in-out ${shortAnimationDuration}`,
+  [`:hover &`]: {
+    paddingTop: '4px',
+  },
+});

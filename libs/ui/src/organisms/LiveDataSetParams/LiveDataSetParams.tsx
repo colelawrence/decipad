@@ -11,7 +11,7 @@ const buttonStyles = css({
   alignItems: 'center',
   padding: '4px',
   ':hover, :focus': {
-    backgroundColor: cssVar('tintedBackgroundColor'),
+    backgroundColor: cssVar('backgroundSubdued'),
   },
 });
 

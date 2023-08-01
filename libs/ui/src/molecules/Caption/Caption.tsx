@@ -5,12 +5,10 @@ import { ComponentProps, FC, ReactNode } from 'react';
 import * as icons from '../../icons';
 
 import {
-  cssVar,
   display,
   p13Regular,
   p14Regular,
   placeholderOpacity,
-  setCssVar,
   smallScreenQuery,
 } from '../../primitives';
 import { AvailableSwatchColor, UserIconKey } from '../../utils';
@@ -33,24 +31,21 @@ const nameWrapperStyles = css({
   gap: '4px',
 });
 
-const iconWrapperStyles = css(
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
-  {
-    display: 'grid',
-    height: '20px',
-    width: '20px',
-    flexShrink: 0,
+const iconWrapperStyles = css({
+  display: 'grid',
+  height: '20px',
+  width: '20px',
+  flexShrink: 0,
 
-    [smallScreenQuery]: {
-      height: '16px',
-      width: '16px',
-    },
-  }
-);
+  [smallScreenQuery]: {
+    height: '16px',
+    width: '16px',
+  },
+});
 
 const placeholderStyles = css(
   p14Regular,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   {
     display: 'grid',
     overflow: 'hidden',
@@ -64,7 +59,7 @@ const placeholderStyles = css(
     '::before': {
       ...display,
       ...p14Regular,
-      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
       pointerEvents: 'none',
       content: 'attr(aria-placeholder)',
       opacity: placeholderOpacity,

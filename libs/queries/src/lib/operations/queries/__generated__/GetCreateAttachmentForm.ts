@@ -8,13 +8,13 @@
 // ====================================================
 
 export interface GetCreateAttachmentForm_getCreateAttachmentForm_fields {
-  __typename: "KeyValue";
+  __typename: 'KeyValue';
   key: string;
   value: string;
 }
 
 export interface GetCreateAttachmentForm_getCreateAttachmentForm {
-  __typename: "CreateAttachmentForm";
+  __typename: 'CreateAttachmentForm';
   url: string;
   handle: string;
   fields: GetCreateAttachmentForm_getCreateAttachmentForm_fields[];

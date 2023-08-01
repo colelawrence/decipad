@@ -15,7 +15,7 @@ import {
   Sparkles,
 } from '../../icons';
 import { DeleteWithDepsMenuItem, MenuList } from '../../molecules';
-import { cssVar, p12Medium, p12Regular, setCssVar } from '../../primitives';
+import { componentCssVars, cssVar, p12Medium } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { hideOnPrint } from '../../styles/editor-layout';
@@ -36,7 +36,7 @@ const handleButtonStyle = css({
   borderRadius: '6px',
 
   ':hover': {
-    background: cssVar('highlightColor'),
+    background: cssVar('backgroundDefault'),
   },
 });
 
@@ -186,7 +186,7 @@ export const BlockDragHandle = ({
           {children}
           {aiButton}
           <MenuItem disabled>
-            <hr css={{ color: cssVar('highlightColor') }} />
+            <hr css={{ color: cssVar('backgroundDefault') }} />
           </MenuItem>
           {/* onDelete can be disabled by the parent component */}
           {isThisBlockUsedInCalculations ? (
@@ -205,27 +205,17 @@ export const BlockDragHandle = ({
       <Tooltip trigger={menuButton} side="bottom" hoverOnly>
         <span
           css={css([
-            p12Regular,
-            setCssVar('currentTextColor', cssVar('backgroundColor')),
+            p12Medium,
+            { color: componentCssVars('TooltipText') },
             { whiteSpace: 'nowrap', textAlign: 'center' },
           ])}
         >
-          <strong
-            css={css([
-              p12Medium,
-              setCssVar('currentTextColor', cssVar('backgroundColor')),
-            ])}
-          >
+          <strong css={[p12Medium, { color: componentCssVars('TooltipText') }]}>
             Drag
           </strong>{' '}
           to move
           <br />
-          <strong
-            css={css([
-              p12Medium,
-              setCssVar('currentTextColor', cssVar('backgroundColor')),
-            ])}
-          >
+          <strong css={[p12Medium, { color: componentCssVars('TooltipText') }]}>
             Click
           </strong>{' '}
           for options

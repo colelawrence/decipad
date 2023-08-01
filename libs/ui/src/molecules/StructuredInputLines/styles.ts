@@ -23,7 +23,7 @@ export const borderStyles = (pos: 'top' | 'bot') =>
     position: 'absolute',
     left: 0,
     right: 0,
-    borderTop: `1px solid ${cssVar('borderColor')}`,
+    borderTop: `1px solid ${cssVar('borderSubdued')}`,
   });
 
 export const borderTopStyles = borderStyles('top');
@@ -37,7 +37,7 @@ export const fadeLineStyles = (pos: 'top' | 'bot', side: 'left' | 'right') =>
     left: side === 'right' ? 0 : undefined,
     right: side === 'left' ? 0 : undefined,
     width: 64,
-    borderTop: `1px solid ${cssVar('borderColor')}`,
+    borderTop: `1px solid ${cssVar('borderSubdued')}`,
     // Fade out the fadeline borders using a mask
     maskImage:
       side === 'right'

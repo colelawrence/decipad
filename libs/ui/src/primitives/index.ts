@@ -6,3 +6,4 @@ export * from './theme';
 export * from './themes/code';
 export * from './var';
 export * from './viewport';
+export * from './Style';

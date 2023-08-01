@@ -6,7 +6,7 @@ export const Bolt: FC = () => (
     <title>Bolt</title>
     <path
       d="M10.75 13.25H6.75L13.25 4.75V10.75H17.25L10.75 19.25V13.25Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

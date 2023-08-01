@@ -10,11 +10,11 @@ export const Generic = (): ReturnType<FC> => (
       width="12"
       height="12"
       rx="6"
-      fill={cssVar('iconBackgroundColor')}
+      fill={cssVar('iconBackground')}
     />
     <path
       d="M14 2L2 14"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.11429"
     />
     <rect
@@ -23,7 +23,7 @@ export const Generic = (): ReturnType<FC> => (
       width="12"
       height="12"
       rx="6"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.11429"
       strokeLinecap="round"
       strokeLinejoin="round"

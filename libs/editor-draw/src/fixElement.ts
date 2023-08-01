@@ -33,7 +33,7 @@ export const fixElement = (
   let elem = _elem;
   // eslint-disable-next-line no-prototype-builtins
   if (elem.hasOwnProperty('text')) {
-    const { text, children, ...rest } = elem;
+    const { text, ...rest } = elem;
     elem = {
       ...rest,
       __text: text as string,

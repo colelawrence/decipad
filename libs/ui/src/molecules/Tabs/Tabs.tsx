@@ -24,9 +24,9 @@ const tabsStyles = (variant: boolean) =>
     minWidth: 150,
     width: 'fit-content',
     backgroundColor: variant
-      ? cssVar('backgroundColor')
-      : cssVar('strongHighlightColor'),
-    border: `1px solid ${cssVar('strongHighlightColor')}`,
+      ? cssVar('backgroundMain')
+      : cssVar('backgroundHeavy'),
+    border: `1px solid ${cssVar('backgroundHeavy')}`,
     borderRadius: 8,
     gap: 0,
     button: {

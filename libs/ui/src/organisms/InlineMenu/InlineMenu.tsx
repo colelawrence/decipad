@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useEffect, useState } from 'react';
 import { InlineMenuItem } from '../../atoms';
 import { InlineMenuGroup } from '../../molecules';
-import { cssVar, mediumShadow, p14Regular, setCssVar } from '../../primitives';
+import { cssVar, mediumShadow, p14Regular } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 
 const styles = css(
@@ -16,14 +16,14 @@ const styles = css(
     gridTemplateColumns: 'fit-content(75vw)',
     padding: '12px',
 
-    backgroundColor: cssVar('backgroundColor'),
-    border: `1px solid ${cssVar('borderColor')}`,
+    backgroundColor: cssVar('backgroundMain'),
+    border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: '8px',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
 
     ':empty::before': {
       ...p14Regular,
-      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
+
       content: '"No matching items found"',
     },
   },
@@ -143,7 +143,7 @@ export const InlineMenu: FC<InlineMenuProps> = ({
       {groupsWithItemsFiltered.map(({ matchingItems, ...group }, i) => {
         return matchingItems.length ? (
           <InlineMenuGroup key={i} {...group}>
-            {matchingItems.map(({ command, extraSearchTerms, ...item }) => {
+            {matchingItems.map(({ command, ...item }) => {
               const setFocus =
                 variant === 'block' &&
                 focusedCommand === command &&

@@ -16,7 +16,7 @@ const buttonStyles = css(p13Medium, {
   marginTop: `${table.smartRowHorizontalPadding}px`,
   borderRadius: '6px',
 
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 const hiddenStyles = css({

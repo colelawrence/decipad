@@ -4,7 +4,11 @@ import { AnyElement } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC, useContext, useEffect } from 'react';
-import { cssVar, p16Regular, smallScreenQuery } from '../../primitives';
+import {
+  componentCssVars,
+  p16Regular,
+  smallScreenQuery,
+} from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
 import { CodeResultProps } from '../../types';
 
@@ -67,7 +71,7 @@ const errorBlockWrapperStyles = css(centeredFlex, {
 });
 
 const errorMessageStypes = css(p16Regular, {
-  color: cssVar('errorBlockColor'),
+  color: componentCssVars('ErrorBlockColor'),
 });
 
 const errorBlockRowStyles = css(centeredFlex, {
@@ -76,6 +80,6 @@ const errorBlockRowStyles = css(centeredFlex, {
 });
 
 const errorBlockBgStyles = css(
-  { backgroundColor: cssVar('errorBlockError') },
+  { backgroundColor: componentCssVars('ErrorBlockError') },
   errorBlock
 );

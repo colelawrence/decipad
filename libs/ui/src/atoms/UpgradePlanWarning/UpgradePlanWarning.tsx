@@ -34,7 +34,7 @@ export const UpgradePlanWarning = ({
       )}
       <div>
         <Button
-          type="yellow"
+          type="primaryBrand"
           onClick={() => {
             if (workspaceId) {
               navigate(
@@ -59,7 +59,8 @@ export const UpgradePlanWarning = ({
 
 const upgradeProStyles = css({
   ...p13Medium,
-  backgroundColor: cssVar('errorBlockAnnotationWarning'),
+  backgroundColor: cssVar('backgroundSubdued'),
+  borderRadius: '6px',
   padding: '12px 16px',
   display: 'flex',
   width: '100%',

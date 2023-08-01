@@ -13,7 +13,7 @@ export const mainIconButtonStyles = css({
 
   ':hover, :focus': {
     backgroundColor: transparency(
-      hexToOpaqueColor(cssVar('strongerHighlightColor')) || black,
+      hexToOpaqueColor(cssVar('borderSubdued')) || black,
       weakOpacity
     ).rgba,
   },
@@ -29,6 +29,6 @@ export const closeButtonStyles = css({
   display: 'grid',
   borderRadius: 4,
   ':hover': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });

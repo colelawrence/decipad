@@ -6,8 +6,8 @@ import { KeyboardKey, Tooltip } from '../../atoms';
 import { cssVar, p12Medium } from '../../primitives';
 
 const highlightStyles = css({
-  color: cssVar('strongTextColor'),
-  borderBottom: `1px dashed ${cssVar('normalTextColor')}`,
+  color: cssVar('textHeavy'),
+  borderBottom: `1px dashed ${cssVar('textDefault')}`,
 });
 
 const activateStyles = css({

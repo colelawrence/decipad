@@ -6,7 +6,7 @@ export const Slider = (): ReturnType<FC> => {
     <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>Slider</title>
 
-      <rect width="40" height="40" rx="8" fill={cssVar('slashColorLight')} />
+      <rect width="40" height="40" rx="8" fill={cssVar('iconBackground')} />
       <g clipPath="url(#clip0_507_34780)">
         <rect
           x="8"
@@ -14,7 +14,7 @@ export const Slider = (): ReturnType<FC> => {
           width="24"
           height="2"
           rx="1"
-          fill={cssVar('slashColorHeavy')}
+          fill={cssVar('iconColorHeavy')}
         />
         <rect
           x="23"
@@ -22,7 +22,7 @@ export const Slider = (): ReturnType<FC> => {
           width="9"
           height="2"
           rx="1"
-          fill={cssVar('slashColorNormal')}
+          fill={cssVar('iconColorDefault')}
         />
         <g filter="url(#filter0_dd_507_34780)">
           <rect
@@ -31,7 +31,7 @@ export const Slider = (): ReturnType<FC> => {
             width="10"
             height="10"
             rx="5"
-            fill={cssVar('backgroundColor')}
+            fill={cssVar('iconColorMain')}
           />
           <rect
             x="14.35"
@@ -39,7 +39,7 @@ export const Slider = (): ReturnType<FC> => {
             width="11.3"
             height="11.3"
             rx="5.65"
-            stroke={cssVar('slashColorHeavy')}
+            stroke={cssVar('iconColorHeavy')}
             strokeWidth="1.3"
           />
         </g>
@@ -102,7 +102,7 @@ export const Slider = (): ReturnType<FC> => {
           <rect
             width="24"
             height="24"
-            fill={cssVar('backgroundColor')}
+            fill={cssVar('iconColorMain')}
             transform="translate(8 8)"
           />
         </clipPath>

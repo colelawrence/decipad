@@ -373,7 +373,7 @@ const thStyles = (
     backgroundColor: color
       ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
           .rgba
-      : cssVar('strongHighlightColor'),
+      : cssVar('backgroundHeavy'),
     // Keep hover effect when hovered, focused or the dropdown menu is opened.
     '&:hover, &:focus-within, &[data-highlight="true"]': {
       backgroundColor:

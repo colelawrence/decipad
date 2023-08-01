@@ -31,8 +31,8 @@ const dropDownItemStyles = css({
 
 const labelStyle = css(p13Medium, {
   borderRadius: '6px',
-  border: `1px solid ${cssVar('borderColor')}`,
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
   padding: '4px 8px',
 });
 

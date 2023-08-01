@@ -22,9 +22,8 @@ import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
 
 // TODO: Refactor or replace with alternative solution
-const useMemoPath = <
-  T extends Path | null | undefined
->(path: T): T => useMemo(() => path, path || []);
+const useMemoPath = <T extends Path | null | undefined>(path: T): T =>
+  useMemo(() => path, path || []);
 
 export const TableDndProvider = ({
   editor,
@@ -97,17 +96,15 @@ export const TableDndProvider = ({
     setColumnDropLine(null);
   }, [editor]);
 
-  const tableDndContextValue = React.useMemo(() => ({
-    onCellHover,
-    onCellDrop,
-    onCellDragEnd,
-    columnDropLine,
-  }), [
-    onCellHover,
-    onCellDrop,
-    onCellDragEnd,
-    columnDropLine,
-  ]);
+  const tableDndContextValue = React.useMemo(
+    () => ({
+      onCellHover,
+      onCellDrop,
+      onCellDragEnd,
+      columnDropLine,
+    }),
+    [onCellHover, onCellDrop, onCellDragEnd, columnDropLine]
+  );
 
   return (
     <TableDndContext.Provider value={tableDndContextValue}>

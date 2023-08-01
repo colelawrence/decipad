@@ -5,7 +5,7 @@ export const Switch2 = (): ReturnType<FC> => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
     <title>Switch</title>
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

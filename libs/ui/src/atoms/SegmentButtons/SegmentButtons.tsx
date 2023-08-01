@@ -2,7 +2,7 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, setCssVar, smallScreenQuery } from '../../primitives';
+import { componentCssVars, cssVar, smallScreenQuery } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
 
@@ -27,8 +27,6 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
 }) => {
   const lastBorder = variant === 'default';
   const side = variant === 'editor-sidebar' ? 'bottom' : 'top';
-  const selectedColor =
-    variant === 'topbar' ? 'strongerHighlightColor' : 'highlightColor';
   // visible is undefined by default, so !== false is the right
   // thing to do.
   const visibleButtons = buttons.filter((btn) => btn.visible !== false);
@@ -40,7 +38,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
         visibleButtons.length > 1 &&
           lastBorder && {
             '& figure:last-of-type': {
-              borderLeft: `1px solid ${cssVar('borderHighlightColor')}`,
+              borderLeft: `1px solid ${cssVar('borderDefault')}`,
             },
           },
         variant === 'editor-sidebar' && {
@@ -89,22 +87,14 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
               disabled ? segmentDisabledButtonStyle : segmentButtonStyle,
               variant === 'editor-sidebar' && {
                 borderRadius: 6,
-                ':hover, :focus': {
-                  backgroundColor: 'initial',
-                  color: cssVar('strongTextColor'),
-                },
               },
               variant === 'topbar' && {
-                borderRadius: 4,
-                ':hover, :focus': {
-                  filter: 'brightness(95%)',
-                },
+                borderRadius: 6,
               },
               selected && {
-                backgroundColor: cssVar(selectedColor),
-                ':hover, :focus': {
-                  backgroundColor: cssVar(selectedColor),
-                },
+                backgroundColor: componentCssVars(
+                  'ButtonTertiaryDefaultBackground'
+                ),
               },
             ]}
           >
@@ -139,8 +129,8 @@ const segmentButtonsStyles = css(hideOnPrint, {
   alignItems: 'center',
   borderRadius: '6px',
   padding: 1,
-  border: `1px solid ${cssVar('borderColor')}`,
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
   '& svg': {
     margin: '4px',
     width: '16px',
@@ -150,11 +140,13 @@ const segmentButtonsStyles = css(hideOnPrint, {
 
 const segmentButtonStyle = css({
   ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
+    color: componentCssVars('ButtonTertiaryHoverText'),
   },
 });
 
 const segmentDisabledButtonStyle = css({
   cursor: 'not-allowed',
-  '& svg': { ...setCssVar('currentTextColor', cssVar('strongHighlightColor')) },
+  backgroundColor: componentCssVars('ButtonTertiaryDisabledBackground'),
+  color: componentCssVars('ButtonTertiaryDisabledText'),
 });

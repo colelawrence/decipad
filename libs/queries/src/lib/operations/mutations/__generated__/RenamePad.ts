@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface RenamePad_updatePad {
-  __typename: "Pad";
+  __typename: 'Pad';
   id: string;
   name: string;
 }

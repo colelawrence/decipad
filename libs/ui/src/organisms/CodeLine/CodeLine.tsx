@@ -23,7 +23,6 @@ import {
   cssVar,
   p14Medium,
   p14Regular,
-  setCssVar,
   smallScreenQuery,
   transparency,
   wiggle,
@@ -58,11 +57,11 @@ const codeLineStyles = (
   css({
     ...(variant === 'standalone'
       ? {
-          borderTop: `1px solid ${cssVar('borderColor')}`,
-          borderLeft: `1px solid ${cssVar('borderColor')}`,
-          borderRight: `1px solid ${cssVar('borderColor')}`,
+          borderTop: `1px solid ${cssVar('borderSubdued')}`,
+          borderLeft: `1px solid ${cssVar('borderSubdued')}`,
+          borderRight: `1px solid ${cssVar('borderSubdued')}`,
 
-          backgroundColor: cssVar('backgroundColor'),
+          backgroundColor: cssVar('backgroundMain'),
           padding: '6px 12px',
         }
       : {
@@ -82,7 +81,7 @@ const codeLineStyles = (
       : {}),
     ...(!hasNext && variant === 'standalone'
       ? {
-          borderBottom: `1px solid ${cssVar('borderColor')}`,
+          borderBottom: `1px solid ${cssVar('borderSubdued')}`,
         }
       : {}),
     position: 'relative',
@@ -126,7 +125,7 @@ const inlineStyles = css({
 
 const codeStyles = css(code, {
   gridArea: 'code',
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
   lineHeight,
   whiteSpace: 'pre-wrap',
 
@@ -152,8 +151,6 @@ const inlineResultStyles = (bubble: boolean) =>
 
     textOverflow: 'ellipsis',
     padding: '2px 8px',
-
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
 
     ...(!bubble && {
       paddingTop: '4px',

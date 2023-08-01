@@ -1,4 +1,4 @@
-import { cssVar, p10Medium } from '@decipad/ui';
+import { cssVar, p10Medium, yellow400 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
 
@@ -7,10 +7,10 @@ type LiveDataSetCaptionProps = PropsWithChildren<{
 }>;
 
 const wrapperStyles = css({
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  backgroundColor: cssVar('backgroundSubdued'),
   marginTop: '2px',
   height: '21px',
-  border: `1px solid ${cssVar('liveDataBackgroundColor')}`,
+  border: `1px solid ${yellow400.hex}`,
   borderRadius: '6px',
   paddingLeft: '10px',
   paddingRight: '3px',

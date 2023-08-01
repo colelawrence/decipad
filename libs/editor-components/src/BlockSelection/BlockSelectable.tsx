@@ -13,5 +13,5 @@ export const BlockSelectable = ({
   _BlockSelectable({
     element,
     children,
-    selectedColor: cssVar('selectionColor'),
+    selectedColor: cssVar('backgroundHeavy'),
   });

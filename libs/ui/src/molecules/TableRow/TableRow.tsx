@@ -7,11 +7,11 @@ import { noop } from 'rxjs';
 import { useMergedRef } from '../../hooks';
 import { draggingOpacity } from '../../organisms/DraggableBlock/DraggableBlock';
 import { regularBorder } from '../../organisms/Table/Table';
-import { cssVar } from '../../primitives';
 import {
   TableCellControls,
   TableCellControlsProps,
 } from '../TableCellControls/TableCellControls';
+import { componentCssVars } from '../../primitives';
 
 const tableRowStyles = (isBeingDragged: boolean) =>
   css({
@@ -98,9 +98,9 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
 );
 
 const bottomDroplineStyles = css({
-  td: { boxShadow: `0 2px 0 ${cssVar('droplineColor')}` },
+  td: { boxShadow: `0 2px 0 ${componentCssVars('DroplineColor')}` },
 });
 
 const topDroplineStyles = css({
-  td: { boxShadow: `0 -2px 0 ${cssVar('droplineColor')}` },
+  td: { boxShadow: `0 -2px 0 ${componentCssVars('DroplineColor')}` },
 });

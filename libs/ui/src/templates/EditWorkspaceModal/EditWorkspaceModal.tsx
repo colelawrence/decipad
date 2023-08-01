@@ -7,7 +7,7 @@ import { Button, InputField } from '../../atoms';
 import { People } from '../../icons';
 import { ClosableModalHeader } from '../../molecules';
 import { ClosableModal } from '../../organisms';
-import { cssVar, p13Medium, p13Regular, setCssVar } from '../../primitives';
+import { p13Medium, p13Regular } from '../../primitives';
 
 type EditWorkspaceModalProps = {
   readonly name: string;
@@ -125,10 +125,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
   );
 };
 
-const headingStyles = css(
-  p13Medium,
-  setCssVar('currentTextColor', cssVar('weakTextColor'))
-);
+const headingStyles = css(p13Medium);
 
 const modalStyles = css({
   display: 'grid',

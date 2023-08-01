@@ -30,13 +30,13 @@ const styles = css({
   background: `
     radial-gradient(
       ellipse at center,
-      ${cssVar('backgroundColor')} 0%,
+      ${cssVar('backgroundMain')} 0%,
       transparent 100%
     ),
     center repeat url(${gridTile}),
     linear-gradient(
-      180deg, ${cssVar('backgroundColor')} 30.41%, ${cssVar(
-    'errorPageGradientEnd'
+      180deg, ${cssVar('backgroundMain')} 30.41%, ${cssVar(
+    'backgroundHeavy'
   )} 90.69%
     )
   `,

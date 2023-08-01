@@ -6,12 +6,7 @@ import { ComponentProps, useState } from 'react';
 import { noop } from '@decipad/utils';
 import { Avatar } from '../../atoms';
 import { Chevron } from '../../icons';
-import {
-  cssVar,
-  p12Medium,
-  setCssVar,
-  shortAnimationDuration,
-} from '../../primitives';
+import { p12Medium, shortAnimationDuration } from '../../primitives';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 const avatarGridStyles = css(p12Medium, {
@@ -21,14 +16,13 @@ const avatarGridStyles = css(p12Medium, {
   columnGap: '6px',
 });
 
-const chevronStyles = (hoverSelector: string) =>
-  css(setCssVar('currentTextColor', cssVar('weakTextColor')), {
-    width: '8px',
-    transition: `padding-top ease-in-out ${shortAnimationDuration}`,
-    [`${hoverSelector} &`]: {
-      paddingTop: '4px',
-    },
-  });
+const chevronStyles = (hoverSelector: string) => ({
+  width: '8px',
+  transition: `padding-top ease-in-out ${shortAnimationDuration}`,
+  [`${hoverSelector} &`]: {
+    paddingTop: '4px',
+  },
+});
 
 type AccountAvatarProps = Pick<
   ComponentProps<typeof Avatar>,

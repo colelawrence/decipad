@@ -69,5 +69,5 @@ const containerStyle = css({
 });
 
 const selectedStyle = css({
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('backgroundDefault')}`,
 });

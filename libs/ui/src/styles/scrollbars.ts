@@ -9,7 +9,7 @@ export const noTrackScrollbarStyles = css({
     scrollbarWidth: 'inherit',
     msOverflowStyle: 'inherit',
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: cssVar('scrollbarColor'),
+      backgroundColor: cssVar('backgroundHeavy'),
     },
   },
   '&::-webkit-scrollbar': {
@@ -28,7 +28,7 @@ export const noTrackScrollbarStyles = css({
   },
 
   '&::-ms-scrollbar-thumb': {
-    backgroundColor: cssVar('scrollbarColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
     borderRadius: defaultScrollbarWidth,
   },
 
@@ -42,7 +42,7 @@ export const insideNotebookScrollbarStyles = css({
     scrollbarWidth: 'inherit',
     msOverflowStyle: 'inherit',
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: cssVar('scrollbarColor'),
+      backgroundColor: cssVar('backgroundHeavy'),
     },
   },
   '&::-webkit-scrollbar': {
@@ -69,7 +69,7 @@ export const insideNotebookScrollbarStyles = css({
   '&::-ms-scrollbar-thumb': {
     width: '3px',
     height: '3px',
-    backgroundColor: cssVar('scrollbarColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
     borderRadius: defaultScrollbarWidth,
   },
 

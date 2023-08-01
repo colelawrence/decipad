@@ -14,7 +14,7 @@ const titleStyles = css(p13Bold, {
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   padding: '6px 5px 2px 5px',
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
   maxWidth: '200px',
   overflowX: 'hidden',
 });

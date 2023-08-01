@@ -13,7 +13,6 @@ import {
   cssVar,
   p12Medium,
   p14Medium,
-  setCssVar,
   shortAnimationDuration,
   tabletScreenQuery,
 } from '../../primitives';
@@ -67,7 +66,7 @@ function CustomDragLayer() {
             style={{
               backgroundColor: color.hex,
               opacity: 1,
-              color: cssVar('currentTextColor'),
+              color: cssVar('textDefault'),
               padding: 6,
               borderRadius: 6,
               display: 'inline-flex',
@@ -86,7 +85,13 @@ function CustomDragLayer() {
             >
               <Icon />
             </span>
-            <span css={{ alignItems: 'center', justifyContent: 'center' }}>
+            <span
+              css={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: cssVar('textTitle'),
+              }}
+            >
               {item.title}
             </span>
           </div>
@@ -402,12 +407,12 @@ const anchorStyles = css(gridStyles, {
   clipPath: 'inset(0 -12px 0 -12px round 12px)',
   transition: `background-color ${shortAnimationDuration} ease-out, box-shadow ${shortAnimationDuration} ease-out`,
   ':hover, :focus': {
-    backgroundColor: cssVar('highlightColor'),
-    boxShadow: `0px 0px 0px 12px ${cssVar('highlightColor')}`,
+    backgroundColor: cssVar('backgroundDefault'),
+    boxShadow: `0px 0px 0px 12px ${cssVar('backgroundDefault')}`,
   },
 });
 
-const nameStyles = css({
+const nameStyles = css(p14Medium, {
   gridArea: 'title',
   gridColumnEnd: 'tags',
   alignSelf: 'center',
@@ -418,13 +423,10 @@ const nameStyles = css({
   },
   textOverflow: 'ellipsis',
 
-  ...p14Medium,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+  color: cssVar('textTitle'),
 });
 
-const noNameNameStyles = css({
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-});
+const noNameNameStyles = css({});
 
 const notebookListInlineTags = css({
   display: 'flex',
@@ -448,8 +450,6 @@ const menuActionsStyles = css({
 
   transition: `opacity ${shortAnimationDuration} ease-out`,
 
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-
   position: 'relative',
   opacity: 1,
 });
@@ -464,9 +464,9 @@ const calendarIconStyles = css({
 const creationDateStyles = css(p12Medium, {
   paddingTop: '8px',
   lineHeight: '20px',
-  backgroundColor: cssVar('highlightColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
-  color: cssVar('weakTextColor'),
+  backgroundColor: cssVar('backgroundDefault'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  color: cssVar('textSubdued'),
   margin: '-7px',
   borderRadius: '0 0 8px 8px',
   padding: '4px 8px',

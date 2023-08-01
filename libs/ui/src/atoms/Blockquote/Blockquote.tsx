@@ -1,17 +1,17 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
-import { cssVar, setCssVar } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
 
 const verticalPadding = '6px';
 
 const styles = css(
   blockAlignment.blockquote.typography,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   {
     padding: `${verticalPadding} 30px ${verticalPadding} 12px`,
-    borderLeft: `4px solid ${cssVar('highlightColor')}`,
+    borderLeft: `4px solid ${cssVar('backgroundDefault')}`,
     wordBreak: 'break-word',
   }
 );

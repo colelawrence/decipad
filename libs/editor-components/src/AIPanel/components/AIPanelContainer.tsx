@@ -6,7 +6,7 @@ import type { FC } from 'react';
 import { ReactNode } from 'react';
 
 const containerCss = css({
-  border: `solid 1px ${cssVar('aiPanelBorderColor')}`,
+  border: `solid 1px ${cssVar('borderDefault')}`,
   padding: 16,
   borderRadius: 10,
   boxShadow: `0px 2px 24px -4px ${transparency(offBlack, weakOpacity).rgba}`,

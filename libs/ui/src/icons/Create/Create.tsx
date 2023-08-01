@@ -3,8 +3,8 @@ import { cssVar } from '../../primitives';
 export const Create = (): ReturnType<React.FC> => (
   <svg
     viewBox="0 0 20 20"
-    fill={cssVar('weakTextColor')}
-    stroke={cssVar('strongTextColor')}
+    fill={cssVar('iconColorDefault')}
+    stroke={cssVar('textHeavy')}
     xmlns="http://www.w3.org/2000/svg"
   >
     <title>Create</title>

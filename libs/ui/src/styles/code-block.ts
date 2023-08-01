@@ -5,7 +5,7 @@ export const lineHeight = '36px';
 
 export const variableStyles: CSSObject = {
   ...code,
-  backgroundColor: cssVar('backgroundHeavy'),
+  backgroundColor: cssVar('borderSubdued'),
   fontWeight: 500,
   fontSize: '13px',
 };

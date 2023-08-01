@@ -36,7 +36,7 @@ export const serializeVisualisationSpec = ({
     },
   };
 
-  const { color, ...specEncodingNoColor } = spec.encoding || {};
+  const specEncodingNoColor = spec.encoding || {};
   const specInside = {
     ...spec,
     encoding: {

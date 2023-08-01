@@ -6,18 +6,18 @@ export const Add = (): ReturnType<FC> => (
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    stroke={cssVar('currentTextColor')}
+    stroke={cssVar('iconColorHeavy')}
   >
     <title>Add</title>
     <path
       d="M8 4V12"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.2"
       strokeLinecap="round"
     />
     <path
       d="M4 8H12"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.2"
       strokeLinecap="round"
       strokeLinejoin="round"

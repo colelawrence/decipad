@@ -16,7 +16,6 @@ import {
   offBlack,
   p12Regular,
   p14Medium,
-  setCssVar,
   transparency,
   weakOpacity,
 } from '../../primitives';
@@ -32,10 +31,7 @@ const menuItemWrapperStyles = css({
   alignItems: 'center',
 });
 
-const menuItemSmallTextStyles = css(
-  p12Regular,
-  setCssVar('normalTextColor', 'weakerTextColor')
-);
+const menuItemSmallTextStyles = css(p12Regular);
 
 const helpMenuStyles = css({
   position: 'fixed',

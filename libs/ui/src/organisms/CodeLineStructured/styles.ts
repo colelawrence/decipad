@@ -4,7 +4,6 @@ import {
   code,
   cssVar,
   mobileQuery,
-  setCssVar,
   smallScreenQuery,
   wiggle,
 } from '../../primitives';
@@ -13,7 +12,7 @@ import { codeBlock } from '../../styles';
 const { lineHeight } = codeBlock;
 
 export const highlightedLineStyles = {
-  borderColor: cssVar('borderHighlightColor'),
+  borderColor: cssVar('borderDefault'),
 };
 
 export const codeLineStyles = css({
@@ -47,7 +46,7 @@ export const variableNameContainerStyles = css({
 
 export const codeContainerStyles = css(code, {
   gridArea: 'code',
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
+
   lineHeight,
   display: 'block',
   flexGrow: 1,

@@ -1,7 +1,12 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p12Bold, p12Regular, setCssVar } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Bold,
+  p12Regular,
+} from '../../primitives';
 
 interface MessageBlockProps {
   type: 'success' | 'warning' | 'error' | 'annotationWarning';
@@ -49,35 +54,33 @@ export const MessageBlock: FC<MessageBlockProps> = ({
 
 const titleStyles = css({
   ...p12Bold,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
 
 const messageStyles = css({
   ...p12Regular,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
 });
 
 const getMessageBlockType = (type: string) => {
   switch (type) {
     case 'error':
       return {
-        backgroundColor: cssVar('errorBlockError'),
-        color: cssVar('normalTextColor'),
+        backgroundColor: componentCssVars('ErrorBlockError'),
+        color: cssVar('textDefault'),
       };
     case 'warning':
       return {
-        backgroundColor: cssVar('errorBlockWarning'),
-        color: cssVar('normalTextColor'),
+        backgroundColor: componentCssVars('ErrorBlockWarning'),
+        color: cssVar('textDefault'),
       };
     case 'annotationWarning':
       return {
-        backgroundColor: cssVar('errorBlockAnnotationWarning'),
-        color: cssVar('normalTextColor'),
+        backgroundColor: componentCssVars('ErrorBlockAnnotationWarning'),
+        color: cssVar('textDefault'),
       };
     default:
       return {
-        backgroundColor: cssVar('toastOk'),
-        color: cssVar('normalTextColor'),
+        backgroundColor: cssVar('stateOkBackground'),
+        color: cssVar('textDefault'),
       };
   }
 };

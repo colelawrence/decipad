@@ -6,21 +6,21 @@ export const Music = (): ReturnType<FC> => (
     <title>Music</title>
     <path
       d="M7 19.25C8.24264 19.25 9.25 18.2426 9.25 17C9.25 15.7574 8.24264 14.75 7 14.75C5.75736 14.75 4.75 15.7574 4.75 17C4.75 18.2426 5.75736 19.25 7 19.25Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M9.25 17V6.75C9.25 5.64543 10.1454 4.75 11.25 4.75H17.25C18.3546 4.75 19.25 5.64543 19.25 6.75V14"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M17 16.25C18.2426 16.25 19.25 15.2426 19.25 14C19.25 12.7574 18.2426 11.75 17 11.75C15.7574 11.75 14.75 12.7574 14.75 14C14.75 15.2426 15.7574 16.25 17 16.25Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

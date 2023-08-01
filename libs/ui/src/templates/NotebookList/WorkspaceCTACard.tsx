@@ -27,7 +27,7 @@ const workspaceCTACardSuperWrapperStyles = (
 
     position: 'relative',
 
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
     backgroundImage: `url(${
       variant ? backgroundPublish : darkTheme ? backgroundDark : background
     })`,
@@ -50,7 +50,7 @@ const dismissWrapperStyles = css({
 const titleStyles = css(p18Medium, {
   lineHeight: '22px',
   maxWidth: '370px',
-  color: cssVar('strongTextColor'),
+  color: cssVar('textHeavy'),
 });
 
 const ctaStyles = css({

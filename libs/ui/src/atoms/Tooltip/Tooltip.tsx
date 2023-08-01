@@ -11,13 +11,7 @@ import {
 } from '@radix-ui/react-hover-card';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { FC, MouseEventHandler, useCallback } from 'react';
-import {
-  cssVar,
-  offBlack,
-  p12Medium,
-  transparency,
-  weakOpacity,
-} from '../../primitives';
+import { componentCssVars, cssVar, p12Medium } from '../../primitives';
 import { useIsDragging } from './useIsDragging';
 
 const contentWrapperStyles = css({
@@ -27,17 +21,8 @@ const contentWrapperStyles = css({
   padding: '12px 16px',
   wordBreak: 'break-word',
   zIndex: '10000',
-});
 
-const darkContentWrapperStyles = css(contentWrapperStyles, {
-  background: cssVar('tooltipBackground'),
-});
-
-const lightWrapperStyles = css(contentWrapperStyles, {
-  background: cssVar('backgroundColor'),
-  border: '1px solid',
-  borderColor: cssVar('borderHighlightColor'),
-  boxShadow: `0px 2px 24px -4px ${transparency(offBlack, weakOpacity).rgba}`,
+  backgroundColor: componentCssVars('TooltipBackground'),
 });
 
 const smallVariantStyles = (
@@ -58,26 +43,19 @@ const contentStyles = css(p12Medium, {
   alignItems: 'center',
   flexDirection: 'column',
   gap: '4px',
-});
-
-const lightContentStyles = css(contentStyles, {
-  color: cssVar('normalTextColor'),
-});
-
-const darkContentStyles = css(contentStyles, {
-  color: cssVar('backgroundColor'),
+  color: componentCssVars('TooltipText'),
 });
 
 const lightArrowStyles = css({
   polygon: {
-    fill: cssVar('backgroundColor'),
-    stroke: cssVar('borderHighlightColor'),
+    fill: cssVar('backgroundMain'),
+    stroke: cssVar('borderDefault'),
   },
 
   borderColor: 'black',
 });
 const darkArrowStyles = css({
-  fill: cssVar('tooltipBackground'),
+  fill: componentCssVars('TooltipBackground'),
 });
 
 const clickableStyles = css({
@@ -143,7 +121,7 @@ export const Tooltip = ({
       side={side}
       align={align}
       css={[
-        theme === 'light' ? lightWrapperStyles : darkContentWrapperStyles,
+        contentWrapperStyles,
         variant === 'small' && smallVariantStyles(side),
         onClick && clickableStyles,
         wrapperStyles,
@@ -156,9 +134,7 @@ export const Tooltip = ({
         height={9}
         offset={6}
       />
-      <div css={theme === 'dark' ? darkContentStyles : lightContentStyles}>
-        {children}
-      </div>
+      <div css={contentStyles}>{children}</div>
     </Content>
   );
 

@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface AttachFileToPad_attachFileToPad {
-  __typename: "Attachment";
+  __typename: 'Attachment';
   id: string;
   fileName: string;
   fileType: string;

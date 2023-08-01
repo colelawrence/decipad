@@ -119,7 +119,7 @@ const tableAddColumnButtonWrapperStyles = css({
 
 const tableAddColumnButtonStyles = css({
   width: '32px',
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
   borderRadius: '8px',
   padding: '8px',
   position: 'absolute',

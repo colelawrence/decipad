@@ -15,10 +15,10 @@ const styles = css({
   padding: '16px',
   paddingBottom: '8px',
 
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
+  backgroundColor: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '8px',
-  boxShadow: `3px 3px 24px ${cssVar('highlightColor')}`,
+  boxShadow: `3px 3px 24px ${cssVar('backgroundDefault')}`,
 
   zIndex: '2',
 });

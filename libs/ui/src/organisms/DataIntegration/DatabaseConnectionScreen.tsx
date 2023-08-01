@@ -129,7 +129,7 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
               </span>
               <span
                 css={{
-                  color: cssVar('errorColor'),
+                  color: cssVar('stateDangerBackground'),
                 }}
               >
                 Delete Connection
@@ -356,7 +356,7 @@ function NewDataConnection({
                         alignItems: 'center',
                         gap: '8px',
                         cursor: 'pointer',
-                        backgroundColor: cssVar('strongerHighlightColor'),
+                        backgroundColor: cssVar('borderSubdued'),
                         borderRadius: '8px 0px 0px 8px',
                       }}
                     >
@@ -445,8 +445,8 @@ function NewDataConnection({
                 ? {
                     color:
                       pingStatus === 'Connection Worked'
-                        ? cssVar('notebookStateOkHeavy')
-                        : cssVar('toastDanger'),
+                        ? cssVar('stateOkText')
+                        : cssVar('stateWarningBackground'),
                   }
                 : {},
             ]}
@@ -531,10 +531,10 @@ const existingConStyle = css({
 });
 
 const inputStyles = css({
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundDefault'),
   borderRadius: '6px',
   padding: '6px 12px',
-  border: `1px solid ${cssVar('strongerHighlightColor')}`,
+  border: `1px solid ${cssVar('borderDefault')}`,
 
   width: '100%',
 });

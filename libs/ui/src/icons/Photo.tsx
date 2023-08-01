@@ -5,7 +5,7 @@ export const Photo = (): ReturnType<FC> => (
   <svg fill="none" viewBox="0 0 24 24">
     <title>Photo</title>
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

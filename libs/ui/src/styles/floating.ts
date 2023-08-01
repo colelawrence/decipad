@@ -13,14 +13,14 @@ export const plateButtonCss = css`
   border-width: 0;
   cursor: pointer;
 
-  background-color: ${cssVar('backgroundColor')};
+  background-color: ${cssVar('backgroundMain')};
 
   :hover {
-    background-color: ${cssVar('highlightColor')};
+    background-color: ${cssVar('backgroundDefault')};
   }
 
   :hover {
-    background-color: ${cssVar('strongHighlightColor')};
+    background-color: ${cssVar('backgroundHeavy')};
   }
 
   padding: 4px 10px;
@@ -41,7 +41,7 @@ export const plateButtonCss = css`
 `;
 
 export const floatingRootCss = css`
-  background-color: ${cssVar('backgroundColor')};
+  background-color: ${cssVar('backgroundMain')};
   width: auto;
   z-index: 10;
 

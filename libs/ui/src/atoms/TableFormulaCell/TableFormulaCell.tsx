@@ -2,7 +2,12 @@
 import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p12Medium, p14Medium, setCssVar } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Medium,
+  p14Medium,
+} from '../../primitives';
 import { table } from '../../styles';
 import { tdBaseStyles } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
@@ -13,7 +18,7 @@ const lineNumberWidth = '22px';
 const functionTdBaseStyles = css(p14Medium, {
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  backgroundColor: cssVar('backgroundSubdued'),
   height: table.tdMinHeight,
   verticalAlign: 'middle',
   cursor: 'default',
@@ -28,7 +33,6 @@ const tdCounterStyles = css({
     paddingLeft: table.firstTdPaddingLeft,
   },
   '&:first-of-type::before': {
-    ...setCssVar('normalTextColor', cssVar('weakTextColor')),
     ...p12Medium,
     backgroundColor: 'transparent',
 
@@ -44,7 +48,7 @@ const tdCounterStyles = css({
 });
 
 const selectedStyles = css({
-  backgroundColor: cssVar('tableSelectionBackgroundColor'),
+  backgroundColor: componentCssVars('TableSelectionBackgroundColor'),
 });
 
 export interface TableFormulaCellProps {

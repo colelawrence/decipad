@@ -22,13 +22,13 @@ const outerWrapperStyles = css({
   padding: '10px',
 
   background: `
-    radial-gradient(rgba(0,0,0,0), ${cssVar('backgroundColor')} 70%),
+    radial-gradient(rgba(0,0,0,0), ${cssVar('backgroundMain')} 70%),
     center repeat url(${gridTile})
   `,
 });
 
 const outerBorderStyles = css({
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '32px',
 });
 
@@ -41,7 +41,7 @@ const wrapperStyles = css({
   gridGap: '16px',
   padding: '56px 64px',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   zIndex: 1,
 
   [mobileQuery]: {
@@ -62,7 +62,7 @@ const shadowStyles = css({
   height: '182px',
   width: '320px',
 
-  background: cssVar('weakerTextColor'),
+  background: cssVar('textDisabled'),
   filter: 'blur(80px)',
   transform: 'translateY(52px)',
 });

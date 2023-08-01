@@ -3,7 +3,7 @@ import { FC, ReactNode, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { noop } from '@decipad/utils';
 import { useWindowListener } from '@decipad/react-utils';
-import { cssVar, p14Medium, setCssVar, teal600 } from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
 import { Edit, Trash } from '../../icons';
 import { DropdownOption } from '../../molecules';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
@@ -21,7 +21,7 @@ const wrapper = css({
     display: 'none',
   },
   '&:hover': {
-    backgroundColor: cssVar('highlightColor'),
+    backgroundColor: cssVar('backgroundDefault'),
     borderRadius: '6px',
     'aside:last-child': {
       display: 'flex',
@@ -48,7 +48,7 @@ const iconStyles = css({
   height: 24,
 });
 
-const itemIconStyles = css(setCssVar('currentTextColor', teal600.rgb), {
+const itemIconStyles = css({
   width: '16px',
   height: '16px',
   display: 'grid',
@@ -143,7 +143,7 @@ export const SelectItem: FC<SelectItemProps> = ({
       css={[
         wrapper,
         focusedItem === item.index && {
-          backgroundColor: cssVar('highlightColor'),
+          backgroundColor: cssVar('backgroundDefault'),
           borderRadius: '6px',
         },
       ]}

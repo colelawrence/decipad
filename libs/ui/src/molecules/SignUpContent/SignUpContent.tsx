@@ -17,12 +17,12 @@ const signupTeaserWrapperStyles = css({
 });
 
 const teaserStyles = css(p13Regular, {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
 });
 
 const joinStyles = css(p13Bold, {
   marginTop: '0.25rem',
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
 });
 
 export const SignUpContent: FC = () => {

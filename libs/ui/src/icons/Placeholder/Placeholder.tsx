@@ -15,16 +15,16 @@ export const Placeholder = (): ReturnType<FC> => {
           width="12"
           height="12"
           rx="6"
-          fill={cssVar('iconBackgroundColor')}
+          fill={cssVar('iconBackground')}
         />
         <path
           d="M2 2L14 14"
-          stroke={cssVar('weakTextColor')}
+          stroke={cssVar('iconColorDefault')}
           strokeWidth="1.11429"
         />
         <path
           d="M14 2L2 14"
-          stroke={cssVar('normalTextColor')}
+          stroke={cssVar('iconColorHeavy')}
           strokeWidth="1.11429"
         />
       </g>
@@ -34,7 +34,7 @@ export const Placeholder = (): ReturnType<FC> => {
         width="12"
         height="12"
         rx="6"
-        stroke={cssVar('weakTextColor')}
+        stroke={cssVar('iconColorDefault')}
         strokeWidth="1.11429"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -47,7 +47,7 @@ export const Placeholder = (): ReturnType<FC> => {
             width="12"
             height="12"
             rx="6"
-            fill={cssVar('backgroundColor')}
+            fill={cssVar('iconColorMain')}
           />
         </clipPath>
       </defs>

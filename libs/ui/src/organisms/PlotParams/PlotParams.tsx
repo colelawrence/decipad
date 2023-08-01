@@ -100,11 +100,11 @@ const wrapperContainerStyles = css({
 
 const buttonStyles = css({
   borderRadius: '6px',
-  border: `1px solid ${cssVar('borderColor')}`,
-  backgroundColor: cssVar('tintedBackgroundColor'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  backgroundColor: cssVar('backgroundSubdued'),
 
   ':hover, :focus': {
-    backgroundColor: cssVar('strongHighlightColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
   display: 'flex',
   flexDirection: 'row',

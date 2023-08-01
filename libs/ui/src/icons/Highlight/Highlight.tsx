@@ -10,21 +10,21 @@ export const Highlight = (): ReturnType<FC> => (
     />
     <path
       d="M5 3V5.05882C5.68627 6.29412 6.64706 9.09412 6.64706 10.4118H10.3529C10.3529 9.17647 12 5.05882 12 5.05882V3"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.23529"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M7.05884 13.2941V10.4117H9.94119V12.0588L7.05884 13.2941Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.23529"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M5 5.05884H12"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.23529"
       strokeLinecap="round"
       strokeLinejoin="round"

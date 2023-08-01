@@ -6,21 +6,21 @@ export const Italic = (): ReturnType<FC> => (
     <title>Italic</title>
     <path
       d="M12.6667 2.66669H6.66667"
-      stroke={cssVar('weakTextColor')}
+      stroke={cssVar('iconColorDefault')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M9.33333 13.3333H3.33333"
-      stroke={cssVar('weakTextColor')}
+      stroke={cssVar('iconColorDefault')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M10 2.66669L6 13.3334"
-      stroke={cssVar('weakTextColor')}
+      stroke={cssVar('iconColorDefault')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

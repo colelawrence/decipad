@@ -1,16 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import {
-  useIsEditorReadOnly,
-  useThemeFromStore,
-} from '@decipad/react-contexts';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
-import { cssVar, setCssVar, transparency } from '../../primitives';
+import { cssVar } from '../../primitives';
 import { blockAlignment } from '../../styles';
-import { AvailableSwatchColor, UserIconKey, swatchesThemed } from '../../utils';
+import { AvailableSwatchColor, UserIconKey } from '../../utils';
 
 const { callout } = blockAlignment;
 
@@ -18,7 +15,7 @@ const verticalPadding = '12px';
 
 const styles = css(
   callout.typography,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   {
     borderRadius: '12px',
 
@@ -32,7 +29,6 @@ const styles = css(
 );
 
 const iconWrapperStyles = css({
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
   alignItems: 'center',
   display: 'grid',
   height: `calc(${callout.typography?.fontSize} * ${callout.typography?.lineHeight})`,
@@ -56,7 +52,6 @@ export const Callout = ({
   saveColor = noop,
 }: CalloutProps): ReturnType<FC> => {
   const Icon = icons[icon];
-  const [darkTheme] = useThemeFromStore();
   return (
     <p
       className={'block-figure'}
@@ -64,9 +59,8 @@ export const Callout = ({
       css={[
         styles,
         {
-          backgroundColor: transparency(swatchesThemed(darkTheme)[color], 0.4)
-            .rgba,
-          color: cssVar('weakTextColor'),
+          backgroundColor: cssVar('themeBackgroundSubdued'),
+          color: cssVar('textSubdued'),
         },
       ]}
     >

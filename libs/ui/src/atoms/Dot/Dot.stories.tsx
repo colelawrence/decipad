@@ -10,9 +10,7 @@ export default {
 
 export const Normal: StoryFn = () => (
   <Dot>
-    <span
-      css={{ padding: '4px 8px', background: cssVar('strongHighlightColor') }}
-    >
+    <span css={{ padding: '4px 8px', background: cssVar('backgroundHeavy') }}>
       Some text with a background
     </span>
   </Dot>

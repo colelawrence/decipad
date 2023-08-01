@@ -6,7 +6,7 @@ export const Slash = (): ReturnType<FC> => (
     <title>Slash</title>
     <path
       d="M3.11358 12.75L7.11361 3.25002"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"

@@ -2,10 +2,9 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Deci } from '../../icons';
-import { cssVar, p14Regular, p24Medium, setCssVar } from '../../primitives';
+import { cssVar, p14Regular, p24Medium } from '../../primitives';
 
 const deciLogoWrapper = css({
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
   display: 'grid',
   width: '80px',
   height: '80px',
@@ -23,14 +22,14 @@ const authContentWrapperStyles = css({
 
 const headingStyles = css(
   p24Medium,
-  setCssVar('currentTextColor', cssVar('strongTextColor')),
+
   {
     textAlign: 'center',
   }
 );
 
 const descriptionStyles = css(p14Regular, {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
   textAlign: 'center',
 });
 

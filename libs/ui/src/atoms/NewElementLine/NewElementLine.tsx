@@ -42,7 +42,7 @@ const addElementLineWrapper = css({
 const addElementLine = css({
   width: '100%',
   height: 2,
-  backgroundColor: cssVar('droplineGreyColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
 });
 
 const buttonStyles = (hasSibling: boolean) =>
@@ -52,8 +52,8 @@ const buttonStyles = (hasSibling: boolean) =>
     gap: '6px',
     padding: hasSibling ? `2px` : '7px',
     borderRadius: '6px',
-    backgroundColor: cssVar('highlightColor'),
-    border: `1px solid ${cssVar('strongHighlightColor')}`,
+    backgroundColor: cssVar('backgroundDefault'),
+    border: `1px solid ${cssVar('backgroundHeavy')}`,
   });
 
 const iconWrapperStyles = css({

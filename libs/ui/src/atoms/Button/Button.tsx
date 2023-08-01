@@ -4,26 +4,17 @@ import { css, CSSObject, SerializedStyles } from '@emotion/react';
 import { forwardRef, MouseEvent, ReactNode, useCallback } from 'react';
 import {
   cssVar,
-  grey400,
   grey700,
-  offBlack,
-  orange300,
-  orange700,
   orange800,
   p13Bold,
-  red200,
-  red400,
-  red500,
   red800,
-  setCssVar,
   transparency,
-  white,
   yellow100,
   yellow200,
   yellow300,
   yellow400,
   yellow500,
-  yellow900,
+  componentCssVars,
 } from '../../primitives';
 import { Anchor } from '../../utils';
 
@@ -47,131 +38,122 @@ const typeStyles: Record<
       border: 0,
       borderRadius: 0,
       boxShadow: '',
-      backgroundColor: cssVar('backgroundColor'),
-      ...setCssVar('currentTextColor', cssVar('normalTextColor')),
+      backgroundColor: cssVar('backgroundMain'),
+
       ':hover, :focus': {
-        backgroundColor: cssVar('tintedBackgroundColor'),
+        backgroundColor: cssVar('backgroundSubdued'),
       },
     },
     disabled: {
       border: 0,
       borderRadius: 0,
       boxShadow: '',
-      backgroundColor: cssVar('backgroundColor'),
-      ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-    },
-  },
-  primary: {
-    enabled: {
-      backgroundColor: cssVar('buttonPrimaryBackground'),
-      ...setCssVar('currentTextColor', cssVar('buttonPrimaryText')),
-      ':hover, :focus': {
-        backgroundColor: cssVar('buttonPrimaryHover'),
-      },
-    },
-    disabled: {
-      backgroundColor: cssVar('buttonPrimaryDisabledBackground'),
-      ...setCssVar('currentTextColor', cssVar('buttonPrimaryDisabledText')),
+      backgroundColor: cssVar('backgroundMain'),
     },
   },
   primaryBrand: {
     enabled: {
-      backgroundColor: cssVar('buttonBrandBackground'),
-      ...setCssVar('currentTextColor', cssVar('buttonBrandText')),
+      backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
+      color: componentCssVars('ButtonPrimaryDefaultText'),
+
       ':hover, :focus': {
-        backgroundColor: cssVar('buttonBrandHover'),
+        backgroundColor: componentCssVars('ButtonPrimaryHoverBackground'),
+        color: componentCssVars('ButtonPrimaryHoverText'),
       },
     },
     disabled: {
-      backgroundColor: cssVar('buttonBrandDisabledBackground'),
-      ...setCssVar('currentTextColor', cssVar('buttonBrandDisabledText')),
+      backgroundColor: componentCssVars('ButtonPrimaryDisabledBackground'),
+      color: componentCssVars('ButtonPrimaryDisabledText'),
+    },
+  },
+  primary: {
+    enabled: {
+      backgroundColor: componentCssVars('ButtonSecondaryDefaultBackground'),
+      color: componentCssVars('ButtonSecondaryDefaultText'),
+
+      ':hover, :focus': {
+        backgroundColor: componentCssVars('ButtonSecondaryHoverBackground'),
+        color: componentCssVars('ButtonSecondaryHoverText'),
+      },
+    },
+    disabled: {
+      backgroundColor: componentCssVars('ButtonSecondaryDisabledBackground'),
+      color: componentCssVars('ButtonSecondaryDisabledText'),
     },
   },
   secondary: {
     enabled: {
-      backgroundColor: cssVar('buttonSecondaryBackground'),
-      ...setCssVar('currentTextColor', cssVar('buttonSecondaryText')),
+      backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
+      color: componentCssVars('ButtonTertiaryDefaultText'),
+
       ':hover, :focus': {
-        backgroundColor: cssVar('buttonSecondaryHover'),
+        backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
+        color: componentCssVars('ButtonTertiaryHoverText'),
       },
     },
     disabled: {
-      backgroundColor: cssVar('buttonSecondaryDisabledBackground'),
-      ...setCssVar('currentTextColor', cssVar('buttonSecondaryDisabledText')),
+      backgroundColor: componentCssVars('ButtonTertiaryDisabledBackground'),
+      color: componentCssVars('ButtonTertiaryDisabledText'),
     },
   },
   danger: {
     enabled: {
-      backgroundColor: red500.rgb,
-      ...setCssVar('currentTextColor', white.rgb),
+      backgroundColor: componentCssVars('ButtonDangerDefaultBackground'),
+      color: componentCssVars('ButtonDangerDefaultText'),
+
       ':hover, :focus': {
-        backgroundColor: red400.rgb,
+        backgroundColor: componentCssVars('ButtonDangerHoverBackground'),
+        color: componentCssVars('ButtonDangerHoverText'),
       },
     },
     disabled: {
-      backgroundColor: red200.rgb,
-      ...setCssVar('currentTextColor', white.rgb),
+      backgroundColor: componentCssVars('ButtonDangerDisabledBackground'),
+      color: componentCssVars('ButtonDangerDisabledText'),
     },
   },
   yellow: {
     enabled: {
       backgroundColor: yellow500.rgb,
-      ...setCssVar('currentTextColor', yellow900.rgb),
+
       ':hover, :focus': {
         backgroundColor: yellow400.rgb,
       },
     },
     disabled: {
       backgroundColor: yellow200.rgb,
-      ...setCssVar('currentTextColor', yellow900.rgb),
     },
   },
   lightYellow: {
     enabled: {
       backgroundColor: yellow100.rgb,
-      ...setCssVar('currentTextColor', orange700.rgb),
+
       ':hover, :focus': {
         backgroundColor: yellow300.rgb,
       },
     },
     disabled: {
       backgroundColor: 'transparent',
-      ...setCssVar('currentTextColor', orange700.rgb),
     },
   },
   text: {
-    enabled: {
-      ...setCssVar('currentTextColor', offBlack.rgb),
-    },
-    disabled: {
-      ...setCssVar('currentTextColor', grey400.rgb),
-    },
+    enabled: {},
+    disabled: {},
   },
   darkDanger: {
     enabled: {
       backgroundColor: red800.rgb,
-      ...setCssVar('currentTextColor', white.rgb),
     },
-    disabled: {
-      ...setCssVar('currentTextColor', grey400.rgb),
-    },
+    disabled: {},
   },
   darkWarning: {
     enabled: {
       backgroundColor: orange800.rgb,
-      ...setCssVar('currentTextColor', white.rgb),
     },
-    disabled: {
-      ...setCssVar('currentTextColor', grey400.rgb),
-    },
+    disabled: {},
   },
   darkWarningText: {
-    enabled: {
-      ...setCssVar('currentTextColor', orange800.rgb),
-    },
-    disabled: {
-      ...setCssVar('currentTextColor', orange300.rgb),
-    },
+    enabled: {},
+    disabled: {},
   },
 };
 

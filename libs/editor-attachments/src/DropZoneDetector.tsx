@@ -1,5 +1,6 @@
 import {
   black,
+  componentCssVars,
   cssVar,
   mediumShadow,
   p14Medium,
@@ -27,10 +28,14 @@ export const DropZoneDetector: FC<DropZoneProps> = ({
     >
       {isOver && (
         <div css={warningForDNDStyles}>
-          <h1 css={css(p16Medium, { color: cssVar('backgroundColor') })}>
+          <h1 css={css(p16Medium, { color: cssVar('backgroundMain') })}>
             Upload images or data
           </h1>
-          <span css={css(p14Medium, { color: cssVar('weakerSlashIconColor') })}>
+          <span
+            css={css(p14Medium, {
+              color: componentCssVars('WeakerSlashIconColor'),
+            })}
+          >
             .csv, .json, .gif, .jpg, .jpeg, .png
           </span>
         </div>
@@ -54,7 +59,7 @@ const warningForDNDStyles = css({
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '300px',
-  backgroundColor: cssVar('strongSlashIconColor'),
+  backgroundColor: componentCssVars('StrongSlashIconColor'),
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',

@@ -19,11 +19,11 @@ const mainStyles = (readOnly: boolean, selected: boolean) =>
     justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
-    ...(selected && { backgroundColor: cssVar('highlightColor') }),
+    ...(selected && { backgroundColor: cssVar('backgroundDefault') }),
     ...(!readOnly && {
-      border: `1px solid ${cssVar('borderColor')}`,
+      border: `1px solid ${cssVar('borderSubdued')}`,
       ':hover': {
-        backgroundColor: cssVar('highlightColor'),
+        backgroundColor: cssVar('backgroundDefault'),
       },
       cursor: 'pointer',
     }),

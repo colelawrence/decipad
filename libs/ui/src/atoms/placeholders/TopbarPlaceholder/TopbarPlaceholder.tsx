@@ -13,7 +13,7 @@ const backButtonStyles = css({
   height: '32px',
   width: '32px',
   borderRadius: '32px',
-  backgroundColor: `${cssVar('strongerHighlightColor')}`,
+  backgroundColor: `${cssVar('borderSubdued')}`,
 });
 
 const rightPanel = css({
@@ -28,14 +28,14 @@ const avatarPlaceholderStyles = css({
   height: '24px',
   width: '24px',
   borderRadius: '24px',
-  backgroundColor: `${cssVar('strongerHighlightColor')}`,
+  backgroundColor: `${cssVar('borderSubdued')}`,
 });
 
 const shareButtonPlaceholderStyles = css({
   height: '33.68px',
   width: '64px',
   borderRadius: '6px',
-  backgroundColor: `${cssVar('strongerHighlightColor')}`,
+  backgroundColor: `${cssVar('borderSubdued')}`,
 });
 
 export const TopbarPlaceholder: React.FC = () => (

@@ -31,7 +31,7 @@ export const DashboardTopbar = ({
     <div
       css={css({
         [smallScreenQuery]: {
-          backgroundColor: cssVar('highlightColor'),
+          backgroundColor: cssVar('backgroundDefault'),
           display: 'none',
         },
       })}
@@ -40,7 +40,7 @@ export const DashboardTopbar = ({
         css={[
           dashboardTopbarWrapperStyles,
           displaySearchBoxBorder && {
-            borderBottom: `1px solid ${cssVar('borderColor')}`,
+            borderBottom: `1px solid ${cssVar('borderSubdued')}`,
             [smallScreenQuery]: {
               borderBottom: 0,
             },
@@ -93,7 +93,7 @@ const dashboardTopbarWrapperStyles = css({
   flexWrap: 'wrap-reverse',
   rowGap: '32px',
   [smallScreenQuery]: {
-    backgroundColor: cssVar('backgroundColor'),
+    backgroundColor: cssVar('backgroundMain'),
   },
 });
 const leftStyles = css({

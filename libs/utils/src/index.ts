@@ -27,6 +27,7 @@ export * from './once';
 export * from './produce';
 export * from './rxjs';
 export * from './storage';
+export * from './themeStore';
 export * from './thro';
 export * from './timeout';
 export * from './trimLines';

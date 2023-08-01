@@ -6,17 +6,17 @@ export const DatePicker = (): ReturnType<FC> => {
     <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>DatePicker</title>
 
-      <rect width={40} height={40} rx={8} fill={cssVar('slashColorLight')} />
+      <rect width={40} height={40} rx={8} fill={cssVar('iconBackground')} />
       <path
         d="M14.15 10.5C14.15 10.0306 14.5306 9.65 15 9.65C15.4694 9.65 15.85 10.0306 15.85 10.5V12.35H14.15V10.5Z"
-        fill={cssVar('backgroundColor')}
-        stroke={cssVar('slashColorHeavy')}
+        fill={cssVar('iconColorMain')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth="1.3"
       />
       <path
         d="M24.15 10.5C24.15 10.0306 24.5306 9.65 25 9.65C25.4694 9.65 25.85 10.0306 25.85 10.5V12.35H24.15V10.5Z"
-        fill={cssVar('backgroundColor')}
-        stroke={cssVar('slashColorHeavy')}
+        fill={cssVar('iconColorMain')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth="1.3"
       />
       <rect
@@ -25,23 +25,23 @@ export const DatePicker = (): ReturnType<FC> => {
         width="17.7"
         height="17.7"
         rx="3.35"
-        fill={cssVar('backgroundColor')}
-        stroke={cssVar('slashColorHeavy')}
+        fill={cssVar('iconColorMain')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth="1.3"
       />
       <path
         d="M11.15 15C11.15 13.1498 12.6498 11.65 14.5 11.65H25.5C27.3502 11.65 28.85 13.1498 28.85 15V16.35H11.15V15Z"
-        fill={cssVar('slashColorLight')}
-        stroke={cssVar('slashColorHeavy')}
+        fill={cssVar('iconBackground')}
+        stroke={cssVar('iconColorHeavy')}
         strokeWidth="1.3"
       />
       <path
         d="M16.0293 25V24.3545L17.7672 22.6758C17.9334 22.5104 18.0719 22.3635 18.1827 22.2351C18.2935 22.1066 18.3766 21.9822 18.432 21.8618C18.4874 21.7413 18.5151 21.6129 18.5151 21.4764C18.5151 21.3206 18.4793 21.1874 18.4076 21.0766C18.3359 20.9642 18.2373 20.8775 18.1118 20.8165C17.9864 20.7555 17.8438 20.725 17.6841 20.725C17.5195 20.725 17.3753 20.7587 17.2515 20.8261C17.1276 20.8919 17.0315 20.9859 16.963 21.1079C16.8962 21.2299 16.8628 21.3752 16.8628 21.5438H16C16 21.2307 16.0725 20.9586 16.2175 20.7274C16.3626 20.4961 16.5622 20.3171 16.8164 20.1903C17.0722 20.0634 17.3655 20 17.6963 20C18.032 20 18.3269 20.0618 18.5811 20.1855C18.8353 20.3091 19.0325 20.4785 19.1726 20.6936C19.3144 20.9088 19.3853 21.1545 19.3853 21.4306C19.3853 21.6153 19.3494 21.7967 19.2777 21.975C19.206 22.1532 19.0797 22.3507 18.8989 22.5674C18.7196 22.7842 18.4679 23.0467 18.1436 23.355L17.2808 24.2197V24.2534H19.461V25H16.0293Z"
-        fill={cssVar('slashColorNormal')}
+        fill={cssVar('iconColorDefault')}
       />
       <path
         d="M20.1063 24.0848V23.3743L22.2304 20.0674H22.8317V21.079H22.465L21.0351 23.3117V23.3502H24V24.0848H20.1063ZM22.4943 25V23.868L22.5041 23.5501V20.0674H23.3596V25H22.4943Z"
-        fill={cssVar('slashColorNormal')}
+        fill={cssVar('iconColorDefault')}
       />
     </svg>
   );

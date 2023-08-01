@@ -31,7 +31,7 @@ const headerStyles = css({
 });
 
 const headingStyles = css(p14Medium, {
-  color: cssVar('weakerTextColor'),
+  color: cssVar('textDisabled'),
   marginLeft: '8px',
 });
 

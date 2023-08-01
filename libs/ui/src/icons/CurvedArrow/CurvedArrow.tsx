@@ -12,9 +12,7 @@ export const CurvedArrow = ({
   active,
   title = 'CurvedArrow',
 }: CurvedArrowProps): ReturnType<FC> => {
-  const arrowColor = active
-    ? cssVar('currentTextColor')
-    : cssVar('weakerTextColor');
+  const arrowColor = active ? cssVar('iconColorHeavy') : cssVar('textDisabled');
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>{title}</title>

@@ -35,7 +35,7 @@ export const Loading = (
   >
     <title data-testid="loading-animation">Loading</title>
     <circle
-      fill={cssVar('currentTextColor')}
+      fill={cssVar('iconColorHeavy')}
       stroke="none"
       cx="4"
       cy="8"
@@ -43,7 +43,7 @@ export const Loading = (
       css={{ animation: `${dotKeyframes} linear 1s 0.1s infinite` }}
     />
     <circle
-      fill={cssVar('currentTextColor')}
+      fill={cssVar('iconColorHeavy')}
       stroke="none"
       cx="8"
       cy="8"
@@ -51,7 +51,7 @@ export const Loading = (
       css={{ animation: `${dotKeyframes} linear 1s 0.2s infinite` }}
     />
     <circle
-      fill={cssVar('currentTextColor')}
+      fill={cssVar('iconColorHeavy')}
       stroke="none"
       cx="12"
       cy="8"

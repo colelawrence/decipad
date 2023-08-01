@@ -13,12 +13,12 @@ const wrapperStyles = css({
 });
 
 const workspaceNameStyles = css(p14Medium, {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
   cursor: 'default',
 });
 
 const notebookNameStyles = css(p14Medium, {
-  color: cssVar('currentTextColor'),
+  color: cssVar('textDefault'),
   cursor: 'default',
 });
 

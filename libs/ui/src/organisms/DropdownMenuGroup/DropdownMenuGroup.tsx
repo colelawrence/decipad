@@ -23,7 +23,7 @@ export const DropdownMenuGroup: FC<DropdownMenuGroupProps> = ({
           css={[
             p14Medium,
             {
-              color: cssVar('weakTextColor'),
+              color: cssVar('textSubdued'),
             },
           ]}
         >

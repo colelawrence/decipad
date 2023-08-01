@@ -10,8 +10,9 @@ import {
   display,
   p14Regular,
   placeholderOpacity,
+  getThemeColor,
 } from '../../primitives';
-import { codeBlock, getThemeColor } from '../../styles';
+import { codeBlock } from '../../styles';
 import {
   hideOnPrint,
   slimBlockWidth,

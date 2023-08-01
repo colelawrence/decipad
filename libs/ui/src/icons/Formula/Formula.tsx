@@ -6,7 +6,7 @@ interface FormulaIconProps {
 }
 
 export const Formula: FC<FormulaIconProps> = ({ strokeColor }) => {
-  const currentStroke = strokeColor || cssVar('currentTextColor');
+  const currentStroke = strokeColor || cssVar('iconColorHeavy');
   return (
     <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <title>Formula</title>

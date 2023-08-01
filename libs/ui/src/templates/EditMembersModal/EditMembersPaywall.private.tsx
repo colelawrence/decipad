@@ -55,7 +55,7 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
         </FeaturesCard>
 
         <Button
-          type="yellow"
+          type="primaryBrand"
           href={paymentHref}
           sameTab={true} // change this to false if you want to work on payments locally
           testId="paywall_upgrade_pro"
@@ -81,7 +81,7 @@ const FeaturesCard = styled.div({
   flexDirection: 'column',
   gap: '16px',
   padding: '16px 24px',
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '8px',
 });
 
@@ -93,20 +93,20 @@ const Section = styled.div({
 
 const Heading = styled.h3(p32Medium, {
   letterSpacing: '-0.03em',
-  color: cssVar('spoilerColor'),
+  color: cssVar('textHeavy'),
 });
 
 const SubHeading = styled.h4(p14Bold, {
-  color: cssVar('normalTextColor'),
+  color: cssVar('textHeavy'),
 });
 
 const Paragraph = styled.p(p14Regular, {
-  color: cssVar('normalTextColor'),
+  color: cssVar('textHeavy'),
 });
 
 const List = styled.ul(p14Regular, {
   alignSelf: 'flex-start',
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
   listStyle: 'inside',
 
   '> li::marker': {

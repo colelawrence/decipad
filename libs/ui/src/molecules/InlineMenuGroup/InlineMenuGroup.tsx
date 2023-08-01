@@ -3,11 +3,11 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { InlineMenuItem } from '../../atoms';
-import { cssVar, p13Medium, setCssVar } from '../../primitives';
+import { p13Medium } from '../../primitives';
 
 const titleStyles = css(
   p13Medium,
-  setCssVar('currentTextColor', cssVar('weakTextColor')),
+
   { padding: '4px 2px' }
 );
 

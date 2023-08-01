@@ -32,7 +32,7 @@ const dataViewMenuWrapperStyles = css({
 });
 
 const menuButtonStyles = css({
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('backgroundDefault')}`,
   width: '36px',
   height: '36px',
   borderRadius: '8px',

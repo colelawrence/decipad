@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { List } from '../../icons';
-import { cssVar, p13Medium, setCssVar } from '../../primitives';
+import { cssVar, p13Medium } from '../../primitives';
 
 export interface ColumnDndPreviewProps {
   readonly label: string;
@@ -20,7 +20,7 @@ export const ColumnDndPreview: React.FC<ColumnDndPreviewProps> = ({
 };
 
 const columnHeaderDndStyles = css(p13Medium, {
-  backgroundColor: cssVar('droplineBgColor'),
+  backgroundColor: cssVar('themeBackgroundDefault'),
   //  opacity: 0.95,
   borderRadius: 8,
   transform: 'rotate(-3deg)',
@@ -36,9 +36,5 @@ const grabIconListStyle = css({
   verticalAlign: 'text-top',
   height: 16,
   width: 16,
-  svg: {
-    ...setCssVar('currentTextColor', cssVar('droplineColor')),
-    ...setCssVar('strongTextColor', cssVar('droplineColor')),
-    ...setCssVar('iconBackgroundColor', cssVar('droplineBgColor')),
-  },
+  svg: {},
 });

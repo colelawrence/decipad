@@ -5,7 +5,7 @@ import { RemoteData } from '../hooks';
 
 const completionCss = css({
   ...p16Regular,
-  background: cssVar('highlightColor'),
+  background: cssVar('backgroundDefault'),
   borderRadius: 5,
   marginBottom: 8,
   padding: 8,
@@ -16,8 +16,8 @@ const buttonContainerCss = css({
   gridGap: 8,
   button: {
     flex: 'none',
-    color: cssVar('aiInsertButtonColor'),
-    background: cssVar('aiInsertButtonBgColor'),
+    color: cssVar('textDefault'),
+    background: cssVar('backgroundDefault'),
     radius: 4,
   },
 });

@@ -12,7 +12,7 @@ import {
 } from '@udecode/plate';
 import { ComponentProps, FC, ReactNode, useCallback } from 'react';
 import { useFocused, useSelected } from 'slate-react';
-import { cssVar } from '../../primitives';
+import { componentCssVars, cssVar } from '../../primitives';
 import { FigCaption } from '../../utils/resizing';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
 import { FloatingMedia } from '../FloatingMedia/FloatingMedia';
@@ -43,19 +43,21 @@ const imagePlaceholderStyles = css({
   background: `
   radial-gradient(
     ellipse at center,
-    ${cssVar('tintedBackgroundColor')} 0%,
+    ${cssVar('backgroundSubdued')} 0%,
     transparent 100%
   ),
   linear-gradient(
-    180deg, ${cssVar('highlightColor')} 30.41%, ${cssVar(
-    'tintedBackgroundColor'
+    180deg, ${cssVar('backgroundDefault')} 30.41%, ${cssVar(
+    'backgroundHeavy'
   )} 100%
   )
 `,
 });
 
 const resizableImagePlaceholderStyles = css({
-  background: `no-repeat center ${cssVar('tableSelectionBackgroundColor')}`,
+  background: `no-repeat center ${componentCssVars(
+    'TableSelectionBackgroundColor'
+  )}`,
 });
 
 type ImageComponent = PlateComponent<{

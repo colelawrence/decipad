@@ -11,7 +11,6 @@ import {
   normalOpacity,
   OpaqueColor,
   p14Regular,
-  setCssVar,
   transparency,
   weakOpacity,
 } from '../../primitives';
@@ -61,7 +60,7 @@ export const NavigationItem = ({
   iconStyles = css({ height: 18, width: 18 }),
   wrapperStyles = css({}),
   isActive = false,
-  backgroundColor = cssVar('highlightColor'),
+  backgroundColor = cssVar('backgroundDefault'),
 
   onClick,
   onLinkClick,
@@ -190,6 +189,7 @@ const containerStyles = css({
 
 const activeStyles = (backgroundColor: OpaqueColor | string) =>
   css({
+    color: cssVar('textTitle'),
     backgroundColor:
       typeof backgroundColor === 'string'
         ? backgroundColor
@@ -203,8 +203,6 @@ const activeStyles = (backgroundColor: OpaqueColor | string) =>
 
 const navigationItemButtonStyles = (backgroundColor: OpaqueColor | string) =>
   css(p14Regular, {
-    ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-
     cursor: 'pointer',
 
     display: 'flex',
@@ -226,25 +224,22 @@ const leftSideStyles = css(p14Regular, {
   gap: '10px',
 });
 
-const iconStylez = css(
-  setCssVar('currentTextColor', cssVar('normalTextColor')),
-  {
-    minHeight: '50%',
-    position: 'relative',
+const iconStylez = css({
+  minHeight: '50%',
+  position: 'relative',
 
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    // essentially 50% padding-right
-    aspectRatio: '1.5 / 1',
-    alignItems: 'start',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  // essentially 50% padding-right
+  aspectRatio: '1.5 / 1',
+  alignItems: 'start',
 
-    '@supports not (aspect-ratio: 1.5 / 1)': {
-      minWidth: '24px',
-      paddingRight: '8px',
-    },
-  }
-);
+  '@supports not (aspect-ratio: 1.5 / 1)': {
+    minWidth: '24px',
+    paddingRight: '8px',
+  },
+});
 
 const workspaceColorActionsStyles = css({
   position: 'relative',

@@ -7,7 +7,7 @@ const conditionLinksWrapperStyles = css(p12Regular, {
   padding: '0 32px',
   textAlign: 'center',
   fontSize: '75%',
-  color: cssVar('weakerTextColor'),
+  color: cssVar('textDisabled'),
 
   lineHeight: 1.36,
 });

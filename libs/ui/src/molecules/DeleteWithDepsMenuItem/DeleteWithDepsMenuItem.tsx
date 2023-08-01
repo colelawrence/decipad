@@ -15,6 +15,7 @@ import {
   purple700,
   transparency,
   wiggle,
+  componentCssVars,
 } from '../../primitives';
 
 interface DeleteWithDepsMenuItemProps {
@@ -119,9 +120,9 @@ export const DeleteWithDepsMenuItem: FC<DeleteWithDepsMenuItemProps> = ({
 
 const deleteWithDepsMenuItemStyles = css(p12Medium, {
   borderRadius: 4,
-  backgroundColor: cssVar('notebookStateDangerLight'),
-  color: cssVar('notebookStateDangerHeavy'),
-  border: `1px solid ${cssVar('notebookStateDangerHeavy')}`,
+  backgroundColor: cssVar('stateDangerIconBackground'),
+  color: componentCssVars('TooltipText'),
+  border: `1px solid ${cssVar('stateDangerIconOutline')}`,
   cursor: 'pointer',
   width: 17,
   height: 17,
@@ -130,9 +131,10 @@ const deleteWithDepsMenuItemStyles = css(p12Medium, {
     animation: `${antiwiggle} 0.5s ease-in-out,
 ${animationTwoColours(
   'background-color',
-  cssVar('notebookStateDangerLight'),
-  cssVar('notebookStateWarningLight')
+  cssVar('stateDangerBackground'),
+  cssVar('stateDangerBackground')
 )} 0.5s ease-in-out`,
+    color: cssVar('textDefault'),
   },
 
   ':hover:after': {

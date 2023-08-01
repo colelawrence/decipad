@@ -42,12 +42,12 @@ const paginationControlWrapperTdStyles = css({
 });
 
 const pageDescriptionStyles = css(p13Regular, {
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
   padding: '0 8px',
 });
 
 const footerRowStyles = css({
-  backgroundColor: cssVar('tableFooterBackgroundColor'),
+  backgroundColor: cssVar('backgroundSubdued'),
 });
 
 type TableResultProps =

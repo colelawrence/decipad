@@ -3,12 +3,11 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, InputHTMLAttributes } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
-import { cssVar, p13Medium, red200, setCssVar } from '../../primitives';
+import { cssVar, p13Medium, red200 } from '../../primitives';
 import { menu } from '../../styles';
 
 const menuItemStyles = css({
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  background: cssVar('backgroundColor'),
+  background: cssVar('backgroundMain'),
 
   alignItems: 'center',
   display: 'flex',
@@ -27,15 +26,12 @@ const labelStyles = css({
 });
 
 const inputStyles = css(p13Medium, {
-  ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  ':focus-within': {
-    ...setCssVar('currentTextColor', cssVar('normalTextColor')),
-  },
+  ':focus-within': {},
 
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
   '*:hover > &, :focus': {
-    borderColor: `${cssVar('strongerHighlightColor')}`,
+    borderColor: `${cssVar('borderSubdued')}`,
   },
 
   padding: '4px 12px',
@@ -44,7 +40,7 @@ const inputStyles = css(p13Medium, {
   width: 0, // Override vendor default width so flex basis can apply
   flex: '0 1 100%',
 
-  background: cssVar('highlightColor'),
+  background: cssVar('backgroundDefault'),
 });
 
 const errorInputStyles = css({

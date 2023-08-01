@@ -1,16 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { AnimatedIcon } from '@decipad/ui';
+import { AnimatedIcon, componentCssVars } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Refresh } from '../../icons';
-import {
-  black,
-  cssVar,
-  p13Medium,
-  setCssVar,
-  transparency,
-} from '../../primitives';
+import { black, cssVar, p13Medium, transparency } from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
@@ -59,8 +53,8 @@ export const TextAndIconButton = ({
     <span
       data-testid={`text-icon-button:${text}`}
       css={[
-        buttonTextStyles(size, notSelectedLook),
-        notSelectedLook && { color: cssVar('weakerTextColor') },
+        buttonTextStyles(notSelectedLook),
+        notSelectedLook && { color: cssVar('textDisabled') },
       ]}
     >
       {text}
@@ -166,17 +160,12 @@ const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
     },
   ]);
 
-const buttonTextStyles = (size: 'fit' | 'normal', notSelectedLook: boolean) =>
+const buttonTextStyles = (notSelectedLook: boolean) =>
   css([
-    p13Medium,
     {
       whiteSpace: 'nowrap',
       padding: '0 4px',
     },
-    size === 'normal' &&
-      !notSelectedLook && {
-        color: cssVar('textHeavy'), // used in integration tabs
-      },
     notSelectedLook && {
       ':hover': {
         color: cssVar('textHeavy'),
@@ -186,26 +175,26 @@ const buttonTextStyles = (size: 'fit' | 'normal', notSelectedLook: boolean) =>
 
 const blueBackgroundStyles = (_disabled: boolean) =>
   css({
-    backgroundColor: cssVar('weakerSlashIconColor'),
+    backgroundColor: componentCssVars('WeakerSlashIconColor'),
     border: `solid 1px ${transparency(black, 0.08).rgba}`,
 
     ':hover, :focus': {
-      backgroundColor: cssVar('weakSlashIconColor'),
+      backgroundColor: componentCssVars('WeakSlashIconColor'),
     },
   });
 
 const redBackgroundStyles = (_disabled: boolean) =>
-  css({
-    backgroundColor: cssVar('buttonDangerLight'),
+  css(p13Medium, {
+    backgroundColor: cssVar('stateDangerBackground'),
     border: `solid 1px ${transparency(black, 0.08).rgba}`,
 
     ':hover, :focus': {
-      backgroundColor: cssVar('buttonDangerHeavy'),
+      backgroundColor: cssVar('stateDangerIconBackground'),
     },
   });
 
 const transparentBackgroundStyles = (_disabled: boolean) =>
-  css({
+  css(p13Medium, {
     backgroundColor: 'transparent',
     border: `solid 1px transparent`,
 
@@ -215,16 +204,16 @@ const transparentBackgroundStyles = (_disabled: boolean) =>
   });
 
 const transparentGreenBackgroundStyles = (_disabled: boolean) =>
-  css({
+  css(p13Medium, {
     backgroundColor: 'transparent',
     border: `solid 1px transparent`,
-    color: cssVar('aiTextColor'),
-    ...setCssVar('currentTextColor', cssVar('aiTextColor')), // set stroke color
+    color: componentCssVars('AiTextColor'),
+
     span: {
-      color: cssVar('aiTextColor'),
+      color: componentCssVars('AiTextColor'),
     },
     svg: {
-      fill: cssVar('aiTextColor'),
+      fill: componentCssVars('AiTextColor'),
     },
     ':hover, :focus': {
       backgroundColor: 'transparent',
@@ -232,30 +221,36 @@ const transparentGreenBackgroundStyles = (_disabled: boolean) =>
   });
 
 const greyBackgroundStyles = (disabled: boolean) =>
-  css({
+  css(p13Medium, {
     backgroundColor: cssVar(
-      disabled ? 'highlightColor' : 'strongHighlightColor'
+      disabled ? 'backgroundSubdued' : 'backgroundDefault'
     ),
     border: `solid 1px ${transparency(black, 0.08).rgba}`,
 
     ':hover, :focus': {
       backgroundColor: cssVar(
-        disabled ? 'highlightColor' : 'strongHighlightColor'
+        disabled ? 'backgroundSubdued' : 'backgroundDefault'
       ),
     },
   });
 
 const brandBackgroundStyles = (disabled: boolean) =>
-  css({
-    color: cssVar(disabled ? 'buttonBrandDisabledText' : 'buttonBrandText'),
-    backgroundColor: cssVar(
-      disabled ? 'buttonBrandDisabledBackground' : 'buttonBrandBackground'
+  css(p13Medium, {
+    color: componentCssVars(
+      disabled ? 'ButtonPrimaryDisabledText' : 'ButtonPrimaryDefaultText'
+    ),
+    backgroundColor: componentCssVars(
+      disabled
+        ? 'ButtonPrimaryDisabledBackground'
+        : 'ButtonPrimaryDefaultBackground'
     ),
     border: `solid 1px transparent`,
 
     ':hover, :focus': {
-      backgroundColor: cssVar(
-        disabled ? 'buttonBrandDisabledBackground' : 'buttonBrandHover'
+      backgroundColor: componentCssVars(
+        disabled
+          ? 'ButtonPrimaryDisabledBackground'
+          : 'ButtonPrimaryHoverBackground'
       ),
     },
   });

@@ -40,7 +40,7 @@ const textStyle = css(p14Medium, {
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
 });
 
 const addWorkspacePlusStyles = css({

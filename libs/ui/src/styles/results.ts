@@ -4,9 +4,9 @@ import { cssVar } from '../primitives';
 export const resultBubbleStyles: CSSObject = {
   ':empty': { display: 'none' },
   borderRadius: 8,
-  backgroundColor: cssVar('backgroundColor'),
-  border: `1px solid ${cssVar('borderColor')}`,
-  filter: `drop-shadow(0px 1px 0px ${cssVar('borderColor')})`,
+  backgroundColor: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderSubdued')}`,
+  filter: `drop-shadow(0px 1px 0px ${cssVar('borderSubdued')})`,
   '@media print': {
     backgroundColor: 'unset',
     border: 'unset',

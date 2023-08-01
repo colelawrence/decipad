@@ -1,7 +1,12 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
-import { cssVar, p16Regular, smallScreenQuery } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p16Regular,
+  smallScreenQuery,
+} from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
 
 // complete-error should never happen, but if it does it's when the fallback
@@ -59,10 +64,10 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
     <div
       css={[
         type === 'warning'
-          ? { backgroundColor: cssVar('errorBlockWarning') }
+          ? { backgroundColor: componentCssVars('ErrorBlockWarning') }
           : type === 'info'
-          ? { backgroundColor: cssVar('errorBlockInfo') }
-          : { backgroundColor: cssVar('errorBlockError') },
+          ? { backgroundColor: componentCssVars('ErrorBlockInfo') }
+          : { backgroundColor: componentCssVars('ErrorBlockError') },
         errorBlock,
       ]}
       contentEditable={false}
@@ -73,7 +78,7 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
             data-testid="error-block"
             css={[
               errorMessageStypes,
-              type === 'info' && { color: cssVar('normalTextColor') },
+              type === 'info' && { color: cssVar('textDefault') },
             ]}
           >
             {type !== 'info' &&
@@ -116,7 +121,7 @@ const errorBlockWrapperStyles = css(centeredFlex, {
 });
 
 const errorMessageStypes = css(p16Regular, {
-  color: cssVar('errorBlockColor'),
+  color: componentCssVars('ErrorBlockColor'),
 });
 
 const errorBlockRowStyles = css(centeredFlex, {

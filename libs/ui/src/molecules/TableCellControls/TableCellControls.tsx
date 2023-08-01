@@ -5,11 +5,9 @@ import { MouseEvent, forwardRef, useCallback, useState } from 'react';
 import { MenuItem, Tooltip } from '../../atoms';
 import { DownArrow, DragHandle, Trash, UpArrow } from '../../icons/index';
 import {
-  cssVar,
   mouseMovingOverTransitionDelay,
   p12Medium,
   p12Regular,
-  setCssVar,
   shortAnimationDuration,
 } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -104,32 +102,16 @@ export const TableCellControls = forwardRef<
             <span
               css={css(
                 p12Regular,
-                setCssVar('currentTextColor', cssVar('backgroundColor')),
+
                 {
                   whiteSpace: 'nowrap',
                   textAlign: 'center',
                 }
               )}
             >
-              <strong
-                css={css([
-                  p12Medium,
-                  setCssVar('currentTextColor', cssVar('backgroundColor')),
-                ])}
-              >
-                Drag
-              </strong>{' '}
-              to move
+              <strong css={css([p12Medium])}>Drag</strong> to move
               <br />
-              <strong
-                css={css([
-                  p12Medium,
-                  setCssVar('currentTextColor', cssVar('backgroundColor')),
-                ])}
-              >
-                Click
-              </strong>{' '}
-              for options
+              <strong css={css([p12Medium])}>Click</strong> for options
             </span>
           </Tooltip>
         </div>

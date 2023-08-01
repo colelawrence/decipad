@@ -16,7 +16,7 @@ const smartCellStyles = css(p14Medium, {
 });
 
 const smartCellHoverCellStyles = css({
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 const smartCellAlignRightStyles = css({
@@ -24,8 +24,8 @@ const smartCellAlignRightStyles = css({
 });
 
 const smartCellGlobalStyles = css({
-  color: cssVar('weakTextColor'),
-  backgroundColor: cssVar('highlightColor'),
+  color: cssVar('textSubdued'),
+  backgroundColor: cssVar('backgroundDefault'),
   fontWeight: 'bold',
 });
 

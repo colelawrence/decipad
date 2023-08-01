@@ -46,7 +46,7 @@ const themeIconStyles = css({
 });
 
 const themePickerStyles = css({
-  backgroundColor: cssVar('strongHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
   width: '32px',
   height: '64px',
   borderRadius: '8px',
@@ -58,11 +58,11 @@ const themePickerStyles = css({
 });
 
 const activeThemePickerStyles = css({
-  backgroundColor: cssVar('strongHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
 });
 
 const toggleThemeSwitchStyles = css({
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   width: '28px',
   height: '28px',
   borderRadius: '6px',

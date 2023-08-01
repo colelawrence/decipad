@@ -85,6 +85,8 @@ const workspaceSelectorStyles = css({
   top: '60px',
   left: '8px',
   zIndex: 2,
+  backgroundColor: cssVar('backgroundMain'),
+  border: `1px solid ${cssVar('borderDefault')}`,
 
   boxShadow: `0px 3px 24px -4px ${mediumShadow.rgba}`,
   borderRadius: '16px',
@@ -115,7 +117,7 @@ const nameTextStyles = css(p18Regular, {
 });
 
 const arrowDownButtonStyles = css({
-  backgroundColor: cssVar('borderHighlightColor'),
+  backgroundColor: cssVar('borderDefault'),
   borderRadius: '50%',
   height: '24px',
   width: '24px',

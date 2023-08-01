@@ -2,18 +2,24 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Formula } from '../../icons';
-import { cssVar, p12Medium, p12Regular, p13Bold } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Medium,
+  p12Regular,
+  p13Bold,
+} from '../../primitives';
 
 const explanationTextStyles = css(p12Medium, {
   padding: '4px 2px',
-  color: cssVar('weakerTextColor'),
+  color: cssVar('textDisabled'),
   code: css({
     display: 'block',
     height: '100%',
     borderRadius: '3px',
     padding: '1px 2px',
-    backgroundColor: cssVar('tooltipCodeBackground'),
-    color: cssVar('weakTextColor'),
+    backgroundColor: componentCssVars('TooltipCodeBackground'),
+    color: cssVar('textSubdued'),
   }),
 });
 
@@ -26,7 +32,7 @@ const iconStyles = css({
 });
 
 const titleTextStyles = css(p13Bold, {
-  color: cssVar('weakTextColor'),
+  color: cssVar('textSubdued'),
 });
 
 const sectionStyles = css({
@@ -41,14 +47,14 @@ const maxSpace = css({
 
 const FormulaTooltipBoxStyles = css(p12Regular, {
   width: '235px',
-  backgroundColor: cssVar('notebookStateDisabledLight'),
+  backgroundColor: cssVar('backgroundDefault'),
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   margin: '3px 3px 3px 0px',
   borderRadius: '8px',
   padding: '2px 2px 0px 3px',
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
 });
 
 const FormulaTooltipContentStyles = css({
@@ -82,7 +88,7 @@ export const AutoCompleteMenuFormulaTooltip = ({
             }}
           >
             <span css={iconStyles}>
-              <Formula strokeColor={cssVar('weakTextColor')} />
+              <Formula strokeColor={cssVar('textSubdued')} />
             </span>
             <span css={[explanationTextStyles, titleTextStyles, maxSpace]}>
               Function for {formulaGroup}

@@ -6,21 +6,21 @@ export const Bank = (): ReturnType<FC> => (
     <title>Bank</title>
     <path
       d="M14.25 19.25V11.5M18.25 11.5V19.25V11.5ZM5.75 19.25V11.5V19.25ZM9.75 19.25V11.5V19.25Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M12 4.75L19.25 11.25H4.75L12 4.75Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M4.75 19.25H19.25"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

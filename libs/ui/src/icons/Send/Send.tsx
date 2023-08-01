@@ -6,14 +6,14 @@ export const Send = (): ReturnType<FC> => (
     <title>Send</title>
     <path
       d="M3.16634 3.16699L12.833 8.00033L3.16634 12.8337L5.49967 8.00033L3.16634 3.16699Z"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M5.66667 8L7.5 8"
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"

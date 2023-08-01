@@ -4,7 +4,7 @@ export const Copy = (): ReturnType<React.FC> => (
   <svg fill="none" viewBox="0 0 24 24">
     <title>Copy</title>
     <path
-      stroke={cssVar('currentTextColor')}
+      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"
@@ -15,8 +15,8 @@ export const Copy = (): ReturnType<React.FC> => (
       height="10.5"
       x="8.75"
       y="8.75"
-      stroke={cssVar('currentTextColor')}
-      fill={cssVar('highlightColor')}
+      stroke={cssVar('iconColorHeavy')}
+      fill={cssVar('backgroundDefault')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

@@ -4,7 +4,7 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FormEvent, useCallback } from 'react';
 import { Button, InputField } from '../../atoms';
-import { h1, p12Medium, p16Regular, cssVar, setCssVar } from '../../primitives';
+import { h1, p12Medium, p16Regular } from '../../primitives';
 import { AccountSetup } from '../../templates';
 import modelDark from './model2_dark.png';
 import modelLight from './model2_light.png';
@@ -38,7 +38,7 @@ const bottomStyles = css({
 
 const stepStyles = css(
   p12Medium,
-  setCssVar('currentTextColor', cssVar('weakerTextColor')),
+
   {
     flexGrow: 3,
     display: 'flex',

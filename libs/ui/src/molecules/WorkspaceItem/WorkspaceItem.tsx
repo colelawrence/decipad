@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { FC, useCallback } from 'react';
 import { Avatar, NavigationItem } from '../../atoms';
 import { Check } from '../../icons';
-import { cssVar, p12Regular, p14Medium, setCssVar } from '../../primitives';
+import { cssVar, p12Regular, p14Medium } from '../../primitives';
 
 const maxWidth = '256px';
 const pencilSize = '24px';
@@ -77,7 +77,7 @@ export const WorkspaceItem = ({
           <strong
             css={css(
               p14Medium,
-              setCssVar('currentTextColor', cssVar('strongTextColor')),
+
               {
                 textAlign: 'left',
                 whiteSpace: 'nowrap',
@@ -91,7 +91,7 @@ export const WorkspaceItem = ({
           <span
             css={css(p12Regular, {
               textAlign: 'left',
-              color: cssVar('weakTextColor'),
+              color: cssVar('textSubdued'),
             })}
           >
             {membersCount} member{membersCount === 1 ? '' : 's'}

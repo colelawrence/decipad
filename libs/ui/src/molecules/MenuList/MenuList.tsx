@@ -19,9 +19,9 @@ const defaultStyles = css({
 
   gap: '2px',
   padding: '6px',
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
   boxShadow: `0px 1px 2px ${shadow1}, 0px 2px 12px ${shadow2}`,
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '8px',
 });
 

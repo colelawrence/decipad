@@ -687,24 +687,24 @@ runTests({
     ],
   },
   'No ambiguity between subtraction and implicit multiplication of an exponentiated unary minus':
-  {
-    sourceMap: false,
-    source: 'InterestRate = 1.1%\n1 - InterestRate**360',
-    ast: [
-      assign('InterestRate', num(0.011, 'percentage')),
-      c('-', l(1), c('**', r('InterestRate'), l(360))),
-    ],
-  },
+    {
+      sourceMap: false,
+      source: 'InterestRate = 1.1%\n1 - InterestRate**360',
+      ast: [
+        assign('InterestRate', num(0.011, 'percentage')),
+        c('-', l(1), c('**', r('InterestRate'), l(360))),
+      ],
+    },
   'No ambiguity between subtraction and implicit multiplication with a negative part (1)':
-  {
-    sourceMap: false,
-    source: '10 - 5',
-    ast: [c('-', l(10), l(5))],
-  },
+    {
+      sourceMap: false,
+      source: '10 - 5',
+      ast: [c('-', l(10), l(5))],
+    },
   'No ambiguity between subtraction and implicit multiplication with a negative part (2)':
-  {
-    sourceMap: false,
-    source: '10 -5',
-    ast: [c('-', l(10), l(5))],
-  },
+    {
+      sourceMap: false,
+      source: '10 -5',
+      ast: [c('-', l(10), l(5))],
+    },
 });

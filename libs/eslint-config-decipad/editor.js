@@ -1,8 +1,20 @@
 const plate = require('@udecode/plate');
 
 module.exports = {
+  plugins: ['unused-imports'],
   extends: ['../../libs/eslint-config-decipad/react'],
   rules: {
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
     'no-restricted-imports': [
       'error',
       {

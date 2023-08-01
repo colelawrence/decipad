@@ -2,22 +2,20 @@ import { noop } from '@decipad/utils';
 import { SerializedStyles, css } from '@emotion/react';
 import { FC, useState } from 'react';
 import { nanoid } from 'nanoid';
-import { cssVar, p14Regular, setCssVar } from '../../primitives';
+import { cssVar, p14Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 
 const inputStyles = css({
   padding: '12px',
 
-  backgroundColor: cssVar('backgroundColor'),
+  backgroundColor: cssVar('backgroundMain'),
 
-  border: `1px solid ${cssVar('borderColor')}`,
+  border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
 
   ...p14Regular,
-  ...setCssVar('currentTextColor', cssVar('strongTextColor')),
-  '&::placeholder': {
-    ...setCssVar('currentTextColor', cssVar('weakTextColor')),
-  },
+
+  '&::placeholder': {},
 });
 
 export type TextareaFieldProps = {

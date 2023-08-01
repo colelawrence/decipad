@@ -8,7 +8,7 @@ import { cssVar, p12Medium } from '../../primitives';
 const selectFontStyles = css(p12Medium);
 
 const selectStyles = css({
-  backgroundColor: cssVar('highlightColor'),
+  backgroundColor: cssVar('backgroundDefault'),
 });
 
 interface LabeledSelectProps<T extends string> {

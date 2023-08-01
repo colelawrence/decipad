@@ -19,7 +19,7 @@ const iconWrapperStyles = css({
   display: 'grid',
   placeItems: 'center',
   borderRadius: '6px',
-  backgroundColor: `${cssVar('highlightColor')}`,
+  backgroundColor: `${cssVar('backgroundDefault')}`,
   transition: `background-color ${shortAnimationDuration} ease-out`,
 });
 

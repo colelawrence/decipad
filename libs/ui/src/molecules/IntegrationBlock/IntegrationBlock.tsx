@@ -127,5 +127,5 @@ const controlStyles = css(p12Medium, hideOnPrint, {
   display: 'flex',
   cursor: 'pointer',
   gap: '6px',
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
 });

@@ -14,7 +14,6 @@ import {
   grey300,
   grey700,
   offBlack,
-  setCssVar,
   smallestDesktop,
   transparency,
   white,
@@ -28,9 +27,9 @@ const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px
 type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
 
 const wrapperStyles = ({ variant }: Variant, color: string) => {
-  const bgColor = cssVar('backgroundColor');
+  const bgColor = cssVar('backgroundMain');
   const targetColor = variant === 'display' ? grey300.rgb : color;
-  const finalColor = cssVar('borderColor');
+  const finalColor = cssVar('borderSubdued');
   const gradient = `linear-gradient(${bgColor}, ${bgColor}), linear-gradient(to right, ${targetColor} 0%, ${finalColor} 18.71%)`;
   return css({
     // Because `borderImage` with a linear gradient and `borderRadius` cannot
@@ -69,7 +68,7 @@ const headerWrapperStyles = css({
 });
 
 const iconWrapperStyles = ({ variant }: Variant) =>
-  css(setCssVar('currentTextColor', cssVar('weakTextColor')), {
+  css({
     display: 'grid',
     height: '20px',
     width: '20px',
@@ -91,7 +90,7 @@ const buttonWrapperStyles = ({ variant }: Variant) =>
     padding: '2px',
     flexShrink: 0,
     ':hover': {
-      backgroundColor: cssVar('highlightColor'),
+      backgroundColor: cssVar('backgroundDefault'),
       borderRadius: '50%',
     },
     ...(variant === 'display' && {
@@ -124,7 +123,7 @@ const variableNameStyles = ({ variant }: Variant) =>
         background: `linear-gradient(
       90deg,
       ${transparency(white, 0).rgba},
-      ${cssVar('backgroundColor')}
+      ${cssVar('backgroundMain')}
     )`,
       }),
     },

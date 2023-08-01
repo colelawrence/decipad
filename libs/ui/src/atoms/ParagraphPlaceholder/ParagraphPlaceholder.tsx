@@ -10,7 +10,7 @@ const hotKeyStyle = css({
   height: '24px',
   width: '24px',
   borderRadius: '6px',
-  border: `1px ${cssVar('strongerHighlightColor')} solid`,
+  border: `1px ${cssVar('borderSubdued')} solid`,
 });
 
 const slashKey = <span css={hotKeyStyle}>/</span>;

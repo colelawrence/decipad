@@ -1,6 +1,6 @@
 import { DRAG_ITEM_COLUMN, DragColumnItem } from '@decipad/editor-table';
 import { useDndPreviewSelectors } from '@decipad/react-contexts';
-import { cssVar, setCssVar } from '@decipad/ui';
+import { cssVar } from '@decipad/ui';
 import { varStyles } from '@decipad/ui/src/styles/code-block';
 import { useEditorRef } from '@udecode/plate';
 import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
@@ -50,10 +50,9 @@ export const DndPreview = () => {
 
               padding: '2px 8px',
 
-              backgroundColor: cssVar('backgroundColor'),
-              border: `1px solid ${cssVar('borderColor')}`,
+              backgroundColor: cssVar('backgroundMain'),
+              border: `1px solid ${cssVar('borderSubdued')}`,
               borderRadius: '8px',
-              ...setCssVar('currentTextColor', cssVar('weakTextColor')),
             },
             {
               transform: 'rotate(3deg)',

@@ -35,7 +35,7 @@ const makeCheckbox = css({
 });
 
 const makeToggle = css({
-  backgroundColor: cssVar('strongHighlightColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
   width: '46px',
   height: '24px',
   borderRadius: '100vmax',
@@ -44,14 +44,13 @@ const makeToggle = css({
   padding: '2px',
   transition: `background-color ${shortAnimationDuration} ease-in-out`,
   position: 'relative',
+  '&[aria-checked="true"]': {
+    backgroundColor: cssVar('backgroundHeavy'),
+  },
 });
 
 const disabledSwitchBgStyles = css({
-  backgroundColor: cssVar('weakerTextColor'),
-});
-
-const activeSwitchBgStyles = css({
-  backgroundColor: cssVar('normalTextColor'),
+  backgroundColor: cssVar('backgroundMain'),
 });
 
 const activeCheckboxBgStyles = css({
@@ -64,13 +63,16 @@ const activeCheckboxBgStyles = css({
 });
 
 const toggleSwitchStyles = css({
-  backgroundColor: cssVar('backgroundColor'),
   width: '18px',
   height: '18px',
   borderRadius: '100vmax',
   position: 'absolute',
   left: '2px',
   transition: `left ${shortAnimationDuration} ease-out`,
+  backgroundColor: cssVar('backgroundMain'),
+  '&[aria-checked="true"]': {
+    backgroundColor: cssVar('textDefault'),
+  },
 });
 
 const checkboxSwitchStyles = css({
@@ -118,9 +120,7 @@ export const Toggle = ({
       aria-roledescription={ariaRoleDescription}
       css={[
         toggleStyles(skinny),
-        skinny
-          ? active && activeCheckboxBgStyles
-          : active && activeSwitchBgStyles,
+        skinny && active && activeCheckboxBgStyles,
         !skinny && disabled && disabledSwitchBgStyles,
       ]}
       onClick={() => {

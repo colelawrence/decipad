@@ -3,16 +3,18 @@ import { useContext } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { Tooltip } from '../../atoms';
 import { QuestionMark } from '../../icons';
-import { cssVar, p13Bold } from '../../primitives';
+import { componentCssVars, cssVar, p13Bold } from '../../primitives';
 
 const styles = css(p13Bold, {
   boxShadow: `0px 2px 24px -4px rgba(36, 36, 41, 0.06)`,
   borderRadius: '6px',
   padding: '0px 8px 0px 10px',
 
-  backgroundColor: cssVar('buttonHoverBackground'),
+  backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryDefaultText'),
   ':hover': {
-    backgroundColor: cssVar('buttonHoverBackgroundHover'),
+    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
+    color: componentCssVars('ButtonTertiaryHoverText'),
   },
 
   fontWeight: 900,
@@ -22,7 +24,7 @@ const innerStyles = css(p13Bold, {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: cssVar('normalTextColor'),
+  color: cssVar('textDefault'),
 
   borderRadius: '6px',
   height: '32px',

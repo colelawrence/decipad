@@ -54,7 +54,7 @@ WithError.args = {
 
 export const WithPlaceholder: StoryFn<
   ComponentProps<typeof CodeLineStructured> & Result.Result
-> = ({ type, value, ...props }) => <CodeLineStructured {...props} />;
+> = (props) => <CodeLineStructured {...props} />;
 WithPlaceholder.args = {
   variableNameChild: 'Distance',
   codeChild: '',

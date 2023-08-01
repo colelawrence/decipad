@@ -83,7 +83,7 @@ export const TableResultCell: FC<TableResultCellProps> = ({
             width: 18,
             borderRadius: 6,
             ':hover': {
-              background: cssVar('highlightColor'),
+              background: cssVar('backgroundDefault'),
             },
           }}
         >
