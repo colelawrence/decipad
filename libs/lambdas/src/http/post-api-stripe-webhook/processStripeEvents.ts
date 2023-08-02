@@ -58,7 +58,7 @@ export const processSessionComplete = async (event: Stripe.Event) => {
     isPremium: payment_status === 'paid',
   });
 
-  track({
+  await track({
     event: 'Stripe subscription created',
     properties: {
       id: subscriptionId,
@@ -101,8 +101,8 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
       isPremium: false,
     });
 
-    track({
-      event: 'Stripe subscription deleted',
+    await track({
+      event: 'Stripe subscription immediately cancelled',
       properties: {
         id,
         workspaceId: wsSubscription.workspace_id,
@@ -118,7 +118,8 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
 };
 
 export const processSubscriptionUpdated = async (event: Stripe.Event) => {
-  const { id, status } = event.data.object as Stripe.Subscription;
+  const { id, status, cancel_at_period_end } = event.data
+    .object as Stripe.Subscription;
   const data = await tables();
   let isPremium = false;
 
@@ -143,6 +144,18 @@ export const processSubscriptionUpdated = async (event: Stripe.Event) => {
   if (VALID_SUBSCRIPTION_STATES.includes(status)) {
     isPremium = true;
   }
+
+  if (cancel_at_period_end) {
+    await track({
+      event: 'Stripe subscription to be cancelled at period end',
+      properties: {
+        id: wsSubscription.workspace_id,
+        workspaceId: workspace.id,
+        billingEmail: wsSubscription.email,
+      },
+    });
+  }
+
   await data.workspaces.put({
     ...workspace,
     isPremium,

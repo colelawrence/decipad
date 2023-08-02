@@ -226,7 +226,7 @@ const resolvers = {
       const emailKeyId = `email:${email}`;
       const emailKey = await data.userkeys.get({ id: emailKeyId });
       if (emailKey) {
-        resolvers.Mutation.shareWithUser(
+        await resolvers.Mutation.shareWithUser(
           _,
           {
             resource,

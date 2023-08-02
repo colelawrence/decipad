@@ -95,8 +95,8 @@ export const cancelSubscriptionFromWorkspaceId = async (workspaceId: ID) => {
     throw new Error('Stripe Subscription does not exist');
   }
 
-  track({
-    event: 'Stripe subscription cancelled',
+  await track({
+    event: 'Stripe subscription deleted',
     properties: {
       id: subscription.id,
       workspaceId: subscription.workspace_id,

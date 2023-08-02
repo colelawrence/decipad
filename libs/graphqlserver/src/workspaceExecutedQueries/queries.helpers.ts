@@ -69,11 +69,11 @@ export const incrementQueryCount = async (
   const { queryCount, query_reset_date } = executedQuery;
 
   if (queryCount >= maxCreditsPerPlan) {
-    track({
+    await track({
       event: 'Query execution limit exceeded',
       properties: {
         workspaceId,
-        isPremium: workspace.isPremium,
+        isPremium: !!workspace.isPremium,
       },
     });
     throw new GraphQLError(

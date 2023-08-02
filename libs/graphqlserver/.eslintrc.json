@@ -1,7 +1,13 @@
 {
   "extends": ["../../libs/eslint-config-decipad"],
   "ignorePatterns": ["!**/*"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "parserOptions": {
+    "project": "libs/graphqlserver/tsconfig.json"
+  },
   "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-floating-promises": "error"
   }
 }

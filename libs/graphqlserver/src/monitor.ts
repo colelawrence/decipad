@@ -81,7 +81,7 @@ const onError = async (rc: GraphQLRequestContext) => {
 export const monitor: ApolloServerPlugin = {
   async requestDidStart(rc: GraphQLRequestContext) {
     if (rc.errors) {
-      onError(rc);
+      await onError(rc);
     }
     return {
       async didEncounterErrors(): Promise<void> {
