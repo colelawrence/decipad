@@ -3,9 +3,7 @@ import { componentCssVars, p13Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Sparkles } from 'libs/ui/src/icons';
 
-const containerCss = css({
-  ...p13Medium,
-
+const containerCss = css(p13Medium, {
   display: 'flex',
   gridGap: 6,
   alignItems: 'flex-end',

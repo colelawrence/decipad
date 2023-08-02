@@ -13,13 +13,11 @@ interface MessageBlockProps {
   icon: ReactNode;
   title?: string;
   message?: string;
-  overrideTextColor?: boolean;
   extraButtonText?: string;
   extraButtonClick?: () => void;
 }
 
-const extraButtonStyles = css({
-  ...p12Regular,
+const extraButtonStyles = css(p12Regular, {
   position: 'absolute',
   right: '20px',
   textDecoration: 'underline',
@@ -30,7 +28,6 @@ export const MessageBlock: FC<MessageBlockProps> = ({
   icon,
   title = '',
   message = '',
-  overrideTextColor = false,
   extraButtonText,
   extraButtonClick,
 }) => {
@@ -38,10 +35,8 @@ export const MessageBlock: FC<MessageBlockProps> = ({
     <div css={wrapperStyles(type)}>
       <div css={iconStyles}>{icon}</div>
       <span>
-        <span css={overrideTextColor ? titleStyles : p12Bold}>{title} </span>
-        <span css={overrideTextColor ? messageStyles : p12Regular}>
-          {message}
-        </span>
+        <span css={p12Bold}>{title} </span>
+        <span css={p12Regular}>{message}</span>
         {extraButtonClick && extraButtonText && (
           <button css={extraButtonStyles} onClick={extraButtonClick}>
             {extraButtonText}
@@ -51,14 +46,6 @@ export const MessageBlock: FC<MessageBlockProps> = ({
     </div>
   );
 };
-
-const titleStyles = css({
-  ...p12Bold,
-});
-
-const messageStyles = css({
-  ...p12Regular,
-});
 
 const getMessageBlockType = (type: string) => {
   switch (type) {

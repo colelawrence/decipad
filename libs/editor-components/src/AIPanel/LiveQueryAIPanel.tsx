@@ -2,7 +2,6 @@ import { useState, FC, useCallback, useEffect } from 'react';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { getAnalytics } from '@decipad/client-events';
-import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
 import { p13Regular, UpgradePlanWarning } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { useRdFetch } from './hooks';
@@ -26,34 +25,21 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
 }) => {
   const [prompt, setPrompt] = useState('');
   const [rd, fetch] = useRdFetch(`generate-sql`);
-
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const {
+    workspaceInfo,
+    setCurrentWorkspaceInfo,
+    isQuotaLimitBeingReached,
+    nrQueriesLeft,
+  } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(
-    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-  );
-  const [nrQueriesLeft, setNrQueriesLeft] = useState(
-    quotaLimit && queryCount ? quotaLimit - queryCount : null
-  );
-  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
-    !!nrQueriesLeft &&
-      !!quotaLimit &&
-      nrQueriesLeft > 0 &&
-      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
-  );
+  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
 
   useEffect(() => {
     if (queryCount && quotaLimit) {
-      setNrQueriesLeft(quotaLimit - queryCount);
-      setShowQueryQuotaLimit(
-        !!nrQueriesLeft &&
-          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
-          nrQueriesLeft > 0
-      );
       setMaxQueryExecution(quotaLimit <= queryCount);
     }
-  }, [quotaLimit, queryCount, nrQueriesLeft]);
+  }, [quotaLimit, queryCount]);
 
   const updateQueryExecutionCount = useCallback(async () => {
     return updateQueryExecCount({
@@ -116,17 +102,17 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
         completionRd={rd}
         makeUseOfSuggestion={makeUseOfSuggestion}
       />
-      {(showQueryQuotaLimit || maxQueryExecution) &&
+      {(maxQueryExecution || isQuotaLimitBeingReached) &&
         workspaceInfo.id &&
         quotaLimit && (
           <UpgradePlanWarning
             workspaceId={workspaceInfo.id}
-            showQueryQuotaLimit={showQueryQuotaLimit}
+            showQueryQuotaLimit={isQuotaLimitBeingReached}
             maxQueryExecution={maxQueryExecution}
             quotaLimit={quotaLimit}
           />
         )}
-      {showQueryQuotaLimit && (
+      {isQuotaLimitBeingReached && (
         <p css={queriesLeftStyles}>
           {nrQueriesLeft} of {quotaLimit} credits left
         </p>
@@ -135,7 +121,6 @@ export const LiveQueryAIPanel: FC<LiveQueryAIPanelProps> = ({
   );
 };
 
-const queriesLeftStyles = css({
-  ...p13Regular,
+const queriesLeftStyles = css(p13Regular, {
   paddingLeft: '5px',
 });

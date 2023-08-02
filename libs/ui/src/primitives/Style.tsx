@@ -410,6 +410,7 @@ export interface ComponentCssVariables {
   TooltipBackground: string;
   TooltipCodeBackground: string;
   TooltipText: string;
+  TooltipTextSecondary: string;
   // -------------End  Tooltips ---------------
 
   // ------------- Droplines ------------------
@@ -512,6 +513,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       TooltipBackground: offBlack.hex,
       TooltipCodeBackground: grey300.hex,
       TooltipText: offWhite.hex,
+      TooltipTextSecondary: grey400.hex,
 
       DroplineBgColor: blue100.hex,
       DroplineColor: blue300.hex,
@@ -599,6 +601,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       TooltipBackground: dark300.hex,
       TooltipCodeBackground: offBlack.hex,
       TooltipText: offBlack.hex,
+      TooltipTextSecondary: dark500.hex,
 
       DroplineBgColor: blue900.hex,
       DroplineColor: blue600.hex,

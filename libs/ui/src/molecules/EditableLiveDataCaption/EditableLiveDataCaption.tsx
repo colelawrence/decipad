@@ -47,8 +47,7 @@ const iconWrapperStyles = css({
   transform: 'translateY(-7%)',
 });
 
-const editableTableCaptionStyles = css({
-  ...p13Medium,
+const editableTableCaptionStyles = css(p13Medium, {
   color: yellow800.hex,
   minWidth: '1rem',
 });

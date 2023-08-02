@@ -202,9 +202,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
   const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount, id } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(
-    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-  );
+  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
   const updateQueryExecutionCount = useCallback(async () => {
     return updateQueryExecCount({
       id: id || '',

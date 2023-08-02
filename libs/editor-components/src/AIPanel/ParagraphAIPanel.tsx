@@ -3,8 +3,8 @@ import { CheckboxSelected, Edit } from 'libs/ui/src/icons';
 import { getAnalytics } from '@decipad/client-events';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
-import { UpgradePlanWarning } from '@decipad/ui';
-import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
+import { p13Regular, UpgradePlanWarning } from '@decipad/ui';
+import { css } from '@emotion/react';
 import {
   AIPanelSuggestion,
   AIPanelForm,
@@ -40,21 +40,15 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
   const [prompt, setPrompt] = useState('');
   const [rd, fetch] = useRdFetch('rewrite-paragraph');
 
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const {
+    workspaceInfo,
+    setCurrentWorkspaceInfo,
+    nrQueriesLeft,
+    isQuotaLimitBeingReached,
+  } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount, id } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(
-    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-  );
-  const [nrQueriesLeft, setNrQueriesLeft] = useState(
-    quotaLimit && queryCount ? quotaLimit - queryCount : null
-  );
-  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
-    !!nrQueriesLeft &&
-      !!quotaLimit &&
-      nrQueriesLeft > 0 &&
-      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
-  );
+  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
 
   const updateQueryExecutionCount = useCallback(async () => {
     return updateQueryExecCount({
@@ -64,12 +58,6 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
 
   useEffect(() => {
     if (queryCount && quotaLimit) {
-      setNrQueriesLeft(quotaLimit - queryCount);
-      setShowQueryQuotaLimit(
-        !!nrQueriesLeft &&
-          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
-          nrQueriesLeft > 0
-      );
       setMaxQueryExecution(quotaLimit <= queryCount);
     }
   }, [quotaLimit, queryCount, nrQueriesLeft]);
@@ -114,22 +102,39 @@ export const ParagraphAIPanel: FC<ParagraphAIPanelProps> = ({
         prompt={prompt}
         setPrompt={setPrompt}
         status={rd.status}
+        disableSubmitButton={maxQueryExecution}
       />
       <AIPanelSuggestion
         completionRd={rd}
         makeUseOfSuggestion={updateParagraph}
         regenerate={handleSubmit}
       />
-      {(showQueryQuotaLimit || maxQueryExecution) &&
+      {(isQuotaLimitBeingReached || maxQueryExecution) &&
         workspaceInfo.id &&
         quotaLimit && (
-          <UpgradePlanWarning
-            workspaceId={workspaceInfo.id}
-            showQueryQuotaLimit={showQueryQuotaLimit}
-            maxQueryExecution={maxQueryExecution}
-            quotaLimit={quotaLimit}
-          />
+          <div css={upgradePlanWarningWrapper}>
+            <UpgradePlanWarning
+              workspaceId={workspaceInfo.id}
+              showQueryQuotaLimit={isQuotaLimitBeingReached}
+              maxQueryExecution={maxQueryExecution}
+              quotaLimit={quotaLimit}
+            />
+          </div>
         )}
+      {isQuotaLimitBeingReached && (
+        <p css={queriesLeftStyles}>
+          {nrQueriesLeft} of {quotaLimit} credits left
+        </p>
+      )}
     </AIPanelContainer>
   );
 };
+
+const queriesLeftStyles = css(p13Regular, {
+  marginTop: '10px',
+  paddingLeft: '5px',
+});
+
+const upgradePlanWarningWrapper = css({
+  marginTop: '10px',
+});

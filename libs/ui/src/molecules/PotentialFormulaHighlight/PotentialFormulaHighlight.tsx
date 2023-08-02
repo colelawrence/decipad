@@ -14,8 +14,6 @@ const activateStyles = css({
   textDecoration: 'underline',
 });
 
-const tooltipContentStyles = css({ ...p12Medium });
-
 interface PotentialFormulaHighlightProps {
   attributes?: LeafAttributes;
   onClick?: () => void;
@@ -45,7 +43,7 @@ export const PotentialFormulaHighlight = forwardRef<
           trigger={<span>{children}</span>}
           open={tooltipOpen}
         >
-          <span css={tooltipContentStyles}>
+          <span css={p12Medium}>
             <button css={activateStyles}>Click to activate</button> (or use{' '}
             <KeyboardKey variant>TAB</KeyboardKey>)
           </span>

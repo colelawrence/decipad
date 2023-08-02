@@ -13,7 +13,6 @@ import {
   PlateComponent,
   SimpleTableCellType,
   useTEditorRef,
-  WARNING_CREDITS_LEFT_PERCENTAGE,
 } from '@decipad/editor-types';
 import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
@@ -27,10 +26,8 @@ import {
   AnimatedIcon,
   IntegrationBlock as UIIntegrationBlock,
   icons,
-  p13Regular,
-  UpgradePlanWarning,
+  UpgradePlanWarningTooltip,
 } from '@decipad/ui';
-import { css } from '@emotion/react';
 import { getPreviousNode, setNodes } from '@udecode/plate';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
@@ -103,33 +100,17 @@ export const IntegrationBlock: PlateComponent = ({
   const editor = useTEditorRef();
   const path = useNodePath(element);
   const prevElement = getPreviousNode<MyElement>(editor, { at: path });
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const { workspaceInfo, setCurrentWorkspaceInfo, isQuotaLimitBeingReached } =
+    useCurrentWorkspaceStore();
   const { quotaLimit, queryCount, id } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(
-    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-  );
-  const [nrQueriesLeft, setNrQueriesLeft] = useState(
-    quotaLimit && queryCount ? quotaLimit - queryCount : null
-  );
-  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
-    !!nrQueriesLeft &&
-      !!quotaLimit &&
-      nrQueriesLeft > 0 &&
-      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
-  );
+  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
 
   useEffect(() => {
     if (queryCount && quotaLimit) {
-      setNrQueriesLeft(quotaLimit - queryCount);
-      setShowQueryQuotaLimit(
-        !!nrQueriesLeft &&
-          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
-          nrQueriesLeft > 0
-      );
       setMaxQueryExecution(quotaLimit <= queryCount);
     }
-  }, [quotaLimit, queryCount, nrQueriesLeft]);
+  }, [quotaLimit, queryCount]);
   const updateQueryExecutionCount = useCallback(async () => {
     return updateQueryExecCount({
       id: id || '',
@@ -269,6 +250,19 @@ export const IntegrationBlock: PlateComponent = ({
     removeFocusFromAllBecauseSlate();
   };
 
+  const tooltipContent =
+    isQuotaLimitBeingReached || maxQueryExecution ? (
+      <UpgradePlanWarningTooltip
+        maxQueryExecution={maxQueryExecution}
+        quotaLimit={quotaLimit}
+        showQueryQuotaLimit={isQuotaLimitBeingReached}
+        workspaceId={workspaceInfo.id}
+        featureCustomText="Unlock refresh data"
+      />
+    ) : (
+      'Refresh data'
+    );
+
   return (
     <IntegrationBlockContext.Provider value={observable.current}>
       <DraggableBlock
@@ -292,8 +286,9 @@ export const IntegrationBlock: PlateComponent = ({
             {
               children: <AnimatedIcon icon={<Refresh />} animated={animated} />,
               onClick: handleClick,
-              tooltip: 'Refresh data',
+              tooltip: tooltipContent,
               visible: !readOnly,
+              disabled: maxQueryExecution,
             },
             {
               children: showData ? <Hide /> : <Show />,
@@ -307,27 +302,7 @@ export const IntegrationBlock: PlateComponent = ({
           displayResults={showData}
           result={blockResult?.result}
         />
-        {(showQueryQuotaLimit || maxQueryExecution) &&
-          workspaceInfo.id &&
-          quotaLimit && (
-            <UpgradePlanWarning
-              workspaceId={workspaceInfo.id}
-              showQueryQuotaLimit={showQueryQuotaLimit}
-              maxQueryExecution={maxQueryExecution}
-              quotaLimit={quotaLimit}
-            />
-          )}
-        {showQueryQuotaLimit && (
-          <p css={queriesLeftStyles}>
-            {nrQueriesLeft} of {quotaLimit} credits left
-          </p>
-        )}
       </DraggableBlock>
     </IntegrationBlockContext.Provider>
   );
 };
-
-const queriesLeftStyles = css({
-  ...p13Regular,
-  paddingLeft: '5px',
-});

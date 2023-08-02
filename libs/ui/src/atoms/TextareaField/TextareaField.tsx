@@ -5,17 +5,11 @@ import { nanoid } from 'nanoid';
 import { cssVar, p14Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 
-const inputStyles = css({
+const inputStyles = css(p14Regular, {
   padding: '12px',
-
   backgroundColor: cssVar('backgroundMain'),
-
   border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '6px',
-
-  ...p14Regular,
-
-  '&::placeholder': {},
 });
 
 export type TextareaFieldProps = {

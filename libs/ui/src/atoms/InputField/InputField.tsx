@@ -23,23 +23,19 @@ const containerStyles = css({
   },
 });
 
-const inputStyles = css({
+const inputStyles = css(p14Regular, {
   padding: '12px',
 
   backgroundColor: cssVar('backgroundMain'),
   gridArea: 'input',
 
-  ...p14Regular,
-
   '&::placeholder': {},
 });
 
-const inputStylesSmall = css(inputStyles, {
+const inputStylesSmall = css(inputStyles, p13Medium, {
   height: '32px',
   padding: '10px 12px',
   backgroundColor: cssVar('backgroundMain'),
-
-  ...p13Medium,
 });
 
 const labelStyles = css([{ gridArea: 'label' }, inputLabel]);

@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { WARNING_CREDITS_LEFT_PERCENTAGE } from '@decipad/editor-types';
 import {
   useIncrementQueryCountMutation,
   useWorkspaceSecrets,
@@ -87,34 +86,23 @@ export const WrapperIntegrationModalDialog: FC<
   const { resultPreview, stage, connectionType } = useConnectionStore();
   const codeStore = useCodeConnectionStore();
   const hasDataPreview = !!resultPreview;
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const {
+    workspaceInfo,
+    setCurrentWorkspaceInfo,
+    nrQueriesLeft,
+    isQuotaLimitBeingReached,
+  } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount } = workspaceInfo;
-  const [maxQueryExecution, setMaxQueryExecution] = useState(
-    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-  );
+  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
   const [runButtonDisabled, setRunButtonDisabled] = useState(maxQueryExecution);
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [nrQueriesLeft, setNrQueriesLeft] = useState(
-    quotaLimit && queryCount ? quotaLimit - queryCount : null
-  );
-  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
-    !!nrQueriesLeft &&
-      !!quotaLimit &&
-      nrQueriesLeft > 0 &&
-      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
-  );
 
   useEffect(() => {
     if (queryCount && quotaLimit) {
-      setNrQueriesLeft(quotaLimit - queryCount);
-      setShowQueryQuotaLimit(
-        !!nrQueriesLeft &&
-          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
-          nrQueriesLeft > 0
-      );
       setMaxQueryExecution(quotaLimit <= queryCount);
+      setRunButtonDisabled(quotaLimit <= queryCount);
     }
-  }, [quotaLimit, queryCount, nrQueriesLeft]);
+  }, [quotaLimit, queryCount]);
 
   const updateQueryExecutionCount = useCallback(async () => {
     return updateQueryExecCount({
@@ -235,12 +223,12 @@ export const WrapperIntegrationModalDialog: FC<
         </div>
       </div>
       <div css={allChildrenStyles(tabStage)}>{children}</div>
-      {(showQueryQuotaLimit || maxQueryExecution) &&
+      {(isQuotaLimitBeingReached || maxQueryExecution) &&
         workspaceId &&
         quotaLimit && (
           <UpgradePlanWarning
             workspaceId={workspaceId}
-            showQueryQuotaLimit={showQueryQuotaLimit}
+            showQueryQuotaLimit={isQuotaLimitBeingReached}
             maxQueryExecution={maxQueryExecution}
             quotaLimit={quotaLimit}
           />
@@ -293,7 +281,7 @@ export const WrapperIntegrationModalDialog: FC<
                     : 'Reset'}
                 </Button>
               </div>
-              {showQueryQuotaLimit && (
+              {isQuotaLimitBeingReached && (
                 <p css={queriesLeftStyles}>
                   {nrQueriesLeft} of {quotaLimit} credits left
                 </p>
@@ -322,9 +310,8 @@ const buttonWrapperStyles = css({
   },
 });
 
-const queriesLeftStyles = css({
-  ...p13Regular,
-  paddingLeft: '5px',
+const queriesLeftStyles = css(p13Regular, {
+  width: '100%',
 });
 
 const intWrapperStyles = css({

@@ -15,8 +15,6 @@ export const SUPPORTED_FILE_TYPES = Object.keys(MAX_UPLOAD_FILE_SIZE);
 
 export const MAX_IMPORT_CELL_COUNT = 10000;
 
-export const WARNING_CREDITS_LEFT_PERCENTAGE = 0.25;
-
 // NOT USED YET
 export const MAX_ATTACHMENT_SIZE = {
   free: 50_000_000,

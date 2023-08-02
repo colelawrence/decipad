@@ -24,8 +24,7 @@ export const captionStyles = css({
   cursor: 'text',
 });
 
-export const captionTextareaStyles = css({
-  ...p14Regular,
+export const captionTextareaStyles = css(p14Regular, {
   padding: '0',
   marginTop: 8,
   width: '100%',

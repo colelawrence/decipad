@@ -176,8 +176,7 @@ const WorkspaceMemberOptions: React.FC<{ onRevoke(): void }> = ({
   </MenuList>
 );
 
-const pricingWrapper = css({
-  ...p12Regular,
+const pricingWrapper = css(p12Regular, {
   backgroundColor: cssVar('backgroundDefault'),
   padding: '12px 16px',
   marginBottom: '8px',
@@ -189,8 +188,7 @@ const pricingLink = css({
   color: componentCssVars('LinkLighterColor'),
 });
 
-const inputLabelStyles = css({
-  ...p12Medium,
+const inputLabelStyles = css(p12Medium, {
   marginBottom: '8px',
 });
 
@@ -297,4 +295,4 @@ const sendInvitationButtonStyles = css({
   maxWidth: 'fit-content',
 });
 
-const revokeInviteButtonStyles = css({ ...p14Medium, color: red500.rgb });
+const revokeInviteButtonStyles = css(p14Medium, { color: red500.rgb });

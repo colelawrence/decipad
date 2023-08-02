@@ -3,8 +3,7 @@ import { Button, ErrorMessage, cssVar, p16Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { RemoteData } from '../hooks';
 
-const completionCss = css({
-  ...p16Regular,
+const completionCss = css(p16Regular, {
   background: cssVar('backgroundDefault'),
   borderRadius: 5,
   marginBottom: 8,

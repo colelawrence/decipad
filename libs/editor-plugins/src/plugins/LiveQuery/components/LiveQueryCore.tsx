@@ -5,18 +5,20 @@ import {
   LiveQueryElement,
   TableCellType,
   useTEditorRef,
-  WARNING_CREDITS_LEFT_PERCENTAGE,
 } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import {
-  Button,
+  componentCssVars,
+  grey700,
   LiveConnectionResult,
   LiveError,
-  p13Regular,
+  p13Bold,
   Spinner,
-  UpgradePlanWarning,
+  Tooltip,
+  transparency,
+  UpgradePlanWarningTooltip,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { setNodes } from '@udecode/plate';
@@ -74,22 +76,11 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   );
 
   const [, setVersion] = useState(0);
-
-  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const { workspaceInfo, setCurrentWorkspaceInfo, isQuotaLimitBeingReached } =
+    useCurrentWorkspaceStore();
   const { quotaLimit, queryCount } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
-  const [maxQueryExecution, setMaxQueryExecution] = useState(
-    !!quotaLimit && !!queryCount && quotaLimit <= queryCount
-  );
-  const [nrQueriesLeft, setNrQueriesLeft] = useState(
-    quotaLimit && queryCount ? quotaLimit - queryCount : null
-  );
-  const [showQueryQuotaLimit, setShowQueryQuotaLimit] = useState(
-    !!nrQueriesLeft &&
-      !!quotaLimit &&
-      nrQueriesLeft > 0 &&
-      nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE
-  );
+  const [maxQueryExecution, setMaxQueryExecution] = useState(false);
 
   const updateQueryExecutionCount = useCallback(async () => {
     return updateQueryExecCount({
@@ -98,16 +89,10 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   }, [workspaceInfo.id, updateQueryExecCount]);
 
   useEffect(() => {
-    if (queryCount && quotaLimit) {
-      setNrQueriesLeft(quotaLimit - queryCount);
-      setShowQueryQuotaLimit(
-        !!nrQueriesLeft &&
-          nrQueriesLeft <= quotaLimit * WARNING_CREDITS_LEFT_PERCENTAGE &&
-          nrQueriesLeft > 0
-      );
+    if (quotaLimit && queryCount) {
       setMaxQueryExecution(quotaLimit <= queryCount);
     }
-  }, [quotaLimit, queryCount, nrQueriesLeft]);
+  }, [queryCount, quotaLimit]);
 
   useEffect(() => {
     const { error, result } = liveQuery;
@@ -166,11 +151,31 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
     }
   };
 
+  const runQueryButton = (
+    <button
+      onClick={onRunQuery}
+      css={buttonStyles}
+      disabled={maxQueryExecution}
+    >
+      Run Query
+    </button>
+  );
+
   return (
     <div contentEditable={false}>
-      <Button onClick={onRunQuery} disabled={maxQueryExecution}>
-        Run Query
-      </Button>
+      {maxQueryExecution || isQuotaLimitBeingReached ? (
+        <Tooltip trigger={runQueryButton} side="top">
+          <UpgradePlanWarningTooltip
+            workspaceId={workspaceInfo.id}
+            quotaLimit={quotaLimit}
+            maxQueryExecution={maxQueryExecution}
+            showQueryQuotaLimit={isQuotaLimitBeingReached}
+            featureCustomText="Unlock this feature"
+          ></UpgradePlanWarningTooltip>
+        </Tooltip>
+      ) : (
+        runQueryButton
+      )}
       {persistedResult && (
         <LiveConnectionResult
           result={persistedResult}
@@ -191,26 +196,24 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
           <Spinner />
         </div>
       )}
-      {(showQueryQuotaLimit || maxQueryExecution) &&
-        workspaceInfo.id &&
-        quotaLimit && (
-          <UpgradePlanWarning
-            workspaceId={workspaceInfo.id}
-            showQueryQuotaLimit={showQueryQuotaLimit}
-            maxQueryExecution={maxQueryExecution}
-            quotaLimit={quotaLimit}
-          />
-        )}
-      {showQueryQuotaLimit && (
-        <p css={queriesLeftStyles}>
-          {nrQueriesLeft} of {quotaLimit} credits left
-        </p>
-      )}
     </div>
   );
 };
 
-const queriesLeftStyles = css({
-  ...p13Regular,
-  paddingLeft: '5px',
+// Sorry for the duplication but native <button> events are not passed into our Button component
+const buttonStyles = css(p13Bold, {
+  padding: '8px 14px',
+  backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryDefaultText'),
+  ':hover, :focus': {
+    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
+    color: componentCssVars('ButtonTertiaryHoverText'),
+  },
+  ':disabled': {
+    backgroundColor: componentCssVars('ButtonTertiaryDisabledBackground'),
+    color: componentCssVars('ButtonTertiaryDisabledText'),
+    cursor: 'not-allowed',
+  },
+  borderRadius: '6px',
+  boxShadow: `0px 1px 12px -4px ${transparency(grey700, 0.04).rgba}`,
 });

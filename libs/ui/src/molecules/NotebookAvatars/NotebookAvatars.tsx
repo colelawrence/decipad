@@ -39,15 +39,12 @@ const avatarStyles = css({
   position: 'relative',
 });
 
-export const tooltipNameStyles = css({
-  ...p13Medium,
-
+export const tooltipNameStyles = css(p13Medium, {
   marginBottom: '3px',
   color: componentCssVars('TooltipText'),
 });
 
-const tooltipRoleStyles = css({
-  ...p12Regular,
+const tooltipRoleStyles = css(p12Regular, {
   color: componentCssVars('TooltipText'),
 });
 

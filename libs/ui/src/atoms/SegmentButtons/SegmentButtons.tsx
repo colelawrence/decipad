@@ -9,7 +9,7 @@ import { css } from '@emotion/react';
 interface SegmentButton {
   readonly children: ReactNode;
   readonly onClick: (event: React.MouseEvent<HTMLElement>) => void;
-  readonly tooltip?: string;
+  readonly tooltip?: string | ReactNode;
   readonly testId?: string;
   readonly visible?: boolean;
   readonly disabled?: boolean;

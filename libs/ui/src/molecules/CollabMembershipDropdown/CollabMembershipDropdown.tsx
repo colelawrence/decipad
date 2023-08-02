@@ -95,7 +95,7 @@ export const CollabMembershipDropdown: FC<CollabAccessDropdownProps> = ({
 
       {onRemove && (
         <MenuItem onSelect={onRemove}>
-          <p css={{ ...p14Medium, color: red500.rgb }}>Remove</p>
+          <p css={[p14Medium, { color: red500.rgb }]}>Remove</p>
         </MenuItem>
       )}
     </MenuList>

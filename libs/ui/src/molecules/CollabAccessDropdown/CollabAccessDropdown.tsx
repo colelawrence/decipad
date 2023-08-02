@@ -101,7 +101,6 @@ const dropDownItemStyles = css({
   maxWidth: '224px',
 });
 
-const dangerOptionStyles = css({
-  ...p14Medium,
+const dangerOptionStyles = css(p14Medium, {
   color: red500.rgb,
 });

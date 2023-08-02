@@ -96,4 +96,5 @@ export { Underline } from './Underline/Underline';
 export { UpdatePrompt } from './UpdatePrompt/UpdatePrompt';
 export { VoidBlock } from './VoidBlock/VoidBlock';
 export { UpgradePlanWarning } from './UpgradePlanWarning/UpgradePlanWarning';
+export { UpgradePlanWarningTooltip } from './UpgradePlanWarning/UpgradePlanWarningTooltip';
 export * from './placeholders';
