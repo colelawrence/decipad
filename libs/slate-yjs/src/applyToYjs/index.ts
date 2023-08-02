@@ -51,7 +51,13 @@ export default function applySlateOps(
           applySlateOp(sharedType, op);
         } catch (err) {
           // eslint-disable-next-line no-console
-          console.error('Error applying slate op', op, err);
+          console.error(
+            'Error applying slate op',
+            op,
+            (err as Error).message,
+            (err as Error).stack,
+            err
+          );
           captureException(err);
         }
       });
