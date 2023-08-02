@@ -71,7 +71,6 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
                 selected: sidebarTab === tab,
               };
             })}
-            variant="editor-sidebar"
           />
         </div>
         <div css={sidebarPaddingStyles}>

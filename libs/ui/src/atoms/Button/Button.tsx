@@ -96,6 +96,21 @@ const typeStyles: Record<
       color: componentCssVars('ButtonTertiaryDisabledText'),
     },
   },
+  tertiaryAlt: {
+    enabled: {
+      backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+      color: componentCssVars('ButtonTertiaryAltDefaultText'),
+
+      ':hover, :focus': {
+        backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+        color: componentCssVars('ButtonTertiaryAltHoverText'),
+      },
+    },
+    disabled: {
+      backgroundColor: componentCssVars('ButtonTertiaryAltDisabledBackground'),
+      color: componentCssVars('ButtonTertiaryAltDisabledText'),
+    },
+  },
   danger: {
     enabled: {
       backgroundColor: componentCssVars('ButtonDangerDefaultBackground'),
@@ -181,6 +196,7 @@ type ButtonProps = {
     | 'primary'
     | 'primaryBrand'
     | 'secondary'
+    | 'tertiaryAlt'
     | 'danger'
     | 'yellow'
     | 'lightYellow'

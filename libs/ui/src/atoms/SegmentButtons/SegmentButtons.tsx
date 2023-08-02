@@ -1,10 +1,10 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { componentCssVars, cssVar, smallScreenQuery } from '../../primitives';
+import { componentCssVars } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 interface SegmentButton {
   readonly children: ReactNode;
@@ -18,53 +18,15 @@ interface SegmentButton {
 
 type SegmentButtonsProps = {
   readonly buttons: SegmentButton[];
-  readonly variant?: 'default' | 'editor-sidebar' | 'topbar';
+  readonly variant?: 'transparent' | 'darker';
 };
 
 export const SegmentButtons: FC<SegmentButtonsProps> = ({
   buttons,
-  variant = 'default',
+  variant = 'transparent',
 }) => {
-  const lastBorder = variant === 'default';
-  const side = variant === 'editor-sidebar' ? 'bottom' : 'top';
-  // visible is undefined by default, so !== false is the right
-  // thing to do.
-  const visibleButtons = buttons.filter((btn) => btn.visible !== false);
   return (
-    <div
-      css={[
-        segmentButtonsStyles,
-        variant === 'topbar' && { gap: 6 },
-        visibleButtons.length > 1 &&
-          lastBorder && {
-            '& figure:last-of-type': {
-              borderLeft: `1px solid ${cssVar('borderDefault')}`,
-            },
-          },
-        variant === 'editor-sidebar' && {
-          backgroundColor: 'transparent',
-          border: 0,
-          svg: { margin: 0, height: 20, width: 20 },
-        },
-        variant === 'topbar' && {
-          backgroundColor: 'transparent',
-          border: 0,
-          figure: {
-            height: 30,
-            width: 30,
-          },
-          svg: {
-            height: 16,
-            width: 16,
-            margin: 'auto',
-            marginTop: 6,
-          },
-          [smallScreenQuery]: {
-            display: 'none',
-          },
-        },
-      ]}
-    >
+    <WrapperDiv variant={variant}>
       {buttons.map((button, i) => {
         const {
           children,
@@ -77,34 +39,24 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
         } = button;
 
         const hasTooltip = !!tooltip;
+
         const trigger = (
-          <figure
-            role="button"
+          <FigureButton
             onClick={disabled ? noop : onClick}
             key={`figure-segment-${i}`}
             data-testid={`segment-button-trigger${testId ? `-${testId}` : ''}`}
-            css={[
-              disabled ? segmentDisabledButtonStyle : segmentButtonStyle,
-              variant === 'editor-sidebar' && {
-                borderRadius: 6,
-              },
-              variant === 'topbar' && {
-                borderRadius: 6,
-              },
-              selected && {
-                backgroundColor: componentCssVars(
-                  'ButtonTertiaryDefaultBackground'
-                ),
-              },
-            ]}
+            aria-disabled={disabled}
+            variant={variant}
+            selected={selected}
           >
             {children}
-          </figure>
+          </FigureButton>
         );
+
         return visible ? (
           hasTooltip && !disabled ? (
             <Tooltip
-              side={side}
+              side={variant === 'darker' ? 'bottom' : 'top'}
               key={`figure-segment-tooltip-${i}`}
               trigger={trigger}
             >
@@ -114,39 +66,64 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
             trigger
           )
         ) : (
-          <div
-            key={`figure-segment-invisible-${i}`}
-            css={{ visibility: 'hidden' }}
-          />
+          <div key={`figure-segment-invisible-${i}`} css={hiddenVis} />
         );
       })}
-    </div>
+    </WrapperDiv>
   );
 };
 
-const segmentButtonsStyles = css(hideOnPrint, {
-  display: 'flex',
+const WrapperDiv = styled.div<{ variant: SegmentButtonsProps['variant'] }>(
+  (props) => ({
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: '6px',
+    backgroundColor:
+      props.variant === 'transparent'
+        ? 'inherit'
+        : componentCssVars('ButtonTertiaryDefaultBackground'),
+  }),
+  hideOnPrint
+);
+
+const FigureButton = styled.figure<{
+  variant: SegmentButtonsProps['variant'];
+  selected: boolean;
+}>((props) => ({
+  display: 'grid',
   alignItems: 'center',
+  justifyContent: 'center',
   borderRadius: '6px',
-  padding: 1,
-  border: `1px solid ${cssVar('borderSubdued')}`,
-  backgroundColor: cssVar('backgroundSubdued'),
-  '& svg': {
-    margin: '4px',
+  minHeight: '30px',
+  minWidth: '30px',
+
+  svg: {
     width: '16px',
     height: '16px',
   },
-});
 
-const segmentButtonStyle = css({
-  ':hover, :focus': {
-    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
-    color: componentCssVars('ButtonTertiaryHoverText'),
+  transition: 'background 0.1s ease-in-out',
+
+  backgroundColor: props.selected
+    ? props.variant === 'transparent'
+      ? componentCssVars('ButtonTertiaryDefaultBackground')
+      : componentCssVars('ButtonTertiaryAltDefaultBackground')
+    : 'inherit',
+
+  ':disabled': {
+    cursor: 'not-allowed',
+    backgroundColor: componentCssVars('ButtonTertiaryAltDisabledBackground'),
+    color: componentCssVars('ButtonTertiaryAltDisabledText'),
   },
-});
 
-const segmentDisabledButtonStyle = css({
-  cursor: 'not-allowed',
-  backgroundColor: componentCssVars('ButtonTertiaryDisabledBackground'),
-  color: componentCssVars('ButtonTertiaryDisabledText'),
+  ':not(:disabled)': {
+    ':hover, :focus': {
+      backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+      color: componentCssVars('ButtonTertiaryAltHoverText'),
+    },
+  },
+}));
+
+const hiddenVis = css({
+  visibility: 'hidden',
 });

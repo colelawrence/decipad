@@ -2,6 +2,7 @@ import { Global } from '@emotion/react';
 import { FC, useMemo } from 'react';
 import { themeStore } from '@decipad/utils';
 import {
+  black,
   blackWhiteBlack,
   blue100,
   blue200,
@@ -355,6 +356,13 @@ export interface ComponentCssVariables {
   ButtonTertiaryDisabledBackground: string;
   ButtonTertiaryDisabledText: string;
 
+  ButtonTertiaryAltDefaultBackground: string;
+  ButtonTertiaryAltDefaultText: string;
+  ButtonTertiaryAltHoverBackground: string;
+  ButtonTertiaryAltHoverText: string;
+  ButtonTertiaryAltDisabledBackground: string;
+  ButtonTertiaryAltDisabledText: string;
+
   ButtonBorderlessDefaultBackground: string;
   ButtonBorderlessDefaultText: string;
   ButtonBorderlessHoverBackground: string;
@@ -461,6 +469,13 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       ButtonTertiaryDisabledBackground: grey200.hex,
       ButtonTertiaryDisabledText: grey400.hex,
 
+      ButtonTertiaryAltDefaultBackground: grey300.hex,
+      ButtonTertiaryAltDefaultText: black.hex,
+      ButtonTertiaryAltHoverBackground: grey200.hex,
+      ButtonTertiaryAltHoverText: grey600.hex,
+      ButtonTertiaryAltDisabledBackground: grey200.hex,
+      ButtonTertiaryAltDisabledText: grey400.hex,
+
       ButtonBorderlessDefaultBackground: fullTransparent.rgba,
       ButtonBorderlessDefaultText: blackWhiteBlack.hex,
       ButtonBorderlessHoverBackground: grey100.hex,
@@ -534,12 +549,19 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       ButtonSecondaryDisabledBackground: dark600.hex,
       ButtonSecondaryDisabledText: dark500.hex,
 
-      ButtonTertiaryDefaultBackground: dark600.hex,
+      ButtonTertiaryDefaultBackground: dark700.hex,
       ButtonTertiaryDefaultText: dark300.hex,
       ButtonTertiaryHoverBackground: dark500.hex,
       ButtonTertiaryHoverText: dark400.hex,
       ButtonTertiaryDisabledBackground: dark400.hex,
       ButtonTertiaryDisabledText: dark500.hex,
+
+      ButtonTertiaryAltDefaultBackground: dark600.hex,
+      ButtonTertiaryAltDefaultText: dark300.hex,
+      ButtonTertiaryAltHoverBackground: dark500.hex,
+      ButtonTertiaryAltHoverText: dark400.hex,
+      ButtonTertiaryAltDisabledBackground: dark400.hex,
+      ButtonTertiaryAltDisabledText: dark500.hex,
 
       ButtonBorderlessDefaultBackground: fullTransparent.rgba,
       ButtonBorderlessDefaultText: dark400.hex,

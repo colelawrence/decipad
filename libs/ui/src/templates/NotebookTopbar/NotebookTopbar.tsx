@@ -72,14 +72,14 @@ const hideForSmallScreenStyles = css({
 });
 
 const linksStyles = css({
-  backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
-  color: componentCssVars('ButtonTertiaryDefaultText'),
+  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryAltDefaultText'),
   display: 'flex',
   gap: '12px',
   height: '32px',
   ':hover': {
-    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
-    color: componentCssVars('ButtonTertiaryHoverText'),
+    backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+    color: componentCssVars('ButtonTertiaryAltHoverText'),
   },
   borderRadius: 6,
   justifyContent: 'center',
@@ -283,18 +283,27 @@ export const NotebookTopbar = ({
                 </Anchor>
               </em>
             </div>
-            <SegmentButtons
-              variant="topbar"
-              buttons={[
-                {
-                  children: <SidebarOpen />,
-                  onClick: toggleSidebar || noop,
-                  selected: sidebarOpen,
-                  tooltip: 'Open the sidebar',
-                  testId: 'top-bar-sidebar',
+
+            <div
+              css={{
+                [smallScreenQuery]: {
+                  visibility: 'hidden',
                 },
-              ]}
-            />
+              }}
+            >
+              <SegmentButtons
+                variant="darker"
+                buttons={[
+                  {
+                    children: <SidebarOpen />,
+                    onClick: toggleSidebar || noop,
+                    selected: sidebarOpen,
+                    tooltip: 'Open the sidebar',
+                    testId: 'top-bar-sidebar',
+                  },
+                ]}
+              />
+            </div>
           </div>
         )}
         {isWriter && <VerticalDivider />}
