@@ -221,6 +221,7 @@ export const NotebookInvitationPopUp = ({
         ) : (
           <Button
             size="extraSlim"
+            type="tertiaryAlt"
             onClick={handleAddCollaborator}
             disabled={disabled}
             testId="send-invitation"

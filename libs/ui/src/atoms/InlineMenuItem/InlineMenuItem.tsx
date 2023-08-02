@@ -14,8 +14,8 @@ const inlineMenuStyles = css({
 
   clipPath: 'inset(-8px -8px -8px -8px round 8px)',
   ':hover, &[data-focused="true"]': {
-    backgroundColor: cssVar('backgroundDefault'),
-    boxShadow: `0px 0px 0px 8px ${cssVar('backgroundDefault')}`,
+    backgroundColor: cssVar('backgroundAccent'),
+    boxShadow: `0px 0px 0px 8px ${cssVar('backgroundAccent')}`,
   },
 });
 

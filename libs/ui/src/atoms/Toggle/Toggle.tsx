@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -7,7 +8,11 @@ import {
   BooleanCheckboxSelected,
   BooleanCheckboxUnselected,
 } from '../../icons';
-import { cssVar, shortAnimationDuration } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  shortAnimationDuration,
+} from '../../primitives';
 
 // Skinny = true means the toggle will be in a table.
 // Therefore needs to be smaller
@@ -35,7 +40,7 @@ const makeCheckbox = css({
 });
 
 const makeToggle = css({
-  backgroundColor: cssVar('backgroundHeavy'),
+  backgroundColor: componentCssVars('ToggleOffBackgroundColor'),
   width: '46px',
   height: '24px',
   borderRadius: '100vmax',
@@ -45,7 +50,7 @@ const makeToggle = css({
   transition: `background-color ${shortAnimationDuration} ease-in-out`,
   position: 'relative',
   '&[aria-checked="true"]': {
-    backgroundColor: cssVar('backgroundHeavy'),
+    backgroundColor: componentCssVars('ToggleOnBackgroundColor'),
   },
 });
 
@@ -71,7 +76,7 @@ const toggleSwitchStyles = css({
   transition: `left ${shortAnimationDuration} ease-out`,
   backgroundColor: cssVar('backgroundMain'),
   '&[aria-checked="true"]': {
-    backgroundColor: cssVar('textDefault'),
+    backgroundColor: cssVar('backgroundMain'),
   },
 });
 
@@ -127,6 +132,7 @@ export const Toggle = ({
         onChange(!active);
       }}
       disabled={disabled}
+      aria-checked={active}
     >
       <span
         role="checkbox"

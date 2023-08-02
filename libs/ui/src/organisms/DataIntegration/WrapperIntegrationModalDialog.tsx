@@ -259,7 +259,7 @@ export const WrapperIntegrationModalDialog: FC<
               </div>
               <div css={buttonWrapperStyles}>
                 <Button
-                  type="secondary"
+                  type="tertiaryAlt"
                   onClick={() => {
                     const AIPanelOpen = !showAiButton;
                     if (tabStage === 'map') {

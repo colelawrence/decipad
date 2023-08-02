@@ -145,6 +145,12 @@ export function getThemeColor(swatchColor: AvailableSwatchColor): ColorPalette {
   return ThemeColors[theme][isDarkMode ? 'Dark' : 'Light'];
 }
 
+/**
+ * React hook for when you want to use a theme color that isn't specified by the editor.
+ * It has to be a hook, because it must react to changes in light and dark mode.
+ *
+ * If you cannot use a hook, then you can use the @see `getThemeColor` function instead.
+ */
 export function useThemeColor(swatchColor: AvailableSwatchColor): ColorPalette {
   const isDarkMode = themeStore((s) => s.theme);
   const theme = translateOldThemeColor(swatchColor);
@@ -440,6 +446,9 @@ export interface ComponentCssVariables {
   SecretsWarningBackground: string;
 
   ChartBlueColor: string;
+
+  ToggleOffBackgroundColor: string;
+  ToggleOnBackgroundColor: string;
 }
 
 /**
@@ -535,6 +544,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
 
       SecretsWarningBackground: yellow200.hex,
       ChartBlueColor: blue400.hex,
+
+      ToggleOffBackgroundColor: grey300.hex,
+      ToggleOnBackgroundColor: grey600.hex,
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -623,6 +635,9 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
 
       SecretsWarningBackground: yellow700.hex,
       ChartBlueColor: blue600.hex,
+
+      ToggleOffBackgroundColor: dark500.hex,
+      ToggleOnBackgroundColor: dark300.hex,
     },
   } as const;
 

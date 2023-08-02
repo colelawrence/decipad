@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
-import { cssVar } from '../../primitives';
+import { cssVar, useThemeColor } from '../../primitives';
 import { blockAlignment } from '../../styles';
 import { AvailableSwatchColor, UserIconKey } from '../../utils';
 
@@ -52,6 +52,7 @@ export const Callout = ({
   saveColor = noop,
 }: CalloutProps): ReturnType<FC> => {
   const Icon = icons[icon];
+  const themeColor = useThemeColor(color);
   return (
     <p
       className={'block-figure'}
@@ -59,8 +60,11 @@ export const Callout = ({
       css={[
         styles,
         {
-          backgroundColor: cssVar('themeBackgroundSubdued'),
-          color: cssVar('textSubdued'),
+          backgroundColor:
+            color === 'Catskill'
+              ? cssVar('backgroundSubdued')
+              : themeColor.Background.Subdued,
+          color: cssVar('textDefault'),
         },
       ]}
     >

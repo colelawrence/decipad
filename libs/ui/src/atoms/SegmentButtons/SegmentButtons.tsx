@@ -96,6 +96,7 @@ const FigureButton = styled.figure<{
   borderRadius: '6px',
   minHeight: '30px',
   minWidth: '30px',
+  cursor: 'pointer',
 
   svg: {
     width: '16px',

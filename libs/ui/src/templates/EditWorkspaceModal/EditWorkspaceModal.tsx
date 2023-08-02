@@ -89,7 +89,7 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
         {
           <div css={membersStyle}>
             <h3 css={headingStyles}>Workspace members</h3>
-            <Button type="secondary" href={membersHref}>
+            <Button type="tertiaryAlt" href={membersHref}>
               <span css={buttonIconStyle}>
                 <People />
               </span>
