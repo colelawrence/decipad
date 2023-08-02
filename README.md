@@ -128,6 +128,9 @@ To run the backend and the frontend, just copy and past the following command in
 yarn serve:all
 ```
 
+> By default a browser window should open with the auto-login URL.
+> If you want to change the browser, define the `DECI_BROWSER` environment variable (in a `.env` file, for instance).
+
 ### Testing the project
 
 To run the unit tests for all the monorepos in the project, you can run the following:
