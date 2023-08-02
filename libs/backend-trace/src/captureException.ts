@@ -1,4 +1,4 @@
-import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
+import { AWSLambda as SentryAWSLambda, Integrations } from '@sentry/serverless';
 import '@sentry/tracing';
 import { Boom, boomify } from '@hapi/boom';
 import { monitor as monitorConfig } from '@decipad/backend-config';
@@ -20,6 +20,7 @@ const sentryInitOptions: SentryOptions = {
   environment: process.env.SENTRY_ENVIRONMENT,
   release: meta().version,
   enableTracing: true,
+  integrations: [new Integrations.Apollo()],
 };
 
 let sentryInitialized = false;
@@ -28,7 +29,7 @@ export const initTrace = (options: TraceOptions = {}): boolean => {
   if (!sentryDSN) {
     return false;
   }
-  if (sentryDSN && !sentryInitialized) {
+  if (!sentryInitialized) {
     SentryAWSLambda.init({ ...sentryInitOptions, ...options });
     sentryInitialized = true;
   }
