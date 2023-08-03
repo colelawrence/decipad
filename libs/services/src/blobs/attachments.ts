@@ -19,8 +19,11 @@ const { buckets, ...config } = s3Config();
 const Bucket = buckets.attachments;
 const s3 = new S3Client(config);
 
-const fixURL = (urlString: string): string => {
+const fixURL = (urlString: string, cors = false): string => {
   const url = new URL(urlString);
+  if (cors && url.hostname === 's3.eu-west-2.amazonaws.com') {
+    url.hostname = `${Bucket}.${url.hostname}`;
+  }
   if (url.hostname.endsWith('amazonaws.com') && url.protocol === 'http:') {
     url.protocol = 'https';
   }
@@ -82,7 +85,7 @@ export async function getCreateAttachmentForm(
     Conditions: [['content-length-range', 0, maxAttachmentSize]],
   }).then(({ url, ...data }) => ({
     ...data,
-    url: fixURL(url),
+    url: fixURL(url, true),
     fileName: key,
     fileType,
   }));
