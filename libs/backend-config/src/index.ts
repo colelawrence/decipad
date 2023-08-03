@@ -114,8 +114,9 @@ function env(name: SupportedEnvKey): string {
 }
 
 export function app() {
+  const urlBase = env('DECI_APP_URL_BASE');
   return {
-    urlBase: env('DECI_APP_URL_BASE'),
+    urlBase,
     apiPathBase: `/api`,
     limits: {
       maxAttachmentSize: Number(env('DECI_MAX_ATTACHMENT_SIZE')),

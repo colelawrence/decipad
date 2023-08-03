@@ -96,6 +96,7 @@ export async function createSandboxEnv(
     ARC_SANDBOX: stringify(ARC_SANDBOX),
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
+    OVERRIDE_DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,
     DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY,
     JWT_SECRET: process.env.JWT_SECRET || nanoid(),

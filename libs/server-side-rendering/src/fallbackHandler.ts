@@ -1,7 +1,8 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { app } from '@decipad/backend-config';
 import documentTemplate from '../public/index.html';
 import { Request, Response } from './types';
 import { loadManifest } from './utils/loadManifest';
-import { baseUrlFromReq } from './utils/baseUrlFromReq';
 import loadingMarkup from '../public/loadingMarkup.html';
 
 export type ReplyingHandler = (
@@ -10,13 +11,13 @@ export type ReplyingHandler = (
 ) => Promise<Response>;
 
 export const fallbackHandler: ReplyingHandler = async (
-  req: Request,
+  _req: Request,
   reason = 'unknown'
 ) => {
   // eslint-disable-next-line no-console
   console.log(`replying with fallback because ${reason}`);
-  const baseUrl = baseUrlFromReq(req);
-  const manifest = await loadManifest(req);
+  const baseUrl = app().urlBase;
+  const manifest = await loadManifest();
   const jsEntryPoint = manifest.files['main.js'];
 
   return {

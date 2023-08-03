@@ -1,17 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { APIGatewayProxyEventV2 as APIGatewayProxyEvent } from 'aws-lambda';
 import { fetch } from '@decipad/fetch';
-import { baseUrlFromReq } from './baseUrlFromReq';
+import { app } from '@decipad/backend-config';
 
 export interface Manifest {
   files: {
     'main.js': string;
   } & Record<string, string>;
 }
-const tryLoadingRemoteManifest = async (
-  req: APIGatewayProxyEvent
-): Promise<Manifest> => {
-  const base = baseUrlFromReq(req);
+const tryLoadingRemoteManifest = async (): Promise<Manifest> => {
+  const base = app().urlBase;
   const manifestUrl = new URL('/asset-manifest.json', base);
   // eslint-disable-next-line no-console
   console.log(`fetching manifest from ${manifestUrl.toString()}`);
@@ -22,11 +19,9 @@ const tryLoadingRemoteManifest = async (
   return res.json();
 };
 
-export const loadManifest = async (
-  req: APIGatewayProxyEvent
-): Promise<Manifest> => {
+export const loadManifest = async (): Promise<Manifest> => {
   try {
-    return await tryLoadingRemoteManifest(req);
+    return await tryLoadingRemoteManifest();
   } catch (err) {
     // eslint-disable-next-line no-console
     console.warn('failed loading manifest from remote');

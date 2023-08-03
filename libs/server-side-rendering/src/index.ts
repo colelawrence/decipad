@@ -1,15 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-extraneous-dependencies
+import dns from 'node:dns';
 import './globalPolyfills';
 import Boom from '@hapi/boom';
 import { handle } from './handle';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { renderNotebook } from './renderNotebook';
 import { Handler } from './types';
-import { baseUrlFromReq } from './utils/baseUrlFromReq';
 import { loadManifest } from './utils/loadManifest';
 import { sessionFromReq } from './utils/sessionFromReq';
+import { app } from '@decipad/backend-config';
+
+dns.setDefaultResultOrder('ipv4first');
 
 type GlobalWithSSR = typeof global & { __DECI_IS_SSR__?: boolean };
 (global as GlobalWithSSR).__DECI_IS_SSR__ = true;
@@ -21,7 +24,7 @@ export const handler: Handler = handle(async (req) => {
   }
 
   const [manifest, session] = await Promise.all([
-    loadManifest(req),
+    loadManifest(),
     sessionFromReq(req),
   ]);
   // eslint-disable-next-line no-console
@@ -29,7 +32,7 @@ export const handler: Handler = handle(async (req) => {
   const start = Date.now();
   const body = await renderNotebook({
     jsEntryPoint: manifest.files['main.js'],
-    baseUrl: baseUrlFromReq(req),
+    baseUrl: app().urlBase,
     notebookId,
     cookies: req.cookies ?? [],
     session,
