@@ -9,6 +9,7 @@ import {
 } from '@decipad/services/notebooks';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
+import Boom from '@hapi/boom';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
@@ -63,6 +64,9 @@ export const duplicatePad = async (
   );
 
   const doc = (await snapshot(id)).value;
+  if (!doc.children[0]) {
+    throw Boom.notAcceptable('snapshot is empty');
+  }
   // set new title
   doc.children[0].children = [{ text: newName }];
   const document = _document != null ? _document : stringify(doc);
