@@ -7,7 +7,7 @@ import { Type } from '../../type';
 import { BuiltinSpec } from '../interfaces';
 import { isTimeSpecificity } from '../../date/index';
 import { overloadBuiltin } from '../overloadBuiltin';
-import { DateValue, Scalar } from '../../value';
+import { DateValue, Scalar, Unknown, UnknownValue } from '../../value';
 
 const roundNumberFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
   Type.combine((precision ?? n).isScalar('number'), n.isScalar('number'));
@@ -34,7 +34,11 @@ const roundWrap = (
   round: (f: DeciNumber, decimalPrecisionValue: DeciNumber) => DeciNumber
 ): NonNullable<BuiltinSpec['fnValues']> => {
   return async ([nValue, decimalPrecisionValue], [type] = []) => {
-    const n = getInstanceof(await nValue.getData(), DeciNumber);
+    const nGeneric = await nValue.getData();
+    if (nGeneric === Unknown) {
+      return UnknownValue;
+    }
+    const n = getInstanceof(nGeneric, DeciNumber);
     const multiplier = multiplyMultipliers(type.unit);
     const decimalPrecision = decimalPrecisionValue
       ? getInstanceof(await decimalPrecisionValue.getData(), DeciNumber)
