@@ -27,27 +27,29 @@ type IconButtonProps = {
   readonly onClick?: () => void;
   readonly children: ReactNode;
   readonly isDefaultBackground: boolean;
+  readonly color?: string;
 };
 
 export const NotebookIconButton: FC<IconButtonProps> = ({
   children,
   onClick,
   isDefaultBackground,
+  color,
 }) => {
   return (
     <div
       css={[
         buttonStyles,
-        css({
+        {
           backgroundColor: isDefaultBackground
             ? cssVar('backgroundSubdued')
-            : cssVar('themeBackgroundSubdued'),
+            : color ?? cssVar('themeBackgroundSubdued'),
           ':hover, :focus': {
             backgroundColor: isDefaultBackground
               ? cssVar('backgroundHeavy')
-              : cssVar('themeBackgroundHeavy'),
+              : color ?? cssVar('themeBackgroundHeavy'),
           },
-        }),
+        },
       ]}
       onClick={onClick}
     >

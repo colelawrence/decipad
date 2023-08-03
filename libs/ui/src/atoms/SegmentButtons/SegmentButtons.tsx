@@ -1,6 +1,6 @@
 import { noop } from '@decipad/utils';
 import { FC, ReactNode } from 'react';
-import { componentCssVars } from '../../primitives';
+import { componentCssVars, cssVar } from '../../primitives';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { Tooltip } from '../Tooltip/Tooltip';
 import styled from '@emotion/styled';
@@ -18,15 +18,21 @@ interface SegmentButton {
 
 type SegmentButtonsProps = {
   readonly buttons: SegmentButton[];
-  readonly variant?: 'transparent' | 'darker';
+  readonly variant?: 'transparent' | 'darker' | 'default';
+  readonly border?: boolean;
+  readonly hideDivider?: boolean;
+  readonly padding?: 'default' | 'skinny';
 };
 
 export const SegmentButtons: FC<SegmentButtonsProps> = ({
   buttons,
   variant = 'transparent',
+  border = false,
+  hideDivider = false,
+  padding = 'default',
 }) => {
   return (
-    <WrapperDiv variant={variant}>
+    <WrapperDiv variant={variant} border={border} hideDivider={hideDivider}>
       {buttons.map((button, i) => {
         const {
           children,
@@ -48,6 +54,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
             aria-disabled={disabled}
             variant={variant}
             selected={selected}
+            padding={padding}
           >
             {children}
           </FigureButton>
@@ -73,43 +80,68 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
   );
 };
 
-const WrapperDiv = styled.div<{ variant: SegmentButtonsProps['variant'] }>(
+const WrapperDiv = styled.div<{
+  variant: SegmentButtonsProps['variant'];
+  border: SegmentButtonsProps['border'];
+  hideDivider: SegmentButtonsProps['hideDivider'];
+}>(
   (props) => ({
     display: 'flex',
     alignItems: 'center',
+
+    // Interstingly, border radius isn't respected by children.
+    // So you have to hide the overflow.
     borderRadius: '6px',
+    overflow: 'hidden',
+    ...(props.border && {
+      border: `1px solid ${cssVar('borderDefault')}`,
+    }),
+
+    height: '100%',
     backgroundColor:
       props.variant === 'transparent'
         ? 'inherit'
         : componentCssVars('ButtonTertiaryDefaultBackground'),
+
+    ...(props.hideDivider && {
+      gap: '4px',
+    }),
+
+    figure: {
+      ...(!props.hideDivider
+        ? {
+            ':not(:last-child)': {
+              borderRight: `1px solid ${cssVar('borderDefault')}`,
+            },
+          }
+        : {
+            borderRadius: '6px',
+          }),
+    },
   }),
   hideOnPrint
 );
 
 const FigureButton = styled.figure<{
   variant: SegmentButtonsProps['variant'];
+  padding: SegmentButtonsProps['padding'];
   selected: boolean;
 }>((props) => ({
   display: 'grid',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: '6px',
-  minHeight: '30px',
-  minWidth: '30px',
   cursor: 'pointer',
-
-  svg: {
-    width: '16px',
-    height: '16px',
-  },
+  padding: props.padding === 'default' ? '6px' : '4px',
 
   transition: 'background 0.1s ease-in-out',
 
   backgroundColor: props.selected
-    ? props.variant === 'transparent'
-      ? componentCssVars('ButtonTertiaryDefaultBackground')
-      : componentCssVars('ButtonTertiaryAltDefaultBackground')
-    : 'inherit',
+    ? componentCssVars('ButtonTertiaryAltDefaultBackground')
+    : props.variant === 'transparent'
+    ? componentCssVars('ButtonTertiaryDefaultBackground')
+    : props.variant === 'darker'
+    ? componentCssVars('ButtonTertiaryAltDefaultBackground')
+    : cssVar('backgroundSubdued'),
 
   ':disabled': {
     cursor: 'not-allowed',

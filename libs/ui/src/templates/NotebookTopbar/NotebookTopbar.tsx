@@ -295,7 +295,11 @@ export const NotebookTopbar = ({
                 variant="darker"
                 buttons={[
                   {
-                    children: <SidebarOpen />,
+                    children: (
+                      <div css={{ width: '20px', height: '20px' }}>
+                        <SidebarOpen />
+                      </div>
+                    ),
                     onClick: toggleSidebar || noop,
                     selected: sidebarOpen,
                     tooltip: 'Open the sidebar',

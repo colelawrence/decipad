@@ -132,6 +132,8 @@ export function translateOldThemeColor(
       return 'Blue';
     case 'Perfume':
       return 'Purple';
+    default:
+      return 'Teal';
   }
 }
 

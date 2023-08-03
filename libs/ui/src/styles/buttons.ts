@@ -1,21 +1,12 @@
 import { css } from '@emotion/react';
-import {
-  black,
-  cssVar,
-  hexToOpaqueColor,
-  transparency,
-  weakOpacity,
-} from '../primitives';
+import { componentCssVars, cssVar } from '../primitives';
 
 export const mainIconButtonStyles = css({
   display: 'inline-block',
   borderRadius: '100vmax',
 
   ':hover, :focus': {
-    backgroundColor: transparency(
-      hexToOpaqueColor(cssVar('borderSubdued')) || black,
-      weakOpacity
-    ).rgba,
+    backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
   },
 });
 

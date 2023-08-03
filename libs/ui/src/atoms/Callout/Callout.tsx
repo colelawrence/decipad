@@ -53,6 +53,7 @@ export const Callout = ({
 }: CalloutProps): ReturnType<FC> => {
   const Icon = icons[icon];
   const themeColor = useThemeColor(color);
+
   return (
     <p
       className={'block-figure'}

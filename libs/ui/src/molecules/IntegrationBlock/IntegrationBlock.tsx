@@ -102,7 +102,12 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
               );
             })
           )}
-          <SegmentButtons buttons={buttons} />
+          <SegmentButtons
+            buttons={buttons}
+            variant="default"
+            border
+            padding="skinny"
+          />
         </div>
       </div>
 
@@ -125,6 +130,7 @@ const controlStyles = css(p12Medium, hideOnPrint, {
   // Shifts whole div to the right.
   marginLeft: 'auto',
   display: 'flex',
+  alignItems: 'center',
   cursor: 'pointer',
   gap: '6px',
   color: cssVar('textDefault'),

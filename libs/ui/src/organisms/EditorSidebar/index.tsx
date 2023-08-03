@@ -61,10 +61,15 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
       >
         <div css={[sidebarPaddingStyles, { paddingTop: 0 }]}>
           <SegmentButtons
+            hideDivider
             buttons={availableTabs.map((tab) => {
               const { tooltip, children: buttonChildren } = getMetaForTab(tab);
               return {
-                children: buttonChildren,
+                children: (
+                  <div css={{ svg: { height: '24px', width: '24px' } }}>
+                    {buttonChildren}
+                  </div>
+                ),
                 onClick: () => setSidebarTab(tab),
                 tooltip,
                 testId: `sidebar-${tab}`,

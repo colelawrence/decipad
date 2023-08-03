@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 interface Color {
   readonly red: number;
   readonly green: number;
@@ -80,6 +81,31 @@ export function transparency(
   };
 }
 
+/**
+ * same as @see transparency but with hexadecimal colour.
+ * @throws if string is not 6 characters of hexadecimal.
+ */
+export function transparencyHex(hexColor: string, opacity: Opacity): string {
+  if (hexColor.length !== 7) {
+    throw new Error(
+      `Hex color doesn't contain 7 chracters (1 for #, 6 for digits), got: ${hexColor}`
+    );
+  }
+
+  // eslint-disable-next-line no-param-reassign
+  hexColor = hexColor.slice(1);
+  const parsedHex = parseInt(hexColor, 16);
+  if (isNaN(parsedHex)) {
+    throw new Error('Hexadecimal was not a valid number');
+  }
+
+  const r = (parsedHex >> 16) & 255;
+  const g = (parsedHex >> 8) & 255;
+  const b = parsedHex & 255;
+
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
 //
 // gray
 //
@@ -124,8 +150,8 @@ export const purple400 = color(143, 135, 251);
 export const purple500 = color(115, 105, 250);
 export const purple600 = color(92, 84, 200);
 export const purple700 = color(69, 63, 150);
-export const purple800 = color(41, 40, 58);
-export const purple900 = color(27, 26, 40);
+export const purple800 = color(46, 42, 100);
+export const purple900 = color(10, 20, 49);
 
 //
 // blue

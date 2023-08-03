@@ -108,7 +108,7 @@ export const EditUserModal: React.FC = () => {
           >
             Save changes
           </Button>
-          <Button type="secondary" onClick={closeModal}>
+          <Button type="tertiaryAlt" onClick={closeModal}>
             Cancel
           </Button>
 

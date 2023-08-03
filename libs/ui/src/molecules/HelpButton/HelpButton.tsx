@@ -10,11 +10,11 @@ const styles = css(p13Bold, {
   borderRadius: '6px',
   padding: '0px 8px 0px 10px',
 
-  backgroundColor: componentCssVars('ButtonTertiaryDefaultBackground'),
-  color: componentCssVars('ButtonTertiaryDefaultText'),
+  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryAltDefaultText'),
   ':hover': {
-    backgroundColor: componentCssVars('ButtonTertiaryHoverBackground'),
-    color: componentCssVars('ButtonTertiaryHoverText'),
+    backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+    color: componentCssVars('ButtonTertiaryAltHoverText'),
   },
 
   fontWeight: 900,

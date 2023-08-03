@@ -4,7 +4,13 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Refresh } from '../../icons';
-import { black, cssVar, p13Medium, transparency } from '../../primitives';
+import {
+  black,
+  cssVar,
+  p12Medium,
+  p13Medium,
+  transparency,
+} from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
@@ -132,6 +138,7 @@ export const TextAndIconButton = ({
 
 const wrapperStyles = {
   display: 'inline-block',
+  height: '100%',
 };
 
 const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
@@ -161,8 +168,9 @@ const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
   ]);
 
 const buttonTextStyles = (notSelectedLook: boolean) =>
-  css([
+  css(p12Medium, [
     {
+      color: cssVar('textDefault'),
       whiteSpace: 'nowrap',
       padding: '0 4px',
     },

@@ -5,7 +5,11 @@ import { OpaqueColor } from './color';
 
 type ColorId = Exclude<
   keyof typeof import('./color'),
-  'color' | 'transparency' | 'hexToOpaqueColor' | 'opaqueColorToHex'
+  | 'color'
+  | 'transparency'
+  | 'hexToOpaqueColor'
+  | 'opaqueColorToHex'
+  | 'transparencyHex'
 >;
 
 const wrapperStyle = {
