@@ -5,8 +5,12 @@ export const useIsOffline = () => {
 
   const handleOfflineStatusChange = useCallback(async () => {
     if (!navigator.onLine) {
-      const resp = await fetch(window.location.href);
-      setIsOffline(!resp.ok);
+      try {
+        const resp = await fetch(window.location.href);
+        setIsOffline(!resp.ok);
+      } catch (err) {
+        setIsOffline(true);
+      }
     } else {
       setIsOffline(false);
     }
