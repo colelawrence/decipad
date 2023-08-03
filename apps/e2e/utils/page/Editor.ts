@@ -25,12 +25,15 @@ export async function waitForEditorToLoad(page: Page) {
   await page.locator(editorTitleLocator()).click({
     timeout: Timeouts.maxSelectorWaitTime,
   });
+
   if (!isOnPlayground(page)) {
     if (await page.isVisible('text=/clear all/i')) {
       await page.click('text=/clear all/i');
       await page.locator(editorTitleLocator()).first().click({
         timeout: Timeouts.maxSelectorWaitTime,
       });
+      // since we have changed the title, we need to move the cursor the to the end of the text
+      await page.keyboard.press('ArrowRight');
     }
   }
 }

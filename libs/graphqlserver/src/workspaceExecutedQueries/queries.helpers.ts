@@ -87,15 +87,15 @@ export const incrementQueryCount = async (
   } else {
     const currentDate = timestamp();
     // eslint-disable-next-line camelcase
-    const isCurrentDateNextMonth = query_reset_date
+    const shouldResetDate = query_reset_date
       ? isSameMonth(currentDate, addMonths(query_reset_date, 1))
-      : false;
+      : true;
 
     let newQueryResetDate;
     let newQueryCount;
 
     // eslint-disable-next-line camelcase
-    if (isCurrentDateNextMonth) {
+    if (shouldResetDate) {
       newQueryCount = 1;
       newQueryResetDate = currentDate;
     } else {

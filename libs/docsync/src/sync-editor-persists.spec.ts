@@ -87,7 +87,7 @@ describe('pad editor persistence', () => {
       {
         children: [
           {
-            text: 'My notebook',
+            text: 'Welcome to Decipad!',
           },
         ],
         type: 'h1',
@@ -132,7 +132,7 @@ describe('pad editor persistence', () => {
       {
         children: [
           {
-            text: 'My notebook',
+            text: 'Welcome to Decipad!',
           },
         ],
         type: 'h1',

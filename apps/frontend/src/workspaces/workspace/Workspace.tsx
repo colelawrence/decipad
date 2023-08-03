@@ -310,7 +310,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     const args = {
       workspaceId,
       sectionId,
-      name: 'My notebook',
+      name: 'Welcome to Decipad!',
     };
 
     const createdNotebookData = await createNotebook(args);

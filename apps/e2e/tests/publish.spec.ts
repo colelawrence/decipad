@@ -62,7 +62,7 @@ test.describe('Simple does publish work test', () => {
     const clipboardText = (
       (await page.evaluate('navigator.clipboard.readText()')) as string
     ).toString();
-    expect(clipboardText).toContain('My-notebook');
+    expect(clipboardText).toContain('Welcome-to-Decipad');
     sharedPageLocation = clipboardText;
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.syncDelay);

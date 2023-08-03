@@ -26,7 +26,7 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
       <EditorTitle
         placeholder={
           isElementEmpty(editor, element) && !readOnly
-            ? 'My notebook'
+            ? 'Welcome to Decipad!'
             : undefined
         }
       >

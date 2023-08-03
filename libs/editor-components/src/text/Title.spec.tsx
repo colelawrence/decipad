@@ -54,6 +54,6 @@ it('shows a placeholder only when empty', async () => {
   await waitFor(() => expect(h1Element).toHaveTextContent(/^$/));
   expect(h1Element).toHaveAttribute(
     'aria-placeholder',
-    expect.stringMatching(/notebook/i)
+    expect.stringMatching(/decipad/i)
   );
 });
