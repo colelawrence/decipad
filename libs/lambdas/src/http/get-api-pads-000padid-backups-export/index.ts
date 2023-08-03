@@ -14,6 +14,7 @@ import { toSlateDoc } from '@decipad/slate-yjs';
 import { Document } from '@decipad/editor-types';
 import { format } from 'date-fns';
 import { resource } from '@decipad/backend-resources';
+import { captureException } from '@decipad/backend-trace';
 import handle from '../handle';
 
 const notebooks = resource('notebook');
@@ -69,18 +70,23 @@ const exportPadBackups = async (notebookId: string): Promise<string> => {
       ':docsync_id': notebookId,
     },
   })) {
-    const s = snapshot && (await snapshotFromDbSnapshot(snapshot));
-    if (!s) {
-      continue;
+    try {
+      const s = snapshot && (await snapshotFromDbSnapshot(snapshot));
+      if (!s) {
+        continue;
+      }
+      const { title, content } = await exportNotebookWithAttachments({
+        notebookId,
+        doc: s.doc,
+      });
+      zip.addFile(
+        `${s.date && `${format(s.date, DATE_FORMAT)}_`}${title}.zip`,
+        content
+      );
+    } catch (err) {
+      console.error('Error getting snapshot', err);
+      captureException(err as Error);
     }
-    const { title, content } = await exportNotebookWithAttachments({
-      notebookId,
-      doc: s.doc,
-    });
-    zip.addFile(
-      `${s.date && `${format(s.date, DATE_FORMAT)}_`}${title}.zip`,
-      content
-    );
   }
   return zip.toBuffer().toString('base64');
 };
