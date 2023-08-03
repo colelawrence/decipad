@@ -12,6 +12,8 @@ import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { nanoid } from 'nanoid';
 import { s3 as s3Config, app as getAppConfig } from '@decipad/backend-config';
 import { URL } from 'url';
+import { isReadableStream } from 'is-stream';
+import { getStreamAsBuffer } from 'get-stream';
 
 const { buckets, ...config } = s3Config();
 const Bucket = buckets.attachments;
@@ -53,6 +55,9 @@ export const getAttachmentContent = async (
   });
   const result = await s3.send(command);
   const content = result.Body;
+  if (isReadableStream(content)) {
+    return getStreamAsBuffer(content);
+  }
   if (!Buffer.isBuffer(content)) {
     throw new Error('Expected buffer as response from s3.getObject');
   }

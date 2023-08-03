@@ -15390,10 +15390,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1427.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1427.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1427.0.tgz#65b7ace2cb06d1f45ed1579790a1300c76aaad29"
-  integrity sha512-PIbBIKwvkvvic7hNQevpzi5Xqbi0YzzbLaFv8NZMorwu73b8ydyF+/B/G2iJ0w82jlAzDPQpWqf/7MuP59X9Gg==
+aws-sdk@2.1428.0:
+  version "2.1428.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1428.0.tgz#961646132dcab4f9afc26675bfdf9d6d272d368b"
+  integrity sha512-z8RfFfbPCbtEPeu2W7UJTRcwXu5WNj2ehoDAhmIkvwKMGb5Y1/TbGmny51bucSWt8QKqZlmLxWs9zBGgy7slXw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -15420,6 +15420,22 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
+
+aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1427.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1427.0.tgz#65b7ace2cb06d1f45ed1579790a1300c76aaad29"
+  integrity sha512-PIbBIKwvkvvic7hNQevpzi5Xqbi0YzzbLaFv8NZMorwu73b8ydyF+/B/G2iJ0w82jlAzDPQpWqf/7MuP59X9Gg==
+  dependencies:
+    buffer "4.9.2"
+    events "1.1.1"
+    ieee754 "1.1.13"
+    jmespath "0.16.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    util "^0.12.4"
+    uuid "8.0.0"
+    xml2js "0.5.0"
 
 axe-core@^4.2.0, axe-core@^4.6.2:
   version "4.7.2"
@@ -21036,6 +21052,11 @@ get-stream@^6.0.0, get-stream@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
+
+get-stream@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-7.0.1.tgz#1664dfe7d1678540ea6a4da3ae7cd59bf4e4a91e"
+  integrity sha512-3M8C1EOFN6r8AMUhwUAACIoXZJEOufDU5+0gFFN5uNs6XYOralD2Pqkl7m046va6x77FwposWXbAhPPIOus7mQ==
 
 get-symbol-description@^1.0.0:
   version "1.0.0"
