@@ -2,7 +2,6 @@ import { LoginPage, VerifyEmail } from '@decipad/ui';
 import { signIn } from 'next-auth/react';
 import { FC, useState } from 'react';
 import { loadWorkspaces } from '../../App';
-import { loadOnboarding } from '../../Onboard/LazyOnboard';
 import { loadEditor } from '../../notebooks/notebook/Notebook';
 
 type Page =
@@ -28,7 +27,6 @@ export const Login: FC = () => {
               const resp = await signIn('email', { email, redirect: false });
               if (resp && resp.ok) {
                 // Aggressively pre-load stuff for user
-                loadOnboarding();
                 loadWorkspaces();
                 loadEditor();
               }

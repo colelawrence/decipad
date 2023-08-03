@@ -21,9 +21,14 @@ import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
+  CreateWorkspaceModal,
   Dashboard,
   DashboardSidebar,
   DashboardSidebarPlaceholder,
+  EditDataConnectionsModal,
+  EditMembersModal,
+  EditUserModal,
+  EditWorkspaceModal,
   LoadingLogo,
   NotebookList,
   NotebookListItem,
@@ -32,7 +37,6 @@ import {
   TColorKeys,
   TColorStatus,
 } from '@decipad/ui';
-import { timeout } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
 import sortBy from 'lodash.sortby';
 import { signOut, useSession } from 'next-auth/react';
@@ -60,36 +64,7 @@ import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 const loadWorkspaceHero = () =>
   import(/* webpackChunkName: "workspace-hero" */ './WorkspaceHero');
 const WorkspaceHero = lazy(loadWorkspaceHero);
-const loadCreateWorkspaceModal = () =>
-  import(
-    /* webpackChunkName: "create-workspace-modal" */ './CreateWorkspaceModal'
-  );
-const CreateWorkspaceModal = lazy(loadCreateWorkspaceModal);
-const loadEditMembersModal = () =>
-  import(/* webpackChunkName: "edit-members-modal" */ './EditMembersModal');
-const EditMembersModal = lazy(loadEditMembersModal);
-const loadEditDataConnectionsModal = () =>
-  import(
-    /* webpackChunkName: "edit-secrets-modal" */ './EditDataConnectionsModal'
-  );
-const EditDataConnectionsModal = lazy(loadEditDataConnectionsModal);
-const loadEditWorkspaceModal = () =>
-  import(/* webpackChunkName: "edit-workspace-modal" */ './EditWorkspaceModal');
-const EditWorkspaceModal = lazy(loadEditWorkspaceModal);
-const loadEditUserModal = () =>
-  import(/* webpackChunkName: "edit-user-modal" */ './EditUserModal');
-const EditUserModal = lazy(loadEditUserModal);
 
-const preloadModals = () => {
-  timeout(3000)
-    .then(loadCreateWorkspaceModal)
-    .then(loadEditMembersModal)
-    .then(loadEditWorkspaceModal)
-    .then(loadEditUserModal);
-};
-
-// prefetch
-preloadModals();
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
 };
@@ -359,9 +334,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
               toast('Failed to remove section.', 'error');
             });
         }}
-        onPointerEnter={() =>
-          loadEditWorkspaceModal().then(loadCreateWorkspaceModal)
-        }
       />
     </Frame>
   );

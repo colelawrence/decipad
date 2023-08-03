@@ -15,6 +15,7 @@ import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { Class } from 'utility-types';
 import { captureException } from '@decipad/backend-trace';
 import { boomify } from '@hapi/boom';
+import { debug } from './debug';
 
 const UserErrors: Array<Class<Error>> = [ForbiddenError, UserInputError];
 
@@ -80,6 +81,7 @@ const onError = async (rc: GraphQLRequestContext) => {
 
 export const monitor: ApolloServerPlugin = {
   async requestDidStart(rc: GraphQLRequestContext) {
+    debug('request started', rc.operationName);
     if (rc.errors) {
       await onError(rc);
     }

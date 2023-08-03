@@ -12,7 +12,7 @@ import { useSession } from 'next-auth/react';
 import { FC, lazy } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
-import { Onboard } from './Onboard/LazyOnboard';
+import { Onboard } from './Onboard/Onboard';
 import { RequireOnboard } from './Onboard/RequireOnboard';
 import { ErrorPage, LazyRoute, RequireSession, RouteEvents } from './meta';
 import Notebooks from './notebooks/Notebooks';
