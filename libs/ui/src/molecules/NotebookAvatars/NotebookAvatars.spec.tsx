@@ -52,7 +52,7 @@ describe('NotebookAvatars Molecule', () => {
     await userEvent.hover(screen.getByText('C'));
 
     expect(await screen.findByText('Chris Doe')).toBeInTheDocument();
-    expect(await screen.findByText('Author')).toBeInTheDocument();
+    expect(await screen.findByText('Admin')).toBeInTheDocument();
 
     await userEvent.hover(screen.getByText('J'));
 

@@ -16,7 +16,7 @@ import { sortAvatars } from './sortAvatars';
 const genRole = (permission: PermissionType) => {
   switch (permission) {
     case 'ADMIN':
-      return 'Author';
+      return 'Admin';
     case 'WRITE':
       return 'Collaborator';
     case 'READ':
