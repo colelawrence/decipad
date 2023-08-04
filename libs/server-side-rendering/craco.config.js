@@ -70,6 +70,14 @@ const configureWebpack = (_config) => {
 
   config.plugins = config.plugins.filter(shouldIncludePlugin);
 
+  if (process.env.DECI_APP_URL_BASE) {
+    config.plugins.push(
+      new EnvironmentPlugin({
+        DECI_APP_URL_BASE: process.env.DECI_APP_URL_BASE,
+      })
+    );
+  }
+
   // config.mode = 'development';
   // config.optimization = {};
 

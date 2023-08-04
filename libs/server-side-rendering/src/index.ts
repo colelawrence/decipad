@@ -14,8 +14,6 @@ import { app } from '@decipad/backend-config';
 
 dns.setDefaultResultOrder('ipv4first');
 
-dns.setDefaultResultOrder('ipv4first');
-
 type GlobalWithSSR = typeof global & { __DECI_IS_SSR__?: boolean };
 (global as GlobalWithSSR).__DECI_IS_SSR__ = true;
 
