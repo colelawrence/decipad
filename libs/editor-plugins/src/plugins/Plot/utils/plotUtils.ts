@@ -9,7 +9,7 @@ import {
 import { PlotElement } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import DeciNumber from '@decipad/number';
-import { componentCssVarHex, componentCssVars, cssVarHex } from '@decipad/ui';
+import { componentCssVarHex, cssVarHex } from '@decipad/ui';
 import { ResultMaterializedTable } from 'libs/language/src/interpreter/interpreter-types';
 import {
   AllowedPlotValue,
@@ -55,7 +55,7 @@ const markTypeToFill = (
     case 'bar':
     case 'area':
     case 'point':
-      return componentCssVars('ChartBlueColor');
+      return componentCssVarHex('ChartBlueColor');
     case 'circle':
     case 'square':
       return 'white';
@@ -238,6 +238,7 @@ export function specFromType(
       scheme: displayProps.colorScheme,
     };
   }
+
   if (encoding.y && encoding.y.axis) {
     encoding.y.axis.labelAngle = 0;
     encoding.y.axis.tickColor = cssVarHex('textDefault');

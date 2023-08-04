@@ -62,6 +62,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
         <div css={[sidebarPaddingStyles, { paddingTop: 0 }]}>
           <SegmentButtons
             hideDivider
+            variant="transparent"
             buttons={availableTabs.map((tab) => {
               const { tooltip, children: buttonChildren } = getMetaForTab(tab);
               return {

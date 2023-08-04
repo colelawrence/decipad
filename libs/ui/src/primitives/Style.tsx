@@ -545,7 +545,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       StatusIndicatorErrorBackground: red100.hex,
 
       SecretsWarningBackground: yellow200.hex,
-      ChartBlueColor: blue400.hex,
+      ChartBlueColor: blue200.hex,
 
       ToggleOffBackgroundColor: grey300.hex,
       ToggleOnBackgroundColor: grey600.hex,
@@ -636,7 +636,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       StatusIndicatorErrorBackground: red300.hex,
 
       SecretsWarningBackground: yellow700.hex,
-      ChartBlueColor: blue600.hex,
+      ChartBlueColor: blue400.hex,
 
       ToggleOffBackgroundColor: dark500.hex,
       ToggleOnBackgroundColor: dark300.hex,
@@ -719,5 +719,6 @@ export function componentCssVars(
 export function componentCssVarHex<V extends keyof ComponentCssVariables>(
   name: V
 ) {
-  return ComponentColors.Light[name];
+  const theme = themeStore.getState().theme ? 'Dark' : 'Light';
+  return ComponentColors[theme][name];
 }

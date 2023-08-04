@@ -1256,6 +1256,125 @@
 						{
 							"children": [
 								{
+									"text": "SmallChart"
+								}
+							],
+							"id": "TCSRKUwyTQTXu4Go36la8",
+							"type": "table-var-name"
+						}
+					],
+					"id": "XVcbjNSFLySXOpqPylJNo",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Column1"
+								}
+							],
+							"id": "PGEN0BGxEaR4MerFNMAYZ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Column3"
+								}
+							],
+							"id": "3hV-Uww74me02-YzpM72l",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "wpEZOD7PjyGQByzfrFYCz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Hello"
+								}
+							],
+							"id": "eq1g1BZ-MecRvAAbwhKFT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5"
+								}
+							],
+							"id": "L2v10cLPw8f35EiE1y-kN",
+							"type": "td"
+						}
+					],
+					"id": "l0d2V3VnsuNvbKwcAn_VE",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "World"
+								}
+							],
+							"id": "WRverD-rIQ1zz-gCvat13",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "7"
+								}
+							],
+							"id": "lIksFe9j9biPlzW3mIcKI",
+							"type": "td"
+						}
+					],
+					"id": "2_sXosize3VS0nZGzW1JB",
+					"type": "tr"
+				}
+			],
+			"id": "dkozmwKyaQykohBW9qZzX",
+			"type": "table",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "s0qQee1qPlToRGz7d1MHl",
+			"type": "plot",
+			"title": "",
+			"sourceVarName": "exprRef_dkozmwKyaQykohBW9qZzX",
+			"xColumnName": "Column1",
+			"yColumnName": "Column3",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
 									"text": "Table5"
 								}
 							],
@@ -2861,12 +2980,12 @@
 			"title": "Table9BigNegatives Line"
 		},
 		{
-			"y2ColumnName": "",
 			"children": [
 				{
 					"text": ""
 				}
 			],
+			"y2ColumnName": "",
 			"id": "DB4mpl-uTu8wINKeZNDCB",
 			"type": "plot",
 			"title": "Table9BigNegatives line",

@@ -21,6 +21,7 @@ import {
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { IconPopover } from '../IconPopover/IconPopover';
+import styled from '@emotion/styled';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -222,9 +223,15 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
               !hideAddDataViewButton &&
               setHideFormulas && (
                 <SegmentButtons
+                  border
+                  variant="default"
                   buttons={[
                     {
-                      children: <icons.Formula />,
+                      children: (
+                        <IconWrapper>
+                          <icons.Formula />
+                        </IconWrapper>
+                      ),
                       tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
                       onClick: () =>
                         tableFormulaEditors.length !== 0
@@ -233,7 +240,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                       testId: 'formula',
                     },
                     {
-                      children: isCollapsed ? <icons.Show /> : <icons.Hide />,
+                      children: (
+                        <IconWrapper>
+                          {isCollapsed ? <icons.Show /> : <icons.Hide />}
+                        </IconWrapper>
+                      ),
                       tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
                       onClick: () => setCollapsed(!isCollapsed),
                       testId: 'table',
@@ -259,3 +270,8 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     </div>
   );
 };
+
+const IconWrapper = styled.div({
+  width: '13px',
+  height: '13px',
+});

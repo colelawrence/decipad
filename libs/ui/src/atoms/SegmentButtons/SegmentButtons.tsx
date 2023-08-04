@@ -138,7 +138,7 @@ const FigureButton = styled.figure<{
   backgroundColor: props.selected
     ? componentCssVars('ButtonTertiaryAltDefaultBackground')
     : props.variant === 'transparent'
-    ? componentCssVars('ButtonTertiaryDefaultBackground')
+    ? 'transparent'
     : props.variant === 'darker'
     ? componentCssVars('ButtonTertiaryAltDefaultBackground')
     : cssVar('backgroundSubdued'),
