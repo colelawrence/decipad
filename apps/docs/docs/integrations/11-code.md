@@ -5,9 +5,9 @@ sidebar_class_name: new
 
 # Code: Data from APIs
 
-import YouTubePlayer from '@site/src/components/VideoCards/videos';
-
-<YouTubePlayer videoId="RMrxUdhKVlE" thumbnailUrl="/docs/img/thumbnails/thumbnail-code-integrations.png" />
+ <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+   <iframe src="https://www.loom.com/embed/c3d2177a8b744ea7b8a939bdbd3881dc?sid=0388946a-9b00-4095-b8f5-4acc3f3cec75" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+ </div>
 
 <br />
 

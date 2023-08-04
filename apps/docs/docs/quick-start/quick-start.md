@@ -12,9 +12,9 @@ image: https://user-images.githubusercontent.com/12210180/162471244-15b6b5ba-5ed
 
 Decipad is a smart document that helps everyone tell stories using data.
 
-import YouTubePlayer from '@site/src/components/VideoCards/videos';
-
-<YouTubePlayer videoId="HgonzbhFWLA" thumbnailUrl="/docs/img/thumbnails/thumbnail-welcome.png" />
+ <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+   <iframe src="https://www.loom.com/embed/e18301fb8aa748eca8f7be0ce38c9e6a?sid=726a1216-91e3-4c61-9f55-8190c2ffa632" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+ </div>
 
 <br />
 

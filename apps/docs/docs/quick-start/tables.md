@@ -7,9 +7,9 @@ toc_min_heading_level: 2
 
 Tables help you organize data, making it easier to read and understand. You can also use tables to perform calculations using formulas.
 
-import YouTubePlayer from '@site/src/components/VideoCards/videos';
-
-<YouTubePlayer videoId="sCGiQr9_iD4" thumbnailUrl="/docs/img/thumbnails/thumbnail-tables.png" />
+ <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+   <iframe src="https://www.loom.com/embed/cb7d3e18401d4f289ea7e7c9eeaf08d9?sid=90c61f2e-95f0-426c-8fb1-920a3adc5c20" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+ </div>
 
 ## Create a Table
 
