@@ -1,5 +1,5 @@
-import { ONE, N } from '@decipad/number';
-import { CurrencyUnits, getUnitByName, Unit } from '@decipad/language';
+import { CurrencyUnits, Unit, getUnitByName } from '@decipad/language';
+import { N, ONE } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 
 function isCurrencyUnit(unit: Unit | null): boolean {

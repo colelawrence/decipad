@@ -1,13 +1,13 @@
-import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import {
   AST,
-  convertToMultiplierUnit,
   DEFAULT_PRECISION,
   MAX_PRECISION,
+  Unit,
+  convertToMultiplierUnit,
   normalizeUnits,
   safeNumberForPrecision,
-  Unit,
 } from '@decipad/language';
+import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import { produce } from '@decipad/utils';
 import pluralize from 'pluralize';
 import {
@@ -16,10 +16,10 @@ import {
 } from './formatEdgeCaseNumbers';
 import { formatTime, isTimeUnit } from './formatTime';
 import {
+  UnitPart,
   formatUnitAsParts,
   isUserDefined,
   prettyENumbers,
-  UnitPart,
 } from './formatUnit';
 import { getCurrency, getPrettyCurrency, hasCurrency } from './getCurrency';
 
@@ -181,7 +181,6 @@ const formatToParts = (
 
   let partsOf: DeciNumberPart[];
   let isPrecise: boolean;
-
   if (isEdgeCaseNumber(n)) {
     // Number is too large or too small for floats
     const placeholder = 99;
@@ -237,7 +236,11 @@ function formatCurrency(locale: string, unit: Unit[], fraction: DeciNumber) {
   return formatToParts(locale, numberFormatOptions, fraction, (parts) =>
     parts.map((u) => {
       if (u.type === 'currency') {
-        return { type: 'currency', value: getPrettyCurrency(u.value) };
+        const unitIs =
+          u.value === 'kr' && numberFormatOptions.currency
+            ? numberFormatOptions.currency
+            : u.value;
+        return { type: 'currency', value: getPrettyCurrency(unitIs) };
       }
       return u;
     })

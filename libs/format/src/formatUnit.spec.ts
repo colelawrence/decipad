@@ -102,7 +102,7 @@ describe('base unit tests', () => {
       '°C'
     );
     expect(formatUnit(locale, U([u('SEK', { multiplier: N(1) })]))).toEqual(
-      'kr'
+      'skr'
     );
     expect(formatUnit(locale, U([u('v', { multiplier: N(1) })]))).toEqual('V');
     expect(formatUnit(locale, U([u('V', { multiplier: N(1) })]))).toEqual('V');

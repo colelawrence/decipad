@@ -1,8 +1,10 @@
-import { N } from '@decipad/number';
 import { parseUnit } from '@decipad/language';
+import { N } from '@decipad/number';
 import * as CurrencyUnits from '../../language/src/units/currency-units';
 import { formatNumber, getIsPrecise } from './formatNumber';
 import {
+  F,
+  U,
   bananasPerDay,
   makeFractionUnitTuple,
   metersPerDay,
@@ -11,8 +13,6 @@ import {
   perDay,
   perEuros,
   u,
-  U,
-  F,
   usd,
   usdPerDay,
   usdPerMonthPerWorker,
@@ -820,6 +820,14 @@ describe('formatNumber', () => {
           { type: 'integer', value: '1' },
         ]);
         expect(asString).toEqual('$1');
+      });
+
+      it('can do nordic currencies', () => {
+        expect(
+          formatNumber(locale, [parseUnit('sek')], N(100000))
+            .partsOf.filter((x) => x.type === 'currency')
+            .map((x) => x.value)[0]
+        ).toBe('skr');
       });
 
       it('-100 usd = -$100', () => {

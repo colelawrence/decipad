@@ -370,10 +370,10 @@ Currencies can be expressed as their symbol or by their name.
 | 🇨🇳 Renminbi             | CNY  | ¥      |
 | 🇭🇰 Hong Kong dollar     | HKD  | HK$    |
 | 🇳🇿 New Zealand dollar   | NZD  | NZ$    |
-| 🇸🇪 Swedish krona        | SEK  | kr     |
+| 🇸🇪 Swedish krona        | SEK  | skr    |
 | 🇰🇷 South Korean won     | KRW  | ₩      |
 | 🇸🇬 Singapore dollar     | SGD  | S$     |
-| 🇳🇴 Norwegian krone      | NOK  | kr     |
+| 🇳🇴 Norwegian krone      | NOK  | nkr    |
 | 🇲🇽 Mexican peso         | MXN  | $      |
 | 🇮🇳 Indian rupee         | INR  | ₹      |
 | 🇷🇺 Russian ruble        | RUB  | ₽      |
@@ -381,7 +381,7 @@ Currencies can be expressed as their symbol or by their name.
 | 🇹🇷 Turkish lira         | TRY  | ₺      |
 | 🇧🇷 Brazilian real       | BRL  | R$     |
 | 🇹🇼 New Taiwan dollar    | TWD  | NT$    |
-| 🇩🇰 Danish krone         | DKK  | kr     |
+| 🇩🇰 Danish krone         | DKK  | dkr    |
 | 🇵🇱 Polish złoty         | PLN  | zł     |
 | 🇹🇭 Thai baht            | THB  | ฿      |
 | 🇮🇩 Indonesian rupiah    | IDR  | Rp     |
