@@ -8,10 +8,21 @@ export function ensureInitialDocument(editor: MyEditor): void {
   const { children, withoutCapturingUndo } = editor;
 
   function createInitNotebook() {
-    if (isFlagEnabled('POPULATED_NEW_NOTEBOOK')) {
-      createPopulatedNotebook(editor);
-    } else {
-      createDefaultNotebook(editor);
+    try {
+      if (isFlagEnabled('POPULATED_NEW_NOTEBOOK')) {
+        try {
+          createPopulatedNotebook(editor);
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('Error creating populated notebook');
+          createDefaultNotebook(editor);
+        }
+      } else {
+        createDefaultNotebook(editor);
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error initialising notebook', err);
     }
   }
 
