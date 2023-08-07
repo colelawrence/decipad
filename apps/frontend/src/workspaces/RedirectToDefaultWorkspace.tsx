@@ -30,7 +30,7 @@ const RedirectToDefaultWorkspace: FC = () => {
     findWorkspaceWithWritePermissions(allWorkspaces);
 
   if (!workspaceId) {
-    throw new Error('No user workspaces with write permissions found');
+    return <Navigate replace to={workspaces({}).$} />;
   }
 
   const redirectTo = isRedirectFromStripe
