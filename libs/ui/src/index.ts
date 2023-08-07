@@ -13,5 +13,6 @@ export * from './templates';
 export * from './utils';
 export * from './utils/useEventNoEffect';
 export * from './images';
+export * from './styles';
 
 export const icons = allIcons;

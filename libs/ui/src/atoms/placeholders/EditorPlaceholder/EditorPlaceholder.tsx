@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { editorLayout } from 'libs/ui/src/styles';
 import { FC } from 'react';
+import { editorLayout } from '../../../styles';
 import { slimBlockWidth } from '../../../styles/editor-layout';
 import { Divider } from '../../Divider/Divider';
 import { Placeholder } from '../../Placeholder/Placeholder';
