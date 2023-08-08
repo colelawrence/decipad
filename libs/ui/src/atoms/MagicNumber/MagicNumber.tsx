@@ -99,7 +99,11 @@ export const MagicNumber = ({
       data-testid="magic-number"
     >
       <span
-        title={result ? result.value?.toString() : 'Loading'}
+        title={
+          result && result?.value !== Result.Unknown
+            ? result.value?.toString()
+            : 'Loading'
+        }
         contentEditable={false}
       >
         <IntrospectMagicNumber
