@@ -8291,12 +8291,12 @@
     "@sentry/utils" "7.61.0"
     tslib "^2.4.1 || ^1.9.3"
 
-"@sentry/bundler-plugin-core@2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.5.0.tgz#9ac413a9109f7f74b559544dc6744b941447b74d"
-  integrity sha512-UNjeTSf0Irt/RsC1Xsfxa+RC92mBvjzuWQnvHJ5c+mXwUt+jLcFgGMCSVK/FCDZO+gAeKzmU1+G2UexbsNAP8w==
+"@sentry/bundler-plugin-core@2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.6.0.tgz#e7e5b2ab25e2650900008d594d44335e56add0df"
+  integrity sha512-3oYJKacxzKg4Xw5t2crsJCeE1/wsN1g3p5o2mesNm+KvP6ovgz8+cqxq5dJigNYqfR9KTSUFo+ZLhOy/pyfkmw==
   dependencies:
-    "@sentry/cli" "^2.17.0"
+    "@sentry/cli" "^2.20.1"
     "@sentry/node" "^7.60.0"
     "@sentry/utils" "^7.60.0"
     dotenv "^16.3.1"
@@ -8305,10 +8305,10 @@
     magic-string "0.27.0"
     unplugin "1.0.1"
 
-"@sentry/cli@^2.17.0":
-  version "2.19.4"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.19.4.tgz#d6a07d8224b457a8023b4b2a56b764abb60b53d2"
-  integrity sha512-wsSr2O/GVgr/i+DYtie+DNhODyI+HL7F5/0t1HwWMjHJWm4+5XTEauznYgbh2mewkzfUk9+t0CPecA82lEgspg==
+"@sentry/cli@^2.20.1":
+  version "2.20.4"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.20.4.tgz#755719aeaa58dbd3910ee23cc020decc16f5a5bf"
+  integrity sha512-mycBCKQmLdaJpSKpXc3IXrQwb5HLxrdjgJgLGbb8saFHIkXl/1ePH171j+REq4dIP1uetu0bdDgEYj6AQjkleQ==
   dependencies:
     https-proxy-agent "^5.0.0"
     node-fetch "^2.6.7"
@@ -8392,12 +8392,12 @@
     "@sentry/types" "7.61.0"
     tslib "^2.4.1 || ^1.9.3"
 
-"@sentry/webpack-plugin@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-2.5.0.tgz#22f087b88341a86a03f1b2fa8402c4791c0a449e"
-  integrity sha512-PFpC+Ufu1Fl8S8MFVjx5F1W+3vDEdpzrgSfg8ZAUoz3zjhKDRQ2NwhqA7E9ZZqwUbctAHutJA39Cm8tFqUuozw==
+"@sentry/webpack-plugin@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-2.6.0.tgz#42019c1a006ba6c9af166d74960b7d5c1f992bce"
+  integrity sha512-sOYcwdqD174vXzht1hifQ45REcDolMURHniEhqjXfbUAwOj4vujlQD16ikwfJKsglh4Tt6dplGDdTe2+tp598Q==
   dependencies:
-    "@sentry/bundler-plugin-core" "2.5.0"
+    "@sentry/bundler-plugin-core" "2.6.0"
     unplugin "1.0.1"
     uuid "^9.0.0"
 
@@ -15350,7 +15350,7 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1431.0:
+aws-sdk@2.1431.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
   version "2.1431.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1431.0.tgz#703da0b87a72e236984b1e657d57d07601a723b8"
   integrity sha512-p6NGyI6+BgojiGn6uW2If6v7uxRPO5C+aGy/M+9/Rhdk8a5n7l0123v9ZUnEJgAy0tsNkazL2ifzV33nc0aGNA==
@@ -15380,22 +15380,6 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
-
-aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1428.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1428.0.tgz#961646132dcab4f9afc26675bfdf9d6d272d368b"
-  integrity sha512-z8RfFfbPCbtEPeu2W7UJTRcwXu5WNj2ehoDAhmIkvwKMGb5Y1/TbGmny51bucSWt8QKqZlmLxWs9zBGgy7slXw==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.5.0"
 
 axe-core@^4.2.0, axe-core@^4.6.2:
   version "4.7.2"
