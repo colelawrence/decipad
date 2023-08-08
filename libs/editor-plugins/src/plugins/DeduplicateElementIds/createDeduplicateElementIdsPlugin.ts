@@ -35,8 +35,8 @@ export const createDeduplicateElementIdsPlugin = createTPluginFactory({
 
     const removeNeedsDeduping = (id: string, element?: Element) => {
       try {
-        const elements = getDefined(needsDeduping.get(id));
-        if (element) {
+        const elements = needsDeduping.get(id);
+        if (element && elements) {
           const elementPos = elements.indexOf(element);
           if (elementPos >= 0) {
             elements.splice(elementPos, 1);
