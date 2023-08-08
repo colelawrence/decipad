@@ -1,5 +1,8 @@
+/* eslint-disable no-param-reassign */
 import { Cache } from '@urql/exchange-graphcache';
 import {
+  GetNotebookByIdDocument,
+  GetNotebookByIdQuery,
   GetWorkspacesDocument,
   GetWorkspacesQuery,
   GraphCacheConfig,
@@ -92,6 +95,24 @@ export const graphCacheConfig: GraphCacheConfig = {
         addNotebookToItsWorkspace(cache, result.importPad as Pad);
       },
       updatePad: (_result, args, cache) => {
+        if (args.pad.icon) {
+          cache.updateQuery<GetNotebookByIdQuery>(
+            {
+              query: GetNotebookByIdDocument,
+              variables: {
+                id: args.id,
+              },
+            },
+            (data) => {
+              if (!data?.getPadById) return data;
+
+              data.getPadById.icon = args.pad.icon;
+              return data;
+            }
+          );
+          return;
+        }
+
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
       setPadPublic: (_result, args, cache) => {

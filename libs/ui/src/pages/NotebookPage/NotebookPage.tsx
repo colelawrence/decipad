@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ComponentProps, ReactNode, useEffect, useRef, useState } from 'react';
 import {
   cssVar,
   cssVarName,
@@ -12,6 +12,7 @@ import {
 } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { useDraggingScroll } from '../../hooks';
+import { EditorIcon } from '../../templates';
 
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
@@ -94,19 +95,33 @@ const layoutAsideStyles = css(
 );
 
 interface NotebookPageProps {
-  readonly notebookIcon: ReactNode;
   readonly notebook: ReactNode;
   readonly topbar?: ReactNode;
   readonly sidebar?: ReactNode;
   readonly sidebarOpen: boolean;
+
+  // Icon stuff
+  readonly icon: ComponentProps<typeof EditorIcon>['icon'] | undefined;
+  readonly iconColor: ComponentProps<typeof EditorIcon>['color'];
+
+  readonly onUpdateIcon: (
+    icon: ComponentProps<typeof EditorIcon>['icon']
+  ) => void;
+  readonly onUpdateIconColor: (
+    color: ComponentProps<typeof EditorIcon>['color']
+  ) => void;
 }
 
 export const NotebookPage: React.FC<NotebookPageProps> = ({
   topbar,
-  notebookIcon,
   notebook,
   sidebar,
   sidebarOpen,
+
+  icon = 'Deci',
+  iconColor,
+  onUpdateIcon,
+  onUpdateIconColor,
 }) => {
   const scrollToRef = useRef<HTMLDivElement>(null);
   const articleRef = useRef<HTMLDivElement>(null);
@@ -167,10 +182,15 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
             onDragOver={onDragOver}
           >
             <div
-              css={css(layoutNotebookScrollerStyles, editorWidth)}
+              css={[layoutNotebookScrollerStyles, editorWidth]}
               ref={overflowingDiv}
             >
-              {notebookIcon}
+              <EditorIcon
+                icon={icon}
+                color={iconColor}
+                onChangeColor={onUpdateIconColor}
+                onChangeIcon={onUpdateIcon}
+              />
               {notebook}
             </div>
           </article>

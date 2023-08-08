@@ -7,13 +7,14 @@ import { graphCacheConfig } from './cacheConfig';
 
 const cache = cacheExchange(graphCacheConfig);
 
-const defaultClientOpts = () => ({
+const defaultClientOpts = (): ClientOptions => ({
   url: new URL(`/graphql`, window.location.origin).toString(),
   fetchOptions: {
     credentials: 'same-origin',
     headers: {},
   },
-  suspense: true, // React Suspense
+  requestPolicy: 'cache-first',
+  suspense: true,
   exchanges: [devtoolsExchange, cache, fetchExchange],
 });
 

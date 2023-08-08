@@ -1,7 +1,7 @@
 import { isServerSideRendering } from '@decipad/support';
 import {
+  EditorIcon,
   EditorPlaceholder,
-  NotebookIconPlaceholder,
   NotebookPage,
   PlaygroundTopBar,
 } from '@decipad/ui';
@@ -12,12 +12,6 @@ import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutat
 const loadEditor = () =>
   import(/* webpackChunkName: "playground-editor" */ './Editor');
 const Editor = lazy(loadEditor);
-const loadEditorIcon = () =>
-  import(/* webpackChunkName: "playground-editor-icon" */ './EditorIcon');
-const EditorIcon = lazy(loadEditorIcon);
-
-// prefetch
-loadEditorIcon().then(loadEditor);
 
 const Playground: React.FC = () => {
   const [icon, setIcon] =
@@ -42,20 +36,10 @@ const Playground: React.FC = () => {
           </Frame>
         </div>
       }
-      notebookIcon={
-        <Frame
-          Heading="h1"
-          title={null}
-          suspenseFallback={<NotebookIconPlaceholder />}
-        >
-          <EditorIcon
-            icon={icon}
-            onChangeIcon={setIcon}
-            color={iconColor}
-            onChangeColor={setIconColor}
-          />
-        </Frame>
-      }
+      icon={icon}
+      iconColor={iconColor}
+      onUpdateIcon={setIcon}
+      onUpdateIconColor={setIconColor}
     />
   );
 };

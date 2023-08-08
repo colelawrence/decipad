@@ -26,9 +26,9 @@ import {
   PermissionType,
 } from '@decipad/graphql-client';
 import { useExternalEditorChange } from '@decipad/editor-hooks';
-import { parseIconColorFromIdentifier } from '../../../utils/parseIconColorFromIdentifier';
 import { useDuplicateNotebook } from './useDuplicateNotebook';
 import EditorIcon from '../EditorIcon';
+import { AvailableSwatchColor } from '@decipad/ui';
 
 const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 
@@ -84,6 +84,20 @@ interface UseNotebookStateAndActionsResult {
 
 const SNAPSHOT_NAME = 'Published 1';
 
+/**
+ * Small helper to split the icon (Icon-Color) into 2 variables.
+ */
+function getIconAndColor(
+  iconString: string | undefined | null
+): [Icon, AvailableSwatchColor] {
+  const [icon, iconColor] = (iconString?.split('-') as [
+    Icon,
+    AvailableSwatchColor
+  ]) || ['Deci', 'Catskill'];
+
+  return [icon, iconColor];
+}
+
 export const useNotebookStateAndActions = ({
   notebookId,
   editor,
@@ -99,9 +113,15 @@ export const useNotebookStateAndActions = ({
     },
   });
   const notebook = getNotebookResult.data?.getPadById;
+
+  // Icon.
+  // We need to have local state, because otherwise even updating cache,
+  // feels super slow.
+  const [icon, iconColor] = getIconAndColor(notebook?.icon);
+  const [cacheIcon, setCacheIcon] = useState(icon);
+  const [cacheIconColor, setCacheIconColor] = useState(iconColor);
+
   const [error, setError] = useState<Error | undefined>();
-  const [icon, setIcon] = useState<Icon | undefined>();
-  const [iconColor, setIconColor] = useState<IconColor>(() => 'Catskill');
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(
@@ -192,41 +212,26 @@ export const useNotebookStateAndActions = ({
     }
   }, [error, getNotebookResult]);
 
-  useEffect(() => {
-    if (notebook) {
-      const { icon: remoteIcon, iconColor: remoteIconColor } =
-        parseIconColorFromIdentifier(notebook.icon);
-      if (remoteIcon && icon !== remoteIcon) {
-        setIcon(remoteIcon);
-      }
-      if (remoteIconColor && remoteIconColor !== iconColor) {
-        setIconColor(remoteIconColor);
-      }
-    }
-  }, [icon, iconColor, notebook]);
-
   // -------- user callbacks -------------
   const updateIcon = useCallback(
     (newIcon: Icon) => {
-      if (newIcon !== icon) {
-        setIcon(newIcon);
-      }
-      if (iconColor) {
-        const iconString = `${newIcon}-${iconColor}`;
-        if (iconString !== notebook?.icon) {
-          remoteUpdateNotebookIcon({
-            id: notebookId,
-            icon: iconString,
-          }).catch((err) => {
-            toast(`Error updating icon: ${(err as Error).message}`, 'error');
-          });
-          event({ type: 'action', action: 'notebook icon changed' });
-        }
+      if (!iconColor) return;
+
+      setCacheIcon(newIcon);
+
+      const iconString = `${newIcon}-${iconColor}`;
+      if (iconString !== notebook?.icon) {
+        remoteUpdateNotebookIcon({
+          id: notebookId,
+          icon: iconString,
+        }).catch((err) => {
+          toast(`Error updating icon: ${(err as Error).message}`, 'error');
+        });
+        event({ type: 'action', action: 'notebook icon changed' });
       }
     },
     [
       event,
-      icon,
       iconColor,
       notebook?.icon,
       notebookId,
@@ -237,31 +242,22 @@ export const useNotebookStateAndActions = ({
 
   const updateIconColor = useCallback(
     (newIconColor: IconColor) => {
-      if (newIconColor !== iconColor) {
-        setIconColor(newIconColor);
-      }
-      if (icon) {
-        const iconString = `${icon}-${newIconColor}`;
-        if (iconString !== notebook?.icon) {
-          remoteUpdateNotebookIcon({
-            id: notebookId,
-            icon: iconString,
-          }).catch((err) => {
-            toast(`Error updating icon: ${(err as Error).message}`, 'error');
-          });
-          event({ type: 'action', action: 'notebook icon color changed' });
-        }
+      if (!icon) return;
+
+      setCacheIconColor(newIconColor);
+
+      const iconString = `${icon}-${newIconColor}`;
+      if (iconString !== notebook?.icon) {
+        remoteUpdateNotebookIcon({
+          id: notebookId,
+          icon: iconString,
+        }).catch((err) => {
+          toast(`Error updating icon: ${(err as Error).message}`, 'error');
+        });
+        event({ type: 'action', action: 'notebook icon color changed' });
       }
     },
-    [
-      event,
-      icon,
-      iconColor,
-      notebook?.icon,
-      notebookId,
-      remoteUpdateNotebookIcon,
-      toast,
-    ]
+    [event, icon, notebook?.icon, notebookId, remoteUpdateNotebookIcon, toast]
   );
 
   // -------- publishing -------------
@@ -382,8 +378,8 @@ export const useNotebookStateAndActions = ({
     isReadOnly,
     isPublic,
     isPublishing,
-    icon,
-    iconColor,
+    icon: cacheIcon,
+    iconColor: cacheIconColor,
     hasLocalChanges,
     isSavedRemotely,
     connectionParams: notebook?.padConnectionParams,

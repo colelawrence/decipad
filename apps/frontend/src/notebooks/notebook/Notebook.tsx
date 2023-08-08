@@ -20,7 +20,6 @@ import { isServerSideRendering } from '@decipad/support';
 import {
   EditorPlaceholder,
   LoadingLogo,
-  NotebookIconPlaceholder,
   NotebookPage,
   TopbarPlaceholder,
   GlobalThemeStyles,
@@ -34,15 +33,9 @@ import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 
-const loadEditorIcon = () =>
-  import(/* webpackChunkName: "notebook-editor-icon" */ './EditorIcon');
-const EditorIcon = lazy(loadEditorIcon);
 export const loadEditor = () =>
   import(/* webpackChunkName: "notebook-editor" */ './Editor');
 const Editor = lazy(loadEditor);
-
-// prefetch
-loadEditorIcon().then(loadEditor);
 
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
@@ -159,6 +152,10 @@ const Notebook: FC = () => {
           >
             <NotebookPage
               sidebarOpen={sidebarOpen}
+              icon={icon}
+              iconColor={iconColor}
+              onUpdateIcon={updateIcon}
+              onUpdateIconColor={updateIconColor}
               notebook={
                 <Frame
                   Heading="h1"
@@ -193,21 +190,6 @@ const Notebook: FC = () => {
                     setSidebarOpen={setSidebarOpen}
                   />
                 )
-              }
-              notebookIcon={
-                <Frame
-                  Heading="h1"
-                  title={null}
-                  suspenseFallback={<NotebookIconPlaceholder />}
-                >
-                  <EditorIcon
-                    color={iconColor}
-                    icon={icon ?? 'Deci'}
-                    onChangeIcon={updateIcon}
-                    onChangeColor={updateIconColor}
-                    readOnly={isReadOnly}
-                  />
-                </Frame>
               }
               topbar={
                 <Frame

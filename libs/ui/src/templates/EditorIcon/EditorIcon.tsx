@@ -73,6 +73,7 @@ export const EditorIcon = ({
   if (readOnly) {
     return <div css={blockStyles}>{iconElement}</div>;
   }
+
   return (
     <div css={blockStyles}>
       <IconPopover {...props} color={color} trigger={iconElement} />
