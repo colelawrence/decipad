@@ -12,7 +12,9 @@ export const useWorkspacePermission = (
   const userId =
     user && 'id' in user && typeof user.id === 'string' ? user.id : null;
 
-  const userAccess = everyone.find((access) => access.user.id === userId);
+  const userAccess = everyone.find(
+    (access) => access.user && access.user.id === userId
+  );
 
   return userAccess?.permission;
 };

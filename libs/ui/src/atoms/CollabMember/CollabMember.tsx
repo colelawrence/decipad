@@ -6,7 +6,7 @@ import { ellipsis, p12Medium, p14Medium } from '../../primitives';
 export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
   avatar: { user },
 }) => {
-  return (
+  return user ? (
     <>
       <div css={avatarStyles}>
         <Avatar
@@ -32,7 +32,7 @@ export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
         </div>
       )}
     </>
-  );
+  ) : null;
 };
 
 const avatarStyles = css({

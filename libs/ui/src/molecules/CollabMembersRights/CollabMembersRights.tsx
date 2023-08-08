@@ -56,9 +56,9 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
     return null;
   }
 
-  const sortedUsersWithAccess = usersWithAccess.sort((a, b) => {
-    return a.user.name.localeCompare(b.user.name);
-  });
+  const sortedUsersWithAccess = usersWithAccess.sort((a, b): number =>
+    a.user && b.user ? a.user.name.localeCompare(b.user.name) : 0
+  );
 
   return (
     <>
@@ -67,47 +67,49 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
       </div>
 
       <div css={groupStyles}>
-        {sortedUsersWithAccess.map(({ user, permission, isTeamMember }) => (
-          <div css={collaboratorStyles} key={user.id}>
-            <div css={avatarStyles}>
-              <Avatar
-                name={user.name}
-                email={user.email || ''}
-                useSecondLetter={false}
+        {sortedUsersWithAccess.map(({ user, permission, isTeamMember }) =>
+          user ? (
+            <div css={collaboratorStyles} key={user.id}>
+              <div css={avatarStyles}>
+                <Avatar
+                  name={user.name}
+                  email={user.email || ''}
+                  useSecondLetter={false}
+                />
+              </div>
+              {user.email === user.name ? (
+                <div css={userDetailsStyles}>
+                  <div
+                    css={css(p12Medium, ellipsis)}
+                    title={user.email ?? undefined}
+                  >
+                    {user.email}
+                  </div>
+                </div>
+              ) : (
+                <div css={userDetailsStyles}>
+                  <div css={css(p14Medium, ellipsis)} title={user.name}>
+                    {user.name}
+                  </div>
+                  <div
+                    css={css(p12Medium, ellipsis)}
+                    title={user.email ?? undefined}
+                  >
+                    {user.email}
+                  </div>
+                </div>
+              )}
+
+              <CollabAccessDropdown
+                disable={isTeamMember || disabled}
+                currentPermission={permission}
+                isActivatedAccount={user.emailValidatedAt != null}
+                onRemove={() => onRemoveCollaborator(user.id)}
+                onChange={(newPerm) => onChangePermission(user.id, newPerm)}
               />
             </div>
-            {user.email === user.name ? (
-              <div css={userDetailsStyles}>
-                <div
-                  css={css(p12Medium, ellipsis)}
-                  title={user.email ?? undefined}
-                >
-                  {user.email}
-                </div>
-              </div>
-            ) : (
-              <div css={userDetailsStyles}>
-                <div css={css(p14Medium, ellipsis)} title={user.name}>
-                  {user.name}
-                </div>
-                <div
-                  css={css(p12Medium, ellipsis)}
-                  title={user.email ?? undefined}
-                >
-                  {user.email}
-                </div>
-              </div>
-            )}
-
-            <CollabAccessDropdown
-              disable={isTeamMember || disabled}
-              currentPermission={permission}
-              isActivatedAccount={user.emailValidatedAt != null}
-              onRemove={() => onRemoveCollaborator(user.id)}
-              onChange={(newPerm) => onChangePermission(user.id, newPerm)}
-            />
-          </div>
-        ))}
+          ) : null
+        )}
       </div>
     </>
   );

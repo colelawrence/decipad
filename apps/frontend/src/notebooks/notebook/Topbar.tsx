@@ -77,7 +77,8 @@ const Topbar: FC<TopbarProps> = ({
       // TODO: ENG-1953 backend should provide this data
       isSharedNotebook={notebook?.access?.users?.some(
         (permission) =>
-          session?.user?.id === permission.user.id &&
+          session?.user &&
+          session.user.id === permission.user?.id &&
           permission.permission !== 'ADMIN'
       )}
       onRevertChanges={removeLocalChanges}

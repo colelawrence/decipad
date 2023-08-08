@@ -14,7 +14,7 @@ export const sortAvatars = (jsonList: NotebookAvatar[]) =>
     const criteriaComparison =
       sortCriteria[permissionA] - sortCriteria[permissionB];
 
-    if (criteriaComparison === 0) {
+    if (criteriaComparison === 0 && a.user && b.user) {
       const nameA = (a.user.name || a.user.email || '').toLowerCase();
       const nameB = (b.user.name || b.user.email || '').toLowerCase();
       return nameA.localeCompare(nameB);

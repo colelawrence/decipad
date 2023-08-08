@@ -9,7 +9,7 @@ export default gql`
   }
 
   type UserAccess {
-    user: User!
+    user: User
     permission: PermissionType!
     canComment: Boolean!
   }

@@ -101,6 +101,9 @@ export const NotebookAvatars = ({
         </div>
       )}
       {firstThree?.map((avatar, index) => {
+        if (!avatar.user) {
+          return null;
+        }
         const email = avatar.user.email || avatar.user.name;
         const cursorColor = backgroundColorFor[email] || null;
         return isWriter ? (

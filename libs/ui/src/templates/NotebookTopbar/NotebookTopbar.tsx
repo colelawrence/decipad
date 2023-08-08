@@ -211,7 +211,7 @@ export const NotebookTopbar = ({
       })),
       ...(usersWithAccess || []),
     ],
-    (access) => access.user.id
+    (access) => access.user?.id
   );
 
   const oneAdminUser = allUsers.filter((u) => u.permission === 'ADMIN')[0];
@@ -338,7 +338,7 @@ export const NotebookTopbar = ({
                 }
               >
                 {`Ask ${
-                  oneAdminUser && oneAdminUser.user.name
+                  oneAdminUser && oneAdminUser.user?.name
                     ? oneAdminUser.user.name
                     : 'an admin'
                 } to change this`}

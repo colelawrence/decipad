@@ -5,7 +5,7 @@ type WorkspaceTrait = {
 };
 
 type NotebookAvatarTrait = {
-  user: { id: string };
+  user?: { id: string } | null;
   permission: string;
 };
 

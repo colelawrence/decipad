@@ -123,32 +123,35 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
         <div css={tableHeadStyles}>Access level</div>
         <div css={tableHeadStyles}>Status</div>
 
-        {workspaceMembers.map((member) => (
-          <React.Fragment key={member.user.id}>
-            <div css={columnAvatarStyles}>
-              <CollabMember key={member.user.id} avatar={member} />
-            </div>
+        {workspaceMembers.map(
+          (member) =>
+            member.user && (
+              <React.Fragment key={member.user.id}>
+                <div css={columnAvatarStyles}>
+                  <CollabMember key={member.user.id} avatar={member} />
+                </div>
 
-            <div css={columnPermissionStyles}>
-              <CollabMembershipDropdown
-                disabled={currentUserId === member.user.id}
-                currentPermission={member.permission}
-                onChange={handleChangePermission(member.user.email)}
-              />
-            </div>
+                <div css={columnPermissionStyles}>
+                  <CollabMembershipDropdown
+                    disabled={currentUserId === member.user.id}
+                    currentPermission={member.permission}
+                    onChange={handleChangePermission(member.user.email)}
+                  />
+                </div>
 
-            <div css={columnInviteStatusStyles}>
-              {member.user.emailValidatedAt == null && (
-                <span css={pendingInviteStyles}>invite pending</span>
-              )}
-              {currentUserId !== member.user.id && (
-                <WorkspaceMemberOptions
-                  onRevoke={handleRevoke(member.user.id)}
-                />
-              )}
-            </div>
-          </React.Fragment>
-        ))}
+                <div css={columnInviteStatusStyles}>
+                  {member.user.emailValidatedAt == null && (
+                    <span css={pendingInviteStyles}>invite pending</span>
+                  )}
+                  {currentUserId !== member.user.id && (
+                    <WorkspaceMemberOptions
+                      onRevoke={handleRevoke(member.user.id)}
+                    />
+                  )}
+                </div>
+              </React.Fragment>
+            )
+        )}
       </div>
     </div>
   );

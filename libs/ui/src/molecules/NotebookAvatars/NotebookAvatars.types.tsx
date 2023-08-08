@@ -3,7 +3,7 @@ import { PermissionType } from '../../types';
 
 export interface NotebookAvatar {
   isTeamMember?: boolean;
-  user: {
+  user?: {
     id: string;
     name: string;
     email?: string | null;
@@ -11,7 +11,7 @@ export interface NotebookAvatar {
     username?: string | null;
     onboarded?: boolean | null;
     emailValidatedAt?: Date | null;
-  };
+  } | null;
   permission: PermissionType;
   onClick?: () => void;
 }
