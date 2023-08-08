@@ -1,0 +1,9 @@
+{
+  "extends": ["../../libs/eslint-config-decipad"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["**/*.js"]
+    }
+  ]
+}

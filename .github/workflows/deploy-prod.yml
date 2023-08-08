@@ -97,3 +97,18 @@ jobs:
 
           yarn deploy:prod
           scripts/push-sam.sh
+
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+    needs: # make sure the notification is sent AFTER the jobs you want included have completed
+      - deploy
+    steps:
+      - name: Notify
+        uses: nobrayner/discord-webhook@v1
+        with:
+          title: "${{ needs.deploy.result == 'failure' && '🔴' || '💚'}} Deploy Prod"
+          github-token: ${{ secrets.github_token }}
+          avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
+          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          include-details: false

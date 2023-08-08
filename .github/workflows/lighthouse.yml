@@ -1,0 +1,61 @@
+name: Lighthouse CI
+on:
+  workflow_run:
+    workflows: ['Deploy Prod']
+    types:
+      - completed
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: lighthouse-${{ github.head_ref }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: Audit URLs using Lighthouse
+        id: lighthouse_audit
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            https://app.decipad.com/n/Spotify-Price-Increase%3AWRnGDJFV2WMCtxboy6B57
+            https://app.decipad.com/n/Bonus-Distribution-Based-on-KPIs%3ADnhuhR1MV4-W5tmHAXJ3Y
+            https://app.decipad.com/n/What-is-your-founder-number-%3AuKfErMkqmL4rKC95xK0vS
+            https://app.decipad.com/n/Investment-Portfolio%3A3p5xglV7U4iyPokEBPKwO
+            https://app.decipad.com/n/Rent-Your-Home-Airbnb%3AfD0f37X2UK1JEk38OsjUK
+            https://app.decipad.com/n/Lemonade-Stand-Business-Model%3AMHc2pg2W_h6-0bCFCJu0P
+            https://app.decipad.com/n/Mortgage-Loan%3AaNHUtEQk8UYU6yxV6jCiw
+            https://app.decipad.com/n/How-to-Price-Your-Business-Pricing-Calculator%3AqKgckpg8yNp6rnZ6tVwfU
+            https://app.decipad.com/n/SDR-compensation-for-growing-companies%3ABSg1Af7gQuwd9LQ1xujdd
+            https://app.decipad.com/n/Understanding-stock-options-at-an-early-stage-startup%3A-pTKsMBR0OKoXnwEkYcwX
+            https://app.decipad.com/n/An-innovative-approach-to-profit-sharing-VC-fun-model%3AIrngk4Tr24G9EYswvDEXr
+            https://app.decipad.com/n/How-much-is-Apple-worth-Breaking-down-a-DCF-model-%3AhioCODsrbDsTmMHKdukPm
+            https://app.decipad.com/n/Sales-pipeline-monthly-report%3AnYJwrnqwyc-EftEWA0LgQ
+            https://app.decipad.com/n/Pricing-a-consulting-project%3ASPcq5TBuk1jDY1pmILiL9
+            https://app.decipad.com/n/Simple-Business-Model-Starting-Your-Own-Business%3AmqHIR9gv579iI100f2GSz
+            https://app.decipad.com/n/An-offer-letter-for-startup-employees%3ArpkOOZpHjUQHfm2cDDOKR
+            https://app.decipad.com/n/Micro-brewery-financial-model%3ArIDMCO5MpzCMB2fX5CbGk
+            https://app.decipad.com/n/GitHub-Enterprise-vs-BuildJet-Cost-Comparison-and-Optimization%3AleuoOdSVOpQoeu4s4BOFT
+            https://app.decipad.com/n/Cost-Effectiveness-of-Solar-Panels%3Axw7nBRl_Wzn4LWd_NmDKZ
+            https://app.decipad.com/n/Simple-Monthly-Revenue-Report%3AMIVdVMMAJ1TD1UyNbRl6C
+            https://app.decipad.com/n/Monthly-Investor-Update%3AepZYKZqffQDDJzJBcoKaJ
+            https://app.decipad.com/n/Hourly-Rate-Proposal-Interior-Design%3AQg-4ZfK2kv2tvtA7oKca1
+            https://app.decipad.com/n/ROI-from-using-PetsApp%3AQpOd1cV8vmHr4WQ0vGh6D
+            https://app.decipad.com/n/Sales-commission-plan-tiered-rates-%3AFAevzQq3Y2Fsx2O97OMfe
+          configPath: './libs/lighthouse/lighthouserc.json'
+          temporaryPublicStorage: true # upload lighthouse report to the temporary storage
+
+  notify:
+    runs-on: ubuntu-latest
+    needs:
+      - lighthouse
+    if: ${{ always() }} # You always want to be notified: success, failure, or cancelled
+    steps:
+      - name: Notify
+        uses: nobrayner/discord-webhook@v1
+        with:
+          title: "${{ needs.lighthouse.result == 'success' && '💚' || '🔴'}} Lighthouse"
+          description: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          github-token: ${{ secrets.github_token }}
+          avatar-url: "https://singlecolorimage.com/get/${{ needs.lighthouse.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
+          discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          include-details: false

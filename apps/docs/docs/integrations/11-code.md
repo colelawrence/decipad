@@ -34,12 +34,11 @@ On the preview pane you will see the result and the format it will be available 
 <br/>
 
 Private keys provide secure access control for your code by restricting unauthorized users.
- 1. **To set up a new key**:
+
+1.  **To set up a new key**:
     - Go to your workspace and click on "Integration Secrets". You can add a new value or remove old keys.
     - Alternatively, click on "Insert Secret" in the JavaScript code editor within your integrations panel.
- 2. **To reuse your private key**:
+2.  **To reuse your private key**:
     - Click on "Insert Secret" in the JavaScript code editor and select the desired secret. A line of code will be automatically added to your script.
 
-
 **Note:** For security reasons, API secrets can only be used directly in a `fetch()` statement. You can't assign them to variables or use them arbitrarily.
-
