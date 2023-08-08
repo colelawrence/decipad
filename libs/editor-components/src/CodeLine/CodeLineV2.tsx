@@ -1,15 +1,12 @@
 import type {
   IdentifiedError,
   IdentifiedResult,
-  Result,
   SimpleValue,
 } from '@decipad/computer';
 import {
   CodeLineV2Element,
-  DisplayElement,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
-  ELEMENT_DISPLAY,
   ELEMENT_STRUCTURED_VARNAME,
   MyElement,
   PlateComponent,
@@ -19,7 +16,6 @@ import {
 import {
   assertElementType,
   getCodeLineSource,
-  insertNodes,
   isStructuredElement,
 } from '@decipad/editor-utils';
 import {
@@ -46,7 +42,6 @@ import {
   useElement,
   useEventEditorSelectors,
 } from '@udecode/plate';
-import { nanoid } from 'nanoid';
 import {
   Children,
   createContext,
@@ -109,36 +104,6 @@ export const CodeLineV2: PlateComponent = ({
       (line) => [getSyntaxError(line), line] as const,
       lineId
     );
-
-  const onClickedResult = useCallback(
-    (result: Result.Result) => {
-      if (
-        result.type.kind !== 'number' &&
-        result.type.kind !== 'date' &&
-        result.type.kind !== 'string' &&
-        result.type.kind !== 'boolean'
-      ) {
-        return;
-      }
-
-      const path = findNodePath(editor, element);
-      if (!path) {
-        return;
-      }
-
-      const newDisplayElement: DisplayElement = {
-        id: nanoid(),
-        type: ELEMENT_DISPLAY,
-        blockId: element.id,
-        children: [{ text: '' }],
-      };
-
-      insertNodes(editor, newDisplayElement, {
-        at: [path[0] + 1],
-      });
-    },
-    [editor, element]
-  );
 
   const isReadOnly = useIsEditorReadOnly();
 
@@ -242,7 +207,6 @@ export const CodeLineV2: PlateComponent = ({
             syntaxError={syntaxError}
             onDragStartInlineResult={handleDragStartInlineResult}
             onDragStartCell={handleDragStartCell}
-            onClickedResult={isReadOnly ? undefined : onClickedResult}
             variableNameChild={varNameElem}
             codeChild={childrenArray[1]}
             unitPicker={unitPicker}

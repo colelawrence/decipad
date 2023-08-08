@@ -22,6 +22,8 @@ type SegmentButtonsProps = {
   readonly border?: boolean;
   readonly hideDivider?: boolean;
   readonly padding?: 'default' | 'skinny';
+  // If undefined, then you'll need to wrap the icons in some size;
+  readonly iconSize?: 'table';
 };
 
 export const SegmentButtons: FC<SegmentButtonsProps> = ({
@@ -30,6 +32,7 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
   border = false,
   hideDivider = false,
   padding = 'default',
+  iconSize,
 }) => {
   return (
     <WrapperDiv variant={variant} border={border} hideDivider={hideDivider}>
@@ -55,8 +58,9 @@ export const SegmentButtons: FC<SegmentButtonsProps> = ({
             variant={variant}
             selected={selected}
             padding={padding}
+            iconSize={iconSize}
           >
-            {children}
+            <div>{children}</div>
           </FigureButton>
         );
 
@@ -125,6 +129,7 @@ const WrapperDiv = styled.div<{
 const FigureButton = styled.figure<{
   variant: SegmentButtonsProps['variant'];
   padding: SegmentButtonsProps['padding'];
+  iconSize: SegmentButtonsProps['iconSize'];
   selected: boolean;
 }>((props) => ({
   display: 'grid',
@@ -155,6 +160,13 @@ const FigureButton = styled.figure<{
       color: componentCssVars('ButtonTertiaryAltHoverText'),
     },
   },
+
+  ...(props.iconSize && {
+    div: {
+      width: props.iconSize === 'table' ? '13px' : '0px',
+      height: props.iconSize === 'table' ? '13px' : '0px',
+    },
+  }),
 }));
 
 const hiddenVis = css({

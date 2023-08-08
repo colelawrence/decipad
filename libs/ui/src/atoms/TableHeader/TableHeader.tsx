@@ -105,7 +105,6 @@ const DropSourceAndTarget = forwardRef<
       css={[
         {
           pointerEvents: !draggingOver ? 'all' : 'none', // IMPORTANT!
-          borderRadius: '6px',
           cursor: 'grab',
           'span:first-of-type': {
             display: 'block',
@@ -403,7 +402,7 @@ const iconTypeStyles = {
 
 const childrenWrapperStyles = css({
   overflow: 'hidden',
-  borderRadius: '6px',
+  borderRadius: '3px',
   mixBlendMode: 'luminosity',
 });
 

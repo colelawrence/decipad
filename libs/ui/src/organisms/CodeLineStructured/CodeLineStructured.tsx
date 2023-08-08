@@ -26,7 +26,6 @@ interface CodeLineStructuredProps {
   readonly onDragStartInlineResult?: (e: React.DragEvent) => void;
   readonly onDragStartCell?: CodeResultProps<'table'>['onDragStartCell'];
   readonly onDragEnd?: (e: React.DragEvent) => void;
-  readonly onClickedResult?: (arg0: Result.Result) => void;
   readonly setShowResult: (showResult: boolean) => void;
   readonly showResult?: boolean;
   readonly variableNameChild: ReactNode;
@@ -42,7 +41,6 @@ export const CodeLineStructured = ({
   onDragStartInlineResult,
   onDragStartCell,
   onDragEnd,
-  onClickedResult,
   variableNameChild,
   codeChild,
   unitPicker,
@@ -59,7 +57,6 @@ export const CodeLineStructured = ({
     result,
     syntaxError,
     onDragStartCell,
-    onClickedResult,
     variant: 'inline',
   });
   const { inline, expanded } = useDelayedValue(
@@ -129,8 +126,7 @@ export const CodeLineStructured = ({
           <div
             css={[
               inlineStyles,
-              (onDragStartInlineResult || onDragStartCell || onClickedResult) &&
-                canGrabStyles,
+              (onDragStartInlineResult || onDragStartCell) && canGrabStyles,
               grabbing && grabbingStyles,
             ]}
             data-testid={`code-line-result:${String(result?.value)}`}

@@ -21,7 +21,6 @@ import {
 import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { CreateChartMenu } from '../CreateChartMenu/CreateChartMenu';
 import { IconPopover } from '../IconPopover/IconPopover';
-import styled from '@emotion/styled';
 
 const tableCaptionWideStyles = css({
   maxWidth: `${wideBlockWidth}px`,
@@ -40,7 +39,7 @@ const tableCaptionInnerStyles = css({
 });
 
 const tableVarStyles = css(codeBlock.structuredVariableStyles, {
-  padding: '4px 8px',
+  padding: '3px 8px',
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -84,7 +83,6 @@ const placeholderStyles = css(codeBlock.structuredVariableStyles, {
     opacity: placeholderOpacity,
   },
   lineHeight: '24px',
-  paddingTop: '2px',
 });
 
 const wrapperStyle = css({ display: 'flex', textAlign: 'center' });
@@ -225,13 +223,10 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                 <SegmentButtons
                   border
                   variant="default"
+                  iconSize="table"
                   buttons={[
                     {
-                      children: (
-                        <IconWrapper>
-                          <icons.Formula />
-                        </IconWrapper>
-                      ),
+                      children: <icons.Formula />,
                       tooltip: `${hideFormulas ? 'Show' : 'Hide'} formulas`,
                       onClick: () =>
                         tableFormulaEditors.length !== 0
@@ -240,11 +235,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
                       testId: 'formula',
                     },
                     {
-                      children: (
-                        <IconWrapper>
-                          {isCollapsed ? <icons.Show /> : <icons.Hide />}
-                        </IconWrapper>
-                      ),
+                      children: isCollapsed ? <icons.Show /> : <icons.Hide />,
                       tooltip: `${isCollapsed ? 'Show' : 'Hide'} table`,
                       onClick: () => setCollapsed(!isCollapsed),
                       testId: 'table',
@@ -270,8 +261,3 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
     </div>
   );
 };
-
-const IconWrapper = styled.div({
-  width: '13px',
-  height: '13px',
-});

@@ -143,7 +143,7 @@ export const DataView: FC<DataViewProps> = ({
         <div
           css={[dataViewControlsStyles, !readOnly && { marginBottom: '8px' }]}
         >
-          <div css={css({ display: 'none' })}>{caption}</div>
+          <div css={{ display: 'none' }}>{caption}</div>
           {!readOnly && (
             <VariableNameSelector
               label=""
@@ -157,6 +157,9 @@ export const DataView: FC<DataViewProps> = ({
               {isFlagEnabled('ROTATED_DATA_VIEW') &&
                 isFlagEnabled('ALTERNATE_ROTATION_DATA_VIEW') && (
                   <SegmentButtons
+                    border
+                    variant="default"
+                    iconSize="table"
                     buttons={[
                       {
                         children: <Transpose />,

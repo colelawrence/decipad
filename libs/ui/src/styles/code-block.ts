@@ -23,6 +23,7 @@ export const varStyles = css(variableStyles, {
 
 export const structuredVariableStyles: CSSObject = {
   ...p14Regular,
+  lineHeight: '1.6',
 };
 
 export const pAdvCalcStyles = css(structuredVariableStyles, {
