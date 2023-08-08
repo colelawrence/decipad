@@ -15,6 +15,7 @@ import {
   SyncSource,
   OnConnectedCallback,
 } from './types';
+import { download } from './download';
 
 supportBigIntToJSON();
 
@@ -151,6 +152,9 @@ export function docSyncEditor<E extends MyEditor>(
     },
     get destroyed() {
       return destroyed;
+    },
+    download() {
+      download(useEditor as DocSyncEditor);
     },
   });
 

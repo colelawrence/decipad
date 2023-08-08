@@ -1,7 +1,13 @@
 import { createContext, useContext, ContextType, ReactNode } from 'react';
 import { Options as ToastOptions } from 'react-toast-notifications';
 
-export type ToastType = 'info' | 'success' | 'warning' | 'error';
+export type ToastType =
+  | 'info'
+  | 'success'
+  | 'soft-warning'
+  | 'warning'
+  | 'error';
+
 export const ToastContext = createContext(
   (
     message: ReactNode | string,

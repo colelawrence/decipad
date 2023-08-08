@@ -30,6 +30,7 @@ export interface NotebookState {
   timedOutLoadingFromRemote: boolean;
   hasLocalChanges: boolean;
   notebookHref?: string;
+  hasNotSavedRemotelyInAWhile: boolean;
   setInitialFocusDone: () => void;
   initialFocusDone: boolean;
   destroyed?: boolean;

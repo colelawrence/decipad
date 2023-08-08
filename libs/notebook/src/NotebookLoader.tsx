@@ -13,6 +13,7 @@ import { useNotebookWarning } from './useNotebookWarning';
 import { SuspendedNotebook } from './SuspendedNotebook';
 import { ExternalDataSourcesProvider } from './ExternalDataSourcesProvider';
 import type { NotebookProps } from './types';
+import { useLocalBackupNotice } from './useLocalBackupNotice';
 
 type NotebookLoaderProps = Omit<
   NotebookProps,
@@ -45,6 +46,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     timedOutLoadingFromRemote,
     destroy,
     isNewNotebook,
+    hasNotSavedRemotelyInAWhile,
   } = useNotebookState(notebookId);
 
   const loaded = loadedFromRemote || timedOutLoadingFromRemote;
@@ -148,6 +150,8 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   ) {
     throw lastValueFrom(computer.results);
   }
+
+  useLocalBackupNotice(editor, hasNotSavedRemotelyInAWhile);
 
   if (editor) {
     return (

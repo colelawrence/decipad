@@ -17,7 +17,10 @@ const ToastProvider: React.FC<React.PropsWithChildren<unknown>> = ({
 
   const add = useCallback(
     (message: ReactNode | string, type: ToastType, options = {}) => {
-      addToast(message, { appearance: type, ...options });
+      addToast(message, {
+        appearance: type as ReactToastNotifications.AppearanceTypes,
+        ...options,
+      });
     },
     [addToast]
   );

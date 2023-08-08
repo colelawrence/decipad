@@ -39,4 +39,5 @@ export type DocSyncEditor = MyEditor &
     markVersion: (version: string) => Promise<void>;
     sameVersion: (version: string) => Promise<boolean>;
     equals: (data: string) => boolean;
+    download: () => void;
   };

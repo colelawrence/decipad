@@ -13,6 +13,7 @@ import { NotebookState, EnhancedPromise } from './state';
 import { isNewNotebook } from './isNewNotebook';
 
 const LOAD_TIMEOUT_MS = 5000;
+const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
 
 const initialState = (): Omit<
   NotebookState,
@@ -37,6 +38,7 @@ const initialState = (): Omit<
     hasLocalChanges: false,
     initialFocusDone: false,
     isNewNotebook: true,
+    hasNotSavedRemotelyInAWhile: false,
     notebookLoadedPromise,
     resolveNotebookLoadedPromise: () => {
       return resolveNotebookLoadedPromise;
@@ -117,6 +119,31 @@ export const createNotebookStore = (onDestroy: () => void) =>
         .subscribe(() => {
           set({ hasLocalChanges: true });
         });
+
+      // ------------ Not saved remotely timeout
+      // Populates the `hasNotSavedRemotelyInAWhile` flag if enough time has passed
+      // since the last time the notebook was saved remotely.
+      const notSavedTimeoutReached = () => {
+        set({ hasNotSavedRemotelyInAWhile: true });
+        scheduleNotSavedTimeout();
+      };
+      let notSavedTimeout: ReturnType<typeof setTimeout> | undefined;
+      const scheduleNotSavedTimeout = () => {
+        clearTimeout(notSavedTimeout);
+        notSavedTimeout = setTimeout(
+          notSavedTimeoutReached,
+          HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS
+        );
+      };
+      scheduleNotSavedTimeout();
+      docSyncEditor.onSaved((source) => {
+        if (source === 'remote') {
+          if (get().hasNotSavedRemotelyInAWhile) {
+            set({ hasNotSavedRemotelyInAWhile: false });
+          }
+          scheduleNotSavedTimeout();
+        }
+      });
 
       set({
         editor: docSyncEditor,

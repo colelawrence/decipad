@@ -1,7 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ToastType } from '@decipad/toast';
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
 import { Success, Warning } from '../../icons';
 import {
   brand100,
@@ -13,14 +12,15 @@ import {
   p14Regular,
   red200,
   red700,
-  toastTransitionDelay,
   yellow200,
   yellow700,
 } from '../../primitives';
+import { ReactNode } from 'react';
 
 type ToastProps = {
   readonly appearance: ToastType;
   readonly autoDismiss?: boolean | number;
+  readonly icon?: ReactNode;
 };
 
 const getAppearanceType = (appearance: ToastType) => {
@@ -29,49 +29,59 @@ const getAppearanceType = (appearance: ToastType) => {
     info: infoStyle,
     success: successStyle,
     warning: warningStyle,
+    'soft-warning': infoStyle,
   };
 
   return type[appearance];
 };
 
-const getIconType = (appearance: ToastType) => {
-  const type = {
-    error: (
-      <span
-        css={css({ '> svg > path': { stroke: red700.rgb, fill: red200.rgb } })}
-      >
-        <Warning />
-      </span>
-    ),
-    info: (
-      <span
-        css={css({
-          '> svg > path': { stroke: grey600.rgb, fill: grey200.rgb },
-        })}
-      >
-        <Success />
-      </span>
-    ),
-    success: (
-      <span
-        css={css({
-          '> svg > path': { stroke: brand700.rgb, fill: brand100.rgb },
-        })}
-      >
-        <Success />
-      </span>
-    ),
-    warning: (
-      <span
-        css={css({
-          '> svg > path': { stroke: yellow700.rgb, fill: yellow200.rgb },
-        })}
-      >
-        <Warning />
-      </span>
-    ),
-  };
+const type = {
+  error: (
+    <span
+      css={css({ '> svg > path': { stroke: red700.rgb, fill: red200.rgb } })}
+    >
+      <Warning />
+    </span>
+  ),
+  info: (
+    <span
+      css={css({
+        '> svg > path': { stroke: grey600.rgb, fill: grey200.rgb },
+      })}
+    >
+      <Success />
+    </span>
+  ),
+  success: (
+    <span
+      css={css({
+        '> svg > path': { stroke: brand700.rgb, fill: brand100.rgb },
+      })}
+    >
+      <Success />
+    </span>
+  ),
+  warning: (
+    <span
+      css={css({
+        '> svg > path': { stroke: yellow700.rgb, fill: yellow200.rgb },
+      })}
+    >
+      <Warning />
+    </span>
+  ),
+  'soft-warning': (
+    <span
+      css={css({
+        '> svg > path': { stroke: grey600.rgb, fill: grey200.rgb },
+      })}
+    >
+      <Warning />
+    </span>
+  ),
+};
 
+const getIconType = (appearance: ToastType) => {
   return type[appearance];
 };
 
@@ -87,35 +97,7 @@ const baseStyles = css(p14Regular, {
   // HACK: So the toast is above the help button and undo component.
   marginRight: '8px',
   marginBottom: '64px',
-  maxWidth: '350px',
   gap: '6px',
-});
-
-const collapsedBaseStyles = css(baseStyles, {
-  gap: '0px',
-  borderRadius: '999px',
-  padding: '6px',
-  lineHeight: p14Regular.lineHeight,
-  height: '28px',
-  width: '28px',
-
-  '& > p': {
-    maxWidth: '0px',
-    maxHeight: '0px',
-    overflow: 'hidden',
-  },
-
-  '&:hover': {
-    borderRadius: '8px',
-    padding: '6px 12px',
-    gap: '6px',
-    width: 'unset',
-    height: 'unset',
-    '& > p': {
-      maxWidth: '100%',
-      maxHeight: '100%',
-    },
-  },
 });
 
 const errorStyle = css(baseStyles, {
@@ -147,27 +129,12 @@ const iconStyles = css({
 
 export const Toast: React.FC<React.PropsWithChildren<ToastProps>> = ({
   appearance,
+  icon,
   children,
-  autoDismiss = true,
 }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => {
-      if (!autoDismiss) {
-        setCollapsed(true);
-      }
-    }, toastTransitionDelay);
-
-    return () => {
-      clearTimeout(t);
-    };
-  }, [autoDismiss]);
-
   return (
-    <div
-      css={[getAppearanceType(appearance), collapsed && collapsedBaseStyles]}
-    >
-      <span css={iconStyles}>{getIconType(appearance)}</span>
+    <div css={[getAppearanceType(appearance)]}>
+      <span css={iconStyles}>{icon ?? getIconType(appearance)}</span>
       <div>{children}</div>
     </div>
   );
