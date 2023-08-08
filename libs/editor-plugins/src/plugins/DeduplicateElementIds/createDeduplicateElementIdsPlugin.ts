@@ -1,6 +1,7 @@
 import { AnyElement, createTPluginFactory } from '@decipad/editor-types';
 import { pluginStore } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
+import { captureException } from '@sentry/browser';
 import { findNode, isElement, nanoid, setNodes } from '@udecode/plate';
 import { Element } from 'slate';
 
@@ -32,44 +33,61 @@ export const createDeduplicateElementIdsPlugin = createTPluginFactory({
       }
     };
 
-    const removeNeedsDeduping = (id: string, element: Element) => {
-      const elements = getDefined(needsDeduping.get(id));
-      const elementPos = elements.indexOf(element);
-      elements.splice(elementPos, 1);
-      if (elements.length === 0) {
-        needsDeduping.delete(id);
+    const removeNeedsDeduping = (id: string, element?: Element) => {
+      try {
+        const elements = getDefined(needsDeduping.get(id));
+        if (element) {
+          const elementPos = elements.indexOf(element);
+          if (elementPos >= 0) {
+            elements.splice(elementPos, 1);
+          }
+          if (elements.length === 0) {
+            needsDeduping.delete(id);
+          }
+        } else {
+          needsDeduping.delete(id);
+        }
+      } catch (err) {
+        console.error('Error removeNeedsDeduping', err);
+        captureException(err);
       }
     };
 
     // eslint-disable-next-line no-param-reassign
     editor.apply = (op) => {
       apply(op);
-      if (op.type === 'insert_node' && isElement(op.node)) {
-        const el = op.node as AnyElement;
-        if (el.id && seenIds.has(el.id)) {
-          insertNeedsDeduping(el.id, op.node);
+      try {
+        if (op.type === 'insert_node' && isElement(op.node)) {
+          const el = op.node as AnyElement;
+          if (el.id && seenIds.has(el.id)) {
+            insertNeedsDeduping(el.id, op.node);
+          }
+          seenIds.add(el.id);
+        } else if (
+          op.type === 'set_node' &&
+          'id' in op.newProperties &&
+          op.newProperties.id
+        ) {
+          seenIds.delete(op.newProperties.id as string);
+        } else if (op.type === 'remove_node' && 'id' in op.node && op.node.id) {
+          seenIds.delete(op.node.id as string);
+          removeNeedsDeduping(op.node.id as string);
+        } else if (
+          op.type === 'split_node' &&
+          'id' in op.properties &&
+          op.properties.id
+        ) {
+          const lookForId = op.properties.id;
+          const entry = findNode(editor, {
+            match: (n) => isElement(n) && n.id === lookForId,
+          });
+          if (entry && isElement(entry[0])) {
+            insertNeedsDeduping(op.properties.id as string, entry[0]);
+          }
         }
-        seenIds.add(el.id);
-      } else if (
-        op.type === 'set_node' &&
-        'id' in op.newProperties &&
-        op.newProperties.id
-      ) {
-        seenIds.delete(op.newProperties.id as string);
-      } else if (op.type === 'remove_node' && 'id' in op.node && op.node.id) {
-        seenIds.delete(op.node.id as string);
-      } else if (
-        op.type === 'split_node' &&
-        'id' in op.properties &&
-        op.properties.id
-      ) {
-        const lookForId = op.properties.id;
-        const entry = findNode(editor, {
-          match: (n) => isElement(n) && n.id === lookForId,
-        });
-        if (entry && isElement(entry[0])) {
-          insertNeedsDeduping(op.properties.id as string, entry[0]);
-        }
+      } catch (err) {
+        console.error(err);
+        captureException(err);
       }
     };
 
