@@ -126,7 +126,9 @@ export const createNotebookStore = (onDestroy: () => void) =>
 
       if (!docSyncEditor.isReadOnly) {
         const notSavedTimeoutReached = () => {
-          set({ hasNotSavedRemotelyInAWhile: true });
+          if (!docSyncEditor.isSavedRemotely().value) {
+            set({ hasNotSavedRemotelyInAWhile: true });
+          }
           scheduleNotSavedTimeout();
         };
         let notSavedTimeout: ReturnType<typeof setTimeout> | undefined;
