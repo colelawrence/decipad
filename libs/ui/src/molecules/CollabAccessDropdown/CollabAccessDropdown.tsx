@@ -19,23 +19,19 @@ type CollabAccessDropdownProps = {
 };
 
 const HumanReadablePermission: Record<PermissionType, string> = {
-  READ: 'Reader',
-  WRITE: 'Collaborator',
-  ADMIN: 'Author',
+  READ: 'reader',
+  WRITE: 'collaborator',
+  ADMIN: 'author',
 };
 
 export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
-  isActivatedAccount,
   isInvitationPicker,
   currentPermission,
   onRemove,
   onChange,
   disable,
 }) => {
-  const permissionLabel =
-    !isActivatedAccount && !isInvitationPicker
-      ? 'invited'
-      : HumanReadablePermission[currentPermission];
+  const permissionLabel = HumanReadablePermission[currentPermission];
 
   const onReaderSelected = useCallback(() => {
     onChange?.('READ');
@@ -49,26 +45,28 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
     return <div css={css(p12Medium)}>{permissionLabel}</div>;
   }
 
-  const triggerElement = (
-    <div css={css(p12Medium)}>
+  const triggerElement = (caret = true) => (
+    <div css={css(p12Medium, !caret && { button: { cursor: 'default' } })}>
       <TextAndIconButton
         text={permissionLabel}
         onClick={noop}
         color={isInvitationPicker ? 'transparent' : 'default'}
       >
-        <Caret variant="down" />
+        {caret && <Caret variant="down" />}
       </TextAndIconButton>
     </div>
   );
 
-  return (
+  return currentPermission === 'ADMIN' ? (
+    triggerElement(false)
+  ) : (
     <MenuList
       portal={false}
       root
       dropdown
       align="end"
       sideOffset={4}
-      trigger={triggerElement}
+      trigger={triggerElement(true)}
     >
       <MenuItem
         onSelect={onReaderSelected}

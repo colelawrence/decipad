@@ -86,17 +86,17 @@ export const EditWorkspaceModal: React.FC<EditWorkspaceModalProps> = ({
             Rename
           </Button>
         </form>
-        {
-          <div css={membersStyle}>
-            <h3 css={headingStyles}>Workspace members</h3>
-            <Button type="tertiaryAlt" href={membersHref}>
-              <span css={buttonIconStyle}>
-                <People />
-              </span>
-              Manage members
-            </Button>
-          </div>
-        }
+
+        <div css={membersStyle}>
+          <h3 css={headingStyles}>Workspace members</h3>
+          <Button type="tertiaryAlt" href={membersHref}>
+            <span css={buttonIconStyle}>
+              <People />
+            </span>
+            Manage members
+          </Button>
+        </div>
+
         {allowDelete && (
           <form css={formStyles} onSubmit={deleteWorkspace}>
             <h3 css={headingStyles}>Delete Workspace</h3>

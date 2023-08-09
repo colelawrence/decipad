@@ -1,11 +1,8 @@
 import type { Document } from '@decipad/editor-types';
 import { once } from '@decipad/utils';
-import welcomeNotebook from './notebooks/welcomeNotebook.json';
-import tutorialNotebook from './notebooks/tutorialNotebook.json';
-import businessNotebook from './notebooks/businessNotebook.json';
-import veryWeirdLoadingWhenEditing from './notebooks/veryWeirdLoadingWhenEditing.json';
-import everything from './notebooks/everything.json';
 import appleModel from './notebooks/apple-model.json';
+import businessNotebook from './notebooks/businessNotebook.json';
+import everything from './notebooks/everything.json';
 import investorUpdate from './notebooks/investor-update-example.json';
 import offerLetter from './notebooks/offer-letter.json';
 import performanceSummary from './notebooks/performance-summary-letter.json';
@@ -14,6 +11,9 @@ import seedFounders from './notebooks/seed-founders.json';
 import shilling from './notebooks/shilling.json';
 import sprintCapacity from './notebooks/sprint-capacity.json';
 import stockOptionsStartup from './notebooks/stock-options-startup.json';
+import tutorialNotebook from './notebooks/tutorialNotebook.json';
+import veryWeirdLoadingWhenEditing from './notebooks/veryWeirdLoadingWhenEditing.json';
+import welcomeNotebook from './notebooks/welcomeNotebook.json';
 
 export interface Notebook {
   title: string;
@@ -36,7 +36,7 @@ const isTesting = once(
     !!process.env.JEST_WORKER_ID || !!process.env.CI || !!process.env.DECI_E2E
 );
 // eslint-disable-next-line no-underscore-dangle
-const isLocalDev = once(() => {
+export const isLocalDev = once(() => {
   const url = process.env.DECI_APP_URL_BASE;
   return (
     url == null ||

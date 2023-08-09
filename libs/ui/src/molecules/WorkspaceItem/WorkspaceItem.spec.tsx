@@ -19,9 +19,17 @@ it('shows the workspace name', () => {
   expect(screen.getByText('Some Workspace')).toBeVisible();
 });
 
+it('shows a workspace private if there is less than two members', () => {
+  render(
+    <DndProvider backend={HTML5Backend}>
+      <WorkspaceItem {...props} membersCount={1} />
+    </DndProvider>
+  );
+  expect(screen.getByText(`Private workspace`)).toBeVisible();
+});
+
 it.each([
   [0, 'members'],
-  [1, 'member'],
   [2, 'members'],
 ])('shows that there is/are %i member(s)', (membersCount, pluralization) => {
   render(

@@ -2,13 +2,16 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { CollabAccessDropdown, NotebookAvatar } from '..';
-import { Avatar } from '../../atoms';
-import { ellipsis, p12Medium, p14Medium } from '../../primitives';
+import { NotebookAvatar } from '..';
+import { p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
+import { CollabMemberOrTeam } from './CollabMemberOrTeam';
 
 type CollabMembersRightsProps = {
   readonly usersWithAccess?: NotebookAvatar[] | null;
+  readonly teamUsers?: NotebookAvatar[] | null;
+  readonly teamName?: string;
+  readonly manageTeamURL?: string;
   readonly onRemoveCollaborator?: (userId: string) => void;
   readonly onChangePermission?: (
     userId: string,
@@ -16,23 +19,6 @@ type CollabMembersRightsProps = {
   ) => void;
   readonly disabled: boolean;
 };
-
-const collaboratorStyles = css({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: '8px',
-});
-
-const avatarStyles = css({
-  width: '28px',
-  height: '28px',
-});
-
-const userDetailsStyles = css({
-  flex: 1,
-  minWidth: 0,
-});
 
 const groupStyles = css({
   display: 'flex',
@@ -48,6 +34,9 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
 
 export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   usersWithAccess,
+  teamName,
+  teamUsers,
+  manageTeamURL,
   onRemoveCollaborator = noop,
   onChangePermission = noop,
   disabled = false,
@@ -56,61 +45,40 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
     return null;
   }
 
-  const sortedUsersWithAccess = usersWithAccess.sort((a, b): number =>
-    a.user && b.user ? a.user.name.localeCompare(b.user.name) : 0
-  );
+  const sortedUsersWithAccess = usersWithAccess.sort((a, b) => {
+    return a.user && b.user ? a.user.name.localeCompare(b.user.name) : 0;
+  });
 
-  return (
+  return sortedUsersWithAccess.length > 0 ||
+    (teamName && teamUsers && teamUsers.length > 1) ? (
     <>
       <div css={titleAndToggleStyles}>
-        <p css={css(p14Medium)}>List of collaborators</p>
+        <p css={css(p14Medium)}>Collaborators</p>
       </div>
-
-      <div css={groupStyles}>
-        {sortedUsersWithAccess.map(({ user, permission, isTeamMember }) =>
-          user ? (
-            <div css={collaboratorStyles} key={user.id}>
-              <div css={avatarStyles}>
-                <Avatar
-                  name={user.name}
-                  email={user.email || ''}
-                  useSecondLetter={false}
-                />
-              </div>
-              {user.email === user.name ? (
-                <div css={userDetailsStyles}>
-                  <div
-                    css={css(p12Medium, ellipsis)}
-                    title={user.email ?? undefined}
-                  >
-                    {user.email}
-                  </div>
-                </div>
-              ) : (
-                <div css={userDetailsStyles}>
-                  <div css={css(p14Medium, ellipsis)} title={user.name}>
-                    {user.name}
-                  </div>
-                  <div
-                    css={css(p12Medium, ellipsis)}
-                    title={user.email ?? undefined}
-                  >
-                    {user.email}
-                  </div>
-                </div>
-              )}
-
-              <CollabAccessDropdown
-                disable={isTeamMember || disabled}
-                currentPermission={permission}
-                isActivatedAccount={user.emailValidatedAt != null}
-                onRemove={() => onRemoveCollaborator(user.id)}
-                onChange={(newPerm) => onChangePermission(user.id, newPerm)}
-              />
-            </div>
+      <div css={[groupStyles]}>
+        {sortedUsersWithAccess.map((info) =>
+          info.user ? (
+            <CollabMemberOrTeam
+              key={info.user.id}
+              info={info}
+              disabled={disabled}
+              onRemoveCollaborator={onRemoveCollaborator}
+              onChangePermission={onChangePermission}
+            />
           ) : null
         )}
+
+        {teamName &&
+          teamUsers &&
+          teamUsers.length > 1 && ( // dont show unless theres at least two people
+            <CollabMemberOrTeam
+              teamName={teamName}
+              disabled={disabled}
+              teamMembers={teamUsers.length}
+              manageTeamURL={manageTeamURL}
+            />
+          )}
       </div>
     </>
-  );
+  ) : null;
 };

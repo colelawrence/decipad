@@ -1,3 +1,4 @@
+import { resource } from '@decipad/backend-resources';
 import {
   GraphqlContext,
   ID,
@@ -8,6 +9,8 @@ import {
   WorkspaceInput,
   WorkspaceRecord,
 } from '@decipad/backendtypes';
+import { maximumPermissionType } from '@decipad/graphqlresource';
+import { isLocalDev } from '@decipad/initial-workspace';
 import { pads } from '@decipad/services';
 import {
   queryAccessibleResources,
@@ -19,14 +22,12 @@ import tables from '@decipad/tables';
 import { byDesc } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
 import assert from 'assert';
-import { maximumPermissionType } from '@decipad/graphqlresource';
-import { resource } from '@decipad/backend-resources';
-import { isAuthorized, loadUser, requireUser } from '../authorization';
 import by from '../../../graphqlresource/src/utils/by';
+import { isAuthorized, loadUser, requireUser } from '../authorization';
+import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
+import { getWorkspaceMembersCount } from './workspace.helpers';
 import { workspaceResource } from './workspaceResource';
 import { withSubscriptionSideEffects } from './workspaceStripeEffects';
-import { getWorkspaceMembersCount } from './workspace.helpers';
-import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
 
 const workspaces = resource('workspace');
 
@@ -79,7 +80,16 @@ export default {
           id: permission.resource_id,
         });
         if (workspace) {
-          workspaceRecords.push(workspace);
+          const { name: workspaceName } = workspace;
+          const ws = { ...workspace };
+          // for development purposes we want
+          // to be able to have premium
+          // and non premium workspaces
+          if (isLocalDev() && workspaceName.includes('@n1n.co')) {
+            ws.isPremium = true;
+          }
+
+          workspaceRecords.push(ws);
         }
       }
 

@@ -16,17 +16,18 @@ import { sortAvatars } from './sortAvatars';
 const genRole = (permission: PermissionType) => {
   switch (permission) {
     case 'ADMIN':
-      return 'Admin';
+      return 'author';
     case 'WRITE':
-      return 'Collaborator';
+      return 'collaborator';
     case 'READ':
-      return 'Reader';
+      return 'reader';
   }
 };
 
 const avatarsWrapperStyles = css({
   position: 'relative',
   display: 'flex',
+  flexDirection: 'row-reverse',
   alignItems: 'center',
   marginLeft: '8px',
   zIndex: 2,
@@ -49,17 +50,29 @@ const tooltipRoleStyles = css(p12Regular, {
 });
 
 export type NotebookAvatarsProps = {
-  isWriter?: boolean;
-  usersWithAccess?: NotebookAvatar[];
-  usersFromTeam?: NotebookAvatar[];
-  allUsers: NotebookAvatar[] | null;
-  allowInvitation?: boolean;
-  isPremiumWorkspace?: boolean;
+  readonly isWriter?: boolean;
+  readonly usersWithAccess?: NotebookAvatar[];
+  readonly usersFromTeam?: NotebookAvatar[];
+  readonly invitedUsers: NotebookAvatar[] | null;
+  readonly teamUsers: NotebookAvatar[] | null;
+  readonly teamName?: string;
+  readonly allowInvitation?: boolean;
+  readonly isPremiumWorkspace?: boolean;
 
-  notebook?: { id: string; name: string; snapshots?: { createdAt?: string }[] };
-  onInvite?: (email: string, permission: PermissionType) => Promise<void>;
-  onChange?: (userId: string, permission: PermissionType) => Promise<void>;
-  onRemove?: (userId: string) => Promise<void>;
+  readonly notebook?: {
+    id: string;
+    name: string;
+    snapshots?: { createdAt?: string }[];
+  };
+  readonly onInvite?: (
+    email: string,
+    permission: PermissionType
+  ) => Promise<void>;
+  readonly onChange?: (
+    userId: string,
+    permission: PermissionType
+  ) => Promise<void>;
+  readonly onRemove?: (userId: string) => Promise<void>;
 };
 
 interface EmailLookup {
@@ -68,11 +81,11 @@ interface EmailLookup {
 
 export const NotebookAvatars = ({
   isWriter,
-  allUsers,
+  invitedUsers,
 }: NotebookAvatarsProps): ReturnType<FC> => {
   const showHowMany = 3;
-  const users = sortAvatars(allUsers || []);
-  const firstThree = users.slice(0, showHowMany).reverse();
+  const users = sortAvatars(invitedUsers || []);
+  const firstThree = users.slice(0, showHowMany);
   const showPlus = users.length > showHowMany;
   const cursors = cursorStore.use.cursors();
 
@@ -95,11 +108,6 @@ export const NotebookAvatars = ({
 
   return (
     <div data-testid="notebook-avatars" css={avatarsWrapperStyles}>
-      {showPlus && (
-        <div css={avatarStyles}>
-          <Avatar name={`+${users.length - showHowMany}`} greyedOut={true} />
-        </div>
-      )}
       {firstThree?.map((avatar, index) => {
         if (!avatar.user) {
           return null;
@@ -138,6 +146,11 @@ export const NotebookAvatars = ({
           </div>
         );
       })}
+      {showPlus && (
+        <div css={avatarStyles}>
+          <Avatar name={`+${users.length - showHowMany}`} greyedOut={true} />
+        </div>
+      )}
     </div>
   );
 };

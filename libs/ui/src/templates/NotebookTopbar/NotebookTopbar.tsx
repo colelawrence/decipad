@@ -26,12 +26,12 @@ import {
 } from '../../molecules';
 import { NotebookPublishingPopUp } from '../../organisms';
 import {
+  componentCssVars,
   cssVar,
   p13Bold,
   p13Medium,
   smallScreenQuery,
   tinyPhone,
-  componentCssVars,
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { PermissionType } from '../../types';
@@ -205,20 +205,33 @@ export const NotebookTopbar = ({
     usersFromTeam
   );
 
-  const allUsers: NotebookAvatar[] = uniqBy(
+  const invitedUsers: NotebookAvatar[] = uniqBy(
+    [...(usersWithAccess || [])],
+    (access) => access.user?.id
+  );
+
+  const manageTeamURL = workspace
+    ? workspaces({})
+        .workspace({
+          workspaceId: workspace.id,
+        })
+        .members({}).$
+    : workspaces({}).$;
+
+  const teamUsers: NotebookAvatar[] = uniqBy(
     [
       ...(usersFromTeam || []).map((user) => ({
         ...user,
         isTeamMember: true,
       })),
-      ...(usersWithAccess || []),
     ],
     (access) => access.user?.id
   );
 
-  const oneAdminUser = allUsers.filter((u) => u.permission === 'ADMIN')[0];
+  const oneAdminUser = invitedUsers.find((u) => u.permission === 'ADMIN');
 
   const isPremiumWorkspace = Boolean(workspace?.isPremium);
+  const teamName = workspace?.name;
   const hasPaywall = !canInvite && !isPremiumWorkspace;
 
   return (
@@ -365,7 +378,9 @@ export const NotebookTopbar = ({
         <NotebookAvatars
           allowInvitation={isAdmin}
           isWriter={!!isWriter}
-          allUsers={allUsers}
+          invitedUsers={invitedUsers}
+          teamUsers={teamUsers}
+          teamName={teamName}
           notebook={notebook}
           {...sharingProps}
         />
@@ -374,9 +389,11 @@ export const NotebookTopbar = ({
           (isAdmin || isWriter) && !isServerSideRendering() ? (
             <NotebookPublishingPopUp
               notebook={notebook}
-              {...sharingProps}
               hasPaywall={hasPaywall}
-              allUsers={allUsers}
+              invitedUsers={invitedUsers}
+              teamUsers={teamUsers}
+              manageTeamURL={manageTeamURL}
+              teamName={teamName}
               isAdmin={isAdmin}
               {...sharingProps}
             />

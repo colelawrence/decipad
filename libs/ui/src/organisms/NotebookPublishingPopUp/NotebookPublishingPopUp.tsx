@@ -126,10 +126,13 @@ const padLinkTextStyles = css(
 );
 
 interface NotebookSharingPopUpProps {
-  hasPaywall?: boolean;
-  allUsers?: NotebookAvatar[] | null;
-  isAdmin?: boolean;
-  notebook: {
+  readonly hasPaywall?: boolean;
+  readonly invitedUsers?: NotebookAvatar[] | null;
+  readonly teamUsers?: NotebookAvatar[] | null;
+  readonly manageTeamURL?: string;
+  readonly teamName?: string;
+  readonly isAdmin?: boolean;
+  readonly notebook: {
     id: string;
     name: string;
     snapshots?: {
@@ -138,30 +141,15 @@ interface NotebookSharingPopUpProps {
       snapshotName?: string;
     }[];
   };
-  hasUnpublishedChanges?: boolean;
-  isPublished?: boolean;
-  isPublishing?: boolean;
-  onPublish?: () => void;
-  onRestore?: () => void;
-  onUnpublish?: () => void;
+  readonly hasUnpublishedChanges?: boolean;
+  readonly isPublished?: boolean;
+  readonly isPublishing?: boolean;
+  readonly onPublish?: () => void;
+  readonly onRestore?: () => void;
+  readonly onUnpublish?: () => void;
 }
 
 const SNAPSHOT_NAME = 'Published 1';
-
-const HorizontalDivider = () => (
-  <div
-    css={[
-      {
-        width: '100%',
-        height: '1px',
-        backgroundColor: cssVar('borderSubdued'),
-        [smallScreenQuery]: {
-          display: 'none',
-        },
-      },
-    ]}
-  />
-);
 
 /**
  * A component that handles the rendering of the notebook sharing pop up and the toggle logic.
@@ -175,7 +163,10 @@ export const NotebookPublishingPopUp = ({
   isPublishing = false,
   onPublish = noop,
   hasPaywall,
-  allUsers,
+  invitedUsers,
+  teamName,
+  teamUsers,
+  manageTeamURL,
   isAdmin = false,
   onUnpublish = noop,
   ...sharingProps
@@ -218,7 +209,10 @@ export const NotebookPublishingPopUp = ({
           <NotebookInvitationPopUp
             notebook={notebook}
             hasPaywall={hasPaywall}
-            usersWithAccess={allUsers}
+            usersWithAccess={invitedUsers}
+            teamUsers={teamUsers}
+            teamName={teamName}
+            manageTeamURL={manageTeamURL}
             isAdmin={isAdmin}
             {...sharingProps}
           />
@@ -226,7 +220,6 @@ export const NotebookPublishingPopUp = ({
 
         {isAdmin && (
           <>
-            <HorizontalDivider />
             <div css={groupStyles}>
               <div
                 css={[
@@ -263,11 +256,6 @@ export const NotebookPublishingPopUp = ({
                   disabled={isPublishing}
                 />
               </div>
-              <p css={descriptionStyles}>
-                {isPublished
-                  ? 'Anyone with this link can view your notebook.'
-                  : ''}
-              </p>
             </div>
           </>
         )}

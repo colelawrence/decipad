@@ -94,6 +94,9 @@ interface NotebookSharingPopUpProps {
   };
   readonly isAdmin: boolean;
   readonly usersWithAccess?: NotebookAvatar[] | null;
+  readonly teamUsers?: NotebookAvatar[] | null;
+  readonly manageTeamURL?: string;
+  readonly teamName?: string;
   readonly onRemove?: (userId: string) => Promise<void>;
   readonly onInvite?: (
     email: string,
@@ -113,6 +116,9 @@ interface NotebookSharingPopUpProps {
 export const NotebookInvitationPopUp = ({
   hasPaywall,
   usersWithAccess,
+  teamName,
+  teamUsers,
+  manageTeamURL,
   isAdmin,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
@@ -177,7 +183,6 @@ export const NotebookInvitationPopUp = ({
         <div css={titleAndToggleStyles}>
           <p css={css(p14Medium)}>Invite others to this notebook</p>
         </div>
-        <p css={descriptionStyles}>Invited users will receive an email.</p>
       </div>
 
       <div css={invitationFormStyles}>
@@ -237,6 +242,9 @@ export const NotebookInvitationPopUp = ({
 
       <CollabMembersRights
         usersWithAccess={usersWithAccess}
+        teamName={teamName}
+        manageTeamURL={manageTeamURL}
+        teamUsers={teamUsers}
         onRemoveCollaborator={handleRemoveCollaborator}
         onChangePermission={handleChangePermission}
         disabled={!isAdmin}

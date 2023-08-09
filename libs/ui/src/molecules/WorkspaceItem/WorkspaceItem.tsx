@@ -94,7 +94,9 @@ export const WorkspaceItem = ({
               color: cssVar('textSubdued'),
             })}
           >
-            {membersCount} member{membersCount === 1 ? '' : 's'}
+            {membersCount === 1
+              ? 'Private workspace'
+              : `${membersCount} members`}
           </span>
         </span>
 
