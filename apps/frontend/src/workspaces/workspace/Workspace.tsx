@@ -25,7 +25,6 @@ import {
   Dashboard,
   DashboardSidebar,
   DashboardSidebarPlaceholder,
-  EditDataConnectionsModal,
   EditMembersModal,
   EditUserModal,
   EditWorkspaceModal,
@@ -60,6 +59,7 @@ import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { filterPads, makeIcons } from '../../utils';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
+import EditDataConnectionsModal from './EditDataConnectionsModal';
 
 const loadWorkspaceHero = () =>
   import(/* webpackChunkName: "workspace-hero" */ './WorkspaceHero');
