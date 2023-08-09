@@ -123,27 +123,30 @@ export const createNotebookStore = (onDestroy: () => void) =>
       // ------------ Not saved remotely timeout
       // Populates the `hasNotSavedRemotelyInAWhile` flag if enough time has passed
       // since the last time the notebook was saved remotely.
-      const notSavedTimeoutReached = () => {
-        set({ hasNotSavedRemotelyInAWhile: true });
-        scheduleNotSavedTimeout();
-      };
-      let notSavedTimeout: ReturnType<typeof setTimeout> | undefined;
-      const scheduleNotSavedTimeout = () => {
-        clearTimeout(notSavedTimeout);
-        notSavedTimeout = setTimeout(
-          notSavedTimeoutReached,
-          HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS
-        );
-      };
-      scheduleNotSavedTimeout();
-      docSyncEditor.onSaved((source) => {
-        if (source === 'remote') {
-          if (get().hasNotSavedRemotelyInAWhile) {
-            set({ hasNotSavedRemotelyInAWhile: false });
-          }
+
+      if (!docSyncEditor.isReadOnly) {
+        const notSavedTimeoutReached = () => {
+          set({ hasNotSavedRemotelyInAWhile: true });
           scheduleNotSavedTimeout();
-        }
-      });
+        };
+        let notSavedTimeout: ReturnType<typeof setTimeout> | undefined;
+        const scheduleNotSavedTimeout = () => {
+          clearTimeout(notSavedTimeout);
+          notSavedTimeout = setTimeout(
+            notSavedTimeoutReached,
+            HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS
+          );
+        };
+        scheduleNotSavedTimeout();
+        docSyncEditor.onSaved((source) => {
+          if (source === 'remote') {
+            if (get().hasNotSavedRemotelyInAWhile) {
+              set({ hasNotSavedRemotelyInAWhile: false });
+            }
+            scheduleNotSavedTimeout();
+          }
+        });
+      }
 
       set({
         editor: docSyncEditor,
