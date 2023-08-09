@@ -239,7 +239,7 @@
     "lodash.uniqby": "^4.7.0",
     "lodash.unzip": "^3.4.0",
     "lodash.zip": "^4.2.0",
-    "luxon": "3.3.0",
+    "luxon": "3.4.0",
     "md5": "^2.3.0",
     "mdast": "^3.0.0",
     "micro-memoize": "4.1.2",
