@@ -21,9 +21,17 @@ import {
 import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
 
-// TODO: Refactor or replace with alternative solution
+/**
+ * Ensure that React treats identical path arrays as equal.
+ *
+ * The deps array should read `path || []` and is not a typo.
+ * Do not replace with `[path]`.
+ *
+ * TODO: Refactor or replace with alternative solution
+ */
 const useMemoPath = <T extends Path | null | undefined>(path: T): T =>
-  useMemo(() => path, [path]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useMemo(() => path, path || []);
 
 export const TableDndProvider = ({
   editor,
@@ -96,7 +104,7 @@ export const TableDndProvider = ({
     setColumnDropLine(null);
   }, [editor]);
 
-  const tableDndContextValue = React.useMemo(
+  const tableDndContextValue = useMemo(
     () => ({
       onCellHover,
       onCellDrop,

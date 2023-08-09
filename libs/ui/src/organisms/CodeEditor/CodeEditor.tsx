@@ -31,6 +31,8 @@ import {
   componentCssVars,
 } from '../../primitives';
 
+const isE2E = 'navigator' in globalThis && navigator.webdriver;
+
 interface CodeEditorProps {
   code: string;
   setCode: (newCode: string) => void;
@@ -58,7 +60,6 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   }, [isDarkMode]);
 
   const [userCopyPastedCode, setUserCopyPastedCode] = useState(false);
-  const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
   const handleCode = useCallback<
     NonNullable<ComponentProps<typeof CodeMirror>['onChange']>

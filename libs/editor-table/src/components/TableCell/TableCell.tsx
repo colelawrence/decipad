@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useState } from 'react';
-import { SerializedType } from '@decipad/computer';
+import { useState, useEffect } from 'react';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
@@ -8,19 +7,40 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
-import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import { TableData } from '@decipad/ui';
 import { dndStore } from '@udecode/plate-dnd';
 import { useColumnDropDirection } from '../../hooks';
 import { useTableCell } from '../../hooks/useTableCell';
 import { sanitizeColumnDropDirection } from '../../utils';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
 import { TableCellDropColumnEffect } from './TableCellDropColumnEffect';
+import { TableCellFormulaTableData } from './TableCellFormulaTableData';
+
+declare global {
+  interface Window {
+    tableCellRenderCount: number;
+  }
+}
+
+const shouldCountRenders = isFlagEnabled('COUNT_TABLE_CELL_RENDERS');
+
+if (shouldCountRenders) {
+  window.tableCellRenderCount = 0;
+}
 
 export const TableCell: PlateComponent = ({
   attributes,
   children,
   element,
 }) => {
+  if (shouldCountRenders) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      window.tableCellRenderCount += 1;
+    });
+  }
+
   const [tableDataElement, tableDataRef] =
     useState<HTMLTableCellElement | null>(null);
 
@@ -34,7 +54,6 @@ export const TableCell: PlateComponent = ({
   }
 
   const {
-    formulaResult,
     selected,
     editable,
     disabled,
@@ -63,23 +82,14 @@ export const TableCell: PlateComponent = ({
     // Also, be careful with the element structure:
     // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
     return (
-      <FormulaTableData
-        result={
-          formulaResult && (
-            <CodeResult
-              parentType={{ kind: 'table' } as SerializedType}
-              {...formulaResult}
-              element={element}
-            />
-          )
-        }
-        resultType={formulaResult && formulaResult.type.kind}
-        {...attributes}
+      <TableCellFormulaTableData
+        element={element}
+        attributes={attributes}
         selected={selected}
         dropDirection={sanitizeColumnDropDirection(dropDirection)}
       >
         {children}
-      </FormulaTableData>
+      </TableCellFormulaTableData>
     );
   }
 

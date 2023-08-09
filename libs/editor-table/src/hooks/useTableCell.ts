@@ -1,14 +1,11 @@
 import { Result } from '@decipad/computer';
+import { useSelection } from '@decipad/editor-hooks';
 import {
   CellValueType,
   TableCellElement,
   TableHeaderElement,
   useTEditorRef,
 } from '@decipad/editor-types';
-import {
-  useSelection,
-  useTableColumnFormulaResultForCell,
-} from '@decipad/editor-hooks';
 import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
 import { useDelayedTrue } from '@decipad/react-utils';
 import {
@@ -34,7 +31,6 @@ interface UseTableCellResult {
   editable: boolean;
   disabled: boolean;
   selectedCells: TElement[] | null;
-  formulaResult: Result.Result | undefined;
   unit: string | undefined;
   parseErrorMessage: string | undefined;
   showParseError: boolean;
@@ -56,9 +52,6 @@ export const useTableCell = (
   const collapsed = isCollapsed(useSelection());
   const selectedCells = useTableStore().get.selectedCells();
   const { tableFrozen } = useEditorTableContext();
-
-  // FIXME: Causes re-render on unrelated computer update
-  const formulaResult = useTableColumnFormulaResultForCell(element);
 
   const width = useTableCellWidth(element);
 
@@ -141,7 +134,6 @@ export const useTableCell = (
       editable,
       disabled,
       selectedCells,
-      formulaResult,
       unit,
       parseErrorMessage,
       showParseError,
@@ -159,7 +151,6 @@ export const useTableCell = (
       dropdownResult,
       editable,
       focused,
-      formulaResult,
       onChangeValue,
       parseErrorMessage,
       selected,
