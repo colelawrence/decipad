@@ -61,6 +61,7 @@ interface UseNotebookStateAndActionsResult {
   hasUnpublishedChanges: boolean;
 
   duplicate: () => Promise<void>;
+  duplicating: boolean;
   removeLocalChanges: () => Promise<void>;
   updateIcon: (icon: Icon) => void;
   updateIconColor: (icon: IconColor) => void;
@@ -134,10 +135,11 @@ export const useNotebookStateAndActions = ({
   );
 
   // ------- remote api -------
-  const [remoteDuplicateNotebook] = useDuplicateNotebook({
-    id: notebookId,
-    editor,
-  });
+  const [remoteDuplicateNotebook, remoteDuplicatingNotebook] =
+    useDuplicateNotebook({
+      id: notebookId,
+      editor,
+    });
   const [, remoteUpdateNotebookIcon] = useUpdateNotebookIconMutation();
   const [, remoteUpdateNotebookIsPublic] = useSetNotebookPublicMutation();
   const [, shareNotebookWithEmail] = useSharePadWithEmailMutation();
@@ -386,6 +388,7 @@ export const useNotebookStateAndActions = ({
     initialState: notebook?.initialState ?? undefined,
     hasUnpublishedChanges: !!hasUnpublishedChanges,
     duplicate,
+    duplicating: remoteDuplicatingNotebook,
     removeLocalChanges,
     setNotebookPublic,
     updateIcon,

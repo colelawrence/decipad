@@ -67,6 +67,7 @@ const Notebook: FC = () => {
     updateIcon,
     updateIconColor,
     duplicate,
+    duplicating,
     removeLocalChanges,
     publishNotebook,
     unpublishNotebook,
@@ -212,6 +213,7 @@ const Notebook: FC = () => {
                     changeEditorAccess={changeEditorAccess}
                     toggleSidebar={toggleSidebar}
                     sidebarOpen={sidebarOpen}
+                    duplicating={duplicating}
                   />
                 </Frame>
               }

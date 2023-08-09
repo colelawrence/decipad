@@ -125,6 +125,7 @@ export type NotebookTopbarProps = Pick<
     hasLocalChanges?: BehaviorSubject<boolean>;
     toggleSidebar?: MouseEventHandler<HTMLSpanElement>;
     sidebarOpen: boolean;
+    duplicating?: boolean;
   };
 
 export const NotebookTopbar = ({
@@ -139,6 +140,7 @@ export const NotebookTopbar = ({
   workspaceAccess,
   toggleSidebar,
   sidebarOpen,
+  duplicating = false,
 
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
@@ -379,8 +381,12 @@ export const NotebookTopbar = ({
               {...sharingProps}
             />
           ) : (
-            <Button type="primaryBrand" onClick={onDuplicateNotebook}>
-              Duplicate notebook
+            <Button
+              disabled={duplicating}
+              type="primaryBrand"
+              onClick={onDuplicateNotebook}
+            >
+              {duplicating ? 'Duplicating...' : 'Duplicate notebook'}
             </Button>
           )
         ) : (

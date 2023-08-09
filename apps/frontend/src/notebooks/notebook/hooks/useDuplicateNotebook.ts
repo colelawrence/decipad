@@ -2,7 +2,7 @@ import type { MyEditor } from '@decipad/editor-types';
 import { serializeDocument } from '@decipad/editor-utils';
 import { notebooks } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   useDuplicateNotebookMutation,
@@ -17,11 +17,12 @@ type UseDuplicateNotebookArgs = {
 export const useDuplicateNotebook = ({
   editor,
   id,
-}: UseDuplicateNotebookArgs) => {
+}: UseDuplicateNotebookArgs): [() => Promise<void>, boolean] => {
   const toast = useToast();
   const navigate = useNavigate();
   const [{ data, error }] = useGetWorkspacesIDsQuery();
   const [, duplicateNotebook] = useDuplicateNotebookMutation();
+  const [mutating, setMutating] = useState(false);
 
   if (error) {
     console.error(error);
@@ -38,6 +39,7 @@ export const useDuplicateNotebook = ({
     }
 
     try {
+      setMutating(true);
       const { data: duplicateData, error: duplicateError } =
         await duplicateNotebook({
           id,
@@ -64,8 +66,10 @@ export const useDuplicateNotebook = ({
     } catch (err) {
       console.error('Failed to duplicate notebook. Error:', err);
       toast('Failed to duplicate notebook.', 'error');
+    } finally {
+      setMutating(false);
     }
   }, [data, duplicateNotebook, editor, id, navigate, toast]);
 
-  return [mutate];
+  return [mutate, mutating];
 };

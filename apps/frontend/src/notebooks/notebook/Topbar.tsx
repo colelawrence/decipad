@@ -29,6 +29,7 @@ type TopbarProps = Pick<
   readonly publishNotebook?: () => void;
   readonly unpublishNotebook?: () => void;
   readonly sidebarOpen: boolean;
+  readonly duplicating: boolean;
 };
 
 const Topbar: FC<TopbarProps> = ({
@@ -46,6 +47,7 @@ const Topbar: FC<TopbarProps> = ({
   removeEditorById = () => Promise.resolve(),
   toggleSidebar,
   sidebarOpen,
+  duplicating,
 }) => {
   const workspaceId = notebook?.workspace?.id || '';
   const { data: session } = useSession();
@@ -85,6 +87,7 @@ const Topbar: FC<TopbarProps> = ({
       hasLocalChanges={hasLocalChanges}
       hasUnpublishedChanges={hasUnpublishedChanges}
       onDuplicateNotebook={duplicateNotebook}
+      duplicating={duplicating}
       onPublish={publishNotebook}
       onUnpublish={unpublishNotebook}
       onInvite={inviteEditorByEmail}
