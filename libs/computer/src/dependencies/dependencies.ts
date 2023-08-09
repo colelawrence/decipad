@@ -1,5 +1,5 @@
 import { unique } from '@decipad/utils';
-import { AST } from '..';
+import { AST, isExprRef } from '..';
 import { getIdentifierString } from '../utils';
 
 export type TableNamespaces = Map<string, Set<string>>;
@@ -88,6 +88,9 @@ export const dependencies = (
         const column = getIdentifierString(columnRef);
 
         if (table.type === 'ref') {
+          if (isExprRef(column)) {
+            return [column];
+          }
           return unique([`${table.args[0]}::${column}`]);
         }
 
@@ -95,6 +98,9 @@ export const dependencies = (
         const derivedTableRef = deriveTableExpressionRef(table);
 
         if (derivedTableRef) {
+          if (isExprRef(column)) {
+            return unique([column, ...derivedTableRef.otherRefs]);
+          }
           return unique([
             `${derivedTableRef.tableRef}::${column}`,
             ...derivedTableRef.otherRefs,
@@ -112,12 +118,16 @@ export const dependencies = (
       case 'colref': {
         const colName = getIdentifierString(node);
 
+        if (isExprRef(colName)) {
+          return [colName];
+        }
+
         // TODO no idea what table this is, let's just do all of them
         // In the future we can improve this by making sure
         // That all column names are globally unique!
         return unique(
           [...namespaces].flatMap(([table, columns]) =>
-            columns.has(colName) ? [`${table}::${colName}`] : []
+            columns.has(colName) ? [`${table}::${colName}`] : [colName]
           )
         );
       }

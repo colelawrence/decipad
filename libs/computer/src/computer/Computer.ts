@@ -671,7 +671,6 @@ export class Computer {
         this.latestProgram
       )
     );
-    // console.log('newParse', prettyPrintProgram(newParse));
     const newExternalData = anyMappingToMap(externalData ?? new Map());
 
     const newComputerProgram = programToComputerProgram(newParse);
