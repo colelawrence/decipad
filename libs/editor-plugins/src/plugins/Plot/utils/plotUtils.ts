@@ -249,7 +249,7 @@ export function specFromType(
   if (encoding.x && encoding.x.axis) {
     encoding.x.axis.domainColor = cssVarHex('textDefault');
     encoding.x.axis.tickColor = cssVarHex('textSubdued');
-    encoding.x.axis.labelColor = cssVarHex('backgroundDefault');
+    encoding.x.axis.labelColor = cssVarHex('textHeavy');
     encoding.x.axis.labelAngle = 0;
     encoding.x.axis.labelFontWeight = 700;
     encoding.x.axis.grid = false;

@@ -296,7 +296,7 @@ export const WrapperIntegrationModalDialog: FC<
             onClick={execSource}
             disabled={runButtonDisabled}
           >
-            <Play />
+            <Play variant="black" />
           </TextAndIconButton>
         </div>
       )}

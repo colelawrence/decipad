@@ -59,7 +59,7 @@ export const EditorIcon = ({
         iconWrapperStyles,
         {
           backgroundColor: isDefaultColor
-            ? cssVar('backgroundSubdued')
+            ? cssVar('backgroundDefault')
             : cssVar('themeBackgroundSubdued'),
           cursor: readOnly ? 'default' : 'pointer',
         },

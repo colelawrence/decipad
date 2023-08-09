@@ -1,5 +1,7 @@
+import { themeStore } from '@decipad/utils';
 import { CssVariables } from './CssVariables';
 import { theme as lightTheme } from './themes/light';
+import { theme as darkTheme } from './themes/dark';
 
 const defaults: CssVariables = lightTheme;
 
@@ -8,7 +10,8 @@ export type CssVariableKey<V extends keyof CssVariables> =
   `${typeof cssVariablePrefix}${V}`;
 
 export function cssVarHex<V extends keyof CssVariables>(name: V) {
-  return defaults[name];
+  const isDarkMode = themeStore.getState().theme;
+  return isDarkMode ? darkTheme[name] : defaults[name];
 }
 
 export function cssVarName<V extends keyof CssVariables>(name: V) {

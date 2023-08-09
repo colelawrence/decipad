@@ -63,7 +63,7 @@ export const Callout = ({
         {
           backgroundColor:
             color === 'Catskill'
-              ? cssVar('backgroundSubdued')
+              ? cssVar('backgroundDefault')
               : themeColor.Background.Subdued,
           color: cssVar('textDefault'),
         },

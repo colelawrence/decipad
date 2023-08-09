@@ -244,9 +244,6 @@ const greyBackgroundStyles = (disabled: boolean) =>
 
 const brandBackgroundStyles = (disabled: boolean) =>
   css(p13Medium, {
-    color: componentCssVars(
-      disabled ? 'ButtonPrimaryDisabledText' : 'ButtonPrimaryDefaultText'
-    ),
     backgroundColor: componentCssVars(
       disabled
         ? 'ButtonPrimaryDisabledBackground'
@@ -259,6 +256,12 @@ const brandBackgroundStyles = (disabled: boolean) =>
         disabled
           ? 'ButtonPrimaryDisabledBackground'
           : 'ButtonPrimaryHoverBackground'
+      ),
+    },
+
+    span: {
+      color: componentCssVars(
+        disabled ? 'ButtonPrimaryDisabledText' : 'ButtonPrimaryDefaultText'
       ),
     },
   });

@@ -16,6 +16,7 @@ import {
   transparency,
   wiggle,
   componentCssVars,
+  offWhite,
 } from '../../primitives';
 
 interface DeleteWithDepsMenuItemProps {
@@ -89,18 +90,18 @@ export const DeleteWithDepsMenuItem: FC<DeleteWithDepsMenuItemProps> = ({
         }
       >
         <p
-          css={css({
+          css={{
             textAlign: 'center',
             maxWidth: '170px',
-          })}
+          }}
         >
           Deleting this block will affect {blocksAffected} other places. 😢
         </p>
         <p
-          css={css({
+          css={{
             textAlign: 'center',
             maxWidth: '170px',
-          })}
+          }}
         >
           Remove references before deleting by clicking the
           <div
@@ -120,8 +121,8 @@ export const DeleteWithDepsMenuItem: FC<DeleteWithDepsMenuItemProps> = ({
 
 const deleteWithDepsMenuItemStyles = css(p12Medium, {
   borderRadius: 4,
-  backgroundColor: cssVar('stateDangerIconBackground'),
-  color: componentCssVars('TooltipText'),
+  backgroundColor: cssVar('stateDangerBackground'),
+  color: offWhite.hex,
   border: `1px solid ${cssVar('stateDangerIconOutline')}`,
   cursor: 'pointer',
   width: 17,

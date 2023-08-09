@@ -2,12 +2,53 @@
 import { css } from '@emotion/react';
 import { Button } from '../../atoms';
 import {
-  componentCssVars,
   cssVar,
-  p16Regular,
+  p13Medium,
+  p14Medium,
   smallScreenQuery,
 } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { Warning } from '../../icons';
+
+function getText(type: ErrorBlockProps['type'], message: string) {
+  if (type === 'error') {
+    return `The rest of your notebook should be fine. Delete this block or contact support. We've been notified of the error! ${message}`;
+  }
+  if (type === 'warning') {
+    return `The rest of your notebook should be fine. Undo, delete this block or contact support. We've been notified of the error! ${message}`;
+  }
+  if (type === 'info') {
+    return message;
+  }
+  return '';
+}
+
+function getButtons(
+  type: ErrorBlockProps['type'],
+  onDelete: ErrorBlockProps['onDelete'],
+  onUndo: ErrorBlockProps['onUndo']
+) {
+  if (type === 'error') {
+    return (
+      <Button type="darkDanger" onClick={onDelete}>
+        Delete this block
+      </Button>
+    );
+  }
+  if (type === 'warning') {
+    return (
+      <>
+        <Button type="primary" onClick={onUndo}>
+          Undo
+        </Button>
+        <Button type="text" onClick={onDelete}>
+          Delete this block
+        </Button>
+      </>
+    );
+  }
+  return null;
+}
 
 // complete-error should never happen, but if it does it's when the fallback
 // component cannot determine the path of it.
@@ -23,90 +64,31 @@ export const ErrorBlock: React.FC<ErrorBlockProps> = ({
   onDelete = () => {},
   onUndo = () => {},
   message = '',
-}: ErrorBlockProps) => {
-  const getText = () => {
-    if (type === 'error') {
-      return `Delete this block or contact support. We've been notified of the error! ${message}`;
-    }
-    if (type === 'warning') {
-      return `Undo, delete this block or contact support. We've been notified of the error! ${message}`;
-    }
-    if (type === 'info') {
-      return message;
-    }
-    return '';
-  };
-
-  const getButtons = () => {
-    if (type === 'error') {
-      return (
-        <Button type="darkDanger" onClick={onDelete}>
-          Delete this block
-        </Button>
-      );
-    }
-    if (type === 'warning') {
-      return (
-        <>
-          <Button type="darkWarningText" onClick={onDelete}>
-            Delete this block
-          </Button>
-          <Button type="darkWarning" onClick={onUndo}>
-            Undo
-          </Button>
-        </>
-      );
-    }
-    return <></>;
-  };
-
-  return (
-    <div
-      css={[
-        type === 'warning'
-          ? { backgroundColor: componentCssVars('ErrorBlockWarning') }
-          : type === 'info'
-          ? { backgroundColor: componentCssVars('ErrorBlockInfo') }
-          : { backgroundColor: componentCssVars('ErrorBlockError') },
-        errorBlock,
-      ]}
-      contentEditable={false}
-    >
-      <div css={errorBlockWrapperStyles}>
-        <div css={errorBlockRowStyles}>
-          <span
-            data-testid="error-block"
-            css={[
-              errorMessageStypes,
-              type === 'info' && { color: cssVar('textDefault') },
-            ]}
-          >
-            {type !== 'info' &&
-              `Oops something is broken, and that's on us. The rest of your notebook should be fine. `}
-            {getText()}
-          </span>
-        </div>
-        {type !== 'info' && (
-          <div css={buttonRow}>
-            <div css={centeredFlex}>{getButtons()}</div>
-          </div>
-        )}
-      </div>
+}: ErrorBlockProps) => (
+  <div css={errorBlock} contentEditable={false} data-testid="error-block">
+    <div css={textRow}>
+      <span>
+        <Warning variant="warning" />
+        Oops something is broken, and that's on us.
+      </span>
+      {getText(type, message)}
     </div>
-  );
-};
+    <div css={buttonRow}>
+      <div>{getButtons('warning', onDelete, onUndo)}</div>
+    </div>
+  </div>
+);
 
-const centeredFlex = css({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-});
-
-const errorBlock = css(centeredFlex, {
-  padding: '16px 24px 16px 24px',
-  gap: 8,
-  borderRadius: 8,
+const errorBlock = css({
+  padding: '16px 24px',
+  gap: '16px',
+  borderRadius: '8px',
   width: slimBlockWidth,
+  backgroundColor: cssVar('backgroundDefault'),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'start',
+
   [smallScreenQuery]: {
     minWidth: '360px',
     maxWidth: slimBlockWidth,
@@ -114,25 +96,30 @@ const errorBlock = css(centeredFlex, {
   },
 });
 
-const errorBlockWrapperStyles = css(centeredFlex, {
+const textRow = css(p13Medium, {
+  display: 'flex',
   flexDirection: 'column',
-  width: '100%',
-  gap: 12,
-});
+  alignItems: 'start',
+  gap: '6px',
+  span: css(p14Medium, {
+    color: cssVar('textTitle'),
+    display: 'flex',
+    gap: '4px',
+  }),
 
-const errorMessageStypes = css(p16Regular, {
-  color: componentCssVars('ErrorBlockColor'),
-});
-
-const errorBlockRowStyles = css(centeredFlex, {
-  flexDirection: 'row',
-  gap: 8,
+  svg: {
+    width: '16px',
+    height: '16px',
+  },
 });
 
 const buttonRow = css({
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'end',
-  alignItems: 'center',
-  gap: 16,
+  div: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'start',
+    alignItems: 'center',
+    gap: '8px',
+  },
 });

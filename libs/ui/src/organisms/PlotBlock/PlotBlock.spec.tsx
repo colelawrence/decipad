@@ -107,40 +107,40 @@ it('displays the plot settings for a line plot unless readonly', async () => {
   const { queryAllByText, rerender } = render(
     <PlotBlock {...plotProps('line')} readOnly={false} />
   );
-  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+  expect(queryAllByText('Settings')).not.toHaveLength(0);
 
   rerender(<PlotBlock {...plotProps('line')} readOnly />);
-  expect(await queryAllByText('Settings')).toHaveLength(0);
+  expect(queryAllByText('Settings')).toHaveLength(0);
 });
 
 it('displays the plot settings for a pie chart unless readonly', async () => {
   const { queryAllByText, rerender } = render(
     <PlotBlock {...plotProps('arc')} readOnly={false} />
   );
-  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+  expect(queryAllByText('Settings')).not.toHaveLength(0);
 
   rerender(<PlotBlock {...plotProps('arc')} readOnly />);
-  expect(await queryAllByText('Settings')).toHaveLength(0);
+  expect(queryAllByText('Settings')).toHaveLength(0);
 });
 
 it('displays the plot settings for an area chart unless readonly', async () => {
   const { queryAllByText, rerender } = render(
     <PlotBlock {...plotProps('area')} readOnly={false} />
   );
-  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+  expect(queryAllByText('Settings')).not.toHaveLength(0);
 
   rerender(<PlotBlock {...plotProps('area')} readOnly />);
-  expect(await queryAllByText('Settings')).toHaveLength(0);
+  expect(queryAllByText('Settings')).toHaveLength(0);
 });
 
 it('displays the plot settings for a scatter plot unless readonly', async () => {
   const { queryAllByText, rerender } = render(
     <PlotBlock {...plotProps('point')} readOnly={false} />
   );
-  expect(await queryAllByText('Settings')).not.toHaveLength(0);
+  expect(queryAllByText('Settings')).not.toHaveLength(0);
 
   rerender(<PlotBlock {...plotProps('point')} readOnly />);
-  expect(await queryAllByText('Settings')).toHaveLength(0);
+  expect(queryAllByText('Settings')).toHaveLength(0);
 });
 
 it('shows a given error message', () => {
