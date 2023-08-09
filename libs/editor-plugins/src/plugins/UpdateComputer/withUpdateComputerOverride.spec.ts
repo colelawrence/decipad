@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
-import { insertNodes, removeNodes } from '@udecode/plate';
+import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { withUpdateComputerOverride } from './withUpdateComputerOverride';
 
@@ -271,6 +271,66 @@ describe('withUpdateComputerOverride', () => {
               "_B",
               "exprRef_id5",
               "_C",
+            },
+            "local": Set {},
+          },
+        },
+      }
+    `);
+  });
+
+  it('allows changing ids of code elements', async () => {
+    await timeout(200);
+    setNodes(editor, { id: 'id3-new' }, { at: [2] });
+    await timeout(200);
+    expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
+      Object {
+        "id3": Object {
+          "epoch": 1n,
+          "id": "id3",
+          "result": Object {
+            "type": Object {
+              "kind": "number",
+              "unit": null,
+            },
+            "value": DeciNumber {
+              "d": 1n,
+              "infinite": false,
+              "n": 1n,
+              "s": 1n,
+            },
+          },
+          "type": "computer-result",
+          "usedNames": Array [],
+          "visibleVariables": Object {
+            "global": Set {
+              "exprRef_id3",
+              "_A",
+            },
+            "local": Set {},
+          },
+        },
+        "id3-new": Object {
+          "epoch": 2n,
+          "id": "id3-new",
+          "result": Object {
+            "type": Object {
+              "errorCause": Object {
+                "duplicatedName": "_A",
+                "errType": "duplicated-name",
+              },
+              "errorLocation": undefined,
+              "kind": "type-error",
+            },
+            "value": Symbol(unknown),
+          },
+          "type": "computer-result",
+          "usedNames": Array [],
+          "visibleVariables": Object {
+            "global": Set {
+              "exprRef_id3",
+              "_A",
+              "exprRef_id3_new",
             },
             "local": Set {},
           },

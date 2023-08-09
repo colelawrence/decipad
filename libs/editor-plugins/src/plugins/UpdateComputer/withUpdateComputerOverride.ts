@@ -124,6 +124,34 @@ export const withUpdateComputerOverride =
             }
           }
         }
+      } else if (
+        op.type === 'set_node' &&
+        'id' in op.newProperties &&
+        'id' in op.properties &&
+        op.newProperties.id !== op.properties.id &&
+        op.path.length > 0
+      ) {
+        {
+          const oldId = op.properties.id as string;
+          const oldEntry = findNode(editor, { match: { id: oldId } });
+          if (oldEntry) {
+            const [oldNode] = oldEntry;
+            if (isElement(oldNode)) {
+              dirtyBlocksSet.set(oldNode.id, oldNode);
+            }
+          }
+        }
+
+        {
+          const newId = op.newProperties.id as string;
+          const newEntry = findNode(editor, { match: { id: newId } });
+          if (newEntry) {
+            const [newNode] = newEntry;
+            if (isElement(newNode)) {
+              dirtyBlocksSet.set(newNode.id, newNode);
+            }
+          }
+        }
       }
       if (op.type === 'remove_node') {
         apply(op);
