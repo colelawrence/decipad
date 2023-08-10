@@ -76,7 +76,7 @@ import {
   TableVariableNameElement,
 } from './table';
 
-export type { DrawElement, DrawElements, DrawElementDescendant };
+export type { DrawElement, DrawElementDescendant, DrawElements };
 
 // Defining specific elements
 
@@ -93,11 +93,11 @@ export interface H1Element extends BaseElement {
 }
 export interface H2Element extends BaseElement {
   type: typeof ELEMENT_H2;
-  children: PlainTextChildren;
+  children: InlineChildren;
 }
 export interface H3Element extends BaseElement {
   type: typeof ELEMENT_H3;
-  children: PlainTextChildren;
+  children: InlineChildren;
 }
 
 // Text blocks

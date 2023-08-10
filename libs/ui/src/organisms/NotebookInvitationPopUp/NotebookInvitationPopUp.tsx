@@ -9,7 +9,7 @@ import { Check, Loading } from '../../icons';
 import { NotebookAvatar } from '../../molecules';
 import { CollabAccessDropdown } from '../../molecules/CollabAccessDropdown/CollabAccessDropdown';
 import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
-import { p13Regular, p14Medium } from '../../primitives';
+import { p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
 
 /**
@@ -33,11 +33,6 @@ const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
 const titleAndToggleStyles = css(horizontalGroupStyles, {
   justifyContent: 'space-between',
 });
-
-/**
- * The styles for the description of the pop up.
- */
-const descriptionStyles = css(p13Regular, {});
 
 const invitationButtonContentStyles = css({
   height: '20px',

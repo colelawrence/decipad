@@ -1,8 +1,8 @@
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { findNode, getNodeString } from '@udecode/plate';
 import { NodeEntry, Path } from 'slate';
-import { CatalogHeadingItem, CatalogItems, CatalogItemVar } from './types';
 import { findParent } from './findParent';
+import { CatalogHeadingItem, CatalogItemVar, CatalogItems } from './types';
 
 const insertInOrder = (
   items: CatalogItems,
@@ -45,12 +45,18 @@ const catalogItem =
     const [parentNode, parentPath] = parent;
     const parentIndex = curr.findIndex((el) => el.blockId === parentNode.id);
     if (parentIndex < 0) {
+      // we are removing expr_Refs from number catalog headings
+      // so people can read their h2, and h3s
+      const textChildren = parentNode.children.filter(
+        (node) => !node.magicnumberz
+      );
+      const adoptiveParent = { ...parentNode, children: textChildren };
       return insertInOrder(
         curr,
         {
           type: parentNode.type,
           blockId: parentNode.id,
-          name: getNodeString(parentNode),
+          name: getNodeString(adoptiveParent),
           path: parentPath,
         },
         name

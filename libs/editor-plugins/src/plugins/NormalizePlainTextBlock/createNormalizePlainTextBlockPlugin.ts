@@ -1,11 +1,5 @@
 /* eslint-disable no-param-reassign */
-import {
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  MyEditor,
-  MyNodeEntry,
-} from '@decipad/editor-types';
+import { ELEMENT_H1, MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { getNodeChildren, isElement } from '@udecode/plate';
 import {
   NormalizerReturnValue,
@@ -14,7 +8,7 @@ import {
 import { normalizeExcessProperties } from '../../utils/normalize';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
-const PLAIN_TEXT_BLOCK_TYPES = [ELEMENT_H1, ELEMENT_H2, ELEMENT_H3];
+const PLAIN_TEXT_BLOCK_TYPES = [ELEMENT_H1];
 
 const normalizePlainTextBlock =
   (editor: MyEditor) =>

@@ -32,8 +32,8 @@ import { findNodePath, getNodeString, insertText } from '@udecode/plate';
 import { useCallback, useState } from 'react';
 import { Element } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
 import { BlockErrorBoundary } from '../../BlockErrorBoundary';
+import { DISMISS_KEYS } from '../../CodeLine/CodeLineTeleport';
 
 const UnprotectedMagicNumber: PlateComponent = ({
   attributes,
