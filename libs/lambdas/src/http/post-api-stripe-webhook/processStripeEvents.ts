@@ -6,6 +6,29 @@ import { track } from '@decipad/backend-analytics';
 import { tables } from 'libs/tables/src/tables';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
+const MAX_CREDITS_EXEC_COUNT = {
+  free: 50,
+  pro: 500,
+};
+
+const updateQueryExecutionTable = async (
+  workspaceId: string,
+  isPremium: boolean
+) => {
+  const data = await tables();
+  const queryExecutionRecord = await data.workspacexecutedqueries.get({
+    id: workspaceId,
+  });
+
+  if (queryExecutionRecord) {
+    await data.workspacexecutedqueries.put({
+      ...queryExecutionRecord,
+      quotaLimit: isPremium
+        ? MAX_CREDITS_EXEC_COUNT.pro
+        : MAX_CREDITS_EXEC_COUNT.free,
+    });
+  }
+};
 
 export const processSessionComplete = async (event: Stripe.Event) => {
   const {
@@ -57,6 +80,7 @@ export const processSessionComplete = async (event: Stripe.Event) => {
     ...workspace,
     isPremium: payment_status === 'paid',
   });
+  updateQueryExecutionTable(workspace.id, payment_status === 'paid');
 
   await track({
     event: 'Stripe subscription created',
@@ -100,6 +124,7 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
       ...workspace,
       isPremium: false,
     });
+    updateQueryExecutionTable(workspace.id, false);
 
     await track({
       event: 'Stripe subscription immediately cancelled',
@@ -160,6 +185,7 @@ export const processSubscriptionUpdated = async (event: Stripe.Event) => {
     ...workspace,
     isPremium,
   });
+  updateQueryExecutionTable(workspace.id, isPremium);
 
   return {
     statusCode: 200,
