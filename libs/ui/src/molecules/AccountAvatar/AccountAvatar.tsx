@@ -24,10 +24,7 @@ const chevronStyles = (hoverSelector: string) => ({
   },
 });
 
-type AccountAvatarProps = Pick<
-  ComponentProps<typeof Avatar>,
-  'name' | 'email'
-> & {
+type AccountAvatarProps = Pick<ComponentProps<typeof Avatar>, 'name'> & {
   readonly menuOpen: boolean;
   readonly variant?: boolean;
   readonly onClick?: () => void;

@@ -112,8 +112,10 @@ export const NotebookAvatars = ({
         if (!avatar.user) {
           return null;
         }
-        const email = avatar.user.email || avatar.user.name;
-        const cursorColor = backgroundColorFor[email] || null;
+        const {
+          user: { email, image, name },
+        } = avatar;
+        const cursorColor = backgroundColorFor[email || name] || null;
         return isWriter ? (
           <Tooltip
             key={index}
@@ -122,27 +124,23 @@ export const NotebookAvatars = ({
             trigger={
               <div css={avatarStyles}>
                 <Avatar
-                  name={avatar.user.name}
+                  name={name}
                   cursorColor={cursorColor}
-                  email={email}
                   onClick={avatar.onClick}
                   useSecondLetter={false}
+                  imageHash={image}
                 />
               </div>
             }
           >
             <div css={{ textAlign: 'center' }}>
-              <p css={tooltipNameStyles}>{avatar.user.name}</p>
+              <p css={tooltipNameStyles}>{name}</p>
               <p css={tooltipRoleStyles}>{genRole(avatar.permission)}</p>
             </div>
           </Tooltip>
         ) : (
           <div key={index} css={avatarStyles}>
-            <Avatar
-              name={avatar.user.name}
-              email={email}
-              useSecondLetter={false}
-            />
+            <Avatar name={name} useSecondLetter={false} imageHash={image} />
           </div>
         );
       })}

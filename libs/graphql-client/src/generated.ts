@@ -860,6 +860,7 @@ export type UserAccess = {
 export type UserInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   hideChecklist?: InputMaybe<Scalars['Boolean']['input']>;
+  image?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   onboarded?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -1277,7 +1278,7 @@ export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __type
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', id: string, name: string, username?: string | null, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null } | null };
+export type UserQuery = { __typename?: 'Query', selfFulfilledGoals: Array<string>, self?: { __typename?: 'User', id: string, name: string, username?: string | null, description?: string | null, hideChecklist?: boolean | null, onboarded?: boolean | null, image?: string | null } | null };
 
 export type WorkspaceSwitcherWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, myPermissionType?: PermissionType | null };
 
@@ -2044,6 +2045,7 @@ export const UserDocument = gql`
     description
     hideChecklist
     onboarded
+    image
   }
   selfFulfilledGoals
 }

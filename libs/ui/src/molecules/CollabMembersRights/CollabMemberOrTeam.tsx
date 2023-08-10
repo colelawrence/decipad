@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+import md5 from 'md5';
 import { FC } from 'react';
 import { CollabAccessDropdown, NotebookAvatar } from '..';
 import { Avatar, TextAndIconButton } from '../../atoms';
@@ -53,16 +54,12 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
       disabled = false,
     } = props;
     const { user, permission, isTeamMember } = info;
-    const { name, id, email } = user || {};
+    const { name, id, email, image } = user || {};
 
     return (
       <div css={collaboratorStyles} key={id}>
         <div css={avatarStyles}>
-          <Avatar
-            name={name || ''}
-            email={email || ''}
-            useSecondLetter={false}
-          />
+          <Avatar name={name || ''} imageHash={image} useSecondLetter={false} />
         </div>
         {email === name ? (
           <div css={userDetailsStyles}>
@@ -95,11 +92,17 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
     );
   }
   const { teamName, manageTeamURL, teamMembers, disabled } = props;
+  // just in case someone use's an email as workspace name
+  const teamNameHash = md5(teamName, { encoding: 'binary' });
 
   return (
     <div css={collaboratorStyles}>
       <div css={avatarStyles}>
-        <Avatar name={teamName} email={teamName} useSecondLetter={false} />
+        <Avatar
+          name={teamName}
+          imageHash={teamNameHash}
+          useSecondLetter={false}
+        />
       </div>
 
       <div css={userDetailsStyles}>

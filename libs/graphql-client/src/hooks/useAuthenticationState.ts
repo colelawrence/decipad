@@ -11,6 +11,7 @@ export const useAuthenticationState = () => {
   const userUsername = user?.self?.username || '';
   const userBio = user?.self?.description || '';
   const userId = 'me'; // TODO: fix user id
+  const userImage = user?.self?.image;
 
   const signOutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -29,9 +30,18 @@ export const useAuthenticationState = () => {
         username: userUsername,
         email: userEmail,
         bio: userBio,
+        image: userImage,
       },
       signOutCallback,
     }),
-    [userId, userName, userUsername, userEmail, userBio, signOutCallback]
+    [
+      userId,
+      userName,
+      userUsername,
+      userEmail,
+      userBio,
+      userImage,
+      signOutCallback,
+    ]
   );
 };

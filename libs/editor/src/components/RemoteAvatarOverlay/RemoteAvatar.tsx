@@ -65,7 +65,7 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
     (collabName && (
       <UIRemoteAvatar
         name={collabName}
-        email={user.email ?? undefined}
+        image={user.image ?? undefined}
         top={
           verticallyCenterOnBlock
             ? y - containerVerticalDisplacement + height / 2

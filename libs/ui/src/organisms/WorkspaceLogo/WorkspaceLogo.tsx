@@ -59,11 +59,7 @@ export const WorkspaceLogo = (props: WorkspaceLogoProps): ReturnType<FC> => {
       >
         <div css={nameStyles}>
           <span css={avatarStyles}>
-            <Avatar
-              useSecondLetter={false}
-              name={props.activeWorkspace.name}
-              email={props.activeWorkspace.name}
-            />
+            <Avatar useSecondLetter={false} name={props.activeWorkspace.name} />
           </span>
           <span css={nameTextStyles}>
             <strong>{props.activeWorkspace.name}</strong>

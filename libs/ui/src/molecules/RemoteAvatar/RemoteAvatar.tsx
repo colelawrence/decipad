@@ -18,7 +18,7 @@ const remoteAvatarStyles = css({
 
 interface RemoteAvatarProps {
   name: string;
-  email?: string;
+  image?: string;
   top: number;
   left: number;
   cursorColor: OpaqueColor;
@@ -26,7 +26,7 @@ interface RemoteAvatarProps {
 
 export const RemoteAvatar: FC<RemoteAvatarProps> = ({
   name,
-  email,
+  image,
   top,
   left,
   cursorColor,
@@ -48,7 +48,7 @@ export const RemoteAvatar: FC<RemoteAvatarProps> = ({
     >
       <Avatar
         name={name}
-        email={email}
+        imageHash={image}
         cursorColor={cursorColor}
         useSecondLetter={false}
       />

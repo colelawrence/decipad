@@ -99,6 +99,7 @@ export const resource = <TData extends ConcreteRecord>(
       if (!permissionType) {
         throw new ForbiddenError('Forbidden');
       }
+
       return {
         user,
         permissionType,

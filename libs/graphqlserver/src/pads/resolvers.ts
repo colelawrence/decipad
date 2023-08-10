@@ -46,6 +46,7 @@ const resolvers = {
     ) {
       // So we can set `initialState` to be the last published snapshot.
       context.snapshotName = params.snapshotName;
+
       return padResource.getById(_, params, context);
     },
 
@@ -156,8 +157,10 @@ const resolvers = {
         context
       );
       if (permissionType == null && parent.isPublic) {
+        context.readingModePermission = true;
         return 'READ';
       }
+      context.readingModePermission = permissionType === 'READ';
       return permissionType;
     },
 

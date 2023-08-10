@@ -11,7 +11,7 @@ export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
       <div css={avatarStyles}>
         <Avatar
           name={user.name}
-          email={user.email || ''}
+          imageHash={user.image}
           useSecondLetter={false}
         />
       </div>

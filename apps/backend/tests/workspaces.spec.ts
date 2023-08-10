@@ -48,7 +48,6 @@ test('workspaces', (ctx) => {
 
   it('creator can get workspace', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
-
     const workspace2 = (
       await client.query({
         query: ctx.gql`

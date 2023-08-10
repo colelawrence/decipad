@@ -48,6 +48,7 @@ const checkmarkStyles = css({
 export interface WorkspaceItemProps {
   readonly id: string;
   readonly name: string;
+  readonly imageHash?: string;
   readonly isActive?: boolean;
   readonly membersCount?: number;
   readonly onWorkspaceNavigate?: (id: string) => void;
@@ -56,6 +57,7 @@ export interface WorkspaceItemProps {
 export const WorkspaceItem = ({
   id,
   name,
+  imageHash,
   isActive,
   membersCount,
   onWorkspaceNavigate = noop,
@@ -69,7 +71,9 @@ export const WorkspaceItem = ({
     <NavigationItem
       href={workspacePath.$}
       onLinkClick={handleNavigate}
-      icon={<Avatar name={name} email={name} useSecondLetter={false} />}
+      icon={
+        <Avatar name={name} imageHash={imageHash} useSecondLetter={false} />
+      }
       iconStyles={avatarStyles}
     >
       <div css={gridStyles}>

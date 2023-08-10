@@ -263,6 +263,7 @@ export type TableRecordChanges<T extends TableRecord> = (
 export interface UserRecord extends TableRecordBase {
   name: string;
   last_login?: number;
+  // image hash
   image?: string | null;
   email?: string | null;
   secret?: string;
@@ -697,6 +698,7 @@ export type GraphqlContext = {
   connectionId?: ID;
   snapshotName?: string;
   event: APIGatewayProxyEventV2;
+  readingModePermission?: boolean;
 };
 
 export type GraphqlObjectType = TableRecord | ExternalDataSource; // add others here
