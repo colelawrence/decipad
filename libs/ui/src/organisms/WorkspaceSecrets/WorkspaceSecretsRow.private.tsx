@@ -35,6 +35,7 @@ export const WorkspaceSecretsRow: React.FC<RowProps> = ({
           roleDescription="delete secret"
           roundedSquare
           transparent
+          testId="delete-secret"
         >
           <Trash />
         </IconButton>
@@ -53,10 +54,16 @@ const secretNameStyles = css(p14Medium, {
 const columnPermissionStyles = css({
   alignSelf: 'center',
   justifySelf: 'end',
+  width: '24px',
+  height: '24px',
+
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 
   svg: {
-    height: '14px',
-    width: '14px',
+    height: '16px',
+    width: '16px',
   },
 });
 

@@ -69,7 +69,10 @@ export const DatabaseConnectionScreen: FC<DatabaseConnectionProps> = ({
         </p>
       </div>
       <div>
-        <Button type="secondary" onClick={() => setIsAddingNewConnection(true)}>
+        <Button
+          type="tertiaryAlt"
+          onClick={() => setIsAddingNewConnection(true)}
+        >
           Add a New Connection
         </Button>
       </div>
@@ -295,8 +298,11 @@ function NewDataConnection({
       <div css={wrapperStyles}>
         <input type="submit" hidden />
         <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
-          <label css={labelStyles}>Connection Name</label>
+          <label css={labelStyles} htmlFor="sql-conn-name">
+            Connection Name
+          </label>
           <input
+            id="sql-conn-name"
             css={inputStyles}
             placeholder="SQL #1"
             value={name}
@@ -328,10 +334,11 @@ function NewDataConnection({
 
         {connMethod === 'full-url' ? (
           <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
-            <label css={labelStyles}>
+            <label css={labelStyles} htmlFor="sql-url">
               SQL URL (Containing credentials, port and database host)
             </label>
             <input
+              id="sql-url"
               css={inputStyles}
               placeholder="mysql://user:password@host.com:3306/your_database"
               value={fullUrl}
@@ -342,7 +349,9 @@ function NewDataConnection({
         ) : (
           <>
             <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
-              <label css={labelStyles}>Manual Connection</label>
+              <label css={labelStyles} htmlFor="manual-conn-url">
+                Manual Connection
+              </label>
               <div css={{ display: 'flex' }}>
                 <MenuList
                   root
@@ -376,6 +385,7 @@ function NewDataConnection({
                   ))}
                 </MenuList>
                 <input
+                  id="manual-conn-url"
                   css={[inputStyles, { borderRadius: '0px 8px 8px 0px' }]}
                   placeholder="database.com"
                   value={host}
@@ -386,8 +396,11 @@ function NewDataConnection({
             </div>
 
             <div css={inputFieldWrapper}>
-              <label css={labelStyles}>Username</label>
+              <label css={labelStyles} htmlFor="manual-conn-username">
+                Username
+              </label>
               <input
+                id="manual-conn-username"
                 css={inputStyles}
                 placeholder="admin"
                 value={username}
@@ -397,8 +410,11 @@ function NewDataConnection({
             </div>
 
             <div css={inputFieldWrapper}>
-              <label css={labelStyles}>Password</label>
+              <label css={labelStyles} htmlFor="manual-conn-password">
+                Password
+              </label>
               <input
+                id="manual-conn-password"
                 type="password"
                 css={inputStyles}
                 placeholder="password"
@@ -409,8 +425,11 @@ function NewDataConnection({
             </div>
 
             <div css={inputFieldWrapper}>
-              <label css={labelStyles}>Database</label>
+              <label css={labelStyles} htmlFor="manual-conn-db">
+                Database
+              </label>
               <input
+                id="manual-conn-db"
                 css={inputStyles}
                 placeholder="mydb"
                 value={databaseName}
@@ -420,8 +439,11 @@ function NewDataConnection({
             </div>
 
             <div css={inputFieldWrapper}>
-              <label css={labelStyles}>Port</label>
+              <label css={labelStyles} htmlFor="manual-conn-port">
+                Port
+              </label>
               <input
+                id="manual-conn-port"
                 css={inputStyles}
                 placeholder="5432"
                 value={port}
@@ -434,7 +456,7 @@ function NewDataConnection({
 
         <div css={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <div>
-            <Button type="secondary" onClick={pingDatabase}>
+            <Button type="tertiaryAlt" onClick={pingDatabase}>
               Test Connection
             </Button>
           </div>
@@ -468,7 +490,7 @@ function NewDataConnection({
       </div>
       <div css={bottomButtons}>
         <div>
-          <Button submit type="primary">
+          <Button submit type="primary" testId="add-conn-button">
             Add
           </Button>
         </div>

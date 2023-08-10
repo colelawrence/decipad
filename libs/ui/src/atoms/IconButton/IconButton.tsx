@@ -13,6 +13,7 @@ type IconButtonProps = {
   readonly roundedSquare?: boolean;
   readonly roleDescription?: string;
   readonly transparent?: boolean;
+  readonly testId?: string;
 } & (
   | {
       readonly href: string;
@@ -30,6 +31,7 @@ export const IconButton = ({
   roleDescription = 'button',
   transparent = false,
 
+  testId,
   onClick,
   href,
 }: IconButtonProps): ReturnType<FC> => {
@@ -37,7 +39,9 @@ export const IconButton = ({
   return onClick ? (
     <button
       aria-roledescription={roleDescription}
+      data-testId={testId}
       css={[
+        buttonStyles,
         mainIconButtonStyles,
         roundedSquare && roundedSquareStyles,
         transparent && { backgroundColor: 'transparent' },
@@ -49,16 +53,21 @@ export const IconButton = ({
   ) : (
     <Anchor
       href={href}
-      css={css([
+      css={[
         mainIconButtonStyles,
         roundedSquare && roundedSquareStyles,
         transparent && { backgroundColor: 'transparent' },
-      ])}
+      ]}
     >
       <span css={iconStyles}>{children}</span>
     </Anchor>
   );
 };
+
+const buttonStyles = css({
+  width: '100%',
+  height: '100%',
+});
 
 const iconStyles = css({
   display: 'flex',
