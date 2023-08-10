@@ -1624,10 +1624,10 @@
     "@smithy/types" "^2.1.0"
     tslib "^2.5.0"
 
-"@aws-sdk/credential-providers@^3.388.0":
-  version "3.388.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/credential-providers/-/credential-providers-3.388.0.tgz#f4122ed7291de9107d1d2124bebec082767fcea7"
-  integrity sha512-5opHLYjj6rHrw2OaxE+IcLhC9JfiopPH7hRknzKjFnSrJ+HjzcHCML5xghwHLJOLGcoWU40CCSlwJVPLlJluMw==
+"@aws-sdk/credential-providers@^3.389.0":
+  version "3.389.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/credential-providers/-/credential-providers-3.389.0.tgz#6e40de6726822904ae73a3df24c43afa0d512179"
+  integrity sha512-BwGDVg4o/GO7Ql1OeiPThfrG4Y8AYNNYznxepOs3972gvTCOW8mmrmeCkpMi50g3LEDz2emny2kWqEjCaXly+w==
   dependencies:
     "@aws-sdk/client-cognito-identity" "3.388.0"
     "@aws-sdk/client-sso" "3.387.0"
@@ -15368,10 +15368,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1433.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1433.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1433.0.tgz#f0697ba1de836f99d5a4aa0772c931d86973b884"
-  integrity sha512-QLZLC8eAk4+l8x9kUbrWPjuyWchE3Ho18llm0Qx5aNcoOq/el4+NxzYeqKjwjGjNJuJ/AeX3J+BzazazrNv9BQ==
+aws-sdk@2.1434.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1434.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1434.0.tgz#64bc3f8e18bfa8057bd9611046a65b85888bd7a3"
+  integrity sha512-8Y4RsmmKe99mpk9nFDX9kdmXqpe089OiJcxwPzZ+rB/IErF96/yUQwY7Lboeh78r2bp59AMMMhsxIKgoOfwIzQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
