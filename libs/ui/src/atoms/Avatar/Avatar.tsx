@@ -156,11 +156,13 @@ export const Avatar = ({
         </div>
       </div>
       <div css={{ position: 'absolute' }}>
-        <Gravatar
-          md5={imageHash || undefined}
-          style={{ borderRadius: roundedSquare ? '8px' : '50%', zIndex: 2 }}
-          default={gravatarBackdrop as any} // bug in type definitions, robohash is allowed see https://en.gravatar.com/site/implement/images/#default-image
-        />
+        {imageHash && (
+          <Gravatar
+            md5={imageHash}
+            style={{ borderRadius: roundedSquare ? '8px' : '50%', zIndex: 2 }}
+            default={gravatarBackdrop as any} // bug in type definitions, robohash is allowed see https://en.gravatar.com/site/implement/images/#default-image
+          />
+        )}
       </div>
     </div>
   );
