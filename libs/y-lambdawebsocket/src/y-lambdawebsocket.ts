@@ -172,7 +172,7 @@ const broadcastMessage = async (
 const nonSeriousErrors = ['Gone', 'LimitExceeded'];
 
 const isSeriousError = (err: Error) =>
-  nonSeriousErrors.some(
+  !nonSeriousErrors.some(
     (errMessage) =>
       (err as ErrorWithCode)?.code?.includes(errMessage) ||
       (err as Error).message.includes(errMessage) ||
