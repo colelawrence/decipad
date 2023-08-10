@@ -35,6 +35,8 @@ import { setPadPublic } from './setPadPublic';
 import { movePad } from './movePad';
 import { padResource } from './padResource';
 
+const MAX_INITIAL_STATE_PAYLOAD_SIZE = 5 * 1000 * 1000; // 5MB
+
 const workspaces = resource('workspace');
 
 const resolvers = {
@@ -223,6 +225,9 @@ const resolvers = {
           ? 'Published 1'
           : context.snapshotName;
       const initialState = await getNotebookInitialState(pad.id, snapshotName);
+      if (initialState.length >= MAX_INITIAL_STATE_PAYLOAD_SIZE) {
+        return null;
+      }
       return Buffer.from(initialState).toString('base64');
     },
 
