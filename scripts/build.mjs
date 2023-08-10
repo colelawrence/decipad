@@ -87,7 +87,7 @@ async function esBuildOptions(env) {
       'libs/lambdas/src/queues/*/index.ts',
       'libs/lambdas/src/ws/*/index.ts',
     ]),
-    target: 'node16',
+    target: 'node18',
     platform: 'node',
     format: 'cjs',
     external: [

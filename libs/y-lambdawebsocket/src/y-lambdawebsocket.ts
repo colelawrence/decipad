@@ -11,6 +11,7 @@ import tables from '@decipad/tables';
 import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
 import { Subscription } from 'rxjs';
+import pSeries from 'p-series';
 import { MessageSender, sender } from './send';
 
 interface Options {
@@ -161,22 +162,22 @@ const broadcastMessage = async (
     })
   ).Items;
 
-  await Promise.all(
+  await pSeries(
     conns
       .filter((conn) => conn.id !== from)
-      .map((conn) => {
-        return trySend(conn.id, message);
-      })
+      .map((conn) => () => trySend(conn.id, message))
   );
 };
 
-const isSeriousError = (err: Error) => {
-  const isGone =
-    (err as ErrorWithCode)?.code?.includes('Gone') ||
-    (err as Error).message.includes('Gone') ||
-    err.name.includes('Gone');
-  return !isGone;
-};
+const nonSeriousErrors = ['Gone', 'LimitExceeded'];
+
+const isSeriousError = (err: Error) =>
+  nonSeriousErrors.some(
+    (errMessage) =>
+      (err as ErrorWithCode)?.code?.includes(errMessage) ||
+      (err as Error).message.includes(errMessage) ||
+      err.name.includes(errMessage)
+  );
 
 export const trySend = async (
   connId: string,
