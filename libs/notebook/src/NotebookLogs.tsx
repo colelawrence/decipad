@@ -19,7 +19,7 @@ const entrySize = (current: number, next: LogEntry): number =>
   current + (next.content?.length ?? 0);
 
 const DEBOUNCE_PUSH_TO_REMOTE_MS = 5_000;
-const MAX_PAYLOAD_SIZE = 200_000;
+const MAX_PAYLOAD_SIZE = 50_000;
 
 let entries: ResourceLogEntries[] = [];
 let pushing = false;
