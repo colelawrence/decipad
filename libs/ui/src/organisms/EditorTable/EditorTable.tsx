@@ -66,6 +66,7 @@ const tableWrapperDraggingStyles = css({
 });
 
 const tableWrapperDefaultStyles = css(
+  scrollbars.deciInsideNotebookOverflowXStyles,
   {
     width: cssVar('editorWidth'),
     minWidth: editorLayout.slimBlockWidth,
@@ -78,8 +79,7 @@ const tableWrapperDefaultStyles = css(
       transform: `translateX(-40px)`,
       minWidth: '0',
     },
-  },
-  scrollbars.deciInsideNotebookOverflowXStyles
+  }
 );
 
 export const tableWrapperStyles = css([
@@ -229,11 +229,11 @@ export const EditorTable: FC<EditorTableProps> = ({
 
           <div
             css={[
+              toggleTableStyles(!!isCollapsed),
               !isDragging
                 ? tableWrapperTransformStyles
                 : tableWrapperDraggingStyles,
               tableWrapperDefaultStyles,
-              toggleTableStyles(!!isCollapsed),
             ]}
           >
             {!isDragging && (
