@@ -45,7 +45,6 @@ import {
 import { Subject } from 'rxjs';
 import { CodeIntegration } from './CodeIntegration';
 import { SQLIntegration } from './SQLIntegration';
-import styled from '@emotion/styled';
 
 function getIntegrationComponent(
   id: string,
@@ -285,20 +284,14 @@ export const IntegrationBlock: PlateComponent = ({
           actionButtons={actionButtons}
           buttons={[
             {
-              children: (
-                <IconWrapper>
-                  <AnimatedIcon icon={<Refresh />} animated={animated} />
-                </IconWrapper>
-              ),
+              children: <AnimatedIcon icon={<Refresh />} animated={animated} />,
               onClick: handleClick,
               tooltip: tooltipContent,
               visible: !readOnly,
               disabled: maxQueryExecution,
             },
             {
-              children: (
-                <IconWrapper>{showData ? <Hide /> : <Show />}</IconWrapper>
-              ),
+              children: showData ? <Hide /> : <Show />,
               onClick: () => {
                 setShowData(!showData);
                 removeFocusFromAllBecauseSlate();
@@ -313,8 +306,3 @@ export const IntegrationBlock: PlateComponent = ({
     </IntegrationBlockContext.Provider>
   );
 };
-
-const IconWrapper = styled.div({
-  width: '16px',
-  height: '16px',
-});

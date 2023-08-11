@@ -23,7 +23,7 @@ type SegmentButtonsProps = {
   readonly hideDivider?: boolean;
   readonly padding?: 'default' | 'skinny';
   // If undefined, then you'll need to wrap the icons in some size;
-  readonly iconSize?: 'table';
+  readonly iconSize?: 'table' | 'integrations';
 };
 
 export const SegmentButtons: FC<SegmentButtonsProps> = ({
@@ -136,7 +136,7 @@ const FigureButton = styled.figure<{
   alignItems: 'center',
   justifyContent: 'center',
   cursor: 'pointer',
-  padding: props.padding === 'default' ? '6px' : '4px',
+  padding: props.padding === 'default' ? '5px' : '4px',
 
   transition: 'background 0.1s ease-in-out',
 
@@ -163,8 +163,18 @@ const FigureButton = styled.figure<{
 
   ...(props.iconSize && {
     div: {
-      width: props.iconSize === 'table' ? '13px' : '0px',
-      height: props.iconSize === 'table' ? '13px' : '0px',
+      width:
+        props.iconSize === 'table'
+          ? '13px'
+          : props.iconSize === 'integrations'
+          ? '16px'
+          : '0px',
+      height:
+        props.iconSize === 'table'
+          ? '13px'
+          : props.iconSize === 'integrations'
+          ? '16px'
+          : '0px',
     },
   }),
 }));

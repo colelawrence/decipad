@@ -9,7 +9,7 @@ import { Invisible, SegmentButtons, Spinner } from '../../atoms';
 import { Move, Transpose } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
 import { p14Regular, smallScreenQuery } from '../../primitives';
-import { editorLayout, scrollbars } from '../../styles';
+import { Height, editorLayout, scrollbars } from '../../styles';
 import {
   AvailableSwatchColor,
   TableStyleContext,
@@ -30,6 +30,7 @@ const dataViewControlsStyles = css({
 });
 
 const buttonRowStyles = css({
+  height: Height.ActionButtons,
   display: 'flex',
   flexDirection: 'row',
   gap: '4px',

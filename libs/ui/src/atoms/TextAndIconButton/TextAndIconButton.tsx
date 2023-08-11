@@ -144,6 +144,7 @@ const wrapperStyles = {
 const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
   css([
     {
+      height: '100%',
       borderRadius: '6px',
       border: `1px solid ${cssVar('borderDefault')}`,
       backgroundColor: cssVar('backgroundSubdued'),
@@ -172,7 +173,8 @@ const buttonTextStyles = (notSelectedLook: boolean) =>
     {
       color: cssVar('textDefault'),
       whiteSpace: 'nowrap',
-      padding: '0 4px',
+      // Top padding here to align text with icon.
+      padding: '1px 4px 0 4px',
     },
     notSelectedLook && {
       ':hover': {

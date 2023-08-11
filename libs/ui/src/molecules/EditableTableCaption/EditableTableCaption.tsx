@@ -12,7 +12,7 @@ import {
   placeholderOpacity,
   getThemeColor,
 } from '../../primitives';
-import { codeBlock } from '../../styles';
+import { codeBlock, Height } from '../../styles';
 import {
   hideOnPrint,
   slimBlockWidth,
@@ -31,6 +31,7 @@ const tableCaptionSlimStyles = css({
 });
 
 const tableCaptionInnerStyles = css({
+  height: Height.Bubble,
   alignItems: 'center',
   display: 'flex',
   justifyContent: 'space-between',
@@ -39,6 +40,7 @@ const tableCaptionInnerStyles = css({
 });
 
 const tableVarStyles = css(codeBlock.structuredVariableStyles, {
+  height: '100%',
   padding: '3px 8px',
   borderRadius: '6px',
   display: 'flex',
@@ -66,6 +68,7 @@ const tableIconSizeStyles = css({
 });
 
 const buttonRowStyles = css({
+  height: Height.ActionButtons,
   display: 'flex',
   flexDirection: 'row',
   gap: '6px',
@@ -75,6 +78,7 @@ const buttonRowStyles = css({
 const placeholderStyles = css(codeBlock.structuredVariableStyles, {
   cursor: 'text',
   display: 'flex',
+  paddingTop: '1px',
   '&::before': {
     ...display,
     ...p14Regular,
@@ -85,7 +89,11 @@ const placeholderStyles = css(codeBlock.structuredVariableStyles, {
   lineHeight: '24px',
 });
 
-const wrapperStyle = css({ display: 'flex', textAlign: 'center' });
+const wrapperStyle = css({
+  display: 'flex',
+  textAlign: 'center',
+  height: '100%',
+});
 
 const editableTableCaptionStyles = css(codeBlock.structuredVariableStyles);
 
@@ -198,7 +206,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             {caption}
           </div>
         </div>
-        <div css={css(buttonRowStyles, hideOnPrint)} contentEditable={false}>
+        <div css={[buttonRowStyles, hideOnPrint]} contentEditable={false}>
           {hideAddDataViewButton || readOnly ? null : (
             <TextAndIconButton
               text="Pivot view"

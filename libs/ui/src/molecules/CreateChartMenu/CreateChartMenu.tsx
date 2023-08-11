@@ -22,7 +22,7 @@ export const CreateChartMenu: FC<CreateChartMenuProps> = ({
     root
     dropdown
     trigger={
-      <button data-testid="create-chart-from-table-button" css={hideOnPrint}>
+      <button data-testid="create-chart-from-table-button" css={buttonStyles}>
         <TextAndIconButton text="Chart" iconPosition="left">
           <icons.Plot />
         </TextAndIconButton>
@@ -50,3 +50,7 @@ export const CreateChartMenu: FC<CreateChartMenuProps> = ({
 );
 
 const minWidthChartMenu = css({ minWidth: '160px' });
+
+const buttonStyles = css(hideOnPrint, {
+  height: '100%',
+});

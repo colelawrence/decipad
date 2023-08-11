@@ -21,12 +21,13 @@ import {
 } from 'react';
 import { Location } from 'slate';
 import { Formula, Number } from '../../icons';
-import { codeBlock } from '../../styles';
+import { Height, codeBlock } from '../../styles';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { getTypeIcon } from '../../utils';
 import { cssVar } from '../../primitives';
 
 const varStyles = css(codeBlock.structuredVariableStyles, {
+  height: Height.Bubble,
   padding: '4px 8px',
   borderRadius: '6px',
   display: 'flex',
@@ -229,7 +230,11 @@ export const CodeVariableDefinition = ({
       >
         {Icon && <Icon />}
       </span>
-      <span>{children}</span>
+      <span css={alignTextStyles}>{children}</span>
     </span>
   );
 };
+
+const alignTextStyles = css({
+  paddingTop: '1px',
+});

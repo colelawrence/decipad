@@ -107,6 +107,7 @@ export const IntegrationBlock: FC<IntegrationBlockProps> = ({
             variant="default"
             border
             padding="skinny"
+            iconSize="integrations"
           />
         </div>
       </div>
