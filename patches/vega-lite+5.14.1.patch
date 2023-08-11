@@ -1,3 +1,37 @@
+diff --git a/node_modules/vega-lite/build/src/util.js b/node_modules/vega-lite/build/src/util.js
+index 0c71b88..6d5594b 100644
+--- a/node_modules/vega-lite/build/src/util.js
++++ b/node_modules/vega-lite/build/src/util.js
+@@ -40,9 +40,9 @@ export function omit(obj, props) {
+ /**
+  * Monkey patch Set so that `stringify` produces a string representation of sets.
+  */
+-Set.prototype['toJSON'] = function () {
+-    return `Set(${[...this].map(x => stableStringify(x)).join(',')})`;
+-};
++// Set.prototype['toJSON'] = function () {
++//     return `Set(${[...this].map(x => stableStringify(x)).join(',')})`;
++// };
+ /**
+  * Converts any object to a string representation that can be consumed by humans.
+  */
+diff --git a/node_modules/vega-lite/build/vega-lite.js b/node_modules/vega-lite/build/vega-lite.js
+index 5fc9095..c48050a 100644
+--- a/node_modules/vega-lite/build/vega-lite.js
++++ b/node_modules/vega-lite/build/vega-lite.js
+@@ -588,9 +588,9 @@
+   /**
+    * Monkey patch Set so that `stringify` produces a string representation of sets.
+    */
+-  Set.prototype['toJSON'] = function () {
+-    return `Set(${[...this].map(x => stableStringify(x)).join(',')})`;
+-  };
++  // Set.prototype['toJSON'] = function () {
++  //   return `Set(${[...this].map(x => stableStringify(x)).join(',')})`;
++  // };
+ 
+   /**
+    * Converts any object to a string representation that can be consumed by humans.
 diff --git a/node_modules/vega-lite/src/util.ts b/node_modules/vega-lite/src/util.ts
 index 4968765..23bdaeb 100644
 --- a/node_modules/vega-lite/src/util.ts
