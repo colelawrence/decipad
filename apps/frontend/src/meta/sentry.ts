@@ -1,6 +1,10 @@
 import { isSupportedBrowser } from '@decipad/support';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import * as Sentry from '@sentry/react';
+import {
+  ExtraErrorData,
+  HttpClient as HttpClientIntegration,
+} from '@sentry/integrations';
 import { useEffect } from 'react';
 import {
   createRoutesFromChildren,
@@ -66,6 +70,8 @@ export const initSentry = () => {
             matchRoutes
           ),
         }),
+        new ExtraErrorData(),
+        new HttpClientIntegration(),
       ],
       tracesSampleRate: 0.1,
     });
