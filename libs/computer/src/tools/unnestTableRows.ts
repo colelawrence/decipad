@@ -44,8 +44,7 @@ export async function* unnestTableRows(
   ): AsyncIterable<ResultAndLabelInfo> {
     const deepValue = await materializeOneResult(_deepValue);
     if (Array.isArray(deepValue) !== dims.length > 0) {
-      console.error({ deepValue, dims });
-      throw new Error('panic: DimensionExplanation does not match reality');
+      return;
     }
 
     if (dims.length === 0) {
