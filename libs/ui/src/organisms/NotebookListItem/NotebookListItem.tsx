@@ -218,10 +218,7 @@ export const NotebookListItem = ({
         <Anchor href={href} css={anchorStyles}>
           <NotebookIcon color={iconColor} icon={icon} />
 
-          <strong
-            data-testid="list-notebook-title"
-            css={[nameStyles, name || noNameNameStyles]}
-          >
+          <strong data-testid="list-notebook-title" css={nameStyles}>
             {name || 'My notebook'}
           </strong>
           <div css={notebookListTagsStyles}>
@@ -421,12 +418,16 @@ const nameStyles = css(p14Medium, {
   '@supports not (overflow-x: clip)': {
     overflowX: 'hidden',
   },
-  textOverflow: 'ellipsis',
 
   color: cssVar('textTitle'),
-});
 
-const noNameNameStyles = css({});
+  maxWidth: '100%',
+
+  overflow: 'hidden',
+  whiteSpace: 'normal',
+  wordWrap: 'break-word',
+  textOverflow: 'ellipsis',
+});
 
 const notebookListInlineTags = css({
   display: 'flex',

@@ -15,7 +15,6 @@ export const verticalPadding = '26px';
 export const gridStyles: CSSObject = {
   width: '100%',
   display: 'grid',
-  gridTemplateColumns:
-    '[icon] 42px [title] min-content [tags] 1fr [actions] 28px',
+  gridTemplateColumns: '[icon] 42px [title] 5fr [tags] 1fr [actions] 28px',
   alignItems: 'center',
 };
