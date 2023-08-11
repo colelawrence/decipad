@@ -4,4 +4,4 @@ import { SerializedType } from '../type';
 export type Validate = <T extends Interpreter.OneResult | null | undefined>(
   type: SerializedType,
   value: T
-) => T;
+) => Interpreter.OneResult | null | undefined;

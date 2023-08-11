@@ -17,7 +17,7 @@ const validate: Validate = <
 >(
   type: SerializedType,
   value: T
-): T => {
+): Interpreter.OneResult | null | undefined => {
   const getTrue = (cond: boolean, failureMessage: string) => {
     if (cond) return true;
     reportError(type, value);
@@ -34,12 +34,8 @@ const validate: Validate = <
     throw new Error(`panic: wanted ${kinds.join('/')} and got ${type.kind}`);
   };
 
-  if (value == null) {
-    return Unknown as T;
-  }
-
-  if (value === Unknown) {
-    return value;
+  if (value == null || typeof value === 'symbol') {
+    return Unknown;
   }
 
   switch (type.kind) {
