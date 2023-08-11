@@ -92,7 +92,7 @@ If `Sales < $0` an error will be generated, highlighting any discrepancy on your
 
 :::
 
-The `match{}` statement tests a group of conditions and returns a value when a true statement is found. It simplifies decision-making based on specific conditions. This statement only works on Advanced Formulas. This statement only works on Advanced Formulas.
+The `match{}` statement tests a group of conditions and returns a value when a true statement is found. It simplifies decision-making based on specific conditions.
 
 :::note Examples
 
