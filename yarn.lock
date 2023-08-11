@@ -3949,10 +3949,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@decipad_org/safejs@^0.6.3":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@decipad_org/safejs/-/safejs-0.6.3.tgz#e621fd7b1846bc67bf439f7fae94e1993b383a88"
-  integrity sha512-gdHKWmlXXNOA8U+uXKQ6tKMuakHpYKry3B9rSNQE/DjbbnfO4vTLtUOUX58n6nCocWaScaeCS6nTrYtNDXPzJw==
+"@decipad_org/safejs@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@decipad_org/safejs/-/safejs-0.7.1.tgz#7b923842fb11fa7060754b2e6fd68cb78d813ae8"
+  integrity sha512-/Hynf3FB2nP+qJOksvl42Nl6qHt+QXhE0MlZP4uQXzznXuewGHidbn2GZ1Mzejb3Cikq+Ox2oeJtmFEGp4Po+g==
 
 "@dependents/detective-less@^3.0.1":
   version "3.0.2"
