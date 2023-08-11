@@ -125,12 +125,13 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
 }) => {
   const scrollToRef = useRef<HTMLDivElement>(null);
   const articleRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleHashChange = () => {
       const { hash } = window.location;
       if (hash && scrollToRef.current) {
-        const targetElement = document.querySelector(hash);
+        const elementId = hash.replace('#', '');
+        // React element IDs do not follow the standard CSS selector naming rules, so we can't simply use querySelector(#<something>)
+        const targetElement = document.querySelector(`[id="${elementId}"]`);
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
           window.history.pushState(null, '', ' ');
