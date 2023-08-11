@@ -78,7 +78,7 @@
     ]
   },
   "dependencies": {
-    "@apollo/client": "3.7.0",
+    "@apollo/client": "3.8.1",
     "@apollo/server": "4.9.0",
     "@architect/architect": "10.13.3",
     "@architect/asap": "6.0.2",
