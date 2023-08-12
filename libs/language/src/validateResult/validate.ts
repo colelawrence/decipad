@@ -40,7 +40,10 @@ const validate: Validate = <
 
   switch (type.kind) {
     case 'number': {
-      getTrue(value instanceof DeciNumber, 'panic: expected fraction');
+      getTrue(
+        value instanceof DeciNumber,
+        `panic: expected fraction and got ${typeof value}`
+      );
       break;
     }
     case 'boolean': {

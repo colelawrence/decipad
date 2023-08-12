@@ -100,7 +100,7 @@ export const MagicNumber = ({
     >
       <span
         title={
-          result && result?.value !== Result.Unknown
+          result && typeof result?.value !== 'symbol'
             ? result.value?.toString()
             : 'Loading'
         }
