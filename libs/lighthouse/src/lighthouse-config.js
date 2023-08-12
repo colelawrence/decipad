@@ -3,4 +3,7 @@ module.exports = {
   settings: {
     emulatedFormFactor: 'desktop',
   },
+  throttling: {
+    cpuSlowdownMultiplier: 2.1,
+  },
 };
