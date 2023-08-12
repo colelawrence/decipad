@@ -1487,3 +1487,275 @@ describe('column assignment integration', () => {
     `);
   });
 });
+
+describe('previous', () => {
+  it('previous can be used with self', async () => {
+    expect(
+      await runCode(`
+      T1 = {}
+      T1.A = [ 4, 5, 6 ]
+      T1.B = previous(1) * 10
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": 1,
+          "cellType": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "T1",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "T1",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 10n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 100n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1000n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('previous can be used with other column', async () => {
+    expect(
+      await runCode(`
+      T1 = {}
+      T1.A = [ 4, 5, 6 ]
+      T1.B = previous(1, A) * 10
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": 1,
+          "cellType": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "T1",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "T1",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 10n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 40n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 50n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('previous can be an expression', async () => {
+    expect(
+      await runCode(`
+      T1 = {}
+      T1.A = [ 4, 5, 6 ]
+      T1.B = previous(1, A * 10)
+      `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": 1,
+          "cellType": Type {
+            "anythingness": false,
+            "atParentIndex": null,
+            "cellType": null,
+            "columnNames": null,
+            "columnTypes": null,
+            "date": null,
+            "delegatesIndexTo": undefined,
+            "errorCause": null,
+            "functionArgCount": undefined,
+            "functionName": undefined,
+            "functionness": false,
+            "indexName": null,
+            "indexedBy": "T1",
+            "node": null,
+            "nothingness": false,
+            "numberError": null,
+            "numberFormat": null,
+            "pending": false,
+            "rangeOf": null,
+            "rowCellNames": null,
+            "rowCellTypes": null,
+            "rowCount": undefined,
+            "rowIndexName": null,
+            "symbol": null,
+            "type": "number",
+            "unit": null,
+            Symbol(immer-draftable): true,
+          },
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": "T1",
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 1n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 40n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 50n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+});

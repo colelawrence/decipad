@@ -1,7 +1,11 @@
 // Accumulate values into a list by consuming an async iterable.
 
+import { getDefined } from '@decipad/utils';
+import type { Expression, Statement } from '../parser/ast-types';
 import { ColumnLikeValue, Value } from '../value';
 import { Realm } from './Realm';
+
+type Evaluate = (realm: Realm, block: Statement) => Promise<Value>;
 
 export const CURRENT_COLUMN_SYMBOL = Symbol('current column');
 
@@ -38,4 +42,20 @@ export const mapWithPrevious = async (
   realm.previousRow = savedPreviousRow;
 
   return ret;
+};
+
+export const usingPrevious = async (
+  realm: Realm,
+  expression: Expression,
+  evaluate: Evaluate
+): Promise<Value> => {
+  const previousRow = getDefined(realm.previousRow, 'no previous row');
+  return realm.stack.withPush(async () => {
+    for (const [columnName, columnValue] of previousRow) {
+      if (typeof columnName === 'string') {
+        realm.stack.set(columnName, columnValue);
+      }
+    }
+    return evaluate(realm, expression);
+  });
 };

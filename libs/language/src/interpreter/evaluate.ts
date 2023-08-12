@@ -33,8 +33,9 @@ import { evaluateTiered } from '../tiered/evaluateTiered';
 import { RuntimeError } from '.';
 import { resultToValue } from '../result';
 import { getDependencies } from '../dependencies/getDependencies';
-import { CURRENT_COLUMN_SYMBOL } from './previous';
+import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
 import { sortValue } from './sortValue';
+import { Expression } from '../parser/ast-types';
 
 // Gets a single value from an expanded AST.
 
@@ -106,29 +107,26 @@ async function internalEvaluate(
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;
-      const args = await pSeries(
-        funcArgs.map((arg) => async () => evaluate(realm, arg))
-      );
 
       if (funcName === 'previous') {
+        const defaultValue = await evaluate(realm, funcArgs[0]);
         if (realm.previousRow === null) {
-          return args[0];
+          return defaultValue;
         }
 
-        if (funcArgs[1] && funcArgs[1].type !== 'ref') {
-          throw new Error(
-            "Second argument to 'previous' must be a column name."
+        if (funcArgs.length < 2) {
+          return getDefined(
+            realm.previousRow.get(CURRENT_COLUMN_SYMBOL),
+            'no previous value'
           );
         }
+        const previousExpression: Expression = funcArgs[1];
 
-        const columnName = funcArgs[1]?.args[0] || CURRENT_COLUMN_SYMBOL;
-        const previousValue = realm.previousRow.get(columnName);
-        if (previousValue) {
-          return previousValue;
-        } else {
-          throw new Error('Column name does not exist.');
-        }
+        return usingPrevious(realm, previousExpression, evaluate);
       } else if (realm.functions.has(funcName)) {
+        const args = await pSeries(
+          funcArgs.map((arg) => async () => evaluate(realm, arg))
+        );
         const customFunc = getDefined(realm.functions.get(funcName));
 
         return realm.withPushCall(async () => {
@@ -152,6 +150,9 @@ async function internalEvaluate(
           throw new Error('function is empty');
         });
       } else {
+        const args = await pSeries(
+          funcArgs.map((arg) => async () => evaluate(realm, arg))
+        );
         const argTypes = funcArgs.map((arg) =>
           getDefined(
             arg.inferredType,
