@@ -1,4 +1,3 @@
-import { isSupportedBrowser } from '@decipad/support';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import * as Sentry from '@sentry/react';
 import {
@@ -38,9 +37,6 @@ export const initSentry = () => {
     Sentry.addTracingExtensions();
     Sentry.init({
       beforeSend: (event: Sentry.Event) => {
-        if (!isSupportedBrowser()) {
-          return null;
-        }
         event.exception?.values?.forEach((error) => {
           if (!error.mechanism?.handled) {
             return;
