@@ -92,9 +92,12 @@ const internalComputeStatement = async (
     }
   }
 
-  const data = await value?.getData();
+  let data = await value?.getData();
   if (data) {
-    validateResult(valueType, data);
+    const newData = validateResult(valueType, data);
+    if (newData != null) {
+      data = newData;
+    }
   }
 
   const variableName =
