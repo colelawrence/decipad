@@ -154,6 +154,6 @@ export function validateResult(
     return validate(type, value);
   } catch (e) {
     reportError(type, value, e as Error);
-    throw e;
   }
+  return undefined;
 }
