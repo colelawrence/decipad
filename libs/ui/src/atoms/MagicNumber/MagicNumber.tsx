@@ -100,8 +100,10 @@ export const MagicNumber = ({
     >
       <span
         title={
-          result && typeof result?.value !== 'symbol'
-            ? result.value?.toString()
+          result?.value != null
+            ? typeof result.value !== 'symbol' && !Array.isArray(result.value)
+              ? result.value?.toString()
+              : 'result'
             : 'Loading'
         }
         contentEditable={false}
