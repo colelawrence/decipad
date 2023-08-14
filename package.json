@@ -204,7 +204,7 @@
     "get-port": "5.1.1",
     "get-stream": "^7.0.1",
     "globby": "11.1.0",
-    "graphql": "16.7.0",
+    "graphql": "16.8.0",
     "graphql-scalars": "1.22.1",
     "graphql-ws": "5.14.0",
     "handlebars": "^4.7.7",

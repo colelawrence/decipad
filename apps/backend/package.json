@@ -14,7 +14,7 @@
     "aws-sdk": "2.1436.0",
     "dotenv": "16.3.0",
     "form-data": "4.0.0",
-    "graphql": "16.7.0",
+    "graphql": "16.8.0",
     "graphql-ws": "5.14.0",
     "lodash.chunk": "4.2.0",
     "lodash.merge": "4.6.2",
