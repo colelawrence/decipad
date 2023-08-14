@@ -214,7 +214,7 @@
     "is-promise": "^4.0.0",
     "is-stream": "^3.0.0",
     "isomorphic-fetch": "3.0.0",
-    "jq.node": "2.4.0",
+    "jq.node": "3.0.0",
     "json-canonicalize": "^1.0.4",
     "json-stringify-safe": "^5.0.1",
     "jsonpath": "^1.1.1",
