@@ -10,7 +10,7 @@ export interface ParseSeriesStartResult {
   value?: Result.OneResult;
 }
 
-export const parseSeriesStart = (
+const internalParseSeriesStart = (
   type: SeriesType,
   content: string
 ): ParseSeriesStartResult => {
@@ -48,5 +48,19 @@ export const parseSeriesStart = (
     }
     default:
       throw new Error(`unknown series type ${type}`);
+  }
+};
+
+export const parseSeriesStart = (
+  type: SeriesType,
+  content: string
+): ParseSeriesStartResult => {
+  try {
+    return internalParseSeriesStart(type, content);
+  } catch (err) {
+    return {
+      type,
+      error: (err as Error).message,
+    };
   }
 };

@@ -70,7 +70,7 @@ export const numberIterator = (initialValue: string): Iterable<string> => {
   };
 };
 
-export const seriesIterator = (
+const internalSeriesIterator = (
   type: SeriesType,
   granularity: Time.Specificity | undefined,
   initialValue: string
@@ -83,5 +83,17 @@ export const seriesIterator = (
       return dateIterator(granularity, initialValue);
     case 'number':
       return numberIterator(initialValue);
+  }
+};
+
+export const seriesIterator = (
+  type: SeriesType,
+  granularity: Time.Specificity | undefined,
+  initialValue: string
+): Iterable<string> => {
+  try {
+    return internalSeriesIterator(type, granularity, initialValue);
+  } catch (err) {
+    return [];
   }
 };
