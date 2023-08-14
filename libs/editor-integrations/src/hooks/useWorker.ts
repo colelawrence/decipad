@@ -1,6 +1,6 @@
 import { useTEditorRef } from '@decipad/editor-types';
 import { BackendUrl } from '@decipad/utils';
-import { SafeJs } from '@decipad_org/safejs';
+import { SafeJs } from '@decipad/safejs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 /**

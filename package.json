@@ -95,7 +95,7 @@
     "@chakra-ui/css-reset": "2.2.0",
     "@codemirror/lang-javascript": "^6.1.8",
     "@codemirror/lang-sql": "^6.5.2",
-    "@decipad_org/safejs": "^0.7.1",
+    "@decipad/safejs": "^1.0.2",
     "@docusaurus/core": "2.4.1",
     "@docusaurus/plugin-client-redirects": "^2.4.1",
     "@docusaurus/preset-classic": "2.4.1",

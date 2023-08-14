@@ -6,7 +6,7 @@ import {
   useComputer,
   useConnectionStore,
 } from '@decipad/react-contexts';
-import type { ResultMessageType } from '@decipad_org/safejs';
+import type { ResultMessageType } from '@decipad/safejs';
 import { mapResultType } from '@decipad/computer';
 import { useCallback, useEffect } from 'react';
 import { useIntegrationContext } from '.';

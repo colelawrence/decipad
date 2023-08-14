@@ -9,7 +9,7 @@ import {
   useConnectionStore,
   useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
-import type { ErrorMessageType, WorkerMessageType } from '@decipad_org/safejs';
+import type { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import {
   Button,

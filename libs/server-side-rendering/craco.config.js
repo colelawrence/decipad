@@ -65,7 +65,7 @@ const configureWebpack = (_config) => {
     ...config.resolve.alias,
     'react-datepicker/dist/react-datepicker.css': false,
     '@excalidraw/excalidraw': false,
-    '@decipad_org/safejs': false,
+    '@decipad/safejs': false,
   };
 
   config.plugins = config.plugins.filter(shouldIncludePlugin);
