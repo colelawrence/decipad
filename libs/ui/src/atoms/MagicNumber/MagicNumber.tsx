@@ -77,6 +77,15 @@ const IntrospectMagicNumber: FC<ResultResultProps> = ({
   );
 };
 
+const resultToSmallString = (result?: Result.OneResult | null): string => {
+  return result != null
+    ? typeof result !== 'symbol' && !Array.isArray(result)
+      ? result.toString()
+      : (Array.isArray(result) && result.map(resultToSmallString).join(',')) ||
+        'result'
+    : 'Loading';
+};
+
 export const MagicNumber = ({
   tempId,
   result,
@@ -98,16 +107,7 @@ export const MagicNumber = ({
       id={tempId}
       data-testid="magic-number"
     >
-      <span
-        title={
-          result?.value != null
-            ? typeof result.value !== 'symbol' && !Array.isArray(result.value)
-              ? result.value?.toString()
-              : 'result'
-            : 'Loading'
-        }
-        contentEditable={false}
-      >
+      <span title={resultToSmallString(result?.value)} contentEditable={false}>
         <IntrospectMagicNumber
           isReference={isReference}
           expression={expression}
@@ -119,7 +119,7 @@ export const MagicNumber = ({
                 highlightStyles(isReference, readOnly),
                 { color: cssVar('themeTextSubdued') },
               ]}
-              data-testid={`code-result:${String(result.value)}`}
+              data-testid={`code-result:${resultToSmallString(result?.value)}`}
             >
               <CodeResult
                 tooltip={false}
