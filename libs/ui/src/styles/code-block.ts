@@ -1,5 +1,6 @@
 import { css, CSSObject } from '@emotion/react';
 import { code, cssVar, p14Regular } from '../primitives';
+import { Height } from './spacings';
 
 export const lineHeight = '36px';
 
@@ -24,6 +25,7 @@ export const varStyles = css(variableStyles, {
 export const structuredVariableStyles: CSSObject = {
   ...p14Regular,
   lineHeight: '1.6',
+  minHeight: Height.Bubble,
 };
 
 export const pAdvCalcStyles = css(structuredVariableStyles, {

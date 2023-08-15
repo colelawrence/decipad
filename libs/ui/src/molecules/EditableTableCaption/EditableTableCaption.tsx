@@ -12,7 +12,7 @@ import {
   placeholderOpacity,
   getThemeColor,
 } from '../../primitives';
-import { codeBlock, Height } from '../../styles';
+import { Height, codeBlock } from '../../styles';
 import {
   hideOnPrint,
   slimBlockWidth,
@@ -31,7 +31,6 @@ const tableCaptionSlimStyles = css({
 });
 
 const tableCaptionInnerStyles = css({
-  height: Height.Bubble,
   alignItems: 'center',
   display: 'flex',
   justifyContent: 'space-between',
@@ -41,7 +40,7 @@ const tableCaptionInnerStyles = css({
 
 const tableVarStyles = css(codeBlock.structuredVariableStyles, {
   height: '100%',
-  padding: '3px 8px',
+  padding: '0px 8px',
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -62,6 +61,7 @@ const tableTitleWrapperStyles = css({
 });
 
 const tableIconSizeStyles = css({
+  flexShrink: 0,
   display: 'grid',
   width: 16,
   height: 16,
@@ -75,10 +75,9 @@ const buttonRowStyles = css({
   alignItems: 'center',
 });
 
-const placeholderStyles = css(codeBlock.structuredVariableStyles, {
+const placeholderStyles = css({
   cursor: 'text',
   display: 'flex',
-  paddingTop: '1px',
   '&::before': {
     ...display,
     ...p14Regular,
@@ -94,8 +93,6 @@ const wrapperStyle = css({
   textAlign: 'center',
   height: '100%',
 });
-
-const editableTableCaptionStyles = css(codeBlock.structuredVariableStyles);
 
 const toggleFormulaStyles = (
   hideFormulas: boolean,
@@ -192,7 +189,6 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             aria-roledescription="table name"
             css={[
               placeholderStyles,
-              editableTableCaptionStyles,
               {
                 color: color
                   ? getThemeColor(color).Text.Default
