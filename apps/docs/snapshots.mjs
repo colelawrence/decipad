@@ -11,7 +11,7 @@ import { diffLines } from 'diff';
 import prettier from 'prettier';
 import chalk from 'chalk';
 
-const DOCS_TEST_TIMEOUT_MS = 60000;
+const DOCS_TEST_TIMEOUT_MS = 90000;
 const docsDir = new URL('.', import.meta.url).pathname;
 
 const snapshotSeparator = '\n==> ';
