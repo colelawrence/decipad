@@ -74,7 +74,7 @@ export const TableResult: FC<TableResultProps> = ({
   const allowsForLookup =
     type.columnTypes && type.columnTypes[0]?.kind === 'string';
 
-  const tableLength = value?.at(0)?.length ?? 0;
+  const tableLength = Array.isArray(value) ? value?.at(0)?.length : 0;
 
   const isNested = useMemo(() => isTabularType(parentType), [parentType]);
 
