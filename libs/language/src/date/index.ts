@@ -25,7 +25,9 @@ export const toLuxonUTC = (date: bigint | undefined | number | DateTime) => {
     return date.toUTC();
   }
   if (typeof date !== 'number') {
-    throw new Error('panic: toLuxon(date) passed an invalid date');
+    throw new Error(
+      `panic: toLuxon(date) passed an invalid date: ${typeof date}`
+    );
   }
   return DateTime.fromMillis(date).toUTC();
 };
