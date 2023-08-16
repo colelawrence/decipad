@@ -9,7 +9,14 @@ export const isValidMessage = (m: Uint8Array | string): boolean => {
   try {
     // if this is a JSON message with an error prop it means there was a server-side problem
     // let's ignore it
-    const json = JSON.parse(s);
+    let json = JSON.parse(s);
+    if (typeof json === 'string') {
+      try {
+        json = JSON.parse(json);
+      } catch (_err) {
+        // do nothing
+      }
+    }
     return !('message' in json);
   } catch (err) {
     // not JSON, so we're good
