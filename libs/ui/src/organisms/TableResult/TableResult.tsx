@@ -67,7 +67,7 @@ export const TableResult: FC<TableResultProps> = ({
   onChangeColumnType,
   element,
 }) => {
-  const value = useMaterializedResult(_value) as
+  let value = useMaterializedResult(_value) as
     | undefined
     | CodeResultProps<'materialized-table'>['value'];
 
@@ -83,8 +83,7 @@ export const TableResult: FC<TableResultProps> = ({
     (!Array.isArray(value) ||
       !(value as Array<unknown>).every((col: unknown) => Array.isArray(col)))
   ) {
-    console.error(value);
-    throw new Error('invalid table value');
+    value = undefined;
   }
 
   const { page, offset, presentRowCount, valuesForPage, setPage } =
@@ -176,7 +175,7 @@ export const TableResult: FC<TableResultProps> = ({
                       tableType={type}
                       columnName={type.columnNames[colIndex]}
                       columnType={type.columnTypes[colIndex]}
-                      value={value[0][rowIndex] as string}
+                      value={(value?.[0][rowIndex] as string | undefined) ?? ''}
                       element={element}
                       tooltip={tooltip}
                     />
