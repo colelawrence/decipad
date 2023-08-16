@@ -12,6 +12,7 @@ import { fnQueue } from '@decipad/fnqueue';
 import { noop } from '@decipad/utils';
 import { Subscription } from 'rxjs';
 import pSeries from 'p-series';
+import { captureException } from '@decipad/backend-trace';
 import { MessageSender, sender } from './send';
 
 interface Options {
@@ -187,7 +188,7 @@ export const trySend = async (
     await ws.send({ id: connId, payload });
   } catch (err) {
     if (err instanceof Error && isSeriousError(err)) {
-      throw err;
+      await captureException(err);
     }
   }
 };

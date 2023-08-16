@@ -9,6 +9,7 @@
     { "path": "../fnqueue" },
     { "path": "../services" },
     { "path": "../tables" },
-    { "path": "../message-packer" }
+    { "path": "../message-packer" },
+    { "path": "../backend-trace" }
   ]
 }
