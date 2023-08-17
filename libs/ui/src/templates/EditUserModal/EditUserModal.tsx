@@ -16,6 +16,7 @@ import {
   serializeAccountSettingsForm,
 } from '../../molecules/AccountSettingsForm/AccountSettingsForm';
 import { Link } from '../../atoms/Link/Link';
+import { useSession } from 'next-auth/react';
 
 export const useEditUserModalStore = create<{
   isOpened: boolean;
@@ -28,6 +29,7 @@ export const useEditUserModalStore = create<{
 }));
 
 export const EditUserModal: React.FC = () => {
+  const { update } = useSession();
   const isOpened = useEditUserModalStore((state) => state.isOpened);
   const closeModal = useEditUserModalStore((state) => state.close);
 
@@ -53,10 +55,11 @@ export const EditUserModal: React.FC = () => {
       }
 
       if (isSuccessful) {
+        await update();
         closeModal();
       }
     },
-    [name, username, setUsername, setName, closeModal]
+    [name, username, setUsername, setName, closeModal, update]
   );
 
   if (!isOpened) {

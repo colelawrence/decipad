@@ -270,6 +270,9 @@ export interface UserRecord extends TableRecordBase {
   first_login?: number;
   hideChecklist?: boolean;
   completeChecklist?: boolean;
+  onboarded?: boolean;
+  description?: string;
+  id: string;
 }
 
 export interface UserKeyRecord extends TableRecordBase {

@@ -8,7 +8,6 @@ import {
   useImportNotebookMutation,
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
-  useUserQuery,
 } from '@decipad/graphql-client';
 import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
@@ -71,8 +70,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const isSharedPage = maybeWorkspaceFolder === 'shared';
 
   const { data: session } = useSession();
-  const { data: user } = useUserQuery()[0];
-
   const toast = useToast();
 
   const [result] = useGetWorkspacesQuery({
@@ -194,7 +191,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
       <DashboardSidebar
         showFeedback={showFeedback}
         Heading="h1"
-        name={user?.self?.name || 'Me'}
+        name={session?.user?.name || 'Me'}
         email={session.user?.email || 'me@example.com'}
         onLogout={signoutCallback}
         activeWorkspace={currentWorkspace}

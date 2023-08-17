@@ -34,6 +34,30 @@ test.describe('Workspace flows', () => {
     );
   });
 
+  test('Update name in the account settings modal', async ({ page }) => {
+    await page.getByTestId('account-settings-button').click();
+    await page.getByTestId('user-name').fill('Joe Doe');
+    await page.getByTestId('btn-create-modal').click();
+
+    await expect(page.locator('[title="Joe Doe"]')).toHaveText('Joe Doe');
+
+    await page.getByTestId('account-settings-button').click();
+
+    await expect(page.getByTestId('user-name')).toHaveValue('Joe Doe');
+  });
+
+  test('Update username in the account settings modal', async ({ page }) => {
+    const currentDate = Date.now();
+    await page.getByTestId('account-settings-button').click();
+    await page.getByTestId('user-username').fill(`joedoe${currentDate}`);
+    await page.getByTestId('btn-create-modal').click();
+    await page.getByTestId('account-settings-button').click();
+
+    await expect(page.getByTestId('user-username')).toHaveValue(
+      `@joedoe${currentDate}`
+    );
+  });
+
   test('user can logout', async ({ page }) => {
     await page.getByTestId('account-settings-button').click();
     await page.getByTestId('logout-link').click();

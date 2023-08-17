@@ -131,9 +131,15 @@ export default {
       const data = await tables();
 
       const existingKey = await data.userkeys.get({ id: key });
+
       if (existingKey) {
-        return existingKey.user_id === user.id;
+        if (existingKey.user_id !== user.id) {
+          throw new UserInputError(`Username is already in use`);
+        } else {
+          return true;
+        }
       }
+
       await data.userkeys.put({
         id: key,
         user_id: user.id,

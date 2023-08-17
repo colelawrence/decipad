@@ -25,7 +25,7 @@ post /api/auth/signin/:provider
 get /api/auth/callback/:provider
 get /api/auth/token
 post /api/auth/signout
-get /api/auth/*
+any /api/auth/*
 
 get /api/invites/:inviteid/accept
 get /api/userkeyvalidations/:userkeyvalidationid/validate

@@ -1,17 +1,22 @@
 import { useEffect } from 'react';
-import { useUpdateUserMutation, useUserQuery } from '@decipad/graphql-client';
+import { DefaultSession } from 'next-auth';
+import { useUpdateUserMutation } from '@decipad/graphql-client';
+import { useSession } from 'next-auth/react';
+
+interface CustomerUser extends DefaultSession {
+  onboarded?: boolean | null;
+}
 
 export const useFinishOnboarding = () => {
-  const [userResult] = useUserQuery();
+  const session = useSession();
   const [, updateUser] = useUpdateUserMutation();
 
-  const isLoading = userResult.fetching;
-  const needsOnboarding = userResult.data?.self?.onboarded === false;
+  const user = session.data?.user as CustomerUser | undefined;
+  const needsOnboarding = user && user?.onboarded === false;
 
   useEffect(() => {
-    if (isLoading) return;
     if (!needsOnboarding) return;
 
     updateUser({ props: { onboarded: true } });
-  }, [isLoading, needsOnboarding, updateUser]);
+  }, [needsOnboarding, updateUser]);
 };

@@ -1,17 +1,33 @@
 import { signOut, useSession } from 'next-auth/react';
+import { DefaultSession } from 'next-auth';
 import { useCallback, useMemo } from 'react';
-import { useUserQuery } from '@decipad/graphql-client';
+
+/* we need to override the Session object from useSession()
+ * as we decorated it with additional fields in server side
+ */
+interface CustomUser extends DefaultSession {
+  user?: {
+    name: string;
+    email: string;
+    image: string;
+    description?: string;
+    id: string;
+    username?: string;
+    onboarded?: boolean | null;
+  };
+}
 
 export const useAuthenticationState = () => {
   const { data: session } = useSession();
-  const { data: user } = useUserQuery()[0];
+  const userSession = session as CustomUser | undefined;
 
-  const userName = user?.self?.name || 'Me';
-  const userEmail = session?.user?.email || 'me@example.com';
-  const userUsername = user?.self?.username || '';
-  const userBio = user?.self?.description || '';
-  const userId = 'me'; // TODO: fix user id
-  const userImage = user?.self?.image;
+  const userName = userSession?.user?.name || 'Me';
+  const userEmail = userSession?.user?.email || 'me@example.com';
+  const userUsername = userSession?.user?.username || '';
+  const userBio = userSession?.user?.description || '';
+  const userId = userSession?.user?.id || 'me';
+  const userImage = userSession?.user?.image;
+  const userOnboarded = userSession?.user?.onboarded;
 
   const signOutCallback = useCallback(() => {
     // Checklist show is stored in db, no longer needed on logout.
@@ -31,6 +47,7 @@ export const useAuthenticationState = () => {
         email: userEmail,
         bio: userBio,
         image: userImage,
+        onboarded: userOnboarded,
       },
       signOutCallback,
     }),
@@ -41,6 +58,7 @@ export const useAuthenticationState = () => {
       userEmail,
       userBio,
       userImage,
+      userOnboarded,
       signOutCallback,
     ]
   );

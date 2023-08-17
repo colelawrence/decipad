@@ -32,6 +32,7 @@ export const AccountSettingsForm = ({
         placeholder="Aspen Vaccaro"
         value={name}
         onChange={setName}
+        testId="user-name"
       />
       <InputField
         size="small"
@@ -40,6 +41,7 @@ export const AccountSettingsForm = ({
         placeholder="@aspen"
         value={username}
         onChange={setUsername}
+        testId="user-username"
       />
       {!DISABLE_BIO && (
         <TextareaField

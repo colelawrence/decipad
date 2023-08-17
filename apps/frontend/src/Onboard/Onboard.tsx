@@ -2,7 +2,6 @@ import { ClientEventsContext } from '@decipad/client-events';
 import {
   useSetUsernameMutation,
   useUpdateUserMutation,
-  useUserQuery,
 } from '@decipad/graphql-client';
 import { onboard } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
@@ -27,11 +26,8 @@ import { useRequiresOnboarding } from './useRequiresOnboarding';
 
 export const Onboard = () => {
   const navigate = useNavigate();
-  const session = useSession();
+  const { data: session, update } = useSession();
   const toast = useToast();
-
-  const [userResult] = useUserQuery();
-
   const updateUser = useUpdateUserMutation()[1];
   const updateUsername = useSetUsernameMutation()[1];
 
@@ -40,17 +36,17 @@ export const Onboard = () => {
   // Keep retrieved values as local state so they can be edited and submitted
   // only when navigating to the next step.
   const [name, setName] = useState(() => {
-    const userEmail = session.data?.user?.email;
-    const fullName = userResult.data?.self?.name;
+    const userEmail = session?.user?.email;
+    const fullName = session?.user?.name;
     const hasValidName = fullName && fullName !== userEmail;
 
     return hasValidName ? fullName : '';
   });
 
-  const [username, setUsername] = useState(session?.data?.user?.username ?? '');
+  const [username, setUsername] = useState(session?.user?.username ?? '');
 
   const [description, setDescription] = useState(
-    userResult.data?.self?.description ?? ''
+    session?.user?.description ?? ''
   );
 
   // Browser navigation between steps.
@@ -136,6 +132,7 @@ export const Onboard = () => {
                         'error'
                       );
                     } else {
+                      update({ name, description, username });
                       next();
                     }
                   })
@@ -153,7 +150,7 @@ export const Onboard = () => {
         element={
           <LazyRoute>
             <AccountSetupFlow3
-              email={session.data?.user?.email}
+              email={session?.user?.email}
               name={name}
               username={username}
               description={description}

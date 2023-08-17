@@ -52,7 +52,7 @@ export const useAccountSettingsState = () => {
       if (updateSuccessful) {
         toast(`You are now ${newUsername}`, 'success');
       } else {
-        toast(`Username ${newUsername} is already taken`, 'error');
+        toast(`Username ${newUsername} is invalid or already taken`, 'error');
       }
 
       return !!updateSuccessful;

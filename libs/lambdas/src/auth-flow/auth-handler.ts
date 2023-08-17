@@ -12,6 +12,7 @@ import adaptReqRes from './adapt-req-res';
 import { adapter } from './db-adapter';
 import { signInEmail } from './email';
 import { Email } from './providers';
+import md5 from 'md5';
 
 const {
   // providers: { github: githubConfig }, // uncommment this when enabling Github logins
@@ -69,15 +70,27 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
           return session;
         }
         const [user] = users;
-        const hmac = createHmac('sha256', thirdParty().intercom.secretId || '');
-        hmac.update(user.email!);
 
         if (session.user) {
           Object.assign(
             session.user,
-            { intercomUserHash: hmac.digest('hex') },
-            pick(user, 'id', 'email', 'name', 'image', 'description')
+            {
+              image: user.email
+                ? md5(user.email, { encoding: 'binary' })
+                : undefined,
+            },
+            pick(user, 'id', 'email', 'name', 'onboarded', 'description')
           );
+
+          const intercomSecret = thirdParty().intercom.secretId;
+
+          if (intercomSecret) {
+            const hmac = createHmac('sha256', intercomSecret);
+            hmac.update(user.email || user.name);
+            Object.assign(session.user, {
+              intercomUserHash: hmac.digest('hex'),
+            });
+          }
         }
 
         const userKeys = (
@@ -91,7 +104,10 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
         ).Items.filter((key) => key.id.startsWith('username:'));
 
         if (userKeys.length) {
-          const [userKey] = userKeys;
+          // the user_id in data.userkeys is not unique
+          const userKey = userKeys.sort(
+            (uk1, uk2) => (uk2.createdAt || 0) - (uk1.createdAt || 0)
+          )[0];
           const username = userKey.id.split(':')[1];
           if (username && session.user) {
             Object.assign(session.user, {
@@ -100,6 +116,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
           }
         }
       }
+
       return session;
     },
   };

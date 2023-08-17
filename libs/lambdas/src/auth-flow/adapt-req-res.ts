@@ -39,11 +39,24 @@ export default function adaptReqRes(handle: NextApiHandler) {
         body = base64Decode(req.body as string);
       }
 
-      if (
-        body &&
-        req.headers['content-type'] === 'application/x-www-form-urlencoded'
-      ) {
-        body = urlDecode(body);
+      if (body) {
+        if (
+          req.headers['content-type'] === 'application/x-www-form-urlencoded'
+        ) {
+          body = urlDecode(body);
+        } else if (
+          req.headers['content-type']?.startsWith('application/json')
+        ) {
+          try {
+            body = JSON.parse(body);
+          } catch (err) {
+            resolve({
+              statusCode: 400,
+              body: JSON.stringify({ error: (err as Error).message }),
+            });
+            return;
+          }
+        }
       }
 
       if (!body) {

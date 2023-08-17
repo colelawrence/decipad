@@ -29,12 +29,13 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
       ...(currentWorkspace.access?.roles?.flatMap((access) =>
         access.role.users?.map((roleUser) => ({
           permission: access.permission,
-          user: roleUser,
+          // currentSpace is not aware if the user updated their details
+          user: roleUser.id === currentUserId ? user : roleUser,
           canComment: true,
         }))
       ) ?? []),
     ],
-    [currentWorkspace]
+    [currentWorkspace, currentUserId, user]
   );
 
   if (paymentLink) {

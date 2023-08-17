@@ -10,6 +10,7 @@ export interface NotebookAvatar {
     image?: string | null;
     username?: string | null;
     onboarded?: boolean | null;
+    bio?: string;
     emailValidatedAt?: Date | null;
   } | null;
   permission: PermissionType;

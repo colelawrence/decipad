@@ -46,6 +46,7 @@ beforeEach(() => {
       session={{
         expires: new Date(Date.now() + 1000000).toISOString(),
         user: {
+          name: 'userName',
           id: 'userid',
         },
       }}

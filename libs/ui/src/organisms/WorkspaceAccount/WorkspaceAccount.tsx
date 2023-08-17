@@ -1,13 +1,15 @@
-import { useAuthenticationState } from '@decipad/graphql-client';
+import { User } from '@decipad/interfaces';
 import { css } from '@emotion/react';
 import { CollabMember } from '../../atoms';
 import { useEditUserModalStore } from '../../templates/EditUserModal/EditUserModal';
 import { cssVar } from '../../primitives';
 import { Settings } from '../../icons';
+import { useSession } from 'next-auth/react';
 
 export const WorkspaceAccount: React.FC = () => {
-  const authState = useAuthenticationState();
   const openUserSettings = useEditUserModalStore((state) => state.open);
+  const { data: session } = useSession();
+  const user = session?.user as User;
 
   return (
     <div css={buttonsContainerStyles}>
@@ -18,7 +20,7 @@ export const WorkspaceAccount: React.FC = () => {
       >
         <CollabMember
           avatar={{
-            user: authState.currentUser,
+            user,
             permission: 'READ',
           }}
         />

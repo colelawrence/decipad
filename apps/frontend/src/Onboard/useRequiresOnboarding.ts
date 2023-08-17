@@ -1,15 +1,14 @@
 import { isServerSideRendering } from '@decipad/support';
+import { User } from '@decipad/interfaces';
 import { useSession } from 'next-auth/react';
-import { useUserQuery } from '@decipad/graphql-client';
 
 export const useRequiresOnboarding = () => {
   const session = useSession();
-  const [userResult] = useUserQuery();
+  const user = session.data?.user as User | undefined;
   return (
     !isServerSideRendering() &&
     session.status === 'authenticated' &&
-    userResult.data != null &&
-    userResult.data.self != null &&
-    !userResult.data.self.onboarded
+    user &&
+    !user.onboarded
   );
 };
