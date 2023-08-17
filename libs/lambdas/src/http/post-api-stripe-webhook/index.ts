@@ -13,7 +13,7 @@ import {
 const stripeConfig = thirdParty().stripe;
 
 export const stripe = new Stripe(stripeConfig.apiKey, {
-  apiVersion: '2022-11-15',
+  apiVersion: '2023-08-16',
 });
 
 export const handler = handle(async (event: APIGatewayProxyEventV2) => {

@@ -11,7 +11,7 @@ import { track } from '@decipad/backend-analytics';
 
 const stripeConfig = thirdParty().stripe;
 const stripe = new Stripe(stripeConfig.secretKey, {
-  apiVersion: '2022-11-15',
+  apiVersion: '2023-08-16',
 });
 
 const workspacesResource = resource('workspace');
