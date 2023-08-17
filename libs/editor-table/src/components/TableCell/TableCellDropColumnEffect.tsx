@@ -5,22 +5,27 @@ import {
   TableCellElement,
 } from '@decipad/editor-types';
 import { useDropColumn } from '../../hooks';
+import { RefPipe } from '@decipad/react-utils';
 
 export interface TableCellDropColumnEffectProps {
   element: TableHeaderElement | TableCellElement;
-  dropTarget: HTMLTableCellElement | null;
+  dropTargetPipe: RefPipe<HTMLTableCellElement | null>;
 }
 
 export const TableCellDropColumnEffect = ({
   element,
-  dropTarget,
+  dropTargetPipe,
 }: TableCellDropColumnEffectProps) => {
   const editor = useTEditorRef();
   const [, dropTargetRef] = useDropColumn(editor, element);
 
   useEffect(() => {
-    dropTargetRef(dropTarget);
-  }, [dropTarget, dropTargetRef]);
+    dropTargetPipe.subscribe(dropTargetRef);
+
+    return () => {
+      dropTargetPipe.unsubscribe(dropTargetRef);
+    };
+  }, [dropTargetRef, dropTargetPipe]);
 
   return null;
 };

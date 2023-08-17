@@ -21,10 +21,6 @@ import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
 import { useCallback, useMemo, useState } from 'react';
 import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
 import { WIDE_MIN_COL_COUNT } from '../../constants';
-import {
-  ColumnInferredTypeContext,
-  createDefaultColumnInferredTypeContextValue,
-} from '../../contexts/ColumnInferredTypeContext';
 import { useTableStore } from '../../contexts/tableStore';
 import { useTable, useTableActions } from '../../hooks';
 import { selectTableResult } from '../../utils/selectTableResult';
@@ -86,10 +82,6 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
 
   const { color: defaultColor } = useEditorStylesContext();
 
-  const [columnInferredTypesContextValue] = useState(
-    createDefaultColumnInferredTypeContextValue
-  );
-
   return (
     (!deleted && (
       <DraggableBlock
@@ -106,45 +98,39 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         key={blockId}
       >
         <EditorTableContext.Provider value={contextValue}>
-          <ColumnInferredTypeContext.Provider
-            value={columnInferredTypesContextValue}
+          <EditorTableResultContext.Provider
+            value={materializedTableResult ?? defaultTableResultValue}
           >
-            <EditorTableResultContext.Provider
-              value={materializedTableResult ?? defaultTableResultValue}
-            >
-              <TableDndProvider editor={editor} table={element}>
-                <EditorTable
-                  id={element.id}
-                  onChangeIcon={onSaveIcon}
-                  onChangeColor={onSaveColor}
-                  onSetCollapsed={onSetCollapsed}
-                  hideFormulas={element.hideFormulas}
-                  onSetHideFormulas={onSetHideFormulas}
-                  icon={(element.icon ?? 'TableSmall') as UserIconKey}
-                  color={
-                    (element.color ?? defaultColor) as AvailableSwatchColor
-                  }
-                  isCollapsed={element.isCollapsed}
-                  onAddRow={onAddRow}
-                  onAddColumn={onAddColumn}
-                  tableWidth={wideTable ? 'WIDE' : 'SLIM'}
-                  isSelectingCell={!!selectedCells}
-                  smartRow={
-                    <SmartRow
-                      onAggregationTypeNameChange={onChangeColumnAggregation}
-                      aggregationTypeNames={headers.map((h) => h.aggregation)}
-                      tableName={name}
-                      tablePath={tablePath}
-                      columns={columns}
-                      element={element}
-                    />
-                  }
-                >
-                  {children}
-                </EditorTable>
-              </TableDndProvider>
-            </EditorTableResultContext.Provider>
-          </ColumnInferredTypeContext.Provider>
+            <TableDndProvider editor={editor} table={element}>
+              <EditorTable
+                id={element.id}
+                onChangeIcon={onSaveIcon}
+                onChangeColor={onSaveColor}
+                onSetCollapsed={onSetCollapsed}
+                hideFormulas={element.hideFormulas}
+                onSetHideFormulas={onSetHideFormulas}
+                icon={(element.icon ?? 'TableSmall') as UserIconKey}
+                color={(element.color ?? defaultColor) as AvailableSwatchColor}
+                isCollapsed={element.isCollapsed}
+                onAddRow={onAddRow}
+                onAddColumn={onAddColumn}
+                tableWidth={wideTable ? 'WIDE' : 'SLIM'}
+                isSelectingCell={!!selectedCells}
+                smartRow={
+                  <SmartRow
+                    onAggregationTypeNameChange={onChangeColumnAggregation}
+                    aggregationTypeNames={headers.map((h) => h.aggregation)}
+                    tableName={name}
+                    tablePath={tablePath}
+                    columns={columns}
+                    element={element}
+                  />
+                }
+              >
+                {children}
+              </EditorTable>
+            </TableDndProvider>
+          </EditorTableResultContext.Provider>
         </EditorTableContext.Provider>
       </DraggableBlock>
     )) ||

@@ -15,11 +15,15 @@ import { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
 import { Path } from 'slate';
 import { useSelected } from 'slate-react';
 import { useDebounce } from 'use-debounce';
-import { useColumnDropDirection, useDropColumn, useTableActions } from '.';
+import {
+  useCellType,
+  useColumnDropDirection,
+  useDropColumn,
+  useTableActions,
+} from '.';
 import { DRAG_ITEM_COLUMN } from '../contexts/TableDndContext';
 import { sanitizeColumnDropDirection } from '../utils';
 import { useDragColumn } from './useDragColumn';
-import { useTableHeaderCellColumnInferredType } from './useTableHeaderCellColumnInferredType';
 import { useTableHeaderCellDropdownNames } from './useTableHeaderCellDropdownNames';
 
 export interface UseTableHeaderCellResult {
@@ -75,11 +79,7 @@ export const useTableHeaderCell = (
   );
 
   const dropDownNames = useTableHeaderCellDropdownNames(element, path);
-
-  const inferredType = useTableHeaderCellColumnInferredType(
-    element,
-    columnIndex
-  );
+  const inferredType = useCellType(element);
 
   const { width } = element;
   const setWidth = usePathMutatorCallback(editor, path, 'width', 'TableHeader');

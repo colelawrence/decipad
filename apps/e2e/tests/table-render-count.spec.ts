@@ -49,16 +49,33 @@ test.describe('Count how many times table cells render', () => {
     await page.close();
   });
 
-  test('renders at most twice in response to a single keystroke', async () => {
+  test('count initial renders', async () => {
     await focusOnBody(page);
     await createTable(page);
 
+    const renderCount = await waitUntilStopRendering(page);
+
+    /**
+     * If this fails with a number less than what's currently expected, reduce
+     * the expected count. Congratulations, you've made tables more efficient!
+     */
+    const cellCount = 9;
+    const expectedPerCell = 3;
+    expect(renderCount).toBe(cellCount * expectedPerCell);
+  });
+
+  test('count renders in response to a single keystroke', async () => {
     await writeInTable(page, 'a', 1, 1);
     const previousRenderCount = await waitUntilStopRendering(page);
     await writeInTable(page, 'b', 1, 1);
     const renderCount = await waitUntilStopRendering(page);
 
     expect(renderCount).toBeGreaterThan(0);
-    expect(renderCount - previousRenderCount).toBeLessThanOrEqual(2);
+
+    /**
+     * If this fails with a number less than what's currently expected, reduce
+     * the expected count. Congratulations, you've made tables more efficient!
+     */
+    expect(renderCount - previousRenderCount).toBe(2);
   });
 });

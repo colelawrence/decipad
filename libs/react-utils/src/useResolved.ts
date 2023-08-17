@@ -5,13 +5,14 @@ import { PromiseOrType, dequal } from '@decipad/utils';
 export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
   const lastP = useRef(p);
   lastP.current = p;
-  const [result, setResult] = useState<T | undefined>();
-  const lastResult = useRef<T | undefined>();
+  const initialResult = isPromise(p) ? undefined : p;
+  const [result, setResult] = useState<T | undefined>(initialResult);
+  const lastResult = useRef<T | undefined>(initialResult);
   const lastResultP = useRef<PromiseOrType<T> | undefined>();
 
   const setResultSafe = useCallback(
     (r: T) => {
-      if (lastP.current === p && !dequal(lastResult, r)) {
+      if (lastP.current === p && !dequal(lastResult.current, r)) {
         lastResult.current = r;
         lastResultP.current = p;
         setResult(r);

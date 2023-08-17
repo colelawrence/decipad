@@ -22,7 +22,7 @@ export function useExternalEditorChange<T>(
 ): T | undefined {
   const editorChanges = useContext(EditorChangeContext);
   const [state, setState] = useState(editor && selector(editor));
-  const lastState = useRef<T | undefined>();
+  const lastState = useRef<T | undefined>(state);
 
   const setStateSafe = useCallback((v: T) => {
     if (!dequal(lastState.current, v)) {

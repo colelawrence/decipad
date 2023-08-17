@@ -16,6 +16,7 @@ import { sanitizeColumnDropDirection } from '../../utils';
 import { isCellAlignRight } from '../../utils/isCellAlignRight';
 import { TableCellDropColumnEffect } from './TableCellDropColumnEffect';
 import { TableCellFormulaTableData } from './TableCellFormulaTableData';
+import { RefPipe } from '@decipad/react-utils';
 
 declare global {
   interface Window {
@@ -41,8 +42,9 @@ export const TableCell: PlateComponent = ({
     });
   }
 
-  const [tableDataElement, tableDataRef] =
-    useState<HTMLTableCellElement | null>(null);
+  const [tableDataElementPipe] = useState(
+    () => new RefPipe<HTMLTableCellElement | null>()
+  );
 
   if (
     !isElementOfType(element, ELEMENT_TH) &&
@@ -98,12 +100,12 @@ export const TableCell: PlateComponent = ({
       {isDragging && (
         <TableCellDropColumnEffect
           element={element}
-          dropTarget={tableDataElement}
+          dropTargetPipe={tableDataElementPipe}
         />
       )}
 
       <TableData
-        ref={tableDataRef}
+        ref={tableDataElementPipe.toRef()}
         isEditable={editable}
         disabled={disabled}
         width={width}

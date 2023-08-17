@@ -1,6 +1,7 @@
 export * from './delay-value';
 export * from './event-listener';
 export * from './justStopEventPropagation';
+export * from './RefPipe';
 export * from './removeFocus';
 export * from './selectable-context';
 export * from './state';
