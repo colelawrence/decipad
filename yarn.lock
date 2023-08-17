@@ -475,29 +475,6 @@
     lambda-runtimes "~1.1.4"
     minimist "~1.2.8"
 
-"@architect/deploy@4.5.1":
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.5.1.tgz#81d945677ac421c65e6ea0b3c9e304de8c3cda4e"
-  integrity sha512-NiXaXT6SZP9do++kNNK8o4NQ9cofheob0Is72ri1vtPqdzPXcAIf5WmMW5t8ALEBBrdJCUiV3+gzYYkjoSxrNA==
-  dependencies:
-    "@architect/create" "~4.2.0"
-    "@architect/hydrate" "~3.2.1"
-    "@architect/inventory" "~3.5.0"
-    "@architect/package" "~8.5.0"
-    "@architect/utils" "~3.1.7"
-    chalk "4.1.2"
-    fs-extra "~11.1.1"
-    get-folder-size "2.0.1"
-    glob "~10.2.2"
-    mime-types "~2.1.35"
-    minimist "~1.2.8"
-    path-sort "~0.1.0"
-    run-parallel "~1.2.0"
-    run-series "~1.1.9"
-    run-waterfall "~1.1.7"
-    zip-dir "~2.0.0"
-    zipit "~2.0.0"
-
 "@architect/deploy@4.6.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.6.0.tgz#07f4944b55acba5e3d564cb206d5da6a4933b8a6"
@@ -670,7 +647,7 @@
     run-waterfall "~1.1.7"
     strftime "~0.10.2"
 
-"@architect/package@~8.5.0", "@architect/package@~8.5.1":
+"@architect/package@~8.5.1":
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.5.1.tgz#c488d0511a727e1d86173ec9175ef8485e8586d0"
   integrity sha512-vt5Wx+OrQAz9b2/T29/XwWb4QDM03M/8Bt5PzUQAHTCn0u/xfiuwtmLVrdUuCxj1KaXQ+Ga+PgSL/1721tHXhg==
@@ -15537,10 +15514,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1438.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1438.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1438.0.tgz#6bc9b3ef716b47ed78d94da5234692ec2dc73ff5"
-  integrity sha512-xessrWtoMD2icLPnm4KlTl3tiudJlYh3RtqBx+BggBc3ie9l98za1tSB4NunabTEbBUj4YMmzN1lpMsNEZ0NGw==
+aws-sdk@2.1439.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1439.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1439.0.tgz#fd8c45ee6b412cf0558d2122aff9f9e0dac72ed2"
+  integrity sha512-T2kXdLylb+pmpAhjFVQO4OpRYjkBpAKtxzRvv7tv90AJCaoguxZ5vfK8S7iKvHDuS9xKgBI8dVktYcgtkGcTJw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
