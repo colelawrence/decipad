@@ -26,7 +26,10 @@ fragment EditorNotebook on Pad {
   name
   myPermissionType
   icon
+  status
   isPublic
+  createdAt
+  archived
   access {
     users {
       user {

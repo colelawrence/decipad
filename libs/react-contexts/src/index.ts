@@ -20,3 +20,4 @@ export * from './execution';
 export * from './file-upload-store';
 export * from './results';
 export * from './theme';
+export * from './notebook-meta-actions';

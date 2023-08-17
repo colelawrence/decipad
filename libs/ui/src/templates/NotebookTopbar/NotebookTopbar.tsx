@@ -13,18 +13,27 @@ import {
   MouseEventHandler,
   useCallback,
   useContext,
+  useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link, SegmentButtons, Tooltip } from '../../atoms';
-import { Cards, Deci, LeftArrowShort, Show, SidebarOpen } from '../../icons';
 import {
-  BetaBadge,
+  Cards,
+  Caret,
+  CurvedArrow,
+  Deci,
+  LeftArrowShort,
+  Show,
+  SidebarOpen,
+} from '../../icons';
+import {
   NotebookAvatar,
   NotebookAvatars,
   NotebookPath,
+  NotebookStatusDropdown,
 } from '../../molecules';
-import { NotebookPublishingPopUp } from '../../organisms';
+import { NotebookOptions, NotebookPublishingPopUp } from '../../organisms';
 import {
   componentCssVars,
   cssVar,
@@ -36,6 +45,7 @@ import {
 import { closeButtonStyles } from '../../styles/buttons';
 import { PermissionType } from '../../types';
 import { Anchor } from '../../utils';
+import * as Styled from './styles';
 
 const topBarWrapperStyles = css({
   display: 'flex',
@@ -43,20 +53,6 @@ const topBarWrapperStyles = css({
   rowGap: '8px',
 
   padding: '16px 0',
-});
-
-const leftSideStyles = css({
-  flex: 1,
-
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
-
-  maxWidth: '450px',
 });
 
 const rightSideStyles = css({
@@ -111,28 +107,54 @@ export type NotebookTopbarProps = Pick<
   ComponentProps<typeof NotebookAvatars>,
   'usersWithAccess' | 'usersFromTeam'
 > &
-  ComponentProps<typeof NotebookPublishingPopUp> & {
-    permission?: PermissionType | null;
-    userWorkspaces?: Array<{ id: string; name: string }>;
-    workspace?: { id: string; name: string; isPremium?: boolean | null } | null;
-    workspaceAccess?: PermissionType | null;
-    isSharedNotebook?: boolean;
-    onDuplicateNotebook?: () => void;
-    onRevertChanges?: () => void;
-    onRemove?: (userId: string) => Promise<void>;
-    onInvite?: (email: string, permission: PermissionType) => Promise<void>;
-    onChange?: (userId: string, permission: PermissionType) => Promise<void>;
-    hasLocalChanges?: BehaviorSubject<boolean>;
-    toggleSidebar?: MouseEventHandler<HTMLSpanElement>;
-    sidebarOpen: boolean;
-    duplicating?: boolean;
+  Pick<ComponentProps<typeof NotebookStatusDropdown>, 'status'> &
+  ComponentProps<typeof NotebookPublishingPopUp> &
+  Omit<ComponentProps<typeof NotebookOptions>, 'trigger' | 'pageType'> & {
+    readonly permission?: PermissionType | null;
+    readonly workspace?: {
+      id: string;
+      name: string;
+      isPremium?: boolean | null;
+    } | null;
+    readonly workspaceAccess?: PermissionType | null;
+    readonly isSharedNotebook?: boolean;
+    readonly onRevertChanges?: () => void;
+    readonly onRemove?: (userId: string) => Promise<void>;
+    readonly onDuplicate: (
+      notebookId: string,
+      navToNotebook?: true
+    ) => Promise<boolean>;
+    readonly onInvite?: (
+      email: string,
+      permission: PermissionType
+    ) => Promise<void>;
+    readonly onChange?: (
+      userId: string,
+      permission: PermissionType
+    ) => Promise<void>;
+    readonly onChangeStatus: (
+      notebookId: string,
+      status: ComponentProps<typeof NotebookStatusDropdown>['status']
+    ) => void;
+    readonly hasLocalChanges?: BehaviorSubject<boolean>;
+    readonly toggleSidebar?: MouseEventHandler<HTMLSpanElement>;
+    readonly sidebarOpen: boolean;
+    readonly isReadOnly: boolean;
+    readonly isArchived: boolean;
+    readonly isNewNotebook: boolean;
+
+    // Undo buttons
+    readonly canUndo: boolean;
+    readonly canRedo: boolean;
+    readonly onUndo: () => void;
+    readonly onRedo: () => void;
+
+    readonly onClearAll: () => void;
   };
 
 export const NotebookTopbar = ({
-  userWorkspaces,
   workspace,
   notebook,
-  onDuplicateNotebook = noop,
   usersWithAccess,
   usersFromTeam,
   permission,
@@ -140,7 +162,29 @@ export const NotebookTopbar = ({
   workspaceAccess,
   toggleSidebar,
   sidebarOpen,
-  duplicating = false,
+  isReadOnly,
+  isNewNotebook,
+  workspaces: userWorkspaces,
+
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
+
+  notebookId,
+  creationDate,
+  isArchived,
+  onDelete,
+  onUnarchive,
+  onExportBackups,
+  onExport,
+  onDuplicate,
+  onClearAll,
+  onMoveWorkspace,
+
+  // Status dropdown
+  status,
+  onChangeStatus,
 
   ...sharingProps
 }: NotebookTopbarProps): ReturnType<FC> => {
@@ -166,12 +210,6 @@ export const NotebookTopbar = ({
   }, [clientEvent]);
 
   const navigate = useNavigate();
-
-  const workspaceName = isSharedNotebook
-    ? 'Shared with me'
-    : isWriter && workspace
-    ? workspace?.name
-    : undefined;
 
   const onBack = useCallback(() => {
     const redirectToWorkspace =
@@ -234,42 +272,112 @@ export const NotebookTopbar = ({
   const teamName = workspace?.name;
   const hasPaywall = !canInvite && !isPremiumWorkspace;
 
+  const readModeTopbar = (
+    <Styled.LeftContainer>
+      <Styled.IconWrap>
+        <Link href="https://decipad.com">
+          <Deci />
+        </Link>
+      </Styled.IconWrap>
+
+      <NotebookPath
+        notebookName={'Decipad — smart document'}
+        href="https://decipad.com"
+      />
+    </Styled.LeftContainer>
+  );
+
+  const [isDuplicating, setIsDuplicating] = useState(false);
+  const [showClearAll, setShowClearAll] = useState(isNewNotebook);
+
+  const changeStatus = useCallback(
+    (s: NotebookTopbarProps['status']) => {
+      onChangeStatus(notebookId, s);
+    },
+    [notebookId, onChangeStatus]
+  );
+
+  const duplicateNotebook = useCallback(() => {
+    setIsDuplicating(true);
+    onDuplicate(notebookId, true).finally(() => setIsDuplicating(false));
+  }, [notebookId, onDuplicate]);
+
   return (
     <div css={topBarWrapperStyles}>
       {/* Left side */}
-      <div css={leftSideStyles}>
-        {workspaceAccess || isSharedNotebook ? (
-          <div css={{ width: '32px', display: 'grid' }}>
-            <IconButton onClick={onBack}>
-              <LeftArrowShort />
-            </IconButton>
-          </div>
-        ) : (
-          <span
-            css={{
-              display: 'grid',
-              height: '32px',
-              width: '32px',
-            }}
-          >
-            <Link href="https://decipad.com">
-              <Deci />
-            </Link>
-          </span>
-        )}
-        <NotebookPath
-          notebookName={isWriter ? notebook.name : 'Decipad — smart document'}
-          workspaceName={workspaceName}
-          href={!isWriter ? 'https://decipad.com' : undefined}
-        />
-        <BetaBadge />
-      </div>
+      {!isReadOnly ? (
+        <Styled.LeftContainer>
+          {workspaceAccess || isSharedNotebook ? (
+            <Styled.IconWrap>
+              <IconButton onClick={onBack}>
+                <LeftArrowShort />
+              </IconButton>
+            </Styled.IconWrap>
+          ) : (
+            <Styled.IconWrap>
+              <Link href="https://decipad.com">
+                <Deci />
+              </Link>
+            </Styled.IconWrap>
+          )}
+          <Styled.TitleContainer>
+            <NotebookOptions
+              notebookId={notebookId}
+              isArchived={isArchived}
+              workspaces={userWorkspaces}
+              trigger={
+                <div data-testId="notebook-actions">
+                  <NotebookPath notebookName={notebook.name} />
+                  <Caret variant="down" />
+                </div>
+              }
+              notebookStatus={
+                <NotebookStatusDropdown
+                  status={status}
+                  onChangeStatus={changeStatus}
+                />
+              }
+              onDelete={onDelete}
+              onUnarchive={onUnarchive}
+              onExportBackups={onExportBackups}
+              onExport={onExport}
+              onDuplicate={onDuplicate}
+              onMoveWorkspace={onMoveWorkspace}
+              creationDate={creationDate}
+            />
+            <Styled.Status data-testId="notebook-status">
+              {status}
+            </Styled.Status>
+          </Styled.TitleContainer>
+          <Styled.ActionButtons>
+            <button type="button" onClick={onUndo} disabled={!canUndo}>
+              <CurvedArrow direction="left" active={canUndo} />
+            </button>
+            <button type="button" onClick={onRedo} disabled={!canRedo}>
+              <CurvedArrow direction="right" active={canRedo} />
+            </button>
+          </Styled.ActionButtons>
+          {showClearAll && !canUndo && (
+            <Button
+              type="primary"
+              onClick={() => {
+                setShowClearAll(false);
+                onClearAll();
+              }}
+            >
+              Clear All
+            </Button>
+          )}
+        </Styled.LeftContainer>
+      ) : (
+        readModeTopbar
+      )}
 
       {/* Right side */}
       <div css={rightSideStyles}>
         {isWriter && (
           <div
-            style={{
+            css={{
               display: 'flex',
               gap: '5px',
             }}
@@ -399,11 +507,11 @@ export const NotebookTopbar = ({
             />
           ) : (
             <Button
-              disabled={duplicating}
+              disabled={isDuplicating}
               type="primaryBrand"
-              onClick={onDuplicateNotebook}
+              onClick={duplicateNotebook}
             >
-              {duplicating ? 'Duplicating...' : 'Duplicate notebook'}
+              {isDuplicating ? 'Duplicating...' : 'Duplicate notebook'}
             </Button>
           )
         ) : (

@@ -56,6 +56,7 @@ interface DashboardProps {
   readonly topbar: ReactNode;
   readonly notebookList: ReactNode;
 }
+
 export const Dashboard = ({
   sidebar,
   topbar,

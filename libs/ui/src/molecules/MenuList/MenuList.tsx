@@ -34,7 +34,7 @@ const alwaysTopContentStyles = css({
   position: 'absolute',
 });
 
-interface RootMenuListProps {
+export interface RootMenuListProps {
   readonly root: true;
   readonly trigger?: undefined;
   readonly dropdown?: false;
@@ -42,7 +42,7 @@ interface RootMenuListProps {
   readonly itemTrigger?: undefined;
 }
 
-interface DropdownRootMenuListProps {
+export interface DropdownRootMenuListProps {
   readonly root: true;
   readonly trigger: ReactNode;
   readonly dropdown: true;
@@ -50,7 +50,7 @@ interface DropdownRootMenuListProps {
   readonly itemTrigger?: undefined;
 }
 
-interface MenuItemMenuListProps {
+export interface MenuItemMenuListProps {
   readonly root?: undefined;
   readonly trigger?: undefined;
   readonly dropdown?: undefined;

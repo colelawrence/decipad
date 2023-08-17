@@ -26,9 +26,12 @@ import {
   PermissionType,
 } from '@decipad/graphql-client';
 import { useExternalEditorChange } from '@decipad/editor-hooks';
-import { useDuplicateNotebook } from './useDuplicateNotebook';
 import EditorIcon from '../EditorIcon';
-import { AvailableSwatchColor } from '@decipad/ui';
+import { TColorStatus } from '@decipad/ui';
+import {
+  isNewNotebook,
+  parseIconColorFromIdentifier,
+} from 'apps/frontend/src/utils';
 
 const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 
@@ -59,9 +62,10 @@ interface UseNotebookStateAndActionsResult {
   connectionParams?: NotebookConnectionParams;
   initialState?: string;
   hasUnpublishedChanges: boolean;
+  notebookStatus: TColorStatus;
+  createdAt: Date;
+  isNew: boolean;
 
-  duplicate: () => Promise<void>;
-  duplicating: boolean;
   removeLocalChanges: () => Promise<void>;
   updateIcon: (icon: Icon) => void;
   updateIconColor: (icon: IconColor) => void;
@@ -85,20 +89,6 @@ interface UseNotebookStateAndActionsResult {
 
 const SNAPSHOT_NAME = 'Published 1';
 
-/**
- * Small helper to split the icon (Icon-Color) into 2 variables.
- */
-function getIconAndColor(
-  iconString: string | undefined | null
-): [Icon, AvailableSwatchColor] {
-  const [icon, iconColor] = (iconString?.split('-') as [
-    Icon,
-    AvailableSwatchColor
-  ]) || ['Deci', 'Catskill'];
-
-  return [icon, iconColor];
-}
-
 export const useNotebookStateAndActions = ({
   notebookId,
   editor,
@@ -115,10 +105,12 @@ export const useNotebookStateAndActions = ({
   });
   const notebook = getNotebookResult.data?.getPadById;
 
+  const notebookStatus = (notebook?.status as TColorStatus) || 'Draft';
+
   // Icon.
   // We need to have local state, because otherwise even updating cache,
   // feels super slow.
-  const [icon, iconColor] = getIconAndColor(notebook?.icon);
+  const { icon, iconColor } = parseIconColorFromIdentifier(notebook?.icon);
   const [cacheIcon, setCacheIcon] = useState(icon);
   const [cacheIconColor, setCacheIconColor] = useState(iconColor);
 
@@ -134,12 +126,12 @@ export const useNotebookStateAndActions = ({
     [notebook]
   );
 
+  const isNew = useMemo(
+    () => isNewNotebook(notebook?.initialState || ''),
+    [notebook?.initialState]
+  );
+
   // ------- remote api -------
-  const [remoteDuplicateNotebook, remoteDuplicatingNotebook] =
-    useDuplicateNotebook({
-      id: notebookId,
-      editor,
-    });
   const [, remoteUpdateNotebookIcon] = useUpdateNotebookIconMutation();
   const [, remoteUpdateNotebookIsPublic] = useSetNotebookPublicMutation();
   const [, shareNotebookWithEmail] = useSharePadWithEmailMutation();
@@ -195,11 +187,6 @@ export const useNotebookStateAndActions = ({
   const event = useContext(ClientEventsContext);
 
   // ------- actions -------
-  const duplicate = useCallback(async () => {
-    await remoteDuplicateNotebook();
-    event({ type: 'action', action: 'notebook duplicated' });
-  }, [remoteDuplicateNotebook, event]);
-
   const removeLocalChanges = useCallback(async () => {
     await docsync?.removeLocalChanges();
     await event({ type: 'action', action: 'notebook local changes removed' });
@@ -387,13 +374,13 @@ export const useNotebookStateAndActions = ({
     connectionParams: notebook?.padConnectionParams,
     initialState: notebook?.initialState ?? undefined,
     hasUnpublishedChanges: !!hasUnpublishedChanges,
-    duplicate,
-    duplicating: remoteDuplicatingNotebook,
+    notebookStatus,
+    isNew,
     removeLocalChanges,
     setNotebookPublic,
     updateIcon,
     updateIconColor,
-
+    createdAt: new Date(notebook?.createdAt),
     publishNotebook,
     unpublishNotebook,
     changeEditorAccess,

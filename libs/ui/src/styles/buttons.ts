@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
-import { componentCssVars, cssVar } from '../primitives';
+import { cssVar } from '../primitives';
 
 export const mainIconButtonStyles = css({
   display: 'inline-block',
   borderRadius: '100vmax',
 
   ':hover, :focus': {
-    backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });
 

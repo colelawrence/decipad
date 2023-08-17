@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
 import { NotebookTopbar } from './NotebookTopbar';
+import { noop } from '@decipad/utils';
 
 const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   workspace: { id: 'wsid', name: "John's Workspace" },
@@ -16,6 +17,24 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   ],
   permission: 'ADMIN',
   sidebarOpen: true,
+  status: 'draft',
+  onChangeStatus: noop,
+  isArchived: false,
+  isReadOnly: false,
+  canUndo: true,
+  canRedo: true,
+  onUndo: noop,
+  onRedo: noop,
+  notebookId: '',
+  onDuplicate: noop as any,
+  onExport: noop,
+  onExportBackups: noop,
+  onUnarchive: noop,
+  onDelete: noop,
+  isNewNotebook: true,
+  onClearAll: noop,
+  onMoveWorkspace: noop,
+  workspaces: [],
 };
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',

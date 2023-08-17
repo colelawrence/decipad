@@ -76,8 +76,8 @@ describe.each(validCombos)('With valid combo %s', (combo) => {
 describe.each(badCombos)('With valid combo %s', (combo) => {
   it(`should not parse ${combo} with a bad term`, () => {
     const { ok, icon, iconColor } = parseIconColorFromIdentifier(combo);
-    expect(icon).toBeUndefined();
-    expect(iconColor).toBeUndefined();
+    expect(icon).toBe('Deci');
+    expect(iconColor).toBe('Catskill');
     expect(ok).toBeFalsy();
   });
 });

@@ -1,6 +1,5 @@
-import Fuse from 'fuse.js';
 import searchQuery from 'search-query-parser';
-import { TColorKeys } from '.';
+import Fuse from 'fuse.js';
 
 const searchQueryOptions = {
   tokenize: true,
@@ -20,6 +19,15 @@ export function parseSearchInput(
   const ExcText = exclude?.text as string;
   return [normalizeSearchText(text), normalizeSearchText(ExcText)];
 }
+
+export const ColorStatusNames = {
+  draft: 'Draft',
+  review: 'Review',
+  approval: 'Approval',
+  done: 'Done',
+} as const;
+export type TColorStatus = keyof typeof ColorStatusNames;
+export const TColorKeys = Object.keys(ColorStatusNames);
 
 export function acceptableStatus(
   status: (string | null)[] | never[]
@@ -53,21 +61,18 @@ export function buildFuseQuery({
   exclude: string[];
   params?: Fuse.Expression[];
 }): Fuse.Expression {
-  /*
-  trick to show all instead of none
-  if (include.length === 0) {
-    return { name: '!1234567890' };
-  }
-  */
   const textPart: Fuse.Expression = {
     $or: [{ name: include.join(' ') }],
   };
-  const paramPart: Fuse.Expression[] = params ? [...params] : [];
+  const paramPart: Fuse.Expression[] = params ?? [];
   const excludePart: Fuse.Expression[] = exclude.map((e) => {
     return { name: `!${e}` };
   });
   const fullQuery = {
-    $and: [textPart, ...paramPart, ...excludePart],
+    $and: [...paramPart, ...excludePart],
   };
+  if (include.length > 0) {
+    fullQuery.$and.push(textPart);
+  }
   return fullQuery as Fuse.Expression;
 }

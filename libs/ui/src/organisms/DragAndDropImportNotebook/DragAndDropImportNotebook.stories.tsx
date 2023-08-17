@@ -16,7 +16,7 @@ export const Normal: StoryFn<
   ComponentProps<typeof DragAndDropImportNotebook>
 > = (props) => (
   <DndProvider backend={HTML5Backend}>
-    <DragAndDropImportNotebook {...props}>
+    <DragAndDropImportNotebook {...props} onImport={() => {}}>
       <span css={css(p16Regular)}>drop here</span>
     </DragAndDropImportNotebook>
   </DndProvider>

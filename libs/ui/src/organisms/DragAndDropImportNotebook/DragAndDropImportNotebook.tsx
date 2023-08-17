@@ -1,5 +1,4 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { FC, ReactNode } from 'react';
@@ -66,13 +65,13 @@ const dndAreaStyles = css({
 });
 
 interface DragAndDropImportNotebookProps {
+  readonly onImport: (source: string) => void;
   readonly enabled?: boolean;
-  readonly onImport?: (source: string) => void;
   readonly children?: ReactNode;
 }
 
 export const DragAndDropImportNotebook = ({
-  onImport = noop,
+  onImport,
   enabled = true,
   children,
 }: DragAndDropImportNotebookProps): ReturnType<FC> => {

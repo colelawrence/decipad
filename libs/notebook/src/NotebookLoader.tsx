@@ -45,7 +45,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     loadedFromRemote,
     timedOutLoadingFromRemote,
     destroy,
-    isNewNotebook,
     hasNotSavedRemotelyInAWhile,
   } = useNotebookState(notebookId);
 
@@ -169,10 +168,8 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
                 notebookId={notebookId}
                 workspaceId={workspaceId}
                 loaded={loaded}
-                isSavedRemotely={editor.isSavedRemotely()}
                 editor={readOrSuspendEditor}
                 readOnly={readOnly}
-                isNewNotebook={isNewNotebook}
               />
             </div>
           </Suspense>

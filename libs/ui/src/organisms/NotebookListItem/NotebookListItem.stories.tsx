@@ -3,15 +3,26 @@ import { ComponentProps } from 'react';
 import { AvailableColorStatus, TColorStatus, UserIconKey } from '../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
 import { NotebookListItem } from './NotebookListItem';
+import { noop } from '@decipad/utils';
 
-const args: Pick<
-  ComponentProps<typeof NotebookListItem>,
-  'name' | 'iconColor' | 'icon' | 'status'
-> = {
+const args: ComponentProps<typeof NotebookListItem> = {
   iconColor: 'Malibu' as AvailableSwatchColor,
   icon: 'Rocket' as UserIconKey,
   name: 'Getting started with Decipad',
   status: 'To Do' as TColorStatus,
+  isPublic: true,
+  id: '123',
+  onDelete: noop,
+  onMoveToSection: noop,
+  onDuplicate: noop as any,
+  onChangeStatus: noop,
+  onExport: noop,
+  onUnarchive: noop,
+  onExportBackups: noop,
+  onMoveWorkspace: noop,
+  notebookId: '123',
+  isArchived: false,
+  workspaces: [],
 };
 
 export default {

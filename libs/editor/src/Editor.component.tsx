@@ -15,13 +15,11 @@ import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate';
 import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useContext, useRef } from 'react';
-import { BehaviorSubject } from 'rxjs';
 import { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
 import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
-import { NotebookState } from './components/NotebookState/NotebookState';
 import { useAutoAnimate } from './hooks';
 import { useUndo } from './hooks/useUndo';
 import { useWriteLock } from './utils/useWriteLock';
@@ -30,11 +28,9 @@ export interface EditorProps {
   notebookId: string;
   workspaceId?: string;
   loaded: boolean;
-  isSavedRemotely: BehaviorSubject<boolean>;
   readOnly: boolean;
   editor?: MyEditor;
   children?: ReactNode;
-  isNewNotebook?: boolean;
 }
 
 const InsidePlate = ({
@@ -68,8 +64,7 @@ const InsidePlate = ({
  * TODO: remove Plate.id after plate patch
  */
 export const Editor = (props: EditorProps) => {
-  const { isSavedRemotely, editor, readOnly, isNewNotebook, workspaceId } =
-    props;
+  const { editor, readOnly, workspaceId } = props;
 
   // Cursor remote presence
   // useCursors(editor);
@@ -133,10 +128,6 @@ export const Editor = (props: EditorProps) => {
                   <InsidePlate {...props} containerRef={containerRef} />
                   <UploadFile />
                   <Integrations workspaceId={workspaceId} />
-                  <NotebookState
-                    isSavedRemotely={isSavedRemotely}
-                    isNewNotebook={!!isNewNotebook}
-                  />
                 </Plate>
               </TeleportEditor>
             </BlockLengthSynchronizationProvider>

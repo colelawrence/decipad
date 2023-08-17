@@ -19,7 +19,7 @@ export { LiveConnectionResult } from './LiveConnectionResult/LiveConnectionResul
 export { LoadingFilter } from './LoadingFilter/LoadingFilter';
 export { LoadingIndicator } from './LoadingIndicator/LoadingIndicator';
 export { LoadingLogo } from './LoadingLogo/LoadingLogo';
-export { NotebookList } from './NotebookList/NotebookList';
+export { UINotebookList } from './NotebookList/UINotebookList';
 export { NotebookListPlaceholder } from './NotebookListPlaceholder/NotebookListPlaceholder';
 export { NotebookTopbar } from './NotebookTopbar/NotebookTopbar';
 export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';

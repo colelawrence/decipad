@@ -33,6 +33,7 @@ export { MediaEmbed } from './MediaEmbed/MediaEmbed';
 export { MobileSidebar } from './MobileSidebar/MobileSidebar';
 export { NotebookInvitationPopUp } from './NotebookInvitationPopUp/NotebookInvitationPopUp';
 export { NotebookListItem } from './NotebookListItem/NotebookListItem';
+export { NotebookOptions } from './NotebookListItem/NotebookOptions';
 export { NotebookPublishingPopUp } from './NotebookPublishingPopUp/NotebookPublishingPopUp';
 export { NumberCatalog } from './NumberCatalog/NumberCatalog';
 export { PaginationControl } from './PaginationControl/PaginationControl';

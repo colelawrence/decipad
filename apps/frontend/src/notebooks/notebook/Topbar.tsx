@@ -4,18 +4,25 @@ import { noop } from '@decipad/utils';
 import { PermissionType } from 'libs/ui/src/types';
 import { useSession } from 'next-auth/react';
 import { ComponentProps, FC } from 'react';
-import { BehaviorSubject } from 'rxjs';
 import { Notebook } from './hooks/useNotebookStateAndActions';
+import { MyEditor } from '@decipad/editor-types';
+import { useEditorUndoState } from './hooks/useEditorUndoState';
+import { useNotebookMetaActions } from '@decipad/react-contexts';
+import { clearNotebook } from '../../utils';
 
 type TopbarProps = Pick<
   ComponentProps<typeof NotebookTopbar>,
-  'userWorkspaces' | 'toggleSidebar'
+  | 'workspaces'
+  | 'toggleSidebar'
+  | 'hasUnpublishedChanges'
+  | 'hasLocalChanges'
+  | 'isPublishing'
+  | 'status'
+  | 'isReadOnly'
+  | 'creationDate'
+  | 'isNewNotebook'
 > & {
   readonly notebook: Notebook;
-  readonly hasLocalChanges: BehaviorSubject<boolean> | undefined;
-  readonly hasUnpublishedChanges: boolean;
-  readonly isPublishing?: boolean;
-  readonly duplicateNotebook?: () => void;
   readonly removeLocalChanges?: () => void;
   readonly inviteEditorByEmail?: (
     email: string,
@@ -29,16 +36,19 @@ type TopbarProps = Pick<
   readonly publishNotebook?: () => void;
   readonly unpublishNotebook?: () => void;
   readonly sidebarOpen: boolean;
-  readonly duplicating: boolean;
+  readonly editor: MyEditor | undefined;
 };
 
 const Topbar: FC<TopbarProps> = ({
-  userWorkspaces,
+  workspaces,
   notebook,
   hasLocalChanges,
   hasUnpublishedChanges,
+  editor,
   isPublishing,
-  duplicateNotebook,
+  isReadOnly,
+  isNewNotebook,
+  creationDate,
   removeLocalChanges,
   publishNotebook = noop,
   unpublishNotebook = noop,
@@ -47,11 +57,14 @@ const Topbar: FC<TopbarProps> = ({
   removeEditorById = () => Promise.resolve(),
   toggleSidebar,
   sidebarOpen,
-  duplicating,
+  status,
 }) => {
   const workspaceId = notebook?.workspace?.id || '';
   const { data: session } = useSession();
   const { everyone: usersFromTeam } = useWorkspaceMembers(workspaceId);
+  const actions = useNotebookMetaActions();
+
+  const [canUndo, canRedo] = useEditorUndoState(editor);
 
   if (!notebook) {
     return null;
@@ -61,16 +74,17 @@ const Topbar: FC<TopbarProps> = ({
     <NotebookTopbar
       sidebarOpen={sidebarOpen}
       notebook={notebook}
-      userWorkspaces={userWorkspaces}
       workspace={notebook.workspace}
+      workspaces={workspaces}
       // TODO: ENG-1953 backend should provide this data
       workspaceAccess={
-        userWorkspaces?.some(
+        workspaces?.some(
           (userWorkspace) => userWorkspace.id === notebook.workspace?.id
         )
           ? 'ADMIN'
           : undefined
       }
+      isNewNotebook={isNewNotebook}
       usersWithAccess={notebook.access.users || []}
       usersFromTeam={usersFromTeam}
       permission={notebook.myPermissionType}
@@ -86,14 +100,29 @@ const Topbar: FC<TopbarProps> = ({
       onRevertChanges={removeLocalChanges}
       hasLocalChanges={hasLocalChanges}
       hasUnpublishedChanges={hasUnpublishedChanges}
-      onDuplicateNotebook={duplicateNotebook}
-      duplicating={duplicating}
       onPublish={publishNotebook}
       onUnpublish={unpublishNotebook}
       onInvite={inviteEditorByEmail}
       onRemove={removeEditorById}
       onChange={changeEditorAccess}
       toggleSidebar={toggleSidebar}
+      status={status}
+      onChangeStatus={actions.onChangeStatus}
+      isReadOnly={isReadOnly}
+      isArchived={Boolean(notebook.archived)}
+      canRedo={canRedo}
+      canUndo={canUndo}
+      onRedo={() => editor?.undoManager?.redo() || noop}
+      onUndo={() => editor?.undoManager?.undo() || noop}
+      notebookId={notebook.id}
+      onMoveWorkspace={actions.onMoveToWorkspace}
+      onDuplicate={actions.onDuplicateNotebook}
+      onExport={actions.onDownloadNotebook}
+      onExportBackups={actions.onDownloadNotebookHistory}
+      onUnarchive={actions.onUnarchiveNotebook}
+      onDelete={actions.onDeleteNotebook}
+      creationDate={creationDate}
+      onClearAll={() => editor && clearNotebook(editor)}
     />
   );
 };

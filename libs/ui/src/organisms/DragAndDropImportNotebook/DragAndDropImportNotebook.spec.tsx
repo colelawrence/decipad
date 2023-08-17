@@ -5,6 +5,7 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DragAndDropImportNotebook } from './DragAndDropImportNotebook';
+import { noop } from '@decipad/utils';
 
 mockConsoleWarn();
 
@@ -82,7 +83,9 @@ const tooLargeFile = new File(
 it('renders the children', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
-      <DragAndDropImportNotebook>child here</DragAndDropImportNotebook>
+      <DragAndDropImportNotebook onImport={noop}>
+        child here
+      </DragAndDropImportNotebook>
     </DndProvider>
   );
   expect(getByText('child here')).toBeVisible();
@@ -91,7 +94,9 @@ it('renders the children', () => {
 it('does not show a drop effect when dragging only a text file over', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
-      <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>
+      <DragAndDropImportNotebook onImport={noop}>
+        drop here
+      </DragAndDropImportNotebook>
     </DndProvider>
   );
 
@@ -116,7 +121,9 @@ it('does not show a drop effect when dragging only a text file over', () => {
 it('does not show a drop effect when dragging only a non-file item over', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
-      <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>
+      <DragAndDropImportNotebook onImport={noop}>
+        drop here
+      </DragAndDropImportNotebook>
     </DndProvider>
   );
 
@@ -141,7 +148,9 @@ it('does not show a drop effect when dragging only a non-file item over', () => 
 it('does not show a drop effect when dragging only a file that is too large over', () => {
   const { getByText } = render(
     <DndProvider backend={HTML5Backend}>
-      <DragAndDropImportNotebook>drop here</DragAndDropImportNotebook>
+      <DragAndDropImportNotebook onImport={noop}>
+        drop here
+      </DragAndDropImportNotebook>
     </DndProvider>
   );
 

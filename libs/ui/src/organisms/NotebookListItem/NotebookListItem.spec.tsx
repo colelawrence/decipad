@@ -6,6 +6,7 @@ import { QueryParamProvider } from 'use-query-params';
 import { BrowserRouter } from 'react-router-dom';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookListItem } from './NotebookListItem';
+import { noop } from '@decipad/utils';
 
 const props: ComponentProps<typeof NotebookListItem> = {
   id: 'my-notebook',
@@ -13,6 +14,18 @@ const props: ComponentProps<typeof NotebookListItem> = {
   icon: 'Rocket',
   status: 'draft',
   iconColor: 'Catskill',
+  isPublic: false,
+  onDelete: noop,
+  onMoveToSection: noop,
+  onDuplicate: noop as any,
+  onChangeStatus: noop,
+  onExport: noop,
+  onUnarchive: noop,
+  onExportBackups: noop,
+  onMoveWorkspace: noop,
+  workspaces: [],
+  notebookId: '123',
+  isArchived: false,
 };
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (

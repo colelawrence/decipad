@@ -8,9 +8,15 @@ describe('Notebook Path', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
-  it('renders the workspace name', () => {
-    render(<NotebookPath workspaceName="dogs" notebookName="Use of funds" />);
+  it('renders notebook name', () => {
+    render(<NotebookPath notebookName="Use of funds" />);
 
-    expect(screen.getByText(/dogs/i)).toBeVisible();
+    expect(screen.getByText('Use of funds')).toBeInTheDocument();
+  });
+
+  it('renders truncated notebook name', () => {
+    render(<NotebookPath notebookName="this is a notebook name" />);
+
+    expect(screen.getByText('this is a notebook n...')).toBeInTheDocument();
   });
 });

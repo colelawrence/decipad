@@ -10,6 +10,8 @@ import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
 
+const noop = () => Promise.resolve();
+
 const props: ComponentProps<typeof NotebookTopbar> = {
   notebook: { id: 'nbid', name: 'My first notebook' },
   workspace: {
@@ -24,14 +26,30 @@ const props: ComponentProps<typeof NotebookTopbar> = {
     },
   ],
   sidebarOpen: true,
+  status: 'draft',
+  notebookId: 'id',
+  onChangeStatus: () => {},
+  isReadOnly: false,
+  canRedo: true,
+  canUndo: true,
+  onUndo: () => {},
+  onRedo: () => {},
+  onDuplicate: noop as any,
+  isArchived: false,
+  onExport: noop,
+  onExportBackups: noop,
+  onUnarchive: noop,
+  onDelete: noop,
+  isNewNotebook: true,
+  onClearAll: noop,
+  onMoveWorkspace: noop,
+  workspaces: [],
 };
 
 interface WithProvidersProps {
   children: ReactNode;
   noSession?: boolean;
 }
-
-const noop = () => Promise.resolve();
 
 const WithProviders: FC<WithProvidersProps> = ({ children, noSession }) => (
   <ClientEventsContext.Provider value={noop}>

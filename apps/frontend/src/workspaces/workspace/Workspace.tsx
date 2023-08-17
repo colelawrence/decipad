@@ -2,18 +2,11 @@ import {
   useCreateNotebookMutation,
   useCreateSectionMutation,
   useCreateWorkspaceMutation,
-  useDeleteNotebookMutation,
   useDeleteSectionMutation,
   useDeleteWorkspaceMutation,
-  useDuplicateNotebookMutation,
   useGetWorkspacesQuery,
   useImportNotebookMutation,
-  useMoveNotebookMutation,
   useRenameWorkspaceMutation,
-  useUnarchiveNotebookMutation,
-  useUpdateNotebookArchiveMutation,
-  useUpdateNotebookStatusMutation,
-  useUpdateSectionAddNotebookMutation,
   useUpdateSectionMutation,
   useUserQuery,
 } from '@decipad/graphql-client';
@@ -29,24 +22,11 @@ import {
   EditUserModal,
   EditWorkspaceModal,
   LoadingLogo,
-  NotebookList,
-  NotebookListItem,
-  NotebookListPlaceholder,
   PaymentSubscriptionStatusModal,
-  TColorKeys,
-  TColorStatus,
+  WorkspaceHero,
 } from '@decipad/ui';
-import stringify from 'json-stringify-safe';
-import sortBy from 'lodash.sortby';
 import { signOut, useSession } from 'next-auth/react';
-import {
-  ComponentProps,
-  FC,
-  lazy,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 import {
   Outlet,
   Route,
@@ -57,13 +37,10 @@ import {
 } from 'react-router-dom';
 import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
-import { filterPads, makeIcons } from '../../utils';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
-
-const loadWorkspaceHero = () =>
-  import(/* webpackChunkName: "workspace-hero" */ './WorkspaceHero');
-const WorkspaceHero = lazy(loadWorkspaceHero);
+import { NotebookList } from './NotebookList';
+import { NotebookMetaActionsProvider } from './providers';
 
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
@@ -98,29 +75,13 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
 
   const toast = useToast();
 
-  const [result, refetch] = useGetWorkspacesQuery({
+  const [result] = useGetWorkspacesQuery({
     requestPolicy: 'cache-first',
   });
 
   const createNotebook = useMutationResultHandler(
     useCreateNotebookMutation()[1],
     'Failed to create notebook'
-  );
-  const deleteNotebook = useMutationResultHandler(
-    useUpdateNotebookArchiveMutation()[1],
-    'Failed to remove notebook'
-  ); // soft delete
-  const finalDeleteNotebook = useMutationResultHandler(
-    useDeleteNotebookMutation()[1],
-    'Failed to remove notebook'
-  );
-  const duplicateNotebook = useMutationResultHandler(
-    useDuplicateNotebookMutation()[1],
-    'Failed to duplicate notebook'
-  );
-  const moveNotebook = useMutationResultHandler(
-    useMoveNotebookMutation()[1],
-    'Failed to move notebook to workspace.'
   );
   const importNotebook = useMutationResultHandler(
     useImportNotebookMutation()[1],
@@ -138,12 +99,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     useDeleteWorkspaceMutation()[1],
     'Failed to remove workspace'
   );
-  const changeNotebookStatus = useMutationResultHandler(
-    useUpdateNotebookStatusMutation()[1]
-  );
-  const unarchiveNotebook = useMutationResultHandler(
-    useUnarchiveNotebookMutation()[1]
-  );
   const createSection = useMutationResultHandler(
     useCreateSectionMutation()[1],
     'Failed to create section'
@@ -155,10 +110,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const editSection = useMutationResultHandler(
     useUpdateSectionMutation()[1],
     'Failed to save section'
-  );
-  const movePadToSection = useMutationResultHandler(
-    useUpdateSectionAddNotebookMutation()[1],
-    'Failed to move notebook to section'
   );
 
   const signoutCallback = useCallback(() => {
@@ -198,75 +149,12 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     });
   }, [currentWorkspace, setCurrentWorkspaceInfo]);
 
-  const pageInfo: ComponentProps<typeof NotebookListItem>['page'] =
-    useMemo(() => {
-      const sections = currentWorkspace?.sections || [];
+  const pageInfo = useMemo(() => {
+    if (isArchivePage) return 'archived';
+    if (isSharedPage) return 'shared';
 
-      if (isArchivePage) return { type: 'archived', sections };
-      if (isSharedPage) return { type: 'shared', sections };
-
-      return {
-        type: sectionId ? 'section' : 'workspace',
-        sections,
-      };
-    }, [isArchivePage, isSharedPage, sectionId, currentWorkspace]);
-
-  const filterNotebooks = useMemo(() => {
-    return filterPads({ page: pageInfo.type });
-  }, [pageInfo]);
-
-  useEffect(() => {
-    if (!isSharedPage) return;
-
-    refetch();
-  }, [refetch, isSharedPage]);
-
-  const allSectionNotebooks = useMemo(
-    () =>
-      currentWorkspace?.sections
-        .find((sct) => sct.id === sectionId)
-        ?.pads?.filter(filterNotebooks)
-        .map(makeIcons),
-    [currentWorkspace?.sections, filterNotebooks, sectionId]
-  );
-
-  const allNotebooks = useMemo(
-    () =>
-      sortBy(
-        currentWorkspace?.pads?.items,
-        (item) => -Date.parse(item.createdAt)
-      )
-        .filter(filterNotebooks)
-        .map(makeIcons),
-    [currentWorkspace?.pads?.items, filterNotebooks]
-  );
-
-  const sharedNotebooks = useMemo(
-    () =>
-      sortBy(
-        workspaceData?.padsSharedWithMe?.items,
-        (item) => -Date.parse(item.createdAt)
-      ).map(makeIcons),
-    [workspaceData?.padsSharedWithMe?.items]
-  );
-
-  const showNotebooks = useMemo(
-    () =>
-      isSharedPage
-        ? sharedNotebooks
-        : sectionId
-        ? allSectionNotebooks && allSectionNotebooks.length > 0
-          ? allSectionNotebooks
-          : []
-        : allNotebooks,
-    [
-      allNotebooks,
-      allSectionNotebooks,
-      sharedNotebooks,
-      isSharedPage,
-      sectionId,
-    ]
-  );
+    return sectionId ? 'section' : 'workspace';
+  }, [isArchivePage, isSharedPage, sectionId]);
 
   const paymentStatus = useMemo(
     () => currentWorkspace?.workspaceSubscription?.paymentStatus,
@@ -338,108 +226,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     </Frame>
   );
 
-  const notebookListWrapper = (
-    <Frame
-      Heading="h1"
-      title={null}
-      suspenseFallback={<NotebookListPlaceholder />}
-    >
-      {
-        <WorkspaceHero
-          name={currentWorkspace.name}
-          isPremium={!!currentWorkspace.isPremium}
-          membersCount={currentWorkspace.membersCount}
-          onCreateNotebook={handleCreateNotebook}
-          membersHref={currentWorkspaceRoute.members({}).$}
-        />
-      }
-      <NotebookList
-        Heading="h1"
-        notebooks={showNotebooks}
-        page={pageInfo}
-        isLoading={fetching}
-        mainWorkspaceRoute={!maybeWorkspaceFolder}
-        onCreateNotebook={handleCreateNotebook}
-        otherWorkspaces={allWorkspaces.filter(
-          (workspace) => workspace.id !== currentWorkspace.id
-        )}
-        onMoveToSection={(pId, sId) => {
-          return movePadToSection({ sectionId: sId, notebookId: pId }).catch(
-            (err) => {
-              console.error(`Failed to add notebook to section. Error:`, err);
-              toast('Failed to add notebook to section', 'error');
-            }
-          );
-        }}
-        onDelete={(id) => {
-          const fn =
-            pageInfo.type === 'archived' ? finalDeleteNotebook : deleteNotebook;
-          return fn({ id }).catch((err) => {
-            console.error(
-              `Failed to ${
-                pageInfo.type === 'archived' ? 'delete' : 'archive'
-              } notebook. Error:`,
-              err
-            );
-            toast(
-              `Failed to ${
-                pageInfo.type === 'archived' ? 'delete' : 'archive'
-              } notebook`,
-              'error'
-            );
-          });
-        }}
-        onDuplicate={(id) =>
-          duplicateNotebook({
-            id,
-            targetWorkspace: workspaceId,
-          }).catch((err) => {
-            console.error('Failed to duplicate notebook. Error:', err);
-            toast('Failed to duplicate notebook.', 'error');
-          })
-        }
-        onMoveToWorkspace={async (id, targetWorkspaceId) => {
-          await moveNotebook({ id, workspaceId: targetWorkspaceId });
-        }}
-        onChangeStatus={(id, st: TColorStatus) => {
-          if (TColorKeys.includes(st)) {
-            changeNotebookStatus({
-              id,
-              status: st,
-            }).catch((err) => {
-              console.error('Failed to change status. Error:', err);
-              toast('Failed to change notebook status', 'error');
-            });
-          } else {
-            console.error(
-              `Bad status. Error: ${st} is not valid ${stringify(
-                TColorKeys,
-                null,
-                2
-              )}`
-            );
-            toast('Failed to change notebook status', 'error');
-          }
-        }}
-        onImport={(source) =>
-          importNotebook({ workspaceId, source }).catch((err) => {
-            console.error('Failed to import notebook. Error:', err);
-            toast('Failed to import notebook.', 'error');
-          })
-        }
-        onUnarchive={(id: string) =>
-          unarchiveNotebook({
-            id,
-          }).catch((err) => {
-            console.error('Failed to un-archive notebook. Error:', err);
-            toast('Failed to move notebook to all notebooks.', 'error');
-          })
-        }
-        showCTA={false}
-      />
-    </Frame>
-  );
-
   return (
     <>
       <Routes>
@@ -447,12 +233,39 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           path="/"
           element={
             <LazyRoute title={currentWorkspace.name}>
-              <Dashboard
-                sidebar={sidebarWrapper}
-                topbar={null}
-                notebookList={notebookListWrapper}
-              />
-              <Outlet />
+              <NotebookMetaActionsProvider
+                workspaceId={currentWorkspace.id}
+                isInArchive={pageInfo === 'archived'}
+              >
+                <Dashboard
+                  sidebar={sidebarWrapper}
+                  topbar={null}
+                  notebookList={
+                    <>
+                      <WorkspaceHero
+                        name={currentWorkspace.name}
+                        isPremium={!!currentWorkspace.isPremium}
+                        membersCount={currentWorkspace.membersCount}
+                        onCreateNotebook={handleCreateNotebook}
+                        membersHref={currentWorkspaceRoute.members({}).$}
+                      />
+                      <NotebookList
+                        pageType={pageInfo}
+                        notebooks={currentWorkspace.pads.items}
+                        sharedNotebooks={workspaceData.padsSharedWithMe.items}
+                        workspaces={allWorkspaces}
+                        onImport={(source) =>
+                          importNotebook({
+                            workspaceId: currentWorkspace.id,
+                            source,
+                          })
+                        }
+                      />
+                    </>
+                  }
+                />
+                <Outlet />
+              </NotebookMetaActionsProvider>
             </LazyRoute>
           }
         >

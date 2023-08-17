@@ -32,6 +32,7 @@ import Topbar from './Topbar';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
+import { NotebookMetaActionsProvider } from '../../workspaces/workspace/providers';
 
 export const loadEditor = () =>
   import(/* webpackChunkName: "notebook-editor" */ './Editor');
@@ -40,6 +41,7 @@ const Editor = lazy(loadEditor);
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
+
   const [sidebarTab, setSidebarTab] = useState<SelectedTab>('block');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = useCallback(() => {
@@ -64,10 +66,11 @@ const Notebook: FC = () => {
     isPublishing,
     icon,
     iconColor,
+    isNew,
+    notebookStatus,
+    createdAt,
     updateIcon,
     updateIconColor,
-    duplicate,
-    duplicating,
     removeLocalChanges,
     publishNotebook,
     unpublishNotebook,
@@ -142,86 +145,96 @@ const Notebook: FC = () => {
   }
 
   return (
-    <DeciEditorContextProvider value={docsync}>
-      <ComputerContextProvider computer={computer}>
-        <EditorStylesContext.Provider value={styles}>
-          <GlobalThemeStyles color={iconColor} />
-          <Frame
-            Heading="h1"
-            title={notebook?.name ?? ''}
-            suspenseFallback={<LoadingLogo />}
-          >
-            <NotebookPage
-              sidebarOpen={sidebarOpen}
-              icon={icon}
-              iconColor={iconColor}
-              onUpdateIcon={updateIcon}
-              onUpdateIconColor={updateIconColor}
-              notebook={
-                <Frame
-                  Heading="h1"
-                  title={null}
-                  suspenseFallback={<EditorPlaceholder />}
-                >
-                  <Editor
-                    notebookMetaLoaded={notebook != null}
-                    notebookTitle={notebook?.name ?? ''}
-                    onNotebookTitleChange={onNotebookTitleChange}
-                    notebookId={notebookId}
-                    workspaceId={workspaceId}
-                    readOnly={isReadOnly}
-                    secret={secret}
-                    connectionParams={connectionParams}
-                    initialState={initialState}
-                    onEditor={setEditor}
-                    onDocsync={setDocsync}
-                    onComputer={setComputer}
-                    getAttachmentForm={getAttachmentForm}
-                    onAttached={onAttached}
-                    useExternalDataSources={useExternalDataSources}
-                  />
-                </Frame>
-              }
-              sidebar={
-                isReadOnly ? null : (
-                  <EditorSidebar
-                    sidebarTab={sidebarTab}
-                    setSidebarTab={setSidebarTab}
-                    sidebarOpen={sidebarOpen}
-                    setSidebarOpen={setSidebarOpen}
-                  />
-                )
-              }
-              topbar={
-                <Frame
-                  Heading="h1"
-                  title={null}
-                  suspenseFallback={<TopbarPlaceholder />}
-                >
-                  <Topbar
-                    userWorkspaces={userWorkspaces.data?.workspaces}
-                    notebook={notebook}
-                    hasLocalChanges={hasLocalChanges}
-                    hasUnpublishedChanges={hasUnpublishedChanges}
-                    isPublishing={isPublishing}
-                    duplicateNotebook={duplicate}
-                    removeLocalChanges={removeLocalChanges}
-                    publishNotebook={publishNotebook}
-                    unpublishNotebook={unpublishNotebook}
-                    inviteEditorByEmail={inviteEditorByEmail}
-                    removeEditorById={removeEditorById}
-                    changeEditorAccess={changeEditorAccess}
-                    toggleSidebar={toggleSidebar}
-                    sidebarOpen={sidebarOpen}
-                    duplicating={duplicating}
-                  />
-                </Frame>
-              }
-            />
-          </Frame>
-        </EditorStylesContext.Provider>
-      </ComputerContextProvider>
-    </DeciEditorContextProvider>
+    <NotebookMetaActionsProvider
+      workspaceId={
+        workspaceId || userWorkspaces.data?.workspaces?.[0]?.id || ''
+      }
+      isInArchive={Boolean(notebook?.archived)}
+    >
+      <DeciEditorContextProvider value={docsync}>
+        <ComputerContextProvider computer={computer}>
+          <EditorStylesContext.Provider value={styles}>
+            <GlobalThemeStyles color={iconColor} />
+            <Frame
+              Heading="h1"
+              title={notebook?.name ?? ''}
+              suspenseFallback={<LoadingLogo />}
+            >
+              <NotebookPage
+                sidebarOpen={sidebarOpen}
+                icon={icon}
+                iconColor={iconColor}
+                onUpdateIcon={updateIcon}
+                onUpdateIconColor={updateIconColor}
+                notebook={
+                  <Frame
+                    Heading="h1"
+                    title={null}
+                    suspenseFallback={<EditorPlaceholder />}
+                  >
+                    <Editor
+                      notebookMetaLoaded={notebook != null}
+                      notebookTitle={notebook?.name ?? ''}
+                      onNotebookTitleChange={onNotebookTitleChange}
+                      notebookId={notebookId}
+                      workspaceId={workspaceId}
+                      readOnly={isReadOnly}
+                      secret={secret}
+                      connectionParams={connectionParams}
+                      initialState={initialState}
+                      onEditor={setEditor}
+                      onDocsync={setDocsync}
+                      onComputer={setComputer}
+                      getAttachmentForm={getAttachmentForm}
+                      onAttached={onAttached}
+                      useExternalDataSources={useExternalDataSources}
+                    />
+                  </Frame>
+                }
+                sidebar={
+                  isReadOnly ? null : (
+                    <EditorSidebar
+                      sidebarTab={sidebarTab}
+                      setSidebarTab={setSidebarTab}
+                      sidebarOpen={sidebarOpen}
+                      setSidebarOpen={setSidebarOpen}
+                    />
+                  )
+                }
+                topbar={
+                  <Frame
+                    Heading="h1"
+                    title={null}
+                    suspenseFallback={<TopbarPlaceholder />}
+                  >
+                    <Topbar
+                      workspaces={userWorkspaces.data?.workspaces ?? []}
+                      notebook={notebook}
+                      hasLocalChanges={hasLocalChanges}
+                      isNewNotebook={isNew}
+                      editor={editor}
+                      hasUnpublishedChanges={hasUnpublishedChanges}
+                      isPublishing={isPublishing}
+                      removeLocalChanges={removeLocalChanges}
+                      publishNotebook={publishNotebook}
+                      unpublishNotebook={unpublishNotebook}
+                      inviteEditorByEmail={inviteEditorByEmail}
+                      removeEditorById={removeEditorById}
+                      changeEditorAccess={changeEditorAccess}
+                      toggleSidebar={toggleSidebar}
+                      sidebarOpen={sidebarOpen}
+                      status={notebookStatus}
+                      isReadOnly={isReadOnly}
+                      creationDate={createdAt}
+                    />
+                  </Frame>
+                }
+              />
+            </Frame>
+          </EditorStylesContext.Provider>
+        </ComputerContextProvider>
+      </DeciEditorContextProvider>
+    </NotebookMetaActionsProvider>
   );
 };
 

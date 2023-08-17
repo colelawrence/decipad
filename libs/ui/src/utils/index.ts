@@ -9,7 +9,6 @@ export * from './notebookStatus';
 export * from './props';
 export * from './results';
 export * from './routing';
-export * from './search';
 export * from './svg';
 export * from './swatches';
 export * from './table';
