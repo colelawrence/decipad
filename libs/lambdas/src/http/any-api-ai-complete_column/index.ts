@@ -1,14 +1,12 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import zip from 'lodash.zip';
 import handle from '../handle';
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
 });
-
-const openai = new OpenAIApi(configuration);
 
 const createUserMessageContent = (table: string, columnName: string) => {
   return `\`\`\`
@@ -92,7 +90,7 @@ export const handler = handle(async (event) => {
 
   const userMessageContent = createUserMessageContent(tableString, columnName);
 
-  const completion = await openai.createChatCompletion({
+  const completion = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo-0613',
     messages: [
       {
@@ -131,7 +129,7 @@ export const handler = handle(async (event) => {
     presence_penalty: 0,
   });
 
-  const { message } = completion.data.choices[0];
+  const { message } = completion.choices[0];
   if (!message || !message.function_call) {
     throw new Error('ChatGPT call failed.');
   }

@@ -1,14 +1,13 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import handle from '../handle';
+import { Completion } from 'openai/resources';
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
 });
-
-const openai = new OpenAIApi(configuration);
 
 type RequestBody = {
   paragraph: string;
@@ -52,9 +51,10 @@ export const handler = handle(async (event) => {
 
   const prompt = createPrompt(requestBody);
 
-  let completion: Awaited<ReturnType<typeof openai.createCompletion>>;
+  let completion: Completion;
+
   try {
-    completion = await openai.createCompletion({
+    completion = await openai.completions.create({
       model: 'text-davinci-003',
       prompt,
       temperature: 0.75,
@@ -66,7 +66,7 @@ export const handler = handle(async (event) => {
   } catch (e) {
     throw Boom.internal('OpenAI request failed', e);
   }
-  const newParagraph = completion.data.choices[0].text;
+  const newParagraph = completion.choices[0].text;
   if (!newParagraph) {
     throw Boom.internal(`Could not rewrite paragraph`);
   }

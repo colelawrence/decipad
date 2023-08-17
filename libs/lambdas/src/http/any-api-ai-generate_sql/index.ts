@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai';
+import { OpenAI } from 'openai';
 import { getDefined } from '@decipad/utils';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
@@ -9,11 +9,9 @@ import handle from '../handle';
 import { ExternalDataSourceRecord } from '../../types';
 import { getSchemaString } from './getSchemaString';
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
 });
-
-const openai = new OpenAIApi(configuration);
 
 const notebook = resource('notebook');
 
@@ -73,7 +71,7 @@ export const handler = handle(async (event) => {
 
   const prompt = createPrompt(schemaString, requestBody.prompt);
 
-  const completion = await openai.createCompletion({
+  const completion = await openai.completions.create({
     model: 'text-davinci-003',
     prompt,
     temperature: 0,
@@ -83,7 +81,7 @@ export const handler = handle(async (event) => {
     presence_penalty: 0.0,
     stop: ['#', ';'],
   });
-  const sqlQuery = completion.data.choices[0].text;
+  const sqlQuery = completion.choices[0].text;
   if (!sqlQuery) {
     throw Boom.internal(`Could not complete query`);
   }
