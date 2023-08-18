@@ -3,6 +3,7 @@ import Boom from '@hapi/boom';
 import { thirdParty } from '@decipad/backend-config';
 import zip from 'lodash.zip';
 import handle from '../handle';
+import { captureException } from '@decipad/backend-trace';
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -138,22 +139,28 @@ export const handler = handle(async (event) => {
   try {
     parsedArgs = JSON.parse(argString as string);
   } catch (e) {
-    throw new Error(
+    const err = new Error(
       `Badly formed ChatGPT response to submit_completion (not parseable JSON): \n\n${argString}`
     );
+
+    captureException(err);
+    throw err;
   }
 
   if (
     !parsedArgs.suggestions ||
     !parsedArgs.suggestions.every((s) => typeof s === 'string')
   ) {
-    throw new Error(
+    const err = new Error(
       `Badly formed ChatGPT response to submit_completion: \n\n${JSON.stringify(
         parsedArgs,
         null,
         2
       )}`
     );
+
+    captureException(err);
+    throw err;
   }
 
   type Row = {
@@ -164,7 +171,7 @@ export const handler = handle(async (event) => {
   type StrictPair = [string, Row];
 
   // We're being very permissive here. If the lengths of the suggestion and table arrays aren't
-  // we naively match as many as we can and discard the rest.
+  // the same we naively match as many as we can and discard the rest.
   const indexedSuggestions = zip(parsedArgs.suggestions, requestBody.table)
     .filter((pair: Pair): pair is StrictPair => !pair.includes(undefined))
     .map(([suggestion, row]) => {

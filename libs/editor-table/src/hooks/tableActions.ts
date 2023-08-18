@@ -39,6 +39,7 @@ import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { useToast } from '@decipad/toast';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
+import * as Sentry from '@sentry/react';
 
 export interface TableActions {
   onDelete: () => void;
@@ -408,49 +409,60 @@ export const useTableActions = (
   const { setTableFrozen } = useEditorTableContext();
   // populate column
   useEffect(() => {
-    switch (rd.status) {
-      case 'loading': {
-        setTableFrozen(true);
-        return;
-      }
-      case 'error': {
-        setTableFrozen(false);
-        return toast('Unable to populate column.', 'error');
-      }
-      case 'success': {
-        setTableFrozen(false);
-        const suggestions = rd.result;
-
-        const isValid =
-          Array.isArray(suggestions) &&
-          suggestions.every(
-            (s) => typeof s.id === 'string' && typeof s.suggestion === 'string'
-          );
-
-        if (!isValid) {
-          throw new Error('JSON does not have expected type');
+    try {
+      switch (rd.status) {
+        case 'loading': {
+          setTableFrozen(true);
+          return;
         }
+        case 'error': {
+          setTableFrozen(false);
+          throw new Error(rd.error);
+        }
+        case 'success': {
+          setTableFrozen(false);
+          const suggestions = rd.result;
 
-        if (!path) return;
-        const [, , ...rows] = Array.from(getNodeChildren(editor, path));
+          const isValid =
+            Array.isArray(suggestions) &&
+            suggestions.every(
+              (s) =>
+                typeof s.id === 'string' && typeof s.suggestion === 'string'
+            );
 
-        rows.forEach((row, i) => {
-          const { id: rowId } = row[0];
-          const suggestion = suggestions.find(({ id }) => rowId === id);
-          if (!suggestion) return;
-
-          const columnCellPath = [...path, i + 2, suggestion.columnIndex];
-          if (hasNode(editor, columnCellPath)) {
-            insertText(editor, suggestion.suggestion, {
-              at: columnCellPath,
-            });
+          if (!isValid) {
+            throw new Error('Populate column received invalid JSON.');
           }
-        });
-        return;
+
+          if (!path) return;
+          const [, , ...rows] = Array.from(getNodeChildren(editor, path));
+
+          rows.forEach((row, i) => {
+            const { id: rowId } = row[0];
+            const suggestion = suggestions.find(({ id }) => rowId === id);
+            if (!suggestion) return;
+
+            const columnCellPath = [...path, i + 2, suggestion.columnIndex];
+            if (hasNode(editor, columnCellPath)) {
+              insertText(editor, suggestion.suggestion, {
+                at: columnCellPath,
+              });
+            }
+          });
+          return;
+        }
+        default: {
+          setTableFrozen(false);
+        }
       }
-      default: {
-        setTableFrozen(false);
-      }
+    } catch (err) {
+      toast('Unable to populate column.', 'error');
+
+      // We want to report an error, but it's not worth crashing the block over so
+      // we're calling Sentry directly.
+      Sentry.captureException(err, {
+        extra: { data: rd },
+      });
     }
   }, [rd, setTableFrozen, editor, path, toast]);
 
