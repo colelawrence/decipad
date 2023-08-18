@@ -85,14 +85,27 @@ export const TableCellControls = forwardRef<
             trigger={menuButton}
             dropdown
           >
-            <MenuItem icon={<UpArrow />} onSelect={onAddRowAbove}>
+            <MenuItem
+              icon={<UpArrow />}
+              onSelect={onAddRowAbove}
+              testid="insert-row-above"
+            >
               Insert Above
             </MenuItem>
-            <MenuItem icon={<DownArrow />} onSelect={onAddRowBelow}>
+            <MenuItem
+              icon={<DownArrow />}
+              onSelect={onAddRowBelow}
+              testid="insert-row-below"
+            >
               Insert Below
             </MenuItem>
             {onRemove && (
-              <MenuItem icon={<Trash />} onSelect={onRemove} selected={false}>
+              <MenuItem
+                icon={<Trash />}
+                onSelect={onRemove}
+                selected={false}
+                testid="delete-row"
+              >
                 Delete
               </MenuItem>
             )}

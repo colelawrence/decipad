@@ -21,7 +21,11 @@ import {
   setSelection,
   withPath,
 } from '@decipad/editor-utils';
-import { useComputer, useEditorTableContext } from '@decipad/react-contexts';
+import {
+  useComputer,
+  useCurrentWorkspaceStore,
+  useEditorTableContext,
+} from '@decipad/react-contexts';
 import {
   InsertNodesOptions,
   getNodeChildren,
@@ -32,11 +36,12 @@ import {
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
+import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
+import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
 import { Path } from 'slate';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
-import { useToast } from '@decipad/toast';
 import { getColumnName } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 import * as Sentry from '@sentry/react';
@@ -405,6 +410,14 @@ export const useTableActions = (
 
   const [rd, fetchRd] = useRdFetch('complete-column');
   const toast = useToast();
+  const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
+  const [, updateQueryExecCount] = useIncrementQueryCountMutation();
+
+  const updateQueryExecutionCount = useCallback(async () => {
+    return updateQueryExecCount({
+      id: workspaceInfo.id || '',
+    });
+  }, [workspaceInfo.id, updateQueryExecCount]);
 
   const { setTableFrozen } = useEditorTableContext();
   // populate column
@@ -510,9 +523,26 @@ export const useTableActions = (
         table: rearranged,
       };
 
-      fetchRd(body);
+      const result = await updateQueryExecutionCount();
+      const newExecutedQueryData = result.data?.incrementQueryCount;
+      if (newExecutedQueryData) {
+        fetchRd(body);
+        setCurrentWorkspaceInfo({
+          ...workspaceInfo,
+          queryCount: newExecutedQueryData.queryCount,
+          quotaLimit: newExecutedQueryData.quotaLimit,
+        });
+      }
     },
-    [editor, path, fetchRd, toast]
+    [
+      path,
+      editor,
+      updateQueryExecutionCount,
+      toast,
+      fetchRd,
+      setCurrentWorkspaceInfo,
+      workspaceInfo,
+    ]
   );
 
   const onMoveColumn = useCallback(

@@ -10,6 +10,7 @@ interface DropdownItem {
   readonly onClick?: () => void;
   readonly disabled?: boolean;
   readonly isNew?: boolean;
+  readonly tooltipContent?: ReactNode;
 }
 
 interface DropdownMenuProps {
@@ -51,6 +52,8 @@ const DropdownMenu = ({
             icon={item.icon}
             onSelect={item.onClick}
             isNew={item.isNew}
+            disabled={!!item.disabled}
+            tooltipContent={item.tooltipContent}
           >
             {item.label}
           </MenuItem>

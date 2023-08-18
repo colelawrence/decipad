@@ -2,6 +2,7 @@
 import type { CellValueType } from '@decipad/editor-types';
 import { ElementAttributes } from '@decipad/editor-types';
 import {
+  useCurrentWorkspaceStore,
   useEditorTableContext,
   useThemeFromStore,
 } from '@decipad/react-contexts';
@@ -16,6 +17,7 @@ import {
   useContext,
   useRef,
   useState,
+  useMemo,
 } from 'react';
 import {
   ConnectDragPreview,
@@ -52,6 +54,7 @@ import {
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { UpgradePlanWarningTooltip } from '../UpgradePlanWarning/UpgradePlanWarningTooltip';
 
 interface DropSourceAndTargetProps {
   readonly draggingOver: boolean;
@@ -165,10 +168,18 @@ export const TableHeader = ({
 }: TableHeaderProps): ReturnType<FC> => {
   const tempWidth = useRef<number | undefined>(undefined);
   const [open, onChangeOpen] = useState(false);
+  const {
+    workspaceInfo: { queryCount, quotaLimit, id },
+    isQuotaLimitBeingReached,
+  } = useCurrentWorkspaceStore();
 
   const toggleOpen = useCallback(() => {
     onChangeOpen(!open);
   }, [open]);
+
+  const shouldDisableAI = useMemo(() => {
+    return !!quotaLimit && !!queryCount && queryCount >= quotaLimit;
+  }, [quotaLimit, queryCount]);
 
   const Icon = getTypeIcon(type);
   const [darkTheme] = useThemeFromStore();
@@ -215,30 +226,41 @@ export const TableHeader = ({
     document.body.addEventListener('mousemove', onMouseMove);
     document.body.addEventListener('mouseup', onMouseUp, { once: true });
   };
+
   const columOptionItems = [
     {
       label: 'Populate column',
       onClick: onPopulateColumn,
-      icon: <Sparkles />,
-      badgeText: 'New',
+      icon: <Sparkles disabled={shouldDisableAI} />,
       isNew: true,
+      disabled: shouldDisableAI,
+      tooltipContent: isQuotaLimitBeingReached ? (
+        <UpgradePlanWarningTooltip
+          workspaceId={id}
+          quotaLimit={quotaLimit}
+          maxQueryExecution={shouldDisableAI}
+          showQueryQuotaLimit={isQuotaLimitBeingReached}
+          featureCustomText="Unlock this feature"
+          showUpgradeProButton={false}
+        ></UpgradePlanWarningTooltip>
+      ) : null,
     },
     {
       label: 'Add column left',
       onClick: onAddColLeft,
-      icon: <AlignArrowLeft />,
+      icon: <AlignArrowLeft disabled={isFirst} />,
       disabled: isFirst,
     },
     {
       label: 'Add column right',
       onClick: onAddColRight,
-      icon: <AlignArrowRight />,
+      icon: <AlignArrowRight disabled={isFirst} />,
       disabled: isFirst,
     },
     {
       label: 'Remove column',
       onClick: onRemoveColumn,
-      icon: <Delete />,
+      icon: <Delete disabled={length === 1} />,
       disabled: length === 1,
     },
   ];

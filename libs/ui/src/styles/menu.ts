@@ -27,6 +27,7 @@ export const itemDisabledStyles = css(itemStyles, {
   '&:hover, &:focus, &[data-selected="true"]': {
     backgroundColor: cssVar('backgroundMain'),
   },
+  color: cssVar('textDisabled'),
 });
 
 export const soonStyles = css(p8Medium, {

@@ -124,17 +124,17 @@ export async function removeRow(page: Page, line: number, tableName?: string) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
   await openRowMenu(page, line, tableName);
-  await page.locator('span', { hasText: 'Delete' }).click();
+  await page.getByTestId('delete-row').click();
 }
 
 export async function insertRowAbove(page: Page, line: number) {
   await openRowMenu(page, line);
-  await page.locator('span', { hasText: 'Insert Above' }).click();
+  await page.getByTestId('insert-row-above').click();
 }
 
 export async function insertRowBelow(page: Page, line: number) {
   await openRowMenu(page, line);
-  await page.locator('span', { hasText: 'Insert Below' }).click();
+  await page.getByTestId('insert-row-below').click();
 }
 
 export async function addColumn(page: Page, tableName?: string) {

@@ -10,6 +10,7 @@ interface UpgradePlanWarningTooltipProps {
   readonly maxQueryExecution?: boolean;
   readonly showQueryQuotaLimit?: boolean;
   readonly featureCustomText?: string;
+  readonly showUpgradeProButton?: boolean;
 }
 export const UpgradePlanWarningTooltip = ({
   quotaLimit,
@@ -17,6 +18,7 @@ export const UpgradePlanWarningTooltip = ({
   maxQueryExecution = false,
   showQueryQuotaLimit = false,
   featureCustomText = '',
+  showUpgradeProButton = true,
 }: UpgradePlanWarningTooltipProps): ReturnType<React.FC> => {
   const navigate = useNavigate();
 
@@ -38,28 +40,30 @@ export const UpgradePlanWarningTooltip = ({
           </p>
         </>
       )}
-      <div>
-        <Button
-          type="primaryBrand"
-          size="extraExtraSlim"
-          onClick={() => {
-            if (workspaceId) {
-              navigate(
-                workspaces({})
-                  .workspace({
-                    workspaceId,
-                  })
-                  .members({}).$,
-                { replace: true }
-              );
-            }
-          }}
-          sameTab={true} // change this to false if you want to work on payments locally
-          testId="integration_upgrade_pro"
-        >
-          Upgrade to Pro
-        </Button>
-      </div>
+      {showUpgradeProButton && (
+        <div>
+          <Button
+            type="primaryBrand"
+            size="extraExtraSlim"
+            onClick={() => {
+              if (workspaceId) {
+                navigate(
+                  workspaces({})
+                    .workspace({
+                      workspaceId,
+                    })
+                    .members({}).$,
+                  { replace: true }
+                );
+              }
+            }}
+            sameTab={true} // change this to false if you want to work on payments locally
+            testId="integration_upgrade_pro"
+          >
+            Upgrade to Pro
+          </Button>
+        </div>
+      )}
     </>
   );
 };

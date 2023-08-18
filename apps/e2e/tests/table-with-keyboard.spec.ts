@@ -53,7 +53,7 @@ test.describe('Adding tables with keyboard (and more)', () => {
 
   test('can delete a row', async () => {
     await openRowMenu(page, 3);
-    await page.locator('span', { hasText: 'Delete' }).click();
+    await page.getByTestId('delete-row').click();
     expect(await getFromTable(page, 1)).toBe('1');
     expect(await getFromTable(page, 2)).toBe('2');
   });
