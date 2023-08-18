@@ -1,9 +1,9 @@
 diff --git a/node_modules/next-auth/core/lib/email/signin.js b/node_modules/next-auth/core/lib/email/signin.js
-index eda015f..328b382 100644
+index b7f2cb2..91a9dde 100644
 --- a/node_modules/next-auth/core/lib/email/signin.js
 +++ b/node_modules/next-auth/core/lib/email/signin.js
 @@ -38,6 +38,7 @@ async function email(identifier, options) {
-   }), adapter.createVerificationToken({
+   }), (_adapter$createVerifi = adapter.createVerificationToken) === null || _adapter$createVerifi === void 0 ? void 0 : _adapter$createVerifi.call(adapter, {
      identifier,
      token: (0, _utils.hashToken)(token, options),
 +    openTokenForTestsOnly: token,
@@ -11,11 +11,11 @@ index eda015f..328b382 100644
    })]);
    return `${url}/verify-request?${new URLSearchParams({
 diff --git a/node_modules/next-auth/src/core/lib/email/signin.ts b/node_modules/next-auth/src/core/lib/email/signin.ts
-index fa4ba15..99ab6d5 100644
+index f672af6..1af8f85 100644
 --- a/node_modules/next-auth/src/core/lib/email/signin.ts
 +++ b/node_modules/next-auth/src/core/lib/email/signin.ts
-@@ -39,6 +39,7 @@ export default async function email(
-     adapter.createVerificationToken({
+@@ -40,6 +40,7 @@ export default async function email(
+     adapter.createVerificationToken?.({
        identifier,
        token: hashToken(token, options),
 +      openTokenForTestsOnly: token,
