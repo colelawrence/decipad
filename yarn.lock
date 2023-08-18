@@ -549,10 +549,10 @@
     run-waterfall "~1.1.7"
     yesno "~0.4.0"
 
-"@architect/functions@6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@architect/functions/-/functions-6.0.1.tgz#80f5321e414108016ab1aecc87a9b47a4368b967"
-  integrity sha512-k+lOJGhFNIg2aQnFzN3B9kq6fHgx5+xmlsJWdHZxDZfYRdnL4oXlyjwG6N3ydsv9j/vw9XwRXqexzicaG5BOCg==
+"@architect/functions@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@architect/functions/-/functions-7.0.0.tgz#82fdd436615ff27fd7b4d60ca5482a4c6aeb2cc5"
+  integrity sha512-6HumTH9885uMAZ9yIEBUi8RmgzFTQoGefd6CD6sNkVzoZM2QCyk4BRfKvo8hdgm+AxDjkZdvA/4kaj5K7680Bg==
   dependencies:
     cookie "^0.5.0"
     cookie-signature "^1.2.1"

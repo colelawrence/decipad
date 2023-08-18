@@ -1,8 +1,8 @@
 diff --git a/node_modules/@architect/functions/src/discovery/index.js b/node_modules/@architect/functions/src/discovery/index.js
-index 6345b24..a4732bc 100644
+index a2c2bef..7bf7896 100644
 --- a/node_modules/@architect/functions/src/discovery/index.js
 +++ b/node_modules/@architect/functions/src/discovery/index.js
-@@ -26,7 +26,7 @@ module.exports = function lookup (callback) {
+@@ -27,7 +27,7 @@ module.exports = function lookup (callback) {
    if (local) {
      let port = 2222
      if (ARC_SANDBOX) {
@@ -12,10 +12,10 @@ index 6345b24..a4732bc 100644
          return callback(ReferenceError('Sandbox internal port not found'))
        }
 diff --git a/node_modules/@architect/functions/src/events/publish.js b/node_modules/@architect/functions/src/events/publish.js
-index 4ef878e..9e25c9e 100644
+index b8e7e22..b1ef00a 100644
 --- a/node_modules/@architect/functions/src/events/publish.js
 +++ b/node_modules/@architect/functions/src/events/publish.js
-@@ -73,12 +73,20 @@ function _publishSandbox (type, params, callback) {
+@@ -73,16 +73,24 @@ function _publishSandbox (type, params, callback) {
    req.end('\n')
  }
  
@@ -24,33 +24,24 @@ index 4ef878e..9e25c9e 100644
 +    removeUndefinedValues: true
 +  },
 +  maxAttempts: 10,
-+    retryMode: 'adaptive',
++  retryMode: 'adaptive',
 +};
 +
  function eventFactory (arc) {
    return function live ({ name, payload }, callback) {
-     let method
-     if (isNode18) {
-       let { SNS } = require('@aws-sdk/client-sns')
--      let sns = new SNS
-+      let sns = new SNS(clientOptions)
-       method = (params, callback) => {
-         return sns.publish(params, callback)
+     if (!snsClient) {
+       if (isNode18) {
+         let { SNS } = require('@aws-sdk/client-sns')
+-        sns = new SNS
++        sns = new SNS(clientOptions)
        }
-diff --git a/node_modules/@architect/functions/src/index.js b/node_modules/@architect/functions/src/index.js
-index 70f27a8..67506f9 100644
---- a/node_modules/@architect/functions/src/index.js
-+++ b/node_modules/@architect/functions/src/index.js
-@@ -13,9 +13,6 @@ if (!ARC_ENV) {
- if (!validEnvs.includes(ARC_ENV)) {
-   throw ReferenceError(`ARC_ENV env var is required for use with @architect/functions`)
- }
--if (ARC_SANDBOX && !sandboxVersionAtLeast('5.0.0')) {
--  throw ReferenceError('Incompatible version: please upgrade to Sandbox >=5.x or Architect >=10.x')
--}
- 
- let http = require('./http')
- let _static = require('./static')
+       else {
+         let SNS = require('aws-sdk/clients/sns')
+-        sns = new SNS
++        sns = new SNS(clientOptions)
+       }
+     }
+     snsClient = (params, callback) => {
 diff --git a/node_modules/@architect/functions/src/tables/dynamo.js b/node_modules/@architect/functions/src/tables/dynamo.js
 index adfe2e3..391fd6f 100644
 --- a/node_modules/@architect/functions/src/tables/dynamo.js
