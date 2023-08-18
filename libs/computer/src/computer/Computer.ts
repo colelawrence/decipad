@@ -447,100 +447,104 @@ export class Computer {
     results: NotebookResults,
     filterForBlockId?: string
   ): ColumnDesc[] {
-    return Object.values(results.blockResults)
-      .flatMap((b) => {
-        if (b.type === 'computer-result') {
-          if (isTableResult(b.result)) {
-            if (filterForBlockId && b.id !== filterForBlockId) {
-              return [];
-            }
-            // external data results in a single table
-            if (this.latestExternalData.has(b.id)) {
-              const extData = getDefined(this.latestExternalData.get(b.id));
-              if (!isTable(extData.type)) {
+    return (
+      Object.values(results.blockResults)
+        // eslint-disable-next-line complexity
+        .flatMap((b) => {
+          if (b.type === 'computer-result') {
+            if (isTableResult(b.result)) {
+              if (filterForBlockId && b.id !== filterForBlockId) {
                 return [];
               }
-              return b.result.type.columnNames.map(
-                (columnName, columnIndex) => {
-                  const result = {
-                    type: {
-                      kind: 'column',
-                      cellType: (extData.type as SerializedTypes.Table)
-                        .columnTypes[columnIndex],
-                    },
-                    value: (extData.value as Result.Result<'table'>['value'])[
-                      columnIndex
-                    ],
-                  } as Result.Result<'column'>;
-                  const tableName = this.getSymbolDefinedInBlock(b.id);
-                  return {
-                    tableName: tableName ?? 'unnamed',
-                    columnName,
-                    result,
-                  };
+              // external data results in a single table
+              if (this.latestExternalData.has(b.id)) {
+                const extData = getDefined(this.latestExternalData.get(b.id));
+                if (!isTable(extData.type)) {
+                  return [];
                 }
-              );
-            } else {
+                return b.result.type.columnNames.map(
+                  (columnName, columnIndex) => {
+                    const result = {
+                      type: {
+                        kind: 'column',
+                        cellType: (extData.type as SerializedTypes.Table)
+                          .columnTypes[columnIndex],
+                      },
+                      value: (extData.value as Result.Result<'table'>['value'])[
+                        columnIndex
+                      ],
+                    } as Result.Result<'column'>;
+                    const tableName = this.getSymbolDefinedInBlock(b.id);
+                    return {
+                      tableName: tableName ?? 'unnamed',
+                      columnName,
+                      result,
+                    };
+                  }
+                );
+              } else {
+                const statement = this.latestProgram.asBlockIdMap.get(b.id)
+                  ?.block?.args[0];
+                if (
+                  (statement?.type !== 'table' &&
+                    statement?.type !== 'assign') ||
+                  !b.result?.value ||
+                  !b.result?.type
+                ) {
+                  return [];
+                }
+                const tableName = getIdentifierString(statement.args[0]);
+                return b.result.type.columnNames.map(
+                  (columnName, columnIndex) => {
+                    const result = {
+                      type: {
+                        kind: 'column',
+                        cellType: (
+                          b.result.type as Result.Result<'table'>['type']
+                        ).columnTypes[columnIndex],
+                      },
+                      value: (
+                        b.result.value as Result.Result<'table'>['value']
+                      )[columnIndex],
+                    } as Result.Result<'column'>;
+                    return {
+                      tableName,
+                      columnName,
+                      result,
+                    };
+                  }
+                );
+              }
+            } else if (isColumn(b.result?.type)) {
               const statement = this.latestProgram.asBlockIdMap.get(b.id)?.block
                 ?.args[0];
-              if (
-                (statement?.type !== 'table' && statement?.type !== 'assign') ||
-                !b.result?.value ||
-                !b.result?.type
-              ) {
+              if (statement?.type !== 'table-column-assign') {
                 return [];
               }
+
               const tableName = getIdentifierString(statement.args[0]);
-              return b.result.type.columnNames.map(
-                (columnName, columnIndex) => {
-                  const result = {
-                    type: {
-                      kind: 'column',
-                      cellType: (
-                        b.result.type as Result.Result<'table'>['type']
-                      ).columnTypes[columnIndex],
-                    },
-                    value: (b.result.value as Result.Result<'table'>['value'])[
-                      columnIndex
-                    ],
-                  } as Result.Result<'column'>;
-                  return {
-                    tableName,
-                    columnName,
-                    result,
-                  };
+              if (filterForBlockId) {
+                const blockId = this.getVarBlockId(tableName);
+                if (blockId !== filterForBlockId) {
+                  return [];
                 }
-              );
-            }
-          } else if (isColumn(b.result?.type)) {
-            const statement = this.latestProgram.asBlockIdMap.get(b.id)?.block
-              ?.args[0];
-            if (statement?.type !== 'table-column-assign') {
-              return [];
-            }
-
-            const tableName = getIdentifierString(statement.args[0]);
-            if (filterForBlockId) {
-              const blockId = this.getVarBlockId(tableName);
-              if (blockId !== filterForBlockId) {
-                return [];
               }
+              const columnName = getIdentifierString(statement.args[1]);
+              return [
+                {
+                  tableName,
+                  columnName,
+                  result: b.result as Result.Result<'column'>,
+                  blockId: b.id,
+                },
+              ];
             }
-            const columnName = getIdentifierString(statement.args[1]);
-            return [
-              {
-                tableName,
-                columnName,
-                result: b.result as Result.Result<'column'>,
-                blockId: b.id,
-              },
-            ];
           }
-        }
 
-        return [];
-      })
-      .reduce(deduplicateColumnResults, []);
+          return [];
+        })
+        .reduce(deduplicateColumnResults, [])
+    );
   }
 
   public getColumnNameDefinedInBlock$ = listenerHelper(

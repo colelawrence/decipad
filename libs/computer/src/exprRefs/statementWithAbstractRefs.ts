@@ -24,6 +24,7 @@ export const statementWithAbstractRefs = <T extends AST.Statement>(
 ): [T, string[]] => {
   const blockDependencies: string[] = [];
 
+  // eslint-disable-next-line complexity
   const processNode = (node: AST.Node) => {
     switch (node.type) {
       case 'funcref': {

@@ -3,6 +3,7 @@ import { formatTypeToBasicString } from './formatTypeBasic';
 import { formatUnit } from './formatUnit';
 
 // istanbul ignore next
+// eslint-disable-next-line complexity
 const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
   switch (spec.errType) {
     case 'free-form': {

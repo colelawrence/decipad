@@ -54,6 +54,7 @@ type VariableEditorMenuProps = {
     }
 );
 
+// eslint-disable-next-line complexity
 export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
   onChangeMax,
   onChangeMin,

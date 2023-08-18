@@ -29,6 +29,7 @@ interface CodeVariableProps {
 
 export type VariableScope = 'global' | 'local' | 'undefined';
 
+// eslint-disable-next-line complexity
 export const CodeVariable = ({
   children,
   showTooltip = true,

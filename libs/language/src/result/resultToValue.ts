@@ -24,6 +24,7 @@ import {
 } from '../interpreter/interpreter-types';
 import { ValueGeneratorFunction } from '../value/types';
 
+// eslint-disable-next-line complexity
 export const resultToValue = async (result: Result.Result): Promise<Value> => {
   const { type, value } = result;
   switch (type.kind) {

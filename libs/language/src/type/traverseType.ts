@@ -1,6 +1,7 @@
 import { produce } from '@decipad/utils';
 import type { SerializedType } from './SerializedType';
 
+// eslint-disable-next-line complexity
 export function traverseType(
   givenType: SerializedType,
   fn: (type: SerializedType) => SerializedType

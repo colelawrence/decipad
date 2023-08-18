@@ -98,6 +98,7 @@ const identifiedErrorFromNode = (id: string): IdentifiedError => ({
 
 const isTesting = !!process.env.JEST_WORKER_ID;
 
+// eslint-disable-next-line complexity
 export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
   const errored = blocks.filter(badBlock);
   const sorted: IdentifiedBlock[] = [];

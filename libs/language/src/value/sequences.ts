@@ -48,6 +48,12 @@ export async function columnFromSequence(
   return Column.fromValues(array, defaultValue('column'));
 }
 
+// helper to allow decreasing date sequences
+const cmpFn = (s: bigint, e: bigint, i: bigint) => {
+  return s < e ? i <= e : i >= e;
+};
+
+// eslint-disable-next-line complexity
 export async function columnFromDateSequence(
   startD: DateValue,
   endD: DateValue,
@@ -70,11 +76,6 @@ export async function columnFromDateSequence(
   const spec = getSpecificity(by);
 
   const array = [];
-
-  // helper to allow decreasing date sequences
-  const cmpFn = (s: bigint, e: bigint, i: bigint) => {
-    return s < e ? i <= e : i >= e;
-  };
 
   const signal = start < end ? 1 : -1;
   const step = 1 * signal;

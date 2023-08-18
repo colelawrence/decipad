@@ -2,6 +2,7 @@
 import { componentCssVarHex, cssVarHex } from '@decipad/ui';
 import { PlotSpec } from './plotUtils.interface';
 
+// eslint-disable-next-line complexity
 export const normalizePlotSpec = (
   spec: PlotSpec | undefined
 ): PlotSpec | undefined => {

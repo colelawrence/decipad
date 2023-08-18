@@ -40,7 +40,7 @@ import { Expression } from '../parser/ast-types';
 // Gets a single value from an expanded AST.
 
 // exhaustive switch
-// eslint-disable-next-line consistent-return
+// eslint-disable-next-line consistent-return, complexity
 async function internalEvaluate(
   realm: Realm,
   node: AST.Statement

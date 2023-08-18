@@ -44,6 +44,7 @@ export function simpleValueUnitToString(
 
 const join = (a: string, b: string) => (b ? `${a} ${b}` : a);
 
+// eslint-disable-next-line complexity
 function print(
   exp: SimpleValueAST | DeciNumber | '%' | undefined
 ): string | undefined {

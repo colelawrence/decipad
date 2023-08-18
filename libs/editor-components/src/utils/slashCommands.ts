@@ -64,6 +64,7 @@ export const execute = ({
   const { changeOpen } = useConnectionStore.getState();
   const { setDialogOpen, setFileType } = useFileUploadStore.getState();
 
+  // eslint-disable-next-line complexity
   withoutNormalizing(editor, () => {
     setSelection(editor, null as unknown as Range);
     switch (command) {

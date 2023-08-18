@@ -94,6 +94,7 @@ export class DeciNumber {
   public readonly s?: bigint;
   public infinite = false;
 
+  // eslint-disable-next-line complexity
   constructor(
     f?: UndefinableOrInfiniteOrFractionLike | string | bigint | number
   ) {

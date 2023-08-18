@@ -48,6 +48,7 @@ export const dependencies = (
     return undefined;
   })(initialNode);
 
+  // eslint-disable-next-line complexity
   function findRefs(node: AST.Node): string[] {
     switch (node.type) {
       case 'argument-names':

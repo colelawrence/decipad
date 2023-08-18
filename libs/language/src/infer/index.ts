@@ -67,7 +67,7 @@ const wrap =
 */
 export const inferExpression = wrap(
   // exhaustive switch
-  // eslint-disable-next-line consistent-return
+  // eslint-disable-next-line consistent-return, complexity
   async (ctx: Context, expr: Writable<AST.Expression>): Promise<Type> => {
     ctx.incrementStatsCounter('inferExpressionCount');
     switch (expr.type) {

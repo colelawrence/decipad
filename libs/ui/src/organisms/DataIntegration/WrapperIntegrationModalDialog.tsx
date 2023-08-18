@@ -66,6 +66,7 @@ interface WrapperIntegrationModalDialogProps {
 
 export const WrapperIntegrationModalDialog: FC<
   WrapperIntegrationModalDialogProps
+  // eslint-disable-next-line complexity
 > = ({
   title,
   onContinue: onConnect,

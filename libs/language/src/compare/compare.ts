@@ -34,6 +34,7 @@ export type Comparable =
   | ReadonlyArray<Comparable>;
 
 /** Returns the sign of a comparison between two things, whatever they may be */
+// eslint-disable-next-line complexity
 function compareToNumber(a: Comparable, b: Comparable): number | bigint {
   if (
     a === UnknownValue ||

@@ -35,6 +35,7 @@ type IconButtonProps = {
   readonly notSelectedLook?: boolean;
 };
 
+// eslint-disable-next-line complexity
 export const TextAndIconButton = ({
   children,
   text = '',

@@ -70,6 +70,7 @@ export const add = (a: LogicNumber, b: LogicNumber): LogicNumber => {
   return a.add(b);
 };
 
+// eslint-disable-next-line complexity
 export const sub = (a: LogicNumber, b: LogicNumber): LogicNumber => {
   if (isInfinity(a) && !isInfinity(b)) {
     return a;
@@ -112,6 +113,7 @@ export const mul = (a: LogicNumber, b: LogicNumber): LogicNumber => {
   return a.mul(b);
 };
 
+// eslint-disable-next-line complexity
 export const div = (a: LogicNumber, b: LogicNumber): LogicNumber => {
   if (isInfinity(a) && isInfinity(b)) {
     throw new Error('dont know how to divide two infinite numbers');
@@ -148,6 +150,7 @@ export const min = (...ns: LogicNumber[]): LogicNumber => {
     throw new Error("don't know the minimum of an empty set");
   }
 
+  // eslint-disable-next-line complexity
   return ns.reduce((a, b) => {
     if (isInfinity(a) && isInfinity(b) && a === b) {
       return a;
@@ -182,6 +185,7 @@ export const max = (...ns: LogicNumber[]): LogicNumber => {
     throw new Error('dont know the maximum of an empty set');
   }
 
+  // eslint-disable-next-line complexity
   return ns.reduce((a, b) => {
     if (isInfinity(a) && isInfinity(b) && a === b) {
       return a;

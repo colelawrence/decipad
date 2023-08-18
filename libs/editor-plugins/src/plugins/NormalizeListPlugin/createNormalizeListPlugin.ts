@@ -31,6 +31,7 @@ import { normalizeExcessProperties } from '../../utils/normalize';
 
 const normalizeList =
   (editor: MyEditor) =>
+  // eslint-disable-next-line complexity
   (entry: MyNodeEntry): NormalizerReturnValue => {
     const [node, path] = entry;
 

@@ -110,6 +110,7 @@ interface ToStringable {
   toString: () => string;
 }
 
+// eslint-disable-next-line complexity
 const internalImportFromUnknownJson = (
   _json: unknown,
   { jsonPath, ...options }: ImportOptions,

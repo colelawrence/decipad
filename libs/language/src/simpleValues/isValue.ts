@@ -36,6 +36,7 @@ export function isValue(
   return isArgListValue(exp, root, definedVariables);
 }
 
+// eslint-disable-next-line complexity
 function isArgListValue(
   exp: AST.Expression,
   root?: DeciNumber,

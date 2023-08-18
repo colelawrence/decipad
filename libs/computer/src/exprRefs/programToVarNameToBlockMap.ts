@@ -9,6 +9,7 @@ interface ProgramToVarNameToBlockMapResult {
   tableToColumnsMap: Map<string, Set<string>>;
 }
 
+// eslint-disable-next-line complexity
 export const programToVarNameToBlockMap = (
   program: Program
 ): ProgramToVarNameToBlockMapResult => {

@@ -22,6 +22,7 @@ type ParsedPermission = {
 
 export const handler = handle(permissionsChangesHandler);
 
+// eslint-disable-next-line complexity
 async function permissionsChangesHandler(
   event: TableRecordChanges<PermissionRecord>
 ) {

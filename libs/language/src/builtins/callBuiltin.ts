@@ -96,6 +96,7 @@ async function callBuiltinAfterAutoconvert(
 
 const stages = ['autoConvertArguments', 'builtin', 'autoConvertResult'];
 
+// eslint-disable-next-line complexity
 export const callBuiltin = async (
   realm: Realm,
   funcName: string,

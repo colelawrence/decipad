@@ -42,6 +42,7 @@ export async function narrowTypes(
   if (s1.kind === 'anything') return t2;
   if (s2UnknownType.kind === 'anything') return t1;
 
+  // eslint-disable-next-line complexity
   const ret = await (async () => {
     if (s1.kind !== s2UnknownType.kind) {
       return t2.expected(s1.kind);

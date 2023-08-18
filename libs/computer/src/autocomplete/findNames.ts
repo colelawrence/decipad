@@ -22,6 +22,7 @@ export function* findNames(
 }
 
 /** Finds names accessible `inBlockId`. `isLocal` is adjusted if we're talking about local variables, and so is the column name if we're in a table (IE we don't need TableName.ColumnName) */
+// eslint-disable-next-line complexity
 function* internalFindNames(
   computer: Computer,
   program: Readonly<Program>,

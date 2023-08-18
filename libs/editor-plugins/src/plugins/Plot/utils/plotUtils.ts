@@ -139,6 +139,7 @@ export function encodingFor(
   return spec;
 }
 
+// eslint-disable-next-line complexity
 export function specFromType(
   computer: Computer,
   type: undefined | SerializedType,

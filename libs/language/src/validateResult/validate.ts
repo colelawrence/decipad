@@ -9,6 +9,7 @@ import { validateColumnResult } from './validateColumnResult';
 import { Validate } from './types';
 import { ResultGenerator } from '../interpreter/interpreter-types';
 
+// eslint-disable-next-line complexity
 const validate: Validate = <
   T extends Interpreter.OneResult | null | undefined =
     | Interpreter.OneResult

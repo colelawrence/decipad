@@ -6,6 +6,7 @@ import { SerializedType, SerializedTypes, Type, serializeType } from '../type';
 import { DateValue, NumberValue, Range, Row, Scalar, Table } from './Value';
 import { Value } from './types';
 
+// eslint-disable-next-line complexity
 export const defaultValue = (
   type: Type | SerializedType | SerializedType['kind'] | undefined
 ): Value => {

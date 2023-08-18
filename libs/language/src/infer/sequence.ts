@@ -134,6 +134,7 @@ export const getDateSequenceIncrement = (
   return getDefined(sortTimeUnits([startUnit, endUnit]).pop());
 };
 
+// eslint-disable-next-line complexity
 export const inferSequence = async (
   ctx: Context,
   expr: AST.Sequence,

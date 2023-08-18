@@ -27,6 +27,7 @@ import { Computer } from '../computer';
  - Infer this statement
  - Evaluate the statement if it's not a type error
  */
+// eslint-disable-next-line complexity
 const internalComputeStatement = async (
   program: ComputerProgram,
   blockId: string,

@@ -167,6 +167,7 @@ export class Stack<T> {
     }
   }
 
+  // eslint-disable-next-line complexity
   setNamespaced(
     [ns, name]: readonly [namespace: string, name: string],
     value: T,

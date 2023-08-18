@@ -93,6 +93,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly isCentered?: boolean;
   readonly hasPreviousSibling?: boolean;
 }
+// eslint-disable-next-line complexity
 export const DraggableBlock = ({
   isSelected = false,
   isHidden = false,

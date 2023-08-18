@@ -89,6 +89,7 @@ function trimPrefix(unitName: string): [DeciNumber, string] {
   return [ONE, unitName];
 }
 
+// eslint-disable-next-line complexity
 export function parseUnit(unitString: string): Unit {
   const knownUnit = getUnitByName(unitString);
   if (knownUnit) {

@@ -16,6 +16,7 @@ function valueOrDefault(
   return value;
 }
 
+// eslint-disable-next-line complexity
 function env(name: SupportedEnvKey): string {
   // we make a big dumb switch here so that esbuild can replace the process.env.* lookups with the actual values:
   switch (name) {

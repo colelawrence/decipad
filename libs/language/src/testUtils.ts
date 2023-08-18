@@ -187,6 +187,7 @@ export const snapshotUnit = (unit: Unit[]) => {
 };
 
 /** Stringify types (for testing/snapshots ONLY) */
+// eslint-disable-next-line complexity
 export const snapshotType = (type: Type | SerializedType): string => {
   if (type instanceof Type) {
     type = serializeType(type);

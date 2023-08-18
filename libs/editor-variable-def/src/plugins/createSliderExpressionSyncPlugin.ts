@@ -29,6 +29,7 @@ export const createSliderExpressionSyncPlugin =
   createOverrideApplyPluginFactory({
     name: 'SLIDER_EXPRESSION_SYNC_PLUGIN',
     plugin: (editor, apply) => {
+      // eslint-disable-next-line complexity
       return (op) => {
         apply(op);
         if (

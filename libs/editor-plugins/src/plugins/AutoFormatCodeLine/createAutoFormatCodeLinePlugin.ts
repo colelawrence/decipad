@@ -51,6 +51,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
   createOnKeyDownPluginFactory({
     name: pluginName,
     plugin: (editor) => {
+      // eslint-disable-next-line complexity
       return (event) => {
         const store = pluginStore<AutoFormatCodeLinePluginStore>(
           editor,

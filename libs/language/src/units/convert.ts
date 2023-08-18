@@ -64,6 +64,7 @@ function baseQuantityUnits(units: Unit[] | null): Unit[] | null {
   );
 }
 
+// eslint-disable-next-line complexity
 export function areUnitsConvertible(
   unitsA: Unit[],
   unitsB: Unit[],
@@ -148,6 +149,7 @@ export function convertBetweenUnits(
   return revertedN;
 }
 
+// eslint-disable-next-line complexity
 function impreciselyConvertBetweenUnits(
   _n: DeciNumber,
   _from: Unit[],

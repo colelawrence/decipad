@@ -30,6 +30,7 @@ const allowableVariant = new Set([
 
 const normalize =
   (editor: MyEditor) =>
+  // eslint-disable-next-line complexity
   ([node, path]: MyNodeEntry): NormalizerReturnValue => {
     if (!isElementOfType(node, ELEMENT_VARIABLE_DEF)) {
       return false;

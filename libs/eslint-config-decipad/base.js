@@ -95,6 +95,7 @@ module.exports = {
         ],
       },
     ],
+    complexity: ['error', { max: 20 }],
   },
   overrides: [
     {

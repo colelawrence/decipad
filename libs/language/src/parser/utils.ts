@@ -3,6 +3,7 @@ import DeciNumber, { N } from '@decipad/number';
 import { AST } from '..';
 import { getIdentifierString, isNode, isStatement } from '../utils';
 
+// eslint-disable-next-line complexity
 export const prettyPrintAST = (node: AST.Node, indent = 0): string => {
   const perLine = isStatement(node) || ['block', 'table'].includes(node.type);
 

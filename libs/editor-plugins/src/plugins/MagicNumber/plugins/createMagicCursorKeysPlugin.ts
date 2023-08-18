@@ -12,6 +12,7 @@ import { isMagicNumber } from '../utils/isMagicNumber';
 
 export const createMagicCursorKeysPlugin = createOnKeyDownPluginFactory({
   name: 'MAGIC_CURSOR_KEYS_PLUGIN',
+  // eslint-disable-next-line complexity
   plugin: (editor) => (event) => {
     if (isCollapsed(editor.selection)) {
       if (event.key === 'ArrowLeft' && !event.altKey && !event.ctrlKey) {

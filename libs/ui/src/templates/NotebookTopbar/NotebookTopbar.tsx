@@ -152,6 +152,7 @@ export type NotebookTopbarProps = Pick<
     readonly onClearAll: () => void;
   };
 
+// eslint-disable-next-line complexity
 export const NotebookTopbar = ({
   workspace,
   notebook,

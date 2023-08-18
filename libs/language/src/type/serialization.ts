@@ -14,6 +14,7 @@ export function serializeType(type: Type | SerializedType): SerializedType {
     // Already serialized
     return type;
   }
+  // eslint-disable-next-line complexity
   const serializedType = ((): SerializedType | null => {
     if (type.pending) {
       return { kind: 'pending' };
@@ -125,6 +126,7 @@ export function deserializeType(type: Type | SerializedType): Type {
   }
   return propagateSymbol(
     type,
+    // eslint-disable-next-line complexity
     (() => {
       switch (type.kind) {
         case 'number':
