@@ -81,7 +81,7 @@ import {
   yellow900,
 } from './color';
 import { AvailableSwatchColor } from '../utils';
-import { setCssVar } from './var';
+import { cssVar, setCssVar } from './var';
 
 type ColorPalette = {
   Text: {
@@ -153,12 +153,31 @@ export function getThemeColor(swatchColor: AvailableSwatchColor): ColorPalette {
  *
  * If you cannot use a hook, then you can use the @see `getThemeColor` function instead.
  */
-export function useThemeColor(swatchColor: AvailableSwatchColor): ColorPalette {
+export function useThemeColor(
+  swatchColor: AvailableSwatchColor,
+  defaultAsGrey?: true
+): ColorPalette {
   const isDarkMode = themeStore((s) => s.theme);
   const theme = translateOldThemeColor(swatchColor);
 
+  if (swatchColor === 'Catskill' && defaultAsGrey) {
+    return ThemeColorGrey;
+  }
+
   return ThemeColors[theme][isDarkMode ? 'Dark' : 'Light'];
 }
+
+const ThemeColorGrey: ThemeColorsType['Teal']['Light'] = {
+  Text: {
+    Subdued: cssVar('textSubdued'),
+    Default: cssVar('textDefault'),
+  },
+  Background: {
+    Subdued: cssVar('backgroundSubdued'),
+    Default: cssVar('backgroundDefault'),
+    Heavy: cssVar('backgroundHeavy'),
+  },
+};
 
 /**
  * Global object containing the different themes in our app.

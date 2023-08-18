@@ -4,7 +4,6 @@ import { ElementAttributes } from '@decipad/editor-types';
 import {
   useCurrentWorkspaceStore,
   useEditorTableContext,
-  useThemeFromStore,
 } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -34,23 +33,10 @@ import {
   Text,
   Warning,
 } from '../../icons';
-import {
-  cssVar,
-  dragHandleHighlight,
-  p13Medium,
-  strongOpacity,
-  transparency,
-} from '../../primitives';
+import { p13Medium, useThemeColor } from '../../primitives';
 import { table } from '../../styles';
 import { tdMinWidth } from '../../styles/table';
-import {
-  AvailableSwatchColor,
-  Swatch,
-  TableStyleContext,
-  getStringType,
-  getTypeIcon,
-  swatchesThemed,
-} from '../../utils';
+import { TableStyleContext, getStringType, getTypeIcon } from '../../utils';
 import { ColumnDropLine } from '../DropLine/ColumnDropLine';
 import DropdownMenu from '../DropdownMenu/DropdownMenu';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -109,21 +95,6 @@ const DropSourceAndTarget = forwardRef<
         {
           pointerEvents: !draggingOver ? 'all' : 'none', // IMPORTANT!
           cursor: 'grab',
-          'span:first-of-type': {
-            display: 'block',
-          },
-          'span:last-of-type': {
-            display: 'none',
-          },
-          ':hover, :active, :focus': {
-            background: dragHandleHighlight,
-            'span:first-of-type': {
-              display: 'none',
-            },
-            'span:last-of-type': {
-              display: 'block',
-            },
-          },
         },
       ]}
       ref={ref}
@@ -133,8 +104,8 @@ const DropSourceAndTarget = forwardRef<
         toggleOpen();
       }}
     >
-      <span>{icon}</span>
-      <span>
+      <span aria-roledescription="table-header-icon">{icon}</span>
+      <span aria-roledescription="table-header-icon-handle">
         <DragHandle />
       </span>
     </div>
@@ -182,9 +153,9 @@ export const TableHeader = ({
   }, [quotaLimit, queryCount]);
 
   const Icon = getTypeIcon(type);
-  const [darkTheme] = useThemeFromStore();
   const { color } = useContext(TableStyleContext);
-  const baseSwatches = swatchesThemed(darkTheme);
+
+  const themeColor = useThemeColor(color || 'Catskill', true);
 
   const editorTableContext = useEditorTableContext();
   const { length } = editorTableContext.cellTypes;
@@ -311,7 +282,16 @@ export const TableHeader = ({
       data-testid="table-header"
       css={[
         columnStyles,
-        thStyles(color as AvailableSwatchColor, darkTheme, baseSwatches),
+        {
+          backgroundColor: themeColor.Background.Subdued,
+          minWidth: tdMinWidth,
+          boxShadow:
+            color && `inset 0px -2px 0px ${themeColor.Background.Default}`,
+
+          '&:hover, &:focus-within, &[data-highlight="true"]': {
+            backgroundColor: themeColor.Background.Heavy,
+          },
+        },
         isEditable && {
           ':hover .table-icon': {
             display: 'none',
@@ -385,28 +365,24 @@ const resizeStyles = css(absoluteRightAdjustment, {
   cursor: 'col-resize',
 });
 
-const thStyles = (
-  color: AvailableSwatchColor,
-  darkMode: boolean,
-  baseSwatches: Swatch
-) =>
-  css({
-    backgroundColor: color
-      ? transparency(baseSwatches[color as AvailableSwatchColor], strongOpacity)
-          .rgba
-      : cssVar('backgroundHeavy'),
-    // Keep hover effect when hovered, focused or the dropdown menu is opened.
-    '&:hover, &:focus-within, &[data-highlight="true"]': {
-      backgroundColor:
-        color && swatchesThemed(darkMode)[color as AvailableSwatchColor].rgb,
+const showDragHandleStyles = css({
+  '[aria-roledescription="table-header-icon"]': {
+    display: 'block',
+  },
+  '[aria-roledescription="table-header-icon-handle"]': {
+    display: 'none',
+  },
+  ':hover, :active, :focus': {
+    '[aria-roledescription="table-header-icon"]': {
+      display: 'none',
     },
-    minWidth: tdMinWidth,
-    boxShadow:
-      color &&
-      `inset 0px -2px 0px ${baseSwatches[color as AvailableSwatchColor].rgb}`,
-  });
+    '[aria-roledescription="table-header-icon-handle"]': {
+      display: 'block',
+    },
+  },
+});
 
-const columnStyles = css(p13Medium, {
+const columnStyles = css(p13Medium, showDragHandleStyles, {
   minHeight: table.thMinHeight,
   padding: `${table.tdVerticalPadding}px ${table.tdHorizontalPadding}px`,
 });
