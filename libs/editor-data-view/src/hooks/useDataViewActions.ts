@@ -201,14 +201,16 @@ export const useDataViewActions = (
           const newColumnPath = [...headerRowPath, childLength];
           insertNodes(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_DATA_VIEW_TH,
-              cellType: serializedType,
-              label,
-              name: columnName,
-              children: [{ text: '' }],
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_DATA_VIEW_TH,
+                cellType: serializedType,
+                label,
+                name: columnName,
+                children: [{ text: '' }],
+              },
+            ],
             { at: newColumnPath }
           );
         });

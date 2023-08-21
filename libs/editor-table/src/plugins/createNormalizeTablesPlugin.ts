@@ -23,7 +23,7 @@ const normalizeTableInput = (
   const table = tableFromLegacyTableInputElement(element);
   return () => {
     deleteText(editor, { at: path });
-    insertNodes(editor, table, { at: path });
+    insertNodes(editor, [table], { at: path });
   };
 };
 

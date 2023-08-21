@@ -97,7 +97,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
               code: '100$',
             });
 
-            insertNodes(editor, newCodeLine, { at: paragraphPath });
+            insertNodes(editor, [newCodeLine], { at: paragraphPath });
             const codeTextPath = [...paragraphPath, 1];
             select(editor, codeTextPath);
           } else if (textBefore.endsWith(' =')) {
@@ -185,7 +185,7 @@ const commitPotentialFormula = (
 
   const viewInstead = magicNumberInstead;
 
-  insertNodes(editor, viewInstead, {
+  insertNodes(editor, [viewInstead], {
     voids: true,
     at: expressionRange,
   });
@@ -194,7 +194,7 @@ const commitPotentialFormula = (
     expressionRange.anchor.path[0],
   ]);
 
-  insertNodes(editor, codeLineBelow, { at: currentBlockEnd });
+  insertNodes(editor, [codeLineBelow], { at: currentBlockEnd });
 
   setTimeout(() => {
     const domNode = toDOMNode(editor, magicNumberInstead);

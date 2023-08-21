@@ -76,10 +76,12 @@ describe('with interactive elements as children', () => {
 
     insertNodes(
       editor,
-      {
-        type: ELEMENT_VARIABLE_DEF,
-        children: [{ text: '' }],
-      },
+      [
+        {
+          type: ELEMENT_VARIABLE_DEF,
+          children: [{ text: '' }],
+        },
+      ],
       { at: [0, 0] }
     );
     normalizeEditor(editor, { force: true });

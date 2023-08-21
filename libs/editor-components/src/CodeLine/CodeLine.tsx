@@ -92,7 +92,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
         children: [{ text: '' }],
       };
 
-      insertNodes(editor, newDisplayElement, {
+      insertNodes(editor, [newDisplayElement], {
         at: [path[0] + 1],
       });
     },

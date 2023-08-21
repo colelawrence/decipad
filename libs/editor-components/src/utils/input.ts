@@ -91,7 +91,7 @@ export const insertInputBelow = (
   });
   const insertPath = requirePathBelowBlock(editor, path);
 
-  insertNodes<VariableDefinitionElement>(editor, input, {
+  insertNodes<VariableDefinitionElement>(editor, [input], {
     at: insertPath,
   });
 
@@ -142,7 +142,7 @@ export const insertSliderInputBelow = (
   );
   insertNodes<VariableSliderElement>(
     editor,
-    input as unknown as VariableSliderElement,
+    [input as unknown as VariableSliderElement],
     {
       at: requirePathBelowBlock(editor, path),
     }
@@ -161,7 +161,7 @@ const getDisplayElement = () => {
 export const insertDisplayBelow = (editor: MyEditor, path: Path): void => {
   const display = getDisplayElement();
   display.varName = 'Result';
-  insertNodes(editor, display, {
+  insertNodes(editor, [display], {
     at: requirePathBelowBlock(editor, path),
   });
 };
@@ -199,7 +199,7 @@ export const insertDropdownBelow = (
     generateDropdownName(),
     1
   );
-  insertNodes(editor, dropdown, {
+  insertNodes(editor, [dropdown], {
     at: requirePathBelowBlock(editor, path),
   });
 };

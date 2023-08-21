@@ -197,7 +197,7 @@ export const importTable = async ({
       ) as Result.Result<'materialized-table'>,
       result.meta
     );
-    insertNodes(editor, t, {
+    insertNodes(editor, [t], {
       at: insertPath,
     });
   }

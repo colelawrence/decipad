@@ -50,5 +50,5 @@ export const insertDataViewBelow = (
   varName?: string
 ): void => {
   const dataView = cloneDeep(getInitialDataViewElement(blockId, varName));
-  insertNodes(editor, dataView, { at: requirePathBelowBlock(editor, path) });
+  insertNodes(editor, [dataView], { at: requirePathBelowBlock(editor, path) });
 };

@@ -100,7 +100,7 @@ export const insertTableBelow = (
   table.children[0].children[0].children[0].text = getAvailableIdentifier(
     generateTableName()
   );
-  insertNodes(editor, table, {
+  insertNodes(editor, [table], {
     at: requirePathBelowBlock(editor, path),
   });
 };

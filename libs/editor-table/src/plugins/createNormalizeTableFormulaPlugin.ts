@@ -45,12 +45,14 @@ export const normalizeTableFormula =
         return () =>
           insertNodes(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_TABLE_COLUMN_FORMULA,
-              columnId: header.id,
-              children: [{ text: '' }],
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_TABLE_COLUMN_FORMULA,
+                columnId: header.id,
+                children: [{ text: '' }],
+              },
+            ],
             { at: insertPath }
           );
       }

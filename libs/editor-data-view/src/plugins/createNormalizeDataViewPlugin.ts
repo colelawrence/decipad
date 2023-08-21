@@ -87,11 +87,13 @@ const normalizeDataViewElement = (
     return () =>
       insertNodes<DataViewNameElement>(
         editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_DATA_VIEW_NAME,
-          children: [{ text: '' }],
-        },
+        [
+          {
+            id: nanoid(),
+            type: ELEMENT_DATA_VIEW_NAME,
+            children: [{ text: '' }],
+          },
+        ],
         { at: [...path, 0, 0] }
       );
   }

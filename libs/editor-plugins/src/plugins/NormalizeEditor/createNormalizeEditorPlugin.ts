@@ -33,11 +33,13 @@ const normalizeEditor =
         return () =>
           insertNodes(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_H1,
-              children: [],
-            } as unknown as H1Element,
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_H1,
+                children: [],
+              } as unknown as H1Element,
+            ],
             {
               at: [...path, 0],
             }

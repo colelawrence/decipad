@@ -16,7 +16,7 @@ export const insertCodeLineBelow = (
 ) => {
   const elm = createCodeLine({ code: '' });
 
-  insertNodes(editor, elm, {
+  insertNodes(editor, [elm], {
     at: requirePathBelowBlock(editor, path),
     select,
   });
@@ -48,7 +48,7 @@ export const insertStructuredCodeLineBelow = ({
   });
 
   const pathBelow = requirePathBelowBlock(editor, path);
-  insertNodes(editor, elm, { at: pathBelow });
+  insertNodes(editor, [elm], { at: pathBelow });
 
   if (select) {
     if (elm.type === ELEMENT_CODE_LINE_V2) {

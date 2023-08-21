@@ -2,8 +2,6 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  StructuredVarnameElement,
-  CodeLineV2ElementCode,
 } from '@decipad/editor-types';
 import { isElementOfType, insertNodes } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
@@ -37,11 +35,13 @@ export const createNormalizeCodeLineV2Plugin = () =>
             return () =>
               insertNodes(
                 editor,
-                {
-                  type: ELEMENT_STRUCTURED_VARNAME,
-                  id: nanoid(),
-                  children: [{ text: '' }],
-                } as StructuredVarnameElement,
+                [
+                  {
+                    type: ELEMENT_STRUCTURED_VARNAME,
+                    id: nanoid(),
+                    children: [{ text: '' }],
+                  },
+                ],
                 { at: [...path, 0] }
               );
           }
@@ -54,11 +54,13 @@ export const createNormalizeCodeLineV2Plugin = () =>
             return () =>
               insertNodes(
                 editor,
-                {
-                  type: ELEMENT_CODE_LINE_V2_CODE,
-                  id: nanoid(),
-                  children: [{ text: '' }],
-                } as CodeLineV2ElementCode,
+                [
+                  {
+                    type: ELEMENT_CODE_LINE_V2_CODE,
+                    id: nanoid(),
+                    children: [{ text: '' }],
+                  },
+                ],
                 { at: [...path, 1] }
               );
           }

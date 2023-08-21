@@ -28,7 +28,7 @@ export const insertDrawBelow = (editor: MyEditor, path: Path): void => {
         offset: 0,
       },
     });
-    insertNodes<DrawElement>(editor, getDrawElement(), {
+    insertNodes<DrawElement>(editor, [getDrawElement()], {
       at: requirePathBelowBlock(editor, path),
     });
   });

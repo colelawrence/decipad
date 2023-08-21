@@ -19,7 +19,7 @@ export const insertMediaEmbed = <V extends Value>(
     url: url as any,
     children: [{ text: '' }],
   };
-  insertNodes<TMediaEmbedElement>(editor, node);
+  insertNodes<TMediaEmbedElement>(editor, [node]);
 };
 
 export const createMediaEmbedPlugin = () =>

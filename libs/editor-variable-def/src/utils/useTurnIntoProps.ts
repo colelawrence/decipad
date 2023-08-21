@@ -57,9 +57,13 @@ export const convertInto =
           const varName = getNodeString(caption);
 
           removeNodes(editor, { at });
-          insertNodes(editor, createStructuredCodeLine({ id, varName, code }), {
-            at,
-          });
+          insertNodes(
+            editor,
+            [createStructuredCodeLine({ id, varName, code })],
+            {
+              at,
+            }
+          );
         }
       }
     }

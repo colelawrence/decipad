@@ -1,6 +1,5 @@
 import { DRAG_TABLE_CELL_RESULT } from '@decipad/editor-components';
 import {
-  CodeLineElement,
   ELEMENT_CODE_LINE,
   MyEditor,
   MyElement,
@@ -57,15 +56,17 @@ export const onDropTableCellResult =
           if (isElementEmpty(editor, block as MyElement)) {
             removeNodes(editor, { at: blockPath });
           }
-          insertNodes(editor, {
-            id: nanoid(),
-            type: ELEMENT_CODE_LINE,
-            children: [
-              {
-                text,
-              },
-            ],
-          } as CodeLineElement);
+          insertNodes(editor, [
+            {
+              id: nanoid(),
+              type: ELEMENT_CODE_LINE,
+              children: [
+                {
+                  text,
+                },
+              ],
+            },
+          ]);
         }
       });
 

@@ -46,11 +46,13 @@ const normalize =
       return () =>
         insertNodes(
           editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_CAPTION,
-            children: [{ text: '' }],
-          } as CaptionElement,
+          [
+            {
+              id: nanoid(),
+              type: ELEMENT_CAPTION,
+              children: [{ text: '' }],
+            } as CaptionElement,
+          ],
           { at: [...path, 0] }
         );
     }
@@ -67,23 +69,27 @@ const normalize =
         return () =>
           insertNodes<DropdownElement>(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_DROPDOWN,
-              children: [{ text: '' }],
-              options: [],
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_DROPDOWN,
+                children: [{ text: '' }],
+                options: [],
+              },
+            ],
             { at: [...path, 1] }
           );
       }
       return () =>
         insertNodes<ExpressionElement>(
           editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_EXPRESSION,
-            children: [{ text: '' }],
-          },
+          [
+            {
+              id: nanoid(),
+              type: ELEMENT_EXPRESSION,
+              children: [{ text: '' }],
+            },
+          ],
           { at: [...path, 1] }
         );
     }
@@ -134,15 +140,17 @@ const normalize =
         return () =>
           insertNodes<SliderElement>(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_SLIDER,
-              max: '10',
-              min: '0',
-              step: '0.1',
-              value: '0',
-              children: [{ text: '' }],
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_SLIDER,
+                max: '10',
+                min: '0',
+                step: '0.1',
+                value: '0',
+                children: [{ text: '' }],
+              },
+            ],
             { at: [...path, 2] }
           );
       }

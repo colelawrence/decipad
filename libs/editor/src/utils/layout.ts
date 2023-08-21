@@ -32,7 +32,7 @@ export const insertNodeIntoColumns = (
       );
     }
 
-    insertNodes(editor, node, {
+    insertNodes(editor, [node], {
       at: hasLayoutAncestorElement ? Path.next(path) : [...path, 1],
     });
   });

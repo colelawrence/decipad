@@ -41,7 +41,7 @@ const withAtLastRow =
         children: [{ text: '' }],
       })),
     };
-    insertNodes(editor, newTr, { at: newTrPath });
+    insertNodes(editor, [newTr], { at: newTrPath });
   };
 
 const withNotAtLastRow =

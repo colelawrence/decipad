@@ -137,12 +137,14 @@ export const changeColumnType = (
         } else {
           insertNodes(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_TABLE_COLUMN_FORMULA,
-              children: [{ text: ' ' }],
-              columnId: headerId,
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_TABLE_COLUMN_FORMULA,
+                children: [{ text: ' ' }],
+                columnId: headerId,
+              },
+            ],
             {
               at: newFormulaPath,
             }

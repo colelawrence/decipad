@@ -113,7 +113,7 @@ export const insertDividerBelow = (
   const at = requirePathBelowBlock(editor, path);
   insertNodes<TElement>(
     editor,
-    { id: nanoid(), type, children: [{ text: '' }] },
+    [{ id: nanoid(), type, children: [{ text: '' }] }],
     { at }
   );
 
@@ -132,7 +132,7 @@ export const insertBlockOfTypeBelow = (
 ): void => {
   insertNodes<TElement>(
     editor,
-    { id: nanoid(), type, children: [{ text: '' }] },
+    [{ id: nanoid(), type, children: [{ text: '' }] }],
     { at: requirePathBelowBlock(editor, path) }
   );
 };
@@ -145,12 +145,14 @@ export const insertImageBelow = (
 ): void => {
   insertNodes<TElement>(
     editor,
-    {
-      id: nanoid(),
-      type: ELEMENT_IMAGE,
-      children: [{ text: alt } as TDescendant],
-      url,
-    },
+    [
+      {
+        id: nanoid(),
+        type: ELEMENT_IMAGE,
+        children: [{ text: alt } as TDescendant],
+        url,
+      },
+    ],
     { at: requirePathBelowBlock(editor, path) }
   );
 };

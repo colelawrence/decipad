@@ -138,14 +138,14 @@ export const commitPotentialFormula = (
     focus: { path, offset: leaf.location.focus },
   };
 
-  insertNodes(editor, viewInstead, {
+  insertNodes(editor, [viewInstead], {
     voids: true,
     at: expressionRange,
   });
 
   const currentBlockEnd: Point = getEndPoint(editor, [path[0]]);
 
-  insertNodes(editor, codeLineBelow, { at: currentBlockEnd });
+  insertNodes(editor, [codeLineBelow], { at: currentBlockEnd });
 
   setTimeout(() => {
     const domNode = toDOMNode(editor, magicNumberInstead);

@@ -35,7 +35,7 @@ const withAtLastColumn =
       cellType: { kind: 'string' },
       children: [{ text: `Column${tableColumnCount + 1}` }],
     };
-    insertNodes(editor, newTh, { at: newThPath });
+    insertNodes(editor, [newTh], { at: newThPath });
   };
 
 const withNotAtLastColumn =

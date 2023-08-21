@@ -93,7 +93,7 @@ const justInsertLiveConnection = async ({
   const insertAtPath = path || selection?.anchor.path;
 
   if (insertAtPath) {
-    insertNodes(editor, liveConnEl, {
+    insertNodes(editor, [liveConnEl], {
       at: requirePathBelowBlock(editor, insertAtPath),
     });
   }
@@ -156,10 +156,10 @@ const identifyIslandsAndThenInsertLiveConnection = async ({
         children: [{ text: 'Add your explanation here', italic: true }],
       };
       withoutNormalizing(editor, () => {
-        insertNodes(editor, paragraphEl, {
+        insertNodes(editor, [paragraphEl], {
           at: nextPath(),
         });
-        insertNodes(editor, liveConnEl, {
+        insertNodes(editor, [liveConnEl], {
           at: nextPath(),
         });
       });

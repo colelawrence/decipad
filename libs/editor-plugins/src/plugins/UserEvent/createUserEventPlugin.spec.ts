@@ -79,14 +79,14 @@ const inputWidget = (): VariableDefinitionElement => ({
 });
 
 it('emits an event on element creation', () => {
-  insertNodes(editor, pElement(), {
+  insertNodes(editor, [pElement()], {
     at: [0],
   });
   expect(mockEvents).toHaveBeenCalled();
 });
 
 it('returns the element type on creation', () => {
-  insertNodes(editor, pElement(), {
+  insertNodes(editor, [pElement()], {
     at: [0],
   });
   expect(mockClientEvent).not.toBeNull();
@@ -96,7 +96,7 @@ it('returns the element type on creation', () => {
 });
 
 it('emits an event on element interaction and text on interaction', () => {
-  insertNodes(editor, codeLine(), {
+  insertNodes(editor, [codeLine()], {
     at: [0],
   });
   editor.selection = {
@@ -116,7 +116,7 @@ it('emits an event on element interaction and text on interaction', () => {
 });
 
 it('returns parent and variant of widgets on interaction', () => {
-  insertNodes(editor, inputWidget(), {
+  insertNodes(editor, [inputWidget()], {
     at: [0],
   });
   editor.selection = {

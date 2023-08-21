@@ -55,7 +55,7 @@ const normalizeTableStructure = (
     return () =>
       insertNodes<TableCaptionElement>(
         editor,
-        createTableCaption({ id: node.id }),
+        [createTableCaption({ id: node.id })],
         { at: [...path, 0] }
       );
   }
@@ -67,20 +67,22 @@ const normalizeTableStructure = (
     return () =>
       insertNodes(
         editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_TR,
-          children: [
-            {
-              id: nanoid(),
-              type: ELEMENT_TH,
-              cellType: {
-                kind: 'string',
+        [
+          {
+            id: nanoid(),
+            type: ELEMENT_TR,
+            children: [
+              {
+                id: nanoid(),
+                type: ELEMENT_TH,
+                cellType: {
+                  kind: 'string',
+                },
+                children: [{ text: '' }],
               },
-              children: [{ text: '' }],
-            },
-          ],
-        } as unknown as TableRowElement,
+            ],
+          } as unknown as TableRowElement,
+        ],
         { at: [...path, 1] }
       );
   }
@@ -120,11 +122,13 @@ const normalizeTableCaption = (
       return () =>
         insertNodes(
           editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_TABLE_VARIABLE_NAME,
-            children: [{ text: '' }],
-          },
+          [
+            {
+              id: nanoid(),
+              type: ELEMENT_TABLE_VARIABLE_NAME,
+              children: [{ text: '' }],
+            },
+          ],
           { at: [...caption[1], 0] }
         );
     }
@@ -360,11 +364,13 @@ const normalizeTableRowColumnCount = (
         return () =>
           insertNodes(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_TD,
-              children: [{ text: '' }],
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_TD,
+                children: [{ text: '' }],
+              },
+            ],
             { at: insertAt }
           );
       }
@@ -384,17 +390,19 @@ const normalizeTableRowCount = (
       return () =>
         insertNodes(
           editor,
-          {
-            id: nanoid(),
-            type: ELEMENT_TR,
-            children: [
-              {
-                id: nanoid(),
-                type: ELEMENT_TD,
-                children: [{ text: '' }],
-              },
-            ],
-          },
+          [
+            {
+              id: nanoid(),
+              type: ELEMENT_TR,
+              children: [
+                {
+                  id: nanoid(),
+                  type: ELEMENT_TD,
+                  children: [{ text: '' }],
+                },
+              ],
+            },
+          ],
           { at: firstDataRowPath }
         );
     }

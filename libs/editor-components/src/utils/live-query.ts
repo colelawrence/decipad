@@ -54,7 +54,7 @@ export const insertLiveQueryBelow = (
 
   const newPath = requirePathBelowBlock(editor, path);
 
-  insertNodes<LiveQueryElement>(editor, liveQuery, { at: newPath });
+  insertNodes<LiveQueryElement>(editor, [liveQuery], { at: newPath });
 
   setTimeout(() => {
     const findPath = [...newPath, 0];

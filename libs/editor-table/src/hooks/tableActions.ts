@@ -102,12 +102,14 @@ export const addColumn = (
   withoutNormalizing(editor, () => {
     insertNodes<TableHeaderElement>(
       editor,
-      {
-        id: nanoid(),
-        type: ELEMENT_TH,
-        cellType,
-        children: [{ text: columnName }],
-      },
+      [
+        {
+          id: nanoid(),
+          type: ELEMENT_TH,
+          cellType,
+          children: [{ text: columnName }],
+        },
+      ],
       {
         at: [...tablePath, 1, position || columnCount],
       }
@@ -116,11 +118,13 @@ export const addColumn = (
     body.forEach((_row, rowIndex) => {
       insertNodes<TableCellElement>(
         editor,
-        {
-          id: nanoid(),
-          type: ELEMENT_TD,
-          children: [{ text: '' }],
-        },
+        [
+          {
+            id: nanoid(),
+            type: ELEMENT_TD,
+            children: [{ text: '' }],
+          },
+        ],
         {
           at: [...tablePath, rowIndex + 2, position || columnCount],
         }

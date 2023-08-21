@@ -1,7 +1,11 @@
 import {
   insertNodes as plateInsertNodes,
   isElement,
-  TElement,
+  type TElement,
+  type Value,
+  type EElementOrText,
+  type TEditor,
+  type InsertNodesOptions,
 } from '@udecode/plate';
 import { getAnalytics } from '@decipad/client-events';
 
@@ -10,11 +14,13 @@ const elementsFrom = (n: unknown | unknown[]): TElement[] => {
   return ret.filter(isElement);
 };
 
-export const insertNodes: typeof plateInsertNodes = (
-  editor,
-  options,
-  ...args
-) => {
+type InsertNodes = <N extends EElementOrText<V>, V extends Value = Value>(
+  editor: TEditor<V>,
+  nodes: N[],
+  options?: InsertNodesOptions<V> | undefined
+) => void;
+
+export const insertNodes: InsertNodes = (editor, options, ...args) => {
   setTimeout(() => {
     const analytics = getAnalytics();
     if (analytics) {

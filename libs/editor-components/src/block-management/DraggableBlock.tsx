@@ -210,9 +210,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         at: path,
       });
       const [prevNode] = entry || [];
-      insertNodes(editor, insertSameNodeType(prevNode as MyElement, computer), {
-        at: path,
-      });
+      insertNodes(
+        editor,
+        [insertSameNodeType(prevNode as MyElement, computer)],
+        {
+          at: path,
+        }
+      );
       select(editor, path);
     }, [path, editor, computer]);
 
@@ -393,11 +397,13 @@ const openSlashMenu = (editor: MyEditor, element: MyElement) => {
   if (createNewParagraph && nextPath) {
     insertNodes(
       editor,
-      {
-        id: nanoid(),
-        type: ELEMENT_PARAGRAPH,
-        children: [{ text: '/' }],
-      },
+      [
+        {
+          id: nanoid(),
+          type: ELEMENT_PARAGRAPH,
+          children: [{ text: '/' }],
+        },
+      ],
       {
         at: nextPath,
       }

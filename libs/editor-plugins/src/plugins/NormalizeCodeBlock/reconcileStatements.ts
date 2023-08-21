@@ -72,7 +72,7 @@ function reconcileBySplitting(
     ],
   };
   return () => {
-    insertNodes(editor, newNode as CodeLineElement, {
+    insertNodes(editor, [newNode], {
       at: incrementLastElementOfPath(codeLinePath),
     });
     insertText(editor, expectedStatement, {

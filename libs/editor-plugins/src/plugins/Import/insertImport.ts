@@ -23,7 +23,7 @@ export const insertImport = (
       source,
       children: [{ text: '' }],
     };
-    insertNodes(editor, fetchEl, {
+    insertNodes(editor, [fetchEl], {
       at: requirePathBelowBlock(editor, selection.anchor.path),
     });
   }

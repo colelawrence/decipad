@@ -33,5 +33,5 @@ export const insertPlotBelow = (
 
   const newPath = requirePathBelowBlock(editor, path);
 
-  insertNodes(editor, plot, { at: newPath });
+  insertNodes(editor, [plot], { at: newPath });
 };

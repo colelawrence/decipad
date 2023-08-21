@@ -61,22 +61,24 @@ export const useTurnIntoProps = (
       withoutNormalizing(editor, () => {
         insertNodes(
           editor,
-          {
-            id: lineId,
-            type: ELEMENT_VARIABLE_DEF,
-            variant,
-            coerceToType: { kind: coercedKind, date },
-            children: [
-              {
-                type: ELEMENT_CAPTION,
-                children: [{ text: symbol }],
-              },
-              {
-                type: ELEMENT_EXPRESSION,
-                children: [{ text: expression }],
-              },
-            ],
-          } as VariableDefinitionElement,
+          [
+            {
+              id: lineId,
+              type: ELEMENT_VARIABLE_DEF,
+              variant,
+              coerceToType: { kind: coercedKind, date },
+              children: [
+                {
+                  type: ELEMENT_CAPTION,
+                  children: [{ text: symbol }],
+                },
+                {
+                  type: ELEMENT_EXPRESSION,
+                  children: [{ text: expression }],
+                },
+              ],
+            } as VariableDefinitionElement,
+          ],
           { at: requirePathBelowBlock(editor, path) }
         );
         removeNodes(editor, { at: path });

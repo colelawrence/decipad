@@ -54,7 +54,7 @@ export const insertImport = async ({
           children: [{ text: '' }],
         };
 
-        insertNodes(editor, fetchEl, {
+        insertNodes(editor, [fetchEl], {
           at: insertPath,
         });
       }

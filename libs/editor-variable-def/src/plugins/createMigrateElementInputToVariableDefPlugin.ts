@@ -17,7 +17,7 @@ const normalize =
     );
     return () => {
       deleteText(editor, { at: path });
-      insertNodes(editor, replacement, { at: path });
+      insertNodes(editor, [replacement], { at: path });
     };
   };
 

@@ -87,11 +87,13 @@ const normalizeList =
         return () =>
           insertNodes(
             editor,
-            {
-              id: nanoid(),
-              type: ELEMENT_LIC,
-              children: [{ text: '' }],
-            },
+            [
+              {
+                id: nanoid(),
+                type: ELEMENT_LIC,
+                children: [{ text: '' }],
+              },
+            ],
             { at: [...path, 0] }
           );
       }

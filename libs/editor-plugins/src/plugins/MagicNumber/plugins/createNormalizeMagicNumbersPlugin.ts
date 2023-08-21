@@ -20,9 +20,11 @@ export const createNormalizeMagicNumbersPlugin = createNormalizerPluginFactory({
             return () =>
               insertNodes(
                 editor,
-                {
-                  text: ' ',
-                },
+                [
+                  {
+                    text: ' ',
+                  },
+                ],
                 { at: insertAt }
               );
           }
@@ -33,9 +35,11 @@ export const createNormalizeMagicNumbersPlugin = createNormalizerPluginFactory({
             return () =>
               insertNodes(
                 editor,
-                {
-                  text: ' ',
-                },
+                [
+                  {
+                    text: ' ',
+                  },
+                ],
                 { at: insertAt }
               );
           }
