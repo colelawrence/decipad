@@ -53,7 +53,7 @@ export const initSentry = () => {
         return event;
       },
       dsn: sentryDsn,
-      replaysSessionSampleRate: 0.1,
+      replaysSessionSampleRate: 0.2,
       replaysOnErrorSampleRate: 1.0,
       integrations: [
         new Sentry.Replay({ maskAllText: true, blockAllMedia: true }),
@@ -69,7 +69,7 @@ export const initSentry = () => {
         new ExtraErrorData(),
         new HttpClientIntegration(),
       ],
-      tracesSampleRate: 0.1,
+      tracesSampleRate: 0.3,
     });
   } catch (err) {
     console.error('Error initialising Sentry');
