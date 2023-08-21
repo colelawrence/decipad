@@ -27,11 +27,14 @@ const inputStyles = css(p13Medium, {
   padding: '6px 12px',
 
   // Make input adjust alongside button
-  width: 0, // Override vendor default width
   flex: '1 1 0px',
 });
 
 const buttonStyles = css(p12Medium, {
+  ':disabled': {
+    color: cssVar('textDisabled'),
+    cursor: 'not-allowed',
+  },
   ':hover, :focus': {
     background: cssVar('backgroundHeavy'),
   },
@@ -89,15 +92,15 @@ export const ASTUnitMenuItem = ({
           }}
           placeholder={placeholder}
         />
-        {unit != null && (
-          <button
-            data-testid="advanced_unit_button"
-            css={buttonStyles}
-            onClick={() => onSelect(unit)}
-          >
-            Add new
-          </button>
-        )}
+
+        <button
+          data-testid="advanced_unit_button"
+          css={buttonStyles}
+          disabled={!unit}
+          onClick={() => onSelect(unit)}
+        >
+          Add new
+        </button>
       </div>
     </MenuItem>
   );

@@ -28,7 +28,6 @@ const inputStyles = css(p13Medium, {
   padding: '6px 10px',
 
   // Make input adjust alongside button
-  width: 0, // Override vendor default width
   flex: '1 1 0px',
 });
 
@@ -40,6 +39,9 @@ const buttonStyles = css(p12Medium, {
   borderRadius: '6px',
   margin: '2px',
   padding: '4px 8px',
+  width: 'max-content',
+  position: 'absolute',
+  right: '8px',
 });
 
 export type UnitsAction =

@@ -12,7 +12,7 @@ beforeEach(() => {
 it('renders the children', () => {
   render(<ASTUnitMenuItem />, { wrapper });
   expect(screen.getByRole('textbox')).toBeInTheDocument();
-  expect(screen.queryByRole('button')).toBeNull();
+  expect(screen.queryByRole('button')).toBeDisabled();
 });
 
 const goodUnit = decilang<SimpleValueAST>`m/s`;
@@ -23,10 +23,9 @@ it('renders a button when parse is successful', async () => {
     wrapper,
   });
 
-  expect(screen.queryByRole('button')).toBeNull();
+  expect(screen.queryByRole('button')).toBeDisabled();
 
   await user.type(screen.getByRole('textbox'), 'm/s');
-  await expect(screen.findByRole('button')).rejects.toThrow();
 
   // Parse always succedes.
   rerender(<ASTUnitMenuItem parseUnit={() => goodUnit} />);

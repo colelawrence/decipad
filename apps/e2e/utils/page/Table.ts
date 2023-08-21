@@ -198,6 +198,18 @@ export async function removeColumn(
   await page.getByText('Remove column').click();
 }
 
+export async function addColumnUnit(
+  page: Page,
+  col: number,
+  unit: string,
+  tableName?: string
+) {
+  await openColTypeMenu(page, col, tableName);
+  await page.getByPlaceholder('add custom unit').click();
+  await page.keyboard.type(unit);
+  await keyPress(page, 'Enter');
+}
+
 export async function addColRight(page: Page, col: number, tableName?: string) {
   await openColMenu(page, col, tableName);
   await page.getByText('Add column right').click();
