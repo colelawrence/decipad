@@ -80,10 +80,22 @@ index adfe2e3..391fd6f 100644
        }
      })
 diff --git a/node_modules/@architect/functions/src/ws/index.js b/node_modules/@architect/functions/src/ws/index.js
-index d018a21..2786a81 100644
+index d018a21..f9d640f 100644
 --- a/node_modules/@architect/functions/src/ws/index.js
 +++ b/node_modules/@architect/functions/src/ws/index.js
-@@ -33,6 +33,11 @@ function instantiateAPI () {
+@@ -22,6 +22,11 @@ function instantiateAPI () {
+     _api = new ApiGatewayManagementApi({
+       apiVersion: '2018-11-29',
+       endpoint: `${ARC_WSS_URL.replace(/^ws/, 'http')}`,
++      marshallOptions: {
++        removeUndefinedValues: true
++      },
++      maxAttempts: 10,
++      retryMode: 'adaptive',
+     })
+   }
+   else {
+@@ -33,6 +38,11 @@ function instantiateAPI () {
        apiVersion: '2018-11-29',
        endpoint: `http://localhost:${port}/_arc/ws`,
        region: AWS_REGION || 'us-west-2',
@@ -95,7 +107,7 @@ index d018a21..2786a81 100644
      })
    }
  
-@@ -86,7 +91,7 @@ function send ({ id, payload }, callback) {
+@@ -86,7 +96,7 @@ function send ({ id, payload }, callback) {
    instantiateAPI()
    return _send({
      ConnectionId: id,
