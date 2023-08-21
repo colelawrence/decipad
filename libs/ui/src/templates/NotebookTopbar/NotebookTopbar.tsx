@@ -28,6 +28,7 @@ import {
   SidebarOpen,
 } from '../../icons';
 import {
+  BetaBadge,
   NotebookAvatar,
   NotebookAvatars,
   NotebookPath,
@@ -285,6 +286,9 @@ export const NotebookTopbar = ({
         notebookName={'Decipad — smart document'}
         href="https://decipad.com"
       />
+      <Styled.BetaWrapper>
+        <BetaBadge />
+      </Styled.BetaWrapper>
     </Styled.LeftContainer>
   );
 
@@ -358,6 +362,9 @@ export const NotebookTopbar = ({
               <CurvedArrow direction="right" active={canRedo} />
             </button>
           </Styled.ActionButtons>
+          <Styled.BetaWrapper>
+            <BetaBadge />
+          </Styled.BetaWrapper>
           {showClearAll && !canUndo && (
             <Button
               type="primary"
