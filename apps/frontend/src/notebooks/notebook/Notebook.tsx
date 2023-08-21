@@ -24,7 +24,6 @@ import {
   TopbarPlaceholder,
   GlobalThemeStyles,
 } from '@decipad/ui';
-import { SelectedTab } from 'libs/ui/src/organisms/EditorSidebar/types';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
@@ -42,12 +41,6 @@ const Editor = lazyLoad(loadEditor);
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
-
-  const [sidebarTab, setSidebarTab] = useState<SelectedTab>('block');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const toggleSidebar = useCallback(() => {
-    setSidebarOpen(!sidebarOpen);
-  }, [setSidebarOpen, sidebarOpen]);
 
   const { setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
 
@@ -162,7 +155,6 @@ const Notebook: FC = () => {
               suspenseFallback={<LoadingLogo />}
             >
               <NotebookPage
-                sidebarOpen={sidebarOpen}
                 icon={icon}
                 iconColor={iconColor}
                 onUpdateIcon={updateIcon}
@@ -192,16 +184,7 @@ const Notebook: FC = () => {
                     />
                   </Frame>
                 }
-                sidebar={
-                  isReadOnly ? null : (
-                    <EditorSidebar
-                      sidebarTab={sidebarTab}
-                      setSidebarTab={setSidebarTab}
-                      sidebarOpen={sidebarOpen}
-                      setSidebarOpen={setSidebarOpen}
-                    />
-                  )
-                }
+                sidebar={!isReadOnly && <EditorSidebar />}
                 topbar={
                   <Frame
                     Heading="h1"
@@ -222,8 +205,6 @@ const Notebook: FC = () => {
                       inviteEditorByEmail={inviteEditorByEmail}
                       removeEditorById={removeEditorById}
                       changeEditorAccess={changeEditorAccess}
-                      toggleSidebar={toggleSidebar}
-                      sidebarOpen={sidebarOpen}
                       status={notebookStatus}
                       isReadOnly={isReadOnly}
                       creationDate={createdAt}

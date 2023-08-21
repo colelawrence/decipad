@@ -4,6 +4,7 @@ import { onDragStartSmartRef } from '@decipad/editor-utils';
 import {
   useComputer,
   useDeciEditorContextProvider,
+  useNotebookMetaData,
 } from '@decipad/react-contexts';
 import {
   SlashCommandsMenu,
@@ -11,14 +12,7 @@ import {
   NumberCatalog as UINumberCatalog,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import {
-  ComponentProps,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { execute } from '../utils/slashCommands';
 import { useOnDragEnd } from '../utils/useDnd';
 import { catalogItems } from './catalogItems';
@@ -28,13 +22,10 @@ import { CatalogItems } from './types';
 
 const catalogDebounceTimeMs = 1_000;
 
-type EditorSidebarControls = Pick<
-  ComponentProps<typeof UIEditorSidebar>,
-  'sidebarTab' | 'setSidebarTab' | 'sidebarOpen' | 'setSidebarOpen'
->;
-
-export function EditorSidebar(props: EditorSidebarControls) {
+export function EditorSidebar() {
   const editor = useDeciEditorContextProvider();
+  const notebookMetaData = useNotebookMetaData();
+
   const onDragStart = useMemo(
     () => editor && onDragStartSmartRef(editor),
     [editor]
@@ -95,10 +86,10 @@ export function EditorSidebar(props: EditorSidebarControls) {
   return (
     <ErrorBoundary fallback={<></>}>
       <UIEditorSidebar
-        {...props}
         items={filteredItems}
         search={search}
         setSearch={setSearch}
+        {...notebookMetaData}
       >
         <UINumberCatalog
           items={filteredItems}

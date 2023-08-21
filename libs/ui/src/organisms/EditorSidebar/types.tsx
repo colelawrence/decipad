@@ -9,7 +9,6 @@ export interface EditorSidebarProps {
   readonly sidebarTab: SelectedTab;
   readonly setSidebarTab: any;
   readonly sidebarOpen: boolean;
-  readonly setSidebarOpen: any;
 }
 
 export type SelectedTab = 'variable' | 'block';

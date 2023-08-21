@@ -13,6 +13,7 @@ import {
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { useDraggingScroll } from '../../hooks';
 import { EditorIcon } from '../../templates';
+import { useNotebookMetaData } from '@decipad/react-contexts';
 
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
@@ -98,7 +99,6 @@ interface NotebookPageProps {
   readonly notebook: ReactNode;
   readonly topbar?: ReactNode;
   readonly sidebar?: ReactNode;
-  readonly sidebarOpen: boolean;
 
   // Icon stuff
   readonly icon: ComponentProps<typeof EditorIcon>['icon'] | undefined;
@@ -116,15 +116,19 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
   topbar,
   notebook,
   sidebar,
-  sidebarOpen,
 
   icon = 'Deci',
   iconColor,
   onUpdateIcon,
   onUpdateIconColor,
 }) => {
+  const { sidebarOpen } = useNotebookMetaData((s) => ({
+    sidebarOpen: s.sidebarOpen,
+  }));
+
   const scrollToRef = useRef<HTMLDivElement>(null);
   const articleRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleHashChange = () => {
       const { hash } = window.location;

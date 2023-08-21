@@ -7,13 +7,15 @@ import { ComponentProps, FC } from 'react';
 import { Notebook } from './hooks/useNotebookStateAndActions';
 import { MyEditor } from '@decipad/editor-types';
 import { useEditorUndoState } from './hooks/useEditorUndoState';
-import { useNotebookMetaActions } from '@decipad/react-contexts';
+import {
+  useNotebookMetaActions,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 import { clearNotebook } from '../../utils';
 
 type TopbarProps = Pick<
   ComponentProps<typeof NotebookTopbar>,
   | 'workspaces'
-  | 'toggleSidebar'
   | 'hasUnpublishedChanges'
   | 'hasLocalChanges'
   | 'isPublishing'
@@ -35,7 +37,6 @@ type TopbarProps = Pick<
   readonly removeEditorById?: (userId: string) => Promise<void>;
   readonly publishNotebook?: () => void;
   readonly unpublishNotebook?: () => void;
-  readonly sidebarOpen: boolean;
   readonly editor: MyEditor | undefined;
 };
 
@@ -55,14 +56,17 @@ const Topbar: FC<TopbarProps> = ({
   inviteEditorByEmail = () => Promise.resolve(),
   changeEditorAccess = () => Promise.resolve(),
   removeEditorById = () => Promise.resolve(),
-  toggleSidebar,
-  sidebarOpen,
   status,
 }) => {
   const workspaceId = notebook?.workspace?.id || '';
   const { data: session } = useSession();
   const { everyone: usersFromTeam } = useWorkspaceMembers(workspaceId);
+
   const actions = useNotebookMetaActions();
+  const sidebarData = useNotebookMetaData((state) => ({
+    sidebarOpen: state.sidebarOpen,
+    toggleSidebar: state.toggleSidebar,
+  }));
 
   const [canUndo, canRedo] = useEditorUndoState(editor);
 
@@ -72,7 +76,7 @@ const Topbar: FC<TopbarProps> = ({
 
   return (
     <NotebookTopbar
-      sidebarOpen={sidebarOpen}
+      {...sidebarData}
       notebook={notebook}
       workspace={notebook.workspace}
       workspaces={workspaces}
@@ -105,7 +109,6 @@ const Topbar: FC<TopbarProps> = ({
       onInvite={inviteEditorByEmail}
       onRemove={removeEditorById}
       onChange={changeEditorAccess}
-      toggleSidebar={toggleSidebar}
       status={status}
       onChangeStatus={actions.onChangeStatus}
       isReadOnly={isReadOnly}

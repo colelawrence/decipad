@@ -24,7 +24,6 @@ const Playground: React.FC = () => {
 
   return (
     <NotebookPage
-      sidebarOpen={false}
       topbar={<PlaygroundTopBar />}
       notebook={
         <div data-editorloaded data-hydrated={!isServerSideRendering()}>
