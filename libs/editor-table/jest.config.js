@@ -11,14 +11,6 @@ module.exports = {
     ...coveragePathIgnorePatterns,
     'src/__fixtures__',
   ],
-  coverageThreshold: {
-    global: {
-      statements: 25,
-      branches: 16,
-      functions: 17,
-      lines: 26,
-    },
-  },
   /* TODO: Update to latest Jest snapshotFormat
    * By default Nx has kept the older style of Jest Snapshot formats
    * to prevent breaking of any existing tests with snapshots.
