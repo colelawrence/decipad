@@ -23,6 +23,7 @@ import { DndPreview } from './components/DndPreview/DndPreview';
 import { useAutoAnimate } from './hooks';
 import { useUndo } from './hooks/useUndo';
 import { useWriteLock } from './utils/useWriteLock';
+import { Scrubber } from 'slate';
 
 export interface EditorProps {
   notebookId: string;
@@ -32,6 +33,13 @@ export interface EditorProps {
   editor?: MyEditor;
   children?: ReactNode;
 }
+
+Scrubber.setScrubber((key, value) => {
+  if (key.startsWith('_react')) {
+    return '[scrubbed]';
+  }
+  return value;
+});
 
 const InsidePlate = ({
   containerRef,
