@@ -1,5 +1,5 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useCanUseDom } from '@decipad/react-utils';
+import { useCanUseDom, lazyLoad } from '@decipad/react-utils';
 import {
   docs,
   notebooks,
@@ -9,7 +9,7 @@ import {
 } from '@decipad/routing';
 import { FeatureFlagsSwitcher, HelpMenu } from '@decipad/ui';
 import { useSession } from 'next-auth/react';
-import { FC, lazy } from 'react';
+import type { FC } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import { Onboard } from './Onboard/Onboard';
@@ -20,10 +20,10 @@ import { NotebookRedirect, WorkspaceRedirect } from './url-compat';
 
 export const loadWorkspaces = () =>
   import(/* webpackChunkName: "workspaces" */ './workspaces/Workspaces');
-const Workspaces = lazy(loadWorkspaces);
+const Workspaces = lazyLoad(loadWorkspaces);
 export const loadPlayground = () =>
   import(/* webpackChunkName: "playground" */ './playground/Playground');
-const Playground = lazy(loadPlayground);
+const Playground = lazyLoad(loadPlayground);
 
 export const App: FC = () => {
   const session = useSession();

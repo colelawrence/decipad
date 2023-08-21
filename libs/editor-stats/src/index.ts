@@ -1,5 +1,5 @@
-import { lazy } from 'react';
+import { lazyLoad } from '@decipad/react-utils';
 
 const loadStats = () =>
   import(/* webpackChunkName: "editor-stats" */ './EditorStats');
-export const EditorStats = lazy(loadStats);
+export const EditorStats = lazyLoad(loadStats);

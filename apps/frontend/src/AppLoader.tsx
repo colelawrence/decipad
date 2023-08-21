@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { GlobalStyles, LoadingLogo } from '@decipad/ui';
+import { lazyLoad } from '@decipad/react-utils';
 
-const AppWithMeta = lazy(
+const AppWithMeta = lazyLoad(
   () => import(/* webpackChunkName: "app-with-meta" */ './AppWithMeta')
 );
 

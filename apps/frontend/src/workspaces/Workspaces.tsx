@@ -1,12 +1,12 @@
 import { workspaces } from '@decipad/routing';
-import { lazy } from 'react';
 import { Route, Routes, useSearchParams } from 'react-router-dom';
+import { lazyLoad } from '@decipad/react-utils';
 import { ErrorPage, LazyRoute } from '../meta';
 import RedirectToDefaultWorkspace from './RedirectToDefaultWorkspace';
 
 const loadWorkspace = () =>
   import(/* webpackChunkName: "workspace" */ './workspace/Workspace');
-const Workspace = lazy(loadWorkspace);
+const Workspace = lazyLoad(loadWorkspace);
 
 // prefetch
 loadWorkspace();

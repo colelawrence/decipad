@@ -111,9 +111,13 @@ export const getURL = (fileName: string): Promise<string> => {
     Bucket,
     Key: fileName,
   });
-  return getSignedUrl(s3, command, {
-    expiresIn: maxAttachmentDownloadTokenExpirationSeconds,
-  }).then(fixURL);
+  return getSignedUrl(
+    s3 as Parameters<typeof getSignedUrl>[0],
+    command as Parameters<typeof getSignedUrl>[1],
+    {
+      expiresIn: maxAttachmentDownloadTokenExpirationSeconds,
+    }
+  ).then(fixURL);
 };
 
 export const remove = async (fileName: string) => {

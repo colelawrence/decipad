@@ -25,7 +25,7 @@ import {
   GlobalThemeStyles,
 } from '@decipad/ui';
 import { SelectedTab } from 'libs/ui/src/organisms/EditorSidebar/types';
-import { FC, lazy, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import Topbar from './Topbar';
@@ -33,10 +33,11 @@ import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 import { NotebookMetaActionsProvider } from '../../workspaces/workspace/providers';
+import { lazyLoad } from '@decipad/react-utils';
 
 export const loadEditor = () =>
   import(/* webpackChunkName: "notebook-editor" */ './Editor');
-const Editor = lazy(loadEditor);
+const Editor = lazyLoad(loadEditor);
 
 const Notebook: FC = () => {
   const [editor, setEditor] = useState<MyEditor | undefined>();

@@ -5,13 +5,14 @@ import {
   NotebookPage,
   PlaygroundTopBar,
 } from '@decipad/ui';
-import { ComponentProps, lazy, useState } from 'react';
+import { ComponentProps, useState } from 'react';
+import { lazyLoad } from '@decipad/react-utils';
 import { Frame } from '../meta';
 import { useAnimateMutations } from '../notebooks/notebook/hooks/useAnimateMutations';
 
 const loadEditor = () =>
   import(/* webpackChunkName: "playground-editor" */ './Editor');
-const Editor = lazy(loadEditor);
+const Editor = lazyLoad(loadEditor);
 
 const Playground: React.FC = () => {
   const [icon, setIcon] =
