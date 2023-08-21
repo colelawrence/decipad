@@ -106,7 +106,12 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
         return UnknownValue;
       }
       if (typeof dateValue !== 'bigint') {
-        dateValue = BigInt(dateValue);
+        try {
+          dateValue = BigInt(dateValue);
+        } catch (err) {
+          console.error(`Error converting "${dateValue}" to BigInt`);
+          throw err;
+        }
       }
       return DateValue.fromDateAndSpecificity(
         dateValue,

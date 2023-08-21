@@ -8,6 +8,7 @@ import {
   sortValue,
 } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
+import stringify from 'json-stringify-safe';
 import { ComputationRealm } from '../computer/ComputationRealm';
 
 export const identifiedResultForTable = (
@@ -25,13 +26,17 @@ export const identifiedResultForTable = (
   }
 
   if (!value || !isTableValue(value)) {
-    throw new Error(`table does not have table value: ${value}`);
+    throw new Error(
+      `table does not have table value: ${value}, ${stringify(value)}`
+    );
   }
 
   [type, value] = sortValue(type, value);
 
   if (!value || !isTableValue(value)) {
-    throw new Error(`table does not have table value: ${value}`);
+    throw new Error(
+      `table does not have table value: ${value}, ${stringify(value)}`
+    );
   }
   if (
     value &&
