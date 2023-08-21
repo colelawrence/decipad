@@ -1,5 +1,5 @@
 import { N } from '@decipad/number';
-import { DateValue, NumberValue, Value } from '../value';
+import { DateValue, NumberValue, Unknown, UnknownValue, Value } from '../value';
 import {
   addTime,
   cmpSpecificities,
@@ -126,6 +126,9 @@ export const dateOverloads: Record<string, OverloadedBuiltinSpec[]> = {
         const d1 = getInstanceof(v1, DateValue);
         const d2 = getInstanceof(v2, DateValue);
         const difference = await subtractDates(d1, d2, d1.specificity);
+        if (difference === Unknown) {
+          return UnknownValue;
+        }
 
         return NumberValue.fromValue(difference);
       },

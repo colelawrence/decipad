@@ -4,7 +4,7 @@ import { singular } from 'pluralize';
 import { AST, Unit } from '..';
 import { startOfDate } from '../../../utils/src/date';
 import { getDefined, n, pairwise } from '../utils';
-import { DateValue } from '../value';
+import { DateValue, Unknown } from '../value';
 import * as Time from './time-types';
 
 export * from './time-quantities';
@@ -17,13 +17,14 @@ export { Time };
 /**
  * Create a Luxon DateTime without a timezone offset from a date-like arg
  */
-export const toLuxonUTC = (date: bigint | undefined | number | DateTime) => {
+export const toLuxonUTC = (date: bigint | number | DateTime) => {
   if (typeof date === 'bigint') {
     date = Number(date);
   }
   if (date instanceof DateTime) {
     return date.toUTC();
   }
+  // if (date == null)
   if (typeof date !== 'number') {
     throw new Error(
       `panic: toLuxon(date) passed an invalid date: ${date} (${typeof date})`
@@ -393,9 +394,14 @@ export const subtractDates = async (
   d1: DateValue,
   d2: DateValue,
   specificity: Time.Specificity
-): Promise<DeciNumber> => {
-  const dateTime1 = await toLuxonUTC(await d1.getData());
-  const dateTime2 = await toLuxonUTC(await d2.getData());
+): Promise<DeciNumber | typeof Unknown> => {
+  const dd1 = await d1.getData();
+  const dd2 = await d2.getData();
+  if (dd1 == null || dd2 == null) {
+    return Unknown;
+  }
+  const dateTime1 = await toLuxonUTC(dd1);
+  const dateTime2 = await toLuxonUTC(dd2);
 
   switch (specificity) {
     case 'year': {
