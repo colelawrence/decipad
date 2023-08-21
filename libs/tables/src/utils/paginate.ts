@@ -11,7 +11,7 @@ interface PaginateOptions<T1, T2> {
   gqlType?: string;
 }
 
-export async function paginate<T1 extends ConcreteRecord, T2>(
+export async function paginate<T1 extends ConcreteRecord, T2 = T1>(
   table: DataTable<T1>,
   /* eslint-disable no-param-reassign */
   query: DynamoDbQuery,

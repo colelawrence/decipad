@@ -9,6 +9,11 @@ const outputPad = (pad: PadRecord): PadRecord => {
   };
 };
 
+const outputPads = (pads: PadRecord[]) => {
+  const sortedItems = pads.sort(byDesc('createdAt'));
+  return sortedItems.map(outputPad);
+};
+
 const getNotebooksById = async (
   notebookIds: string[]
 ): Promise<PadRecord[]> => {
@@ -23,8 +28,7 @@ const getNotebooksById = async (
     const sliceItems = await data.pads.batchGet(notebookIdsSlice);
     items = items.concat(sliceItems);
   }
-  const sortedItems = items.sort(byDesc('createdAt'));
-  return sortedItems.map(outputPad);
+  return outputPads(items);
 };
 
 interface GetWorkspaceNotebooksProps {
@@ -47,9 +51,15 @@ export const getWorkspaceNotebooks = async ({
     },
   };
 
-  return paginate(data.pads, query, page, {
+  const paged = await paginate(data.pads, query, page, {
     gqlType: 'Pad',
   });
+  const { items: notebooks } = paged;
+
+  return {
+    ...paged,
+    items: outputPads(notebooks),
+  };
 };
 
 interface GetNotebooksSharedWithProps {
