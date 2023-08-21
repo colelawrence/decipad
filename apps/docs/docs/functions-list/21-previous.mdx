@@ -32,6 +32,18 @@ Sales={
 }
 ```
 
+`previous(0, Acquired * 5%)` forecasts the number of customers who churned based on the previous year's acquired clients and a `5%` churn rate.
+
+```deci live
+CustomerForecast={
+  Year=[date(2020)..date(2023)]
+  Acquired=previous(1000 customers) * 200%
+  Churned=previous(0, Acquired * 5%)
+}
+```
+
+### Example Notebooks
+
 <GridContainer>
   <Card
     title="Demo notebook"
