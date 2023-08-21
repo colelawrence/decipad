@@ -15,7 +15,12 @@ import {
   selectEventRange,
 } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
-import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
+import {
+  getBlockAbove,
+  isElementEmpty,
+  isText,
+  removeNodes,
+} from '@udecode/plate';
 import { dndStore } from '@udecode/plate-dnd';
 import { nanoid } from 'nanoid';
 import { DragEvent } from 'react';
@@ -41,7 +46,7 @@ export const onDropSmartCellResult =
       ) as unknown as DragCellData[];
       if (!fragment) return;
 
-      const filteredFragment: MyText[] = [];
+      const filteredFragments: MyText[] = [];
 
       fragment.forEach((data) => {
         const blockAbove = getBlockAbove(editor) ?? [];
@@ -54,14 +59,14 @@ export const onDropSmartCellResult =
           block.type === ELEMENT_CODE_LINE ||
           block.type === ELEMENT_CODE_LINE_V2_CODE
         ) {
-          filteredFragment.push({
+          filteredFragments.push({
             text,
           });
         } else if (
           block.type === ELEMENT_PARAGRAPH ||
           block.type === ELEMENT_LIC
         ) {
-          filteredFragment.push({
+          filteredFragments.push({
             text,
             [MARK_MAGICNUMBER]: true,
           });
@@ -83,6 +88,6 @@ export const onDropSmartCellResult =
         }
       });
 
-      editor.insertFragment(filteredFragment);
+      editor.insertFragment(filteredFragments.filter(isText));
     }
   };
