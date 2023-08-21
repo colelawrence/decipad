@@ -98,11 +98,14 @@ export const useNotebookStateAndActions = ({
   const toast = useToast();
 
   // ------- state -------
+  const [error, setError] = useState<Error | undefined>();
+
   const [getNotebookResult] = useGetNotebookByIdQuery({
     variables: {
       id: notebookId,
     },
   });
+
   const notebook = getNotebookResult.data?.getPadById;
 
   const notebookStatus = (notebook?.status as TColorStatus) || 'Draft';
@@ -114,7 +117,6 @@ export const useNotebookStateAndActions = ({
   const [cacheIcon, setCacheIcon] = useState(icon);
   const [cacheIconColor, setCacheIconColor] = useState(iconColor);
 
-  const [error, setError] = useState<Error | undefined>();
   const hasLocalChanges = useMemo(() => docsync?.hasLocalChanges(), [docsync]);
   const isSavedRemotely = useMemo(() => docsync?.isSavedRemotely(), [docsync]);
   const isReadOnly = useMemo(
@@ -127,8 +129,8 @@ export const useNotebookStateAndActions = ({
   );
 
   const isNew = useMemo(
-    () => isNewNotebook(notebook?.initialState || ''),
-    [notebook?.initialState]
+    () => notebook != null && isNewNotebook(notebook?.initialState || ''),
+    [notebook]
   );
 
   // ------- remote api -------
@@ -362,7 +364,10 @@ export const useNotebookStateAndActions = ({
   );
 
   return {
-    error,
+    error:
+      error ??
+      getNotebookResult.error?.graphQLErrors?.[0] ??
+      getNotebookResult.error,
     notebook,
     isReadOnly,
     isPublic,
