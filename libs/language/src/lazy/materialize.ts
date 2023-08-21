@@ -30,6 +30,8 @@ const recurse = async (
   }
 };
 
+export const EMPTY: OneResult = () => empty();
+
 /**
  * Come up with all possible .lowLevelGet arg combinations and call
  * it while building a nested array
@@ -40,7 +42,7 @@ export const materialize = async (
   const hc = await _hc;
   const dimensions = await hc.dimensions();
   if (dimensions.some((dim) => dim.dimensionLength === 0)) {
-    return () => empty();
+    return EMPTY;
   }
 
   /** args for lowLevelGet(). We'll be mutating this as we go */

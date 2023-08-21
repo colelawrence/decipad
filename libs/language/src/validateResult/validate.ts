@@ -8,6 +8,21 @@ import { SerializedType, SerializedTypeKind, serializeType } from '../type';
 import { validateColumnResult } from './validateColumnResult';
 import { Validate } from './types';
 import { ResultGenerator } from '../interpreter/interpreter-types';
+import { empty } from '@decipad/generator-utils';
+import { EMPTY } from '../lazy/materialize';
+
+const getTrue = (cond: boolean, failureMessage: string) => {
+  if (cond) return true;
+  throw new Error(failureMessage);
+};
+const getArray = <T>(thing: T) => {
+  if (Array.isArray(thing)) return thing;
+  throw new Error('panic: expected array');
+};
+const getOfKind = (type: SerializedType, ...kinds: SerializedTypeKind[]) => {
+  if (kinds.includes(type.kind)) return type;
+  throw new Error(`panic: wanted ${kinds.join('/')} and got ${type.kind}`);
+};
 
 // eslint-disable-next-line complexity
 const validate: Validate = <
@@ -19,23 +34,12 @@ const validate: Validate = <
   type: SerializedType,
   value: T
 ): Interpreter.OneResult | null | undefined => {
-  const getTrue = (cond: boolean, failureMessage: string) => {
-    if (cond) return true;
-    reportError(type, value);
-    throw new Error(failureMessage);
-  };
-  const getArray = <T>(thing: T) => {
-    if (Array.isArray(thing)) return thing;
-    reportError(type, value);
-    throw new Error('panic: expected array');
-  };
-  const getOfKind = (type: SerializedType, ...kinds: SerializedTypeKind[]) => {
-    if (kinds.includes(type.kind)) return type;
-    reportError(type, value);
-    throw new Error(`panic: wanted ${kinds.join('/')} and got ${type.kind}`);
-  };
-
-  if (value == null || typeof value === 'symbol') {
+  if (
+    value == null ||
+    typeof value === 'symbol' ||
+    value === empty ||
+    value === EMPTY
+  ) {
     return Unknown;
   }
 
@@ -89,7 +93,7 @@ const validate: Validate = <
         type,
         value as ResultGenerator | null,
         getTrue,
-        validate
+        validateResult
       ) as T;
     }
     case 'table': {
@@ -144,9 +148,10 @@ const reportError = (
 };
 
 export function validateResult(
-  type: Type | SerializedType,
+  _type: Type | SerializedType,
   value: Interpreter.OneResult | null | undefined
-) {
+): Interpreter.OneResult | null | undefined {
+  let type: Type | SerializedType = _type;
   if (type instanceof Type) {
     type = serializeType(type);
   }

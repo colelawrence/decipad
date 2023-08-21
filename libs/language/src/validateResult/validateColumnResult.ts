@@ -21,8 +21,8 @@ export const validateColumnResult = (
   const { cellType } = type;
   return async function* validateColumnResult(start?: number, end?: number) {
     for await (const v of getDefined(value)(start, end)) {
-      validate(cellType, v);
-      yield v;
+      const newValue = validate(cellType, v);
+      yield newValue ?? v;
     }
   };
 };
