@@ -27,13 +27,17 @@ const anchorStyles = css(notebookNameStyles, {
 interface NotebookPathProps {
   notebookName: string;
   href?: string;
+  concatName?: true;
 }
 
 export const NotebookPath = ({
   notebookName: _notebookName,
   href,
+  concatName,
 }: NotebookPathProps): ReturnType<FC> => {
-  const notebookName = getNotebookName(_notebookName);
+  const notebookName = concatName
+    ? getNotebookName(_notebookName)
+    : _notebookName;
 
   return (
     <div css={wrapperStyles}>

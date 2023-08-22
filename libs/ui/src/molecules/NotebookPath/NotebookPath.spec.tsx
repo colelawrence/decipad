@@ -14,8 +14,14 @@ describe('Notebook Path', () => {
     expect(screen.getByText('Use of funds')).toBeInTheDocument();
   });
 
-  it('renders truncated notebook name', () => {
+  it('renders full notebook name', () => {
     render(<NotebookPath notebookName="this is a notebook name" />);
+
+    expect(screen.getByText('this is a notebook name')).toBeInTheDocument();
+  });
+
+  it('renders truncated notebook name', () => {
+    render(<NotebookPath concatName notebookName="this is a notebook name" />);
 
     expect(screen.getByText('this is a notebook n...')).toBeInTheDocument();
   });

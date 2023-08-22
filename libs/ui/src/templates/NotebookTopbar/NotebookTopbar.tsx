@@ -332,7 +332,7 @@ export const NotebookTopbar = ({
               workspaces={userWorkspaces}
               trigger={
                 <div data-testId="notebook-actions">
-                  <NotebookPath notebookName={notebook.name} />
+                  <NotebookPath concatName notebookName={notebook.name} />
                   <Caret variant="down" />
                 </div>
               }
