@@ -5,7 +5,7 @@ type LazyComponentTypeModule<P = {}> = {
   default: LazyComponentType<P>;
 };
 
-type Loader<P = {}> = () => Promise<LazyComponentTypeModule<P>>;
+export type Loader<P = {}> = () => Promise<LazyComponentTypeModule<P>>;
 
 const retry = <P = {}>(
   fn: Loader<P>,

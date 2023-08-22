@@ -1,8 +1,9 @@
-import { lazy, Suspense } from 'react';
+import { ComponentProps, Suspense } from 'react';
 import type { PlateComponent } from '@decipad/editor-types';
 import { LoadingIndicator, ErrorBlock } from '@decipad/ui';
 import { useLockEditorWriting } from '@decipad/react-contexts';
 import { ErrorBoundary } from '@sentry/react';
+import { Loader, lazyLoad } from '@decipad/react-utils';
 
 const EditorElementPlaceholder: PlateComponent = (props) => {
   useLockEditorWriting();
@@ -17,9 +18,9 @@ const EditorElementPlaceholder: PlateComponent = (props) => {
 };
 
 export const lazyElementComponent = (
-  factory: Parameters<typeof lazy>['0']
+  factory: Loader<ComponentProps<PlateComponent>>
 ): PlateComponent => {
-  const LazyElementComponent = lazy(factory);
+  const LazyElementComponent = lazyLoad(factory) as unknown as PlateComponent;
 
   const LazyElementLoader: PlateComponent = (props) => {
     return (
