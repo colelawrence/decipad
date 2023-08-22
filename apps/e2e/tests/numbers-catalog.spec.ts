@@ -1,5 +1,6 @@
 import { BrowserContext, Page, test } from '@playwright/test';
 import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
+import { openColTypeMenu } from '../utils/page/Table';
 import { snapshot } from '../utils/src';
 
 test.describe('Tests the number catalog', () => {
@@ -24,6 +25,7 @@ test.describe('Tests the number catalog', () => {
       .first()
       .click();
     await waitForEditorToLoad(page);
+    await openColTypeMenu(page, 3, 'Revenue');
     await snapshot(page as Page, 'Notebook: Number Catalog');
   });
 });
