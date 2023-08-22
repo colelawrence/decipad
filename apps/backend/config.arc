@@ -1,5 +1,5 @@
 @aws
-timeout 60
+timeout 20
 runtime nodejs18.x
 
 @arc
