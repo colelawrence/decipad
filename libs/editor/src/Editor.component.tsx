@@ -35,7 +35,7 @@ export interface EditorProps {
 }
 
 Scrubber.setScrubber((key, value) => {
-  if (key.startsWith('_react')) {
+  if (key.startsWith('__')) {
     return '[scrubbed]';
   }
   return value;
