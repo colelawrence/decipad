@@ -17,6 +17,7 @@ export const IntercomProvider: FC<{ readonly children: ReactNode }> = ({
         userHash: session.data?.user?.intercomUserHash,
       }}
       shouldInitialize={session.status === 'authenticated'}
+      initializeDelay={2000}
     >
       {children}
     </Provider>
