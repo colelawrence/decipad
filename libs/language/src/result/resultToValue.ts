@@ -27,6 +27,11 @@ import { ValueGeneratorFunction } from '../value/types';
 // eslint-disable-next-line complexity
 export const resultToValue = async (result: Result.Result): Promise<Value> => {
   const { type, value } = result;
+
+  if (typeof value === 'symbol') {
+    return UnknownValue;
+  }
+
   switch (type.kind) {
     case 'type-error':
     case 'pending':
