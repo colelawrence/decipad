@@ -94,9 +94,44 @@ async function removeFromAllowList(event: TableRecordChanges<UserKeyRecord>) {
   }
 }
 
+async function removeDuplicatedUserkeys(
+  event: TableRecordChanges<UserKeyRecord>
+) {
+  if (event.action !== 'put') {
+    return;
+  }
+
+  const { args } = event;
+  const keyType = args.id.split(':')[0];
+
+  if (!keyType) {
+    return;
+  }
+  const data = await tables();
+
+  const userKeys = (
+    await data.userkeys.query({
+      IndexName: 'byUserId',
+      KeyConditionExpression: 'user_id = :user_id',
+      ExpressionAttributeValues: {
+        ':user_id': args.user_id,
+      },
+    })
+  ).Items.reduce((acc: Array<{ id: string }>, key: UserKeyRecord) => {
+    if (key.id.startsWith(`${keyType}:`) && key.id !== args.id) {
+      acc.push({ id: key.id });
+    }
+
+    return acc;
+  }, []);
+
+  await data.userkeys.batchDelete(userKeys);
+}
+
 async function userKeyChangesHandler(event: TableRecordChanges<UserKeyRecord>) {
   const { table } = event;
   assert.strictEqual(table, 'userkeys');
   await sendEmailValidationEmail(event);
   await removeFromAllowList(event);
+  await removeDuplicatedUserkeys(event);
 }
