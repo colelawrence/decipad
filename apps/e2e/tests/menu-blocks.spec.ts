@@ -67,22 +67,37 @@ test.describe('Test Menu Blocks', () => {
 
   test('creates pie chart', async () => {
     await createPieChartBelow(page);
+    expect(await page.getByTestId('error-block').count(), `broken blocks`).toBe(
+      0
+    );
   });
 
   test('creates line chart', async () => {
     await createLineChartBelow(page);
+    expect(await page.getByTestId('error-block').count(), `broken blocks`).toBe(
+      0
+    );
   });
 
   test('creates bar chart', async () => {
     await createBarChartBelow(page);
+    expect(await page.getByTestId('error-block').count(), `broken blocks`).toBe(
+      0
+    );
   });
 
   test('creates area chart', async () => {
     await createAreaChartBelow(page);
+    expect(await page.getByTestId('error-block').count(), `broken blocks`).toBe(
+      0
+    );
   });
 
   test('creates scatter chart', async () => {
     await createScatterChartBelow(page);
+    expect(await page.getByTestId('error-block').count(), `broken blocks`).toBe(
+      0
+    );
   });
 
   test('creates input widget', async () => {
