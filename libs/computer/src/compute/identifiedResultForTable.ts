@@ -27,7 +27,9 @@ export const identifiedResultForTable = (
 
   if (!value || !isTableValue(value)) {
     throw new Error(
-      `table does not have table value: ${value}, ${stringify(value)}`
+      `table does not have table value: ${value}, ${stringify(
+        value
+      )} (${typeof value})`
     );
   }
 
@@ -35,7 +37,9 @@ export const identifiedResultForTable = (
 
   if (!value || !isTableValue(value)) {
     throw new Error(
-      `table does not have table value: ${value}, ${stringify(value)}`
+      `table does not have table value: ${value}, ${stringify(
+        value
+      )} (${typeof value})`
     );
   }
   if (
