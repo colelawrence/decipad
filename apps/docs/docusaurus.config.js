@@ -75,7 +75,7 @@ const config = {
   favicon: '/img/favicon.png',
   organizationName: 'decipad', // Usually your GitHub org/user name.
   projectName: 'decipad', // Usually your repo name.
-
+  staticDirectories: ['public', 'static'],
   presets: [
     [
       '@docusaurus/preset-classic',

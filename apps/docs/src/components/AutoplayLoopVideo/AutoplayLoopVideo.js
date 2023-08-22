@@ -5,7 +5,7 @@ const AutoplayLoopVideo = ({ src, playbackSpeed }) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const [isZoomed, setIsZoomed] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true); // New state for play/pause
+  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
     const videoElement = videoRef.current;
