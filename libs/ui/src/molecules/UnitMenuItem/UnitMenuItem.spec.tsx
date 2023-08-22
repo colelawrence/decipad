@@ -12,7 +12,7 @@ beforeEach(() => {
 it('renders the children', () => {
   render(<UnitMenuItem />, { wrapper });
   expect(screen.getByRole('textbox')).toBeInTheDocument();
-  expect(screen.queryByRole('button')).toBeNull();
+  expect(screen.queryByRole('button')).toBeDisabled();
 });
 
 it('renders a button when parse is successful', async () => {

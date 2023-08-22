@@ -26,12 +26,13 @@ const inputStyles = css(p13Medium, {
   background: cssVar('backgroundDefault'),
   borderRadius: '6px',
   padding: '6px 10px',
-
-  // Make input adjust alongside button
-  flex: '1 1 0px',
 });
 
 const buttonStyles = css(p12Medium, {
+  ':disabled': {
+    color: cssVar('textDisabled'),
+    cursor: 'not-allowed',
+  },
   ':hover, :focus': {
     background: cssVar('backgroundHeavy'),
   },
@@ -39,9 +40,6 @@ const buttonStyles = css(p12Medium, {
   borderRadius: '6px',
   margin: '2px',
   padding: '4px 8px',
-  width: 'max-content',
-  position: 'absolute',
-  right: '8px',
 });
 
 export type UnitsAction =
@@ -89,7 +87,7 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const showCommitBtn = useMemo(() => {
-    return state.unit != null || state.constant != null;
+    return state.text && (state.unit != null || state.constant != null);
   }, [state]);
 
   const handleKeyDown = async (newUnit: string) => {
@@ -151,11 +149,14 @@ export const UnitMenuItem: FC<UnitMenuItemProps> = ({
           }}
           placeholder={placeholder}
         />
-        {showCommitBtn && (
-          <button css={buttonStyles} onClick={() => onSelect(unitOrConstant)}>
-            Add
-          </button>
-        )}
+
+        <button
+          css={buttonStyles}
+          onClick={() => onSelect(unitOrConstant)}
+          disabled={!showCommitBtn}
+        >
+          Add
+        </button>
       </div>
     </MenuItem>
   );

@@ -47,7 +47,7 @@ test.describe('Tests Custom Units', () => {
 
     await page.keyboard.type('apples');
 
-    // ensure the button is disabled if the user doesn't enter any unit
+    // ensure the button is enabled if the user enters a valid unit
     await expect(page.getByTestId('advanced_unit_button')).toBeEnabled();
 
     await keyPress(page, 'Enter');

@@ -49,6 +49,6 @@ it('disables workspace creation while already submitting', async () => {
     resolveCreation();
   });
   await waitFor(() => {
-    expect(getByTestId('btn-create-modal')).not.toBeDisabled();
+    expect(getByTestId('btn-create-modal')).toBeEnabled();
   });
 });
