@@ -43,7 +43,6 @@ const plotResult: ComponentProps<typeof PlotBlock>['result'] = {
 const props: ComponentProps<typeof PlotBlock> = {
   title: 'Plot',
   readOnly: false,
-  errorMessage: '',
   plotParams: {
     sourceVarName: 'source var name',
     sourceVarNameOptions: [

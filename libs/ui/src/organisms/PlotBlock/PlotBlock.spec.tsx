@@ -142,10 +142,3 @@ it('displays the plot settings for a scatter plot unless readonly', async () => 
   rerender(<PlotBlock {...plotProps('point')} readOnly />);
   expect(queryAllByText('Settings')).toHaveLength(0);
 });
-
-it('shows a given error message', () => {
-  const { getByTestId } = render(
-    <PlotBlock {...plotProps('line')} errorMessage="Oopsie whoopsie." />
-  );
-  expect(getByTestId('error-block')).toBeVisible();
-});
