@@ -4,6 +4,7 @@ import { getDefined } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
 import debounce from 'lodash.debounce';
 import { FC, PropsWithChildren, useCallback, useEffect } from 'react';
+import { chunkify } from './chunkify';
 
 type Fn = (...args: unknown[]) => unknown;
 type CreateLogsFn = (
@@ -75,14 +76,16 @@ const pushConsoleCall = (
   args: unknown[],
   createLogs: CreateLogsFn
 ) => {
-  const newEntries = args
+  const pendingEntries = args
     .map((arg) => ({
       content: stringify(arg),
       createdAt: new Date(),
       source: method,
     }))
     .filter((entry) => entry.content);
-  entries.push({ resource, entries: newEntries });
+  for (const chunk of chunkify(pendingEntries, MAX_PAYLOAD_SIZE)) {
+    entries.push({ resource, entries: chunk });
+  }
   pushToRemote(createLogs);
 };
 
