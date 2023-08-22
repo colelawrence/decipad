@@ -65,8 +65,3 @@ export const ActionButtons = styled.div({
 export const Status = styled.div(p13Medium, {
   cursor: 'pointer',
 });
-
-export const BetaWrapper = styled.div({
-  display: 'flex',
-  alignItems: 'center',
-});
