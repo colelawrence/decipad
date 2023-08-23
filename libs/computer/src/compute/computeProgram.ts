@@ -111,7 +111,7 @@ const internalComputeStatement = async (
     id: blockId,
     epoch: realm.epoch,
     get result() {
-      if (!valueType.errorCause && statement.type === 'table') {
+      if (!valueType.errorCause && statement.type === 'table' && variableName) {
         return identifiedResultForTable(realm, variableName, statement);
       }
       return serializeResult(valueType, data);
