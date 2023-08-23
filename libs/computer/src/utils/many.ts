@@ -39,12 +39,8 @@ export const getStatement = (
 export const getStatementFromProgram = (
   program: ComputerProgram,
   blockId: string
-): AST.Statement => {
-  return getDefined(
-    program.asBlockIdMap.get(blockId)?.block?.args[0],
-    `ComputationGraph: Could not find code line at ${blockId}`
-  );
-};
+): AST.Statement | undefined =>
+  program.asBlockIdMap.get(blockId)?.block?.args[0];
 
 export const iterProgram = (
   program: AST.Block[],

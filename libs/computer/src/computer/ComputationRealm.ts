@@ -53,13 +53,16 @@ export class ComputationRealm {
     this.errorLocs.delete(blockId);
     this.locCache.delete(blockId);
 
-    const sym = getDefinedSymbol(getStatementFromProgram(program, blockId));
-    if (sym) {
-      this.interpreterRealm.stack.delete(sym, 'global');
-      this.inferContext.stack.delete(sym, 'global');
-      this.interpreterRealm.functions.delete(sym);
-      this.interpreterRealm.clearCacheForSymbols([sym]);
-      this.inferContext.functionDefinitions.delete(sym);
+    const statement = getStatementFromProgram(program, blockId);
+    if (statement) {
+      const sym = getDefinedSymbol(statement);
+      if (sym) {
+        this.interpreterRealm.stack.delete(sym, 'global');
+        this.inferContext.stack.delete(sym, 'global');
+        this.interpreterRealm.functions.delete(sym);
+        this.interpreterRealm.clearCacheForSymbols([sym]);
+        this.inferContext.functionDefinitions.delete(sym);
+      }
     }
   }
 
