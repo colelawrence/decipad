@@ -41,28 +41,6 @@ describe('variant prop', () => {
   });
 });
 
-describe.each([
-  ['onCopy', /copy/i],
-  ['onDelete', /delete/i],
-])('%s prop', (prop, text) => {
-  it('gets called when the respective item is clicked', async () => {
-    const testProp = {
-      [prop]: jest.fn(),
-    };
-    const { findByText } = render(
-      <VariableEditorMenu {...props} {...testProp} />
-    );
-
-    await userEvent.click(await findByText(/trigger/i), {
-      pointerEventsCheck: 0,
-    });
-    await userEvent.click(await findByText(text), {
-      pointerEventsCheck: 0,
-    });
-    expect(testProp[prop]).toHaveBeenCalledTimes(1);
-  });
-});
-
 it('errors when max is lower than min', async () => {
   const { findByDisplayValue, findByText } = render(
     <VariableEditorMenu {...props} variant="slider" max="0" min="10" />

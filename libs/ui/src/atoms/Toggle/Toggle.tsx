@@ -133,6 +133,7 @@ export const Toggle = ({
       }}
       disabled={disabled}
       aria-checked={active}
+      data-testid="toggle-cell-editor"
     >
       <span
         role="checkbox"

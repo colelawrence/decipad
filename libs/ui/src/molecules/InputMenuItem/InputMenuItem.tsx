@@ -22,6 +22,7 @@ const menuItemStyles = css({
 });
 
 const labelStyles = css({
+  minWidth: '36px',
   flex: '1 1 0px',
 });
 
@@ -37,7 +38,7 @@ const inputStyles = css(p13Medium, {
   padding: '4px 12px',
   margin: '2px 0',
 
-  width: 0, // Override vendor default width so flex basis can apply
+  width: '100px',
   flex: '0 1 100%',
 
   background: cssVar('backgroundDefault'),

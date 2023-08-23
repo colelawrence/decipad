@@ -41,14 +41,14 @@ test.describe('Test Toggle Widget', () => {
 
   test('can turn on toggle', async () => {
     const widgetEditor = page.getByTestId('widget-editor');
-    await widgetEditor.getByRole('button').nth(2).click();
+    await page.getByTestId('toggle-cell-editor').click();
     await expect(widgetEditor.getByRole('checkbox')).toBeChecked();
     await expect(page.getByText('true', { exact: true }).first()).toBeVisible();
   });
 
   test('can turn off toggle', async () => {
     const widgetEditor = page.getByTestId('widget-editor');
-    await widgetEditor.getByRole('button').nth(2).click();
+    await page.getByTestId('toggle-cell-editor').click();
     await expect(widgetEditor.getByRole('checkbox')).not.toBeChecked();
     await expect(
       page.getByText('false', { exact: true }).first()

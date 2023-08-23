@@ -6,7 +6,6 @@ import {
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import {
   createPlateEditor,
   createPlugins,
@@ -73,24 +72,6 @@ describe('Variable def expression element', () => {
     expect(getByText('var')).toBeVisible();
     expect(getByText('10')).toBeVisible();
   });
-
-  it('deletes element', async () => {
-    const { getByTitle, findByText } = render(
-      <Plate {...plateProps} editor={editor} />,
-      {
-        wrapper,
-      }
-    );
-
-    await userEvent.click(getByTitle(/ellipsis/i), {
-      pointerEventsCheck: 0,
-    });
-    await userEvent.click(await findByText(/delete/i), {
-      pointerEventsCheck: 0,
-    });
-
-    expect(editor.children).toHaveLength(1);
-  });
 });
 
 describe('Variable def slider element', () => {
@@ -149,23 +130,5 @@ describe('Variable def slider element', () => {
     });
 
     expect(getByText('var')).toBeVisible();
-  });
-
-  it('deletes element', async () => {
-    const { getByTitle, findByText } = render(
-      <Plate {...plateProps} editor={editor} />,
-      {
-        wrapper,
-      }
-    );
-
-    await userEvent.click(getByTitle(/ellipsis/i), {
-      pointerEventsCheck: 0,
-    });
-    await userEvent.click(await findByText(/delete/i), {
-      pointerEventsCheck: 0,
-    });
-
-    expect(editor.children).toHaveLength(0);
   });
 });

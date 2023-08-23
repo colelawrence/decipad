@@ -3,7 +3,7 @@ import { CellValueType } from '@decipad/editor-types';
 import { SerializedType, tokenRules } from '@decipad/language';
 import { noop } from '@decipad/utils';
 import { ComponentProps, ReactNode, useCallback } from 'react';
-import { MenuItem, MenuSeparator, TriggerMenuItem } from '../../atoms';
+import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   Calendar,
   Number as NumberIcon,
@@ -15,8 +15,6 @@ import { InputMenuItem, MenuList } from '../../molecules';
 import { getDateType, getNumberType, getStringType } from '../../utils';
 
 type VariableEditorMenuProps = {
-  readonly onCopy?: () => void;
-  readonly onDelete?: () => void;
   readonly type?: CellValueType;
   readonly onChangeType?: (
     type: SerializedType | 'smart-selection' | undefined
@@ -59,8 +57,6 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
   onChangeMax,
   onChangeMin,
   onChangeStep,
-  onCopy = noop,
-  onDelete = noop,
   type,
   onChangeType = noop,
   max,
@@ -123,7 +119,6 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
           pattern={tokenRules.main.number.match.source}
           value={step}
         />,
-        <MenuSeparator key="sep" />,
       ]}
       {variant === 'expression' || variant === 'dropdown' ? (
         <MenuList
@@ -199,11 +194,6 @@ export const VariableEditorMenu: React.FC<VariableEditorMenuProps> = ({
           </MenuList>
         )
       )}
-      <MenuItem onSelect={onCopy}>Copy</MenuItem>
-
-      <MenuItem onSelect={onDelete}>
-        <div css={{ minWidth: '165px' }}>Delete</div>
-      </MenuItem>
     </MenuList>
   );
 };

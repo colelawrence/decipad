@@ -18,7 +18,6 @@ import {
   assertElementType,
   isDragAndDropHorizontal,
   mutateText,
-  safeDelete,
 } from '@decipad/editor-utils';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
@@ -26,15 +25,9 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
-import {
-  PlateEditor,
-  findNodePath,
-  getNodeString,
-  serializeHtml,
-} from '@udecode/plate';
-import copy from 'copy-to-clipboard';
+import { findNodePath, getNodeString } from '@udecode/plate';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext } from 'react';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';
 import { VariableEditorContextProvider } from './VariableEditorContext';
 
@@ -44,25 +37,11 @@ export const VariableDef: PlateComponent = ({
   children,
 }) => {
   assertElementType(element, ELEMENT_VARIABLE_DEF);
-  const [deleted, setDeleted] = useState(false);
 
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
   const path = useNodePath(element);
-
-  const onDelete = useCallback(() => {
-    if (path) {
-      setDeleted(true);
-      safeDelete(editor, path);
-    }
-  }, [editor, path]);
-
-  const onCopy = useCallback(() => {
-    copy(serializeHtml(editor as PlateEditor, { nodes: [element] }), {
-      format: 'text/html',
-    });
-  }, [editor, element]);
 
   const sliderElementPath = useNodePath(
     (element as VariableSliderElement).children[2]
@@ -154,7 +133,7 @@ export const VariableDef: PlateComponent = ({
     [editor, secondChild]
   );
 
-  const isHorizontal = isDragAndDropHorizontal(deleted, editor, path);
+  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
   const getAxis = useDragAndDropGetAxis({ isHorizontal });
   const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
 
@@ -162,9 +141,6 @@ export const VariableDef: PlateComponent = ({
 
   const turnIntoProps = useTurnIntoProps(element);
 
-  if (deleted) {
-    return <></>;
-  }
   const { color = defaultColor } = element.children[0];
 
   return (
@@ -190,8 +166,6 @@ export const VariableDef: PlateComponent = ({
       >
         <VariableEditor
           variant={element.variant}
-          onDelete={onDelete}
-          onCopy={onCopy}
           onChangeMax={onChangeMax}
           onChangeMin={onChangeMin}
           onChangeStep={onChangeStep}

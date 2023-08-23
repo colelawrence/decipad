@@ -24,9 +24,12 @@ import { AvailableSwatchColor, getTypeIcon, swatchesThemed } from '../../utils';
 const leftBarSize = 2;
 const smallScreenQuery = `@media (max-width: ${smallestDesktop.portrait.width}px)`;
 
-type Variant = Pick<ComponentProps<typeof VariableEditorMenu>, 'variant'>;
+type Variant = Pick<
+  ComponentProps<typeof VariableEditorMenu>,
+  'variant'
+>['variant'];
 
-const wrapperStyles = ({ variant }: Variant, color: string) => {
+const wrapperStyles = (variant: Variant, color: string) => {
   const bgColor = cssVar('backgroundMain');
   const targetColor = variant === 'display' ? grey300.rgb : color;
   const finalColor = cssVar('borderSubdued');
@@ -67,9 +70,10 @@ const headerWrapperStyles = css({
   padding: '0 2px',
 });
 
-const iconWrapperStyles = ({ variant }: Variant) =>
+const iconWrapperStyles = (variant: Variant) =>
   css({
     display: 'grid',
+    alignItems: 'center',
     height: '20px',
     width: '20px',
     flexShrink: 0,
@@ -85,7 +89,7 @@ const iconWrapperStyles = ({ variant }: Variant) =>
     },
   });
 
-const buttonWrapperStyles = ({ variant }: Variant) =>
+const buttonWrapperStyles = (variant: Variant) =>
   css({
     padding: '2px',
     flexShrink: 0,
@@ -102,7 +106,7 @@ const buttonWrapperStyles = ({ variant }: Variant) =>
     }),
   });
 
-const variableNameStyles = ({ variant }: Variant) =>
+const variableNameStyles = (variant: Variant) =>
   css({
     alignSelf: 'start',
     flexGrow: 2,
@@ -153,6 +157,7 @@ export const VariableEditor = ({
   value,
   onChangeValue = noop,
   element,
+  variant,
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
@@ -166,8 +171,8 @@ export const VariableEditor = ({
       aria-label="column-content"
       className={'block-table'}
       css={wrapperStyles(
-        { variant: menuProps.variant },
-        menuProps.variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
+        variant,
+        variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
       )}
       data-testid="widget-editor"
     >
@@ -175,55 +180,48 @@ export const VariableEditor = ({
         <div
           css={[
             headerWrapperStyles,
-            menuProps.variant === 'display' && {
+            variant === 'display' && {
               gap: 0,
             },
           ]}
         >
           <>
-            <div
-              css={variableNameStyles({
-                variant: menuProps.variant,
-              })}
-            >
-              {childrenArray[0]}
-            </div>
-            {menuProps.variant !== 'display' && (
+            <div css={variableNameStyles(variant)}>{childrenArray[0]}</div>
+            {variant !== 'display' && (
               <span
                 contentEditable={false}
                 css={[
-                  iconWrapperStyles({ variant: menuProps.variant }),
+                  iconWrapperStyles(variant),
                   readOnly && { visibility: 'hidden' },
                 ]}
               >
                 <Icon />
               </span>
             )}
-            <div
-              contentEditable={false}
-              css={iconWrapperStyles({ variant: menuProps.variant })}
-            >
-              <VariableEditorMenu
-                {...(menuProps as ComponentProps<typeof VariableEditorMenu>)}
-                trigger={
-                  <button
-                    css={[
-                      buttonWrapperStyles({
-                        variant: menuProps.variant,
-                      }),
-                      readOnly && { visibility: 'hidden' },
-                    ]}
-                  >
-                    <Ellipsis />
-                  </button>
-                }
-                type={type}
-                onChangeType={onChangeType}
-              />
-            </div>
+            {isMenuVariant(variant) && (
+              <div contentEditable={false} css={iconWrapperStyles(variant)}>
+                <VariableEditorMenu
+                  {...({ ...menuProps, variant } as ComponentProps<
+                    typeof VariableEditorMenu
+                  >)}
+                  trigger={
+                    <button
+                      css={[
+                        buttonWrapperStyles(variant),
+                        readOnly && { visibility: 'hidden' },
+                      ]}
+                    >
+                      <Ellipsis />
+                    </button>
+                  }
+                  type={type}
+                  onChangeType={onChangeType}
+                />
+              </div>
+            )}
           </>
         </div>
-        {menuProps.variant !== 'display' && childrenArray.length > 1 && (
+        {variant !== 'display' && childrenArray.length > 1 && (
           <CellEditor
             type={type}
             value={value}
@@ -241,3 +239,11 @@ export const VariableEditor = ({
     </div>
   );
 };
+
+/**
+ * Small helper function
+ * Does this variant have a menu (...), on the top right?
+ */
+function isMenuVariant(variant: Variant): boolean {
+  return !(variant === 'date' || variant === 'toggle' || variant === 'display');
+}

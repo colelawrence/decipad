@@ -12,7 +12,10 @@ import {
   PlateComponent,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { isDragAndDropHorizontal, safeDelete } from '@decipad/editor-utils';
+import {
+  assertElementType,
+  isDragAndDropHorizontal,
+} from '@decipad/editor-utils';
 import {
   useComputer,
   useIsEditorReadOnly,
@@ -32,9 +35,7 @@ import { Number } from 'libs/ui/src/icons';
 const displayDebounceNamesDefinedMs = 500;
 
 export const Display: PlateComponent = ({ attributes, element, children }) => {
-  if (element?.type !== ELEMENT_DISPLAY) {
-    throw new Error(`Expression is meant to render expression elements`);
-  }
+  assertElementType(element, ELEMENT_DISPLAY);
   const [openMenu, setOpenMenu] = useState(false);
 
   // Because we only calculate results when the dropdown is open,
@@ -65,14 +66,6 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
 
   const res = useResult(element.blockId);
   const computer = useComputer();
-
-  const [deleted, setDeleted] = useState(false);
-  const onDelete = useCallback(() => {
-    if (path) {
-      setDeleted(true);
-      safeDelete(editor, path);
-    }
-  }, [editor, path]);
 
   // Results from computer are NOT calculated until the menu is actually open.
   // Saving a lot of CPU when the editor is re-rendering when the user is busy
@@ -127,7 +120,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
     [namesDefined, unnamedResults]
   );
 
-  const isHorizontal = isDragAndDropHorizontal(deleted, editor, path);
+  const isHorizontal = isDragAndDropHorizontal(false, editor, path);
   const getAxis = useDragAndDropGetAxis({ isHorizontal });
   const onDrop = useDragAndDropOnDrop({ editor, element, path, isHorizontal });
 
@@ -179,12 +172,7 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         getAxis={getAxis}
         onDrop={onDrop}
       >
-        <VariableEditor
-          variant="display"
-          readOnly={readOnly}
-          element={element}
-          onDelete={onDelete}
-        >
+        <VariableEditor variant="display" readOnly={readOnly} element={element}>
           <DropdownMenu
             open={openMenu}
             setOpen={!readOnly ? setOpenMenu : noop}
