@@ -1,6 +1,12 @@
 {
   "index_name": "docs.dev.decipad.com",
+  "start_urls": [
+    {
+      "url": "https://dev.decipad.com/docs/"
+    }
+  ],
   "sitemap_urls": ["https://dev.decipad.com/docs/sitemap.xml"],
+  "stop_urls": ["https://dev.decipad.com/docs/releases/.*"],
   "selectors": {
     "default": {
       "lvl0": {

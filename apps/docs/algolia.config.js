@@ -7,6 +7,7 @@ const configs = {
     apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.dev.decipad.com',
     contextualSearch: false,
+    searchPagePath: 'search',
     exclusionPatterns: [
       '**/releases',
       '**/releases/**',
@@ -24,6 +25,7 @@ const configs = {
     apiKey: 'db6e12842f8c0c9dded465872fe17d54',
     indexName: 'docs.app.decipad.com',
     contextualSearch: false,
+    searchPagePath: 'search',
     exclusionPatterns: [
       '**/releases',
       '**/releases/**',
