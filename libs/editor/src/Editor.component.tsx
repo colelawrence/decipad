@@ -34,9 +34,14 @@ export interface EditorProps {
   children?: ReactNode;
 }
 
+const SCRUBBED = '[scrubbed]';
+
 Scrubber.setScrubber((key, value) => {
-  if (key.startsWith('__')) {
-    return '[scrubbed]';
+  if (key.startsWith('__') || key === 'window') {
+    return SCRUBBED;
+  }
+  if (value === globalThis) {
+    return SCRUBBED;
   }
   return value;
 });
