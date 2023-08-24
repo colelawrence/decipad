@@ -105,7 +105,7 @@ export const Image: ImageComponent = ({
         >
           <figure
             className={'block-figure'}
-            aria-label="column-content"
+            aria-roledescription="column-content"
             css={figureStyles}
             contentEditable={false}
           >

@@ -57,7 +57,7 @@ export const Callout = ({
   return (
     <p
       className={'block-figure'}
-      aria-label="column-content"
+      aria-roledescription="column-content"
       css={[
         styles,
         {

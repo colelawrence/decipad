@@ -41,7 +41,7 @@ export const Paragraph = ({
 }: ParagraphProps): ReturnType<React.FC> => {
   return (
     <div
-      aria-label="column-content"
+      aria-roledescription="column-content"
       className="block-p"
       css={styles}
       data-testid="paragraph-wrapper"

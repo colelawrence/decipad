@@ -96,6 +96,7 @@ export const EditableLiveDataCaption: FC<EditableTableCaptionProps> = ({
             (loading ? <Spinner /> : isUiIntegration ? <Data /> : <Zap />)}
         </div>
         <div
+          role="textbox"
           aria-placeholder={
             empty ? generateVarName(isFlagEnabled('SILLY_NAMES')) : ''
           }

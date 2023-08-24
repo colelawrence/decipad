@@ -185,6 +185,7 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
             )}
           </div>
           <div
+            role="textbox"
             aria-placeholder={empty ? 'Name your table' : ''}
             aria-roledescription="table name"
             css={[

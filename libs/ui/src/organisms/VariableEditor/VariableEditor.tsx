@@ -168,7 +168,7 @@ export const VariableEditor = ({
   const selected = useSelected();
   return (
     <div
-      aria-label="column-content"
+      aria-roledescription="column-content"
       className={'block-table'}
       css={wrapperStyles(
         variant,

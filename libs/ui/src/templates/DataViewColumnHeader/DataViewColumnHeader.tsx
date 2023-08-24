@@ -56,7 +56,6 @@ export type Ref = HTMLTableCellElement;
 const dataViewColumnHeaderStyles = css({
   '&::before, &::after': {
     display: 'block',
-    content: ' attr(aria-placeholder)',
     width: '2px',
     background: 'transparent',
     height: 'calc(100% - 12px)',

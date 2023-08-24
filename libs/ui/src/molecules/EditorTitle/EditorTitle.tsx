@@ -21,7 +21,13 @@ export const EditorTitle: FC<EditorTitleProps> = ({
 }) => (
   <div css={wrapperStyles}>
     <div>
-      <h1 aria-placeholder={placeholder}>{children}</h1>
+      <h1
+        role="textbox"
+        aria-placeholder={placeholder}
+        data-testid="editor-title"
+      >
+        {children}
+      </h1>
     </div>
     <div contentEditable={false}>
       <Divider />

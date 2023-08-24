@@ -89,13 +89,9 @@ test.describe('Duplicating a notebook', () => {
     expect(padCopyIndex).toBeGreaterThanOrEqual(0);
     await followPad(page, padCopyIndex);
     await waitForEditorToLoad(page);
-    await expect(
-      page
-        .getByRole('heading', {
-          name: 'Copy of pad title here',
-        })
-        .getByText('Copy of pad title here')
-    ).toBeVisible();
+    await expect(page.getByTestId('editor-title')).toHaveText(
+      'Copy of pad title here'
+    );
     await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
     await navigateToWorkspacePage(page);
   });

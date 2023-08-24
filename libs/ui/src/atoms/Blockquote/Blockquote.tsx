@@ -24,7 +24,7 @@ export const Blockquote = ({
   children,
 }: BlockquoteProps): ReturnType<React.FC> => {
   return (
-    <blockquote aria-label="column-content" css={styles}>
+    <blockquote aria-roledescription="column-content" css={styles}>
       {children}
     </blockquote>
   );

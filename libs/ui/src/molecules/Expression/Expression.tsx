@@ -101,6 +101,7 @@ export const Expression = ({
       ]}
     >
       <div
+        role="textbox"
         css={[
           expressionInputStyles,
           (type?.kind === 'date' || type?.kind === 'string') && {

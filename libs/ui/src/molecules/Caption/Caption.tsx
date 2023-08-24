@@ -99,6 +99,7 @@ export const Caption = ({
         />
       )}
       <div
+        role="textbox"
         css={placeholderStyles}
         aria-placeholder={empty ? 'Name your input' : ''}
         spellCheck={false}
