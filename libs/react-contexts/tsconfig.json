@@ -12,6 +12,7 @@
     { "path": "../client-events" },
     { "path": "../feature-flags" },
     { "path": "../interfaces" },
-    { "path": "../frontend-config" }
+    { "path": "../frontend-config" },
+    { "path": "../import" }
   ]
 }

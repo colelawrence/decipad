@@ -7,11 +7,10 @@ import {
   useConnectionStore,
 } from '@decipad/react-contexts';
 import type { ResultMessageType } from '@decipad/safejs';
-import { mapResultType } from '@decipad/computer';
 import { useCallback, useEffect } from 'react';
 import { useIntegrationContext } from '.';
 import { useWorker } from '../hooks';
-import { MaybeResultFromWorker } from '../utils';
+import { importFromJSONAndCoercions } from '@decipad/import';
 
 interface CodeIntegrationProps {
   id: string;
@@ -38,11 +37,13 @@ export const CodeIntegration = function CodeIntegration({
   const codeStore = useCodeConnectionStore();
 
   useEffect(() => {
-    const result = MaybeResultFromWorker(blockOptions.latestResult);
-    if (!result) return;
-
-    const mappedResult = mapResultType(result, typeMappings);
-    pushResultToComputer(computer, id, varName, mappedResult);
+    const result = importFromJSONAndCoercions(
+      blockOptions.latestResult,
+      typeMappings
+    );
+    if (result) {
+      pushResultToComputer(computer, id, varName, result);
+    }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
   useEffect(() => {
@@ -54,10 +55,10 @@ export const CodeIntegration = function CodeIntegration({
   const worker = useWorker(
     useCallback(
       (msg: ResultMessageType) => {
-        const result = MaybeResultFromWorker(msg.result);
-        if (!result) return;
-        const mappedResult = mapResultType(result, typeMappings);
-        pushResultToComputer(computer, id, varName, mappedResult);
+        const result = importFromJSONAndCoercions(msg.result, typeMappings);
+        if (result) {
+          pushResultToComputer(computer, id, varName, result);
+        }
       },
       [computer, id, varName, typeMappings]
     ),
@@ -77,7 +78,10 @@ export const CodeIntegration = function CodeIntegration({
           store.setStage('connect');
           store.setExistingIntegration(id);
 
-          const res = MaybeResultFromWorker(blockOptions.latestResult);
+          const res = importFromJSONAndCoercions(
+            blockOptions.latestResult,
+            store.resultTypeMapping
+          );
           if (res) {
             store.setResultPreview(res);
           }

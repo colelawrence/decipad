@@ -1,4 +1,4 @@
-import { Result, isColumn } from '@decipad/computer';
+import { Result, SerializedTypes, isColumn } from '@decipad/computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';
@@ -9,6 +9,7 @@ import { normalizeColumnName } from './utils/normalizeColumnName';
 import { rowsToColumns } from './utils/rowsToColumns';
 import { sameType } from './utils/sameType';
 import { selectUsingJsonPath } from './utils/selectUsingJsonPath';
+import omit from 'lodash.omit';
 
 const importTableFromArray = (
   arr: Array<unknown>,
@@ -27,7 +28,8 @@ const importTableFromArray = (
 
 const importFromArray = (
   arr: Array<unknown>,
-  options: ImportOptions
+  options: ImportOptions,
+  cohersion?: TableCellType
 ): Result.Result => {
   if (arr.length === 0) {
     return {
@@ -40,7 +42,9 @@ const importFromArray = (
   if (arr.some((elem) => Array.isArray(elem))) {
     return importTableFromArray(arr, options);
   }
-  const results = arr.map((cell) => importFromUnknownJson(cell, options));
+  const results = arr.map((cell) =>
+    importFromUnknownJson(cell, options, cohersion)
+  );
   if (!sameType(results.map(({ type }) => type))) {
     return errorResult('not all elements of array are of same type');
   }
@@ -118,7 +122,11 @@ const internalImportFromUnknownJson = (
 ): Result.Result => {
   const json = jsonPath ? selectUsingJsonPath(_json, jsonPath) : _json;
   if (Array.isArray(json)) {
-    return importFromArray(json, options);
+    return importFromArray(
+      json,
+      omit(options, 'columnTypeCoercions'),
+      cohersion
+    );
   }
   const tof = typeof json;
 
@@ -145,11 +153,10 @@ const internalImportFromUnknownJson = (
     tof === 'bigint' ||
     (tof === 'string' && cohersion?.kind === 'number')
   ) {
+    const type: SerializedTypes.Number =
+      cohersion?.kind === 'number' ? cohersion : { kind: 'number' };
     return {
-      type: {
-        kind: 'number',
-        unit: null,
-      },
+      type,
       value: N(json as number | bigint | string),
     };
   }

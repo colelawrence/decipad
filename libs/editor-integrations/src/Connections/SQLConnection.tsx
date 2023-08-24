@@ -5,11 +5,17 @@ import {
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { CodeEditor } from '@decipad/ui';
-import { importFromUnknownJson } from '@decipad/import';
+import {
+  columnTypeCoercionsToRec,
+  importFromUnknownJson,
+} from '@decipad/import';
 import { ConnectionProps } from './types';
 import { fetchQuery } from '../utils';
 
-export const SQLConnection: FC<ConnectionProps> = ({ setResultPreview }) => {
+export const SQLConnection: FC<ConnectionProps> = ({
+  setResultPreview,
+  typeMapping,
+}) => {
   const sqlStore = useSQLConnectionStore();
 
   const [log, setLog] = useState<TExecution<boolean>[]>([]);
@@ -28,7 +34,11 @@ export const SQLConnection: FC<ConnectionProps> = ({ setResultPreview }) => {
 
       if (queryExec.type === 'success') {
         sqlStore.Set({ latestResult: JSON.stringify(queryExec.data) });
-        setResultPreview(importFromUnknownJson(queryExec.data, {}));
+        setResultPreview(
+          importFromUnknownJson(queryExec.data, {
+            columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
+          })
+        );
         onExecute({ status: 'success', ok: true });
       } else {
         onExecute({ status: 'error', err: queryExec.message });
@@ -37,7 +47,7 @@ export const SQLConnection: FC<ConnectionProps> = ({ setResultPreview }) => {
     } else {
       console.error('NO EXTERNAL DATA ID');
     }
-  }, [onExecute, setResultPreview, sqlStore]);
+  }, [onExecute, setResultPreview, sqlStore, typeMapping]);
 
   useEffect(() => {
     if (info.status === 'run') {

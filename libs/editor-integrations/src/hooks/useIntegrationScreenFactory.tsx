@@ -16,6 +16,8 @@ export const useIntegrationScreenFactory = (): ReactNode => {
   const store = useConnectionStore((state) => ({
     connectionType: state.connectionType,
     resultPreview: state.resultPreview,
+    resultTypeMapping: state.resultTypeMapping,
+    rawResult: state.rawResult,
     varName: state.varName,
     stage: state.stage,
     setVarName: state.setVarName,
@@ -29,12 +31,13 @@ export const useIntegrationScreenFactory = (): ReactNode => {
       connect: (
         <Connection
           type={store.connectionType}
+          typeMapping={store.resultTypeMapping}
           setResultPreview={store.setResultPreview}
         />
       ),
       map: (
         <ResultPreview
-          result={store.resultPreview}
+          result={store.rawResult != null ? store.resultPreview : undefined}
           name={store.varName || ''}
           setName={store.setVarName}
           setTypeMapping={store.setResultTypeMapping}

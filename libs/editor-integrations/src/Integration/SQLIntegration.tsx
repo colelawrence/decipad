@@ -6,9 +6,9 @@ import {
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { IntegrationTypes } from '@decipad/editor-types';
-import { mapResultType } from '@decipad/computer';
 import { useIntegrationContext } from '.';
-import { MaybeResultFromWorker, fetchQuery } from '../utils';
+import { importFromJSONAndCoercions } from '@decipad/import';
+import { fetchQuery } from '../utils';
 
 interface SQLIntegrationProps {
   id: string;
@@ -30,11 +30,13 @@ export const SQLIntegration: FC<SQLIntegrationProps> = ({
   const sqlStore = useSQLConnectionStore();
 
   useEffect(() => {
-    const result = MaybeResultFromWorker(blockOptions.latestResult);
-    if (!result) return;
-
-    const mappedResult = mapResultType(result, typeMappings);
-    pushResultToComputer(computer, id, varName, mappedResult);
+    const result = importFromJSONAndCoercions(
+      blockOptions.latestResult,
+      typeMappings
+    );
+    if (result) {
+      pushResultToComputer(computer, id, varName, result);
+    }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
   useEffect(() => {
@@ -51,11 +53,13 @@ export const SQLIntegration: FC<SQLIntegrationProps> = ({
           fetchQuery(blockOptions.externalDataUrl, blockOptions.query).then(
             (res) => {
               if (res?.type === 'success') {
-                const result = MaybeResultFromWorker(JSON.stringify(res.data));
-                if (!result) return;
-
-                const mappedResult = mapResultType(result, typeMappings);
-                pushResultToComputer(computer, id, varName, mappedResult);
+                const result = importFromJSONAndCoercions(
+                  JSON.stringify(res.data),
+                  typeMappings
+                );
+                if (result) {
+                  pushResultToComputer(computer, id, varName, result);
+                }
               }
               // TODO: Handle error case
             }
@@ -67,7 +71,10 @@ export const SQLIntegration: FC<SQLIntegrationProps> = ({
           store.setStage('connect');
           store.setExistingIntegration(id);
 
-          const res = MaybeResultFromWorker(blockOptions.latestResult);
+          const res = importFromJSONAndCoercions(
+            blockOptions.latestResult,
+            typeMappings
+          );
           if (res) {
             store.setResultPreview(res);
           }

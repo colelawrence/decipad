@@ -19,7 +19,7 @@ import { css } from '@emotion/react';
 import { Settings } from 'libs/ui/src/icons';
 import { hideOnPrint } from 'libs/ui/src/styles/editor-layout';
 import { deciOverflowStyles } from 'libs/ui/src/styles/scrollbars';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 interface ResultPreviewProps {
   result?: Result.Result;
@@ -82,25 +82,6 @@ export const ResultPreview: FC<ResultPreviewProps> = ({
 
   const shouldDisplayPreview = !foundError && result;
   const isVariableResult = result && result.type.kind !== 'materialized-table';
-
-  useEffect(() => {
-    const type = result?.type;
-    if (
-      type &&
-      type.kind !== 'column' &&
-      type.kind !== 'materialized-column' &&
-      type.kind !== 'table' &&
-      type.kind !== 'materialized-table' &&
-      type.kind !== 'row' &&
-      type.kind !== 'range' &&
-      type.kind !== 'pending' &&
-      type.kind !== 'nothing' &&
-      type.kind !== 'function' &&
-      type.kind !== 'type-error'
-    ) {
-      onChangeType(type);
-    }
-  }, [onChangeType, result]);
 
   return (
     <div css={resultPreviewWrapperStyles(!!isVariableResult)}>

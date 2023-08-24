@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
-import { Result, mapResultType } from '@decipad/computer';
+import { create } from 'zustand';
+import { Result } from '@decipad/computer';
 import { codePlaceholder } from '@decipad/frontend-config';
 import {
   ImportElementSource,
   SimpleTableCellType,
 } from '@decipad/editor-types';
 import { generateVarName } from '@decipad/utils';
-import { create } from 'zustand';
+import { importFromJSONAndCoercions } from '@decipad/import';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];
@@ -24,6 +25,9 @@ export interface IntegrationStore {
   varName: string | undefined;
   setVarName: (v: string) => void;
 
+  rawResult?: string;
+  setRawResult: (rawResult: string | undefined) => void;
+
   resultPreview?: Result.Result;
   setResultPreview: (v: Result.Result | undefined) => void;
 
@@ -31,7 +35,6 @@ export interface IntegrationStore {
   // Index is the index of the column (or if not a column, then defaults to 0)
   setResultTypeMapping: (index: number, type: SimpleTableCellType) => void;
   setAllTypeMapping: (v: Array<SimpleTableCellType | undefined>) => void;
-  applyTypeMapping: () => void;
 
   /** Method to move to the next stage (This changes depending on the type of integration) */
   next: () => void;
@@ -78,29 +81,28 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
   varName: generateVarName(true),
   setVarName: (v) => set(() => ({ varName: v })),
 
+  rawResult: undefined,
+  setRawResult: (rawResult) => set(() => ({ rawResult })),
+
   resultPreview: undefined,
   setResultPreview: (v) => set(() => ({ resultPreview: v })),
 
   resultTypeMapping: [],
   setResultTypeMapping(index, type) {
-    const { resultTypeMapping, applyTypeMapping } = get();
+    const { resultTypeMapping, rawResult } = get();
 
     const clonedTypeMappings = [...resultTypeMapping];
     clonedTypeMappings[index] = type;
 
     set({ resultTypeMapping: clonedTypeMappings });
-    applyTypeMapping();
+
+    if (rawResult) {
+      const res = importFromJSONAndCoercions(rawResult, clonedTypeMappings);
+      set({ resultPreview: res });
+    }
   },
   setAllTypeMapping(types) {
     set({ resultTypeMapping: types });
-  },
-
-  applyTypeMapping() {
-    const { resultPreview, resultTypeMapping } = get();
-    if (!resultPreview) return;
-
-    const mappedType = mapResultType(resultPreview, resultTypeMapping);
-    set({ resultPreview: mappedType });
   },
 
   next() {

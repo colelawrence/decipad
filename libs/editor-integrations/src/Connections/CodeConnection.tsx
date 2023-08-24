@@ -1,5 +1,9 @@
 import { safeNumberForPrecision } from '@decipad/computer';
-import { importFromUnknownJson, tableFlip } from '@decipad/import';
+import {
+  columnTypeCoercionsToRec,
+  importFromUnknownJson,
+  tableFlip,
+} from '@decipad/import';
 import DeciNumber from '@decipad/number';
 import {
   ExecutionContext,
@@ -189,15 +193,19 @@ const AiPanel = ({
   );
 };
 
-export const CodeConnection: FC<ConnectionProps> = (props) => {
-  const { stage } = useConnectionStore();
+export const CodeConnection: FC<ConnectionProps> = ({
+  setResultPreview,
+  typeMapping,
+}) => {
+  const { stage, setRawResult } = useConnectionStore();
+
   const { setCode, setLatestResult, code, showAi, toggleShowAi } =
     useCodeConnectionStore();
+
   const { onExecute, info } = useContext(ExecutionContext);
   const [log, setLog] = useState<TExecution<boolean>[]>(
     [] as TExecution<boolean>[]
   );
-  const { setResultPreview } = props;
   const computer = useComputer();
   const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount, id } = workspaceInfo;
@@ -281,6 +289,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
         return;
       }
 
+      setRawResult(msg.result);
       setLatestResult(msg.result);
       try {
         let jsonMsg = JSON.parse(msg.result);
@@ -299,7 +308,9 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
           jsonMsg = tableFlip(jsonMsg);
         }
 
-        const res = importFromUnknownJson(jsonMsg, {});
+        const res = importFromUnknownJson(jsonMsg, {
+          columnTypeCoercions: columnTypeCoercionsToRec(typeMapping),
+        });
         setResultPreview(res);
 
         onExecute({ status: 'success', ok: true });
@@ -312,7 +323,7 @@ export const CodeConnection: FC<ConnectionProps> = (props) => {
         });
       }
     },
-    [onExecute, setLatestResult, setResultPreview]
+    [onExecute, setLatestResult, setRawResult, setResultPreview, typeMapping]
   );
 
   const errorStream = useCallback(

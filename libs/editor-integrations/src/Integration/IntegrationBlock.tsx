@@ -18,6 +18,7 @@ import { assertElementType, isStructuredElement } from '@decipad/editor-utils';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import {
   useComputer,
+  useConnectionStore,
   useCurrentWorkspaceStore,
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
@@ -105,6 +106,11 @@ export const IntegrationBlock: PlateComponent = ({
   const { quotaLimit, queryCount, id } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
   const [maxQueryExecution, setMaxQueryExecution] = useState(false);
+  const { setAllTypeMapping } = useConnectionStore();
+
+  useEffect(() => {
+    setAllTypeMapping(element.typeMappings);
+  }, [element.typeMappings, setAllTypeMapping]);
 
   useEffect(() => {
     if (queryCount && quotaLimit) {
