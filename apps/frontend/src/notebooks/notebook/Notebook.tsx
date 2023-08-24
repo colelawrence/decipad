@@ -33,6 +33,7 @@ import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 import { NotebookMetaActionsProvider } from '../../workspaces/workspace/providers';
 import { lazyLoad } from '@decipad/react-utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const loadEditor = () =>
   import(/* webpackChunkName: "notebook-editor" */ './Editor');
@@ -47,7 +48,10 @@ const Notebook: FC = () => {
   const {
     notebook: { id: notebookId },
     secret,
+    embed: _embed,
   } = useRouteParams(notebooks({}).notebook);
+
+  const embed = isFlagEnabled('EMBED') && _embed;
 
   const {
     error,
@@ -159,6 +163,7 @@ const Notebook: FC = () => {
                 iconColor={iconColor}
                 onUpdateIcon={updateIcon}
                 onUpdateIconColor={updateIconColor}
+                isEmbed={embed}
                 notebook={
                   <Frame
                     Heading="h1"
@@ -184,7 +189,7 @@ const Notebook: FC = () => {
                     />
                   </Frame>
                 }
-                sidebar={!isReadOnly && <EditorSidebar />}
+                sidebar={!isReadOnly && !embed && <EditorSidebar />}
                 topbar={
                   <Frame
                     Heading="h1"

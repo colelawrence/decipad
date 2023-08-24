@@ -6,6 +6,8 @@ import { applyUpdate, Doc } from 'yjs';
  * However this would make for rather unmaintanable code.
  */
 export function isNewNotebook(initialState: string): boolean {
+  if (initialState.length === 0) return false;
+
   const x = new Doc();
   const update = Buffer.from(initialState, 'base64');
   applyUpdate(x, update);

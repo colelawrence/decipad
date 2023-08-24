@@ -25,6 +25,7 @@ const playTopBarWrapperStyles = css({
   display: 'flex',
   justifyContent: 'space-between',
   rowGap: '8px',
+  width: '100%',
 
   padding: '16px 0',
 });

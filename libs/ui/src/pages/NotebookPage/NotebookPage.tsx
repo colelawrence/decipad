@@ -1,6 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { ComponentProps, ReactNode, useEffect, useRef, useState } from 'react';
+import { useDraggingScroll } from '../../hooks';
 import {
   cssVar,
   cssVarName,
@@ -11,26 +12,27 @@ import {
   tabletScreenQuery,
 } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
-import { useDraggingScroll } from '../../hooks';
 import { EditorIcon } from '../../templates';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
-const layoutAppContainerStyles = css(
-  {
-    width: '100%',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  !isE2E && { height: '100vh' }
-);
+const layoutAppContainerHeightStyles = (isEmbed: boolean) =>
+  !isE2E && {
+    border: isEmbed ? `1px solid ${cssVar('borderDefault')}` : 0,
+  };
 
-const layoutEditorAndSidebarContainerStyles = css(
+const layoutAppContainerStyles = css({
+  width: '100%',
+  overflow: 'hidden',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const layoutEditorAndSidebarContainerStyles = (isEmbed: boolean) => [
   {
-    order: 2,
+    order: isEmbed ? 1 : 2,
 
     width: '100%',
     display: 'flex',
@@ -39,48 +41,72 @@ const layoutEditorAndSidebarContainerStyles = css(
 
     [smallScreenQuery]: {
       paddingTop: 0,
-      paddingBottom: 65,
+      paddingBottom: isEmbed ? 0 : 65,
     },
   },
-  !isE2E && { height: '100vh' }
-);
+  !isE2E && { height: isEmbed ? 'fit-content' : '100%' },
+];
 
-const layoutHeaderContainerStyles = css({
-  width: '100%',
-  position: 'sticky',
-  padding: '0 32px',
-  backgroundColor: cssVar('backgroundAccent'),
-});
+const layoutHeaderContainerStyles = (isEmbed: boolean) =>
+  css({
+    height: '76px',
+    width: '100%',
+    position: 'sticky',
+    order: isEmbed ? 2 : 1,
+    padding: isEmbed ? '0 8px' : '0 32px',
+    backgroundColor: cssVar('backgroundAccent'),
+    display: 'flex',
+    alignItems: 'center',
+  });
 
-const layoutNotebookFixedHeightContainerStyles = css(
+const layoutNotebookFixedHeightContainerStyles = (isEmbed: boolean) => [
   {
-    borderRadius: 16,
     backgroundColor: cssVar('backgroundMain'),
+    height: '100%',
   },
-  !isE2E && { height: 'calc(100vh - 75px)' }
-);
+  css(
+    isEmbed
+      ? { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }
+      : {
+          borderRadius: 16,
+        }
+  ),
+];
 
-const layoutNotebookScrollerStyles = css(
+const layoutNotebookSpacingStyles = (isEmbed: boolean) => [
+  {
+    [smallScreenQuery]: {
+      padding: '12px 24px',
+    },
+  },
+  isEmbed
+    ? { paddingTop: 32, paddingBottom: 32 }
+    : { paddingTop: 64, paddingBottom: '200px' },
+];
+
+const layoutNotebookScrollerStyles = css([
   {
     overflowX: 'hidden',
     width: '100%',
-    paddingBottom: '200px',
-    paddingTop: 64,
   },
   !isE2E && { height: '100%' },
-  deciOverflowYStyles
-);
+  deciOverflowYStyles,
+]);
 
-const layoutArticleWrapperStyles = css({
-  margin: '0 24px',
-  width: '100%',
-  [smallScreenQuery]: {
-    backgroundColor: cssVar('backgroundMain'),
-    margin: 0,
-    padding: '0 24px',
-    borderRadius: 16,
-  },
-});
+const layoutArticleWrapperStyles = (isEmbed: boolean) =>
+  css({
+    margin: isEmbed ? '0' : '0 24px 24px 24px',
+    width: '100%',
+    [smallScreenQuery]: {
+      backgroundColor: cssVar('backgroundMain'),
+      margin: 0,
+      ...(isEmbed
+        ? { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }
+        : {
+            borderRadius: 16,
+          }),
+    },
+  });
 
 const layoutAsideStyles = css(
   {
@@ -90,7 +116,7 @@ const layoutAsideStyles = css(
     minWidth: 0,
     transition: `min-width ${shortAnimationDuration} ease-in-out, padding 0ms linear ${shortAnimationDuration}`,
   },
-  layoutNotebookFixedHeightContainerStyles,
+  layoutNotebookFixedHeightContainerStyles(false),
   isE2E && { height: 'unset' },
   { borderTopRightRadius: 0, borderBottomRightRadius: 0 }
 );
@@ -99,6 +125,7 @@ interface NotebookPageProps {
   readonly notebook: ReactNode;
   readonly topbar?: ReactNode;
   readonly sidebar?: ReactNode;
+  readonly isEmbed?: boolean;
 
   // Icon stuff
   readonly icon: ComponentProps<typeof EditorIcon>['icon'] | undefined;
@@ -118,6 +145,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
   sidebar,
 
   icon = 'Deci',
+  isEmbed = false,
   iconColor,
   onUpdateIcon,
   onUpdateIconColor,
@@ -177,25 +205,36 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
   const { onDragEnd, onDragOver } = useDraggingScroll(overflowingDiv);
 
   return (
-    <div css={layoutAppContainerStyles}>
-      <main css={layoutEditorAndSidebarContainerStyles} ref={scrollToRef}>
-        <div css={layoutArticleWrapperStyles}>
+    <div
+      css={[layoutAppContainerStyles, layoutAppContainerHeightStyles(isEmbed)]}
+    >
+      <main
+        css={layoutEditorAndSidebarContainerStyles(isEmbed)}
+        ref={scrollToRef}
+      >
+        <div css={layoutArticleWrapperStyles(isEmbed)}>
           <article
             ref={articleRef}
-            css={layoutNotebookFixedHeightContainerStyles}
+            css={layoutNotebookFixedHeightContainerStyles(isEmbed)}
             onDragEnd={onDragEnd}
             onDragOver={onDragOver}
           >
             <div
-              css={[layoutNotebookScrollerStyles, editorWidth]}
+              css={[
+                layoutNotebookSpacingStyles(isEmbed),
+                layoutNotebookScrollerStyles,
+                editorWidth,
+              ]}
               ref={overflowingDiv}
             >
-              <EditorIcon
-                icon={icon}
-                color={iconColor}
-                onChangeColor={onUpdateIconColor}
-                onChangeIcon={onUpdateIcon}
-              />
+              {!isEmbed && (
+                <EditorIcon
+                  icon={icon}
+                  color={iconColor}
+                  onChangeColor={onUpdateIconColor}
+                  onChangeIcon={onUpdateIcon}
+                />
+              )}
               {notebook}
             </div>
           </article>
@@ -225,7 +264,9 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
           </aside>
         )}
       </main>
-      {topbar && <header css={layoutHeaderContainerStyles}>{topbar}</header>}
+      {topbar && (
+        <header css={layoutHeaderContainerStyles(isEmbed)}>{topbar}</header>
+      )}
     </div>
   );
 };

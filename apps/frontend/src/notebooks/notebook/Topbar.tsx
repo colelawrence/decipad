@@ -12,6 +12,9 @@ import {
   useNotebookMetaData,
 } from '@decipad/react-contexts';
 import { clearNotebook } from '../../utils';
+import { useRouteParams } from 'typesafe-routes/react-router';
+import { notebooks } from '@decipad/routing';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type TopbarProps = Pick<
   ComponentProps<typeof NotebookTopbar>,
@@ -70,6 +73,9 @@ const Topbar: FC<TopbarProps> = ({
 
   const [canUndo, canRedo] = useEditorUndoState(editor);
 
+  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
+  const embed = isFlagEnabled('EMBED') && _embed;
+
   if (!notebook) {
     return null;
   }
@@ -126,6 +132,7 @@ const Topbar: FC<TopbarProps> = ({
       onDelete={actions.onDeleteNotebook}
       creationDate={creationDate}
       onClearAll={() => editor && clearNotebook(editor)}
+      isEmbed={Boolean(embed)}
     />
   );
 };

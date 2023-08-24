@@ -8,9 +8,9 @@ import * as Popover from '@radix-ui/react-popover';
 import { format } from 'date-fns';
 import { FC, useCallback, useContext, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Button, Dot, Toggle, Tooltip } from '../../atoms';
-import { Link, World } from '../../icons';
-import { NotebookAvatar } from '../../molecules';
+import { Button, Dot, MenuItem, Toggle, Tooltip } from '../../atoms';
+import { Caret, Code, Copy, Link, World } from '../../icons';
+import { MenuList, NotebookAvatar } from '../../molecules';
 import {
   cssVar,
   p13Regular,
@@ -19,6 +19,7 @@ import {
   smallShadow,
 } from '../../primitives';
 import { NotebookInvitationPopUp } from '../NotebookInvitationPopUp/NotebookInvitationPopUp';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -72,58 +73,60 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
 });
 
 /**
- * The styles for the description of the pop up.
- */
-const descriptionStyles = css(p13Regular, {});
-
-/**
  * The styles for the parent div that wraps the copy button and the text box.
  */
 const clipboardWrapperStyles = css({
+  height: '32px',
   border: '1px solid',
   borderColor: cssVar('backgroundDefault'),
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: '6px',
   whiteSpace: 'nowrap',
 });
 
-/**
- * The copy button styles.
- */
 const copyButtonStyles = css(p13Regular, {
+  height: '100%',
+  backgroundColor: cssVar('backgroundDefault'),
+  borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: cssVar('backgroundDefault'),
-  padding: '6px 12px',
-  borderRadius: '6px',
-});
-
-/**
- * The link icon rendered inside the copy button styles.
- */
-const copyButtonIconStyles = css({
-  width: '18px',
-  height: '18px',
-  marginRight: '3px',
-  '> svg > path': { stroke: cssVar('textDefault') },
+  padding: '0px 8px',
+  button: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    svg: {
+      width: '16px',
+      height: '16px',
+    },
+  },
 });
 
 /**
  * The link text box on the right side of the copy button styles.
  */
-const padLinkTextStyles = css(
-  p13Regular,
+const padLinkTextStyles = css(p13Regular, {
+  userSelect: 'all',
 
-  {
-    userSelect: 'all',
+  width: '100%',
+  overflow: 'hidden',
+  padding: '0px 2px',
+});
 
-    width: '100%',
-    overflow: 'hidden',
-  }
-);
+const copyMenuTriggerStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  svg: { width: 16, height: 16 },
+});
+
+const copyMenuItemStyles = css({
+  display: 'flex',
+  gap: 4,
+
+  svg: { width: 16, height: 16 },
+});
 
 interface NotebookSharingPopUpProps {
   readonly hasPaywall?: boolean;
@@ -173,6 +176,7 @@ export const NotebookPublishingPopUp = ({
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [copiedPublicStatusVisible, setCopiedPublicStatusVisible] =
     useState(false);
+  const [copyDropdown, setCopyDropdwn] = useState(false);
 
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const clientEvent = useContext(ClientEventsContext);
@@ -185,6 +189,8 @@ export const NotebookPublishingPopUp = ({
         notebooks({}).notebook({ notebook }).$,
         window.location.origin
       ).toString();
+
+  const embedLink = `${link}?embed=true`;
 
   const onPublishToggle = useCallback(
     (newIsPublished: boolean) => {
@@ -263,43 +269,75 @@ export const NotebookPublishingPopUp = ({
         {isPublished && (
           <div css={groupStyles}>
             <div css={clipboardWrapperStyles}>
-              <Tooltip
-                variant="small"
-                open={copiedPublicStatusVisible}
-                usePortal={false}
-                trigger={
-                  <div>
-                    <CopyToClipboard
-                      text={link}
-                      onCopy={() => {
-                        setCopiedPublicStatusVisible(true);
-                        setTimeout(() => {
-                          setCopiedPublicStatusVisible(false);
-                          setShareMenuOpen(false);
-                        }, 1000);
-                        // Analytics
-                        clientEvent({
-                          type: 'action',
-                          action: 'notebook share link copied',
-                        });
-                      }}
-                    >
-                      <button
-                        css={copyButtonStyles}
-                        aria-roledescription="copy url to clipboard"
-                        data-testid="copy-published-link"
+              <div css={copyButtonStyles}>
+                <Tooltip
+                  variant="small"
+                  open={copiedPublicStatusVisible}
+                  usePortal={false}
+                  trigger={
+                    <div>
+                      <CopyToClipboard
+                        text={link}
+                        onCopy={() => {
+                          setCopiedPublicStatusVisible(true);
+                          setTimeout(() => {
+                            setCopiedPublicStatusVisible(false);
+                            setShareMenuOpen(false);
+                          }, 1000);
+                          // Analytics
+                          clientEvent({
+                            type: 'action',
+                            action: 'notebook share link copied',
+                          });
+                        }}
                       >
-                        <span css={copyButtonIconStyles}>
+                        <button
+                          aria-roledescription="copy url to clipboard"
+                          data-testid="copy-published-link"
+                          css={{ paddingLeft: '2px', paddingRight: '2px' }}
+                        >
                           <Link />
-                        </span>{' '}
-                        Copy
-                      </button>
-                    </CopyToClipboard>
-                  </div>
-                }
-              >
-                <p>Copied!</p>
-              </Tooltip>
+                          Copy
+                        </button>
+                      </CopyToClipboard>
+                    </div>
+                  }
+                >
+                  <p>Copied!</p>
+                </Tooltip>
+                {isFlagEnabled('EMBED') && (
+                  <MenuList
+                    root
+                    dropdown
+                    portal={false}
+                    open={copyDropdown}
+                    onChangeOpen={setCopyDropdwn}
+                    trigger={
+                      <div css={copyMenuTriggerStyles}>
+                        <Caret variant="down" />
+                      </div>
+                    }
+                  >
+                    <MenuItem>
+                      <CopyToClipboard text={link}>
+                        <div css={copyMenuItemStyles}>
+                          <Copy />
+                          Copy invitation link
+                        </div>
+                      </CopyToClipboard>
+                    </MenuItem>
+                    <MenuItem>
+                      <CopyToClipboard text={embedLink}>
+                        <div css={copyMenuItemStyles}>
+                          <Code />
+                          Copy embed link
+                        </div>
+                      </CopyToClipboard>
+                    </MenuItem>
+                  </MenuList>
+                )}
+              </div>
+
               <p css={padLinkTextStyles}>{link.replace(/https?:\/\//, '')}</p>
             </div>
           </div>
@@ -307,7 +345,7 @@ export const NotebookPublishingPopUp = ({
         {isAdmin && hasUnpublishedChanges && (
           <div css={groupStyles}>
             {(currentSnapshot?.createdAt || currentSnapshot?.updatedAt) && (
-              <p css={descriptionStyles} data-testid="version-date">
+              <p css={p13Regular} data-testid="version-date">
                 Previous version from{' '}
                 {format(
                   new Date(
@@ -337,7 +375,11 @@ export const NotebookPublishingPopUp = ({
     <Popover.Root
       defaultOpen
       open={shareMenuOpen}
-      onOpenChange={setShareMenuOpen}
+      onOpenChange={(v) => {
+        if (!copyDropdown) {
+          setShareMenuOpen(v);
+        }
+      }}
     >
       <Popover.Trigger asChild>
         {isPublished && hasUnpublishedChanges ? (

@@ -35,6 +35,7 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   onClearAll: noop,
   onMoveWorkspace: noop,
   workspaces: [],
+  isEmbed: false,
 };
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',

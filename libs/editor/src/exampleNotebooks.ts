@@ -504,3 +504,126 @@ export const introNotebook = (): MyValue => [
     id: nanoid(),
   },
 ];
+
+export const embedNotebook = (): MyValue => [
+  {
+    children: [
+      {
+        text: 'Embed Example',
+      },
+    ],
+    type: 'h1',
+    id: '8XJf0t9qg14xiVOsob5OM',
+  },
+  {
+    children: [
+      {
+        children: [
+          {
+            text: 'AppleCount',
+          },
+        ],
+        type: 'structured_varname',
+        id: 'WGHVjpdqW3dhYUg4SOy_y',
+      },
+      {
+        children: [
+          {
+            text: '2 Apples',
+          },
+        ],
+        type: 'code_line_v2_code',
+        id: 'q5Eq0CD2VCcUbyqEG6gUE',
+      },
+    ],
+    id: 'QIkWu7aSGVP6b8c7B266P',
+    type: 'code_line_v2',
+  },
+  {
+    children: [
+      {
+        children: [
+          {
+            text: 'AppleCount2',
+          },
+        ],
+        type: 'structured_varname',
+        id: 'QJB7AoMBVisO1qIWBf_bH',
+      },
+      {
+        children: [
+          {
+            text: '3 Apples + ',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            id: 'IYgieWISrNLtfQX61iCIa',
+            type: 'smart-ref',
+            blockId: 'QIkWu7aSGVP6b8c7B266P',
+            columnId: null,
+            lastSeenVariableName: 'AppleCount',
+          },
+          {
+            text: ' ',
+          },
+        ],
+        type: 'code_line_v2_code',
+        id: 'GCyN8Gjw6_Vsl8sn2CMHf',
+      },
+    ],
+    id: '26VUxybVp4R2EiT8vgFPd',
+    type: 'code_line_v2',
+  },
+  {
+    children: [
+      {
+        children: [
+          {
+            text: 'TotalApples',
+          },
+        ],
+        type: 'structured_varname',
+        id: 'rmC668c_DcXrIR6Ym6IzB',
+      },
+      {
+        children: [
+          {
+            text: '',
+          },
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            id: 'y4Q5XcNKbHwxY_6cHS7ZJ',
+            type: 'smart-ref',
+            blockId: '26VUxybVp4R2EiT8vgFPd',
+            columnId: null,
+            lastSeenVariableName: 'AppleCount2',
+          },
+          {
+            text: '',
+          },
+        ],
+        type: 'code_line_v2_code',
+        id: 'PPfC_GjTgqoTZWUMmjFca',
+      },
+    ],
+    id: 'pDy6vpsJZNOKYd3vdN6J_',
+    type: 'code_line_v2',
+  },
+  {
+    children: [
+      {
+        text: '',
+      },
+    ],
+    type: 'p',
+    id: 'UHmLtVtYv-eWdkDRmnMYj',
+  },
+];

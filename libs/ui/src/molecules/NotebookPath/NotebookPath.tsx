@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { cssVar, p13Medium, smallScreenQuery } from '../../primitives';
+import { cssVar, p13Medium } from '../../primitives';
 
 const wrapperStyles = css({
   textOverflow: 'ellipsis',
@@ -9,7 +9,7 @@ const wrapperStyles = css({
   overflow: 'hidden',
   display: 'flex',
   alignItems: 'center',
-  [smallScreenQuery]: {
+  '@media (max-width: 475px)': {
     display: 'none',
   },
 });

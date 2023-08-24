@@ -46,15 +46,27 @@ export const LeftContainer = styled.div({
 });
 
 export const ActionButtons = styled.div({
-  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
-  borderRadius: '6px',
   display: 'flex',
+  height: '100%',
+  gap: '8px',
+  div: {
+    backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+    borderRadius: '6px',
+    height: '100%',
+    display: 'flex',
+  },
   button: {
     padding: '8px',
     borderRadius: '6px',
+    backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
     ':not(:disabled):hover': {
       backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
     },
+  },
+  'button:last-of-type': {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
   },
   svg: {
     width: '16px',

@@ -14,8 +14,12 @@ export const availableFlags = [
   // show computer stats when clicking Alt-Shift-s
   'COMPUTER_STATS',
   'SILLY_NAMES',
+  // Notion Connections in-notebook
+  'NOTION_CONNECTIONS',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
+  // Embed mode 'embed=true',
+  'EMBED',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

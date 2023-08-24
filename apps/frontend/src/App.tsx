@@ -31,6 +31,7 @@ export const App: FC = () => {
 
   const [searchParams] = useSearchParams();
   const isRedirectFromStripe = !!searchParams.get('fromStripe');
+  const isEmbed = searchParams.get('embed') === 'true';
 
   const redirectTo = isRedirectFromStripe
     ? `${workspaces({}).$}?fromStripe=true`
@@ -92,7 +93,7 @@ export const App: FC = () => {
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
 
-      {canUseDom && session.status === 'authenticated' && (
+      {canUseDom && session.status === 'authenticated' && !isEmbed && (
         <HelpMenu
           discordUrl="http://discord.gg/decipad"
           docsUrl={docs({}).$}

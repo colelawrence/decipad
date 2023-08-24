@@ -44,6 +44,7 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   onClearAll: noop,
   onMoveWorkspace: noop,
   workspaces: [],
+  isEmbed: false,
 };
 
 interface WithProvidersProps {

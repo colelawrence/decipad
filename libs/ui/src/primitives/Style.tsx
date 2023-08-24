@@ -101,6 +101,7 @@ type ThemeColorObject = {
 };
 
 type Themes =
+  | 'Grey'
   | 'Teal'
   | 'Brand'
   | 'Blue'
@@ -137,6 +138,10 @@ export function translateOldThemeColor(
   }
 }
 
+function isEmbed(): boolean {
+  return window.location.search.includes('embed=true');
+}
+
 /**
  * Returns the color palette, with the correct dark or light mode.
  */
@@ -144,7 +149,9 @@ export function getThemeColor(swatchColor: AvailableSwatchColor): ColorPalette {
   const theme = translateOldThemeColor(swatchColor);
   const { theme: isDarkMode } = themeStore.getState();
 
-  return ThemeColors[theme][isDarkMode ? 'Dark' : 'Light'];
+  return ThemeColors[theme === 'Teal' && isEmbed() ? 'Grey' : theme][
+    isDarkMode ? 'Dark' : 'Light'
+  ];
 }
 
 /**
@@ -154,13 +161,14 @@ export function getThemeColor(swatchColor: AvailableSwatchColor): ColorPalette {
  * If you cannot use a hook, then you can use the @see `getThemeColor` function instead.
  */
 export function useThemeColor(
-  swatchColor: AvailableSwatchColor,
+  swatchColor: AvailableSwatchColor | 'Grey',
   defaultAsGrey?: true
 ): ColorPalette {
   const isDarkMode = themeStore((s) => s.theme);
-  const theme = translateOldThemeColor(swatchColor);
+  const theme =
+    swatchColor === 'Grey' ? 'Grey' : translateOldThemeColor(swatchColor);
 
-  if (swatchColor === 'Catskill' && defaultAsGrey) {
+  if (swatchColor === 'Catskill' && (defaultAsGrey || isEmbed())) {
     return ThemeColorGrey;
   }
 
@@ -184,6 +192,31 @@ const ThemeColorGrey: ThemeColorsType['Teal']['Light'] = {
  * These are not themselves CSS Variables, but are used to SET the CSS Variables.
  */
 export const ThemeColors: ThemeColorsType = {
+  Grey: {
+    Light: {
+      Text: {
+        Subdued: black.hex,
+        Default: grey700.hex,
+      },
+      Background: {
+        Subdued: grey200.hex,
+        Default: grey200.hex,
+        Heavy: grey200.hex,
+      },
+    },
+    Dark: {
+      Text: {
+        Subdued: white.hex,
+        Default: white.hex,
+      },
+      Background: {
+        Subdued: dark600.hex,
+        Default: dark600.hex,
+        Heavy: dark500.hex,
+      },
+    },
+  },
+
   Teal: {
     Light: {
       Text: {
@@ -695,7 +728,10 @@ export const GlobalThemeStyles: FC<{ color: AvailableSwatchColor }> = ({
   const mode = isDarkMode ? 'Dark' : 'Light';
 
   const ThemeColor = useMemo<keyof typeof ThemeColors>(
-    () => translateOldThemeColor(color),
+    () =>
+      window.location.search.includes('embed=true') && color === 'Catskill'
+        ? 'Grey'
+        : translateOldThemeColor(color),
     [color]
   );
 
