@@ -138,7 +138,7 @@ export function translateOldThemeColor(
   }
 }
 
-function isEmbed(): boolean {
+export function isEmbed(): boolean {
   return window.location.search.includes('embed=true');
 }
 
