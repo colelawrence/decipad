@@ -10,6 +10,21 @@ setupDeciNumberSnapshotSerializer();
 const sumif = parseFunctor(getDefined(operators.sumif.functionSignature));
 
 describe('reducer operators', () => {
+  it('sum: sums all numbers on a list', async () => {
+    expect(
+      await operators.total.fnValues?.([fromJS([2, 1.3, 2.75, 0, 3.1, 5])])
+    ).toMatchInlineSnapshot(`
+      NumberValue {
+        "value": DeciNumber {
+          "d": 20n,
+          "infinite": false,
+          "n": 283n,
+          "s": 1n,
+        },
+      }
+    `);
+  });
+
   it('sumif: sums the elements against boolean elements in a second list', async () => {
     expect(
       await sumif([t.column(t.number()), t.column(t.boolean())])

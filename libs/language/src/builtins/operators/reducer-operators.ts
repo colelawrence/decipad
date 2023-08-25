@@ -1,13 +1,6 @@
-import { ZERO } from '@decipad/number';
+/* eslint-disable no-bitwise */
 import type { BuiltinSpec } from '../interfaces';
-import {
-  Scalar,
-  Value,
-  defaultValue,
-  fromJS,
-  getColumnLike,
-  isColumnLike,
-} from '../../value';
+import { Scalar, Value, getColumnLike, isColumnLike } from '../../value';
 import { coherceToFraction } from '../../utils/coherceToFraction';
 
 export const reducerOperators: { [fname: string]: BuiltinSpec } = {
@@ -17,10 +10,16 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
     argCardinalities: [2],
     isReducer: true,
     fnValues: async ([nums]) => {
-      let acc = ZERO;
+      let acc = 0;
       for await (const v of getColumnLike(nums).values()) {
-        acc = acc.add(coherceToFraction(coherceToFraction(await v.getData())));
+        const f = coherceToFraction(await v.getData());
+        if (f.infinite) {
+          return Scalar.fromValue(f);
+        }
+        const ff = f.valueOf();
+        acc += ff;
       }
+
       return Scalar.fromValue(acc);
     },
     functionSignature: 'column<number:R> -> R',
@@ -47,7 +46,8 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
       if (!isColumnLike(bools)) {
         throw new Error('Expected second argument to be a column of booleans');
       }
-      let acc = ZERO;
+
+      let acc = 0;
       const boolsIt = bools.values();
       for await (const n of numbers.values()) {
         const b = await boolsIt.next();
@@ -57,10 +57,16 @@ export const reducerOperators: { [fname: string]: BuiltinSpec } = {
           );
         }
         if (await b.value.getData()) {
-          acc = acc.add(coherceToFraction(await n.getData()));
+          const f = coherceToFraction(await n.getData());
+          if (f.infinite) {
+            return Scalar.fromValue(f);
+          }
+          const ff = f.valueOf();
+          acc += ff;
         }
       }
-      return fromJS(acc, defaultValue('number'));
+
+      return Scalar.fromValue(acc);
     },
     functionSignature: 'column<number:R>, column<boolean> -> R',
     explanation: 'Adds all the elements of a column that match condition.',

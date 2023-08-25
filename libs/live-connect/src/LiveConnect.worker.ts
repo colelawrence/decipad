@@ -112,8 +112,8 @@ const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
 };
 
 const notify = (subscriptionId: string) => {
+  let lastResult: ImportResult | undefined;
   return async (result: ImportResult) => {
-    let lastResult: ImportResult | undefined;
     if (!dequal(lastResult, result)) {
       lastResult = result;
       const newResponse = createRPCResponse(result);
