@@ -13,6 +13,7 @@ const ELEMENT_OFFSET = 200;
 const SCROLL_SCALAR = 400;
 
 interface UseDraggingScrollReturn<T extends HTMLElement> {
+  readonly ref: RefObject<T>;
   readonly onDragEnd: DragEventHandler<T>;
   readonly onDragOver: DragEventHandler<T>;
 }
@@ -23,14 +24,14 @@ interface UseDraggingScrollReturn<T extends HTMLElement> {
  *
  * It uses window.requestAnimationFrame to provide very smooth scrolling.
  *
- * @param ref of the element you want to scroll.
- *
- * @returns onDragEnd, onDragOver. Use these functions on the element that
+ * @returns ref, onDragEnd, onDragOver. Use these functions on the element that
  * triggers the scrolling (It doesn't have to be the same element that is itself scrolled).
  */
-export function useDraggingScroll<T extends HTMLElement>(
-  scrollingElement: RefObject<T>
-): UseDraggingScrollReturn<T> {
+export function useDraggingScroll<
+  T extends HTMLElement
+>(): UseDraggingScrollReturn<T> {
+  const ref = useRef<T>(null);
+
   const animationRef = useRef<ReturnType<
     typeof window.requestAnimationFrame
   > | null>(null);
@@ -38,14 +39,14 @@ export function useDraggingScroll<T extends HTMLElement>(
   const animationSpeedRef = useRef<number>(0);
 
   const AnimateScroll = useCallback(() => {
-    if (!scrollingElement.current) return;
+    if (!ref.current) return;
 
-    scrollingElement.current.scrollBy(0, animationSpeedRef.current);
+    ref.current.scrollBy(0, animationSpeedRef.current);
 
     if (animationRef.current) {
       animationRef.current = window.requestAnimationFrame(AnimateScroll);
     }
-  }, [scrollingElement]);
+  }, [ref]);
 
   useEffect(() => {
     return () => {
@@ -61,8 +62,8 @@ export function useDraggingScroll<T extends HTMLElement>(
 
   const onDragOver = useCallback<DragEventHandler<T>>(
     (e) => {
-      if (!scrollingElement.current) return;
-      const element = scrollingElement.current;
+      if (!ref.current) return;
+      const element = ref.current;
 
       const top = element.offsetTop;
       const bottom = element.offsetTop + element.offsetHeight;
@@ -81,10 +82,11 @@ export function useDraggingScroll<T extends HTMLElement>(
         animationRef.current = null;
       }
     },
-    [AnimateScroll, scrollingElement]
+    [AnimateScroll, ref]
   );
 
   return {
+    ref,
     onDragEnd,
     onDragOver,
   };
