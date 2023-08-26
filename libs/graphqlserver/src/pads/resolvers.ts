@@ -153,15 +153,41 @@ const resolvers = {
       params: unknown,
       context: GraphqlContext
     ) => {
+      if (!context.user && parent.isPublic) {
+        context.readingModePermission = true;
+        return 'READ';
+      }
+
       const permissionType = await padResource.myPermissionType(
         parent,
         params,
         context
       );
-      if (permissionType == null && parent.isPublic) {
-        context.readingModePermission = true;
-        return 'READ';
+
+      /** permissionType can be null if:
+       *  no user
+       *  the current user was not invited to the notebook
+       *  the current user was not invited to the notebook but it is a member of the workspace belonging to the same workspace as the current notebook
+       */
+      if (permissionType == null) {
+        const wsPermissionType = await isAuthorized(
+          `/workspaces/${parent.workspace_id}`,
+          context,
+          'WRITE'
+        );
+
+        if (
+          (!wsPermissionType || wsPermissionType === 'READ') &&
+          parent.isPublic
+        ) {
+          context.readingModePermission = true;
+          return 'READ';
+        }
+
+        context.readingModePermission = wsPermissionType === 'READ';
+        return wsPermissionType;
       }
+
       context.readingModePermission = permissionType === 'READ';
       return permissionType;
     },

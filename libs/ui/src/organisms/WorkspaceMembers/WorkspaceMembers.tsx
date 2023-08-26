@@ -123,8 +123,11 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
         <div css={tableHeadStyles}>Access level</div>
         <div css={tableHeadStyles}>Status</div>
 
-        {workspaceMembers.map(
-          (member) =>
+        {workspaceMembers.map((member) => {
+          const inviteStatusStyles = columnInviteStatusStyles(
+            !!member.user?.emailValidatedAt
+          );
+          return (
             member.user && (
               <React.Fragment key={member.user.id}>
                 <div css={columnAvatarStyles}>
@@ -139,10 +142,11 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
                   />
                 </div>
 
-                <div css={columnInviteStatusStyles}>
-                  {member.user.emailValidatedAt == null && (
-                    <span css={pendingInviteStyles}>invite pending</span>
-                  )}
+                <div css={inviteStatusStyles}>
+                  {member.user.emailValidatedAt == null &&
+                    currentUserId !== member.user.id && (
+                      <span css={pendingInviteStyles}>invite pending</span>
+                    )}
                   {currentUserId !== member.user.id && (
                     <WorkspaceMemberOptions
                       onRevoke={handleRevoke(member.user.id)}
@@ -151,7 +155,8 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
                 </div>
               </React.Fragment>
             )
-        )}
+          );
+        })}
       </div>
     </div>
   );
@@ -210,10 +215,11 @@ const columnPermissionStyles = css({
   alignSelf: 'center',
 });
 
-const columnInviteStatusStyles = css({
-  alignSelf: 'center',
-  justifySelf: 'flex-end',
-});
+const columnInviteStatusStyles = (alignEnd: boolean) =>
+  css({
+    alignSelf: 'center',
+    justifySelf: alignEnd ? 'flex-end' : 'flex-start',
+  });
 
 const membersTableStyles = css({
   margin: '16px 0',
