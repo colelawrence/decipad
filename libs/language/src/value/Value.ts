@@ -466,7 +466,7 @@ export class Table implements Value {
 }
 
 export const isTableValue = (v: Value | undefined | null): v is Table =>
-  v instanceof Table;
+  v instanceof Table && v.columnNames != null && v.columns != null;
 
 export class Row implements Value {
   cells: Value[];
