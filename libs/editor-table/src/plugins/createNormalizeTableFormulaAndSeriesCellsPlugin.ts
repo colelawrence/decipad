@@ -111,7 +111,7 @@ const normalizeSeriesColumn = (
       const [cellEl, cellPath] = cell;
       const existingText = getNodeString(cellEl).trim();
       const expectedText = series.next().value;
-      if (existingText !== expectedText) {
+      if (typeof expectedText === 'string' && existingText !== expectedText) {
         return () => {
           const selectionBefore = editor.selection;
           insertText(editor, expectedText, { at: cellPath });
