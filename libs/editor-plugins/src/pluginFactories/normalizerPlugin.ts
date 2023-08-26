@@ -1,4 +1,10 @@
-import { deleteText, isElement, unsetNodes } from '@udecode/plate';
+import {
+  deleteText,
+  getNode,
+  hasNode,
+  isElement,
+  unsetNodes,
+} from '@udecode/plate';
 import {
   createTPluginFactory,
   getMyEditor,
@@ -114,8 +120,25 @@ const withNormalizerOverride = (
         ? elementType
         : [elementType];
 
+    const nextNormalizer: typeof normalizeNode = (entry) => {
+      const [node, path] = entry;
+      if (isElement(node)) {
+        const existentNode = getNode(editor, path);
+        if (
+          !existentNode ||
+          (isElement(existentNode) && existentNode.id !== node.id)
+        ) {
+          return;
+        }
+      }
+      return normalizeNode(entry);
+    };
+
     // eslint-disable-next-line no-param-reassign
     myEditor.normalizeNode = (entry) => {
+      if (!hasNode(editor, entry[1])) {
+        return;
+      }
       try {
         const [node] = entry;
 
@@ -123,7 +146,7 @@ const withNormalizerOverride = (
           if (acceptedTypes) {
             if (acceptedTypes.indexOf((node as MyElement).type) < 0) {
               // no match, break early
-              return normalizeNode(entry);
+              return nextNormalizer(entry);
             }
             if (removeUnacceptableElementProperties(entry)) {
               return;
@@ -158,7 +181,7 @@ const withNormalizerOverride = (
         captureException(err);
         return undefined;
       }
-      return normalizeNode(entry);
+      return nextNormalizer(entry);
     };
 
     return editor;
