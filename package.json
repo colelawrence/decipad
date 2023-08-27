@@ -93,7 +93,7 @@
     "@aws-sdk/s3-request-presigner": "^3.400.0",
     "@babel/runtime": "7.22.3",
     "@chakra-ui/css-reset": "2.2.0",
-    "@codemirror/lang-javascript": "^6.1.8",
+    "@codemirror/lang-javascript": "^6.2.0",
     "@codemirror/lang-sql": "^6.5.2",
     "@decipad/safejs": "^1.0.2",
     "@docusaurus/core": "2.4.1",
