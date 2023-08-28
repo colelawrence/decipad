@@ -97,8 +97,6 @@ it('can use namespaces', () => {
   );
   expect(stack.has('Table')).toMatchInlineSnapshot(`true`);
 
-  expect(() => stack.set('Table', 'fail')).toThrow();
-
   expect(stack.globalVariables).toMatchInlineSnapshot(`
     Map {
       "A" => "No",

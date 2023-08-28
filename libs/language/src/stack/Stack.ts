@@ -193,11 +193,6 @@ export class Stack<T> {
 
     const map = this.getAssignmentScope(varGroup);
 
-    if (ns === '' && map.has(name)) {
-      throw new Error(
-        `panic: assigning a value to an existing namespace ${name}`
-      );
-    }
     let subMap = map.get(ns);
     if (!subMap) {
       map.set(ns, (subMap = new Map()));
