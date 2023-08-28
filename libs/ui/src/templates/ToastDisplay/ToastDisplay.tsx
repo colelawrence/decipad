@@ -1,14 +1,9 @@
 import { ToastContext, ToastType } from '@decipad/toast';
-import {
-  ComponentType,
-  useEffect,
-  useState,
-  useCallback,
-  ReactNode,
-} from 'react';
+import { ComponentType, useState, useCallback, ReactNode } from 'react';
 import * as ReactToastNotifications from 'react-toast-notifications';
 import { Toast } from '../../atoms';
 import { toastTransitionDelay } from '../../primitives';
+import { isServerSideRendering } from '@decipad/support';
 
 const ToastProvider: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
@@ -32,23 +27,20 @@ export const ToastDisplay: React.FC<React.PropsWithChildren<unknown>> = ({
   children,
 }) => {
   // SSR shenanigans
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    setShow(true);
-  }, []);
+  const [show] = useState(!isServerSideRendering());
 
-  return (
-    (show && (
-      <ReactToastNotifications.ToastProvider
-        components={{
-          Toast: Toast as ComponentType<ReactToastNotifications.ToastProps>,
-        }}
-        autoDismiss
-        autoDismissTimeout={toastTransitionDelay}
-        placement="top-center"
-      >
-        <ToastProvider>{children}</ToastProvider>
-      </ReactToastNotifications.ToastProvider>
-    )) || <>{children}</>
+  return show ? (
+    <ReactToastNotifications.ToastProvider
+      components={{
+        Toast: Toast as ComponentType<ReactToastNotifications.ToastProps>,
+      }}
+      autoDismiss
+      autoDismissTimeout={toastTransitionDelay}
+      placement="top-center"
+    >
+      <ToastProvider>{children}</ToastProvider>
+    </ReactToastNotifications.ToastProvider>
+  ) : (
+    <>{children}</>
   );
 };
