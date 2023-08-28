@@ -16,6 +16,10 @@ export function assertElementMultipleType<Type extends MyElement['type']>(
   types: Type[]
 ): asserts node is Extract<MyElement, { type: Type }> {
   if (!isElement(node) || !types.includes(node.type as Type)) {
-    throw new Error(`Expected element type to be ${types.join(', ')}`);
+    throw new Error(
+      `Expected element type to be ${types.join(', ')} and is ${
+        (node as MyElement | undefined)?.type
+      }`
+    );
   }
 }
