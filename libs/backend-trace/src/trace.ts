@@ -1,4 +1,7 @@
-import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
+import {
+  AWSLambda as SentryAWSLambda,
+  configureScope,
+} from '@sentry/serverless';
 import {
   Context,
   Handler,
@@ -72,9 +75,16 @@ export const trace = <
 >(
   handle: Handler<TReq, TRes>,
   options: TraceOptions = {}
-) => {
+): Handler<TReq, TRes> => {
   if (initTrace(options)) {
     return handleErrors(handle);
   }
-  return handle;
+  return (event, context, callback) => {
+    if (event.headers?.['x-transaction-id']) {
+      configureScope((scope) => {
+        scope.setTag('transaction_id', event.headers['x-transaction-id']);
+      });
+    }
+    return handle(event, context, callback);
+  };
 };
