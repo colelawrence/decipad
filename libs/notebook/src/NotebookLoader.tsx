@@ -11,7 +11,6 @@ import { isServerSideRendering } from '@decipad/support';
 import { EditorPlaceholder } from '@decipad/ui';
 import { useNotebookWarning } from './useNotebookWarning';
 import { SuspendedNotebook } from './SuspendedNotebook';
-import { ExternalDataSourcesProvider } from './ExternalDataSourcesProvider';
 import type { NotebookProps } from './types';
 import { useLocalBackupNotice } from './useLocalBackupNotice';
 
@@ -33,7 +32,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   onEditor,
   onDocsync,
   onComputer,
-  useExternalDataSources,
 }) => {
   const { data: session } = useSession();
 
@@ -154,27 +152,22 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
 
   if (editor) {
     return (
-      <ExternalDataSourcesProvider
-        notebookId={notebookId}
-        useExternalDataSources={useExternalDataSources}
-      >
-        <ComputerContextProvider computer={computer}>
-          <Suspense fallback={<EditorPlaceholder />}>
-            <div
-              data-editorloaded={loaded}
-              data-hydrated={!isServerSideRendering() && loaded}
-            >
-              <SuspendedNotebook
-                notebookId={notebookId}
-                workspaceId={workspaceId}
-                loaded={loaded}
-                editor={readOrSuspendEditor}
-                readOnly={readOnly}
-              />
-            </div>
-          </Suspense>
-        </ComputerContextProvider>
-      </ExternalDataSourcesProvider>
+      <ComputerContextProvider computer={computer}>
+        <Suspense fallback={<EditorPlaceholder />}>
+          <div
+            data-editorloaded={loaded}
+            data-hydrated={!isServerSideRendering() && loaded}
+          >
+            <SuspendedNotebook
+              notebookId={notebookId}
+              workspaceId={workspaceId}
+              loaded={loaded}
+              editor={readOrSuspendEditor}
+              readOnly={readOnly}
+            />
+          </div>
+        </Suspense>
+      </ComputerContextProvider>
     );
   }
   return null;

@@ -4,7 +4,6 @@ import { EditorSidebar } from '@decipad/editor-components';
 import { MyEditor } from '@decipad/editor-types';
 import {
   useFinishOnboarding,
-  useGetWorkspacesIDsQuery,
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import {
@@ -19,9 +18,7 @@ import { notebooks, useRouteParams } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import {
   EditorPlaceholder,
-  LoadingLogo,
   NotebookPage,
-  TopbarPlaceholder,
   GlobalThemeStyles,
 } from '@decipad/ui';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -29,11 +26,11 @@ import { Subject } from 'rxjs';
 import { ErrorPage, Frame, RequireSession } from '../../meta';
 import Topbar from './Topbar';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
-import { useExternalDataSources } from './hooks/useExternalDataSources';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 import { NotebookMetaActionsProvider } from '../../workspaces/workspace/providers';
 import { lazyLoad } from '@decipad/react-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { ExternalDataSourcesProvider } from './providers';
 
 export const loadEditor = () =>
   import(/* webpackChunkName: "notebook-editor" */ './Editor');
@@ -67,6 +64,8 @@ const Notebook: FC = () => {
     isNew,
     notebookStatus,
     createdAt,
+    workspaceMembers,
+    externalData,
     updateIcon,
     updateIconColor,
     removeLocalChanges,
@@ -82,8 +81,6 @@ const Notebook: FC = () => {
     editor,
     docsync,
   });
-
-  const [userWorkspaces] = useGetWorkspacesIDsQuery();
 
   const [, renameNotebook] = useRenameNotebookMutation();
 
@@ -144,20 +141,14 @@ const Notebook: FC = () => {
 
   return (
     <NotebookMetaActionsProvider
-      workspaceId={
-        workspaceId || userWorkspaces.data?.workspaces?.[0]?.id || ''
-      }
+      workspaceId={workspaceId || ''}
       isInArchive={Boolean(notebook?.archived)}
     >
-      <DeciEditorContextProvider value={docsync}>
-        <ComputerContextProvider computer={computer}>
-          <EditorStylesContext.Provider value={styles}>
-            <GlobalThemeStyles color={iconColor} />
-            <Frame
-              Heading="h1"
-              title={notebook?.name ?? ''}
-              suspenseFallback={<LoadingLogo />}
-            >
+      <ExternalDataSourcesProvider externalData={externalData}>
+        <DeciEditorContextProvider value={docsync}>
+          <ComputerContextProvider computer={computer}>
+            <EditorStylesContext.Provider value={styles}>
+              <GlobalThemeStyles color={iconColor} />
               <NotebookPage
                 icon={icon}
                 iconColor={iconColor}
@@ -185,42 +176,35 @@ const Notebook: FC = () => {
                       onComputer={setComputer}
                       getAttachmentForm={getAttachmentForm}
                       onAttached={onAttached}
-                      useExternalDataSources={useExternalDataSources}
                     />
                   </Frame>
                 }
                 sidebar={!isReadOnly && !embed && <EditorSidebar />}
                 topbar={
-                  <Frame
-                    Heading="h1"
-                    title={null}
-                    suspenseFallback={<TopbarPlaceholder />}
-                  >
-                    <Topbar
-                      workspaces={userWorkspaces.data?.workspaces ?? []}
-                      notebook={notebook}
-                      hasLocalChanges={hasLocalChanges}
-                      isNewNotebook={isNew}
-                      editor={editor}
-                      hasUnpublishedChanges={hasUnpublishedChanges}
-                      isPublishing={isPublishing}
-                      removeLocalChanges={removeLocalChanges}
-                      publishNotebook={publishNotebook}
-                      unpublishNotebook={unpublishNotebook}
-                      inviteEditorByEmail={inviteEditorByEmail}
-                      removeEditorById={removeEditorById}
-                      changeEditorAccess={changeEditorAccess}
-                      status={notebookStatus}
-                      isReadOnly={isReadOnly}
-                      creationDate={createdAt}
-                    />
-                  </Frame>
+                  <Topbar
+                    notebook={notebook}
+                    hasLocalChanges={hasLocalChanges}
+                    isNewNotebook={isNew}
+                    editor={editor}
+                    hasUnpublishedChanges={hasUnpublishedChanges}
+                    isPublishing={isPublishing}
+                    usersFromTeam={workspaceMembers}
+                    removeLocalChanges={removeLocalChanges}
+                    publishNotebook={publishNotebook}
+                    unpublishNotebook={unpublishNotebook}
+                    inviteEditorByEmail={inviteEditorByEmail}
+                    removeEditorById={removeEditorById}
+                    changeEditorAccess={changeEditorAccess}
+                    status={notebookStatus}
+                    isReadOnly={isReadOnly}
+                    creationDate={createdAt}
+                  />
                 }
               />
-            </Frame>
-          </EditorStylesContext.Provider>
-        </ComputerContextProvider>
-      </DeciEditorContextProvider>
+            </EditorStylesContext.Provider>
+          </ComputerContextProvider>
+        </DeciEditorContextProvider>
+      </ExternalDataSourcesProvider>
     </NotebookMetaActionsProvider>
   );
 };

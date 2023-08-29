@@ -24,6 +24,7 @@ import {
   useUnsharePadWithUserMutation,
   useUpdatePadPermissionMutation,
   PermissionType,
+  UserAccess,
 } from '@decipad/graphql-client';
 import { useExternalEditorChange } from '@decipad/editor-hooks';
 import EditorIcon from '../EditorIcon';
@@ -32,6 +33,8 @@ import {
   isNewNotebook,
   parseIconColorFromIdentifier,
 } from 'apps/frontend/src/utils';
+import { useExternalDataSources } from './useExternalDataSources';
+import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 
 const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
 
@@ -65,6 +68,8 @@ interface UseNotebookStateAndActionsResult {
   notebookStatus: TColorStatus;
   createdAt: Date;
   isNew: boolean;
+  workspaceMembers: Array<UserAccess>;
+  externalData: ExternalDataSourcesContextValue;
 
   removeLocalChanges: () => Promise<void>;
   updateIcon: (icon: Icon) => void;
@@ -105,8 +110,31 @@ export const useNotebookStateAndActions = ({
       id: notebookId,
     },
   });
-
   const notebook = getNotebookResult.data?.getPadById;
+
+  /* Workspace Members */
+  const workspaceAccess = getNotebookResult.data?.getPadById?.workspace?.access;
+  const roles = workspaceAccess?.roles ?? [];
+  const users = workspaceAccess?.users ?? [];
+  const workspaceMembers: UserAccess[] = [
+    ...users.map(
+      (user): UserAccess => ({
+        ...user,
+        canComment: true,
+      })
+    ),
+    ...roles.flatMap((rec) =>
+      rec.role.users.map(
+        (user): UserAccess => ({
+          user,
+          permission: rec.permission,
+          canComment: true,
+        })
+      )
+    ),
+  ];
+
+  const externalData = useExternalDataSources(notebookId);
 
   const notebookStatus = (notebook?.status as TColorStatus) || 'Draft';
 
@@ -380,7 +408,9 @@ export const useNotebookStateAndActions = ({
     initialState: notebook?.initialState ?? undefined,
     hasUnpublishedChanges: !!hasUnpublishedChanges,
     notebookStatus,
+    externalData,
     isNew,
+    workspaceMembers: workspaceMembers ?? [],
     removeLocalChanges,
     setNotebookPublic,
     updateIcon,

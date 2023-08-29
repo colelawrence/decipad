@@ -1,7 +1,6 @@
 import { Computer } from '@decipad/computer';
 import { DocSyncEditor } from '@decipad/docsync';
 import { MyEditor } from '@decipad/editor-types';
-import { ExternalDataSourcesContextValue } from '@decipad/interfaces';
 
 export interface NotebookConnectionParams {
   url: string;
@@ -25,7 +24,4 @@ export interface NotebookProps {
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;
   onAttached: (handle: string) => Promise<undefined | { url: URL }>;
-  useExternalDataSources: (
-    notebookId: string
-  ) => ExternalDataSourcesContextValue;
 }

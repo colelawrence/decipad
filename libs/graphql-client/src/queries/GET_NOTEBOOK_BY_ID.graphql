@@ -45,6 +45,7 @@ fragment EditorNotebook on Pad {
     workspaceExecutedQuery {
       ...WorkspaceExecutedQueryData
     }
+    ...WorkspaceMembers
   }
   padConnectionParams {
     url

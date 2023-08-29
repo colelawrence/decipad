@@ -37,7 +37,7 @@ const defaultClientOpts = () => {
       credentials: 'same-origin',
       headers: {},
     },
-    requestPolicy: 'cache-and-network',
+    requestPolicy: 'cache-first',
     suspense: true, // React Suspense
     exchanges: [
       devtoolsExchange,

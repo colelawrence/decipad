@@ -57,6 +57,18 @@ export const graphCacheConfig: GraphCacheConfig = {
     WorkspaceAccess() {
       return null;
     },
+    PagedResult() {
+      return null;
+    },
+    RoleAccess() {
+      return null;
+    },
+    PadConnectionParams(data) {
+      return data.url ?? null;
+    },
+    PadSnapshot(data) {
+      return data.createdAt ?? null;
+    },
   },
   resolvers: {
     PadSnapshot: {

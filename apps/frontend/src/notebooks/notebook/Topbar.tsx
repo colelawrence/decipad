@@ -1,5 +1,4 @@
-import { useWorkspaceMembers } from '@decipad/graphql-client';
-import { NotebookTopbar } from '@decipad/ui';
+import { NotebookTopbar, TopbarPlaceholder } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { PermissionType } from 'libs/ui/src/types';
 import { useSession } from 'next-auth/react';
@@ -15,16 +14,18 @@ import { clearNotebook } from '../../utils';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useGetWorkspacesQuery } from '@decipad/graphql-client';
+import { Frame } from '../../meta';
 
 type TopbarProps = Pick<
   ComponentProps<typeof NotebookTopbar>,
-  | 'workspaces'
   | 'hasUnpublishedChanges'
   | 'hasLocalChanges'
   | 'isPublishing'
   | 'status'
   | 'isReadOnly'
   | 'creationDate'
+  | 'usersFromTeam'
   | 'isNewNotebook'
 > & {
   readonly notebook: Notebook;
@@ -44,7 +45,6 @@ type TopbarProps = Pick<
 };
 
 const Topbar: FC<TopbarProps> = ({
-  workspaces,
   notebook,
   hasLocalChanges,
   hasUnpublishedChanges,
@@ -53,6 +53,7 @@ const Topbar: FC<TopbarProps> = ({
   isReadOnly,
   isNewNotebook,
   creationDate,
+  usersFromTeam,
   removeLocalChanges,
   publishNotebook = noop,
   unpublishNotebook = noop,
@@ -61,9 +62,7 @@ const Topbar: FC<TopbarProps> = ({
   removeEditorById = () => Promise.resolve(),
   status,
 }) => {
-  const workspaceId = notebook?.workspace?.id || '';
   const { data: session } = useSession();
-  const { everyone: usersFromTeam } = useWorkspaceMembers(workspaceId);
 
   const actions = useNotebookMetaActions();
   const sidebarData = useNotebookMetaData((state) => ({
@@ -72,68 +71,71 @@ const Topbar: FC<TopbarProps> = ({
   }));
 
   const [canUndo, canRedo] = useEditorUndoState(editor);
+  const [workspaces] = useGetWorkspacesQuery();
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const embed = isFlagEnabled('EMBED') && _embed;
 
   if (!notebook) {
-    return null;
+    return <TopbarPlaceholder />;
   }
 
   return (
-    <NotebookTopbar
-      {...sidebarData}
-      notebook={notebook}
-      workspace={notebook.workspace}
-      workspaces={workspaces}
-      // TODO: ENG-1953 backend should provide this data
-      workspaceAccess={
-        workspaces?.some(
-          (userWorkspace) => userWorkspace.id === notebook.workspace?.id
-        )
-          ? 'ADMIN'
-          : undefined
-      }
-      isNewNotebook={isNewNotebook}
-      usersWithAccess={notebook.access.users || []}
-      usersFromTeam={usersFromTeam}
-      permission={notebook.myPermissionType}
-      isPublished={notebook.isPublic || undefined}
-      isPublishing={isPublishing}
-      // TODO: ENG-1953 backend should provide this data
-      isSharedNotebook={notebook?.access?.users?.some(
-        (permission) =>
-          session?.user &&
-          session.user.id === permission.user?.id &&
-          permission.permission !== 'ADMIN'
-      )}
-      onRevertChanges={removeLocalChanges}
-      hasLocalChanges={hasLocalChanges}
-      hasUnpublishedChanges={hasUnpublishedChanges}
-      onPublish={publishNotebook}
-      onUnpublish={unpublishNotebook}
-      onInvite={inviteEditorByEmail}
-      onRemove={removeEditorById}
-      onChange={changeEditorAccess}
-      status={status}
-      onChangeStatus={actions.onChangeStatus}
-      isReadOnly={isReadOnly}
-      isArchived={Boolean(notebook.archived)}
-      canRedo={canRedo}
-      canUndo={canUndo}
-      onRedo={() => editor?.undoManager?.redo() || noop}
-      onUndo={() => editor?.undoManager?.undo() || noop}
-      notebookId={notebook.id}
-      onMoveWorkspace={actions.onMoveToWorkspace}
-      onDuplicate={actions.onDuplicateNotebook}
-      onExport={actions.onDownloadNotebook}
-      onExportBackups={actions.onDownloadNotebookHistory}
-      onUnarchive={actions.onUnarchiveNotebook}
-      onDelete={actions.onDeleteNotebook}
-      creationDate={creationDate}
-      onClearAll={() => editor && clearNotebook(editor)}
-      isEmbed={Boolean(embed)}
-    />
+    <Frame Heading="h1" title={null} suspenseFallback={<TopbarPlaceholder />}>
+      <NotebookTopbar
+        {...sidebarData}
+        notebook={notebook}
+        workspace={notebook.workspace}
+        workspaces={workspaces.data?.workspaces ?? []}
+        // TODO: ENG-1953 backend should provide this data
+        workspaceAccess={
+          workspaces.data?.workspaces.some(
+            (userWorkspace) => userWorkspace.id === notebook.workspace?.id
+          )
+            ? 'ADMIN'
+            : undefined
+        }
+        isNewNotebook={isNewNotebook}
+        usersWithAccess={notebook.access.users || []}
+        usersFromTeam={usersFromTeam}
+        permission={notebook.myPermissionType}
+        isPublished={notebook.isPublic || undefined}
+        isPublishing={isPublishing}
+        // TODO: ENG-1953 backend should provide this data
+        isSharedNotebook={notebook?.access?.users?.some(
+          (permission) =>
+            session?.user &&
+            session.user.id === permission.user?.id &&
+            permission.permission !== 'ADMIN'
+        )}
+        onRevertChanges={removeLocalChanges}
+        hasLocalChanges={hasLocalChanges}
+        hasUnpublishedChanges={hasUnpublishedChanges}
+        onPublish={publishNotebook}
+        onUnpublish={unpublishNotebook}
+        onInvite={inviteEditorByEmail}
+        onRemove={removeEditorById}
+        onChange={changeEditorAccess}
+        status={status}
+        onChangeStatus={actions.onChangeStatus}
+        isReadOnly={isReadOnly}
+        isArchived={Boolean(notebook.archived)}
+        canRedo={canRedo}
+        canUndo={canUndo}
+        onRedo={() => editor?.undoManager?.redo() || noop}
+        onUndo={() => editor?.undoManager?.undo() || noop}
+        notebookId={notebook.id}
+        onMoveWorkspace={actions.onMoveToWorkspace}
+        onDuplicate={actions.onDuplicateNotebook}
+        onExport={actions.onDownloadNotebook}
+        onExportBackups={actions.onDownloadNotebookHistory}
+        onUnarchive={actions.onUnarchiveNotebook}
+        onDelete={actions.onDeleteNotebook}
+        creationDate={creationDate}
+        onClearAll={() => editor && clearNotebook(editor)}
+        isEmbed={Boolean(embed)}
+      />
+    </Frame>
   );
 };
 
