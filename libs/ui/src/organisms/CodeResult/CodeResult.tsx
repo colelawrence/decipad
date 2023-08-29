@@ -104,11 +104,13 @@ const getResultMatchers = (): ResultMatcher[] => [
   },
   {
     component: RowResult,
-    match: ({ type, variant }) => type.kind === 'row' && variant === 'block',
+    match: ({ type, variant, value }) =>
+      type.kind === 'row' && variant === 'block' && Array.isArray(value),
   },
   {
     component: InlineRowResult,
-    match: ({ type, variant }) => type.kind === 'row' && variant === 'inline',
+    match: ({ type, variant, value }) =>
+      type.kind === 'row' && variant === 'inline' && Array.isArray(value),
   },
   {
     component: DefaultFunctionResult,
