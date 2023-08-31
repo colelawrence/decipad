@@ -74,7 +74,6 @@ export default {
       const workspaceRecords = [];
 
       for (const permission of permissions) {
-        // TODO should we use Promise.all?
         // eslint-disable-next-line no-await-in-loop
         const workspace = await data.workspaces.get({
           id: permission.resource_id,

@@ -10,19 +10,22 @@ import {
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
+import { loadUser } from '../authorization';
+import { isLocalDev } from '@decipad/initial-workspace';
+import { byAsc } from '@decipad/utils';
 
 const notebooks = resource('notebook');
-const workspaces = resource('workspace');
 
 export const duplicatePad = async (
   _: unknown,
-  {
-    id,
-    targetWorkspace,
-    document: _document,
-  }: { id: ID; targetWorkspace?: string; document?: string },
+  { id, document: _document }: { id: ID; document?: string },
   context: GraphqlContext
 ): Promise<Pad> => {
+  const user = loadUser(context);
+  if (!user) {
+    throw new ForbiddenError('Not signed in');
+  }
+
   const data = await tables();
   const previousPad = await data.pads.get({ id });
 
@@ -30,6 +33,46 @@ export const duplicatePad = async (
     throw new UserInputError('No such pad');
   }
 
+  const permissions = (
+    await data.permissions.query({
+      IndexName: 'byUserId',
+      KeyConditionExpression:
+        'user_id = :user_id and resource_type = :resource_type',
+      ExpressionAttributeValues: {
+        ':user_id': user.id,
+        ':resource_type': 'workspaces',
+      },
+    })
+  ).Items;
+
+  let workspaceId = '';
+  for (const permission of permissions) {
+    // TODO should we use Promise.all?
+    // eslint-disable-next-line no-await-in-loop
+    const workspace = await data.workspaces.get({
+      id: permission.resource_id,
+    });
+
+    const workspaceRecords = [];
+    // Use the first created workspace as it's likely to be the user's main workspace
+    if (workspace) {
+      const { name: workspaceName } = workspace;
+      const ws = { ...workspace };
+      // for development purposes we want
+      // to be able to have premium
+      // and non premium workspaces
+      if (isLocalDev() && workspaceName.includes('@n1n.co')) {
+        ws.isPremium = true;
+      }
+
+      workspaceRecords.push(ws);
+    }
+    workspaceId = workspaceRecords.sort(byAsc('name'))[0].id;
+  }
+
+  if (!workspaceId) {
+    throw new ForbiddenError('Could not authenticate.');
+  }
   await notebooks.expectAuthorizedForGraphql({
     context,
     recordId: id,
@@ -37,24 +80,13 @@ export const duplicatePad = async (
   });
 
   const newName =
-    targetWorkspace === previousPad.workspace_id
+    workspaceId === previousPad.workspace_id
       ? `Copy of ${previousPad.name}`
       : previousPad.name;
 
   previousPad.name = newName;
   previousPad.isPublic = false;
   previousPad.archived = false;
-
-  const workspaceId = targetWorkspace || previousPad.workspace_id;
-
-  const { user } = await workspaces.expectAuthorizedForGraphql({
-    context,
-    recordId: workspaceId,
-    minimumPermissionType: 'WRITE',
-  });
-  if (!user) {
-    throw new ForbiddenError('not authenticated');
-  }
 
   const clonedPad = await createPad2(workspaceId, previousPad, user);
 
