@@ -85,6 +85,7 @@ jobs:
           REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.ALPHA_STRIPE_CUSTOMER_PORTAL_LINK}}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=32768'
           GIT_COMMIT_HASH: '${{github.sha}}'
+          NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
 
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"

@@ -13,6 +13,7 @@ export default gql`
     redshift
     mariadb
     mssql
+    notion
   }
 
   type ExternalKey {

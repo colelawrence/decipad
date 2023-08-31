@@ -15,26 +15,28 @@ export const Title: PlateComponent = ({ attributes, children, element }) => {
   const editor = useTEditorRef();
   const readOnly = useIsEditorReadOnly();
 
-  if (isEmbed()) {
-    return null;
-  }
+  const embed = isEmbed();
 
   return (
-    <EditorBlock
-      blockKind="title"
-      data-testid="notebook-title"
-      {...attributes}
-      contentEditable={readOnly ? false : undefined}
-    >
-      <EditorTitle
-        placeholder={
-          isElementEmpty(editor, element) && !readOnly
-            ? 'My notebook'
-            : undefined
-        }
-      >
-        {children}
-      </EditorTitle>
-    </EditorBlock>
+    <>
+      {!embed && (
+        <EditorBlock
+          blockKind="title"
+          data-testid="notebook-title"
+          {...attributes}
+          contentEditable={readOnly ? false : undefined}
+        >
+          <EditorTitle
+            placeholder={
+              isElementEmpty(editor, element) && !readOnly
+                ? 'My notebook'
+                : undefined
+            }
+          >
+            {children}
+          </EditorTitle>
+        </EditorBlock>
+      )}
+    </>
   );
 };

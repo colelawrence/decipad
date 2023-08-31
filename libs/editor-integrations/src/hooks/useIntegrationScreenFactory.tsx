@@ -23,6 +23,7 @@ export const useIntegrationScreenFactory = (): ReactNode => {
     setVarName: state.setVarName,
     setResultPreview: state.setResultPreview,
     setResultTypeMapping: state.setResultTypeMapping,
+    setRawResult: state.setRawResult,
   }));
 
   const componentMap: Record<IntegrationStore['stage'], ReactNode> = useMemo(
@@ -33,6 +34,7 @@ export const useIntegrationScreenFactory = (): ReactNode => {
           type={store.connectionType}
           typeMapping={store.resultTypeMapping}
           setResultPreview={store.setResultPreview}
+          setRawResult={store.setRawResult}
         />
       ),
       map: (

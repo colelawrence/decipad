@@ -45,7 +45,8 @@ export type ImportElementSource =
   | 'cockroachdb'
   | 'redshift'
   | 'mssql'
-  | 'mariadb';
+  | 'mariadb'
+  | 'notion';
 
 export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   decipad: 'Decipad',
@@ -60,6 +61,7 @@ export const ImportElementSourcePretty: Record<ImportElementSource, string> = {
   redshift: 'RedShift',
   mssql: 'MySQL',
   mariadb: 'MariaDB',
+  notion: 'Notion',
 };
 
 export interface ImportElement extends BaseElement {

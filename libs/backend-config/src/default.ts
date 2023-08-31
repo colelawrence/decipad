@@ -64,6 +64,8 @@ const defaultEnvValues = {
     'https://buy.stripe.com/test_7sI16U2EX4xcgVO000',
   REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK:
     'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000',
+
+  NOTION_TOKEN: 'secret_g0S3h99PyM20tZ6oxPonoQ66xwxxmUtNaaDTHVKFPFn',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

@@ -36,6 +36,7 @@
     "lambdawebsocket",
     "NEXTAUTH",
     "Normaliser",
+    "notionhq",
     "nrwl",
     "prefetch",
     "retryable",

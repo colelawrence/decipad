@@ -111,6 +111,8 @@ function env(name: SupportedEnvKey): string {
         name,
         process.env.REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK
       );
+    case 'NOTION_TOKEN':
+      return valueOrDefault(name, process.env.NOTION_TOKEN);
   }
 }
 
@@ -238,6 +240,9 @@ export function thirdParty() {
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')
     ),
+    notion: {
+      apiKey: env('NOTION_TOKEN'),
+    },
   };
 }
 

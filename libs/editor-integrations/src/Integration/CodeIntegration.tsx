@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-import { IntegrationTypes } from '@decipad/editor-types';
 import { pushResultToComputer } from '@decipad/live-connect';
 import {
   useCodeConnectionStore,
@@ -11,13 +9,7 @@ import { useCallback, useEffect } from 'react';
 import { useIntegrationContext } from '.';
 import { useWorker } from '../hooks';
 import { importFromJSONAndCoercions } from '@decipad/import';
-
-interface CodeIntegrationProps {
-  id: string;
-  varName: string;
-  typeMappings: IntegrationTypes.IntegrationBlock['typeMappings'];
-  blockOptions: IntegrationTypes.CodeBlockIntegration;
-}
+import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 
 /**
  * Code block integration, child of the regular IntegrationBlock
@@ -29,7 +21,7 @@ export const CodeIntegration = function CodeIntegration({
   blockOptions,
   id,
   varName,
-}: CodeIntegrationProps): null {
+}: ConcreteIntegrationBlock<'codeconnection'>): null {
   const computer = useComputer();
   const observable = useIntegrationContext();
 

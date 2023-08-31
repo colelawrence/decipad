@@ -7,7 +7,7 @@ import {
   SimpleTableCellType,
 } from '@decipad/editor-types';
 import { generateVarName } from '@decipad/utils';
-import { importFromJSONAndCoercions } from '@decipad/import';
+import { importFromJSONAndCoercions, importFromNotion } from '@decipad/import';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];
@@ -89,15 +89,19 @@ export const useConnectionStore = create<IntegrationStore>((set, get) => ({
 
   resultTypeMapping: [],
   setResultTypeMapping(index, type) {
-    const { resultTypeMapping, rawResult } = get();
+    const { resultTypeMapping, rawResult, connectionType } = get();
 
     const clonedTypeMappings = [...resultTypeMapping];
     clonedTypeMappings[index] = type;
 
     set({ resultTypeMapping: clonedTypeMappings });
 
-    if (rawResult) {
-      const res = importFromJSONAndCoercions(rawResult, clonedTypeMappings);
+    if (rawResult && connectionType) {
+      const processedResult = getProcessedResult(rawResult, connectionType);
+      const res = importFromJSONAndCoercions(
+        processedResult,
+        clonedTypeMappings
+      );
       set({ resultPreview: res });
     }
   },
@@ -168,6 +172,8 @@ interface ConnectionStore {
   timeOfLastRun: string | null;
 }
 
+// ------ CODE ------
+
 interface CodeConnectionStore extends ConnectionStore {
   code: string;
   setCode: (newCode: string) => void;
@@ -203,6 +209,8 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
     set(({ showAi }) => ({ showAi: b === undefined ? !showAi : b })),
 }));
 
+// ------ SQL ------
+
 interface SQLConnectionStore extends ConnectionStore {
   ExternalDataId: string | undefined;
   ExternalDataName: string | undefined;
@@ -236,3 +244,50 @@ export const useSQLConnectionStore = create<SQLConnectionStore>((set) => ({
     set(() => NewState);
   },
 }));
+
+// ------ NOTION ------
+
+interface NotionConnectionStore extends ConnectionStore {
+  NotionDatabaseUrl: string | undefined;
+
+  Reset: () => void;
+  Set: (NewState: Partial<NotionConnectionStore>) => void;
+}
+
+export const useNotionConnectionStore = create<NotionConnectionStore>(
+  (set) => ({
+    /* Generic Connection Fields */
+    latestResult: '',
+    timeOfLastRun: null,
+
+    /* Notion Specific Fields */
+    NotionDatabaseUrl: undefined,
+    Reset() {
+      set(() => ({
+        NotionDatabaseUrl: undefined,
+        latestResult: '',
+        timeOfLastRun: null,
+      }));
+    },
+
+    Set(NewState) {
+      set(() => NewState);
+    },
+  })
+);
+
+/**
+ * Small helper function to do any pre processing of the raw result.
+ * Should deprecate this.
+ */
+function getProcessedResult(
+  rawResult: string,
+  type: ImportElementSource
+): string {
+  switch (type) {
+    case 'notion':
+      return JSON.stringify(importFromNotion(JSON.parse(rawResult)));
+    default:
+      return rawResult;
+  }
+}

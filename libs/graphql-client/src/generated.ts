@@ -93,6 +93,7 @@ export enum ExternalProvider {
   Mariadb = 'mariadb',
   Mssql = 'mssql',
   Mysql = 'mysql',
+  Notion = 'notion',
   Oracledb = 'oracledb',
   Postgresql = 'postgresql',
   Redshift = 'redshift'
@@ -603,6 +604,7 @@ export type Query = {
   getExternalDataSource: ExternalDataSource;
   getExternalDataSources: PagedResult;
   getExternalDataSourcesWorkspace: PagedResult;
+  getNotion: Scalars['String']['output'];
   getPadById?: Maybe<Pad>;
   getWorkspaceById?: Maybe<Workspace>;
   getWorkspaceSecrets: Array<Secret>;
@@ -633,6 +635,12 @@ export type QueryGetExternalDataSourcesArgs = {
 export type QueryGetExternalDataSourcesWorkspaceArgs = {
   page: PageInput;
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetNotionArgs = {
+  notebookId: Scalars['ID']['input'];
+  url: Scalars['String']['input'];
 };
 
 
@@ -1274,6 +1282,14 @@ export type GetNotebookByIdQueryVariables = Exact<{
 
 
 export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, myPermissionType?: PermissionType | null, icon?: string | null, status?: string | null, isPublic?: boolean | null, createdAt?: any | null, archived?: boolean | null, initialState?: string | null, access: { __typename?: 'PadAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null, emailValidatedAt?: any | null } | null }> | null }, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, access?: { __typename?: 'WorkspaceAccess', users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null } | null, padConnectionParams: { __typename?: 'PadConnectionParams', url: string, token: string }, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, data?: string | null, version?: string | null }> } | null };
+
+export type GetNotionQueryVariables = Exact<{
+  url: Scalars['String']['input'];
+  notebookId: Scalars['ID']['input'];
+}>;
+
+
+export type GetNotionQuery = { __typename?: 'Query', getNotion: string };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2041,6 +2057,15 @@ export const GetNotebookByIdDocument = gql`
 export function useGetNotebookByIdQuery(options: Omit<Urql.UseQueryArgs<GetNotebookByIdQueryVariables>, 'query'>) {
   return Urql.useQuery<GetNotebookByIdQuery, GetNotebookByIdQueryVariables>({ query: GetNotebookByIdDocument, ...options });
 };
+export const GetNotionDocument = gql`
+    query GetNotion($url: String!, $notebookId: ID!) {
+  getNotion(url: $url, notebookId: $notebookId)
+}
+    `;
+
+export function useGetNotionQuery(options: Omit<Urql.UseQueryArgs<GetNotionQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetNotionQuery, GetNotionQueryVariables>({ query: GetNotionDocument, ...options });
+};
 export const UserDocument = gql`
     query User {
   self {
@@ -2157,6 +2182,7 @@ export type GraphCacheResolvers = {
     getExternalDataSource?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourceArgs, WithTypename<ExternalDataSource> | string>,
     getExternalDataSources?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesArgs, WithTypename<PagedResult> | string>,
     getExternalDataSourcesWorkspace?: GraphCacheResolver<WithTypename<Query>, QueryGetExternalDataSourcesWorkspaceArgs, WithTypename<PagedResult> | string>,
+    getNotion?: GraphCacheResolver<WithTypename<Query>, QueryGetNotionArgs, Scalars['String'] | string>,
     getPadById?: GraphCacheResolver<WithTypename<Query>, QueryGetPadByIdArgs, WithTypename<Pad> | string>,
     getWorkspaceById?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceByIdArgs, WithTypename<Workspace> | string>,
     getWorkspaceSecrets?: GraphCacheResolver<WithTypename<Query>, QueryGetWorkspaceSecretsArgs, Array<WithTypename<Secret> | string>>,

@@ -22,7 +22,15 @@ export interface SQLBlockIntegration extends BlockIntegration {
   externalDataName: string;
 }
 
-type IntegrationTypes = CodeBlockIntegration | SQLBlockIntegration;
+export interface NotionBlockIntegration extends BlockIntegration {
+  type: 'notion';
+  notionUrl: string;
+}
+
+type IntegrationTypes =
+  | CodeBlockIntegration
+  | SQLBlockIntegration
+  | NotionBlockIntegration;
 
 export interface IntegrationBlock extends BaseElement {
   type: typeof ELEMENT_INTEGRATION;
@@ -33,3 +41,10 @@ export interface IntegrationBlock extends BaseElement {
 
   integrationType: IntegrationTypes;
 }
+
+export type ConcreteIntegrationBlock<T extends IntegrationTypes['type']> = {
+  id: string;
+  varName: string;
+  typeMappings: IntegrationBlock['typeMappings'];
+  blockOptions: Extract<IntegrationTypes, { type: T }>;
+};

@@ -132,9 +132,7 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               <Button
                 testId="embed-csv-button"
                 type="primary"
-                onClick={() => {
-                  onUpload(fileName, 'embed');
-                }}
+                onClick={() => onUpload(fileName, 'embed')}
                 disabled={!isValidURL(fileName)}
               >
                 {stringPerUploadFileType.button}

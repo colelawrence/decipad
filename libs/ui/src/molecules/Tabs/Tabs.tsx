@@ -21,7 +21,6 @@ const tabsStyles = (variant: boolean) =>
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: '2px',
-    minWidth: 150,
     width: 'fit-content',
     backgroundColor: variant
       ? cssVar('backgroundMain')

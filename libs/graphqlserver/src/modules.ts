@@ -19,6 +19,7 @@ import logs from './logs-module';
 import secrets from './secrets';
 import workspaceSubscriptions from './workspaceSubscriptions';
 import workspaceExecutedQueries from './workspaceExecutedQueries';
+import notion from './notion';
 
 type GraphqlModule = {
   typedefs: DocumentNode;
@@ -43,6 +44,7 @@ const modules: GraphqlModule[] = [
   secrets,
   workspaceSubscriptions,
   workspaceExecutedQueries,
+  notion,
 ];
 
 if (process.env.NODE_ENV !== 'production') {

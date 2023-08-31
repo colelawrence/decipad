@@ -5,4 +5,5 @@ export interface ConnectionProps {
   type?: ImportElementSource;
   typeMapping: Array<TableCellType | undefined>;
   setResultPreview: (res: Result.Result | undefined) => void;
+  setRawResult: (res: string) => void;
 }

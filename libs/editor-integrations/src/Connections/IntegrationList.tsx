@@ -6,8 +6,10 @@ import {
   OtherSql,
   SelectIntegration,
   WebApi,
+  icons,
 } from '@decipad/ui';
 import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const store = useConnectionStore.getState();
 export const IntegrationList: ComponentProps<
@@ -35,6 +37,20 @@ export const IntegrationList: ComponentProps<
     },
     enabled: true,
   },
+  ...(!isFlagEnabled('NOTION_CONNECTIONS')
+    ? []
+    : [
+        {
+          icon: <icons.Notion />,
+          title: 'Notion',
+          description: 'Connect your notion databases to decipad.',
+          onClick: () => {
+            store.setConnectionType('notion');
+            store.setStage('connect');
+          },
+          enabled: isFlagEnabled('NOTION_CONNECTIONS'),
+        },
+      ]),
   {
     icon: <img alt="Google Sheet" src={GoogleSheet} />,
     title: 'Google sheet',

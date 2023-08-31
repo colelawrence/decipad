@@ -24,6 +24,12 @@
     },
     {
       "path": "../react-utils"
+    },
+    {
+      "path": "../editor-integrations"
+    },
+    {
+      "path": "../generator-utils"
     }
   ]
 }

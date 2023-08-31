@@ -3,6 +3,7 @@ import { setSelection } from '@decipad/editor-utils';
 import {
   useCodeConnectionStore,
   useConnectionStore,
+  useNotionConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { findNode, insertNodes, insertText, setNodes } from '@udecode/plate';
@@ -72,6 +73,22 @@ export const useCreateIntegration = () => {
                 type: 'mysql',
                 externalDataName: getDefined(sqlStore.ExternalDataName),
                 externalDataUrl: getDefined(sqlStore.ExternalDataId),
+              } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
+            },
+            { at: path }
+          );
+        } else if (node.integrationType.type === 'notion') {
+          const notionStore = useNotionConnectionStore.getState();
+          setNodes(
+            editor,
+            {
+              ...node,
+              typeMappings: store.resultTypeMapping,
+              integrationType: {
+                type: 'notion',
+                latestResult: notionStore.latestResult,
+                timeOfLastRun: notionStore.timeOfLastRun,
+                notionUrl: getDefined(notionStore.NotionDatabaseUrl),
               } satisfies IntegrationTypes.IntegrationBlock['integrationType'],
             },
             { at: path }

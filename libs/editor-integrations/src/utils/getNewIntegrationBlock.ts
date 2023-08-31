@@ -6,6 +6,7 @@ import {
 import {
   useCodeConnectionStore,
   useConnectionStore,
+  useNotionConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
 import { getDefined } from '@decipad/utils';
@@ -60,19 +61,26 @@ export function getNewIntegration(
       };
     }
 
-    default: {
+    case 'notion': {
+      const notionStore = useNotionConnectionStore.getState();
+      const store = useConnectionStore.getState();
+
       return {
         id: nanoid(),
         type: ELEMENT_INTEGRATION,
-        children: [{ text: 'yoname' }],
-        typeMappings: [],
+        children: [{ text: varName }],
+        typeMappings: store.resultTypeMapping,
         integrationType: {
-          type: 'codeconnection',
-          code: '',
-          latestResult: '',
+          type: 'notion',
+          latestResult: notionStore.latestResult,
           timeOfLastRun: null,
+          notionUrl: getDefined(notionStore.NotionDatabaseUrl),
         },
       };
+    }
+
+    default: {
+      throw new Error('Integration type not supported yet');
     }
   }
 }

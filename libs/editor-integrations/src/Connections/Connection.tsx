@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { CodeConnection } from './CodeConnection';
 import { ConnectionProps } from './types';
 import { SQLConnection } from './SQLConnection';
+import { NotionConnection } from './NotionConnection';
 
 // Component used for different types of connection. A bridge.
 export const Connection: FC<ConnectionProps> = (props) => {
@@ -12,6 +13,8 @@ export const Connection: FC<ConnectionProps> = (props) => {
       return <CodeConnection {...props} />;
     case 'mysql':
       return <SQLConnection {...props} />;
+    case 'notion':
+      return <NotionConnection {...props} />;
     // STUB
     default:
       return null;

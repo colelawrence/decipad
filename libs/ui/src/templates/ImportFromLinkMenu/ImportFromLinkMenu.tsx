@@ -22,6 +22,7 @@ const sourceToName: Record<ImportElementSource, string> = {
   mariadb: 'a MariaDB database',
   mssql: 'a SQL Server database',
   codeconnection: 'A code connection',
+  notion: 'a Notion connection',
 };
 
 const databases = [

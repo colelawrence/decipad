@@ -143,6 +143,7 @@ export { Movie } from './Movie/Movie';
 export { Music } from './Music/Music';
 export { NestIndicator } from './NestIndicator/NestIndicator';
 export { Newspaper } from './Newspaper';
+export { Notion } from './Notion';
 export { Number } from './Number/Number';
 export { Package } from './Package/Package';
 export { Paperclip } from './Paperclip/Paperclip';

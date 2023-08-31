@@ -5,19 +5,12 @@ import {
   useConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
-import { IntegrationTypes } from '@decipad/editor-types';
 import { useIntegrationContext } from '.';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { fetchQuery } from '../utils';
+import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 
-interface SQLIntegrationProps {
-  id: string;
-  varName: string;
-  typeMappings: IntegrationTypes.IntegrationBlock['typeMappings'];
-  blockOptions: IntegrationTypes.SQLBlockIntegration;
-}
-
-export const SQLIntegration: FC<SQLIntegrationProps> = ({
+export const SQLIntegration: FC<ConcreteIntegrationBlock<'mysql'>> = ({
   typeMappings,
   blockOptions,
   id,

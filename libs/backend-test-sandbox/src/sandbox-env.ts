@@ -104,6 +104,7 @@ export async function createSandboxEnv(
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    NOTION_TOKEN: process.env.NOTION_TOKEN,
     DECI_BACKEND_TEST: 'true',
   };
 

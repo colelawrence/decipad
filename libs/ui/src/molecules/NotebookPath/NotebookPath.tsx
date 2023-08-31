@@ -27,6 +27,7 @@ const anchorStyles = css(notebookNameStyles, {
 interface NotebookPathProps {
   notebookName: string;
   href?: string;
+  target?: string;
   concatName?: true;
 }
 

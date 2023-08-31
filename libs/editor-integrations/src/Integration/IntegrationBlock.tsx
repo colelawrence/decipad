@@ -46,6 +46,7 @@ import {
 import { Subject } from 'rxjs';
 import { CodeIntegration } from './CodeIntegration';
 import { SQLIntegration } from './SQLIntegration';
+import { NotionIntegration } from './NotionIntegration';
 
 function getIntegrationComponent(
   id: string,
@@ -66,6 +67,15 @@ function getIntegrationComponent(
     case 'mysql':
       return (
         <SQLIntegration
+          id={id}
+          varName={varName}
+          typeMappings={typeMappings}
+          blockOptions={blockOptions}
+        />
+      );
+    case 'notion':
+      return (
+        <NotionIntegration
           id={id}
           varName={varName}
           typeMappings={typeMappings}

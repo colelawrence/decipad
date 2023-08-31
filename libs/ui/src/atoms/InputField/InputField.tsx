@@ -1,8 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { nanoid } from 'nanoid';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useId } from 'react';
 import { cssVar, p13Medium, p14Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
 
@@ -104,12 +103,12 @@ export const InputField = ({
   onChange = noop,
   onEnter = noop,
 }: InputFieldProps): ReturnType<FC> => {
-  const id = `input-${useState(nanoid)[0]}`;
-  const labelEl = label ? (
+  const id = `input-${useId()}`;
+  const labelEl = label && (
     <label htmlFor={id} css={labelStyles}>
       {label}
     </label>
-  ) : null;
+  );
 
   const errorEl = error ? <span css={errorStyles}>{error}</span> : null;
 
