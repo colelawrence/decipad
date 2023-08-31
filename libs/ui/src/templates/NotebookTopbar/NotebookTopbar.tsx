@@ -546,6 +546,7 @@ export const NotebookTopbar = ({
                   disabled={isDuplicating}
                   type="primaryBrand"
                   onClick={duplicateNotebook}
+                  testId="duplicate-button"
                 >
                   {isDuplicating ? 'Duplicating...' : 'Duplicate notebook'}
                 </Button>
