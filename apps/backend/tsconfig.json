@@ -22,6 +22,9 @@
     },
     {
       "path": "../../libs/backend-config"
+    },
+    {
+      "path": "../../libs/lambdas"
     }
   ]
 }

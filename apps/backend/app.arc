@@ -442,6 +442,9 @@ fileattachments-changes
 docsyncupdates-changes
 sync-after-connect
 
+@scheduled
+reset-querycount cron(0 0 1 * ? *)
+
 @plugins
 s3
 custom-domain

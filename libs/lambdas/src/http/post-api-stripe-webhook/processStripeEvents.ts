@@ -4,12 +4,10 @@ import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { tables } from 'libs/tables/src/tables';
+import { MAX_CREDITS_EXEC_COUNT } from '@decipad/backendtypes';
+import { timestamp } from '@decipad/tables';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
-const MAX_CREDITS_EXEC_COUNT = {
-  free: 50,
-  pro: 500,
-};
 
 const updateQueryExecutionTable = async (
   workspaceId: string,
@@ -26,6 +24,22 @@ const updateQueryExecutionTable = async (
       quotaLimit: isPremium
         ? MAX_CREDITS_EXEC_COUNT.pro
         : MAX_CREDITS_EXEC_COUNT.free,
+    });
+  }
+};
+
+const resetQueryCount = async (workspaceId: string) => {
+  const data = await tables();
+
+  const queryExecutionRecord = await data.workspacexecutedqueries.get({
+    id: workspaceId,
+  });
+
+  if (queryExecutionRecord) {
+    await data.workspacexecutedqueries.put({
+      ...queryExecutionRecord,
+      query_reset_date: timestamp(),
+      queryCount: 0,
     });
   }
 };
@@ -190,5 +204,29 @@ export const processSubscriptionUpdated = async (event: Stripe.Event) => {
   return {
     statusCode: 200,
     body: `webhook succeeded! Subscription updated: ${id}`,
+  };
+};
+
+export const processInvoiceCreated = async (event: Stripe.Event) => {
+  const { subscription } = event.data as Stripe.Invoice;
+  const data = await tables();
+
+  const stripeSubscriptionId =
+    typeof subscription === 'string' ? subscription : subscription?.id || '';
+
+  const workspace = await data.workspacesubscriptions.get({
+    id: stripeSubscriptionId,
+  });
+
+  if (workspace) {
+    await resetQueryCount(workspace.id);
+    return {
+      statusCode: 200,
+      body: `webhook succeeded! Workspace query count reset: ${workspace.id}`,
+    };
+  }
+  return {
+    statusCode: 400,
+    body: `webhook failed! Workspace query count not reset. Stripe Subscription ${stripeSubscriptionId} does not exist in the database`,
   };
 };

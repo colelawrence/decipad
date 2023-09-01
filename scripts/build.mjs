@@ -87,6 +87,7 @@ async function esBuildOptions(env) {
       'libs/lambdas/src/http/*/index.js',
       'libs/lambdas/src/queues/*/index.ts',
       'libs/lambdas/src/ws/*/index.ts',
+      'libs/lambdas/src/scheduled/*/index.ts',
     ]),
     target: 'node18',
     platform: 'node',

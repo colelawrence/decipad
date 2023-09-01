@@ -3,17 +3,12 @@ import { timestamp } from '@decipad/backend-utils';
 import {
   GraphqlContext,
   WorkspaceExecutedQueryRecord,
+  MAX_CREDITS_EXEC_COUNT,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { track } from '@decipad/backend-analytics';
-import { isSameMonth, addMonths } from 'date-fns';
 import { GraphQLError } from 'graphql';
-
-export const MAX_CREDITS_EXEC_COUNT = {
-  free: 50,
-  pro: 500,
-};
 
 const workspacesResource = resource('workspace');
 
@@ -66,7 +61,7 @@ export const incrementQueryCount = async (
     return execQuery;
   }
   // eslint-disable-next-line camelcase
-  const { queryCount, query_reset_date } = executedQuery;
+  const { queryCount } = executedQuery;
 
   if (queryCount >= maxCreditsPerPlan) {
     await track({
@@ -85,27 +80,9 @@ export const incrementQueryCount = async (
       }
     );
   } else {
-    const currentDate = timestamp();
-    // eslint-disable-next-line camelcase
-    const shouldResetDate = query_reset_date
-      ? isSameMonth(currentDate, addMonths(query_reset_date, 1))
-      : true;
-
-    let newQueryResetDate;
-    let newQueryCount;
-
-    // eslint-disable-next-line camelcase
-    if (shouldResetDate) {
-      newQueryCount = 1;
-      newQueryResetDate = currentDate;
-    } else {
-      newQueryCount = (queryCount || 0) + 1;
-    }
     const newQuery = {
       ...executedQuery,
-      queryCount: newQueryCount,
-      // eslint-disable-next-line camelcase
-      query_reset_date: newQueryResetDate || query_reset_date,
+      queryCount: (queryCount || 0) + 1,
     };
 
     await data.workspacexecutedqueries.put(newQuery);
