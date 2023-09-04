@@ -254,7 +254,7 @@
     "nodemailer": "6.9.0",
     "oauth": "0.10.0",
     "open": "^8.4.0",
-    "openai": "^4.3.0",
+    "openai": "^4.4.0",
     "p-series": "2.1.0",
     "patch-package": "7.0.2",
     "pg": "^8.10.0",
