@@ -13,7 +13,7 @@ jobs:
       group: lighthouse-${{ github.head_ref }}
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
         uses: treosh/lighthouse-ci-action@v10
