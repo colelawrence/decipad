@@ -42,6 +42,8 @@ test.describe('Use case: building a candle business', () => {
 
     await waitForEditorToLoad(page);
 
+    await expect(page).toHaveTitle('🕯Starting a Candle Business | Decipad');
+
     await page.waitForSelector('[data-testid="number-result:$6,913.8"]');
 
     expect(await fetchTable(page, '[id="ddTJXSKZzWh56A8NMCZmM"]')).toBe(

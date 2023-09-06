@@ -158,7 +158,7 @@ const Notebook: FC = () => {
                 notebook={
                   <Frame
                     Heading="h1"
-                    title={null}
+                    title={notebook?.name || ''}
                     suspenseFallback={<EditorPlaceholder />}
                   >
                     <Editor
