@@ -130,7 +130,7 @@
     "@react-email/section": "0.0.2",
     "@react-email/text": "^0.0.2",
     "@segment/analytics-next": "1.54.0",
-    "@sentry/browser": "7.67.0",
+    "@sentry/browser": "7.68.0",
     "@sentry/integrations": "^7.67.0",
     "@sentry/react": "7.67.0",
     "@sentry/serverless": "7.67.0",
