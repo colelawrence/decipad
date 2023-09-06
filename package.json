@@ -465,7 +465,7 @@
     "webpack": "5.88.2",
     "webpack-bundle-analyzer": "^4.9.0",
     "worker-loader": "^3.0.8",
-    "ws": "8.13.0"
+    "ws": "8.14.0"
   },
   "resolutions": {
     "@types/react": "18.2.7",
