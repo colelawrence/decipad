@@ -4,6 +4,12 @@ sidebar_position: 6
 
 # Number Units
 
+import YouTubePlayer from '@site/src/components/VideoCards/videos';
+
+<YouTubePlayer videoId="8MH1r6uA7-g" thumbnailUrl="/docs/img/thumbnails/thumbnail-units.png" />
+
+<br/>
+
 Units specify the measurement or quantity of a number, adding context and meaning to calculations. They also simplify calculations by handling conversions automatically, eliminating the need for manual conversions.
 
 These are the key concepts to understand units in Decipad:
