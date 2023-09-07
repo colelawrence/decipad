@@ -55,6 +55,7 @@ test.describe('Simple does publish work test', () => {
 
   test('it can share', async () => {
     await page.getByRole('button', { name: 'Share' }).click();
+    await page.getByTestId('publish-tab').click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');

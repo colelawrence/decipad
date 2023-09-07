@@ -14,23 +14,28 @@ const styles = (
   color: OpaqueColor,
   size: number,
   variant: boolean,
+  noBorder: boolean,
+  position: 'absolute' | 'relative',
   square: boolean,
   transform: boolean,
   strokeColor?: OpaqueColor
 ) => {
+  // we should go through these status dots and refactor for consistency
+  // currently it has too many props and is not clear what they do
   const stroke = strokeColor
     ? strokeColor.hex
+    : noBorder
+    ? 'transparent'
     : variant
-    ? transparency(black, 0.3).rgba
+    ? transparency(black, 0.2).rgba
     : cssVar('backgroundMain');
   const strokeWidth = variant ? '1.11px' : '2px';
   return css({
-    position: 'absolute',
-    display: 'contents',
+    position,
+    display: position === 'absolute' ? 'contents' : 'inline-flex',
 
     '::before': {
-      position: 'absolute',
-
+      position,
       border: `${strokeWidth} solid ${stroke}`,
       transform: transform ? 'translate(2px, -2.5px) rotate(10deg)' : 'none',
       borderRadius: square ? '4px' : '50%',
@@ -48,12 +53,14 @@ const styles = (
 
 type DotProps = {
   readonly children?: ReactNode;
+  readonly position?: 'absolute' | 'relative';
   readonly top?: number;
   readonly left?: number;
   readonly right?: number;
   readonly bottom?: number;
   readonly size?: number;
   readonly variant?: boolean;
+  readonly noBorder?: boolean;
   readonly square?: boolean;
   readonly visible?: boolean;
   readonly drunkMode?: boolean;
@@ -62,12 +69,14 @@ type DotProps = {
 };
 
 export const Dot = ({
+  position = 'absolute',
   top,
   left,
   right,
   bottom,
   size = 10,
   variant = false,
+  noBorder = false,
   color = orange500,
   visible = true,
   square = false,
@@ -78,7 +87,16 @@ export const Dot = ({
   const elem = (
     <span
       css={[
-        styles(color, size, variant, square, false, strokeColor),
+        styles(
+          color,
+          size,
+          variant,
+          noBorder,
+          position,
+          square,
+          false,
+          strokeColor
+        ),
         !visible && css({ '::before': { opacity: 0 } }),
         css({ '::before': { top, left, right, bottom } }),
       ]}
@@ -94,7 +112,7 @@ export const Dot = ({
     >
       <span
         css={[
-          styles(color, size, variant, square, true),
+          styles(color, size, variant, noBorder, position, square, true),
           !visible && css({ '::before': { opacity: 0 } }),
           css({ '::before': { top, left, right, bottom } }),
         ]}

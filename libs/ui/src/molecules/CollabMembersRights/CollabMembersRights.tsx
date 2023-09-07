@@ -3,7 +3,6 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { NotebookAvatar } from '..';
-import { p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
 import { CollabMemberOrTeam } from './CollabMemberOrTeam';
 
@@ -26,12 +25,6 @@ const groupStyles = css({
   gap: '8px',
 });
 
-const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
-
-const titleAndToggleStyles = css(horizontalGroupStyles, {
-  justifyContent: 'space-between',
-});
-
 export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   usersWithAccess,
   teamName,
@@ -52,9 +45,6 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   return sortedUsersWithAccess.length > 0 ||
     (teamName && teamUsers && teamUsers.length > 1) ? (
     <>
-      <div css={titleAndToggleStyles}>
-        <p css={css(p14Medium)}>Collaborators</p>
-      </div>
       <div css={[groupStyles]}>
         {sortedUsersWithAccess.map((info) =>
           info.user ? (

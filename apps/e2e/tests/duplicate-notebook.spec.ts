@@ -53,6 +53,7 @@ test.describe('Simple does publish work test', () => {
     await page.waitForTimeout(Timeouts.syncDelay);
 
     await page.getByTestId('publish-button').click();
+    await page.getByTestId('publish-tab').click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');

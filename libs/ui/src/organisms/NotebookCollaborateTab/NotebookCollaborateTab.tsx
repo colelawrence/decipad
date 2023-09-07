@@ -9,7 +9,7 @@ import { Check, Loading } from '../../icons';
 import { NotebookAvatar } from '../../molecules';
 import { CollabAccessDropdown } from '../../molecules/CollabAccessDropdown/CollabAccessDropdown';
 import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
-import { p14Medium } from '../../primitives';
+import { cssVar, p14Medium, p14Regular } from '../../primitives';
 import { PermissionType } from '../../types';
 
 /**
@@ -22,16 +22,9 @@ const innerPopUpStyles = css({
   gap: '16px',
 });
 
-const groupStyles = css({
+const titleStyles = css({
   display: 'flex',
   flexDirection: 'column',
-  gap: '8px',
-});
-
-const horizontalGroupStyles = css(groupStyles, { flexDirection: 'row' });
-
-const titleAndToggleStyles = css(horizontalGroupStyles, {
-  justifyContent: 'space-between',
 });
 
 const invitationButtonContentStyles = css({
@@ -77,7 +70,7 @@ const LoadingDots = () => (
   <Loading width="24px" style={{ marginRight: '6px' }} />
 );
 
-interface NotebookSharingPopUpProps {
+interface NotebookCollaborateTabProps {
   readonly hasPaywall?: boolean;
   readonly notebook: {
     id: string;
@@ -108,7 +101,7 @@ interface NotebookSharingPopUpProps {
  * @param link The notebook link to be rendered in the text box and copied to the clipboard on button click.
  * @returns The notebook sharing pop up.
  */
-export const NotebookInvitationPopUp = ({
+export const NotebookCollaborateTab = ({
   hasPaywall,
   usersWithAccess,
   teamName,
@@ -119,7 +112,7 @@ export const NotebookInvitationPopUp = ({
   onRemove = () => Promise.resolve(),
   onChange = () => Promise.resolve(),
   notebook,
-}: NotebookSharingPopUpProps): ReturnType<FC> => {
+}: NotebookCollaborateTabProps): ReturnType<FC> => {
   const { data: session } = useSession();
   const [email, setEmail] = useState('');
   const [loading, setIsLoading] = useState(false);
@@ -174,66 +167,75 @@ export const NotebookInvitationPopUp = ({
 
   return (
     <div css={innerPopUpStyles}>
-      <div css={groupStyles}>
-        <div css={titleAndToggleStyles}>
-          <p css={css(p14Medium)}>Invite others to this notebook</p>
-        </div>
+      <div css={titleStyles}>
+        <p css={css(p14Medium, { color: cssVar('textHeavy') })}>
+          {isAdmin
+            ? 'Invite people to collaborate'
+            : 'Invitees of this notebook'}
+        </p>
+        <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
+          {isAdmin
+            ? 'Invited users will receive an email to the provided email address'
+            : 'Request access to have more sharing options'}
+        </p>
       </div>
 
-      <div css={invitationFormStyles}>
-        <div css={inputContainerStyles}>
-          <InputField
-            placeholder="Enter email address"
-            value={email}
-            onChange={setEmail}
-            onEnter={handleAddCollaborator}
-            disabled={disabled}
-          />
-
-          <span css={inputAccessPickerStyles}>
-            <CollabAccessDropdown
-              isInvitationPicker
-              currentPermission={permission}
-              onChange={setPermission}
+      {isAdmin && (
+        <div css={invitationFormStyles}>
+          <div css={inputContainerStyles}>
+            <InputField
+              placeholder="Enter email address"
+              value={email}
+              onChange={setEmail}
+              onEnter={handleAddCollaborator}
+              disabled={disabled}
             />
-          </span>
-        </div>
 
-        {hasPaywall ? (
-          <Button
-            size="extraSlim"
-            type={'primary'}
-            onClick={() => {
-              if (workspaceId) {
-                navigate(
-                  workspaces({})
-                    .workspace({
-                      workspaceId,
-                    })
-                    .members({}).$,
-                  { replace: true }
-                );
-              }
-            }}
-          >
-            Upgrade to Pro to invite more people
-          </Button>
-        ) : (
-          <Button
-            size="extraSlim"
-            type="tertiaryAlt"
-            onClick={handleAddCollaborator}
-            disabled={disabled}
-            testId="send-invitation"
-          >
-            <div css={invitationButtonContentStyles}>
-              {success && <CheckMark />}
-              {loading && <LoadingDots />}
-              Send invite
-            </div>
-          </Button>
-        )}
-      </div>
+            <span css={inputAccessPickerStyles}>
+              <CollabAccessDropdown
+                isInvitationPicker
+                currentPermission={permission}
+                onChange={setPermission}
+              />
+            </span>
+          </div>
+
+          {hasPaywall ? (
+            <Button
+              size="extraSlim"
+              type={'primary'}
+              onClick={() => {
+                if (workspaceId) {
+                  navigate(
+                    workspaces({})
+                      .workspace({
+                        workspaceId,
+                      })
+                      .members({}).$,
+                    { replace: true }
+                  );
+                }
+              }}
+            >
+              Upgrade to Pro to invite more people
+            </Button>
+          ) : (
+            <Button
+              size="extraSlim"
+              type="tertiaryAlt"
+              onClick={handleAddCollaborator}
+              disabled={disabled}
+              testId="send-invitation"
+            >
+              <div css={invitationButtonContentStyles}>
+                {success && <CheckMark />}
+                {loading && <LoadingDots />}
+                Send invite
+              </div>
+            </Button>
+          )}
+        </div>
+      )}
 
       <CollabMembersRights
         usersWithAccess={usersWithAccess}

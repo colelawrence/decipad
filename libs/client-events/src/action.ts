@@ -28,6 +28,7 @@ type Action =
   // Editor actions
   | { action: 'number field updated'; props: { isReadOnly: boolean } }
   | { action: 'notebook share link copied'; props?: undefined }
+  | { action: 'notebook embed link copied'; props?: undefined }
   | { action: 'notebook templates clicked'; props?: undefined }
   | { action: 'notebook code error docs link clicked'; props?: undefined }
   | { action: 'slash command'; props: { command: string } }

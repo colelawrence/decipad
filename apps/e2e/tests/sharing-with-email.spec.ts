@@ -39,15 +39,15 @@ test.describe('Sharing pad with email', () => {
     await focusOnBody(page);
 
     // Is hidden by default
-    await expect(page.locator('.notebook-invitation-popup')).toHaveCount(0);
+    await expect(page.locator('.notebook-collaborate-tab')).toHaveCount(0);
 
     // Is shown when clicking on the plus avatar
     await page.getByRole('button').getByText('Share').click();
-    await expect(page.locator('.notebook-invitation-popup')).toHaveCount(1);
-    await expect(page.locator('.notebook-invitation-popup')).toBeVisible();
+    await expect(page.locator('.notebook-collaborate-tab')).toHaveCount(1);
+    await expect(page.locator('.notebook-collaborate-tab')).toBeVisible();
 
     await page
-      .locator('.notebook-invitation-popup input')
+      .locator('.notebook-collaborate-tab input')
       .fill('invited-lama@ranch.org');
     await page.getByTestId('send-invitation').click();
 

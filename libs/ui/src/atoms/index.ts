@@ -85,6 +85,7 @@ export { TableFormulaCell } from './TableFormulaCell/TableFormulaCell';
 export { TableHeader } from './TableHeader/TableHeader';
 export { Tag } from './Tag/Tag';
 export { TextAndIconButton } from './TextAndIconButton/TextAndIconButton';
+export { TabButton } from './TabButton/TabButton';
 export { TextButton } from './TextButton/TextButton';
 export { TextareaField } from './TextareaField/TextareaField';
 export { ThemePicker } from './ThemePicker/ThemePicker';

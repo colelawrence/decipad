@@ -60,6 +60,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
   test('click publish button and extract text', async () => {
     await page.getByRole('button', { name: 'Share' }).click();
+    await page.getByTestId('publish-tab').click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
     await page.getByTestId('copy-published-link').waitFor();
     // eslint-disable-next-line playwright/no-wait-for-timeout

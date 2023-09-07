@@ -63,6 +63,7 @@ test.describe('Loading reference notebook', () => {
 
   test('Publish notebook and navigate to it as a random user', async () => {
     await page.getByRole('button', { name: 'Share' }).click();
+    await page.getByTestId('publish-tab').click();
     await page.locator('[aria-roledescription="enable publishing"]').click();
 
     publishedNotebookPage = await randomUser.newPage();
