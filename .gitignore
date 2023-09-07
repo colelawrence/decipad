@@ -248,6 +248,7 @@ apps/client/.env.production
 apps/backend/src/http/*/*.js*
 apps/backend/src/ws/*/*.js*
 apps/backend/src/queues/*/*.js*
+apps/backend/src/scheduled/*/*.js*
 
 # Backend shared dir
 apps/backend/src/shared

@@ -6,8 +6,7 @@
 import { Workspace } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
 import { queryCountHandler } from '@decipad/lambdas';
-import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
-import { noop } from '@decipad/utils';
+import { ScheduledEvent } from 'aws-lambda';
 
 test('Executed queries', (ctx) => {
   const { test: it } = ctx;
@@ -49,51 +48,23 @@ test('Executed queries', (ctx) => {
   });
 
   it('can reset the query count when the scheduled job is executed', async () => {
-    const mockedEvent: APIGatewayProxyEventV2 = {
-      version: '2.0',
-      routeKey: 'GET /endpoint',
-      rawPath: '/endpoint',
-      rawQueryString: '',
-      headers: {},
-      requestContext: {
-        accountId: '',
-        apiId: '',
-        domainName: '',
-        domainPrefix: '',
-        http: {
-          method: 'GET',
-          path: '/endpoint',
-          protocol: 'HTTP/1.1',
-          sourceIp: '127.0.0.1',
-          userAgent: 'Mock User Agent',
-        },
-        requestId: '',
-        routeKey: '',
-        stage: 'test',
-        time: '',
-        timeEpoch: 0,
-      },
-      isBase64Encoded: false,
+    const mockedEvent: ScheduledEvent = {
+      version: '0',
+      account: '123456789012',
+      region: 'eu-west-2',
+      detail: {},
+      'detail-type': 'Scheduled Event',
+      source: 'aws.events',
+      time: '2019-03-01T01:23:45Z',
+      id: 'cdc73f9d-aea9-11e3-9d5a-835b769c0d9c',
+      resources: [
+        'arn:aws:events:eu-west-2:123456789012:rule/reset-querycount',
+      ],
     };
 
-    const context: Context = {
-      ...ctx,
-      functionName: '',
-      functionVersion: '',
-      awsRequestId: '',
-      memoryLimitInMB: '2048MB',
-      logStreamName: '',
-      getRemainingTimeInMillis: () => 1000,
-      logGroupName: '',
-      callbackWaitsForEmptyEventLoop: false,
-      invokedFunctionArn: '',
-      done: noop,
-      succeed: noop,
-      fail: noop,
-    };
     const client = ctx.graphql.withAuth(await ctx.auth());
 
-    await queryCountHandler(mockedEvent, context, noop);
+    await queryCountHandler(mockedEvent);
 
     const { workspaces } = (
       await client.query({
