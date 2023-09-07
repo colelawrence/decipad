@@ -2,7 +2,15 @@
 import { useCanUseDom } from '@decipad/react-utils';
 import { css, SerializedStyles } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
-import { createContext, FC, ReactElement, ReactNode, useContext } from 'react';
+import {
+  createContext,
+  FC,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useContext,
+  useRef,
+} from 'react';
 import { isElement } from 'react-is';
 
 import { TriggerMenuItem } from '../../atoms';
@@ -137,12 +145,27 @@ export const MenuList: FC<MenuListProps> = ({
 }) => {
   const depth = useContext(Depth) + 1;
 
+  const triggerRef = useRef<HTMLDivElement>(null);
+
   if (root && depth > 1) {
     throw new Error('Cannot use root MenuList nested in another MenuList');
   }
   if (!root && depth === 1) {
     throw new Error('Non-root MenuList must be nested in another MenuList');
   }
+
+  const hideOnAnotherMenuTrigger = useCallback((e: Event) => {
+    const target = e.target as HTMLElement;
+    const menuContainer = triggerRef.current?.parentElement;
+    if (
+      menuContainer &&
+      menuContainer.contains(target) &&
+      !menuContainer.isEqualNode(target)
+    ) {
+      return;
+    }
+    e.preventDefault();
+  }, []);
 
   const {
     DropdownMenuTriggerElement,
@@ -169,7 +192,7 @@ export const MenuList: FC<MenuListProps> = ({
         onOpenChange={onChangeOpen}
         modal={dropdown}
       >
-        {triggerNode}
+        <div ref={triggerRef}>{triggerNode}</div>
         <DropdownMenuPortalElement portal={portal} container={container}>
           <div
             css={[
@@ -180,7 +203,7 @@ export const MenuList: FC<MenuListProps> = ({
             <DropdownMenuContentElement
               css={css([defaultStyles, styles])}
               align={align}
-              onFocusOutside={(e) => e.preventDefault()}
+              onFocusOutside={hideOnAnotherMenuTrigger}
               onClick={(e) => e.preventDefault()}
               side={side}
               sideOffset={sideOffset}
