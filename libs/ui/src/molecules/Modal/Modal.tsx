@@ -27,60 +27,39 @@ const overlayStyles = css({
   display: 'grid',
 });
 
-const animationsDialog = (fadeOut?: boolean) =>
-  css({
-    '@keyframes fadeInDown': {
-      from: {
-        opacity: 0,
-        transform: 'translate3d(0, -100%, 0)',
-      },
-
-      '50%': {
-        opacity: 1,
-        transform: 'translate3d(0, 0, 0)',
-      },
+const animationsDialog = css({
+  '@keyframes fadeIn': {
+    from: {
+      opacity: 0,
+      transform: 'scale(0.95)',
     },
 
-    '@keyframes fadeOutUp': {
-      from: {
-        opacity: 1,
-        transform: 'translate3d(0, 0, 0)',
-      },
-      to: {
-        opacity: 0,
-        transform: 'translate3d(0, -100%, 0)',
-      },
+    to: {
+      opacity: 1,
+      transform: 'scale(1)',
     },
+  },
 
-    animationName: fadeOut ? 'fadeOutUp' : 'fadeInDown',
-    animationDuration: '0.3s',
-    animationFillMode: 'both',
-  });
+  animationName: 'fadeIn',
+  animationDuration: '150ms',
+  animationTimingFunction: 'ease-in-out',
+  animationFillMode: 'both',
+});
 
-const animationsOverlay = (fadeOut?: boolean) =>
-  css({
-    '@keyframes fadeIn': {
-      from: {
-        opacity: 0,
-      },
-      to: {
-        opacity: 1,
-      },
+const animationsOverlay = css({
+  '@keyframes fadeIn': {
+    from: {
+      opacity: 0,
     },
-
-    '@keyframes fadeOut': {
-      from: {
-        opacity: 1,
-      },
-      to: {
-        opacity: 0,
-      },
+    to: {
+      opacity: 1,
     },
+  },
 
-    animationName: fadeOut ? 'fadeOut' : 'fadeIn',
-    animationDuration: '0.3s',
-    animationFillMode: 'both',
-  });
+  animationName: 'fadeIn',
+  animationDuration: '0.3s',
+  animationFillMode: 'both',
+});
 
 export const modalDialogStyles = css(
   {
@@ -104,7 +83,6 @@ export const modalDialogStyles = css(
 
 type ModalProps = {
   readonly children: ReactNode;
-  readonly fadeOut?: boolean;
   readonly testId?: string;
 } & ComponentProps<typeof Overlay>;
 
@@ -113,11 +91,8 @@ export const Modal = ({
   testId,
   ...props
 }: ModalProps): ReturnType<React.FC> => {
-  const animatedDialog = css(
-    animationsDialog(props.fadeOut),
-    modalDialogStyles
-  );
-  const animatedOverlay = css(animationsOverlay(props.fadeOut), overlayStyles);
+  const animatedDialog = css(animationsDialog, modalDialogStyles);
+  const animatedOverlay = css(animationsOverlay, overlayStyles);
 
   return (
     <div css={pageCoverStyles} data-testid={testId}>
