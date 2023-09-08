@@ -153,6 +153,9 @@ export function docSyncEditor<E extends MyEditor>(
     get destroyed() {
       return destroyed;
     },
+    getVersionChecksum() {
+      return md5(canonicalize(toSlateDoc(doc.getArray())));
+    },
     download() {
       download(useEditor as DocSyncEditor);
     },

@@ -8,9 +8,9 @@ import {
   UINotebookList,
   useSearchBarStore,
 } from '@decipad/ui';
-import { useNotebookMetaActions } from '@decipad/react-contexts';
 import { PageTypes, useFilteredNotebooks, useSearchResults } from './hooks';
 import { parseIconColorFromIdentifier } from '../../utils';
+import { useNotebookMetaActions } from '../../hooks';
 
 type NotebookListProps = Pick<
   ComponentProps<typeof UINotebookList>,
@@ -35,7 +35,7 @@ export const NotebookList: FC<NotebookListProps> = ({
   workspaces,
   onImport,
 }) => {
-  const actions = useNotebookMetaActions();
+  const actions = useNotebookMetaActions(pageType === 'archived');
   const { search, status, visibility } = useSearchBarStore();
   const filteredNotebooks = useFilteredNotebooks(
     pageType,

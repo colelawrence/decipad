@@ -1,14 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 2 */
-import { useWorkspaceMembersState } from '@decipad/graphql-client';
+import {
+  UserAccessMetaFragment,
+  useWorkspaceMembersState,
+} from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, CollabMember, InputField, MenuItem } from '../../atoms';
 import { Check, Ellipsis, Loading } from '../../icons';
-import {
-  CollabMembershipDropdown,
-  MenuList,
-  NotebookAvatar,
-} from '../../molecules';
+import { CollabMembershipDropdown, MenuList } from '../../molecules';
 import {
   cssVar,
   p12Medium,
@@ -22,7 +21,7 @@ import { PermissionType } from '../../types';
 
 export type WorkspaceMembersProps = {
   workspaceId: string;
-  workspaceMembers: NotebookAvatar[];
+  workspaceMembers: UserAccessMetaFragment[];
   currentUserId?: string;
 };
 
@@ -124,9 +123,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
         <div css={tableHeadStyles}>Status</div>
 
         {workspaceMembers.map((member) => {
-          const inviteStatusStyles = columnInviteStatusStyles(
-            !!member.user?.emailValidatedAt
-          );
+          const inviteStatusStyles = columnInviteStatusStyles(true);
           return (
             member.user && (
               <React.Fragment key={member.user.id}>
@@ -143,10 +140,9 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
                 </div>
 
                 <div css={inviteStatusStyles}>
-                  {member.user.emailValidatedAt == null &&
-                    currentUserId !== member.user.id && (
-                      <span css={pendingInviteStyles}>invite pending</span>
-                    )}
+                  {currentUserId !== member.user.id && (
+                    <span css={pendingInviteStyles}>invite pending</span>
+                  )}
                   {currentUserId !== member.user.id && (
                     <WorkspaceMemberOptions
                       onRevoke={handleRevoke(member.user.id)}

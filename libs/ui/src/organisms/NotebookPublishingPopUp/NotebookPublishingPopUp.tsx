@@ -2,17 +2,20 @@
 
 import { notebooks } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
-import { noop } from '@decipad/utils';
-import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { FC, useCallback, useState } from 'react';
+import { css } from '@emotion/react';
+import { ComponentProps, FC, useCallback, useState } from 'react';
 import { Button, Dot, TabButton } from '../../atoms';
-import { NotebookAvatar } from '../../molecules';
 import { cssVar, smallScreenQuery, smallShadow } from '../../primitives';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import {
+  NotebookMetaDataFragment,
+  UserAccessMetaFragment,
+} from '@decipad/graphql-client';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { Tabs } from '../../molecules/Tabs/Tabs';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
 
 /**
@@ -48,29 +51,28 @@ const groupStyles = css({
   gap: '8px',
 });
 
-interface NotebookSharingPopUpProps {
+export type NotebookSharingPopUpProps = Pick<
+  ComponentProps<typeof NotebookCollaborateTab>,
+  'onInvite' | 'onRemove' | 'onChange'
+> & {
+  readonly snapshots: NotebookMetaDataFragment['snapshots'];
   readonly hasPaywall?: boolean;
-  readonly invitedUsers?: NotebookAvatar[] | null;
-  readonly teamUsers?: NotebookAvatar[] | null;
+  readonly invitedUsers?: UserAccessMetaFragment[] | null;
+  readonly teamUsers?: UserAccessMetaFragment[] | null;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
   readonly isAdmin?: boolean;
-  readonly notebook: {
-    id: string;
-    name: string;
-    snapshots?: {
-      createdAt?: string;
-      updatedAt?: string;
-      snapshotName?: string;
-    }[];
-  };
-  readonly hasUnpublishedChanges?: boolean;
-  readonly isPublished?: boolean;
-  readonly isPublishing?: boolean;
-  readonly onPublish?: () => void;
   readonly onRestore?: () => void;
-  readonly onUnpublish?: () => void;
-}
+
+  readonly notebookId: string;
+  readonly notebookName: string;
+  readonly isPublished: boolean;
+  readonly hasUnpublishedChanges: boolean;
+  readonly workspaceId: string;
+
+  readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
+  readonly onUnpublish: NotebookMetaActionsReturn['onUnpublishNotebook'];
+};
 
 type TabStates = 'Collaborate' | 'Publish' | 'Embed';
 
@@ -82,19 +84,25 @@ const SNAPSHOT_NAME = 'Published 1';
  * @returns The notebook sharing pop up.
  */
 export const NotebookPublishingPopUp = ({
-  notebook,
+  snapshots,
   hasUnpublishedChanges = false,
-  isPublished = false,
-  isPublishing = false,
-  onPublish = noop,
   hasPaywall,
   invitedUsers,
   teamName,
   teamUsers,
   manageTeamURL,
+  workspaceId,
   isAdmin = false,
-  onUnpublish = noop,
-  ...sharingProps
+  notebookName,
+
+  isPublished,
+  notebookId,
+  onPublish,
+  onUnpublish,
+
+  onInvite,
+  onRemove,
+  onChange,
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [selectedTab, setSelectedTab] = useState<TabStates>('Collaborate');
 
@@ -117,7 +125,9 @@ export const NotebookPublishingPopUp = ({
   const link = isServerSideRendering()
     ? ''
     : new URL(
-        notebooks({}).notebook({ notebook }).$,
+        notebooks({}).notebook({
+          notebook: { id: notebookId, name: notebookName },
+        }).$,
         window.location.origin
       ).toString();
 
@@ -127,7 +137,7 @@ export const NotebookPublishingPopUp = ({
     setShareMenuOpen(!shareMenuOpen);
   }, [shareMenuOpen]);
 
-  const currentSnapshot = notebook.snapshots?.find(
+  const currentSnapshot = snapshots.find(
     (ss) => ss.snapshotName === SNAPSHOT_NAME
   );
 
@@ -168,22 +178,25 @@ export const NotebookPublishingPopUp = ({
         {isAdmin && selectedTab === 'Collaborate' && (
           <div css={groupStyles} className="notebook-collaborate-tab">
             <NotebookCollaborateTab
-              notebook={notebook}
               hasPaywall={hasPaywall}
               usersWithAccess={invitedUsers}
               teamUsers={teamUsers}
               teamName={teamName}
               manageTeamURL={manageTeamURL}
               isAdmin={isAdmin}
-              {...sharingProps}
+              workspaceId={workspaceId}
+              notebookId={notebookId}
+              onRemove={onRemove}
+              onInvite={onInvite}
+              onChange={onChange}
             />
           </div>
         )}
         {isAdmin && selectedTab === 'Publish' && (
           <div css={groupStyles} className="notebook-publish-tab">
             <NotebookPublishTab
+              notebookId={notebookId}
               isAdmin={isAdmin}
-              isPublishing={isPublishing}
               isPublished={isPublished}
               link={link}
               hasUnpublishedChanges={hasUnpublishedChanges}
@@ -208,20 +221,23 @@ export const NotebookPublishingPopUp = ({
           <>
             <div css={groupStyles} className="notebook-not-admin-tab">
               <NotebookCollaborateTab
-                notebook={notebook}
+                notebookId={notebookId}
+                workspaceId={workspaceId}
                 hasPaywall={hasPaywall}
                 usersWithAccess={invitedUsers}
                 teamUsers={teamUsers}
                 teamName={teamName}
                 manageTeamURL={manageTeamURL}
                 isAdmin={isAdmin}
-                {...sharingProps}
+                onRemove={onRemove}
+                onInvite={onInvite}
+                onChange={onChange}
               />
             </div>
             <div css={groupStyles} className="notebook-not-admin-tab">
               <NotebookPublishTab
+                notebookId={notebookId}
                 isAdmin={isAdmin}
-                isPublishing={isPublishing}
                 isPublished={isPublished}
                 link={link}
                 hasUnpublishedChanges={hasUnpublishedChanges}

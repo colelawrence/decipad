@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { Avatar } from '..';
-import { NotebookAvatar } from '../../molecules';
 import { ellipsis, p12Medium, p14Medium } from '../../primitives';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
-export const CollabMember: React.FC<{ avatar: NotebookAvatar }> = ({
+export const CollabMember: React.FC<{ avatar: UserAccessMetaFragment }> = ({
   avatar: { user },
 }) => {
   return user ? (

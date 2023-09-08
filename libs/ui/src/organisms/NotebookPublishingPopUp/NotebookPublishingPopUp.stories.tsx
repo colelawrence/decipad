@@ -1,12 +1,21 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { NotebookPublishingPopUp } from './NotebookPublishingPopUp';
+import {
+  NotebookPublishingPopUp,
+  NotebookSharingPopUpProps,
+} from './NotebookPublishingPopUp';
+import { noop } from '@decipad/utils';
 
-const args = {
-  notebook: {
-    id: 'nbid',
-    name: 'My notebook',
-    snapshots: [{ createdAt: '1970-01-20T07:09:01.191Z' }],
-  },
+const args: NotebookSharingPopUpProps = {
+  snapshots: [],
+  workspaceId: 'workspace id',
+  notebookId: 'notebook id',
+  notebookName: 'notebookName',
+  onChange: noop as any,
+  onInvite: noop as any,
+  onRemove: noop as any,
+  onPublish: noop as any,
+  onRestore: noop as any,
+  onUnpublish: noop as any,
   hasUnpublishedChanges: false,
   isPublished: false,
 };

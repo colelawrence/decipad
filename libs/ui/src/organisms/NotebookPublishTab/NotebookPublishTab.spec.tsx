@@ -24,9 +24,9 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: false,
       isPublished: true,
       isAdmin: true,
-      isPublishing: false,
-      onPublish: () => noop,
-      onUnpublish: () => noop,
+      onPublish: () => noop as any,
+      onUnpublish: () => noop as any,
+      notebookId: 'id',
     };
 
     const { getByRole, queryByTestId } = render(
@@ -49,9 +49,9 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      isPublishing: false,
-      onPublish: () => noop,
-      onUnpublish: () => noop,
+      onPublish: () => noop as any,
+      onUnpublish: () => noop as any,
+      notebookId: 'id',
     };
 
     const { getByRole, queryByTestId } = render(
@@ -74,9 +74,9 @@ describe('NotebookPublishingPopUp organism', () => {
       isAdmin: true,
       hasUnpublishedChanges: true,
       isPublished: true,
-      isPublishing: false,
-      onPublish: () => noop,
-      onUnpublish: () => noop,
+      onPublish: () => noop as any,
+      onUnpublish: () => noop as any,
+      notebookId: 'id',
     };
 
     const { queryByTestId } = render(
@@ -98,9 +98,9 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      isPublishing: false,
-      onPublish: () => noop,
-      onUnpublish: () => noop,
+      onPublish: () => noop as any,
+      onUnpublish: () => noop as any,
+      notebookId: 'id',
     };
 
     const { queryByTestId } = render(
@@ -121,10 +121,10 @@ describe('NotebookPublishingPopUp organism', () => {
       setShareMenuOpen: () => noop,
       hasUnpublishedChanges: true,
       isPublished: false,
-      isPublishing: false,
       isAdmin: true,
-      onPublish: () => noop,
-      onUnpublish: () => noop,
+      onPublish: () => noop as any,
+      onUnpublish: () => noop as any,
+      notebookId: 'id',
     };
 
     const { getByRole } = render(
@@ -146,9 +146,9 @@ describe('NotebookPublishingPopUp organism', () => {
       hasUnpublishedChanges: true,
       isPublished: true,
       isAdmin: true,
-      isPublishing: true,
-      onPublish: () => noop,
-      onUnpublish: () => noop,
+      onPublish: () => noop as any,
+      onUnpublish: () => noop as any,
+      notebookId: 'id',
     };
 
     const { getByRole } = render(

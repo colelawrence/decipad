@@ -50,7 +50,6 @@ export { Modal } from './Modal/Modal';
 export { ModalForm } from './ModalForm/ModalForm';
 export { NavigationList } from './NavigationList/NavigationList';
 export { NotebookAvatars } from './NotebookAvatars/NotebookAvatars';
-export type { NotebookAvatar } from './NotebookAvatars/NotebookAvatars.types';
 export { NotebookIcon } from './NotebookIcon/NotebookIcon';
 export { NotebookListHeader } from './NotebookListHeader/NotebookListHeader';
 export { NotebookListItemPlaceholder } from './NotebookListItemPlaceholder/NotebookListItemPlaceholder';

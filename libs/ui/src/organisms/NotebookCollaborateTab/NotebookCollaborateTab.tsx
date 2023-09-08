@@ -6,11 +6,12 @@ import { FC, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, InputField } from '../../atoms';
 import { Check, Loading } from '../../icons';
-import { NotebookAvatar } from '../../molecules';
 import { CollabAccessDropdown } from '../../molecules/CollabAccessDropdown/CollabAccessDropdown';
 import { CollabMembersRights } from '../../molecules/CollabMembersRights/CollabMembersRights';
 import { cssVar, p14Medium, p14Regular } from '../../primitives';
 import { PermissionType } from '../../types';
+import { NotebookAccessActionsReturn } from '@decipad/interfaces';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 /**
  * The styles for the content rendered without the need for the toggle to be activated. This is also the parent of the toggle component.
@@ -72,28 +73,17 @@ const LoadingDots = () => (
 
 interface NotebookCollaborateTabProps {
   readonly hasPaywall?: boolean;
-  readonly notebook: {
-    id: string;
-    name: string;
-    snapshots?: { createdAt?: string }[];
-    workspace?: {
-      id: string;
-    };
-  };
+  readonly workspaceId: string;
   readonly isAdmin: boolean;
-  readonly usersWithAccess?: NotebookAvatar[] | null;
-  readonly teamUsers?: NotebookAvatar[] | null;
+  readonly usersWithAccess?: UserAccessMetaFragment[] | null;
+  readonly teamUsers?: UserAccessMetaFragment[] | null;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
-  readonly onRemove?: (userId: string) => Promise<void>;
-  readonly onInvite?: (
-    email: string,
-    permission: PermissionType
-  ) => Promise<void>;
-  readonly onChange?: (
-    userId: string,
-    permission: PermissionType
-  ) => Promise<void>;
+
+  readonly notebookId: string;
+  readonly onRemove: NotebookAccessActionsReturn['onRemoveAccess'];
+  readonly onInvite: NotebookAccessActionsReturn['onInviteByEmail'];
+  readonly onChange: NotebookAccessActionsReturn['onChangeAccess'];
 }
 
 /**
@@ -108,10 +98,11 @@ export const NotebookCollaborateTab = ({
   teamUsers,
   manageTeamURL,
   isAdmin,
+  workspaceId,
+  notebookId,
   onInvite = () => Promise.resolve(),
   onRemove = () => Promise.resolve(),
   onChange = () => Promise.resolve(),
-  notebook,
 }: NotebookCollaborateTabProps): ReturnType<FC> => {
   const { data: session } = useSession();
   const [email, setEmail] = useState('');
@@ -121,7 +112,6 @@ export const NotebookCollaborateTab = ({
   const navigate = useNavigate();
 
   const isInvalidEmail = !email.includes('@') || email === session?.user?.email;
-  const workspaceId = notebook.workspace?.id;
 
   const handleAddCollaborator = useCallback(() => {
     if (loading) return;
@@ -130,37 +120,29 @@ export const NotebookCollaborateTab = ({
 
     setIsLoading(true);
     setEmail('');
-    onInvite(email, permission).finally(() => {
+    onInvite(notebookId, email, permission).finally(() => {
       setIsLoading(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 4000);
     });
-  }, [
-    email,
-    loading,
-    permission,
-    onInvite,
-    isInvalidEmail,
-    setIsLoading,
-    setSuccess,
-  ]);
+  }, [loading, email, isInvalidEmail, onInvite, notebookId, permission]);
 
   const handleRemoveCollaborator = useCallback(
     (userId: string) => {
       if (loading) return;
       setIsLoading(true);
-      onRemove(userId).finally(() => setIsLoading(false));
+      onRemove(notebookId, userId).finally(() => setIsLoading(false));
     },
-    [loading, onRemove, setIsLoading]
+    [loading, notebookId, onRemove]
   );
 
   const handleChangePermission = useCallback(
     (userId: string, perm: PermissionType) => {
       if (loading) return;
       setIsLoading(true);
-      onChange(userId, perm).finally(() => setIsLoading(false));
+      onChange(notebookId, userId, perm).finally(() => setIsLoading(false));
     },
-    [loading, onChange, setIsLoading]
+    [loading, notebookId, onChange]
   );
 
   const disabled = hasPaywall || !isAdmin;

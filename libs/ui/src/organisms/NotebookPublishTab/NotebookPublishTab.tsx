@@ -6,6 +6,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { useCallback, useContext, useState } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
 import { format } from 'date-fns';
+import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 
 const innerPopUpStyles = css({
   display: 'flex',
@@ -93,8 +94,8 @@ const padLinkTextStyles = css(p13Regular, {
 
 /* eslint decipad/css-prop-named-variable: 0 */
 interface NotebookPublishTabProps {
+  readonly notebookId: string;
   readonly isAdmin: boolean;
-  readonly isPublishing: boolean;
   readonly isPublished: boolean;
   readonly hasUnpublishedChanges: boolean;
   readonly link: string;
@@ -106,13 +107,13 @@ interface NotebookPublishTabProps {
       }
     | undefined;
   readonly setShareMenuOpen: (open: boolean) => void;
-  readonly onPublish: () => void;
-  readonly onUnpublish: () => void;
+  readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
+  readonly onUnpublish: NotebookMetaActionsReturn['onUnpublishNotebook'];
 }
 
 export const NotebookPublishTab = ({
+  notebookId,
   isAdmin,
-  isPublishing,
   isPublished,
   hasUnpublishedChanges,
   currentSnapshot,
@@ -126,13 +127,19 @@ export const NotebookPublishTab = ({
     useState(false);
 
   const [toggleState, setToggleState] = useState(isPublished);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const onPublishToggle = useCallback(
     (newIsPublished: boolean) => {
       setToggleState(newIsPublished);
-      newIsPublished ? onPublish() : onUnpublish();
+      setIsPublishing(true);
+      if (newIsPublished) {
+        onPublish(notebookId).then(() => setIsPublishing(false));
+        return;
+      }
+      onUnpublish(notebookId).then(() => setIsPublishing(false));
     },
-    [onPublish, onUnpublish]
+    [notebookId, onPublish, onUnpublish]
   );
   return (
     <div css={innerPopUpStyles}>
@@ -186,7 +193,7 @@ export const NotebookPublishTab = ({
           <div css={horizontalGroupStyles}>
             <Button
               type="secondary"
-              onClick={onPublish}
+              onClick={() => onPublish(notebookId)}
               disabled={isPublishing}
               testId="publish-changes"
             >

@@ -1,8 +1,12 @@
 import { devtoolsExchange } from '@urql/devtools';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import merge from 'deepmerge';
-import type { Client, ClientOptions } from 'urql';
-import { fetchExchange, createClient as urqlCreateClient } from 'urql';
+import {
+  Client,
+  ClientOptions,
+  fetchExchange,
+  createClient as urqlCreateClient,
+} from 'urql';
 import { fetch as myFetch } from '@decipad/fetch';
 import { graphCacheConfig } from './cacheConfig';
 

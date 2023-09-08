@@ -5,9 +5,7 @@ export const loadCrucialDependencies = async () => {
       /* webpackChunkName: "workspace" */ './workspaces/workspace/Workspace'
     ),
     import(/* webpackChunkName: "notebooks" */ './notebooks/Notebooks'),
-    import(
-      /* webpackChunkName: "notebook-topbar" */ './notebooks/notebook/Topbar'
-    ),
+
     import(
       /* webpackChunkName: "notebook-editor-icon" */ './notebooks/notebook/EditorIcon'
     ),

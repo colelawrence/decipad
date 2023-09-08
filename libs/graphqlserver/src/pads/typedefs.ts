@@ -16,6 +16,7 @@ export default gql`
     canComment: Boolean!
   }
   type PadAccess {
+    id: ID!
     roles: [RoleAccess!]
     users: [UserAccess!]
     secrets: [SecretAccess!]

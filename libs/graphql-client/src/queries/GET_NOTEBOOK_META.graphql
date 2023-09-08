@@ -1,0 +1,59 @@
+fragment UserAccessMeta on UserAccess {
+  user {
+    id
+    name
+    email
+    image
+  }
+  permission
+  canComment
+}
+
+fragment NotebookMetaData on Pad {
+  id
+  name
+  status
+  myPermissionType
+  isPublic
+  createdAt
+  initialState
+  workspace {
+    id
+    name
+    isPremium
+    myPermissionType
+    access {
+      id
+      users {
+        ...UserAccessMeta
+      }
+    }
+  }
+  snapshots {
+    snapshotName
+    createdAt
+    updatedAt
+    version
+  }
+  archived
+  access {
+    id
+    users {
+      ...UserAccessMeta
+    }
+  }
+}
+
+fragment NotebookWorkspacesData on Workspace {
+  id
+  name
+}
+
+query GetNotebookMeta($id: ID!) {
+  getPadById(id: $id) {
+    ...NotebookMetaData
+  }
+  workspaces {
+    ...NotebookWorkspacesData
+  }
+}

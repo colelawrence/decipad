@@ -98,6 +98,7 @@ export type SecretAccess = {
 };
 
 export type PadAccess = {
+  id: ID;
   roles: RoleAccess[];
   users: UserAccess[];
   secrets: SecretAccess[];

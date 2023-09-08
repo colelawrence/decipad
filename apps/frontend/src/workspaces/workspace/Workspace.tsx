@@ -39,7 +39,6 @@ import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { NotebookList } from './NotebookList';
-import { NotebookMetaActionsProvider } from './providers';
 
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
@@ -72,9 +71,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
   const { data: session } = useSession();
   const toast = useToast();
 
-  const [result] = useGetWorkspacesQuery({
-    requestPolicy: 'cache-first',
-  });
+  const [result] = useGetWorkspacesQuery();
 
   const createNotebook = useMutationResultHandler(
     useCreateNotebookMutation()[1],
@@ -230,39 +227,34 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
           path="/"
           element={
             <LazyRoute title={currentWorkspace.name}>
-              <NotebookMetaActionsProvider
-                workspaceId={currentWorkspace.id}
-                isInArchive={pageInfo === 'archived'}
-              >
-                <Dashboard
-                  sidebar={sidebarWrapper}
-                  topbar={null}
-                  notebookList={
-                    <>
-                      <WorkspaceHero
-                        name={currentWorkspace.name}
-                        isPremium={!!currentWorkspace.isPremium}
-                        membersCount={currentWorkspace.membersCount}
-                        onCreateNotebook={handleCreateNotebook}
-                        membersHref={currentWorkspaceRoute.members({}).$}
-                      />
-                      <NotebookList
-                        pageType={pageInfo}
-                        notebooks={currentWorkspace.pads.items}
-                        sharedNotebooks={workspaceData.padsSharedWithMe.items}
-                        workspaces={allWorkspaces}
-                        onImport={(source) =>
-                          importNotebook({
-                            workspaceId: currentWorkspace.id,
-                            source,
-                          })
-                        }
-                      />
-                    </>
-                  }
-                />
-                <Outlet />
-              </NotebookMetaActionsProvider>
+              <Dashboard
+                sidebar={sidebarWrapper}
+                topbar={null}
+                notebookList={
+                  <>
+                    <WorkspaceHero
+                      name={currentWorkspace.name}
+                      isPremium={!!currentWorkspace.isPremium}
+                      membersCount={currentWorkspace.membersCount}
+                      onCreateNotebook={handleCreateNotebook}
+                      membersHref={currentWorkspaceRoute.members({}).$}
+                    />
+                    <NotebookList
+                      pageType={pageInfo}
+                      notebooks={currentWorkspace.pads.items}
+                      sharedNotebooks={workspaceData.padsSharedWithMe.items}
+                      workspaces={allWorkspaces}
+                      onImport={(source) =>
+                        importNotebook({
+                          workspaceId: currentWorkspace.id,
+                          source,
+                        })
+                      }
+                    />
+                  </>
+                }
+              />
+              <Outlet />
             </LazyRoute>
           }
         >

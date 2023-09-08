@@ -24,9 +24,7 @@ import {
   useUnsharePadWithUserMutation,
   useUpdatePadPermissionMutation,
   PermissionType,
-  UserAccess,
 } from '@decipad/graphql-client';
-import { useExternalEditorChange } from '@decipad/editor-hooks';
 import EditorIcon from '../EditorIcon';
 import { TColorStatus } from '@decipad/ui';
 import {
@@ -44,8 +42,8 @@ export type Notebook = GetNotebookByIdQuery['getPadById'];
 
 interface useNotebookStateAndActionsProps {
   readonly notebookId: string;
-  readonly editor?: MyEditor;
-  readonly docsync?: DocSyncEditor;
+  readonly editor: MyEditor | undefined;
+  readonly docsync: DocSyncEditor | undefined;
 }
 
 interface NotebookConnectionParams {
@@ -64,11 +62,9 @@ interface UseNotebookStateAndActionsResult {
   isSavedRemotely: BehaviorSubject<boolean> | undefined;
   connectionParams?: NotebookConnectionParams;
   initialState?: string;
-  hasUnpublishedChanges: boolean;
   notebookStatus: TColorStatus;
   createdAt: Date;
   isNew: boolean;
-  workspaceMembers: Array<UserAccess>;
   externalData: ExternalDataSourcesContextValue;
 
   removeLocalChanges: () => Promise<void>;
@@ -96,7 +92,6 @@ const SNAPSHOT_NAME = 'Published 1';
 
 export const useNotebookStateAndActions = ({
   notebookId,
-  editor,
   docsync,
 }: useNotebookStateAndActionsProps): UseNotebookStateAndActionsResult => {
   // ------- internal hooks -------
@@ -111,28 +106,6 @@ export const useNotebookStateAndActions = ({
     },
   });
   const notebook = getNotebookResult.data?.getPadById;
-
-  /* Workspace Members */
-  const workspaceAccess = getNotebookResult.data?.getPadById?.workspace?.access;
-  const roles = workspaceAccess?.roles ?? [];
-  const users = workspaceAccess?.users ?? [];
-  const workspaceMembers: UserAccess[] = [
-    ...users.map(
-      (user): UserAccess => ({
-        ...user,
-        canComment: true,
-      })
-    ),
-    ...roles.flatMap((rec) =>
-      rec.role.users.map(
-        (user): UserAccess => ({
-          user,
-          permission: rec.permission,
-          canComment: true,
-        })
-      )
-    ),
-  ];
 
   const externalData = useExternalDataSources(notebookId);
 
@@ -281,22 +254,6 @@ export const useNotebookStateAndActions = ({
 
   // -------- publishing -------------
 
-  const snapshot = notebook?.snapshots.find(
-    (s) => s.snapshotName === SNAPSHOT_NAME
-  );
-
-  const hasUnpublishedChanges = useExternalEditorChange(
-    editor,
-    useCallback(() => {
-      return (
-        isPublic && !(snapshot?.version && docsync?.equals(snapshot?.version))
-      );
-    }, [docsync, isPublic, snapshot?.version]),
-    {
-      debounceTimeMs: DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS,
-    }
-  );
-
   const setNotebookPublic = useCallback(
     async (newIsPublic: boolean) => {
       await remoteUpdateNotebookIsPublic({
@@ -406,11 +363,9 @@ export const useNotebookStateAndActions = ({
     isSavedRemotely,
     connectionParams: notebook?.padConnectionParams,
     initialState: notebook?.initialState ?? undefined,
-    hasUnpublishedChanges: !!hasUnpublishedChanges,
     notebookStatus,
     externalData,
     isNew,
-    workspaceMembers: workspaceMembers ?? [],
     removeLocalChanges,
     setNotebookPublic,
     updateIcon,

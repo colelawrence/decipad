@@ -2,13 +2,13 @@
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { NotebookAvatar } from '..';
 import { PermissionType } from '../../types';
 import { CollabMemberOrTeam } from './CollabMemberOrTeam';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 type CollabMembersRightsProps = {
-  readonly usersWithAccess?: NotebookAvatar[] | null;
-  readonly teamUsers?: NotebookAvatar[] | null;
+  readonly usersWithAccess?: UserAccessMetaFragment[] | null;
+  readonly teamUsers?: UserAccessMetaFragment[] | null;
   readonly teamName?: string;
   readonly manageTeamURL?: string;
   readonly onRemoveCollaborator?: (userId: string) => void;

@@ -1,4 +1,4 @@
-import { NotebookAvatar } from './NotebookAvatars.types';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 const sortCriteria = {
   ADMIN: 0,
@@ -6,7 +6,7 @@ const sortCriteria = {
   READ: 2,
 };
 
-export const sortAvatars = (jsonList: NotebookAvatar[]) =>
+export const sortAvatars = (jsonList: UserAccessMetaFragment[]) =>
   jsonList.sort((a, b) => {
     const permissionA = a.permission;
     const permissionB = b.permission;

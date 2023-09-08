@@ -6,6 +6,7 @@ export default gql`
   }
 
   type WorkspaceAccess {
+    id: ID!
     roles: [RoleAccess!]
     users: [UserAccess!]
   }

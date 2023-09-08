@@ -3,6 +3,7 @@ mutation unsharePadWithUser($padId: ID!, $userId: ID!) {
     id
     name
     access {
+      id
       users {
         permission
         canComment

@@ -36,6 +36,7 @@ export type DocSyncEditor = MyEditor &
     removeLocalChanges: () => Promise<void>;
     isDocSyncEnabled: boolean;
     destroyed: boolean;
+    getVersionChecksum: () => string;
     markVersion: (version: string) => Promise<void>;
     sameVersion: (version: string) => Promise<boolean>;
     equals: (data: string) => boolean;

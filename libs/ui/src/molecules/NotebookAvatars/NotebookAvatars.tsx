@@ -10,8 +10,9 @@ import {
   p13Medium,
 } from '../../primitives';
 import { PermissionType } from '../../types';
-import { Cursor, NotebookAvatar } from './NotebookAvatars.types';
+import { Cursor } from './NotebookAvatars.types';
 import { sortAvatars } from './sortAvatars';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 const genRole = (permission: PermissionType) => {
   switch (permission) {
@@ -51,28 +52,13 @@ const tooltipRoleStyles = css(p12Regular, {
 
 export type NotebookAvatarsProps = {
   readonly isWriter?: boolean;
-  readonly usersWithAccess?: NotebookAvatar[];
-  readonly usersFromTeam?: NotebookAvatar[];
-  readonly invitedUsers: NotebookAvatar[] | null;
-  readonly teamUsers: NotebookAvatar[] | null;
+  readonly usersWithAccess?: UserAccessMetaFragment[];
+  readonly usersFromTeam?: UserAccessMetaFragment[];
+  readonly invitedUsers: UserAccessMetaFragment[] | null;
+  readonly teamUsers?: UserAccessMetaFragment[] | null;
   readonly teamName?: string;
   readonly allowInvitation?: boolean;
   readonly isPremiumWorkspace?: boolean;
-
-  readonly notebook?: {
-    id: string;
-    name: string;
-    snapshots?: { createdAt?: string }[];
-  };
-  readonly onInvite?: (
-    email: string,
-    permission: PermissionType
-  ) => Promise<void>;
-  readonly onChange?: (
-    userId: string,
-    permission: PermissionType
-  ) => Promise<void>;
-  readonly onRemove?: (userId: string) => Promise<void>;
 };
 
 interface EmailLookup {
@@ -126,7 +112,6 @@ export const NotebookAvatars = ({
                 <Avatar
                   name={name}
                   cursorColor={cursorColor}
-                  onClick={avatar.onClick}
                   useSecondLetter={false}
                   imageHash={image}
                 />

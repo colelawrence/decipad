@@ -32,6 +32,7 @@ export interface SecretAccess {
 }
 
 export interface Access {
+  id: ID;
   roles?: RoleAccess[];
   users?: UserAccess[];
   secrets?: SecretAccess[];
@@ -98,6 +99,7 @@ export function access<
       .sort(by('permission'));
 
     return {
+      id: parent.id,
       roles: roleAccesses,
       users: userAccesses,
       secrets: secretAccesses,

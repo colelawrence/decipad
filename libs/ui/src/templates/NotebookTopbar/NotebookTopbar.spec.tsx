@@ -9,42 +9,40 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
+import { PermissionType } from '@decipad/graphql-client';
 
 const noop = () => Promise.resolve();
 
 const props: ComponentProps<typeof NotebookTopbar> = {
-  notebook: { id: 'nbid', name: 'My first notebook' },
-  workspace: {
-    id: 'wsid',
-    name: "John's Workspace",
-  },
-  permission: 'ADMIN',
-  usersWithAccess: [
-    {
-      user: { id: '1', name: 'John Doe', email: 'foo@nar.com' },
-      permission: 'ADMIN',
-    },
-  ],
   sidebarOpen: true,
-  status: 'draft',
-  notebookId: 'id',
-  onChangeStatus: () => {},
-  isReadOnly: false,
   canRedo: true,
   canUndo: true,
-  onUndo: () => {},
-  onRedo: () => {},
-  onDuplicate: noop as any,
-  isArchived: false,
-  onExport: noop,
-  onExportBackups: noop,
-  onUnarchive: noop,
-  onDelete: noop,
+  onUndo: noop,
+  onRedo: noop,
   isNewNotebook: true,
   onClearAll: noop,
-  onMoveWorkspace: noop,
-  workspaces: [],
   isEmbed: false,
+  toggleSidebar: noop,
+  notebookMeta: undefined,
+  notebookMetaActions: {
+    onChangeStatus: noop,
+    onMoveToSection: noop,
+    onDeleteNotebook: noop,
+    onMoveToWorkspace: noop,
+    onPublishNotebook: noop,
+    onDownloadNotebook: noop,
+    onDuplicateNotebook: noop as any,
+    onUnarchiveNotebook: noop,
+    onUnpublishNotebook: noop,
+    onDownloadNotebookHistory: noop,
+  },
+  notebookAccessActions: {
+    onChangeAccess: noop,
+    onRemoveAccess: noop,
+    onInviteByEmail: noop,
+  },
+  userWorkspaces: [],
+  hasUnpublishedChanges: false,
 };
 
 interface WithProvidersProps {
@@ -82,7 +80,7 @@ describe('Notebook Topbar', () => {
     {
       const { queryByText } = render(
         <WithProviders>
-          <NotebookTopbar {...props} permission="READ" />
+          <NotebookTopbar {...props} />
         </WithProviders>
       );
       expect(queryByText(/try decipad/i)).not.toBeInTheDocument();
@@ -92,7 +90,7 @@ describe('Notebook Topbar', () => {
     {
       const { getByText } = render(
         <WithProviders noSession>
-          <NotebookTopbar {...props} permission="READ" />
+          <NotebookTopbar {...props} />
         </WithProviders>
       );
       expect(getByText(/try decipad/i).parentNode).toHaveAttribute(
@@ -102,52 +100,60 @@ describe('Notebook Topbar', () => {
     }
   });
 
-  it('renders the duplicate button only when not admin', () => {
-    const { getByText, queryByText, rerender } = render(
-      <WithProviders>
-        <NotebookTopbar {...props} permission="ADMIN" />
-      </WithProviders>
-    );
-    expect(queryByText(/dup/i)).not.toBeInTheDocument();
-    expect(queryByText(/templates/i)).toBeInTheDocument();
-    expect(queryByText(/sidebar/i)).toBeInTheDocument();
-
-    rerender(
-      <WithProviders>
-        <NotebookTopbar {...props} permission="READ" />
-      </WithProviders>
-    );
-    expect(getByText(/dup/i)).toBeVisible();
-  });
-
   it('renders the publish button only for admin', () => {
-    const { getByText, queryByText, rerender } = render(
+    const { queryByText, rerender } = render(
       <WithProviders>
-        <NotebookTopbar {...props} permission="READ" />
+        <NotebookTopbar
+          {...props}
+          notebookMeta={{
+            id: 'id',
+            name: 'name',
+            myPermissionType: PermissionType.Read,
+            snapshots: [],
+            access: {
+              id: 'id',
+            },
+          }}
+        />
       </WithProviders>
     );
     expect(queryByText(/share/i, {})).toBeNull();
 
     rerender(
       <WithProviders>
-        <NotebookTopbar {...props} permission="WRITE" />
+        <NotebookTopbar
+          {...props}
+          notebookMeta={{
+            id: 'id',
+            name: 'name',
+            myPermissionType: PermissionType.Admin,
+            snapshots: [],
+            access: {
+              id: 'id',
+            },
+          }}
+        />
       </WithProviders>
     );
     expect(queryByText(/share/i)).toBeVisible();
-
-    rerender(
-      <WithProviders>
-        <NotebookTopbar {...props} permission="ADMIN" />
-      </WithProviders>
-    );
-    expect(getByText(/share/i)).toBeVisible();
   });
 });
 
 it('renders well for writers', () => {
   const { queryByText } = render(
     <WithProviders>
-      <NotebookTopbar {...props} permission="WRITE" />
+      <NotebookTopbar
+        {...props}
+        notebookMeta={{
+          id: 'id',
+          name: 'name',
+          myPermissionType: PermissionType.Write,
+          snapshots: [],
+          access: {
+            id: 'id',
+          },
+        }}
+      />
     </WithProviders>
   );
   expect(queryByText(/try decipad/i)).not.toBeInTheDocument();

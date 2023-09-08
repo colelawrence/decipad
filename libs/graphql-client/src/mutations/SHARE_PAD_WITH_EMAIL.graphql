@@ -13,6 +13,7 @@ mutation sharePadWithEmail(
     id
     name
     access {
+      id
       users {
         permission
         canComment

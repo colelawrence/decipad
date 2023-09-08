@@ -5,6 +5,7 @@ import { useEditUserModalStore } from '../../templates/EditUserModal/EditUserMod
 import { cssVar } from '../../primitives';
 import { Settings } from '../../icons';
 import { useSession } from 'next-auth/react';
+import { PermissionType } from '@decipad/graphql-client';
 
 export const WorkspaceAccount: React.FC = () => {
   const openUserSettings = useEditUserModalStore((state) => state.open);
@@ -21,7 +22,8 @@ export const WorkspaceAccount: React.FC = () => {
         <CollabMember
           avatar={{
             user,
-            permission: 'READ',
+            permission: PermissionType.Read,
+            canComment: true,
           }}
         />
 

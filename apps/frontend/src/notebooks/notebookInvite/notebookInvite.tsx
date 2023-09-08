@@ -17,7 +17,6 @@ const NotebookInvite: FC = () => {
 
   const [getNotebookResult, refetchNotebook] = useGetNotebookByIdQuery({
     variables: { id: notebookId },
-    requestPolicy: 'network-only',
   });
 
   const isLoaded = !getNotebookResult.fetching;

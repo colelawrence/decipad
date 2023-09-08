@@ -3,13 +3,14 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import md5 from 'md5';
 import { FC } from 'react';
-import { CollabAccessDropdown, NotebookAvatar } from '..';
+import { CollabAccessDropdown } from '..';
 import { Avatar, TextAndIconButton } from '../../atoms';
 import { ellipsis, p12Medium, p14Medium } from '../../primitives';
 import { PermissionType } from '../../types';
+import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 type CollabMemberUserProps = {
-  readonly info: NotebookAvatar;
+  readonly info: UserAccessMetaFragment;
   readonly onRemoveCollaborator?: (userId: string) => void;
   readonly onChangePermission?: (
     userId: string,
@@ -53,7 +54,7 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
       onChangePermission = noop,
       disabled = false,
     } = props;
-    const { user, permission, isTeamMember } = info;
+    const { user, permission } = info;
     const { name, id, email, image } = user || {};
 
     return (
@@ -81,7 +82,7 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
         {/* Define isTeamMember and permission based on your logic */}
         {/* Replace 'isTeamMember' and 'permission' with actual variables */}
         <CollabAccessDropdown
-          disable={isTeamMember || disabled}
+          disable={disabled}
           currentPermission={permission}
           onRemove={() => (user?.id ? onRemoveCollaborator(user.id) : noop)}
           onChange={(newPerm) =>

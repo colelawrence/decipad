@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
 import { useStripeCollaborationRules } from '@decipad/react-utils';
@@ -5,18 +6,9 @@ import { workspaces } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
-import uniqBy from 'lodash.uniqby';
 import { useSession } from 'next-auth/react';
-import {
-  ComponentProps,
-  FC,
-  MouseEventHandler,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import { FC, useCallback, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BehaviorSubject } from 'rxjs';
 import { Button, IconButton, Link, SegmentButtons, Tooltip } from '../../atoms';
 import {
   Cards,
@@ -29,7 +21,6 @@ import {
   SidebarOpen,
 } from '../../icons';
 import {
-  NotebookAvatar,
   NotebookAvatars,
   NotebookPath,
   NotebookStatusDropdown,
@@ -46,8 +37,16 @@ import {
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { PermissionType } from '../../types';
-import { Anchor } from '../../utils';
+import { Anchor, TColorStatus } from '../../utils';
 import * as Styled from './styles';
+import {
+  NotebookMetaDataFragment,
+  NotebookWorkspacesDataFragment,
+} from '@decipad/graphql-client';
+import {
+  NotebookAccessActionsReturn,
+  NotebookMetaActionsReturn,
+} from '@decipad/interfaces';
 
 const topBarWrapperStyles = (isEmbed: boolean) =>
   css({
@@ -109,71 +108,53 @@ const VerticalDivider = () => (
   />
 );
 
-export type NotebookTopbarProps = Pick<
-  ComponentProps<typeof NotebookAvatars>,
-  'usersWithAccess' | 'usersFromTeam'
-> &
-  Pick<ComponentProps<typeof NotebookStatusDropdown>, 'status'> &
-  ComponentProps<typeof NotebookPublishingPopUp> &
-  Omit<ComponentProps<typeof NotebookOptions>, 'trigger' | 'pageType'> & {
-    readonly permission?: PermissionType | null;
-    readonly workspace?: {
-      id: string;
-      name: string;
-      isPremium?: boolean | null;
-    } | null;
-    readonly workspaceAccess?: PermissionType | null;
-    readonly isSharedNotebook?: boolean;
-    readonly onRevertChanges?: () => void;
-    readonly onRemove?: (userId: string) => Promise<void>;
-    readonly onDuplicate: (
-      notebookId: string,
-      navToNotebook?: true
-    ) => Promise<boolean>;
-    readonly onInvite?: (
-      email: string,
-      permission: PermissionType
-    ) => Promise<void>;
-    readonly onChange?: (
-      userId: string,
-      permission: PermissionType
-    ) => Promise<void>;
-    readonly onChangeStatus: (
-      notebookId: string,
-      status: ComponentProps<typeof NotebookStatusDropdown>['status']
-    ) => void;
-    readonly hasLocalChanges?: BehaviorSubject<boolean>;
-    readonly toggleSidebar?: MouseEventHandler<HTMLSpanElement>;
-    readonly sidebarOpen: boolean;
-    readonly isReadOnly: boolean;
-    readonly isArchived: boolean;
-    readonly isNewNotebook: boolean;
+export type NotebookTopbarProps = {
+  readonly isSharedNotebook?: boolean;
+  readonly onRevertChanges?: () => void;
+  readonly onRemove?: (userId: string) => Promise<void>;
+  readonly onInvite?: (
+    email: string,
+    permission: PermissionType
+  ) => Promise<void>;
+  readonly onChange?: (
+    userId: string,
+    permission: PermissionType
+  ) => Promise<void>;
+  readonly isNewNotebook: boolean;
 
-    // Undo buttons
-    readonly canUndo: boolean;
-    readonly canRedo: boolean;
-    readonly onUndo: () => void;
-    readonly onRedo: () => void;
+  // Sidebar
+  readonly sidebarOpen: boolean;
+  readonly toggleSidebar: () => void;
 
-    readonly onClearAll: () => void;
+  // Undo buttons
+  readonly canUndo: boolean;
+  readonly canRedo: boolean;
+  readonly onUndo: () => void;
+  readonly onRedo: () => void;
 
-    readonly isEmbed: boolean;
-  };
+  readonly onClearAll: () => void;
+
+  readonly isEmbed: boolean;
+
+  // Important that this can be undefined
+  // Because when you re-fetch the query, its going to be
+  readonly notebookMeta: NotebookMetaDataFragment | null | undefined;
+
+  readonly notebookMetaActions: NotebookMetaActionsReturn;
+  readonly notebookAccessActions: NotebookAccessActionsReturn;
+
+  readonly userWorkspaces: Array<NotebookWorkspacesDataFragment>;
+
+  readonly hasUnpublishedChanges: boolean;
+};
 
 // eslint-disable-next-line complexity
 export const NotebookTopbar = ({
-  workspace,
-  notebook,
-  usersWithAccess,
-  usersFromTeam,
-  permission,
   isSharedNotebook,
-  workspaceAccess,
   toggleSidebar,
   sidebarOpen,
-  isReadOnly: _isReadOnly,
   isNewNotebook,
-  workspaces: userWorkspaces,
+  hasUnpublishedChanges,
 
   canUndo,
   canRedo,
@@ -181,30 +162,39 @@ export const NotebookTopbar = ({
   onRedo,
   onRevertChanges,
 
-  notebookId,
-  creationDate,
-  isArchived,
-  onDelete,
-  onUnarchive,
-  onExportBackups,
-  onExport,
-  onDuplicate,
   onClearAll,
-  onMoveWorkspace,
 
   // Status dropdown
-  status,
-  onChangeStatus,
   isEmbed,
 
-  ...sharingProps
+  notebookMeta,
+  notebookMetaActions,
+  notebookAccessActions,
+  userWorkspaces,
 }: NotebookTopbarProps): ReturnType<FC> => {
+  // --------------------------------------------------
+
+  const notebookId = notebookMeta?.id ?? '';
+  const workspace = notebookMeta?.workspace;
+  const usersWithAccess = notebookMeta?.access.users ?? [];
+  const usersFromTeam = workspace?.access?.users ?? [];
+  const permission = notebookMeta?.myPermissionType ?? 'READ';
+  const status = (notebookMeta?.status ?? 'Draft') as TColorStatus;
+  const isArchived = Boolean(notebookMeta?.archived);
+  const isReadOnly = notebookMeta?.myPermissionType === 'READ';
+  const notebookName = notebookMeta?.name ?? 'My Notebook';
+  const snapshots = notebookMeta?.snapshots ?? [];
+  const workspaceAccess = notebookMeta?.workspace?.myPermissionType ?? 'READ';
+  const creationDate = notebookMeta?.createdAt
+    ? new Date(notebookMeta.createdAt)
+    : new Date();
+  const isPublished = Boolean(notebookMeta?.isPublic);
+
+  // --------------------------------------------------
+
   const { status: sessionStatus } = useSession();
   const isAdmin = permission === 'ADMIN';
-  const isWriter =
-    permission === 'ADMIN' || permission === 'WRITE' || workspaceAccess;
-
-  const isReadOnly = _isReadOnly || isEmbed;
+  const isWriter = permission === 'ADMIN' || permission === 'WRITE';
 
   const clientEvent = useContext(ClientEventsContext);
   const onGalleryClick = useCallback(
@@ -256,11 +246,6 @@ export const NotebookTopbar = ({
     usersFromTeam
   );
 
-  const invitedUsers: NotebookAvatar[] = uniqBy(
-    [...(usersWithAccess || [])],
-    (access) => access.user?.id
-  );
-
   const manageTeamURL = workspace
     ? workspaces({})
         .workspace({
@@ -269,20 +254,10 @@ export const NotebookTopbar = ({
         .members({}).$
     : workspaces({}).$;
 
-  const teamUsers: NotebookAvatar[] = uniqBy(
-    [
-      ...(usersFromTeam || []).map((user) => ({
-        ...user,
-        isTeamMember: true,
-      })),
-    ],
-    (access) => access.user?.id
-  );
-
-  const oneAdminUser = invitedUsers.find((u) => u.permission === 'ADMIN');
+  const oneAdminUser = usersWithAccess.find((u) => u.permission === 'ADMIN');
 
   const isPremiumWorkspace = Boolean(workspace?.isPremium);
-  const teamName = workspace?.name;
+  const teamName = workspace?.name ?? '';
   const hasPaywall = !canInvite && !isPremiumWorkspace;
 
   const readModeTopbar = (
@@ -320,19 +295,21 @@ export const NotebookTopbar = ({
   );
 
   const [isDuplicating, setIsDuplicating] = useState(false);
-  const [showClearAll, setShowClearAll] = useState(isNewNotebook);
+  const [showClearAll, setShowClearAll] = useState(true);
 
   const changeStatus = useCallback(
-    (s: NotebookTopbarProps['status']) => {
-      onChangeStatus(notebookId, s);
+    (s: TColorStatus) => {
+      notebookMetaActions.onChangeStatus(notebookId, s);
     },
-    [notebookId, onChangeStatus]
+    [notebookId, notebookMetaActions]
   );
 
   const duplicateNotebook = useCallback(() => {
     setIsDuplicating(true);
-    onDuplicate(notebookId, true).finally(() => setIsDuplicating(false));
-  }, [notebookId, onDuplicate]);
+    notebookMetaActions
+      .onDuplicateNotebook(notebookId, true)
+      .finally(() => setIsDuplicating(false));
+  }, [notebookId, notebookMetaActions]);
 
   return (
     <div css={topBarWrapperStyles(isEmbed)}>
@@ -368,7 +345,7 @@ export const NotebookTopbar = ({
                 workspaces={userWorkspaces}
                 trigger={
                   <div data-testId="notebook-actions">
-                    <NotebookPath concatName notebookName={notebook.name} />
+                    <NotebookPath concatName notebookName={notebookName} />
                     <Caret variant="down" />
                   </div>
                 }
@@ -378,12 +355,12 @@ export const NotebookTopbar = ({
                     onChangeStatus={changeStatus}
                   />
                 }
-                onDelete={onDelete}
-                onUnarchive={onUnarchive}
-                onExportBackups={onExportBackups}
-                onExport={onExport}
-                onDuplicate={onDuplicate}
-                onMoveWorkspace={onMoveWorkspace}
+                onDelete={notebookMetaActions.onDeleteNotebook}
+                onUnarchive={notebookMetaActions.onUnarchiveNotebook}
+                onExportBackups={notebookMetaActions.onDownloadNotebookHistory}
+                onExport={notebookMetaActions.onDownloadNotebook}
+                onMoveWorkspace={notebookMetaActions.onMoveToWorkspace}
+                onDuplicate={notebookMetaActions.onDuplicateNotebook}
                 creationDate={creationDate}
               />
               <Styled.Status data-testId="notebook-status">
@@ -391,7 +368,7 @@ export const NotebookTopbar = ({
               </Styled.Status>
             </Styled.TitleContainer>
             {!(isReadOnly || isEmbed) && undoButtons}
-            {showClearAll && !canUndo && (
+            {isNewNotebook && showClearAll && (
               <Button
                 type="primary"
                 onClick={() => {
@@ -520,26 +497,30 @@ export const NotebookTopbar = ({
               </p>
             )}
             <NotebookAvatars
-              allowInvitation={isAdmin}
               isWriter={!!isWriter}
-              invitedUsers={invitedUsers}
-              teamUsers={teamUsers}
-              teamName={teamName}
-              notebook={notebook}
-              {...sharingProps}
+              invitedUsers={usersWithAccess}
             />
 
             {sessionStatus === 'authenticated' ? (
               (isAdmin || isWriter) && !isServerSideRendering() ? (
                 <NotebookPublishingPopUp
-                  notebook={notebook}
+                  notebookName={notebookName}
+                  workspaceId={workspace?.id ?? ''}
                   hasPaywall={hasPaywall}
-                  invitedUsers={invitedUsers}
-                  teamUsers={teamUsers}
+                  invitedUsers={usersWithAccess}
+                  teamUsers={usersFromTeam}
                   manageTeamURL={manageTeamURL}
                   teamName={teamName}
                   isAdmin={isAdmin}
-                  {...sharingProps}
+                  snapshots={snapshots}
+                  notebookId={notebookId}
+                  isPublished={isPublished}
+                  hasUnpublishedChanges={hasUnpublishedChanges}
+                  onPublish={notebookMetaActions.onPublishNotebook}
+                  onUnpublish={notebookMetaActions.onUnpublishNotebook}
+                  onInvite={notebookAccessActions.onInviteByEmail}
+                  onChange={notebookAccessActions.onChangeAccess}
+                  onRemove={notebookAccessActions.onRemoveAccess}
                 />
               ) : (
                 <Button

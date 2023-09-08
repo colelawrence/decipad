@@ -8,6 +8,7 @@ mutation updatePadPermission(
     id
     name
     access {
+      id
       users {
         permission
         canComment
@@ -27,6 +28,7 @@ mutation updatePadPermission(
     id
     name
     access {
+      id
       users {
         permission
         canComment

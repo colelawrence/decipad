@@ -25,7 +25,10 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
 
   const members = useMemo(
     () => [
-      ...(currentWorkspace.access?.users ?? []),
+      ...(currentWorkspace.access?.users?.map((u) => ({
+        ...u,
+        canComment: true,
+      })) ?? []),
       ...(currentWorkspace.access?.roles?.flatMap((access) =>
         access.role.users?.map((roleUser) => ({
           permission: access.permission,

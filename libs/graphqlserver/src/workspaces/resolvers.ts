@@ -278,6 +278,7 @@ export default {
         .sort(by('permission'));
 
       return {
+        id: workspace.id,
         roles: roleAccesses,
         users: userAccesses,
       };

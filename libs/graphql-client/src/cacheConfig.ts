@@ -1,8 +1,13 @@
+/* eslint-disable no-labels */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { Cache } from '@urql/exchange-graphcache';
 import {
+  DashboardWorkspaceFragment,
   GetNotebookByIdDocument,
   GetNotebookByIdQuery,
+  GetNotebookMetaDocument,
+  GetNotebookMetaQuery,
   GetWorkspacesDocument,
   GetWorkspacesQuery,
   GraphCacheConfig,
@@ -11,6 +16,7 @@ import {
   UserDocument,
   UserQuery,
   Workspace,
+  WorkspaceNotebookFragment,
 } from './generated';
 import * as schema from './schema.generated.json';
 
@@ -45,29 +51,23 @@ const addSectionToItsWorkspace = (
 export const graphCacheConfig: GraphCacheConfig = {
   schema: schema as GraphCacheConfig['schema'],
   keys: {
-    PagedPadResult() {
-      return null;
-    },
-    PadAccess() {
-      return null;
-    },
-    UserAccess() {
-      return null;
-    },
-    WorkspaceAccess() {
-      return null;
-    },
-    PagedResult() {
-      return null;
-    },
-    RoleAccess() {
-      return null;
+    UserAccess(data) {
+      return data.user?.id ?? null;
     },
     PadConnectionParams(data) {
       return data.url ?? null;
     },
+    RoleAccess(data) {
+      return data.role?.id ?? null;
+    },
     PadSnapshot(data) {
-      return data.createdAt ?? null;
+      return data.snapshotName ?? null;
+    },
+    PagedResult(data) {
+      return data.count?.toString() ?? null;
+    },
+    PagedPadResult(data) {
+      return data.count?.toString() ?? null;
     },
   },
   resolvers: {
@@ -125,16 +125,101 @@ export const graphCacheConfig: GraphCacheConfig = {
           return;
         }
 
+        if (args.pad.status) {
+          cache.updateQuery<GetNotebookByIdQuery>(
+            {
+              query: GetNotebookByIdDocument,
+              variables: {
+                id: args.id,
+              },
+            },
+            (data) => {
+              if (!data?.getPadById) return data;
+
+              data.getPadById.status = args.pad.status;
+              return data;
+            }
+          );
+          return;
+        }
+
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
       setPadPublic: (_result, args, cache) => {
-        cache.invalidate({ __typename: 'Pad', id: args.id });
+        cache.updateQuery<GetNotebookMetaQuery>(
+          {
+            query: GetNotebookMetaDocument,
+            variables: {
+              id: args.id,
+            },
+          },
+          (data) => {
+            if (!data?.getPadById) {
+              throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
+            }
+
+            data.getPadById.isPublic = args.isPublic;
+            return data;
+          }
+        );
+      },
+      createOrUpdateSnapshot() {
+        // cache.invalidate({ __typename: 'Pad', id: args.notebookId });
       },
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
       },
       movePad: (_result, args, cache) => {
-        cache.invalidate({ __typename: 'Pad', id: args.id });
+        cache.updateQuery<GetWorkspacesQuery>(
+          {
+            query: GetWorkspacesDocument,
+            variables: {
+              id: args.id,
+            },
+          },
+          (data) => {
+            if (!data?.workspaces) {
+              throw new Error('QUERY NOT FOUND, there is a bug somewhere...');
+            }
+
+            // O(n^2) to find the workspace of the notebook.
+            // Most people have 1 workspace so O(n).
+            // But could become performance problem.
+            let currentNotebook: WorkspaceNotebookFragment | undefined;
+            let currentWorkspace: DashboardWorkspaceFragment | undefined;
+
+            topLoop: for (const workspace of data.workspaces) {
+              for (const n of workspace.pads.items) {
+                if (n.id === args.id) {
+                  currentNotebook = n;
+                  currentWorkspace = workspace;
+                  break topLoop;
+                }
+              }
+            }
+
+            if (!currentNotebook) {
+              throw new Error('Could not find the notebook');
+            }
+
+            if (!currentWorkspace) {
+              throw new Error('Could not find notebooks workspace');
+            }
+
+            // Remove notebook from current workspace
+            currentWorkspace.pads.items = currentWorkspace.pads.items.filter(
+              (n) => n.id !== args.id
+            );
+
+            const targetWorkspace = data.workspaces.find(
+              (w) => w.id === args.workspaceId
+            );
+
+            // Add notebook to new workspace.
+            targetWorkspace?.pads.items.push(currentNotebook);
+            return data;
+          }
+        );
       },
       addSectionToWorkspace: (result, args, cache) => {
         addSectionToItsWorkspace(
@@ -142,9 +227,6 @@ export const graphCacheConfig: GraphCacheConfig = {
           result.addSectionToWorkspace as Section,
           args.workspaceId as string
         );
-      },
-      createOrUpdateSnapshot: (_result, args, cache) => {
-        cache.invalidate({ __typename: 'Pad', id: args.notebookId });
       },
       updateSectionInWorkspace: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Section', id: args.sectionId });

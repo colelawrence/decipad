@@ -35,3 +35,4 @@ export * from './unique';
 export * from './unzip';
 export * from './varnamify';
 export * from './zip';
+export * from './isE2E';

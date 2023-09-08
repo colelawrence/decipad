@@ -2,6 +2,7 @@ import { isServerSideRendering } from '@decipad/support';
 import {
   EditorIcon,
   EditorPlaceholder,
+  GlobalThemeStyles,
   NotebookPage,
   PlaygroundTopBar,
 } from '@decipad/ui';
@@ -32,14 +33,19 @@ const Playground: React.FC = () => {
             title={null}
             suspenseFallback={<EditorPlaceholder />}
           >
+            <GlobalThemeStyles color={iconColor} />
+            <EditorIcon
+              icon={icon}
+              color={iconColor}
+              onChangeIcon={setIcon}
+              onChangeColor={setIconColor}
+            />
             <Editor />
           </Frame>
         </div>
       }
-      icon={icon}
-      iconColor={iconColor}
-      onUpdateIcon={setIcon}
-      onUpdateIconColor={setIconColor}
+      sidebar={null}
+      isEmbed={false}
     />
   );
 };

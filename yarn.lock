@@ -5086,13 +5086,25 @@
     "@graphql-codegen/visitor-plugin-common" "^4.0.0"
     tslib "~2.5.0"
 
-"@graphql-codegen/plugin-helpers@^2.6.2":
+"@graphql-codegen/plugin-helpers@^2.6.2", "@graphql-codegen/plugin-helpers@^2.7.2":
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-2.7.2.tgz#6544f739d725441c826a8af6a49519f588ff9bed"
   integrity sha512-kln2AZ12uii6U59OQXdjLk5nOlh1pHis1R98cDZGFnfaiAbX9V3fxcZ1MMJkB7qFUymTALzyjZoXXdyVmPMfRg==
   dependencies:
     "@graphql-tools/utils" "^8.8.0"
     change-case-all "1.0.14"
+    common-tags "1.8.2"
+    import-from "4.0.0"
+    lodash "~4.17.0"
+    tslib "~2.4.0"
+
+"@graphql-codegen/plugin-helpers@^3.0.0":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/plugin-helpers/-/plugin-helpers-3.1.2.tgz#69a2e91178f478ea6849846ade0a59a844d34389"
+  integrity sha512-emOQiHyIliVOIjKVKdsI5MXj312zmRDwmHpyUTZMjfpvxq/UVAHUJIVdVf+lnjjrI+LXBTgMlTWTgHQfmICxjg==
+  dependencies:
+    "@graphql-tools/utils" "^9.0.0"
+    change-case-all "1.0.15"
     common-tags "1.8.2"
     import-from "4.0.0"
     lodash "~4.17.0"
@@ -5130,15 +5142,15 @@
     auto-bind "~4.0.0"
     tslib "~2.5.0"
 
-"@graphql-codegen/typescript-urql-graphcache@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-urql-graphcache/-/typescript-urql-graphcache-2.4.0.tgz#08a0ed3815e923e0e075c6dff65a3ec930f34fbe"
-  integrity sha512-4z2M4fbKFyjlOx2uAztERpzOOdZuxpXhQ413Qkw6u+QGaylbefHH04UNlL/zMh9ovVbLZnEMmdnBRy/nqCMwsw==
+"@graphql-codegen/typescript-urql-graphcache@2.4.5":
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-urql-graphcache/-/typescript-urql-graphcache-2.4.5.tgz#ce5ce3ee8383359a6c5d1e33a0992ab75cd65566"
+  integrity sha512-h+Px+Cj/9MMI5I8iQbSoJUWuq7I/hSCG5yM1tur8hzqzaQMbR5FGTwxlPnHFfUljvHj/bVdwYHwvO9p+PaNvww==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "^2.6.2"
-    "@graphql-codegen/visitor-plugin-common" "2.12.1"
+    "@graphql-codegen/plugin-helpers" "^3.0.0"
+    "@graphql-codegen/visitor-plugin-common" "2.13.1"
     auto-bind "~4.0.0"
-    change-case-all "1.0.14"
+    change-case-all "1.0.15"
     tslib "~2.4.0"
 
 "@graphql-codegen/typescript-urql@3.7.0":
@@ -5177,6 +5189,22 @@
   integrity sha512-dIUrX4+i/uazyPQqXyQ8cqykgNFe1lknjnfDWFo0gnk2W8+ruuL2JpSrj/7efzFHxbYGMQrCABDCUTVLi3DcVA==
   dependencies:
     "@graphql-codegen/plugin-helpers" "^2.6.2"
+    "@graphql-tools/optimize" "^1.3.0"
+    "@graphql-tools/relay-operation-optimizer" "^6.5.0"
+    "@graphql-tools/utils" "^8.8.0"
+    auto-bind "~4.0.0"
+    change-case-all "1.0.14"
+    dependency-graph "^0.11.0"
+    graphql-tag "^2.11.0"
+    parse-filepath "^1.0.2"
+    tslib "~2.4.0"
+
+"@graphql-codegen/visitor-plugin-common@2.13.1":
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-2.13.1.tgz#2228660f6692bcdb96b1f6d91a0661624266b76b"
+  integrity sha512-mD9ufZhDGhyrSaWQGrU1Q1c5f01TeWtSWy/cDwXYjJcHIj1Y/DG2x0tOflEfCvh5WcnmHNIw4lzDsg1W7iFJEg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^2.7.2"
     "@graphql-tools/optimize" "^1.3.0"
     "@graphql-tools/relay-operation-optimizer" "^6.5.0"
     "@graphql-tools/utils" "^8.8.0"
@@ -5534,7 +5562,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@graphql-tools/utils@^9.2.1":
+"@graphql-tools/utils@^9.0.0", "@graphql-tools/utils@^9.2.1":
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-9.2.1.tgz#1b3df0ef166cfa3eae706e3518b17d5922721c57"
   integrity sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==
@@ -14075,10 +14103,10 @@
     "@uiw/codemirror-extensions-basic-setup" "4.21.2"
     codemirror "^6.0.0"
 
-"@urql/core@>=3.0.0", "@urql/core@^4.0.0":
-  version "4.0.10"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-4.0.10.tgz#b227f161910d6f22d27bb308098e1181b949c302"
-  integrity sha512-Vs3nOSAnYftqOCg034Ostp/uSqWlQg5ryLIzcOrm8+O43s4M+Ew4GQAuemIH7ZDB8dek6h61zzWI3ujd8FH3NA==
+"@urql/core@>=3.2.0", "@urql/core@^4.1.0":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-4.1.1.tgz#b1312eb0ecbc91e315457a3ec14741321cbee1c7"
+  integrity sha512-iIoAy6BY+BUZZ7KIpnMT7C9q+ULf5ZCVxGe3/i7WZSJBrQa2h1QkIMhL+8fAKmOn9gt83jSIv5drWWnhZ9izEA==
   dependencies:
     "@0no-co/graphql.web" "^1.0.1"
     wonka "^6.3.2"
@@ -14090,12 +14118,12 @@
   dependencies:
     wonka ">= 4.0.9"
 
-"@urql/exchange-graphcache@5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-5.0.1.tgz#3c051d971ba79cccf4aadc2cf87b413c6682cbd3"
-  integrity sha512-sbornx6SaAADycfEex0+npdJwhImSKa+76DAnOjF48wls5bYlG+ewDe0ipWdmV+gQ+t9SDFPLAHBzFURTlQacQ==
+"@urql/exchange-graphcache@5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@urql/exchange-graphcache/-/exchange-graphcache-5.2.0.tgz#d8af2ac73e3644e1947a82f0da1bdb912c9f9ccd"
+  integrity sha512-wHSTkp6TAhioauK/85DyiiQP5vz4EAJx7JQ+39OaHZ9TSdDqWkg4zs9VAhV3OzSopA9DNbihZVZ32w7q8BSUEA==
   dependencies:
-    "@urql/core" ">=3.0.0"
+    "@urql/core" ">=3.2.0"
     wonka "^6.0.0"
 
 "@urql/introspection@^0.3.2":
@@ -15495,6 +15523,22 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
+
+aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1450.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1450.0.tgz#d54a0bfc6d54391b3d39ff73c0398f435082c14c"
+  integrity sha512-EfZLImJ0XNuIdlx5McHX0rJbOiQHz+vEjnpGV08gXSzaq2cN3vSjE+L2Dju7KmaIh85FTYvLOf2REUuCLDpSRg==
+  dependencies:
+    buffer "4.9.2"
+    events "1.1.1"
+    ieee754 "1.1.13"
+    jmespath "0.16.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    util "^0.12.4"
+    uuid "8.0.0"
+    xml2js "0.5.0"
 
 axe-core@^4.2.0, axe-core@^4.6.2:
   version "4.7.2"
@@ -33959,12 +34003,12 @@ urlpattern-polyfill@^9.0.0:
   resolved "https://registry.yarnpkg.com/urlpattern-polyfill/-/urlpattern-polyfill-9.0.0.tgz#bc7e386bb12fd7898b58d1509df21d3c29ab3460"
   integrity sha512-WHN8KDQblxd32odxeIgo83rdVDE2bvdkb86it7bMhYZwWKJz0+O0RK/eZiHYnM+zgt/U7hAHOlCQGfjjvSkw2g==
 
-urql@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/urql/-/urql-4.0.3.tgz#60345dbf04320d6a50c69bc56230c67394449dcf"
-  integrity sha512-ynwez59f5uo31RO9/OD1RveasLGsaRC2mEm5nNGuPiQbpIeuZLQJTya61hr6I9c24YWIHf3Ld29xZy6JW3scvQ==
+urql@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/urql/-/urql-4.0.5.tgz#354106523a523d9b0c4101bf4988c7e34c5a243c"
+  integrity sha512-VicPBQXWicSbE+0oPzU2HMyDa//76FmwyQ7LayaYQxX97nhvMLs2ZWQdUmEzQQqvmw4YFaI0wPz1Qisp+PrZIQ==
   dependencies:
-    "@urql/core" "^4.0.0"
+    "@urql/core" "^4.1.0"
     wonka "^6.3.2"
 
 use-callback-ref@^1.3.0:

@@ -1,27 +1,27 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotebookAvatars, NotebookAvatarsProps } from './NotebookAvatars';
+import { PermissionType } from '@decipad/graphql-client';
 
 const props: NotebookAvatarsProps = {
-  teamUsers: [],
   invitedUsers: [
     {
       user: {
         id: '0',
         name: 'John Doe',
         email: 'foo@nar.com',
-        onboarded: true,
       },
-      permission: 'WRITE',
+      permission: PermissionType.Write,
+      canComment: true,
     },
     {
       user: {
         id: '1',
         name: 'Blake Doe',
         email: 'blake@nar.com',
-        onboarded: true,
       },
-      permission: 'READ',
+      permission: PermissionType.Read,
+      canComment: true,
     },
     {
       user: {
@@ -29,11 +29,11 @@ const props: NotebookAvatarsProps = {
         name: 'Chris Doe',
         email: 'chris@nar.com',
       },
-      permission: 'ADMIN',
+      permission: PermissionType.Admin,
+      canComment: true,
     },
   ],
   isWriter: true,
-  allowInvitation: false,
 };
 
 describe('NotebookAvatars Molecule', () => {

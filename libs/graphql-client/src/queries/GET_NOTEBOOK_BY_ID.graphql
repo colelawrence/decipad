@@ -30,14 +30,6 @@ fragment EditorNotebook on Pad {
   isPublic
   createdAt
   archived
-  access {
-    users {
-      user {
-        ...Collaborator
-      }
-      permission
-    }
-  }
   workspace {
     id
     name
@@ -45,16 +37,12 @@ fragment EditorNotebook on Pad {
     workspaceExecutedQuery {
       ...WorkspaceExecutedQueryData
     }
-    ...WorkspaceMembers
   }
   padConnectionParams {
     url
     token
   }
   initialState
-  snapshots {
-    ...NotebookSnapshot
-  }
 }
 
 query GetNotebookById($id: ID!, $snapshotName: String) {

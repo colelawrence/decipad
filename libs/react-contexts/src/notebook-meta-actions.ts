@@ -1,6 +1,7 @@
-import { createContext, useContext } from 'react';
 import { persist } from 'zustand/middleware';
 import { create } from 'zustand';
+import { Subject } from 'rxjs';
+import { isE2E } from '@decipad/utils';
 
 export interface NotebookMetaActionsType {
   readonly onDeleteNotebook: (notebookId: string, showToast?: true) => void;
@@ -20,24 +21,6 @@ export interface NotebookMetaActionsType {
   ) => Promise<boolean>;
 }
 
-export const NotebookMetaActions = createContext<
-  NotebookMetaActionsType | undefined
->(undefined);
-
-/**
- * Use Notebook Meta Actions to change meta data about a notebook.
- * This includes its section, download actions, archive etc...
- *
- * This should be available both withtin the workspace and notebook.
- */
-export const useNotebookMetaActions = () => {
-  const data = useContext(NotebookMetaActions);
-  if (!data) {
-    throw new Error('Used `useNotebookMetaActions` outside a provider');
-  }
-  return data;
-};
-
 export type SelectedTab = 'variable' | 'block';
 
 export interface NotebookMetaDataType {
@@ -45,23 +28,38 @@ export interface NotebookMetaDataType {
   readonly toggleSidebar: () => void;
   readonly sidebarTab: SelectedTab;
   readonly setSidebarTab: (tab: SelectedTab) => void;
+
+  // More technical stuff
+  readonly hasPublished: Subject<undefined>;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
   persist(
-    (set) => ({
-      sidebarOpen: true,
-      toggleSidebar() {
-        set(({ sidebarOpen }) => ({ sidebarOpen: !sidebarOpen }));
-      },
+    (set) => {
+      return {
+        sidebarOpen: isE2E(),
+        toggleSidebar() {
+          set(({ sidebarOpen }) => ({ sidebarOpen: !sidebarOpen }));
+        },
 
-      sidebarTab: 'block',
-      setSidebarTab(sidebarTab) {
-        set(() => ({ sidebarTab }));
-      },
-    }),
+        sidebarTab: 'block',
+        setSidebarTab(sidebarTab) {
+          set(() => ({ sidebarTab }));
+        },
+
+        hasPublished: new Subject(),
+      };
+    },
     {
       name: 'notebook-ui-meta',
+      partialize(state) {
+        return Object.fromEntries(
+          Object.entries(state).filter(
+            ([key]) => !['hasPublished'].includes(key)
+          )
+        );
+      },
+      skipHydration: true,
     }
   )
 );
