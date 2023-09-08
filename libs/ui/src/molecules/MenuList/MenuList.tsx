@@ -33,6 +33,12 @@ const defaultStyles = css({
   borderRadius: '8px',
 });
 
+const triggerStyles = css({
+  display: 'contents',
+  height: '100%',
+  width: '100%',
+});
+
 const undropdownifyContentStyles = css({
   '>[data-radix-popper-content-wrapper]': { display: 'contents' },
 });
@@ -192,7 +198,9 @@ export const MenuList: FC<MenuListProps> = ({
         onOpenChange={onChangeOpen}
         modal={dropdown}
       >
-        <div ref={triggerRef}>{triggerNode}</div>
+        <div css={triggerStyles} ref={triggerRef}>
+          {triggerNode}
+        </div>
         <DropdownMenuPortalElement portal={portal} container={container}>
           <div
             css={[
