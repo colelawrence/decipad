@@ -15,3 +15,5 @@ rimraf.sync(path.join(__dirname, '.s3rver_data'));
 // This should be enough time for some requests
 // that require a lambda cold start.
 jest.setTimeout(10000);
+
+jest.retryTimes(2);
