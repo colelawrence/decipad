@@ -26,74 +26,84 @@ import { doNotPluralize, normalizeUnitName } from './utils';
 import * as VoltageUnits from './voltage-units';
 import * as VolumeUnits from './volume-units';
 
-export type BaseQuantity =
-  | 'length'
-  | 'area'
-  | 'volume'
-  | 'pressure'
-  | 'force'
-  | 'energy'
-  | 'mass'
-  | 'temperature'
-  | 'second'
-  | 'month'
-  | 'substance'
-  | 'electric current'
-  | 'electric charge'
-  | 'electrical capacitance'
-  | 'electrical resistance'
-  | 'electrical conductance'
-  | 'luminous intensity'
-  | 'luminous flow'
-  | 'solid angle'
-  | 'voltage'
-  | 'speed'
-  | 'power'
-  | 'frequency'
-  | 'information'
-  | 'angle'
-  | 'EUR'
-  | 'USD'
-  | 'GBP'
-  | 'SEK'
-  | 'XXX'
-  | 'NOK'
-  | 'UAH'
-  | 'JPY'
-  | 'CNY'
-  | 'PHP'
-  | 'INR'
-  | 'RUB'
-  | 'TRY'
-  | 'KRW'
-  | 'THB'
-  | 'PLN'
-  | 'ILS'
-  | 'AED'
-  | 'SAR'
-  | 'AUD'
-  | 'CAD'
-  | 'CHF'
-  | 'HKD'
-  | 'NZD'
-  | 'SGD'
-  | 'ZAR'
-  | 'BRL'
-  | 'TWD'
-  | 'DKK'
-  | 'IDR'
-  | 'HUF'
-  | 'CZK'
-  | 'CLP'
-  | 'COP'
-  | 'MYR'
-  | 'RON'
-  | 'BTC'
-  | 'ETH';
+const baseQuantities = [
+  'length',
+  'area',
+  'volume',
+  'pressure',
+  'force',
+  'energy',
+  'mass',
+  'temperature',
+  'second',
+  'month',
+  'year',
+  'substance',
+  'electric current',
+  'electric charge',
+  'electrical capacitance',
+  'electrical resistance',
+  'electrical conductance',
+  'luminous intensity',
+  'luminous flow',
+  'solid angle',
+  'voltage',
+  'speed',
+  'power',
+  'frequency',
+  'information',
+  'angle',
+  'EUR',
+  'USD',
+  'GBP',
+  'SEK',
+  'XXX',
+  'NOK',
+  'UAH',
+  'JPY',
+  'CNY',
+  'PHP',
+  'INR',
+  'RUB',
+  'TRY',
+  'KRW',
+  'THB',
+  'PLN',
+  'ILS',
+  'AED',
+  'SAR',
+  'AUD',
+  'CAD',
+  'CHF',
+  'HKD',
+  'NZD',
+  'SGD',
+  'ZAR',
+  'BRL',
+  'TWD',
+  'DKK',
+  'IDR',
+  'HUF',
+  'CZK',
+  'CLP',
+  'COP',
+  'MYR',
+  'RON',
+  'BTC',
+  'ETH',
+] as const;
+
+export type BaseQuantity = typeof baseQuantities[number];
+const baseQuantitySet: ReadonlySet<string> = new Set(baseQuantities);
+
+export const isBaseQuantity = (unit: string): unit is BaseQuantity =>
+  baseQuantitySet.has(unit);
 
 export type UnitOfMeasure = {
   name: string;
   baseQuantity: BaseQuantity;
+  canConvertTo?: (unit: BaseQuantity) => boolean;
+  convertTo?: (unit: BaseQuantity, n: DeciNumber) => DeciNumber;
   symbols?: string[];
   aliases?: string[];
   pretty?: string;
@@ -245,7 +255,16 @@ export function areUnitsCompatible(
     return false;
   }
 
-  return unitA.baseQuantity === unitB.baseQuantity;
+  const sameBaseQuantity = unitA.baseQuantity === unitB.baseQuantity;
+  if (sameBaseQuantity) {
+    return true;
+  }
+
+  const baseUnit = getUnitByName(unitA.baseQuantity);
+  if (baseUnit?.canConvertTo?.(unitB.baseQuantity)) {
+    return true;
+  }
+  return false;
 }
 
 export { CurrencyUnits };

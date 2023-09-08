@@ -1827,7 +1827,7 @@ describe('number units work together', () => {
   it('handles non-scalar unit conversions', async () => {
     expect(await runCode(`1Kelvin + 2°C + 3°F`)).toMatchObject({
       // 1 + (2 + 273.15) + ((3 - 32) * 5 / 9 + 273.15)
-      // = 1 + 275.15 + 257.03(8) =  533.18(8)
+      // = 1 + 275.15 + 257.03(8) =  533.18(8) Kelvin
       value: N(50007, 100),
       type: t.number(U('°F')),
     });
@@ -1939,14 +1939,16 @@ describe('number units work together', () => {
   });
 
   it('autoconverts expanding expandable units (2)', async () => {
-    expect(await runCode(`1 newton/meter^2 + 2 bar`)).toMatchObject({
+    expect(await runCode(`1 newton/meter^2 + 2 bar in bars`)).toMatchObject({
       value: N(200001, 100000),
       type: t.number(U('bars')),
     });
   });
 
   it('autoconverts expanding expandable units (3)', async () => {
-    expect(await runCode(`2 bar + 1 newton/meter^2`)).toMatchObject({
+    expect(
+      await runCode(`2 bar + 1 newton/meter^2 in newton/meter^2`)
+    ).toMatchObject({
       value: N(200001),
       type: t.number(U([u('meters', { exp: N(-2) }), u('newtons')])),
     });
@@ -2040,7 +2042,7 @@ describe('number units work together', () => {
   });
 
   it('should calculate 1cF + 1cF', async () => {
-    const run = await runCode(`1 cF + 1 cF`);
+    const run = await runCode(`cF + 1 cF`);
 
     expect(run).toMatchObject({
       value: N(2, 100),
@@ -2305,6 +2307,13 @@ describe('unit conversion', () => {
     expect(await runCode(`1000 milliliters in liters`)).toMatchObject({
       value: N(1),
       type: t.number(U('liters')),
+    });
+  });
+
+  it('autoconverts units in different bases correctly', async () => {
+    expect(await runCode(`$60K per year - $100 per month`)).toMatchObject({
+      value: N(4900),
+      type: t.number(U([u('$'), u('months', { exp: N(-1) })])),
     });
   });
 });

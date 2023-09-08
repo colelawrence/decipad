@@ -412,6 +412,11 @@ describe('convert', () => {
     expect(convertBetweenUnits(N(14), U('days'), U('weeks'))).toMatchObject(
       N(2)
     );
+    expect(
+      convertBetweenUnits(N(2), U('months'), U('days'), {
+        tolerateImprecision: true,
+      })
+    ).toMatchObject(N(60));
     expect(convertBetweenUnits(N(2), U('months'), U('years'))).toMatchObject(
       N(2).div(N(12))
     );

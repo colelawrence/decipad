@@ -405,7 +405,7 @@ export const subtractDates = async (
 
   switch (specificity) {
     case 'year': {
-      return N(dateTime1.diff(dateTime2, 'years').years * 12);
+      return N(dateTime1.diff(dateTime2, 'years').years);
     }
     case 'month': {
       return N(dateTime1.diff(dateTime2, 'months').months);

@@ -1,4 +1,4 @@
-import DeciNumber from '@decipad/number';
+import DeciNumber, { ONE } from '@decipad/number';
 import { produce, getDefined } from '@decipad/utils';
 import { getUnitByName } from './known-units';
 import { expandUnits, contractUnits } from './expand';
@@ -21,18 +21,24 @@ function areQuantityUnitsCompatible(
 ): boolean {
   if (a.unit === b.unit && a.exp.equals(b.exp)) {
     return true;
-  } else if (tolerateImprecision && a.exp.equals(b.exp)) {
-    const baseA = getBaseQuantity(a);
-    const baseB = getBaseQuantity(b);
-    return getImpreciseConversionFactor(baseA, baseB) != null;
   } else {
-    return false;
+    const knownUnitA = getUnitByName(a.unit);
+    const knownUnitB = getUnitByName(b.unit);
+    if (knownUnitB && knownUnitA?.canConvertTo?.(knownUnitB.baseQuantity)) {
+      return true;
+    }
+    if (tolerateImprecision && a.exp.equals(b.exp)) {
+      const baseA = getBaseQuantity(a);
+      const baseB = getBaseQuantity(b);
+      return getImpreciseConversionFactor(baseA, baseB) != null;
+    }
   }
+  return false;
 }
 
 function areQuantityUnitsReversible(
-  a: Unit[] | null,
-  b: Unit[] | null
+  a: Unit[] | null | undefined,
+  b: Unit[] | null | undefined
 ): boolean {
   if (!a || !b) {
     return false;
@@ -49,7 +55,9 @@ function areQuantityUnitsReversible(
   );
 }
 
-function baseQuantityUnits(units: Unit[] | null): Unit[] | null {
+function baseQuantityUnits(
+  units: Unit[] | null | undefined
+): Unit[] | null | undefined {
   if (!units?.length) {
     return units;
   }
@@ -105,7 +113,7 @@ export function areUnitsConvertible(
 export function toExpandedBaseQuantity(
   n: DeciNumber,
   sourceUnits: Unit[]
-): [Unit[] | null, DeciNumber] {
+): [Unit[] | null | undefined, DeciNumber] {
   const [expandedUnits, convert] = expandUnits(sourceUnits);
   return [expandedUnits, convert(n)];
 }
@@ -132,6 +140,8 @@ export function convertBetweenUnits(
   if (tolerateImprecision && !areUnitsConvertible(from, to)) {
     // It's not convertible precisely, let's go imprecise
     n = impreciselyConvertBetweenUnits(n, from, to);
+  } else {
+    n = maybePreciselyConvertBetweenKnownUnits(n, from, to);
   }
 
   const [expandedUnits, expandedN] = toExpandedBaseQuantity(n, from);
@@ -147,6 +157,44 @@ export function convertBetweenUnits(
   }
 
   return revertedN;
+}
+
+function maybePreciselyConvertBetweenKnownUnits(
+  _n: DeciNumber,
+  _from: Unit[],
+  _to: Unit[]
+): DeciNumber {
+  let n = _n;
+  const from = getDefined(normalizeUnits(_from), 'could not normalize units');
+  const to = getDefined(normalizeUnits(_to), 'could not normalize units');
+  for (const fromU of from) {
+    for (const toU of to) {
+      const basicCompat = areQuantityUnitsCompatible(fromU, toU);
+      if (!basicCompat) {
+        continue;
+      }
+
+      const fromBase = getUnitByName(fromU.unit);
+      const toBase = getUnitByName(toU.unit);
+
+      if (fromBase?.name === toBase?.name) {
+        continue;
+      }
+
+      const conversion =
+        fromBase &&
+        toBase?.baseQuantity &&
+        fromBase.convertTo &&
+        n.mul(fromBase.convertTo(toBase.baseQuantity, ONE).pow(toU.exp));
+
+      if (!conversion) {
+        continue;
+      }
+      n = conversion;
+    }
+  }
+
+  return n;
 }
 
 // eslint-disable-next-line complexity

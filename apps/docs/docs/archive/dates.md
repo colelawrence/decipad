@@ -98,22 +98,6 @@ round(1 month in weeks, 1)
 ==> 4.3 weeks
 ```
 
-However, you need to be mindful. Now, `year` is defined as a number of days. So you can't convert a year into a decade for example:
-
-```deci live
-year = 365 days
-1 year in decades
-==> 0.1013(8) decades
-```
-
-But you still can convert a decade into years, since the definition of `decade` is unchanged and it will ignore your user defined `year`.
-
-```deci live
-year = 365 days
-1 decade in years
-==> 10 years
-```
-
 ## Formulas on dates
 
 Here is a list of all the functions that work on dates.

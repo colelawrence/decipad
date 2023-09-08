@@ -2,6 +2,7 @@ import DeciNumber, { N } from '@decipad/number';
 
 const dayInSeconds = 86400;
 const monthInSeconds = N(dayInSeconds * 30);
+const yearInSeconds = N(31536000);
 
 /**
  * Convert between base quantities that are almost equivalent
@@ -11,7 +12,11 @@ export const impreciseConversions: ImpreciseConversions = {
     second: monthInSeconds,
   },
   second: {
-    month: N(1).div(monthInSeconds),
+    month: monthInSeconds.inverse(),
+    year: yearInSeconds.inverse(),
+  },
+  year: {
+    second: yearInSeconds,
   },
 };
 

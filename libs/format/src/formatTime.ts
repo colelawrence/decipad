@@ -9,21 +9,24 @@ import {
 import pluralize from 'pluralize';
 import type { IntermediateDeciNumber } from './formatNumber';
 import { Options, prettifyTimeMs as getPrettyPartsOfTime } from './parseMs';
+import { once } from '@decipad/utils';
 
-const ms = [parseUnit('millisecond')] as Unit[];
+const ms = once(() => [parseUnit('millisecond')] as Unit[]);
 
 export function fromTimeUnitToTimeBase(
   unit: Unit[],
   n: DeciNumber
 ): [DeciNumber, boolean] {
+  const [firstUnit] = unit;
   const unitLargerThanDay =
-    unit[0].baseQuantity === 'month' ||
-    normalizeUnitName(unit[0].unit) === 'week';
+    firstUnit.baseQuantity === 'month' ||
+    firstUnit.baseQuantity === 'year' ||
+    normalizeUnitName(firstUnit.unit) === 'week';
   if (unitLargerThanDay) {
     return [n, false];
   }
-  if (areUnitsConvertible(unit, ms)) {
-    return [convertBetweenUnits(n, unit, ms), true];
+  if (areUnitsConvertible(unit, ms())) {
+    return [convertBetweenUnits(n, unit, ms()), true];
   }
   throw new Error('Invalid conversion to non time unit');
 }

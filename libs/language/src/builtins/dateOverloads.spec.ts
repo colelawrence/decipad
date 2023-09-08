@@ -236,7 +236,7 @@ describe('date overloads', () => {
       DeciNumber {
         "d": 1n,
         "infinite": false,
-        "n": 12n,
+        "n": 1n,
         "s": 1n,
       }
     `);

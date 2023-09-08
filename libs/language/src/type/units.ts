@@ -182,11 +182,16 @@ export const simplifyUnits = (units: Unit[]): Unit[] =>
     }, [])
     .filter((unit) => N(unit.exp).compare(ZERO) !== 0) as Unit[];
 
+export const normalizeUnitNameString = (unitName: string): string => {
+  const symbolUnit = getUnitByName(unitName);
+  return symbolUnit?.name ?? unitName;
+};
+
 export const normalizeUnitName = (unit: Unit): Unit => {
-  const symbolUnit = getUnitByName(unit.unit);
+  const symbolUnit = normalizeUnitNameString(unit.unit);
   if (symbolUnit) {
     return produce(unit, (unit) => {
-      unit.unit = symbolUnit.name;
+      unit.unit = symbolUnit;
     });
   }
   return unit;

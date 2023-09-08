@@ -11,6 +11,7 @@ const baseQuantityToBaseUnit: Record<BaseQuantity, string> = {
   temperature: 'kelvin',
   second: 'second',
   month: 'month',
+  year: 'year',
   substance: 'mole',
   'electric current': 'ampere',
   'electric charge': 'coulomb',

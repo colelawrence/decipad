@@ -26,6 +26,11 @@ export function contractUnits(
   if (!units?.length) {
     return [null, identity];
   }
-  const [, converter] = expandUnits(units, nonScalarInversion, scalarInversion);
-  return [units, converter];
+  const [contractedUnits, converter] = expandUnits(
+    units,
+    nonScalarInversion,
+    scalarInversion
+  );
+
+  return [contractedUnits ?? units, converter];
 }

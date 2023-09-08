@@ -1,11 +1,15 @@
 import DeciNumber, { ONE } from '@decipad/number';
 import { produce, getDefined, identity } from '@decipad/utils';
-import { UnitOfMeasure, getUnitByName } from '../known-units';
+import { UnitOfMeasure, getUnitByName, isBaseQuantity } from '../known-units';
 import { normalizeUnits, Unit } from '../../type';
 import { BaseQuantityExpansion, expansions } from './expansions';
 import { baseUnitForBaseQuantity } from '../base-units';
-import { Converter, ExpandUnitResult } from '.';
-import { normalizeUnitNames } from '../../type/units';
+import {
+  Converter,
+  ExpandUnitResult,
+  ExpandUnitResultWithNullableUnits,
+} from '.';
+import { normalizeUnitNameString, normalizeUnitNames } from '../../type/units';
 
 export type NonScalarExpansion = (u: Unit) => [Unit, Converter];
 export type ScaleConverter = (convert: Converter) => Converter;
@@ -100,10 +104,11 @@ export function expandUnit(
 function expandUnitArgs(
   _units: Unit[],
   nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
-  scale: ScaleConverter = identity
-): [Unit[] | null, Converter] {
+  scale: ScaleConverter = identity,
+  _converter: Converter = identity
+): ExpandUnitResultWithNullableUnits {
   let units = _units;
-  let converter: Converter = identity;
+  let converter = _converter;
   let beforeCount = units.length;
   // eslint-disable-next-line no-constant-condition
   while (true) {
@@ -126,16 +131,74 @@ function expandUnitArgs(
   return [units, converter];
 }
 
+function convertCompatibleUnitArgs(
+  units: Unit[],
+  _converter: Converter = identity
+): ExpandUnitResult {
+  let converter = _converter;
+  const convertedUnits = units.map((sourceUnit) => {
+    const knownSourceUnit = getUnitByName(sourceUnit.unit);
+    if (knownSourceUnit) {
+      for (const targetUnit of units) {
+        if (
+          targetUnit === sourceUnit ||
+          !targetUnit.exp.equals(sourceUnit.exp)
+        ) {
+          continue;
+        }
+
+        const targetUnitName = normalizeUnitNameString(targetUnit.unit);
+        if (
+          isBaseQuantity(targetUnitName) &&
+          knownSourceUnit.canConvertTo?.(targetUnitName) &&
+          knownSourceUnit.convertTo != null
+        ) {
+          const targetUnitOfMeasure = getDefined(getUnitByName(targetUnitName));
+          const previousConverter = converter;
+          const { convertTo } = knownSourceUnit;
+          if (convertTo != null) {
+            console.log(
+              `will apply converter to convert from ${knownSourceUnit.name} to ${targetUnitName}`
+            );
+            converter = (n) => {
+              console.log(sourceUnit.unit, sourceUnit.exp.toString());
+              const previousValue = previousConverter(n);
+              console.log('previousValue', previousValue);
+              return previousValue.mul(
+                convertTo(targetUnitName, ONE).pow(sourceUnit.exp)
+              );
+            };
+            return produce(sourceUnit, (sourceUnit) => {
+              sourceUnit.unit = targetUnitOfMeasure.name;
+            });
+          }
+        }
+      }
+    }
+    return sourceUnit;
+  });
+  return [convertedUnits, converter];
+}
+
+function expandAndConvertUnitArgs(
+  _units: Unit[],
+  nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
+  scale: ScaleConverter = identity
+): ExpandUnitResultWithNullableUnits {
+  const [units, converter] = convertCompatibleUnitArgs(_units);
+  return expandUnitArgs(units, nonScalarExpansion, scale, converter);
+}
+
 export function expandUnits(
   units?: Unit[] | null,
   nonScalarExpansion: NonScalarExpansion = nonScalarExpansionFromBaseQuantity,
   scale: ScaleConverter = identity
-): [Unit[] | null, Converter] {
+): ExpandUnitResultWithNullableUnits {
   if (!units?.length) {
     return [null, identity];
   }
 
-  const [unitArgs, converter] = expandUnitArgs(
+  const [unitArgs, converter] = expandAndConvertUnitArgs(
     normalizeUnitNames(units),
     nonScalarExpansion,
     scale
