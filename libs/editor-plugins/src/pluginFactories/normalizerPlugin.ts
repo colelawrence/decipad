@@ -179,7 +179,6 @@ const withNormalizerOverride = (
           (err as Error).message
         }`;
         captureException(err);
-        return undefined;
       }
       return nextNormalizer(entry);
     };

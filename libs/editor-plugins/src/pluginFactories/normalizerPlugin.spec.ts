@@ -1,4 +1,4 @@
-import { createPlateEditor, normalizeEditor } from '@udecode/plate';
+import { ELEMENT_H1, createPlateEditor, normalizeEditor } from '@udecode/plate';
 import { createTPlateEditor, ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from './normalizerPlugin';
 
@@ -78,6 +78,37 @@ describe('createNormalizerPluginFactory', () => {
           {
             type: 'el2',
             children: [{ text: '' }],
+          },
+        ],
+      },
+    ]);
+  });
+
+  it('still continues normalization if normalizer fails', () => {
+    const plugin = createNormalizerPluginFactory({
+      name: 'test createNormalizerPlugin',
+      elementType: ELEMENT_H1,
+      plugin: () => () => {
+        throw new Error('test error');
+      },
+    });
+    const editor = createTPlateEditor({
+      plugins: [plugin()],
+    });
+    editor.children = [
+      {
+        type: ELEMENT_H1,
+        children: [],
+      } as never,
+    ];
+
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toEqual([
+      {
+        type: ELEMENT_H1,
+        children: [
+          {
+            text: '',
           },
         ],
       },
