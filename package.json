@@ -446,7 +446,7 @@
     "npm-check": "^6.0.1",
     "npm-run-all": "4.1.5",
     "nx": "16.8.0",
-    "nx-cloud": "16.3.0",
+    "nx-cloud": "16.4.0",
     "p-time": "2",
     "prettier": "2.8.1",
     "react-dev-utils": "12.0.1",
