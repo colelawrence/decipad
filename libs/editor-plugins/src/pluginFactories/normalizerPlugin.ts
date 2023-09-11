@@ -106,7 +106,7 @@ const withNormalizerOverride = (
     const myEditor = getMyEditor(editor);
 
     const { normalizeNode } = myEditor;
-    const newNormalize = plugin && plugin(editor);
+    const newNormalize = plugin?.(editor);
 
     const removeUnacceptableElementProperties =
       withRemoveUnacceptableElementProperties(
@@ -122,6 +122,9 @@ const withNormalizerOverride = (
 
     const nextNormalizer: typeof normalizeNode = (entry) => {
       const [node, path] = entry;
+      if (!hasNode(editor, path)) {
+        return;
+      }
       if (isElement(node)) {
         const existentNode = getNode(editor, path);
         if (
