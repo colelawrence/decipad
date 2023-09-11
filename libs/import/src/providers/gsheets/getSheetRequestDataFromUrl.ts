@@ -17,7 +17,12 @@ const getSheetRequestDataFromApiUrl = (sheetUrl: URL): SheetRequestData => {
 };
 
 const getSheetRequestDataFromUserUrl = (sheetUrl: URL): SheetRequestData => {
-  const match = sheetUrl.pathname.match(/^\/spreadsheets\/d\/([^/]+)\/edit/);
+  let match = sheetUrl.pathname.match(/^\/spreadsheets\/d\/([^/]+)\/edit/);
+  if (!match) {
+    match = sheetUrl.pathname.match(
+      /^\/spreadsheets\/u\/[^/]+\/d\/([^/]+)\/edit/
+    );
+  }
   if (!match) {
     throw new Error(`Could not extract sheet id from ${sheetUrl}`);
   }
