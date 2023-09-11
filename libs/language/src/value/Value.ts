@@ -418,7 +418,7 @@ export class Table implements Value {
     this.columnNames = columnNames;
   }
 
-  static fromNamedColumns(columns: Value[], columnNames: string[]) {
+  static fromNamedColumns(columns: Value[] = [], columnNames: string[] = []) {
     return new Table(
       columns.map((c) => (isColumnLike(c) ? c : new EmptyColumn([]))),
       columnNames
