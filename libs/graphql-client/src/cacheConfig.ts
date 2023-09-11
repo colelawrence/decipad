@@ -107,43 +107,42 @@ export const graphCacheConfig: GraphCacheConfig = {
         addNotebookToItsWorkspace(cache, result.importPad as Pad);
       },
       updatePad: (_result, args, cache) => {
-        if (args.pad.icon) {
-          cache.updateQuery<GetNotebookByIdQuery>(
-            {
-              query: GetNotebookByIdDocument,
-              variables: {
-                id: args.id,
-              },
+        cache.updateQuery<GetNotebookByIdQuery>(
+          {
+            query: GetNotebookByIdDocument,
+            variables: {
+              id: args.id,
             },
-            (data) => {
-              if (!data?.getPadById) return data;
+          },
+          (data) => {
+            if (!data?.getPadById) return data;
 
-              data.getPadById.icon = args.pad.icon;
-              return data;
+            for (const [k, v] of Object.entries(args.pad)) {
+              if (v != null) {
+                data.getPadById[k as keyof typeof data.getPadById] = v;
+              }
             }
-          );
-          return;
-        }
-
-        if (args.pad.status) {
-          cache.updateQuery<GetNotebookByIdQuery>(
-            {
-              query: GetNotebookByIdDocument,
-              variables: {
-                id: args.id,
-              },
+            return data;
+          }
+        );
+        cache.updateQuery<GetNotebookMetaQuery>(
+          {
+            query: GetNotebookMetaDocument,
+            variables: {
+              id: args.id,
             },
-            (data) => {
-              if (!data?.getPadById) return data;
+          },
+          (data) => {
+            if (!data?.getPadById) return data;
 
-              data.getPadById.status = args.pad.status;
-              return data;
+            for (const [k, v] of Object.entries(args.pad)) {
+              if (v != null) {
+                data.getPadById[k as keyof typeof data.getPadById] = v;
+              }
             }
-          );
-          return;
-        }
-
-        cache.invalidate({ __typename: 'Pad', id: args.id });
+            return data;
+          }
+        );
       },
       setPadPublic: (_result, args, cache) => {
         cache.updateQuery<GetNotebookMetaQuery>(
