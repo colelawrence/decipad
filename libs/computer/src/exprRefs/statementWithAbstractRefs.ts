@@ -82,7 +82,7 @@ export const statementWithAbstractRefs = <T extends AST.Statement>(
           // we want to convert column access expr refs to the column name
           const block = varNameToBlockMap.get(colName);
           if (block && block.definesTableColumn) {
-            colRef.args[0] = getDefined(block.definesTableColumn.at(1));
+            colRef.args[0] = getDefined(block.definesTableColumn[1]);
           }
         }
         if (expr.type === 'ref') {
