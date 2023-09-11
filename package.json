@@ -92,7 +92,7 @@
     "@aws-sdk/s3-presigned-post": "^3.409.0",
     "@aws-sdk/s3-request-presigner": "^3.409.0",
     "@babel/runtime": "7.22.3",
-    "@chakra-ui/css-reset": "2.2.0",
+    "@chakra-ui/css-reset": "2.3.0",
     "@codemirror/lang-javascript": "^6.2.0",
     "@codemirror/lang-sql": "^6.5.2",
     "@decipad/safejs": "^1.0.2",
