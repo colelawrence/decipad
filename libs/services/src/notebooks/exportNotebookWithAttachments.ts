@@ -25,7 +25,7 @@ const serialize = (_: string, value: unknown): unknown =>
   typeof value === 'bigint' ? value.toString() : value;
 
 const getNotebookTitle = (document: Document): string =>
-  getNodeString(document?.children[0]) || 'notebook';
+  getNodeString(document?.children[0] ?? { text: '' }) || 'notebook';
 
 export const exportNotebookWithAttachments = async ({
   notebookId,
