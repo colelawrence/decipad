@@ -8,6 +8,7 @@ import {
   processSessionComplete,
   processSubscriptionUpdated,
   processSubscriptionDeleted,
+  processInvoiceCreated,
 } from './processStripeEvents';
 
 const stripeConfig = thirdParty().stripe;
@@ -32,6 +33,8 @@ export const handler = handle(async (event: APIGatewayProxyEventV2) => {
     );
 
     switch (stripeEvent.type) {
+      case 'invoice.created':
+        return processInvoiceCreated(stripeEvent);
       case 'checkout.session.completed':
         return processSessionComplete(stripeEvent);
       case 'customer.subscription.updated':
