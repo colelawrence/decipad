@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { cssVar, p13Regular, p14Medium, p14Regular } from '../../primitives';
-import { Link } from '../../icons';
-import { Tooltip } from '../../atoms';
+import { Link as LinkIcon } from '../../icons';
+import { Tooltip, Link } from '../../atoms';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useContext, useState } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
@@ -97,12 +97,25 @@ export const NotebookEmbedTab = ({
           <div css={groupStyles}>
             <div css={titleStyles}>
               <p css={css(p14Medium, { color: cssVar('textHeavy') })}>
-                Embed notebook
+                {isPublished ? 'Embed notebook' : 'Publish to enable embedding'}
               </p>
               <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
-                {isPublished
-                  ? 'You can embed notebook in other tools by pasting the link below'
-                  : 'You can embed the notebook in other tools only after publishing it'}
+                {isPublished ? (
+                  'You can embed notebook in other tools by pasting the link below'
+                ) : (
+                  <>
+                    <span css={{ marginRight: 4 }}>
+                      You can embed the notebook in other tools only after
+                      publishing it.
+                    </span>
+                    <Link
+                      color="plain"
+                      href="https://app.decipad.com/docs/share/embeds"
+                    >
+                      Check out docs
+                    </Link>
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -139,7 +152,7 @@ export const NotebookEmbedTab = ({
                         data-testid="copy-published-link"
                         css={copyInnerButtonStyles}
                       >
-                        <Link />
+                        <LinkIcon />
                         <span css={{ paddingTop: '1px' }}>Copy</span>
                       </button>
                     </CopyToClipboard>

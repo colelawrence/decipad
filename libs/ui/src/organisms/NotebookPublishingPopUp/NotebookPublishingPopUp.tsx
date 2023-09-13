@@ -106,6 +106,8 @@ export const NotebookPublishingPopUp = ({
 }: NotebookSharingPopUpProps): ReturnType<FC> => {
   const [selectedTab, setSelectedTab] = useState<TabStates>('Collaborate');
 
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const selectTab = (tab: TabStates) => {
     setSelectedTab(tab);
   };
@@ -201,6 +203,8 @@ export const NotebookPublishingPopUp = ({
               link={link}
               hasUnpublishedChanges={hasUnpublishedChanges}
               currentSnapshot={currentSnapshot}
+              isPublishing={isPublishing}
+              setIsPublishing={setIsPublishing}
               onPublish={onPublish}
               onUnpublish={onUnpublish}
               setShareMenuOpen={setShareMenuOpen}
@@ -242,6 +246,8 @@ export const NotebookPublishingPopUp = ({
                 link={link}
                 hasUnpublishedChanges={hasUnpublishedChanges}
                 currentSnapshot={currentSnapshot}
+                isPublishing={isPublishing}
+                setIsPublishing={setIsPublishing}
                 onPublish={onPublish}
                 onUnpublish={onUnpublish}
                 setShareMenuOpen={setShareMenuOpen}
@@ -260,7 +266,7 @@ export const NotebookPublishingPopUp = ({
       onOpenChange={onToggleShareMenu}
     >
       <Popover.Trigger asChild>
-        {isPublished && hasUnpublishedChanges ? (
+        {isPublished && hasUnpublishedChanges && !isPublishing && isAdmin ? (
           <Button
             type="primaryBrand"
             onClick={toggleMenuOpen}

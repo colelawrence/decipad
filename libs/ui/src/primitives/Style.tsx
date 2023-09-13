@@ -444,6 +444,8 @@ export interface ComponentCssVariables {
   LinkDefaultHoverColor: string;
   LinkDangerColor: string;
   LinkDangerHoverColor: string;
+  LinkPlainColor: string;
+  LinkPlainHoverColor: string;
   // ------------- End Links ------------------
 
   // ------------- AI Colors ------------------
@@ -559,6 +561,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       LinkDefaultHoverColor: blue700.hex,
       LinkDangerColor: red500.hex,
       LinkDangerHoverColor: red700.hex,
+      LinkPlainColor: black.hex,
+      LinkPlainHoverColor: grey600.hex,
 
       AiTextColor: teal600.hex,
       AiBubbleBackgroundColor: teal50.hex,
@@ -650,6 +654,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       LinkDefaultHoverColor: blue700.hex,
       LinkDangerColor: red500.hex,
       LinkDangerHoverColor: red700.hex,
+      LinkPlainColor: dark100.hex,
+      LinkPlainHoverColor: dark400.hex,
 
       AiTextColor: teal500.hex,
       AiBubbleBackgroundColor: teal800.hex,

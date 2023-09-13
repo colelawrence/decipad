@@ -107,6 +107,8 @@ interface NotebookPublishTabProps {
       }
     | undefined;
   readonly setShareMenuOpen: (open: boolean) => void;
+  readonly isPublishing: boolean;
+  readonly setIsPublishing: (isPublishing: boolean) => void;
   readonly onPublish: NotebookMetaActionsReturn['onPublishNotebook'];
   readonly onUnpublish: NotebookMetaActionsReturn['onUnpublishNotebook'];
 }
@@ -119,6 +121,8 @@ export const NotebookPublishTab = ({
   currentSnapshot,
   link,
   setShareMenuOpen,
+  isPublishing,
+  setIsPublishing,
   onPublish,
   onUnpublish,
 }: NotebookPublishTabProps) => {
@@ -127,7 +131,6 @@ export const NotebookPublishTab = ({
     useState(false);
 
   const [toggleState, setToggleState] = useState(isPublished);
-  const [isPublishing, setIsPublishing] = useState(false);
 
   const onPublishToggle = useCallback(
     (newIsPublished: boolean) => {
@@ -139,7 +142,7 @@ export const NotebookPublishTab = ({
       }
       onUnpublish(notebookId).then(() => setIsPublishing(false));
     },
-    [notebookId, onPublish, onUnpublish]
+    [notebookId, onPublish, onUnpublish, setIsPublishing]
   );
   return (
     <div css={innerPopUpStyles}>
@@ -159,10 +162,8 @@ export const NotebookPublishTab = ({
                   Publish Online
                 </p>
                 <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
-                  {isPublishing
-                    ? 'Creating link...'
-                    : isPublished
-                    ? 'Anyone with link can view'
+                  {!isPublished && isPublishing
+                    ? 'Creating a link...'
                     : 'Anyone with link can view'}
                 </p>
               </div>
@@ -192,19 +193,20 @@ export const NotebookPublishTab = ({
           )}
           <div css={horizontalGroupStyles}>
             <Button
-              type="secondary"
+              size="extraSlim"
+              type="tertiaryAlt"
               onClick={() => onPublish(notebookId)}
               disabled={isPublishing}
               testId="publish-changes"
             >
               {isPublishing ? (
-                <span>Sharing...</span>
+                <span>Publishing...</span>
               ) : (
                 <span
                   css={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}
                 >
                   <Dot noBorder size={4} position="relative" />
-                  Share with new changes
+                  Publish with new changes
                 </span>
               )}
             </Button>

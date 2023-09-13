@@ -4,7 +4,7 @@ import { HTMLPropsAs } from '@udecode/plate';
 import { Anchor } from '../../utils';
 import { componentCssVars } from '../../primitives';
 
-type LinkColor = 'default' | 'danger';
+type LinkColor = 'default' | 'danger' | 'plain';
 
 const styles = css({
   cursor: 'pointer',
@@ -29,6 +29,13 @@ const styleColors: Record<LinkColor, SerializedStyles> = {
       color: componentCssVars('LinkDangerHoverColor'),
     },
     ':visited': { color: componentCssVars('LinkDangerHoverColor') },
+  }),
+  plain: css({
+    color: componentCssVars('LinkPlainColor'),
+    ':hover,:visited:hover': {
+      color: componentCssVars('LinkPlainHoverColor'),
+    },
+    ':visited': { color: componentCssVars('LinkPlainHoverColor') },
   }),
 };
 
