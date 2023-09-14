@@ -1,5 +1,4 @@
 ---
-sidebar_position: 2
 sidebar_class_name: new
 ---
 
@@ -9,9 +8,9 @@ sidebar_class_name: new
 
 ## Share Your Notebook
 
-1. Open your notebook and click the `+` button on the top bar.
-2. Select a role for the person you want to invite.
-3. Enter their email address.
+1. Open your notebook and click the `Share` button on the top bar and select `Collaborate`.
+3. Enter the email address and role of the person you want to invite.
+2. Click `Send invite` to send an email with an invite link.
 
 There are two roles you can assign to your teammate:
 
@@ -20,14 +19,13 @@ There are two roles you can assign to your teammate:
 
 ## Change Access Permissions
 
-1. Click the `+` button near your avatar on the top bar of your notebook.
-2. Use the role dropdown to update the permissions.
-3. f
+1. Click the `Share` button on the top bar and select `Collaborate`.
+2. Use the role dropdown next to each person's name to update the permissions.
 
 ## Remove Access to Your Notebook
 
-1. Click the `+` button near your avatar on the top bar of your notebook.
-2. Press the role dropdown and choose `Remove`.
+1. Click the `Share` button on the top bar and select `Collaborate`.
+2. Press the role dropdown next to each person's name and choose `Remove`.
 
 **Note**: If your notebook has been published, users with the link will still be able to access your notebook as a reader. <br/> [Learn more about publishing Notebooks →](/docs/share/publish).
 

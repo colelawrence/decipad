@@ -1,22 +1,23 @@
----
-sidebar_position: 3
----
 
 # Publish Notebooks
 
-![Publish](https://user-images.githubusercontent.com/12210180/198083883-9ce40254-d19d-4176-b93d-fa6b4e2565c0.gif)
+import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
+
+<AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/publishvideo.mov" playbackSpeed={2} />
 
 ## Make Your Notebooks Public
 
 1.  Open the notebook you want to publish.
-2.  Click on the `Publish` button located in the top right-hand corner of the screen.
-3.  To make the notebook public, toggle the `Publish Notebook` switch to the `on` position. This will generate a link that you can share with anyone who wants to access the notebook.
-4.  To publish any new changes to an already published notebook, click the `Publish New Changes` button.
-5.  To make the notebook private again, toggle the `Publish Notebook` switch to the `off` position.
+2.  Click on the `Share` button located in the top right-hand corner of the screen and select `Publish`.
+3.  To make the notebook public, toggle the `Publish Online` switch to the `on` position. This will generate a link that you can share with anyone who wants to access the notebook.
+4.  To publish any new changes to an already published notebook, click the `Share with new changes` button.
+5.  To make the notebook private again, toggle the `Publish Online` switch to the `off` position.
 
 ## Hide Blocks from Readers
 
 When you publish your notebook, you can choose to hide specific blocks from readers. This allows you to control the visibility of certain content.
+
+<AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/hidereader.mov" playbackSpeed={2} />
 
 #### Here's how you can hide a block from a reader:
 
