@@ -5,6 +5,7 @@ import {
   createWorkspace,
   getClearText,
   Timeouts,
+  snapshot,
 } from '../utils/src';
 
 const executeCode = (page: Page, sourcecode: string, x: number) =>
@@ -27,6 +28,10 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
       .locator('div')
       .first()
       .fill(sourcecode);
+
+    await snapshot(page, 'Notebook: Js Code Editor', {
+      mobile: false,
+    });
 
     await page.getByTestId('text-icon-button:Run').click();
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();

@@ -3,7 +3,12 @@ import stringify from 'json-stringify-safe';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
 import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
-import { createWorkspace, importNotebook } from '../utils/src';
+import {
+  createWorkspace,
+  importNotebook,
+  snapshot,
+  Timeouts,
+} from '../utils/src';
 
 test.describe('Use case: building a candle business', () => {
   test.describe.configure({ mode: 'serial' });
@@ -11,6 +16,7 @@ test.describe('Use case: building a candle business', () => {
   let page: Page;
   let context: BrowserContext;
   let workspaceId: string;
+  let notebookId: string;
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
@@ -30,7 +36,7 @@ test.describe('Use case: building a candle business', () => {
   });
 
   test('loads and computes the "starting a candle business notebook"', async () => {
-    const notebookId = await importNotebook(
+    notebookId = await importNotebook(
       workspaceId,
       Buffer.from(stringify(startingACandleBusiness), 'utf-8').toString(
         'base64'
@@ -150,5 +156,15 @@ test.describe('Use case: building a candle business', () => {
 | 2027 | ≈$134.45K  | ≈$48.4K         | $9,680.4 | ≈$38.72K  |
 '------------------------------------------------------------'`
     );
+  });
+
+  test('load embed version of the notebook', async () => {
+    await page.goto(`/n/${notebookId}?embed=true`);
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
+    await snapshot(page, 'Embed: Start a Candle Business', {
+      mobile: true,
+    });
   });
 });
