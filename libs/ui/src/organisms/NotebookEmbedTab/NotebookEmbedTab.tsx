@@ -1,7 +1,13 @@
 import { css } from '@emotion/react';
-import { cssVar, p13Regular, p14Medium, p14Regular } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p13Regular,
+  p14Medium,
+  p14Regular,
+} from '../../primitives';
 import { Link as LinkIcon } from '../../icons';
-import { Tooltip, Link } from '../../atoms';
+import { Tooltip, Link, Badge } from '../../atoms';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useContext, useState } from 'react';
 import { ClientEventsContext } from '@decipad/client-events';
@@ -22,6 +28,7 @@ const groupStyles = css({
 const titleStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  gap: 8,
 });
 
 /**
@@ -98,24 +105,35 @@ export const NotebookEmbedTab = ({
             <div css={titleStyles}>
               <p css={css(p14Medium, { color: cssVar('textHeavy') })}>
                 {isPublished ? 'Embed notebook' : 'Publish to enable embedding'}
+                <Badge
+                  styles={css({
+                    marginLeft: 6,
+                    backgroundColor: componentCssVars(
+                      'ButtonPrimaryHoverBackground'
+                    ),
+                  })}
+                >
+                  beta
+                </Badge>
               </p>
               <p css={css(p14Regular, { color: cssVar('textSubdued') })}>
                 {isPublished ? (
-                  'You can embed notebook in other tools by pasting the link below'
+                  <span css={{ marginRight: 4 }}>
+                    You can embed notebook in other tools by pasting the link
+                    below.
+                  </span>
                 ) : (
-                  <>
-                    <span css={{ marginRight: 4 }}>
-                      You can embed the notebook in other tools only after
-                      publishing it.
-                    </span>
-                    <Link
-                      color="plain"
-                      href="https://app.decipad.com/docs/share/embeds"
-                    >
-                      Check out docs
-                    </Link>
-                  </>
+                  <span css={{ marginRight: 4 }}>
+                    You can embed the notebook in other tools only after
+                    publishing it.
+                  </span>
                 )}
+                <Link
+                  color="plain"
+                  href="https://app.decipad.com/docs/share/embeds"
+                >
+                  Check out docs
+                </Link>
               </p>
             </div>
           </div>

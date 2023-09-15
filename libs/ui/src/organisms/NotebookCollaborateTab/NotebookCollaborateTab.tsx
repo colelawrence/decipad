@@ -26,6 +26,7 @@ const innerPopUpStyles = css({
 const titleStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  gap: 4,
 });
 
 const invitationButtonContentStyles = css({

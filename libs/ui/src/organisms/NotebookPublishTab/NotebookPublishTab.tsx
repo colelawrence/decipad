@@ -41,6 +41,7 @@ const titleAndToggleStyles = css(horizontalGroupStyles, {
 const titleStyles = css({
   display: 'flex',
   flexDirection: 'column',
+  gap: 4,
 });
 
 /**
@@ -178,7 +179,7 @@ export const NotebookPublishTab = ({
           </div>
         </>
       )}
-      {isAdmin && hasUnpublishedChanges && (
+      {isAdmin && isPublished && hasUnpublishedChanges && (
         <div css={groupStyles}>
           {(currentSnapshot?.createdAt || currentSnapshot?.updatedAt) && (
             <p css={p13Regular} data-testid="version-date">
