@@ -49,3 +49,7 @@ Add data insights or calculations to any webpage with Decipad embeds.
 ## Request other apps
 
 Don’t see an app you want to embed on? Please reach out to [support@decipad.com](mailto:support@decipad.com) or use the Help Button at the bottom of your Decipad app to share your request and our team will try to accommodate.
+
+## Embeds not loading
+
+Make sure you have third-party cookies enabled in your browser for Decipad embeds to work.
