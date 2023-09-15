@@ -121,7 +121,7 @@ export const useTableCell = (
   );
 
   const { dropdownOptions, dropdownResult } = useDropdownConsumer({
-    varName: nodeText,
+    blockId: nodeText.length > 0 ? nodeText : undefined,
     cellType,
   });
 

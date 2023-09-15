@@ -10,9 +10,13 @@ import { useEffect } from 'react';
 import { Observable, Subject, filter, finalize } from 'rxjs';
 import { onSubscribe } from '@decipad/utils';
 
-type SpecificObserver<T extends ElementKind> = EditorObserverMessage<
+export type SpecificObserver<T extends ElementKind> = EditorObserverMessage<
   Extract<MyElement, { type: T }>
 >;
+
+export type CallbackObserver<T extends ElementKind> = (
+  value: SpecificObserver<T> | 'on-mount'
+) => void;
 
 /**
  * React hook to observer change in a type of element, or a specific element.
@@ -21,7 +25,7 @@ type SpecificObserver<T extends ElementKind> = EditorObserverMessage<
  * Note: For better performance, use `useCallback` on the callback
  */
 export function useElementObserver<T extends ElementKind>(
-  callback: (value: SpecificObserver<T>) => void,
+  callback: CallbackObserver<T>,
   editor: MyEditor,
   elementType: T,
   elementId?: string
@@ -31,6 +35,8 @@ export function useElementObserver<T extends ElementKind>(
     if (!observer) return;
 
     const observer$ = observer.subscribe(callback);
+
+    callback('on-mount');
 
     return () => {
       observer$.unsubscribe();

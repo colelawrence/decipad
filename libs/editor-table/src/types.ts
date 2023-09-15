@@ -21,7 +21,7 @@ export interface TotalAggregationExpressions {
 export interface DropdownOption {
   id: string;
   value: string;
-  focused: boolean;
+  focused?: boolean;
 }
 
 export interface TableColumn {

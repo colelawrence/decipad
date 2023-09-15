@@ -1,4 +1,4 @@
-import { AST, Computer, IdentifiedError } from '@decipad/computer';
+import { AST, Computer, IdentifiedError, getExprRef } from '@decipad/computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   TableElement,
@@ -118,7 +118,7 @@ const dropdownColumnToColumn = ({
     if (text) {
       return {
         type: 'ref',
-        args: [text],
+        args: [getExprRef(text)],
       };
     }
     return getNullReplacementValue(th.cellType);

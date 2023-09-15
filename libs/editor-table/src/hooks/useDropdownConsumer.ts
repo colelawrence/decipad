@@ -1,17 +1,20 @@
-import { Result, getExprRef, materializeResult } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import {
   ELEMENT_VARIABLE_DEF,
   CellValueType,
   useTEditorRef,
+  VariableDropdownElement,
 } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
-import { useComputer } from '@decipad/react-contexts';
-import { useMemo } from 'react';
-import { useResolved } from '@decipad/react-utils';
+import { useCallback, useState } from 'react';
 import { DropdownOption } from '../types';
+import { useMaterializedDropdownResult } from './useMaterializedDropdownResult';
+import {
+  CallbackObserver,
+  useElementObserver,
+} from '@decipad/editor-components';
 
 interface UseDropDownConsumerProps {
-  varName: string;
+  blockId: string | undefined;
   cellType: CellValueType | undefined;
 }
 
@@ -21,42 +24,39 @@ interface UseDropDownConsumerResults {
 }
 
 export const useDropdownConsumer = ({
-  varName,
+  blockId,
   cellType,
 }: UseDropDownConsumerProps): UseDropDownConsumerResults => {
-  const computer = useComputer();
   const editor = useTEditorRef();
 
-  const dropdownResult = computer.getVarResult$.use(varName)?.result;
-  const materializedDropdownResult = useResolved(
-    useMemo(
-      () =>
-        dropdownResult != null ? materializeResult(dropdownResult) : undefined,
-      [dropdownResult]
-    )
+  const materializedDropdownResult = useMaterializedDropdownResult(blockId);
+
+  const [dropdownOptions, setDropdownOptions] = useState<Array<DropdownOption>>(
+    []
   );
-  const dropdownOptions: DropdownOption[] = useMemo(() => {
-    if (!cellType || cellType.kind !== 'dropdown') return [];
 
-    const dropdown = editor.children.find((child) => child.id === cellType.id);
-    if (!dropdown) {
-      return [];
-    }
-    assertElementType(dropdown, ELEMENT_VARIABLE_DEF);
-    if (dropdown.variant !== 'dropdown') return [];
-    const { options } = dropdown.children[1];
+  const dropdownObserverCallback = useCallback<
+    CallbackObserver<typeof ELEMENT_VARIABLE_DEF>
+  >(() => {
+    if (cellType?.kind !== 'dropdown') return;
 
-    return options.map((o) => ({
-      ...o,
-      focused: varName === getExprRef(o.id),
-    }));
-  }, [cellType, editor.children, varName]);
+    const dropdown = editor.children.find(
+      (child): child is VariableDropdownElement => {
+        return child.id === cellType.id;
+      }
+    );
 
-  return useMemo(
-    () => ({
-      dropdownResult: materializedDropdownResult,
-      dropdownOptions,
-    }),
-    [dropdownOptions, materializedDropdownResult]
-  );
+    if (!dropdown) return;
+
+    if (dropdown.variant !== 'dropdown') return;
+
+    setDropdownOptions([...dropdown.children[1].options]);
+  }, [cellType, editor]);
+
+  useElementObserver(dropdownObserverCallback, editor, ELEMENT_VARIABLE_DEF);
+
+  return {
+    dropdownResult: materializedDropdownResult,
+    dropdownOptions,
+  };
 };

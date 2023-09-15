@@ -9,3 +9,4 @@ export * from './useIsColumnSelected';
 export * from './useTable';
 export * from './useColumnAggregationTypes';
 export * from './useColumnsInferredTypes';
+export * from './useMaterializedDropdownResult';

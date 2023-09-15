@@ -60,6 +60,7 @@ import {
   createWithDocSyncHistoryPlugin,
   createDeduplicateElementIdsPlugin,
   createMigrateStructuredInputs,
+  createMigrateTableDropdownToId,
   createLiveDataSetPlugin,
 } from '@decipad/editor-plugins';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
@@ -244,6 +245,7 @@ export const plugins = ({
 
       // Migrations
       createMigrateStructuredInputs(),
+      createMigrateTableDropdownToId(),
       createPreventInvalidSelectionPlugin(),
 
       createElementChangePlugin(),

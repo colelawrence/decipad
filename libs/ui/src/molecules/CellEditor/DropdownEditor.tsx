@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { getExprRef, Result } from '@decipad/computer';
+import { Result } from '@decipad/computer';
 import { AnyElement, CellValueType } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useState } from 'react';
@@ -45,7 +45,7 @@ export const DropdownEditor: FC<DropdownEditorProps> = ({
         onExecute={(i) => {
           const id = dropdownOptions?.find((v) => v.value === i.item);
           if (!id) return;
-          onChangeValue(getExprRef(id.id));
+          onChangeValue(id.id);
           setOpen(false);
         }}
       >
