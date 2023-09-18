@@ -42,7 +42,6 @@ import { ErrorPage, RequireSession } from '../../meta';
 import { useAnimateMutations } from './hooks/useAnimateMutations';
 import { useNotebookStateAndActions } from './hooks/useNotebookStateAndActions';
 import { lazyLoad } from '@decipad/react-utils';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { useEditorUndoState } from './hooks';
 import { useNotebookAccessActions, useNotebookMetaActions } from '../../hooks';
@@ -77,7 +76,7 @@ export const NewNotebook: FC = () => {
     notebook: { id: notebookId },
     embed: _embed,
   } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(isFlagEnabled('EMBED') && _embed);
+  const isEmbed = Boolean(_embed);
 
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
   const [editor, setEditor] = useState<MyEditor | undefined>();
@@ -278,7 +277,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   }, [meta.data?.getPadById?.myPermissionType, sidebarData]);
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(isFlagEnabled('EMBED') && _embed);
+  const isEmbed = Boolean(_embed);
 
   const isPublic = meta.data?.getPadById?.isPublic;
   const snapshot = meta.data?.getPadById?.snapshots.find(

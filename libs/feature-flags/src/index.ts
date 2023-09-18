@@ -18,8 +18,6 @@ export const availableFlags = [
   'NOTION_CONNECTIONS',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
-  // Embed mode 'embed=true',
-  'EMBED',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

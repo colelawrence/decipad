@@ -7,7 +7,6 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useState } from 'react';
 import { Button, Dot, TabButton } from '../../atoms';
 import { cssVar, smallScreenQuery, smallShadow } from '../../primitives';
-import { isFlagEnabled } from '@decipad/feature-flags';
 import {
   NotebookMetaDataFragment,
   UserAccessMetaFragment,
@@ -164,16 +163,14 @@ export const NotebookPublishingPopUp = ({
               }}
               testId="publish-tab"
             />
-            {isFlagEnabled('EMBED') && (
-              <TabButton
-                text="Embed"
-                isSelected={selectedTab === 'Embed'}
-                onClick={() => {
-                  selectTab('Embed');
-                }}
-                testId="embed-tab"
-              />
-            )}
+            <TabButton
+              text="Embed"
+              isSelected={selectedTab === 'Embed'}
+              onClick={() => {
+                selectTab('Embed');
+              }}
+              testId="embed-tab"
+            />
           </Tabs>
         )}
 
@@ -211,7 +208,7 @@ export const NotebookPublishingPopUp = ({
             />
           </div>
         )}
-        {isAdmin && selectedTab === 'Embed' && isFlagEnabled('EMBED') && (
+        {isAdmin && selectedTab === 'Embed' && (
           <div css={groupStyles} className="notebook-embed-tab">
             <NotebookEmbedTab
               isAdmin={isAdmin}
