@@ -1,4 +1,5 @@
-import { keyframes } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
+import { PropertiesHyphen } from 'csstype';
 
 export const shortAnimationDuration = '120ms';
 export const shortAnimationDurationMs = 120;
@@ -14,6 +15,29 @@ export const toastTransitionDelay = 7500;
 export const showTransition = 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)';
 
 export const easing = 'cubic-bezier(0.42, 0, 0.58, 1)';
+
+export const easingTiming = {
+  easeIn: 'cubic-bezier(0.32, 0, 0.67, 0)',
+  easeOut: 'cubic-bezier(0.33, 1, 0.68, 1)',
+};
+
+export const hoverTransitionStyles = (
+  property: keyof PropertiesHyphen | Array<keyof PropertiesHyphen> | 'all',
+  duration = 150
+) =>
+  css({
+    transitionProperty: Array.isArray(property)
+      ? property.join(', ')
+      : property,
+    transitionDuration: '30ms',
+    transitionTimingFunction: easingTiming.easeIn,
+    transitionDelay: '0ms',
+    '&:hover': {
+      transitionDuration: `${duration}ms`,
+      transitionTimingFunction: easingTiming.easeOut,
+      transitionDelay: mouseMovingOverTransitionDelay,
+    },
+  });
 
 export const wiggle = keyframes`
   20% {
@@ -43,7 +67,8 @@ export const wiggle = keyframes`
   }
 `;
 
-export const antiwiggle = keyframes`20% {
+export const antiwiggle = keyframes`
+  20% {
     transform:  rotate(-3deg);
   }
 
@@ -64,14 +89,16 @@ export const antiwiggle = keyframes`20% {
   }
 `;
 
-export const rotation = keyframes`from {transform: rotate(360deg)}
-to {transform: rotate(0deg)}`;
+export const rotation = keyframes`from {transform: rotate(360deg)} to {transform: rotate(0deg)}`;
 
-export const animationTwoColours = (
-  cssProp: string,
-  one: string,
-  two: string
-) =>
-  keyframes`0% { ${cssProp}: ${one}; }
-  50% { ${cssProp}: ${two}; }
-  100% { ${cssProp}: ${one}; }`;
+export const animationTwoColours = (one: string, two: string) =>
+  keyframes`
+  0% {
+    background-color: ${one};
+  }
+  50% {
+    background-color: ${two};
+  }
+  100% {
+    background-color: ${one};
+  }`;

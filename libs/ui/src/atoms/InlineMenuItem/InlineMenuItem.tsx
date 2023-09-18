@@ -29,7 +29,7 @@ const iconStyles = css({
 const textStyles = css({
   display: 'grid',
   textAlign: 'start',
-  rowGap: '6px',
+  rowGap: '2px',
 });
 
 const inlineStyles = css({

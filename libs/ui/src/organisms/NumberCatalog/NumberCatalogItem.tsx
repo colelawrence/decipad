@@ -2,20 +2,11 @@
 import { isTable } from '@decipad/computer';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
-import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
+import { useComputer } from '@decipad/react-contexts';
 import { useDelayedValue } from '@decipad/react-utils';
 import { css } from '@emotion/react';
-import { DragHandle, NestIndicator } from '../../icons';
-import {
-  black,
-  boldOpacity,
-  cssVar,
-  p12Medium,
-  p14Medium,
-  transparency,
-  weakOpacity,
-  white,
-} from '../../primitives';
+import { DragHandle } from '../../icons';
+import { cssVar, p14Medium } from '../../primitives';
 import { CodeResult } from '../CodeResult/CodeResult';
 
 interface NumberProps {
@@ -38,7 +29,6 @@ export const NumberCatalogItem = ({
     undebouncedResult,
     undebouncedResult?.result == null
   );
-  const [darkTheme] = useThemeFromStore();
 
   if (!result?.result) {
     return null;
@@ -76,50 +66,37 @@ export const NumberCatalogItem = ({
           })
         }
         onDragEnd={onDragEnd}
-        css={numberCatalogListItemStyles(darkTheme)}
+        css={numberCatalogListItemStyles}
       >
-        <span
-          css={css({
-            display: 'inline-flex',
-            gap: '6px',
-            alignItems: 'center',
-            svg: {
-              width: '16px',
-              height: '16px',
-            },
-          })}
-        >
-          <NestIndicator />
-          <span
-            css={css(p14Medium, {
-              position: 'relative',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              minWidth: 0,
-              display: 'inherit',
-            })}
-          >
-            {name}
-            <span
-              css={css(p12Medium, {
-                marginLeft: '8px',
-                alignSelf: 'center',
-                color: cssVar('textSubdued'),
-              })}
-            >
-              {isTable(result.result.type) ? (
-                'Table'
-              ) : result.result.type.kind === 'type-error' ? (
-                <CodeResult variant="inline" {...result.result} />
-              ) : (
-                <CodeResult {...result.result} />
-              )}
-            </span>
-          </span>
-        </span>
         <span data-drag-handle css={dragHandleStyles}>
           <DragHandle />
+        </span>
+        <span
+          css={css(p14Medium, {
+            position: 'relative',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            minWidth: 0,
+            display: 'inline-flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+          })}
+        >
+          {name}
+          <span
+            css={css(p14Medium, {
+              color: cssVar('textSubdued'),
+            })}
+          >
+            {isTable(result.result.type) ? (
+              'Table'
+            ) : result.result.type.kind === 'type-error' ? (
+              <CodeResult variant="inline" {...result.result} />
+            ) : (
+              <CodeResult {...result.result} />
+            )}
+          </span>
         </span>
       </div>
     </div>
@@ -128,40 +105,36 @@ export const NumberCatalogItem = ({
 
 const dragHandleStyles = css({
   opacity: 0,
-  borderRadius: '4px',
-  padding: '5px',
-  height: '20px',
-  width: '20px',
+  height: '28px',
+  width: '28px',
   display: 'inline-flex',
-  backgroundColor: transparency(black, weakOpacity).rgba,
-  color: 'black',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: cssVar('textHeavy'),
   svg: {
     width: '10px',
     height: '10px',
   },
 });
 
-export const numberCatalogListItemStyles = (darkTheme: boolean) =>
-  css(p14Medium, {
-    padding: '11px 0px 9px 0px',
-    display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1fr) 24px',
-    alignItems: 'center',
-    gap: '8px',
-    cursor: 'grab',
-    minWidth: 0,
-    minHeight: 0,
-    '*:hover > &': {
-      backgroundColor: transparency(darkTheme ? black : white, 0.5).rgba,
-      'span:last-child': {
-        opacity: 1,
-      },
-      span: {
-        color: transparency(darkTheme ? white : black, boldOpacity).rgba,
-      },
-      'span:last-child span': {
-        mixBlendMode: 'initial',
-        color: cssVar('themeTextSubdued'),
-      },
+export const numberCatalogListItemStyles = css(p14Medium, {
+  padding: '4px 8px 4px 0px',
+  borderRadius: '6px',
+  display: 'grid',
+  gridTemplateColumns: '28px minmax(0, 1fr)',
+  alignItems: 'center',
+  cursor: 'grab',
+  minWidth: 0,
+  minHeight: 0,
+  '&:hover': {
+    backgroundColor: cssVar('backgroundDefault'),
+    'span:first-child': {
+      opacity: 1,
     },
-  });
+
+    'span:last-child > span:last-child': {
+      mixBlendMode: 'initial',
+      color: cssVar('themeTextSubdued'),
+    },
+  },
+});

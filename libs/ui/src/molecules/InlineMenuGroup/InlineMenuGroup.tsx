@@ -3,12 +3,12 @@ import { css } from '@emotion/react';
 import { Children, FC, ReactNode } from 'react';
 import { isElement } from 'react-is';
 import { InlineMenuItem } from '../../atoms';
-import { p13Medium } from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
 
 const titleStyles = css(
-  p13Medium,
+  p14Medium,
 
-  { padding: '4px 2px' }
+  { padding: '8px 4px', color: cssVar('textSubdued') }
 );
 
 const itemsStyles = css({

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import {
   cssVar,
+  easingTiming,
   mediumShadow,
-  shortAnimationDuration,
   smallScreenQuery,
   tabletScreenQuery,
 } from '../../primitives';
@@ -100,18 +100,21 @@ export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
   },
 });
 
-const SIDEBAR_WIDTH = '300px';
+const SIDEBAR_WIDTH = '320px';
 
 interface AsideWrapperProps {
   readonly isOpen: boolean;
 }
 
 export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
+  position: 'relative',
   display: 'flex',
   justifyContent: 'flex-end',
   overflowY: 'auto',
   minWidth: props.isOpen ? SIDEBAR_WIDTH : 0,
-  transition: `min-width ${shortAnimationDuration} ease-in-out, padding 0ms linear ${shortAnimationDuration}`,
+  transition: `min-width 120ms ${
+    props.isOpen ? easingTiming.easeOut : easingTiming.easeIn
+  }`,
   backgroundColor: cssVar('backgroundMain'),
   height: '100%',
   borderRadius: '16px 0px 0px 16px',
@@ -122,6 +125,7 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   [tabletScreenQuery]: {
     position: 'fixed',
     border: `solid 1px ${cssVar('borderDefault')}`,
+    borderRight: 'none',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
     zIndex: 9,
   },

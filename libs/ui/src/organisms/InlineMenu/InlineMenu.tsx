@@ -15,7 +15,7 @@ const styles = css(
     display: 'grid',
     gridTemplateColumns: 'fit-content(75vw)',
     padding: '12px',
-
+    rowGap: '12px',
     backgroundColor: cssVar('backgroundMain'),
     border: `1px solid ${cssVar('borderSubdued')}`,
     borderRadius: '8px',

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { cssVar, offBlack } from '../../primitives';
+import { offBlack } from '../../primitives';
 
 interface PlusProps {
   readonly variant?: 'black';
@@ -11,13 +11,13 @@ export const Plus: FC<PlusProps> = ({ variant }) => {
       <title>Plus</title>
       <path
         d="M10 6.5V14.5"
-        stroke={variant ? offBlack.hex : cssVar('iconColorHeavy')}
+        stroke={variant ? offBlack.hex : 'currentColor'}
         strokeWidth="1.5"
         strokeLinecap="round"
       />
       <path
         d="M6 10.5H14"
-        stroke={variant ? offBlack.hex : cssVar('iconColorHeavy')}
+        stroke={variant ? offBlack.hex : 'currentColor'}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

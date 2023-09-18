@@ -120,8 +120,9 @@ export const InputField = ({
       disabled={disabled}
       css={[
         {
+          color: cssVar('textDefault'),
           '::placeholder': {
-            color: cssVar('textDefault'),
+            color: cssVar('textSubdued'),
           },
         },
         size === 'small' ? inputStylesSmall : inputStyles,

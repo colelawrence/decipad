@@ -1,36 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { Children, FC } from 'react';
-import { InputField, SegmentButtons, SidebarIcon } from '../../atoms';
-import { AreaChart, Formula, Plus, Search } from '../../icons';
-import { shortAnimationDuration } from '../../primitives';
+import { InputField, SidebarIcon } from '../../atoms';
+import { FileText, Formula, Plus, Search } from '../../icons';
 import {
   sidebarColumnStyles,
-  sidebarEllipsisStyles,
-  sidebarPaddingStyles,
+  sidebarContentStyles,
   sidebarSearchBoxStyles,
   sidebarSearchIconStyles,
   sidebarWrapperStyles,
 } from './styles';
 import { EditorSidebarProps, SelectedTab } from './types';
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@decipad/ui';
 
-const availableTabs: SelectedTab[] = ['block', 'variable'];
+const AVAILABLE_TABS: SelectedTab[] = ['block', 'variable'];
 
-const getMetaForTab = (tab: SelectedTab) => {
+const getTriggerMetaForTab = (tab: SelectedTab) => {
   switch (tab) {
     case 'variable':
       return {
         tooltip: 'Re-use data and variables',
-        children: <SidebarIcon description={'Data'} icon={<AreaChart />} />,
+        label: 'Data',
+        children: <SidebarIcon description={'Data'} icon={<FileText />} />,
       };
     case 'block':
       return {
         tooltip: 'Insert new blocks',
+        label: 'Insert',
         children: <SidebarIcon description={'Insert'} icon={<Plus />} />,
       };
     default:
       return {
         tooltip: tab,
+        label: tab,
         children: <SidebarIcon description={tab} icon={<Formula />} />,
       };
   }
@@ -42,44 +44,36 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
   setSearch,
   sidebarTab,
   setSidebarTab,
-  sidebarOpen,
 }) => {
   const [variable, block] = Children.toArray(children);
 
   return (
     <div css={sidebarColumnStyles}>
-      <div
-        css={[
-          sidebarWrapperStyles,
-          !sidebarOpen
-            ? {
-                width: 0,
-                padding: 0,
-              }
-            : { transition: `width ${shortAnimationDuration} ease-in-out` },
-        ]}
-      >
-        <div css={[sidebarPaddingStyles, { paddingTop: 0 }]}>
-          <SegmentButtons
-            hideDivider
-            variant="transparent"
-            buttons={availableTabs.map((tab) => {
-              const { tooltip, children: buttonChildren } = getMetaForTab(tab);
-              return {
-                children: (
-                  <div css={{ svg: { height: '24px', width: '24px' } }}>
-                    {buttonChildren}
-                  </div>
-                ),
-                onClick: () => setSidebarTab(tab),
+      <TabsRoot css={[sidebarWrapperStyles]} defaultValue={sidebarTab}>
+        <div css={sidebarContentStyles}>
+          <TabsList>
+            {AVAILABLE_TABS.map((tab) => {
+              const {
+                label,
+                children: tabChildren,
                 tooltip,
-                testId: `sidebar-${tab}`,
-                selected: sidebarTab === tab,
-              };
+              } = getTriggerMetaForTab(tab);
+              return (
+                <TabsTrigger
+                  name={tab}
+                  trigger={{
+                    label,
+                    children: tabChildren,
+                    tooltip,
+                    onClick: () => setSidebarTab(tab),
+                    disabled: false,
+                    selected: sidebarTab === tab,
+                  }}
+                />
+              );
             })}
-          />
-        </div>
-        <div css={sidebarPaddingStyles}>
+          </TabsList>
+
           <div css={sidebarSearchBoxStyles}>
             <div css={sidebarSearchIconStyles}>
               <Search />
@@ -97,30 +91,26 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
               }
             ></InputField>
           </div>
-          <div css={sidebarEllipsisStyles}></div>
-        </div>
-        <div
-          css={[
-            sidebarPaddingStyles,
-            {
-              'div[role="menu"]': {
-                padding: 0,
+
+          <div
+            css={[
+              {
+                paddingBottom: 120,
+                width: '100%',
               },
-            },
-            {
-              paddingBottom: 100,
-            },
-          ]}
-        >
-          {sidebarTab === 'variable' ? (
-            variable
-          ) : sidebarTab === 'block' ? (
-            block
-          ) : (
-            <></>
-          )}
+              {
+                '& > div > div[role="menu"]': {
+                  margin: '-16px -8px',
+                  gridTemplateColumns: '1fr',
+                },
+              },
+            ]}
+          >
+            <TabsContent name="variable">{variable}</TabsContent>
+            <TabsContent name="block">{block}</TabsContent>
+          </div>
         </div>
-      </div>
+      </TabsRoot>
     </div>
   );
 };

@@ -64,7 +64,7 @@ const handleStyle = css(handleButtonStyle, {
 const plusStyle = css(handleButtonStyle, {
   gridArea: 'plus',
   cursor: 'pointer',
-
+  color: cssVar('iconColorHeavy'),
   height: '20px',
   width: '20px',
 });

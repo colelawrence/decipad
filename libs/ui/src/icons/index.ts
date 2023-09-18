@@ -87,6 +87,7 @@ export { Education } from './Education/Education';
 export { Ellipsis } from './Ellipsis/Ellipsis';
 export { File } from './File/File';
 export { FilePlus } from './FilePlus/FilePlus';
+export { FileText } from './FileText/FileText';
 export { Film } from './Film';
 export { Fire } from './Fire';
 export { Folder } from './Folder/Folder';

@@ -8,6 +8,7 @@ import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 type TabButtonProps = {
   readonly text?: TextChildren;
+  readonly children?: React.ReactNode;
   readonly href?: string;
   readonly disabled?: boolean;
   readonly onClick?: () => void;
@@ -23,6 +24,7 @@ export const TabButton = ({
   isSelected = false,
   disabled = false,
   testId = '',
+  children,
 }: TabButtonProps): ReturnType<FC> => {
   const onButtonClick = useEventNoEffect(disabled ? noop : onClick);
 
@@ -35,6 +37,7 @@ export const TabButton = ({
       ]}
     >
       {text}
+      {children}
     </span>
   );
 

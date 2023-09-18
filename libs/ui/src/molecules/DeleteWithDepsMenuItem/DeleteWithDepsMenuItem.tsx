@@ -131,7 +131,6 @@ const deleteWithDepsMenuItemStyles = css(p12Medium, {
   ':hover': {
     animation: `${antiwiggle} 0.5s ease-in-out,
 ${animationTwoColours(
-  'background-color',
   cssVar('stateDangerBackground'),
   cssVar('stateDangerBackground')
 )} 0.5s ease-in-out`,

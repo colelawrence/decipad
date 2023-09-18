@@ -1,11 +1,9 @@
 import { FC } from 'react';
-import { cssVar } from '../../primitives';
 
 export const Search = (): ReturnType<FC> => (
-  <svg fill="none" viewBox="0 0 24 24">
+  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <title>Search</title>
     <path
-      stroke={cssVar('iconColorHeavy')}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="1.5"

@@ -1,27 +1,36 @@
 import { css } from '@emotion/react';
-import {
-  cssVar,
-  p12Medium,
-  p14Medium,
-  shortAnimationDuration,
-} from '../../primitives';
+import { cssVar, p12Medium, p14Medium } from '../../primitives';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
 import { regularBorder } from '../Table/Table';
 
+export const sidebarColumnStyles = css`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+`;
+
 export const sidebarWrapperStyles = css(
   {
+    position: 'relative',
     overflowX: 'hidden',
-    width: 300,
-    transition: `width ${shortAnimationDuration} ease-in-out, padding 0ms linear ${shortAnimationDuration}`,
+    width: 320,
     height: '100%',
-    top: 66,
-    right: 0,
-    alignItems: 'center',
-    padding: 14,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '16px 8px 16px 16px',
     backgroundColor: cssVar('backgroundMain'),
   },
   deciOverflowYStyles
 );
+
+export const sidebarContentStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: 16,
+  width: 288,
+});
 
 export const sidebarPaddingStyles = css`
   display: flex;
@@ -62,23 +71,17 @@ export const sidebarEllipsisStyles = css`
   align-items: center;
 `;
 
-export const sidebarColumnStyles = css`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 20px;
-`;
-
 export const sidebarSearchBoxStyles = css({
   display: 'flex',
-  width: 264,
   height: 32,
   padding: '6px 12px 6px 6px',
   alignItems: 'center',
-  gap: 10,
+  width: '100%',
+  gap: 6,
   borderRadius: 6,
   border: regularBorder,
   backgroundColor: cssVar('backgroundMain'),
+  color: cssVar('textSubdued'),
   input: {
     borderRadius: 0,
     border: 0,
@@ -91,8 +94,8 @@ export const sidebarSearchBoxStyles = css({
   },
 });
 
-export const sidebarSearchIconStyles = css`
-  display: grid;
-  width: 20px;
-  height: 20px;
-`;
+export const sidebarSearchIconStyles = css({
+  width: '20px',
+  height: '20px',
+  flexShrink: 0,
+});

@@ -28,14 +28,8 @@ export const NumberCatalog = ({
   ): ReactNode {
     switch (item.type) {
       case 'h2':
-        return (
-          <NumberCatalogHeading key={item.blockId} {...item} headingLevel={2} />
-        );
-
       case 'h3':
-        return (
-          <NumberCatalogHeading key={item.blockId} {...item} headingLevel={3} />
-        );
+        return <NumberCatalogHeading key={item.blockId} {...item} />;
       case 'var':
         return (
           <NumberCatalogItem
@@ -46,6 +40,8 @@ export const NumberCatalog = ({
             onDragEnd={onDragEnd}
           />
         );
+      default:
+        return null;
     }
   }
 
@@ -76,7 +72,9 @@ const numberCatalogMenuStyles = css({
 });
 
 const menuBodyStyles = css({
-  borderRadius: '10px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 4,
   minHeight: '40px',
   overflowX: 'hidden',
 });

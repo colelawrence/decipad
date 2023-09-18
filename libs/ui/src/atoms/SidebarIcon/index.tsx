@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
-import { cssVar, p12Medium } from '../../primitives';
+import { p12Medium } from '../../primitives';
 
 interface SidebarIconProps {
   readonly icon: ReactNode;
@@ -19,20 +19,25 @@ export const SidebarIcon: FC<SidebarIconProps> = ({ icon, description }) => {
 };
 
 const sidebarIconDescriptionStyles = css(p12Medium, {
+  color: 'inherit',
   textTransform: 'capitalize',
-  color: cssVar('textHeavy'),
   textAlign: 'center',
+  lineHeight: '1.25',
   userSelect: 'none',
+  marginBottom: '1px',
 });
 
-const sidebarIconWrapperStyles = css`
-  display: flex;
-  border-radius: 6px;
-  width: 75px;
-  padding: 4px 6px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-`;
+const sidebarIconWrapperStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '1px 0',
+  gap: '2px',
+  flexShrink: 0,
+  '& svg': {
+    width: '24px',
+    height: '24px',
+    stroke: 'currentColor',
+  },
+});
