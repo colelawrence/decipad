@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useThemeFromStore } from '@decipad/react-contexts';
-import { AvailableSwatchColor, Swatch, swatchesThemed } from '@decipad/ui';
+import { Swatch, swatchesThemed } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../primitives';
 import { highlight } from '../../styles';
 
-const styles = (color: AvailableSwatchColor, baseSwatches: Swatch) => {
+const styles = (baseSwatches: Swatch) => {
   return css(highlight.highlightStyles, {
     borderRadius: '0.9em 0.3em',
     margin: '0 -0.45em',
@@ -21,22 +21,21 @@ const styles = (color: AvailableSwatchColor, baseSwatches: Swatch) => {
     webkitBoxDecorationBreak: 'clone',
     backgroundImage: `linear-gradient(
     to right,
-    ${transparency(baseSwatches[color], weakOpacity).rgba},
-    ${transparency(baseSwatches[color], strongOpacity).rgba} 5%,
-    ${transparency(baseSwatches[color], normalOpacity).rgba}
+    ${transparency(baseSwatches.Sun, weakOpacity).rgba},
+    ${transparency(baseSwatches.Sun, strongOpacity).rgba} 5%,
+    ${transparency(baseSwatches.Sun, normalOpacity).rgba}
   )`,
   });
 };
 
 interface HighlightProps {
   readonly children: ReactNode;
-  readonly color?: AvailableSwatchColor;
 }
 export const Highlight = ({
   children,
-  color = 'Sun',
 }: HighlightProps): ReturnType<React.FC> => {
   const [darkTheme] = useThemeFromStore();
   const baseSwatches = swatchesThemed(darkTheme);
-  return <span css={styles(color, baseSwatches)}>{children}</span>;
+
+  return <span css={styles(baseSwatches)}>{children}</span>;
 };
