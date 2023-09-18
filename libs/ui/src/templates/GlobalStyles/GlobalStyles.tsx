@@ -55,14 +55,15 @@ const DatePickerStyles: FC = () => {
   return (
     <Global
       styles={{
+        'div.react-datepicker-wrapper': {
+          width: '100%',
+        },
         'div.react-datepicker': {
           padding: '8px 0',
           borderRadius: '8px',
           border: `1px solid ${cssVar('borderSubdued')}`,
         },
         'button.react-datepicker__navigation': {
-          width: '4px',
-          height: '4px',
           border: 'none',
           padding: '22px 2px',
           margin: '0 10px',
