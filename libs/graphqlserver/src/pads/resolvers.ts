@@ -11,6 +11,7 @@ import {
   User,
   WorkspaceRecord,
   PagedResult,
+  PermissionType,
 } from '@decipad/backendtypes';
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
@@ -34,6 +35,8 @@ import { importPad } from './importPad';
 import { setPadPublic } from './setPadPublic';
 import { movePad } from './movePad';
 import { padResource } from './padResource';
+import { maximumPermissionIn } from 'libs/services/src/authorization/maximum-permission';
+import { notebook } from 'libs/backend-resources/src/resources';
 
 const MAX_INITIAL_STATE_PAYLOAD_SIZE = 5 * 1000 * 1000; // 5MB
 
@@ -92,15 +95,15 @@ const resolvers = {
       const workspaceResource = `/workspaces/${opts.workspaceId}`;
       await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
-      const notebook = opts.pad;
+      const { pad } = opts;
 
       if (opts.sectionId) {
-        notebook.section_id = opts.sectionId;
+        pad.section_id = opts.sectionId;
       }
 
       return padResource.create(
         _,
-        { workspaceId: opts.workspaceId, pad: notebook },
+        { workspaceId: opts.workspaceId, pad },
         context
       );
     },
@@ -153,43 +156,29 @@ const resolvers = {
       params: unknown,
       context: GraphqlContext
     ) => {
-      if (!context.user && parent.isPublic) {
-        context.readingModePermission = true;
-        return 'READ';
-      }
-
-      const permissionType = await padResource.myPermissionType(
+      const notebookPermission = await padResource.myPermissionType(
         parent,
         params,
         context
       );
+      const workspacePermission = await isAuthorized(
+        getDefined(notebook.parentResourceUriFromRecord)(parent),
+        context,
+        'WRITE'
+      );
 
-      /** permissionType can be null if:
-       *  no user
-       *  the current user was not invited to the notebook
-       *  the current user was not invited to the notebook but it is a member of the workspace belonging to the same workspace as the current notebook
-       */
-      if (permissionType == null) {
-        const wsPermissionType = await isAuthorized(
-          `/workspaces/${parent.workspace_id}`,
-          context,
-          'WRITE'
-        );
+      const maxPermission = maximumPermissionIn(
+        [notebookPermission, workspacePermission].filter(
+          Boolean
+        ) as Array<PermissionType>
+      );
 
-        if (
-          (!wsPermissionType || wsPermissionType === 'READ') &&
-          parent.isPublic
-        ) {
-          context.readingModePermission = true;
-          return 'READ';
-        }
+      // allow the user to have read permission if the notebook is public
+      const effectivePermission =
+        maxPermission ?? (parent.isPublic ? 'READ' : undefined);
 
-        context.readingModePermission = wsPermissionType === 'READ';
-        return wsPermissionType;
-      }
-
-      context.readingModePermission = permissionType === 'READ';
-      return permissionType;
+      context.readingModePermission = effectivePermission === 'READ';
+      return effectivePermission;
     },
 
     async workspace(
@@ -197,7 +186,9 @@ const resolvers = {
       _: unknown,
       context: GraphqlContext
     ): Promise<WorkspaceRecord | undefined> {
-      const workspaceResource = `/workspaces/${pad.workspace_id}`;
+      const workspaceResource = getDefined(
+        notebook.parentResourceUriFromRecord
+      )(pad);
       if (!(await isAuthorized(workspaceResource, context, 'READ'))) {
         return undefined;
       }
