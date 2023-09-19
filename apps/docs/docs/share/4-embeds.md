@@ -34,22 +34,18 @@ Add data insights or calculations to any webpage with Decipad embeds.
 #### Embed on Webflow
   * Adapt this HTML code by replacing YOUR-DECIPAD-EMBED-LINK with the embed link you got from Decipad.
   ```
-  <iframe  style="border-radius:32px" 
-  src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" 
-  frameBorder="0"></iframe>
+  <iframe src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" frameBorder="0"></iframe>
   ```
   * Open your Webflow project and add a ["Custom Code Embed"](https://university.webflow.com/lesson/custom-code-embed) block.
   * Add the adapted HTML code you just created to the ["Custom Code Embed"](https://university.webflow.com/lesson/custom-code-embed) block on Webflow.
   * Send an email to [support@decipad.com](mailto:support@decipad.com) to have your domain approved.
 
-#### Embed on Github Pages
+#### Embed on Github Pages, replit or Vercel
   * Adapt this HTML code by replacing YOUR-DECIPAD-EMBED-LINK with the embed link you got from Decipad.
   ```
-  <iframe  style="border-radius:32px" 
-  src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" 
-  frameBorder="0"></iframe>
+  <iframe src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" frameBorder="0"></iframe>
   ```
-  * Send an email to support@decipad.com to have your domain approved.
+  * If you have a custom domain, send an email to support@decipad.com to have it approved.
   
 #### Embed Decipad on a Custom Domain
   * We currently support embeds for custom domains on: Notion, Monday.com, ClickUp and Webflow. Please reach out to [support@decipad.com](mailto:support@decipad.com) to have your domain or website approved.
