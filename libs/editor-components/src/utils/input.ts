@@ -66,11 +66,13 @@ const getInitialInputElement = ({
   } as VariableDefinitionElement;
 };
 
+const getInitialDate = new Date().toISOString().split('T')[0];
+
 const getVariantAndHolder = (
   kind: SerializedTypeKind | undefined
 ): [ElementVariants, string] => {
   if (kind === 'boolean') return ['toggle', 'false'];
-  if (kind === 'date') return ['date', '2022-11-03'];
+  if (kind === 'date') return ['date', getInitialDate];
   return ['expression', DEFAULT_INPUT_VALUE];
 };
 

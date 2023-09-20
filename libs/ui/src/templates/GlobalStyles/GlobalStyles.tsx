@@ -11,9 +11,7 @@ import {
   GlobalComponentStyles,
   lightTheme,
   mediumShadow,
-  p12Medium,
   p13Medium,
-  p14Medium,
   strongOpacity,
 } from '../../primitives';
 
@@ -34,23 +32,6 @@ const DarkThemeStyles = (): ReturnType<React.FC> => {
   );
 };
 
-const dateCellStyles = {
-  backgroundColor: cssVar('stateOkBackground'),
-  color: 'black',
-};
-
-const calendarHeaderStyles = {
-  ...p13Medium,
-  color: cssVar('textDefault'),
-  paddingBottom: '16px',
-  borderBottom: `solid 1px ${cssVar('backgroundDefault')}`,
-  margin: 'auto 10px',
-};
-
-const datePickerHeaderStyles = {
-  backgroundColor: 'white',
-};
-
 const DatePickerStyles: FC = () => {
   return (
     <Global
@@ -58,102 +39,191 @@ const DatePickerStyles: FC = () => {
         'div.react-datepicker-wrapper': {
           width: '100%',
         },
-        'div.react-datepicker': {
-          padding: '8px 0',
-          borderRadius: '8px',
-          border: `1px solid ${cssVar('borderSubdued')}`,
-        },
-        'button.react-datepicker__navigation': {
-          border: 'none',
-          padding: '22px 2px',
-          margin: '0 10px',
-          color: cssVar('textDefault'),
-        },
-        'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle':
-          {
+        'div.react-datepicker-popper': {
+          '&[data-placement^=bottom] div.react-datepicker__triangle': {
             display: 'none',
           },
-        'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle':
-          {
+          '&[data-placement^=top] div.react-datepicker__triangle': {
             display: 'none',
           },
-        'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle::before':
-          {
+          '&[data-placement^=bottom] div.react-datepicker__triangle::before': {
             borderBottomColor: cssVar('borderSubdued'),
           },
-        'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle::before':
-          {
+          '&[data-placement^=top] div.react-datepicker__triangle::before': {
             borderTopColor: cssVar('borderSubdued'),
           },
-        'div.react-datepicker-popper[data-placement^=bottom] div.react-datepicker__triangle::after':
-          {
+          '&[data-placement^=bottom] div.react-datepicker__triangle::after': {
             borderBottomColor: cssVar('backgroundMain'),
           },
-        'div.react-datepicker-popper[data-placement^=top] div.react-datepicker__triangle::after':
-          {
+          '&[data-placement^=top] div.react-datepicker__triangle::after': {
             borderTopColor: cssVar('backgroundMain'),
           },
-        '.react-datepicker__year-text.react-datepicker__year-text--keyboard-selected':
-          dateCellStyles,
-        '.react-datepicker__year-text.react-datepicker__year-text--selected':
-          dateCellStyles,
-        '.react-datepicker__year-text.react-datepicker__year--keyboard-selected':
-          dateCellStyles,
-        '.react-datepicker__month-text.react-datepicker__month-text--keyboard-selected':
-          dateCellStyles,
-        '.react-datepicker__day.react-datepicker__day--selected':
-          dateCellStyles,
-        '.react-datepicker__day.react-datepicker__day--keyboard-selected':
-          dateCellStyles,
-        '.react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected[aria-selected]':
-          dateCellStyles,
-        '.react-datepicker__year--container .react-datepicker__header':
-          datePickerHeaderStyles,
-        '.react-datepicker__month-container .react-datepicker__header':
-          datePickerHeaderStyles,
-        '.react-datepicker__time-container .react-datepicker__header':
-          datePickerHeaderStyles,
-        '.react-datepicker .react-datepicker__header': {
-          borderBottom: '1px solid',
-          borderBottomColor: cssVar('backgroundDefault'),
         },
-        'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__current-month':
-          calendarHeaderStyles,
-        'div.react-datepicker__year--container > div.react-datepicker__header.react-datepicker-year-header':
-          calendarHeaderStyles,
-        'div.react-datepicker__month-container > div.react-datepicker__header.react-datepicker-year-header':
-          calendarHeaderStyles,
-        'div.react-datepicker__time-container.react-datepicker__time-container--with-today-button > div.react-datepicker__header.react-datepicker__header--time':
-          { display: 'none' },
-        'div.react-datepicker__time-container.react-datepicker__time-container--with-today-button > div.react-datepicker__time':
-          {
+        '.react-datepicker': {
+          '&&, & &__time-container, &__time-container--with-today-button': {
+            padding: '6px 0px',
             borderRadius: '8px',
+            background: cssVar('backgroundMain'),
             border: `1px solid ${cssVar('borderSubdued')}`,
           },
-        'div.react-datepicker__month-container > div.react-datepicker__header > div.react-datepicker__day-names':
-          {
-            paddingTop: '16px',
+
+          '&__time': {
+            '&&&': {
+              backgroundColor: cssVar('backgroundMain'),
+            },
           },
-        'div.react-datepicker .react-datepicker__header': { border: 'none' },
-        '.react-datepicker__day--outside-month': {
-          color: `${cssVar('backgroundHeavy')} !important`,
-          pointerEvents: 'none',
-        },
-        '.react-datepicker .react-datepicker__time-container': {
-          border: `none`,
-          right: '-95px',
-          backgroundColor: cssVar('backgroundMain'),
-          ...p12Medium,
-        },
-        '.react-datepicker .react-datepicker__day-name , .react-datepicker .react-datepicker__time-name':
-          {
-            ...p14Medium,
-            color: cssVar('textDisabled'),
+
+          '&__time-list': {
+            '&::-webkit-scrollbar': {
+              width: '4px',
+            },
+
+            '&::-webkit-scrollbar-track': {
+              background: 'none',
+            },
+
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: cssVar('borderDefault'),
+              borderRadius: '8px',
+            },
           },
-        'div.react-datepicker__today-button': {
-          border: 'none',
-          ...p13Medium,
-          backgroundColor: cssVar('backgroundMain'),
+
+          '& &__navigation': {
+            border: 'none',
+            top: '9px',
+            color: cssVar('textSubdued'),
+          },
+
+          '& &__navigation-icon': {
+            '&::before': {
+              borderColor: cssVar('textSubdued'),
+              height: '4px',
+              width: '4px',
+              borderWidth: '2px 2px 0 0',
+            },
+          },
+
+          '& &__navigation:hover &__navigation-icon': {
+            '&::before': {
+              borderColor: cssVar('textDefault'),
+            },
+          },
+
+          '& &__header': {
+            ...p13Medium,
+            color: cssVar('textSubdued'),
+            paddingBottom: '8px',
+            borderBottom: `solid 1px ${cssVar('backgroundDefault')}`,
+            backgroundColor: cssVar('backgroundMain'),
+            borderRadius: '8px 8px 0px 0px',
+          },
+
+          '& &-time__header': {
+            ...p13Medium,
+            color: cssVar('textSubdued'),
+          },
+
+          '& &__day-names': {
+            marginTop: '8px',
+          },
+
+          '& &__current-month': {
+            ...p13Medium,
+            color: cssVar('textSubdued'),
+          },
+
+          '& &__day-name': {
+            ...p13Medium,
+            color: cssVar('textSubdued'),
+            margin: '2px',
+          },
+
+          '& &__day, & &__month-text, & &__year-text': {
+            ...p13Medium,
+            color: cssVar('textDefault'),
+            lineHeight: '28px',
+            width: '28px',
+            margin: '2px',
+
+            '&:hover': {
+              backgroundColor: cssVar('backgroundHeavy'),
+            },
+
+            '&--outside-month': {
+              opacity: '0.5',
+            },
+
+            '&--selected': {
+              backgroundColor: cssVar('themeBackgroundDefault'),
+              color: cssVar('themeTextDefault'),
+
+              '&:hover': {
+                backgroundColor: cssVar('themeBackgroundDefault'),
+              },
+            },
+            '&--keyboard-selected': {
+              backgroundColor: cssVar('themeBackgroundDefault'),
+              color: cssVar('themeTextDefault'),
+
+              '&:hover': {
+                backgroundColor: cssVar('themeBackgroundDefault'),
+              },
+            },
+          },
+
+          '&__time-list-item': {
+            // yes, this is the cleanest way to override specifity of react-datepicker
+            '&&&&&&': {
+              ...p13Medium,
+              color: cssVar('textDefault'),
+              lineHeight: '28px',
+              height: 'auto',
+              margin: '2px',
+              padding: '2px 4px',
+              borderRadius: '6px',
+
+              '&:hover': {
+                backgroundColor: cssVar('backgroundHeavy'),
+              },
+
+              '&--selected': {
+                backgroundColor: cssVar('themeBackgroundDefault'),
+                color: cssVar('themeTextDefault'),
+
+                '&:hover': {
+                  backgroundColor: cssVar('themeBackgroundDefault'),
+                },
+              },
+              '&--keyboard-selected': {
+                backgroundColor: cssVar('themeBackgroundDefault'),
+                color: cssVar('themeTextDefault'),
+
+                '&:hover': {
+                  backgroundColor: cssVar('themeBackgroundDefault'),
+                },
+              },
+            },
+          },
+
+          '& &__year-wrapper': {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            maxWidth: '100%',
+          },
+
+          '& &__today-button': {
+            ...p13Medium,
+            padding: '6px 12px',
+            margin: 'auto 10px 4px',
+            border: 'none',
+            borderRadius: '8px',
+            backgroundColor: cssVar('backgroundDefault'),
+            color: cssVar('textDefault'),
+
+            '&:hover': {
+              backgroundColor: cssVar('backgroundHeavy'),
+            },
+          },
         },
       }}
     />

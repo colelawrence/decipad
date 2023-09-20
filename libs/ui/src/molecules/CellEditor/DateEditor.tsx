@@ -53,7 +53,6 @@ const showTimeInputForGranularity: Partial<
 export const DateEditor: FC<DateEditorProps> = ({
   open,
   focused = false,
-  isEditable = false,
   children,
   value = '',
   unit,
@@ -117,7 +116,7 @@ export const DateEditor: FC<DateEditorProps> = ({
       className="mydateeditorwrapper"
       ref={datePickerWrapperRef}
     >
-      {isEditable && focused ? (
+      {focused ? (
         <DatePicker
           open={open && type?.kind === 'date'}
           dateFormat={dateFormat || 'yyyy-MM-dd'}

@@ -192,25 +192,26 @@ export const VariableEditor = ({
                 contentEditable={false}
                 css={[
                   iconWrapperStyles(variant),
-                  readOnly && { visibility: 'hidden' },
+                  readOnly && { display: 'none' },
                 ]}
               >
                 <Icon />
               </span>
             )}
             {isMenuVariant(variant) && (
-              <div contentEditable={false} css={iconWrapperStyles(variant)}>
+              <div
+                contentEditable={false}
+                css={[
+                  iconWrapperStyles(variant),
+                  readOnly && { display: 'none' },
+                ]}
+              >
                 <VariableEditorMenu
                   {...({ ...menuProps, variant } as ComponentProps<
                     typeof VariableEditorMenu
                   >)}
                   trigger={
-                    <button
-                      css={[
-                        buttonWrapperStyles(variant),
-                        readOnly && { visibility: 'hidden' },
-                      ]}
-                    >
+                    <button css={[buttonWrapperStyles(variant)]}>
                       <Ellipsis />
                     </button>
                   }
