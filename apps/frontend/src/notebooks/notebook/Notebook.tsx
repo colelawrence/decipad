@@ -251,6 +251,9 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     variables: { id: notebookId },
   });
 
+  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
+  const isEmbed = Boolean(_embed);
+
   /**
    * Edge case. We default to a closed sidebar,
    * so that in read mode we don't get any jumps on the sidebar.
@@ -268,6 +271,12 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
         if (!hasStorage) {
           sidebarData.toggleSidebar();
         }
+        break;
+      }
+      default: {
+        if (sidebarData.sidebarOpen) {
+          sidebarData.toggleSidebar();
+        }
       }
     }
 
@@ -275,9 +284,6 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       useNotebookMetaData.persist.rehydrate();
     }
   }, [meta.data?.getPadById?.myPermissionType, sidebarData]);
-
-  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
-  const isEmbed = Boolean(_embed);
 
   const isPublic = meta.data?.getPadById?.isPublic;
   const snapshot = meta.data?.getPadById?.snapshots.find(
@@ -341,7 +347,10 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
 const NewSidebar: FC = () => {
   const [isSidebarOpen] = useNotebookMetaData((state) => [state.sidebarOpen]);
 
-  if (isSidebarOpen) {
+  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
+  const isEmbed = Boolean(_embed);
+
+  if (isSidebarOpen && !isEmbed) {
     return <EditorSidebar />;
   }
 
