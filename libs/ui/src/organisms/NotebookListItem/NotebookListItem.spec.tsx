@@ -26,6 +26,7 @@ const props: ComponentProps<typeof NotebookListItem> = {
   workspaces: [],
   notebookId: '123',
   isArchived: false,
+  workspaceId: '456',
 };
 
 const WithContexts: FC<PropsWithChildren> = ({ children }) => (

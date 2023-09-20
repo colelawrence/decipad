@@ -119,6 +119,7 @@ export type NotebookListItemProps = Pick<
     ) => void;
     readonly icon: UserIconKey;
     readonly iconColor: AvailableSwatchColor;
+    readonly workspaceId: string;
   };
 
 interface DropResult {
@@ -152,6 +153,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
     onChangeStatus = noop,
     icon = 'Deci',
     iconColor = 'Catskill',
+    workspaceId,
   }) {
     const href = notebooks({}).notebook({ notebook: { id, name } }).$;
     const [{ isDragging }, drag, preview] = useCustomDrag(
@@ -228,6 +230,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
               onUnarchive={onUnarchive}
               onDelete={onDelete}
               allowDuplicate
+              workspaceId={workspaceId}
             />
           </Anchor>
         </div>

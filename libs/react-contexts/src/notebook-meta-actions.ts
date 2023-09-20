@@ -17,7 +17,8 @@ export interface NotebookMetaActionsType {
 
   readonly onDuplicateNotebook: (
     notebookId: string,
-    navigateToNotebook?: true
+    navigateToNotebook?: boolean,
+    workspaceId?: string
   ) => Promise<boolean>;
 }
 

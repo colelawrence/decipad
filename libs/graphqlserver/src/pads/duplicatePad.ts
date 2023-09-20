@@ -10,7 +10,7 @@ import {
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
-import { loadUser } from '../authorization';
+import { isAuthorized, loadUser } from '../authorization';
 import { isLocalDev } from '@decipad/initial-workspace';
 import { byAsc } from '@decipad/utils';
 
@@ -18,7 +18,11 @@ const notebooks = resource('notebook');
 
 export const duplicatePad = async (
   _: unknown,
-  { id, document: _document }: { id: ID; document?: string },
+  {
+    id,
+    document: _document,
+    targetWorkspace,
+  }: { id: ID; document?: string; targetWorkspace?: string },
   context: GraphqlContext
 ): Promise<Pad> => {
   const user = loadUser(context);
@@ -46,28 +50,35 @@ export const duplicatePad = async (
   ).Items;
 
   let workspaceId = '';
-  for (const permission of permissions) {
-    // TODO should we use Promise.all?
-    // eslint-disable-next-line no-await-in-loop
-    const workspace = await data.workspaces.get({
-      id: permission.resource_id,
-    });
-
-    const workspaceRecords = [];
-    // Use the first created workspace as it's likely to be the user's main workspace
-    if (workspace) {
-      const { name: workspaceName } = workspace;
-      const ws = { ...workspace };
-      // for development purposes we want
-      // to be able to have premium
-      // and non premium workspaces
-      if (isLocalDev() && workspaceName.includes('@n1n.co')) {
-        ws.isPremium = true;
-      }
-
-      workspaceRecords.push(ws);
+  if (targetWorkspace) {
+    const workspaceResourceName = `/workspaces/${targetWorkspace}`;
+    if (await isAuthorized(workspaceResourceName, context, 'WRITE')) {
+      workspaceId = targetWorkspace;
     }
-    workspaceId = workspaceRecords.sort(byAsc('name'))[0].id;
+  } else {
+    for (const permission of permissions) {
+      // TODO should we use Promise.all?
+      // eslint-disable-next-line no-await-in-loop
+      const workspace = await data.workspaces.get({
+        id: permission.resource_id,
+      });
+
+      const workspaceRecords = [];
+      // Use the first created workspace as it's likely to be the user's main workspace
+      if (workspace) {
+        const { name: workspaceName } = workspace;
+        const ws = { ...workspace };
+        // for development purposes we want
+        // to be able to have premium
+        // and non premium workspaces
+        if (isLocalDev() && workspaceName.includes('@n1n.co')) {
+          ws.isPremium = true;
+        }
+
+        workspaceRecords.push(ws);
+      }
+      workspaceId = workspaceRecords.sort(byAsc('name'))[0].id;
+    }
   }
 
   if (!workspaceId) {

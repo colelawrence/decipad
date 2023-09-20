@@ -250,6 +250,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                           source,
                         })
                       }
+                      workspaceId={currentWorkspace.id}
                     />
                   </>
                 }

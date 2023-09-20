@@ -305,11 +305,12 @@ export const NotebookTopbar = ({
   );
 
   const duplicateNotebook = useCallback(() => {
+    const workspaceId = isReadOnly ? '' : workspace?.id;
     setIsDuplicating(true);
     notebookMetaActions
-      .onDuplicateNotebook(notebookId, true)
+      .onDuplicateNotebook(notebookId, true, workspaceId)
       .finally(() => setIsDuplicating(false));
-  }, [notebookId, notebookMetaActions]);
+  }, [isReadOnly, notebookId, notebookMetaActions, workspace?.id]);
 
   return (
     <div css={topBarWrapperStyles(isEmbed)}>
@@ -362,6 +363,7 @@ export const NotebookTopbar = ({
                 onMoveWorkspace={notebookMetaActions.onMoveToWorkspace}
                 onDuplicate={notebookMetaActions.onDuplicateNotebook}
                 creationDate={creationDate}
+                workspaceId={workspace?.id ?? ''}
               />
               <Styled.Status data-testId="notebook-status">
                 {status}

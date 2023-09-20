@@ -20,6 +20,7 @@ type NotebookListProps = Pick<
   readonly notebooks: Array<WorkspaceNotebookFragment>;
   readonly sharedNotebooks: Array<WorkspaceNotebookFragment>;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
+  readonly workspaceId: string;
 };
 
 type ListItemType = ComponentProps<typeof NotebookListItem>;
@@ -34,6 +35,7 @@ export const NotebookList: FC<NotebookListProps> = ({
   pageType,
   workspaces,
   onImport,
+  workspaceId,
 }) => {
   const actions = useNotebookMetaActions(pageType === 'archived');
   const { search, status, visibility } = useSearchBarStore();
@@ -83,6 +85,7 @@ export const NotebookList: FC<NotebookListProps> = ({
               onUnarchive={actions.onUnarchiveNotebook}
               onDuplicate={actions.onDuplicateNotebook}
               notebookId={n.id}
+              workspaceId={workspaceId}
             />
           </li>
         );

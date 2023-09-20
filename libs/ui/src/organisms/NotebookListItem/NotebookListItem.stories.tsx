@@ -23,6 +23,7 @@ const args: ComponentProps<typeof NotebookListItem> = {
   notebookId: '123',
   isArchived: false,
   workspaces: [],
+  workspaceId: '456',
 };
 
 export default {

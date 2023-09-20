@@ -12,7 +12,8 @@ export interface NotebookMetaActionsReturn {
 
   onDuplicateNotebook: (
     notebookId: string,
-    navigateToNotebook?: true
+    navigateToNotebook?: boolean,
+    workspaceId?: string
   ) => Promise<boolean>;
 
   onPublishNotebook: (notebookId: string) => Promise<void>;

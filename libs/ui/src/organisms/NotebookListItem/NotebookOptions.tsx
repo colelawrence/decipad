@@ -22,6 +22,7 @@ export interface NotebookOptionsProps {
   readonly notebookId: string;
   readonly isArchived: boolean;
   readonly trigger: ReactNode;
+  readonly workspaceId: string;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
   readonly onDuplicate: NotebookMetaActionsType['onDuplicateNotebook'];
   readonly onExport: NotebookMetaActionsType['onDownloadNotebook'];
@@ -54,6 +55,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   creationDate,
   notebookStatus,
   allowDuplicate = false,
+  workspaceId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -73,7 +75,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
           <MenuItem
             icon={<Copy />}
             onSelect={() => {
-              onDuplicate(id);
+              onDuplicate(id, false, workspaceId);
               setIsOpen(false);
             }}
           >

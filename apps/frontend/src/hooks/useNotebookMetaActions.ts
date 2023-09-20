@@ -161,10 +161,10 @@ export function useNotebookMetaActions(
   const onDuplicateNotebook = useCallback<
     NotebookMetaActionsReturn['onDuplicateNotebook']
   >(
-    async (notebookId, navigateToNotebook) => {
+    async (notebookId, navigateToNotebook, workspaceId) => {
       const res = await duplicateNotebook({
         id: notebookId,
-        targetWorkspace: '',
+        targetWorkspace: workspaceId ?? '',
       });
 
       if (res.error || !res.data?.duplicatePad) {
