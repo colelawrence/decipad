@@ -48,7 +48,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
   const [variable, block] = Children.toArray(children);
 
   return (
-    <div css={sidebarColumnStyles}>
+    <div css={sidebarColumnStyles} data-testid="editor-sidebar">
       <TabsRoot css={[sidebarWrapperStyles]} defaultValue={sidebarTab}>
         <div css={sidebarContentStyles}>
           <TabsList>
@@ -61,6 +61,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
               return (
                 <TabsTrigger
                   name={tab}
+                  testId={`sidebar-${label}`}
                   trigger={{
                     label,
                     children: tabChildren,
