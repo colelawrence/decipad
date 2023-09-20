@@ -58,7 +58,7 @@ export const CollabMemberOrTeam: FC<CollabMemberOrTeamProps> = (props) => {
     const { name, id, email, image } = user || {};
 
     return (
-      <div css={collaboratorStyles} key={id}>
+      <div css={collaboratorStyles} key={id} data-testid={`sharing-list:${id}`}>
         <div css={avatarStyles}>
           <Avatar name={name || ''} imageHash={image} useSecondLetter={false} />
         </div>

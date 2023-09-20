@@ -18,6 +18,7 @@ export const EditMembersPaywall: React.FC<EditMembersPaywallProps> = ({
       paragraph="$15 per seat per month"
       Heading="h3"
       closeAction={closeHref}
+      testId="upgrade-pro-modal"
     >
       <ModalContent>
         <Section>

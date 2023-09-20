@@ -174,7 +174,10 @@ export const NotebookCollaborateTab = ({
               disabled={disabled}
             />
 
-            <span css={inputAccessPickerStyles}>
+            <span
+              css={inputAccessPickerStyles}
+              data-testid="select-share-permission"
+            >
               <CollabAccessDropdown
                 isInvitationPicker
                 currentPermission={permission}
@@ -187,6 +190,7 @@ export const NotebookCollaborateTab = ({
             <Button
               size="extraSlim"
               type={'primary'}
+              testId="upgrade-button"
               onClick={() => {
                 if (workspaceId) {
                   navigate(
