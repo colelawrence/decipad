@@ -65,6 +65,7 @@ export {
   statementToIdentifiedBlock,
   isColumn,
   isTable,
+  isTableColumn,
   isTableResult,
   getResultGenerator,
   selectErrorFromResult,

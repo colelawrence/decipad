@@ -1,5 +1,6 @@
 export * from './isColumn';
 export * from './isTable';
+export * from './isTableColumn';
 export * from './isTableResult';
 export * from './isResultGenerator';
 export * from './getResultGenerator';

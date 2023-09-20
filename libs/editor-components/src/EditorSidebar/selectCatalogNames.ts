@@ -7,6 +7,7 @@ export const acceptableNumberCatalogKinds = new Set([
   'string',
   'range',
   'table',
+  'column',
 ]);
 
 export const selectCatalogNames = (

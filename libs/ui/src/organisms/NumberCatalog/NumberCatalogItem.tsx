@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isTable } from '@decipad/computer';
+import { isTable, isTableColumn, Result } from '@decipad/computer';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
 import { useComputer } from '@decipad/react-contexts';
@@ -44,13 +44,30 @@ export const NumberCatalogItem = ({
       kind === 'date' ||
       kind === 'number' ||
       kind === 'string' ||
-      kind === 'table'
+      kind === 'table' ||
+      kind === 'column'
     )
   ) {
     return null;
   }
 
   const asText = formatResultPreview(result.result);
+
+  const displayResultType = (res: Result.Result) => {
+    if (isTable(res.type)) {
+      return 'Table';
+    }
+
+    if (isTableColumn(res.type)) {
+      return 'Column';
+    }
+
+    if (res.type.kind === 'type-error') {
+      return <CodeResult variant="inline" {...res} />;
+    }
+
+    return <CodeResult {...res} />;
+  };
 
   return (
     <div>
@@ -89,13 +106,7 @@ export const NumberCatalogItem = ({
               color: cssVar('textSubdued'),
             })}
           >
-            {isTable(result.result.type) ? (
-              'Table'
-            ) : result.result.type.kind === 'type-error' ? (
-              <CodeResult variant="inline" {...result.result} />
-            ) : (
-              <CodeResult {...result.result} />
-            )}
+            {displayResultType(result.result)}
           </span>
         </span>
       </div>
