@@ -2498,6 +2498,100 @@
 				{
 					"children": [
 						{
+							"children": [
+								{
+									"text": "Input"
+								}
+							],
+							"id": "q_IkdslCEQGy0-InIfVfS",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "2022-11-03"
+								}
+							],
+							"id": "xo44EypNjs06mjh_al_pl",
+							"type": "exp"
+						}
+					],
+					"id": "_omI26eotlQ8Rd5IQpKmM",
+					"type": "def",
+					"variant": "date",
+					"coerceToType": {
+						"kind": "date",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "InputCopyCopy"
+								}
+							],
+							"id": "LALHHtQCqOEg6IuFkbpp1",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "2022-11"
+								}
+							],
+							"id": "55_1UYPtdcprnVa6Wdq98",
+							"type": "exp"
+						}
+					],
+					"id": "txSQRG_HWcrK7T-MevJxp",
+					"type": "def",
+					"variant": "date",
+					"coerceToType": {
+						"kind": "date",
+						"date": "day"
+					}
+				}
+			],
+			"id": "Lp9NESY8QYZmVJ0XRoTt-",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InputCopy"
+						}
+					],
+					"id": "fATofXfXr5iKgKPL4Mktq",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "2022-11-03"
+						}
+					],
+					"id": "IuZWe6vtMFL0uNU19QoWt",
+					"type": "exp"
+				}
+			],
+			"id": "RLRio6h9QCRYdX9IYheQy",
+			"type": "def",
+			"variant": "date",
+			"coerceToType": {
+				"kind": "date",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
 							"text": "StructuredDollars"
 						}
 					],
@@ -2539,7 +2633,8 @@
 				}
 			],
 			"id": "IU6OU-fL-UyFv2ssCAETg",
-			"type": "code_line_v2"
+			"type": "code_line_v2",
+			"isHidden": true
 		},
 		{
 			"children": [
@@ -2563,7 +2658,8 @@
 				}
 			],
 			"id": "Acu2wNUIP6Pc0tnef-nfJ",
-			"type": "code_line_v2"
+			"type": "code_line_v2",
+			"isHidden": true
 		},
 		{
 			"children": [
@@ -3369,8 +3465,6 @@
 			"version": 2
 		},
 		{
-			"version": 2,
-			"hideFormulas": false,
 			"children": [
 				{
 					"children": [
@@ -3495,7 +3589,7 @@
 						{
 							"children": [
 								{
-									"text": "exprRef_AqD22IuRny6JIpMe9o7Zm"
+									"text": "AqD22IuRny6JIpMe9o7Zm"
 								}
 							],
 							"id": "OC-qmLbI-gwTWnDk-ix0J",
@@ -3537,7 +3631,7 @@
 						{
 							"children": [
 								{
-									"text": "exprRef_RF8aRVCm2fJJZ4zfi6H59"
+									"text": "RF8aRVCm2fJJZ4zfi6H59"
 								}
 							],
 							"id": "R--2U8slGKz2D44zzMGyi",
@@ -3590,6 +3684,8 @@
 					"id": "PUtYB6Pp6M_g7GdKrIQbt"
 				}
 			],
+			"version": 2,
+			"hideFormulas": false,
 			"type": "table",
 			"id": "Df85VD_OCcJcK6gKJ-bmK"
 		},
