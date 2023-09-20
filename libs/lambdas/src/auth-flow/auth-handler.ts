@@ -86,7 +86,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
 
           if (intercomSecret) {
             const hmac = createHmac('sha256', intercomSecret);
-            hmac.update(user.email || user.name);
+            hmac.update(user.id);
             Object.assign(session.user, {
               intercomUserHash: hmac.digest('hex'),
             });

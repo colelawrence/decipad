@@ -1,4 +1,5 @@
 import { ToastDisplay } from '@decipad/ui';
+import { useSession } from 'next-auth/react';
 import { FC, ReactNode } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -15,14 +16,20 @@ const backendForDND = () =>
     : HTML5Backend;
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
+  const session = useSession();
+
   return (
     <ToastDisplay>
       <UpdatesHandler>
         <QueryParamProvider adapter={ReactRouter6Adapter}>
           <AnalyticsProvider>
-            <IntercomProvider>
+            {session.status === 'authenticated' ? (
+              <IntercomProvider>
+                <DndProvider backend={backendForDND()}>{children}</DndProvider>
+              </IntercomProvider>
+            ) : (
               <DndProvider backend={backendForDND()}>{children}</DndProvider>
-            </IntercomProvider>
+            )}
           </AnalyticsProvider>
         </QueryParamProvider>
       </UpdatesHandler>
