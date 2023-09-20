@@ -340,6 +340,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       onClearAll={() => editor && clearNotebook(editor)}
       sidebarOpen={sidebarData.sidebarOpen}
       toggleSidebar={sidebarData.toggleSidebar}
+      isSharedNotebook={!meta.data?.getPadById?.workspace?.myPermissionType}
     />
   );
 };

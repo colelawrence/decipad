@@ -1,4 +1,4 @@
-import { GraphqlContext, Workspace } from '@decipad/backendtypes';
+import { Workspace } from '@decipad/backendtypes';
 import {
   incrementQueryCount,
   getWorkspaceExecutedQuery,
@@ -6,12 +6,8 @@ import {
 
 export default {
   Workspace: {
-    async workspaceExecutedQuery(
-      workspace: Workspace,
-      _: unknown,
-      context: GraphqlContext
-    ) {
-      return getWorkspaceExecutedQuery(workspace.id, context);
+    async workspaceExecutedQuery(workspace: Workspace) {
+      return getWorkspaceExecutedQuery(workspace.id);
     },
   },
 

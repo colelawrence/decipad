@@ -1,7 +1,5 @@
-import { resource } from '@decipad/backend-resources';
 import { timestamp } from '@decipad/backend-utils';
 import {
-  GraphqlContext,
   WorkspaceExecutedQueryRecord,
   MAX_CREDITS_EXEC_COUNT,
 } from '@decipad/backendtypes';
@@ -10,18 +8,9 @@ import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { track } from '@decipad/backend-analytics';
 import { GraphQLError } from 'graphql';
 
-const workspacesResource = resource('workspace');
-
 export const getWorkspaceExecutedQuery = async (
-  workspaceId: string,
-  context: GraphqlContext
+  workspaceId: string
 ): Promise<WorkspaceExecutedQueryRecord | undefined> => {
-  await workspacesResource.expectAuthorizedForGraphql({
-    context,
-    recordId: workspaceId,
-    minimumPermissionType: 'READ',
-  });
-
   const data = await tables();
   return data.workspacexecutedqueries.get({ id: workspaceId });
 };

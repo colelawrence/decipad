@@ -184,7 +184,7 @@ export const NotebookTopbar = ({
   const isReadOnly = notebookMeta?.myPermissionType === 'READ';
   const notebookName = notebookMeta?.name ?? 'My Notebook';
   const snapshots = notebookMeta?.snapshots ?? [];
-  const workspaceAccess = notebookMeta?.workspace?.myPermissionType ?? 'READ';
+  const workspaceAccess = notebookMeta?.workspace?.myPermissionType;
   const creationDate = notebookMeta?.createdAt
     ? new Date(notebookMeta.createdAt)
     : new Date();

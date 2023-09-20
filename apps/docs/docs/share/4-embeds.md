@@ -13,42 +13,52 @@ Add data insights or calculations to any webpage with Decipad embeds.
 <br/>
 
 ## Embed Decipad Notebooks on other APPs
+
 1. Click the `Share` button at the top of your notebook to open the sharing menu.
 2. Select the `Publish` tab from the sharing menu and enable `Anyone with the link can view`. To hide blocks from embeds, use the option menu that appears when you hover over blocks and select `Hide from reader`.
 3. Go to the `Embed` tab in the sharing menu, and click `Copy` to get the embed link.
 4. Don't forget to republish your notebook when you make updates to ensure they show up in your embed.
 
-
 #### Embed on Notion
-  * Paste the Decipad embed link on notion and select `Create embed`.
-  * Check out this [interactive Invoice Template](https://cord-wok-161.notion.site/Quick-Invoice-Calculator-c62577c04a2d4ed6bdcd8f13c558a98b) and [this Hourly Rate Proposal](https://www.notion.so/decipad/Hourly-Rate-Proposal-c8702370b9f041e1a3260e72e192320c). 
+
+- Paste the Decipad embed link on notion and select `Create embed`.
+- Check out this [interactive Invoice Template](https://cord-wok-161.notion.site/Quick-Invoice-Calculator-c62577c04a2d4ed6bdcd8f13c558a98b) and [this Hourly Rate Proposal](https://www.notion.so/decipad/Hourly-Rate-Proposal-c8702370b9f041e1a3260e72e192320c).
 
 #### Embed on Monday.com
-  * Open Monday.com and create a new Doc.
-  * Add a new ["Embed everything"](https://support.monday.com/hc/en-us/articles/360002383219-The-Embed-Everything-Widget) widget and paste the Decipad embed link.
+
+- Open Monday.com and create a new Doc.
+- Add a new ["Embed everything"](https://support.monday.com/hc/en-us/articles/360002383219-The-Embed-Everything-Widget) widget and paste the Decipad embed link.
 
 #### Embed on ClickUp
-  * Open ClickUp and create a new Drashboard.
-  * Add a new ["Custom Embed"](https://help.clickup.com/hc/en-us/articles/6312198759319-Embed-cards) card and paste the Decipad embed link.
+
+- Open ClickUp and create a new Drashboard.
+- Add a new ["Custom Embed"](https://help.clickup.com/hc/en-us/articles/6312198759319-Embed-cards) card and paste the Decipad embed link.
 
 #### Embed on Webflow
-  * Adapt this HTML code by replacing YOUR-DECIPAD-EMBED-LINK with the embed link you got from Decipad.
-  ```
-  <iframe src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" frameBorder="0"></iframe>
-  ```
-  * Open your Webflow project and add a ["Custom Code Embed"](https://university.webflow.com/lesson/custom-code-embed) block.
-  * Add the adapted HTML code you just created to the ["Custom Code Embed"](https://university.webflow.com/lesson/custom-code-embed) block on Webflow.
-  * Send an email to [support@decipad.com](mailto:support@decipad.com) to have your domain approved.
+
+- Adapt this HTML code by replacing YOUR-DECIPAD-EMBED-LINK with the embed link you got from Decipad.
+
+```
+<iframe src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" frameBorder="0"></iframe>
+```
+
+- Open your Webflow project and add a ["Custom Code Embed"](https://university.webflow.com/lesson/custom-code-embed) block.
+- Add the adapted HTML code you just created to the ["Custom Code Embed"](https://university.webflow.com/lesson/custom-code-embed) block on Webflow.
+- Send an email to [support@decipad.com](mailto:support@decipad.com) to have your domain approved.
 
 #### Embed on Github Pages, replit or Vercel
-  * Adapt this HTML code by replacing YOUR-DECIPAD-EMBED-LINK with the embed link you got from Decipad.
-  ```
-  <iframe src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" frameBorder="0"></iframe>
-  ```
-  * If you have a custom domain, send an email to support@decipad.com to have it approved.
-  
+
+- Adapt this HTML code by replacing YOUR-DECIPAD-EMBED-LINK with the embed link you got from Decipad.
+
+```
+<iframe src="YOUR-DECIPAD-EMBED-LINK" width="100%" height="100%" frameBorder="0"></iframe>
+```
+
+- If you have a custom domain, send an email to support@decipad.com to have it approved.
+
 #### Embed Decipad on a Custom Domain
-  * We currently support embeds for custom domains on: Notion, Monday.com, ClickUp and Webflow. Please reach out to [support@decipad.com](mailto:support@decipad.com) to have your domain or website approved.
+
+- We currently support embeds for custom domains on: Notion, Monday.com, ClickUp and Webflow. Please reach out to [support@decipad.com](mailto:support@decipad.com) to have your domain or website approved.
 
 ## Request other apps
 

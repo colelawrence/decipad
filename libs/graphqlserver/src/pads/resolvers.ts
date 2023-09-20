@@ -185,15 +185,19 @@ const resolvers = {
       pad: PadRecord,
       _: unknown,
       context: GraphqlContext
-    ): Promise<WorkspaceRecord | undefined> {
+    ): Promise<WorkspaceRecord | Partial<WorkspaceRecord> | undefined> {
+      const data = await tables();
+
       const workspaceResource = getDefined(
         notebook.parentResourceUriFromRecord
       )(pad);
+      const workspace = await data.workspaces.get({ id: pad.workspace_id });
+
       if (!(await isAuthorized(workspaceResource, context, 'READ'))) {
-        return undefined;
+        // small hack to avoid setting the name of the workspace as nullable and changing several files
+        return { id: pad.workspace_id, name: '' };
       }
-      const data = await tables();
-      return data.workspaces.get({ id: pad.workspace_id });
+      return workspace;
     },
 
     async section(
