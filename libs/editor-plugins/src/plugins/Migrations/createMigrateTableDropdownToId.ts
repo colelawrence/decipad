@@ -21,6 +21,8 @@ export const createMigrateTableDropdownToId = createNormalizerPluginFactory({
       const [node, path] = entry;
 
       if (isElement(node) && node.type === ELEMENT_TH) {
+        if (!node.cellType) return false;
+
         assertElementType(node, ELEMENT_TH);
 
         if (node.cellType.kind !== 'dropdown') return false;
