@@ -48,11 +48,11 @@ test.describe('date widget read mode', () => {
   test('publish notebook', async () => {
     await page.getByTestId('publish-button').click();
     await page.getByTestId('publish-tab').click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.chartsDelay);
     await page.locator('[aria-roledescription="enable publishing"]').click();
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
     await page.getByTestId('copy-published-link').click();
     sharedPageLocation = (
       (await page.evaluate('navigator.clipboard.readText()')) as string
@@ -67,6 +67,8 @@ test.describe('date widget read mode', () => {
     incognitoPage = await incognito.newPage();
     await incognitoPage.goto(sharedPageLocation!);
     await waitForNotebookToLoad(incognitoPage);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.chartsDelay);
     await incognitoPage.getByTestId('widget-input').click();
     await incognitoPage.locator('text=Today').click();
     await expect(incognitoPage.getByTestId('widget-input')).toContainText(
