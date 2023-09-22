@@ -23,7 +23,7 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
       <UpdatesHandler>
         <QueryParamProvider adapter={ReactRouter6Adapter}>
           <AnalyticsProvider>
-            {session.status === 'authenticated' ? (
+            {session.status !== 'unauthenticated' ? (
               <IntercomProvider>
                 <DndProvider backend={backendForDND()}>{children}</DndProvider>
               </IntercomProvider>
