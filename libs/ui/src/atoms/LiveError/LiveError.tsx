@@ -1,10 +1,12 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { noop } from '@decipad/utils';
 import { ComponentProps, FC } from 'react';
-import * as icons from '../../icons';
 import { CodeError } from '../CodeError/CodeError';
 import { TextAndIconButton } from '../TextAndIconButton/TextAndIconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { GoogleConnectButton } from '@decipad/ui';
+import { Refresh } from '../../icons';
 
 interface LiveErrorProps {
   error: Error;
@@ -21,7 +23,7 @@ interface ErrorIcons {
   [key: string]: IconInfo;
 }
 
-const errIcons: ErrorIcons = {
+const errorIcons: ErrorIcons = {
   'Could not find the result': {
     icon: (
       <CodeError
@@ -33,7 +35,7 @@ const errIcons: ErrorIcons = {
     color: 'red',
   },
   'Failed to fetch': {
-    icon: <icons.Refresh />,
+    icon: <Refresh />,
     color: 'default',
   },
   'connect ENETUNREACH 2': {
@@ -63,13 +65,12 @@ export const LiveError: FC<LiveErrorProps> = ({
   onRetry = noop,
   onAuthenticate = noop,
 }) => {
-  console.error(error.message);
-  const isPermissionErr = isPermissionError(error);
-  const isFailedAuth = isFlagEnabled('INTEGRATIONS_AUTH') && isPermissionErr;
-  const label = isFailedAuth ? 'Authenticate with google' : 'Retry';
+  const isFailedAuth =
+    isFlagEnabled('INTEGRATIONS_AUTH') && isPermissionError(error);
+
   const action = isFailedAuth ? onAuthenticate : onRetry;
 
-  const defaultErr = (
+  const defaultError = (
     <CodeError
       message={error.message || "There's an error in the source document"}
       defaultDocsMessage={'Go to source'}
@@ -77,23 +78,26 @@ export const LiveError: FC<LiveErrorProps> = ({
       variant="smol"
     />
   );
-  const errMsg = error.message || '';
-  const specialErrs = Object.keys(errIcons);
-  const maybeMatchErr = specialErrs.find((thing) => errMsg.includes(thing));
-  const { icon, color } = isPermissionErr
-    ? ({ icon: <icons.Google />, color: 'default' } as IconInfo)
-    : maybeMatchErr
-    ? errIcons[maybeMatchErr]
+  const errorMessage = error.message || '';
+
+  const specialErrors = Object.keys(errorIcons);
+
+  const matchError = specialErrors.find((m) => errorMessage.includes(m));
+
+  const { icon, color } = matchError
+    ? errorIcons[matchError]
     : ({
-        icon: defaultErr,
+        icon: defaultError,
         color: 'red',
       } as IconInfo);
 
-  const btn = (
+  const button = isPermissionError(error) ? (
+    <GoogleConnectButton onClick={action} />
+  ) : (
     <TextAndIconButton
       color={color}
       iconPosition="left"
-      text={label}
+      text="Retry"
       onClick={action}
       animateIcon={!isFailedAuth}
       disabled={isFailedAuth}
@@ -101,12 +105,13 @@ export const LiveError: FC<LiveErrorProps> = ({
       {icon}
     </TextAndIconButton>
   );
+
   return isFailedAuth ? (
-    <Tooltip hoverOnly trigger={<span>{btn}</span>}>
+    <Tooltip hoverOnly trigger={button}>
       Sorry, we can't access your private document right now. We are waiting for
       google to approve our app.
     </Tooltip>
   ) : (
-    btn
+    button
   );
 };

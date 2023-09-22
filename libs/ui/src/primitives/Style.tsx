@@ -505,6 +505,11 @@ export interface ComponentCssVariables {
 
   ToggleOffBackgroundColor: string;
   ToggleOnBackgroundColor: string;
+
+  GoogleButtonBackground: string;
+  GoogleButtonHoverBackground: string;
+  GoogleButtonBorder: string;
+  GoogleButtonText: string;
 }
 
 /**
@@ -605,6 +610,11 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
 
       ToggleOffBackgroundColor: grey300.hex,
       ToggleOnBackgroundColor: grey600.hex,
+
+      GoogleButtonBackground: '#ffffff',
+      GoogleButtonHoverBackground: 'eeeeee',
+      GoogleButtonBorder: '#dcdcdc',
+      GoogleButtonText: '#757575',
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -698,6 +708,11 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
 
       ToggleOffBackgroundColor: dark500.hex,
       ToggleOnBackgroundColor: dark300.hex,
+
+      GoogleButtonBackground: '#4285F4',
+      GoogleButtonHoverBackground: '#3367D6',
+      GoogleButtonBorder: '#3367D6',
+      GoogleButtonText: '#ffffff',
     },
   } as const;
 

@@ -42,6 +42,7 @@ export { ExternalHrefIcon } from './ExternalHrefIcon/ExternalHrefIcon';
 export * from './Floating';
 export { FloatingButton } from './FloatingButton/FloatingButton';
 export { FunctionResult } from './FunctionResult/FunctionResult';
+export { GoogleConnectButton } from './GoogleConnectButton/GoogleConnectButton';
 export { Heading1 } from './Heading1/Heading1';
 export { Heading2 } from './Heading2/Heading2';
 export { Highlight } from './Highlight/Highlight';
