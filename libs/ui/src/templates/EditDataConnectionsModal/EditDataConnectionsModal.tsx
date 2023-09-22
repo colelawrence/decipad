@@ -5,8 +5,7 @@ import { css } from '@emotion/react';
 import { workspaces } from '@decipad/routing';
 import { ClosableModal } from '../../organisms';
 import { ClosableModalHeader } from '../../molecules';
-import { Tabs } from '../../molecules/Tabs/Tabs';
-import { TextAndIconButton } from '../../atoms';
+import { TabsRoot, TabsList, TabsTrigger } from '@decipad/ui';
 
 type EditDataConnectionsModalProps = {
   readonly closeHref: string;
@@ -37,34 +36,29 @@ export const EditDataConnectionsModal: React.FC<
       closeAction={closeHref}
     >
       <div css={modalWrapper}>
-        <div css={fullWidth}>
-          <Tabs variant>
-            <TextAndIconButton
-              size="normal"
-              text="API Secrets"
-              variantHover
-              notSelectedLook={pathname !== connections.codeSecrets({}).$}
-              color={
-                pathname === connections.codeSecrets({}).$
-                  ? 'grey'
-                  : 'transparent'
-              }
-              onClick={() => navigate(connections.codeSecrets({}).$)}
+        <TabsRoot css={fullWidth}>
+          <TabsList>
+            <TabsTrigger
+              name="secrets"
+              trigger={{
+                label: 'API Secrets',
+                onClick: () => navigate(connections.codeSecrets({}).$),
+                disabled: false,
+                selected: pathname === connections.codeSecrets({}).$,
+              }}
             />
-            <TextAndIconButton
-              size="normal"
-              text="SQL Connections"
-              variantHover
-              notSelectedLook={pathname !== connections.sqlConnections({}).$}
-              color={
-                pathname === connections.sqlConnections({}).$
-                  ? 'grey'
-                  : 'transparent'
-              }
-              onClick={() => navigate(connections.sqlConnections({}).$)}
+            <TabsTrigger
+              name="connections"
+              trigger={{
+                label: 'SQL Connections',
+                onClick: () => navigate(connections.sqlConnections({}).$),
+                disabled: false,
+                selected: pathname === connections.sqlConnections({}).$,
+              }}
             />
-          </Tabs>
-        </div>
+          </TabsList>
+        </TabsRoot>
+
         <Outlet />
       </div>
     </ClosableModal>

@@ -13,9 +13,9 @@ import { BackendUrl } from '@decipad/utils';
 import { MessageBlock } from '.';
 import { Caret, Edit, Loading, Trash, Warning } from '../../icons';
 import { cssVar, p13Bold, p14Medium, p16Bold } from '../../primitives';
-import { Button, MenuItem, TextAndIconButton } from '../../atoms';
+import { Button, MenuItem } from '../../atoms';
 import { MenuList } from '../../molecules';
-import { Tabs } from '../../molecules/Tabs/Tabs';
+import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@decipad/ui';
 
 interface DatabaseConnectionProps {
   workspaceId: string;
@@ -311,148 +311,155 @@ function NewDataConnection({
           />
         </div>
 
-        <div css={{ width: '100%' }}>
-          <Tabs variant>
-            <TextAndIconButton
-              size="normal"
-              text="Manual Connection"
-              variantHover
-              notSelectedLook={connMethod !== 'manual'}
-              color={connMethod === 'manual' ? 'grey' : 'transparent'}
-              onClick={() => setConnMethod('manual')}
+        <TabsRoot css={{ width: '100%' }} defaultValue="full-url">
+          <TabsList>
+            <TabsTrigger
+              name="full-url"
+              trigger={{
+                label: 'Use a full SQL URL',
+                onClick: () => setConnMethod('full-url'),
+                disabled: false,
+                selected: connMethod === 'full-url',
+              }}
             />
-            <TextAndIconButton
-              size="normal"
-              text="Use a Full SQL URL"
-              variantHover
-              notSelectedLook={connMethod !== 'full-url'}
-              color={connMethod === 'full-url' ? 'grey' : 'transparent'}
-              onClick={() => setConnMethod('full-url')}
+            <TabsTrigger
+              name="manual"
+              trigger={{
+                label: 'Manual Connection',
+                onClick: () => setConnMethod('manual'),
+                disabled: false,
+                selected: connMethod === 'manual',
+              }}
             />
-          </Tabs>
-        </div>
+          </TabsList>
 
-        {connMethod === 'full-url' ? (
-          <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
-            <label css={labelStyles} htmlFor="sql-url">
-              SQL URL (Containing credentials, port and database host)
-            </label>
-            <input
-              id="sql-url"
-              css={inputStyles}
-              placeholder="mysql://user:password@host.com:3306/your_database"
-              value={fullUrl}
-              onChange={(e) => setFullUrl(e.target.value)}
-              onFocus={resetOnFocus}
-            />
-          </div>
-        ) : (
-          <>
-            <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
-              <label css={labelStyles} htmlFor="manual-conn-url">
-                Manual Connection
-              </label>
-              <div css={{ display: 'flex' }}>
-                <MenuList
-                  root
-                  dropdown
-                  trigger={
-                    <div
-                      css={{
-                        width: 'fit-content',
-                        display: 'flex',
-                        padding: '8px 8px 8px 12px',
-                        alignItems: 'center',
-                        gap: '8px',
-                        cursor: 'pointer',
-                        backgroundColor: cssVar('borderSubdued'),
-                        borderRadius: '8px 0px 0px 8px',
-                      }}
-                    >
-                      {protocol ?? placeholderList.mysql}
-                      <div css={{ width: '16px' }}>
-                        <Caret variant="down" />
-                      </div>
-                    </div>
-                  }
-                >
-                  {Object.entries(placeholderList).map(([key, value]) => (
-                    <MenuItem
-                      onSelect={() => setProtocol(key as ImportElementSource)}
-                    >
-                      <div css={{ minWidth: '136px' }}>{value}</div>
-                    </MenuItem>
-                  ))}
-                </MenuList>
+          <TabsContent name="full-url">
+            <div css={tabsContentStyles}>
+              <div css={inputFieldWrapper}>
+                <label css={labelStyles} htmlFor="sql-url">
+                  SQL URL (Containing credentials, port and database host)
+                </label>
                 <input
-                  id="manual-conn-url"
-                  css={[inputStyles, { borderRadius: '0px 8px 8px 0px' }]}
-                  placeholder="database.com"
-                  value={host}
-                  onChange={(e) => setHost(e.target.value)}
+                  id="sql-url"
+                  css={inputStyles}
+                  placeholder="mysql://user:password@host.com:3306/your_database"
+                  value={fullUrl}
+                  onChange={(e) => setFullUrl(e.target.value)}
                   onFocus={resetOnFocus}
                 />
               </div>
             </div>
+          </TabsContent>
+          <TabsContent name="manual">
+            <div css={tabsContentStyles}>
+              <div css={[inputFieldWrapper, { gridColumn: 'span 2' }]}>
+                <label css={labelStyles} htmlFor="manual-conn-url">
+                  Manual Connection
+                </label>
+                <div css={{ display: 'flex' }}>
+                  <MenuList
+                    root
+                    dropdown
+                    trigger={
+                      <div
+                        css={{
+                          width: 'fit-content',
+                          display: 'flex',
+                          padding: '8px 8px 8px 12px',
+                          alignItems: 'center',
+                          gap: '8px',
+                          cursor: 'pointer',
+                          backgroundColor: cssVar('borderSubdued'),
+                          borderRadius: '8px 0px 0px 8px',
+                        }}
+                      >
+                        {protocol ?? placeholderList.mysql}
+                        <div css={{ width: '16px' }}>
+                          <Caret variant="down" />
+                        </div>
+                      </div>
+                    }
+                  >
+                    {Object.entries(placeholderList).map(([key, value]) => (
+                      <MenuItem
+                        onSelect={() => setProtocol(key as ImportElementSource)}
+                      >
+                        <div css={{ minWidth: '136px' }}>{value}</div>
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                  <input
+                    id="manual-conn-url"
+                    css={[inputStyles, { borderRadius: '0px 8px 8px 0px' }]}
+                    placeholder="database.com"
+                    value={host}
+                    onChange={(e) => setHost(e.target.value)}
+                    onFocus={resetOnFocus}
+                  />
+                </div>
+              </div>
 
-            <div css={inputFieldWrapper}>
-              <label css={labelStyles} htmlFor="manual-conn-username">
-                Username
-              </label>
-              <input
-                id="manual-conn-username"
-                css={inputStyles}
-                placeholder="admin"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                onFocus={resetOnFocus}
-              />
-            </div>
+              <div css={inputGridStyles}>
+                <div css={inputFieldWrapper}>
+                  <label css={labelStyles} htmlFor="manual-conn-username">
+                    Username
+                  </label>
+                  <input
+                    id="manual-conn-username"
+                    css={inputStyles}
+                    placeholder="admin"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    onFocus={resetOnFocus}
+                  />
+                </div>
 
-            <div css={inputFieldWrapper}>
-              <label css={labelStyles} htmlFor="manual-conn-password">
-                Password
-              </label>
-              <input
-                id="manual-conn-password"
-                type="password"
-                css={inputStyles}
-                placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onFocus={resetOnFocus}
-              />
-            </div>
+                <div css={inputFieldWrapper}>
+                  <label css={labelStyles} htmlFor="manual-conn-password">
+                    Password
+                  </label>
+                  <input
+                    id="manual-conn-password"
+                    type="password"
+                    css={inputStyles}
+                    placeholder="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onFocus={resetOnFocus}
+                  />
+                </div>
 
-            <div css={inputFieldWrapper}>
-              <label css={labelStyles} htmlFor="manual-conn-db">
-                Database
-              </label>
-              <input
-                id="manual-conn-db"
-                css={inputStyles}
-                placeholder="mydb"
-                value={databaseName}
-                onChange={(e) => setdatabaseName(e.target.value)}
-                onFocus={resetOnFocus}
-              />
-            </div>
+                <div css={inputFieldWrapper}>
+                  <label css={labelStyles} htmlFor="manual-conn-db">
+                    Database
+                  </label>
+                  <input
+                    id="manual-conn-db"
+                    css={inputStyles}
+                    placeholder="mydb"
+                    value={databaseName}
+                    onChange={(e) => setdatabaseName(e.target.value)}
+                    onFocus={resetOnFocus}
+                  />
+                </div>
 
-            <div css={inputFieldWrapper}>
-              <label css={labelStyles} htmlFor="manual-conn-port">
-                Port
-              </label>
-              <input
-                id="manual-conn-port"
-                css={inputStyles}
-                placeholder="5432"
-                value={port}
-                onChange={(e) => setPort(e.target.value)}
-                onFocus={resetOnFocus}
-              />
+                <div css={inputFieldWrapper}>
+                  <label css={labelStyles} htmlFor="manual-conn-port">
+                    Port
+                  </label>
+                  <input
+                    id="manual-conn-port"
+                    css={inputStyles}
+                    placeholder="5432"
+                    value={port}
+                    onChange={(e) => setPort(e.target.value)}
+                    onFocus={resetOnFocus}
+                  />
+                </div>
+              </div>
             </div>
-          </>
-        )}
+          </TabsContent>
+        </TabsRoot>
 
         <div css={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <div>
@@ -506,19 +513,26 @@ function NewDataConnection({
 
 const wrapperStyles = css({
   width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+});
 
+const tabsContentStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+  padding: '12px 0px',
+});
+
+const inputGridStyles = css({
   display: 'grid',
-
   gridTemplateColumns: '1fr 1fr',
-  gridColumnGap: '10px',
-
-  gridTemplateRows: '1fr 1fr 1fr 1fr',
-  gridRowGap: '10px',
+  gap: '12px',
 });
 
 const inputFieldWrapper = css({
   width: '100%',
-
   display: 'flex',
   flexDirection: 'column',
   gap: '4px',

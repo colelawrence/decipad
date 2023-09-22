@@ -25,7 +25,7 @@ import {
 } from 'react';
 import { Button, TextAndIconButton, UpgradePlanWarning } from '../../atoms';
 import { Close, Play, Sparkles } from '../../icons';
-import { Tabs } from '../../molecules/Tabs/Tabs';
+import { TabsList, TabsTrigger, TabsRoot } from '@decipad/ui';
 import {
   cssVar,
   mobileQuery,
@@ -164,26 +164,28 @@ export const WrapperIntegrationModalDialog: FC<
   });
 
   const tabs = (
-    <Tabs variant>
-      <TextAndIconButton
-        key="tab-1"
-        size="normal"
-        text="Code"
-        variantHover
-        notSelectedLook={tabStage !== 'connect'}
-        color={tabStage === 'connect' ? 'grey' : 'transparent'}
-        onClick={() => onTabClick('connect')}
-      />
-      <TextAndIconButton
-        key="tab-2"
-        size="normal"
-        text="Preview"
-        variantHover
-        notSelectedLook={tabStage !== 'map'}
-        color={tabStage === 'map' ? 'grey' : 'transparent'}
-        onClick={() => onTabClick('map')}
-      />
-    </Tabs>
+    <TabsRoot>
+      <TabsList>
+        <TabsTrigger
+          name="connect"
+          trigger={{
+            label: 'Code',
+            onClick: () => onTabClick('connect'),
+            disabled: false,
+            selected: tabStage === 'connect',
+          }}
+        />
+        <TabsTrigger
+          name="map"
+          trigger={{
+            label: 'Preview',
+            onClick: () => onTabClick('map'),
+            disabled: false,
+            selected: tabStage === 'map',
+          }}
+        />
+      </TabsList>
+    </TabsRoot>
   );
 
   return (

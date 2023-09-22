@@ -1,12 +1,17 @@
 import { FileType, MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
-import { isValidURL } from '@decipad/ui';
+import {
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+  isValidURL,
+} from '@decipad/ui';
 import { css } from '@emotion/react';
-import { ChangeEvent, FC, useMemo, useRef, useState } from 'react';
-import { Button, TextAndIconButton } from '../../atoms';
+import { ChangeEvent, FC, useRef, useState } from 'react';
+import { Button } from '../../atoms';
 import { Close } from '../../icons';
 import { modalDialogStyles } from '../../molecules/Modal/Modal';
-import { Tabs } from '../../molecules/Tabs/Tabs';
 import { cssVar, p12Medium, p15Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 
@@ -59,12 +64,6 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   const [fileName, setFileName] = useState('');
   const toast = useToast();
 
-  const stringPerUploadFileType = useMemo(() => {
-    return activeTab === 'upload'
-      ? { button: 'Choose file' }
-      : { button: 'Embed' };
-  }, [activeTab]);
-
   const handleFileChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const files = evt?.target?.files;
     const uploadFile = files && files[0];
@@ -86,7 +85,7 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   };
 
   return (
-    <div css={allWrapperStyles}>
+    <TabsRoot css={allWrapperStyles} defaultValue={activeTab}>
       <div css={titleWrapperStyles}>
         <div css={titleStyles}>{title}</div>
         <div css={iconStyles}>
@@ -95,70 +94,73 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
           </div>
         </div>
       </div>
-      <div css={tabWrapStyles}>
-        <Tabs variant>
-          <TextAndIconButton
-            key="tab-1"
-            size="fit"
-            text="Upload"
-            variantHover
-            aria-selected={activeTab === 'upload'}
-            notSelectedLook={activeTab !== 'upload'}
-            color={activeTab === 'upload' ? 'grey' : 'transparent'}
-            onClick={() => setActiveTab('upload')}
+      <div css={tabWrapStyles} defaultValue={activeTab}>
+        <TabsList>
+          <TabsTrigger
+            name="upload"
+            testId="upload-file-tab"
+            trigger={{
+              label: 'Upload',
+              onClick: () => setActiveTab('upload'),
+              disabled: false,
+              selected: activeTab === 'upload',
+            }}
           />
-          <TextAndIconButton
-            key="tab-2"
-            size="fit"
-            text="Embed link"
-            aria-selected={activeTab === 'embed'}
-            variantHover
-            notSelectedLook={activeTab !== 'embed'}
-            color={activeTab === 'embed' ? 'grey' : 'transparent'}
-            onClick={() => setActiveTab('embed')}
+          <TabsTrigger
+            name="embed"
+            testId="embed-file-tab"
+            trigger={{
+              label: 'Embed link',
+              onClick: () => setActiveTab('embed'),
+              disabled: false,
+              selected: activeTab === 'embed',
+            }}
           />
-        </Tabs>
+        </TabsList>
       </div>
       <div css={importFileWrapperStyles}>
-        <div css={importFileActionStyles}>
-          {activeTab === 'embed' && (
-            <>
-              <input
-                data-testid="upload-link-input"
-                css={inputStyles}
-                value={fileName}
-                onChange={(e) => setFileName(e.target.value)}
-              />
-              <Button
-                testId="embed-csv-button"
-                type="primary"
-                onClick={() => onUpload(fileName, 'embed')}
-                disabled={!isValidURL(fileName)}
-              >
-                {stringPerUploadFileType.button}
-              </Button>
-            </>
-          )}
-          {activeTab === 'upload' && (
-            <>
-              <input
-                type="file"
-                accept={accept}
-                onChange={handleFileChange}
-                ref={fileInputRef}
-                css={hiddenElement}
-              />
-              <Button type="primary" onClick={handleButtonClick}>
-                {stringPerUploadFileType.button}
-              </Button>
-            </>
-          )}
-        </div>
-        <span css={p12Medium}>
-          You can also drag & drop, or copy & paste directly into the notebook.
-        </span>
+        <TabsContent name="embed">
+          <div css={importFileActionStyles}>
+            <input
+              data-testid="upload-link-input"
+              css={inputStyles}
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+            />
+            <Button
+              key="embed-csv-button"
+              testId="embed-csv-button"
+              type="primary"
+              onClick={() => onUpload(fileName, 'embed')}
+              disabled={!isValidURL(fileName)}
+            >
+              Embed
+            </Button>
+          </div>
+        </TabsContent>
+        <TabsContent name="upload">
+          <div css={importFileActionStyles}>
+            <input
+              type="file"
+              accept={accept}
+              onChange={handleFileChange}
+              ref={fileInputRef}
+              css={hiddenElement}
+            />
+            <Button
+              key="upload-button"
+              type="primary"
+              onClick={handleButtonClick}
+            >
+              Choose file
+            </Button>
+          </div>
+        </TabsContent>
       </div>
-    </div>
+      <span css={p12Medium}>
+        You can also drag & drop, or copy & paste directly into the notebook.
+      </span>
+    </TabsRoot>
   );
 };
 

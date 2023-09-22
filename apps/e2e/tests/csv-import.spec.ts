@@ -27,7 +27,7 @@ test.describe('Testing CSV imports', () => {
   test('Importing CSV through csv panel', async () => {
     await createCSVBelow(page);
     await page.getByRole('button', { name: 'Choose file' }).first().click();
-    await page.getByTestId('text-icon-button:Embed link').click();
+    await page.getByTestId('embed-file-tab').click();
     await page
       .getByTestId('upload-link-input')
       .fill(

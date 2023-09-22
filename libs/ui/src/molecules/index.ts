@@ -70,7 +70,7 @@ export { SyntaxErrorHighlight } from './SyntaxErrorHighlight/SyntaxErrorHighligh
 export { TableCellControls } from './TableCellControls/TableCellControls';
 export { TableHeaderRow } from './TableHeaderRow/TableHeaderRow';
 export { TableRow } from './TableRow/TableRow';
-export { TabsRoot, TabsList, TabsTrigger, TabsContent } from './TabsV2/TabsV2';
+export { TabsRoot, TabsList, TabsTrigger, TabsContent } from './Tabs/Tabs';
 export { TextInputMenuItem } from './TextInputMenuItem/TextInputMenuItem';
 export { UnitMenuItem } from './UnitMenuItem/UnitMenuItem';
 export { UnorderedList } from './UnorderedList/UnorderedList';

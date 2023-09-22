@@ -51,7 +51,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
     <div css={sidebarColumnStyles} data-testid="editor-sidebar">
       <TabsRoot css={[sidebarWrapperStyles]} defaultValue={sidebarTab}>
         <div css={sidebarContentStyles}>
-          <TabsList>
+          <TabsList fullWidth>
             {AVAILABLE_TABS.map((tab) => {
               const {
                 label,

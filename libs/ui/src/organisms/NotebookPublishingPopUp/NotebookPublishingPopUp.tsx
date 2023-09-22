@@ -5,7 +5,7 @@ import { isServerSideRendering } from '@decipad/support';
 import * as Popover from '@radix-ui/react-popover';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useCallback, useState } from 'react';
-import { Button, Dot, TabButton } from '../../atoms';
+import { Button, Dot } from '../../atoms';
 import { cssVar, smallScreenQuery, smallShadow } from '../../primitives';
 import {
   NotebookMetaDataFragment,
@@ -13,9 +13,9 @@ import {
 } from '@decipad/graphql-client';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
-import { Tabs } from '../../molecules/Tabs/Tabs';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@decipad/ui';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -48,6 +48,7 @@ const groupStyles = css({
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
+  marginTop: '16px',
 });
 
 export type NotebookSharingPopUpProps = Pick<
@@ -146,77 +147,84 @@ export const NotebookPublishingPopUp = ({
     <div css={popUpStyles}>
       <div css={innerPopUpStyles}>
         {isAdmin && (
-          <Tabs variant fullWidth useGrid>
-            <TabButton
-              text="Collaborate"
-              isSelected={selectedTab === 'Collaborate'}
-              onClick={() => {
-                selectTab('Collaborate');
-              }}
-              testId="collaborate-tab"
-            />
-            <TabButton
-              text="Publish"
-              isSelected={selectedTab === 'Publish'}
-              onClick={() => {
-                selectTab('Publish');
-              }}
-              testId="publish-tab"
-            />
-            <TabButton
-              text="Embed"
-              isSelected={selectedTab === 'Embed'}
-              onClick={() => {
-                selectTab('Embed');
-              }}
-              testId="embed-tab"
-            />
-          </Tabs>
-        )}
-
-        {isAdmin && selectedTab === 'Collaborate' && (
-          <div css={groupStyles} className="notebook-collaborate-tab">
-            <NotebookCollaborateTab
-              hasPaywall={hasPaywall}
-              usersWithAccess={invitedUsers}
-              teamUsers={teamUsers}
-              teamName={teamName}
-              manageTeamURL={manageTeamURL}
-              isAdmin={isAdmin}
-              workspaceId={workspaceId}
-              notebookId={notebookId}
-              onRemove={onRemove}
-              onInvite={onInvite}
-              onChange={onChange}
-            />
-          </div>
-        )}
-        {isAdmin && selectedTab === 'Publish' && (
-          <div css={groupStyles} className="notebook-publish-tab">
-            <NotebookPublishTab
-              notebookId={notebookId}
-              isAdmin={isAdmin}
-              isPublished={isPublished}
-              link={link}
-              hasUnpublishedChanges={hasUnpublishedChanges}
-              currentSnapshot={currentSnapshot}
-              isPublishing={isPublishing}
-              setIsPublishing={setIsPublishing}
-              onPublish={onPublish}
-              onUnpublish={onUnpublish}
-              setShareMenuOpen={setShareMenuOpen}
-            />
-          </div>
-        )}
-        {isAdmin && selectedTab === 'Embed' && (
-          <div css={groupStyles} className="notebook-embed-tab">
-            <NotebookEmbedTab
-              isAdmin={isAdmin}
-              isPublished={isPublished}
-              embedLink={embedLink}
-              setShareMenuOpen={setShareMenuOpen}
-            />
-          </div>
+          <TabsRoot defaultValue={selectedTab}>
+            <TabsList fullWidth>
+              <TabsTrigger
+                testId="collaborate-tab"
+                name="Collaborate"
+                trigger={{
+                  label: 'Collaborate',
+                  onClick: () => selectTab('Collaborate'),
+                  disabled: false,
+                  selected: selectedTab === 'Collaborate',
+                }}
+              />
+              <TabsTrigger
+                testId="publish-tab"
+                name="Publish"
+                trigger={{
+                  label: 'Publish',
+                  onClick: () => selectTab('Publish'),
+                  disabled: false,
+                  selected: selectedTab === 'Publish',
+                }}
+              />
+              <TabsTrigger
+                testId="embed-tab"
+                name="Embed"
+                trigger={{
+                  label: 'Embed',
+                  onClick: () => selectTab('Embed'),
+                  disabled: false,
+                  selected: selectedTab === 'Embed',
+                }}
+              />
+            </TabsList>
+            <TabsContent name="Collaborate">
+              <div css={groupStyles} className="notebook-collaborate-tab">
+                <NotebookCollaborateTab
+                  hasPaywall={hasPaywall}
+                  usersWithAccess={invitedUsers}
+                  teamUsers={teamUsers}
+                  teamName={teamName}
+                  manageTeamURL={manageTeamURL}
+                  isAdmin={isAdmin}
+                  workspaceId={workspaceId}
+                  notebookId={notebookId}
+                  onRemove={onRemove}
+                  onInvite={onInvite}
+                  onChange={onChange}
+                />
+              </div>
+            </TabsContent>
+            <TabsContent name="Publish">
+              <div css={groupStyles} className="notebook-publish-tab">
+                <NotebookPublishTab
+                  notebookId={notebookId}
+                  isAdmin={isAdmin}
+                  isPublished={isPublished}
+                  link={link}
+                  hasUnpublishedChanges={hasUnpublishedChanges}
+                  currentSnapshot={currentSnapshot}
+                  isPublishing={isPublishing}
+                  setIsPublishing={setIsPublishing}
+                  onPublish={onPublish}
+                  onUnpublish={onUnpublish}
+                  setShareMenuOpen={setShareMenuOpen}
+                />
+              </div>
+            </TabsContent>
+            <TabsContent name="Embed">
+              <div css={groupStyles} className="notebook-embed-tab">
+                <NotebookEmbedTab
+                  isAdmin={isAdmin}
+                  isPublished={isPublished}
+                  embedLink={embedLink}
+                  setShareMenuOpen={setShareMenuOpen}
+                />
+              </div>
+            </TabsContent>
+          </TabsRoot>
         )}
         {!isAdmin && (
           <>
