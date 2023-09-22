@@ -1,0 +1,995 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "[Template] Chartr Dashboard Summary (Internal)"
+				}
+			],
+			"type": "h1",
+			"id": "F3xvV5eHPFnTgRsOmh5v7"
+		},
+		{
+			"children": [
+				{
+					"text": "Brand: "
+				},
+				{
+					"text": "Brand",
+					"magicnumberz": true
+				},
+				{
+					"text": " \nSponsor Date: "
+				},
+				{
+					"text": "Date",
+					"magicnumberz": true
+				},
+				{
+					"text": " \nPackage: "
+				},
+				{
+					"text": "Package",
+					"magicnumberz": true
+				},
+				{
+					"text": "\nPrice:  "
+				},
+				{
+					"text": "Cost",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "qvMLb02NR7ywH2_w-47Y-"
+		},
+		{
+			"children": [
+				{
+					"text": "Performance"
+				}
+			],
+			"type": "h2",
+			"id": "boSVuMODKwecNUrjFCARW"
+		},
+		{
+			"children": [
+				{
+					"text": "Select the date of the sponsorship to view corresponding data and explore scenarios if pricing were to increase/decrease by a given percentage. "
+				}
+			],
+			"type": "p",
+			"id": "zKmO0zJUaN4q6RQBMjgDY"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Date"
+								}
+							],
+							"type": "caption",
+							"id": "HmLriVamWH3rqEBZNRyld",
+							"icon": "Bolt",
+							"color": "Malibu"
+						},
+						{
+							"children": [
+								{
+									"text": "2023-09-04"
+								}
+							],
+							"type": "exp",
+							"id": "FM1di86lu0kRl-Ch7r3aC"
+						}
+					],
+					"id": "HvZ-Cd9UAXflFUyJLRL_4",
+					"type": "def",
+					"variant": "date",
+					"coerceToType": {
+						"kind": "date",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "PricePercentChange"
+								}
+							],
+							"id": "F-0ynwURgNW9iyOQoZn2G",
+							"type": "caption",
+							"icon": "Percentage",
+							"color": "Malibu"
+						},
+						{
+							"children": [
+								{
+									"text": "45%"
+								}
+							],
+							"id": "R7Aq0gXznl9snGBtPxKEo",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "e6PJ2bK-7O_q93WdSqX3B",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "45"
+						}
+					],
+					"id": "E4yFuRLW11lbb7jzYIERK",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "qHlDrHh1Ox-lPuQ9MRwBw",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Performance metrics as of ["
+				},
+				{
+					"text": "Date of Data",
+					"bold": true
+				},
+				{
+					"text": "]"
+				}
+			],
+			"id": "-Bp3AZpcgAvs_vMFHkN4n",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Total Unique Recipients: "
+								},
+								{
+									"text": "Recipients",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "3Iwwyt59jmM97xS6kzVzd"
+						}
+					],
+					"type": "li",
+					"id": "qDrM9abOTr0OKwCjV36hb"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Total Unique Opens: "
+								},
+								{
+									"text": "Opens",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "Al6bwZ7w0AcoDg7__43Tz"
+						}
+					],
+					"type": "li",
+					"id": "vTgNVs1sMfUclBrpRsEZ8"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Total Unique Clicks "
+								},
+								{
+									"text": "Clicks",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "pVvKdGvWpO2Nuf5widPaA"
+						}
+					],
+					"type": "li",
+					"id": "q-ExEZqrbrhkMmOhd1sys"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Open Rate: "
+								},
+								{
+									"text": "OpenRate",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "HWFxkopWEjIP3gaTjFrVw"
+						}
+					],
+					"type": "li",
+					"id": "U0uejg_iNTBzElJ7cDuKS"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CTR: "
+								},
+								{
+									"text": "CTR",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "WhPrsDce4oGU7P1Xmi-Z8"
+						}
+					],
+					"type": "li",
+					"id": "MyS0Q81hdhUGwfIMKSeYD"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CPC: "
+								},
+								{
+									"text": "CPC",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "ow60VgAcAk5cT5aXKcPmb"
+						}
+					],
+					"type": "li",
+					"id": "AiHQp5oKfQdkWdvhGROq7"
+				}
+			],
+			"type": "ul",
+			"id": "kArfZnw_xTjJr2dVZxtXK"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "OpenRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0xmvaDxqySdQdAXP5yvHT"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Wlri4RXm4LhFO_nWfFX6l",
+							"type": "smart-ref",
+							"blockId": "UFtuvB9Y5KfIcnVFrJki2",
+							"columnId": null,
+							"lastSeenVariableName": "Opens"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NnSyGBIRbGIudN6B8lMs3",
+							"type": "smart-ref",
+							"blockId": "vfA7owWcFIBHsqwnb0bLE",
+							"columnId": null,
+							"lastSeenVariableName": "Recipients"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "iCM5sAljj0B2kMFLzOGZx"
+				}
+			],
+			"id": "MmQJi5Tg7dvpYyFzV3Lp4",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CTR"
+						}
+					],
+					"type": "structured_varname",
+					"id": "xHk3iokyYsX_qgQLcZVqN"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rqjJ3cYHVON79ZpnDsRBY",
+							"type": "smart-ref",
+							"blockId": "tw-dl2jy_p8alD5hxvuOa",
+							"columnId": null,
+							"lastSeenVariableName": "Clicks"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l7GfVM0Twx7wqGkjm_UWQ",
+							"type": "smart-ref",
+							"blockId": "UFtuvB9Y5KfIcnVFrJki2",
+							"columnId": null,
+							"lastSeenVariableName": "Opens"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Q7unfjs9RlxMvjNz-2Qhw"
+				}
+			],
+			"id": "6zV-cYYcqO4pAuiqmYntQ",
+			"type": "code_line_v2",
+			"showResult": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CPC"
+						}
+					],
+					"type": "structured_varname",
+					"id": "_uhJrP2326FuAg1ByfAec"
+				},
+				{
+					"children": [
+						{
+							"text": "("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1Ckf8vgqNS_4InmLLxCRZ",
+							"type": "smart-ref",
+							"blockId": "XsQ4oxHzotv0DBzXAevq1",
+							"columnId": null,
+							"lastSeenVariableName": "Cost"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3iGWcWLiOaZkUMzSJLrIk",
+							"type": "smart-ref",
+							"blockId": "E4yFuRLW11lbb7jzYIERK",
+							"columnId": null,
+							"lastSeenVariableName": "PricePercentChange"
+						},
+						{
+							"text": " )/ "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5cvAEupM7xNZ8qVL--8Yx",
+							"type": "smart-ref",
+							"blockId": "tw-dl2jy_p8alD5hxvuOa",
+							"columnId": null,
+							"lastSeenVariableName": "Clicks"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "wNLbeMCbUoUkNbYvWisPn"
+				}
+			],
+			"id": "VzNd2ERZazdvEEwGY00B4",
+			"type": "code_line_v2",
+			"showResult": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "_gOqPitf7e4ET_IUfqEsR"
+		},
+		{
+			"children": [
+				{
+					"text": "Chartr Benchmarks"
+				}
+			],
+			"type": "h2",
+			"id": "Hn95f8Kwt3-aVRvlylI-4"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "m_THLPXoCJ_om2b5VmWVN",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Subscribers"
+						}
+					],
+					"type": "structured_varname",
+					"id": "V-XhPDqY4yuZsLb1cbHpL"
+				},
+				{
+					"children": [
+						{
+							"text": "400000"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "op1Ycw6S793T_u5mRS5gw"
+				}
+			],
+			"id": "OCdPpPrsXolsszawBhwm2",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AvgOpenRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "n6M-3oDjVbyfZT96i8NYY"
+				},
+				{
+					"children": [
+						{
+							"text": "55%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "5UBAR4F9yH-kHKSnENqCu"
+				}
+			],
+			"id": "6JYHBvXOr0lgcruG_Nlma",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AvgClickRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "3cRK84GFZ1waRy1-gkKp4"
+				},
+				{
+					"children": [
+						{
+							"text": "1%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "IiqefDNAhrlHkNs1gy-0w"
+				}
+			],
+			"id": "Hch3mLnOJ6TAEMK_ArC5A",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Definitions",
+					"italic": true
+				}
+			],
+			"type": "p",
+			"id": "1Yx4ARQAL0bdBW2iBmoFb"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Subscribers:",
+									"bold": true
+								},
+								{
+									"text": " Monthly subscribers as of May 2023"
+								}
+							],
+							"type": "lic",
+							"id": "1GMEjmJo8eJE2P9sUDSMx"
+						}
+					],
+					"type": "li",
+					"id": "ODTlri6kjnjC97c4Hjmud"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Open Rate: ",
+									"bold": true
+								},
+								{
+									"text": "Average unique open rate"
+								}
+							],
+							"type": "lic",
+							"id": "KsmysdcFo5DR-F0WodiB0"
+						}
+					],
+					"type": "li",
+					"id": "3bURf6dKJBRAkPOqQ77Br"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Click Rate: ",
+									"bold": true
+								},
+								{
+									"text": "Unique clicks / unique opens"
+								}
+							],
+							"type": "lic",
+							"id": "ku1xTzv4sPjUs4hJEeQtB"
+						}
+					],
+					"type": "li",
+					"id": "_2oK5E4pTMb2u6NkQmtEc"
+				}
+			],
+			"type": "ul",
+			"id": "xC5BkeCqnBwTMe3_j0IMX"
+		},
+		{
+			"children": [
+				{
+					"text": "Google Sheets: Live Data Connection"
+				}
+			],
+			"type": "h2",
+			"id": "_5b83cI7SLmFvDaUU8Sia"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "7vZvn5mEZqOz9IgFS-s8e",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Table"
+						}
+					],
+					"id": "FsrFRQ987OC0XFC1XalKU",
+					"type": "live-var-name"
+				}
+			],
+			"id": "CeYTYF_3VbWAca_mP0Ejb",
+			"type": "live-conn",
+			"url": "https://docs.google.com/spreadsheets/d/1u4iMqeHpxjLzRlo1sutp9PwNZn-H6Drp-zDTYqnrmcU/edit?usp=sharing",
+			"source": "gsheets",
+			"isFirstRowHeaderRow": true,
+			"columnTypeCoercions": {
+				"3": {
+					"kind": "number",
+					"unit": [
+						{
+							"exp": {
+								"n": "1",
+								"d": "1",
+								"s": "1",
+								"infinite": false
+							},
+							"multiplier": {
+								"n": "1",
+								"d": "1",
+								"s": "1",
+								"infinite": false
+							},
+							"known": true,
+							"unit": "usdollar",
+							"baseSuperQuantity": "currency",
+							"baseQuantity": "usdollar"
+						}
+					]
+				}
+			}
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "TAP8ZpfMLH7Ql_ghwZiu4",
+			"type": "plot",
+			"title": "",
+			"sourceVarName": "exprRef_CeYTYF_3VbWAca_mP0Ejb",
+			"xColumnName": "Date",
+			"yColumnName": "Date",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "UniqueClicks",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": "Formula Appendix"
+				}
+			],
+			"type": "h2",
+			"id": "1XzdMgwfEF0jq9s98hBEA",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "_owTnOtA_OLZEXINsmCu7",
+			"type": "divider",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DateSelect"
+						}
+					],
+					"type": "structured_varname",
+					"id": "e5veKuofX0CSqCpUaxn9u"
+				},
+				{
+					"children": [
+						{
+							"text": "filter("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2C7NKB0PqjGPCbbOFWYlC",
+							"type": "smart-ref",
+							"blockId": "CeYTYF_3VbWAca_mP0Ejb",
+							"columnId": null,
+							"lastSeenVariableName": "Table"
+						},
+						{
+							"text": ", "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "cAQfIDCrf0w65BEzlAvE-",
+							"type": "smart-ref",
+							"blockId": "CeYTYF_3VbWAca_mP0Ejb",
+							"columnId": "CeYTYF_3VbWAca_mP0Ejb--0",
+							"lastSeenVariableName": "Table.Date"
+						},
+						{
+							"text": " =="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "z-FuQfFf2pXE1VKsLEisr",
+							"type": "smart-ref",
+							"blockId": "HvZ-Cd9UAXflFUyJLRL_4",
+							"columnId": null,
+							"lastSeenVariableName": "Date"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "uho-H6V544Dzz1sjPFtYT"
+				}
+			],
+			"id": "c_d4gMHssG5q8pbs8_nkM",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Brand"
+						}
+					],
+					"type": "structured_varname",
+					"id": "nPHZz8Ih_Y6w7NYwrED7Y"
+				},
+				{
+					"children": [
+						{
+							"text": "DateSelect.Brand"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "r_NScrjo4huVmKJseKN-z"
+				}
+			],
+			"id": "EdUeBosLMdDKCADul-bGa",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Package"
+						}
+					],
+					"type": "structured_varname",
+					"id": "7ENTK2CsGeNMzfSCMi80k"
+				},
+				{
+					"children": [
+						{
+							"text": "DateSelect.Package"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "oEDEHWAoJcH-aXb7Uy6Ml"
+				}
+			],
+			"id": "H8oklm1LQuoOu3Cr9i4H8",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Cost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "NL7t_2qcYwCGxgWa6Y1cd"
+				},
+				{
+					"children": [
+						{
+							"text": "DateSelect.Price"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "J91lXZbX30U4CoI3UzC5m"
+				}
+			],
+			"id": "XsQ4oxHzotv0DBzXAevq1",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Recipients"
+						}
+					],
+					"type": "structured_varname",
+					"id": "LfFuCpH-hl8XViei6j3ld"
+				},
+				{
+					"children": [
+						{
+							"text": "DateSelect.Recipients"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "PkwckxiDr5sNfZpxGLWmR"
+				}
+			],
+			"id": "vfA7owWcFIBHsqwnb0bLE",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Opens"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ch83w3YAPF8TX-AZ5y1vE"
+				},
+				{
+					"children": [
+						{
+							"text": "DateSelect.Opens"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "qwMtGOxLf0aOQ7IhK9KKU"
+				}
+			],
+			"id": "UFtuvB9Y5KfIcnVFrJki2",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Clicks"
+						}
+					],
+					"type": "structured_varname",
+					"id": "n0qovGZRfK-puxqDhUD_B"
+				},
+				{
+					"children": [
+						{
+							"text": "DateSelect.UniqueClicks"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "qQMTK0MWPMebbg7VAeq_x"
+				}
+			],
+			"id": "tw-dl2jy_p8alD5hxvuOa",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "s2mP34LUAxFFOGizaBlib"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "H_pz_AZ7Rz9swEHt-KYwD"
+		}
+	]
+}
