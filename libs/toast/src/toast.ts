@@ -1,27 +1,70 @@
-import { createContext, useContext, ContextType, ReactNode } from 'react';
-import { Options as ToastOptions } from 'react-toast-notifications';
+import { createContext, useContext } from 'react';
 
-export type ToastType =
+export type ToastStatus =
   | 'info'
   | 'success'
   | 'soft-warning'
   | 'warning'
   | 'error';
 
-export const ToastContext = createContext(
+export type ToastOptions = {
+  autoDismiss?: boolean;
+  duration?: number;
+};
+
+export type ToastType = {
+  content: string | JSX.Element;
+  status: ToastStatus;
+  options: ToastOptions;
+  open: boolean;
+};
+
+type ToastContextType = {
   (
-    message: ReactNode | string,
-    type: ToastType,
-    _options?: ToastOptions
-  ): void => {
-    console.error(
-      'Attempted to create a toast of type',
-      type,
-      'but there is no way of showing toasts provided. Toast message:',
-      message
-    );
-  }
+    content: ToastType['content'],
+    status: ToastType['status'],
+    options?: ToastType['options']
+  ): string;
+  success: (
+    content: ToastType['content'],
+    options?: ToastType['options']
+  ) => string;
+  error: (
+    content: ToastType['content'],
+    options?: ToastType['options']
+  ) => string;
+  warning: (
+    content: ToastType['content'],
+    options?: ToastType['options']
+  ) => string;
+  info: (
+    content: ToastType['content'],
+    options?: ToastType['options']
+  ) => string;
+  delete: (id: string) => void;
+};
+
+type ToastContextImlpType = {
+  sortToasts: () => void;
+  toastElementsMapRef: React.MutableRefObject<Map<string, HTMLLIElement>>;
+};
+
+export const ToastContext = createContext<ToastContextType | undefined>(
+  undefined
 );
 
-export const useToast = (): ContextType<typeof ToastContext> =>
-  useContext(ToastContext);
+export const ToastContextImpl = createContext<ToastContextImlpType | undefined>(
+  undefined
+);
+
+export const useToast = () => {
+  const context = useContext(ToastContext);
+  if (context) return context;
+  throw new Error('useToast must be used within Toasts');
+};
+
+export const useToastContext = () => {
+  const context = useContext(ToastContextImpl);
+  if (context) return context;
+  throw new Error('useToast must be used within Toasts');
+};

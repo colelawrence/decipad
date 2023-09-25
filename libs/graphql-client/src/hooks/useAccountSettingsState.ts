@@ -30,9 +30,9 @@ export const useAccountSettingsState = () => {
       const updateSuccessful = data?.updateSelf;
 
       if (updateSuccessful) {
-        toast(`Your name changed to ${newName}`, 'success');
+        toast.success(`Your name changed to ${newName}`);
       } else {
-        toast('Could not change your name', 'error');
+        toast.error('Could not change your name');
       }
 
       return !!updateSuccessful;
@@ -50,9 +50,9 @@ export const useAccountSettingsState = () => {
 
       const updateSuccessful = data?.setUsername;
       if (updateSuccessful) {
-        toast(`You are now ${newUsername}`, 'success');
+        toast.success(`You are now ${newUsername}`);
       } else {
-        toast(`Username ${newUsername} is invalid or already taken`, 'error');
+        toast.error(`Username ${newUsername} is invalid or already taken`);
       }
 
       return !!updateSuccessful;
@@ -70,9 +70,9 @@ export const useAccountSettingsState = () => {
 
       const updateSuccessful = data?.updateSelf;
       if (updateSuccessful) {
-        toast('Your bio has been updated', 'success');
+        toast.success('Your bio has been updated');
       } else {
-        toast('Could not update your bio', 'error');
+        toast.error('Could not update your bio');
       }
 
       return !!updateSuccessful;

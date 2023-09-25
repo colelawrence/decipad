@@ -20,27 +20,24 @@ export const useMutationResultHandler = <
       const resp = await fn(args);
       if (resp == null) {
         console.error('No response');
-        toast(
-          'No response to mutation request. Please contact support',
-          'error'
-        );
+        toast.error('No response to mutation request. Please contact support');
         return;
       }
       const { data, error } = resp;
       if (error != null) {
         console.error(error);
-        toast(errorMessage, 'error');
+        toast.error(errorMessage);
         return;
       }
       if (data == null) {
         console.error('No data on response');
-        toast('No data on mutation response. Please contact support', 'error');
+        toast.error('No data on mutation response. Please contact support');
         return;
       }
       return data;
     } catch (err) {
       console.error(err);
-      toast(errorMessage, 'error');
+      toast.error(errorMessage);
     }
   };
 };

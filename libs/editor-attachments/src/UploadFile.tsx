@@ -131,10 +131,11 @@ export const UploadFile: FC = () => {
             attachGenericFile(fileInfo, () => noop, form, onAttached)
               .then((response) => {
                 if (!response?.url) {
-                  return toast(
+                  toast(
                     'We had a server error processing your file',
                     'warning'
                   );
+                  return;
                 }
                 insertByUrl(response.url, fileInfo.name);
               })

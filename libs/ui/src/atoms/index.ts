@@ -90,7 +90,7 @@ export { TabButton } from './TabButton/TabButton';
 export { TextButton } from './TextButton/TextButton';
 export { TextareaField } from './TextareaField/TextareaField';
 export { ThemePicker } from './ThemePicker/ThemePicker';
-export { Toast } from './Toast/Toast';
+export { ToastItem } from './Toast/Toast';
 export { Toggle } from './Toggle/Toggle';
 export { Tooltip } from './Tooltip/Tooltip';
 export { TriggerMenuItem } from './TriggerMenuItem/TriggerMenuItem';

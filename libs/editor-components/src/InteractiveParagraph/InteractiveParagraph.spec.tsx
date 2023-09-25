@@ -22,6 +22,7 @@ import { findDomNodePath } from '@decipad/editor-utils';
 import { Computer } from '@decipad/computer';
 import userEvent from '@testing-library/user-event';
 import { InteractiveParagraph } from './InteractiveParagraph';
+import { ToastDisplay } from '@decipad/ui';
 
 let editor: PlateEditor;
 let plateProps: PlateProps;
@@ -51,7 +52,9 @@ beforeEach(() => {
         },
       }}
     >
-      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+      <ToastDisplay>
+        <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+      </ToastDisplay>
     </SessionProvider>
   );
 });

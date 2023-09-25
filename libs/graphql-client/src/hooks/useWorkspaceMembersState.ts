@@ -27,7 +27,7 @@ export const useWorkspaceMembersState = () => {
         });
       } catch (err) {
         console.error('Failed to share workspace. Error:', err);
-        toast('Failed to share workspace.', 'error');
+        toast.error('Failed to share workspace');
       }
     },
     [shareWorkspace]
@@ -42,7 +42,7 @@ export const useWorkspaceMembersState = () => {
         });
       } catch (err) {
         console.error('Failed to revoke workspace access. Error:', err);
-        toast('Failed to revoke workspace access.', 'error');
+        toast.error('Failed to revoke workspace access');
       }
     },
     [unshareWorkspace]
@@ -59,7 +59,7 @@ export const useWorkspaceMembersState = () => {
         });
       } catch (err) {
         console.error('Failed to change workspace permission. Error:', err);
-        toast('Failed to change workspace permission.', 'error');
+        toast.error('Failed to change workspace permission');
       }
     },
     [changeWorkspaceAccess]

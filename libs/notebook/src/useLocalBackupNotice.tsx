@@ -2,8 +2,7 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { useToast } from '@decipad/toast';
 import { Button, Tooltip } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { FC, useCallback, useEffect } from 'react';
-import { useToasts } from 'react-toast-notifications';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 
 const warningContainerStyles = css({
   whiteSpace: 'nowrap',
@@ -38,15 +37,11 @@ const HasNotSavedRemotelyInAWhileWarning: FC<
   );
 };
 
-const toastId = (editor: DocSyncEditor): string =>
-  `${editor.id}-useLocalBackupNotice`;
-
 export const useLocalBackupNotice = (
   editor: DocSyncEditor | undefined,
   hasNotSavedRemotelyInAWhile: boolean
 ) => {
   const toast = useToast();
-  const { removeToast } = useToasts();
 
   const onDownloadNotebook = useCallback(() => {
     if (editor) {
@@ -54,23 +49,24 @@ export const useLocalBackupNotice = (
     }
   }, [editor]);
 
+  const toastTitle = useMemo(
+    () => (
+      <HasNotSavedRemotelyInAWhileWarning
+        onDownloadNotebook={onDownloadNotebook}
+      />
+    ),
+    [onDownloadNotebook]
+  );
+
   useEffect(() => {
+    let toastId: string;
     if (!!editor && hasNotSavedRemotelyInAWhile) {
-      toast(
-        <HasNotSavedRemotelyInAWhileWarning
-          onDownloadNotebook={onDownloadNotebook}
-        />,
-        'soft-warning',
-        {
-          id: toastId(editor),
-          autoDismiss: false,
-        }
-      );
+      toastId = toast(toastTitle, 'soft-warning', { autoDismiss: false });
     }
 
     return () => {
       if (editor) {
-        removeToast(toastId(editor));
+        toast.delete(toastId);
       }
     };
   }, [
@@ -78,6 +74,6 @@ export const useLocalBackupNotice = (
     hasNotSavedRemotelyInAWhile,
     toast,
     onDownloadNotebook,
-    removeToast,
+    toastTitle,
   ]);
 };

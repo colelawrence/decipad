@@ -128,6 +128,8 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
 
   useNotebookWarning({ notebookId });
 
+  useLocalBackupNotice(editor, hasNotSavedRemotelyInAWhile);
+
   const readOrSuspendEditor = useMemo(
     () => ({
       read: () => {
@@ -147,8 +149,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   ) {
     throw lastValueFrom(computer.results);
   }
-
-  useLocalBackupNotice(editor, hasNotSavedRemotelyInAWhile);
 
   if (editor) {
     return (

@@ -70,7 +70,8 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
     if (uploadFile) {
       const { size } = uploadFile;
       if (size > maxSize) {
-        return toast(`Upload failed: File size over ${MAX_LABEL}`, 'warning');
+        toast(`Upload failed: File size over ${MAX_LABEL}`, 'warning');
+        return;
       }
 
       onUpload(uploadFile, 'upload');
