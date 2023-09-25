@@ -208,23 +208,30 @@ export const processSubscriptionUpdated = async (event: Stripe.Event) => {
 };
 
 export const processInvoiceCreated = async (event: Stripe.Event) => {
-  const { subscription } = event.data as Stripe.Invoice;
+  const { subscription } = event.data.object as Stripe.Invoice;
   const data = await tables();
-
   const stripeSubscriptionId =
-    typeof subscription === 'string' ? subscription : subscription?.id || '';
+    typeof subscription === 'string' ? subscription : subscription?.id;
 
-  const workspace = await data.workspacesubscriptions.get({
-    id: stripeSubscriptionId,
-  });
+  if (stripeSubscriptionId) {
+    const workspace = await data.workspacesubscriptions.get({
+      id: stripeSubscriptionId,
+    });
 
-  if (workspace) {
-    await resetQueryCount(workspace.id);
+    if (workspace) {
+      await resetQueryCount(workspace.id);
+      return {
+        statusCode: 200,
+        body: `webhook succeeded! Workspace query count reset: ${workspace.id}`,
+      };
+    }
+
     return {
       statusCode: 200,
-      body: `webhook succeeded! Workspace query count reset: ${workspace.id}`,
+      body: `webhook succeeded! Workspace does not have any query count to reset.  Stripe Subscription ${stripeSubscriptionId}`,
     };
   }
+
   return {
     statusCode: 400,
     body: `webhook failed! Workspace query count not reset. Stripe Subscription ${stripeSubscriptionId} does not exist in the database`,
