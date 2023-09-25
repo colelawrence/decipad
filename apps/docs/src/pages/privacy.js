@@ -103,7 +103,7 @@ export default function Terms() {
                     color: '#5f6486',
                   }}
                 >
-                  Last Updated: July 21, 2023
+                  Last Updated: September 25, 2023
                 </p>
               </center>
             </div>
@@ -157,7 +157,21 @@ export default function Terms() {
               If you choose to use our integration with Google Sheets, we will
               receive an authentication token from Google to access your Google
               Sheets and provide the Service to you. We will not store or use
-              any other Personal Data from Google.
+              any other Personal Data from Google. The Service's use and
+              transfer to any other app of information received from Google APIs
+              will adhere to Google API Services User Data Policy, including the
+              Limited Use requirements. The Google API Services User Data Policy
+              is available{' '}
+              <u>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href="https://developers.google.com/terms/api-services-user-data-policy"
+                >
+                  here
+                </a>
+              </u>
+              .
             </p>
 
             <p>
@@ -378,7 +392,7 @@ export default function Terms() {
               </li>
             </ul>
             <p>
-              <b>Payment Processing.</b>Any payments made via the Service are
+              <b>Payment Processing.</b> Any payments made via the Service are
               processed by Stripe, and we do not directly collect, store, or
               maintain any payment card information provided. You can read
               Stripe's Privacy Policy at: https://stripe.com/privacy.
