@@ -17,6 +17,7 @@ import {
   usdPerDay,
   usdPerMonthPerWorker,
 } from './testUtils';
+import assert from 'assert';
 
 const locale = 'en-US';
 
@@ -57,11 +58,16 @@ describe('formatNumber', () => {
       });
 
       it('1.001 = 1 [1.001001001001]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1000, 999)
-        );
+        const { asString, partsOf, isPrecise, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1000, 999));
+
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
+
         expect(asString).toEqual('≈1');
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
@@ -69,14 +75,22 @@ describe('formatNumber', () => {
         ]);
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('1.001001001001001');
+        expect(preciseString).toBe('1.(001)');
+        expect(financialString).toBe('1.00');
+        expect(scientificString).toBe('1.001');
       });
 
       it('1.11111 = 1.11 [1.1111]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(10, 9)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(10, 9));
+
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
+
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '1' },
@@ -86,22 +100,32 @@ describe('formatNumber', () => {
         expect(asString).toEqual('≈1.11');
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('1.1111111111111112');
+        expect(preciseString).toBe('1.(1)');
+        expect(financialString).toBe('1.11');
+        expect(scientificString).toBe('1.11111');
       });
 
       it('1337 = 1,337', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1337)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1337));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(asString).toEqual('1,337');
         expect(isPrecise).toBe(true);
         expect(asStringPrecise).toBe('1,337');
+
         expect(partsOf).toEqual([
           { type: 'integer', value: '1' },
           { type: 'group', value: ',' },
           { type: 'integer', value: '337' },
         ]);
+        expect(preciseString).toBe('1,337');
+        expect(financialString).toBe('1.34K');
+        expect(scientificString).toBe('1.337×10³');
       });
 
       it('1/1337^-200 = ?', () => {
@@ -126,11 +150,14 @@ describe('formatNumber', () => {
       });
 
       it('0.(3) = 0.33 [0.3333]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1, 3)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1, 3));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(asString).toEqual('≈0.33');
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
@@ -140,14 +167,20 @@ describe('formatNumber', () => {
         ]);
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('0.3333333333333333');
+        expect(preciseString).toBe('0.(3)');
+        expect(financialString).toBe('0.33');
+        expect(scientificString).toBe('3.33333×10⁻¹');
       });
 
       it('1/27.932.716.234.532.345.672.234.567 = 0 [0.000000000000000]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1n, 27932716234532345672234567n)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1n, 27932716234532345672234567n));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(asString).toEqual('≈0.00');
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
@@ -157,14 +190,20 @@ describe('formatNumber', () => {
         ]);
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('3.5800313567920443×10⁻²⁶');
+        expect(preciseString).toBe('0.000000000000000');
+        expect(financialString).toBe('0.00');
+        expect(scientificString).toBe('3.58003×10⁻²⁶');
       });
 
       it('1,000 in 56 parts = 17.86 [17.857142857142857]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1000, 56)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1000, 56));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '17' },
@@ -174,6 +213,9 @@ describe('formatNumber', () => {
         expect(asString).toEqual('≈17.86');
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('17.857142857142858');
+        expect(preciseString).toBe('17.(857142)');
+        expect(financialString).toBe('17.86');
+        expect(scientificString).toBe('1.78571×10¹');
       });
 
       it('1/100 = 0.01', () => {
@@ -202,11 +244,14 @@ describe('formatNumber', () => {
       });
 
       it('1,000,001 = 1 million [1000001]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1000001)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1000001));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '1' },
@@ -216,6 +261,9 @@ describe('formatNumber', () => {
         expect(asString).toEqual('≈1 million');
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('1,000,001');
+        expect(preciseString).toBe('1,000,001');
+        expect(financialString).toBe('1.00M');
+        expect(scientificString).toBe('1×10⁶');
       });
 
       it('1,010,000 = 1.01 million', () => {
@@ -224,13 +272,22 @@ describe('formatNumber', () => {
       });
 
       it('1,000,567 = 1 million [1000567]', () => {
-        const { asString, asStringPrecise } = formatNumber(
+        const { asString, asStringPrecise, formatOptions } = formatNumber(
           locale,
           null,
           F(1000567)
         );
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(asString).toEqual('≈1 million');
         expect(asStringPrecise).toEqual('1,000,567');
+        expect(preciseString).toBe('1,000,567');
+        expect(financialString).toBe('1.00M');
+        expect(scientificString).toBe('1.00057×10⁶');
         expect(formatNumber(locale, null, N(1000567))).toMatchObject({
           isPrecise: false,
           asString: '≈1 million',
@@ -255,11 +312,14 @@ describe('formatNumber', () => {
       });
 
       it('1,000,000,001 = 1 billion [1000000001]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1000000001)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1000000001));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '1' },
@@ -269,6 +329,9 @@ describe('formatNumber', () => {
         expect(asString).toEqual('≈1 billion');
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('1,000,000,001');
+        expect(preciseString).toBe('1,000,000,001');
+        expect(financialString).toBe('1.00B');
+        expect(scientificString).toBe('1×10⁹');
       });
 
       it('1,000,000,000 = 1 trillion', () => {
@@ -286,13 +349,17 @@ describe('formatNumber', () => {
       });
 
       it('1,000,000,000,001 = 1 trillion [1000000000001]', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1000000000001n)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1000000000001n));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('1.000000000001×10¹²');
+
         expect(asString).toEqual('≈1 trillion');
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
@@ -300,16 +367,23 @@ describe('formatNumber', () => {
           { type: 'literal', value: ' ' },
           { type: 'compact', value: 'trillion' },
         ]);
+        expect(preciseString).toBe('1,000,000,000,001');
+        expect(financialString).toBe('1.00T');
+        expect(scientificString).toBe('1×10¹²');
       });
 
       it('1,000,000,000,000,001 = ≈1×10¹⁵', () => {
-        const { isPrecise, partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1000000000000001n)
-        );
+        const { isPrecise, partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, null, F(1000000000000001n));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(isPrecise).toBe(false);
         expect(asStringPrecise).toBe('1.000000000000001×10¹⁵');
+
         expect(asString).toEqual('≈1×10¹⁵');
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
@@ -317,6 +391,9 @@ describe('formatNumber', () => {
           { originalValue: 'E', type: 'exponentSeparator', value: '×10' },
           { originalValue: '15', type: 'exponentInteger', value: '¹⁵' },
         ]);
+        expect(preciseString).toBe('1,000,000,000,000,001');
+        expect(financialString).toBe('1000.00T');
+        expect(scientificString).toBe('1×10¹⁵');
       });
 
       it('100,000,000,000,000,000,000,000,000,000,000,000 = 100×10⁻³³', () => {
@@ -344,25 +421,42 @@ describe('formatNumber', () => {
       });
 
       it('-1/100,000,000,000,000,000,000,000,000,000,000,000 = 0 [-0.000000000000000]', () => {
-        const { asString, partsOf, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(-1, 100000000000000000000000000000000000n)
-        );
+        const { asString, partsOf, asStringPrecise, formatOptions } =
+          formatNumber(
+            locale,
+            null,
+            F(-1, 100000000000000000000000000000000000n)
+          );
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '-0.00' },
         ]);
         expect(asString).toEqual('≈-0.00');
         expect(asStringPrecise).toEqual('-1×10⁻³⁵');
+        expect(preciseString).toBe('-0.000000000000000');
+        expect(financialString).toBe('-0.00');
+        expect(scientificString).toBe('-1×10⁻³⁵');
       });
 
       it('1/100,000,000,000,000,000,000,000,000,000,000,000 = 0 [0.000000000000000]', () => {
-        const { isPrecise, asString, partsOf, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(1, 100000000000000000000000000000000000n)
-        );
+        const { isPrecise, asString, partsOf, asStringPrecise, formatOptions } =
+          formatNumber(
+            locale,
+            null,
+            F(1, 100000000000000000000000000000000000n)
+          );
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '0' },
@@ -371,18 +465,29 @@ describe('formatNumber', () => {
         ]);
         expect(asString).toEqual('≈0.00');
         expect(asStringPrecise).toBe('1×10⁻³⁵');
+
         expect(isPrecise).toEqual(false);
+        expect(preciseString).toBe('0.000000000000000');
+        expect(financialString).toBe('0.00');
+        expect(scientificString).toBe('1×10⁻³⁵');
       });
 
       it('large numbers dont NaN', () => {
-        const { isPrecise, asString, partsOf, asStringPrecise } = formatNumber(
-          locale,
-          null,
-          F(
-            62657874821779703792562241943419303322066944468106652748595980508010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000n,
-            99841105961333740249832526095785439715019611210891297448940309958414571344942004777775447146813196387426531389711440107440518358529668957393764724110006564062164949390227139418902680190382417464665695698754232071972555328137006309409164907026740968759220322118653548973829100361706011760111439311632915849634542560941761883439196545435007035742001n
-          )
-        );
+        const { isPrecise, asString, partsOf, asStringPrecise, formatOptions } =
+          formatNumber(
+            locale,
+            null,
+            F(
+              62657874821779703792562241943419303322066944468106652748595980508010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000n,
+              99841105961333740249832526095785439715019611210891297448940309958414571344942004777775447146813196387426531389711440107440518358529668957393764724110006564062164949390227139418902680190382417464665695698754232071972555328137006309409164907026740968759220322118653548973829100361706011760111439311632915849634542560941761883439196545435007035742001n
+            )
+          );
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'integer', value: '0' },
@@ -392,6 +497,9 @@ describe('formatNumber', () => {
         expect(asString).toEqual('≈0.63');
         expect(isPrecise).toEqual(false);
         expect(asStringPrecise).toBe('0.627575928957014');
+        expect(preciseString).toBe('0.627575928957014');
+        expect(financialString).toBe('0.63');
+        expect(scientificString).toBe('6.27576×10⁻¹');
       });
     });
 
@@ -405,6 +513,11 @@ describe('formatNumber', () => {
           Object {
             "asString": "≈0 kilometers",
             "asStringPrecise": "0.001",
+            "formatOptions": Object {
+              "financialString": "0.00",
+              "preciseString": "0.001",
+              "scientificString": "1×10⁻³",
+            },
             "isPrecise": false,
             "partsOf": Array [
               Object {
@@ -521,6 +634,7 @@ describe('formatNumber', () => {
         expect(deciNum).toEqual({
           asString: '6 µs 666 ns',
           asStringPrecise: '0.000006666666666666667 seconds',
+          formatOptions: null,
           isPrecise: true,
           partsOf: [
             { type: 'integer', value: '6' },
@@ -597,11 +711,14 @@ describe('formatNumber', () => {
       });
 
       it('$1 * meter = $1 meter', () => {
-        const { partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          [parseUnit('usd'), parseUnit('meter')],
-          F(1)
-        );
+        const { partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, [parseUnit('usd'), parseUnit('meter')], F(1));
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'currency', value: '$' },
           { type: 'integer', value: '1' },
@@ -613,16 +730,29 @@ describe('formatNumber', () => {
         ]);
         expect(asString).toEqual('$1 meter');
         expect(asStringPrecise).toEqual('1');
+        expect(preciseString).toBe('1');
+        expect(financialString).toBe('1.00');
+        expect(scientificString).toBe('1');
       });
 
       it('$1 / meter = $1 per meter', () => {
-        const { partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          [parseUnit('usd'), u('meter', { exp: N(-1) })],
-          F(1)
-        );
+        const { partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(
+            locale,
+            [parseUnit('usd'), u('meter', { exp: N(-1) })],
+            F(1)
+          );
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(asString).toEqual('$1 per meter');
         expect(asStringPrecise).toEqual('1');
+        expect(preciseString).toBe('1');
+        expect(financialString).toBe('1.00');
+        expect(scientificString).toBe('1');
         expect(partsOf).toEqual([
           { type: 'currency', value: '$' },
           { type: 'integer', value: '1' },
@@ -907,11 +1037,14 @@ describe('formatNumber', () => {
 
       it('100,000,000 / 13 Euros = €7.69M [7692307.692307692307692]', () => {
         const [nr, unit] = makeFractionUnitTuple(F(100000000, 13), 'eur');
-        const { partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          unit,
-          nr
-        );
+        const { partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, unit, nr);
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'currency', value: '€' },
@@ -922,15 +1055,21 @@ describe('formatNumber', () => {
         ]);
         expect(asString).toEqual('≈€7.69M'); // -> precise
         expect(asStringPrecise).toEqual('7,692,307.692307692');
+        expect(preciseString).toBe('7,692,307.(692307)');
+        expect(financialString).toBe('7.69M');
+        expect(scientificString).toBe('7.69231×10⁶');
       });
 
       it('1,404,000 $ = $1.4M [1404000]', () => {
         const [nr, unit] = makeFractionUnitTuple(F(1404000), 'usd');
-        const { partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          unit,
-          nr
-        );
+        const { partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, unit, nr);
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'currency', value: '$' },
@@ -941,15 +1080,21 @@ describe('formatNumber', () => {
         ]);
         expect(asString).toEqual('≈$1.4M');
         expect(asStringPrecise).toEqual('1,404,000');
+        expect(preciseString).toBe('1,404,000');
+        expect(financialString).toBe('1.40M');
+        expect(scientificString).toBe('1.404×10⁶');
       });
 
       it('1,000 gbp in 56 parts = £17.86 each [17.857142857142857]', () => {
         const [nr, unit] = makeFractionUnitTuple(F(1000, 56), 'gbp');
-        const { partsOf, asString, asStringPrecise } = formatNumber(
-          locale,
-          unit,
-          nr
-        );
+        const { partsOf, asString, asStringPrecise, formatOptions } =
+          formatNumber(locale, unit, nr);
+        expect(formatOptions).not.toBeNull();
+
+        assert(formatOptions !== null);
+
+        const { preciseString, financialString, scientificString } =
+          formatOptions;
         expect(partsOf).toEqual([
           { type: 'roughly', value: '≈' },
           { type: 'currency', value: '£' },
@@ -959,15 +1104,29 @@ describe('formatNumber', () => {
         ]);
         expect(asString).toEqual('≈£17.86');
         expect(asStringPrecise).toEqual('17.857142857142858');
+        expect(preciseString).toBe('17.(857142)');
+        expect(financialString).toBe('17.86');
+        expect(scientificString).toBe('1.78571×10¹');
       });
 
       it('$0.001 = $0 [0.001]', () => {
         const [nr, unit] = makeFractionUnitTuple(F(1, 1000), 'usd');
-        const { asString, asStringPrecise } = formatNumber(locale, unit, nr);
+        const { asString, asStringPrecise, formatOptions } = formatNumber(
+          locale,
+          unit,
+          nr
+        );
+        expect(formatOptions).not.toBeNull();
+
         expect(formatNumber(locale, unit, nr)).toEqual({
           isPrecise: false,
           asString: '≈$0',
           asStringPrecise: '0.001',
+          formatOptions: {
+            financialString: '0.00',
+            preciseString: '0.001',
+            scientificString: '1×10⁻³',
+          },
           value: 0.001,
           partsOf: [
             { type: 'roughly', value: '≈' },

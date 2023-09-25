@@ -2,18 +2,21 @@
 import type { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
 import type { IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import {
   CodeResult,
   AvailableSwatchColor,
   IconPopover,
   Tooltip,
   UserIconKey,
+  DropdownMenu,
+  SelectItems,
 } from '@decipad/ui';
-import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { Caret } from '../../icons';
 import * as icons from '../../icons';
 import { cssVar, p14Regular, p24Medium } from '../../primitives';
+import { ResultFormatting } from '../../types';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -32,6 +35,7 @@ const triggerStyles = (readOnly: boolean, selected: boolean) =>
     height: '100%',
     display: 'flex',
     justifyContent: 'space-between',
+
     alignItems: 'center',
     transition: 'all 0.2s ease-in-out',
     marginTop: '4px',
@@ -70,23 +74,32 @@ interface DisplayWidgetDropdownProps {
   readonly openMenu: boolean;
   readonly onChangeOpen: (arg0: boolean) => void;
   readonly lineResult?: IdentifiedResult | IdentifiedError;
+  readonly formatting?: ResultFormatting;
   readonly result?: string;
   readonly readOnly: boolean;
   readonly children: ReactNode;
   readonly icon?: UserIconKey;
   readonly color?: AvailableSwatchColor;
   readonly saveIcon?: (newIcon: UserIconKey) => void;
+  readonly saveColor?: (newColor: AvailableSwatchColor) => void;
+  readonly onExecute?: (option: SelectItems) => void;
+  readonly allResults: SelectItems[];
 }
 
 export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
   openMenu,
   onChangeOpen,
   lineResult,
+  formatting = 'automatic',
   result = 'Result',
   readOnly,
   children,
-  icon = 'Paperclip',
+  color = 'Sun',
+  icon = 'Crown',
   saveIcon = noop,
+  saveColor = noop,
+  onExecute = noop,
+  allResults,
 }) => {
   const Icon = icons[icon];
 
@@ -111,39 +124,49 @@ export const DisplayWidget: FC<DisplayWidgetDropdownProps> = ({
           </span>
         ) : (
           <IconPopover
-            color={'Malibu'}
+            color={color}
             trigger={
               <div css={iconWrapperStyles}>
                 <Icon />
               </div>
             }
             onChangeIcon={saveIcon}
+            onChangeColor={saveColor}
           />
         )}
+
         <div css={textWrapperStyles}>
           <Tooltip trigger={fullVarName}>{result}</Tooltip>
         </div>
       </div>
       {children}
-      <div
-        css={triggerStyles(readOnly, openMenu)}
-        onClick={() => !readOnly && onChangeOpen(!openMenu)}
-        data-testid="result-widget"
+      <DropdownMenu
+        open={openMenu}
+        setOpen={!readOnly ? onChangeOpen : noop}
+        onExecute={onExecute}
+        groups={allResults}
+        isReadOnly={readOnly}
       >
-        <span css={[p24Medium, { color: cssVar('textHeavy') }]}>
-          {lineResult?.result?.type.kind !== 'type-error' &&
-          lineResult?.result ? (
-            <CodeResult {...lineResult.result} />
-          ) : (
-            '0'
+        <div
+          css={triggerStyles(readOnly, openMenu)}
+          onClick={() => !readOnly && onChangeOpen(!openMenu)}
+          data-testid="result-widget"
+        >
+          <span css={[p24Medium, { color: cssVar('textHeavy') }]}>
+            {lineResult?.result?.type.kind !== 'type-error' &&
+            lineResult?.result ? (
+              <CodeResult {...lineResult.result} formatting={formatting} />
+            ) : (
+              '0'
+            )}
+          </span>
+          {!readOnly && (
+            <div css={{ width: 20, height: 20 }}>
+              <Caret variant={openMenu ? 'up' : 'down'} color="normal" />
+            </div>
           )}
-        </span>
-        {!readOnly && (
-          <div css={{ width: 20, height: 20 }}>
-            <Caret variant={openMenu ? 'up' : 'down'} color="normal" />
-          </div>
-        )}
-      </div>
+        </div>
+      </DropdownMenu>
     </>
   );
 };

@@ -46,6 +46,17 @@ const OTHER_LONG_NUMBER_OPTIONS: Intl.NumberFormatOptions = {
   minimumFractionDigits: 0,
   notation: 'standard',
 };
+const FINANCIAL_NUMBER_OPTIONS: Intl.NumberFormatOptions = {
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
+  notation: 'compact',
+};
+
+const SCIENTIFIC_NUMBER_OPTIONS: Intl.NumberFormatOptions = {
+  maximumFractionDigits: 5,
+  minimumFractionDigits: 0,
+  notation: 'scientific',
+};
 
 export type DeciNumberPart = (
   | Intl.NumberFormatPart
@@ -56,13 +67,22 @@ export type DeciNumberPart = (
   partsOf?: UnitPart[];
 };
 
+export type DeciNumberFormatOptions = {
+  financialString: string;
+  preciseString: string;
+  scientificString: string;
+};
+
 export type DeciNumberRep = {
   isPrecise: boolean;
   value: number;
   asString: string;
   asStringPrecise: string;
+  formatOptions: DeciNumberFormatOptions | null;
   partsOf: DeciNumberPart[];
 };
+
+export type UnionDeciNumberRep = DeciNumberRep;
 
 export type IntermediateDeciNumber = Omit<DeciNumberRep, 'asString'>;
 
@@ -217,7 +237,44 @@ const formatToParts = (
     );
   }
 
-  return { isPrecise, partsOf: mapParts(partsOf), value, asStringPrecise };
+  const scientificString = partsToString(
+    beautifyExponents(
+      new Intl.NumberFormat(locale, {
+        ...SCIENTIFIC_NUMBER_OPTIONS,
+      }).formatToParts(useSafeN)
+    )
+  );
+
+  const financialString = partsToString(
+    beautifyExponents(
+      new Intl.NumberFormat(locale, {
+        ...FINANCIAL_NUMBER_OPTIONS,
+      }).formatToParts(useSafeN)
+    )
+  );
+
+  const preciseString = n.toString().replace(/-?\d+/, (match) => {
+    const fmt = new Intl.NumberFormat(locale, {
+      ...DEFAULT_NUMBER_OPTIONS,
+      notation: 'standard',
+      maximumFractionDigits: 0,
+    });
+    return fmt.format(Number(match));
+  });
+
+  const formatOptions: DeciNumberFormatOptions = {
+    financialString,
+    preciseString,
+    scientificString,
+  };
+
+  return {
+    isPrecise,
+    partsOf: mapParts(partsOf),
+    value,
+    asStringPrecise,
+    formatOptions,
+  };
 };
 
 function formatCurrency(locale: string, unit: Unit[], fraction: DeciNumber) {
@@ -402,7 +459,7 @@ export function formatNumber(
     };
   }
 
-  let deciNumber: IntermediateDeciNumber;
+  let deciNumber;
   if (unit) {
     const units = normalizeUnits(unit) as Unit[];
 

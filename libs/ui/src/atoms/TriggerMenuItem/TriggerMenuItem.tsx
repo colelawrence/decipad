@@ -33,6 +33,7 @@ interface TriggerMenuItemProps {
   readonly icon?: ReactNode;
   readonly selected?: boolean;
   readonly selectedPreview?: string;
+  readonly disabled?: boolean;
 }
 
 export const TriggerMenuItem: FC<TriggerMenuItemProps> = ({
@@ -40,13 +41,18 @@ export const TriggerMenuItem: FC<TriggerMenuItemProps> = ({
   icon,
   selected,
   selectedPreview,
+  disabled,
 }) => {
   const depth = useContext(Depth);
   const DropdownMenuTriggerElement =
     depth === 0 ? RadixDropdownMenu.Trigger : RadixDropdownMenu.SubTrigger;
 
   return (
-    <DropdownMenuTriggerElement css={menu.itemStyles} data-selected={selected}>
+    <DropdownMenuTriggerElement
+      disabled={disabled}
+      css={disabled ? menu.itemDisabledStyles : menu.itemStyles}
+      data-selected={selected}
+    >
       {icon != null && <span css={iconWrapperStyles}>{icon}</span>}
       <span css={childrenWrapperStyles} data-testid="trigger-menu-item">
         {children}

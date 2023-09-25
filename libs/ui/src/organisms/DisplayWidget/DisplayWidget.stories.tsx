@@ -12,6 +12,7 @@ const args: ComponentProps<typeof DisplayWidget> = {
   result: 'Result',
   readOnly: false,
   children: [],
+  allResults: [],
 };
 
 export default {

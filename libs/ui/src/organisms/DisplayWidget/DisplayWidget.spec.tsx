@@ -10,6 +10,7 @@ const props: ComponentProps<typeof DisplayWidget> = {
   result: 'Result',
   readOnly: false,
   children: [],
+  allResults: [],
 };
 
 it('renders display widget with result', async () => {

@@ -7,8 +7,10 @@ import {
   Unit,
 } from '@decipad/language';
 import pluralize from 'pluralize';
-import type { IntermediateDeciNumber } from './formatNumber';
+
 import { Options, prettifyTimeMs as getPrettyPartsOfTime } from './parseMs';
+import type { IntermediateDeciNumber } from './formatNumber';
+
 import { once } from '@decipad/utils';
 
 const ms = once(() => [parseUnit('millisecond')] as Unit[]);
@@ -51,11 +53,13 @@ export function formatTime(
   if (!simplify || value === 0) {
     return {
       ...formatAnyUnit(locale, units, n),
+      formatOptions: null,
       asStringPrecise,
     };
   }
   return {
     asStringPrecise,
+    formatOptions: null,
     isPrecise: true,
     partsOf: getPrettyPartsOfTime(
       value,

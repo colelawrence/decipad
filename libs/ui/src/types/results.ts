@@ -8,6 +8,12 @@ export interface DragCellData {
   cellValue: string;
 }
 
+export type ResultFormatting =
+  | 'automatic'
+  | 'precise'
+  | 'financial'
+  | 'scientific';
+
 export interface CodeResultProps<T extends SerializedTypeKind>
   extends Result.Result<T> {
   readonly parentType?: SerializedType;
@@ -18,6 +24,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   ) => (e: DragEvent<HTMLDivElement>) => void;
   readonly onDragEnd?: (e: DragEvent<HTMLDivElement>) => void;
   readonly tooltip?: boolean;
+  readonly formatting?: ResultFormatting;
   readonly isLiveResult?: boolean;
   readonly isNotEditable?: boolean;
   readonly firstTableRowControls?: ReactNode;

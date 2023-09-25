@@ -137,6 +137,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1 second',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -151,6 +152,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0.001 seconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -165,6 +167,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0 milliseconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '0' },
@@ -179,6 +182,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0 seconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '0' },
@@ -193,6 +197,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1 millisecond',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -207,6 +212,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '60 seconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -221,6 +227,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '90 seconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -238,6 +245,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1.5 hours',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -255,6 +263,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1.9 days',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -275,6 +284,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '14 days',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '14' },
@@ -289,6 +299,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '2 weeks',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '2' },
@@ -303,6 +314,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '1.5 months',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -325,6 +337,7 @@ describe('formatTime', () => {
       );
       expect(res).toEqual({
         asStringPrecise: '2 seconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '0' },
@@ -340,6 +353,7 @@ describe('formatTime', () => {
       const res = formatTime('en-US', unit, value, {}, formatAnyUnit);
       expect(res).toEqual({
         asStringPrecise: '0.000001 seconds',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '1' },
@@ -360,6 +374,7 @@ describe('formatTime', () => {
       );
       expect(res).toEqual({
         asStringPrecise: '12 months',
+        formatOptions: null,
         isPrecise: true,
         partsOf: [
           { type: 'integer', value: '12' },

@@ -24,13 +24,13 @@ import {
 import {
   DisplayWidget,
   VariableEditor,
-  DropdownMenu,
   SelectItems,
   UserIconKey,
+  AvailableSwatchColor,
 } from '@decipad/ui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { noop } from '@decipad/utils';
 import { Number } from 'libs/ui/src/icons';
+import { ResultFormatting } from 'libs/ui/src/types';
 
 const displayDebounceNamesDefinedMs = 500;
 
@@ -51,6 +51,15 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
   const path = useNodePath(element);
 
   const saveIcon = usePathMutatorCallback(editor, path, 'icon', 'Display');
+  const saveColor = usePathMutatorCallback(editor, path, 'color', 'Display');
+
+  const changeFormatting = usePathMutatorCallback(
+    editor,
+    path,
+    'formatting',
+    'Display'
+  );
+
   const changeBlockId = usePathMutatorCallback(
     editor,
     path,
@@ -172,26 +181,31 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
         getAxis={getAxis}
         onDrop={onDrop}
       >
-        <VariableEditor variant="display" readOnly={readOnly} element={element}>
-          <DropdownMenu
-            open={openMenu}
-            setOpen={!readOnly ? setOpenMenu : noop}
+        <VariableEditor
+          onChangeFormatting={changeFormatting}
+          variant="display"
+          readOnly={readOnly}
+          color={element.color as AvailableSwatchColor}
+          element={element}
+          lineResult={res}
+          formatting={element.formatting as ResultFormatting}
+        >
+          <DisplayWidget
+            openMenu={openMenu}
+            onChangeOpen={setOpenMenu}
             onExecute={onExecute}
-            groups={allResults}
-            isReadOnly={readOnly}
+            allResults={allResults}
+            formatting={element.formatting as ResultFormatting}
+            lineResult={res}
+            result={element.varName}
+            readOnly={readOnly}
+            color={element.color as AvailableSwatchColor}
+            icon={element.icon as UserIconKey}
+            saveIcon={saveIcon}
+            saveColor={saveColor}
           >
-            <DisplayWidget
-              openMenu={openMenu}
-              onChangeOpen={setOpenMenu}
-              lineResult={res}
-              result={element.varName}
-              readOnly={readOnly}
-              icon={element.icon as UserIconKey}
-              saveIcon={saveIcon}
-            >
-              {children}
-            </DisplayWidget>
-          </DropdownMenu>
+            {children}
+          </DisplayWidget>
         </VariableEditor>
       </DraggableBlock>
     </div>

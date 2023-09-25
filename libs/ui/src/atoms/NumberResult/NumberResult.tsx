@@ -1,30 +1,31 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { N } from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
-import { css } from '@emotion/react';
 import { FC } from 'react';
 import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { useFormattedResultString } from '@decipad/ui';
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,
   value,
+  formatting = 'automatic',
   tooltip = true,
   variant = 'block',
 }) => {
   const computer = useComputer();
 
   const formatted = computer.formatNumber(type, N(value));
-  const preciseString = formatted.asStringPrecise;
-  const unitPart = formatted.partsOf.find(
-    (part) => part.type === 'unit'
-  )?.value;
-  const currencyPart = formatted.partsOf.find(
-    (part) => part.type === 'currency'
-  )?.value;
 
-  const fullResult = <span>{formatted.asString}</span>;
+  const [resultString, preciseString] = useFormattedResultString(
+    formatted,
+    formatting
+  );
+
+  const displayString =
+    type.numberFormat === 'percentage' ? formatted.asString : resultString;
+
   const trigger = (
     <span
       data-testid={`number-result:${formatted.asString}`}
@@ -36,30 +37,17 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
         ]
       }
     >
-      {fullResult}
+      {displayString}
     </span>
   );
 
-  if (!tooltip || formatted.asString === preciseString) {
+  if (!tooltip || resultString === preciseString) {
     return trigger;
   }
 
   return (
     <Tooltip trigger={trigger} stopClickPropagation>
-      {unitPart ? (
-        <>
-          <p>
-            {currencyPart}
-            {preciseString}
-          </p>
-          <p css={css({ fontStyle: 'italic' })}>{unitPart}</p>
-        </>
-      ) : (
-        <p>
-          {currencyPart}
-          {preciseString}
-        </p>
-      )}
+      {preciseString}
     </Tooltip>
   );
 };

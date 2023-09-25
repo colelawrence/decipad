@@ -1,5 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SerializedType } from '@decipad/computer';
+import {
+  IdentifiedError,
+  IdentifiedResult,
+  SerializedType,
+} from '@decipad/computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
@@ -11,7 +15,6 @@ import { Ellipsis, Virus } from '../../icons';
 import { CellEditor } from '../../molecules';
 import {
   cssVar,
-  grey300,
   grey700,
   offBlack,
   smallestDesktop,
@@ -29,11 +32,11 @@ type Variant = Pick<
   'variant'
 >['variant'];
 
-const wrapperStyles = (variant: Variant, color: string) => {
+const wrapperStyles = (color: string) => {
   const bgColor = cssVar('backgroundMain');
-  const targetColor = variant === 'display' ? grey300.rgb : color;
+
   const finalColor = cssVar('borderSubdued');
-  const gradient = `linear-gradient(${bgColor}, ${bgColor}), linear-gradient(to right, ${targetColor} 0%, ${finalColor} 18.71%)`;
+  const gradient = `linear-gradient(${bgColor}, ${bgColor}), linear-gradient(to right, ${color} 0%, ${finalColor} 18.71%)`;
   return css({
     // Because `borderImage` with a linear gradient and `borderRadius` cannot
     // work together, we mimic a border by setting a linear gradient in the
@@ -141,6 +144,7 @@ interface VariableEditorProps
   type?: SerializedType;
   onChangeType?: (type: SerializedType | 'smart-selection' | undefined) => void;
   value?: string;
+  lineResult?: IdentifiedResult | IdentifiedError;
   onChangeValue?: (
     value: string | undefined // only booleans for now
   ) => void;
@@ -155,6 +159,7 @@ export const VariableEditor = ({
   type,
   onChangeType = noop,
   value,
+  lineResult,
   onChangeValue = noop,
   element,
   variant,
@@ -166,14 +171,14 @@ export const VariableEditor = ({
 
   const Icon = useMemo(() => (type && getTypeIcon(type)) ?? Virus, [type]);
   const selected = useSelected();
+
+  const resultType = lineResult?.result?.type;
+
   return (
     <div
       aria-roledescription="column-content"
       className={'block-table'}
-      css={wrapperStyles(
-        variant,
-        variant === 'display' ? '#FFFFFF' : baseSwatches[color].rgb
-      )}
+      css={wrapperStyles(baseSwatches[color].rgb)}
       data-testid="widget-editor"
     >
       <div css={widgetWrapperStyles}>
@@ -215,7 +220,8 @@ export const VariableEditor = ({
                       <Ellipsis />
                     </button>
                   }
-                  type={type}
+                  lineResult={lineResult}
+                  type={variant !== 'display' ? type : resultType}
                   onChangeType={onChangeType}
                 />
               </div>
@@ -246,5 +252,5 @@ export const VariableEditor = ({
  * Does this variant have a menu (...), on the top right?
  */
 function isMenuVariant(variant: Variant): boolean {
-  return !(variant === 'date' || variant === 'toggle' || variant === 'display');
+  return !(variant === 'date' || variant === 'toggle');
 }
