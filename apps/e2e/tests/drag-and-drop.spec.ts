@@ -35,7 +35,9 @@ test.describe('Section creation', () => {
 
   test('Searching on the search bar and dragging the notebook', async () => {
     await page.getByTestId('search-bar').click();
-    await page.getByTestId('search-bar').type('Welcome to Decipad!');
+    await page
+      .getByTestId('search-bar')
+      .pressSequentially('Welcome to Decipad!');
 
     // Dragging the notebook
     await page

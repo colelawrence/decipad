@@ -40,8 +40,8 @@ test.describe('Auto complete menu', () => {
     const secretValue = page.locator('[data-testid="input-secret-value"]');
     const addSecret = page.locator('[data-testid="add-secret-button"]');
 
-    await secretName.type('MySecret');
-    await secretValue.type('123');
+    await secretName.fill('MySecret');
+    await secretValue.fill('123');
     await addSecret.click();
 
     const newSecret = page.locator('text="MySecret"');
@@ -75,13 +75,13 @@ test.describe('Auto complete menu', () => {
     // It's a good test to make sure we're following best practices.
     const sqlConnName = page.locator('text="Connection Name"');
     await sqlConnName.click();
-    await sqlConnName.type('MyConnection');
+    await sqlConnName.fill('MyConnection');
 
     const sqlConnUrl = page.locator(
       'text="SQL URL (Containing credentials, port and database host)"'
     );
     await sqlConnUrl.click();
-    await sqlConnUrl.type('MyUrl');
+    await sqlConnUrl.fill('MyUrl');
 
     const submitConn = page.getByTestId('add-conn-button');
     await expect(submitConn).toBeVisible();

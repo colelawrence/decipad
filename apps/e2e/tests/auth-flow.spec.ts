@@ -18,13 +18,13 @@ test.describe('Authentication flow', () => {
   test('should allow the user to type their email for login', async ({
     page,
   }) => {
-    await page.type('input', 'johndoe123@gmail.com');
+    await page.fill('input', 'johndoe123@gmail.com');
     const inputValue = await page.inputValue('input');
     expect(inputValue).toBe('johndoe123@gmail.com');
   });
 
   test('should show confirmation email on login attempt', async ({ page }) => {
-    await page.type('input', 'johndoe123@gmail.com');
+    await page.fill('input', 'johndoe123@gmail.com');
     await page.click('text=/Continue/i');
   });
 
