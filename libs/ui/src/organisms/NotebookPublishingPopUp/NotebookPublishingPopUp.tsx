@@ -58,7 +58,7 @@ export type NotebookSharingPopUpProps = Pick<
   readonly snapshots: NotebookMetaDataFragment['snapshots'];
   readonly hasPaywall?: boolean;
   readonly invitedUsers?: UserAccessMetaFragment[] | null;
-  readonly teamUsers?: UserAccessMetaFragment[] | null;
+  readonly nrOfTeamMembers?: number;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
   readonly isAdmin?: boolean;
@@ -89,7 +89,7 @@ export const NotebookPublishingPopUp = ({
   hasPaywall,
   invitedUsers,
   teamName,
-  teamUsers,
+  nrOfTeamMembers,
   manageTeamURL,
   workspaceId,
   isAdmin = false,
@@ -185,7 +185,7 @@ export const NotebookPublishingPopUp = ({
                 <NotebookCollaborateTab
                   hasPaywall={hasPaywall}
                   usersWithAccess={invitedUsers}
-                  teamUsers={teamUsers}
+                  nrOfTeamMembers={nrOfTeamMembers}
                   teamName={teamName}
                   manageTeamURL={manageTeamURL}
                   isAdmin={isAdmin}
@@ -234,7 +234,7 @@ export const NotebookPublishingPopUp = ({
                 workspaceId={workspaceId}
                 hasPaywall={hasPaywall}
                 usersWithAccess={invitedUsers}
-                teamUsers={teamUsers}
+                nrOfTeamMembers={nrOfTeamMembers}
                 teamName={teamName}
                 manageTeamURL={manageTeamURL}
                 isAdmin={isAdmin}

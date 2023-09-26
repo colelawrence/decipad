@@ -28,6 +28,7 @@ fragment NotebookMetaData on Pad {
         ...UserAccessMeta
       }
     }
+    membersCount
   }
   snapshots {
     snapshotName

@@ -236,6 +236,12 @@ export const graphCacheConfig: GraphCacheConfig = {
       removeSectionFromWorkspace: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Section', id: args.sectionId });
       },
+      shareWorkspaceWithEmail(_result, args, cache) {
+        cache.invalidate({ __typename: 'Workspace', id: args.id });
+      },
+      unshareWorkspaceWithUser(_result, args, cache) {
+        cache.invalidate({ __typename: 'Workspace', id: args.id });
+      },
       sharePadWithSecret: () => {
         // No need to update secret access since we're currently not fetching secret access
         // cache.updateQuery<GetNotebookTopbarQuery>(

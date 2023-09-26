@@ -8,7 +8,7 @@ import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 type CollabMembersRightsProps = {
   readonly usersWithAccess?: UserAccessMetaFragment[] | null;
-  readonly teamUsers?: UserAccessMetaFragment[] | null;
+  readonly nrOfTeamMembers?: number;
   readonly teamName?: string;
   readonly manageTeamURL?: string;
   readonly onRemoveCollaborator?: (userId: string) => void;
@@ -28,7 +28,7 @@ const groupStyles = css({
 export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   usersWithAccess,
   teamName,
-  teamUsers,
+  nrOfTeamMembers = 0,
   manageTeamURL,
   onRemoveCollaborator = noop,
   onChangePermission = noop,
@@ -43,7 +43,7 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   });
 
   return sortedUsersWithAccess.length > 0 ||
-    (teamName && teamUsers && teamUsers.length > 1) ? (
+    (teamName && nrOfTeamMembers > 1) ? (
     <>
       <div css={[groupStyles]}>
         {sortedUsersWithAccess.map((info) =>
@@ -59,12 +59,11 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
         )}
 
         {teamName &&
-          teamUsers &&
-          teamUsers.length > 1 && ( // dont show unless theres at least two people
+          nrOfTeamMembers > 1 && ( // dont show unless theres at least two people
             <CollabMemberOrTeam
               teamName={teamName}
               disabled={disabled}
-              teamMembers={teamUsers.length}
+              teamMembers={nrOfTeamMembers}
               manageTeamURL={manageTeamURL}
             />
           )}

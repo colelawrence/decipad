@@ -77,7 +77,7 @@ interface NotebookCollaborateTabProps {
   readonly workspaceId: string;
   readonly isAdmin: boolean;
   readonly usersWithAccess?: UserAccessMetaFragment[] | null;
-  readonly teamUsers?: UserAccessMetaFragment[] | null;
+  readonly nrOfTeamMembers?: number;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
 
@@ -96,7 +96,7 @@ export const NotebookCollaborateTab = ({
   hasPaywall,
   usersWithAccess,
   teamName,
-  teamUsers,
+  nrOfTeamMembers = 0,
   manageTeamURL,
   isAdmin,
   workspaceId,
@@ -228,7 +228,7 @@ export const NotebookCollaborateTab = ({
         usersWithAccess={usersWithAccess}
         teamName={teamName}
         manageTeamURL={manageTeamURL}
-        teamUsers={teamUsers}
+        nrOfTeamMembers={nrOfTeamMembers}
         onRemoveCollaborator={handleRemoveCollaborator}
         onChangePermission={handleChangePermission}
         disabled={!isAdmin}
