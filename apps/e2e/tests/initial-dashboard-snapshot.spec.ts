@@ -18,6 +18,7 @@ test.describe('Dashboard snapshot', () => {
 
   let page: Page;
   let context: BrowserContext;
+  let localStorageValue: string | null;
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
@@ -65,6 +66,41 @@ test.describe('Dashboard snapshot', () => {
         );
 
     await snapshot(page as Page, 'Dashboard: Initial Notebooks');
+  });
+
+  test.use({ colorScheme: 'dark' });
+
+  test('shows workspace in dark mode mode', async () => {
+    // eslint-disable-next-line playwright/valid-expect
+    await waitForExpect(async () => {
+      localStorageValue = await page.evaluate(() => {
+        window.localStorage.setItem('deciThemePreference', 'dark');
+        return window.localStorage.getItem('deciThemePreference');
+      });
+
+      if (localStorageValue !== null) {
+        expect(localStorageValue).toMatch('dark');
+      }
+    });
+    await page.reload({ waitUntil: 'load' });
+    await snapshot(page as Page, 'Dashboard: Initial Notebooks Darkmode');
+  });
+
+  test.use({ colorScheme: 'light' });
+
+  test('shows workspace in light mode mode', async () => {
+    // eslint-disable-next-line playwright/valid-expect
+    await waitForExpect(async () => {
+      localStorageValue = await page.evaluate(() => {
+        window.localStorage.setItem('deciThemePreference', 'light');
+        return localStorage.getItem('deciThemePreference');
+      });
+
+      if (localStorageValue !== null) {
+        expect(localStorageValue).toMatch('light');
+      }
+    });
+    await page.reload({ waitUntil: 'load' });
   });
 });
 

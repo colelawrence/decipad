@@ -15,6 +15,7 @@ import {
   snapshot,
   withTestUser,
 } from '../utils/src';
+import waitForExpect from 'wait-for-expect';
 
 test.describe('Loading and snapshot of big notebook', () => {
   test.describe.configure({ mode: 'serial' });
@@ -26,6 +27,8 @@ test.describe('Loading and snapshot of big notebook', () => {
   let context: BrowserContext;
   let incognito: BrowserContext;
   let randomUser: BrowserContext;
+  let localStorageValue: string | null;
+
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = page.context();
@@ -56,6 +59,41 @@ test.describe('Loading and snapshot of big notebook', () => {
     await page.waitForSelector('text="ם עוד. על בקר"');
 
     await snapshot(page as Page, 'Notebook: All elements');
+  });
+
+  test.use({ colorScheme: 'dark' });
+
+  test('shows workspace in dark mode mode', async () => {
+    // eslint-disable-next-line playwright/valid-expect
+    await waitForExpect(async () => {
+      localStorageValue = await page.evaluate(() => {
+        window.localStorage.setItem('deciThemePreference', 'dark');
+        return window.localStorage.getItem('deciThemePreference');
+      });
+
+      if (localStorageValue !== null) {
+        expect(localStorageValue).toMatch('dark');
+      }
+    });
+    await page.reload({ waitUntil: 'load' });
+    await snapshot(page as Page, 'Notebook: All elements Darkmode');
+  });
+
+  test.use({ colorScheme: 'light' });
+
+  test('shows workspace in light mode mode', async () => {
+    // eslint-disable-next-line playwright/valid-expect
+    await waitForExpect(async () => {
+      localStorageValue = await page.evaluate(() => {
+        window.localStorage.setItem('deciThemePreference', 'light');
+        return localStorage.getItem('deciThemePreference');
+      });
+
+      if (localStorageValue !== null) {
+        expect(localStorageValue).toMatch('light');
+      }
+    });
+    await page.reload({ waitUntil: 'load' });
   });
 
   test('click publish button and extract text', async () => {
