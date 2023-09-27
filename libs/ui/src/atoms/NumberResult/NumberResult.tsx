@@ -6,6 +6,7 @@ import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { useFormattedResultString } from '@decipad/ui';
+import { css } from '@emotion/react';
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,
@@ -18,10 +19,14 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
 
   const formatted = computer.formatNumber(type, N(value));
 
-  const [resultString, preciseString] = useFormattedResultString(
-    formatted,
-    formatting
-  );
+  const unitPart = formatted.partsOf.find(
+    (part) => part.type === 'unit'
+  )?.value;
+  const currencyPart = formatted.partsOf.find(
+    (part) => part.type === 'currency'
+  )?.value;
+
+  const [resultString] = useFormattedResultString(formatted, formatting);
 
   const displayString =
     type.numberFormat === 'percentage' ? formatted.asString : resultString;
@@ -41,13 +46,26 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
     </span>
   );
 
-  if (!tooltip || resultString === preciseString) {
+  if (!tooltip || resultString === formatted.asStringPrecise) {
     return trigger;
   }
 
   return (
     <Tooltip trigger={trigger} stopClickPropagation>
-      {preciseString}
+      {unitPart ? (
+        <>
+          <p>
+            {currencyPart}
+            {formatted.asStringPrecise}
+          </p>
+          <p css={css({ fontStyle: 'italic' })}>{unitPart}</p>
+        </>
+      ) : (
+        <p>
+          {currencyPart}
+          {formatted.asStringPrecise}
+        </p>
+      )}
     </Tooltip>
   );
 };
