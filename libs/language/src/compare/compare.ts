@@ -83,6 +83,9 @@ function compareToNumber(a: Comparable, b: Comparable): number | bigint {
     return ((a.value && 1) || 0) - ((b.value && 1) || 0);
   }
   if (a instanceof DateValue && b instanceof DateValue) {
+    if (a.moment == null && b.moment == null) {
+      return 0;
+    }
     if (a.moment == null) {
       return -1;
     }
@@ -133,17 +136,8 @@ const sign = (diff: number | bigint): CompareResult => {
 };
 
 export const compare = (
-  a: Comparable | undefined,
-  b: Comparable | undefined
+  a: Comparable = Unknown,
+  b: Comparable = Unknown
 ): CompareResult => {
-  if (a == null || b == null) {
-    if (a != null) {
-      return -1;
-    }
-    if (b != null) {
-      return 1;
-    }
-    return 0;
-  }
   return sign(compareToNumber(a, b));
 };

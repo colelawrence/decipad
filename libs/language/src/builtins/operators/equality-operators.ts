@@ -31,11 +31,13 @@ export const equalityOperators: Record<string, BuiltinSpec> = {
     fn: ([a, b]) => isEqual(a, b),
     functor: equalityFunctor,
     operatorKind: 'infix',
+    likesUnknowns: true,
   },
   '!=': {
     argCount: 2,
     fn: ([a, b]) => !isEqual(a, b),
     functor: equalityFunctor,
     operatorKind: 'infix',
+    likesUnknowns: true,
   },
 };

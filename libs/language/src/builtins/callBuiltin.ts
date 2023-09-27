@@ -49,7 +49,7 @@ async function callBuiltinAfterAutoconvert(
       const argData = await Promise.all(
         argsLowerDims.map(async (a) => a.getData())
       );
-      if (argData.some((d) => d === Unknown)) {
+      if (argData.some((d) => d === Unknown) && !builtin.likesUnknowns) {
         return UnknownValue;
       }
       try {

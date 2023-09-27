@@ -22,6 +22,7 @@ export interface BuiltinSpec {
   aliasFor?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn?: (args: any[], types?: Type[]) => any;
+  likesUnknowns?: boolean;
   noAutoconvert?: boolean;
   autoConvertArgs?: boolean;
   absoluteNumberInput?: boolean;
