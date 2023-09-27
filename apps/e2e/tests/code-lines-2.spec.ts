@@ -32,4 +32,13 @@ test.describe('Calculation Blocks v2', () => {
     // Expected behavior is that the codeline-code will turn MyVariable to MyVariable2
     await expect(page.getByText('MyVariable2', { exact: true })).toBeVisible();
   });
+
+  test('Check precise result on hover', async () => {
+    await createCodeLineV2Below(page, 'IrrationalNumber', 'pi');
+    await expect(
+      page.getByText('IrrationalNumber', { exact: true })
+    ).toBeVisible();
+    await page.getByTestId('number-result:≈3.14').hover();
+    await expect(page.getByText('3.141592653589793')).toBeVisible();
+  });
 });
