@@ -27,7 +27,11 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
           </TextWithIcon>
         </Button>
 
-        <Button type="primaryBrand" onClick={onCreateNotebook}>
+        <Button
+          type="primaryBrand"
+          onClick={onCreateNotebook}
+          testId="new-notebook"
+        >
           <TextWithIcon>
             <Plus variant="black" />
             <span>New Notebook</span>

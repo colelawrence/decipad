@@ -328,7 +328,7 @@ export const NotebookTopbar = ({
           <Styled.LeftContainer>
             {workspaceAccess || isSharedNotebook ? (
               <Styled.IconWrap>
-                <IconButton onClick={onBack}>
+                <IconButton onClick={onBack} testId="go-to-workspace">
                   <LeftArrowShort />
                 </IconButton>
               </Styled.IconWrap>

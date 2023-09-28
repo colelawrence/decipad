@@ -76,7 +76,7 @@ function waitForDownload(page: Page): Promise<Buffer> {
 }
 
 export async function clickNewPadButton(page: Page) {
-  await page.locator('text=/New Notebook/').click();
+  await page.getByTestId('new-notebook').click();
 }
 
 export const ellipsisSelector = (n: number): string => {
