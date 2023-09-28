@@ -24,7 +24,7 @@ test.describe('Testing CSV imports', () => {
     await page.close();
   });
 
-  test('Importing CSV through csv panel', async () => {
+  test('Importing csv link through csv panel', async () => {
     await createCSVBelow(page);
     await page.getByRole('button', { name: 'Choose file' }).first().click();
     await page.getByTestId('embed-file-tab').click();
@@ -39,5 +39,28 @@ test.describe('Testing CSV imports', () => {
     await expect(
       page.getByTestId('live-code').getByTestId('loading-animation')
     ).toBeHidden();
+  });
+
+  test('Importing csv file through csv panel', async () => {
+    await createCSVBelow(page);
+    await page.getByTestId('upload-file-tab').click();
+    await page.getByRole('button', { name: 'Choose file' }).click();
+    const fileChooserPromise = page.waitForEvent('filechooser');
+    await page.getByText('Choose file').click();
+    const fileChooser = await fileChooserPromise;
+    await fileChooser.setFiles('./__fixtures__/csv/accounts.csv');
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+    await expect(
+      page.getByTestId('live-code').getByTestId('loading-animation')
+    ).toBeHidden();
+    await page
+      .getByTestId('integration-block')
+      .filter({ hasText: /accounts_c/ })
+      .getByTestId('segment-button-trigger')
+      .click();
+    await expect(
+      page.getByText('7109 rows, previewing rows 1 to 10')
+    ).toBeVisible();
   });
 });
