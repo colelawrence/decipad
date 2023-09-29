@@ -7,6 +7,7 @@ import {
   insertRowAbove,
   insertRowBelow,
   writeInTable,
+  deleteTable,
 } from '../utils/page/Table';
 
 test.describe('Basic Table', () => {
@@ -34,6 +35,15 @@ test.describe('Basic Table', () => {
   test('creates table', async () => {
     await focusOnBody(page);
     await createTable(page);
+  });
+
+  test('deletes table and created a new table to check for name collisions', async () => {
+    await deleteTable(page);
+    await createTable(page);
+    await expect(
+      await page.getByTestId('code-line-warning').count(),
+      `calculation errors`
+    ).toBe(0);
   });
 
   test('fills table', async () => {

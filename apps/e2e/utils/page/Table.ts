@@ -171,6 +171,11 @@ export function hideTable(page: Page, tableName?: string) {
     .click();
 }
 
+export function deleteTable(page: Page) {
+  page.getByTestId('drag-handle').first().click();
+  return page.getByText('Delete').click();
+}
+
 export function showTable(page: Page, tableName?: string) {
   return getTableOrPage(page, tableName)
     .getByTestId('segment-button-trigger-table')
