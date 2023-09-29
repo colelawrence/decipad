@@ -325,6 +325,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
               borderRadius: 8,
             },
           })}
+          data-testid="draggable-block"
         >
           <BlockSelectable element={element}>
             <BlockErrorBoundary element={element}>

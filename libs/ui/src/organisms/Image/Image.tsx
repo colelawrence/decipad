@@ -108,6 +108,7 @@ export const Image: ImageComponent = ({
             aria-roledescription="column-content"
             css={figureStyles}
             contentEditable={false}
+            data-testid="notebook-image-block"
           >
             <Resizable
               css={[
