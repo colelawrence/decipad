@@ -10,6 +10,7 @@ import {
   applyMap,
   applyFilterMap,
   Value,
+  Column,
 } from '../../value';
 import { createConcatenatedColumn } from '../../lazy/ConcatenatedColumn';
 import { buildType as t, Type } from '../../type';
@@ -201,19 +202,28 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
 
   filter: {
     argCount: 2,
-    functorNoAutomap: async ([table, column]) =>
-      Type.combine(
-        (await (await column.isColumn()).reduced()).isScalar('boolean'),
-        table.isTable(),
-        produce((table) => {
-          table.indexName = null;
-        })
+    functorNoAutomap: async ([subject, column]) =>
+      Type.either(
+        Type.combine(
+          (await (await column.isColumn()).reduced()).isScalar('boolean'),
+          subject.isTable(),
+          produce((table) => {
+            table.indexName = null;
+          })
+        ),
+        Type.combine(
+          (await (await column.isColumn()).reduced()).isScalar('boolean'),
+          subject.isColumn()
+        )
       ),
-    fnValuesNoAutomap: async ([_table, _column]) => {
+    fnValuesNoAutomap: async ([subject, _column]) => {
       const filterMap = (await all(
         map(getColumnLike(_column).values(), valueToResultValue)
       )) as boolean[];
-      const table = getInstanceof(_table, Table);
+      if (subject instanceof Column) {
+        return applyFilterMap(subject, filterMap);
+      }
+      const table = getInstanceof(subject, Table);
       return table.mapColumns((col) => applyFilterMap(col, filterMap));
     },
     explanation: 'Filter table rows based on column values.',

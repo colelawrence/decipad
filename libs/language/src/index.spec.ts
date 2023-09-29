@@ -3283,3 +3283,17 @@ describe('first in column formula', () => {
     `);
   });
 });
+
+describe('filter on columns', () => {
+  it('can filter columns', async () => {
+    expect(
+      await runCode(`
+        Col = [1, 2, 3, 4]
+        filter(Col, Col > 2)
+      `)
+    ).toMatchObject({
+      type: { cellType: { type: 'number' } },
+      value: [N(3), N(4)],
+    });
+  });
+});
