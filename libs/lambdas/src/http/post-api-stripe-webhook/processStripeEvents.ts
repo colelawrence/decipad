@@ -3,9 +3,8 @@
 import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
-import { tables } from 'libs/tables/src/tables';
 import { MAX_CREDITS_EXEC_COUNT } from '@decipad/backendtypes';
-import { timestamp } from '@decipad/tables';
+import { timestamp, tables } from '@decipad/tables';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
 
@@ -214,15 +213,15 @@ export const processInvoiceCreated = async (event: Stripe.Event) => {
     typeof subscription === 'string' ? subscription : subscription?.id;
 
   if (stripeSubscriptionId) {
-    const workspace = await data.workspacesubscriptions.get({
+    const workspaceSubscription = await data.workspacesubscriptions.get({
       id: stripeSubscriptionId,
     });
 
-    if (workspace) {
-      await resetQueryCount(workspace.id);
+    if (workspaceSubscription) {
+      await resetQueryCount(workspaceSubscription?.workspace_id);
       return {
         statusCode: 200,
-        body: `webhook succeeded! Workspace query count reset: ${workspace.id}`,
+        body: `webhook succeeded! Workspace query count reset: ${workspaceSubscription?.workspace_id}`,
       };
     }
 

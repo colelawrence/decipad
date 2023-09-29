@@ -25,6 +25,9 @@
     },
     {
       "path": "../../libs/lambdas"
+    },
+    {
+      "path": "../../libs/graphql-client"
     }
   ]
 }
