@@ -106,6 +106,7 @@ Bonus = match {
   Performance == "Exceeds": 2%
   Performance == "Greatly exceeds": 3%
 }
+==> 2%
 ```
 
 In this example, the `Bonus` variable will be assigned the value of 2% because the value of `Performance` matches the condition "Exceeds". The `match()` statement allows us to specify different conditions and their corresponding results or calculations.
@@ -147,6 +148,7 @@ tiers YourSales {
        max: $500000
        min: $5000
 }
+==> 112000 $
 ```
 
 In this example, the `YourSales` variable is divided into different tiers based on the specified thresholds. The commission percentage changes as the sales amount crosses these thresholds. The `tiers` statement allows us to define calculations for each tier and handle scenarios beyond the defined thresholds.
@@ -172,6 +174,7 @@ CalculateSales(YourSales) = tiers YourSales {
 }
 
 CalculateSales($120000)
+==> 112000 $
 ```
 
 By calling `CalculateSales($120000)`, you will get the result based on the tiered calculations for that specific sales amount.
