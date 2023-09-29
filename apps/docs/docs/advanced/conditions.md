@@ -98,7 +98,7 @@ The `match{}` statement tests a group of conditions and returns a value when a t
 
 Suppose we have a variable `Performance` with the value "Exceeds". We want to determine the bonus based on the performance level.
 
-```
+```deci live
 Performance = "Exceeds"
 
 Bonus = match {
@@ -130,22 +130,22 @@ tiers [Your Value] {
 
 :::
 
-Tiers allow you to slice a number into different levels and perform calculations on each tier. It simplifies complex scenarios such as tiered sales commission structures or progressive tax systems. This statement only works on Advanced Formulas.
+Tiers allow you to slice a number into different levels and perform calculations on each tier. It simplifies complex scenarios such as tiered sales commission structures or progressive tax systems.
 
 :::note Examples
 
 Let's consider a sales commission scenario where the commission rate varies based on the sales amount (`YourSales`).
 
-```
-YourSales = $120,000
+```deci live
+YourSales = $120000
 
 tiers YourSales {
-   $50,000: tier _ 5%
-  $100,000: tier _ 7%
-  $150,000: tier _ 10%
-      rest: tier _ 15%
-       max: $500,000
-       min: $5,000
+   $50000: tier - 5%
+  $100000: tier - 7%
+  $150000: tier - 10%
+      rest: tier - 15%
+       max: $500000
+       min: $5000
 }
 ```
 
@@ -159,23 +159,21 @@ To make tier calculations more reusable, you can define a custom formula that in
 
 :::note Examples
 
-```
-CalculateSales(YourSales) = tiers YourSales {
-   $50,000: tier _ 5%
-  $100,000: tier _ 7%
-  $150,000: tier _ 10%
-      rest: tier _ 15%
-       max: $500,000
-       min: $5,000
-}
-```
-
 In this example, the `CalculateSales` formula takes the `YourSales` variable as input and applies the tiered calculation defined in the `tiers` formula. This allows you to easily calculate sales based on different sales amounts by using the `CalculateSales()` formula.
 
-```
-CalculateSales($120,000)
+```deci live
+CalculateSales(YourSales) = tiers YourSales {
+   $50000: tier - 5%
+  $100000: tier - 7%
+  $150000: tier - 10%
+      rest: tier - 15%
+       max: $500000
+       min: $5000
+}
+
+CalculateSales($120000)
 ```
 
-By calling `CalculateSales($120,000)`, you will get the result based on the tiered calculations for that specific sales amount.
+By calling `CalculateSales($120000)`, you will get the result based on the tiered calculations for that specific sales amount.
 
 :::
