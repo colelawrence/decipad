@@ -1,0 +1,428 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "What's the real price of social media?"
+				}
+			],
+			"type": "h1",
+			"id": "9JSPfV2GcK5P7JQtXwAyM"
+		},
+		{
+			"children": [
+				{
+					"text": "Fellow scrollers! 📱 Let's chat about something that's both fascinating and potentially wallet-boosting. Like many of you, I spend a significant amount of time mindlessly browsing social media every day. It's fun, it's entertaining, but is it, well, financially productive?"
+				}
+			],
+			"type": "p",
+			"id": "h9t_PzP_-50QpTj_x4Ste"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's do a little thought experiment. Imagine if we could transform our social media hours into,  working hours.  How much could we actually earn? Get ready, we're about to flip the script on our daily scrolling routine."
+				}
+			],
+			"type": "p",
+			"id": "Nb4zTXZzjzv8EgnNjcwfq"
+		},
+		{
+			"children": [
+				{
+					"text": "🕰 Time is 💸 money"
+				}
+			],
+			"type": "h3",
+			"id": "aX6OOJNHkNcPsh84Hcli8"
+		},
+		{
+			"children": [
+				{
+					"text": "How much time do you spend on social media, and how much is your time worth per hour?"
+				}
+			],
+			"type": "p",
+			"id": "Tni_F9t4ArOPm0EYRUqiM"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SocialMediaTime"
+								}
+							],
+							"type": "caption",
+							"id": "3-v5MqOmTu1Dg2TySc_rv",
+							"icon": "Coffee"
+						},
+						{
+							"children": [
+								{
+									"text": "4 hours per day"
+								}
+							],
+							"type": "exp",
+							"id": "EvaOqbcQNm17rpa_0Zt0G"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wSkb4oe6uZpkJX9pJHe3l",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "0.1",
+							"value": "4"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "p4JVfky5hPt_k_V-JV_N1"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "HourlyWorth"
+								}
+							],
+							"type": "caption",
+							"id": "LXnPKrpjoFHNlDVAhv0za",
+							"icon": "DollarCircle"
+						},
+						{
+							"children": [
+								{
+									"text": "35 $ per hour"
+								}
+							],
+							"type": "exp",
+							"id": "oaM3ge5CBkkVffyGC6SIt"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ENPuqe7tHh2cTDFcw6Uc-",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "2",
+							"value": "35"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "QR8-FHwGYQOdKHPhBiZ2z"
+				}
+			],
+			"type": "columns",
+			"id": "QtxUV4PLtHrFCn0E1sYua"
+		},
+		{
+			"children": [
+				{
+					"text": "If you replaced each day's social media time with work time you'd make a potential "
+				},
+				{
+					"text": "MoneyMade",
+					"magicnumberz": true
+				},
+				{
+					"text": " per day. 😬"
+				}
+			],
+			"type": "p",
+			"id": "hiAvSxKzhfIcvMfrDMh1E"
+		},
+		{
+			"children": [
+				{
+					"text": "However, this is "
+				},
+				{
+					"text": "not very realistic",
+					"highlight": true
+				},
+				{
+					"text": ", we need time on social media - at the end of the day it's a nice activity to stay connected to friends and family. "
+				}
+			],
+			"type": "p",
+			"id": "cQIHwt7dCPPgQru8BxlG0"
+		},
+		{
+			"children": [
+				{
+					"text": "But we're still looking to "
+				},
+				{
+					"text": "cut some of it",
+					"highlight": true
+				},
+				{
+					"text": ". Let's change the slider for how much percentage of our social media time we want to cut."
+				}
+			],
+			"type": "p",
+			"id": "kgOhn1-8oItqtE4GI1JuF"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TimeCut"
+						}
+					],
+					"type": "caption",
+					"id": "4jYEmkJdBRjx_wOwkzQIO",
+					"icon": "World"
+				},
+				{
+					"children": [
+						{
+							"text": "20%"
+						}
+					],
+					"type": "exp",
+					"id": "8d2satA2hhPcMgymmZ7Hm"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "slider",
+					"max": "100",
+					"min": "0",
+					"step": "1",
+					"value": "20",
+					"id": "ShHrn1yGilGux75mB2Ftq"
+				}
+			],
+			"type": "def",
+			"variant": "slider",
+			"id": "Ueb5vArPbCIQMnfc8SJrl"
+		},
+		{
+			"children": [
+				{
+					"text": "If you cut "
+				},
+				{
+					"text": "TimeCut",
+					"magicnumberz": true
+				},
+				{
+					"text": " from your social media time, you'd spend "
+				},
+				{
+					"text": "NewSocialMediaTime",
+					"magicnumberz": true
+				},
+				{
+					"text": " on social media a day instead."
+				}
+			],
+			"type": "p",
+			"id": "DN3AbdHfUU9g67pRbo2B-"
+		},
+		{
+			"children": [
+				{
+					"text": "This would mean that each day you could make "
+				},
+				{
+					"text": "AdjustedMoneyMade",
+					"magicnumberz": true
+				},
+				{
+					"text": " per day. A whopping "
+				},
+				{
+					"text": "FinalSalary",
+					"magicnumberz": true
+				},
+				{
+					"text": " per month! 🤯"
+				}
+			],
+			"type": "p",
+			"id": "OCds7eH5sBucxVMmy7S72"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "42P0_HbKlbsc8cUt8HA7g"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "cyhMXRBnJmbsw4YO863M3"
+		},
+		{
+			"children": [
+				{
+					"text": "FYI"
+				}
+			],
+			"type": "h2",
+			"id": "B_XxNrI8AzlTlcVJ03r62"
+		},
+		{
+			"children": [
+				{
+					"text": "🚀 You are looking at a Decipad Notebook. We're building this tool because we believe you shouldn't need to be a data analyst (or programmer) to make sense of the world's information. ",
+					"italic": true
+				}
+			],
+			"type": "p",
+			"id": "z2dKhaq57_dxCX1K6Cpdz"
+		},
+		{
+			"children": [
+				{
+					"text": "Do you have a numbers question you need an answer to? Check ",
+					"italic": true
+				},
+				{
+					"children": [
+						{
+							"text": "our website",
+							"italic": true
+						}
+					],
+					"type": "a",
+					"url": "https://www.decipad.com",
+					"id": "Jpo2IhcFPU9_8QUZf3fpL"
+				},
+				{
+					"text": " to sign-up and create your own notebook, and join ",
+					"italic": true
+				},
+				{
+					"children": [
+						{
+							"text": "our community",
+							"italic": true
+						}
+					],
+					"type": "a",
+					"url": "https://discord.com/invite/HwDMqwbGmc",
+					"id": "UUEQWvUZ_XE6RLaSPwKTn"
+				},
+				{
+					"text": " to chat with the team! ",
+					"italic": true
+				}
+			],
+			"type": "p",
+			"id": "UpUFomuRpzY4EWlSUQAKO"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "CafmOl0KgUx6eK5igESWZ"
+		},
+		{
+			"children": [
+				{
+					"text": "MoneyMade = SocialMediaTime * HourlyWorth * day"
+				}
+			],
+			"type": "code_line",
+			"id": "UZwCLOyj_vqEby1RCDfoQ",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "NewSocialMediaTime = SocialMediaTime * day * (100% - TimeCut)"
+				}
+			],
+			"type": "code_line",
+			"id": "DqcLbI6NAZcgY-TxmAUj7",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "AdjustedMoneyMade = (SocialMediaTime - NewSocialMediaTime)  * HourlyWorth "
+				}
+			],
+			"id": "5GookK1fh7CzAgrWXDCsi",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "FinalSalary = AdjustedMoneyMade *30"
+				}
+			],
+			"type": "code_line",
+			"id": "8JoOGxfWrbOa3_dcJNL8w",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "JseRRQ_Rjd9QMjvl6MO7f"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "4tSz2gec34fcb7FwDFwwt"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "p_Lb12GJd4wdV_1VCuUcq"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "iuN6juAZj7OtIiJszcUGM"
+		}
+	]
+}

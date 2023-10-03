@@ -1,0 +1,1379 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Spotify Price Increase"
+				}
+			],
+			"type": "h1",
+			"id": "g1KP_AFJVZYlQ6q4nM8bt"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Spotify announced this Monday an increase in its premium music services, becoming the latest streaming service giant to raise subscription prices.  The price increased to "
+						},
+						{
+							"text": "exprRef_LKyW9VGbxLR0g7ZCzke7A",
+							"magicnumberz": true
+						},
+						{
+							"text": " from "
+						},
+						{
+							"text": "exprRef_pU2ky8zynQbOpf1h40bpa",
+							"magicnumberz": true
+						},
+						{
+							"text": ". "
+						}
+					],
+					"type": "p",
+					"id": "6NtyBrpPU8s-fDzyILIPA"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "img",
+					"url": "https://photos5.appleinsider.com/gallery/43969-85507-Spotify-xl.jpg",
+					"id": "mVj0d2X_ZkKOBm7hoH5iJ"
+				}
+			],
+			"id": "pRpsQTOxh0Vp3j_aBRooS",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InitialPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "w59m1f25UE8kZhtdO7pN6"
+				},
+				{
+					"children": [
+						{
+							"text": "$9.99 per subscriber"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "yPNvBegXtOgiDs-TV3h4v"
+				}
+			],
+			"id": "pU2ky8zynQbOpf1h40bpa",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EndPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "zXNaEBrO_t3F3i5kifMHE"
+				},
+				{
+					"children": [
+						{
+							"text": "$10.99 per subscriber"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Rs8arpEc4qo-vggEQvY1i"
+				}
+			],
+			"id": "LKyW9VGbxLR0g7ZCzke7A",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "HCs2i99vVj0xozsMkn2oo"
+		},
+		{
+			"children": [
+				{
+					"text": "Demand Estimation"
+				}
+			],
+			"id": "PA4UHMWKyaKg7JBzsQiD_",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "First, let's see how the number of subscribers has evolved through the years."
+				}
+			],
+			"id": "QRP0Z6hhKaUvZOuOezgUq",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "DZ0A-QLfH7NwgQ7i0RyQx",
+			"type": "plot",
+			"title": "Number of premium subscribers Spotify at the end of each year (in millions)",
+			"sourceVarName": "exprRef_EwozoBq_REg0ceMRiYK6w",
+			"xColumnName": "Year",
+			"yColumnName": "PremiumSubscribers",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on the number of subscribers that Spotify had at the close of 2022 and assuming that a price of "
+				},
+				{
+					"text": "exprRef_z5H7FMPR2jmsmlPvOrIJ5",
+					"magicnumberz": true
+				},
+				{
+					"text": " would result in Spotify losing most of its clients (they would all go to substitute music streaming services), we can estimate the demand."
+				}
+			],
+			"id": "b-_hzM2Y2KFEu0L87F2PY",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Subscribers"
+						}
+					],
+					"type": "structured_varname",
+					"id": "qgJftjpKX4SO0kF9lbYXi"
+				},
+				{
+					"children": [
+						{
+							"text": "205 million subscribers"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "nN_KOMxC2iKvHtxQdmNY9"
+				}
+			],
+			"id": "7E31k0xZKxwT7Q-eqYPyN",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "LimitPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "iP7FDKCn6b_7o2duURo2E"
+				},
+				{
+					"children": [
+						{
+							"text": "$100 per subscriber"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "7aSmsBBUcRRJeaiJwoxcG"
+				}
+			],
+			"id": "z5H7FMPR2jmsmlPvOrIJ5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "This model includes a convergence factor of "
+				},
+				{
+					"text": "exprRef_24OMOt8wY5RkXInDofE2A",
+					"magicnumberz": true
+				},
+				{
+					"text": ". You can duplicate this model to see the detailed formula and play with different factors."
+				}
+			],
+			"id": "y2rqlp18IB4LRG0kJRldz",
+			"type": "callout",
+			"color": "Catskill"
+		},
+		{
+			"children": [
+				{
+					"text": "We must also select a convergence factor. Opting for 1 will result in a linear demand curve, while a higher factor will make the number of users experience the most pronounced changes close to $0 per subscriber and smaller changes as it nears "
+				},
+				{
+					"text": "exprRef_z5H7FMPR2jmsmlPvOrIJ5",
+					"magicnumberz": true
+				},
+				{
+					"text": "the limit price. A factor of 3.2 makes the optimal price the $10.99 that Spotify just chose."
+				}
+			],
+			"id": "XiuFV5HyyAGRwVxj9E7im",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ConvergenceFactor"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0xenaqh4ZjP4RWMEX6nIK"
+				},
+				{
+					"children": [
+						{
+							"text": "3.2"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "kJc2nNFSwBcDWh6qrDXQ5"
+				}
+			],
+			"id": "24OMOt8wY5RkXInDofE2A",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Demand(x) =  "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "hsn8yaMV2cIDalx-8D3WK",
+					"type": "smart-ref",
+					"blockId": "7E31k0xZKxwT7Q-eqYPyN",
+					"columnId": null,
+					"lastSeenVariableName": "Subscribers"
+				},
+				{
+					"text": "/(("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "avh5IUL-ppFVSavShreCu",
+					"type": "smart-ref",
+					"blockId": "z5H7FMPR2jmsmlPvOrIJ5",
+					"columnId": null,
+					"lastSeenVariableName": "LimitPrice"
+				},
+				{
+					"text": "*subscriber/$)^(1/"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "hKnAGJiTxYTFc48otfqRJ",
+					"type": "smart-ref",
+					"blockId": "24OMOt8wY5RkXInDofE2A",
+					"columnId": null,
+					"lastSeenVariableName": "ConvergenceFactor"
+				},
+				{
+					"text": ")-( "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "74A8P1wbMWEhaZSsvu9AX",
+					"type": "smart-ref",
+					"blockId": "pU2ky8zynQbOpf1h40bpa",
+					"columnId": null,
+					"lastSeenVariableName": "InitialPrice"
+				},
+				{
+					"text": " *subscribers/$)^(1/"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "O5xEqCCPxrh5WYyFO1N0N",
+					"type": "smart-ref",
+					"blockId": "24OMOt8wY5RkXInDofE2A",
+					"columnId": null,
+					"lastSeenVariableName": "ConvergenceFactor"
+				},
+				{
+					"text": "))^"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "skU_dutNtrqdP0mTDTpA1",
+					"type": "smart-ref",
+					"blockId": "24OMOt8wY5RkXInDofE2A",
+					"columnId": null,
+					"lastSeenVariableName": "ConvergenceFactor"
+				},
+				{
+					"text": "*(("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "avh5IUL-ppFVSavShreCu",
+					"type": "smart-ref",
+					"blockId": "z5H7FMPR2jmsmlPvOrIJ5",
+					"columnId": null,
+					"lastSeenVariableName": "LimitPrice"
+				},
+				{
+					"text": "*subscriber/$)^(1/"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "D6kAMGXNSMXdTj9YRMUoc",
+					"type": "smart-ref",
+					"blockId": "24OMOt8wY5RkXInDofE2A",
+					"columnId": null,
+					"lastSeenVariableName": "ConvergenceFactor"
+				},
+				{
+					"text": ")-(x*subscribers/$)^(1/"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "phcQrkv-YEoWvG_KE3uot",
+					"type": "smart-ref",
+					"blockId": "24OMOt8wY5RkXInDofE2A",
+					"columnId": null,
+					"lastSeenVariableName": "ConvergenceFactor"
+				},
+				{
+					"text": "))^"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "KpI-SfgY82_dFPIDhyM00",
+					"type": "smart-ref",
+					"blockId": "24OMOt8wY5RkXInDofE2A",
+					"columnId": null,
+					"lastSeenVariableName": "ConvergenceFactor"
+				},
+				{
+					"text": " in subscribers"
+				}
+			],
+			"id": "VS8CJP6aPJjx1cxSfzc6A",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Now we can construct a graph to visualize the number of premium subscribers that Spotify would have for any price level from 0$ to 100$. "
+				}
+			],
+			"id": "oGDOVa-ZiMAvcKYrFw7Fr",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "_SfE6F4mbDkjC83Jag02C",
+			"type": "plot",
+			"title": "Premium Subscribers in Spotify for each price level",
+			"sourceVarName": "exprRef_HLHuwX_N_9AOjKenqvR2O",
+			"xColumnName": "Price",
+			"yColumnName": "Demand",
+			"markType": "line",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "ff3NU6OApKq2TK2A5YFHN"
+		},
+		{
+			"children": [
+				{
+					"text": "Impact in Revenue "
+				}
+			],
+			"id": "i0Kld0P6QJRQxpMI9uQQa",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's do some math to see how this shift in price impacts the monthly revenues earned by Spotify!"
+				}
+			],
+			"id": "Sodo8KUBxS_tZWv8CDGLD",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InitialRevenues"
+						}
+					],
+					"type": "structured_varname",
+					"id": "GciqPgQXRgV688Bc4wJKC"
+				},
+				{
+					"children": [
+						{
+							"text": " "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "M69l2H9eQYeuGWWLyugJc",
+							"type": "smart-ref",
+							"blockId": "7E31k0xZKxwT7Q-eqYPyN",
+							"columnId": null,
+							"lastSeenVariableName": "Subscribers"
+						},
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "p_Z1ftOqhsPbC3h4CDany",
+							"type": "smart-ref",
+							"blockId": "pU2ky8zynQbOpf1h40bpa",
+							"columnId": null,
+							"lastSeenVariableName": "InitialPrice"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "t7yRvQxaAdAZ65xfFzYRK"
+				}
+			],
+			"id": "wRykqTqFG0tTsZX6hQais",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EndRevenues"
+						}
+					],
+					"type": "structured_varname",
+					"id": "gG5rEFTkWmIpQ41dcFO3Q"
+				},
+				{
+					"children": [
+						{
+							"text": "  "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FwM_t0Ufu73QAvvTJYz6i",
+							"type": "smart-ref",
+							"blockId": "9oOp5JznXimTOMjje_-n0",
+							"columnId": null,
+							"lastSeenVariableName": "EndSubscribers"
+						},
+						{
+							"text": "*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pbVcpKPN2DkhmS_PnRC8R",
+							"type": "smart-ref",
+							"blockId": "LKyW9VGbxLR0g7ZCzke7A",
+							"columnId": null,
+							"lastSeenVariableName": "EndPrice"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "jVSf4i8t9DYN1g1AqT1g6"
+				}
+			],
+			"id": "jgcU7jDX0yzeV4r8H-h33",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RevenueDiference"
+						}
+					],
+					"type": "structured_varname",
+					"id": "aMXsAHM4NxrNhhksQKfAY"
+				},
+				{
+					"children": [
+						{
+							"text": " "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "P-eay2hpjHXcP4LBe_eXV",
+							"type": "smart-ref",
+							"blockId": "jgcU7jDX0yzeV4r8H-h33",
+							"columnId": null,
+							"lastSeenVariableName": "EndRevenues"
+						},
+						{
+							"text": "-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VqGpwAt6ahcUgP7RPTOaZ",
+							"type": "smart-ref",
+							"blockId": "wRykqTqFG0tTsZX6hQais",
+							"columnId": null,
+							"lastSeenVariableName": "InitialRevenues"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "NX25vMje8Of4JUpea7PLM"
+				}
+			],
+			"id": "ckRrPFf7i5SCgogojAF8d",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EndSubscribers"
+						}
+					],
+					"type": "structured_varname",
+					"id": "4soATvNOH5fbsVqM9qWjt"
+				},
+				{
+					"children": [
+						{
+							"text": " Demand("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jFoJKEE0ldsEGO2VsKDbY",
+							"type": "smart-ref",
+							"blockId": "LKyW9VGbxLR0g7ZCzke7A",
+							"columnId": null,
+							"lastSeenVariableName": "EndPrice"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "OVs4kMGbk3UlQLmxKtbQ2"
+				}
+			],
+			"id": "9oOp5JznXimTOMjje_-n0",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SubscribersDiference"
+						}
+					],
+					"type": "structured_varname",
+					"id": "9stMpdI5iY1G9NpT3OxOk"
+				},
+				{
+					"children": [
+						{
+							"text": " "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sXOgGqzNdyHCbmgkUAELe",
+							"type": "smart-ref",
+							"blockId": "7E31k0xZKxwT7Q-eqYPyN",
+							"columnId": null,
+							"lastSeenVariableName": "Subscribers"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JVlnsIGvYDYv2_vmqoJVN",
+							"type": "smart-ref",
+							"blockId": "9oOp5JznXimTOMjje_-n0",
+							"columnId": null,
+							"lastSeenVariableName": "EndSubscribers"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "8noRz89lSEh7CGwxkJe58"
+				}
+			],
+			"id": "AwPheW47USv6iHX1kiHkz",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "According to our calculations, the new price of "
+				},
+				{
+					"text": "exprRef_LKyW9VGbxLR0g7ZCzke7A",
+					"magicnumberz": true
+				},
+				{
+					"text": " will make Spotify increase its monthly revenues by "
+				},
+				{
+					"text": "exprRef_ckRrPFf7i5SCgogojAF8d",
+					"magicnumberz": true
+				},
+				{
+					"text": ", but at the same time will make them lose  "
+				},
+				{
+					"text": "exprRef_AwPheW47USv6iHX1kiHkz",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "RlMhExOD7UW-yOYR_9Sx4",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "HlPoWCtLDw9ytT_sZaK3X"
+		},
+		{
+			"children": [
+				{
+					"text": "Test"
+				}
+			],
+			"id": "iv81AcGi015615dq518uh",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's see what would happen if Spotify had different price points! Pick a new price and observe how the revenues and subscriber numbers change."
+				}
+			],
+			"type": "p",
+			"id": "QH5gNITVxB80KQ_HGrvP6"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "NewPriceSlider"
+						}
+					],
+					"id": "BkwF1yfu1FwlsonmuvI45",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "30 $ per subscriber"
+						}
+					],
+					"id": "MNYjT_EUFjAigrB3btfcq",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "beKLVM92Shh-wk0AKVBwg",
+					"type": "slider",
+					"max": "100",
+					"min": "0",
+					"step": "1",
+					"value": "30"
+				}
+			],
+			"id": "Tq71030--fJ2LxFPSkEfb",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TestSusbcribers"
+						}
+					],
+					"type": "structured_varname",
+					"id": "47tODe6A_a_sVnfDxCxVT"
+				},
+				{
+					"children": [
+						{
+							"text": "Demand("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gnukyhvhYqTdGgNcigQU0",
+							"type": "smart-ref",
+							"blockId": "Tq71030--fJ2LxFPSkEfb",
+							"columnId": null,
+							"lastSeenVariableName": "NewPriceSlider"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Enp0j2twNzVsuZX5hanNC"
+				}
+			],
+			"id": "bklk4Gx5Srhxl9XpI9hbC",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TestRevenue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "NRP66H92u2UXymQrd88mR"
+				},
+				{
+					"children": [
+						{
+							"text": " "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "baRJnM3tCXfnHi-7Sa-r9",
+							"type": "smart-ref",
+							"blockId": "bklk4Gx5Srhxl9XpI9hbC",
+							"columnId": null,
+							"lastSeenVariableName": "TestSusbcribers"
+						},
+						{
+							"text": " *"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ad_uMgPjvYY2IhgSoXd-S",
+							"type": "smart-ref",
+							"blockId": "Tq71030--fJ2LxFPSkEfb",
+							"columnId": null,
+							"lastSeenVariableName": "NewPriceSlider"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "YDCjCp4oz0rO_9c3QA5AF"
+				}
+			],
+			"id": "YG7ASovuOVEESMkl9AUNL",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "With this price, Spotify would have "
+				},
+				{
+					"text": "exprRef_bklk4Gx5Srhxl9XpI9hbC",
+					"magicnumberz": true
+				},
+				{
+					"text": " and would earn "
+				},
+				{
+					"text": "exprRef_YG7ASovuOVEESMkl9AUNL",
+					"magicnumberz": true
+				},
+				{
+					"text": " monthly."
+				}
+			],
+			"type": "p",
+			"id": "W14zaAYnXKBJkUnxwWvEj"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "floHy0BB2P8BDV-R4VRGL"
+		},
+		{
+			"children": [
+				{
+					"text": "Optimal Point"
+				}
+			],
+			"id": "9U8QAOj4SyjclTdLgFw2-",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "The optimal price that Spotify could charge with the estimated demand curve in order to maximize the monthly revenues is "
+				},
+				{
+					"text": "exprRef_wpdNtKIyCY2jUMBRbB1Dw",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"id": "c5HCHwLIeNqjBfUZ_uxRc",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "8cL18Ee0z0-xR6jykUPgl",
+			"type": "plot",
+			"title": "Revenue generated by Spotify for each price level (in $USD)",
+			"sourceVarName": "exprRef_jQsIdAdYN9tAtPph_eCNB",
+			"xColumnName": "Price",
+			"yColumnName": "Revenue",
+			"markType": "line",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "None",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "DSxGffdYiJtCnu8MladR8"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix"
+				}
+			],
+			"id": "4NYwSqYQHM45lnQ0P5koG",
+			"type": "h2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SubscribersTable"
+								}
+							],
+							"id": "L-VW3ZAaa4lo86ZfvhOcY",
+							"type": "table-var-name"
+						}
+					],
+					"id": "8xz-WNL5Z4TXI5wUR___2",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year"
+								}
+							],
+							"id": "vWP987VuxBUZB6j6-6Ix5",
+							"type": "th",
+							"cellType": {
+								"kind": "series",
+								"seriesType": "date"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "PremiumSubscribers"
+								}
+							],
+							"id": "KYxSlvtnHgA1fGHiDb5_m",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							}
+						}
+					],
+					"id": "QpY8_DPjmZFkzUey2k_o3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2015"
+								}
+							],
+							"id": "Kh_Scv36sA-k4U6N-adPp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "28"
+								}
+							],
+							"id": "QcMZVLvMBTmkShH2-sNz5",
+							"type": "td"
+						}
+					],
+					"id": "XIdg9PjCiz2dMIZPhyTIs",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2016"
+								}
+							],
+							"id": "vNu6ITOym9y_UNmyxdOz4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "48"
+								}
+							],
+							"id": "rwv8PbAzWCIFGMPqXTRyt",
+							"type": "td"
+						}
+					],
+					"id": "TMlZxoEf4_OHKRCC6d5l2",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2017"
+								}
+							],
+							"id": "EH1gIHZA2bkq89_bWKFpi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "71"
+								}
+							],
+							"id": "Ss4ItvfXjwksQBrp9W6sX",
+							"type": "td"
+						}
+					],
+					"id": "BHxXRd5JmaEZWzZ3GMZgh",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2018"
+								}
+							],
+							"id": "aWJTJohLNro8T6Una-Rre",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "96"
+								}
+							],
+							"id": "IySG-Sw-4se7rSjCtz4FR",
+							"type": "td"
+						}
+					],
+					"id": "cpLkGkfZfjdQu_3_Ncb5k",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2019"
+								}
+							],
+							"id": "WLavk4WgZJWaoMpg2uaKD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "124"
+								}
+							],
+							"id": "mF2F0CPoNMs3Hjc-7-IXi",
+							"type": "td"
+						}
+					],
+					"id": "qBRtYJDDVvLi-_nVbig6n",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2020"
+								}
+							],
+							"id": "dXhap6P7y_oWvcMxowBMc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "155"
+								}
+							],
+							"id": "MRYnJAd8H7rWFAGIkWCaa",
+							"type": "td"
+						}
+					],
+					"id": "J1jXx852uWA22xDWBAxfG",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2021"
+								}
+							],
+							"id": "globVO2-Npcv7F88aivdR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "180"
+								}
+							],
+							"id": "fChFBxWvdCxAtQT5EU8Nf",
+							"type": "td"
+						}
+					],
+					"id": "UbSmNEuzwfb1asGWqnZAa",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2022"
+								}
+							],
+							"id": "zlFXrLgyfYGk1tY-VO8UQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "205"
+								}
+							],
+							"id": "X0titfccCrf-T3LN_eTpb",
+							"type": "td"
+						}
+					],
+					"id": "VxZTn1STYOIw8GxTW0k59",
+					"type": "tr"
+				}
+			],
+			"id": "EwozoBq-REg0ceMRiYK6w",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "DemandTable = {\n  Price = [0$ per subscriber..100]\n  Demand = Demand(Price)\n}"
+				}
+			],
+			"isHidden": true,
+			"id": "HLHuwX_N_9AOjKenqvR2O",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"text": "Test = {\n  Price = [1$ per subscriber..20]\n  Demand = Demand(Price)\n  Revenue = Price*Demand\n}"
+				}
+			],
+			"id": "jQsIdAdYN9tAtPph-eCNB",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "OptimPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "uL7s2NdLhkV7tho1aa5g-"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UpLIiIwRpcD_u8nlX9lxQ",
+							"type": "smart-ref",
+							"blockId": "jQsIdAdYN9tAtPph-eCNB",
+							"columnId": null,
+							"lastSeenVariableName": "Test"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ofAyBljdg3iZTpC-Hdj14",
+							"type": "smart-ref",
+							"blockId": "jQsIdAdYN9tAtPph-eCNB",
+							"columnId": "jQsIdAdYN9tAtPph-eCNB_2",
+							"lastSeenVariableName": "Test.Revenue"
+						},
+						{
+							"text": "==Max("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oTvB1I8d1na8TT68AFBzS",
+							"type": "smart-ref",
+							"blockId": "jQsIdAdYN9tAtPph-eCNB",
+							"columnId": "jQsIdAdYN9tAtPph-eCNB_2",
+							"lastSeenVariableName": "Test.Revenue"
+						},
+						{
+							"text": " )).Price"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "TS1ZEo9XHUW-DFHU1vlW4"
+				}
+			],
+			"id": "wpdNtKIyCY2jUMBRbB1Dw",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "lJbJzD6JWrmAgNFm1Ii-c"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "OLR00uWZaB62DaLkm7lNN"
+		}
+	]
+}

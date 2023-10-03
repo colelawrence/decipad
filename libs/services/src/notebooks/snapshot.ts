@@ -4,6 +4,9 @@ import { Document } from '@decipad/editor-types';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import { applyUpdate, Doc, mergeUpdates } from 'yjs';
+import { fetchSnapshotFromFile } from '../../../backend-notebook-content/src/fetchSnapshotFromFile';
+import { getDefined } from '@decipad/utils';
+import { DocSyncSnapshotRecord } from '@decipad/backendtypes';
 
 export const snapshot = async (
   notebookId: string
@@ -37,4 +40,51 @@ export const snapshot = async (
     data: Buffer.from(mergedUpdates),
     version: md5(canonicalizedObj),
   };
+};
+
+export interface Snapshot {
+  name: string;
+  doc: Document;
+  date?: Date;
+}
+
+export const snapshotFromDbSnapshot = async (
+  snapshotRec: DocSyncSnapshotRecord
+): Promise<Snapshot | undefined> => {
+  const data =
+    (snapshotRec.data && Buffer.from(snapshotRec.data, 'base64')) ||
+    (await fetchSnapshotFromFile(getDefined(snapshotRec.data_file_path)));
+
+  if (!data) {
+    return undefined;
+  }
+  const doc = new Doc();
+  applyUpdate(doc, data);
+
+  return {
+    name: snapshotRec.snapshotName,
+    doc: { children: toSlateDoc(doc.getArray()) },
+    date:
+      (snapshotRec.createdAt && new Date(snapshotRec.createdAt * 1000)) ||
+      undefined,
+  };
+};
+
+export const getStoredSnapshot = async (
+  notebookId: string,
+  snapshotName: string
+): Promise<Snapshot | undefined> => {
+  const data = await tables();
+  const snapshotRec = (
+    await data.docsyncsnapshots.query({
+      IndexName: 'byDocsyncIdAndSnapshotName',
+      KeyConditionExpression:
+        'docsync_id = :docsyncId and snapshotName = :snapshotName',
+      ExpressionAttributeValues: {
+        ':docsyncId': notebookId,
+        ':snapshotName': snapshotName,
+      },
+    })
+  ).Items[0];
+  return snapshotRec && snapshotFromDbSnapshot(snapshotRec);
 };

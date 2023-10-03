@@ -1,0 +1,128 @@
+diff --git a/node_modules/@nasa-gcn/architect-plugin-search/index.js b/node_modules/@nasa-gcn/architect-plugin-search/index.js
+index ade4b86..1b82fd3 100644
+--- a/node_modules/@nasa-gcn/architect-plugin-search/index.js
++++ b/node_modules/@nasa-gcn/architect-plugin-search/index.js
+@@ -32,7 +32,7 @@ async function exists(path) {
+ }
+ 
+ // install.ts
+-var version = "8.6.2";
++var version = "2.9.0";
+ var types = /* @__PURE__ */ new Map([
+   ["Linux", ["linux", "tar.gz"]],
+   ["Darwin", ["darwin", "tar.gz"]],
+@@ -49,43 +49,26 @@ function getFilename() {
+   const arch = archs.get(os_arch);
+   if (!typeInfo || !arch) {
+     throw new Error(
+-      `No ElasticSearch binary is available for your OS type (${os_type}) and architecture (${os_arch}). For supported operating systems, see https://www.elastic.co/downloads/elasticsearch.`
++      `No OpenSearch binary is available for your OS type (${os_type}) and architecture (${os_arch}). For supported operating systems, see https://www.elastic.co/downloads/elasticsearch.`
+     );
+   }
+   const [type, ext] = typeInfo;
+-  return { name: `elasticsearch-${version}-${type}-${arch}`, ext };
++  return { name: `opensearch-${version}-${type}-${arch}`, ext };
+ }
+-async function download(url) {
+-  console.log("Downloading", url, "to", cache);
+-  await mkdirP(cache);
+-  const { body } = await fetch(url, { cachePath: cache });
+-  return body;
+-}
+-async function install() {
++async function getBinPath() {
+   const { name: name2, ext } = getFilename();
+   const extractPath = join(cache, name2);
+   const binExt = os.type() === "Windows_NT" ? ".bat" : "";
+   const binPath = join(
+     extractPath,
+-    `elasticsearch-${version}`,
++    `opensearch-${version}`,
+     "bin",
+-    `elasticsearch${binExt}`
++    `opensearch${binExt}`
+   );
+-  const binPathExists = await exists(binPath);
+-  if (!binPathExists) {
+-    const url = `https://artifacts.elastic.co/downloads/elasticsearch/${name2}.${ext}`;
+-    const stream = await download(url);
+-    let extract;
+-    if (url.endsWith(".tar.gz")) {
+-      extract = untar({ cwd: extractPath });
+-    } else if (url.endsWith(".zip")) {
+-      extract = unzip({ path: extractPath });
+-    } else {
+-      throw new Error("unknown archive type");
+-    }
+-    console.log("Extracting to", extractPath);
+-    await mkdirP(extractPath);
+-    await pipeline(stream, extract);
++  console.log('opensearch bin path', binPath);
++  if (!await exists(binPath)) {
++    console.log('Expected opensearch binary to exist at path ' + binPath)
++    return undefined;
+   }
+   return binPath;
+ }
+@@ -134,7 +117,10 @@ var LocalElasticSearch = class {
+   static async launch({ port }) {
+     port ?? (port = 9200);
+     const url = `http://localhost:${port}`;
+-    const bin = await install();
++    const bin = await getBinPath();
++    if (!bin) {
++      return;
++    }
+     let child;
+     await mkdirP(temp);
+     const tempDir = await mkdtemp(join2(temp, "run-"));
+@@ -160,16 +146,23 @@ var LocalElasticSearch = class {
+         ]);
+       } catch (e) {
+         await pipeline2(
+-          createReadStream(join2(logsDir, "elasticsearch.log")),
++          createReadStream(join2(logsDir, "opensearch.log")),
+           process.stderr
+         );
+         throw e;
+       }
+-      console.log("ElasticSearch is ready at", url);
++      console.log("OpenSearch is ready at", url);
+     } catch (e) {
+       await rimraf(tempDir);
+       throw e;
+     }
++
++    process.once('SIGTERM', () => {
++      if (child) {
++        child.kill();
++      }
++    });
++
+     return new this({ child, tempDir, port, url });
+   }
+   async stop() {
+@@ -401,7 +394,8 @@ var deploy = {
+   // @ts-expect-error: The Architect plugins API has no type definitions.
+   services({ stage, arc }) {
+     if (stage !== "production") {
+-      return { node: "http://localhost:9200" };
++      var port = parseInt(process.env.DECI_SEARCH_PORT ?? '9200');
++      return { node: "http://localhost:" + port };
+     } else if (arc.search) {
+       return services2;
+     } else {
+@@ -419,11 +413,10 @@ var sandbox = {
+       }
+     }
+   }) {
+-    local = await launch({});
+-    await populate(cwd, { node: local.url });
++    // empty
+   },
+   async end() {
+-    await local.stop();
++    // empty
+   }
+ };
+ export {

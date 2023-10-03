@@ -1,23 +1,38 @@
-import { getNodeString } from '@udecode/plate';
-import type {
-  Document,
-  AnyElement,
-  ColumnsElement,
-} from '@decipad/editor-types';
+import { getNodeString, isElement } from '@udecode/plate';
+import {
+  type Document,
+  type AnyElement,
+  type ColumnsElement,
+  type MyNode,
+  ELEMENT_SMART_REF,
+} from '../../editor-types/src';
 import { getVerbalizer } from './verbalizers';
 
-interface VerbalizedElement {
+export interface VerbalizedElement {
   element: AnyElement;
   verbalized: string;
 }
 
-interface DocumentVerbalization {
+export interface DocumentVerbalization {
   document: Document;
   verbalized: VerbalizedElement[];
 }
 
 const isStructuralElement = (element: AnyElement): element is ColumnsElement =>
   element.type === 'columns'; // right now, only columns are structural elements. Add tabs here later.
+
+const verbalizeOneNode = (node: MyNode): string => {
+  if (isElement(node)) {
+    if (node.type === ELEMENT_SMART_REF) {
+      return node.lastSeenVariableName ?? getNodeString(node);
+    }
+    const v = getVerbalizer(node);
+    return v != null
+      ? v(node, verbalizeOneNode)
+      : node.children.map(verbalizeOneNode).join('');
+  }
+  return getNodeString(node);
+};
 
 const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
   const v = getVerbalizer(element);
@@ -27,7 +42,8 @@ const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
   return [
     {
       element,
-      verbalized: v != null ? v(element) : getNodeString(element),
+      verbalized:
+        v != null ? v(element, verbalizeOneNode) : verbalizeOneNode(element),
     },
   ];
 };

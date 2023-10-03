@@ -1,0 +1,2377 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Pricing ROI Calculator: Tell Your Story of Value"
+				}
+			],
+			"type": "h1",
+			"id": "XxRTA0ZjxyEwTj8gEJ-cb"
+		},
+		{
+			"children": [
+				{
+					"text": "275270067_1282159448936896_5650026794776945824_n.png"
+				}
+			],
+			"id": "YXs2Sm_IFBpk8dO5ONRZS",
+			"type": "img",
+			"url": "https://app.decipad.com/api/pads/Gamm88b_QBOsXd2cj7BhD/attachments/B23Rft10vUJMn8-RxgRIb",
+			"width": 580
+		},
+		{
+			"children": [
+				{
+					"text": "At PetsApp, we're as obsessed with your ROI as you are — we're only successful together. Let's say you have:"
+				}
+			],
+			"type": "p",
+			"id": "UhHlQlySZHAenAkr_4bZK"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Vets"
+								}
+							],
+							"id": "d_erf6LfV93IyE-lZRONe",
+							"type": "caption",
+							"icon": "Happy"
+						},
+						{
+							"children": [
+								{
+									"text": "2.6 vets"
+								}
+							],
+							"id": "0TNdm-QXiQ2Pb13devLj6",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "F-uuISwq0oEVMvQEX7jfl",
+							"type": "slider",
+							"max": "50",
+							"min": "0",
+							"step": "0.1",
+							"value": "2.6"
+						}
+					],
+					"id": "kOTO6Uwk_1FY0cixwsr1f",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Clinics"
+								}
+							],
+							"id": "YfJYR2nHJRixDWqfTfzvC",
+							"type": "caption",
+							"icon": "World"
+						},
+						{
+							"children": [
+								{
+									"text": "5 clinics"
+								}
+							],
+							"id": "xwctxagRWNNPrYuD3ggk5",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SlXlqmCGK2REYi7YyCBbr",
+							"type": "slider",
+							"max": "500",
+							"min": "0",
+							"step": "1",
+							"value": "5"
+						}
+					],
+					"id": "CMxa9XBTqj_etYDQhj8ku",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "d4hGbD-4PRhQxcSjKq4oH",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AverageTransaction"
+								}
+							],
+							"id": "IgV1L1ywC0WBwCmpx4tcv",
+							"type": "caption",
+							"icon": "Wallet"
+						},
+						{
+							"children": [
+								{
+									"text": "240 $"
+								}
+							],
+							"id": "jtULJudaobW9doWVpK-Cq",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "u8RhOM3g9CdcYRPIJe1YO",
+							"type": "slider",
+							"max": "1000",
+							"min": "0",
+							"step": "10",
+							"value": "240"
+						}
+					],
+					"id": "fomYx94Lyyo55OHRqeJ0s",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "WellnessPlans"
+								}
+							],
+							"id": "jdcoismX6kFippyeacEsN",
+							"type": "caption",
+							"icon": "Health"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "nAKXTysOTO_j9qi4DJ8iM",
+							"type": "exp"
+						}
+					],
+					"id": "KErP_3xRcED8PwukljQmC",
+					"type": "def",
+					"variant": "toggle",
+					"coerceToType": {
+						"kind": "boolean",
+						"date": "day"
+					}
+				}
+			],
+			"id": "nCJHf5teZT00ZIUxzq11G",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "By using PetsApp you will potentially see an increased revenue of "
+				},
+				{
+					"text": "exprRef_ZFxzk16XU1INx2JjPyBvD",
+					"magicnumberz": true
+				},
+				{
+					"text": ".  "
+				}
+			],
+			"type": "p",
+			"id": "iJYh4Z-2dY1jnJ9ywrx71"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "sZAUwbuNNmLz9gK6Lh05N",
+			"type": "plot",
+			"title": "Revenue increase by using PetsApp",
+			"sourceVarName": "exprRef_7rCUPmQ8RxkSpe9jv7aIe",
+			"xColumnName": "Name",
+			"yColumnName": "Revenue",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "Name",
+			"colorScheme": "monochrome_blue",
+			"y2ColumnName": ""
+		},
+		{
+			"children": [
+				{
+					"text": "If you think it's too good to be true, let's go into the details."
+				}
+			],
+			"type": "p",
+			"id": "6cbFU6WG20fOULO-0u_Nn"
+		},
+		{
+			"children": [
+				{
+					"text": "Increasing your revenue by decreasing downtime"
+				}
+			],
+			"type": "h2",
+			"id": "8ATW_vbjyO_CPSa3ZKFtv"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "fl-mjzYrECI8hVMVYrw-J",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "FreeSlots"
+								}
+							],
+							"id": "ozaVfgcGYd6luBUP-0NaT",
+							"type": "caption",
+							"icon": "Clock"
+						},
+						{
+							"children": [
+								{
+									"text": "2 consultations per procedure"
+								}
+							],
+							"id": "26WPQMvo7Ec9Oa_UPLoU4",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DwF2Jd_m_OLREMtO-vVqn",
+							"type": "slider",
+							"max": "3",
+							"min": "0",
+							"step": "1",
+							"value": "2"
+						}
+					],
+					"id": "-MXzpjf3bKWmBmiNiXL9v",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Procedures"
+								}
+							],
+							"id": "guBAGCvvsHWGBgmbOZmax",
+							"type": "caption",
+							"icon": "Education"
+						},
+						{
+							"children": [
+								{
+									"text": "3 procedures per day"
+								}
+							],
+							"id": "M_jYyARoJ55ieaYqsn7DX",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IOjwyD9aolv0gLuo4PaoU",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "3"
+						}
+					],
+					"id": "wV0UNVUgba0ApBdbuCkAV",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "AoCq-ev9WCtveS9shR2LI",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "We assume the average vet does "
+				},
+				{
+					"text": "Procedures",
+					"magicnumberz": true
+				},
+				{
+					"text": ". By doing the discharge consult and post-op check associated with each procedure asynchronously via PetsApp you save  "
+				},
+				{
+					"text": "FreeSlots",
+					"magicnumberz": true
+				},
+				{
+					"text": " at peak times that can be backfilled and charged for.  We learned all of this this by "
+				},
+				{
+					"children": [
+						{
+							"text": "working together with great clinics like yours"
+						}
+					],
+					"type": "a",
+					"url": "https://petsapp.com/case-studies/castle-vets-case-study",
+					"id": "9rYuf7bjKnetzaaK2MEto"
+				},
+				{
+					"text": ". "
+				}
+			],
+			"type": "p",
+			"id": "xssal_4AxAgyCc-GzhF7G"
+		},
+		{
+			"children": [
+				{
+					"text": "On a per vet basis you would be able to free up "
+				},
+				{
+					"text": "exprRef_mubR4OzdMp_McVZvO5msr",
+					"magicnumberz": true
+				},
+				{
+					"text": " by using PetsApp, which you could then backfill and charge for."
+				}
+			],
+			"type": "p",
+			"id": "vaq3zvewFqfo8SM7UD69Y"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SavedConsultations"
+						}
+					],
+					"type": "structured_varname",
+					"id": "F4oQahFQARekmajxw8coJ"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wgt-2Ip1F1zaDEsExc81J",
+							"type": "smart-ref",
+							"blockId": "-MXzpjf3bKWmBmiNiXL9v",
+							"lastSeenVariableName": "FreeSlots"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SEadNSGhhumZ47QjMXUeh",
+							"type": "smart-ref",
+							"blockId": "wV0UNVUgba0ApBdbuCkAV",
+							"lastSeenVariableName": "Procedures"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "-RWAGXtGkfmTdw2pj_6GN"
+				}
+			],
+			"id": "mubR4OzdMp_McVZvO5msr",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SavedAllClinics"
+						}
+					],
+					"type": "structured_varname",
+					"id": "TbiOkY_0-oujyyoyeFDRP"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7-0fYZNZ5BBydE_sOwRWo",
+							"type": "smart-ref",
+							"blockId": "mubR4OzdMp_McVZvO5msr",
+							"lastSeenVariableName": "SavedConsultations"
+						},
+						{
+							"text": " per vet * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ucfY5MiW_NEhAGf7yQ1nj",
+							"type": "smart-ref",
+							"blockId": "kOTO6Uwk_1FY0cixwsr1f",
+							"lastSeenVariableName": "Vets"
+						},
+						{
+							"text": " per clinic * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "O_d6fB_XZ8AUrrCwcNqJm",
+							"type": "smart-ref",
+							"blockId": "CMxa9XBTqj_etYDQhj8ku",
+							"lastSeenVariableName": "Clinics"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "SettZg7i2d64XNbCYj9Ko"
+				}
+			],
+			"id": "29jQWUY-L1fqrm9rANMXP",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Given you have "
+				},
+				{
+					"text": "exprRef_kOTO6Uwk_1FY0cixwsr1f",
+					"magicnumberz": true
+				},
+				{
+					"text": " and a total of "
+				},
+				{
+					"text": "exprRef_CMxa9XBTqj_etYDQhj8ku",
+					"magicnumberz": true
+				},
+				{
+					"text": " you will save a total amount of "
+				},
+				{
+					"text": "exprRef_29jQWUY_L1fqrm9rANMXP",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "eqzkKWGMp0soiezrVZNQC"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DaysInMonth"
+						}
+					],
+					"id": "-vq0vJXmB87is3AF-4daR",
+					"type": "caption",
+					"icon": "Clock"
+				},
+				{
+					"children": [
+						{
+							"text": "22 day"
+						}
+					],
+					"id": "3l47ghRVDDWZtAaaRZWOO",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "-QVGDdXOBGR1_ZmRrdMfR",
+					"type": "slider",
+					"max": "31",
+					"min": "5",
+					"step": "1",
+					"value": "22"
+				}
+			],
+			"id": "_u1RsvLaP8zFumlQGXzdh",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "If you consider a month with "
+				},
+				{
+					"text": "DaysInMonth",
+					"magicnumberz": true
+				},
+				{
+					"text": " (when the clinic is actually open) you would have saved "
+				},
+				{
+					"text": "exprRef_PdtGgQsfOXtDqC7pTQ8Rk",
+					"magicnumberz": true
+				},
+				{
+					"text": ". Given an average transaction value of "
+				},
+				{
+					"text": "exprRef_fomYx94Lyyo55OHRqeJ0s",
+					"magicnumberz": true
+				},
+				{
+					"text": ", that's the same as saying  "
+				},
+				{
+					"text": "exprRef_zJrR38vVxT1i80RxqSgp3",
+					"magicnumberz": true
+				},
+				{
+					"text": " or "
+				},
+				{
+					"text": "exprRef_p_1u5vfZQQeRhAi866lkv",
+					"magicnumberz": true
+				},
+				{
+					"text": ". "
+				}
+			],
+			"type": "p",
+			"id": "1rcmXPyLBWJl_bA_RyvlQ"
+		},
+		{
+			"children": [
+				{
+					"text": "By using the team you already have."
+				}
+			],
+			"type": "p",
+			"id": "Pgvv_jiJKOV4yRytfX9fb"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MonthlyConsultations"
+						}
+					],
+					"type": "structured_varname",
+					"id": "eo-VugW-iPK-wByzmpFOq"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Ri205aVmGwcorBIIwptNF",
+							"type": "smart-ref",
+							"blockId": "29jQWUY-L1fqrm9rANMXP",
+							"lastSeenVariableName": "SavedAllClinics"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KZBzKbhKfZusfekca4U-V",
+							"type": "smart-ref",
+							"blockId": "_u1RsvLaP8zFumlQGXzdh",
+							"lastSeenVariableName": "DaysInMonth"
+						},
+						{
+							"text": " per month "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "5Z1IuvPRlt3V0nymLz_cc"
+				}
+			],
+			"id": "PdtGgQsfOXtDqC7pTQ8Rk",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MonthlyROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "oA2NHBGiuQTRWjWvYKCJj"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aryLeCaq2lOVf0Rkp1-ql",
+							"type": "smart-ref",
+							"blockId": "fomYx94Lyyo55OHRqeJ0s",
+							"lastSeenVariableName": "AverageTransaction"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qFhkvB-IJELHuzjacUkp0",
+							"type": "smart-ref",
+							"blockId": "PdtGgQsfOXtDqC7pTQ8Rk",
+							"lastSeenVariableName": "MonthlyConsultations"
+						},
+						{
+							"text": " per consultation"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "MGWnMASnY_DNUJSYPWiwn"
+				}
+			],
+			"id": "Ur9tVFJvfL33DOoKHe1CS",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RoundedROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "tsawHjyCHhDfFMlzMkzjO"
+				},
+				{
+					"children": [
+						{
+							"text": "round(MonthlyROI, -3)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "iGJFGG2NBZqyAOIa-b8xH"
+				}
+			],
+			"id": "zJrR38vVxT1i80RxqSgp3",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DowntimeROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "jvXL-mdOeFrAf-ByszWuW"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "cbHaYeCRs07oYa6f8DEF_",
+							"type": "smart-ref",
+							"blockId": "Ur9tVFJvfL33DOoKHe1CS",
+							"lastSeenVariableName": "MonthlyROI"
+						},
+						{
+							"text": " in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "_QYcv8kN5WZvCfzTmNFsa"
+				}
+			],
+			"id": "p-1u5vfZQQeRhAi866lkv",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "lvUmoYkm3-atJF8_WwA-8"
+		},
+		{
+			"children": [
+				{
+					"text": "Wellness Plans"
+				}
+			],
+			"type": "h2",
+			"id": "sFkrNy1ehvWwHKV0I21cI"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "VqtoNApY5cDjyshiIqOBR",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Wellness plans are PetsApp insurance plans that you can offer your patients. If you haven't considered pet insurance as a commercial offering we think you will find this compelling. If you already have a wellness plans offering, you can simplify your stack and have better ROI by using PetsApp."
+				}
+			],
+			"type": "p",
+			"id": "kZLy8b5HLjoLij72714Fn"
+		},
+		{
+			"children": [
+				{
+					"text": "The uplift of our wellness plans is "
+				},
+				{
+					"text": "exprRef_A6KyUm_oE3YwAQYq_833t",
+					"magicnumberz": true
+				},
+				{
+					"text": ". Across the sector, wellness plans have an average penetration rate of "
+				},
+				{
+					"text": "exprRef_iJqRnM41xS4fO4tSoM68y",
+					"magicnumberz": true
+				},
+				{
+					"text": ". Considering a average of "
+				},
+				{
+					"text": "exprRef_W0LihTpP6iFYrn8_YzFp5",
+					"magicnumberz": true
+				},
+				{
+					"text": "  and a wellness plan cost of "
+				},
+				{
+					"text": "exprRef_T6xL8yjDrslal8JY7AOIK",
+					"magicnumberz": true
+				},
+				{
+					"text": " you would be making approximately "
+				},
+				{
+					"text": "exprRef_Df4S07we2K9k1tkTwj1It",
+					"magicnumberz": true
+				},
+				{
+					"text": " by offering wellness plans to your clients. Considering the "
+				},
+				{
+					"text": "exprRef_iJqRnM41xS4fO4tSoM68y",
+					"magicnumberz": true
+				},
+				{
+					"text": " uplift of using PetsApp, that goes up to "
+				},
+				{
+					"text": "exprRef_0BNrMDyL0PlV91jd0dWyZ",
+					"magicnumberz": true
+				},
+				{
+					"text": ".."
+				}
+			],
+			"type": "p",
+			"id": "vna3pF2qnSPlZygMTFdU_"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Uplift"
+						}
+					],
+					"type": "structured_varname",
+					"id": "CgobP9sN5CJgJT6_vUPiO"
+				},
+				{
+					"children": [
+						{
+							"text": "25%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "aRIN-7ki8x6yge2lji9SJ"
+				}
+			],
+			"id": "iJqRnM41xS4fO4tSoM68y",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Penetration"
+						}
+					],
+					"type": "structured_varname",
+					"id": "XmSjB6Sqt_6xU1Y5ApQfJ"
+				},
+				{
+					"children": [
+						{
+							"text": "35%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ZHpsAnCiiqrk0r3MV4r6c"
+				}
+			],
+			"id": "A6KyUm-oE3YwAQYq-833t",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Price"
+						}
+					],
+					"type": "structured_varname",
+					"id": "UZO700-QHGyraNF_tWFNx"
+				},
+				{
+					"children": [
+						{
+							"text": "$45 per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "OYSBUQkK_f44HzDpnSjbd"
+				}
+			],
+			"id": "T6xL8yjDrslal8JY7AOIK",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PossibleRevenue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "OmcFcP3m84WRuPpyt4Ocy"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "W0uQhoMbOST1wU-_k4IqG",
+							"type": "smart-ref",
+							"blockId": "T6xL8yjDrslal8JY7AOIK",
+							"lastSeenVariableName": "Price"
+						},
+						{
+							"text": " per pet * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aToDEp3Li6TyLIr6G7YQC",
+							"type": "smart-ref",
+							"blockId": "W0LihTpP6iFYrn8-YzFp5",
+							"lastSeenVariableName": "AvgPets"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Aw2-0saptYye4cuOv3c0g"
+				}
+			],
+			"id": "CK4sN29rndrtwVxO8DVg1",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AvgPets"
+						}
+					],
+					"type": "structured_varname",
+					"id": "F6-Y-khle49ddl-1PqrRP"
+				},
+				{
+					"children": [
+						{
+							"text": "3000 pets"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "_qS6vDZvUgHVaKitxFo1h"
+				}
+			],
+			"id": "W0LihTpP6iFYrn8-YzFp5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Revenue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "t6qYbPPKTVL-EVATV17oq"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yH65BufH2zpqdSz7vuWhY",
+							"type": "smart-ref",
+							"blockId": "A6KyUm-oE3YwAQYq-833t",
+							"lastSeenVariableName": "Penetration"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4zuRug46vKiQifdx9872Q",
+							"type": "smart-ref",
+							"blockId": "CK4sN29rndrtwVxO8DVg1",
+							"lastSeenVariableName": "PossibleRevenue"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "aHY9h4FxcJOjKG_6YtLV3"
+				}
+			],
+			"id": "5lLl4aJceOvIS4N9q6vRu",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RoundRevenue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "q3kL8hCStHoVRLN47dRXE"
+				},
+				{
+					"children": [
+						{
+							"text": "round("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Q5SibwB9cpyD5Jgw83QJU",
+							"type": "smart-ref",
+							"blockId": "5lLl4aJceOvIS4N9q6vRu",
+							"lastSeenVariableName": "Revenue"
+						},
+						{
+							"text": ", -3)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "THWhsnaHtF1UdjNYm0oTN"
+				}
+			],
+			"id": "Df4S07we2K9k1tkTwj1It",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RevenueWithUplift"
+						}
+					],
+					"type": "structured_varname",
+					"id": "UVhlJh3mtn36QhnESZ2oa"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zr7SMhFPbRjhLcTJWCUju",
+							"type": "smart-ref",
+							"blockId": "5lLl4aJceOvIS4N9q6vRu",
+							"lastSeenVariableName": "Revenue"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pL80C71vArhg8ZQYE0NEe",
+							"type": "smart-ref",
+							"blockId": "iJqRnM41xS4fO4tSoM68y",
+							"lastSeenVariableName": "Uplift"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "pkvSPlsGTz73NIvdoaHn0"
+				}
+			],
+			"id": "9I9jl1hwwONUuvQ9cvyR8",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RevenueUpliftRound"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0C7Xqyi5DBroHZUdD3Cw6"
+				},
+				{
+					"children": [
+						{
+							"text": "round("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ei8ACFOYX2zcXU_MXLkQm",
+							"type": "smart-ref",
+							"blockId": "9I9jl1hwwONUuvQ9cvyR8",
+							"lastSeenVariableName": "RevenueWithUplift"
+						},
+						{
+							"text": ", -3)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "EqEfCUXpdytDf4RdMZtX8"
+				}
+			],
+			"id": "0BNrMDyL0PlV91jd0dWyZ",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "If you are considering changing your wellness plans to PetsApp, you have more reasons than just ease of use and dealing with less suppliers. By using Petsapp you will make extra "
+				},
+				{
+					"text": "exprRef_rxBznxAZwQcBRVZ6xPYnl",
+					"magicnumberz": true
+				},
+				{
+					"text": ". Same as saying "
+				},
+				{
+					"text": "exprRef_GBVP_ouONVVBdOr0srrVw",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "YGvGIdaTAEROIwwNevolN"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "UpliftDifference"
+						}
+					],
+					"type": "structured_varname",
+					"id": "QJQpU_IX-aK6xThrV33q2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "k50KuyDAiFSTtLL9tHHrC",
+							"type": "smart-ref",
+							"blockId": "CMxa9XBTqj_etYDQhj8ku",
+							"lastSeenVariableName": "Clinics"
+						},
+						{
+							"text": " * ("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jbqNB5WZsfa49E9P9yp_h",
+							"type": "smart-ref",
+							"blockId": "9I9jl1hwwONUuvQ9cvyR8",
+							"lastSeenVariableName": "RevenueWithUplift"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7R_YjJwjEEY7ZnsqAiMcF",
+							"type": "smart-ref",
+							"blockId": "5lLl4aJceOvIS4N9q6vRu",
+							"lastSeenVariableName": "Revenue"
+						},
+						{
+							"text": ") per clinic  "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "6rvAhbNU2yfSj_4tNV-gO"
+				}
+			],
+			"id": "pMD4yD5_YvGNhYEyJcTZj",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "UpliftDiffRounded"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Ic_cOTnNsdxpmdJFAMLQY"
+				},
+				{
+					"children": [
+						{
+							"text": "round("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MjHiWdv5hgOLeZG4Tvn63",
+							"type": "smart-ref",
+							"blockId": "pMD4yD5_YvGNhYEyJcTZj",
+							"lastSeenVariableName": "UpliftDifference"
+						},
+						{
+							"text": ", -3)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "YYp6Nqgh_52gh_zbjipKC"
+				}
+			],
+			"id": "rxBznxAZwQcBRVZ6xPYnl",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "WPROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fRula02oLUeVuqMqv8WbI"
+				},
+				{
+					"children": [
+						{
+							"text": "(if "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WctQ8FHSVaa_c2HpmRyik",
+							"type": "smart-ref",
+							"blockId": "KErP_3xRcED8PwukljQmC",
+							"lastSeenVariableName": "WellnessPlans"
+						},
+						{
+							"text": " then "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8s6FQNhKxI4cglOazjZJX",
+							"type": "smart-ref",
+							"blockId": "pMD4yD5_YvGNhYEyJcTZj",
+							"lastSeenVariableName": "UpliftDifference"
+						},
+						{
+							"text": " else 0) in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "KtB871mLwF7-0j3i7JOdw"
+				}
+			],
+			"id": "GBVP_ouONVVBdOr0srrVw",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "hlhawb6P0aQanzoNrUp03"
+		},
+		{
+			"children": [
+				{
+					"text": "Missed calls"
+				}
+			],
+			"type": "h2",
+			"id": "N5Va-e_EwwWAK14VXly7n"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "l8GV3ELPuE-495NKn3XCO",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Vets deal with an unsustainable amount of inbound phone calls, preventing their front desk team from responding to all pet owner enquiries that come in. Revenue opportunities are missed, time is wasted, and vets are prevented from focusing on what really matters: Taking care of sick pets. Don't take our word for it, you can read "
+				},
+				{
+					"children": [
+						{
+							"text": "how we help clinics deal with this problem"
+						}
+					],
+					"type": "a",
+					"url": "https://petsapp.com/case-studies/how-petsapp-helped-pennard-vets-reduce-missed-calls-by-85percent",
+					"id": "zyAukrjPed1lZk37Tbr0K"
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "vPAgVhMOsLctw-F9Urw9q"
+		},
+		{
+			"children": [
+				{
+					"text": "So let's drill down in how to calculate ROI for not being able to cope with all these calls. On average a clinic has "
+				},
+				{
+					"text": "exprRef_pAVDeCtURj46XQEYaZGCg",
+					"magicnumberz": true
+				},
+				{
+					"text": " missed calls per month. With PetsApp our clinics achieve a reduction of missed calls of "
+				},
+				{
+					"text": "exprRef_FyVdsnZ8NyuvXEjvzqZDg",
+					"magicnumberz": true
+				},
+				{
+					"text": ".  "
+				}
+			],
+			"type": "p",
+			"id": "JvOHsNFxMo1wyskiSyk-8"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MissedCalls"
+						}
+					],
+					"type": "structured_varname",
+					"id": "sWxrMJJoMA2EDXsmbs12a"
+				},
+				{
+					"children": [
+						{
+							"text": "233"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Wx1QOR0uzbNa4IKMWV7Nh"
+				}
+			],
+			"id": "pAVDeCtURj46XQEYaZGCg",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Reduction"
+						}
+					],
+					"type": "structured_varname",
+					"id": "l0z3b05c67qlqEGg4xXbE"
+				},
+				{
+					"children": [
+						{
+							"text": "85%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "9B-ibxzCVVoYru3Y-JrIh"
+				}
+			],
+			"id": "FyVdsnZ8NyuvXEjvzqZDg",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MissedAfterPetsApp"
+						}
+					],
+					"type": "structured_varname",
+					"id": "BkCKAvV6egOIZ7zE1IGlQ"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sSnyF_ub1dNsrCDsdCpl1",
+							"type": "smart-ref",
+							"blockId": "pAVDeCtURj46XQEYaZGCg",
+							"lastSeenVariableName": "MissedCalls"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZWaLxpCiyU1xXWJo3LCcU",
+							"type": "smart-ref",
+							"blockId": "FyVdsnZ8NyuvXEjvzqZDg",
+							"lastSeenVariableName": "Reduction"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "gH30fqZCQhuLJYgZn0rWV"
+				}
+			],
+			"id": "IWwA16WlPa0ae6TJmN-45",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "If we assume that "
+				},
+				{
+					"text": "exprRef_GWkr5Wx7JTLN_zwc7X3k3",
+					"magicnumberz": true
+				},
+				{
+					"text": " of those calls would convert into an appointment, you missed out on "
+				},
+				{
+					"text": "exprRef_wyTrBxVNjZFaKeRMeQaz9",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "ZnXspNy7SwpYwgUXbTpV-"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ConversionRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "dBrrzSSgASlnzhHGjJBPJ"
+				},
+				{
+					"children": [
+						{
+							"text": "40%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Fv8J8OUrv5uz40QnR2qKP"
+				}
+			],
+			"id": "GWkr5Wx7JTLN_zwc7X3k3",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MissedDifference"
+						}
+					],
+					"type": "structured_varname",
+					"id": "uYeYueYFNLzC00Yui179d"
+				},
+				{
+					"children": [
+						{
+							"text": "("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TyI7-Nad2t-e9kjX8kWMf",
+							"type": "smart-ref",
+							"blockId": "pAVDeCtURj46XQEYaZGCg",
+							"lastSeenVariableName": "MissedCalls"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SpgD92LLG3HnElVFHXJm7",
+							"type": "smart-ref",
+							"blockId": "IWwA16WlPa0ae6TJmN-45",
+							"lastSeenVariableName": "MissedAfterPetsApp"
+						},
+						{
+							"text": ") per clinic"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "4f5nZrPe3dKyUPqEIb3QS"
+				}
+			],
+			"id": "gjEC-SKD6K94yupEomsaa",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MissedCallsROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "sJGJhNyGynt1f_8O2awNc"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "12JSBN54JoK3PM-_874D9",
+							"type": "smart-ref",
+							"blockId": "CMxa9XBTqj_etYDQhj8ku",
+							"lastSeenVariableName": "Clinics"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gMzSivS5rwjMvG4dVnPp2",
+							"type": "smart-ref",
+							"blockId": "gjEC-SKD6K94yupEomsaa",
+							"lastSeenVariableName": "MissedDifference"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qM8lhbnmFdrE8PbYylBLH",
+							"type": "smart-ref",
+							"blockId": "GWkr5Wx7JTLN_zwc7X3k3",
+							"lastSeenVariableName": "ConversionRate"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FwrlsF47H0NLWCNnaNovu",
+							"type": "smart-ref",
+							"blockId": "fomYx94Lyyo55OHRqeJ0s",
+							"lastSeenVariableName": "AverageTransaction"
+						},
+						{
+							"text": " per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "os0MZUQbKKJVwT41lms58"
+				}
+			],
+			"id": "YOjhIJESRSmgfjMkqTnWU",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CallsROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "QTO4_dzcu6x1RIV7l7l_0"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Zg-oYpBGN3BG_CYZn8jCP",
+							"type": "smart-ref",
+							"blockId": "YOjhIJESRSmgfjMkqTnWU",
+							"lastSeenVariableName": "MissedCallsROI"
+						},
+						{
+							"text": " in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "R6KJucXNCbA1o2vVq8oK1"
+				}
+			],
+			"id": "wyTrBxVNjZFaKeRMeQaz9",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "exuGOxBM2IjCG40YaTJIX"
+		},
+		{
+			"children": [
+				{
+					"text": "Online products"
+				}
+			],
+			"type": "h2",
+			"id": "7fl2AC0A8Dd4sNgCo17yI"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "bCOCUwd0F3HLXc86swUsT",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "It's easy for your clients to buy things online these day, and if you cannot offering them convenience you will find yourself loosing revenue by not being able to sell products that used to be a big part of your revenues just a few years ago."
+				}
+			],
+			"type": "p",
+			"id": "tk7YAt1ywgcW1hB5yy0LA"
+		},
+		{
+			"children": [
+				{
+					"text": "With PetsApp we simplify this process by allowing pets owners to buy products directly from the chat. We found that "
+				},
+				{
+					"text": "exprRef_Go8nIE5t8aLEemQ3bV2px",
+					"magicnumberz": true
+				},
+				{
+					"text": " of chat interactions include product purchase discussions. We found out that typically clinics can convert "
+				},
+				{
+					"text": "exprRef_UbvLmY3M6fG3k1ibv_ezW",
+					"magicnumberz": true
+				},
+				{
+					"text": " of these conversations directly into in app purchases with PetsApp."
+				}
+			],
+			"type": "p",
+			"id": "BlYgjpLi2Um4VoUMmCYQY"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PurchaseChats"
+						}
+					],
+					"type": "structured_varname",
+					"id": "dggxibz49DwA_uH3_kQR8"
+				},
+				{
+					"children": [
+						{
+							"text": "35%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "cwCO8YeVPyvinQWx3ozl8"
+				}
+			],
+			"id": "Go8nIE5t8aLEemQ3bV2px",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ConvertRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "MQBsi0F_mI1Q8qupt36Ys"
+				},
+				{
+					"children": [
+						{
+							"text": "25%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "tNIkn5F4cnx-o2uF8MOPy"
+				}
+			],
+			"id": "UbvLmY3M6fG3k1ibv_ezW",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Considering an average of "
+				},
+				{
+					"text": "exprRef_WWrStAdUG7mQS3O_sQz1B",
+					"magicnumberz": true
+				},
+				{
+					"text": " an a typical product value of "
+				},
+				{
+					"text": "exprRef_ThpU5gUpKg08GyliF7xkS",
+					"magicnumberz": true
+				},
+				{
+					"text": " , this translates into "
+				},
+				{
+					"text": "exprRef_tvD1htIEobBVFfDB3RsYZ",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "G0Hky1Y6vHFcwchzXs9lI"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Chats"
+						}
+					],
+					"type": "structured_varname",
+					"id": "KFxs9RQUoC8U2VmnxWF_4"
+				},
+				{
+					"children": [
+						{
+							"text": "512 chats per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "h5OqgAuhoeMPqmDPkfN8Y"
+				}
+			],
+			"id": "WWrStAdUG7mQS3O_sQz1B",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ProductCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "okNaG7fOytkoiRw-amulr"
+				},
+				{
+					"children": [
+						{
+							"text": "$55 per chat"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Tvw1cEJq2jMpi0b6Ye_eA"
+				}
+			],
+			"id": "ThpU5gUpKg08GyliF7xkS",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ChatMonthROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "CP2aZHeOWj77MrixlPa7M"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iJr-Msa4rrddexXn3cqtf",
+							"type": "smart-ref",
+							"blockId": "WWrStAdUG7mQS3O_sQz1B",
+							"lastSeenVariableName": "Chats"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wx19TUdXoNUYNMuTM8dkx",
+							"type": "smart-ref",
+							"blockId": "Go8nIE5t8aLEemQ3bV2px",
+							"lastSeenVariableName": "PurchaseChats"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "b3psW-6m2GsUQCbi8FsOP",
+							"type": "smart-ref",
+							"blockId": "UbvLmY3M6fG3k1ibv_ezW",
+							"lastSeenVariableName": "ConvertRate"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hjyZNYzCXlhpVHvbmzBM9",
+							"type": "smart-ref",
+							"blockId": "ThpU5gUpKg08GyliF7xkS",
+							"lastSeenVariableName": "ProductCost"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "CdIJpP6jNPjx9r-H_1gML"
+				}
+			],
+			"id": "2vUMOrymzX_pC6nn105bs",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ChatROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "GmO6bq1wgw9k-krA1u8gC"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4OAezqwtGh_M73_FKuzME",
+							"type": "smart-ref",
+							"blockId": "2vUMOrymzX_pC6nn105bs",
+							"lastSeenVariableName": "ChatMonthROI"
+						},
+						{
+							"text": " in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "9J34fMWTdmUcq8d1_gAZ5"
+				}
+			],
+			"id": "tvD1htIEobBVFfDB3RsYZ",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "eFsN8Mo6zAZl_nZsd6qHE"
+		},
+		{
+			"children": [
+				{
+					"text": "Adding it all up"
+				}
+			],
+			"id": "-7a2nhVKIDIZx-BiQDSex",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "87JCpVtNo3BDFC677QweV",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "This is the ROI breakdown:"
+				}
+			],
+			"type": "p",
+			"id": "iEkv-CksLmxnd0zLgpdA_"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "A total of "
+								},
+								{
+									"text": "exprRef_p_1u5vfZQQeRhAi866lkv",
+									"magicnumberz": true
+								},
+								{
+									"text": " due to increase productivity of vets during downtime."
+								}
+							],
+							"type": "lic",
+							"id": "wB4feHopfPhF0d3dE5_DA"
+						}
+					],
+					"type": "li",
+					"id": "2F08bp1lzm8p59AfHZK-d"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "A total of "
+								},
+								{
+									"text": "exprRef_GBVP_ouONVVBdOr0srrVw",
+									"magicnumberz": true
+								},
+								{
+									"text": " due to wellness plans."
+								}
+							],
+							"type": "lic",
+							"id": "bmM8S2hSwFp_SzuotfWI4"
+						}
+					],
+					"type": "li",
+					"id": "AmzxPB8yNuFJtV2KzZYHQ"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "A total of "
+								},
+								{
+									"text": "exprRef_wyTrBxVNjZFaKeRMeQaz9",
+									"magicnumberz": true
+								},
+								{
+									"text": " due to missing less calls, leading to more consultations."
+								}
+							],
+							"type": "lic",
+							"id": "EGwsj2H9fpZsT_uUOvQDw"
+						}
+					],
+					"type": "li",
+					"id": "pxB6m3lksACcKShoAFqFN"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "A total of "
+								},
+								{
+									"text": "ChatROI",
+									"magicnumberz": true
+								},
+								{
+									"text": " by selling products directly from your chat"
+								}
+							],
+							"type": "lic",
+							"id": "UJH_-OF-mkwgnZZlUYaQX"
+						}
+					],
+					"type": "li",
+					"id": "V52IvWPyMiKXEh9-S6rUF"
+				}
+			],
+			"type": "ul",
+			"id": "48dgEsDXQnGS7K4JApcnk"
+		},
+		{
+			"children": [
+				{
+					"text": "This means a total of "
+				},
+				{
+					"text": "exprRef_ZFxzk16XU1INx2JjPyBvD",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "I4K5Q7wlfvwSk6H55m_Xm"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ROI"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Qnv6fhPlexn64LtxEa80t"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"lastSeenVariableName": "ROIBreakdown.Revenue",
+							"id": "g3w0SByUXk5NFgpcNmCXV",
+							"type": "smart-ref",
+							"blockId": "7rCUPmQ8RxkSpe9jv7aIe",
+							"columnId": "7rCUPmQ8RxkSpe9jv7aIe_1"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "LQK5kSLWsiz34rTeRS90E"
+				}
+			],
+			"id": "ZFxzk16XU1INx2JjPyBvD",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "OomBNDie7SnWpJPErgOSz"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix"
+				}
+			],
+			"type": "h2",
+			"id": "XLFc2BqeqrbLkxkqm0qC1",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "W2kwwA1_AFvBUfVOs3dGp",
+			"type": "divider",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Preparing a chart"
+				}
+			],
+			"type": "h3",
+			"id": "9TsXXbOvh_IKJCHHdpQwN",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "TZNvJBPt2wnIFRr9l0sUM",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "ROIBreakdown = {\n  Name = [\"Productivity\", \"Wellness Plans\", \"Missed Calls\", \"Products\"]\n  Revenue = [DowntimeROI, WPROI, "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "mKLga4XQPYxMJLxKKHxXq",
+					"type": "smart-ref",
+					"blockId": "wyTrBxVNjZFaKeRMeQaz9",
+					"lastSeenVariableName": "CallsROI"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "ChatROI",
+					"id": "di3xIjbWh6jG2uro0yCbD",
+					"type": "smart-ref",
+					"blockId": "tvD1htIEobBVFfDB3RsYZ",
+					"columnId": null
+				},
+				{
+					"text": "  ]\n}"
+				}
+			],
+			"id": "7rCUPmQ8RxkSpe9jv7aIe",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "A7MQD3qkLxvwpzrRPOlYH"
+		}
+	]
+}

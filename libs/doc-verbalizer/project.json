@@ -15,7 +15,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/doc-verbalizer"],
       "options": {
-        "jestConfig": "libs/language/jest.config.js"
+        "jestConfig": "libs/doc-verbalizer/jest.config.js"
       }
     },
     "typecheck": {
@@ -28,6 +28,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/doc-verbalizer"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/esbuild --bundle --target=node18 --platform=node --format=cjs --outdir=build src/main.ts",
         "cwd": "libs/doc-verbalizer"
       }
     }

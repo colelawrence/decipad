@@ -1,0 +1,43 @@
+diff --git a/node_modules/@nasa-gcn/architect-functions-search/index.js b/node_modules/@nasa-gcn/architect-functions-search/index.js
+index 34236cd..8b3938b 100644
+--- a/node_modules/@nasa-gcn/architect-functions-search/index.js
++++ b/node_modules/@nasa-gcn/architect-functions-search/index.js
+@@ -15,9 +15,15 @@ const functions_1 = require("@architect/functions");
+ const opensearch_1 = require("@opensearch-project/opensearch");
+ const aws_1 = require("@opensearch-project/opensearch/aws");
+ const memoizee_1 = __importDefault(require("memoizee"));
++
++let memoServiceProps;
+ async function getServiceProps() {
+-    const discoveredServices = await (0, functions_1.services)();
+-    return discoveredServices['nasa_gcn-architect_plugin_search'];
++    if (!memoServiceProps) {
++      const discoveredServices = await (0, functions_1.services)();
++      memoServiceProps = discoveredServices['nasa_gcn-architect_plugin_search'];
++    }
++
++    return memoServiceProps;
+ }
+ /** Return the OpenSearch Service name. */
+ async function name() {
+@@ -27,7 +33,7 @@ async function name() {
+ exports.name = name;
+ exports.search = (0, memoizee_1.default)(async () => {
+     const props = await getServiceProps();
+-    const node = props?.node;
++    const node = process.env.DECI_SEARCH_URL ? process.env.DECI_SEARCH_URL: props?.node;
+     const service = props?.sig4service;
+     if (!node)
+         throw new Error('unknown endpoint');
+@@ -41,5 +47,11 @@ exports.search = (0, memoizee_1.default)(async () => {
+             service,
+         }));
+     }
++    if (process.env.DECI_SEARCH_USERNAME && process.env.DECI_SEARCH_PASSWORD) {
++        options.auth = {
++            username: process.env.DECI_SEARCH_USERNAME,
++            password: process.env.DECI_SEARCH_PASSWORD,
++        };
++    }
+     return new opensearch_1.Client(options);
+ }, { promise: true });

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "lib": ["esnext"]
+  },
+  "references": [
+    { "path": "../backendtypes" },
+    { "path": "../tables" },
+    { "path": "../utils" },
+    { "path": "../backend-config" },
+    { "path": "../editor-types" }
+  ]
+}

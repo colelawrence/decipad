@@ -1,0 +1,1962 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Financial Balance Tracker: Expenses & Income Calculator"
+				}
+			],
+			"type": "h1",
+			"id": "L2NQ1veZtAbvmGjjvnhim"
+		},
+		{
+			"children": [
+				{
+					"text": "Everyone struggles keeping track of their spending, there are quite a few apps for this as well. I thought I's take a shot at a quick napkin math calculator that anyone can use to get their spending habits under control."
+				}
+			],
+			"type": "callout",
+			"id": "2XCKvQZw2dtkYsr1wFpP0"
+		},
+		{
+			"children": [
+				{
+					"text": "Income "
+				}
+			],
+			"id": "QlhEo1BpqsFJu25kqp3Zm",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "This is where you add your income from Primary (salary) and secondary sources"
+				}
+			],
+			"id": "rj5NQ_uM1MXcEUYyFxwg3",
+			"type": "callout",
+			"color": "Catskill"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "IMPORTANT! make sure you enter your salary and any supplemental income post-tax deduction."
+						}
+					],
+					"id": "KzVFV1TUK_brll6ZdjIax",
+					"type": "callout",
+					"color": "Rose",
+					"icon": "AnnotationWarning"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Primary_Income"
+								}
+							],
+							"id": "4p3k7iURB3102dMCZFSs0",
+							"type": "caption",
+							"color": "Sulu",
+							"icon": "Clock"
+						},
+						{
+							"children": [
+								{
+									"text": "8k euros "
+								}
+							],
+							"id": "s3hL7gm-ZJQIELJMZGg81",
+							"type": "exp"
+						}
+					],
+					"id": "JypBAcxUVCMc1h1uQN5h3",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "9r6T-u8sMNg52MK6sgLyz",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Do you own a house? a stock or bond that pays dividends or coupons, do you still get allowance from your folks? - enter them here"
+						}
+					],
+					"id": "8y-GCD_Vlsz_6dgSmc40y",
+					"type": "callout",
+					"color": "Sulu"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Secondary_Income"
+								}
+							],
+							"id": "sJKhMNU4sy2dfwI8V8tcE",
+							"type": "caption",
+							"icon": "World",
+							"color": "Sulu"
+						},
+						{
+							"children": [
+								{
+									"text": "1500 euros "
+								}
+							],
+							"id": "n465_iBvwcbzPxyQAjPPh",
+							"type": "exp"
+						}
+					],
+					"id": "iw5x45GJkw3dNeCMw4JY6",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "ruem6L3nmUkVbOMFBq_Tm",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Expense Tracking"
+				}
+			],
+			"id": "nlSGb8tTVUC-ATxXgNooA",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "In each of the following table add you expenses , feel free to add rows or create additional categories"
+				}
+			],
+			"id": "sxcjsyyCxh2ALwsLHzbQR",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "TO7G1t9au4d97PijdBgv7",
+							"type": "table-var-name"
+						}
+					],
+					"id": "2pe6jT-s-J3abi6Kg8K3V",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Category"
+								}
+							],
+							"id": "C4drbaA-P2ibEdnjgx4SO",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Expense"
+								}
+							],
+							"id": "oLIYfWhEDh2z7ZMZZV75s",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Amount"
+								}
+							],
+							"id": "73xY1-5SNH_iGMFVKVfv6",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"unit": "euro",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "euro"
+									}
+								]
+							}
+						}
+					],
+					"id": "WSXDF6-90GT-dt83hck2t",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "kI61fQYGWjPFoR0KgPDSW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Rent/ mortage"
+								}
+							],
+							"id": "PH25XenJ6kDm6eeHfcJVG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "800 "
+								}
+							],
+							"id": "PhpA-aYgiKAB6cvNoouW3",
+							"type": "td"
+						}
+					],
+					"id": "o9U6d_l2_YYf9DInH_ljD",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "by_qzGypqorGelPapLLeV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Homeowners or renters insurance"
+								}
+							],
+							"id": "WzAtEAaB_YeL2WbKcs68x",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "23"
+								}
+							],
+							"id": "O4pV4w6PHEcpRyqyR2osB",
+							"type": "td"
+						}
+					],
+					"id": "N5ZBYoYifmQDXldloWVaP",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "o0dBd0lM1KrdvaMBSLY8V",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Property tax"
+								}
+							],
+							"id": "t_9v5lGB-Ov7_DhV4WIt_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "adZCSoiscAGf6EKCXLQF3",
+							"type": "td"
+						}
+					],
+					"id": "0KUISDxBGFY-sJbeIo6yB",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "f4dQ3TZUgfYZqA9NNWaNZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Electricity & natural gas"
+								}
+							],
+							"id": "y_DkBjofe1Q2jbwxeW-EK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "gmQnYbD-TH2k1Nb9Mc0F4",
+							"type": "td"
+						}
+					],
+					"id": "tVtn9v2eYZzg_T8hRbIUE",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "At3P5hlf-jW_hSOnVJKha",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Water"
+								}
+							],
+							"id": "bjfhgYi-s77NJRXQ9er4r",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "35"
+								}
+							],
+							"id": "sKYG9UwyXQisSJAl_4J6H",
+							"type": "td"
+						}
+					],
+					"id": "ymk1Li4FsmvoUvq235356",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "Qaefx3wBBzPPEOw5fchYr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Sanitation / garbage services"
+								}
+							],
+							"id": "dWDU07njU923Ynj3HpIK4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "IUfnh7iFOOxLbXoJx7-Yr",
+							"type": "td"
+						}
+					],
+					"id": "4pojeudsaNIy590b25qZc",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "b8mZTdFJ2qZpcSZcRRvNr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Groceries, toiletries and other essentials"
+								}
+							],
+							"id": "xOIAUlwJjVXhllUnkxcrC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "F7ydFKr04xcDoW8gx5G-b",
+							"type": "td"
+						}
+					],
+					"id": "l0nnWkVx7nXMLP-Tq4zxY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Housing"
+								}
+							],
+							"id": "KZZma1bdmBxIPM7zyi6o4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Phone & Internet "
+								}
+							],
+							"id": "03iBTKncLR9I2sj-YZGuV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "25"
+								}
+							],
+							"id": "lNVcZopFwdl-AuISdbYoy",
+							"type": "td"
+						}
+					],
+					"id": "hfXvyo26Voe9kkjNTmXf_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "xjfavxYvoJj8OzX0R7Pn_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Car Payments"
+								}
+							],
+							"id": "3LaFOP6lRRcJORLaB6L0A",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "GvN0shoVtFxEFVkEcPHOI",
+							"type": "td"
+						}
+					],
+					"id": "qmE7Cd7rNyyh3v3yWzwaY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "3X07K7JK4R4Eig76uqEhH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Insurance"
+								}
+							],
+							"id": "tWk61eR0yNcXCrughqAwg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "p2UeWt7q0IWmzGIiTb_nt",
+							"type": "td"
+						}
+					],
+					"id": "x1uT2mQaMUtNuMcHqA5PT",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "kj2beFezu50yHetNtOHM8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Gas "
+								}
+							],
+							"id": "xHl5YLIxXuFnqlGNk1CZ8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "wKVKaFHC8ChnssYEGKgh8",
+							"type": "td"
+						}
+					],
+					"id": "w4-VAIQyBtMInaGdKn46n",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "NTiwzvVw1epvcuLluS_Ln",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Parking and registration fees"
+								}
+							],
+							"id": "DvbRzththascZshVGO3V6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "rdyTBxqJkeXlQ62q6MJZr",
+							"type": "td"
+						}
+					],
+					"id": "ZYNpM4bqk_u0TB50uURCT",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "h7f5Hp1yHAtZbK4rPmJPc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Car maintenance and repairs"
+								}
+							],
+							"id": "AJVDT9qCv6qAOwODxj_MF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50"
+								}
+							],
+							"id": "fBe1FT6C1_fAovUMJJrVD",
+							"type": "td"
+						}
+					],
+					"id": "WNjrt5qabeeehLSPS0dAb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "I7b9gsAGZeULopRkvU_LL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Public transportation "
+								}
+							],
+							"id": "PE2C9372kIr9ei0s1atCK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "95"
+								}
+							],
+							"id": "YTVmk9d-f_NtSoUyDDvtE",
+							"type": "td"
+						}
+					],
+					"id": "t6pRz53Jp2Y7Ka_6HE-es",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Health"
+								}
+							],
+							"id": "YwpviT80NV7M3nG48vNbz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Health insurance "
+								}
+							],
+							"id": "R1Manw7GGd0cAteEtyvGP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "13"
+								}
+							],
+							"id": "Vs5k5sEx6HG3RIx4P9uqs",
+							"type": "td"
+						}
+					],
+					"id": "ZBRQfnUPvWehIqnaJr5o0",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Health"
+								}
+							],
+							"id": "PC_rbTWBmjZ0oCrnT1gXW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Out-of-pocket medical costs"
+								}
+							],
+							"id": "FClZyyp6Oe-fxV-ci2cCd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "-95bEKQMWn5HqXQMCKawn",
+							"type": "td"
+						}
+					],
+					"id": "mTyUWGKTfod-yGY7yYXhM",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Health"
+								}
+							],
+							"id": "q20Oy9iXf7MZGASkmhC2e",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Life insurance "
+								}
+							],
+							"id": "TViaq3RoiNEvvmPh41gp9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "dU18GAwV3RDZPfSGVsYcy",
+							"type": "td"
+						}
+					],
+					"id": "y5o_B_rDgNCbmP5sDP0Mm",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "VhzhUnVA9bwy_Hwo2sOYK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Clothing, jewelry, etc. "
+								}
+							],
+							"id": "_FUVIajifG-VitSopHVvV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "c_Br_0AoWiliOAdPE1fgm",
+							"type": "td"
+						}
+					],
+					"id": "Nr050_ue9AQNQ-ylNZvFV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "YSf15KLliNP6Lghyer3pG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Dining out"
+								}
+							],
+							"id": "mcRaTIjH9KhZ_QLNsk5eZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "sIy5SC-useVTsKIBVbfYn",
+							"type": "td"
+						}
+					],
+					"id": "pGp1ZW97jtSoTxCs9pmn_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "nJAHliyeVlDZnZjP3vy5v",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Special meals at home"
+								}
+							],
+							"id": "Rqh1KID3PhsSZIEmQ-93F",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "75"
+								}
+							],
+							"id": "XrQbpSYEloYwzrVFVkX9O",
+							"type": "td"
+						}
+					],
+					"id": "8ji1ClutAZoo9b6ONiSHb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "496WJk_ePOFCjxXEeoCjD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Alcohol"
+								}
+							],
+							"id": "tyhp3762UeDjkNAiQVl9I",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "40"
+								}
+							],
+							"id": "lQkqNDRMEioUIJimXzwRC",
+							"type": "td"
+						}
+					],
+					"id": "Ilppb2Bmx2vc7CWeRV8GG",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "ydpHMg2o2xREkAQS4Pko7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Movie, concert and event tickets"
+								}
+							],
+							"id": "DhCMuXuLodsaB8LUZGgBg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "30rP-40BznUV02JT6QKLl",
+							"type": "td"
+						}
+					],
+					"id": "nUgyLlmfr8zbFFLRM0qmV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "q0XXlQ9cT7obr1IDjUGSs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Gym or club memberships"
+								}
+							],
+							"id": "0o5DWzqWgXZMo_73mLtDv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "-Y0E6mTovsuhqNj0owdNh",
+							"type": "td"
+						}
+					],
+					"id": "50FOp9eYhXvVLWvDMG82I",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "iKORnyqFzOCDtWYy9gWGc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Travel expenses (airline tickets, hotels, rental cars, etc.)"
+								}
+							],
+							"id": "7t6yA4rD9qi9CEFtxfyZy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "eL-YThkN1H8sNJvJFbf-5",
+							"type": "td"
+						}
+					],
+					"id": "H3_eTo0x3GkcjoAV1YSIH",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "HvOeOtuFjurRlvSq1sQ3f",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Cable or streaming packages"
+								}
+							],
+							"id": "1uyimtnQHtd9CDsJnJ1bC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "25"
+								}
+							],
+							"id": "Fn2Tg4UXyHhtakDNK5QUO",
+							"type": "td"
+						}
+					],
+					"id": "EAr9OLD6ie7sqC2bM6GGY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Extras"
+								}
+							],
+							"id": "sT7EKKOOXFbarvflICtFN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home decor items"
+								}
+							],
+							"id": "RPGaQjwt1OsZ-JMANistc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "lWhJJU6xzcN6ccMmSkR5d",
+							"type": "td"
+						}
+					],
+					"id": "ccjwlV798Og1_HdXryYF3",
+					"type": "tr"
+				}
+			],
+			"id": "fUzZkG6-YYWMPH4fzDPbj",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"icon": "Wallet"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Total_Expenses"
+						}
+					],
+					"type": "structured_varname",
+					"id": "WWi3SQnbSQlw9m3KODQAw"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7Fi5MU1kjkMebjVSlInvq",
+							"type": "smart-ref",
+							"blockId": "fUzZkG6-YYWMPH4fzDPbj",
+							"columnId": "73xY1-5SNH_iGMFVKVfv6",
+							"lastSeenVariableName": "Expenses.Amount"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "lm_MzIjMcLd2ChtlOOVxg"
+				}
+			],
+			"id": "nDwOZS3TzrqCcglg5deKU",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Savings_and_debt"
+								}
+							],
+							"id": "nubCv2Ausz4Vq4lBUQ4V5",
+							"type": "table-var-name"
+						}
+					],
+					"id": "6_TP0yFJ1TXwkA8hL0Ggl",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "PIpe"
+								}
+							],
+							"id": "BmCWBIHP-nBD2fJI2ueJd",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Amount"
+								}
+							],
+							"id": "EDxD0YhOpA56Y0r41P08W",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"unit": "euro",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "euro"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "JInskujsykIu4uWldPhzb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Emergency fund contributions"
+								}
+							],
+							"id": "U9jCYKieLOBwy4B3X8x2F",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "cnihEb0TxERXIQGaxTGlC",
+							"type": "td"
+						}
+					],
+					"id": "t0M9hbPnUYKug4qts5SKo",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Savings account contributions"
+								}
+							],
+							"id": "66IXXzEbjJh0jwZgbf4aJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "400"
+								}
+							],
+							"id": "QquT9AqyTQGHTLCecbRtO",
+							"type": "td"
+						}
+					],
+					"id": "YvfWQUNg5r5dssilke6Og",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "401(k) contributions"
+								}
+							],
+							"id": "SFIvuVlt-vZEde7WiON8L",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-"
+								}
+							],
+							"id": "3E7esF8e3ycG2ZvYOmqfD",
+							"type": "td"
+						}
+					],
+					"id": "Mdbs0WN0uxQNmyvNRoQth",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Individual retirement account contributions"
+								}
+							],
+							"id": "r6Rkt8O_vxSyA8iTntM_p",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-"
+								}
+							],
+							"id": "Zg2G2jcM_ypPHjfap3FbH",
+							"type": "td"
+						}
+					],
+					"id": "WvalwLvLF7r7KY6a_IzR3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other investments"
+								}
+							],
+							"id": "pTFvZ0t6_G-7FH0CsmEJ0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "Y3k5DaYYP7wRHiDV_afmJ",
+							"type": "td"
+						}
+					],
+					"id": "CDQ5KBtdgm-yGpmap_nnL",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Credit card payments"
+								}
+							],
+							"id": "jVfdnJ-e5I99rWTSPNeED",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "500"
+								}
+							],
+							"id": "Gwxva4v_SxC5FkYBk_l8X",
+							"type": "td"
+						}
+					],
+					"id": "MvSOTEjB5c49Y40bj7Ktk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Excess payments on student loans"
+								}
+							],
+							"id": "ZYZIEu-NRNnNpaeE5dvLA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "Th8WC7BHDYvaOI3qC9vwn",
+							"type": "td"
+						}
+					],
+					"id": "DJVG3avY6kj2IxeaSxuzJ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Excess payments on mortgage"
+								}
+							],
+							"id": "Keh3b75cQ_tkR3ryD2eGi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "CL8BMStLgwAlSW95kMVaH",
+							"type": "td"
+						}
+					],
+					"id": "9Cy2wYe3KHpQjlWo4GPMW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "College savings"
+								}
+							],
+							"id": "vQhXdB4_rzejTc4ycgLgf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "kPrVRZki7SUcZ6FsGOxYI",
+							"type": "td"
+						}
+					],
+					"id": "722W0tFN9Az7KFDmsD8fb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other"
+								}
+							],
+							"id": "z_DVU0pTs8I3ttyFoxuNL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "bRbOKK0zrIOSry8LoQEe0",
+							"type": "td"
+						}
+					],
+					"id": "ZBg0THyXAQ9W1mrBUcMZA",
+					"type": "tr"
+				}
+			],
+			"id": "tIL6SEEcsD-eKRyF6-_Ct",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"icon": "Growth",
+			"color": "Sulu"
+		},
+		{
+			"children": [
+				{
+					"text": "Summary "
+				}
+			],
+			"id": "YX72E5mUlPPb6buZwtUWe",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Monthly_Income"
+						}
+					],
+					"type": "structured_varname",
+					"id": "m0frealp827toi7Vw7661"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l2phlFSOj7K_x6UWjbzNN",
+							"type": "smart-ref",
+							"blockId": "JypBAcxUVCMc1h1uQN5h3",
+							"columnId": null,
+							"lastSeenVariableName": "Primary_Income"
+						},
+						{
+							"text": " +"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XuWv19hCb6o65yeEhDJzx",
+							"type": "smart-ref",
+							"blockId": "iw5x45GJkw3dNeCMw4JY6",
+							"columnId": null,
+							"lastSeenVariableName": "Secondary_Income"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "bu8yXSzjBYMkSdgDXEAl8"
+				}
+			],
+			"id": "iS3gubVF3JZDZIGlrBAhP",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Yearly_Income"
+						}
+					],
+					"type": "structured_varname",
+					"id": "3WNkwUruDDdQHrtrm_SLx"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "40c7zOXee5XGfqR-eWKK6",
+							"type": "smart-ref",
+							"blockId": "iS3gubVF3JZDZIGlrBAhP",
+							"columnId": null,
+							"lastSeenVariableName": "Monthly_Income"
+						},
+						{
+							"text": " *12"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "rdemIPYS1obuHbE7IZn3o"
+				}
+			],
+			"id": "dY5axhwAGN7MJUbg1G5Hv",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Monthly_Available"
+						}
+					],
+					"type": "structured_varname",
+					"id": "3rOKFqBTqI6EkcP6x5b-O"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gMJOXH_L4rgq0LSqNuuF-",
+							"type": "smart-ref",
+							"blockId": "iS3gubVF3JZDZIGlrBAhP",
+							"columnId": null,
+							"lastSeenVariableName": "Monthly_Income"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3GU9cndkpLAkYNwmQSgkZ",
+							"type": "smart-ref",
+							"blockId": "nDwOZS3TzrqCcglg5deKU",
+							"columnId": null,
+							"lastSeenVariableName": "Total_Expenses"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "kcgA5vfIzcAAcU8ZjnmtO"
+				}
+			],
+			"id": "U546wrkJPk8u7na8ph4Yg",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Yearly_Available"
+						}
+					],
+					"type": "structured_varname",
+					"id": "MOXR7cmeQezNYt3TrHNJY"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RClSFzdyslse5q3y2hajy",
+							"type": "smart-ref",
+							"blockId": "U546wrkJPk8u7na8ph4Yg",
+							"columnId": null,
+							"lastSeenVariableName": "Monthly_Available"
+						},
+						{
+							"text": " *12"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "MzAxgOe9k_4yYMI-_vqJm"
+				}
+			],
+			"id": "w144p0YVffiAVTKiuDxqJ",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "3DPzLf5F-oz52MRIl2mfe",
+					"blockId": "U546wrkJPk8u7na8ph4Yg",
+					"type": "display",
+					"varName": "Monthly_Available"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "snPffh473Vez86inIzQ_9",
+					"blockId": "w144p0YVffiAVTKiuDxqJ",
+					"type": "display",
+					"varName": "Yearly_Available"
+				}
+			],
+			"id": "43S7W6m3AvlCHAbJyHWKK",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Expenses Break Down "
+				}
+			],
+			"type": "h3",
+			"id": "CMoltYLl8VReY_QLz3MO_"
+		},
+		{
+			"children": [
+				{
+					"text": "Did you know ? understanding how money is distributed among housing, transportation, health, and more is crucial for smart financial choices, enabling savings and goal achievement. "
+				}
+			],
+			"id": "grYED8pNZ2UxJmTaBPJTH",
+			"type": "blockquote"
+		},
+		{
+			"children": [
+				{
+					"text": "Expenses ",
+					"bold": true
+				}
+			],
+			"type": "p",
+			"id": "QrmtPrzrZiCAIqmxC_w_B"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Your total Expenses are displayed in the result widget to the right → "
+						}
+					],
+					"id": "zZcOyq4Fd3CmzyfCScXf5",
+					"type": "callout"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "a-Fd84o1UbBGUA_0U1KB-",
+					"blockId": "nDwOZS3TzrqCcglg5deKU",
+					"type": "display",
+					"varName": "Total_Expenses"
+				}
+			],
+			"id": "sLYZFwZyb3tMwdkEWR196",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "And this is how your expense break down according to categories "
+				}
+			],
+			"id": "D5CSuBxS_aFXUmCt__9MY",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view"
+								}
+							],
+							"id": "Fug56knl4nBFzzYJiGXTB",
+							"type": "data-view-name"
+						}
+					],
+					"id": "3EKySPTK_gcfGUze3lc4r",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-eQZ553V1XQrm3DkzpAFW",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Category",
+							"name": "C4drbaA-P2ibEdnjgx4SO"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KjacyCU9l7IBhUShjLrsX",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "euros",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "EUR",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Amount",
+							"name": "73xY1-5SNH_iGMFVKVfv6",
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wg_8WLZVXL1zN7vHG5o85",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "euros",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "EUR",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Amount",
+							"name": "73xY1-5SNH_iGMFVKVfv6",
+							"aggregation": "% of total"
+						}
+					],
+					"id": "4tiVOuyWP5JYGmjAW7eV4",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "2D4S7ukQr2Di1H-jrtgw9",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "fUzZkG6-YYWMPH4fzDPbj"
+		},
+		{
+			"children": [
+				{
+					"text": "Savings and debt repayments ",
+					"bold": true,
+					"underline": true
+				}
+			],
+			"type": "p",
+			"id": "1IYhd1cvJd9f0tslYXqtX"
+		},
+		{
+			"children": [
+				{
+					"text": "All in all , "
+				},
+				{
+					"text": "sum(Savings_and_debt.Amount)",
+					"magicnumberz": true
+				},
+				{
+					"text": "  are directed towards savings and debt repayments. "
+				}
+			],
+			"type": "p",
+			"id": "hgryQnjQcT4JVrYPnOWhU"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Ratio_Savings"
+						}
+					],
+					"type": "structured_varname",
+					"id": "bqCV7gh3GazWFv3Jt7Jdv"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qWMHyTPkP1TyY_Zncs1Ig",
+							"type": "smart-ref",
+							"blockId": "tIL6SEEcsD-eKRyF6-_Ct",
+							"columnId": "EDxD0YhOpA56Y0r41P08W",
+							"lastSeenVariableName": "Savings_and_debt.Amount"
+						},
+						{
+							"text": " )/"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8ESPK7VpcC41yPU6X-9n3",
+							"type": "smart-ref",
+							"blockId": "iS3gubVF3JZDZIGlrBAhP",
+							"columnId": null,
+							"lastSeenVariableName": "Monthly_Income"
+						},
+						{
+							"text": "  in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "MSNgGZdYH5AElH1u1L6cG"
+				}
+			],
+			"id": "1LSK42OMyqXzPoO8FsJjV",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "According to the 50-30-20 Rule , at least 20% of your income should go towards savings and debt repayments . in our case it is  ",
+					"highlight": true
+				},
+				{
+					"text": "exprRef_1LSK42OMyqXzPoO8FsJjV",
+					"magicnumberz": true,
+					"highlight": true
+				},
+				{
+					"text": " .",
+					"highlight": true
+				}
+			],
+			"type": "p",
+			"id": "VC7MU9EvH5Si6AxdthDMa"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "1OZ0qxF0dRnADVjb6g1Jl"
+		}
+	]
+}

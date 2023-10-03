@@ -3,7 +3,10 @@
   "compilerOptions": {
     "lib": ["esnext"]
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "../backend-notebook-content/src/fetchSnapshotFromFile.ts"
+  ],
   "references": [
     {
       "path": "../backendtypes"

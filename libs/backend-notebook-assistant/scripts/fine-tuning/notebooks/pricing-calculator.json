@@ -1,0 +1,2405 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Pricing Calculator: How to price your product"
+				}
+			],
+			"type": "h1",
+			"id": "DW3zMULDNVjn967dvI3yP"
+		},
+		{
+			"children": [
+				{
+					"text": "Setting the right price for your product can can boost sales volume, increase your market share, and steal potential customers from your competitors. This template breaks down how to set your optimal price based on five steps. "
+				}
+			],
+			"id": "p-fZNukzO5ji_4Yx1-vVS",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "1. Calculate your costs to"
+				},
+				{
+					"text": " ",
+					"bold": true
+				},
+				{
+					"text": "produce the product\n"
+				},
+				{
+					"text": "2. ",
+					"bold": true
+				},
+				{
+					"text": "Estimate"
+				},
+				{
+					"text": " ",
+					"bold": true
+				},
+				{
+					"text": "packaging and shipping\n"
+				},
+				{
+					"text": "3. ",
+					"bold": true
+				},
+				{
+					"text": "Set the payment terms offered\n"
+				},
+				{
+					"text": "4. ",
+					"bold": true
+				},
+				{
+					"text": "Customize by customer and market profile"
+				},
+				{
+					"text": "\n5. ",
+					"bold": true
+				},
+				{
+					"text": "Set your Target Margin\n6. (Optional) Adjust price for discounts"
+				}
+			],
+			"type": "callout",
+			"id": "x1z-z3KuYYmh9eInq3jK2",
+			"color": "Catskill",
+			"icon": "AnnotationWarning"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "x4D2S4pB0vOa7AR10oQ2j"
+		},
+		{
+			"children": [
+				{
+					"text": "1. Determine Your Production Costs"
+				}
+			],
+			"type": "h2",
+			"id": "CzA54aBJ_I6-TgXvmPuYX"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "d9dTmCthG7uZBgFXg7MK8",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Take into account the materials or inputs required to create your product. Add your costs to the below table. Add/remove as many rows as you need. "
+				}
+			],
+			"type": "p",
+			"id": "9MWkAZ9PbV59MVA9gHIOx"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ProductionCosts"
+								}
+							],
+							"id": "hAl06zRfNOa602VKA_R6X",
+							"type": "table-var-name"
+						}
+					],
+					"id": "6mhI1GLEYO55Zle8ztcEH",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Items"
+								}
+							],
+							"id": "xwwFKkPpyhplxmnG2Py2U",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 256
+						},
+						{
+							"children": [
+								{
+									"text": "Costs"
+								}
+							],
+							"id": "88E510BMe5E3VG0vV4ABk",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									},
+									{
+										"unit": "units",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": false
+									}
+								]
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "TLE2lPiIXdTb0QVD_5q6m",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Raw Materials"
+								}
+							],
+							"id": "U2-e-1JhRyc258507lQkB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$10 per unit"
+								}
+							],
+							"id": "VnAJQJDNsY5Zzpsnbivp5",
+							"type": "td"
+						}
+					],
+					"id": "w0MA4UYwSX7mcQh6JBSgY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Finishing"
+								}
+							],
+							"id": "LdwQxJdHa-FMhEGpR_yl-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$15 per unit"
+								}
+							],
+							"id": "rQZvORMA3AR4i19CvFjFR",
+							"type": "td"
+						}
+					],
+					"id": "b20Gn98go9rgKcvkHPz3n",
+					"type": "tr"
+				}
+			],
+			"id": "6bMHNrb6EJOIJ8fgXot6_",
+			"type": "table",
+			"hideFormulas": false,
+			"version": 2,
+			"icon": "Growth"
+		},
+		{
+			"children": [
+				{
+					"text": "Your current production cost is "
+				},
+				{
+					"text": "sum(ProductionCosts.Costs)",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "callout",
+			"id": "wqstPAvJOL0MdQoVJq58z",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "q-SIhWu-AKkR4aDJXtfDN",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "2. Estimate Packaging and Shipping Costs"
+				}
+			],
+			"type": "h2",
+			"id": "gQbwoETuNSXHFwviMff2d"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "dItAk3o5pPy24ecAGPC2Z",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, let's estimate how much it will cost to package and ship a product. As shipping costs will vary by order size, we've created multiple shipping packages. "
+				}
+			],
+			"type": "p",
+			"id": "obDIQANgfLKWzFnK2ezba"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Order"
+								}
+							],
+							"id": "POVCshBlR2Noj499v9UB5",
+							"type": "caption",
+							"icon": "Server"
+						},
+						{
+							"children": [
+								{
+									"text": "6 units"
+								}
+							],
+							"id": "SetXpIV4t_b6Sn3XmKwPE",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6RfubHBFBa98mE9m4-7yd",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "6"
+						}
+					],
+					"id": "cxMEoBeULr3ZN1QFpy4JJ",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Packaging"
+								}
+							],
+							"id": "4z6ZJ9Pwo0djDhnvzlg-E",
+							"type": "caption",
+							"icon": "Polaroids"
+						},
+						{
+							"children": [
+								{
+									"text": "Package 1"
+								}
+							],
+							"id": "WwT-h_AZU_Jj9JPzbw5nM",
+							"type": "dropdown",
+							"options": [
+								{
+									"id": "bHjCDW5GaZ8dS2LVkzy86",
+									"value": "Package 2"
+								},
+								{
+									"id": "9fVt_XkiEjxdW2rMxYeRI",
+									"value": "Package 3"
+								},
+								{
+									"id": "-OEkMWXXXLQW6tHxU01SC",
+									"value": "Package 1"
+								}
+							],
+							"smartSelection": false
+						}
+					],
+					"id": "OLfHSiz6DzC5ckpdx9QGc",
+					"type": "def",
+					"variant": "dropdown",
+					"coerceToType": {
+						"kind": "string"
+					}
+				}
+			],
+			"id": "sx2wGk3ETjMk5zZ5DD9jG",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "PackageSpecs"
+								}
+							],
+							"id": "0tr1AOIRct3bm78LREG2d",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " ceil("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7q9BunZ2bRPaMJHs64YUH",
+									"type": "smart-ref",
+									"blockId": "cxMEoBeULr3ZN1QFpy4JJ",
+									"columnId": null,
+									"lastSeenVariableName": "Order"
+								},
+								{
+									"text": "/"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3-g_Iou2qNE3dk3uLBs7Y",
+									"type": "smart-ref",
+									"blockId": "V1aARJvdh8vHoF0WeWyGu",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Sizes"
+								},
+								{
+									"text": ") packages"
+								}
+							],
+							"id": "_dX1-NKndyV1nfuyIopCx",
+							"type": "table-column-formula",
+							"columnId": "PWwUIGQB19IimH-6kF_zI"
+						}
+					],
+					"id": "vb6LqLkn4N7BXxlpjEobS",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Types"
+								}
+							],
+							"id": "kK67ht_CtX7GdeJXSMOi2",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							},
+							"width": 119
+						},
+						{
+							"children": [
+								{
+									"text": "Sizes"
+								}
+							],
+							"id": "V1aARJvdh8vHoF0WeWyGu",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 126
+						},
+						{
+							"children": [
+								{
+									"text": "Costs"
+								}
+							],
+							"id": "lkJcL-6OLUulidJU-ZP-w",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 154
+						},
+						{
+							"children": [
+								{
+									"text": "Quantities"
+								}
+							],
+							"id": "PWwUIGQB19IimH-6kF_zI",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "uBmQcpr4zYYK7a3or9A2l",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Package 1"
+								}
+							],
+							"id": "XrmNpZEvGnsciZszEzaZA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1 units"
+								}
+							],
+							"id": "S5B1GVS2jhsO7W_mZKoj4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$10 per package"
+								}
+							],
+							"id": "Qjjkhfiosp_4SLd9YRKJw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "U1gJpOeTJ03OJYxZt5Cz4",
+							"type": "td"
+						}
+					],
+					"id": "x6p1jNW3aOy2ZgBeIDRfN",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Package 2"
+								}
+							],
+							"id": "DZy3F2sTN2wjnJJ2tpU9t",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "bQ0PnzbAvxEbl5I8YX6XT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$20 per package"
+								}
+							],
+							"id": "ifjtn7jDHHaLRSLAY00oq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9ivQXowMUw8MHhbcCDUg2",
+							"type": "td"
+						}
+					],
+					"id": "dlQTZ0qYDOz91HY7V0aVB",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Package 3"
+								}
+							],
+							"id": "pkchORkXyk2P3cJGRGG74",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "LtyPW4TZKVxWcFKr7lATO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$30 per package"
+								}
+							],
+							"id": "ZTGhxlX8XoO3fbngXtaLu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "N0xFnEysE7g7QwkXIzSft",
+							"type": "td"
+						}
+					],
+					"id": "QeRGkwwsBUSHrgYpx5lL-",
+					"type": "tr"
+				}
+			],
+			"id": "WWc6vBQjHZC5ZVweQFtma",
+			"type": "table",
+			"hideFormulas": false,
+			"isCollapsed": false,
+			"isHidden": false,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "OrderSpec"
+						}
+					],
+					"type": "structured_varname",
+					"id": "bXATDE4cpF0N8VILMXLqH"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HwfDO69W3um2WY3WHr6TI",
+							"type": "smart-ref",
+							"blockId": "WWc6vBQjHZC5ZVweQFtma",
+							"columnId": null,
+							"lastSeenVariableName": "PackageSpecs"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hKWvjteA9QVfnFh8Sjnbu",
+							"type": "smart-ref",
+							"blockId": "OLfHSiz6DzC5ckpdx9QGc",
+							"columnId": null,
+							"lastSeenVariableName": "Packaging"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "t3dNzFh7XOvuwucqb3cxV"
+				}
+			],
+			"id": "stcRPjxh7bskk9zMKBwLB",
+			"type": "code_line_v2",
+			"showResult": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PackagingPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "uiGmVc0iR5FhYr_YTVLgz"
+				},
+				{
+					"children": [
+						{
+							"text": "OrderSpec.Costs*OrderSpec.Quantities"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "itOllZI_lc67vR7AWrwDg"
+				}
+			],
+			"id": "Qzdb7B1ikoQ5zgOJmQsER",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "OrderPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "B9yDfx3dBTd18EdMn1ylT"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pjrWn2dLYQt0cJTOdJ_sf",
+							"type": "smart-ref",
+							"blockId": "6bMHNrb6EJOIJ8fgXot6_",
+							"columnId": "88E510BMe5E3VG0vV4ABk",
+							"lastSeenVariableName": "ProductionCosts.Costs"
+						},
+						{
+							"text": ")*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EAEYrX6dsmB4aAiZpHet_",
+							"type": "smart-ref",
+							"blockId": "cxMEoBeULr3ZN1QFpy4JJ",
+							"columnId": null,
+							"lastSeenVariableName": "Order"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "vl7JxhVqTt58HRaiW85KX"
+				}
+			],
+			"id": "WpW-j72WVjemwYzJaHpPd",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Your current order cost is now "
+				},
+				{
+					"text": "exprRef_WpW_j72WVjemwYzJaHpPd",
+					"magicnumberz": true
+				},
+				{
+					"text": "  (includes  "
+				},
+				{
+					"text": "exprRef_Qzdb7B1ikoQ5zgOJmQsER",
+					"magicnumberz": true
+				},
+				{
+					"text": "  for packaging)"
+				}
+			],
+			"id": "eScbOEONmcxTrGTtn69yw",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "bAjMTPfex3vEuoawxUPgm"
+		},
+		{
+			"children": [
+				{
+					"text": "3. Set Incentives with Payment Terms"
+				}
+			],
+			"type": "h2",
+			"id": "VMRw5zikc6LGbzmvU8pE7"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "JP4bRXEAZW-JFcmFvLdwX",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "It's common to adjust pricing based on the terms of payment to create incentives for your business. For example, it might make sense to be paid in a specific currency or get payed upfront. Update the below table to your needs: "
+				}
+			],
+			"type": "p",
+			"id": "69eSnjQPF42lC5nRyVAQA"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ToP"
+						}
+					],
+					"id": "W3HpVxZwMkyPGwMclHiPq",
+					"type": "caption",
+					"icon": "Newspaper"
+				},
+				{
+					"children": [
+						{
+							"text": "LC 180"
+						}
+					],
+					"id": "rTUjMoHM034VbwyiT6jJl",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "sXAAhCjDNDiQPx7R2s9ZP",
+							"value": "Advanced Payment"
+						},
+						{
+							"id": "hURh62pwDONS0z21z7HdH",
+							"value": "LC Sight"
+						},
+						{
+							"id": "qlMS5YiK-5SFUU2exQGlk",
+							"value": "LC 180"
+						},
+						{
+							"id": "WdRHHSA6l2-yWGRcwwr4c",
+							"value": "Cash against documents"
+						}
+					]
+				}
+			],
+			"id": "hLAl7vdZCwuVDkLsIuIDc",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "PaymentTerms"
+								}
+							],
+							"id": "h02IEgl4dcp--D8BybiC4",
+							"type": "table-var-name"
+						}
+					],
+					"id": "urnaIGVAEk-zEmlRtrlOd",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ToP"
+								}
+							],
+							"id": "RHmeiCfYHO_YBm3qttlzM",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 134
+						},
+						{
+							"children": [
+								{
+									"text": "Markup"
+								}
+							],
+							"id": "RdrsHflkRAotIpDswCb5R",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 109
+						},
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "uCBIhOu6yWX-u53KNYII-",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 356
+						}
+					],
+					"id": "l2CW9ScKqlfOyiXbpTZE7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Advanced Payment"
+								}
+							],
+							"id": "z1u1ztGjQtS-18D88LoiK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "E-c-inw91OLYLcspfRcGr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Payment upfront before receiving any goods or services"
+								}
+							],
+							"id": "FJt7_lRlKGRKrpGQEGhVD",
+							"type": "td"
+						}
+					],
+					"id": "x9ZLt29uTN2ay99NIBEj8",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "LC Sight"
+								}
+							],
+							"id": "bCKEoSC2jaA_pLW0vUnvC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "pBbddPCYBYzpSsNIk_AuB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Letter of Credit at Sight: payment after all contigencies"
+								}
+							],
+							"id": "Sqa7YF2iyxQSoBNvJJ6Uk",
+							"type": "td"
+						}
+					],
+					"id": "XFUJchwm3KdP1-2SOFpbI",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "LC 180"
+								}
+							],
+							"id": "_8N9MTxhn0MjSb5HmQ0m0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "K9WvW1extd1caaW_LunDF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Letter of Credit 180 days: Simillar to LC Sight but the payment is set 180 after all contigencies"
+								}
+							],
+							"id": "HtB7kjfBx7f_bJYxOqYbf",
+							"type": "td"
+						}
+					],
+					"id": "Vk50GRFaEAq5Ia2U-xXGa",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Cash again Documents"
+								}
+							],
+							"id": "myI8KxqnjUjeZEJIbUC5y",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "Ydx5zYLNSK5GitAsL6E86",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Payment clears after specific documents are received by the buyer"
+								}
+							],
+							"id": "1Z3L8kFDBKyfsc3S5IDds",
+							"type": "td"
+						}
+					],
+					"id": "9ORFVAaSCmauRUi984a8x",
+					"type": "tr"
+				}
+			],
+			"id": "hWvKBGoUkirfVfifxuRBW",
+			"type": "table",
+			"version": 2,
+			"icon": "Receipt"
+		},
+		{
+			"children": [
+				{
+					"text": "You may also want  to add premium for payment in certain currencies if that incurs additional costs: "
+				}
+			],
+			"id": "XfJUS3U57hWeHGDrPhYXt",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Currency"
+						}
+					],
+					"id": "V8k2knv6M9wxjCm6l3BS7",
+					"type": "caption",
+					"icon": "BalanceSheet"
+				},
+				{
+					"children": [
+						{
+							"text": "EUR"
+						}
+					],
+					"id": "KwuDRGv3PhB49hYzJvpqo",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "Q1bIIgXnp8vH4MVS3mDWe",
+							"value": "USD"
+						},
+						{
+							"id": "Cf5H_K11ylymquMWwgKMe",
+							"value": "EUR"
+						}
+					]
+				}
+			],
+			"id": "gQgH3KHUzsyawAKvARIbR",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Exchange"
+								}
+							],
+							"id": "Fxs22k1cJfNSX5pkVPAut",
+							"type": "table-var-name"
+						}
+					],
+					"id": "8HM9NOTbBWhUn0Rod2T8X",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Currency"
+								}
+							],
+							"id": "BE8q2R7_eRlmyt4MUPeIZ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Markup"
+								}
+							],
+							"id": "NZ9aVCGNNL7JD4VLbBTSp",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "4S-blAtagw9RodY8yPGV4",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "USD"
+								}
+							],
+							"id": "tjlaFiogbfft_3HEvm8wn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "iWOQAiu4EWI8RcCcZyLEW",
+							"type": "td"
+						}
+					],
+					"id": "xKqk2NAacvP_8KnflVZg3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "EUR"
+								}
+							],
+							"id": "sFhugKvuGcS1LhXysi0id",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "sLXgOM572yN-_dItqObw2",
+							"type": "td"
+						}
+					],
+					"id": "BmF-FbgqaEhucWvdjr-iy",
+					"type": "tr"
+				}
+			],
+			"id": "IDs7E4HuUAltOCbn_SfxD",
+			"type": "table",
+			"version": 2,
+			"icon": "BalanceSheet"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PaymentMarkup"
+						}
+					],
+					"type": "structured_varname",
+					"id": "MBkJO2r5PN-RPv_DpRl3C"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JxWwR-CEIZ90O1J7zEECa",
+							"type": "smart-ref",
+							"blockId": "hWvKBGoUkirfVfifxuRBW",
+							"columnId": null,
+							"lastSeenVariableName": "PaymentTerms"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dpfWDqPmEtqe75BaEq5K4",
+							"type": "smart-ref",
+							"blockId": "hLAl7vdZCwuVDkLsIuIDc",
+							"columnId": null,
+							"lastSeenVariableName": "ToP"
+						},
+						{
+							"text": ").Markup"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "AeBJUCMRdDw_gu2tPcBc8"
+				}
+			],
+			"id": "_DNKHBB0q4RFgZjp7aRFY",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CurrencyMarkup"
+						}
+					],
+					"type": "structured_varname",
+					"id": "i9bSKR8C5_OoDDG7l7Ug4"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UZKKkl4FsGvaaquq4TXr_",
+							"type": "smart-ref",
+							"blockId": "IDs7E4HuUAltOCbn_SfxD",
+							"columnId": null,
+							"lastSeenVariableName": "Exchange"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xsu290x9QTngonOY1URcp",
+							"type": "smart-ref",
+							"blockId": "gQgH3KHUzsyawAKvARIbR",
+							"columnId": null,
+							"lastSeenVariableName": "Currency"
+						},
+						{
+							"text": ").Markup"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "5ZRTsrt-OehmY8A9ZvIm1"
+				}
+			],
+			"id": "yo8L8Mr_DmUvY164Gc93Z",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Your current exchange rate buffer is "
+				},
+				{
+					"text": "exprRef__DNKHBB0q4RFgZjp7aRFY",
+					"magicnumberz": true
+				},
+				{
+					"text": " and your term of payments adjustment is set at "
+				},
+				{
+					"text": "exprRef_yo8L8Mr_DmUvY164Gc93Z",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "hI3YsDYubuRRt3uILAD_J",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "CD77AUGhJ-dQwBPE60mfC"
+		},
+		{
+			"children": [
+				{
+					"text": "4. Identify your Customer Profile"
+				}
+			],
+			"type": "h2",
+			"id": "SH3R39Z3DNyamfp0lR1R7"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "s2tSY6gwe2YPE-4TM7BKi",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Depending on the customer segment and region, you might want to adapt your prices. Here we adapt pricing based on region, but you can augment this model with additional categories. "
+				}
+			],
+			"type": "p",
+			"id": "E_aZGXxvkdQOAOZfaGOgy"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Region"
+						}
+					],
+					"icon": "World",
+					"id": "vsRN2-ouK572a-n9Opn71",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "America"
+						}
+					],
+					"id": "MLEo90A8WYmnfcTQP4GrJ",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "gWCeaioOS6r4sIjVQll-B",
+							"value": "America"
+						},
+						{
+							"id": "pT56YU_RfeILQSqOHhwhX",
+							"value": "Europe"
+						},
+						{
+							"id": "GijItl3_CJ7op7-RDYspP",
+							"value": "Asia"
+						},
+						{
+							"id": "gGSTrhwBM19gb54oimom3",
+							"value": "NA"
+						}
+					]
+				}
+			],
+			"id": "XJh33Wffmgym2-45VyTRL",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Locations"
+								}
+							],
+							"id": "YuOH3-p9gZ7gSwzU14fB2",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "G242JVGoZz2RHNQ6Vc99C",
+									"type": "smart-ref",
+									"blockId": "r76zdu1az6EOhb6KjXluw",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "ShippingMarkup"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "W4VnfZcZGQExveqkRFtUs",
+									"type": "smart-ref",
+									"blockId": "dPcaM0M4a9opvbcwVjNXS",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "RegionMarkup"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "cXGE8GtaqmFUuTceJaXer",
+							"type": "table-column-formula",
+							"columnId": "zRZRA_Docxb4WsaBo_m2w"
+						}
+					],
+					"id": "iDtoDCXkATzflSA6C3kFG",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Region"
+								}
+							],
+							"id": "fs3CNznKmMQk7W-PnvG7K",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "ShippingMarkup"
+								}
+							],
+							"id": "r76zdu1az6EOhb6KjXluw",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "RegionMarkup"
+								}
+							],
+							"id": "dPcaM0M4a9opvbcwVjNXS",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "TotalMarkup"
+								}
+							],
+							"id": "zRZRA_Docxb4WsaBo_m2w",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "F1i_sxwY3qLmFbuBFRhsq",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "America"
+								}
+							],
+							"id": "LdbXf5eNds03MUSR4ap72",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "VB-PBlp2JU6wcUQdL2a4D",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15%"
+								}
+							],
+							"id": "YTr2v_KRp7yIK5zA-EIDL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2-4r6sKf3MmRcQMT98eny",
+							"type": "td"
+						}
+					],
+					"id": "n3wD3yH7NSUQoyC4g1nDt",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Europe"
+								}
+							],
+							"id": "-7hXg-BZTcyZkvSjwuUlk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "NfsjVUr1LnTBD2T1zoTFq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "qPWwXJIPRmtcI2NxCTYbg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6KhCNWF-AuGkcNK4j0IWm",
+							"type": "td"
+						}
+					],
+					"id": "RExmTVT_8LSRraRRHZWx8",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Asia"
+								}
+							],
+							"id": "9ZJfvN1AUrUhHTHd5DzWV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100%"
+								}
+							],
+							"id": "caiFqub-YRI0o3EAtE455",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "-UUHxfqr27rAi341lhUdB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YX2Tp4H8xbjFUuq8maUeV",
+							"type": "td"
+						}
+					],
+					"id": "h2A-KVYKL7RsUn6YMDHnO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NA"
+								}
+							],
+							"id": "StY0FS_d3rBc1Vfj9N0Uc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100%"
+								}
+							],
+							"id": "r2lqH67yd1EpJgI-OdTIU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15%"
+								}
+							],
+							"id": "-LxR2GND8fjqOdGLbeTpa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GJI7M66IYkcH7KbE3Ocej",
+							"type": "td"
+						}
+					],
+					"id": "AfHzvIKTvUuFLPcLAIYsg",
+					"type": "tr"
+				}
+			],
+			"id": "yLPvNGOSv30aPHWevIfN1",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"icon": "World"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "LocationMarkup"
+						}
+					],
+					"type": "structured_varname",
+					"id": "A1rqfbWIRWeejF0xS9fLg"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_i90s6mn1_UIw78eX4lk9",
+							"type": "smart-ref",
+							"blockId": "yLPvNGOSv30aPHWevIfN1",
+							"columnId": null,
+							"lastSeenVariableName": "Locations"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5tonQYNrpcmRx8BTNCBQd",
+							"type": "smart-ref",
+							"blockId": "XJh33Wffmgym2-45VyTRL",
+							"columnId": null,
+							"lastSeenVariableName": "Region"
+						},
+						{
+							"text": ").TotalMarkup"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "F1s2jlDRudxIDza87hJbU"
+				}
+			],
+			"id": "ZeDDqxm71PcyYtRICn-F1",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on your client region ("
+				},
+				{
+					"text": "exprRef_XJh33Wffmgym2_45VyTRL",
+					"magicnumberz": true
+				},
+				{
+					"text": "),  your location markup is "
+				},
+				{
+					"text": "exprRef_ZeDDqxm71PcyYtRICn_F1",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "callout",
+			"id": "set3zLI0x8ls_eiUA1ef3",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "Y_P8CWGjOfO4GzIr-N64n"
+		},
+		{
+			"children": [
+				{
+					"text": "5. Set Your Target Margin and Price Point"
+				}
+			],
+			"type": "h2",
+			"id": "Y1U0GYxH7dY6jQOKYt24d"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Tcmwg11UUMcCz5atX82Hn",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Finally, you can set your target profit margin to calculate your optimal price given your costs, shipping, payment terms and customer profile"
+				}
+			],
+			"id": "oGlb06JMucZhND7Qd2nY3",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ProfitMargin"
+						}
+					],
+					"id": "oC8YEJh0y8uUFEeBF4PZO",
+					"type": "caption",
+					"icon": "Percentage"
+				},
+				{
+					"children": [
+						{
+							"text": "20% "
+						}
+					],
+					"id": "axe3HGul5SAFPJcYSZmpq",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "f1YLmloPMYpuYRbLghNy_",
+					"type": "slider",
+					"max": "200",
+					"min": "0",
+					"step": "5",
+					"value": "20"
+				}
+			],
+			"id": "VmDyZdWSjmOyBuiR1XQz5",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Price"
+						}
+					],
+					"type": "structured_varname",
+					"id": "KX5KqSs-GLGdhosrlTj5Y"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "g4SVY-jh2eectkMPCEBQk",
+							"type": "smart-ref",
+							"blockId": "WpW-j72WVjemwYzJaHpPd",
+							"columnId": null,
+							"lastSeenVariableName": "OrderPrice"
+						},
+						{
+							"text": "+"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YOaEDVFXpBknqKecSYPh8",
+							"type": "smart-ref",
+							"blockId": "Qzdb7B1ikoQ5zgOJmQsER",
+							"columnId": null,
+							"lastSeenVariableName": "PackagingPrice"
+						},
+						{
+							"text": "+"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "uZatEA3DFIC1YSwjahz9H",
+							"type": "smart-ref",
+							"blockId": "VmDyZdWSjmOyBuiR1XQz5",
+							"columnId": null,
+							"lastSeenVariableName": "ProfitMargin"
+						},
+						{
+							"text": "+ ("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qKxdZ3HBKo_vLIY4vwcMO",
+							"type": "smart-ref",
+							"blockId": "_DNKHBB0q4RFgZjp7aRFY",
+							"columnId": null,
+							"lastSeenVariableName": "PaymentMarkup"
+						},
+						{
+							"text": "+"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "etWfzUfE4rzd3TvOz2ZE6",
+							"type": "smart-ref",
+							"blockId": "yo8L8Mr_DmUvY164Gc93Z",
+							"columnId": null,
+							"lastSeenVariableName": "CurrencyMarkup"
+						},
+						{
+							"text": "+"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tU231JwDE9Xsa48jOaxFV",
+							"type": "smart-ref",
+							"blockId": "ZeDDqxm71PcyYtRICn-F1",
+							"columnId": null,
+							"lastSeenVariableName": "LocationMarkup"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "uBKekXpzDH7oVaSC-s7xQ"
+				}
+			],
+			"id": "yoCWRO4b9oA3qeosKHChb",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Your final price at a "
+				},
+				{
+					"text": "ProfitMargin",
+					"magicnumberz": true
+				},
+				{
+					"text": " profit margin is "
+				},
+				{
+					"text": "exprRef_yoCWRO4b9oA3qeosKHChb",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "etMIGwfu9qNMePLBuLSVH",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "h3",
+			"id": "hwqNfPsph42uRluLus8UB"
+		},
+		{
+			"children": [
+				{
+					"text": "6. (Optional) Include Any Discounts"
+				}
+			],
+			"type": "h2",
+			"id": "4l5wWvssjL8fivvV7ZWfF"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "4DX_55cnEAN-15oeey_cj",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Include any discounts you may be offering to understand how those discounts will effect your final price. You can customize these inputs with your scenario. "
+				}
+			],
+			"id": "z0V9l5NLn6fl6oCxbzYeo",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DiscountType"
+						}
+					],
+					"icon": "Percentage",
+					"id": "KwA-iDQKrt-DXAJ0YMNub",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "Returning"
+						}
+					],
+					"id": "3UrcL5QAXPUOghyMGP09A",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "MK90uwZRubUs3LoaZF0bv",
+							"value": "VIP"
+						},
+						{
+							"id": "Uu7lpIgy1QSNyxCSTjI_G",
+							"value": "Returning"
+						},
+						{
+							"id": "W3m6XKVEKZqFik0esWmUO",
+							"value": "Referral "
+						},
+						{
+							"id": "DQm1-vPgdMK8KDSHChGZS",
+							"value": "Normal"
+						}
+					],
+					"smartSelection": false
+				}
+			],
+			"id": "YR7B4TkbKcN3trne27oci",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Discounts"
+								}
+							],
+							"id": "KqwSUe1CbmbNvqnoMwHSd",
+							"type": "table-var-name"
+						}
+					],
+					"id": "2WwtWEBcc5Nl4K1veDvSL",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "jKXyZBz0aVZpYavzuYTl-",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Amount"
+								}
+							],
+							"id": "mBPBoFQnjDk--eNRYhk8Q",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "2LYmOwOVhhTZF9N34-Lfc",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Normal"
+								}
+							],
+							"id": "5EgnfiQLDQtT5G4ZSYoLN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "4z46nUJgYxwaM0ni7deuj",
+							"type": "td"
+						}
+					],
+					"id": "xaXsWLEB75F3eRtb-azmq",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Referral"
+								}
+							],
+							"id": "u9f0T5hpMHeXdVPneh-gT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "Yc7IxyLaKwF0tzvTz4-oB",
+							"type": "td"
+						}
+					],
+					"id": "F_4QB5zTeEqSJaqt434Us",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Returning"
+								}
+							],
+							"id": "84dBB5yRGinmyjRYZnkzz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "nU9hOEvqvZNBdaqRgIo7I",
+							"type": "td"
+						}
+					],
+					"id": "SoQnpzU-AWaiTIxYoZOHO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "VIP"
+								}
+							],
+							"id": "NGM5A5Mj-78SPYFGqHWxH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "Ao9e4FHId0hwf8ft-pwpx",
+							"type": "td"
+						}
+					],
+					"id": "pIqndpLHWk7cu4GSf_NCo",
+					"type": "tr"
+				}
+			],
+			"id": "DJbKWershRmDhT6n7yRbK",
+			"type": "table",
+			"version": 2,
+			"icon": "Percentage"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Discount"
+						}
+					],
+					"type": "structured_varname",
+					"id": "6UNti9lYr6LJ1iI3XPNV5"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "O3PgeJ9M_HYEe0a3ecb-2",
+							"type": "smart-ref",
+							"blockId": "DJbKWershRmDhT6n7yRbK",
+							"columnId": null,
+							"lastSeenVariableName": "Discounts"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "G4z3pyN9LtMsHzglVwGcV",
+							"type": "smart-ref",
+							"blockId": "YR7B4TkbKcN3trne27oci",
+							"columnId": null,
+							"lastSeenVariableName": "DiscountType"
+						},
+						{
+							"text": ").Amount"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "GE07AgYTM7bs_Mqv2htaq"
+				}
+			],
+			"id": "TJu_YlIR4bgrPnFdQIUDr",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DiscountedPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "MNBzPWKvSZbtaejiKFrOC"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UQFemaMZ3kg1xsmUtrj0p",
+							"type": "smart-ref",
+							"blockId": "yoCWRO4b9oA3qeosKHChb",
+							"columnId": null,
+							"lastSeenVariableName": "Price"
+						},
+						{
+							"text": "-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VWMpZc80aNy0s2lcO2h36",
+							"type": "smart-ref",
+							"blockId": "TJu_YlIR4bgrPnFdQIUDr",
+							"columnId": null,
+							"lastSeenVariableName": "Discount"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "-kpMgIdGF6FipdB48wh-D"
+				}
+			],
+			"id": "e0gyujy6VrJVu0c-UWHEZ",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "You adjusted price with a "
+				},
+				{
+					"text": "exprRef_TJu_YlIR4bgrPnFdQIUDr",
+					"magicnumberz": true
+				},
+				{
+					"text": "  discount is "
+				},
+				{
+					"text": "exprRef_e0gyujy6VrJVu0c_UWHEZ",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "callout",
+			"id": "PJMLQ7mi0ERaxkpjk8-b1",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "T9ELJuBzT1VYYI12lOD24"
+		}
+	]
+}

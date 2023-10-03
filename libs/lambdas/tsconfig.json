@@ -22,7 +22,7 @@
     { "path": "../y-dynamodb" },
     { "path": "../backend-trace" },
     { "path": "../backend-analytics" },
-    { "path": "../docsync-maintenance" },
+    { "path": "../notebook-maintenance" },
     { "path": "../slate-yjs" },
     { "path": "../external-data-lambdas" },
     { "path": "../backend-resources" },

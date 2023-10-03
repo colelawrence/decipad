@@ -2,7 +2,8 @@
 // we need to also ensure a defined TZ for the tests here just in case of e.g. `yarn nx test ui`.
 process.env.TZ = process.env.TZ || 'America/Los_Angeles';
 
-const { presets, plugins } = require('./babel-web.config');
+const { join } = require('path');
+const { presets, plugins, moduleNameMapper } = require('./babel-web.config');
 
 module.exports = {
   collectCoverageFrom: [
@@ -20,9 +21,14 @@ module.exports = {
     '^.+\\.mjs$': ['babel-jest', { presets, plugins }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lib0|y-protocols|@udecode/plate|@udecode/plate-core|nanoid|@decipad/safejs|@formkit/auto-animate|.*dnd.*|next-auth)/)',
+    'node_modules/(?!(lib0|y-protocols|@udecode/plate|@udecode/plate-core|nanoid|@decipad/safejs|@formkit/auto-animate|.*dnd.*|next-auth|is-stream|get-stream|langchain)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
+
+  moduleNameMapper: {
+    ...moduleNameMapper,
+    '@decipad/editor-types': join(__dirname, 'libs/editor-types/src/index.ts'),
+  },
 
   setupFilesAfterEnv: [
     require.resolve('./libs/testutils/src/serialize-big-int.js'),

@@ -8,6 +8,8 @@
   "references": [
     { "path": "../services" },
     { "path": "../tables" },
-    { "path": "../utils" }
+    { "path": "../utils" },
+    { "path": "../backend-config" },
+    { "path": "../backend-utils" }
   ]
 }

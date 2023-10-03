@@ -2,6 +2,7 @@ import { PermissionType, User } from '@decipad/backendtypes';
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ForbiddenError } from 'apollo-server-lambda';
+import tables from '@decipad/tables';
 
 type Context = {
   user?: User;
@@ -47,4 +48,11 @@ export async function isAuthenticatedAndAuthorized(
     throw new ForbiddenError('Forbidden');
   }
   return user;
+}
+
+export async function isSuperAdmin(context: Context): Promise<boolean> {
+  const user = requireUser(context);
+  const data = await tables();
+  const superAdmin = await data.superadminusers.get({ id: user.id });
+  return superAdmin != null;
 }

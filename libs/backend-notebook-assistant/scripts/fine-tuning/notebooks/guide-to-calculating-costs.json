@@ -1,0 +1,1813 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Guide to Calculating Costs: Fixed, Variable, Semi Variable"
+				}
+			],
+			"type": "h1",
+			"id": "uTeT3i0o7C1kd7TmcW6xk"
+		},
+		{
+			"children": [
+				{
+					"text": "This notebook explains three common types of costs and how to calculate them in Decipad: "
+				},
+				{
+					"text": "Fixed Costs",
+					"bold": true
+				},
+				{
+					"text": ", "
+				},
+				{
+					"text": "Variable Costs",
+					"bold": true
+				},
+				{
+					"text": ", and "
+				},
+				{
+					"text": "Semi-Variable Costs",
+					"bold": true
+				},
+				{
+					"text": ". "
+				}
+			],
+			"id": "_HFXpx54yJeAgkY37DGNL",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "Overview of Cost Types "
+				}
+			],
+			"type": "h2",
+			"id": "ce7z2xyIltItD2IPKpHYn",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "N1mA_jhIYxz8EJ1DV_aia",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Fixed Costs",
+					"bold": true
+				}
+			],
+			"type": "h3",
+			"id": "dmjZd7mz0j5hoKdNZDMvj",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Fixed costs remain constant regardless of production or activity levels.  Examples include rent, salaries of full time staff and insurance. To calculate your total fixed costs, simply add up all these expenses. "
+				}
+			],
+			"type": "p",
+			"id": "NJXKCHOSB7RNwDf_Ay8CI",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "In the below example, your total fixed costs are "
+				},
+				{
+					"text": "exprRef_UpOZFprTfVMqlthBw0SXc",
+					"magicnumberz": true
+				},
+				{
+					"text": " or "
+				},
+				{
+					"text": "exprRef_on84NYWyid7RiDJ_0QaYa",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "c0MnIDeFn6cQYGX7c0vjQ",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Rent"
+						}
+					],
+					"type": "structured_varname",
+					"id": "UmmKS3KJG_B7KZORt-rtr"
+				},
+				{
+					"children": [
+						{
+							"text": "$1000 per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "oITFANTbUJp2GrZnh7hJ8"
+				}
+			],
+			"id": "tTz7HacEAOU6VQdhJsg-g",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Salaries"
+						}
+					],
+					"type": "structured_varname",
+					"id": "dusCGw8GE_DvQLD-29PQD"
+				},
+				{
+					"children": [
+						{
+							"text": "$4000 per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "UCJNncilXOMadWqMY1BV4"
+				}
+			],
+			"id": "IE9b5du7dxrteZZCYWe9i",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Insurnace"
+						}
+					],
+					"type": "structured_varname",
+					"id": "F_N0OXnPLab4lkCZZrHFU"
+				},
+				{
+					"children": [
+						{
+							"text": "$1500 per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "LyilxDCxc0OtKMdt3l6JJ"
+				}
+			],
+			"id": "3mazd8FrVSonoK_7DyTGa",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "FixedYearly"
+						}
+					],
+					"type": "structured_varname",
+					"id": "dU_mZ9Y7wAnwo4uNWPmMO"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gQs4Ng9SdAZVChDvcInxn",
+							"type": "smart-ref",
+							"blockId": "tTz7HacEAOU6VQdhJsg-g",
+							"columnId": null,
+							"lastSeenVariableName": "Rent"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "r-xkV6MMxxKyHxEMSwxdz",
+							"type": "smart-ref",
+							"blockId": "IE9b5du7dxrteZZCYWe9i",
+							"columnId": null,
+							"lastSeenVariableName": "Salaries"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ka6xH8BHFHCUIjTBIckKw",
+							"type": "smart-ref",
+							"blockId": "3mazd8FrVSonoK_7DyTGa",
+							"columnId": null,
+							"lastSeenVariableName": "Insurnace"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "w78vIzi3oxAmg3B3xfYD8"
+				}
+			],
+			"id": "on84NYWyid7RiDJ_0QaYa",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "FixedMonthly"
+						}
+					],
+					"type": "structured_varname",
+					"id": "8EkUA-3NDWjqyuREXsU3-"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "g8zhawoPpDqt1p5mhJXt3",
+							"type": "smart-ref",
+							"blockId": "tTz7HacEAOU6VQdhJsg-g",
+							"columnId": null,
+							"lastSeenVariableName": "Rent"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aeYC1Dpi_d90I3QsSAjdt",
+							"type": "smart-ref",
+							"blockId": "IE9b5du7dxrteZZCYWe9i",
+							"columnId": null,
+							"lastSeenVariableName": "Salaries"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ogbjCYD_pgF8epZvWOKSG",
+							"type": "smart-ref",
+							"blockId": "3mazd8FrVSonoK_7DyTGa",
+							"columnId": null,
+							"lastSeenVariableName": "Insurnace"
+						},
+						{
+							"text": " in $ per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "E-Jo0dWq8q4KDHR1_4hCm"
+				}
+			],
+			"id": "UpOZFprTfVMqlthBw0SXc",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Variable Costs",
+					"bold": true
+				}
+			],
+			"type": "h3",
+			"id": "9OS4DRZRB28-Xq6RAd0oS"
+		},
+		{
+			"children": [
+				{
+					"text": "Variable costs are directly tied to your business's production or sales volume. They fluctuate as your production increases or decreases. Examples include:"
+				}
+			],
+			"type": "p",
+			"id": "4EyO23Z5UfjLJm2JmSI5_"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Cost of raw materials"
+								}
+							],
+							"id": "sdVYjy0SWL44vtUZOXtD0",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "el6JEh00Jc5fzaUi4CTYr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Direct labor costs (hourly wages for workers)"
+								}
+							],
+							"id": "JbqIZ58Volmw3jxVpTUbK",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "Ss3tRWar85xzrPR-CqvuY"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Shipping and delivery charges"
+								}
+							],
+							"id": "SkTRPdGQ5kEiKPHpYQv4r",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "un068RgCsjaVravmfSqjG"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Sales commissions"
+								}
+							],
+							"id": "I0WHMOS3qac-QNvTAMxiw",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "cip35oY7sS-OmP1Ha6fCs"
+				}
+			],
+			"type": "ul",
+			"id": "SugN12Ri8UMJhi5Q9nbcb"
+		},
+		{
+			"children": [
+				{
+					"text": "Variable Cost (VC) "
+				},
+				{
+					"text": "=",
+					"bold": true
+				},
+				{
+					"text": " Variable Cost per Unit "
+				},
+				{
+					"text": "×",
+					"bold": true
+				},
+				{
+					"text": " Quantity of Units"
+				}
+			],
+			"type": "callout",
+			"id": "y3PoRk09JeB-mhDUX7JNN",
+			"color": "Catskill",
+			"icon": "Activity"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "UnitCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ZbsONcbTT-srZ6LL0KYrc"
+				},
+				{
+					"children": [
+						{
+							"text": "$10 per unit"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "SNs9rKd7p_NRx4xdKOBBI"
+				}
+			],
+			"id": "zTSecVEFT5Ns8LhF8xuI5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Quantity"
+						}
+					],
+					"type": "structured_varname",
+					"id": "otyjSbBYl-3_t0dJ4x4l1"
+				},
+				{
+					"children": [
+						{
+							"text": "100 units"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "X0PpN0BECxXl6jtKYVJf9"
+				}
+			],
+			"id": "9s0p8v2PDveGlBYr1-qkv",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "VariableCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "z1qO_l-VcN4e4IcnAhXbu"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7-YALRSCDT7ujTpbXKTX8",
+							"type": "smart-ref",
+							"blockId": "zTSecVEFT5Ns8LhF8xuI5",
+							"columnId": null,
+							"lastSeenVariableName": "UnitCost"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OIE3zd38k4QBaRoKsRTCk",
+							"type": "smart-ref",
+							"blockId": "9s0p8v2PDveGlBYr1-qkv",
+							"columnId": null,
+							"lastSeenVariableName": "Quantity"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "HCTmNzY4OA5nIkZOG2WEF"
+				}
+			],
+			"id": "vc8CXLxlU0cfA1fZV5ZnE",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Semi-Variable Costs ",
+					"bold": true
+				}
+			],
+			"type": "h3",
+			"id": "Se6m8RIVDNXhBYnuxhIro"
+		},
+		{
+			"children": [
+				{
+					"text": "Semi-variable costs also called mixed costs have characteristics of both fixed and variable costs. They consist of a fixed component that remains constant and a variable component that changes with production or sales. Examples include:"
+				}
+			],
+			"type": "p",
+			"id": "SBWl36VuR8BPmh0ibTvDn"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Utilities (a fixed base fee plus usage charges)"
+								}
+							],
+							"id": "13iutggH8QE4d8QioMjrf",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "_iEDiahAfqnspzsH7-JDv"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Vehicle expenses (a fixed lease payment plus variable fuel costs)"
+								}
+							],
+							"id": "JqT0hur5jTHraCk0ocfVU",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "dZMyT7WlklborYGAGCodo"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Phone bills (a fixed monthly fee plus usage charges)"
+								}
+							],
+							"id": "Er53-hlGhBuRNQkPEvpl6",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "eBGV_cj9iwYSJzDgNCjHs"
+				}
+			],
+			"type": "ul",
+			"id": "rKY5mTay-q02S6Iz8aSTw"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's say you pay a fixed base cost of "
+				},
+				{
+					"text": "exprRef_MXL16C5_iAz_iP7yjCAGS",
+					"magicnumberz": true
+				},
+				{
+					"text": " and "
+				},
+				{
+					"text": "exprRef_BX8OvRpK7QTHPns6nBCzw",
+					"magicnumberz": true
+				},
+				{
+					"text": " for electricity consumed. And, in a given month you consume "
+				},
+				{
+					"text": "exprRef_ymLwMmXERqCD44F_dRos_",
+					"magicnumberz": true
+				},
+				{
+					"text": " :"
+				}
+			],
+			"type": "p",
+			"id": "MN1nGWlKKMSH7bk5AeD2j"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "FixedComponent"
+						}
+					],
+					"type": "structured_varname",
+					"id": "UiLnKZSr8heK-a5YzQ1cU"
+				},
+				{
+					"children": [
+						{
+							"text": "$100"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "FECI_ARxIi0w8QxM_Y1Ql"
+				}
+			],
+			"id": "MXL16C5_iAz_iP7yjCAGS",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "VariableComponent"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Re8klpgrHHRBiP9Is-H6x"
+				},
+				{
+					"children": [
+						{
+							"text": "$0.10 per kWh"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "GRN5MewlkicjATy9aQENf"
+				}
+			],
+			"id": "BX8OvRpK7QTHPns6nBCzw",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Consumption"
+						}
+					],
+					"type": "structured_varname",
+					"id": "lpoqqi3t9khOM5Z7Uv7BL"
+				},
+				{
+					"children": [
+						{
+							"text": "800 kWh"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "OeqnNFpq24j7RsYJ03RoC"
+				}
+			],
+			"id": "ymLwMmXERqCD44F-dRos-",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SemiVariableCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "4O0tysRcmeI7OxsjMBCRs"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jUgGfLHfsUB-keBETVs1e",
+							"type": "smart-ref",
+							"blockId": "MXL16C5_iAz_iP7yjCAGS",
+							"columnId": null,
+							"lastSeenVariableName": "FixedComponent"
+						},
+						{
+							"text": " + ("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "icyLJM57oH8h1pxGIQ3kc",
+							"type": "smart-ref",
+							"blockId": "BX8OvRpK7QTHPns6nBCzw",
+							"columnId": null,
+							"lastSeenVariableName": "VariableComponent"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "24l5c3U3d9VmgOZfuX4VQ",
+							"type": "smart-ref",
+							"blockId": "ymLwMmXERqCD44F-dRos-",
+							"columnId": null,
+							"lastSeenVariableName": "Consumption"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "hW8KA6SnS9aEsub4G6vDv"
+				}
+			],
+			"id": "e6uvC2WiCFhb71hCtktUC",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "fr38XuWPeC8V9t15PAdPf"
+		},
+		{
+			"children": [
+				{
+					"text": "Aggregating Your Total Costs"
+				}
+			],
+			"type": "h2",
+			"id": "yF8Jew8DVCizgJlpOrv_L"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "2_0syRsqRVGPhN737tGQF",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, lets build a table to easily manage and estimate our total annual costs to operate a business. "
+				}
+			],
+			"type": "p",
+			"id": "Z6-lV53yOb4DWASEnBIBK"
+		},
+		{
+			"children": [
+				{
+					"text": "Edit/modify this table for your business. Your total cost will "
+				},
+				{
+					"text": "automatically",
+					"bold": true
+				},
+				{
+					"text": " calculate\n\n1. List your costs \n2. Indicate the type: Fixed, Variable, Semi-Variable\n3. Indicate the Period: Monthly, Quarterly, Annual\n4. If Fixed or Semi Variable enter the fixed amount (enter 0 if none)\n5. If Variable or Semi-Variable indicate the unit cost and quantity (enter 0 if none)"
+				}
+			],
+			"type": "callout",
+			"id": "YCVhY_MW6p-J4vmpK3bJ7",
+			"color": "Catskill",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CostTable"
+								}
+							],
+							"id": "pTBJPpc7aN9mg3YgnxURu",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " Costing("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PaZvNZPCWEvALEpdNA9JL",
+									"type": "smart-ref",
+									"blockId": "ttHKRq6uYliO_1iJfunVS",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7gP587iK8b5Ni75S1eklc",
+									"type": "smart-ref",
+									"blockId": "9NSgb2kRULqP5XbglssYc",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "FixedCost"
+								},
+								{
+									"text": " , "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_Vt0IM8lZBj7AKj-ycrnf",
+									"type": "smart-ref",
+									"blockId": "HXRwZWKf4s7rAPDq-WJnv",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "UnitCost"
+								},
+								{
+									"text": " , "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bFyL3Tiknd2xQcdU-iY6r",
+									"type": "smart-ref",
+									"blockId": "GDljlEn4PNamSy8K4Nt_4",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Quantity"
+								},
+								{
+									"text": " ) * payment_term("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "fQzpdBcQ2SlEzJiFEmN-_",
+									"type": "smart-ref",
+									"blockId": "5u2yau7CqxfQjHugrm9OF",
+									"columnId": null,
+									"lastSeenVariableName": "Period"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "-27yHd3hhO7EoR_Bzros4",
+							"type": "table-column-formula",
+							"columnId": "EGsOUNJ_AMQue0wGvI3PC"
+						}
+					],
+					"id": "OECIHS20aRj6bWJdbpZ3i",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "fFUtiiUESXF_4SfhCBPfn",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "ttHKRq6uYliO_1iJfunVS",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "oZrTHh-1NZX3JRo4FJngJ",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Period"
+								}
+							],
+							"id": "5u2yau7CqxfQjHugrm9OF",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "UWJhQd9WOSsuiJcTHokF0",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "FixedCost"
+								}
+							],
+							"id": "9NSgb2kRULqP5XbglssYc",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "UnitCost"
+								}
+							],
+							"id": "HXRwZWKf4s7rAPDq-WJnv",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Quantity"
+								}
+							],
+							"id": "GDljlEn4PNamSy8K4Nt_4",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "TotalCost"
+								}
+							],
+							"id": "EGsOUNJ_AMQue0wGvI3PC",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "vCPx5mLUcisumoxFivI1q",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "c5HCdQ91XDpFJ9YNyErY-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FKXMHtUB0NGGtrwp15Mbr"
+								}
+							],
+							"id": "2fd7FkSjcUI2cy96d-lLv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "wRxsD649JdTfxow9zNF8b"
+								}
+							],
+							"id": "EHV3nqdFgr4UtFGQT0id5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$3500"
+								}
+							],
+							"id": "ACUipvb3mCOHblqwh9U_E",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$0"
+								}
+							],
+							"id": "xalXsaodo1pzk5330bllz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "2zmFgyf_GxiUfknjIgI4u",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Kjwy-_4mNcGeKHnVjHLx-",
+							"type": "td"
+						}
+					],
+					"id": "BjW57RZULwb5QkTkm7zLL",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item 2"
+								}
+							],
+							"id": "wdq2t74xNkjXxrkJytTzE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "wXLCHWGnCqIK4CXTirnS_"
+								}
+							],
+							"id": "7Qo1fpmCEOIcKUZx0Ykjn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "wRxsD649JdTfxow9zNF8b"
+								}
+							],
+							"id": "Rx1j7l9TzqeyyCoh-4CYS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$50"
+								}
+							],
+							"id": "16aFotu_UiYRguVdD1Mjt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$3"
+								}
+							],
+							"id": "CKo9w_Z_dlm20h7yjl7mw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "EvRraPBwK3EXrgRonr3HY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Q-aAdwqPXTUW6mk4qumHU",
+							"type": "td"
+						}
+					],
+					"id": "bska4hQ3HKT-ViB9JurpO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item 3"
+								}
+							],
+							"id": "6mmD8dH_Guf0FseRopbVr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "B17-myyusmpW5xGT0n4tE"
+								}
+							],
+							"id": "54iqcf8Q7lHqRHkBZHABV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "myJE4X604NWO0qZLoNysu"
+								}
+							],
+							"id": "iv1dTzqIBTz38rEgqQkiI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$0"
+								}
+							],
+							"id": "Cq-znyqNUvwiwIxz9DMs-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$20"
+								}
+							],
+							"id": "-mDAyeWn72042p9oj67QR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "GCqgT4DCG8-tLrVWsuSIw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hpdAdDbJDcoUS2qwUNqM0",
+							"type": "td"
+						}
+					],
+					"id": "NNeCyGxyIs4oZT9vV0Wvp",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item 4"
+								}
+							],
+							"id": "9jbFasKBFNudS3HyYJMt6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FKXMHtUB0NGGtrwp15Mbr"
+								}
+							],
+							"id": "opdDH2WT7foMIt58hH41-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "j39qpkOR9u9dfj8Fceeop"
+								}
+							],
+							"id": "ruFPx4fcujnoqwuoAe2i7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$5000"
+								}
+							],
+							"id": "i4ThU5_kIW1j_4hzXXDkJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$0"
+								}
+							],
+							"id": "Ki0p3u579vTA76AQEiNSC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "Vwh03rxfBViM3UsDo6Y5q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rtRpy49KhrtXz4M27i9Q4",
+							"type": "td"
+						}
+					],
+					"id": "vS2bjAd0CxHjlRa8BZxRa",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item 5"
+								}
+							],
+							"id": "a5XDR1zwKHt0FT1A5Vc_d",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "B17-myyusmpW5xGT0n4tE"
+								}
+							],
+							"id": "z8zDYp5mnBLRIN9ONfUB0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "wRxsD649JdTfxow9zNF8b"
+								}
+							],
+							"id": "SM9DBPtJHWN0U_Tz2_Qq4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$0"
+								}
+							],
+							"id": "s52ZWji4YswWO9isIEma5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$10"
+								}
+							],
+							"id": "HoIlVn-Su_AFy4EEpW7ZA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1000"
+								}
+							],
+							"id": "5a5GflBplT6Zq3qSVcgB_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "J3zrFGIxvpLmtaSBuXLOv",
+							"type": "td"
+						}
+					],
+					"id": "IVEJO_tkIWaXh5eKb2iWI",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item 6"
+								}
+							],
+							"id": "olT2eT_GkHGq-zyLTNmLT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FKXMHtUB0NGGtrwp15Mbr"
+								}
+							],
+							"id": "q7A7_WTJaCVbRs1i900Go",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "j39qpkOR9u9dfj8Fceeop"
+								}
+							],
+							"id": "kYYvQ0tPGu_3rxHvzZz_E",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$55000"
+								}
+							],
+							"id": "IInt8BpTvgwR__0Q-51sY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$0"
+								}
+							],
+							"id": "xxYgrBUVpXssz-RVB5RcD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "hwsgaS-hTe7Tt7_vL4yUq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lfqcHfsec9022mX-v7NUr",
+							"type": "td"
+						}
+					],
+					"id": "VU5l8C76DDA5mC6X1JNk3",
+					"type": "tr"
+				}
+			],
+			"id": "F41aUjPclshCE_Xzsz78M",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": "Your total estimated annual costs to run your business are "
+				},
+				{
+					"text": "sum(CostTable.TotalCost)",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "P_PuX7I8b7kVb9Zvxyznh"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "HjHbRsxObEsStZrFlVVld"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix"
+				}
+			],
+			"type": "h2",
+			"id": "9Gih4MFXqKKcMoTwi9qKW"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "hrMkkd9ddHTbMVzh_Px-0",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "This template uses categories and functions. Duplicate this model to see the full details. "
+				}
+			],
+			"id": "kOFc58sMK91y9X_rcH729",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CostStructure"
+						}
+					],
+					"id": "vezkupjEkDuLBqki4Y2RH",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "Select"
+						}
+					],
+					"id": "c2HRxEjTsj50IixRqdTby",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "FKXMHtUB0NGGtrwp15Mbr",
+							"value": "Fixed"
+						},
+						{
+							"id": "B17-myyusmpW5xGT0n4tE",
+							"value": "Variable"
+						},
+						{
+							"id": "wXLCHWGnCqIK4CXTirnS_",
+							"value": "Semi Variable"
+						}
+					]
+				}
+			],
+			"id": "oZrTHh-1NZX3JRo4FJngJ",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BillingPeriods"
+						}
+					],
+					"id": "Qp9bQeShd3CVOrkXNJjP4",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "Select"
+						}
+					],
+					"id": "8Tqn0Y9-Fz_74658163lG",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "wRxsD649JdTfxow9zNF8b",
+							"value": "Monthly"
+						},
+						{
+							"id": "j39qpkOR9u9dfj8Fceeop",
+							"value": "Yearly"
+						},
+						{
+							"id": "myJE4X604NWO0qZLoNysu",
+							"value": "Quarterly"
+						}
+					]
+				}
+			],
+			"id": "UWJhQd9WOSsuiJcTHokF0",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "These are the payment types used in this model along with a corresponding function. You can add/delete or modify. "
+				}
+			],
+			"id": "XFGRfGmibKb4cZ1ql-7Rt",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "PaymentTypes"
+								}
+							],
+							"id": "3UBTILvCxzqvkXpC4sYAI",
+							"type": "table-var-name"
+						}
+					],
+					"id": "lCk8lS6JbxzX5TZ3NfCD-",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Term"
+								}
+							],
+							"id": "Sngs34EiV3ypSVNt1CFvL",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "CostFrequency"
+								}
+							],
+							"id": "fo0N6BKYLWFyBesnDj-yL",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "eGkYZa0u-lk_-SVDotbvi",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Monthly"
+								}
+							],
+							"id": "iX8jUQBcpZzgHAsvW-vdn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "12 per year"
+								}
+							],
+							"id": "0MqHzIZ_iPR8-eurhBLyb",
+							"type": "td"
+						}
+					],
+					"id": "E0fcHQSZ_ubR0hwI7hFne",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Quarterly"
+								}
+							],
+							"id": "eG_ml0brRBaUqz4W6WW8q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "RSbyz3GuEaYz-2cRol7sS",
+							"type": "td"
+						}
+					],
+					"id": "81_KrqTJIb1ixL_wcw9EO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Annual"
+								}
+							],
+							"id": "XkRawjyMWgNBk7umU4YCl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1"
+								}
+							],
+							"id": "rd7ZuDnqYXevwPcvd9yVX",
+							"type": "td"
+						}
+					],
+					"id": "7lcXBgVgQaReSi-EUCu_I",
+					"type": "tr"
+				}
+			],
+			"id": "9LRerxUTuHGswSQWIA7V5",
+			"type": "table",
+			"version": 2,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "payment_term(p) = sum(filter("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Yi_IVsmd3IaGqOnDOoTjD",
+					"type": "smart-ref",
+					"blockId": "9LRerxUTuHGswSQWIA7V5",
+					"columnId": null,
+					"lastSeenVariableName": "PaymentTypes"
+				},
+				{
+					"text": " , "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "s2glaMATnXFhhXjGcHbRq",
+					"type": "smart-ref",
+					"blockId": "9LRerxUTuHGswSQWIA7V5",
+					"columnId": "Sngs34EiV3ypSVNt1CFvL",
+					"lastSeenVariableName": "PaymentTypes.Term"
+				},
+				{
+					"text": "  == p).CostFrequency)"
+				}
+			],
+			"isHidden": true,
+			"type": "code_line",
+			"id": "JIi0Wuuw3odWx87e0J_Vz"
+		},
+		{
+			"children": [
+				{
+					"text": "Match function was used to easily calculate cost types"
+				}
+			],
+			"id": "B31F7PN24DFpu6Ya_j93m",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Costing(type, fixedcost, unitcost, quantity) = match {\n  type == \"Variable\": unitcost * quantity\n  type == \"Fixed\": fixedcost\n  type == \"Semi Variable\": fixedcost + (unitcost * quantity)\n}"
+				}
+			],
+			"id": "z90EgXoRFhJR8rpJcUuNs",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "RWrctZXCbQsmhsSiADZvw"
+		}
+	]
+}

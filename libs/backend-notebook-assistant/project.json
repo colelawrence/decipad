@@ -1,0 +1,37 @@
+{
+  "name": "backend-notebook-assistant",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend-notebook-assistant/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/backend-notebook-assistant/src/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/backend-notebook-assistant"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/backend-notebook-assistant"],
+      "options": {
+        "jestConfig": "libs/backend-notebook-assistant/jest.config.js",
+        "bail": true
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/backend-notebook-assistant"
+      }
+    }
+  },
+  "tags": []
+}

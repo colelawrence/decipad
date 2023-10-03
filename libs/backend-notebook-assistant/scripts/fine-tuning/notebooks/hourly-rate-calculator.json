@@ -1,0 +1,2195 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Hourly Rate Calculator"
+				}
+			],
+			"type": "h1",
+			"id": "xSu2f9GfoijtF7HlT2Yx6"
+		},
+		{
+			"children": [
+				{
+					"text": "Are you considering freelancing or already navigating the freelance world but struggling to determine your hourly rate? You're not alone. Setting the right hourly rate is a crucial step in building a successful freelance career. It ensures you're fairly compensated for your expertise and the value you deliver. Use this calculator to estimate your "
+				},
+				{
+					"text": "break even rate ",
+					"bold": true
+				},
+				{
+					"text": "and "
+				},
+				{
+					"text": "optimal hourly rate ",
+					"bold": true
+				},
+				{
+					"text": "based on:"
+				}
+			],
+			"type": "p",
+			"id": "5YRvpVZOBVvVeQ-a9scvQ",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Your time "
+								}
+							],
+							"type": "lic",
+							"id": "DfpOvRe7GLRpYMToFR6Ei"
+						}
+					],
+					"type": "li",
+					"id": "IXSht_j75D4ivzQ-fXH0T"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Your costs "
+								}
+							],
+							"type": "lic",
+							"id": "d2mtWp8i_JTJSpu8G4Cp4"
+						}
+					],
+					"type": "li",
+					"id": "WyR8gUc_gUCIbqJhIhLyh"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Taxes and fees "
+								}
+							],
+							"type": "lic",
+							"id": "WoXCZqQbQDwWglCetevB4"
+						}
+					],
+					"type": "li",
+					"id": "0vzTI3ciTvTcIkfFznwmr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Break even point "
+								}
+							],
+							"type": "lic",
+							"id": "OJ5KJmNbgyoGwgzeThqMA"
+						}
+					],
+					"type": "li",
+					"id": "UBoEAP8kcnDrdNwMkpZGM"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Margin and premiums"
+								}
+							],
+							"type": "lic",
+							"id": "CbaHh0BpX4-Xvsm9MQT_8"
+						}
+					],
+					"type": "li",
+					"id": "5hubaJpcUu7e5IFa4IxpI"
+				}
+			],
+			"type": "ol",
+			"id": "rKsqjXpA8APJqwDo3sYjm",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "img",
+			"url": "https://replicate.delivery/pbxt/WdPKfmz3EZ2yTazvBd3GBlP3xjOBxh1AlOF9sFERWdv8UeuQA/out-0.png",
+			"id": "zHfqkS_bo-ZstxcDqlhCd",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "1. Your Billable Time"
+				}
+			],
+			"type": "h2",
+			"id": "vcwPOu_XiXzxXujSyDu19"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "7U2X0BrEugkodu2f75HRN",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Freelancing isn't just about doing the work, it's about running a business. You're not only the talent but also the admin, marketer, accountant and salesperson. A general rule of thumb is to assume that around 75% of your working day will be spent on billable tasks. This means if you have an 8-hour workday, you can realistically estimate 6 billable hours. You also need to account for vacation, holidays, and sick days when you won't earn but still have expenses."
+				}
+			],
+			"id": "RNohXOwz6qvqjM8jVQU2g",
+			"type": "p",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Decipad understands time, so you can modify the units as per day, per week, per year, per month by just typing."
+				}
+			],
+			"type": "callout",
+			"id": "JJYm3lPI-GEREE99TBSSk",
+			"color": "Catskill",
+			"icon": "LightBulb"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on the below inputs, you will have "
+				},
+				{
+					"text": "exprRef_G38vfc81Q4pZv9tsw9rTC",
+					"magicnumberz": true
+				},
+				{
+					"text": " in billable hours"
+				}
+			],
+			"type": "p",
+			"id": "e4SADXMacBJL-E6OVUYOi"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "WorkDays"
+								}
+							],
+							"id": "ODZOye0HL8zAqdAYtgFNF",
+							"type": "caption",
+							"color": "Perfume",
+							"icon": "Newspaper"
+						},
+						{
+							"children": [
+								{
+									"text": "4 days per week"
+								}
+							],
+							"id": "Df-4AZNk_c1ONlsr5jnku",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CnEnvvi6Jikw7OkrvqH8v",
+							"type": "slider",
+							"max": "7",
+							"min": "0",
+							"step": "1",
+							"value": "4"
+						}
+					],
+					"id": "PCje4viBSHgTgCT-cpVJx",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Billable"
+								}
+							],
+							"id": "uM0yVTwNVuW7eerT2fdG7",
+							"type": "caption",
+							"color": "Perfume",
+							"icon": "BalanceSheet"
+						},
+						{
+							"children": [
+								{
+									"text": "7 hours per day"
+								}
+							],
+							"id": "0Tr0pyJxQ9r-7x4FvDtGI",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dNX_XB8ktouQMCpxf9uZI",
+							"type": "slider",
+							"max": "12",
+							"min": "0",
+							"step": "1",
+							"value": "7"
+						}
+					],
+					"id": "mbrd0zscLjG_PmZeiN6F0",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Holidays"
+								}
+							],
+							"id": "VFJaJJ7PGfUYPQcg8FNr-",
+							"type": "caption",
+							"color": "Perfume",
+							"icon": "Polaroids"
+						},
+						{
+							"children": [
+								{
+									"text": "9 days per year"
+								}
+							],
+							"id": "2YMvIEBc1RpobYW201P-1",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IsAs5srZI5IxCuxb0xt7j",
+							"type": "slider",
+							"max": "25",
+							"min": "0",
+							"step": "1",
+							"value": "9"
+						}
+					],
+					"id": "tnQY21CrHcC-KR-KYphxa",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Vacation"
+								}
+							],
+							"id": "TQYCvHElfAcoGguxCsRH_",
+							"type": "caption",
+							"color": "Perfume",
+							"icon": "Beach"
+						},
+						{
+							"children": [
+								{
+									"text": "10 days per year"
+								}
+							],
+							"id": "XxP2eR6ElVla3AwH-Jp7d",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AfkU3ZXtZD9xJzA-dliUR",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "10"
+						}
+					],
+					"id": "0gXUTLU-WSo5avGGJapgn",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "5HkK2p-ljX7JonlgLLu80",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SickDays"
+						}
+					],
+					"id": "BSeqLnY_N0j1K-h3PugPr",
+					"type": "caption",
+					"color": "Perfume",
+					"icon": "Virus"
+				},
+				{
+					"children": [
+						{
+							"text": "6 days per year"
+						}
+					],
+					"id": "pF3DH5DdUTPV-rCEblVz4",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "q3jAKBWnevTEPf00u8ws8",
+					"type": "slider",
+					"max": "10",
+					"min": "0",
+					"step": "1",
+					"value": "6"
+				}
+			],
+			"id": "sHC5Orx15AyQ4nQ-EimTM",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TimeOff"
+						}
+					],
+					"type": "structured_varname",
+					"id": "eyZSlNPOpw5atnjNiqRNH"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XaLX-tOOjf-u7CT1wVlde",
+							"type": "smart-ref",
+							"blockId": "tnQY21CrHcC-KR-KYphxa",
+							"columnId": null,
+							"lastSeenVariableName": "Holidays"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6T6kqCyi0gXM-z84Mt19P",
+							"type": "smart-ref",
+							"blockId": "0gXUTLU-WSo5avGGJapgn",
+							"columnId": null,
+							"lastSeenVariableName": "Vacation"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "s2hdCmMB-pgthPn6PfdEy",
+							"type": "smart-ref",
+							"blockId": "sHC5Orx15AyQ4nQ-EimTM",
+							"columnId": null,
+							"lastSeenVariableName": "SickDays"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "u8_aiY2_OswDBK02pb3zU"
+				}
+			],
+			"id": "Q2IS-VwEdpba2bkUDDBz4",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ActualWorkDays"
+						}
+					],
+					"type": "structured_varname",
+					"id": "O4khaUkUd6x2dferFJ-Sf"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-pogf_elcvukRiT6piiE_",
+							"type": "smart-ref",
+							"blockId": "PCje4viBSHgTgCT-cpVJx",
+							"columnId": null,
+							"lastSeenVariableName": "WorkDays"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d0s6wNqfJrM4aEK_05zk-",
+							"type": "smart-ref",
+							"blockId": "Q2IS-VwEdpba2bkUDDBz4",
+							"columnId": null,
+							"lastSeenVariableName": "TimeOff"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "lYH2yeFYLXdSoXHmsByYE"
+				}
+			],
+			"id": "KbMrigfXDYqV28yyC0TJ0",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BillableHours"
+						}
+					],
+					"type": "structured_varname",
+					"id": "NcvlIQbN1Nxhj70pJ2-fa"
+				},
+				{
+					"children": [
+						{
+							"text": " "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "45mmI12zDXyXzPLZJ8y83",
+							"type": "smart-ref",
+							"blockId": "mbrd0zscLjG_PmZeiN6F0",
+							"columnId": null,
+							"lastSeenVariableName": "Billable"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "T34OAsvYiGujC6cQ6QjHX",
+							"type": "smart-ref",
+							"blockId": "KbMrigfXDYqV28yyC0TJ0",
+							"columnId": null,
+							"lastSeenVariableName": "ActualWorkDays"
+						},
+						{
+							"text": " in hours per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "lr5Nigve2QpNxaRlX6JF5"
+				}
+			],
+			"id": "G38vfc81Q4pZv9tsw9rTC",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BillableDays"
+						}
+					],
+					"type": "structured_varname",
+					"id": "uR_H7ZIXWw5KXTTVZF6M5"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_pXZjFw_6ZIdumsLfqe_8",
+							"type": "smart-ref",
+							"blockId": "G38vfc81Q4pZv9tsw9rTC",
+							"columnId": null,
+							"lastSeenVariableName": "BillableHours"
+						},
+						{
+							"text": " in days per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "6Kk5l5Lxk62bxzbmuEFr4"
+				}
+			],
+			"id": "QJFLUElum4Ot9ywc05ody",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "week"
+						}
+					],
+					"type": "structured_varname",
+					"id": "GT3w905sLM7473Rx51wSO"
+				},
+				{
+					"children": [
+						{
+							"text": "1/52 year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "eoQata3OqtEpcuh2cKxTS"
+				}
+			],
+			"id": "sh4zRxh1K7QE_Ujwlxj9d",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "XNx5VNnq983SgTHWfrCAS"
+		},
+		{
+			"children": [
+				{
+					"text": "2.  Your Expenses & Costs "
+				}
+			],
+			"type": "h2",
+			"id": "ru09xJ8l8Ju90ZqM1hvQ3"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "gu0as8SzQjjug0AOLiUwK",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, let's calculate the costs of running your freelance business, including covering your personal expenses to support your desired lifestyle. This forms your "
+				},
+				{
+					"text": "minimum salary",
+					"bold": true
+				},
+				{
+					"text": " requirement. Additionally, tally up all your "
+				},
+				{
+					"text": "business expenses",
+					"bold": true
+				},
+				{
+					"text": ", such as marketing, administrative costs, tools, etc."
+				}
+			],
+			"type": "p",
+			"id": "rtCiZAOks1cGSoG82oD1m"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MinSalary"
+								}
+							],
+							"id": "uUAe0XxXYMw8axTxmsbrc",
+							"type": "caption",
+							"icon": "Battery",
+							"color": "Sun"
+						},
+						{
+							"children": [
+								{
+									"text": "$50000 per year"
+								}
+							],
+							"id": "HmjBlmoyGWpXl7xZtGzlj",
+							"type": "exp"
+						}
+					],
+					"id": "oJIHJ5_PBpYSQ9Su39UbU",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Office"
+								}
+							],
+							"id": "oCoHFogVLp3mUoE7V1H6W",
+							"type": "caption",
+							"icon": "Buildings"
+						},
+						{
+							"children": [
+								{
+									"text": "$1500 per month"
+								}
+							],
+							"id": "BgP4UXaZ_q_ijM4JHd8q5",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JhWpEc4fC3hxi84ejvnMs",
+							"type": "slider",
+							"max": "10000",
+							"min": "0",
+							"step": "1",
+							"value": "1500"
+						}
+					],
+					"id": "lyrTCBae76NKzpsouwbQK",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "3IeZR446EA3bt2nQBKCTv",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Marketing"
+								}
+							],
+							"id": "160cjlMt6uewl0p-_Hvjk",
+							"type": "caption",
+							"icon": "Sparkles"
+						},
+						{
+							"children": [
+								{
+									"text": "$200 per month"
+								}
+							],
+							"id": "X4ahZ3MkBcmGwv3NaXf5M",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "eoWVSJxhFnixqZrQQfDpM",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "200"
+						}
+					],
+					"id": "bdUgghZ2jVb5rIVFmKtZ6",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Admin"
+								}
+							],
+							"id": "1i7Y0WTIAaz50Ztqi09Eq",
+							"type": "caption",
+							"icon": "Paperclip"
+						},
+						{
+							"children": [
+								{
+									"text": "$120 per month"
+								}
+							],
+							"id": "u0NPQqHH2DcgrqoryIYnd",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CbC-mczkRpF-zy5BNszER",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "120"
+						}
+					],
+					"id": "jZIH2vE9VSfN2bo3QhMkq",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "i7-BMLyPfYjeKJVz9olfm",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ToolsAndTech"
+								}
+							],
+							"id": "l1TQuyJ4709wrHqyQf-Gu",
+							"type": "caption",
+							"icon": "Battery"
+						},
+						{
+							"children": [
+								{
+									"text": "$150 per month"
+								}
+							],
+							"id": "I1EzGjo_OT3OUcFw-CNUo",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lnXhtzHjqnG-D9WAkQb2P",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "150"
+						}
+					],
+					"id": "G8UyKRBMYIb2B0Z0LznL9",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other"
+								}
+							],
+							"id": "jHKIWwxCDHsQF3yLYPQbp",
+							"type": "caption",
+							"icon": "World"
+						},
+						{
+							"children": [
+								{
+									"text": "$800 per year"
+								}
+							],
+							"id": "BNA1IX5lUhTZRpqtqFh5-",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LAblaHt5iwL7hCOJ5drYs",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "800"
+						}
+					],
+					"id": "nU33Ebhq_QcCjNKyDny3C",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "PH1jnw93CwhK4XX1ckyKB",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Your total expenses are "
+				},
+				{
+					"text": "exprRef_3167xcYIAsFdYGlf91T7M",
+					"magicnumberz": true
+				},
+				{
+					"text": " or "
+				},
+				{
+					"text": "exprRef_rD1bXCv2teFUOdZt7UKzA",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "3myOf-tELS6V2yGQ3oen6",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalExpenses"
+						}
+					],
+					"type": "structured_varname",
+					"id": "jVazhycGbmtZgBP-x8U0E"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DWJZ29j4GtGgjTxQuxpj8",
+							"type": "smart-ref",
+							"blockId": "oJIHJ5_PBpYSQ9Su39UbU",
+							"columnId": null,
+							"lastSeenVariableName": "MinSalary"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9NH_wJcnJ2-pLIuto2oK1",
+							"type": "smart-ref",
+							"blockId": "lyrTCBae76NKzpsouwbQK",
+							"columnId": null,
+							"lastSeenVariableName": "Office"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KLVN8gT6KSw3vQHnKUNBM",
+							"type": "smart-ref",
+							"blockId": "bdUgghZ2jVb5rIVFmKtZ6",
+							"columnId": null,
+							"lastSeenVariableName": "Marketing"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Dyzfe01kWq-223FEM0Z-p",
+							"type": "smart-ref",
+							"blockId": "jZIH2vE9VSfN2bo3QhMkq",
+							"columnId": null,
+							"lastSeenVariableName": "Admin"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GcCyvEY1iP4I8uF2M7r31",
+							"type": "smart-ref",
+							"blockId": "G8UyKRBMYIb2B0Z0LznL9",
+							"columnId": null,
+							"lastSeenVariableName": "ToolsAndTech"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WFsr1eqm4tNqvjET-2oHV",
+							"type": "smart-ref",
+							"blockId": "nU33Ebhq_QcCjNKyDny3C",
+							"columnId": null,
+							"lastSeenVariableName": "Other"
+						},
+						{
+							"text": " in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "yHKes481vv2s02gBLXQhd"
+				}
+			],
+			"id": "3167xcYIAsFdYGlf91T7M",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MonthlyBurn"
+						}
+					],
+					"type": "structured_varname",
+					"id": "w5O72w-cnOW1q_RwrpOJn"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EnBjRSjbXKq2JxM2HDv7P",
+							"type": "smart-ref",
+							"blockId": "3167xcYIAsFdYGlf91T7M",
+							"columnId": null,
+							"lastSeenVariableName": "TotalExpenses"
+						},
+						{
+							"text": " in $ per month"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "4TBr6zoyagrp-eJ56CbO9"
+				}
+			],
+			"id": "rD1bXCv2teFUOdZt7UKzA",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "AYh4M8cYRJydEXhHvO263"
+		},
+		{
+			"children": [
+				{
+					"text": "3. Income Taxes & Fees"
+				}
+			],
+			"type": "h2",
+			"id": "C9jqJKkrmbHLLYONF18Hn"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "igZxnMX8nJa07peLg9njc",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "You won't pocket 100% of your income. As a freelancer, you're responsible for paying your own taxes and you may incur fees related to invoicing or payment processing. It's important to account for income related expenses."
+				}
+			],
+			"type": "p",
+			"id": "GGh0FKbqfVmLM7_Q010aw"
+		},
+		{
+			"children": [
+				{
+					"text": "To ensure your earnings cover your expenses, let's work with the assumption that your total income is equal to your costs: "
+				},
+				{
+					"text": "exprRef_3167xcYIAsFdYGlf91T7M",
+					"magicnumberz": true
+				},
+				{
+					"text": ". If you prefer to use a different estimate for income, enter it below in the 'Adjusted Income' field. Otherwise, leave it blank."
+				}
+			],
+			"type": "p",
+			"id": "UHbaxN9geasjpxFwWQdYK"
+		},
+		{
+			"children": [
+				{
+					"text": "Your estimated taxes and fees are: "
+				},
+				{
+					"text": "exprRef_O2xN_v2ptlLn9vAfQdZQa",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "0J2pPIlw-ahJF7GQdzE5i",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "StateTaxes"
+								}
+							],
+							"id": "M_y3vMJpQnx3xYYwx7DbJ",
+							"type": "caption",
+							"color": "Perfume",
+							"icon": "Receipt"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "wKN7-xJjYe7SC0kJmvl_7",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mp6pv-I8QX6oNTV8caFb0",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "5",
+							"value": "5"
+						}
+					],
+					"id": "3_MxF7QB73uxZzNHbtL2M",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "FederalTaxes"
+								}
+							],
+							"id": "58Cyex0hFrnKBwfLg_VrZ",
+							"type": "caption",
+							"color": "Perfume",
+							"icon": "Receipt"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "_W8QNR3FG7BnYMUFEc6JH",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ipYDmJB7898ar_ulShgfw",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "5",
+							"value": "5"
+						}
+					],
+					"id": "tVOSJ8lWNbtaNPi1ZEvsV",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "PCYxhYCAul0pxsnuFHX0g",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Fees"
+								}
+							],
+							"id": "AZoRpzFhKrCC7MuuTRyRJ",
+							"type": "caption",
+							"icon": "Wallet"
+						},
+						{
+							"children": [
+								{
+									"text": "3%"
+								}
+							],
+							"id": "tbCCmSaQ3cYoaqUwSO9IX",
+							"type": "exp"
+						}
+					],
+					"id": "OHTsZi9IqsGzLtMjWeRld",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AdjustedIncome"
+								}
+							],
+							"id": "d5dnfgLVxlG1uRNvjijPC",
+							"type": "caption",
+							"icon": "Server",
+							"color": "Catskill"
+						},
+						{
+							"children": [
+								{
+									"text": "$0 per year"
+								}
+							],
+							"id": "4sZlA_AXzjH9nRuDFx_jA",
+							"type": "exp"
+						}
+					],
+					"id": "BFrGvmfOZHs_E6JxvtyZ5",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "uFMH-g_JSci4YVq40p6jl",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TaxesAndFees"
+						}
+					],
+					"type": "structured_varname",
+					"id": "LQvnI4dz9aj3Kf7WfMHYF"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FW3YYkMWClaBeEh5Wdxqd",
+							"type": "smart-ref",
+							"blockId": "tVOSJ8lWNbtaNPi1ZEvsV",
+							"columnId": null,
+							"lastSeenVariableName": "FederalTaxes"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BiHNFJ6EG4adTwKzTgnEr",
+							"type": "smart-ref",
+							"blockId": "3_MxF7QB73uxZzNHbtL2M",
+							"columnId": null,
+							"lastSeenVariableName": "StateTaxes"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BB0z_X3b3r05geX_fpjPE",
+							"type": "smart-ref",
+							"blockId": "OHTsZi9IqsGzLtMjWeRld",
+							"columnId": null,
+							"lastSeenVariableName": "Fees"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "uSxHxifFiQyFQKHunwfqu"
+				}
+			],
+			"id": "ErRK1NV_mfZi34MYZDB5E",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "IncomeExpenses"
+						}
+					],
+					"type": "structured_varname",
+					"id": "aZvk8Ulva_OqzJkmOV2E0"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8d_wOWo8KgrJEde-WVxiS",
+							"type": "smart-ref",
+							"blockId": "l6LhLL7yCTjUlJqeKNELb",
+							"columnId": null,
+							"lastSeenVariableName": "Income"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3vyjKvDY101iaszdxfAIF",
+							"type": "smart-ref",
+							"blockId": "ErRK1NV_mfZi34MYZDB5E",
+							"columnId": null,
+							"lastSeenVariableName": "TaxesAndFees"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "hsyefC-BWmQQW7wTUigzl"
+				}
+			],
+			"id": "O2xN-v2ptlLn9vAfQdZQa",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Income"
+						}
+					],
+					"type": "structured_varname",
+					"id": "4ivLrEpQO46k0SBA-QV89"
+				},
+				{
+					"children": [
+						{
+							"text": " if "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mNLcxcIDpNl62I_2BJGNn",
+							"type": "smart-ref",
+							"blockId": "BFrGvmfOZHs_E6JxvtyZ5",
+							"columnId": null,
+							"lastSeenVariableName": "AdjustedIncome"
+						},
+						{
+							"text": " == 0 then "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AlJpRw3kTbyrC_ar0RDwg",
+							"type": "smart-ref",
+							"blockId": "3167xcYIAsFdYGlf91T7M",
+							"columnId": null,
+							"lastSeenVariableName": "TotalExpenses"
+						},
+						{
+							"text": " else "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jrvi1f6YGpwWPgYUAivSD",
+							"type": "smart-ref",
+							"blockId": "BFrGvmfOZHs_E6JxvtyZ5",
+							"columnId": null,
+							"lastSeenVariableName": "AdjustedIncome"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Dnksr4Kful0Qxhr3FWmR8"
+				}
+			],
+			"id": "l6LhLL7yCTjUlJqeKNELb",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "gCXaUW5P-OXQc2C7IGX8J"
+		},
+		{
+			"children": [
+				{
+					"text": "4. Your Break Even Point"
+				}
+			],
+			"type": "h2",
+			"id": "-XC9Cv-LiO1ot6Rx9a0n-"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "B9tSre5_fCxW8CFHTKreB",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on your estimated working hours, expenses and taxes and fees your break even hourly rate is "
+				},
+				{
+					"text": "exprRef_D_ivcLvl5wuTgxMC_tXOm",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "TQ6bNMqKllqS-Nhp40VEy",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BreakEven"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Uqyc9ttEQKyUtBMgzrj3O"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UPcTFtisu8aVXpemkq4UA",
+							"type": "smart-ref",
+							"blockId": "3167xcYIAsFdYGlf91T7M",
+							"columnId": null,
+							"lastSeenVariableName": "TotalExpenses"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "anaDkUHFer3mjmOOdc-2n",
+							"type": "smart-ref",
+							"blockId": "ErRK1NV_mfZi34MYZDB5E",
+							"columnId": null,
+							"lastSeenVariableName": "TaxesAndFees"
+						},
+						{
+							"text": " in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "R5s5vafaM0mc9vnxPOGIY"
+				}
+			],
+			"id": "0yIccJYWJKZ2375zqnmZ6",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "HourlyRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "YOEnrg65ahkrnStIeemE1"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YHU7L8SsR87fAp-QQsgg_",
+							"type": "smart-ref",
+							"blockId": "0yIccJYWJKZ2375zqnmZ6",
+							"columnId": null,
+							"lastSeenVariableName": "BreakEven"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ej1wdQ-fqraGRIvsucmRM",
+							"type": "smart-ref",
+							"blockId": "G38vfc81Q4pZv9tsw9rTC",
+							"columnId": null,
+							"lastSeenVariableName": "BillableHours"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "W0_EGes4ayM8VVByMfJcH"
+				}
+			],
+			"id": "D-ivcLvl5wuTgxMC_tXOm",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DayRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Q6p90WsqnlmB8Hfdgd69D"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WcSuIRxl0ARqv4a4fizyM",
+							"type": "smart-ref",
+							"blockId": "D-ivcLvl5wuTgxMC_tXOm",
+							"columnId": null,
+							"lastSeenVariableName": "HourlyRate"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "A4YCA0kPkI-BtfXHJ1KKs",
+							"type": "smart-ref",
+							"blockId": "mbrd0zscLjG_PmZeiN6F0",
+							"columnId": null,
+							"lastSeenVariableName": "Billable"
+						},
+						{
+							"text": " in $ per day"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "3o27q4t9nKE2pFR4gfEZx"
+				}
+			],
+			"id": "rN4LtjQo1fyAoV-USaP98",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "WeekRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "cH2mrKzLeDKEbCztkcXIL"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_F1x0peZIZZUNZIktCm8d",
+							"type": "smart-ref",
+							"blockId": "rN4LtjQo1fyAoV-USaP98",
+							"columnId": null,
+							"lastSeenVariableName": "DayRate"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WSy2wY9MUN2GEm2W_usoN",
+							"type": "smart-ref",
+							"blockId": "PCje4viBSHgTgCT-cpVJx",
+							"columnId": null,
+							"lastSeenVariableName": "WorkDays"
+						},
+						{
+							"text": " week per week"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "dzMrmhxI7OqHjm9ijtEkG"
+				}
+			],
+			"id": "c0gctvwBouaMLyd_CXqM2",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "Rx8FCOh17qpq3vvx8BwjZ"
+		},
+		{
+			"children": [
+				{
+					"text": "5. Your Margin and Premiums"
+				}
+			],
+			"type": "h2",
+			"id": "PneX5Epwy5AKLS4QIPinZ"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "2EM5rKaTHNVF__yOoCBJ3",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "To estimate your optimal rate, you may want to include a margin above your break even rate. Your margin might consider your skill level, location or competitors. At a "
+				},
+				{
+					"text": "exprRef_5F4TpJZE5o7ZWN_TUr_eo",
+					"magicnumberz": true
+				},
+				{
+					"text": " margin, your rate would be: "
+				},
+				{
+					"text": "exprRef_LojerTbM656y4L2eSYf0b",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"type": "p",
+			"id": "N93HxWvMw2AqZsSW58Dyf"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Margin"
+						}
+					],
+					"id": "x9F3AX0JMaVb08sJPNAJl",
+					"type": "caption",
+					"icon": "Sparkles"
+				},
+				{
+					"children": [
+						{
+							"text": "15%"
+						}
+					],
+					"id": "8n_DBlC_4go238_0jPlDV",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "8Urina1I2dxildqzCaTBq",
+					"type": "slider",
+					"max": "200",
+					"min": "0",
+					"step": "1",
+					"value": "15"
+				}
+			],
+			"id": "5F4TpJZE5o7ZWN-TUr_eo",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "pO2q8KwoFTBsjtNyiG4wh"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Gnx5xWS6bCPnzUOM0H7HE",
+							"type": "smart-ref",
+							"blockId": "D-ivcLvl5wuTgxMC_tXOm",
+							"columnId": null,
+							"lastSeenVariableName": "HourlyRate"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8yE5xWbKn6iSSTKG0CajW",
+							"type": "smart-ref",
+							"blockId": "5F4TpJZE5o7ZWN-TUr_eo",
+							"columnId": null,
+							"lastSeenVariableName": "Margin"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "EsGwVmzHpPbxnSC80AmHS"
+				}
+			],
+			"id": "LojerTbM656y4L2eSYf0b",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "And, "
+				},
+				{
+					"text": "your time isn't the only driver of value",
+					"bold": true
+				},
+				{
+					"text": ". While hourly rates are a straightforward way to bill clients, they don't always reflect the true value of your work. For a high value project, you may want to charge a premium for your time or include a retainer in addition to an hourly rate. Consider the value you provide, your experience and expertise. Use the below table to add/edit premiums for different packages and services:"
+				}
+			],
+			"type": "p",
+			"id": "x5_ct1SlTcfZrs-CQZ29p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ProjectScope"
+								}
+							],
+							"id": "5tlDEBoQV7TWVNPUGKEPU",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "cRBgpSY3CH4CRBhN3zJzv",
+									"type": "smart-ref",
+									"blockId": "LojerTbM656y4L2eSYf0b",
+									"columnId": null,
+									"lastSeenVariableName": "BaseRate"
+								},
+								{
+									"text": " + "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "LgzExeSKcG_smfyYJfbfW",
+									"type": "smart-ref",
+									"blockId": "7Gm8i070884_YXLvHv5hz",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Premium"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "CP26KRQCRVrC7wWkP-_Dw",
+							"type": "table-column-formula",
+							"columnId": "OwM0UH1cnjpVUn4e3BvFZ"
+						}
+					],
+					"id": "7cattio8evhAygXtZSy2-",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Services"
+								}
+							],
+							"id": "3TpqZRmlqBW29vGneiGrJ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Premium"
+								}
+							],
+							"id": "7Gm8i070884_YXLvHv5hz",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Rate"
+								}
+							],
+							"id": "OwM0UH1cnjpVUn4e3BvFZ",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "lJpqXZdQGPqMkoLR8zXlQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Standard"
+								}
+							],
+							"id": "rmDGiSzAghHh0M6hcZsBW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "uMItMoTXFvV8E4_kYMaA1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ataR47WSGxJ6zAqXZgsWn",
+							"type": "td"
+						}
+					],
+					"id": "8r10z01a3ArDS_9gsOnFV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Professional"
+								}
+							],
+							"id": "KNcij7PNuE3YBCUdDf9Vs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4%"
+								}
+							],
+							"id": "2zuJDjcjnqG_oEqFcvIZv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-vGg84yT2V3rpRvAa4ElS",
+							"type": "td"
+						}
+					],
+					"id": "nfrFkCnPHQ3o1lVAk4Qds",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Custom"
+								}
+							],
+							"id": "6FAO8Dv533bb7040wRIjt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "7%"
+								}
+							],
+							"id": "yEK2024FlGt_aywqEYij_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mr7CdFNsx2SPigmpaRvjJ",
+							"type": "td"
+						}
+					],
+					"id": "2zaTgMylqGKVOQ25_tcD6",
+					"type": "tr"
+				}
+			],
+			"id": "1BaRyMb241YBQYIJrEJtg",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": "That's a Wrap! Let us know if you need help customizing this model to your needs. "
+				}
+			],
+			"type": "h3",
+			"id": "fdzJxJJy4wYmAjFVbXLf9"
+		},
+		{
+			"children": [
+				{
+					"text": "Remember that finding the right balance between competitive pricing and fair compensation can take some trial and error. Regularly review your rates and adjust them as needed to reflect changes in your skills, market conditions, and client expectations."
+				}
+			],
+			"type": "p",
+			"id": "I9YmBYmLFDBssEaARRrvo"
+		},
+		{
+			"children": [
+				{
+					"text": "If you would like help customizing a model for your business, "
+				},
+				{
+					"children": [
+						{
+							"text": "join our community on Discord"
+						}
+					],
+					"type": "a",
+					"url": "http://discord.gg/decipad",
+					"id": "SuODo4mOraQB5OQTBAe1G"
+				},
+				{
+					"text": " and let us know what you need. Or, contact support@decipad.com"
+				}
+			],
+			"type": "callout",
+			"id": "aoe3VkfFBAwEScryuJpjD",
+			"color": "Catskill",
+			"icon": "Trophy"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "Vj4iLMnXHDEgnemIhbtXC"
+		}
+	]
+}

@@ -1,4 +1,7 @@
 import stringify from 'json-stringify-safe';
+import assert from 'assert';
+import { unauthorized } from '@hapi/boom';
+import { Doc as YDoc, applyUpdate } from 'yjs';
 import {
   GraphqlContext,
   ID,
@@ -16,20 +19,22 @@ import {
 import { subscribe } from '@decipad/services/pubsub';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import assert from 'assert';
 import {
-  getNotebookInitialState,
   getNotebooksSharedWith,
   getWorkspaceNotebooks,
 } from '@decipad/services/notebooks';
 import { resource } from '@decipad/backend-resources';
+import { toSlateDoc } from '@decipad/slate-yjs';
+import { searchTemplates } from '@decipad/backend-search';
+import { getNotebookInitialState } from '@decipad/backend-notebook-content';
 import {
   isAuthenticatedAndAuthorized,
   isAuthorized,
+  isSuperAdmin,
   requireUser,
 } from '../authorization';
 import { accessTokenFor } from '../utils/accessTokenFor';
-import { createOrUpdateSnapshot, getSnapshots } from './createOrUpdateSnapshot';
+import { createOrUpdateSnapshot, getSnapshots } from './snapshots';
 import { duplicatePad } from './duplicatePad';
 import { importPad } from './importPad';
 import { setPadPublic } from './setPadPublic';
@@ -84,6 +89,31 @@ const resolvers = {
         page,
       });
     },
+
+    async searchTemplates(
+      _: unknown,
+      { search, page }: { search: string; page: PageInput },
+      context: GraphqlContext
+    ): Promise<PagedResult<PadRecord>> {
+      await requireUser(context);
+
+      const { maxItems, cursor: cursorString = '0' } = page;
+      const cursor = parseInt(cursorString, 10);
+      const results = await searchTemplates(search, {
+        startIndex: cursor,
+        maxResults: maxItems + 1,
+      });
+
+      const userResultSize =
+        results.length > maxItems ? maxItems : results.length;
+
+      return {
+        cursor: String(cursor + results.length),
+        hasNextPage: userResultSize < results.length,
+        count: userResultSize,
+        items: results.slice(0, userResultSize),
+      };
+    },
   },
 
   Mutation: {
@@ -107,7 +137,16 @@ const resolvers = {
         context
       );
     },
-    updatePad: padResource.update,
+    async updatePad(
+      parent: unknown,
+      opts: { id: ID; workspaceId: ID; pad: PadInput; sectionId: ID },
+      context: GraphqlContext
+    ) {
+      if (opts.pad.isTemplate && !(await isSuperAdmin(context))) {
+        throw unauthorized();
+      }
+      return padResource.update(parent, opts, context);
+    },
     removePad: padResource.remove,
     sharePadWithRole: padResource.shareWithRole,
     unsharePadWithRole: padResource.unshareWithRole,
@@ -256,6 +295,14 @@ const resolvers = {
       return getSnapshots({
         notebookId: pad.id,
       });
+    },
+
+    async document(pad: PadRecord) {
+      const initialState = await getNotebookInitialState(pad.id);
+      const doc = new YDoc();
+      applyUpdate(doc, initialState);
+
+      return JSON.stringify({ children: toSlateDoc(doc.getArray()) });
     },
   },
 

@@ -1,0 +1,1889 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] Shilling Founders Fund | An innovative approach to profit sharing"
+        }
+      ],
+      "type": "h1",
+      "id": "myq_J9txAooCBmels_aES"
+    },
+    {
+      "children": [
+        {
+          "text": "This is a Decipad dynamic document. You can interact with the model to explore the impact of different scenarios. "
+        }
+      ],
+      "id": "lBExt1S-TfSey04tK5Vg2",
+      "type": "callout",
+      "icon": "Pin",
+      "color": "Catskill"
+    },
+    {
+      "children": [
+        {
+          "text": "Work as one, win as one"
+        }
+      ],
+      "type": "h2",
+      "id": "qyNACnsAJq_-eTGYwQ4TW"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "D6thrllnTHX4u7cgjYmvd",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "The Shilling Founders Fund operates a unique profit-sharing model for their portfolio companies. All founders they invest in receive a portion of the profits the fund generates. "
+        }
+      ],
+      "id": "zzhUE65UcGzHeH-ET3VQX",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "In this model, we break down Shilling's unique approach.\n"
+        }
+      ],
+      "id": "qL1gMUJ6s4GhgixDmNGyu",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Screenshot 2023-02-27 at 20.47.09.png"
+        }
+      ],
+      "id": "aqkXiUIHBj4fT8T8NhXUm",
+      "type": "img",
+      "url": "https://dev.decipad.com/api/pads/gNes0_x3oFuQN7j3Co9aS/attachments/xViit-1TDdSVNYeDpkgMZ",
+      "width": 580
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "kYuZjJO6eB5QITVwODMEJ"
+    },
+    {
+      "children": [
+        {
+          "text": "Profit sharing for Shilling Founders"
+        }
+      ],
+      "type": "h2",
+      "id": "alDxNgxztPT5iicuBIJMr"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "Mw_kY_wiOWSPIOdYa6Lu8",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Shilling VC launched the Founders Fund as a new approach to funding that prioritizes community building. "
+        }
+      ],
+      "type": "p",
+      "id": "dn2TL1h80v69Vq2vHxGJj"
+    },
+    {
+      "children": [
+        {
+          "text": "The program is a partnership between Shilling, LPs, portfolio founders, advisors and team members. Together representing the Community."
+        }
+      ],
+      "type": "p",
+      "id": "ME9e5L-pDq4Hs6kZ8u8ps"
+    },
+    {
+      "children": [
+        {
+          "text": "From an economic standpoint, Shilling shares the Fund's upside with The Community through a carry pool and point system. "
+        }
+      ],
+      "type": "p",
+      "id": "5LftmUku8vVCFr9fkMNT1"
+    },
+    {
+      "children": [
+        {
+          "text": "Mechanics of the carry pool"
+        }
+      ],
+      "type": "h3",
+      "id": "Biwt5CBLPBpW_k8UhsGyA"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "9saKrgMnoDo0lYVoZ9fon",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Shilling allocates a percentage of the total carried interest to the program. The carried interest is the proportion of the profits made by the Fund that is paid to the VC after all the initial committed capital has been returned to the investors."
+        }
+      ],
+      "type": "p",
+      "id": "viakcFbbAc1pvF7fy1yRm"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CarryPoolAllocation"
+            }
+          ],
+          "type": "caption",
+          "id": "KGPWBaXUd3nWpRI3ttYi2",
+          "icon": "Percentage"
+        },
+        {
+          "children": [
+            {
+              "text": "7%"
+            }
+          ],
+          "type": "exp",
+          "id": "Bo8dtYHjnt906Pujt_8-r"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "NwYD30ondI8j4uwyPq82k",
+          "type": "slider",
+          "min": "0",
+          "max": "100",
+          "step": "1",
+          "value": "7"
+        }
+      ],
+      "id": "IfP0ArUJVA5OYx8xpTm7p",
+      "type": "def",
+      "variant": "slider",
+      "coerceToType": {
+        "kind": "number",
+        "date": "day"
+      }
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": " "
+                },
+                {
+                  "text": "exprRef_UwUvgwrRVK_jUrVkBdYXR",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " of that pool is equally distributed to portfolio companies, and each company’s founder receives an equitable split."
+                }
+              ],
+              "id": "fMHk-Cz_z8byZrp0KAonn",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "UxwvnDa33DUzwr-HVg28W"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "The remaining "
+                },
+                {
+                  "text": "exprRef_Q3bTfbFLmfsXs_LIIvd92",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " is distributed by Shilling to the Community based on contributions. "
+                }
+              ],
+              "type": "lic",
+              "id": "0ggj4N91luxd1KJT-VZ2k"
+            }
+          ],
+          "type": "li",
+          "id": "oE4hMdoXuQqVMp07NUMVP"
+        }
+      ],
+      "type": "ul",
+      "id": "PLxF9uOflHUOZ8h3qxoBb"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "FounderCarry"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "g12imLWUR0WKRMQ3JIJe9"
+        },
+        {
+          "children": [
+            {
+              "text": "1/3 as %"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "HKAFwxxOZdoksdk9B4Qmb"
+        }
+      ],
+      "id": "UwUvgwrRVK_jUrVkBdYXR",
+      "type": "code_line_v2",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CommunityCarry"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "7X_TRzITsQCbD87JzBvpw"
+        },
+        {
+          "children": [
+            {
+              "text": "2/3 as %"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "JKxF__7G_S3QLLYisFL46"
+        }
+      ],
+      "id": "Q3bTfbFLmfsXs_LIIvd92",
+      "type": "code_line_v2",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "Z8TlwVA3e-YR-AalUTVLl"
+    },
+    {
+      "children": [
+        {
+          "text": "Carry Points System"
+        }
+      ],
+      "type": "h3",
+      "id": "97HWLxnK6CeJeg8WZ1mnX"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "0SZ5DV5GJ_5wIvGS8-Q43",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "The Carry Pool is allocated using a points system. For example purposes, let's say there are "
+        },
+        {
+          "text": "exprRef_jU891ylfV_VrddiDJS2rP",
+          "magicnumberz": true
+        },
+        {
+          "text": " available to be allocated:"
+        }
+      ],
+      "type": "p",
+      "id": "nZlp4OJD7e8_fx7MRabzV"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "TotalCarryPoints"
+            }
+          ],
+          "type": "caption",
+          "id": "x9a3tNoaoxtHV6N8-4zMV",
+          "icon": "Trophy"
+        },
+        {
+          "children": [
+            {
+              "text": "10000 points"
+            }
+          ],
+          "type": "exp",
+          "id": "S0EAahdZ7DldrlforwaNT"
+        }
+      ],
+      "id": "jU891ylfV-VrddiDJS2rP",
+      "type": "def",
+      "variant": "expression",
+      "coerceToType": {
+        "kind": "number",
+        "date": "day"
+      }
+    },
+    {
+      "children": [
+        {
+          "text": "This means there are"
+        },
+        {
+          "text": "exprRef_3Vk5MnHlqxTuH8_Ny9sTj",
+          "magicnumberz": true
+        },
+        {
+          "text": " (carry) allocated to the companies’ founders in the Fund’s portfolio. "
+        }
+      ],
+      "type": "p",
+      "id": "mKXpB3zBfPCFiwmSP39nI"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "FounderPoints"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "uFHW964wBCpRtV-D_zX2X"
+        },
+        {
+          "children": [
+            {
+              "text": "round("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "fV8roAUc8u5xgjX_q6xfd",
+              "type": "smart-ref",
+              "blockId": "UwUvgwrRVK_jUrVkBdYXR",
+              "columnId": null,
+              "lastSeenVariableName": "FounderCarry"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "n7kBvgtgYWO6eJ7hgIF6B",
+              "type": "smart-ref",
+              "blockId": "jU891ylfV-VrddiDJS2rP",
+              "columnId": null,
+              "lastSeenVariableName": "TotalCarryPoints"
+            },
+            {
+              "text": ")"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "_mB40-l4zFwTrpt1qRDT0"
+        }
+      ],
+      "id": "3Vk5MnHlqxTuH8-Ny9sTj",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "And, there are"
+        },
+        {
+          "text": "exprRef_UVDRW_QH0UQ6s8HlWjnMr",
+          "magicnumberz": true
+        },
+        {
+          "text": "  allocated to the Community and awarded based on certain achievements that Shilling defines. "
+        }
+      ],
+      "type": "p",
+      "id": "BtgFIt3nAk5af6QqQGnVw"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CommunityPoints"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "TyVk7vBhEqfXN83-76sgC"
+        },
+        {
+          "children": [
+            {
+              "text": "round("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "qZpw8WsPNmdFEf-NXv6ye",
+              "type": "smart-ref",
+              "blockId": "Q3bTfbFLmfsXs_LIIvd92",
+              "columnId": null,
+              "lastSeenVariableName": "CommunityCarry"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "deONnG1CoqD3PGfu9Zib2",
+              "type": "smart-ref",
+              "blockId": "jU891ylfV-VrddiDJS2rP",
+              "columnId": null,
+              "lastSeenVariableName": "TotalCarryPoints"
+            },
+            {
+              "text": ")"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "7Mh02Ldw4F64s9JYrycGX"
+        }
+      ],
+      "id": "UVDRW-QH0UQ6s8HlWjnMr",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "F65MmtVyzt1OptSK_KGiO"
+    },
+    {
+      "children": [
+        {
+          "text": "Simulating fund performance"
+        }
+      ],
+      "type": "h2",
+      "id": "BeiYlSB5CwSO1wZNq-Nej",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "I6WxE7BPBOEmesZHzycms",
+      "type": "divider",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "text": "First we need to enter the information regarding the fund along with some hypothetical assumptions. "
+        }
+      ],
+      "type": "p",
+      "id": "tebf-gPaodIqyJi8M9kTr",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "FundSize"
+                }
+              ],
+              "id": "mmJv3Gs2XTUNl9jnkuTZs",
+              "type": "caption",
+              "icon": "Wallet"
+            },
+            {
+              "children": [
+                {
+                  "text": "71M euros"
+                }
+              ],
+              "id": "Eitqu28oIKrSGxngv2f9a",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "FduxKAeapVEIWC7xMcCgB",
+              "type": "slider",
+              "max": "200",
+              "min": "25",
+              "step": "1",
+              "value": "71"
+            }
+          ],
+          "id": "GWuRhVmtrWYseABugeAve",
+          "type": "def",
+          "variant": "slider"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "FundMaturity"
+                }
+              ],
+              "id": "LPBMI8uX54lS4rHokHwla",
+              "type": "caption",
+              "icon": "Clock"
+            },
+            {
+              "children": [
+                {
+                  "text": "11 years"
+                }
+              ],
+              "id": "0IoWTgRTdOz1G3CmPIQ-n",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Ckx1aLfR24IDkxjgpKv1W",
+              "type": "slider",
+              "max": "20",
+              "min": "6",
+              "step": "1",
+              "value": "11"
+            }
+          ],
+          "id": "cW3ziolPvkAy7j8J01yBN",
+          "type": "def",
+          "variant": "slider"
+        }
+      ],
+      "id": "glDcNzr6xCMMyxXiupImS",
+      "type": "columns"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ManagementFee"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "XQMNHCvPqxdyWMSWlrQVc"
+        },
+        {
+          "children": [
+            {
+              "text": "2% per year"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "X7ZR_bSEXBjC4-L33YoNF"
+        }
+      ],
+      "id": "oXIHzLYTvNO5iWpNMqXCq",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Carry"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "QqtfgQB8VAhJk1r9QhEXX"
+        },
+        {
+          "children": [
+            {
+              "text": "20%"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "fxnty0VvVBf_daejoZIfv"
+        }
+      ],
+      "id": "A4pve04na-xiEFqMDTVk3",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "And, we need to consider potential outcomes for the Fund. You can modify or add new outcomes to the below table. "
+        }
+      ],
+      "type": "p",
+      "id": "zXwdMBvAJhIBc5og8VmIB",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Outcomes"
+                }
+              ],
+              "id": "l0k-0iYzjL3sBG1jdcIuP",
+              "type": "table-var-name"
+            }
+          ],
+          "id": "5H-hI5mr4AD-EXmfsPp93",
+          "type": "table-caption"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Name"
+                }
+              ],
+              "id": "ZBRh62dhm45kfED1V4RSh",
+              "type": "th",
+              "cellType": {
+                "kind": "string"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Description"
+                }
+              ],
+              "id": "xGpeqhYTQfXqvBn5ot978",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            },
+            {
+              "children": [
+                {
+                  "text": "Multiplier"
+                }
+              ],
+              "id": "nD-kVMw5Sfs5eBvQDt-h_",
+              "type": "th",
+              "cellType": {
+                "kind": "anything"
+              }
+            }
+          ],
+          "id": "jWBUJewwV7HPlk_2ZN-Sp",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "No returns"
+                }
+              ],
+              "id": "3h1Kqeexr9eOLGIN4358J",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "The fund doesn't return above the conversion threshold, and hence only LPs see any money back."
+                }
+              ],
+              "id": "Obw68i8i_9fOTwe5ZAohE",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "1"
+                }
+              ],
+              "id": "udj4W7y4eH3gHcG2-nwGE",
+              "type": "td"
+            }
+          ],
+          "id": "OUYHm6ONJKZx-WWsQPkuc",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Strong fund"
+                }
+              ],
+              "id": "DyMnw2UVCswgcRNSHPSGA",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "The fund has moderate return to investors, and returns slightly higher than industry average"
+                }
+              ],
+              "id": "6HHEMxDTk54eNbCc9hn00",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "3"
+                }
+              ],
+              "id": "B9zndwkCcAg78xBUGFjf3",
+              "type": "td"
+            }
+          ],
+          "id": "PQ5NkAEMG_SGp4DbJfo-J",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Outlier fund"
+                }
+              ],
+              "id": "bNph5bwK2YjJog3pFhId8",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "The fund performs like some of the best firms in the world, and exceeds LP expectations for a first fund"
+                }
+              ],
+              "id": "eE6QyKXjcXWEsppb-gTcK",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "10"
+                }
+              ],
+              "id": "QtKZF4zZ_UePgz20CfR5S",
+              "type": "td"
+            }
+          ],
+          "id": "G3P_VSVbCX44irIEGwPbm",
+          "type": "tr"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Home run"
+                }
+              ],
+              "id": "5hFP7ZNsr9_7BL_L78MTi",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "This is one of the best VC funds of all time, and outputs one or more world renowned companies."
+                }
+              ],
+              "id": "KhazCjeps-OIMKYy0_45U",
+              "type": "td"
+            },
+            {
+              "children": [
+                {
+                  "text": "50"
+                }
+              ],
+              "id": "c9GNYDVysJ8eFmwYZs6uE",
+              "type": "td"
+            }
+          ],
+          "id": "hvb-UQqKsWriiKvXh09s5",
+          "type": "tr"
+        }
+      ],
+      "id": "Q_NEAzC-IJEL3V3P5EwNe",
+      "type": "table",
+      "icon": "Rocket",
+      "version": 2,
+      "hideFormulas": false
+    },
+    {
+      "children": [
+        {
+          "text": "Additional Formula Inputs"
+        }
+      ],
+      "type": "h3",
+      "id": "sd9fd5LZMQWOWP5hxlCLO",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "Performance of the fund the carry would be ("
+        },
+        {
+          "text": "liquidation preference 1x non participating",
+          "italic": true
+        },
+        {
+          "text": "):"
+        }
+      ],
+      "type": "p",
+      "id": "t8dSLZRK254P0NiPYPEbR",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ConversionThreshold"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "MfhQ9BGUajGB1v4sLohDI"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DUUYhxuh0E4_vgenBzYKe",
+              "type": "smart-ref",
+              "blockId": "GWuRhVmtrWYseABugeAve",
+              "lastSeenVariableName": "FundSize"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "11ge5-2PsZqb_XWNvD9Pm"
+        }
+      ],
+      "id": "GLVMG5SCPe0Y8qEUUkDJZ",
+      "type": "code_line_v2",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "GivenOutcome"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "h3aN3Kq1IPUEF6oNWZyMk"
+        },
+        {
+          "children": [
+            {
+              "text": "lookup("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "M9kGcv6mRMv3UkqAidtlM",
+              "type": "smart-ref",
+              "blockId": "Q_NEAzC-IJEL3V3P5EwNe",
+              "lastSeenVariableName": "Outcomes"
+            },
+            {
+              "text": ", "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "bhGCXkCU56AVku1A1JXwq",
+              "type": "smart-ref",
+              "blockId": "Q_NEAzC-IJEL3V3P5EwNe",
+              "lastSeenVariableName": "Outcomes.Name",
+              "columnId": "ZBRh62dhm45kfED1V4RSh"
+            },
+            {
+              "text": " == "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "-UHUlwQ1-toA5-Tn9NOsA",
+              "type": "smart-ref",
+              "blockId": "pQTbCEEbWpzj5_dKM-58c",
+              "lastSeenVariableName": "Outcome"
+            },
+            {
+              "text": ")"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "uZWV4JNjVbwHSCMcOGJ8l"
+        }
+      ],
+      "id": "jkbhEm6aKpxFtols56nNX",
+      "type": "code_line_v2",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Multiplier"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "c1xwl_0IgPy2PxhgSqLf0"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "kZXealijuTsT2Mf62hIIo",
+              "type": "smart-ref",
+              "blockId": "jkbhEm6aKpxFtols56nNX",
+              "lastSeenVariableName": "GivenOutcome"
+            },
+            {
+              "text": ".Multiplier"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "BSlkxlXI7jMu_uqDZfz7L"
+        }
+      ],
+      "id": "jVORZWMyHSk6tQG4ljL5L",
+      "type": "code_line_v2",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "And, we can calculate the fund results based on different outcomes:"
+        }
+      ],
+      "id": "BWXsdKvmlVvuyM_WfwRG9",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Outcome"
+            }
+          ],
+          "id": "flBUX2FwGauGaTzNcLaUV",
+          "type": "caption",
+          "icon": "Bolt"
+        },
+        {
+          "children": [
+            {
+              "text": "Strong fund"
+            }
+          ],
+          "id": "hKxAeJhIWUf1_0ehjb-jQ",
+          "type": "dropdown",
+          "options": [
+            {
+              "id": "jrbdWPGjMZJHYVGJGJvpY",
+              "value": "No returns"
+            },
+            {
+              "id": "A5erj0Y1uockz1CZMWTpl",
+              "value": "Strong fund"
+            },
+            {
+              "id": "0eSjDnEIDSs3MN7JYHxV9",
+              "value": "Outlier fund"
+            },
+            {
+              "id": "epW9t1mNOS15fFEBsXWLa",
+              "value": "Home run"
+            }
+          ]
+        }
+      ],
+      "id": "pQTbCEEbWpzj5_dKM-58c",
+      "type": "def",
+      "variant": "dropdown",
+      "coerceToType": {
+        "kind": "string"
+      }
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "NmNRjXolXa99cO9nwfqBq",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "TotalManagementFee"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "645jCmqTgnZeHcI_Mo_Hx"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ypILZtH6wLUJzAxqYFOuv",
+              "type": "smart-ref",
+              "blockId": "oXIHzLYTvNO5iWpNMqXCq",
+              "lastSeenVariableName": "ManagementFee"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DqKe1F84h4kPENEdJWwua",
+              "type": "smart-ref",
+              "blockId": "GWuRhVmtrWYseABugeAve",
+              "lastSeenVariableName": "FundSize"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "7i-CgaONrXKx4kK6HuQrj",
+              "type": "smart-ref",
+              "blockId": "cW3ziolPvkAy7j8J01yBN",
+              "lastSeenVariableName": "FundMaturity"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "8642wK3bXw1Sz3qiRz1Ji"
+        }
+      ],
+      "id": "aLQLs_RETNALFVqVEgEM3",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CapitalAvailable"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "AhDvs8Ix6ndGV0kHNzCKV"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "_9oeF8IfPconSN6ET-OXM",
+              "type": "smart-ref",
+              "blockId": "GWuRhVmtrWYseABugeAve",
+              "lastSeenVariableName": "FundSize"
+            },
+            {
+              "text": " - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "rwDkWlMgbFTFLRJMYQOgk",
+              "type": "smart-ref",
+              "blockId": "aLQLs_RETNALFVqVEgEM3",
+              "lastSeenVariableName": "TotalManagementFee"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "-jDeaijDKz7zSDiC8M2lR"
+        }
+      ],
+      "id": "ZjGTQtjjfLfNeTqRkqwWB",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Returns"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "44bIdolNM9d7sgW7_SMpJ"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "YmSjQN2zJe5u68uERJ31J",
+              "type": "smart-ref",
+              "blockId": "ZjGTQtjjfLfNeTqRkqwWB",
+              "lastSeenVariableName": "CapitalAvailable"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "LOBxgi8MixDSUMO4YdEdx",
+              "type": "smart-ref",
+              "blockId": "jVORZWMyHSk6tQG4ljL5L",
+              "lastSeenVariableName": "Multiplier"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "J-Z-E74IWy_HsS7cKhnZa"
+        }
+      ],
+      "id": "Mn04C8I6qN6-lVSNI6b2F",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CapitalInvested"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "JmyS39qIYI08SjasEibcV"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "aqH9RKKvKyWrmKzWwt_zJ",
+              "type": "smart-ref",
+              "blockId": "GWuRhVmtrWYseABugeAve",
+              "lastSeenVariableName": "FundSize"
+            },
+            {
+              "text": " - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "fhjUB_5Z22PHBAdgZsahm",
+              "type": "smart-ref",
+              "blockId": "aLQLs_RETNALFVqVEgEM3",
+              "lastSeenVariableName": "TotalManagementFee"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "5SNvmVlACfoMHMo1FYKUI"
+        }
+      ],
+      "id": "Mtceo2jzgtljeKALE452O",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LPs"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "j8MPNA9luPJTxb_Lr-xqL"
+        },
+        {
+          "children": [
+            {
+              "text": "100% - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "3bEVKif25ZR5jT5jCJrWr",
+              "type": "smart-ref",
+              "blockId": "A4pve04na-xiEFqMDTVk3",
+              "lastSeenVariableName": "Carry"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "t5jUOFeSxIwNJk8H_1U5a"
+        }
+      ],
+      "id": "gMruEoXhX3NpENK6jarz9",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LPDistribution"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "h0SM-aqKhAPgt9kOPhPZB"
+        },
+        {
+          "children": [
+            {
+              "text": "if "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "QskiuLzoJoN3AADoUGUai",
+              "type": "smart-ref",
+              "blockId": "Mn04C8I6qN6-lVSNI6b2F",
+              "lastSeenVariableName": "Returns"
+            },
+            {
+              "text": " < "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "lastSeenVariableName": "ConversionThreshold",
+              "id": "rNHjqkqFwK5Qh3xJlSLYK",
+              "type": "smart-ref",
+              "blockId": "GLVMG5SCPe0Y8qEUUkDJZ"
+            },
+            {
+              "text": " then "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "fFygRTCEZIXNMPAtZhxJU",
+              "type": "smart-ref",
+              "blockId": "Mn04C8I6qN6-lVSNI6b2F",
+              "lastSeenVariableName": "Returns"
+            },
+            {
+              "text": " else "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "WIx1s-7HvS62USiKKxr3B",
+              "type": "smart-ref",
+              "blockId": "Mn04C8I6qN6-lVSNI6b2F",
+              "lastSeenVariableName": "Returns"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "xaGemjaOCAG7bL7rhVEAm",
+              "type": "smart-ref",
+              "blockId": "gMruEoXhX3NpENK6jarz9",
+              "lastSeenVariableName": "LPs"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "BsC6eV3wCuY3cyHV-h68Y"
+        }
+      ],
+      "id": "6uAEyN2eGN3TTWxcdpcZT",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CarryDistribution"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "X6EpZrrYmVO3S4z04s4An"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "1Ac_FKCJhx-t961SX5osu",
+              "type": "smart-ref",
+              "blockId": "Mn04C8I6qN6-lVSNI6b2F",
+              "lastSeenVariableName": "Returns"
+            },
+            {
+              "text": " - "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "O5vrAqGVoyyx0MjQ861Jq",
+              "type": "smart-ref",
+              "blockId": "6uAEyN2eGN3TTWxcdpcZT",
+              "lastSeenVariableName": "LPDistribution"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "VS1_M-R2IZsW8GdC09ww3"
+        }
+      ],
+      "id": "dhlxc3DmT65B8qo2fBAeJ",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "And, the carry for founders is:"
+        }
+      ],
+      "id": "2yQ7mbIcAwEUZCbEbR5PM",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "CommunityCarryShare"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "pczjR3pwCrZuJ7M2n7f4u"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "IV2XzNe1sB_NnkSureCPp",
+              "type": "smart-ref",
+              "blockId": "dhlxc3DmT65B8qo2fBAeJ",
+              "lastSeenVariableName": "CarryDistribution"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "eNLG7W2n2KbTrAij6RaLV",
+              "type": "smart-ref",
+              "blockId": "IfP0ArUJVA5OYx8xpTm7p",
+              "lastSeenVariableName": "CarryPoolAllocation"
+            },
+            {
+              "text": "  "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "2hR5UfqTxGBCi3gE9nQuC"
+        }
+      ],
+      "id": "epAlot_O6PdFjUs6p75Ya",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "cuQAKWqAhVt8XK0sshCmk",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "Founder Profit Sharing Scenarios"
+        }
+      ],
+      "id": "eo7gZNMGf0kUsM1PmrJe_",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "pw3LHz94jHvjEw-UfN7p0",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "Now, we can explore different scenarios for a founder that has earned points:"
+        }
+      ],
+      "id": "vTOAEINpJz7EEED299sn9",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "YourPoints"
+            }
+          ],
+          "id": "1cTKHy1LJDUxoL8SYucGB",
+          "type": "caption",
+          "icon": "People"
+        },
+        {
+          "children": [
+            {
+              "text": "300 points"
+            }
+          ],
+          "id": "drhLv13F3Oo5BHl_fZr4K",
+          "type": "exp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "toXgGMbzEqRuFmOooCrgP",
+          "type": "slider",
+          "max": "1000",
+          "min": "0",
+          "step": "1",
+          "value": "300"
+        }
+      ],
+      "id": "Znjp97a-WeT96pLaYfkWZ",
+      "type": "def",
+      "variant": "slider"
+    },
+    {
+      "children": [
+        {
+          "text": "In the case of a "
+        },
+        {
+          "text": "exprRef_pQTbCEEbWpzj5_dKM_58c",
+          "magicnumberz": true
+        },
+        {
+          "text": " or"
+        },
+        {
+          "text": "exprRef_jVORZWMyHSk6tQG4ljL5L",
+          "magicnumberz": true
+        },
+        {
+          "text": " x multiple,  the fund returns "
+        },
+        {
+          "text": "exprRef_Mn04C8I6qN6_lVSNI6b2F",
+          "magicnumberz": true
+        },
+        {
+          "text": " on an original investment of "
+        },
+        {
+          "text": "exprRef_GWuRhVmtrWYseABugeAve",
+          "magicnumberz": true
+        },
+        {
+          "text": " . The LPs get a return of "
+        },
+        {
+          "text": "exprRef_6uAEyN2eGN3TTWxcdpcZT",
+          "magicnumberz": true
+        },
+        {
+          "text": " and the carry for Shilling + Founders would be "
+        },
+        {
+          "text": "exprRef_dhlxc3DmT65B8qo2fBAeJ",
+          "magicnumberz": true
+        },
+        {
+          "text": ". "
+        }
+      ],
+      "id": "RAtjG5dFBj1UTyDmKzPPX",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "text": "The Shilling Community would receive a total of "
+        },
+        {
+          "text": "exprRef_epAlot_O6PdFjUs6p75Ya",
+          "magicnumberz": true
+        },
+        {
+          "text": " which would be distributed based on allocated points. With a total pool of "
+        },
+        {
+          "text": "exprRef_jU891ylfV_VrddiDJS2rP",
+          "magicnumberz": true
+        },
+        {
+          "text": "  that would be "
+        },
+        {
+          "text": "exprRef_K8de_ZBhi70lUx5YT2WAD",
+          "magicnumberz": true
+        },
+        {
+          "text": "."
+        }
+      ],
+      "id": "X8org1TMnh2FkKczPHztH",
+      "type": "p"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "ValuePerPoint"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "k3CnYY3yRwgGd1Emty0Gu"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "s2ve-J2MrWqi5BOewfizm",
+              "type": "smart-ref",
+              "blockId": "epAlot_O6PdFjUs6p75Ya",
+              "lastSeenVariableName": "CommunityCarryShare"
+            },
+            {
+              "text": " / "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "2aDEAlwxr8PTLUz5R2l3r",
+              "type": "smart-ref",
+              "blockId": "jU891ylfV-VrddiDJS2rP",
+              "lastSeenVariableName": "TotalCarryPoints"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "-KvovUbsFsVOd5XZnjh2F"
+        }
+      ],
+      "id": "K8de-ZBhi70lUx5YT2WAD",
+      "type": "code_line_v2",
+      "isHidden": false
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "YourPointsReturn"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "ZBIeqYlI0T-jhSzRbCSur"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "RbUTMzBvGE7iy2_mE9l74",
+              "type": "smart-ref",
+              "blockId": "Znjp97a-WeT96pLaYfkWZ",
+              "columnId": null,
+              "lastSeenVariableName": "YourPoints"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "-K4aljO5YBgBCXS4d9Rhk",
+              "type": "smart-ref",
+              "blockId": "K8de-ZBhi70lUx5YT2WAD",
+              "columnId": null,
+              "lastSeenVariableName": "ValuePerPoint"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "UmQWdzC2CG6gLXqRCKGtV"
+        }
+      ],
+      "id": "XyDot-flX21GzkKZTKtqu",
+      "type": "code_line_v2",
+      "icon": "Happy"
+    },
+    {
+      "children": [
+        {
+          "text": "As a founder with "
+        },
+        {
+          "text": "exprRef_Znjp97a_WeT96pLaYfkWZ",
+          "magicnumberz": true
+        },
+        {
+          "text": " you would earn around "
+        },
+        {
+          "text": "exprRef_XyDot_flX21GzkKZTKtqu",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        }
+      ],
+      "id": "mXcNC5A5vvqmEba_6GVTj",
+      "type": "callout",
+      "icon": "Rocket"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "QkcXOOl_Nui54YKDhf3A4"
+    }
+  ]
+}

@@ -1,0 +1,1300 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "[Template] Sprint Capacity Calculation for Scrum Teams"
+        }
+      ],
+      "type": "h1",
+      "id": "2bXGFNSj8Obw7gypuA8Bg"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "img",
+      "url": "https://miro.medium.com/v2/resize:fit:1400/1*ZQOTJnzP-TG08ms5G-rjrA.png",
+      "id": "IY1QF-_pIElmYP0tw23K4"
+    },
+    {
+      "children": [
+        {
+          "text": "I have been a scrum master for my current team for almost a year now. I have tried a couple of methods to calculate sprint capacities and it took several iterations to arrive at something that now works best for us and is explained in detail in this article."
+        }
+      ],
+      "type": "blockquote",
+      "id": "zrpnj3I-LoCKfemGIQ--9"
+    },
+    {
+      "children": [
+        {
+          "text": "Story Points and Developer Days"
+        }
+      ],
+      "id": "DC2Te9FDQf8mYjNGIPZ0A",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "FHaFaDNgmmaHZ2HJhKcV4",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "In our team, we estimate tasks in terms of story point (SP) and it was very important for us to keep it as simple as possible for us to estimate tasks and also to make it easily convertible to time estimates so that all tech and non-tech stakeholders could understand when we say a task would take X story points (SPs). We kept an SP as follows:"
+        }
+      ],
+      "type": "p",
+      "id": "Rsmhlv86vivu_rnAgpDJ1"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "developer_day"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "VJZemAjILr_TX7GOsSL_g"
+        },
+        {
+          "children": [
+            {
+              "text": "8 hours"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "-zrsRUqr8FEEP5aFjg8oy"
+        }
+      ],
+      "id": "njTgzhlJ2LT12qm1G-aYc",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "developer_hour"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "7RpMcDsZG3Jv-UrCvMr7V"
+        },
+        {
+          "children": [
+            {
+              "text": "1 hours"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "RdVuyMYBPHgUROZaYvyS7"
+        }
+      ],
+      "id": "2Txw3kzJyYyfJhHqP006j",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "StoryPoint"
+                }
+              ],
+              "id": "lzTatNoc0d4OSHEMvaHmx",
+              "type": "caption",
+              "icon": "Server"
+            },
+            {
+              "children": [
+                {
+                  "text": "Developer day"
+                }
+              ],
+              "id": "2lCqPImDXsI4yoIg12Fzk",
+              "type": "dropdown",
+              "options": [
+                {
+                  "id": "RmZFHixkeZTnJ_tKVm22e",
+                  "value": "Developer day"
+                },
+                {
+                  "id": "VWfE6cbwGXNrfomSHuh1I",
+                  "value": "Developer hour"
+                }
+              ],
+              "smartSelection": false
+            }
+          ],
+          "id": "_W8i-3ma5AYDfOLVpusFv",
+          "type": "def",
+          "variant": "dropdown",
+          "coerceToType": {
+            "kind": "string"
+          }
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Developers"
+                }
+              ],
+              "id": "d8GAReNzDi0R0itXgLOj_",
+              "type": "caption",
+              "icon": "People"
+            },
+            {
+              "children": [
+                {
+                  "text": "5"
+                }
+              ],
+              "id": "YltLxKfpsOQDMUBOcAeGS",
+              "type": "exp"
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Mt1pNre5a0CK04jIJSiN5",
+              "type": "slider",
+              "max": "10",
+              "min": "1",
+              "step": "1",
+              "value": "5"
+            }
+          ],
+          "id": "EfLb_wu1DSggxjIo3MVcl",
+          "type": "def",
+          "variant": "slider"
+        }
+      ],
+      "id": "OvRcyVcktET9hi90sdC_K",
+      "type": "columns"
+    },
+    {
+      "children": [
+        {
+          "text": "SP = if "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "06JHiGXxHwU-l8-9fWiFt",
+          "type": "smart-ref",
+          "blockId": "_W8i-3ma5AYDfOLVpusFv",
+          "columnId": null,
+          "lastSeenVariableName": "StoryPoint"
+        },
+        {
+          "text": " == \"Developer day\" then "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "0w8irHusGSHOkVcXxzYPx",
+          "type": "smart-ref",
+          "blockId": "njTgzhlJ2LT12qm1G-aYc",
+          "columnId": null,
+          "lastSeenVariableName": "developer_day"
+        },
+        {
+          "text": " else "
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "l6zHPyVCaLH8kk-VsXHz9",
+          "type": "smart-ref",
+          "blockId": "2Txw3kzJyYyfJhHqP006j",
+          "columnId": null,
+          "lastSeenVariableName": "developer_hour"
+        },
+        {
+          "text": ""
+        }
+      ],
+      "id": "t9CZF4JgBhswoTz9C79cJ",
+      "type": "code_line",
+      "isHidden": true
+    },
+    {
+      "children": [
+        {
+          "text": "If we commit that a task takes one story point for completion, we essentially mean that it can be completed by if they work "
+        },
+        {
+          "text": "StoryPoint",
+          "magicnumberz": true
+        },
+        {
+          "text": " "
+        },
+        {
+          "text": "without any interruption",
+          "bold": true
+        },
+        {
+          "text": ". In the real world, no developer works uninterruptedly."
+        }
+      ],
+      "type": "p",
+      "id": "wC0oPIWd-sYbm7QdQfDM8"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "SPPerDay"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "BGLuczTWFSn5P4Ay412c9"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "mWDDCUQbjqvxHdXnutqeO",
+              "type": "smart-ref",
+              "blockId": "njTgzhlJ2LT12qm1G-aYc",
+              "columnId": null,
+              "lastSeenVariableName": "developer_day"
+            },
+            {
+              "text": " / SP "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "4DO3jM3NFznJiX_H5nXG3"
+        }
+      ],
+      "id": "9SN8BXz5bcoqIqgVl1BVA",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "DaysInWeek"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "iojXquYXimLUHRNbK7u5n"
+        },
+        {
+          "children": [
+            {
+              "text": "5"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "lhMjUu82QrbDIqVzBc1ti"
+        }
+      ],
+      "id": "gt2nEI_-qweuhbiF4TAqv",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "AvailableHours"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "6oVu4HiR7EPtf3TEX-_ik"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "go_ghTVxQaRvpALiOiijI",
+              "type": "smart-ref",
+              "blockId": "EfLb_wu1DSggxjIo3MVcl",
+              "columnId": null,
+              "lastSeenVariableName": "Developers"
+            },
+            {
+              "text": " * SP * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "gvzfVCjurLkbamE6q-pCg",
+              "type": "smart-ref",
+              "blockId": "9SN8BXz5bcoqIqgVl1BVA",
+              "columnId": null,
+              "lastSeenVariableName": "SPPerDay"
+            },
+            {
+              "text": " "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "ksUkYFnLYNIp6kDzQN1dy"
+        }
+      ],
+      "id": "sCamPJmJpF_VduOzDKGXL",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "AvailableInSP"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "up-y5FdX-U0oUMquXstd8"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Phoc0ax0RCwSCf2AUsOFW",
+              "type": "smart-ref",
+              "blockId": "sCamPJmJpF_VduOzDKGXL",
+              "columnId": null,
+              "lastSeenVariableName": "AvailableHours"
+            },
+            {
+              "text": " in SP"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "2QaqvMPZlgpeWSRfyrjVn"
+        }
+      ],
+      "id": "RUOUqrdMwQ5aqvCgEsaHZ",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "With "
+        },
+        {
+          "text": "Developers",
+          "magicnumberz": true
+        },
+        {
+          "text": " developers you will have a total of "
+        },
+        {
+          "text": "exprRef_RUOUqrdMwQ5aqvCgEsaHZ",
+          "magicnumberz": true
+        },
+        {
+          "text": " per day."
+        }
+      ],
+      "type": "p",
+      "id": "ZtiwWoyA1uJ_jzI5p2uKW"
+    },
+    {
+      "children": [
+        {
+          "text": "Ideal Scenario"
+        }
+      ],
+      "id": "DkBR33mS5tVHEwfqt-0Nm",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "FOl6vxzXIei5FH-IapTtr",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Sprint"
+            }
+          ],
+          "id": "PzBhLAqhiMOta0aqZmx3k",
+          "type": "caption",
+          "icon": "Compass"
+        },
+        {
+          "children": [
+            {
+              "text": "2 weeks"
+            }
+          ],
+          "id": "UHLmblkgbCyHiVPx5QX_P",
+          "type": "exp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "MWeqxlbzZKL3H2zjEmzl0",
+          "type": "slider",
+          "max": "6",
+          "min": "1",
+          "step": "1",
+          "value": "2"
+        }
+      ],
+      "id": "nUqioyVMBsHvt1x2DVazb",
+      "type": "def",
+      "variant": "slider"
+    },
+    {
+      "children": [
+        {
+          "text": "Let's assume that we have a team of "
+        },
+        {
+          "text": "Developers",
+          "magicnumberz": true
+        },
+        {
+          "text": " developers and sprints are "
+        },
+        {
+          "text": "Sprint",
+          "magicnumberz": true
+        },
+        {
+          "text": " long (i.e "
+        },
+        {
+          "text": "exprRef_fF59DNS79Gak40pGTwW1a",
+          "magicnumberz": true
+        },
+        {
+          "text": " working days) with typical working hours being  a "
+        },
+        {
+          "text": "exprRef_njTgzhlJ2LT12qm1G_aYc",
+          "magicnumberz": true
+        },
+        {
+          "text": " day. Assuming that developers are working "
+        },
+        {
+          "text": "uninterrupted",
+          "bold": true
+        },
+        {
+          "text": " in the sprint:"
+        }
+      ],
+      "type": "p",
+      "id": "GsG1QLYpfm-aMSd643uDF"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "DaysPerSprint"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "Rlv-g2eT9rIUPrYl4EAxp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "fT0pTz8_K5AQmnCpjgBxL",
+              "type": "smart-ref",
+              "blockId": "nUqioyVMBsHvt1x2DVazb",
+              "columnId": null,
+              "lastSeenVariableName": "Sprint"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "ySulfyPPZRjiqM5Qxf08k",
+              "type": "smart-ref",
+              "blockId": "gt2nEI_-qweuhbiF4TAqv",
+              "columnId": null,
+              "lastSeenVariableName": "DaysInWeek"
+            },
+            {
+              "text": " per week "
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "xFXmti2jW_jQTI8B89eim"
+        }
+      ],
+      "id": "fF59DNS79Gak40pGTwW1a",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "HoursPerSprint"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "9YAETSmcfU05NjisDp5Vw"
+        },
+        {
+          "children": [
+            {
+              "text": "AvailableHours * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "_AGoTDYkquIf9SWBxo-ZQ",
+              "type": "smart-ref",
+              "blockId": "fF59DNS79Gak40pGTwW1a",
+              "columnId": null,
+              "lastSeenVariableName": "DaysPerSprint"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "_Y2ulyzsSD980FNzruARq"
+        }
+      ],
+      "id": "ArgjVgG4Tlrw_2388lTuo",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "SPPerSprint"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "YeKZmUrGevVvCwWyuEGBp"
+        },
+        {
+          "children": [
+            {
+              "text": "AvailableInSP * DaysPerSprint"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "Urj4s2G-VRig-Btta1BvL"
+        }
+      ],
+      "id": "hSsGnUFlBpR-Np-HflsAd",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "So in a sprint with "
+        },
+        {
+          "text": "exprRef_EfLb_wu1DSggxjIo3MVcl",
+          "magicnumberz": true
+        },
+        {
+          "text": " developers you have "
+        },
+        {
+          "text": "exprRef_hSsGnUFlBpR_Np_HflsAd",
+          "magicnumberz": true
+        },
+        {
+          "text": " available."
+        }
+      ],
+      "type": "p",
+      "id": "Maae6tA6QleVE10wWl6iL"
+    },
+    {
+      "children": [
+        {
+          "text": "Now let us look at how to accommodate the missing pieces in our calculations so far."
+        }
+      ],
+      "type": "p",
+      "id": "cklwCunkieLHzD0l93PhR"
+    },
+    {
+      "children": [
+        {
+          "text": "Focus Factor"
+        }
+      ],
+      "id": "UeKQrPFaOVG1UV7x63J3T",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "1_nxoWa4zSnB7YjWafDkm",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "Focus"
+            }
+          ],
+          "id": "J-q-9Zl_zBLY9Z8daxkkW",
+          "type": "caption",
+          "icon": "Percentage"
+        },
+        {
+          "children": [
+            {
+              "text": "60%"
+            }
+          ],
+          "id": "llJjLowcdEetl5eq_jhZ4",
+          "type": "exp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "n2NFws9buaqAz4ytYuhKJ",
+          "type": "slider",
+          "max": "100",
+          "min": "0",
+          "step": "1",
+          "value": "60"
+        }
+      ],
+      "id": "GlNqamU0Hxn_HVKPpg5Wi",
+      "type": "def",
+      "variant": "slider"
+    },
+    {
+      "children": [
+        {
+          "text": "In all the above discussion, we overlooked that developers indeed get interrupted during their work. This is a very common problem in my team as our product features were spanned across multiple horizontals in the company. So to account for these into the estimates, we used the idea of focus factor. The focus factor reflects how much percent of the time a developer effectively gets to work on tasks in the sprints."
+        }
+      ],
+      "type": "p",
+      "id": "MROZ-_dMovBuslXlzceD1"
+    },
+    {
+      "children": [
+        {
+          "text": "We took multiple iterations to fine-tune this number as we had to carefully consider the following key factors where we spend most of our time:"
+        }
+      ],
+      "type": "p",
+      "id": "rBY3L53IZG-Ar7soWWZjc"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Scrum ceremonies (planning, grooming, retrospectives, demos, etc.)"
+                }
+              ],
+              "id": "5BYL-2U9MSWeRwu1aXPPK",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "4ABKpxZC5sLSINHSLC97b"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "On-call responsibilities"
+                }
+              ],
+              "id": "3ww7LwgM28gJ5OEW24k1v",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "Vq_B7JGYbv3oo7xIYTtV_"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Design review meetings"
+                }
+              ],
+              "id": "SwDEtyV0cVXVBRgJOSYC_",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "toAskoDRiMHc3BrHgV3Pw"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Code reviews"
+                }
+              ],
+              "id": "Pd-KYPPaNT8CNeTLtyiZp",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "Lj1Q6tStxyQjUB-D1K29b"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Other meetings like manager 1:1, hiring interviews, learning curves, etc."
+                }
+              ],
+              "id": "kanCthjj7VKBkRxqmC2Xu",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "zIFzbBCnyKAIjoxghhvHQ"
+        }
+      ],
+      "type": "ul",
+      "id": "fC0TNtUNdM9IRHNZOEq23"
+    },
+    {
+      "children": [
+        {
+          "text": "After iterating through historical data from every team member, we finally ended up with the fact that we were "
+        },
+        {
+          "text": "exprRef_GlNqamU0Hxn_HVKPpg5Wi",
+          "magicnumberz": true
+        },
+        {
+          "text": "  efficient during the sprint which lead us to:"
+        }
+      ],
+      "type": "p",
+      "id": "eKKc7Woql0Zb095uduZRl"
+    },
+    {
+      "children": [
+        {
+          "text": "Sprint Capacity with Focus Factor"
+        }
+      ],
+      "id": "EPefQ22LH3SV3W0zS-fO3",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "KD6-0oB-n81Dc2inpwzbG",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "So let's review. Your team does:"
+        }
+      ],
+      "type": "p",
+      "id": "qy2LMRZMes8tZeESyduRu"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "does "
+                },
+                {
+                  "text": "exprRef_nUqioyVMBsHvt1x2DVazb",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " sprints"
+                }
+              ],
+              "type": "lic",
+              "id": "jA5rYzroueVR7rup7UV_v"
+            }
+          ],
+          "type": "li",
+          "id": "wswbRIoxQ714BXk3hytZH"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "has "
+                },
+                {
+                  "text": "exprRef_EfLb_wu1DSggxjIo3MVcl",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " developers"
+                }
+              ],
+              "type": "lic",
+              "id": "aQqtstSTxKBl2DmgrcUb3"
+            }
+          ],
+          "type": "li",
+          "id": "imRgjBGuT11RBsXlvDiNb"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Each story point means "
+                },
+                {
+                  "text": "SP",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " "
+                }
+              ],
+              "type": "lic",
+              "id": "ZPjr6zQQz4lNLzRmO9WtJ"
+            }
+          ],
+          "type": "li",
+          "id": "8mwJnB-PbPaOzFomRGLlX"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "You are assuming your developers work on coding tasks "
+                },
+                {
+                  "text": "exprRef_GlNqamU0Hxn_HVKPpg5Wi",
+                  "magicnumberz": true
+                },
+                {
+                  "text": " of the time."
+                }
+              ],
+              "type": "lic",
+              "id": "mNdw1ZDD08J9RNApE9cg5"
+            }
+          ],
+          "type": "li",
+          "id": "5Tw_RJatgViyCbsSyIdyk"
+        }
+      ],
+      "type": "ul",
+      "id": "Te5nhR0Sqx1hGPBxV-ZQe"
+    },
+    {
+      "children": [
+        {
+          "text": "With the definition of focus factor clear, let us try to accommodate it in our calculations:"
+        }
+      ],
+      "type": "p",
+      "id": "X80J-Yy84ThFl8xvFydBb"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "FocusedHoursSprint"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "JknobRoIl66luO99JKA27"
+        },
+        {
+          "children": [
+            {
+              "text": "HoursPerSprint * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "Lzh9nT_56nT9RV0CVUhb_",
+              "type": "smart-ref",
+              "blockId": "GlNqamU0Hxn_HVKPpg5Wi",
+              "columnId": null,
+              "lastSeenVariableName": "Focus"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "-OWegqh8zfkdfAK2MIqr2"
+        }
+      ],
+      "id": "ZNCTDdcP_6uvr2zblped4",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "EffectiveSPSprint"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "FZ-3EqX7rtk5r-GXbVbKS"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "D6lZrY5z-RQViaQYJYwYQ",
+              "type": "smart-ref",
+              "blockId": "hSsGnUFlBpR-Np-HflsAd",
+              "columnId": null,
+              "lastSeenVariableName": "SPPerSprint"
+            },
+            {
+              "text": " * "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "wVR7c_FbdldBgmY2pFca4",
+              "type": "smart-ref",
+              "blockId": "GlNqamU0Hxn_HVKPpg5Wi",
+              "columnId": null,
+              "lastSeenVariableName": "Focus"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "myQXlUdXScq5-7fnp6ulI"
+        }
+      ],
+      "id": "4VwbYg3gwQuBkPqnQi_Y3",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "EffectiveSP"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "OtDt3YusJxm6nmVQHOC1o"
+        },
+        {
+          "children": [
+            {
+              "text": "SP / "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "hKOkLRnR9YMXNPUt_Cj5M",
+              "type": "smart-ref",
+              "blockId": "GlNqamU0Hxn_HVKPpg5Wi",
+              "columnId": null,
+              "lastSeenVariableName": "Focus"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "-vu0wKRjNmxBzxF4bqkxZ"
+        }
+      ],
+      "id": "7sKZimX6pC9qdXh39pgsq",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "EffectiveSPTime"
+            }
+          ],
+          "type": "structured_varname",
+          "id": "1E8VDzRtYrGPeF5P9pzNH"
+        },
+        {
+          "children": [
+            {
+              "text": "stripunit(round(EffectiveSP in "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "YNB341Znu2cVI8D2k084P",
+              "type": "smart-ref",
+              "blockId": "njTgzhlJ2LT12qm1G-aYc",
+              "columnId": null,
+              "lastSeenVariableName": "developer_day"
+            },
+            {
+              "text": ", 1))"
+            }
+          ],
+          "type": "code_line_v2_code",
+          "id": "kEZ_RlFZP4Go4slyY5sNf"
+        }
+      ],
+      "id": "U7kYy-twNOsMfc0JYPcIU",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "text": "This means you have "
+        },
+        {
+          "text": "exprRef_4VwbYg3gwQuBkPqnQi_Y3",
+          "magicnumberz": true
+        },
+        {
+          "text": " available per sprint ("
+        },
+        {
+          "text": "exprRef_7sKZimX6pC9qdXh39pgsq",
+          "magicnumberz": true
+        },
+        {
+          "text": ")"
+        }
+      ],
+      "type": "p",
+      "id": "U-jehN0tov-_tSl8BDc8p"
+    },
+    {
+      "children": [
+        {
+          "text": "As developers, we continue to estimate tasks "
+        },
+        {
+          "text": "without",
+          "bold": true
+        },
+        {
+          "text": " considering any interruptions as these are already accounted for in the capacity planning. Also, all stakeholders know one SP means the deliverables can be expected in "
+        },
+        {
+          "text": "exprRef_U7kYy_twNOsMfc0JYPcIU",
+          "magicnumberz": true
+        },
+        {
+          "text": " working days approximately."
+        }
+      ],
+      "type": "p",
+      "id": "qmNwitWc3ti2r-3pphq59"
+    },
+    {
+      "children": [
+        {
+          "text": "Revising Focus Factor Periodically"
+        }
+      ],
+      "id": "8AVWMMqCfCdgCTM4t-7ws",
+      "type": "h2"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "id": "OmJNwvawQMXxzgl4eEFlg",
+      "type": "divider"
+    },
+    {
+      "children": [
+        {
+          "text": "The good part about the focus factor is that you can tune it proactively depending on each sprint. I always try to keep at least one or two upcoming sprints ready and I look at the kind of tasks involved and also team dynamics changes if any to see focus factor adjustments are needed for these sprints. eg: In our case, we revised it recently to consider that we got a dedicated team member to test our code changes. The same applies when developers are leaving the team."
+        }
+      ],
+      "type": "p",
+      "id": "iyFjkmsIWgAZLxA9xLoK4"
+    },
+    {
+      "children": [
+        {
+          "text": "As the team matures over time, developers get more productive and this means they can do a lot more in one SP than they did one year ago. This can be tackled two ways:"
+        }
+      ],
+      "type": "p",
+      "id": "KB_q5jF840dCt2Py_Jz_o"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "During task estimations, we try to give a lower estimate for things we got too good at, which previously would have been costly because of some learning involved. This is what we adopted as its natural solution.",
+                  "highlight": true
+                }
+              ],
+              "id": "WoMut24LhKYQ-3KF8FNbN",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "G7LcL3i7O_P34D1lPGW2S"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Increase the focus factor."
+                }
+              ],
+              "id": "Iu3DfKrhMdd727rDQlhfh",
+              "type": "lic"
+            }
+          ],
+          "type": "li",
+          "id": "ncAR70giWlAt3UuUH23yw"
+        }
+      ],
+      "type": "ol",
+      "id": "LzjX8bcSx37SSwZOq7Elt"
+    },
+    {
+      "children": [
+        {
+          "text": ""
+        }
+      ],
+      "type": "p",
+      "id": "u32AzTitKwjQxgBoJNpzv"
+    }
+  ]
+}

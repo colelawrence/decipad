@@ -1,5 +1,9 @@
-import { Unit } from '@decipad/language';
-import { TElement, TImageElement, TMediaEmbedElement } from '@udecode/plate';
+import type { Unit } from '@decipad/computer';
+import type {
+  TElement,
+  TImageElement,
+  TMediaEmbedElement,
+} from '@udecode/plate';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -29,14 +33,14 @@ import {
   InteractiveElement,
   MarkKind,
 } from '.';
-import {
+import type {
   DataViewCaptionElement,
   DataViewElement,
   DataViewHeader,
   DataViewHeaderRowElement,
   DataViewNameElement,
 } from './data-view';
-import { DrawElement, DrawElementDescendant, DrawElements } from './draw';
+import type { DrawElement, DrawElementDescendant, DrawElements } from './draw';
 import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -52,7 +56,7 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
-import {
+import type {
   CaptionElement,
   DisplayElement,
   DropdownElement,
@@ -64,7 +68,7 @@ import {
   SliderElement,
   VariableDefinitionElement,
 } from './interactive-elements';
-import {
+import type {
   DeprecatedTableInputElement,
   TableCaptionElement,
   TableCellElement,

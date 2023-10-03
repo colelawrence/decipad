@@ -38,7 +38,7 @@ const defaultEnvValues = {
   JWT_MAX_AGE: '2592000', // 1 month (30 * 24 * 60 * 60)
   JWT_SECRET: 'catwalklrjqwr92309endasjkdn023eqhjdskajhaskj',
 
-  OPENAI_API_KEY: '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',
+  OPENAI_API_KEY: 'ask the dev team',
 
   NEXTAUTH_URL: 'http://localhost:3000/api/auth',
 

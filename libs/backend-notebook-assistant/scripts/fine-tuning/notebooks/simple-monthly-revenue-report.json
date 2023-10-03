@@ -1,0 +1,968 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Simple Monthly Revenue Report"
+				}
+			],
+			"type": "h1",
+			"id": "DRMYMGfD48rzgUa1JEKFb"
+		},
+		{
+			"children": [
+				{
+					"text": "Use this template to communicate monthly metrics like revenue and customer growth. Increase the complexity as you need. Optionally, connect this report to live data using JS or SQL queries. Learn how to connect live data here.  "
+				}
+			],
+			"color": "Catskill",
+			"icon": "Paperclip",
+			"id": "uzGQQyzGgeZ2TtXSgFBqn",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"text": "Highlights"
+				}
+			],
+			"type": "h2",
+			"id": "KsY_13AqhZuEqmbG_DaIl"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "8oYOjDnjFFU1JgLPf35g-",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Summarize 2-3 most impactful updates over the last period"
+				}
+			],
+			"id": "S9LdnBPyQo4r549bgd-Fw",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Message"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Our average customer value this month was "
+								},
+								{
+									"text": "Select.ACV",
+									"magicnumberz": true
+								},
+								{
+									"text": "  "
+								}
+							],
+							"type": "lic",
+							"id": "aTbS7APWa4vaM25JSdjKM"
+						}
+					],
+					"type": "li",
+					"id": "OR6v6q283GrzBgygzXD1z"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Top drivers were [this driver]  and [this driver]"
+								}
+							],
+							"type": "lic",
+							"id": "CX1io2AG9F_EpMnQrng8R"
+						}
+					],
+					"type": "li",
+					"id": "4tB_tmBWz_fAeC9kew0La"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "For "
+								},
+								{
+									"text": "Select.Date",
+									"magicnumberz": true
+								},
+								{
+									"text": " revenue increased "
+								},
+								{
+									"text": "Select.MoM_RevenueGrowth",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "UPMpCUb__-lUwHzAT2AAJ"
+						}
+					],
+					"type": "li",
+					"id": "jCAPTFCpNjdfCIXd5AYsF"
+				}
+			],
+			"type": "ul",
+			"id": "7GYsIpAJs4EMMnjBEth3m"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SelectMonth"
+						}
+					],
+					"id": "2clpKgDgeUsf8fSwwArL-",
+					"type": "caption",
+					"icon": "Clock"
+				},
+				{
+					"children": [
+						{
+							"text": "date(2023-03)"
+						}
+					],
+					"id": "_aMTkRXV47AwILbZv8bPM",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "CZKUItCbRmdtoQsOI9RQf",
+							"value": "date(2023-01)"
+						},
+						{
+							"id": "0oK1a-v7edCiUWuQgWedv",
+							"value": "date(2023-02)"
+						},
+						{
+							"id": "7IM8v_L_GCeS2-CYu18I9",
+							"value": "date(2023-03)"
+						},
+						{
+							"id": "WBGDJZ5Ez6QdlwSmtdICQ",
+							"value": "date(2023-04)"
+						},
+						{
+							"id": "8522uOzasS-Ya_AncfOkx",
+							"value": "date(2023-05)"
+						},
+						{
+							"id": "LfCJHB_TBMoNTiG6H8-4d",
+							"value": "date(2023-06)"
+						}
+					],
+					"smartSelection": false
+				}
+			],
+			"id": "S7dSxFpjJHpjPmdqaCNOb",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "number",
+				"unit": null
+			},
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KeyMetrics"
+								}
+							],
+							"id": "X7L_sycGF0Fw18HATqSPN",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "qJylSSFtooZooZPo0qeUp",
+									"type": "smart-ref",
+									"blockId": "bh7ATWbeQl7D_fZZ5vUur",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Revenue"
+								},
+								{
+									"text": " / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HW2tV5UWvdr8t1oljA2ux",
+									"type": "smart-ref",
+									"blockId": "fvxYlIb6awIKxcuJJizii",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Customers"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "8rSFRVA3i1TO24U_Zx2IU",
+							"type": "table-column-formula",
+							"columnId": "BvfjVZu8NPgxxuUPUaZ3k"
+						},
+						{
+							"children": [
+								{
+									"text": "  ("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "S0FYrzCFXbPDajGNEQtA3",
+									"type": "smart-ref",
+									"blockId": "bh7ATWbeQl7D_fZZ5vUur",
+									"columnId": null,
+									"lastSeenVariableName": "Revenue"
+								},
+								{
+									"text": " / previous(0,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B6i5cQNx_Thu_-Ft_cIxL",
+									"type": "smart-ref",
+									"blockId": "bh7ATWbeQl7D_fZZ5vUur",
+									"columnId": null,
+									"lastSeenVariableName": "Revenue"
+								},
+								{
+									"text": "))- 1 in %"
+								}
+							],
+							"id": "tB0k8vZNGvitbGnRWU1fB",
+							"type": "table-column-formula",
+							"columnId": "jdLEgq8Z1RI69w0uMhpQp"
+						},
+						{
+							"children": [
+								{
+									"text": "  ("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mQR8O08loTRB_--6UElSZ",
+									"type": "smart-ref",
+									"blockId": "fvxYlIb6awIKxcuJJizii",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Customers"
+								},
+								{
+									"text": "  / previous(0,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "nUhN1FmzE_TNNI85nIGpB",
+									"type": "smart-ref",
+									"blockId": "fvxYlIb6awIKxcuJJizii",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Customers"
+								},
+								{
+									"text": " ))- 1 in %"
+								}
+							],
+							"id": "C_7G5zxfez-crUeizY68z",
+							"type": "table-column-formula",
+							"columnId": "2D_tf_JYAOxcRGIa66z1b"
+						},
+						{
+							"children": [
+								{
+									"text": "  ("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xIeT7LFD2-z6vtbyuAreF",
+									"type": "smart-ref",
+									"blockId": "BvfjVZu8NPgxxuUPUaZ3k",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "ACV"
+								},
+								{
+									"text": " / previous(0,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Mw8ckegiY_Mk-yiDWNxXD",
+									"type": "smart-ref",
+									"blockId": "BvfjVZu8NPgxxuUPUaZ3k",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "ACV"
+								},
+								{
+									"text": " ))- 1 in %"
+								}
+							],
+							"id": "kzFi_e8CTKwyjxwr4JFvd",
+							"type": "table-column-formula",
+							"columnId": "hl1mqNQyw8GWYtHEzKRN9"
+						}
+					],
+					"id": "MeSlyCj-mtQiKfUDma7Np",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Date"
+								}
+							],
+							"id": "2rpiecIWSo3mkgWNqrKwk",
+							"type": "th",
+							"cellType": {
+								"kind": "series",
+								"seriesType": "date"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue"
+								}
+							],
+							"id": "bh7ATWbeQl7D_fZZ5vUur",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Customers"
+								}
+							],
+							"id": "fvxYlIb6awIKxcuJJizii",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "ACV"
+								}
+							],
+							"id": "BvfjVZu8NPgxxuUPUaZ3k",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MoM_RevenueGrowth"
+								}
+							],
+							"id": "jdLEgq8Z1RI69w0uMhpQp",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MoM_CustomerGrowth"
+								}
+							],
+							"id": "2D_tf_JYAOxcRGIa66z1b",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "ACV_PercentChange"
+								}
+							],
+							"id": "hl1mqNQyw8GWYtHEzKRN9",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "A_fhdcbNU2lZMdezz_3Fv",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-01"
+								}
+							],
+							"id": "cn-PFRgVSrx1n2R_rZwB7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10000"
+								}
+							],
+							"id": "jH3okFYCxSSnN6sURGCz2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "26"
+								}
+							],
+							"id": "926KefVpIgNx7xHicfF_0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "k8sB_ktM4Qy-UJfAawT9U",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nU3UvenzhdpSmNeyxvghJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "v9z-Gu23t9jFTrdzodnBn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HxN6wD1KaM9QuN5upoIDq",
+							"type": "td"
+						}
+					],
+					"id": "BeAi4RIroCKGuc98L7x2Q",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-02"
+								}
+							],
+							"id": "2Z1hltnNIo-2QpIO37Nc_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "16000"
+								}
+							],
+							"id": "bpKWIVZ-t6f9SLSJcX9pe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "51"
+								}
+							],
+							"id": "J_6LL7lCk0Wcc5xiG8G7r",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wOVFhPykgc0_apNpX0fm1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MRUP8v1g3wOC4lRUlPVHz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BgSu43kAcU3osTJqBb2Or",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-rQGaWyb-L_SPnAW5T0oC",
+							"type": "td"
+						}
+					],
+					"id": "h7x838zU6FPEqayGn8OnY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-03"
+								}
+							],
+							"id": "0B7-Fs9gNqHC5h9kjpG9-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "27000"
+								}
+							],
+							"id": "XC3zNCc98bXCqVc_Qg3bX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "98"
+								}
+							],
+							"id": "ENYiMEtOXx9bsJ0G_R4a7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "36yL_Pe-y6JjA3UJlq7HQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qLYJae7gYPx4YfHYgIsMk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qA7q1zGDJHXMZ5XAOOfhf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Wc0NLOe8qzuQjAs7SKaNR",
+							"type": "td"
+						}
+					],
+					"id": "lbgqyAY05CNr7ZoVORU2u",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-04"
+								}
+							],
+							"id": "SH_QsaQSnudC6oNAKbNfy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "46000"
+								}
+							],
+							"id": "1dSAGPiJh14nOpkP8zmkw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "104"
+								}
+							],
+							"id": "FEjjojPvZ8WpF5N4lsZpH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H_w7gLV7B8EE1oORWG8uA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5ZlJ_XhG8bvtUUWPhm_pd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nOC1eeseveyVm80YcG7ch",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "r5WjtVTKpGDeHnK1qqu85",
+							"type": "td"
+						}
+					],
+					"id": "irK2nyCAHl4fxXXICag9A",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-05"
+								}
+							],
+							"id": "xywdI3YoWq0Q-J_tTMPoR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "82000"
+								}
+							],
+							"id": "8VgNIPgNFuFERSL9ElwXs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "138"
+								}
+							],
+							"id": "WO_PL-V1Mpd5KEATyGGaX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Z8TXsbH5773-7agzPEByf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FrO2yMo7ABAwIli0EPWu4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hH8XVcn_GX581XAJ6Uhzj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "shRJL-wHOf8H6jyt5fAjb",
+							"type": "td"
+						}
+					],
+					"id": "CQHf27CIcW9aVPCv3Etx5",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-06"
+								}
+							],
+							"id": "k5C49x2DQ1cNLMQly9bLy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "152000"
+								}
+							],
+							"id": "UOMw3FwSrR0wW86ZYEcu-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "290"
+								}
+							],
+							"id": "96QpdZNVqiiAKe3F7MuEn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DbnAS5lzhW9brsz5MALSd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8z5NHrUc_z6ql-NcdiVtf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YhF3zRHPZTCMp5-TC53Yn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1Tn_So1xI7nwkxECUK_qI",
+							"type": "td"
+						}
+					],
+					"id": "hJbN653ArJa2NQU5AhoyT",
+					"type": "tr"
+				}
+			],
+			"id": "IznRNH9oWPzprLcHSSw7y",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false,
+			"isHidden": false,
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "CDTeCltdYDmDGLJPCqsBC",
+			"type": "plot",
+			"title": "Revenue By Month",
+			"sourceVarName": "exprRef_IznRNH9oWPzprLcHSSw7y",
+			"xColumnName": "Date",
+			"yColumnName": "Revenue",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "Date",
+			"y2ColumnName": "None",
+			"colorScheme": "multicolor_orange"
+		},
+		{
+			"children": [
+				{
+					"text": "Select = lookup("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "lxzTYgLI6rwX7NrU8nYqz",
+					"type": "smart-ref",
+					"blockId": "IznRNH9oWPzprLcHSSw7y",
+					"columnId": null,
+					"lastSeenVariableName": "KeyMetrics"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "E_ey__d8IXwEBghNQTx1v",
+					"type": "smart-ref",
+					"blockId": "S7dSxFpjJHpjPmdqaCNOb",
+					"columnId": null,
+					"lastSeenVariableName": "SelectMonth"
+				},
+				{
+					"text": " )"
+				}
+			],
+			"id": "klW0BRkNn-K3Cd72TTGS3",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "rau_ZTpoYiZKcX1gEzaJn"
+		}
+	]
+}

@@ -1,0 +1,234 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "🕯Starting a Candle Business"
+        }
+      ],
+      "type": "h1",
+      "id": "3JTr-B84cKMnNOYnvHiFi"
+    },
+    {
+      "children": [
+        {
+          "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!"
+        }
+      ],
+      "type": "p",
+      "id": "18YPGVFcBkSie3WopWDlo"
+    },
+    {
+      "children": [
+        {
+          "text": "It looks like I could make a profit ",
+          "highlight": true
+        },
+        {
+          "text": "and some side income based on my assumptions below. Feedback welcome!"
+        }
+      ],
+      "type": "p",
+      "id": "ngIq_tCJClGugubOIsRKT"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "nameoftheslider"
+            }
+          ],
+          "id": "-igGVqsXaHA80joO1eFUm",
+          "type": "caption"
+        },
+        {
+          "children": [
+            {
+              "text": "5"
+            }
+          ],
+          "id": "C4SzMPEnqrsKwTNJhL5vu",
+          "type": "exp"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "id": "5MhvUPKXijpZV9AwLW4Cs",
+          "type": "slider",
+          "max": "10",
+          "min": "0",
+          "step": "1",
+          "value": "5"
+        }
+      ],
+      "id": "QeyklnGhr7iEZvZ1ntElO",
+      "type": "def",
+      "variant": "slider"
+    },
+    {
+      "children": [
+        {
+          "text": "It looks like I could make a profit ",
+          "highlight": true
+        },
+        {
+          "text": "and some side income based on my assumptions below. Feedback welcome!"
+        }
+      ],
+      "type": "p",
+      "id": "ngIq_tCJClGugubOIsRKT"
+    },
+    {
+      "type": "table",
+      "id": "2wr03rifdsk30rfsd",
+      "children": [
+        {
+          "type": "table-caption",
+          "id": "fdfskljdslk3erwlk",
+          "children": [
+            {
+              "type": "table-var-name",
+              "id": "ek3093490dkwdkjsakdjksc",
+              "children": [
+                {
+                  "text": "Table1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tr",
+          "id": "fdskrew034ksdfsk",
+          "children": [
+            {
+              "type": "th",
+              "id": "fdsk3re3ejdsakfdsfss",
+              "cellType": {
+                "kind": "anything"
+              },
+              "children": [
+                {
+                  "text": "Column 1"
+                }
+              ]
+            },
+            {
+              "type": "th",
+              "id": "3jsjdf30ekdsa",
+              "cellType": {
+                "kind": "anything"
+              },
+              "children": [
+                {
+                  "text": "Column 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tr",
+          "id": "fj3e93eidskdsadffcc",
+          "children": [
+            {
+              "type": "td",
+              "id": "dsj309eskcdasklassmc",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "type": "td",
+              "id": "fdsn3e9wdisadsaksaav",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tr",
+          "id": "2e9dw934eksd230e23r9kcr39cmgt",
+          "children": [
+            {
+              "type": "td",
+              "id": "fd3e939dsaksd023od",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "type": "td",
+              "id": "fsd3e93eidsakasdac",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "tr",
+          "id": "3edjed039ic9didicvkk",
+          "children": [
+            {
+              "type": "td",
+              "id": "2ejdj3dj32d923dj",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "type": "td",
+              "id": "2edjwo3tywkfbr0hfewg3ejjokpok",
+              "children": [
+                {
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "children": [
+        {
+          "text": "🎯 What about marketing?"
+        }
+      ],
+      "type": "h2",
+      "id": "xHCDeKqDxpFqJxDAdXjDI"
+    },
+    {
+      "children": [
+        {
+          "text": "What percentage of my net revenue "
+        },
+        {
+          "text": "(before expenses)",
+          "italic": true
+        },
+        {
+          "text": " would I allocate to marketing initiatives? "
+        }
+      ],
+      "type": "p",
+      "id": "n2uD1VwAOCMN1FQOMngPv"
+    }
+  ]
+}

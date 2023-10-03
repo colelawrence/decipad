@@ -1,0 +1,2466 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "SDR compensation for growing companies"
+				}
+			],
+			"type": "h1",
+			"id": "iK-u_Abgy0zlNDtnQJ3GJ"
+		},
+		{
+			"children": [
+				{
+					"text": "Compensation"
+				}
+			],
+			"type": "h2",
+			"id": "Sr3AmqltPR3AYaK26IQeL"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "8dWb79HrjM_shDWexSRgf",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Base compensation"
+				}
+			],
+			"type": "h3",
+			"id": "OjuEJfHPdydhwgv-3qJQh"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "eIW4VkaArkSgkCoILyfw-",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Your annual salary for "
+				},
+				{
+					"text": "exprRef_SihqKfnUL1SPqbCXLCJ9X",
+					"magicnumberz": true
+				},
+				{
+					"text": " is comprised of a base salary and variable incentive"
+				}
+			],
+			"type": "p",
+			"id": "3TKW4l_P-ssMAcdW92nfP"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Base salary:"
+								},
+								{
+									"text": "exprRef_QrQ1JM056N3PDLjCKYppl",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "39PmwQefYYqa4skSmSLlN"
+						}
+					],
+					"type": "li",
+					"id": "ym4z4fx9EPLFlZ5zmEJ3u"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Base/variable ratio: "
+								},
+								{
+									"text": "BaseVariableRatio",
+									"magicnumberz": true
+								},
+								{
+									"text": "/"
+								},
+								{
+									"text": "VariableBaseRatio",
+									"magicnumberz": true
+								},
+								{
+									"text": " ."
+								}
+							],
+							"type": "lic",
+							"id": "JezJEa5VLoDEvlDMjNRe-"
+						}
+					],
+					"type": "li",
+					"id": "yw8XTL6YrG5nueRnX9OX_"
+				}
+			],
+			"type": "ul",
+			"id": "5oxIKE5d4zHthw8UjGGYQ"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseSalary"
+						}
+					],
+					"type": "structured_varname",
+					"id": "jSsE8XhH4aS9cNzO_LCmH"
+				},
+				{
+					"children": [
+						{
+							"text": "35000 $"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ifI58RrmPql3lsUIfqPZG"
+				}
+			],
+			"id": "QrQ1JM056N3PDLjCKYppl",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AnnualIncentive"
+						}
+					],
+					"type": "structured_varname",
+					"id": "2UWeofArSleVaSHFLyjcQ"
+				},
+				{
+					"children": [
+						{
+							"text": "35000 $"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "_LPJGI9GqCn2Lo_AyVMjT"
+				}
+			],
+			"id": "mXjgmvObNcErvGtr9qDBh",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Year"
+						}
+					],
+					"type": "structured_varname",
+					"id": "xKX2kh0Yju0dXzWgG2R1b"
+				},
+				{
+					"children": [
+						{
+							"text": "date(2023)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Ek9kZsXSeHZzDqX5qowhW"
+				}
+			],
+			"id": "SihqKfnUL1SPqbCXLCJ9X",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseVariableRatio"
+						}
+					],
+					"type": "structured_varname",
+					"id": "hnl1H3nwr8PlQJXb7p8i6"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OSl9E0xw28yphfXTpPCai",
+							"type": "smart-ref",
+							"blockId": "QrQ1JM056N3PDLjCKYppl",
+							"lastSeenVariableName": "BaseSalary"
+						},
+						{
+							"text": " / ("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "k0Lme-HRCwZch1l2yM3U9",
+							"type": "smart-ref",
+							"blockId": "QrQ1JM056N3PDLjCKYppl",
+							"lastSeenVariableName": "BaseSalary"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "viEcRY40F5uP6qvvjiwHN",
+							"type": "smart-ref",
+							"blockId": "mXjgmvObNcErvGtr9qDBh",
+							"lastSeenVariableName": "AnnualIncentive"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "0fE-syh_IHRkTv1spWCwR"
+				}
+			],
+			"id": "x5BYCZIzqFjrOB22iHESa",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "VariableBaseRatio"
+						}
+					],
+					"type": "structured_varname",
+					"id": "BjLz5thADXYC7_1KsdTlX"
+				},
+				{
+					"children": [
+						{
+							"text": "1 - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aZJRR1gB7uT2PwQ1x1Ki0",
+							"type": "smart-ref",
+							"blockId": "x5BYCZIzqFjrOB22iHESa",
+							"lastSeenVariableName": "BaseVariableRatio"
+						},
+						{
+							"text": " in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "8esKj66MOc_7UBtWX1qv3"
+				}
+			],
+			"id": "MJgA3AF_eizsPaEQgiQ4z",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Comission"
+				}
+			],
+			"type": "h3",
+			"id": "QEXbCTFW1W5k3W-rbK9ge"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "aZcGQ93NsZLx1VoPUcQ34",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Your annual incentive target is "
+				},
+				{
+					"text": "exprRef_mXjgmvObNcErvGtr9qDBh",
+					"magicnumberz": true
+				},
+				{
+					"text": "  based on "
+				},
+				{
+					"text": "BaseAttainment",
+					"magicnumberz": true
+				},
+				{
+					"text": " quota attainment "
+				}
+			],
+			"type": "p",
+			"id": "vFK2KImo9kJFc7Hrxfjbm"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Performance Measure: Number of demos booked per quarter"
+								}
+							],
+							"type": "lic",
+							"id": "x9SuRo1nMlG2ZZx4_cRoi"
+						}
+					],
+					"type": "li",
+					"id": "_Z06tZLOUy8VI3Nkzk5Ak"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Annual Quota: "
+								},
+								{
+									"text": "AnnualQuota",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "acUeUdlW6E5KE6vcRnECx"
+						}
+					],
+					"type": "li",
+					"id": "Usujx3i43ZErC7xMTHtJz"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Payout Period: Quarterly; "
+								},
+								{
+									"text": "exprRef_cxa9PrhfILwglXkw0LHJG",
+									"magicnumberz": true
+								},
+								{
+									"text": " per quarter at "
+								},
+								{
+									"text": "BaseAttainment",
+									"magicnumberz": true
+								},
+								{
+									"text": " attainment"
+								}
+							],
+							"type": "lic",
+							"id": "K02_SqUSs97yk-1JRi61I"
+						}
+					],
+					"type": "li",
+					"id": "Jz0Mn1tEEsLIxt3-cPgCl"
+				}
+			],
+			"type": "ul",
+			"id": "VdobB6JCTsuehmJOiqDSC"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseAttainment"
+						}
+					],
+					"type": "structured_varname",
+					"id": "H811-fEZ0HzaQ5uXAH5Ej"
+				},
+				{
+					"children": [
+						{
+							"text": "100%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "MNeCJDlS0T52VEyNifOCU"
+				}
+			],
+			"id": "_z7m5BUj412Y4TH8SuRp1",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "QuarterlyTargets"
+						}
+					],
+					"type": "structured_varname",
+					"id": "L1YwQHHo_G_cemS5t73z8"
+				},
+				{
+					"children": [
+						{
+							"text": "[105 demos, 120 demos, 125 demos, 150 demos]"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "FHl8Hcws6zPhPBvP1uBeN"
+				}
+			],
+			"id": "dbhfzURKdfkecbarosaiN",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AnnualQuota"
+						}
+					],
+					"type": "structured_varname",
+					"id": "KYPqBW6AYs7tbnj1GbCZT"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IXgRlSGaxYZdpIJdCsrgG",
+							"type": "smart-ref",
+							"blockId": "dbhfzURKdfkecbarosaiN",
+							"lastSeenVariableName": "QuarterlyTargets"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "oLfxQ7ffqjS3T7OGLfjqi"
+				}
+			],
+			"id": "25c1bJAya8RGUayBfTQ3M",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "QuarterlyIncentive"
+						}
+					],
+					"type": "structured_varname",
+					"id": "wWvxMa1aN6lNleZHQFZ2h"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d9dYmRDuPYUyAGopKTiFW",
+							"type": "smart-ref",
+							"blockId": "mXjgmvObNcErvGtr9qDBh",
+							"lastSeenVariableName": "AnnualIncentive"
+						},
+						{
+							"text": " / 4"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "r0A8D75dIV8tVmTdvcthc"
+				}
+			],
+			"id": "cxa9PrhfILwglXkw0LHJG",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Comission Acceleration"
+				}
+			],
+			"type": "h3",
+			"id": "0EVDMjgOuIBV-k9-kSzaz"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "IfjqoTwTAeh7BbXw9IhM1",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "There are three accelerators for out performance"
+				}
+			],
+			"type": "p",
+			"id": "RtFiCrkeIlUgtjADgutm0"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Achieve quota: Base rate for achieving quote is "
+								},
+								{
+									"text": "exprRef_nTYC55kOUw4LWxZm_Olbj",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "-tavndFCfccYNPhLsi2jK"
+						}
+					],
+					"type": "li",
+					"id": "sz4KufwCIrEzuE6gbwt8O"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Above 100% of quota: "
+								},
+								{
+									"text": "exprRef_a1AxPH11EI_4cvy4wDKGg",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "Ep1gn3njger2Ba2S1dx7j"
+						}
+					],
+					"type": "li",
+					"id": "0--6Uy83DZmR_hdARsXyr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Above 150% of quota: "
+								},
+								{
+									"text": "exprRef_Uya81Z2jLI0BLy2Go614x",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "T4ekh_WFrzTQeO9sp4Jgp"
+						}
+					],
+					"type": "li",
+					"id": "DQWJ-J_zuPkBiIIvpaZp7"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Closed/won deals: Any deal that converts will have a "
+								},
+								{
+									"text": "exprRef_rOWbP1_p8h0ik8YAz7cqD",
+									"magicnumberz": true
+								},
+								{
+									"text": "x multiplier"
+								}
+							],
+							"type": "lic",
+							"id": "LAcSyFJVvJ4PghNyhpVRH"
+						}
+					],
+					"type": "li",
+					"id": "-T4uORCKjjl1zwsrAJmho"
+				}
+			],
+			"type": "ul",
+			"id": "IfdZL2trHEcPEBF-BoWeE"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "w2m2kMJexJbVrCsqLw3L1"
+				},
+				{
+					"children": [
+						{
+							"text": "75 $ per demo"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "GH4IRyPipIliJUYkJnqMd"
+				}
+			],
+			"id": "nTYC55kOUw4LWxZm_Olbj",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AboveAccRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ByeVZZOkOgqE9-aY3tkZN"
+				},
+				{
+					"children": [
+						{
+							"text": "175 $ per demo"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "_qrODmeaITcmb7xUlmjc-"
+				}
+			],
+			"id": "a1AxPH11EI-4cvy4wDKGg",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TopAccRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ZzDGQnR9VEC1GtvdEwEIe"
+				},
+				{
+					"children": [
+						{
+							"text": "250 $ per demo"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "KG-Bz0QSSQPMqMgJ_QMXi"
+				}
+			],
+			"id": "Uya81Z2jLI0BLy2Go614x",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CloseRateMultiple"
+						}
+					],
+					"type": "structured_varname",
+					"id": "IkY_eTinJvIIXbptK2eky"
+				},
+				{
+					"children": [
+						{
+							"text": "2"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "N-S2MvWE-1lLO_D2jOUtA"
+				}
+			],
+			"id": "rOWbP1-p8h0ik8YAz7cqD",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CloseAccRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fSXiuZppBABTqCTFYIe88"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SnHULFtfHRN_HnXyJPp1Z",
+							"type": "smart-ref",
+							"blockId": "rOWbP1-p8h0ik8YAz7cqD",
+							"lastSeenVariableName": "CloseRateMultiple"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "E7gH-JzIpYAJZGHcOWTCL",
+							"type": "smart-ref",
+							"blockId": "nTYC55kOUw4LWxZm_Olbj",
+							"lastSeenVariableName": "BaseRate"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "dHKYnje3PwXPX3K0gdIiJ"
+				}
+			],
+			"id": "-Pqm2dE6emAdqI5zKGZcq",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Minimums / Caps:"
+				}
+			],
+			"type": "p",
+			"id": "c7v48kH_LG9beGb0g6H09"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "If you do not reach your quota, "
+								},
+								{
+									"text": "exprRef_JnkyHRWx3ZxiKKJqTG5UO",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "lHh9meCQe4koe4FgClKFY"
+						}
+					],
+					"type": "li",
+					"id": "ORwnYd7V-QzvE0hXFuVL8"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "There is quarterly payout cap of "
+								},
+								{
+									"text": "PayoutCap",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "BX9F0_IX8r8m2U6b5ru9a"
+						}
+					],
+					"type": "li",
+					"id": "NNXljKRsCK6XAGw8w1Fhx"
+				}
+			],
+			"type": "ul",
+			"id": "pcxCTZqPFIJB-9sRJaM9U"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MinRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "gveE5Qte4IOgcc-wXBJ6s"
+				},
+				{
+					"children": [
+						{
+							"text": "40 $ per demo"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "iznHnPaGqekx9S9sXFnIq"
+				}
+			],
+			"id": "JnkyHRWx3ZxiKKJqTG5UO",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PayoutCap"
+						}
+					],
+					"type": "structured_varname",
+					"id": "2eQBp00HoiOuQNx3Lo3dd"
+				},
+				{
+					"children": [
+						{
+							"text": "$50000"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "JgHXMeSmc_jdXCGeELqm0"
+				}
+			],
+			"id": "-JBkZyt636GHO6mw0ovxS",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Simulating Your Sales Payout "
+				}
+			],
+			"type": "h2",
+			"id": "vr8fx2z6kFMwHEIKLtNVa",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "A6YHpmKv6qw77JKe95fB1",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Below are your quota targets for each quarter.  "
+				},
+				{
+					"text": "You can interact with different levels of attainment and close rates to see the impact on your variable commission",
+					"highlight": true
+				},
+				{
+					"text": ": "
+				}
+			],
+			"id": "4ltGi48slsr8eWbGWkwhq",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DemoAttainment"
+								}
+							],
+							"id": "a7g52ozmxzA1w5b0PTsBK",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "100%"
+								}
+							],
+							"id": "z5t8ZfILxOmj9baAVS6m7",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WgND9UEC7p0MGN2lukeHr",
+							"type": "slider",
+							"max": "1000",
+							"min": "0",
+							"step": "10",
+							"value": "100"
+						}
+					],
+					"id": "Xyd1KbHtAMfC561hL148Q",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CloseRate"
+								}
+							],
+							"id": "ygChBq7d3Me44Jof5U0XE",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "sRzMnqQY6y34Sq4ph84Ug",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YzALb7IgrGP1rmxNnW_C9",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "20"
+						}
+					],
+					"id": "LDDByq54CVZHAb9ONkhv7",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "TL5qDTRSoJDEx7POOc4ih",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Base on a demo attainment of "
+				},
+				{
+					"text": "exprRef_Xyd1KbHtAMfC561hL148Q",
+					"magicnumberz": true
+				},
+				{
+					"text": " and a close rate of "
+				},
+				{
+					"text": "exprRef_LDDByq54CVZHAb9ONkhv7",
+					"magicnumberz": true
+				},
+				{
+					"text": " your compensation would be as follows:"
+				}
+			],
+			"type": "p",
+			"id": "Yo4CtS0lIDdpAO3myhYQx"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Base Salary: "
+								},
+								{
+									"text": "exprRef_QrQ1JM056N3PDLjCKYppl",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "xfYIQYkc8XORMBhKj5G6Q"
+						}
+					],
+					"type": "li",
+					"id": "-HEYahOAOaUHGWlCsgXwp"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Commission: "
+								},
+								{
+									"text": "Comission",
+									"magicnumberz": true
+								},
+								{
+									"text": " (Demos: "
+								},
+								{
+									"text": "DemoComission",
+									"magicnumberz": true
+								},
+								{
+									"text": " Closed Deals:  "
+								},
+								{
+									"text": "ClosedComission",
+									"magicnumberz": true
+								},
+								{
+									"text": ")"
+								}
+							],
+							"type": "lic",
+							"id": "rsurBLczvTpEkk7EznLMR"
+						}
+					],
+					"type": "li",
+					"id": "p59IuuQURQuOTi-qI_0iE"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Total OTE: "
+								},
+								{
+									"text": "TotalOTE",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "OV1Bf_g-xumCKg0HJmHoP"
+						}
+					],
+					"type": "li",
+					"id": "afFd32qJ_Na-V1YCANfb2"
+				}
+			],
+			"type": "ul",
+			"id": "uXbv_BOUE-X1NKNZp6Bus"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DemoComission"
+						}
+					],
+					"type": "structured_varname",
+					"id": "lHJtVi8-gh_bFwUpuUAJg"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "p9DkIeAqRCwGJzZx2CYtN",
+							"type": "smart-ref",
+							"blockId": "RN-3QrefZLRs9VlX7Ch36",
+							"lastSeenVariableName": "Quota.PayoutDemos",
+							"columnId": "GdXEM8CARKPDhVugaBttJ"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "LtoCCA_3ltccXMZ5E59Tx"
+				}
+			],
+			"id": "rlkC4n-W8UFNsXIsZMaNN",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ClosedComission"
+						}
+					],
+					"type": "structured_varname",
+					"id": "4uHNeG0qh5RsXV5eCsR6O"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hZD1ai4YJHeqjRHUXO8za",
+							"type": "smart-ref",
+							"blockId": "RN-3QrefZLRs9VlX7Ch36",
+							"lastSeenVariableName": "Quota.PayoutClosedDeals",
+							"columnId": "BZynPHsLKEcExkHpm-j62"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "kgmJXv11PIj391amuyRsc"
+				}
+			],
+			"id": "v2sM1meKWSMyltACmpWM5",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Comission"
+						}
+					],
+					"type": "structured_varname",
+					"id": "s4plaHBd4aCl9oixi1IXh"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9-nMfIRGqjM7XcM0-LMkf",
+							"type": "smart-ref",
+							"blockId": "rlkC4n-W8UFNsXIsZMaNN",
+							"lastSeenVariableName": "DemoComission"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "I6DRd51CvygrGcluo1P5g",
+							"type": "smart-ref",
+							"blockId": "v2sM1meKWSMyltACmpWM5",
+							"lastSeenVariableName": "ClosedComission"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "t5ongfRXB8t_dga7BAlaR"
+				}
+			],
+			"id": "Qd2ldLOuyu1aIEIxKzxdw",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalOTE"
+						}
+					],
+					"type": "structured_varname",
+					"id": "tlawUZdxbpxFpxYRT-H4Y"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jREMNwtzmGwssX_qHt0Ot",
+							"type": "smart-ref",
+							"blockId": "Qd2ldLOuyu1aIEIxKzxdw",
+							"lastSeenVariableName": "Comission"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xB2z3lakmm3mBtFBtq5EP",
+							"type": "smart-ref",
+							"blockId": "QrQ1JM056N3PDLjCKYppl",
+							"lastSeenVariableName": "BaseSalary"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "l3B95-bdYEo491Ht35Eid"
+				}
+			],
+			"id": "ufS3OrRT_x52Nu2P4Ktbi",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "The table below shows the breakdown on a quarterly basis:"
+				}
+			],
+			"id": "c6EwcSJkvBKLxWm53a2Qh",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Quota"
+								}
+							],
+							"id": "FMENqcN5pE8Wrf39w1EIF",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Zk4NFYWT2fiQn3HGUC7L7",
+									"type": "smart-ref",
+									"blockId": "Xyd1KbHtAMfC561hL148Q",
+									"lastSeenVariableName": "DemoAttainment"
+								},
+								{
+									"text": "  < BaseAttainment  then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JFoUusQUfHS9FFCegc-Wd",
+									"type": "smart-ref",
+									"blockId": "Xyd1KbHtAMfC561hL148Q",
+									"lastSeenVariableName": "DemoAttainment"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kfZcXZe97TtJM1f_JuR09",
+									"type": "smart-ref",
+									"blockId": "3VbA4tSikRBQPD1Sow4Po",
+									"columnId": null,
+									"lastSeenVariableName": "Expected"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "P-owfL1ZKLN-64yEBvGUf",
+									"type": "smart-ref",
+									"blockId": "JnkyHRWx3ZxiKKJqTG5UO",
+									"lastSeenVariableName": "MinRate"
+								},
+								{
+									"text": " else CommissionTier("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5-NgynjHNaaOdDmccKKK2",
+									"type": "smart-ref",
+									"blockId": "3VbA4tSikRBQPD1Sow4Po",
+									"columnId": null,
+									"lastSeenVariableName": "Expected"
+								},
+								{
+									"text": "* "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "XWSmJ8fnarEjw_M8eOLvh",
+									"type": "smart-ref",
+									"blockId": "Xyd1KbHtAMfC561hL148Q",
+									"lastSeenVariableName": "DemoAttainment"
+								},
+								{
+									"text": " / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pqhhphAdPdtDznhhLS1Zz",
+									"type": "smart-ref",
+									"blockId": "3VbA4tSikRBQPD1Sow4Po",
+									"columnId": null,
+									"lastSeenVariableName": "Expected"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3PSvWtOAxTZvjO7tL2sJT",
+									"type": "smart-ref",
+									"blockId": "3VbA4tSikRBQPD1Sow4Po",
+									"columnId": null,
+									"lastSeenVariableName": "Expected"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "VHt-RaU8QkSoOYkjU1W0u",
+							"type": "table-column-formula",
+							"columnId": "GdXEM8CARKPDhVugaBttJ"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TqYa7JnpudnFgaAQKoqhi",
+									"type": "smart-ref",
+									"blockId": "3VbA4tSikRBQPD1Sow4Po",
+									"columnId": null,
+									"lastSeenVariableName": "Expected"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sdypaRgLFUDGl7khjMh4s",
+									"type": "smart-ref",
+									"blockId": "Xyd1KbHtAMfC561hL148Q",
+									"lastSeenVariableName": "DemoAttainment"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "YHSoCixuE4yJU4aF1fRhm",
+							"type": "table-column-formula",
+							"columnId": "ehmIoBBKx6bD90GWS4ngm"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "UIzo9ZE1ACke-BmGfYlH5",
+									"type": "smart-ref",
+									"blockId": "LDDByq54CVZHAb9ONkhv7",
+									"lastSeenVariableName": "CloseRate"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "XyOaUCaPCLeaqkhEzWliP",
+									"type": "smart-ref",
+									"blockId": "3VbA4tSikRBQPD1Sow4Po",
+									"columnId": null,
+									"lastSeenVariableName": "Expected"
+								},
+								{
+									"text": " * CloseAccRate"
+								}
+							],
+							"id": "dhdvaJhkgA5dreWrI9rOa",
+							"type": "table-column-formula",
+							"columnId": "BZynPHsLKEcExkHpm-j62"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jdRlQD8SduPcU5PwhWHPS",
+									"type": "smart-ref",
+									"blockId": "GdXEM8CARKPDhVugaBttJ",
+									"columnId": null,
+									"lastSeenVariableName": "PayoutDemos"
+								},
+								{
+									"text": " + "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3NQNDKd_hhdlfj5tCMDLt",
+									"type": "smart-ref",
+									"blockId": "BZynPHsLKEcExkHpm-j62",
+									"columnId": null,
+									"lastSeenVariableName": "PayoutClosedDeals"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "LEw_AG0bfPFmt8cperQWL",
+							"type": "table-column-formula",
+							"columnId": "GEkwF9SC58nyBQi1mNSeQ"
+						},
+						{
+							"children": [
+								{
+									"text": " QuarterlyTargets"
+								}
+							],
+							"id": "mIGwTgTj1fjaUZMxjxvQ7",
+							"type": "table-column-formula",
+							"columnId": "3VbA4tSikRBQPD1Sow4Po"
+						}
+					],
+					"id": "XdkKLWVQiSnWHIhiy-yKJ",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Quarter"
+								}
+							],
+							"id": "MY8kSgylW6wGy1sa6dsOJ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Expected"
+								}
+							],
+							"id": "3VbA4tSikRBQPD1Sow4Po",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Actual"
+								}
+							],
+							"id": "ehmIoBBKx6bD90GWS4ngm",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "PayoutDemos"
+								}
+							],
+							"id": "GdXEM8CARKPDhVugaBttJ",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "PayoutClosedDeals"
+								}
+							],
+							"id": "BZynPHsLKEcExkHpm-j62",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "TotalPayout"
+								}
+							],
+							"id": "GEkwF9SC58nyBQi1mNSeQ",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "NJh-_Xw2PHmb6SvYuduwX",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q1'23"
+								}
+							],
+							"id": "z__0Kkg0SzaEE3-k8P_QY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Ca96dMlx0OEmmrZiZ3MPn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DBs440U7GWZn3or_iZVzi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NMdLFoB2nV2n8HjdGE5bs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "615q-PQgSBY9-c9hioIFa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EaURfORyxkmfKP4_xRcXA",
+							"type": "td"
+						}
+					],
+					"id": "6thKAaGZy9BU3QQqjGJsu",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q2'23"
+								}
+							],
+							"id": "-Vjcl3eLW2Eu9oovenGpa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0EHsq1Jc9j2KDtjwSBfdH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dZnZjCuCye9viln0-IWXh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pVHipRJHbUW7fob06_MMZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "K8Feubs8q0Bzkw-P9r3pT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aBDuPQhYfeqnUYlKpfImT",
+							"type": "td"
+						}
+					],
+					"id": "ERE5SNM6ZhrQ7R61-pM3-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q3'23"
+								}
+							],
+							"id": "W--XMT1w5N8lJXmea5H_c",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tf5BCksoBKd4ML9a2XM98",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "P0QHBaSL-XIKTBa4JWA_z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6ufMnY6C5HEG-IqX1NSig",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7qDJSBOh5pdMo1ZZZx9Y-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lCqLCwvtLbipK7CqGd2Dp",
+							"type": "td"
+						}
+					],
+					"id": "wXFGf4l4oEkHXBOsAneea",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q4'23"
+								}
+							],
+							"id": "yhW_hDn6EgrDpB0IcUKAf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XvzW-TBqBfQBf31C1gBcd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GkyyfU3vflqcyqzAJ3_ri",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ot8iBckp-lBElsijspgPe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "S9q6auH9IPE84fM-LTVwk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vGrstlEJSiCS9nAk8BK7k",
+							"type": "td"
+						}
+					],
+					"id": "ALs0k-Cef3h07sUpB_WAT",
+					"type": "tr"
+				}
+			],
+			"id": "RN-3QrefZLRs9VlX7Ch36",
+			"type": "table",
+			"hideFormulas": true,
+			"icon": "Server",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "e-sQbsk21bCSpLZVgp7CZ",
+			"type": "plot",
+			"title": "Chart",
+			"sourceVarName": "exprRef_52wj5omYOfoviN_84j3z6",
+			"xColumnName": "Type",
+			"yColumnName": "Amount",
+			"markType": "bar",
+			"thetaColumnName": "Amount",
+			"sizeColumnName": "",
+			"colorColumnName": "Type",
+			"colorScheme": "monochrome_purple",
+			"y2ColumnName": ""
+		},
+		{
+			"children": [
+				{
+					"text": "Modelling"
+				}
+			],
+			"id": "fPDFyPb5So7VWy92jMuLU",
+			"type": "h2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"isHidden": true,
+			"id": "vHewr2N54KY3U3tbrn-k3",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Rate & Tiers"
+				}
+			],
+			"id": "4lpbJhtFDuN2VGOHOYsc1",
+			"type": "h3",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"isHidden": true,
+			"id": "Ysc6oOMrTDp9xe4U5dM0u",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "The below tiered function makes it easy to calculate payouts:"
+				}
+			],
+			"type": "p",
+			"id": "r53jP84373Y-ZE887SNKY",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "CommissionTier(DemosBooked, QuarterlyDemosTarget) = tiered DemosBooked {\n  100% : "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "PACozbb1ygnnXMJ4PgHDx",
+					"type": "smart-ref",
+					"blockId": "cxa9PrhfILwglXkw0LHJG",
+					"lastSeenVariableName": "QuarterlyIncentive"
+				},
+				{
+					"text": " \n  150% : tier * QuarterlyDemosTarget * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "ye6s0R6CKwX7JI-siFrsQ",
+					"type": "smart-ref",
+					"blockId": "a1AxPH11EI-4cvy4wDKGg",
+					"lastSeenVariableName": "AboveAccRate"
+				},
+				{
+					"text": " \n  rest: tier * QuarterlyDemosTarget * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "qFPuLgPOq83gvFPJZbrbe",
+					"type": "smart-ref",
+					"blockId": "Uya81Z2jLI0BLy2Go614x",
+					"lastSeenVariableName": "TopAccRate"
+				},
+				{
+					"text": " \n  max: "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "S_IlSkdCeVIoHoYjm9KAn",
+					"type": "smart-ref",
+					"blockId": "-JBkZyt636GHO6mw0ovxS",
+					"lastSeenVariableName": "PayoutCap"
+				},
+				{
+					"text": " \n}"
+				}
+			],
+			"type": "code_line",
+			"id": "jOuN5r5_ADRwkUxrArH08",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "raT_1DBxLMu-5HnH71m72",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "Preparing charts"
+				}
+			],
+			"id": "X-Rds7J0ulbqhOs765B8B",
+			"type": "h3",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "DXoxSLd_-oXq52lyGQO_H",
+			"type": "divider",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "For our pie chart we need to massage the data so we can display exactly what a candidate would expect"
+				}
+			],
+			"id": "-W1SEMDHExp9PxphX0Jl2",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "PayMix = {\n  Type = [\"Base Pay\", \"Demo Pay\", \"Closed Deals Pay\"]\n  Amount = ["
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "M-Hf6t4EdDpguf9e5n7IO",
+					"type": "smart-ref",
+					"blockId": "QrQ1JM056N3PDLjCKYppl",
+					"lastSeenVariableName": "BaseSalary"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "eyoOkUbdCabeauPm2cz7G",
+					"type": "smart-ref",
+					"blockId": "rlkC4n-W8UFNsXIsZMaNN",
+					"lastSeenVariableName": "DemoComission"
+				},
+				{
+					"text": " ,  "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "mRQJ5BZjN9qcH30usYC2s",
+					"type": "smart-ref",
+					"blockId": "v2sM1meKWSMyltACmpWM5",
+					"lastSeenVariableName": "ClosedComission"
+				},
+				{
+					"text": " ]\n}"
+				}
+			],
+			"type": "code_line",
+			"id": "52wj5omYOfoviN_84j3z6",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "C5H-dXLJ_uU1i5dGr8E8U"
+		},
+		{
+			"children": [
+				{
+					"text": "Checks & Balances"
+				}
+			],
+			"type": "h3",
+			"id": "PEC2H-BNlvP82jqhfu1IS",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "eTAgVIVk0YHTMp-fBCd2B",
+			"type": "divider",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "We can verify our calculations match up here. "
+				},
+				{
+					"text": "This allows the team to make changes to the model, but double check if they didn't break base assumptions",
+					"highlight": true
+				},
+				{
+					"text": " we have about the behaviour of this model"
+				}
+			],
+			"id": "fpbvOzY8TTBIWMwPu0Zfw",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "This is the most important check up, as we know different businesses might have targets adjusted to seasonality. However the total inputed in the table and what we use in our document text should match every time:"
+				}
+			],
+			"type": "p",
+			"id": "uQgXSfUZfAxCxdD3TI3vh",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "assert("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "QNTV-0FVGVgzlDIIYwrXG",
+					"type": "smart-ref",
+					"blockId": "25c1bJAya8RGUayBfTQ3M",
+					"lastSeenVariableName": "AnnualQuota"
+				},
+				{
+					"text": " == sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "ayZqNov66LBlKmdVDdvRM",
+					"type": "smart-ref",
+					"blockId": "RN-3QrefZLRs9VlX7Ch36",
+					"lastSeenVariableName": "Quota.Expected",
+					"columnId": "3VbA4tSikRBQPD1Sow4Po"
+				},
+				{
+					"text": "))"
+				}
+			],
+			"id": "o3Cl6VAtAcRHh2F1acQ3p",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Below verifies that what we list as demo comission matches the payout shown in the table:"
+				}
+			],
+			"id": "1pUWWt_8Gqk1zQqSP77J2",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "assert("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Wo2rzzrWeomj03myYx0ma",
+					"type": "smart-ref",
+					"blockId": "rlkC4n-W8UFNsXIsZMaNN",
+					"lastSeenVariableName": "DemoComission"
+				},
+				{
+					"text": " == sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "waA32UKfVoirTUjcT3zVR",
+					"type": "smart-ref",
+					"blockId": "RN-3QrefZLRs9VlX7Ch36",
+					"lastSeenVariableName": "Quota.PayoutDemos",
+					"columnId": "GdXEM8CARKPDhVugaBttJ"
+				},
+				{
+					"text": "))"
+				}
+			],
+			"id": "Ht1Hhr-MUCDMQuZ8rjKJ8",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Make sure the total comission presented in text matches what is presented in the table:"
+				}
+			],
+			"type": "p",
+			"id": "Wr3vupbLvtI1Wy_TUwL5z",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "assert("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "cdLAxf-Qztn3n7F0c2sHS",
+					"type": "smart-ref",
+					"blockId": "v2sM1meKWSMyltACmpWM5",
+					"lastSeenVariableName": "ClosedComission"
+				},
+				{
+					"text": " == sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "1vvxY1Sv4V5-U3rodf6AV",
+					"type": "smart-ref",
+					"blockId": "RN-3QrefZLRs9VlX7Ch36",
+					"lastSeenVariableName": "Quota.PayoutClosedDeals",
+					"columnId": "BZynPHsLKEcExkHpm-j62"
+				},
+				{
+					"text": "))"
+				}
+			],
+			"id": "4C030UBj-X89bzMNFbEl7",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Make sure the total payout matches what is expected in the document:"
+				}
+			],
+			"type": "p",
+			"id": "JsGAjPDWi5nruIf388oBY",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "assert( "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "KY2cTdUx-d8a1XURvXaUK",
+					"type": "smart-ref",
+					"blockId": "Qd2ldLOuyu1aIEIxKzxdw",
+					"lastSeenVariableName": "Comission"
+				},
+				{
+					"text": " == sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "_3hpbDBGsyBnw3pr4NQpw",
+					"type": "smart-ref",
+					"blockId": "RN-3QrefZLRs9VlX7Ch36",
+					"columnId": "GEkwF9SC58nyBQi1mNSeQ",
+					"lastSeenVariableName": "Quota.TotalPayout"
+				},
+				{
+					"text": "))"
+				}
+			],
+			"id": "VYWZ9hdt0_hmleZuHWJYB",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "n0EM0ybV6ACnA0-u2IstN"
+		}
+	]
+}

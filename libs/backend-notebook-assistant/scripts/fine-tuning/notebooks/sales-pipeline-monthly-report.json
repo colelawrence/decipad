@@ -1,0 +1,2008 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Sales pipeline monthly report"
+				}
+			],
+			"type": "h1",
+			"id": "TEoJfc9TOYrPPx0ra19po"
+		},
+		{
+			"children": [
+				{
+					"text": "You can duplicate and modify this template to make it your own. If you need help or want to collaborate chat with us at "
+				},
+				{
+					"text": "support@decipad.com",
+					"underline": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "7flFrCsHR6xYzH7WfV7ny",
+			"icon": "Happy",
+			"color": "Catskill",
+			"type": "callout",
+			"colorScheme": "monochrome_purple"
+		},
+		{
+			"children": [
+				{
+					"text": "TL/DR "
+				}
+			],
+			"id": "DIeuR78he_DTMZeUEu-he",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "x0n-pTG2i3obKgt_PpqBw",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Highlights",
+					"bold": true
+				}
+			],
+			"type": "p",
+			"id": "ZRAqrhQ6HMwT5-whztDcA",
+			"colorScheme": "monochrome_purple"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Automotive vertical",
+									"bold": true
+								},
+								{
+									"text": " expected continues to be our top performing segment."
+								}
+							],
+							"type": "lic",
+							"id": "1DU6ZKBwNSeMwM9WQfZQJ"
+						}
+					],
+					"type": "li",
+					"id": "y3XS2qBE1c04Pbtgsmiex"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Closed a new deal with"
+								},
+								{
+									"text": " Company Seven ",
+									"bold": true
+								},
+								{
+									"text": "for "
+								},
+								{
+									"text": "exprRef_PxyXKjB31s1EgdiarSyz0",
+									"magicnumberz": true
+								},
+								{
+									"text": " , a "
+								},
+								{
+									"text": "exprRef_O2awdiEyshbMId1_Pa9nt",
+									"magicnumberz": true
+								},
+								{
+									"text": " increase over expected opportunity"
+								}
+							],
+							"type": "lic",
+							"id": "1DU6ZKBwNSeMwM9WQfZQJ"
+						}
+					],
+					"type": "li",
+					"id": "q7fc4Iq_8Mx73K7lPeCuc"
+				}
+			],
+			"type": "ul",
+			"id": "1n5S-QWEclhfTQvc-iuFv"
+		},
+		{
+			"children": [
+				{
+					"text": "Tip: Numbers in the above summary are dynamic references and update when your underlying data updates. To create a dynamic reference in text, just drag a result from a calculation, data view or numbers side bar into your text. "
+				}
+			],
+			"type": "callout",
+			"id": "1pq3eGDSiU6ZP7CrcZig-",
+			"color": "Sun",
+			"icon": "LightBulb",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Sales Performance to goal"
+				}
+			],
+			"type": "h3",
+			"id": "7m3xzdvBHgnN6R5DC_VW2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "LRMCDbvqjpanqJtwG2XHo",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Q1_Target_for_my"
+								}
+							],
+							"id": "XZEcyhrJd0fixiT3hmDeK",
+							"type": "caption",
+							"icon": "Bolt",
+							"color": "Grapefruit"
+						},
+						{
+							"children": [
+								{
+									"text": "2100000 USD"
+								}
+							],
+							"id": "VygMX0Rm1Dan0aZ7OB3u6",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VH3PVQrXwMLDeBMpFDy7C",
+							"type": "slider",
+							"max": "5000000",
+							"min": "0",
+							"step": "100000",
+							"value": "2100000"
+						}
+					],
+					"id": "zyTjRBRtr8DO0xopHDRQ5",
+					"type": "def",
+					"variant": "slider",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "eUQtydmkckUHb5jH1KYCV",
+					"blockId": "87rrG09iDPOq_2s7NJn00",
+					"type": "display",
+					"varName": "Forecasted_Revenue"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "0hKjrJfCG72COUkcEVXSi",
+					"blockId": "YbXGHaYUWa9xBBhMOzUVa",
+					"type": "display",
+					"varName": "Revenue_Opportunity2"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "ahyXJa3YqLBvj12URMNIj",
+					"blockId": "nyMJh4f7YBmJotcf1c6T7",
+					"type": "display",
+					"varName": "Pacing_Forecast"
+				}
+			],
+			"id": "ntFdyDWWbGrCLOxWUsNPn",
+			"type": "columns",
+			"colorScheme": "monochrome_purple"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Y9BqQFriC6mvjYQttRfHO",
+			"type": "plot",
+			"title": "Revenue opportunity by stage",
+			"sourceVarName": "exprRef_jwsdH_E22OSz3M0r_DMvU",
+			"xColumnName": "Deal_Stage",
+			"yColumnName": "Revenue_Opportunity",
+			"markType": "bar",
+			"thetaColumnName": "Revenue_Opportunity",
+			"sizeColumnName": "",
+			"colorColumnName": "Deal_Stage",
+			"colorScheme": "monochrome_purple",
+			"y2ColumnName": "Revenue_Forecast"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "G1BPlBLaJLRplrUrvvHt6"
+		},
+		{
+			"children": [
+				{
+					"text": "Close Rate Assumptions"
+				}
+			],
+			"id": "MPHHbZG4zc90kDBvStzNh",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "n_FIS3j6C7ZTtqlQBBWgf",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Close_Probability"
+								}
+							],
+							"id": "rQag1Ctg4XywZtWGF_0c9",
+							"type": "table-var-name"
+						}
+					],
+					"id": "9hDdwCcxf_gbBSp7u6Zy6",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Stage2"
+								}
+							],
+							"id": "mML2jmIDwTuUp3SxX3_UF",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "CloseRate"
+								}
+							],
+							"id": "NglBDY6Z_K2mDGZZTrx-c",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "TmdTx_jxq1ro0KDtqdS23",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "closed"
+								}
+							],
+							"id": "X_BKTGvEqSNn-dgssKvVL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100%"
+								}
+							],
+							"id": "rVxKj4arxLRqrLMtt8JL-",
+							"type": "td"
+						}
+					],
+					"id": "BrlRXA5dHBS-7YDiKdHC2",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "contract"
+								}
+							],
+							"id": "N3GxDDq6EftmSRU9tt0D_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "75%"
+								}
+							],
+							"id": "5z22FtHkbtzp-0kMSltAo",
+							"type": "td"
+						}
+					],
+					"id": "baENUI1oeEIQqCnNAW-Sj",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "negotiations"
+								}
+							],
+							"id": "vdRJKKxSZmrJX92zlclPk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50%"
+								}
+							],
+							"id": "CbfzbtJp_l5C6quCuGuKc",
+							"type": "td"
+						}
+					],
+					"id": "SeG0KjEHZRXNZuDvWvAIP",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "engaged"
+								}
+							],
+							"id": "Tn8tHfsRTctCKEZihSVX3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "25%"
+								}
+							],
+							"id": "uaH8NmShTl54iBWlCJui-",
+							"type": "td"
+						}
+					],
+					"id": "87MkLKLxyf-5EjMvSrvFl",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "lost"
+								}
+							],
+							"id": "KqzGLSbLw01hsLOusCoto",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "BcTJfzTr8DqR6F1Z1iNHR",
+							"type": "td"
+						}
+					],
+					"id": "dCk5GzCnNgc1dEdUTSo5N",
+					"type": "tr"
+				}
+			],
+			"id": "lY73gvGtpjMaywcS7khHV",
+			"type": "table",
+			"color": "Catskill",
+			"icon": "LightBulb",
+			"version": 2,
+			"colorScheme": "monochrome_purple"
+		},
+		{
+			"children": [
+				{
+					"text": "Tip: You can modify the above table to create your own close rate assumptions or add new ones. "
+				}
+			],
+			"id": "JvIxz8atyBCRo328-zmf7",
+			"type": "callout",
+			"icon": "LightBulb",
+			"color": "Sun",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "probability(s) = sum(filter("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "ZbD-g7uNQPl7HivvSuYMO",
+					"type": "smart-ref",
+					"blockId": "lY73gvGtpjMaywcS7khHV",
+					"lastSeenVariableName": "Close_Probability"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "lxXtvh6WvweP72g4ssDcN",
+					"type": "smart-ref",
+					"blockId": "lY73gvGtpjMaywcS7khHV",
+					"lastSeenVariableName": "Close_Probability.Stage2",
+					"columnId": "mML2jmIDwTuUp3SxX3_UF"
+				},
+				{
+					"text": " == s).CloseRate)"
+				}
+			],
+			"type": "code_line",
+			"id": "JIi0Wuuw3odWx87e0J_Vz"
+		},
+		{
+			"children": [
+				{
+					"text": "Tip: Creating a function, like the above, makes it easy to look up the CloseRate by Stage. It is used in the below table to calculate the expected revenue and makes column formulas much easier to read & maintain. "
+				}
+			],
+			"id": "rRalBgO8DpcErxgRHv0ho",
+			"type": "callout",
+			"color": "Sun",
+			"icon": "LightBulb",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Pipeline Data"
+				}
+			],
+			"id": "EhP35Rp8BOFZYJCwsC9mM",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "SpirapHcOzGlcmC_kHf7b",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Deal_Pipeline"
+								}
+							],
+							"id": "qEq-VUHQkiIwMExRM1evc",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " (if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xmJZLWSccKZ5QQAkbpv01",
+									"type": "smart-ref",
+									"blockId": "EoPjUVUYPIMWfomH5ZXnz",
+									"columnId": null,
+									"lastSeenVariableName": "Deal_Stage"
+								},
+								{
+									"text": " == \"closed\" then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rMW3gImxMZRH3SIOwA7Xw",
+									"type": "smart-ref",
+									"blockId": "ieu29HaOJbc2TAALyJZe1",
+									"columnId": null,
+									"lastSeenVariableName": "Revenue_Booked"
+								},
+								{
+									"text": " else  "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "k-eYBpkyvpyMpsFeI1C_h",
+									"type": "smart-ref",
+									"blockId": "oEisi-cwkS8f8e4BZVCXN",
+									"columnId": null,
+									"lastSeenVariableName": "Revenue_Opportunity"
+								},
+								{
+									"text": "   * probability("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tPi8WsLxFmZwvtuiW_7F4",
+									"type": "smart-ref",
+									"blockId": "EoPjUVUYPIMWfomH5ZXnz",
+									"columnId": null,
+									"lastSeenVariableName": "Deal_Stage"
+								},
+								{
+									"text": ") )"
+								}
+							],
+							"id": "TGKK64w6kkr_iKmXpW2va",
+							"type": "table-column-formula",
+							"columnId": "wo8i87LiDfijfW8UIaEIp"
+						}
+					],
+					"id": "Y3Kd1SSvwkEJEZYhO3ck2",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company"
+								}
+							],
+							"id": "sY5vM43_SmvO-Bf-pRprZ",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Veritcal"
+								}
+							],
+							"id": "G4WmyRkh-dKkcNc5IjVj3",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "9inwXUdnU7qpvMbHRn7yZ",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Deal_Stage"
+								}
+							],
+							"id": "EoPjUVUYPIMWfomH5ZXnz",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "-kX2uHEjk9VrTfxsvaWfh",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue_Opportunity"
+								}
+							],
+							"id": "oEisi-cwkS8f8e4BZVCXN",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue_Booked"
+								}
+							],
+							"id": "ieu29HaOJbc2TAALyJZe1",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue_Forecast"
+								}
+							],
+							"type": "th",
+							"id": "wo8i87LiDfijfW8UIaEIp",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "wwhZKRw_DrYGpF8pkxSdS",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company One"
+								}
+							],
+							"id": "02p1nPyVpH9wxhdflWbWk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "SP4m9fgVPK9zBRZ25bKqE"
+								}
+							],
+							"id": "lI4aBttkCKQ3fedXkJu8R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Be7UL8Z62ke4021BZ4AuO"
+								}
+							],
+							"id": "ksMZR8QLhbsmAX6sE407V",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$10000"
+								}
+							],
+							"id": "px3oiFPl7AbDh5ovBH7Sc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$11250"
+								}
+							],
+							"id": "wimHoOqGMJc81yoqZsjMS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ulEfxWg0N319mXdpRPfMf",
+							"type": "td"
+						}
+					],
+					"id": "DGPe9ykMuLA2Au1shGSPV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company  Two"
+								}
+							],
+							"id": "piyixP9ZVQ0TlApmdf1R6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "tADqTA_5IJqbNJuqwVNjI"
+								}
+							],
+							"id": "ZHisbNGlVaYoaAjjFd8aI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "vMd5-cMY951r4Z03MUki6"
+								}
+							],
+							"id": "i2EaWaD6u5bdA-NlgQqvt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$25000"
+								}
+							],
+							"id": "M2SD6ZMZ_vJ8S_n_SYkKC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KpwZRGQI7Gf8QJvUX5GHG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "b4F5mcgVpxjha3tt_GFWr",
+							"type": "td"
+						}
+					],
+					"id": "aN2okonlRd9ejZAOKecxr",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Three"
+								}
+							],
+							"id": "lqTB6lQ-tBEP4OKSnhoaX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "MEe9AQVltdT1_ZIBagTMN"
+								}
+							],
+							"id": "4OHOqTqcWfJky978LDtZy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "ioL87sTHN34h_gYXOcmmJ"
+								}
+							],
+							"id": "QQqVzZTOJI_F2oDJiwtYs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$125000"
+								}
+							],
+							"id": "wuZh1rMw2QfWlgnF7WLOr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lch5HIGDkBVmgFKp-LUrb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "B94hoa3H3Tu5J8YksnHdg",
+							"type": "td"
+						}
+					],
+					"id": "y5nyEl2D-rL4cNtAyF-v2",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Four"
+								}
+							],
+							"id": "nNN7eVuSPIA2eaWimYFeq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "YVrsPR-xCPMX-mziltOYC"
+								}
+							],
+							"id": "opisF8uhAvv5gs2pGE53x",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "ioL87sTHN34h_gYXOcmmJ"
+								}
+							],
+							"id": "_O1QBgVpLSnts2nrvX-Xv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$130000"
+								}
+							],
+							"id": "EgIRawzFZLnF6khmCJ0l8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5e1KwBOWl_ts9k1rQm_PG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Wix24Qj5RpMqf_JiukjfE",
+							"type": "td"
+						}
+					],
+					"id": "y7wJc2nEqB49ZSHUv7TRt",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Five"
+								}
+							],
+							"id": "61exWgyXV2EqpFeE1P0-Z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "MEe9AQVltdT1_ZIBagTMN"
+								}
+							],
+							"id": "Ch8hrhpUB9_cpm2EnZpDm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "ioL87sTHN34h_gYXOcmmJ"
+								}
+							],
+							"id": "KW6RmV8sQ-a0Uriywh4Hg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$75000"
+								}
+							],
+							"id": "ksUY7p8jopg0b1uaWUdQR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EWJu4tZ8ncWzMmTJM1yqT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NN9V54dBIzH1_kl4kEtRU",
+							"type": "td"
+						}
+					],
+					"id": "qKwtVSzPZqQNWlgBTnOAv",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Six"
+								}
+							],
+							"id": "PmNv2FBRt8tKrDlazJmNF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "SP4m9fgVPK9zBRZ25bKqE"
+								}
+							],
+							"id": "UJiBc0uL6BBNBr78eVHlT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Be7UL8Z62ke4021BZ4AuO"
+								}
+							],
+							"id": "ww6fkdENa0IEGaVFVgKN8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$82500"
+								}
+							],
+							"id": "eXH5c-vyx4D0JnL7FEFhe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$73500"
+								}
+							],
+							"id": "3AjhYUZshTA1Dfc3P-7K_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7Dy8JLTLtDVALzcWL7IBs",
+							"type": "td"
+						}
+					],
+					"id": "joKhlNbiXj5ZMFXLYpOBp",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Seven"
+								}
+							],
+							"id": "bD3Sn9lN64A49tL5yBA7H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "SP4m9fgVPK9zBRZ25bKqE"
+								}
+							],
+							"id": "gIW_7L-WDCR2PCFpw4b3h",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Be7UL8Z62ke4021BZ4AuO"
+								}
+							],
+							"id": "UzAYPpnU9Cblu4ssm5vPg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$65700"
+								}
+							],
+							"id": "hjI6e4ittO8fJdYhjeDxQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$105000"
+								}
+							],
+							"id": "oh5MeL1m60piKSDzMNMYm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "etYZM4af_sb9OJMOFBUpE",
+							"type": "td"
+						}
+					],
+					"id": "gub6J0_YHHab_5YIFK4i-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Eight"
+								}
+							],
+							"id": "3s91ZfgiCn2Qbk79MC6eY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "tADqTA_5IJqbNJuqwVNjI"
+								}
+							],
+							"id": "o_oMiqy9zbkFE5dyca4sk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "abruf-QTwe2VKuf31Cspl"
+								}
+							],
+							"id": "yfsYcbaRXrycGhL6dfjXn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$105000"
+								}
+							],
+							"id": "jSOMvysAgjCyWtJPpG6Yf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "uQTxM259r0J85SavgSP6p",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HvTb89gVEgKmwoWswimFk",
+							"type": "td"
+						}
+					],
+					"id": "eVmXk10yqZQ4ADFaiDWlx",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Nine"
+								}
+							],
+							"id": "md6_7I0tre4WPbCor43SF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "SP4m9fgVPK9zBRZ25bKqE"
+								}
+							],
+							"id": "DB3-s7acYln0ko3MSt9yt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "vMd5-cMY951r4Z03MUki6"
+								}
+							],
+							"id": "4MsRImJ7cwEunJgrCJw1U",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$250000"
+								}
+							],
+							"id": "ME6VOKd-hUUsvHtTisT4I",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ErVL2MEQHs91qWopvlAaK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-Fo7VpJCJVfrgvpiXjppx",
+							"type": "td"
+						}
+					],
+					"id": "rdPPv2kKSWPvrRomvwNCF",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Ten"
+								}
+							],
+							"id": "3YJOHtH5ymXGLr6FnrGT3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "MEe9AQVltdT1_ZIBagTMN"
+								}
+							],
+							"id": "YoNJRqHcFrT5E_QG8UJpe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "ioL87sTHN34h_gYXOcmmJ"
+								}
+							],
+							"id": "Y67130SOPBro8sPMTJc2z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$165000"
+								}
+							],
+							"id": "45q-Tl4PoEn40c2ePIjBE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ledOs2A5e9Cqkgmrjj7dL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pUCbNlvUBk3Rjpl9zKVwM",
+							"type": "td"
+						}
+					],
+					"id": "M4ymCOH7uYNZ8XLiqAne3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Eleven"
+								}
+							],
+							"id": "EBEYkp8_FryFXQ3ZBZkAv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "tADqTA_5IJqbNJuqwVNjI"
+								}
+							],
+							"id": "y_ECNzOhOLotI-C84CBBv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "abruf-QTwe2VKuf31Cspl"
+								}
+							],
+							"id": "cmsm1CiChDG4c408SVw41",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$42000"
+								}
+							],
+							"id": "GwBTQa78gorc494vkDTvn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kw3K4gy6r4Xk012HF-UIb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oyz4OZP11eOOzAQQNur-t",
+							"type": "td"
+						}
+					],
+					"id": "F-lpvvxFFCDkVGVCPAbbJ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Twelve"
+								}
+							],
+							"id": "8Vi0V5KKGLV9bYLZI_sc0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "MEe9AQVltdT1_ZIBagTMN"
+								}
+							],
+							"id": "iLYLytVRSLiMM4E9joIR-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "ioL87sTHN34h_gYXOcmmJ"
+								}
+							],
+							"id": "5DoQexnTTu8tm-0ksyQjv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$32000"
+								}
+							],
+							"id": "9oVYamIq7EUifOxWG3nKY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "e4kw6CinzkZMs-MsEifGa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "G_bqANWNM3DPbtPzOUz9Y",
+							"type": "td"
+						}
+					],
+					"id": "ko4avodtXtWwUjp2stQa7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Thirteen"
+								}
+							],
+							"id": "jx485ReM6qdbzxf0VDHwK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "SP4m9fgVPK9zBRZ25bKqE"
+								}
+							],
+							"id": "4U7A14pC-pTaHzqAgnHVD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Be7UL8Z62ke4021BZ4AuO"
+								}
+							],
+							"id": "XY8oZElowI5Xe7HKJpTZS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$150000"
+								}
+							],
+							"id": "JWd2-p3wYTvJCzZjJDDjj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$50000"
+								}
+							],
+							"id": "x-UZ2r-tzBEvAE43UEJtt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LCtcw-dStPTirmu-12x2I",
+							"type": "td"
+						}
+					],
+					"id": "UtYORRnqW2PY_bjdRkFZb",
+					"type": "tr"
+				}
+			],
+			"id": "jwsdH-E22OSz3M0r_DMvU",
+			"type": "table",
+			"icon": "Server",
+			"isCollapsed": false,
+			"hideFormulas": false,
+			"isHidden": false,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": " "
+				}
+			],
+			"id": "9lB3UZlCSl4ou1wnPg6G2",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": " "
+				}
+			],
+			"id": "AMG6dAhuzEIjqyB1p0yeb",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "A few more calculations and tips to reuse this template"
+				}
+			],
+			"type": "h2",
+			"id": "oz914pWzZcyGx2Qrhz8v3",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Vsw0mjJnks5BgUW4ovWcJ",
+			"type": "divider",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Duplicate this template to access all data. If you are not part of our private beta yet, contact our team or join the waitlist at www.decipad.com"
+				}
+			],
+			"id": "RSyPQ9cvaAACDVqrj-_xX",
+			"type": "callout",
+			"color": "Sun",
+			"icon": "LightBulb"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "pDYNxCbudj_eXFEdgXGx8",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "1. Reference data from a table in a results widget"
+				}
+			],
+			"type": "h3",
+			"id": "L5Av8UEP5N0mCS4or8953",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Result widgets don't currently work with tables directly (we're working on it!).  A current workaround is to create a calculation block, reference the result and assign a name, like the below . You can then select these to be displayed in a result widget."
+				}
+			],
+			"id": "9m5P4Ydz7j-JL8CMVqEv3",
+			"type": "callout",
+			"icon": "LightBulb",
+			"color": "Sun",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Forecasted_Revenue = sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "c_Uxt-qE2IO7XeejURWIF",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU",
+					"columnId": "wo8i87LiDfijfW8UIaEIp",
+					"lastSeenVariableName": "Deal_Pipeline.Revenue_Forecast"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"type": "code_line",
+			"id": "87rrG09iDPOq_2s7NJn00",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Booked_Revenue = sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "p-_SfIlIQpY1Z9xXFk6W9",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU",
+					"lastSeenVariableName": "Deal_Pipeline.Revenue_Booked",
+					"columnId": "ieu29HaOJbc2TAALyJZe1"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"type": "code_line",
+			"id": "42Oi93GBYGLqYjcdky1Bm",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Revenue_Opportunity2 = sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "v4inWHpMzFrhyCR8drKMD",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU",
+					"lastSeenVariableName": "Deal_Pipeline.Revenue_Opportunity",
+					"columnId": "oEisi-cwkS8f8e4BZVCXN"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"id": "YbXGHaYUWa9xBBhMOzUVa",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Pacing_Forecast = "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "Forecasted_Revenue",
+					"id": "ubWhVXx6NSOERvV99E3yR",
+					"type": "smart-ref",
+					"blockId": "87rrG09iDPOq_2s7NJn00"
+				},
+				{
+					"text": " / "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "Q1_Target_for_my",
+					"id": "hkz1FIDE2QnmOjW9XwAo-",
+					"type": "smart-ref",
+					"blockId": "zyTjRBRtr8DO0xopHDRQ5"
+				},
+				{
+					"text": " in %"
+				}
+			],
+			"type": "code_line",
+			"id": "nyMJh4f7YBmJotcf1c6T7",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "6U4bBH2rTx6SvNLJD353k"
+		},
+		{
+			"children": [
+				{
+					"text": "2. Add category lists to a table "
+				}
+			],
+			"type": "h3",
+			"id": "FhcR4T4DukmFqFRp1ubSX",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "We are working on enabling category lists in tables. A current workaround is to \n1. Create a list widget like the below \n2. Select the column that you want to add a category to \n3. Select the category you want to add and it creates a list"
+				}
+			],
+			"type": "callout",
+			"id": "lIGDD7gEqGYtB71h8wMBV",
+			"icon": "LightBulb",
+			"color": "Sun",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Industry"
+						}
+					],
+					"id": "hzJD0XLtK_v8dyB3ER3Nn",
+					"type": "caption",
+					"color": "Catskill",
+					"icon": "ShoppingCart"
+				},
+				{
+					"children": [
+						{
+							"text": "Entertainment"
+						}
+					],
+					"id": "J1cDDhC8MkUJI2idZ6e6z",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "YVrsPR-xCPMX-mziltOYC",
+							"value": "FinTech"
+						},
+						{
+							"id": "tADqTA_5IJqbNJuqwVNjI",
+							"value": "Government"
+						},
+						{
+							"id": "MEe9AQVltdT1_ZIBagTMN",
+							"value": "Entertainment"
+						},
+						{
+							"id": "D18T2P_-YX-pTQcwNTHWF",
+							"value": "CPG"
+						},
+						{
+							"id": "SP4m9fgVPK9zBRZ25bKqE",
+							"value": "Automotive"
+						}
+					],
+					"smartSelection": false
+				}
+			],
+			"id": "9inwXUdnU7qpvMbHRn7yZ",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Stage"
+						}
+					],
+					"id": "ONFPlnemxK33j96vr01Dw",
+					"type": "caption",
+					"icon": "Rocket",
+					"color": "Catskill"
+				},
+				{
+					"children": [
+						{
+							"text": "closed"
+						}
+					],
+					"id": "BZ5qPsE4yB6TAaSVlqsaS",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "Be7UL8Z62ke4021BZ4AuO",
+							"value": "closed"
+						},
+						{
+							"id": "abruf-QTwe2VKuf31Cspl",
+							"value": "negotiations"
+						},
+						{
+							"id": "vMd5-cMY951r4Z03MUki6",
+							"value": "contract"
+						},
+						{
+							"id": "ioL87sTHN34h_gYXOcmmJ",
+							"value": "engaged"
+						},
+						{
+							"id": "brw8CFVy4X_Or3DiY1_Lc",
+							"value": "lost"
+						}
+					]
+				}
+			],
+			"id": "-kX2uHEjk9VrTfxsvaWfh",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "PLrNJLw2l85fEb7rYKHbB"
+		},
+		{
+			"children": [
+				{
+					"text": "3. Lookup individual values from a table or data view"
+				}
+			],
+			"id": "dqoLjNmtMOuCprT2tSfQX",
+			"type": "h3",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "You can't currently drag and drop single data points from a table or data view (only aggregations). To reference individual values from a specific deal from a table create a look-up. "
+				}
+			],
+			"id": "IA4YMxa5Nv5dYgm9WNIkr",
+			"type": "callout",
+			"icon": "LightBulb",
+			"color": "Sun",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "CompanySeven_Booked_Revenue = lookup("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "Deal_Pipeline",
+					"id": "kANOzAbfmamRuum0P5gFE",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU"
+				},
+				{
+					"text": " , "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "XOVKU6RopCaPWJE0pTlTK",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU",
+					"lastSeenVariableName": "Deal_Pipeline.Company",
+					"columnId": "sY5vM43_SmvO-Bf-pRprZ"
+				},
+				{
+					"text": " ==\"Company Seven\").Revenue_Booked"
+				}
+			],
+			"type": "code_line",
+			"id": "PxyXKjB31s1EgdiarSyz0",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "CompanySeven_RevenueOppty = lookup("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "Deal_Pipeline",
+					"id": "kANOzAbfmamRuum0P5gFE",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU"
+				},
+				{
+					"text": " , "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "vym5SFpdjW0G77QyqIiIu",
+					"type": "smart-ref",
+					"blockId": "jwsdH-E22OSz3M0r_DMvU",
+					"lastSeenVariableName": "Deal_Pipeline.Company",
+					"columnId": "sY5vM43_SmvO-Bf-pRprZ"
+				},
+				{
+					"text": " ==\"Company Seven\").Revenue_Opportunity"
+				}
+			],
+			"type": "code_line",
+			"id": "ntGvp9wRjUX7R4wFpNyV7",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Deal_Seven_Percent_Change = ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "CompanySeven_Booked_Revenue",
+					"id": "cTZytgXS76n8UstY-WMMY",
+					"type": "smart-ref",
+					"blockId": "PxyXKjB31s1EgdiarSyz0"
+				},
+				{
+					"text": " - "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "CompanySeven_RevenueOppty",
+					"id": "v-FoTUXXFGCTOyiCMkICM",
+					"type": "smart-ref",
+					"blockId": "ntGvp9wRjUX7R4wFpNyV7"
+				},
+				{
+					"text": ") / "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "CompanySeven_RevenueOppty",
+					"id": "VWamlI5G-cQ4Vp9oiaFw9",
+					"type": "smart-ref",
+					"blockId": "ntGvp9wRjUX7R4wFpNyV7"
+				},
+				{
+					"text": " in %"
+				}
+			],
+			"type": "code_line",
+			"id": "O2awdiEyshbMId1-Pa9nt",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "cS-Lt8HBFM45T94oa20So",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "hye4vKAUZEnXLoneXiloP"
+		}
+	]
+}

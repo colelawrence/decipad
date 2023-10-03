@@ -51,7 +51,9 @@
         "libs/discord-customerservice-lambda/src/index.ts"
       ],
       "@decipad/docsync": ["libs/docsync/src/index.ts"],
-      "@decipad/docsync-maintenance": ["libs/docsync-maintenance/src/index.ts"],
+      "@decipad/notebook-maintenance": [
+        "libs/notebook-maintenance/src/index.ts"
+      ],
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
@@ -123,7 +125,7 @@
       "@decipad/services/images": ["libs/services/src/images"],
       "@decipad/services/invites": ["libs/services/src/invites"],
       "@decipad/services/monitor": ["libs/services/src/monitor"],
-      "@decipad/services/notebooks": ["libs/services/src/notebooks"],
+      "@decipad/services/notebooks": ["libs/services/src/notebooks/index.ts"],
       "@decipad/services/permissions": ["libs/services/src/permissions"],
       "@decipad/services/pubsub": ["libs/services/src/pubsub"],
       "@decipad/services/users": ["libs/services/src/users"],
@@ -145,7 +147,15 @@
       "@decipad/y-indexeddb": ["libs/y-indexeddb/src/index.ts"],
       "@decipad/y-lambdawebsocket": ["libs/y-lambdawebsocket/src/index.ts"],
       "@decipad/y-websocket": ["libs/y-websocket/src/index.ts"],
-      "@decipad/lambdas": ["libs/lambdas/src/index.ts"]
+      "@decipad/lambdas": ["libs/lambdas/src/index.ts"],
+      "@decipad/backend-search": ["libs/backend-search/src/index.ts"],
+      "@decipad/backend-notebook-assistant": [
+        "libs/backend-notebook-assistant/src/index.ts"
+      ],
+      "@decipad/backend-notebook-content": [
+        "libs/backend-notebook-content/src/index.ts"
+      ],
+      "@decipad/doc-verbalizer": ["libs/doc-verbalizer/src/index.ts"]
     }
   },
   "files": [],

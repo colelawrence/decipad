@@ -1,0 +1,3800 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Interactive Pricing Proposals:"
+				}
+			],
+			"type": "h1",
+			"id": "JRtj7tCMSU4dcnY-WdWec"
+		},
+		{
+			"children": [
+				{
+					"text": "LivingRoom.png"
+				}
+			],
+			"id": "gGWyB9K4w1ESAdBPndBNL",
+			"type": "img",
+			"url": "https://app.decipad.com/api/pads/oVBo4BmyGsmAVf7az8QNy/attachments/GxcwjrKhLhMnNWvwhKsPz"
+		},
+		{
+			"children": [
+				{
+					"text": "Design Services Proposal: ",
+					"bold": true
+				},
+				{
+					"text": "March 2, 2023\n"
+				},
+				{
+					"text": "Client Address",
+					"bold": true
+				},
+				{
+					"text": ": "
+				},
+				{
+					"text": "exprRef_7UYwvBHF6rZKoPhl1uRGm",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "RhZoVicEHVZ57wHcRRUeN",
+			"type": "p",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "This template is for an hourly proposal using interior design as an example. It includes an hourly rate for time and fixed costs for furniture. Duplicate and adjust for your circumstances or industry."
+				}
+			],
+			"id": "0KK6NuqVv5ltlIQc0oeWy",
+			"type": "callout",
+			"icon": "People",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Summary"
+				}
+			],
+			"type": "h2",
+			"id": "rb2CbWUdHviWmyEc06rj7"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "0lda-tSpxTGZPD_S6lDRc",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "We're excited to share our proposal for your home. You can interact with this proposal to better understand the process and play with cost scenarios. "
+				}
+			],
+			"type": "p",
+			"id": "j8yi7OzxwDT66l-MgN45O",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Our rate is "
+				},
+				{
+					"text": "exprRef_OKUMa7NiuXYzrliut_1Sf",
+					"magicnumberz": true
+				},
+				{
+					"text": " for room design, development and project management. In this proposal all costs are broken down by stage with estimated hours. We also provide a breakdown of estimated furniture costs. "
+				}
+			],
+			"type": "p",
+			"id": "9k9bDGUw1Jv1uA-4MZ1FY"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "HourlyRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "XF6BzROT4ONAzd4SZ1GO4"
+				},
+				{
+					"children": [
+						{
+							"text": "$150 per hour"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "_eoNEu7ThDvzBEyIqnYIH"
+				}
+			],
+			"id": "OKUMa7NiuXYzrliut-1Sf",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InitialFee"
+						}
+					],
+					"type": "structured_varname",
+					"id": "qmZbXOezLmMn7ec0mXIEX"
+				},
+				{
+					"children": [
+						{
+							"text": "$160"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ePFrn9lWhd96o8AmGuhZW"
+				}
+			],
+			"id": "jHl0ANjK8feyKHeV4Bvc5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Here is a summary of your estimated costs:"
+				}
+			],
+			"type": "p",
+			"id": "4uETTPEfHLa9xegz-OZXP"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Estimated project fee: "
+								},
+								{
+									"text": "exprRef_SmMELDyCq6ogID4IYS9hP",
+									"magicnumberz": true
+								},
+								{
+									"text": " for tota hours of "
+								},
+								{
+									"text": "exprRef_n049HA_8yxAasuVlIC6Kx",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "jSkTRfc8kacJ6PqW_Z-T0"
+						}
+					],
+					"type": "li",
+					"id": "hxT0mTGtpLNzuwjnD1tfN"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Estimated furniture cost: "
+								},
+								{
+									"text": "exprRef_YX1IDoCUzEfKUvVkT6JCt",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "s8V1oydDk9pZzPJ9B3GU0"
+						}
+					],
+					"type": "li",
+					"id": "51Rkga5CoE_EtrzxEgtQE"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Initial meeting fee: "
+								},
+								{
+									"text": "exprRef_KumW9941qXbSQiqIrPfDb",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "DjP_mEiE-h8lQxHk17lko"
+						}
+					],
+					"type": "li",
+					"id": "fkfR8It7yL-UFxrzTMdyx"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Total Estimate Cost: "
+								},
+								{
+									"text": "exprRef_xHHoYGLrGQnznpTFoZYN0",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "6k23LMLlIuiigf6cou8cD"
+						}
+					],
+					"type": "li",
+					"id": "TzRKKuEiT1i3EYilx0qVP"
+				}
+			],
+			"type": "ul",
+			"id": "veEO8VvIbVC2TSFgV3SQQ"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "oXol78J3cUypGSbiyuhZh"
+				},
+				{
+					"children": [
+						{
+							"text": " "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oI0PEhGZWYCEfPWd0r9BW",
+							"type": "smart-ref",
+							"blockId": "SmMELDyCq6ogID4IYS9hP",
+							"columnId": null,
+							"lastSeenVariableName": "TotalFee"
+						},
+						{
+							"text": " +  "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "o1wZob3lBfvRfVkEmIxHR",
+							"type": "smart-ref",
+							"blockId": "YX1IDoCUzEfKUvVkT6JCt",
+							"columnId": null,
+							"lastSeenVariableName": "TotalFurnitureCost"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tiTeIA-btvPsGnO8aEXH-",
+							"type": "smart-ref",
+							"blockId": "KumW9941qXbSQiqIrPfDb",
+							"columnId": null,
+							"lastSeenVariableName": "InitialMeeting"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "WHaf5zCl2OTjLepQTGUh-"
+				}
+			],
+			"id": "xHHoYGLrGQnznpTFoZYN0",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "P0HHE9NSVQmreY79tWwbk"
+		},
+		{
+			"children": [
+				{
+					"text": "Initial Fees"
+				}
+			],
+			"type": "h2",
+			"id": "Vn3DU_hIbAMiHEqF4aXME"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Y0nPQxGdo-A_WfKH1JLtr",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Before we begin design work, we will require a retainer. The retainer will be "
+				},
+				{
+					"text": "exprRef_erZAC_IgUTXzNQbOs5yCS",
+					"magicnumberz": true
+				},
+				{
+					"text": " which we will send an invoice for once you approve the proposal.  We also be sending an invoice for the opening meeting of "
+				},
+				{
+					"text": "exprRef_KumW9941qXbSQiqIrPfDb",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"type": "p",
+			"id": "k0A_gE-nwpt4sVN30exMP"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Retainer"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fl6lmeaqj2y7T794nlSS0"
+				},
+				{
+					"children": [
+						{
+							"text": "$2000"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ynLRDqkRweVR8mLo53bC6"
+				}
+			],
+			"isHidden": false,
+			"id": "erZAC-IgUTXzNQbOs5yCS",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InitialMeeting"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Xh3uCU00ci-yKJyMqBWE7"
+				},
+				{
+					"children": [
+						{
+							"text": "$160"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "UOB1z--pwyDa9jQr0Ikps"
+				}
+			],
+			"id": "KumW9941qXbSQiqIrPfDb",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "rphQzzcwzWoQ5869TdJTy"
+		},
+		{
+			"children": [
+				{
+					"text": "Hourly Fees"
+				}
+			],
+			"type": "h2",
+			"id": "xlRJBDvWcoW4QH3fMfbTm"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "lMyBqrf3guea88ZyJtnOr",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Our hourly rate is "
+				},
+				{
+					"text": "exprRef_OKUMa7NiuXYzrliut_1Sf",
+					"magicnumberz": true
+				},
+				{
+					"text": " . For your project we are estimating a total time of "
+				},
+				{
+					"text": "exprRef_n049HA_8yxAasuVlIC6Kx",
+					"magicnumberz": true
+				},
+				{
+					"text": "which comes to a fee of   "
+				},
+				{
+					"text": "exprRef_SmMELDyCq6ogID4IYS9hP",
+					"magicnumberz": true
+				},
+				{
+					"text": " . Below we have broken down the project hours by room and for project development. "
+				}
+			],
+			"type": "p",
+			"id": "uDoldQAN7IBTLKn4Ot4At"
+		},
+		{
+			"children": [
+				{
+					"text": "Our "
+				},
+				{
+					"text": "hourly rate",
+					"bold": true
+				},
+				{
+					"text": " includes all meetings, product sourcing, floor plans, moodboards, showroom visits, installations of product in home."
+				}
+			],
+			"id": "JNMHLgqJnxpGDEGv3N7Jx",
+			"type": "callout",
+			"icon": "People"
+		},
+		{
+			"children": [
+				{
+					"text": "1. Room Planning Hours"
+				}
+			],
+			"type": "h3",
+			"id": "qgXYm7reTuG3pQz4VD4JX"
+		},
+		{
+			"children": [
+				{
+					"text": "Below is a breakdown of estimated hours per room for mood board and furniture sourcing. You can select/unselect room to see an adjusted total. "
+				}
+			],
+			"id": "ZrFZXKBIUxUUaLNoeaa82",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "HoursPerRoom"
+								}
+							],
+							"id": "-cfWorCxYiE8WRUaxT7DM",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "j6rQAap25ZIWluOspajCq",
+									"type": "smart-ref",
+									"blockId": "0XXZOji1Zl7D8ok1fc-mi",
+									"columnId": null,
+									"lastSeenVariableName": "Include"
+								},
+								{
+									"text": " then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zK6iAsXcX5EBUb5iC10-r",
+									"type": "smart-ref",
+									"blockId": "mYlPXXSrvmq509d-6ndiP",
+									"columnId": null,
+									"lastSeenVariableName": "Time"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "F1HmlvU2nhGrzjXFFcykw",
+									"type": "smart-ref",
+									"blockId": "OKUMa7NiuXYzrliut-1Sf",
+									"lastSeenVariableName": "HourlyRate"
+								},
+								{
+									"text": " else 0"
+								}
+							],
+							"id": "jDvEBZjRvEfRL_F5O5Z9i",
+							"type": "table-column-formula",
+							"columnId": "UP5joaIBUP5KNuZkUwqeH"
+						}
+					],
+					"id": "0TMrRi3KuWYSgwkZ8GHDI",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Room"
+								}
+							],
+							"id": "Es_hInnJNtvd2YsKdjowL",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "hWEba1JFYLOs0t3Agx4zu",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Time"
+								}
+							],
+							"id": "mYlPXXSrvmq509d-6ndiP",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Include"
+								}
+							],
+							"id": "0XXZOji1Zl7D8ok1fc-mi",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "UP5joaIBUP5KNuZkUwqeH",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "Dzns5XUVkAmZw81BEz7Dt",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Living "
+								}
+							],
+							"id": "xbGvNM7vRG4WGshxRFqom",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "includes sourcing + mood board."
+								}
+							],
+							"id": "fyKcWBR2_aRHCNLCOHn1z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "7 hours"
+								}
+							],
+							"id": "VUYK8VIB72QomaW5sjEow",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "-VoXvEKTjLLibYdHbsZBK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SPJS5VQlFI5XxDy-i6iuw",
+							"type": "td"
+						}
+					],
+					"id": "zwmKCKCN8t68IFmEbOzOQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Dining"
+								}
+							],
+							"id": "Z7uI0UrEsRWkiYAmaQJci",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "includes sourcing + mood board."
+								}
+							],
+							"id": "nOjYhdC3Tyy5-rLiNcKSu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5"
+								}
+							],
+							"id": "QG0nYRP1POfCgkkIjmwao",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "ghp3UYom8ndXGm1j54s4V",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NOIL-zWaq46ine59jFOSs",
+							"type": "td"
+						}
+					],
+					"id": "GoCacNxJIPp00StJNsVRI",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Master Bed"
+								}
+							],
+							"id": "ftU_LtTwQan3uM-BNOsAL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "includes sourcing + mood board."
+								}
+							],
+							"id": "GwvqMKPb1-3sQRc1B1W39",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "6"
+								}
+							],
+							"id": "CfEmWQQK5hAfeBROmn0qR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "L0-IeJS__dgQ9XzcVFWj8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "J5IlCSeL8s_N33oKz-A8w",
+							"type": "td"
+						}
+					],
+					"id": "4gretu1NW-R5TdUhVW0lK",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Guest Bed"
+								}
+							],
+							"id": "jbpxPNf5OIiVB2gbHVaRz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "includes sourcing + mood board."
+								}
+							],
+							"id": "yzY8Bs4C2Khk7mAyJEXr4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "7 hours"
+								}
+							],
+							"id": "ReAGbmkX3645hjiGK5rlK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "iaqm3YrmwkoDZaD4A_Bof",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5TgSMNz6ufvkd_KNpm1ZJ",
+							"type": "td"
+						}
+					],
+					"id": "rgRCEuXa3Nqt5xKmvBiTz",
+					"type": "tr"
+				}
+			],
+			"id": "iE7hWmV-fE7UbVSblo83H",
+			"type": "table",
+			"hideFormulas": false,
+			"color": "Catskill",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalRoomPlanningCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "c6B4sypGkNqouwFTYMqWv"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qYj2eKjCkv0niIfGhXuRi",
+							"type": "smart-ref",
+							"blockId": "iE7hWmV-fE7UbVSblo83H",
+							"columnId": "UP5joaIBUP5KNuZkUwqeH",
+							"lastSeenVariableName": "HoursPerRoom.Cost"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "otK0LVXYs3pcj9VTyDcxI"
+				}
+			],
+			"id": "kvwAAZZIVwVdT5KVrIk35",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "6NO91BScdILJrnPeWCpoN"
+		},
+		{
+			"children": [
+				{
+					"text": "2. Project Development Hours"
+				}
+			],
+			"type": "h3",
+			"id": "xmF7yng2Q9gL6qlA5b0E3"
+		},
+		{
+			"children": [
+				{
+					"text": "Additional hours include our time for planning, management, installation and styling. We've broken down each part of the journey with estimated hours. We estimate "
+				},
+				{
+					"text": "exprRef_DSMKCBI3QaVMRmWGliiKF",
+					"magicnumberz": true
+				},
+				{
+					"text": " for a total cost of "
+				},
+				{
+					"text": "exprRef_AACEPBWdzV9uoMbn3DieK",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "e1X97l6N-ZWQsYbE3Do9Z"
+		},
+		{
+			"children": [
+				{
+					"text": "Schematic Meeting: ",
+					"bold": true
+				},
+				{
+					"text": "A touch point meeting to review color palettes, styles, and textiles before the design is further developed. "
+				},
+				{
+					"text": "Estimated Hours:",
+					"italic": true
+				},
+				{
+					"text": " "
+				},
+				{
+					"text": "exprRef_HlE0H8GfmkvzDpgZZZzS3",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "-clNXTWstt-WcGMBrYOI3"
+		},
+		{
+			"children": [
+				{
+					"text": "Design Plan Review Meeting: ",
+					"bold": true
+				},
+				{
+					"text": "Review completed design plan options. "
+				},
+				{
+					"text": "Estimated Hours: ",
+					"italic": true
+				},
+				{
+					"text": "exprRef_8vHz0ipuspraU7VMgUFuU",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "FaCD4K4h8pnMgX34ks0SD"
+		},
+		{
+			"children": [
+				{
+					"text": "Revisions & Final Plan: ",
+					"bold": true
+				},
+				{
+					"text": "Includes time for revisions (as needed) and development of your plan with item/cost summary. "
+				},
+				{
+					"text": "Estimated Hours: ",
+					"italic": true
+				},
+				{
+					"text": "exprRef_dQhcSFnZWIBqGNCsq_tSe",
+					"magicnumberz": true
+				},
+				{
+					"text": "    "
+				}
+			],
+			"type": "p",
+			"id": "pot-f1Txg0OWW4Bb40hIn"
+		},
+		{
+			"children": [
+				{
+					"text": "Purchasing and Installation: ",
+					"bold": true
+				},
+				{
+					"text": "Place orders for all items and communicate with vendors and coordinate deliveries etc. Optional to be onsite to project manage, not included in this proposal. "
+				},
+				{
+					"text": "Estimated Hours:",
+					"italic": true
+				},
+				{
+					"text": " ",
+					"bold": true
+				},
+				{
+					"text": "exprRef_3a_6eDsSzNlQxqkCDifXr",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "D9aXvlfMZulLbQB0CeI7D"
+		},
+		{
+			"children": [
+				{
+					"text": "Styling:",
+					"bold": true
+				},
+				{
+					"text": " We spend time in your home helping you style and organize to tie everything together! "
+				},
+				{
+					"text": "Estimated Total Hours: ",
+					"italic": true
+				},
+				{
+					"text": "exprRef_kUw2bIwtw4308bQREU__x",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "5x-xwmoJyR-hxb48Jeeri"
+		},
+		{
+			"children": [
+				{
+					"text": "Summary of hours for project development: ",
+					"italic": true
+				}
+			],
+			"type": "p",
+			"id": "vFfD1SQ698fjjjooBkekz"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Schematic"
+						}
+					],
+					"type": "structured_varname",
+					"id": "mkRPq1XJmI75cFv5Z8KCE"
+				},
+				{
+					"children": [
+						{
+							"text": "1 hour"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "8CROgu7l8s2nCfGzxCAqC"
+				}
+			],
+			"id": "HlE0H8GfmkvzDpgZZZzS3",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DesignPlan"
+						}
+					],
+					"type": "structured_varname",
+					"id": "WWgVHpca98p8EY6MoPwC4"
+				},
+				{
+					"children": [
+						{
+							"text": "2 hour"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "kdoqJKPvBI56mblqCSB_T"
+				}
+			],
+			"id": "8vHz0ipuspraU7VMgUFuU",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "FinalPlan"
+						}
+					],
+					"type": "structured_varname",
+					"id": "cq0Vm4qIDUdnoINx0jwT0"
+				},
+				{
+					"children": [
+						{
+							"text": "3.5 hour "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "AAnkiMX2xTjZshBrlylpW"
+				}
+			],
+			"id": "dQhcSFnZWIBqGNCsq-tSe",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PurchaseInstall"
+						}
+					],
+					"type": "structured_varname",
+					"id": "e8j-9RsVY0wfKJuFX7AtI"
+				},
+				{
+					"children": [
+						{
+							"text": "5.5 hour"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "vEOlZcLz_ht6N4UN-vkaz"
+				}
+			],
+			"id": "3a-6eDsSzNlQxqkCDifXr",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Styling"
+						}
+					],
+					"type": "structured_varname",
+					"id": "lHteJBio0kdyY7AAumiYF"
+				},
+				{
+					"children": [
+						{
+							"text": "7 hour"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "YE-EFAU_S9rRJ0BrhCuQz"
+				}
+			],
+			"id": "kUw2bIwtw4308bQREU__x",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Total summary:"
+				}
+			],
+			"id": "RDMaJ86uSwoOroJ6Lr4QZ",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalHours_ProjectDev"
+						}
+					],
+					"type": "structured_varname",
+					"id": "roNIfAk8UWj60AYKR378x"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "B7U6QaOTAhcHUXxRqjYL2",
+							"type": "smart-ref",
+							"blockId": "HlE0H8GfmkvzDpgZZZzS3",
+							"lastSeenVariableName": "Schematic"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ys7E3z9ndQ9c5UxXn0dBy",
+							"type": "smart-ref",
+							"blockId": "8vHz0ipuspraU7VMgUFuU",
+							"lastSeenVariableName": "DesignPlan"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "u9jjJiikdY3mKpZeof1wS",
+							"type": "smart-ref",
+							"blockId": "dQhcSFnZWIBqGNCsq-tSe",
+							"lastSeenVariableName": "FinalPlan"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HkN-mh8JX0YmRUfynRASh",
+							"type": "smart-ref",
+							"blockId": "3a-6eDsSzNlQxqkCDifXr",
+							"lastSeenVariableName": "PurchaseInstall"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Ml9UkRF7hAO5Eh6xlBh52",
+							"type": "smart-ref",
+							"blockId": "kUw2bIwtw4308bQREU__x",
+							"lastSeenVariableName": "Styling"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "eqXPHRxGLCDB2tsLxJfsR"
+				}
+			],
+			"id": "DSMKCBI3QaVMRmWGliiKF",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalFee_ProjectDev"
+						}
+					],
+					"type": "structured_varname",
+					"id": "QoRwd2WHxvy8sXdKq9HOB"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9B96kFKFQU3O6IQs_s5GT",
+							"type": "smart-ref",
+							"blockId": "DSMKCBI3QaVMRmWGliiKF",
+							"lastSeenVariableName": "TotalHours_ProjectDev"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DhE3wbnUJdlVVkj8481Z8",
+							"type": "smart-ref",
+							"blockId": "OKUMa7NiuXYzrliut-1Sf",
+							"lastSeenVariableName": "HourlyRate"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QZ8JtQRcHOa1dBE0qMx2Y"
+				}
+			],
+			"id": "AACEPBWdzV9uoMbn3DieK",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "cgki13kWU3trBD9MSEPqh",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Total Fees for Time"
+				}
+			],
+			"id": "6CY0esIKfhyo_jEvvW1R5",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Total cost for time and project development: "
+				},
+				{
+					"text": "exprRef_SmMELDyCq6ogID4IYS9hP",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "PkzkPuQ5r3uGPeCEUhDkt"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalHours"
+						}
+					],
+					"type": "structured_varname",
+					"id": "MsivQhauTHm5u3GWHHNHY"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZaAqFELTr4UvPj6iDBfht",
+							"type": "smart-ref",
+							"blockId": "iE7hWmV-fE7UbVSblo83H",
+							"columnId": "mYlPXXSrvmq509d-6ndiP",
+							"lastSeenVariableName": "HoursPerRoom.Time"
+						},
+						{
+							"text": ", "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l7Fm4f5yg-tS2hSv14ypN",
+							"type": "smart-ref",
+							"blockId": "iE7hWmV-fE7UbVSblo83H",
+							"columnId": "0XXZOji1Zl7D8ok1fc-mi",
+							"lastSeenVariableName": "HoursPerRoom.Include"
+						},
+						{
+							"text": ") + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gZhJV_b2A5H04QkDXgUi7",
+							"type": "smart-ref",
+							"blockId": "DSMKCBI3QaVMRmWGliiKF",
+							"columnId": null,
+							"lastSeenVariableName": "TotalHours_ProjectDev"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "8KN98_9sc58VQPxXbFx1c"
+				}
+			],
+			"id": "n049HA_8yxAasuVlIC6Kx",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalFee"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0B9bqwXaDx1RS3RrSFNjv"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CTIjGs7h_qxQuXQocvtz_",
+							"type": "smart-ref",
+							"blockId": "kvwAAZZIVwVdT5KVrIk35",
+							"columnId": null,
+							"lastSeenVariableName": "TotalRoomPlanningCost"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ePI1GuSg2fbsjGtuUn5uK",
+							"type": "smart-ref",
+							"blockId": "AACEPBWdzV9uoMbn3DieK",
+							"columnId": null,
+							"lastSeenVariableName": "TotalFee_ProjectDev"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "gjLqBBQ6NWCQzwWlxi9nb"
+				}
+			],
+			"id": "SmMELDyCq6ogID4IYS9hP",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "YFt_LRpAyMPAr6Kh7HZ7C",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "Furniture Costs: Pivot View Breakdown"
+				}
+			],
+			"type": "h2",
+			"id": "rx5bnmbt_3HUL47yd2rwy"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "VoceUYgT4QFSeqjFBTYXT",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Below is an estimate of furniture costs for each room. You can expand the folders to see the breakdown. "
+				},
+				{
+					"text": "Estimated Total:",
+					"italic": true
+				},
+				{
+					"text": " "
+				},
+				{
+					"text": "sum(Total_Rooms_Items.EstimatedCost)",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "qGjpYZFaqEx4n4Af0gkNX"
+		},
+		{
+			"children": [
+				{
+					"text": "TotalFurnitureCost = sum(Total_Rooms_Items.TotalCost)"
+				}
+			],
+			"type": "code_line",
+			"id": "YX1IDoCUzEfKUvVkT6JCt",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view"
+								}
+							],
+							"id": "mEgVadTi5d8K3VsUftRUZ",
+							"type": "data-view-name"
+						}
+					],
+					"id": "0kRXmc0QcFfmpJu672GqE",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SwJELp2dkiOPwAVEm77F0",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Room",
+							"name": "Room"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "PumrlagkrLYpwPIlmhZiJ",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Item",
+							"name": "Item"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VcjrWskMdT1v3QjJhZfE5",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "EstimatedCost",
+							"name": "EstimatedCost",
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MxawCM0NDpRvovZDzQOpz",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "TotalCost",
+							"name": "TotalCost",
+							"aggregation": "Sum"
+						}
+					],
+					"id": "t0s7Ucq_DWegRcctsTIl2",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "bakdr9ztDbwUUcnteFIAd",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "N31aH-f-pIl7ujc5SHw75"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix: Detailed Furniture List"
+				}
+			],
+			"id": "NturCw_yO42xxAtYuaroK",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "ICwB9-t_ArzNW9cqQSqFU",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "You can edit the below information and add/remove pieces to update your cost estimate. "
+				}
+			],
+			"type": "p",
+			"id": "YZn8faLoO39qMqKVhDvrR",
+			"expandedGroups": [
+				"4876f89796260f971c5fff6978e37708acc9a36ae1e99ff1ec4e750a844d86a3"
+			]
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Living"
+								}
+							],
+							"id": "zIvsmGQOTULorPf4eEpkh",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "N_QSqUj_i6aSF-F-DbvAk",
+									"type": "smart-ref",
+									"blockId": "cyVtJGhQK6rRqraUKfPzs",
+									"columnId": null,
+									"lastSeenVariableName": "Include"
+								},
+								{
+									"text": " then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "um5SsRVdNmHpc6zMdVVQB",
+									"type": "smart-ref",
+									"blockId": "1R2hV3F9MGrF6yM6b9bdt",
+									"columnId": null,
+									"lastSeenVariableName": "EstimatedCost"
+								},
+								{
+									"text": " else $0"
+								}
+							],
+							"id": "y7Qa_0a7umnPRO809fM-E",
+							"type": "table-column-formula",
+							"columnId": "Fqc2ONJW62dHMTV2nYZ0U"
+						}
+					],
+					"id": "zv3OOUQW1U8xV2pYypH_6",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "IAEL6Qusgq6aHY2ATfKNV",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Room"
+								}
+							],
+							"id": "kHVRZUII1w8QWEwghYX_T",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "65i3ndmvFhHXnki6gFQcd",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Include"
+								}
+							],
+							"id": "cyVtJGhQK6rRqraUKfPzs",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "EstimatedCost"
+								}
+							],
+							"id": "1R2hV3F9MGrF6yM6b9bdt",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "TotalCost"
+								}
+							],
+							"id": "Fqc2ONJW62dHMTV2nYZ0U",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "3yhJzu3zH4gM0T9n81WEw",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rug"
+								}
+							],
+							"id": "DvzPvvvrhUp3Me_2heX1Z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "tcsLNpjlKPpgh3op3liQv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "k16MAJ4_QrMV-jZsywKS8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$2000"
+								}
+							],
+							"id": "zxiW9KbyEzyMTr0TVBPDG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TNQ0RApST5G--mcwnejyJ",
+							"type": "td"
+						}
+					],
+					"id": "fv_D1CnnoXTUyM2ujLjrK",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Pillows"
+								}
+							],
+							"id": "ZRswtB7Q0uRKjmYGMoKbE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "42EdNBqec3CCKRUPedzb8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "PZuuVDycJa1K5n7IAG4TN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1200"
+								}
+							],
+							"id": "AP5-Q2w5HP4uJjaWzc4oy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wJ4HHl1gqE9-KKgkjCsQ8",
+							"type": "td"
+						}
+					],
+					"id": "0GPIi5tPS5gMzsUKrhQv7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Chair"
+								}
+							],
+							"id": "PHoM7u3W1EDTCt721qKs9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "_EATpZ2YL2XxNXcb01S5o",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "hQxwN--y33HbPATYyOXyL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$3500"
+								}
+							],
+							"id": "-t6Ukb8G20c2iHvMq6CyL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AodDtZeUp8UsQIphrJsM-",
+							"type": "td"
+						}
+					],
+					"id": "tDHIaUdcEJ9FapVE7Nl3U",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Side Tables"
+								}
+							],
+							"id": "GiCsnNU1r2BX30lhG700P",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "08PUWYErlyQxqlIy1WlMF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "BNvRe4FVGcFuQLIxOqgCE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "jXtWKNvlLDKsKqlBbpEvh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mtEeuq60oEEe6XronbQR_",
+							"type": "td"
+						}
+					],
+					"id": "6eErwxrO18IhffHvExBUK",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Storage"
+								}
+							],
+							"id": "jMMNxd4jvdcHZLPqkv1EP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "3n7p-Q4B2sHMX7ebwRJV9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "R-rK5ok8Lkbdbm2_QWSN1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$2000"
+								}
+							],
+							"id": "IvUp5eSHt8dryt1ew9BfQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jiElWK1wq3g412DLoLgE0",
+							"type": "td"
+						}
+					],
+					"id": "NN4VzJw2qfuUbVubcYcT4",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Paint "
+								}
+							],
+							"id": "M9aSRby8Uo8tfnaRB0jyI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "SPXSPUd6gn416acEoqPch",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "udEV_pv81fUZ4GexRzx8n",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$2000"
+								}
+							],
+							"id": "0d3BD8vJE4BRV7Eooixt9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "uy39EQFFbl2yhbgRfca-B",
+							"type": "td"
+						}
+					],
+					"id": "pXSP5us_SJCvGtpxEKUIi",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Wallpaper"
+								}
+							],
+							"id": "spbngBRHgXjsH3eibWqR-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "g5wC_bMoNVUdfy7ap7tVE"
+								}
+							],
+							"id": "N-0poRdAZ78CG3cTY8swI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "XyPI5wgfmOyaUDjcI1_8q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1500"
+								}
+							],
+							"id": "DV3d97BRzFFt0Nlm9S7BD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3ZXreCJWxhmjdbO3rypzH",
+							"type": "td"
+						}
+					],
+					"id": "ztrRCdyzCg368HArkMhvZ",
+					"type": "tr"
+				}
+			],
+			"id": "TSF_BNVXngCs1msov1zDa",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Dining"
+								}
+							],
+							"id": "sXpcoh0HchMcmNA5ajGOA",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4G5bOvUiUQxZhxKdUGsOY",
+									"type": "smart-ref",
+									"blockId": "Tc5Mfi2rSotaJbSna869e",
+									"columnId": null,
+									"lastSeenVariableName": "Include"
+								},
+								{
+									"text": " then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "jd4jZhbt_UuMg-vO5kTo9",
+									"type": "smart-ref",
+									"blockId": "d2fAs4Ox8QNPRCvNMQTCl",
+									"columnId": null,
+									"lastSeenVariableName": "EstimatedCost"
+								},
+								{
+									"text": " else $0"
+								}
+							],
+							"id": "at-OThgBxO4xc70CpJ128",
+							"type": "table-column-formula",
+							"columnId": "pwmmCKQOFWwPendxpURLj"
+						}
+					],
+					"id": "gknOU9Gv2hGucEtMDRxcm",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "jWDlHwlCHfrUy9DpfJ0Bg",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Room"
+								}
+							],
+							"id": "03jDmDNIm7g93SAK-WxYG",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "65i3ndmvFhHXnki6gFQcd",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Include"
+								}
+							],
+							"id": "Tc5Mfi2rSotaJbSna869e",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "EstimatedCost"
+								}
+							],
+							"id": "d2fAs4Ox8QNPRCvNMQTCl",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "TotalCost"
+								}
+							],
+							"id": "pwmmCKQOFWwPendxpURLj",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "vRVIzdKrHiR9kx8EOgZUY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Chairs"
+								}
+							],
+							"id": "9EQEd8yu-zQk030alz9iZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "hBjuRlktBgMCuNgPi6xAB"
+								}
+							],
+							"id": "ZkPH_6IbCZ2_dftFhwZQk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "Rc0Bhs_UuUxrXSaPmVN3R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$2000"
+								}
+							],
+							"id": "Cwaag1BJaZ3Jku980hwEB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Lyfb-luNWXo4HYiCA8f9q",
+							"type": "td"
+						}
+					],
+					"id": "VEseF3DmW7__ByNXM8FXj",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Light over table"
+								}
+							],
+							"id": "wVkozEPsQMNzHCvJ6ViAK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "hBjuRlktBgMCuNgPi6xAB"
+								}
+							],
+							"id": "uQ1YqZKLPgI4sXCNru46J",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "IAKMFPfXTcXK0NP0oCmqo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$500"
+								}
+							],
+							"id": "LrzL2y2Z1VSdwCh7nxOIv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rsr-rM9sSVXABUD2Na3d1",
+							"type": "td"
+						}
+					],
+					"id": "B1DHZKIslEaZ1SsNNMRHe",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Lights over bars"
+								}
+							],
+							"id": "gTvlxpgXLaxOQ0Jv_pdJ2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "hBjuRlktBgMCuNgPi6xAB"
+								}
+							],
+							"id": "u7_Fsdy43wRHZAJWWfEY7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "xaNpqa6rEqQIPs_G1V7cY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$800"
+								}
+							],
+							"id": "g0f0eAc4w6o9DyBJOLxXE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kwLbNJXBQE4vxSZQuOwGt",
+							"type": "td"
+						}
+					],
+					"id": "82-oI_vIF2FuVA380vmsv",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Wallpaper"
+								}
+							],
+							"id": "rTMpKSz5xUHtdveYeOJNh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "hBjuRlktBgMCuNgPi6xAB"
+								}
+							],
+							"id": "EjkHAGZ8j1f8G75Q2j0U7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "3ej3OUNY2wWQghXXWJBOO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1500"
+								}
+							],
+							"id": "fAv6gsoFY6Z1UFGdGoXPf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DnDdbolw1g_FaWoLMfeZ2",
+							"type": "td"
+						}
+					],
+					"id": "VLz4Ycf-xLrafEzO8AbNY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Dining Table"
+								}
+							],
+							"id": "0_KXi4JIi3_ZQUGWUcc_3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "hBjuRlktBgMCuNgPi6xAB"
+								}
+							],
+							"id": "Rj9DZPtvDDmIhW7Yu19jm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "hzqvOJi_rpI259vH7FVvy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1800"
+								}
+							],
+							"id": "7QCDKW9X3NhIBneS4blKv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hbLJ_O-OUCQ5YovH_Fopo",
+							"type": "td"
+						}
+					],
+					"id": "Z6SHHuDzpc5vK62cHr4V9",
+					"type": "tr"
+				}
+			],
+			"id": "8rE42A4yrABumyKNR2sug",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MasterBed"
+								}
+							],
+							"id": "UrWaBhFXSH1JrZ5qzCPi7",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pXk1g9dNYKYq1yj1-9F4x",
+									"type": "smart-ref",
+									"blockId": "OMT_ltuZuu5GVbgasGkOY",
+									"columnId": null,
+									"lastSeenVariableName": "Include"
+								},
+								{
+									"text": " then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rXruoyccLtlwrL8ULddkJ",
+									"type": "smart-ref",
+									"blockId": "zkDmFdVp2wE4goxiid80h",
+									"columnId": null,
+									"lastSeenVariableName": "EstimatedCost"
+								},
+								{
+									"text": " else $0"
+								}
+							],
+							"id": "ThS-9s-xncIXFCO86Zd92",
+							"type": "table-column-formula",
+							"columnId": "dmG5EGq9AwCkO_P2h2QHj"
+						}
+					],
+					"id": "z3it503r1vaiplRflJSG_",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "X8eKvVraPMTJVMyf43oLs",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Room"
+								}
+							],
+							"id": "dSjY8y-lzNzvsETlnrUFO",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "65i3ndmvFhHXnki6gFQcd",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Include"
+								}
+							],
+							"id": "OMT_ltuZuu5GVbgasGkOY",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "EstimatedCost"
+								}
+							],
+							"id": "zkDmFdVp2wE4goxiid80h",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "TotalCost"
+								}
+							],
+							"id": "dmG5EGq9AwCkO_P2h2QHj",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "nQAQ2dCfF_-k-lnU3Rcc0",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rug"
+								}
+							],
+							"id": "TwvxwpxUq3BW8XdXB_n36",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "nL15D_iiyRWLJ8xl0OhtD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "1TzEAOO0FTIUGK-ra9kdt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1200"
+								}
+							],
+							"id": "OjNWGlNm_ag9wcmdLVO7F",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1oSdT8QUwjCMA0rRMZ8zW",
+							"type": "td"
+						}
+					],
+					"id": "D8tVkrEjwVMIvdSa4Xc7c",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Dresser"
+								}
+							],
+							"id": "gLyC1yH5jlWxfRLOIjNvO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "HJyh3f5FUYt7njb2JztRj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "duVVBBkCJGgdKuiciyP0Z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "rUHjP8Wt78nTMn00-9TBI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bB2Kp-Xy3XrEK5WtfiMpw",
+							"type": "td"
+						}
+					],
+					"id": "RcrLb2fnPDfGyeSpHqrct",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Paint"
+								}
+							],
+							"id": "9Vng0cjQMpDm8ZFR421C6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "IONlWs6bjdCTDZ_0dzQz2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "AQHRiOJhBaAi5_otD6tbW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "DDfWWMeB2kU1B0qF11DE-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oAIOHMENqU4izkyGq4eoJ",
+							"type": "td"
+						}
+					],
+					"id": "-KSa7xR9yryiub59Z9ZBB",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Side tables"
+								}
+							],
+							"id": "CwjS-poaEuk9iGxWG-wpY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "7YxZ0MnxyLqzYgaqVqivK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "2qHO1NUyDzto8OvB7w5mc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$600"
+								}
+							],
+							"id": "zYRFN6r18iwCEJNLIUxvH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xSlu6qqK99TvFZOh7Gw60",
+							"type": "td"
+						}
+					],
+					"id": "zi3mpctpq2lD6Lvq9IihY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Light overhead"
+								}
+							],
+							"id": "muUF5R8mJyxleFAbuwq4H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "wxFq4GJo0z5g8rJmHmNez",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "hhewAe-7D-Pzpl5uJml6k",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$500"
+								}
+							],
+							"id": "Py1HY150eZkJ2MS8fPTfN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aVnX5U-F03CzyqHkOjKZI",
+							"type": "td"
+						}
+					],
+					"id": "-L0K7bjQy_80j607mgvi3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Sconces"
+								}
+							],
+							"id": "4X-9xY-bkJg7omNMS42GR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "dp4inO8f-A2qZeqxQWggE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "iCr9ckw2zdu6W5jtFAruz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$600"
+								}
+							],
+							"id": "maTTO6l0oDtC63L-bVNJ3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ahB76pkhE0Pw-4ZwkUzP-",
+							"type": "td"
+						}
+					],
+					"id": "QFE0YEChZwe-GcgkqmPpV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Paint"
+								}
+							],
+							"id": "Kh5A-_fwR8o1KtQogNTuD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "ayj0hi7O3PUxEfspcwGX-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "IHKF47qYRiMMloTIW6LdM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1500"
+								}
+							],
+							"id": "QzN5iGs4E22rsDHq0vNtq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ouGR1IF2__m7wTwZ8mTiV",
+							"type": "td"
+						}
+					],
+					"id": "zE_hui9Wu3w3LqWn7VHWZ",
+					"type": "tr"
+				}
+			],
+			"id": "Px6sFNuUSjkUrOjVcWo6K",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "GuestBed"
+								}
+							],
+							"id": "VkiOYLfPyjVRT16A3WZdj",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "efvKE2sh_iWA_PW7wwFi2",
+									"type": "smart-ref",
+									"blockId": "w_F_M8NPztiDiBb979N_0",
+									"columnId": null,
+									"lastSeenVariableName": "Include"
+								},
+								{
+									"text": " then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Tg9EkXzJYOKxXE_xboDHz",
+									"type": "smart-ref",
+									"blockId": "wdPO5qVlkd0tTGwasCR1Y",
+									"columnId": null,
+									"lastSeenVariableName": "EstimatedCost"
+								},
+								{
+									"text": " else $0"
+								}
+							],
+							"id": "zxaZt6n0OdnrOo4SnOmcW",
+							"type": "table-column-formula",
+							"columnId": "uBaLKBo1ULmPT_I2TTH7V"
+						}
+					],
+					"id": "pwC_buy4Yi8qW1-uCYk3M",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "qxIMryDF731l_wbf1L8a-",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Room"
+								}
+							],
+							"id": "11aKFP7QWR9ZYBe2Kd7Ip",
+							"type": "th",
+							"cellType": {
+								"kind": "dropdown",
+								"id": "65i3ndmvFhHXnki6gFQcd",
+								"type": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Include"
+								}
+							],
+							"id": "w_F_M8NPztiDiBb979N_0",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "EstimatedCost"
+								}
+							],
+							"id": "wdPO5qVlkd0tTGwasCR1Y",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "TotalCost"
+								}
+							],
+							"id": "uBaLKBo1ULmPT_I2TTH7V",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "Ere74m4xllj9USdqwU1bz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Chairs"
+								}
+							],
+							"id": "eTN67YBlBdXOmN9mMojCU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FLqF4T9F4XWMoPy_1MhcC"
+								}
+							],
+							"id": "THzVRhO885-dGp46kSpR9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "scltO6b_e6yI9O3vC0zl9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "L2XiiYq-EepHNLR_DSbJL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6-0X1aRIq2qY6jTKtPimF",
+							"type": "td"
+						}
+					],
+					"id": "ZjZsBs24B8X_EnDkysI-s",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bedding"
+								}
+							],
+							"id": "NaWqHdrK1jDPggo7QTKdz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FLqF4T9F4XWMoPy_1MhcC"
+								}
+							],
+							"id": "DydH6o6WlyEbsaT2pAfX0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "5mf1A8AvzVbJx6PwLyMjg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "X6u90oR5pKn7gKDur2aBK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JzXp4ozqfH3jVVYido9wk",
+							"type": "td"
+						}
+					],
+					"id": "FZDzMMoQdlkkxfSSXouAa",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Dresser"
+								}
+							],
+							"id": "UVbSWWKmk_5Z-uITVr9Ye",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FLqF4T9F4XWMoPy_1MhcC"
+								}
+							],
+							"id": "L0z61h_Cm5nVWZzo_kgiq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "J_Zr14CrFOhZPrx09rx8J",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "oS_fkUZxJVPee_TnsumYc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "v49Lmls4O8QclaM0csXao",
+							"type": "td"
+						}
+					],
+					"id": "6tEc3-2tAn-JgJJrTLW9u",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Paint"
+								}
+							],
+							"id": "J5CCVs-rHat25GjFesmAz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "uBGHI9MyBf9v6UABxBOEQ"
+								}
+							],
+							"id": "ueqREaTcskTRCwStq0wzH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "XoJkdAJ0p7cw7m54gKrcH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1000"
+								}
+							],
+							"id": "PyuvNEkBbUwCNnLEIhC3w",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ApTEbkKlC6IxT5QoAy3-B",
+							"type": "td"
+						}
+					],
+					"id": "hUNx3k7vdl1Pl1QHYo6AR",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Side Tables"
+								}
+							],
+							"id": "uW9shAh_OD4jVuErbqTP3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FLqF4T9F4XWMoPy_1MhcC"
+								}
+							],
+							"id": "f4XkB_yz2ELHaMdyCVN58",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "jo_bv-tIQpVT2uV43mSND",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$600"
+								}
+							],
+							"id": "EsKfr30gA-0SLggt_RxjW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8P3qj9lf4mJgH_CLx-QXH",
+							"type": "td"
+						}
+					],
+					"id": "SNwI1iELM-ll3Bem_uKFm",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Light overhead"
+								}
+							],
+							"id": "yZ67t6d0cQ13P4qMLah2j",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FLqF4T9F4XWMoPy_1MhcC"
+								}
+							],
+							"id": "O8rApXrjwosKecTx9Pkof",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "_fb6SnGIVmWc5AiJXmo6b",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$500"
+								}
+							],
+							"id": "GamnLielqhr4AuFLUfTq7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iVzspaLLjNFOjcymxLuuU",
+							"type": "td"
+						}
+					],
+					"id": "2par7IpGbTdEn4Iufdpev",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Sconces"
+								}
+							],
+							"id": "6vW2SREFcGw_m_upPT1xK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "FLqF4T9F4XWMoPy_1MhcC"
+								}
+							],
+							"id": "YK-UEWRCsjw9rzsFPgEAY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "0m8EpW58g4ak0IRZxmjlc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$600"
+								}
+							],
+							"id": "T0AO05wN_G8M9nEno3uB_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "f5J0KuhqssLAG35x33CtX",
+							"type": "td"
+						}
+					],
+					"id": "FXoUtvdIVVvwdRPULyJbL",
+					"type": "tr"
+				}
+			],
+			"id": "BhwXidPY6yB-XsR_DC5hh",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Total_Rooms_Items"
+						}
+					],
+					"type": "structured_varname",
+					"id": "m6CgYWaVU31xjJNuckD2g"
+				},
+				{
+					"children": [
+						{
+							"text": "concatenate(concatenate(concatenate("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XekE8a5xLCFHtXT4Dp7Q0",
+							"type": "smart-ref",
+							"blockId": "8rE42A4yrABumyKNR2sug",
+							"lastSeenVariableName": "Dining"
+						},
+						{
+							"text": ", "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mFTWeqZLn47yNh4g_xV6F",
+							"type": "smart-ref",
+							"blockId": "TSF_BNVXngCs1msov1zDa",
+							"lastSeenVariableName": "Living"
+						},
+						{
+							"text": ") , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "K6tOpuZaPK1NCAUiPEXrT",
+							"type": "smart-ref",
+							"blockId": "Px6sFNuUSjkUrOjVcWo6K",
+							"lastSeenVariableName": "MasterBed"
+						},
+						{
+							"text": " ), "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "F72OTNhgHnBO3IIAqE9OB",
+							"type": "smart-ref",
+							"blockId": "BhwXidPY6yB-XsR_DC5hh",
+							"lastSeenVariableName": "GuestBed"
+						},
+						{
+							"text": " ) "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "PzbRHnSAX7ASE0QI-iceF"
+				}
+			],
+			"id": "N31aH-f-pIl7ujc5SHw75",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "d3WPIBPFFp2_jUsyC5VH6"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix - Input Forms"
+				}
+			],
+			"id": "CRjRfWqigbbGBBMn-Z_Fb",
+			"type": "h3",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Room"
+						}
+					],
+					"id": "KiGFVb7KaHX_CxvRljknw",
+					"type": "caption",
+					"icon": "Wallet"
+				},
+				{
+					"children": [
+						{
+							"text": "Select"
+						}
+					],
+					"id": "G2fDaEZT3-Iw6Qe5EsxUR",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "g5wC_bMoNVUdfy7ap7tVE",
+							"value": "Living"
+						},
+						{
+							"id": "hBjuRlktBgMCuNgPi6xAB",
+							"value": "Dining"
+						},
+						{
+							"id": "uBGHI9MyBf9v6UABxBOEQ",
+							"value": "Master Bed"
+						},
+						{
+							"id": "FLqF4T9F4XWMoPy_1MhcC",
+							"value": "Guest Bed"
+						}
+					]
+				}
+			],
+			"id": "65i3ndmvFhHXnki6gFQcd",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "string"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Address"
+						}
+					],
+					"id": "TLKUbm9LoZwMQcpC8yFvp",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "New York, New York"
+						}
+					],
+					"id": "v7rIMmZTTz0HVCe5U2aWC",
+					"type": "exp"
+				}
+			],
+			"id": "7UYwvBHF6rZKoPhl1uRGm",
+			"type": "def",
+			"variant": "expression",
+			"coerceToType": {
+				"kind": "string"
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "sI24SeaQJE3B2VYoNUSIL"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "bvWUaIg3a5wSGbkdd4-A1"
+		}
+	]
+}

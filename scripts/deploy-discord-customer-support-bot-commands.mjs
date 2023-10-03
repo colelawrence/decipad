@@ -98,6 +98,47 @@ process.on('unhandledRejection', (err) => {
         },
       ],
     },
+    {
+      name: 'templates',
+      type: 1,
+      application_id: process.env.DISCORD_APP_ID,
+      description: 'manage the Decipad notebook templates',
+      options: [
+        {
+          name: 'add',
+          description: 'adds a template',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description: 'The notebook URL you want to turn into a template',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'remove',
+          description: 'removes a template',
+          type: 1,
+          options: [
+            {
+              name: 'url',
+              description:
+                'The notebook URL you want to remove from the template list',
+              required: true,
+              type: 3, // string
+            },
+          ],
+        },
+        {
+          name: 'list',
+          description: 'lists all templates',
+          type: 1,
+          options: [],
+        },
+      ],
+    },
   ];
 
   // For authorization, you can use either your bot token

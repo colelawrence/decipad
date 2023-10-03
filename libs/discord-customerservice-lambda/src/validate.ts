@@ -7,7 +7,7 @@ import {
 import Boom from '@hapi/boom';
 import nacl from 'tweetnacl';
 import { discord, discord as discordConfig } from '@decipad/backend-config';
-import { getHeader } from './utils';
+import { getHeader } from './utils/getHeader';
 import type { Command } from './command';
 
 function validateRequestHeaders(

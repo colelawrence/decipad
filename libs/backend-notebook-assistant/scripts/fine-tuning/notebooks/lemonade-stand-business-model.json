@@ -1,0 +1,1642 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Lemonade Stand Business Model"
+				}
+			],
+			"type": "h1",
+			"id": "gBs-nnwBZtVLdfqNEbdSI"
+		},
+		{
+			"children": [
+				{
+					"text": "This simple financial model explores your costs, profits and ownership of starting a business, using the Lemonade Stand Case Study. It covers a span of 5 years and concentrates on sales of lemonade just in the summer."
+				}
+			],
+			"type": "p",
+			"id": "XvSG-k_rl73-FRtmfObCE"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "IygqhFNKevTW2eJl0DMmL",
+			"type": "img",
+			"url": "https://dev.decipad.com/api/pads/pPbu2apT5BzUUA5EJg3xT/attachments/VkEvQ5GqLWVZCe6D0KBax"
+		},
+		{
+			"children": [
+				{
+					"text": "Company Ownership"
+				}
+			],
+			"id": "giqv6D3Q2kZDLZtwI7soP",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "An investor is ready to provide the capital needed to build your Lemonade Stand and finance the working capital for the first year. In exchange, you will give them a portion of the company ownership."
+				}
+			],
+			"type": "p",
+			"id": "APbOHvfCAsMEB-QRfclMa"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Investor"
+								}
+							],
+							"id": "nw7IfdUJ9XcRw9CZadsBx",
+							"type": "caption",
+							"icon": "Percentage"
+						},
+						{
+							"children": [
+								{
+									"text": "35%"
+								}
+							],
+							"id": "XBrZYOfYHG-yuF7Pbbv7-",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nYGtq6U6A17aNhwJAnOUn",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "35"
+						}
+					],
+					"id": "BicukLwyligTemwH6uVb7",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "GDFDidxbwp2v1Wvjlk2Fk",
+					"blockId": "-Ps-1MM1mrw-0iNuYrX0b",
+					"type": "display",
+					"varName": "You",
+					"icon": "AnnotationWarning"
+				}
+			],
+			"id": "mUlHpzktynS9EPGqfIoJH",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "You"
+						}
+					],
+					"type": "structured_varname",
+					"id": "YcSuuVlWIRZeqRlotKE9z"
+				},
+				{
+					"children": [
+						{
+							"text": "1-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "s_URnzZNyEkrKIGuIfkhY",
+							"type": "smart-ref",
+							"blockId": "BicukLwyligTemwH6uVb7",
+							"columnId": null,
+							"lastSeenVariableName": "Investor"
+						},
+						{
+							"text": " in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "kC0my5-vjebH0AVjd_WIA"
+				}
+			],
+			"id": "-Ps-1MM1mrw-0iNuYrX0b",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Investment"
+				}
+			],
+			"id": "fbuxSErBvNNAQ-QOeoXym",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "You will need to build a stand that allows you to produce and sell lemonades. Please define the investment amount."
+				}
+			],
+			"type": "p",
+			"id": "H9KG3LHAvLn5KamzK9It7"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Stand"
+						}
+					],
+					"id": "7pif0fvrUldl7YHx7vu_s",
+					"type": "caption",
+					"icon": "Wallet"
+				},
+				{
+					"children": [
+						{
+							"text": "300 USD"
+						}
+					],
+					"id": "PaM5ug1DAyVoYPihLZGPp",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "iW9VDzntJqHZklD7yx0ZU",
+					"type": "slider",
+					"max": "500",
+					"min": "0",
+					"step": "50",
+					"value": "300"
+				}
+			],
+			"id": "wA-vi-DrDFPSIblIIYfmS",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "When your business closes at the end of year five, you can expect to sell the stand for 20% of its original cost."
+				}
+			],
+			"type": "p",
+			"id": "Rfxg0ZOADv73h6CXV9XwH"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "nulUGpthgOPisDVFElhHY"
+		},
+		{
+			"children": [
+				{
+					"text": "Production"
+				}
+			],
+			"type": "h2",
+			"id": "b7RMVCh35dKG7fAr5ZkbS"
+		},
+		{
+			"children": [
+				{
+					"text": "Define the number of lemonades you wish to sell over one summer. "
+				}
+			],
+			"type": "p",
+			"id": "Edlydzz1ay9MRaAbdd0Zp"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Production"
+						}
+					],
+					"id": "wo41Xt_eudWmQJxJ714Tj",
+					"type": "caption",
+					"icon": "Sparkles"
+				},
+				{
+					"children": [
+						{
+							"text": "300 lemonades per summer"
+						}
+					],
+					"id": "LvUQtRBErYpyXFLzVWayV",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "TuXtTQSg_23TStOJsE4AP",
+					"type": "slider",
+					"max": "500",
+					"min": "0",
+					"step": "10",
+					"value": "300"
+				}
+			],
+			"id": "FE8y05IZ785I2ynuv26Kn",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we need to figure out how much profit we'll generate from each cup of lemonade."
+				}
+			],
+			"type": "p",
+			"id": "ndbSvCk8gS-tbtmpo35ZI"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "UnitPrice"
+								}
+							],
+							"id": "a8PtRRZTPSA4aaUy2ffIr",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "3.5$ per lemonade"
+								}
+							],
+							"id": "ZZVnjuse21O8frnz2mnEG",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ujcs-UCz3NitjrrVqrAEU",
+							"type": "slider",
+							"max": "5",
+							"min": "0",
+							"step": "0.1",
+							"value": "3.5"
+						}
+					],
+					"id": "ySLZEup4HKav3ZqZ6HywU",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Tip"
+								}
+							],
+							"id": "iNx68ph2Opir3aqDGLNqI",
+							"type": "caption",
+							"icon": "Heart"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "YMuqUX7KtBFPAXLglqw2c",
+							"type": "exp"
+						}
+					],
+					"id": "8vW6NImkBe-lGQWXmKkNW",
+					"type": "def",
+					"variant": "toggle",
+					"coerceToType": {
+						"kind": "boolean",
+						"date": "day"
+					}
+				}
+			],
+			"id": "H8ETTgCwM2tdK5oBDgm4p",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "UnitCost"
+						}
+					],
+					"id": "Sqs1p8SOO9qxUwBPE1Rra",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "1.2$ per lemonade"
+						}
+					],
+					"id": "bOwFFJyLW2EokJAhf5mBX",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "2ux22XplS1BxeTNAGAxsz",
+					"type": "slider",
+					"max": "2",
+					"min": "0",
+					"step": "0.1",
+					"value": "1.2"
+				}
+			],
+			"id": "W1y6D9yxkUlPjOXdBJQdP",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "UnitGrossProfit"
+						}
+					],
+					"type": "structured_varname",
+					"id": "sVnB1AP-yy9vcMzWpD3q6"
+				},
+				{
+					"children": [
+						{
+							"text": " if "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HoD3dHiA26UANFgztTU0l",
+							"type": "smart-ref",
+							"blockId": "8vW6NImkBe-lGQWXmKkNW",
+							"columnId": null,
+							"lastSeenVariableName": "Tip"
+						},
+						{
+							"text": " then "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xvq2Vye2dS48lq-7Cq7G-",
+							"type": "smart-ref",
+							"blockId": "ySLZEup4HKav3ZqZ6HywU",
+							"columnId": null,
+							"lastSeenVariableName": "UnitPrice"
+						},
+						{
+							"text": "+5% - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Nh_X82s6X8EYC6hisBtbK",
+							"type": "smart-ref",
+							"blockId": "W1y6D9yxkUlPjOXdBJQdP",
+							"columnId": null,
+							"lastSeenVariableName": "UnitCost"
+						},
+						{
+							"text": " else "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LwVCUPbH0i2fGJ4mvEZiB",
+							"type": "smart-ref",
+							"blockId": "ySLZEup4HKav3ZqZ6HywU",
+							"columnId": null,
+							"lastSeenVariableName": "UnitPrice"
+						},
+						{
+							"text": "-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "L9PN-xhd_Qpd4nY_7_6GE",
+							"type": "smart-ref",
+							"blockId": "W1y6D9yxkUlPjOXdBJQdP",
+							"columnId": null,
+							"lastSeenVariableName": "UnitCost"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "S_86Wy8To7u2uY36WL6yi"
+				}
+			],
+			"id": "lceMMRgQwrXpX2OBmGnWB",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "pd42BV6fs-TfPAg_1rEyM"
+		},
+		{
+			"children": [
+				{
+					"text": "Additional costs"
+				}
+			],
+			"type": "h2",
+			"id": "O76FBgqGzsSi-HMIH8o42"
+		},
+		{
+			"children": [
+				{
+					"text": "For this example, we will only include the salary of the workers you may need for your business. Define the number of employees and the salary for each of them. You can choose to hire no employees, in which case you will be the only one working."
+				}
+			],
+			"type": "p",
+			"id": "u5ESeCSbdVz_agHtK4jmS"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Employees"
+								}
+							],
+							"id": "1DGiXb6LIIpWj3diAZizp",
+							"type": "caption",
+							"icon": "People"
+						},
+						{
+							"children": [
+								{
+									"text": "1"
+								}
+							],
+							"id": "GSIz3xV0rJcOq7CPJcF1n",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Hzs-7zoq4zKnF2R9e-jPp",
+							"type": "slider",
+							"max": "2",
+							"min": "0",
+							"step": "1",
+							"value": "1"
+						}
+					],
+					"id": "T--XaddBSKTIxR9Be5uqq",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SummerSalary"
+								}
+							],
+							"id": "wyO7_2qUwHE4ioIvSgJ98",
+							"type": "caption",
+							"icon": "Wallet"
+						},
+						{
+							"children": [
+								{
+									"text": "200$"
+								}
+							],
+							"id": "NlY1bRKh0CE4ahpnsqg8n",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "t18_KbWghfBRnplRCVlk3",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "200"
+						}
+					],
+					"id": "-jWdkLC8kFYy61wuEAqD5",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "BzSKuokqG3WnIDyfJXauR",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "yqBgeSbWH-gosuLYsa8OA"
+		},
+		{
+			"children": [
+				{
+					"text": "Earnings per summer"
+				}
+			],
+			"type": "h2",
+			"id": "tVKlYc-oSIXLRNqzbcyP_"
+		},
+		{
+			"children": [
+				{
+					"text": " I think we're ready to infer our projected income and expenses:"
+				}
+			],
+			"type": "p",
+			"id": "oZw84dnGrxZhhtA8OZBza"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Earnings"
+								}
+							],
+							"id": "E1Z9cGTo07MN5Vm1mlicx",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IVqEDeAGDPfg4H6aytvCg",
+									"type": "smart-ref",
+									"blockId": "FE8y05IZ785I2ynuv26Kn",
+									"columnId": null,
+									"lastSeenVariableName": "Production"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "oIYKs94XPSM4KTORDhzm0",
+									"type": "smart-ref",
+									"blockId": "W1y6D9yxkUlPjOXdBJQdP",
+									"columnId": null,
+									"lastSeenVariableName": "UnitCost"
+								},
+								{
+									"text": " *1 summer"
+								}
+							],
+							"id": "bvd6ee-L5iec016Pa7coH",
+							"type": "table-column-formula",
+							"columnId": "FqNBIjons47npUAg15Ulc"
+						},
+						{
+							"children": [
+								{
+									"text": "  "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4NmUnaX_oXJokRTwkYpml",
+									"type": "smart-ref",
+									"blockId": "-jWdkLC8kFYy61wuEAqD5",
+									"columnId": null,
+									"lastSeenVariableName": "SummerSalary"
+								},
+								{
+									"text": "  "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "97QAdltY0f_CwHgpvOc1u",
+									"type": "smart-ref",
+									"blockId": "T--XaddBSKTIxR9Be5uqq",
+									"columnId": null,
+									"lastSeenVariableName": "Employees"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "GB0cKLuviDQfXcP_IhKhM",
+							"type": "table-column-formula",
+							"columnId": "fWY7cvYcRK4CJPwW_cLU1"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "fW0CoW7YUqRZQVuyoNXAJ",
+									"type": "smart-ref",
+									"blockId": "qjm-n2gKNQcmJlEDUL7Gc",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Revenue"
+								},
+								{
+									"text": " - "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sIGmuOxV-Jui7cE2SNG5T",
+									"type": "smart-ref",
+									"blockId": "FqNBIjons47npUAg15Ulc",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "COGS"
+								},
+								{
+									"text": " -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ep7T-42r98NoZTt4X-NE-",
+									"type": "smart-ref",
+									"blockId": "fWY7cvYcRK4CJPwW_cLU1",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Wages"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "r_DVxPb87XlL3kEiH0haN",
+							"type": "table-column-formula",
+							"columnId": "XiiP-1gqCmW2wA3pa1eYJ"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "M3uP7Waqg4H-4Ds_fIXLh",
+									"type": "smart-ref",
+									"blockId": "FE8y05IZ785I2ynuv26Kn",
+									"columnId": null,
+									"lastSeenVariableName": "Production"
+								},
+								{
+									"text": "*"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "SiC5FrXEnBX7Lss9LPmZk",
+									"type": "smart-ref",
+									"blockId": "ySLZEup4HKav3ZqZ6HywU",
+									"columnId": null,
+									"lastSeenVariableName": "UnitPrice"
+								},
+								{
+									"text": " *1 summer"
+								}
+							],
+							"id": "mdkNcpx0gUqhrJRafXrrn",
+							"type": "table-column-formula",
+							"columnId": "qjm-n2gKNQcmJlEDUL7Gc"
+						}
+					],
+					"id": "iL31SieO9YvBwQJA9jfnl",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Summer"
+								}
+							],
+							"id": "fLYIfq7HpbQdsrqwIxOCH",
+							"type": "th",
+							"cellType": {
+								"kind": "series",
+								"seriesType": "date"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue"
+								}
+							],
+							"id": "qjm-n2gKNQcmJlEDUL7Gc",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "COGS"
+								}
+							],
+							"id": "FqNBIjons47npUAg15Ulc",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Wages"
+								}
+							],
+							"id": "fWY7cvYcRK4CJPwW_cLU1",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Profit"
+								}
+							],
+							"id": "XiiP-1gqCmW2wA3pa1eYJ",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "xMFcr7v5MQnn6L4tZbFX6",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023"
+								}
+							],
+							"id": "0sAWOEogsRyEDBibQ1oQ2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NljpfOBb_zrcQiw7x55WI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nfiX8M5lADDViJt4e7CPq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sDO9ZPQCI8wp0jzPIZAHW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5lytnztqfG6FKIRz20GCH",
+							"type": "td"
+						}
+					],
+					"id": "GD-QnmgeAPvnHmG-owp7i",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2024"
+								}
+							],
+							"id": "k7ZWtBr9_hL-GZN5AMLCN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KdvE54vxuUOHxYfJQYXWG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KMYjdWc1evotjQ6KF2MAx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H_pIiwERYnZIBPPdnzdsX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zTI98CmIaN3ZXJtjjEF8K",
+							"type": "td"
+						}
+					],
+					"id": "CU-G5nnxI5Oel2Q1pyXjQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2025"
+								}
+							],
+							"id": "noSgqsbCVkRhBjh1Q1rui",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sBCxWJXplv0kl6Yh-KHQN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Cgv_COJYOxZwie6_6K1Ux",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Q9WbjvGdsaiv8YR3qo1Hd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Xpto2PWKFNG6yINWRCpwZ",
+							"type": "td"
+						}
+					],
+					"id": "WPtmxELKaQlESmKTISCJe",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2026"
+								}
+							],
+							"id": "0btQw5PSTeuond_yNRaqc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "r8-_j3HA6iwS2j0Bj9WnE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "c6zNpb7f453WBDvPuiA4K",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MAUnB1x-i0o2yLCfGtSBq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Lvydxhgc0xQxgrgdvhqDS",
+							"type": "td"
+						}
+					],
+					"id": "DTLgohE9n8xIPccmqC28g",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2027"
+								}
+							],
+							"id": "KhFUWa-5QcXn_w3GevzaK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SKCJZCMmBdOAeqJaFo_Ds",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HDlcFeE09Bin65NHtmg7v",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "y8maMhz_8LOMHKjFWF3BH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XZCDNtjC5hDSFJFOPPntG",
+							"type": "td"
+						}
+					],
+					"id": "v6na-d7IAH7Xk4fu0kdRL",
+					"type": "tr"
+				}
+			],
+			"id": "AU-d6NZ_1-feem-cj2Bkr",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false,
+			"icon": "Wallet"
+		},
+		{
+			"children": [
+				{
+					"text": "Business Results!!"
+				}
+			],
+			"id": "RcraHVpUAg3Fw5cnX6X0W",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "This table presents the profits created by the company and the portion that belongs to you and your investor."
+				}
+			],
+			"type": "p",
+			"id": "oBzan9c-rrDxTyhDKKXgS"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ProfitsSum"
+						}
+					],
+					"type": "structured_varname",
+					"id": "KlMhV_Tb-A2J08i5qkm3W"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Dbt_xPcbG1THqmJM5lj-Y",
+							"type": "smart-ref",
+							"blockId": "AU-d6NZ_1-feem-cj2Bkr",
+							"columnId": "XiiP-1gqCmW2wA3pa1eYJ",
+							"lastSeenVariableName": "Earnings.Profit"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "lDMum8tvexRXzrbvtJmDF"
+				}
+			],
+			"id": "rJ_MT88Grvo8DMAy94NFA",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SalvageValue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "iEcADPOuB_G4A29E_Wcbp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AtCn52oWIzHG-rYwSVTEF",
+							"type": "smart-ref",
+							"blockId": "wA-vi-DrDFPSIblIIYfmS",
+							"columnId": null,
+							"lastSeenVariableName": "Stand"
+						},
+						{
+							"text": " *20%"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "HdKT1lAZTRKJyq_RDT8JK"
+				}
+			],
+			"id": "FXcOVr_WWDu0jZzy1oH5Q",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Results"
+								}
+							],
+							"id": "XO5ZjYUR5DM_VlCdVYcEE",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if first then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "T5lErrVwMa4f_kU-e33ru",
+									"type": "smart-ref",
+									"blockId": "rJ_MT88Grvo8DMAy94NFA",
+									"columnId": null,
+									"lastSeenVariableName": "ProfitsSum"
+								},
+								{
+									"text": " else if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BCusnoYrTiE435EH1vRGc",
+									"type": "smart-ref",
+									"blockId": "UwNCoUUtcJfxuyT28YlR5",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Item"
+								},
+								{
+									"text": " == \"Total\" then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PvbZl6Oj_bZ2puwCR-WIf",
+									"type": "smart-ref",
+									"blockId": "FXcOVr_WWDu0jZzy1oH5Q",
+									"columnId": null,
+									"lastSeenVariableName": "SalvageValue"
+								},
+								{
+									"text": "+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KTbBEbrkiKMU4ZKGvn3t3",
+									"type": "smart-ref",
+									"blockId": "rJ_MT88Grvo8DMAy94NFA",
+									"columnId": null,
+									"lastSeenVariableName": "ProfitsSum"
+								},
+								{
+									"text": " else "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"type": "smart-ref",
+									"blockId": "FXcOVr_WWDu0jZzy1oH5Q",
+									"columnId": null,
+									"lastSeenVariableName": "SalvageValue",
+									"id": "RrPHsMRVmHR5iOJgtdRXY"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "msf6JyR5H-67tHRmBJbzS",
+							"type": "table-column-formula",
+							"columnId": "QqV2gZVp35iIqOOjz4zDA"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Gz32Yo43Ya3XC2gv7RwVK",
+									"type": "smart-ref",
+									"blockId": "QqV2gZVp35iIqOOjz4zDA",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Company"
+								},
+								{
+									"text": " *("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IUYgMcSX1sZiZut8OljB7",
+									"type": "smart-ref",
+									"blockId": "-Ps-1MM1mrw-0iNuYrX0b",
+									"columnId": null,
+									"lastSeenVariableName": "You"
+								},
+								{
+									"text": ") "
+								}
+							],
+							"id": "Cszoa7rt6wmNthaB_h369",
+							"type": "table-column-formula",
+							"columnId": "3xIkZR5189ghfE-nsLvpe"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MYOxuPpnScydrG9g8nusm",
+									"type": "smart-ref",
+									"blockId": "QqV2gZVp35iIqOOjz4zDA",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Company"
+								},
+								{
+									"text": " *"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "gA-rJkhHSOm2mv9hqYHvD",
+									"type": "smart-ref",
+									"blockId": "BicukLwyligTemwH6uVb7",
+									"columnId": null,
+									"lastSeenVariableName": "Investor"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "9iGnl5FOVZsFq0QjrE0ch",
+							"type": "table-column-formula",
+							"columnId": "AxNr1S7wMeXRg04PoBqaC"
+						}
+					],
+					"id": "3y0AjCo3m11xxUWWE9lyE",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "UwNCoUUtcJfxuyT28YlR5",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 112
+						},
+						{
+							"children": [
+								{
+									"text": "Company"
+								}
+							],
+							"id": "QqV2gZVp35iIqOOjz4zDA",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Yours"
+								}
+							],
+							"id": "3xIkZR5189ghfE-nsLvpe",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Investor"
+								}
+							],
+							"id": "AxNr1S7wMeXRg04PoBqaC",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "t-DmjoK3JuKdJHINmi0e_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Profits"
+								}
+							],
+							"id": "4pvNlGqO36y7NwjQCjWpG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0PjDtEEXzf6DMVzWi3G5l",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BiqPcGm_RZfpAvdf5-MEf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mPn4AyP2SySczf-ZqPhrn",
+							"type": "td"
+						}
+					],
+					"id": "Gtrnr4SCY9KAldvgn-zPe",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Stand Sale"
+								}
+							],
+							"id": "O3PHN70NLLaHvnC-TPDxx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZLJZEe8QIu6jjs4leufmz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "61PffRnguxFvJNQeyGEfZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RPfafGELd97xFLErz8iAJ",
+							"type": "td"
+						}
+					],
+					"id": "vujJ8eEmFYlNNicORc08x",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Total"
+								}
+							],
+							"id": "Zvr5QWkcYek_eb-7qL0Cz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6sTRf_G3C9t6Zmf_YQNS9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "R3_X9ABCvTLyvAuIugliF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NH6Ip5pfmO26srkXeeMDq",
+							"type": "td"
+						}
+					],
+					"id": "0liUJhaG7zn6UPPgXs61z",
+					"type": "tr"
+				}
+			],
+			"icon": "Wallet",
+			"id": "s_CY9rgho5XnwyeyipwdQ",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "inD0HLZdPQ22Yfh14MDBp"
+		}
+	]
+}

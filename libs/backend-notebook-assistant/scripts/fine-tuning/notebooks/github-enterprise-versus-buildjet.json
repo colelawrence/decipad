@@ -1,0 +1,1128 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "GitHub Enterprise vs. BuildJet: Cost Comparison and Optimization"
+				}
+			],
+			"type": "h1",
+			"id": "2P_hpmoFVYPIXnvH2KO1v"
+		},
+		{
+			"children": [
+				{
+					"text": "This notebook is designed to help developers make an informed choice between GitHub Enterprise and BuildJet. It evaluates your current spending and offers suggestions to optimize costs. By providing the requested information below, you will learn which option best suits your requirements."
+				}
+			],
+			"type": "p",
+			"id": "eJgo-x58ecPmWtfQdlYOU"
+		},
+		{
+			"children": [
+				{
+					"text": "Your Setup"
+				}
+			],
+			"type": "h2",
+			"id": "UqpYyqalA5AVEofS728k_"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Q6tcHZVUSnSJiyARBaqbw",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Most of the inputs in this notebook are self-explanatory. However, it's important to note that BuildJet is known for its faster performance compared to GitHub Actions. To quantify this improvement, you can use the \"BuildJet Improvement\" slider below and specify the percentage by which you believe BuildJet is faster."
+				}
+			],
+			"type": "p",
+			"id": "yOr67G287HGY_vjRldMRm"
+		},
+		{
+			"children": [
+				{
+					"text": "This analysis is based on the assumption that the cheapest available CPUs are being used. If you have different requirements or preferences regarding the CPU selection, please feel free to duplicate this document and modify it accordingly."
+				}
+			],
+			"type": "p",
+			"id": "Kl77zKmE1scMGiPRv52cw"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Github runners are priced at "
+								},
+								{
+									"text": "GHRate * 100 ¢ per $ per minute",
+									"magicnumberz": true
+								},
+								{
+									"text": "."
+								}
+							],
+							"type": "lic",
+							"id": "WUwoe9uoxjIhT1jcZIp7D"
+						}
+					],
+					"type": "li",
+					"id": "6CwdtPPlKv0WsFiFX8zpH"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Buildjet runners at "
+								},
+								{
+									"text": "BJRate * 100 ¢ per $ per minute",
+									"magicnumberz": true
+								},
+								{
+									"text": "."
+								}
+							],
+							"type": "lic",
+							"id": "vC9HanmUEmqNGwedj8VT5"
+						}
+					],
+					"type": "li",
+					"id": "0x1dJs0vqhwTj3Bmtyn2_"
+				}
+			],
+			"type": "ul",
+			"id": "kjyt40qJ1ML6xLDOjnL5m"
+		},
+		{
+			"children": [
+				{
+					"text": "TL;DR:"
+				}
+			],
+			"type": "h2",
+			"id": "zFvlc2vWQ2Xtvs0QJ0gNw"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "TPUMRUWkG0jAWBcqJFwXH",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Seats"
+								}
+							],
+							"type": "caption",
+							"id": "J6YVku8UihnGOnb7ZRR3M",
+							"icon": "People"
+						},
+						{
+							"children": [
+								{
+									"text": "11 users"
+								}
+							],
+							"type": "exp",
+							"id": "H54B-C3SggMe9ILZjfH9L"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LjlcxF-hSVK-6kAxqgqMb",
+							"type": "slider",
+							"max": "50",
+							"min": "0",
+							"step": "1",
+							"value": "11"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "pSnPLR97oLmYexUEO_I3q",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ActionsUsage"
+								}
+							],
+							"type": "caption",
+							"id": "ZQ3Ex5LrxKebGLAxylOJE",
+							"icon": "Clock"
+						},
+						{
+							"children": [
+								{
+									"text": "75k"
+								}
+							],
+							"type": "exp",
+							"id": "nZqCqnKCFXHmFFI8djgzX"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MGjda7L7ZoIJs-0xajo-A",
+							"type": "slider",
+							"max": "500",
+							"min": "1",
+							"step": "1",
+							"value": "75"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "EvRQWJuV8Kn5zsRDethiQ",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "9z9bc0Dw4zyj_SZMKoDPX",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BuildjetImprovement"
+						}
+					],
+					"id": "Rd7HjKnAukKYe_FY6RD-k",
+					"type": "caption",
+					"icon": "Percentage"
+				},
+				{
+					"children": [
+						{
+							"text": "30%"
+						}
+					],
+					"id": "C7qBD3HDgJXjtjeol9R9y",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "fwitVdBlVpcPJOm328Ebn",
+					"type": "slider",
+					"max": "100",
+					"min": "0",
+					"step": "1",
+					"value": "30"
+				}
+			],
+			"id": "eflPrdhSaQ0Cm5HGxgowr",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "This is your Github spending breakdown:"
+				}
+			],
+			"id": "aN_WTVc6mP5k4BDvZ4VbS",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Team plan: ",
+							"highlight": true
+						},
+						{
+							"text": "exprRef__QPRdbWBz1ffq2A5jsdMf",
+							"magicnumberz": true,
+							"highlight": true
+						},
+						{
+							"text": "\n\nBased on "
+						},
+						{
+							"text": "exprRef_pSnPLR97oLmYexUEO_I3q",
+							"magicnumberz": true
+						},
+						{
+							"text": " you are spending "
+						},
+						{
+							"text": "BaseSeats in $ per month",
+							"magicnumberz": true
+						},
+						{
+							"text": " to buy seats. This includes "
+						},
+						{
+							"text": "exprRef_A1GW8gL0BgqUC8M9s3pFE",
+							"magicnumberz": true
+						},
+						{
+							"text": " Github Action minutes per month, but you spend "
+						},
+						{
+							"text": "exprRef_EvRQWJuV8Kn5zsRDethiQ",
+							"magicnumberz": true
+						},
+						{
+							"text": " minutes.  This means an extra cost with actions of "
+						},
+						{
+							"text": "BaseActions in $ per month",
+							"magicnumberz": true
+						},
+						{
+							"text": ". "
+						}
+					],
+					"type": "p",
+					"id": "OkqpKd-Rmv_0Ks3sS1A9w"
+				},
+				{
+					"children": [
+						{
+							"text": "Enterprise plan:",
+							"highlight": true
+						},
+						{
+							"text": "EnterpriseBill",
+							"magicnumberz": true,
+							"highlight": true
+						},
+						{
+							"text": "\n\nStill on "
+						},
+						{
+							"text": "exprRef_pSnPLR97oLmYexUEO_I3q",
+							"magicnumberz": true
+						},
+						{
+							"text": " but now those seats cost you "
+						},
+						{
+							"text": "EnterpriseSeats in $ per month",
+							"magicnumberz": true
+						},
+						{
+							"text": " to buy seats. This includes a generous"
+						},
+						{
+							"text": "IncEnterpriseMinutes",
+							"magicnumberz": true
+						},
+						{
+							"text": " Github Action minutes per month, and your spend is "
+						},
+						{
+							"text": "exprRef_EvRQWJuV8Kn5zsRDethiQ",
+							"magicnumberz": true
+						},
+						{
+							"text": " minutes. So you pay "
+						},
+						{
+							"text": "EnterpriseActions in $ per month",
+							"magicnumberz": true
+						},
+						{
+							"text": " for the actions."
+						}
+					],
+					"type": "p",
+					"id": "4y1a1XS8ol6Tec6DGaXag"
+				}
+			],
+			"id": "5VeLXZyAAoHBbi4pDAIQ5",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Buildjet + Team Plan: ",
+					"highlight": true
+				},
+				{
+					"text": "exprRef_EfhQmrJYb8UpaC3KKuzzo",
+					"magicnumberz": true
+				},
+				{
+					"text": "\n\nWith Buildjet you spend the same fees to buy "
+				},
+				{
+					"text": "exprRef_pSnPLR97oLmYexUEO_I3q",
+					"magicnumberz": true
+				},
+				{
+					"text": " seats, and you still pay them to GitHub. However you only use "
+				},
+				{
+					"text": "exprRef_fHkjgTMKp50Rp1l4oYO6E",
+					"magicnumberz": true
+				},
+				{
+					"text": " CI minutes per month (instead of "
+				},
+				{
+					"text": "exprRef_EvRQWJuV8Kn5zsRDethiQ",
+					"magicnumberz": true
+				},
+				{
+					"text": " Github Actions) because of better CI performance of Buildjet ("
+				},
+				{
+					"text": "BuildjetImprovement",
+					"magicnumberz": true
+				},
+				{
+					"text": " assumed for the purposes of this document)."
+				}
+			],
+			"type": "p",
+			"id": "-9r2AFIbpyqVsKbKipMrP"
+		},
+		{
+			"children": [
+				{
+					"text": "Considering you waiver the "
+				},
+				{
+					"text": "exprRef_A1GW8gL0BgqUC8M9s3pFE",
+					"magicnumberz": true
+				},
+				{
+					"text": " actions you get with your team plan, you will pay Buildjet "
+				},
+				{
+					"text": "BuildActions in $ per month",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "LtqBPxoIHY15u9dKmvHUJ"
+		},
+		{
+			"children": [
+				{
+					"text": "In conclusion, BuildJet proves to be a competitive option when compared to GitHub Actions.The fact that it is faster can significantly impact developer productivity. While cost is an important factor to consider, it is equally essential to assess the potential gains in developer productivity that come with a faster CI. "
+				}
+			],
+			"type": "p",
+			"id": "h78djzdsgzjkXngyYx3qu"
+		},
+		{
+			"children": [
+				{
+					"text": "By carefully weighing both factors, developers can make an informed decision that aligns with their specific needs and priorities."
+				}
+			],
+			"type": "p",
+			"id": "I5AqhuGEePA5dbsh6xKQk"
+		},
+		{
+			"children": [
+				{
+					"text": "Now I'm off to downgrade my Github Enterprise. Thanks Buildjet ✌️ "
+				}
+			],
+			"type": "p",
+			"id": "yhdr1Baa4LocAoYLsndwM"
+		},
+		{
+			"children": [
+				{
+					"text": "Annex"
+				}
+			],
+			"type": "h2",
+			"id": "uN1FdDHgps9eE4V6gX68c"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "7VtftiDOQXjO2BJUxghvk",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Inputs"
+				}
+			],
+			"id": "CPS7AP9tgK5zyTCyYyAwk",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "GHRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fc1U9n0F8d2oHykHeuAH9"
+				},
+				{
+					"children": [
+						{
+							"text": "$0.008"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "mBh5NLHMa8CmE8aRPs4Y3"
+				}
+			],
+			"id": "fwUsFYe58z0QFWAUH7_zA",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BJRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fYG-SIaarD7DhBDdUW6wx"
+				},
+				{
+					"children": [
+						{
+							"text": "$0.004"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "BYQnbOQVPqR6-njwrUotX"
+				}
+			],
+			"id": "CIPRt_9Dii8EYlx1jxPP8",
+			"type": "code_line_v2",
+			"variant": "calculation",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TeamPrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "bKocR5P4llx3k9odYjojz"
+				},
+				{
+					"children": [
+						{
+							"text": "$48 per user per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "wI2xIbaH2gxlQ5iR5JQHU"
+				}
+			],
+			"id": "HIS8GIW9ZViy0zOtbE-fc",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnterprisePrice"
+						}
+					],
+					"type": "structured_varname",
+					"id": "lyjD-CsSQjo2VdYqymuaI"
+				},
+				{
+					"children": [
+						{
+							"text": "$252 per user per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "1E-UGoNqprOYd-hcwyQHD"
+				}
+			],
+			"id": "lNPwQLPNLB7Sbwnl3pjUl",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "IncEnterpriseMinutes"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0KO_4VDGGynRva_NV2Tr6"
+				},
+				{
+					"children": [
+						{
+							"text": "50k"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "wVlcxMlYzV_UYtXNoruNU"
+				}
+			],
+			"id": "AwAKQZ6Njt3z8xZbPx81F",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "IncTeamMinutes"
+						}
+					],
+					"type": "structured_varname",
+					"id": "608mph9nf-kIcukuK-FK6"
+				},
+				{
+					"children": [
+						{
+							"text": "3k"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "RpxEr-7-dPzeHFiLGt-t1"
+				}
+			],
+			"id": "A1GW8gL0BgqUC8M9s3pFE",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Github Team Plan"
+				}
+			],
+			"type": "h3",
+			"id": "UNwgku-7m2gTSmdEWchT9"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseSeats"
+						}
+					],
+					"type": "structured_varname",
+					"id": "17pPiMGY3d-YbB9tUx9Nh"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "94jc9F-9_dU6pxcbLl6OA",
+							"type": "smart-ref",
+							"blockId": "pSnPLR97oLmYexUEO_I3q",
+							"columnId": null,
+							"lastSeenVariableName": "Seats"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qwXmuJBFIraffGE43wYJ2",
+							"type": "smart-ref",
+							"blockId": "HIS8GIW9ZViy0zOtbE-fc",
+							"columnId": null,
+							"lastSeenVariableName": "TeamPrice"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "lEPj3noRPSTEfyOWpqfli"
+				}
+			],
+			"id": "we4MQAKtO1uGg0gwE-C8D",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseActionsDelta"
+						}
+					],
+					"type": "structured_varname",
+					"id": "UAcCet43xgEgzt2cW9Q2X"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ACmpwneh0Z10pK17fibwC",
+							"type": "smart-ref",
+							"blockId": "EvRQWJuV8Kn5zsRDethiQ",
+							"columnId": null,
+							"lastSeenVariableName": "ActionsUsage"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QDq6rFSC2Wrbb8SUPfA6F",
+							"type": "smart-ref",
+							"blockId": "A1GW8gL0BgqUC8M9s3pFE",
+							"columnId": null,
+							"lastSeenVariableName": "IncTeamMinutes"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ZGjcVjuxxAnX3M1ZFrgpz"
+				}
+			],
+			"id": "cD6MEzijtzqg3xSThQ4og",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseActions"
+						}
+					],
+					"type": "structured_varname",
+					"id": "DMSF7Ssx--sD7A_HhlMuq"
+				},
+				{
+					"children": [
+						{
+							"text": "(max([BaseActionsDelta, 0]) * GHRate per month) in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "cdmNchWe7tkdWjQ8vy1y6"
+				}
+			],
+			"id": "SzifCa4b-OwE_h_WDe1Ux",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseBill"
+						}
+					],
+					"type": "structured_varname",
+					"id": "qX1nhYYuk8xZvwHbKKpnF"
+				},
+				{
+					"children": [
+						{
+							"text": "BaseSeats + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XJBBiO8c2jHQTRQD3J4lz",
+							"type": "smart-ref",
+							"blockId": "SzifCa4b-OwE_h_WDe1Ux",
+							"columnId": null,
+							"lastSeenVariableName": "BaseActions"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "b5T093mQ_9zRwEtwdNa6R"
+				}
+			],
+			"id": "-QPRdbWBz1ffq2A5jsdMf",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Github Enterprise plan"
+				}
+			],
+			"type": "h3",
+			"id": "_4_Zft6VCaRqWtvIU_wBf"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnterpriseSeats"
+						}
+					],
+					"type": "structured_varname",
+					"id": "CaHIrcC3XFu6czLBkeMwf"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xizFvao5Ck-fMAx7aItk4",
+							"type": "smart-ref",
+							"blockId": "pSnPLR97oLmYexUEO_I3q",
+							"columnId": null,
+							"lastSeenVariableName": "Seats"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4vpss0g_MrKRHJVyJKs6i",
+							"type": "smart-ref",
+							"blockId": "lNPwQLPNLB7Sbwnl3pjUl",
+							"columnId": null,
+							"lastSeenVariableName": "EnterprisePrice"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ktcSFPpjrx_GVpMj938h0"
+				}
+			],
+			"id": "JIbq3nBoRvnKl9SfeB7W5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnterpriseActionsDelta"
+						}
+					],
+					"type": "structured_varname",
+					"id": "klm0TwOzKMripFD4rgMw0"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1mA8_XDeUU3cYo9-kE30H",
+							"type": "smart-ref",
+							"blockId": "EvRQWJuV8Kn5zsRDethiQ",
+							"columnId": null,
+							"lastSeenVariableName": "ActionsUsage"
+						},
+						{
+							"text": " - IncEnterpriseMinutes"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "yOpaaIYeAVhq8hBGgFTl6"
+				}
+			],
+			"id": "92-x7sjkjaJASVxf3wvS5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnterpriseActions"
+						}
+					],
+					"type": "structured_varname",
+					"id": "FfuHVXzXBQNcuwcHlN7dA"
+				},
+				{
+					"children": [
+						{
+							"text": "(max([EnterpriseActionsDelta, 0]) * GHRate per month in $ per year)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "9DdKBJor6P4ijZ2OBOUk3"
+				}
+			],
+			"id": "2qVMu1uL-QXXhI5yFsAm6",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnterpriseBill"
+						}
+					],
+					"type": "structured_varname",
+					"id": "k9mik75KwwrQliIYjKx0s"
+				},
+				{
+					"children": [
+						{
+							"text": "EnterpriseSeats + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QNlA1Zu1-cWorVagZqWmq",
+							"type": "smart-ref",
+							"blockId": "2qVMu1uL-QXXhI5yFsAm6",
+							"columnId": null,
+							"lastSeenVariableName": "EnterpriseActions"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "J4eUjTiBlRxtcvYB_kqZS"
+				}
+			],
+			"id": "-b1K1iBdCNI4hcGM_YC5J",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Buildjet Action usage"
+				}
+			],
+			"type": "h3",
+			"id": "-Oy_Z8vYdB0Ym5YCsGb-a"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BuildUsage"
+						}
+					],
+					"type": "structured_varname",
+					"id": "-Az1Zr6RqEzwbkwEWQQr6"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "PgvRGRGGsysTn2VYDZRIA",
+							"type": "smart-ref",
+							"blockId": "EvRQWJuV8Kn5zsRDethiQ",
+							"columnId": null,
+							"lastSeenVariableName": "ActionsUsage"
+						},
+						{
+							"text": " - BuildjetImprovement"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "93LISDX9mU4o0e0z64a5H"
+				}
+			],
+			"id": "fHkjgTMKp50Rp1l4oYO6E",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BuildActions"
+						}
+					],
+					"type": "structured_varname",
+					"id": "T7FiwmkrBUI13LAPyCDdd"
+				},
+				{
+					"children": [
+						{
+							"text": "BuildUsage * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9ti03H86__vy4lS8VK9FQ",
+							"type": "smart-ref",
+							"blockId": "CIPRt_9Dii8EYlx1jxPP8",
+							"columnId": null,
+							"lastSeenVariableName": "BJRate"
+						},
+						{
+							"text": " per month in $ per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "5HV9pkzrunbWLmc4myGRM"
+				}
+			],
+			"id": "4YKWkZAO1SLgV26wBBwO_",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BuildPlusGHBill"
+						}
+					],
+					"type": "structured_varname",
+					"id": "6hhAOuUaVBS2OEi5OSWnA"
+				},
+				{
+					"children": [
+						{
+							"text": "BaseSeats + BuildActions"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "CPRcLb2MOXeZAc_lZ0ctS"
+				}
+			],
+			"id": "EfhQmrJYb8UpaC3KKuzzo",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "xz9poQBCFlhCzTsSdZIQ_"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "7wHU6_GhMroQ_wni1ZOkE"
+		}
+	]
+}

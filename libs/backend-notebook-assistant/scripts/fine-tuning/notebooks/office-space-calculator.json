@@ -1,0 +1,1230 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Office Space calculator "
+				}
+			],
+			"type": "h1",
+			"id": "GRSMz_LWPaLweKqOkye3b"
+		},
+		{
+			"children": [
+				{
+					"text": "This is a Decipad notebook. You can alter the table and inputs below so that all calculations adjust to your circumstances. Utilize this template to seamlessly calculate your office space requirements, factoring in employee count, management needs, and common areas. With the flexibility to adapt office space trends to your unique situation, you can optimize your workspace for productivity and collaboration."
+				}
+			],
+			"id": "DWuscgMg_eeSCJ0TRyCdU",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"text": "Results: Total Office Space You Will Need"
+				}
+			],
+			"id": "44ibf8iTzuIWwkF_on-LM",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "MLKHUq42YaLh9UaYk6A0t",
+					"blockId": "HWd_cVL4jVCSpL5lp7owy",
+					"type": "display",
+					"varName": "TotalWorkSpace"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "a7mixCX65t5Ndf7PvjnWp",
+					"blockId": "_BvVd00j_81gabfrbNSxp",
+					"type": "display",
+					"varName": "TotalAdditionalSpace"
+				}
+			],
+			"id": "4km_ZgiqM2o1vK4jF8mP9",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RequiredOfficeSpace"
+						}
+					],
+					"type": "structured_varname",
+					"id": "cm25uzOMvHenczlYgdNnq"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qILEE5HjwAPEU2b8yfI2n",
+							"type": "smart-ref",
+							"blockId": "HWd_cVL4jVCSpL5lp7owy",
+							"columnId": null,
+							"lastSeenVariableName": "TotalWorkSpace"
+						},
+						{
+							"text": " +"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "n_rkF699Q1i9jXZn3FfOU",
+							"type": "smart-ref",
+							"blockId": "_BvVd00j_81gabfrbNSxp",
+							"columnId": null,
+							"lastSeenVariableName": "TotalAdditionalSpace"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "wwAYTo2Q2ev4ug7QaCI9u"
+				}
+			],
+			"id": "BJA8VC6I6Sytkgb9p0XTW",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "For your company with"
+				},
+				{
+					"text": "exprRef_9JUEJ7doYYaHoosrkN5rC",
+					"magicnumberz": true
+				},
+				{
+					"text": " including  "
+				},
+				{
+					"text": "exprRef_f183fIwz7eOA3J3pPlcDL",
+					"magicnumberz": true
+				},
+				{
+					"text": "and   "
+				},
+				{
+					"text": "exprRef_Ocaj7QZbHLCl3_Uaha51O",
+					"magicnumberz": true
+				},
+				{
+					"text": " when calculating office space based on a workstation size of "
+				},
+				{
+					"text": "exprRef_dYk9k19_8_ya4gbQubxR6",
+					"magicnumberz": true
+				},
+				{
+					"text": " and offices of "
+				},
+				{
+					"text": "exprRef_H7TBADO2dLGIEKO3yfCKK",
+					"magicnumberz": true
+				},
+				{
+					"text": " and  "
+				},
+				{
+					"text": "exprRef_Oxrf_0vdhaHt1cVKYVeAu",
+					"magicnumberz": true
+				},
+				{
+					"text": " along with "
+				},
+				{
+					"text": "exprRef__BvVd00j_81gabfrbNSxp",
+					"magicnumberz": true
+				},
+				{
+					"text": " of common office areas, the recommended office size you require is "
+				},
+				{
+					"text": "exprRef_BJA8VC6I6Sytkgb9p0XTW",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "Piyroovesci47yzWW-Fpc",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "Inputs: Adjust Your Circumstances"
+				}
+			],
+			"type": "h2",
+			"id": "_GxoNqcBPTsXsyrArAGXJ"
+		},
+		{
+			"children": [
+				{
+					"text": "Complete the below sections and your results will automatically update."
+				}
+			],
+			"id": "qw182p8_ESrwzmLWdu4qk",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"text": "Open-concept office space"
+				}
+			],
+			"id": "Nt70frtjW5kFG2ifSo1hV",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Let's Start with the number of employees expected to be working in the open office area. "
+						}
+					],
+					"id": "PUCqBho6DtPBRkVQ_WpxL",
+					"type": "callout"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NumEmployees"
+								}
+							],
+							"id": "R2GpczP0wk6FcgeRmnUhP",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "110 employees"
+								}
+							],
+							"id": "lTGQId_vOvAudHoONXKe5",
+							"type": "exp"
+						}
+					],
+					"id": "9JUEJ7doYYaHoosrkN5rC",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "hmvvfPUXFvD1cTxFUda0R",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "WorkStationSize"
+								}
+							],
+							"id": "-iR1VJB-gKbvTTkxkKCCN",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "70 sqft per employee "
+								}
+							],
+							"id": "llc9DSt9OBo8vKbFimbVC",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qR2OCRol0dIDDZSSaMrni",
+							"type": "slider",
+							"max": "100",
+							"min": "60",
+							"step": "1",
+							"value": "70"
+						}
+					],
+					"id": "dYk9k19-8-ya4gbQubxR6",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"text": "When choosing workstation sizes, aiming for a minimum of 60 square feet per workstation aligns with CDC recommendations for comfortable spacing, while opting for approximately 100 square feet per workstation creates an open and collaborative environment."
+						}
+					],
+					"id": "RxmZ7Bt8gMZ9L7CMlCZ5v",
+					"type": "callout"
+				}
+			],
+			"id": "n3IzffQshtMDFnpUbCFbc",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "OpenSpace"
+						}
+					],
+					"type": "structured_varname",
+					"id": "y5D0qJ_ayui4C-IQAs8d8"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HImMbdCMOfYc8adWHUB4a",
+							"type": "smart-ref",
+							"blockId": "dYk9k19-8-ya4gbQubxR6",
+							"columnId": null,
+							"lastSeenVariableName": "WorkStationSize"
+						},
+						{
+							"text": "  for "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rzq-oVMo306c9t1z7JDz0",
+							"type": "smart-ref",
+							"blockId": "9JUEJ7doYYaHoosrkN5rC",
+							"columnId": null,
+							"lastSeenVariableName": "NumEmployees"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "XQ_wE_s-rE92DHqWv2e3n"
+				}
+			],
+			"id": "SgEjp5542QqnJKk4dEDx1",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Private office space"
+				}
+			],
+			"id": "K7YrfdZYsv_Z_fo_kY18F",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, define how many private offices are required for management level employees."
+				}
+			],
+			"id": "n0CQWFkLGqdbM8XPeTokH",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Directors"
+								}
+							],
+							"id": "w5c81VW2IQ51YJIFDP8fe",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "4 directors"
+								}
+							],
+							"id": "qmh2ejyty6U01_g-eNGPl",
+							"type": "exp"
+						}
+					],
+					"id": "Ocaj7QZbHLCl3-Uaha51O",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Seniors"
+								}
+							],
+							"id": "bf0s6_ZPvxZScgbDJ9-7r",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "6 seniors"
+								}
+							],
+							"id": "cYj9XU67VcUulquZcnNWo",
+							"type": "exp"
+						}
+					],
+					"id": "f183fIwz7eOA3J3pPlcDL",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "cyc8P50yvmBkIUKY2IuW4",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Management Office Space Requirements"
+				}
+			],
+			"id": "_HhIquoK0jJavfyQGOFmf",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DirectorOffices"
+						}
+					],
+					"type": "structured_varname",
+					"id": "1ySw4CXW6jEwuvHJa6uUB"
+				},
+				{
+					"children": [
+						{
+							"text": "220 sqft per director"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "sTchW2I_3y2XPGHRMskFM"
+				}
+			],
+			"id": "Oxrf-0vdhaHt1cVKYVeAu",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SeniorOffices"
+						}
+					],
+					"type": "structured_varname",
+					"id": "OKypuCM_mU80BwQaoyqYr"
+				},
+				{
+					"children": [
+						{
+							"text": "180 sqft per senior"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "nbAgEqhoBUgOtSU8yJRN8"
+				}
+			],
+			"id": "H7TBADO2dLGIEKO3yfCKK",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "SeniorSpace = "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "VtnR8sbkOMKBxy-cYUdaB",
+					"type": "smart-ref",
+					"blockId": "H7TBADO2dLGIEKO3yfCKK",
+					"columnId": null,
+					"lastSeenVariableName": "SeniorOffices"
+				},
+				{
+					"text": " for "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "9GEPQuu6l2SkOcxpZfT_C",
+					"type": "smart-ref",
+					"blockId": "f183fIwz7eOA3J3pPlcDL",
+					"columnId": null,
+					"lastSeenVariableName": "Seniors"
+				},
+				{
+					"text": ""
+				}
+			],
+			"id": "CicfSj-0_aVsg5jXEU97_",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"text": "DirectorSpace = "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "KSKSxhsUMOtntYpiYTIh6",
+					"type": "smart-ref",
+					"blockId": "Oxrf-0vdhaHt1cVKYVeAu",
+					"columnId": null,
+					"lastSeenVariableName": "DirectorOffices"
+				},
+				{
+					"text": " for "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "-dVn2ROFkHkNBeRT6BjBd",
+					"type": "smart-ref",
+					"blockId": "Ocaj7QZbHLCl3-Uaha51O",
+					"columnId": null,
+					"lastSeenVariableName": "Directors"
+				},
+				{
+					"text": ""
+				}
+			],
+			"id": "6BEcWXk3yfls-8hKKVE_H",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"text": "PrivateSpace = "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "g0iK8Sj2RcMT9pzW1ogZ6",
+					"type": "smart-ref",
+					"blockId": "CicfSj-0_aVsg5jXEU97_",
+					"columnId": null,
+					"lastSeenVariableName": "SeniorSpace"
+				},
+				{
+					"text": "  +"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "TFqGCNeKydmuFkiziO0DN",
+					"type": "smart-ref",
+					"blockId": "6BEcWXk3yfls-8hKKVE_H",
+					"columnId": null,
+					"lastSeenVariableName": "DirectorSpace"
+				},
+				{
+					"text": ""
+				}
+			],
+			"id": "kRCZpFBZPCGazRjjmldCl",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalWorkSpace"
+						}
+					],
+					"type": "structured_varname",
+					"id": "_FXTyclhRRS4WR-gZm3vG"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "cmcxzookZfae0b8bWPM5Z",
+							"type": "smart-ref",
+							"blockId": "kRCZpFBZPCGazRjjmldCl",
+							"columnId": null,
+							"lastSeenVariableName": "PrivateSpace"
+						},
+						{
+							"text": " +"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "u51k7_BAGnv3QSCi2T598",
+							"type": "smart-ref",
+							"blockId": "SgEjp5542QqnJKk4dEDx1",
+							"columnId": null,
+							"lastSeenVariableName": "OpenSpace"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "75HKbcwh9ogV8HBRr_XNr"
+				}
+			],
+			"id": "HWd_cVL4jVCSpL5lp7owy",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Common Areas"
+				}
+			],
+			"id": "ArGA-_kd8EygSY1M0D5qk",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "In the Deci table below, you can choose the extra common spaces you want to have in your office space by simply checking the boxes. The output of additional office space will be automatically updated in your output box above..."
+				}
+			],
+			"id": "yxD5VABfqUFI9HzHJ2yar",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AdditionalSpaces"
+								}
+							],
+							"id": "tx06zZA-UtLoptrKW6opU",
+							"type": "table-var-name"
+						}
+					],
+					"id": "0GpynZqGmkLyIEP8k0_L2",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Space"
+								}
+							],
+							"id": "GAb0UqWInUU_uOOHCcHks",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Required"
+								}
+							],
+							"id": "z625k_e65BILgIY289Oc1",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Size"
+								}
+							],
+							"id": "CrcNQhsIhuM3_5N5nYzRc",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "sqft",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "area",
+										"baseSuperQuantity": "area"
+									}
+								]
+							}
+						}
+					],
+					"id": "lnBlRct3o_QyhlY3ne2BM",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Reception Area"
+								}
+							],
+							"type": "td",
+							"id": "jrGUECS40sQxje0ZYNmmg"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "NMtsQdqtVPELeia97zeXc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "350"
+								}
+							],
+							"id": "BSlhcBvdSaCo8_gyzKt8B",
+							"type": "td"
+						}
+					],
+					"id": "D5ZwMNgs6t2iH_Dt3kt5F",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Lounge"
+								}
+							],
+							"id": "jrlY358gRg4xEmyITZltW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AVbkaOAJ98_p5H4xt3hyo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "250"
+								}
+							],
+							"id": "-xPqBOYUoeP-CCkM_T43h",
+							"type": "td"
+						}
+					],
+					"id": "nmjCiyRCQ73q5tUJyh4c7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Waiting Area"
+								}
+							],
+							"id": "83sdwZn-3qq02La1WEjZO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "H3YxX_zxKFw9cNCmnDrU8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "200"
+								}
+							],
+							"id": "xIz-0uuogpqOk_5qaConj",
+							"type": "td"
+						}
+					],
+					"id": "6yDRFYTY3VaJ8P1-2b7x9",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Large Conference Room"
+								}
+							],
+							"id": "YjrP_6pglynECFdl51MbK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aZJjR4aac7ppKdD8ZBZYS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "380"
+								}
+							],
+							"id": "DtYPmo4S8WeamuP-aNQ1B",
+							"type": "td"
+						}
+					],
+					"id": "5vPcmBeA10dH5OmMuqpMr",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Medium Conference Room"
+								}
+							],
+							"id": "ErfKOcpo_mGI1E8bbVktj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "60C-qzfkCPXV2CIHce-uK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "260"
+								}
+							],
+							"id": "y3dwKnUnLtwXvsfweLouZ",
+							"type": "td"
+						}
+					],
+					"id": "EN9qtviynncUikQW8rtlY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Small  Conference Room"
+								}
+							],
+							"id": "D5-lr9RIn24Ps7k62dvCM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "-8aMiXy-K4sPae2EhE7Jv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "120"
+								}
+							],
+							"id": "naTwiSGpaqEQSALf0rsYf",
+							"type": "td"
+						}
+					],
+					"id": "rKchOxT4WwbVzagp5LUjl",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Wellness Room"
+								}
+							],
+							"id": "DZbQaK8fdi49EEwmt054H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RjX4SlBkjSRjMGmEGcV0m",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "80"
+								}
+							],
+							"id": "96h3HnCLu02OR5jsowons",
+							"type": "td"
+						}
+					],
+					"id": "wsgUM7ll7sryNwHDz7aDm",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Breakout Room"
+								}
+							],
+							"id": "2D-ekdiVXruf1SwgbdtMY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bAhG3BKwcXbUl2DMUFqD3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "O8oL4GvGNa_oKcSVMr64q",
+							"type": "td"
+						}
+					],
+					"id": "Bn-DiIXLqR2lg4LnJ-ZzK",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Kitchen with dining area"
+								}
+							],
+							"id": "BUQ8_F7ElHYujcJtk3KMl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "vHbWIrm9z435EuSQYjczO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "300"
+								}
+							],
+							"id": "Pvrbm77O0MyxQY2LkjM0J",
+							"type": "td"
+						}
+					],
+					"id": "IbJttLoUapQPcvGcrg4IC",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Kitchenette"
+								}
+							],
+							"id": "vBkHDmcuCUok124ByRL0x",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "false"
+								}
+							],
+							"id": "sF_QrnqrDvhFoap7bd9C8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "120"
+								}
+							],
+							"id": "w09egspUwmeW2QWmoZ_ct",
+							"type": "td"
+						}
+					],
+					"id": "c8dwEA2Gt7G5nofeU_BkE",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Server Room"
+								}
+							],
+							"id": "TGX0XBMLk-wPa1jeVmtXz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "iaLcJeRXPNbaXtHnFqJNn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "80"
+								}
+							],
+							"id": "UGqwx-VwIF5Kprdd0MGBz",
+							"type": "td"
+						}
+					],
+					"id": "PVZPVYpPWb7JPy5_KMOAM",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other"
+								}
+							],
+							"id": "8Z9DBN0JnvN5ksnC7uS7O",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tZjYdcr9HHcTVxPera7mt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rdvkYYq8j9wjy18kZNv0J",
+							"type": "td"
+						}
+					],
+					"id": "i9Xkg3yzxsvs5IA8Cpx7q",
+					"type": "tr"
+				}
+			],
+			"id": "wRMYPfiWtO9ACxYwse_Zy",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalAdditionalSpace"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fFu6nzn5TGM2uYWcCGdcj"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "a6AxcfTSe0xWdpb7QYeLH",
+							"type": "smart-ref",
+							"blockId": "wRMYPfiWtO9ACxYwse_Zy",
+							"columnId": "CrcNQhsIhuM3_5N5nYzRc",
+							"lastSeenVariableName": "AdditionalSpaces.Size"
+						},
+						{
+							"text": " ,"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "j_ZQLZYVG5uVkqbz3jSwJ",
+							"type": "smart-ref",
+							"blockId": "wRMYPfiWtO9ACxYwse_Zy",
+							"columnId": "z625k_e65BILgIY289Oc1",
+							"lastSeenVariableName": "AdditionalSpaces.Required"
+						},
+						{
+							"text": "  ==true)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "9y0ddcmjpshCQh7AUO5n1"
+				}
+			],
+			"id": "_BvVd00j_81gabfrbNSxp",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "yUZRKajJdbv06lb0e1Nui"
+		}
+	]
+}

@@ -1,0 +1,2259 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Salary Negotiations"
+				}
+			],
+			"type": "h1",
+			"id": "g6pZWG0DTjwoinYf0Ukfi"
+		},
+		{
+			"children": [
+				{
+					"text": "Why you should think of your salary like an investment.",
+					"bold": true
+				}
+			],
+			"type": "p",
+			"id": "OZ66H4rhO2sVfHjkEIZOP"
+		},
+		{
+			"children": [
+				{
+					"text": "Your salary is much like "
+				},
+				{
+					"text": "investing,",
+					"highlight": true
+				},
+				{
+					"text": " where you start impacts your future return. Start a job at $50,000 a year instead of $55,000 a year and if your raises are percentage-based, or if your salary in a new job is partly based on your previous salary, over time the aggregate loss on incremental gains can be huge. Use this template to see how huge the impact can be. "
+				}
+			],
+			"type": "p",
+			"id": "afO8T4c50FVn2ZpWY2It9"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "img",
+			"url": "https://miro.medium.com/max/1000/1*gpRnqqLiPRH9M6fbDiSFcw.gif",
+			"id": "9CEmaO91PZuLkMz8BaN5R"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's analyze two scenarios:",
+					"bold": true
+				}
+			],
+			"type": "p",
+			"id": "g_XLUBjRT8Euye9K38pEc"
+		},
+		{
+			"children": [
+				{
+					"text": "Alice never negotiates and gets a raise each year."
+				}
+			],
+			"type": "callout",
+			"id": "XncZxITb_U-inBBMBkxRP",
+			"color": "Sun",
+			"icon": "Bolt"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "JobOffer"
+								}
+							],
+							"type": "caption",
+							"id": "uWZsQRDTquSl08TgDw7-Y",
+							"color": "Sun",
+							"icon": "Bolt"
+						},
+						{
+							"children": [
+								{
+									"text": "45000$"
+								}
+							],
+							"type": "exp",
+							"id": "UEld5QJj539QQsUEBFpOR"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "100000",
+							"min": "0",
+							"step": "5000",
+							"value": "45000",
+							"id": "j4Ld20SgQ8eRfyPL7xWxl"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "T1vsl-X7dScv9i586VWqQ"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NormalPayRaise"
+								}
+							],
+							"id": "y1878nIFG4-vZ6bgBwWPO",
+							"type": "caption",
+							"color": "Sun",
+							"icon": "Bolt"
+						},
+						{
+							"children": [
+								{
+									"text": "2%"
+								}
+							],
+							"id": "c7mHu7MUP4vSXQq4rccVe",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YolbbYdsDsfRUEv-EhhsY",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "0.1",
+							"value": "2"
+						}
+					],
+					"id": "dwYxwo53oWgWPrK--ImvM",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"type": "columns",
+			"id": "kP2e-W6b0n84b3ZV58jfK"
+		},
+		{
+			"children": [
+				{
+					"text": "Bob negotiates a better offer from the get-go and a raise each year."
+				}
+			],
+			"type": "callout",
+			"id": "_tZMZeAbplY_foAbNuHJZ",
+			"icon": "Crown"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NegotiatedJobOffer"
+								}
+							],
+							"type": "caption",
+							"id": "50wfSqijpl14YdzTJeJpT",
+							"color": "Malibu",
+							"icon": "Crown"
+						},
+						{
+							"children": [
+								{
+									"text": "50000$"
+								}
+							],
+							"type": "exp",
+							"id": "irdnBWACtsa48Bn6koTQ5"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "100000",
+							"min": "0",
+							"step": "5000",
+							"value": "50000",
+							"id": "AsQvnG9nZt-75VGyuzv20"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "SF9y2V11ffD3fQwovu5Iy"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NegotiatedPayRaise"
+								}
+							],
+							"icon": "Crown",
+							"type": "caption",
+							"id": "xmco-PNSElK8pWZV2xdtr",
+							"color": "Malibu"
+						},
+						{
+							"children": [
+								{
+									"text": "4%"
+								}
+							],
+							"type": "exp",
+							"id": "H3R2rR-hKj05O-tREGHwy"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "4",
+							"id": "WzqGjj-GdxAPWj5t-2Du1"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "YaIzDtteO_-TrYM6DwaM9"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NegotiateEveryXYear"
+								}
+							],
+							"type": "caption",
+							"id": "d8Q51x5OXgLEcXceCebwE",
+							"color": "Malibu"
+						},
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"type": "exp",
+							"id": "bsv5V0ZSEogXGlQTe_Da5"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "10",
+							"min": "1",
+							"step": "1",
+							"value": "3",
+							"id": "VAJBIGrr-oRV7Nbst2_hb"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "iMM0CbKDCLN4m6ZQkho-c"
+				}
+			],
+			"type": "columns",
+			"id": "TJeYZH8Ulffr5OxXgDHpp"
+		},
+		{
+			"children": [
+				{
+					"text": "During her lifetime, Alice would be missing out on "
+				},
+				{
+					"text": "LostIncome",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "e9T4_fAkB14sL5yPdhzOX"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "rCd5TBzwUkM07EywKpSD9"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "QZQTZIOdeSVGOGL9GBLCs"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CompTable"
+								}
+							],
+							"type": "table-var-name",
+							"id": "u3wwNTpcDRNnPqJjFKBeF"
+						},
+						{
+							"children": [
+								{
+									"text": "round(notNegotiated("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "Year",
+									"id": "YmBMl2OUiEi82tLNF-6YX",
+									"type": "smart-ref",
+									"blockId": "bisahrE3h0KNvCHh9KUTM",
+									"columnId": null
+								},
+								{
+									"text": ",previous(JobOffer)),2)"
+								}
+							],
+							"type": "table-column-formula",
+							"columnId": "CPxscfjj58cqJBO5vVz_I",
+							"id": "ygpwwEkelSBIruHtDu-7o"
+						},
+						{
+							"children": [
+								{
+									"text": "round(negotiated("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "Year",
+									"id": "5qpAS43DM8i4wXe3Qvkci",
+									"type": "smart-ref",
+									"blockId": "bisahrE3h0KNvCHh9KUTM",
+									"columnId": null
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "Alice",
+									"id": "zVfRRo3WZGiWvwbPD-ZGF",
+									"type": "smart-ref",
+									"blockId": "CPxscfjj58cqJBO5vVz_I",
+									"columnId": null
+								},
+								{
+									"text": ",previous(NegotiatedJobOffer )),2)"
+								}
+							],
+							"type": "table-column-formula",
+							"columnId": "EJyNI7PMXGtHoEt7CyCML",
+							"id": "2ACyz6pbENRE3WOPwOZWc"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "Bob",
+									"id": "QoT0cLkaEE1nxlIslIBOO",
+									"type": "smart-ref",
+									"blockId": "EJyNI7PMXGtHoEt7CyCML",
+									"columnId": null
+								},
+								{
+									"text": " - "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "Alice",
+									"id": "V57n0CsoMiNYbZY_lebBl",
+									"type": "smart-ref",
+									"blockId": "CPxscfjj58cqJBO5vVz_I",
+									"columnId": null
+								},
+								{
+									"text": ""
+								}
+							],
+							"type": "table-column-formula",
+							"columnId": "1VFiWZIxmkbbq4ry2vaQI",
+							"id": "nRD3jq0Atw1KX920jEgbD"
+						}
+					],
+					"type": "table-caption",
+					"id": "M3Ev-nNCX7_O6GCb0MEPR"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"id": "bisahrE3h0KNvCHh9KUTM"
+						},
+						{
+							"children": [
+								{
+									"text": "Alice"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"id": "CPxscfjj58cqJBO5vVz_I"
+						},
+						{
+							"children": [
+								{
+									"text": "Bob"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"id": "EJyNI7PMXGtHoEt7CyCML"
+						},
+						{
+							"children": [
+								{
+									"text": "Diff"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"id": "1VFiWZIxmkbbq4ry2vaQI"
+						}
+					],
+					"type": "tr",
+					"id": "_Mhd3tdkT6dO2QRA6Ko9S"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "1"
+								}
+							],
+							"type": "td",
+							"id": "ohHkxVQGm_LXDE5OuVQeE"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"id": "PG7M1lF-BR2w0VoA_81rM"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "LBbov99_4w4kwH0Xf3nlL"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "7YTF4iejd_Fl2yvW-Y9Wi"
+						}
+					],
+					"type": "tr",
+					"id": "ZJ2THjTDpWMOt_kH_T23K"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"type": "td",
+							"id": "ZAEuK0LzEMe3qSeL599ud"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"id": "itDoqSw8DX-WlLiaKnIPN"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "HPCsCR6QsQ_cwoGhe8lbk"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "6apIw5Jie8S4nvbbQsF_b"
+						}
+					],
+					"type": "tr",
+					"id": "cqAscB7C22hsjmnFXyJ1i"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"type": "td",
+							"id": "BV5XYwQb6Qj7tbv29aeqE"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"id": "PAneQYgtNrH98twEa2G_o"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "SG6WysDLkGCKroobEJxyj"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "VhRUTM862WcdF0O89t-mr"
+						}
+					],
+					"type": "tr",
+					"id": "Q32cJQLufuDZAgmG1lTCS"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "dIL4jqBYEbWylnNizP9ZQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-oVVpHVK09xU8ew0WsKvL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "TmHH08quUuyEW09CpBHIH"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "S-XAyN9LzdwIpc_sh9l2m"
+						}
+					],
+					"type": "tr",
+					"id": "J_KSxOGvRUb9pjIWT1aqH"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "5"
+								}
+							],
+							"id": "lUOlXLhh5J2yE8pE11tvH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RFueJBfuJAUvg5eswi8ey",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "hPnTyww85pSmeAtkawRfi"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "hdI3LWk2KHTwFUmBSvGfE"
+						}
+					],
+					"type": "tr",
+					"id": "U9D4j3ahXKKRqDIxdbDXT"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "6"
+								}
+							],
+							"id": "PmYBTRYVKQ7x3-H_iG60Q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0PTW3-aC4f4_-Cxu0_9l4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "yO5cJAfbxVbRa47kpuDgz"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "I3W6Zad9JVU13wX_Cd84j"
+						}
+					],
+					"type": "tr",
+					"id": "tDbz8IYlBPRqh5JRw6n09"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "7"
+								}
+							],
+							"id": "GJjniOJxDMDdQFNNlGK3r",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l4ZvAeZ8ZLecQLMpYMGp0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "33YLTxFTv3ansP8TlTlxT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "K7Z63gWnYHlf3ETdSKp1p",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "W1GcPMWQUdmiu8BmoXK8V"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "8"
+								}
+							],
+							"id": "1ssioESoMkPWXUVky7oh-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VCwnZg9ecPpenxlpG2PQ4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0xuU022hWvaFLRvr22zOG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yFxqFXZK7zV3alsTwQFiA",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "nuXi2A0qejXFfAPfU1zxn"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "9"
+								}
+							],
+							"id": "OfE4HvPO81Pcb15TSx_Mz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "e3OfGG_B_sFnRbxsQswkn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "B3N0KD1oORjmNwo8ozY96",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hteD6Opy5SMJqIkbJNO74",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "pNlvWNYhkt59kKFKv_cZH"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "gZ5T35zKwvPgjZHd4AMvr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KKQKilJYLEm7DE-j8o5JB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tcY8O5sB0f85vhrO32FEd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1nOxoUPDJdoPbkJVuTSfb",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "XIHbpBlCdh2U2mC0_MQrn"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "11"
+								}
+							],
+							"id": "5zsu6NoHoXQQCunl1_87N",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NFprW4rbEQJUCcLW1MxVq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0tCs6e_Oald6YPGIxBggA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "eeN06-n9ZRIQbE_BFAkW2",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "-RbLyEoiRp1sbj_JxJrsL"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "12"
+								}
+							],
+							"id": "O96RLDSWKey_AMoAyaUa-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3g7ueSh3MNcrNndjzZxQH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Br5mV0qU1Js8RPU_493by",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KxkeZqMuVHe_CMRSkDi_3",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "1_1L55lC-MhgnzTx_YY_T"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "13"
+								}
+							],
+							"id": "tkZFRZLXiU0pkjsHL-hwr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pUo50jcdFgpDuV998sj3a",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WUeomicYGoevPz6HytdDr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EEZuRkmRElATVwyBdPMyo",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "xsGQFZDYsKBuwHTRP2u9O"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "14"
+								}
+							],
+							"id": "F9Q3zT29xIVzftXX7EJRo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TdiL4oSRsBiIsNB-2Bts3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2iKhE3gQp2Cz844YluMUz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2JFysQAWSw741RQCOfd4E",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "scIK0vr6UEn9dvby5Ro_1"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "tsHsbW4KJ-2tDWtSTZA3k",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "95NXX3dChcjDif8co4QA2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7T_f6PZeDbEzWMwNJtu0c",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Xd0wWPsmFVfXVnqz6N65y",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "rF0aCgBupnDsS19gqq-uS"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "16"
+								}
+							],
+							"id": "ypq4dke8Qy3Zx-YiYV4S-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dqm7Rtoku2gpfjeaXlhwP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "STbigCXlRc2lXxA8ODBT_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VNXKJUdr2JeA5ouNp0AfI",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "HspDs-IQ3HUMmukwlhKh1"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "17"
+								}
+							],
+							"id": "Y4IxsQpMwtyq0QWjjDIyP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oeWGY9MnvLk2HGsYZAQie",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5ZpPIxST1cpM4ZNBsoxBc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yjfKLWj_N8jCBBT3SXU2q",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "vrEmCilbIoMyOqa7Xw2tp"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "18"
+								}
+							],
+							"id": "Hz8ODIABqh42XGONko8ll",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aIupfGlYd-EIO7LTGIxSm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2MfhzR_FlevapzTDeaGFA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DBiOnD1hKxdNWEjgwGrrB",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "fUY3Z__SG7zq14bIw0cKM"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "19"
+								}
+							],
+							"id": "8-QS3yj5xWm2NQ8mKWhTu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JyEySsFCtB1kxs8voTMEH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Ml95UMIMj7uBtQ1CYH7lS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "evyx42INMD_SfE5gVpe5U",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "n90sP9dj5Q8EFpf26O0f3"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "Iqd2xMg72TneblvFsxOiR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IVjPPEGBlOFP_B1vjyjWB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jO--uGCKSiYT1XXwvMIau",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "U2Pm_iaVlfoNNXON9tXy0",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "F2RBIWZtqLbf-iyQc2rs9"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "21"
+								}
+							],
+							"id": "VBO7ibM2Lqv3T3YOLQ7Va",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3MRp8oAf6XNS7Psqd8LW2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RDXsYqoRZ1Cx8ar7XRW-k",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rKAdUVtkwl5ntyiwJadr6",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "HDtDRfnthvK4E7MTNAoQ4"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "22"
+								}
+							],
+							"id": "2RnaCH5R60cXPv-SCPuFH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4FXDeco9YKiDVFlwpSPhI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qB6PTZEK6uKIBAUG9qZGO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nMGNE6Ta91JEPC7_PURb0",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "6ozkFoFiy4kCyOqdnlcJS"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "23"
+								}
+							],
+							"id": "1mVm91YhBMJM7HGqtnD7j",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "28Zp9bf37_vzFu-Xl2NfA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lNs6llwcspNKfQOCutj_Z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jAnqSbrFkaIGC6cLju117",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "mbQV0ljGJf6Pr9aaWIZkx"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "24"
+								}
+							],
+							"id": "yeNBbaslGtCSPOMb-30k1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9cW8d9DkU5CbEXTf1SAZl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8CkcbFwgZvFsxY25Be2Ru",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yJL0Oq2WiveFyf3DK5PgY",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "xd-nkl3q96vDIa0LipeDn"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "25"
+								}
+							],
+							"id": "NEcIamDRv8ID_6k40cXzG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "t6kLUqve9wkVMoKO7QfSo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WmxM6avO9eNerMnxHvDKv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "uSpBGIDadVF6PxXKOaXwX",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "9JlXq-M2d4Res5ZL9BKOF"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "26"
+								}
+							],
+							"id": "HjA120vxr-d56p2vuZSBG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FkVzZuWl78GYjh0TeJQTR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2sPqDjHESQtsauA6JoDE3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vg_cvQYzmCiSUiUdtENmy",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "gf6hQW6pw-UbpiPievvdP"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "27"
+								}
+							],
+							"id": "FSKCjYZC2bGpyn8dsNZMH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "B5-AmGDV6j9jgCM_zybEd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iIqKyi9oJVNoiBAFNRfa0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yIs_ZAl4lA6PkIf_u4hWY",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "AiJVEbFWzHzMCmPjdvrJ1"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "28"
+								}
+							],
+							"id": "65VMOZyn0yZh2Atd2xkGw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hBYxHjjPxAGC2eWaBv4ly",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5mv0pN-8DBhETho4DCTAE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ykmiN0cuDZLxlUuX5s4mG",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "ARvqBcmSA-HX3JtGiuQxu"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "29"
+								}
+							],
+							"id": "3FwH7EOX_I7bZWb3NQRcO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FJRV62I-_-OIF2G7XhqjM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_ww052DdIxGqvWJ4PhsYt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ERfIPZzISYrkct3uQgys6",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "Yfop1Vwmklsyf4XUhG0fA"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "uu8K7Zv_SN1H5owLrTBj4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JNyMzq17HCRqWEmf1-i24",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XeRKUH7jiY9UOXW5W6ctl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Y30QpQqEyplep4aDrqYuD",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "JVdcV4BbE681_PqD90QzW"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "31"
+								}
+							],
+							"id": "kJdrYDDiu3zqLKAbPAEct",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "axkGCHHhQgBpAC3NEBDLZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7-eXAxotp27X3-jzwX2iT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8ZL5Cajni0n7_Y8w9yKsa",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "O5p49-YTyUpTAHe8YjZMN"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "32"
+								}
+							],
+							"id": "uiIU3RozZEa6kPs_dUZTM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mrETRULg2E60pUFzEhhTZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4sgu4QyMLaylAVoZNJ2xP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Jpu1TdR9P-bWxUhmKKjuP",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "e96vOo1XV2Q212mgTAYaL"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "33"
+								}
+							],
+							"id": "MIz6RYL28kW4lw9pxlGl8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "PqNOQP1-JsE0nCMJPnAw4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "j2Wi5GsW8XXb-qQBf5JIZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sH5rJ3KErWkHtEvMByAc_",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "cJJv1y_pq-JcKzqohRLJJ"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "34"
+								}
+							],
+							"id": "BXCw5x4kl24sQke7M7c7c",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GpKLMa9HoQAslmYtRjqcg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6vRp3E1pjL_5wH4eDdsKu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OVaSoD6_MKq73J_CJ-r4a",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "JU_Hj8KjhhA2ywNm6asMl"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "35"
+								}
+							],
+							"id": "_Y8dKfVGIXdAXikSYtB3p",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LLfzNklNGsoHTSfHsJ6Z-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "16GfNAWsDoXJbGBWraqL5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "W00gDvmlOgWbnTLCKyXtN",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "RzdtUXQY9ZC5jUPF3pp2W"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "36"
+								}
+							],
+							"id": "J-Dwhui7G2nZOSANTRjh9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "G14pDadZYydqtDIfcpftx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IgsUt9lg2rks1J1eyux9s",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UtUr0SFRa504xR-NUNJev",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "e0_gF0DJI1AVkcSDxwuT7"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "37"
+								}
+							],
+							"id": "gMI8QfZlvLtTOeZG9bvCo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "igcWE6Ay2owbPrZClIea-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Dh2dhfcIRX-L_6JdqChhJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DK5ihI3Ky7-P4WlsUAF5d",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "UVoGxhnp9EGadQ9C91pwN"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "38"
+								}
+							],
+							"id": "rwR1hmetoCEegmoj8QjwX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4b-px0-jbFuxmyXpQm6WY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wmlTC_AJtvDRRI8dz3TGO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "M6OaAMDwmDICUUjcCjIpO",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "1R_D79HPkV95D_PywETaM"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "39"
+								}
+							],
+							"id": "Ly7i3Lh9qpJ-LhqRBIaGX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "893agPoqigt_VXeVVaZkq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3JEmmR5v3GwP7fvnYFE6C",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "h-Wq3ORrq5u8E6X6e826r",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "kJEsbgQiI_1qMhpIvk36t"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "40"
+								}
+							],
+							"id": "lOSqoRB4-pj5A5nwSaVT4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZKN9qPWpYpylvAwPchgxF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iDTc-Q5sQ7ncIJ9PcRjf-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OcsPYPdvEpLqKWlBVWwvP",
+							"type": "td"
+						}
+					],
+					"type": "tr",
+					"id": "Y80ta2vKOhZ9rytIDLWrQ"
+				}
+			],
+			"version": 2,
+			"type": "table",
+			"id": "wx4Ph4Xhxl4gRGAW1Rcr-"
+		},
+		{
+			"children": [
+				{
+					"text": "LostIncome = round(Sum(CompTable.Diff),2)"
+				}
+			],
+			"type": "code_line",
+			"id": "H2rFKbd_GTZxvgQK5NeOo"
+		},
+		{
+			"children": [
+				{
+					"text": "negotiated(Years, Salary,Previous) = if Years == 1 then Previous else if Years mod NegotiateEveryXYear == 0 then Previous * (1 +NegotiatedPayRaise) else Previous * (1+NormalPayRaise) "
+				}
+			],
+			"type": "code_line",
+			"id": "cOySOXAIauSMKo44B5Vsl"
+		},
+		{
+			"children": [
+				{
+					"text": "notNegotiated(Years, Previous) = if Years == 1 then Previous else Previous * (1+NormalPayRaise )"
+				}
+			],
+			"type": "code_line",
+			"id": "mDGxhPbsNgLZTEFIBFrN9"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "0jizj1MtFXjfWh9PU0ZIg"
+		}
+	]
+}

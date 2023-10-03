@@ -32,6 +32,7 @@ export const padResource = Resource({
     workspace_id: workspaceId,
     section_id: pad.section_id,
     createdAt: timestamp(),
+    isTemplate: 0,
   }),
 
   updateRecordFrom: (record: PadRecord, { pad }: { pad: PadInput }) => {

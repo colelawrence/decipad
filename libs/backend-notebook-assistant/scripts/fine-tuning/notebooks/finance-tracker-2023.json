@@ -1,0 +1,5328 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "My Finance Tracker 2023"
+				}
+			],
+			"type": "h1",
+			"id": "0LJPoVlDTf8WTRq-1t-13"
+		},
+		{
+			"children": [
+				{
+					"text": "Start the year with the right foot by getting hold of your finances. "
+				}
+			],
+			"id": "i5ZjlSkg8fTiKUMqx6YiI",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "With this template you can input your expenses and income to get a detailed summary of cashflows by type as well charts that show how much you are spending on each category so far and by month."
+				}
+			],
+			"id": "ExNmRWnG_qVn-4DMkbAl1",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "LrWqU0eLVy9qZLH1kNCzX",
+			"type": "plot",
+			"title": "Money Spent each Month",
+			"sourceVarName": "exprRef_QTF7OPDR0rb6H_bOyAbJm",
+			"xColumnName": "Month",
+			"yColumnName": "Expenses",
+			"markType": "bar",
+			"thetaColumnName": "Expenses",
+			"sizeColumnName": "",
+			"colorColumnName": "Type",
+			"colorScheme": "monochrome_purple",
+			"y2ColumnName": "Cashflow"
+		},
+		{
+			"children": [
+				{
+					"text": "Your Financial Summary"
+				}
+			],
+			"id": "XL5idK9eJP-uttSmTS4qR",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "_GlxVjQtPQxGUgpkopnec",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "This is your financial summary based on the information you input below under 'My Data'. \n\nYour can Interact with the below data view to explore your financial by different time periods and categories: \n\nTime Period: Click "
+				},
+				{
+					"text": "Month",
+					"bold": true
+				},
+				{
+					"text": " —> select "
+				},
+				{
+					"text": "Cluster ",
+					"bold": true
+				},
+				{
+					"text": "—> select desired "
+				},
+				{
+					"text": "time period",
+					"bold": true
+				}
+			],
+			"id": "KNt58kfngRyjUTzeFBSmx",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Pin"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view"
+								}
+							],
+							"id": "todnENoCiwEi1ZPJX8TZq",
+							"type": "data-view-name"
+						}
+					],
+					"id": "r17SFRdbWg0T_Ib7qk2eu",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Toq1VAS1zDBUl5fq1ej5Q",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "date",
+								"date": "month"
+							},
+							"label": "Month",
+							"name": "Month"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "67oPYEYglHK4JRxsYcJNp",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Type",
+							"name": "Type"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FESvTIt4AC6D2ExiK0mKh",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "usdollars",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Cashflow",
+							"name": "Cashflow",
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UQ2oH_xRKwgmVHfxMxNjt",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Expenses",
+							"name": "Expenses",
+							"aggregation": "Sum"
+						}
+					],
+					"id": "usKaVFRe1GLO7HIt_RSEp",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "zFQ_mBnPZ2PbVPf418i1T",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "QTF7OPDR0rb6H-bOyAbJm"
+		},
+		{
+			"children": [
+				{
+					"text": "On the Money Spent in 2023 chart, you can see how much you are spending in each category along the year"
+				}
+			],
+			"id": "xTDioHRlEKspUIF0eSQud",
+			"type": "callout",
+			"color": "Catskill"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "GxpBCxtjTgsklLCod0RGn",
+			"type": "plot",
+			"sizeColumnName": "",
+			"title": "Money Spent in 2023 ",
+			"thetaColumnName": "Expenses",
+			"sourceVarName": "exprRef_QTF7OPDR0rb6H_bOyAbJm",
+			"colorScheme": "monochrome_purple",
+			"xColumnName": "Type",
+			"colorColumnName": "Type",
+			"yColumnName": "Amount",
+			"markType": "arc",
+			"y2ColumnName": ""
+		},
+		{
+			"children": [
+				{
+					"text": "On the Money Spend each Month chart, you can see how your expenses progress along the year"
+				}
+			],
+			"id": "DXWLPeE8If7xc2VhdmANj",
+			"type": "callout",
+			"color": "Catskill"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "OkLEFDrarxRNOX0RMP2c2"
+		},
+		{
+			"children": [
+				{
+					"text": "Input Your Data"
+				}
+			],
+			"id": "Uid6mvWltT-vU-h5cbuDJ",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "7FW7eLnTh-tSVJK9LUCeX",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "On this section, you can input your cashflows for each month. There is a table for each month to make your expenses easy to categorize and aggregate. Expand the 'show table' to fill out every month. "
+				}
+			],
+			"id": "GArKgi6K-QIS-Ocdl14-P",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "January"
+								}
+							],
+							"id": "1yoooCdJ5l7q-SptwbDTH",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " date(2023-01)"
+								}
+							],
+							"id": "VtpKR0nM91HzOwVDOkhyo",
+							"type": "table-column-formula",
+							"columnId": "lvHKOjLvncDJ9TdFot31B"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pv0mCnuhspKcM9QfdI4AK",
+									"type": "smart-ref",
+									"blockId": "nWCpuSBNi0cYcKqE6kyaJ",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "L-fCQLkbgKsU0IK8ipP92",
+									"type": "smart-ref",
+									"blockId": "hshUFA3-6SPUAUkLCym-E",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "j8XkRCkxvmYqZ7j81ZzFB",
+							"type": "table-column-formula",
+							"columnId": "t6ytRkQ-Ksh87Llglk5kO"
+						}
+					],
+					"id": "tzwus4eQ2UEaDZHuWnCSp",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "ocmf6VDvV_Gmr81yaEEK1",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "nWCpuSBNi0cYcKqE6kyaJ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "hshUFA3-6SPUAUkLCym-E",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "t6ytRkQ-Ksh87Llglk5kO",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "lvHKOjLvncDJ9TdFot31B",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "1CzNpfX0hsCeBfKVRSBW7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "4nqCfI05i5cIfdPxN01d1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "V13EUW41oHb2xKwzW4drt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "8xt7iCp28OTf5CA-YP1mO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Ong53NvfopAL5dQYXYHh0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "J_ultpJ6gHWLl_qM81w2V",
+							"type": "td"
+						}
+					],
+					"id": "__CE26O33iyqxFKMoUlT_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "JDll4OA3DR5St7HZfARhx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "Bau1bSwpglBj13tGGz7n3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "abw5z6TwTm14XUDh5N2Bc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xBkqHi245Pe5kqO087NqP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9Kr71jTizUdeEV-O5fWac",
+							"type": "td"
+						}
+					],
+					"id": "lE4RcK5UulZu1WhCjV7OO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "vE8odMdxTp3NK8_mkusjI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "l7cGiSWf-8PdwjU9V-ISQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-2000"
+								}
+							],
+							"id": "N1kRMysi1KeN4ETNZVYnv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6DInw1yBHMcyo1SFZ-egJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4OIPI5HgnIIU96znlRTR3",
+							"type": "td"
+						}
+					],
+					"id": "TL58hW1KiPQ_w5NxP7ZF9",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "GCky5bT97vreZKgzud4GV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "Gk__DPTJBh3WWvIBdikc3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "UguapHGHNfZnmdWHQqvzo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yf0rHYbQpP2uBIL8yxEGz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CY9fouPfK_iT-xvCcYxp6",
+							"type": "td"
+						}
+					],
+					"id": "4yedHaiHBZ9tmfl0glmbb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "7t-oRDCoVgCQhwgtMYVTM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "RWD8AqATpl1iboF_t1uO6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "V4CDx4XjMTF5XIbyZ1IA0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "T3BI9hOgX9y9B9vGY_v7Z",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IHAaO8QpjRz6WQXtMF76D",
+							"type": "td"
+						}
+					],
+					"id": "u_s1EJFrrBeeYNQhTGZEL",
+					"type": "tr"
+				}
+			],
+			"id": "pMK5BE4GsMQ-kJJ3qIMg9",
+			"type": "table",
+			"isCollapsed": false,
+			"hideFormulas": true,
+			"icon": "Table",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "February"
+								}
+							],
+							"id": "Q8CZLvanWCMuifpQXn-uJ",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " date(2023-02)"
+								}
+							],
+							"id": "qznepFdYuJXFgRpCeLK3Y",
+							"type": "table-column-formula",
+							"columnId": "Dbroqgp-s3yeZjOHy-RRE"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hmXwmpc2xnu3YJ4aSkxeu",
+									"type": "smart-ref",
+									"blockId": "xC4tEerKShfD3uogQQHMc",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Sm8h9KQLugo72pRmJ1IQr",
+									"type": "smart-ref",
+									"blockId": "mC0DvVEIwBFFLkX3vLKnx",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "qLzFOcJKYvhG0DWsxl_L-",
+							"type": "table-column-formula",
+							"columnId": "imGIMw0SqNz_-K8fHhuCw"
+						}
+					],
+					"id": "1IpnZzLerJsw1-gdBqe3w",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "xdwuPbpI9rlP1fC0gZ1aV",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "xC4tEerKShfD3uogQQHMc",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "mC0DvVEIwBFFLkX3vLKnx",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "imGIMw0SqNz_-K8fHhuCw",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "Dbroqgp-s3yeZjOHy-RRE",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "9mgnPLOU7mRRN2HUx9hbb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "6-R9RqHODGSRVumEM0P54",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "EDf8M5cDtoZS0kFL7uTMM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "t49IWyZKRHFtl61Le9O51",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "39W-pApch3bO6aXika35X",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qI2PJ7fEMj7qkRwhzIFIY",
+							"type": "td"
+						}
+					],
+					"id": "xJtasi6Wj-2B_lBEmjeIV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "zInonLzUn-c-TI9QhtFXZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "3bsDLJYG6Q-t6zq-5rUYx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "LtDHizakWITRvDUvqFQZk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fnfglaMtLfqczcY30k9ob",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jQmWJAgu0I4wxiJdCGKNj",
+							"type": "td"
+						}
+					],
+					"id": "rZaqDd4m3ZF29NkEp41as",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "MKSdhGDNlxCyRQtejf0A5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "kG8FXFUcXHjqB7k2Jm5zS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "KAAyYNldxXb1p5RuYKcpZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-emNCAheJLKACsVfR9-87",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2EAZhCLvFv3P2MrO3Jh4m",
+							"type": "td"
+						}
+					],
+					"id": "pY1HbxVzS4PVSpp2OYwIz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "Y0-x0XSfjgvYctFyPCBV5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "jkAbP81bOzObTi6_IRUCB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "SvT_qJLehSVGYeWhvRRVa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OFzXd2Clpz5tacAsSnigl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "V-4PPV1gPvr3ax7iEwlLO",
+							"type": "td"
+						}
+					],
+					"id": "lMMfWOhtqqLeUTkrxd788",
+					"type": "tr"
+				}
+			],
+			"id": "bYq2TEGo5YmQjhv5P26vS",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"icon": "Table",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "March"
+								}
+							],
+							"id": "X0TCkwQDPb3WV7mfPxVAc",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " date(2023-03)"
+								}
+							],
+							"id": "FiaduRw6u2AwQZufjA0ID",
+							"type": "table-column-formula",
+							"columnId": "WaA9mn2B0685Hf8Uz2EMq"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EQap2dR1unWvIjsm900gR",
+									"type": "smart-ref",
+									"blockId": "VkgSVmdaZR8kcvyt-JXIs",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "VcEJj0fHFdk6jzZAAcPOX",
+									"type": "smart-ref",
+									"blockId": "tuem_JXn3Kfr7Q5QvRO-T",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "SvfvyBsVsO35E88DHY0Z7",
+							"type": "table-column-formula",
+							"columnId": "J2HXRFFhEpNx5bFDPgn5x"
+						}
+					],
+					"id": "g4zwCWC7pExtgIu9kROio",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "45XYhvxzenFwST2kgz4av",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "VkgSVmdaZR8kcvyt-JXIs",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "tuem_JXn3Kfr7Q5QvRO-T",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "J2HXRFFhEpNx5bFDPgn5x",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "WaA9mn2B0685Hf8Uz2EMq",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "7XgtIaRhE5qpMGtOY75qZ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "S10fmRamhzppYE-NQKRlH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "-778DCz7T2Zj4KERwn9bG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "--e65QMxFhFFgc49ZAkQ0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sz5Rftc9SvOT2TAIA_yYD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6l5IzGATdhNbASwzqy0Nn",
+							"type": "td"
+						}
+					],
+					"id": "e83ecaFpqOOiofRxR6yXe",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "O1j3u71MG5U0520tzP429",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "-VU_afPFjE8HxyPRSi3t2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "fvyl-H7ZkWBObxC4EMcsy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7mK_4OxXfk3RjCc_OL6Pl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TpZgFhebm7JctKpc6kcg2",
+							"type": "td"
+						}
+					],
+					"id": "5dXcqNUSQcHuJ4oRPmWYs",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "iwSprPatoL_2u1yzt8Q1d",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "SBKS9ees5Y-RozxVGo-mh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "OAxjnGvgySdLhqhMLoy6n",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l5vLveBO8MgiN_fXGJ691",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mQ1n_m8REq1AGp6YkaKaC",
+							"type": "td"
+						}
+					],
+					"id": "qk55T8P82C3M1wgGC3PcN",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "01-q1Oq1ZAhzovb0LyBBG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "UD8eTQPZoljjiCMOBaUYf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-250"
+								}
+							],
+							"id": "GJdWflS0_f-R1GwwUuGwU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "B4T4UqIchrMQAXp2JbFVC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "z53fgdSI7983BqZuVN-If",
+							"type": "td"
+						}
+					],
+					"id": "0l1h_GPSEd2hJ2yzSNC5a",
+					"type": "tr"
+				}
+			],
+			"id": "3MJdUDND1u05bp9tG_FCl",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"icon": "Table",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "April"
+								}
+							],
+							"id": "ih5WdKezgFMLPGnQhc0dl",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-04)"
+								}
+							],
+							"id": "1Ow9-ex6fZpmfm9LNBS0d",
+							"type": "table-column-formula",
+							"columnId": "QihmAVsd3pAc3RP0LOX6a"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "fOwWZuPn4_0xKoFivcvmP",
+									"type": "smart-ref",
+									"blockId": "CrZtaQdUk12oo9QRnIcSn",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "k4aGfvZ3upwYQYFtaANJJ",
+									"type": "smart-ref",
+									"blockId": "qLm2ZSn4Xp9sniyYgc4GU",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "s1-cm-AoMSu-vKJZeYfND",
+							"type": "table-column-formula",
+							"columnId": "CkZHAgOzRHSuT0mEiG_Mi"
+						}
+					],
+					"id": "91LLTV3mgq5nGk55d3NlI",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "cPHuf5RiPG9z1IDDtxkJ_",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "CrZtaQdUk12oo9QRnIcSn",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "qLm2ZSn4Xp9sniyYgc4GU",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "CkZHAgOzRHSuT0mEiG_Mi",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "QihmAVsd3pAc3RP0LOX6a",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "zH2WYjtdlParuz4tY4oZ3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "QK4CYlroQU_XM--pk91um",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "iVJ020rChr42OnpeW8Lg5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "ziTs6MjMFKPmrGhEX7Fjb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "a3V0G9eyZxpaJJK8lSgWW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ao4o2y3Kw5f9WWwjS16XN",
+							"type": "td"
+						}
+					],
+					"id": "ZBjiQa0JpDW1ccSNx8vb_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "UMKq42EfVGe9eCJHvka2x",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "ndtmK-nePJe2-KApS5eBI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "FSuXyrM3ravlqkGt5Ss9l",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HHO4NQaF_zhfCqcj7krhe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8QUpj3QAG08rAy-rRCxb3",
+							"type": "td"
+						}
+					],
+					"id": "JVbMzodwQqkgYt7-MnGjD",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "ovSlfluecAxSyJz4F5PzZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "kp3Szb5CHOcFSIthnkbTF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "Y_1XNA7FaWDbfFRkxrU4f",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "m6DpbmCmFvIWfwk416-fn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Nsi4UZeCee3CfHxk1ZAE2",
+							"type": "td"
+						}
+					],
+					"id": "A0sU8MtkQnBp4QnFUxjrb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "z6CkJPUocgEhCqQYF7k6S",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "Zl2vB8zbzATgfqnNoJVlN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-150"
+								}
+							],
+							"id": "30tZbr5PYcdIFED14Bmom",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qacVG-X3aRoD6vq5X2Vdb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tQJO8nzcXKadKdCEzKxQk",
+							"type": "td"
+						}
+					],
+					"id": "rnpRV1Ik1T5mdjjqe4cjD",
+					"type": "tr"
+				}
+			],
+			"id": "CB0g7lK3IR4hLizDff7n_",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "May"
+								}
+							],
+							"id": "FZhYdmCdB_oXFRTee_VPz",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-05)"
+								}
+							],
+							"id": "lWbQK9RO3XOZc9zZ3i7kc",
+							"type": "table-column-formula",
+							"columnId": "YX8_OVq1B-7qwvM348mD4"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_6HOlRaw2V7PSsLRrAaRN",
+									"type": "smart-ref",
+									"blockId": "F85aKMcEEjjaYhJK1m7kR",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1CgMCqgTuNkw-igbckES6",
+									"type": "smart-ref",
+									"blockId": "X5eLDuAjWl98roVYjnDEa",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "OqVNCw35d4OZtBCzZ8Baa",
+							"type": "table-column-formula",
+							"columnId": "kkLq7xfD0tSjknOPhO1Ss"
+						}
+					],
+					"id": "NDOBhBiL1uhcPnVxM8QVq",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "bAndOUvQSbwtOEjy98MX7",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "F85aKMcEEjjaYhJK1m7kR",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "X5eLDuAjWl98roVYjnDEa",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "kkLq7xfD0tSjknOPhO1Ss",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "YX8_OVq1B-7qwvM348mD4",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "rMvrh1t29bKOslRUhmrXj",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "4Xk8rdPrGX-bR0C9ldtn1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "vO6S2kHcARc41NlXv8SRx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "e-7JWqA3XYfe-VXcaO83j",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "D4ucbNYzCLxATWlzklEaU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "91VJXThTeY3UcksUvNR9B",
+							"type": "td"
+						}
+					],
+					"id": "67JqwxmV1nM0HVOS4YLqJ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "gb2Rv9hm07EFKmxguIZD6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "eX9UMM3WrvVGdhjuN9-F2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "sb2E1_T0u1tOwDAlpFts4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "P8DcjL5uLcRYdUON07JIR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qt_T1EzhyFnhE-GtzgnhJ",
+							"type": "td"
+						}
+					],
+					"id": "32Toj1lIL63vdvpGSDmq-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "EmhWERNR9HAjb-5ah-p2M",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "kJzRcOo6D30WywbuvB18H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "XhWl58Hm9jVId76Bo-1AC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iX1ZknudscSepx8dzIYTz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "v3UA8LH49qDIBI7cyxhko",
+							"type": "td"
+						}
+					],
+					"id": "gND89GjKhMCEnV4yo1LsQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "UcIX3I1aCK4gF8f3epTwo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "pIXB_Uzy79j-wXTyCif0R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "ravUNf7uI11XipQZOK6NY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oF-mCHBy-TSBxcx_eQjvJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UxyvUxLm7AC4AHUzdvDy4",
+							"type": "td"
+						}
+					],
+					"id": "Wl2pVaDJf45Tj5bTt-CXT",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "k3cTWq9yoddbYsBYPieEA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "f06n9D_WaUn4NUwHW1UjM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "9rawbm08msDiXSQLAQZCX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NtjJbBNwEoKXSjdqzbEOU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "v6skIe1UwDK4lfBIj7nYf",
+							"type": "td"
+						}
+					],
+					"id": "H_wPKbFpn972iT_dcH61p",
+					"type": "tr"
+				}
+			],
+			"id": "6fAJlgIW3jgJPw7MwxRyu",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "June"
+								}
+							],
+							"id": "Vqt0ay98y3v-I4briE_M-",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-06)"
+								}
+							],
+							"id": "ugiynnUsyegVBVZke8_DL",
+							"type": "table-column-formula",
+							"columnId": "cPQJwhw77Sse-433E1_RW"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "9m0QXsvDHH0TCf1A2wSPT",
+									"type": "smart-ref",
+									"blockId": "p-w_H6ckwWxHwm8qwkK37",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2f4oE-LJq8TWrCB0DX23_",
+									"type": "smart-ref",
+									"blockId": "eg6Y74u6umWPD1pv1hkch",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "0OxL1h_oQaYaAJth6MCRp",
+							"type": "table-column-formula",
+							"columnId": "vmf8G8BAWus-z4wjhhLB6"
+						}
+					],
+					"id": "_XrYAnNJbn68v643sFmpU",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "PX_R8pXNQ3apbcQGmAGLv",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "p-w_H6ckwWxHwm8qwkK37",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "eg6Y74u6umWPD1pv1hkch",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "vmf8G8BAWus-z4wjhhLB6",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "cPQJwhw77Sse-433E1_RW",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "htm8J-M0w5P4qNCSJqHGO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "AYWMkYP0sMQkxVjfnMADa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "mEWYw5BbcmjDul-AbJQ-r",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "OCMacQsK5dEnw5G-gpNI3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VOeF93fBJXPCvghJlzHwH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HxttD3T5ZWcbre8OvxPHo",
+							"type": "td"
+						}
+					],
+					"id": "-LhhLWaukBme7nr1idVJk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "1AGklHIpMEz8fHygsnf3E",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "zLQ7G6pGyf6lMnFCXg84N",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "X_tqj2LoRwBQRy7b8qkjj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bt3cLHbUDyMxpy4uLweRJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Km0EvUZjqckRQ2vJdsbCz",
+							"type": "td"
+						}
+					],
+					"id": "JR7BqbODQnWbh7XVoo3vo",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "wBSXg49R-lc1ArBl-4vIM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "DEnPEQ6mRwO7C8kyOQmt-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "pFOsXpbis8Q5bKDKyjnfQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Q_txNtG3IG5yiexR9tvHS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-G_UZg_copTXBGoY2Uyei",
+							"type": "td"
+						}
+					],
+					"id": "HJGuz4jGjnRQJLAezFNFx",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "dzdNPufoVfHMcbD4a_Rdc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "b2TbBUmDmjicnqOHA4Hsf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "_7cCq_SJ7XiX4yWwUsymv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WobwNkhWVxtUZOamV3A4p",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "f4nTlH1Mhid4o8jnO0_ZN",
+							"type": "td"
+						}
+					],
+					"id": "rvrqAEhDDO8L4z7SN10Y0",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "1bVEX9zFVJ9NZ4MCusaFR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "ClZxfKSW96UDuv4M2rDIt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-100"
+								}
+							],
+							"id": "R2xrujO73c1sI_nUxACLa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AlLD6G30YIKBM7WXD2EnJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-GhcFPfrjnQypJBEwWKI0",
+							"type": "td"
+						}
+					],
+					"id": "v4yiK-6t43fFSoHZzpjWw",
+					"type": "tr"
+				}
+			],
+			"id": "bXdw5ZxrnGuwUirzlmEWp",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "July"
+								}
+							],
+							"id": "9xWdpMTglY441O1NJxkcL",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-07)"
+								}
+							],
+							"id": "yZV1qUshbKrxeqnkEXf_r",
+							"type": "table-column-formula",
+							"columnId": "AhlNIHQrtrC075OT1FcI2"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "uJGG7Xc0jBao6e2mqhLcO",
+									"type": "smart-ref",
+									"blockId": "zpTVJmiFYImpybGVBqnb3",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Mu-jO8maYao5ZRWhLrmae",
+									"type": "smart-ref",
+									"blockId": "pwaQ1DqBxQXZWDngvkKll",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "toD70puH9-uETpHswNnOQ",
+							"type": "table-column-formula",
+							"columnId": "WoCvCBXdOsxk80xHhg71-"
+						}
+					],
+					"id": "ateU96oLc6hEJvGyvFcCb",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "NCpwYGlGNubJ84yMM4EGd",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "zpTVJmiFYImpybGVBqnb3",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "pwaQ1DqBxQXZWDngvkKll",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "WoCvCBXdOsxk80xHhg71-",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "AhlNIHQrtrC075OT1FcI2",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "mmx_rBs-bwN_l6OhKecOn",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "P4S-CJY3wNSK8WbuKhsOK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "xX0gio6oUx95NhVEYdhBK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "mO1zHNs-0DsCdaTIqSj8k",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EZEhFiSnPThDJ3qNGGHVT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NZcR-zo66mDugDN0b4lPM",
+							"type": "td"
+						}
+					],
+					"id": "6AV5WyQHa2olFsmIwiNBK",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "uLP-SjXGfFJWTeV4x57JV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "ugAQVFP3wvLSMVDNAJ0gs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "3pIzoK5j8JCRi-v6Fi2Kk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "cmQsJuKGu_-JznIIznztO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rvzeEN_xwbTX0Nh9TlWM8",
+							"type": "td"
+						}
+					],
+					"id": "WgNcQKDdy06XSzdCV8Qk4",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "QLAk-08ksKfbMbH8RVxvw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "Xu2ApUqR00B7GFO6e3vgh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "PJ49UgNku2Yv7q8J5nSFZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yCuxCbcmNRA3EBzrM_miW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "A7aGZHAa4rUoz-Cliy9t7",
+							"type": "td"
+						}
+					],
+					"id": "nFXIIoklZQ5UjUxqVYNIk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "ha42ckVmpl4R1ONIoZfqR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "Jv9V3XJXsx14XbQYt9b_8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "MnUyiZivuERllXcv6yRx_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CvI92AGjqSTm-NL5MbTzm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4Nc6UfaRcI_yG7npPK9fv",
+							"type": "td"
+						}
+					],
+					"id": "tG33gjkRv1vkHX3s8qy2D",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "4-1nzlJ4EwDg51oHWFVG4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "lNbS32gFCkTpgZL9PSRtL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-50"
+								}
+							],
+							"id": "PpjhSUBU_1HTb-pCrN3gZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "n_6GC_4yzz8QjqyMBN2mK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "J0DjT3SyYSm8d7BBnpOGA",
+							"type": "td"
+						}
+					],
+					"id": "hJrvMlBP2wBjJxbf2T5M7",
+					"type": "tr"
+				}
+			],
+			"id": "BJHigzmzTgGWRAideXMRu",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "August"
+								}
+							],
+							"id": "uHsQRNnISjw7n9Gr_-W1y",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-08)"
+								}
+							],
+							"id": "qJyw4Gh6HTazG3-xEa2xL",
+							"type": "table-column-formula",
+							"columnId": "-rJ_WuSvXLx3iLhW0fwhN"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "JR1hrDZHUdkEfpxHcXBET",
+									"type": "smart-ref",
+									"blockId": "fyHluGQhlYsDsJPK1gXFL",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6Tiy8srEJeIPHlylNKfCN",
+									"type": "smart-ref",
+									"blockId": "wl-VuNppHHMfrUFVQmb2M",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "v4O5rN8W_KrazrHmOCpIo",
+							"type": "table-column-formula",
+							"columnId": "xqgrWc5YJcKPTWYItIvZD"
+						}
+					],
+					"id": "tkvWwwpMBxMA7XX1Q2yzL",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "pwyk3kF2HPcTQ5_b5L8KP",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "fyHluGQhlYsDsJPK1gXFL",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "wl-VuNppHHMfrUFVQmb2M",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "xqgrWc5YJcKPTWYItIvZD",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "-rJ_WuSvXLx3iLhW0fwhN",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "f8a6HzLOT-crYgW9mzgEX",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "dIXnNjzNd-OM85H0RRFe3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "tqhLRwwavgQ_neoNKdvLa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "SPMPE2cAzcSRqRslyaAeM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "riDivC-VSa4dfOWgLC1NT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GNN8iGYh_I1Q37gdaFMek",
+							"type": "td"
+						}
+					],
+					"id": "n73fHVTuqWaS6Mnpo_n4N",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "cRs0-JV8-JXDBK_SUL7Fj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "JBGK1vT3e1fnVhlFfvOse",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "q2C7QSrZo2UOGGx8EcgQI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SidNpsqKY9gm_K-60NE7Y",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tESvZuPGokAKygyM-_V4Y",
+							"type": "td"
+						}
+					],
+					"id": "et8f5EePhBJ3s48FwdcWE",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "HIBNmT-Dd9ocVx0hzFVGd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "ps0y7_JuSvVKXqgXN9AQH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "RM_f2u686140b9GbwlAXY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iXbClizIyMKWRZCPWup0l",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YVj9km6PlpTC6LRWSos2y",
+							"type": "td"
+						}
+					],
+					"id": "nnGLWa1DY7OoeJ-QYhrFF",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "LmRSImCLK2NBzGE38lItp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "H_uxSST-OwdzulFMv6Gz3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "9yPolZwX3q7QOJkEnwZ8q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Spim8UtzO0h6gyUQTxk4o",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "x2xokkZ9Q2kRvPyvWTE3H",
+							"type": "td"
+						}
+					],
+					"id": "NEI0som8M6w7mPMU_yUxm",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "PRRCqvzrZ3CNrktnQvHo-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "0qCWsDgCFOYiz52p4mnn6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "nH5cyqL7pEtk9VvVSLyY7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "N74wgoXDirgYPAG0dOqFr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HqPsju6Izb6O7eqN_El_Z",
+							"type": "td"
+						}
+					],
+					"id": "oKxMw0AGrGlzGvX_DrVU7",
+					"type": "tr"
+				}
+			],
+			"id": "BVrAO_0A8gh1r-N34qv2o",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "September"
+								}
+							],
+							"id": "4kyQF81f43qYnPZzdl0Sn",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-09)"
+								}
+							],
+							"id": "JCExX00T13tICeFzQWS-U",
+							"type": "table-column-formula",
+							"columnId": "RY7M9TX7xQFthqGQVKn9-"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "nT-Rp-O42iasPgsM_S5NA",
+									"type": "smart-ref",
+									"blockId": "4dY9kXPwv-yedU1Q6UWPL",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "r79nOtIzCnriUy4GuzBPm",
+									"type": "smart-ref",
+									"blockId": "z5fbSiI9yXEbkQ7TNKq9b",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "YCMihmQAPRjzVDKiZG7oe",
+							"type": "table-column-formula",
+							"columnId": "rIBRT3-wa7RqEBIqOftev"
+						}
+					],
+					"id": "nY2ssy48X6Ht0yoVlwpew",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "hLcQokyvY4ZOWmORebsUh",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "4dY9kXPwv-yedU1Q6UWPL",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "z5fbSiI9yXEbkQ7TNKq9b",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "rIBRT3-wa7RqEBIqOftev",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "RY7M9TX7xQFthqGQVKn9-",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "yg1l1akP3SsWOmZ78skTb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "ziAJJzgYtDl2E5EgLxO47",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "gw-rjJBLto-h6206ivLIt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "hyb-UopKhDm0w3wp6W_R0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "flpxc80p2JJXki3GWMhUu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gbBHmw2T2KX3pWEIe969X",
+							"type": "td"
+						}
+					],
+					"id": "ZC1SVTdlf9ZZMwYK-KHxU",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "RpiKYbQoaocGAvg6UBhWG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "fd5t9inrNPb2A1M3uGYy0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "EPOgDJnJnjm0WYfo_sUuU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "v_CvX5JjU_6JZKgQdgqqM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vAutX4sL7vGvul4IO6vvc",
+							"type": "td"
+						}
+					],
+					"id": "KCReBmyYa8ervyDS9Zuia",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "rFCktXWGZybE0yqNnKj7o",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "Ul5g6ny7wVxiq0NVG1NsA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "5UYo2e1BCuuq2aiBNUj1T",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zIY0Gt4pZUSgwG5vtLuCo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FnI7OAIw73z3n4QwWJxAp",
+							"type": "td"
+						}
+					],
+					"id": "amk5WFmFyW0YEJsscpK7F",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "_HmyW68BpQfPJb3nE71DB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "GvOfADx2anqHrhXbmPbcC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "mzmuE-HGGJ_Y_MiC704MM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6CiMyxC09G2bNbWNhKdVR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xHolfrtWE5l24HWQJLS66",
+							"type": "td"
+						}
+					],
+					"id": "RwZZEmvOD15CUvm_UIi4t",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "M5sIM3mwvfy_0N9qlCj4R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "C9FLlB_LBX8ARrcJuMHTp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "_4zElxjLP4BR1FBAJzmYe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oDgCDt5Dk4NeqmNnLmSN7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Wx8TQ1OKamslyCbuK9FcP",
+							"type": "td"
+						}
+					],
+					"id": "uQmafzHjyZJ7XFr7OncmV",
+					"type": "tr"
+				}
+			],
+			"id": "qX5PH8trnlUhFxTpYMQYZ",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "October"
+								}
+							],
+							"id": "INh_zysfwmJH4UZps6uje",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-10)"
+								}
+							],
+							"id": "40tU2D-jMbKy_rwpFglY4",
+							"type": "table-column-formula",
+							"columnId": "wYshaBBZ8k1D1sEWU_gkV"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ouiZGaacDrkYgcABBMMm4",
+									"type": "smart-ref",
+									"blockId": "4o5q1lAj557y3iUmT-BRs",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "UbXU_iLb_BOT8YRDNUrgA",
+									"type": "smart-ref",
+									"blockId": "DUmHfckfwaXfx7ifUTvLf",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "B6GOGzRUePmucb_B8vNfG",
+							"type": "table-column-formula",
+							"columnId": "PVZdV7chHhqPXg-mA3f10"
+						}
+					],
+					"id": "DJ9PpVvEjfe-JAyy1YMzP",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "sov6O17Sisdq5X2j7bKuq",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "4o5q1lAj557y3iUmT-BRs",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "DUmHfckfwaXfx7ifUTvLf",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "PVZdV7chHhqPXg-mA3f10",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "wYshaBBZ8k1D1sEWU_gkV",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "I4JirE4Qb04fIFTSxR83j",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "aE4doimDCsMKn3VhJkZTT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "68aGZ1W8v87hQlNqZb1Hv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "XPpp_OC5yybl5vkWv7ydP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "60bmNIlAre6-7Kvj65iWg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "j77PAoYYftdgw9THJWYLy",
+							"type": "td"
+						}
+					],
+					"id": "I21xEueJsFQdBCRUtPO98",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "sUv9uWaNWQIUJwv7u15kD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "rllszCclZM3oE7ZvGqPAo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "kOzP0oPrDU2FrjJRda88I",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9cAT_a6IbWru92K0EYP-a",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WQKDdYe5p4ou3dNI0Szh-",
+							"type": "td"
+						}
+					],
+					"id": "syjbRoVJQRCPv76tI7BBT",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "PVG0vjbgVWR0jB7tC32N-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "wtQJjkIx2GNOWFx9jBGeG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "Y6z0MYh2joNqGMql7mQ1Q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XVpeTLWs8RgaSw6DNNgja",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Gn4alx8iidWq7bKY_Lr0k",
+							"type": "td"
+						}
+					],
+					"id": "m4O0h8RpPiFXGDVeKOO1J",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "lc5flJ4gOOBZEUq18H7kl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "RL_KoVykzXgA5w1c5kQYE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "D-_PvGjtzLAyqoYgMgLMR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "624nhLx0tEy9JR8DQxje_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "q8NnnGCH_6F5JLibXrglf",
+							"type": "td"
+						}
+					],
+					"id": "jlsX-i--chP2JyWbRX3ly",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "tqHjqL5gHdmv8dB7Hqgpw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "5Lkm9r-cXb0YW6a4HWPCd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-150$"
+								}
+							],
+							"id": "uUOCgSY4KEQQWkdHdQVQG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-ccwZXeOzlTI8_WbiVNkx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7DtIgkfPhxuGuLJBDfTxF",
+							"type": "td"
+						}
+					],
+					"id": "2FwURH3l_MQwLrO7Sb7tD",
+					"type": "tr"
+				}
+			],
+			"id": "SgstMwVdrh0dXywgPwOu_",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "November"
+								}
+							],
+							"id": "k2CwYbDD0BvjwwvirwnoG",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-11)"
+								}
+							],
+							"id": "wWEx_jIWw-7smp9rMJL1P",
+							"type": "table-column-formula",
+							"columnId": "0lCsSg82fQNZSZeUTRfdS"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IuBjs0kmgjWcafxVI1uH3",
+									"type": "smart-ref",
+									"blockId": "2ZOoxZnsnadyDdvZTvKqr",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tf3urJuc7I_FxGp2UZy01",
+									"type": "smart-ref",
+									"blockId": "R6u3W8c1jUE3S6Y5SbuoN",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "y-cTe-w6Fah_9SDkuCmog",
+							"type": "table-column-formula",
+							"columnId": "KbVy69yD1TeVjPCEHEnbs"
+						}
+					],
+					"id": "X8kn5ei6Em9J4I9QAM-N8",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "vQum6RFZ8eK7sUNYt3Qz3",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "2ZOoxZnsnadyDdvZTvKqr",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "R6u3W8c1jUE3S6Y5SbuoN",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "KbVy69yD1TeVjPCEHEnbs",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "0lCsSg82fQNZSZeUTRfdS",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "p2MQ1doGpiE4KTG-iDuZh",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "L3LPJnpOtrtOcXVIlmW1k",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "n7x-Zh2XG1AVstnKtKNbQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "wo51A_PIt6B5kKMvPnptK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Q4N06dIRYh-pB7JOVA_ra",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "J8UCwmHxSmr9PqwWNy6HX",
+							"type": "td"
+						}
+					],
+					"id": "r82ytiQz0SO7XrM6JIkO_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "4g0WdpYzZBFZZhbh6eCnC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "EJDwpSUnteM96pPTiF5w6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "y6Zjeee0DlI-meiVWroTB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xE30YEme_qqa1T5azlEeB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "uD8oZHYaDXu5J8lr1xrul",
+							"type": "td"
+						}
+					],
+					"id": "PQBxh2h1EAtTozfvcQwfI",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "TyfpwJVm4DMUBe-tuDs7f",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "di07e12LX-J6K0QGCxZS7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "NND_f2yRpLj-QMxdrentH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "u3n50pmbSQx1UQ8aqz2XP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ftwFdQxl3jIRjcg679ZEy",
+							"type": "td"
+						}
+					],
+					"id": "bmom_uWw5gXs6YLu4TnFW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "oM8YNUOFTYQmQcGyaEn-h",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "lIlGcAUW7cQyQdd6M6cuN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "yZBIeagthUXZIokY-Ozyi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LSfZ3WGy2qAaBy6pCWC3W",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LaidNOHKj0dzDUEXCa0CR",
+							"type": "td"
+						}
+					],
+					"id": "eiPkBsqUgnOHwHcj_QXik",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "jejTf4ZYgvHZ5d4vFg75s",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "6lZYS20un_n6nj3hKKl3N",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "47C2vYTh0wxuwbSogNdKJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5KaDox2K89DTulQbUYYPw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Gm6tmb-C1eaC3wWEcNnou",
+							"type": "td"
+						}
+					],
+					"id": "AlWraB3YnRUrUKmjVE6yJ",
+					"type": "tr"
+				}
+			],
+			"id": "YXCPanclbc30rJJ43ldZ_",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "December"
+								}
+							],
+							"id": "6Mrp08uBMSWeeox9s4dqa",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "date(2023-12)"
+								}
+							],
+							"id": "9h0NxqfYtGsYEe_cOaGlV",
+							"type": "table-column-formula",
+							"columnId": "iEc0ftqv8cW7Gsn-9Ky09"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "2tWfWqnUJriPBuoaNSpBU",
+									"type": "smart-ref",
+									"blockId": "JgqtyTwjRD7EzQ1gT32pP",
+									"columnId": null,
+									"lastSeenVariableName": "Type"
+								},
+								{
+									"text": " != \"Income\" then -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "IqfNHRMiB0A3NNa7u55fV",
+									"type": "smart-ref",
+									"blockId": "IB_1b0fQSVXCAwqXVbBQg",
+									"columnId": null,
+									"lastSeenVariableName": "Cashflow"
+								},
+								{
+									"text": " else 0$"
+								}
+							],
+							"id": "xZdi-1xCGVP_AbcR8YI0t",
+							"type": "table-column-formula",
+							"columnId": "sq8tfMDLrjvK8Grzp_CQZ"
+						}
+					],
+					"id": "V-WG9seOTLaya3-QQFTNL",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "BxZ1Ry1Mkk66RLReoZSvu",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "JgqtyTwjRD7EzQ1gT32pP",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cashflow"
+								}
+							],
+							"id": "IB_1b0fQSVXCAwqXVbBQg",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "sq8tfMDLrjvK8Grzp_CQZ",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "iEc0ftqv8cW7Gsn-9Ky09",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "l0eExIXgWpGXskZRzSihL",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Salary"
+								}
+							],
+							"id": "wBaRHIw3X03bW7maV6dQ2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "oaRGx7zLlq870BjmAnI21",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5000"
+								}
+							],
+							"id": "6AC8X0he6Hsg3TFSMxzzS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7jVsYIiVK3FQfchKw4eHW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UDNrW26RmMcmdo7sbBAac",
+							"type": "td"
+						}
+					],
+					"id": "pOiWVzNFcJVkMSw0AZzve",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "0GZVP834FsrbPEOhdFfW2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "Nbm1p4h6OWsF7N-ToyTw_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-1500"
+								}
+							],
+							"id": "h60now6H6fJT0IJ25Q7iK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nSYhANKRdP3RrdjDJt_B7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XZTtpRzy7_rysggYIMI2r",
+							"type": "td"
+						}
+					],
+					"id": "dl2BGeiion-QaHMnl5tUQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Bills"
+								}
+							],
+							"id": "PU9tyQJB58tWKBIrsZJ0a",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Home"
+								}
+							],
+							"id": "-1H-dtas-OIIjPF0nWEul",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-200"
+								}
+							],
+							"id": "Zynh9z7hs1a_wPsXeMwkz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bs8XJdzBx-HF2oey6A4mX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fb-byTagXxra10f7sFed9",
+							"type": "td"
+						}
+					],
+					"id": "AlanvCaQBewdykz9RNB2m",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Restaurant"
+								}
+							],
+							"id": "jRjhL4Uvcs1t1dZVfwAQP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Fun"
+								}
+							],
+							"id": "mCY9rqkhXwueEhkn165ZT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-300"
+								}
+							],
+							"id": "pCxyC4CGRgtQo9o-oQUJ8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l_WFattag03EfKdZF8Sw6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "PEgQo8QJacUeD2Sd6tkA2",
+							"type": "td"
+						}
+					],
+					"id": "gIzGz7rSJATUpIW6BdB35",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Groceries"
+								}
+							],
+							"id": "fibd3oyCx3j-AWSFl3p-f",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "54Y3moa-EQyMKQ24VzEtV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "-100"
+								}
+							],
+							"id": "vYqezUFrxlOwpYqUC1qdS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LgMQGsTBZUVI0_Kzk6rgY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "P9_ikny_Zol17WyHJm1Py",
+							"type": "td"
+						}
+					],
+					"id": "pPI5aunyXDRVr9oFIjgFN",
+					"type": "tr"
+				}
+			],
+			"version": 2,
+			"id": "IXktbtSTnsFSf49V054Dz",
+			"type": "table",
+			"isCollapsed": true,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": "Calculations"
+				}
+			],
+			"type": "h2",
+			"id": "1jWL55gP48VOBM-gxVP1P",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "This section has the calculations that power this template. You don't need to update these. "
+				}
+			],
+			"id": "LMy4nwHJPZ_fhOzx-ALAU",
+			"type": "callout",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "FullYear = concatenate(concatenate(concatenate(concatenate(concatenate(concatenate(concatenate(concatenate(concatenate(concatenate(concatenate("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "January",
+					"id": "URZeqIjR2hOydKFqd8tj4",
+					"type": "smart-ref",
+					"blockId": "pMK5BE4GsMQ-kJJ3qIMg9"
+				},
+				{
+					"text": ","
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "February",
+					"id": "pSEzCv5ENcD6YHJU4QAs8",
+					"type": "smart-ref",
+					"blockId": "bYq2TEGo5YmQjhv5P26vS"
+				},
+				{
+					"text": "),"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "March",
+					"id": "xa7ue9IddLx4sk66VWi9D",
+					"type": "smart-ref",
+					"blockId": "3MJdUDND1u05bp9tG_FCl"
+				},
+				{
+					"text": "),"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "April",
+					"id": "ggBFHG2g0irC_3IwfTDXb",
+					"type": "smart-ref",
+					"blockId": "CB0g7lK3IR4hLizDff7n_"
+				},
+				{
+					"text": "),"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "May",
+					"id": "aDfoDqqAW23FHvXVcGvZi",
+					"type": "smart-ref",
+					"blockId": "6fAJlgIW3jgJPw7MwxRyu"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "June",
+					"id": "VLg4_cvyWZI5gynMjoMS8",
+					"type": "smart-ref",
+					"blockId": "bXdw5ZxrnGuwUirzlmEWp"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "July",
+					"id": "e7fzlidtNhYmxGseveyfE",
+					"type": "smart-ref",
+					"blockId": "BJHigzmzTgGWRAideXMRu"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "August",
+					"id": "0EyvGZ9v7A8NiLS13DuVw",
+					"type": "smart-ref",
+					"blockId": "BVrAO_0A8gh1r-N34qv2o"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "September",
+					"id": "xGm3XWAoVhGSB9rmkTYDG",
+					"type": "smart-ref",
+					"blockId": "qX5PH8trnlUhFxTpYMQYZ"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "October",
+					"id": "LEijRJReUNnr8dccOxIA5",
+					"type": "smart-ref",
+					"blockId": "SgstMwVdrh0dXywgPwOu_"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "November",
+					"id": "DQhV1ZeApXdgitSui-F7O",
+					"type": "smart-ref",
+					"blockId": "YXCPanclbc30rJJ43ldZ_"
+				},
+				{
+					"text": "), "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "December",
+					"id": "y2xBT1l7TlYkWD7AC0nj4",
+					"type": "smart-ref",
+					"blockId": "IXktbtSTnsFSf49V054Dz"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"type": "code_line",
+			"id": "QTF7OPDR0rb6H-bOyAbJm",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "9wm_yZSFKz8eBnzQoZcuZ"
+		}
+	]
+}

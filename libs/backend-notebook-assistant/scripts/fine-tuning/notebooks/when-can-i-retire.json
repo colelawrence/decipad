@@ -1,0 +1,634 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "When can I retire?"
+				}
+			],
+			"type": "h1",
+			"id": "QO0Lo87CVBUxjC1Hao7fZ"
+		},
+		{
+			"children": [
+				{
+					"text": "FIRE stands for financial independence, retire early. "
+				},
+				{
+					"text": "It's a movement that encourages people to live below their means, so they have more money to invest towards early retirement or part-time work",
+					"bold": true
+				},
+				{
+					"text": ". The higher your savings rate and the percentage of income you don't spend, the faster you can become work optional. ["
+				},
+				{
+					"children": [
+						{
+							"text": "1"
+						}
+					],
+					"type": "a",
+					"url": "https://time.com/nextadvisor/financial-independence/how-to-find-your-fire-number/#:~:text=FIRE%20stands%20for%20financial%20independence,you%20can%20become%20work%20optional.",
+					"id": "Xlo2W_o0msMChlpX1I60y"
+				},
+				{
+					"text": "]"
+				}
+			],
+			"type": "p",
+			"id": "UY2wejOJXwa8nGrrAi2c1"
+		},
+		{
+			"children": [
+				{
+					"text": "Use this model to find your number"
+				}
+			],
+			"type": "p",
+			"id": "RqTX07sudrcHCvmU9x5H5"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "InitialInvestment"
+								}
+							],
+							"type": "caption",
+							"id": "HYHV13pu2PNMkKg0F2cxf",
+							"color": "Sun"
+						},
+						{
+							"children": [
+								{
+									"text": "20000£"
+								}
+							],
+							"type": "exp",
+							"id": "eVEW45MEgI7HkJSIIglsB"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "300000",
+							"min": "100",
+							"step": "5000",
+							"value": "20000",
+							"id": "8bGObzqtHSnsCLBxHMsVw"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "RkFXXXUPsIihqLVTpDT-G"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MonthlyExp"
+								}
+							],
+							"type": "caption",
+							"id": "JK_8g18Ej6JmqEHEhb8ls",
+							"color": "Sun"
+						},
+						{
+							"children": [
+								{
+									"text": "2000£"
+								}
+							],
+							"type": "exp",
+							"id": "oCHpyhrZGqrQqOadgALID"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "5000",
+							"min": "500",
+							"step": "100",
+							"value": "2000",
+							"id": "VXknxOpat7XfA-IFLXXfJ"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "DFPfRghoSnrXYfMrqxPdp"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MonthlyInvestment"
+								}
+							],
+							"type": "caption",
+							"id": "OVQLRyA2_TahEKX2Au7Ih",
+							"color": "Sun"
+						},
+						{
+							"children": [
+								{
+									"text": "800£"
+								}
+							],
+							"type": "exp",
+							"id": "edMcAzmK8ZlEJWE5vtJoL"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "3000",
+							"min": "0",
+							"step": "100",
+							"value": "800",
+							"id": "6Yw4Icqvrwz1wfGDTIwq0"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "EHOEcCT8TQpeN9F0N66F-"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "RealGrowthRate"
+								}
+							],
+							"type": "caption",
+							"id": "qQI7mwYazyvPMO76Eb91r",
+							"color": "Sun"
+						},
+						{
+							"children": [
+								{
+									"text": "6%"
+								}
+							],
+							"type": "exp",
+							"id": "9Oxk7qCYrQwNi9ef6xLdh"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "50",
+							"min": "0",
+							"step": "0.5",
+							"value": "6",
+							"id": "H9ZslPh2qTDVayBePEMUj"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "HhWI-GMm0OE-VP8LzLslk"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "YearsToGrow"
+								}
+							],
+							"type": "caption",
+							"id": "lRjRUVCa0VgNmptXe8g38",
+							"color": "Sun"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"type": "exp",
+							"id": "WGPHDqdbjOemV1gP-KhtG"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "50",
+							"min": "0",
+							"step": "1",
+							"value": "20",
+							"id": "-gUvECdTNs6sDw7R-Rq6n"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "Sl2caEgDZbU6qFvpkgf5b"
+				}
+			],
+			"type": "columns",
+			"id": "RUAs4ocOSGowtJKqPxDAA"
+		},
+		{
+			"children": [
+				{
+					"text": "Compound Interest with Regular Contributions Formula:",
+					"italic": true
+				}
+			],
+			"type": "blockquote",
+			"id": "x8AKEq3uT7erT45c9ElEd",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Investment("
+				},
+				{
+					"lastSeenVariableName": "InitialInvestment",
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "fvjYAqmOoCVbj94fLdm43",
+					"type": "smart-ref",
+					"blockId": "RkFXXXUPsIihqLVTpDT-G"
+				},
+				{
+					"text": ",YearlyInvestment,InterestRate,Time)=rounddown("
+				},
+				{
+					"lastSeenVariableName": "InitialInvestment",
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "8rSSJSWPXEufK2lRG9ODu",
+					"type": "smart-ref",
+					"blockId": "RkFXXXUPsIihqLVTpDT-G"
+				},
+				{
+					"text": "*(1+InterestRate)**Time+YearlyInvestment*(((1+InterestRate)**Time)-1)/InterestRate)"
+				}
+			],
+			"type": "code_line",
+			"id": "02lZGjLeUrTx63OAT1COr",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Your investment:"
+				}
+			],
+			"type": "h2",
+			"id": "grn5WGdwNGEkRyxBU05XW"
+		},
+		{
+			"children": [
+				{
+					"text": "🐖 = Investment("
+				},
+				{
+					"lastSeenVariableName": "InitialInvestment",
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "MkwBNlmTkBGOBFYgCemFd",
+					"type": "smart-ref",
+					"blockId": "RkFXXXUPsIihqLVTpDT-G"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"lastSeenVariableName": "MonthlyInvestment",
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "kz_LYrUw9mM2Af9Nw3q_x",
+					"type": "smart-ref",
+					"blockId": "EHOEcCT8TQpeN9F0N66F-"
+				},
+				{
+					"text": " * 12, "
+				},
+				{
+					"lastSeenVariableName": "RealGrowthRate",
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "qcOPy3Y0gVT8WAPakJoQw",
+					"type": "smart-ref",
+					"blockId": "HhWI-GMm0OE-VP8LzLslk"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"lastSeenVariableName": "YearsToGrow",
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "tMsNN1EvENKsjcelBMQkp",
+					"type": "smart-ref",
+					"blockId": "Sl2caEgDZbU6qFvpkgf5b"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"type": "code_line",
+			"id": "7Q7Y9UNfs-sWRnNcXs5Qv"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "🔥"
+								}
+							],
+							"id": "6SsAsoxm_dT7BBw1XkIrS",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "TWOMcjB3dvpQufHPCtqXq",
+									"type": "smart-ref",
+									"blockId": "DFPfRghoSnrXYfMrqxPdp",
+									"lastSeenVariableName": "MonthlyExp"
+								},
+								{
+									"text": " * [200, 300, 500]"
+								}
+							],
+							"id": "RDt_9RGRY1JkvXs5TAFFW",
+							"type": "table-column-formula",
+							"columnId": "IwSlQkkQT4XwKkuWfFOaA"
+						},
+						{
+							"children": [
+								{
+									"text": " if "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "pgIlOtZZUsQpp0Hi2cB01",
+									"type": "smart-ref",
+									"blockId": "7Q7Y9UNfs-sWRnNcXs5Qv",
+									"lastSeenVariableName": "🐖"
+								},
+								{
+									"text": " - "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "fb8ZhqHEFAICXUVPkc2Q2",
+									"type": "smart-ref",
+									"blockId": "IwSlQkkQT4XwKkuWfFOaA",
+									"columnId": null,
+									"lastSeenVariableName": "FireNumber"
+								},
+								{
+									"text": "  > 0£ then \"💪\" else \"💩\""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "DJLKpyHaVPWCIkxvvKePN",
+									"type": "smart-ref",
+									"blockId": "IwSlQkkQT4XwKkuWfFOaA",
+									"columnId": null,
+									"lastSeenVariableName": "FireNumber"
+								},
+								{
+									"text": "  > 0£ then \"💪\" else \"💩\""
+								}
+							],
+							"id": "CoAUOJuBKxWqG35CIXWin",
+							"type": "table-column-formula",
+							"columnId": "G-9b9Cz2fQPXmaxJqueO3"
+						}
+					],
+					"id": "JMhNs9t6O_Zd15Kuh7kxT",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "aut_AuQ0hFBL6yToKs_Co",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "FireNumber"
+								}
+							],
+							"id": "IwSlQkkQT4XwKkuWfFOaA",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Achievable"
+								}
+							],
+							"id": "G-9b9Cz2fQPXmaxJqueO3",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "9wcuzGuqFjapImH7KnGGt",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Lean"
+								}
+							],
+							"id": "iqjuquuoz_NpVdSbRJAmJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7gl7imzrgflAa2eIvGF1Y",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6VkIUjuGHVC40nbryoGVG",
+							"type": "td"
+						}
+					],
+					"id": "zqFy5S48igaqfaRnd_drz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Traditional"
+								}
+							],
+							"id": "ICjJJW61jJlwv7eyL02eC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "t2IJSSnAO2Xrh66j4zphQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Trxlgcq27fr8eL00eAL1i",
+							"type": "td"
+						}
+					],
+					"id": "dWm0q_t0KZxWrb5Rglsbb",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Fat"
+								}
+							],
+							"id": "-8DAMSFNh9eBa2DvALaiu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BxfwiFe4GPiCRwtL4Eh_q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hWouq9fWRr4aK5HqRjVfz",
+							"type": "td"
+						}
+					],
+					"id": "fetuf4FVxLs3Q_n1tnM-h",
+					"type": "tr"
+				}
+			],
+			"version": 2,
+			"id": "-QPE9hH7GYJl0e2H-Z_Gn",
+			"type": "table"
+		},
+		{
+			"id": "M2qW8D_XyFu9w5qwupvlw",
+			"children": [
+				{
+					"text": "Will you achieve F.I.R.E?"
+				}
+			],
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "jQmybFDi6wF9uWK-SxEVO"
+		}
+	]
+}

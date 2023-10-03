@@ -1,0 +1,1529 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Consulting Project Calculator"
+				}
+			],
+			"type": "h1",
+			"id": "gICp3WE_RCRhobLLZbK5x"
+		},
+		{
+			"children": [
+				{
+					"text": "How much to charge for a consulting project requires planning and foresight. Use this template to explore your project fees."
+				}
+			],
+			"type": "p",
+			"id": "REP7FP3uHMmDIFqgUYZac"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "MxtvZBvr2orRUA65ZZNwm"
+		},
+		{
+			"children": [
+				{
+					"text": "1. Set your staff allocation and base rates"
+				}
+			],
+			"type": "h2",
+			"id": "5X2qXjHm9ewfSUP1fCryx"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "L-lwtTHo3NlXhYWsp6wvd",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Calculate your staff allocation in hours. You can expand this table to account for different roles. "
+				}
+			],
+			"type": "p",
+			"id": "bxv71j_BofPaagnqto8ru"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Staff"
+								}
+							],
+							"id": "tOk_izkWd4G8wkVJ6h4SU",
+							"type": "table-var-name"
+						}
+					],
+					"id": "2QV52yWO0_x9UuZlAzSdy",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Role"
+								}
+							],
+							"id": "Y9RBbIHBJrvKmQkCG4XE3",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Hours"
+								}
+							],
+							"id": "o5GWF1I50o1-pUohRRZjv",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "BaseRate"
+								}
+							],
+							"id": "IflrqtqQVJBtDtWSTesXR",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "CxEzvn1GroQJJZMc_WK3E",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "lArOPCh1aASo1UA3DzcqI",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Director"
+								}
+							],
+							"id": "zPcLyAUzMWBCJb1Xa-Rae",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "40 hours"
+								}
+							],
+							"id": "7l2g9MLzj7XwanHiMU0UI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "200€ per hour"
+								}
+							],
+							"id": "bs2djomQg-f8ALHKXcI4s",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150€ per hour"
+								}
+							],
+							"id": "WkKvDZ-36shRVg2QCMfsK",
+							"type": "td"
+						}
+					],
+					"id": "mOFhLp_3fmKi42dUQE8SI",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Manager"
+								}
+							],
+							"id": "GTEK3zxDQ-fMGhNLyOQLu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "240 hours"
+								}
+							],
+							"id": "r8pIo1QZw429OC_8fC0ie",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "SueuvOYaOYiTtqd1EM7Do",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "120€ per hour"
+								}
+							],
+							"id": "hy3Vc_fkLHf8C76KrOwwM",
+							"type": "td"
+						}
+					],
+					"id": "EdQ1bhK3M7dc0wfsY3SdD",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Senior"
+								}
+							],
+							"id": "NFAKt4ob8Ia5drd0sQHMg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "350 hours"
+								}
+							],
+							"id": "ntSBO59bBIwxmlDStO3Gr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "160"
+								}
+							],
+							"id": "X1oLp07V9vY4CwWiXGYXn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "130€ per hour"
+								}
+							],
+							"id": "UFY1Ftv6tr1ZQ_WrUdppQ",
+							"type": "td"
+						}
+					],
+					"id": "-TPry6RomPJs7eFw3rhTQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Consultant"
+								}
+							],
+							"id": "VtJq77OoCjvxcn6_CL89S",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "500"
+								}
+							],
+							"id": "YgOZLct-lKw4zni21MU3g",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "120"
+								}
+							],
+							"id": "eG6GHw5dnkRA97PTGPyL5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100€ per hour"
+								}
+							],
+							"id": "daA3GziOen0nyKg-X3agg",
+							"type": "td"
+						}
+					],
+					"id": "3F3BdJ3JBK3GvOtKOEiw_",
+					"type": "tr"
+				}
+			],
+			"id": "vItJSL33_LpKGYAVguGfY",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false,
+			"icon": "People"
+		},
+		{
+			"children": [
+				{
+					"text": "2. Explore your markup opportunities"
+				}
+			],
+			"type": "h2",
+			"id": "LviosALVamCu-M9FfbGlX"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "16BIZI9veHlnKHomxtvg_",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Set different markups depending on your project type. Update this table with different markups to study your options."
+				}
+			],
+			"type": "p",
+			"id": "JbJYSrujOAsYpFiyoc7rR"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Agency"
+								}
+							],
+							"id": "afb1L-Gr93Ws4vgercAeg",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "(sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "AOPKdVqKTLIUGVp1BkegA",
+									"type": "smart-ref",
+									"blockId": "vItJSL33_LpKGYAVguGfY",
+									"columnId": "IflrqtqQVJBtDtWSTesXR",
+									"lastSeenVariableName": "Staff.BaseRate"
+								},
+								{
+									"text": "*"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HQZnX3etieE4q7XpT6hBf",
+									"type": "smart-ref",
+									"blockId": "vItJSL33_LpKGYAVguGfY",
+									"columnId": "o5GWF1I50o1-pUohRRZjv",
+									"lastSeenVariableName": "Staff.Hours"
+								},
+								{
+									"text": ")+ "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "qaVn7p5sF_mk1JdPYpGv3",
+									"type": "smart-ref",
+									"blockId": "muSjEyrMEJCe1QFsvK1jE",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "RateMarkup"
+								},
+								{
+									"text": ")/sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KB7K24bdOnbeWKsR-TDyd",
+									"type": "smart-ref",
+									"blockId": "vItJSL33_LpKGYAVguGfY",
+									"columnId": "o5GWF1I50o1-pUohRRZjv",
+									"lastSeenVariableName": "Staff.Hours"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "p-Es-COA43Uaa_rbLY30D",
+							"type": "table-column-formula",
+							"columnId": "_aaagLW2js4oTZw1O8pzO"
+						},
+						{
+							"children": [
+								{
+									"text": "sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PuukydxtuB2yD8okckmvF",
+									"type": "smart-ref",
+									"blockId": "vItJSL33_LpKGYAVguGfY",
+									"columnId": "CxEzvn1GroQJJZMc_WK3E",
+									"lastSeenVariableName": "Staff.Cost"
+								},
+								{
+									"text": "*"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "8vInL4buU8BS7XcOLsGLc",
+									"type": "smart-ref",
+									"blockId": "vItJSL33_LpKGYAVguGfY",
+									"columnId": "o5GWF1I50o1-pUohRRZjv",
+									"lastSeenVariableName": "Staff.Hours"
+								},
+								{
+									"text": ")/sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sqZK4hRAQzYhJlpx44ADW",
+									"type": "smart-ref",
+									"blockId": "vItJSL33_LpKGYAVguGfY",
+									"columnId": "o5GWF1I50o1-pUohRRZjv",
+									"lastSeenVariableName": "Staff.Hours"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "1ZB9tGn5qs5DafBVmA1mX",
+							"type": "table-column-formula",
+							"columnId": "gYRW-dfl7L-9uhZB_ATv7"
+						},
+						{
+							"children": [
+								{
+									"text": "("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NFV21_PUku6waVS0VGPmC",
+									"type": "smart-ref",
+									"blockId": "_aaagLW2js4oTZw1O8pzO",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Rate"
+								},
+								{
+									"text": "-"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BdOqJFkkni60uTqCRl60_",
+									"type": "smart-ref",
+									"blockId": "gYRW-dfl7L-9uhZB_ATv7",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Cost"
+								},
+								{
+									"text": ")/"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YiEvAbdvYKQQW1QiDUFfY",
+									"type": "smart-ref",
+									"blockId": "_aaagLW2js4oTZw1O8pzO",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Rate"
+								},
+								{
+									"text": " in %"
+								}
+							],
+							"id": "iPTo-ZQeuQlb7LM6P8H0N",
+							"type": "table-column-formula",
+							"columnId": "URe-nN2woUpkZUIT1IC0B"
+						}
+					],
+					"id": "FHmArTB0kp6cCD446dNDW",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ProjectType"
+								}
+							],
+							"id": "7AdpfhNEt7Zqd4OZvKNqV",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							},
+							"width": 160
+						},
+						{
+							"children": [
+								{
+									"text": "RateMarkup"
+								}
+							],
+							"id": "muSjEyrMEJCe1QFsvK1jE",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "hours",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "second",
+										"baseSuperQuantity": "second"
+									},
+									{
+										"unit": "€",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "EUR",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Rate"
+								}
+							],
+							"id": "_aaagLW2js4oTZw1O8pzO",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"width": 168
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "gYRW-dfl7L-9uhZB_ATv7",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Margins"
+								}
+							],
+							"id": "URe-nN2woUpkZUIT1IC0B",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "1UV09zCW4-B9XzqLHzcrL",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Basic Project"
+								}
+							],
+							"id": "Vr3qG2uA6PDzxTvBITjsM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "t2yfi8YQVjOg1LvB6TLMj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xOTozeU8ovTXUQ5oLSC9O",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9Xu37eqakiTXbJLlcOQZ2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oB8yypEWHM2Dob6zudaxb",
+							"type": "td"
+						}
+					],
+					"id": "jdSmhUDnGAkqQLBgBTbqQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Average Project"
+								}
+							],
+							"id": "vlZLnE982Rr2_lbXWvoKD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "53xuCEQMx2PFRIigEQ2wZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0iBUWV1kDD6vLYLpHJ7KL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "akdDpIibhf0SEl8zdxkqw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zQqhcBKU5DhKAG8FtpMz6",
+							"type": "td"
+						}
+					],
+					"id": "HhL4DTggKbmGwJEfNFl6R",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Advanced Project"
+								}
+							],
+							"id": "mXd0qDYdeFzZQ-zX2DNCf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "ExLUBZjcfC3_wNkyLuEe8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "2zqlv66MLOeg5qPVooYnY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "X5kYlRZxM2VCax21lzPmZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GrPAzJ4hZlohXjjIt-jIK",
+							"type": "td"
+						}
+					],
+					"id": "lPcxe82owbmTuhFfwLNCh",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Niche Project"
+								}
+							],
+							"id": "kxP6_strC1PgHm8qF7poh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50%"
+								}
+							],
+							"id": "rNLFFZC0SV8orGYYvMoFx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "feYk5DRBTTwjVFJWWb932",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "s7KBfeEJmTeQXekkxl7sW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8TGJ3MgdAbOoEqIKl6fWO",
+							"type": "td"
+						}
+					],
+					"id": "2HTvZD0cUSSnPtkeZIRmk",
+					"type": "tr"
+				}
+			],
+			"id": "B8zWT0yaHUuxmpxQjYwPR",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"icon": "Receipt"
+		},
+		{
+			"children": [
+				{
+					"text": "3. Check your gross rates"
+				}
+			],
+			"type": "h2",
+			"id": "QVLUUBMlSUOpBvy31QErg"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "28BOUtL0GJ7EJbeANtEGx",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Calculate your staff cost by multiplying your rates by your staff allocation."
+				}
+			],
+			"type": "p",
+			"id": "EcU4hJFluxURn5KnzMESg"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "GrossRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "qOHAHXhafgWQ8WM4XCIZk"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "acBpQBY3oberCtzbhVTwP",
+							"type": "smart-ref",
+							"blockId": "B8zWT0yaHUuxmpxQjYwPR",
+							"columnId": "_aaagLW2js4oTZw1O8pzO",
+							"lastSeenVariableName": "Agency.Rate"
+						},
+						{
+							"text": "*sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CJ884iXveqyYcmFJBiUea",
+							"type": "smart-ref",
+							"blockId": "vItJSL33_LpKGYAVguGfY",
+							"columnId": "o5GWF1I50o1-pUohRRZjv",
+							"lastSeenVariableName": "Staff.Hours"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "gs1NMVfau6-_dt4H2fZfY"
+				}
+			],
+			"id": "XzbyX67o1m4LEBOOSQUzV",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "jLd7RAOYiinw2-zDAEXfr"
+		},
+		{
+			"children": [
+				{
+					"text": "4. Account for project expenses"
+				}
+			],
+			"type": "h2",
+			"id": "WB3kcdOzBHETKxGygsnVq"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "FdcJ2kEAUekxKUX6w38jL",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on previous projects, you can generalize your expenses based on your project's gross value, update the widget to customize this assumption."
+				}
+			],
+			"type": "p",
+			"id": "7T0Gfr8lSbRIKqh3nR_6o"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "GeneralExpensesAverage"
+						}
+					],
+					"id": "TCAgbYeGrpb2cXO_pRzzi",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "1%"
+						}
+					],
+					"id": "--X58Xk4siMX-Wh5Pqkue",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "9TripTzn2Q73AY71jTymn",
+					"type": "slider",
+					"max": "10",
+					"min": "0",
+					"step": "1",
+					"value": "1"
+				}
+			],
+			"id": "8wfosxYxiirDBBxFw96xO",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "GeneralExpenses"
+						}
+					],
+					"type": "structured_varname",
+					"id": "l6mAAFXHXI0CMTOYQ298s"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rljxN1AJJU6MAqf7ZvFzB",
+							"type": "smart-ref",
+							"blockId": "XzbyX67o1m4LEBOOSQUzV",
+							"columnId": null,
+							"lastSeenVariableName": "GrossRate"
+						},
+						{
+							"text": "*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hg8MZBLwXBUZ0xX8HN_hh",
+							"type": "smart-ref",
+							"blockId": "8wfosxYxiirDBBxFw96xO",
+							"columnId": null,
+							"lastSeenVariableName": "GeneralExpensesAverage"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "-YgopLzP2FTjlD3fvUNPN"
+				}
+			],
+			"id": "YDMpPls-aBRMJQGEyjesh",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "joCkXeflBnld4LK4-DAOa"
+		},
+		{
+			"children": [
+				{
+					"text": "5. Calculate your direct costs"
+				}
+			],
+			"type": "h2",
+			"id": "TGY82GWImIqRPJ77kvtWU"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "S5Y6EFHtjFdBOuEH7SfoE",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Direct costs are calculated by multiplying staff costs by project allocation, just like we did to calculate the project's gross value:"
+				}
+			],
+			"type": "p",
+			"id": "oRpXssCexXeiWY4j7zRl0"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DirectCosts"
+						}
+					],
+					"type": "structured_varname",
+					"id": "JPfv7O972eIZBKrf8idEI"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5Eyk5I_pinT5nYO3IDVDG",
+							"type": "smart-ref",
+							"blockId": "B8zWT0yaHUuxmpxQjYwPR",
+							"columnId": "gYRW-dfl7L-9uhZB_ATv7",
+							"lastSeenVariableName": "Agency.Cost"
+						},
+						{
+							"text": "*sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iFFXRrX9YhXrzjmNn0_c-",
+							"type": "smart-ref",
+							"blockId": "vItJSL33_LpKGYAVguGfY",
+							"columnId": "o5GWF1I50o1-pUohRRZjv",
+							"lastSeenVariableName": "Staff.Hours"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "T6EoAK15TJyhsolUBy7Cz"
+				}
+			],
+			"id": "whJJsUcplfe9-scg7jml9",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "iDG43AmRf3iJnnixR2vHX"
+		},
+		{
+			"children": [
+				{
+					"text": "6. Model potential discounts"
+				}
+			],
+			"type": "h2",
+			"id": "BsMamEEcL97uQ9qcVlMmB"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "fyHMcw0QHsoc4cJzNkD5y",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "You might want to be prepared for a potential value negotiation with your clients. Explore discount scenarios for your target rates with these widgets."
+				}
+			],
+			"type": "p",
+			"id": "3CR05zVA1OhC8UxtqgVwO"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Discount"
+								}
+							],
+							"id": "dubS9LgjaVVcPMNemPu4B",
+							"type": "table-var-name"
+						}
+					],
+					"id": "9NhLwKAX_jJZLZz4l_cyU",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "jYWg5o6EJLckfT0zfnzNZ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Amount"
+								}
+							],
+							"id": "dqylpQ0DQEM6yROdYJXS7",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "VENWSX2q0pHIbHb_N-RTC",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Without Discount"
+								}
+							],
+							"id": "V0RHDgWPvZnIMtkLBCz1U",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "bGWGslETngOqI0C1Kp72G",
+							"type": "td"
+						}
+					],
+					"id": "X04GAwsOkyRy7fRiy31-T",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Generic Discount"
+								}
+							],
+							"id": "ylMd7KogzgF4ZpBTUPhQC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "B3IhsEgwc7giq6S7nc4JG",
+							"type": "td"
+						}
+					],
+					"id": "6qQviWq8ynDi8--Okxsgg",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Returning Discount"
+								}
+							],
+							"id": "lNnEWzdwDjt5430Quo894",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "ntxDM1wkREwT-EDZEJF_D",
+							"type": "td"
+						}
+					],
+					"id": "7sHJiuF8JPhRpKlvSC-NL",
+					"type": "tr"
+				}
+			],
+			"id": "OkQqfWKkPiSy3uEe_un6G",
+			"type": "table",
+			"version": 2,
+			"icon": "Percentage"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "cHS2Gh717-lpPixZDIL4o"
+		},
+		{
+			"children": [
+				{
+					"text": "7. Calculate your project fees"
+				}
+			],
+			"type": "h2",
+			"id": "7lJLkaQPXumB2Yf0DptiA"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "0VLpJkfuk3Y_SMSzxUHWB",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Here you can see your fees based on your markups, expense ratio and staff allocation. "
+				}
+			],
+			"type": "p",
+			"id": "j2L-ut7gUJYe5dmBHNTZo"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ProjectFee"
+						}
+					],
+					"type": "structured_varname",
+					"id": "BzxKmPfC8USNGfL6cxi0u"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H9_8kQCTvtRFLpaHjH08x",
+							"type": "smart-ref",
+							"blockId": "XzbyX67o1m4LEBOOSQUzV",
+							"columnId": null,
+							"lastSeenVariableName": "GrossRate"
+						},
+						{
+							"text": "*(1-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gD_6xt1Husrxgot2riptJ",
+							"type": "smart-ref",
+							"blockId": "OkQqfWKkPiSy3uEe_un6G",
+							"columnId": "dqylpQ0DQEM6yROdYJXS7",
+							"lastSeenVariableName": "Discount.Amount"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ItvU204mpQu3yctqbgoNF"
+				}
+			],
+			"id": "Zr9BMoUMDApSRMzHKQYKZ",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "e3AXu4OzdVfwJr7oGI6GG"
+		},
+		{
+			"children": [
+				{
+					"text": "8. Project gross profits:"
+				}
+			],
+			"type": "h2",
+			"id": "t2EmhOWToyLNAkutpIEgj"
+		},
+		{
+			"children": [
+				{
+					"text": "And finally your gross forecast for each markup. "
+				}
+			],
+			"type": "p",
+			"id": "zw5oCIdmTXYOTajMWWhN-"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "yzTd6TrZAWpqGkxujha0a",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "GrossMargin"
+						}
+					],
+					"type": "structured_varname",
+					"id": "MaD3CVWp4shpvrXqz0ydt"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_v_WIPhbZM12lcMPCkUHL",
+							"type": "smart-ref",
+							"blockId": "Zr9BMoUMDApSRMzHKQYKZ",
+							"columnId": null,
+							"lastSeenVariableName": "ProjectFee"
+						},
+						{
+							"text": "-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CCOXwKhFr4H2NET1NXc15",
+							"type": "smart-ref",
+							"blockId": "whJJsUcplfe9-scg7jml9",
+							"columnId": null,
+							"lastSeenVariableName": "DirectCosts"
+						},
+						{
+							"text": "-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4niv8R4Gg7JNASmPG1hpE",
+							"type": "smart-ref",
+							"blockId": "YDMpPls-aBRMJQGEyjesh",
+							"columnId": null,
+							"lastSeenVariableName": "GeneralExpenses"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "UgRAR-ksIniCZCT1gGCNC"
+				}
+			],
+			"id": "cnlOSS-LKC9_JfAIseBsc",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Update your rates and markups to explore different options. This model will update to showcase new scenarios automatically."
+				}
+			],
+			"type": "p",
+			"id": "Jx6R48vinOj-1sDE9hlp2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "JRW2kb5zhoq6R2Sr3bljn"
+		}
+	]
+}

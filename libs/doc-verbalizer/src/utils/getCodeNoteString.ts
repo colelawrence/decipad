@@ -1,4 +1,4 @@
-import { AnyElement, Text } from '@decipad/editor-types';
+import type { AnyElement, Text } from '@decipad/editor-types';
 import { getNodeString, isElement } from '@udecode/plate';
 import { ELEMENT_SMART_REF } from '../../../editor-types/src/element-kinds';
 

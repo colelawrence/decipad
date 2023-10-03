@@ -136,6 +136,7 @@ export type PadInput = {
   status?: string;
   section_id?: string;
   archived?: boolean;
+  isTemplate?: number;
 };
 
 export type SectionInput = {
@@ -333,6 +334,7 @@ export interface PadRecord extends TableRecordBase {
   createdAt: number;
   section_id?: string;
   archived?: boolean;
+  isTemplate?: number;
 }
 
 export interface SectionRecord extends TableRecordBase {
@@ -633,7 +635,7 @@ export type TableName = keyof ConcreteDataTable;
 export interface DynamoDbQuery {
   IndexName?: string;
   KeyConditionExpression?: string;
-  ExpressionAttributeValues?: Record<string, string | boolean>;
+  ExpressionAttributeValues?: Record<string, string | boolean | number>;
   ExpressionAttributeNames?: Record<string, string>;
   ExclusiveStartKey?: string;
   FilterExpression?: string;

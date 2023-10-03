@@ -1,0 +1,2049 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Monthly Investor Update"
+				}
+			],
+			"type": "h1",
+			"id": "DRMYMGfD48rzgUa1JEKFb"
+		},
+		{
+			"children": [
+				{
+					"text": "Use this template to create an investor update where your narrative and model are seamlessly integrated. If you are a founder and still on the waitlist, email us: support@decipad.com. "
+				}
+			],
+			"color": "Catskill",
+			"icon": "Paperclip",
+			"id": "uzGQQyzGgeZ2TtXSgFBqn",
+			"type": "callout"
+		},
+		{
+			"children": [
+				{
+					"text": "Month: "
+				},
+				{
+					"text": "exprRef_PX00Bmde68Ts1srzNSVYZ",
+					"magicnumberz": true
+				},
+				{
+					"text": " \nAuthors: "
+				},
+				{
+					"text": "exprRef_4bxNrY7wA2p3LeiWEQDNc",
+					"magicnumberz": true
+				},
+				{
+					"text": " \nCash: "
+				},
+				{
+					"text": "exprRef_sVKGiivZtsaYACzyoUZ8V",
+					"magicnumberz": true
+				},
+				{
+					"text": "\nRunway: "
+				},
+				{
+					"text": "exprRef_UsrOE7t3aq6k4bknMbKPP",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "I4vwNYG08jgaw7jhXZMbi",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "Highlights"
+				}
+			],
+			"type": "h2",
+			"id": "KsY_13AqhZuEqmbG_DaIl"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "8oYOjDnjFFU1JgLPf35g-",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Summarize 2-3 most impactful updates over the last period"
+				}
+			],
+			"id": "S9LdnBPyQo4r549bgd-Fw",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Message"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We're on track to exit beta and launch to the general market in [month]. "
+								}
+							],
+							"type": "lic",
+							"id": "gRnXLTALrN7m15F9GHAC4"
+						}
+					],
+					"type": "li",
+					"id": "4xDJP3IAWcOu3mfQClti6"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We hired a marketing agency to support our launch and accelerate growth. "
+								}
+							],
+							"type": "lic",
+							"id": "5MEQWrKoNLyOmC-8BhZCM"
+						}
+					],
+					"type": "li",
+					"id": "e2esbiB8U9dfJURL2RrSc"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We shipped [this feature] to customers last month; over [x%] adoption in the first 30 days. "
+								}
+							],
+							"type": "lic",
+							"id": "B2vzPTHyLzZOwPH-_kCdc"
+						}
+					],
+					"type": "li",
+					"id": "dpjo65LGpakTDKXLVls-R"
+				}
+			],
+			"type": "ul",
+			"id": "ibHC41zaz1g_8z720uOXE"
+		},
+		{
+			"children": [
+				{
+					"text": "Key Metrics"
+				}
+			],
+			"type": "h3",
+			"id": "aINCW1uOfrPDuMeSsCGd5"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "KDzuKsdyeKgtS29BkHllQ",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Add metrics that are easily repeatable or a north star metric. Types of metrics to consider: Revenue (e.g. MRR), Adoption (e.g. WAU), Acquisition (e.g. CAC)"
+				}
+			],
+			"id": "0N2-m74BscbGVtzPpQism",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Message"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We've been live with paid plans for three month. For the month end of "
+								},
+								{
+									"text": "Select.Date",
+									"magicnumberz": true
+								},
+								{
+									"text": ", we had "
+								},
+								{
+									"text": "Select.PaidAccounts",
+									"magicnumberz": true
+								},
+								{
+									"text": " paid accounts with an MRR of  "
+								},
+								{
+									"text": "Select.MRR",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "kbdph7-ehWWeZsVcCg20C"
+						}
+					],
+					"type": "li",
+					"id": "enSk6KXFjchGpof-NPq34"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Free accounts continues to accelerate reaching "
+								},
+								{
+									"text": "Select.FreeAccounts",
+									"magicnumberz": true
+								},
+								{
+									"text": " active free accounts; MoM growth of "
+								},
+								{
+									"text": "Select.MoMGrowth_Free",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"type": "lic",
+							"id": "h0Tt2WYYdqMyuN7OpQKEZ"
+						}
+					],
+					"type": "li",
+					"id": "idBydQGVipHYlmziDZpCi"
+				}
+			],
+			"type": "ul",
+			"id": "9Os-VAd_9DeXPfJQhmyqU"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SelectMonth"
+						}
+					],
+					"id": "2clpKgDgeUsf8fSwwArL-",
+					"type": "caption",
+					"icon": "Clock"
+				},
+				{
+					"children": [
+						{
+							"text": "date(2023-06)"
+						}
+					],
+					"id": "_aMTkRXV47AwILbZv8bPM",
+					"type": "dropdown",
+					"options": [
+						{
+							"id": "CZKUItCbRmdtoQsOI9RQf",
+							"value": "date(2023-01)"
+						},
+						{
+							"id": "0oK1a-v7edCiUWuQgWedv",
+							"value": "date(2023-02)"
+						},
+						{
+							"id": "7IM8v_L_GCeS2-CYu18I9",
+							"value": "date(2023-03)"
+						},
+						{
+							"id": "WBGDJZ5Ez6QdlwSmtdICQ",
+							"value": "date(2023-04)"
+						},
+						{
+							"id": "8522uOzasS-Ya_AncfOkx",
+							"value": "date(2023-05)"
+						},
+						{
+							"id": "LfCJHB_TBMoNTiG6H8-4d",
+							"value": "date(2023-06)"
+						}
+					],
+					"smartSelection": false
+				}
+			],
+			"id": "S7dSxFpjJHpjPmdqaCNOb",
+			"type": "def",
+			"variant": "dropdown",
+			"coerceToType": {
+				"kind": "number",
+				"unit": null
+			},
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KeyMetrics"
+								}
+							],
+							"id": "X7L_sycGF0Fw18HATqSPN",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " ("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "S0FYrzCFXbPDajGNEQtA3",
+									"type": "smart-ref",
+									"blockId": "bh7ATWbeQl7D_fZZ5vUur",
+									"columnId": null,
+									"lastSeenVariableName": "MRR"
+								},
+								{
+									"text": " / previous(0,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "B6i5cQNx_Thu_-Ft_cIxL",
+									"type": "smart-ref",
+									"blockId": "bh7ATWbeQl7D_fZZ5vUur",
+									"columnId": null,
+									"lastSeenVariableName": "MRR"
+								},
+								{
+									"text": "))- 1 in %"
+								}
+							],
+							"id": "4efLl1rc5v2GhHYB9Bp_p",
+							"type": "table-column-formula",
+							"columnId": "sXPAd2pWuwMUsHO-jThtF"
+						},
+						{
+							"children": [
+								{
+									"text": "("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CeIELCWSynTRVGqgdzPBQ",
+									"type": "smart-ref",
+									"blockId": "tqNYIoSKwrjdczglad78O",
+									"columnId": null,
+									"lastSeenVariableName": "FreeAccounts"
+								},
+								{
+									"text": " / previous(0, "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wNP42f3kcWoJpgxa0Sq3r",
+									"type": "smart-ref",
+									"blockId": "tqNYIoSKwrjdczglad78O",
+									"columnId": null,
+									"lastSeenVariableName": "FreeAccounts"
+								},
+								{
+									"text": "))-1 in %"
+								}
+							],
+							"id": "G4vH-16r9uqzLshk2yMdA",
+							"type": "table-column-formula",
+							"columnId": "iWgt2dOuVaw5vZjZ6F8Rx"
+						}
+					],
+					"id": "MeSlyCj-mtQiKfUDma7Np",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Date"
+								}
+							],
+							"id": "2rpiecIWSo3mkgWNqrKwk",
+							"type": "th",
+							"cellType": {
+								"kind": "date",
+								"date": "month"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MRR"
+								}
+							],
+							"id": "bh7ATWbeQl7D_fZZ5vUur",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "PaidAccounts"
+								}
+							],
+							"id": "fvxYlIb6awIKxcuJJizii",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "FreeAccounts"
+								}
+							],
+							"id": "tqNYIoSKwrjdczglad78O",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "MoMGrowth_MRR"
+								}
+							],
+							"id": "sXPAd2pWuwMUsHO-jThtF",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MoMGrowth_Free"
+								}
+							],
+							"id": "iWgt2dOuVaw5vZjZ6F8Rx",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "A_fhdcbNU2lZMdezz_3Fv",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-01"
+								}
+							],
+							"id": "cn-PFRgVSrx1n2R_rZwB7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "jH3okFYCxSSnN6sURGCz2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "926KefVpIgNx7xHicfF_0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50"
+								}
+							],
+							"id": "4juX3tNoOdC-WnfHUFm5e",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nKfFRzVTgqp4oGVHpgMpx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oaDifCBHRy-zXQj5FY_Bm",
+							"type": "td"
+						}
+					],
+					"id": "BeAi4RIroCKGuc98L7x2Q",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-02"
+								}
+							],
+							"id": "2Z1hltnNIo-2QpIO37Nc_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "bpKWIVZ-t6f9SLSJcX9pe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "J_6LL7lCk0Wcc5xiG8G7r",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "65"
+								}
+							],
+							"id": "XKVoOLRuGKhAjgXg1b9cY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5fpmh89LZ9iS7SOEc7VNH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CX0sP8AJEg_xaxBCFyn8_",
+							"type": "td"
+						}
+					],
+					"id": "h7x838zU6FPEqayGn8OnY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-03"
+								}
+							],
+							"id": "0B7-Fs9gNqHC5h9kjpG9-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "XC3zNCc98bXCqVc_Qg3bX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0"
+								}
+							],
+							"id": "ENYiMEtOXx9bsJ0G_R4a7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "105"
+								}
+							],
+							"id": "DaDKdR7UAuFyFNMBOl0vI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "n-xg7sg194wf6EkLOp_BW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_U5prhW_vsYr5fqqJjeBZ",
+							"type": "td"
+						}
+					],
+					"id": "lbgqyAY05CNr7ZoVORU2u",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-04"
+								}
+							],
+							"id": "SH_QsaQSnudC6oNAKbNfy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2200"
+								}
+							],
+							"id": "1dSAGPiJh14nOpkP8zmkw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "FEjjojPvZ8WpF5N4lsZpH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "170"
+								}
+							],
+							"id": "z9q8BLW8FNllRyd1x7kLM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gS3jZ4B89Tk2Cz8uU4jcc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l8gONOVUeppoA7XeuOUEo",
+							"type": "td"
+						}
+					],
+					"id": "irK2nyCAHl4fxXXICag9A",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-05"
+								}
+							],
+							"id": "xywdI3YoWq0Q-J_tTMPoR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5600"
+								}
+							],
+							"id": "8VgNIPgNFuFERSL9ElwXs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "25"
+								}
+							],
+							"id": "WO_PL-V1Mpd5KEATyGGaX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "280"
+								}
+							],
+							"id": "O5S_ohml9yJKLkIVqmdb9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "R500znZOiUz4FLLQl5AVq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GprMW4uJ7QXW9K9r6m6_m",
+							"type": "td"
+						}
+					],
+					"id": "CQHf27CIcW9aVPCv3Etx5",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-06"
+								}
+							],
+							"id": "k5C49x2DQ1cNLMQly9bLy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "11800"
+								}
+							],
+							"id": "UOMw3FwSrR0wW86ZYEcu-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50"
+								}
+							],
+							"id": "96QpdZNVqiiAKe3F7MuEn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "465"
+								}
+							],
+							"id": "BJZYemoOyquQJ7Nh4QcaR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "cPRnJJVVscwU2mz_Wr677",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bNRizvDcBC1wJQ8ySReGf",
+							"type": "td"
+						}
+					],
+					"id": "hJbN653ArJa2NQU5AhoyT",
+					"type": "tr"
+				}
+			],
+			"id": "IznRNH9oWPzprLcHSSw7y",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false,
+			"isHidden": false,
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "YtcFRZVBrOSy-L1khpw-Z",
+			"type": "plot",
+			"title": "Customers",
+			"sourceVarName": "exprRef_IznRNH9oWPzprLcHSSw7y",
+			"xColumnName": "Date",
+			"yColumnName": "FreeAccounts",
+			"markType": "line",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "PaidAccounts",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": "Customer Stories"
+				}
+			],
+			"type": "h3",
+			"id": "aExnTVARKmgoTfwVVzQ9s"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "4qTYD_GSxX_i77eMQjMgL",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Bring context to your milestones, metrics and accomplishments by highlighting the customer's voice and bringing richer context to your metrics. "
+				}
+			],
+			"type": "callout",
+			"id": "axvY2P7xYu7ln6AxIFG2q",
+			"color": "Catskill",
+			"icon": "Message"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Launched our first NPS survey;"
+						},
+						{
+							"text": "exprRef_msFIOR7_zwbE3X7AtsqLX",
+							"magicnumberz": true
+						},
+						{
+							"text": " customers completed the survey; . "
+						},
+						{
+							"text": "exprRef_AhlIeBl39sk1Qri8YXwpm",
+							"magicnumberz": true
+						},
+						{
+							"text": " completion rate. "
+						}
+					],
+					"id": "JFvYvjKnJy4k33OJy2EUj",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "oGP2Pp6CZWQmOvWcHxEQd",
+					"type": "display",
+					"blockId": "3TD7Xa0ezvzaTDa3pN6Yw",
+					"varName": "NPS_Results",
+					"icon": "Happy"
+				}
+			],
+			"id": "QP3P-7MXTKsTGDc5CIqr0",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Add a customer quote or story. "
+						},
+						{
+							"text": "Example:",
+							"underline": true
+						},
+						{
+							"text": " Meet [name], one of our early adopters and pro users. They are using our product [to solve this pain point]. "
+						}
+					],
+					"id": "KM3pF2cHfRl3Y9jgPOSdK",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "img",
+					"url": "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fcb4b0173-d747-44dc-9025-80e6e96ec573%2FScreenshot_2023-05-23_at_4.42.00_PM.png?table=block&id=6558cfa6-1348-4107-9f97-0d816c282d7f&spaceId=7ce130cc-53ad-41f1-8eb0-e6954b9b5246&width=2000&userId=5215a5d1-2fcf-42f5-b83b-e00242929ae7&cache=v2",
+					"id": "r9zFd7yfEHsH3fYN_Z0Kz",
+					"width": 287
+				}
+			],
+			"id": "hJ-rDzNJQ3vtsiPS5OQoY",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "NPS_Results"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fnNuTVqkr8k1NcSYtFpfj"
+				},
+				{
+					"children": [
+						{
+							"text": "8"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Sdlk0tLvDZCpEOnOkbCCW"
+				}
+			],
+			"id": "3TD7Xa0ezvzaTDa3pN6Yw",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CompletedSurvey"
+						}
+					],
+					"type": "structured_varname",
+					"id": "CMW7ZJL16XuP2Y9juzJtH"
+				},
+				{
+					"children": [
+						{
+							"text": "1000"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "xdMZgYgFI2IrxBMaMqJ6v"
+				}
+			],
+			"id": "msFIOR7_zwbE3X7AtsqLX",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalBetaUsers"
+						}
+					],
+					"type": "structured_varname",
+					"id": "3wGRKoYsilGxvgQkS7uAo"
+				},
+				{
+					"children": [
+						{
+							"text": "5000"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "7v_lXm9zEfaKeceXWGeNC"
+				}
+			],
+			"id": "v3TFVzBs5bgUz-EQYHffH",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CompletionRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "UbDw7l4LUNoDPNGqLE9sK"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1omDwAyDRYyMaJ9_Z13_t",
+							"type": "smart-ref",
+							"blockId": "msFIOR7_zwbE3X7AtsqLX",
+							"columnId": null,
+							"lastSeenVariableName": "CompletedSurvey"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "eqGT0u7xF3IwhBKh2lhfU",
+							"type": "smart-ref",
+							"blockId": "v3TFVzBs5bgUz-EQYHffH",
+							"columnId": null,
+							"lastSeenVariableName": "TotalBetaUsers"
+						},
+						{
+							"text": " in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "TPYx5mBIhesUFpD9DhpOj"
+				}
+			],
+			"id": "AhlIeBl39sk1Qri8YXwpm",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "RUKSwJdBugdMxUW9P5sap"
+		},
+		{
+			"children": [
+				{
+					"text": "Risks /Challenges"
+				}
+			],
+			"type": "h3",
+			"id": "NH1Lh8XswmdI1NXZEjkab"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "jo7DrOYBt0pZ6jZZDS-28",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Over the last two month, we've prioritized feature development to execute on the roadmap and prepare to launch 2.0. This has come at an expected, but growing backlog of bugs and performance needs. "
+								}
+							],
+							"id": "tXci_XwzFfZkabDN80tOE",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "ALApso8ckeoO-X8f1TJoz"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We're analyzing the time needed to address and if there will be implications on our launch target. "
+								}
+							],
+							"id": "NFVYUCyXxZqbeCX31q_Ck",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "ICcrTS4bdz1Bf1PtAQUX7"
+				}
+			],
+			"type": "ul",
+			"id": "wG-9cAuh8WcAr8J-MOf8N"
+		},
+		{
+			"children": [
+				{
+					"text": "Top Asks"
+				}
+			],
+			"type": "h3",
+			"id": "Oi8yyhGc7wLVX9VwQZd2L"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Fr3oilm1R3OJ7L2QI1ZRA",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Recommend no more than 1-2 "
+				}
+			],
+			"id": "AyC7T3YjkBOFtSaPIQrup",
+			"type": "callout",
+			"color": "Catskill",
+			"icon": "Message"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We're looking for introductions at the below companies if you know anyone. "
+								}
+							],
+							"type": "lic",
+							"id": "DvmA_DwdYgf4o6KQqn_3a"
+						}
+					],
+					"type": "li",
+					"id": "QTdmTmjtJg9esYdeSrW8y"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "We're looking for a technical writer on contract to help improve our documentation if you know anyone great [link here]"
+								}
+							],
+							"type": "lic",
+							"id": "WN-aG1WfSh9yZyRgnv7kz"
+						}
+					],
+					"type": "li",
+					"id": "JPuntfXBGfbbv5m2qIYA1"
+				}
+			],
+			"type": "ul",
+			"id": "dPkoP06M6rma0q2FlVab0"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TargetPartners"
+								}
+							],
+							"id": "LDt7lFRcQl_bQu7CMGytg",
+							"type": "table-var-name"
+						}
+					],
+					"id": "l9F-sWqlj3PWFluzMmKkZ",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company"
+								}
+							],
+							"id": "4vDuWvFgPuXEnXKUvvocQ",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Status"
+								}
+							],
+							"id": "rxogzHmwFxepmzIm3F136",
+							"type": "th",
+							"cellType": {
+								"kind": "boolean"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Notes"
+								}
+							],
+							"id": "DgimTYJiVhtBrT0I-RCXL",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "VOYDr9QSMGxwOLmiIVDV1",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company One"
+								}
+							],
+							"id": "T7VwmdRMJVV_sKkxFRPrY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nbwj13PKxDOlA7cetZwwz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Targeting an introduction to their product or partnership team"
+								}
+							],
+							"id": "XLH1MT_UJVcxlpoRqyZvB",
+							"type": "td"
+						}
+					],
+					"id": "lMQvMbVF9PYaa3liC8Vdj",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Two"
+								}
+							],
+							"id": "C5KkBQ0jQNLWqQ0rEAbeH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "false"
+								}
+							],
+							"id": "jN92KTiRIcqt42FN0nYE4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Targeting an introduction to their product or partnership team"
+								}
+							],
+							"id": "xhk3aWXTw1Zz9l1YclJDp",
+							"type": "td"
+						}
+					],
+					"id": "T8bCD39N5otwm1jNH1ON1",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Company Three"
+								}
+							],
+							"id": "fEACKgMSk2_LsvwBpd5k7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "f17uDzzg34nEUmk7Qy6Tj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Thank you Jon Snow for making the introduction!"
+								}
+							],
+							"id": "eS--tn7fbawg2mIQvaNh3",
+							"type": "td"
+						}
+					],
+					"id": "VKtgflwZsHKjQE8AleVky",
+					"type": "tr"
+				}
+			],
+			"id": "vmt-Zn5eVKTyxmP8bMHu1",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"text": " Burn, Cash & Financials "
+				}
+			],
+			"type": "h2",
+			"id": "53hkJZODFtZxUyj_e4Q6D"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "nkIc51V9LkiwxXvtP901P",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Our average monthly burn this year has been "
+				},
+				{
+					"text": "average(MontlyBurn.Burn)",
+					"magicnumberz": true
+				},
+				{
+					"text": " , we expect burn to increase to  "
+				},
+				{
+					"text": "exprRef_DKQgFCsxQ63SxcUf48DEf",
+					"magicnumberz": true
+				},
+				{
+					"text": " with increased GTM and data costs. "
+				}
+			],
+			"type": "p",
+			"id": "KRWvdnrBZhSqVgH61pe8v"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on our increased burn, we have"
+				},
+				{
+					"text": "exprRef_UsrOE7t3aq6k4bknMbKPP",
+					"magicnumberz": true
+				},
+				{
+					"text": " runway. "
+				}
+			],
+			"type": "p",
+			"id": "njqZapF2sKzOxA0kNI5jk"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ForcastedBurn"
+								}
+							],
+							"id": "qdphM_EvRHbpWOj5VQ_0i",
+							"type": "caption",
+							"icon": "Battery"
+						},
+						{
+							"children": [
+								{
+									"text": "$275000 per month"
+								}
+							],
+							"id": "jsgRscnJr-t6d5mlpt03r",
+							"type": "exp"
+						}
+					],
+					"id": "DKQgFCsxQ63SxcUf48DEf",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Cash"
+								}
+							],
+							"id": "_lxPBtMpmQV75dDnQAm_O",
+							"type": "caption",
+							"icon": "Compass"
+						},
+						{
+							"children": [
+								{
+									"text": "$3800000"
+								}
+							],
+							"id": "7ZavRxFAMEUYZVlYtQYSw",
+							"type": "exp"
+						}
+					],
+					"id": "sVKGiivZtsaYACzyoUZ8V",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "WomTB57PH97F3TBUFtCsK",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RunwayMonths"
+						}
+					],
+					"type": "structured_varname",
+					"id": "S8tFQ2Yai2q6Ri0vgzWgg"
+				},
+				{
+					"children": [
+						{
+							"text": "round("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "I-ti-Y1-DWvr9baUxhV7C",
+							"type": "smart-ref",
+							"blockId": "sVKGiivZtsaYACzyoUZ8V",
+							"columnId": null,
+							"lastSeenVariableName": "Cash"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ERaEfKy-7rNvzmf6L8ZMd",
+							"type": "smart-ref",
+							"blockId": "DKQgFCsxQ63SxcUf48DEf",
+							"columnId": null,
+							"lastSeenVariableName": "ForcastedBurn"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "UTn41UFN0sYs5iC5cjymQ"
+				}
+			],
+			"isHidden": true,
+			"id": "UsrOE7t3aq6k4bknMbKPP",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MontlyBurn"
+								}
+							],
+							"id": "A8G5hmnBB2KCndWoHHUZK",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " ("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RqkGBUXNtsnlhJ6T9gS1f",
+									"type": "smart-ref",
+									"blockId": "O_9wL6yDOUbv7HObhQnYD",
+									"columnId": null,
+									"lastSeenVariableName": "Burn"
+								},
+								{
+									"text": " / previous(0,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "25Ixy_NovpenNg05dDvB8",
+									"type": "smart-ref",
+									"blockId": "O_9wL6yDOUbv7HObhQnYD",
+									"columnId": null,
+									"lastSeenVariableName": "Burn"
+								},
+								{
+									"text": "))-1 in %"
+								}
+							],
+							"id": "fAVcY5IfCJUC-YGRqC0oQ",
+							"type": "table-column-formula",
+							"columnId": "Nacu2qoWIN97RyyQIaFuG"
+						}
+					],
+					"id": "1XTlDKpbh8JBgWKob8U99",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Month"
+								}
+							],
+							"id": "FKhQDM0XtMlvqJdMwoDes",
+							"type": "th",
+							"cellType": {
+								"kind": "date",
+								"date": "month"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Burn"
+								}
+							],
+							"aggregation": "Average",
+							"id": "O_9wL6yDOUbv7HObhQnYD",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MoM_Burn"
+								}
+							],
+							"id": "Nacu2qoWIN97RyyQIaFuG",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "gqkcjAiyBzdPG5ISFTpgB",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-01"
+								}
+							],
+							"id": "PCD5xgLVxQy0seFt8gPDs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$205000"
+								}
+							],
+							"id": "XiIiu6Ig2KtuSDIwWho-y",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "S6OFMOjkloo7D6WNcg8PI",
+							"type": "td"
+						}
+					],
+					"id": "8EieOlCP1oFY68ouOCSET",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-02"
+								}
+							],
+							"id": "Y24_lq7nhxJfUScwk55yW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$204000"
+								}
+							],
+							"id": "tecGs_kPbs5U7Se7Hb2Kk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "m_4dr0C4op_xU5_KBM-fm",
+							"type": "td"
+						}
+					],
+					"id": "hA56Qw7gKRhltzy6F392n",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-03"
+								}
+							],
+							"id": "xmPp1a9lH_gDLgdcWqdao",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$207000"
+								}
+							],
+							"id": "CP0m93GeCYqqqFoAvjHbJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iNDGKRBav9C1why3GR4qy",
+							"type": "td"
+						}
+					],
+					"id": "kNJOjWfVd__xxpbqOkEtx",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-04"
+								}
+							],
+							"id": "tkseOxPRSTEBFGCLS-eAN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$240000"
+								}
+							],
+							"id": "-nOnb84oE6tIdI-BNMy7L",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jVYbogxAi3uE5EhcWxj-v",
+							"type": "td"
+						}
+					],
+					"id": "E_JTrESHy2pluHzLbEyDC",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-05"
+								}
+							],
+							"id": "GBq4XNUMrMdEPexdEb1rj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$240000"
+								}
+							],
+							"id": "4pTmzHMF0xJxriHfr5suO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YX0OOdFGqFcIUpupTv6Qg",
+							"type": "td"
+						}
+					],
+					"id": "Yu7zPIKzBhKLgXL1eaoKo",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2023-06"
+								}
+							],
+							"id": "G7M_6ZQEZCKs7pPQMffWe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$245000"
+								}
+							],
+							"id": "VlTsZS3qQmAboupxxvczc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vaYdn2Ty62U8Pqf08ZmOR",
+							"type": "td"
+						}
+					],
+					"id": "5K90JBk5gkdpDSQdZ5ZDD",
+					"type": "tr"
+				}
+			],
+			"id": "mNIy30Ki-82erxTA-bP5G",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "WdoQaU3Fa_ZIA1tBpRuG6",
+			"type": "plot",
+			"title": "MonthlyBurn",
+			"sourceVarName": "exprRef_mNIy30Ki_82erxTA_bP5G",
+			"xColumnName": "Month",
+			"yColumnName": "Burn",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "None",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "1rCSWIxeLT9MH3u5jROrA"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "ZeOYObJzb1HcGZTeKNIhW"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix - Form Fill "
+				}
+			],
+			"type": "h3",
+			"id": "3DxF1zZwspKbmC_lK1knc",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "date"
+						}
+					],
+					"type": "structured_varname",
+					"id": "aSUCqY6Tcuhgkhm_VkjI3"
+				},
+				{
+					"children": [
+						{
+							"text": "date(2023-07)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "jzUJL5_T3-HBDqVpaFTXC"
+				}
+			],
+			"id": "PX00Bmde68Ts1srzNSVYZ",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Authors"
+						}
+					],
+					"type": "structured_varname",
+					"id": "jwInzLAoLpU2TD9i5760F"
+				},
+				{
+					"children": [
+						{
+							"text": "[\"Kelly\", \"Nuno\"]"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "6ets1lz3LIiKzwMEMvUBf"
+				}
+			],
+			"id": "4bxNrY7wA2p3LeiWEQDNc",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Select = lookup("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "lxzTYgLI6rwX7NrU8nYqz",
+					"type": "smart-ref",
+					"blockId": "IznRNH9oWPzprLcHSSw7y",
+					"columnId": null,
+					"lastSeenVariableName": "KeyMetrics"
+				},
+				{
+					"text": ", "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"lastSeenVariableName": "SelectMonth",
+					"id": "RMlbxIiW4p-yDkzkmeuI7",
+					"type": "smart-ref",
+					"blockId": "S7dSxFpjJHpjPmdqaCNOb",
+					"columnId": null
+				},
+				{
+					"text": ")"
+				}
+			],
+			"id": "klW0BRkNn-K3Cd72TTGS3",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "",
+					"bold": true
+				}
+			],
+			"type": "p",
+			"id": "DDJG2DInogszz-OUulXXG"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "rau_ZTpoYiZKcX1gEzaJn"
+		}
+	]
+}

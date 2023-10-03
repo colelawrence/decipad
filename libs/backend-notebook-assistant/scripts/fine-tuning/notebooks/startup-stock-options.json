@@ -1,0 +1,1842 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Understanding stock options at an early stage startup"
+				}
+			],
+			"type": "h1",
+			"id": "80M4jtCWemIUWoySwSThH"
+		},
+		{
+			"children": [
+				{
+					"text": "You have an offer that includes stock options, but you don't know how equity compensation works. How much will your stock options be worth in the future? Check out this model to find out."
+				}
+			],
+			"type": "callout",
+			"id": "zEG7-fvVsZbeb0SSXRaNn",
+			"color": "Catskill"
+		},
+		{
+			"children": [
+				{
+					"text": "What are stock options? "
+				}
+			],
+			"type": "h2",
+			"id": "8n7aJL3-Ngr7jD2flEw1B"
+		},
+		{
+			"children": [
+				{
+					"text": "Startup equity most often is granted in the form of "
+				},
+				{
+					"text": "Stock Options",
+					"bold": true
+				},
+				{
+					"text": ", which are literally what they sound like: an "
+				},
+				{
+					"text": "option",
+					"underline": true
+				},
+				{
+					"text": " to buy stock at a certain date and price. You "
+				},
+				{
+					"text": "won't",
+					"underline": true
+				},
+				{
+					"text": " own any shares yet. "
+				}
+			],
+			"type": "p",
+			"id": "d7zi4Ef8SLypaL-mpJANj"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "The "
+								},
+								{
+									"text": "strike price",
+									"bold": true
+								},
+								{
+									"text": " (also called an exercise price or grant price) is the price at which you can purchase the stock."
+								}
+							],
+							"type": "lic",
+							"id": "QLUEsKPhlK-T0jHO-c-wv"
+						}
+					],
+					"type": "li",
+					"id": "tCuxkzkHzxKrB_Pir6yFX"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Vesting schedule",
+									"bold": true
+								},
+								{
+									"text": ". This is the period you need to wait before you have the right to exercise your options. "
+								}
+							],
+							"type": "lic",
+							"id": "fZs8aXgqy3kqjDZvd8HbB"
+						}
+					],
+					"type": "li",
+					"id": "a2O3EU2qD-chmaES5fyxN"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Exercising ",
+									"bold": true
+								},
+								{
+									"text": "your options means purchasing shares at the strike price. You own shares in Deci when you exercise. "
+								}
+							],
+							"type": "lic",
+							"id": "fH0DHqTUL0klmSTX9huIF"
+						}
+					],
+					"type": "li",
+					"id": "2IoPb3MITcA25T3rNb1jC"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Selling:",
+									"bold": true
+								},
+								{
+									"text": " Once you exercise, you can sell your shares"
+								},
+								{
+									"text": " ",
+									"underline": true
+								},
+								{
+									"text": "IF",
+									"bold": true,
+									"underline": true
+								},
+								{
+									"text": " there is a buyer!",
+									"underline": true
+								},
+								{
+									"text": " This is typically possible with an exit event like an acquisition or IPO. Hopefully, your shares are worth more than your strike price when you sell. "
+								}
+							],
+							"type": "lic",
+							"id": "RjByGpA3nB6FOxq3YRlVk"
+						}
+					],
+					"type": "li",
+					"id": "qzusefxVwNVR57m-DJTHv"
+				}
+			],
+			"type": "ul",
+			"id": "--93G_o1731F6mHJiRID_"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "ORcuY39wBsf6bjAQDGxTq"
+		},
+		{
+			"children": [
+				{
+					"text": "Your stock options offer"
+				}
+			],
+			"type": "h2",
+			"id": "dmtFJsIpqQiUjaDg1CD_K"
+		},
+		{
+			"children": [
+				{
+					"text": "Customize the inputs below based on your offer:"
+				}
+			],
+			"type": "p",
+			"id": "ZRStIgy3D3jpci3Q_HtKX"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NumberOptions"
+								}
+							],
+							"id": "Wrbk0fks2X6KoS-8zvV2Q",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "8000"
+								}
+							],
+							"id": "Fp6zOmV-YcY8NKLrBkFg3",
+							"type": "exp"
+						}
+					],
+					"id": "Oh0GisPmlL2ZgmrAUtV8a",
+					"type": "def",
+					"variant": "expression"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "YourOwnership"
+								}
+							],
+							"id": "XYraUGXduJMROjA1r0nW5",
+							"type": "caption",
+							"icon": "Percentage"
+						},
+						{
+							"children": [
+								{
+									"text": "0.1%"
+								}
+							],
+							"id": "tLZVDjX-BTTVAm1mTKcsa",
+							"type": "exp"
+						}
+					],
+					"id": "h2jKAI7t1nEmAkOHbNZgA",
+					"type": "def",
+					"variant": "expression"
+				}
+			],
+			"id": "DE6MQcI-lTLIlcxltitfn",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "StrikePrice"
+						}
+					],
+					"id": "yc0P2Nev6sksqRLy5UTBk",
+					"type": "caption",
+					"icon": "Key"
+				},
+				{
+					"children": [
+						{
+							"text": "0.5£"
+						}
+					],
+					"id": "sjwnj188R-PlsnQxbL4lD",
+					"type": "exp"
+				}
+			],
+			"id": "ySQe_Oc6FnPfHvhupBrU5",
+			"type": "def",
+			"variant": "expression"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "8TH5t1LyxLEHERN0rVa6G"
+		},
+		{
+			"children": [
+				{
+					"text": "Tip:",
+					"bold": true
+				},
+				{
+					"text": " If you are joining a company, you should ask what set of shares was used to compute your ownership percentage. Is it outstanding shares (total # of shares "
+				},
+				{
+					"text": "held",
+					"underline": true
+				},
+				{
+					"text": " by all shareholders) or fully diluted ("
+				},
+				{
+					"text": "all",
+					"underline": true
+				},
+				{
+					"text": " shares issued; shares held and any shares in reserve). "
+				}
+			],
+			"type": "blockquote",
+			"id": "BK06IQt71Uh9R9aXyxQN2"
+		},
+		{
+			"children": [
+				{
+					"text": "What level of ownership do different levels of employees usually get? "
+				},
+				{
+					"children": [
+						{
+							"text": "See this"
+						}
+					],
+					"type": "a",
+					"url": "https://techcrunch.com/2020/01/09/deciding-how-much-equity-to-give-your-key-employees",
+					"id": "1MxMvI-0C0X16MREp9TJQ"
+				},
+				{
+					"text": " resource and "
+				},
+				{
+					"children": [
+						{
+							"text": "this one"
+						}
+					],
+					"type": "a",
+					"url": "https://venturehacks.com/option-pool-shuffle#market",
+					"id": "IOUcMDJP2zwI_AC6d3RrA"
+				},
+				{
+					"text": ""
+				}
+			],
+			"type": "blockquote",
+			"id": "7ay-O1zhdskmW27cGdR52"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "HHXJgnPv5y352ePfpP2yq"
+		},
+		{
+			"children": [
+				{
+					"text": "Company Valuation "
+				}
+			],
+			"type": "h2",
+			"id": "2zJc326Vzbs_dd5QL2GF8"
+		},
+		{
+			"children": [
+				{
+					"text": "Your"
+				},
+				{
+					"text": " stock options ",
+					"bold": true
+				},
+				{
+					"text": "value will be closely tied to "
+				},
+				{
+					"text": "the valuation",
+					"bold": true
+				},
+				{
+					"text": " of the company. Hopefully, your company will grow , and its "
+				},
+				{
+					"text": "valuation",
+					"bold": true
+				},
+				{
+					"text": " will increase, making your "
+				},
+				{
+					"text": "Stock Options",
+					"bold": true
+				},
+				{
+					"text": " value change. Example Valuation:"
+				}
+			],
+			"type": "p",
+			"id": "ipgpjlyuqvGEGRD0dDKht"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Valuation"
+						}
+					],
+					"id": "Ie6n8rBCR_-Tu8UnVOjWR",
+					"type": "caption",
+					"icon": "Plane"
+				},
+				{
+					"children": [
+						{
+							"text": "3000000£"
+						}
+					],
+					"id": "_BLv4DxTA42guFtmnuyG2",
+					"type": "exp"
+				}
+			],
+			"id": "W5vgUjt1WZ-av5J8B1Gmz",
+			"type": "def",
+			"variant": "expression"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's assume all of your "
+				},
+				{
+					"text": "Stock Options",
+					"bold": true
+				},
+				{
+					"text": " were vested, "
+				},
+				{
+					"text": "YourEquityValue",
+					"code": true
+				},
+				{
+					"text": " would be:"
+				}
+			],
+			"type": "p",
+			"id": "us_DTnrkGu_4A0t8HWbTn"
+		},
+		{
+			"children": [
+				{
+					"text": "YourEquityValue = "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Bgl5U305mO8lg-cSiskRT",
+					"type": "smart-ref",
+					"blockId": "h2jKAI7t1nEmAkOHbNZgA",
+					"lastSeenVariableName": "YourOwnership"
+				},
+				{
+					"text": " * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "gjv8bjDrmHrKOIZPrO9ii",
+					"type": "smart-ref",
+					"blockId": "W5vgUjt1WZ-av5J8B1Gmz",
+					"lastSeenVariableName": "Valuation"
+				},
+				{
+					"text": ""
+				}
+			],
+			"type": "code_line",
+			"id": "JhO5l7hxeAbArDqFzneNw"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "ulnIgH5V6VnFAoCD4kDGg"
+		},
+		{
+			"children": [
+				{
+					"text": "Vesting"
+				}
+			],
+			"type": "h2",
+			"id": "Eovj_V9fEzQUccIkvB54E"
+		},
+		{
+			"children": [
+				{
+					"text": "Over time, you’ll earn the right to exercise your options per your"
+				},
+				{
+					"text": " Vesting Schedule",
+					"bold": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "A9hXw5wlKIZQlSsDag1eo"
+		},
+		{
+			"children": [
+				{
+					"text": "A "
+				},
+				{
+					"text": "Vesting Schedule",
+					"bold": true
+				},
+				{
+					"text": " is typically: 4 years with a 1 year cliff:"
+				}
+			],
+			"type": "p",
+			"id": "auA7yoimNNBX4Iu2gIYOG"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "It has a duration of 48 months (4 years). This means it will take 48 months for your options to fully vest. "
+								}
+							],
+							"type": "lic",
+							"id": "jqbmbEqtClmyA7r5Zn73u"
+						}
+					],
+					"type": "li",
+					"id": "NWbD93ft5RIqMfYjtZmw4"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Stock Options ",
+									"bold": true
+								},
+								{
+									"text": "typically have a one year "
+								},
+								{
+									"text": "Vesting Cliff",
+									"bold": true
+								},
+								{
+									"text": ". "
+								},
+								{
+									"text": "(Meaning that you will need to be a decimate for 1 year before your stock options start to vest)",
+									"italic": true
+								}
+							],
+							"type": "lic",
+							"id": "any5PfjMDO8yDGqiNPrys"
+						}
+					],
+					"type": "li",
+					"id": "dsLuUxMIv-LRaatQWi4x6"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "After your vesting cliff, 25% of your "
+								},
+								{
+									"text": "Stock Options",
+									"bold": true
+								},
+								{
+									"text": " will vest. (12 months worth of equity). "
+								}
+							],
+							"type": "lic",
+							"id": "NSF7cJxkqc_n7xgaKZoPI"
+						}
+					],
+					"type": "li",
+					"id": "Qth6FHRshBqRmURabh75i"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "At your 1-year anniversary, your "
+								},
+								{
+									"text": "Stock Options",
+									"bold": true
+								},
+								{
+									"text": " will total "
+								},
+								{
+									"text": "StockOptionAtCliff",
+									"code": true
+								}
+							],
+							"type": "lic",
+							"id": "CIztctckUKkX-1vQVCTnG"
+						}
+					],
+					"type": "li",
+					"id": "WkbGQLIzh3cI-lZUDsWP9"
+				}
+			],
+			"type": "ul",
+			"id": "Bqmd5e-nvIDNllROMqSYk"
+		},
+		{
+			"children": [
+				{
+					"text": "To look at your vesting progress, let's see how many options have vested for you. You can also adjust the vesting period and cliff if you are on a different schedule. "
+				}
+			],
+			"type": "p",
+			"id": "7clwdLPskOVx9YoRGB-NA"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OptionsStartMonth"
+								}
+							],
+							"id": "Z7rMCTrbJ_QmoZ4SVKh3F",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "2020-04"
+								}
+							],
+							"id": "Lbr1R0WYjHUP9_OK7zdj8",
+							"type": "exp"
+						}
+					],
+					"id": "CrvYxok9_zYejOPC1Tr2k",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "date",
+						"date": "month"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CliffPeriod"
+								}
+							],
+							"id": "JwDzPnlScIEJ65WQ4TqlX",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "12 months"
+								}
+							],
+							"id": "h-8mo0ge0OR9mHUbx6m5z",
+							"type": "exp"
+						}
+					],
+					"id": "XRADj7EpANLRY_j5vITyW",
+					"type": "def",
+					"variant": "expression"
+				}
+			],
+			"id": "lRsKsz82e7tTXPMZPZwNZ",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "VestingPeriod"
+								}
+							],
+							"id": "ywgBKEWuVfeJs0Z-DmocT",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "48 months"
+								}
+							],
+							"id": "n37SJaINnjtVRNUI1CiJt",
+							"type": "exp"
+						}
+					],
+					"id": "R3C5oVU1Ju4R2puQATAPA",
+					"type": "def",
+					"variant": "expression"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CurrentMonth"
+								}
+							],
+							"id": "j9iMmsl_zGPAwfp8Covz1",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "2022-03"
+								}
+							],
+							"id": "sKzFTXvO4T5bDn-Y1m37z",
+							"type": "exp"
+						}
+					],
+					"id": "VdesiEWgxb7aB1mIgvMXb",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "date",
+						"date": "month"
+					}
+				}
+			],
+			"id": "qsUiWwXbiNbRCTENza7NW",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "CountMonth(Month) = (Month - "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "CsOpt4XwOk6L3eL1z8RFa",
+					"type": "smart-ref",
+					"blockId": "CrvYxok9_zYejOPC1Tr2k",
+					"lastSeenVariableName": "OptionsStartMonth"
+				},
+				{
+					"text": " + 1) / months"
+				}
+			],
+			"type": "code_line",
+			"id": "aMS4XD4kUW5o8r7hedmJj"
+		},
+		{
+			"children": [
+				{
+					"text": "YourOwnershipVested ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "LTLNyuEhSWZiret4vX3Xa",
+					"type": "smart-ref",
+					"blockId": "VdesiEWgxb7aB1mIgvMXb",
+					"lastSeenVariableName": "CurrentMonth"
+				},
+				{
+					"text": ") = if "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "jtw3v7WOBkZBAZYfpHUpM",
+					"type": "smart-ref",
+					"blockId": "VdesiEWgxb7aB1mIgvMXb",
+					"lastSeenVariableName": "CurrentMonth"
+				},
+				{
+					"text": " >= "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "rqLyRBBvoipsX_pC8UDSm",
+					"type": "smart-ref",
+					"blockId": "CrvYxok9_zYejOPC1Tr2k",
+					"lastSeenVariableName": "OptionsStartMonth"
+				},
+				{
+					"text": " + "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "9HnR54xJ983S17kEQEmOU",
+					"type": "smart-ref",
+					"blockId": "XRADj7EpANLRY_j5vITyW",
+					"lastSeenVariableName": "CliffPeriod"
+				},
+				{
+					"text": " then "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "SndKtR06BxAPj7P_F7qxJ",
+					"type": "smart-ref",
+					"blockId": "h2jKAI7t1nEmAkOHbNZgA",
+					"lastSeenVariableName": "YourOwnership"
+				},
+				{
+					"text": "*CountMonth("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "CK4ryOk4mMzM6eDa_yp_Y",
+					"type": "smart-ref",
+					"blockId": "VdesiEWgxb7aB1mIgvMXb",
+					"lastSeenVariableName": "CurrentMonth"
+				},
+				{
+					"text": ")/48 else 0"
+				}
+			],
+			"type": "code_line",
+			"id": "G0wH0XUhEchVj7NG5Zp_5"
+		},
+		{
+			"children": [
+				{
+					"text": "EquityAtDate = rounddown((YourOwnershipVested(date(2022-03)) * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "SyFtm85zGHkoIGSIv2O7m",
+					"type": "smart-ref",
+					"blockId": "Oh0GisPmlL2ZgmrAUtV8a",
+					"lastSeenVariableName": "NumberOptions"
+				},
+				{
+					"text": ")/"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "0aB5w17YisE8XAy-Q2qTo",
+					"type": "smart-ref",
+					"blockId": "h2jKAI7t1nEmAkOHbNZgA",
+					"lastSeenVariableName": "YourOwnership"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"type": "code_line",
+			"id": "VIYmlORii0KmwKortLjd0"
+		},
+		{
+			"children": [
+				{
+					"text": "Cost to exercise your vested options"
+				}
+			],
+			"type": "h3",
+			"id": "1qGNB-Uz89WE6KAtfjXNs"
+		},
+		{
+			"children": [
+				{
+					"text": "You can only exercise your options after they vest. "
+				},
+				{
+					"text": "Exercising",
+					"italic": true
+				},
+				{
+					"text": " means you are exercising your option to buy stock at a certain price, a.k.a. you are purchasing shares at the"
+				},
+				{
+					"text": "StrikePrice",
+					"code": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "QpfLI-FdETI6zel7jaMoi"
+		},
+		{
+			"children": [
+				{
+					"text": "To exercise your stock options after vesting, they will cost "
+				},
+				{
+					"text": "OptionCosts",
+					"code": true
+				}
+			],
+			"type": "p",
+			"id": "L-6gonDxzn8ILwY1LfWJc"
+		},
+		{
+			"children": [
+				{
+					"text": "OptionCosts = "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "vMpt1DV9YAwJqwZ00T_CE",
+					"type": "smart-ref",
+					"blockId": "Oh0GisPmlL2ZgmrAUtV8a",
+					"lastSeenVariableName": "NumberOptions"
+				},
+				{
+					"text": " * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "JyCH6jUoQ57fE73F2Syob",
+					"type": "smart-ref",
+					"blockId": "ySQe_Oc6FnPfHvhupBrU5",
+					"lastSeenVariableName": "StrikePrice"
+				},
+				{
+					"text": ""
+				}
+			],
+			"type": "code_line",
+			"id": "sJ3nFh2VEoHNIzHN5NjWd"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "SnWH1wfBzIuqoF79B7fX5"
+		},
+		{
+			"children": [
+				{
+					"text": "What could your options be worth if we exit?  "
+				}
+			],
+			"type": "h2",
+			"id": "-GqRVsOwBmspIEKTiTvnf"
+		},
+		{
+			"children": [
+				{
+					"text": "Before we consider certain exits, let's account for the possibility of dilution. "
+				}
+			],
+			"type": "p",
+			"id": "_V_a_-PFDbJefE7sQU_V_"
+		},
+		{
+			"children": [
+				{
+					"text": "Dilution Events"
+				}
+			],
+			"type": "h3",
+			"id": "yP2jYZtK8VpzBQ0Hrf_Bd"
+		},
+		{
+			"children": [
+				{
+					"text": "As the company grows, it will likely raise more money. With each raise, a new valuation is established, usually (because the company is worth more!). This means the value of your stock options are worth more. "
+				}
+			],
+			"type": "p",
+			"id": "TV84wxqbf4js5e41m3oOp"
+		},
+		{
+			"children": [
+				{
+					"text": "However, with each new raise, a company likely gives away equity to investors. So, while the value of your options has gone up. Your ownership percentage will go down or get diluted. Dilution isn't a bad thing. You still own the same number of options. Those options are now worth more, but your ownership percentage will decrease. "
+				}
+			],
+			"type": "p",
+			"id": "0dFwbALPknc0hAYtNY55L"
+		},
+		{
+			"children": [
+				{
+					"text": "It's important to consider dilution in predicting the future valuation of a company. If you want to accommodate for dilution in future rounds, you can do so by changing the Dilution Event input to "
+				},
+				{
+					"text": "true",
+					"bold": true
+				},
+				{
+					"text": " or "
+				},
+				{
+					"text": "false,",
+					"bold": true
+				},
+				{
+					"text": " depending on your preferences. 20% dilution per round is a fairly standard. But, it can range. "
+				}
+			],
+			"type": "p",
+			"id": "nNmL1cA9CvIW4Q39rSEC0"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DilutionEvents"
+								}
+							],
+							"id": "WHV1cs7PdjA8hKRM9BRSB",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "XQ-LWBVY-izwEGXgkX60P",
+							"type": "exp"
+						}
+					],
+					"id": "Wqqo4s7vph1YLAs700GCg",
+					"type": "def",
+					"variant": "expression"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AdditionalRounds"
+								}
+							],
+							"type": "caption",
+							"id": "DmkOmTbGpRP5QvCId6Pcu"
+						},
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"type": "exp",
+							"id": "60gkulEHncjtdkgSmkK8E"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "2",
+							"id": "taC-9COn9M7w2trnNI8tV"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "qBgQiUKoU7nU2RkiPbK35"
+				}
+			],
+			"id": "g9876EGoshhT_93uaFcFU",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DilutionPerRound"
+						}
+					],
+					"id": "wl9IV6DGpMNsshlc_Kokd",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "20%"
+						}
+					],
+					"id": "pu0H2hCRHuPthpZR-PqmI",
+					"type": "exp"
+				}
+			],
+			"id": "IGZXBNueycFdWcOXgBwF7",
+			"type": "def",
+			"variant": "expression"
+		},
+		{
+			"children": [
+				{
+					"text": "You can compute the "
+				},
+				{
+					"text": "DilutedSharesRatio",
+					"code": true
+				},
+				{
+					"text": ", as the next calculation block. It is a factor by which your "
+				},
+				{
+					"text": "Stock Options",
+					"bold": true
+				},
+				{
+					"text": " equity value will be divided by due to dilution events:"
+				}
+			],
+			"type": "p",
+			"id": "DgyjxcNixX-aAomj0N4t0"
+		},
+		{
+			"children": [
+				{
+					"text": "DilutedSharesRatio= "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "QFlMgGKeyM8IaX_pTnOQD",
+					"type": "smart-ref",
+					"blockId": "IGZXBNueycFdWcOXgBwF7",
+					"lastSeenVariableName": "DilutionPerRound"
+				},
+				{
+					"text": " * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "sX0a3GHTbMDlLMvkG1LM6",
+					"type": "smart-ref",
+					"blockId": "qBgQiUKoU7nU2RkiPbK35",
+					"lastSeenVariableName": "AdditionalRounds"
+				},
+				{
+					"text": " + 1"
+				}
+			],
+			"type": "code_line",
+			"id": "KBliU9fqLAquuNw-Ee9iH"
+		},
+		{
+			"children": [
+				{
+					"text": "To account for the dilution, you can use the following function:"
+				}
+			],
+			"type": "p",
+			"id": "pIdGOoqGZ0TTQ2MWj8zY3"
+		},
+		{
+			"children": [
+				{
+					"text": "StockOptionAfterVest = YourOwnershipVested("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Jm-YiCjlv39n5vy9G0Ime",
+					"type": "smart-ref",
+					"blockId": "CrvYxok9_zYejOPC1Tr2k",
+					"lastSeenVariableName": "OptionsStartMonth"
+				},
+				{
+					"text": " + "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "bDQh7wj_CYiOYQL6KJ_yD",
+					"type": "smart-ref",
+					"blockId": "R3C5oVU1Ju4R2puQATAPA",
+					"lastSeenVariableName": "VestingPeriod"
+				},
+				{
+					"text": " - 1 month)"
+				}
+			],
+			"type": "code_line",
+			"id": "pas16PjidjpCKCTug0s0p"
+		},
+		{
+			"children": [
+				{
+					"text": "getCompanyPercentage("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "lEscIdc0Xln8YLQXfcbsa",
+					"type": "smart-ref",
+					"blockId": "Wqqo4s7vph1YLAs700GCg",
+					"lastSeenVariableName": "DilutionEvents"
+				},
+				{
+					"text": ") = if "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "4A41Pvjq4YoK4ESwvaXjT",
+					"type": "smart-ref",
+					"blockId": "Wqqo4s7vph1YLAs700GCg",
+					"lastSeenVariableName": "DilutionEvents"
+				},
+				{
+					"text": " then ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "qnHBOvQAIVmLBWRp85HzU",
+					"type": "smart-ref",
+					"blockId": "pas16PjidjpCKCTug0s0p",
+					"lastSeenVariableName": "StockOptionAfterVest"
+				},
+				{
+					"text": "/"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "ezTSmZ782E7yKE8WD9EXa",
+					"type": "smart-ref",
+					"blockId": "KBliU9fqLAquuNw-Ee9iH",
+					"lastSeenVariableName": "DilutedSharesRatio"
+				},
+				{
+					"text": ") else "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Wqf4vq1-TJlJhx3g18Irj",
+					"type": "smart-ref",
+					"blockId": "pas16PjidjpCKCTug0s0p",
+					"lastSeenVariableName": "StockOptionAfterVest"
+				},
+				{
+					"text": ""
+				}
+			],
+			"type": "code_line",
+			"id": "6cI6MDyfhGJO50Fdwthgr"
+		},
+		{
+			"children": [
+				{
+					"text": "Your post dilution ownership"
+				},
+				{
+					"text": ":",
+					"bold": true
+				}
+			],
+			"type": "p",
+			"id": "4QeUEtqV7svtuSyq_4m9Y"
+		},
+		{
+			"children": [
+				{
+					"text": "FinalOwnershipPercentage = getCompanyPercentage("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "0JkJe6CoyocX-AsCRaccL",
+					"type": "smart-ref",
+					"blockId": "Wqqo4s7vph1YLAs700GCg",
+					"lastSeenVariableName": "DilutionEvents"
+				},
+				{
+					"text": ") in %"
+				}
+			],
+			"type": "code_line",
+			"id": "JCnL9SK6dDlBU9LUtQCdm"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "iUDCpTgNXDeKp1mCv2rfB"
+		},
+		{
+			"children": [
+				{
+					"text": "Possible outcomes for your equity"
+				}
+			],
+			"type": "h3",
+			"id": "j5ArMksaw_y_MXVs_ZxHF"
+		},
+		{
+			"children": [
+				{
+					"text": "You can compute the "
+				},
+				{
+					"text": "Equity Value ",
+					"bold": true
+				},
+				{
+					"text": "of your "
+				},
+				{
+					"text": "Stock Options",
+					"bold": true
+				},
+				{
+					"text": " using the "
+				},
+				{
+					"text": "CalcEquityValue",
+					"code": true
+				},
+				{
+					"text": " function:"
+				}
+			],
+			"type": "p",
+			"id": "BQMOBjprb9xpqoKve7Rw5"
+		},
+		{
+			"children": [
+				{
+					"text": "CalcEquityValue ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "YE1lqkTnqrFrTHV4IzipY",
+					"type": "smart-ref",
+					"blockId": "W5vgUjt1WZ-av5J8B1Gmz",
+					"lastSeenVariableName": "Valuation"
+				},
+				{
+					"text": ")= "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "748PYhhM2_TTJVExSJT-r",
+					"type": "smart-ref",
+					"blockId": "W5vgUjt1WZ-av5J8B1Gmz",
+					"lastSeenVariableName": "Valuation"
+				},
+				{
+					"text": " * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "C9pY9NEicibQC046gh_P3",
+					"type": "smart-ref",
+					"blockId": "JCnL9SK6dDlBU9LUtQCdm",
+					"lastSeenVariableName": "FinalOwnershipPercentage"
+				},
+				{
+					"text": " - "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "virVhauk4dQutbf6X32CO",
+					"type": "smart-ref",
+					"blockId": "sJ3nFh2VEoHNIzHN5NjWd",
+					"lastSeenVariableName": "OptionCosts"
+				},
+				{
+					"text": ""
+				}
+			],
+			"type": "code_line",
+			"id": "rWutMiXXgX5dtaHKjg46O"
+		},
+		{
+			"children": [
+				{
+					"text": "You can play with new valuations and see how it impacts your offer. For example, for a new valuation of "
+				},
+				{
+					"text": "exprRef_GjtgLi4cOxxi4gsgJD8Ky",
+					"magicnumberz": true
+				},
+				{
+					"text": " and the above circumstances your equity value will be "
+				},
+				{
+					"text": "exprRef_2vshhIX_skApVgecqRBkT",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"type": "p",
+			"id": "YcSM4UibOrhGEcq8wtzOZ"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "NewValuation"
+						}
+					],
+					"id": "wuZbSc2qVE6hMsKQCdqq8",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "50000000£"
+						}
+					],
+					"id": "NT_l-flmUsOUXUt5qpad2",
+					"type": "exp"
+				}
+			],
+			"id": "GjtgLi4cOxxi4gsgJD8Ky",
+			"type": "def",
+			"variant": "expression"
+		},
+		{
+			"children": [
+				{
+					"text": "EquityValueOfNewValuation = CalcEquityValue("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "143usloUqJ0GjutuKoDH9",
+					"type": "smart-ref",
+					"blockId": "GjtgLi4cOxxi4gsgJD8Ky",
+					"lastSeenVariableName": "NewValuation"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"type": "code_line",
+			"id": "2vshhIX-skApVgecqRBkT"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's compare different valuation scenarios in the below table to see your equity value"
+				}
+			],
+			"type": "p",
+			"id": "qHoSU0pcHkPzef2F64BQc"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "IPOEquity"
+								}
+							],
+							"type": "table-var-name",
+							"id": "ouhLS4IM7_JKgs7tvB0pE"
+						},
+						{
+							"children": [
+								{
+									"text": "round(CalcEquityValue("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "VXEjVpYslYYrOHBBRdJTC",
+									"type": "smart-ref",
+									"blockId": "WopzflNfU_CdsmRsQlCFf",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Valuation"
+								},
+								{
+									"text": " ),2)"
+								}
+							],
+							"type": "table-column-formula",
+							"columnId": "EVJTXoI2sGtdekFDBnDCE",
+							"id": "RaEc_MDrZBnxFye_AUl0f"
+						}
+					],
+					"type": "table-caption",
+					"id": "hZVQ7FWBOlP2YvX8Wn_LB"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Scenario"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							},
+							"id": "MferAIfRsbTjH1uXyZAr-"
+						},
+						{
+							"children": [
+								{
+									"text": "Valuation"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"multiplier": {
+											"s": "1",
+											"n": "1",
+											"d": "1"
+										},
+										"known": true,
+										"unit": "britishpound",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "britishpound"
+									}
+								]
+							},
+							"id": "WopzflNfU_CdsmRsQlCFf"
+						},
+						{
+							"children": [
+								{
+									"text": "YourEquityValueStockOptions"
+								}
+							],
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"id": "EVJTXoI2sGtdekFDBnDCE"
+						}
+					],
+					"type": "tr",
+					"id": "kZ1SuMJf0m_wGeBKVwY1i"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "🌱 Let's go"
+								}
+							],
+							"type": "td",
+							"id": "WrIGtCZCeGyFOtCpNqey2"
+						},
+						{
+							"children": [
+								{
+									"text": "15 M£"
+								}
+							],
+							"type": "td",
+							"id": "Mei4MgA6nuwlVLfnFiD9C"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"id": "YDA-vy7qaA9MjXg2ngAJo"
+						}
+					],
+					"type": "tr",
+					"id": "Q44QeYZxwCMbCofvxv6To"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "🌿 We are all in this together"
+								}
+							],
+							"type": "td",
+							"id": "WbPEjeup4TjMVmTDCVzFS"
+						},
+						{
+							"children": [
+								{
+									"text": "50 M£"
+								}
+							],
+							"type": "td",
+							"id": "eJj0p_ZX2QNnNYrFIsAm8"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"id": "rthJkxlCHa4z4hfXZmeU2"
+						}
+					],
+					"type": "tr",
+					"id": "rrJez2jbi1ETC4TW4qndL"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "🦄 A wild creature appears"
+								}
+							],
+							"type": "td",
+							"id": "LM393b1cFdEB09rMdmAfS"
+						},
+						{
+							"children": [
+								{
+									"text": "1000 M£"
+								}
+							],
+							"type": "td",
+							"id": "QPO7z_F02L5V1v6Eyt41L"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"type": "td",
+							"id": "CjXrA7yJWYjd9vbYc0-m_"
+						}
+					],
+					"type": "tr",
+					"id": "DxAS3HowEO9DBlweZ0yAz"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "🚀 To the Moon"
+								}
+							],
+							"id": "2hLMfvfF-yf-1riyJ8JAk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100 000 M£"
+								}
+							],
+							"id": "WiJFnSU4lBb07U3WoUxXk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oSYPJ_B84fyuWaiQKDrtj",
+							"type": "td"
+						}
+					],
+					"id": "7NS1nle3DaHYKhe6w4of4",
+					"type": "tr"
+				}
+			],
+			"type": "table",
+			"id": "cm4_fkatrABB76p1C-eCm",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "0tat1zwG_6RNTsKEnEwUi"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "M45LXk2RsxkeS4ZoePkMA",
+			"type": "p"
+		}
+	]
+}

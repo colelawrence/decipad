@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src", "src/tests/__fixtures__/*.json", "scripts"],
+  "compilerOptions": {
+    "lib": ["esnext"]
+  },
+  "references": [
+    { "path": "../backendtypes" },
+    { "path": "../tables" },
+    { "path": "../backend-config" },
+    { "path": "../editor-types" },
+    { "path": "../doc-verbalizer" },
+    { "path": "../backend-notebook-content" },
+    { "path": "../computer" }
+  ]
+}

@@ -1,0 +1,1727 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "What is your founder number?"
+				}
+			],
+			"type": "h1",
+			"id": "QbEXpDwTrb7u--9w8-3Hn"
+		},
+		{
+			"children": [
+				{
+					"text": "This is a Decipad notebook. You can alter table and inputs above so that all calculations adjust to your circumstances. For the purpose of this document we will assume you are the largest shareholder in the cap table. If that's not the case, that's alright. Reading the document will present a breakdown by stakeholder."
+				}
+			],
+			"type": "callout",
+			"id": "3YuE4l2x75m-l2MdtiU5P",
+			"color": "Malibu",
+			"icon": "AnnotationWarning"
+		},
+		{
+			"children": [
+				{
+					"text": "When it comes to the sale of a business, it can be tricky to know where to start. Many factors must be taken into account; this workbook focuses on one particular area of them."
+				}
+			],
+			"type": "p",
+			"id": "kDdu4mizCktr8AW_YWAXc"
+		},
+		{
+			"children": [
+				{
+					"text": "What is fair compensation for the founders? \nAnd what is "
+				},
+				{
+					"text": "your",
+					"bold": true
+				},
+				{
+					"text": " founder number?"
+				}
+			],
+			"type": "blockquote",
+			"id": "KUdWnf8fjAj8jmhfN7IPc"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Cap"
+								}
+							],
+							"id": "ojPF-q2dNSFIZ-yeDPA6b",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BK__Wm1Yznl7HEfOA7j2x",
+									"type": "smart-ref",
+									"blockId": "bT3e3MWQUqAeAJOYLMhnv",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Shares"
+								},
+								{
+									"text": " / sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "iFloZOKKJnuuT39TgR7pP",
+									"type": "smart-ref",
+									"blockId": "6Uui_IgilEBmKG8XCaQIN",
+									"columnId": "bT3e3MWQUqAeAJOYLMhnv",
+									"lastSeenVariableName": "Cap.Shares"
+								},
+								{
+									"text": ") in %"
+								}
+							],
+							"id": "PECYTOclswsJBjBiAvlNf",
+							"type": "table-column-formula",
+							"columnId": "b8ZEe8j9SWKfmTzvdK2Bc"
+						}
+					],
+					"id": "KyZVcDoufGY1mG5AwcF_f",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Name"
+								}
+							],
+							"id": "4DsaZa9-rcvQwRwjFQRSN",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "6WBMNwRwfwKzpWNPY_4x9",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Shares"
+								}
+							],
+							"id": "bT3e3MWQUqAeAJOYLMhnv",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Ownership"
+								}
+							],
+							"id": "b8ZEe8j9SWKfmTzvdK2Bc",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "8khlxX2-4GWtq9fGAPCUX",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Alice"
+								}
+							],
+							"id": "tjaVOmNekh64JD3CaNMBL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Common"
+								}
+							],
+							"id": "YXbCHKTrZA6gKOiuksmKi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10 m shares"
+								}
+							],
+							"id": "TC7YtoHfs9VTwkL67XKj8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fvshh0oWxVoi7CnRVAWC-",
+							"type": "td"
+						}
+					],
+					"id": "8aQf3pEIWLH0wAkGCexMe",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other shareholders"
+								}
+							],
+							"id": "g9a653lyjs0bCBPiuWbwl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Common"
+								}
+							],
+							"id": "73SMPCbypra9I_yxixjt5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2.5 m shares"
+								}
+							],
+							"id": "yLXWcnH0Ilse883RTBDvC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9NTt261gIEy4NRsFv4PEB",
+							"type": "td"
+						}
+					],
+					"id": "6ROsdpUBvwV7tAGF60mJs",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Stock Options"
+								}
+							],
+							"id": "oVo9Bxdpfrh17YJqXsVVC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Common"
+								}
+							],
+							"id": "PFSwxjdXXhn3cxB-O9mUc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2.5 m shares"
+								}
+							],
+							"id": "meNy9nid0vJz1ESpSzKKf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JKj3Wk5oWVfPA9yS87jpB",
+							"type": "td"
+						}
+					],
+					"id": "MYFA0D7ba3RNXZN7AimhQ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Investors"
+								}
+							],
+							"id": "y33J_InBVdRIDwd83WZ-8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Pref"
+								}
+							],
+							"id": "wWWh3XITC1es_Z0cnGp_9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "6 m shares"
+								}
+							],
+							"id": "ubXl_Ols8VrWJapB1HnN3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZE4hSbktaumIXpfgM2A6R",
+							"type": "td"
+						}
+					],
+					"id": "sVgr9bavRzUU6FglUUDBN",
+					"type": "tr"
+				}
+			],
+			"id": "6Uui_IgilEBmKG8XCaQIN",
+			"type": "table",
+			"version": 2,
+			"icon": "People",
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "FounderNumber"
+								}
+							],
+							"id": "jS6NhwnhNYD9v74a93_Lf",
+							"type": "caption",
+							"icon": "Compass"
+						},
+						{
+							"children": [
+								{
+									"text": "$5M"
+								}
+							],
+							"id": "hyXAG2sZQnl28cmVoKcrH",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xOwvIwRty-R4eJBWy_k-T",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "5"
+						}
+					],
+					"id": "wW5mE0r2SozssZwu4F3WN",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Investment"
+								}
+							],
+							"id": "d0cOmritgYjayqm4jQJ9j",
+							"type": "caption",
+							"icon": "Wallet"
+						},
+						{
+							"children": [
+								{
+									"text": "$5M"
+								}
+							],
+							"id": "I4FnDsDoMrvIl5MiFjbVy",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BP8ULbOw6_rHEhzgnVhmY",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "5"
+						}
+					],
+					"id": "6byVsGjXgx0Sg_ffU_0GP",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "RY0e6G_7Yr6mXOocZt3S-",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Multiplier"
+						}
+					],
+					"id": "SDMOBkfvnvuJgzHXOu1vC",
+					"type": "caption",
+					"icon": "Percentage"
+				},
+				{
+					"children": [
+						{
+							"text": "1"
+						}
+					],
+					"id": "_mxqMQftjyzGRhjXKZeKI",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "FdcbQNzv-I64hanfopI5I",
+					"type": "slider",
+					"max": "3",
+					"min": "1",
+					"step": "1",
+					"value": "1"
+				}
+			],
+			"id": "hC4HsFEdIrjVOt6DyJHqB",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "TL;DR:"
+				}
+			],
+			"type": "h2",
+			"id": "5ORURFX6jdalyjCIuS3Ta"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "vPjM7her6yVYx5XbAbb-t",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "For "
+				},
+				{
+					"text": "exprRef_Hw2vElEKZosTdFgUD6Pj_",
+					"magicnumberz": true
+				},
+				{
+					"text": " to make "
+				},
+				{
+					"text": "exprRef_wW5mE0r2SozssZwu4F3WN",
+					"magicnumberz": true
+				},
+				{
+					"text": " the company would need to be sold for a minimum of "
+				},
+				{
+					"text": "exprRef_AARIZEMbH4gsYxkVoE_UR",
+					"magicnumberz": true
+				},
+				{
+					"text": ". This assumes a liquidation preference multiplier of "
+				},
+				{
+					"text": "Multiplier ",
+					"magicnumberz": true
+				},
+				{
+					"text": " (participating)."
+				}
+			],
+			"type": "p",
+			"id": "DF7_8I9X5Ob3i09tRHij8"
+		},
+		{
+			"children": [
+				{
+					"text": "The distribution of funds would look like this:"
+				}
+			],
+			"type": "p",
+			"id": "INumMO7aWjHYdgfIGNYPM"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Exits by shareholder"
+								}
+							],
+							"id": "uD4eUbPA6xm9mYttiKvDO",
+							"type": "data-view-name"
+						}
+					],
+					"id": "159mJiK8wVVnTd9f5AJml",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8ThOHQbGWprprE1xGDjfL",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Name",
+							"name": "Name"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0ecqeBq4__MKWOQF26eaz",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Total",
+							"name": "Row8pCsPGh2saLW3ZG2kb",
+							"aggregation": "Sum"
+						}
+					],
+					"id": "BaIPaCMqMgzjjEHuYzp_g",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "b3E6ANKA8tvVkFxtD_Dfk",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "2MlkjBy5AYk9CsOLODPCR",
+			"icon": "Trophy"
+		},
+		{
+			"children": [
+				{
+					"text": "Napkin math"
+				}
+			],
+			"type": "h2",
+			"id": "dJLdWmbm-V5wVF_7cGyCw"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "wCUFl-sKhk7g-x9i7M0YJ",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Capitalisation table"
+				}
+			],
+			"type": "h3",
+			"id": "n8xj9_x5I_T2GeEy150TP"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "j06adE91aDRXHhSprkQYJ",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's start with the capitalisation table:"
+				}
+			],
+			"type": "p",
+			"id": "2KJZXPiVnq55t1whC8W56"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "S1ef62F4GYeASNeha_Iyq",
+			"type": "plot",
+			"title": "Ownership by shareholder",
+			"sourceVarName": "exprRef_6Uui_IgilEBmKG8XCaQIN",
+			"xColumnName": "",
+			"yColumnName": "",
+			"markType": "arc",
+			"thetaColumnName": "Shares",
+			"sizeColumnName": "",
+			"colorColumnName": "Name",
+			"y2ColumnName": "",
+			"colorScheme": "monochrome_green"
+		},
+		{
+			"children": [
+				{
+					"text": "Typically, calculating the return for each shareholder would be a simple as multiplying their ownership by the transaction value. For instance for a transaction value of "
+				},
+				{
+					"text": "exprRef_URCtWKF4X_2RGTaV3b6QK",
+					"magicnumberz": true
+				},
+				{
+					"text": " you would have the following returns:"
+				}
+			],
+			"type": "p",
+			"id": "iivrsk0vjf53amJ_5-Jo1"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Exit event without preference rights"
+								}
+							],
+							"id": "7jgMcBFkH-K_Xw5V4tmrL",
+							"type": "data-view-name"
+						}
+					],
+					"id": "SPPx-UCF0VHbEhDgdDmmN",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kEdwJXoZc8ZyKkmUE3AW-",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Name",
+							"name": "Name"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kkTp-2Mm88lbzM-viTN7s",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Value",
+							"name": "Value",
+							"aggregation": "Sum",
+							"rounding": "-3"
+						}
+					],
+					"id": "BaKFX3ogPZ9JkBIFw8QfJ",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "QuFc7C7UMsF0CsK6iXFqq",
+			"type": "data-view",
+			"expandedGroups": [
+				"7e6d382937e111bf627707992627231c430e52ad0c6c2150b2e17631824806c3/5567a988c6deb67418d40ef95b5b1e41b980716659bbb0ad8621057042ba93be",
+				"db605e8f71913d1f3966ad908d78b8a8084f5047122037b2b91a7192b598a9ad"
+			],
+			"varName": "jAwBqblC-s_xxbry6AUd1",
+			"icon": "AnnotationWarning"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SampleTransaction"
+						}
+					],
+					"type": "structured_varname",
+					"id": "HSzUGhi-G-LsimEF3d2qK"
+				},
+				{
+					"children": [
+						{
+							"text": "$10 million"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "WX7ScWyw5dudlj4dUBZkB"
+				}
+			],
+			"id": "URCtWKF4X_2RGTaV3b6QK",
+			"type": "code_line_v2",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SampleDistrib"
+						}
+					],
+					"type": "structured_varname",
+					"id": "GrGWmxzR1dpYQPiz844Ds"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "q16a_PfjgZx6vDcRCslba",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "b8ZEe8j9SWKfmTzvdK2Bc",
+							"lastSeenVariableName": "Cap.Ownership"
+						},
+						{
+							"text": " * SampleTransaction as table"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "nCuWU13bufhjhtncJLil6"
+				}
+			],
+			"id": "jAwBqblC-s_xxbry6AUd1",
+			"type": "code_line_v2",
+			"showResult": false,
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "l_8yPUitFl6psmYLONYz9"
+		},
+		{
+			"children": [
+				{
+					"text": "The liquidation preference"
+				}
+			],
+			"type": "h3",
+			"id": "YTZWSley_IFQggjnv8Z41"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "MVVwXSTMs0lYwNMt4kSHq",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "When looking at venture-backed sales, the most significant component to consider in terms of exit value should be liquidation preference, as investors usually have more control than entrepreneurs. There are "
+				},
+				{
+					"children": [
+						{
+							"text": "entire books"
+						}
+					],
+					"type": "a",
+					"url": "https://www.amazon.co.uk/Venture-Deals-Smarter-Lawyer-Capitalist/dp/1118443616",
+					"id": "9hYQBbPtpbfALXbrjT2sQ"
+				},
+				{
+					"text": " written on the topic of term sheets, but when considering a sale liquidation preference is the most important one."
+				}
+			],
+			"type": "p",
+			"id": "Rh0nfoLH2fIssmuaDglEB"
+		},
+		{
+			"children": [
+				{
+					"text": "Liquidation preference  refers to the right of the investor (pref shares) to be the first to receive money in the event of a liquidity event such as an exit. This preference means that the investor is entitled to receive their investment amount back in full before other shareholders (common shares) receive any money. "
+				}
+			],
+			"type": "p",
+			"id": "8F6Si3kmlm1UXnhwZqJJ5"
+		},
+		{
+			"children": [
+				{
+					"text": "The multiplier and participating rights are two typical levers used by VCs to protect their liquidation preference rights. "
+				}
+			],
+			"id": "OSNB7qBW9gh9W4OIi1oVb",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Multiplier",
+									"highlight": true
+								},
+								{
+									"text": " is a multiple of a venture capitalist’s investment that they are entitled to receive before other investors in the event of an exit"
+								}
+							],
+							"id": "1PaKZtTXH_w2X6JgzmD2H",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "fcMrM3yNQKIy9ndaL8K-K"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Participating rights",
+									"highlight": true
+								},
+								{
+									"text": ", meanwhile, grant a venture capitalist the right to receive any remaining proceeds after the liquidation preference has been paid out."
+								}
+							],
+							"id": "hgvRtjT_lR3ln5-2CD3fM",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "bS4XEqGU4iYa2I0lL_YhU"
+				}
+			],
+			"type": "ul",
+			"id": "hLpR7reips-iU1wqWWnIf"
+		},
+		{
+			"children": [
+				{
+					"text": "You should be able to read your investment documents are get these numbers from there. They should have been negotiated on "
+				},
+				{
+					"children": [
+						{
+							"text": "your term sheet"
+						}
+					],
+					"type": "a",
+					"url": "https://app.decipad.com/n/A-founders-guide-to-pricing-your-first-round%3AEIfsPUrmoNZDMtGHYuxMW",
+					"id": "q4wBrGzRRGwGxg86hEdiu"
+				},
+				{
+					"text": "."
+				}
+			],
+			"type": "p",
+			"id": "V7d5VEL8s1Drn0mQZYyBc"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "FYN4GpjAppLwJSGi7TIDi"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "InvestorShares"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0tUE3jiLOkPCJMehpMDKb"
+				},
+				{
+					"children": [
+						{
+							"text": "sum(filter("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FKPdkKWyObWKZyDbe8wIf",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": null,
+							"lastSeenVariableName": "Cap"
+						},
+						{
+							"text": ", "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "l44IgMusaVT7gLfO35r3H",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "4DsaZa9-rcvQwRwjFQRSN",
+							"lastSeenVariableName": "Cap.Name"
+						},
+						{
+							"text": "  == \"Investors\").Shares)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "8hWgtTywsk2ZhoBvSNPHE"
+				}
+			],
+			"id": "Cu8sT_io2iN3EXschhvsb",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalShares"
+						}
+					],
+					"type": "structured_varname",
+					"id": "gOiUwMuU3Encm_oeshk3t"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Trd_9Lipr1fdFo0RBwxih",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "bT3e3MWQUqAeAJOYLMhnv",
+							"lastSeenVariableName": "Cap.Shares"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "RuVt23H3y7IkuQ1PZd8MK"
+				}
+			],
+			"id": "pQKQeH2spjYdPVKNjn1iL",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PrefPercentage"
+						}
+					],
+					"type": "structured_varname",
+					"id": "IpbyPOpFlgqjuF2r8XD23"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4EbBUCM1IsjOCyu9jYgTI",
+							"type": "smart-ref",
+							"blockId": "Cu8sT_io2iN3EXschhvsb",
+							"columnId": null,
+							"lastSeenVariableName": "InvestorShares"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mehmIycMwdTBeVm2IpstN",
+							"type": "smart-ref",
+							"blockId": "pQKQeH2spjYdPVKNjn1iL",
+							"columnId": null,
+							"lastSeenVariableName": "TotalShares"
+						},
+						{
+							"text": " in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "fVy3gg3kHKGREYjmz0iD_"
+				}
+			],
+			"id": "AEE7akRbX7KSsn_Xbt8cL",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "YqX_eTLFG-4VQV5N4F8Fb"
+		},
+		{
+			"children": [
+				{
+					"text": "Finding the founder number"
+				}
+			],
+			"type": "h3",
+			"id": "FMSLzogsx29govxP1Ajb5"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "NC-fdD7gOoUiWCrIFV-tT",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we understand the capitalisation table and everything about the liquidation preference, let's find what is the minimum sale that reaches your number.  Do bear in mind that typically transactions are broken into cash, equity, and share incentives. So ymmv."
+				}
+			],
+			"type": "p",
+			"id": "e1FUGb8JpQUmERK2nYCZ1"
+		},
+		{
+			"children": [
+				{
+					"text": "The shareholder with most equity is "
+				},
+				{
+					"text": "exprRef_Hw2vElEKZosTdFgUD6Pj_",
+					"magicnumberz": true
+				},
+				{
+					"text": " with "
+				},
+				{
+					"text": "exprRef_Moku4PFv6JT9olEOYnvWc",
+					"magicnumberz": true
+				},
+				{
+					"text": " ("
+				},
+				{
+					"text": "exprRef_PhxqMeeg2vQwP1qHppLhn",
+					"magicnumberz": true
+				},
+				{
+					"text": ").  For "
+				},
+				{
+					"text": "exprRef_Hw2vElEKZosTdFgUD6Pj_",
+					"magicnumberz": true
+				},
+				{
+					"text": " to make "
+				},
+				{
+					"text": "exprRef_wW5mE0r2SozssZwu4F3WN",
+					"magicnumberz": true
+				},
+				{
+					"text": ", a minimum transaction of "
+				},
+				{
+					"text": "exprRef_AARIZEMbH4gsYxkVoE_UR",
+					"magicnumberz": true
+				},
+				{
+					"text": " is needed. "
+				}
+			],
+			"type": "p",
+			"id": "ZEwQ_AErystdm1Nl1QO0y"
+		},
+		{
+			"children": [
+				{
+					"text": "The final distribution would look like this:"
+				}
+			],
+			"type": "p",
+			"id": "iZdTFbrvuq5n42MbmBpdI"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view"
+								}
+							],
+							"id": "o2oVwHU5fIN7Fzc0AsfZC",
+							"type": "data-view-name"
+						}
+					],
+					"id": "TXLzSs9cHiK97jHgMaloZ",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H695RPCylgaYkulbiI0Ka",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"label": "Name",
+							"name": "Name"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KaVDGyKPC1Qc9DssjxcPE",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"label": "Total",
+							"name": "Row8pCsPGh2saLW3ZG2kb",
+							"aggregation": "Sum"
+						}
+					],
+					"id": "FVeZ82lCjBmdvs8f7RVsE",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "lWkOH6jcUr5xOgNqx80xx",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "2MlkjBy5AYk9CsOLODPCR"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Shares"
+						}
+					],
+					"type": "structured_varname",
+					"id": "RJbU4COHNc5TPmGZDk8tO"
+				},
+				{
+					"children": [
+						{
+							"text": "max("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Y3NjeKQkPKkYK_BuqkcPm",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "bT3e3MWQUqAeAJOYLMhnv",
+							"lastSeenVariableName": "Cap.Shares"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "uhWAIMFPcwZylzLdHD7tY"
+				}
+			],
+			"id": "Moku4PFv6JT9olEOYnvWc",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Person"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0eJf-nAm16Tb30gaEV-7J"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dT1QIKmWnyUSDWbzj5Qw1",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": null,
+							"lastSeenVariableName": "Cap"
+						},
+						{
+							"text": ", "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OZEPTE_jcfbwKhCvCsSnY",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "bT3e3MWQUqAeAJOYLMhnv",
+							"lastSeenVariableName": "Cap.Shares"
+						},
+						{
+							"text": " == "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9slkGdh7F6NKGFRqmRL7X",
+							"type": "smart-ref",
+							"blockId": "Moku4PFv6JT9olEOYnvWc",
+							"columnId": null,
+							"lastSeenVariableName": "Shares"
+						},
+						{
+							"text": " ).Name"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "6oauv3d8RYudfAdK7nTIc"
+				}
+			],
+			"id": "Hw2vElEKZosTdFgUD6Pj_",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Ownership"
+						}
+					],
+					"type": "structured_varname",
+					"id": "o0Qct5SORr9PQcB3e-jFF"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UAuRaaDLdn0aH0ExoOuRT",
+							"type": "smart-ref",
+							"blockId": "Moku4PFv6JT9olEOYnvWc",
+							"columnId": null,
+							"lastSeenVariableName": "Shares"
+						},
+						{
+							"text": " / total("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9vE3ojVYm15WHJPMErZQd",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "bT3e3MWQUqAeAJOYLMhnv",
+							"lastSeenVariableName": "Cap.Shares"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QyJ46V5zMGvC6wgwi5q2D"
+				}
+			],
+			"id": "PhxqMeeg2vQwP1qHppLhn",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Preference"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ANGv4aVJf2gswfifdTDO_"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "g7QkgLjwk1wL4j0_NIOEX",
+							"type": "smart-ref",
+							"blockId": "6byVsGjXgx0Sg_ffU_0GP",
+							"columnId": null,
+							"lastSeenVariableName": "Investment"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lWn9z6M3FlAHuK2SDSwVU",
+							"type": "smart-ref",
+							"blockId": "hC4HsFEdIrjVOt6DyJHqB",
+							"columnId": null,
+							"lastSeenVariableName": "Multiplier"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "9VHHEIp3QC8N5CEbRabq7"
+				}
+			],
+			"id": "HSovDr7BQYsRKjNLUXmP8",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TransactionValue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "DazjMo7_E1TE6OkQYl1HZ"
+				},
+				{
+					"children": [
+						{
+							"text": "("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Bw7KSbF3j90vrWiUqcJ7l",
+							"type": "smart-ref",
+							"blockId": "wW5mE0r2SozssZwu4F3WN",
+							"columnId": null,
+							"lastSeenVariableName": "FounderNumber"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NVI4H_E0QkKjGIcuqonYo",
+							"type": "smart-ref",
+							"blockId": "PhxqMeeg2vQwP1qHppLhn",
+							"columnId": null,
+							"lastSeenVariableName": "Ownership"
+						},
+						{
+							"text": ") + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aF2bVTsg0WgXgyF-xfsEw",
+							"type": "smart-ref",
+							"blockId": "HSovDr7BQYsRKjNLUXmP8",
+							"columnId": null,
+							"lastSeenVariableName": "Preference"
+						},
+						{
+							"text": "  "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Qc7qyueD4aVJuwO6SHnte"
+				}
+			],
+			"id": "AARIZEMbH4gsYxkVoE_UR",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "FreeDistribution"
+						}
+					],
+					"type": "structured_varname",
+					"id": "rxaEAsn9x2NcqZtZcKCoz"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "n-OwhtocYaHvngYbrEB3Q",
+							"type": "smart-ref",
+							"blockId": "AARIZEMbH4gsYxkVoE_UR",
+							"columnId": null,
+							"lastSeenVariableName": "TransactionValue"
+						},
+						{
+							"text": " - Preference  "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "YwjZl5emMNriHdw8XKubr"
+				}
+			],
+			"id": "a9P5Kh8bZv1JJgy-3cZ2Q",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ExitFromFree"
+						}
+					],
+					"type": "structured_varname",
+					"id": "zU6cIozFk3E73qYIlrTEx"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d7U0Pwpji9DoK94oPWWsK",
+							"type": "smart-ref",
+							"blockId": "6Uui_IgilEBmKG8XCaQIN",
+							"columnId": "b8ZEe8j9SWKfmTzvdK2Bc",
+							"lastSeenVariableName": "Cap.Ownership"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yY-UuBNxMxS4HyR1JZkeW",
+							"type": "smart-ref",
+							"blockId": "a9P5Kh8bZv1JJgy-3cZ2Q",
+							"columnId": null,
+							"lastSeenVariableName": "FreeDistribution"
+						},
+						{
+							"text": "  as table"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "et8hVHK8ghEKo0Rn2gz-t"
+				}
+			],
+			"id": "2MlkjBy5AYk9CsOLODPCR",
+			"type": "code_line_v2",
+			"showResult": false
+		},
+		{
+			"children": [
+				{
+					"text": "ExitFromFree.Total = if Name == \"Investors\" then "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "qvZuhbvpwH__mxKyqNHT_",
+					"type": "smart-ref",
+					"blockId": "HSovDr7BQYsRKjNLUXmP8",
+					"columnId": null,
+					"lastSeenVariableName": "Preference"
+				},
+				{
+					"text": "+ Value else Value"
+				}
+			],
+			"id": "Row8pCsPGh2saLW3ZG2kb",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "6kSTQSv_srkS87l9meCz1"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "kN4lRD1rvlzF3fRuo6Dks"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "XXMsn4yKprFgX32mgS4mo"
+		}
+	]
+}

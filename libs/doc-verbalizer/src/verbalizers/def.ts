@@ -1,13 +1,13 @@
-import { getNodeString } from '@udecode/plate';
-import { AnyElement, ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
-import { assertElementType } from '@decipad/editor-utils';
+import { ELEMENT_VARIABLE_DEF } from '../../../editor-types/src';
 import stringify from 'json-stringify-safe';
+import { assertElementType } from '../utils/assertElementType';
+import { Verbalizer } from './types';
 
-export const defVerbalizer = (element: AnyElement): string => {
+export const defVerbalizer: Verbalizer = (element, verbalize) => {
   assertElementType(element, ELEMENT_VARIABLE_DEF);
 
-  const varName = getNodeString(element.children[0]);
-  const expression = getNodeString(element.children[1]);
+  const varName = verbalize(element.children[0]);
+  const expression = verbalize(element.children[1]);
 
   switch (element.variant) {
     case 'slider': {

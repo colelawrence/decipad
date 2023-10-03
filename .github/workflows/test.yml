@@ -66,6 +66,7 @@ jobs:
           DECI_VERBOSE: 'true'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npx nx affected --parallel=3 --ci --skip-nx-cache --target test --code-coverage
 
   notify:

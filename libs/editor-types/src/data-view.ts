@@ -1,6 +1,5 @@
-import type { SerializedType } from '@decipad/language';
-import type { BaseElement } from '.';
-import { EmptyText, Text } from '.';
+import type { SerializedType } from '@decipad/computer';
+import type { BaseElement, EmptyText, Text } from '.';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,

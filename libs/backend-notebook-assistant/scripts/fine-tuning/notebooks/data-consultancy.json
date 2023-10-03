@@ -1,0 +1,2227 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Data Consultancy Demystified"
+				}
+			],
+			"type": "h1",
+			"id": "N_sRm4R8D3YINa5qec4L9"
+		},
+		{
+			"children": [
+				{
+					"text": "There are quite unique challenges and considerations faced by data scientists who do consulting work on the side. Whether you're just starting or already have some experience, these insights will help you make the most of your time and maximize your value."
+				}
+			],
+			"type": "p",
+			"id": "3gbC1BLO8mPBeJ9NhuOtr"
+		},
+		{
+			"children": [
+				{
+					"text": "#1 Set Your Time Commitment:"
+				}
+			],
+			"type": "h2",
+			"id": "J5V6Ot2AVYbHcxrT0GmoA"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "9334J0MXR2rKNNtFMd46d",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "One of the first decisions you need to make as a data science consultant is how many hours you can dedicate to your consulting projects. Balancing your regular job, personal life, and consulting work requires careful planning. "
+				}
+			],
+			"type": "p",
+			"id": "kC8Jl6BJWRAADgC2aEMQG"
+		},
+		{
+			"children": [
+				{
+					"text": "Define how many hours you work per week",
+					"bold": true
+				},
+				{
+					"text": "\n\nEg. If your day job already takes 40h per week, your will need to work more time on the side to allocate to your consultancy gig."
+				}
+			],
+			"id": "iLz7-_WfwBl4Ui-iULrqz",
+			"type": "callout",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "HoursWeekWorking"
+								}
+							],
+							"id": "1vctsA9j00AJCuLxN_dxM",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "80 "
+								}
+							],
+							"id": "iupWRAdbKEPWCEnlpoq7r",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3g5szW7eIPkDaUE0nbfWA",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "80"
+						}
+					],
+					"id": "5C-GwGy7yC8PxbNYr3UUm",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "DataConsultancy"
+								}
+							],
+							"id": "9eGYtzybBAYKvxQ49KNCv",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "50%"
+								}
+							],
+							"id": "Ox-II2DwnQzcGZrgfpWXZ",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TMfWuRK4vddz8sOlq34T6",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "5",
+							"value": "50"
+						}
+					],
+					"id": "xJB8NW8A6VPyiobfgQZ3L",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "pBng9kv85xD9wLVFlMKVM",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "With this arrangement you are planning to work "
+				},
+				{
+					"text": "DayWork + Consultancy",
+					"magicnumberz": true
+				},
+				{
+					"text": " hours per week, "
+				},
+				{
+					"text": "exprRef_hJOQ85mDFmscGBI_v0_NZ",
+					"magicnumberz": true
+				},
+				{
+					"text": " hours ("
+				},
+				{
+					"text": "exprRef_xJB8NW8A6VPyiobfgQZ3L",
+					"magicnumberz": true
+				},
+				{
+					"text": " ) in consultancy."
+				}
+			],
+			"id": "G3FKxx2ELf1CwnjWcojBT",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "DayWork"
+						}
+					],
+					"type": "structured_varname",
+					"id": "_cX5YXD22qVqn8xdG47Pk"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6fs_eiHH7w7zUqGfs6nVS",
+							"type": "smart-ref",
+							"blockId": "5C-GwGy7yC8PxbNYr3UUm",
+							"columnId": null,
+							"lastSeenVariableName": "HoursWeekWorking"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yQugddp7lH1wW7hCWlukM",
+							"type": "smart-ref",
+							"blockId": "xJB8NW8A6VPyiobfgQZ3L",
+							"columnId": null,
+							"lastSeenVariableName": "DataConsultancy"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Qg_kjQLrqSy1s3iz7D1fj"
+				}
+			],
+			"id": "sWp3VzrPfyHWv_UhFO1AF",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Consultancy"
+						}
+					],
+					"type": "structured_varname",
+					"id": "iiBns7pkaBlcQn3_jXWcI"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WZW5uPE04EcjudhrtQkRc",
+							"type": "smart-ref",
+							"blockId": "5C-GwGy7yC8PxbNYr3UUm",
+							"columnId": null,
+							"lastSeenVariableName": "HoursWeekWorking"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CmkfrH_gmlUjBUunrLrwE",
+							"type": "smart-ref",
+							"blockId": "xJB8NW8A6VPyiobfgQZ3L",
+							"columnId": null,
+							"lastSeenVariableName": "DataConsultancy"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "AYl9BuL76P-A28hSEdBbK"
+				}
+			],
+			"id": "hJOQ85mDFmscGBI-v0-NZ",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "k5MvZsE8vVnqskQxhzhIi"
+		},
+		{
+			"children": [
+				{
+					"text": "#2 Allocate your Time:"
+				}
+			],
+			"type": "h2",
+			"id": "RVMNsL6cB47COyPhbbX68"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Yq-fzo4ASyljYrzh_fQCd",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Managing your time effectively is vital. Beyond client work, you'll need to allocate time for marketing, sales, education, and other administrative tasks. Create a comprehensive timetable that accounts for all these activities. Dedicate sufficient time to service your clients' needs while also allowing for professional development and growth. "
+				}
+			],
+			"id": "xGZ6m2QEg88ZCDqRg22Sd",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "Define your Timetable",
+					"bold": true
+				},
+				{
+					"text": "\n\nUse this timetable as a starting point. \nSelect how much time you will spend on billable tasks (Currently "
+				},
+				{
+					"text": "BillableTimeSpent",
+					"magicnumberz": true
+				},
+				{
+					"text": " or "
+				},
+				{
+					"text": "BillableTimeSpent*Consultancy",
+					"magicnumberz": true
+				},
+				{
+					"text": " hours ) and update your Billable General items to see how a breakdown of your "
+				},
+				{
+					"text": "exprRef_hJOQ85mDFmscGBI_v0_NZ",
+					"magicnumberz": true
+				},
+				{
+					"text": "  hours in consultancy work can look like. Currently you have "
+				},
+				{
+					"text": "count(Billable.Items)",
+					"magicnumberz": true
+				},
+				{
+					"text": " billable items on your list."
+				}
+			],
+			"id": "TmCbUB2GHHFcy-0Bvpnp6",
+			"type": "callout",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BillableTimeSpent"
+						}
+					],
+					"id": "RMfS2i1bnjHsmFgti3FVl",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "50%"
+						}
+					],
+					"id": "_wUCU76c1JSjXkxsxj4OZ",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "lvVBiGJrSHsFkBEsJxVdF",
+					"type": "slider",
+					"max": "100",
+					"min": "0",
+					"step": "5",
+					"value": "50"
+				}
+			],
+			"id": "Y8SYxXUKXbD4zbCn2k47k",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Billable"
+								}
+							],
+							"id": "syxNNGuAKusFZsU6yUwqB",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5W0alV-HHivVNIlgZqdfL",
+									"type": "smart-ref",
+									"blockId": "hJOQ85mDFmscGBI-v0-NZ",
+									"columnId": null,
+									"lastSeenVariableName": "Consultancy"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4L8FfY2B9vOuSS-nDIMB3",
+									"type": "smart-ref",
+									"blockId": "jxHYM58MEX6OhGCXU39RZ",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Allocation"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "NzzlKq7uEV_gf3Vz5Aw4U",
+									"type": "smart-ref",
+									"blockId": "Y8SYxXUKXbD4zbCn2k47k",
+									"columnId": null,
+									"lastSeenVariableName": "BillableTimeSpent"
+								},
+								{
+									"text": " hours "
+								}
+							],
+							"id": "KsljptKE5fw4C_Yxwbita",
+							"type": "table-column-formula",
+							"columnId": "rAHym6VwvsJu_8MIDJSLV"
+						}
+					],
+					"id": "s82qVSPZpnNJ1osU2hlpl",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Items"
+								}
+							],
+							"id": "_TK6VT_uXX-egrOlzKWSd",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 271
+						},
+						{
+							"children": [
+								{
+									"text": "Allocation"
+								}
+							],
+							"id": "jxHYM58MEX6OhGCXU39RZ",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"aggregation": "Sum",
+							"width": 146
+						},
+						{
+							"children": [
+								{
+									"text": "InPractise"
+								}
+							],
+							"id": "rAHym6VwvsJu_8MIDJSLV",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"width": 194,
+							"aggregation": "Sum"
+						}
+					],
+					"id": "R0rbpHxKYu6kCDMWQKmXo",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Support"
+								}
+							],
+							"id": "af_r1jXewcWfo3KaTfmEp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "OeX2kPnY_pGSoNLo47Ct2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9LDO7F56GfarbPi8WCQHj",
+							"type": "td"
+						}
+					],
+					"id": "YrijrI7WktXiw74FA58ZY",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Implementation"
+								}
+							],
+							"id": "xM1rPH6emPNCaILIOArZ9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "95%"
+								}
+							],
+							"id": "7-kC5fibVUeL089CcHBVt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HYDzqAt1Y1F7nYyFeLBof",
+							"type": "td"
+						}
+					],
+					"id": "yOztR7crpNNwDamtgWB6-",
+					"type": "tr"
+				}
+			],
+			"id": "B5vlml7P7vsEEb7nVUN-z",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "GeneralTasks"
+								}
+							],
+							"id": "v3doU3sbKcGrOPUIb4Y67",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5IbJnJQSI11L93O_ZMMK-",
+									"type": "smart-ref",
+									"blockId": "hJOQ85mDFmscGBI-v0-NZ",
+									"columnId": null,
+									"lastSeenVariableName": "Consultancy"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "rNnlHhhPif0ZhQ784zGYJ",
+									"type": "smart-ref",
+									"blockId": "7_-dIv_VeqtEDOnDB8DHZ",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Allocation"
+								},
+								{
+									"text": " * (100% -"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OSSUwX8bvoKBXOwqhoePC",
+									"type": "smart-ref",
+									"blockId": "Y8SYxXUKXbD4zbCn2k47k",
+									"columnId": null,
+									"lastSeenVariableName": "BillableTimeSpent"
+								},
+								{
+									"text": ") hours"
+								}
+							],
+							"id": "BEUM6TnQjdIBUXbF2x6mm",
+							"type": "table-column-formula",
+							"columnId": "p0F7ju8y3med26BM2Qh4L"
+						}
+					],
+					"id": "tdDdN8timDlASUGwVnc3W",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Items"
+								}
+							],
+							"id": "Ins7gO-iyry798PlGCO5t",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 270
+						},
+						{
+							"children": [
+								{
+									"text": "Allocation"
+								}
+							],
+							"id": "7_-dIv_VeqtEDOnDB8DHZ",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"aggregation": "Sum",
+							"width": 137
+						},
+						{
+							"children": [
+								{
+									"text": "InPractise"
+								}
+							],
+							"id": "p0F7ju8y3med26BM2Qh4L",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"width": 194,
+							"aggregation": "Sum"
+						}
+					],
+					"id": "NWfmVzmmPNX914nZST-4X",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Sales & Marketing"
+								}
+							],
+							"id": "iePJEmcJi5NlW3ZI_B7Do",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30%"
+								}
+							],
+							"id": "fqx546Z909thndD5KEdK6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dQ2QUbyPr5no9XQYtpluO",
+							"type": "td"
+						}
+					],
+					"id": "YRRQGrA_B9NjHhKGpkiDk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Admin"
+								}
+							],
+							"id": "KopKOKtqzGPlg_iJP11FP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "5Fe5Hg9eSXpc7gK525kbC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7oauvxz_B2ufNBz-2mVXK",
+							"type": "td"
+						}
+					],
+					"id": "CQZu8R4Y2zzfPpJYUczuE",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "R&D"
+								}
+							],
+							"id": "AqAIHqMsDrOgJyoD3TMNs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30%"
+								}
+							],
+							"id": "bDBcypuYgdivVsXMt3n8_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6XcF6HaHjTJpdIBGM8_uU",
+							"type": "td"
+						}
+					],
+					"id": "5l3QsRdAH0Tgt0M_Cm1gq",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Mastering your Craft"
+								}
+							],
+							"id": "IXr7GxSQJmcQjRtynX0kJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30%"
+								}
+							],
+							"id": "6lRqiwpMrSx2E3PVruG72",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5wLlglweq857oHpUa1DKF",
+							"type": "td"
+						}
+					],
+					"id": "pdyMAA62Sa7eHtheHU_2F",
+					"type": "tr"
+				}
+			],
+			"id": "OZ882VEPB_RvdRls5pq8A",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "ilL_IjhbVmWAVflSBSD2i"
+		},
+		{
+			"children": [
+				{
+					"text": "#3 Define Your Proposition:"
+				}
+			],
+			"type": "h2",
+			"id": "_k45_uOF8cD19cF6XCkyJ"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "oh9ATul4ckfaQvLGfz_Sg",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "What problems will you solve, and what services will benefit their businesses. It's crucial to identify your unique value proposition and clearly articulate the value you will bring to your clients. Are you an expert in data visualization, predictive modeling, or machine learning? Tailor your value "
+				}
+			],
+			"type": "p",
+			"id": "FfsM8gw852QFU4S9KhLPw"
+		},
+		{
+			"children": [
+				{
+					"text": "Define your Services",
+					"bold": true
+				},
+				{
+					"text": "\n\nOn the next table, brainstorm the services you can provide and start thinking how many hours they take out of your  "
+				},
+				{
+					"text": "exprRef_hJOQ85mDFmscGBI_v0_NZ",
+					"magicnumberz": true
+				},
+				{
+					"text": "  hour budget and price things accordingly. You can use this table to model a premium on top of your hours if that specific services requires hight skill or unlocks your client in key areas."
+				}
+			],
+			"id": "vBldlDJ5cOwWlHOGvfBKP",
+			"type": "callout",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Services"
+								}
+							],
+							"id": "LjdI3U4lVzwlkwHzZTCIT",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "otxJtoBCQLca5JyG9k1sq",
+									"type": "smart-ref",
+									"blockId": "wu6IOgtP9D-p-VK-yKgm-",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "AverageHoursSpend"
+								},
+								{
+									"text": " + "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "sWDkrEa-CTmBnwiznm1Y_",
+									"type": "smart-ref",
+									"blockId": "jJeB-MIDI4HatbBLHvvmb",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Premium"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "uU872B2FIoiqfDZc-pzBQ",
+							"type": "table-column-formula",
+							"columnId": "QzIx_ew34tI6fn-b6Da7j"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "V2rLuITLqYprzphz9kQ4Z",
+									"type": "smart-ref",
+									"blockId": "QzIx_ew34tI6fn-b6Da7j",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "AverageHourWithPremium"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OcR8w3D6kHJtyu4u4Xd1J",
+									"type": "smart-ref",
+									"blockId": "mDVAPQHKn2JaGsQ6vA0mB",
+									"columnId": null,
+									"lastSeenVariableName": "RateHour"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "NFR0AJXgoXhmo67oUkN-4",
+							"type": "table-column-formula",
+							"columnId": "fbmKVRYPQfARuGEBtJD3_"
+						}
+					],
+					"id": "O8-Cm4jAhzpg-UBKf3Gsy",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Premium"
+								}
+							],
+							"id": "jJeB-MIDI4HatbBLHvvmb",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Items"
+								}
+							],
+							"id": "pJdXOPlHOOZhtE3AhFqGd",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 333
+						},
+						{
+							"children": [
+								{
+									"text": "AverageHoursSpend"
+								}
+							],
+							"id": "wu6IOgtP9D-p-VK-yKgm-",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"width": 181
+						},
+						{
+							"children": [
+								{
+									"text": "AverageHourWithPremium"
+								}
+							],
+							"id": "QzIx_ew34tI6fn-b6Da7j",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"width": 128
+						},
+						{
+							"children": [
+								{
+									"text": "PotencialPrice"
+								}
+							],
+							"id": "fbmKVRYPQfARuGEBtJD3_",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "0_75eY-SrCsSxBX--nTId",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "0%"
+								}
+							],
+							"id": "KZNRJ1W5G8A-3yG4HAK_y",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Data Visualization Board"
+								}
+							],
+							"id": "LLfKUW1zCebHtJfPvXHWF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "yqpgwHipnCiD_rRwj06g9",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KesXVxYykpYzaUXh0f8sq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LQFoejLUP8RnSOe3LkQRb",
+							"type": "td"
+						}
+					],
+					"id": "Iz6wmVKFq0ONGzUxHb7up",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "50%"
+								}
+							],
+							"id": "aJR7HHw5nNTQESEJnZL8H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Data Quality Audit"
+								}
+							],
+							"id": "8ZoniXNnyhFt4Y9C8zBFG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "Osh44-Fxcflh-I-ww_ayF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "baKOYaOYt704Djq6SCjNd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oIc7V3o5P3XXFGbPH0jhQ",
+							"type": "td"
+						}
+					],
+					"id": "1ha5G5J4ErenLhQFO9U-L",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "200%"
+								}
+							],
+							"id": "mW10L9aflpv4W3DC_tGEt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Data Strategy and Roadmap"
+								}
+							],
+							"id": "Ev3DT5KQvmSnNAbjLmJIt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "80"
+								}
+							],
+							"id": "nNr9Ymphjc_wmLdYF5LOG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Z2vcFWGvfimxtb47bkjLs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bVp5TkcINN4opHlShi6nK",
+							"type": "td"
+						}
+					],
+					"id": "FevYK8W8dLVC5cGBJIVUe",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "200%"
+								}
+							],
+							"id": "lib8KyNK5nFeq_geBgT8H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Data-driven Decision Insight"
+								}
+							],
+							"id": "wnNqTMVmCG--Bfig0y_fP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "NwLM0q8-xvnSom2DpF29I",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QNK5MYZ-xLgEcOZymHrAN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "g_hW6RtI0173W3xZSwNIJ",
+							"type": "td"
+						}
+					],
+					"id": "1qQsxMAqBH1xWDcjbsGAK",
+					"type": "tr"
+				}
+			],
+			"id": "Dz7WsRyK74dtTkYbf_-my",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true,
+			"isCollapsed": false
+		},
+		{
+			"children": [
+				{
+					"text": "#4 Price Your Services:"
+				}
+			],
+			"type": "h2",
+			"id": "ot6241d8F-EkK63N27IEv"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "qZSnHi2kU4VjpLl4IzywD",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "You need to strike a balance between providing value to your clients and ensuring fair compensation for your expertise and time. Consider factors such as your level of experience, the complexity of the project, and the potential value your services can deliver to determine a competitive pricing model. Experiment with different pricing strategies to find what works best for you."
+				}
+			],
+			"type": "p",
+			"id": "_wrnRphWQg9UBq_P9knLD"
+		},
+		{
+			"children": [
+				{
+					"text": "Once you have that figured out capture the value you are bringing into a clear and transparent model your prospects can understand. An option you can choose is to charge by the hour. Set a fixed price for a number of billable hours and set a price for extra hours a client may ask you to add as the project progresses."
+				}
+			],
+			"type": "p",
+			"id": "w2Y_u-PHw6pHhZKO6tYy2"
+		},
+		{
+			"children": [
+				{
+					"text": "Define your Rate",
+					"bold": true
+				},
+				{
+					"text": "\n\nSet a base hourly rate as a starting point and go from there. For example, if you bill all of your "
+				},
+				{
+					"text": "exprRef_hJOQ85mDFmscGBI_v0_NZ",
+					"magicnumberz": true
+				},
+				{
+					"text": " hours at a base rate of "
+				},
+				{
+					"text": "RateHour",
+					"magicnumberz": true
+				},
+				{
+					"text": " you can make up to "
+				},
+				{
+					"text": "EveryHourBilled",
+					"magicnumberz": true
+				},
+				{
+					"text": " .  But if we look at our time table, only a few items are billable. So your value would look more like "
+				},
+				{
+					"text": "BillableHours*RateHour",
+					"magicnumberz": true
+				},
+				{
+					"text": " per week. This income can change if your services have a premium of top of your base rate for example."
+				}
+			],
+			"id": "FRAAHeGGXYhboJwjA8m5C",
+			"type": "callout",
+			"icon": "Frame"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RateHour"
+						}
+					],
+					"id": "ycjsldnYd12iQaqw0eTgX",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "150$"
+						}
+					],
+					"id": "NUNP1SD_s0o8bO1FYYOOn",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "JFDMH_4-tVU3N6WWvTmx1",
+					"type": "slider",
+					"max": "500",
+					"min": "50",
+					"step": "50",
+					"value": "150"
+				}
+			],
+			"id": "mDVAPQHKn2JaGsQ6vA0mB",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EveryHourBilled"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fM8388UKbc7kZQkKtyv8S"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GMUbzv8z3P9PC-48fqvPc",
+							"type": "smart-ref",
+							"blockId": "mDVAPQHKn2JaGsQ6vA0mB",
+							"columnId": null,
+							"lastSeenVariableName": "RateHour"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5EaIVvrz-LHgrPlF4hzfK",
+							"type": "smart-ref",
+							"blockId": "hJOQ85mDFmscGBI-v0-NZ",
+							"columnId": null,
+							"lastSeenVariableName": "Consultancy"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "P6akpfGIujeREwmXkvGby"
+				}
+			],
+			"id": "YOj8x2WyaYIb8wKpbcZAv",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BillableHours"
+						}
+					],
+					"type": "structured_varname",
+					"id": "LZyjCQWwgLH8QxoJowmuD"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "eHEsXsbv1AQ_2cNJv9GAV",
+							"type": "smart-ref",
+							"blockId": "B5vlml7P7vsEEb7nVUN-z",
+							"columnId": "rAHym6VwvsJu_8MIDJSLV",
+							"lastSeenVariableName": "Billable.InPractise"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "utYvaPL7Xms7_532kgemR"
+				}
+			],
+			"id": "VtIfab-HVGiwN4RGeovZr",
+			"type": "code_line_v2",
+			"showResult": true,
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "ELgg6u3cbyfeGJtq0l0_w"
+		},
+		{
+			"children": [
+				{
+					"text": "#5 Update your Strategy:"
+				}
+			],
+			"id": "1Y8m15gbLXpcUl9Wpihet",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "qau4H5k1WVKfG9RyeJpIX",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Regularly evaluate the worth of your consulting projects. Assess the value you provide to clients and compare it with the compensation you receive. Keep track of the impact you make, both quantitatively and qualitatively. Periodically reassess your pricing model, value proposition, and workload to ensure they align with your goals. This ongoing evaluation will help you make data-informed decisions to enhance your consulting business."
+				}
+			],
+			"id": "uP7uWVxWrN40ebssrHYvp",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "APuwexKgkqWtFaK_nQTgG"
+		},
+		{
+			"children": [
+				{
+					"text": "Bonus: Example Project"
+				}
+			],
+			"id": "o-WYHWR4ky3mGQ39OmG6O",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "PNyYB9U7HfDNlx9AiYVFM",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's consider a sample project to check out the numbers."
+				}
+			],
+			"type": "p",
+			"id": "T_hUnPNLgrNlAZ-IPlkcJ"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ExampleClient"
+								}
+							],
+							"id": "r90EfnsQ8vycwbraJNTcf",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tCLxMzXVwSWrdl62T9fvH",
+									"type": "smart-ref",
+									"blockId": "GPLD6QtJkqI6QVJjPLtMN",
+									"columnId": null,
+									"lastSeenVariableName": "Hours"
+								},
+								{
+									"text": " + lookup("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "dhDZ0tcO5fKt747F9D_gL",
+									"type": "smart-ref",
+									"blockId": "Dz7WsRyK74dtTkYbf_-my",
+									"columnId": null,
+									"lastSeenVariableName": "Services"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "hY_wQmw9epj-8mM0XfGOi",
+									"type": "smart-ref",
+									"blockId": "Dz7WsRyK74dtTkYbf_-my",
+									"columnId": "pJdXOPlHOOZhtE3AhFqGd",
+									"lastSeenVariableName": "Services.Items"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "7m4QHV5Vdysl8hvnD9Mhj",
+									"type": "smart-ref",
+									"blockId": "TX32aTDQbKvCy8FuSGWs7",
+									"columnId": null,
+									"lastSeenVariableName": "Items"
+								},
+								{
+									"text": ").Premium )* "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3lvSNSBL2WpN0qZ_y8jjR",
+									"type": "smart-ref",
+									"blockId": "mDVAPQHKn2JaGsQ6vA0mB",
+									"columnId": null,
+									"lastSeenVariableName": "RateHour"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "66RYXE2dOAgbmw4zdVvSY",
+							"type": "table-column-formula",
+							"columnId": "Q-6ZLE-Ta2f1p2tEBwdnM"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "t635ycQ4duNwROXyDArVp",
+									"type": "smart-ref",
+									"blockId": "Q-6ZLE-Ta2f1p2tEBwdnM",
+									"columnId": null,
+									"lastSeenVariableName": "Fee"
+								},
+								{
+									"text": " / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YdqBAGKcYOnxpBWQTNNyj",
+									"type": "smart-ref",
+									"blockId": "GPLD6QtJkqI6QVJjPLtMN",
+									"columnId": null,
+									"lastSeenVariableName": "Hours"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "R9z1lOft6cxTvbnFF-6Xc",
+							"type": "table-column-formula",
+							"columnId": "Lo1PbzlNG4zaLKO6R62_t"
+						}
+					],
+					"id": "FzwKP2UBYTlZfTgQ7Ibe2",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Hours"
+								}
+							],
+							"id": "GPLD6QtJkqI6QVJjPLtMN",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Items"
+								}
+							],
+							"id": "TX32aTDQbKvCy8FuSGWs7",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 197
+						},
+						{
+							"children": [
+								{
+									"text": "Fee"
+								}
+							],
+							"id": "Q-6ZLE-Ta2f1p2tEBwdnM",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "AverageRate"
+								}
+							],
+							"id": "Lo1PbzlNG4zaLKO6R62_t",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Average"
+						}
+					],
+					"id": "EG4sZjb4KaHFjMf9jocSa",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "35 "
+								}
+							],
+							"id": "gZOkaIHXqQZgvMrhOF1Bk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Data Visualization Board"
+								}
+							],
+							"id": "UrNFXhVCUCqTDCqfq6fVy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "44bOV1PpylzZxxJFglYOa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "m05SmS93hRpaqgaq1CMmt",
+							"type": "td"
+						}
+					],
+					"id": "8IRwBKZFfPbiKk7grQBk1",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "vOWBvrKHHDhncH-2rBEQ6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Data Quality Audit"
+								}
+							],
+							"id": "UH-97z_wwh_O-oot56Ybx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BCqpoCjmTt9rIdgGQHI3n",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OE1Z6gWNPSLQcLN1O2QVm",
+							"type": "td"
+						}
+					],
+					"id": "2_nljbAqOHu86SpY2F0dZ",
+					"type": "tr"
+				}
+			],
+			"isCollapsed": false,
+			"id": "KlVst6zgCB0OOF0giq2BM",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": "For this client you can expect to make "
+				},
+				{
+					"text": "sum(ExampleClient.Fee)",
+					"magicnumberz": true
+				},
+				{
+					"text": "  ( an average rate of "
+				},
+				{
+					"text": "average(ExampleClient.AverageRate)",
+					"magicnumberz": true
+				},
+				{
+					"text": " on this particular job ) and you can expect to spend "
+				},
+				{
+					"text": "exprRef_QZRmXHaj1_CEsf1dpq3yx",
+					"magicnumberz": true
+				},
+				{
+					"text": " hours on the implementation alone. Since implementation accounts for "
+				},
+				{
+					"text": "exprRef_bnhAmFRolYxa2bC_xkXJ9",
+					"magicnumberz": true
+				},
+				{
+					"text": " of your time spent per week, you can estimate that you will take "
+				},
+				{
+					"text": "exprRef_idkBZ_aZh1J750RNxb9v0",
+					"magicnumberz": true
+				},
+				{
+					"text": " weeks to complete. Since you allocated time to tasks that aren't billable, your effective take home pay is "
+				},
+				{
+					"text": "exprRef_OfIX4gVnSmgZpg28CzjwD",
+					"magicnumberz": true
+				},
+				{
+					"text": " per hour."
+				}
+			],
+			"id": "skUOrkGGOOUsAMObd1jGe",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ProjectFee"
+						}
+					],
+					"type": "structured_varname",
+					"id": "8b59_7l0A8KDUaDKIUPi_"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "galF8-YvOdRp6MCTpjUfH",
+							"type": "smart-ref",
+							"blockId": "KlVst6zgCB0OOF0giq2BM",
+							"columnId": "Q-6ZLE-Ta2f1p2tEBwdnM",
+							"lastSeenVariableName": "ExampleClient.Fee"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Gwl7jaQn9_FjBVj_5BPIr"
+				}
+			],
+			"id": "DpdizjJC7eD0V9FWqva8V",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ImplementationAllocation"
+						}
+					],
+					"type": "structured_varname",
+					"id": "jEJmn7jM8AOk23FhkDyjr"
+				},
+				{
+					"children": [
+						{
+							"text": "lookup("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pRFPmNWwgyB6v5XTPljf2",
+							"type": "smart-ref",
+							"blockId": "B5vlml7P7vsEEb7nVUN-z",
+							"columnId": null,
+							"lastSeenVariableName": "Billable"
+						},
+						{
+							"text": " , "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sge8f5vWIRDLxx10jFGCT",
+							"type": "smart-ref",
+							"blockId": "B5vlml7P7vsEEb7nVUN-z",
+							"columnId": "_TK6VT_uXX-egrOlzKWSd",
+							"lastSeenVariableName": "Billable.Items"
+						},
+						{
+							"text": " == \"Implementation\").Allocation * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_0BVK5aBHw8C_tUZtRn2a",
+							"type": "smart-ref",
+							"blockId": "Y8SYxXUKXbD4zbCn2k47k",
+							"columnId": null,
+							"lastSeenVariableName": "BillableTimeSpent"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "jhctrTCcSuFKc_x5l4-WY"
+				}
+			],
+			"id": "bnhAmFRolYxa2bC-xkXJ9",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "HoursSpentProject"
+						}
+					],
+					"type": "structured_varname",
+					"id": "B1wxUZYJlF0_kQSJ83Qir"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CIvPVzYITgtPJi7QA3WRh",
+							"type": "smart-ref",
+							"blockId": "KlVst6zgCB0OOF0giq2BM",
+							"columnId": "GPLD6QtJkqI6QVJjPLtMN",
+							"lastSeenVariableName": "ExampleClient.Hours"
+						},
+						{
+							"text": ") "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "V0jeO0DGouX_7f30uVXjG"
+				}
+			],
+			"id": "QZRmXHaj1_CEsf1dpq3yx",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TimeEstimateWeeks"
+						}
+					],
+					"type": "structured_varname",
+					"id": "CMDAyXJDHIfNyeuIsH6JZ"
+				},
+				{
+					"children": [
+						{
+							"text": "roundup(sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VU-e8I86SDz2HkeNx_ta2",
+							"type": "smart-ref",
+							"blockId": "KlVst6zgCB0OOF0giq2BM",
+							"columnId": "GPLD6QtJkqI6QVJjPLtMN",
+							"lastSeenVariableName": "ExampleClient.Hours"
+						},
+						{
+							"text": ") / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HXjl_7FJn1hvJPukzHX4c",
+							"type": "smart-ref",
+							"blockId": "hJOQ85mDFmscGBI-v0-NZ",
+							"columnId": null,
+							"lastSeenVariableName": "Consultancy"
+						},
+						{
+							"text": " * (1/"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9S8Qh-oggtSGoo7A76cmW",
+							"type": "smart-ref",
+							"blockId": "bnhAmFRolYxa2bC-xkXJ9",
+							"columnId": null,
+							"lastSeenVariableName": "ImplementationAllocation"
+						},
+						{
+							"text": ")) weeks"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "TYBbYZ6kIdRuzW6uFr0kb"
+				}
+			],
+			"id": "idkBZ_aZh1J750RNxb9v0",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Variable"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fe7qlpPSZh_c9ucSEbq0t"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FwGTRehhBqJXM_BueH1kM",
+							"type": "smart-ref",
+							"blockId": "DpdizjJC7eD0V9FWqva8V",
+							"columnId": null,
+							"lastSeenVariableName": "ProjectFee"
+						},
+						{
+							"text": " /("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fcTfG4L2-df7Y0p07PZXU",
+							"type": "smart-ref",
+							"blockId": "idkBZ_aZh1J750RNxb9v0",
+							"columnId": null,
+							"lastSeenVariableName": "TimeEstimateWeeks"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kE6XHUgwKLzXbK2wfABYZ",
+							"type": "smart-ref",
+							"blockId": "hJOQ85mDFmscGBI-v0-NZ",
+							"columnId": null,
+							"lastSeenVariableName": "Consultancy"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Ftd9vNYzW8O3rcIW68YLf"
+				}
+			],
+			"id": "OfIX4gVnSmgZpg28CzjwD",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "PIWmBkBduq-uERnPG5s7q"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "QSalEgSGQJsb7JJwQ15id"
+		}
+	]
+}

@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { TableRecordChanges, DocSyncUpdateRecord } from '@decipad/backendtypes';
-import { notebookMaintenance } from '@decipad/docsync-maintenance';
+import { notebookMaintenance } from '@decipad/notebook-maintenance';
 import handle from '../handle';
 
 process.env.DECI_NO_DOCSYNC_UPDATE_CHANGES = 'true';

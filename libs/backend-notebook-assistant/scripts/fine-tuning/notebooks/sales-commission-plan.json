@@ -1,0 +1,823 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Sales commission plan [tiered rates]"
+				}
+			],
+			"type": "h1",
+			"id": "hnOUa3j5pwxwX8o9zbFdW"
+		},
+		{
+			"children": [
+				{
+					"text": "Use this template to share interactive commission plans with your sales team so they can better understand how their variable compensation will work.  For a template with "
+				},
+				{
+					"children": [
+						{
+							"text": "Seasonal tiers"
+						}
+					],
+					"type": "a",
+					"url": "https://app.decipad.com/n/Sales-commission-letter-advanced-tiered-rates-%3ANR-p3m8x3D2TVoK4kxDoe",
+					"id": "0ZMnEGMxTbt_Quh1mZyV2"
+				},
+				{
+					"text": ". And, a "
+				},
+				{
+					"children": [
+						{
+							"text": "Sales Development Rep (SDR) template"
+						}
+					],
+					"type": "a",
+					"url": "https://app.decipad.com/n/SDR-compensation-for-growing-companies%3AgEo9yC8lhBXeko-5dSxIV",
+					"id": "WZE3nSx3TuX2SUBb3k-94"
+				},
+				{
+					"text": ". "
+				}
+			],
+			"id": "DniAYcQfIEU4--YTTNI2b",
+			"type": "callout",
+			"icon": "Paperclip",
+			"color": "Catskill"
+		},
+		{
+			"children": [
+				{
+					"text": "Plan Summary"
+				}
+			],
+			"type": "h2",
+			"id": "9hr_CZErCfZ8BzTZ9PL2i"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "divider",
+			"id": "C6EqnaWAskGrHMHHECIMY"
+		},
+		{
+			"children": [
+				{
+					"text": "Your On Target Earnings (OTE) comprises your base salary and a variable target"
+				}
+			],
+			"type": "p",
+			"id": "gACJerq4Mg9KML5si6BXD"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Annual base salary:"
+								},
+								{
+									"text": "exprRef_lIktg0NiGfXrntDyIFy6C",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "wMSuRS7ZPJdMs3k21-RGL",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "6TTezfNlR3xFEsKcaD-Nq"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Annual variable incentive:    "
+								},
+								{
+									"text": "exprRef_P7DK0Pp46TRwFVxvRx5mc",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "nLQM861u93czfk_XnnSmX",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "YY2PgA8a_iMkCvTLCfTTc"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Annual on target earnings (OTE): "
+								},
+								{
+									"text": "exprRef_tZsKqZ52j9_8EKHJyTbEP",
+									"magicnumberz": true
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "_IlF7CqsFQo3AO46yHAJq",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "c_CM0J7MzArUxrz-YFrwe"
+				}
+			],
+			"type": "ul",
+			"id": "atINxa-hryPnjCZ40O8Z3"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BaseSalary"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Cmhn8QIntlzfoEQU-e2NY"
+				},
+				{
+					"children": [
+						{
+							"text": "$135000"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "cSM3P8FbTMnP9EBC-dNpJ"
+				}
+			],
+			"id": "lIktg0NiGfXrntDyIFy6C",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PayMix"
+						}
+					],
+					"type": "structured_varname",
+					"id": "wHSZjKdpIBob8wyCwDGn9"
+				},
+				{
+					"children": [
+						{
+							"text": "60 / 40 "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "RBU7F1uU3CpXrUZwHyV6H"
+				}
+			],
+			"id": "8rPQ_I3xOI27fOY8GnIW1",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "VariableTarget"
+						}
+					],
+					"type": "structured_varname",
+					"id": "AqFsQFvKcMObj_hbjCKEI"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vUC0GQBNXoPDbt-Ohb6Ei",
+							"type": "smart-ref",
+							"blockId": "lIktg0NiGfXrntDyIFy6C",
+							"lastSeenVariableName": "BaseSalary"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "V5R4MXEDKuhx-xFtZXNBC",
+							"type": "smart-ref",
+							"blockId": "8rPQ_I3xOI27fOY8GnIW1",
+							"lastSeenVariableName": "PayMix"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "cqOdZ6fQjIm8QjVxY37N6"
+				}
+			],
+			"id": "P7DK0Pp46TRwFVxvRx5mc",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TargetOTE"
+						}
+					],
+					"type": "structured_varname",
+					"id": "U-rn7eQdniagFtbeYKgJq"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pyYPOd0oEMzmtHNUVq9cp",
+							"type": "smart-ref",
+							"blockId": "lIktg0NiGfXrntDyIFy6C",
+							"lastSeenVariableName": "BaseSalary"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "m8pwBWPr_ZgNg2RnTeN2X",
+							"type": "smart-ref",
+							"blockId": "P7DK0Pp46TRwFVxvRx5mc",
+							"lastSeenVariableName": "VariableTarget"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "PRYykopeHTY1iJEd2-PPd"
+				}
+			],
+			"id": "tZsKqZ52j9-8EKHJyTbEP",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "yqwD9p_TQRDImDR_SlnQJ"
+		},
+		{
+			"children": [
+				{
+					"text": "Quota Targets "
+				}
+			],
+			"type": "h2",
+			"id": "uHXRPP3Ek7ocCujluLQQL"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "WUSSXvb6ji4OrJkhwuRqI",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Your variable incentive will be based on the following:"
+				}
+			],
+			"type": "p",
+			"id": "6idoIpl2RkTw63AO7_vAA"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Quota Measure: Revenue"
+								}
+							],
+							"id": "HlJBNNBNGkeqcAYWaJWg8",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "1JNo9ITslcjW93QJ0fK_w"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Payout Term: Quarterly "
+								}
+							],
+							"id": "YtA2gHKcW6X6OcpM1B5dg",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "Ict5R6SVx8ilwNub9HA1m"
+				}
+			],
+			"type": "ul",
+			"id": "so-SECEoEub4HfwWyua2V"
+		},
+		{
+			"children": [
+				{
+					"text": "If you achieve "
+				},
+				{
+					"text": "exprRef_0HB_md_rMn7a_XNOyX2mt",
+					"magicnumberz": true
+				},
+				{
+					"text": " of your target, your commission will be "
+				},
+				{
+					"text": "sum(Quota.Payout)",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "os77ZLodAT_106VkEdUTS",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Attainment"
+						}
+					],
+					"id": "SGUXrR_y9QtRHhY-HqFqV",
+					"type": "caption",
+					"icon": "Bolt"
+				},
+				{
+					"children": [
+						{
+							"text": "249%"
+						}
+					],
+					"id": "IQCN_v3UN19ssl3_qdYYT",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "m71Lk-wIfufe6DgaIeP1T",
+					"type": "slider",
+					"max": "500",
+					"min": "0",
+					"step": "1",
+					"value": "249"
+				}
+			],
+			"id": "0HB-md_rMn7a_XNOyX2mt",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Quota"
+								}
+							],
+							"id": "kbpbncex82P7h6xk2lS6M",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " CommissionTiers("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "61fn5fa3bHCl9RjsDJn-S",
+									"type": "smart-ref",
+									"blockId": "3EB2qBAeiJ0whQx9aiZbw",
+									"columnId": null,
+									"lastSeenVariableName": "Target"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "crQiiY-di6pawOEMHCV3d",
+									"type": "smart-ref",
+									"blockId": "0HB-md_rMn7a_XNOyX2mt",
+									"lastSeenVariableName": "Attainment"
+								},
+								{
+									"text": " / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "YVyUMwZZoCFOk3h3kB6Jp",
+									"type": "smart-ref",
+									"blockId": "3EB2qBAeiJ0whQx9aiZbw",
+									"columnId": null,
+									"lastSeenVariableName": "Target"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "l3n53yCR4fJAG8zOYMOkh",
+									"type": "smart-ref",
+									"blockId": "3EB2qBAeiJ0whQx9aiZbw",
+									"columnId": null,
+									"lastSeenVariableName": "Target"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "j4WU5Qc3t8PhrRwO2PLAE",
+							"type": "table-column-formula",
+							"columnId": "s_z_BhtkKGlcr00zVUpT0"
+						}
+					],
+					"id": "0Zb-nWM-jYedxd--OlOgA",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Half"
+								}
+							],
+							"id": "LofsIJjks-LM4_l6o20h8",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Quarter"
+								}
+							],
+							"id": "iCoBqZxDgLfcrEaFbqmP7",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Target"
+								}
+							],
+							"id": "3EB2qBAeiJ0whQx9aiZbw",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Payout"
+								}
+							],
+							"id": "s_z_BhtkKGlcr00zVUpT0",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "s3eGtetmWCUhLsiy8J5S_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "H1"
+								}
+							],
+							"id": "8GV_q3jEjdky0RY6A3xbM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Q1"
+								}
+							],
+							"id": "XQT0niWYr_a0rMf6wU2Va",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$6650450"
+								}
+							],
+							"id": "tdB8uATKN6SsrH05YUhpb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "PwyLAWJ5ETTm7dvz3Iyf2",
+							"type": "td"
+						}
+					],
+					"id": "h03EBRfm666z43zlw2ETW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "H1"
+								}
+							],
+							"id": "uy-EOiZttfgpNgiWrAEFy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Q2"
+								}
+							],
+							"id": "jAxGjmsZ7jqzy38FB0Q1I",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$8300850"
+								}
+							],
+							"id": "w-3pS4DEhx52eZMqRfTnK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kDD0u1SQCYE_cHCAV1NYO",
+							"type": "td"
+						}
+					],
+					"id": "t78rKlpkUhkuL_kVJQh9C",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "H2"
+								}
+							],
+							"id": "I3qdndhss8T43Rk5Bb_sp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Q3"
+								}
+							],
+							"id": "_4AM7vwPmVB5I0Qj79eg6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$12407865 "
+								}
+							],
+							"id": "MyZVyx7w0lscR0VDnnxsO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UtTP1CcaDCd0SY5TvenAI",
+							"type": "td"
+						}
+					],
+					"id": "az9sctM8JeEBIphfZOT4z",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "H2"
+								}
+							],
+							"id": "O36A8QLsb02JcrrE0rSnU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Q4"
+								}
+							],
+							"id": "E3TDU4xpqRIWix_he6yDD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$15910250 "
+								}
+							],
+							"id": "zccrKbqt7rsbT9M8H7WEh",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "p8D1mU0gGGCFWadi2k3tk",
+							"type": "td"
+						}
+					],
+					"id": "1svLc1S2j_ybKm5QAMglR",
+					"type": "tr"
+				}
+			],
+			"id": "sq9U8M15_EnmQqWHP3okv",
+			"type": "table",
+			"hideFormulas": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": "Tiered Rates "
+				}
+			],
+			"type": "h2",
+			"id": "pWPTe9nb0WTeayA7_G9QP"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "0TNK6FVJuuGO-A1Bdogo4",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "CommissionTiers(Performance, Target) = tiers Performance {\n  60% : tier * Target * 0.14 % \n 100% : tier * Target * 0.31 % \n rest : tier * Target * 0.80 % \n}"
+				}
+			],
+			"id": "v9VIZzEmU3Td7Trzgz_zS",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "h3",
+			"id": "WI4tMIMAiOx5-chCh7I92"
+		},
+		{
+			"children": [
+				{
+					"text": "Learn to build this model in minutes!"
+				}
+			],
+			"id": "YtA2gHKcW6X6OcpM1B5dg",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "Y04yaa1JrqGdTRgTKCPUg",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "vvVleQUQailbiwHH16prM",
+			"type": "media_embed",
+			"url": "https://www.youtube.com/embed/h7KmNJ85FEw"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "LbEFiprGU6RrTxhAUWDD6"
+		}
+	]
+}

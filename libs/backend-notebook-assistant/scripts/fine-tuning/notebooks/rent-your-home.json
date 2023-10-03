@@ -1,0 +1,1065 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Rent Your Home - Airbnb"
+				}
+			],
+			"type": "h1",
+			"id": "5ZAKkX2AIKRbpz09IdghY"
+		},
+		{
+			"children": [
+				{
+					"text": "Are you excited to rent out your second home? Especially during months when you and your family are not using it? There are plenty of platforms that can assist you in achieving this goal and gain a lucrative income. This model is modeled based on Airbnb and will help you grasp an understanding of how much money you can make."
+				}
+			],
+			"type": "p",
+			"id": "gBbflXueKcsURlmwDm1Ll"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "u4CsNwvyguzJ4PN57L4DU",
+			"type": "img",
+			"url": "https://dev.decipad.com/api/pads/9uz-UhgYL2272CK20CTmd/attachments/Uf2Z64JUMuWunTRHu5-bq"
+		},
+		{
+			"children": [
+				{
+					"text": "There are a few aspects we will take into consideration:"
+				}
+			],
+			"type": "p",
+			"id": "_X9f6yvb3n9D-bM8gJ1t_"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Revenues: This refers to the income generated from renting the property, which depends on the season, rates, occupancy, and duration."
+								}
+							],
+							"id": "JcBov3VtKkIt-BYe8kDXu",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "Zx3pyEvhCJdkAUqQoxVTi"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Costs: Include broker fees, repairs, utilities, taxes, and insurance."
+								}
+							],
+							"id": "tyzSByeFpPX_Pzm8fDfN9",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "F28QNq5L6hLM0mlFGt66c"
+				}
+			],
+			"type": "ol",
+			"id": "62RcN0PtMnDEeUf7N33nF"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "k0zuXng07wsOZzILMGBcW"
+		},
+		{
+			"children": [
+				{
+					"text": "Revenue"
+				}
+			],
+			"id": "0fEAegveFUes-8XrYMEbS",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "First, let's start with some assumptions on available days, daily rent, and occupancy targets to forecast potential income. You may modify the number of seasons by adding or deleting rows in the table."
+				}
+			],
+			"type": "p",
+			"id": "LpsoyQiQ8eWg6jYmUzvfk"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Assumptions"
+								}
+							],
+							"id": "S2oLTukF10CaorlZ-PVwl",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " round("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "3KGEMbRduEDPLJzqjBn3p",
+									"type": "smart-ref",
+									"blockId": "HTMKsWn_1U2TUhQGc9k7P",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "AvailableDays"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kMzP3UbqPrmUovfMYgemx",
+									"type": "smart-ref",
+									"blockId": "z6onKIwUQmc6CmyeS3bwF",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Occupancy"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "ugqHIDjgK4ELG8Ddh55Vr",
+							"type": "table-column-formula",
+							"columnId": "5jrOuPbmzOef4vNw7eheY"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ivJZbbzQ4j673bcHcaE8b",
+									"type": "smart-ref",
+									"blockId": "5jrOuPbmzOef4vNw7eheY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "RentedDays"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "v55AY6Ev-XJAwacu9voqa",
+									"type": "smart-ref",
+									"blockId": "F6MISzJdnbPhTrR6fpRPG",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "DailyRent"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "cmXXmU6iSlWmbJIFTFrXu",
+							"type": "table-column-formula",
+							"columnId": "NlQciH_HBEkBcy11mjgaD"
+						}
+					],
+					"id": "QBoWpuf2hjyTyHiVxU6ff",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Season"
+								}
+							],
+							"id": "9SKt0XIQwRkaFg0x3iBOI",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "AvailableDays"
+								}
+							],
+							"id": "HTMKsWn_1U2TUhQGc9k7P",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 77,
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "DailyRent"
+								}
+							],
+							"id": "F6MISzJdnbPhTrR6fpRPG",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									},
+									{
+										"unit": "days",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "second",
+										"baseSuperQuantity": "second"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Occupancy"
+								}
+							],
+							"id": "z6onKIwUQmc6CmyeS3bwF",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"width": 78
+						},
+						{
+							"children": [
+								{
+									"text": "RentedDays"
+								}
+							],
+							"id": "5jrOuPbmzOef4vNw7eheY",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum",
+							"width": 75
+						},
+						{
+							"children": [
+								{
+									"text": "Income"
+								}
+							],
+							"id": "NlQciH_HBEkBcy11mjgaD",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "2YqDrekg9hAcJ2h_7Jy-_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Holidays"
+								}
+							],
+							"id": "3bOKU00VsYHhhKZLhh2FM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10 days "
+								}
+							],
+							"id": "7lPXYxso4pzHs8CijsWlz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "500 "
+								}
+							],
+							"id": "3hIPUISA_YPhFykyDBW9G",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "35%"
+								}
+							],
+							"id": "53eihFGqEQyPIALNj7l60",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JnnY8xYKH-DA8dOBsX8Cv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "SK1aTJqF5uDvLIy2-ey_d",
+							"type": "td"
+						}
+					],
+					"id": "HwrvuzT-bCGNplCAXyP7F",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Regular"
+								}
+							],
+							"id": "UwZuHOMbtoIsrWNZwk7Xf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50"
+								}
+							],
+							"id": "Cfi-pVckMC7Z1jhYDvAf1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "300"
+								}
+							],
+							"id": "qNXMLZMfaSRpYBBsGdoja",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "6v024NNRUiC2vKyAltV0B",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fMt9QTxTX_dCk0pBLaPCZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "knOLWLbS87iu1HnmDhrWg",
+							"type": "td"
+						}
+					],
+					"id": "LRvhiwPLXcUz8jg8KkCOE",
+					"type": "tr"
+				}
+			],
+			"id": "0ABenXP__GS8-FBv8qwCL",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": "Costs"
+				}
+			],
+			"id": "kE-yHSJv_v4z_IFvlgw0y",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "There are a few costs associated with every time you rent your second home, but they depend on different variables."
+				}
+			],
+			"type": "p",
+			"id": "h2oW6xUBSNESqodFXrlgo"
+		},
+		{
+			"children": [
+				{
+					"text": "One-time costs: Preparation"
+				}
+			],
+			"type": "p",
+			"id": "dtowQ9BhEuG2G5bQjzg4g"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PrepCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "eHJLJvQ07VW2Pw2ukrJhw"
+				},
+				{
+					"children": [
+						{
+							"text": "200 $"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "15MsO-iBErrnT82vrVtlQ"
+				}
+			],
+			"id": "f1WohIY7Ck5qDX1fl9OxN",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Costs that depend on rental days: Maintenance and Utilities. You may modify the number of occupancy cost items by adding or deleting rows in the table."
+				}
+			],
+			"type": "p",
+			"id": "D21wOzRyjHayaKKRNw726"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OccupancyCosts"
+								}
+							],
+							"id": "YRhZxWCMaWTbRnnkZhQG5",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "FUpVH2_0gqLZtck1CHcL4",
+									"type": "smart-ref",
+									"blockId": "otzybhjSJjHTEPY0nKfNi",
+									"columnId": null,
+									"lastSeenVariableName": "Cost"
+								},
+								{
+									"text": " * sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "QCkPZ-hZRREYign1zKkFe",
+									"type": "smart-ref",
+									"blockId": "0ABenXP__GS8-FBv8qwCL",
+									"columnId": "5jrOuPbmzOef4vNw7eheY",
+									"lastSeenVariableName": "Assumptions.RentedDays"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "8OS0FGyR42yuNH8v8tsYe",
+							"type": "table-column-formula",
+							"columnId": "3-5n9-Sulkodfc-flqO0P"
+						}
+					],
+					"id": "zXNG6D_gg_lxPAggaSkWv",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "DMA_lS2cYCDgcKLrIlOqA",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "otzybhjSJjHTEPY0nKfNi",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Total"
+								}
+							],
+							"id": "3-5n9-Sulkodfc-flqO0P",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "HkrlFGvRVPYI7um3omqA2",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MaintCost"
+								}
+							],
+							"id": "DUEiTaUoUQz8Fe_s-YmQB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$10 per day"
+								}
+							],
+							"id": "r9qPnqcDt8wAVEEzB-FsE",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wZRXM9LnwzBpAGsU7NYBC",
+							"type": "td"
+						}
+					],
+					"id": "KyT-VIxjQq04COI-XTsqU",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "UtilityCost"
+								}
+							],
+							"id": "26CJvuKcX5wG0mvVf0Glu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$15 per day"
+								}
+							],
+							"id": "lt4uv2Pxhfx17m3x4yczC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WZ9Ypebds1X8hViY3DP3i",
+							"type": "td"
+						}
+					],
+					"id": "Jiveq-GTBQIuWph0K7kBi",
+					"type": "tr"
+				}
+			],
+			"id": "YsZ_PQa49SyKYe-EXn585",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"text": "Costs depending on the total revenue generated: Broker Fee and Tax. You may modify these costs by changing their names and adding or deleting rows in the input table. You may modify the number of revenue cost items by adding or deleting rows in the table."
+				}
+			],
+			"id": "Gg4b6kflswi7x4rf42T9H",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "RevenueCost"
+								}
+							],
+							"id": "Jjl6Ur9hM709Y_NjwrIMN",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BSJH8UeokezX7KvkfD19s",
+									"type": "smart-ref",
+									"blockId": "B68_RYSSMhatFh1ISESKW",
+									"columnId": null,
+									"lastSeenVariableName": "Fee"
+								},
+								{
+									"text": " * sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "RjWCw8NcsgAZZwu2I2Ik1",
+									"type": "smart-ref",
+									"blockId": "0ABenXP__GS8-FBv8qwCL",
+									"columnId": "NlQciH_HBEkBcy11mjgaD",
+									"lastSeenVariableName": "Assumptions.Income"
+								},
+								{
+									"text": " )"
+								}
+							],
+							"id": "rlhIQZK59ZNLKsACNbsy8",
+							"type": "table-column-formula",
+							"columnId": "8p5HqwhGU-SgIzwFXhkhH"
+						}
+					],
+					"id": "UJuRlTyxjzIfbNG-sRDEl",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Type"
+								}
+							],
+							"id": "44gIorZuZxxP90BIZ5uZR",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Fee"
+								}
+							],
+							"id": "B68_RYSSMhatFh1ISESKW",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Total"
+								}
+							],
+							"id": "8p5HqwhGU-SgIzwFXhkhH",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "JNzeVOW5nrroVwyilt6Nw",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Broker Cost"
+								}
+							],
+							"id": "tqv41SllMLAyIpyEy9OW0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3%"
+								}
+							],
+							"id": "vdFP8r4kybYerCJjdtWeM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HJkvJHteW4vB5r6_dCeME",
+							"type": "td"
+						}
+					],
+					"id": "L-qYAJEiQZpbR9Hm4N7aK",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Tax"
+								}
+							],
+							"id": "OqD3IQPvg3furr58qn3m0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "TA90QMP_avNDv67TY2kqF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0THhiHOO8wMyQEgHqgc1t",
+							"type": "td"
+						}
+					],
+					"id": "5j8vBA0qIfUP4qOFLLxxW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other"
+								}
+							],
+							"id": "eg70WowtoKYBX_zmjMxoS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5%"
+								}
+							],
+							"id": "KkMY5NZcAJdrPrDO_1fFO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Io6Dk9AN5UKnxmdZ6go2z",
+							"type": "td"
+						}
+					],
+					"id": "twXawQxOKX__X2ItRTpkT",
+					"type": "tr"
+				}
+			],
+			"id": "3frhJnr5UlFaCzbcplpOI",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "1XBeUDfX2ajqFUKxXz7Gp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "YyjEs1wBs1BADZ5cUR3dr",
+							"type": "smart-ref",
+							"blockId": "f1WohIY7Ck5qDX1fl9OxN",
+							"columnId": null,
+							"lastSeenVariableName": "PrepCost"
+						},
+						{
+							"text": " + sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ORO3Wdjf_boU4KlDYm8N6",
+							"type": "smart-ref",
+							"blockId": "YsZ_PQa49SyKYe-EXn585",
+							"columnId": "3-5n9-Sulkodfc-flqO0P",
+							"lastSeenVariableName": "OccupancyCosts.Total"
+						},
+						{
+							"text": ") + sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "teO8hvMfO9NcOwv5LllzA",
+							"type": "smart-ref",
+							"blockId": "3frhJnr5UlFaCzbcplpOI",
+							"columnId": "8p5HqwhGU-SgIzwFXhkhH",
+							"lastSeenVariableName": "RevenueCost.Total"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "XMW2PxvN9fl1h_sDFFdMO"
+				}
+			],
+			"id": "B9NNSxhKQA3wQIG6Frbju",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "VQcfH-QxqoMCdaSNu6j3t"
+		},
+		{
+			"children": [
+				{
+					"text": "Results"
+				}
+			],
+			"id": "u4V_xbE1x_V-52mGbGWR2",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Profits"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Y2fA9Dr2mLQdXxtguZS3H"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H6-iyEJIGeETVKTL2JOjr",
+							"type": "smart-ref",
+							"blockId": "0ABenXP__GS8-FBv8qwCL",
+							"columnId": "NlQciH_HBEkBcy11mjgaD",
+							"lastSeenVariableName": "Assumptions.Income"
+						},
+						{
+							"text": " ) - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7i3HezzlPw3TSl6NdDGEV",
+							"type": "smart-ref",
+							"blockId": "B9NNSxhKQA3wQIG6Frbju",
+							"columnId": null,
+							"lastSeenVariableName": "TotalCost"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "KhES4nlxVhG4jrebRngHz"
+				}
+			],
+			"id": "iQLfezTW5EA2XvVyfGlHn",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "If you add up all the assumptions you put in, you'll end up with an annual income of "
+				},
+				{
+					"text": "exprRef_iQLfezTW5EA2XvVyfGlHn",
+					"magicnumberz": true
+				},
+				{
+					"text": "! An extra income like that is certainly an attractive proposition - don't you think"
+				}
+			],
+			"type": "p",
+			"id": "4b7z9EpNDu93rMnD5qVaF"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "b1QQjNpOTfsjVJuEiUiYe"
+		}
+	]
+}

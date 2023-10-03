@@ -306,6 +306,10 @@ pads
   workspace_id *String
   name byWorkspaceOnly
 
+pads
+  isTemplate *Number
+  name byIsTemplate
+
 sections
   workspace_id *String
   name byWorkspace
@@ -441,13 +445,23 @@ usertaggedresources-changes
 fileattachments-changes
 docsyncupdates-changes
 sync-after-connect
+docsyncsnapshots-changes
+
 
 @scheduled
 reset-querycount cron(0 0 1 * ? *)
 
+#@search
+#availabilityZoneCount 1
+#instanceCount 1
+#instanceType r6g.large.search
+#volumeSize 100
+
 @plugins
 s3
 custom-domain
+#nasa-gcn/architect-plugin-search
+#nasa-gcn/architect-functions-search
 
 @aws
 region eu-west-2

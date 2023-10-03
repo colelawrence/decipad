@@ -1,0 +1,545 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Saving for a big purchase"
+				}
+			],
+			"id": "dvdG6Ev0iIvii_rpwWuoE",
+			"type": "h1"
+		},
+		{
+			"children": [
+				{
+					"text": "How long do I need to save for?"
+				}
+			],
+			"type": "p",
+			"id": "ZunNdEoKJhwssgk_e24o0"
+		},
+		{
+			"children": [
+				{
+					"text": "Based on the below inputs,  you need to save for "
+				},
+				{
+					"text": "exprRef_rHlZ5yzOcubWwanOj0s_B",
+					"magicnumberz": true
+				},
+				{
+					"text": " to buy your "
+				},
+				{
+					"text": "exprRef_M6_nL2hfa8j67CJq7t_8n",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "t1dUDqrY5YKfDsy6_QHtI"
+		},
+		{
+			"children": [
+				{
+					"text": "Inputs"
+				}
+			],
+			"id": "46gxrlEw3piJc6spbPnWp",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "Fill out the below inputs with the item you want to purchase: "
+				}
+			],
+			"type": "p",
+			"id": "I5Fm-yhwg6TKI1wQZwzTS"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ItemName"
+								}
+							],
+							"id": "ytuFPIervNRdCCw8OCzMy",
+							"type": "caption",
+							"icon": "Star"
+						},
+						{
+							"children": [
+								{
+									"text": "Motorcycle"
+								}
+							],
+							"id": "rcaMgpGe1xjLmop67bN6f",
+							"type": "exp"
+						}
+					],
+					"id": "M6_nL2hfa8j67CJq7t_8n",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "string"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ItemCost"
+								}
+							],
+							"type": "caption",
+							"id": "GGCjVAq_zkEKPGCkYiJug",
+							"icon": "Newspaper"
+						},
+						{
+							"children": [
+								{
+									"text": "$5495"
+								}
+							],
+							"type": "exp",
+							"id": "Ah6SmRstKLZJErsbKRLyk"
+						}
+					],
+					"id": "82x2LmRZ6GFbZwHPKGJwC",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MonthlyIncome"
+								}
+							],
+							"type": "caption",
+							"id": "JmBa3mEgU1bj8tWWHwby0",
+							"icon": "Rocket"
+						},
+						{
+							"children": [
+								{
+									"text": "4500$ per month"
+								}
+							],
+							"type": "exp",
+							"id": "wxMfxhDi9bdrx9zKmtGe7"
+						}
+					],
+					"id": "o6JL-NsqZXsuh0bSaRnSg",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "RetirementSavings"
+								}
+							],
+							"id": "YGSbYfunYY2HzLmmWbS3z",
+							"type": "caption",
+							"icon": "Percentage"
+						},
+						{
+							"children": [
+								{
+									"text": "10%"
+								}
+							],
+							"id": "CVST_ShoE4lEDNRZIPweI",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d6HxFJOMX6VRL3LfQnAEU",
+							"type": "slider",
+							"max": "10",
+							"min": "0",
+							"step": "1",
+							"value": "10"
+						}
+					],
+					"type": "def",
+					"variant": "slider",
+					"id": "326gnhtv9mzbz888mMh-c"
+				}
+			],
+			"id": "GTOze4xEyc50AAEELfNGX",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Expenses"
+				}
+			],
+			"type": "h2",
+			"id": "8iFNldmyIIhUaeG5Iyc8w"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "MonthlyExpenses"
+								}
+							],
+							"id": "TBtO8QgHTfj-9b7jhQEuj",
+							"type": "table-var-name"
+						}
+					],
+					"id": "Nb3tRlQq0V7rLTvPk75BE",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Item"
+								}
+							],
+							"id": "45g5vwP_K_L_bsYmOuK5R",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "MN8MIHOxLCldYCS-PZ_13",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "NeKu0sQrKnhsIaLRs-8Pc",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Rent"
+								}
+							],
+							"id": "Mmy3kiasCDjTS6xQ2Harr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$1400 per month"
+								}
+							],
+							"id": "XzPo_1wYL9n3ttKja7YNB",
+							"type": "td"
+						}
+					],
+					"id": "9G_qmh2nN3dDzmIAMQCV1",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "Z_n3YZxUb7W4IO9U2wOQM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$220 per month"
+								}
+							],
+							"id": "_GtsaN3L2wK7MY2FeQwMQ",
+							"type": "td"
+						}
+					],
+					"id": "EOL2CkKNiiGET4pA5Texk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Pet Insurance"
+								}
+							],
+							"id": "m0KH7LX9Au4UyzeH6_eCw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "$400 per year"
+								}
+							],
+							"id": "pipKG5nx-vNMqlVI9l9Kh",
+							"type": "td"
+						}
+					],
+					"id": "LiioFj8nfKwveNadh1Sts",
+					"type": "tr"
+				}
+			],
+			"id": "KjhUmRH_6_pK4cSMpxR3D",
+			"type": "table",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": "Your total expenses are "
+				},
+				{
+					"text": "sum(MonthlyExpenses.Cost)",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "tT-fWg-h4mjUW2whxDFlE",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalExpenses"
+						}
+					],
+					"type": "structured_varname",
+					"id": "fT4v4nVVEiGwuMb8jutTc"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zlx-njUQz9Y_xK0_SUuoz",
+							"type": "smart-ref",
+							"blockId": "KjhUmRH_6_pK4cSMpxR3D",
+							"columnId": "MN8MIHOxLCldYCS-PZ_13",
+							"lastSeenVariableName": "MonthlyExpenses.Cost"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "3xjHQHUaYOFsRV5eENxkQ"
+				}
+			],
+			"id": "NqNAwtupypBvQ2hqp06QL",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, let's subtract our total expenses and target savings to get our available funds for a big purchase:"
+				}
+			],
+			"type": "p",
+			"id": "owSe6r3WukcOilHVwVYtf"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PurchaseFunds"
+						}
+					],
+					"type": "structured_varname",
+					"id": "3qnMpE9P_I3v1WQ3rI0gg"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ixejVDTOApWJlkS0MroV1",
+							"type": "smart-ref",
+							"blockId": "o6JL-NsqZXsuh0bSaRnSg",
+							"columnId": null,
+							"lastSeenVariableName": "MonthlyIncome"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OUxS4OeYDTMyzWLs91yx-",
+							"type": "smart-ref",
+							"blockId": "NqNAwtupypBvQ2hqp06QL",
+							"columnId": null,
+							"lastSeenVariableName": "TotalExpenses"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EPlP7mHosE7BSbeLnwQOt",
+							"type": "smart-ref",
+							"blockId": "326gnhtv9mzbz888mMh-c",
+							"columnId": null,
+							"lastSeenVariableName": "RetirementSavings"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "-X8QNrQPkCwLyHX1UrN1H"
+				}
+			],
+			"id": "FrKj4w5UU5vTR9oucjOhS",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "eEH-2BM1lLXZYvjLOW_wX"
+		},
+		{
+			"children": [
+				{
+					"text": "Time to purchase"
+				}
+			],
+			"type": "h2",
+			"id": "8EgC48D8LDhjp1CwvWArE"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Months"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0itVOs94UPLv6wh-mBzcR"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QiLb_wiXuwpFYkITcAlqd",
+							"type": "smart-ref",
+							"blockId": "82x2LmRZ6GFbZwHPKGJwC",
+							"columnId": null,
+							"lastSeenVariableName": "ItemCost"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XZRY_9Vj5f5A99W-tryEZ",
+							"type": "smart-ref",
+							"blockId": "FrKj4w5UU5vTR9oucjOhS",
+							"columnId": null,
+							"lastSeenVariableName": "PurchaseFunds"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QBnPDhkbOaxT6OJMZY8_h"
+				}
+			],
+			"id": "rHlZ5yzOcubWwanOj0s-B",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "2cqajDWwRv5qG6AX1h6h2"
+		}
+	]
+}

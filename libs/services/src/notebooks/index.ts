@@ -2,8 +2,6 @@ export * from './create';
 export * from './duplicate';
 export * from './get-notebooks';
 export * from './snapshot';
-export * from './initialState';
-export * from './fetchSnapshotFromFile';
 export * from './storeSnapshotDataAsFile';
 export * from './snapshotFilePath';
 export * from './exportNotebookContent';

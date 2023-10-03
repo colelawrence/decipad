@@ -1,3 +1,44 @@
+diff --git a/node_modules/@architect/sandbox/src/cli/_stdin.js b/node_modules/@architect/sandbox/src/cli/_stdin.js
+index f47fbe5..327f014 100644
+--- a/node_modules/@architect/sandbox/src/cli/_stdin.js
++++ b/node_modules/@architect/sandbox/src/cli/_stdin.js
+@@ -4,11 +4,24 @@ let sandbox = require('../')
+ module.exports = function handleStdin (params) {
+   let { rehydrate, update, watcher } = params
+ 
++  let closing = false;
++  function close() {
++    if (closing) {
++      return;
++    }
++    closing = true;
++    if (watcher) {
++      watcher.close().then(end)
++    }
++    else end()
++  }
++
+   // Listen for important keystrokes
+   emitKeypressEvents(process.stdin)
+   if (process.stdin.isTTY) {
+     process.stdin.setRawMode(true)
+   }
++  process.once('SIGTERM', close);
+   process.stdin.on('keypress', function now (input, key) {
+     if (input === 'H') {
+       rehydrate({
+@@ -34,10 +47,7 @@ module.exports = function handleStdin (params) {
+       })
+     }
+     if (key.sequence === '\u0003' || key.sequence === '\u0004') {
+-      if (watcher) {
+-        watcher.close().then(end)
+-      }
+-      else end()
++      close()
+     }
+   })
+ 
 diff --git a/node_modules/@architect/sandbox/src/invoke-lambda/env/index.js b/node_modules/@architect/sandbox/src/invoke-lambda/env/index.js
 index aa09dfe..7e19c07 100644
 --- a/node_modules/@architect/sandbox/src/invoke-lambda/env/index.js

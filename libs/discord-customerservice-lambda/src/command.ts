@@ -116,6 +116,36 @@ export type SuperadminsApplicationCommandDataOption =
   | SuperadminsRemoveApplicationCommandDataOption
   | SuperadminsListApplicationCommandDataOption;
 
+export type TemplatesAddApplicationCommandDataOption = {
+  name: 'add';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    }
+  ];
+};
+
+export type TemplatesRemoveApplicationCommandDataOption = {
+  name: 'remove';
+  options: [
+    {
+      name: 'url';
+      value: string;
+    }
+  ];
+};
+
+export type TemplatesListApplicationCommandDataOption = {
+  name: 'list';
+  options: [];
+};
+
+export type TemplatesApplicationCommandDataOption =
+  | TemplatesAddApplicationCommandDataOption
+  | TemplatesRemoveApplicationCommandDataOption
+  | TemplatesListApplicationCommandDataOption;
+
 export type SuperadminsCommandData = {
   name: 'superadmins';
   options: SuperadminsApplicationCommandDataOption[];

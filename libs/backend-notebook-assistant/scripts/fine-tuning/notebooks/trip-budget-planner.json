@@ -1,0 +1,1177 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Trip Budget Planner 🌏"
+				}
+			],
+			"type": "h1",
+			"id": "q_drrgalwulgZHuQLcaSM"
+		},
+		{
+			"children": [
+				{
+					"text": "Welcome to Decipad's Budget Planner! 🌟\nPlanning your next adventure has never been easier. \nFollow the simple and intuitive guidelines provided in this template and together, we'll make your travel dreams a reality while keeping your finances in check. ✈️🌍💰"
+				}
+			],
+			"type": "callout",
+			"id": "zhMjrjX28HFo_TjRNtrbj"
+		},
+		{
+			"children": [
+				{
+					"text": "Trip Budget"
+				}
+			],
+			"id": "wSqf6A9ch0rHLJqls9grj",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Please enter your budget into the green budget input widget."
+						}
+					],
+					"id": "9dyCYlxAl62MFmE55k3xd",
+					"type": "callout",
+					"color": "Sulu",
+					"icon": "Wallet"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Budget"
+								}
+							],
+							"id": "YiSmHpDrxX7RaFxD0rYwA",
+							"type": "caption",
+							"color": "Sulu"
+						},
+						{
+							"children": [
+								{
+									"text": "3000$"
+								}
+							],
+							"id": "smEBDl0W1ZPU9Ix3bMkhX",
+							"type": "exp"
+						}
+					],
+					"id": "FU4sAXFs_uEiB_Rh9cyas",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "0CSdSXnRLsxgXsc0B9HxD",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Trip Overview"
+				}
+			],
+			"id": "MRmzDMxZgM3fwdJN1y5Ec",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "KiyexNKao1AQToze_A-Fu",
+					"blockId": "LDbTsquI47JMezn16asME",
+					"type": "display",
+					"varName": "Total_Expenses"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "TEO-mKcBSgOUJkVeGLzMj",
+					"blockId": "l2l-aCEyLIyEM4awOqDaa",
+					"type": "display",
+					"varName": "Spare"
+				}
+			],
+			"id": "tvM9QgA9_k-2LPQHC0x5m",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "The \"On Budget\" checkbox should be automatically checked if your Expenses align with your budget."
+						}
+					],
+					"id": "T9-P4J-vrhsdgkzCWNkrF",
+					"type": "callout",
+					"color": "Sun",
+					"icon": "Message"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "mDMani1nUfAninLCursTj",
+					"type": "display",
+					"blockId": "oIo0GL8O4-ggPUW7MRr2m",
+					"varName": "On_Budget"
+				}
+			],
+			"id": "bJEU3HUNNOsPx7EaqH_hz",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "e52i8HZqnrcc8T2YW1S--",
+			"type": "plot",
+			"title": "Expense Breakdown ",
+			"sourceVarName": "exprRef_Msmd7b_gaUJucBpTHnHV5",
+			"xColumnName": "",
+			"yColumnName": "",
+			"markType": "arc",
+			"thetaColumnName": "Total",
+			"sizeColumnName": "",
+			"colorColumnName": "Catagory",
+			"y2ColumnName": "",
+			"colorScheme": "multicolor_red"
+		},
+		{
+			"children": [
+				{
+					"text": "Expenses "
+				}
+			],
+			"id": "JkhgYKxaImlvkFDzeUOQD",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's have some fun with our \"Expenses\" table! 📊💰 Here's the deal: we want you to play the role of the budgeting master. Take each expense, give it a catchy category name, describe it in your own words, jot down how much you plan to spend, and don't forget to tell us the cost per unit (if it applies).\nGuess what happens next? Our trusty table will do the math for you! It'll add everything up, and like magic, you'll see the pie chart above transform right before your eyes. Budgeting has never been this playful and easy! 🥧✨"
+				}
+			],
+			"id": "KNbasjZNv5LEKREDYwC_r",
+			"type": "callout",
+			"icon": "Message",
+			"color": "Sulu"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Expenses"
+								}
+							],
+							"id": "vVbaccEN02z2A_9y_s29s",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "bfwtKg7h_WYiDFqi5RqSa",
+									"type": "smart-ref",
+									"blockId": "Msmd7b_gaUJucBpTHnHV5",
+									"columnId": "RHbT6q4n-ceYyRwP7ujc1",
+									"lastSeenVariableName": "Expenses.Amount"
+								},
+								{
+									"text": " *"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ISmmtdioD24JungkmyEM2",
+									"type": "smart-ref",
+									"blockId": "Msmd7b_gaUJucBpTHnHV5",
+									"columnId": "9Zw4cowt5HwgH6Ui-4pPU",
+									"lastSeenVariableName": "Expenses.Cost_Per_unit"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "RhThDxz5hhRMnoRuBzMYZ",
+							"type": "table-column-formula",
+							"columnId": "zWoR1o5fo1K8-2Sik5UPi"
+						}
+					],
+					"id": "6a0Bjb0qg88ufjPfhskSS",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Catagory"
+								}
+							],
+							"id": "MvMaPQGc5b2bOC2f9KIEs",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Description"
+								}
+							],
+							"id": "T1zQQ34jzuwIx3bTYMB6y",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Amount"
+								}
+							],
+							"id": "RHbT6q4n-ceYyRwP7ujc1",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost_Per_unit"
+								}
+							],
+							"id": "9Zw4cowt5HwgH6Ui-4pPU",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"unit": "usdollar",
+										"baseSuperQuantity": "currency",
+										"baseQuantity": "usdollar"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Total"
+								}
+							],
+							"id": "zWoR1o5fo1K8-2Sik5UPi",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "wvwvpIqrwfH8CJ0-m60j9",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "yq7KF2jfo-aeeF2E8wNcL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "✈ Flights"
+								}
+							],
+							"id": "yJ2O4emB8j4fK26lzYYm6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"id": "QL-WV9flMumuWbLnsIFnI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "400.00"
+								}
+							],
+							"id": "NXLXGRO6rsEe2CqRzpnLZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KKBKtfZFOU3nn0kJBT70w",
+							"type": "td"
+						}
+					],
+					"id": "0PFPnxaLDLCSILuaKAyqA",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "0c-kTAm-Q24duiyQZujlt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🚕🚎Public transportation"
+								}
+							],
+							"id": "6wvVHQHEup2ODeuq9Gk4_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "ROX9qGYEW-QcFhjH9Bz8s",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30.00"
+								}
+							],
+							"id": "CiKkV5DO8RGQo9vsU5-9v",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "40b5zEQ3mQBrUxvECg22b",
+							"type": "td"
+						}
+					],
+					"id": "qbE_z48NM7Lelkqekw8fW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "6DzSwfw8_CVcAW_A3jEZ0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🚗 Car rental \n(fee / day)"
+								}
+							],
+							"id": "C7ZliOxm8brCChUkw-wJp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "sFTRdbSRpHgH2-aohTlyo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "ziByQrySHH6nhl-7KQ8WC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ePEBkJTHCE53RkICcpDmu",
+							"type": "td"
+						}
+					],
+					"id": "BsEAmyONWiFfoUyWxmOUT",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "m6hIWvn6_hHxTzwC5E6pt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🚗 Driving\n (miles, cost/mile)"
+								}
+							],
+							"id": "QiWqNiE2UhQrZE2xMtOi0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50"
+								}
+							],
+							"id": "sKeGQR-F1UuCNKUVAJ9Hs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.56"
+								}
+							],
+							"id": "DuNr1-7ewalnw7JupYUPz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mQZkOimyKYeYntckQ6qcT",
+							"type": "td"
+						}
+					],
+					"id": "F0ozf1EYQxZ4P-k7UqeMk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Transportation"
+								}
+							],
+							"id": "HWsn7MRR9aIZrPZ8qGwkw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🅿️  Parking\n (days, cost/day)"
+								}
+							],
+							"id": "H-M5soNfAljL323cYLYKs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "vmC076ZgXTdcbEow-nbG5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "14.95"
+								}
+							],
+							"id": "6fbDxLFnj3xSPViMyDBk6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RlMDTICiMB9vF0elG7q5W",
+							"type": "td"
+						}
+					],
+					"id": "gFg72Z1u0Ock9iJzSKch2",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Lodging"
+								}
+							],
+							"id": "u3HIiqBK-PcdCtMRAShg2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🏨  Hotel \n(nights, cost/night)"
+								}
+							],
+							"id": "CBwSdS6UOrcTJHCr_L0Wm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"id": "fExy-_E3S3d5EyOHT2Dwm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "120.00"
+								}
+							],
+							"id": "Fa7Ls3iTmgcEPgFXlF5OK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OF9dyoXhqXI0NnmfzGMC6",
+							"type": "td"
+						}
+					],
+					"id": "giteZzh1Llb0Gxw7U8WpN",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "wLr5LLMkkI2Eg-UsUBV-_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🥓 Breakfast"
+								}
+							],
+							"id": "T0-kpLUPTrZeISFc6M9S8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "qBN6eE3paVgro5plo-fx-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "12.00"
+								}
+							],
+							"id": "Ja0a1ViVEQE1M6XqW2xj0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mc5deO9PbsP2cH6WmSHIi",
+							"type": "td"
+						}
+					],
+					"id": "S-3qYOW3SUPKEIeKV1UIF",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "KyjItsvpG-7TiCvZ89jwd",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🍔 Lunch"
+								}
+							],
+							"id": "zmdYcu3P6w0vpABNcus4a",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3"
+								}
+							],
+							"id": "oQGBmEk4PD6qpdYOMoPgK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "45.00"
+								}
+							],
+							"id": "-dyqZRHl06_ApRaIoFmAn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1RGet4O_hCLYBIOn7-TEH",
+							"type": "td"
+						}
+					],
+					"id": "QvOel490BgimqYsE6zMek",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "C9HGN-pDPmWYebJ1cdhZ2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🍜 Dinners"
+								}
+							],
+							"id": "F1RM7BFaVfB3Dp1uzkqyI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"id": "5vulm46CMWplojkbSEkBM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50.00"
+								}
+							],
+							"id": "L6qY5QyVvNUkfN5zF4wCB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "73sGQxf_m9of8NuJjJ0wm",
+							"type": "td"
+						}
+					],
+					"id": "QswLQ7b96cFSuSkb5EG3y",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Food"
+								}
+							],
+							"id": "598_saraTyNLKRt2XA1DL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🥨 Snacks and Drinks"
+								}
+							],
+							"id": "2ULAxGoVgcUoRpRK_Lyup",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "ICH0m9hmFVtVWI4-2H3Re",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10.00"
+								}
+							],
+							"id": "FOKw6O8Kgn6WMfOyoKp9C",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WYHzWzkoqTPTdziAyjEOY",
+							"type": "td"
+						}
+					],
+					"id": "7-d8b1tPY6oa6ElAZAXB0",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Entertainment"
+								}
+							],
+							"id": "_uv-5hsWupSkTisDfTs5V",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🖼 Museum Tickets"
+								}
+							],
+							"id": "KMLZqgADjt-9ZKh1EoMtm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": " 2"
+								}
+							],
+							"id": "wX5kK7NyR-C4vNHd4kcJ8",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20.00"
+								}
+							],
+							"id": "HUelEj_xsOnqBBG6jl6WM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iUi43LwIfxfQEXP8wQ9kI",
+							"type": "td"
+						}
+					],
+					"id": "eAx-MQUBbauUCSWz1ejjO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Entertainment"
+								}
+							],
+							"id": "VYRWLo1C2isDH8306XWKP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🎙Concert Tickets"
+								}
+							],
+							"id": "jGq9GFmuDKYsP0pXyHP50",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"id": "8E2n-eWcbrVYHIbsiLV43",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "35.00"
+								}
+							],
+							"id": "eXcz6EaqizOqyCc5t8nsV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FKg3-f9g4VNIMbuCrL6RO",
+							"type": "td"
+						}
+					],
+					"id": "i6fBrVNc2vc4G-LwJ0ZPq",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other"
+								}
+							],
+							"id": "3kQDvcS_Zne7yhovUfqw_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🗺  City Tour"
+								}
+							],
+							"id": "izlfhQoRitYwdFvccDZbi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": " 2"
+								}
+							],
+							"id": "A4N-xDGoGdL-EHydHIxbI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50.00"
+								}
+							],
+							"id": "AcOQFcJIl4WCrDfV9Fogv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vREOHYNJsnOD4LYZyu2xa",
+							"type": "td"
+						}
+					],
+					"id": "Klt6k1BYEQcy4nFaYa86Y",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Other"
+								}
+							],
+							"id": "NIMD7bwePpXpIRmz4v6gP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "🎁Souvenirs and Gifts"
+								}
+							],
+							"id": "I40V98bH9Yg3RD9xbu15R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1"
+								}
+							],
+							"id": "puQj2d8RP0tG04zK98WrS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.00"
+								}
+							],
+							"id": "GJIXbHovoEdB46-cyerS0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fiq6T8G-mM_-YPj6ouGCj",
+							"type": "td"
+						}
+					],
+					"id": "5foCQhv5Sm8n6rGTJgwli",
+					"type": "tr"
+				}
+			],
+			"id": "Msmd7b_gaUJucBpTHnHV5",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"icon": "Wallet",
+			"color": "Sulu"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Total_Expenses"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Y6SxQfiUKHCni2LWnj35O"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7m4Cl6MotQ6KTO0p5Ygyt",
+							"type": "smart-ref",
+							"blockId": "Msmd7b_gaUJucBpTHnHV5",
+							"columnId": "zWoR1o5fo1K8-2Sik5UPi",
+							"lastSeenVariableName": "Expenses.Total"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "IHrPmNGV4JeWggjzpQkSS"
+				}
+			],
+			"id": "LDbTsquI47JMezn16asME",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Spare"
+						}
+					],
+					"type": "structured_varname",
+					"id": "wVhTfdLP6i-ijMN7Wgrg9"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "m3mM9r_U-pshaeam9YGjo",
+							"type": "smart-ref",
+							"blockId": "FU4sAXFs_uEiB_Rh9cyas",
+							"columnId": null,
+							"lastSeenVariableName": "Budget"
+						},
+						{
+							"text": " -"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vMsx51nWJ0aHdfYCj4DJg",
+							"type": "smart-ref",
+							"blockId": "LDbTsquI47JMezn16asME",
+							"columnId": null,
+							"lastSeenVariableName": "Total_Expenses"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "jDo3vTgmJgL_vh5h6xUpW"
+				}
+			],
+			"id": "l2l-aCEyLIyEM4awOqDaa",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "On_Budget = ("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "VbPhGvlnBD7Sw0KbWt_r6",
+					"type": "smart-ref",
+					"blockId": "l2l-aCEyLIyEM4awOqDaa",
+					"columnId": null,
+					"lastSeenVariableName": "Spare"
+				},
+				{
+					"text": " > 0)"
+				}
+			],
+			"id": "oIo0GL8O4-ggPUW7MRr2m",
+			"type": "code_line",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "JtSMmhXgM_eRxy3HO5bWp"
+		}
+	]
+}

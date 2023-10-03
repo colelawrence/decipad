@@ -1,13 +1,13 @@
 import {
-  AutoformatPlugin,
+  type AutoformatPlugin,
   createAutoformatPlugin,
   createPlateEditor,
-  CreatePlateEditorOptions,
+  type CreatePlateEditorOptions,
   createPluginFactory,
   getTEditor,
-  NoInfer,
-  PlatePlugin,
-  PluginOptions,
+  type NoInfer,
+  type PlatePlugin,
+  type PluginOptions,
   useEditorRef,
   usePlateEditorRef,
   usePlateEditorState,
@@ -15,7 +15,7 @@ import {
 } from '@udecode/plate';
 import { MyValue } from './value';
 import { MyEditor } from './nodes';
-import { MyOverrideByKey, MyPlatePlugin } from './plate';
+import type { MyOverrideByKey, MyPlatePlugin } from './plate';
 
 /**
  * Plate store, Slate context

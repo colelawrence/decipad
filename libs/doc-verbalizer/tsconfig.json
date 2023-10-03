@@ -1,15 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "lib": ["esnext"]
-  },
   "include": ["src", "src/__fixtures__/*.json"],
   "references": [
     {
       "path": "../editor-types"
-    },
-    {
-      "path": "../editor-utils"
     }
   ]
 }

@@ -1,27 +1,11 @@
 import Boom from '@hapi/boom';
 import { getDefined } from '@decipad/utils';
+import { parseNotebookUrl } from '@decipad/backend-utils';
 import {
   NotebookWriteApplicationCommandDataOption,
   NotebookReadApplicationCommandDataOption,
   NotebookApplicationCommandDataOption,
 } from '../command';
-
-function parseUrl(url: string) {
-  const matchExp =
-    /^https:\/\/(([a-zA-Z0-9]+)\.)?decipad.com\/workspaces\/([a-zA-Z0-9]+)\/pads\/([a-zA-Z0-9]+)(\?secret=[a-zA-Z0-9]+)*$/;
-  const match = matchExp.exec(url);
-  if (!(match && match[2] && match[3] && match[4])) {
-    throw Boom.notAcceptable(`notebook url seems invalid: ${url}`);
-  }
-  const prEnvId = match[2] || 'alpha';
-  const workspaceId = match[3];
-  const notebookId = match[3];
-  return {
-    prEnvId,
-    workspaceId,
-    notebookId,
-  };
-}
 
 async function write(
   options: NotebookWriteApplicationCommandDataOption['options']
@@ -31,10 +15,9 @@ async function write(
     'no option named url'
   );
   const user = options.find((o) => o.name === 'user');
-  const workspace = options.find((o) => o.name === 'workspace');
 
   const url = (option.value ?? '').toLowerCase();
-  const { prEnvId, workspaceId, notebookId } = parseUrl(url);
+  const { prEnvId, notebookId } = parseNotebookUrl(url);
 
   if (!user) {
     throw Boom.notAcceptable('Not implemented yet');
@@ -42,7 +25,7 @@ async function write(
 
   const userId = user;
 
-  return `${prEnvId} ${workspace || workspaceId} ${userId} ${notebookId}`;
+  return `${prEnvId} ${userId} ${notebookId}`;
 }
 
 async function read(
@@ -53,9 +36,9 @@ async function read(
     'no option named url'
   );
   const url = (option.value ?? '').toLowerCase();
-  const { prEnvId, workspaceId, notebookId } = parseUrl(url);
+  const { prEnvId, notebookId } = parseNotebookUrl(url);
 
-  return `${prEnvId} ${workspaceId} ${notebookId}`;
+  return `${prEnvId} ${notebookId}`;
 }
 
 export default function notebook(

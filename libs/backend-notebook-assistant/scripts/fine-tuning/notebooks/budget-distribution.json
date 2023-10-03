@@ -1,0 +1,3439 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Bonus Distribution Based on KPIs"
+				}
+			],
+			"type": "h1",
+			"id": "PvYYMscrt2JHb5ulpqDzB"
+		},
+		{
+			"children": [
+				{
+					"text": "This is sample data only. Duplicate this template for your organization. "
+				}
+			],
+			"id": "oMGBWPnnlI-_O4-KEfxp-",
+			"type": "callout",
+			"icon": "Message",
+			"color": "Grapefruit"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OrganizationKPIs"
+								}
+							],
+							"id": "ucAqvS2ZV_xADY1ndWE1_",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " min(["
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "HWKivRQsclITMpiTTkhQz",
+									"type": "smart-ref",
+									"blockId": "yxhwediqOcgag_Re0FZ9u",
+									"columnId": null,
+									"lastSeenVariableName": "Goal"
+								},
+								{
+									"text": ", "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "VouQCyY5I8QJw4P8v0l9V",
+									"type": "smart-ref",
+									"blockId": "2bJyMRmvxUd7aJxNrDAVV",
+									"columnId": null,
+									"lastSeenVariableName": "Result"
+								},
+								{
+									"text": "]) / "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "oXN7JxVMRaE1s-CfFJYg0",
+									"type": "smart-ref",
+									"blockId": "yxhwediqOcgag_Re0FZ9u",
+									"columnId": null,
+									"lastSeenVariableName": "Goal"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OsNyPfGg_u1ZXF63hOku9",
+									"type": "smart-ref",
+									"blockId": "mNyhKNFWPDfchSJT-Yh_M",
+									"columnId": null,
+									"lastSeenVariableName": "MaxPoints"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "5ifTItYzmGen2NtKhJXmz",
+							"type": "table-column-formula",
+							"columnId": "yqhSi32zbgdlFaGr0RLeO"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "PAuScv4OHd4d01Zjy5kys",
+									"type": "smart-ref",
+									"blockId": "t6gzIexIYBhcP1mwCaJcI",
+									"columnId": "TbObp7gXEq-6vJ1cpaw7z",
+									"lastSeenVariableName": "KPIInput.Result"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "hfXAcin0mgLkaggO5nZWh",
+							"type": "table-column-formula",
+							"columnId": "2bJyMRmvxUd7aJxNrDAVV"
+						}
+					],
+					"id": "5U_8Yfh2vLoKgeKKIwZ03",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPINo"
+								}
+							],
+							"id": "8GjR0UeBqA9l1l4cYvJ16",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "KPI"
+								}
+							],
+							"id": "_ctRQaQQZ2hSY_V3ROXrL",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Goal"
+								}
+							],
+							"id": "yxhwediqOcgag_Re0FZ9u",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Result"
+								}
+							],
+							"id": "2bJyMRmvxUd7aJxNrDAVV",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MaxPoints"
+								}
+							],
+							"id": "mNyhKNFWPDfchSJT-Yh_M",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "Points"
+								}
+							],
+							"id": "yqhSi32zbgdlFaGr0RLeO",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "7Jg5Muek-z0Mf3XpoOCwV",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "6CWwr_6gwAtdpvIKXcKLR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "New Onboarded Users"
+								}
+							],
+							"id": "QTk9J2L5n3oqoLffbezTX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "3500"
+								}
+							],
+							"id": "_4-B8MJ1xsNmdF9nW4LKW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pIzAKuXlk-f8FX89FhAMA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "16"
+								}
+							],
+							"id": "Qqkn72Mvb4U-UmwjPOKK3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UIweN-IzL3OWeGVA5iRlj",
+							"type": "td"
+						}
+					],
+					"id": "MdJS68HlbYm0EQBkO6Jvn",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "IB9RES_-GMaQB_Od0xnlf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue (USD)"
+								}
+							],
+							"id": "ZOwRCKPlPBrBxN8kX_tSD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "38900"
+								}
+							],
+							"id": "d6AYBz3BLLsQUTneDbGvq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DG8Znmg4_swxuiv1y5D4R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "8"
+								}
+							],
+							"id": "H6NuYaFpl0SC5PFnK4uqT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "iXynzrnLU3YBFHtKjQJGU",
+							"type": "td"
+						}
+					],
+					"id": "dioNTKkOYptItvif8fd-H",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "JBzDJKnE5NKE6f6KrZJRC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Unique Applicants for Grants"
+								}
+							],
+							"id": "Tq9h5oxw3Vu4HhzqF2PsF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "500"
+								}
+							],
+							"id": "ZR-3Stl7KOSgk0ego69_B",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DwnppB5hIdnJiQLt6vfnK",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "8"
+								}
+							],
+							"id": "joMMrHicD0Nbu6GUVnN6h",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MPEZS3t_lKZ2147sCucx-",
+							"type": "td"
+						}
+					],
+					"id": "gRcyDa_EV7Mrj2cG617SB",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI04"
+								}
+							],
+							"id": "EIG0QpbLf4chsbxptcROZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Number of Transactions"
+								}
+							],
+							"id": "SQKTchzlMVu1DJa_RoXmZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "6500"
+								}
+							],
+							"id": "1QD3-hxV20JlsZe6gItgB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QvVO6vfQf8k80oe5iwfN5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "oDLbkKlybFFeFd687vzKo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "aqyL534y9eS4Ltetb6TxC",
+							"type": "td"
+						}
+					],
+					"id": "xO2gd56yX0VoxGL-NOM3r",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI05"
+								}
+							],
+							"id": "DUyiGiwbPgVc_p4BQw4H4",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Monthly Active User"
+								}
+							],
+							"id": "7n5kBmkmA0jlQktA6y7O5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1350"
+								}
+							],
+							"id": "rqS8wHIM3RhjYWdc7lfs0",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nTbBa2cwhk5sXpOFN0Nlm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "95NuH-70HLWoBDKWBq6KI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HIt4CgAX2oS52pbzmk0LO",
+							"type": "td"
+						}
+					],
+					"id": "PkaCw12yVkoZOPbh_9uaH",
+					"type": "tr"
+				}
+			],
+			"id": "CoGSU6w95cfyg3_94OVy9",
+			"type": "table",
+			"isCollapsed": false,
+			"hideFormulas": false,
+			"isHidden": true,
+			"color": "Malibu",
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": "Definitions"
+				}
+			],
+			"id": "Yulx4J1xNAQYBGkXV27qV",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's start with definitions."
+				}
+			],
+			"type": "p",
+			"id": "L53EKUnoZKSbwUmM82-DB"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "There are two different KPIs: Organization KPIs and Core Contributor KPIs."
+								}
+							],
+							"type": "lic",
+							"id": "29_GKOK2UL-5nzSRnGtf1"
+						}
+					],
+					"type": "li",
+					"id": "3K4DJCf7oA6LwCC4YGsNB"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Each KPI has a maximum point determined based on its relative importance."
+								}
+							],
+							"type": "lic",
+							"id": "bUGBhc3rBBYJwxEKrF909"
+						}
+					],
+					"type": "li",
+					"id": "jxgRbfumgijO7XWQZ7VHt"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "The bonus will be determined by the points collected through the KPIs."
+								}
+							],
+							"id": "i40gH450jy_eJFPXyxiig",
+							"type": "lic"
+						}
+					],
+					"type": "li",
+					"id": "AKY2Qj_rQEMd3B4zOkifN"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "The size of the bonus pool is determined every quarter."
+								}
+							],
+							"type": "lic",
+							"id": "IkcNdoEtwBHDWB2eH7JEb"
+						}
+					],
+					"type": "li",
+					"id": "scZ1Tcx65pLpcMRNcH59y"
+				}
+			],
+			"type": "ol",
+			"id": "uuwacGJonqrfjjaxwfOeG"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "B4I5GgL9syCPNibsUAvEP",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Bonus Pool"
+				}
+			],
+			"id": "Ftu78arbetkc2KSYulggE",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's decide the size of the bonus pool for this quarter. "
+				}
+			],
+			"id": "BcIg5NUa7ZdGZXrcIBIpP",
+			"type": "p",
+			"variant": "slider",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BonusPool"
+						}
+					],
+					"id": "6tEconOS7UehOj4TLpqJq",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "$15000"
+						}
+					],
+					"id": "E40VpzxQHoUFZ4uzhQfzd",
+					"type": "exp"
+				}
+			],
+			"id": "0E8yckctiheHk_xCPbe0G",
+			"type": "def",
+			"variant": "expression",
+			"coerceToType": {
+				"kind": "number",
+				"unit": null
+			}
+		},
+		{
+			"children": [
+				{
+					"text": "PS: If you change the Bonus Pool, the bonus calculation will be updated automatically. "
+				}
+			],
+			"id": "puZShYn6wdSx_gTe6iEZm",
+			"type": "callout",
+			"color": "Grapefruit"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "jCI3FxzXdUL-3DqijGOG3",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Organization KPIs"
+				}
+			],
+			"id": "UwKPTLAK3idt4WMxkynQW",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's move on with "
+				},
+				{
+					"text": "Organization KPIs ",
+					"bold": true
+				},
+				{
+					"text": "(for this quarter)"
+				}
+			],
+			"type": "p",
+			"id": "iwX9ZBJDEL_IEyWDcno0i"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view for OrganizationKPIs"
+								}
+							],
+							"id": "29lKmvca60g-VO8G1Qr-e",
+							"type": "data-view-name"
+						}
+					],
+					"id": "gxX9UsqdajrGA1LPlMGGV",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AmdlZsCbz7UqAxCRnHFSt",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"name": "8GjR0UeBqA9l1l4cYvJ16"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TBnIUnBAba2c0dfGiAwnO",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"name": "_ctRQaQQZ2hSY_V3ROXrL"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "0feRsp5Zs3Wcz5rEpcZF2",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"name": "yxhwediqOcgag_Re0FZ9u"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MY64LDJkDn1WR5KrzSA9C",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"name": "mNyhKNFWPDfchSJT-Yh_M"
+						}
+					],
+					"id": "ohTsiLxA-4TshlI5p4ztv",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "LdNyb1uAaz2pq3IohFRxe",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "CoGSU6w95cfyg3_94OVy9",
+			"color": "Sun",
+			"icon": "Star"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "TIzt6yCVmTBwk9CEfVj17",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Distributed Bonus"
+				}
+			],
+			"id": "NEWupL2zW8rfMPDll-eR1",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's create a system to determine how much of the allocated bonus will be distributed:"
+				}
+			],
+			"type": "p",
+			"id": "iCKYWJCd_fzovTJaQTq_z"
+		},
+		{
+			"children": [
+				{
+					"text": "Distributed Bonus: Distribution Multiplier X Bonus Pool"
+				}
+			],
+			"id": "7Vi3XYXIe5Xy_E_J_s0Ub",
+			"type": "callout",
+			"color": "Grapefruit"
+		},
+		{
+			"children": [
+				{
+					"text": "If the total Organization KPI Points between\n0 and 19.9 then the multiplier is 0\n20 and 23.9 then the multiplier is 0.5\n24 and 31.9 then the multiplier is 0.8\n32 and 40 then the multiplier is 1"
+				}
+			],
+			"id": "RRrjoE5pAH0zyBQGiy9cP",
+			"type": "callout",
+			"color": "Grapefruit"
+		},
+		{
+			"children": [
+				{
+					"text": "We need to enter the results to calculate the distributed bonus, so please enter the results in the table."
+				}
+			],
+			"id": "zUZk5CRowTvTJzqZAYMLl",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPIInput"
+								}
+							],
+							"id": "NPOcWuXhlRl6JZ0AvU11z",
+							"type": "table-var-name"
+						}
+					],
+					"id": "3p7O2NZWc0rtET-WGKg3-",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPINo"
+								}
+							],
+							"id": "DW6XpK3MpozsjDbR__t7C",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "KPI"
+								}
+							],
+							"id": "gk616V5F9a8MT1zRYQzBJ",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Result"
+								}
+							],
+							"id": "TbObp7gXEq-6vJ1cpaw7z",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "JtOc9cUm3rZGvVJqpIIph",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "nWz4PamxHPl7mhNIG3zSJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "New Onboarded Users"
+								}
+							],
+							"id": "RZisliAIRl94mivQDfKUm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1885"
+								}
+							],
+							"id": "CQHL4vfRf0KjIFbYwx_K1",
+							"type": "td"
+						}
+					],
+					"id": "rbb_puCScK3FBQqmrXOG2",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "fabWUXGWVuXuApvcvqLE_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Revenue (USD)"
+								}
+							],
+							"id": "usnlmOF3fJH2K-TJ4Cwal",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "13000"
+								}
+							],
+							"id": "YbF6xpvmMUJy9pdS4qXu6",
+							"type": "td"
+						}
+					],
+					"id": "vg79xok_TvHFahHSI_Yus",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "so6aqw7LjXJEuT3E_2XaJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Unique Applicants for Grants"
+								}
+							],
+							"id": "45RwYP4EjqRcf6RWxo_qm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "423"
+								}
+							],
+							"id": "tIbRUWD7nNFldnlbdv3jM",
+							"type": "td"
+						}
+					],
+					"id": "JNdpvLeUBzDlSTk9EQAU3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI04"
+								}
+							],
+							"id": "p26kQ54_zodWFdIM8UB0n",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Number of Transactions"
+								}
+							],
+							"id": "8cskLXXVg0zlm8VPCsmNX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "5996"
+								}
+							],
+							"id": "ttPEjlO_vJpctYiYI0cTA",
+							"type": "td"
+						}
+					],
+					"id": "pjGSbq71jZC_MjXrY4Qc-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "KPI05"
+								}
+							],
+							"id": "t-2yUK6ueZ0clVyyxzd00",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Monthly Active User"
+								}
+							],
+							"id": "fl2BZeVdQD26CwMNGCrF2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "991"
+								}
+							],
+							"id": "Xzr0iNxRpB5eMZT921TIq",
+							"type": "td"
+						}
+					],
+					"id": "obPV5UiGiA3nXGXO576oR",
+					"type": "tr"
+				}
+			],
+			"id": "t6gzIexIYBhcP1mwCaJcI",
+			"type": "table",
+			"hideFormulas": false,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": "BonusTotal = Bonus(sum("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "N4tl7Y0q482MEd8yF1sSe",
+					"type": "smart-ref",
+					"blockId": "CoGSU6w95cfyg3_94OVy9",
+					"lastSeenVariableName": "OrganizationKPIs.Points",
+					"columnId": "yqhSi32zbgdlFaGr0RLeO"
+				},
+				{
+					"text": "))"
+				}
+			],
+			"isHidden": true,
+			"id": "JmoboNg1BrZVG55X9rNi3",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"text": "Bonus(points) = match {\n points >= 32: "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "nJimIuzmDSn4EHamVRt-9",
+					"type": "smart-ref",
+					"blockId": "0E8yckctiheHk_xCPbe0G",
+					"lastSeenVariableName": "BonusPool"
+				},
+				{
+					"text": " * 1,\n points >= 24: "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "B1vhYhnBedYojfVEOc3rV",
+					"type": "smart-ref",
+					"blockId": "0E8yckctiheHk_xCPbe0G",
+					"lastSeenVariableName": "BonusPool"
+				},
+				{
+					"text": " * 0.8,\n points >= 20: "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "gBKFwrg8DBlS-ydjVJNmp",
+					"type": "smart-ref",
+					"blockId": "0E8yckctiheHk_xCPbe0G",
+					"lastSeenVariableName": "BonusPool"
+				},
+				{
+					"text": " * 0.5\n points < 20: 0\n}"
+				}
+			],
+			"isHidden": true,
+			"id": "FZkSudb5BKuus7jcPfwbO",
+			"type": "code_line"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "OrganizationKPIEarnedPoints"
+						}
+					],
+					"type": "structured_varname",
+					"id": "GG_jbaDUh2a2wj5S5gdPC"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8RbU5rAUu5UF5ygch1gfy",
+							"type": "smart-ref",
+							"blockId": "CoGSU6w95cfyg3_94OVy9",
+							"lastSeenVariableName": "OrganizationKPIs.Points",
+							"columnId": "yqhSi32zbgdlFaGr0RLeO"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "cK2QwUcNFTEftUDwjDsg9"
+				}
+			],
+			"id": "Kq8zOmTlZCbKFmwzCOMmE",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "Based on the results the total earned points is "
+				},
+				{
+					"text": "exprRef_Kq8zOmTlZCbKFmwzCOMmE",
+					"magicnumberz": true
+				},
+				{
+					"text": "and the amount of the bonus to distribute is "
+				},
+				{
+					"text": "exprRef_JmoboNg1BrZVG55X9rNi3",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "cIde-tgpIS7NGmxKaPrXW",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "ANutRr6qTUNGP_D650vJi",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Core Contributor KPIs"
+				}
+			],
+			"id": "U7GuJoDPbj3jAaD_9fOLV",
+			"type": "h3"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CoreContributorKPIs"
+								}
+							],
+							"id": "3yxGrX8Kb5_aimMJgrRcF",
+							"type": "table-var-name"
+						}
+					],
+					"id": "RYl8um-rQQamZbIjjx0JS",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CoreContributor"
+								}
+							],
+							"id": "WAm67lSA6hlCVk_BAw5B1",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "KPINo"
+								}
+							],
+							"id": "oGAaW2M1kLqMGZ-2CKNbM",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "KPI"
+								}
+							],
+							"id": "EQFk-ufox1ZoNAcYqcvka",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Goal"
+								}
+							],
+							"id": "JuxzgIWHUPw7qq_E7LMaD",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Result"
+								}
+							],
+							"id": "bccrWPQzgj3gGMKvD7e-y",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MaxPoints"
+								}
+							],
+							"id": "BplUM0vWJ2w9hS8Zv9VvX",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Points"
+								}
+							],
+							"id": "FxpAlz5vWRBInzyTKeFKB",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "l9pXBSia6VC-gfzxCp71Q",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "-CFpi6Ii58PFsES4J3gVf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "K1R5evT8bXWX1GbDiCV_R",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI01"
+								}
+							],
+							"id": "wpCjh2bIZKIO8z1agRPkG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "13750"
+								}
+							],
+							"id": "kJJcGjegJ_7rVFB1yPdYL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-WxffeSz8_Vqk5KKYgobW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "WLrB6zAb0IgW1hoIKnVyZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BZ9O5dcqD4pGzfA1pkOZ-",
+							"type": "td"
+						}
+					],
+					"id": "9Qwd1_sMZlyX3QH4kuTuf",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "psborNd_NvnAzgPt4xiyQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "hklANtZ4rSv2RnJX1KQK-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI02"
+								}
+							],
+							"id": "_d2-veAkHH07lTOeKcHrM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.8"
+								}
+							],
+							"id": "19RnURqv6Ej55kuqQwRM5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HMEhEQODGy0iRbzc8W2iR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "sMkII7nVz50DTmHph4nOD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IR70TBSW4ajm9Gw1BEaqu",
+							"type": "td"
+						}
+					],
+					"id": "Z6mNzKOtyGBrq99MObUBU",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "XzeVwCd7zBJiNJkRlIDRY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "2l1PnNVmynW4hl-cSZEoW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI03"
+								}
+							],
+							"id": "UQ3RQnFKe8siDitWxKyzX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1500"
+								}
+							],
+							"id": "ugCgTTsL7epd1iWkLCVxu",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nib8K3FOwoamYSlCQzaQp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "e9Yr73DhumTENdCgWrPCB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_jgs-vkDrtjU833zSBpud",
+							"type": "td"
+						}
+					],
+					"id": "PVLkZadcMh63UiYdVemgz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "OEdM4wad4CnX8FChgzAly",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "-lFGdDBeSh8wVb_xUY0qS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI01"
+								}
+							],
+							"id": "ni4UnxiBGnN5kbWX6ttZ5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2000"
+								}
+							],
+							"id": "uj4F6BV_VxnKDkqqSnN2h",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vjupl0FveJP9Ya4ts2v92",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "aATmDs8xQW3uEut1_gl0C",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5dQF2v_r7v5UKRUE3VXxd",
+							"type": "td"
+						}
+					],
+					"id": "76FQD-JISAeKleyXgYp03",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "oVbnc2W5O1Gq9M4pPYgwH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "pQdh2Iy7zN_XEPniaHeTo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI02"
+								}
+							],
+							"id": "ePIouUvx1C9V-0UN2Mije",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "MjcY4OuMITtlRlRL7Ced6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "fzOqYwCHjDMXmM8SYFaou",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "Wdpe9u0E-h2y7Y9C9VYzZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zLqsn9509MR3QJ3-1hPHj",
+							"type": "td"
+						}
+					],
+					"id": "USeUQv-NQTr7BOvS7c1Fc",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "SYkPRgciWG2E_ly00WLHN",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "dIk51AO-WIBuEEYKffiPr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI03"
+								}
+							],
+							"id": "sVWFuIgdulPb6w9yJLDqy",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1.5"
+								}
+							],
+							"id": "Dv74GB9wNCPeyNFrF77aG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hD2kBFHrDOuPUJq0kMPsF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "iyjz1FpHwzgT_Qnz96cvC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1T-48PfwwN9ToBWOHum7V",
+							"type": "td"
+						}
+					],
+					"id": "RNXhvMUgcrPKAm8g0yCvi",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "sUpth6PBE0sO2CLaBJQcF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "PAJQ9pSa7SKC438QoMvpc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI01"
+								}
+							],
+							"id": "7O0CI4Hpwlv8vqyam6rZO",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "XALtbf8-RqUK-Va8v9atG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sMDr3cVX25A_4aIZOYSG3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "u9XeHcXSGAPVmc6Efwwu2",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "JmjSLaz2SoDmSsy_Ia38P",
+							"type": "td"
+						}
+					],
+					"id": "45YktpeifUPXK9rK8Rc2E",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "TQaqRV4yNIOm3a55qKkm5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "LqLmbNVeBCqK-yxFpxcDc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI02"
+								}
+							],
+							"id": "b-B2mtHQTACJJK4atVWWP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "75000"
+								}
+							],
+							"id": "qkjIj6XhGfIZyIvgfZzGU",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "a3TICa8CXBHZMbUb0fOIP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "9k0ZZF1V0GslUKlv493xq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gKnewapsLIi867XZfIK0c",
+							"type": "td"
+						}
+					],
+					"id": "8Egq0ccdReotWoJGk2t1q",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "cptVaQzTrk0tvwFWBAVid",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "c067ChoWun2zwg7wfsO35",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "Definition of KPI03"
+								}
+							],
+							"id": "obmIABvrQ2dTLQfmyr6g_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "900"
+								}
+							],
+							"id": "YwB_IiA0UG1R446wK3IvC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TEryRZ5L0rHFM82IvInGA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "R20g94y-k_My-lO-1q_6g",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nJRu3sc8csZ20QgUFM9g3",
+							"type": "td"
+						}
+					],
+					"id": "QtYeDfqhDcUdKdBKjjJnC",
+					"type": "tr"
+				}
+			],
+			"id": "JWKtzxoaJaJxnCKwM10LY",
+			"type": "table",
+			"hideFormulas": false,
+			"isCollapsed": true,
+			"isHidden": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"text": "Let's see the KPIs of core contributors."
+				}
+			],
+			"type": "p",
+			"id": "S8cCnrWEyVr38BmeWtQUO"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view for CoreContributorKPIs"
+								}
+							],
+							"id": "4ZX3qTMxJF2fHuE0xFGuQ",
+							"type": "data-view-name"
+						}
+					],
+					"id": "IhdGhS7RJDdnJ6_Udn4yW",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9yq1CvgflIqwma1lIuGK0",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"name": "WAm67lSA6hlCVk_BAw5B1"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "czlhiHFzG1jd0pJ1l9wcJ",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"name": "oGAaW2M1kLqMGZ-2CKNbM"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ujhvVdt2aU3mMn8zzRlmm",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"name": "EQFk-ufox1ZoNAcYqcvka"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4j0CmyDcKbWXernqW-mNs",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"name": "JuxzgIWHUPw7qq_E7LMaD"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rcE0fp34ln-dsszExUd_8",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"name": "BplUM0vWJ2w9hS8Zv9VvX"
+						}
+					],
+					"id": "rZQBiRWGQxLQfsrpFxwIk",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "dVXwp238xBsT5jYaq45qa",
+			"type": "data-view",
+			"expandedGroups": [
+				"6e3851e05ed184e633de07aaf14067f210f190a5e4a1454996ffd21fb3069f98",
+				"f1db41be82889afbf20c772821f921b40b28ea96c66d1a2129a04e4ba3473b4e",
+				"8b93a567e9b630b9dcc9dd926d3f968b36850855a5946cc03d0c190947cdb280",
+				"6e3851e05ed184e633de07aaf14067f210f190a5e4a1454996ffd21fb3069f98/5135d35045157b324ae89c3336729847ba89670eda6d5ac85781865a705d7526/0ece984fcda9baacf3a3accd5faba964d8a18138b5d392b34932427705260aad/990eba3eae11fefb7354ce9bc5765f37e4ce19481133ebf112d609e7c0ee26a2",
+				"6e3851e05ed184e633de07aaf14067f210f190a5e4a1454996ffd21fb3069f98/a3613f2538b3f9d814ab7d00e98e4c85af218f2a603151268b34e9e871acbf58/e9ce7c007998dbb1a729ff2a6189b89a5e83adc932043cdad088909f3f7eed0f/1e9d7c27c8bbc8ddf0055c93e064a62fa995d177fee28cc8fa949bc8a4db06f4",
+				"6e3851e05ed184e633de07aaf14067f210f190a5e4a1454996ffd21fb3069f98/fed4ea519f5a2f8cdaf81fbc8074a955009c648e133ed5ad3c5c6b92c87d317e/e3a49c38e0a705484ff20468f0b6a9e141d1c1de7c0e95d4f572cced6ed1b1a5/9f69998560dcfd8016442e0a32e959191df095817a164ce844c64ec5a8b0cc1b"
+			],
+			"varName": "JWKtzxoaJaJxnCKwM10LY",
+			"color": "Rose",
+			"icon": "Coffee"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's enter the results to calculate points for Core Contributor KPIs."
+				}
+			],
+			"type": "p",
+			"id": "llg_73PKHhuBQ_1H9RI22"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CoreContributorKPIResults"
+								}
+							],
+							"id": "yTc5CdcTu2L0-6vOYCRtl",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5XDVhyeN8V3Wz09DBZrPD",
+									"type": "smart-ref",
+									"blockId": "JWKtzxoaJaJxnCKwM10LY",
+									"columnId": "EQFk-ufox1ZoNAcYqcvka",
+									"lastSeenVariableName": "CoreContributorKPIs.KPI"
+								},
+								{
+									"text": "  "
+								}
+							],
+							"id": "LprYh_E45i-41GznZRE7B",
+							"type": "table-column-formula",
+							"columnId": "rZlr5yJSiay4RvlllE1Ti"
+						},
+						{
+							"children": [
+								{
+									"text": " min(["
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "_2yrDt-p8TrpBG95HYwO2",
+									"type": "smart-ref",
+									"blockId": "jHI6OWdkl-cSm-QK99J-l",
+									"columnId": null,
+									"lastSeenVariableName": "Goal"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "ZPcFwPKQZyRw822s-sF7b",
+									"type": "smart-ref",
+									"blockId": "FPHzvTuUuvtBsRmjSJTtf",
+									"columnId": null,
+									"lastSeenVariableName": "Result"
+								},
+								{
+									"text": "])/"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mK1StjMgdjlQgpC7yieYj",
+									"type": "smart-ref",
+									"blockId": "jHI6OWdkl-cSm-QK99J-l",
+									"columnId": null,
+									"lastSeenVariableName": "Goal"
+								},
+								{
+									"text": " *"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EK31dzk-KwqguMzgYxTbl",
+									"type": "smart-ref",
+									"blockId": "C20XVlSmJPPITS07O8QL5",
+									"columnId": null,
+									"lastSeenVariableName": "MaxPoints"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "HcpkQHN-bpKLD_tHYOhqy",
+							"type": "table-column-formula",
+							"columnId": "YM3huoeR5IzqzZC6X9TM2"
+						}
+					],
+					"id": "5JnavmPtGp7SRhpPTetZH",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CoreContributor"
+								}
+							],
+							"id": "Wt8M54SGmyHoDsnlRpTS_",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "KPINo"
+								}
+							],
+							"id": "1H8QKblP0jvL78zTu2m0p",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "KPI"
+								}
+							],
+							"id": "rZlr5yJSiay4RvlllE1Ti",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Goal"
+								}
+							],
+							"id": "jHI6OWdkl-cSm-QK99J-l",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Result"
+								}
+							],
+							"id": "FPHzvTuUuvtBsRmjSJTtf",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "MaxPoints"
+								}
+							],
+							"id": "C20XVlSmJPPITS07O8QL5",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Points"
+								}
+							],
+							"id": "YM3huoeR5IzqzZC6X9TM2",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "m9wuW9XL9JBi_BR8zZt2f",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "LArG1U7iQo4cvHllpwAsn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "l7gg_5kMrQBjrJBXqXz12",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TwlzPtXY2-llBV-6cMwU3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "13750"
+								}
+							],
+							"id": "9LXkVkC8wdLR59Thfc-fT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "13500"
+								}
+							],
+							"id": "K_3E5wyxSR556KVklWPMB",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "NefEMB6Apfoy83Yu0w39G",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3w8E3C7ZKd58qb6EAWwBZ",
+							"type": "td"
+						}
+					],
+					"id": "tfqs0Ddo3l1z0EL_hv6yx",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "OCYXly2fXEh7ee4NFzIY3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "z1ncSY-wurJ-RZ7KLbvBb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "P3VbbRVIykPxpBe51xlWs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.8"
+								}
+							],
+							"id": "1QIHAKAvnLKAM2bpuoqmC",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.7"
+								}
+							],
+							"id": "qjY4i5i8beKwWYC7B2nLt",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "JTo1KneupYMSWityaOVqX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8sXuTen17bRxEWM2i_TuX",
+							"type": "td"
+						}
+					],
+					"id": "Or228tOD7hSEIXnl8tRDl",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "yWh9k5d42EXwubAYZRQ60",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "dTxL_oawJXX6qbNsVNYNW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lMw_mJNpBOfeV2cEJA-xW",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1500"
+								}
+							],
+							"id": "fCDzox8ADgl0cQ1eYi9Rb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1200"
+								}
+							],
+							"id": "CI1lrl9jL_eCSfuygI21I",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "YVR4kvRo3kjnXCmzYHCB7",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KIvS7WASZ0R4MRpYDzLIv",
+							"type": "td"
+						}
+					],
+					"id": "n2VTCmpg94ayBJ1R2D6Hl",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "lUCy35SeaEKx6llt8__Ua",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "SWtLKYrlUooPi8YfS-L9-",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "tZ5cNwk02LOY1p4I0jWYi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2000"
+								}
+							],
+							"id": "BRjqHoYzaoG2F6lEIwvbL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1800"
+								}
+							],
+							"id": "M_9BgoGRAqQtKzFb-yJcV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "hPc6O2YJSUdmp-d_YkDNq",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "18_1xtQPZ_j6dmiAaYH10",
+							"type": "td"
+						}
+					],
+					"id": "2W8JWAp3kR3Z0qgzqZibW",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "jch0mXWM-5CvrF9GPmovM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "FsDySOPFKNrhbJNtHMs7f",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yHMGZw54zurpJmJYaaA8O",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "iwtbHyQSTRpD1xGVrHUI1",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "500"
+								}
+							],
+							"id": "DPjUxNdELu-FwvzaJo1Sx",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "20T-xLR-Dn3iIQ4utI88q",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_Y68rajqbZPEFPE90hk1d",
+							"type": "td"
+						}
+					],
+					"id": "QRfXDRUwGiYpGJuT4g8WN",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "2ydHBH4nfkIiO-W9Ram29",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "4m4OMIFcYhoEs2oyV_z74",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wnFHQdNQxu8m-ceHv4CJw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1.5"
+								}
+							],
+							"id": "0kOU5wDaWsxsmCoFYoFYI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "1.35"
+								}
+							],
+							"id": "bM_--90vVZ4qQIN5d_atm",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "gV5SmfzrWWMf5j2ksg6pL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RMfDlWg7Du8JS-kIEi8MJ",
+							"type": "td"
+						}
+					],
+					"id": "wayxCnjx-ClsQdyGpN2Dz",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "7XZws4b3zBc9e7q2JeKYo",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI01"
+								}
+							],
+							"id": "balTDJf2zpVBrUZl71Yej",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xmNgHao1dYaB9cwA6XGon",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "4"
+								}
+							],
+							"id": "Sfq_LyUJnBuVIorwERfl3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "6"
+								}
+							],
+							"id": "ARjoWri4g2XTjEeAaQ-YF",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "30"
+								}
+							],
+							"id": "el28vdjeo4WGy6rQp8SPJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "h5IBalLR0hgC1Pu38nqd4",
+							"type": "td"
+						}
+					],
+					"id": "HQhv0WsM79LnWbGG7dL8J",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "yYTm67yd-2hGg_AP_CEZg",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI02"
+								}
+							],
+							"id": "Sg9BjfZcTaMvF5oF0UjT_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "oz2k0ljHT-NuNcxRGSIjz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "75000"
+								}
+							],
+							"id": "Br1At9orn60CftUWxd93H",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "77000"
+								}
+							],
+							"id": "FtVRblzlKL3xH5yIcguwJ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "20"
+								}
+							],
+							"id": "NklHnyDybUQoVASTUjChI",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gCazTD75rQ98vzeIBcCtn",
+							"type": "td"
+						}
+					],
+					"id": "f5dhAOrswNmxXMcvpWohp",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "vTVOJJcrZuDZOVo_OwC4G",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "KPI03"
+								}
+							],
+							"id": "k1MBTA-29oN66SvWeySPY",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AFcXZvAdk5MbJqFGEdtyp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "900"
+								}
+							],
+							"id": "CrnNH5A8kSYte7mkgEb8g",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "500"
+								}
+							],
+							"id": "CEm7l0CUDApKyXAAUHPDc",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "Fj9zoreAA9LzUEbEFCFZP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DAaAgklCqjNMnkh_VShp1",
+							"type": "td"
+						}
+					],
+					"id": "cf3YWdoNIcyZu8DiVatER",
+					"type": "tr"
+				}
+			],
+			"id": "F7Xv5lUT18K8yLeu5RNHs",
+			"type": "table",
+			"hideFormulas": true,
+			"isCollapsed": false,
+			"version": 2,
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "BonusCalculation"
+								}
+							],
+							"id": "RhxlxX6hJLXdoZdqhXLGT",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " sumif("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "wLcfAJa7cUfog0Q4QMqfy",
+									"type": "smart-ref",
+									"blockId": "F7Xv5lUT18K8yLeu5RNHs",
+									"columnId": "YM3huoeR5IzqzZC6X9TM2",
+									"lastSeenVariableName": "CoreContributorKPIResults.Points"
+								},
+								{
+									"text": "   , "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kE9rWl8lZ1jcBhMJETgxI",
+									"type": "smart-ref",
+									"blockId": "F7Xv5lUT18K8yLeu5RNHs",
+									"columnId": "Wt8M54SGmyHoDsnlRpTS_",
+									"lastSeenVariableName": "CoreContributorKPIResults.CoreContributor"
+								},
+								{
+									"text": " == "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "P1Js8OVEBo4bVM-PXU8dQ",
+									"type": "smart-ref",
+									"blockId": "NfLtt_-7PLeZjcagDAjop",
+									"columnId": null,
+									"lastSeenVariableName": "CoreContributor"
+								},
+								{
+									"text": "  )"
+								}
+							],
+							"id": "z7by8JPssyf9yRWAScB1M",
+							"type": "table-column-formula",
+							"columnId": "AmUuCd0_Ugo15npa8nAE1"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "ContributorPoint",
+									"id": "uRWF-9j8gTmBPeUJpcV-s",
+									"type": "smart-ref",
+									"blockId": "AmUuCd0_Ugo15npa8nAE1",
+									"columnId": null
+								},
+								{
+									"text": "  + "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "mP3vObv7RxVZDPtQGOM4T",
+									"type": "smart-ref",
+									"blockId": "Kq8zOmTlZCbKFmwzCOMmE",
+									"lastSeenVariableName": "OrganizationKPIEarnedPoints"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "BHDiW8edQ9_1pFOKltxV_",
+							"type": "table-column-formula",
+							"columnId": "bI3DHEkJlKgcTCk250DmP"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"lastSeenVariableName": "TotalPoints",
+									"id": "O3RiOpMEaXJxOd7l_0JKL",
+									"type": "smart-ref",
+									"blockId": "bI3DHEkJlKgcTCk250DmP",
+									"columnId": null
+								},
+								{
+									"text": "/sum("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "DkJZSP78eO5Jg6rWDTuCE",
+									"type": "smart-ref",
+									"blockId": "y0IdSkz83bBTCy0S3VsD0",
+									"lastSeenVariableName": "BonusCalculation.TotalPoints",
+									"columnId": "bI3DHEkJlKgcTCk250DmP"
+								},
+								{
+									"text": " )* "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "0wH1IERrXWmLAzbK3S7BF",
+									"type": "smart-ref",
+									"blockId": "JmoboNg1BrZVG55X9rNi3",
+									"lastSeenVariableName": "BonusTotal"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "tR1VxMas7UL8VDqW9vu8o",
+							"type": "table-column-formula",
+							"columnId": "knb4YxIpSXNM_dzY4CNm0"
+						}
+					],
+					"id": "OiFXAjy3StniRnjSV7BsP",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "CoreContributor"
+								}
+							],
+							"id": "NfLtt_-7PLeZjcagDAjop",
+							"type": "th",
+							"cellType": {
+								"kind": "string"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "ContributorPoint"
+								}
+							],
+							"id": "AmUuCd0_Ugo15npa8nAE1",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "TotalPoints"
+								}
+							],
+							"id": "bI3DHEkJlKgcTCk250DmP",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						},
+						{
+							"children": [
+								{
+									"text": "BonusEarned"
+								}
+							],
+							"id": "knb4YxIpSXNM_dzY4CNm0",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "0zITOM_AuhO-ilEYcUZeH",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "First Talent"
+								}
+							],
+							"id": "gn6GRWfwa-BR4UgMWhuOz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yi6KxVNIZjPvh0330jRpT",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nDdens4U_rigRxe57EJNz",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "WVJsz0o9YSmLuoHGD2jar",
+							"type": "td"
+						}
+					],
+					"id": "JFSL9qjCKuSgjbGDU99-P",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Second Talent"
+								}
+							],
+							"id": "ZlGoVaYupzLkyM64BMVzQ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9LN5u_0FFvkQx-u4FSmiS",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "W68GMWPNXIhs7qA4lL7le",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rIvkew05g1BJfOT27isK-",
+							"type": "td"
+						}
+					],
+					"id": "k-KhyetiGzZcu4shq7kFj",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Third Talent"
+								}
+							],
+							"id": "SdZGMkgxdhIjfP3kTabEX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BI96MAITyR8q6Xqa0bvBr",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gYThQiH_apHhaXzBg8HSV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LOptHsS4KoEO5PlTsjCo_",
+							"type": "td"
+						}
+					],
+					"id": "3Ka3LvaEugO3sLRbUexp1",
+					"type": "tr"
+				}
+			],
+			"id": "y0IdSkz83bBTCy0S3VsD0",
+			"type": "table",
+			"hideFormulas": true,
+			"isCollapsed": true,
+			"color": "Rose",
+			"isHidden": true,
+			"version": 2
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Data view for BonusCalculation"
+								}
+							],
+							"id": "RGe6BJw7hUj4Lfu8N3-Eu",
+							"type": "data-view-name"
+						}
+					],
+					"id": "81F72EgYEriy36s19af3k",
+					"type": "data-view-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5HytvdjgUvFsZQ_qqb4xW",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "string"
+							},
+							"name": "NfLtt_-7PLeZjcagDAjop"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "shum1Pvz_8KwCFcpBWc1G",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"name": "AmUuCd0_Ugo15npa8nAE1"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ArW83met_ObbonIgvq1CA",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"name": "bI3DHEkJlKgcTCk250DmP"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "EMW9sswk-kt7mcDQ5b0TK",
+							"type": "data-view-th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "$",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									}
+								]
+							},
+							"name": "knb4YxIpSXNM_dzY4CNm0"
+						}
+					],
+					"id": "GMVxM6nkoPA9m5QQziQIx",
+					"type": "data-view-tr"
+				}
+			],
+			"id": "8r1eNrvgOLnlbh-UnofXv",
+			"type": "data-view",
+			"expandedGroups": [],
+			"varName": "y0IdSkz83bBTCy0S3VsD0",
+			"color": "Rose"
+		},
+		{
+			"children": [
+				{
+					"text": "So, we distributed "
+				},
+				{
+					"text": "exprRef_JmoboNg1BrZVG55X9rNi3",
+					"magicnumberz": true
+				},
+				{
+					"text": " to the core contributors based on Organization KPI and Core Contributor KPI results."
+				}
+			],
+			"type": "p",
+			"id": "B5rAH9mP_BIIwtm1vuPV8"
+		},
+		{
+			"children": [
+				{
+					"text": "Please share your questions and feedback with me: tolga at tolgadizmen.com"
+				}
+			],
+			"type": "callout",
+			"id": "R_oS0hzcaEVel3H-DHoaY",
+			"color": "Grapefruit",
+			"icon": "Heart"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "ICLCy62DkeQ3pYHEggxyI"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "8JrgcmE2nIsdt0WgnAMka"
+		}
+	]
+}

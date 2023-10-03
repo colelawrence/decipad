@@ -1,0 +1,3028 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Micro-brewery financial model"
+				}
+			],
+			"type": "h1",
+			"id": "gBs-nnwBZtVLdfqNEbdSI"
+		},
+		{
+			"children": [
+				{
+					"text": "My father is now retired, but before that he was production manager at a big regional brewery. I think he should have a hobby, and he loves beer. Should he create a micro-brewery to keep him entertained and active? Let's create a financial model for such a micro-brewery "
+				},
+				{
+					"text": "for the first ",
+					"bold": true,
+					"underline": true
+				},
+				{
+					"text": "last(ProductionOverTime.Year) - first(ProductionOverTime.Year) + 1",
+					"bold": true,
+					"underline": true,
+					"magicnumberz": true
+				},
+				{
+					"text": " .",
+					"bold": true,
+					"underline": true
+				}
+			],
+			"type": "p",
+			"id": "f4WEuTTAAZZoO-nc0SeVO"
+		},
+		{
+			"children": [
+				{
+					"text": "9343055666_3b2d264fda_b.jpg"
+				}
+			],
+			"id": "TeVJyXvSb_w8hj_gs4ofh",
+			"type": "img",
+			"url": "https://app.decipad.com/api/pads/ReqYMmQ2eUpLr_knpN51n/attachments/8sq2gM8sACwSqi6rYp05c"
+		},
+		{
+			"children": [
+				{
+					"text": "This model was based on "
+				},
+				{
+					"children": [
+						{
+							"text": "https://sharpsheets.io/blog/financial-model-brewery-template/"
+						}
+					],
+					"type": "a",
+					"url": "https://sharpsheets.io/blog/financial-model-brewery-template/",
+					"id": "dW2ISQ7sGMzo0iAzmqVev"
+				},
+				{
+					"text": " (with some adjustments)."
+				}
+			],
+			"type": "p",
+			"id": "LvD-04WyqHRRG0kpE_qjz"
+		},
+		{
+			"children": [
+				{
+					"text": "Production"
+				}
+			],
+			"type": "h2",
+			"id": "b7RMVCh35dKG7fAr5ZkbS"
+		},
+		{
+			"children": [
+				{
+					"text": "The first we should do is forecast the production of this brewery. Typically the production should start at a given level and then increase constantly throughout time."
+				}
+			],
+			"type": "p",
+			"id": "Edlydzz1ay9MRaAbdd0Zp"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ProductionFirstYear"
+								}
+							],
+							"id": "wo41Xt_eudWmQJxJ714Tj",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "3000 barrels per year"
+								}
+							],
+							"id": "LvUQtRBErYpyXFLzVWayV",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "TuXtTQSg_23TStOJsE4AP",
+							"type": "slider",
+							"max": "10000",
+							"min": "0",
+							"step": "1000",
+							"value": "3000"
+						}
+					],
+					"id": "FE8y05IZ785I2ynuv26Kn",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ProductionYoYIncrease"
+								}
+							],
+							"id": "GkhpXWpMEIplSV2OBqe0r",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "j9c1YOiRYfdvymor5kHOH",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "xGTrR1QSoGX9ShqUq4WQP",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "20"
+						}
+					],
+					"id": "rYlZbiyO7EpmQQSHPqdx4",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "2SoS6E6zuX7ZaVs8a9v6v",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ProductionOverTime"
+								}
+							],
+							"id": "Bj5pNLngZspvwXDq5S-dX",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " if first then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "v_V9zcMhHGxgU9YqmQiIy",
+									"type": "smart-ref",
+									"blockId": "FE8y05IZ785I2ynuv26Kn",
+									"columnId": null,
+									"lastSeenVariableName": "ProductionFirstYear"
+								},
+								{
+									"text": " else previous("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "c8tOY6JyjAmmhWYY7SnSQ",
+									"type": "smart-ref",
+									"blockId": "FE8y05IZ785I2ynuv26Kn",
+									"columnId": null,
+									"lastSeenVariableName": "ProductionFirstYear"
+								},
+								{
+									"text": ") * (1 +"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "D_RDsf74VS83HHOgXvi7Q",
+									"type": "smart-ref",
+									"blockId": "rYlZbiyO7EpmQQSHPqdx4",
+									"columnId": null,
+									"lastSeenVariableName": "ProductionYoYIncrease"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "UtbqgURlIRain5bpQlwrC",
+							"type": "table-column-formula",
+							"columnId": "l5SabLExhYqezTvlPc2_A"
+						}
+					],
+					"id": "jBoboAVJBdkmofL6ayKCO",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year"
+								}
+							],
+							"id": "VJ7lZZ0RsongDWj83rsPc",
+							"type": "th",
+							"cellType": {
+								"kind": "series",
+								"seriesType": "date"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "ProductionBarrels"
+								}
+							],
+							"id": "l5SabLExhYqezTvlPc2_A",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "WK6rKcHLREYGXvsB_eWnC",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2024"
+								}
+							],
+							"id": "0PAwhshJgMVV3Ov2U3sKe",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Hpz2_WkgGnRftd9q75FGx",
+							"type": "td"
+						}
+					],
+					"id": "l0_XK0JwmfXQalHfoIF7h",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2025"
+								}
+							],
+							"id": "fFxXau_aWGJwhECFK_bo3",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qmBbpjQ1xz7EnfArlc6IU",
+							"type": "td"
+						}
+					],
+					"id": "SAtXDIwTCId4qXK-pNcqw",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2026"
+								}
+							],
+							"id": "PRhs8fj1YhCG1t6TElBQZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kEoAoduOD1yrShmdY6hJ4",
+							"type": "td"
+						}
+					],
+					"id": "TVRzn-LES4lDeaykQPuk3",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2027"
+								}
+							],
+							"id": "ne93Da0g4e0kDvLG0Zw5A",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nDtoQOMRe9Q6MoJZzdrEL",
+							"type": "td"
+						}
+					],
+					"id": "hu8KkVHksmDV4aMKzSSAm",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "2028"
+								}
+							],
+							"id": "fCo-GWoBFoV-J9sSstF6_",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "q0CHROMkjPKpwvCM1E2uI",
+							"type": "td"
+						}
+					],
+					"id": "9X_er2HWw0kH6n1CKti1B",
+					"type": "tr"
+				}
+			],
+			"id": "jwQnH4dTCt_X6w5wQA9lr",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"icon": "Clock"
+		},
+		{
+			"children": [
+				{
+					"text": "So, we start off with "
+				},
+				{
+					"text": "ProductionFirstYear",
+					"magicnumberz": true
+				},
+				{
+					"text": " and then, after "
+				},
+				{
+					"text": "last(ProductionOverTime.Year) - first(ProductionOverTime.Year)",
+					"magicnumberz": true
+				},
+				{
+					"text": " , we end up with "
+				},
+				{
+					"text": "last(ProductionOverTime.ProductionBarrels)",
+					"magicnumberz": true
+				},
+				{
+					"text": " . "
+				}
+			],
+			"type": "p",
+			"id": "Qx2KgEIQnskwI-T3t1B-i"
+		},
+		{
+			"children": [
+				{
+					"text": "Revenue"
+				}
+			],
+			"type": "h2",
+			"id": "07IYmCiRal4NTK7TDx4zK"
+		},
+		{
+			"children": [
+				{
+					"text": "Now that we have some numbers for the forecasted production, we should figure out how much money we're going to make on sales."
+				}
+			],
+			"type": "p",
+			"id": "ndbSvCk8gS-tbtmpo35ZI"
+		},
+		{
+			"children": [
+				{
+					"text": "A brewery typically sells in 3 forms:"
+				}
+			],
+			"type": "p",
+			"id": "AmvQRDLJCK2Xs_ORKcXxQ"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "barrels (wholesale)"
+								}
+							],
+							"type": "lic",
+							"id": "E6-4zov4UEFQNezNuFwy7"
+						}
+					],
+					"type": "li",
+					"id": "fMW-3M35q1Ftxk91NfivD"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "kegs (for restaurants and bars)"
+								}
+							],
+							"type": "lic",
+							"id": "LghsPLmnB-I2XZ_ZDsVmz"
+						}
+					],
+					"type": "li",
+					"id": "vPseHISAqDGApjbSsPLD9"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "packs of canned or bottled beer"
+								}
+							],
+							"type": "lic",
+							"id": "T4V5ENc8AHqviC8CWdjMS"
+						}
+					],
+					"type": "li",
+					"id": "Lj1PagxlL6kmEtErL6A9h"
+				}
+			],
+			"type": "ul",
+			"id": "nKDygfwSI3tgG-IbcMIjb"
+		},
+		{
+			"children": [
+				{
+					"text": "For that we'll create a category called "
+				},
+				{
+					"text": "OutputForm",
+					"code": true
+				},
+				{
+					"text": ", which we'll use later:"
+				}
+			],
+			"type": "p",
+			"id": "VDhtI2r1Dx4JOLBMAgpwt"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OutputForm"
+								}
+							],
+							"id": "sHj2ZRtlqxsR15BBJ7E9E",
+							"type": "table-var-name"
+						}
+					],
+					"id": "wqq-8ap3t3-CVtxiPgmnd",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Name"
+								}
+							],
+							"id": "JmHRSoKd4INdbsCD-Os0f",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						}
+					],
+					"id": "6jF9umaQgCp_8VKks7pg-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "barrel"
+								}
+							],
+							"id": "ZRuT4pKM6tunZbc3BuiOX",
+							"type": "td"
+						}
+					],
+					"id": "Ky9UPpfDOV0Oq1dOfy4W0",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "keg"
+								}
+							],
+							"id": "tgjUGxZNAzO17-4zVv9Ow",
+							"type": "td"
+						}
+					],
+					"id": "g1cfMHll8nIzKNkbDO8p7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "pack"
+								}
+							],
+							"id": "63t5IEjh7YQ8S3O-KMWdO",
+							"type": "td"
+						}
+					],
+					"id": "hsZYRemwxBZ9KCS-IzmJh",
+					"type": "tr"
+				}
+			],
+			"id": "MCFC5rX-l9mC0-PmWNtuj",
+			"type": "table",
+			"version": 2,
+			"color": "Sulu",
+			"icon": "Wallet"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, let's break down the ratio of outputs we expect to produce:"
+				}
+			],
+			"type": "p",
+			"id": "qyrgtTg4vLixGiyQrGX2X"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OutputFormRatio"
+								}
+							],
+							"id": "ohmq4HJHwndqr56T1dx_7",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "u3PBfN9n2dhtKqIKjntFw",
+									"type": "smart-ref",
+									"blockId": "MCFC5rX-l9mC0-PmWNtuj",
+									"columnId": "JmHRSoKd4INdbsCD-Os0f",
+									"lastSeenVariableName": "OutputForm.Name"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "bE9cPuQ2LJBK3SBZYzxCH",
+							"type": "table-column-formula",
+							"columnId": "gULczxO7Xb_QwidIqa2bs"
+						}
+					],
+					"id": "RqCEFAWFrA9rMRY7VpPRZ",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OutputForm"
+								}
+							],
+							"id": "gULczxO7Xb_QwidIqa2bs",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Ratio"
+								}
+							],
+							"id": "IGXe2-RPntlr3ZopOORe7",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": null
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "tsW5DQoiBcUrs3-Or2kT_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VMGuAHyalFAcaP9lJzZ5W",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "50%"
+								}
+							],
+							"id": "kT0lIeDOAwl8AhUmvNnEa",
+							"type": "td"
+						}
+					],
+					"id": "C0LJcWFJrBbiHZRu5cVqt",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hhlymHYnc4j1rg0MGCNlP",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "25%"
+								}
+							],
+							"id": "dnx_Wk0RSlwJCJlKfajxL",
+							"type": "td"
+						}
+					],
+					"id": "w569BgaiNL0Q4ofdyC_t0",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BX9lhIAUrEvf7d9bnV2Sb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "25%"
+								}
+							],
+							"id": "ZgXiG-c60eOK3_m0nNMEA",
+							"type": "td"
+						}
+					],
+					"id": "vX9x0VWuXkdcjMMZjLsME",
+					"type": "tr"
+				}
+			],
+			"id": "EA4SjTAZkCU4kTcX8jARu",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"color": "Sulu",
+			"icon": "Sparkles"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, let's see how much this yields per output form:"
+				}
+			],
+			"id": "ynQ1lNm70er1CiVTErmYH",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SalesByForm"
+						}
+					],
+					"type": "structured_varname",
+					"id": "BvTJevx5A-9WxbJ98uKfY"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "yhNk-yKdhMTRfBSmkKTfZ",
+							"type": "smart-ref",
+							"blockId": "EA4SjTAZkCU4kTcX8jARu",
+							"columnId": "IGXe2-RPntlr3ZopOORe7",
+							"lastSeenVariableName": "OutputFormRatio.Ratio"
+						},
+						{
+							"text": "  * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "icA1ysSZx_sZLaMLDoNcp",
+							"type": "smart-ref",
+							"blockId": "jwQnH4dTCt_X6w5wQA9lr",
+							"columnId": "l5SabLExhYqezTvlPc2_A",
+							"lastSeenVariableName": "ProductionOverTime.ProductionBarrels"
+						},
+						{
+							"text": " in gallons per year"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QQwtx6-MC0Yj0dnvQdz9q"
+				}
+			],
+			"id": "xr3ul6Q7DX_nRtPIsCZdY",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Now, let's define the prices for which we will sell each form:"
+				}
+			],
+			"type": "p",
+			"id": "fuLXKUUH6BfknoJN7YzwN"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "SellPrice"
+								}
+							],
+							"id": "_rGeK5eiZK96WvJi_cPEo",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "yF0VBZNGwP2b2BLPxJGDn",
+									"type": "smart-ref",
+									"blockId": "MCFC5rX-l9mC0-PmWNtuj",
+									"columnId": "JmHRSoKd4INdbsCD-Os0f",
+									"lastSeenVariableName": "OutputForm.Name"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "ye1P8lGI146-n2OgRq97G",
+							"type": "table-column-formula",
+							"columnId": "DwvRz1cpB06aOXRsTBuL7"
+						}
+					],
+					"id": "AGGQtWZcg57fQZzxs_XyD",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OutputForm"
+								}
+							],
+							"id": "DwvRz1cpB06aOXRsTBuL7",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "SellPrice"
+								}
+							],
+							"id": "_IfQ-EV_bomnEZgshNX94",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "USD",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									},
+									{
+										"unit": "gallons",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "volume",
+										"baseSuperQuantity": "volume"
+									}
+								]
+							}
+						}
+					],
+					"id": "hxUGY-4lKb8WMPwklKmXo",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6DCOpfPuvVwUh_oyG-ofb",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "100"
+								}
+							],
+							"id": "DJQjI91unuwsfg3GSclz3",
+							"type": "td"
+						}
+					],
+					"id": "xzgWZH3ErkOR8cg1LpsQw",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qaVXG7fQNI-4mzQd3TILV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "150"
+								}
+							],
+							"id": "AF55zjkUJ39AwhyGDed_D",
+							"type": "td"
+						}
+					],
+					"id": "Ckfp62Zk0LVrNwvmmGYu_",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RhFQkw-iLjNR-Ui3SvC4b",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "250"
+								}
+							],
+							"id": "g7qDeLdexKg76xFMWXs0t",
+							"type": "td"
+						}
+					],
+					"id": "L8yVT5RL3fs_R4GXC7d4M",
+					"type": "tr"
+				}
+			],
+			"id": "ckfWEIP_X1Pp-UV2llAEa",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false
+		},
+		{
+			"children": [
+				{
+					"text": "Now we can calculate how much we'll sell throughout time:"
+				}
+			],
+			"type": "p",
+			"id": "z0ALx685I1yixV5RB-Wx8"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Revenue"
+						}
+					],
+					"type": "structured_varname",
+					"id": "rwIIgmtWXjj_TadUwxH6F"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-RaAuJbPwvWXggdS9JhBR",
+							"type": "smart-ref",
+							"blockId": "xr3ul6Q7DX_nRtPIsCZdY",
+							"columnId": null,
+							"lastSeenVariableName": "SalesByForm"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_j0TTbfxjOQj0tFQ7jJLG",
+							"type": "smart-ref",
+							"blockId": "ckfWEIP_X1Pp-UV2llAEa",
+							"columnId": "_IfQ-EV_bomnEZgshNX94",
+							"lastSeenVariableName": "SellPrice.SellPrice"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "sW02IGva96drdGrrZGsx-"
+				}
+			],
+			"id": "PrWmqCEftverG59WujHSM",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Cost of Goods Sold"
+				}
+			],
+			"type": "h2",
+			"id": "lRq0LBsWiIr25ybvbG9hC"
+		},
+		{
+			"children": [
+				{
+					"text": "The next step is to know the cost for producing out product."
+				}
+			],
+			"type": "p",
+			"id": "P8xZ84lszvXvPWW1LyKaq"
+		},
+		{
+			"children": [
+				{
+					"text": "First we need to define the raw materials, their quantity and cost:"
+				}
+			],
+			"type": "p",
+			"id": "7uYmnBS7Bds4CmPJmpVO1"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "RawMaterials"
+								}
+							],
+							"id": "sxWRBBveyr8INuXy5RRwG",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "tEFlQU4T61k2Xh4DotpFg",
+									"type": "smart-ref",
+									"blockId": "zzawE5dRlYlO0AmoBkj2p",
+									"columnId": null,
+									"lastSeenVariableName": "Quantity"
+								},
+								{
+									"text": " * "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "OMR-9we-m1Lf6Q55KBx7E",
+									"type": "smart-ref",
+									"blockId": "CZ-bfEf023If2YB6uOOSo",
+									"columnId": null,
+									"lastSeenVariableName": "Price"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "9lEPiRFQvaEkwMWJhbKDV",
+							"type": "table-column-formula",
+							"columnId": "Zc0tKHsUbQRsM5lt7JQig"
+						}
+					],
+					"id": "oKut7dP8-G19QiLLyo2Iy",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Material"
+								}
+							],
+							"id": "K1keMXkvQQTdr-aeHuR6Q",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Price"
+								}
+							],
+							"id": "CZ-bfEf023If2YB6uOOSo",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "USD",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									},
+									{
+										"unit": "pounds",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "mass",
+										"baseSuperQuantity": "mass"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Quantity"
+								}
+							],
+							"id": "zzawE5dRlYlO0AmoBkj2p",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "gallons",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "volume",
+										"baseSuperQuantity": "volume",
+										"quality": "beer"
+									},
+									{
+										"unit": "pounds",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "mass",
+										"baseSuperQuantity": "mass"
+									}
+								]
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "Zc0tKHsUbQRsM5lt7JQig",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							},
+							"aggregation": "Sum"
+						}
+					],
+					"id": "5fu2LOBp0l1njjq7A7TW-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Hops"
+								}
+							],
+							"id": "SWHt_YKkN9oM6UmItdKCM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "llfFgepTXU0NY5liSGwZk",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.65"
+								}
+							],
+							"id": "feeAZjPAgKeaWPHGSb16O",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7maCJUV4PlCk5hDfAvOHi",
+							"type": "td"
+						}
+					],
+					"id": "NV1XDCsXDKdRBkZRvgrZ-",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Malt"
+								}
+							],
+							"id": "ukv16wRpUA8VntnMmvS4K",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.75"
+								}
+							],
+							"id": "SgzcDLjlJu8gqGMuv-p0n",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "2fYgmu9sEEHJG6ILwNb5D",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UJ5LgCiQy5ZqWtYkhuXW4",
+							"type": "td"
+						}
+					],
+					"id": "qXFTo1EUqb7rvZM_nJuJH",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Water"
+								}
+							],
+							"id": "A6CrT0rLL1WeM9jTQj_7h",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "0.1"
+								}
+							],
+							"id": "1M4zt4mu8pRLmxpnTZ5Fn",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "186"
+								}
+							],
+							"id": "OIrZ7atPnfv-VVlBm6f6o",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "n1xQGhMHlAUUufAzzkdzW",
+							"type": "td"
+						}
+					],
+					"id": "UHMk--tYi4mTXv9M-WAjL",
+					"type": "tr"
+				}
+			],
+			"id": "8c9bdxWsZRL7is0lnqz7G",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"color": "Perfume",
+			"icon": "Leaf"
+		},
+		{
+			"children": [
+				{
+					"text": "We now know that the raw materials will cost "
+				},
+				{
+					"text": "sum(RawMaterials.Cost)",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"type": "p",
+			"id": "JXaG_4hiPrbtUlYWLE3Iv"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RawMaterialsCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "zR_3F7sc2EGBa8enbstro"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CkpP5D-UKpPPdxmMaqw8u",
+							"type": "smart-ref",
+							"blockId": "8c9bdxWsZRL7is0lnqz7G",
+							"columnId": "Zc0tKHsUbQRsM5lt7JQig",
+							"lastSeenVariableName": "RawMaterials.Cost"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "UMIWlxsVoC_AEo_hVZDtj"
+				}
+			],
+			"id": "w4jdAtewUcDQa1ULgbWF5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "We should now calculate the cost of packaging. But first we need to know, for each form, how many gallons of beer does one unit hold."
+				}
+			],
+			"type": "p",
+			"id": "N8dE2bACocQ2xg_Evpru_"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "OutputFormCapacity"
+								}
+							],
+							"id": "poG4HpdVSLX35nGjNQOS7",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "MMkF_9jZP0Pwistp5ps0U",
+									"type": "smart-ref",
+									"blockId": "MCFC5rX-l9mC0-PmWNtuj",
+									"columnId": "JmHRSoKd4INdbsCD-Os0f",
+									"lastSeenVariableName": "OutputForm.Name"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "p9OHpFRL-zb8kx3rfkaK0",
+							"type": "table-column-formula",
+							"columnId": "DVPqutCbV5ci8SzimmzRP"
+						}
+					],
+					"id": "hgBeNyzK5j4FpV-YYk4QZ",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Form"
+								}
+							],
+							"id": "DVPqutCbV5ci8SzimmzRP",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Capacity"
+								}
+							],
+							"id": "oj1c-fbznX3i6Ci4Xe1nO",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "gallons",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "volume",
+										"baseSuperQuantity": "volume"
+									},
+									{
+										"unit": "units",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": false
+									}
+								]
+							}
+						}
+					],
+					"id": "56gHNmJqhXiGU5rlMy45K",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "R7xhhL8YBFXDJiw9J14ru",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "31"
+								}
+							],
+							"id": "bqnPUKGU7R-61NSxivl-0",
+							"type": "td"
+						}
+					],
+					"id": "gkPjOMkfvJVC8xKvZB_nP",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "VeJRZy3-WcP7BHsqbuDdf",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "wDxg3OW13ppcJomRsmafS",
+							"type": "td"
+						}
+					],
+					"id": "XvSWLy27O8W5HXZDRUHbO",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "BwkwmeZEWN0hS13Q4IyId",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "2"
+								}
+							],
+							"id": "gTPT_038JXu8dleWJD10Z",
+							"type": "td"
+						}
+					],
+					"id": "ocSUSRQV2i-LQxJ4YfAW4",
+					"type": "tr"
+				}
+			],
+			"id": "61BEBQCx2Mh1YoTJq8lPD",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"color": "Perfume",
+			"icon": "Leaf"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we need to figure out the cost of packaging per unit"
+				}
+			],
+			"id": "GA4bcLIfZ8nRLcMQSKpqO",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Packaging"
+								}
+							],
+							"id": "K8Zj4zu1YHOqWbxQh8NkU",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "P2kP9JOXVLAcQhR61kC3_",
+									"type": "smart-ref",
+									"blockId": "MCFC5rX-l9mC0-PmWNtuj",
+									"columnId": "JmHRSoKd4INdbsCD-Os0f",
+									"lastSeenVariableName": "OutputForm.Name"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "76kGLG-ffM6vHyfqeSohd",
+							"type": "table-column-formula",
+							"columnId": "6FjPvfqGza9tutPNdgF1v"
+						}
+					],
+					"id": "H5bawHdORfXjGAdnjz8jf",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Form"
+								}
+							],
+							"id": "6FjPvfqGza9tutPNdgF1v",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Cost"
+								}
+							],
+							"id": "uM0ZU-04sUgnH7kAa0S2o",
+							"type": "th",
+							"cellType": {
+								"kind": "number",
+								"unit": [
+									{
+										"unit": "USD",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": true,
+										"baseQuantity": "USD",
+										"baseSuperQuantity": "currency"
+									},
+									{
+										"unit": "units",
+										"exp": {
+											"n": "1",
+											"d": "1",
+											"s": "-1",
+											"infinite": false
+										},
+										"multiplier": {
+											"n": "1",
+											"d": "1",
+											"s": "1",
+											"infinite": false
+										},
+										"known": false
+									}
+								]
+							}
+						}
+					],
+					"id": "bV14THi_aZDodH7vRpV4z",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "IUwJogqEywg28M_cVpRE5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "10"
+								}
+							],
+							"id": "Mo89qLBNbxCmok0hyk_Zm",
+							"type": "td"
+						}
+					],
+					"id": "dy0R3sKFvaFqj94z0yhD7",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "pUNrlVM0MoyesEKITh7JX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "K1tsXqEgq0-_o5BUnQQ8E",
+							"type": "td"
+						}
+					],
+					"id": "OdpYUqiLoC4LSDATLgowk",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1q2bee8bCp6WkiDglWtEG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": "15"
+								}
+							],
+							"id": "LjrOp4jD_L8r-MskIwS_8",
+							"type": "td"
+						}
+					],
+					"id": "j_2nQB8y6WkRP2XS9VXyB",
+					"type": "tr"
+				}
+			],
+			"id": "j3E0qaBcdJy4UKSrmOYaa",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": false,
+			"color": "Perfume",
+			"icon": "ShoppingCart"
+		},
+		{
+			"children": [
+				{
+					"text": "We can now calculate the cost per gallon by form:"
+				}
+			],
+			"type": "p",
+			"id": "FZkQSuoCNAdJUYQ3tL9WO"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PackagingCostByForm"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0Zcgyd8SLCBiXlo2icv_G"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vwfAznsQZCWk6xaSa2AcP",
+							"type": "smart-ref",
+							"blockId": "j3E0qaBcdJy4UKSrmOYaa",
+							"columnId": "uM0ZU-04sUgnH7kAa0S2o",
+							"lastSeenVariableName": "Packaging.Cost"
+						},
+						{
+							"text": " / "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Vn2BMT3DZ_X67gfEbeFul",
+							"type": "smart-ref",
+							"blockId": "61BEBQCx2Mh1YoTJq8lPD",
+							"columnId": "oj1c-fbznX3i6Ci4Xe1nO",
+							"lastSeenVariableName": "OutputFormCapacity.Capacity"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "EMP9ATpk4iIe3Q3Yb9rVR"
+				}
+			],
+			"id": "bSN3bNdeOjeqtbRn6UsiY",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Now, per type of product form, we know the COGS:"
+				}
+			],
+			"type": "p",
+			"id": "_aKLNmUiW-rytKboD9RGL"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "COGS"
+						}
+					],
+					"type": "structured_varname",
+					"id": "h5lIVSh83KwieIbSWZnAp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qNjPQ4EMemDOojtrQe8ri",
+							"type": "smart-ref",
+							"blockId": "bSN3bNdeOjeqtbRn6UsiY",
+							"columnId": null,
+							"lastSeenVariableName": "PackagingCostByForm"
+						},
+						{
+							"text": "  + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dOl2jg5ZUf57_SQmj5OOX",
+							"type": "smart-ref",
+							"blockId": "w4jdAtewUcDQa1ULgbWF5",
+							"columnId": null,
+							"lastSeenVariableName": "RawMaterialsCost"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "f98N4wE0rJfEMtplLlYCn"
+				}
+			],
+			"id": "C3kIOIh0eujqWEAxwZhBg",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Rent"
+				}
+			],
+			"type": "h2",
+			"id": "yn6MSKkA-9rEBsYfAPXXR"
+		},
+		{
+			"children": [
+				{
+					"text": "We need some space to have our micro-brewery. Let's find out the costs."
+				}
+			],
+			"type": "p",
+			"id": "4XBmpXqDsD_Z1mt5a8Usm"
+		},
+		{
+			"children": [
+				{
+					"text": "First we need to define thee size of the industrial warehouse and factory plant. "
+				}
+			],
+			"type": "p",
+			"id": "M1zW2plaCL5WQUiU6Wngg"
+		},
+		{
+			"children": [
+				{
+					"text": "Here we chose to colocate the warehouse and factory plant, otherwise we'd need to factor in the costs of transportation.",
+					"highlight": true
+				}
+			],
+			"type": "blockquote",
+			"id": "X6PrHULmvVdUYkID-NX1j"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "IndustrialPlantAndWarehouseSize"
+						}
+					],
+					"id": "KwG3iEKQ9Wk67O-ATW82o",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "700 sqft"
+						}
+					],
+					"id": "Td5DjnX-JKdv_b3LGvSHw",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "l40kwN3RcqWZLaL8vOujD",
+					"type": "slider",
+					"max": "2000",
+					"min": "0",
+					"step": "1",
+					"value": "700"
+				}
+			],
+			"id": "iFtjViRc91BMGbLThZa9V",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we need to know how much this facility will cost us per month"
+				}
+			],
+			"id": "aMmZQfbeGRe5dMyWFqX1p",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "IndustrialPlanAndWarehouseRent"
+						}
+					],
+					"id": "pMYndjwOkgBJ2860lf57s",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "0.85 $ per month per sqft"
+						}
+					],
+					"id": "gPl-aBEFw_vzUtNTXYYN4",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "7mH2JaDr_2NvgJA2CkFgn",
+					"type": "slider",
+					"max": "10",
+					"min": "0",
+					"step": "1",
+					"value": "0.85"
+				}
+			],
+			"id": "Qo2i_BXfaKnKd-ocDkIvE",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we can calculate the rent:"
+				}
+			],
+			"type": "p",
+			"id": "YHBTDzLZ08iOe0oQGbhml"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Rent"
+						}
+					],
+					"type": "structured_varname",
+					"id": "3J4R-8EdfHXmiSOCGd-_h"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "7Gh7e8Ep38InHByvY6n3P",
+							"type": "smart-ref",
+							"blockId": "Qo2i_BXfaKnKd-ocDkIvE",
+							"columnId": null,
+							"lastSeenVariableName": "IndustrialPlanAndWarehouseRent"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "foItw8F2Gb9skm2MWDiiH",
+							"type": "smart-ref",
+							"blockId": "iFtjViRc91BMGbLThZa9V",
+							"columnId": null,
+							"lastSeenVariableName": "IndustrialPlantAndWarehouseSize"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "jvCO9DRXP1JWGahk9NXez"
+				}
+			],
+			"id": "xoP-naGwDDvIxQkuirS1f",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Staff salaries"
+				}
+			],
+			"type": "h2",
+			"id": "gL1x267Br_5Qw_MPfAE1F"
+		},
+		{
+			"children": [
+				{
+					"text": "We'll need people to operate the brewery. Let's first define the salary for each worker:"
+				}
+			],
+			"type": "p",
+			"id": "Eur--ISCxDnw-wyBGecT8"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BrewerSalary"
+						}
+					],
+					"id": "yER1g2Ah0dtnjAJL-TSv7",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "35 thousand USD per year per brewer"
+						}
+					],
+					"id": "K_D-vf08MKwT8J0Xywq5U",
+					"type": "exp"
+				}
+			],
+			"id": "wqaqdhd9py4INc2SOLVzA",
+			"type": "def",
+			"variant": "expression",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			}
+		},
+		{
+			"children": [
+				{
+					"text": "Now that we know that each brewer will receive an salary of "
+				},
+				{
+					"text": "BrewerSalary for 1 brewer",
+					"magicnumberz": true
+				},
+				{
+					"text": ", let's figure out the number of employees we'll need:"
+				}
+			],
+			"type": "p",
+			"id": "w28qUf0TUI2OoAhWv4Mr7"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "we'll need a manager"
+								}
+							],
+							"type": "lic",
+							"id": "0MD99E2IBgfs6UfhtKmsD"
+						}
+					],
+					"type": "li",
+					"id": "27SEZRYmJV15ENrjQK9yO"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "we'll need between 0.75 and 1.76 brewers for every 1000 barrels produced each year"
+								}
+							],
+							"type": "lic",
+							"id": "wOP9SdIuP92HvgGMF0KN9"
+						}
+					],
+					"type": "li",
+					"id": "EuIMPLMTS7DUWzotKBnNR"
+				}
+			],
+			"type": "ul",
+			"id": "lP1vixB5zbVNu_VFhVmgo"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's calculate the number of brewers we'll need based on the forecasted beer production:"
+				}
+			],
+			"type": "p",
+			"id": "3aLsgS3NfC4nyTbQaee_b"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BrewersRatio"
+						}
+					],
+					"id": "f3-9JcYhGbFNLc4AVxyAP",
+					"type": "caption"
+				},
+				{
+					"children": [
+						{
+							"text": "1.25 brewers per (thousand barrels) per year"
+						}
+					],
+					"id": "p8DGsGwRqD0n-Qy2UfO_-",
+					"type": "exp"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "3N_7UeXzW0LviQipGD2Q1",
+					"type": "slider",
+					"max": "2",
+					"min": "1",
+					"step": "0.01",
+					"value": "1.25"
+				}
+			],
+			"id": "1X7mwJAfCBMM6VDvkReoN",
+			"type": "def",
+			"variant": "slider"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BrewerCount"
+						}
+					],
+					"type": "structured_varname",
+					"id": "PlBjhRh2t_ES2C33AdpJU"
+				},
+				{
+					"children": [
+						{
+							"text": "ceil("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kFQiHjJ3-Q5ZZsdgrHDsH",
+							"type": "smart-ref",
+							"blockId": "jwQnH4dTCt_X6w5wQA9lr",
+							"columnId": "l5SabLExhYqezTvlPc2_A",
+							"lastSeenVariableName": "ProductionOverTime.ProductionBarrels"
+						},
+						{
+							"text": " for 1 year * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "09nmbP5sHf3ttkNFpdPe0",
+							"type": "smart-ref",
+							"blockId": "1X7mwJAfCBMM6VDvkReoN",
+							"columnId": null,
+							"lastSeenVariableName": "BrewersRatio"
+						},
+						{
+							"text": " for 1 year)"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Zm6rO6m8O_eZbHmWZJbH0"
+				}
+			],
+			"id": "9k5fEblyAlxSK6YuwqJeC",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Here is how much we'll spend on brewer staff:"
+				}
+			],
+			"type": "p",
+			"id": "J1xBvEpSn4mXJu0oyKUAX"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "BrewerStaffCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "zdOfveVpLULCByZfpwKtc"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "upyeXcvPZG8gNFx6XQNJd",
+							"type": "smart-ref",
+							"blockId": "9k5fEblyAlxSK6YuwqJeC",
+							"columnId": null,
+							"lastSeenVariableName": "BrewerCount"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MNC_XQuLHqhqx-cqiPaWT",
+							"type": "smart-ref",
+							"blockId": "wqaqdhd9py4INc2SOLVzA",
+							"columnId": null,
+							"lastSeenVariableName": "BrewerSalary"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "o7z-WK_iyoKOp0MzzXvzb"
+				}
+			],
+			"id": "dXZRS2gQ8kiyatTK0kBda",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"text": "Now, for the manager salary:"
+				}
+			],
+			"type": "p",
+			"id": "uGe_6PSZB616A47deOgHx"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ManagerSalary"
+								}
+							],
+							"id": "RfFQmxKQS6MIMXU30ebLd",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "45 thousand USD per manager per year"
+								}
+							],
+							"id": "QjYZ6-P3baARH__j0GAcz",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "NHvl6JZXGgQT6n13VRy8o",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "45"
+						}
+					],
+					"id": "zdvXapUlVfU0cHIGtf9TK",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "ManagerCount"
+								}
+							],
+							"id": "58XSb0XX8OAxlOr_k98lI",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "1 manager"
+								}
+							],
+							"id": "ndyOvO-M4d6p6J4Hou9Yk",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1xWdLPgbY4wqozHOSmfzR",
+							"type": "slider",
+							"max": "5",
+							"min": "0",
+							"step": "1",
+							"value": "1"
+						}
+					],
+					"id": "GIGg4-UIycL0MKHyK9K0C",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "N9RKYie6PeZAZTFf5KJgl",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "ManagerCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "pBaaPGdu1EpxZO0ndGrCX"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "kDroxc9_0G-TRo_UAfvw_",
+							"type": "smart-ref",
+							"blockId": "zdvXapUlVfU0cHIGtf9TK",
+							"columnId": null,
+							"lastSeenVariableName": "ManagerSalary"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zI8OS-W4KhysNxfi2iY8c",
+							"type": "smart-ref",
+							"blockId": "GIGg4-UIycL0MKHyK9K0C",
+							"columnId": null,
+							"lastSeenVariableName": "ManagerCount"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "udLKMbYUt-jLR7lj2aIX3"
+				}
+			],
+			"id": "0rdZNxABhGvnHBs3-29ut",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we have the total staff cost"
+				}
+			],
+			"type": "p",
+			"id": "YR_phbnV7EwK8ObI_Q1Id"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "StaffCost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "k0PgLizEUZOIcbRh3tgk4"
+				},
+				{
+					"children": [
+						{
+							"text": "ManagerCost + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d5_70gHogfvmpALsp5w_M",
+							"type": "smart-ref",
+							"blockId": "dXZRS2gQ8kiyatTK0kBda",
+							"columnId": null,
+							"lastSeenVariableName": "BrewerStaffCost"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "13JEYOIJLIfBLumRE_kcd"
+				}
+			],
+			"id": "HtMaW9jGwJ-3ekbdjVhO3",
+			"type": "code_line_v2",
+			"showResult": false
+		},
+		{
+			"children": [
+				{
+					"text": "Total fixed costs"
+				}
+			],
+			"type": "h2",
+			"id": "yAWBqNtji8g1Y5iZyJQWk"
+		},
+		{
+			"children": [
+				{
+					"text": "Now we can calculate the total fixed costs:"
+				}
+			],
+			"type": "p",
+			"id": "vakbRuibqOYsXYWXTtASA"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "FixedCosts"
+						}
+					],
+					"type": "structured_varname",
+					"id": "283fhW9ELG1qNelWyXU8T"
+				},
+				{
+					"children": [
+						{
+							"text": "Rent + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8oENRRlK1ksL1na4vdXA5",
+							"type": "smart-ref",
+							"blockId": "HtMaW9jGwJ-3ekbdjVhO3",
+							"columnId": null,
+							"lastSeenVariableName": "StaffCost"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "4fBDqOJnh8sUR4YY481u8"
+				}
+			],
+			"id": "HRcWNjvNWt8RN4FUfF2C8",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Gross margin"
+				}
+			],
+			"type": "h2",
+			"id": "2Xau6MkD-xh6OyQ39HbAt"
+		},
+		{
+			"children": [
+				{
+					"text": "We can calculate gross margin (Revenue - COGS)."
+				}
+			],
+			"type": "p",
+			"id": "bKCTvZdP6VXj_5zb7ppBJ"
+		},
+		{
+			"children": [
+				{
+					"text": "First we need to calculate the projected total COGS."
+				}
+			],
+			"type": "p",
+			"id": "edfbjLNJRkCtKDohIdEp5"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalCOGS"
+						}
+					],
+					"type": "structured_varname",
+					"id": "H3kBwjje2OWpWPCPvz09V"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "w_kPMxCtfnfIQ3VpG8mRI",
+							"type": "smart-ref",
+							"blockId": "xr3ul6Q7DX_nRtPIsCZdY",
+							"columnId": null,
+							"lastSeenVariableName": "SalesByForm"
+						},
+						{
+							"text": "  * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "--RRS_Qm6XJ0NgLTDHsVJ",
+							"type": "smart-ref",
+							"blockId": "C3kIOIh0eujqWEAxwZhBg",
+							"columnId": null,
+							"lastSeenVariableName": "COGS"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "W6tGdR-Zf4gdD8FJJDzWC"
+				}
+			],
+			"id": "M4vQPaZ2nwRwopLASIZ5b",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "And now we can calculate the gross margin:"
+				}
+			],
+			"type": "p",
+			"id": "D9fQ-uNaf6pUHQ8Vxn75M"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "GrossMargin"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ncK5rN2ykF1eJcydwRX8R"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Cq-QkSrOpRF9g_GOW9Fm_",
+							"type": "smart-ref",
+							"blockId": "PrWmqCEftverG59WujHSM",
+							"columnId": null,
+							"lastSeenVariableName": "Revenue"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hOO-RoZSr6OBVhFBstqtI",
+							"type": "smart-ref",
+							"blockId": "M4vQPaZ2nwRwopLASIZ5b",
+							"columnId": null,
+							"lastSeenVariableName": "TotalCOGS"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "IchOqmXUpvIy88ZnVVtTY"
+				}
+			],
+			"showResult": false,
+			"id": "8QzK8qEHmznoBz3ZQzw7E",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "P&L"
+				}
+			],
+			"type": "h2",
+			"id": "O76FBgqGzsSi-HMIH8o42"
+		},
+		{
+			"children": [
+				{
+					"text": "Now I think we're ready to infer our projected P&L for the first years:"
+				}
+			],
+			"type": "p",
+			"id": "oZw84dnGrxZhhtA8OZBza"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PL"
+						}
+					],
+					"type": "structured_varname",
+					"id": "i-luD8XO7DqXJTbYF7T0o"
+				},
+				{
+					"children": [
+						{
+							"text": "("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "X8glcjiq9JHk3zgoCFbfJ",
+							"type": "smart-ref",
+							"blockId": "8QzK8qEHmznoBz3ZQzw7E",
+							"columnId": null,
+							"lastSeenVariableName": "GrossMargin"
+						},
+						{
+							"text": "  - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ShWZ2pPyaRpJaTBBKSMu8",
+							"type": "smart-ref",
+							"blockId": "HRcWNjvNWt8RN4FUfF2C8",
+							"columnId": null,
+							"lastSeenVariableName": "FixedCosts"
+						},
+						{
+							"text": " ) over "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Ff3RTGUQ7k1NJBj7sU7dU",
+							"type": "smart-ref",
+							"blockId": "jwQnH4dTCt_X6w5wQA9lr",
+							"columnId": null,
+							"lastSeenVariableName": "ProductionOverTime"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "Yi8hsKsQOtTxx77dCQVWt"
+				}
+			],
+			"id": "zstON1SzBZufSriu6GPJp",
+			"type": "code_line_v2",
+			"showResult": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "YearlyPL"
+						}
+					],
+					"type": "structured_varname",
+					"id": "XXexPIjdgrOEeSQjJELVG"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "GYa40tyS0HjmdXtkVc3sm",
+							"type": "smart-ref",
+							"blockId": "zstON1SzBZufSriu6GPJp",
+							"columnId": null,
+							"lastSeenVariableName": "PL"
+						},
+						{
+							"text": ") as table"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "XQwiarkWDapsdWg0XLbJg"
+				}
+			],
+			"id": "Bh8wnqtNq7_Rj9Q02I3j4",
+			"type": "code_line_v2",
+			"showResult": false
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "mGPvlrxp5mw3kYic4oNo5",
+			"type": "plot",
+			"title": "",
+			"sourceVarName": "exprRef_Bh8wnqtNq7_Rj9Q02I3j4",
+			"xColumnName": "Year",
+			"yColumnName": "Value",
+			"markType": "line",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "",
+			"y2ColumnName": "",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "KSqgjQDWeD_sVei6MWljF"
+		}
+	]
+}

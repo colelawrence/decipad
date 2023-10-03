@@ -58,7 +58,10 @@ function start(env: Env, config: Config): Promise<void> {
       );
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      child!.once('exit', (code) => {
+      child!.once('exit', (code, signal) => {
+        console.log(
+          `SANDBOX CHILD EXITED with code ${signal} and signal ${signal}`
+        );
         started = false;
         if (stoppedResolve) {
           stoppedResolve(code);
@@ -134,7 +137,7 @@ function stop(): Promise<unknown> {
   const stoppedPromise = new Promise((resolve) => {
     stoppedResolve = resolve;
   });
-  child.kill('SIGKILL');
+  child.kill('SIGTERM');
   return stoppedPromise;
 }
 

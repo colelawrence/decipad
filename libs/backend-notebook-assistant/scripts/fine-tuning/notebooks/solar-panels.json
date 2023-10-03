@@ -1,0 +1,1047 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Cost Effectiveness of Solar Panels"
+				}
+			],
+			"type": "h1",
+			"id": "DO7Xd5xVdZyq9lMbAL0Vb"
+		},
+		{
+			"children": [
+				{
+					"text": "solar-gettyimages-525206743.webp"
+				}
+			],
+			"id": "P-SU9p_AWqQdbkS3nxERy",
+			"type": "img",
+			"url": "https://app.decipad.com/api/pads/gOGDMK7sstMspsbrZRaEB/attachments/ugwEIBVQrPA0OVwCIm8EN"
+		},
+		{
+			"children": [
+				{
+					"text": "Consumption inputs"
+				}
+			],
+			"type": "h2",
+			"id": "iGmY2dLxWylmSbhaB4gV3"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "87CrAzOYE5Idq4wDLcXGe",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "First, let's setup a few simple inputs, including the amount of electricity your household uses, "
+				},
+				{
+					"text": "energy consumption, ",
+					"bold": true
+				},
+				{
+					"text": "and the "
+				},
+				{
+					"text": "price",
+					"bold": true
+				},
+				{
+					"text": " per kilowatt hour charged by your utility company. "
+				}
+			],
+			"type": "p",
+			"id": "xiH_9ZZAexvm_IYjtoGUj"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "EnergyConsumption"
+								}
+							],
+							"type": "caption",
+							"id": "dKRoWlZlFwReeXvrXp70p",
+							"icon": "ShoppingCart"
+						},
+						{
+							"children": [
+								{
+									"text": "398 kWh per month"
+								}
+							],
+							"type": "exp",
+							"id": "KjJ9m_Hr8E7IcmtsuJc6s"
+						}
+					],
+					"id": "Hvdf1YJw63CfXXeC2vri1",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Price"
+								}
+							],
+							"id": "G1dYQeuEFtaheyF7X9IU6",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "$0.18 per kWh"
+								}
+							],
+							"id": "e2bpdL_RXj_i9p8Uw-7fB",
+							"type": "exp"
+						}
+					],
+					"id": "Dj7JlsXGR-saXQJ5Mo2rn",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "cD4mp9URBK48_BwZn91rx",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "And, we can calculate the cost of electricity before accounting for additional factors: "
+				},
+				{
+					"text": "exprRef_k1BUnBhdARoYHxWYPjnkB",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "BE15vjFVq8-DBnZtCiXpc",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Cost"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Rfn8ALK1r_YTQg60aRQw_"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "H1jTmrSVKF0wz0bZ2ffsM",
+							"type": "smart-ref",
+							"blockId": "Hvdf1YJw63CfXXeC2vri1",
+							"lastSeenVariableName": "EnergyConsumption"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "LyM5MbN8fQC5mseDPnn0P",
+							"type": "smart-ref",
+							"blockId": "Dj7JlsXGR-saXQJ5Mo2rn",
+							"lastSeenVariableName": "Price"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "nPaBJT-ylvf76F_kqbEgu"
+				}
+			],
+			"id": "k1BUnBhdARoYHxWYPjnkB",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "h3",
+			"id": "Wrmj9lqZnxQ77KxhP06aW",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Tiered Energy Usage Rates"
+				}
+			],
+			"id": "rRihlU-DV0uWpTqthLCKK",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "qIWRh5tDNj5xrZZcKq5Fs",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Some utility companies use a tiered pricing structure. This means the more electricity you use, the higher your rate gets. If you have a tiered structure, enable "
+				},
+				{
+					"text": "tiered pricing",
+					"bold": true
+				},
+				{
+					"text": " and enter your "
+				},
+				{
+					"text": "baseline",
+					"bold": true
+				},
+				{
+					"text": " "
+				},
+				{
+					"text": "allowance",
+					"bold": true
+				},
+				{
+					"text": ". You can also adjust the rate tiers for your area or service."
+				}
+			],
+			"type": "p",
+			"id": "xVL_ZfTarkUQVDGxcN_qi"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TieredPricing"
+								}
+							],
+							"id": "J76jr7DZuwzapDLc3mHFn",
+							"type": "caption",
+							"icon": "Server"
+						},
+						{
+							"children": [
+								{
+									"text": "true"
+								}
+							],
+							"id": "yEnCU7CvNVfDYLskvi065",
+							"type": "exp"
+						}
+					],
+					"id": "Yn6Tb-4xBMbFHUTNYpI8r",
+					"type": "def",
+					"variant": "toggle",
+					"coerceToType": {
+						"kind": "boolean",
+						"date": "day"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Baseline"
+								}
+							],
+							"type": "caption",
+							"id": "tkOxtaAwov10gL_o3fiEU",
+							"icon": "Pin"
+						},
+						{
+							"children": [
+								{
+									"text": "325 kWh per month  "
+								}
+							],
+							"type": "exp",
+							"id": "M2XAwQWYx7VgKeKWjF7Gy"
+						}
+					],
+					"id": "PdeBGeslyBEvcuvp65AJA",
+					"type": "def",
+					"variant": "expression",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "0T6RjVr4H-5UgnD-dJFev",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "ConsumptionTiers(Usage) = tiered Usage {\n  100% * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "b4P6ewimOHMeiXcwtoso5",
+					"type": "smart-ref",
+					"blockId": "PdeBGeslyBEvcuvp65AJA",
+					"lastSeenVariableName": "Baseline"
+				},
+				{
+					"text": " : tier * $0.17 / kWh\n  130% * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "i1l4bX_0uxD8bzn0WCLEC",
+					"type": "smart-ref",
+					"blockId": "PdeBGeslyBEvcuvp65AJA",
+					"lastSeenVariableName": "Baseline"
+				},
+				{
+					"text": " : tier * $0.21 / kWh \n  200% * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "BAkkIxaDxGxVD4moN8XTC",
+					"type": "smart-ref",
+					"blockId": "PdeBGeslyBEvcuvp65AJA",
+					"lastSeenVariableName": "Baseline"
+				},
+				{
+					"text": " : tier * $0.31 / kWh \n  rest: tier * $0.33 / kWh \n}"
+				}
+			],
+			"id": "zR5MYsJKGfoSvvUk1uh-p",
+			"type": "code_line",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "EngeryCost = if "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "fqn5vduoM8PR1L8ivpQn5",
+					"type": "smart-ref",
+					"blockId": "Yn6Tb-4xBMbFHUTNYpI8r",
+					"lastSeenVariableName": "TieredPricing"
+				},
+				{
+					"text": " then ConsumptionTiers("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "876qu9rrm_PaRN8kMIpz_",
+					"type": "smart-ref",
+					"blockId": "Hvdf1YJw63CfXXeC2vri1",
+					"lastSeenVariableName": "EnergyConsumption"
+				},
+				{
+					"text": ") else "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "z4U9U7wd5yq3auRc3gypi",
+					"type": "smart-ref",
+					"blockId": "k1BUnBhdARoYHxWYPjnkB",
+					"lastSeenVariableName": "Cost"
+				},
+				{
+					"text": ""
+				}
+			],
+			"id": "6mkbqpdMyESuzLazLV4Nb",
+			"type": "code_line",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "Based on your energy consumption of"
+				},
+				{
+					"text": "exprRef_Hvdf1YJw63CfXXeC2vri1",
+					"magicnumberz": true
+				},
+				{
+					"text": "  your cost will be "
+				},
+				{
+					"text": "exprRef_6mkbqpdMyESuzLazLV4Nb",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "7_Or9PXsp_h54E2mFZrZg"
+		},
+		{
+			"children": [
+				{
+					"text": "Taxes "
+				}
+			],
+			"type": "h3",
+			"id": "_xZX3UMj3Dcr2BTkwFaKP",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "We can also incorporate a user tax for your monthly cost. At a "
+				},
+				{
+					"text": "exprRef_ylaW3JIFyPEfWzcLStnfU",
+					"magicnumberz": true
+				},
+				{
+					"text": " tax rate your energy cost will be "
+				},
+				{
+					"text": "exprRef_wWjVQkFro5qgv8rgWNgzL",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"id": "Yy6CydaLaLgPrKC9_aOEE",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TaxRate"
+						}
+					],
+					"type": "caption",
+					"id": "dAN_7dN-4dhZr0fodEvco",
+					"icon": "Percentage"
+				},
+				{
+					"children": [
+						{
+							"text": "5%"
+						}
+					],
+					"type": "exp",
+					"id": "fEuQ75kSyJzi9TroFgtbz"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "rnzpuDbWLyexdm-5FEkKN",
+					"type": "slider",
+					"max": "10",
+					"min": "0",
+					"step": "1",
+					"value": "5"
+				}
+			],
+			"id": "ylaW3JIFyPEfWzcLStnfU",
+			"type": "def",
+			"variant": "slider",
+			"coerceToType": {
+				"kind": "number",
+				"date": "day"
+			}
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnergyCostAfterTax"
+						}
+					],
+					"type": "structured_varname",
+					"id": "56TCORk5coJArNs32kySM"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZHrYMj6sgNiEAwsrQrX37",
+							"type": "smart-ref",
+							"blockId": "6mkbqpdMyESuzLazLV4Nb",
+							"lastSeenVariableName": "EngeryCost"
+						},
+						{
+							"text": " * (1+ "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qrHsUOLMb88RAO9213Wkx",
+							"type": "smart-ref",
+							"blockId": "ylaW3JIFyPEfWzcLStnfU",
+							"lastSeenVariableName": "TaxRate"
+						},
+						{
+							"text": " )"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QofSmTbECayXy8Yj4oBLt"
+				}
+			],
+			"id": "wWjVQkFro5qgv8rgWNgzL",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "dSnAfZcV8TnD85XX5OdVZ"
+		},
+		{
+			"children": [
+				{
+					"text": "Solar panels"
+				}
+			],
+			"type": "h2",
+			"id": "CPndfB61F08smLaqrY-iU"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "m2iH44XArfFEXpIsBjO3e",
+			"type": "divider"
+		},
+		{
+			"children": [
+				{
+					"text": "Let's look at how producing some energy will affect energy cost at different levels. "
+				}
+			],
+			"type": "p",
+			"id": "TR1i7ycbzYPFPwxg-ORBm"
+		},
+		{
+			"children": [
+				{
+					"text": "On average, a typical solar panel with a capacity of 250 watts can produce around 30-50 kilowatt-hours (kWh) of electricity per month. However, this value can vary depending on factors such as location, weather, and time of year. "
+				}
+			],
+			"type": "p",
+			"id": "rMIozTl8l9lXefNzDet7M"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "EnergyPerPanel"
+								}
+							],
+							"id": "pGy9g67Gb6AeO_8HgZ3IA",
+							"type": "caption",
+							"icon": "Leaf"
+						},
+						{
+							"children": [
+								{
+									"text": "20 kWh per month"
+								}
+							],
+							"id": "kzB4Lv8qn5QY_lMY_4e6n",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ARrzu-VTqEsWrSPqc-tE7",
+							"type": "slider",
+							"min": "0",
+							"step": "10",
+							"max": "100",
+							"value": "20"
+						}
+					],
+					"id": "v2fQ9s5dP3tL4xNa4Zug9",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "NumberOfPanels"
+								}
+							],
+							"type": "caption",
+							"id": "-iAfNi5hK4FMpwowhPhYv",
+							"icon": "ShoppingCart"
+						},
+						{
+							"children": [
+								{
+									"text": "6"
+								}
+							],
+							"type": "exp",
+							"id": "l848qLhloSOnk1xmxFMjm"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zExV_8uHGSR192-cd89F0",
+							"type": "slider",
+							"step": "1",
+							"min": "0",
+							"value": "6",
+							"max": "20"
+						}
+					],
+					"id": "Yj8uVJa-MD5akAfB-bE5K",
+					"type": "def",
+					"variant": "slider",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "rMjejbkHRM7C2UWQG2b4e",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "EnergyProduced"
+						}
+					],
+					"type": "structured_varname",
+					"id": "8bBEnJTa3Jn2Wr49otkUr"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "etntkdOVDKyI6kbAyeyJk",
+							"type": "smart-ref",
+							"blockId": "v2fQ9s5dP3tL4xNa4Zug9",
+							"lastSeenVariableName": "EnergyPerPanel"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "n-7wzABqK5tFi4Zc0mb_w",
+							"type": "smart-ref",
+							"blockId": "Yj8uVJa-MD5akAfB-bE5K",
+							"lastSeenVariableName": "NumberOfPanels"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "rHmqAWmMDMGGlSEEzIDGB"
+				}
+			],
+			"id": "lTn3EBQyoFfy0PRxYzA1n",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "NetEnergyUsage"
+						}
+					],
+					"type": "structured_varname",
+					"id": "FpXfhS-AJrh2LBmTQFyRB"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "eE6swfgf4zBPnE9kqEWB6",
+							"type": "smart-ref",
+							"blockId": "Hvdf1YJw63CfXXeC2vri1",
+							"lastSeenVariableName": "EnergyConsumption"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FpoDc_fX8bRbDvsjg-F_P",
+							"type": "smart-ref",
+							"blockId": "lTn3EBQyoFfy0PRxYzA1n",
+							"lastSeenVariableName": "EnergyProduced"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "m_x966ZTZ8_a4Mfx8b5sB"
+				}
+			],
+			"id": "4sRBbqPz6m9wAdqK0x9sa",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": "Now, we can calculate our "
+				},
+				{
+					"text": "energy cost with solar panels:",
+					"bold": true
+				},
+				{
+					"text": " "
+				},
+				{
+					"text": "exprRef_dTEFr47ABm__lMCcdae2T",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "nZ72cCH1_JfnBPkHrmtpm",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": "EnergyCostWithSolar = if "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "PHoeqEJQKkWaABX4mlPig",
+					"type": "smart-ref",
+					"blockId": "Yn6Tb-4xBMbFHUTNYpI8r",
+					"lastSeenVariableName": "TieredPricing"
+				},
+				{
+					"text": " then ConsumptionTiers("
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "0E9QUpnbt64dXAUSO5UkJ",
+					"type": "smart-ref",
+					"blockId": "4sRBbqPz6m9wAdqK0x9sa",
+					"lastSeenVariableName": "NetEnergyUsage"
+				},
+				{
+					"text": ") * (1+ "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "rfXwBTEMghuX_TK-j5hzE",
+					"type": "smart-ref",
+					"blockId": "ylaW3JIFyPEfWzcLStnfU",
+					"lastSeenVariableName": "TaxRate"
+				},
+				{
+					"text": ") else "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "Gda9y10ho-U1bY4F8jceA",
+					"type": "smart-ref",
+					"blockId": "Dj7JlsXGR-saXQJ5Mo2rn",
+					"lastSeenVariableName": "Price"
+				},
+				{
+					"text": " * "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "fryDg9KhngdqXO6a_TA7b",
+					"type": "smart-ref",
+					"blockId": "4sRBbqPz6m9wAdqK0x9sa",
+					"lastSeenVariableName": "NetEnergyUsage"
+				},
+				{
+					"text": " * (1+ "
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "NN1-e5POyC_jWklyxGxTB",
+					"type": "smart-ref",
+					"blockId": "ylaW3JIFyPEfWzcLStnfU",
+					"lastSeenVariableName": "TaxRate"
+				},
+				{
+					"text": ")"
+				}
+			],
+			"id": "dTEFr47ABm_-lMCcdae2T",
+			"type": "code_line",
+			"isHidden": false
+		},
+		{
+			"children": [
+				{
+					"text": "And, our total savings is "
+				},
+				{
+					"text": "exprRef_sw8Z96pRwQ_6slckPl3l_",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"id": "JHc4xw8zQBkeqB9PZZLQH",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "MonthlySavings"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0VTn0JEEjYwIpWc3F0ywn"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Kl2Xv2I-p_dm113gNok7o",
+							"type": "smart-ref",
+							"blockId": "wWjVQkFro5qgv8rgWNgzL",
+							"lastSeenVariableName": "EnergyCostAfterTax"
+						},
+						{
+							"text": " - "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "gEI8OPwXLNK7bRuDvmnfe",
+							"type": "smart-ref",
+							"blockId": "dTEFr47ABm_-lMCcdae2T",
+							"lastSeenVariableName": "EnergyCostWithSolar"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "YReVQqbgVGv-ihKIC_Hx0"
+				}
+			],
+			"id": "sw8Z96pRwQ_6slckPl3l-",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "dWJaimFhb0q0n-Ghdt8F9"
+		},
+		{
+			"children": [
+				{
+					"text": " To summarize, your average monthly savings will be"
+				},
+				{
+					"text": "exprRef_sw8Z96pRwQ_6slckPl3l_",
+					"magicnumberz": true
+				},
+				{
+					"text": " with "
+				},
+				{
+					"text": "exprRef_Yj8uVJa_MD5akAfB_bE5K",
+					"magicnumberz": true
+				},
+				{
+					"text": " solar panels that produce "
+				},
+				{
+					"text": "exprRef_v2fQ9s5dP3tL4xNa4Zug9",
+					"magicnumberz": true
+				},
+				{
+					"text": " per panel. "
+				}
+			],
+			"type": "callout",
+			"id": "XlDDlXhCe6b5DTo0NTSnT",
+			"icon": "Leaf"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "WbCtclH8-ha1yt2gu33EP"
+		}
+	]
+}

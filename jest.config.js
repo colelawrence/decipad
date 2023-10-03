@@ -40,6 +40,8 @@ module.exports = {
     '<rootDir>/libs/live-connect',
     '<rootDir>/libs/column',
     '<rootDir>/libs/server-side-rendering',
+    '<rootDir>/libs/backend-search',
+    '<rootDir>/libs/backend-notebook-assistant',
     '<rootDir>/libs/doc-verbalizer',
   ],
 };

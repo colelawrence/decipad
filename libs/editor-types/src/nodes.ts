@@ -1,4 +1,4 @@
-import {
+import type {
   EDescendant,
   EElement,
   EElementEntry,
@@ -12,12 +12,12 @@ import {
   TOperation,
   TReactEditor,
 } from '@udecode/plate';
-import { RefObject } from 'react';
-import { UndoManager } from 'yjs';
-import { Observable, Subject } from 'rxjs';
-import { EventInterceptor } from './event-interception';
-import { MyValue } from './value';
-import { ElementKind } from '.';
+import type { RefObject } from 'react';
+import type { UndoManager } from 'yjs';
+import type { Observable, Subject } from 'rxjs';
+import type { EventInterceptor } from './event-interception';
+import type { MyValue } from './value';
+import type { ElementKind } from '.';
 
 /**
  * Node

@@ -1,5 +1,5 @@
 import { Path } from 'slate';
 
-export const isPath = (path: Path | undefined): path is Path => {
+export const isPath = (path: unknown): path is Path => {
   return Path.isPath(path);
 };

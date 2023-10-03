@@ -1,5 +1,5 @@
 import type { SerializedType } from '@decipad/computer';
-import {
+import type {
   BaseElement,
   BlockElement,
   DEPRECATED_ELEMENT_INPUT,
@@ -9,7 +9,7 @@ import {
   IntegrationTypes,
   PlainText,
 } from '.';
-import {
+import type {
   ELEMENT_CAPTION,
   ELEMENT_DISPLAY,
   ELEMENT_DROPDOWN,

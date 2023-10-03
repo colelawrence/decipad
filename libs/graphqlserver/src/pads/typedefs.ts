@@ -8,6 +8,7 @@ export default gql`
     archived: Boolean
     section_id: String
     tags: [String!]
+    isTemplate: Boolean
   }
 
   type SecretAccess {
@@ -42,6 +43,8 @@ export default gql`
     padConnectionParams: PadConnectionParams!
     initialState: String
     snapshots: [PadSnapshot!]!
+    document: String!
+    isTemplate: Boolean
   }
 
   type PagedPadResult {
@@ -70,6 +73,7 @@ export default gql`
     pads(workspaceId: ID!, page: PageInput!): PagedPadResult!
     padsSharedWithMe(page: PageInput!): PagedPadResult!
     featuredPad: Pad
+    searchTemplates(query: String!, page: PageInput!): PagedPadResult!
   }
 
   extend type Mutation {
@@ -115,7 +119,11 @@ export default gql`
 
     unshareNotebookWithSecret(id: ID!, secret: String!): Boolean
 
-    createOrUpdateSnapshot(notebookId: ID!, snapshotName: String!): Boolean!
+    createOrUpdateSnapshot(
+      notebookId: ID!
+      snapshotName: String!
+      forceSearchIndexUpdate: Boolean
+    ): Boolean!
   }
 
   extend type Subscription {

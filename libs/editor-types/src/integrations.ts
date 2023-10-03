@@ -1,8 +1,8 @@
-import {
+import type {
   BaseElement,
-  ELEMENT_INTEGRATION,
   PlainText,
   SimpleTableCellType,
+  ELEMENT_INTEGRATION,
 } from '.';
 
 interface BlockIntegration {

@@ -1,12 +1,14 @@
+import { config as configDotEnv, parse as parseDotEnv } from 'dotenv';
 import stringify from 'json-stringify-safe';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { parse as parseDotEnv } from 'dotenv';
 import { nanoid } from 'nanoid';
 import { fromIni, fromEnv } from '@aws-sdk/credential-providers';
 import { Config } from './config';
 import baseUrl from './base-url';
 import getPorts from './get-ports';
+
+configDotEnv();
 
 export type Env = NodeJS.ProcessEnv & Record<string, string | undefined>;
 type ISandboxEnvReturn = [Env, Config];
@@ -65,13 +67,13 @@ export async function createSandboxEnv(
     // Architect uses env name testing instead of the conventional test
     NODE_ENV: 'testing' as 'test',
     DEBUG: process.env.DEBUG,
+    CI: process.env.CI,
   };
 
   // configure Architect's ports
-  const [portBase, eventsPort, tablesPort, s3Port, arcPort] = await getPorts(
-    workerId,
-    5
-  );
+  const newPorts = await getPorts(workerId, 6);
+  const [portBase, eventsPort, tablesPort, s3Port, arcPort] = newPorts;
+  const searchPort = process.env.SEARCH_PORT ?? newPorts[5];
 
   const ports: Record<string, string> = {
     _arc: arcPort,
@@ -81,6 +83,7 @@ export async function createSandboxEnv(
     s3: s3Port,
   };
   const ARC_SANDBOX = {
+    version: '5.0.0', // arc needs this
     ports,
   };
 
@@ -95,6 +98,7 @@ export async function createSandboxEnv(
     ARC_INTERNAL_PORT: arcPort,
     ARC_SANDBOX: stringify(ARC_SANDBOX),
     DECI_S3_ENDPOINT: `localhost:${s3Port}`,
+    DECI_SEARCH_PORT: searchPort,
     DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     OVERRIDE_DECI_APP_URL_BASE: `http://localhost:${portBase}`,
     REACT_APP_DECI_WS_URL: `ws://localhost:${portBase}/ws`,

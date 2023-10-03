@@ -1,0 +1,2751 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Investment Portfolio"
+				}
+			],
+			"type": "h1",
+			"id": "5ZAKkX2AIKRbpz09IdghY"
+		},
+		{
+			"children": [
+				{
+					"text": "This model is designed to assist in the selection of an investment portfolio featuring a risk-free asset and two of the biggest stocks traded on US stock exchange markets."
+				}
+			],
+			"type": "p",
+			"id": "G90f3W5MBUuFyVpLDTiTm"
+		},
+		{
+			"children": [
+				{
+					"text": "The 10-year Treasury Bond was employed as a source for the market data of the risk-free rate, and the return and volatility of each stock were determined by analyzing the historic prices for the past 5 years."
+				}
+			],
+			"type": "p",
+			"id": "gBbflXueKcsURlmwDm1Ll"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "2ICsNaZpIAuynkEcxGCmi",
+			"type": "img",
+			"url": "https://dev.decipad.com/api/pads/3JXZjjzdr2i6PolBFeQ0W/attachments/8X1RQ_XRZ3Tly9D1nZ8OR"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "HaPgWWE6rAFd49zoqNR3M"
+		},
+		{
+			"children": [
+				{
+					"text": "Define your inputs:"
+				}
+			],
+			"type": "h3",
+			"id": "2Tg5J8JKrnfIDNOi_Ijls"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Please enter the total amount you are willing to invest."
+						}
+					],
+					"id": "waFkV2D0nt5l0euhsb4Le",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "TotalInvestment"
+								}
+							],
+							"id": "wiTmV1jSBFXBudqPD3CLn",
+							"type": "caption",
+							"icon": "ShoppingCart"
+						},
+						{
+							"children": [
+								{
+									"text": "$350k"
+								}
+							],
+							"id": "6MbWEtyr4ZjwEfQOnF8S6",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "glqt-gKkLJ3q5i-Que7aH",
+							"type": "slider",
+							"max": "1000",
+							"min": "100",
+							"step": "10",
+							"value": "350"
+						}
+					],
+					"id": "nHLoeAb9CPIPk88Q0j5ej",
+					"type": "def",
+					"variant": "slider"
+				}
+			],
+			"id": "VoEk5Rm9AI_rtca6oMrvD",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "What percentage of your investment portfolio would you like to maintain in a risk-free rate asset?"
+						}
+					],
+					"id": "S2IxGHUqSA0snUImM-zP-",
+					"type": "p"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AllocationRiskFree"
+								}
+							],
+							"icon": "Percentage",
+							"id": "jv6Yy6_5EHnxkFOYhFG7n",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "20%"
+								}
+							],
+							"id": "e6UxCfpQMYQ5fcATYaOvX",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5G7oJGL7mDpwJ5OZ9os0A",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "20"
+						}
+					],
+					"id": "Ulf0oF0zTw10CVz5sfueW",
+					"type": "def",
+					"variant": "slider",
+					"coerceToType": {
+						"kind": "number",
+						"date": "day"
+					}
+				}
+			],
+			"id": "GtfIylRBoN4C52fEddbn1",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "You can select two stocks from the following lists to form a risky portfolio."
+				}
+			],
+			"id": "arGImL0jw-HX86MiQjbmf",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Stock1"
+								}
+							],
+							"id": "T4PFRVgvGQxsBqGjmY1WD",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "AMZN"
+								}
+							],
+							"id": "egU39cF3KwYUXTFV59BN4",
+							"type": "dropdown",
+							"options": [
+								{
+									"id": "YLqcd3A8nbYEQO4yhu_9f",
+									"value": "AAPL"
+								},
+								{
+									"id": "MyhglJzw5aL-cTd_G221x",
+									"value": "MSFT"
+								},
+								{
+									"id": "LpDKbKQ0cs9emLdlF329P",
+									"value": "GOOG"
+								},
+								{
+									"id": "J03UnWWHKgBoNwyDk2r2d",
+									"value": "AMZN"
+								},
+								{
+									"id": "eiiZ8vzqWwP4o0Kcs-4SO",
+									"value": "NVDA"
+								},
+								{
+									"id": "aDK6d_ID-wRcDpGb8a9Ng",
+									"value": "TSLA"
+								},
+								{
+									"id": "f5yaYrHcFXUqiNKcjPRZO",
+									"value": "BRK.A"
+								},
+								{
+									"id": "ZJG5dkpuvgnEb8fB6Hk6H",
+									"value": "META"
+								},
+								{
+									"id": "htt2CwL4TKg1C3vSnj5sY",
+									"value": "V"
+								},
+								{
+									"id": "jlL3-lCMF7wNvfFnXyuCh",
+									"value": "UNH"
+								}
+							]
+						}
+					],
+					"id": "hj4WPZJtjf-EnzBbRbCK9",
+					"type": "def",
+					"variant": "dropdown",
+					"coerceToType": {
+						"kind": "string"
+					}
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Stock2"
+								}
+							],
+							"id": "4r_S9fIvBUH0W0Hzh8TQO",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "TSLA"
+								}
+							],
+							"id": "E49NsJmAz7T3SmfCyD5uf",
+							"type": "dropdown",
+							"options": [
+								{
+									"id": "g_-CgbREk09z2RuMqIPE9",
+									"value": "AAPL"
+								},
+								{
+									"id": "R9mpIbMw_tHDoikqJDrgN",
+									"value": "MSFT"
+								},
+								{
+									"id": "5vzGtJoraDLr8_9JQJ5Th",
+									"value": "GOOG"
+								},
+								{
+									"id": "rxEgNlyu9Ssh-o6vQMU0J",
+									"value": "AMZN"
+								},
+								{
+									"id": "6oJVRHZIRLAOSDbwZba9C",
+									"value": "NVDA"
+								},
+								{
+									"id": "u2Tq3bFykveGdvqcIzZZS",
+									"value": "TSLA"
+								},
+								{
+									"id": "HJhfPdNECpiny9tCNgtXu",
+									"value": "BRK.A"
+								},
+								{
+									"id": "TddufM122D5fjZ5NcFSK8",
+									"value": "META"
+								},
+								{
+									"id": "CBhTexCoQtlfCGATCi-3h",
+									"value": "V"
+								},
+								{
+									"id": "vDkK6K0ayo-dG4mM9CoVc",
+									"value": "UNH"
+								}
+							]
+						}
+					],
+					"id": "MJm59TSsKQSQmEQMuagIP",
+					"type": "def",
+					"variant": "dropdown",
+					"coerceToType": {
+						"kind": "string"
+					}
+				}
+			],
+			"id": "uePGpWemg9PfMH4FLkbYg",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Please indicate the proportion of "
+				},
+				{
+					"text": "exprRef_hj4WPZJtjf_EnzBbRbCK9",
+					"magicnumberz": true
+				},
+				{
+					"text": " you would like to acquire. The remainder will be allotted to "
+				},
+				{
+					"text": "exprRef_MJm59TSsKQSQmEQMuagIP",
+					"magicnumberz": true
+				},
+				{
+					"text": "."
+				}
+			],
+			"id": "VV-Kjrm9pW_Aj3JOR8yuO",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "AllocationStock1"
+								}
+							],
+							"icon": "Percentage",
+							"id": "bG6RnrEG3rfzvvhxcWtLx",
+							"type": "caption"
+						},
+						{
+							"children": [
+								{
+									"text": "61%"
+								}
+							],
+							"id": "pLvSWHJuKZl9Ss0NA98Wa",
+							"type": "exp"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AH3P2wL_yhmQe56r93nLB",
+							"type": "slider",
+							"max": "100",
+							"min": "0",
+							"step": "1",
+							"value": "61"
+						}
+					],
+					"id": "Pfvr7wv3HPVC4oMIusbGe",
+					"type": "def",
+					"variant": "slider"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"id": "zGepJlgSuHlChxiavDTvY",
+					"type": "display",
+					"blockId": "jfVtZs_dNc0jRwmCWOREk",
+					"varName": "AllocationStock2"
+				}
+			],
+			"id": "zmiyXswOecrV_hHg6C2ic",
+			"type": "columns"
+		},
+		{
+			"children": [
+				{
+					"text": "Use formulas to connect your data: "
+				}
+			],
+			"id": "jQqVO3Z6q7rbYsqkmfuc6",
+			"type": "h3",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AllocationStock"
+						}
+					],
+					"type": "structured_varname",
+					"id": "zIZpajwtSs-PTJRKtsgBD"
+				},
+				{
+					"children": [
+						{
+							"text": "100%-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "KWsRVc9JyKozv8q366_Gd",
+							"type": "smart-ref",
+							"blockId": "Ulf0oF0zTw10CVz5sfueW",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationRiskFree"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "pFPdJMQboJxEb3yc-bbHf"
+				}
+			],
+			"id": "QKrtSkJxbLB7eKkcSWZim",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "StockVol"
+						}
+					],
+					"type": "structured_varname",
+					"id": "xzfK4KtjQIK8lbaKwaVOL"
+				},
+				{
+					"children": [
+						{
+							"text": "sqrt(("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "W0ZA1DIMwz2CEL-LjQ-F-",
+							"type": "smart-ref",
+							"blockId": "n3oUtAWT8N1vHReBILoeu",
+							"columnId": null,
+							"lastSeenVariableName": "Stock2Vol"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "sFdQAvcMBXZXKkVQ7Y-wl",
+							"type": "smart-ref",
+							"blockId": "jfVtZs_dNc0jRwmCWOREk",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock2"
+						},
+						{
+							"text": " )^(2)+("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4myhdlHQqNkGE5zxhW4zM",
+							"type": "smart-ref",
+							"blockId": "yBLuuUu1P3h5til5UOrE5",
+							"columnId": null,
+							"lastSeenVariableName": "Stock1Vol"
+						},
+						{
+							"text": "  *"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "9lJ9Jmqrzl45lqzuoRhK2",
+							"type": "smart-ref",
+							"blockId": "Pfvr7wv3HPVC4oMIusbGe",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock1"
+						},
+						{
+							"text": " )^(2)+2*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "L9c7QKI-2i6ruvv7F3TVq",
+							"type": "smart-ref",
+							"blockId": "Pfvr7wv3HPVC4oMIusbGe",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock1"
+						},
+						{
+							"text": " *"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "_w-IUAZVmwgteg9okcbDF",
+							"type": "smart-ref",
+							"blockId": "yBLuuUu1P3h5til5UOrE5",
+							"columnId": null,
+							"lastSeenVariableName": "Stock1Vol"
+						},
+						{
+							"text": " *"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "__qBR9OmZZ-Ex6c_8J6-p",
+							"type": "smart-ref",
+							"blockId": "jfVtZs_dNc0jRwmCWOREk",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock2"
+						},
+						{
+							"text": "*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zTk1mwe95jYjsuLlH3dfB",
+							"type": "smart-ref",
+							"blockId": "n3oUtAWT8N1vHReBILoeu",
+							"columnId": null,
+							"lastSeenVariableName": "Stock2Vol"
+						},
+						{
+							"text": "*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "MB4pc7oT07pKcmKtnbi6B",
+							"type": "smart-ref",
+							"blockId": "FqQ-011qsmAJjwAjveA4m",
+							"columnId": null,
+							"lastSeenVariableName": "Correlation"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "laDcNLI47srLRgV2ZSoiF"
+				}
+			],
+			"id": "VfgdsQODBCq33u2dNEqbN",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "AllocationStock2"
+						}
+					],
+					"type": "structured_varname",
+					"id": "FEPw9GlmlbIShUk416sQp"
+				},
+				{
+					"children": [
+						{
+							"text": "(100%-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d08xEE7GG1qJ29UyZWuoS",
+							"type": "smart-ref",
+							"blockId": "Pfvr7wv3HPVC4oMIusbGe",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock1"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "P7sSl8EVkmcy5W_mYBCGR"
+				}
+			],
+			"id": "jfVtZs_dNc0jRwmCWOREk",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "StockRet"
+						}
+					],
+					"type": "structured_varname",
+					"id": "ELlnats8JfK6E0Gop6vqD"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qlOkfhqp9w9im9dSxJTOf",
+							"type": "smart-ref",
+							"blockId": "Pfvr7wv3HPVC4oMIusbGe",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock1"
+						},
+						{
+							"text": " *"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "-h13iNUnwv785H3Ow8xCk",
+							"type": "smart-ref",
+							"blockId": "3gdZ9glwPWrc6Mnhk9ra2",
+							"columnId": null,
+							"lastSeenVariableName": "Stock1return"
+						},
+						{
+							"text": " +"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UWBFaG1EaM4r-pGPMWrXE",
+							"type": "smart-ref",
+							"blockId": "jfVtZs_dNc0jRwmCWOREk",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock2"
+						},
+						{
+							"text": " *"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3x-UK34mrQbB_RZBhlCgl",
+							"type": "smart-ref",
+							"blockId": "6ggWjCjpJZ1kAgPCSFmSc",
+							"columnId": null,
+							"lastSeenVariableName": "Stock2return"
+						},
+						{
+							"text": ""
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "MaPg05P2Qg1ef1xaIilPH"
+				}
+			],
+			"id": "p9f0E568cv1ZB_gK7qrJh",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PortfolioReturn"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0OGNr0hnZBZWEA3D4UKY3"
+				},
+				{
+					"children": [
+						{
+							"text": "("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "5XllY776wSgUSzoi7VxcE",
+							"type": "smart-ref",
+							"blockId": "_tafEp_qXU80ovvuKgDtr",
+							"columnId": null,
+							"lastSeenVariableName": "RiskFreeRate"
+						},
+						{
+							"text": "*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "U2RovxaTPEUxWorT5s2Ok",
+							"type": "smart-ref",
+							"blockId": "Ulf0oF0zTw10CVz5sfueW",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationRiskFree"
+						},
+						{
+							"text": " + "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "35FWIjoiJRm1gX4m10P-4",
+							"type": "smart-ref",
+							"blockId": "p9f0E568cv1ZB_gK7qrJh",
+							"columnId": null,
+							"lastSeenVariableName": "StockRet"
+						},
+						{
+							"text": "*"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zB3Fz31BColTPS46_x7Cr",
+							"type": "smart-ref",
+							"blockId": "QKrtSkJxbLB7eKkcSWZim",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "1UnoKEDOamP0vLUpjyiLX"
+				}
+			],
+			"id": "2vq3-GdNWwwgmmNKEEuoz",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "PortfolioVol"
+						}
+					],
+					"type": "structured_varname",
+					"id": "TCGYyCj-YKAx36rUsaoWQ"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hbpcEEaurnm3aRYzTEkdH",
+							"type": "smart-ref",
+							"blockId": "VfgdsQODBCq33u2dNEqbN",
+							"columnId": null,
+							"lastSeenVariableName": "StockVol"
+						},
+						{
+							"text": "* "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "hBZz2SFZ0pu7qd8zmYV4v",
+							"type": "smart-ref",
+							"blockId": "QKrtSkJxbLB7eKkcSWZim",
+							"columnId": null,
+							"lastSeenVariableName": "AllocationStock"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "H2EsR-2pBQaeTUYev0iXI"
+				}
+			],
+			"id": "NaI2XSPrm_ne6Ql9MLDz_",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Interest"
+						}
+					],
+					"type": "structured_varname",
+					"id": "TjxlU36p8ZGc3ElW-NlWc"
+				},
+				{
+					"children": [
+						{
+							"text": ""
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OqKNijUBC2hzloxoU8YN4",
+							"type": "smart-ref",
+							"blockId": "nHLoeAb9CPIPk88Q0j5ej",
+							"columnId": null,
+							"lastSeenVariableName": "TotalInvestment"
+						},
+						{
+							"text": " * "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "8WwnjFw3ElLkDlCWbVNJJ",
+							"type": "smart-ref",
+							"blockId": "2vq3-GdNWwwgmmNKEEuoz",
+							"columnId": null,
+							"lastSeenVariableName": "PortfolioReturn"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "ajys0iR-3WzyEdSTBUCKa"
+				}
+			],
+			"id": "YRwzFQslf8fNxkD0hAu5q",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "SharpRatio"
+						}
+					],
+					"type": "structured_varname",
+					"id": "EmCeThwmX3rJ0kILhOX-9"
+				},
+				{
+					"children": [
+						{
+							"text": " ("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4ccsDyFmAu1VItBgHOx4n",
+							"type": "smart-ref",
+							"blockId": "2vq3-GdNWwwgmmNKEEuoz",
+							"columnId": null,
+							"lastSeenVariableName": "PortfolioReturn"
+						},
+						{
+							"text": "-"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "bDrvpdbdfwjXMyR7VsNgR",
+							"type": "smart-ref",
+							"blockId": "_tafEp_qXU80ovvuKgDtr",
+							"columnId": null,
+							"lastSeenVariableName": "RiskFreeRate"
+						},
+						{
+							"text": " )/ "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jq9aOuoNZMH2qHk3f65mh",
+							"type": "smart-ref",
+							"blockId": "NaI2XSPrm_ne6Ql9MLDz_",
+							"columnId": null,
+							"lastSeenVariableName": "PortfolioVol"
+						},
+						{
+							"text": " "
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "4X2ihJKTGBfbLyf7cRpyF"
+				}
+			],
+			"id": "KstpxRT7x0HMsLmaDskLV",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "cCNy4x3KDQGhRmRJfgWch"
+		},
+		{
+			"children": [
+				{
+					"text": "Portfolio"
+				}
+			],
+			"id": "2nHyHynvLz0dA3TX5EXj7",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "The following table shows the performance of a portfolio with investments in a Risk-Free Rate asset (RF), "
+				},
+				{
+					"text": "exprRef_hj4WPZJtjf_EnzBbRbCK9",
+					"magicnumberz": true
+				},
+				{
+					"text": " stock, and "
+				},
+				{
+					"text": "exprRef_MJm59TSsKQSQmEQMuagIP",
+					"magicnumberz": true
+				},
+				{
+					"text": " stock over time. The portfolio has been compounded accordingly."
+				}
+			],
+			"type": "p",
+			"id": "CYwBRf50J5Hmv9yV9TxmO"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Portfolio"
+								}
+							],
+							"id": "bPNk-PxmOaeBPAjU-zku6",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": "[\"Risk Free\","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "toNctvr3EqfxCyJ71VlhW",
+									"type": "smart-ref",
+									"blockId": "hj4WPZJtjf-EnzBbRbCK9",
+									"columnId": null,
+									"lastSeenVariableName": "Stock1"
+								},
+								{
+									"text": ","
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "zUNRKRsa97PZ-icrR-m7K",
+									"type": "smart-ref",
+									"blockId": "MJm59TSsKQSQmEQMuagIP",
+									"columnId": null,
+									"lastSeenVariableName": "Stock2"
+								},
+								{
+									"text": ",\"Portfolio\"]"
+								}
+							],
+							"id": "lKOZSAps5qq8CnsLY0Nlq",
+							"type": "table-column-formula",
+							"columnId": "yI_XBTvjyXZ4N_TW47l_M"
+						},
+						{
+							"children": [
+								{
+									"text": " ["
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Ofn7L7w_7DoU2pBKIX2OX",
+									"type": "smart-ref",
+									"blockId": "_tafEp_qXU80ovvuKgDtr",
+									"columnId": null,
+									"lastSeenVariableName": "RiskFreeRate"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xO4Fb5k6410bPuo9mfMnz",
+									"type": "smart-ref",
+									"blockId": "3gdZ9glwPWrc6Mnhk9ra2",
+									"columnId": null,
+									"lastSeenVariableName": "Stock1return"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "k6SWMFL716WeYtuNmV8CV",
+									"type": "smart-ref",
+									"blockId": "6ggWjCjpJZ1kAgPCSFmSc",
+									"columnId": null,
+									"lastSeenVariableName": "Stock2return"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xhNwsebClODEEM_dZMV0y",
+									"type": "smart-ref",
+									"blockId": "2vq3-GdNWwwgmmNKEEuoz",
+									"columnId": null,
+									"lastSeenVariableName": "PortfolioReturn"
+								},
+								{
+									"text": " ]in%"
+								}
+							],
+							"id": "su2DK5gYc-_O7U-joIEBC",
+							"type": "table-column-formula",
+							"columnId": "kl3Or8NqmPFOjW-H0FFZs"
+						},
+						{
+							"children": [
+								{
+									"text": "[0,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "CNjIiWZbQKuAIsxT5MVNC",
+									"type": "smart-ref",
+									"blockId": "yBLuuUu1P3h5til5UOrE5",
+									"columnId": null,
+									"lastSeenVariableName": "Stock1Vol"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "xyoWWlG4jhAh0b7QN2S_1",
+									"type": "smart-ref",
+									"blockId": "n3oUtAWT8N1vHReBILoeu",
+									"columnId": null,
+									"lastSeenVariableName": "Stock2Vol"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "6ij3DzPdnX8DsQ2-RHMo9",
+									"type": "smart-ref",
+									"blockId": "NaI2XSPrm_ne6Ql9MLDz_",
+									"columnId": null,
+									"lastSeenVariableName": "PortfolioVol"
+								},
+								{
+									"text": "] in%"
+								}
+							],
+							"id": "GJOgY3rO1Sir5LTvOSJID",
+							"type": "table-column-formula",
+							"columnId": "AYGEZ8s0LuJzOSyRLf6Gk"
+						},
+						{
+							"children": [
+								{
+									"text": " ["
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "liYjAbPicaYcsKyzs6RkQ",
+									"type": "smart-ref",
+									"blockId": "Ulf0oF0zTw10CVz5sfueW",
+									"columnId": null,
+									"lastSeenVariableName": "AllocationRiskFree"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "KUVtjmHaupZ3dhkwuzzlJ",
+									"type": "smart-ref",
+									"blockId": "Pfvr7wv3HPVC4oMIusbGe",
+									"columnId": null,
+									"lastSeenVariableName": "AllocationStock1"
+								},
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "5x53Ci4y7pHRsSIyS9t5W",
+									"type": "smart-ref",
+									"blockId": "QKrtSkJxbLB7eKkcSWZim",
+									"columnId": null,
+									"lastSeenVariableName": "AllocationStock"
+								},
+								{
+									"text": " ,"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "8tvYSGak6BczF2JN0pkCb",
+									"type": "smart-ref",
+									"blockId": "jfVtZs_dNc0jRwmCWOREk",
+									"columnId": null,
+									"lastSeenVariableName": "AllocationStock2"
+								},
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "BQp72RDZ--CCl9Kk17HWz",
+									"type": "smart-ref",
+									"blockId": "QKrtSkJxbLB7eKkcSWZim",
+									"columnId": null,
+									"lastSeenVariableName": "AllocationStock"
+								},
+								{
+									"text": " ,1]"
+								}
+							],
+							"id": "YV1LEBA_6VBTfm9T5Rrn1",
+							"type": "table-column-formula",
+							"columnId": "r8T0raYqeZI5DIhtobZ5m"
+						}
+					],
+					"id": "LEtG_x8m58e1uQRRaEdnd",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Asset"
+								}
+							],
+							"id": "yI_XBTvjyXZ4N_TW47l_M",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Allocation"
+								}
+							],
+							"id": "r8T0raYqeZI5DIhtobZ5m",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Return"
+								}
+							],
+							"id": "kl3Or8NqmPFOjW-H0FFZs",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Volatility"
+								}
+							],
+							"id": "AYGEZ8s0LuJzOSyRLf6Gk",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "Lnldk7wFRymZGOyObx4IX",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "53D0eTT_SZjN6f4bjbX89",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "UF2TgFkvwR3jjN6CQedWl",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "f6GYMjPxbKoF82bzrj3pi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "OQPQeaNTtn2NlbsqCvWwL",
+							"type": "td"
+						}
+					],
+					"id": "0qOywPll5cI6bJW3YC3VZ",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "mTlInfLDzpLF21iBzA6KA",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Zftt-stuHzYJUFmvMVc-v",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lTl3V4zutQ8E9NEyOr4eX",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ALRS8UiJ02RxXcnamwFXN",
+							"type": "td"
+						}
+					],
+					"id": "X04COieu6Yg2-ZREoChnx",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QjABlz31awMVE4SozkygG",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Q1EiR6uEIQFxjpIHnZ3vV",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "RC0MPx37JKrLtU_TSrCd6",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ikjQ1xfSZ-21gWtcMl_2k",
+							"type": "td"
+						}
+					],
+					"id": "XhO6wXz6NAiYZoFICna_u",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d-JjseOHHq2VUfI_w6CuM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ZEU5nt-ttvSBJOBqTPIUp",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Te1rOrAlRVOmXuetPol6l",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DO8leTc7_PHOJkrHIVkQX",
+							"type": "td"
+						}
+					],
+					"id": "C_eKy7vfaFCgT7M4IdWWT",
+					"type": "tr"
+				}
+			],
+			"id": "Chs9GvqdQjfs_7v_h1e5q",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": "This selected portfolio gives us an annual profitability of "
+				},
+				{
+					"text": "exprRef_2vq3_GdNWwwgmmNKEEuoz",
+					"magicnumberz": true
+				},
+				{
+					"text": " with and a volatility (standard deviation) of "
+				},
+				{
+					"text": "exprRef_NaI2XSPrm_ne6Ql9MLDz_",
+					"magicnumberz": true
+				},
+				{
+					"text": " ."
+				}
+			],
+			"type": "p",
+			"id": "qDfJ1A3kYuRLXrIudQjw4"
+		},
+		{
+			"children": [
+				{
+					"text": "The Sharp Ratio of this investment portfolio is "
+				},
+				{
+					"text": "exprRef_KstpxRT7x0HMsLmaDskLV",
+					"magicnumberz": true
+				},
+				{
+					"text": " . An investor should always strive for the highest possible Sharp Ratio. By doing so, the investor would be able to obtain the highest possible return with a minimized level of volatility."
+				}
+			],
+			"type": "p",
+			"id": "DW8YmlgkZlKVBnOwwDXgG"
+		},
+		{
+			"children": [
+				{
+					"text": "Results"
+				}
+			],
+			"id": "c7vP-59ZJrsm7LEvH4LRR",
+			"type": "h2"
+		},
+		{
+			"children": [
+				{
+					"text": "In the table and graph below, you can see how your expected return from your investments assuming you are able to re-invest the interests you receive every year. "
+				}
+			],
+			"id": "6BuVXEdXyXCQ8T9VVCyJI",
+			"type": "p"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "_VWqAmm_PRcenBFud3diD",
+			"type": "img",
+			"url": "https://dev.decipad.com/api/pads/3JXZjjzdr2i6PolBFeQ0W/attachments/wVP7Kx9Gu6vrqtbmEnrWo"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Results"
+								}
+							],
+							"id": "B1OtQ-eEmsC7BXc4fOoVS",
+							"type": "table-var-name"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "WH7t9Ve_HAmf4nZM-WyJE",
+									"type": "smart-ref",
+									"blockId": "tiNtMlgrr-r7Gu4QMUBGo",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "BB"
+								},
+								{
+									"text": " +"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "56Dms6WijqzOlVwR1Ey5E",
+									"type": "smart-ref",
+									"blockId": "u-qi4BVjgWpGHZMEyZfhY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Int"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "SFg_yCp739SASdeR3cKIT",
+							"type": "table-column-formula",
+							"columnId": "ZU5ptw1G6w_bZTy1cX95J"
+						},
+						{
+							"children": [
+								{
+									"text": " "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "kxRqwClMFyaFOioSu-maG",
+									"type": "smart-ref",
+									"blockId": "2vq3-GdNWwwgmmNKEEuoz",
+									"columnId": null,
+									"lastSeenVariableName": "PortfolioReturn"
+								},
+								{
+									"text": " *"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1itdynKtxJqtHJrQ0aBnn",
+									"type": "smart-ref",
+									"blockId": "tiNtMlgrr-r7Gu4QMUBGo",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "BB"
+								},
+								{
+									"text": " "
+								}
+							],
+							"id": "S5gbt-Gfl2Idm0ewvMeHT",
+							"type": "table-column-formula",
+							"columnId": "u-qi4BVjgWpGHZMEyZfhY"
+						},
+						{
+							"children": [
+								{
+									"text": "if first then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "Kgo69PRCQdloLbjE4gtMq",
+									"type": "smart-ref",
+									"blockId": "u-qi4BVjgWpGHZMEyZfhY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Int"
+								},
+								{
+									"text": " else previous("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "4kjHVbGUT-lz49Ca-kZ-5",
+									"type": "smart-ref",
+									"blockId": "u-qi4BVjgWpGHZMEyZfhY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Int"
+								},
+								{
+									"text": ")+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "DwuQBVWUcuRvOtD53Kzgq",
+									"type": "smart-ref",
+									"blockId": "u-qi4BVjgWpGHZMEyZfhY",
+									"columnId": null,
+									"decoration": "cell",
+									"lastSeenVariableName": "Int"
+								},
+								{
+									"text": ""
+								}
+							],
+							"id": "1S5_GdRXUUK2ZwODTekxm",
+							"type": "table-column-formula",
+							"columnId": "rrg9Qr99L3ln_O_vEsDjk"
+						},
+						{
+							"children": [
+								{
+									"text": "if first then "
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "EuhssH6emnvmLrRQY6jxq",
+									"type": "smart-ref",
+									"blockId": "nHLoeAb9CPIPk88Q0j5ej",
+									"columnId": null,
+									"lastSeenVariableName": "TotalInvestment"
+								},
+								{
+									"text": " else previous("
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "nh7CgO8b_YQmYhXE4V5dI",
+									"type": "smart-ref",
+									"blockId": "nHLoeAb9CPIPk88Q0j5ej",
+									"columnId": null,
+									"lastSeenVariableName": "TotalInvestment"
+								},
+								{
+									"text": " )*(1+"
+								},
+								{
+									"children": [
+										{
+											"text": ""
+										}
+									],
+									"id": "1Tse72f_3P661Zcr36mCb",
+									"type": "smart-ref",
+									"blockId": "2vq3-GdNWwwgmmNKEEuoz",
+									"columnId": null,
+									"lastSeenVariableName": "PortfolioReturn"
+								},
+								{
+									"text": ")"
+								}
+							],
+							"id": "qz7jaABBgSNrTjDPZ2yD3",
+							"type": "table-column-formula",
+							"columnId": "tiNtMlgrr-r7Gu4QMUBGo"
+						}
+					],
+					"id": "qMQV1nPXaT03xJccpL30t",
+					"type": "table-caption"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year"
+								}
+							],
+							"id": "zose64Ad7Gp-WQypMZEDG",
+							"type": "th",
+							"cellType": {
+								"kind": "anything"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "BB"
+								}
+							],
+							"id": "tiNtMlgrr-r7Gu4QMUBGo",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "Int"
+								}
+							],
+							"id": "u-qi4BVjgWpGHZMEyZfhY",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "CummInt"
+								}
+							],
+							"id": "rrg9Qr99L3ln_O_vEsDjk",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						},
+						{
+							"children": [
+								{
+									"text": "EB"
+								}
+							],
+							"id": "ZU5ptw1G6w_bZTy1cX95J",
+							"type": "th",
+							"cellType": {
+								"kind": "table-formula"
+							}
+						}
+					],
+					"id": "13ia7EBXg8prBGTIMOA0v",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": " Year 1"
+								}
+							],
+							"id": "lvbVUPyid5YaP8FU4_gjv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "HT2eGhIvi7tip0-i7wliR",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "6eVaUmST7J0YEgO6NnvVs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "o4fnrIeRMd6QCHLsHfm14",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "jhe6gY0MT1_Y-vkpKGVaC",
+							"type": "td"
+						}
+					],
+					"id": "plgQDBGF-IgmW_Fmc9snF",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year 2"
+								}
+							],
+							"id": "96AzHwEwblNOzt_BNRi_5",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DdgaiJlq0-eVea3dXUUPM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "lrNvORgtuakNlyFvU3-Ey",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Gnyu1x3RDdlZ43lsr71Zi",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "g3DUxSpIoaO7JD4G4cIL2",
+							"type": "td"
+						}
+					],
+					"id": "0N3_7887jiikEXvca_K7P",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year 3"
+								}
+							],
+							"id": "gYmbK99jH3g4QO1J9VZQv",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "W23_xuboMRabD7eh6R1Qs",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "ObO6RQPD-2xxg9hzTqw04",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "CS6-3Nw-EPEaotOLF1Dwj",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "U0Y00oSRX07lqjZYlc8Qf",
+							"type": "td"
+						}
+					],
+					"id": "Ysf-SsIGe7ADdWdgKRCku",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year 4"
+								}
+							],
+							"id": "KkF_NQvqCk6_xsMbPIqHa",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "q0jlhbV2-OU7h7kqNfUEH",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "B_jSiJtBYkknSYXk8wzQw",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "T4rqU90jRUF3tGOw-UKts",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "m5coaUbeswYhplghtEtcB",
+							"type": "td"
+						}
+					],
+					"id": "bYIKHLQ3xFNJh5WqI3dbm",
+					"type": "tr"
+				},
+				{
+					"children": [
+						{
+							"children": [
+								{
+									"text": "Year 5"
+								}
+							],
+							"id": "D4cmTSykrGfe0M2iYvyaL",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "nSZb_MwHTMsyjFD5zU6VZ",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "dFlb3zMT_i4lfwUhaf3LD",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "cZLGh7-WiSm-3Ve8oW-mM",
+							"type": "td"
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "npMieJk4x5wXlgOmrqmD_",
+							"type": "td"
+						}
+					],
+					"id": "ve_H2c-gEEPUQLFzoI2K9",
+					"type": "tr"
+				}
+			],
+			"id": "-OL2W8LVCyFTGOKcBayIz",
+			"type": "table",
+			"version": 2,
+			"hideFormulas": true
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "dk6HsdFPvj0-Hr1cWS8SS"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"id": "-LMhDKZ-7GKCOOKc6VsqC",
+			"type": "plot",
+			"title": "",
+			"sourceVarName": "exprRef__OL2W8LVCyFTGOKcBayIz",
+			"xColumnName": "Year",
+			"yColumnName": "CummInt",
+			"markType": "bar",
+			"thetaColumnName": "",
+			"sizeColumnName": "",
+			"colorColumnName": "CummInterest",
+			"y2ColumnName": "Int",
+			"colorScheme": "multicolor_yellow"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TotalEarnings5"
+						}
+					],
+					"type": "structured_varname",
+					"id": "0Vzf9mmS4-snwlwb3j5-q"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4PMs8IcE4iRCMKJIIzHmO",
+							"type": "smart-ref",
+							"blockId": "-OL2W8LVCyFTGOKcBayIz",
+							"columnId": "u-qi4BVjgWpGHZMEyZfhY",
+							"lastSeenVariableName": "Results.Int"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "xjl96U41YnakkL6qgA7lg"
+				}
+			],
+			"id": "t3QMl0iojuw4IdT82LwJ_",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"text": "After five years, your total earnings would add up to "
+				},
+				{
+					"text": "exprRef_t3QMl0iojuw4IdT82LwJ_",
+					"magicnumberz": true
+				},
+				{
+					"text": " "
+				}
+			],
+			"type": "p",
+			"id": "5NmZsEzYSbYLOlrEE-DHE"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "spa8S8up7zg6ZpUUw9z6N"
+		},
+		{
+			"children": [
+				{
+					"text": "Appendix: Live data connections"
+				}
+			],
+			"id": "TmYnmhvRufj_bxQL4emPG",
+			"type": "h2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "TBTable"
+						}
+					],
+					"id": "a52GxXibMfNHe7bMbKG3K",
+					"type": "live-var-name"
+				}
+			],
+			"id": "_20cc_nuO8uocwVxFp69N",
+			"type": "live-conn",
+			"url": "https://docs.google.com/spreadsheets/d/1nWFhSSQ_GCjPBRfVjoLFDalJ-Ert8OWuzzBfMRiZFrg/edit#gid=266964564",
+			"source": "gsheets",
+			"isFirstRowHeaderRow": true,
+			"columnTypeCoercions": [],
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "StockTableVariable"
+						}
+					],
+					"id": "V83TxctlJsOWqA9q7a1sm",
+					"type": "live-var-name"
+				}
+			],
+			"id": "wsrGfpkbLfPSsep-fcHPX",
+			"type": "live-conn",
+			"url": "https://docs.google.com/spreadsheets/d/1RPh7SV0EJ5mfZIaXEerjnjM-y4iSYS9F_GdqanpIbyc/edit#gid=1934823037",
+			"source": "gsheets",
+			"isFirstRowHeaderRow": true,
+			"columnTypeCoercions": [],
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "CorrTable"
+						}
+					],
+					"id": "d1P4TC3BD2m_zyzkhl_Rf",
+					"type": "live-var-name"
+				}
+			],
+			"isHidden": true,
+			"id": "EHDeDJMfqJYsAYnW54Zb6",
+			"type": "live-conn",
+			"url": "https://docs.google.com/spreadsheets/d/1RPh7SV0EJ5mfZIaXEerjnjM-y4iSYS9F_GdqanpIbyc/edit#gid=407459655",
+			"source": "gsheets",
+			"isFirstRowHeaderRow": true,
+			"columnTypeCoercions": []
+		},
+		{
+			"children": [
+				{
+					"text": "Live variables from data connections",
+					"italic": true
+				}
+			],
+			"id": "zvenJdBeEiZuam02tnYiY",
+			"type": "p",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Correlation"
+						}
+					],
+					"type": "structured_varname",
+					"id": "SHX9EKDJ-4PSf-fG3JEqP"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zXUYU90o7QqjLdWX1yWDL",
+							"type": "smart-ref",
+							"blockId": "EHDeDJMfqJYsAYnW54Zb6",
+							"columnId": "EHDeDJMfqJYsAYnW54Zb6--2",
+							"lastSeenVariableName": "CorrTable.Corr"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "DXs0XbgGLn606QEgVnL_V",
+							"type": "smart-ref",
+							"blockId": "EHDeDJMfqJYsAYnW54Zb6",
+							"columnId": "EHDeDJMfqJYsAYnW54Zb6--0",
+							"lastSeenVariableName": "CorrTable.Stock1"
+						},
+						{
+							"text": " =="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vZFlSUNZ3NMPvbv7iduNz",
+							"type": "smart-ref",
+							"blockId": "hj4WPZJtjf-EnzBbRbCK9",
+							"columnId": null,
+							"lastSeenVariableName": "Stock1"
+						},
+						{
+							"text": " and "
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "U-mq7ru5mpBMD-neYZNAq",
+							"type": "smart-ref",
+							"blockId": "EHDeDJMfqJYsAYnW54Zb6",
+							"columnId": "EHDeDJMfqJYsAYnW54Zb6--1",
+							"lastSeenVariableName": "CorrTable.Stock2"
+						},
+						{
+							"text": "=="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "3Mi8uUbehyLZGZ32R61cg",
+							"type": "smart-ref",
+							"blockId": "MJm59TSsKQSQmEQMuagIP",
+							"columnId": null,
+							"lastSeenVariableName": "Stock2"
+						},
+						{
+							"text": ")"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "tx0lzvGqBETBVx81FRZcG"
+				}
+			],
+			"id": "FqQ-011qsmAJjwAjveA4m",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "RiskFreeRate"
+						}
+					],
+					"type": "structured_varname",
+					"id": "6-9wNRGoScXODz5prY-S_"
+				},
+				{
+					"children": [
+						{
+							"text": "sum("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "rqADaELxRV2MuJsgYO1VE",
+							"type": "smart-ref",
+							"blockId": "_20cc_nuO8uocwVxFp69N",
+							"columnId": "_20cc_nuO8uocwVxFp69N--1",
+							"lastSeenVariableName": "TBTable.Price"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "QDeBSIqve8ye8h5Q4ESnD"
+				}
+			],
+			"id": "_tafEp_qXU80ovvuKgDtr",
+			"type": "code_line_v2",
+			"isHidden": true
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Stock1return"
+						}
+					],
+					"type": "structured_varname",
+					"id": "AdWEvEY-TrpTUf3YWaL2M"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "AtA9wfIgAO27lP6fmhNHr",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--2",
+							"lastSeenVariableName": "StockTableVariable.5YearsReturn"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "4sgw4v3AxIkkOQIBV8Uij",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--0",
+							"lastSeenVariableName": "StockTableVariable.Ticker"
+						},
+						{
+							"text": "=="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "wBbsQvS2O0Z15i_gvInif",
+							"type": "smart-ref",
+							"blockId": "hj4WPZJtjf-EnzBbRbCK9",
+							"columnId": null,
+							"lastSeenVariableName": "Stock1"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "4QF_QknfbcGMu0Lg77UP2"
+				}
+			],
+			"isHidden": true,
+			"id": "3gdZ9glwPWrc6Mnhk9ra2",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Stock2return"
+						}
+					],
+					"type": "structured_varname",
+					"id": "Oi2UYlGnwzpzkIKsRPfAg"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "QKA6Ta8BXcoeRLEIN7P6l",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--2",
+							"lastSeenVariableName": "StockTableVariable.5YearsReturn"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "1pCxdVFR2UhBtD7EVwGZ5",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--0",
+							"lastSeenVariableName": "StockTableVariable.Ticker"
+						},
+						{
+							"text": "=="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "FoeceZRj6MsOnA5CJgnyw",
+							"type": "smart-ref",
+							"blockId": "MJm59TSsKQSQmEQMuagIP",
+							"columnId": null,
+							"lastSeenVariableName": "Stock2"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "psdM20degxzu4csymW8n2"
+				}
+			],
+			"isHidden": true,
+			"id": "6ggWjCjpJZ1kAgPCSFmSc",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Stock1Vol"
+						}
+					],
+					"type": "structured_varname",
+					"id": "oADH7UcPkxdTqIKWRX8t0"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "Jq_NYB0rmi51PDinJ9ncC",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--2",
+							"lastSeenVariableName": "StockTableVariable.5YearsReturn"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "vLqsGXCQhzWQ54bsJUKcL",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--0",
+							"lastSeenVariableName": "StockTableVariable.Ticker"
+						},
+						{
+							"text": "=="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "XgCe4yZZIASl0b0fARgKm",
+							"type": "smart-ref",
+							"blockId": "hj4WPZJtjf-EnzBbRbCK9",
+							"columnId": null,
+							"lastSeenVariableName": "Stock1"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "oDFvjmNSq63loJA3ykX32"
+				}
+			],
+			"isHidden": true,
+			"id": "yBLuuUu1P3h5til5UOrE5",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": "Stock2Vol"
+						}
+					],
+					"type": "structured_varname",
+					"id": "YMBzLEF1BLviu5KizaOfo"
+				},
+				{
+					"children": [
+						{
+							"text": "sumif("
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "zE5rzBzbNTaGZP9rJjqHU",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--2",
+							"lastSeenVariableName": "StockTableVariable.5YearsReturn"
+						},
+						{
+							"text": ","
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "qpJII8SQcbW9Z27iRM0fU",
+							"type": "smart-ref",
+							"blockId": "wsrGfpkbLfPSsep-fcHPX",
+							"columnId": "wsrGfpkbLfPSsep-fcHPX--0",
+							"lastSeenVariableName": "StockTableVariable.Ticker"
+						},
+						{
+							"text": "=="
+						},
+						{
+							"children": [
+								{
+									"text": ""
+								}
+							],
+							"id": "d0cbVGSXFMFjRM9A2C1tK",
+							"type": "smart-ref",
+							"blockId": "MJm59TSsKQSQmEQMuagIP",
+							"columnId": null,
+							"lastSeenVariableName": "Stock2"
+						},
+						{
+							"text": ") in %"
+						}
+					],
+					"type": "code_line_v2_code",
+					"id": "sLRI6m3kpGX68mjomXr9A"
+				}
+			],
+			"isHidden": true,
+			"id": "n3oUtAWT8N1vHReBILoeu",
+			"type": "code_line_v2"
+		},
+		{
+			"children": [
+				{
+					"text": ""
+				}
+			],
+			"type": "p",
+			"id": "WM4ANf065xe1E0paJjHOx"
+		}
+	]
+}
