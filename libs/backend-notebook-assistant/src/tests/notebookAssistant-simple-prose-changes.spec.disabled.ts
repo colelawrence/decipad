@@ -1,13 +1,15 @@
-/* eslint-disable jest/no-standalone-expect */
+import { Document } from '@decipad/editor-types';
 import { testWithSandbox as test } from '../../../backend-test-sandbox/src';
 import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
-import simplest from './__fixtures__/simplest.json';
-import { Document } from '@decipad/editor-types';
+import _notebook from './__fixtures__/simplest.json';
+import { applyOperations } from '../utils/applyOperations';
+
+const notebook = _notebook as Document;
 
 test('notebook assistant: prose', async (ctx) => {
   let newNotebookId: string;
-  setupTest(ctx, simplest as Document, ({ notebookId }) => {
+  setupTest(ctx, notebook, ({ notebookId }) => {
     newNotebookId = notebookId;
   });
 
@@ -16,47 +18,38 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'change the title text to say "🕯Stopping a Candle Business"'
     );
-    expect(results).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
       [
         {
-          "node": {
-            "text": "🕯Starting a Candle Business",
-          },
-          "path": [
-            0,
-            0,
+          "children": [
+            {
+              "text": "🕯Stopping a Candle Business",
+            },
           ],
-          "type": "remove_node",
+          "id": "3JTr-B84cKMnNOYnvHiFi",
+          "type": "h1",
         },
         {
-          "node": {
-            "children": [
-              {
-                "text": "🕯Starting a Candle Business",
-              },
-            ],
-            "id": "3JTr-B84cKMnNOYnvHiFi",
-            "type": "h1",
-          },
-          "path": [
-            0,
+          "children": [
+            {
+              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
+            },
           ],
-          "type": "remove_node",
+          "id": "18YPGVFcBkSie3WopWDlo",
+          "type": "p",
         },
         {
-          "node": {
-            "children": [
-              {
-                "text": "🕯Stopping a Candle Business",
-              },
-            ],
-            "id": "3JTr-B84cKMnNOYnvHiFi",
-            "type": "h1",
-          },
-          "path": [
-            0,
+          "children": [
+            {
+              "highlight": true,
+              "text": "It looks like I could make a profit ",
+            },
+            {
+              "text": "and some side income based on my assumptions below. Feedback welcome!",
+            },
           ],
-          "type": "insert_node",
+          "id": "ngIq_tCJClGugubOIsRKT",
+          "type": "p",
         },
       ]
     `);
@@ -67,26 +60,25 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'remove the last paragraph'
     );
-    expect(results).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
       [
         {
-          "node": {
-            "children": [
-              {
-                "highlight": true,
-                "text": "It looks like I could make a profit ",
-              },
-              {
-                "text": "and some side income based on my assumptions below. Feedback welcome!",
-              },
-            ],
-            "id": "ngIq_tCJClGugubOIsRKT",
-            "type": "p",
-          },
-          "path": [
-            2,
+          "children": [
+            {
+              "text": "🕯Starting a Candle Business",
+            },
           ],
-          "type": "remove_node",
+          "id": "3JTr-B84cKMnNOYnvHiFi",
+          "type": "h1",
+        },
+        {
+          "children": [
+            {
+              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
+            },
+          ],
+          "id": "18YPGVFcBkSie3WopWDlo",
+          "type": "p",
         },
       ]
     `);
@@ -97,19 +89,47 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'add a paragraph asking people to follow me on Twitter'
     );
-    expect(results).toMatchObject([
+    expect(applyOperations(notebook, results)).toMatchObject([
       {
-        node: {
-          children: [
-            {
-              text: expect.stringContaining('Twitter'),
-            },
-          ],
-          id: expect.any(String),
-          type: 'p',
-        },
-        path: [3],
-        type: 'insert_node',
+        children: [
+          {
+            text: '🕯Starting a Candle Business',
+          },
+        ],
+        id: '3JTr-B84cKMnNOYnvHiFi',
+        type: 'h1',
+      },
+      {
+        children: [
+          {
+            text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+          },
+        ],
+        id: '18YPGVFcBkSie3WopWDlo',
+        type: 'p',
+      },
+      {
+        children: [
+          {
+            highlight: true,
+            text: 'It looks like I could make a profit ',
+          },
+          {
+            text: 'and some side income based on my assumptions below. Feedback welcome!',
+          },
+        ],
+        id: 'ngIq_tCJClGugubOIsRKT',
+        type: 'p',
+      },
+      {
+        children: [
+          {
+            highlight: true,
+            text: "Don't forget to follow me on Twitter for more updates and tips!",
+          },
+        ],
+        id: expect.any(String),
+        type: 'p',
       },
     ]);
   }, 240000);
@@ -119,41 +139,41 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'change the second paragraph asking people to follow me on Twitter'
     );
-    expect(results).toMatchObject([
-      {
-        node: {
-          text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-        },
-        path: [1, 0],
-        type: 'remove_node',
-      },
-      {
-        node: {
-          children: [
+    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
+      [
+        {
+          "children": [
             {
-              text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+              "text": "🕯Starting a Candle Business",
             },
           ],
-          id: '18YPGVFcBkSie3WopWDlo',
-          type: 'p',
+          "id": "3JTr-B84cKMnNOYnvHiFi",
+          "type": "h1",
         },
-        path: [1],
-        type: 'remove_node',
-      },
-      {
-        node: {
-          children: [
+        {
+          "children": [
             {
-              text: expect.stringContaining('Twitter'),
+              "text": "During the pandemic, many people thought of starting a side business. If you're interested, you can follow me on Twitter for updates and tips on candle-making!",
             },
           ],
-          id: '18YPGVFcBkSie3WopWDlo',
-          type: 'p',
+          "id": "18YPGVFcBkSie3WopWDlo",
+          "type": "p",
         },
-        path: [1],
-        type: 'insert_node',
-      },
-    ]);
+        {
+          "children": [
+            {
+              "highlight": true,
+              "text": "It looks like I could make a profit ",
+            },
+            {
+              "text": "and some side income based on my assumptions below. Feedback welcome!",
+            },
+          ],
+          "id": "ngIq_tCJClGugubOIsRKT",
+          "type": "p",
+        },
+      ]
+    `);
   }, 240000);
 
   it('can add a code line to a notebook without code lines', async () => {
@@ -161,33 +181,62 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'add a code line calculating 3 divided by 4'
     );
-    expect(results).toMatchObject([
+    expect(applyOperations(notebook, results)).toMatchObject([
       {
-        node: {
-          children: [
-            {
-              children: [
-                {
-                  text: '',
-                },
-              ],
-              type: 'structured_varname',
-            },
-            {
-              children: [
-                {
-                  text: expect.stringMatching(/^3 ?\/ ?4$/),
-                },
-              ],
-              type: 'code_line_v2_code',
-            },
-          ],
-          id: expect.any(String),
-          showResult: true,
-          type: 'code_line_v2',
-        },
-        path: [3],
-        type: 'insert_node',
+        children: [
+          {
+            text: '🕯Starting a Candle Business',
+          },
+        ],
+        id: '3JTr-B84cKMnNOYnvHiFi',
+        type: 'h1',
+      },
+      {
+        children: [
+          {
+            text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+          },
+        ],
+        id: '18YPGVFcBkSie3WopWDlo',
+        type: 'p',
+      },
+      {
+        children: [
+          {
+            highlight: true,
+            text: 'It looks like I could make a profit ',
+          },
+          {
+            text: 'and some side income based on my assumptions below. Feedback welcome!',
+          },
+        ],
+        id: 'ngIq_tCJClGugubOIsRKT',
+        type: 'p',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: '',
+              },
+            ],
+            id: expect.any(String),
+            type: 'structured_varname',
+          },
+          {
+            children: [
+              {
+                text: '3 / 4',
+              },
+            ],
+            id: expect.any(String),
+            type: 'code_line_v2_code',
+          },
+        ],
+        id: expect.any(String),
+        showResult: true,
+        type: 'code_line_v2',
       },
     ]);
   }, 240000);
