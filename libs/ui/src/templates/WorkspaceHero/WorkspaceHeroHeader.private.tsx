@@ -3,6 +3,10 @@ import { Button } from '../../atoms';
 import { cssVar } from '../../primitives';
 import { SearchBar } from '../../molecules';
 import { Plus, Users } from '../../icons';
+import { HelpMenu } from '@decipad/ui';
+import { docs } from '@decipad/routing';
+import { useSession } from 'next-auth/react';
+import { useCanUseDom } from '@decipad/react-utils';
 
 type WorkspaceHeroHeaderProps = {
   membersHref?: string;
@@ -13,6 +17,8 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
   membersHref,
   onCreateNotebook,
 }) => {
+  const { status: sessionStatus } = useSession();
+  const canUseDom = useCanUseDom();
   return (
     <Container>
       <SearchBarRestyle>
@@ -20,6 +26,16 @@ export const WorkspaceHeroHeader: React.FC<WorkspaceHeroHeaderProps> = ({
       </SearchBarRestyle>
 
       <Buttons>
+        {canUseDom && sessionStatus === 'authenticated' && (
+          <div>
+            <HelpMenu
+              discordUrl="http://discord.gg/decipad"
+              docsUrl={docs({}).$}
+              releaseUrl={docs({}).page({ name: 'releases' }).$}
+              variant="workspace"
+            />
+          </div>
+        )}
         <Button href={membersHref} type="secondary">
           <TextWithIcon>
             <Users />

@@ -18,7 +18,7 @@ interface SegmentButton {
 
 type SegmentButtonsProps = {
   readonly buttons: SegmentButton[];
-  readonly variant?: 'transparent' | 'darker' | 'default';
+  readonly variant?: 'transparent' | 'darker' | 'default' | 'lighter';
   readonly border?: boolean;
   readonly hideDivider?: boolean;
   readonly padding?: 'default' | 'skinny';
@@ -105,6 +105,8 @@ const WrapperDiv = styled.div<{
     backgroundColor:
       props.variant === 'transparent'
         ? 'inherit'
+        : props.variant === 'lighter'
+        ? componentCssVars('ButtonSecondaryDefaultBackground')
         : componentCssVars('ButtonTertiaryDefaultBackground'),
 
     ...(props.hideDivider && {
@@ -146,6 +148,8 @@ const FigureButton = styled.figure<{
     ? 'transparent'
     : props.variant === 'darker'
     ? componentCssVars('ButtonTertiaryAltDefaultBackground')
+    : props.variant === 'lighter'
+    ? componentCssVars('ButtonTertiaryDefaultBackground')
     : cssVar('backgroundSubdued'),
 
   ':disabled': {
@@ -156,7 +160,10 @@ const FigureButton = styled.figure<{
 
   ':not(:disabled)': {
     ':hover, :focus': {
-      backgroundColor: componentCssVars('ButtonTertiaryAltHoverBackground'),
+      backgroundColor:
+        props.variant !== 'lighter'
+          ? componentCssVars('ButtonTertiaryAltHoverBackground')
+          : componentCssVars('ButtonTertiaryHoverBackground'),
       color: componentCssVars('ButtonTertiaryAltHoverText'),
     },
   },

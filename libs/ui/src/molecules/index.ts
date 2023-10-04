@@ -41,7 +41,6 @@ export { FeatureFlagsSwitcher } from './FeatureFlagsSwitcher/FeatureFlagsSwitche
 export { FilterBubbles } from './FilterBubbles/FilterBubbles';
 export { FloatingLink } from './FloatingLink/FloatingLink';
 export { FormulaTableData } from './FormulaTableData/FormulaTableData';
-export { HelpButton } from './HelpButton/HelpButton';
 export { IconPopover } from './IconPopover/IconPopover';
 export { ImportTableFirstRowControls } from './ImportTableFirstRowControls/ImportTableFirstRowControls';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';

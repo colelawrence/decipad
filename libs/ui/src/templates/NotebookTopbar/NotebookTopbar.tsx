@@ -1,8 +1,11 @@
 /* eslint-disable prefer-destructuring */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { useStripeCollaborationRules } from '@decipad/react-utils';
-import { workspaces } from '@decipad/routing';
+import {
+  useCanUseDom,
+  useStripeCollaborationRules,
+} from '@decipad/react-utils';
+import { workspaces, docs } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -26,7 +29,11 @@ import {
   NotebookPath,
   NotebookStatusDropdown,
 } from '../../molecules';
-import { NotebookOptions, NotebookPublishingPopUp } from '../../organisms';
+import {
+  HelpMenu,
+  NotebookOptions,
+  NotebookPublishingPopUp,
+} from '../../organisms';
 import {
   componentCssVars,
   cssVar,
@@ -201,6 +208,8 @@ export const NotebookTopbar = ({
   // --------------------------------------------------
 
   const { status: sessionStatus } = useSession();
+  const canUseDom = useCanUseDom();
+
   const isAdmin = permission === 'ADMIN';
   const isWriter = permission === 'ADMIN' || permission === 'WRITE';
 
@@ -401,13 +410,13 @@ export const NotebookTopbar = ({
           undoButtons
         ) : (
           <div css={rightSideStyles}>
-            {isWriter && (
-              <div
-                css={{
-                  display: 'flex',
-                  gap: '5px',
-                }}
-              >
+            <div
+              css={{
+                display: 'flex',
+                gap: '5px',
+              }}
+            >
+              {isWriter && (
                 <div css={[linksStyles, !isEmbed && hideForSmallScreenStyles]}>
                   <em css={topbarButtonStyles}>
                     <Anchor
@@ -432,11 +441,21 @@ export const NotebookTopbar = ({
                     </Anchor>
                   </em>
                 </div>
-
+              )}
+              {canUseDom && sessionStatus === 'authenticated' && !isEmbed && (
+                <div>
+                  <HelpMenu
+                    discordUrl="http://discord.gg/decipad"
+                    docsUrl={docs({}).$}
+                    releaseUrl={docs({}).page({ name: 'releases' }).$}
+                  />
+                </div>
+              )}
+              {isWriter && (
                 <div
                   css={{
                     [smallScreenQuery]: {
-                      visibility: 'hidden',
+                      display: 'none',
                     },
                   }}
                 >
@@ -457,8 +476,8 @@ export const NotebookTopbar = ({
                     ]}
                   />
                 </div>
-              </div>
-            )}
+              )}
+            </div>
             {isWriter && <VerticalDivider />}
             {sessionStatus === 'authenticated' ? (
               isWriter && !isServerSideRendering() ? null : (

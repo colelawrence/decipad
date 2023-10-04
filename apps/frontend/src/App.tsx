@@ -1,14 +1,7 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCanUseDom, lazyLoad } from '@decipad/react-utils';
-import {
-  docs,
-  notebooks,
-  onboard,
-  playground,
-  workspaces,
-} from '@decipad/routing';
-import { FeatureFlagsSwitcher, HelpMenu } from '@decipad/ui';
-import { useSession } from 'next-auth/react';
+import { notebooks, onboard, playground, workspaces } from '@decipad/routing';
+import { FeatureFlagsSwitcher } from '@decipad/ui';
 import type { FC } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
@@ -26,12 +19,10 @@ export const loadPlayground = () =>
 const Playground = lazyLoad(loadPlayground);
 
 export const App: FC = () => {
-  const session = useSession();
   const canUseDom = useCanUseDom();
 
   const [searchParams] = useSearchParams();
   const isRedirectFromStripe = !!searchParams.get('fromStripe');
-  const isEmbed = searchParams.get('embed') === 'true';
 
   const redirectTo = isRedirectFromStripe
     ? `${workspaces({}).$}?fromStripe=true`
@@ -92,14 +83,6 @@ export const App: FC = () => {
         />
         <Route path="*" element={<ErrorPage Heading="h1" wellKnown="404" />} />
       </Routes>
-
-      {canUseDom && session.status === 'authenticated' && !isEmbed && (
-        <HelpMenu
-          discordUrl="http://discord.gg/decipad"
-          docsUrl={docs({}).$}
-          releaseUrl={docs({}).page({ name: 'releases' }).$}
-        />
-      )}
       {/* Feature flagging the feature flag switcher makes it unreacheable in
       production, even if you press the shortcut, unless you know how */}
       {canUseDom &&

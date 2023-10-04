@@ -3,15 +3,16 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext, useState } from 'react';
 import { useIntercom } from 'react-use-intercom';
-import { Link, MenuItem, MenuSeparator } from '../../atoms';
+import { Link, MenuItem, MenuSeparator, SegmentButtons } from '../../atoms';
 import {
   ArrowDiagonalTopRight,
   Chat,
   Discord,
   Docs,
   LightBulb,
+  QuestionMark,
 } from '../../icons';
-import { HelpButton, MenuList } from '../../molecules';
+import { MenuList } from '../../molecules';
 import {
   offBlack,
   p12Regular,
@@ -19,7 +20,20 @@ import {
   transparency,
   weakOpacity,
 } from '../../primitives';
-import { hideOnPrint } from '../../styles/editor-layout';
+import { noop } from '@decipad/utils';
+
+const buttonStyles = css({
+  width: '20px',
+  height: '22px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  '> svg': {
+    width: '12px',
+    height: '12px',
+  },
+});
 
 const menuItemWrapperStyles = css({
   display: 'flex',
@@ -32,13 +46,6 @@ const menuItemWrapperStyles = css({
 });
 
 const menuItemSmallTextStyles = css(p12Regular);
-
-const helpMenuStyles = css({
-  position: 'fixed',
-  bottom: '16px',
-  right: '16px',
-  zIndex: 66,
-});
 
 const pulse = keyframes`
   0% {
@@ -168,12 +175,14 @@ interface HelpMenuProps {
   readonly discordUrl?: string;
   readonly docsUrl?: string;
   readonly releaseUrl?: string;
+  readonly variant?: 'workspace' | 'notebook';
 }
 
 export const HelpMenu = ({
   discordUrl,
   docsUrl,
   releaseUrl,
+  variant = 'notebook',
 }: HelpMenuProps) => {
   const clientEvent = useContext(ClientEventsContext);
   const [open, setOpen] = useState(false);
@@ -199,8 +208,22 @@ export const HelpMenu = ({
         setOpen(!open);
       }}
       trigger={
-        <div css={[helpMenuStyles, hideOnPrint]}>
-          <HelpButton />
+        <div>
+          <SegmentButtons
+            variant={variant === 'workspace' ? 'lighter' : 'darker'}
+            buttons={[
+              {
+                children: (
+                  <div css={buttonStyles}>
+                    <QuestionMark />
+                  </div>
+                ),
+                onClick: noop,
+                tooltip: 'Help and resources',
+                testId: 'top-bar-help',
+              },
+            ]}
+          />
         </div>
       }
       align="end"

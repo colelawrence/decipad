@@ -10,6 +10,7 @@ import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
 import { PermissionType } from '@decipad/graphql-client';
+import { IntercomProvider } from 'react-use-intercom';
 
 const noop = () => Promise.resolve();
 
@@ -64,13 +65,15 @@ const WithProviders: FC<WithProvidersProps> = ({ children, noSession }) => (
             }
       }
     >
-      <DndProvider backend={HTML5Backend}>
-        <BrowserRouter>
-          <QueryParamProvider adapter={ReactRouter6Adapter}>
-            {children}
-          </QueryParamProvider>
-        </BrowserRouter>
-      </DndProvider>
+      <IntercomProvider appId="">
+        <DndProvider backend={HTML5Backend}>
+          <BrowserRouter>
+            <QueryParamProvider adapter={ReactRouter6Adapter}>
+              {children}
+            </QueryParamProvider>
+          </BrowserRouter>
+        </DndProvider>
+      </IntercomProvider>
     </SessionProvider>
   </ClientEventsContext.Provider>
 );
