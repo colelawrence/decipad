@@ -1,0 +1,13 @@
+query GetSuggestedNotebookChanges($notebookId: String!, $prompt: String!) {
+  suggestNotebookChanges(notebookId: $notebookId, prompt: $prompt) {
+    type
+    path
+    newPath
+    node
+    text
+    offset
+    position
+    properties
+    newProperties
+  }
+}

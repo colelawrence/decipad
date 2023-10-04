@@ -29,6 +29,8 @@ export interface NotebookMetaDataType {
   readonly toggleSidebar: () => void;
   readonly sidebarTab: SelectedTab;
   readonly setSidebarTab: (tab: SelectedTab) => void;
+  readonly aiMode: boolean;
+  readonly toggleAIMode: () => void;
 
   // More technical stuff
   readonly hasPublished: Subject<undefined>;
@@ -38,17 +40,25 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
   persist(
     (set) => {
       return {
+        hasPublished: new Subject(),
+        sidebarTab: 'block',
         sidebarOpen: isE2E(),
-        toggleSidebar() {
-          set(({ sidebarOpen }) => ({ sidebarOpen: !sidebarOpen }));
+        aiMode: false,
+
+        toggleAIMode() {
+          set(({ aiMode }) => ({ aiMode: !aiMode, sidebarOpen: false }));
         },
 
-        sidebarTab: 'block',
-        setSidebarTab(sidebarTab) {
+        toggleSidebar() {
+          set(({ sidebarOpen }) => ({
+            sidebarOpen: !sidebarOpen,
+            aiMode: false,
+          }));
+        },
+
+        setSidebarTab(sidebarTab: SelectedTab) {
           set(() => ({ sidebarTab }));
         },
-
-        hasPublished: new Subject(),
       };
     },
     {
@@ -56,7 +66,7 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
       partialize(state) {
         return Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) => !['hasPublished'].includes(key)
+            ([key]) => !['hasPublished', 'aiMode'].includes(key)
           )
         );
       },

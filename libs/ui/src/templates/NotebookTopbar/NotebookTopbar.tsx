@@ -21,6 +21,7 @@ import {
   SidebarOpen,
 } from '../../icons';
 import {
+  AIModeSwitch,
   NotebookAvatars,
   NotebookPath,
   NotebookStatusDropdown,
@@ -47,6 +48,7 @@ import {
   NotebookAccessActionsReturn,
   NotebookMetaActionsReturn,
 } from '@decipad/interfaces';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const topBarWrapperStyles = (isEmbed: boolean) =>
   css({
@@ -126,6 +128,10 @@ export type NotebookTopbarProps = {
   readonly sidebarOpen: boolean;
   readonly toggleSidebar: () => void;
 
+  // AI Assistant
+  readonly aiMode: boolean;
+  readonly toggleAIMode: () => void;
+
   // Undo buttons
   readonly canUndo: boolean;
   readonly canRedo: boolean;
@@ -153,6 +159,8 @@ export const NotebookTopbar = ({
   isSharedNotebook,
   toggleSidebar,
   sidebarOpen,
+  toggleAIMode,
+  aiMode,
   isNewNotebook,
   hasUnpublishedChanges,
 
@@ -384,6 +392,9 @@ export const NotebookTopbar = ({
           </Styled.LeftContainer>
         ) : (
           readModeTopbar
+        )}
+        {isWriter && !isEmbed && isFlagEnabled('AI_ASSISTANT_CHAT') && (
+          <AIModeSwitch value={aiMode} onChange={toggleAIMode} />
         )}
         {/* Right side */}
         {isEmbed ? (

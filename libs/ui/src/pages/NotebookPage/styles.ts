@@ -101,6 +101,7 @@ export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
 });
 
 const SIDEBAR_WIDTH = '320px';
+const ASSISTANT_WIDTH = '640px';
 
 interface AsideWrapperProps {
   readonly isOpen: boolean;
@@ -124,9 +125,43 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   },
   [tabletScreenQuery]: {
     position: 'fixed',
+    height: 'calc(100vh - 82px)',
     border: `solid 1px ${cssVar('borderDefault')}`,
     borderRight: 'none',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
     zIndex: 9,
   },
 }));
+
+interface AssistantWrapperProps {
+  readonly isOpen: boolean;
+}
+
+export const AssistantWrapper = styled.aside<AssistantWrapperProps>(
+  (props) => ({
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    overflowY: 'auto',
+    minWidth: props.isOpen ? ASSISTANT_WIDTH : 0,
+    transition: `min-width 120ms ${
+      props.isOpen ? easingTiming.easeOut : easingTiming.easeIn
+    }`,
+    backgroundColor: cssVar('backgroundMain'),
+    height: '100%',
+    borderRadius: '16px 0px 0px 16px',
+
+    [smallScreenQuery]: {
+      display: 'none',
+    },
+    [tabletScreenQuery]: {
+      position: 'fixed',
+      height: 'auto',
+      top: '70px',
+      bottom: '12px',
+      borderRight: 'none',
+      boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
+      zIndex: 9,
+    },
+  })
+);

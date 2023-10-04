@@ -19,6 +19,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  GraphQLJSONObject: { input: any; output: any; }
 };
 
 export type Attachment = {
@@ -215,6 +216,7 @@ export type MutationCreateLogsArgs = {
 
 
 export type MutationCreateOrUpdateSnapshotArgs = {
+  forceSearchIndexUpdate?: InputMaybe<Scalars['Boolean']['input']>;
   notebookId: Scalars['ID']['input'];
   snapshotName: Scalars['String']['input'];
 };
@@ -507,10 +509,12 @@ export type Pad = {
   archived?: Maybe<Scalars['Boolean']['output']>;
   attachments: Array<Attachment>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
+  document: Scalars['String']['output'];
   icon?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   initialState?: Maybe<Scalars['String']['output']>;
   isPublic?: Maybe<Scalars['Boolean']['output']>;
+  isTemplate?: Maybe<Scalars['Boolean']['output']>;
   myPermissionType?: Maybe<PermissionType>;
   name: Scalars['String']['output'];
   padConnectionParams: PadConnectionParams;
@@ -545,6 +549,7 @@ export type PadConnectionParams = {
 export type PadInput = {
   archived?: InputMaybe<Scalars['Boolean']['input']>;
   icon?: InputMaybe<Scalars['String']['input']>;
+  isTemplate?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   section_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
@@ -614,9 +619,11 @@ export type Query = {
   pads: PagedPadResult;
   padsByTag: PagedPadResult;
   padsSharedWithMe: PagedPadResult;
+  searchTemplates: PagedPadResult;
   sections: Array<Section>;
   self?: Maybe<User>;
   selfFulfilledGoals: Array<Scalars['String']['output']>;
+  suggestNotebookChanges?: Maybe<Array<Maybe<SlateOp>>>;
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
@@ -680,8 +687,20 @@ export type QueryPadsSharedWithMeArgs = {
 };
 
 
+export type QuerySearchTemplatesArgs = {
+  page: PageInput;
+  query: Scalars['String']['input'];
+};
+
+
 export type QuerySectionsArgs = {
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type QuerySuggestNotebookChangesArgs = {
+  notebookId: Scalars['String']['input'];
+  prompt: Scalars['String']['input'];
 };
 
 
@@ -790,6 +809,19 @@ export type SharedWithUser = {
   canComment: Scalars['Boolean']['output'];
   permissionType: PermissionType;
   user: User;
+};
+
+export type SlateOp = {
+  __typename?: 'SlateOp';
+  newPath?: Maybe<Array<Scalars['Int']['output']>>;
+  newProperties?: Maybe<Scalars['GraphQLJSONObject']['output']>;
+  node?: Maybe<Scalars['GraphQLJSONObject']['output']>;
+  offset?: Maybe<Scalars['Int']['output']>;
+  path?: Maybe<Array<Scalars['Int']['output']>>;
+  position?: Maybe<Scalars['Int']['output']>;
+  properties?: Maybe<Scalars['GraphQLJSONObject']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
 };
 
 export type Subscription = {
@@ -1306,6 +1338,14 @@ export type GetNotionQueryVariables = Exact<{
 
 
 export type GetNotionQuery = { __typename?: 'Query', getNotion: string };
+
+export type GetSuggestedNotebookChangesQueryVariables = Exact<{
+  notebookId: Scalars['String']['input'];
+  prompt: Scalars['String']['input'];
+}>;
+
+
+export type GetSuggestedNotebookChangesQuery = { __typename?: 'Query', suggestNotebookChanges?: Array<{ __typename?: 'SlateOp', type: string, path?: Array<number> | null, newPath?: Array<number> | null, node?: any | null, text?: string | null, offset?: number | null, position?: number | null, properties?: any | null, newProperties?: any | null } | null> | null };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2142,6 +2182,25 @@ export const GetNotionDocument = gql`
 export function useGetNotionQuery(options: Omit<Urql.UseQueryArgs<GetNotionQueryVariables>, 'query'>) {
   return Urql.useQuery<GetNotionQuery, GetNotionQueryVariables>({ query: GetNotionDocument, ...options });
 };
+export const GetSuggestedNotebookChangesDocument = gql`
+    query GetSuggestedNotebookChanges($notebookId: String!, $prompt: String!) {
+  suggestNotebookChanges(notebookId: $notebookId, prompt: $prompt) {
+    type
+    path
+    newPath
+    node
+    text
+    offset
+    position
+    properties
+    newProperties
+  }
+}
+    `;
+
+export function useGetSuggestedNotebookChangesQuery(options: Omit<Urql.UseQueryArgs<GetSuggestedNotebookChangesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetSuggestedNotebookChangesQuery, GetSuggestedNotebookChangesQueryVariables>({ query: GetSuggestedNotebookChangesDocument, ...options });
+};
 export const UserDocument = gql`
     query User {
   self {
@@ -2241,6 +2300,7 @@ export type GraphCacheKeysConfig = {
   SharedWith?: (data: WithTypename<SharedWith>) => null | string,
   SharedWithRole?: (data: WithTypename<SharedWithRole>) => null | string,
   SharedWithUser?: (data: WithTypename<SharedWithUser>) => null | string,
+  SlateOp?: (data: WithTypename<SlateOp>) => null | string,
   TagChanges?: (data: WithTypename<TagChanges>) => null | string,
   TagRecord?: (data: WithTypename<TagRecord>) => null | string,
   User?: (data: WithTypename<User>) => null | string,
@@ -2266,9 +2326,11 @@ export type GraphCacheResolvers = {
     pads?: GraphCacheResolver<WithTypename<Query>, QueryPadsArgs, WithTypename<PagedPadResult> | string>,
     padsByTag?: GraphCacheResolver<WithTypename<Query>, QueryPadsByTagArgs, WithTypename<PagedPadResult> | string>,
     padsSharedWithMe?: GraphCacheResolver<WithTypename<Query>, QueryPadsSharedWithMeArgs, WithTypename<PagedPadResult> | string>,
+    searchTemplates?: GraphCacheResolver<WithTypename<Query>, QuerySearchTemplatesArgs, WithTypename<PagedPadResult> | string>,
     sections?: GraphCacheResolver<WithTypename<Query>, QuerySectionsArgs, Array<WithTypename<Section> | string>>,
     self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     selfFulfilledGoals?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<Scalars['String'] | string>>,
+    suggestNotebookChanges?: GraphCacheResolver<WithTypename<Query>, QuerySuggestNotebookChangesArgs, Array<WithTypename<SlateOp> | string>>,
     tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
     version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
     workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
@@ -2321,10 +2383,12 @@ export type GraphCacheResolvers = {
     archived?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     attachments?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Array<WithTypename<Attachment> | string>>,
     createdAt?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['DateTime'] | string>,
+    document?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     icon?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     id?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['ID'] | string>,
     initialState?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     isPublic?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
+    isTemplate?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['Boolean'] | string>,
     myPermissionType?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, PermissionType | string>,
     name?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, Scalars['String'] | string>,
     padConnectionParams?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<PadConnectionParams> | string>,
@@ -2440,6 +2504,17 @@ export type GraphCacheResolvers = {
     canComment?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, Scalars['Boolean'] | string>,
     permissionType?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, PermissionType | string>,
     user?: GraphCacheResolver<WithTypename<SharedWithUser>, Record<string, never>, WithTypename<User> | string>
+  },
+  SlateOp?: {
+    newPath?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Array<Scalars['Int'] | string>>,
+    newProperties?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['GraphQLJSONObject'] | string>,
+    node?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['GraphQLJSONObject'] | string>,
+    offset?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['Int'] | string>,
+    path?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Array<Scalars['Int'] | string>>,
+    position?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['Int'] | string>,
+    properties?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['GraphQLJSONObject'] | string>,
+    text?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['String'] | string>,
+    type?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['String'] | string>
   },
   TagChanges?: {
     added?: GraphCacheResolver<WithTypename<TagChanges>, Record<string, never>, Array<WithTypename<TagRecord> | string>>,

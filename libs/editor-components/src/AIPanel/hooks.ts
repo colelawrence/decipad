@@ -1,5 +1,6 @@
 import { captureException } from '@sentry/browser';
 import { useEffect, useState } from 'react';
+import { ChatCompletionMessageParam } from 'openai/resources/chat';
 
 export type RemoteData<T> =
   | {
@@ -28,6 +29,10 @@ export type Endpoints = {
     response: {
       completion: string;
     };
+  };
+  chat: {
+    body: ChatCompletionMessageParam[];
+    response: ChatCompletionMessageParam;
   };
   'rewrite-paragraph': {
     body: {

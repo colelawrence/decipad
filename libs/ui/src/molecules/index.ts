@@ -6,6 +6,12 @@ export {
 } from './AccountSettingsForm/AccountSettingsForm';
 export { AddTableRowButton } from './AddTableRowButton/AddTableRowButton';
 export { Aggregation } from './Aggregation/Aggregation';
+export { AIModeSwitch } from './AIModeSwitch/AIModeSwitch';
+export { AssistantAIMessage } from './AssistantAIMessage/AssistantAIMessage';
+export { AssistantChatHeader } from './AssistantChatHeader/AssistantChatHeader';
+export { AssistantUserMessage } from './AssistantUserMessage/AssistantUserMessage';
+export { AssistantMessageMarkdown } from './AssistantMessageMarkdown/AssistantMessageMarkdown';
+export { AssistantMessageInput } from './AssistantMessageInput/AssistantMessageInput';
 export { AuthContent } from './AuthContent/AuthContent';
 export { AutoCompleteMenuGroup } from './AutoCompleteMenuGroup/AutoCompleteMenuGroup';
 export { BetaBadge } from './BetaBadge/BetaBadge';

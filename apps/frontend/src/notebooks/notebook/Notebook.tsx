@@ -26,6 +26,7 @@ import {
   TopbarPlaceholder,
   NotebookTopbar,
   EditorIcon,
+  AssistantChatPlaceholder,
 } from '@decipad/ui';
 import {
   FC,
@@ -47,10 +48,17 @@ import { useEditorUndoState } from './hooks';
 import { useNotebookAccessActions, useNotebookMetaActions } from '../../hooks';
 import { useExternalEditorChange } from '@decipad/editor-hooks';
 import { Helmet } from 'react-helmet';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
-export const loadEditor = () =>
-  import(/* webpackChunkName: "notebook-editor" */ './Editor');
+export const loadEditor = () => {
+  return import(/* webpackChunkName: "notebook-editor" */ './Editor');
+};
 const Editor = lazyLoad(loadEditor);
+
+export const loadAssistantChat = () => {
+  return import(/* webpackChunkName: "notebook-assistant" */ './AssistantChat');
+};
+const AssistantChat = lazyLoad(loadAssistantChat);
 
 const ChangesNotebook: FC = () => {
   const [changeSubject] = useState(() => new Subject<undefined>());
@@ -113,6 +121,13 @@ export const NewNotebook: FC = () => {
                 </Suspense>
               }
               sidebar={<NewSidebar />}
+              assistant={
+                isFlagEnabled('AI_ASSISTANT_CHAT') ? (
+                  <Suspense fallback={<AssistantChatPlaceholder />}>
+                    <NewAssistant notebookId={notebookId} />
+                  </Suspense>
+                ) : null
+              }
               isEmbed={isEmbed}
             />
           </ComputerContextProvider>
@@ -245,6 +260,11 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     hasPublished: state.hasPublished,
   }));
 
+  const aiModeData = useNotebookMetaData((state) => ({
+    aiMode: state.aiMode,
+    toggleAiMode: state.toggleAIMode,
+  }));
+
   const [canUndo, canRedo] = useEditorUndoState(editor);
 
   const [meta] = useGetNotebookMetaQuery({
@@ -340,6 +360,8 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       onClearAll={() => editor && clearNotebook(editor)}
       sidebarOpen={sidebarData.sidebarOpen}
       toggleSidebar={sidebarData.toggleSidebar}
+      aiMode={aiModeData.aiMode}
+      toggleAIMode={aiModeData.toggleAiMode}
       isSharedNotebook={!meta.data?.getPadById?.workspace?.myPermissionType}
     />
   );
@@ -353,6 +375,23 @@ const NewSidebar: FC = () => {
 
   if (isSidebarOpen && !isEmbed) {
     return <EditorSidebar />;
+  }
+
+  return null;
+};
+
+type NewAssistantProps = {
+  notebookId: string;
+};
+
+const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
+  const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);
+
+  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
+  const isEmbed = Boolean(_embed);
+
+  if (isAssistantOpen && !isEmbed) {
+    return <AssistantChat notebookId={notebookId} />;
   }
 
   return null;

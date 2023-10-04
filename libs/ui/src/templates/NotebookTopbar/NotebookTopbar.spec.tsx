@@ -43,6 +43,8 @@ const props: ComponentProps<typeof NotebookTopbar> = {
   },
   userWorkspaces: [],
   hasUnpublishedChanges: false,
+  toggleAIMode: noop,
+  aiMode: false,
 };
 
 interface WithProvidersProps {

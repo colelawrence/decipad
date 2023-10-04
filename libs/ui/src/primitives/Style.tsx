@@ -70,6 +70,7 @@ import {
   teal600,
   teal700,
   teal800,
+  teal900,
   white,
   yellow100,
   yellow200,
@@ -510,6 +511,18 @@ export interface ComponentCssVariables {
   GoogleButtonHoverBackground: string;
   GoogleButtonBorder: string;
   GoogleButtonText: string;
+
+  // --------- End Status Indicators ----------
+  //
+  // ------------- AI Assistant ---------------
+  AIAssistantBackgroundColor: string;
+  AIAssistantElevationColor: string;
+  AIAssistantBorderColor: string;
+  AIAssistantTextColor: string;
+  AIAssistantTextSubduedColor: string;
+  AIAssistantHighlightColor: string;
+  AIAssistantCodeBackgroundColor: string;
+  // ----------- End AI Assistant -------------
 }
 
 /**
@@ -615,6 +628,14 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       GoogleButtonHoverBackground: 'eeeeee',
       GoogleButtonBorder: '#dcdcdc',
       GoogleButtonText: '#757575',
+
+      AIAssistantBackgroundColor: grey700.hex,
+      AIAssistantElevationColor: grey600.hex,
+      AIAssistantBorderColor: grey100.hex,
+      AIAssistantTextColor: offWhite.hex,
+      AIAssistantTextSubduedColor: grey400.hex,
+      AIAssistantHighlightColor: teal500.hex,
+      AIAssistantCodeBackgroundColor: teal900.hex,
     },
     Dark: {
       ButtonPrimaryDefaultBackground: purple300.hex,
@@ -713,6 +734,14 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       GoogleButtonHoverBackground: '#3367D6',
       GoogleButtonBorder: '#3367D6',
       GoogleButtonText: '#ffffff',
+
+      AIAssistantBackgroundColor: grey700.hex,
+      AIAssistantElevationColor: grey600.hex,
+      AIAssistantBorderColor: dark600.hex,
+      AIAssistantTextColor: offWhite.hex,
+      AIAssistantTextSubduedColor: grey400.hex,
+      AIAssistantHighlightColor: teal500.hex,
+      AIAssistantCodeBackgroundColor: teal900.hex,
     },
   } as const;
 

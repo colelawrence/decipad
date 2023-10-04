@@ -1,4 +1,6 @@
 export { AccountMenu } from './AccountMenu/AccountMenu';
+export { AssistantChat } from './AssistantChat/AssistantChat';
+export { AssistantMessageList } from './AssistantMessageList/AssistantMessageList';
 export { AutoCompleteMenu } from './AutoCompleteMenu/AutoCompleteMenu';
 export { BlockDragHandle } from './BlockDragHandle/BlockDragHandle';
 export { ClosableModal } from './ClosableModal/ClosableModal';

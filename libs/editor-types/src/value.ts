@@ -80,7 +80,7 @@ import type {
   TableVariableNameElement,
 } from './table';
 
-export type { DrawElement, DrawElementDescendant, DrawElements };
+export type { DrawElement, DrawElements, DrawElementDescendant };
 
 // Defining specific elements
 
@@ -293,42 +293,39 @@ export type BlockElement =
 
 type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
-export type MyValue = [
-  H1Element,
-  ...Array<
-    | H1Element
-    | H2Element
-    | H3Element
-    | ParagraphElement
-    | BlockquoteElement
-    | InlineNumberElement
-    | SmartRefElement
-    | CalloutElement
-    | CodeLineElement
-    | CodeLineV2Element
-    | StructuredInputElement
-    | DividerElement
-    | ImageElement
-    | MediaEmbedElement
-    | DrawElement
-    | DeprecatedCodeBlockElement
-    | UnorderedListElement
-    | OrderedListElement
-    | ColumnsElement
-    | InteractiveElement
-    | DataViewElement
-    | IntegrationTypes.IntegrationBlock
-  >
-];
+export type TopLevelValue =
+  | H1Element
+  | H2Element
+  | H3Element
+  | ParagraphElement
+  | BlockquoteElement
+  | InlineNumberElement
+  | SmartRefElement
+  | CalloutElement
+  | CodeLineElement
+  | CodeLineV2Element
+  | StructuredInputElement
+  | DividerElement
+  | ImageElement
+  | MediaEmbedElement
+  | DrawElement
+  | DeprecatedCodeBlockElement
+  | UnorderedListElement
+  | OrderedListElement
+  | ColumnsElement
+  | InteractiveElement
+  | DataViewElement
+  | IntegrationTypes.IntegrationBlock;
+export type MyValue = [H1Element, ...Array<TopLevelValue>];
 
 export type Document = {
   children: MyValue;
 };
 
-type InlineDescendant = InlineElement | RichText;
+export type InlineDescendant = InlineElement | RichText;
 
-type InlineChildren = Array<InlineDescendant>;
-type PlainTextChildren = [PlainText];
+export type InlineChildren = Array<InlineDescendant>;
+export type PlainTextChildren = [PlainText];
 
 export type AnyElement =
   | BlockElement

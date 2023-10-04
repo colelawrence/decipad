@@ -1,3 +1,4 @@
+export * from './ai-chat-history';
 export * from './computer';
 export * from './current-workspace-store';
 export * from './cursor-store';

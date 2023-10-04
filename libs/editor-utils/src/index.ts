@@ -59,4 +59,5 @@ export * from './turnInto';
 export * from './useCache';
 export * from './useIsOffline';
 export * from './useMaterializedResult';
+export * from './valuesToMarkdown';
 export * from './withPath';

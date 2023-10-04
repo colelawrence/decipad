@@ -38,6 +38,7 @@ any /api/ai/generate-sql
 any /api/ai/rewrite-paragraph
 any /api/ai/generate-fetch-js
 any /api/ai/complete-column
+post /api/ai/chat/:padid
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
 any /api/pads/:padid/export

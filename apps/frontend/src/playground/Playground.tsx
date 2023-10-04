@@ -45,6 +45,7 @@ const Playground: React.FC = () => {
         </div>
       }
       sidebar={null}
+      assistant={null}
       isEmbed={false}
     />
   );
