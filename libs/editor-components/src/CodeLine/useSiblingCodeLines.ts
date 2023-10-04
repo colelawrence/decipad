@@ -16,10 +16,10 @@ export const useSiblingCodeLines = (element: MyElement) =>
       const previousPath = currentPath && getPreviousPath(currentPath);
       return (
         currentPath != null &&
+        previousPath != null &&
         isElement(n) &&
         n.type === ELEMENT_CODE_LINE &&
-        (Path.equals(Path.next(currentPath), p) ||
-          Path.equals(previousPath ?? [], p))
+        (Path.equals(Path.next(currentPath), p) || Path.equals(previousPath, p))
       );
     };
 

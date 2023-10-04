@@ -8,7 +8,10 @@ export async function createTable(page: Page) {
 
   await page.keyboard.insertText('/table');
 
-  await page.keyboard.press('Enter');
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page.click('[data-testid="menu-item-table"]');
+  await page.waitForSelector('[data-slate-editor] table');
 }
 
 export function tableRowLocator(line: number) {

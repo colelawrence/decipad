@@ -18,7 +18,7 @@ test.describe('Import Menu', () => {
   });
 
   test('screenshots the import menu', async () => {
-    await page.getByTestId('paragraph-content').last().click();
+    await page.keyboard.press('Enter');
     await page.keyboard.type('hello world');
     await page.keyboard.press('Enter');
     await page.keyboard.type('/t');

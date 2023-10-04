@@ -2,17 +2,16 @@
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
 import { Pad } from '@decipad/backendtypes';
+import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import fetch from 'jest-fetch-mock';
 import waitForExpect from 'wait-for-expect';
 import { createDocSyncEditor, DocSyncEditor } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';
-import { EditorController } from '@decipad/notebook-tabs';
-import { timeout } from '@decipad/utils';
 
 waitForExpect.defaults.interval = 500;
-const replicaCount = 5;
+const replicaCount = 3;
 const randomChangeCountPerReplica = 50;
 
 test('sync many', (ctx) => {
@@ -89,7 +88,7 @@ test('sync many', (ctx) => {
     for (let i = 0; i < replicaCount; i += 1) {
       const editor = createDocSyncEditor(pad.id, {
         protocolVersion: 2,
-        controller: new EditorController(pad.id, []),
+        editor: createTPlateEditor(),
       });
       editors.push(editor);
     }
@@ -98,9 +97,7 @@ test('sync many', (ctx) => {
       editors.map(
         (editor) =>
           new Promise<void>((resolve) => {
-            editor.onConnected(() => {
-              resolve();
-            });
+            editor.onConnected(resolve);
           })
       )
     );
@@ -108,30 +105,18 @@ test('sync many', (ctx) => {
 
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
-
-    for (const e of editors) {
-      e.editorController.Loaded('test');
-      expect(e.editorController.SubEditors).toHaveLength(1);
-    }
-
-    // Lets wait for the loaded state to go through.
-    await timeout(5000);
-
     await randomChangesToEditors(
-      editors.map((e) => e.editorController.SubEditors[0]),
+      editors as unknown as Array<MyEditor>,
       randomChangeCountPerReplica
     );
 
     await waitForExpect(() => {
-      const expectedContents = clone(editors[0].editorController.children);
+      const expectedContents = clone(editors[0].children);
       expect(editors.length).toBe(replicaCount);
-
       for (const editor2 of editors.slice(1)) {
-        expect(editor2.editorController.children).toMatchObject(
-          expectedContents
-        );
+        expect(editor2.children).toMatchObject(expectedContents);
       }
-    }, 10000);
-    expect(editors[0].editorController.children.length).toBeGreaterThan(0);
-  }, 20000);
+    }, 50000);
+    expect(editors[0].children.length).toBeGreaterThan(0);
+  }, 60000);
 });

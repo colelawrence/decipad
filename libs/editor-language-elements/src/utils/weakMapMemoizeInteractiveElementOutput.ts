@@ -15,7 +15,7 @@ export const weakMapMemoizeInteractiveElementOutput = <
 ): TransformerFn<T, Promise<RetT>> => {
   const cache = new WeakMap<T, RetT | null>();
 
-  return async (editor, computer, arg) => {
+  return async (editor: MyEditor, computer: Computer, arg: T) => {
     const cached = cache.get(arg) ?? (await fn(editor, computer, arg));
     cache.set(arg, cached);
     return cached;

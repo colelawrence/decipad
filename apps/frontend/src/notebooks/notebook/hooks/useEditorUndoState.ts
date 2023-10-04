@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { DocSyncEditor } from '@decipad/docsync';
+import { MyEditor } from '@decipad/editor-types';
 
 /**
  * Responsively returns if the editor can undo/redo any changes.
  */
 export function useEditorUndoState(
-  editor: DocSyncEditor | undefined
+  editor: MyEditor | undefined
 ): [boolean, boolean] {
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);

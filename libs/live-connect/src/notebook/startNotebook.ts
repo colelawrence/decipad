@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import { dequal, getDefined, noop } from '@decipad/utils';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import debounce from 'lodash.debounce';
@@ -8,14 +7,12 @@ import {
   Computer,
   IdentifiedError,
   IdentifiedResult,
-  Program,
   identifiedErrorToMessage,
 } from '@decipad/computer';
-import { MyValue, createTPlateEditor } from '@decipad/editor-types';
+import { createTPlateEditor } from '@decipad/editor-types';
 import { getURLComponents } from '@decipad/editor-utils';
 import type { Observe, Subscription } from '../types';
 import { liveConnections } from './liveConnections';
-import { EditorController } from '@decipad/notebook-tabs';
 
 const debounceGetValueMs = 500;
 
@@ -31,7 +28,7 @@ export const startNotebook = (
   editor.normalizeNode = noop;
   const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
-    controller: new EditorController(docId, []),
+    editor,
     protocolVersion: 2,
   });
 
@@ -64,14 +61,8 @@ export const startNotebook = (
   } = liveConnections(observeExternal);
 
   const getValue = debounce(async () => {
-    const wholeProgram: Program = [];
-    for (const e of syncEditor.editorController.SubEditors) {
-      wholeProgram.push(
-        ...(await editorToProgram(e, editor.children, computer))
-      );
-    }
     computer.pushCompute({
-      program: wholeProgram,
+      program: await editorToProgram(syncEditor, syncEditor.children, computer),
     });
   }, debounceGetValueMs);
 
@@ -99,22 +90,18 @@ export const startNotebook = (
   };
 
   syncEditor.onLoaded(getValue);
-  const { onChange } = syncEditor.editorController;
-  syncEditor.editorController.onChange = () => {
+  const { onChange } = syncEditor;
+  syncEditor.onChange = () => {
     (async () => {
       try {
-        const v: MyValue = [];
-        for (const e of syncEditor.editorController.SubEditors) {
-          v.push(...e.children);
-        }
-        await updateLiveConnections(v);
+        await updateLiveConnections(syncEditor.children);
         getValue();
       } catch (err) {
         onError(err as Error);
       }
     })();
 
-    onChange.bind(syncEditor.editorController)();
+    onChange();
   };
 
   return computer;

@@ -9,10 +9,6 @@
   "references": [
     { "path": "../docsync" },
     { "path": "../editor-types" },
-    { "path": "../editor-language-elements" },
-    { "path": "../computer" },
-    { "path": "../react-contexts" },
-    { "path": "../notebook-tabs" },
-    { "path": "../ui" }
+    { "path": "../computer" }
   ]
 }

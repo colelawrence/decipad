@@ -40,7 +40,10 @@ export interface EditorObserverMessage<T extends MyElement = MyElement> {
   element: T;
 }
 
-export interface ObserverElements {
+export type MyEditor = PlateEditor<MyValue> & {
+  isDragging?: boolean;
+  interceptEvent?: EventInterceptor;
+  previewRef?: RefObject<HTMLDivElement>;
   elementObserverPool?: Map<
     ElementKind,
     { observer: Observable<EditorObserverMessage>; subsribers: number }
@@ -50,14 +53,7 @@ export interface ObserverElements {
     { observer: Observable<EditorObserverMessage>; subsribers: number }
   >;
   changeObserver$?: Subject<EditorObserverMessage>;
-}
-
-export type MyEditor = PlateEditor<MyValue> & {
-  isDragging?: boolean;
-  interceptEvent?: EventInterceptor;
-  previewRef?: RefObject<HTMLDivElement>;
-} & ObserverElements &
-  UndoEditor;
+} & UndoEditor;
 export type MyReactEditor = TReactEditor<MyValue>;
 
 /**

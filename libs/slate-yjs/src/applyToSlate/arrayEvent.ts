@@ -1,7 +1,8 @@
 import stringify from 'json-stringify-safe';
-import { isText, TDescendant, TNodeOperation } from '@udecode/plate';
+import { getNode, isText, TDescendant, TNodeOperation } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
+import { MyElement } from '@decipad/editor-types';
 import { YjsEditor } from '@decipad/slate-yjs';
 import { SyncElement } from '../model';
 import { toSlateNode, toSlatePath } from '../utils/convert';
@@ -14,7 +15,7 @@ export default function translateArrayEvent(
   event: Y.YArrayEvent<SyncElement>
 ): TNodeOperation[] {
   const targetPath = toSlatePath(event.path);
-  const targetElement = editor.editorController.GetNode(targetPath);
+  const targetElement = getNode<MyElement>(editor, targetPath);
   if (!targetElement) return [];
 
   invariant(!isText(targetElement), 'Cannot apply array event to text node');

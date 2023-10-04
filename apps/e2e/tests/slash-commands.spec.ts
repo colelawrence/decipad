@@ -18,7 +18,7 @@ test.describe('Slash commands', () => {
   });
 
   test('screenshots the slash commands', async () => {
-    await page.click('[data-testid="paragraph-content"]');
+    await page.keyboard.press('Enter');
     await page.keyboard.type('hello world');
     await page.keyboard.press('Enter');
     await page.keyboard.type('/t');

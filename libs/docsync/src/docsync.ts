@@ -5,14 +5,17 @@ import stringify from 'json-stringify-safe';
 import { fetch } from '@decipad/fetch';
 import { SyncElement, withCursor, withYjs } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
-import { EditorController } from '@decipad/notebook-tabs';
 import {
   TWebSocketProvider,
   createWebsocketProvider,
 } from '@decipad/y-websocket';
+import { MyEditor } from '@decipad/editor-types';
 import { supports } from '@decipad/support';
+import { PlateEditor } from '@udecode/plate';
 import { docSyncEditor } from './docSyncEditor';
+import { ensureInitialDocument } from './utils/ensureInitialDocument';
 import { setupUndo } from './setupUndo';
+import { asLocalEditor } from './asLocalEditor';
 
 const tokenTimeoutMs = 60 * 1000;
 
@@ -22,7 +25,7 @@ interface DocSyncConnectionParams {
 }
 
 export interface DocSyncOptions {
-  controller: EditorController;
+  editor: MyEditor;
   readOnly?: boolean;
   authSecret?: string;
   WebSocketPolyfill?: typeof WebSocket;
@@ -55,7 +58,7 @@ async function wsAddress(docId: string): Promise<string> {
 export function createDocSyncEditor(
   docId: string,
   {
-    controller,
+    editor,
     readOnly = false,
     authSecret,
     onError,
@@ -68,6 +71,7 @@ export function createDocSyncEditor(
   }: DocSyncOptions,
   getSession: () => Session | undefined = () => undefined
 ) {
+  (editor as PlateEditor).children = [];
   const doc = new YDoc();
   const store = supports('indexeddb')
     ? new IndexeddbPersistence(docId, doc, { readOnly })
@@ -114,7 +118,9 @@ export function createDocSyncEditor(
 
   // Yjs editor
   const shared = doc.getArray<SyncElement>();
-  const yjsEditor = withYjs(controller, shared);
+  const yjsEditor = withYjs(editor as MyEditor, shared);
+
+  yjsEditor.synchronizeValue();
 
   let destroyed = false;
   let synced = false;
@@ -131,7 +137,6 @@ export function createDocSyncEditor(
           applyUpdate(doc, update);
           setTimeout(() => {
             if (!destroyed) {
-              controller.Loaded();
               syncEditor.setLoadedRemotely();
             }
           }, 0);
@@ -157,6 +162,10 @@ export function createDocSyncEditor(
   // Cursor editor
   const cursorEditor = withCursor(yjsEditor, awareness, getSession);
 
+  const { normalizeNode } = cursorEditor;
+  cursorEditor.normalizeNode = (entry) =>
+    asLocalEditor(cursorEditor, () => normalizeNode(entry));
+
   // Sync editor
   let syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
   const { destroy } = syncEditor;
@@ -173,6 +182,14 @@ export function createDocSyncEditor(
   let loadedRemotely = false;
 
   const onLoaded = (source: 'remote' | 'local') => {
+    if (
+      !readOnly &&
+      !destroyed &&
+      !loadedRemotely &&
+      (!ws || source === 'remote')
+    ) {
+      ensureInitialDocument(editor);
+    }
     if (source === 'remote') {
       syncEditor.isLoadedRemotely = true;
       loadedRemotely = true;

@@ -1,5 +1,4 @@
 import {
-  DrawElement,
   DrawElements,
   ELEMENT_DRAW,
   PlateComponent,
@@ -27,9 +26,7 @@ export const Draw: PlateComponent = ({ element, attributes }) => {
   elementRef.current = element;
   const updating = useRef(false);
 
-  const previousElements = useRef<DrawElements>(
-    cloneDeep(element.children) as DrawElements
-  );
+  const previousElements = useRef<DrawElements>(cloneDeep(element.children));
 
   const updateScene = useCallback((nextElements: Readonly<DrawElements>) => {
     const excalidrawApi = excalidrawRef.current;
@@ -48,13 +45,13 @@ export const Draw: PlateComponent = ({ element, attributes }) => {
 
   const { onUserChange } = useApplyUserChanges({
     editor,
-    element: element as DrawElement,
+    element,
     updating,
     isInteracting,
     updateScene,
   });
 
-  useApplyEditorChanges(element as DrawElement, updateScene);
+  useApplyEditorChanges(element, updateScene);
 
   return (
     <UIDraw

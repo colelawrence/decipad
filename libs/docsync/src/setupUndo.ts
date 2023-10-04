@@ -24,6 +24,14 @@ export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
     captureTimeout: 200,
   });
 
+  editor.undo = () => {
+    undoManager.undo();
+  };
+
+  editor.redo = () => {
+    undoManager.redo();
+  };
+
   editor.withoutCapturingUndo = (cb: () => void) => {
     captureTransaction = false;
     cb();

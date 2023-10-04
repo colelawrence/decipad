@@ -1,7 +1,7 @@
+import { useTEditorRef } from '@decipad/editor-types';
 import { BackendUrl } from '@decipad/utils';
 import { SafeJs } from '@decipad/safejs';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNotebookId } from '@decipad/react-contexts';
 
 /**
  * Use to register a worker with an ID, used to avoid creating extra threads.
@@ -15,14 +15,15 @@ export function useWorker(
   // Use a ref and worker to keep track of prop changes.
   const workerRef = useRef<SafeJs | undefined>(undefined);
   const [worker, setWorker] = useState<SafeJs | undefined>(undefined);
-  const notebookId = useNotebookId();
+
+  const editor = useTEditorRef();
 
   const workerOptions = useMemo(
     () => ({
       ...initOptions,
-      fetchProxyUrl: BackendUrl.fetchProxy(notebookId).toString(),
+      fetchProxyUrl: BackendUrl.fetchProxy(editor.id).toString(),
     }),
-    [notebookId, initOptions]
+    [editor.id, initOptions]
   );
 
   // Clean up the worker when component unmounts.

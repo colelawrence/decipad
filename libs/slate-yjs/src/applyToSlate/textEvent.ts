@@ -1,4 +1,4 @@
-import { isText, TTextOperation } from '@udecode/plate';
+import { getNode, isText, TTextOperation } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { YjsEditor } from '@decipad/slate-yjs';
@@ -14,7 +14,8 @@ export default function translateTextEvent(
   event: Y.YTextEvent
 ): TTextOperation[] {
   const targetPath = toSlatePath(event.path);
-  const targetText = editor.editorController.GetNode(targetPath);
+  const targetText = getNode(editor, targetPath);
+
   invariant(isText(targetText), 'Cannot apply text event to non-text node');
 
   let offset = 0;

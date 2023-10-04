@@ -14,7 +14,7 @@ export const EditorLayout = forwardRef<HTMLDivElement, { children: ReactNode }>(
           '[data-slate-editor]': {
             maxWidth: slimBlockWidth,
             margin: '0 auto',
-            zIndex: 10,
+            zIndex: 1,
           },
         }}
         data-stop-animate-query

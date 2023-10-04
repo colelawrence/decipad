@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { DocSyncEditor } from '@decipad/docsync';
+import { MyEditor } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { ClientEventsContext } from '@decipad/client-events';
 import { PermissionType as PermissionTypeStr } from 'libs/ui/src/types';
@@ -41,6 +42,7 @@ export type Notebook = GetNotebookByIdQuery['getPadById'];
 
 interface useNotebookStateAndActionsProps {
   readonly notebookId: string;
+  readonly editor: MyEditor | undefined;
   readonly docsync: DocSyncEditor | undefined;
 }
 

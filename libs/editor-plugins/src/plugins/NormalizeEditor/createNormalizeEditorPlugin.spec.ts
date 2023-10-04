@@ -13,7 +13,7 @@ import {
   H1Element,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, select, TEditor } from '@udecode/plate';
 import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 
 const h1Element = () =>
@@ -26,6 +26,50 @@ let editor: TEditor;
 beforeEach(() => {
   editor = createTPlateEditor({
     plugins: [createNormalizeEditorPlugin()],
+  });
+});
+
+describe('the title normalization', () => {
+  it('forces the first block to be an H1', () => {
+    editor.children = [
+      {
+        type: ELEMENT_H2,
+        children: [{ text: '' }],
+      },
+    ];
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toMatchObject([h1Element()]);
+  });
+
+  it('forces the first H1 to exist', () => {
+    editor.children = [];
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toMatchObject([h1Element()]);
+  });
+
+  it('forbids H1s in the second to last elements and converts them to paragraphs', () => {
+    editor.children = [h1Element(), h1Element()];
+    normalizeEditor(editor, { force: true });
+    expect(editor.children).toMatchObject([
+      expect.anything(),
+      {
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: '' }],
+      },
+    ] as MyElement[]);
+  });
+
+  it('applies to moved but unchanged blocks', () => {
+    editor.children = [{ type: ELEMENT_H1, children: [{ text: 'text' }] }];
+    select(editor, { path: [0, 0], offset: 0 });
+    editor.insertNode({ children: [{ text: '' }] } as never);
+    expect(editor.children).toMatchObject([
+      h1Element(),
+      {
+        type: ELEMENT_PARAGRAPH,
+        children: [{ text: 'text' }],
+      },
+    ] as MyElement[]);
   });
 });
 

@@ -1,36 +1,29 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { AutocompleteName } from '@decipad/computer';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
-import { useComputer, useNotebookMetaData } from '@decipad/react-contexts';
+import {
+  useComputer,
+  useDeciEditorContextProvider,
+  useNotebookMetaData,
+} from '@decipad/react-contexts';
 import {
   SlashCommandsMenu,
   EditorSidebar as UIEditorSidebar,
   NumberCatalog as UINumberCatalog,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { execute } from '../utils/slashCommands';
 import { useOnDragEnd } from '../utils/useDnd';
 import { catalogItems } from './catalogItems';
 import { selectCatalogNames } from './selectCatalogNames';
 import { toVar } from './toVar';
 import { CatalogItems } from './types';
-import { MyEditor } from '@decipad/editor-types';
 
 const catalogDebounceTimeMs = 1_000;
 
-interface EditorSidebarProps {
-  editor: MyEditor;
-}
-
-export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
+export function EditorSidebar() {
+  const editor = useDeciEditorContextProvider();
   const notebookMetaData = useNotebookMetaData();
 
   const onDragStart = useMemo(
@@ -111,4 +104,4 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
       </UIEditorSidebar>
     </ErrorBoundary>
   );
-};
+}

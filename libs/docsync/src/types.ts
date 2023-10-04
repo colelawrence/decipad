@@ -1,6 +1,7 @@
+import { MyEditor } from '@decipad/editor-types';
 import { CursorEditor, YjsEditor } from '@decipad/slate-yjs';
 import { BehaviorSubject } from 'rxjs';
-import { Array as YArray, Text as YText, Map as YMap, UndoManager } from 'yjs';
+import { Array as YArray, Text as YText, Map as YMap } from 'yjs';
 
 export type Doc = YArray<RootElement>;
 
@@ -15,10 +16,9 @@ export type OnSavedCallback = (source: SyncSource) => void;
 export type OnConnectedCallback = () => void;
 export type OnDisconnectedCallback = () => void;
 
-export type DocSyncEditor = YjsEditor &
+export type DocSyncEditor = MyEditor &
+  YjsEditor &
   CursorEditor & {
-    undoManager?: UndoManager;
-    withoutCapturingUndo?: (cb: () => void) => void;
     isReadOnly?: boolean;
     isLoadedLocally: boolean;
     isLoadedRemotely: boolean;

@@ -29,7 +29,6 @@ import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { attachGenericFile } from './attachGeneric';
 import { maybeSourceFromFileType } from './maybeSourceFromFileType';
-import { useActiveEditor } from '@decipad/notebook-tabs';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,
@@ -56,8 +55,6 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
     defaultEditorAttachmentsContextValue
   );
   const canDropState = dndStore.use.canDrop();
-
-  const activeEditor = useActiveEditor(editor?.editorController);
 
   const onUploadProgress = useCallback(
     (file: File) => (progressEvent: AxiosProgressEvent) => {
@@ -88,39 +85,37 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
 
   const attachImage = useCallback(
     async (file: File): Promise<{ url: string }> => {
-      const targetURL = `/api/pads/${notebookId}/images`;
+      const targetURL = `/api/pads/${editor?.id}/images`;
       const response = await axios.post(targetURL, file, {
         onUploadProgress: onUploadProgress(file),
       });
       const url = response.data;
       return { url };
     },
-    [notebookId, onUploadProgress]
+    [editor?.id, onUploadProgress]
   );
 
   const insertAttachment = useCallback(
     (file: File, url: string) => {
-      if (!activeEditor) {
+      if (!editor) {
         return;
       }
-      withoutNormalizing(activeEditor, () => {
+      withoutNormalizing(editor, () => {
         let insertAt: Path;
-        if (!activeEditor.selection || !isCollapsed(activeEditor.selection)) {
-          const point = getStartPoint(activeEditor, [
-            activeEditor.children.length - 1,
-          ]);
-          focusEditor(activeEditor, point);
+        if (!editor.selection || !isCollapsed(editor.selection)) {
+          const point = getStartPoint(editor, [editor.children.length - 1]);
+          focusEditor(editor, point);
           insertAt = point.path;
         } else {
-          insertAt = activeEditor.selection.anchor.path;
+          insertAt = editor.selection.anchor.path;
         }
 
         if (file.type.startsWith('image/')) {
-          insertImageBelow(activeEditor, insertAt, url, file.name);
+          insertImageBelow(editor, insertAt, url, file.name);
         } else {
           insertLiveConnection({
             computer,
-            editor: activeEditor,
+            editor,
             url,
             source: maybeSourceFromFileType(file.type) ?? undefined,
             fileName: file.name,
@@ -128,12 +123,12 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
         }
       });
     },
-    [computer, activeEditor]
+    [computer, editor]
   );
 
   const onAttach = useCallback(
     async (file: File) => {
-      if (notebookId) {
+      if (!editor?.id) {
         return;
       }
       setAttachments(
@@ -179,8 +174,8 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
       attachGeneric,
       attachImage,
       attachments,
+      editor?.id,
       insertAttachment,
-      notebookId,
       toast,
     ]
   );

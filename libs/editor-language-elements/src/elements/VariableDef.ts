@@ -1,5 +1,9 @@
-import { ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
-import { AST, Program, getExprRef } from '@decipad/computer';
+import {
+  MyElement,
+  ELEMENT_VARIABLE_DEF,
+  MyEditor,
+} from '@decipad/editor-types';
+import { AST, Computer, Program, getExprRef } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType } from '@decipad/parse';
@@ -11,7 +15,11 @@ import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariabl
 export const VariableDef: InteractiveLanguageElement = {
   type: ELEMENT_VARIABLE_DEF,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor, computer, element): Promise<Program> => {
+    async (
+      _editor: MyEditor,
+      computer: Computer,
+      element: MyElement
+    ): Promise<Program> => {
       assertElementType(element, ELEMENT_VARIABLE_DEF);
 
       if (element.children.length < 2) {

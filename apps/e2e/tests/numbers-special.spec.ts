@@ -43,7 +43,7 @@ test.describe('Formula highlighting', () => {
   const lineNo = -1;
 
   test('highlights a number while typing', async () => {
-    await page.click('[data-testid="paragraph-content"]');
+    await keyPress(page, 'Enter');
     await page.keyboard.type('We have bought 3');
     const potentialFormula = await getHighlightContent(page);
     expect(potentialFormula).toEqual('3');

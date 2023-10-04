@@ -82,8 +82,6 @@ export const ArticleWrapper = styled.article<IsEmbed>((props) => ({
   margin: '0px 24px',
   width: '100%',
   borderRadius: '16px',
-  display: 'flex',
-  flexDirection: 'column',
 
   /* Embed conditional styles */
   ...(props.isEmbed && {
@@ -121,7 +119,6 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   backgroundColor: cssVar('backgroundMain'),
   height: '100%',
   borderRadius: '16px 0px 0px 16px',
-  zIndex: 40,
 
   [smallScreenQuery]: {
     display: 'none',
@@ -132,6 +129,7 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
     border: `solid 1px ${cssVar('borderDefault')}`,
     borderRight: 'none',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
+    zIndex: 9,
   },
 }));
 

@@ -59,7 +59,7 @@ export const Paragraph: PlateComponent = ({
   // when the amount of editor children change.
   const showPlaceHolder = useEditorChange(
     (editor) =>
-      (editor.children.length === 1 && isElementEmpty(editor, element)) ||
+      (editor.children.length === 2 && isElementEmpty(editor, element)) ||
       (isElementEmpty(editor, element) &&
         isSelected(editor, element) &&
         !isSelectionExpanded(editor)),

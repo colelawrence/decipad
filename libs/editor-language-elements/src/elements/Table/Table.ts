@@ -1,6 +1,11 @@
 import { getNodeString } from '@udecode/plate';
-import { ELEMENT_TABLE } from '@decipad/editor-types';
-import { Program, AST, statementToIdentifiedBlock } from '@decipad/computer';
+import { MyElement, ELEMENT_TABLE, MyEditor } from '@decipad/editor-types';
+import {
+  Computer,
+  Program,
+  AST,
+  statementToIdentifiedBlock,
+} from '@decipad/computer';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../../types';
@@ -9,7 +14,11 @@ import { headerToColumn } from './headerToColumn';
 export const Table: InteractiveLanguageElement = {
   type: ELEMENT_TABLE,
   getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
-    async (_editor, computer, table): Promise<Program> => {
+    async (
+      _editor: MyEditor,
+      computer: Computer,
+      table: MyElement
+    ): Promise<Program> => {
       assertElementType(table, ELEMENT_TABLE);
 
       const [caption, headerRow, ...dataRows] = table.children;

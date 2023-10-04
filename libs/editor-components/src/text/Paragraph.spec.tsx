@@ -1,4 +1,4 @@
-import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { ELEMENT_H1, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { act, render, waitFor } from '@testing-library/react';
 import {
   createParagraphPlugin,
@@ -42,7 +42,10 @@ it('shows a placeholder when notebook empty and not selected', async () => {
     <Plate
       {...plateProps}
       editor={editor}
-      initialValue={[{ type: ELEMENT_PARAGRAPH, children: [{ text: '' }] }]}
+      initialValue={[
+        { type: ELEMENT_H1, children: [{ text: 'title' }] },
+        { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
+      ]}
     />,
     {
       wrapper,
@@ -110,6 +113,7 @@ it('does not show a placeholder when not selected', async () => {
       {...plateProps}
       editor={editor}
       initialValue={[
+        { type: ELEMENT_H1, children: [{ text: 'title' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
@@ -143,6 +147,7 @@ it('does not show a placeholder when selecting more than the paragraph', async (
       {...plateProps}
       editor={editor}
       initialValue={[
+        { type: ELEMENT_H1, children: [{ text: 'title' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'text' }] },
         { type: ELEMENT_PARAGRAPH, children: [{ text: 'other' }] },
       ]}
