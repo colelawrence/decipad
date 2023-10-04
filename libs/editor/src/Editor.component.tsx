@@ -32,6 +32,8 @@ export interface EditorProps {
   readOnly: boolean;
   editor?: MyEditor;
   children?: ReactNode;
+  tabIndex: number;
+  titleEditor: JSX.Element;
 }
 
 const SCRUBBED = '[scrubbed]';
@@ -48,9 +50,11 @@ Scrubber.setScrubber((key, value) => {
 
 const InsidePlate = ({
   containerRef,
+  tabIndex,
   children,
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
+  tabIndex: number;
 }) => {
   // setup undo
   useUndo();
@@ -60,10 +64,10 @@ const InsidePlate = ({
     <>
       <Tooltip />
       <ErrorBoundary fallback={<></>}>
-        <CursorOverlay containerRef={containerRef} />
+        <CursorOverlay containerRef={containerRef} tabIndex={tabIndex} />
       </ErrorBoundary>
       <ErrorBoundary fallback={<></>}>
-        <RemoteAvatarOverlay containerRef={containerRef} />
+        <RemoteAvatarOverlay containerRef={containerRef} tabIndex={tabIndex} />
       </ErrorBoundary>
       <ErrorBoundary fallback={<></>}>
         <DndPreview />
@@ -77,7 +81,7 @@ const InsidePlate = ({
  * TODO: remove Plate.id after plate patch
  */
 export const Editor = (props: EditorProps) => {
-  const { editor, readOnly, workspaceId } = props;
+  const { editor, readOnly, workspaceId, notebookId } = props;
 
   // Cursor remote presence
   // useCursors(editor);
@@ -122,28 +126,31 @@ export const Editor = (props: EditorProps) => {
     >
       <LoadingFilter loading={isWritingLocked}>
         <EditorBlockParentRefProvider onRefChange={onRefChange}>
-          <EditorLayout ref={containerRef}>
-            <BlockLengthSynchronizationProvider editor={editor}>
-              <TeleportEditor editor={editor}>
-                <Plate<MyValue>
-                  editor={editor}
-                  onChange={onChange}
-                  readOnly={
-                    // Only respect write locks here and not the readOnly prop.
-                    // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
-                    // The rest are controlled via EditorReadOnlyContext.
-                    isWritingLocked
-                  }
-                  disableCorePlugins={{
-                    history: true,
-                  }}
-                >
-                  <InsidePlate {...props} containerRef={containerRef} />
-                  <UploadFile />
-                  <Integrations workspaceId={workspaceId} />
-                </Plate>
-              </TeleportEditor>
-            </BlockLengthSynchronizationProvider>
+          <EditorLayout>
+            {props.titleEditor}
+            <div ref={containerRef}>
+              <BlockLengthSynchronizationProvider editor={editor}>
+                <TeleportEditor editor={editor}>
+                  <Plate<MyValue>
+                    editor={editor}
+                    onChange={onChange}
+                    readOnly={
+                      // Only respect write locks here and not the readOnly prop.
+                      // Even if !readOnly, we never lock the entire editor but always keep some elements editable.
+                      // The rest are controlled via EditorReadOnlyContext.
+                      isWritingLocked
+                    }
+                    disableCorePlugins={{
+                      history: true,
+                    }}
+                  >
+                    <InsidePlate {...props} containerRef={containerRef} />
+                    <UploadFile notebookId={notebookId} />
+                    <Integrations workspaceId={workspaceId} />
+                  </Plate>
+                </TeleportEditor>
+              </BlockLengthSynchronizationProvider>
+            </div>
           </EditorLayout>
         </EditorBlockParentRefProvider>
       </LoadingFilter>

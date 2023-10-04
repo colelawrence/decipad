@@ -117,43 +117,50 @@ test.describe('Duplicating a notebook', () => {
               text: 'Copy of pad title here',
             },
           ],
-          type: 'h1',
+          type: 'title',
           id: expect.any(String),
         },
         {
           children: [
             {
-              text: 'this is the first paragraph',
+              children: [
+                {
+                  text: 'this is the first paragraph',
+                },
+              ],
+              type: 'p',
+              id: expect.any(String),
             },
-          ],
-          type: 'p',
-          id: expect.any(String),
-        },
-        {
-          children: [
             {
-              text: 'this is the second paragraph',
+              children: [
+                {
+                  text: 'this is the second paragraph',
+                },
+              ],
+              type: 'p',
+              id: expect.any(String),
             },
-          ],
-          type: 'p',
-          id: expect.any(String),
-        },
-        {
-          children: [
             {
-              text: 'this is the third paragraph',
+              children: [
+                {
+                  text: 'this is the third paragraph',
+                },
+              ],
+              type: 'p',
+              id: expect.any(String),
             },
-          ],
-          type: 'p',
-          id: expect.any(String),
-        },
-        {
-          children: [
             {
-              text: '',
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              type: 'p',
+              id: expect.any(String),
             },
           ],
-          type: 'p',
+          type: 'tab',
+          name: expect.any(String),
           id: expect.any(String),
         },
       ],

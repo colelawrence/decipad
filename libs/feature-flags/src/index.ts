@@ -18,6 +18,8 @@ export const availableFlags = [
   'NOTION_CONNECTIONS',
   // Count the number of times TableCell renders
   'COUNT_TABLE_CELL_RENDERS',
+  // Tabs (bottom bar).
+  'TABS',
   // Enable AI assistant
   'AI_ASSISTANT_CHAT',
 ] as const;

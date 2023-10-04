@@ -1,5 +1,5 @@
 import { notebooks } from '@decipad/routing';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { ErrorPage, RequireSession, RouteEvents } from '../meta';
 import Notebook from './notebook/Notebook';
 import NotebookInvite from './notebookInvite/notebookInvite';
@@ -7,15 +7,14 @@ import { WelcomeNotebookRedirect } from '../Onboard/WelcomeNotebookRedirect';
 
 const Notebooks: React.FC = () => {
   const routeDefs = notebooks({});
-  const { key } = useLocation();
 
   return (
     <Routes>
       <Route
-        path={routeDefs.notebook.template}
+        path="/:notebook/:tab?"
         element={
           <RouteEvents category="notebook">
-            <Notebook key={key} />
+            <Notebook />
           </RouteEvents>
         }
       />

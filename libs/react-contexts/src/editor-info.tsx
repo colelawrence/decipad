@@ -15,3 +15,7 @@ export const useLockEditorWriting = () => {
   const { lockWriting } = useContext(EditorReadOnlyContext);
   useEffect(lockWriting, [lockWriting]);
 };
+
+export const EditorIdContext = createContext<string>('');
+
+export const useNotebookId = (): string => useContext(EditorIdContext);

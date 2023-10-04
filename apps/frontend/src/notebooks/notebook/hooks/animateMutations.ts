@@ -98,7 +98,10 @@ const observe = (root: Node) => {
 
 const schedule = () => {
   setTimeout(() => {
-    const editor = document.querySelector('[data-slate-editor="true"]');
+    // We have 2 editors on screen.
+    // 1. Title
+    // 2. Actual Editor
+    const [_, editor] = document.querySelectorAll('[data-slate-editor="true"]');
     if (!editor) {
       schedule();
     } else {

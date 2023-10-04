@@ -1,4 +1,4 @@
-import { CursorEditor, toSlateDoc, YjsEditor } from '@decipad/slate-yjs';
+import { CursorEditor, toSlateDoc } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
@@ -6,7 +6,6 @@ import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';
 import { Doc as YDoc } from 'yjs';
 import { BehaviorSubject } from 'rxjs';
-import { MyEditor } from '@decipad/editor-types';
 import { supportBigIntToJSON } from '@decipad/utils';
 import {
   DocSyncEditor,
@@ -19,12 +18,12 @@ import { download } from './download';
 
 supportBigIntToJSON();
 
-export function docSyncEditor<E extends MyEditor>(
-  editor: E & YjsEditor & CursorEditor,
+export function docSyncEditor(
+  editor: CursorEditor,
   doc: YDoc,
   store?: IndexeddbPersistence,
   ws?: TWebSocketProvider
-): E & DocSyncEditor {
+): DocSyncEditor {
   const events = new EventEmitter();
 
   store?.on('synced', function onStoreSynced() {

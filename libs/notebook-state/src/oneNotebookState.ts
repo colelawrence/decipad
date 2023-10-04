@@ -7,13 +7,22 @@ import { createStore } from 'zustand';
 import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
 import { Computer } from '@decipad/computer';
-import { createTPlateEditor } from '@decipad/editor-types';
 import { isServerSideRendering } from '@decipad/support';
+import {
+  EditorController,
+  BlockProcessor,
+  TitleElement,
+} from '@decipad/notebook-tabs';
 import { NotebookState, EnhancedPromise } from './state';
 import { isNewNotebook } from './isNewNotebook';
+import { CursorAwarenessSchedule } from './cursors';
+import debounce from 'lodash.debounce';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
+const COMPUTER_DEBOUNCE = 100;
+
+let interval: NodeJS.Timer | null;
 
 const initialState = (): Omit<
   NotebookState,
@@ -30,6 +39,7 @@ const initialState = (): Omit<
       };
     }) as unknown as EnhancedPromise<DocSyncEditor>;
   return {
+    blockProcessor: undefined,
     syncClientState: 'idle',
     editor: undefined,
     loadedFromLocal: false,
@@ -50,13 +60,17 @@ export const createNotebookStore = (onDestroy: () => void) =>
   createStore<NotebookState>((set, get) => ({
     ...initialState(),
     computer: new Computer(),
-    initEditor: (notebookId, { plugins, docsync }, getSession) => {
+    initEditor: (
+      notebookId,
+      { docsync, plugins, onChangeTitle },
+      getSession
+    ) => {
       // verify that if we have a matching connected docsync instance
-      const { editor: oldEditor, syncClientState } = get();
+      const { editor: oldEditor, syncClientState, computer } = get();
       if (oldEditor) {
         if (
           syncClientState === 'created' &&
-          oldEditor.id === notebookId &&
+          oldEditor.editorController.NotebookId === notebookId &&
           oldEditor.isReadOnly === docsync.readOnly &&
           !oldEditor.destroyed
         ) {
@@ -71,11 +85,32 @@ export const createNotebookStore = (onDestroy: () => void) =>
         }
       }
 
-      const editor = createTPlateEditor({
-        id: notebookId,
-        plugins,
-        disableCorePlugins: { history: true },
-      });
+      if (!computer) {
+        throw new Error('Where is my computer');
+      }
+
+      const controller = new EditorController(notebookId, plugins);
+      const blockProcessor = new BlockProcessor(
+        controller,
+        computer,
+        COMPUTER_DEBOUNCE
+      );
+
+      const changeTitle = debounce((title: string) => {
+        onChangeTitle(title);
+      }, 1000);
+
+      const { onChange } = controller.TitleEditor;
+
+      let oldTitle: string = '';
+      controller.TitleEditor.onChange = () => {
+        const title = controller.TitleEditor.children[0] as TitleElement;
+        if (title?.children?.[0]?.text !== oldTitle) {
+          oldTitle = title?.children?.[0]?.text;
+          changeTitle(oldTitle);
+        }
+        onChange();
+      };
 
       const newNotebook =
         docsync.initialState != null && isNewNotebook(docsync.initialState);
@@ -84,16 +119,32 @@ export const createNotebookStore = (onDestroy: () => void) =>
         notebookId,
         {
           ...docsync,
-          editor,
+          controller,
           onError: captureException,
         },
         getSession
       );
 
+      // ==== Cursor awareness ====
+
+      if (interval != null) {
+        clearInterval(interval);
+      }
+
+      interval = setInterval(
+        () => CursorAwarenessSchedule(docSyncEditor),
+        1000
+      );
+
+      // ==== End Cursor awareness ====
+
+      // Its here.
       const loadTimeout = setTimeout(() => {
         set({ timedOutLoadingFromRemote: true });
-        const { resolveNotebookLoadedPromise } = get();
-        resolveNotebookLoadedPromise()(docSyncEditor);
+        const { resolveNotebookLoadedPromise, editor } = get();
+        if (editor) {
+          resolveNotebookLoadedPromise()(editor);
+        }
       }, LOAD_TIMEOUT_MS);
 
       const onDocSyncEditorLoaded: OnLoadedCallback = (source) => {
@@ -156,6 +207,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
         hasLocalChanges: false,
         destroyed: false,
         isNewNotebook: newNotebook,
+        blockProcessor,
       });
     },
     setInitialFocusDone: () => {

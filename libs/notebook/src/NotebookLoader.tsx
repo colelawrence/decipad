@@ -10,9 +10,9 @@ import { useNotebookState } from '@decipad/notebook-state';
 import { isServerSideRendering } from '@decipad/support';
 import { EditorPlaceholder } from '@decipad/ui';
 import { useNotebookWarning } from './useNotebookWarning';
-import { SuspendedNotebook } from './SuspendedNotebook';
 import type { NotebookProps } from './types';
 import { useLocalBackupNotice } from './useLocalBackupNotice';
+import { TabEditorComponent } from '@decipad/editor';
 
 type NotebookLoaderProps = Omit<
   NotebookProps,
@@ -23,15 +23,13 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   notebookId,
   workspaceId,
   notebookMetaLoaded,
-  notebookTitle,
-  onNotebookTitleChange,
   readOnly,
   secret,
   connectionParams,
   initialState,
-  onEditor,
   onDocsync,
   onComputer,
+  onNotebookTitleChange,
 }) => {
   const { data: session } = useSession();
 
@@ -50,19 +48,10 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   const interactions = useEditorUserInteractionsContext();
 
   const plugins = useEditorPlugins({
-    notebookId,
     computer,
     readOnly,
-    notebookTitle,
-    onNotebookTitleChange,
     interactions,
   });
-
-  useEffect(() => {
-    if (editor) {
-      onEditor(editor);
-    }
-  }, [editor, onEditor]);
 
   const init = useCallback(() => {
     if (notebookMetaLoaded && plugins) {
@@ -77,6 +66,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
             initialState,
             protocolVersion: 2,
           },
+          onChangeTitle: onNotebookTitleChange,
         },
         () => session ?? undefined
       );
@@ -87,6 +77,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     initialState,
     notebookId,
     notebookMetaLoaded,
+    onNotebookTitleChange,
     plugins,
     readOnly,
     secret,
@@ -158,11 +149,11 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
             data-editorloaded={loaded}
             data-hydrated={!isServerSideRendering() && loaded}
           >
-            <SuspendedNotebook
+            <TabEditorComponent
               notebookId={notebookId}
               workspaceId={workspaceId}
               loaded={loaded}
-              editor={readOrSuspendEditor}
+              controller={readOrSuspendEditor.read().editorController}
               readOnly={readOnly}
             />
           </div>

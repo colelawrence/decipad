@@ -4,15 +4,6 @@ import { nanoid } from 'nanoid';
 
 export const emptyNotebook = (): MyValue => [
   {
-    type: 'h1',
-    id: nanoid(),
-    children: [
-      {
-        text: '',
-      },
-    ],
-  },
-  {
     type: 'p',
     id: nanoid(),
     children: [
@@ -23,16 +14,9 @@ export const emptyNotebook = (): MyValue => [
   },
 ];
 
+export const introNotebookTitle = '🦄 Make sense of numbers today';
+
 export const introNotebook = (): MyValue => [
-  {
-    children: [
-      {
-        text: '🦄 Make sense of numbers today',
-      },
-    ],
-    type: 'h1',
-    id: nanoid(),
-  },
   {
     children: [
       {

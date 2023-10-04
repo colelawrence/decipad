@@ -47,6 +47,9 @@
       "path": "../support"
     },
     {
+      "path": "../notebook-tabs"
+    },
+    {
       "path": "../editor-data-view"
     },
     {

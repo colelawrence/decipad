@@ -48,6 +48,7 @@ export { SmartColumnCell } from './SmartColumnCell/SmartColumnCell';
 export { SmartRow } from './SmartRow/SmartRow';
 export { StatsPopup } from './StatsPopup/StatsPopup';
 export { Table } from './Table/Table';
+export { Tabs } from './Tabs/Tabs';
 export { TableButton } from './TableButton/TableButton';
 export { TableColumnHeader } from './TableColumnHeader/TableColumnHeader';
 export { TableColumnMenu } from './TableColumnMenu/TableColumnMenu';

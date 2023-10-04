@@ -41,13 +41,11 @@ import {
   createNormalizeRichTextBlockPlugin,
   createNormalizeTextPlugin,
   createNormalizeVoidPlugin,
-  createNotebookTitlePlugin,
   createOperationsBlackboxPlugin,
   createPersistSelectionPlugin,
   createPlotPlugin,
   createPotentialFormulaHighlightPlugin,
   createPreventInvalidSelectionPlugin,
-  createRemoteCursorsPlugin,
   createRenderPerformanceStatsPlugin,
   createSelectionShortcutPlugin,
   createSmartRefPlugin,
@@ -55,7 +53,6 @@ import {
   createSyntaxErrorHighlightPlugin,
   createTrailingParagraphPlugin,
   createTypeErrorHighlightPlugin,
-  createUpdateComputerPlugin,
   createUserEventPlugin,
   createWithDocSyncHistoryPlugin,
   createDeduplicateElementIdsPlugin,
@@ -98,8 +95,6 @@ interface PluginOptions {
   computer: Computer;
   events?: ClientEventContextType;
   readOnly: boolean;
-  notebookTitle?: string;
-  onNotebookTitleChange?: (newTitle: string) => void;
   interactions?: Subject<UserInteraction>;
 }
 
@@ -107,8 +102,6 @@ export const plugins = ({
   computer,
   events = noopPromise,
   readOnly,
-  notebookTitle,
-  onNotebookTitleChange,
   interactions,
 }: PluginOptions) =>
   createPlugins<MyValue, MyEditor>(
@@ -124,12 +117,6 @@ export const plugins = ({
 
       createDisplayPlugin(),
       createIntegrationPlugin(),
-
-      createNotebookTitlePlugin({
-        readOnly,
-        notebookTitle,
-        onNotebookTitleChange,
-      }),
 
       // Layout blocks
       createLayoutColumnsPlugin(),
@@ -203,7 +190,6 @@ export const plugins = ({
       // language
       createCodeLinePlugin(computer),
       createCodeLineV2Plugin(computer),
-      createUpdateComputerPlugin(computer),
       createVariableDefPlugin(),
       createPotentialFormulaHighlightPlugin(readOnly),
 
@@ -236,9 +222,6 @@ export const plugins = ({
 
       // drawings
       createDrawPlugin(),
-
-      // remote cursors,
-      createRemoteCursorsPlugin(),
 
       // event interception
       createEventInterceptionSuperHandlerPlugin(),

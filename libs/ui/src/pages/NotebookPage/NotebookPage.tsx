@@ -12,6 +12,7 @@ interface NotebookPageProps {
   readonly notebook: ReactNode;
   readonly topbar: ReactNode;
   readonly sidebar: ReactNode;
+  readonly tabs: ReactNode;
   readonly assistant: ReactNode;
   readonly isEmbed: boolean;
 }
@@ -20,6 +21,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
   topbar,
   notebook,
   sidebar,
+  tabs,
   assistant,
   isEmbed = false,
 }) => {
@@ -50,9 +52,10 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
           <S.NotebookSpacingWrapper ref={overflowingDiv}>
             {notebook}
           </S.NotebookSpacingWrapper>
+          {!isEmbed && tabs}
         </S.ArticleWrapper>
 
-        {sidebar && (
+        {sidebar && !isEmbed && (
           <S.AsideWrapper isOpen={sidebarOpen}>{sidebar}</S.AsideWrapper>
         )}
         {isFlagEnabled('AI_ASSISTANT_CHAT') && assistant && (

@@ -1,19 +1,20 @@
-import { TEditor } from '@udecode/plate';
+/* eslint-disable no-param-reassign */
 import invariant from 'tiny-invariant';
 import { Awareness } from 'y-protocols/awareness';
 import debounce from 'lodash.debounce';
 import { Session } from 'next-auth';
 import { YjsEditor } from './yjsEditor';
 import { jsonify } from '../utils/jsonify';
-
-const AWARENESS: WeakMap<TEditor, Awareness> = new WeakMap();
-
-const cursorChangeDebounceMs = 2_000;
+import { noop } from '@decipad/utils';
 
 export interface CursorEditor extends YjsEditor {
   awareness: Awareness;
   destroy: () => void;
 }
+
+const AWARENESS: WeakMap<CursorEditor, Awareness> = new WeakMap();
+
+const cursorChangeDebounceMs = 2_000;
 
 export const CursorEditor = {
   awareness(editor: CursorEditor): Awareness {
@@ -24,7 +25,7 @@ export const CursorEditor = {
 
   updateCursor: (editor: CursorEditor, session: Session | undefined): void => {
     try {
-      const { selection } = editor;
+      const selection = editor.editorController.GetSelection();
 
       const { anchor } = selection ?? {};
       const { focus } = selection ?? {};
@@ -49,36 +50,40 @@ export const CursorEditor = {
   },
 };
 
-export function withCursor<T extends YjsEditor>(
-  editor: T,
+export function withCursor(
+  editor: YjsEditor,
   awareness: Awareness,
   getSession: () => Session | undefined
-): T & CursorEditor {
-  const e = editor as T & CursorEditor;
+): CursorEditor {
+  const cursorEditor: CursorEditor = {
+    ...editor,
+    awareness,
+    destroy: noop,
+  };
 
-  AWARENESS.set(e, awareness);
-  e.awareness = awareness;
+  AWARENESS.set(cursorEditor, awareness);
 
-  const { onChange, destroy } = editor;
+  const { onChange } = editor.editorController;
+  const { destroy } = editor;
 
   const debouncedOnChange = debounce(() => {
     try {
-      CursorEditor.updateCursor(e, getSession());
+      CursorEditor.updateCursor(cursorEditor, getSession());
     } catch (err) {
       // do nothing, not important
     }
   }, cursorChangeDebounceMs);
 
-  e.onChange = () => {
+  editor.editorController.onChange = () => {
     debouncedOnChange();
 
-    onChange();
+    onChange.bind(editor.editorController)();
   };
 
-  e.destroy = () => {
-    e.onChange = onChange;
-    destroy.call(e);
+  editor.destroy = () => {
+    editor.editorController.onChange = onChange.bind(editor.editorController);
+    destroy.call(cursorEditor);
   };
 
-  return e;
+  return cursorEditor;
 }

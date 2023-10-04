@@ -15,7 +15,7 @@ import { FC, useCallback } from 'react';
 import { Path } from 'slate';
 import { attachGenericFile } from './attachGeneric';
 
-export const UploadFile: FC = () => {
+export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
   const computer = useComputer();
   const { dialogOpen, fileType, setDialogOpen, resetStore } =
     useFileUploadStore();
@@ -62,13 +62,13 @@ export const UploadFile: FC = () => {
 
   const insertFromComputer = useCallback(
     async (file: File) => {
-      const targetURL = arcEndpoint(editor?.id as string);
+      const targetURL = arcEndpoint(notebookId);
       const response = await axios.post(targetURL, file);
       const url = response.data;
 
       insertByUrl(url, file.name);
     },
-    [arcEndpoint, editor?.id, insertByUrl]
+    [arcEndpoint, insertByUrl, notebookId]
   );
 
   const [, getCreateAttachmentForm] = useGetCreateAttachmentFormMutation();
@@ -113,7 +113,7 @@ export const UploadFile: FC = () => {
               [URL, FormData, string] | undefined
             > => {
               const result = await getCreateAttachmentForm({
-                notebookId: editor?.id,
+                notebookId,
                 fileType: fileInfo.type,
                 fileName: fileInfo.name,
               });
@@ -162,8 +162,8 @@ export const UploadFile: FC = () => {
       insertFromComputer,
       onAttached,
       getCreateAttachmentForm,
-      editor?.id,
       toast,
+      notebookId,
     ]
   );
 
