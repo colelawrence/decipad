@@ -1,0 +1,36 @@
+{
+  "name": "notebook-tabs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/notebook-tabs",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/notebook-tabs/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/notebook-tabs"],
+      "options": {
+        "jestConfig": "libs/notebook-tabs/jest.config.js"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b libs/notebook-tabs"
+      }
+    },
+    "depcheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "../../node_modules/.bin/madge --circular src",
+        "cwd": "libs/notebook-tabs"
+      }
+    }
+  },
+  "tags": []
+}

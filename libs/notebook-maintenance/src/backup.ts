@@ -19,7 +19,7 @@ const currentEpochTimestamp = () => {
   return now - remainder;
 };
 
-const currentEpoque = () => {
+export const currentEpoque = () => {
   return format(currentEpochTimestamp(), 'yyyy-MM-dd:HH:mm O');
 };
 
@@ -44,7 +44,7 @@ export const needsBackup = async (
   );
 };
 
-const backup = async (snapshotName: string, notebookId: string) => {
+export const backup = async (snapshotName: string, notebookId: string) => {
   const { data, version } = await snapshot(notebookId);
 
   const newSnapshot: DocSyncSnapshotRecord = {

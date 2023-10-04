@@ -1,12 +1,12 @@
-import { createTPlateEditor } from '@decipad/editor-types';
 import { disable } from '@decipad/feature-flags';
 import { getDefined } from '@decipad/utils';
-import { TElement } from '@udecode/plate';
 import waitForExpect from 'wait-for-expect';
 import { createDocSyncEditor, DocSyncEditor } from '.';
+import { EditorController } from '@decipad/notebook-tabs';
 
 describe('pad editor persistence', () => {
   let editor: DocSyncEditor;
+  const title = 'My Title';
   let onLoadedImpl: ((source: string) => void) | undefined;
   const onLoaded = (source: string) => {
     if (onLoadedImpl) {
@@ -24,7 +24,7 @@ describe('pad editor persistence', () => {
     editor = createDocSyncEditor('docid', {
       protocolVersion: 2,
       ws: false,
-      editor: createTPlateEditor(),
+      controller: new EditorController('docid', []),
     });
     editor.onLoaded(onLoaded);
     editor.onSaved(onSaved);
@@ -51,7 +51,7 @@ describe('pad editor persistence', () => {
     });
   });
 
-  test('allows some changes that get saved', async () => {
+  test('Saves some small changes', async () => {
     let saved = false;
     onSavedImpl = (source: string) => {
       expect(source).toBe('local');
@@ -59,48 +59,33 @@ describe('pad editor persistence', () => {
     };
     const e = getDefined(editor);
 
-    e.apply({
+    e.editorController.Loaded('none');
+
+    e.editorController.apply({
       type: 'insert_node',
       path: [0],
-      node: { children: [{ text: '' }] } as TElement,
-    });
-
-    e.apply({
-      type: 'insert_text',
-      path: [0, 0],
-      offset: 0,
-      text: 'A new string of text to be inserted.',
+      node: {
+        type: 'title',
+        id: 'titleID',
+        children: [{ text: title }],
+      },
     });
 
     await waitForExpect(() => {
       expect(saved).toBe(true);
     });
 
-    expect(e.children).toMatchObject([
+    expect(e.editorController.children).toMatchObject([
       {
         children: [
           {
-            text: 'A new string of text to be inserted.',
+            text: title,
           },
         ],
-      },
-      {
-        children: [
-          {
-            text: 'Welcome to Decipad!',
-          },
-        ],
-        type: 'h1',
-      },
-      {
-        children: [
-          {
-            text: '',
-          },
-        ],
-        type: 'p',
+        type: 'title',
       },
     ]);
+
     e.destroy();
   });
 
@@ -112,7 +97,7 @@ describe('pad editor persistence', () => {
     };
     const editor2 = createDocSyncEditor('docid', {
       ws: false,
-      editor: createTPlateEditor(),
+      controller: new EditorController('docid', []),
       protocolVersion: 2,
     });
     editor2.onLoaded(onLoaded2);
@@ -121,29 +106,14 @@ describe('pad editor persistence', () => {
       expect(loaded).toBe(true);
     });
 
-    expect(editor2.children).toMatchObject([
+    expect(editor2.editorController.children).toMatchObject([
       {
         children: [
           {
-            text: 'A new string of text to be inserted.',
+            text: title,
           },
         ],
-      },
-      {
-        children: [
-          {
-            text: 'Welcome to Decipad!',
-          },
-        ],
-        type: 'h1',
-      },
-      {
-        children: [
-          {
-            text: '',
-          },
-        ],
-        type: 'p',
+        type: 'title',
       },
     ]);
   });

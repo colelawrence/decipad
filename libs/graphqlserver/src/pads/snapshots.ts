@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { backup, currentEpoque } from '@decipad/notebook-maintenance';
 import { GraphqlContext, ID } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { snapshot, storeSnapshotDataAsFile } from '@decipad/services/notebooks';
@@ -77,6 +78,29 @@ export const createOrUpdateSnapshot = async (
   if (pad.isTemplate && forceSearchIndexUpdate) {
     await indexNotebook(pad, stringify(snapshotData.value));
   }
+
+  return true;
+};
+
+export const createSnapshot = async (
+  _: unknown,
+  { notebookId }: { notebookId: ID },
+  context: GraphqlContext
+): Promise<boolean> => {
+  await notebooks.expectAuthorizedForGraphql({
+    context,
+    recordId: notebookId,
+    minimumPermissionType: 'WRITE',
+  });
+
+  const data = await tables();
+  const pad = await data.pads.get({ id: notebookId });
+
+  if (!pad) {
+    throw Boom.notFound();
+  }
+
+  await backup(currentEpoque(), notebookId);
 
   return true;
 };

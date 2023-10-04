@@ -134,6 +134,7 @@ export type Mutation = {
   createPad: Pad;
   createRole: Role;
   createSecret: Secret;
+  createSnapshot: Scalars['Boolean']['output'];
   createUserViaMagicLink: User;
   createWorkspace: Workspace;
   doNothing?: Maybe<Scalars['Boolean']['output']>;
@@ -237,6 +238,11 @@ export type MutationCreateRoleArgs = {
 export type MutationCreateSecretArgs = {
   secret: SecretInput;
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateSnapshotArgs = {
+  notebookId: Scalars['ID']['input'];
 };
 
 
@@ -1022,6 +1028,13 @@ export type CreateSectionMutationVariables = Exact<{
 
 export type CreateSectionMutation = { __typename?: 'Mutation', addSectionToWorkspace?: { __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null } | null };
 
+export type CreateNotebookSnapshotMutationVariables = Exact<{
+  notebookId: Scalars['ID']['input'];
+}>;
+
+
+export type CreateNotebookSnapshotMutation = { __typename?: 'Mutation', createSnapshot: boolean };
+
 export type CreateOrUpdateNotebookSnapshotMutationVariables = Exact<{
   notebookId: Scalars['ID']['input'];
   snapshotName: Scalars['String']['input'];
@@ -1686,6 +1699,15 @@ export const CreateSectionDocument = gql`
 
 export function useCreateSectionMutation() {
   return Urql.useMutation<CreateSectionMutation, CreateSectionMutationVariables>(CreateSectionDocument);
+};
+export const CreateNotebookSnapshotDocument = gql`
+    mutation CreateNotebookSnapshot($notebookId: ID!) {
+  createSnapshot(notebookId: $notebookId)
+}
+    `;
+
+export function useCreateNotebookSnapshotMutation() {
+  return Urql.useMutation<CreateNotebookSnapshotMutation, CreateNotebookSnapshotMutationVariables>(CreateNotebookSnapshotDocument);
 };
 export const CreateOrUpdateNotebookSnapshotDocument = gql`
     mutation CreateOrUpdateNotebookSnapshot($notebookId: ID!, $snapshotName: String!) {
@@ -2596,6 +2618,7 @@ export type GraphCacheOptimisticUpdaters = {
   createPad?: GraphCacheOptimisticMutationResolver<MutationCreatePadArgs, WithTypename<Pad>>,
   createRole?: GraphCacheOptimisticMutationResolver<MutationCreateRoleArgs, WithTypename<Role>>,
   createSecret?: GraphCacheOptimisticMutationResolver<MutationCreateSecretArgs, WithTypename<Secret>>,
+  createSnapshot?: GraphCacheOptimisticMutationResolver<MutationCreateSnapshotArgs, Scalars['Boolean']>,
   createUserViaMagicLink?: GraphCacheOptimisticMutationResolver<MutationCreateUserViaMagicLinkArgs, WithTypename<User>>,
   createWorkspace?: GraphCacheOptimisticMutationResolver<MutationCreateWorkspaceArgs, WithTypename<Workspace>>,
   doNothing?: GraphCacheOptimisticMutationResolver<Record<string, never>, Maybe<Scalars['Boolean']>>,
@@ -2655,6 +2678,7 @@ export type GraphCacheUpdaters = {
     createPad?: GraphCacheUpdateResolver<{ createPad: WithTypename<Pad> }, MutationCreatePadArgs>,
     createRole?: GraphCacheUpdateResolver<{ createRole: WithTypename<Role> }, MutationCreateRoleArgs>,
     createSecret?: GraphCacheUpdateResolver<{ createSecret: WithTypename<Secret> }, MutationCreateSecretArgs>,
+    createSnapshot?: GraphCacheUpdateResolver<{ createSnapshot: Scalars['Boolean'] }, MutationCreateSnapshotArgs>,
     createUserViaMagicLink?: GraphCacheUpdateResolver<{ createUserViaMagicLink: WithTypename<User> }, MutationCreateUserViaMagicLinkArgs>,
     createWorkspace?: GraphCacheUpdateResolver<{ createWorkspace: WithTypename<Workspace> }, MutationCreateWorkspaceArgs>,
     doNothing?: GraphCacheUpdateResolver<{ doNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,

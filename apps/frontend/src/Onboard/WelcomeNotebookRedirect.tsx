@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { useGetWorkspacesQuery } from '@decipad/graphql-client';
 import { Navigate } from 'react-router-dom';
 import { notebooks, workspaces } from '@decipad/routing';
-import { initialNotebook } from '@decipad/docsync';
 import { LoadingLogo } from '@decipad/ui';
+import { InitialNotebook } from '@decipad/notebook-tabs';
 
 export const WelcomeNotebookRedirect: FC = () => {
   const [result] = useGetWorkspacesQuery({
@@ -21,7 +21,7 @@ export const WelcomeNotebookRedirect: FC = () => {
   // But at least we take name from initialNotebook so it has less chance to break
   const notebookIds =
     result.data?.workspaces?.flatMap((workspace) =>
-      workspace?.pads.items.filter((pad) => pad.name === initialNotebook.title)
+      workspace?.pads.items.filter((pad) => pad.name === InitialNotebook.title)
     ) ?? [];
 
   if (notebookIds.length === 1) {

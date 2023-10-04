@@ -34,7 +34,11 @@ import {
   requireUser,
 } from '../authorization';
 import { accessTokenFor } from '../utils/accessTokenFor';
-import { createOrUpdateSnapshot, getSnapshots } from './snapshots';
+import {
+  createOrUpdateSnapshot,
+  createSnapshot,
+  getSnapshots,
+} from './snapshots';
 import { duplicatePad } from './duplicatePad';
 import { importPad } from './importPad';
 import { setPadPublic } from './setPadPublic';
@@ -159,6 +163,7 @@ const resolvers = {
     duplicatePad,
     setPadPublic,
     createOrUpdateSnapshot,
+    createSnapshot,
     movePad,
     importPad: async (
       parent: unknown,

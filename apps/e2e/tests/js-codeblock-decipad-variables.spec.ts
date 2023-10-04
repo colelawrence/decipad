@@ -28,7 +28,7 @@ test.describe('More JS codeblock checks', () => {
   let generatedVarName: string;
 
   test('Create a variable', async () => {
-    await page.keyboard.press('Enter');
+    await page.getByTestId('paragraph-content').last().click();
     await page.keyboard.press('=');
 
     await page

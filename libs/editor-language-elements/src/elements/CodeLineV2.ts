@@ -4,7 +4,6 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_SMART_REF,
   MyEditor,
-  MyElement,
 } from '@decipad/editor-types';
 import {
   assertElementType,
@@ -48,62 +47,66 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
   }
 );
 
-export const parseStructuredCodeLine = weakMapMemoizeInteractiveElementOutput(
-  async (
-    editor: MyEditor,
-    computer: Computer,
-    block: MyElement
-  ): Promise<{
-    interpretedAs: 'code' | 'literal' | 'empty';
-    programChunk: Program;
-  }> => {
-    assertElementType(block, ELEMENT_CODE_LINE_V2);
+export const parseStructuredCodeLine = async (
+  editor: MyEditor,
+  computer: Computer,
+  block: CodeLineV2Element
+): Promise<{
+  interpretedAs: 'code' | 'literal' | 'empty';
+  programChunk: Program;
+}> => {
+  assertElementType(block, ELEMENT_CODE_LINE_V2);
 
-    const [vname, sourcetext] = block.children;
+  const [vname, sourcetext] = block.children;
 
-    if (getCodeLineSource(block.children[1])?.trim()) {
-      const hasAnySmartRefs = block.children[1].children.some((elm) =>
-        isElementOfType(elm, ELEMENT_SMART_REF)
-      );
-      const asNumber = hasAnySmartRefs
-        ? []
-        : await tryParseAsNumber(editor, computer, block);
+  if (getCodeLineSource(block.children[1])?.trim()) {
+    const hasAnySmartRefs = block.children[1].children.some((elm) =>
+      isElementOfType(elm, ELEMENT_SMART_REF)
+    );
+    const asNumber = hasAnySmartRefs
+      ? []
+      : await tryParseAsNumber(editor, computer, block);
 
-      if (asNumber.length) {
-        return {
-          interpretedAs: 'literal',
-          programChunk: asNumber,
-        };
-      }
-
+    if (asNumber.length) {
       return {
-        interpretedAs: 'code',
-        programChunk: parseElementAsVariableAssignment(
-          block.id,
-          getNodeString(vname),
-          getCodeLineSource(sourcetext)
-        ),
+        interpretedAs: 'literal',
+        programChunk: asNumber,
       };
     }
-    // empty line
+
     return {
-      interpretedAs: 'empty',
+      interpretedAs: 'code',
       programChunk: parseElementAsVariableAssignment(
         block.id,
         getNodeString(vname),
-        { type: 'literal', args: ['number', N(0)] }
+        getCodeLineSource(sourcetext)
       ),
     };
   }
-);
+  // empty line
+  return {
+    interpretedAs: 'empty',
+    programChunk: parseElementAsVariableAssignment(
+      block.id,
+      getNodeString(vname),
+      { type: 'literal', args: ['number', N(0)] }
+    ),
+  };
+};
 
 export const CodeLineV2: InteractiveLanguageElement = {
   type: ELEMENT_CODE_LINE_V2,
-  getParsedBlockFromElement: async (editor, computer, e) => {
-    assertElementType(e, ELEMENT_CODE_LINE_V2);
+  getParsedBlockFromElement: weakMapMemoizeInteractiveElementOutput(
+    async (editor, computer, e) => {
+      assertElementType(e, ELEMENT_CODE_LINE_V2);
 
-    const { programChunk } = await parseStructuredCodeLine(editor, computer, e);
+      const { programChunk } = await parseStructuredCodeLine(
+        editor,
+        computer,
+        e
+      );
 
-    return programChunk;
-  },
+      return programChunk;
+    }
+  ),
 };

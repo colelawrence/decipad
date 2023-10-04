@@ -26,7 +26,7 @@ test.describe('Navigating with magic numbers', () => {
 
   test('creates some text', async () => {
     await page.keyboard.type('Should you buy a house?');
-    await keyPress(page, 'Enter');
+    await page.getByTestId('paragraph-content').last().click();
     await page.keyboard.type('Price is %Price');
     await page.keyboard.press('%');
     await page.keyboard.press('Enter');

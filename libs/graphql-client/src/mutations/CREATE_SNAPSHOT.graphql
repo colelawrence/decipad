@@ -1,0 +1,3 @@
+mutation CreateNotebookSnapshot($notebookId: ID!) {
+  createSnapshot(notebookId: $notebookId)
+}

@@ -45,6 +45,7 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DATA_VIEW,
+  ELEMENT_DISPLAY,
   ELEMENT_DRAW,
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
@@ -316,7 +317,8 @@ export type TopLevelValue =
   | InteractiveElement
   | DataViewElement
   | IntegrationTypes.IntegrationBlock;
-export type MyValue = [H1Element, ...Array<TopLevelValue>];
+
+export type MyValue = Array<TopLevelValue>;
 
 export type Document = {
   children: MyValue;
@@ -363,4 +365,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DRAW,
   ELEMENT_LIVE_QUERY,
   ELEMENT_INTEGRATION,
+  ELEMENT_DISPLAY,
 ];

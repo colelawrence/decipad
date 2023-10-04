@@ -124,6 +124,8 @@ export default gql`
       snapshotName: String!
       forceSearchIndexUpdate: Boolean
     ): Boolean!
+
+    createSnapshot(notebookId: ID!): Boolean!
   }
 
   extend type Subscription {

@@ -103,6 +103,7 @@
       "@decipad/meta": ["libs/meta/src/index.ts"],
       "@decipad/notebook": ["libs/notebook/src/index.ts"],
       "@decipad/notebook-state": ["libs/notebook-state/src/index.ts"],
+      "@decipad/notebook-tabs": ["libs/notebook-tabs/src/index.ts"],
       "@decipad/number": ["libs/number/src/index.ts"],
       "@decipad/parse": ["libs/parse/src/index.ts"],
       "@decipad/queries": ["libs/queries/src/index.ts"],

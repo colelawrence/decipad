@@ -35,6 +35,7 @@ module.exports = {
     '<rootDir>/libs/computer',
     '<rootDir>/libs/parse',
     '<rootDir>/libs/import',
+    '<rootDir>/libs/notebook-tabs',
     '<rootDir>/libs/number',
     '<rootDir>/libs/message-packer',
     '<rootDir>/libs/live-connect',

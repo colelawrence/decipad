@@ -1,9 +1,10 @@
+/* eslint-disable unused-imports/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-param-reassign */
 import { noop } from '@decipad/utils';
 import {
   isHistoryEditor,
-  TEditor,
   TOperation,
-  withoutNormalizing,
   withoutSavingHistory,
 } from '@udecode/plate';
 import invariant from 'tiny-invariant';
@@ -11,32 +12,19 @@ import * as Y from 'yjs';
 import { applyYjsEvents } from '../applyToSlate';
 import applySlateOps from '../applyToYjs';
 import { SharedType, slateYjsSymbol } from '../model';
-import { toSlateDoc } from '../utils';
+import { EditorController } from '@decipad/notebook-tabs';
 
-const IS_REMOTE: WeakSet<TEditor> = new WeakSet();
-const LOCAL_OPERATIONS: WeakMap<TEditor, Set<TOperation>> = new WeakMap();
-const SHARED_TYPES: WeakMap<TEditor, SharedType> = new WeakMap();
-
-export interface YjsEditor extends TEditor {
+export interface YjsEditor {
+  editorController: EditorController;
   sharedType: SharedType;
   destroy: () => void;
-  synchronizeValue: () => void;
 }
 
-export type WithYjsOptions = {
-  synchronizeValue?: boolean;
-};
+const IS_REMOTE: WeakSet<YjsEditor> = new WeakSet();
+const LOCAL_OPERATIONS: WeakMap<YjsEditor, Set<TOperation>> = new WeakMap();
+const SHARED_TYPES: WeakMap<YjsEditor, SharedType> = new WeakMap();
 
 export const YjsEditor = {
-  /**
-   * Set the editor value to the content of the to the editor bound shared type.
-   */
-  synchronizeValue: (e: YjsEditor): void => {
-    withoutNormalizing(e, () => {
-      e.children = toSlateDoc(e.sharedType) as YjsEditor['children'];
-      e.onChange();
-    });
-  },
   /**
    * Returns whether the editor currently is applying remote changes.
    */
@@ -118,20 +106,18 @@ function applyLocalOperations(editor: YjsEditor): void {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const yjsApply = (editor: YjsEditor, events: Y.YEvent<any>[]) =>
-  withoutNormalizing(editor, () =>
-    YjsEditor.asRemote(editor, () => {
-      try {
-        applyYjsEvents(
-          editor,
-          events.filter((event) => event.transaction?.origin !== slateYjsSymbol)
-        );
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Error applying remote event', err);
-        throw err;
-      }
-    })
-  );
+  YjsEditor.asRemote(editor, () => {
+    try {
+      applyYjsEvents(
+        editor,
+        events.filter((event) => event.transaction?.origin !== slateYjsSymbol)
+      );
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error applying remote event', err);
+      throw err;
+    }
+  });
 
 function applyRemoteYjsEvents(
   _editor: YjsEditor,
@@ -152,44 +138,42 @@ function applyRemoteYjsEvents(
   }
 }
 
-export function withYjs<T extends TEditor>(
-  editor: T,
+export function withYjs(
+  editorController: EditorController,
   sharedType: SharedType
-): T & YjsEditor {
-  const e = editor as T & YjsEditor;
+): YjsEditor {
+  const yjs: YjsEditor = {
+    editorController,
+    sharedType,
+    destroy: noop,
+  };
 
-  e.sharedType = sharedType;
-  SHARED_TYPES.set(editor, sharedType);
-  LOCAL_OPERATIONS.set(editor, new Set());
+  SHARED_TYPES.set(yjs, sharedType);
+  LOCAL_OPERATIONS.set(yjs, new Set());
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const observer = (events: Y.YEvent<any>[]) => applyRemoteYjsEvents(e, events);
+  const observer = (events: Y.YEvent<any>[]) =>
+    applyRemoteYjsEvents(yjs, events);
   sharedType.observeDeep(observer);
 
-  const { apply, onChange, destroy = noop } = e;
+  const { apply, onChange } = editorController;
 
-  e.apply = (op: TOperation) => {
-    trackLocalOperations(e, op);
-
-    apply(op);
+  editorController.apply = (op) => {
+    trackLocalOperations(yjs, op);
+    apply.bind(editorController)(op);
   };
 
-  e.onChange = () => {
-    applyLocalOperations(e);
-
-    onChange();
+  editorController.onChange = () => {
+    applyLocalOperations(yjs);
+    onChange.bind(editorController)();
   };
 
-  e.destroy = () => {
+  yjs.destroy = () => {
+    editorController.apply = apply;
+    editorController.onChange = onChange;
+
     sharedType.unobserveDeep(observer);
-    e.apply = apply;
-    e.onChange = onChange;
-    destroy.call(e);
   };
 
-  e.synchronizeValue = () => {
-    YjsEditor.synchronizeValue(e);
-  };
-
-  return e;
+  return yjs;
 }
