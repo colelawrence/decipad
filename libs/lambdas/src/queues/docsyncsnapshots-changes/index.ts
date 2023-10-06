@@ -11,7 +11,7 @@ process.env.DECI_NO_DOCSYNC_UPDATE_CHANGES = 'true';
 const handleDocSyncUpdatePut = async (
   event: TableRecordChanges<DocSyncSnapshotRecord>
 ) => {
-  assert.strictEqual(event.table, 'docsyncupsnapshots');
+  assert.strictEqual(event.table, 'docsyncsnapshots');
   if (event.action === 'put') {
     await notebookMaintenance(event.args.docsync_id);
   }
