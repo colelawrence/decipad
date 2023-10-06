@@ -14,6 +14,7 @@ import { ComputerContextProvider } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createCodeLinePlugin, createCodeVariableHighlightPlugin } from '..';
+import { BrowserRouter } from 'react-router-dom';
 
 let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
@@ -24,18 +25,21 @@ type PlateWrapperProps = Pick<DeprecatedCodeBlockElement, 'children'> & {
 const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
   <DndProvider backend={HTML5Backend}>
     <ComputerContextProvider computer={computer}>
-      <Plate<MyValue>
-        initialValue={[
-          {
-            type: DEPRECATED_ELEMENT_CODE_BLOCK,
-            children,
-          } as never,
-        ]}
-        plugins={[
-          createCodeLinePlugin(computer),
-          createCodeVariableHighlightPlugin(),
-        ]}
-      />
+      <BrowserRouter>
+        ()
+        <Plate<MyValue>
+          initialValue={[
+            {
+              type: DEPRECATED_ELEMENT_CODE_BLOCK,
+              children,
+            } as never,
+          ]}
+          plugins={[
+            createCodeLinePlugin(computer),
+            createCodeVariableHighlightPlugin(),
+          ]}
+        />
+      </BrowserRouter>
     </ComputerContextProvider>
   </DndProvider>
 );

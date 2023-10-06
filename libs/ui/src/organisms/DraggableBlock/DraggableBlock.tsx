@@ -17,6 +17,7 @@ import {
 } from '../../primitives';
 import { blockAlignment, editorLayout } from '../../styles';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { TabElement } from '@decipad/editor-types';
 
 const handleWidth = 16;
 const totalSpaceWithGap = handleWidth + editorLayout.gutterGap;
@@ -72,6 +73,8 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly onAdd?: () => void;
   readonly onPlus?: () => void;
   readonly onCopyHref?: () => void;
+  readonly onMoveToTab?: (tabId: string) => void;
+  readonly tabs?: Array<TabElement>;
   readonly showLine?: boolean;
 
   readonly onTurnInto?: (value: string) => void;
@@ -105,7 +108,9 @@ export const DraggableBlock = ({
   previewRef,
 
   draggableCss,
+  tabs = [],
 
+  onMoveToTab,
   onMouseDown,
   onDelete,
   onDuplicate,
@@ -218,6 +223,8 @@ export const DraggableBlock = ({
               onDelete={onDelete}
               onDuplicate={onDuplicate}
               onShowHide={onShowHide}
+              onMoveToTab={onMoveToTab}
+              tabs={tabs}
               showEyeLabel={showEyeLabel}
               showAddBlock={!isHidden}
               onCopyHref={onCopyHref}

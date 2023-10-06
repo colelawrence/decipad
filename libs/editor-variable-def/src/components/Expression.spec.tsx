@@ -10,6 +10,7 @@ import {
   PlateProps,
 } from '@udecode/plate';
 import { Expression } from './Expression';
+import { BrowserRouter } from 'react-router-dom';
 
 let plateProps: PlateProps;
 let editor: PlateEditor;
@@ -34,7 +35,11 @@ beforeEach(() => {
 });
 
 it('renders the element properties', () => {
-  const { getByText } = render(<Plate {...plateProps} editor={editor} />);
+  const { getByText } = render(<Plate {...plateProps} editor={editor} />, {
+    wrapper({ children }) {
+      return <BrowserRouter>{children}</BrowserRouter>;
+    },
+  });
 
   expect(getByText('expression')).toBeVisible();
 });

@@ -30,6 +30,7 @@ import handler from 'serve-handler';
 import { useDataView, useDataViewLayoutData } from './hooks';
 import { createDataViewPlugin } from './plugins';
 import { AggregationKind, Column } from './types';
+import { BrowserRouter } from 'react-router-dom';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -100,7 +101,9 @@ const WithProviders: FC<
   return (
     <DndProvider backend={HTML5Backend}>
       <ComputerContextProvider computer={computer}>
-        <Plate editor={editor as PlateEditor}>{children}</Plate>
+        <BrowserRouter>
+          <Plate editor={editor as PlateEditor}>{children}</Plate>
+        </BrowserRouter>
       </ComputerContextProvider>
     </DndProvider>
   );

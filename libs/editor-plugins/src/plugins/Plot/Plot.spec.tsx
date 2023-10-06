@@ -11,6 +11,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { N } from '@decipad/number';
 import Plot from './Plot';
+import { BrowserRouter } from 'react-router-dom';
 
 interface PlotWithProvidersParams {
   element?: Partial<PlotElement>;
@@ -80,19 +81,21 @@ const PlotWithProviders = ({
   };
   return (
     <DndProvider backend={HTML5Backend}>
-      <TestResultsProvider blockResults={blockResults}>
-        <ComputerContextProvider>
-          <Plate>
-            <Plot
-              attributes={{
-                'data-slate-node': 'element',
-                ref: createRef(),
-              }}
-              element={element}
-            />
-          </Plate>
-        </ComputerContextProvider>
-      </TestResultsProvider>
+      <BrowserRouter>
+        <TestResultsProvider blockResults={blockResults}>
+          <ComputerContextProvider>
+            <Plate>
+              <Plot
+                attributes={{
+                  'data-slate-node': 'element',
+                  ref: createRef(),
+                }}
+                element={element}
+              />
+            </Plate>
+          </ComputerContextProvider>
+        </TestResultsProvider>
+      </BrowserRouter>
     </DndProvider>
   );
 };

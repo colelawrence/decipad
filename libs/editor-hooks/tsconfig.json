@@ -21,6 +21,9 @@
     },
     {
       "path": "../react-utils"
+    },
+    {
+      "path": "../notebook-tabs"
     }
   ]
 }

@@ -11,3 +11,4 @@ export * from './useSelection';
 export * from './useTableColumnFormulaResultForColumn';
 export * from './useWasSelected';
 export * from './useEditorChange';
+export * from './useTabs';

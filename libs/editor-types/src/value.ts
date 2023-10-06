@@ -55,6 +55,8 @@ import {
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
   ELEMENT_VARIABLE_DEF,
 } from './element-kinds';
 import type {
@@ -294,6 +296,20 @@ export type BlockElement =
 
 type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
+// Tabs
+export interface TabElement {
+  type: typeof ELEMENT_TAB;
+  id: string;
+  name: string;
+  children: MyValue;
+}
+
+export interface TitleElement {
+  type: typeof ELEMENT_TITLE;
+  id: string;
+  children: [{ text: string }];
+}
+
 export type TopLevelValue =
   | H1Element
   | H2Element
@@ -317,6 +333,8 @@ export type TopLevelValue =
   | InteractiveElement
   | DataViewElement
   | IntegrationTypes.IntegrationBlock;
+
+export type NotebookValue = [TitleElement, ...Array<TabElement>];
 
 export type MyValue = Array<TopLevelValue>;
 

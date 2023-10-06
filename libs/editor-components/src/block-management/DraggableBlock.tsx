@@ -1,6 +1,11 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { Computer, parseSimpleValue } from '@decipad/computer';
-import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
+import {
+  useFilteredTabs,
+  useMoveToTab,
+  useNodePath,
+  usePathMutatorCallback,
+} from '@decipad/editor-hooks';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -9,6 +14,7 @@ import {
   MyEditor,
   MyElement,
   MyElementOrText,
+  TopLevelValue,
   alwaysWritableElementTypes,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -33,6 +39,8 @@ import {
 import { generateVarName, noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
+  TNodeEntry,
+  findNode,
   findNodePath,
   focusEditor,
   getEndPoint,
@@ -45,6 +53,7 @@ import {
   insertText,
   removeNodes,
   select,
+  withoutNormalizing,
 } from '@udecode/plate';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
@@ -63,6 +72,10 @@ import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
 import utils from './utils';
+import {
+  blockSelectionSelectors,
+  blockSelectionStore,
+} from '@udecode/plate-selection';
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -278,6 +291,47 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         editor.children[1].children[0].text === ''
       );
 
+    const tabs = useFilteredTabs();
+    const moveTab = useMoveToTab();
+
+    const onMoveTab = useCallback(
+      (tabId: string) =>
+        withoutNormalizing(editor, () => {
+          if (!nodePath) return;
+
+          const selectedIds =
+            blockSelectionSelectors.selectedIds() as Set<string>;
+
+          if (selectedIds.size === 0) {
+            onDelete();
+            moveTab(tabId, element as TopLevelValue);
+            return;
+          }
+
+          const entries: TNodeEntry<TopLevelValue>[] = [];
+
+          for (const id of selectedIds.values()) {
+            const entry = findNode<TopLevelValue>(editor, { match: { id } });
+            if (!entry) continue;
+
+            entries.push(entry);
+          }
+
+          entries.sort(([, aPath], [, bPath]) => aPath[0] - bPath[0]);
+
+          for (let i = 0; i < entries.length; i += 1) {
+            // entry = [node, path]
+            // so we are selecting the first number, of the path, of the first entry.
+            removeNodes(editor, { at: [entries[0][1][0]] });
+            moveTab(tabId, entries[i][0]);
+          }
+
+          // Reset the selection
+          blockSelectionStore.set.selectedIds(new Set());
+        }),
+      [nodePath, moveTab, element, onDelete, editor]
+    );
+
     if (deleted) {
       return null;
     }
@@ -312,6 +366,8 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         dependenciesForBlock={dependenciesForBlock}
         onDuplicate={onDuplicate}
         onShowHide={onShowHide}
+        onMoveToTab={onMoveTab}
+        tabs={tabs}
         onAdd={onAdd}
         onPlus={onPlus}
         onCopyHref={isFlagEnabled('COPY_HREF') ? onCopyHref : undefined}

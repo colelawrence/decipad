@@ -15,6 +15,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { EditorReadOnlyContext } from '@decipad/react-contexts';
 import { DraggableBlock } from './DraggableBlock';
+import { BrowserRouter } from 'react-router-dom';
 
 const DraggableParagraph: PlateComponent = ({ element, children }) => (
   <DraggableBlock blockKind="paragraph" element={element!}>
@@ -43,7 +44,9 @@ beforeEach(() => {
   };
   editor = createPlateEditor({ plugins });
   wrapper = ({ children }) => (
-    <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+    <DndProvider backend={HTML5Backend}>
+      <BrowserRouter>{children}</BrowserRouter>
+    </DndProvider>
   );
 });
 

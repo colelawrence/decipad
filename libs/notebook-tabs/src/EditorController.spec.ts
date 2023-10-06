@@ -1,6 +1,12 @@
 /* eslint-disable no-plusplus */
-import { MyValue } from '@decipad/editor-types';
-import { EditorController, TabElement, TitleElement } from './EditorController';
+import {
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
+  MyValue,
+  TabElement,
+  TitleElement,
+} from '@decipad/editor-types';
+import { EditorController } from './EditorController';
 
 let mockCounter = 0;
 jest.mock('nanoid', () => {
@@ -196,7 +202,7 @@ describe('Sub editors behavior', () => {
       type: 'insert_node',
       path: [0],
       node: {
-        type: 'title',
+        type: ELEMENT_TITLE,
         id: 'title_id',
         children: [{ text: '' }],
       } satisfies TitleElement,
@@ -206,7 +212,7 @@ describe('Sub editors behavior', () => {
       type: 'insert_node',
       path: [1],
       node: {
-        type: 'tab',
+        type: ELEMENT_TAB,
         id: 'title_id',
         name: 'Tab name',
         children: [
@@ -891,13 +897,14 @@ describe('Migrating old documents into tabs', () => {
     controller.Loaded();
 
     expect(controller.children).toHaveLength(2);
-    expect(controller.children[0].type).toBe('title');
-    expect(controller.children[1].type).toBe('tab');
+    expect(controller.children[0].type).toBe(ELEMENT_TITLE);
+    expect(controller.children[1].type).toBe(ELEMENT_TAB);
 
     // Really just making sure
     expect(
       controller.children[1].children.some(
-        (c) => (c.type as any) === 'tab' || (c.type as any) === 'title'
+        (c) =>
+          (c.type as any) === ELEMENT_TAB || (c.type as any) === ELEMENT_TITLE
       )
     ).toBeFalsy();
   });
@@ -915,7 +922,7 @@ describe('Tab Operations', () => {
     const { id } = controller.children[1];
     controller.RenameTab(id, 'My Name!');
     expect(controller.children[1]).toMatchObject({
-      type: 'tab',
+      type: ELEMENT_TAB,
       id,
       name: 'My Name!',
       children: expect.any(Array),

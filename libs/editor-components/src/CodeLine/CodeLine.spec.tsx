@@ -5,6 +5,7 @@ import { Plate } from '@udecode/plate';
 import React, { createRef, PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('Placeholders', () => {
   // @ts-ignore
@@ -31,6 +32,8 @@ describe('Placeholders', () => {
 
 const TestProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => (
   <DndProvider backend={HTML5Backend}>
-    <Plate>{children}</Plate>
+    <BrowserRouter>
+      <Plate>{children}</Plate>
+    </BrowserRouter>
   </DndProvider>
 );

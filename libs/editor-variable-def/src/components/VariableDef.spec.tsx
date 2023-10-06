@@ -17,6 +17,7 @@ import {
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VariableDef } from './VariableDef';
+import { BrowserRouter } from 'react-router-dom';
 
 describe('Variable def expression element', () => {
   let plateProps: PlateProps;
@@ -60,7 +61,9 @@ describe('Variable def expression element', () => {
     });
 
     wrapper = ({ children }) => (
-      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
     );
   });
 
@@ -120,7 +123,9 @@ describe('Variable def slider element', () => {
     });
 
     wrapper = ({ children }) => (
-      <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+      <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </DndProvider>
     );
   });
 

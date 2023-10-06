@@ -23,6 +23,7 @@ import { Computer } from '@decipad/computer';
 import userEvent from '@testing-library/user-event';
 import { InteractiveParagraph } from './InteractiveParagraph';
 import { ToastDisplay } from '@decipad/ui';
+import { BrowserRouter } from 'react-router-dom';
 
 let editor: PlateEditor;
 let plateProps: PlateProps;
@@ -53,7 +54,9 @@ beforeEach(() => {
       }}
     >
       <ToastDisplay>
-        <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+        <BrowserRouter>
+          <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+        </BrowserRouter>
       </ToastDisplay>
     </SessionProvider>
   );

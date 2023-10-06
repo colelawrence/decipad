@@ -17,9 +17,12 @@ import { findDomNodePath } from '@decipad/editor-utils';
 import { PropsWithChildren } from 'react';
 import { timeout } from '@decipad/utils';
 import { Paragraph } from './Paragraph';
+import { BrowserRouter } from 'react-router-dom';
 
 const wrapper: React.FC<PropsWithChildren<unknown>> = ({ children }) => (
-  <DndProvider backend={HTML5Backend}>{children}</DndProvider>
+  <DndProvider backend={HTML5Backend}>
+    <BrowserRouter>{children}</BrowserRouter>
+  </DndProvider>
 );
 
 let plateProps: PlateProps;

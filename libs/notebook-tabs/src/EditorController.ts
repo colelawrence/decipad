@@ -3,12 +3,13 @@
 import cloneDeep from 'lodash.clonedeep';
 import { BaseEditor, BaseSelection, Node, Path, createEditor } from 'slate';
 import { nanoid } from 'nanoid';
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ReactEditor, withReact } from 'slate-react';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import {
+  ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   TDescendant,
   TEditor,
@@ -19,11 +20,15 @@ import {
   removeNodes,
 } from '@udecode/plate';
 import {
+  ELEMENT_TAB,
+  ELEMENT_TITLE,
   H1Element,
   MyEditor,
   MyElement,
   MyPlatePlugin,
-  MyValue,
+  NotebookValue,
+  TabElement,
+  TitleElement,
   createTPlateEditor,
 } from '@decipad/editor-types';
 import starterNotebook from './InitialNotebook';
@@ -31,20 +36,6 @@ import { noop } from '@decipad/utils';
 
 const INITIAL_TAB_NAME = 'Tab';
 const INITIAL_TITLE = 'Welcome to Decipad!';
-
-// TODO: Move these into editor types.
-export interface TabElement {
-  type: 'tab';
-  id: string;
-  name: string;
-  children: MyValue;
-}
-
-export interface TitleElement {
-  type: 'title';
-  id: string;
-  children: [{ text: string }];
-}
 
 /**
  * Editor Controller Class
@@ -59,7 +50,7 @@ export interface TitleElement {
  * This means its shared state (but should not be changed by this class).
  */
 export class EditorController {
-  public children: [TitleElement, ...Array<TabElement>];
+  public children: NotebookValue;
   public SubEditors: Array<MyEditor>;
   public NotebookId: string;
 
@@ -123,7 +114,7 @@ export class EditorController {
     };
 
     const titleEl: TitleElement = {
-      type: 'title',
+      type: ELEMENT_TITLE,
       id: 'placeholder_id - if you see this = bug',
       get children() {
         return (editor.children[0] as TitleElement).children;
@@ -191,7 +182,7 @@ export class EditorController {
     // We do this because Slate uses Immer and the reference to `editor.children`,
     // is not predictable.
     const child: TabElement = {
-      type: 'tab',
+      type: ELEMENT_TAB,
       id: tabId,
       name: tabName,
       get children() {
@@ -252,8 +243,8 @@ export class EditorController {
     if (
       op.type === 'insert_node' &&
       op.path.length === 1 &&
-      op.node.type !== 'tab' &&
-      op.node.type !== 'title'
+      op.node.type !== ELEMENT_TAB &&
+      op.node.type !== ELEMENT_TITLE
     ) {
       // In this state we have an old notebook.
       this.OldNodes.push(op.node);
@@ -264,7 +255,7 @@ export class EditorController {
     if (op.type !== 'set_selection' && op.path.length === 1) {
       // This must be an operation on tab level.
 
-      if (op.type === 'insert_node' && op.node.type === 'title') {
+      if (op.type === 'insert_node' && op.node.type === ELEMENT_TITLE) {
         this.TitleEditor.withoutNormalizing(() => {
           this.TitleEditor.children = [op.node];
         });
@@ -280,7 +271,7 @@ export class EditorController {
         const node = op.node as unknown as TabElement;
         const [editor, child] = this.CreateSubEditor(node.id, node.name);
 
-        child.type = 'tab';
+        child.type = ELEMENT_TAB;
 
         this.SubEditors.push(editor);
         this.children.push(child);
@@ -412,7 +403,7 @@ export class EditorController {
       type: 'insert_node',
       path: [0],
       node: {
-        type: 'title',
+        type: ELEMENT_TITLE,
         id: nanoid(),
         children: [{ text: INITIAL_TITLE }],
       } satisfies TitleElement,
@@ -422,7 +413,7 @@ export class EditorController {
       type: 'insert_node',
       path: [1],
       node: {
-        type: 'tab',
+        type: ELEMENT_TAB,
         id: nanoid(),
         name: INITIAL_TAB_NAME,
         children: [],
@@ -445,7 +436,7 @@ export class EditorController {
       type: 'insert_node',
       path: [0],
       node: {
-        type: 'title',
+        type: ELEMENT_TITLE,
         id: 'test_title',
         children: [{ text: '' }],
       } satisfies TitleElement,
@@ -455,7 +446,7 @@ export class EditorController {
       type: 'insert_node',
       path: [1],
       node: {
-        type: 'tab',
+        type: ELEMENT_TAB,
         id: 'test_tab',
         name: 'test_tab_name',
         children: [],
@@ -483,7 +474,7 @@ export class EditorController {
       type: 'insert_node',
       path: [this.children.length],
       node: {
-        type: 'tab',
+        type: ELEMENT_TAB,
         id,
         children: [
           {
@@ -505,7 +496,7 @@ export class EditorController {
     }
 
     const tab = this.children[index];
-    if (tab.type === 'title') {
+    if (tab.type === ELEMENT_TITLE) {
       throw new Error('Should only get a tab element');
     }
 
@@ -523,7 +514,7 @@ export class EditorController {
     }
 
     const tab = this.children[index];
-    if (tab.type === 'title') {
+    if (tab.type === ELEMENT_TITLE) {
       throw new Error('Should only get a tab element');
     }
 
@@ -579,9 +570,9 @@ export class EditorController {
         });
       }
 
-      if (title.type === 'h1') {
+      if (title.type === ELEMENT_H1) {
         this.TitleEditor.insertNodes({
-          type: 'title',
+          type: ELEMENT_TITLE,
           id: title.id,
           children: [{ text: title.children[0].text }],
         } as Node);
@@ -598,10 +589,16 @@ export class EditorController {
   }
 }
 
+export const ControllerProvider = createContext<EditorController | undefined>(
+  undefined
+);
+
 /**
  * Reactive hook that returns the existing tabs.
  */
-export function useTabs(controller: EditorController): Array<TabElement> {
+export function useTabs(
+  controller: EditorController | undefined
+): Array<TabElement> {
   const [, setRender] = useState(0);
 
   useEffect(() => {

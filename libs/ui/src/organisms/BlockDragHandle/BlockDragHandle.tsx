@@ -3,7 +3,7 @@ import { BlockDependents } from '@decipad/computer';
 import { noop, once } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, HTMLProps, ReactNode, useCallback, useState } from 'react';
-import { MenuItem, Tooltip } from '../../atoms';
+import { MenuItem, Tooltip, TriggerMenuItem } from '../../atoms';
 import {
   Delete,
   DragHandle,
@@ -19,6 +19,7 @@ import { componentCssVars, cssVar, p12Medium } from '../../primitives';
 import { editorLayout } from '../../styles';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { hideOnPrint } from '../../styles/editor-layout';
+import { TabElement } from '@decipad/editor-types';
 
 const gridStyles = once(() =>
   css({
@@ -83,6 +84,8 @@ interface BlockDragHandleProps {
   readonly onDuplicate?: () => void;
   readonly onShowHide?: (action: 'show' | 'hide') => void;
   readonly onCopyHref?: () => void;
+  readonly onMoveToTab?: (tabId: string) => void;
+  readonly tabs?: Array<TabElement>;
   readonly aiPanel?: {
     text: string;
     visible: boolean;
@@ -99,9 +102,11 @@ export const BlockDragHandle = ({
   onMouseDown,
   showAddBlock = true,
   onChangeMenuOpen = noop,
+  tabs = [],
   onPlus = noop,
   onDelete = noop,
   onDuplicate = noop,
+  onMoveToTab,
   onCopyHref,
   dependenciesForBlock,
   aiPanel,
@@ -182,6 +187,23 @@ export const BlockDragHandle = ({
             <MenuItem icon={<Link />} onSelect={onCopyHref}>
               Copy reference
             </MenuItem>
+          )}
+          {onMoveToTab && tabs.length > 0 && (
+            <MenuList
+              itemTrigger={
+                <TriggerMenuItem icon={<Link />}>Move to tab</TriggerMenuItem>
+              }
+            >
+              {tabs.map((t) => (
+                <MenuItem
+                  key={t.id}
+                  icon={<Link />}
+                  onSelect={() => onMoveToTab(t.id)}
+                >
+                  <div css={{ minWidth: '132px' }}>{t.name}</div>
+                </MenuItem>
+              ))}
+            </MenuList>
           )}
           {children}
           {aiButton}

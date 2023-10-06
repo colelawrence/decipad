@@ -4,14 +4,14 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 
-import { MyElement } from '@decipad/editor-types';
+import { MyElement, TabElement } from '@decipad/editor-types';
 import { Computer, Program, ProgramBlock } from '@decipad/computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { TOperation, findNode, isElement } from '@udecode/plate';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
-import { EditorController, TabElement } from './EditorController';
+import { EditorController } from './EditorController';
 
 export class BlockProcessor {
   private Controller: EditorController;

@@ -95,4 +95,6 @@ export const ELEMENT_DRAW_IMAGE = 'image';
 // others
 export const ELEMENT_CAPTION = 'caption';
 
-export const ELEMENT_EDITOR = 'single-tab-editor';
+// Tabs
+export const ELEMENT_TAB = 'tab';
+export const ELEMENT_TITLE = 'title';

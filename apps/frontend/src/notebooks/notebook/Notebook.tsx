@@ -45,6 +45,7 @@ import { useEditorUndoState } from './hooks';
 import { useNotebookAccessActions, useNotebookMetaActions } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import {
+  ControllerProvider,
   EditorController,
   useActiveEditor,
   useTabs,
@@ -100,39 +101,41 @@ export const NewNotebook: FC = () => {
 
   return (
     <DocsyncEditorProvider.Provider value={docsync}>
-      <ComputerContextProvider computer={computer}>
-        <NotebookPage
-          notebook={
-            <Suspense fallback={<EditorPlaceholder />}>
-              <NewEditor
-                notebookId={notebookId}
-                setDocsync={setDocsync}
-                setComputer={setComputer}
-                setError={setError}
-              />
-            </Suspense>
-          }
-          topbar={
-            <Suspense fallback={<TopbarPlaceholder />}>
-              <NewTopbar notebookId={notebookId} />
-            </Suspense>
-          }
-          sidebar={<NewSidebar docsync={docsync} />}
-          tabs={
-            docsync?.editorController && isFlagEnabled('TABS') ? (
-              <NewTabs controller={docsync.editorController} />
-            ) : null
-          }
-          assistant={
-            isFlagEnabled('AI_ASSISTANT_CHAT') ? (
-              <Suspense fallback={<AssistantChatPlaceholder />}>
-                <NewAssistant notebookId={notebookId} />
+      <ControllerProvider.Provider value={docsync?.editorController}>
+        <ComputerContextProvider computer={computer}>
+          <NotebookPage
+            notebook={
+              <Suspense fallback={<EditorPlaceholder />}>
+                <NewEditor
+                  notebookId={notebookId}
+                  setDocsync={setDocsync}
+                  setComputer={setComputer}
+                  setError={setError}
+                />
               </Suspense>
-            ) : null
-          }
-          isEmbed={isEmbed}
-        />
-      </ComputerContextProvider>
+            }
+            topbar={
+              <Suspense fallback={<TopbarPlaceholder />}>
+                <NewTopbar notebookId={notebookId} />
+              </Suspense>
+            }
+            sidebar={<NewSidebar docsync={docsync} />}
+            tabs={
+              docsync?.editorController && isFlagEnabled('TABS') ? (
+                <NewTabs controller={docsync.editorController} />
+              ) : null
+            }
+            assistant={
+              isFlagEnabled('AI_ASSISTANT_CHAT') ? (
+                <Suspense fallback={<AssistantChatPlaceholder />}>
+                  <NewAssistant notebookId={notebookId} />
+                </Suspense>
+              ) : null
+            }
+            isEmbed={isEmbed}
+          />
+        </ComputerContextProvider>
+      </ControllerProvider.Provider>
     </DocsyncEditorProvider.Provider>
   );
 };

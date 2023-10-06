@@ -8,15 +8,12 @@ import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
 import { Computer } from '@decipad/computer';
 import { isServerSideRendering } from '@decipad/support';
-import {
-  EditorController,
-  BlockProcessor,
-  TitleElement,
-} from '@decipad/notebook-tabs';
+import { EditorController, BlockProcessor } from '@decipad/notebook-tabs';
 import { NotebookState, EnhancedPromise } from './state';
 import { isNewNotebook } from './isNewNotebook';
 import { CursorAwarenessSchedule } from './cursors';
 import debounce from 'lodash.debounce';
+import { TitleElement } from '@decipad/editor-types';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
