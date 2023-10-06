@@ -3,6 +3,7 @@ import type {
   CellValueType,
   SeriesType,
   TableCellType,
+  UserIconKey,
 } from '@decipad/editor-types';
 import { ElementType, FunctionComponent, createContext } from 'react';
 import {
@@ -16,7 +17,6 @@ import {
   Warning,
 } from '../icons';
 import { AvailableSwatchColor } from './swatches';
-import { UserIconKey } from './user-icons';
 
 const isCurrencyUnit = (unit: Unit[] | null | undefined): boolean =>
   unit?.length === 1 && unit[0].baseSuperQuantity === 'currency';

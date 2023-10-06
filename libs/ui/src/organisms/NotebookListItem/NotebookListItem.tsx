@@ -14,13 +14,13 @@ import {
   Anchor,
   AvailableSwatchColor,
   DNDItemTypes,
-  UserIconKey,
   getEmptyImage,
   swatchesThemed,
 } from '../../utils';
 import { NotebookStatusProps } from '../../molecules/NotebookStatus/NotebookStatus';
 import { NotebookOptions } from './NotebookOptions';
 import { Ellipsis } from '../../icons';
+import { UserIconKey } from '@decipad/editor-types';
 
 function CustomDragLayer() {
   const {

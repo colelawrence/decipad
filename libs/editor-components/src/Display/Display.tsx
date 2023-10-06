@@ -10,6 +10,7 @@ import {
   COLUMN_KINDS,
   ELEMENT_DISPLAY,
   PlateComponent,
+  UserIconKey,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -25,7 +26,6 @@ import {
   DisplayWidget,
   VariableEditor,
   SelectItems,
-  UserIconKey,
   AvailableSwatchColor,
 } from '@decipad/ui';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';

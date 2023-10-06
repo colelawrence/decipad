@@ -3,6 +3,7 @@ import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_DATA_VIEW,
   PlateComponent,
+  UserIconKey,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
@@ -11,7 +12,6 @@ import {
   AvailableSwatchColor,
   DataViewMenu,
   DataView as UIDataView,
-  UserIconKey,
   VoidBlock,
 } from '@decipad/ui';
 import { ReactNode, useCallback, useMemo, useState } from 'react';

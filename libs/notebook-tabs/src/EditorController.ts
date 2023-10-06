@@ -29,6 +29,7 @@ import {
   NotebookValue,
   TabElement,
   TitleElement,
+  UserIconKey,
   createTPlateEditor,
 } from '@decipad/editor-types';
 import starterNotebook from './InitialNotebook';
@@ -281,10 +282,13 @@ export class EditorController {
         this.Notifier.next('new-tab');
         this.onChange();
       } else if (op.type === 'set_node') {
-        // Setting tab node (usually the name);
+        // Setting tab node (usually the name or icon);
 
-        const c = this.children[op.path[0]] as TabElement;
-        c.name = (op.newProperties as any).name;
+        const tab = this.children[op.path[0]] as TabElement;
+        this.children[op.path[0]] = {
+          ...tab,
+          ...op.newProperties,
+        };
 
         this.Notifier.next('new-tab');
         this.onChange();
@@ -530,6 +534,31 @@ export class EditorController {
     };
 
     this.apply(renameMethod);
+  }
+
+  public ChangeTabIcon(id: string, icon: UserIconKey): void {
+    const index = this.children.findIndex((e) => e.id === id);
+    if (index === -1) {
+      throw new Error('Could not find this tab');
+    }
+
+    const tab = this.children[index];
+    if (tab.type === ELEMENT_TITLE) {
+      throw new Error('Should only get a tab element');
+    }
+
+    const changeIcon: TOperation = {
+      type: 'set_node',
+      path: [index],
+      properties: {
+        icon: tab.icon,
+      },
+      newProperties: {
+        icon,
+      },
+    };
+
+    this.apply(changeIcon);
   }
 
   /**

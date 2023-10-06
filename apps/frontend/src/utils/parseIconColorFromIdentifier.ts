@@ -1,9 +1,5 @@
-import {
-  AvailableSwatchColor,
-  swatchNames,
-  UserIconKey,
-  userIconKeys,
-} from 'libs/ui/src/utils';
+import { UserIconKey, userIconKeys } from '@decipad/editor-types';
+import { AvailableSwatchColor, swatchNames } from 'libs/ui/src/utils';
 
 interface ParseIconColorReturn {
   ok: boolean;

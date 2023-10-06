@@ -2,6 +2,7 @@ import {
   COLUMN_KINDS,
   ELEMENT_CALLOUT,
   PlateComponent,
+  UserIconKey,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -11,7 +12,7 @@ import {
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import { Callout as UICallout } from '@decipad/ui';
-import { AvailableSwatchColor, UserIconKey } from 'libs/ui/src/utils';
+import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { DraggableBlock } from '../block-management';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 import { useTurnIntoProps } from '../utils';

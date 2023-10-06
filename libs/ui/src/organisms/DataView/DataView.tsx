@@ -10,11 +10,8 @@ import { Move, Transpose } from '../../icons';
 import { VariableNameSelector } from '../../molecules';
 import { p14Regular, smallScreenQuery } from '../../primitives';
 import { Height, editorLayout, scrollbars } from '../../styles';
-import {
-  AvailableSwatchColor,
-  TableStyleContext,
-  UserIconKey,
-} from '../../utils';
+import { AvailableSwatchColor, TableStyleContext } from '../../utils';
+import { UserIconKey } from '@decipad/editor-types';
 
 const dataViewWrapperStyles = css({
   display: 'flex',

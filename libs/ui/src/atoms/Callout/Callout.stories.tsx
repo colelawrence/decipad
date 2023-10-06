@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { UserIconKey, swatchNames } from '../../utils';
+import { swatchNames } from '../../utils';
 import { Callout } from './Callout';
+import { UserIconKey } from '@decipad/editor-types';
 
 const args = { children: 'You can edit interactive inputs!' };
 

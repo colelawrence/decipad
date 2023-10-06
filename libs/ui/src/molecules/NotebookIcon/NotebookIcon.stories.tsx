@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { AvailableSwatchColor, TColorStatus, UserIconKey } from '../../utils';
+import { AvailableSwatchColor, TColorStatus } from '../../utils';
 import { NotebookIcon } from './NotebookIcon';
+import { UserIconKey } from '@decipad/editor-types';
 
 const args = {
   icon: 'Car' as UserIconKey,

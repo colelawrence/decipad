@@ -15,13 +15,10 @@ import { cssVar, smallScreenQuery } from '../../primitives';
 import { editorLayout, scrollbars } from '../../styles';
 import { slimBlockWidth } from '../../styles/editor-layout';
 import { tableControlWidth } from '../../styles/table';
-import {
-  AvailableSwatchColor,
-  TableStyleContext,
-  UserIconKey,
-} from '../../utils';
+import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { TableWidth } from '../Table/Table';
+import { UserIconKey } from '@decipad/editor-types';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = cssVar('editorWidth');

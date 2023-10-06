@@ -32,6 +32,7 @@ import {
   IntegrationTypes,
   InteractiveElement,
   MarkKind,
+  UserIconKey,
 } from '.';
 import type {
   DataViewCaptionElement,
@@ -302,6 +303,7 @@ export interface TabElement {
   id: string;
   name: string;
   children: MyValue;
+  icon?: UserIconKey;
 }
 
 export interface TitleElement {

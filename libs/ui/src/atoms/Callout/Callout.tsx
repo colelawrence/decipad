@@ -7,7 +7,8 @@ import * as icons from '../../icons';
 import { IconPopover } from '../../molecules/IconPopover/IconPopover';
 import { cssVar, useThemeColor } from '../../primitives';
 import { blockAlignment } from '../../styles';
-import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { AvailableSwatchColor } from '../../utils';
+import { UserIconKey } from '@decipad/editor-types';
 
 const { callout } = blockAlignment;
 

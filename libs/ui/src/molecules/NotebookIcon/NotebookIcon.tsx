@@ -3,7 +3,8 @@ import { css } from '@emotion/react';
 import { FC } from 'react';
 import * as icons from '../../icons';
 import { cssVar, mediumShadow, useThemeColor } from '../../primitives';
-import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { AvailableSwatchColor } from '../../utils';
+import { UserIconKey } from '@decipad/editor-types';
 
 export interface NotebookIconProps {
   readonly icon: UserIconKey;

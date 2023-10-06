@@ -11,8 +11,9 @@ import {
   placeholderOpacity,
   smallScreenQuery,
 } from '../../primitives';
-import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { AvailableSwatchColor } from '../../utils';
 import { IconPopover } from '../IconPopover/IconPopover';
+import { UserIconKey } from '@decipad/editor-types';
 
 interface CaptionProps
   extends Pick<

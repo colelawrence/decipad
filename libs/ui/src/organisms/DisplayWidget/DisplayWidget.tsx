@@ -8,7 +8,6 @@ import {
   AvailableSwatchColor,
   IconPopover,
   Tooltip,
-  UserIconKey,
   DropdownMenu,
   SelectItems,
 } from '@decipad/ui';
@@ -17,6 +16,7 @@ import { Caret } from '../../icons';
 import * as icons from '../../icons';
 import { cssVar, p14Regular, p24Medium } from '../../primitives';
 import { ResultFormatting } from '../../types';
+import { UserIconKey } from '@decipad/editor-types';
 
 const wrapperStyles = css({
   display: 'flex',

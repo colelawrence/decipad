@@ -1,9 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';
-import { AvailableColorStatus, TColorStatus, UserIconKey } from '../../utils';
+import { AvailableColorStatus, TColorStatus } from '../../utils';
 import { AvailableSwatchColor, swatchNames } from '../../utils/swatches';
 import { NotebookListItem } from './NotebookListItem';
 import { noop } from '@decipad/utils';
+import { UserIconKey } from '@decipad/editor-types';
 
 const args: ComponentProps<typeof NotebookListItem> = {
   iconColor: 'Malibu' as AvailableSwatchColor,

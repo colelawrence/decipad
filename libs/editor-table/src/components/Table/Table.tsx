@@ -4,6 +4,7 @@ import { useNodePath } from '@decipad/editor-hooks';
 import {
   ELEMENT_TABLE,
   PlateComponent,
+  UserIconKey,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -17,7 +18,7 @@ import {
   useComputer,
   useEditorStylesContext,
 } from '@decipad/react-contexts';
-import { AvailableSwatchColor, EditorTable, UserIconKey } from '@decipad/ui';
+import { AvailableSwatchColor, EditorTable } from '@decipad/ui';
 import { useCallback, useMemo, useState } from 'react';
 import { defaultTableResultValue } from '../../../../react-contexts/src/editor-table-result';
 import { WIDE_MIN_COL_COUNT } from '../../constants';

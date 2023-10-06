@@ -1,8 +1,9 @@
-import { Caption as UICaption, Tooltip, UserIconKey } from '@decipad/ui';
+import { Caption as UICaption, Tooltip } from '@decipad/ui';
 import {
   ELEMENT_CAPTION,
   ELEMENT_VARIABLE_DEF,
   PlateComponent,
+  UserIconKey,
   useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';

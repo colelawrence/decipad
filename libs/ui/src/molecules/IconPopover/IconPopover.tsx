@@ -10,13 +10,8 @@ import { Close } from '../../icons';
 import { cssVar, p13Medium, useThemeColor } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { deciOverflowXStyles } from '../../styles/scrollbars';
-import {
-  AvailableSwatchColor,
-  UserIconKey,
-  swatchNames,
-  swatchesThemed,
-  userIconKeys,
-} from '../../utils';
+import { AvailableSwatchColor, swatchNames, swatchesThemed } from '../../utils';
+import { UserIconKey, userIconKeys } from '@decipad/editor-types';
 
 const contentWrapper = css({
   marginTop: '6px',

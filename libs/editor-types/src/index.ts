@@ -20,6 +20,7 @@ export * from './table';
 export * from './utils';
 export * from './value';
 export * from './subscription-plans';
+export * from './icons';
 export { markKinds };
 
 import type { TableCellType } from './table';

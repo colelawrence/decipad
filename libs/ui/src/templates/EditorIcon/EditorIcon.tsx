@@ -5,7 +5,8 @@ import * as icons from '../../icons';
 import { IconPopover } from '../../molecules';
 import { cssVar, p14Regular, shortAnimationDuration } from '../../primitives';
 import { editorLayout } from '../../styles';
-import { AvailableSwatchColor, UserIconKey } from '../../utils';
+import { AvailableSwatchColor } from '../../utils';
+import { UserIconKey } from '@decipad/editor-types';
 
 const blockStyles = css({
   display: 'grid',
