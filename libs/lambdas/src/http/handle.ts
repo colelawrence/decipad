@@ -5,6 +5,7 @@ import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
   APIGatewayProxyStructuredResultV2,
+  ScheduledEvent,
 } from 'aws-lambda';
 import chalk from 'chalk';
 import { Handler } from '@decipad/backendtypes';
@@ -13,16 +14,26 @@ import { debug } from '../debug';
 
 export default (handler: Handler) => {
   return trace(
-    async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResultV2> => {
+    async (
+      req: APIGatewayProxyEvent | ScheduledEvent
+    ): Promise<APIGatewayProxyResultV2> => {
       debug('request', req);
       try {
-        let body = await handler(req);
+        if ('detail-type' in req && req['detail-type'] === 'Scheduled Event') {
+          return {
+            statusCode: 200,
+            headers: { 'content-type': 'application/json; charset=utf-8' },
+            body: '',
+          };
+        }
+
+        let body = await handler(req as APIGatewayProxyEvent);
         if (isFullReturnObject(body)) {
           debug('response', body);
           return body;
         }
 
-        let statusCode = okStatusCodeFor(req);
+        let statusCode = okStatusCodeFor(req as APIGatewayProxyEvent);
         const headers = {
           'content-type': 'application/json; charset=utf-8',
         };
