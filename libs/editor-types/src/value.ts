@@ -298,7 +298,7 @@ export type BlockElement =
 type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
 // Tabs
-export interface TabElement {
+export interface TabElement extends BaseElement {
   type: typeof ELEMENT_TAB;
   id: string;
   name: string;
@@ -306,7 +306,7 @@ export interface TabElement {
   icon?: UserIconKey;
 }
 
-export interface TitleElement {
+export interface TitleElement extends BaseElement {
   type: typeof ELEMENT_TITLE;
   id: string;
   children: [{ text: string }];
@@ -350,6 +350,7 @@ export type InlineChildren = Array<InlineDescendant>;
 export type PlainTextChildren = [PlainText];
 
 export type AnyElement =
+  | TabElement
   | BlockElement
   | InlineElement
   | CodeLineV2ElementCode

@@ -23,7 +23,6 @@ describe('verbalizeDoc', () => {
     const doc = someCode as Document;
     const { document, verbalized } = verbalizeDoc(doc);
     expect(document).toMatchObject(doc);
-    expect(verbalized.map((v) => v.element)).toMatchObject(doc.children);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
         "# 🕯Starting a Candle Business",
@@ -45,7 +44,6 @@ describe('verbalizeDoc', () => {
     const doc = uiComponents as Document;
     const { document, verbalized } = verbalizeDoc(doc);
     expect(document).toMatchObject(doc);
-    expect(verbalized.map((v) => v.element)).toMatchObject(doc.children);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
         "# 🕯Starting a Candle Business",

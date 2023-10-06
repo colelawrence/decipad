@@ -5,6 +5,8 @@ import {
   type ColumnsElement,
   type MyNode,
   ELEMENT_SMART_REF,
+  ELEMENT_COLUMNS,
+  ELEMENT_TAB,
 } from '../../editor-types/src';
 import { getVerbalizer } from './verbalizers';
 
@@ -19,7 +21,7 @@ export interface DocumentVerbalization {
 }
 
 const isStructuralElement = (element: AnyElement): element is ColumnsElement =>
-  element.type === 'columns'; // right now, only columns are structural elements. Add tabs here later.
+  element.type === ELEMENT_COLUMNS || element.type === ELEMENT_TAB; // right now, only columns are structural elements. Add tabs here later.
 
 const verbalizeOneNode = (node: MyNode): string => {
   if (isElement(node)) {
@@ -46,7 +48,9 @@ const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
     {
       element,
       verbalized:
-        v != null ? v(element, verbalizeOneNode) : verbalizeOneNode(element),
+        v != null
+          ? v(element, verbalizeOneNode)
+          : verbalizeOneNode(element as MyNode),
     },
   ];
 };
