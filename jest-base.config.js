@@ -21,7 +21,7 @@ module.exports = {
     '^.+\\.mjs$': ['babel-jest', { presets, plugins }],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lib0|y-protocols|@udecode/plate|@udecode/plate-core|nanoid|@decipad/safejs|@formkit/auto-animate|.*dnd.*|next-auth|is-stream|get-stream|langchain)/)',
+    'node_modules/(?!(lib0|y-protocols|@udecode/plate|@udecode/plate-core|nanoid|@decipad/safejs|@formkit/auto-animate|.*dnd.*|next-auth|is-stream|get-stream|langchain|jsonpath-plus)/)',
     '\\.pnp\\.[^\\/]+$',
   ],
 
