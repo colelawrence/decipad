@@ -2,19 +2,22 @@ export const schema = `
 
 // Inline elements
 
-interface LinkElement extends BaseElement {
+interface LinkElement {
+  id: string;
   type: 'a';
   children: Array<RichText>;
   url: string;
 }
 
-interface InlineNumberElement extends BaseElement {
+interface InlineNumberElement {
+  id: string;
   type: 'inline-number';
   blockId: string;
   children: [EmptyText];
 }
 
-interface SmartRefElement extends BaseElement {
+interface SmartRefElement {
+  id: string;
   type: 'smart-ref';
   lastSeenVariableName?: string;
   blockId: string;
@@ -38,21 +41,17 @@ type PlainText = EmptyText | { text: string };
 type RichText = PlainText & Partial<Record<MarkKind, true>>;
 type Text = PlainText | RichText;
 
-interface BaseElement {
-  type: string;
-  id: string;
-};
-
 // Title H1
 
-interface H1Element extends BaseElement {
+interface H1Element {
+  id: string;
   type: 'h1';
   children: PlainTextChildren;
 };
 
 // Paragraph
 
-interface ParagraphElement extends BaseElement {
+interface ParagraphElement {
   id: string;
   type: 'p;
   children: InlineChildren;
@@ -61,14 +60,16 @@ interface ParagraphElement extends BaseElement {
 
 // Code line element types
 
-interface StructuredVarnameElement extends BaseElement {
+interface StructuredVarnameElement {
+  id: string;
   type: 'structured_varname';
   children: [PlainText];
 }
 
 type SmartRefDecoration = 'cell';
 
-interface SmartRefElement extends BaseElement {
+interface SmartRefElement {
+  id: string;
   type: 'smart-ref';
   lastSeenVariableName?: string;
   blockId: string;
@@ -77,12 +78,14 @@ interface SmartRefElement extends BaseElement {
   children: [PlainText];
 }
 
-interface CodeLineV2ElementCode extends BaseElement {
+interface CodeLineV2ElementCode {
+  id: string;
   type: 'code_line_v2_code';
   children: Array<PlainText | SmartRefElement>; // the code of a code line
 }
 
-interface CodeLineV2Element extends BaseElement {
+interface CodeLineV2Element {
+  id: string;
   type: 'code_line_v2';
   showResult?: boolean;
   children: [StructuredVarnameElement, CodeLineV2ElementCode];
@@ -90,7 +93,8 @@ interface CodeLineV2Element extends BaseElement {
 
 // Variable def and slider
 
-interface CaptionElement extends BaseElement {
+interface CaptionElement {
+  id: string;
   type: 'caption';
   children: [PlainText]; // contains the name of the element
   icon: string;
@@ -104,7 +108,8 @@ type ElementVariants =
 interface VariableBaseElement<
   V extends ElementVariants,
   T extends BlockElement[]
-> extends BaseElement {
+> {
+  id: string;
   type: typeof ELEMENT_VARIABLE_DEF;
   variant: V;
   children: [CaptionElement, ...T];
@@ -123,7 +128,8 @@ type VariableSliderElement = VariableBaseElement<
 type VariableElement = VariableExpressionElement | VariableToggleElement | VariableDateElement | VariableDropdownElement | VariableSliderElement;
 
 // sliders must always live inside VariableSliderElement
-interface SliderElement extends BaseElement {
+interface SliderElement {
+  id: string;
   type: 'slider';
   max: string;
   min: string;
@@ -173,52 +179,53 @@ type TableCellType =
   | SimpleTableCellType
   | { kind: 'table-formula' };
 
-interface TableColumnFormulaElement extends BaseElement {
-  type: 'table-column-formula';
+// table column formula. Needs to exist for every th with cell type kind of \`table-formula\`.
+interface TableColumnFormulaElement {
   id: string;
+  type: 'table-column-formula';
   columnId: string; // the id of the \`th\` element this formula belongs to
   children: (PlainText | SmartRefElement)[]; // the formula mathematical expression for that column
 }
 
-interface TableVariableNameElement extends BaseElement {
-  type: 'table-var-name';
+interface TableVariableNameElement {
   id: string;
+  type: 'table-var-name';
   children: [Text]; // table var name, CANNOT have spaces
 }
-interface TableCaptionElement extends BaseElement {
-  type: 'table-caption';
+interface TableCaptionElement {
   id: string;
+  type: 'table-caption';
   children: [TableVariableNameElement, ...TableColumnFormulaElement[]];
 }
-interface TableCellElement extends BaseElement {
-  type: 'td';
+interface TableCellElement {
   id: string;
+  type: 'td';
   children: [Text]; // defaults to empty text ({ text: '' })
 }
 
-interface TableRowElement extends BaseElement {
-  type: 'tr';
+interface TableRowElement {
   id: string;
+  type: 'tr';
   children: TableCellElement[];
 }
 
-interface TableHeaderElement extends BaseElement {
-  type: 'th';
+interface TableHeaderElement {
   id: string;
+  type: 'th';
   cellType: TableCellType;
   children: [Text];  // column name, CANNOT have spaces
   aggregation?: string // NEVER use
 }
 
-interface TableHeaderRowElement extends BaseElement {
-  type: 'tr';
+interface TableHeaderRowElement {
   id: string;
+  type: 'tr';
   children: TableHeaderElement[];
 }
 
-interface TableElement extends BaseElement {
-  type: 'table';
+interface TableElement {
   id: string;
+  type: 'table';
   children: [TableCaptionElement, TableHeaderRowElement, ...TableRowElement[]];
 }
 

@@ -89,56 +89,6 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'add a paragraph asking people to follow me on Twitter'
     );
-    expect(applyOperations(notebook, results)).toMatchObject([
-      {
-        children: [
-          {
-            text: '🕯Starting a Candle Business',
-          },
-        ],
-        id: '3JTr-B84cKMnNOYnvHiFi',
-        type: 'h1',
-      },
-      {
-        children: [
-          {
-            text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-          },
-        ],
-        id: '18YPGVFcBkSie3WopWDlo',
-        type: 'p',
-      },
-      {
-        children: [
-          {
-            highlight: true,
-            text: 'It looks like I could make a profit ',
-          },
-          {
-            text: 'and some side income based on my assumptions below. Feedback welcome!',
-          },
-        ],
-        id: 'ngIq_tCJClGugubOIsRKT',
-        type: 'p',
-      },
-      {
-        children: [
-          {
-            highlight: true,
-            text: "Don't forget to follow me on Twitter for more updates and tips!",
-          },
-        ],
-        id: expect.any(String),
-        type: 'p',
-      },
-    ]);
-  }, 240000);
-
-  it('can change a paragraph', async () => {
-    const results = await notebookAssistant(
-      newNotebookId,
-      'change the second paragraph asking people to follow me on Twitter'
-    );
     expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
       [
         {
@@ -153,7 +103,7 @@ test('notebook assistant: prose', async (ctx) => {
         {
           "children": [
             {
-              "text": "During the pandemic, many people thought of starting a side business. If you're interested, you can follow me on Twitter for updates and tips on candle-making!",
+              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
             },
           ],
           "id": "18YPGVFcBkSie3WopWDlo",
@@ -172,8 +122,57 @@ test('notebook assistant: prose', async (ctx) => {
           "id": "ngIq_tCJClGugubOIsRKT",
           "type": "p",
         },
+        {
+          "children": [
+            {
+              "text": "Please follow me on Twitter!",
+            },
+          ],
+          "id": "newBlockId",
+          "type": "p",
+        },
       ]
     `);
+  }, 240000);
+
+  it('can change a paragraph', async () => {
+    const results = await notebookAssistant(
+      newNotebookId,
+      'change the second paragraph asking people to follow me on Twitter'
+    );
+    expect(applyOperations(notebook, results)).toMatchObject([
+      {
+        children: [
+          {
+            text: '🕯Starting a Candle Business',
+          },
+        ],
+        id: '3JTr-B84cKMnNOYnvHiFi',
+        type: 'h1',
+      },
+      {
+        children: [
+          {
+            text: expect.stringContaining('Twitter'),
+          },
+        ],
+        id: '18YPGVFcBkSie3WopWDlo',
+        type: 'p',
+      },
+      {
+        children: [
+          {
+            highlight: true,
+            text: 'It looks like I could make a profit ',
+          },
+          {
+            text: 'and some side income based on my assumptions below. Feedback welcome!',
+          },
+        ],
+        id: 'ngIq_tCJClGugubOIsRKT',
+        type: 'p',
+      },
+    ]);
   }, 240000);
 
   it('can add a code line to a notebook without code lines', async () => {

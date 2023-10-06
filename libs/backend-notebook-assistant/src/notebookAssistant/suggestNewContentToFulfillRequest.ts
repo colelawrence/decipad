@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-import { Document } from '@decipad/editor-types';
+import {
+  AnyElement,
+  Document,
+  ELEMENT_TABLE,
+  ELEMENT_VARIABLE_DEF,
+} from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { debug } from '../debug';
-import {
-  introTemplate,
-  afterBlocksTemplate,
-  instructions,
-  schema,
-} from '../config';
+import { introTemplate, afterBlocksTemplate, schema } from '../config';
 import { getOpenAI } from '../utils/openAi';
 import {
   ChatCompletionCreateParamsNonStreaming,
@@ -22,6 +22,12 @@ import { parseJSONResponse } from '../utils/parseJSONResponse';
 import { applyCommands } from '../utils/applyCommands';
 import { commandSchema } from '../config/commandSchema';
 import { getRelevantBlockIds } from '../utils/getRelevantBlockIds';
+import { getElements } from '../utils/getElements';
+import { instructionSummaries, getInstructions } from '../config/instructions';
+import { parseInstructionConstituents } from '../utils/parseInstructionConstituents';
+
+// TODO: we still have issues when individualizing elements from deeply nested structures
+const problematicBlockTypes = new Set([ELEMENT_VARIABLE_DEF, ELEMENT_TABLE]);
 
 export const suggestNewContentToFulfillRequest = async (
   content: Document,
@@ -34,7 +40,7 @@ export const suggestNewContentToFulfillRequest = async (
   // const computationalSummary = createComputationalSummary(content);
   const intro = (await introTemplate.invoke({})).toString();
 
-  const messages: ChatCompletionMessage[] = [
+  let messages: ChatCompletionMessage[] = [
     {
       role: 'system',
       content: intro,
@@ -56,29 +62,35 @@ If I were to ask you to make the following modifications to this document:
 
 ${JSON.stringify(request)}
 
-What would be the individual JSON blocks you would need to fulfil this request?
-Please reply with a JSON array that contains the ids (as sole strings) of the blocks you would need.
-Reply with valid JSON only.
-If you wouldn't need any block to fulfil the user request (like when a user asks to add a block), reply with an empty JSON array.
-Only reply with a single JSON array, nothing else.
-No comments.
-`,
+Given the following index of instructions:
+
+\`\`\`json
+${JSON.stringify(instructionSummaries, null, '\t')}
+\`\`\`
+
+Which instructions would you need to fulfil my request?
+Only reply with a single JSON array with the keys, nothing else.
+Example of a reply: \`["code-lines", "table-formulas"]\`.
+No comments.`,
     },
   ];
 
-  let maxIterations = 5;
+  let maxIterations = 6;
   let done = false;
-  let haveRelevantBlockIds = false;
+  let relevantBlockIds: undefined | string[];
+  let shouldJumpOverSpecificElementIds = false;
+  let specificElementIds: undefined | string[];
   let failedCode = false;
   let triedCode = false;
+  let instructions: undefined | string;
   let reply: ChatCompletionMessage;
 
   const generateChatCompletion = async () => {
     const makeFunctionsAvailable =
-      haveRelevantBlockIds && !failedCode && !triedCode;
+      specificElementIds != null && !failedCode && !triedCode;
     const createOptions: ChatCompletionCreateParamsNonStreaming = {
       messages,
-      model: 'gpt-3.5-turbo-16k',
+      model: openAi.model,
       temperature: 0,
       functions: makeFunctionsAvailable
         ? [
@@ -104,50 +116,19 @@ No comments.
     if (makeFunctionsAvailable) {
       createOptions.function_call = 'auto';
     }
-    return openAi.chat.completions.create(createOptions);
+    return openAi.client.chat.completions.create(createOptions);
   };
 
-  const parseRelevantBlockIds = async () => {
-    debug('parseRelevantBlockIds', reply);
-    messages.push(reply);
+  const parseInstructions = () => {
     try {
-      const relevantBlockIds = getRelevantBlockIds(
-        getDefined(
-          reply.content,
-          'no reply content for parsing relevant block ids'
+      instructions = getInstructions(
+        parseInstructionConstituents(
+          getDefined(
+            reply.content,
+            'no reply content for parsing instruction keys'
+          )
         )
       );
-
-      haveRelevantBlockIds = true;
-      messages.splice(0); // remove anything about getting the relevant blocks so we don't confuse the AI
-
-      const newInstructions = (
-        await afterBlocksTemplate.invoke({
-          instructions,
-          schema,
-          commandSchema,
-        })
-      ).toString();
-      messages.push({ role: 'system', content: newInstructions });
-
-      const relevantBlocks = verbalizedDocument.verbalized
-        .filter((v) =>
-          (relevantBlockIds as Array<string>).includes(v.element.id)
-        )
-        .map((v) => v.element);
-      messages.push({
-        role: 'user',
-        content: `Here is the list of blocks from my document that you may need to change:
-
-\`\`\`json
-${stringify(relevantBlocks, null, '\t')}
-\`\`\`
-
-Please reply with a list of commands that strictly makes the following changes to my doc: ${JSON.stringify(
-          request
-        )}.
-`,
-      });
     } catch (err) {
       messages.push({
         role: 'user',
@@ -155,6 +136,132 @@ Please reply with a list of commands that strictly makes the following changes t
 Please reply in JSON only, no comments. Don't apologize.`,
       });
     }
+  };
+
+  const sendInstructionsForRelevantBlocks = () => {
+    messages.push({
+      role: 'user',
+      content: `Given the document block list I gave you earlier, what would be the individual JSON blocks you would need to fulfil this request?
+      Please reply with a JSON array that contains the ids (as sole strings) of the blocks you would need.
+      Reply with valid JSON only.
+      If you wouldn't need any block to fulfil the user request (like when a user asks to add a block), reply with an empty JSON array.
+      Only reply with a single JSON array, nothing else.
+      No comments.`,
+    });
+  };
+
+  const parseRelevantBlockIds = async () => {
+    debug('parseRelevantBlockIds', reply);
+    try {
+      relevantBlockIds = getRelevantBlockIds(
+        getDefined(
+          reply.content,
+          'no reply content for parsing relevant block ids'
+        )
+      );
+    } catch (err) {
+      messages.push({
+        role: 'user',
+        content: `I had the following error: "${(err as Error).message}".
+Please reply in JSON only, no comments. Don't apologize.`,
+      });
+    }
+  };
+
+  const isProblematicBlock = (element: AnyElement): boolean => {
+    return problematicBlockTypes.has(element.type);
+  };
+
+  const sendRelevantBlocks = async () => {
+    const relevantBlocks = verbalizedDocument.verbalized
+      .filter((v) => getDefined(relevantBlockIds).includes(v.element.id))
+      .map((v) => v.element);
+    if (relevantBlocks.find(isProblematicBlock)) {
+      shouldJumpOverSpecificElementIds = true;
+
+      const newInstructions = (
+        await afterBlocksTemplate.invoke({
+          instructions: getDefined(instructions, 'no instructions'),
+          schema,
+          commandSchema,
+        })
+      ).toString();
+      messages.push({ role: 'system', content: newInstructions });
+    }
+    const finalInstructions = shouldJumpOverSpecificElementIds
+      ? `Please reply with a list of JSON commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
+          request
+        )}.
+Only reply with a single JSON array, nothing else.
+No comments.`
+      : `Please reply with a JSON list of element ids (root or inner) you would need to satisfy to make the following changes to my doc: ${JSON.stringify(
+          request
+        )}.
+
+What would be the minimum individual JSON elements you would need to fulfil this request?
+Please reply with a JSON array that contains the ids (as sole strings) of the elements you would need.
+Reply with valid JSON only.
+If you wouldn't need any element to fulfil the user request (like when a user asks to add a block), reply with an empty JSON array.
+Only reply with a single JSON array, nothing else.
+No comments.
+`;
+
+    messages.push({
+      role: 'user',
+      content: `Here is the list of blocks from my document that you may need to change or remove:
+
+\`\`\`json
+${stringify(relevantBlocks, null, '\t')}
+\`\`\`
+
+${finalInstructions}`,
+    });
+  };
+
+  const parseSpecificElementIds = async () => {
+    debug('parseSpecificElementIds', reply);
+    try {
+      specificElementIds = getRelevantBlockIds(
+        getDefined(
+          reply.content,
+          'no reply content for parsing specific element ids'
+        )
+      );
+    } catch (err) {
+      messages.push({
+        role: 'user',
+        content: `I had the following error: "${(err as Error).message}".
+Please reply in JSON only, no comments. Don't apologize.`,
+      });
+    }
+  };
+
+  const sendSpecificElements = async () => {
+    const newInstructions = (
+      await afterBlocksTemplate.invoke({
+        instructions: getDefined(instructions, 'no instructions'),
+        schema,
+        commandSchema,
+      })
+    ).toString();
+    messages.push({ role: 'system', content: newInstructions });
+
+    const relevantElements = getElements(content, new Set(specificElementIds));
+    messages.push({
+      role: 'user',
+      content: `Here is the list of elements from my document that you may need to change or remove:
+
+\`\`\`json
+${stringify(relevantElements, null, '\t')}
+\`\`\`
+
+Please reply with a list of commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
+        request
+      )}.
+Only reply with a single JSON array, nothing else.
+No comments.
+`,
+    });
   };
 
   const makeFunctionCall = async () => {
@@ -172,7 +279,6 @@ Please reply in JSON only, no comments. Don't apologize.`,
       );
       debug('code snippet:', codeSnippet);
       if (codeSnippet) {
-        messages.push(reply);
         messages.push({
           role: 'function',
           content: codeSnippet,
@@ -180,17 +286,26 @@ Please reply in JSON only, no comments. Don't apologize.`,
         } as ChatCompletionMessage);
       } else {
         failedCode = true;
-        if (reply.content && haveRelevantBlockIds) {
+        if (reply.content && relevantBlockIds != null) {
           done = true;
         }
         debug('code was not valid');
       }
     } else {
       failedCode = true;
-      if (reply.content && haveRelevantBlockIds) {
+      if (reply.content && relevantBlockIds != null) {
         done = true;
       }
     }
+  };
+
+  const resetMessages = () => {
+    messages = [
+      {
+        role: 'system',
+        content: intro,
+      },
+    ];
   };
 
   const generateFinalReply = (): Document | undefined => {
@@ -203,7 +318,6 @@ Please reply in JSON only, no comments. Don't apologize.`,
       return finalDoc;
     } catch (err) {
       done = false;
-      messages.push(reply);
       messages.push({
         role: 'user',
         content: `${(err as Error).message}. No comments. Don't apologize.`,
@@ -222,15 +336,37 @@ Please reply in JSON only, no comments. Don't apologize.`,
     debug(`------------------- ITERATION -${maxIterations}`, messages);
     const result = await generateChatCompletion();
     reply = result.choices[0].message;
+    messages.push(reply);
+    debug('Reply:', reply);
 
-    if (!haveRelevantBlockIds) {
-      await parseRelevantBlockIds();
+    if (!instructions) {
+      parseInstructions();
+      await sendInstructionsForRelevantBlocks();
       continue;
+    }
+
+    if (!relevantBlockIds) {
+      await parseRelevantBlockIds();
+      resetMessages();
+      await sendRelevantBlocks();
+      continue;
+    }
+    if (!specificElementIds) {
+      if (!shouldJumpOverSpecificElementIds) {
+        await parseSpecificElementIds();
+        await sendSpecificElements();
+        continue;
+      } else {
+        specificElementIds = relevantBlockIds;
+      }
     }
 
     if (reply.function_call) {
       await makeFunctionCall();
-    } else if (haveRelevantBlockIds) {
+    } else if (
+      specificElementIds ||
+      (shouldJumpOverSpecificElementIds && relevantBlockIds)
+    ) {
       done = true;
     }
 

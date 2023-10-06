@@ -35,7 +35,7 @@ Respond in less than 100 characters.`,
     },
     { role: 'user', content: prompt },
   ];
-  const completion = await getOpenAI().chat.completions.create({
+  const completion = await getOpenAI().client.chat.completions.create({
     model: fineTunedModelForDecilangCode,
     messages,
   });

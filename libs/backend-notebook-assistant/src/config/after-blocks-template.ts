@@ -1,7 +1,7 @@
 import { PromptTemplate } from 'langchain/prompts';
 
 export const afterBlocksTemplate =
-  PromptTemplate.fromTemplate(`You are a helpful and obedient AI that only responds in valid JSON that can be parsed. Consider the following TypeScript Interface for a JSON schema:
+  PromptTemplate.fromTemplate(`Consider the following TypeScript Interface for a JSON schema:
 
 \`\`\`typescript
 {schema}

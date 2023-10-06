@@ -25,6 +25,16 @@
         "bail": true
       }
     },
+    "test:local": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/backend-notebook-assistant"],
+      "options": {
+        "jestConfig": "libs/backend-notebook-assistant/jest.config.js",
+        "bail": true,
+        "testMatch": ["**/*.spec.disabled.ts"],
+        "testPathPattern": ["libs/backend-notebook-assistant/src/tests"]
+      }
+    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {

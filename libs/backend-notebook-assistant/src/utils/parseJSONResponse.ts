@@ -40,14 +40,16 @@ export const parseJSONResponse = (
       }
     }
     if (!attempts.triedHalving) {
-      return parseJSONResponse(
-        response.slice(0, Math.round(response.length / 2)),
-        err as Error,
-        {
+      const half = response.length / 2;
+      const firstHalf = response.slice(0, half).trim();
+      const even = response.length % 2 === 0;
+      const secondHalf = response.slice(half + (even ? 1 : 0)).trim();
+      if (firstHalf === secondHalf) {
+        return parseJSONResponse(firstHalf, err as Error, {
           ...attempts,
           triedHalving: true,
-        }
-      );
+        });
+      }
     }
     throw new Error(
       `Error parsing your response: ${
