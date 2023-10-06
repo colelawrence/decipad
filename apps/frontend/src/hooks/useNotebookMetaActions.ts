@@ -21,6 +21,7 @@ import {
 } from '../utils';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { useNotebookMetaData } from '@decipad/react-contexts';
+import { getLocalNotebookUpdates } from '@decipad/docsync';
 
 const SNAPSHOT_NAME = 'Published 1';
 
@@ -188,9 +189,12 @@ export function useNotebookMetaActions(
       // Let other parts of the UI know that we have published a new version
       hasPublished.next(undefined);
 
+      const localState = await getLocalNotebookUpdates(notebookId);
+
       await createOrUpdateSnapshot({
         notebookId,
         snapshotName: SNAPSHOT_NAME,
+        remoteState: localState && Buffer.from(localState).toString('base64'),
       });
       await remoteUpdateNotebookIsPublic({ id: notebookId, isPublic: true });
     },

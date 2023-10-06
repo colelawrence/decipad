@@ -9,11 +9,14 @@ import { getDefined } from '@decipad/utils';
 import { DocSyncSnapshotRecord } from '@decipad/backendtypes';
 
 export const snapshot = async (
-  notebookId: string
+  notebookId: string,
+  remoteState?: string
 ): Promise<{ data: Buffer; version: string; value: Document }> => {
   const data = await tables();
 
-  const updates: Buffer[] = [];
+  const updates: Buffer[] = remoteState
+    ? [Buffer.from(remoteState, 'base64')]
+    : [];
   const resource = `/pads/${notebookId}`;
   for await (const update of allPages(data.docsyncupdates, {
     KeyConditionExpression: 'id = :id',

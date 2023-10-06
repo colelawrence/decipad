@@ -219,6 +219,7 @@ export type MutationCreateLogsArgs = {
 export type MutationCreateOrUpdateSnapshotArgs = {
   forceSearchIndexUpdate?: InputMaybe<Scalars['Boolean']['input']>;
   notebookId: Scalars['ID']['input'];
+  remoteState?: InputMaybe<Scalars['String']['input']>;
   snapshotName: Scalars['String']['input'];
 };
 
@@ -1038,6 +1039,7 @@ export type CreateNotebookSnapshotMutation = { __typename?: 'Mutation', createSn
 export type CreateOrUpdateNotebookSnapshotMutationVariables = Exact<{
   notebookId: Scalars['ID']['input'];
   snapshotName: Scalars['String']['input'];
+  remoteState?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -1710,8 +1712,12 @@ export function useCreateNotebookSnapshotMutation() {
   return Urql.useMutation<CreateNotebookSnapshotMutation, CreateNotebookSnapshotMutationVariables>(CreateNotebookSnapshotDocument);
 };
 export const CreateOrUpdateNotebookSnapshotDocument = gql`
-    mutation CreateOrUpdateNotebookSnapshot($notebookId: ID!, $snapshotName: String!) {
-  createOrUpdateSnapshot(notebookId: $notebookId, snapshotName: $snapshotName)
+    mutation CreateOrUpdateNotebookSnapshot($notebookId: ID!, $snapshotName: String!, $remoteState: String) {
+  createOrUpdateSnapshot(
+    notebookId: $notebookId
+    snapshotName: $snapshotName
+    remoteState: $remoteState
+  )
 }
     `;
 

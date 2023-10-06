@@ -122,6 +122,7 @@ export default gql`
     createOrUpdateSnapshot(
       notebookId: ID!
       snapshotName: String!
+      remoteState: String
       forceSearchIndexUpdate: Boolean
     ): Boolean!
 

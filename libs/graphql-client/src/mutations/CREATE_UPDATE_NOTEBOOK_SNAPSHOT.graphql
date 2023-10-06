@@ -1,6 +1,11 @@
 mutation CreateOrUpdateNotebookSnapshot(
   $notebookId: ID!
   $snapshotName: String!
+  $remoteState: String
 ) {
-  createOrUpdateSnapshot(notebookId: $notebookId, snapshotName: $snapshotName)
+  createOrUpdateSnapshot(
+    notebookId: $notebookId
+    snapshotName: $snapshotName
+    remoteState: $remoteState
+  )
 }

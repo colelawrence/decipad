@@ -14,13 +14,21 @@ const MAX_DATA_SIZE_BYTES = 100_000;
 
 const notebooks = resource('notebook');
 
+export interface CreateOrUpdateSnapshotParams {
+  notebookId: ID;
+  snapshotName: string;
+  remoteState: string;
+  forceSearchIndexUpdate: boolean;
+}
+
 export const createOrUpdateSnapshot = async (
   _: unknown,
   {
     notebookId,
     snapshotName,
+    remoteState,
     forceSearchIndexUpdate,
-  }: { notebookId: ID; snapshotName: string; forceSearchIndexUpdate: boolean },
+  }: CreateOrUpdateSnapshotParams,
   context: GraphqlContext
 ): Promise<boolean> => {
   await notebooks.expectAuthorizedForGraphql({
@@ -48,7 +56,7 @@ export const createOrUpdateSnapshot = async (
     })
   ).Items;
 
-  const snapshotData = await snapshot(notebookId);
+  const snapshotData = await snapshot(notebookId, remoteState);
 
   if (!existingSnapshot) {
     existingSnapshot = {
