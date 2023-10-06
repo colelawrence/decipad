@@ -65,7 +65,6 @@ export const TableCell: PlateComponent = ({
     cellType,
     nodeText,
     onChangeValue,
-    collapsed,
     showParseError,
     parseErrorMessage,
     dropdownOptions,
@@ -114,7 +113,6 @@ export const TableCell: PlateComponent = ({
         attributes={attributes}
         selected={selected}
         focused={selectedCells && selectedCells.length > 1 ? false : focused}
-        collapsed={collapsed}
         unit={unit}
         type={cellType}
         value={nodeText}

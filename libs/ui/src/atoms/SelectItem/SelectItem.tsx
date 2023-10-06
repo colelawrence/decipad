@@ -97,6 +97,15 @@ export const SelectItem: FC<SelectItemProps> = ({
   const [editing, setEditing] = useState(false);
   const [editingError, setEditingError] = useState(false);
 
+  const formatItem = (itemElem: SelectItems) => {
+    if (itemElem.type === 'column') {
+      const parsedItem = itemElem.item.split('.');
+      return parsedItem.length > 1 ? parsedItem[1] : parsedItem[0];
+    }
+
+    return itemElem.item;
+  };
+
   const keydown = useCallback(
     (event: KeyboardEvent) => {
       if ((event.key === 'Enter' || event.key === 'Escape') && editing) {
@@ -159,7 +168,7 @@ export const SelectItem: FC<SelectItemProps> = ({
         }}
       >
         {item.icon && <div css={itemIconStyles}>{item.icon}</div>}
-        <span css={textStyles}>{item.item}</span>
+        <span css={textStyles}>{formatItem(item)}</span>
       </div>
       {isEditAllowed && (
         <aside css={[iconWrapper]}>

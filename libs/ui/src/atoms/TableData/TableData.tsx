@@ -98,7 +98,6 @@ export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
   grabbing?: boolean;
   selected?: boolean;
   focused?: boolean;
-  collapsed?: boolean;
   disabled?: boolean;
   type?: CellValueType;
   rowSpan?: number;
