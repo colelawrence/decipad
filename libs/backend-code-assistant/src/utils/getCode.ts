@@ -1,38 +1,19 @@
 import { parseStatement, Parser } from '@decipad/computer';
 import { debug } from '../debug';
+import { unwrapCodeContent } from './unwrapCodeContent';
 
 const formErrorMessage = (error: Parser.ParserError): string =>
   `Parse error at line ${error.line}, char ${error.column}: ${error.message}`;
 
-const unwrapContent = (content: string) => {
-  let started = false;
-  const result: string[] = [];
-  for (const line of content.split('\n')) {
-    if (line.startsWith('```')) {
-      if (!started) {
-        started = true;
-      } else {
-        return result.join('\n');
-      }
-    } else {
-      result.push(line);
-    }
-  }
-  if (started) {
-    return result.join('\n');
-  }
-  return content;
-};
-
 export const getCode = (wrappedContent: string): string | undefined => {
-  const content = unwrapContent(wrappedContent);
+  const content = unwrapCodeContent(wrappedContent);
   debug('unwrapped content:', content);
   const parsed = parseStatement(content);
   if (
     content
       .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0).length !== 1
+      .map((line: string) => line.trim())
+      .filter((line: string) => line.length > 0).length !== 1
   ) {
     throw new Error('please reply in just one line of code');
   }

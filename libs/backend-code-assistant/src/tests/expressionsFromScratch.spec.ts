@@ -11,5 +11,5 @@ describe('code from scratch assistant', () => {
       })
     ).toContain('cos');
     // TODO: improve this match
-  });
+  }, 20000);
 });

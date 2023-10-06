@@ -91,14 +91,21 @@ const createTrainingDataFromNotebooks = async () => {
   return prompts;
 };
 
+const conversationFiles = [
+  'conversations-pedro.json',
+  'conversations-simao.json',
+  'conversations-john.json',
+];
+
 const createTrainingDataFromConversations = async () => {
   console.log('Loading conversations...');
-  const conversations = JSON.parse(
-    await readFile(
-      join(__dirname, 'config', 'conversations', 'conversations.json'),
-      'utf8'
-    )
-  );
+  let conversations = [];
+  for (const file of conversationFiles) {
+    const moreConversations = JSON.parse(
+      await readFile(join(__dirname, 'config', 'conversations', file), 'utf8')
+    );
+    conversations = conversations.concat(moreConversations);
+  }
   return conversations.map(conversationToChatMessages).map((messages) => ({
     messages,
   }));

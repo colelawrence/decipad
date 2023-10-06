@@ -1,0 +1,1992 @@
+[
+  {
+    "title": "Decipad Tables Q&A",
+    "create_time": 1696434354.714051,
+    "update_time": 1696435040.333031,
+    "mapping": {
+      "31bfc33a-f4b4-4afa-ba9a-3f1b35eb492b": {
+        "id": "31bfc33a-f4b4-4afa-ba9a-3f1b35eb492b",
+        "message": {
+          "id": "31bfc33a-f4b4-4afa-ba9a-3f1b35eb492b",
+          "author": { "role": "system", "name": null, "metadata": {} },
+          "create_time": null,
+          "update_time": null,
+          "content": { "content_type": "text", "parts": [""] },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 0.0,
+          "metadata": {},
+          "recipient": "all"
+        },
+        "parent": "aaa1ab54-6acb-427a-98ff-b7dee82cb63b",
+        "children": ["aaa2e700-39f1-4fca-a370-dd5e62ebb11d"]
+      },
+      "aaa1ab54-6acb-427a-98ff-b7dee82cb63b": {
+        "id": "aaa1ab54-6acb-427a-98ff-b7dee82cb63b",
+        "message": null,
+        "parent": null,
+        "children": ["31bfc33a-f4b4-4afa-ba9a-3f1b35eb492b"]
+      },
+      "aaa2e700-39f1-4fca-a370-dd5e62ebb11d": {
+        "id": "aaa2e700-39f1-4fca-a370-dd5e62ebb11d",
+        "message": {
+          "id": "aaa2e700-39f1-4fca-a370-dd5e62ebb11d",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434354.718648,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad is an interactive notebook to explore data, create models and share insights. Combine text, numbers, and calculations to bring ideas to life in a narrative format, that anyone can read and understand.\n\nDecipad Tables help you organize data, making it easier to read and understand. You can also use tables to perform calculations using formulas.\n\nCreate a Table\n\nTo create a new table, go to your notebook, click the + button next to an empty line and select Table from the menu, or you can open the block menu by typing / on an empty paragraph, select Table using the arrow keys, and press enter.\n\nAdd Formulas to a Table:\n\nYou can add formulas to a table by clicking on any cell and starting with the equals sign (=).\nAlternatively, you can add formulas to a column by clicking on the column \u25bc and selecting Formula.\nAdd Quick Calculation Insights:\n\nClick the Calculate button at the end of your table to perform quick calculations.\nSelect the desired calculation based on the data type in the column (e.g., sum, count).\nThe available calculations depend on the type of data in your table.\nYou can easily drag and drop these calculations results:\n\nInto your text to explain them. Learn more about Inline Results \u2192\nInto your formulas to reuse them. Learn more about Formulas \u2192\nAdd Units to Table Values:\n\nTo add units to table values, include them as text in the respective cell.\nFor example, you can enter $10 or 5oz to indicate a currency or measurement.\nAlternatively, you can format a column to display units by clicking on the column \u25bc and adding your custom unit.\nAdd Units to Columns:\n\nClick the down triangle button on a column, select Change type, and enter a new unit in the create custom field.\nUpdate Table and Column Names:\n\nAfter creating a table, you can update its default name by replacing it in the top left corner of the table.\nTo update column names, click on the existing name and select a new one.\nAdd and Delete Columns and Rows:\n\nAdd new columns by clicking the + button on the right side of the table.\nDelete a column by clicking the upside-down triangle button on the column and selecting Delete column.\nAdd new rows by clicking the + Add row button at the end of the table.\nDelete rows or insert new ones by hovering over a row, clicking the \u2e2c button, and selecting the desired action.\nRearrange Table Columns and Rows:\n\nYou can rearrange table columns and rows by dragging and dropping them within the same table.\nTo move a row, click and hold the \u2e2c button on the left side of the row and drag it to a new position.\nTo move a column, click and hold the \u2e2c button on the left side of the column name and drag it to a new position.\nTo delete a column, click the \u2e2c button on a column and select Delete column.\n\nUpdate Column Data Types:\n\nHover over the column header, click the drop-down triangle button on a column, and choose a new column type from the list.\nAdd Column Series:\n\nCreate a column series by selecting Series and then Date in the column's Change type menu. Specify the starting point, and subsequent dates will be calculated automatically.\nHide Table Formulas:\n\nClick the Hide formulas button on top of the table to hide table formulas. Click the Show formulas button to display them again.\nCustomizing Table Appearance:\n\nChange the color and icon of your table by clicking the grid icon next to the table name.\nSelect a new color and icon from the menu to give your table a unique personality.\nReferencing Columns\n\nYou can easily reuse and incorporate values from any column in your calculations.\n\nTo reference a table column in a calculation, follow these steps:\n\nType the table name.\nUse a dot . to indicate the specific column within the table.\nAppend the column name after the dot.\nFor example, if your table is named \"Table\" and you want to access the \"Column\" within it, write it as:\n\nTable.Column\n\nExample: Summing a Column\n\nLet's consider an example where you want to sum the values in a sales table.\n\nAssuming you have a table named \"SalesData\" with a column named \"SalesPrice\", you can calculate the sum using this syntax: sum(SalesData.SalesPrice). This calculation can be used in a formula block or another column formula.\n\nThis syntax can be customized for other calculations as well. For instance, you can calculate the average, minimum, maximum, or apply other mathematical operations to the column values. Learn more about Formulas for Tables\u2192\n\nYou can expand on this by incorporating additional calculations, such as calculating the tax for all sales:\n\nsum(SalesData.SalesPrice) + tax\n\nCompact Format: Referencing Columns in the Same Table\n\nWithin the same table, it is easy to reference other columns and reuse their values.\n\nLet's continue with the example of a sales table. If you want to calculate the tax per item instead of the tax for all sales, you can add a new formula column and write SalesData.SalesPrice + tax. This calculation will determine the tax for each individual item based on its row.\n\nSince you are working within the same table, you can use the compact format that only requires a reference to the column name: SalesPrice + tax. Decipad will automatically calculate the tax for each row, considering the values from the respective rows in the table.\n\nAsk me questions about Decipad tables"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "31bfc33a-f4b4-4afa-ba9a-3f1b35eb492b",
+        "children": ["befe4183-f481-4c06-89b3-58978324f5f6"]
+      },
+      "befe4183-f481-4c06-89b3-58978324f5f6": {
+        "id": "befe4183-f481-4c06-89b3-58978324f5f6",
+        "message": {
+          "id": "befe4183-f481-4c06-89b3-58978324f5f6",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434428.830809,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! I can provide more information and answer any questions you have about Decipad tables. Feel free to ask anything related to creating, formatting, using formulas, or any other aspect of working with tables in Decipad."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2e700-39f1-4fca-a370-dd5e62ebb11d",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2e700-39f1-4fca-a370-dd5e62ebb11d",
+        "children": ["aaa2f0f8-50f6-4842-80f9-5c83be6143ff"]
+      },
+      "aaa2f0f8-50f6-4842-80f9-5c83be6143ff": {
+        "id": "aaa2f0f8-50f6-4842-80f9-5c83be6143ff",
+        "message": {
+          "id": "aaa2f0f8-50f6-4842-80f9-5c83be6143ff",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434464.844228,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad have several functions to help you work with Decipad Tables ask me questions about it"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "befe4183-f481-4c06-89b3-58978324f5f6",
+        "children": ["a78093a6-031b-4ce0-a516-0d67b11aeb6d"]
+      },
+      "a78093a6-031b-4ce0-a516-0d67b11aeb6d": {
+        "id": "a78093a6-031b-4ce0-a516-0d67b11aeb6d",
+        "message": {
+          "id": "a78093a6-031b-4ce0-a516-0d67b11aeb6d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434477.386994,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! Decipad offers various functions and features to help you work with tables effectively. Here are some questions to help you explore these functions:\n\n1. How do I create a new table in Decipad?\n\n2. Can you explain how to add formulas to a Decipad table?\n\n3. What types of calculations can I perform using the \"Calculate\" button in Decipad tables?\n\n4. How can I add units to table values in Decipad?\n\n5. What options are available for customizing the appearance of a Decipad table?\n\n6. How do I reference columns from one table in calculations or formulas in Decipad?\n\n7. Can you provide an example of a calculation using Decipad's table functions?\n\n8. What are some advanced features for working with Decipad tables, such as column series or hiding formulas?\n\n9. How can I add or delete columns and rows in a Decipad table?\n\n10. What are the options for rearranging table columns and rows in Decipad?\n\nFeel free to choose any of these questions or ask any specific questions you have about working with Decipad tables, and I'll provide detailed answers and explanations."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2f0f8-50f6-4842-80f9-5c83be6143ff",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2f0f8-50f6-4842-80f9-5c83be6143ff",
+        "children": [
+          "aaa227fe-9357-485e-8b63-2c584edff3e9",
+          "aaa2a055-c303-4772-aa24-ce1c4aa25ae9"
+        ]
+      },
+      "aaa227fe-9357-485e-8b63-2c584edff3e9": {
+        "id": "aaa227fe-9357-485e-8b63-2c584edff3e9",
+        "message": {
+          "id": "aaa227fe-9357-485e-8b63-2c584edff3e9",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434532.606289,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is a list of decipad functions to use with tables\n\n| Name                       | Syntax                           | Description                                                                                            |\n| -------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------ |\n| [average()](average)       | average(Column)                  | Calculates the average of a column.                                                                    |\n| [concatenate()](concatenate)       | concatenate(Table, Table)                | Combines two tables into a new table.                                                                  |\n| [count()](count)           | count(Column)                    | Counts the number of rows in a column.                                                                 |\n| [filter()](filter)         | filter(Table, Condition)         | Filters table rows based on a condition.                                                               |\n| [first()](first)           | first(Column)                    | Extracts the first element from a column.                                                              |\n| [grow()](grow)             | grow(Initial, Rate, Column)      | Calculates the compound growth of an initial value across rows.                                        |\n| [last()](last)             | last(Table.Column)               | Extracts the last element from a column.                                                               |\n| [lookup()](lookup)         | lookup(Table, Condition)         | Finds a row that matches a condition from a table.                                                     |\n| [max()](max)               | max(Column)                      | Calculates the largest number from a column of numbers or the most recent date from a column of dates. |\n| [min()](min)               | min(Column)                      | Calculates the smallest number from a column of numbers or the earliest date from a column of dates.   |\n| [previous()](previous)     | previous(InitialValue, [Column]) | References the previous value within a table.                                                          |\n| [reverse()](reverse)       | reverse(Table)                   | Reverses the order of rows or a single column.                                                         |\n| [sort()](sort)             | sort(Column)                     | Reorders a column in ascending order.                                                                  |\n| [stepgrowth()](stepgrowth) | stepgrowth(Column)               | Calculates the change between values in a column.                                                      |\n| [sum()](sum)               | sum(Column)                      | Calculates the sum of a column.                                                                        |\n| [unique()](unique)         | unique(Column)                   | Extracts the unique values from a column.                                                              |\n\n</FunctionsListTable>"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "a78093a6-031b-4ce0-a516-0d67b11aeb6d",
+        "children": ["01e0aa26-f687-4a62-9741-036091b0c19d"]
+      },
+      "aaa2a055-c303-4772-aa24-ce1c4aa25ae9": {
+        "id": "aaa2a055-c303-4772-aa24-ce1c4aa25ae9",
+        "message": {
+          "id": "aaa2a055-c303-4772-aa24-ce1c4aa25ae9",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434545.795656,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is a list of decipad functions to use with tables\n\n| Name                       | Syntax                           | Description                                                                                            |\n| -------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------ |\n| [average()](average)       | average(Column)                  | Calculates the average of a column.                                                                    |\n| [concatenate()](concatenate)       | concatenate(Table, Table)                | Combines two tables into a new table.                                                                  |\n| [count()](count)           | count(Column)                    | Counts the number of rows in a column.                                                                 |\n| [filter()](filter)         | filter(Table, Condition)         | Filters table rows based on a condition.                                                               |\n| [first()](first)           | first(Column)                    | Extracts the first element from a column.                                                              |\n| [grow()](grow)             | grow(Initial, Rate, Column)      | Calculates the compound growth of an initial value across rows.                                        |\n| [last()](last)             | last(Table.Column)               | Extracts the last element from a column.                                                               |\n| [lookup()](lookup)         | lookup(Table, Condition)         | Finds a row that matches a condition from a table.                                                     |\n| [max()](max)               | max(Column)                      | Calculates the largest number from a column of numbers or the most recent date from a column of dates. |\n| [min()](min)               | min(Column)                      | Calculates the smallest number from a column of numbers or the earliest date from a column of dates.   |\n| [previous()](previous)     | previous(InitialValue, [Column]) | References the previous value within a table.                                                          |\n| [reverse()](reverse)       | reverse(Table)                   | Reverses the order of rows or a single column.                                                         |\n| [sort()](sort)             | sort(Column)                     | Reorders a column in ascending order.                                                                  |\n| [stepgrowth()](stepgrowth) | stepgrowth(Column)               | Calculates the change between values in a column.                                                      |\n| [sum()](sum)               | sum(Column)                      | Calculates the sum of a column.                                                                        |\n| [unique()](unique)         | unique(Column)                   | Extracts the unique values from a column.                                                              |\n\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "a78093a6-031b-4ce0-a516-0d67b11aeb6d",
+        "children": ["c8fa8f68-ca04-4161-94f2-90ba3af43dfe"]
+      },
+      "01e0aa26-f687-4a62-9741-036091b0c19d": {
+        "id": "01e0aa26-f687-4a62-9741-036091b0c19d",
+        "message": {
+          "id": "01e0aa26-f687-4a62-9741-036091b0c19d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434547.291976,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": ["Great! Decipad provides"]
+          },
+          "status": "in_progress",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": {
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa227fe-9357-485e-8b63-2c584edff3e9",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa227fe-9357-485e-8b63-2c584edff3e9",
+        "children": []
+      },
+      "c8fa8f68-ca04-4161-94f2-90ba3af43dfe": {
+        "id": "c8fa8f68-ca04-4161-94f2-90ba3af43dfe",
+        "message": {
+          "id": "c8fa8f68-ca04-4161-94f2-90ba3af43dfe",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434556.628559,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "That's a comprehensive list of Decipad functions for working with tables. Here are some questions to help you explore these functions further:\n\n1. How can I use the `average()` function in Decipad to calculate the average of a specific column in a table?\n\n2. What is the purpose of the `concatenate()` function, and how can I use it to combine two tables into a new one?\n\n3. How does the `count()` function work in Decipad, and how can I count the number of rows in a particular column?\n\n4. Can you provide an example of how to use the `filter()` function to filter table rows based on a condition in Decipad?\n\n5. What does the `max()` function do, and how can I use it to find the largest number or most recent date in a column?\n\n6. How can I calculate the compound growth of an initial value across rows using the `grow()` function in Decipad?\n\n7. What is the purpose of the `lookup()` function, and how can I find a row that matches a specific condition in a table?\n\n8. Can you show me an example of how to use the `sum()` function in Decipad to calculate the sum of a column?\n\n9. How do I use the `unique()` function to extract unique values from a column in a Decipad table?\n\n10. What are some practical use cases for the `previous()` function, which references the previous value within a table?\n\nFeel free to ask any specific questions about these functions or request examples for their usage, and I'll provide detailed explanations."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2a055-c303-4772-aa24-ce1c4aa25ae9",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2a055-c303-4772-aa24-ce1c4aa25ae9",
+        "children": ["aaa2fdce-4d16-4a6f-ac9b-00972637634e"]
+      },
+      "aaa2fdce-4d16-4a6f-ac9b-00972637634e": {
+        "id": "aaa2fdce-4d16-4a6f-ac9b-00972637634e",
+        "message": {
+          "id": "aaa2fdce-4d16-4a6f-ac9b-00972637634e",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434593.248536,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Column Average\n\nSyntax: average(Table.Column)\n\nCalculate the average of a column. You can also use alternative syntaxes for improved readability: avg() and mean().\n\nExamples\n\naverage([1, 2, 3, 4])\n\n2.5\nDecipad Language Sandbox\nModify this example and see how it impacts the result\nColumn Average that Meet a Condition\nSyntax:\n\naverageif(Table.Column, Table Column Condition)\n\nCalculate average of a column of numbers that meet your specified condition. You can also use alternative syntaxes for improved readability: avgif() and meanif().\n\nExamples\n\nTable = {\n  A = [1, 2, 3]\n  B = [4, 5, 6]\n}\n\naverageif(Table.A, Table.B < 6)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "c8fa8f68-ca04-4161-94f2-90ba3af43dfe",
+        "children": ["e1ccb24f-85c9-4f9a-8db0-8c23e59e2d56"]
+      },
+      "e1ccb24f-85c9-4f9a-8db0-8c23e59e2d56": {
+        "id": "e1ccb24f-85c9-4f9a-8db0-8c23e59e2d56",
+        "message": {
+          "id": "e1ccb24f-85c9-4f9a-8db0-8c23e59e2d56",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434604.073774,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Great! Let's dive into the `average()` and `averageif()` functions in Decipad.\n\n1. **Column Average (average()):**\n\n   - **Syntax:** `average(Table.Column)`\n   - **Description:** This function calculates the average of a specific column in a table.\n   - **Alternative Syntaxes:** You can also use `avg()` and `mean()` for improved readability.\n\n   **Example:**\n   ```markdown\n   average([1, 2, 3, 4])\n   ```\n   **Result:** 2.5\n\n   In this example, the `average()` function calculates the average of the values `[1, 2, 3, 4]`, which is `2.5`.\n\n2. **Column Average that Meets a Condition (averageif()):**\n\n   - **Syntax:** `averageif(Table.Column, Table Column Condition)`\n   - **Description:** This function calculates the average of a column of numbers that meet a specified condition.\n   - **Alternative Syntaxes:** You can also use `avgif()` and `meanif()` for improved readability.\n\n   **Example:**\n   ```markdown\n   Table = {\n     A = [1, 2, 3]\n     B = [4, 5, 6]\n   }\n   averageif(Table.A, Table.B < 6)\n   ```\n   **Result:** 1.5\n\n   In this example, the `averageif()` function calculates the average of values in `Table.A` where the corresponding values in `Table.B` are less than 6. It takes the values `[1, 2]` from `Table.A`, and their average is `1.5`.\n\nFeel free to ask if you have more questions or need further clarification on these functions or their usage in Decipad!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2fdce-4d16-4a6f-ac9b-00972637634e",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2fdce-4d16-4a6f-ac9b-00972637634e",
+        "children": ["aaa28cf0-1cac-413b-b1e9-5e8b26a9b1a5"]
+      },
+      "aaa28cf0-1cac-413b-b1e9-5e8b26a9b1a5": {
+        "id": "aaa28cf0-1cac-413b-b1e9-5e8b26a9b1a5",
+        "message": {
+          "id": "aaa28cf0-1cac-413b-b1e9-5e8b26a9b1a5",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434606.659634,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Combine Tables\n\nSyntax:\n\nconcatenate(Table, Table)\n\nCombines two tables into a new table. These tables have to have the same column types and names.\n\nExamples\n\nSalesDay1 = {\n  Number = [1..3]\n  Sales = [$5, $10, $100]\n}\n\nSalesDay2 = {\n  Number = [1..3]\n  Sales = [$20, $30, $5]\n}\nconcatenate(SalesDay1, SalesDay2)"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "e1ccb24f-85c9-4f9a-8db0-8c23e59e2d56",
+        "children": ["b95f65ba-c9ca-457d-9eea-8985dedc6fbf"]
+      },
+      "b95f65ba-c9ca-457d-9eea-8985dedc6fbf": {
+        "id": "b95f65ba-c9ca-457d-9eea-8985dedc6fbf",
+        "message": {
+          "id": "b95f65ba-c9ca-457d-9eea-8985dedc6fbf",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434617.722305,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `concatenate()` function in Decipad allows you to combine two tables into a new table, provided that these tables have the same column types and names. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `concatenate(Table1, Table2)`\n- **Description:** Combines two tables (`Table1` and `Table2`) into a new table, assuming that both tables have identical column types and names.\n\n**Example:**\n\nLet's consider two tables, `SalesDay1` and `SalesDay2`, with the same column structure:\n\n```markdown\nSalesDay1 = {\n  Number = [1..3]\n  Sales = [$5, $10, $100]\n}\n\nSalesDay2 = {\n  Number = [1..3]\n  Sales = [$20, $30, $5]\n}\n```\n\nNow, you can use the `concatenate()` function to combine these two tables:\n\n```markdown\nconcatenate(SalesDay1, SalesDay2)\n```\n\n**Result:**\n\nThe result of the `concatenate()` function will be a new table that combines the data from both `SalesDay1` and `SalesDay2`:\n\n```markdown\n{\n  Number = [1, 2, 3, 1, 2, 3]\n  Sales = [$5, $10, $100, $20, $30, $5]\n}\n```\n\nIn this merged table, the data from both `SalesDay1` and `SalesDay2` has been concatenated into a single table, maintaining the column names and types.\n\nKeep in mind that the columns in the original tables should have matching names and types for the `concatenate()` function to work as expected.\n\nFeel free to ask if you have any more questions or need further assistance!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa28cf0-1cac-413b-b1e9-5e8b26a9b1a5",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa28cf0-1cac-413b-b1e9-5e8b26a9b1a5",
+        "children": ["aaa29900-55aa-4396-9655-9fac7a234e72"]
+      },
+      "aaa29900-55aa-4396-9655-9fac7a234e72": {
+        "id": "aaa29900-55aa-4396-9655-9fac7a234e72",
+        "message": {
+          "id": "aaa29900-55aa-4396-9655-9fac7a234e72",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434621.83501,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Count Rows\n\nSyntax:\n\ncount(Table.Column)\n\nCounts the number of rows in a column. You can also use the alternative syntax: len()\n\nExamples\n\nErrands = [\"make bread\", \"walk dog\", \"do homework\"]\n\ncount(Errands)\n\n3\nDecipad Language Sandbox\nModify this example and see how it impacts the result\n\nCount Rows that Meet a Condition\n\nSyntax:\n\ncountif(Table.Column, Condition)\n\nCounts the number of rows on a column that satisfy the specified condition.\n\nExamples\n\nFlights = {\n  Number = [\"TP123\", \"BA456\", \"EJ789\"]\n  PassengerCount = [100, 150, 200]\n}\n\n\ncountif(Flights.PassengerCount > 100)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "b95f65ba-c9ca-457d-9eea-8985dedc6fbf",
+        "children": ["7c955ed4-c378-4b2a-bc7a-bfb573f53141"]
+      },
+      "7c955ed4-c378-4b2a-bc7a-bfb573f53141": {
+        "id": "7c955ed4-c378-4b2a-bc7a-bfb573f53141",
+        "message": {
+          "id": "7c955ed4-c378-4b2a-bc7a-bfb573f53141",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434633.948017,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! Let's explore the `count()` and `countif()` functions in Decipad:\n\n**1. Count Rows (count()):**\n\n- **Syntax:** `count(Table.Column)`\n- **Description:** The `count()` function calculates and returns the number of rows in a specific column of a table. Alternatively, you can use `len()` as an alternative syntax for the same purpose.\n\n**Example:**\n\nConsider a list of errands in a column called `Errands`:\n\n```markdown\nErrands = [\"make bread\", \"walk dog\", \"do homework\"]\n```\n\nYou can use the `count()` function to count the number of rows in the `Errands` column:\n\n```markdown\ncount(Errands)\n```\n\n**Result:** The result will be `3`, indicating that there are 3 rows in the `Errands` column.\n\n**2. Count Rows that Meet a Condition (countif()):**\n\n- **Syntax:** `countif(Table.Column, Condition)`\n- **Description:** The `countif()` function counts the number of rows in a column that satisfy a specified condition.\n\n**Example:**\n\nLet's consider a table of flight information with two columns, `Number` and `PassengerCount`:\n\n```markdown\nFlights = {\n  Number = [\"TP123\", \"BA456\", \"EJ789\"]\n  PassengerCount = [100, 150, 200]\n}\n```\n\nYou can use the `countif()` function to count the number of rows where the `PassengerCount` is greater than 100:\n\n```markdown\ncountif(Flights.PassengerCount > 100)\n```\n\n**Result:** The result will be `2`, indicating that there are 2 rows in the `PassengerCount` column where the condition `PassengerCount > 100` is met.\n\nThese functions are useful for summarizing and analyzing data within your tables in Decipad. If you have more questions or need further assistance, please feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa29900-55aa-4396-9655-9fac7a234e72",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa29900-55aa-4396-9655-9fac7a234e72",
+        "children": ["aaa2a442-2391-4870-8a48-576987661992"]
+      },
+      "aaa2a442-2391-4870-8a48-576987661992": {
+        "id": "aaa2a442-2391-4870-8a48-576987661992",
+        "message": {
+          "id": "aaa2a442-2391-4870-8a48-576987661992",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434636.806357,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Filter a Table\n\nSyntax:\n\nfilter( Table, Table Column Condition )\n\nThe filter() formula lets you filter the values from a table.\n\nExamples\n\nEmployees = {\n  name = [\"Jane\", \"Peter\", \"John\"]\n  Office = [\"USA\", \"Germany\", \"Japan\"]\n  Salary = [80k, 60k, 50k]\n}\n\nfilter(Employees, Employees.Salary > 55k)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "7c955ed4-c378-4b2a-bc7a-bfb573f53141",
+        "children": ["ba40fa89-d944-40ec-84c7-db65f9576330"]
+      },
+      "ba40fa89-d944-40ec-84c7-db65f9576330": {
+        "id": "ba40fa89-d944-40ec-84c7-db65f9576330",
+        "message": {
+          "id": "ba40fa89-d944-40ec-84c7-db65f9576330",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434652.266385,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `filter()` function in Decipad allows you to filter values from a table based on a specified condition. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `filter(Table, Table Column Condition)`\n- **Description:** The `filter()` function is used to filter values from a table (`Table`) based on a condition specified for a specific column (`Table Column Condition`).\n\n**Example:**\n\nLet's say you have a table named `Employees` with three columns: `name`, `Office`, and `Salary`:\n\n```markdown\nEmployees = {\n  name = [\"Jane\", \"Peter\", \"John\"]\n  Office = [\"USA\", \"Germany\", \"Japan\"]\n  Salary = [80k, 60k, 50k]\n}\n```\n\nNow, you want to filter the employees whose salary is greater than $55,000. You can use the `filter()` function for this:\n\n```markdown\nfilter(Employees, Employees.Salary > 55k)\n```\n\n**Result:**\n\nThe result of this `filter()` function will be a new table that contains only the rows where the condition `Employees.Salary > 55k` is true:\n\n```markdown\n{\n  name = [\"Jane\", \"Peter\"]\n  Office = [\"USA\", \"Germany\"]\n  Salary = [80k, 60k]\n}\n```\n\nIn this filtered table, only the employees with salaries greater than $55,000 are included, which are Jane and Peter.\n\nThe `filter()` function is a powerful tool for selecting and extracting specific rows from a table based on criteria that you define.\n\nIf you have more questions or need further assistance with Decipad or any other topic, feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2a442-2391-4870-8a48-576987661992",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2a442-2391-4870-8a48-576987661992",
+        "children": ["aaa2951a-3ffc-4cc3-b555-1cf505467076"]
+      },
+      "aaa2951a-3ffc-4cc3-b555-1cf505467076": {
+        "id": "aaa2951a-3ffc-4cc3-b555-1cf505467076",
+        "message": {
+          "id": "aaa2951a-3ffc-4cc3-b555-1cf505467076",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434663.457281,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "First Column Value\n\nSyntax:\n\nfirst(Table.Column)\n\nExtracts the first element from a column.\n\nExamples\n\nErrands = [\"make bread\", \"walk dog\", \"do homework\"]\n\nfirst(Errands)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "ba40fa89-d944-40ec-84c7-db65f9576330",
+        "children": ["141127ae-65f2-4d46-965b-f342af6cf2c4"]
+      },
+      "141127ae-65f2-4d46-965b-f342af6cf2c4": {
+        "id": "141127ae-65f2-4d46-965b-f342af6cf2c4",
+        "message": {
+          "id": "141127ae-65f2-4d46-965b-f342af6cf2c4",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434670.92765,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `first()` function in Decipad is used to extract the first element from a specific column in a table. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `first(Table.Column)`\n- **Description:** The `first()` function extracts and returns the first element from a specified column (`Table.Column`) in a table.\n\n**Example:**\n\nLet's say you have a column named `Errands` containing a list of tasks:\n\n```markdown\nErrands = [\"make bread\", \"walk dog\", \"do homework\"]\n```\n\nYou can use the `first()` function to extract the first task from the `Errands` column:\n\n```markdown\nfirst(Errands)\n```\n\n**Result:**\n\nThe result of this `first()` function will be the first element in the `Errands` column, which is `\"make bread\"`.\n\nSo, in this example, the `first(Errands)` function extracts the first task, \"make bread,\" from the `Errands` column.\n\nThis function is handy when you need to retrieve the initial value or element from a column in your Decipad table.\n\nIf you have more questions or need further assistance, feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2951a-3ffc-4cc3-b555-1cf505467076",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2951a-3ffc-4cc3-b555-1cf505467076",
+        "children": ["aaa2070e-4466-4c8f-9864-ec582114c7cd"]
+      },
+      "aaa2070e-4466-4c8f-9864-ec582114c7cd": {
+        "id": "aaa2070e-4466-4c8f-9864-ec582114c7cd",
+        "message": {
+          "id": "aaa2070e-4466-4c8f-9864-ec582114c7cd",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434678.129776,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Growth\n\nThis formula compounds an initial value by a specific rate over any sequence or list of values.\n\nYears = [date(2022), date(2023), date(2024), date(2025)]\n\ngrow(500, 10%, Years)\n\n1\n500\n2\n550\n3\n605\n4\n665.5\n \nDecipad Language Sandbox\nModify this example and see how it impacts the result\nStep Growth\nThis formula gives you the increments (or decrements) between values in a sequence or list.\n\nBooksRead = {\n  Year = [date(2018), date(2019), date(2020), date(2021)]\n  Total = [15, 12, 25, 20]\n}\n\nstepgrowth(BooksRead.Total)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "141127ae-65f2-4d46-965b-f342af6cf2c4",
+        "children": ["8090fcba-b018-4975-bd9e-2fc43690be18"]
+      },
+      "8090fcba-b018-4975-bd9e-2fc43690be18": {
+        "id": "8090fcba-b018-4975-bd9e-2fc43690be18",
+        "message": {
+          "id": "8090fcba-b018-4975-bd9e-2fc43690be18",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434707.578769,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! Let's explore the `grow()` and `stepgrowth()` functions in Decipad:\n\n**1. Growth (grow()):**\n\n- **Syntax:** `grow(InitialValue, Rate, Sequence)`\n- **Description:** The `grow()` function is used to compound an initial value by a specific growth rate over a sequence or list of values (`Sequence`).\n\n**Example:**\n\nIn the provided example, we have a sequence of years in the `Years` variable and want to calculate the growth of an initial value of `500` at a growth rate of `10%` over these years:\n\n```markdown\nYears = [date(2022), date(2023), date(2024), date(2025)]\ngrow(500, 10%, Years)\n```\n\n**Result:**\n\nThe result will be a sequence of values showing the compounded growth of the initial value:\n\n```markdown\n1\n500\n2\n550\n3\n605\n4\n665.5\n```\n\nIn this case, the initial value of `500` grows by `10%` each year, resulting in the calculated values for each year.\n\n**2. Step Growth (stepgrowth()):**\n\n- **Syntax:** `stepgrowth(Sequence)`\n- **Description:** The `stepgrowth()` function calculates the increments (or decrements) between values in a sequence or list.\n\n**Example:**\n\nConsider a table named `BooksRead` with two columns, `Year` and `Total`, indicating the total number of books read in each year:\n\n```markdown\nBooksRead = {\n  Year = [date(2018), date(2019), date(2020), date(2021)]\n  Total = [15, 12, 25, 20]\n}\n```\n\nYou can use the `stepgrowth()` function to calculate the growth between each consecutive year's total number of books read:\n\n```markdown\nstepgrowth(BooksRead.Total)\n```\n\n**Result:**\n\nThe result will be a sequence of values representing the growth (or decrease) in the total number of books read between each consecutive year:\n\n```markdown\n1\n-3\n2\n13\n3\n-5\n```\n\nIn this example, the `stepgrowth()` function calculates the difference between the `Total` values for each year, showing how the number of books read changed from year to year.\n\nThese functions are useful for analyzing and visualizing growth or changes in data over time or across sequences in Decipad. If you have more questions or need further assistance, please feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2070e-4466-4c8f-9864-ec582114c7cd",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2070e-4466-4c8f-9864-ec582114c7cd",
+        "children": ["aaa20a2b-34a3-4685-b11e-b38070dfe3aa"]
+      },
+      "aaa20a2b-34a3-4685-b11e-b38070dfe3aa": {
+        "id": "aaa20a2b-34a3-4685-b11e-b38070dfe3aa",
+        "message": {
+          "id": "aaa20a2b-34a3-4685-b11e-b38070dfe3aa",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434717.210483,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Last Column Value\n\nSyntax\n\nlast(Table.Column)\n\nExtracts the last element from a column.\n\nExamples\n\nErrands = [\"make bread\", \"walk dog\", \"do homework\"]\n\nlast(Errands)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "8090fcba-b018-4975-bd9e-2fc43690be18",
+        "children": ["afb8a47f-738b-482c-a562-bdd10385064f"]
+      },
+      "afb8a47f-738b-482c-a562-bdd10385064f": {
+        "id": "afb8a47f-738b-482c-a562-bdd10385064f",
+        "message": {
+          "id": "afb8a47f-738b-482c-a562-bdd10385064f",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434730.845148,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `last()` function in Decipad is used to extract the last element from a specific column in a table. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `last(Table.Column)`\n- **Description:** The `last()` function extracts and returns the last element from a specified column (`Table.Column`) in a table.\n\n**Example:**\n\nLet's say you have a column named `Errands` containing a list of tasks:\n\n```markdown\nErrands = [\"make bread\", \"walk dog\", \"do homework\"]\n```\n\nYou can use the `last()` function to extract the last task from the `Errands` column:\n\n```markdown\nlast(Errands)\n```\n\n**Result:**\n\nThe result of this `last()` function will be the last element in the `Errands` column, which is `\"do homework\"`.\n\nSo, in this example, the `last(Errands)` function extracts the last task, \"do homework,\" from the `Errands` column.\n\nThis function is handy when you need to retrieve the final value or element from a column in your Decipad table.\n\nIf you have more questions or need further assistance, feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa20a2b-34a3-4685-b11e-b38070dfe3aa",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa20a2b-34a3-4685-b11e-b38070dfe3aa",
+        "children": ["aaa2f130-29ba-4e59-a4ff-250a47b5d551"]
+      },
+      "aaa2f130-29ba-4e59-a4ff-250a47b5d551": {
+        "id": "aaa2f130-29ba-4e59-a4ff-250a47b5d551",
+        "message": {
+          "id": "aaa2f130-29ba-4e59-a4ff-250a47b5d551",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434735.703141,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Lookup\n\nSyntax:\n\nlookup( Table, Table Column Condition )\n\nThe lookup() formula lets you access rows and values from a table to inspect or reuse.\n\nExamples\n\nEmployees = {\n  name = [\"Jane\", \"Peter\", \"John\"]\n  Office = [\"USA\", \"Germany\", \"Japan\"]\n}\n\nlookup(Employees, \"Peter\")\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "afb8a47f-738b-482c-a562-bdd10385064f",
+        "children": ["0dbf67eb-dd43-40a9-b8ed-4dba56fa8c40"]
+      },
+      "0dbf67eb-dd43-40a9-b8ed-4dba56fa8c40": {
+        "id": "0dbf67eb-dd43-40a9-b8ed-4dba56fa8c40",
+        "message": {
+          "id": "0dbf67eb-dd43-40a9-b8ed-4dba56fa8c40",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434754.069685,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `lookup()` function in Decipad allows you to access rows and values from a table based on a specified condition or criteria. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `lookup(Table, Table Column Condition)`\n- **Description:** The `lookup()` function is used to access rows and values from a table (`Table`) based on a specified condition or criteria (`Table Column Condition`).\n\n**Example:**\n\nLet's say you have a table named `Employees` with two columns, `name` and `Office`, which represents the names of employees and their respective offices:\n\n```markdown\nEmployees = {\n  name = [\"Jane\", \"Peter\", \"John\"]\n  Office = [\"USA\", \"Germany\", \"Japan\"]\n}\n```\n\nNow, you want to use the `lookup()` function to find information about an employee with the name \"Peter.\" You can do this by specifying the condition that matches the name \"Peter\":\n\n```markdown\nlookup(Employees, \"Peter\")\n```\n\n**Result:**\n\nThe result of this `lookup()` function will provide you with the row that matches the condition \"Peter\" in the `name` column. In this case, it would return:\n\n```markdown\n{\n  name = \"Peter\"\n  Office = \"Germany\"\n}\n```\n\nThe result is a table that contains the information for the employee named \"Peter,\" including both their name and office.\n\nThe `lookup()` function is useful for extracting specific rows or information from a table based on criteria you define.\n\nIf you have more questions or need further assistance with Decipad or any other topic, feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2f130-29ba-4e59-a4ff-250a47b5d551",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2f130-29ba-4e59-a4ff-250a47b5d551",
+        "children": ["aaa2a25e-a564-4cad-a164-42a6f34b633a"]
+      },
+      "aaa2a25e-a564-4cad-a164-42a6f34b633a": {
+        "id": "aaa2a25e-a564-4cad-a164-42a6f34b633a",
+        "message": {
+          "id": "aaa2a25e-a564-4cad-a164-42a6f34b633a",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434761.797042,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Column Max Value\n\nSyntax:\n\nmax(Table.Column)\n\nCalculate the largest number from a column of numbers or the most recent date from a column of dates.\n\nExamples\n\nPrices = {\n  Discounts = [10%, 20%, 30%]\n}\nmax(Prices.Discounts)\n\n30%\nDecipad Language Sandbox\nModify this example and see how it impacts the result\nmax([date(2050-Jan-01), date(2025-Jun-01)])\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "0dbf67eb-dd43-40a9-b8ed-4dba56fa8c40",
+        "children": ["c6c37e57-56c7-461e-89fb-ecb72ed381cb"]
+      },
+      "c6c37e57-56c7-461e-89fb-ecb72ed381cb": {
+        "id": "c6c37e57-56c7-461e-89fb-ecb72ed381cb",
+        "message": {
+          "id": "c6c37e57-56c7-461e-89fb-ecb72ed381cb",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434772.710455,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `max()` function in Decipad is used to calculate the largest number from a column of numbers or the most recent date from a column of dates. Here's an explanation of the function along with examples:\n\n**Function:**\n\n- **Syntax:** `max(Table.Column)`\n- **Description:** The `max()` function calculates and returns the largest value (number or date) found in a specified column (`Table.Column`) of a table.\n\n**Examples:**\n\n1. **Calculating the Largest Discount Percentage:**\n\n   Let's say you have a table named `Prices` with a column called `Discounts`, which contains a list of discount percentages:\n\n   ```markdown\n   Prices = {\n     Discounts = [10%, 20%, 30%]\n   }\n   ```\n\n   You can use the `max()` function to find the largest discount percentage in the `Discounts` column:\n\n   ```markdown\n   max(Prices.Discounts)\n   ```\n\n   **Result:** The result will be `30%`, indicating that the largest discount percentage in the `Discounts` column is `30%`.\n\n2. **Finding the Most Recent Date:**\n\n   In this example, you have a list of dates, and you want to find the most recent date:\n\n   ```markdown\n   max([date(2050-Jan-01), date(2025-Jun-01)])\n   ```\n\n   **Result:** The result will be the most recent date, which is `2050-Jan-01`.\n\nThe `max()` function is handy for quickly identifying the maximum value in a column, whether it contains numbers or dates.\n\nFeel free to ask if you have more questions or need further assistance with Decipad or any other topic!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2a25e-a564-4cad-a164-42a6f34b633a",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2a25e-a564-4cad-a164-42a6f34b633a",
+        "children": ["aaa2c6ef-95fd-433c-a721-85f7c9d8d253"]
+      },
+      "aaa2c6ef-95fd-433c-a721-85f7c9d8d253": {
+        "id": "aaa2c6ef-95fd-433c-a721-85f7c9d8d253",
+        "message": {
+          "id": "aaa2c6ef-95fd-433c-a721-85f7c9d8d253",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434777.83091,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Column Max Value\n\nSyntax:\n\nmin(Table.Column)\n\nCalculate the smallest number from a column of numbers or the earliest date from a column of dates.\n\nExamples\n\nPrices = {\n  Discounts = [10%, 20%, 30%]\n}\nmin(Prices.Discounts)\n\n10%\nDecipad Language Sandbox\nModify this example and see how it impacts the result\nmin([date(2050-Jan-01), date(2025-Jun-01)])\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "c6c37e57-56c7-461e-89fb-ecb72ed381cb",
+        "children": ["6b96288a-441b-40f4-bdcf-101704e720b1"]
+      },
+      "6b96288a-441b-40f4-bdcf-101704e720b1": {
+        "id": "6b96288a-441b-40f4-bdcf-101704e720b1",
+        "message": {
+          "id": "6b96288a-441b-40f4-bdcf-101704e720b1",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434827.249807,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `min()` function in Decipad is used to calculate the smallest number from a column of numbers or the earliest date from a column of dates. Here's an explanation of the function along with examples:\n\n**Function:**\n\n- **Syntax:** `min(Table.Column)`\n- **Description:** The `min()` function calculates and returns the smallest value (number or date) found in a specified column (`Table.Column`) of a table.\n\n**Examples:**\n\n1. **Calculating the Smallest Discount Percentage:**\n\n   Let's say you have a table named `Prices` with a column called `Discounts`, which contains a list of discount percentages:\n\n   ```markdown\n   Prices = {\n     Discounts = [10%, 20%, 30%]\n   }\n   ```\n\n   You can use the `min()` function to find the smallest discount percentage in the `Discounts` column:\n\n   ```markdown\n   min(Prices.Discounts)\n   ```\n\n   **Result:** The result will be `10%`, indicating that the smallest discount percentage in the `Discounts` column is `10%`.\n\n2. **Finding the Earliest Date:**\n\n   In this example, you have a list of dates, and you want to find the earliest date:\n\n   ```markdown\n   min([date(2050-Jan-01), date(2025-Jun-01)])\n   ```\n\n   **Result:** The result will be the earliest date, which is `2025-Jun-01`.\n\nThe `min()` function is useful for quickly identifying the minimum value in a column, whether it contains numbers or dates.\n\nFeel free to ask if you have more questions or need further assistance with Decipad or any other topic!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2c6ef-95fd-433c-a721-85f7c9d8d253",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2c6ef-95fd-433c-a721-85f7c9d8d253",
+        "children": ["aaa23a34-6f70-4750-bde6-e102f349634f"]
+      },
+      "aaa23a34-6f70-4750-bde6-e102f349634f": {
+        "id": "aaa23a34-6f70-4750-bde6-e102f349634f",
+        "message": {
+          "id": "aaa23a34-6f70-4750-bde6-e102f349634f",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434832.251743,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Reference Previous Values\n\nSyntax:\n\nprevious(InitialValue, [Table.Column])\n\nReferences the previous value within a table. The first argument is the initial value, and if you want to reference the previous result in another column, you can pass its name as the second argument.\n\nExamples\n\nprevious($10) + 5% adds $10 to the first row and adds 5% to each subsequent row, taking into account the previous value.\n\nSales={\n  Year=[date(2020)..date(2023)]\n  Growth=previous($10) + 5%\n}\n\nYear\nGrowth\n2020\n$10.5\n2021\n\u2248$11.03\n2022\n\u2248$11.58\n2023\n\u2248$12.16\n \nDecipad Language Sandbox\nModify this example and see how it impacts the result\nprevious(0, Acquired * 5%) forecasts the number of customers who churned based on the previous year's acquired clients and a 5% churn rate.\n\nCustomerForecast={\n  Year=[date(2020)..date(2023)]\n  Acquired=previous(1000 customers) * 200%\n  Churned=previous(0, Acquired * 5%)\n}\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "6b96288a-441b-40f4-bdcf-101704e720b1",
+        "children": ["6ce627ec-dfa6-43d1-b8c6-30872c7c78d8"]
+      },
+      "6ce627ec-dfa6-43d1-b8c6-30872c7c78d8": {
+        "id": "6ce627ec-dfa6-43d1-b8c6-30872c7c78d8",
+        "message": {
+          "id": "6ce627ec-dfa6-43d1-b8c6-30872c7c78d8",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434848.564214,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `previous()` function in Decipad allows you to reference the previous value within a table. It's a powerful tool for creating calculations that depend on the previous result or value. Here's an explanation of the function along with examples:\n\n**Function:**\n\n- **Syntax:** `previous(InitialValue, [Table.Column])`\n- **Description:** The `previous()` function references the previous value within a table. The first argument is the initial value, and if you want to reference the previous result in another column, you can pass its name as the second argument (`Table.Column`).\n\n**Examples:**\n\n1. **Incremental Sales Growth:**\n\n   In this example, you want to calculate incremental sales growth. You start with an initial value of `$10` in the first row and add `5%` to each subsequent row, taking into account the previous value:\n\n   ```markdown\n   Sales = {\n     Year = [date(2020)..date(2023)]\n     Growth = previous($10) + 5%\n   }\n   ```\n\n   **Result:**\n\n   The `Growth` column calculates the growth, starting with `$10` and adding `5%` in each subsequent row:\n\n   ```markdown\n   Year      Growth\n   2020      $10.00\n   2021      \u2248$10.50\n   2022      \u2248$11.03\n   2023      \u2248$11.58\n   ```\n\n2. **Forecasting Customer Churn:**\n\n   In this example, you want to forecast the number of customers who churned based on the previous year's acquired clients and a `5%` churn rate:\n\n   ```markdown\n   CustomerForecast = {\n     Year = [date(2020)..date(2023)]\n     Acquired = previous(1000 customers) * 200%\n     Churned = previous(0, Acquired * 5%)\n   }\n   ```\n\n   **Result:**\n\n   The `Churned` column calculates the number of churned customers based on the previous year's acquired clients and a `5%` churn rate:\n\n   ```markdown\n   Year      Acquired      Churned\n   2020      2,000         0\n   2021      4,000         200\n   2022      8,000         400\n   2023      16,000        800\n   ```\n\nIn both examples, the `previous()` function is used to reference the previous value, allowing you to create dynamic calculations based on historical data or incremental growth.\n\nFeel free to ask if you have more questions or need further assistance with Decipad or any other topic!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa23a34-6f70-4750-bde6-e102f349634f",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa23a34-6f70-4750-bde6-e102f349634f",
+        "children": ["aaa2f19f-2d43-451d-b02b-f2a06d552b09"]
+      },
+      "aaa2f19f-2d43-451d-b02b-f2a06d552b09": {
+        "id": "aaa2f19f-2d43-451d-b02b-f2a06d552b09",
+        "message": {
+          "id": "aaa2f19f-2d43-451d-b02b-f2a06d552b09",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434851.672451,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Reverse Table Rows Order\n\nSyntax:\n\nreverse(Table)\n\nReverses the order of rows. Also works with single columns: reverse(Table.Column).\n\nSales={\n  Year=[date(2020)..date(2023)]\n  Growth=previous($10) + 5%\n}\n\nreverse(Sales)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "6ce627ec-dfa6-43d1-b8c6-30872c7c78d8",
+        "children": ["fe90fb06-0b0b-4c87-8857-fc721e526344"]
+      },
+      "fe90fb06-0b0b-4c87-8857-fc721e526344": {
+        "id": "fe90fb06-0b0b-4c87-8857-fc721e526344",
+        "message": {
+          "id": "fe90fb06-0b0b-4c87-8857-fc721e526344",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434862.584931,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `reverse()` function in Decipad is used to reverse the order of rows in a table or the order of elements in a single column. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `reverse(Table)` or `reverse(Table.Column)`\n- **Description:** The `reverse()` function reverses the order of rows in a table or the order of elements in a single column (`Table.Column`).\n\n**Example:**\n\nLet's consider a table named `Sales` with two columns, `Year` and `Growth`, which represents sales growth over several years:\n\n```markdown\nSales = {\n  Year = [date(2020)..date(2023)]\n  Growth = previous($10) + 5%\n}\n```\n\nIf you want to reverse the order of rows in the `Sales` table, you can use the `reverse()` function as follows:\n\n```markdown\nreverse(Sales)\n```\n\n**Result:**\n\nThe result will be a new table with the rows reversed, changing the order of years and corresponding growth values:\n\n```markdown\nYear      Growth\n2023      \u2248$11.58\n2022      \u2248$11.03\n2021      \u2248$10.50\n2020      $10.00\n```\n\nAs you can see, the order of rows has been reversed, so the most recent year (2023) appears at the top, followed by previous years in descending order.\n\nThe `reverse()` function is useful when you need to present data in the reverse order for visualization or analysis purposes.\n\nIf you have more questions or need further assistance with Decipad or any other topic, feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2f19f-2d43-451d-b02b-f2a06d552b09",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2f19f-2d43-451d-b02b-f2a06d552b09",
+        "children": ["aaa282ce-5379-4e41-9aff-b27330b75da4"]
+      },
+      "aaa282ce-5379-4e41-9aff-b27330b75da4": {
+        "id": "aaa282ce-5379-4e41-9aff-b27330b75da4",
+        "message": {
+          "id": "aaa282ce-5379-4e41-9aff-b27330b75da4",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434864.852602,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Sort Table Rows\n\nSyntax:\n\nsort(Table.Column)\n\nReorders a column in ascending order.\n\nExamples\n\nsort([date(2021-03), date(2020-12), date(2023-01)])\n\n1\nDec 2020\n2\nMar 2021\n3\nJan 2023\n \nDecipad Language Sandbox\nModify this example and see how it impacts the result\nSort Table Rows by Column\nSyntax:\n\nsortby(Table, Column)\n\nReorder table rows based on a specific column.\n\nFlights = {\n  Number = [\"TP123\", \"BA456\", \"EJ789\"]\n  PassengerCount = [100, 150, 200]\n}\n\nsortby(Flights, Flights.Number)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "fe90fb06-0b0b-4c87-8857-fc721e526344",
+        "children": ["dfcb9ea1-827e-4274-b70b-ed1cf5563988"]
+      },
+      "dfcb9ea1-827e-4274-b70b-ed1cf5563988": {
+        "id": "dfcb9ea1-827e-4274-b70b-ed1cf5563988",
+        "message": {
+          "id": "dfcb9ea1-827e-4274-b70b-ed1cf5563988",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434880.389878,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! In Decipad, you can use the `sort()` and `sortby()` functions to reorder rows in a table based on a specific column. Here's an explanation of both functions along with examples:\n\n**1. Sort a Single Column (sort()):**\n\n- **Syntax:** `sort(Table.Column)`\n- **Description:** The `sort()` function reorders a single column in ascending order.\n\n**Example:**\n\nLet's say you have a list of dates in ascending order:\n\n```markdown\nsort([date(2021-03), date(2020-12), date(2023-01)])\n```\n\n**Result:** The result will be the dates sorted in ascending order:\n\n```markdown\n1\nDec 2020\n2\nMar 2021\n3\nJan 2023\n```\n\nIn this example, the `sort()` function arranges the dates in chronological order.\n\n**2. Sort Table Rows by a Column (sortby()):**\n\n- **Syntax:** `sortby(Table, Column)`\n- **Description:** The `sortby()` function reorders the rows of a table based on a specific column.\n\n**Example:**\n\nConsider a table named `Flights` with two columns, `Number` and `PassengerCount`, representing flight numbers and passenger counts:\n\n```markdown\nFlights = {\n  Number = [\"TP123\", \"BA456\", \"EJ789\"]\n  PassengerCount = [100, 150, 200]\n}\n```\n\nYou can use the `sortby()` function to sort the rows of the `Flights` table based on the `Number` column:\n\n```markdown\nsortby(Flights, Flights.Number)\n```\n\n**Result:** The result will be a table with rows sorted based on the `Number` column:\n\n```markdown\n{\n  Number = [\"BA456\", \"EJ789\", \"TP123\"]\n  PassengerCount = [150, 200, 100]\n}\n```\n\nIn this example, the `sortby()` function arranges the rows of the `Flights` table in ascending order based on the flight numbers.\n\nThese functions are helpful for arranging data in a specific order for analysis or presentation in Decipad.\n\nIf you have more questions or need further assistance, please feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa282ce-5379-4e41-9aff-b27330b75da4",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa282ce-5379-4e41-9aff-b27330b75da4",
+        "children": ["aaa2523b-6bc1-4371-89d1-65d13ef0a70f"]
+      },
+      "aaa2523b-6bc1-4371-89d1-65d13ef0a70f": {
+        "id": "aaa2523b-6bc1-4371-89d1-65d13ef0a70f",
+        "message": {
+          "id": "aaa2523b-6bc1-4371-89d1-65d13ef0a70f",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434884.984262,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Growth\n\nThis formula compounds an initial value by a specific rate over any sequence or list of values.\n\nYears = [date(2022), date(2023), date(2024), date(2025)]\n\ngrow(500, 10%, Years)\n\n1\n500\n2\n550\n3\n605\n4\n665.5\n \nDecipad Language Sandbox\nModify this example and see how it impacts the result\nStep Growth\nThis formula gives you the increments (or decrements) between values in a sequence or list.\n\nBooksRead = {\n  Year = [date(2018), date(2019), date(2020), date(2021)]\n  Total = [15, 12, 25, 20]\n}\n\nstepgrowth(BooksRead.Total)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "dfcb9ea1-827e-4274-b70b-ed1cf5563988",
+        "children": ["539565fa-e642-4028-bae0-eeb6954ab6d9"]
+      },
+      "539565fa-e642-4028-bae0-eeb6954ab6d9": {
+        "id": "539565fa-e642-4028-bae0-eeb6954ab6d9",
+        "message": {
+          "id": "539565fa-e642-4028-bae0-eeb6954ab6d9",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434953.784048,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! The `grow()` and `stepgrowth()` functions in Decipad are useful for calculating growth and increments (or decrements) between values over a sequence or list. Here are explanations of both functions along with examples:\n\n**1. Growth (grow()):**\n\n- **Syntax:** `grow(InitialValue, Rate, Sequence)`\n- **Description:** The `grow()` function compounds an initial value by a specific growth rate over a sequence or list of values (`Sequence`).\n\n**Example:**\n\nIn the provided example, you have a sequence of years in the `Years` variable, and you want to calculate the growth of an initial value of `500` at a growth rate of `10%` over these years:\n\n```markdown\nYears = [date(2022), date(2023), date(2024), date(2025)]\ngrow(500, 10%, Years)\n```\n\n**Result:**\n\nThe result will be a sequence of values showing the compounded growth of the initial value:\n\n```markdown\n1\n500\n2\n550\n3\n605\n4\n665.5\n```\n\nIn this case, the initial value of `500` grows by `10%` each year, resulting in the calculated values for each year.\n\n**2. Step Growth (stepgrowth()):**\n\n- **Syntax:** `stepgrowth(Sequence)`\n- **Description:** The `stepgrowth()` function calculates the increments (or decrements) between values in a sequence or list.\n\n**Example:**\n\nConsider a table named `BooksRead` with two columns, `Year` and `Total`, indicating the total number of books read in each year:\n\n```markdown\nBooksRead = {\n  Year = [date(2018), date(2019), date(2020), date(2021)]\n  Total = [15, 12, 25, 20]\n}\n```\n\nYou can use the `stepgrowth()` function to calculate the growth between each consecutive year's total number of books read:\n\n```markdown\nstepgrowth(BooksRead.Total)\n```\n\n**Result:**\n\nThe result will be a sequence of values representing the growth (or decrease) in the total number of books read between each consecutive year:\n\n```markdown\n1\n-3\n2\n13\n3\n-5\n```\n\nIn this example, the `stepgrowth()` function calculates the difference between the `Total` values for each year, showing how the number of books read changed from year to year.\n\nThese functions are helpful for analyzing and visualizing growth or changes in data over time or across sequences in Decipad.\n\nIf you have more questions or need further assistance, please feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2523b-6bc1-4371-89d1-65d13ef0a70f",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2523b-6bc1-4371-89d1-65d13ef0a70f",
+        "children": ["aaa281e2-b529-44d7-bc7f-18ba73b38fd4"]
+      },
+      "aaa281e2-b529-44d7-bc7f-18ba73b38fd4": {
+        "id": "aaa281e2-b529-44d7-bc7f-18ba73b38fd4",
+        "message": {
+          "id": "aaa281e2-b529-44d7-bc7f-18ba73b38fd4",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434965.131314,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Sum Rows\n\nSyntax:\n\nsum(Table.Column) \ntotal(Table.Column)\n\nThis formula gives you the sum of all numbers in a list or a table column. You can use total()as an alternative syntax:\n\nExample\n\nmy_table = {\n  column_A = [1, 2, 3]\n  column_B = [4, 5, 6]\n}\n\nsum(my_table.column_B)\n\n15\nDecipad Language Sandbox\nModify this example and see how it impacts the result\nSum Rows that Meet a Condition\nSyntax:\n\nsumif(Table.Column, Table Column Condition)\n\nCalculates the sum of an entire column based on your specified condition.\n\nExamples\n\nmy_table = {\n  column_A = [1, 2, 3]\n  column_B = [4, 5, 6]\n}\n\nsumif(my_table.column_B, my_table.column_B > 4)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "539565fa-e642-4028-bae0-eeb6954ab6d9",
+        "children": ["613b1a52-045c-4c6d-9869-b89bfc129f41"]
+      },
+      "613b1a52-045c-4c6d-9869-b89bfc129f41": {
+        "id": "613b1a52-045c-4c6d-9869-b89bfc129f41",
+        "message": {
+          "id": "613b1a52-045c-4c6d-9869-b89bfc129f41",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434990.549426,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! In Decipad, you can use the `sum()` and `total()` functions to calculate the sum of numbers in a list or a table column. Additionally, the `sumif()` function allows you to calculate the sum of values in a column based on a specified condition. Here are explanations and examples for each:\n\n**1. Calculate the Sum of a Table Column (sum() or total()):**\n\n- **Syntax:** `sum(Table.Column)` or `total(Table.Column)`\n- **Description:** These functions give you the sum of all numbers in a list or a table column. You can use `total()` as an alternative syntax for `sum()`.\n\n**Example:**\n\nSuppose you have a table named `my_table` with two columns, `column_A` and `column_B`, representing numerical values:\n\n```markdown\nmy_table = {\n  column_A = [1, 2, 3]\n  column_B = [4, 5, 6]\n}\n```\n\nYou can use the `sum()` or `total()` function to calculate the sum of values in `column_B`:\n\n```markdown\nsum(my_table.column_B)\n```\n\nor\n\n```markdown\ntotal(my_table.column_B)\n```\n\n**Result:** The result will be the sum of all values in `column_B`, which is `15`.\n\nThese functions are useful for quickly calculating the total of numerical data in a column or list.\n\n**2. Calculate the Sum of Values Based on a Condition (sumif()):**\n\n- **Syntax:** `sumif(Table.Column, Table Column Condition)`\n- **Description:** The `sumif()` function calculates the sum of an entire column based on your specified condition.\n\n**Example:**\n\nUsing the same `my_table` as before, you can use the `sumif()` function to calculate the sum of values in `column_B` that meet a condition (e.g., values greater than `4`):\n\n```markdown\nsumif(my_table.column_B, my_table.column_B > 4)\n```\n\n**Result:** The result will be the sum of values in `column_B` that satisfy the condition (values greater than `4`). In this case, it would be `11`, as it sums the values `5` and `6`.\n\nThe `sumif()` function is useful when you want to perform conditional calculations on data in a column.\n\nThese functions are valuable for performing various calculations and aggregations on your data in Decipad.\n\nIf you have more questions or need further assistance, please feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa281e2-b529-44d7-bc7f-18ba73b38fd4",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa281e2-b529-44d7-bc7f-18ba73b38fd4",
+        "children": ["aaa2eb53-60c3-49ef-8adf-0303a592a086"]
+      },
+      "aaa2eb53-60c3-49ef-8adf-0303a592a086": {
+        "id": "aaa2eb53-60c3-49ef-8adf-0303a592a086",
+        "message": {
+          "id": "aaa2eb53-60c3-49ef-8adf-0303a592a086",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434993.663631,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Unique Values\n\nSyntax:\n\nunique(Column)\n\nExtracts the uniques values from a column.\n\nExamples\n\nunique([4 USD, 3 USD, 1 USD, 1 USD, 4 USD, 3 USD, 3 USD])\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "613b1a52-045c-4c6d-9869-b89bfc129f41",
+        "children": ["b93bbc35-404c-4dc6-ac8e-8aa856195151"]
+      },
+      "b93bbc35-404c-4dc6-ac8e-8aa856195151": {
+        "id": "b93bbc35-404c-4dc6-ac8e-8aa856195151",
+        "message": {
+          "id": "b93bbc35-404c-4dc6-ac8e-8aa856195151",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696435001.5358,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! In Decipad, the `unique()` function allows you to extract unique values from a column or a list. Here's an explanation of the function along with an example:\n\n**Function:**\n\n- **Syntax:** `unique(Column)`\n- **Description:** The `unique()` function is used to extract the unique values from a column or a list, removing any duplicate values.\n\n**Example:**\n\nLet's say you have a list of values representing different amounts in USD, and you want to extract the unique values from this list:\n\n```markdown\nunique([4 USD, 3 USD, 1 USD, 1 USD, 4 USD, 3 USD, 3 USD])\n```\n\n**Result:** The result will be the unique values from the list:\n\n```markdown\n4 USD\n3 USD\n1 USD\n```\n\nIn this example, the `unique()` function removes duplicate values and extracts the unique values, giving you a list of unique amounts.\n\nThe `unique()` function is useful when you need to identify and work with unique elements from a list or column in your data.\n\nIf you have more questions or need further assistance with Decipad or any other topic, please feel free to ask!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2eb53-60c3-49ef-8adf-0303a592a086",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2eb53-60c3-49ef-8adf-0303a592a086",
+        "children": ["aaa24e0f-b1c5-4313-9a7d-ee247e99e93a"]
+      },
+      "aaa24e0f-b1c5-4313-9a7d-ee247e99e93a": {
+        "id": "aaa24e0f-b1c5-4313-9a7d-ee247e99e93a",
+        "message": {
+          "id": "aaa24e0f-b1c5-4313-9a7d-ee247e99e93a",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696435017.844378,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": ["make a summary with key concepts, value and how tos"]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "b93bbc35-404c-4dc6-ac8e-8aa856195151",
+        "children": ["b6068e31-5a5d-4096-87b3-ed139f17c544"]
+      },
+      "b6068e31-5a5d-4096-87b3-ed139f17c544": {
+        "id": "b6068e31-5a5d-4096-87b3-ed139f17c544",
+        "message": {
+          "id": "b6068e31-5a5d-4096-87b3-ed139f17c544",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696435040.327063,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "**Key Concepts in Decipad Tables:**\n\n1. **Tables:** Tables in Decipad are used to organize and present structured data. They consist of columns and rows, where each column represents a specific data attribute or variable, and each row represents a data entry or record.\n\n2. **Formulas:** Formulas are used to perform calculations and operations on table data. You can use various functions to manipulate and analyze data within tables.\n\n3. **Functions:** Decipad provides a wide range of functions for working with tables, including functions for calculations, filtering, sorting, and more. These functions allow you to extract valuable insights from your data.\n\n4. **Columns:** Columns represent individual data attributes within a table. You can reference columns to perform calculations, filter data, and generate insights.\n\n5. **Rows:** Rows represent individual data entries or records within a table. You can add, delete, rearrange, and filter rows to manage your data effectively.\n\n6. **Calculations:** Decipad allows you to perform calculations within tables, including basic arithmetic, statistical calculations, and custom calculations based on your data.\n\n7. **Conditions:** Conditions are used to filter data in tables. You can apply conditions to columns to extract specific subsets of data based on predefined criteria.\n\n8. **Aggregations:** Aggregations are used to summarize and analyze data. Functions like `sum()`, `average()`, and `count()` are used to aggregate data within columns.\n\n**Value of Decipad Tables:**\n\n- Decipad tables provide a structured and interactive way to work with data, making it easier to explore, analyze, and share insights.\n- Tables allow you to perform calculations, filter data, and create informative narratives using a combination of text, numbers, and formulas.\n- Decipad functions enable efficient data manipulation, aggregation, and visualization, making it a valuable tool for data analysis and reporting.\n\n**How to Use Decipad Tables:**\n\n1. **Create a Table:** To create a new table, go to your notebook, click the \"+\" button next to an empty line, select \"Table\" from the menu, or use the block menu with the \"/\" command and select \"Table.\"\n\n2. **Add Data:** Populate your table by adding columns and rows. You can enter data manually or import data from external sources.\n\n3. **Perform Calculations:** Use formulas and functions to perform calculations on table data. You can calculate sums, averages, and more using functions like `sum()` and `average()`.\n\n4. **Filter Data:** Apply conditions to columns using the `filter()` function to extract specific subsets of data that meet certain criteria.\n\n5. **Sort and Rearrange:** Use functions like `sort()` and `reverse()` to reorder rows or columns in your table.\n\n6. **Aggregate Data:** Use aggregation functions such as `sum()`, `average()`, and `count()` to summarize and analyze data within columns.\n\n7. **Create Insights:** Combine text and calculations to create informative narratives within your table. You can use inline results to explain your calculations.\n\n8. **Reference Columns:** Reference specific columns in calculations using the dot notation (e.g., `Table.Column`) to reuse and incorporate values from other columns.\n\n9. **Customize Appearance:** Customize the appearance of your table by changing its color, icon, and other visual properties.\n\n10. **Share Insights:** Share your Decipad notebook with others to collaborate and communicate your data-driven insights effectively.\n\nDecipad Tables provide a versatile platform for data analysis, allowing you to work with data in a narrative and interactive format."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa24e0f-b1c5-4313-9a7d-ee247e99e93a",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa24e0f-b1c5-4313-9a7d-ee247e99e93a",
+        "children": []
+      }
+    },
+    "moderation_results": [],
+    "current_node": "b6068e31-5a5d-4096-87b3-ed139f17c544",
+    "plugin_ids": null,
+    "conversation_id": "ba36ea30-fe2f-4b4b-a7d7-56ddb6a6a9f7",
+    "conversation_template_id": null,
+    "id": "ba36ea30-fe2f-4b4b-a7d7-56ddb6a6a9f7"
+  },
+  {
+    "title": "Decipad Financial Functions Explanation",
+    "create_time": 1696433485.593676,
+    "update_time": 1696435082.564522,
+    "mapping": {
+      "24d46274-7a00-4746-8515-93b788ecd897": {
+        "id": "24d46274-7a00-4746-8515-93b788ecd897",
+        "message": {
+          "id": "24d46274-7a00-4746-8515-93b788ecd897",
+          "author": { "role": "system", "name": null, "metadata": {} },
+          "create_time": null,
+          "update_time": null,
+          "content": { "content_type": "text", "parts": [""] },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 0.0,
+          "metadata": {},
+          "recipient": "all"
+        },
+        "parent": "aaa181de-eb52-43f2-a441-37f674faded1",
+        "children": ["aaa25375-6474-4e74-b7f3-e8b9d49f8ff3"]
+      },
+      "aaa181de-eb52-43f2-a441-37f674faded1": {
+        "id": "aaa181de-eb52-43f2-a441-37f674faded1",
+        "message": null,
+        "parent": null,
+        "children": ["24d46274-7a00-4746-8515-93b788ecd897"]
+      },
+      "aaa25375-6474-4e74-b7f3-e8b9d49f8ff3": {
+        "id": "aaa25375-6474-4e74-b7f3-e8b9d49f8ff3",
+        "message": {
+          "id": "aaa25375-6474-4e74-b7f3-e8b9d49f8ff3",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433485.594393,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad is a smart document that helps everyone tell stories using data.\n\nYou can use the Decipad Language to create calculations and explore data.\n\nThe Decipad Language have several finical functions to help you with common operations. Ask me questions about it."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "24d46274-7a00-4746-8515-93b788ecd897",
+        "children": ["f03f7c12-3cea-48f0-a67d-c46edf4dce9a"]
+      },
+      "f03f7c12-3cea-48f0-a67d-c46edf4dce9a": {
+        "id": "f03f7c12-3cea-48f0-a67d-c46edf4dce9a",
+        "message": {
+          "id": "f03f7c12-3cea-48f0-a67d-c46edf4dce9a",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433487.430505,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Sure, I'd be happy to learn more about the Decipad Language and its financial functions. Can you provide some examples of the financial functions it offers and explain how they can be used to perform common operations related to data and storytelling?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa25375-6474-4e74-b7f3-e8b9d49f8ff3",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa25375-6474-4e74-b7f3-e8b9d49f8ff3",
+        "children": ["aaa26f59-6f77-4a2f-82fc-1734574a58df"]
+      },
+      "aaa26f59-6f77-4a2f-82fc-1734574a58df": {
+        "id": "aaa26f59-6f77-4a2f-82fc-1734574a58df",
+        "message": {
+          "id": "aaa26f59-6f77-4a2f-82fc-1734574a58df",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433537.525761,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here is a summary table with the finance functions Decipad Currency supports\n\n| Name                                   | Syntax                                                  | Description                                                                                                                                    |\n| -------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |\n| [compoundrate()](compound)              | compoundrate(Rate, Number of Periods)                   | Calculates the compound rate over a specified number of periods based on a constant rate.                                                      |\n| [futurevalue()](future-value)          | futurevalue(Rate, Number of Periods, Initial Amount)    | Calculates the future value of an investment considering the total number of periods, initial amount, and a constant interest rate.            |\n| [netpresentvalue()](net-present-value) | netpresentvalue(Discount Rate, Future Cashflows Column) | Calculates the net present value of an investment based on a list or column of periodic cash flows and a discount rate.                        |\n| [paymentamounts()](payment-amounts)    | paymentamounts(Rate, Number of Periods, Amount)         | Calculates the annual payment amount of a loan considering the borrowed amount, the number of repayment periods, and a constant interest rate. |\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "f03f7c12-3cea-48f0-a67d-c46edf4dce9a",
+        "children": ["e0a7b2a7-d9ba-4d3d-a2cb-d1460b2e222e"]
+      },
+      "e0a7b2a7-d9ba-4d3d-a2cb-d1460b2e222e": {
+        "id": "e0a7b2a7-d9ba-4d3d-a2cb-d1460b2e222e",
+        "message": {
+          "id": "e0a7b2a7-d9ba-4d3d-a2cb-d1460b2e222e",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433544.015256,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing the summary of financial functions supported by Decipad Currency. These functions seem quite useful for performing various financial calculations. Let me ask you a few questions to better understand how they work:\n\n1. **compoundrate()**:\n   - How does the `compoundrate()` function calculate the compound rate, and what units does it return the result in?\n   - Can you provide an example of how to use this function in a practical scenario?\n\n2. **futurevalue()**:\n   - How is the future value calculated using the `futurevalue()` function?\n   - Could you give an example of when someone might want to use this function?\n\n3. **netpresentvalue()**:\n   - What is the purpose of the `netpresentvalue()` function, and how does it work?\n   - Can you provide a real-world example where this function would be beneficial?\n\n4. **paymentamounts()**:\n   - What kind of loans or financial situations can the `paymentamounts()` function be applied to?\n   - Could you illustrate how this function can be used to calculate an annual payment amount with a specific example?\n\nUnderstanding these details will help users effectively utilize these financial functions within the Decipad Language."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa26f59-6f77-4a2f-82fc-1734574a58df",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa26f59-6f77-4a2f-82fc-1734574a58df",
+        "children": ["aaa21fa4-17a0-4e99-b663-2734527f1249"]
+      },
+      "aaa21fa4-17a0-4e99-b663-2734527f1249": {
+        "id": "aaa21fa4-17a0-4e99-b663-2734527f1249",
+        "message": {
+          "id": "aaa21fa4-17a0-4e99-b663-2734527f1249",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433831.89708,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Compound Rate\nSyntax: compoundrate(Rate, Number of Periods)\n\nCalculates the compound rate over a specified number of periods based on a constant rate.\n\nExamples: compoundrate(5%, 36 months) This calculates the compound rate of 5% over a period of 36 months. and the result is a percentage"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "e0a7b2a7-d9ba-4d3d-a2cb-d1460b2e222e",
+        "children": ["1f6a0bff-3210-48e8-aedd-560e0638dfb4"]
+      },
+      "1f6a0bff-3210-48e8-aedd-560e0638dfb4": {
+        "id": "1f6a0bff-3210-48e8-aedd-560e0638dfb4",
+        "message": {
+          "id": "1f6a0bff-3210-48e8-aedd-560e0638dfb4",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433836.866898,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing the details on the `compoundrate()` function. It calculates the compound rate over a specified number of periods based on a constant rate and returns the result as a percentage. \n\nHere's an example:\n- If you have an initial amount and you want to calculate how much it will grow over a certain period with a fixed interest rate, you can use `compoundrate()`. For instance, if you invest $1,000 at a 5% annual interest rate and want to know the compound rate over 36 months:\n  ```\n  compoundrate(5%, 36 months)\n  ```\n  The result will be a percentage, indicating how much your initial amount will grow over 36 months with a 5% annual interest rate.\n\nThis function can be valuable for individuals or businesses looking to project the growth of their investments or savings over time."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa21fa4-17a0-4e99-b663-2734527f1249",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa21fa4-17a0-4e99-b663-2734527f1249",
+        "children": ["aaa29eca-c8c2-46be-8455-0bb47817ca4f"]
+      },
+      "aaa29eca-c8c2-46be-8455-0bb47817ca4f": {
+        "id": "aaa29eca-c8c2-46be-8455-0bb47817ca4f",
+        "message": {
+          "id": "aaa29eca-c8c2-46be-8455-0bb47817ca4f",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433885.355003,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Future Value\n\nSyntax:: futurevalue(Rate, Number of Periods, Initial Amount)\n\nCalculates the future value of an investment considering the total number of periods, initial amount, and a constant interest rate. fv() is the compact format for readability.\n\nExamples: futurevalue(5%, 36 months, $50k)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "1f6a0bff-3210-48e8-aedd-560e0638dfb4",
+        "children": ["28927e9f-4b14-4392-87b7-42f36f1cd7ed"]
+      },
+      "28927e9f-4b14-4392-87b7-42f36f1cd7ed": {
+        "id": "28927e9f-4b14-4392-87b7-42f36f1cd7ed",
+        "message": {
+          "id": "28927e9f-4b14-4392-87b7-42f36f1cd7ed",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433891.731245,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for explaining the `futurevalue()` function. It calculates the future value of an investment based on the provided interest rate, the number of periods, and the initial amount. The result represents the total value the investment will reach at the end of the specified time period.\n\nHere's an example of how to use it:\n\nSuppose you have an initial investment of $50,000, and you want to calculate how much it will grow over 36 months with a 5% annual interest rate. You can use the `futurevalue()` function like this:\n\n```\nfuturevalue(5%, 36 months, $50k)\n```\n\nThe result will give you the future value of your $50,000 investment after 36 months, taking into account the 5% interest rate.\n\nThis function can be valuable for individuals and businesses to forecast the growth of investments or savings over time, helping with financial planning and decision-making."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa29eca-c8c2-46be-8455-0bb47817ca4f",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa29eca-c8c2-46be-8455-0bb47817ca4f",
+        "children": ["aaa20a99-1287-4ab2-9cbc-be6351a5cc15"]
+      },
+      "aaa20a99-1287-4ab2-9cbc-be6351a5cc15": {
+        "id": "aaa20a99-1287-4ab2-9cbc-be6351a5cc15",
+        "message": {
+          "id": "aaa20a99-1287-4ab2-9cbc-be6351a5cc15",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433927.749176,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Net Present Value\n\nSyntax: netpresentvalue(Discount Rate, Future Cashflows Column)\n\nCalculates the net present value of an investment based on a list or column of periodic cash flows and a discount rate. npv() is the compact format for readability.\n\nExamples:\n\nRevenue = {\n  Years = [date(2020)..date(2023)]\n  Cashflows = [$100, $500, $200, $400]\n}\n\n NPV = netpresentvalue(5%, Revenue.Cashflows)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "28927e9f-4b14-4392-87b7-42f36f1cd7ed",
+        "children": ["48144632-a498-49e0-82d0-6db34c4848d2"]
+      },
+      "48144632-a498-49e0-82d0-6db34c4848d2": {
+        "id": "48144632-a498-49e0-82d0-6db34c4848d2",
+        "message": {
+          "id": "48144632-a498-49e0-82d0-6db34c4848d2",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433936.235409,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for explaining the `netpresentvalue()` function. It's used to calculate the net present value (NPV) of an investment based on a series of periodic cash flows and a specified discount rate. NPV is a financial metric that helps assess the profitability of an investment by considering the time value of money.\n\nHere's how you can use it:\n\nSuppose you have a list or column of periodic cash flows, such as the \"Cashflows\" array in your example, and a discount rate of 5%. You want to calculate the net present value of these cash flows:\n\n```decipad\nRevenue = {\n  Years = [date(2020)..date(2023)]\n  Cashflows = [$100, $500, $200, $400]\n}\n\nNPV = netpresentvalue(5%, Revenue.Cashflows)\n```\n\nIn this case, the `netpresentvalue()` function will calculate the present value of each cash flow, considering the discount rate of 5%, and then sum them up to give you the net present value. This can help you determine whether the investment is expected to generate a positive or negative return, considering the time value of money.\n\nNPV is a crucial tool in financial analysis, as it allows you to evaluate the profitability and attractiveness of investment projects or business ventures. Positive NPV indicates that the investment is expected to generate a return greater than the discount rate, making it potentially worthwhile. Negative NPV suggests that the investment may not be economically viable."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa20a99-1287-4ab2-9cbc-be6351a5cc15",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa20a99-1287-4ab2-9cbc-be6351a5cc15",
+        "children": ["aaa2a54c-700d-4160-9bc3-2ba0a0993204"]
+      },
+      "aaa2a54c-700d-4160-9bc3-2ba0a0993204": {
+        "id": "aaa2a54c-700d-4160-9bc3-2ba0a0993204",
+        "message": {
+          "id": "aaa2a54c-700d-4160-9bc3-2ba0a0993204",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433954.387378,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Payment Amounts\n\nSyntax: paymentamounts(Rate, Number of Periods, Amount)\n\nCalculates the annual payment amount of a loan considering the borrowed amount, the number of repayment periods, and a constant interest rate. pmt() is the compact format for readability.\n\nExamples:\n\npaymentamounts(3%, 36 months, $10k)\n"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "48144632-a498-49e0-82d0-6db34c4848d2",
+        "children": ["6f63eaf2-4db9-40f8-aefd-9e31d31eabd1"]
+      },
+      "6f63eaf2-4db9-40f8-aefd-9e31d31eabd1": {
+        "id": "6f63eaf2-4db9-40f8-aefd-9e31d31eabd1",
+        "message": {
+          "id": "6f63eaf2-4db9-40f8-aefd-9e31d31eabd1",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433960.997744,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for explaining the `paymentamounts()` function. It calculates the annual payment amount of a loan based on the provided interest rate, the number of repayment periods, and the borrowed amount. This function is particularly useful for individuals and businesses looking to determine the regular payments required to repay a loan.\n\nHere's how you can use it:\n\nSuppose you have borrowed $10,000 at a 3% annual interest rate, and you want to calculate the annual payment amount required to repay the loan over 36 months. You can use the `paymentamounts()` function like this:\n\n```decipad\npaymentamounts(3%, 36 months, $10k)\n```\n\nThe result will give you the annual payment amount needed to repay the $10,000 loan over the specified 36-month period while considering the 3% interest rate.\n\nThis function is essential for financial planning and budgeting, as it helps individuals and businesses understand the financial commitment required to service a loan. It can also be used to compare different loan options and choose the one that best fits your financial situation."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2a54c-700d-4160-9bc3-2ba0a0993204",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2a54c-700d-4160-9bc3-2ba0a0993204",
+        "children": ["aaa24a39-5190-4607-9b93-fe1617f6dd48"]
+      },
+      "aaa24a39-5190-4607-9b93-fe1617f6dd48": {
+        "id": "aaa24a39-5190-4607-9b93-fe1617f6dd48",
+        "message": {
+          "id": "aaa24a39-5190-4607-9b93-fe1617f6dd48",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696433989.409217,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Do you want me to tell you about the currency units we support?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "6f63eaf2-4db9-40f8-aefd-9e31d31eabd1",
+        "children": ["b095dea9-ef04-4ebb-af67-0ac3fc1cde04"]
+      },
+      "b095dea9-ef04-4ebb-af67-0ac3fc1cde04": {
+        "id": "b095dea9-ef04-4ebb-af67-0ac3fc1cde04",
+        "message": {
+          "id": "b095dea9-ef04-4ebb-af67-0ac3fc1cde04",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696433992.113707,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Sure, I'd be interested to learn about the currency units supported by Decipad Currency. Please provide information on the different currency units available and how they can be used within Decipad."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa24a39-5190-4607-9b93-fe1617f6dd48",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa24a39-5190-4607-9b93-fe1617f6dd48",
+        "children": ["aaa25153-abbd-4616-a6b3-d51a9626f026"]
+      },
+      "aaa25153-abbd-4616-a6b3-d51a9626f026": {
+        "id": "aaa25153-abbd-4616-a6b3-d51a9626f026",
+        "message": {
+          "id": "aaa25153-abbd-4616-a6b3-d51a9626f026",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434094.472307,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Units specify the measurement or quantity of a number, adding context and meaning to calculations. They also simplify calculations by handling conversions automatically, eliminating the need for manual conversions.\n\nThese are the key concepts to understand units in Decipad:\n\nSimple Units: Simple units are straightforward and represent a specific quantity. For example, $4 denotes 4 in dollars.\nComplex Units: Complex units involve combinations of measurements, rates, or compound units. For instance, miles per hour represents the speed at which a distance is covered in one hour.\nBuilt-in Units: Decipad already supports a list of several known units that you can reuse on your calculations. See list bellow.\nCustom Units You can define your own units simply by adding them to your calculations and Decipad will automatically detect them. Example: 5 mugs or 5$ per mug. Alternatively you can use the add custom unit field on any formula block or column.\n\nCurrencies Units\n\nUnited States dollar (USD): $\nEuro (EUR): \u20ac\nJapanese yen (JPY): \u00a5\nPound sterling (GBP): \u00a3\nAustralian dollar (AUD): A$\nCanadian dollar (CAD): C$\nSwiss franc (CHF): CHF\nRenminbi (CNY): \u00a5\nHong Kong dollar (HKD): HK$\nNew Zealand dollar (NZD): NZ$\nSwedish krona (SEK): skr\nSouth Korean won (KRW): \u20a9\nSingapore dollar (SGD): S$\nNorwegian krone (NOK): nkr\nMexican peso (MXN): $\nIndian rupee (INR): \u20b9\nRussian ruble (RUB): \u20bd\nSouth African rand (ZAR): R\nTurkish lira (TRY): \u20ba\nBrazilian real (BRL): R$\nNew Taiwan dollar (TWD): NT$\nDanish krone (DKK): dkr\nPolish z\u0142oty (PLN): z\u0142\nThai baht (THB): \u0e3f\nIndonesian rupiah (IDR): Rp\nHungarian forint (HUF): Ft\nCzech koruna (CZK): K\u010d\nIsraeli new shekel (ILS): \u20aa\nChilean peso (CLP): CLP$\nPhilippine peso (PHP): \u20b1\nUAE dirham (AED): \u062f.\u0625\nColombian peso (COP): COL$\nSaudi riyal (SAR): \ufdfc\nMalaysian ringgit (MYR): RM\nRomanian leu (RON): L\nUkrainian hryvnia (UAH): \u20b4"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "b095dea9-ef04-4ebb-af67-0ac3fc1cde04",
+        "children": ["8e231be4-6b2f-49b4-987a-489f48898403"]
+      },
+      "8e231be4-6b2f-49b4-987a-489f48898403": {
+        "id": "8e231be4-6b2f-49b4-987a-489f48898403",
+        "message": {
+          "id": "8e231be4-6b2f-49b4-987a-489f48898403",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434100.758216,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing the list of currency units supported by Decipad Currency. Having access to a variety of currency units is essential for performing financial calculations accurately and conveniently. Users can work with these currency units to represent monetary values in their calculations, making it easier to manage financial data and perform conversions when needed. This feature is particularly useful for individuals and businesses working with international currencies or conducting financial analysis in multiple currencies."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa25153-abbd-4616-a6b3-d51a9626f026",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa25153-abbd-4616-a6b3-d51a9626f026",
+        "children": ["aaa23077-9a0c-4419-b4d5-62a3e838a972"]
+      },
+      "aaa23077-9a0c-4419-b4d5-62a3e838a972": {
+        "id": "aaa23077-9a0c-4419-b4d5-62a3e838a972",
+        "message": {
+          "id": "aaa23077-9a0c-4419-b4d5-62a3e838a972",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696434167.262612,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad doesn't do currency conversion out of the box but you can use the javascript integration to fetch an API with the conversion you are looking for "
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "8e231be4-6b2f-49b4-987a-489f48898403",
+        "children": ["d169bebb-72f7-428f-a0cc-db4bc1f99bae"]
+      },
+      "d169bebb-72f7-428f-a0cc-db4bc1f99bae": {
+        "id": "d169bebb-72f7-428f-a0cc-db4bc1f99bae",
+        "message": {
+          "id": "d169bebb-72f7-428f-a0cc-db4bc1f99bae",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696434179.708519,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for clarifying that Decipad doesn't perform currency conversion out of the box but allows users to integrate JavaScript to fetch currency conversion data via an API. This approach provides flexibility for users who need to perform currency conversions within their Decipad calculations, as they can customize the integration to suit their specific requirements. Integrating an external API for currency conversion is a common method used in various financial and business applications to ensure up-to-date and accurate exchange rate information is used for calculations involving different currencies."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa23077-9a0c-4419-b4d5-62a3e838a972",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa23077-9a0c-4419-b4d5-62a3e838a972",
+        "children": ["aaa235b1-4484-4fe1-847b-de5bd69b2bf5"]
+      },
+      "aaa235b1-4484-4fe1-847b-de5bd69b2bf5": {
+        "id": "aaa235b1-4484-4fe1-847b-de5bd69b2bf5",
+        "message": {
+          "id": "aaa235b1-4484-4fe1-847b-de5bd69b2bf5",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696435069.300098,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": ["make a summary with key concepts, value and how tos"]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "d169bebb-72f7-428f-a0cc-db4bc1f99bae",
+        "children": ["3cb1487d-7185-4ebd-aaf1-0912b518831d"]
+      },
+      "3cb1487d-7185-4ebd-aaf1-0912b518831d": {
+        "id": "3cb1487d-7185-4ebd-aaf1-0912b518831d",
+        "message": {
+          "id": "3cb1487d-7185-4ebd-aaf1-0912b518831d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696435082.560782,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! Here's a summary of key concepts, values, and how-tos related to Decipad Currency:\n\n**Key Concepts:**\n\n1. **Units:** Units in Decipad provide context and meaning to calculations. They represent specific quantities and can be simple or complex. Examples include \"$4\" (simple) and \"miles per hour\" (complex).\n\n2. **Built-in Units:** Decipad supports a range of built-in units, including various currency units, to simplify calculations. These built-in units cover multiple international currencies, making it easier to work with financial data.\n\n3. **Custom Units:** Users can define custom units by adding them to calculations. This feature allows for flexibility and adaptability when working with unique measurement or rate combinations.\n\n**Values (Currency Units):**\n\nDecipad Currency supports a variety of currency units, including but not limited to:\n- United States dollar (USD): $\n- Euro (EUR): \u20ac\n- Japanese yen (JPY): \u00a5\n- Pound sterling (GBP): \u00a3\n- Australian dollar (AUD): A$\n- Canadian dollar (CAD): C$\n- Swiss franc (CHF): CHF\n- And many more...\n\n**How-tos:**\n\n1. **Using Simple Units:** To work with simple units, simply include the unit symbol after the quantity, such as \"$4\" to represent 4 dollars.\n\n2. **Utilizing Built-in Units:** Take advantage of Decipad's built-in currency units when performing financial calculations by using the provided symbols, like \"$\" for USD or \"\u20ac\" for EUR.\n\n3. **Creating Custom Units:** Define custom units by adding them directly to your calculations. For example, you can use \"5 mugs\" or \"5$ per mug\" to represent custom units.\n\n4. **Currency Conversion (Optional):** While Decipad doesn't natively handle currency conversion, you can integrate JavaScript to fetch an API that provides the currency conversion rates you need. This allows you to perform currency conversions within your Decipad calculations, ensuring accuracy when dealing with different currencies.\n\nBy understanding these key concepts, values, and how-tos, users can effectively utilize Decipad Currency for various financial and data-related tasks, making calculations more meaningful and precise."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa235b1-4484-4fe1-847b-de5bd69b2bf5",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa235b1-4484-4fe1-847b-de5bd69b2bf5",
+        "children": []
+      }
+    },
+    "moderation_results": [],
+    "current_node": "3cb1487d-7185-4ebd-aaf1-0912b518831d",
+    "plugin_ids": null,
+    "conversation_id": "3dce74c8-0162-4847-b3ac-e0a911f8a343",
+    "conversation_template_id": null,
+    "id": "3dce74c8-0162-4847-b3ac-e0a911f8a343"
+  },
+  {
+    "title": "Learn about Decipad Language.",
+    "create_time": 1696414795.235942,
+    "update_time": 1696416480.489832,
+    "mapping": {
+      "cde15a3b-fe94-49c3-8d49-59884498e3b0": {
+        "id": "cde15a3b-fe94-49c3-8d49-59884498e3b0",
+        "message": {
+          "id": "cde15a3b-fe94-49c3-8d49-59884498e3b0",
+          "author": { "role": "system", "name": null, "metadata": {} },
+          "create_time": null,
+          "update_time": null,
+          "content": { "content_type": "text", "parts": [""] },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 0.0,
+          "metadata": {},
+          "recipient": "all"
+        },
+        "parent": "aaa1b5f3-238d-43e3-aab0-48f4ee019cde",
+        "children": ["aaa2b08e-5351-461d-a0a9-0130d8e7daa5"]
+      },
+      "aaa1b5f3-238d-43e3-aab0-48f4ee019cde": {
+        "id": "aaa1b5f3-238d-43e3-aab0-48f4ee019cde",
+        "message": null,
+        "parent": null,
+        "children": ["cde15a3b-fe94-49c3-8d49-59884498e3b0"]
+      },
+      "aaa2b08e-5351-461d-a0a9-0130d8e7daa5": {
+        "id": "aaa2b08e-5351-461d-a0a9-0130d8e7daa5",
+        "message": {
+          "id": "aaa2b08e-5351-461d-a0a9-0130d8e7daa5",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696414795.236592,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "I am going to tech you about the Decipad Language. Ask me several questions about it"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "cde15a3b-fe94-49c3-8d49-59884498e3b0",
+        "children": ["54c0d0ec-48bf-488c-a892-e4412cc02457"]
+      },
+      "54c0d0ec-48bf-488c-a892-e4412cc02457": {
+        "id": "54c0d0ec-48bf-488c-a892-e4412cc02457",
+        "message": {
+          "id": "54c0d0ec-48bf-488c-a892-e4412cc02457",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696414797.135633,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! I'd be interested in learning more about Decipad Language. Please provide some background information or an overview of what Decipad Language is, and then I can ask you some questions to delve deeper into its features and usage."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2b08e-5351-461d-a0a9-0130d8e7daa5",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2b08e-5351-461d-a0a9-0130d8e7daa5",
+        "children": ["aaa28b94-3a99-4250-8c24-efc43526861f"]
+      },
+      "aaa28b94-3a99-4250-8c24-efc43526861f": {
+        "id": "aaa28b94-3a99-4250-8c24-efc43526861f",
+        "message": {
+          "id": "aaa28b94-3a99-4250-8c24-efc43526861f",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696414874.047157,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad is a smart document that helps everyone tell stories using data.\n\nThe Decipad Language is what powers the notebook calculations and here is the documentation page https://app.decipad.com/docs"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "54c0d0ec-48bf-488c-a892-e4412cc02457",
+        "children": ["a0435109-1f33-43cc-abc8-3e5f84535540"]
+      },
+      "a0435109-1f33-43cc-abc8-3e5f84535540": {
+        "id": "a0435109-1f33-43cc-abc8-3e5f84535540",
+        "message": {
+          "id": "a0435109-1f33-43cc-abc8-3e5f84535540",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696414879.175997,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing some information about Decipad and the Decipad Language. I'll start by asking a few questions to learn more:\n\n1. What inspired the development of the Decipad Language, and what specific problem does it aim to solve in the context of telling stories using data?\n\n2. Could you explain the primary features and capabilities of the Decipad Language in more detail? How does it enable users to work with data and create data-driven narratives?\n\n3. Are there any notable use cases or industries where Decipad Language has proven to be particularly useful or effective?\n\n4. How does Decipad Language handle data integration and manipulation? Does it support various data sources and formats?\n\n5. Are there any unique or advanced functionalities within Decipad Language that set it apart from other data storytelling tools or languages?\n\n6. Is Decipad Language accessible to users with varying levels of technical expertise, or does it require a specific skill set to effectively use it?\n\n7. Are there any notable examples or success stories of individuals or organizations using Decipad Language to create compelling data-driven narratives?\n\nI look forward to learning more about Decipad Language and how it enhances data storytelling."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa28b94-3a99-4250-8c24-efc43526861f",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa28b94-3a99-4250-8c24-efc43526861f",
+        "children": ["aaa21fc1-17ec-4211-a04e-f0238c481023"]
+      },
+      "aaa21fc1-17ec-4211-a04e-f0238c481023": {
+        "id": "aaa21fc1-17ec-4211-a04e-f0238c481023",
+        "message": {
+          "id": "aaa21fc1-17ec-4211-a04e-f0238c481023",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696415181.125581,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "The Decipad Language aims to make calculations intuitive and human readable.\n\nOne of its primary features is supporting numbers units so calculations have better context\n\nIt is particularly useful to create reports\n\nOn the notebooks you can import data via javascript and you can reuse its results with the Decipad Language.\n\nWhat sets the Decipad Language apart is that anyone without a programming background should be able to read its expressions and understand the meaning behind the calculation.\n\nThe Decipad Language is accessible to users with varying levels of technical expertise."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "a0435109-1f33-43cc-abc8-3e5f84535540",
+        "children": ["1846eff4-ccf0-4256-ba8f-b34e9dc6df2f"]
+      },
+      "1846eff4-ccf0-4256-ba8f-b34e9dc6df2f": {
+        "id": "1846eff4-ccf0-4256-ba8f-b34e9dc6df2f",
+        "message": {
+          "id": "1846eff4-ccf0-4256-ba8f-b34e9dc6df2f",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696415186.483323,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing more details about the Decipad Language. It's interesting to see how it aims to make calculations more intuitive and human-readable while supporting units for better context. Let's dive a bit deeper with some follow-up questions:\n\n1. Can you provide an example of how the Decipad Language makes calculations more intuitive and human-readable compared to traditional methods or other languages?\n\n2. How does the Decipad Language handle unit conversions and ensure that calculations maintain accuracy and consistency in different contexts?\n\n3. When you mention that it's particularly useful for creating reports, could you elaborate on how it simplifies the process of generating data-driven reports or documents?\n\n4. Could you explain the process of importing data via JavaScript in Decipad notebooks and how users can effectively reuse the results within the Decipad Language?\n\n5. Are there any specific industries or professions where you've seen a strong adoption of the Decipad Language for data storytelling or reporting?\n\n6. Are there any plans or ongoing developments to expand the capabilities or integrations of the Decipad Language in the future?\n\n7. In terms of accessibility to users with varying technical expertise, are there any resources or tutorials available to help beginners get started with the Decipad Language?\n\nThank you for sharing more insights about the Decipad Language, and I'm keen to learn more about its practical applications and functionality."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa21fc1-17ec-4211-a04e-f0238c481023",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa21fc1-17ec-4211-a04e-f0238c481023",
+        "children": ["aaa2c558-1c54-4f1f-8a75-3871f3b37e34"]
+      },
+      "aaa2c558-1c54-4f1f-8a75-3871f3b37e34": {
+        "id": "aaa2c558-1c54-4f1f-8a75-3871f3b37e34",
+        "message": {
+          "id": "aaa2c558-1c54-4f1f-8a75-3871f3b37e34",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696416052.175521,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's an example of a calculation using the decipad language.\n\n\"$500 per month * year\". It calculates how many dollars each month will accumulate during a year.\n\nDecipad supports several popular units by default and you define your own. The Decipad Language uses units following mathematical rules\n\nDecipad simplifies reports because you can combine narrative within your calculations so every numbers has the right context for your audience right there, avoiding less back and forth.\n\nImporting data using javascript just requires you to create a simple script in javascript that pulls the data your need from the internet and the return values are passed on to the Decipad Language for reuse.\n\nThe Decipad Language is especially useful for non technical people who need to talk about numbers.\n\nEvery week the team adds new features and capabilities to the Decipad Language. Suggest your own on support@decipad.com\n\nThere are several tutorials available for beginners at https://app.decipad.com/docs and on our YouTube channel https://www.youtube.com/@decipad"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "1846eff4-ccf0-4256-ba8f-b34e9dc6df2f",
+        "children": ["ab19da55-6400-4003-86af-093da3dcd948"]
+      },
+      "ab19da55-6400-4003-86af-093da3dcd948": {
+        "id": "ab19da55-6400-4003-86af-093da3dcd948",
+        "message": {
+          "id": "ab19da55-6400-4003-86af-093da3dcd948",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696416057.236148,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing more details and the example of a Decipad Language calculation. It's becoming clearer how this language simplifies data-driven narratives and reporting. Here are a few more questions:\n\n1. Can you share an example of how the Decipad Language allows users to combine narrative within calculations to provide context for their audience? How does this narrative integration work?\n\n2. What are some of the popular units that Decipad supports by default, and how does it handle custom units defined by users?\n\n3. It's great to know that new features and capabilities are added to the Decipad Language regularly. Are there any recent or upcoming features you'd like to highlight or share with us?\n\n4. For those interested in learning the Decipad Language, what kind of tutorials and resources are available on your website and YouTube channel? Are there specific tutorials you recommend for beginners?\n\n5. Can you provide an example of a real-world use case where a non-technical user successfully used the Decipad Language to convey complex data effectively?\n\n6. How does Decipad ensure the security and privacy of data imported via JavaScript or used within Decipad notebooks?\n\nThank you for providing these insights, and I'm sure this information will be valuable to anyone interested in using the Decipad Language for data storytelling and reporting."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2c558-1c54-4f1f-8a75-3871f3b37e34",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2c558-1c54-4f1f-8a75-3871f3b37e34",
+        "children": ["aaa2e702-fa90-4a9c-891f-d881b71721c8"]
+      },
+      "aaa2e702-fa90-4a9c-891f-d881b71721c8": {
+        "id": "aaa2e702-fa90-4a9c-891f-d881b71721c8",
+        "message": {
+          "id": "aaa2e702-fa90-4a9c-891f-d881b71721c8",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696416297.249779,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "To add narrative and context to your calculations just start typing on a new paragraph. You can reorder your calculations and paragraphs at any time so you can play with the layout to make sure it reads how you intended.\n\nDecipad supports most currencies by default. \u20ac $ \u00a3 and time, day, hour, month, year\n\nThis is a quick video on how to get started https://www.youtube.com/watch?v=HgonzbhFWLA&t=15s\n\nOur javascript implementation runs a separate container using SafeJs. Here is our blogpost about it. https://www.decipad.com/blog/introducing-safejs-a-secure-way-to-integrate-data"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "ab19da55-6400-4003-86af-093da3dcd948",
+        "children": ["8920270c-b31c-4aae-8b75-18a90c9a1c1d"]
+      },
+      "8920270c-b31c-4aae-8b75-18a90c9a1c1d": {
+        "id": "8920270c-b31c-4aae-8b75-18a90c9a1c1d",
+        "message": {
+          "id": "8920270c-b31c-4aae-8b75-18a90c9a1c1d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696416303.07504,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing more information about how Decipad allows users to add narrative and context to calculations, the supported currencies, and the JavaScript implementation using SafeJs. Here are a few final questions to wrap up:\n\n1. Can users easily export or share their Decipad notebooks and reports with others? Are there any collaboration features available?\n\n2. Are there any notable case studies or success stories you can share about organizations or individuals who have effectively used Decipad for their data storytelling needs?\n\n3. In terms of data security and privacy, what measures are in place to ensure that sensitive data remains protected when using Decipad?\n\n4. Are there any plans to expand the language support or integrations for Decipad in the future?\n\n5. How does Decipad handle data visualization? Can users create charts or graphs within their reports?\n\n6. Is there a community or forum where users of Decipad can connect, ask questions, and share their experiences and best practices?\n\nThank you for providing additional details, and I appreciate the links to the video tutorial and blog post. This information will be valuable for those interested in exploring Decipad further."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa2e702-fa90-4a9c-891f-d881b71721c8",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2e702-fa90-4a9c-891f-d881b71721c8",
+        "children": ["aaa23b04-2f48-4f27-8cea-8ce3a04dd30a"]
+      },
+      "aaa23b04-2f48-4f27-8cea-8ce3a04dd30a": {
+        "id": "aaa23b04-2f48-4f27-8cea-8ce3a04dd30a",
+        "message": {
+          "id": "aaa23b04-2f48-4f27-8cea-8ce3a04dd30a",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696416477.173618,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "You can export your notebooks to a json file that you can import at a later date. \n\nYou can invite people to collaborate with you on decipad and create and edit notebook at the same time.\n\nYou can also publish your notebooks so anyone with a link can read them.\n\nDecipad lets you add and create images and charts. To create a chart you will need to import data first or create your own table.\n\nWe have a Discord server where you can talk to the Decipad team and other Decipad users. http://discord.gg/decipad"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "8920270c-b31c-4aae-8b75-18a90c9a1c1d",
+        "children": ["b18641b6-5238-41cd-9b10-f5beda79eb8e"]
+      },
+      "b18641b6-5238-41cd-9b10-f5beda79eb8e": {
+        "id": "b18641b6-5238-41cd-9b10-f5beda79eb8e",
+        "message": {
+          "id": "b18641b6-5238-41cd-9b10-f5beda79eb8e",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696416480.48768,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing more information about the export, collaboration, and data visualization features in Decipad, as well as the link to the Decipad Discord server for community interaction. This gives a comprehensive picture of what Decipad offers to its users. \n\nIt seems like Decipad offers a wide range of tools and functionalities for data storytelling and reporting. If users have further questions or want to connect with the Decipad community, they can use the Discord server you've shared.\n\nIf you have any more information or updates to share about Decipad in the future, please feel free to do so. Thank you for providing insights into this platform!"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "text-davinci-002-render-sha",
+            "parent_id": "aaa23b04-2f48-4f27-8cea-8ce3a04dd30a",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa23b04-2f48-4f27-8cea-8ce3a04dd30a",
+        "children": []
+      }
+    },
+    "moderation_results": [],
+    "current_node": "b18641b6-5238-41cd-9b10-f5beda79eb8e",
+    "plugin_ids": null,
+    "conversation_id": "a649962e-c4ec-458a-9f68-91be0242efae",
+    "conversation_template_id": null,
+    "id": "a649962e-c4ec-458a-9f68-91be0242efae"
+  }
+]

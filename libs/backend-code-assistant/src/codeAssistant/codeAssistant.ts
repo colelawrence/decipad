@@ -5,9 +5,10 @@ import { getDefined } from '@decipad/utils';
 import { createComputationalSummary } from '../utils/createComputationalSummary';
 import { debug } from '../debug';
 import { getCode } from '../utils/getCode';
+import { intro } from './texts';
 
 const fineTunedModelForDecilangCode =
-  'ft:gpt-3.5-turbo-0613:team-n1n-co::84Sx5nlJ';
+  'ft:gpt-3.5-turbo-0613:team-n1n-co::86fVKLap';
 
 export interface CodeAssistantOptions {
   summary?: string;
@@ -47,9 +48,7 @@ export const codeAssistant = async (
   const messages = _messages || [
     {
       role: 'system',
-      content: `Decipad is a notebook product that allows users to perform inline calculations using the Decipad language.
-The Decipad language is somewhat similar to JavaScript.
-You are an a helpful programmer that knows the Decipad language.
+      content: `${intro}
 
 ${summaryText}
 

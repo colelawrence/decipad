@@ -1,5 +1,1350 @@
 [
   {
+    "title": "Decipad Language: Representing Percentages",
+    "create_time": 1696427892.358104,
+    "update_time": 1696428487.190847,
+    "mapping": {
+      "e4df74b9-4827-467e-be4b-eb46d6c3cfdc": {
+        "id": "e4df74b9-4827-467e-be4b-eb46d6c3cfdc",
+        "message": {
+          "id": "e4df74b9-4827-467e-be4b-eb46d6c3cfdc",
+          "author": { "role": "system", "name": null, "metadata": {} },
+          "create_time": null,
+          "update_time": null,
+          "content": { "content_type": "text", "parts": [""] },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 0.0,
+          "metadata": {},
+          "recipient": "all"
+        },
+        "parent": "aaa1d76b-0c90-4d4c-8a5a-4079a5c3d16d",
+        "children": ["aaa2f85b-a780-41cc-8567-6ed8d14948db"]
+      },
+      "aaa1d76b-0c90-4d4c-8a5a-4079a5c3d16d": {
+        "id": "aaa1d76b-0c90-4d4c-8a5a-4079a5c3d16d",
+        "message": null,
+        "parent": null,
+        "children": ["e4df74b9-4827-467e-be4b-eb46d6c3cfdc"]
+      },
+      "aaa2f85b-a780-41cc-8567-6ed8d14948db": {
+        "id": "aaa2f85b-a780-41cc-8567-6ed8d14948db",
+        "message": {
+          "id": "aaa2f85b-a780-41cc-8567-6ed8d14948db",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696427892.358817,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "you want to learn about a programming language called Decipad language, specifically about how we represent percentages. Please ask me questions so that you can learn the Decipad language.\nOne question at a time please."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "e4df74b9-4827-467e-be4b-eb46d6c3cfdc",
+        "children": ["3de5062e-bb26-4a64-8b67-0203f3c3caee"]
+      },
+      "3de5062e-bb26-4a64-8b67-0203f3c3caee": {
+        "id": "3de5062e-bb26-4a64-8b67-0203f3c3caee",
+        "message": {
+          "id": "3de5062e-bb26-4a64-8b67-0203f3c3caee",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696427896.646712,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Certainly! To start, can you please explain the basic syntax used in Decipad language for representing percentages? For example, how would one represent 25 percent?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2f85b-a780-41cc-8567-6ed8d14948db",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2f85b-a780-41cc-8567-6ed8d14948db",
+        "children": ["aaa26031-7f65-4c74-845f-717842c96a7d"]
+      },
+      "aaa26031-7f65-4c74-845f-717842c96a7d": {
+        "id": "aaa26031-7f65-4c74-845f-717842c96a7d",
+        "message": {
+          "id": "aaa26031-7f65-4c74-845f-717842c96a7d",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696427915.192409,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "In the Decipad language, 25 percent would be represented as:\n\n`25%`"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "3de5062e-bb26-4a64-8b67-0203f3c3caee",
+        "children": ["3edf63c6-f3e0-4465-ba3e-161abe7bc659"]
+      },
+      "3edf63c6-f3e0-4465-ba3e-161abe7bc659": {
+        "id": "3edf63c6-f3e0-4465-ba3e-161abe7bc659",
+        "message": {
+          "id": "3edf63c6-f3e0-4465-ba3e-161abe7bc659",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696427922.003372,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the clarification! Is there a specific way to perform operations with percentages in Decipad language, such as addition, subtraction, multiplication, or division of percentage values? For example, how would one calculate and represent 25% of 50, or add 25% and 10% together?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa26031-7f65-4c74-845f-717842c96a7d",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa26031-7f65-4c74-845f-717842c96a7d",
+        "children": ["aaa2f671-dd4e-4be6-a18b-19dc44ea4717"]
+      },
+      "aaa2f671-dd4e-4be6-a18b-19dc44ea4717": {
+        "id": "aaa2f671-dd4e-4be6-a18b-19dc44ea4717",
+        "message": {
+          "id": "aaa2f671-dd4e-4be6-a18b-19dc44ea4717",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428031.894118,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "percentages are like any other number.\nYou can add them to other numbers.\nBut when you add a non-percentage number to a number, you get the first number multiplied by 1 + the percentage.\n\nFor instance, `40 + 25%` would be `50`\n\n`10% + 25%` would still be 35%"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "3edf63c6-f3e0-4465-ba3e-161abe7bc659",
+        "children": ["2aa00437-1787-420d-9c10-4ed15b2bd9d2"]
+      },
+      "2aa00437-1787-420d-9c10-4ed15b2bd9d2": {
+        "id": "2aa00437-1787-420d-9c10-4ed15b2bd9d2",
+        "message": {
+          "id": "2aa00437-1787-420d-9c10-4ed15b2bd9d2",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428036.268931,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Understood. When performing subtraction and division operations with percentages, how does the Decipad language handle these? For instance, how would one compute and represent `50 - 25%` and `50% / 2` in the language?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2f671-dd4e-4be6-a18b-19dc44ea4717",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2f671-dd4e-4be6-a18b-19dc44ea4717",
+        "children": ["aaa286c9-39f9-4d43-b7a1-8b22ec5d9f2a"]
+      },
+      "aaa286c9-39f9-4d43-b7a1-8b22ec5d9f2a": {
+        "id": "aaa286c9-39f9-4d43-b7a1-8b22ec5d9f2a",
+        "message": {
+          "id": "aaa286c9-39f9-4d43-b7a1-8b22ec5d9f2a",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428118.318379,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Simply as `50 - 25%`. Note that this would yield 37.5\n\n`50% / 2` would yield 25%"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "2aa00437-1787-420d-9c10-4ed15b2bd9d2",
+        "children": ["ed927353-9d77-4813-a809-d6a83bbaec6b"]
+      },
+      "ed927353-9d77-4813-a809-d6a83bbaec6b": {
+        "id": "ed927353-9d77-4813-a809-d6a83bbaec6b",
+        "message": {
+          "id": "ed927353-9d77-4813-a809-d6a83bbaec6b",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428121.884355,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Got it. Can you explain how the Decipad language handles rounding of percentages? Is there any specific function or operator for rounding, and how does it determine whether to round up or down? For example, how would `37.5%` be rounded?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa286c9-39f9-4d43-b7a1-8b22ec5d9f2a",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa286c9-39f9-4d43-b7a1-8b22ec5d9f2a",
+        "children": ["aaa21d82-ca02-4e7e-b56f-acb02d33400e"]
+      },
+      "aaa21d82-ca02-4e7e-b56f-acb02d33400e": {
+        "id": "aaa21d82-ca02-4e7e-b56f-acb02d33400e",
+        "message": {
+          "id": "aaa21d82-ca02-4e7e-b56f-acb02d33400e",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428267.333695,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "by default nothing gets rounded, but the user can use the `round` function to round any number, percentages included.\nA percentage of `25%` has the same value as 0.25.\n\nSo, to round 37.55% to the percent decimals (effectively millesimals), you would have to do `round(37.55%, 3)`, which results in 37,6%."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "ed927353-9d77-4813-a809-d6a83bbaec6b",
+        "children": ["2031c048-94ff-4d60-85a4-becd8a563b79"]
+      },
+      "2031c048-94ff-4d60-85a4-becd8a563b79": {
+        "id": "2031c048-94ff-4d60-85a4-becd8a563b79",
+        "message": {
+          "id": "2031c048-94ff-4d60-85a4-becd8a563b79",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428273.329994,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the explanation! In the Decipad language, how are percentage values stored in variables, and how can these variables be manipulated or used in functions? For example, how would one declare a variable to store `25%` and then use it in an operation or function call?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa21d82-ca02-4e7e-b56f-acb02d33400e",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa21d82-ca02-4e7e-b56f-acb02d33400e",
+        "children": ["aaa21d9d-55b4-408c-bcc4-35b628dba948"]
+      },
+      "aaa21d9d-55b4-408c-bcc4-35b628dba948": {
+        "id": "aaa21d9d-55b4-408c-bcc4-35b628dba948",
+        "message": {
+          "id": "aaa21d9d-55b4-408c-bcc4-35b628dba948",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428333.097321,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "You would simply declare a variable with that value like this:\n\n```deci\nVarName = 25%\n```\n\nThen you can use it in any calculation:\n\n```deci\nVarName2 = 4 + VarName\n```\n\n(this last calculation would result in `5`)"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "2031c048-94ff-4d60-85a4-becd8a563b79",
+        "children": ["33d8f4b2-d1c1-4437-9a65-e375b583dfe1"]
+      },
+      "33d8f4b2-d1c1-4437-9a65-e375b583dfe1": {
+        "id": "33d8f4b2-d1c1-4437-9a65-e375b583dfe1",
+        "message": {
+          "id": "33d8f4b2-d1c1-4437-9a65-e375b583dfe1",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428337.802332,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you! Is there any specific data type assigned to percentage values in Decipad language, or are they treated as floats? Additionally, does the language offer any built-in functions specifically designed to work with percentages?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa21d9d-55b4-408c-bcc4-35b628dba948",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa21d9d-55b4-408c-bcc4-35b628dba948",
+        "children": ["aaa29a2f-189e-4616-8e5f-2c5bdef4a659"]
+      },
+      "aaa29a2f-189e-4616-8e5f-2c5bdef4a659": {
+        "id": "aaa29a2f-189e-4616-8e5f-2c5bdef4a659",
+        "message": {
+          "id": "aaa29a2f-189e-4616-8e5f-2c5bdef4a659",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428365.185332,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "they're represented internally as any other number in Decipad: as a fraction with arbitrary precision."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "33d8f4b2-d1c1-4437-9a65-e375b583dfe1",
+        "children": ["45c416a9-d5a9-49bc-b504-baeb376b2d1d"]
+      },
+      "45c416a9-d5a9-49bc-b504-baeb376b2d1d": {
+        "id": "45c416a9-d5a9-49bc-b504-baeb376b2d1d",
+        "message": {
+          "id": "45c416a9-d5a9-49bc-b504-baeb376b2d1d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428368.908066,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Understood! Are there any special rules, constraints, or best practices in Decipad language regarding working with percentages that users should be aware of? For example, any limitations in precision, specific formatting requirements, or considerations when using percentages in conditional statements or loops?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa29a2f-189e-4616-8e5f-2c5bdef4a659",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa29a2f-189e-4616-8e5f-2c5bdef4a659",
+        "children": ["aaa23df0-8996-4552-8edc-e7549eae54a0"]
+      },
+      "aaa23df0-8996-4552-8edc-e7549eae54a0": {
+        "id": "aaa23df0-8996-4552-8edc-e7549eae54a0",
+        "message": {
+          "id": "aaa23df0-8996-4552-8edc-e7549eae54a0",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428413.016891,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "You can turn a result into a percentage.\nFor instance, if you wanted a ratio like `OfficeCost / PeopleCount` to be a percentage, you can do:\n\n```deci\nOfficeCost / PeopleCount in %\n```"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "45c416a9-d5a9-49bc-b504-baeb376b2d1d",
+        "children": ["e1b2e0fb-8e4c-4776-809a-a4f4678babf7"]
+      },
+      "e1b2e0fb-8e4c-4776-809a-a4f4678babf7": {
+        "id": "e1b2e0fb-8e4c-4776-809a-a4f4678babf7",
+        "message": {
+          "id": "e1b2e0fb-8e4c-4776-809a-a4f4678babf7",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428418.996259,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Interesting! Can you provide more details on how the `in %` syntax works? Is this used exclusively for converting a ratio to a percentage, or does it have additional applications? For example, how does `OfficeCost / PeopleCount in %` differ from simply `OfficeCost / PeopleCount` in the resulting value and type?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa23df0-8996-4552-8edc-e7549eae54a0",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa23df0-8996-4552-8edc-e7549eae54a0",
+        "children": ["aaa2c3db-40ac-4c33-992c-52c802361135"]
+      },
+      "aaa2c3db-40ac-4c33-992c-52c802361135": {
+        "id": "aaa2c3db-40ac-4c33-992c-52c802361135",
+        "message": {
+          "id": "aaa2c3db-40ac-4c33-992c-52c802361135",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428464.064849,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "You can use `in` for converting to other compatible units, like this:\n\n```deci\nOfficeSpace = 50 squaremeters\nOfficeSpace in squaremiles\n```"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "e1b2e0fb-8e4c-4776-809a-a4f4678babf7",
+        "children": ["45cd8c8f-9513-4857-ba96-a9cb782bc7b0"]
+      },
+      "45cd8c8f-9513-4857-ba96-a9cb782bc7b0": {
+        "id": "45cd8c8f-9513-4857-ba96-a9cb782bc7b0",
+        "message": {
+          "id": "45cd8c8f-9513-4857-ba96-a9cb782bc7b0",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428471.404744,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for explaining! Regarding the use of `in %`, how is the conversion handled internally? Is it multiplying the ratio by 100, and does it automatically append the percentage sign to the resulting value? For instance, if `OfficeCost / PeopleCount` evaluates to `0.2`, does `OfficeCost / PeopleCount in %` result in `20%`?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2c3db-40ac-4c33-992c-52c802361135",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2c3db-40ac-4c33-992c-52c802361135",
+        "children": ["aaa20d3d-d83f-443b-885f-3612c7e8d1fb"]
+      },
+      "aaa20d3d-d83f-443b-885f-3612c7e8d1fb": {
+        "id": "aaa20d3d-d83f-443b-885f-3612c7e8d1fb",
+        "message": {
+          "id": "aaa20d3d-d83f-443b-885f-3612c7e8d1fb",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696428483.740742,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": ["yes, that is correct."]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "45cd8c8f-9513-4857-ba96-a9cb782bc7b0",
+        "children": ["1993a913-7b45-45f8-9ee0-bbc6bd0b3d96"]
+      },
+      "1993a913-7b45-45f8-9ee0-bbc6bd0b3d96": {
+        "id": "1993a913-7b45-45f8-9ee0-bbc6bd0b3d96",
+        "message": {
+          "id": "1993a913-7b45-45f8-9ee0-bbc6bd0b3d96",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696428487.189075,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Great! Can you provide any information about error handling related to percentage operations in Decipad? For example, how does the language handle division by zero or other invalid operations involving percentages? Are there specific error messages or exception types that are used?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa20d3d-d83f-443b-885f-3612c7e8d1fb",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa20d3d-d83f-443b-885f-3612c7e8d1fb",
+        "children": []
+      }
+    },
+    "moderation_results": [],
+    "current_node": "1993a913-7b45-45f8-9ee0-bbc6bd0b3d96",
+    "plugin_ids": null,
+    "conversation_id": "fb212048-e1e4-4665-b039-0e5399e20d16",
+    "conversation_template_id": null,
+    "id": "fb212048-e1e4-4665-b039-0e5399e20d16"
+  },
+  {
+    "title": "Decipad Math Function Syntax",
+    "create_time": 1696369298.61241,
+    "update_time": 1696370911.936976,
+    "mapping": {
+      "298ad85d-048f-4277-a32d-7db6e0f5a4c8": {
+        "id": "298ad85d-048f-4277-a32d-7db6e0f5a4c8",
+        "message": {
+          "id": "298ad85d-048f-4277-a32d-7db6e0f5a4c8",
+          "author": { "role": "system", "name": null, "metadata": {} },
+          "create_time": null,
+          "update_time": null,
+          "content": { "content_type": "text", "parts": [""] },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 0.0,
+          "metadata": {},
+          "recipient": "all"
+        },
+        "parent": "aaa15d64-135a-4f51-9c87-2413eb770027",
+        "children": ["aaa2504d-c5c2-450f-835d-9404907595b8"]
+      },
+      "aaa15d64-135a-4f51-9c87-2413eb770027": {
+        "id": "aaa15d64-135a-4f51-9c87-2413eb770027",
+        "message": null,
+        "parent": null,
+        "children": ["298ad85d-048f-4277-a32d-7db6e0f5a4c8"]
+      },
+      "aaa2504d-c5c2-450f-835d-9404907595b8": {
+        "id": "aaa2504d-c5c2-450f-835d-9404907595b8",
+        "message": {
+          "id": "aaa2504d-c5c2-450f-835d-9404907595b8",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696369298.61329,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "you want to learn about a programming language called Decipad language, specifically about mathematical functions. Please ask me questions so that you can learn the Decipad language.\nOne question at a time please."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "298ad85d-048f-4277-a32d-7db6e0f5a4c8",
+        "children": ["b148648a-7b1e-4c3c-b045-378d5ae10e6f"]
+      },
+      "b148648a-7b1e-4c3c-b045-378d5ae10e6f": {
+        "id": "b148648a-7b1e-4c3c-b045-378d5ae10e6f",
+        "message": {
+          "id": "b148648a-7b1e-4c3c-b045-378d5ae10e6f",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696369301.114928,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Great! First, could you please provide a brief overview of the Decipad language's syntax, particularly how mathematical functions are represented and called in this language?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2504d-c5c2-450f-835d-9404907595b8",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2504d-c5c2-450f-835d-9404907595b8",
+        "children": ["aaa2b978-65e2-4b45-8515-18c178b2ec6d"]
+      },
+      "aaa2b978-65e2-4b45-8515-18c178b2ec6d": {
+        "id": "aaa2b978-65e2-4b45-8515-18c178b2ec6d",
+        "message": {
+          "id": "aaa2b978-65e2-4b45-8515-18c178b2ec6d",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696369599.255507,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "There are infix mathematical operators like `+`, `/`, `-`, `*`, `mod``^`, which are used like in regular mathematical notation.\nSome examples:\n\n```deci\n1 + 3\n3 / 4\n8 ^2\n9 mod 3\n```\n\nAnd there are other built-in mathematical functions that are called like in a programming language like JavaScript. Some examples:\n\n```deci\nround(32.321, 2)\nsin(PI)\nsqrt(9)\n```"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "b148648a-7b1e-4c3c-b045-378d5ae10e6f",
+        "children": ["005a47ef-fa18-4699-abc0-ea3e950451b9"]
+      },
+      "005a47ef-fa18-4699-abc0-ea3e950451b9": {
+        "id": "005a47ef-fa18-4699-abc0-ea3e950451b9",
+        "message": {
+          "id": "005a47ef-fa18-4699-abc0-ea3e950451b9",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696369602.551276,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the information. Can users define their own mathematical functions in Decipad, and if so, could you provide an example of how this can be done?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2b978-65e2-4b45-8515-18c178b2ec6d",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2b978-65e2-4b45-8515-18c178b2ec6d",
+        "children": ["aaa25c42-d3b5-4f4d-8e05-7390994e0005"]
+      },
+      "aaa25c42-d3b5-4f4d-8e05-7390994e0005": {
+        "id": "aaa25c42-d3b5-4f4d-8e05-7390994e0005",
+        "message": {
+          "id": "aaa25c42-d3b5-4f4d-8e05-7390994e0005",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696369650.100397,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "they can create functions like this:\n\n```deci\nsomeCalculation(a, b) = (a mod b) / 4\n```"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "005a47ef-fa18-4699-abc0-ea3e950451b9",
+        "children": ["f639b273-6b6b-4f60-ace8-1dd729221e38"]
+      },
+      "f639b273-6b6b-4f60-ace8-1dd729221e38": {
+        "id": "f639b273-6b6b-4f60-ace8-1dd729221e38",
+        "message": {
+          "id": "f639b273-6b6b-4f60-ace8-1dd729221e38",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696369652.976056,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for providing an example. How are variables declared and initialized in Decipad, and is there a specific data type or notation used for representing numbers, such as integers and floating-point values?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa25c42-d3b5-4f4d-8e05-7390994e0005",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa25c42-d3b5-4f4d-8e05-7390994e0005",
+        "children": ["aaa22087-88bd-4d9a-9ae3-e5229828c9b0"]
+      },
+      "aaa22087-88bd-4d9a-9ae3-e5229828c9b0": {
+        "id": "aaa22087-88bd-4d9a-9ae3-e5229828c9b0",
+        "message": {
+          "id": "aaa22087-88bd-4d9a-9ae3-e5229828c9b0",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696369839.403263,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "variables are declared like this:\n\n```dci\nVarName = Expression\n```\n\nVariable names must begin with a letter and not have spaces in it.\n\nExamples:\n\n```deci\nOfficeArea = 32 squarefeet\nSalary = 3000 USD\nRentCost = 32 GPB per square foot\nOfficeCost = OfficeArea * RentCost\n```\n\nNumbers can be written in normal number notation or scientific notation. Examples:\n\n```deci\n43.421\n42\n5.5e10\n```"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "f639b273-6b6b-4f60-ace8-1dd729221e38",
+        "children": ["7eb05d4c-d0ac-4441-8066-335f3ede974d"]
+      },
+      "7eb05d4c-d0ac-4441-8066-335f3ede974d": {
+        "id": "7eb05d4c-d0ac-4441-8066-335f3ede974d",
+        "message": {
+          "id": "7eb05d4c-d0ac-4441-8066-335f3ede974d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696369843.306135,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for clarifying. When functions are defined, like the `someCalculation(a, b)` example you provided earlier, is there a way to specify the data type of the parameters (like `a` and `b`), or does Decipad dynamically type variables? Also, are there any constraints or specific types for the return values of functions?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa22087-88bd-4d9a-9ae3-e5229828c9b0",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa22087-88bd-4d9a-9ae3-e5229828c9b0",
+        "children": ["aaa25671-8a9a-4a6d-866e-f23dd0fdeb03"]
+      },
+      "aaa25671-8a9a-4a6d-866e-f23dd0fdeb03": {
+        "id": "aaa25671-8a9a-4a6d-866e-f23dd0fdeb03",
+        "message": {
+          "id": "aaa25671-8a9a-4a6d-866e-f23dd0fdeb03",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696369952.542317,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad functions are dynamically typed. Even though values have a specific type and the Decipad language is strongly typed, the function type is inferred at the call site.\n\nFor instance, the following function:\n\n```deci\nSum(a, b) = a + b\n```\n\nCan be used to add numbers, concatenate strings or, for instance, add some time to a date value."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "7eb05d4c-d0ac-4441-8066-335f3ede974d",
+        "children": ["c1179f36-627d-413e-b6c4-0b4f6b205690"]
+      },
+      "c1179f36-627d-413e-b6c4-0b4f6b205690": {
+        "id": "c1179f36-627d-413e-b6c4-0b4f6b205690",
+        "message": {
+          "id": "c1179f36-627d-413e-b6c4-0b4f6b205690",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696369956.168209,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Understood! Regarding the built-in mathematical functions, are there specific libraries or modules that need to be imported to access these functions, or are they available globally? Additionally, does Decipad support any mechanisms for error handling, especially for mathematical operations that may result in errors or exceptions (like division by zero)?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa25671-8a9a-4a6d-866e-f23dd0fdeb03",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa25671-8a9a-4a6d-866e-f23dd0fdeb03",
+        "children": ["aaa2b517-ea20-482d-8651-728566fa053d"]
+      },
+      "aaa2b517-ea20-482d-8651-728566fa053d": {
+        "id": "aaa2b517-ea20-482d-8651-728566fa053d",
+        "message": {
+          "id": "aaa2b517-ea20-482d-8651-728566fa053d",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370010.740227,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "The built-in functions are available globally.\nError handling happens per statement.\nDivision by zero is supported (the result is `infinity`)."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "c1179f36-627d-413e-b6c4-0b4f6b205690",
+        "children": ["80922c8b-946b-46c6-8d93-2fb8061c1aed"]
+      },
+      "80922c8b-946b-46c6-8d93-2fb8061c1aed": {
+        "id": "80922c8b-946b-46c6-8d93-2fb8061c1aed",
+        "message": {
+          "id": "80922c8b-946b-46c6-8d93-2fb8061c1aed",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370014.289998,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Got it! Since functions are dynamically typed, does Decipad provide any mechanism or feature for handling or checking types within a function? For example, ensuring that a function operates correctly if it expects a number but receives a string instead. Also, how does the language handle type conversions or coercions, especially between numbers and strings?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2b517-ea20-482d-8651-728566fa053d",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2b517-ea20-482d-8651-728566fa053d",
+        "children": ["aaa2c738-8917-4f5c-bec6-e0c77e8d4402"]
+      },
+      "aaa2c738-8917-4f5c-bec6-e0c77e8d4402": {
+        "id": "aaa2c738-8917-4f5c-bec6-e0c77e8d4402",
+        "message": {
+          "id": "aaa2c738-8917-4f5c-bec6-e0c77e8d4402",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370045.035487,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "There are no ways to enforce the use of a function to specific types.\nIt's up to the caller of that function to make sure the types are correct."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "80922c8b-946b-46c6-8d93-2fb8061c1aed",
+        "children": ["ee939994-daf7-43de-aaf5-fccbb0443d7b"]
+      },
+      "ee939994-daf7-43de-aaf5-fccbb0443d7b": {
+        "id": "ee939994-daf7-43de-aaf5-fccbb0443d7b",
+        "message": {
+          "id": "ee939994-daf7-43de-aaf5-fccbb0443d7b",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370048.254817,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "I understand. Can you please share how the Decipad language handles control flow structures, such as loops and conditionals, especially within the context of performing mathematical computations? Are there any unique or specific syntaxes or structures in Decipad for iterative operations or conditional logic?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2c738-8917-4f5c-bec6-e0c77e8d4402",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2c738-8917-4f5c-bec6-e0c77e8d4402",
+        "children": ["aaa2928e-030e-4ebc-ac50-4d306eb660a4"]
+      },
+      "aaa2928e-030e-4ebc-ac50-4d306eb660a4": {
+        "id": "aaa2928e-030e-4ebc-ac50-4d306eb660a4",
+        "message": {
+          "id": "aaa2928e-030e-4ebc-ac50-4d306eb660a4",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370120.566772,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad has no loops.\nConditions are `if ... then ... else` expressions\nFor conditional logic, Decipad has operators like `and`, `or`, `==`, `>=`, `<`, `<=`, etc."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "ee939994-daf7-43de-aaf5-fccbb0443d7b",
+        "children": ["86774a2e-0563-42bd-af37-1b4e51f7c4ff"]
+      },
+      "86774a2e-0563-42bd-af37-1b4e51f7c4ff": {
+        "id": "86774a2e-0563-42bd-af37-1b4e51f7c4ff",
+        "message": {
+          "id": "86774a2e-0563-42bd-af37-1b4e51f7c4ff",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370124.746588,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the clarification. Could you please provide an example of how the if...then...else expression is used within Decipad, especially in the context of mathematical functions or calculations? Additionally, how does Decipad handle logical operators with different data types, for instance, comparing a number with a string?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2928e-030e-4ebc-ac50-4d306eb660a4",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2928e-030e-4ebc-ac50-4d306eb660a4",
+        "children": ["aaa22847-1ef5-405e-a3c3-07a9b587dff4"]
+      },
+      "aaa22847-1ef5-405e-a3c3-07a9b587dff4": {
+        "id": "aaa22847-1ef5-405e-a3c3-07a9b587dff4",
+        "message": {
+          "id": "aaa22847-1ef5-405e-a3c3-07a9b587dff4",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370271.964131,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "An if then else expression has two branches, which are expressions that need to have the same type.\nAn if then else expression always needs the else branch.\nExample:\n\n```deci\na = if b > 10 then \"big\" else \"small\"\n```\n\nSome operations can handle different data types as arguments, some others don't.\nFor instance, trying to add a number to a boolean will result in a type error."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "86774a2e-0563-42bd-af37-1b4e51f7c4ff",
+        "children": ["6ac2bc9d-efcb-4aba-8962-aead3e68c54a"]
+      },
+      "6ac2bc9d-efcb-4aba-8962-aead3e68c54a": {
+        "id": "6ac2bc9d-efcb-4aba-8962-aead3e68c54a",
+        "message": {
+          "id": "6ac2bc9d-efcb-4aba-8962-aead3e68c54a",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370277.95067,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the example. Is there a way to handle or catch errors in Decipad, like the type error you mentioned? Does the language have constructs or mechanisms for error prevention or handling, allowing the programmer to gracefully manage issues that arise during the execution of expressions or functions?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa22847-1ef5-405e-a3c3-07a9b587dff4",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa22847-1ef5-405e-a3c3-07a9b587dff4",
+        "children": ["aaa2e67d-04e5-4084-90e5-5b4b14c1e675"]
+      },
+      "aaa2e67d-04e5-4084-90e5-5b4b14c1e675": {
+        "id": "aaa2e67d-04e5-4084-90e5-5b4b14c1e675",
+        "message": {
+          "id": "aaa2e67d-04e5-4084-90e5-5b4b14c1e675",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370392.649161,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "There is no way to catch the errors.\nThe error belongs to the expression that produced it, and it propagates only to the places where that expression is used.\n\nIn this example:\n\n```deci\na = 1\nb = \"2\"\nc = a * 2\nd = a + b\n```\n\nThe first, second and third expressions will succeed, but the last one have a type error."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "6ac2bc9d-efcb-4aba-8962-aead3e68c54a",
+        "children": ["34732df8-62a2-4770-b4f0-871622340563"]
+      },
+      "34732df8-62a2-4770-b4f0-871622340563": {
+        "id": "34732df8-62a2-4770-b4f0-871622340563",
+        "message": {
+          "id": "34732df8-62a2-4770-b4f0-871622340563",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370398.50789,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Understood, thank you. As for the built-in mathematical functions you initially mentioned, could you please provide a more comprehensive list of these functions? Additionally, does Decipad have any special constants or mathematical constructs, like \u03c0 (Pi) or e, that are predefined for use in calculations?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2e67d-04e5-4084-90e5-5b4b14c1e675",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2e67d-04e5-4084-90e5-5b4b14c1e675",
+        "children": ["aaa204bc-09b3-4364-83d4-aa76e8bb2198"]
+      },
+      "aaa204bc-09b3-4364-83d4-aa76e8bb2198": {
+        "id": "aaa204bc-09b3-4364-83d4-aa76e8bb2198",
+        "message": {
+          "id": "aaa204bc-09b3-4364-83d4-aa76e8bb2198",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370699.831648,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "There are some constants that are globally defined, like `Pi`, `\u03c0` and `e`.\n\nHere are some mathematical functions that are available:\n\nabs()\tabs(Number)\tReturns the absolute value of a number, removing the negative sign if present.\nacos()\tacos(Angle)\tComputes trigonometric functions for angles.\nasin()\tasin(Angle)\tComputes trigonometric functions for angles.\natan()\tatan(Angle)\tComputes trigonometric functions for angles.\ncos()\tcos(Angle)\tComputes trigonometric functions for angles.\nfactorial()\tfactorial(Number)\tComputes factorials, which are commonly used in probability calculations.\ngetunit()\tgetunit(Number)\tRemoves the units from a number, allowing you to work with the numbers alone.\nln()\tln(Number)\tCalculates the natural logarithm of a given number.\nmod\t[Number] mod [Number]\tCalculates the remainder when one number is divided by another.\nround()\tround(Number, [Precision])\tRounds a number to a specified number of decimal places or to the nearest whole number.\nsin()\tsin(Angle)\tComputes trigonometric functions for angles.\nsqrt()\tsqrt(Number)\tCalculates the square root of a given number.\nstripunit()\tstripunit(Number)\tRetrieves the units of a given number.\ntan()\ttan(Angle)\tComputes trigonometric functions for angles.\naverage()\taverage(Column)\tCalculates the average of a column.\nmax()\tmax(Column)\tCalculates the largest number from a column of numbers or the most recent date from a column of dates.\nmin()\tmin(Column)\tCalculates the smallest number from a column of numbers or the earliest date from a column of dates.\nsum()\tsum(Column)\tCalculates the sum of a column."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "34732df8-62a2-4770-b4f0-871622340563",
+        "children": ["d51b6c53-f662-49dc-9e9f-ac80daaba894"]
+      },
+      "d51b6c53-f662-49dc-9e9f-ac80daaba894": {
+        "id": "d51b6c53-f662-49dc-9e9f-ac80daaba894",
+        "message": {
+          "id": "d51b6c53-f662-49dc-9e9f-ac80daaba894",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370703.849686,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the comprehensive list! Are there any limitations or specific considerations users should be aware of when performing mathematical calculations in Decipad? For example, limitations regarding the precision or range of numbers, handling of irrational numbers, or computational efficiency considerations for complex calculations?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa204bc-09b3-4364-83d4-aa76e8bb2198",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa204bc-09b3-4364-83d4-aa76e8bb2198",
+        "children": ["aaa20b7a-1e23-4bf0-9f21-82a5cefbe666"]
+      },
+      "aaa20b7a-1e23-4bf0-9f21-82a5cefbe666": {
+        "id": "aaa20b7a-1e23-4bf0-9f21-82a5cefbe666",
+        "message": {
+          "id": "aaa20b7a-1e23-4bf0-9f21-82a5cefbe666",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370770.320918,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Decipad does not support irrational numbers, but it represents any rational number with arbitrary precision."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "d51b6c53-f662-49dc-9e9f-ac80daaba894",
+        "children": ["42df1bdb-d8d0-4232-ac78-f377ef22374c"]
+      },
+      "42df1bdb-d8d0-4232-ac78-f377ef22374c": {
+        "id": "42df1bdb-d8d0-4232-ac78-f377ef22374c",
+        "message": {
+          "id": "42df1bdb-d8d0-4232-ac78-f377ef22374c",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370773.394158,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thanks for the information. Lastly, is there any integrated development environment (IDE) or preferred editor for developing in Decipad? Additionally, does the language offer any debugging tools or facilities to help developers troubleshoot and validate their mathematical functions and expressions?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa20b7a-1e23-4bf0-9f21-82a5cefbe666",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa20b7a-1e23-4bf0-9f21-82a5cefbe666",
+        "children": ["aaa270f5-40db-4795-a66e-7f341b25c0d6"]
+      },
+      "aaa270f5-40db-4795-a66e-7f341b25c0d6": {
+        "id": "aaa270f5-40db-4795-a66e-7f341b25c0d6",
+        "message": {
+          "id": "aaa270f5-40db-4795-a66e-7f341b25c0d6",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370798.561343,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "The Decipad language was designed to be used in the context of a Decipad notebook."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "42df1bdb-d8d0-4232-ac78-f377ef22374c",
+        "children": ["47a9d2ef-7ec6-483d-a3e1-03a425d2aacc"]
+      },
+      "47a9d2ef-7ec6-483d-a3e1-03a425d2aacc": {
+        "id": "47a9d2ef-7ec6-483d-a3e1-03a425d2aacc",
+        "message": {
+          "id": "47a9d2ef-7ec6-483d-a3e1-03a425d2aacc",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370802.519646,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Understood. If there are more details or unique features about the Decipad notebook environment, I'd be interested to learn about them. For instance, how does the notebook facilitate the writing and execution of Decipad code? Does it provide any interactive features, visualizations, or assistance for developers as they work with Decipad language for mathematical computations and other tasks?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa270f5-40db-4795-a66e-7f341b25c0d6",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa270f5-40db-4795-a66e-7f341b25c0d6",
+        "children": ["aaa2173b-f61e-4172-8ab1-d71483ba93a2"]
+      },
+      "aaa2173b-f61e-4172-8ab1-d71483ba93a2": {
+        "id": "aaa2173b-f61e-4172-8ab1-d71483ba93a2",
+        "message": {
+          "id": "aaa2173b-f61e-4172-8ab1-d71483ba93a2",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370849.665964,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Yes it does.\nIt provides some block elements users can place in the notebook for doing graphs, pivot tables, tables, sliders and others."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "47a9d2ef-7ec6-483d-a3e1-03a425d2aacc",
+        "children": ["0e76bd03-40c4-4612-83b1-31b85900622d"]
+      },
+      "0e76bd03-40c4-4612-83b1-31b85900622d": {
+        "id": "0e76bd03-40c4-4612-83b1-31b85900622d",
+        "message": {
+          "id": "0e76bd03-40c4-4612-83b1-31b85900622d",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370853.646906,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "That's very informative, thank you! How does the integration between Decipad code and these interactive elements work? Can you provide an example of how a user might define a mathematical function or expression in Decipad and then visualize the result using a graph, pivot table, or other interactive element within the notebook?"
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa2173b-f61e-4172-8ab1-d71483ba93a2",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa2173b-f61e-4172-8ab1-d71483ba93a2",
+        "children": ["aaa27f2c-7300-4439-af19-9c0020a20f47"]
+      },
+      "aaa27f2c-7300-4439-af19-9c0020a20f47": {
+        "id": "aaa27f2c-7300-4439-af19-9c0020a20f47",
+        "message": {
+          "id": "aaa27f2c-7300-4439-af19-9c0020a20f47",
+          "author": { "role": "user", "name": null, "metadata": {} },
+          "create_time": 1696370908.642667,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "You can add specific code lines in Decipad where you can defined functions, do calculations, assign results to variables, etc., or you can use expressions to make derived columns on a Decipad UI table."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": null,
+          "weight": 1.0,
+          "metadata": { "timestamp_": "absolute", "message_type": null },
+          "recipient": "all"
+        },
+        "parent": "0e76bd03-40c4-4612-83b1-31b85900622d",
+        "children": ["d59478fa-fd25-4bd6-ad19-d4cb63aa2673"]
+      },
+      "d59478fa-fd25-4bd6-ad19-d4cb63aa2673": {
+        "id": "d59478fa-fd25-4bd6-ad19-d4cb63aa2673",
+        "message": {
+          "id": "d59478fa-fd25-4bd6-ad19-d4cb63aa2673",
+          "author": { "role": "assistant", "name": null, "metadata": {} },
+          "create_time": 1696370911.935563,
+          "update_time": null,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Thank you for the clarification. Can you please provide a practical example of how a user would define a function, perform a calculation, or use expressions within these interactive elements like tables or graphs in a Decipad notebook? I'm interested in understanding the workflow and interaction between code and visual elements in the environment."
+            ]
+          },
+          "status": "finished_successfully",
+          "end_turn": true,
+          "weight": 1.0,
+          "metadata": {
+            "finish_details": { "type": "stop", "stop_tokens": [100260] },
+            "is_complete": true,
+            "message_type": null,
+            "model_slug": "gpt-4",
+            "parent_id": "aaa27f2c-7300-4439-af19-9c0020a20f47",
+            "timestamp_": "absolute"
+          },
+          "recipient": "all"
+        },
+        "parent": "aaa27f2c-7300-4439-af19-9c0020a20f47",
+        "children": []
+      }
+    },
+    "moderation_results": [],
+    "current_node": "d59478fa-fd25-4bd6-ad19-d4cb63aa2673",
+    "plugin_ids": null,
+    "conversation_id": "17f55217-b12e-4151-bb53-5f7978b0a6e2",
+    "conversation_template_id": null,
+    "id": "17f55217-b12e-4151-bb53-5f7978b0a6e2"
+  },
+  {
     "title": "Learn Decipad 'tiered' structure.",
     "create_time": 1695981474.752229,
     "update_time": 1695990184.163074,
@@ -40,7 +1385,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about the `tiered` control structure in Decipad.\nPlease ask me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about the `tiered` control structure in Decipad.\nPlease ask me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -91,7 +1436,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about the `tiers` control structure in Decipad.\nPlease ask me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about the `tiers` control structure in Decipad.\nPlease ask me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -142,7 +1487,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "In general, users can use `tiers` using this syntax:\n\n```\ntiers [Your Value] {\n         [Tier 1]: [Value or Calculation]\n         [Tier 2]: [Value or Calculation]\n         [Tier 3]: [Value or Calculation]\n                            ...\n  [Optional] rest: [Value or Calculation]\n  [Optional]  max: [Value or Calculation]\n  [Optional]  min: [Value or Calculation]\n}\n```\n\nHere is an example:\n\n```\nYourSales = $120000\n\ntiers YourSales {\n   $50000: tier * 5%\n  $100000: tier * 7%\n  $150000: tier * 10%\n      rest: tier * 15%\n       max: $500000\n       min: $5000\n}\n```\n\nwill yield `8000 $`"
+              "In general, users can use `tiers` using this syntax:\n\n```deci\ntiers [Your Value] {\n         [Tier 1]: [Value or Calculation]\n         [Tier 2]: [Value or Calculation]\n         [Tier 3]: [Value or Calculation]\n                            ...\n  [Optional] rest: [Value or Calculation]\n  [Optional]  max: [Value or Calculation]\n  [Optional]  min: [Value or Calculation]\n}\n```\n\nHere is an example:\n\n```\nYourSales = $120000\n\ntiers YourSales {\n   $50000: tier * 5%\n  $100000: tier * 7%\n  $150000: tier * 10%\n      rest: tier * 15%\n       max: $500000\n       min: $5000\n}\n```\n\nwill yield `8000 $`"
             ]
           },
           "status": "finished_successfully",
@@ -298,7 +1643,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Internally, a tiers evaluation keeps 2 counters.\nA remainder, which is initialiser to the initial value.\nA result, which gets accumulated with the value of each tier.\n`tiers` processes  the tiers in the following way:\nFind all the tier slices a value fits into.\nFor instance, if the tiers slices are 50000, 100000 and 150000, a value of 120000 fits inside the first 3 slices slices.\nFor each matching slice, the corresponding value expression is evaluated with the `tier` implicit variable assigned to the amount for that tier.\nIn our example, the first tier gets a `tier` value of 50000. Since that tier expression is `tier * 5%`, then the result is `2500`.\nNow, the second tier is evaluated, with the `tier` value getting the interval (difference between the previous tier) of `50000` (100000 - 50000). For this tier, the corresponding value is `tier * 7%`, which yields 3500.\nBoth these tiers yield a sum of 2500 + 3500 = 6000.\nBut we still have a remainder that was not applied, which is 120000 (our initial value) and the top value of the last applied tier (100000). 120000 - 100000 = 20000.\nThis value goes into the `rest` value expression, which is `tier * 15%`, yielding 15% of 20000 = 3000.\nThis last value also accumulates with the result, yielding a final result of 3000"
+              "Internally, a tiers evaluation keeps 2 counters.\nA remainder, which is initialiser to the initial value.\nA result, which gets accumulated with the value of each tier.\n`tiers` processes  the tiers in the following way:\nFind all the tier slices a value fits into.\nFor instance, if the tiers slices are `50000`, `100000` and `150000`, a value of `120000` fits inside the first 3 slices slices.\nFor each matching slice, the corresponding value expression is evaluated with the `tier` implicit variable assigned to the amount for that tier.\nIn our example, the first tier gets a `tier` value of `50000`. Since that tier expression is `tier * 5%`, then the result is `2500`.\nNow, the second tier is evaluated, with the `tier` value getting the interval (difference between the previous tier) of `50000` (100000 - 50000). For this tier, the corresponding value is `tier * 7%`, which yields `3500`.\nBoth these tiers yield a sum of 2500 + 3500 = 6000.\nBut we still have a remainder that was not applied, which is 120000 (our initial value) and the top value of the last applied tier (100000). 120000 - 100000 = 20000.\nThis value goes into the `rest` value expression, which is `tier * 15%`, yielding 15% of 20000 = 3000.\nThis last value also accumulates with the result, yielding a final result of 3000"
             ]
           },
           "status": "finished_successfully",
@@ -349,7 +1694,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Internally, a tiers evaluation keeps 2 counters.\nA remainder, which is initialiser to the initial value.\nA result, which gets accumulated with the value of each tier.\n`tiers` processes  the tiers in the following way:\nFind all the tier slices a value fits into.\nFor instance, if the tiers slices are 50000, 100000 and 150000, a value of 120000 fits inside the first 3 slices slices.\nFor each matching slice, the corresponding value expression is evaluated with the `tier` implicit variable assigned to the amount for that tier.\nIn our example, the first tier gets a `tier` value of 50000. Since that tier expression is `tier * 5%`, then the result is `2500`.\nNow, the second tier is evaluated, with the `tier` value getting the interval (difference between the previous tier) of `50000` (100000 - 50000). For this tier, the corresponding value is `tier * 7%`, which yields 3500.\nBoth these tiers yield a sum of 2500 + 3500 = 6000.\nNext, the third tier is evaluated, with the `tier` value getting the remainder of the value, which is 20000.\nThis value goes into the `rest` value expression, which is `tier * 10%`, yielding 10% of 20000 = 2000.\nThese 3 tier results added together yield 8000."
+              "Internally, a tiers evaluation keeps 2 counters.\nA remainder, which is initialiser to the initial value.\nA result, which gets accumulated with the value of each tier.\n`tiers` processes  the tiers in the following way:\nFind all the tier slices a value fits into.\nFor instance, if the tiers slices are `50000`, `100000` and `150000`, a value of `120000` fits inside the first 3 slices slices.\nFor each matching slice, the corresponding value expression is evaluated with the `tier` implicit variable assigned to the amount for that tier.\nIn our example, the first tier gets a `tier` value of 50000. Since that tier expression is `tier * 5%`, then the result is `2500`.\nNow, the second tier is evaluated, with the `tier` value getting the interval (difference between the previous tier) of `50000` (100000 - 50000). For this tier, the corresponding value is `tier * 7%`, which yields `3500`.\nBoth these tiers yield a sum of 2500 + 3500 = 6000.\nNext, the third tier is evaluated, with the `tier` value getting the remainder of the value, which is 20000.\nThis value goes into the `rest` value expression, which is `tier * 10%`, yielding 10% of 20000 = 2000.\nThese 3 tier results added together yield 8000."
             ]
           },
           "status": "finished_successfully",
@@ -600,7 +1945,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Usually tiers are used within user functions in this fashion:\n\n```\nCommission(Sales) = tiers Sales {\n   $50000: tier * 5%\n  $100000: tier * 7%\n  $150000: tier * 10%\n      rest: tier * 15%\n       max: $500000\n       min: $5000\n}\n```"
+              "Usually tiers are used within user functions in this fashion:\n\n```deci\nCommission(Sales) = tiers Sales {\n   $50000: tier * 5%\n  $100000: tier * 7%\n  $150000: tier * 10%\n      rest: tier * 15%\n       max: $500000\n       min: $5000\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -903,7 +2248,9 @@
           "update_time": null,
           "content": {
             "content_type": "text",
-            "parts": ["there's no currency conversion mechanism built-in yet."]
+            "parts": [
+              "there's no currency conversion mechanism in Decipad built-in yet."
+            ]
           },
           "status": "finished_successfully",
           "end_turn": null,
@@ -953,7 +2300,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "can you output an example of a Decipad user function that uses the tiers structure to calculate taxes in brackets?"
+              "Can you output an example of a Decipad user function that uses the tiers structure to calculate taxes in brackets?"
             ]
           },
           "status": "finished_successfully",
@@ -1040,7 +2387,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about the `match` control structure in Decipad.\nPlease ask me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about the `match` control structure in Decipad.\nPlease ask me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -1091,7 +2438,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Generically, a match can be written like this:\n\n```\n[Result] = match {\n  [Condition 1]: [Result 1]\n  [Condition 2]: [Result 2]\n  [Condition 3]: [Result 3]\n              ...\n}\n```\n\nExample:\n\n```\nPerformance = \"Exceeds\"\n\nBonus = match {\n  Performance == \"Meets\": 0%\n  Performance == \"Exceeds\": 2%\n  Performance == \"Greatly exceeds\": 3%\n}\n```\nwill yield `2%`"
+              "Generically, a match can be written like this:\n\n```deci\n[Result] = match {\n  [Condition 1]: [Result 1]\n  [Condition 2]: [Result 2]\n  [Condition 3]: [Result 3]\n              ...\n}\n```\n\nExample:\n\n```deci\nPerformance = \"Exceeds\"\n\nBonus = match {\n  Performance == \"Meets\": 0%\n  Performance == \"Exceeds\": 2%\n  Performance == \"Greatly exceeds\": 3%\n}\n```\nwill yield `2%`"
             ]
           },
           "status": "finished_successfully",
@@ -1346,7 +2693,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "yes. A match is an expression, and any expression inside a match can also be a match.\nYou can create such an example."
+              "Yes. A match is an expression, and any expression inside a match can also be a match.\nYou can create such an example."
             ]
           },
           "status": "finished_successfully",
@@ -1396,7 +2743,7 @@
           "update_time": null,
           "content": {
             "content_type": "text",
-            "parts": ["yes, that's perfect!"]
+            "parts": ["Yes, that's perfect!"]
           },
           "status": "finished_successfully",
           "end_turn": null,
@@ -1699,7 +3046,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "I think that the `match` construct is the most helpful in the context of a user function.\n\nHere is such an example:\n\n```\nBonus(Performance) = match {\n  Performance == \"Meets\": 0%\n  Performance == \"Exceeds\": 2%\n  Performance == \"Greatly exceeds\": 3%\n}\n\nBonus(\"Exceeds\")\n```\n\nwill yield `2%`."
+              "I think that the `match` construct is the most helpful in the context of a user function.\n\nHere is such an example:\n\n```deci\nBonus(Performance) = match {\n  Performance == \"Meets\": 0%\n  Performance == \"Exceeds\": 2%\n  Performance == \"Greatly exceeds\": 3%\n}\n\nBonus(\"Exceeds\")\n```\n\nwill yield `2%`."
             ]
           },
           "status": "finished_successfully",
@@ -1888,7 +3235,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about language tables in Decipad.\nPlease ask me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about language tables in Decipad.\nPlease ask me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -1990,7 +3337,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "You can declare a table in Decipad like this:\n\n```\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n```\n\nYou can also add columns to tables like this:\n\n```\nTableName.NewColumnName1 = [10, 11, 12]\nTableName.NewColumnName2 = NewColumnName1 + ColumnD\n```"
+              "You can declare a table in Decipad like this:\n\n```deci\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n```\n\nYou can also add columns to tables like this:\n\n```deci\nTableName.NewColumnName1 = [10, 11, 12]\nTableName.NewColumnName2 = NewColumnName1 + ColumnD\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2092,7 +3439,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Outside of a table, you can access a column on a table using the dot notation like this:\n\nTableName.ColumnName\n\nYou can retrieve and use values on a column using column-specific functions or any mathematical operator."
+              "Outside of a table, you can access a column on a table using the dot notation like this:\n\n```deci\nTableName.ColumnName\n```\n\nYou can retrieve and use values on a column using column-specific functions or any mathematical operator."
             ]
           },
           "status": "finished_successfully",
@@ -2195,7 +3542,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "yes, tables can be passed as values to functions.\nFor example, you can get a row on a specific table using the `lookup` function:\n\n```\nlookup(TableName, TableName.ColumnName == date(2020)`"
+              "Yes, tables can be passed as values to functions.\nFor example, you can get a row on a specific table using the `lookup` function:\n\n```deci\nlookup(TableName, TableName.ColumnName == date(2020)\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2246,7 +3593,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "yes, tables can be passed as values to functions.\nFor example, you can get a row on a specific table using the `lookup` function:\n\n```\nlookup(TableName, TableName.ColumnName == date(2020)\n```"
+              "Yes, tables can be passed as values to functions.\nFor example, you can get a row on a specific table using the `lookup` function:\n\n```deci\nlookup(TableName, TableName.ColumnName == date(2020)\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2297,7 +3644,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "The `lookup` function returns a row, which is a bit like a table but each column only has one value.\n\nExample:\n\n```\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nlookup(TableName, TableName.ColumnA === 1)\n```\n\nwill yield\n```\n{\n  ColumnA = 2,\n  ColumnB = 5,\n  ColumnC = false,\n  ColumnD = 7\n}\n```"
+              "The `lookup` function returns a row, which is a bit like a table but each column only has one value.\n\nExample:\n\n``deci`\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nlookup(TableName, TableName.ColumnA === 1)\n```\n\nwill yield\n```\n{\n  ColumnA = 2,\n  ColumnB = 5,\n  ColumnC = false,\n  ColumnD = 7\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2348,7 +3695,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Within a table column you can either have a literal value or an expression.\nAn expression on a column can refer to other columns by name (without the table name prefix).\n\nIn my example above, ColumnD is defined as a sum of each value on ColumnA and ColumnB:\n\n```\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n```"
+              "Within a table column you can either have a literal value or an expression.\nAn expression on a column can refer to other columns by name (without the table name prefix).\n\nIn my example above, `ColumnD` is defined as a sum of each value on ColumnA and ColumnB:\n\n```deci\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2399,7 +3746,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Yes, in Decipad you can filter entire tables based on any condition. you can use the `filter` function for that.\n\nExample:\n\n```\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nfilter(TableName, TableName.ColumnB > 4)\n```\n\nwill yield\n\n```\nTableName = {\n  ColumnA = [2, 3]\n  ColumnB = [5, 6]\n  ColumnC = [false, true]\n  ColumnD = [7, 9]\n}\n```"
+              "Yes, in Decipad you can filter entire tables based on any condition. you can use the `filter` function for that.\n\nExample:\n\n```deci\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nfilter(TableName, TableName.ColumnB > 4)\n```\n\nwill yield\n\n```deci\nTableName = {\n  ColumnA = [2, 3]\n  ColumnB = [5, 6]\n  ColumnC = [false, true]\n  ColumnD = [7, 9]\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2450,7 +3797,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "yes. Here is another example with that:\n\n```\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nfilter(TableName, TableName.ColumnB > 4 and TableName.ColumnA != 3)\n```\n\nwill yield\n\n```\nTableName = {\n  ColumnA = [2]\n  ColumnB = [5]\n  ColumnC = [false]\n  ColumnD = [7]\n}\n```"
+              "yes. Here is another example with that:\n\n```deci\nTableName = {\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nfilter(TableName, TableName.ColumnB > 4 and TableName.ColumnA != 3)\n```\n\nwill yield\n\n```\nTableName = {\n  ColumnA = [2]\n  ColumnB = [5]\n  ColumnC = [false]\n  ColumnD = [7]\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2504,7 +3851,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Sure. For filtering tables you can use the `sortby` function. Here is an example:\n\n```\nTableName = {\n  ColumnA = [1, 3, 2]\n  ColumnB = [4, 6, 5]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nsortby(TableName, TableName.ColumnA)\n```\n\nwill yield\n\n```\n{\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, true, false]\n  ColumnD = [5, 7, 9]\n}\n```\n\nif you want to sort in reverse, you can use the reverse function that will reverse each table column. Example:\n\n```\nreverse(sortby(TableName, TableName.ColumnA))`"
+              "Sure. For filtering tables you can use the `sortby` function. Here is an example:\n\n```deci\nTableName = {\n  ColumnA = [1, 3, 2]\n  ColumnB = [4, 6, 5]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nsortby(TableName, TableName.ColumnA)\n```\n\nwill yield\n\n```\n{\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, true, false]\n  ColumnD = [5, 7, 9]\n}\n```\n\nif you want to sort in reverse, you can use the reverse function that will reverse each table column. Example:\n\n```deci\nreverse(sortby(TableName, TableName.ColumnA))`"
             ]
           },
           "status": "finished_successfully",
@@ -2555,7 +3902,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Sure. For filtering tables you can use the `sortby` function. Here is an example:\n\n```\nTableName = {\n  ColumnA = [1, 3, 2]\n  ColumnB = [4, 6, 5]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nsortby(TableName, TableName.ColumnA)\n```\n\nwill yield\n\n```\n{\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, true, false]\n  ColumnD = [5, 7, 9]\n}\n```\n\nif you want to sort in reverse, you can use the reverse function that will reverse each table column. Example:\n\n```\nreverse(sortby(TableName, TableName.ColumnA))`\n```\n\nwill yield\n\n```\n{\n  ColumnA = [3, 2, 1]\n  ColumnB = [6, 5, 4]\n  ColumnC = [false, true, true]\n  ColumnD = [9, 7, 5]\n}\n```"
+              "Sure. For filtering tables you can use the `sortby` function. Here is an example:\n\n```deci\nTableName = {\n  ColumnA = [1, 3, 2]\n  ColumnB = [4, 6, 5]\n  ColumnC = [true, false, true]\n  ColumnD = ColumnA + ColumnB\n}\n\nsortby(TableName, TableName.ColumnA)\n```\n\nwill yield\n\n```\n{\n  ColumnA = [1, 2, 3]\n  ColumnB = [4, 5, 6]\n  ColumnC = [true, true, false]\n  ColumnD = [5, 7, 9]\n}\n```\n\nif you want to sort in reverse, you can use the reverse function that will reverse each table column. Example:\n\n```\nreverse(sortby(TableName, TableName.ColumnA))`\n```\n\nwill yield\n\n```\n{\n  ColumnA = [3, 2, 1]\n  ColumnB = [6, 5, 4]\n  ColumnC = [false, true, true]\n  ColumnD = [9, 7, 5]\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2606,7 +3953,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "In Decipad you can concatenate two compatible tables using the `concatenate` function. These tables need to have the same column names and each corresponding column needs to have the same type of values.\n\n```\nTableA = {\n  ColA = [1, 2, 3]\n  ColB = [true, false, true]\n}\n\nTableB = {\n  ColA = [4, 5, 6]\n  ColB = [false, true, false]\n}\n\nconcatenate(TableA, TableB)\n```\n\nwill yield\n\n```\n{\n  ColA = [ 1, 2, 3, 4, 5, 6 ],\n  ColB = [ true, false, true, false, true, false ]\n}\n```"
+              "In Decipad you can concatenate two compatible tables using the `concatenate` function. These tables need to have the same column names and each corresponding column needs to have the same type of values.\n\n```deci\nTableA = {\n  ColA = [1, 2, 3]\n  ColB = [true, false, true]\n}\n\nTableB = {\n  ColA = [4, 5, 6]\n  ColB = [false, true, false]\n}\n\nconcatenate(TableA, TableB)\n```\n\nwill yield\n\n```deci\n{\n  ColA = [ 1, 2, 3, 4, 5, 6 ],\n  ColB = [ true, false, true, false, true, false ]\n}\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2844,7 +4191,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about multi-dimensional values (which we call columns in Decipad) are represented and handled in Decipad.\nPlease ask me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about multi-dimensional values (which we call columns in Decipad) are represented and handled in Decipad.\nPlease ask me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -2898,7 +4245,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "A column is a sequence of values. These values have to have the same type.\nBasic value types in Decipad are strings, booleans dates and numbers.\nA column is a sequence of one of these types of values.\nA column can have other columns inside.\nA column can be literally declared using square brackets, with colons separating the values (much like JavaScript).\nExamples of column literals:\n\n[1, 2, 3]"
+              "A column is a sequence of values. These values have to have the same type.\nBasic value types in Decipad are strings, booleans dates and numbers.\nA column is a sequence of one of these types of values.\nA column can have other columns inside.\nA column can be literally declared using square brackets, with colons separating the values (much like JavaScript).\nExamples of column literals:\n\n```deci[1, 2, 3]\n```"
             ]
           },
           "status": "finished_successfully",
@@ -2949,7 +4296,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "A column is a sequence of values. These values have to have the same type.\nBasic value types in Decipad are strings, booleans dates and numbers.\nA column is a sequence of one of these types of values.\nA column can have other columns inside.\nA column can be literally declared using square brackets, with colons separating the values (much like JavaScript).\nExamples of column literals:\n\n[1, 2, 3]\n[\"a\", \"b\", \"c\"]\n[true, false, true]\n[date(2020), date(2021), date(2022)]\n[date(2020-01) .. date(2022-10)]"
+              "A column is a sequence of values. These values have to have the same type.\nBasic value types in Decipad are strings, booleans dates and numbers.\nA column is a sequence of one of these types of values.\nA column can have other columns inside.\nA column can be literally declared using square brackets, with colons separating the values (much like JavaScript).\nExamples of column literals:\n\n```deci\n[1, 2, 3]\n[\"a\", \"b\", \"c\"]\n[true, false, true]\n[date(2020), date(2021), date(2022)]\n[date(2020-01) .. date(2022-10)]\n```"
             ]
           },
           "status": "finished_successfully",
@@ -3000,7 +4347,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "The Decipad language does not have explicit iteration control structures or explicit mappings.\nInstead, normal operations can be transparently applied to multi-dimensional values as they would in numbers.\nHere are some examples:\n\n[1, 2, 3] + 1\n\nyields [2, 3, 4]\n\n[1, 2, 3] * 10\n\nyields [10, 20, 30]\n\n[1, 2, 3] + [10, 20, 30]\n\nyields [11, 22, 33]\n\n[20, 30, 40] - 10\n\nyields [10, 20, 30]"
+              "The Decipad language does not have explicit iteration control structures or explicit mappings.\nInstead, normal operations can be transparently applied to multi-dimensional values as they would in numbers.\nHere are some examples:\n\n```deci\n[1, 2, 3] + 1\n```\n\nyields `[2, 3, 4]`\n\n```deci\n[1, 2, 3] * 10\n```\n\nyields `[10, 20, 30]`\n\n```deci\n[1, 2, 3] + [10, 20, 30]\n```\n\nyields `[11, 22, 33]`\n\n```deci\n[20, 30, 40] - 10\n```\n\nyields `[10, 20, 30]`."
             ]
           },
           "status": "finished_successfully",
@@ -3051,7 +4398,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "in these cases of operating on two columns with different types, Decipad will yield a type mismatch error.\nFor columns that have mismatched lengths, Decipad will yield unknown for positions that have no corresponding value.\n\nExample:\n\n[1, 2, 3] + [1, 2]\n\nyields [ 2, 4, unknown ]"
+              "in these cases of operating on two columns with different types, Decipad will yield a type mismatch error.\nFor columns that have mismatched lengths, Decipad will yield unknown for positions that have no corresponding value.\n\nExample:\n\n```deci\n[1, 2, 3] + [1, 2]\n```\n\nyields `[ 2, 4, unknown ]`."
             ]
           },
           "status": "finished_successfully",
@@ -3102,7 +4449,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Any column can have columns inside it, in a recursive way.\nHere is an example:\n\n[[1, 2, 3], [4, 5]]\n\nWe don't allow columns with mixed types.\nThis is an invalid column in Decipad:\n\n[[1, 2, 3], [4, 5], [\"a\"]]\n\nTo access and manipulate columns, you can use the `first`, `last`, `sort`, `unique`, `reverse`, 'cat`, `len`, `filter` and other functions.\n\nExample:\n\nCol = [1, 3, 2, 4]\n\nlen(Col)\nyields 4\n\nfirst(Col)\nyields 1\n\nlast(Col)\nyields 4\n\nsort(Col)\nyields [1, 2, 3, 4]\n\nunique(Col)\nyields [1, 3, 2, 4]\n\nreverse(Col)\nyields [4, 2, 3, 1]\n\ncat(Col, [5, 6])\nyields [ 1, 3, 2, 4, 5, 6 ]\n\nfilter(Col, Col > 2)\nyields [3, 4]"
+              "Any column can have columns inside it, in a recursive way.\nHere is an example:\n\n```deci\n[[1, 2, 3], [4, 5]]\n```\n\nWe don't allow columns with mixed types.\nThis is an invalid column in Decipad:\n\n```deci\n[[1, 2, 3], [4, 5], [\"a\"]]\n```\n\nTo access and manipulate columns, you can use the `first`, `last`, `sort`, `unique`, `reverse`, 'cat`, `len`, `filter` and other functions.\n\nExample:\n\n```deci\nCol = [1, 3, 2, 4]\n```\n\n```deci\nlen(Col)\n```\n\nyields `4`\n\n```deci\nfirst(Col)\n```\n\nyields `1`\n\n```deci\nlast(Col)\n```\n\nyields `4`\n\n```deci\nsort(Col)\n```\n\nyields `[1, 2, 3, 4]`\n\n```deci\nunique(Col)\n```\n\nyields `[1, 3, 2, 4]`\n\n```deci\nreverse(Col)\n```\n\nyields `[4, 2, 3, 1]`\n\n```deci\ncat(Col, [5, 6])\n```\n\nyields `[ 1, 3, 2, 4, 5, 6 ]`\n\n```deci\nfilter(Col, Col > 2)\n```\nyields `[3, 4]`."
             ]
           },
           "status": "finished_successfully",
@@ -3153,7 +4500,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Decipad applies any operation to the nested columns recursively.\nExamples:\n\n[[1, 2, 3], [4, 5, 6]] + 2\nyields [ [ 3, 4, 5 ], [ 6, 7, 8 ] ]\n\nfirst([[1, 2, 3], [4, 5, 6]])\nyields [1, 4]\n\nThe exception can be `reverse`, where it's applied only to the first level of the column. Example:\n\nreverse([[1, 2, 3], [4, 5, 6]])\nyields [[4, 5, 6], [1, 2, 3]]"
+              "Decipad applies any operation to the nested columns recursively.\nExamples:\n\n```deci\n[[1, 2, 3], [4, 5, 6]] + 2\n```\n\nyields `[ [ 3, 4, 5 ], [ 6, 7, 8 ] ]`.\n\n```deci\nfirst([[1, 2, 3], [4, 5, 6]])\n```\n\nyields `[1, 4]`\n\nThe exception can be `reverse`, where it's applied only to the first level of the column. Example:\n\n```deci\nreverse([[1, 2, 3], [4, 5, 6]])\n```\n\nyields `[[4, 5, 6], [1, 2, 3]]`."
             ]
           },
           "status": "finished_successfully",
@@ -3305,7 +4652,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "`first[unknown, 1, 2, 3)` will yield `unknown`\n\n`sort([3, 2, unknown, 1])` will yield `[unknown, 1, 2, 3]`\n\n`len([1, 2, unknown, 4])` will yield `4`.\n\nThere are no functions to replace unknown, but you can filter a column to get rid of unknown values like this:\n\n```\nCol = [1, 2, unknown, 4, unknown]\nfilter(Col, Col != unknown)\n```\n\nwill yield `[1, 2, 4]`"
+              "`first[unknown, 1, 2, 3)` will yield `unknown`\n\n`sort([3, 2, unknown, 1])` will yield `[unknown, 1, 2, 3]`\n\n`len([1, 2, unknown, 4])` will yield `4`.\n\nThere are no functions to replace unknown, but you can filter a column to get rid of unknown values like this:\n\n```deci\nCol = [1, 2, unknown, 4, unknown]\nfilter(Col, Col != unknown)\n```\n\nwill yield `[1, 2, 4]`"
             ]
           },
           "status": "finished_successfully",
@@ -3356,7 +4703,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "A logical comparison operator works as other operators in Decipad.\n\nExamples:\n\n[1, 2, 3, 4] > 2\nwill yield [false, false, true, true]\n\n![true, false, true]\nwill yield [false, true, false]\n\n```\nCol = [1, 2, 3, 4, 5]\nfilter(Col, Col > 2 and Col < 5)\n```\nwill yield `[3, 4]`"
+              "A logical comparison operator works as other operators in Decipad.\n\nExamples:\n\n```deci\n[1, 2, 3, 4] > 2\n```\n\nwill yield `[false, false, true, true]`.\n\n```deci\n![true, false, true]\n```\n\nwill yield `[false, true, false]`.\n\n```deci\nCol = [1, 2, 3, 4, 5]\nfilter(Col, Col > 2 and Col < 5)\n```\n\nwill yield `[3, 4]`"
             ]
           },
           "status": "finished_successfully",
@@ -3407,7 +4754,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "if else control structures apply recursively in Decipad.\n\nExample:\n\n```\nCol = [1, 2, 3, 4, 5]\nif (Col > 2) then 1 else 2\n```\nwill yield `[ 2, 2, 1, 1, 1 ]`"
+              "Any `if then else` control structure applies recursively in Decipad.\n\nExample:\n\n```deci\nCol = [1, 2, 3, 4, 5]\nif (Col > 2) then 1 else 2\n```\n\nwill yield `[ 2, 2, 1, 1, 1 ]`"
             ]
           },
           "status": "finished_successfully",
@@ -3494,7 +4841,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about how dates are represented and handled in Decipad.\nAsk me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nI'd like to talk about how dates are represented and handled in Decipad.\nAsk me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -3545,7 +4892,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "they're a special data type.\nAs literals, they can be expressed by the `date` function like this:\n`date(2020)`\n`date(2020-10)`\n`date(2020-10-03)`\n`date(2020-10-03 18)`"
+              "Dates are special data type.\nAs literals, they can be expressed by the `date` function like this:\n`date(2020)`\n`date(2020-10)`\n`date(2020-10-03)`\n`date(2020-10-03 18)`"
             ]
           },
           "status": "finished_successfully",
@@ -3596,7 +4943,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "we can.\nFirst of all, Decipad each date has a specific granularity.\nThe granularity can be year, month, day, hour, minute, second or millisecond.\nYou can then add and subtract any time unit (hour, second, day, month, year) from any date, as long as the granularity allows it.\n\nFor instance, you can do:\n\n`date(2020) + 1 year`\n`date(2020-10) + 4 months`\n`date(2020-10-20) + 4 months`\n`date(2020-10-20) + 40 days`\n`date(2020-10-20 14:32) + 200 minutes`"
+              "We can.\nFirst of all, Decipad each date has a specific granularity.\nThe granularity can be year, month, day, hour, minute, second or millisecond.\nYou can then add and subtract any time unit (hour, second, day, month, year) from any date, as long as the granularity allows it.\n\nFor instance, you can do:\n\n`date(2020) + 1 year`\n`date(2020-10) + 4 months`\n`date(2020-10-20) + 4 months`\n`date(2020-10-20) + 40 days`\n`date(2020-10-20 14:32) + 200 minutes`"
             ]
           },
           "status": "finished_successfully",
@@ -4038,7 +5385,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nAsk me one question at a time."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language.\nAsk me one question at a time."
             ]
           },
           "status": "finished_successfully",
@@ -4140,7 +5487,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Decipad only has one number type and it\u2019s a fraction with arbitrary precision.\nOne interesting thing about Decipad numbers is that it allows you to use units with these numbers, giving them more context."
+              "Decipad only has one number type and it's a fraction with arbitrary precision.\nOne interesting thing about Decipad numbers is that it allows you to use units with these numbers, giving them more context."
             ]
           },
           "status": "finished_successfully",
@@ -4191,7 +5538,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "The unit part comes after the number literal.\nExamples:\n32 kilometers \n46 USD\n102 bananas\n\nThe units can also be composed:\n32 miles / minute \n46 USD per squaremeter\n102 bananas per year\n\nWhen using addition or subtraction, or any other operation that requires the same units on the arguments, Decipad can automatically auto-convert the arguments of compatible units.\n\nFor example, this is valid in Decipad:\n\n32 miles + 40 kilometers\n32 joules per minute - 40 calories per hour"
+              "The unit part comes after the number literal.\nExamples:\n`32 kilometers` \n`46 USD`\n`102 bananas`\n\nThe units can also be composed:\n`32 miles / minute` \n`46 USD per squaremeter`\n`102 bananas per year`\n\nWhen using addition or subtraction, or any other operation that requires the same units on the arguments, Decipad can automatically auto-convert the arguments of compatible units.\n\nFor example, this is valid in Decipad:\n\n`32 miles + 40 kilometers`\n`32 joules per minute - 40 calories per hour`"
             ]
           },
           "status": "finished_successfully",
@@ -4242,7 +5589,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "In Decipad a unit are the symbols right after the number.\nA user can convert between units using the `in` keyword like this:\n\n10 miles per hour in kilometres per second"
+              "In Decipad a unit are the symbols right after the number.\nA user can convert between units using the `in` keyword like this:\n\n`10 miles per hour in kilometres per second`."
             ]
           },
           "status": "finished_successfully",
@@ -4315,7 +5662,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Decipad knows most S.I. standard units.\nYou can also use custom units that Decipad knows nothing about, but then it can't convert them.\nA user can also add user units like this:\n\nfeathers = 2 grams\n\nThen the user can convert:\n\n10 kilograms in feathers"
+              "Decipad knows most S.I. standard units.\nYou can also use custom units that Decipad knows nothing about, but then it can't convert them.\nA user can also add user units like this:\n\n```deci\nfeathers = 2 grams\n```\n\nThen the user can convert:\n\n```deci\n10 kilograms in feathers\n```"
             ]
           },
           "status": "finished_successfully",
@@ -4468,7 +5815,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "all Decipad built-in functions that handle numbers automatically accept units and propagate them across operations."
+              "All Decipad built-in functions that handle numbers automatically accept units and propagate them across operations."
             ]
           },
           "status": "finished_successfully",
@@ -4621,7 +5968,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "For standard units, Decipad recognises these prefixes and adds this information to the unit. Behind the scenes, a unit has a multiplier (1, 10, 100, 1000, ..., -10, -100, -1000, etc.)"
+              "For standard units, Decipad recognizes these prefixes and adds this information to the unit. Behind the scenes, a unit has a multiplier (1, 10, 100, 1000, ..., -10, -100, -1000, etc.)"
             ]
           },
           "status": "finished_successfully",
@@ -4672,7 +6019,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "with non-standard units, the full name of the unit is used as given to the user.\n\nFor instance, `10 kiwis` is NOT `10000 iwis`"
+              "With non-standard units, the full name of the unit is used as given to the user.\n\nFor instance, `10 kiwis` is NOT `10000 iwis`"
             ]
           },
           "status": "finished_successfully",
@@ -4723,7 +6070,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "yes, it allows for that (like JavaScript), and uses the same precedence as JavaScript."
+              "Yes, it allows for that (like JavaScript), and uses the same precedence as JavaScript."
             ]
           },
           "status": "finished_successfully",
@@ -5160,7 +6507,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "If want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language."
+              "You told me you want to learn a language named Decipad. Ask me questions about this language so you can better understand how to generate code for this language."
             ]
           },
           "status": "finished_successfully",
@@ -5259,7 +6606,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Syntatically Decipad is very similar to JavaScript, but it doesn't use semi-colons.\nOne single global context (except for column formulas)\nVariables can be assigned using the `=` sign. Example: `A = 42`.\nValues can be strings, numbers, booleans, dates, ranges and sequences.\nA number can have units. Example: `42 miles per minute`.\nA string needs to be enclosed in `\"`."
+              "Syntactically Decipad is very similar to JavaScript, but it doesn't use semi-colons.\nOne single global context (except for column formulas)\nVariables can be assigned using the `=` sign. Example: `A = 42`.\nValues can be strings, numbers, booleans, dates, ranges or sequences.\nA number can have units. Example: `42 miles per minute`.\nA string needs to be enclosed in `\"`."
             ]
           },
           "status": "finished_successfully",
@@ -5309,7 +6656,9 @@
           "update_time": null,
           "content": {
             "content_type": "text",
-            "parts": ["Example: `FunctionName(arg1, arg2) = arg1 + arg2`"]
+            "parts": [
+              "Example:\n\n```deci\n`FunctionName(arg1, arg2) = arg1 + arg2`\n```"
+            ]
           },
           "status": "finished_successfully",
           "end_turn": null,
@@ -5512,7 +6861,7 @@
           "content": {
             "content_type": "text",
             "parts": [
-              "Decipad has tables. A table has columns and each column has values.\nAll values in one column must be of the same type.\nHere is an example of a table:\n```\nTable1 = {\n  Column1: [1, 2, 3]\n  Column2: [true, false, true]\n}\n```"
+              "Decipad has tables. A table has columns and each column has values.\nAll values in one column must be of the same type.\nHere is an example of a table:\n```deci\nTable1 = {\n  Column1: [1, 2, 3]\n  Column2: [true, false, true]\n}\n```"
             ]
           },
           "status": "finished_successfully",
