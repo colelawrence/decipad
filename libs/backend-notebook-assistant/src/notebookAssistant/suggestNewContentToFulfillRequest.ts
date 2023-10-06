@@ -1,5 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
+import stringify from 'json-stringify-safe';
+import {
+  ChatCompletionCreateParamsNonStreaming,
+  ChatCompletionMessage,
+} from 'openai/resources/chat';
 import {
   AnyElement,
   Document,
@@ -7,16 +12,11 @@ import {
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
+import { codeAssistant } from '@decipad/backend-code-assistant';
+import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import { debug } from '../debug';
 import { introTemplate, afterBlocksTemplate, schema } from '../config';
 import { getOpenAI } from '../utils/openAi';
-import {
-  ChatCompletionCreateParamsNonStreaming,
-  ChatCompletionMessage,
-} from 'openai/resources/chat';
-import { codeAssistant } from '../codeAssistant/codeAssistant';
-import stringify from 'json-stringify-safe';
-import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import { createComputationalSummary } from '../utils/createComputationalSummary';
 import { parseJSONResponse } from '../utils/parseJSONResponse';
 import { applyCommands } from '../utils/applyCommands';
@@ -273,10 +273,10 @@ No comments.
         }
       ).description;
       debug('code prompt: %j', codePrompt);
-      const codeSnippet = await codeAssistant(
-        createComputationalSummary(content),
-        codePrompt
-      );
+      const codeSnippet = await codeAssistant({
+        summary: createComputationalSummary(content),
+        prompt: codePrompt,
+      });
       debug('code snippet:', codeSnippet);
       if (codeSnippet) {
         messages.push({

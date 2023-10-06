@@ -153,6 +153,9 @@
       "@decipad/backend-notebook-assistant": [
         "libs/backend-notebook-assistant/src/index.ts"
       ],
+      "@decipad/backend-code-assistant": [
+        "libs/backend-code-assistant/src/index.ts"
+      ],
       "@decipad/backend-notebook-content": [
         "libs/backend-notebook-content/src/index.ts"
       ],

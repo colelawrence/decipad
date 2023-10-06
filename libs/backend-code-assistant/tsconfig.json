@@ -5,13 +5,9 @@
     "lib": ["esnext"]
   },
   "references": [
-    { "path": "../backendtypes" },
-    { "path": "../tables" },
-    { "path": "../backend-config" },
     { "path": "../editor-types" },
     { "path": "../doc-verbalizer" },
-    { "path": "../backend-notebook-content" },
-    { "path": "../backend-code-assistant" },
+    { "path": "../backend-config" },
     { "path": "../computer" }
   ]
 }

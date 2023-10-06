@@ -1,0 +1,63 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "🕯Starting a Candle Business"
+        }
+      ],
+      "type": "h1",
+      "id": "3JTr-B84cKMnNOYnvHiFi"
+    },
+    {
+      "children": [
+        {
+          "id": "p3e90dsjad39dsamn",
+          "children": [
+            {
+              "text": "OfficeArea"
+            }
+          ],
+          "type": "structured_varname"
+        },
+        {
+          "children": [
+            {
+              "text": "32 squaremeters"
+            }
+          ],
+          "id": "powehfowbe389dns",
+          "type": "code_line_v2_code"
+        }
+      ],
+      "showResult": true,
+      "id": "FDSffDfa3refdsFsdf",
+      "type": "code_line_v2"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "MonthlyRentCost"
+            }
+          ],
+          "id": "1dkfnsddsfhef3",
+          "type": "structured_varname"
+        },
+        {
+          "children": [
+            {
+              "text": "30 USD per squaremeter / month"
+            }
+          ],
+          "id": "olj2e0wqwdsksdl",
+          "type": "code_line_v2_code"
+        }
+      ],
+      "showResult": true,
+      "id": "fjsdfdofsd3-e3dsdcj",
+      "type": "code_line_v2"
+    }
+  ]
+}

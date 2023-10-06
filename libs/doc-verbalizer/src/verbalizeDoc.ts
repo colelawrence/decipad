@@ -27,11 +27,14 @@ const verbalizeOneNode = (node: MyNode): string => {
       return node.lastSeenVariableName ?? getNodeString(node);
     }
     const v = getVerbalizer(node);
-    return v != null
-      ? v(node, verbalizeOneNode)
-      : node.children.map(verbalizeOneNode).join('');
+    const result =
+      v != null
+        ? v(node, verbalizeOneNode)
+        : node.children.map(verbalizeOneNode).join('');
+    return result;
   }
-  return getNodeString(node);
+  const result = getNodeString(node);
+  return result;
 };
 
 const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
