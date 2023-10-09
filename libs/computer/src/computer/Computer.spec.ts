@@ -621,7 +621,16 @@ it('can list tables and columns', async () => {
     Array [
       Object {
         "blockId": "block-0_0",
+        "blockType": Object {
+          "cellType": Object {
+            "kind": "number",
+            "unit": null,
+          },
+          "indexedBy": "exprRef_block_0",
+          "kind": "column",
+        },
         "columnName": "A",
+        "readableTableName": "table",
         "result": Object {
           "type": Object {
             "cellType": Object {
@@ -644,7 +653,15 @@ it('can list tables and columns', async () => {
       },
       Object {
         "blockId": "block-0_1",
+        "blockType": Object {
+          "cellType": Object {
+            "kind": "string",
+          },
+          "indexedBy": "exprRef_block_0",
+          "kind": "column",
+        },
         "columnName": "B",
+        "readableTableName": "table",
         "result": Object {
           "type": Object {
             "cellType": Object {
@@ -661,7 +678,16 @@ it('can list tables and columns', async () => {
       },
       Object {
         "blockId": "block-1",
+        "blockType": Object {
+          "cellType": Object {
+            "date": "day",
+            "kind": "date",
+          },
+          "indexedBy": "exprRef_block_0",
+          "kind": "column",
+        },
         "columnName": "C",
+        "readableTableName": "table",
         "result": Object {
           "type": Object {
             "cellType": Object {

@@ -212,14 +212,21 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
             ? element.selectedColumn === `${c.tableName}.${c.columnName}`
             : true
         )
-        .map((c) => ({
-          group: 'Table column',
-          item: `${c.tableName}.${c.columnName}`,
-          coherceToType: c.result.type.cellType,
-          type: 'column',
-          focused: element.selectedColumn === `${c.tableName}.${c.columnName}`,
-          icon: <icons.TableSmall />,
-        })),
+        .map((c) => {
+          const itemName = c.readableTableName
+            ? `${c.readableTableName}.${c.columnName}`
+            : `${c.tableName}.${c.columnName}`;
+          return {
+            group: 'Table column',
+            item: `${c.tableName}.${c.columnName}`,
+            itemName,
+            coherceToType: c.result.type.cellType,
+            type: 'column',
+            focused:
+              element.selectedColumn === `${c.tableName}.${c.columnName}`,
+            icon: <icons.TableSmall />,
+          };
+        }),
       ...(colValues
         ? uniqBy(
             [
@@ -237,24 +244,13 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
     ];
   }, [element.selectedColumn, materializedColumns]);
 
-  return useMemo(
-    () => ({
-      dropdownOpen,
-      setDropdownOpen,
-      dropdownIds: [...dropdownIds, ...otherItems],
-      addOption,
-      removeOption,
-      editOption,
-      execute,
-    }),
-    [
-      addOption,
-      dropdownIds,
-      dropdownOpen,
-      editOption,
-      execute,
-      otherItems,
-      removeOption,
-    ]
-  );
+  return {
+    dropdownOpen,
+    setDropdownOpen,
+    dropdownIds: element.smartSelection ? otherItems : dropdownIds,
+    addOption,
+    removeOption,
+    editOption,
+    execute,
+  };
 };

@@ -451,6 +451,8 @@ export class Computer {
       Object.values(results.blockResults)
         // eslint-disable-next-line complexity
         .flatMap((b) => {
+          let readableTableName = this.getSymbolDefinedInBlock(b.id);
+          const blockType = b.result?.type;
           if (b.type === 'computer-result') {
             if (isTableResult(b.result)) {
               if (filterForBlockId && b.id !== filterForBlockId) {
@@ -477,8 +479,10 @@ export class Computer {
                     const tableName = this.getSymbolDefinedInBlock(b.id);
                     return {
                       tableName: tableName ?? 'unnamed',
+                      readableTableName,
                       columnName,
                       result,
+                      blockType,
                     };
                   }
                 );
@@ -509,8 +513,10 @@ export class Computer {
                     } as Result.Result<'column'>;
                     return {
                       tableName,
+                      readableTableName,
                       columnName,
                       result,
+                      blockType,
                     };
                   }
                 );
@@ -523,6 +529,8 @@ export class Computer {
               }
 
               const tableName = getIdentifierString(statement.args[0]);
+              const blockId = this.getVarBlockId(tableName);
+              readableTableName = this.getSymbolDefinedInBlock(blockId ?? '');
               if (filterForBlockId) {
                 const blockId = this.getVarBlockId(tableName);
                 if (blockId !== filterForBlockId) {
@@ -533,9 +541,11 @@ export class Computer {
               return [
                 {
                   tableName,
+                  readableTableName,
                   columnName,
                   result: b.result as Result.Result<'column'>,
                   blockId: b.id,
+                  blockType,
                 },
               ];
             }

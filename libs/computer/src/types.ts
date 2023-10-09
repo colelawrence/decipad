@@ -1,4 +1,4 @@
-import type { AST, Parser, Result } from '@decipad/language';
+import type { AST, Parser, Result, SerializedType } from '@decipad/language';
 import type { AnyMapping } from '@decipad/utils';
 import type { BehaviorSubject } from 'rxjs';
 import type { VisibleVariables } from './computer/getVisibleVariables';
@@ -90,6 +90,8 @@ export interface ColumnDesc {
   columnName: string;
   result: Result.Result<'column'>;
   blockId?: string;
+  readableTableName?: string;
+  blockType?: SerializedType;
 }
 
 export interface TableDesc {
@@ -99,9 +101,11 @@ export interface TableDesc {
 
 export interface MaterializedColumnDesc {
   tableName: string;
+  readableTableName?: string;
   columnName: string;
   result: Result.Result<'materialized-column'>;
   blockId?: string;
+  blockType?: SerializedType;
 }
 
 export interface DimensionExplanation {

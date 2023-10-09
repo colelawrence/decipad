@@ -61,6 +61,7 @@ export type SelectItemTypes = 'column';
 export interface SelectItems {
   index?: number;
   item: string;
+  itemName?: string;
   group?: string;
   blockId?: string;
   type?: SelectItemTypes;
@@ -98,15 +99,6 @@ export const SelectItem: FC<SelectItemProps> = ({
   const [newValue, setNewValue] = useState(item.item);
   const [editing, setEditing] = useState(false);
   const [editingError, setEditingError] = useState(false);
-
-  const formatItem = (itemElem: SelectItems) => {
-    if (itemElem.type === 'column') {
-      const parsedItem = itemElem.item.split('.');
-      return parsedItem.length > 1 ? parsedItem[1] : parsedItem[0];
-    }
-
-    return itemElem.item;
-  };
 
   const keydown = useCallback(
     (event: KeyboardEvent) => {
@@ -170,7 +162,7 @@ export const SelectItem: FC<SelectItemProps> = ({
         }}
       >
         {item.icon && <div css={itemIconStyles}>{item.icon}</div>}
-        <span css={textStyles}>{formatItem(item)}</span>
+        <span css={textStyles}>{item.itemName ?? item.item}</span>
       </div>
       {isEditAllowed && (
         <aside css={[iconWrapper]}>

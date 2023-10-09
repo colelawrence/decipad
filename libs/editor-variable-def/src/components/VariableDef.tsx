@@ -107,7 +107,7 @@ export const VariableDef: PlateComponent = ({
           !(element as VariableDropdownElement).children[1].smartSelection
         );
         onChangeTypeMutator({
-          kind: 'number',
+          kind: element.coerceToType?.kind,
           unit: null,
         });
       } else {
@@ -180,7 +180,11 @@ export const VariableDef: PlateComponent = ({
           }
           color={color as AvailableSwatchColor}
           readOnly={readOnly}
-          type={element.coerceToType ?? inferredType}
+          type={
+            element.variant === 'dropdown'
+              ? inferredType
+              : element.coerceToType ?? inferredType
+          }
           onChangeType={onChangeType}
           value={getNodeString(element.children[1])}
           onChangeValue={onChangeValue}
