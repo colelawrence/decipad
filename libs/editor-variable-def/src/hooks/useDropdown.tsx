@@ -53,6 +53,13 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
     'useDropdown'
   );
 
+  const onChangeTypeMutator = usePathMutatorCallback(
+    editor,
+    path?.slice(-1), // the parent (VariableDef)
+    'coerceToType',
+    'VariableDef'
+  );
+
   const addOption = useCallback(
     (newOption: string) => {
       elementChangeOptions([
@@ -127,6 +134,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         elementChangeColumn(
           element.selectedColumn === option.item ? undefined : option.item
         );
+        onChangeTypeMutator(option.coherceToType);
       } else {
         if (selected === option.item) {
           changeOptions('Select');
@@ -145,12 +153,13 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
       }
     },
     [
-      changeOptions,
-      selected,
       elementChangeColumn,
       element.selectedColumn,
+      onChangeTypeMutator,
+      selected,
       userEvents,
       readOnly,
+      changeOptions,
     ]
   );
 
@@ -206,7 +215,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         .map((c) => ({
           group: 'Table column',
           item: `${c.tableName}.${c.columnName}`,
-          // blockId: c.blockId,
+          coherceToType: c.result.type.cellType,
           type: 'column',
           focused: element.selectedColumn === `${c.tableName}.${c.columnName}`,
           icon: <icons.TableSmall />,

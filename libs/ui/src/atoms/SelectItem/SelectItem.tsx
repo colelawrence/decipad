@@ -7,6 +7,7 @@ import { cssVar, p14Medium } from '../../primitives';
 import { Edit, Trash } from '../../icons';
 import { DropdownOption } from '../../molecules';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import { CellValueType } from '@decipad/editor-types';
 
 const wrapper = css({
   width: '100%',
@@ -63,6 +64,7 @@ export interface SelectItems {
   group?: string;
   blockId?: string;
   type?: SelectItemTypes;
+  coherceToType?: CellValueType;
   icon?: ReactNode;
 }
 

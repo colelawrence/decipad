@@ -1,8 +1,11 @@
-import { ELEMENT_VARIABLE_DEF } from '@decipad/editor-types';
-import { AST, Program, getExprRef } from '@decipad/computer';
+import {
+  ELEMENT_VARIABLE_DEF,
+  VariableDropdownElement,
+} from '@decipad/editor-types';
+import { AST, Computer, Program, getExprRef } from '@decipad/computer';
 import { getNodeString } from '@udecode/plate';
 import { assertElementType } from '@decipad/editor-utils';
-import { inferType } from '@decipad/parse';
+import { inferType, parseCell } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../types';
@@ -25,8 +28,7 @@ export const VariableDef: InteractiveLanguageElement = {
       if (
         element.variant === 'expression' ||
         element.variant === 'date' ||
-        element.variant === 'toggle' ||
-        element.variant === 'dropdown'
+        element.variant === 'toggle'
       ) {
         const { type, coerced } = await inferType(computer, expression, {
           type: element.coerceToType,
@@ -39,44 +41,82 @@ export const VariableDef: InteractiveLanguageElement = {
         } else {
           expression = coerced || '';
         }
-        if (element.variant === 'dropdown') {
-          const dropdownVariable = parseElementAsVariableAssignment(
-            id,
-            variableName,
-            expression
-          );
-          // TODO: Refactor this part into function.
-          const dropdownOptions = await Promise.all(
-            element.children[1].options.map(async (option) => {
-              let dropdownExpression: string | AST.Expression;
-              const dropdownType = await inferType(computer, option.value, {
-                type: element.coerceToType,
-              });
-              if (
-                dropdownType.type.kind === 'anything' ||
-                dropdownType.type.kind === 'nothing'
-              ) {
-                dropdownExpression = {
-                  type: 'noop',
-                  args: [],
-                };
-              } else {
-                dropdownExpression = getDefined(dropdownType.coerced);
-              }
-              return parseElementAsVariableAssignment(
-                option.id,
-                getExprRef(option.id),
-                dropdownExpression,
-                true, // isArtificial
-                id // origin block id
-              );
-            })
-          );
-          return [...dropdownVariable, ...dropdownOptions.flat()];
-        }
+      } else if (element.variant === 'dropdown') {
+        return parseDropdown(computer, element);
       }
 
       return parseElementAsVariableAssignment(id, variableName, expression);
     }
   ),
 };
+
+/**
+ * A normal dropdown widget.
+ */
+async function parseDropdown(
+  computer: Computer,
+  element: VariableDropdownElement
+): Promise<Program> {
+  const [name, expression] = element.children.map((c) => getNodeString(c));
+
+  const parsedOptions = await parseDropdownOptions(computer, element);
+
+  let parsedInput: AST.Expression | Error | null = null;
+  try {
+    parsedInput = await parseCell(
+      computer,
+      element.coerceToType ?? {
+        kind: 'number',
+        unit: null,
+      },
+      expression
+    );
+  } catch (err) {
+    // do nothing
+  }
+
+  if (!(parsedInput instanceof Error || parsedInput == null)) {
+    return [
+      ...parseElementAsVariableAssignment(element.id, name, parsedInput),
+      ...parsedOptions,
+    ];
+  }
+
+  return [];
+}
+
+async function parseDropdownOptions(
+  computer: Computer,
+  element: VariableDropdownElement
+): Promise<Program> {
+  const [, dropdown] = element.children;
+
+  const dropdownOptions = await Promise.all(
+    dropdown.options.map(async (option) => {
+      let dropdownExpression: string | AST.Expression;
+      const dropdownType = await inferType(computer, option.value, {
+        type: element.coerceToType,
+      });
+      if (
+        dropdownType.type.kind === 'anything' ||
+        dropdownType.type.kind === 'nothing'
+      ) {
+        dropdownExpression = {
+          type: 'noop',
+          args: [],
+        };
+      } else {
+        dropdownExpression = getDefined(dropdownType.coerced);
+      }
+      return parseElementAsVariableAssignment(
+        option.id,
+        getExprRef(option.id),
+        dropdownExpression,
+        true, // isArtificial
+        element.id // origin block id
+      );
+    })
+  );
+
+  return dropdownOptions.flat();
+}
