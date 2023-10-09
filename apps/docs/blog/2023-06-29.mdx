@@ -1,10 +1,10 @@
 ---
-title: 'Weekly Roundup June 29'
+title: 'Update June 29'
 tags: [Fixed and Improved]
 hide_table_of_contents: true
 ---
 
-import {Stars, Hammer, FancyTitle} from '@site/src/components/FancyTitle';
+import { Stars, Hammer, FancyTitle } from '@site/src/components/FancyTitle';
 import { ReleasePost } from '@site/src/components/ReleasePost';
 
 <ReleasePost>
@@ -14,26 +14,30 @@ import { ReleasePost } from '@site/src/components/ReleasePost';
 We're planning an upgrade to the language engine on **July 6th**. <br/>This upgrade may have an impact on some of your existing work and is essential to unlock enhanced flexibility for modeling in the future.
 
 Here are the features that may be affected by this upgrade:
+
 - References to columns which share the same name as a global variable.
 - Any calculations, charts or data views that rely on these results.
 
 If any notebooks break due to the upgrade, our support team is ready to assist you. Just reach out to us at support@decipad.com or click the help button on the bottom corner of your notebook.
 
-<br/>
+<br />
 
 ### <FancyTitle icon={Hammer}>Fixes and Improvements</FancyTitle>
 
 - **Charts Improvements**:
+
   - **Improved Settings Menu**: Optimized the settings menu to occupy less space in your notebook.
   - **New Chart Captions**: Added captions field so you can provide context for visualizations.
   - **Fixed Scatter and Line Charts**: Scatter and line charts that rely on series now display plots instead of empty grids.
 
 - **Tables Improvements**:
+
   - **Enhanced Formulas Drawer**: Improved the formulas drawer to ensure consistent variable names with the bubbles throughout the notebook.
   - **Resolved Empty Column Formulas**: Fixed an issue where empty column formulas would display errors.
   - **Fixed Formulas on Columns**: Formulas on columns now work correctly for all rows, not just the first row.
 
 - **Data Views Improvements**:
+
   - **Updated Data View Icons**: Enhanced the appearance of icons for data view controls.
   - **Fixed Reordering Data View Columns**: Buttons now function properly when reordering data view columns.
 
