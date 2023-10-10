@@ -1,8 +1,9 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
 import cloneDeep from 'lodash.clonedeep';
-import { BaseEditor, BaseSelection, Node, Path, createEditor } from 'slate';
+import { BaseEditor, BaseSelection, Element, Path, createEditor } from 'slate';
 import { nanoid } from 'nanoid';
 import { createContext, useEffect, useState } from 'react';
 import { Subject } from 'rxjs';
@@ -14,7 +15,6 @@ import {
   ELEMENT_PARAGRAPH,
   TDescendant,
   TEditor,
-  TElement,
   TOperation,
   getNode,
   insertNodes,
@@ -39,6 +39,7 @@ import { noop } from '@decipad/utils';
 
 const INITIAL_TAB_NAME = 'Tab';
 const INITIAL_TITLE = 'Welcome to Decipad!';
+const PLACEHOLDER_ID = 'placeholder_id';
 
 /**
  * Editor Controller Class
@@ -118,7 +119,7 @@ export class EditorController {
 
     const titleEl: TitleElement = {
       type: ELEMENT_TITLE,
-      id: 'placeholder_id - if you see this = bug',
+      id: PLACEHOLDER_ID,
       get children() {
         return (editor.children[0] as TitleElement).children;
       },
@@ -255,6 +256,9 @@ export class EditorController {
    * - Applying operatons from docsync to individual editors
    */
   public apply(op: TOperation): void {
+    // Skip this function, go straight to above.
+    if (op.TO_REMOTE) return;
+
     // ==== Migration ====
     if (
       op.type === 'insert_node' &&
@@ -271,7 +275,12 @@ export class EditorController {
     if (op.type !== 'set_selection' && op.path.length === 1) {
       // This must be an operation on tab level.
 
-      if (op.type === 'insert_node' && op.node.type === ELEMENT_TITLE) {
+      if (
+        op.type === 'insert_node' &&
+        op.node.type === ELEMENT_TITLE &&
+        this.TitleEditor.children.length === 0 &&
+        Element.isElement(op.node)
+      ) {
         this.TitleEditor.withoutNormalizing(() => {
           this.TitleEditor.children = [op.node];
         });
@@ -281,7 +290,7 @@ export class EditorController {
 
         this.TitleEditor.onChange();
         this.onChange();
-      } else if (op.type === 'insert_node') {
+      } else if (op.type === 'insert_node' && op.node.type === ELEMENT_TAB) {
         // Inserting a tab.
 
         const node = op.node as unknown as TabElement;
@@ -494,6 +503,7 @@ export class EditorController {
       path: [this.children.length],
       node: {
         type: ELEMENT_TAB,
+        name: 'New tab',
         id,
         children: [
           {
@@ -576,6 +586,22 @@ export class EditorController {
     this.apply(changeIcon);
   }
 
+  private Normalize(): void {
+    if (this.children[0].id === PLACEHOLDER_ID) {
+      // We never inserted a title to the notebook.
+      // We have the placeholder title.
+      this.apply({
+        type: 'insert_node',
+        path: [0],
+        node: {
+          type: ELEMENT_TITLE,
+          id: nanoid(),
+          children: [{ text: INITIAL_TITLE }],
+        } satisfies TitleElement,
+      });
+    }
+  }
+
   /**
    * To be used after docsync does all the initial `apply` calls.
    *
@@ -615,21 +641,27 @@ export class EditorController {
       }
 
       if (title.type === ELEMENT_H1) {
-        this.TitleEditor.insertNodes({
-          type: ELEMENT_TITLE,
-          id: title.id,
-          children: [{ text: title.children[0].text }],
-        } as Node);
+        this.apply({
+          type: 'insert_node',
+          path: [0],
+          node: {
+            type: ELEMENT_TITLE,
+            id: title.id,
+            children: [{ text: title.children[0].text }],
+          } as TitleElement,
+        });
         this.OldNodes.shift();
       }
 
       this.CreateTab();
 
       const editor = this.SubEditors[0];
-      insertNodes(editor, this.OldNodes as unknown as TElement[], { at: [0] });
+      insertNodes(editor, this.OldNodes as any, { at: [0] });
 
       this.OldNodes = [];
     }
+
+    this.Normalize();
   }
 }
 

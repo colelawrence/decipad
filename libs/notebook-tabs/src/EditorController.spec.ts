@@ -900,6 +900,18 @@ describe('Migrating old documents into tabs', () => {
     expect(controller.children[0].type).toBe(ELEMENT_TITLE);
     expect(controller.children[1].type).toBe(ELEMENT_TAB);
 
+    expect(controller.children[0]).toMatchInlineSnapshot(`
+      Object {
+        "children": Array [
+          Object {
+            "text": "How rich would you be if you invested in bitcoin",
+          },
+        ],
+        "id": "h1Id",
+        "type": "title",
+      }
+    `);
+
     // Really just making sure
     expect(
       controller.children[1].children.some(
@@ -942,5 +954,110 @@ describe('Tab Operations', () => {
 
     expect(controller.children.find((c) => c.id === id)).toBeUndefined();
     expect(controller.SubEditors.find((c) => c.id === id)).toBeUndefined();
+  });
+});
+
+describe('Tests normalizer for tabs', () => {
+  it('First title is not overriden', () => {
+    const controller = new EditorController('id', []);
+    controller.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: ELEMENT_TITLE,
+        id: '1',
+        children: [{ text: 'first title' }],
+      } satisfies TitleElement,
+    });
+    controller.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: ELEMENT_TITLE,
+        id: '2',
+        children: [{ text: 'second title' }],
+      } satisfies TitleElement,
+    });
+
+    expect(controller.children).toMatchObject([
+      {
+        type: ELEMENT_TITLE,
+        id: '1',
+        children: [{ text: 'first title' }],
+      },
+    ]);
+  });
+
+  it('Spams insert titles and tabs', () => {
+    const controller = new EditorController('id', []);
+
+    for (let i = 0; i < 50; i += 2) {
+      controller.apply({
+        type: 'insert_node',
+        path: [0],
+        node: {
+          type: ELEMENT_TITLE,
+          id: i.toString(),
+          children: [{ text: `Title: ${i}` }],
+        } satisfies TitleElement,
+      });
+
+      controller.apply({
+        type: 'insert_node',
+        path: [0],
+        node: {
+          type: ELEMENT_TAB,
+          id: (i + 1).toString(),
+          name: `Tab: ${i + 1}`,
+          children: [],
+        } satisfies TabElement,
+      });
+    }
+
+    // 25 tabs + 1 title.
+    expect(controller.children).toHaveLength(26);
+    expect(
+      controller.children.map((c) => c.type).filter((c) => c === 'title')
+    ).toHaveLength(1);
+    expect(
+      controller.children.map((c) => c.type).filter((c) => c === 'tab')
+    ).toHaveLength(25);
+  });
+
+  it('always adds title', () => {
+    const controller = new EditorController('id', []);
+    controller.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: ELEMENT_TAB,
+        id: '1',
+        name: 'Tab',
+        children: [],
+      } satisfies TabElement,
+    });
+
+    controller.Loaded();
+
+    expect(controller.children).toHaveLength(2);
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "Welcome to Decipad!",
+            },
+          ],
+          "id": "10",
+          "type": "title",
+        },
+        Object {
+          "children": Array [],
+          "id": "1",
+          "name": "Tab",
+          "type": "tab",
+        },
+      ]
+    `);
   });
 });
