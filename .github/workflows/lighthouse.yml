@@ -55,7 +55,7 @@ jobs:
       - name: Notify
         uses: nobrayner/discord-webhook@v1
         with:
-          title: "${{ needs.lighthouse.result == 'success' && '💚' || '🔴'}} Lighthouse"
+          title: "${{ needs.lighthouse.result == 'success' && '💚' || needs.lighthouse.result == 'cancelled' &&  '🗑️' || '🔴'}} Lighthouse"
           description: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           github-token: ${{ secrets.github_token }}
           avatar-url: "https://singlecolorimage.com/get/${{ needs.lighthouse.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
