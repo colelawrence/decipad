@@ -373,7 +373,7 @@
     "@nx/workspace": "16.8.0",
     "@percy/cli": "^1.27.0",
     "@percy/playwright": "^1.0.4",
-    "@sentry/webpack-plugin": "^2.7.0",
+    "@sentry/webpack-plugin": "^2.8.0",
     "@storybook/addon-a11y": "7.4.0",
     "@storybook/addon-mdx-gfm": "7.4.0",
     "@storybook/core": "6.5.16",

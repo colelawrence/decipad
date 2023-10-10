@@ -8394,12 +8394,12 @@
     "@sentry/utils" "7.69.0"
     tslib "^2.4.1 || ^1.9.3"
 
-"@sentry/bundler-plugin-core@2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.7.0.tgz#6a6e2ac14646b92c932dfa46a7ea9a719782c6a3"
-  integrity sha512-ZxJG/DsRXJ9BMaKv+butL3TaiHsuuUy1bNkl56/FCbCt1rYuzltEPT2cBuuveieg66ZWtzerSF17QX3v6svtJQ==
+"@sentry/bundler-plugin-core@2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@sentry/bundler-plugin-core/-/bundler-plugin-core-2.8.0.tgz#e01df24d7f909277f453844132b856ed997c182b"
+  integrity sha512-DsTUgeKPqck3DkGzKjRduhPpEn0pez+/THF3gpwQBEfbPnKGr0EYugDvfungZwBFenckIvQBDTOZw0STvbgChA==
   dependencies:
-    "@sentry/cli" "^2.20.1"
+    "@sentry/cli" "^2.21.2"
     "@sentry/node" "^7.60.0"
     "@sentry/utils" "^7.60.0"
     dotenv "^16.3.1"
@@ -8408,10 +8408,10 @@
     magic-string "0.27.0"
     unplugin "1.0.1"
 
-"@sentry/cli@^2.20.1":
-  version "2.20.4"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.20.4.tgz#755719aeaa58dbd3910ee23cc020decc16f5a5bf"
-  integrity sha512-mycBCKQmLdaJpSKpXc3IXrQwb5HLxrdjgJgLGbb8saFHIkXl/1ePH171j+REq4dIP1uetu0bdDgEYj6AQjkleQ==
+"@sentry/cli@^2.21.2":
+  version "2.21.2"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-2.21.2.tgz#89e5633ff48a83d078c76c6997fffd4b68b2da1c"
+  integrity sha512-X1nye89zl+QV3FSuQDGItfM51tW9PQ7ce0TtV/12DgGgTVEgnVp5uvO3wX5XauHvulQzRPzwUL3ZK+yS5bAwCw==
   dependencies:
     https-proxy-agent "^5.0.0"
     node-fetch "^2.6.7"
@@ -8505,12 +8505,12 @@
     "@sentry/types" "7.69.0"
     tslib "^2.4.1 || ^1.9.3"
 
-"@sentry/webpack-plugin@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-2.7.0.tgz#3a350f190918c05ad13f585c57fbcae3d79c6708"
-  integrity sha512-RN/Z72P2rNPiNsnH2OCHx3rOSDZa/HDLKUUMn2QO//kkTZS/Iu0HCNgCg1Ik5Z6evxtPC0bPhWo9aBksKaXDbg==
+"@sentry/webpack-plugin@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-2.8.0.tgz#d806dc88c00f946e0cb0d0f5a32f7fded15bb0a3"
+  integrity sha512-DO+5qfLaSdcNOAwunSy8L11J4OYQbTLANKWTIRnFCAjx54waW0Pu2c/iRpUdor66LtYq9M5JMzH73gKewMYBYA==
   dependencies:
-    "@sentry/bundler-plugin-core" "2.7.0"
+    "@sentry/bundler-plugin-core" "2.8.0"
     unplugin "1.0.1"
     uuid "^9.0.0"
 
