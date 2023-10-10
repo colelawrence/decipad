@@ -1,7 +1,7 @@
 import { EditorBlock, EditorTitle } from '@decipad/ui';
-import { FC } from 'react';
-import { BaseEditor, Descendant, Text } from 'slate';
-import { Editable, ReactEditor, Slate } from 'slate-react';
+import { FC, KeyboardEvent, useMemo } from 'react';
+import { BaseEditor, BaseText, Descendant, Text } from 'slate';
+import { Editable, ReactEditor, RenderElementProps, Slate } from 'slate-react';
 
 interface TitleEditorProps {
   tab: string | undefined;
@@ -16,35 +16,58 @@ export const TitleEditor: FC<TitleEditorProps> = ({
   initialValue,
   readOnly,
 }) => {
+  const onKeyDown = useMemo(() => onKeyDownCurried(editor), [editor]);
+
   return (
     <Slate key={tab} editor={editor} initialValue={initialValue}>
       <Editable
         readOnly={readOnly}
+        onKeyDown={onKeyDown}
         renderElement={(props) => {
-          if (!('type' in props.element))
-            throw new Error('type should be present');
-          if (props.element.type) {
-            const leaf = props.element.children[0];
-            if (!Text.isText(leaf)) throw new Error('Was expecting text');
-            return (
-              <EditorBlock
-                {...props.attributes}
-                blockKind="title"
-                data-testId="notebook-title"
+          const leaf = getLeaf(props);
+          return (
+            <EditorBlock
+              {...props.attributes}
+              blockKind="title"
+              data-testId="notebook-title"
+            >
+              <EditorTitle
+                placeholder={
+                  leaf.text.length === 0 ? 'My Notebook Title' : undefined
+                }
               >
-                <EditorTitle
-                  placeholder={
-                    leaf.text.length === 0 ? 'My Notebook Title' : undefined
-                  }
-                >
-                  {props.children}
-                </EditorTitle>
-              </EditorBlock>
-            );
-          }
-          throw new Error('Title editor should contian nothing else');
+                {props.children}
+              </EditorTitle>
+            </EditorBlock>
+          );
         }}
       />
     </Slate>
   );
 };
+
+function getLeaf(props: RenderElementProps): BaseText {
+  if (!('type' in props.element)) {
+    throw new Error('type should be present');
+  }
+  if (!props.element.type) {
+    throw new Error('Title editor should contian nothing else');
+  }
+  const leaf = props.element.children[0];
+  if (!Text.isText(leaf)) {
+    throw new Error('Was expecting text');
+  }
+  return leaf;
+}
+
+function onKeyDownCurried(
+  editor: BaseEditor & ReactEditor
+): (e: KeyboardEvent<HTMLDivElement>) => void {
+  return (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+      e.preventDefault();
+      e.stopPropagation();
+      editor.select([0, 0]);
+    }
+  };
+}
