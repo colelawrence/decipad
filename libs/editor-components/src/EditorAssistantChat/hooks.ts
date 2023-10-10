@@ -1,17 +1,31 @@
+import {
+  GetSuggestedNotebookChangesDocument,
+  GetSuggestedNotebookChangesQuery,
+} from '@decipad/graphql-client';
+import { EditorController } from '@decipad/notebook-tabs';
 import { Message, useAIChatHistory } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
+import { TOperation } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useState } from 'react';
+import { useClient } from 'urql';
 
-export const useAssistantChat = (notebookId: string) => {
-  const chats = useAIChatHistory((state) => state.chats);
-  const addMessage = useAIChatHistory((state) => state.addMessage);
-  const deleteMessage = useAIChatHistory((state) => state.deleteMessage);
+export const useAssistantChat = (
+  notebookId: string,
+  controller: EditorController
+) => {
+  const [chats, addMessage, deleteMessage] = useAIChatHistory((state) => [
+    state.chats,
+    state.addMessage,
+    state.deleteMessage,
+  ]);
 
   const messages = useMemo(() => chats[notebookId] || [], [chats, notebookId]);
 
   const handleAddMessage = addMessage(notebookId);
   const handleDeleteMessage = deleteMessage(notebookId);
+
+  const client = useClient();
 
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -72,6 +86,24 @@ export const useAssistantChat = (notebookId: string) => {
     }
   };
 
+  const getAssistantChanges = useCallback(
+    async (
+      prompt: string
+    ): Promise<GetSuggestedNotebookChangesQuery['suggestNotebookChanges']> => {
+      const res = await client.executeQuery<GetSuggestedNotebookChangesQuery>({
+        query: GetSuggestedNotebookChangesDocument,
+        key: Math.random(),
+        variables: {
+          notebookId,
+          prompt,
+        },
+      });
+
+      return res.data?.suggestNotebookChanges;
+    },
+    [client, notebookId]
+  );
+
   const sendUserMessage = async (content: string) => {
     const newMessage: Message = {
       role: 'user',
@@ -107,10 +139,47 @@ export const useAssistantChat = (notebookId: string) => {
     setLoading(false);
   };
 
+  const makeChanges = useCallback(
+    async (messageId: string) => {
+      const msg = messages.find((m) => m.id === messageId);
+      if (msg == null) {
+        throw new Error('Should always be able to find the message');
+      }
+
+      if (msg.replyTo == null) {
+        throw new Error('Message is not replying to anything');
+      }
+      const userMessage = getUserMessageFromReplyTo(msg.replyTo)!;
+      if (userMessage.content == null || userMessage.content?.length === 0) {
+        throw new Error('The content is empty');
+      }
+
+      const operations = await getAssistantChanges(userMessage.content);
+      if (operations && operations.length > 0) {
+        // Disable normalizer
+        controller.WithoutNormalizing(() => {
+          for (const op of operations) {
+            try {
+              // We apply the changes as if they are "remote".
+              // So we need this to avoid a cycle.
+              (op as any).IS_LOCAL_SYNTHETIC = true;
+              controller.apply(op as TOperation);
+            } catch (err) {
+              console.error('error applying: ', op, err);
+              throw err;
+            }
+          }
+        });
+      }
+    },
+    [controller, getAssistantChanges, getUserMessageFromReplyTo, messages]
+  );
+
   return {
     messages,
     sendUserMessage,
     regenerateResponse,
     loading,
+    makeChanges,
   };
 };

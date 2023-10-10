@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
 import cloneDeep from 'lodash.clonedeep';
@@ -18,6 +19,7 @@ import {
   getNode,
   insertNodes,
   removeNodes,
+  withoutNormalizing,
 } from '@udecode/plate';
 import {
   ELEMENT_TAB,
@@ -166,7 +168,9 @@ export class EditorController {
         this.Notifier.next('any-change');
       }
 
-      this.apply(translatedOp);
+      if (!op.IS_LOCAL_SYNTHETIC) {
+        this.apply(translatedOp);
+      }
 
       if (op.type === 'remove_node') {
         apply(op);
@@ -228,6 +232,17 @@ export class EditorController {
       }
     }
     return null;
+  }
+
+  public WithoutNormalizing(callback: () => void): void {
+    let myCallback = callback;
+    for (const editor of this.SubEditors) {
+      // JS Moment. you need to create a variable inside the loop,
+      // otherwise it will point to unexpected places.
+      const copyOfCallback = myCallback;
+      myCallback = () => withoutNormalizing(editor, copyOfCallback);
+    }
+    myCallback();
   }
 
   /**

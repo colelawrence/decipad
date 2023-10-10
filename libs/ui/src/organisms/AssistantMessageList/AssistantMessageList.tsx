@@ -47,7 +47,7 @@ type AssistantMessageListProps = {
   readonly handleLikeResponse: (id: string) => void;
   readonly handleDislikeResponse: (id: string) => void;
   readonly handleRegenerateResponse: (id: string) => void;
-  readonly handleSuggestChanges: (prompt: string) => void;
+  readonly handleSuggestChanges: (id: string) => void;
 };
 
 export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
@@ -79,7 +79,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                 key={id}
                 text={content}
                 rating={responseRating}
-                handleSuggestChanges={() => handleSuggestChanges(content || '')}
+                handleSuggestChanges={() => handleSuggestChanges(id)}
                 handleLikeResponse={() => handleLikeResponse(id)}
                 handleDislikeResponse={() => handleDislikeResponse(id)}
                 handleRegenerateResponse={() => handleRegenerateResponse(id)}

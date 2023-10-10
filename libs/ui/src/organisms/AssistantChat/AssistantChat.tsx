@@ -25,7 +25,7 @@ type AssistantChatProps = {
   readonly messages: Message[];
   readonly sendMessage: (content: string) => void;
   readonly regenerateResponse: (id: string) => void;
-  readonly suggestChanges: (prompt: string) => void;
+  readonly suggestChanges: (id: string) => void;
   readonly clearMessages: () => void;
   readonly rateResponse: (id: string, rating: AIResponseRating) => void;
   readonly loading: boolean;
