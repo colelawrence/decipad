@@ -1,23 +1,8 @@
 import { unique } from '@decipad/utils';
-import { AST, isExprRef } from '..';
+import { type AST, isExprRef } from '..';
 import { getIdentifierString } from '../utils';
 
 export type TableNamespaces = Map<string, Set<string>>;
-
-const deriveTableExpressionRef = (
-  node: AST.Expression
-): { tableRef: string; otherRefs: string[] } | undefined => {
-  if (node.type !== 'function-call') return;
-
-  const [, argList] = node.args;
-  // It just so happens that all table-returning functions currently return a table with the same
-  // type as their first arg, but this might not always be the case. Really we need a more systematic
-  // approach to deciding which arg to use as the table's type.
-  const firstArg = argList.args[0];
-  if (firstArg.type !== 'ref') return;
-  const firstArgRefString = getIdentifierString(firstArg);
-  return { tableRef: firstArgRefString, otherRefs: dependencies(node) };
-};
 
 /** Finds what `node` depends on. `namespaces` can be built in the `findAllTables` function.
  * If we're in a table context (e.g. `Table.Col1 = 1`), then we can use the `namespaces` to
@@ -47,6 +32,21 @@ export const dependencies = (
     }
     return undefined;
   })(initialNode);
+
+  const deriveTableExpressionRef = (
+    node: AST.Expression
+  ): { tableRef: string; otherRefs: string[] } | undefined => {
+    if (node.type !== 'function-call') return;
+
+    const [, argList] = node.args;
+    // It just so happens that all table-returning functions currently return a table with the same
+    // type as their first arg, but this might not always be the case. Really we need a more systematic
+    // approach to deciding which arg to use as the table's type.
+    const firstArg = argList.args[0];
+    if (firstArg.type !== 'ref') return;
+    const firstArgRefString = getIdentifierString(firstArg);
+    return { tableRef: firstArgRefString, otherRefs: findRefs(node) };
+  };
 
   // eslint-disable-next-line complexity
   function findRefs(node: AST.Node): string[] {
@@ -92,7 +92,7 @@ export const dependencies = (
           if (isExprRef(column)) {
             return [column];
           }
-          return unique([`${table.args[0]}::${column}`]);
+          return [`${table.args[0]}::${column}`];
         }
 
         // If the table isn't referred to by name try to derive the table
@@ -167,13 +167,21 @@ export const dependencies = (
         return unique(node.args.flatMap(findRefs));
       }
       case 'ref': {
-        if (localNames.has(node.args[0])) {
-          if (localTableName != null) {
-            return [`${localTableName}::${node.args[0]}`];
-          } else {
-            // Ignore function arguments
-            return [];
+        const names = [node.args[0]];
+        if (node.previousVarName) {
+          names.push(node.previousVarName);
+        }
+        let hasLocalName;
+        for (const name of names) {
+          if (localNames.has(name)) {
+            hasLocalName = true;
+            if (localTableName != null) {
+              return names.map((name) => `${localTableName}::${name}`);
+            }
           }
+        }
+        if (hasLocalName) {
+          return [];
         }
         return node.args;
       }
@@ -265,7 +273,7 @@ function getTableColNames(table: AST.Table) {
 function getLocalNames(
   nodeOrBlock: AST.Node,
   namespaces: TableNamespaces
-): Set<string> | null {
+): ReadonlySet<string> | null {
   const names = [];
 
   for (const node of blocksToStatements([nodeOrBlock])) {

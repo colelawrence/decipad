@@ -305,17 +305,13 @@ export const inferStatement = async (
   ...args: Parameters<typeof inferStatementInternal>
 ): Promise<Type> => {
   const [ctx] = args;
-  const { usedNames: previoususedNames } = ctx;
+  const { usedNames: previoususedNames = [] } = ctx;
 
-  if (previoususedNames == null) {
-    return inferStatementInternal(...args);
-  }
-
-  // Do not keep track of names retrieved here if we errored out
   ctx.usedNames = [...previoususedNames];
 
   const type = await inferStatementInternal(...args);
 
+  // Do not keep track of names retrieved here if we errored out
   if (type.errorCause) {
     ctx.usedNames = previoususedNames;
   }

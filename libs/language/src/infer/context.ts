@@ -115,7 +115,7 @@ export const pushTableContext = async <T>(
   const previousTable = ctx.inTableBraces;
   ctx.inTableBraces = tableName;
   try {
-    return ctx.stack.withPush(async () => {
+    return await ctx.stack.withPush(async () => {
       ctx.stack.set('first', t.boolean());
       return fn();
     });
@@ -131,12 +131,7 @@ export const logRetrievedName = (
   group: VarGroup = 'lexical'
 ) => {
   const nsName = typeof name === 'string' ? (['', name] as const) : name;
-  const tableName = nsName[0] === '' ? nsName[1] : nsName[0];
-  if (
-    ctx.usedNames &&
-    ctx.stack.isNameGlobal(nsName, group) &&
-    tableName !== ctx.inTableBraces
-  ) {
+  if (ctx.usedNames && ctx.stack.isNameGlobal(nsName, group)) {
     ctx.usedNames.push(nsName);
   }
 };

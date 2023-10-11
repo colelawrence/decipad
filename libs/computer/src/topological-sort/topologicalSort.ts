@@ -35,13 +35,16 @@ const blockEntities = ({ block }: IdentifiedBlock): Set<string> => {
 
   const entities = new Set<string>();
 
-  // we have a statement if we've made it this far
-  if (statement.type === 'table-column-assign') {
-    const [tablePartialDef, colDef] = statement.args;
-    entities.add(`${tablePartialDef.args[0]}::${colDef.args[0]}`);
-  } else {
-    const arg0 = statement.args[0];
-    entities.add(getIdentifierString(arg0));
+  switch (statement.type) {
+    case 'table-column-assign': {
+      const [tablePartialDef, colDef] = statement.args;
+      entities.add(`${tablePartialDef.args[0]}::${colDef.args[0]}`);
+      break;
+    }
+    default: {
+      const arg0 = statement.args[0];
+      entities.add(getIdentifierString(arg0));
+    }
   }
   entities.add(getExprRef(block.id));
 

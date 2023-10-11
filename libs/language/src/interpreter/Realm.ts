@@ -42,7 +42,7 @@ export class Realm {
     const parentExpressionCache = this.expressionCache;
     this.expressionCache = new ExpressionCache(parentExpressionCache);
     try {
-      return this.stack.withPush(wrapper);
+      return await this.stack.withPush(wrapper);
     } finally {
       this.expressionCache = parentExpressionCache;
     }
@@ -52,7 +52,7 @@ export class Realm {
     const parentExpressionCache = this.expressionCache;
     this.expressionCache = new ExpressionCache(parentExpressionCache);
     try {
-      return this.stack.withPushCall(wrapper);
+      return await this.stack.withPushCall(wrapper);
     } finally {
       this.expressionCache = parentExpressionCache;
     }

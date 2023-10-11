@@ -1,5 +1,5 @@
 import { getDefined, produce } from '@decipad/utils';
-import type { AST } from '..';
+import { type AST } from '..';
 import { Type, buildType as t, InferError } from '../type';
 import { getIdentifierString, walkAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
@@ -114,6 +114,13 @@ export async function inferTableColumnPerCell(
   return inferExpression(ctx, columnAst);
 }
 
+function* nodeNames(node: AST.Ref) {
+  yield getIdentifierString(node);
+  if (node.previousVarName) {
+    yield node.previousVarName;
+  }
+}
+
 export function refersToOtherColumnsByName(
   expr: AST.Expression,
   columns: Map<string, unknown>
@@ -122,10 +129,10 @@ export function refersToOtherColumnsByName(
 
   walkAst(expr, (node) => {
     if (node.type === 'ref') {
-      const name = getIdentifierString(node);
-
-      if (columns.has(name)) {
-        isReferringToOtherColumnByName = true;
+      for (const name of nodeNames(node)) {
+        if (columns.has(name)) {
+          isReferringToOtherColumnByName = true;
+        }
       }
     }
   });
