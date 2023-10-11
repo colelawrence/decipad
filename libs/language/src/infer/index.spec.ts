@@ -825,8 +825,9 @@ describe('Property access', () => {
         ?.spec
     ).toMatchInlineSnapshot(`
       Object {
-        "errType": "free-form",
-        "message": "A column named A does not exist in Table",
+        "columnName": "A",
+        "errType": "unknown-table-column",
+        "tableName": "Table",
       }
     `);
 

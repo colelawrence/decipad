@@ -110,6 +110,11 @@ export type ErrSpec = {
       errType: 'retired-feature';
       featureName: string;
     }
+  | {
+      errType: 'unknown-table-column';
+      tableName: string;
+      columnName: string;
+    }
 );
 
 // exhaustive switch
@@ -297,6 +302,14 @@ export class InferError extends Error {
   static needOneAndOnlyOneUnit() {
     return new InferError({
       errType: 'need-one-only-one-unit',
+    });
+  }
+
+  static unknownTableColumn(tableName: string, columnName: string) {
+    return new InferError({
+      errType: 'unknown-table-column',
+      tableName,
+      columnName,
     });
   }
 

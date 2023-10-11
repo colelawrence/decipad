@@ -1,4 +1,5 @@
 import type { Document, MyElement, MyValue } from '@decipad/editor-types';
+import { isElement } from '@udecode/plate';
 import cloneDeep from 'lodash.clonedeep';
 
 export const assembleDocument = (
@@ -9,7 +10,7 @@ export const assembleDocument = (
 
   for (const element of elements) {
     const changedElementIndex = newDocument.children.findIndex(
-      (el) => el.id === element.id
+      (el) => isElement(el) && el.id === element.id
     );
     if (changedElementIndex >= 0) {
       newDocument.children[changedElementIndex] = element as MyValue[number];

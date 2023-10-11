@@ -211,7 +211,7 @@ export const inferExpression = wrap(
           if (index < 0) {
             return [
               t.impossible(
-                `A column named ${propName} does not exist in ${tableName}`
+                InferError.unknownTableColumn(tableName ?? '', propName)
               ),
               index,
             ];

@@ -110,6 +110,11 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
     case 'unknown-reference': {
       return `Unknown reference: ${spec.refName}`;
     }
+    case 'unknown-table-column': {
+      return `Unknown column ${spec.columnName}${
+        spec.tableName ? ` in ${spec.tableName}` : ''
+      }`;
+    }
     case 'retired-feature': {
       return "You're using a feature that's been retired";
     }

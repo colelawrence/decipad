@@ -23,6 +23,12 @@ const toUserlandError = (err: ErrSpec, computer: Computer): ErrSpec => {
         err.expectedArgCount[0],
         computer
       );
+      break;
+    }
+    case 'unknown-table-column': {
+      err.tableName = translateIdentifier(err.tableName, computer);
+      err.columnName = translateIdentifier(err.columnName, computer);
+      break;
     }
   }
   return err;
