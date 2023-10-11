@@ -90,6 +90,7 @@ interface CustomMenuItemProps
   chat?: boolean;
   external?: boolean;
   readonly onClick: () => void;
+  readonly dataTestid?: string;
 }
 
 const CustomMenuItem = ({
@@ -101,6 +102,7 @@ const CustomMenuItem = ({
   external,
   onClick,
   icon,
+  dataTestid,
 }: CustomMenuItemProps) => {
   const followLink = useCallback(() => {
     if (to) {
@@ -158,7 +160,7 @@ const CustomMenuItem = ({
         }
       }
     >
-      <MenuItem onSelect={onSelect ?? followLink}>
+      <MenuItem onSelect={onSelect ?? followLink} testid={dataTestid}>
         {to !== undefined ? (
           <Link css={linkStyles} href={to} onClick={onClick}>
             {children}
@@ -228,6 +230,7 @@ export const HelpMenu = ({
       }
       align="end"
       sideOffset={8}
+      dataTestid="help-options-modal"
     >
       <CustomMenuItem
         onSelect={show}
@@ -240,6 +243,7 @@ export const HelpMenu = ({
             action: 'contact live support',
           });
         }}
+        dataTestid="contact-live-support"
       />
       <MenuSeparator />
       <CustomMenuItem
@@ -253,6 +257,7 @@ export const HelpMenu = ({
             action: 'visit releases',
           })
         }
+        dataTestid="releases-link"
       />
       <CustomMenuItem
         to={docsUrl}
@@ -268,6 +273,7 @@ export const HelpMenu = ({
             },
           })
         }
+        dataTestid="docs-link"
       />
       <CustomMenuItem
         onSelect={showFeedback}
@@ -279,6 +285,7 @@ export const HelpMenu = ({
             action: 'send feedback',
           });
         }}
+        dataTestid="send-feedback"
       />
       <CustomMenuItem
         to={discordUrl}
@@ -291,6 +298,7 @@ export const HelpMenu = ({
             action: 'join discord',
           })
         }
+        dataTestid="discord-link"
       />
     </MenuList>
   );
