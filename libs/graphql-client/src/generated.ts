@@ -630,7 +630,7 @@ export type Query = {
   sections: Array<Section>;
   self?: Maybe<User>;
   selfFulfilledGoals: Array<Scalars['String']['output']>;
-  suggestNotebookChanges?: Maybe<Array<Maybe<SlateOp>>>;
+  suggestNotebookChanges?: Maybe<SuggestNotebookChangesReply>;
   tags: Array<Scalars['String']['output']>;
   version?: Maybe<Scalars['String']['output']>;
   workspaces: Array<Workspace>;
@@ -872,6 +872,12 @@ export enum SubscriptionStatus {
   Trialing = 'trialing',
   Unpaid = 'unpaid'
 }
+
+export type SuggestNotebookChangesReply = {
+  __typename?: 'SuggestNotebookChangesReply';
+  operations?: Maybe<Array<Maybe<SlateOp>>>;
+  summary?: Maybe<Scalars['String']['output']>;
+};
 
 export type TagChanges = {
   __typename?: 'TagChanges';
@@ -1360,7 +1366,7 @@ export type GetSuggestedNotebookChangesQueryVariables = Exact<{
 }>;
 
 
-export type GetSuggestedNotebookChangesQuery = { __typename?: 'Query', suggestNotebookChanges?: Array<{ __typename?: 'SlateOp', type: string, path?: Array<number> | null, newPath?: Array<number> | null, node?: any | null, text?: string | null, offset?: number | null, position?: number | null, properties?: any | null, newProperties?: any | null } | null> | null };
+export type GetSuggestedNotebookChangesQuery = { __typename?: 'Query', suggestNotebookChanges?: { __typename?: 'SuggestNotebookChangesReply', summary?: string | null, operations?: Array<{ __typename?: 'SlateOp', type: string, path?: Array<number> | null, newPath?: Array<number> | null, node?: any | null, text?: string | null, offset?: number | null, position?: number | null, properties?: any | null, newProperties?: any | null } | null> | null } | null };
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2213,15 +2219,18 @@ export function useGetNotionQuery(options: Omit<Urql.UseQueryArgs<GetNotionQuery
 export const GetSuggestedNotebookChangesDocument = gql`
     query GetSuggestedNotebookChanges($notebookId: String!, $prompt: String!) {
   suggestNotebookChanges(notebookId: $notebookId, prompt: $prompt) {
-    type
-    path
-    newPath
-    node
-    text
-    offset
-    position
-    properties
-    newProperties
+    operations {
+      type
+      path
+      newPath
+      node
+      text
+      offset
+      position
+      properties
+      newProperties
+    }
+    summary
   }
 }
     `;
@@ -2329,6 +2338,7 @@ export type GraphCacheKeysConfig = {
   SharedWithRole?: (data: WithTypename<SharedWithRole>) => null | string,
   SharedWithUser?: (data: WithTypename<SharedWithUser>) => null | string,
   SlateOp?: (data: WithTypename<SlateOp>) => null | string,
+  SuggestNotebookChangesReply?: (data: WithTypename<SuggestNotebookChangesReply>) => null | string,
   TagChanges?: (data: WithTypename<TagChanges>) => null | string,
   TagRecord?: (data: WithTypename<TagRecord>) => null | string,
   User?: (data: WithTypename<User>) => null | string,
@@ -2358,7 +2368,7 @@ export type GraphCacheResolvers = {
     sections?: GraphCacheResolver<WithTypename<Query>, QuerySectionsArgs, Array<WithTypename<Section> | string>>,
     self?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, WithTypename<User> | string>,
     selfFulfilledGoals?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<Scalars['String'] | string>>,
-    suggestNotebookChanges?: GraphCacheResolver<WithTypename<Query>, QuerySuggestNotebookChangesArgs, Array<WithTypename<SlateOp> | string>>,
+    suggestNotebookChanges?: GraphCacheResolver<WithTypename<Query>, QuerySuggestNotebookChangesArgs, WithTypename<SuggestNotebookChangesReply> | string>,
     tags?: GraphCacheResolver<WithTypename<Query>, QueryTagsArgs, Array<Scalars['String'] | string>>,
     version?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Scalars['String'] | string>,
     workspaces?: GraphCacheResolver<WithTypename<Query>, Record<string, never>, Array<WithTypename<Workspace> | string>>
@@ -2544,6 +2554,10 @@ export type GraphCacheResolvers = {
     text?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['String'] | string>,
     type?: GraphCacheResolver<WithTypename<SlateOp>, Record<string, never>, Scalars['String'] | string>
   },
+  SuggestNotebookChangesReply?: {
+    operations?: GraphCacheResolver<WithTypename<SuggestNotebookChangesReply>, Record<string, never>, Array<WithTypename<SlateOp> | string>>,
+    summary?: GraphCacheResolver<WithTypename<SuggestNotebookChangesReply>, Record<string, never>, Scalars['String'] | string>
+  },
   TagChanges?: {
     added?: GraphCacheResolver<WithTypename<TagChanges>, Record<string, never>, Array<WithTypename<TagRecord> | string>>,
     removed?: GraphCacheResolver<WithTypename<TagChanges>, Record<string, never>, Array<WithTypename<TagRecord> | string>>
@@ -2673,6 +2687,28 @@ export type GraphCacheOptimisticUpdaters = {
 };
 
 export type GraphCacheUpdaters = {
+  Query?: {
+    featuredPad?: GraphCacheUpdateResolver<{ featuredPad: Maybe<WithTypename<Pad>> }, Record<string, never>>,
+    getExternalDataSource?: GraphCacheUpdateResolver<{ getExternalDataSource: WithTypename<ExternalDataSource> }, QueryGetExternalDataSourceArgs>,
+    getExternalDataSources?: GraphCacheUpdateResolver<{ getExternalDataSources: WithTypename<PagedResult> }, QueryGetExternalDataSourcesArgs>,
+    getExternalDataSourcesWorkspace?: GraphCacheUpdateResolver<{ getExternalDataSourcesWorkspace: WithTypename<PagedResult> }, QueryGetExternalDataSourcesWorkspaceArgs>,
+    getNotion?: GraphCacheUpdateResolver<{ getNotion: Scalars['String'] }, QueryGetNotionArgs>,
+    getPadById?: GraphCacheUpdateResolver<{ getPadById: Maybe<WithTypename<Pad>> }, QueryGetPadByIdArgs>,
+    getWorkspaceById?: GraphCacheUpdateResolver<{ getWorkspaceById: Maybe<WithTypename<Workspace>> }, QueryGetWorkspaceByIdArgs>,
+    getWorkspaceSecrets?: GraphCacheUpdateResolver<{ getWorkspaceSecrets: Array<WithTypename<Secret>> }, QueryGetWorkspaceSecretsArgs>,
+    me?: GraphCacheUpdateResolver<{ me: Maybe<WithTypename<User>> }, Record<string, never>>,
+    pads?: GraphCacheUpdateResolver<{ pads: WithTypename<PagedPadResult> }, QueryPadsArgs>,
+    padsByTag?: GraphCacheUpdateResolver<{ padsByTag: WithTypename<PagedPadResult> }, QueryPadsByTagArgs>,
+    padsSharedWithMe?: GraphCacheUpdateResolver<{ padsSharedWithMe: WithTypename<PagedPadResult> }, QueryPadsSharedWithMeArgs>,
+    searchTemplates?: GraphCacheUpdateResolver<{ searchTemplates: WithTypename<PagedPadResult> }, QuerySearchTemplatesArgs>,
+    sections?: GraphCacheUpdateResolver<{ sections: Array<WithTypename<Section>> }, QuerySectionsArgs>,
+    self?: GraphCacheUpdateResolver<{ self: Maybe<WithTypename<User>> }, Record<string, never>>,
+    selfFulfilledGoals?: GraphCacheUpdateResolver<{ selfFulfilledGoals: Array<Scalars['String']> }, Record<string, never>>,
+    suggestNotebookChanges?: GraphCacheUpdateResolver<{ suggestNotebookChanges: Maybe<WithTypename<SuggestNotebookChangesReply>> }, QuerySuggestNotebookChangesArgs>,
+    tags?: GraphCacheUpdateResolver<{ tags: Array<Scalars['String']> }, QueryTagsArgs>,
+    version?: GraphCacheUpdateResolver<{ version: Maybe<Scalars['String']> }, Record<string, never>>,
+    workspaces?: GraphCacheUpdateResolver<{ workspaces: Array<WithTypename<Workspace>> }, Record<string, never>>
+  },
   Mutation?: {
     addNotebookToSection?: GraphCacheUpdateResolver<{ addNotebookToSection: Maybe<Scalars['Boolean']> }, MutationAddNotebookToSectionArgs>,
     addSectionToWorkspace?: GraphCacheUpdateResolver<{ addSectionToWorkspace: Maybe<WithTypename<Section>> }, MutationAddSectionToWorkspaceArgs>,
@@ -2738,6 +2774,258 @@ export type GraphCacheUpdaters = {
     subscribeToNothing?: GraphCacheUpdateResolver<{ subscribeToNothing: Maybe<Scalars['Boolean']> }, Record<string, never>>,
     tagsChanged?: GraphCacheUpdateResolver<{ tagsChanged: WithTypename<TagChanges> }, SubscriptionTagsChangedArgs>,
     workspacesChanged?: GraphCacheUpdateResolver<{ workspacesChanged: WithTypename<WorkspacesChanges> }, Record<string, never>>
+  },
+  Attachment?: {
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    fileName?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    fileSize?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    fileType?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    pad?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    uploadedBy?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>,
+    url?: GraphCacheUpdateResolver<Maybe<WithTypename<Attachment>>, Record<string, never>>
+  },
+  CreateAttachmentForm?: {
+    fields?: GraphCacheUpdateResolver<Maybe<WithTypename<CreateAttachmentForm>>, Record<string, never>>,
+    handle?: GraphCacheUpdateResolver<Maybe<WithTypename<CreateAttachmentForm>>, Record<string, never>>,
+    url?: GraphCacheUpdateResolver<Maybe<WithTypename<CreateAttachmentForm>>, Record<string, never>>
+  },
+  ExternalDataSource?: {
+    access?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    authUrl?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    dataSourceName?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    dataUrl?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    externalId?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    keys?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    padId?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    provider?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>,
+    workspace_id?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSource>>, Record<string, never>>
+  },
+  ExternalDataSourceAccess?: {
+    roles?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSourceAccess>>, Record<string, never>>,
+    users?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalDataSourceAccess>>, Record<string, never>>
+  },
+  ExternalKey?: {
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalKey>>, Record<string, never>>,
+    expiresAt?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalKey>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalKey>>, Record<string, never>>,
+    lastError?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalKey>>, Record<string, never>>,
+    lastUsedAt?: GraphCacheUpdateResolver<Maybe<WithTypename<ExternalKey>>, Record<string, never>>
+  },
+  KeyValue?: {
+    key?: GraphCacheUpdateResolver<Maybe<WithTypename<KeyValue>>, Record<string, never>>,
+    value?: GraphCacheUpdateResolver<Maybe<WithTypename<KeyValue>>, Record<string, never>>
+  },
+  Pad?: {
+    access?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    archived?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    attachments?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    document?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    icon?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    initialState?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    isPublic?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    isTemplate?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    myPermissionType?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    padConnectionParams?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    section?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    snapshots?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    status?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    tags?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,
+    workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>
+  },
+  PadAccess?: {
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAccess>>, Record<string, never>>,
+    roles?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAccess>>, Record<string, never>>,
+    secrets?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAccess>>, Record<string, never>>,
+    users?: GraphCacheUpdateResolver<Maybe<WithTypename<PadAccess>>, Record<string, never>>
+  },
+  PadChanges?: {
+    added?: GraphCacheUpdateResolver<Maybe<WithTypename<PadChanges>>, Record<string, never>>,
+    removed?: GraphCacheUpdateResolver<Maybe<WithTypename<PadChanges>>, Record<string, never>>,
+    updated?: GraphCacheUpdateResolver<Maybe<WithTypename<PadChanges>>, Record<string, never>>
+  },
+  PadConnectionParams?: {
+    token?: GraphCacheUpdateResolver<Maybe<WithTypename<PadConnectionParams>>, Record<string, never>>,
+    url?: GraphCacheUpdateResolver<Maybe<WithTypename<PadConnectionParams>>, Record<string, never>>
+  },
+  PadSnapshot?: {
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<PadSnapshot>>, Record<string, never>>,
+    data?: GraphCacheUpdateResolver<Maybe<WithTypename<PadSnapshot>>, Record<string, never>>,
+    snapshotName?: GraphCacheUpdateResolver<Maybe<WithTypename<PadSnapshot>>, Record<string, never>>,
+    updatedAt?: GraphCacheUpdateResolver<Maybe<WithTypename<PadSnapshot>>, Record<string, never>>,
+    version?: GraphCacheUpdateResolver<Maybe<WithTypename<PadSnapshot>>, Record<string, never>>
+  },
+  PagedPadResult?: {
+    count?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedPadResult>>, Record<string, never>>,
+    cursor?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedPadResult>>, Record<string, never>>,
+    hasNextPage?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedPadResult>>, Record<string, never>>,
+    items?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedPadResult>>, Record<string, never>>
+  },
+  PagedResult?: {
+    count?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedResult>>, Record<string, never>>,
+    cursor?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedResult>>, Record<string, never>>,
+    hasNextPage?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedResult>>, Record<string, never>>,
+    items?: GraphCacheUpdateResolver<Maybe<WithTypename<PagedResult>>, Record<string, never>>
+  },
+  Permission?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
+    givenBy?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
+    resource?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
+    type?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
+    user?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>
+  },
+  Role?: {
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>,
+    users?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>,
+    workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>
+  },
+  RoleAccess?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>,
+    permission?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>,
+    role?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleAccess>>, Record<string, never>>
+  },
+  RoleInvitation?: {
+    expires_at?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleInvitation>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleInvitation>>, Record<string, never>>,
+    role?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleInvitation>>, Record<string, never>>,
+    user?: GraphCacheUpdateResolver<Maybe<WithTypename<RoleInvitation>>, Record<string, never>>
+  },
+  Secret?: {
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Secret>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<Secret>>, Record<string, never>>,
+    workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<Secret>>, Record<string, never>>
+  },
+  SecretAccess?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<SecretAccess>>, Record<string, never>>,
+    permission?: GraphCacheUpdateResolver<Maybe<WithTypename<SecretAccess>>, Record<string, never>>,
+    secret?: GraphCacheUpdateResolver<Maybe<WithTypename<SecretAccess>>, Record<string, never>>
+  },
+  Section?: {
+    color?: GraphCacheUpdateResolver<Maybe<WithTypename<Section>>, Record<string, never>>,
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Section>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Section>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<Section>>, Record<string, never>>,
+    pads?: GraphCacheUpdateResolver<Maybe<WithTypename<Section>>, Record<string, never>>,
+    workspace_id?: GraphCacheUpdateResolver<Maybe<WithTypename<Section>>, Record<string, never>>
+  },
+  SectionChanges?: {
+    added?: GraphCacheUpdateResolver<Maybe<WithTypename<SectionChanges>>, Record<string, never>>,
+    removed?: GraphCacheUpdateResolver<Maybe<WithTypename<SectionChanges>>, Record<string, never>>,
+    updated?: GraphCacheUpdateResolver<Maybe<WithTypename<SectionChanges>>, Record<string, never>>
+  },
+  ShareInvitation?: {
+    email?: GraphCacheUpdateResolver<Maybe<WithTypename<ShareInvitation>>, Record<string, never>>
+  },
+  SharedResource?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedResource>>, Record<string, never>>,
+    permission?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedResource>>, Record<string, never>>,
+    resource?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedResource>>, Record<string, never>>
+  },
+  SharedWith?: {
+    pendingInvitations?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWith>>, Record<string, never>>,
+    roles?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWith>>, Record<string, never>>,
+    users?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWith>>, Record<string, never>>
+  },
+  SharedWithRole?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWithRole>>, Record<string, never>>,
+    permissionType?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWithRole>>, Record<string, never>>,
+    role?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWithRole>>, Record<string, never>>
+  },
+  SharedWithUser?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWithUser>>, Record<string, never>>,
+    permissionType?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWithUser>>, Record<string, never>>,
+    user?: GraphCacheUpdateResolver<Maybe<WithTypename<SharedWithUser>>, Record<string, never>>
+  },
+  SlateOp?: {
+    newPath?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    newProperties?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    node?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    offset?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    path?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    position?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    properties?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    text?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>,
+    type?: GraphCacheUpdateResolver<Maybe<WithTypename<SlateOp>>, Record<string, never>>
+  },
+  SuggestNotebookChangesReply?: {
+    operations?: GraphCacheUpdateResolver<Maybe<WithTypename<SuggestNotebookChangesReply>>, Record<string, never>>,
+    summary?: GraphCacheUpdateResolver<Maybe<WithTypename<SuggestNotebookChangesReply>>, Record<string, never>>
+  },
+  TagChanges?: {
+    added?: GraphCacheUpdateResolver<Maybe<WithTypename<TagChanges>>, Record<string, never>>,
+    removed?: GraphCacheUpdateResolver<Maybe<WithTypename<TagChanges>>, Record<string, never>>
+  },
+  TagRecord?: {
+    tag?: GraphCacheUpdateResolver<Maybe<WithTypename<TagRecord>>, Record<string, never>>,
+    workspaceId?: GraphCacheUpdateResolver<Maybe<WithTypename<TagRecord>>, Record<string, never>>
+  },
+  User?: {
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    description?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    email?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    emailValidatedAt?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    hideChecklist?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    image?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    onboarded?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    username?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>
+  },
+  UserAccess?: {
+    canComment?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>,
+    permission?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>,
+    user?: GraphCacheUpdateResolver<Maybe<WithTypename<UserAccess>>, Record<string, never>>
+  },
+  Workspace?: {
+    access?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    isPremium?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    isPublic?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    membersCount?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    myPermissionType?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    name?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    pads?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, WorkspacePadsArgs>,
+    roles?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    secrets?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    sections?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    workspaceExecutedQuery?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
+    workspaceSubscription?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>
+  },
+  WorkspaceAccess?: {
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>,
+    roles?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>,
+    users?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceAccess>>, Record<string, never>>
+  },
+  WorkspaceExecutedQuery?: {
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
+    queryCount?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
+    query_reset_date?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
+    quotaLimit?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>,
+    workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceExecutedQuery>>, Record<string, never>>
+  },
+  WorkspaceSubscription?: {
+    customer_id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
+    paymentLink?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
+    paymentStatus?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
+    seats?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
+    status?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>,
+    workspace?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspaceSubscription>>, Record<string, never>>
+  },
+  WorkspacesChanges?: {
+    added?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspacesChanges>>, Record<string, never>>,
+    removed?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspacesChanges>>, Record<string, never>>,
+    updated?: GraphCacheUpdateResolver<Maybe<WithTypename<WorkspacesChanges>>, Record<string, never>>
   },
 };
 

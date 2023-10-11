@@ -5,6 +5,7 @@ import {
 import { EditorController } from '@decipad/notebook-tabs';
 import { Message, useAIChatHistory } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
+import { getDefined } from '@decipad/utils';
 import { TOperation } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useState } from 'react';
@@ -154,11 +155,11 @@ export const useAssistantChat = (
         throw new Error('The content is empty');
       }
 
-      const operations = await getAssistantChanges(userMessage.content);
-      if (operations && operations.length > 0) {
+      const assistantReply = await getAssistantChanges(userMessage.content);
+      if (assistantReply?.operations && assistantReply.operations.length > 0) {
         // Disable normalizer
         controller.WithoutNormalizing(() => {
-          for (const op of operations) {
+          for (const op of getDefined(assistantReply.operations)) {
             try {
               // We apply the changes as if they are "remote".
               // So we need this to avoid a cycle.
