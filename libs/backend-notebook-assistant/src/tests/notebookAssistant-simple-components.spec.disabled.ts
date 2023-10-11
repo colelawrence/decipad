@@ -16,12 +16,12 @@ test('notebook assistant: simple UI components', async (ctx) => {
   });
 
   it('can add a slider', async () => {
-    let results = await notebookAssistant(
+    const results = await notebookAssistant(
       newNotebookId,
       'add another slider named MyNewSlider with default value of 10, min of 0 and max of 100'
     );
     if (
-      dequal(results.slice(0, 2), [
+      dequal(results.operations.slice(0, 2), [
         {
           node: {
             text: 'What percentage of my net revenue ',
@@ -39,9 +39,9 @@ test('notebook assistant: simple UI components', async (ctx) => {
         },
       ])
     ) {
-      results = results.slice(2);
+      results.operations = results.operations.slice(2);
     }
-    const newVersion = applyOperations(notebook, results);
+    const newVersion = applyOperations(notebook, results.operations);
     expect(newVersion).toMatchObject([
       {
         children: [
@@ -320,7 +320,8 @@ test('notebook assistant: simple UI components', async (ctx) => {
       newNotebookId,
       'change the slider var name to be "MySlider1"'
     );
-    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [

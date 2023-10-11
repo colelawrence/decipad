@@ -20,7 +20,7 @@ test('notebook assistant: tables', async (ctx) => {
       'create another table with two columns and 3 rows'
     );
 
-    expect(applyOperations(document, results)).toMatchObject([
+    expect(applyOperations(document, results.operations)).toMatchObject([
       {
         children: [
           {
@@ -383,7 +383,8 @@ test('notebook assistant: tables', async (ctx) => {
       'change the table variable name to be "MyTableName"'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -625,7 +626,8 @@ test('notebook assistant: tables', async (ctx) => {
       'change the table second column name to "MySecondColumn"'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -867,7 +869,8 @@ test('notebook assistant: tables', async (ctx) => {
       'add another column to the table'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -1148,7 +1151,8 @@ test('notebook assistant: tables', async (ctx) => {
       'remove the last column of the table'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -1336,7 +1340,8 @@ test('notebook assistant: tables', async (ctx) => {
       'change the type of the second column to number'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -1578,7 +1583,8 @@ test('notebook assistant: tables', async (ctx) => {
       'fill the first column of the existing table with numbers from 10 to 14, adding extra rows if needed'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -1868,7 +1874,7 @@ test('notebook assistant: tables', async (ctx) => {
       'fill the second column of the existing table with 10 Pokemon names'
     );
 
-    expect(applyOperations(document, results)).toMatchObject([
+    expect(applyOperations(document, results.operations)).toMatchObject([
       {
         children: [
           {

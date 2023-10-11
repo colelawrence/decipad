@@ -18,7 +18,8 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'change the title text to say "🕯Stopping a Candle Business"'
     );
-    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -53,6 +54,9 @@ test('notebook assistant: prose', async (ctx) => {
         },
       ]
     `);
+    expect(results.summary).toBe(
+      'I have changed the text of the title element from "🕯Starting a Candle Business" to "🕯Stopping a Candle Business".'
+    );
   }, 240000);
 
   it('can remove a paragraph', async () => {
@@ -60,7 +64,8 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'remove the last paragraph'
     );
-    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -89,7 +94,8 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'add a paragraph asking people to follow me on Twitter'
     );
-    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -140,7 +146,7 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'change the second paragraph asking people to follow me on Twitter'
     );
-    expect(applyOperations(notebook, results)).toMatchObject([
+    expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
         children: [
           {
@@ -180,7 +186,7 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'add a code line calculating 3 divided by 4'
     );
-    expect(applyOperations(notebook, results)).toMatchObject([
+    expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
         children: [
           {

@@ -16,7 +16,15 @@ export default gql`
     newProperties: GraphQLJSONObject
   }
 
+  type SuggestNotebookChangesReply {
+    operations: [SlateOp]
+    summary: String
+  }
+
   extend type Query {
-    suggestNotebookChanges(notebookId: String!, prompt: String!): [SlateOp]
+    suggestNotebookChanges(
+      notebookId: String!
+      prompt: String!
+    ): SuggestNotebookChangesReply
   }
 `;

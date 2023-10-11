@@ -11,7 +11,7 @@ import {
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
+import { getDefined } from '../../../utils/src';
 import { codeAssistant } from '@decipad/backend-code-assistant';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import { debug } from '../debug';
@@ -26,13 +26,18 @@ import { getElements } from '../utils/getElements';
 import { instructionSummaries, getInstructions } from '../config/instructions';
 import { parseInstructionConstituents } from '../utils/parseInstructionConstituents';
 
+export interface SuggestNewContentReply {
+  newDocument: Document;
+  summary: string;
+}
+
 // TODO: we still have issues when individualizing elements from deeply nested structures
 const problematicBlockTypes = new Set([ELEMENT_VARIABLE_DEF, ELEMENT_TABLE]);
 
 export const suggestNewContentToFulfillRequest = async (
   content: Document,
   request: string
-): Promise<Document> => {
+): Promise<SuggestNewContentReply> => {
   debug('suggestNewContentToFulfillRequest', content, request);
   const openAi = getOpenAI();
 
@@ -75,11 +80,12 @@ No comments.`,
     },
   ];
 
-  let maxIterations = 6;
+  let maxIterations = 7;
   let done = false;
   let relevantBlockIds: undefined | string[];
   let shouldJumpOverSpecificElementIds = false;
   let specificElementIds: undefined | string[];
+  let changesSummary: undefined | string;
   let failedCode = false;
   let triedCode = false;
   let instructions: undefined | string;
@@ -87,7 +93,10 @@ No comments.`,
 
   const generateChatCompletion = async () => {
     const makeFunctionsAvailable =
-      specificElementIds != null && !failedCode && !triedCode;
+      changesSummary != null &&
+      specificElementIds != null &&
+      !failedCode &&
+      !triedCode;
     const createOptions: ChatCompletionCreateParamsNonStreaming = {
       messages,
       model: openAi.model,
@@ -133,7 +142,7 @@ No comments.`,
       messages.push({
         role: 'user',
         content: `I had the following error: "${(err as Error).message}".
-Please reply in JSON only, no comments. Don't apologize.`,
+Reply in JSON only, no comments. Don't apologize.`,
       });
     }
   };
@@ -142,7 +151,7 @@ Please reply in JSON only, no comments. Don't apologize.`,
     messages.push({
       role: 'user',
       content: `Given the document block list I gave you earlier, what would be the individual JSON blocks you would need to fulfil this request?
-      Please reply with a JSON array that contains the ids (as sole strings) of the blocks you would need.
+      Reply with a JSON array that contains the ids (as sole strings) of the blocks you would need.
       Reply with valid JSON only.
       If you wouldn't need any block to fulfil the user request (like when a user asks to add a block), reply with an empty JSON array.
       Only reply with a single JSON array, nothing else.
@@ -163,7 +172,7 @@ Please reply in JSON only, no comments. Don't apologize.`,
       messages.push({
         role: 'user',
         content: `I had the following error: "${(err as Error).message}".
-Please reply in JSON only, no comments. Don't apologize.`,
+Reply in JSON only, no comments. Don't apologize.`,
       });
     }
   };
@@ -189,17 +198,17 @@ Please reply in JSON only, no comments. Don't apologize.`,
       messages.push({ role: 'system', content: newInstructions });
     }
     const finalInstructions = shouldJumpOverSpecificElementIds
-      ? `Please reply with a list of JSON commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
+      ? `Reply with a list of JSON commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
           request
         )}.
 Only reply with a single JSON array, nothing else.
 No comments.`
-      : `Please reply with a JSON list of element ids (root or inner) you would need to satisfy to make the following changes to my doc: ${JSON.stringify(
+      : `Reply with a JSON list of element ids (root or inner) you would need to satisfy to make the following changes to my doc: ${JSON.stringify(
           request
         )}.
 
 What would be the minimum individual JSON elements you would need to fulfil this request?
-Please reply with a JSON array that contains the ids (as sole strings) of the elements you would need.
+Reply with a JSON array that contains the ids (as sole strings) of the elements you would need.
 Reply with valid JSON only.
 If you wouldn't need any element to fulfil the user request (like when a user asks to add a block), reply with an empty JSON array.
 Only reply with a single JSON array, nothing else.
@@ -255,12 +264,28 @@ Please reply in JSON only, no comments. Don't apologize.`,
 ${stringify(relevantElements, null, '\t')}
 \`\`\`
 
-Please reply with a list of commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
+Let's pretend you had done the changes to my doc I request here: ${JSON.stringify(
+        request
+      )}
+Give me a textual summary of the changes you have made in simple terms.`,
+    });
+  };
+
+  const parseChangesSummary = (): void => {
+    if (!reply.content) {
+      throw new Error('Reply with a summary of changes in markdown.');
+    }
+    changesSummary = reply.content;
+  };
+
+  const sendFinalReplyInstructions = async (): Promise<void> => {
+    messages.push({
+      role: 'user',
+      content: `Reply with a list of commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
         request
       )}.
 Only reply with a single JSON array, nothing else.
-No comments.
-`,
+No comments.`,
     });
   };
 
@@ -308,14 +333,17 @@ No comments.
     ];
   };
 
-  const generateFinalReply = (): Document | undefined => {
+  const generateFinalReply = (): SuggestNewContentReply | undefined => {
     const response = getDefined(reply?.content, 'no reply');
     debug('suggestNewContentToFulfillRequest: response:', response);
 
     try {
       const finalDoc = applyCommands(content, response);
       debug('finalDoc', finalDoc);
-      return finalDoc;
+      return {
+        newDocument: finalDoc,
+        summary: getDefined(changesSummary),
+      };
     } catch (err) {
       done = false;
       messages.push({
@@ -359,6 +387,12 @@ No comments.
       } else {
         specificElementIds = relevantBlockIds;
       }
+    }
+
+    if (!changesSummary) {
+      await parseChangesSummary();
+      await sendFinalReplyInstructions();
+      continue;
     }
 
     if (reply.function_call) {

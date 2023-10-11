@@ -19,7 +19,8 @@ test('notebook assistant: simple code changes', async (ctx) => {
       newNotebookId,
       'change the variable name of VarName1 to NewVarName'
     );
-    expect(applyOperations(notebook, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(notebook, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -133,7 +134,7 @@ test('notebook assistant: simple code changes', async (ctx) => {
       newNotebookId,
       'add 1 to the end of the cosine calculation'
     );
-    expect(applyOperations(notebook, results)).toMatchObject([
+    expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
         children: [
           {

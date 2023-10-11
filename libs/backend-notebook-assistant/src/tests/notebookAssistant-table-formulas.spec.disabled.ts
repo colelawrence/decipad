@@ -19,7 +19,8 @@ test('notebook assistant: table formulas', async (ctx) => {
       'add a column to the table that calculates the sum of the EBITDA and Capex columns'
     );
 
-    expect(applyOperations(document, results)).toMatchInlineSnapshot(`
+    expect(applyOperations(document, results.operations))
+      .toMatchInlineSnapshot(`
       [
         {
           "children": [
@@ -687,7 +688,7 @@ test('notebook assistant: table formulas', async (ctx) => {
       'change the last column to calculate the average of the EBITDA column instead'
     );
 
-    expect(applyOperations(document, results)).toMatchObject([
+    expect(applyOperations(document, results.operations)).toMatchObject([
       {
         children: [
           {
