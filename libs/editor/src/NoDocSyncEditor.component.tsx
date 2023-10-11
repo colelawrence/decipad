@@ -104,6 +104,8 @@ export const NoDocSyncEditorInternal: FC = () => {
                   } as any,
                 ]}
                 readOnly={isWritingLocked}
+                onUndo={() => {}}
+                onRedo={() => {}}
               />
               <div ref={containerRef}>
                 <BlockLengthSynchronizationProvider editor={editor}>

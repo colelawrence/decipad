@@ -5,6 +5,7 @@ import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { EditorIdContext } from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
+import { useUndo } from './hooks/useUndo';
 
 type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,
@@ -26,6 +27,8 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   loaded,
 }) => {
   const { tab } = useRouteParams(notebooks({}).notebook);
+
+  useUndo(controller);
 
   const subEditorIndex =
     tab != null ? controller.SubEditors.findIndex((v) => v.id === tab) : 0;
@@ -52,6 +55,8 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
             editor={controller.TitleEditor}
             initialValue={controller.TitleEditor.children}
             readOnly={readOnly}
+            onUndo={controller.Undo}
+            onRedo={controller.Redo}
           />
         }
       />

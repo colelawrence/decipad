@@ -54,7 +54,6 @@ import {
   createTrailingParagraphPlugin,
   createTypeErrorHighlightPlugin,
   createUserEventPlugin,
-  createWithDocSyncHistoryPlugin,
   createDeduplicateElementIdsPlugin,
   createMigrateStructuredInputs,
   createMigrateTableDropdownToId,
@@ -207,9 +206,6 @@ export const plugins = ({
       // deserializers
       createDeserializeDocxPlugin(),
       createJuicePlugin({}),
-
-      // history
-      createWithDocSyncHistoryPlugin(),
 
       createUserEventPlugin(events),
 

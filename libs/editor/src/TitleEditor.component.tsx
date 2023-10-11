@@ -8,6 +8,8 @@ interface TitleEditorProps {
   editor: BaseEditor & ReactEditor;
   initialValue: Descendant[];
   readOnly: boolean;
+  onUndo: () => void;
+  onRedo: () => void;
 }
 
 export const TitleEditor: FC<TitleEditorProps> = ({
@@ -73,6 +75,7 @@ function onKeyDownCurried(
 ): (e: KeyboardEvent<HTMLDivElement>) => void {
   return (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+      // Select All
       e.preventDefault();
       e.stopPropagation();
       editor.select([0, 0]);

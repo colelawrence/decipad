@@ -53,4 +53,3 @@ export * from './TrailingParagraph';
 export * from './TypeErrorHighlight';
 export * from './UserEvent';
 export * from './UpdateComputer';
-export * from './WithDocSyncHistory';

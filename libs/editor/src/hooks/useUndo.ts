@@ -1,9 +1,8 @@
-import { useTEditorRef } from '@decipad/editor-types';
+import { EditorController } from '@decipad/notebook-tabs';
 import { useWindowListener } from '@decipad/react-utils';
 import { useCallback } from 'react';
 
-export const useUndo = () => {
-  const editor = useTEditorRef();
+export const useUndo = (controller: EditorController) => {
   useWindowListener(
     'keydown',
     useCallback(
@@ -12,18 +11,18 @@ export const useUndo = () => {
           if (event.key === 'z' && !event.shiftKey) {
             event.preventDefault();
             event.stopPropagation();
-            editor.undo();
+            controller.Undo();
           } else if (
             event.key === 'Z' ||
             (event.key === 'z' && event.shiftKey)
           ) {
             event.preventDefault();
             event.stopPropagation();
-            editor.redo();
+            controller.Redo();
           }
         }
       },
-      [editor]
+      [controller]
     )
   );
 };

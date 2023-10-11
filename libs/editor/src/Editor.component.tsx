@@ -21,7 +21,6 @@ import { EditorChangeContext } from '../../react-contexts/src/editor-change';
 import { CursorOverlay, RemoteAvatarOverlay, Tooltip } from './components';
 import { DndPreview } from './components/DndPreview/DndPreview';
 import { useAutoAnimate } from './hooks';
-import { useUndo } from './hooks/useUndo';
 import { useWriteLock } from './utils/useWriteLock';
 import { Scrubber } from 'slate';
 
@@ -55,27 +54,21 @@ const InsidePlate = ({
 }: EditorProps & {
   containerRef: RefObject<HTMLDivElement>;
   tabIndex: number;
-}) => {
-  // setup undo
-  useUndo();
-
-  // upload / fetch data
-  return (
-    <>
-      <Tooltip />
-      <ErrorBoundary fallback={<></>}>
-        <CursorOverlay containerRef={containerRef} tabIndex={tabIndex} />
-      </ErrorBoundary>
-      <ErrorBoundary fallback={<></>}>
-        <RemoteAvatarOverlay containerRef={containerRef} tabIndex={tabIndex} />
-      </ErrorBoundary>
-      <ErrorBoundary fallback={<></>}>
-        <DndPreview />
-      </ErrorBoundary>
-      {children}
-    </>
-  );
-};
+}) => (
+  <>
+    <Tooltip />
+    <ErrorBoundary fallback={<></>}>
+      <CursorOverlay containerRef={containerRef} tabIndex={tabIndex} />
+    </ErrorBoundary>
+    <ErrorBoundary fallback={<></>}>
+      <RemoteAvatarOverlay containerRef={containerRef} tabIndex={tabIndex} />
+    </ErrorBoundary>
+    <ErrorBoundary fallback={<></>}>
+      <DndPreview />
+    </ErrorBoundary>
+    {children}
+  </>
+);
 
 /**
  * TODO: remove Plate.id after plate patch

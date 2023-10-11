@@ -31,5 +31,19 @@ export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
 
   editor.undoManager = undoManager;
 
+  const sub = editor.editorController.Notifier.subscribe((e) => {
+    if (e === 'undo') {
+      editor.undoManager?.undo();
+    } else if (e === 'redo') {
+      editor.undoManager?.redo();
+    }
+  });
+
+  const { destroy } = editor;
+  editor.destroy = () => {
+    sub.unsubscribe();
+    destroy();
+  };
+
   return editor;
 };

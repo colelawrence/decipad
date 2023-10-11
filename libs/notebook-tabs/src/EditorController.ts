@@ -65,7 +65,9 @@ export class EditorController {
   public SubEditors: Array<MyEditor>;
   public NotebookId: string;
 
-  public Notifier: Subject<'new-tab' | 'any-change' | 'remove-tab'>;
+  public Notifier: Subject<
+    'new-tab' | 'any-change' | 'remove-tab' | 'undo' | 'redo'
+  >;
 
   public TitleEditor: BaseEditor & ReactEditor;
 
@@ -681,6 +683,14 @@ export class EditorController {
     }
 
     this.Normalize();
+  }
+
+  public Undo(): void {
+    this.Notifier.next('undo');
+  }
+
+  public Redo(): void {
+    this.Notifier.next('redo');
   }
 }
 
