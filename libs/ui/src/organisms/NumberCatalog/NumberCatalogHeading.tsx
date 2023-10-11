@@ -22,6 +22,7 @@ export const NumberCatalogHeading = ({
         window.history.pushState(null, '', cssSelector);
         window.dispatchEvent(new Event('hashchange'));
       }}
+      data-testid="number-catalog-link"
     >
       <span css={numberCatalogListStyles}>
         <span

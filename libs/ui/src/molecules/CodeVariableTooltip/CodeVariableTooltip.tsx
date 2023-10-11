@@ -42,6 +42,7 @@ export const CodeVariableTooltip: FC<CodeVariableTooltipProps> = ({
         window.history.pushState(null, '', `#${defBlockId}`);
         window.dispatchEvent(new Event('hashchange'));
       }}
+      data-testid="go-to-definition"
     >
       Go to definition &rarr;
     </a>
