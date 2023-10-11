@@ -92,7 +92,7 @@ function start(env: Env, config: Config): Promise<void> {
         if (!started) {
           if (output.indexOf('Sandbox startup scripts ran') >= 0) {
             started = true;
-            resolve();
+            setTimeout(() => resolve(), 2000);
           }
         }
         if (verbose || started) {
