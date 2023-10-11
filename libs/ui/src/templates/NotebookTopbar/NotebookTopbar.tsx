@@ -312,7 +312,9 @@ export const NotebookTopbar = ({
   );
 
   const [isDuplicating, setIsDuplicating] = useState(false);
-  const [showClearAll, setShowClearAll] = useState(true);
+  const [showClearAll, setShowClearAll] = useState(
+    isFlagEnabled('POPULATED_NEW_NOTEBOOK')
+  );
 
   const changeStatus = useCallback(
     (s: TColorStatus) => {

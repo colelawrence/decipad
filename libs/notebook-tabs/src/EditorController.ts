@@ -43,6 +43,7 @@ import {
 } from '@decipad/editor-types';
 import starterNotebook from './InitialNotebook';
 import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 const INITIAL_TAB_NAME = 'Tab';
 const INITIAL_TITLE = 'Welcome to Decipad!';
@@ -504,6 +505,43 @@ export class EditorController {
   }
 
   /**
+   * Used for testing.
+   * Inserts a title and an empty tab.
+   */
+  private EnsureEmptyDoc(): void {
+    this.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: ELEMENT_TITLE,
+        id: nanoid(),
+        children: [{ text: INITIAL_TITLE }],
+      } satisfies TitleElement,
+    });
+
+    this.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: ELEMENT_TAB,
+        id: nanoid(),
+        name: INITIAL_TAB_NAME,
+        children: [],
+      } satisfies TabElement,
+    });
+
+    insertNodes(
+      this.SubEditors[0],
+      {
+        type: ELEMENT_PARAGRAPH,
+        id: nanoid(),
+        children: [{ text: '' }],
+      },
+      { at: [0] }
+    );
+  }
+
+  /**
    * Removes all the content from the first tab.
    */
   public ClearAll() {
@@ -637,7 +675,11 @@ export class EditorController {
       this.IsNewNotebook = true;
 
       if (_initialDoc == null) {
-        this.EnsureInitialDoc();
+        if (isFlagEnabled('POPULATED_NEW_NOTEBOOK')) {
+          this.EnsureInitialDoc();
+        } else {
+          this.EnsureEmptyDoc();
+        }
       } else if (_initialDoc === 'test') {
         this.EnsureInitialTestDoc();
       }
