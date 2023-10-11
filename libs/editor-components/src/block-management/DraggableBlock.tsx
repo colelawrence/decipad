@@ -1,11 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { Computer, parseSimpleValue } from '@decipad/computer';
-import {
-  useFilteredTabs,
-  useMoveToTab,
-  useNodePath,
-  usePathMutatorCallback,
-} from '@decipad/editor-hooks';
+import { useFilteredTabs, useNodePath } from '@decipad/editor-hooks';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
@@ -14,7 +9,6 @@ import {
   MyEditor,
   MyElement,
   MyElementOrText,
-  TopLevelValue,
   alwaysWritableElementTypes,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -22,8 +16,6 @@ import {
   createStructuredCodeLine,
   getCodeLineSource,
   insertNodes,
-  requirePathBelowBlock,
-  setSelection,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -39,21 +31,14 @@ import {
 import { generateVarName, noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import {
-  TNodeEntry,
-  findNode,
   findNodePath,
   focusEditor,
   getEndPoint,
   getNextNode,
   getNodeString,
   getPreviousNode,
-  getStartPoint,
-  hasNode,
-  insertElements,
   insertText,
-  removeNodes,
   select,
-  withoutNormalizing,
 } from '@udecode/plate';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
@@ -71,11 +56,8 @@ import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
 import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
-import utils from './utils';
-import {
-  blockSelectionSelectors,
-  blockSelectionStore,
-} from '@udecode/plate-selection';
+import { blockSelectionSelectors } from '@udecode/plate-selection';
+import { useBlockActions } from './hooks';
 
 type DraggableBlockProps = {
   readonly element: MyElement;
@@ -95,37 +77,9 @@ type DraggableBlockProps = {
 > &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 
-type OnDelete = (() => void) | 'none' | undefined;
-
-const placeHolders = {
+const PLACEHOLDERS = {
   input: '100$',
   formula: '14 * 3',
-};
-
-const defaultOnDelete = (
-  editor: MyEditor,
-  element: MyElement,
-  parentOnDelete?: OnDelete
-): void => {
-  const path = findNodePath(editor, element);
-  const onDelete = () => {
-    if (path) {
-      removeNodes(editor, {
-        at: path,
-      });
-      if (hasNode(editor, path)) {
-        const point = getStartPoint(editor, path);
-        setSelection(editor, {
-          anchor: point,
-          focus: point,
-        });
-      }
-    }
-  };
-
-  if (path) {
-    typeof parentOnDelete === 'function' ? parentOnDelete() : onDelete();
-  }
 };
 
 export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
@@ -149,9 +103,13 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
     forwardedRef
   ) => {
     const [deleted, setDeleted] = useState(false);
+
     const editor = useTEditorRef();
     const readOnly = useIsEditorReadOnly();
     const computer = useComputer();
+    const tabs = useFilteredTabs();
+
+    const event = useContext(ClientEventsContext);
 
     const dependencyArray = Array.isArray(dependencyId)
       ? dependencyId
@@ -160,17 +118,29 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       : [];
 
     const dependenciesForBlock = computer.blocksInUse$.use(...dependencyArray);
+
+    const blockSelectedIds =
+      blockSelectionSelectors.selectedIds() as Set<string>;
+    const isMultipleSelection = blockSelectedIds.size > 1;
+
     const selected = useSelected();
     const path = useNodePath(element);
-    const setIsHidden = usePathMutatorCallback(
-      editor,
-      path,
-      'isHidden',
-      'DraggableBlock'
-    );
+
+    // Only show the Blue line to add element on these conditions.
+    // If its a nested element (Such as a list, don't show it in between).
+    const showLine =
+      path &&
+      path.length === 1 &&
+      !(
+        editor.children.length === 2 &&
+        editor.children[1].children[0].text === ''
+      );
 
     const blockRef = useRef<HTMLDivElement>(null);
     const previewRef = useRef<HTMLDivElement>(null);
+
+    const ref = useMergedRef(blockRef, forwardedRef);
+
     const { dragRef, dropLine, isDragging } = useDnd({
       accept,
       element,
@@ -180,42 +150,68 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       nodeRef: blockRef,
     });
 
+    const draggingIds = dndStore.use.draggingIds();
+
     useEffect(() => {
       if (!isDragging) {
         dndPreviewActions.draggingId('');
       }
     }, [isDragging]);
 
-    const draggingIds = dndStore.use.draggingIds();
+    const onMouseDown = useCallback(() => {
+      if (element.type === ELEMENT_TABLE) {
+        dndPreviewActions.draggingId(element.id);
+      }
+    }, [element.id, element.type]);
 
-    const ref = useMergedRef(blockRef, forwardedRef);
+    const { onDelete, onMoveTab, onDuplicate, onShowHide } = useBlockActions({
+      editor,
+      element,
+    });
 
-    const event = useContext(ClientEventsContext);
-
-    const onDelete = useCallback(() => {
+    const handleDelete = useCallback(() => {
       event({
         type: 'action',
         action: 'block deleted',
         props: { blockType: element.type },
       });
       setDeleted(true);
-      defaultOnDelete(editor, element, parentOnDelete);
+      onDelete(parentOnDelete);
       onceDeleted();
-    }, [editor, element, parentOnDelete, event, onceDeleted]);
+    }, [parentOnDelete, event, element, onDelete, onceDeleted]);
 
-    const onDuplicate = useCallback(() => {
-      if (path) {
-        const newEl = utils.cloneProxy(computer, element);
-        insertElements(editor, newEl, {
-          at: requirePathBelowBlock(editor, path),
-        });
+    const handleDuplicate = useCallback(() => {
+      event({
+        type: 'action',
+        action: 'block duplicated',
+        props: { blockType: element.type },
+      });
+      onDuplicate();
+    }, [event, onDuplicate, element]);
+
+    const handleMoveTab = useCallback(
+      (tabId: string) => {
         event({
           type: 'action',
-          action: 'block duplicated',
-          props: { blockType: newEl.type },
+          action: 'block moved to other tab',
+          props: { blockType: element.type },
         });
-      }
-    }, [computer, editor, element, event, path]);
+        onMoveTab(tabId);
+      },
+      [event, element, onMoveTab]
+    );
+
+    const handleShowHide = useCallback(
+      (action: 'show' | 'hide') => {
+        event({
+          type: 'action',
+          action: `${action} block`,
+          props: { blockType: element.type },
+        });
+        onShowHide(action);
+      },
+      [event, element, onShowHide]
+    );
 
     const onAdd = useCallback(() => {
       if (path == null) return;
@@ -253,85 +249,6 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       });
     }, [element.id, element.type, event]);
 
-    const onShowHide = useCallback(
-      (a: 'show' | 'hide') => {
-        if (a === 'show') {
-          setIsHidden(false, 'showing');
-          event({
-            type: 'action',
-            action: 'show block',
-            props: { blockType: element.type },
-          });
-        } else {
-          setIsHidden(true, 'hiding');
-          event({
-            type: 'action',
-            action: 'hide block',
-            props: { blockType: element.type },
-          });
-        }
-      },
-      [element.type, event, setIsHidden]
-    );
-
-    const onMouseDown = useCallback(() => {
-      if (element.type === ELEMENT_TABLE) {
-        dndPreviewActions.draggingId(element.id);
-      }
-    }, [element.id, element.type]);
-
-    // Only show the Blue line to add element on these conditions.
-    // If its a nested element (Such as a list, don't show it in between).
-    const nodePath = useNodePath(element);
-    const showLine =
-      nodePath &&
-      nodePath.length === 1 &&
-      !(
-        editor.children.length === 2 &&
-        editor.children[1].children[0].text === ''
-      );
-
-    const tabs = useFilteredTabs();
-    const moveTab = useMoveToTab();
-
-    const onMoveTab = useCallback(
-      (tabId: string) =>
-        withoutNormalizing(editor, () => {
-          if (!nodePath) return;
-
-          const selectedIds =
-            blockSelectionSelectors.selectedIds() as Set<string>;
-
-          if (selectedIds.size === 0) {
-            onDelete();
-            moveTab(tabId, element as TopLevelValue);
-            return;
-          }
-
-          const entries: TNodeEntry<TopLevelValue>[] = [];
-
-          for (const id of selectedIds.values()) {
-            const entry = findNode<TopLevelValue>(editor, { match: { id } });
-            if (!entry) continue;
-
-            entries.push(entry);
-          }
-
-          entries.sort(([, aPath], [, bPath]) => aPath[0] - bPath[0]);
-
-          for (let i = 0; i < entries.length; i += 1) {
-            // entry = [node, path]
-            // so we are selecting the first number, of the path, of the first entry.
-            removeNodes(editor, { at: [entries[0][1][0]] });
-            moveTab(tabId, entries[i][0]);
-          }
-
-          // Reset the selection
-          blockSelectionStore.set.selectedIds(new Set());
-        }),
-      [nodePath, moveTab, element, onDelete, editor]
-    );
-
     if (deleted) {
       return null;
     }
@@ -355,6 +272,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
       <UIDraggableBlock
         {...props}
         isHidden={element.isHidden}
+        isMultipleSelection={isMultipleSelection}
         isSelected={selected}
         dragSource={dragRef}
         blockRef={ref}
@@ -362,11 +280,11 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
         dropLine={dropLine || undefined}
         isBeingDragged={isDragging || draggingIds.has(element.id)}
         onMouseDown={onMouseDown}
-        onDelete={onDelete}
+        onDelete={handleDelete}
         dependenciesForBlock={dependenciesForBlock}
-        onDuplicate={onDuplicate}
-        onShowHide={onShowHide}
-        onMoveToTab={onMoveTab}
+        onDuplicate={handleDuplicate}
+        onShowHide={handleShowHide}
+        onMoveToTab={handleMoveTab}
         tabs={tabs}
         onAdd={onAdd}
         onPlus={onPlus}
@@ -399,8 +317,7 @@ const insertSameNodeType = (
   computer: Computer
 ): MyElementOrText => {
   const id = nanoid();
-  const { input, formula } = placeHolders;
-
+  const { input, formula } = PLACEHOLDERS;
   switch (prevNode?.type) {
     case ELEMENT_CODE_LINE_V2: {
       const prevNodeText = getCodeLineSource(prevNode.children[1]);
@@ -408,7 +325,6 @@ const insertSameNodeType = (
       const autoVarName = computer.getAvailableIdentifier(
         generateVarName(isFlagEnabled('SILLY_NAMES'))
       );
-
       return createStructuredCodeLine({
         id,
         varName: autoVarName,
@@ -429,13 +345,11 @@ const insertSameNodeType = (
       };
   }
 };
-
 const openSlashMenu = (editor: MyEditor, element: MyElement) => {
   const currentLine = getNodeString(element);
   const currentPath = findNodePath(editor, element);
   const nextNode = getNextNode(editor, { at: currentPath });
   const [nextElement, nextPath] = nextNode || [];
-
   if (currentLine === '/') return;
   if (!currentPath) return;
 

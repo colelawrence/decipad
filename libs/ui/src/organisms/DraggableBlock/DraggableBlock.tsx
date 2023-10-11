@@ -89,6 +89,7 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
   readonly children: ReactNode;
 
   readonly disableDrag?: boolean;
+  readonly isMultipleSelection?: boolean;
 
   /** Should the icons on the left be centered?
    * Tables for example shouldnt be
@@ -128,6 +129,7 @@ export const DraggableBlock = ({
   blockKind,
   children,
 
+  isMultipleSelection = false,
   disableDrag = false,
   isCentered = false,
   hasPreviousSibling,
@@ -216,6 +218,7 @@ export const DraggableBlock = ({
             <BlockDragHandle
               menuOpen={menuOpen}
               isHidden={isHidden}
+              isMultipleSelection={isMultipleSelection}
               dependenciesForBlock={dependenciesForBlock}
               onMouseDown={onMouseDown}
               onChangeMenuOpen={setMenuOpen}
@@ -230,24 +233,26 @@ export const DraggableBlock = ({
               onCopyHref={onCopyHref}
               aiPanel={aiPanel}
             >
-              {turnInto != null && turnInto.length > 0 && (
-                <MenuList
-                  itemTrigger={
-                    <TriggerMenuItem icon={<CircularArrow />}>
-                      Turn into
-                    </TriggerMenuItem>
-                  }
-                >
-                  {turnInto.map((option) => (
-                    <MenuItem
-                      key={option.value}
-                      onSelect={() => onTurnInto?.(option.value)}
-                    >
-                      {option.title}
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              )}
+              {!isMultipleSelection &&
+                turnInto != null &&
+                turnInto.length > 0 && (
+                  <MenuList
+                    itemTrigger={
+                      <TriggerMenuItem icon={<CircularArrow />}>
+                        Turn into
+                      </TriggerMenuItem>
+                    }
+                  >
+                    {turnInto.map((option) => (
+                      <MenuItem
+                        key={option.value}
+                        onSelect={() => onTurnInto?.(option.value)}
+                      >
+                        {option.title}
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                )}
             </BlockDragHandle>
           )}
         </div>

@@ -33,6 +33,7 @@ type Action =
   | { action: 'notebook code error docs link clicked'; props?: undefined }
   | { action: 'slash command'; props: { command: string } }
   | { action: 'block duplicated'; props: { blockType: string } }
+  | { action: 'block moved to other tab'; props: { blockType: string } }
   | { action: 'copy block href'; props: { blockType: string } }
   | { action: 'click +'; props: { blockType: string } }
   | { action: 'block deleted'; props: { blockType: string } }

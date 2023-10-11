@@ -77,6 +77,7 @@ interface BlockDragHandleProps {
   readonly onMouseDown?: HTMLProps<HTMLDivElement>['onMouseDown'];
   readonly onChangeMenuOpen?: (newMenuOpen: boolean) => void;
   readonly isHidden?: boolean;
+  readonly isMultipleSelection?: boolean;
   readonly showEyeLabel?: boolean;
   readonly showAddBlock?: boolean;
   readonly onPlus?: () => void;
@@ -97,6 +98,7 @@ export const BlockDragHandle = ({
   children,
   menuOpen = false,
   isHidden = false,
+  isMultipleSelection = false,
   onShowHide = noop,
   showEyeLabel = false,
   onMouseDown,
@@ -183,7 +185,7 @@ export const BlockDragHandle = ({
           <MenuItem icon={<Duplicate />} onSelect={onDuplicate}>
             Duplicate
           </MenuItem>
-          {onCopyHref && (
+          {onCopyHref && !isMultipleSelection && (
             <MenuItem icon={<Link />} onSelect={onCopyHref}>
               Copy reference
             </MenuItem>
@@ -206,7 +208,7 @@ export const BlockDragHandle = ({
             </MenuList>
           )}
           {children}
-          {aiButton}
+          {!isMultipleSelection ? aiButton : null}
           <MenuItem disabled>
             <hr css={{ color: cssVar('backgroundDefault') }} />
           </MenuItem>
