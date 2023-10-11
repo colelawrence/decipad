@@ -267,7 +267,7 @@ ${stringify(relevantElements, null, '\t')}
 Let's pretend you had done the changes to my doc I request here: ${JSON.stringify(
         request
       )}
-Give me a textual summary of the changes you have made in simple terms.`,
+Give me a textual summary of the changes you have made in simple terms, in text only. Don't reply JSON.`,
     });
   };
 
