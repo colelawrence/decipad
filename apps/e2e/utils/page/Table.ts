@@ -191,6 +191,36 @@ export function showFormulasTable(page: Page, tableName?: string) {
     .click();
 }
 
+export async function changeColumnYear(
+  page: Page,
+  col: number,
+  tableName?: string
+) {
+  await openColTypeMenu(page, col, tableName);
+  await page.getByText('Date').click();
+  await page.getByText('Year').click();
+}
+
+export async function changeColumnMonth(
+  page: Page,
+  col: number,
+  tableName?: string
+) {
+  await openColTypeMenu(page, col, tableName);
+  await page.getByText('Date').click();
+  await page.getByText('Month').click();
+}
+
+export async function changeColumnDay(
+  page: Page,
+  col: number,
+  tableName?: string
+) {
+  await openColTypeMenu(page, col, tableName);
+  await page.getByText('Date').click();
+  await page.getByText('Day').click();
+}
+
 export async function removeColumn(
   page: Page,
   col: number,
