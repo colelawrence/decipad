@@ -23,6 +23,14 @@ export const TitleEditor: FC<TitleEditorProps> = ({
       <Editable
         readOnly={readOnly}
         onKeyDown={onKeyDown}
+        onPaste={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const data = e.clipboardData.getData('text/plain');
+          if (data.length === 0) return;
+          editor.insertText(data.replaceAll('\n', ''));
+        }}
         renderElement={(props) => {
           const leaf = getLeaf(props);
           return (

@@ -3,7 +3,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
 import cloneDeep from 'lodash.clonedeep';
-import { BaseEditor, BaseSelection, Element, Path, createEditor } from 'slate';
+import {
+  BaseEditor,
+  BaseSelection,
+  Element,
+  Path,
+  Text,
+  createEditor,
+} from 'slate';
 import { nanoid } from 'nanoid';
 import { createContext, useEffect, useState } from 'react';
 import { Subject } from 'rxjs';
@@ -92,7 +99,7 @@ export class EditorController {
 
     const editor = withReact(createEditor());
 
-    const { apply, onChange } = editor;
+    const { apply, onChange, normalizeNode } = editor;
 
     editor.apply = (e) => {
       // Prevents most slate operations,
@@ -100,21 +107,33 @@ export class EditorController {
       if (
         e.type === 'insert_text' ||
         e.type === 'remove_text' ||
-        e.type === 'set_selection' ||
-        e.type === 'insert_node'
+        e.type === 'set_selection'
       ) {
         apply(e);
-      }
-
-      if (e.type !== 'set_selection') {
-        (e as any).IS_LOCAL = true;
-        this.apply(e as TOperation);
+        if (e.type !== 'set_selection') {
+          (e as any).IS_LOCAL = true;
+          this.apply(e as TOperation);
+        }
       }
     };
 
     editor.onChange = () => {
       this.onChange();
       onChange();
+    };
+
+    editor.normalizeNode = (entry) => {
+      const [node, path] = entry;
+      if (path[0] !== 0) {
+        editor.removeNodes({ at: path });
+        return;
+      }
+
+      if (Text.isText(node) && path[1] !== 0) {
+        editor.removeNodes({ at: path });
+        return;
+      }
+      normalizeNode(entry);
     };
 
     const titleEl: TitleElement = {
