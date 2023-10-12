@@ -261,9 +261,9 @@ function useSetWorkspaceQuota(workspace: EditorNotebookFragment['workspace']) {
 
 function useNotebookTitleChange(notebookId: string) {
   const [, renameNotebook] = useRenameNotebookMutation();
-  const onNotebookTitleChange = useCallback(
-    (newName: string) => {
-      if (!isServerSideRendering()) {
+  return useCallback(
+    (newName?: string) => {
+      if (newName != null && !isServerSideRendering()) {
         const nameTrimmed = newName.trim();
         renameNotebook({
           id: notebookId,
@@ -280,8 +280,6 @@ function useNotebookTitleChange(notebookId: string) {
     },
     [notebookId, renameNotebook]
   );
-
-  return onNotebookTitleChange;
 }
 
 const DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS = 1_000;
