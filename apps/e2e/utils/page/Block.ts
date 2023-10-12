@@ -56,7 +56,7 @@ export async function createInputBelow(
 
   await page.keyboard.type(identifier);
 
-  await page.click('div [data-testid="input-widget-name"]');
+  await page.click('div [data-testid="input-widget-name"] >> nth=-1');
   await keyPress(page, 'ArrowDown');
   // erase 100$, then focus goes to title, we come back down
   await keyPress(page, 'End');
@@ -222,7 +222,8 @@ export async function createToggleBelow(page: Page, identifier: string) {
 export async function createSliderBelow(
   page: Page,
   identifier: string,
-  value: number | string
+  value: number | string,
+  options?: { min?: number; max?: number; step?: number }
 ) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
@@ -241,7 +242,7 @@ export async function createSliderBelow(
 
   await page.keyboard.type(identifier);
 
-  await page.click('div [data-testid="input-widget-name"]');
+  await page.click('div [data-testid="input-widget-name"] >> nth=-1');
   await keyPress(page, 'ArrowDown');
   // erase 100$, then focus goes to title, we come back down
   await keyPress(page, 'End');
@@ -251,6 +252,32 @@ export async function createSliderBelow(
   await keyPress(page, 'Backspace');
 
   await page.keyboard.type(value.toString());
+
+  if (options) {
+    await page
+      .locator('[data-testid="widget-editor"] button >> nth=-1')
+      .click();
+
+    if (options.min) {
+      await page
+        .locator('[role = "menu"] input >> nth=0')
+        .fill(String(options.min));
+    }
+
+    if (options.max) {
+      await page
+        .locator('[role = "menu"] input >> nth=1')
+        .fill(String(options.max));
+    }
+
+    if (options.step) {
+      await page
+        .locator('[role = "menu"] input >> nth=2')
+        .fill(String(options.step));
+    }
+
+    page.keyboard.press('Escape');
+  }
 }
 
 export async function createDateBelow(page: Page, identifier: string) {

@@ -7,7 +7,8 @@ export async function createTable(page: Page) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
   await page.keyboard.insertText('/table');
-
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.typing);
   await page.keyboard.press('Enter');
 }
 
@@ -135,10 +136,10 @@ export async function insertRowBelow(page: Page, line: number) {
 }
 
 export async function addColumn(page: Page, tableName?: string) {
-  focusOnTable(page, tableName);
+  await focusOnTable(page, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  getTableOrPage(page, tableName)
+  await getTableOrPage(page, tableName)
     .locator('button[title="Add Column"]')
     .click({ force: true });
 }
@@ -255,10 +256,18 @@ export async function addColLeft(page: Page, col: number, tableName?: string) {
 export async function updateDataType(
   page: Page,
   col: number,
-  tableName?: string
+  tableName?: string,
+  dataType = 'Text',
+  subOption: string | undefined = undefined
 ) {
   await openColTypeMenu(page, col, tableName);
-  await page.getByRole('menuitem', { name: 'Text' }).click();
+  await page.getByRole('menuitem', { name: dataType }).click();
+  if (subOption) {
+    await page
+      .locator(`div [data-side="right"] >> text='${subOption}'`)
+      .last()
+      .click();
+  }
 }
 
 export async function selectColumnName(
@@ -279,7 +288,7 @@ export async function renameColumn(
   identifier: string,
   tableName?: string
 ) {
-  selectColumnName(page, col, tableName);
+  await selectColumnName(page, col, tableName);
   await keyPress(page, 'Backspace');
   await page.keyboard.type(identifier);
 }
@@ -293,4 +302,45 @@ export async function focusOnTableColumnFormula(
   } else {
     await page.getByRole('code').filter({ hasText: filterText }).click();
   }
+}
+
+export async function swapTableColumns(
+  page: Page,
+  fromCol: number,
+  toCol: number
+) {
+  // get distance between to column on table
+  const [col1Loc, col2Loc] = await Promise.all([
+    page
+      .locator(`div [data-testid="table-add-remove-column-button"] >> nth=0`)
+      .boundingBox(),
+    page
+      .locator(`div [data-testid="table-add-remove-column-button"] >> nth=1`)
+      .boundingBox(),
+  ]);
+
+  const colWidth = col2Loc!.x - col1Loc!.x;
+  const movingRight = fromCol < toCol;
+
+  // hover over from column and click
+  await page
+    .locator(
+      `div [data-testid="table-add-remove-column-button"] >> nth=${fromCol}`
+    )
+    .hover();
+  await page.mouse.down();
+
+  const toColLoc = await page
+    .locator(
+      `div [data-testid="table-add-remove-column-button"] >> nth=${toCol}`
+    )
+    .boundingBox();
+
+  // drag one column past the location we want and drop it
+  const toColX = toColLoc!.x + (movingRight ? colWidth : -colWidth);
+  await page.mouse.move(toColX, toColLoc!.y);
+
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(1_000);
+  await page.mouse.up();
 }
