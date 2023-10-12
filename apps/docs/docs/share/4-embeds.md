@@ -24,10 +24,19 @@ Add data insights or calculations to any webpage with Decipad embeds.
 - Paste the Decipad embed link on notion and select `Create embed`.
 - Check out this [interactive Invoice Template](https://cord-wok-161.notion.site/Quick-Invoice-Calculator-c62577c04a2d4ed6bdcd8f13c558a98b) and [this Hourly Rate Proposal](https://www.notion.so/decipad/Hourly-Rate-Proposal-c8702370b9f041e1a3260e72e192320c).
 
-#### Embed on Monday.com
+#### Embed on monday.com
 
-- Open Monday.com and create a new Doc.
+- Open monday.com and create a new Doc.
 - Add a new ["Embed everything"](https://support.monday.com/hc/en-us/articles/360002383219-The-Embed-Everything-Widget) widget and paste the Decipad embed link.
+- Alternatively, use this button to install the Decipad Embedding app:
+
+<a href="https://auth.monday.com/oauth2/authorize?client_id=34c0414c71b1fc9a14ffe9932af64042&response_type=install">
+                <img
+                  alt="Add to monday.com"
+                  height="42"
+                  src="https://dapulse-res.cloudinary.com/image/upload/f_auto,q_auto/remote_mondaycom_static/uploads/Tal/4b5d9548-0598-436e-a5b6-9bc5f29ee1d9_Group12441.png"
+                />
+              </a>
 
 #### Embed on ClickUp
 
