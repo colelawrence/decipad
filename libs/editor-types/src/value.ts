@@ -1,4 +1,4 @@
-import type { Unit } from '@decipad/computer';
+import type { Unit } from '@decipad/remote-computer';
 import type {
   TElement,
   TImageElement,

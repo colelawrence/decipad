@@ -1,9 +1,9 @@
 import {
   Result,
-  SerializedTypeKind,
+  type SerializedTypeKind,
   isColumn,
   isTable,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { isDeciNumberInput } from '@decipad/number';
 import {
   ColumnResult,

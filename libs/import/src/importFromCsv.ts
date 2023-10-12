@@ -1,5 +1,5 @@
 import { parse as parseCSV } from 'csv-parse';
-import { Computer, Result } from '@decipad/computer';
+import { RemoteComputer, Result } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { pivot } from './utils/pivot';
 import { Sheet, SpreadsheetValue } from './types';
@@ -13,7 +13,7 @@ const toColumnOriented = (rowOrientedData: SpreadsheetValue[][]): Sheet => {
 };
 
 export const importFromCsv = (
-  computer: Computer,
+  computer: RemoteComputer,
   source: string,
   options: ImportOptions
 ): Promise<Result.Result<'table'>> => {

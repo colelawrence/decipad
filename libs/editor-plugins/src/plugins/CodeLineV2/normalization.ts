@@ -4,7 +4,7 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
 import { isElementOfType, insertNodes } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { nanoid } from 'nanoid';
 import { getNodeChildren, removeNodes, setNodes } from '@udecode/plate';
 import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeLinePlugin';
@@ -86,7 +86,7 @@ export const createNormalizeCodeLineV2Plugin = () =>
       },
   });
 
-export const createNormalizeCodeLineCodePlugin = (computer: Computer) =>
+export const createNormalizeCodeLineCodePlugin = (computer: RemoteComputer) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_CODE_LINE_V2_CODE',
     elementType: ELEMENT_CODE_LINE_V2_CODE,

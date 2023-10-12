@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "references": [
+    { "path": "../computer" },
+    { "path": "../utils" },
+    { "path": "../format" },
+    { "path": "../language" }
+  ]
+}

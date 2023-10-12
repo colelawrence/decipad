@@ -1,0 +1,76 @@
+export * from './types';
+export * from './remoteComputer';
+export * from './isRemoteComputer';
+
+// re-export the basic types needed by the remote computer clients
+// eslint-disable-next-line no-restricted-imports
+export type {
+  AST,
+  AutocompleteName,
+  BlockDependents,
+  BracketError,
+  ComputeRequest,
+  Constant,
+  DimensionExplanation,
+  IdentifiedError,
+  IdentifiedResult,
+  NotebookResults,
+  Parseable,
+  ParseableDate,
+  Parser,
+  Program,
+  ProgramBlock,
+  SerializedType,
+  SerializedTypeKind,
+  SerializedTypes,
+  SimpleValueAST,
+  Time,
+  Unit,
+  UnitOfMeasure,
+} from '@decipad/computer';
+
+// export utils
+
+// eslint-disable-next-line no-restricted-imports
+export {
+  areUnitsConvertible,
+  astNode,
+  buildType,
+  cleanDate,
+  convertBetweenUnits,
+  convertToMultiplierUnit,
+  currencyUnits,
+  decilang,
+  deserializeType,
+  defaultComputerResults,
+  getConstantByName,
+  getExprRef,
+  identifierRegExpGlobal,
+  InferError,
+  isColumn,
+  isExpression,
+  isTable,
+  isTableColumn,
+  isTableResult,
+  identifiedErrorToMessage,
+  materializeOneResult,
+  materializeResult,
+  memoizedColumnResultGenerator,
+  parseBlock,
+  parseExpressionOrThrow,
+  parseNumberWithUnit,
+  parseStatement,
+  parseSimpleValue,
+  parseSimpleValueUnit,
+  prettyPrintAST,
+  Result,
+  runCode,
+  safeNumberForPrecision,
+  serializeResult,
+  serializeType,
+  setErrorReporter,
+  simpleValueToString,
+  STATEMENT_SEP_TOKEN_TYPE,
+  tokenize,
+  unnestTableRows,
+} from '@decipad/computer';

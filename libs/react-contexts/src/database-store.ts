@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { create } from 'zustand';
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { codePlaceholder } from '@decipad/frontend-config';
 import {
   ImportElementSource,

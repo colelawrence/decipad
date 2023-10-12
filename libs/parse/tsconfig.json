@@ -6,7 +6,7 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../computer"
+      "path": "../remote-computer"
     },
     {
       "path": "../utils"

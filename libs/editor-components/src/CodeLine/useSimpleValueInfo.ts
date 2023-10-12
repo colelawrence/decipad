@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import {
-  Computer,
+  RemoteComputer,
   AST,
   simpleValueToString,
   parseSimpleValueUnit,
   parseSimpleValue,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import {
   CodeLineV2Element,
   ELEMENT_SMART_REF,
@@ -15,7 +15,7 @@ import { isElementOfType } from '@decipad/editor-utils';
 import { findNodePath, insertText } from '@udecode/plate';
 
 export function useSimpleValueInfo(
-  computer: Computer,
+  computer: RemoteComputer,
   element: CodeLineV2Element,
   sourceCode: string
 ) {

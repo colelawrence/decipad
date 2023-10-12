@@ -9,7 +9,7 @@
       "path": "../editor-types"
     },
     {
-      "path": "../computer"
+      "path": "../remote-computer"
     },
     {
       "path": "../utils"

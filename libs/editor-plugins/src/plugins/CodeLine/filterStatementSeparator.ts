@@ -1,8 +1,8 @@
 import {
-  Computer,
+  RemoteComputer,
   STATEMENT_SEP_TOKEN_TYPE,
   tokenize,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import {
   getBlockAbove,
   getChildren,
@@ -21,7 +21,7 @@ import { Path } from 'slate';
 
 export const filterStatementSeparator = (
   editor: MyEditor,
-  computer: Computer
+  computer: RemoteComputer
 ): boolean => {
   const anchor = editor.selection?.anchor?.offset ?? 0;
   const focus = editor.selection?.focus?.offset ?? 0;

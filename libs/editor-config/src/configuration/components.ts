@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   Blockquote,
   Bold,
@@ -53,7 +53,7 @@ export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>
 >;
 
-export const components = (computer: Computer): PlateComponents => ({
+export const components = (computer: RemoteComputer): PlateComponents => ({
   // Headings
   [ELEMENT_H1]: Title,
   [ELEMENT_H2]: Heading1,

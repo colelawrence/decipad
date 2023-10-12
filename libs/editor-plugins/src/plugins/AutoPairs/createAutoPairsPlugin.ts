@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -24,7 +24,7 @@ const pairs = [
 const isAtEndOfLine = (text: string, cursorOffset: number) =>
   text[cursorOffset] === '\n' || text[cursorOffset] === undefined;
 
-export const createAutoPairsPlugin = (computer: Computer) =>
+export const createAutoPairsPlugin = (computer: RemoteComputer) =>
   createOnKeyDownPluginFactory({
     name: 'AUTO_PAIR_PLUGIN',
     plugin: (editor) => (event) => {

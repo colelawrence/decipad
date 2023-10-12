@@ -83,11 +83,11 @@ import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
-interface ComputerOpts {
+export interface ComputerOpts {
   initialProgram?: Program;
 }
 
-interface IngestComputeRequestResponse {
+export interface IngestComputeRequestResponse {
   program: ComputerProgram;
 }
 

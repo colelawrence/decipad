@@ -1,5 +1,5 @@
 import { MyElement, MyEditor } from '@decipad/editor-types';
-import { Computer, ProgramBlock } from '@decipad/computer';
+import { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { findNode, getNode, isElement } from '@udecode/plate';
@@ -15,7 +15,7 @@ export interface WithUpdateComputerOverrideOptions {
 
 export const withUpdateComputerOverride =
   (
-    computer: Computer,
+    computer: RemoteComputer,
     {
       debounceEditorChangesMs = DEBFAULT_DEBOUNCE_UPDATE_COMPUTER_MS,
     }: WithUpdateComputerOverrideOptions = {}

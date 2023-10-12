@@ -1,4 +1,4 @@
-import { Time } from '@decipad/computer';
+import type { Time } from '@decipad/remote-computer';
 import { parseDate as globalParseDate, once } from '@decipad/utils';
 import { DateFormat } from './types';
 

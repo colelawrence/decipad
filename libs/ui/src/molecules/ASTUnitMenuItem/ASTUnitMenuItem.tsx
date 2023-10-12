@@ -1,4 +1,4 @@
-import { AST, parseSimpleValueUnit } from '@decipad/computer';
+import { AST, parseSimpleValueUnit } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';

@@ -1,5 +1,5 @@
 import { ClientEventContextType } from '@decipad/client-events';
-import type { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { noopPromise } from '@decipad/editor-utils';
 import {
@@ -91,7 +91,7 @@ import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
 
 interface PluginOptions {
-  computer: Computer;
+  computer: RemoteComputer;
   events?: ClientEventContextType;
   readOnly: boolean;
   interactions?: Subject<UserInteraction>;

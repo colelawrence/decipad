@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { InferError } from '@decipad/computer';
+import { InferError } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 import { css } from '@emotion/react';

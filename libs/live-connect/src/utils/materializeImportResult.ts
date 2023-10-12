@@ -1,5 +1,5 @@
 import { ImportResult } from '@decipad/import';
-import { materializeResult } from '@decipad/computer';
+import { materializeResult } from '@decipad/remote-computer';
 
 export const materializeImportResult = async (
   result: ImportResult

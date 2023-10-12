@@ -1,7 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import type { FC, ReactNode } from 'react';
 import { css } from '@emotion/react';
-import type { IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import type {
+  IdentifiedError,
+  IdentifiedResult,
+} from '@decipad/remote-computer';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import {
   CodeResult,

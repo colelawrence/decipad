@@ -1,7 +1,7 @@
-import { AST } from '@decipad/computer';
-import { CellValueType } from '@decipad/editor-types';
+import type { AST } from '@decipad/remote-computer';
+import type { CellValueType } from '@decipad/editor-types';
 import { dateFromMillis } from '@decipad/utils';
-import { DateTime } from 'luxon';
+import type { DateTime } from 'luxon';
 import { astNode } from './astNode';
 
 type DatePropName = 'year' | 'month' | 'day' | 'hour' | 'minute';

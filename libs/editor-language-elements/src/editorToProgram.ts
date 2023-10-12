@@ -1,5 +1,5 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import type { Computer, Program } from '@decipad/computer';
+import type { RemoteComputer, Program } from '@decipad/remote-computer';
 import {
   elementToLanguageBlocks,
   interactiveElementTypes,
@@ -10,7 +10,7 @@ export { interactiveElementTypes };
 export const editorToProgram = async (
   editor: MyEditor,
   blocks: Iterable<MyElement>,
-  computer: Computer
+  computer: RemoteComputer
 ): Promise<Program> => {
   const program: Program = [];
 

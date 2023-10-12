@@ -8,7 +8,7 @@
   "references": [
     { "path": "../frontend-config" },
     {
-      "path": "../computer"
+      "path": "../remote-computer"
     },
     {
       "path": "../editor-types"

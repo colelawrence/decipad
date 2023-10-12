@@ -2,16 +2,16 @@ import { CellValueType, TableCellType } from '@decipad/editor-types';
 import DeciNumber, { N, ZERO } from '@decipad/number';
 import {
   AST,
-  Computer,
+  RemoteComputer,
   areUnitsConvertible,
   convertBetweenUnits,
   convertToMultiplierUnit,
-  Result,
-  Unit,
+  type Result,
+  type Unit,
   SerializedType,
   parseStatement,
   isExpression,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { formatUnit, formatError } from '@decipad/format';
 import { PromiseOrType, containsNumber } from '@decipad/utils';
 import { astNode } from './utils/astNode';
@@ -25,7 +25,7 @@ type ParseCellResult = AST.Expression | Error | null;
 const defaultLocale = 'en-US'; // TODO: make this dynamic
 
 const parsing = async (
-  computer: Computer,
+  computer: RemoteComputer,
   type: SerializedType,
   text: string,
   afterParse: (result: Result.Result) => PromiseOrType<ParseCellResult>
@@ -103,7 +103,7 @@ export function assertCellType<Kind extends CellValueType['kind']>(
 
 export const parseCell = memoize(
   async (
-    computer: Computer,
+    computer: RemoteComputer,
     _cellType: CellValueType,
     text: string
   ): Promise<AST.Expression | Error | null> => {

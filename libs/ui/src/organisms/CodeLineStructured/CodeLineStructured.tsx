@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { useDelayedValue } from '@decipad/react-utils';
 import React, { ComponentProps, ReactNode, useCallback, useState } from 'react';
 import { CodeError } from '../../atoms';

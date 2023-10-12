@@ -29,7 +29,7 @@
       "path": "../react-contexts"
     },
     {
-      "path": "../computer"
+      "path": "../remote-computer"
     },
     {
       "path": "../live-connect"

@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { ELEMENT_VARIABLE_DEF, MyElement } from '@decipad/editor-types';
 import { clone } from '@decipad/editor-utils';
 import { nanoid } from 'nanoid';
@@ -9,7 +9,7 @@ const utils = {
    * add it onto this function,
    * otherwise the function `clone` is used.
    */
-  cloneProxy(computer: Computer, element: MyElement) {
+  cloneProxy(computer: RemoteComputer, element: MyElement) {
     const newElement = clone(computer, element);
     switch (newElement.type) {
       case ELEMENT_VARIABLE_DEF: {

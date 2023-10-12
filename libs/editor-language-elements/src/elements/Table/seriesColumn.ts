@@ -1,17 +1,17 @@
 import { SeriesType } from '@decipad/editor-types';
-import {
+import type {
   AST,
-  Computer,
+  RemoteComputer,
   IdentifiedError,
   SerializedType,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { astColumn, astNode } from '@decipad/editor-utils';
 import { enumerate, getDefined } from '@decipad/utils';
 import { parseCell, parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { simpleArtifficialError } from './common';
 
 export async function seriesColumn(
-  computer: Computer,
+  computer: RemoteComputer,
   type: SeriesType,
   firstCell: string,
   rowCount: number,

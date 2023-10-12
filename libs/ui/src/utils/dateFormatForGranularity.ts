@@ -1,4 +1,4 @@
-import { SerializedTypes } from '@decipad/computer';
+import type { SerializedTypes } from '@decipad/remote-computer';
 import { CellValueType } from '@decipad/editor-types';
 
 const dateFormatsForType: Record<SerializedTypes.Date['date'], string> = {

@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 
 export const rowsToColumns = (result: Result.Result): Result.Result => {
   if (

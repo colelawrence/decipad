@@ -1,6 +1,6 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
-import type { SerializedType } from '@decipad/computer';
+import type { SerializedType } from '@decipad/remote-computer';
 import * as elementKindsModule from './element-kinds';
 import * as markKinds from './mark-kinds';
 

@@ -1,4 +1,4 @@
-import { Result, materializeOneResult } from '@decipad/computer';
+import { Result, materializeOneResult } from '@decipad/remote-computer';
 import { useResolved } from '@decipad/react-utils';
 import { useMemo } from 'react';
 

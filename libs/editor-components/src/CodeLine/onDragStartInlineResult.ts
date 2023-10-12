@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { onDragStartSmartRef } from '@decipad/editor-utils';
 import React from 'react';
-import { Computer, Result } from '@decipad/computer';
+import { RemoteComputer, Result } from '@decipad/remote-computer';
 
 export const DRAG_INLINE_RESULT = 'inline-result';
 
@@ -20,7 +20,7 @@ export const onDragStartInlineResult =
     }: {
       element: CodeLineElement | CodeLineV2Element;
       asText?: string;
-      computer: Computer;
+      computer: RemoteComputer;
       result: Result.Result;
     }
   ) =>

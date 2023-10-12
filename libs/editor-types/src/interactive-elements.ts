@@ -1,4 +1,4 @@
-import type { SerializedType } from '@decipad/computer';
+import type { SerializedType } from '@decipad/remote-computer';
 import type {
   BaseElement,
   BlockElement,

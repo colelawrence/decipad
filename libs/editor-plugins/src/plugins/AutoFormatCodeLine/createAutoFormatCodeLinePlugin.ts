@@ -1,5 +1,5 @@
 import { getAnalytics } from '@decipad/client-events';
-import { Computer, getExprRef } from '@decipad/computer';
+import { RemoteComputer, getExprRef } from '@decipad/remote-computer';
 import { editorAnalytics$, openEditor$ } from '@decipad/editor-components';
 import {
   BlockElement,
@@ -47,7 +47,7 @@ interface AutoFormatCodeLinePluginStore {
 
 const pluginName = 'AUTO_FORMAT_CODE_LINE_PLUGIN';
 
-export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
+export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
   createOnKeyDownPluginFactory({
     name: pluginName,
     plugin: (editor) => {
@@ -158,7 +158,7 @@ export const createAutoFormatCodeLinePlugin = (computer: Computer) =>
 
 const commitPotentialFormula = (
   editor: MyEditor,
-  computer: Computer,
+  computer: RemoteComputer,
   expressionRange: BaseRange,
   onCommit: (ref: ShadowCalcReference) => void,
   id?: string

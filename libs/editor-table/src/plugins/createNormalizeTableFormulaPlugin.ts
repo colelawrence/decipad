@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   NormalizerReturnValue,
   createNormalizerPlugin,
@@ -15,7 +15,7 @@ import { hasNode, deleteText } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
 export const normalizeTableFormula =
-  (_computer: Computer) =>
+  (_computer: RemoteComputer) =>
   (editor: MyEditor) =>
   (entry: MyNodeEntry): NormalizerReturnValue => {
     const [element, path] = entry;
@@ -76,7 +76,7 @@ export const normalizeTableFormula =
     return false;
   };
 
-export const createNormalizeTableFormulaPlugin = (computer: Computer) =>
+export const createNormalizeTableFormulaPlugin = (computer: RemoteComputer) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
     elementType: ELEMENT_TABLE,

@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { BlockDependents } from '@decipad/computer';
+import type { BlockDependents } from '@decipad/remote-computer';
 import { css, SerializedStyles } from '@emotion/react';
 import { ComponentProps, FC, HTMLProps, ReactNode, Ref, useState } from 'react';
 import { ConnectDragSource } from 'react-dnd';

@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { AnyElement, CellValueType } from '@decipad/editor-types';
-import { Result } from '@decipad/computer';
+import type { AnyElement, CellValueType } from '@decipad/editor-types';
+import type { Result } from '@decipad/remote-computer';
 import { useWindowListener } from '@decipad/react-utils';
 import { css } from '@emotion/react';
 import {

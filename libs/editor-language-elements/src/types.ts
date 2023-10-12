@@ -1,11 +1,11 @@
-import { Computer, Program } from '@decipad/computer';
+import { RemoteComputer, Program } from '@decipad/remote-computer';
 import { MyEditor, MyElement } from '@decipad/editor-types';
 import { PromiseOrType } from '@decipad/utils';
 
 export type InteractiveLanguageElement = {
   getParsedBlockFromElement?: (
     editor: MyEditor,
-    computer: Computer,
+    computer: RemoteComputer,
     element: MyElement
   ) => PromiseOrType<Program>;
   type: string | string[];

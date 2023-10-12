@@ -1,4 +1,4 @@
-import { AST, prettyPrintAST } from '@decipad/computer';
+import { type AST, prettyPrintAST } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { unitToAST } from './unitToAST';
 

@@ -14,10 +14,12 @@ import {
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
 import { Path } from 'slate';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
 
-export const autoformatBlocks = (computer: Computer): MyAutoformatRule[] => [
+export const autoformatBlocks = (
+  computer: RemoteComputer
+): MyAutoformatRule[] => [
   {
     mode: 'block',
     type: ELEMENT_H2,

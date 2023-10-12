@@ -1,6 +1,6 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
 import { DRAG_SMART_REF } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { onDropSmartRef } from './onDrop/onDropSmartRef';
 
 /**
@@ -10,7 +10,9 @@ import { onDropSmartRef } from './onDrop/onDropSmartRef';
  *
  * See `onDragStartSmartRef` for the drag part
  */
-export const createDndSmartRefPlugin = (computer: Computer): MyPlatePlugin => ({
+export const createDndSmartRefPlugin = (
+  computer: RemoteComputer
+): MyPlatePlugin => ({
   key: DRAG_SMART_REF,
   handlers: {
     onDrop: onDropSmartRef(computer),

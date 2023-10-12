@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TH,
@@ -33,7 +33,7 @@ export const changeColumnType = (
   path: Path,
   cellType: TableCellType | undefined,
   columnIndex: number,
-  computer?: Computer // Needed when changing from dropdown to other types
+  computer?: RemoteComputer // Needed when changing from dropdown to other types
 ) => {
   withoutNormalizing(editor, () => {
     if (cellType?.kind === 'table-formula') {

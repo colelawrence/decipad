@@ -1,11 +1,11 @@
 /* eslint-disable no-loop-func */
 import {
-  Computer,
+  RemoteComputer,
   Result,
   SerializedType,
   isTableResult,
   materializeResult,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -30,7 +30,7 @@ interface ImportTableProps {
   editor: MyEditor;
   insertPath: Path;
   result: ImportResult;
-  computer: Computer;
+  computer: RemoteComputer;
 }
 
 const valueToString = (result: Result.Result): string => {
@@ -136,7 +136,7 @@ const dataRows = (
 };
 
 const tableElement = (
-  computer: Computer,
+  computer: RemoteComputer,
   table: Result.Result<'materialized-table'>,
   meta?: ImportResult['meta']
 ): TableElement => {

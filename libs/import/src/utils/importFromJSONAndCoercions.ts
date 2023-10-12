@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Result } from '@decipad/remote-computer';
 import { TableCellType } from '@decipad/editor-types';
 import { columnTypeCoercionsToRec } from './columnTypeCoersionsToRec';
 import { tableFlip } from './tableFlip';

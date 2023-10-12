@@ -1,5 +1,5 @@
 import { FC, useEffect, useContext } from 'react';
-import { InferError } from '@decipad/computer';
+import { InferError } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { ClientEventsContext } from '@decipad/client-events';
 import { AnyElement } from '@decipad/editor-types';

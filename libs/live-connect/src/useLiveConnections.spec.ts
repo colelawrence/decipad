@@ -1,9 +1,9 @@
 import {
-  Computer,
+  getRemoteComputer,
   materializeOneResult,
   runCode,
   serializeResult,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
 import { BehaviorSubject } from 'rxjs';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
@@ -13,7 +13,7 @@ setupDeciNumberSnapshotSerializer();
 
 it('can push a new table into the computer', async () => {
   // We need a first request for the computer to function
-  const computer = new Computer({ initialProgram: [] });
+  const computer = getRemoteComputer({ initialProgram: [] });
 
   const { type, value } = await runCode(
     'Table1 = { Column1 = [1], Column2 = [2] }\nTable1'

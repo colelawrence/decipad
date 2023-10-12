@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/computer';
+import type { SerializedType } from '@decipad/remote-computer';
 import { dequal } from '@decipad/utils';
 
 export const sameType = (types: SerializedType[]): boolean => {

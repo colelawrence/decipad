@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { FC } from 'react';
 import { css } from '@emotion/react';
 import { QuestionMark, Cloud } from '../../icons';

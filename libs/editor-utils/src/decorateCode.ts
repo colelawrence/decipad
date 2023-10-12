@@ -15,7 +15,7 @@ import {
   CodeLineV2Element,
 } from '@decipad/editor-types';
 import { BasePoint, Path, Range } from 'slate';
-import { Computer, parseStatement } from '@decipad/computer';
+import { RemoteComputer, parseStatement } from '@decipad/remote-computer';
 import { isExprRef } from 'libs/computer/src/exprRefs';
 import { getVariableRanges } from './getVariableRanges';
 import type { RangeWithVariableInfo } from './getVariableRanges';
@@ -77,7 +77,7 @@ export interface AutocompleteDecorationProps {
 }
 
 export const decorateCode = (
-  computer: Computer,
+  computer: RemoteComputer,
   elementType:
     | typeof ELEMENT_CODE_LINE
     | typeof ELEMENT_TABLE_COLUMN_FORMULA

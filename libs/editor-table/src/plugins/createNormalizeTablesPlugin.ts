@@ -11,7 +11,7 @@ import {
 } from '@decipad/editor-types';
 import { deleteText, isElement, TNodeEntry } from '@udecode/plate';
 import { insertNodes } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
 import { normalizeTable } from '../utils/normalizeTable';
 
@@ -27,7 +27,7 @@ const normalizeTableInput = (
   };
 };
 
-export const createNormalizeTablesPlugin = (computer: Computer) =>
+export const createNormalizeTablesPlugin = (computer: RemoteComputer) =>
   createNormalizerPluginFactory({
     name: 'NORMALIZE_TABLES_PLUGIN',
     plugin:

@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { all } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
 import { useMemo } from 'react';

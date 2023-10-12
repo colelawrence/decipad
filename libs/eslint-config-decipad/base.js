@@ -76,6 +76,11 @@ module.exports = {
             message: 'Use @decipad/number instead of @decipad/fraction',
           },
           {
+            name: '@decipad/computer',
+            message:
+              'Use @decipad/remote-computer instead of @decipad/computer',
+          },
+          {
             name: 'fraction.js',
             message: 'Use @decipad/number instead of fraction.js',
           },

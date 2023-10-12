@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { Computer, parseSimpleValue } from '@decipad/computer';
+import { RemoteComputer, parseSimpleValue } from '@decipad/remote-computer';
 import { useFilteredTabs, useNodePath } from '@decipad/editor-hooks';
 import {
   ELEMENT_CODE_LINE,
@@ -314,7 +314,7 @@ export const DraggableBlock: React.FC<DraggableBlockProps> = forwardRef<
 
 const insertSameNodeType = (
   prevNode: MyElement | undefined,
-  computer: Computer
+  computer: RemoteComputer
 ): MyElementOrText => {
   const id = nanoid();
   const { input, formula } = PLACEHOLDERS;

@@ -22,7 +22,7 @@ import {
 } from '@decipad/editor-types';
 import { enumerate, dequal } from '@decipad/utils';
 import { NodeEntry } from 'slate';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { setSelection } from '@decipad/editor-utils';
 
@@ -157,7 +157,7 @@ export const normalizeTableFormulaAndSeries =
   };
 
 export const createNormalizeTableFormulaAndSeriesCellsPlugin = (
-  _computer: Computer
+  _computer: RemoteComputer
 ) =>
   createNormalizerPlugin({
     name: 'NORMALIZE_TABLE_FORMULA_AND_SERIES_CELLS_PLUGIN',

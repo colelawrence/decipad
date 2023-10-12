@@ -1,4 +1,5 @@
-import { captureException, Computer, Result } from '@decipad/computer';
+import { captureException } from '@sentry/react';
+import { RemoteComputer, Result } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
 import {
@@ -60,7 +61,7 @@ const getSheet = (response: unknown): Sheet => {
 };
 
 const handleGsheetsResponse = async (
-  computer: Computer,
+  computer: RemoteComputer,
   resp: unknown,
   options: ImportOptions
 ): Promise<Result.Result> => {

@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Result } from '@decipad/remote-computer';
 
 export const errorResult = (message: string): Result.Result => {
   return {

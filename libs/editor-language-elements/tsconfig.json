@@ -14,7 +14,7 @@
       "path": "../editor-utils"
     },
     {
-      "path": "../computer"
+      "path": "../remote-computer"
     },
     {
       "path": "../react-contexts"

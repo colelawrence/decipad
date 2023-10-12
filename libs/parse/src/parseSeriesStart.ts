@@ -1,4 +1,8 @@
-import { Result, Time, parseNumberWithUnit } from '@decipad/computer';
+import {
+  type Result,
+  type Time,
+  parseNumberWithUnit,
+} from '@decipad/remote-computer';
 import { SeriesType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { parseDate } from './parseDate';

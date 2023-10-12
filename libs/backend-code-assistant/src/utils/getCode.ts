@@ -1,4 +1,4 @@
-import { parseStatement, Parser } from '@decipad/computer';
+import { parseStatement, Parser } from '@decipad/remote-computer';
 import { debug } from '../debug';
 import { unwrapCodeContent } from './unwrapCodeContent';
 

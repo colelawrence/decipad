@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import type { SerializedTypes } from '@decipad/computer';
+import type { SerializedTypes } from '@decipad/remote-computer';
 import { CellValueType } from '@decipad/editor-types';
 import { useCanUseDom } from '@decipad/react-utils';
 import { css } from '@emotion/react';

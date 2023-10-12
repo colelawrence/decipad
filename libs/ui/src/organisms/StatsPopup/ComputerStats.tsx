@@ -1,4 +1,7 @@
-import { ComputerExpressionResultStat, ComputerStat } from '@decipad/computer';
+import type {
+  ComputerExpressionResultStat,
+  ComputerStat,
+} from '@decipad/remote-computer';
 import { FC, useMemo } from 'react';
 import { PlotResult } from '../PlotResult/PlotResult';
 import { PlotSpec } from '../PlotResult/PlotResult.types';

@@ -1,6 +1,9 @@
 /* eslint-disable no-param-reassign */
-import type { Constant, Unit } from '@decipad/computer';
-import { getConstantByName } from '@decipad/computer';
+import {
+  type Constant,
+  type Unit,
+  getConstantByName,
+} from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useMemo, useReducer, useRef } from 'react';

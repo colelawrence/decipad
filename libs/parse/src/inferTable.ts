@@ -1,10 +1,10 @@
 import {
-  Computer,
+  RemoteComputer,
   Result,
   SerializedType,
   memoizedColumnResultGenerator,
   cleanDate,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { varNamify } from '@decipad/utils';
 import { slice } from '@decipad/generator-utils';
 import { columnNameFromIndex } from './columnNameFromIndex';
@@ -80,7 +80,7 @@ const tableToValue = (
 };
 
 export const inferTable = async (
-  computer: Computer,
+  computer: RemoteComputer,
   data: Sheet,
   options: InferTableOptions
 ): Promise<Result.Result<'table'>> => {

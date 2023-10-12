@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_SMART_REF,
   MyEditor,
@@ -26,7 +26,9 @@ import { BasePoint, Path } from 'slate';
 import { insertSmartRef } from './insertSmartRef';
 
 export const onDropSmartRef =
-  (computer: Computer) => (editor: MyEditor) => (event: React.DragEvent) => {
+  (computer: RemoteComputer) =>
+  (editor: MyEditor) =>
+  (event: React.DragEvent) => {
     if (editor.dragging === DRAG_SMART_REF) {
       // eslint-disable-next-line no-param-reassign
       editor.dragging = null;

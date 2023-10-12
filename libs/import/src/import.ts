@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   ColIndex,
   ImportElementSource,
@@ -9,7 +9,7 @@ import { decipad, gsheets } from './providers';
 import { ImportResult } from './types';
 
 export interface ImportParams {
-  computer: Computer;
+  computer: RemoteComputer;
   url: URL;
   proxy?: URL;
   provider?: ImportElementSource;

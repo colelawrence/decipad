@@ -1,5 +1,8 @@
 /* eslsnt-disable prefer-destructuring */
-import { Computer } from '@decipad/computer';
+import {
+  type RemoteComputer,
+  getRemoteComputer,
+} from '@decipad/remote-computer';
 import { DocSyncEditor } from '@decipad/docsync';
 import { EditorSidebar } from '@decipad/editor-components';
 import {
@@ -89,7 +92,7 @@ export const NewNotebook: FC = () => {
   const isEmbed = Boolean(_embed);
 
   const [docsync, setDocsync] = useState<DocSyncEditor | undefined>();
-  const [computer, setComputer] = useState<Computer>(new Computer());
+  const [computer, setComputer] = useState<RemoteComputer>(getRemoteComputer());
   const [error, setError] = useState<Error | undefined>(undefined);
 
   useAnimateMutations();
@@ -187,7 +190,7 @@ const NewTabs: FC<{ controller: EditorController }> = ({ controller }) => {
 const NewEditor: FC<{
   notebookId: string;
   setDocsync: (docsync: DocSyncEditor) => void;
-  setComputer: (computer: Computer) => void;
+  setComputer: (computer: RemoteComputer) => void;
   setError: (error: Error | undefined) => void;
 }> = ({ notebookId, setDocsync, setComputer, setError }) => {
   const docsync = useContext(DocsyncEditorProvider);

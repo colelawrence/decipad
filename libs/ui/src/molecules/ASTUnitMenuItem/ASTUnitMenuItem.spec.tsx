@@ -1,4 +1,4 @@
-import { decilang, SimpleValueAST } from '@decipad/computer';
+import { decilang, SimpleValueAST } from '@decipad/remote-computer';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MenuWrapper as wrapper } from '../../test-utils';

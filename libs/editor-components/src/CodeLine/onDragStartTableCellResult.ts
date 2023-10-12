@@ -2,7 +2,7 @@ import { MyEditor } from '@decipad/editor-types';
 import { ComponentProps } from 'react';
 import { setSlateFragment } from '@decipad/editor-utils';
 import { CodeResult } from '@decipad/ui';
-import { Computer, SerializedTypes } from '@decipad/computer';
+import { RemoteComputer, SerializedTypes } from '@decipad/remote-computer';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 
@@ -14,7 +14,7 @@ export const onDragStartTableCellResult =
     {
       computer,
     }: {
-      computer: Computer;
+      computer: RemoteComputer;
     }
   ): NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']> =>
   (data, { previewRef, result }) =>

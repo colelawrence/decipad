@@ -1,4 +1,8 @@
-import { Result, SerializedTypes, isColumn } from '@decipad/computer';
+import {
+  Result,
+  type SerializedTypes,
+  isColumn,
+} from '@decipad/remote-computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
 import { columnNameFromIndex, parseBoolean, parseDate } from '@decipad/parse';

@@ -3,7 +3,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { isElement } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { MyElement, MyNode } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { identity } from '@decipad/utils';
 import { deduplicateVarNameInBlock } from './deduplicateVarNameInBlock';
 
@@ -32,10 +32,16 @@ const cloneAndReplaceElementIds = <T extends MyElement>(
   return transform(JSON.parse(text));
 };
 
-const cloneElement = <T extends MyElement>(computer: Computer, el: T): T =>
+const cloneElement = <T extends MyElement>(
+  computer: RemoteComputer,
+  el: T
+): T =>
   cloneAndReplaceElementIds(el, (e) => deduplicateVarNameInBlock(computer, e));
 
-export const clone = <T extends MyNode>(computer: Computer, node: T): T => {
+export const clone = <T extends MyNode>(
+  computer: RemoteComputer,
+  node: T
+): T => {
   if (isElement(node)) {
     return cloneElement(computer, node) as T;
   }

@@ -4,5 +4,5 @@
     "lib": ["esnext"]
   },
   "include": ["src"],
-  "references": [{ "path": "../computer" }]
+  "references": [{ "path": "../remote-computer" }]
 }

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { LiveQueryElement, LiveQueryQueryElement } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { getDatabaseUrl } from '../utils/getDatabaseUrl';
 
 export const useLiveConnectionUrl = (
   element: LiveQueryElement | LiveQueryQueryElement,
-  computer: Computer
+  computer: RemoteComputer
 ): string | undefined => {
   const databaseResult = computer.getBlockIdResult$.use(
     element.connectionBlockId

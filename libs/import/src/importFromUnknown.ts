@@ -1,4 +1,4 @@
-import { Computer, Result, isColumn } from '@decipad/computer';
+import { RemoteComputer, Result, isColumn } from '@decipad/remote-computer';
 import type { ImportOptions } from './import';
 import { importFromCsv } from './importFromCsv';
 import { importFromUnknownJson } from './importFromUnknownJson';
@@ -22,7 +22,7 @@ const unnestOneColumnOneCellIfNecessary = (
 };
 
 const importFromUnknownResponse = async (
-  computer: Computer,
+  computer: RemoteComputer,
   resp: Response,
   options: ImportOptions,
   url?: URL
@@ -70,7 +70,7 @@ const importFromUnknownResponse = async (
 };
 
 const importFromUnknownUrl = async (
-  computer: Computer,
+  computer: RemoteComputer,
   url: URL,
   options: ImportOptions = {}
 ): Promise<ImportResult[]> => {
@@ -84,7 +84,7 @@ const importFromUnknownUrl = async (
 };
 
 export const importFromUnknown = async (
-  computer: Computer,
+  computer: RemoteComputer,
   source: URL | Response,
   options: ImportOptions = {}
 ): Promise<ImportResult[]> => {

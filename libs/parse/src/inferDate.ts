@@ -1,4 +1,4 @@
-import { Time } from '@decipad/computer';
+import type { Time } from '@decipad/remote-computer';
 import { formatDate } from '@decipad/utils';
 import { parseDate } from './parseDate';
 import { CoercibleType, DateGranularity } from './types';

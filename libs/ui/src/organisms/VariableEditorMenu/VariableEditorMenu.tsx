@@ -17,7 +17,10 @@ import {
 import { InputMenuItem, MenuList } from '../../molecules';
 import { getDateType, getNumberType, getStringType } from '../../utils';
 import { MagnifyingGlass } from '../../icons/MagnifyingGlass/MagnifyingGlass';
-import { IdentifiedError, IdentifiedResult } from '@decipad/computer';
+import type {
+  IdentifiedError,
+  IdentifiedResult,
+} from '@decipad/remote-computer';
 import { CodeResult } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ResultFormatting } from '../../types';

@@ -3,7 +3,7 @@ import {
   runCode as run,
   SerializedTypeKind,
   serializeResult,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 
 export async function runCode<T extends SerializedTypeKind>(
   code: string

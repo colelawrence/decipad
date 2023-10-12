@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { render } from '@testing-library/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
 import { TestResultsProvider } from '@decipad/react-contexts';
-import { NotebookResults } from '@decipad/computer';
+import type { NotebookResults } from '@decipad/remote-computer';
 
 import { runCode } from '../../test-utils';
 import { ColumnResult } from '..';

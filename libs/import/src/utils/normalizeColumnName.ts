@@ -1,4 +1,4 @@
-import { identifierRegExpGlobal } from '@decipad/computer';
+import { identifierRegExpGlobal } from '@decipad/remote-computer';
 
 export const normalizeColumnName = (_columnName: string): string => {
   let columnName = _columnName.replaceAll('-', '_');

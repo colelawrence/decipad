@@ -1,4 +1,4 @@
-import { Computer, materializeResult } from '@decipad/computer';
+import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
 import { createServer, Server } from 'http';
 import path from 'path';
 import handler from 'serve-handler';
@@ -40,7 +40,7 @@ describe('import performance', () => {
   it(
     'imports big(ish) csv',
     async () => {
-      const computer = new Computer();
+      const computer = getRemoteComputer();
       const address = getDefined(server.address());
       const file = '/bigish1.csv';
       const url =
@@ -68,7 +68,7 @@ describe('import performance', () => {
   it(
     'imports big csv',
     async () => {
-      const computer = new Computer();
+      const computer = getRemoteComputer();
       const address = getDefined(server.address());
       const file = '/big1.csv';
       const url =

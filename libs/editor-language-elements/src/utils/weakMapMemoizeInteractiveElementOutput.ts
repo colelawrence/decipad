@@ -1,9 +1,9 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { MyEditor, MyElement } from '@decipad/editor-types';
 
 type TransformerFn<T extends MyElement, RetT> = (
   editor: MyEditor,
-  computer: Computer,
+  computer: RemoteComputer,
   arg: T
 ) => RetT;
 

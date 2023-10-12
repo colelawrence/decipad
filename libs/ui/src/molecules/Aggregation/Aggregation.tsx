@@ -1,7 +1,7 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { type FC, type DragEvent, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
 import { antiwiggle, cssVar, p12Medium, wiggle } from '../../primitives';
 import { CodeResult } from '../../organisms';

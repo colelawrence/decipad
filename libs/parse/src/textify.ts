@@ -1,5 +1,5 @@
 import stringify from 'json-stringify-safe';
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { simpleFormatUnit } from '@decipad/format';
 import { N } from '@decipad/number';
 import { coerceToDate } from './inferDate';

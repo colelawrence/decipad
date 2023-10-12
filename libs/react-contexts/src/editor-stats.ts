@@ -1,6 +1,9 @@
 import { createStore } from 'zustand/vanilla';
 import { useStore } from 'zustand';
-import { ComputerStat, ComputerExpressionResultStat } from '@decipad/computer';
+import {
+  ComputerStat,
+  ComputerExpressionResultStat,
+} from '@decipad/remote-computer';
 
 export interface DataViewStat {
   computeLayoutElapsedTimeMs: number;

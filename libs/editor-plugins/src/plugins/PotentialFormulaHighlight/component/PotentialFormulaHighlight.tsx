@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { Computer, getExprRef } from '@decipad/computer';
+import { RemoteComputer, getExprRef } from '@decipad/remote-computer';
 import {
   ELEMENT_INLINE_NUMBER,
   ELEMENT_PARAGRAPH,
@@ -96,7 +96,7 @@ export const PotentialFormulaHighlight: PlateComponent<{
 
 export const commitPotentialFormula = (
   editor: MyEditor,
-  computer: Computer,
+  computer: RemoteComputer,
   path: Path,
   leaf: RichText & PotentialFormulaDecoration,
   mode: 'magic' | 'inline',

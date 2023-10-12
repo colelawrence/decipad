@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
@@ -43,7 +43,7 @@ type Attributes =
   | undefined;
 
 export const createTablePlugin = (
-  computer: Computer
+  computer: RemoteComputer
 ): MyPlatePlugin<TablePlugin<MyValue>> => ({
   key: ELEMENT_TABLE,
   isElement: true,

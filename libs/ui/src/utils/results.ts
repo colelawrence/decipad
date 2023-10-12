@@ -1,9 +1,9 @@
 import {
-  SerializedType,
-  SerializedTypes,
+  type SerializedType,
+  type SerializedTypes,
   isColumn,
   isTable,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 
 type TabularType =
   | SerializedTypes.Column

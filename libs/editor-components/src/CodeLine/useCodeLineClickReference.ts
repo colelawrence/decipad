@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Computer, parseBlock } from '@decipad/computer';
+import { RemoteComputer, parseBlock } from '@decipad/remote-computer';
 import { MyEditor } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';
 
@@ -40,7 +40,7 @@ const DELIM_END = /[\s({[,]$/;
 
 const getInsertableValue = (
   editor: MyEditor,
-  computer: Computer,
+  computer: RemoteComputer,
   elementId: string,
   code: string
 ) => {
@@ -61,7 +61,7 @@ const getInsertableValue = (
   return insertableName;
 };
 
-const getVariableName = (computer: Computer, elementId: string) => {
+const getVariableName = (computer: RemoteComputer, elementId: string) => {
   const res = computer.getStatement(elementId);
   return res?.type === 'assign' ? res.args[0].args[0] : null;
 };

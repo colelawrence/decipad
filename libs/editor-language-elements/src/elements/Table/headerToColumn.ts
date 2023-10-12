@@ -1,4 +1,9 @@
-import { AST, Computer, IdentifiedError, getExprRef } from '@decipad/computer';
+import {
+  type AST,
+  type RemoteComputer,
+  type IdentifiedError,
+  getExprRef,
+} from '@decipad/remote-computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   TableElement,
@@ -22,7 +27,7 @@ import { seriesColumn } from './seriesColumn';
 import { simpleArtifficialError } from './common';
 
 interface HeaderToColumnProps {
-  computer: Computer;
+  computer: RemoteComputer;
   tableName: string;
   table: TableElement;
   th: TableHeaderElement;

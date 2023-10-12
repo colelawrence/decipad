@@ -1,9 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import {
+import type {
   IdentifiedError,
   IdentifiedResult,
   SerializedType,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';

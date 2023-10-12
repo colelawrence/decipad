@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -37,7 +37,7 @@ type Shortcuts =
 // In the future this function could be used by all elements to get shortcuts.
 function getShortcut(
   editor: MyEditor,
-  computer: Computer,
+  computer: RemoteComputer,
   event: KeyboardEvent
 ): Shortcuts | undefined {
   switch (true) {
@@ -77,11 +77,12 @@ function setSelectionFullText(editor: MyEditor, path: Path) {
 
 const ALLOWED_ELEMENTS = new Set([ELEMENT_CODE_LINE_V2]);
 
-export function createStructuredKeyboard(computer: Computer) {
+export function createStructuredKeyboard(computer: RemoteComputer) {
   return createOnKeyDownPluginFactory({
     name: 'STRUCTURED_KEYBOARD_SHORTCUTS',
     plugin:
       (editor) =>
+      // eslint-disable-next-line complexity
       (event): boolean => {
         const { selection } = editor;
         if (!selection) return false;

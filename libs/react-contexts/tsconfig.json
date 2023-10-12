@@ -6,13 +6,13 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../computer" },
     { "path": "../editor-types" },
     { "path": "../utils" },
     { "path": "../client-events" },
     { "path": "../feature-flags" },
     { "path": "../interfaces" },
     { "path": "../frontend-config" },
-    { "path": "../import" }
+    { "path": "../import" },
+    { "path": "../remote-computer" }
   ]
 }

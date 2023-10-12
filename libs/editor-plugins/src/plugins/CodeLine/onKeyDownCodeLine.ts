@@ -7,7 +7,7 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   focusAndSetSelection,
   insertCodeLineBelow,
@@ -39,7 +39,7 @@ const findCodeLineParentEntry = (editor: MyEditor) => {
 };
 
 export const onKeyDownCodeLine =
-  (computer: Computer) =>
+  (computer: RemoteComputer) =>
   (editor: MyEditor) =>
   (event: React.KeyboardEvent<Element>) => {
     if (event.key !== 'Enter') return;

@@ -1,4 +1,4 @@
-import { Computer, parseStatement } from '@decipad/computer';
+import { RemoteComputer, parseStatement } from '@decipad/remote-computer';
 import {
   AnyElement,
   CodeLineElement,
@@ -15,7 +15,7 @@ import {
 import { getNodeString } from '@udecode/plate';
 
 function deduplicateVarNameInDef(
-  computer: Computer,
+  computer: RemoteComputer,
   e: VariableDefinitionElement
 ) {
   e.children[0].children[0].text = computer.getAvailableIdentifier(
@@ -23,7 +23,10 @@ function deduplicateVarNameInDef(
   );
 }
 
-function deduplicateAssignmentVarName(computer: Computer, e: CodeLineElement) {
+function deduplicateAssignmentVarName(
+  computer: RemoteComputer,
+  e: CodeLineElement
+) {
   const code = getNodeString(e);
   const parsed = parseStatement(code);
   if (!parsed.error && parsed.solution && parsed.solution.type === 'assign') {
@@ -34,7 +37,7 @@ function deduplicateAssignmentVarName(computer: Computer, e: CodeLineElement) {
 }
 
 function deduplicateVarNameInCodeLineV2(
-  computer: Computer,
+  computer: RemoteComputer,
   e: CodeLineV2Element
 ) {
   e.children[0].children[0].text = computer.getAvailableIdentifier(
@@ -43,7 +46,7 @@ function deduplicateVarNameInCodeLineV2(
 }
 
 function deduplicateVarNameInStructuredIn(
-  computer: Computer,
+  computer: RemoteComputer,
   e: StructuredInputElement
 ) {
   e.children[0].children[0].text = computer.getAvailableIdentifier(
@@ -51,7 +54,7 @@ function deduplicateVarNameInStructuredIn(
   );
 }
 
-function deduplicateTableVarName(computer: Computer, e: TableElement) {
+function deduplicateTableVarName(computer: RemoteComputer, e: TableElement) {
   const captionEl = e.children[0].children[0];
   const varName = getNodeString(captionEl);
   e.children[0].children[0].children[0].text = computer.getAvailableIdentifier(
@@ -60,7 +63,7 @@ function deduplicateTableVarName(computer: Computer, e: TableElement) {
 }
 
 export const deduplicateVarNameInBlock = <T extends AnyElement>(
-  computer: Computer,
+  computer: RemoteComputer,
   el: T
 ): T => {
   switch (el.type) {

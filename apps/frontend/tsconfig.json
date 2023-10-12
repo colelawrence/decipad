@@ -38,6 +38,9 @@
     },
     {
       "path": "../../libs/graphql-client"
+    },
+    {
+      "path": "../../libs/remote-computer"
     }
   ]
 }

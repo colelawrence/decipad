@@ -1,7 +1,11 @@
 /* eslint-disable no-restricted-globals */
 import './utils/workerPolyfills';
 import { ImportResult, tryImport } from '@decipad/import';
-import { Computer, setErrorReporter } from '@decipad/computer';
+import {
+  RemoteComputer,
+  getRemoteComputer,
+  setErrorReporter,
+} from '@decipad/remote-computer';
 import { getNotebook, getURLComponents } from '@decipad/editor-utils';
 import { RPC } from '@mixer/postmessage-rpc';
 import { nanoid } from 'nanoid';
@@ -64,7 +68,7 @@ interface UnsubscribeParams {
 const subscriptions = new Map<SubscriptionId, Subscription>();
 
 const tryImportHere = async (
-  computer: Computer,
+  computer: RemoteComputer,
   subscriptionId: SubscriptionId
 ) => {
   const sub = subscriptions.get(subscriptionId);
@@ -101,7 +105,7 @@ const tryImportHere = async (
   }
 };
 
-const schedule = (computer: Computer, subscriptionId: SubscriptionId) => {
+const schedule = (computer: RemoteComputer, subscriptionId: SubscriptionId) => {
   const sub = subscriptions.get(subscriptionId);
   if (sub) {
     setTimeout(
@@ -221,7 +225,7 @@ const subscribeInternal = async (
       onError(subscriptionId, params)
     );
   } else {
-    const computer = new Computer();
+    const computer = getRemoteComputer();
     schedule(computer, subscriptionId);
     setTimeout(() => {
       tryImportHere(computer, subscriptionId);

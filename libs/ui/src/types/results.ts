@@ -1,4 +1,8 @@
-import { Result, SerializedType, SerializedTypeKind } from '@decipad/computer';
+import type {
+  Result,
+  SerializedType,
+  SerializedTypeKind,
+} from '@decipad/remote-computer';
 import { AnyElement, SimpleTableCellType } from '@decipad/editor-types';
 import { DragEvent, ReactNode, RefObject } from 'react';
 

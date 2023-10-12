@@ -2,16 +2,16 @@ import React, { ReactNode } from 'react';
 
 import {
   defaultComputerResults,
-  Computer,
+  getRemoteComputer,
   NotebookResults,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { ComputerContextProvider, useComputer } from './computer';
 
 /** A computer provider with a value for tests */
 export const TestResultsProvider: React.FC<
   Partial<NotebookResults> & { children?: ReactNode }
 > = ({ children, ...contextItem }) => {
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   computer.results.next({
     ...defaultComputerResults,
     ...contextItem,

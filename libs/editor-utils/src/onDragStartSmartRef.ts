@@ -1,4 +1,3 @@
-import { Computer, Result, SerializedTypes } from '@decipad/computer';
 import {
   CodeLineElement,
   CodeLineV2Element,
@@ -6,6 +5,11 @@ import {
 } from '@decipad/editor-types';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
+import {
+  RemoteComputer,
+  Result,
+  SerializedTypes,
+} from '@decipad/remote-computer';
 
 export const DRAG_SMART_REF = 'smart-ref';
 export const DRAG_BLOCK_ID_CONTENT_TYPE = 'text/x-block-id';
@@ -14,7 +18,7 @@ export type SmartRefDragCallback = (opts: {
   blockId?: string;
   element?: CodeLineElement | CodeLineV2Element;
   asText: string;
-  computer: Computer;
+  computer: RemoteComputer;
   result: Result.Result;
 }) => (e: React.DragEvent) => void;
 

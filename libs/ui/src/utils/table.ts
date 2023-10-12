@@ -1,4 +1,9 @@
-import { SerializedType, SerializedTypes, Time, Unit } from '@decipad/computer';
+import type {
+  SerializedType,
+  SerializedTypes,
+  Time,
+  Unit,
+} from '@decipad/remote-computer';
 import type {
   CellValueType,
   SeriesType,

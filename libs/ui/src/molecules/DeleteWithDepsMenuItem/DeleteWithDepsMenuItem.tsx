@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { BlockDependents } from '@decipad/computer';
+import type { BlockDependents } from '@decipad/remote-computer';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';

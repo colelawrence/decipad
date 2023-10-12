@@ -1,4 +1,8 @@
-import { Computer, Parseable, ParseableDate } from '@decipad/computer';
+import {
+  RemoteComputer,
+  Parseable,
+  ParseableDate,
+} from '@decipad/remote-computer';
 import {
   ELEMENT_CAPTION,
   ELEMENT_CODE_LINE_V2,
@@ -27,7 +31,7 @@ const getElementExpression = (element: MyElement): string => {
 
 export const useTurnIntoProps = (
   element: MyElement,
-  computer: Computer,
+  computer: RemoteComputer,
   lineId: string
 ) => {
   const editor = useTEditorRef();

@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { ImportElementSource } from '@decipad/editor-types';
 
 export interface Provider {

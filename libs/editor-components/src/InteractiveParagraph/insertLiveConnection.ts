@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
@@ -30,7 +30,7 @@ const nextBlock = (path: Path): Path => {
 };
 
 export interface InsertLiveConnectionProps {
-  readonly computer: Computer;
+  readonly computer: RemoteComputer;
   readonly editor: MyEditor;
   readonly source?: ImportElementSource;
   readonly fileName?: string;

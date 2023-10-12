@@ -7,8 +7,8 @@ import {
   serializeType,
   Result,
   isTableResult,
-} from '@decipad/computer';
-import type { Computer, ProgramBlock } from '@decipad/computer';
+} from '@decipad/remote-computer';
+import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { PromiseOrType, zip } from '@decipad/utils';
 import {
   ColIndex,
@@ -52,7 +52,7 @@ export interface LiveConnectionProps {
 }
 
 export const useLiveConnection = (
-  computer: Computer,
+  computer: RemoteComputer,
   {
     blockId,
     variableName,
@@ -161,7 +161,7 @@ export const useLiveConnection = (
 };
 
 function pushPendingResultToComputer(
-  computer: Computer,
+  computer: RemoteComputer,
   blockId: string,
   variableName: string
 ) {
@@ -200,7 +200,7 @@ function pushPendingResultToComputer(
  * Pass `computerResult` as `undefined` if you want to erase the result.
  */
 export function pushResultToComputer(
-  computer: Computer,
+  computer: RemoteComputer,
   blockId: string,
   variableName: string,
   computerResult: Result.Result | undefined

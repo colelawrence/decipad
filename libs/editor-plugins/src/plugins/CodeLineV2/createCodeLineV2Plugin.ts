@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   createEventInterceptorPluginFactory,
   createStructuredKeyboard,
@@ -21,24 +21,26 @@ import {
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
 
-const createCodeLineRootPlugin = (_computer: Computer) => ({
+const createCodeLineRootPlugin = (_computer: RemoteComputer) => ({
   key: ELEMENT_CODE_LINE_V2,
   isElement: true,
   component: CodeLineV2,
 });
-const createCodeLineVarnamePlugin = (_computer: Computer) => ({
+const createCodeLineVarnamePlugin = (_computer: RemoteComputer) => ({
   key: ELEMENT_STRUCTURED_VARNAME,
   isElement: true,
   component: CodeLineV2Varname,
 });
-const createCodeLineCodeTextPlugin = (computer: Computer) => ({
+const createCodeLineCodeTextPlugin = (computer: RemoteComputer) => ({
   key: ELEMENT_CODE_LINE_V2_CODE,
   isElement: true,
   component: CodeLineV2Code,
   decorate: decorateCode(computer, ELEMENT_CODE_LINE_V2_CODE),
 });
 
-export const createCodeLineV2Plugin = (computer: Computer): MyPlatePlugin => ({
+export const createCodeLineV2Plugin = (
+  computer: RemoteComputer
+): MyPlatePlugin => ({
   key: 'CODE_LINE_V2_ROOT',
   plugins: [
     createCodeLineRootPlugin(computer),

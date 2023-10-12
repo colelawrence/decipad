@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { currencyUnits, Unit, UnitOfMeasure } from '@decipad/computer';
+import { currencyUnits, Unit, UnitOfMeasure } from '@decipad/remote-computer';
 import type {
   CellValueType,
   ColumnMenuDropdown,

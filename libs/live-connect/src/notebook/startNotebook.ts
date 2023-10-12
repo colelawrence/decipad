@@ -5,12 +5,13 @@ import debounce from 'lodash.debounce';
 import { createDocSyncEditor } from '@decipad/docsync';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import {
-  Computer,
-  IdentifiedError,
-  IdentifiedResult,
-  Program,
+  getRemoteComputer,
+  type IdentifiedError,
+  type IdentifiedResult,
+  type Program,
   identifiedErrorToMessage,
-} from '@decipad/computer';
+  type RemoteComputer,
+} from '@decipad/remote-computer';
 import { MyValue, createTPlateEditor } from '@decipad/editor-types';
 import { getURLComponents } from '@decipad/editor-utils';
 import type { Observe, Subscription } from '../types';
@@ -25,7 +26,7 @@ export const startNotebook = (
   subscription: Subscription,
   observeExternal: Observe,
   onError: OnErrorCallback
-): Computer => {
+): RemoteComputer => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
   const editor = createTPlateEditor();
   editor.normalizeNode = noop;
@@ -35,7 +36,7 @@ export const startNotebook = (
     protocolVersion: 2,
   });
 
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   const { unsubscribe } = computer.results
     .pipe(
       map((result) => result.blockResults[blockId]),

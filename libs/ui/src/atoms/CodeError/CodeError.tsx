@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { BracketError } from '@decipad/computer';
+import { BracketError } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { FC, useContext } from 'react';
 import { Tooltip } from '..';

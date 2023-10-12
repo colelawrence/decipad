@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Result } from '@decipad/computer';
+import type { Result } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
 import { css } from '@emotion/react';
 import { DragEvent, FC, ReactNode, RefObject, useState } from 'react';

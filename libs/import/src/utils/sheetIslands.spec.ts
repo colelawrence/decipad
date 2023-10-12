@@ -1,4 +1,4 @@
-import { Result, SerializedTypes } from '@decipad/computer';
+import type { Result, SerializedTypes } from '@decipad/remote-computer';
 import { ImportResult } from '../types';
 import { matrix } from './matrix';
 import { findAllIslands } from './sheetIslands';

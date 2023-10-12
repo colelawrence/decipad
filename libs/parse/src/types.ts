@@ -1,5 +1,5 @@
 import { ColIndex, TableCellType } from '@decipad/editor-types';
-import { SerializedType } from '@decipad/computer';
+import type { SerializedType } from '@decipad/remote-computer';
 
 export interface InferTableOptions {
   useFirstRowAsHeader?: boolean;

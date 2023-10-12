@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { isTable, isTableColumn, Result } from '@decipad/computer';
+import { isTable, isTableColumn, Result } from '@decipad/remote-computer';
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
 import { useComputer } from '@decipad/react-contexts';

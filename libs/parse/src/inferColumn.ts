@@ -1,9 +1,9 @@
 /* eslint-disable no-await-in-loop */
 import {
   areUnitsConvertible,
-  Computer,
+  RemoteComputer,
   SerializedTypes,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { CellValueType } from '@decipad/editor-types';
 import { containsNumber } from '@decipad/utils';
 import { inferType } from '.';
@@ -20,7 +20,7 @@ const INFER_MAX_ROWS = 20;
 
 export const inferColumn = memoize(
   async (
-    computer: Computer,
+    computer: RemoteComputer,
     column: SpreadsheetColumn,
     options: InferColumnOptions = {}
   ): Promise<CellValueType> => {

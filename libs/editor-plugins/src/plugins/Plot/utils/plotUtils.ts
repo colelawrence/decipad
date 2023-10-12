@@ -1,11 +1,11 @@
 import {
-  Computer,
+  RemoteComputer,
   convertToMultiplierUnit,
   materializeResult,
   Result,
   safeNumberForPrecision,
   SerializedType,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { PlotElement } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import DeciNumber from '@decipad/number';
@@ -117,7 +117,7 @@ function displayTimeUnitType(type: SerializedType): TimeUnit | undefined {
 }
 
 export function encodingFor(
-  _computer: Computer,
+  _computer: RemoteComputer,
   columnName: string,
   columnType: SerializedType,
   markType: PlotElement['markType']
@@ -141,7 +141,7 @@ export function encodingFor(
 
 // eslint-disable-next-line complexity
 export function specFromType(
-  computer: Computer,
+  computer: RemoteComputer,
   type: undefined | SerializedType,
   displayProps: DisplayProps
 ): undefined | PlotSpec {

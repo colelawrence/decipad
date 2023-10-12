@@ -1,10 +1,10 @@
 import {
   AutocompleteName,
-  Computer,
+  RemoteComputer,
   SerializedType,
   getExprRef,
   isTable as isComputerTable,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { PlotElement, useTEditorRef } from '@decipad/editor-types';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { useComputer, useThemeFromStore } from '@decipad/react-contexts';
@@ -51,7 +51,7 @@ type AutocompleteNameWithExpRef = AutocompleteName & {
 };
 
 const autocompleteNameToExprRef = (
-  computer: Computer,
+  computer: RemoteComputer,
   table: AutocompleteName
 ): AutocompleteNameWithExpRef => {
   return {

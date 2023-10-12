@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { type RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
@@ -37,7 +37,7 @@ const rulesForbiddenInCodeLines = [
   query: disableCodelineFormatting,
 }));
 
-export const autoformatRules = (computer: Computer) =>
+export const autoformatRules = (computer: RemoteComputer) =>
   [
     ...autoformatBlocks(computer),
     ...autoformatLists,

@@ -1,5 +1,4 @@
-import type { Constant, SerializedTypes } from '@decipad/computer';
-
+import type { Constant, SerializedTypes } from '@decipad/remote-computer';
 import type { EmptyText, PlainText, SmartRefElement, Text } from '.';
 import type {
   ELEMENT_TABLE,

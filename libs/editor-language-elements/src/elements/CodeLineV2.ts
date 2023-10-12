@@ -1,4 +1,4 @@
-import { AST, Computer, Program } from '@decipad/computer';
+import type { AST, RemoteComputer, Program } from '@decipad/remote-computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -49,7 +49,7 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
 
 export const parseStructuredCodeLine = async (
   editor: MyEditor,
-  computer: Computer,
+  computer: RemoteComputer,
   block: CodeLineV2Element
 ): Promise<{
   interpretedAs: 'code' | 'literal' | 'empty';

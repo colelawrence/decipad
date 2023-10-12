@@ -1,7 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
-import { unnestTableRows, DimensionExplanation } from '@decipad/computer';
+import {
+  unnestTableRows,
+  type DimensionExplanation,
+} from '@decipad/remote-computer';
 import { all as allElements } from '@decipad/generator-utils';
 import { useResolved } from '@decipad/react-utils';
 import { cssVar } from '../../primitives';

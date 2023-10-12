@@ -1,6 +1,6 @@
 import { N } from '@decipad/number';
 import { TableCellType } from '@decipad/editor-types';
-import { Computer, prettyPrintAST } from '@decipad/computer';
+import { getRemoteComputer, prettyPrintAST } from '@decipad/remote-computer';
 import { getDefined } from '@decipad/utils';
 import { getExpression, parseCell } from './parseCell';
 
@@ -8,7 +8,7 @@ type NoValidateTest = [string, TableCellType];
 
 const testParseCell = async (type: TableCellType, text: string) =>
   prettyPrintAST(
-    getExpression(getDefined(await parseCell(new Computer(), type, text)))
+    getExpression(getDefined(await parseCell(getRemoteComputer(), type, text)))
   );
 
 it('turns cells into AST nodes', async () => {
@@ -104,5 +104,7 @@ it.each([
   ['99999', { kind: 'date', date: 'year' }],
   ['aaaa', { kind: 'date', date: 'year' }],
 ] as NoValidateTest[])('%s is not a valid %s', async (format, type) => {
-  expect(await parseCell(new Computer(), type, format)).toBeInstanceOf(Error);
+  expect(await parseCell(getRemoteComputer(), type, format)).toBeInstanceOf(
+    Error
+  );
 });

@@ -1,7 +1,11 @@
 import { MyEditor } from '@decipad/editor-types';
 import { setSlateFragment } from '@decipad/editor-utils';
 import { DragEvent } from 'react';
-import { Computer, Result, SerializedTypes } from '@decipad/computer';
+import {
+  RemoteComputer,
+  Result,
+  SerializedTypes,
+} from '@decipad/remote-computer';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 
@@ -15,7 +19,7 @@ export const onDragSmartCellResultStarted =
     result,
   }: {
     expression: string;
-    computer: Computer;
+    computer: RemoteComputer;
     result: Result.Result;
   }) =>
   (e: DragEvent) => {
