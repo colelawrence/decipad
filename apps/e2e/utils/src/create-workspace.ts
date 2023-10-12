@@ -25,3 +25,25 @@ export const createWorkspace = async (p: Page): Promise<string> => {
   }
   return resp.data.createWorkspace.id;
 };
+
+export const getWorkspaces = async (p: Page): Promise<{ name: string }[]> => {
+  const resp = await (
+    await p.request.post('/graphql', {
+      data: stringify({
+        query:
+          'query GetWorkspaces {\n' +
+          '  workspaces {\n' +
+          '    name\n' +
+          '  }\n' +
+          '}',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  ).json();
+  if (resp.errors?.length) {
+    throw new Error(resp.errors[0].message);
+  }
+  return resp.data.workspaces;
+};

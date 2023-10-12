@@ -91,12 +91,19 @@ export async function removePad(page: Page, index = 0) {
   await Promise.all([page.waitForRequest('/graphql'), removeButton.click()]);
 }
 
-export async function duplicatePad(page: Page, index = 0) {
+export async function duplicatePad(page: Page, index = 0, workspace = '') {
   await page.click(ellipsisSelector(index));
-  const duplicateButton = (await page.waitForSelector(
-    'div[role="menuitem"] span:has-text("Duplicate")'
-  ))!;
-  await Promise.all([page.waitForRequest('/graphql'), duplicateButton.click()]);
+  await page.getByText('Duplicate').click();
+  // accounts with multiple workspaces have an extra menu to select where to copy
+  if (workspace !== '') {
+    const selectDuplicateWorkspace = page
+      .locator(`div[role="menuitem"] span:has-text("${workspace}")`)
+      .first();
+    await Promise.all([
+      page.waitForRequest('/graphql'),
+      selectDuplicateWorkspace.click(),
+    ]);
+  }
 }
 
 export async function exportPad(page: Page, index = 0): Promise<string> {

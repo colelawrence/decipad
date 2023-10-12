@@ -89,6 +89,7 @@ export const WorkspaceItem = ({
                 textOverflow: 'ellipsis',
               }
             )}
+            data-testid="workspace-picker"
           >
             {name}
           </strong>

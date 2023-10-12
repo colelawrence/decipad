@@ -147,7 +147,7 @@ test.describe('Dashboard operations', () => {
   });
 
   test('can duplicate pad', async () => {
-    await duplicatePad(page, 0);
+    await duplicatePad(page);
 
     // eslint-disable-next-line playwright/valid-expect
     await waitForExpect(async () => {

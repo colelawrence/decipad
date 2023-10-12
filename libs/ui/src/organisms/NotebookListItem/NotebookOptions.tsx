@@ -1,7 +1,10 @@
+import { WorkspaceSwitcherWorkspaceFragment } from '@decipad/graphql-client';
+import { NotebookMetaActionsType } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { FC, ReactNode, useState } from 'react';
 import format from 'date-fns/format';
+import { FC, ReactNode, useState } from 'react';
+import { MenuItem, TriggerMenuItem } from '../../atoms';
 import {
   AddToWorkspace,
   Archive,
@@ -12,11 +15,8 @@ import {
   Switch,
   Trash,
 } from '../../icons';
-import { MenuItem, TriggerMenuItem } from '../../atoms';
-import { cssVar, p12Medium, shortAnimationDuration } from '../../primitives';
 import { MenuList } from '../../molecules';
-import { NotebookMetaActionsType } from '@decipad/react-contexts';
-import { WorkspaceSwitcherWorkspaceFragment } from '@decipad/graphql-client';
+import { cssVar, p12Medium, shortAnimationDuration } from '../../primitives';
 
 export interface NotebookOptionsProps {
   readonly notebookId: string;
@@ -71,17 +71,38 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         onChangeOpen={setIsOpen}
         trigger={trigger}
       >
-        {allowDuplicate && (
-          <MenuItem
-            icon={<Copy />}
-            onSelect={() => {
-              onDuplicate(id, false, workspaceId);
-              setIsOpen(false);
-            }}
-          >
-            <MinDiv>Duplicate</MinDiv>
-          </MenuItem>
-        )}
+        {allowDuplicate &&
+          (workspaces.length > 1 ? (
+            <MenuList
+              itemTrigger={
+                <TriggerMenuItem icon={<Copy />}>
+                  <MinDiv>Duplicate in</MinDiv>
+                </TriggerMenuItem>
+              }
+            >
+              {workspaces.map((workspace) => (
+                <MenuItem
+                  key={workspace.id}
+                  onSelect={() => {
+                    onDuplicate(id, false, workspace.id);
+                    setIsOpen(false);
+                  }}
+                >
+                  {workspace.name}
+                </MenuItem>
+              ))}
+            </MenuList>
+          ) : (
+            <MenuItem
+              icon={<Copy />}
+              onSelect={() => {
+                onDuplicate(id, false, workspaceId);
+                setIsOpen(false);
+              }}
+            >
+              <MinDiv>Duplicate</MinDiv>
+            </MenuItem>
+          ))}
         {notebookStatus && notebookStatus}
         {workspaces.length > 1 && (
           <MenuList
