@@ -1,2 +1,2 @@
 @aws
-memory 2048
+memory 4096
