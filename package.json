@@ -402,7 +402,7 @@
     "@types/pluralize": "0.0.29",
     "@types/react": "18.0.28",
     "@types/react-copy-to-clipboard": "5.0.4",
-    "@types/react-datepicker": "4.15.0",
+    "@types/react-datepicker": "4.19.0",
     "@types/react-dom": "18.2.5",
     "@types/react-helmet": "^6.1.6",
     "@types/react-is": "18.2.0",
