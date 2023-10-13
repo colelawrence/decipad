@@ -15851,6 +15851,11 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+basex-encoder@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/basex-encoder/-/basex-encoder-0.0.10.tgz#3c89e54a49650133a6920cf4a57506032cd86ab4"
+  integrity sha512-7C/hMsE+cWNTxy+N1heJ5e540eIHIUpF5jTRz9sdSRvCYDDvaSNZ1/tDUqm9fwDxhAZu6jkOexxlEvyoTzaRMg==
+
 basic-auth@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"

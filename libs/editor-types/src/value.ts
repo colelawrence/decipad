@@ -338,6 +338,10 @@ export type TopLevelValue =
 
 export type NotebookValue = [TitleElement, ...Array<TabElement>];
 
+export type RootDocument = {
+  children: NotebookValue;
+};
+
 export type MyValue = Array<TopLevelValue>;
 
 export type Document = {
@@ -350,6 +354,7 @@ export type InlineChildren = Array<InlineDescendant>;
 export type PlainTextChildren = [PlainText];
 
 export type AnyElement =
+  | TitleElement
   | TabElement
   | BlockElement
   | InlineElement

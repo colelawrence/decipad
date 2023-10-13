@@ -1,0 +1,4324 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`encodeDocumentIds encodes and decodes 1`] = `
+{
+  "children": [
+    {
+      "children": [
+        {
+          "text": "Everything, everywhere, all at once",
+        },
+      ],
+      "id": "🍏A",
+      "type": "h1",
+    },
+    {
+      "children": [
+        {
+          "text": "🍔 = 3",
+        },
+      ],
+      "id": "🍏B",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "variable = 4",
+        },
+      ],
+      "id": "🍏C",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "variable2 = 4+1",
+        },
+      ],
+      "id": "🍏D",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "isTrue= true and true ",
+        },
+      ],
+      "id": "🍏E",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "isFalse = false and false",
+        },
+      ],
+      "id": "🍏F",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "string = "This is a string" + """,
+        },
+      ],
+      "id": "🍏G",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "string2= "string"",
+        },
+      ],
+      "id": "🍏H",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "err = 1/0",
+        },
+      ],
+      "id": "🍏J",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "units = 1km/s",
+        },
+      ],
+      "id": "🍏K",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "food = 1 🍊/🍎",
+        },
+      ],
+      "id": "🍏L",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "food",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "units",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "isTrue",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "isFalse",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "err",
+        },
+        {
+          "text": " ",
+        },
+      ],
+      "id": "🍏M",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Table3",
+                },
+              ],
+              "id": "🍏Q",
+              "type": "table-var-name",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+                {
+                  "blockId": "🍏U",
+                  "children": [
+                    {
+                      "text": "",
+                    },
+                  ],
+                  "columnId": null,
+                  "id": "🍏S",
+                  "lastSeenVariableName": "Column1",
+                  "type": "smart-ref",
+                },
+                {
+                  "text": " + 5",
+                },
+              ],
+              "columnId": "🍏V",
+              "id": "🍏R",
+              "type": "table-column-formula",
+            },
+          ],
+          "id": "🍏P",
+          "type": "table-caption",
+        },
+        {
+          "children": [
+            {
+              "cellType": {
+                "kind": "number",
+                "unit": null,
+              },
+              "children": [
+                {
+                  "text": "Column1",
+                },
+              ],
+              "id": "🍏U",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "table-formula",
+              },
+              "children": [
+                {
+                  "text": "Column2",
+                },
+              ],
+              "id": "🍏V",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "boolean",
+              },
+              "children": [
+                {
+                  "text": "Column3",
+                },
+              ],
+              "id": "🍏W",
+              "type": "th",
+            },
+          ],
+          "id": "🍏T",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "1",
+                },
+              ],
+              "id": "🍏Y",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Z",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏a",
+              "type": "td",
+            },
+          ],
+          "id": "🍏X",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2",
+                },
+              ],
+              "id": "🍏c",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏d",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "false",
+                },
+              ],
+              "id": "🍏e",
+              "type": "td",
+            },
+          ],
+          "id": "🍏b",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "3",
+                },
+              ],
+              "id": "🍏g",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏h",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏i",
+              "type": "td",
+            },
+          ],
+          "id": "🍏f",
+          "type": "tr",
+        },
+      ],
+      "color": "Sun",
+      "id": "🍏N",
+      "type": "table",
+      "version": 2,
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "🔥",
+                },
+              ],
+              "id": "🍏m",
+              "type": "table-var-name",
+            },
+            {
+              "children": [
+                {
+                  "text": " ",
+                },
+                {
+                  "blockId": "🍏t",
+                  "children": [
+                    {
+                      "text": "",
+                    },
+                  ],
+                  "columnId": null,
+                  "id": "🍏o",
+                  "lastSeenVariableName": "Column2",
+                  "type": "smart-ref",
+                },
+                {
+                  "text": " + 1",
+                },
+              ],
+              "columnId": "🍏v",
+              "id": "🍏n",
+              "type": "table-column-formula",
+            },
+            {
+              "children": [
+                {
+                  "text": " ",
+                },
+                {
+                  "blockId": "🍏t",
+                  "children": [
+                    {
+                      "text": "",
+                    },
+                  ],
+                  "columnId": null,
+                  "id": "🍏q",
+                  "lastSeenVariableName": "Column2",
+                  "type": "smart-ref",
+                },
+                {
+                  "text": " - date(1970-01) in weeks",
+                },
+              ],
+              "columnId": "🍏w",
+              "id": "🍏p",
+              "type": "table-column-formula",
+            },
+          ],
+          "id": "🍏k",
+          "type": "table-caption",
+        },
+        {
+          "children": [
+            {
+              "cellType": {
+                "date": "year",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column1",
+                },
+              ],
+              "id": "🍏s",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "month",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column2",
+                },
+              ],
+              "id": "🍏t",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "day",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "🎉",
+                },
+              ],
+              "id": "🍏u",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "table-formula",
+              },
+              "children": [
+                {
+                  "text": "Column4",
+                },
+              ],
+              "id": "🍏v",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "table-formula",
+              },
+              "children": [
+                {
+                  "text": "Column5",
+                },
+              ],
+              "id": "🍏w",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column6",
+                },
+              ],
+              "id": "🍏x",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column7",
+                },
+              ],
+              "id": "🍏y",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column8",
+                },
+              ],
+              "id": "🍏z",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column9",
+                },
+              ],
+              "id": "🍏BA",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column10",
+                },
+              ],
+              "id": "🍏BB",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column11",
+                },
+              ],
+              "id": "🍏BC",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column12",
+                },
+              ],
+              "id": "🍏BD",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column13",
+                },
+              ],
+              "id": "🍏BE",
+              "type": "th",
+            },
+          ],
+          "id": "🍏r",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "1999",
+                },
+              ],
+              "id": "🍏BG",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "1999-01",
+                },
+              ],
+              "id": "🍏BH",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "1999-01-01",
+                },
+              ],
+              "id": "🍏BJ",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BK",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BL",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BM",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BN",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BP",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BQ",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BR",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BS",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BT",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BU",
+              "type": "td",
+            },
+          ],
+          "id": "🍏BF",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2000",
+                },
+              ],
+              "id": "🍏BW",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2000-01",
+                },
+              ],
+              "id": "🍏BX",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2000-01-01",
+                },
+              ],
+              "id": "🍏BY",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏BZ",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Ba",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bb",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bc",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bd",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Be",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bf",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bg",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bh",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bi",
+              "type": "td",
+            },
+          ],
+          "id": "🍏BV",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "20001",
+                },
+              ],
+              "id": "🍏Bk",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2001-01",
+                },
+              ],
+              "id": "🍏Bm",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2001-01-01",
+                },
+              ],
+              "id": "🍏Bn",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bo",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bp",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bq",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Br",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bs",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bt",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bu",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bv",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bw",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Bx",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Bj",
+          "type": "tr",
+        },
+      ],
+      "color": "Rose",
+      "id": "🍏j",
+      "type": "table",
+      "version": 2,
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Table2",
+                },
+              ],
+              "id": "🍏CA",
+              "type": "table-var-name",
+            },
+            {
+              "children": [
+                {
+                  "text": " ",
+                },
+                {
+                  "blockId": "🍏CJ",
+                  "children": [
+                    {
+                      "text": "",
+                    },
+                  ],
+                  "columnId": null,
+                  "id": "🍏CC",
+                  "lastSeenVariableName": "Column5",
+                  "type": "smart-ref",
+                },
+                {
+                  "text": " * 10",
+                },
+              ],
+              "columnId": "🍏CK",
+              "id": "🍏CB",
+              "type": "table-column-formula",
+            },
+          ],
+          "id": "🍏Bz",
+          "type": "table-caption",
+        },
+        {
+          "children": [
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column1",
+                },
+              ],
+              "id": "🍏CE",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "boolean",
+              },
+              "children": [
+                {
+                  "text": "Column2",
+                },
+              ],
+              "id": "🍏CF",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "Column3",
+                },
+              ],
+              "id": "🍏CG",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "month",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column4",
+                },
+              ],
+              "id": "🍏CH",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "number",
+                "unit": null,
+              },
+              "children": [
+                {
+                  "text": "Column5",
+                },
+              ],
+              "id": "🍏CJ",
+              "type": "th",
+            },
+            {
+              "aggregation": "Sum",
+              "cellType": {
+                "kind": "table-formula",
+              },
+              "children": [
+                {
+                  "text": "Property6",
+                },
+              ],
+              "id": "🍏CK",
+              "type": "th",
+            },
+          ],
+          "id": "🍏CD",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "1",
+                },
+              ],
+              "id": "🍏CM",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏CN",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "words with sape",
+                },
+              ],
+              "id": "🍏CP",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "date(2020-02-03)",
+                },
+              ],
+              "id": "🍏CQ",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "1",
+                },
+              ],
+              "id": "🍏CR",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏CS",
+              "type": "td",
+            },
+          ],
+          "id": "🍏CL",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "2",
+                },
+              ],
+              "id": "🍏CU",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "false",
+                },
+              ],
+              "id": "🍏CV",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "😄",
+                },
+              ],
+              "id": "🍏CW",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "2030-02-03",
+                },
+              ],
+              "id": "🍏CX",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "2",
+                },
+              ],
+              "id": "🍏CY",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏CZ",
+              "type": "td",
+            },
+          ],
+          "id": "🍏CT",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "3",
+                },
+              ],
+              "id": "🍏Cb",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "false",
+                },
+              ],
+              "id": "🍏Cc",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "c",
+                },
+              ],
+              "id": "🍏Cd",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "3000-03-01",
+                },
+              ],
+              "id": "🍏Ce",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "3",
+                },
+              ],
+              "id": "🍏Cf",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Cg",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Ca",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "4",
+                },
+              ],
+              "id": "🍏Ci",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "false",
+                },
+              ],
+              "id": "🍏Cj",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "d",
+                },
+              ],
+              "id": "🍏Ck",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "30-04-01",
+                },
+              ],
+              "id": "🍏Cm",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "4",
+                },
+              ],
+              "id": "🍏Cn",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Co",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Ch",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "5",
+                },
+              ],
+              "id": "🍏Cq",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏Cr",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "e",
+                },
+              ],
+              "id": "🍏Cs",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2020-02-03",
+                },
+              ],
+              "id": "🍏Ct",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "5",
+                },
+              ],
+              "id": "🍏Cu",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Cv",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Cp",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "6",
+                },
+              ],
+              "id": "🍏Cx",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏Cy",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "f",
+                },
+              ],
+              "id": "🍏Cz",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2020-02-03",
+                },
+              ],
+              "id": "🍏DA",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "6",
+                },
+              ],
+              "id": "🍏DB",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏DC",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Cw",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "-0.3",
+                },
+              ],
+              "id": "🍏DE",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "false",
+                },
+              ],
+              "id": "🍏DF",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "longstringheretestthis",
+                },
+              ],
+              "id": "🍏DG",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2020-02-03",
+                },
+              ],
+              "id": "🍏DH",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "-0.3",
+                },
+              ],
+              "id": "🍏DJ",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏DK",
+              "type": "td",
+            },
+          ],
+          "id": "🍏DD",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "0.8",
+                },
+              ],
+              "id": "🍏DM",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏DN",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "a",
+                },
+              ],
+              "id": "🍏DP",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2020-02-03",
+                },
+              ],
+              "id": "🍏DQ",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "0.8",
+                },
+              ],
+              "id": "🍏DR",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏DS",
+              "type": "td",
+            },
+          ],
+          "id": "🍏DL",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "9.4",
+                },
+              ],
+              "id": "🍏DU",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏DV",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "b",
+                },
+              ],
+              "id": "🍏DW",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2020-02-03",
+                },
+              ],
+              "id": "🍏DX",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "9.4",
+                },
+              ],
+              "id": "🍏DY",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏DZ",
+              "type": "td",
+            },
+          ],
+          "id": "🍏DT",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "1045345345454534545",
+                },
+              ],
+              "id": "🍏Db",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "true",
+                },
+              ],
+              "id": "🍏Dc",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "c",
+                },
+              ],
+              "id": "🍏Dd",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "2020-02-03",
+                },
+              ],
+              "id": "🍏De",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "45453453453453453534534",
+                },
+              ],
+              "id": "🍏Df",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Dg",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Da",
+          "type": "tr",
+        },
+      ],
+      "color": "Perfume",
+      "hideFormulas": false,
+      "id": "🍏By",
+      "type": "table",
+      "version": 2,
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Data view for Table2",
+                },
+              ],
+              "id": "🍏Dj",
+              "type": "data-view-name",
+            },
+          ],
+          "id": "🍏Di",
+          "type": "data-view-caption",
+        },
+        {
+          "children": [
+            {
+              "cellType": {
+                "date": "month",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Dm",
+              "name": "🍏CH",
+              "type": "data-view-th",
+            },
+            {
+              "aggregation": "Sum",
+              "cellType": {
+                "kind": "number",
+                "unit": null,
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Dn",
+              "name": "🍏CK",
+              "type": "data-view-th",
+            },
+            {
+              "aggregation": "% of total",
+              "cellType": {
+                "kind": "number",
+                "unit": null,
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Do",
+              "name": "🍏CK",
+              "type": "data-view-th",
+            },
+          ],
+          "id": "🍏Dk",
+          "type": "data-view-tr",
+        },
+      ],
+      "expandedGroups": [
+        "25e37b5ac63a7ecbac6e0f2d53756972b353986e333493ef08b295a2563d64c0",
+      ],
+      "id": "🍏Dh",
+      "type": "data-view",
+      "varName": "🍏By",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+        {
+          "blockId": "🍏By",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏Dq",
+          "lastSeenVariableName": "Table2",
+          "type": "smart-ref",
+        },
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏Dp",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+        {
+          "blockId": "🍏j",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏Ds",
+          "lastSeenVariableName": "🔥",
+          "type": "smart-ref",
+        },
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏Dr",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+        {
+          "blockId": "🍏N",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏Du",
+          "lastSeenVariableName": "Table3",
+          "type": "smart-ref",
+        },
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏Dt",
+      "type": "code_line",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "colorColumnName": "",
+      "colorScheme": "",
+      "id": "🍏Dv",
+      "markType": "circle",
+      "sizeColumnName": "",
+      "sourceVarName": "Table3",
+      "thetaColumnName": "",
+      "title": "Chart",
+      "type": "plot",
+      "xColumnName": "Column1",
+      "y2ColumnName": "",
+      "yColumnName": "Column2",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "colorColumnName": "",
+      "colorScheme": "",
+      "id": "🍏Dw",
+      "markType": "line",
+      "sizeColumnName": "",
+      "sourceVarName": "Table3",
+      "thetaColumnName": "",
+      "title": "Chart",
+      "type": "plot",
+      "xColumnName": "Column1",
+      "y2ColumnName": "",
+      "yColumnName": "Column1",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "colorColumnName": "",
+      "colorScheme": "",
+      "id": "🍏Dx",
+      "markType": "bar",
+      "sizeColumnName": "",
+      "sourceVarName": "Table2",
+      "thetaColumnName": "",
+      "title": "Chart",
+      "type": "plot",
+      "xColumnName": "Column1",
+      "y2ColumnName": "",
+      "yColumnName": "Column1",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏Dz",
+          "type": "caption",
+        },
+        {
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏EA",
+          "type": "exp",
+        },
+      ],
+      "id": "🍏Dy",
+      "type": "def",
+      "variant": "expression",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "color": "Perfume",
+              "icon": "Happy",
+              "id": "🍏ED",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏EE",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏EC",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏EG",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏EH",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏EF",
+          "type": "def",
+          "variant": "expression",
+        },
+      ],
+      "id": "🍏EB",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Variable",
+                },
+              ],
+              "color": "Malibu",
+              "icon": "AnnotationWarning",
+              "id": "🍏EL",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "10 km",
+                },
+              ],
+              "id": "🍏EM",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏EK",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "VariableColor",
+                },
+              ],
+              "color": "Sun",
+              "icon": "Star",
+              "id": "🍏EP",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "1+1",
+                },
+              ],
+              "id": "🍏EQ",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏EN",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "VariableColor2",
+                },
+              ],
+              "color": "Catskill",
+              "icon": "Frame",
+              "id": "🍏ES",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": ""Yes"",
+                },
+              ],
+              "id": "🍏ET",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏ER",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "VariableDate",
+                },
+              ],
+              "color": "Rose",
+              "icon": "Crown",
+              "id": "🍏EV",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "date(2020-02-03)",
+                },
+              ],
+              "id": "🍏EW",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏EU",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "VariableNumber",
+                },
+              ],
+              "color": "Malibu",
+              "icon": "Sunrise",
+              "id": "🍏EY",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "1",
+                },
+              ],
+              "id": "🍏EZ",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏EX",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "👗",
+                },
+              ],
+              "color": "Perfume",
+              "icon": "Music",
+              "id": "🍏Eb",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "10%",
+                },
+              ],
+              "id": "🍏Ec",
+              "type": "exp",
+            },
+          ],
+          "id": "🍏Ea",
+          "type": "def",
+          "variant": "expression",
+        },
+      ],
+      "id": "🍏EJ",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Dropdown",
+                },
+              ],
+              "id": "🍏Ef",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "10%",
+                },
+              ],
+              "id": "🍏Eg",
+              "options": [
+                {
+                  "id": "H2HMaFqzQY3glJEONDKzL",
+                  "value": "10%",
+                },
+                {
+                  "id": "UZ5RNoRnk1JnLJc43t9sy",
+                  "value": "20%",
+                },
+                {
+                  "id": "I6fYGIrCBN5xq9R01B2y3",
+                  "value": "30%",
+                },
+              ],
+              "type": "dropdown",
+            },
+          ],
+          "id": "🍏Ee",
+          "type": "def",
+          "variant": "dropdown",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Positions",
+                },
+              ],
+              "id": "🍏Ei",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": ""Software Dev"",
+                },
+              ],
+              "id": "🍏Ej",
+              "options": [
+                {
+                  "id": "AhNihf-z7icWzwFYmtXB8",
+                  "value": ""Software Dev"",
+                },
+                {
+                  "id": "zFkM2UwQjzueWZmje0Vg3",
+                  "value": ""Designer"",
+                },
+              ],
+              "type": "dropdown",
+            },
+          ],
+          "id": "🍏Eh",
+          "type": "def",
+          "variant": "dropdown",
+        },
+      ],
+      "id": "🍏Ed",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Input1",
+                },
+              ],
+              "id": "🍏En",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "100$ &",
+                },
+              ],
+              "id": "🍏Eo",
+              "type": "exp",
+            },
+          ],
+          "coerceToType": {
+            "date": "day",
+            "kind": "number",
+          },
+          "id": "🍏Em",
+          "type": "def",
+          "variant": "expression",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Input2",
+                },
+              ],
+              "id": "🍏Eq",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "100$ + "a"",
+                },
+              ],
+              "id": "🍏Er",
+              "type": "exp",
+            },
+          ],
+          "coerceToType": {
+            "date": "day",
+            "kind": "number",
+          },
+          "id": "🍏Ep",
+          "type": "def",
+          "variant": "expression",
+        },
+      ],
+      "id": "🍏Ek",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Slider1",
+                },
+              ],
+              "id": "🍏Eu",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "4 + "a"",
+                },
+              ],
+              "id": "🍏Ev",
+              "type": "exp",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Ew",
+              "max": "10",
+              "min": "0",
+              "step": "1",
+              "type": "slider",
+              "value": "4",
+            },
+          ],
+          "id": "🍏Et",
+          "type": "def",
+          "variant": "slider",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Slider2",
+                },
+              ],
+              "id": "🍏Ey",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "5 &",
+                },
+              ],
+              "id": "🍏Ez",
+              "type": "exp",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏FA",
+              "max": "10",
+              "min": "0",
+              "step": "1",
+              "type": "slider",
+              "value": "5",
+            },
+          ],
+          "id": "🍏Ex",
+          "type": "def",
+          "variant": "slider",
+        },
+      ],
+      "id": "🍏Es",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏FB",
+      "type": "divider",
+    },
+    {
+      "children": [
+        {
+          "blockId": "🍏Eh",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏FD",
+          "type": "display",
+          "varName": "Positions",
+        },
+        {
+          "blockId": "🍏D",
+          "children": [
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏FE",
+          "type": "display",
+          "varName": "variable2",
+        },
+      ],
+      "id": "🍏FC",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Input",
+                },
+              ],
+              "id": "🍏FH",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "2022-11-03",
+                },
+              ],
+              "id": "🍏FJ",
+              "type": "exp",
+            },
+          ],
+          "coerceToType": {
+            "date": "day",
+            "kind": "date",
+          },
+          "id": "🍏FG",
+          "type": "def",
+          "variant": "date",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "InputCopyCopy",
+                },
+              ],
+              "id": "🍏FL",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "2022-11",
+                },
+              ],
+              "id": "🍏FM",
+              "type": "exp",
+            },
+          ],
+          "coerceToType": {
+            "date": "day",
+            "kind": "date",
+          },
+          "id": "🍏FK",
+          "type": "def",
+          "variant": "date",
+        },
+      ],
+      "id": "🍏FF",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "InputCopy",
+            },
+          ],
+          "id": "🍏FP",
+          "type": "caption",
+        },
+        {
+          "children": [
+            {
+              "text": "2022-11-03",
+            },
+          ],
+          "id": "🍏FQ",
+          "type": "exp",
+        },
+      ],
+      "coerceToType": {
+        "date": "day",
+        "kind": "date",
+      },
+      "id": "🍏FN",
+      "isHidden": true,
+      "type": "def",
+      "variant": "date",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollars",
+            },
+          ],
+          "id": "🍏FS",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "$100",
+            },
+          ],
+          "id": "🍏FT",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏FR",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1",
+            },
+          ],
+          "id": "🍏FV",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "100%",
+            },
+          ],
+          "id": "🍏FW",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏FU",
+      "isHidden": true,
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1Copy1",
+            },
+          ],
+          "id": "🍏FY",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "100 kilometer",
+            },
+          ],
+          "id": "🍏FZ",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏FX",
+      "isHidden": true,
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1Copy1Copy1",
+            },
+          ],
+          "id": "🍏Fb",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "100 second",
+            },
+          ],
+          "id": "🍏Fc",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fa",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "StructuredDollarsCopy1Copy1Copy1Copy1",
+            },
+          ],
+          "id": "🍏Fe",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "100 $ per hour",
+            },
+          ],
+          "id": "🍏Ff",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fd",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "OneMoreStructuredDollarForTheRoad",
+            },
+          ],
+          "id": "🍏Fh",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "",
+            },
+            {
+              "blockId": "🍏FR",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Fj",
+              "lastSeenVariableName": "StructuredDollars",
+              "type": "smart-ref",
+            },
+            {
+              "text": " + 1",
+            },
+          ],
+          "id": "🍏Fi",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fg",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigRef",
+            },
+          ],
+          "id": "🍏Fm",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "",
+            },
+            {
+              "blockId": "🍏Fg",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Fo",
+              "lastSeenVariableName": "OneMoreStructuredDollarForTheRoad",
+              "type": "smart-ref",
+            },
+            {
+              "text": " ",
+            },
+          ],
+          "id": "🍏Fn",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fk",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigRefCopy1",
+            },
+          ],
+          "id": "🍏Fq",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "",
+            },
+            {
+              "blockId": "🍏FR",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Fs",
+              "lastSeenVariableName": "StructuredDollars",
+              "type": "smart-ref",
+            },
+            {
+              "text": " + ",
+            },
+            {
+              "blockId": "🍏Fg",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Ft",
+              "lastSeenVariableName": "OneMoreStructuredDollarForTheRoad",
+              "type": "smart-ref",
+            },
+            {
+              "text": "",
+            },
+          ],
+          "id": "🍏Fr",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fp",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigRefCopy1Copy1",
+            },
+          ],
+          "id": "🍏Fv",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "",
+            },
+            {
+              "blockId": "🍏FR",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Fx",
+              "lastSeenVariableName": "StructuredDollars",
+              "type": "smart-ref",
+            },
+            {
+              "text": " + ",
+            },
+            {
+              "blockId": "🍏Fg",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Fy",
+              "lastSeenVariableName": "OneMoreStructuredDollarForTheRoad",
+              "type": "smart-ref",
+            },
+            {
+              "text": "+ ",
+            },
+          ],
+          "id": "🍏Fw",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fu",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "BigBunber",
+            },
+          ],
+          "id": "🍏GA",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "3e200",
+            },
+          ],
+          "id": "🍏GB",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏Fz",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "exprRef_uqKFbC_Q62uYo03FMSdpiexprRef_sTyUI7bAdmn0_OyxJz_Oj",
+        },
+        {
+          "text": " ",
+        },
+      ],
+      "id": "🍏GC",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LoanRate",
+            },
+          ],
+          "id": "🍏GE",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "(pmt( ",
+            },
+            {
+              "blockId": "🍏GN",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏GG",
+              "lastSeenVariableName": "LoanInterest",
+              "type": "smart-ref",
+            },
+            {
+              "text": " , 5, ",
+            },
+            {
+              "blockId": "🍏GR",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏GH",
+              "lastSeenVariableName": "FundsLoan",
+              "type": "smart-ref",
+            },
+            {
+              "text": " )/12) per month",
+            },
+          ],
+          "id": "🍏GF",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏GD",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LoanRepay",
+            },
+          ],
+          "id": "🍏GK",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "",
+            },
+            {
+              "blockId": "🍏GD",
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏GM",
+              "lastSeenVariableName": "LoanRate",
+              "type": "smart-ref",
+            },
+            {
+              "text": " * 5 years",
+            },
+          ],
+          "id": "🍏GL",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏GJ",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "LoanInterest",
+            },
+          ],
+          "id": "🍏GP",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "100$",
+            },
+          ],
+          "id": "🍏GQ",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏GN",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "text": "FundsLoan",
+            },
+          ],
+          "id": "🍏GS",
+          "type": "structured_varname",
+        },
+        {
+          "children": [
+            {
+              "text": "100$",
+            },
+          ],
+          "id": "🍏GT",
+          "type": "code_line_v2_code",
+        },
+      ],
+      "id": "🍏GR",
+      "type": "code_line_v2",
+    },
+    {
+      "children": [
+        {
+          "text": "LongVariableNameLiveConnections",
+        },
+      ],
+      "id": "🍏GU",
+      "integrationType": {
+        "code": "return 5;",
+        "latestResult": "5",
+        "timeOfLastRun": "2023-09-25T16:07:02.217Z",
+        "type": "codeconnection",
+      },
+      "type": "integration-block",
+      "typeMappings": [],
+    },
+    {
+      "children": [
+        {
+          "text": "Heading #1",
+        },
+      ],
+      "id": "🍏GV",
+      "type": "h2",
+    },
+    {
+      "children": [
+        {
+          "text": "Heading #2",
+        },
+      ],
+      "id": "🍏GW",
+      "type": "h3",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏GX",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "color": "Catskill",
+      "id": "🍏GY",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "color": "Sulu",
+      "id": "🍏GZ",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "color": "Sun",
+      "id": "🍏Ga",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "color": "Rose",
+      "id": "🍏Gb",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "color": "Perfume",
+      "id": "🍏Gc",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "text": "💀",
+        },
+      ],
+      "id": "🍏Gd",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "text": "
+Long quote ",
+        },
+        {
+          "text": "underline",
+          "underline": true,
+        },
+        {
+          "text": " ",
+        },
+        {
+          "bold": true,
+          "text": "bold",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "italic": true,
+          "text": "italics",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "strikethrough": true,
+          "text": "crossed",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "highlight": true,
+          "text": "highlight",
+        },
+        {
+          "text": "
+💀
+
+
+
+",
+        },
+      ],
+      "color": "Catskill",
+      "icon": "Heart",
+      "id": "🍏Ge",
+      "type": "callout",
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Table1",
+                },
+              ],
+              "id": "🍏Gh",
+              "type": "table-var-name",
+            },
+          ],
+          "id": "🍏Gg",
+          "type": "table-caption",
+        },
+        {
+          "children": [
+            {
+              "cellType": {
+                "date": "year",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column1",
+                },
+              ],
+              "id": "🍏Gj",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "month",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column2",
+                },
+              ],
+              "id": "🍏Gk",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "month",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column3",
+                },
+              ],
+              "id": "🍏Gm",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "month",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column4",
+                },
+              ],
+              "id": "🍏Gn",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "date": "year",
+                "kind": "date",
+              },
+              "children": [
+                {
+                  "text": "Column5",
+                },
+              ],
+              "id": "🍏Go",
+              "type": "th",
+            },
+          ],
+          "id": "🍏Gi",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gq",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gr",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gs",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gt",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gu",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Gp",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gw",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gx",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gy",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Gz",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HA",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Gv",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HC",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HD",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HE",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HF",
+              "type": "td",
+            },
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HG",
+              "type": "td",
+            },
+          ],
+          "id": "🍏HB",
+          "type": "tr",
+        },
+      ],
+      "color": "Malibu",
+      "id": "🍏Gf",
+      "type": "table",
+      "version": 2,
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "tableislongtitlesdjasiodjasidsdsdsdsdasdsdadasdasdasddfsdfdfsdfdfdsfsdfsdfdfsdfsdfsddfsdfsdfdfasndasnd",
+                },
+              ],
+              "id": "🍏HK",
+              "type": "table-var-name",
+            },
+            {
+              "children": [
+                {
+                  "text": "1",
+                },
+              ],
+              "columnId": "🍏HQ",
+              "id": "🍏HL",
+              "type": "table-column-formula",
+            },
+            {
+              "children": [
+                {
+                  "text": "2",
+                },
+              ],
+              "columnId": "🍏HR",
+              "id": "🍏HM",
+              "type": "table-column-formula",
+            },
+          ],
+          "id": "🍏HJ",
+          "type": "table-caption",
+        },
+        {
+          "children": [
+            {
+              "cellType": {
+                "kind": "string",
+              },
+              "children": [
+                {
+                  "text": "tablewithlongjsdsjdhasjhdsjkdsjdhasjhd",
+                },
+              ],
+              "id": "🍏HP",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "table-formula",
+              },
+              "children": [
+                {
+                  "text": "Column2",
+                },
+              ],
+              "id": "🍏HQ",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "kind": "table-formula",
+              },
+              "children": [
+                {
+                  "text": "Column3",
+                },
+              ],
+              "id": "🍏HR",
+              "type": "th",
+            },
+            {
+              "cellType": {
+                "id": "🍏Hj",
+                "kind": "dropdown",
+                "type": "string",
+              },
+              "children": [
+                {
+                  "text": "Column4",
+                },
+              ],
+              "id": "🍏HS",
+              "type": "th",
+            },
+          ],
+          "id": "🍏HN",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HU",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HV",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HW",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "AqD22IuRny6JIpMe9o7Zm",
+                },
+              ],
+              "id": "🍏HX",
+              "type": "td",
+            },
+          ],
+          "id": "🍏HT",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏HZ",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Ha",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Hb",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "RF8aRVCm2fJJZ4zfi6H59",
+                },
+              ],
+              "id": "🍏Hc",
+              "type": "td",
+            },
+          ],
+          "id": "🍏HY",
+          "type": "tr",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏He",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Hf",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Hg",
+              "type": "td",
+            },
+            {
+              "children": [
+                {
+                  "text": "",
+                },
+              ],
+              "id": "🍏Hh",
+              "type": "td",
+            },
+          ],
+          "id": "🍏Hd",
+          "type": "tr",
+        },
+      ],
+      "hideFormulas": false,
+      "id": "🍏HH",
+      "type": "table",
+      "version": 2,
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Dropdown1",
+                },
+              ],
+              "id": "🍏Hk",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "A",
+                },
+              ],
+              "id": "🍏Hm",
+              "options": [
+                {
+                  "id": "AqD22IuRny6JIpMe9o7Zm",
+                  "value": "A",
+                },
+                {
+                  "id": "RF8aRVCm2fJJZ4zfi6H59",
+                  "value": "B",
+                },
+                {
+                  "id": "ST5ZXSl-StrHjnGtYmQXP",
+                  "value": "C",
+                },
+              ],
+              "type": "dropdown",
+            },
+          ],
+          "coerceToType": {
+            "kind": "string",
+          },
+          "id": "🍏Hj",
+          "type": "def",
+          "variant": "dropdown",
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "Dropdown2",
+                },
+              ],
+              "id": "🍏Ho",
+              "type": "caption",
+            },
+            {
+              "children": [
+                {
+                  "text": "Select",
+                },
+              ],
+              "id": "🍏Hp",
+              "options": [],
+              "type": "dropdown",
+            },
+          ],
+          "coerceToType": {
+            "kind": "string",
+          },
+          "id": "🍏Hn",
+          "type": "def",
+          "variant": "dropdown",
+        },
+      ],
+      "id": "🍏Hi",
+      "type": "columns",
+    },
+    {
+      "children": [
+        {
+          "text": "Long quote ",
+        },
+        {
+          "text": "underline",
+          "underline": true,
+        },
+        {
+          "text": " ",
+        },
+        {
+          "bold": true,
+          "text": "bold",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "italic": true,
+          "text": "italics",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "strikethrough": true,
+          "text": "crossed",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "highlight": true,
+          "text": "highlight💀",
+        },
+        {
+          "text": "  ",
+        },
+        {
+          "code": true,
+          "text": "code",
+        },
+      ],
+      "id": "🍏Hq",
+      "type": "blockquote",
+    },
+    {
+      "children": [
+        {
+          "text": "Long quote ",
+        },
+        {
+          "text": "underline",
+          "underline": true,
+        },
+        {
+          "text": " ",
+        },
+        {
+          "bold": true,
+          "text": "bold",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "italic": true,
+          "text": "italics",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "strikethrough": true,
+          "text": "crossed",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "highlight": true,
+          "text": "highlight",
+        },
+        {
+          "code": true,
+          "text": "code",
+        },
+        {
+          "text": "
+
+",
+        },
+      ],
+      "id": "🍏Hr",
+      "type": "blockquote",
+    },
+    {
+      "children": [
+        {
+          "text": "Long quote ",
+        },
+        {
+          "text": "underline",
+          "underline": true,
+        },
+        {
+          "text": " ",
+        },
+        {
+          "bold": true,
+          "text": "bold",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "italic": true,
+          "text": "italics",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "strikethrough": true,
+          "text": "crossed",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "highlight": true,
+          "text": "highlight",
+        },
+        {
+          "code": true,
+          "text": "code",
+        },
+      ],
+      "id": "🍏Hs",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "Long quote ",
+        },
+        {
+          "text": "underline",
+          "underline": true,
+        },
+        {
+          "text": " ",
+        },
+        {
+          "bold": true,
+          "text": "bold",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "italic": true,
+          "text": "italics",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "strikethrough": true,
+          "text": "crossed",
+        },
+        {
+          "text": " ",
+        },
+        {
+          "highlight": true,
+          "text": "highlight",
+        },
+        {
+          "code": true,
+          "text": "code",
+        },
+      ],
+      "id": "🍏Ht",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏Hu",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "string",
+        },
+        {
+          "text": " ",
+        },
+      ],
+      "id": "🍏Hv",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "isTrue",
+        },
+        {
+          "text": " ",
+        },
+      ],
+      "id": "🍏Hw",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "variable",
+        },
+        {
+          "text": " ",
+        },
+      ],
+      "id": "🍏Hx",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "variable2",
+        },
+        {
+          "text": " ",
+        },
+      ],
+      "id": "🍏Hy",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": " ",
+        },
+        {
+          "magicnumberz": true,
+          "text": "units",
+        },
+        {
+          "text": " 
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis au",
+        },
+        {
+          "highlight": true,
+          "text": "te irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+        },
+        {
+          "text": " Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+",
+        },
+        {
+          "bold": true,
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+",
+        },
+        {
+          "italic": true,
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+",
+        },
+        {
+          "strikethrough": true,
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+",
+        },
+        {
+          "highlight": true,
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        },
+      ],
+      "id": "🍏Hz",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, ",
+        },
+        {
+          "strikethrough": true,
+          "text": "sed",
+        },
+        {
+          "text": " do eiusmod tempor incididunt ut labore et ",
+        },
+        {
+          "code": true,
+          "text": "dolore",
+        },
+        {
+          "text": " magna aliqua. Ut enim ad minim veniam, quis nostrud ",
+        },
+        {
+          "code": true,
+          "text": "exercitation",
+        },
+        {
+          "text": " ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in ",
+        },
+        {
+          "code": true,
+          "text": "reprehenderit",
+        },
+        {
+          "text": " in voluptate velit esse cillum dolore eu fugiat ",
+        },
+        {
+          "text": "nulla",
+          "underline": true,
+        },
+        {
+          "text": " pariatur. Excepteur sint occaecat cupidatat non proident, ",
+        },
+        {
+          "italic": true,
+          "text": "sunt",
+        },
+        {
+          "text": " in culpa qui officia deserunt mollit anim id est laborum.",
+        },
+      ],
+      "id": "🍏JA",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "ي العاشر ليونيكود (Unicode Conference)، الذي سيعقد في 10-12 آذار 1997 بمدينة مَايِنْتْس، ألمانيا. و سيجمع المؤتمر بين خبراء من كافة قطاعات الصناعة على الش",
+        },
+        {
+          "highlight": true,
+          "text": "بكة العالمية انترنيت ويونيكود، حيث ستتم، على الصعيدين الدولي والمحلي على حد سواء",
+        },
+        {
+          "text": " مناقشة سبل استخدام يونكود في النظم القائمة وفيما يخص التطبيقات الحاسوبية، الخطوط، تصميم النصوص والحوسبة متعد",
+        },
+      ],
+      "id": "🍏JB",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "作長後耳堅間用商指権番一行末。難部購事身月妻連商楽府文職。舞半囲懲芝京惑懇台像止謝犯府国際無。光興事影小缶長視報手権及棋本水晴。載容足聞能作玲弁伝出容葉得崎責。無郎隠問属大新化新示毒海攻行世川主験。夜問場野形展左局部受知決。辞広稜替崎中供書性暮事天科師誇聞。文全近年額話意字洋委作最氷達。使根辞覧千者養祉話齢店実。",
+        },
+      ],
+      "id": "🍏JC",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JD",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "思航島株加交足能型検魚覚見時辞人取為資本。情話出主東開年紙側地業対学新協遺。児件職網募",
+        },
+        {
+          "highlight": true,
+          "text": "勢割図演初闘投。経検著教展明問聞告月普候。逮権公持佐長快載掲強救法去了券三。越実症習",
+        },
+        {
+          "text": "業認発飛申者法欠迫化。墜金間院和柴的賞員出員業各新油宏。続便力度業聴首条転権予鈴。年陸多塁石力報犠級達併即堀。堂回普磐題常頭質話失解広台図色果覧車。",
+        },
+      ],
+      "id": "🍏JE",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "Велика частина його тексту складається з розділів 1.10.32-3 з Цицерона De finibus bonorum ін malorum ( на кордонах добра і зла ; finibus може alspo перекла",
+        },
+        {
+          "highlight": true,
+          "text": "сти як цілей). Neque Порро quisquam Передбачуване Квай dolorem Ipsum Quia Dolor си",
+        },
+        {
+          "text": "діти Амет, consectetur, adipisci велить є першим відомим версія ("І немає ні тих, хто любить горе себе, так як це горе і, таким чином, хоче отримати його " ​​). Було встановлено, Річард МакКлінток, філолог, директор видань в Хемпден - Sydney College в штаті Вірджинія; він шукав citings з consectetur " в класичній латинської літератури, в термін дивно низької частоти в цьому корпусу літератури. Lorem Ipsum інформації",
+        },
+      ],
+      "id": "🍏JF",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "שער בשפות איטליה גם. ביולי מדויקים כתב את, ומדעים אחרונים סטטיסטיקה דת זכר. היא גם סרבול החופשית,",
+        },
+        {
+          "highlight": true,
+          "text": " גם שמו כיצד בחירות. ",
+        },
+        {
+          "text": "אם שכל דפים צרפתית. מיזמי נוסחאות מיתולוגיה ארץ מה.",
+        },
+      ],
+      "id": "🍏JG",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JH",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "דת הקהילה למאמרים שמו, אל הרוח ראשי שאלות שער. יידיש חופשית דת כלל, או אחר החברה ממונרכיה, מתוך פנאי על זכר. עזה בהבנה טבלאות מה. מוגש הסביבה אם תנך. של למתחילים אנתרופולוגיה צ'ט, אחרים ויקיפדיה לוח ב, ארץ את דרכה רוסית.",
+        },
+      ],
+      "id": "🍏JJ",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JK",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "ויש של פיסול תבניות, אל תנך סרבול בהשחתה בהיסטוריה. דת ארץ ניווט ובמתן, מה כימיה ומדעים קצרמרים בדף. מיזם אספרנטו ויקימדיה גם רבה, שדרות ואלקטרוניקה אם עוד. על בקר מתוך חרטומים.",
+        },
+      ],
+      "id": "🍏JL",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "ם עוד. על בקר",
+        },
+      ],
+      "id": "🍏JM",
+      "type": "h2",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JN",
+      "type": "p",
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JP",
+      "type": "img",
+      "url": "https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png",
+      "width": 580,
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JQ",
+      "type": "img",
+      "url": "https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png",
+      "width": 341,
+    },
+    {
+      "children": [
+        {
+          "text": "",
+        },
+      ],
+      "id": "🍏JR",
+      "type": "p",
+    },
+  ],
+}
+`;

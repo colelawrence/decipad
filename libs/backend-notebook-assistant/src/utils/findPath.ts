@@ -1,8 +1,8 @@
-import { AnyElement, Document } from '@decipad/editor-types';
+import { AnyElement, RootDocument } from '@decipad/editor-types';
 import { isElement } from '@udecode/plate';
 
 export const findPath = (
-  node: Document | AnyElement,
+  node: RootDocument | AnyElement,
   blockId: string
 ): string[] | undefined => {
   let childIndex = -1;

@@ -1,8 +1,8 @@
-import type { Document, AnyElement } from '@decipad/editor-types';
+import type { AnyElement, RootDocument } from '@decipad/editor-types';
 import { isElement } from '@udecode/plate';
 
 export const getElements = (
-  content: Document | AnyElement,
+  content: RootDocument | AnyElement,
   elementIds: Set<string>
 ): AnyElement[] => {
   let results: AnyElement[] = [];

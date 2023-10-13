@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src", "src/tests/__fixtures__/*.json", "scripts"],
+  "include": ["src", "src/*/__fixtures__/*.json", "scripts"],
   "compilerOptions": {
     "lib": ["esnext"]
   },

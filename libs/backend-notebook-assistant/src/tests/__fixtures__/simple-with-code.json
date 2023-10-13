@@ -10,98 +10,105 @@
       "id": "3JTr-B84cKMnNOYnvHiFi"
     },
     {
-      "children": [
-        {
-          "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!"
-        }
-      ],
-      "type": "p",
-      "id": "18YPGVFcBkSie3WopWDlo"
-    },
-    {
-      "children": [
-        {
-          "text": "It looks like I could make a profit ",
-          "highlight": true
-        },
-        {
-          "text": "and some side income based on my assumptions below. Feedback welcome!"
-        }
-      ],
-      "type": "p",
-      "id": "ngIq_tCJClGugubOIsRKT"
-    },
-    {
-      "children": [
-        {
-          "id": "p3e90dsjad39dsamn",
-          "children": [
-            {
-              "text": "VarName1"
-            }
-          ],
-          "type": "structured_varname"
-        },
-        {
-          "children": [
-            {
-              "text": "3 / 4"
-            }
-          ],
-          "id": "powehfowbe389dns",
-          "type": "code_line_v2_code"
-        }
-      ],
-      "showResult": true,
-      "id": "FDSffDfa3refdsFsdf",
-      "type": "code_line_v2"
-    },
-    {
-      "children": [
-        {
-          "text": "It looks like I could make a profit ",
-          "highlight": true
-        },
-        {
-          "text": "and some side income based on my assumptions below. Feedback welcome!"
-        }
-      ],
-      "type": "p",
-      "id": "ngIq_tCJClGugubOIsRKT"
-    },
-    {
+      "type": "tab",
+      "id": "vHiFdsiB84cKMOYn3JTr-",
+      "name": "Main",
       "children": [
         {
           "children": [
             {
-              "text": "VarName2"
+              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!"
             }
           ],
-          "id": "1dkfnsddsfhef3",
-          "type": "structured_varname"
+          "type": "p",
+          "id": "18YPGVFcBkSie3WopWDlo"
         },
         {
           "children": [
             {
-              "text": "cos(PI)"
+              "text": "It looks like I could make a profit ",
+              "highlight": true
+            },
+            {
+              "text": "and some side income based on my assumptions below. Feedback welcome!"
             }
           ],
-          "id": "olj2e0wqwdsksdl",
-          "type": "code_line_v2_code"
-        }
-      ],
-      "showResult": true,
-      "id": "fjsdfdofsd3-e3dsdcj",
-      "type": "code_line_v2"
-    },
-    {
-      "children": [
+          "type": "p",
+          "id": "ngIq_tCJClGugubOIsRKT"
+        },
         {
-          "text": "💸 How much will I pay for the act of candle-making and inflation?"
+          "children": [
+            {
+              "id": "p3e90dsjad39dsamn",
+              "children": [
+                {
+                  "text": "VarName1"
+                }
+              ],
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "3 / 4"
+                }
+              ],
+              "id": "powehfowbe389dns",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "showResult": true,
+          "id": "FDSffDfa3refdsFsdf",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": "It looks like I could make a profit ",
+              "highlight": true
+            },
+            {
+              "text": "and some side income based on my assumptions below. Feedback welcome!"
+            }
+          ],
+          "type": "p",
+          "id": "ngIq_tCJfdsfsdf4ClGugubOIsRKT"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "text": "VarName2"
+                }
+              ],
+              "id": "1dkfnsddsfhef3",
+              "type": "structured_varname"
+            },
+            {
+              "children": [
+                {
+                  "text": "cos(PI)"
+                }
+              ],
+              "id": "olj2e0wqwdsksdl",
+              "type": "code_line_v2_code"
+            }
+          ],
+          "showResult": true,
+          "id": "fjsdfdofsd3-e3dsdcj",
+          "type": "code_line_v2"
+        },
+        {
+          "children": [
+            {
+              "text": "💸 How much will I pay for the act of candle-making and inflation?"
+            }
+          ],
+          "type": "h2",
+          "id": "P1MO3vjonREmgtamfVbur"
         }
-      ],
-      "type": "h2",
-      "id": "P1MO3vjonREmgtamfVbur"
+      ]
     }
   ]
 }

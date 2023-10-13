@@ -1,4 +1,4 @@
-import { Document } from '@decipad/editor-types';
+import { RootDocument } from '@decipad/editor-types';
 import { getOpenAI } from '../utils/openAi';
 import { ChatCompletionMessage } from 'openai/resources/chat';
 import { getDefined } from '@decipad/utils';
@@ -12,7 +12,7 @@ const fineTunedModelForDecilangCode =
 
 export interface CodeAssistantOptions {
   summary?: string;
-  notebook?: Document;
+  notebook?: RootDocument;
   prompt: string;
   _messages?: ChatCompletionMessage[];
   attempt?: number;

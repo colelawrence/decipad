@@ -21,7 +21,8 @@ NEVER REMOVE ANY ELEMENT (unless the user explicitly tells you to).
 Don't replace the ids of elements.
 All text must be inside text elements like \`{ text: 'text here' }\`.
 If appropriate, always set \`showResult\` to \`true\`.
-NEVER use the \`aggregation\` attribute on any element.`;
+NEVER use the \`aggregation\` attribute on any element.
+Any new Block element ALWAYS goes into a tab.`;
 
 const instructions: Record<InstructionConstituent, string> = {
   'code-lines': `Code lines:

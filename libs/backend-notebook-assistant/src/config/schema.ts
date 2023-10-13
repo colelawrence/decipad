@@ -41,7 +41,11 @@ type PlainText = EmptyText | { text: string };
 type RichText = PlainText & Partial<Record<MarkKind, true>>;
 type Text = PlainText | RichText;
 
-// Title H1
+interface TitleElement {
+  id: string;
+  type: 'title';
+  children: PlainTextChildren;
+}
 
 interface H1Element {
   id: string;
@@ -233,12 +237,19 @@ interface TableElement {
 
 type BlockElement = ParagraphElement | TableElement | VariableElement | CodeLineV2Element;
 
+type TabElement = {
+  id: string;
+  type: 'tab';
+  name: string;
+  children: Array<BlockElement>;
+}
+
 // The entire document
 
 type Document = {
   children: [
-    H1Element,
-    ...Array<BlockElement>
+    TitleElement,
+    ...Array<TabElement>
   ];
 };
 `;

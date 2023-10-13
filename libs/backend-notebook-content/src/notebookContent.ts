@@ -2,7 +2,7 @@ import { Buffer } from 'buffer';
 import { applyUpdate, mergeUpdates, Doc as YDoc } from 'yjs';
 import tables, { allPages } from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import type { Document, MyValue } from '@decipad/editor-types';
+import type { NotebookValue, RootDocument } from '@decipad/editor-types';
 import { fetchSnapshotFromFile } from './fetchSnapshotFromFile';
 
 // When loading the editor initial state, if the snapshot is void, try to load the actual notebook.
@@ -81,9 +81,9 @@ export const getNotebookInitialState = async (
 
 export const getNotebookContent = async (
   notebookId: string
-): Promise<Document> => {
+): Promise<RootDocument> => {
   const initialState = await getNotebookInitialState(notebookId);
   const doc = new YDoc();
   applyUpdate(doc, initialState);
-  return { children: doc.getArray().toJSON() as MyValue };
+  return { children: doc.getArray().toJSON() as NotebookValue };
 };

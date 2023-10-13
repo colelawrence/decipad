@@ -24,7 +24,7 @@ test('notebook assistant: prose', async (ctx) => {
         {
           "children": [
             {
-              "text": "🕯Stopping a Candle Business",
+              "text": "🕯Starting a Candle Business",
             },
           ],
           "id": "3JTr-B84cKMnNOYnvHiFi",
@@ -33,29 +33,36 @@ test('notebook assistant: prose', async (ctx) => {
         {
           "children": [
             {
-              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
-            },
-          ],
-          "id": "18YPGVFcBkSie3WopWDlo",
-          "type": "p",
-        },
-        {
-          "children": [
-            {
-              "highlight": true,
-              "text": "It looks like I could make a profit ",
+              "children": [
+                {
+                  "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
+                },
+              ],
+              "id": "18YPGVFcBkSie3WopWDlo",
+              "type": "p",
             },
             {
-              "text": "and some side income based on my assumptions below. Feedback welcome!",
+              "children": [
+                {
+                  "highlight": true,
+                  "text": "It looks like I could make a profit ",
+                },
+                {
+                  "text": "and some side income based on my assumptions below. Feedback welcome!",
+                },
+              ],
+              "id": "ngIq_tCJClGugubOIsRKT",
+              "type": "p",
             },
           ],
-          "id": "ngIq_tCJClGugubOIsRKT",
-          "type": "p",
+          "id": "vHiFdsiB84cKMOYn3JTr-",
+          "name": "Main",
+          "type": "tab",
         },
       ]
     `);
     expect(results.summary).toBe(
-      'I have changed the text of the title element from "🕯Starting a Candle Business" to "🕯Stopping a Candle Business".'
+      'I have changed the title of your document from "🕯Starting a Candle Business" to "🕯Stopping a Candle Business".'
     );
   }, 240000);
 
@@ -79,11 +86,18 @@ test('notebook assistant: prose', async (ctx) => {
         {
           "children": [
             {
-              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
+              "children": [
+                {
+                  "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
+                },
+              ],
+              "id": "18YPGVFcBkSie3WopWDlo",
+              "type": "p",
             },
           ],
-          "id": "18YPGVFcBkSie3WopWDlo",
-          "type": "p",
+          "id": "vHiFdsiB84cKMOYn3JTr-",
+          "name": "Main",
+          "type": "tab",
         },
       ]
     `);
@@ -94,51 +108,55 @@ test('notebook assistant: prose', async (ctx) => {
       newNotebookId,
       'add a paragraph asking people to follow me on Twitter'
     );
-    expect(applyOperations(notebook, results.operations))
-      .toMatchInlineSnapshot(`
-      [
-        {
-          "children": [
-            {
-              "text": "🕯Starting a Candle Business",
-            },
-          ],
-          "id": "3JTr-B84cKMnNOYnvHiFi",
-          "type": "h1",
-        },
-        {
-          "children": [
-            {
-              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
-            },
-          ],
-          "id": "18YPGVFcBkSie3WopWDlo",
-          "type": "p",
-        },
-        {
-          "children": [
-            {
-              "highlight": true,
-              "text": "It looks like I could make a profit ",
-            },
-            {
-              "text": "and some side income based on my assumptions below. Feedback welcome!",
-            },
-          ],
-          "id": "ngIq_tCJClGugubOIsRKT",
-          "type": "p",
-        },
-        {
-          "children": [
-            {
-              "text": "Please follow me on Twitter!",
-            },
-          ],
-          "id": "newBlockId",
-          "type": "p",
-        },
-      ]
-    `);
+    expect(applyOperations(notebook, results.operations)).toMatchObject([
+      {
+        children: [
+          {
+            text: '🕯Starting a Candle Business',
+          },
+        ],
+        id: '3JTr-B84cKMnNOYnvHiFi',
+        type: 'h1',
+      },
+      {
+        children: [
+          {
+            children: [
+              {
+                text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+              },
+            ],
+            id: '18YPGVFcBkSie3WopWDlo',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                highlight: true,
+                text: 'It looks like I could make a profit ',
+              },
+              {
+                text: 'and some side income based on my assumptions below. Feedback welcome!',
+              },
+            ],
+            id: 'ngIq_tCJClGugubOIsRKT',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                text: 'Please follow me on Twitter!',
+              },
+            ],
+            id: expect.any(String),
+            type: 'p',
+          },
+        ],
+        id: 'vHiFdsiB84cKMOYn3JTr-',
+        name: 'Main',
+        type: 'tab',
+      },
+    ]);
   }, 240000);
 
   it('can change a paragraph', async () => {
@@ -157,26 +175,33 @@ test('notebook assistant: prose', async (ctx) => {
         type: 'h1',
       },
       {
+        type: 'tab',
+        id: 'vHiFdsiB84cKMOYn3JTr-',
+        name: 'Main',
         children: [
           {
-            text: expect.stringContaining('Twitter'),
-          },
-        ],
-        id: '18YPGVFcBkSie3WopWDlo',
-        type: 'p',
-      },
-      {
-        children: [
-          {
-            highlight: true,
-            text: 'It looks like I could make a profit ',
+            children: [
+              {
+                text: expect.stringContaining('Twitter'),
+              },
+            ],
+            id: '18YPGVFcBkSie3WopWDlo',
+            type: 'p',
           },
           {
-            text: 'and some side income based on my assumptions below. Feedback welcome!',
+            children: [
+              {
+                highlight: true,
+                text: 'It looks like I could make a profit ',
+              },
+              {
+                text: 'and some side income based on my assumptions below. Feedback welcome!',
+              },
+            ],
+            id: 'ngIq_tCJClGugubOIsRKT',
+            type: 'p',
           },
         ],
-        id: 'ngIq_tCJClGugubOIsRKT',
-        type: 'p',
       },
     ]);
   }, 240000);
@@ -197,51 +222,58 @@ test('notebook assistant: prose', async (ctx) => {
         type: 'h1',
       },
       {
-        children: [
-          {
-            text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-          },
-        ],
-        id: '18YPGVFcBkSie3WopWDlo',
-        type: 'p',
-      },
-      {
-        children: [
-          {
-            highlight: true,
-            text: 'It looks like I could make a profit ',
-          },
-          {
-            text: 'and some side income based on my assumptions below. Feedback welcome!',
-          },
-        ],
-        id: 'ngIq_tCJClGugubOIsRKT',
-        type: 'p',
-      },
-      {
+        type: 'tab',
+        id: 'vHiFdsiB84cKMOYn3JTr-',
+        name: 'Main',
         children: [
           {
             children: [
               {
-                text: '',
+                text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
               },
             ],
-            id: expect.any(String),
-            type: 'structured_varname',
+            id: '18YPGVFcBkSie3WopWDlo',
+            type: 'p',
           },
           {
             children: [
               {
-                text: '3 / 4',
+                highlight: true,
+                text: 'It looks like I could make a profit ',
+              },
+              {
+                text: 'and some side income based on my assumptions below. Feedback welcome!',
+              },
+            ],
+            id: 'ngIq_tCJClGugubOIsRKT',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: '',
+                  },
+                ],
+                id: expect.any(String),
+                type: 'structured_varname',
+              },
+              {
+                children: [
+                  {
+                    text: '3 / 4',
+                  },
+                ],
+                id: expect.any(String),
+                type: 'code_line_v2_code',
               },
             ],
             id: expect.any(String),
-            type: 'code_line_v2_code',
+            showResult: true,
+            type: 'code_line_v2',
           },
         ],
-        id: expect.any(String),
-        showResult: true,
-        type: 'code_line_v2',
       },
     ]);
   }, 240000);

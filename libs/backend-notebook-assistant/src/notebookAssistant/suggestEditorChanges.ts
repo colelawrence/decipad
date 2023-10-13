@@ -10,12 +10,17 @@ import {
   isNode,
   isText,
   withoutNormalizing,
+  TEditor,
 } from '@udecode/plate';
 import { JSONPatchISOFormatOp } from 'jsondiffpatch';
 import stringify from 'json-stringify-safe';
 import set from 'lodash.set';
 import cloneDeep from 'lodash.clonedeep';
-import { Document, createTPlateEditor } from '@decipad/editor-types';
+import {
+  NotebookValue,
+  RootDocument,
+  createTPlateEditor,
+} from '@decipad/editor-types';
 import { getDefined, noop } from '@decipad/utils';
 import { diff } from '../utils/diff';
 import { createSubDebug } from '../debug';
@@ -34,7 +39,7 @@ type TNodeEntryWithRemainderPathAndParentNode = [
 ];
 
 const deltaToSlateOperation = (
-  previous: Document,
+  previous: RootDocument,
   delta: JSONPatchISOFormatOp
 ): TOperation[] => {
   debug('deltaToSlateOperation previous', stringify(previous, null, '\t'));
@@ -46,7 +51,7 @@ const deltaToSlateOperation = (
     const pathParts = path.split('/').filter(isNotEmptyString);
     debug('deltaToSlateOperation pathParts:', pathParts);
     const slatePath: TPath = [];
-    let current: TNode | Array<TNode> | Document | undefined = previous;
+    let current: TNode | Array<TNode> | RootDocument | undefined = previous;
     const remainder = [...pathParts];
     let beforeCurrent: undefined | TNode;
     while (remainder.length > 0 && current != null) {
@@ -206,8 +211,8 @@ const deltaToSlateOperation = (
 };
 
 export const suggestEditorChanges = (
-  oldVersion: Document,
-  newVersion: Document,
+  oldVersion: RootDocument,
+  newVersion: RootDocument,
   depth = 0
 ): TOperation[] => {
   debug('suggestEditorChanges');
@@ -227,11 +232,10 @@ export const suggestEditorChanges = (
     throw new Error('Maximum depth of suggestEditorChanges reached');
   }
   // we need to apply one diff at a time so that the paths match the current state after individual application
-  const editor = createTPlateEditor();
+  const editor = createTPlateEditor() as unknown as TEditor<NotebookValue>;
   editor.children = oldVersion.children;
   editor.normalize = noop; // prevent normalisation
   let applied = false;
-  let result: TOperation[] = [];
   const appliedOps: TOperation[] = [];
   withoutNormalizing(editor, () => {
     while (!applied && ops.length > 0) {
@@ -265,10 +269,7 @@ export const suggestEditorChanges = (
 
   debug('applied ops:', appliedOps);
 
-  result = appliedOps.concat(
+  return appliedOps.concat(
     suggestEditorChanges({ children: editor.children }, newVersion, depth + 1)
   );
-  // });
-
-  return result;
 };

@@ -1,4 +1,9 @@
-import { AnyElement, Document, MyValue } from '@decipad/editor-types';
+import {
+  AnyElement,
+  ELEMENT_TAB,
+  RootDocument,
+  TabElement,
+} from '@decipad/editor-types';
 import cloneDeep from 'lodash.clonedeep';
 import { getCommands } from './getCommands';
 import { findPath } from './findPath';
@@ -6,7 +11,8 @@ import set from 'lodash.set';
 import { removePath } from './removePath';
 import get from 'lodash.get';
 import { debug } from '../debug';
-import { mergeProps } from '@udecode/plate';
+import { isElement, mergeProps } from '@udecode/plate';
+import { nanoid } from 'nanoid';
 
 export interface AddCommand {
   action: 'add';
@@ -26,10 +32,17 @@ export interface ChangeCommand {
 
 export type Command = AddCommand | RemoveCommand | ChangeCommand;
 
+const newTab = (): TabElement => ({
+  type: ELEMENT_TAB,
+  id: nanoid(),
+  name: 'New tab',
+  children: [],
+});
+
 export const applyCommands = (
-  doc: Document,
+  doc: RootDocument,
   commandsString: string
-): Document => {
+): RootDocument => {
   const commands = getCommands(commandsString);
   const newDocument = cloneDeep(doc);
   let previousDoc = cloneDeep(doc);
@@ -60,7 +73,20 @@ export const applyCommands = (
               : command.newBlock;
           set(newDocument, propPath, newBlock);
         } else if (command.action === 'add') {
-          newDocument.children.push(command.newBlock as MyValue[number]);
+          let firstTab = newDocument.children.find(
+            (el) => isElement(el) && el.type === ELEMENT_TAB
+          ) as undefined | TabElement;
+          if (!firstTab) {
+            firstTab = newTab();
+            newDocument.children = [
+              newDocument.children[0],
+              newTab(),
+              ...(newDocument.children.slice(1) as TabElement[]),
+            ];
+          }
+          firstTab.children.push(
+            command.newBlock as TabElement['children'][number]
+          );
         }
         break;
       }

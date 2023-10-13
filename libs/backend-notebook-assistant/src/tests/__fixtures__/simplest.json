@@ -10,26 +10,33 @@
       "id": "3JTr-B84cKMnNOYnvHiFi"
     },
     {
+      "type": "tab",
+      "id": "vHiFdsiB84cKMOYn3JTr-",
+      "name": "Main",
       "children": [
         {
-          "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!"
-        }
-      ],
-      "type": "p",
-      "id": "18YPGVFcBkSie3WopWDlo"
-    },
-    {
-      "children": [
-        {
-          "text": "It looks like I could make a profit ",
-          "highlight": true
+          "children": [
+            {
+              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!"
+            }
+          ],
+          "type": "p",
+          "id": "18YPGVFcBkSie3WopWDlo"
         },
         {
-          "text": "and some side income based on my assumptions below. Feedback welcome!"
+          "children": [
+            {
+              "text": "It looks like I could make a profit ",
+              "highlight": true
+            },
+            {
+              "text": "and some side income based on my assumptions below. Feedback welcome!"
+            }
+          ],
+          "type": "p",
+          "id": "ngIq_tCJClGugubOIsRKT"
         }
-      ],
-      "type": "p",
-      "id": "ngIq_tCJClGugubOIsRKT"
+      ]
     }
   ]
 }

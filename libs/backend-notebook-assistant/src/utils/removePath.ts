@@ -1,8 +1,8 @@
-import { Document } from '@decipad/editor-types';
+import { RootDocument } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
 import get from 'lodash.get';
 
-export const removePath = (doc: Document, path: string[]): void => {
+export const removePath = (doc: RootDocument, path: string[]): void => {
   const lastPointStr = path[path.length - 1];
   const lastPoint = parseInt(lastPointStr, 10);
   if (Number.isNaN(lastPoint)) {

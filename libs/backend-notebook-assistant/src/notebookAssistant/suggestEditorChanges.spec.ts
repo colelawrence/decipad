@@ -1,8 +1,8 @@
 import {
   ELEMENT_DATA_VIEW,
-  ELEMENT_H1,
   ELEMENT_PARAGRAPH,
-  type Document,
+  ELEMENT_TITLE,
+  RootDocument,
 } from '@decipad/editor-types';
 import { suggestEditorChanges } from './suggestEditorChanges';
 
@@ -12,12 +12,20 @@ describe('suggestEditorChanges', () => {
       suggestEditorChanges(
         {
           children: [
-            { id: 'id1', type: ELEMENT_H1, children: [{ text: 'title here' }] },
+            {
+              id: 'id1',
+              type: ELEMENT_TITLE,
+              children: [{ text: 'title here' }],
+            },
           ],
         },
         {
           children: [
-            { id: 'id1', type: ELEMENT_H1, children: [{ text: 'title here' }] },
+            {
+              id: 'id1',
+              type: ELEMENT_TITLE,
+              children: [{ text: 'title here' }],
+            },
           ],
         }
       )
@@ -29,14 +37,18 @@ describe('suggestEditorChanges', () => {
       suggestEditorChanges(
         {
           children: [
-            { id: 'id1', type: ELEMENT_H1, children: [{ text: 'title here' }] },
+            {
+              id: 'id1',
+              type: ELEMENT_TITLE,
+              children: [{ text: 'title here' }],
+            },
           ],
         },
         {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title changed' }],
             },
           ],
@@ -62,7 +74,7 @@ describe('suggestEditorChanges', () => {
               },
             ],
             "id": "id1",
-            "type": "h1",
+            "type": "title",
           },
           "path": [
             0,
@@ -77,7 +89,7 @@ describe('suggestEditorChanges', () => {
               },
             ],
             "id": "id1",
-            "type": "h1",
+            "type": "title",
           },
           "path": [
             0,
@@ -93,11 +105,22 @@ describe('suggestEditorChanges', () => {
       suggestEditorChanges(
         {
           children: [
-            { id: 'id1', type: ELEMENT_H1, children: [{ text: 'title here' }] },
             {
-              id: 'id2',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'id1',
+              type: ELEMENT_TITLE,
+              children: [{ text: 'title here' }],
+            },
+            {
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id2',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         },
@@ -105,18 +128,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'new paragraph here' }],
-            },
-            {
-              id: 'id2',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'new paragraph here' }],
+                },
+                {
+                  id: 'id2',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         }
@@ -135,6 +165,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
           ],
           "type": "insert_node",
         },
@@ -149,18 +180,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id2',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'new paragraph here' }],
-            },
-            {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id2',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'new paragraph here' }],
+                },
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         },
@@ -168,13 +206,20 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         }
@@ -193,6 +238,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
           ],
           "type": "remove_node",
         },
@@ -207,18 +253,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id2',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'new paragraph here' }],
-            },
-            {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id2',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'new paragraph here' }],
+                },
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         },
@@ -226,18 +279,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
-            },
-            {
-              id: 'id2',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'new paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+                {
+                  id: 'id2',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'new paragraph here' }],
+                },
+              ],
             },
           ],
         }
@@ -247,9 +307,11 @@ describe('suggestEditorChanges', () => {
         {
           "newPath": [
             1,
+            0,
           ],
           "path": [
-            2,
+            1,
+            1,
           ],
           "type": "move_node",
         },
@@ -264,18 +326,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id2',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'new paragraph here' }],
-            },
-            {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id2',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'new paragraph here' }],
+                },
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         },
@@ -283,18 +352,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id4',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'other paragraph here' }],
-            },
-            {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
+              children: [
+                {
+                  id: 'id4',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'other paragraph here' }],
+                },
+                {
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
+                },
+              ],
             },
           ],
         }
@@ -313,6 +389,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
           ],
           "type": "remove_node",
         },
@@ -328,6 +405,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
           ],
           "type": "insert_node",
         },
@@ -342,46 +420,53 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id2',
-              type: ELEMENT_DATA_VIEW,
-              varName: 'var name 1',
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
-                  id: 'id2.1',
-                  type: 'data-view-caption',
+                  id: 'id2',
+                  type: ELEMENT_DATA_VIEW,
+                  varName: 'var name 1',
                   children: [
                     {
-                      id: 'id2.1.1',
-                      type: 'data-view-name',
-                      children: [{ text: 'data view caption' }],
+                      id: 'id2.1',
+                      type: 'data-view-caption',
+                      children: [
+                        {
+                          id: 'id2.1.1',
+                          type: 'data-view-name',
+                          children: [{ text: 'data view caption' }],
+                        },
+                      ],
+                    },
+                    {
+                      id: 'id2.2',
+                      type: 'data-view-tr',
+                      children: [
+                        {
+                          id: 'id2.2.1',
+                          type: 'data-view-th',
+                          children: [{ text: '' }],
+                          cellType: { kind: 'string' },
+                          name: 'name',
+                          label: 'label',
+                          icon: 'icon',
+                        },
+                      ],
                     },
                   ],
                 },
                 {
-                  id: 'id2.2',
-                  type: 'data-view-tr',
-                  children: [
-                    {
-                      id: 'id2.2.1',
-                      type: 'data-view-th',
-                      children: [{ text: '' }],
-                      cellType: { kind: 'string' },
-                      name: 'name',
-                      label: 'label',
-                      icon: 'icon',
-                    },
-                  ],
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
                 },
               ],
-            },
-            {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
             },
           ],
         },
@@ -389,46 +474,53 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               id: 'id1',
-              type: ELEMENT_H1,
+              type: ELEMENT_TITLE,
               children: [{ text: 'title here' }],
             },
             {
-              id: 'id2',
-              type: ELEMENT_DATA_VIEW,
-              varName: 'var name 2',
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
-                  id: 'id2.1',
-                  type: 'data-view-caption',
+                  id: 'id2',
+                  type: ELEMENT_DATA_VIEW,
+                  varName: 'var name 2',
                   children: [
                     {
-                      id: 'id2.1.1',
-                      type: 'data-view-name',
-                      children: [{ text: 'data view caption' }],
+                      id: 'id2.1',
+                      type: 'data-view-caption',
+                      children: [
+                        {
+                          id: 'id2.1.1',
+                          type: 'data-view-name',
+                          children: [{ text: 'data view caption' }],
+                        },
+                      ],
+                    },
+                    {
+                      id: 'id2.2',
+                      type: 'data-view-tr',
+                      children: [
+                        {
+                          id: 'id2.2.1',
+                          type: 'data-view-th',
+                          children: [{ text: '' }],
+                          cellType: { kind: 'boolean' },
+                          name: 'name',
+                          label: 'label',
+                          color: 'orange',
+                        },
+                      ],
                     },
                   ],
                 },
                 {
-                  id: 'id2.2',
-                  type: 'data-view-tr',
-                  children: [
-                    {
-                      id: 'id2.2.1',
-                      type: 'data-view-th',
-                      children: [{ text: '' }],
-                      cellType: { kind: 'boolean' },
-                      name: 'name',
-                      label: 'label',
-                      color: 'orange',
-                    },
-                  ],
+                  id: 'id3',
+                  type: ELEMENT_PARAGRAPH,
+                  children: [{ text: 'paragraph here' }],
                 },
               ],
-            },
-            {
-              id: 'id3',
-              type: ELEMENT_PARAGRAPH,
-              children: [{ text: 'paragraph here' }],
             },
           ],
         }
@@ -456,6 +548,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
             1,
             0,
           ],
@@ -486,6 +579,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
             1,
             0,
           ],
@@ -516,6 +610,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
             1,
             0,
           ],
@@ -573,6 +668,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
           ],
           "properties": {
             "varName": "var name 1",
@@ -595,32 +691,39 @@ describe('suggestEditorChanges', () => {
                 },
               ],
 
-              type: 'h1',
+              type: ELEMENT_TITLE,
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
-                  text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-                },
-              ],
+                  children: [
+                    {
+                      text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+                    },
+                  ],
 
-              type: 'p',
-              id: '18YPGVFcBkSie3WopWDlo',
-            },
-            {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
+                  type: 'p',
+                  id: '18YPGVFcBkSie3WopWDlo',
                 },
                 {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
+                  children: [
+                    {
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
+                    },
+                    {
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
                 },
               ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
             },
           ],
         },
@@ -633,42 +736,49 @@ describe('suggestEditorChanges', () => {
                 },
               ],
 
-              type: 'h1',
+              type: 'title',
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
+              id: 'tabid1',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
-                  text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-                },
-              ],
+                  children: [
+                    {
+                      text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+                    },
+                  ],
 
-              type: 'p',
-              id: '18YPGVFcBkSie3WopWDlo',
-            },
-            {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
+                  type: 'p',
+                  id: '18YPGVFcBkSie3WopWDlo',
                 },
                 {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
-                },
-              ],
+                  children: [
+                    {
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
+                    },
+                    {
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
+                    },
+                  ],
 
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
-            },
-            {
-              children: [
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
+                },
                 {
-                  text: "Don't forget to follow me on Twitter!",
+                  children: [
+                    {
+                      text: "Don't forget to follow me on Twitter!",
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'new-paragraph-id',
                 },
               ],
-
-              type: 'p',
-              id: 'new-paragraph-id',
             },
           ],
         }
@@ -686,7 +796,8 @@ describe('suggestEditorChanges', () => {
             "type": "p",
           },
           "path": [
-            3,
+            1,
+            2,
           ],
           "type": "insert_node",
         },
@@ -706,32 +817,39 @@ describe('suggestEditorChanges', () => {
                 },
               ],
 
-              type: 'h1',
+              type: ELEMENT_TITLE,
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
+              id: 'vHiFdsiB84cKMOYn3JTr-',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
-                  text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-                },
-              ],
+                  children: [
+                    {
+                      text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+                    },
+                  ],
 
-              type: 'p',
-              id: '18YPGVFcBkSie3WopWDlo',
-            },
-            {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
+                  type: 'p',
+                  id: '18YPGVFcBkSie3WopWDlo',
                 },
                 {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
+                  children: [
+                    {
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
+                    },
+                    {
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
                 },
               ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
             },
           ],
         },
@@ -744,28 +862,35 @@ describe('suggestEditorChanges', () => {
                 },
               ],
 
-              type: 'h1',
+              type: 'title',
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
+              id: 'vHiFdsiB84cKMOYn3JTr-',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
-                  text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-                },
-              ],
+                  children: [
+                    {
+                      text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
+                    },
+                  ],
 
-              type: 'p',
-              id: '18YPGVFcBkSie3WopWDlo',
-            },
-            {
-              children: [
+                  type: 'p',
+                  id: '18YPGVFcBkSie3WopWDlo',
+                },
                 {
-                  text: 'Please follow me on Twitter for updates and feedback!',
+                  children: [
+                    {
+                      text: 'Please follow me on Twitter for updates and feedback!',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
                 },
               ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
             },
           ],
         }
@@ -777,7 +902,8 @@ describe('suggestEditorChanges', () => {
             "text": "and some side income based on my assumptions below. Feedback welcome!",
           },
           "path": [
-            2,
+            1,
+            1,
             1,
           ],
           "type": "remove_node",
@@ -788,7 +914,8 @@ describe('suggestEditorChanges', () => {
             "text": "It looks like I could make a profit ",
           },
           "path": [
-            2,
+            1,
+            1,
             0,
           ],
           "type": "remove_node",
@@ -805,7 +932,8 @@ describe('suggestEditorChanges', () => {
             "type": "p",
           },
           "path": [
-            2,
+            1,
+            1,
           ],
           "type": "remove_node",
         },
@@ -820,7 +948,8 @@ describe('suggestEditorChanges', () => {
             "type": "p",
           },
           "path": [
-            2,
+            1,
+            1,
           ],
           "type": "insert_node",
         },
@@ -835,18 +964,25 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               children: [{ text: '🕯Starting a Candle Business' }],
-              type: 'h1',
+              type: 'title',
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
+              id: 'vHiFdsiB84cKMOYn3JTr-',
+              name: 'Main',
+              type: 'tab',
               children: [
-                { text: 'What percentage of my net revenue ' },
-                { text: '(before expenses)', italic: true },
-                { text: ' would I allocate to marketing initiatives? ' },
-              ],
+                {
+                  children: [
+                    { text: 'What percentage of my net revenue ' },
+                    { text: '(before expenses)', italic: true },
+                    { text: ' would I allocate to marketing initiatives? ' },
+                  ],
 
-              type: 'p',
-              id: 'n2uD1VwAOCMN1FQOMngPv',
+                  type: 'p',
+                  id: 'n2uD1VwAOCMN1FQOMngPv',
+                },
+              ],
             },
           ],
         },
@@ -854,18 +990,28 @@ describe('suggestEditorChanges', () => {
           children: [
             {
               children: [{ text: '🕯Starting a Candle Business' }],
-              type: 'h1',
+              type: 'title',
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
+              id: 'vHiFdsiB84cKMOYn3JTr-',
+              name: 'Main',
+              type: 'tab',
               children: [
-                { text: 'What percentage of my net revenue ', italic: true },
-                { text: '(before expenses)', italic: true },
-                { text: ' would I allocate to marketing initiatives? ' },
-              ],
+                {
+                  children: [
+                    {
+                      text: 'What percentage of my net revenue ',
+                      italic: true,
+                    },
+                    { text: '(before expenses)', italic: true },
+                    { text: ' would I allocate to marketing initiatives? ' },
+                  ],
 
-              type: 'p',
-              id: 'n2uD1VwAOCMN1FQOMngPv',
+                  type: 'p',
+                  id: 'n2uD1VwAOCMN1FQOMngPv',
+                },
+              ],
             },
           ],
         }
@@ -879,6 +1025,7 @@ describe('suggestEditorChanges', () => {
           "path": [
             1,
             0,
+            0,
           ],
           "type": "remove_node",
         },
@@ -889,6 +1036,7 @@ describe('suggestEditorChanges', () => {
           },
           "path": [
             1,
+            0,
             0,
           ],
           "type": "insert_node",
@@ -909,169 +1057,60 @@ describe('suggestEditorChanges', () => {
                 },
               ],
 
-              type: 'h1',
+              type: 'title',
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
-            {
-              children: [
-                {
-                  text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-                },
-              ],
 
-              type: 'p',
-              id: '18YPGVFcBkSie3WopWDlo',
-            },
             {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
-                },
-                {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
-                },
-              ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
-            },
-            {
+              id: 'vHiFdsiB84cKMOYn3JTr-',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
                   children: [
                     {
-                      text: 'nameoftheslider',
+                      text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
                     },
                   ],
 
-                  id: '-igGVqsXaHA80joO1eFUm',
-                  type: 'caption',
+                  type: 'p',
+                  id: '18YPGVFcBkSie3WopWDlo',
                 },
                 {
                   children: [
                     {
-                      text: '5',
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
                     },
-                  ],
-
-                  id: 'C4SzMPEnqrsKwTNJhL5vu',
-                  type: 'exp',
-                },
-                {
-                  children: [
                     {
-                      text: '',
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
                     },
                   ],
 
-                  id: '5MhvUPKXijpZV9AwLW4Cs',
-                  type: 'slider',
-                  max: '10',
-                  min: '0',
-                  step: '1',
-                  value: '5',
-                },
-              ],
-
-              id: 'QeyklnGhr7iEZvZ1ntElO',
-              type: 'def',
-              variant: 'slider',
-            },
-            {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
-                },
-                {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
-                },
-              ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: 'Table1',
-                        },
-                      ],
-
-                      type: 'table-var-name',
-                      id: 'ek3093490dkwdkjsakdjksc',
-                    },
-                  ],
-
-                  type: 'table-caption',
-                  id: 'fdfskljdslk3erwlk',
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
                 },
                 {
                   children: [
                     {
                       children: [
                         {
-                          text: 'Column1',
+                          text: 'nameoftheslider',
                         },
                       ],
 
-                      type: 'th',
-                      id: 'fdsk3re3ejdsakfdsfss',
-                      cellType: {
-                        kind: 'anything',
-                      },
+                      id: '-igGVqsXaHA80joO1eFUm',
+                      type: 'caption',
                     },
                     {
                       children: [
                         {
-                          text: 'Column2',
+                          text: '5',
                         },
                       ],
 
-                      type: 'th',
-                      id: '3jsjdf30ekdsa',
-                      cellType: {
-                        kind: 'anything',
-                      },
-                    },
-                  ],
-
-                  type: 'tr',
-                  id: 'fdskrew034ksdfsk',
-                },
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: '',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: 'fdsn3e9wdisadsaksaav',
-                    },
-                  ],
-
-                  type: 'tr',
-                  id: 'fj3e93eidskdsadffcc',
-                },
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: '',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: 'fd3e939dsaksd023od',
+                      id: 'C4SzMPEnqrsKwTNJhL5vu',
+                      type: 'exp',
                     },
                     {
                       children: [
@@ -1080,75 +1119,192 @@ describe('suggestEditorChanges', () => {
                         },
                       ],
 
-                      type: 'td',
-                      id: 'fsd3e93eidsakasdac',
+                      id: '5MhvUPKXijpZV9AwLW4Cs',
+                      type: 'slider',
+                      max: '10',
+                      min: '0',
+                      step: '1',
+                      value: '5',
                     },
                   ],
 
-                  type: 'tr',
-                  id: '2e9dw934eksd230e23r9kcr39cmgt',
+                  id: 'QeyklnGhr7iEZvZ1ntElO',
+                  type: 'def',
+                  variant: 'slider',
+                },
+                {
+                  children: [
+                    {
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
+                    },
+                    {
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
                 },
                 {
                   children: [
                     {
                       children: [
                         {
-                          text: '',
+                          children: [
+                            {
+                              text: 'Table1',
+                            },
+                          ],
+
+                          type: 'table-var-name',
+                          id: 'ek3093490dkwdkjsakdjksc',
                         },
                       ],
 
-                      type: 'td',
-                      id: '2ejdj3dj32d923dj',
+                      type: 'table-caption',
+                      id: 'fdfskljdslk3erwlk',
                     },
                     {
                       children: [
                         {
-                          text: '',
+                          children: [
+                            {
+                              text: 'Column1',
+                            },
+                          ],
+
+                          type: 'th',
+                          id: 'fdsk3re3ejdsakfdsfss',
+                          cellType: {
+                            kind: 'anything',
+                          },
+                        },
+                        {
+                          children: [
+                            {
+                              text: 'Column2',
+                            },
+                          ],
+
+                          type: 'th',
+                          id: '3jsjdf30ekdsa',
+                          cellType: {
+                            kind: 'anything',
+                          },
                         },
                       ],
 
-                      type: 'td',
-                      id: '2edjwo3tywkfbr0hfewg3ejjokpok',
+                      type: 'tr',
+                      id: 'fdskrew034ksdfsk',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: '',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'fdsn3e9wdisadsaksaav',
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: 'fj3e93eidskdsadffcc',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: '',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'fd3e939dsaksd023od',
+                        },
+                        {
+                          children: [
+                            {
+                              text: '',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'fsd3e93eidsakasdac',
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: '2e9dw934eksd230e23r9kcr39cmgt',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: '',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: '2ejdj3dj32d923dj',
+                        },
+                        {
+                          children: [
+                            {
+                              text: '',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: '2edjwo3tywkfbr0hfewg3ejjokpok',
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: '3edjed039ic9didicvkk',
                     },
                   ],
 
-                  type: 'tr',
-                  id: '3edjed039ic9didicvkk',
+                  type: 'table',
+                  id: '2wr03rifdsk30rfsd',
+                },
+                {
+                  children: [
+                    {
+                      text: '🎯 What about marketing?',
+                    },
+                  ],
+
+                  type: 'h2',
+                  id: 'xHCDeKqDxpFqJxDAdXjDI',
+                },
+                {
+                  children: [
+                    {
+                      text: 'What percentage of my net revenue ',
+                    },
+                    {
+                      text: '(before expenses)',
+                      italic: true,
+                    },
+                    {
+                      text: ' would I allocate to marketing initiatives? ',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'n2uD1VwAOCMN1FQOMngPv',
                 },
               ],
-
-              type: 'table',
-              id: '2wr03rifdsk30rfsd',
-            },
-            {
-              children: [
-                {
-                  text: '🎯 What about marketing?',
-                },
-              ],
-
-              type: 'h2',
-              id: 'xHCDeKqDxpFqJxDAdXjDI',
-            },
-            {
-              children: [
-                {
-                  text: 'What percentage of my net revenue ',
-                },
-                {
-                  text: '(before expenses)',
-                  italic: true,
-                },
-                {
-                  text: ' would I allocate to marketing initiatives? ',
-                },
-              ],
-
-              type: 'p',
-              id: 'n2uD1VwAOCMN1FQOMngPv',
             },
           ],
-        } as unknown as Document,
+        } as RootDocument,
         {
           children: [
             {
@@ -1158,256 +1314,263 @@ describe('suggestEditorChanges', () => {
                 },
               ],
 
-              type: 'h1',
+              type: 'title',
               id: '3JTr-B84cKMnNOYnvHiFi',
             },
             {
-              children: [
-                {
-                  text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-                },
-              ],
-
-              type: 'p',
-              id: '18YPGVFcBkSie3WopWDlo',
-            },
-            {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
-                },
-                {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
-                },
-              ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
-            },
-            {
+              id: 'vHiFdsiB84cKMOYn3JTr-',
+              name: 'Main',
+              type: 'tab',
               children: [
                 {
                   children: [
                     {
-                      text: 'nameoftheslider',
+                      text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
                     },
                   ],
 
-                  id: '-igGVqsXaHA80joO1eFUm',
-                  type: 'caption',
+                  type: 'p',
+                  id: '18YPGVFcBkSie3WopWDlo',
                 },
                 {
                   children: [
                     {
-                      text: '5',
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
+                    },
+                    {
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
                     },
                   ],
 
-                  id: 'C4SzMPEnqrsKwTNJhL5vu',
-                  type: 'exp',
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
                 },
                 {
                   children: [
                     {
-                      text: '',
+                      children: [
+                        {
+                          text: 'nameoftheslider',
+                        },
+                      ],
+
+                      id: '-igGVqsXaHA80joO1eFUm',
+                      type: 'caption',
+                    },
+                    {
+                      children: [
+                        {
+                          text: '5',
+                        },
+                      ],
+
+                      id: 'C4SzMPEnqrsKwTNJhL5vu',
+                      type: 'exp',
+                    },
+                    {
+                      children: [
+                        {
+                          text: '',
+                        },
+                      ],
+
+                      id: '5MhvUPKXijpZV9AwLW4Cs',
+                      type: 'slider',
+                      max: '10',
+                      min: '0',
+                      step: '1',
+                      value: '5',
                     },
                   ],
 
-                  id: '5MhvUPKXijpZV9AwLW4Cs',
-                  type: 'slider',
-                  max: '10',
-                  min: '0',
-                  step: '1',
-                  value: '5',
+                  id: 'QeyklnGhr7iEZvZ1ntElO',
+                  type: 'def',
+                  variant: 'slider',
+                },
+                {
+                  children: [
+                    {
+                      text: 'It looks like I could make a profit ',
+                      highlight: true,
+                    },
+                    {
+                      text: 'and some side income based on my assumptions below. Feedback welcome!',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'ngIq_tCJClGugubOIsRKT',
+                },
+                {
+                  children: [
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: 'Table1',
+                            },
+                          ],
+
+                          type: 'table-var-name',
+                          id: 'ek3093490dkwdkjsakdjksc',
+                        },
+                      ],
+
+                      type: 'table-caption',
+                      id: 'fdfskljdslk3erwlk',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: 'Column1',
+                            },
+                          ],
+
+                          type: 'th',
+                          id: 'fdsk3re3ejdsakfdsfss',
+                          cellType: {
+                            kind: 'anything',
+                          },
+                        },
+                        {
+                          children: [
+                            {
+                              text: 'Column2',
+                            },
+                          ],
+
+                          type: 'th',
+                          id: '3jsjdf30ekdsa',
+                          cellType: {
+                            kind: 'anything',
+                          },
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: 'fdskrew034ksdfsk',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: 'Pikachu',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'dsj309eskcdasklassmc',
+                        },
+                        {
+                          children: [
+                            {
+                              text: 'Charizard',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'fdsn3e9wdisadsaksaav',
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: 'fj3e93eidskdsadffcc',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: 'Bulbasaur',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'fd3e939dsaksd023od',
+                        },
+                        {
+                          children: [
+                            {
+                              text: 'Squirtle',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: 'fsd3e93eidsakasdac',
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: '2e9dw934eksd230e23r9kcr39cmgt',
+                    },
+                    {
+                      children: [
+                        {
+                          children: [
+                            {
+                              text: 'Jigglypuff',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: '2ejdj3dj32d923dj',
+                        },
+                        {
+                          children: [
+                            {
+                              text: 'Mewtwo',
+                            },
+                          ],
+
+                          type: 'td',
+                          id: '2edjwo3tywkfbr0hfewg3ejjokpok',
+                        },
+                      ],
+
+                      type: 'tr',
+                      id: '3edjed039ic9didicvkk',
+                    },
+                  ],
+
+                  type: 'table',
+                  id: '2wr03rifdsk30rfsd',
+                },
+                {
+                  children: [
+                    {
+                      text: '🎯 What about marketing?',
+                    },
+                  ],
+
+                  type: 'h2',
+                  id: 'xHCDeKqDxpFqJxDAdXjDI',
+                },
+                {
+                  children: [
+                    {
+                      text: 'What percentage of my net revenue ',
+                    },
+                    {
+                      text: '(before expenses)',
+                      italic: true,
+                    },
+                    {
+                      text: ' would I allocate to marketing initiatives? ',
+                    },
+                  ],
+
+                  type: 'p',
+                  id: 'n2uD1VwAOCMN1FQOMngPv',
                 },
               ],
-
-              id: 'QeyklnGhr7iEZvZ1ntElO',
-              type: 'def',
-              variant: 'slider',
-            },
-            {
-              children: [
-                {
-                  text: 'It looks like I could make a profit ',
-                  highlight: true,
-                },
-                {
-                  text: 'and some side income based on my assumptions below. Feedback welcome!',
-                },
-              ],
-
-              type: 'p',
-              id: 'ngIq_tCJClGugubOIsRKT',
-            },
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: 'Table1',
-                        },
-                      ],
-
-                      type: 'table-var-name',
-                      id: 'ek3093490dkwdkjsakdjksc',
-                    },
-                  ],
-
-                  type: 'table-caption',
-                  id: 'fdfskljdslk3erwlk',
-                },
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: 'Column1',
-                        },
-                      ],
-
-                      type: 'th',
-                      id: 'fdsk3re3ejdsakfdsfss',
-                      cellType: {
-                        kind: 'anything',
-                      },
-                    },
-                    {
-                      children: [
-                        {
-                          text: 'Column2',
-                        },
-                      ],
-
-                      type: 'th',
-                      id: '3jsjdf30ekdsa',
-                      cellType: {
-                        kind: 'anything',
-                      },
-                    },
-                  ],
-
-                  type: 'tr',
-                  id: 'fdskrew034ksdfsk',
-                },
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: 'Pikachu',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: 'dsj309eskcdasklassmc',
-                    },
-                    {
-                      children: [
-                        {
-                          text: 'Charizard',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: 'fdsn3e9wdisadsaksaav',
-                    },
-                  ],
-
-                  type: 'tr',
-                  id: 'fj3e93eidskdsadffcc',
-                },
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: 'Bulbasaur',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: 'fd3e939dsaksd023od',
-                    },
-                    {
-                      children: [
-                        {
-                          text: 'Squirtle',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: 'fsd3e93eidsakasdac',
-                    },
-                  ],
-
-                  type: 'tr',
-                  id: '2e9dw934eksd230e23r9kcr39cmgt',
-                },
-                {
-                  children: [
-                    {
-                      children: [
-                        {
-                          text: 'Jigglypuff',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: '2ejdj3dj32d923dj',
-                    },
-                    {
-                      children: [
-                        {
-                          text: 'Mewtwo',
-                        },
-                      ],
-
-                      type: 'td',
-                      id: '2edjwo3tywkfbr0hfewg3ejjokpok',
-                    },
-                  ],
-
-                  type: 'tr',
-                  id: '3edjed039ic9didicvkk',
-                },
-              ],
-
-              type: 'table',
-              id: '2wr03rifdsk30rfsd',
-            },
-            {
-              children: [
-                {
-                  text: '🎯 What about marketing?',
-                },
-              ],
-
-              type: 'h2',
-              id: 'xHCDeKqDxpFqJxDAdXjDI',
-            },
-            {
-              children: [
-                {
-                  text: 'What percentage of my net revenue ',
-                },
-                {
-                  text: '(before expenses)',
-                  italic: true,
-                },
-                {
-                  text: ' would I allocate to marketing initiatives? ',
-                },
-              ],
-
-              type: 'p',
-              id: 'n2uD1VwAOCMN1FQOMngPv',
             },
           ],
-        } as unknown as Document
+        } as RootDocument
       )
     ).toMatchInlineSnapshot(`
       [
@@ -1422,7 +1585,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             3,
             0,
           ],
@@ -1439,7 +1603,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             4,
             0,
           ],
@@ -1456,7 +1621,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             2,
             0,
           ],
@@ -1473,7 +1639,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             2,
             1,
           ],
@@ -1490,7 +1657,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             2,
             1,
           ],
@@ -1507,7 +1675,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             3,
             0,
           ],
@@ -1524,7 +1693,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             3,
             1,
           ],
@@ -1541,7 +1711,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             3,
             1,
           ],
@@ -1558,7 +1729,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             4,
             0,
           ],
@@ -1575,7 +1747,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             4,
             1,
           ],
@@ -1592,7 +1765,8 @@ describe('suggestEditorChanges', () => {
             "type": "td",
           },
           "path": [
-            5,
+            1,
+            4,
             4,
             1,
           ],

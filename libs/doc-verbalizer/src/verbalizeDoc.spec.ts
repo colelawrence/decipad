@@ -2,11 +2,11 @@ import { verbalizeDoc } from './verbalizeDoc';
 import textOnly from './__fixtures__/text-only.json';
 import someCode from './__fixtures__/some-code.json';
 import uiComponents from './__fixtures__/simple-ui-components.json';
-import { Document } from '@decipad/editor-types';
+import { RootDocument } from '@decipad/editor-types';
 
 describe('verbalizeDoc', () => {
   it('verbalizes text documents into the text itself', () => {
-    const doc = textOnly as Document;
+    const doc = textOnly as RootDocument;
     const { document, verbalized } = verbalizeDoc(doc);
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.element)).toMatchObject(doc.children);
@@ -20,7 +20,7 @@ describe('verbalizeDoc', () => {
   });
 
   it('verbalizes code lines', () => {
-    const doc = someCode as Document;
+    const doc = someCode as RootDocument;
     const { document, verbalized } = verbalizeDoc(doc);
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
@@ -41,7 +41,7 @@ describe('verbalizeDoc', () => {
   });
 
   it('verbalizes some simple UI components', () => {
-    const doc = uiComponents as Document;
+    const doc = uiComponents as RootDocument;
     const { document, verbalized } = verbalizeDoc(doc);
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`

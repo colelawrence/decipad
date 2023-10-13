@@ -34,96 +34,103 @@ test('notebook assistant: simple code changes', async (ctx) => {
         {
           "children": [
             {
-              "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
-            },
-          ],
-          "id": "18YPGVFcBkSie3WopWDlo",
-          "type": "p",
-        },
-        {
-          "children": [
-            {
-              "highlight": true,
-              "text": "It looks like I could make a profit ",
-            },
-            {
-              "text": "and some side income based on my assumptions below. Feedback welcome!",
-            },
-          ],
-          "id": "ngIq_tCJClGugubOIsRKT",
-          "type": "p",
-        },
-        {
-          "children": [
-            {
               "children": [
                 {
-                  "text": "NewVarName",
+                  "text": "During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!",
                 },
               ],
-              "id": "p3e90dsjad39dsamn",
-              "type": "structured_varname",
+              "id": "18YPGVFcBkSie3WopWDlo",
+              "type": "p",
             },
             {
               "children": [
                 {
-                  "text": "3 / 4",
+                  "highlight": true,
+                  "text": "It looks like I could make a profit ",
                 },
-              ],
-              "id": "powehfowbe389dns",
-              "type": "code_line_v2_code",
-            },
-          ],
-          "id": "FDSffDfa3refdsFsdf",
-          "showResult": true,
-          "type": "code_line_v2",
-        },
-        {
-          "children": [
-            {
-              "highlight": true,
-              "text": "It looks like I could make a profit ",
-            },
-            {
-              "text": "and some side income based on my assumptions below. Feedback welcome!",
-            },
-          ],
-          "id": "ngIq_tCJClGugubOIsRKT",
-          "type": "p",
-        },
-        {
-          "children": [
-            {
-              "children": [
                 {
-                  "text": "VarName2",
+                  "text": "and some side income based on my assumptions below. Feedback welcome!",
                 },
               ],
-              "id": "1dkfnsddsfhef3",
-              "type": "structured_varname",
+              "id": "ngIq_tCJClGugubOIsRKT",
+              "type": "p",
             },
             {
               "children": [
                 {
-                  "text": "cos(PI)",
+                  "children": [
+                    {
+                      "text": "NewVarName",
+                    },
+                  ],
+                  "id": "p3e90dsjad39dsamn",
+                  "type": "structured_varname",
+                },
+                {
+                  "children": [
+                    {
+                      "text": "3 / 4",
+                    },
+                  ],
+                  "id": "powehfowbe389dns",
+                  "type": "code_line_v2_code",
                 },
               ],
-              "id": "olj2e0wqwdsksdl",
-              "type": "code_line_v2_code",
+              "id": "FDSffDfa3refdsFsdf",
+              "showResult": true,
+              "type": "code_line_v2",
             },
-          ],
-          "id": "fjsdfdofsd3-e3dsdcj",
-          "showResult": true,
-          "type": "code_line_v2",
-        },
-        {
-          "children": [
             {
-              "text": "💸 How much will I pay for the act of candle-making and inflation?",
+              "children": [
+                {
+                  "highlight": true,
+                  "text": "It looks like I could make a profit ",
+                },
+                {
+                  "text": "and some side income based on my assumptions below. Feedback welcome!",
+                },
+              ],
+              "id": "ngIq_tCJfdsfsdf4ClGugubOIsRKT",
+              "type": "p",
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "VarName2",
+                    },
+                  ],
+                  "id": "1dkfnsddsfhef3",
+                  "type": "structured_varname",
+                },
+                {
+                  "children": [
+                    {
+                      "text": "cos(PI)",
+                    },
+                  ],
+                  "id": "olj2e0wqwdsksdl",
+                  "type": "code_line_v2_code",
+                },
+              ],
+              "id": "fjsdfdofsd3-e3dsdcj",
+              "showResult": true,
+              "type": "code_line_v2",
+            },
+            {
+              "children": [
+                {
+                  "text": "💸 How much will I pay for the act of candle-making and inflation?",
+                },
+              ],
+              "id": "P1MO3vjonREmgtamfVbur",
+              "type": "h2",
             },
           ],
-          "id": "P1MO3vjonREmgtamfVbur",
-          "type": "h2",
+          "id": "vHiFdsiB84cKMOYn3JTr-",
+          "name": "Main",
+          "type": "tab",
         },
       ]
     `);
@@ -147,97 +154,103 @@ test('notebook assistant: simple code changes', async (ctx) => {
       {
         children: [
           {
-            text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
-          },
-        ],
-        id: '18YPGVFcBkSie3WopWDlo',
-        type: 'p',
-      },
-      {
-        children: [
-          {
-            highlight: true,
-            text: 'It looks like I could make a profit ',
-          },
-          {
-            text: 'and some side income based on my assumptions below. Feedback welcome!',
-          },
-        ],
-        id: 'ngIq_tCJClGugubOIsRKT',
-        type: 'p',
-      },
-      {
-        children: [
-          {
             children: [
               {
-                text: 'VarName1',
+                text: 'During the pandemic, many people thought of starting a side business, so I decided to see if my candle-making hobby could be profitable!',
               },
             ],
-            id: 'p3e90dsjad39dsamn',
-            type: 'structured_varname',
+            id: '18YPGVFcBkSie3WopWDlo',
+            type: 'p',
           },
           {
             children: [
               {
-                text: '3 / 4',
+                highlight: true,
+                text: 'It looks like I could make a profit ',
               },
-            ],
-            id: 'powehfowbe389dns',
-            type: 'code_line_v2_code',
-          },
-        ],
-        id: 'FDSffDfa3refdsFsdf',
-        showResult: true,
-        type: 'code_line_v2',
-      },
-      {
-        children: [
-          {
-            highlight: true,
-            text: 'It looks like I could make a profit ',
-          },
-          {
-            text: 'and some side income based on my assumptions below. Feedback welcome!',
-          },
-        ],
-        id: 'ngIq_tCJClGugubOIsRKT',
-        type: 'p',
-      },
-      {
-        children: [
-          {
-            children: [
               {
-                text: 'VarName2',
+                text: 'and some side income based on my assumptions below. Feedback welcome!',
               },
             ],
-            id: '1dkfnsddsfhef3',
-            type: 'structured_varname',
+            id: 'ngIq_tCJClGugubOIsRKT',
+            type: 'p',
           },
           {
             children: [
               {
-                // TODO: our assistant sometimes fails to keep PI inside the cos argument...
-                text: expect.stringMatching(/^cos\(.*\) \+ 1/),
+                children: [
+                  {
+                    text: 'VarName1',
+                  },
+                ],
+                id: 'p3e90dsjad39dsamn',
+                type: 'structured_varname',
+              },
+              {
+                children: [
+                  {
+                    text: '3 / 4',
+                  },
+                ],
+                id: 'powehfowbe389dns',
+                type: 'code_line_v2_code',
               },
             ],
-            id: 'olj2e0wqwdsksdl',
-            type: 'code_line_v2_code',
+            id: 'FDSffDfa3refdsFsdf',
+            showResult: true,
+            type: 'code_line_v2',
           },
-        ],
-        id: 'fjsdfdofsd3-e3dsdcj',
-        showResult: true,
-        type: 'code_line_v2',
-      },
-      {
-        children: [
           {
-            text: '💸 How much will I pay for the act of candle-making and inflation?',
+            children: [
+              {
+                highlight: true,
+                text: 'It looks like I could make a profit ',
+              },
+              {
+                text: 'and some side income based on my assumptions below. Feedback welcome!',
+              },
+            ],
+            id: 'ngIq_tCJfdsfsdf4ClGugubOIsRKT',
+            type: 'p',
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    text: 'VarName2',
+                  },
+                ],
+                id: '1dkfnsddsfhef3',
+                type: 'structured_varname',
+              },
+              {
+                children: [
+                  {
+                    text: expect.stringMatching(/^cos\((PI)\) \+ 1$/i),
+                  },
+                ],
+                id: 'olj2e0wqwdsksdl',
+                type: 'code_line_v2_code',
+              },
+            ],
+            id: 'fjsdfdofsd3-e3dsdcj',
+            showResult: true,
+            type: 'code_line_v2',
+          },
+          {
+            children: [
+              {
+                text: '💸 How much will I pay for the act of candle-making and inflation?',
+              },
+            ],
+            id: 'P1MO3vjonREmgtamfVbur',
+            type: 'h2',
           },
         ],
-        id: 'P1MO3vjonREmgtamfVbur',
-        type: 'h2',
+        id: 'vHiFdsiB84cKMOYn3JTr-',
+        name: 'Main',
+        type: 'tab',
       },
     ]);
   }, 240000);

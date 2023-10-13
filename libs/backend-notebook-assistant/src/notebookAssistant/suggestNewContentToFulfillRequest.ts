@@ -7,9 +7,9 @@ import {
 } from 'openai/resources/chat';
 import {
   AnyElement,
-  Document,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
+  RootDocument,
 } from '@decipad/editor-types';
 import { getDefined } from '../../../utils/src';
 import { codeAssistant } from '@decipad/backend-code-assistant';
@@ -27,22 +27,25 @@ import { instructionSummaries, getInstructions } from '../config/instructions';
 import { parseInstructionConstituents } from '../utils/parseInstructionConstituents';
 
 export interface SuggestNewContentReply {
-  newDocument: Document;
+  newDocument: RootDocument;
   summary: string;
 }
 
 // TODO: we still have issues when individualizing elements from deeply nested structures
 const problematicBlockTypes = new Set([ELEMENT_VARIABLE_DEF, ELEMENT_TABLE]);
 
+const completionRequestOptions = {
+  timeout: 120 * 1000,
+};
+
 export const suggestNewContentToFulfillRequest = async (
-  content: Document,
+  content: RootDocument,
   request: string
 ): Promise<SuggestNewContentReply> => {
   debug('suggestNewContentToFulfillRequest', content, request);
   const openAi = getOpenAI();
 
   const verbalizedDocument = verbalizeDoc(content);
-  // const computationalSummary = createComputationalSummary(content);
   const intro = (await introTemplate.invoke({})).toString();
 
   let messages: ChatCompletionMessage[] = [
@@ -80,23 +83,27 @@ No comments.`,
     },
   ];
 
-  let maxIterations = 7;
-  let done = false;
+  let maxIterations = 10;
+
+  // conversational state
   let relevantBlockIds: undefined | string[];
   let shouldJumpOverSpecificElementIds = false;
   let specificElementIds: undefined | string[];
   let changesSummary: undefined | string;
   let failedCode = false;
   let triedCode = false;
+  let sentFinalInstructions = false;
+  let sentChangesSummaryInstructions = false;
   let instructions: undefined | string;
+
+  let finalDoc: RootDocument | undefined;
+
+  // latest reply
   let reply: ChatCompletionMessage;
 
   const generateChatCompletion = async () => {
     const makeFunctionsAvailable =
-      changesSummary != null &&
-      specificElementIds != null &&
-      !failedCode &&
-      !triedCode;
+      sentFinalInstructions && !triedCode && !failedCode;
     const createOptions: ChatCompletionCreateParamsNonStreaming = {
       messages,
       model: openAi.model,
@@ -125,7 +132,10 @@ No comments.`,
     if (makeFunctionsAvailable) {
       createOptions.function_call = 'auto';
     }
-    return openAi.client.chat.completions.create(createOptions);
+    return openAi.client.chat.completions.create(
+      createOptions,
+      completionRequestOptions
+    );
   };
 
   const parseInstructions = () => {
@@ -215,6 +225,9 @@ Only reply with a single JSON array, nothing else.
 No comments.
 `;
 
+    if (shouldJumpOverSpecificElementIds) {
+      sentFinalInstructions = true;
+    }
     messages.push({
       role: 'user',
       content: `Here is the list of blocks from my document that you may need to change or remove:
@@ -263,25 +276,14 @@ Please reply in JSON only, no comments. Don't apologize.`,
 \`\`\`json
 ${stringify(relevantElements, null, '\t')}
 \`\`\`
-
-Let's pretend you had done the changes to my doc I request here: ${JSON.stringify(
-        request
-      )}
-Give me a textual summary of the changes you have made in simple terms, in text only. Don't reply JSON. Refer to variables by their human-readable names, found in \`children.children.text\`, not by their id.`,
+`,
     });
-  };
-
-  const parseChangesSummary = (): void => {
-    if (!reply.content) {
-      throw new Error('Reply with a summary of changes in markdown.');
-    }
-    changesSummary = reply.content;
   };
 
   const sendFinalReplyInstructions = async (): Promise<void> => {
     messages.push({
       role: 'user',
-      content: `Reply with a list of commands of the given Command type that strictly makes the following changes to my doc: ${JSON.stringify(
+      content: `Reply with a list of commands of the given Command schema that strictly makes the following changes to my doc: ${JSON.stringify(
         request
       )}.
 Only reply with a single JSON array, nothing else.
@@ -311,16 +313,10 @@ No comments.`,
         } as ChatCompletionMessage);
       } else {
         failedCode = true;
-        if (reply.content && relevantBlockIds != null) {
-          done = true;
-        }
         debug('code was not valid');
       }
     } else {
       failedCode = true;
-      if (reply.content && relevantBlockIds != null) {
-        done = true;
-      }
     }
   };
 
@@ -333,33 +329,43 @@ No comments.`,
     ];
   };
 
-  const generateFinalReply = (): SuggestNewContentReply | undefined => {
-    const response = getDefined(reply?.content, 'no reply');
+  const parseFinalDoc = () => {
+    const response = reply?.content;
+    if (!response) {
+      return;
+    }
     debug('suggestNewContentToFulfillRequest: response:', response);
 
     try {
-      const finalDoc = applyCommands(content, response);
+      finalDoc = applyCommands(content, response);
       debug('finalDoc', finalDoc);
-      return {
-        newDocument: finalDoc,
-        summary: getDefined(changesSummary),
-      };
     } catch (err) {
-      done = false;
       messages.push({
         role: 'user',
         content: `${(err as Error).message}. No comments. Don't apologize.`,
       });
-      done = false;
       // eslint-disable-next-line no-console
       console.error('Error parsing chat assistant output to JSON', err);
       // eslint-disable-next-line no-console
       console.error('text was', response);
     }
-    return undefined;
   };
 
-  while (!done && maxIterations > 0) {
+  const sendChangesSummaryInstructions = () => {
+    messages.push({
+      role: 'user',
+      content: `Summarize the changes you have done to my document in simple text, no jargon.`,
+    });
+  };
+
+  const parseChangesSummary = (): void => {
+    if (!reply.content) {
+      throw new Error('Reply with a summary of changes in markdown.');
+    }
+    changesSummary = reply.content;
+  };
+
+  while (maxIterations > 0 && (!finalDoc || !changesSummary)) {
     maxIterations -= 1;
     debug(`------------------- ITERATION -${maxIterations}`, messages);
     const result = await generateChatCompletion();
@@ -383,36 +389,47 @@ No comments.`,
       if (!shouldJumpOverSpecificElementIds) {
         await parseSpecificElementIds();
         await sendSpecificElements();
-        continue;
       } else {
         specificElementIds = relevantBlockIds;
       }
     }
 
-    if (!changesSummary) {
-      await parseChangesSummary();
-      await sendFinalReplyInstructions();
+    if (!sentFinalInstructions) {
+      sentFinalInstructions = true;
+      sendFinalReplyInstructions();
       continue;
     }
 
     if (reply.function_call) {
       await makeFunctionCall();
-    } else if (
-      specificElementIds ||
-      (shouldJumpOverSpecificElementIds && relevantBlockIds)
-    ) {
-      done = true;
     }
 
-    debug('RESULT %j', reply);
-
-    if (done) {
-      const shouldReturn = generateFinalReply();
-      if (shouldReturn) {
-        return shouldReturn;
+    if (!finalDoc) {
+      parseFinalDoc();
+      if (!finalDoc) {
+        // try again
+        continue;
       }
+    }
+
+    debug('FINAL DOC %j', finalDoc);
+
+    if (!sentChangesSummaryInstructions) {
+      sentChangesSummaryInstructions = true;
+      sendChangesSummaryInstructions();
+      continue;
+    }
+    if (!changesSummary) {
+      await parseChangesSummary();
+    }
+
+    if (finalDoc && changesSummary) {
+      return {
+        newDocument: finalDoc,
+        summary: changesSummary,
+      };
     }
   }
 
-  return getDefined(generateFinalReply(), 'could not generate reply');
+  throw new Error('could not generate reply');
 };

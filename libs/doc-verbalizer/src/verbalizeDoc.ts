@@ -1,12 +1,12 @@
 import { getNodeString, isElement } from '@udecode/plate';
 import {
-  type Document,
   type AnyElement,
   type ColumnsElement,
   type MyNode,
   ELEMENT_SMART_REF,
   ELEMENT_COLUMNS,
   ELEMENT_TAB,
+  RootDocument,
 } from '../../editor-types/src';
 import { getVerbalizer } from './verbalizers';
 
@@ -16,7 +16,7 @@ export interface VerbalizedElement {
 }
 
 export interface DocumentVerbalization {
-  document: Document;
+  document: RootDocument;
   verbalized: VerbalizedElement[];
 }
 
@@ -55,7 +55,7 @@ const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
   ];
 };
 
-export const verbalizeDoc = (doc: Document): DocumentVerbalization => {
+export const verbalizeDoc = (doc: RootDocument): DocumentVerbalization => {
   return {
     document: doc,
     verbalized: doc.children.flatMap(verbalizeElement),
