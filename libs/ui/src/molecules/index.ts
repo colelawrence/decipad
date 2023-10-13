@@ -9,6 +9,7 @@ export { Aggregation } from './Aggregation/Aggregation';
 export { AIModeSwitch } from './AIModeSwitch/AIModeSwitch';
 export { AssistantAIMessage } from './AssistantAIMessage/AssistantAIMessage';
 export { AssistantChatHeader } from './AssistantChatHeader/AssistantChatHeader';
+export { AssistantNotebookMessage } from './AssistantNotebookMessage/AssistantNotebookMessage';
 export { AssistantUserMessage } from './AssistantUserMessage/AssistantUserMessage';
 export { AssistantMessageMarkdown } from './AssistantMessageMarkdown/AssistantMessageMarkdown';
 export { AssistantMessageInput } from './AssistantMessageInput/AssistantMessageInput';

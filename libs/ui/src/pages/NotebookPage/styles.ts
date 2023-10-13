@@ -152,6 +152,7 @@ export const AssistantWrapper = styled.aside<AssistantWrapperProps>(
     backgroundColor: cssVar('backgroundMain'),
     height: '100%',
     borderRadius: '16px 0px 0px 16px',
+    zIndex: 40,
 
     [smallScreenQuery]: {
       display: 'none',
@@ -161,9 +162,9 @@ export const AssistantWrapper = styled.aside<AssistantWrapperProps>(
       height: 'auto',
       top: '70px',
       bottom: '12px',
+      border: `solid 1px ${cssVar('borderDefault')}`,
       borderRight: 'none',
       boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
-      zIndex: 9,
     },
   })
 );

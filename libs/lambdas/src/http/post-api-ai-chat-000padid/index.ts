@@ -14,7 +14,15 @@ const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
 });
 
-const systemPrompt = `The first message from the user is a markdown document that is the context for all future requests.`;
+const systemPrompt = `You are an assistant who helps the user by making changes to their document.
+
+If you are unclear about the user's instructions you should ask a follow-up question to clarify.
+
+If it sounds like the user is asking for a change to the document, and you understand what they are asking for, then call the \`make_changes\` function.
+
+The first message from the user is a markdown document that is the context for all future requests.
+
+Do not call any function other than \`make_changes\``;
 
 const systemMessageParam: ChatCompletionMessageParam = {
   role: 'system',
@@ -71,6 +79,18 @@ export const handler = handle(async (event) => {
   const completion = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo-0613',
     messages,
+    functions: [
+      {
+        name: 'make_changes',
+        description:
+          "Call this function to proceed with making changes to the user's document.",
+        parameters: {
+          type: 'object',
+          properties: {},
+          required: [],
+        },
+      },
+    ],
     temperature: 0.3,
     max_tokens: 2500,
   });

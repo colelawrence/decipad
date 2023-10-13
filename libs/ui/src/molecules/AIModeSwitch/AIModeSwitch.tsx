@@ -4,54 +4,46 @@ import {
   componentCssVars,
   cssVar,
   easingTiming,
-  p13Medium,
+  p13Bold,
 } from '../../primitives';
 
 import * as Switch from '@radix-ui/react-switch';
 
 const switchWrapperStyles = css({
-  background: componentCssVars('AIAssistantHighlightColor'),
+  background: cssVar('backgroundHeavy'),
   borderRadius: '6px',
   display: 'flex',
+  gap: '8px',
+  padding: '0px 8px',
   alignItems: 'center',
   height: '32px',
 });
 
 const switchIconStyles = css({
-  padding: '8px',
+  display: 'flex',
+  height: '16px',
+  width: '16px',
 
   '& svg': {
     width: '16px',
     height: '16px',
 
     '& path': {
-      stroke: componentCssVars('AIAssistantTextColor'),
+      stroke: cssVar('textDefault'),
     },
   },
-});
-
-const switchContainerStyles = css({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: '8px',
-  padding: '0px 8px',
-  height: '100%',
-  borderRadius: '6px',
-  boxShadow: `0px 0px 0px 2px ${cssVar('backgroundMain')}`,
-  cursor: 'pointer',
 });
 
 const switchStyles = css({
   all: 'unset',
   width: 34,
   height: 18,
-  backgroundColor: componentCssVars('AIAssistantTextSubduedColor'),
+  background: cssVar('borderDefault'),
   borderRadius: '9px',
   position: 'relative',
   WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
   '&[data-state="checked"]': {
-    backgroundColor: componentCssVars('AIAssistantTextColor'),
+    backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
   },
 });
 
@@ -59,7 +51,7 @@ const switchThumbStyles = css({
   display: 'block',
   width: 14,
   height: 14,
-  backgroundColor: componentCssVars('AIAssistantHighlightColor'),
+  backgroundColor: componentCssVars('AIAssistantTextColor'),
   borderRadius: '50%',
   transition: `transform 100ms ${easingTiming.easeOut}`,
   transform: 'translateX(2px)',
@@ -68,9 +60,11 @@ const switchThumbStyles = css({
 });
 
 const labelStyles = css({
-  ...p13Medium,
-  color: componentCssVars('AIAssistantTextColor'),
+  ...p13Bold,
   cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
 });
 
 type AIModeSwitchProps = {
@@ -84,22 +78,20 @@ export const AIModeSwitch: React.FC<AIModeSwitchProps> = ({
 }) => {
   return (
     <div css={switchWrapperStyles}>
-      <div css={switchIconStyles}>
-        <Sparkles />
-      </div>
-      <div css={switchContainerStyles}>
-        <label css={labelStyles} htmlFor="ai-mode">
-          AI Mode
-        </label>
-        <Switch.Root
-          css={switchStyles}
-          id="ai-mode"
-          checked={value}
-          onCheckedChange={onChange}
-        >
-          <Switch.Thumb css={switchThumbStyles} />
-        </Switch.Root>
-      </div>
+      <label css={labelStyles} htmlFor="ai-mode">
+        <div css={switchIconStyles}>
+          <Sparkles />
+        </div>
+        AI
+      </label>
+      <Switch.Root
+        css={switchStyles}
+        id="ai-mode"
+        checked={value}
+        onCheckedChange={onChange}
+      >
+        <Switch.Thumb css={switchThumbStyles} />
+      </Switch.Root>
     </div>
   );
 };

@@ -1,34 +1,37 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Tooltip, p12Medium, p13Regular, p14Regular } from '@decipad/ui';
-import { AlignArrowLeft, Sparkles } from '../../icons';
-import { componentCssVars, cssVar } from '../../primitives';
+import { Tooltip, p14Regular } from '@decipad/ui';
+import { DeciAI, Duplicate, ThumbsDown, ThumbsUp } from '../../icons';
+import { componentCssVars, cssVar, p14Medium } from '../../primitives';
 
-import { AIResponseRating } from '@decipad/react-contexts';
+import { AIResponseRating, AIResponseType } from '@decipad/react-contexts';
 import { AssistantMessageMarkdown } from '../AssistantMessageMarkdown/AssistantMessageMarkdown';
 import { css } from '@emotion/react';
+import copyToClipboard from 'copy-to-clipboard';
 
 const wrapperStyles = css({
   display: 'flex',
-  padding: '8px 20px',
+  padding: '8px 0px',
   width: '100%',
-  gap: 6,
+  gap: 8,
 });
 
 const avatarStyles = css({
   width: 28,
   height: 28,
-  margin: '8px 0px 2px',
-  padding: 4,
-  borderRadius: '50%',
-  backgroundColor: componentCssVars('AIAssistantHighlightColor'),
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  margin: '2px 0px',
   flexShrink: 0,
+  borderRadius: '50%',
+  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
 
   '& svg': {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
 
     '& path': {
-      stroke: componentCssVars('AIAssistantTextColor'),
+      fill: componentCssVars('AIAssistantTextColor'),
     },
   },
 });
@@ -37,28 +40,18 @@ const contentStyles = css(p14Regular, {
   position: 'relative',
   width: '100%',
   lineHeight: '20px',
-  padding: '6px',
+  padding: '2px 0px',
+  color: cssVar('textHeavy'),
   borderRadius: 8,
-  color: componentCssVars('AIAssistantTextColor'),
 
   '&::before': {
     content: '""',
     position: 'absolute',
     top: 0,
     bottom: 0,
-    left: -48,
-    width: 48,
+    left: -40,
+    width: 40,
     height: '100%',
-  },
-
-  '&:hover': {
-    boxShadow: `0px 0px 0px 2px ${componentCssVars(
-      'AIAssistantHighlightColor'
-    )}`,
-
-    '& button': {
-      visibility: 'visible',
-    },
   },
 });
 
@@ -66,156 +59,151 @@ const errorContentStyles = css(p14Regular, {
   position: 'relative',
   width: '100%',
   lineHeight: '20px',
+  padding: '6px 12px',
+  borderRadius: 8,
+  backgroundColor: cssVar('stateDangerBackground'),
+  color: cssVar('stateDangerText'),
+});
+
+const loadingContentStyles = css(p14Regular, {
+  position: 'relative',
+  width: '100%',
+  lineHeight: '20px',
   padding: '6px',
   borderRadius: 8,
-  color: cssVar('stateDangerBackground'),
+  color: cssVar('textSubdued'),
 });
 
 const buttonContainerStyles = css({
   display: 'flex',
-  gap: 6,
+  alignItems: 'center',
+  gap: 8,
   padding: '6px',
   width: '100%',
 });
 
-const buttonGroupStyles = css({
-  display: 'flex',
-
-  '& button': {
-    margin: '0px -1px',
-
-    '&:first-of-type': {
-      borderRadius: '6px 0px 0px 6px',
-    },
-    '&:last-of-type': {
-      borderRadius: '0px 6px 6px 0px',
-    },
-  },
-});
-
-const buttonStyles = css(p12Medium, {
-  height: 24,
+const buttonStyles = css(p14Medium, {
+  height: 28,
   padding: '1px 8px 0px',
-  borderRadius: 6,
-  border: `1px solid ${componentCssVars('AIAssistantTextSubduedColor')}`,
+  borderRadius: 4,
   backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
-  color: componentCssVars('AIAssistantTextSubduedColor'),
+  color: componentCssVars('AIAssistantTextColor'),
   cursor: 'pointer',
 
   '&:hover': {
-    borderColor: componentCssVars('AIAssistantTextColor'),
+    backgroundColor: componentCssVars('AIAssistantBackgroundHoverColor'),
     color: componentCssVars('AIAssistantTextColor'),
-    zIndex: 1,
   },
 
   '&:active': {
-    borderColor: componentCssVars('AIAssistantHighlightColor'),
-    color: componentCssVars('AIAssistantHighlightColor'),
-  },
-
-  '&[data-selected="true"]': {
-    backgroundColor: componentCssVars('AIAssistantElevationColor'),
+    boxShadow: `0px 0px 0px 2px ${cssVar('backgroundDefault')}`,
   },
 });
 
-const insertButtonStyles = css({
-  width: 28,
-  position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  left: -28,
-  height: 28,
-  borderRadius: '6px 0px 0px 6px',
+const iconButtonStyles = css(p14Medium, {
+  height: 24,
+  width: 24,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: componentCssVars('AIAssistantHighlightColor'),
-  border: 'none',
-  outline: 'none',
+  borderRadius: 4,
   cursor: 'pointer',
-  color: componentCssVars('AIAssistantTextColor'),
-  visibility: 'hidden',
 
-  '& svg': {
-    width: 20,
-    height: 20,
+  '& > svg': {
+    width: 16,
+    height: 16,
+  },
 
-    '& path': {
-      stroke: componentCssVars('AIAssistantTextColor'),
-    },
+  '&:hover': {
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+
+  '&:active': {
+    backgroundColor: cssVar('backgroundHeavy'),
   },
 });
 
-const tooltipTextStyles = css(p13Regular, {
-  margin: 0,
-  color: componentCssVars('AIAssistantTextColor'),
-  textAlign: 'center',
-});
-
 type AssistantAIMessageProps = {
-  readonly text: string | null;
+  readonly text: string;
+  readonly type: AIResponseType;
   readonly rating?: AIResponseRating;
+  readonly canRegenerate?: boolean;
   readonly handleLikeResponse: () => void;
   readonly handleDislikeResponse: () => void;
   readonly handleRegenerateResponse: () => void;
-  readonly handleSuggestChanges: () => void;
 };
 
 export const AssistantAIMessage: React.FC<AssistantAIMessageProps> = ({
   text,
+  type,
   rating,
+  canRegenerate,
   handleLikeResponse,
   handleDislikeResponse,
   handleRegenerateResponse,
-  handleSuggestChanges,
 }) => {
   return (
     <div css={wrapperStyles}>
       <div css={avatarStyles}>
-        <Sparkles />
+        <DeciAI />
       </div>
       <div css={contentStyles}>
-        {text ? (
-          <AssistantMessageMarkdown text={text || ''} />
-        ) : (
-          <p css={errorContentStyles}>There was an error processing request</p>
-        )}
-        <div css={buttonContainerStyles}>
-          <div css={buttonGroupStyles}>
-            <button
-              onClick={handleLikeResponse}
-              css={buttonStyles}
-              data-selected={rating === 'like'}
-              data-testid="like-button"
+        {type === 'pending' && <div css={loadingContentStyles}>{text}</div>}
+        {type === 'error' && <div css={errorContentStyles}>{text}</div>}
+        {type === 'success' && <AssistantMessageMarkdown text={text} />}
+        {type !== 'pending' && (
+          <div css={buttonContainerStyles}>
+            {canRegenerate && (
+              <button onClick={handleRegenerateResponse} css={buttonStyles}>
+                Regenerate
+              </button>
+            )}
+            <Tooltip
+              trigger={
+                <button
+                  onClick={handleLikeResponse}
+                  css={iconButtonStyles}
+                  data-selected={rating === 'like'}
+                  data-testid="like-button"
+                >
+                  <ThumbsUp />
+                </button>
+              }
             >
-              Like
-            </button>
-            <button
-              onClick={handleDislikeResponse}
-              css={buttonStyles}
-              data-selected={rating === 'dislike'}
-              data-testid="dislike-button"
+              Like response
+            </Tooltip>
+            <Tooltip
+              trigger={
+                <button
+                  onClick={handleDislikeResponse}
+                  css={iconButtonStyles}
+                  data-selected={rating === 'dislike'}
+                  data-testid="dislike-button"
+                >
+                  <ThumbsDown />
+                </button>
+              }
             >
-              Dislike
-            </button>
+              Dislike response
+            </Tooltip>
+            {type !== 'error' && (
+              <Tooltip
+                trigger={
+                  <button
+                    onClick={() => copyToClipboard(text)}
+                    css={iconButtonStyles}
+                    data-selected={rating === 'dislike'}
+                    data-testid="copy-button"
+                  >
+                    <Duplicate />
+                  </button>
+                }
+              >
+                Copy response to clipboard
+              </Tooltip>
+            )}
           </div>
-          <button onClick={handleRegenerateResponse} css={buttonStyles}>
-            Regenerate Response
-          </button>
-        </div>
-
-        <Tooltip
-          trigger={
-            <button onClick={handleSuggestChanges} css={insertButtonStyles}>
-              <AlignArrowLeft />
-            </button>
-          }
-        >
-          <p css={tooltipTextStyles}>
-            Insert this calculation to the notebook and creates all necessary
-            items
-          </p>
-        </Tooltip>
+        )}
       </div>
     </div>
   );

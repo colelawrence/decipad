@@ -4,14 +4,13 @@ import { Avatar, p14Regular } from '@decipad/ui';
 import { User } from '@decipad/interfaces';
 import { useSession } from 'next-auth/react';
 import { css } from '@emotion/react';
-import { componentCssVars } from '../../primitives';
+import { cssVar } from '../../primitives';
 
 const wrapperStyles = css({
   display: 'flex',
-  padding: '8px 20px',
+  padding: '8px 0px',
   width: '100%',
-  gap: 6,
-  backgroundColor: componentCssVars('AIAssistantElevationColor'),
+  gap: 8,
 });
 
 const avatarStyles = css({
@@ -22,9 +21,12 @@ const avatarStyles = css({
 });
 
 const contentStyles = css(p14Regular, {
+  width: '100%',
   lineHeight: '20px',
-  padding: '0px 6px',
-  color: componentCssVars('AIAssistantTextColor'),
+  padding: '2px 6px',
+  backgroundColor: cssVar('backgroundDefault'),
+  color: cssVar('textHeavy'),
+  borderRadius: 8,
 
   '& p': {
     padding: 6,
@@ -39,7 +41,6 @@ type AssistantUserMessageProps = {
 export const AssistantUserMessage: React.FC<AssistantUserMessageProps> = ({
   text,
 }) => {
-  // TODO: This could probably be part of the message object
   const { data: session } = useSession();
   const user = session?.user as User;
   const { name, image } = user;

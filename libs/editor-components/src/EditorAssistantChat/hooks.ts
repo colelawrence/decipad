@@ -5,8 +5,8 @@ import {
 import { EditorController } from '@decipad/notebook-tabs';
 import { Message, useAIChatHistory } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { getDefined } from '@decipad/utils';
 import { TOperation } from '@udecode/plate';
+
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useState } from 'react';
 import { useClient } from 'urql';
@@ -15,20 +15,24 @@ export const useAssistantChat = (
   notebookId: string,
   controller: EditorController
 ) => {
-  const [chats, addMessage, deleteMessage] = useAIChatHistory((state) => [
-    state.chats,
-    state.addMessage,
-    state.deleteMessage,
-  ]);
+  const [chats, addMessage, deleteMessage, updateMessage] = useAIChatHistory(
+    (state) => [
+      state.chats,
+      state.addMessage,
+      state.deleteMessage,
+      state.updateMessage,
+    ]
+  );
 
   const messages = useMemo(() => chats[notebookId] || [], [chats, notebookId]);
 
   const handleAddMessage = addMessage(notebookId);
+  const handleUpdateMessage = updateMessage(notebookId);
   const handleDeleteMessage = deleteMessage(notebookId);
 
   const client = useClient();
 
-  const [loading, setLoading] = useState(false);
+  const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
   const toast = useToast();
 
   const getAssistantMessageReplyToFromId = useCallback(
@@ -53,44 +57,8 @@ export const useAssistantChat = (
     [messages]
   );
 
-  const getAssistantResponse = async (
-    chatId: string,
-    updatedMessages: Message[],
-    userMessageId: string
-  ) => {
-    try {
-      const response = await fetch(`/api/ai/chat/${chatId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          updatedMessages.map((message) => {
-            const { id: _id, replyTo: _replyTo, ...rest } = message;
-            return rest;
-          })
-        ),
-      });
-      const result = await response.json();
-      const newMessage: Message = {
-        ...result,
-        role: 'assistant',
-        id: nanoid(),
-        replyTo: userMessageId,
-      };
-      handleAddMessage(newMessage);
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        "Couldn't get response from AI assistant. Please try again later."
-      );
-    }
-  };
-
   const getAssistantChanges = useCallback(
-    async (
-      prompt: string
-    ): Promise<GetSuggestedNotebookChangesQuery['suggestNotebookChanges']> => {
+    async (prompt: string) => {
       const res = await client.executeQuery<GetSuggestedNotebookChangesQuery>({
         query: GetSuggestedNotebookChangesDocument,
         key: Math.random(),
@@ -100,10 +68,126 @@ export const useAssistantChat = (
         },
       });
 
-      return res.data?.suggestNotebookChanges;
+      const operations = res.data?.suggestNotebookChanges?.operations;
+      const summary = res.data?.suggestNotebookChanges?.summary;
+
+      return { operations, summary };
     },
     [client, notebookId]
   );
+
+  const applyChanges = useCallback(
+    (operations: TOperation[]) => {
+      const toastId = toast.info('Applying changes...', { autoDismiss: false });
+
+      // Disable normalizer
+      if (operations.length > 0) {
+        controller.WithoutNormalizing(() => {
+          for (const op of operations) {
+            try {
+              // We apply the changes as if they are "remote".
+              // So we need this to avoid a cycle.
+              (op as any).IS_LOCAL_SYNTHETIC = true;
+              controller.apply(op as TOperation);
+            } catch (err) {
+              toast.error('Error applying changes');
+              console.error('error applying: ', op, err);
+              throw err;
+            }
+          }
+        });
+      }
+      toast.delete(toastId);
+    },
+    [controller, toast]
+  );
+
+  // TODO: Refactor refactor refactor
+  const getAssistantResponse = async (
+    chatId: string,
+    updatedMessages: Message[],
+    userMessage: Message
+  ) => {
+    const newResponse: Message = {
+      content: 'Generating response...',
+      role: 'assistant',
+      type: 'pending',
+      id: nanoid(),
+      replyTo: userMessage.id,
+    };
+    handleAddMessage(newResponse);
+    try {
+      const response = await fetch(`/api/ai/chat/${chatId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(
+          updatedMessages.map((message) => {
+            const {
+              id: _id,
+              replyTo: _replyTo,
+              type: _type,
+              ...rest
+            } = message;
+            return rest;
+          })
+        ),
+      });
+
+      const result = await response.json();
+
+      // TODO: remove this when we have a proper error handling
+      if (result.name === 'Error') {
+        throw new Error(result.message);
+      }
+
+      // TODO: make this check more explicit
+      if (!result.function_call) {
+        handleUpdateMessage({
+          ...newResponse,
+          content: result.content,
+          type: 'success',
+        });
+        return;
+      }
+
+      handleUpdateMessage({
+        ...newResponse,
+        content: 'Got it. Let me update the document for you...',
+        type: 'pending',
+      });
+
+      const toastId = toast.info('Getting changes...', { autoDismiss: false });
+
+      const { operations, summary } = await getAssistantChanges(
+        userMessage.content
+      );
+
+      toast.delete(toastId);
+
+      if (operations) {
+        applyChanges(operations as TOperation[]);
+      }
+      if (summary) {
+        handleUpdateMessage({
+          ...newResponse,
+          content: summary,
+          type: 'success',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      handleUpdateMessage({
+        ...newResponse,
+        content: 'Error generating response',
+        type: 'error',
+      });
+      toast.error(
+        "Couldn't get response from AI assistant. Please try again later."
+      );
+    }
+  };
 
   const sendUserMessage = async (content: string) => {
     const newMessage: Message = {
@@ -115,11 +199,11 @@ export const useAssistantChat = (
     const updatedMessages = [...messages, newMessage];
 
     handleAddMessage(newMessage);
-    setLoading(true);
+    setIsGeneratingResponse(true);
 
-    await getAssistantResponse(notebookId, updatedMessages, newMessage.id);
+    await getAssistantResponse(notebookId, updatedMessages, newMessage);
 
-    setLoading(false);
+    setIsGeneratingResponse(false);
   };
 
   const regenerateResponse = async (id: string) => {
@@ -133,54 +217,22 @@ export const useAssistantChat = (
     if (!userMessage) {
       return;
     }
+
     handleDeleteMessage(id);
+
     const updatedMessages = [...messages, userMessage];
-    setLoading(true);
-    await getAssistantResponse(notebookId, updatedMessages, userMessage.id);
-    setLoading(false);
+
+    setIsGeneratingResponse(true);
+
+    await getAssistantResponse(notebookId, updatedMessages, userMessage);
+
+    setIsGeneratingResponse(false);
   };
-
-  const makeChanges = useCallback(
-    async (messageId: string) => {
-      const msg = messages.find((m) => m.id === messageId);
-      if (msg == null) {
-        throw new Error('Should always be able to find the message');
-      }
-
-      if (msg.replyTo == null) {
-        throw new Error('Message is not replying to anything');
-      }
-      const userMessage = getUserMessageFromReplyTo(msg.replyTo)!;
-      if (userMessage.content == null || userMessage.content?.length === 0) {
-        throw new Error('The content is empty');
-      }
-
-      const assistantReply = await getAssistantChanges(userMessage.content);
-      if (assistantReply?.operations && assistantReply.operations.length > 0) {
-        // Disable normalizer
-        controller.WithoutNormalizing(() => {
-          for (const op of getDefined(assistantReply.operations)) {
-            try {
-              // We apply the changes as if they are "remote".
-              // So we need this to avoid a cycle.
-              (op as any).IS_LOCAL_SYNTHETIC = true;
-              controller.apply(op as TOperation);
-            } catch (err) {
-              console.error('error applying: ', op, err);
-              throw err;
-            }
-          }
-        });
-      }
-    },
-    [controller, getAssistantChanges, getUserMessageFromReplyTo, messages]
-  );
 
   return {
     messages,
     sendUserMessage,
     regenerateResponse,
-    loading,
-    makeChanges,
+    isGeneratingResponse,
   };
 };

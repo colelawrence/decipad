@@ -1,6 +1,5 @@
 import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
 import { create } from 'zustand';
-import { ChatCompletionMessageParam } from 'openai/resources/chat';
 
 import { get as getIdb, set as setIdb, del as delIdb } from 'idb-keyval';
 
@@ -18,6 +17,9 @@ const storage: StateStorage = {
 
 export type AIResponseRating = 'like' | 'dislike';
 
+// TODO: rename type property to status
+export type AIResponseType = 'success' | 'pending' | 'error';
+
 export type RatedAIResponseBody = {
   userMessage: string;
   responseMessage: string;
@@ -30,16 +32,20 @@ export type RatedAIResponse = {
 };
 
 export type Message =
-  | (ChatCompletionMessageParam & {
+  | {
       readonly id: string;
       readonly role: 'user';
+      readonly content: string;
+      readonly type?: never;
       readonly replyTo?: never;
-    })
-  | (ChatCompletionMessageParam & {
+    }
+  | {
       readonly id: string;
       readonly role: 'assistant';
+      readonly content: string;
+      readonly type: AIResponseType;
       readonly replyTo: string;
-    });
+    };
 
 type Chat = {
   readonly [key: string]: Message[];
@@ -49,6 +55,7 @@ export interface AIChatHistoryType {
   readonly chats: Chat;
   readonly ratedResponses: RatedAIResponse[];
   readonly addMessage: (notebookId: string) => (message: Message) => void;
+  readonly updateMessage: (notebookId: string) => (message: Message) => void;
   readonly deleteMessage: (notebookId: string) => (messageId: string) => void;
   readonly clearMessages: (notebookId: string) => () => void;
   readonly rateResponse: (
@@ -90,6 +97,21 @@ export const useAIChatHistory = create<AIChatHistoryType>()(
                 ...state.chats,
                 [notebookId]: state.chats[notebookId].filter(
                   (message) => message.id !== messageId
+                ),
+              },
+            };
+          });
+        },
+        updateMessage: (notebookId: string) => (message: Message) => {
+          set((state) => {
+            if (!state.chats[notebookId]) {
+              return state;
+            }
+            return {
+              chats: {
+                ...state.chats,
+                [notebookId]: state.chats[notebookId].map((m) =>
+                  m.id === message.id ? message : m
                 ),
               },
             };

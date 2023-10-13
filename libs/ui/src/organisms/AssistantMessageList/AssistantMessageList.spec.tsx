@@ -4,20 +4,6 @@ import { SessionProvider } from 'next-auth/react';
 import { AssistantMessageList } from './AssistantMessageList';
 import { noop } from '@decipad/utils';
 
-it('renders loading state when generating response', () => {
-  const { getByText } = render(
-    <AssistantMessageList
-      messages={[]}
-      isLoading={true}
-      handleDislikeResponse={noop}
-      handleLikeResponse={noop}
-      handleRegenerateResponse={noop}
-      handleSuggestChanges={noop}
-    />
-  );
-  expect(getByText('Generating response...')).toBeVisible();
-});
-
 it('renders 2 messages', () => {
   const { getByTestId } = render(
     <SessionProvider
@@ -37,14 +23,13 @@ it('renders 2 messages', () => {
             id: '2',
             role: 'assistant',
             content: 'Hola',
+            type: 'success',
             replyTo: '1',
           },
         ]}
-        isLoading={false}
         handleDislikeResponse={noop}
         handleLikeResponse={noop}
         handleRegenerateResponse={noop}
-        handleSuggestChanges={noop}
       />
     </SessionProvider>
   );

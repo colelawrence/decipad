@@ -14,37 +14,34 @@ const wrapperStyles = css({
   position: 'relative',
   display: 'grid',
   overflow: 'hidden',
-  gridTemplateRows: '44px auto 44px',
+  gridTemplateRows: '56px auto max-content',
   height: '100%',
   width: '100%',
-  backgroundColor: cssVar('backgroundDefault'),
-  gap: 2,
+  backgroundColor: cssVar('backgroundMain'),
 });
 
 type AssistantChatProps = {
   readonly messages: Message[];
   readonly sendMessage: (content: string) => void;
   readonly regenerateResponse: (id: string) => void;
-  readonly suggestChanges: (id: string) => void;
   readonly clearMessages: () => void;
   readonly rateResponse: (id: string, rating: AIResponseRating) => void;
-  readonly loading: boolean;
+  readonly isGeneratingResponse: boolean;
 };
 
 export const AssistantChat: React.FC<AssistantChatProps> = ({
   messages,
   sendMessage,
   regenerateResponse,
-  suggestChanges,
   clearMessages,
   rateResponse,
-  loading,
+  isGeneratingResponse,
 }) => {
-  const handleLikeResponse = (id: string) => {
+  const likeResponse = (id: string) => {
     rateResponse(id, 'like');
   };
 
-  const handleDislikeResponse = (id: string) => {
+  const dislikeResponse = (id: string) => {
     rateResponse(id, 'dislike');
   };
 
@@ -53,13 +50,14 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
       <AssistantChatHeader onClear={clearMessages} />
       <AssistantMessageList
         messages={messages}
-        isLoading={loading}
-        handleLikeResponse={handleLikeResponse}
-        handleDislikeResponse={handleDislikeResponse}
+        handleLikeResponse={likeResponse}
+        handleDislikeResponse={dislikeResponse}
         handleRegenerateResponse={regenerateResponse}
-        handleSuggestChanges={suggestChanges}
       />
-      <AssistantMessageInput onSubmit={sendMessage} />
+      <AssistantMessageInput
+        onSubmit={sendMessage}
+        isLocked={isGeneratingResponse}
+      />
     </div>
   );
 };

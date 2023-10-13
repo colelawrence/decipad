@@ -516,6 +516,7 @@ export interface ComponentCssVariables {
   //
   // ------------- AI Assistant ---------------
   AIAssistantBackgroundColor: string;
+  AIAssistantBackgroundHoverColor: string;
   AIAssistantElevationColor: string;
   AIAssistantBorderColor: string;
   AIAssistantTextColor: string;
@@ -629,7 +630,8 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       GoogleButtonBorder: '#dcdcdc',
       GoogleButtonText: '#757575',
 
-      AIAssistantBackgroundColor: grey700.hex,
+      AIAssistantBackgroundColor: offBlack.hex,
+      AIAssistantBackgroundHoverColor: grey700.hex,
       AIAssistantElevationColor: grey600.hex,
       AIAssistantBorderColor: grey100.hex,
       AIAssistantTextColor: offWhite.hex,
@@ -735,10 +737,11 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       GoogleButtonBorder: '#3367D6',
       GoogleButtonText: '#ffffff',
 
-      AIAssistantBackgroundColor: grey700.hex,
+      AIAssistantBackgroundColor: offWhite.hex,
+      AIAssistantBackgroundHoverColor: grey700.hex,
       AIAssistantElevationColor: grey600.hex,
       AIAssistantBorderColor: dark600.hex,
-      AIAssistantTextColor: offWhite.hex,
+      AIAssistantTextColor: offBlack.hex,
       AIAssistantTextSubduedColor: grey400.hex,
       AIAssistantHighlightColor: teal500.hex,
       AIAssistantCodeBackgroundColor: teal900.hex,

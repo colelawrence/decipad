@@ -21,8 +21,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
     messages,
     sendUserMessage,
     regenerateResponse,
-    loading,
-    makeChanges,
+    isGeneratingResponse,
   } = useAssistantChat(notebookId, controller);
 
   return (
@@ -30,8 +29,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
       messages={messages}
       sendMessage={sendUserMessage}
       regenerateResponse={regenerateResponse}
-      suggestChanges={makeChanges}
-      loading={loading}
+      isGeneratingResponse={isGeneratingResponse}
       clearMessages={clearMessages(notebookId)}
       rateResponse={rateResponse(notebookId)}
     />

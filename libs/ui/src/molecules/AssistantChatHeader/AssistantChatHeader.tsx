@@ -1,6 +1,5 @@
-import { p12Medium, p14Regular } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { componentCssVars } from '../../primitives';
+import { componentCssVars, cssVar, p14Medium } from '../../primitives';
 
 export const wrapperStyles = css({
   display: 'flex',
@@ -8,33 +7,29 @@ export const wrapperStyles = css({
   justifyContent: 'space-between',
   padding: '0px 20px',
   width: '100%',
-  height: 44,
-  backgroundColor: componentCssVars('AIAssistantElevationColor'),
+  height: 56,
+  borderBottom: `1px solid ${cssVar('borderDefault')}`,
 });
 
-export const titleStyles = css(p14Regular, {
+export const titleStyles = css(p14Medium, {
   margin: 0,
-  color: componentCssVars('AIAssistantTextColor'),
 });
 
-export const buttonStyles = css(p12Medium, {
+export const buttonStyles = css(p14Medium, {
   height: 24,
-  padding: '1px 8px 0px',
+  padding: '2px 8px 0px',
   borderRadius: 6,
-  border: `1px solid ${componentCssVars('AIAssistantTextSubduedColor')}`,
-  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
-  color: componentCssVars('AIAssistantTextSubduedColor'),
+  color: cssVar('textSubdued'),
   cursor: 'pointer',
 
   '&:hover': {
-    borderColor: componentCssVars('AIAssistantTextColor'),
-    color: componentCssVars('AIAssistantTextColor'),
-    zIndex: 1,
+    backgroundColor: cssVar('backgroundDefault'),
+    color: cssVar('textHeavy'),
   },
 
   '&:active': {
-    borderColor: componentCssVars('AIAssistantHighlightColor'),
-    color: componentCssVars('AIAssistantHighlightColor'),
+    backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
+    color: componentCssVars('AIAssistantTextColor'),
   },
 });
 
@@ -46,9 +41,9 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   onClear,
 }) => (
   <div css={wrapperStyles}>
-    <h1 css={titleStyles}>AI Assistant</h1>
+    <h1 css={titleStyles}>Chat with AI assistant</h1>
     <button css={buttonStyles} onClick={onClear}>
-      Clear
+      Clear chat
     </button>
   </div>
 );
