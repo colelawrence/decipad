@@ -155,6 +155,7 @@ export const resultFromError = (
   );
 
   if (!(error instanceof RuntimeError)) {
+    console.error('Computer: Runtime error caught:', error);
     captureException(error);
   }
 

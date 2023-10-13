@@ -28,6 +28,7 @@ export const handler = trace<TWSRequestContext>(
       if (err instanceof Error) {
         const boom = boomify(err);
         if (boom.isServer) {
+          console.error(boom);
           await captureException(err);
         }
         return { statusCode: boom.output.statusCode };

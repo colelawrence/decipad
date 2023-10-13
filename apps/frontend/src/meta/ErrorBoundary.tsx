@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from './ErrorPage';
+import { isExpectableServerSideError } from '../utils/isExpectableServerSideError';
 
 interface ErrorBoundaryProps {
   readonly children: ReactNode;
@@ -44,6 +45,10 @@ export const ErrorBoundary: FC<ErrorBoundaryProps> = ({ children }) => {
 
   const onError = useCallback(
     (error: Error, info: ErrorInfo) => {
+      console.error('Error caught on error boundary', error);
+      if (isExpectableServerSideError(error)) {
+        return;
+      }
       setErrorCount(errorCount + 1);
       console.error(error);
       const sentryError = new SentryError(error.message);

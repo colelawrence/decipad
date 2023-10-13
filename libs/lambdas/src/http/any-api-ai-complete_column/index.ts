@@ -142,6 +142,7 @@ export const handler = handle(async (event) => {
     const err = new Error(
       `Badly formed ChatGPT response to submit_completion (not parseable JSON): \n\n${argString}`
     );
+    console.error(err);
 
     captureException(err);
     throw err;
@@ -159,6 +160,7 @@ export const handler = handle(async (event) => {
       )}`
     );
 
+    console.error(err);
     captureException(err);
     throw err;
   }

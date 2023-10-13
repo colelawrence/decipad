@@ -474,6 +474,7 @@ export const useTableActions = (
       }
     } catch (err) {
       toast('Unable to populate column.', 'error');
+      console.error('Error caught in tableActions', err);
 
       // We want to report an error, but it's not worth crashing the block over so
       // we're calling Sentry directly.

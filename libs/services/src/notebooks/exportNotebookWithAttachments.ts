@@ -51,7 +51,7 @@ export const exportNotebookWithAttachments = async ({
       );
     } catch (err) {
       console.error('Error fetching attachment', attachment);
-      console.error(err);
+      console.error('Error caught fetching attachment', err);
       await captureException(err as Error);
     }
   }

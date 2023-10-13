@@ -60,7 +60,7 @@ export const renderApp = (dependencies: RenderDependencies) => {
 
       const timeout = setTimeout(async () => {
         await captureException(
-          new Error(`app render timed out after ${RENDER_TIMEOUT_MS} ms`)
+          new Error(`SSR: app render timed out after ${RENDER_TIMEOUT_MS} ms`)
         );
         timedOut = true;
         try {

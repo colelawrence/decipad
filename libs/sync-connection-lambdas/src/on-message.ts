@@ -155,6 +155,8 @@ export const onMessage = async (connId: string, message: Uint8Array) => {
   try {
     return await _onMessage(connId, message);
   } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('sync-connection-lambdas: Error caught on message', err);
     await captureException(err as Error);
     return { statusCode: 200 };
   }

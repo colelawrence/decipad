@@ -52,9 +52,9 @@ export function BlockErrorBoundary({
   const onError = useCallback(
     (err: Error, info: ErrorInfo) => {
       const { message } = err;
-      console.error(err);
       // eslint-disable-next-line no-param-reassign
       err.message = `Block crash (${element?.type ?? 'unknown'}): ${message}`;
+      console.error('BlockErrorBoundary error caught', err);
       Sentry.captureException(err, {
         level: 'fatal',
         extra: {

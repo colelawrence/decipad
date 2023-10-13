@@ -48,7 +48,7 @@ export const createDeduplicateElementIdsPlugin = createTPluginFactory({
           needsDeduping.delete(id);
         }
       } catch (err) {
-        console.error('Error removeNeedsDeduping', err);
+        console.error('Error in removeNeedsDeduping', err);
         captureException(err);
       }
     };
@@ -86,7 +86,7 @@ export const createDeduplicateElementIdsPlugin = createTPluginFactory({
           }
         }
       } catch (err) {
-        console.error(err);
+        console.error('Error in createDeduplicateElementIdsPlugin', err);
         captureException(err);
       }
     };

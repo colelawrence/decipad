@@ -188,6 +188,8 @@ export const trySend = async (
     await ws.send({ id: connId, payload });
   } catch (err) {
     if (err instanceof Error && isSeriousError(err)) {
+      // eslint-disable-next-line no-console
+      console.error('Error in y-lambdawebsocket trySend', err);
       await captureException(err);
     }
   }

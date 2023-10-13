@@ -128,7 +128,7 @@ export const useRdFetch = <Name extends keyof Endpoints>(endpoint: Name) => {
         setRd({ status: 'success', result });
       })
       .catch((error) => {
-        console.error('an error has happened', error);
+        console.error('AI hooks: an error has happened', error);
         captureException(error);
         setRd({ status: 'error', error });
       });

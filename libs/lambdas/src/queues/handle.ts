@@ -26,6 +26,7 @@ const processAllRecords = async <T>(
   );
   for (const result of results) {
     if (result.status === 'rejected') {
+      console.error('Error processing event', result.reason);
       await captureException(result.reason);
     }
   }

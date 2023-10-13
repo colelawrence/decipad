@@ -11,6 +11,7 @@ import {
   useCreateExternalDataSourceMutation,
   useGetExternalDataSourcesQuery,
 } from '@decipad/graphql-client';
+import { isExpectableServerSideError } from '../../../utils/isExpectableServerSideError';
 
 export const useExternalDataSources = (
   notebookId: string
@@ -24,9 +25,11 @@ export const useExternalDataSources = (
 
   useEffect(() => {
     if (externalDataSources.error) {
-      console.error(externalDataSources.error);
-      captureException(externalDataSources.error);
       toast(externalDataSources.error.message, 'error');
+      if (!isExpectableServerSideError(externalDataSources.error)) {
+        console.error(externalDataSources.error);
+        captureException(externalDataSources.error);
+      }
     }
   }, [externalDataSources.error, toast]);
 

@@ -24,7 +24,7 @@ export const createEditorApplyErrorReporterPlugin =
         try {
           apply.call(editor, op);
         } catch (err) {
-          console.error(err);
+          console.error('Error caught in :', err);
           console.error('history:', history);
           captureException(err, {
             extra: {
