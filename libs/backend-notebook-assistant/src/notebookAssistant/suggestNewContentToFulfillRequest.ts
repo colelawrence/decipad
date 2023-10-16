@@ -23,8 +23,14 @@ import { applyCommands } from '../utils/applyCommands';
 import { commandSchema } from '../config/commandSchema';
 import { getRelevantBlockIds } from '../utils/getRelevantBlockIds';
 import { getElements } from '../utils/getElements';
-import { instructionSummaries, getInstructions } from '../config/instructions';
+import {
+  instructionSummaries,
+  getInstructions,
+  InstructionConstituent,
+  tagsForInstructions,
+} from '../config/instructions';
 import { parseInstructionConstituents } from '../utils/parseInstructionConstituents';
+import { getAllTags } from '../utils/getAllTags';
 
 export interface SuggestNewContentReply {
   newDocument: RootDocument;
@@ -89,6 +95,7 @@ No comments.`,
   let relevantBlockIds: undefined | string[];
   let shouldJumpOverSpecificElementIds = false;
   let specificElementIds: undefined | string[];
+  let instructionConstituents: undefined | InstructionConstituent[];
   let changesSummary: undefined | string;
   let failedCode = false;
   let triedCode = false;
@@ -103,7 +110,10 @@ No comments.`,
 
   const generateChatCompletion = async () => {
     const makeFunctionsAvailable =
-      sentFinalInstructions && !triedCode && !failedCode;
+      sentFinalInstructions &&
+      !triedCode &&
+      !failedCode &&
+      !sentChangesSummaryInstructions;
     const createOptions: ChatCompletionCreateParamsNonStreaming = {
       messages,
       model: openAi.model,
@@ -140,14 +150,13 @@ No comments.`,
 
   const parseInstructions = () => {
     try {
-      instructions = getInstructions(
-        parseInstructionConstituents(
-          getDefined(
-            reply.content,
-            'no reply content for parsing instruction keys'
-          )
+      instructionConstituents = parseInstructionConstituents(
+        getDefined(
+          reply.content,
+          'no reply content for parsing instruction keys'
         )
       );
+      instructions = getInstructions(instructionConstituents);
     } catch (err) {
       messages.push({
         role: 'user',
@@ -187,6 +196,13 @@ Reply in JSON only, no comments. Don't apologize.`,
     }
   };
 
+  const createRelevantDocumentSchema = () => {
+    const tags = instructionConstituents
+      ? instructionConstituents.flatMap((inst) => tagsForInstructions[inst])
+      : [];
+    return schema(getAllTags(verbalizedDocument).concat(tags));
+  };
+
   const isProblematicBlock = (element: AnyElement): boolean => {
     return problematicBlockTypes.has(element.type);
   };
@@ -195,13 +211,14 @@ Reply in JSON only, no comments. Don't apologize.`,
     const relevantBlocks = verbalizedDocument.verbalized
       .filter((v) => getDefined(relevantBlockIds).includes(v.element.id))
       .map((v) => v.element);
+
     if (relevantBlocks.find(isProblematicBlock)) {
       shouldJumpOverSpecificElementIds = true;
 
       const newInstructions = (
         await afterBlocksTemplate.invoke({
           instructions: getDefined(instructions, 'no instructions'),
-          schema,
+          schema: createRelevantDocumentSchema(),
           commandSchema,
         })
       ).toString();
@@ -262,7 +279,7 @@ Please reply in JSON only, no comments. Don't apologize.`,
     const newInstructions = (
       await afterBlocksTemplate.invoke({
         instructions: getDefined(instructions, 'no instructions'),
-        schema,
+        schema: createRelevantDocumentSchema(),
         commandSchema,
       })
     ).toString();
@@ -338,7 +355,7 @@ No comments.`,
 
     try {
       finalDoc = applyCommands(content, response);
-      debug('finalDoc', finalDoc);
+      debug('finalDoc', stringify(finalDoc, null, '\t'));
     } catch (err) {
       messages.push({
         role: 'user',

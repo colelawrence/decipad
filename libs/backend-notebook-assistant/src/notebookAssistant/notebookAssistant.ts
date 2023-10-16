@@ -6,6 +6,7 @@ import { TOperation } from '@udecode/plate';
 import { fixElementIds } from '../utils/fixElementIds';
 import { RootDocument } from '@decipad/editor-types';
 import { encodeDocumentIds } from '../utils/encodeDocumentIds';
+import cloneDeep from 'lodash.clonedeep';
 
 export interface NotebookAssistantReply {
   operations: TOperation[];
@@ -19,12 +20,15 @@ const internalNotebookAssistant = async (
   const [encodedOldDocument, decodeDocument] = encodeDocumentIds(oldDocument);
 
   const { newDocument: encodedNewDocument, summary } =
-    await suggestNewContentToFulfillRequest(encodedOldDocument, request);
+    await suggestNewContentToFulfillRequest(
+      cloneDeep(encodedOldDocument),
+      request
+    );
   const newDocument = decodeDocument(encodedNewDocument);
   return {
     operations: suggestEditorChanges(
-      newDocument,
-      fixElementIds(oldDocument, newDocument)
+      oldDocument,
+      fixElementIds(cloneDeep(oldDocument), cloneDeep(newDocument))
     ),
     summary,
   };

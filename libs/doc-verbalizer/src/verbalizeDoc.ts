@@ -13,6 +13,7 @@ import { getVerbalizer } from './verbalizers';
 export interface VerbalizedElement {
   element: AnyElement;
   verbalized: string;
+  tags: Set<string>;
 }
 
 export interface DocumentVerbalization {
@@ -23,27 +24,34 @@ export interface DocumentVerbalization {
 const isStructuralElement = (element: AnyElement): element is ColumnsElement =>
   element.type === ELEMENT_COLUMNS || element.type === ELEMENT_TAB; // right now, only columns are structural elements. Add tabs here later.
 
-const verbalizeOneNode = (node: MyNode): string => {
-  if (isElement(node)) {
-    if (node.type === ELEMENT_SMART_REF) {
-      return node.lastSeenVariableName ?? getNodeString(node);
-    }
-    const v = getVerbalizer(node);
-    const result =
-      v != null
-        ? v(node, verbalizeOneNode)
-        : node.children.map(verbalizeOneNode).join('');
-    return result;
-  }
-  const result = getNodeString(node);
-  return result;
-};
-
-const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
-  const v = getVerbalizer(element);
+const verbalizeElement = (
+  element: AnyElement,
+  tags: Set<string>
+): VerbalizedElement[] => {
   if (isStructuralElement(element)) {
-    return element.children.flatMap(verbalizeElement);
+    return element.children.flatMap(
+      (child) => verbalizeElement(child, new Set()),
+      tags
+    );
   }
+  const verbalizeOneNode = (node: MyNode): string => {
+    if (isElement(node)) {
+      tags.add(node.type);
+      if (node.type === ELEMENT_SMART_REF) {
+        return node.lastSeenVariableName ?? getNodeString(node);
+      }
+      const v = getVerbalizer(node);
+      const result =
+        v != null
+          ? v(node, verbalizeOneNode)
+          : node.children.map(verbalizeOneNode).join('');
+      return result;
+    }
+    const result = getNodeString(node);
+    return result;
+  };
+  const v = getVerbalizer(element);
+
   return [
     {
       element,
@@ -51,6 +59,7 @@ const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
         v != null
           ? v(element, verbalizeOneNode)
           : verbalizeOneNode(element as MyNode),
+      tags,
     },
   ];
 };
@@ -58,6 +67,8 @@ const verbalizeElement = (element: AnyElement): VerbalizedElement[] => {
 export const verbalizeDoc = (doc: RootDocument): DocumentVerbalization => {
   return {
     document: doc,
-    verbalized: doc.children.flatMap(verbalizeElement),
+    verbalized: doc.children.flatMap((child) =>
+      verbalizeElement(child, new Set())
+    ),
   };
 };

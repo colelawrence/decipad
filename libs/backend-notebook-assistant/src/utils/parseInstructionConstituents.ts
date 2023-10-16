@@ -1,6 +1,9 @@
 import { parseJSONResponse } from './parseJSONResponse';
+import type { InstructionConstituent } from '../config/instructions';
 
-export const parseInstructionConstituents = (response: string) => {
+export const parseInstructionConstituents = (
+  response: string
+): InstructionConstituent[] => {
   const constituents = parseJSONResponse(response);
   if (!Array.isArray(constituents)) {
     throw new TypeError(`Your reply should have been a JSON array of block ids, and it's not.

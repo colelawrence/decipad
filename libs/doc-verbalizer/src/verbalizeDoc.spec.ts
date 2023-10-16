@@ -38,6 +38,27 @@ describe('verbalizeDoc', () => {
         "## 💸 How much will I pay for the act of candle-making and inflation?",
       ]
     `);
+    expect(verbalized.map((v) => v.tags)).toMatchInlineSnapshot(`
+      [
+        Set {},
+        Set {
+          "p",
+        },
+        Set {
+          "p",
+        },
+        Set {
+          "code_line_v2_code",
+        },
+        Set {
+          "p",
+        },
+        Set {
+          "code_line_v2_code",
+        },
+        Set {},
+      ]
+    `);
   });
 
   it('verbalizes some simple UI components', () => {
@@ -71,6 +92,40 @@ describe('verbalizeDoc', () => {
         CashTaxRate =  CashTax / EBITDA in %
       }
       \`\`\`",
+      ]
+    `);
+    expect(verbalized.map((v) => v.tags)).toMatchInlineSnapshot(`
+      [
+        Set {},
+        Set {
+          "p",
+        },
+        Set {
+          "caption",
+          "exp",
+        },
+        Set {
+          "p",
+        },
+        Set {
+          "caption",
+          "exp",
+        },
+        Set {},
+        Set {
+          "caption",
+          "exp",
+        },
+        Set {
+          "caption",
+          "dropdown",
+        },
+        Set {
+          "td",
+          "table-var-name",
+          "table-column-formula",
+          "smart-ref",
+        },
       ]
     `);
   });

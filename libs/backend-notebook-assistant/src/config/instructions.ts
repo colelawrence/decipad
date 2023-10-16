@@ -1,4 +1,4 @@
-type InstructionConstituent =
+export type InstructionConstituent =
   | 'code-lines'
   | 'sliders'
   | 'tables'
@@ -11,6 +11,13 @@ export const instructionSummaries: Record<InstructionConstituent, string> = {
   tables: 'Tables with data and / or derived calculations',
   'table-formulas':
     'Code, expressions or formulas that go inside table columns',
+};
+
+export const tagsForInstructions: Record<InstructionConstituent, string[]> = {
+  'code-lines': ['code_line_v2'],
+  sliders: ['def'],
+  tables: ['table'],
+  'table-formulas': ['th'],
 };
 
 type InstructionConstituents = Array<InstructionConstituent>;
