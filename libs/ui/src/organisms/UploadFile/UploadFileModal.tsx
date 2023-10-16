@@ -41,6 +41,11 @@ const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
         maxSize: MAX_UPLOAD_FILE_SIZE.media,
         accept: 'video/*',
       };
+    case 'embed':
+      return {
+        title: 'Insert embed',
+        maxSize: MAX_UPLOAD_FILE_SIZE.embed,
+      };
     case 'data':
       return {
         title: 'Upload a data file',
@@ -60,7 +65,9 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   const { title, maxSize, accept } = getConfigForFileType(fileType);
   const MAX_LABEL = `${maxSize / 1_000_000}MB`;
 
-  const [activeTab, setActiveTab] = useState('upload');
+  const uploadEnabled = fileType !== 'embed';
+
+  const [activeTab, setActiveTab] = useState(uploadEnabled ? 'upload' : 'link');
   const [fileName, setFileName] = useState('');
   const toast = useToast();
 
@@ -95,32 +102,35 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
           </div>
         </div>
       </div>
-      <div css={tabWrapStyles} defaultValue={activeTab}>
-        <TabsList>
-          <TabsTrigger
-            name="upload"
-            testId="upload-file-tab"
-            trigger={{
-              label: 'Upload',
-              onClick: () => setActiveTab('upload'),
-              disabled: false,
-              selected: activeTab === 'upload',
-            }}
-          />
-          <TabsTrigger
-            name="embed"
-            testId="embed-file-tab"
-            trigger={{
-              label: 'Embed link',
-              onClick: () => setActiveTab('embed'),
-              disabled: false,
-              selected: activeTab === 'embed',
-            }}
-          />
-        </TabsList>
-      </div>
+      {uploadEnabled && (
+        <div css={tabWrapStyles} defaultValue={activeTab}>
+          <TabsList>
+            <TabsTrigger
+              name="upload"
+              testId="upload-file-tab"
+              trigger={{
+                label: 'Upload',
+                onClick: () => setActiveTab('upload'),
+                disabled: false,
+                selected: activeTab === 'upload',
+              }}
+            />
+
+            <TabsTrigger
+              name="link"
+              testId="link-file-tab"
+              trigger={{
+                label: 'Link',
+                onClick: () => setActiveTab('link'),
+                disabled: false,
+                selected: activeTab === 'link',
+              }}
+            />
+          </TabsList>
+        </div>
+      )}
       <div css={importFileWrapperStyles}>
-        <TabsContent name="embed">
+        <TabsContent name="link">
           <div css={importFileActionStyles}>
             <input
               data-testid="upload-link-input"
@@ -129,13 +139,13 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               onChange={(e) => setFileName(e.target.value)}
             />
             <Button
-              key="embed-csv-button"
-              testId="embed-csv-button"
+              key="link-button"
+              testId="link-button"
               type="primary"
-              onClick={() => onUpload(fileName, 'embed')}
+              onClick={() => onUpload(fileName, 'link')}
               disabled={!isValidURL(fileName)}
             >
-              Embed
+              Insert
             </Button>
           </div>
         </TabsContent>

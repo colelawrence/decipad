@@ -1,10 +1,12 @@
-export type FileType = 'image' | 'media' | 'data';
+export type FileType = 'image' | 'media' | 'data' | 'embed';
 
 export const MAX_UPLOAD_FILE_SIZE = {
   // JPEG, JPG, GIF, PNG
   image: 5_000_000,
   // not supported yet
   media: 5_000_000,
+  // embed a website
+  embed: 0,
   // JSON, CSV
   data: 500_000,
   // notebooks --> check if needed

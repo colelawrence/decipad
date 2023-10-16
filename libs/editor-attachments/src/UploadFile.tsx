@@ -1,6 +1,6 @@
 import { insertLiveConnection } from '@decipad/editor-components';
 import { MyEditor, useTEditorRef } from '@decipad/editor-types';
-import { insertImageBelow } from '@decipad/editor-utils';
+import { insertEmbedBelow, insertImageBelow } from '@decipad/editor-utils';
 import {
   useAttachFileToNotebookMutation,
   useGetCreateAttachmentFormMutation,
@@ -25,6 +25,8 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
       switch (fileType) {
         case 'image':
           return insertImageBelow(editor, path, url);
+        case 'embed':
+          return insertEmbedBelow(editor, path, url);
         case 'data':
           return insertLiveConnection({
             computer,
@@ -95,7 +97,7 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
     (fileInfo: File | string, uploadType: string) => {
       switch (fileType) {
         case 'image': {
-          if (uploadType === 'embed' && typeof fileInfo === 'string') {
+          if (uploadType === 'link' && typeof fileInfo === 'string') {
             insertByUrl(fileInfo);
           } else if (fileInfo instanceof File) {
             insertFromComputer(fileInfo);
@@ -104,9 +106,17 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
           }
           break;
         }
+        case 'embed': {
+          if (uploadType === 'link' && typeof fileInfo === 'string') {
+            insertByUrl(fileInfo);
+          } else {
+            throw new Error('This cannot happen');
+          }
+          break;
+        }
         case 'data': {
           // live connection note
-          if (uploadType === 'embed' && typeof fileInfo === 'string') {
+          if (uploadType === 'link' && typeof fileInfo === 'string') {
             insertByUrl(fileInfo);
           } else if (fileInfo instanceof File) {
             const form = async (): Promise<

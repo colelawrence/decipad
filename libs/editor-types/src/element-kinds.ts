@@ -1,7 +1,7 @@
 export {
-  ELEMENT_BLOCKQUOTE,
   // Code
   ELEMENT_CODE_BLOCK as DEPRECATED_ELEMENT_CODE_BLOCK,
+  ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_LINE,
   ELEMENT_H1,
   ELEMENT_H2,
@@ -94,6 +94,7 @@ export const ELEMENT_DRAW_IMAGE = 'image';
 
 // others
 export const ELEMENT_CAPTION = 'caption';
+export const ELEMENT_IFRAME = 'iframe';
 
 // Tabs
 export const ELEMENT_TAB = 'tab';

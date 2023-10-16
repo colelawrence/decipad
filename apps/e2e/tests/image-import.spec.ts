@@ -52,13 +52,13 @@ test.describe('Make sure importing images work', () => {
   test('Importing image via link', async () => {
     await page.getByTestId('paragraph-content').last().fill('/');
     await page.getByTestId('menu-item-upload-image').click();
-    await page.getByTestId('embed-file-tab').click();
+    await page.getByTestId('link-file-tab').click();
     await page
       .getByTestId('upload-link-input')
       .fill(
         'https://app.decipad.com/docs/assets/images/image_collab-1be976675d57684cb0a1223a5d6551ff.png'
       );
-    await page.getByTestId('embed-csv-button').click();
+    await page.getByTestId('link-button').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
     await expect(

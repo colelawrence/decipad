@@ -48,6 +48,7 @@ import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DISPLAY,
   ELEMENT_DRAW,
+  ELEMENT_IFRAME,
   ELEMENT_IMPORT,
   ELEMENT_LIVE_CONNECTION,
   ELEMENT_LIVE_DATASET,
@@ -84,7 +85,7 @@ import type {
   TableVariableNameElement,
 } from './table';
 
-export type { DrawElement, DrawElements, DrawElementDescendant };
+export type { DrawElement, DrawElementDescendant, DrawElements };
 
 // Defining specific elements
 
@@ -135,6 +136,11 @@ export interface ImageElement extends TImageElement, BaseElement {
 }
 export interface MediaEmbedElement extends TMediaEmbedElement, BaseElement {
   type: typeof ELEMENT_MEDIA_EMBED;
+  children: [EmptyText];
+}
+export interface IframeEmbedElement extends TImageElement, BaseElement {
+  type: typeof ELEMENT_IFRAME;
+  url: string;
   children: [EmptyText];
 }
 
@@ -292,6 +298,7 @@ export type BlockElement =
   | StructuredInputElement
   | StructuredInputElementChildren
   | TableColumnFormulaElement
+  | IframeEmbedElement
   // Draw Elements
   | DrawElementDescendant;
 
@@ -334,6 +341,7 @@ export type TopLevelValue =
   | ColumnsElement
   | InteractiveElement
   | DataViewElement
+  | IframeEmbedElement
   | IntegrationTypes.IntegrationBlock;
 
 export type NotebookValue = [TitleElement, ...Array<TabElement>];
@@ -392,4 +400,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_LIVE_QUERY,
   ELEMENT_INTEGRATION,
   ELEMENT_DISPLAY,
+  ELEMENT_IFRAME,
 ];

@@ -161,6 +161,10 @@ export const execute = ({
         setFileType('data' as FileType);
         setDialogOpen(true);
         break;
+      case 'upload-embed':
+        setFileType('embed' as FileType);
+        setDialogOpen(true);
+        break;
     }
 
     let newElementPath: Path;

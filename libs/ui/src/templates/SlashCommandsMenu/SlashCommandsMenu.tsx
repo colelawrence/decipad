@@ -15,6 +15,7 @@ import {
   Heading1,
   Heading2,
   Image,
+  ImportTable,
   Input,
   Integrations,
   LineChartSlash,
@@ -146,6 +147,15 @@ const integrationsGroups = (paint: boolean) => ({
       icon: paintIcon(<CSV />, paint ? 'Daffodil' : undefined),
       enabled: true,
       extraSearchTerms: ['upload', 'csv', 'data', 'excel'],
+    },
+    {
+      command: 'upload-embed',
+      title: 'Embed',
+      description:
+        'Embed slides, videos, or other content from another website',
+      icon: paintIcon(<ImportTable />, paint ? 'Daffodil' : undefined),
+      enabled: true,
+      extraSearchTerms: ['import', 'embed'],
     },
   ],
 });

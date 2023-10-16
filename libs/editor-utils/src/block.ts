@@ -1,6 +1,7 @@
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
+  ELEMENT_IFRAME,
   ELEMENT_IMAGE,
   ELEMENT_INLINE_NUMBER,
   ELEMENT_LIC,
@@ -149,6 +150,26 @@ export const insertImageBelow = (
       {
         id: nanoid(),
         type: ELEMENT_IMAGE,
+        children: [{ text: alt } as TDescendant],
+        url,
+      },
+    ],
+    { at: requirePathBelowBlock(editor, path) }
+  );
+};
+
+export const insertEmbedBelow = (
+  editor: MyEditor,
+  path: Path,
+  url: string,
+  alt = ''
+): void => {
+  insertNodes<TElement>(
+    editor,
+    [
+      {
+        id: nanoid(),
+        type: ELEMENT_IFRAME,
         children: [{ text: alt } as TDescendant],
         url,
       },

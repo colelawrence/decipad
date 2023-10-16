@@ -1,4 +1,3 @@
-import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   Blockquote,
   Bold,
@@ -9,6 +8,7 @@ import {
   Heading1,
   Heading2,
   Highlight,
+  IframeEmbed,
   Image,
   InteractiveParagraph,
   Italic,
@@ -23,7 +23,6 @@ import {
   UnorderedList,
 } from '@decipad/editor-components';
 import {
-  ElementKind,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
   ELEMENT_DISPLAY,
@@ -31,6 +30,7 @@ import {
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
+  ELEMENT_IFRAME,
   ELEMENT_IMAGE,
   ELEMENT_LI,
   ELEMENT_LIC,
@@ -39,15 +39,17 @@ import {
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
   ELEMENT_UL,
-  MarkKind,
+  ElementKind,
   MARK_BOLD,
   MARK_CODE,
   MARK_HIGHLIGHT,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
   MARK_UNDERLINE,
+  MarkKind,
   PlateComponent,
 } from '@decipad/editor-types';
+import type { RemoteComputer } from '@decipad/remote-computer';
 
 export type PlateComponents = Partial<
   Record<ElementKind | MarkKind, PlateComponent>
@@ -68,6 +70,7 @@ export const components = (computer: RemoteComputer): PlateComponents => ({
   // Media
   [ELEMENT_IMAGE]: Image,
   [ELEMENT_MEDIA_EMBED]: MediaEmbed,
+  [ELEMENT_IFRAME]: IframeEmbed,
 
   // Lists
   [ELEMENT_UL]: UnorderedList,

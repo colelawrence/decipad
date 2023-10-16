@@ -1,7 +1,7 @@
 import { ClientEventContextType } from '@decipad/client-events';
-import type { RemoteComputer } from '@decipad/remote-computer';
+import { createElementChangePlugin } from '@decipad/editor-components';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
-import { noopPromise } from '@decipad/editor-utils';
+import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import {
   createAttachmentPlugin,
   createAutoCompleteMenuPlugin,
@@ -12,6 +12,7 @@ import {
   createCodeLinePlugin,
   createCodeLineV2Plugin,
   createCodeVariableHighlightPlugin,
+  createDeduplicateElementIdsPlugin,
   createDisplayPlugin,
   createDividerPlugin,
   createDndSmartRefPlugin,
@@ -20,14 +21,18 @@ import {
   createEditorApplyErrorReporterPlugin,
   createEventInterceptionSuperHandlerPlugin,
   createExitBreakPlugin,
+  createIframePlugin,
   createImagePlugin,
   createImportPlugin,
   createLayoutColumnsPlugin,
   createLinkPlugin,
   createLiveConnectionPlugin,
+  createLiveDataSetPlugin,
   createLiveQueryPlugin,
   createMarksPlugins,
   createMediaEmbedPlugin,
+  createMigrateStructuredInputs,
+  createMigrateTableDropdownToId,
   createNavigationPlugin,
   createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
@@ -54,24 +59,20 @@ import {
   createTrailingParagraphPlugin,
   createTypeErrorHighlightPlugin,
   createUserEventPlugin,
-  createDeduplicateElementIdsPlugin,
-  createMigrateStructuredInputs,
-  createMigrateTableDropdownToId,
-  createLiveDataSetPlugin,
 } from '@decipad/editor-plugins';
-import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import { createTablePlugin } from '@decipad/editor-table';
-import { createElementChangePlugin } from '@decipad/editor-components';
 import {
-  createTAutoformatPlugin,
   ELEMENT_DRAW,
   ELEMENT_IMAGE,
   ELEMENT_MEDIA_EMBED,
   MyEditor,
   MyValue,
+  createTAutoformatPlugin,
 } from '@decipad/editor-types';
+import { noopPromise } from '@decipad/editor-utils';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import type { UserInteraction } from '@decipad/react-contexts';
+import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   createBlockquotePlugin,
   createDeserializeDocxPlugin,
@@ -82,9 +83,9 @@ import {
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
 } from '@udecode/plate';
+import { createDndPlugin } from '@udecode/plate-dnd';
 import { createJuicePlugin } from '@udecode/plate-juice';
 import { Subject } from 'rxjs';
-import { createDndPlugin } from '@udecode/plate-dnd';
 import { autoformatRules } from './autoformat';
 import { components } from './components';
 import { exitBreakOptions } from './exitBreakOptions';
@@ -115,10 +116,11 @@ export const plugins = ({
       createDividerPlugin(),
 
       createDisplayPlugin(),
+      createIframePlugin(),
       createIntegrationPlugin(),
 
       // Layout blocks
-      createLayoutColumnsPlugin(),
+      createLayoutColumnsPlugin (),
 
       // structure enforcement
       createNormalizeEditorPlugin(),
