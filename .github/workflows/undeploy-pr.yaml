@@ -7,6 +7,9 @@ on:
 jobs:
   undeploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: 'deploy-pr-${{ github.event.pull_request.number }}'
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
