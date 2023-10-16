@@ -34,7 +34,6 @@ import {
   createMigrateStructuredInputs,
   createMigrateTableDropdownToId,
   createNavigationPlugin,
-  createNormalizeCodeBlockPlugin,
   createNormalizeCodeLinePlugin,
   createNormalizeColumnsPlugin,
   createNormalizeEditorPlugin,
@@ -120,14 +119,13 @@ export const plugins = ({
       createIntegrationPlugin(),
 
       // Layout blocks
-      createLayoutColumnsPlugin (),
+      createLayoutColumnsPlugin(),
 
       // structure enforcement
       createNormalizeEditorPlugin(),
       createNormalizeVoidPlugin(),
       createNormalizeRichTextBlockPlugin(),
       createNormalizePlainTextBlockPlugin(),
-      createNormalizeCodeBlockPlugin(),
       createNormalizeCodeLinePlugin(computer),
       createNormalizeListPlugin(),
       createNormalizeLinkPlugin(),
