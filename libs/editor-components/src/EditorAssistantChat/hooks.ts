@@ -68,6 +68,13 @@ export const useAssistantChat = (
         },
       });
 
+      // eslint-disable-next-line no-console
+      console.debug('response from assistant changes', res);
+
+      if (res.error) {
+        throw res.error;
+      }
+
       const operations = res.data?.suggestNotebookChanges?.operations;
       const summary = res.data?.suggestNotebookChanges?.summary;
 
@@ -160,21 +167,21 @@ export const useAssistantChat = (
 
       const toastId = toast.info('Getting changes...', { autoDismiss: false });
 
-      const { operations, summary } = await getAssistantChanges(
-        userMessage.content
-      );
+      try {
+        const changes = await getAssistantChanges(userMessage.content);
 
-      toast.delete(toastId);
-
-      if (operations) {
-        applyChanges(operations as TOperation[]);
-      }
-      if (summary) {
-        handleUpdateMessage({
-          ...newResponse,
-          content: summary,
-          type: 'success',
-        });
+        if (changes?.operations) {
+          applyChanges(changes.operations as TOperation[]);
+        }
+        if (changes?.summary) {
+          handleUpdateMessage({
+            ...newResponse,
+            content: changes.summary,
+            type: 'success',
+          });
+        }
+      } finally {
+        toast.delete(toastId);
       }
     } catch (error) {
       console.error(error);

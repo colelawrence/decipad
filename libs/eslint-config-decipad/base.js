@@ -97,6 +97,10 @@ module.exports = {
             message:
               'Use @decipad/utils or specific lodash functions like lodash.maxby',
           },
+          {
+            name: 'react-use-intercom',
+            message: 'Use useIntercom from @decipad/react-utils instead',
+          },
         ],
       },
     ],

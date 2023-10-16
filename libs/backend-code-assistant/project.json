@@ -23,6 +23,24 @@
         "command": "../../node_modules/.bin/madge --circular src",
         "cwd": "libs/backend-code-assistant"
       }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/backend-code-assistant"],
+      "options": {
+        "jestConfig": "libs/backend-code-assistant/jest.config.js",
+        "bail": true
+      }
+    },
+    "test:local": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/backend-code-assistant"],
+      "options": {
+        "jestConfig": "libs/backend-code-assistant/jest.config.js",
+        "bail": true,
+        "testMatch": ["**/*.spec.disabled.ts"],
+        "testPathPattern": ["libs/backend-code-assistant/src/tests"]
+      }
     }
   },
   "tags": []

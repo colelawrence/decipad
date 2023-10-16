@@ -452,17 +452,17 @@ docsyncsnapshots-changes
 @scheduled
 reset-querycount cron(0 0 1 * ? *)
 
-#@search
-#availabilityZoneCount 1
-#instanceCount 1
-#instanceType r6g.large.search
-#volumeSize 100
+@search
+availabilityZoneCount 1
+instanceCount 1
+instanceType t3.medium.search
+volumeSize 100
 
 @plugins
 s3
 custom-domain
-#nasa-gcn/architect-plugin-search
-#nasa-gcn/architect-functions-search
+nasa-gcn/architect-plugin-search
+nasa-gcn/architect-functions-search
 
 @aws
 region eu-west-2

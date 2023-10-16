@@ -6,13 +6,13 @@ const { readFile, writeFile } = require('node:fs/promises');
 const { getOpenAI } = require('./openai');
 const { join } = require('node:path');
 const { mkdirp } = require('mkdirp');
-const { docs } = require('./config/docs');
+const { languageDocs } = require('../../config/languageDocs');
 const { notebooks } = require('./config/notebooks');
 const { conversationToChatMessages } = require('./conversationToChatMessages');
 const verbalizeDocument = require('../../../doc-verbalizer/build').default;
 
 const createTrainingDataFromDocs = async () => {
-  for (const filePath of docs) {
+  for (const filePath of languageDocs) {
     if (!existsSync(filePath)) {
       throw new Error(`Could not find file ${filePath}`);
     }
@@ -20,7 +20,7 @@ const createTrainingDataFromDocs = async () => {
 
   const prompts = [];
 
-  for (const filePath of docs) {
+  for (const filePath of languageDocs) {
     console.log(`- ${filePath}`);
     const expectedReply = await readFile(filePath, 'utf8');
     const completion = await getOpenAI().chat.completions.create({

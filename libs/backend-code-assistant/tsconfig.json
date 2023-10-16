@@ -8,6 +8,7 @@
     { "path": "../editor-types" },
     { "path": "../doc-verbalizer" },
     { "path": "../backend-config" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../backend-search" }
   ]
 }

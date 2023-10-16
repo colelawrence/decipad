@@ -10,6 +10,7 @@ import { QueryParamProvider } from 'use-query-params';
 import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { NotebookTopbar } from './NotebookTopbar';
 import { PermissionType } from '@decipad/graphql-client';
+// eslint-disable-next-line no-restricted-imports
 import { IntercomProvider } from 'react-use-intercom';
 
 const noop = () => Promise.resolve();

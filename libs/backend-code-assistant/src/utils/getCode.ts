@@ -5,10 +5,18 @@ import { unwrapCodeContent } from './unwrapCodeContent';
 const formErrorMessage = (error: Parser.ParserError): string =>
   `Parse error at line ${error.line}, char ${error.column}: ${error.message}`;
 
-export const getCode = (wrappedContent: string): string | undefined => {
-  const content = unwrapCodeContent(wrappedContent);
+const removeResultArtifacts = (code: string) =>
+  code
+    .split('\n')
+    .filter((line) => !line.startsWith('==>'))
+    .join('\n');
+
+const internalGetCode = (wrappedContent: string): string | undefined => {
+  if (!wrappedContent) {
+    return wrappedContent;
+  }
+  const content = removeResultArtifacts(unwrapCodeContent(wrappedContent));
   debug('unwrapped content:', content);
-  const parsed = parseStatement(content);
   if (
     content
       .split('\n')
@@ -17,6 +25,7 @@ export const getCode = (wrappedContent: string): string | undefined => {
   ) {
     throw new Error('please reply in just one line of code');
   }
+  const parsed = parseStatement(content);
   if (parsed.solution) {
     if (parsed.solution.type === 'assign') {
       return content.split('=')[1].trim();
@@ -33,3 +42,18 @@ export const getCode = (wrappedContent: string): string | undefined => {
   }
   return undefined;
 };
+
+const perhapsUnwrapInlineMarkers = (
+  content: string | undefined
+): string | undefined => {
+  if (!content) {
+    return content;
+  }
+  if (content.charAt(0) === '`' && content.charAt(content.length - 1) === '`') {
+    return content.substring(1, content.length - 1);
+  }
+  return content;
+};
+
+export const getCode = (wrappedContent: string): string | undefined =>
+  perhapsUnwrapInlineMarkers(internalGetCode(wrappedContent));

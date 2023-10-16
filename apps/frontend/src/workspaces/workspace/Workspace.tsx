@@ -24,6 +24,7 @@ import {
   PaymentSubscriptionStatusModal,
   WorkspaceHero,
 } from '@decipad/ui';
+import { useIntercom } from '@decipad/react-utils';
 import { signOut, useSession } from 'next-auth/react';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import {
@@ -34,7 +35,6 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { useIntercom } from 'react-use-intercom';
 import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';

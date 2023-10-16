@@ -110,6 +110,9 @@ export async function createSandboxEnv(
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     NOTION_TOKEN: process.env.NOTION_TOKEN,
     DECI_BACKEND_TEST: 'true',
+    DECI_SEARCH_URL: process.env.DECI_SEARCH_URL,
+    DECI_SEARCH_USERNAME: process.env.DECI_SEARCH_USERNAME,
+    DECI_SEARCH_PASSWORD: process.env.DECI_SEARCH_PASSWORD,
   };
 
   // the final sandbox environment:

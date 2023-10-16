@@ -12,7 +12,7 @@ on:
 
 jobs:
   deploy:
-    timeout-minutes: 45
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     concurrency:
       group: 'deploy-pr-${{ github.event.pull_request.number }}'
@@ -98,6 +98,7 @@ jobs:
           REACT_APP_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
           REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
+          # DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-code-assistant'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh
@@ -109,6 +110,14 @@ jobs:
 
           yarn deploy:pr
           scripts/push-sam.sh
+
+      - name: Update AI indexes
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-west-2
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: yarn update_ai_indexes DecipadBackendStaging${{ github.event.pull_request.number }}
 
   #### Notify
 

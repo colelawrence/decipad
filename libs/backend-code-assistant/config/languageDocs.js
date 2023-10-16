@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 const { join } = require('node:path');
 
-exports.docs = [
+const languageDocs = [
   'docs/advanced/combinations.mdx',
   'docs/advanced/conditions.md',
   'docs/advanced/custom-function.mdx',
@@ -56,6 +56,9 @@ exports.docs = [
   'language/modeling/13-functions.md',
   'language/modeling/15-lookups.md',
   'language/modeling/16-previous.md',
-].map((path) =>
-  join(__dirname, '..', '..', '..', '..', '..', 'apps', 'docs', path)
-);
+];
+
+exports.languageDocs = languageDocs;
+
+exports.languageDocPath = (doc) =>
+  join(__dirname, '..', '..', '..', 'apps', 'docs', doc);

@@ -10,6 +10,7 @@ export * from './use-behavior-subject';
 export * from './useActiveElement';
 export * from './useCanUseDom';
 export * from './useEventListener';
+export * from './useIntercom';
 export * from './useLocalStorage';
 export * from './useResolved';
 export * from './lazyLoad';

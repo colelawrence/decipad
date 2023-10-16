@@ -2,7 +2,7 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { css, keyframes } from '@emotion/react';
 import { ComponentProps, useCallback, useContext, useState } from 'react';
-import { useIntercom } from 'react-use-intercom';
+import { useIntercom } from '@decipad/react-utils';
 import { Link, MenuItem, MenuSeparator, SegmentButtons } from '../../atoms';
 import {
   ArrowDiagonalTopRight,

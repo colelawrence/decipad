@@ -104,6 +104,14 @@ jobs:
           yarn clean
           yarn deploy
 
+      - name: Update AI indexes
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: yarn update_ai_indexes DecipadBackendStaging
+
   notify:
     name: Discord Notification
     runs-on: ubuntu-latest

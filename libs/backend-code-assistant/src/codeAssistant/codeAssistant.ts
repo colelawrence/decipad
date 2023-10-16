@@ -5,7 +5,8 @@ import { getDefined } from '@decipad/utils';
 import { createComputationalSummary } from '../utils/createComputationalSummary';
 import { debug } from '../debug';
 import { getCode } from '../utils/getCode';
-import { intro } from './texts';
+import { getLanguageDocSnippets } from '../utils/getLanguageDocSnippets';
+import { instructions, intro } from './texts';
 
 const fineTunedModelForDecilangCode =
   'ft:gpt-3.5-turbo-0613:team-n1n-co::86fVKLap';
@@ -18,6 +19,7 @@ export interface CodeAssistantOptions {
   attempt?: number;
 }
 
+const maxLanguageDocSnippetCount = 2;
 const maxAttempts = 4;
 
 export const codeAssistant = async (
@@ -45,33 +47,45 @@ export const codeAssistant = async (
   ${summary}
   """`;
 
+  const snippets = await getLanguageDocSnippets(
+    `${summary}
+${prompt}`,
+    maxLanguageDocSnippetCount
+  );
+
+  const snippetsText =
+    snippets.length > 0
+      ? `Relevant Decipad language doc snippets:
+
+${snippets.map((snippet) => `Docs:"""\n${snippet}\n"""\n`).join('\n')}
+`
+      : '';
+
+  debug('language docs snippets:', snippetsText);
+
   const messages = _messages || [
     {
       role: 'system',
       content: `${intro}
 
+${snippetsText}
+
 ${summaryText}
 
-INSTRUCTIONS:"""
-Use existing available variables in the code elements given above.
-Variable names cannot have spaces in them.
-Always reply with only one line of code wrapped in \`\`\`deci
-<code here>
-\`\`\`
-No comments
-"""`,
+${instructions}`,
     },
     {
       role: 'user',
-      content: `Get me a Decipad code line to ${prompt}
+      content: `I want a Decipad language code snippet for my notebook that will allow me to ${prompt}.
 
-Just the code, no comments.`,
+No comments.`,
     },
   ];
   debug('messages:', JSON.stringify(messages, null, '\t'));
   const completion = await getOpenAI().chat.completions.create({
     model: fineTunedModelForDecilangCode,
     messages,
+    temperature: 0,
   });
 
   const assistantMessage = completion.choices[0].message;
@@ -79,12 +93,14 @@ Just the code, no comments.`,
   debug('reply:', content);
   if (content) {
     try {
-      return getCode(content);
+      const code = getCode(content);
+      debug('final reply:', code);
+      return code;
     } catch (err) {
       messages.push(assistantMessage);
       messages.push({
         role: 'user',
-        content: (err as Error).message,
+        content: `${(err as Error).message}\nPlease fix this.`,
       });
       return codeAssistant({
         ...props,

@@ -1,5 +1,5 @@
 diff --git a/node_modules/@nasa-gcn/architect-plugin-search/index.js b/node_modules/@nasa-gcn/architect-plugin-search/index.js
-index ade4b86..1b82fd3 100644
+index ade4b86..f4275ae 100644
 --- a/node_modules/@nasa-gcn/architect-plugin-search/index.js
 +++ b/node_modules/@nasa-gcn/architect-plugin-search/index.js
 @@ -32,7 +32,7 @@ async function exists(path) {
@@ -102,11 +102,13 @@ index ade4b86..1b82fd3 100644
      return new this({ child, tempDir, port, url });
    }
    async stop() {
-@@ -401,7 +394,8 @@ var deploy = {
+@@ -400,8 +393,9 @@ var deploy = {
+   },
    // @ts-expect-error: The Architect plugins API has no type definitions.
    services({ stage, arc }) {
-     if (stage !== "production") {
+-    if (stage !== "production") {
 -      return { node: "http://localhost:9200" };
++    if (stage !== "production" && stage !== "staging") {
 +      var port = parseInt(process.env.DECI_SEARCH_PORT ?? '9200');
 +      return { node: "http://localhost:" + port };
      } else if (arc.search) {
