@@ -3,7 +3,7 @@ export interface NotebookMetaActionsReturn {
   onUnarchiveNotebook: (notebookId: string, showToast?: true) => void;
 
   onDownloadNotebook: (notebookId: string) => void;
-  onDownloadNotebookHistory: (notebookId: string) => void;
+  onDownloadNotebookHistory: (notebookId: string) => Promise<void>;
 
   onMoveToSection: (notebookId: string, sectionId: string) => void;
   onMoveToWorkspace: (notebookId: string, workspaceId: string) => void;

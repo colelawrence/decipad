@@ -22,6 +22,7 @@ import {
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
+import { captureException } from '@sentry/browser';
 
 const SNAPSHOT_NAME = 'Published 1';
 
@@ -111,9 +112,18 @@ export function useNotebookMetaActions(
 
   const onDownloadNotebookHistory = useCallback<
     NotebookMetaActionsReturn['onDownloadNotebookHistory']
-  >((notebookId) => {
-    exportNotebookBackups(notebookId)();
-  }, []);
+  >(
+    async (notebookId) => {
+      try {
+        await exportNotebookBackups(notebookId)();
+      } catch (err) {
+        console.error(err);
+        toast('Error downloading notebook', 'error');
+        captureException(err);
+      }
+    },
+    [toast]
+  );
 
   const onMoveToSection = useCallback<
     NotebookMetaActionsReturn['onMoveToSection']

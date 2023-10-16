@@ -30,6 +30,10 @@ const remoteExportNotebookWithUpdates = async (
       body: updates,
     }
   );
+  if (!resp.ok) {
+    console.error(await resp.text());
+    throw new Error('Error downloading notebook backups');
+  }
   return resp.blob();
 };
 
@@ -51,6 +55,10 @@ const remoteExportNotebookBackups = async (
       method: 'GET',
     }
   );
+  if (!resp.ok) {
+    console.error(await resp.text());
+    throw new Error('Error downloading notebook backups');
+  }
   return resp.blob();
 };
 
