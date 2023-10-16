@@ -118,4 +118,64 @@ test.describe('Dropdown widget', () => {
       timeout: 5000,
     });
   });
+
+  test('Load Drop down with values from table column', async () => {
+    await page.locator('[data-testid="widget-editor"] button >> nth=1').click();
+    await page.getByRole('menuitem', { name: 'Change type' }).click();
+    await page.getByRole('menuitem', { name: 'From existing column' }).click();
+
+    await clickCell(page, 1, 0);
+    await page.keyboard.type('One');
+
+    await clickCell(page, 2, 0);
+    await page.keyboard.type('Two');
+
+    await clickCell(page, 3, 0);
+    await page.keyboard.type('Three');
+
+    await page.locator('[aria-roledescription="dropdown-open"]').click();
+
+    const [option1, option2, option3] = await Promise.all([
+      page
+        .locator('[aria-roledescription="dropdownOption"] >> nth=0')
+        .innerText(),
+      page
+        .locator('[aria-roledescription="dropdownOption"] >> nth=1')
+        .innerText(),
+      page
+        .locator('[aria-roledescription="dropdownOption"] >> nth=2')
+        .innerText(),
+    ]);
+    expect(option1).toBe('Table.Column1');
+    expect(option2).toBe('Table.Column2');
+    expect(option3).toBe('Table.Column3');
+
+    await page
+      .locator('[aria-roledescription="dropdownOption"] >> nth=0')
+      .click();
+
+    await page
+      .locator('[aria-roledescription="dropdownOption"] >> nth=1')
+      .waitFor({ state: 'visible', timeout: 5000 });
+
+    const items = await Promise.all(
+      (
+        await page.locator('[aria-roledescription="dropdownOption"]').all()
+      ).map((e) => e.innerText())
+    );
+
+    expect(items[1]).toBe('One');
+    expect(items[2]).toBe('Two');
+    expect(items[3]).toBe('Three');
+
+    await page
+      .locator('[aria-roledescription="dropdownOption"] >> nth=1')
+      .click();
+
+    const dropDownText = await page
+      .locator('[aria-roledescription="dropdown-open"]')
+      .innerText();
+
+    expect(dropDownText).toBe('One');
+  });
 });
