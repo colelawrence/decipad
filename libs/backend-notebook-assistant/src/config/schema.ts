@@ -1,3 +1,4 @@
+import toposort from 'toposort';
 import { unique } from '@decipad/utils';
 
 const schemaByElementType: Record<string, string> = {
@@ -208,7 +209,7 @@ type TagType = keyof typeof schemaByElementType;
 
 const dependencies: Record<string, Array<TagType>> = {
   a: ['InlineElement', 'InlineChildren'],
-  def: ['exp'],
+  def: ['exp', 'slider'],
   TableCellType: ['SimpleTableCellType'],
   'table-column-formula': ['smart-ref'],
   'table-caption': ['table-var-name', 'table-column-formula'],
@@ -217,6 +218,8 @@ const dependencies: Record<string, Array<TagType>> = {
   table: ['table-caption', 'TableHeaderRowElement', 'tr'],
   code_line_v2: ['structured_varname', 'code_line_v2_code'],
   code_line_v2_code: ['smart-ref'],
+  TableHeaderRowElement: ['th'],
+  p: ['InlineChildren'],
 };
 
 const globalSchemaPreamble = `type PlainText = EmptyText | { text: string };
@@ -243,8 +246,7 @@ type Document = {
     TitleElement,
     ...Array<TabElement>
   ];
-};
-`;
+};`;
 
 const getDependents = (tag: string): string[] => {
   const dependents = dependencies[tag];
@@ -254,13 +256,21 @@ const getDependents = (tag: string): string[] => {
   return [];
 };
 
-const getSpecificSchema = (tags: Array<string>): string =>
-  unique(tags.concat(tags.flatMap((tag) => getDependents(tag))))
-    .map((tag) => schemaByElementType[tag])
-    .join('\n\n');
+const getSpecificSchema = (tags: Array<string>): string => {
+  const allTags = unique(
+    tags.concat(tags.flatMap((tag) => getDependents(tag)))
+  );
+
+  const tagsWithDeps = allTags.flatMap((tag): Array<[string, string]> => {
+    const dependents = getDependents(tag);
+    return dependents.map((dep) => [dep, tag]);
+  });
+  const sortedTags = unique(tags.concat(toposort(tagsWithDeps)));
+
+  return sortedTags.map((tag) => schemaByElementType[tag]).join('\n\n');
+};
 
 export const schema = (tags: Array<string>): string => `${globalSchemaPreamble}
-
 ${getSpecificSchema(tags)}
 
 ${globalSchemaFooter}`;

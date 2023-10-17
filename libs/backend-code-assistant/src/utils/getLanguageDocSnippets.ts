@@ -16,8 +16,6 @@ export const getLanguageDocSnippets = async (
   }
   const store = await searchStore();
   const vector = await getVectorEmbedding(prompt);
-  // eslint-disable-next-line no-console
-  console.debug('vector', vector);
   const searchResults = await store.search({
     index: indexNames.languageDocs,
     body: {

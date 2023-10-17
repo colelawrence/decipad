@@ -255,7 +255,6 @@ export const suggestEditorChanges = (
           appliedOps.push(slateOp);
           applied = true;
         } catch (err) {
-          console.error(err);
           // it's fine, sometimes this happens because the
           // jsondiffpatch formatted gives invalid remove
           // operations because it's dumb.

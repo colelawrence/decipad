@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import stringify from 'json-stringify-safe';
 import { TestContext } from '@decipad/backend-test-sandbox';
 import defaultDocument from './__fixtures__/simplest.json';
@@ -9,6 +10,10 @@ interface AfterRunResults {
 }
 
 type AfterRunCallback = (results: AfterRunResults) => void;
+
+// eslint-disable-next-line no-console
+console.log(`Loading .env from ${process.cwd()}`);
+dotenv.config();
 
 export const setupTest = (
   ctx: TestContext,

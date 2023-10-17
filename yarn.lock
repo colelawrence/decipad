@@ -13492,6 +13492,11 @@
   dependencies:
     "@types/jest" "*"
 
+"@types/toposort@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@types/toposort/-/toposort-2.0.4.tgz#9e47a1dcc7eca89bb54db42efb6232e0d2e31c73"
+  integrity sha512-Cf/2hCtUUv8Zz7oQhxmHgAi0t6crZvFwpSFB03uiu7kt9m1dLYRx6SBzTTda1k5/qD0NQTPlAHgAD328U0yx0g==
+
 "@types/tough-cookie@*":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.2.tgz#6286b4c7228d58ab7866d19716f3696e03a09397"
@@ -34013,6 +34018,11 @@ topojson-client@^3.1.0:
   integrity sha512-605uxS6bcYxGXw9qi62XyrV6Q3xwbndjachmNxu8HWTtVPxZfEJN9fd/SZS1Q54Sn2y0TMyMxFj/cJINqGHrKw==
   dependencies:
     commander "2"
+
+toposort@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/toposort/-/toposort-2.0.2.tgz#ae21768175d1559d48bef35420b2f4962f09c330"
+  integrity sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==
 
 totalist@^1.0.0:
   version "1.1.0"
