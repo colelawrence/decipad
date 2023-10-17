@@ -203,12 +203,50 @@ type VariableSliderElement = VariableBaseElement<
     type: 'code_line_v2_code';
     children: Array<PlainText | SmartRefElement>;
   }`,
+
+  'data-view-tr': `interface DataViewHeaderRowElement {
+    id: string,
+    type: 'data-view-tr';
+    children: Array<DataViewHeader>;
+  }`,
+
+  'data-view-th': `interface DataViewHeader {
+    id: string;
+    type: 'data-view-th';
+    cellType: SimpleTableCellType;
+    aggregation?: 'average' | 'max' | 'median' | 'min' | 'span' | 'sum';
+    rounding?: string;
+    name: string;
+    label: string;
+    children: [EmptyText];
+  }`,
+
+  'data-view-name': `interface DataViewNameElement {
+    id: string;
+    type: 'data-view-name';
+    children: [Text];
+  }`,
+
+  'data-view-caption': `interface DataViewCaptionElement {
+    id: string;
+    type: 'data-view-caption';
+    children: [DataViewNameElement];
+  }`,
+
+  'data-view': `export interface DataViewElement extends BaseElement {
+    type: 'data-view';
+    children: [DataViewCaptionElement, DataViewHeaderRowElement];
+    varName?: string; // contains the table block id
+    color?: string;
+    icon?: string;
+  }`,
 } as const;
 
 type TagType = keyof typeof schemaByElementType;
 
-const dependencies: Record<string, Array<TagType>> = {
+const dependencies: Record<TagType, Array<TagType>> = {
   a: ['InlineElement', 'InlineChildren'],
+  p: ['InlineChildren'],
   def: ['exp', 'slider'],
   TableCellType: ['SimpleTableCellType'],
   'table-column-formula': ['smart-ref'],
@@ -219,7 +257,11 @@ const dependencies: Record<string, Array<TagType>> = {
   code_line_v2: ['structured_varname', 'code_line_v2_code'],
   code_line_v2_code: ['smart-ref'],
   TableHeaderRowElement: ['th'],
-  p: ['InlineChildren'],
+  'data-view': ['data-view-caption', 'data-view-tr'],
+  'data-view-caption': ['data-view-name'],
+  'data-view-tr': ['data-view-th'],
+  'data-view-th': ['SimpleTableCellType'],
+  SimpleTableCellType: ['Number', 'Boolean', 'String', 'Date', 'Anything'],
 };
 
 const globalSchemaPreamble = `type PlainText = EmptyText | { text: string };

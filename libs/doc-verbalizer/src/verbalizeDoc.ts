@@ -24,9 +24,9 @@ export interface DocumentVerbalization {
 const isStructuralElement = (element: AnyElement): element is ColumnsElement =>
   element.type === ELEMENT_COLUMNS || element.type === ELEMENT_TAB; // right now, only columns are structural elements. Add tabs here later.
 
-const verbalizeElement = (
+export const verbalizeElement = (
   element: AnyElement,
-  tags: Set<string>
+  tags: Set<string> = new Set()
 ): VerbalizedElement[] => {
   if (isStructuralElement(element)) {
     return element.children.flatMap(

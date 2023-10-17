@@ -175,6 +175,31 @@ describe('schema generator', () => {
         }
         
 
+      type Number =
+        | {
+            kind: 'number';
+            unit?: Unit[] | null;
+            numberError?: 'month-day-conversion';
+            numberFormat?: null;
+          }
+        | {
+            kind: 'number';
+            numberFormat: 'percentage';
+            unit?: null;
+            numberError?: null;
+          );
+
+      type Boolean = { kind: 'boolean' };
+
+      type String = { kind: 'string' };
+
+      type Date = {
+        kind: 'date';
+        date: Time.Specificity;
+      };
+
+      type Anything = { kind: 'anything' };
+
       type SimpleTableCellType =
         | Number
         | String
@@ -282,6 +307,105 @@ describe('schema generator', () => {
           step: string;
           value: string;
           children: [EmptyText]; // do not use or change
+        }
+
+      type BlockElement = ParagraphElement | TableElement | VariableElement | CodeLineV2Element;
+
+      type TabElement = {
+        id: string;
+        type: 'tab';
+        name: string;
+        children: Array<BlockElement>;
+      }
+
+      // The entire document
+
+      type Document = {
+        children: [
+          TitleElement,
+          ...Array<TabElement>
+        ];
+      };"
+    `);
+  });
+
+  it('provides schema for data view', () => {
+    expect(schema(['data-view'])).toMatchInlineSnapshot(`
+      "type PlainText = EmptyText | { text: string };
+      type PlainTextChildren = [PlainText];
+      type EmptyText = {
+        text: '';
+      };
+      type RichText = PlainText & Partial<Record<MarkKind, true>>;
+      type Text = PlainText | RichText;
+      export interface DataViewElement extends BaseElement {
+          type: 'data-view';
+          children: [DataViewCaptionElement, DataViewHeaderRowElement];
+          varName?: string; // contains the table block id
+          color?: string;
+          icon?: string;
+        }
+
+      interface DataViewNameElement {
+          id: string;
+          type: 'data-view-name';
+          children: [Text];
+        }
+
+      interface DataViewCaptionElement {
+          id: string;
+          type: 'data-view-caption';
+          children: [DataViewNameElement];
+        }
+
+      type Number =
+        | {
+            kind: 'number';
+            unit?: Unit[] | null;
+            numberError?: 'month-day-conversion';
+            numberFormat?: null;
+          }
+        | {
+            kind: 'number';
+            numberFormat: 'percentage';
+            unit?: null;
+            numberError?: null;
+          );
+
+      type Boolean = { kind: 'boolean' };
+
+      type String = { kind: 'string' };
+
+      type Date = {
+        kind: 'date';
+        date: Time.Specificity;
+      };
+
+      type Anything = { kind: 'anything' };
+
+      type SimpleTableCellType =
+        | Number
+        | String
+        | Boolean
+        | Date
+        | Anything // default type
+        ;
+
+      interface DataViewHeader {
+          id: string;
+          type: 'data-view-th';
+          cellType: SimpleTableCellType;
+          aggregation?: 'average' | 'max' | 'median' | 'min' | 'span' | 'sum';
+          rounding?: string;
+          name: string;
+          label: string;
+          children: [EmptyText];
+        }
+
+      interface DataViewHeaderRowElement {
+          id: string,
+          type: 'data-view-tr';
+          children: Array<DataViewHeader>;
         }
 
       type BlockElement = ParagraphElement | TableElement | VariableElement | CodeLineV2Element;

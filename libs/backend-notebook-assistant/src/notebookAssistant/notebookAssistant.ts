@@ -7,6 +7,7 @@ import { fixElementIds } from '../utils/fixElementIds';
 import { RootDocument } from '@decipad/editor-types';
 import { encodeDocumentIds } from '../utils/encodeDocumentIds';
 import cloneDeep from 'lodash.clonedeep';
+import { fixDocument } from '../utils/fixDocument';
 
 export interface NotebookAssistantReply {
   operations: TOperation[];
@@ -24,7 +25,7 @@ const internalNotebookAssistant = async (
       cloneDeep(encodedOldDocument),
       request
     );
-  const newDocument = decodeDocument(encodedNewDocument);
+  const newDocument = fixDocument(decodeDocument(encodedNewDocument));
   return {
     operations: suggestEditorChanges(
       oldDocument,

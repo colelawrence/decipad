@@ -1,16 +1,22 @@
+import cloneDeep from 'lodash.clonedeep';
+
 export type InstructionConstituent =
   | 'code-lines'
   | 'sliders'
   | 'tables'
-  | 'table-formulas';
+  | 'table-formulas'
+  | 'data-views';
 
 export const instructionSummaries: Record<InstructionConstituent, string> = {
   'code-lines':
     'Decipad language code, expressions or formulas in a single line',
   sliders: 'Input element for the user to choose a value',
-  tables: 'Tables with data and / or derived calculations',
+  tables:
+    'Tables with data and / or derived calculations. NEVER use to summarize or analyze a table.',
   'table-formulas':
-    'Code, expressions or formulas that go inside table columns',
+    'Code, expressions or formulas that go inside table columns. Do NOT use to summarize or analyze a table.',
+  'data-views':
+    'Data views (pivot tables): should be used to analyze, summarize or aggregate tables.',
 };
 
 export const tagsForInstructions: Record<InstructionConstituent, string[]> = {
@@ -18,6 +24,7 @@ export const tagsForInstructions: Record<InstructionConstituent, string[]> = {
   sliders: ['def'],
   tables: ['table'],
   'table-formulas': ['th'],
+  'data-views': ['data-view'],
 };
 
 type InstructionConstituents = Array<InstructionConstituent>;
@@ -29,7 +36,9 @@ Don't replace the ids of elements.
 All text must be inside text elements like \`{ text: 'text here' }\`.
 If appropriate, always set \`showResult\` to \`true\`.
 NEVER use the \`aggregation\` attribute on any element.
-Any new Block element ALWAYS goes into a tab.`;
+Any new Block element ALWAYS goes into a tab.
+To summarize a table ALWAYS use data-views.
+Add a data view if you need to summarize data.`;
 
 const instructions: Record<InstructionConstituent, string> = {
   'code-lines': `Code lines:
@@ -41,9 +50,11 @@ On code lines, don't use JavaScript or any other programming language. Always us
 Don't use the Math library. If you need any symbol (like PI), assume that symbol already exists.
 On code lines, don't insert your calculations. Instead, insert the full expression to get that result.
 Don't put any code inside an element of type \`structured_varname\`.`,
+
   sliders: `Sliders:
 Elements of type \`slider\` must ALWAYS be inside an element if type \`def\` that is of a "slider" variant.,
 The var name of a slider is contained inside the "caption" element of the parent "def".`,
+
   tables: `Tables:
 By default a table has no formula elements.
 A column on a table only has a corresponding formula element if and only if its cell type is "table-formula".
@@ -51,7 +62,9 @@ By default, table columns are of cell type "anything".
 When asked to add new columns, NEVER change any property on other columns.
 Column names are inside the text children of elements of type \`th\` and should have only letters and no spaces.
 When asked to add a column, DON'T change the \`cellType\` of any other column on that table.
-In a \`th\` the \`cellType\` must always be filled.`,
+In a \`th\` the \`cellType\` must always be filled.
+To summarize data, NEVER use a table, ALWAYS use a data view.`,
+
   'table-formulas': `Table formulas:
 When asked to add or change a column that depends on other columns or symbols, the \`cellType\` should be \`{ kind: 'table-formula' }\`.
 Column formulas or calculations need to be inside a \`table-column-formula\` element.
@@ -62,6 +75,43 @@ New elements of type \`table-column-formula\` should NEVER have elements of type
 NEVER put the code, formula or calculation for a column inside the \`th\` element. Instead, use a \`table-column-formula\` element for that.
 When asked, in a calculation, to use positional references to a column (like "second column"), fetch the name of that column (inside the corresponding \`th\` element) and use it in the formula.
 `,
+
+  'data-views': `Data views or pivot tables:
+A data view element is used to analyze or aggregate columns in a table.
+A data view cell type kind should NEVER be \`table-formula\`.
+Inside a \`data-view\` element, the \`varName\` property needs to be filled with id of the table.
+ALWAYS use the table id in the \`varName\` property, NOT the table name.
+NEVER call the \`generate_decilang_code\` when adding or changing a data view.
+To summarize a table ALWAYS use a data view.
+To summarize data, NEVER use a table, ALWAYS use a data view.
+NEVER replace a table with a data view.
+NEVER remove a table.`,
+};
+
+const sanitizeConstituents = (
+  _constituents: InstructionConstituents
+): InstructionConstituents => {
+  let constituents = cloneDeep(_constituents);
+  // HACK: remove tables if we're dealing with data views
+  if (constituents.includes('data-views')) {
+    {
+      const indexOfTables = constituents.indexOf('tables');
+      if (indexOfTables >= 0) {
+        constituents = constituents
+          .slice(0, indexOfTables)
+          .concat(constituents.slice(indexOfTables + 1));
+      }
+    }
+    {
+      const indexOfTableFormulas = constituents.indexOf('table-formulas');
+      if (indexOfTableFormulas >= 0) {
+        constituents = constituents
+          .slice(0, indexOfTableFormulas)
+          .concat(constituents.slice(indexOfTableFormulas + 1));
+      }
+    }
+  }
+  return constituents;
 };
 
 export const getInstructions = (
@@ -70,7 +120,9 @@ export const getInstructions = (
   let parts: string[] = [genericInstructions];
 
   parts = parts.concat(
-    constituents.map((constituent) => instructions[constituent])
+    sanitizeConstituents(constituents).map(
+      (constituent) => instructions[constituent]
+    )
   );
 
   return parts.join('\n\n');

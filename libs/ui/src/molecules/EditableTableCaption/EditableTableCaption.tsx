@@ -143,7 +143,8 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
   } = useContext(TableStyleContext);
 
   const Icon = icons[icon];
-  const [caption, ...tableFormulaEditors] = Children.toArray(children);
+  const childArray = Children.toArray(children);
+  const [caption, ...tableFormulaEditors] = childArray;
 
   return (
     <div css={isForWideTable ? tableCaptionWideStyles : tableCaptionSlimStyles}>
@@ -259,9 +260,11 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           tableFormulaEditors.length
         )}
       >
-        <FormulasDrawer readOnly={readOnly}>
-          {tableFormulaEditors}
-        </FormulasDrawer>
+        {tableFormulaEditors.length > 0 && (
+          <FormulasDrawer readOnly={readOnly}>
+            {tableFormulaEditors}
+          </FormulasDrawer>
+        )}
       </div>
     </div>
   );

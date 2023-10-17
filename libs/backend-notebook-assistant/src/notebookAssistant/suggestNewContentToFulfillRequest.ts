@@ -6,14 +6,13 @@ import {
   ChatCompletionMessage,
 } from 'openai/resources/chat';
 import {
-  AnyElement,
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
   RootDocument,
 } from '@decipad/editor-types';
 import { getDefined } from '../../../utils/src';
 import { codeAssistant } from '@decipad/backend-code-assistant';
-import { verbalizeDoc } from '@decipad/doc-verbalizer';
+import { VerbalizedElement, verbalizeDoc } from '@decipad/doc-verbalizer';
 import { debug } from '../debug';
 import { introTemplate, afterBlocksTemplate, schema } from '../config';
 import { getOpenAI } from '../utils/openAi';
@@ -22,7 +21,6 @@ import { parseJSONResponse } from '../utils/parseJSONResponse';
 import { applyCommands } from '../utils/applyCommands';
 import { commandSchema } from '../config/commandSchema';
 import { getRelevantBlockIds } from '../utils/getRelevantBlockIds';
-import { getElements } from '../utils/getElements';
 import {
   instructionSummaries,
   getInstructions,
@@ -39,6 +37,13 @@ export interface SuggestNewContentReply {
 
 // TODO: we still have issues when individualizing elements from deeply nested structures
 const problematicBlockTypes = new Set([ELEMENT_VARIABLE_DEF, ELEMENT_TABLE]);
+const dataViewKeywords = [
+  'summarize',
+  'summarise',
+  'summary',
+  'pivot',
+  'analyze',
+];
 
 const completionRequestOptions = {
   timeout: 120 * 1000,
@@ -53,6 +58,16 @@ export const suggestNewContentToFulfillRequest = async (
 
   const verbalizedDocument = verbalizeDoc(content);
   const intro = (await introTemplate.invoke({})).toString();
+
+  const nudges = (): string => {
+    const text = request.toLocaleLowerCase();
+
+    // data view nudge
+    if (dataViewKeywords.find((keyword) => text.includes(keyword))) {
+      return `It looks like the user is asking to summarize data. Request instructions for data views if true.\n`;
+    }
+    return '';
+  };
 
   let messages: ChatCompletionMessage[] = [
     {
@@ -85,7 +100,7 @@ ${JSON.stringify(instructionSummaries, null, '\t')}
 Which instructions would you need to fulfil my request?
 Only reply with a single JSON array with the keys, nothing else.
 Example of a reply: \`["code-lines", "table-formulas"]\`.
-No comments.`,
+${nudges()}No comments.`,
     },
   ];
 
@@ -102,6 +117,7 @@ No comments.`,
   let sentFinalInstructions = false;
   let sentChangesSummaryInstructions = false;
   let instructions: undefined | string;
+  let dataViewMode = false;
 
   let finalDoc: RootDocument | undefined;
 
@@ -113,7 +129,8 @@ No comments.`,
       sentFinalInstructions &&
       !triedCode &&
       !failedCode &&
-      !sentChangesSummaryInstructions;
+      !sentChangesSummaryInstructions &&
+      !dataViewMode;
     const createOptions: ChatCompletionCreateParamsNonStreaming = {
       messages,
       model: openAi.model,
@@ -156,6 +173,8 @@ No comments.`,
           'no reply content for parsing instruction keys'
         )
       );
+      dataViewMode = instructionConstituents.includes('data-views');
+      debug('instruction constituents:', instructionConstituents);
       instructions = getInstructions(instructionConstituents);
     } catch (err) {
       messages.push({
@@ -203,14 +222,38 @@ Reply in JSON only, no comments. Don't apologize.`,
     return schema(getAllTags(verbalizedDocument).concat(tags));
   };
 
-  const isProblematicBlock = (element: AnyElement): boolean => {
-    return problematicBlockTypes.has(element.type);
+  const isProblematicBlock = (element: VerbalizedElement): boolean => {
+    return problematicBlockTypes.has(element.element.type);
+  };
+
+  const relevantBlocksText = (
+    verbalizedElements: VerbalizedElement[]
+  ): string => {
+    const strictDataViewMode =
+      dataViewMode &&
+      verbalizedElements.length === 1 &&
+      verbalizedElements[0].element.type === 'table';
+
+    if (strictDataViewMode) {
+      return `Here is the table you need for your data view:
+
+${verbalizedElements[0].verbalized}
+
+Important: This table's id is "${verbalizedElements[0].element.id}"`;
+    }
+    const elements = verbalizedElements.map((el) => el.element);
+
+    return `Here is the list of blocks from my document that you may need to see, change or remove:
+
+\`\`\`json
+${stringify(elements, null, '\t')}
+\`\`\``;
   };
 
   const sendRelevantBlocks = async () => {
-    const relevantBlocks = verbalizedDocument.verbalized
-      .filter((v) => getDefined(relevantBlockIds).includes(v.element.id))
-      .map((v) => v.element);
+    const relevantBlocks = verbalizedDocument.verbalized.filter((v) =>
+      getDefined(relevantBlockIds).includes(v.element.id)
+    );
 
     if (relevantBlocks.find(isProblematicBlock)) {
       shouldJumpOverSpecificElementIds = true;
@@ -247,11 +290,7 @@ No comments.
     }
     messages.push({
       role: 'user',
-      content: `Here is the list of blocks from my document that you may need to change or remove:
-
-\`\`\`json
-${stringify(relevantBlocks, null, '\t')}
-\`\`\`
+      content: `${relevantBlocksText(relevantBlocks)}
 
 ${finalInstructions}`,
     });
@@ -285,13 +324,15 @@ Please reply in JSON only, no comments. Don't apologize.`,
     ).toString();
     messages.push({ role: 'system', content: newInstructions });
 
-    const relevantElements = getElements(content, new Set(specificElementIds));
+    const relevantElements = verbalizedDocument.verbalized.filter((v) =>
+      getDefined(specificElementIds).includes(v.element.id)
+    );
     messages.push({
       role: 'user',
-      content: `Here is the list of elements from my document that you may need to change or remove:
+      content: `Here is the list of elements from my document that you may need to see, change or remove:
 
 \`\`\`json
-${stringify(relevantElements, null, '\t')}
+${relevantBlocksText(relevantElements)}
 \`\`\`
 `,
     });
@@ -371,7 +412,7 @@ No comments.`,
   const sendChangesSummaryInstructions = () => {
     messages.push({
       role: 'user',
-      content: `Summarize the changes you have done to my document in simple text, no jargon.`,
+      content: `Summarize the changes you have done to my document in simple text, no jargon, no ids.`,
     });
   };
 

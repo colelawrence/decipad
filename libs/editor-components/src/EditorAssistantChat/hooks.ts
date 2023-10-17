@@ -63,14 +63,17 @@ export const useAssistantChat = (
 
   const getAssistantChanges = useCallback(
     async (prompt: string) => {
-      const res = await client.executeQuery<GetSuggestedNotebookChangesQuery>({
-        query: GetSuggestedNotebookChangesDocument,
-        key: Math.random(),
-        variables: {
-          notebookId,
-          prompt,
+      const res = await client.executeQuery<GetSuggestedNotebookChangesQuery>(
+        {
+          query: GetSuggestedNotebookChangesDocument,
+          key: Math.random(),
+          variables: {
+            notebookId,
+            prompt,
+          },
         },
-      });
+        { requestPolicy: 'network-only' }
+      );
 
       // eslint-disable-next-line no-console
       console.debug('response from assistant changes', res);
