@@ -13,6 +13,7 @@ import {
   Plus,
   Show,
   Sparkles,
+  Switch,
 } from '../../icons';
 import { DeleteWithDepsMenuItem, MenuList } from '../../molecules';
 import { componentCssVars, cssVar, p12Medium } from '../../primitives';
@@ -193,7 +194,7 @@ export const BlockDragHandle = ({
           {onMoveToTab && tabs.length > 0 && (
             <MenuList
               itemTrigger={
-                <TriggerMenuItem icon={<Link />}>Move to tab</TriggerMenuItem>
+                <TriggerMenuItem icon={<Switch />}>Move to tab</TriggerMenuItem>
               }
             >
               {tabs.map((t) => (

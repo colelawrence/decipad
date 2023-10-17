@@ -26,7 +26,7 @@ import {
   TopbarPlaceholder,
   NotebookTopbar,
   EditorIcon,
-  Tabs,
+  NotebookTabs,
   AssistantChatPlaceholder,
 } from '@decipad/ui';
 import {
@@ -125,7 +125,10 @@ export const NewNotebook: FC = () => {
             sidebar={<NewSidebar docsync={docsync} />}
             tabs={
               docsync?.editorController && isFlagEnabled('TABS') ? (
-                <NewTabs controller={docsync.editorController} />
+                <NewTabs
+                  notebookId={notebookId}
+                  controller={docsync.editorController}
+                />
               ) : null
             }
             assistant={
@@ -143,18 +146,30 @@ export const NewNotebook: FC = () => {
   );
 };
 
-const NewTabs: FC<{ controller: EditorController }> = ({ controller }) => {
+const NewTabs: FC<{ notebookId: string; controller: EditorController }> = ({
+  notebookId,
+  controller,
+}) => {
   const tabs = useTabs(controller);
   const { notebook, tab } = useRouteParams(notebooks({}).notebook);
+  const docsync = useContext(DocsyncEditorProvider);
+
+  const { isReadOnly } = useNotebookStateAndActions({
+    notebookId,
+    docsync,
+  });
 
   const nav = useNavigate();
 
   return (
-    <Tabs
-      tabs={tabs.map(({ id, name }) => ({
+    <NotebookTabs
+      tabs={tabs.map(({ id, name, icon, isHidden }) => ({
         id,
         name,
+        icon,
+        isHidden,
       }))}
+      isReadOnly={isReadOnly}
       activeTabId={tab ?? tabs[0]?.id}
       onClick={(id) => {
         nav(`${notebooks({}).notebook({ notebook }).$}/${id}`);
@@ -178,6 +193,8 @@ const NewTabs: FC<{ controller: EditorController }> = ({ controller }) => {
 
         nav(`${notebooks({}).notebook({ notebook }).$}/${firstAvailable?.id}`);
       }}
+      onChangeIcon={controller.ChangeTabIcon.bind(controller)}
+      onToggleShowHide={controller.ToggleShowHideTab.bind(controller)}
     />
   );
 };

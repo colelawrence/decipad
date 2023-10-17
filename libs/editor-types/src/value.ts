@@ -309,8 +309,9 @@ export interface TabElement extends BaseElement {
   type: typeof ELEMENT_TAB;
   id: string;
   name: string;
-  children: MyValue;
   icon?: UserIconKey;
+  isHidden?: boolean;
+  children: MyValue;
 }
 
 export interface TitleElement extends BaseElement {

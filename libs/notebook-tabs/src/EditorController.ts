@@ -45,8 +45,9 @@ import starterNotebook from './InitialNotebook';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 
-const INITIAL_TAB_NAME = 'Tab';
+const INITIAL_TAB_NAME = 'New Tab';
 const INITIAL_TITLE = 'Welcome to Decipad!';
+const INITIAL_TAB_ICON: UserIconKey = 'Receipt';
 const PLACEHOLDER_ID = 'placeholder_id';
 
 /**
@@ -157,10 +158,14 @@ export class EditorController {
    */
   private CreateSubEditor(
     _tabId?: string,
-    _tabName?: string
+    _tabName?: string,
+    _tabIcon?: UserIconKey,
+    _tabIsHidden?: boolean
   ): [MyEditor, TabElement] {
     const tabId = _tabId ?? nanoid();
-    const tabName = _tabName ?? 'New tab';
+    const tabName = _tabName ?? INITIAL_TAB_NAME;
+    const tabIcon = _tabIcon ?? INITIAL_TAB_ICON;
+    const tabIsHidden = _tabIsHidden ?? false;
 
     const editor = createTPlateEditor({
       id: tabId,
@@ -213,6 +218,8 @@ export class EditorController {
       type: ELEMENT_TAB,
       id: tabId,
       name: tabName,
+      icon: tabIcon,
+      isHidden: tabIsHidden,
       get children() {
         return editor!.children;
       },
@@ -316,7 +323,12 @@ export class EditorController {
         // Inserting a tab.
 
         const node = op.node as unknown as TabElement;
-        const [editor, child] = this.CreateSubEditor(node.id, node.name);
+        const [editor, child] = this.CreateSubEditor(
+          node.id,
+          node.name,
+          node.icon,
+          node.isHidden
+        );
 
         child.type = ELEMENT_TAB;
 
@@ -466,6 +478,8 @@ export class EditorController {
         type: ELEMENT_TAB,
         id: nanoid(),
         name: INITIAL_TAB_NAME,
+        icon: INITIAL_TAB_ICON,
+        isHidden: false,
         children: [],
       } satisfies TabElement,
     });
@@ -499,6 +513,8 @@ export class EditorController {
         type: ELEMENT_TAB,
         id: 'test_tab',
         name: 'test_tab_name',
+        icon: 'Receipt',
+        isHidden: false,
         children: [],
       } satisfies TabElement,
     });
@@ -526,6 +542,8 @@ export class EditorController {
         type: ELEMENT_TAB,
         id: nanoid(),
         name: INITIAL_TAB_NAME,
+        icon: INITIAL_TAB_ICON,
+        isHidden: false,
         children: [],
       } satisfies TabElement,
     });
@@ -643,6 +661,31 @@ export class EditorController {
     };
 
     this.apply(changeIcon);
+  }
+
+  public ToggleShowHideTab(id: string): void {
+    const index = this.children.findIndex((e) => e.id === id);
+    if (index === -1) {
+      throw new Error('Could not find this tab');
+    }
+
+    const tab = this.children[index];
+    if (tab.type === ELEMENT_TITLE) {
+      throw new Error('Should only get a tab element');
+    }
+
+    const toggleHidden: TOperation = {
+      type: 'set_node',
+      path: [index],
+      properties: {
+        isHiddden: tab.isHidden,
+      },
+      newProperties: {
+        isHidden: !tab.isHidden,
+      },
+    };
+
+    this.apply(toggleHidden);
   }
 
   private Normalize(): void {

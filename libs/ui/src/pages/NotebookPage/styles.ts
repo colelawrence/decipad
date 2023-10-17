@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import {
   cssVar,
-  easingTiming,
   mediumShadow,
   smallScreenQuery,
   tabletScreenQuery,
@@ -14,6 +13,9 @@ const isE2E = 'navigator' in globalThis && navigator.webdriver;
 interface IsEmbed {
   isEmbed: boolean;
 }
+
+const SIDEBAR_WIDTH = '320px';
+const ASSISTANT_WIDTH = '640px';
 
 /**
  * Used to wrap everything inside the app.
@@ -61,7 +63,8 @@ export const MainWrapper = styled.main<IsEmbed>((props) => ({
   display: 'flex',
   justifyContent: 'flex-end',
   backgroundColor: cssVar('backgroundAccent'),
-  paddingBottom: '12px',
+  padding: '0px 24px 12px',
+  gap: '24px',
 
   [smallScreenQuery]: {
     // paddingBottom: isEmbed ? 0 : 65,
@@ -70,20 +73,32 @@ export const MainWrapper = styled.main<IsEmbed>((props) => ({
   /* Embed conditional styles */
   ...(props.isEmbed && {
     order: 1,
-    paddingBottom: '0px',
+    padding: '0px',
   }),
 
   // !isE2E && { height: isEmbed ? 'fit-content' : '100%' },
 }));
 
-export const ArticleWrapper = styled.article<IsEmbed>((props) => ({
-  backgroundColor: cssVar('backgroundMain'),
+type ArticleWrapperProps = IsEmbed & {
+  isSidebarOpen: boolean;
+  isAssistantOpen: boolean;
+};
+
+export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
+  backgroundColor: cssVar('backgroundHeavy'),
   height: '100%',
-  margin: '0px 24px',
-  width: '100%',
+  width: props.isSidebarOpen
+    ? `calc(100% - ${SIDEBAR_WIDTH})`
+    : props.isAssistantOpen
+    ? `calc(100% - ${ASSISTANT_WIDTH})`
+    : '100%',
   borderRadius: '16px',
   display: 'flex',
   flexDirection: 'column',
+
+  [tabletScreenQuery]: {
+    width: '100%',
+  },
 
   /* Embed conditional styles */
   ...(props.isEmbed && {
@@ -92,6 +107,8 @@ export const ArticleWrapper = styled.article<IsEmbed>((props) => ({
 }));
 
 export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
+  backgroundColor: cssVar('backgroundMain'),
+  borderRadius: '16px',
   paddingTop: '64px',
   paddingBottom: '200px',
   width: '100%',
@@ -102,22 +119,23 @@ export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
   },
 });
 
-const SIDEBAR_WIDTH = '320px';
-const ASSISTANT_WIDTH = '640px';
-
 interface AsideWrapperProps {
-  readonly isOpen: boolean;
+  readonly isSidebarOpen: boolean;
+  readonly isAssistantOpen: boolean;
 }
 
 export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   position: 'relative',
+  marginRight: '-24px',
   display: 'flex',
   justifyContent: 'flex-end',
   overflowY: 'auto',
-  minWidth: props.isOpen ? SIDEBAR_WIDTH : 0,
-  transition: `min-width 120ms ${
-    props.isOpen ? easingTiming.easeOut : easingTiming.easeIn
-  }`,
+  flexShrink: 0,
+  flexBasis: props.isSidebarOpen
+    ? SIDEBAR_WIDTH
+    : props.isAssistantOpen
+    ? ASSISTANT_WIDTH
+    : '0px',
   backgroundColor: cssVar('backgroundMain'),
   height: '100%',
   borderRadius: '16px 0px 0px 16px',
@@ -134,37 +152,3 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
   },
 }));
-
-interface AssistantWrapperProps {
-  readonly isOpen: boolean;
-}
-
-export const AssistantWrapper = styled.aside<AssistantWrapperProps>(
-  (props) => ({
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    overflowY: 'auto',
-    minWidth: props.isOpen ? ASSISTANT_WIDTH : 0,
-    transition: `min-width 120ms ${
-      props.isOpen ? easingTiming.easeOut : easingTiming.easeIn
-    }`,
-    backgroundColor: cssVar('backgroundMain'),
-    height: '100%',
-    borderRadius: '16px 0px 0px 16px',
-    zIndex: 40,
-
-    [smallScreenQuery]: {
-      display: 'none',
-    },
-    [tabletScreenQuery]: {
-      position: 'fixed',
-      height: 'auto',
-      top: '70px',
-      bottom: '12px',
-      border: `solid 1px ${cssVar('borderDefault')}`,
-      borderRight: 'none',
-      boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
-    },
-  })
-);

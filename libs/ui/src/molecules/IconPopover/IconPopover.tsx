@@ -46,6 +46,7 @@ const iconsWrapper = css(
 );
 
 type IconPopoverProps = {
+  readonly iconOnly?: boolean;
   readonly color: AvailableSwatchColor;
   readonly trigger: JSX.Element;
   readonly onChangeIcon?: (newIcon: UserIconKey) => void;
@@ -53,6 +54,7 @@ type IconPopoverProps = {
 };
 
 export const IconPopover = ({
+  iconOnly = false,
   color,
   trigger,
   onChangeIcon = noop,
@@ -73,34 +75,39 @@ export const IconPopover = ({
             <Close />
           </Popover.Close>
         </div>
-        <div css={{ padding: '12px 0' }}>
-          <Divider />
-        </div>
-        <div
-          css={{
-            display: 'flex',
-            gap: '8px',
-            justifyContent: 'space-between',
-          }}
-        >
-          {swatchNames.map((key) => {
-            return (
-              <button
-                key={key}
-                aria-label={key}
-                data-testid={`icon-color-picker-${key}`}
-                onClick={() => {
-                  onChangeColor(key);
-                }}
-              >
-                <ColorPicker
-                  color={baseSwatches[key]}
-                  selected={key === color}
-                />
-              </button>
-            );
-          })}
-        </div>
+        {!iconOnly && (
+          <>
+            <div css={{ padding: '12px 0' }}>
+              <Divider />
+            </div>
+
+            <div
+              css={{
+                display: 'flex',
+                gap: '8px',
+                justifyContent: 'space-between',
+              }}
+            >
+              {swatchNames.map((key) => {
+                return (
+                  <button
+                    key={key}
+                    aria-label={key}
+                    data-testid={`icon-color-picker-${key}`}
+                    onClick={() => {
+                      onChangeColor(key);
+                    }}
+                  >
+                    <ColorPicker
+                      color={baseSwatches[key]}
+                      selected={key === color}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
         <div css={iconsWrapper}>
           {userIconKeys.map((choice) => {
             const Icon = icons[choice];

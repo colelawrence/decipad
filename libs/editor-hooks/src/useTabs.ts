@@ -17,23 +17,33 @@ export const useTabs = (): ReturnType<typeof _useTabs> => {
 };
 
 /**
+ * Returns an active tab id, or null if there is no active tab.
+ */
+export const useActiveTabId = (): string | null => {
+  const controller = useContext(ControllerProvider);
+  const tabs = _useTabs(controller);
+  const { tab } = useRouteParams(notebooks({}).notebook);
+
+  if (tabs.length === 0) return null;
+
+  const activeTabId = !tab ? tabs[0].id : tabs.find((t) => t.id === tab)?.id;
+
+  if (!activeTabId) {
+    throw new Error(
+      'Tab ID must always be found, there is likely a disconnect between URL param and tabID'
+    );
+  }
+
+  return activeTabId;
+};
+
+/**
  * Returns all tabs that are not the one the user is currently looking at.
  */
 export const useFilteredTabs = (): ReturnType<typeof _useTabs> => {
   const controller = useContext(ControllerProvider);
   const tabs = _useTabs(controller);
-  const { tab } = useRouteParams(notebooks({}).notebook);
-
-  if (tabs.length === 0) return [];
-
-  const activeTabId =
-    tab == null ? tabs[0].id : tabs.find((t) => t.id === tab)?.id;
-
-  if (activeTabId == null) {
-    throw new Error(
-      'Tab ID must always be found, there is likely a disconnect between URL param and tabID'
-    );
-  }
+  const activeTabId = useActiveTabId();
 
   return tabs.filter((t) => t.id !== activeTabId);
 };

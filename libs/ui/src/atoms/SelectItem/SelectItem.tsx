@@ -45,8 +45,8 @@ const iconWrapper = css({
 
 const iconStyles = css({
   cursor: 'pointer',
-  width: 24,
-  height: 24,
+  width: 14,
+  height: 14,
 });
 
 const itemIconStyles = css({
@@ -174,7 +174,7 @@ export const SelectItem: FC<SelectItemProps> = ({
             <Edit />
           </div>
           <div
-            css={[iconStyles, { width: 14, height: 14 }]}
+            css={iconStyles}
             onClick={onRemove}
             aria-roledescription="dropdown-delete"
           >

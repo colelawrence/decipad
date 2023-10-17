@@ -83,6 +83,39 @@ export const insideNotebookScrollbarStyles = css({
   },
 });
 
+export const deciTabsScrollbarStyles = css({
+  '&:hover': {
+    scrollbarWidth: 'inherit',
+    msOverflowStyle: 'inherit',
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: cssVar('backgroundHeavy'),
+    },
+  },
+  '&::-webkit-scrollbar': {
+    backgroundColor: 'transparent',
+    width: defaultScrollbarWidth,
+    height: defaultScrollbarWidth,
+  },
+
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'transparent',
+    borderRadius: defaultScrollbarWidth,
+  },
+
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: 'transparent',
+  },
+
+  '&::-ms-scrollbar-thumb': {
+    backgroundColor: cssVar('backgroundHeavy'),
+    borderRadius: defaultScrollbarWidth,
+  },
+
+  '&::-ms-scrollbar-track': {
+    backgroundColor: 'transparent',
+  },
+});
+
 // use only inside the editor
 // make different styles for outside
 export const deciInsideNotebookOverflowXStyles = css(
@@ -92,6 +125,15 @@ export const deciInsideNotebookOverflowXStyles = css(
     msOverflowStyle: 'none',
   },
   insideNotebookScrollbarStyles
+);
+
+export const deciTabsOverflowXStyles = css(
+  {
+    overflowX: 'auto',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
+  },
+  deciTabsScrollbarStyles
 );
 
 export const deciOverflowYStyles = css(

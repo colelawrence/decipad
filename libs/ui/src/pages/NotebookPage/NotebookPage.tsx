@@ -45,6 +45,8 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
       <S.MainWrapper isEmbed={isEmbed} ref={scrollToRef}>
         <S.ArticleWrapper
           isEmbed={isEmbed}
+          isAssistantOpen={assistantOpen}
+          isSidebarOpen={sidebarOpen}
           ref={articleRef}
           onDragEnd={onDragEnd}
           onDragOver={onDragOver}
@@ -55,13 +57,16 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
           {!isEmbed && tabs}
         </S.ArticleWrapper>
 
-        {sidebar && !isEmbed && (
-          <S.AsideWrapper isOpen={sidebarOpen}>{sidebar}</S.AsideWrapper>
-        )}
-        {isFlagEnabled('AI_ASSISTANT_CHAT') && assistant && (
-          <S.AssistantWrapper isOpen={assistantOpen}>
-            {assistant}
-          </S.AssistantWrapper>
+        {!isEmbed && (!!sidebar || !!assistant) && (
+          <S.AsideWrapper
+            isSidebarOpen={sidebarOpen}
+            isAssistantOpen={assistantOpen}
+          >
+            <>
+              {sidebar}
+              {isFlagEnabled('AI_ASSISTANT_CHAT') ? assistant : null}
+            </>
+          </S.AsideWrapper>
         )}
       </S.MainWrapper>
     </S.AppWrapper>

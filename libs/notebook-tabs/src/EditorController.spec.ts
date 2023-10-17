@@ -215,6 +215,8 @@ describe('Sub editors behavior', () => {
         type: ELEMENT_TAB,
         id: 'title_id',
         name: 'Tab name',
+        icon: 'Deci',
+        isHidden: false,
         children: [
           {
             type: 'p',
@@ -314,7 +316,9 @@ describe('Migrating old documents into tabs', () => {
               "type": "p",
             },
           ],
+          "icon": "Receipt",
           "id": "3",
+          "isHidden": false,
           "name": "New tab",
           "type": "tab",
         },
@@ -1009,6 +1013,8 @@ describe('Tests normalizer for tabs', () => {
           type: ELEMENT_TAB,
           id: (i + 1).toString(),
           name: `Tab: ${i + 1}`,
+          icon: 'Deci',
+          isHidden: false,
           children: [],
         } satisfies TabElement,
       });
@@ -1033,6 +1039,8 @@ describe('Tests normalizer for tabs', () => {
         type: ELEMENT_TAB,
         id: '1',
         name: 'Tab',
+        icon: 'Deci',
+        isHidden: false,
         children: [],
       } satisfies TabElement,
     });
@@ -1053,7 +1061,9 @@ describe('Tests normalizer for tabs', () => {
         },
         Object {
           "children": Array [],
+          "icon": "Deci",
           "id": "1",
+          "isHidden": false,
           "name": "Tab",
           "type": "tab",
         },

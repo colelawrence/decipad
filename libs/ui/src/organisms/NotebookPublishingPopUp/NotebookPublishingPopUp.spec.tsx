@@ -3,6 +3,7 @@ import { act, render } from '@testing-library/react';
 import fetch from 'jest-fetch-mock';
 import { ComponentProps } from 'react';
 import { NotebookPublishingPopUp } from './NotebookPublishingPopUp';
+import { BrowserRouter } from 'react-router-dom';
 
 jest.mock('../NotebookCollaborateTab/NotebookCollaborateTab.tsx', () => ({
   NotebookInvitationPopUp: () => null,
@@ -41,7 +42,9 @@ describe('NotebookPublishingPopUp organism', () => {
     };
 
     const { getByRole, queryByTestId } = render(
-      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      <BrowserRouter>
+        <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      </BrowserRouter>
     );
 
     const publishButton = queryByTestId('publish-button');
@@ -78,7 +81,9 @@ describe('NotebookPublishingPopUp organism', () => {
     };
 
     const { queryByTestId } = render(
-      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      <BrowserRouter>
+        <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      </BrowserRouter>
     );
 
     const publishButton = queryByTestId('publish-button');
@@ -113,7 +118,9 @@ describe('NotebookPublishingPopUp organism', () => {
     };
 
     const { queryByTestId } = render(
-      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      <BrowserRouter>
+        <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      </BrowserRouter>
     );
 
     const publishButton = queryByTestId('publish-button');
@@ -148,7 +155,9 @@ describe('NotebookPublishingPopUp organism', () => {
     };
 
     const { queryByTestId } = render(
-      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      <BrowserRouter>
+        <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      </BrowserRouter>
     );
 
     const publishButton = queryByTestId('publish-button');
@@ -182,7 +191,9 @@ describe('NotebookPublishingPopUp organism', () => {
     };
 
     const { getByRole, queryByTestId } = render(
-      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      <BrowserRouter>
+        <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      </BrowserRouter>
     );
 
     const publishButton = queryByTestId('publish-button');
@@ -217,7 +228,9 @@ describe('NotebookPublishingPopUp organism', () => {
     };
 
     const { getByRole, queryByTestId } = render(
-      <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      <BrowserRouter>
+        <NotebookPublishingPopUp {...props}></NotebookPublishingPopUp>
+      </BrowserRouter>
     );
 
     const publishButton = queryByTestId('publish-button');

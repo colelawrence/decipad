@@ -37,6 +37,7 @@ const newCss = css({
 });
 
 const contentStyles = css({
+  flex: 1,
   display: 'flex',
   columnGap: 'inherit',
 });

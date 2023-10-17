@@ -11,11 +11,13 @@ import {
   NotebookMetaDataFragment,
   UserAccessMetaFragment,
 } from '@decipad/graphql-client';
+import { useActiveTabId } from '@decipad/editor-hooks';
 import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { NotebookCollaborateTab } from '../NotebookCollaborateTab/NotebookCollaborateTab';
 import { NotebookPublishTab } from '../NotebookPublishTab/NotebookPublishTab';
 import { NotebookEmbedTab } from '../NotebookEmbedTab/NotebookEmbedTab';
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@decipad/ui';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../molecules';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 /**
  * The parent div styles, this handles the position of the pop up relative to the button.
@@ -124,12 +126,21 @@ export const NotebookPublishingPopUp = ({
 
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
 
+  const activeTabId = useActiveTabId();
+
   const link = isServerSideRendering()
     ? ''
     : new URL(
-        notebooks({}).notebook({
-          notebook: { id: notebookId, name: notebookName },
-        }).$,
+        notebooks({}).notebook(
+          isFlagEnabled('TABS')
+            ? {
+                notebook: { id: notebookId, name: notebookName },
+                tab: activeTabId ?? undefined,
+              }
+            : {
+                notebook: { id: notebookId, name: notebookName },
+              }
+        ).$,
         window.location.origin
       ).toString();
 
