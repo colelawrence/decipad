@@ -3,7 +3,11 @@ import {
   GetSuggestedNotebookChangesQuery,
 } from '@decipad/graphql-client';
 import { EditorController } from '@decipad/notebook-tabs';
-import { Message, useAIChatHistory } from '@decipad/react-contexts';
+import {
+  Message,
+  UserMessage,
+  useAIChatHistory,
+} from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { TOperation } from '@udecode/plate';
 
@@ -142,15 +146,19 @@ export const useAssistantChat = (
         ),
       });
 
-      const result = await response.json();
+      if (response.status !== 200) {
+        const err = await response.json();
 
-      // TODO: remove this when we have a proper error handling
-      if (result.name === 'Error') {
-        throw new Error(result.message);
+        // TODO: remove this when we have a proper error handling
+        if (err.name === 'Error') {
+          throw new Error(err.message);
+        }
       }
 
+      const result: Message = await response.json();
+
       // TODO: make this check more explicit
-      if (!result.function_call) {
+      if (!('function_call' in result)) {
         handleUpdateMessage({
           ...newResponse,
           content: result.content,
@@ -166,9 +174,10 @@ export const useAssistantChat = (
       });
 
       const toastId = toast.info('Getting changes...', { autoDismiss: false });
-
       try {
-        const changes = await getAssistantChanges(userMessage.content);
+        const changes = await getAssistantChanges(
+          (userMessage as UserMessage).content
+        );
 
         if (changes?.operations) {
           applyChanges(changes.operations as TOperation[]);

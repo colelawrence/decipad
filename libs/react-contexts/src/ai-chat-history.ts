@@ -31,21 +31,41 @@ export type RatedAIResponse = {
   readonly rating: AIResponseRating;
 };
 
-export type Message =
-  | {
-      readonly id: string;
-      readonly role: 'user';
-      readonly content: string;
-      readonly type?: never;
-      readonly replyTo?: never;
-    }
-  | {
-      readonly id: string;
-      readonly role: 'assistant';
-      readonly content: string;
-      readonly type: AIResponseType;
-      readonly replyTo: string;
-    };
+export type UserMessage = {
+  readonly id: string;
+  readonly role: 'user';
+  readonly content: string;
+  readonly type?: never;
+  readonly replyTo?: never;
+};
+
+type BaseAssistantMessage = {
+  readonly id: string;
+  readonly role: 'assistant';
+  readonly type: AIResponseType;
+  readonly replyTo: string;
+};
+
+type FunctionCallAssistantMessage = {
+  readonly id: string;
+  readonly role: 'assistant';
+  readonly type: AIResponseType;
+  readonly replyTo: string;
+  readonly function_call: {
+    arguments: {};
+    name: 'make_changes';
+  };
+};
+
+type ReplyAssistantMessage = BaseAssistantMessage & {
+  readonly content: string;
+};
+
+export type AssistantMessage =
+  | FunctionCallAssistantMessage
+  | ReplyAssistantMessage;
+
+export type Message = UserMessage | AssistantMessage;
 
 type Chat = {
   readonly [key: string]: Message[];
@@ -176,11 +196,12 @@ export const useAIChatHistory = create<AIChatHistoryType>()(
               )?.replyTo as string;
 
               const userMessage = state.chats[notebookId]?.find(
-                (message) => message.id === userMessageRef
+                (message): message is UserMessage =>
+                  message.id === userMessageRef
               )?.content as string;
 
               const responseMessage = state.chats[notebookId]?.find(
-                (message) => message.id === messageId
+                (message): message is UserMessage => message.id === messageId
               )?.content as string;
 
               const body: RatedAIResponseBody = {

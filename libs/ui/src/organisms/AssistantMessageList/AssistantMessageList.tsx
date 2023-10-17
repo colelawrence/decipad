@@ -43,22 +43,24 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
     <div css={wrapperStyles}>
       <div css={listStyles} data-testid="assistant-message-list">
         {messages.map((message, index, array) => {
-          const { id, role, content, type } = message;
+          const { id, role, type } = message;
 
           const responseRating = ratedResponses.find(
             (response) => response.messageId === id
           )?.rating;
 
           if (role === 'user') {
-            return <AssistantUserMessage key={id} text={content || ''} />;
+            return (
+              <AssistantUserMessage key={id} text={message.content || ''} />
+            );
           }
 
-          if (role === 'assistant') {
+          if (role === 'assistant' && 'content' in message) {
             return (
               <AssistantAIMessage
                 key={id}
                 type={type}
-                text={content}
+                text={message.content}
                 rating={responseRating}
                 canRegenerate={index === array.length - 1}
                 handleLikeResponse={() => handleLikeResponse(id)}
