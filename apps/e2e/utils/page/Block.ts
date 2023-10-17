@@ -383,6 +383,21 @@ export async function createCSVBelow(page: Page) {
     .click();
 }
 
+export async function createEmbedBelow(page: Page) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText('/embed');
+
+  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
+
+  await page
+    .locator('article')
+    .getByRole('menuitem')
+    .getByText('embed')
+    .nth(0)
+    .click();
+}
+
 export function getCodeLineBlockLocator(page: Page) {
   return page.locator('//*[@data-slate-editor][//code]') as Locator;
 }
