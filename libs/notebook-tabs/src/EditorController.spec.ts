@@ -3,10 +3,11 @@ import {
   ELEMENT_TAB,
   ELEMENT_TITLE,
   MyValue,
+  ParagraphElement,
   TabElement,
   TitleElement,
 } from '@decipad/editor-types';
-import { EditorController } from './EditorController';
+import { EditorController, OutOfSyncError } from './EditorController';
 
 let mockCounter = 0;
 jest.mock('nanoid', () => {
@@ -18,182 +19,12 @@ jest.mock('nanoid', () => {
   };
 });
 
-describe('Translating paths by adding tab index', () => {
-  const controller = new EditorController('id', []);
-
-  it('Translates insert_text', () => {
-    const translatedOp = controller.TranslateOpUp(0, {
-      type: 'insert_text',
-      path: [1, 0],
-      offset: 5,
-      text: 'Hello',
-    });
-
-    expect(translatedOp).toMatchObject({
-      type: 'insert_text',
-      path: [0, 1, 0],
-      offset: 5,
-      text: 'Hello',
-    });
-  });
-
-  it('Translates move_node operation', () => {
-    const translatedOp = controller.TranslateOpUp(5, {
-      type: 'move_node',
-      path: [1, 0],
-      newPath: [2, 0],
-    });
-
-    expect(translatedOp).toMatchObject({
-      type: 'move_node',
-      path: [5, 1, 0],
-      newPath: [5, 2, 0],
-    });
-  });
-
-  it('Translates set_selection operation', () => {
-    const translatedOp = controller.TranslateOpUp(2, {
-      type: 'set_selection',
-      properties: {
-        focus: {
-          path: [1, 2, 3],
-          offset: 2,
-        },
-        anchor: {
-          path: [1, 2, 3],
-          offset: 2,
-        },
-      },
-      newProperties: {
-        focus: {
-          path: [3, 2, 3],
-          offset: 4,
-        },
-        anchor: {
-          path: [1, 2, 3],
-          offset: 2,
-        },
-      },
-    });
-
-    expect(translatedOp).toMatchObject({
-      type: 'set_selection',
-      properties: {
-        focus: {
-          path: [2, 1, 2, 3],
-          offset: 2,
-        },
-        anchor: {
-          path: [2, 1, 2, 3],
-          offset: 2,
-        },
-      },
-      newProperties: {
-        focus: {
-          path: [2, 3, 2, 3],
-          offset: 4,
-        },
-        anchor: {
-          path: [2, 1, 2, 3],
-          offset: 2,
-        },
-      },
-    });
-  });
-});
-
-describe('Translating paths into sub editor operations', () => {
-  const controller = new EditorController('id', []);
-
-  it('Translates insert_text', () => {
-    const translatedOp = controller.TranslateOpDown({
-      type: 'insert_text',
-      path: [0, 1, 0],
-      offset: 5,
-      text: 'Hello',
-    });
-
-    expect(translatedOp).toMatchObject([
-      0,
-      {
-        type: 'insert_text',
-        path: [1, 0],
-        offset: 5,
-        text: 'Hello',
-      },
-    ]);
-  });
-
-  it('Translates move_node operation', () => {
-    const translatedOp = controller.TranslateOpDown({
-      type: 'move_node',
-      path: [1, 1, 0],
-      newPath: [1, 2, 0],
-    });
-
-    expect(translatedOp).toMatchObject([
-      1,
-      {
-        type: 'move_node',
-        path: [1, 0],
-        newPath: [2, 0],
-      },
-    ]);
-  });
-
-  it('Translates set_selection operation', () => {
-    const translatedOp = controller.TranslateOpDown({
-      type: 'set_selection',
-      properties: {
-        focus: {
-          path: [6, 1, 2, 3],
-          offset: 2,
-        },
-        anchor: {
-          path: [6, 1, 2, 3],
-          offset: 2,
-        },
-      },
-      newProperties: {
-        focus: {
-          path: [6, 3, 2, 3],
-          offset: 4,
-        },
-        anchor: {
-          path: [6, 1, 2, 3],
-          offset: 2,
-        },
-      },
-    });
-
-    expect(translatedOp).toMatchObject([
-      6,
-      {
-        type: 'set_selection',
-        properties: {
-          focus: {
-            path: [1, 2, 3],
-            offset: 2,
-          },
-          anchor: {
-            path: [1, 2, 3],
-            offset: 2,
-          },
-        },
-        newProperties: {
-          focus: {
-            path: [3, 2, 3],
-            offset: 4,
-          },
-          anchor: {
-            path: [1, 2, 3],
-            offset: 2,
-          },
-        },
-      },
-    ]);
-  });
-});
+let lastException: any;
+jest.mock('@sentry/browser', () => ({
+  captureException: (args: any) => {
+    lastException = args;
+  },
+}));
 
 describe('Sub editors behavior', () => {
   it('should update controller children object if editor changes', () => {
@@ -928,7 +759,7 @@ describe('Migrating old documents into tabs', () => {
 
 describe('Tab Operations', () => {
   const controller = new EditorController('id', []);
-  controller.Loaded();
+  controller.Loaded(undefined, true);
 
   it('Meets initial conditions -> title, tab', () => {
     expect(controller.children).toHaveLength(2);
@@ -962,7 +793,7 @@ describe('Tab Operations', () => {
 });
 
 describe('Tests normalizer for tabs', () => {
-  it('First title is not overriden', () => {
+  it('First title inserted wins', () => {
     const controller = new EditorController('id', []);
     controller.apply({
       type: 'insert_node',
@@ -975,7 +806,7 @@ describe('Tests normalizer for tabs', () => {
     });
     controller.apply({
       type: 'insert_node',
-      path: [1],
+      path: [0],
       node: {
         type: ELEMENT_TITLE,
         id: '2',
@@ -994,11 +825,12 @@ describe('Tests normalizer for tabs', () => {
 
   it('Spams insert titles and tabs', () => {
     const controller = new EditorController('id', []);
+    controller.Loaded(undefined, true);
 
-    for (let i = 0; i < 50; i += 2) {
+    for (let i = 2; i < 52; i += 2) {
       controller.apply({
         type: 'insert_node',
-        path: [0],
+        path: [i],
         node: {
           type: ELEMENT_TITLE,
           id: i.toString(),
@@ -1006,9 +838,15 @@ describe('Tests normalizer for tabs', () => {
         } satisfies TitleElement,
       });
 
+      expect(lastException).toBeInstanceOf(OutOfSyncError);
+      const exception: OutOfSyncError = lastException;
+      expect(exception.op.type).toBe('insert_node');
+
+      lastException = undefined;
+
       controller.apply({
         type: 'insert_node',
-        path: [0],
+        path: [i + 1],
         node: {
           type: ELEMENT_TAB,
           id: (i + 1).toString(),
@@ -1018,23 +856,57 @@ describe('Tests normalizer for tabs', () => {
           children: [],
         } satisfies TabElement,
       });
+
+      expect(lastException).toBeUndefined();
     }
 
     // 25 tabs + 1 title.
-    expect(controller.children).toHaveLength(26);
+    expect(controller.children).toHaveLength(27);
     expect(
       controller.children.map((c) => c.type).filter((c) => c === 'title')
     ).toHaveLength(1);
     expect(
       controller.children.map((c) => c.type).filter((c) => c === 'tab')
-    ).toHaveLength(25);
+    ).toHaveLength(26);
   });
 
-  it('always adds title', () => {
+  it('Initial loading states', () => {
     const controller = new EditorController('id', []);
+    controller.Loaded('test', true);
+
+    expect(controller.children).toHaveLength(2);
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "",
+            },
+          ],
+          "id": "test_title",
+          "type": "title",
+        },
+        Object {
+          "children": Array [],
+          "icon": "Receipt",
+          "id": "test_tab",
+          "isHidden": false,
+          "name": "test_tab_name",
+          "type": "tab",
+        },
+      ]
+    `);
+
+    expect(controller.IsLoaded).toBeTruthy();
+  });
+});
+
+describe('Resilience of existing notebooks with broken structure', () => {
+  it('Inserts a title if one if not present', () => {
+    const controller = new EditorController('id', []);
+
     controller.apply({
       type: 'insert_node',
-      path: [0],
       node: {
         type: ELEMENT_TAB,
         id: '1',
@@ -1043,11 +915,11 @@ describe('Tests normalizer for tabs', () => {
         isHidden: false,
         children: [],
       } satisfies TabElement,
+      path: [0],
     });
 
     controller.Loaded();
 
-    expect(controller.children).toHaveLength(2);
     expect(controller.children).toMatchInlineSnapshot(`
       Array [
         Object {
@@ -1056,11 +928,21 @@ describe('Tests normalizer for tabs', () => {
               "text": "Welcome to Decipad!",
             },
           ],
-          "id": "11",
+          "id": "13",
           "type": "title",
         },
         Object {
-          "children": Array [],
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "14",
+              "type": "p",
+            },
+          ],
           "icon": "Deci",
           "id": "1",
           "isHidden": false,
@@ -1069,5 +951,189 @@ describe('Tests normalizer for tabs', () => {
         },
       ]
     `);
+  });
+
+  it('Inserts a tab if one is not found', () => {
+    const controller = new EditorController('id', []);
+
+    controller.apply({
+      type: 'insert_node',
+      node: {
+        id: 'titleid',
+        type: 'title',
+        children: [{ text: 'my title' }],
+      } satisfies TitleElement,
+      path: [0],
+    });
+
+    controller.Loaded();
+
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "my title",
+            },
+          ],
+          "id": "titleid",
+          "type": "title",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "16",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "15",
+          "isHidden": false,
+          "name": "New tab",
+          "type": "tab",
+        },
+      ]
+    `);
+  });
+
+  it('inserts both a title and tab is neither are found', () => {
+    const controller = new EditorController('id', []);
+    controller.Loaded();
+
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "Welcome to Decipad!",
+            },
+          ],
+          "id": "17",
+          "type": "title",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "19",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "18",
+          "isHidden": false,
+          "name": "New tab",
+          "type": "tab",
+        },
+      ]
+    `);
+  });
+
+  it('doesnt insert titles and tabs in wrong orders', () => {
+    const controller = new EditorController('id', []);
+
+    controller.apply({
+      type: 'insert_node',
+      node: {
+        id: 'tabid',
+        type: 'tab',
+        name: 'tabname',
+        children: [],
+      } satisfies TabElement,
+      path: [0],
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      node: {
+        id: 'titleid',
+        type: 'title',
+        children: [{ text: 'title' }],
+      } satisfies TitleElement,
+      path: [1],
+    });
+
+    controller.Loaded();
+
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "title",
+            },
+          ],
+          "id": "titleid",
+          "type": "title",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "20",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "tabid",
+          "isHidden": false,
+          "name": "tabname",
+          "type": "tab",
+        },
+      ]
+    `);
+  });
+
+  it('adds a paragraph to a tab if it is empty', () => {
+    const controller = new EditorController('id', []);
+
+    controller.apply({
+      type: 'insert_node',
+      node: {
+        id: 'titleid',
+        type: 'title',
+        children: [{ text: 'title' }],
+      } satisfies TitleElement,
+      path: [0],
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      node: {
+        id: 'tabid',
+        type: 'tab',
+        name: 'tabname',
+        children: [],
+      } satisfies TabElement,
+      path: [1],
+    });
+
+    controller.Loaded();
+
+    expect(controller.children[1]).toMatchObject({
+      id: 'tabid',
+      type: 'tab',
+      name: 'tabname',
+      children: [
+        {
+          type: 'p',
+          id: expect.any(String),
+          children: [{ text: '' }],
+        } satisfies ParagraphElement,
+      ],
+    });
   });
 });

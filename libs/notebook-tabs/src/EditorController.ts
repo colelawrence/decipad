@@ -3,26 +3,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
 import cloneDeep from 'lodash.clonedeep';
-import {
-  BaseEditor,
-  BaseSelection,
-  Element,
-  Path,
-  Text,
-  createEditor,
-} from 'slate';
+import { BaseEditor, BaseSelection, Path, Text, createEditor } from 'slate';
 import { nanoid } from 'nanoid';
-import { createContext, useEffect, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ReactEditor, withReact } from 'slate-react';
-import { useRouteParams } from 'typesafe-routes/react-router';
-import { notebooks } from '@decipad/routing';
 import {
   ELEMENT_H1,
   ELEMENT_PARAGRAPH,
   TDescendant,
   TEditor,
+  TInsertNodeOperation,
   TOperation,
+  TRemoveNodeOperation,
+  TSetNodeOperation,
   getNode,
   insertNodes,
   removeNodes,
@@ -36,6 +29,7 @@ import {
   MyElement,
   MyPlatePlugin,
   NotebookValue,
+  ParagraphElement,
   TabElement,
   TitleElement,
   UserIconKey,
@@ -44,11 +38,36 @@ import {
 import starterNotebook from './InitialNotebook';
 import { noop } from '@decipad/utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import {
+  TranslateOpDown,
+  TranslateOpUp,
+  TranslatePathUp,
+} from './TranslatePaths';
+import { IsOldOperation, IsTab, IsTitle, NoSelectOperations } from './utils';
+import { captureException } from '@sentry/browser';
+
+function captureExceptionWrapper(error: OutOfSyncError) {
+  console.error(error);
+  captureException(error);
+}
 
 const INITIAL_TAB_NAME = 'New Tab';
 const INITIAL_TITLE = 'Welcome to Decipad!';
 const INITIAL_TAB_ICON: UserIconKey = 'Receipt';
 const PLACEHOLDER_ID = 'placeholder_id';
+
+/**
+ * Helper error class to make errors more visible on sentry.
+ */
+
+export class OutOfSyncError extends Error {
+  public op: TOperation;
+
+  constructor(error: string, op: TOperation) {
+    super(error);
+    this.op = op;
+  }
+}
 
 /**
  * Editor Controller Class
@@ -74,11 +93,13 @@ export class EditorController {
   public TitleEditor: BaseEditor & ReactEditor;
 
   public IsNewNotebook: boolean;
+  public IsLoaded: boolean;
 
   private EditorPlugins: Array<MyPlatePlugin>;
   private OldNodes: Array<TDescendant>;
 
   private CreateSnapshot: () => void;
+  private InsertOperations: Array<TInsertNodeOperation>;
 
   /**
    * Constructor initalizes a basic slate text editor, and
@@ -100,7 +121,17 @@ export class EditorController {
     this.OldNodes = [];
 
     this.IsNewNotebook = false;
+    this.IsLoaded = false;
 
+    this.TitleEditor = this.CreateTitleEditor();
+
+    this.InsertOperations = [];
+  }
+
+  /**
+   * Called alongside the contructor to create the title editor.
+   */
+  private CreateTitleEditor(): BaseEditor & ReactEditor {
     const editor = withReact(createEditor());
 
     const { apply, onChange, normalizeNode } = editor;
@@ -144,12 +175,13 @@ export class EditorController {
       type: ELEMENT_TITLE,
       id: PLACEHOLDER_ID,
       get children() {
-        return (editor.children[0] as TitleElement).children;
+        return (editor.children[0] as TitleElement)?.children;
       },
     };
 
     this.children.unshift(titleEl);
-    this.TitleEditor = editor;
+
+    return editor;
   }
 
   /**
@@ -182,7 +214,7 @@ export class EditorController {
       const index = this.children.findIndex((c) => c.id === tabId);
       if (index === -1) throw new Error('Chould not find editor');
 
-      const translatedOp = this.TranslateOpUp(index, op);
+      const translatedOp = TranslateOpUp(index, op);
       translatedOp.IS_LOCAL = true;
 
       /**
@@ -255,7 +287,7 @@ export class EditorController {
       if (editor.selection != null) {
         const selection = cloneDeep(editor.selection);
 
-        selection.focus.path = this.TranslatePathUp(i, selection.focus.path);
+        selection.focus.path = TranslatePathUp(i, selection.focus.path);
         // selection.anchor.path = this.TranslatePathUp(i, selection.anchor.path);
 
         return selection;
@@ -276,6 +308,126 @@ export class EditorController {
   }
 
   /**
+   * Helps declutter the `apply` function.
+   * Various error throwing, and its crutial this part works perfectly.
+   */
+  private HandleTopLevelOps(op: NoSelectOperations): boolean {
+    if (op.path.length === 1) {
+      // Must be a top level operation.
+
+      if (op.type === 'insert_node') {
+        this.InsertOperations.push(op);
+        if (IsTitle(op.node) && this.children[0].id === PLACEHOLDER_ID) {
+          this.InsertTitle(op as TInsertNodeOperation<TitleElement>);
+        } else if (IsTab(op.node)) {
+          this.InsertTab(op as TInsertNodeOperation<TabElement>);
+        } else {
+          // We must now salvage the docsync state, by sending docsync a remove instruction
+          captureExceptionWrapper(
+            new OutOfSyncError(
+              'Tried to insert a non tab/title top level element.',
+              op
+            )
+          );
+        }
+      } else if (op.type === 'set_node') {
+        this.SetTabProps(op);
+      } else if (op.type === 'remove_node') {
+        if (IsTab(op.node)) {
+          this.RemoveTabOp(op as TRemoveNodeOperation<TabElement>);
+        } else {
+          // There isn't much we can do here.
+          captureExceptionWrapper(
+            new OutOfSyncError(
+              'Should not remove anything else on top level',
+              op
+            )
+          );
+        }
+      } else {
+        captureExceptionWrapper(
+          new OutOfSyncError('No more top level operations ', op)
+        );
+      }
+
+      this.onChange();
+      return true;
+    }
+    return false;
+  }
+
+  private InsertTitle(op: TInsertNodeOperation<TitleElement>): void {
+    if (op.path[0] !== 0) {
+      captureExceptionWrapper(
+        new OutOfSyncError('Tried to insert title in non-0 path', op)
+      );
+    }
+
+    this.TitleEditor.withoutNormalizing(() => {
+      this.TitleEditor.children = [op.node];
+    });
+
+    // Make sure we are in sync
+    this.children[0].id = op.node.id;
+    this.TitleEditor.onChange();
+  }
+
+  private InsertTab(op: TInsertNodeOperation<TabElement>): void {
+    if (op.path[0] === 0) {
+      captureExceptionWrapper(
+        new OutOfSyncError(
+          'Tried to insert a tab at 0th index (only title)',
+          op
+        )
+      );
+    }
+
+    const [editor, child] = this.CreateSubEditor(
+      op.node.id,
+      op.node.name,
+      op.node.icon,
+      op.node.isHidden
+    );
+
+    this.SubEditors.push(editor);
+    this.children.push(child);
+
+    editor.withoutNormalizing(() => {
+      editor.children = op.node.children;
+    });
+
+    this.Notifier.next('new-tab');
+  }
+
+  private SetTabProps(op: TSetNodeOperation): void {
+    const tabIndex = op.path[0];
+    if (tabIndex === 0) {
+      captureExceptionWrapper(
+        new OutOfSyncError('Tried to set node on the title node', op)
+      );
+    }
+
+    const tab = this.children[tabIndex];
+    if (tab.type !== 'tab') {
+      captureExceptionWrapper(new OutOfSyncError('Should always be a tab', op));
+    }
+
+    this.children[tabIndex] = {
+      ...tab,
+      ...op.newProperties,
+    };
+
+    this.Notifier.next('new-tab');
+  }
+
+  private RemoveTabOp(op: TRemoveNodeOperation<TabElement>): void {
+    const index = op.path[0];
+    this.children.splice(index, 1);
+    this.SubEditors.splice(index - 1, 1);
+    this.Notifier.next('remove-tab');
+  }
+
+  /**
    * Most business logic happens here. Applying a slate operation and figuring out
    * what happens where.
    *
@@ -284,94 +436,38 @@ export class EditorController {
    * - Inserting/Renaming/Deleting Tabs.
    * - Applying operatons from docsync to individual editors
    */
+  // eslint-disable-next-line complexity
   public apply(op: TOperation): void {
-    // Skip this function, go straight to above.
-    if (op.TO_REMOTE) return;
+    // eslint-disable-next-line no-console
+    console.debug(`Editor Controller: %c${op.type}`, 'color: green', op);
 
-    // ==== Migration ====
-    if (
-      op.type === 'insert_node' &&
-      op.path.length === 1 &&
-      op.node.type !== ELEMENT_TAB &&
-      op.node.type !== ELEMENT_TITLE
-    ) {
-      // In this state we have an old notebook.
-      this.OldNodes.push(op.node);
-
+    if (op.TO_REMOTE) {
+      // Skip this function, go straight to above.
       return;
     }
 
-    if (op.type !== 'set_selection' && op.path.length === 1) {
-      // This must be an operation on tab level.
+    // Theres no need for us to use set_selection events here.
+    if (op.type === 'set_selection') return;
 
-      if (
-        op.type === 'insert_node' &&
-        op.node.type === ELEMENT_TITLE &&
-        this.TitleEditor.children.length === 0 &&
-        Element.isElement(op.node)
-      ) {
-        this.TitleEditor.withoutNormalizing(() => {
-          this.TitleEditor.children = [op.node];
-        });
-
-        // Make sure we are in sync
-        this.children[0].id = op.node.id as string;
-
-        this.TitleEditor.onChange();
-        this.onChange();
-      } else if (op.type === 'insert_node' && op.node.type === ELEMENT_TAB) {
-        // Inserting a tab.
-
-        const node = op.node as unknown as TabElement;
-        const [editor, child] = this.CreateSubEditor(
-          node.id,
-          node.name,
-          node.icon,
-          node.isHidden
-        );
-
-        child.type = ELEMENT_TAB;
-
-        this.SubEditors.push(editor);
-        this.children.push(child);
-
-        editor.insertNode(op.node.children as any);
-
-        this.Notifier.next('new-tab');
-        this.onChange();
-      } else if (op.type === 'set_node') {
-        // Setting tab node (usually the name or icon);
-
-        const tab = this.children[op.path[0]] as TabElement;
-        this.children[op.path[0]] = {
-          ...tab,
-          ...op.newProperties,
-        };
-
-        this.Notifier.next('new-tab');
-        this.onChange();
-      } else if (op.type === 'remove_node' && !op.TEST) {
-        const index = op.path[0];
-        this.children.splice(index, 1);
-        this.SubEditors.splice(index - 1, 1);
-        this.Notifier.next('remove-tab');
-        this.onChange();
-      }
-
+    if (IsOldOperation(op)) {
+      this.OldNodes.push(op.node as TDescendant);
       return;
     }
+
+    const isTopLevel = this.HandleTopLevelOps(op);
+    if (isTopLevel) return;
 
     // Local events should not be applied otherwise we have a loop.
     if (op.IS_LOCAL) return;
 
     // Remote event to the title (no need to translate down)
-    if (op.type !== 'set_selection' && op.path[0] === 0) {
+    if (op.path[0] === 0) {
       this.TitleEditor.apply(op);
       return;
     }
 
     // Remote events that need to be applied to individual editors.
-    const [tab, subOp] = this.TranslateOpDown(op);
+    const [tab, subOp] = TranslateOpDown(op);
 
     // -1 because now we have a title editor.
     // So remote events say that [0, ...] is a modification to the title.
@@ -381,81 +477,7 @@ export class EditorController {
   public onChange(): void {
     // do nothing
   }
-
   // ====== End Slate Editor Stubs ======
-
-  /**
-   * Take a sub editor operation, and add tabIndex to it to create a
-   * global operation docsync can use.
-   */
-  public TranslateOpUp(tabIndex: number, _op: TOperation): TOperation {
-    if (tabIndex < 0) {
-      throw new Error('You should only provide index values');
-    }
-
-    const op = cloneDeep(_op);
-    if (op.type === 'set_selection') {
-      op.properties?.focus?.path.unshift(tabIndex);
-      op.properties?.anchor?.path.unshift(tabIndex);
-
-      op.newProperties?.focus?.path.unshift(tabIndex);
-      op.newProperties?.anchor?.path.unshift(tabIndex);
-
-      return op;
-    }
-
-    op.path.unshift(tabIndex);
-
-    if (op.type === 'move_node') {
-      op.newPath.unshift(tabIndex);
-    }
-
-    return op;
-  }
-
-  /**
-   * Take a docsync operation, and return which sub editor it should
-   * be applied to, as well as the operation translated
-   */
-  public TranslateOpDown(_op: TOperation): [number, TOperation] {
-    const op = cloneDeep(_op);
-    if (op.type === 'set_selection') {
-      const tabIndex = op.properties?.focus?.path.shift();
-      if (tabIndex == null) throw new Error('Path length cannot be 0');
-
-      op.properties?.anchor?.path.shift();
-
-      op.newProperties?.focus?.path.shift();
-      op.newProperties?.anchor?.path.shift();
-
-      return [tabIndex, op];
-    }
-
-    const tabIndex = op.path.shift();
-    if (tabIndex == null) throw new Error('Path length cannot be 0');
-
-    if (op.type === 'move_node') {
-      op.newPath.shift();
-    }
-
-    return [tabIndex, op];
-  }
-
-  public TranslatePathUp(tabIndex: number, _path: Path): Path {
-    const path = cloneDeep(_path);
-    path.unshift(tabIndex);
-    return path;
-  }
-
-  public TranslatePathDown(_path: Path): [number, Path] {
-    const path = cloneDeep(_path);
-    if (path.length === 0) {
-      throw new Error('Path should have at least one element');
-    }
-
-    const tab = path.shift();
-    return [tab!, path];
-  }
 
   /**
    * Inital document here.
@@ -478,17 +500,11 @@ export class EditorController {
         type: ELEMENT_TAB,
         id: nanoid(),
         name: INITIAL_TAB_NAME,
+        children: starterNotebook as any,
         icon: INITIAL_TAB_ICON,
         isHidden: false,
-        children: [],
       } satisfies TabElement,
     });
-
-    const editor = this.SubEditors[0];
-
-    for (let i = 0; i < starterNotebook.length; i++) {
-      insertNodes(editor, starterNotebook[i], { at: [i] });
-    }
   }
 
   /**
@@ -542,21 +558,17 @@ export class EditorController {
         type: ELEMENT_TAB,
         id: nanoid(),
         name: INITIAL_TAB_NAME,
+        children: [
+          {
+            type: ELEMENT_PARAGRAPH,
+            id: nanoid(),
+            children: [{ text: '' }],
+          },
+        ],
         icon: INITIAL_TAB_ICON,
         isHidden: false,
-        children: [],
       } satisfies TabElement,
     });
-
-    insertNodes(
-      this.SubEditors[0],
-      {
-        type: ELEMENT_PARAGRAPH,
-        id: nanoid(),
-        children: [{ text: '' }],
-      },
-      { at: [0] }
-    );
   }
 
   /**
@@ -568,9 +580,11 @@ export class EditorController {
     // Children length changes as we remove nodes.
     const childLength = editor.children.length;
 
-    for (let i = 0; i < childLength; i++) {
-      removeNodes(editor, { at: [0] });
-    }
+    editor.withoutNormalizing(() => {
+      for (let i = 0; i < childLength; i++) {
+        removeNodes(editor, { at: [0] });
+      }
+    });
   }
 
   public CreateTab(_tabId?: string): string {
@@ -688,22 +702,6 @@ export class EditorController {
     this.apply(toggleHidden);
   }
 
-  private Normalize(): void {
-    if (this.children[0].id === PLACEHOLDER_ID) {
-      // We never inserted a title to the notebook.
-      // We have the placeholder title.
-      this.apply({
-        type: 'insert_node',
-        path: [0],
-        node: {
-          type: ELEMENT_TITLE,
-          id: nanoid(),
-          children: [{ text: INITIAL_TITLE }],
-        } satisfies TitleElement,
-      });
-    }
-  }
-
   /**
    * To be used after docsync does all the initial `apply` calls.
    *
@@ -712,8 +710,12 @@ export class EditorController {
    *
    * @param _skipInitialDoc used for testing
    */
-  public Loaded(_initialDoc?: 'test' | 'none'): void {
-    if (this.SubEditors.length === 0 && this.OldNodes.length === 0) {
+  public Loaded(_initialDoc?: 'test' | 'none', isNewNotebook?: boolean): void {
+    if (
+      this.SubEditors.length === 0 &&
+      this.OldNodes.length === 0 &&
+      isNewNotebook
+    ) {
       // This means its a brand new notebook.
       this.IsNewNotebook = true;
 
@@ -727,6 +729,7 @@ export class EditorController {
         this.EnsureInitialTestDoc();
       }
 
+      this.IsLoaded = true;
       return;
     }
 
@@ -741,7 +744,7 @@ export class EditorController {
         this.apply({
           type: 'remove_node',
           node: this.OldNodes[i],
-          TEST: true,
+          TO_REMOTE: true,
           path: [0],
         });
       }
@@ -757,17 +760,78 @@ export class EditorController {
           } as TitleElement,
         });
         this.OldNodes.shift();
+      } else {
+        throw new Error('First old node was not an H1');
       }
 
       this.CreateTab();
 
       const editor = this.SubEditors[0];
-      insertNodes(editor, this.OldNodes as any, { at: [0] });
+
+      editor.withoutNormalizing(() => {
+        insertNodes(editor, this.OldNodes as any, { at: [0] });
+      });
 
       this.OldNodes = [];
     }
 
-    this.Normalize();
+    const goodTitleIndex = this.InsertOperations.findIndex((op) =>
+      IsTitle(op.node)
+    );
+
+    // Extract the one good title (if any)
+    if (goodTitleIndex !== -1) {
+      this.InsertOperations.splice(goodTitleIndex, 1);
+    }
+
+    // Then good title is not present. We remove everything that isn't a tab.
+    for (let i = this.InsertOperations.length - 1; i >= 0; i--) {
+      const { node, path } = this.InsertOperations[i];
+      if (!IsTab(node)) {
+        this.apply({
+          type: 'remove_node',
+          TO_REMOTE: true,
+          path: [path[0]],
+          node,
+        });
+        this.onChange();
+      }
+    }
+
+    if (goodTitleIndex === -1) {
+      this.apply({
+        type: 'insert_node',
+        path: [0],
+        node: {
+          type: ELEMENT_TITLE,
+          id: nanoid(),
+          children: [{ text: INITIAL_TITLE }],
+        },
+      });
+    }
+
+    for (let i = 1; i < this.children.length; i++) {
+      const node = this.children[i];
+      if (node.children.length === 0) {
+        insertNodes(
+          this.SubEditors[i - 1],
+          {
+            type: ELEMENT_PARAGRAPH,
+            id: nanoid(),
+            children: [{ text: '' }],
+          } satisfies ParagraphElement,
+          { at: [0] }
+        );
+        continue;
+      }
+    }
+
+    if (this.children.length <= 1) {
+      // We don't have any tabs, just a title.
+      this.CreateTab();
+    }
+
+    this.IsLoaded = true;
   }
 
   public Undo(): void {
@@ -777,46 +841,4 @@ export class EditorController {
   public Redo(): void {
     this.Notifier.next('redo');
   }
-}
-
-export const ControllerProvider = createContext<EditorController | undefined>(
-  undefined
-);
-
-/**
- * Reactive hook that returns the existing tabs.
- */
-export function useTabs(
-  controller: EditorController | undefined
-): Array<TabElement> {
-  const [, setRender] = useState(0);
-
-  useEffect(() => {
-    if (!controller) return;
-    const sub = controller.Notifier.subscribe((v) => {
-      if (v !== 'new-tab' && v !== 'remove-tab') return;
-      setRender((r) => r + 1);
-    });
-
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [controller]);
-
-  return (controller?.children.slice(1) as Array<TabElement>) ?? [];
-}
-
-/**
- * Returns the `MyEditor` object the user is currently looking at.
- */
-export function useActiveEditor(
-  controller: EditorController | undefined
-): MyEditor | undefined {
-  const { tab } = useRouteParams(notebooks({}).notebook);
-
-  if (!controller) return undefined;
-
-  return tab
-    ? controller.SubEditors.find((e) => e.id === tab)
-    : controller.SubEditors[0];
 }

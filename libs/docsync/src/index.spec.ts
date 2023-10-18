@@ -15,6 +15,17 @@ waitForExpect.defaults.interval = 500;
 const replicaCount = 5;
 const randomChangeCountPerReplica = 50;
 
+let mockCounter = 0;
+jest.mock('nanoid', () => {
+  return {
+    nanoid: () => {
+      // eslint-disable-next-line no-plusplus
+      const id = mockCounter++;
+      return id.toString();
+    },
+  };
+});
+
 test('sync many', (ctx) => {
   const editors: DocSyncEditor[] = [];
   let pad: Pad;
@@ -104,15 +115,45 @@ test('sync many', (ctx) => {
           })
       )
     );
+
+    // We load only one of the editors, because if they all load, then they all try and insert
+    // their starting notebook (title and tab), which would mean many multiple insertions.
+    editors[0].editorController.Loaded('test');
+    expect(editors[0].editorController.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "Welcome to Decipad!",
+            },
+          ],
+          "id": "11",
+          "type": "title",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "13",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "12",
+          "isHidden": false,
+          "name": "New tab",
+          "type": "tab",
+        },
+      ]
+    `);
   });
 
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
-
-    for (const e of editors) {
-      e.editorController.Loaded('test');
-      expect(e.editorController.SubEditors).toHaveLength(1);
-    }
 
     // Lets wait for the loaded state to go through.
     await timeout(5000);
@@ -122,8 +163,13 @@ test('sync many', (ctx) => {
       randomChangeCountPerReplica
     );
 
+    const firstEditor = editors[0].editorController.children;
+    expect(firstEditor.filter((e) => e.type === 'title')).toHaveLength(1);
+    expect(firstEditor.filter((e) => e.type === 'tab')).toHaveLength(1);
+
     await waitForExpect(() => {
-      const expectedContents = clone(editors[0].editorController.children);
+      const expectedContents = clone(firstEditor);
+
       expect(editors.length).toBe(replicaCount);
 
       for (const editor2 of editors.slice(1)) {

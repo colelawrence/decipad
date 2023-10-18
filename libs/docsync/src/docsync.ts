@@ -16,6 +16,9 @@ import { setupUndo } from './setupUndo';
 
 const tokenTimeoutMs = 60 * 1000;
 
+// AAA= is state for a completely empty Yjs document.
+const EMPTY_STATE = 'AAA=';
+
 interface DocSyncConnectionParams {
   url: string;
   token: string;
@@ -129,9 +132,11 @@ export function createDocSyncEditor(
         try {
           const update = Buffer.from(initialState, 'base64');
           applyUpdate(doc, update);
+
+          const isInitialState = initialState === EMPTY_STATE;
           setTimeout(() => {
             if (!destroyed) {
-              controller.Loaded();
+              controller.Loaded(undefined, isInitialState);
               syncEditor.setLoadedRemotely();
             }
           }, 0);

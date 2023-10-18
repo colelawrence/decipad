@@ -58,8 +58,8 @@ export class BlockProcessor {
       this.MaybeCompute();
     };
 
-    controller.Loaded = () => {
-      Loaded.bind(controller)();
+    controller.Loaded = (...args) => {
+      Loaded.bind(controller)(...args);
       this.SetAllBlocksDirty();
       this.MaybeCompute();
     };

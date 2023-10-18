@@ -33,8 +33,8 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   const subEditorIndex =
     tab != null ? controller.SubEditors.findIndex((v) => v.id === tab) : 0;
 
-  if (subEditorIndex === -1) {
-    <>Loading...</>;
+  if (subEditorIndex === -1 || !controller.IsLoaded) {
+    return <>Loading...</>;
   }
 
   const subEditor = controller.SubEditors[subEditorIndex];

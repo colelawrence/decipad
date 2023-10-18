@@ -59,17 +59,24 @@ describe('pad editor persistence', () => {
     };
     const e = getDefined(editor);
 
-    e.editorController.Loaded('none');
-
     e.editorController.apply({
       type: 'insert_node',
       path: [0],
       node: {
+        id: 'titleId',
         type: 'title',
-        id: 'titleID',
-        children: [{ text: title }],
+        children: [{ text: '' }],
       },
     });
+
+    e.editorController.apply({
+      type: 'insert_text',
+      path: [0, 0],
+      offset: 0,
+      text: title,
+    });
+
+    e.editorController.Loaded();
 
     await waitForExpect(() => {
       expect(saved).toBe(true);
@@ -83,6 +90,13 @@ describe('pad editor persistence', () => {
           },
         ],
         type: 'title',
+        id: expect.any(String),
+      },
+      {
+        children: expect.any(Array),
+        type: 'tab',
+        id: expect.any(String),
+        name: expect.any(String),
       },
     ]);
 
@@ -114,6 +128,13 @@ describe('pad editor persistence', () => {
           },
         ],
         type: 'title',
+        id: expect.any(String),
+      },
+      {
+        children: expect.any(Array),
+        type: 'tab',
+        id: expect.any(String),
+        name: expect.any(String),
       },
     ]);
   });
