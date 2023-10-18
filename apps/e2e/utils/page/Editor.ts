@@ -15,7 +15,7 @@ export const editorLocator = (): string => {
 };
 
 export const editorTitleLocator = (): string => {
-  return `${editorLocator()} [data-testid="notebook-title"]`;
+  return `[data-testid="notebook-title"]`;
 };
 
 export async function waitForEditorToLoad(page: Page) {

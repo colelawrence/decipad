@@ -57,23 +57,27 @@ test.describe('Sharing pad with email', () => {
     await page.getByRole('button').getByText('Share').click();
     await page
       .locator('.notebook-collaborate-tab input')
-      .fill('invited-reader@ranch.org');
+      .fill('invited-lama2@ranch.org');
     await page.getByTestId('collaboration-level-dropdown').nth(0).click();
     await page.locator('text="Notebook reader"').click();
     await page.getByTestId('send-invitation').click();
 
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');
+    await expect(page.getByText('invited-lama2@ranch.org')).toBeVisible();
 
-    const avatarsCountAfterInvitation = await page
-      .getByTestId('avatar-img')
+    const collaborators = await page
+      .getByTestId(/^sharing-list:/)
+      .getByText('collaborator')
       .count();
-
-    const expected =
-      // eslint-disable-next-line playwright/no-conditional-in-test
-      avatarsCountAfterInvitation === 4 || avatarsCountAfterInvitation === 2;
-
-    expect(expected).toBe(true);
+    expect(collaborators).toBe(1);
+    const readers = await page
+      .getByTestId(/^sharing-list:/)
+      .getByText('reader')
+      .count();
+    expect(readers).toBe(1);
+    const authors = await page.getByTestId('text-icon-button:author').count();
+    expect(authors).toBe(1);
   });
 
   test('an registered user can collaborate after registration', async () => {
@@ -131,7 +135,7 @@ test.describe('Sharing pad with email', () => {
           IndexName: 'byIdentifier',
           KeyConditionExpression: 'identifier = :email',
           ExpressionAttributeValues: {
-            ':email': 'invited-reader@ranch.org',
+            ':email': 'invited-lama2@ranch.org',
           },
         })
       ).Items;
