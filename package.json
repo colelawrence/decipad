@@ -288,7 +288,7 @@
     "raw-loader": "^4.0.2",
     "react": "18.2.0",
     "react-copy-to-clipboard": "5.1.0",
-    "react-datepicker": "4.20.0",
+    "react-datepicker": "4.21.0",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
     "react-dnd-preview": "8.0.0",
