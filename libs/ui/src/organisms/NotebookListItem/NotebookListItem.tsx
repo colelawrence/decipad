@@ -135,6 +135,7 @@ interface DropResult {
  */
 export const NotebookListItem: FC<NotebookListItemProps> = memo(
   function NotebookListItem({
+    permissionType,
     id,
     name,
     status,
@@ -214,6 +215,7 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
               isArchived={isArchived}
             />
             <NotebookOptions
+              permissionType={permissionType}
               trigger={
                 <div css={mainIconWrapper}>
                   <Ellipsis />
@@ -229,7 +231,6 @@ export const NotebookListItem: FC<NotebookListItemProps> = memo(
               onExportBackups={onExportBackups}
               onUnarchive={onUnarchive}
               onDelete={onDelete}
-              allowDuplicate
               workspaceId={workspaceId}
             />
           </Anchor>

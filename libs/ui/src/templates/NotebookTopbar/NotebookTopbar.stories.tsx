@@ -4,6 +4,7 @@ import { NotebookTopbar } from './NotebookTopbar';
 import { noop } from '@decipad/utils';
 
 const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
+  permissionType: null,
   sidebarOpen: true,
   canRedo: true,
   canUndo: true,

@@ -44,12 +44,12 @@ import {
   tinyPhone,
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
-import { PermissionType } from '../../types';
 import { Anchor, TColorStatus } from '../../utils';
 import * as Styled from './styles';
 import {
   NotebookMetaDataFragment,
   NotebookWorkspacesDataFragment,
+  PermissionType,
 } from '@decipad/graphql-client';
 import {
   NotebookAccessActionsReturn,
@@ -118,7 +118,7 @@ const VerticalDivider = () => (
 );
 
 export type NotebookTopbarProps = {
-  readonly isSharedNotebook?: boolean;
+  readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
   readonly onRevertChanges?: () => void;
   readonly onRemove?: (userId: string) => Promise<void>;
   readonly onInvite?: (
@@ -163,7 +163,7 @@ export type NotebookTopbarProps = {
 
 // eslint-disable-next-line complexity
 export const NotebookTopbar = ({
-  isSharedNotebook,
+  permissionType,
   toggleSidebar,
   sidebarOpen,
   toggleAIMode,
@@ -189,6 +189,7 @@ export const NotebookTopbar = ({
 }: NotebookTopbarProps): ReturnType<FC> => {
   // --------------------------------------------------
 
+  const isSharedNotebook = !permissionType;
   const notebookId = notebookMeta?.id ?? '';
   const workspace = notebookMeta?.workspace;
   const usersWithAccess = notebookMeta?.access.users ?? [];
@@ -360,6 +361,7 @@ export const NotebookTopbar = ({
             )}
             <Styled.TitleContainer>
               <NotebookOptions
+                permissionType={permissionType}
                 notebookId={notebookId}
                 isArchived={isArchived}
                 workspaces={userWorkspaces}
@@ -556,7 +558,7 @@ export const NotebookTopbar = ({
                   onChange={notebookAccessActions.onChangeAccess}
                   onRemove={notebookAccessActions.onRemoveAccess}
                 />
-              ) : (
+              ) : isPublished || permissionType !== PermissionType.Read ? (
                 <Button
                   disabled={isDuplicating}
                   type="primaryBrand"
@@ -565,7 +567,7 @@ export const NotebookTopbar = ({
                 >
                   {isDuplicating ? 'Duplicating...' : 'Duplicate notebook'}
                 </Button>
-              )
+              ) : null
             ) : (
               <Button
                 href="/"

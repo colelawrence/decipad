@@ -329,6 +329,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+  const permission = meta.data?.getPadById?.myPermissionType;
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
@@ -341,7 +342,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
    * Where we must toggle their sidebar open by default
    */
   useEffect(() => {
-    switch (meta.data?.getPadById?.myPermissionType) {
+    switch (permission) {
       case 'ADMIN':
       case 'WRITE': {
         const { name } = useNotebookMetaData.persist.getOptions();
@@ -362,7 +363,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     if (!useNotebookMetaData.persist.hasHydrated()) {
       useNotebookMetaData.persist.rehydrate();
     }
-  }, [meta.data?.getPadById?.myPermissionType, sidebarData]);
+  }, [permission, sidebarData]);
 
   const isPublic = meta.data?.getPadById?.isPublic;
   const snapshot = meta.data?.getPadById?.snapshots.find(
@@ -410,6 +411,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
 
   return (
     <NotebookTopbar
+      permissionType={permission}
       hasUnpublishedChanges={hasUnpublishedChanges}
       notebookMeta={meta.data?.getPadById}
       userWorkspaces={meta.data?.workspaces ?? []}
@@ -426,7 +428,6 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       toggleSidebar={sidebarData.toggleSidebar}
       aiMode={aiModeData.aiMode}
       toggleAIMode={aiModeData.toggleAiMode}
-      isSharedNotebook={!meta.data?.getPadById?.workspace?.myPermissionType}
     />
   );
 };

@@ -7,6 +7,7 @@ import { noop } from '@decipad/utils';
 import { UserIconKey } from '@decipad/editor-types';
 
 const args: ComponentProps<typeof NotebookListItem> = {
+  permissionType: null,
   iconColor: 'Malibu' as AvailableSwatchColor,
   icon: 'Rocket' as UserIconKey,
   name: 'Getting started with Decipad',

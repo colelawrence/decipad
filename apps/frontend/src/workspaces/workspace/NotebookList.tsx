@@ -67,6 +67,7 @@ export const NotebookList: FC<NotebookListProps> = ({
         return (
           <li key={n.id}>
             <NotebookListItem
+              permissionType={n.myPermissionType}
               id={n.id}
               isArchived={pageType === 'archived'}
               status={(n.status as ListItemType['status']) ?? 'draft'}

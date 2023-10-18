@@ -16,6 +16,7 @@ import { IntercomProvider } from 'react-use-intercom';
 const noop = () => Promise.resolve();
 
 const props: ComponentProps<typeof NotebookTopbar> = {
+  permissionType: null,
   sidebarOpen: true,
   canRedo: true,
   canUndo: true,

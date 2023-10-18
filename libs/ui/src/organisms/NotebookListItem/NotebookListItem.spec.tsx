@@ -9,6 +9,7 @@ import { NotebookListItem } from './NotebookListItem';
 import { noop } from '@decipad/utils';
 
 const props: ComponentProps<typeof NotebookListItem> = {
+  permissionType: null,
   id: 'my-notebook',
   name: 'My Notebook',
   icon: 'Rocket',

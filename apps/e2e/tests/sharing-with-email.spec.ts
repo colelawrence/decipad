@@ -51,6 +51,17 @@ test.describe('Sharing pad with email', () => {
       .fill('invited-lama@ranch.org');
     await page.getByTestId('send-invitation').click();
 
+    // Close the share popup;
+    await page.getByRole('button').getByText('Share').click();
+
+    await page.getByRole('button').getByText('Share').click();
+    await page
+      .locator('.notebook-collaborate-tab input')
+      .fill('invited-reader@ranch.org');
+    await page.getByTestId('collaboration-level-dropdown').nth(0).click();
+    await page.locator('text="Notebook reader"').click();
+    await page.getByTestId('send-invitation').click();
+
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');
 
@@ -103,5 +114,43 @@ test.describe('Sharing pad with email', () => {
     await expect(
       publishedNotebookPage.getByTestId('codeline-varname')
     ).toHaveCount(5);
+
+    publishedNotebookPage.close();
+  });
+
+  test('A reader cannot duplicate notebook', async () => {
+    publishedNotebookPage = (await incognito.newPage()) as Page;
+
+    const data = await arc.tables();
+
+    let authLink: string | undefined;
+    // eslint-disable-next-line playwright/valid-expect
+    await waitForExpect(async () => {
+      const verificationRequests = (
+        await data.verificationrequests.query({
+          IndexName: 'byIdentifier',
+          KeyConditionExpression: 'identifier = :email',
+          ExpressionAttributeValues: {
+            ':email': 'invited-reader@ranch.org',
+          },
+        })
+      ).Items;
+
+      expect(verificationRequests).toHaveLength(1);
+      const [verificationRequest] = verificationRequests;
+      expect(verificationRequest).toBeDefined();
+      const { origin } = new URL(page.url());
+      authLink = `${origin}/api/auth/callback/email?callbackUrl=%2Fn%2Fwelcome&token=${encodeURIComponent(
+        verificationRequest.openTokenForTestsOnly ?? ''
+      )}&email=${encodeURIComponent(verificationRequest.identifier)}`;
+    });
+
+    expect(authLink).toBeDefined();
+    publishedNotebookPage.goto(authLink!);
+
+    const duplicateButton = page.locator('text="Duplicate"');
+
+    // Reader collaborators should not be able to see duplicate button.
+    await expect(duplicateButton).toBeHidden();
   });
 });

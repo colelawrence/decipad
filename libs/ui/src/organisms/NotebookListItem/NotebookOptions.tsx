@@ -1,4 +1,8 @@
-import { WorkspaceSwitcherWorkspaceFragment } from '@decipad/graphql-client';
+import {
+  NotebookMetaDataFragment,
+  PermissionType,
+  WorkspaceSwitcherWorkspaceFragment,
+} from '@decipad/graphql-client';
 import { NotebookMetaActionsType } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -16,7 +20,12 @@ import {
   Trash,
 } from '../../icons';
 import { MenuList } from '../../molecules';
-import { cssVar, p12Medium, shortAnimationDuration } from '../../primitives';
+import {
+  cssVar,
+  p12Medium,
+  p12Regular,
+  shortAnimationDuration,
+} from '../../primitives';
 
 export interface NotebookOptionsProps {
   readonly notebookId: string;
@@ -30,14 +39,13 @@ export interface NotebookOptionsProps {
   readonly onUnarchive: NotebookMetaActionsType['onUnarchiveNotebook'];
   readonly onDelete: NotebookMetaActionsType['onDeleteNotebook'];
   readonly onMoveWorkspace: NotebookMetaActionsType['onMoveToWorkspace'];
+  readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
 
   /* Optionals */
   readonly creationDate?: Date;
   // Show the 'draft', 'review', picker. Currently used
   // inside the notebook.
   readonly notebookStatus?: ReactNode;
-  // Allow the duplicate option.
-  readonly allowDuplicate?: boolean;
 }
 
 export const NotebookOptions: FC<NotebookOptionsProps> = ({
@@ -47,6 +55,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   onUnarchive,
   onDelete,
   onMoveWorkspace,
+  permissionType,
   trigger,
   isArchived,
   workspaces,
@@ -54,7 +63,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
 
   creationDate,
   notebookStatus,
-  allowDuplicate = false,
   workspaceId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +79,12 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
         onChangeOpen={setIsOpen}
         trigger={trigger}
       >
-        {allowDuplicate &&
+        {permissionType === PermissionType.Read && (
+          <ReaderInfo>
+            As a Reader, you can not download or copy this notebook.
+          </ReaderInfo>
+        )}
+        {permissionType !== PermissionType.Read &&
           (workspaces.length > 1 ? (
             <MenuList
               itemTrigger={
@@ -104,7 +117,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             </MenuItem>
           ))}
         {notebookStatus && notebookStatus}
-        {workspaces.length > 1 && (
+        {permissionType === PermissionType.Admin && workspaces.length > 1 && (
           <MenuList
             itemTrigger={
               <TriggerMenuItem icon={<Switch />}>
@@ -126,25 +139,29 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             ))}
           </MenuList>
         )}
-        <MenuItem
-          icon={<Download />}
-          onSelect={() => {
-            onExport(id);
-            setIsOpen(false);
-          }}
-        >
-          Download
-        </MenuItem>
-        <MenuItem
-          icon={<GitBranch />}
-          onSelect={() => {
-            onExportBackups(id);
-            setIsOpen(false);
-          }}
-        >
-          Version History
-        </MenuItem>
-        {isArchived && (
+        {permissionType !== PermissionType.Read && (
+          <>
+            <MenuItem
+              icon={<Download />}
+              onSelect={() => {
+                onExport(id);
+                setIsOpen(false);
+              }}
+            >
+              Download
+            </MenuItem>
+            <MenuItem
+              icon={<GitBranch />}
+              onSelect={() => {
+                onExportBackups(id);
+                setIsOpen(false);
+              }}
+            >
+              Version History
+            </MenuItem>
+          </>
+        )}
+        {permissionType !== PermissionType.Read && isArchived && (
           <MenuItem
             icon={<FolderOpen />}
             onSelect={() => {
@@ -155,15 +172,18 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             Put back
           </MenuItem>
         )}
-        <MenuItem
-          icon={isArchived ? <Trash /> : <Archive />}
-          onSelect={() => {
-            onDelete(id, true);
-            setIsOpen(false);
-          }}
-        >
-          {isArchived ? 'Delete' : 'Archive'}
-        </MenuItem>
+
+        {permissionType !== PermissionType.Read && (
+          <MenuItem
+            icon={isArchived ? <Trash /> : <Archive />}
+            onSelect={() => {
+              onDelete(id, true);
+              setIsOpen(false);
+            }}
+          >
+            {isArchived ? 'Delete' : 'Archive'}
+          </MenuItem>
+        )}
 
         {creationDate && (
           <li css={creationDateStyles}>
@@ -209,4 +229,10 @@ const creationDateStyles = css(p12Medium, {
 
 const MinDiv = styled.div({
   minWidth: '132px',
+});
+
+const ReaderInfo = styled.li(p12Regular, {
+  padding: '4px 8px',
+  width: '152px',
+  listStyle: 'none',
 });

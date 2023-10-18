@@ -46,7 +46,10 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
   }
 
   const triggerElement = (caret = true) => (
-    <div css={css(p12Medium, !caret && { button: { cursor: 'default' } })}>
+    <div
+      css={css(p12Medium, !caret && { button: { cursor: 'default' } })}
+      data-testId="collaboration-level-dropdown"
+    >
       <TextAndIconButton
         text={permissionLabel}
         onClick={noop}
