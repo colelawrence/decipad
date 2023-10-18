@@ -11,7 +11,7 @@
     "@architect/architect": "10.14.0",
     "@architect/destroy": "decipad/destroy",
     "@apollo/server": "4.9.0",
-    "aws-sdk": "2.1473.0",
+    "aws-sdk": "2.1475.0",
     "dotenv": "16.3.0",
     "form-data": "4.0.0",
     "graphql": "16.8.0",
