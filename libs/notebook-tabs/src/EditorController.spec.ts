@@ -1137,3 +1137,37 @@ describe('Resilience of existing notebooks with broken structure', () => {
     });
   });
 });
+
+describe('Moving tabs', () => {
+  it('moves the order of two tabs', () => {
+    const controller = new EditorController('id', []);
+    controller.Loaded();
+
+    controller.CreateTab('tab1');
+    controller.CreateTab('tab2');
+    controller.MoveTabs('tab1', 'tab2');
+
+    expect(controller.children[2].id).toBe('tab2');
+    expect(controller.children[3].id).toBe('tab1');
+  });
+
+  it('moves tabs various times', () => {
+    const controller = new EditorController('id', []);
+    controller.Loaded();
+
+    controller.CreateTab('tab1');
+    controller.CreateTab('tab2');
+    controller.CreateTab('tab3');
+    controller.CreateTab('tab4');
+    controller.CreateTab('tab5');
+
+    controller.MoveTabs('tab5', 'tab1');
+    controller.MoveTabs('tab4', 'tab2');
+
+    expect(controller.children[2].id).toBe('tab5');
+    expect(controller.children[3].id).toBe('tab4');
+    expect(controller.children[4].id).toBe('tab3');
+    expect(controller.children[5].id).toBe('tab2');
+    expect(controller.children[6].id).toBe('tab1');
+  });
+});

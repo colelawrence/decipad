@@ -13,6 +13,7 @@ import {
   TDescendant,
   TEditor,
   TInsertNodeOperation,
+  TMoveNodeOperation,
   TOperation,
   TRemoveNodeOperation,
   TSetNodeOperation,
@@ -46,7 +47,7 @@ import {
 import { IsOldOperation, IsTab, IsTitle, NoSelectOperations } from './utils';
 import { captureException } from '@sentry/browser';
 
-function captureExceptionWrapper(error: OutOfSyncError) {
+function captureExceptionWrapper<T extends Error>(error: T) {
   console.error(error);
   captureException(error);
 }
@@ -344,6 +345,8 @@ export class EditorController {
             )
           );
         }
+      } else if (op.type === 'move_node') {
+        this.MoveTab(op);
       } else {
         captureExceptionWrapper(
           new OutOfSyncError('No more top level operations ', op)
@@ -397,6 +400,28 @@ export class EditorController {
     });
 
     this.Notifier.next('new-tab');
+  }
+
+  private MoveTab(op: TMoveNodeOperation): void {
+    if (op.path[0] === 0 || op.newPath[0] === 0) {
+      captureExceptionWrapper(
+        new OutOfSyncError(
+          'You cannot move a tab to be in 0th index (where title should be)',
+          op
+        )
+      );
+      return;
+    }
+
+    [this.SubEditors[op.path[0] - 1], this.SubEditors[op.newPath[0] - 1]] = [
+      this.SubEditors[op.newPath[0] - 1],
+      this.SubEditors[op.path[0] - 1],
+    ];
+
+    [this.children[op.path[0]], this.children[op.newPath[0]]] = [
+      this.children[op.newPath[0]],
+      this.children[op.path[0]],
+    ];
   }
 
   private SetTabProps(op: TSetNodeOperation): void {
@@ -588,7 +613,7 @@ export class EditorController {
   }
 
   public CreateTab(_tabId?: string): string {
-    const id = nanoid();
+    const id = _tabId ?? nanoid();
     this.apply({
       type: 'insert_node',
       path: [this.children.length],
@@ -599,7 +624,7 @@ export class EditorController {
         children: [
           {
             type: ELEMENT_PARAGRAPH,
-            id: _tabId ?? nanoid(),
+            id: nanoid(),
             children: [{ text: '' }],
           },
         ],
@@ -700,6 +725,33 @@ export class EditorController {
     };
 
     this.apply(toggleHidden);
+  }
+
+  /**
+   * Swaps the position of two tabs with the given IDs
+   * @throws if the IDs are not found.
+   */
+  public MoveTabs(fromTabId: string, toTabId: string): void {
+    const fromIndex = this.children.findIndex((e) => e.id === fromTabId);
+    if (fromIndex === -1) {
+      captureExceptionWrapper(new Error('Tried to move a non-existing tab'));
+      return;
+    }
+
+    const toIndex = this.children.findIndex((e) => e.id === toTabId);
+    if (toIndex === -1) {
+      captureExceptionWrapper(new Error('Tried to move a non-existing tab'));
+      return;
+    }
+
+    this.apply({
+      type: 'move_node',
+      path: [fromIndex],
+      newPath: [toIndex],
+    });
+
+    // Notify so that `useTabs` hook can update UI.
+    this.Notifier.next('new-tab');
   }
 
   /**
