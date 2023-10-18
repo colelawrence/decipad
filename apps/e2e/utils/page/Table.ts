@@ -2,14 +2,10 @@
 import { Page } from '@playwright/test';
 import { Timeouts } from '../src';
 import { keyPress } from './Editor';
+import { createWithSlashCommand } from './Block';
 
 export async function createTable(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/table');
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.typing);
-  await page.keyboard.press('Enter');
+  await createWithSlashCommand(page, '/table');
 }
 
 export function tableRowLocator(line: number) {

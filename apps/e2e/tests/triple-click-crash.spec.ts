@@ -1,6 +1,6 @@
 import { BrowserContext, Page, test, expect } from '@playwright/test';
-import { setUp } from '../utils/page/Editor';
-import { createWorkspace } from '../utils/src';
+import { focusOnBody, setUp } from '../utils/page/Editor';
+import { createWorkspace, Timeouts } from '../utils/src';
 
 test.describe('Makes sure triple click or more does not crash app', () => {
   test.describe.configure({ mode: 'serial' });
@@ -26,7 +26,12 @@ test.describe('Makes sure triple click or more does not crash app', () => {
   });
 
   test('Simulation of triple click or more through two double clicks', async () => {
-    await page.getByTestId('paragraph-content').last().fill('test test test');
+    await focusOnBody(page);
+    await page.keyboard.insertText('test test test');
+
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
+
     await page.getByText('test test test').dblclick();
     await page.getByText('test test test').dblclick();
     await page.keyboard.press('Backspace');

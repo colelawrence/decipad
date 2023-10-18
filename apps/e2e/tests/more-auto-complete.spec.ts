@@ -1,6 +1,12 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
-import { addColumn, writeInTable } from '../utils/page/Table';
+import {
+  addColumn,
+  createTable,
+  renameColumn,
+  writeInTable,
+} from '../utils/page/Table';
+import { createCodeLineV2Below } from '../utils/page/Block';
 import { Timeouts, createWorkspace } from '../utils/src';
 
 test.describe('Make sure auto-complete works', () => {
@@ -28,14 +34,11 @@ test.describe('Make sure auto-complete works', () => {
 
   test('Creates a table and creates a formula', async () => {
     // Creates a table and fills it
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-table').first().click();
+    await createTable(page);
 
-    await page.getByText('Column1').fill('Name');
-    await page.getByText('Column2').fill('Revenue');
-    await page.getByText('Column3').fill('Total');
+    await renameColumn(page, 0, 'Name');
+    await renameColumn(page, 1, 'Revenue');
+    await renameColumn(page, 2, 'Total');
 
     await writeInTable(page, 'one', 1);
     await writeInTable(page, 'two', 2);
@@ -46,27 +49,11 @@ test.describe('Make sure auto-complete works', () => {
     await writeInTable(page, '3', 3, 1);
 
     // Creates formula and fills it
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-structured-code-line').first().click();
-    await page.getByTestId('codeline-code').fill('100');
-    await page.getByTestId('codeline-varname').dblclick();
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type('Revenue');
+    await createCodeLineV2Below(page, 'Revenue', '100');
   });
 
   test('Checks if the revenue variable is linked properly', async () => {
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page
-      .locator('article')
-      .getByTestId('menu-item-structured-code-line')
-      .click();
-    await page.getByTestId('codeline-varname').nth(1).dblclick();
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type('Another');
+    await createCodeLineV2Below(page, 'Another', '');
     await page.getByTestId('codeline-code').last().fill('Revenue');
     await page
       .getByTestId('autocomplete-group:Variables')
@@ -99,26 +86,14 @@ test.describe('Make sure auto-complete works', () => {
 
   test('New table with revenueNew', async () => {
     // Creates a new formula for RevenueNew
-    await page.getByTestId('paragraph-content').last().click();
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-structured-code-line').first().click();
-    await page.getByTestId('codeline-code').last().fill('100');
-    await page.getByTestId('codeline-varname').last().dblclick();
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type('RevenueNew');
+    await createCodeLineV2Below(page, 'RevenueNew', '100');
 
     // Creates a new table and fills it
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-table').first().click();
-    page.getByTestId('table-name-input').last();
+    await createTable(page);
 
-    await page.getByText('Column1').last().fill('name');
-    await page.getByText('Column2').fill('RevenueNew');
-    await page.getByText('Column3').last().fill('total');
+    await renameColumn(page, 0, 'name', 'Table2');
+    await renameColumn(page, 1, 'RevenueNew', 'Table2');
+    await renameColumn(page, 2, 'total', 'Table2');
 
     await writeInTable(page, 'one', 1, 0, 'Table2');
     await writeInTable(page, 'two', 2, 0, 'Table2');

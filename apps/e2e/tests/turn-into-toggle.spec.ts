@@ -1,4 +1,5 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
+import { createWithSlashCommand } from '../utils/page/Block';
 import { setUp } from '../utils/page/Editor';
 import { createWorkspace } from '../utils/src';
 
@@ -26,10 +27,7 @@ test.describe('Make sure the toggle conversion works', () => {
   });
 
   test('Checks all the files', async () => {
-    await page.getByTestId('paragraph-content').last().fill('/i');
-
-    await page.locator('article').getByTestId('menu-item-input').waitFor();
-    await page.locator('article').getByTestId('menu-item-input').click();
+    await createWithSlashCommand(page, '/input', 'input');
     await page.locator('article').getByTestId('drag-handle').first().click();
 
     page.getByText('Turn into').waitFor();

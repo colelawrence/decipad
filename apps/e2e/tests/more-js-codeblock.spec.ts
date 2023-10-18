@@ -1,4 +1,5 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { createWithSlashCommand } from '../utils/page/Block';
 import { setUp } from '../utils/page/Editor';
 import {
   codePlaceholders,
@@ -34,10 +35,7 @@ test.describe('More JS codeblock checks', () => {
     const allSources = codePlaceholders;
     expect(allSources.length).toBeGreaterThan(0);
 
-    await page.getByTestId('paragraph-content').last().fill('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.menuOpenDelay);
-    await page.getByTestId('menu-item-open-integration').first().click();
+    await createWithSlashCommand(page, '/integrations');
     await page.getByTestId('select-integration:Code').click();
 
     // First line of the CodeMirror

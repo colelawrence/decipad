@@ -2,22 +2,31 @@ import { Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
 import { ControlPlus, keyPress } from './Editor';
 
+export async function createWithSlashCommand(
+  page: Page,
+  command: string,
+  // For disambiguation
+  menuItem?: string
+) {
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  await page.keyboard.insertText(command);
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.typing);
+
+  if (menuItem) {
+    await page.click(`[data-testid="menu-item-${menuItem}"]`);
+  } else {
+    await page.keyboard.press('Enter');
+  }
+}
+
 export async function createNumberInputBelow(
   page: Page,
   identifier: string,
   value: string
 ) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/number');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('number input')
-    .click();
+  await createWithSlashCommand(page, '/number');
 
   await page.dblclick(
     '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
@@ -39,13 +48,7 @@ export async function createInputBelow(
   identifier: string,
   value: number | string
 ) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/input');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page.click('[data-testid="menu-item-input"]');
+  await createWithSlashCommand(page, '/input', 'input');
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input/')
@@ -69,18 +72,7 @@ export async function createInputBelow(
 }
 
 export async function createDropdownBelow(page: Page, identifier: string) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/dropdown');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('Dropdown')
-    .nth(1)
-    .click();
+  await createWithSlashCommand(page, '/dropdown');
 
   await page.getByText('Dropdown', { exact: true }).last().dblclick();
 
@@ -90,124 +82,37 @@ export async function createDropdownBelow(page: Page, identifier: string) {
 }
 
 export async function createResultBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/result');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('result')
-    .nth(1)
-    .click();
+  await createWithSlashCommand(page, '/result');
 
   page.locator('[data-testid="widget-caption"] >> text=/Unnammed/').last();
 }
 
 export async function createDataViewBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/data view');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('data view')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/data view');
 }
 
 export async function createPieChartBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/pie chart');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('chart')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/pie chart');
 }
 
 export async function createLineChartBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/line chart');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('chart')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/line chart');
 }
 
 export async function createBarChartBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/bar chart');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('chart')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/bar chart');
 }
 
 export async function createAreaChartBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/area chart');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('chart')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/area chart');
 }
 
 export async function createScatterChartBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/scatter plot');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('plot')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/scatter chart');
 }
 
 export async function createToggleBelow(page: Page, identifier: string) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/toggle');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('toggle')
-    .click();
+  await createWithSlashCommand(page, '/toggle');
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input/')
@@ -225,13 +130,7 @@ export async function createSliderBelow(
   value: number | string,
   options?: { min?: number; max?: number; step?: number }
 ) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/slider');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page.locator('role=menuitem', { hasText: 'slider' }).nth(0).click();
+  await createWithSlashCommand(page, '/slider');
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Slider/')
@@ -281,13 +180,7 @@ export async function createSliderBelow(
 }
 
 export async function createDateBelow(page: Page, identifier: string) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/date');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page.locator('role=menuitem', { hasText: 'date' }).nth(0).click();
+  await createWithSlashCommand(page, '/date');
 
   await page
     .locator('[data-testid="widget-caption"] >> text=/Input/')
@@ -305,23 +198,9 @@ export async function createCalculationBlockBelow(
 ) {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);
-  await page
-    .locator('[data-testid="paragraph-wrapper"] >> nth=-1')
-    .click({ timeout: Timeouts.maxSelectorWaitTime });
 
-  await page
-    .locator(
-      '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
-    )
-    .click();
+  await createWithSlashCommand(page, '/advanced');
 
-  await page.keyboard.insertText('/advanced');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('advanced')
-    .click();
   await page.waitForSelector('[data-testid="code-line"]');
 
   await page.keyboard.type(decilang);
@@ -352,10 +231,12 @@ export async function createCodeLineV2Below(
     '[data-slate-editor] [data-testid="codeline-varname"]'
   );
 
-  // Click the varname (we default to the code itself)
-  await page.dblclick(
+  // Select the varname (we default to the code itself)
+  await page.click(
     '[data-slate-editor] [data-testid="codeline-varname"] >> nth=-1'
   );
+
+  await ControlPlus(page, 'a');
 
   await page.keyboard.type(variableName);
 
@@ -369,18 +250,7 @@ export async function createCodeLineV2Below(
 }
 
 export async function createCSVBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/csv');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('CSV')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/csv', 'upload-csv');
 }
 
 export async function createEmbedBelow(page: Page) {

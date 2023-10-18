@@ -1,6 +1,10 @@
 import { expect, Page, test } from '@playwright/test';
-import { createCalculationBlockBelow } from '../utils/page/Block';
 import {
+  createCalculationBlockBelow,
+  createResultBelow,
+} from '../utils/page/Block';
+import {
+  ControlPlus,
   focusOnBody,
   goToPlayground,
   waitForEditorToLoad,
@@ -22,9 +26,7 @@ test.describe('Results widgets', () => {
   });
 
   test('creates an empty result widget', async () => {
-    await focusOnBody(page);
-    await page.keyboard.type('/result');
-    await page.locator('[role="menuitem"] >> span >> svg').click();
+    await createResultBelow(page);
     await expect(page.getByText('Result')).toHaveCount(1);
   });
 
@@ -56,7 +58,8 @@ test.describe('Results widgets', () => {
 
   test('updates the result when calculation changes', async () => {
     await page.getByText('Hello = 5 + 1').click();
-    await page.keyboard.press('End');
+    await ControlPlus(page, 'a');
+    await page.keyboard.press('ArrowRight');
     await page.keyboard.type(' + 4');
 
     await expect(
