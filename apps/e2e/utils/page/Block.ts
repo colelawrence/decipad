@@ -10,6 +10,9 @@ export async function createWithSlashCommand(
 ) {
   await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
 
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.typing);
+
   await page.keyboard.insertText(command);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.typing);

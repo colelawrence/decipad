@@ -8,7 +8,7 @@ export const Timeouts = {
   typing: 75,
   syncDelay: 3000,
   chartsDelay: 5000,
-  tableDelay: 2000,
+  tableDelay: 500,
   computerDelay: 2000,
   menuOpenDelay: 200,
   liveBlockDelay: 200,
