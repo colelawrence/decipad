@@ -447,6 +447,7 @@ fileattachments-changes
 docsyncupdates-changes
 sync-after-connect
 docsyncsnapshots-changes
+chat-agent-message
 
 
 @scheduled

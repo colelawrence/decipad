@@ -1,5 +1,6 @@
 import Boom, { boomify } from '@hapi/boom';
-import { onMessage } from '@decipad/sync-connection-lambdas';
+import { onMessage as onSyncMessage } from '@decipad/sync-connection-lambdas';
+import { onMessage as onChatAgentMessage } from '@decipad/backend-notebook-assistant';
 import tables from '@decipad/tables';
 import { captureException, trace } from '@decipad/backend-trace';
 import EventEmitter from 'events';
@@ -23,7 +24,10 @@ export const handler = trace<TWSRequestContext>(
     }
 
     try {
-      return await onMessage(connId, getBody(event.body));
+      if (typeof conn.protocol === 'number') {
+        return await onSyncMessage(conn, getBody(event.body));
+      }
+      return await onChatAgentMessage(conn, event.body, event.isBase64Encoded);
     } catch (err) {
       if (err instanceof Error) {
         const boom = boomify(err);

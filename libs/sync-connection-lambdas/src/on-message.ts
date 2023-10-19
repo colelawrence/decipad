@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Doc as YDoc } from 'yjs';
 import { nanoid } from 'nanoid';
-import Boom from '@hapi/boom';
 import tables from '@decipad/tables';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import {
@@ -22,7 +21,15 @@ import { captureException } from '@decipad/backend-trace';
 import { ConnectionRecord } from '@decipad/backendtypes';
 import pSeries from 'p-series';
 
-const send = async (conn: ConnectionRecord, message: Buffer) => {
+type SyncConnectionRecord = ConnectionRecord & {
+  protocol: number;
+};
+
+const isSyncProtocolConnection = (
+  conn: ConnectionRecord
+): conn is SyncConnectionRecord => typeof conn.protocol === 'number';
+
+const send = async (conn: SyncConnectionRecord, message: Buffer) => {
   const messages: string[] = [];
   const s = sender(conn.protocol ?? 1);
   const sub = s.message.subscribe((m) => {
@@ -55,8 +62,8 @@ async function broadcast(
 
   await pSeries(
     conns
-      .filter((conn) => conn.id !== from)
-      .map((conn) => () => send(conn, message))
+      .filter((conn) => isSyncProtocolConnection(conn) && conn.id !== from)
+      .map((conn) => () => send(conn as SyncConnectionRecord, message))
   );
 }
 
@@ -91,7 +98,7 @@ async function maybeStoreMessage(
 async function processMessage(
   resource: string,
   message: Uint8Array,
-  conn: ConnectionRecord,
+  conn: SyncConnectionRecord,
   version: string | undefined,
   readOnly: boolean
 ): Promise<void> {
@@ -113,13 +120,11 @@ async function processMessage(
 }
 
 export async function _onMessage(
-  connId: string,
+  conn: ConnectionRecord,
   message: Uint8Array
 ): Promise<APIGatewayProxyResultV2> {
-  const data = await tables();
-  const conn = await data.connections.get({ id: connId });
-  if (!conn) {
-    throw Boom.resourceGone();
+  if (!isSyncProtocolConnection(conn)) {
+    throw new Error(`Invalid protocol for sync message: ${conn.protocol}`);
   }
 
   // let's assume that all messages are an attempt to write
@@ -143,7 +148,7 @@ export async function _onMessage(
     processMessage(resource, message, conn, conn.versionName, !!canRead),
   ];
   if (canWrite) {
-    ops.push(broadcast(resource, Buffer.from(message), connId));
+    ops.push(broadcast(resource, Buffer.from(message), conn.id));
     ops.push(maybeStoreMessage(resource, message));
   }
   await Promise.all(ops);
@@ -151,9 +156,12 @@ export async function _onMessage(
   return { statusCode: 200 };
 }
 
-export const onMessage = async (connId: string, message: Uint8Array) => {
+export const onMessage = async (
+  conn: ConnectionRecord,
+  message: Uint8Array
+) => {
   try {
-    return await _onMessage(connId, message);
+    return await _onMessage(conn, message);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('sync-connection-lambdas: Error caught on message', err);

@@ -17,7 +17,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can add a table', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'create another table with two columns and 3 rows'
+      'create another table with two columns and 3 rows',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([
@@ -380,7 +381,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can change the variable name of a table', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the table variable name to be "MyTableName"'
+      'change the table variable name to be "MyTableName"',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -623,7 +625,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can change a column name', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the table second column name to "MySecondColumn"'
+      'change the table second column name to "MySecondColumn"',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -866,7 +869,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can add a column', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add another column to the table'
+      'add another column to the table',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -1148,7 +1152,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can remove a column', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'remove the last column of the table'
+      'remove the last column of the table',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -1337,7 +1342,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can change the type of a column', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the type of the second column to number'
+      'change the type of the second column to number',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -1580,7 +1586,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can fill a column with sequential numbers', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'fill the first column of the existing table with numbers from 10 to 14, adding extra rows if needed'
+      'fill the first column of the existing table with numbers from 10 to 14, adding extra rows if needed',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -1871,7 +1878,8 @@ test('notebook assistant: tables', async (ctx) => {
   it('can fill a column with pokemon names', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'fill the second column of the existing table with 10 Pokemon names'
+      'fill the second column of the existing table with 10 Pokemon names',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([

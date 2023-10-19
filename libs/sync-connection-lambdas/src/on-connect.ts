@@ -50,6 +50,10 @@ export async function onConnect({
   auth,
   protocol,
 }: ConnectParams): Promise<void> {
+  if (protocol < 1 || protocol > 2) {
+    throw new Error(`Invalid protocol version ${protocol}`);
+  }
+
   let permissionTypes: PermissionType[];
   if (
     !auth.length &&

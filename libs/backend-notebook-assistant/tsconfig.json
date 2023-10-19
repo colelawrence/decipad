@@ -12,6 +12,8 @@
     { "path": "../doc-verbalizer" },
     { "path": "../backend-notebook-content" },
     { "path": "../backend-code-assistant" },
-    { "path": "../computer" }
+    { "path": "../computer" },
+    { "path": "../services" },
+    { "path": "../fnqueue" }
   ]
 }

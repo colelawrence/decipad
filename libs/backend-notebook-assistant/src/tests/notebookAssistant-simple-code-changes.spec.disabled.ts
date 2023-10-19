@@ -17,7 +17,8 @@ test('notebook assistant: simple code changes', async (ctx) => {
   it('can set the variable name to a code line', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the variable name of VarName1 to NewVarName'
+      'change the variable name of VarName1 to NewVarName',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`
@@ -139,7 +140,8 @@ test('notebook assistant: simple code changes', async (ctx) => {
   it('can make a simple change to a code line', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add 1 to the end of the cosine calculation'
+      'add 1 to the end of the cosine calculation',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {

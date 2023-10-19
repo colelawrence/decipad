@@ -18,7 +18,8 @@ test('notebook assistant: simple UI components', async (ctx) => {
   it('can add a slider', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add another slider named MyNewSlider with default value of 10, min of 0 and max of 100'
+      'add another slider named MyNewSlider with default value of 10, min of 0 and max of 100',
+      'conn-id'
     );
     if (
       dequal(results.operations.slice(0, 2), [
@@ -324,7 +325,8 @@ test('notebook assistant: simple UI components', async (ctx) => {
   it('can change a slider caption', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the slider var name to be "MySlider1"'
+      'change the slider var name to be "MySlider1"',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`

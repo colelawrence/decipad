@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 import stringify from 'json-stringify-safe';
-import {
+import type { Subject } from 'rxjs';
+import type {
   ChatCompletionCreateParamsNonStreaming,
   ChatCompletionMessage,
 } from 'openai/resources/chat';
@@ -13,7 +14,7 @@ import {
 import { getDefined } from '../../../utils/src';
 import { codeAssistant } from '@decipad/backend-code-assistant';
 import { VerbalizedElement, verbalizeDoc } from '@decipad/doc-verbalizer';
-import { debug } from '../debug';
+import { createSubDebug } from '../debug';
 import { introTemplate, afterBlocksTemplate, schema } from '../config';
 import { getOpenAI } from '../utils/openAi';
 import { createComputationalSummary } from '../utils/createComputationalSummary';
@@ -29,6 +30,7 @@ import {
 } from '../config/instructions';
 import { parseInstructionConstituents } from '../utils/parseInstructionConstituents';
 import { getAllTags } from '../utils/getAllTags';
+import type { NotebookAssistantEvent } from '../types';
 
 export interface SuggestNewContentReply {
   newDocument: RootDocument;
@@ -51,8 +53,11 @@ const completionRequestOptions = {
 
 export const suggestNewContentToFulfillRequest = async (
   content: RootDocument,
-  request: string
-): Promise<SuggestNewContentReply> => {
+  request: string,
+  events: Subject<NotebookAssistantEvent>,
+  connectionId: string
+) => {
+  const debug = createSubDebug(connectionId);
   debug('suggestNewContentToFulfillRequest', content, request);
   const openAi = getOpenAI();
 
@@ -103,6 +108,11 @@ Example of a reply: \`["code-lines", "table-formulas"]\`.
 ${nudges()}No comments.`,
     },
   ];
+
+  events.next({
+    type: 'progress',
+    action: 'sent initial instructions',
+  });
 
   let maxIterations = 10;
 
@@ -176,6 +186,10 @@ ${nudges()}No comments.`,
       dataViewMode = instructionConstituents.includes('data-views');
       debug('instruction constituents:', instructionConstituents);
       instructions = getInstructions(instructionConstituents);
+      events.next({
+        type: 'progress',
+        action: 'have instruction index',
+      });
     } catch (err) {
       messages.push({
         role: 'user',
@@ -195,6 +209,10 @@ Reply in JSON only, no comments. Don't apologize.`,
       Only reply with a single JSON array, nothing else.
       No comments.`,
     });
+    events.next({
+      type: 'progress',
+      action: 'asked for block ids',
+    });
   };
 
   const parseRelevantBlockIds = async () => {
@@ -206,6 +224,10 @@ Reply in JSON only, no comments. Don't apologize.`,
           'no reply content for parsing relevant block ids'
         )
       );
+      events.next({
+        type: 'progress',
+        action: 'have block ids',
+      });
     } catch (err) {
       messages.push({
         role: 'user',
@@ -294,6 +316,18 @@ No comments.
 
 ${finalInstructions}`,
     });
+
+    if (shouldJumpOverSpecificElementIds) {
+      events.next({
+        type: 'progress',
+        action: 'sent relevant instructions',
+      });
+    } else {
+      events.next({
+        type: 'progress',
+        action: 'asked for internal element ids',
+      });
+    }
   };
 
   const parseSpecificElementIds = async () => {
@@ -305,6 +339,10 @@ ${finalInstructions}`,
           'no reply content for parsing specific element ids'
         )
       );
+      events.next({
+        type: 'progress',
+        action: 'have specific element ids',
+      });
     } catch (err) {
       messages.push({
         role: 'user',
@@ -336,6 +374,10 @@ ${relevantBlocksText(relevantElements)}
 \`\`\`
 `,
     });
+    events.next({
+      type: 'progress',
+      action: 'sent the relevant elements',
+    });
   };
 
   const sendFinalReplyInstructions = async (): Promise<void> => {
@@ -347,10 +389,18 @@ ${relevantBlocksText(relevantElements)}
 Only reply with a single JSON array, nothing else.
 No comments.`,
     });
+    events.next({
+      type: 'progress',
+      action: 'sent relevant blocks',
+    });
   };
 
   const makeFunctionCall = async () => {
     if (reply?.function_call?.name === 'generate_decilang_code') {
+      events.next({
+        type: 'progress',
+        action: 'generating decipad language code',
+      });
       triedCode = true;
       const codePrompt = (
         parseJSONResponse(reply.function_call.arguments) as {
@@ -369,6 +419,11 @@ No comments.`,
           content: codeSnippet,
           name: reply.function_call.name,
         } as ChatCompletionMessage);
+
+        events.next({
+          type: 'progress',
+          action: 'have decipad language code',
+        });
       } else {
         failedCode = true;
         debug('code was not valid');
@@ -414,6 +469,10 @@ No comments.`,
       role: 'user',
       content: `Summarize the changes you have done to my document in simple text, no jargon, no ids.`,
     });
+    events.next({
+      type: 'progress',
+      action: 'asked to summarize changes',
+    });
   };
 
   const parseChangesSummary = (): void => {
@@ -421,12 +480,20 @@ No comments.`,
       throw new Error('Reply with a summary of changes in markdown.');
     }
     changesSummary = reply.content;
+    events.next({
+      type: 'progress',
+      action: 'have summary of changes',
+    });
   };
 
   while (maxIterations > 0 && (!finalDoc || !changesSummary)) {
     maxIterations -= 1;
     debug(`------------------- ITERATION -${maxIterations}`, messages);
     const result = await generateChatCompletion();
+    events.next({
+      type: 'progress',
+      action: 'have response from the agent',
+    });
     reply = result.choices[0].message;
     messages.push(reply);
     debug('Reply:', reply);
@@ -468,6 +535,11 @@ No comments.`,
         // try again
         continue;
       }
+      events.next({
+        type: 'progress',
+        action: 'have new version of the document',
+      });
+      events.next({ type: 'new-doc', newDoc: finalDoc });
     }
 
     debug('FINAL DOC %j', finalDoc);
@@ -477,17 +549,17 @@ No comments.`,
       sendChangesSummaryInstructions();
       continue;
     }
-    if (!changesSummary) {
+    if (changesSummary == null) {
       await parseChangesSummary();
-    }
-
-    if (finalDoc && changesSummary) {
-      return {
-        newDocument: finalDoc,
-        summary: changesSummary,
-      };
+      if (changesSummary != null) {
+        events.next({ type: 'summary', summary: changesSummary });
+      }
+      continue;
     }
   }
 
-  throw new Error('could not generate reply');
+  if (changesSummary == null || finalDoc == null) {
+    throw new Error('could not generate reply');
+  }
+  events.next({ type: 'end' });
 };

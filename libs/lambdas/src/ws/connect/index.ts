@@ -2,10 +2,11 @@ import {
   authenticate,
   isValidAuthResult,
 } from '@decipad/services/authentication';
-import { onConnect } from '@decipad/sync-connection-lambdas';
+import { onConnect as onSyncConnect } from '@decipad/sync-connection-lambdas';
+import { onConnect as onChatAgentConnect } from '@decipad/backend-notebook-assistant';
 import { getDefined } from '@decipad/utils';
 import { trace } from '@decipad/backend-trace';
-import Boom, { boomify } from '@hapi/boom';
+import Boom, { boomify, notAcceptable } from '@hapi/boom';
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import EventEmitter from 'events';
 import { resource } from '@decipad/backend-resources';
@@ -26,19 +27,27 @@ const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
     if (!docId) {
       throw Boom.notAcceptable('no doc id');
     }
-    const protocol = qs.protocol ? Number(qs.protocol) : 1;
-    if (Number.isNaN(protocol) || protocol < 1 || protocol > 2) {
-      throw new Error(`Invalid protocol version ${protocol}`);
-    }
     const resources = await notebooks.getResourceIds(docId);
-    const versionName = qs.version ?? '';
-    await onConnect({
-      connId,
-      resources,
-      versionName,
-      auth: authResult,
-      protocol,
-    });
+    const protocol = qs.protocol ? Number(qs.protocol) : 1;
+    if (!Number.isNaN(protocol)) {
+      // sync protocol
+      await onSyncConnect({
+        connId,
+        resources,
+        auth: authResult,
+        protocol,
+        versionName: qs.version ?? '',
+      });
+    } else if (qs.protocol?.startsWith('agent-chat')) {
+      await onChatAgentConnect({
+        connId,
+        resources,
+        auth: authResult,
+        protocol: qs.protocol,
+      });
+    } else {
+      throw notAcceptable(`Unknown protocol ${qs.protocol}`);
+    }
 
     const wsProtocol =
       event.headers['sec-websocket-protocol'] ||

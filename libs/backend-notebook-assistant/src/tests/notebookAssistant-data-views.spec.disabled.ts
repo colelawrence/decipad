@@ -17,7 +17,8 @@ test('notebook assistant: data views', async (ctx) => {
   it('can add a data view', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add a data view to analyze the first 2 columns of my table'
+      'add a data view to analyze the first 2 columns of my table',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([
@@ -320,7 +321,8 @@ test('notebook assistant: data views', async (ctx) => {
   it('can summarize a table', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'summarize table Table1'
+      'summarize table Table1',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([

@@ -98,7 +98,7 @@ jobs:
           REACT_APP_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
           REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
-          # DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-code-assistant'
+          DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh

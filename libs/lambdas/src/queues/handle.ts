@@ -1,5 +1,5 @@
 import { captureException, trace } from '@decipad/backend-trace';
-import { timeout } from '@decipad/utils';
+import { timeout as runTimeout } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { debug } from '../debug';
 
@@ -11,7 +11,7 @@ type EventWithRecord = APIGatewayProxyEventV2 & {
   }>;
 };
 
-const TIMEOUT_MS = 50_000;
+const DEFAULT_TIMEOUT_MS = 50_000;
 
 const processAllRecords = async <T>(
   event: EventWithRecord,
@@ -32,12 +32,23 @@ const processAllRecords = async <T>(
   }
 };
 
-export default function queueHandler<T>(userHandler: RecordHandler<T>) {
+export interface QueueHandlerOptions {
+  timeout?: number | false;
+}
+
+export default function queueHandler<T>(
+  userHandler: RecordHandler<T>,
+  { timeout = DEFAULT_TIMEOUT_MS }: QueueHandlerOptions = {}
+) {
   return trace(async (event: EventWithRecord) => {
-    await Promise.race([
-      processAllRecords(event, userHandler),
-      timeout(TIMEOUT_MS),
-    ]);
+    if (typeof timeout === 'number') {
+      await Promise.race([
+        processAllRecords(event, userHandler),
+        runTimeout(timeout),
+      ]);
+    } else {
+      await processAllRecords(event, userHandler);
+    }
     return { statusCode: 200 };
   });
 }

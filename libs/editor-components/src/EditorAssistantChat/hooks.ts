@@ -1,19 +1,15 @@
+import type { EditorController } from '@decipad/notebook-tabs';
 import {
-  GetSuggestedNotebookChangesDocument,
-  GetSuggestedNotebookChangesQuery,
-} from '@decipad/graphql-client';
-import { EditorController } from '@decipad/notebook-tabs';
-import {
-  Message,
-  UserMessage,
+  type Message,
   useAIChatHistory,
+  AssistantMessage,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { TOperation } from '@udecode/plate';
 
 import { nanoid } from 'nanoid';
-import { useCallback, useMemo, useState } from 'react';
-import { useClient } from 'urql';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { useNotebookAssistantHelper } from './useNotebookAssistantHelper';
+import { useChatAssistantHelper } from './useChatAssistantHelper';
 
 export const useAssistantChat = (
   notebookId: string,
@@ -33,8 +29,6 @@ export const useAssistantChat = (
   const handleAddMessage = addMessage(notebookId);
   const handleUpdateMessage = updateMessage(notebookId);
   const handleDeleteMessage = deleteMessage(notebookId);
-
-  const client = useClient();
 
   const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
   const toast = useToast();
@@ -61,192 +55,104 @@ export const useAssistantChat = (
     [messages]
   );
 
-  const getAssistantChanges = useCallback(
-    async (prompt: string) => {
-      const res = await client.executeQuery<GetSuggestedNotebookChangesQuery>(
-        {
-          query: GetSuggestedNotebookChangesDocument,
-          key: Math.random(),
-          variables: {
-            notebookId,
-            prompt,
-          },
-        },
-        { requestPolicy: 'network-only' }
-      );
+  const latestAssistantMessage = useRef<AssistantMessage | undefined>();
 
-      // eslint-disable-next-line no-console
-      console.debug('response from assistant changes', res);
+  const setLatestAssistantMessage = useCallback((message: AssistantMessage) => {
+    latestAssistantMessage.current = message;
+  }, []);
 
-      if (res.error) {
-        throw res.error;
+  const updateLatestAssistantMessage = useCallback(
+    (message: Partial<AssistantMessage>) => {
+      if (latestAssistantMessage.current) {
+        const newLatestResponse = {
+          ...latestAssistantMessage.current,
+          ...message,
+        };
+        handleUpdateMessage(newLatestResponse);
+        latestAssistantMessage.current = newLatestResponse;
+      } else {
+        // eslint-disable-next-line no-console
+        console.debug('no latest response');
       }
-
-      const operations = res.data?.suggestNotebookChanges?.operations;
-      const summary = res.data?.suggestNotebookChanges?.summary;
-
-      return { operations, summary };
     },
-    [client, notebookId]
+    [handleUpdateMessage, latestAssistantMessage]
   );
 
-  const applyChanges = useCallback(
-    (operations: TOperation[]) => {
-      const toastId = toast.info('Applying changes...', { autoDismiss: false });
+  const [gettingChangesToastId, setGettingChangesToastId] = useState<
+    string | undefined
+  >();
 
-      // Disable normalizer
-      if (operations.length > 0) {
-        controller.WithoutNormalizing(() => {
-          for (const op of operations) {
-            try {
-              // We apply the changes as if they are "remote".
-              // So we need this to avoid a cycle.
-              (op as any).IS_LOCAL_SYNTHETIC = true;
-              controller.apply(op as TOperation);
-            } catch (err) {
-              toast.error('Error applying changes');
-              console.error('error applying: ', op, err);
-              throw err;
-            }
-          }
-        });
+  const { sendPrompt } = useNotebookAssistantHelper({
+    notebookId,
+    controller,
+    updateMessage: updateLatestAssistantMessage,
+    onceDone: useCallback(() => {
+      if (gettingChangesToastId) {
+        toast.delete(gettingChangesToastId);
       }
-      toast.delete(toastId);
+    }, [gettingChangesToastId, toast]),
+  });
+
+  const { newUserMessage } = useChatAssistantHelper({
+    addMessage: handleAddMessage,
+    chatId: notebookId,
+    sendPrompt,
+    setGettingChangesToastId,
+    setLatestAssistantMessage,
+    updateLatestAssistantMessage,
+  });
+
+  const sendUserMessage = useCallback(
+    async (content: string) => {
+      const newMessage: Message = {
+        role: 'user',
+        content,
+        id: nanoid(),
+      };
+
+      const updatedMessages = [...messages, newMessage];
+
+      handleAddMessage(newMessage);
+      setIsGeneratingResponse(true);
+
+      await newUserMessage(updatedMessages, newMessage);
+
+      setIsGeneratingResponse(false);
     },
-    [controller, toast]
+    [handleAddMessage, messages, newUserMessage]
   );
 
-  // TODO: Refactor refactor refactor
-  const getAssistantResponse = async (
-    chatId: string,
-    updatedMessages: Message[],
-    userMessage: Message
-  ) => {
-    const newResponse: Message = {
-      content: 'Generating response...',
-      role: 'assistant',
-      type: 'pending',
-      id: nanoid(),
-      replyTo: userMessage.id,
-    };
-    handleAddMessage(newResponse);
-    try {
-      const response = await fetch(`/api/ai/chat/${chatId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          updatedMessages.map((message) => {
-            const {
-              id: _id,
-              replyTo: _replyTo,
-              type: _type,
-              ...rest
-            } = message;
-            return rest;
-          })
-        ),
-      });
+  const regenerateResponse = useCallback(
+    async (id: string) => {
+      const replyTo = getAssistantMessageReplyToFromId(id);
 
-      if (response.status !== 200) {
-        const err = await response.json();
-
-        // TODO: remove this when we have a proper error handling
-        if (err.name === 'Error') {
-          throw new Error(err.message);
-        }
+      if (!replyTo) {
+        return;
       }
+      const userMessage = getUserMessageFromReplyTo(replyTo);
 
-      const result: Message = await response.json();
-
-      // TODO: make this check more explicit
-      if (!('function_call' in result)) {
-        handleUpdateMessage({
-          ...newResponse,
-          content: result.content,
-          type: 'success',
-        });
+      if (!userMessage) {
         return;
       }
 
-      handleUpdateMessage({
-        ...newResponse,
-        content: 'Got it. Let me update the document for you...',
-        type: 'pending',
-      });
+      handleDeleteMessage(id);
 
-      const toastId = toast.info('Getting changes...', { autoDismiss: false });
-      try {
-        const changes = await getAssistantChanges(
-          (userMessage as UserMessage).content
-        );
+      const updatedMessages = [...messages, userMessage];
 
-        if (changes?.operations) {
-          applyChanges(changes.operations as TOperation[]);
-        }
-        if (changes?.summary) {
-          handleUpdateMessage({
-            ...newResponse,
-            content: changes.summary,
-            type: 'success',
-          });
-        }
-      } finally {
-        toast.delete(toastId);
-      }
-    } catch (error) {
-      console.error(error);
-      handleUpdateMessage({
-        ...newResponse,
-        content: 'Error generating response',
-        type: 'error',
-      });
-      toast.error(
-        "Couldn't get response from AI assistant. Please try again later."
-      );
-    }
-  };
+      setIsGeneratingResponse(true);
 
-  const sendUserMessage = async (content: string) => {
-    const newMessage: Message = {
-      role: 'user',
-      content,
-      id: nanoid(),
-    };
+      await newUserMessage(updatedMessages, userMessage);
 
-    const updatedMessages = [...messages, newMessage];
-
-    handleAddMessage(newMessage);
-    setIsGeneratingResponse(true);
-
-    await getAssistantResponse(notebookId, updatedMessages, newMessage);
-
-    setIsGeneratingResponse(false);
-  };
-
-  const regenerateResponse = async (id: string) => {
-    const replyTo = getAssistantMessageReplyToFromId(id);
-
-    if (!replyTo) {
-      return;
-    }
-    const userMessage = getUserMessageFromReplyTo(replyTo);
-
-    if (!userMessage) {
-      return;
-    }
-
-    handleDeleteMessage(id);
-
-    const updatedMessages = [...messages, userMessage];
-
-    setIsGeneratingResponse(true);
-
-    await getAssistantResponse(notebookId, updatedMessages, userMessage);
-
-    setIsGeneratingResponse(false);
-  };
+      setIsGeneratingResponse(false);
+    },
+    [
+      getAssistantMessageReplyToFromId,
+      getUserMessageFromReplyTo,
+      handleDeleteMessage,
+      messages,
+      newUserMessage,
+    ]
+  );
 
   return {
     messages,

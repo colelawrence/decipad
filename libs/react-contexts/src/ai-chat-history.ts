@@ -57,7 +57,7 @@ type FunctionCallAssistantMessage = {
   };
 };
 
-type ReplyAssistantMessage = BaseAssistantMessage & {
+export type ReplyAssistantMessage = BaseAssistantMessage & {
   readonly content: string;
 };
 

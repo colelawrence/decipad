@@ -16,7 +16,8 @@ test('notebook assistant: prose', async (ctx) => {
   it('can change the title of a notebook', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the title text to say "🕯Stopping a Candle Business"'
+      'change the title text to say "🕯Stopping a Candle Business"',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`
@@ -24,7 +25,7 @@ test('notebook assistant: prose', async (ctx) => {
         {
           "children": [
             {
-              "text": "🕯Starting a Candle Business",
+              "text": "🕯Stopping a Candle Business",
             },
           ],
           "id": "3JTr-B84cKMnNOYnvHiFi",
@@ -69,7 +70,8 @@ test('notebook assistant: prose', async (ctx) => {
   it('can remove a paragraph', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'remove the last paragraph'
+      'remove the last paragraph',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`
@@ -106,7 +108,8 @@ test('notebook assistant: prose', async (ctx) => {
   it('can add a paragraph', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add a paragraph asking people to follow me on Twitter'
+      'add a paragraph asking people to follow me on Twitter',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
@@ -162,7 +165,8 @@ test('notebook assistant: prose', async (ctx) => {
   it('can change a paragraph', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the second paragraph asking people to follow me on Twitter'
+      'change the second paragraph asking people to follow me on Twitter',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
@@ -209,7 +213,8 @@ test('notebook assistant: prose', async (ctx) => {
   it('can add a code line to a notebook without code lines', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add a code line calculating 3 divided by 4'
+      'add a code line calculating 3 divided by 4',
+      'conn-id'
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {

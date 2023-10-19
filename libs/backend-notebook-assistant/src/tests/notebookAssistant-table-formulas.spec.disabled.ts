@@ -16,7 +16,8 @@ test('notebook assistant: table formulas', async (ctx) => {
   it('can add a formula column', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'add a column to the table that calculates the sum of the EBITDA and Capex columns'
+      'add a column to the table that calculates the sum of the EBITDA and Capex columns',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations))
@@ -680,7 +681,8 @@ test('notebook assistant: table formulas', async (ctx) => {
   it('can change a formula column', async () => {
     const results = await notebookAssistant(
       newNotebookId,
-      'change the last column to calculate the average of the EBITDA column instead'
+      'change the last column to calculate the average of the EBITDA column instead',
+      'conn-id'
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([

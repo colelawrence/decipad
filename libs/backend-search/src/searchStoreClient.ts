@@ -38,7 +38,5 @@ export const searchStoreClient = async (): Promise<Client> => {
       password: process.env.DECI_SEARCH_PASSWORD,
     };
   }
-  // eslint-disable-next-line no-console
-  console.log('searchStoreClient:', options);
   return new Client(options);
 };
