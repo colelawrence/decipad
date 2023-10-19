@@ -26,6 +26,7 @@ export const tableVerbalizer: Verbalizer = (element, verbalize) => {
     const mapper =
       kind === 'string' ||
       kind === 'anything' ||
+      kind === 'date' ||
       (kind === 'series' && header.cellType.seriesType !== 'number')
         ? (d: string) => stringify(d)
         : identity;

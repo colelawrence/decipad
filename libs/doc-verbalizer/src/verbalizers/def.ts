@@ -12,9 +12,9 @@ export const defVerbalizer: Verbalizer = (element, verbalize) => {
   switch (element.variant) {
     case 'slider': {
       const { max, min, step } = element.children[2];
-      return `Slider that exposes a variable named \`${varName}\`, has the value of ${stringify(
+      return `Slider with variable named \`${varName}\`, value of ${stringify(
         expression
-      )}, has a minimum allowed value of ${min}, a maximum allowed value of ${max} and a step of ${step}.`;
+      )}, minimum = ${min}, maximum = ${max}, step = ${step}.`;
     }
     case 'toggle':
     case 'expression': {

@@ -9,6 +9,7 @@ import {
   RootDocument,
 } from '../../editor-types/src';
 import { getVerbalizer } from './verbalizers';
+import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
 
 export interface VerbalizedElement {
   element: AnyElement;
@@ -51,14 +52,18 @@ export const verbalizeElement = (
     return result;
   };
   const v = getVerbalizer(element);
+  let verbalized: string;
+  if (v == null) {
+    tags.add(element.type);
+    verbalized = nodeStringVerbalizer(element, verbalizeOneNode);
+  } else {
+    verbalized = v(element, verbalizeOneNode);
+  }
 
   return [
     {
       element,
-      verbalized:
-        v != null
-          ? v(element, verbalizeOneNode)
-          : verbalizeOneNode(element as MyNode),
+      verbalized,
       tags,
     },
   ];
