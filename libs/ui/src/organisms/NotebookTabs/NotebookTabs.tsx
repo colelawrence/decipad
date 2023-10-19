@@ -194,6 +194,7 @@ export const NotebookTabs: FC<TabsProps> = ({
               const id = onCreateTab();
               setEditableTabId(id);
             }}
+            data-testid="add-tab-button"
           >
             <Plus />
             Add tab
@@ -259,6 +260,7 @@ const Tab: FC<TabProps> = ({
       value={id}
       isActive={isActive}
       isHidden={isHidden}
+      data-testid="tab-button"
     >
       <TabContent onClick={isReadOnly ? onClick : handleClickRename}>
         {isReadOnly ? (
@@ -282,19 +284,20 @@ const Tab: FC<TabProps> = ({
             onChangeColor={noop}
           />
         )}
-        <TabName>{name}</TabName>
+        <TabName data-testid="tab-name">{name}</TabName>
       </TabContent>
       {isActive && !isReadOnly && (
         <MenuList
           root
           dropdown
           trigger={
-            <IconWrapper>
+            <IconWrapper data-testid="tab-options-button">
               <Caret variant={open ? 'up' : 'down'} />
             </IconWrapper>
           }
           open={open}
           onChangeOpen={setOpen}
+          dataTestid="tab-options-menu"
         >
           <MenuItem icon={<Edit />} onSelect={onRename}>
             Rename Tab
