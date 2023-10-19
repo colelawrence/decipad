@@ -33,7 +33,7 @@ test.describe('Icons on the editor title', () => {
   test('changes the color of the icon', async ({ page }) => {
     await page.locator('button[aria-haspopup="dialog"]').click();
     await page.getByTestId('icon-color-picker-Sulu').click();
-
+    await expect(page.getByText('Pick a style')).toBeVisible();
     await snapshot(page as Page, 'Notebook: Icon selection');
   });
 });
