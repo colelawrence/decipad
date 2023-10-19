@@ -9,7 +9,7 @@ import {
 } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ChangeEvent, FC, useRef, useState } from 'react';
-import { Button } from '../../atoms';
+import { Button, Link } from '../../atoms';
 import { Close } from '../../icons';
 import { modalDialogStyles } from '../../molecules/Modal/Modal';
 import { cssVar, p12Medium, p15Medium } from '../../primitives';
@@ -43,7 +43,7 @@ const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
       };
     case 'embed':
       return {
-        title: 'Insert embed',
+        title: 'Embed URL',
         maxSize: MAX_UPLOAD_FILE_SIZE.embed,
       };
     case 'data':
@@ -169,7 +169,11 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
         </TabsContent>
       </div>
       <span css={p12Medium}>
-        You can also drag & drop, or copy & paste directly into the notebook.
+        Embeds are experimental. Check out{' '}
+        <Link href="https://app.decipad.com/docs/quick-start/embed-on-decipad">
+          the docs
+        </Link>{' '}
+        if you run into issues.
       </span>
     </TabsRoot>
   );
