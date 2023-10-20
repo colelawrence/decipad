@@ -7,7 +7,7 @@ import {
   TabElement,
   TitleElement,
 } from '@decipad/editor-types';
-import { EditorController, OutOfSyncError } from './EditorController';
+import { EditorController } from './EditorController';
 
 let mockCounter = 0;
 jest.mock('nanoid', () => {
@@ -18,13 +18,6 @@ jest.mock('nanoid', () => {
     },
   };
 });
-
-let lastException: any;
-jest.mock('@sentry/browser', () => ({
-  captureException: (args: any) => {
-    lastException = args;
-  },
-}));
 
 describe('Sub editors behavior', () => {
   it('should update controller children object if editor changes', () => {
@@ -123,7 +116,7 @@ describe('Migrating old documents into tabs', () => {
               "text": "This is the title",
             },
           ],
-          "id": "h1",
+          "id": "3",
           "type": "title",
         },
         Object {
@@ -137,18 +130,9 @@ describe('Migrating old documents into tabs', () => {
               "id": "p1",
               "type": "p",
             },
-            Object {
-              "children": Array [
-                Object {
-                  "text": "",
-                },
-              ],
-              "id": "4",
-              "type": "p",
-            },
           ],
           "icon": "Receipt",
-          "id": "3",
+          "id": "4",
           "isHidden": false,
           "name": "New tab",
           "type": "tab",
@@ -742,7 +726,7 @@ describe('Migrating old documents into tabs', () => {
             "text": "How rich would you be if you invested in bitcoin",
           },
         ],
-        "id": "h1Id",
+        "id": "5",
         "type": "title",
       }
     `);
@@ -754,6 +738,114 @@ describe('Migrating old documents into tabs', () => {
           (c.type as any) === ELEMENT_TAB || (c.type as any) === ELEMENT_TITLE
       )
     ).toBeFalsy();
+  });
+
+  it('migrates partially when tabs are also present', () => {
+    const controller = new EditorController('id', []);
+
+    const mixed: MyValue = [
+      {
+        type: 'p',
+        id: 'p1',
+        children: [{ text: 'This is a paragraph' }],
+      },
+      {
+        type: 'p',
+        id: 'p2',
+        children: [{ text: 'This is another paragraph' }],
+      },
+    ];
+
+    controller.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: 'title',
+        id: 'titleId',
+        children: [{ text: 'My Title' }],
+      } satisfies TitleElement,
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: 'tab',
+        id: 'tab1',
+        name: 'hello',
+        children: [
+          {
+            type: 'p',
+            id: 'p-tab-1',
+            children: [{ text: 'inside tab' }],
+          },
+        ],
+      } satisfies TabElement,
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [2],
+      node: mixed[0],
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [3],
+      node: mixed[1],
+    });
+
+    controller.Loaded();
+
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "My Title",
+            },
+          ],
+          "id": "titleId",
+          "type": "title",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "inside tab",
+                },
+              ],
+              "id": "p-tab-1",
+              "type": "p",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "This is a paragraph",
+                },
+              ],
+              "id": "p1",
+              "type": "p",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "This is another paragraph",
+                },
+              ],
+              "id": "p2",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "tab1",
+          "isHidden": false,
+          "name": "hello",
+          "type": "tab",
+        },
+      ]
+    `);
   });
 });
 
@@ -838,12 +930,6 @@ describe('Tests normalizer for tabs', () => {
         } satisfies TitleElement,
       });
 
-      expect(lastException).toBeInstanceOf(OutOfSyncError);
-      const exception: OutOfSyncError = lastException;
-      expect(exception.op.type).toBe('insert_node');
-
-      lastException = undefined;
-
       controller.apply({
         type: 'insert_node',
         path: [i + 1],
@@ -856,8 +942,6 @@ describe('Tests normalizer for tabs', () => {
           children: [],
         } satisfies TabElement,
       });
-
-      expect(lastException).toBeUndefined();
     }
 
     // 25 tabs + 1 title.
@@ -1069,10 +1153,10 @@ describe('Resilience of existing notebooks with broken structure', () => {
         Object {
           "children": Array [
             Object {
-              "text": "Welcome to Decipad!",
+              "text": "title",
             },
           ],
-          "id": "20",
+          "id": "titleid",
           "type": "title",
         },
         Object {
@@ -1083,7 +1167,7 @@ describe('Resilience of existing notebooks with broken structure', () => {
                   "text": "",
                 },
               ],
-              "id": "21",
+              "id": "20",
               "type": "p",
             },
           ],

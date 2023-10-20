@@ -9,7 +9,6 @@ import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';
 import { EditorController } from '@decipad/notebook-tabs';
-import { timeout } from '@decipad/utils';
 
 waitForExpect.defaults.interval = 500;
 const replicaCount = 5;
@@ -101,6 +100,7 @@ test('sync many', (ctx) => {
       const editor = createDocSyncEditor(pad.id, {
         protocolVersion: 2,
         controller: new EditorController(pad.id, []),
+        // initialState: EMPTY_INITIAL_NOTEBOOK,
       });
       editors.push(editor);
     }
@@ -116,47 +116,21 @@ test('sync many', (ctx) => {
       )
     );
 
-    // We load only one of the editors, because if they all load, then they all try and insert
-    // their starting notebook (title and tab), which would mean many multiple insertions.
     editors[0].editorController.Loaded('test');
-    expect(editors[0].editorController.children).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "children": Array [
-            Object {
-              "text": "Welcome to Decipad!",
-            },
-          ],
-          "id": "11",
-          "type": "title",
-        },
-        Object {
-          "children": Array [
-            Object {
-              "children": Array [
-                Object {
-                  "text": "",
-                },
-              ],
-              "id": "13",
-              "type": "p",
-            },
-          ],
-          "icon": "Receipt",
-          "id": "12",
-          "isHidden": false,
-          "name": "New tab",
-          "type": "tab",
-        },
-      ]
-    `);
   });
 
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
 
-    // Lets wait for the loaded state to go through.
-    await timeout(5000);
+    await waitForExpect(
+      () => {
+        for (const editor of editors) {
+          expect(editor.editorController.children).toHaveLength(2);
+        }
+      },
+      20000,
+      5000
+    );
 
     await randomChangesToEditors(
       editors.map((e) => e.editorController.SubEditors[0]),

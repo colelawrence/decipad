@@ -134,7 +134,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     await publishedNotebookPage.waitForSelector('text="ם עוד. על בקר"');
 
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
-      25
+      24
     );
     await expect(page.locator('[data-slate-editor] p')).toHaveCount(9);
   });
