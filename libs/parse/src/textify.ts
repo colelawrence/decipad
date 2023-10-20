@@ -27,6 +27,9 @@ const textifyNumber = (result: Result.Result<'number'>) => {
 };
 
 export const textify = (result: Result.Result): string => {
+  if (typeof result.value === 'symbol') {
+    return '?';
+  }
   switch (result.type.kind) {
     case 'boolean':
       return textifyBoolean(result as Result.Result<'boolean'>);
