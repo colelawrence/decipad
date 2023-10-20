@@ -25,7 +25,7 @@ it('can push a new table into the computer', async () => {
     'Table1',
     serializeResult(type, value)
   );
-  await timeout(0);
+  await timeout(10);
 
   expect(
     await Promise.all(
@@ -88,7 +88,7 @@ it('can push a new table into the computer', async () => {
 
   // Garbage collect
   pushResultToComputer(computer, 'blockid', 'Table1', undefined);
-  await timeout(0);
+  await timeout(100);
 
   // Assert on the computer's internal state to make sure we've GC'd the things we need to
   expect(
