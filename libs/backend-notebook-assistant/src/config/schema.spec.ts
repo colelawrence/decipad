@@ -338,7 +338,8 @@ describe('schema generator', () => {
       };
       type RichText = PlainText & Partial<Record<MarkKind, true>>;
       type Text = PlainText | RichText;
-      export interface DataViewElement extends BaseElement {
+      export interface DataViewElement {
+          id: string;
           type: 'data-view';
           children: [DataViewCaptionElement, DataViewHeaderRowElement];
           varName?: string; // contains the table block id
@@ -406,6 +407,58 @@ describe('schema generator', () => {
           id: string,
           type: 'data-view-tr';
           children: Array<DataViewHeader>;
+        }
+
+      type BlockElement = ParagraphElement | TableElement | VariableElement | CodeLineV2Element;
+
+      type TabElement = {
+        id: string;
+        type: 'tab';
+        name: string;
+        children: Array<BlockElement>;
+      }
+
+      // The entire document
+
+      type Document = {
+        children: [
+          TitleElement,
+          ...Array<TabElement>
+        ];
+      };"
+    `);
+  });
+
+  it('provides schema for plots', () => {
+    expect(schema(['plot'])).toMatchInlineSnapshot(`
+      "type PlainText = EmptyText | { text: string };
+      type PlainTextChildren = [PlainText];
+      type EmptyText = {
+        text: '';
+      };
+      type RichText = PlainText & Partial<Record<MarkKind, true>>;
+      type Text = PlainText | RichText;
+      interface PlotElement {
+          id: string;
+          type: 'plot';
+          title?: string;
+          sourceVarName: string;
+          markType:
+            | 'bar'
+            | 'circle'
+            | 'square'
+            | 'tick'
+            | 'line'
+            | 'area'
+            | 'point'
+            | 'arc';
+          xColumnName: string;
+          yColumnName: string;
+          sizeColumnName: string;
+          colorColumnName: string;
+          thetaColumnName: string;
+          children: [EmptyText];
+          y2ColumnName: string;
         }
 
       type BlockElement = ParagraphElement | TableElement | VariableElement | CodeLineV2Element;

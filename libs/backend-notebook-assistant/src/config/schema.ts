@@ -233,12 +233,36 @@ type VariableSliderElement = VariableBaseElement<
     children: [DataViewNameElement];
   }`,
 
-  'data-view': `export interface DataViewElement extends BaseElement {
+  'data-view': `export interface DataViewElement {
+    id: string;
     type: 'data-view';
     children: [DataViewCaptionElement, DataViewHeaderRowElement];
     varName?: string; // contains the table block id
     color?: string;
     icon?: string;
+  }`,
+
+  plot: `interface PlotElement {
+    id: string;
+    type: 'plot';
+    title?: string;
+    sourceVarName: string;
+    markType:
+      | 'bar'
+      | 'circle'
+      | 'square'
+      | 'tick'
+      | 'line'
+      | 'area'
+      | 'point'
+      | 'arc';
+    xColumnName: string;
+    yColumnName: string;
+    sizeColumnName: string;
+    colorColumnName: string;
+    thetaColumnName: string;
+    children: [EmptyText];
+    y2ColumnName: string;
   }`,
 } as const;
 

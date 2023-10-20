@@ -183,7 +183,9 @@ ${nudges()}No comments.`,
           'no reply content for parsing instruction keys'
         )
       );
-      dataViewMode = instructionConstituents.includes('data-views');
+      dataViewMode =
+        instructionConstituents.includes('data-views') ||
+        instructionConstituents.includes('plots');
       debug('instruction constituents:', instructionConstituents);
       instructions = getInstructions(instructionConstituents);
       events.next({

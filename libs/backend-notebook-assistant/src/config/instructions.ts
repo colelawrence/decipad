@@ -5,7 +5,8 @@ export type InstructionConstituent =
   | 'sliders'
   | 'tables'
   | 'table-formulas'
-  | 'data-views';
+  | 'data-views'
+  | 'plots';
 
 export const instructionSummaries: Record<InstructionConstituent, string> = {
   'code-lines':
@@ -17,6 +18,7 @@ export const instructionSummaries: Record<InstructionConstituent, string> = {
     'Code, expressions or formulas that go inside table columns. Do NOT use to summarize or analyze a table.',
   'data-views':
     'Data views (pivot tables): should be used to analyze, summarize or aggregate tables.',
+  plots: `Graphics, charts, plots to view table data.`,
 };
 
 export const tagsForInstructions: Record<InstructionConstituent, string[]> = {
@@ -25,6 +27,7 @@ export const tagsForInstructions: Record<InstructionConstituent, string[]> = {
   tables: ['table'],
   'table-formulas': ['th'],
   'data-views': ['data-view'],
+  plots: ['plot'],
 };
 
 type InstructionConstituents = Array<InstructionConstituent>;
@@ -86,6 +89,13 @@ To summarize a table ALWAYS use a data view.
 To summarize data, NEVER use a table, ALWAYS use a data view.
 NEVER replace a table with a data view.
 NEVER remove a table.`,
+
+  plots: `Plots, Graphs or Charts:
+An element of type \`plot\` can be used to print a chart or graphic.
+Always fill the \`xColumnName\` and the \`yColumnName\` attributes with column names.,
+The chart type can be changed by changing the \`markType\` attribute to "bar", "circle", "square", "tick", "line", "area", or "point".
+If the \`markType\` is \`arc\` it will print a pie chart. For pie charts the \`thetaColumnName\` should be filled.
+NEVER remove a table when adding or changing a chart.`,
 };
 
 const sanitizeConstituents = (
