@@ -1,4 +1,5 @@
-import { PromiseOrType } from '@decipad/utils';
+/* eslint-disable no-console */
+import { PromiseOrType, noop } from '@decipad/utils';
 
 type AsyncFunction<T> = () => PromiseOrType<T>;
 type Fn<T> = (value: T) => void;
@@ -10,10 +11,48 @@ type FunctionQueue = {
   pendingCount: () => number;
 };
 
-export function fnQueue(): FunctionQueue {
+export interface FnQueueOptions {
+  onError?: (err: unknown, finalRetry: boolean) => unknown;
+  maxRetries?: number;
+  isRetryable?: (err: unknown) => boolean;
+}
+
+const returnsFalse = () => false;
+
+const isTesting = process.env.JEST_WORKER_ID != null;
+
+export function fnQueue({
+  onError = noop,
+  maxRetries = 0,
+  isRetryable = returnsFalse,
+}: FnQueueOptions = {}): FunctionQueue {
   const fns: AsyncFunction<unknown>[] = [];
   let processing = 0;
   const flushes: Fn<void>[] = [];
+
+  async function callFn<T>(
+    fn: AsyncFunction<T>,
+    previousRetryCount = 0
+  ): Promise<T> {
+    const handleError = (err: unknown) => {
+      if (previousRetryCount < maxRetries && isRetryable(err)) {
+        onError(err, false);
+        if (!isTesting) {
+          console.log('going to retry');
+        }
+        return callFn(fn, previousRetryCount + 1);
+      }
+      onError(err, true);
+      throw err;
+    };
+
+    try {
+      return Promise.resolve(fn()).catch(handleError);
+      // return await fn();
+    } catch (err) {
+      return handleError(err);
+    }
+  }
 
   function processOne() {
     const fn = fns.shift();
@@ -29,6 +68,8 @@ export function fnQueue(): FunctionQueue {
       processing += 1;
       try {
         await processOne();
+      } catch (err) {
+        await onError(err, true);
       } finally {
         processing -= 1;
       }
@@ -45,16 +86,16 @@ export function fnQueue(): FunctionQueue {
 
   function push<T>(fn: AsyncFunction<T>): Promise<T> {
     let resolve: Fn<T>;
-    let reject: Fn<Error>;
+    let reject: Fn<unknown>;
     const p = new Promise<T>((res, rej) => {
       resolve = res;
       reject = rej;
     });
     fns.push(async () => {
       try {
-        resolve(await fn());
+        resolve(await callFn(fn));
       } catch (err) {
-        reject(err as Error);
+        reject(err);
       }
     });
     work();

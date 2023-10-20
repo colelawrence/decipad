@@ -55,4 +55,26 @@ describe('fn-queue', () => {
     expect(r1).toBe('r1');
     expect(r2).toBe('r2');
   });
+
+  it('can retry', async () => {
+    let errorCount = 0;
+    const q = fnQueue({
+      maxRetries: 1,
+      isRetryable: () => true,
+      onError: () => {
+        errorCount += 1;
+      },
+    });
+    let tryCount = 0;
+    const r = await q.push(async () => {
+      tryCount += 1;
+      if (tryCount === 1) {
+        throw new Error('test error');
+      }
+      return 'return value';
+    });
+    expect(errorCount).toBe(1);
+    expect(tryCount).toBe(2);
+    expect(r).toBe('return value');
+  });
 });

@@ -170,28 +170,39 @@ const broadcastMessage = async (
   );
 };
 
-const nonSeriousErrors = ['Gone', 'LimitExceeded'];
+const errorIs = (err: unknown, errMessage: string): boolean =>
+  err instanceof Error &&
+  ((err as ErrorWithCode)?.code?.includes(errMessage) ||
+    (err as Error).message.includes(errMessage) ||
+    err.name.includes(errMessage));
 
+const nonSeriousErrors = ['Gone', 'LimitExceeded'];
 const isSeriousError = (err: Error) =>
-  !nonSeriousErrors.some(
-    (errMessage) =>
-      (err as ErrorWithCode)?.code?.includes(errMessage) ||
-      (err as Error).message.includes(errMessage) ||
-      err.name.includes(errMessage)
-  );
+  !nonSeriousErrors.some((errMessage) => errorIs(err, errMessage));
+
+const retryableErrors = ['LimitExceeded', 'InvalidSignature'];
+const isRetryableError = (err: unknown) =>
+  retryableErrors.some((errMessage) => errorIs(err, errMessage));
+
+const justSend = (connId: string, payload: string) =>
+  ws.send({ id: connId, payload });
+
+const onSendError = async (err: unknown, isFinal = true) => {
+  if (isFinal && err instanceof Error && isSeriousError(err)) {
+    // eslint-disable-next-line no-console
+    console.error('Error in y-lambdawebsocket send', err);
+    await captureException(err);
+  }
+};
 
 export const trySend = async (
   connId: string,
   payload: string
 ): Promise<void> => {
   try {
-    await ws.send({ id: connId, payload });
+    await justSend(connId, payload);
   } catch (err) {
-    if (err instanceof Error && isSeriousError(err)) {
-      // eslint-disable-next-line no-console
-      console.error('Error in y-lambdawebsocket trySend', err);
-      await captureException(err);
-    }
+    onSendError(err);
   }
 };
 
@@ -208,7 +219,11 @@ export class LambdaWebsocketProvider extends Observable<string> {
   wsUnsuccessfulReconnects = 0;
   messageHandlers: MessageHandler[];
   mux = fnQueue();
-  sendQueue = fnQueue();
+  sendQueue = fnQueue({
+    isRetryable: isRetryableError,
+    maxRetries: 1,
+    onError: onSendError,
+  });
 
   senderSubscription: Subscription;
   sender: MessageSender;
@@ -259,7 +274,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
     if (this.destroyed) {
       return;
     }
-    this.sendQueue.push(() => trySend(to, message));
+    this.sendQueue.push(() => justSend(to, message));
   }
 
   private send(message: Buffer) {
