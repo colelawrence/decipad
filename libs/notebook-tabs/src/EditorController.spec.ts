@@ -793,7 +793,7 @@ describe('Tab Operations', () => {
 });
 
 describe('Tests normalizer for tabs', () => {
-  it('First title inserted wins', () => {
+  it('Last title inserted wins', () => {
     const controller = new EditorController('id', []);
     controller.apply({
       type: 'insert_node',
@@ -817,8 +817,8 @@ describe('Tests normalizer for tabs', () => {
     expect(controller.children).toMatchObject([
       {
         type: ELEMENT_TITLE,
-        id: '1',
-        children: [{ text: 'first title' }],
+        id: '2',
+        children: [{ text: 'second title' }],
       },
     ]);
   });
@@ -1069,10 +1069,10 @@ describe('Resilience of existing notebooks with broken structure', () => {
         Object {
           "children": Array [
             Object {
-              "text": "title",
+              "text": "Welcome to Decipad!",
             },
           ],
-          "id": "titleid",
+          "id": "20",
           "type": "title",
         },
         Object {
@@ -1083,7 +1083,7 @@ describe('Resilience of existing notebooks with broken structure', () => {
                   "text": "",
                 },
               ],
-              "id": "20",
+              "id": "21",
               "type": "p",
             },
           ],

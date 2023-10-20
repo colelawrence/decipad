@@ -318,7 +318,7 @@ export class EditorController {
 
       if (op.type === 'insert_node') {
         this.InsertOperations.push(op);
-        if (IsTitle(op.node) && this.children[0].id === PLACEHOLDER_ID) {
+        if (IsTitle(op.node)) {
           this.InsertTitle(op as TInsertNodeOperation<TitleElement>);
         } else if (IsTab(op.node)) {
           this.InsertTab(op as TInsertNodeOperation<TabElement>);
@@ -364,6 +364,7 @@ export class EditorController {
       captureExceptionWrapper(
         new OutOfSyncError('Tried to insert title in non-0 path', op)
       );
+      return;
     }
 
     this.TitleEditor.withoutNormalizing(() => {
@@ -827,8 +828,8 @@ export class EditorController {
       this.OldNodes = [];
     }
 
-    const goodTitleIndex = this.InsertOperations.findIndex((op) =>
-      IsTitle(op.node)
+    const goodTitleIndex = this.InsertOperations.findIndex(
+      (op) => IsTitle(op.node) && op.path.length === 1 && op.path[0] === 0
     );
 
     // Extract the one good title (if any)
