@@ -1020,10 +1020,10 @@
     tslib "^2.5.0"
     uuid "^8.3.2"
 
-"@aws-sdk/client-opensearch@^3.431.0":
-  version "3.431.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-opensearch/-/client-opensearch-3.431.0.tgz#91f1963134fd6723081eb15100633e31ac6cf18c"
-  integrity sha512-DGOqGTxHIjOFwp7uGVyslxm2gbXLMAKrJWMTAxVo51h2CUZIdBoolbdFlhFqRWf0LulffLJeHfjfp56OtIouXw==
+"@aws-sdk/client-opensearch@^3.432.0":
+  version "3.432.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-opensearch/-/client-opensearch-3.432.0.tgz#b9cbaf6bc61e4b6b3f65b8330672100950bc4083"
+  integrity sha512-cg/HFDwoEgZcbJ0mvG6NUUK8x1aOoN3X9pDzcU+aKc/0q03euz+Y8Elao/CgKBijC4xP28Yl0i0Ur2c5KJyk9A==
   dependencies:
     "@aws-crypto/sha256-browser" "3.0.0"
     "@aws-crypto/sha256-js" "3.0.0"
@@ -15491,7 +15491,7 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1476.0:
+aws-sdk@2.1476.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
   version "2.1476.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1476.0.tgz#c0c3861f3287fc05d8e9fc7ebb3e0fb713f979a7"
   integrity sha512-JxLdsSUpdPISLSyIUHGDLggR7i0VQRWAbtv4BO0Okv2vlm7uuLAiEHge/ZmX7DObzAbKiG8dn1Dfc2v0pOwBuw==
@@ -15521,22 +15521,6 @@ aws-sdk@2.880.0:
     url "0.10.3"
     uuid "3.3.2"
     xml2js "0.4.19"
-
-aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1475.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1475.0.tgz#2b7dc55e7779964a9174c4595b239be76080bc32"
-  integrity sha512-fYlDnmh7sDH/CS6TtP0EEH2RcLBemgHnJjUhkHGIqQvMTzi3N13EvBtyaYozoJsJ2i8/rcwU10/48HO7rNwL5g==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.5.0"
 
 aws4@^1.11.0:
   version "1.12.0"
