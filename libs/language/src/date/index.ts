@@ -229,7 +229,7 @@ export const cleanDate = (
 export const dateToArray = (
   date: Date | number | bigint | undefined
 ): Array<bigint> => {
-  if (date == null) {
+  if (date == null || Number.isNaN(date)) {
     return [];
   }
   const d = new Date(Number(date));
@@ -330,10 +330,10 @@ export function date(
 const pad = (x: bigint | string) => String(x).padStart(2, '0');
 
 export function stringifyDate(
-  date: bigint | undefined | symbol,
+  date: bigint | number | undefined | symbol,
   specificity: Time.Specificity
 ): string {
-  if (date == null || typeof date === 'symbol') {
+  if (date == null || typeof date === 'symbol' || Number.isNaN(date)) {
     return UNKNOWN_ASSTRING;
   }
   const segments = dateToArray(date);

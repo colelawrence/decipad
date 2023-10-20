@@ -98,7 +98,7 @@ export class ComputationRealm {
           name,
           await all(
             map(data(), (d) =>
-              stringifyDate(d as bigint | symbol | undefined, date)
+              stringifyDate(d as bigint | number | symbol | undefined, date)
             )
           )
         );
