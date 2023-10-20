@@ -38,7 +38,7 @@ export interface EditorProps {
 const SCRUBBED = '[scrubbed]';
 
 Scrubber.setScrubber((key, value) => {
-  if (key.startsWith('__') || key === 'window') {
+  if (key.startsWith('_') || key === 'window') {
     return SCRUBBED;
   }
   if (value === globalThis) {
