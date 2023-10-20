@@ -17,6 +17,7 @@ import { nanoid } from 'nanoid';
 export interface AddCommand {
   action: 'add';
   newBlock: AnyElement; // the block to add
+  placeAfterBlockId?: string; // id of the block to insert after
 }
 
 export interface RemoveCommand {
@@ -72,7 +73,35 @@ export const applyCommands = (
                 )
               : command.newBlock;
           set(newDocument, propPath, newBlock);
+          break;
         } else if (command.action === 'add') {
+          if (command.placeAfterBlockId) {
+            const previousBlockPath = findPath(
+              previousDoc,
+              command.placeAfterBlockId
+            );
+            if (previousBlockPath && previousBlockPath.length > 0) {
+              const parentPath = previousBlockPath.slice(
+                0,
+                previousBlockPath.length - 2
+              );
+              const parent = get(newDocument, parentPath.join('.'));
+              if (parent && isElement(parent)) {
+                const parentPos = Number(
+                  previousBlockPath[previousBlockPath.length - 1]
+                );
+                if (!Number.isNaN(parentPos)) {
+                  const selfPos = parentPos + 1;
+                  parent.children = [
+                    ...parent.children.slice(0, selfPos),
+                    command.newBlock,
+                    ...parent.children.slice(selfPos),
+                  ];
+                  break;
+                }
+              }
+            }
+          }
           let firstTab = newDocument.children.find(
             (el) => isElement(el) && el.type === ELEMENT_TAB
           ) as undefined | TabElement;

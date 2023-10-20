@@ -2,6 +2,7 @@ export const commandSchema = `
 interface AddCommand {
   action: 'add';
   newBlock: BlockElement; // the block to add
+  placeAfterBlockId?: string; // id of the block to insert after
 }
 
 interface RemoveCommand {
