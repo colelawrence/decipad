@@ -85,42 +85,21 @@ export function fnQueue({
   }
 
   function push<T>(fn: AsyncFunction<T>): Promise<T> {
-    let resolve: Fn<T>;
-    let reject: Fn<unknown>;
-    const p = new Promise<T>((res, rej) => {
-      resolve = res;
-      reject = rej;
+    const p = new Promise<T>((resolve, reject) => {
+      fns.push(() => callFn(fn).then(resolve).catch(reject));
     });
-    fns.push(async () => {
-      try {
-        resolve(await callFn(fn));
-      } catch (err) {
-        reject(err);
-      }
-    });
-    work();
-
+    setTimeout(work, 0);
     return p;
   }
 
   function unshift<T>(fn: AsyncFunction<T>): Promise<T> {
-    let resolve: Fn<T>;
-    let reject: Fn<Error>;
-    const p = new Promise<T>((res, rej) => {
-      resolve = res;
-      reject = rej;
+    const p = new Promise<T>((resolve, reject) => {
+      fns.unshift(() => callFn(fn).then(resolve).catch(reject));
     });
-    fns.unshift(async () => {
-      try {
-        resolve(await fn());
-      } catch (err) {
-        reject(err as Error);
-      }
-    });
-    work();
-
+    setTimeout(work, 0);
     return p;
   }
+
   function flush() {
     if (fns.length === 0 && processing === 0) {
       return Promise.resolve(undefined);

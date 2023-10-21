@@ -25,7 +25,7 @@ it('can push a new table into the computer', async () => {
     'Table1',
     serializeResult(type, value)
   );
-  await timeout(10);
+  await timeout(100);
 
   expect(
     await Promise.all(
