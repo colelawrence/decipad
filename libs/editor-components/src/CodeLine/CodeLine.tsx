@@ -22,7 +22,7 @@ import { findNodePath } from '@udecode/plate';
 import { Formula } from 'libs/ui/src/icons';
 import { codeBlock } from 'libs/ui/src/styles';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { DraggableBlock } from '../block-management';
 import { useOnDragEnd } from '../utils/useDnd';
@@ -60,14 +60,6 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
       (line) => [getSyntaxError(line), line?.result] as const,
       lineId
     );
-
-  useEffect(() => {
-    // refresh decorations when text or result type changes
-    const path = findNodePath(editor, element);
-    if (path) {
-      editor.normalizeNode([element, path]);
-    }
-  }, [editor, element, lineResult?.type]);
 
   const onClickedResult = useCallback(
     (result: Result.Result) => {
