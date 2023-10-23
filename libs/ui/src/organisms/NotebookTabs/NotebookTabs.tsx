@@ -300,19 +300,19 @@ const Tab: FC<TabProps> = ({
           dataTestid="tab-options-menu"
         >
           <MenuItem icon={<Edit />} onSelect={onRename}>
-            Rename Tab
+            Rename tab
           </MenuItem>
           <MenuItem
             icon={isHidden ? <Show /> : <Hide />}
             onSelect={onToggleShowHide}
           >
-            {isHidden ? 'Show To Reader' : 'Hide From Reader'}
+            {isHidden ? 'Show to reader' : 'Hide from reader'}
           </MenuItem>
           <MenuItem disabled>
             <hr css={{ color: cssVar('backgroundDefault') }} />
           </MenuItem>
           <MenuItem icon={<Trash />} onSelect={onDelete}>
-            Delete Tab
+            Delete tab
           </MenuItem>
         </MenuList>
       )}
