@@ -286,7 +286,7 @@ const Tab: FC<TabProps> = ({
         )}
         <TabName data-testid="tab-name">{name}</TabName>
       </TabContent>
-      {isActive && !isReadOnly && (
+      {!isReadOnly && (
         <MenuList
           root
           dropdown

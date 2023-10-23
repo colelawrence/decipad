@@ -73,7 +73,7 @@ test.describe('check basic tabs funcionality @notebook @tabs', () => {
   test('delete second tab', async () => {
     // goes to second tab named New Tab
     await page.getByTestId('tab-button').getByText('New Tab').click();
-    await page.getByTestId('tab-options-button').click();
+    await page.getByTestId('tab-options-button').nth(1).click();
     await expect(page.getByTestId('tab-options-menu')).toBeVisible();
     await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
       'this is the first paragraph on the second tab'
