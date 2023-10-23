@@ -15,6 +15,7 @@ import {
   Sparkles,
   Switch,
 } from '../../icons';
+import * as icons from '../../icons';
 import { DeleteWithDepsMenuItem, MenuList } from '../../molecules';
 import { componentCssVars, cssVar, p12Medium } from '../../primitives';
 import { editorLayout } from '../../styles';
@@ -197,15 +198,18 @@ export const BlockDragHandle = ({
                 <TriggerMenuItem icon={<Switch />}>Move to tab</TriggerMenuItem>
               }
             >
-              {tabs.map((t) => (
-                <MenuItem
-                  key={t.id}
-                  icon={<Link />}
-                  onSelect={() => onMoveToTab(t.id)}
-                >
-                  <div css={{ minWidth: '132px' }}>{t.name}</div>
-                </MenuItem>
-              ))}
+              {tabs.map((t) => {
+                const TabIcon = icons[t.icon || 'Receipt'];
+                return (
+                  <MenuItem
+                    key={t.id}
+                    icon={<TabIcon />}
+                    onSelect={() => onMoveToTab(t.id)}
+                  >
+                    <div css={{ minWidth: '132px' }}>{t.name}</div>
+                  </MenuItem>
+                );
+              })}
             </MenuList>
           )}
           {children}
