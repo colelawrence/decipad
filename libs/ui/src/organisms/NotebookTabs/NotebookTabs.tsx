@@ -93,6 +93,14 @@ export const NotebookTabs: FC<TabsProps> = ({
     setHasScroll(containerHasScroll());
   }, [containerHasScroll, tabs]);
 
+  const onInputFocus = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      event.target.select();
+      onChangeInputResize(event);
+    },
+    [onChangeInputResize]
+  );
+
   const onDelete = useCallback(
     (id: string, isLast: boolean) => () => {
       if (isLast) {
@@ -113,12 +121,12 @@ export const NotebookTabs: FC<TabsProps> = ({
   );
 
   const onSubmitEdit = useCallback(
-    (id: string) => (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const { value } = event.currentTarget.tabName as HTMLInputElement;
-      if (value == null) {
+    (id: string) => {
+      if (!inputContent) {
         return;
       }
+
+      const value = inputContent.trim();
 
       if (value === '') {
         toast.warning('Tab name cannot be empty');
@@ -129,7 +137,19 @@ export const NotebookTabs: FC<TabsProps> = ({
       onRenameTab(id, value);
       setEditableTabId(undefined);
     },
-    [onRenameTab, toast]
+    [onRenameTab, toast, inputContent]
+  );
+
+  const handleEnterKey = useCallback(
+    (id: string) => (event: React.KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        event.stopPropagation();
+
+        onSubmitEdit(id);
+      }
+    },
+    [onSubmitEdit]
   );
 
   return (
@@ -146,17 +166,18 @@ export const NotebookTabs: FC<TabsProps> = ({
                   key={id}
                   isActive={true}
                 >
-                  <TabForm onSubmit={onSubmitEdit(id)}>
+                  <TabForm>
                     <HiddenResizeSpan ref={resizeSpanRef}>
                       {inputContent}
                     </HiddenResizeSpan>
                     <TabInput
                       onChange={onChangeInputResize}
-                      onFocus={onChangeInputResize}
+                      onFocus={onInputFocus}
                       style={{
                         width: inputWidth,
                       }}
-                      onBlur={() => setEditableTabId(undefined)}
+                      onKeyDown={handleEnterKey(id)}
+                      onBlur={() => onSubmitEdit(id)}
                       type="text"
                       name="tabName"
                       defaultValue={name}
@@ -493,7 +514,7 @@ const TabContent = styled.div({
   gap: '4px',
 });
 
-const TabForm = styled.form({
+const TabForm = styled.div({
   position: 'relative',
   minWidth: '52px',
   margin: '0px 44px 0px 8px',
