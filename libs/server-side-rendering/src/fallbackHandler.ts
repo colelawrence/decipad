@@ -11,7 +11,7 @@ export type ReplyingHandler = (
 ) => Promise<Response>;
 
 export const fallbackHandler: ReplyingHandler = async (
-  _req: Request,
+  req: Request,
   reason = 'unknown'
 ) => {
   // eslint-disable-next-line no-console
@@ -19,7 +19,6 @@ export const fallbackHandler: ReplyingHandler = async (
   const baseUrl = app().urlBase;
   const manifest = await loadManifest();
   const jsEntryPoint = manifest.files['main.js'];
-
   return {
     statusCode: 200,
     headers: {
@@ -32,6 +31,12 @@ export const fallbackHandler: ReplyingHandler = async (
       .replace(
         '<script src="/static/js/bundle.js" async=""></script>',
         `<script src="${jsEntryPoint}" async=""></script>`
+      )
+      .replace(
+        '%OEMBED_URL%',
+        `${baseUrl}/api/oembed?url=${encodeURI(
+          baseUrl + req.rawPath
+        )}&format=json`
       ),
   };
 };

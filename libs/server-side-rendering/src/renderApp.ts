@@ -22,6 +22,7 @@ export interface RenderDependencies {
   extractData: () => unknown;
   urlBase: string;
   session: Session;
+  location: string;
 }
 
 ReactDOM.createPortal = (() => {
@@ -86,6 +87,9 @@ export const renderApp = (dependencies: RenderDependencies) => {
     const styles = constructStyleTagsFromChunks(chunks);
 
     const { documentTemplate } = dependencies;
+    const oembedUrl = `${dependencies.urlBase}/api/oembed?url=${encodeURI(
+      dependencies.location
+    )}&format=json`;
     return documentTemplate
       .replaceAll('%PUBLIC_URL%', dependencies.urlBase)
       .replace('<styles data-decipad-bootstrap></styles>', styles)
@@ -100,6 +104,7 @@ export const renderApp = (dependencies: RenderDependencies) => {
         '<script src="/static/js/bundle.js" async=""></script>',
         `<script src="${dependencies.jsEntryPoint}" async=""></script>`
       )
-      .replace('<script defer="defer" src="/index.js"></script>', '');
+      .replace('<script defer="defer" src="/index.js"></script>', '')
+      .replace('%OEMBED_URL%', oembedUrl);
   });
 };

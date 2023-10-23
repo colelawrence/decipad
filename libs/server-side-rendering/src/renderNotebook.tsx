@@ -62,6 +62,7 @@ const getDependencies = async ({
     renderToPipeableStream,
     extractData: () => ssrExchange.extractData(),
     emotionCache,
+    location,
   };
 };
 

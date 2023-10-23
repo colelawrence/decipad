@@ -20,6 +20,8 @@ any /graphql
 
 get /api/version
 
+get /api/oembed
+
 # Auth
 post /api/auth/signin/:provider
 get /api/auth/callback/:provider

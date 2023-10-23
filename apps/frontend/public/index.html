@@ -33,6 +33,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com/" />
     <link rel="preconnect" href="https://fonts.googleapis.com/" />
     <title>Decipad — Make sense of numbers</title>
+    <script>
+      const link = document.createElement('link');
+      link.rel = 'alternate';
+      link.type = 'application/json+oembed';
+      link.href = `${
+        window.location.origin
+      }/api/oembed?url=${encodeURIComponent(
+        window.location.href
+      )})&format=json`;
+      document.head.appendChild(link);
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
