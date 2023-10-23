@@ -19,11 +19,12 @@ const { buckets, ...config } = s3Config();
 const Bucket = buckets.attachments;
 const s3 = new S3Client(config);
 
-const fixURL = (urlString: string, cors = false): string => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const fixURL = (urlString: string, _cors = false): string => {
   const url = new URL(urlString);
-  if (cors && url.hostname === 's3.eu-west-2.amazonaws.com') {
-    url.hostname = `${Bucket}.${url.hostname}`;
-  }
+  // if (cors && url.hostname === 's3.eu-west-2.amazonaws.com') {
+  //   url.hostname = `${Bucket}.${url.hostname}`;
+  // }
   if (url.hostname.endsWith('amazonaws.com') && url.protocol === 'http:') {
     url.protocol = 'https';
   }
