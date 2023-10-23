@@ -6,9 +6,9 @@ const notebook = route(
   `/:notebook&:tab?&:${SECRET_URL_PARAM}?&:embed?`,
   {
     notebook: descriptiveIdParser,
+    tab: stringParser,
     [SECRET_URL_PARAM]: stringParser,
     embed: booleanParser,
-    tab: stringParser,
   },
   {}
 );

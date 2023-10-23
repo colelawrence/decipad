@@ -124,7 +124,7 @@ export const NewNotebook: FC = () => {
             }
             sidebar={<NewSidebar docsync={docsync} />}
             tabs={
-              docsync?.editorController && isFlagEnabled('TABS') ? (
+              !isEmbed && docsync?.editorController && isFlagEnabled('TABS') ? (
                 <NewTabs
                   notebookId={notebookId}
                   controller={docsync.editorController}
@@ -146,10 +146,10 @@ export const NewNotebook: FC = () => {
   );
 };
 
-const NewTabs: FC<{ notebookId: string; controller: EditorController }> = ({
-  notebookId,
-  controller,
-}) => {
+const NewTabs: FC<{
+  notebookId: string;
+  controller: EditorController;
+}> = ({ notebookId, controller }) => {
   const tabs = useTabs(controller);
   const { notebook, tab } = useRouteParams(notebooks({}).notebook);
   const docsync = useContext(DocsyncEditorProvider);
