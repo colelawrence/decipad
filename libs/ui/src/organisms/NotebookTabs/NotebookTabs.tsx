@@ -133,9 +133,8 @@ export const NotebookTabs: FC<TabsProps> = ({
         setEditableTabId(undefined);
         return;
       }
-
-      onRenameTab(id, value);
       setEditableTabId(undefined);
+      onRenameTab(id, value);
     },
     [onRenameTab, toast, inputContent]
   );
@@ -258,9 +257,9 @@ const Tab: FC<TabProps> = ({
   const Icon = icons[icon];
 
   const handleClickRename = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      event.preventDefault();
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event.stopPropagation();
+      event.preventDefault();
 
       switch (event.detail) {
         case 1:
@@ -282,8 +281,9 @@ const Tab: FC<TabProps> = ({
       isActive={isActive}
       isHidden={isHidden}
       data-testid="tab-button"
+      onClick={isReadOnly ? onClick : handleClickRename}
     >
-      <TabContent onClick={isReadOnly ? onClick : handleClickRename}>
+      <TabContent>
         {isReadOnly ? (
           <TabIcon>
             <Icon />
@@ -332,8 +332,12 @@ const Tab: FC<TabProps> = ({
           <MenuItem disabled>
             <hr css={{ color: cssVar('backgroundDefault') }} />
           </MenuItem>
-          <MenuItem icon={<Trash />} onSelect={onDelete}>
-            Delete tab
+          <MenuItem
+            icon={<Trash />}
+            onSelect={onDelete}
+            onClick={(event) => event.stopPropagation()}
+          >
+            Delete Tab
           </MenuItem>
         </MenuList>
       )}
