@@ -19,7 +19,7 @@ export const attachGenericFile = async (
   }
   const [target, form, handle] = attForm;
   form.append('file', file);
-  await axios.put(target.toString(), form, {
+  await axios.post(target.toString(), form, {
     onUploadProgress: onUploadProgress(file),
   });
   const onAttachedResponse = await onAttached(handle);
