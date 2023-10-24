@@ -18,7 +18,7 @@ const contentWrapper = css({
   backgroundColor: cssVar('backgroundMain'),
   padding: '12px',
   borderRadius: '8px',
-  maxWidth: '272px',
+  width: '260px',
   boxShadow: `0px 1px 2px ${cssVar('backgroundDefault')}, 0px 2px 12px ${cssVar(
     'backgroundDefault'
   )}`,
