@@ -185,10 +185,14 @@ export const EditableTableCaption: FC<EditableTableCaptionProps> = ({
           </div>
           <div
             role="textbox"
-            aria-placeholder={empty ? 'Name your table' : ''}
             aria-roledescription="table name"
             css={[
               placeholderStyles,
+              empty && {
+                ':after': {
+                  content: '"Name your table"',
+                },
+              },
               {
                 color: color
                   ? getThemeColor(color).Text.Default
