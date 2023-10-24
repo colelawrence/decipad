@@ -411,12 +411,19 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     setIsNewNotebook(Boolean(docsync?.editorController.IsNewNotebook));
   }, [docsync?.editorController.IsNewNotebook]);
 
+  const revertChanges = useCallback(() => {
+    while (docsync?.undoManager?.canUndo()) {
+      docsync.undoManager.undo();
+    }
+  }, [docsync?.undoManager]);
+
   if (!meta.data?.getPadById) {
     return <TopbarPlaceholder />;
   }
 
   return (
     <NotebookTopbar
+      onRevertChanges={revertChanges}
       permissionType={permission}
       hasUnpublishedChanges={hasUnpublishedChanges}
       notebookMeta={meta.data?.getPadById}

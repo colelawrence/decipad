@@ -119,7 +119,7 @@ const VerticalDivider = () => (
 
 export type NotebookTopbarProps = {
   readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
-  readonly onRevertChanges?: () => void;
+  readonly onRevertChanges: () => void;
   readonly onRemove?: (userId: string) => Promise<void>;
   readonly onInvite?: (
     email: string,

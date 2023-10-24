@@ -36,6 +36,7 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   hasUnpublishedChanges: false,
   toggleAIMode: noop,
   aiMode: false,
+  onRevertChanges: noop,
 };
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',
