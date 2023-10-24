@@ -28,6 +28,12 @@ export const itemDisabledStyles = css(itemStyles, {
     backgroundColor: cssVar('backgroundMain'),
   },
   color: cssVar('textDisabled'),
+
+  svg: {
+    path: {
+      stroke: cssVar('textDisabled'),
+    },
+  },
 });
 
 export const soonStyles = css(p8Medium, {

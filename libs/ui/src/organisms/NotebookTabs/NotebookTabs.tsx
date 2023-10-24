@@ -13,13 +13,15 @@ import { UserIconKey } from '@decipad/editor-types';
 
 import { noop } from '@decipad/utils';
 
+type UITab = {
+  id: string;
+  name: string;
+  icon?: UserIconKey;
+  isHidden?: boolean;
+};
+
 export interface TabsProps {
-  readonly tabs: Array<{
-    id: string;
-    name: string;
-    icon?: UserIconKey;
-    isHidden?: boolean;
-  }>;
+  readonly tabs: UITab[];
   readonly isReadOnly: boolean;
   readonly activeTabId: string | undefined;
   readonly onClick: (id: string) => void;
@@ -101,16 +103,67 @@ export const NotebookTabs: FC<TabsProps> = ({
     [onChangeInputResize]
   );
 
+  const isLastTab = useCallback(
+    (id: string) => {
+      return tabs.filter((tab) => tab.id !== id).length === 0;
+    },
+    [tabs]
+  );
+
+  const isLastVisibleTab = useCallback(
+    (id: string) => {
+      return tabs.filter((tab) => tab.id !== id).every((tab) => tab.isHidden);
+    },
+    [tabs]
+  );
+
+  const getCanHideDelete = useCallback(
+    (id: string) => {
+      return !(isLastTab(id) || isLastVisibleTab(id));
+    },
+    [isLastTab, isLastVisibleTab]
+  );
+
+  const onShowHide = useCallback(
+    (id: string) => () => {
+      if (isLastTab(id)) {
+        toast.warning('Cannot hide the last tab');
+        return;
+      }
+
+      if (isLastVisibleTab(id)) {
+        toast.warning('Cannot hide the last visible tab');
+        return;
+      }
+
+      onToggleShowHide(id);
+    },
+    [onToggleShowHide, toast, isLastTab, isLastVisibleTab]
+  );
+
   const onDelete = useCallback(
-    (id: string, isLast: boolean) => () => {
-      if (isLast) {
-        toast.warning('You cannot delete the last tab');
+    (id: string) => () => {
+      if (isLastTab(id)) {
+        toast.warning('Cannot delete the last tab');
+        return;
+      }
+
+      if (isLastVisibleTab(id)) {
+        toast.warning('Cannot delete the last visible tab');
         return;
       }
 
       onDeleteTab(id);
     },
-    [onDeleteTab, toast]
+    [onDeleteTab, toast, isLastTab, isLastVisibleTab]
+  );
+
+  const onChangeName = useCallback(
+    (id: string) => () => {
+      onClick(id);
+      setEditableTabId(id);
+    },
+    [onClick]
   );
 
   const onChangeIcon = useCallback(
@@ -205,11 +258,12 @@ export const NotebookTabs: FC<TabsProps> = ({
                 isReadOnly={isReadOnly}
                 isHidden={isHidden ?? false}
                 isActive={id === activeTabId}
+                canHideDelete={getCanHideDelete(id)}
                 onClick={() => onClick(id)}
                 onChangeIcon={onChangeIcon(id)}
-                onRename={() => setEditableTabId(id)}
-                onDelete={onDelete(id, tabs.length === 1)}
-                onToggleShowHide={() => onToggleShowHide(id)}
+                onRename={onChangeName(id)}
+                onDelete={onDelete(id)}
+                onToggleShowHide={onShowHide(id)}
               />
             );
           })}
@@ -238,6 +292,7 @@ interface TabProps {
   isHidden: boolean;
   isActive: boolean;
   isReadOnly: boolean;
+  canHideDelete: boolean;
   onClick: () => void;
   onRename: () => void;
   onDelete: () => void;
@@ -251,6 +306,7 @@ const Tab: FC<TabProps> = ({
   name,
   icon,
   id,
+  canHideDelete,
   isHidden,
   onClick,
   onRename,
@@ -332,6 +388,7 @@ const Tab: FC<TabProps> = ({
           <MenuItem
             icon={isHidden ? <Show /> : <Hide />}
             onSelect={onToggleShowHide}
+            disabled={!canHideDelete}
           >
             {isHidden ? 'Show to reader' : 'Hide from reader'}
           </MenuItem>
@@ -341,6 +398,7 @@ const Tab: FC<TabProps> = ({
           <MenuItem
             icon={<Trash />}
             onSelect={onDelete}
+            disabled={!canHideDelete}
             onClick={(event) => event.stopPropagation()}
           >
             Delete Tab
