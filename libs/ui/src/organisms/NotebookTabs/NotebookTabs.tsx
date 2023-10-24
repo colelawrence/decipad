@@ -139,13 +139,19 @@ export const NotebookTabs: FC<TabsProps> = ({
     [onRenameTab, toast, inputContent]
   );
 
-  const handleEnterKey = useCallback(
+  const handleKeyPress = useCallback(
     (id: string) => (event: React.KeyboardEvent) => {
       if (event.key === 'Enter') {
         event.preventDefault();
         event.stopPropagation();
 
         onSubmitEdit(id);
+      }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+
+        setEditableTabId(undefined);
       }
     },
     [onSubmitEdit]
@@ -175,7 +181,7 @@ export const NotebookTabs: FC<TabsProps> = ({
                       style={{
                         width: inputWidth,
                       }}
-                      onKeyDown={handleEnterKey(id)}
+                      onKeyDown={handleKeyPress(id)}
                       onBlur={() => onSubmitEdit(id)}
                       type="text"
                       name="tabName"
