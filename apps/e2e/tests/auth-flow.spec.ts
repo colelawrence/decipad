@@ -1,40 +1,45 @@
-import { expect, Page, test } from '@playwright/test';
-import { setUp } from '../utils/page/Home';
-import { snapshot, Timeouts, withTestUser } from '../utils/src';
+import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { snapshot, withTestUser } from '../utils/src';
 
-test.describe('Authentication flow', () => {
-  test.beforeEach(async ({ page }) => {
-    await setUp(page);
+test.describe('check auth flows @auth', () => {
+  let page: Page;
+  let context: BrowserContext;
+
+  test.beforeAll(async ({ browser }) => {
+    page = await browser.newPage();
+    context = page.context();
   });
 
-  test('Should display welcome message', async ({ page }) => {
-    await page.goto('/');
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.redirectDelay);
-    await page.waitForSelector('text=/Welcome to Deci/i');
+  test.afterAll(async () => {
+    await page.close();
+  });
+
+  test('login flow', async () => {
+    const testEmail = 'johndoe123@gmail.com';
+    context.clearCookies();
+    await Promise.all([page.goto('/'), page.waitForEvent('load')]);
+    await expect(page.getByText('Welcome to Deci')).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'Terms of Service' })
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: 'Privacy Policy' })
+    ).toBeVisible();
+    await expect(page.getByTestId('login-button')).toHaveAttribute('disabled');
     await snapshot(page as Page, 'Auth: Login Window');
+    const emailField = page.getByPlaceholder('Enter your email');
+    await emailField.fill(testEmail);
+    await page.getByTestId('login-button').click();
+    await expect(
+      page.getByText(
+        `Open the link sent to ${testEmail}. No email? Check spam folder.`
+      )
+    ).toBeVisible();
   });
 
-  test('should allow the user to type their email for login', async ({
-    page,
-  }) => {
-    await page.fill('input', 'johndoe123@gmail.com');
-    const inputValue = await page.inputValue('input');
-    expect(inputValue).toBe('johndoe123@gmail.com');
-  });
-
-  test('should show confirmation email on login attempt', async ({ page }) => {
-    await page.fill('input', 'johndoe123@gmail.com');
-    await page.click('text=/Continue/i');
-  });
-
-  test('should redirect to workspace if authenticated', async ({
-    page,
-    context,
-  }) => {
-    await setUp(page);
+  test('redirect to workspace if authenticated', async () => {
     await withTestUser({ page, context });
     await page.goto('/');
-    await expect(page.locator('[data-testid="dashboard"]')).toBeVisible();
+    await expect(page.getByTestId('dashboard')).toBeVisible();
   });
 });

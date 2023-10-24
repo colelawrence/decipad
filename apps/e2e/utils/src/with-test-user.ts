@@ -17,8 +17,7 @@ export async function withTestUser({
   page,
   email = randomEmail(),
 }: WithTestUserProps): Promise<TestUser> {
-  const Context = context;
-  Context.clearCookies();
+  context.clearCookies();
   const loginUrl = `${app().urlBase}/api/auth/${
     auth().testUserSecret
   }?email=${encodeURIComponent(email)}`;

@@ -87,6 +87,7 @@ const LoginForm = ({ onSubmit }: LoginPageProps) => {
           submit
           type="primary"
           disabled={!signUpRedirect && (!formValid || isSubmitting)}
+          testId="login-button"
         >
           Continue
         </Button>

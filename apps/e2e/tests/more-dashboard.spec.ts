@@ -1,17 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { app } from '@decipad/backend-config';
-import { setUp } from '../utils/page/Home';
-import { ellipsisSelector } from '../utils/page/Workspace';
-import { withTestUser, Timeouts } from '../utils/src';
+import { ellipsisSelector, setUp } from '../utils/page/Workspace';
+import { Timeouts } from '../utils/src';
 
 test.describe('Workspace flows', () => {
   test.beforeEach(async ({ page, context }) => {
-    await setUp(page);
-    await withTestUser({ page, context });
-    await page.goto('/');
-    await page.waitForSelector('text=/Workspace/i', {
-      timeout: Timeouts.maxSelectorWaitTime,
-    });
+    await setUp({ page, context });
   });
 
   test('Archive & delete a notebook', async ({ page }) => {

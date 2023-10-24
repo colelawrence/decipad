@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 import os from 'os';
 import path from 'path';
-import { withTestUser } from '../src/with-test-user';
+import { withTestUser, Timeouts } from '../src';
 
 interface Pad {
   anchor: ElementHandle;
@@ -23,6 +23,9 @@ export async function navigateToWorkspacePage(page: Page) {
   if (!isOnWorkspacePage(page)) {
     await page.goto('/');
   }
+  await page.waitForSelector('text=/Workspace/i', {
+    timeout: Timeouts.maxSelectorWaitTime,
+  });
   await page.waitForSelector('.notebookList > li');
 }
 
