@@ -229,9 +229,11 @@ const NewEditor: FC<{
 
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
-  // Helmet wasn't behaving
   useEffect(() => {
-    document.title = `${actions.notebook?.name ?? 'New Notebook'} | Decipad`;
+    // Hack. We must be the last ones to set the title of the notebook.
+    setTimeout(() => {
+      document.title = `${actions.notebook?.name ?? 'New Notebook'} | Decipad`;
+    }, 0);
   }, [actions.notebook?.name]);
 
   const onNotebookTitleChange = useNotebookTitleChange(
