@@ -24,15 +24,14 @@ import {
   setNodes,
 } from '@udecode/plate';
 import { setSelection } from '@decipad/editor-utils';
-import {
-  ElementObserverFactory,
-  elementChangeFunction,
-} from './elementChangeObservable';
+import { ElementObserver } from './ElementObserver';
 
 describe('observes changes in specific elements', () => {
-  let editor = createTPlateEditor();
+  const editor = createTPlateEditor();
   editor.children = [{ type: ELEMENT_H1, id: '1', children: [{ text: '' }] }];
-  editor = elementChangeFunction(editor);
+
+  const change = new ElementObserver();
+  change.OverrideApply(editor);
 
   /**
    * We can test it this way because the editor.apply will run synchronously,
@@ -41,7 +40,7 @@ describe('observes changes in specific elements', () => {
   it('listens to changes on H1 element', () => {
     const items: EditorObserverMessage[] = [];
 
-    const $ = ElementObserverFactory(editor, ELEMENT_H1);
+    const $ = change.CreateElementObserver(ELEMENT_H1);
 
     $?.subscribe((v) => items.push(v));
 
@@ -79,7 +78,7 @@ describe('observes changes in specific elements', () => {
   it('listens to various changes on H1 element', () => {
     const items: EditorObserverMessage[] = [];
 
-    const $ = ElementObserverFactory(editor, ELEMENT_H1);
+    const $ = change.CreateElementObserver(ELEMENT_H1);
     $?.subscribe((v) => items.push(v));
 
     editor.selection = {
@@ -143,8 +142,10 @@ describe('observes changes in specific elements', () => {
   });
 
   it('Reuses observable objects from pool', () => {
-    const $1 = ElementObserverFactory(editor, ELEMENT_H1);
-    const $2 = ElementObserverFactory(editor, ELEMENT_H1);
+    const $1 = change.CreateElementObserver(ELEMENT_H1);
+    expect(change.elementObserverPool.size).toBe(1);
+    const $2 = change.CreateElementObserver(ELEMENT_H1);
+    expect(change.elementObserverPool.size).toBe(1);
 
     expect($1).toBeDefined();
     expect($2).toBeDefined();
@@ -186,8 +187,8 @@ describe('observes changes in specific elements', () => {
     const codelineItems: EditorObserverMessage[] = [];
     const varnameItems: EditorObserverMessage[] = [];
 
-    const codeline$ = ElementObserverFactory(editor, ELEMENT_CODE_LINE_V2);
-    const varname$ = ElementObserverFactory(editor, ELEMENT_STRUCTURED_VARNAME);
+    const codeline$ = change.CreateElementObserver(ELEMENT_CODE_LINE_V2);
+    const varname$ = change.CreateElementObserver(ELEMENT_STRUCTURED_VARNAME);
 
     codeline$?.subscribe((v) => codelineItems.push(v));
     varname$?.subscribe((v) => varnameItems.push(v));
@@ -286,7 +287,7 @@ describe('observes changes in specific elements', () => {
     ];
 
     const changes: EditorObserverMessage[] = [];
-    const dropdown$ = ElementObserverFactory(editor, ELEMENT_DROPDOWN);
+    const dropdown$ = change.CreateElementObserver(ELEMENT_DROPDOWN);
 
     dropdown$?.subscribe((v) => changes.push(v));
 
@@ -324,7 +325,7 @@ describe('observes changes in specific elements', () => {
 
   it('gets notified of element deletion', () => {
     const changes: EditorObserverMessage[] = [];
-    const varDef$ = ElementObserverFactory(editor, ELEMENT_VARIABLE_DEF);
+    const varDef$ = change.CreateElementObserver(ELEMENT_VARIABLE_DEF);
 
     varDef$?.subscribe((v) => changes.push(v));
 
@@ -376,7 +377,7 @@ describe('observes changes in specific elements', () => {
 
   it('doesnt get updated on selection changes', () => {
     const changes: EditorObserverMessage[] = [];
-    const varDef$ = ElementObserverFactory(editor, ELEMENT_VARIABLE_DEF);
+    const varDef$ = change.CreateElementObserver(ELEMENT_VARIABLE_DEF);
 
     const varDef = varDef$?.subscribe((v) => changes.push(v));
 
@@ -415,15 +416,17 @@ describe('observes changes in specific elements', () => {
 });
 
 describe('Listens to change on specific IDs', () => {
-  let editor = createTPlateEditor();
+  const editor = createTPlateEditor();
   editor.children = [{ type: ELEMENT_H1, id: '1', children: [{ text: '' }] }];
-  editor = elementChangeFunction(editor);
+
+  const change = new ElementObserver();
+  change.OverrideApply(editor);
 
   it('Listens to changes on id: 1', () => {
     const changes: EditorObserverMessage[] = [];
-    const id1$ = ElementObserverFactory(editor, ELEMENT_H1, '1');
+    const id1$ = change.CreateElementObserver(ELEMENT_H1, '1');
 
-    const id1 = id1$?.subscribe((v) => changes.push(v));
+    const id1 = id1$.subscribe((v) => changes.push(v));
 
     editor.selection = {
       anchor: {
@@ -455,7 +458,7 @@ describe('Listens to change on specific IDs', () => {
       ]
     `);
 
-    id1?.unsubscribe();
+    id1.unsubscribe();
   });
 
   it('Only listens to change for the specific element', () => {
@@ -465,7 +468,7 @@ describe('Listens to change on specific IDs', () => {
     ];
 
     const changes: EditorObserverMessage[] = [];
-    const id1$ = ElementObserverFactory(editor, ELEMENT_H1, '1');
+    const id1$ = change.CreateElementObserver(ELEMENT_H1, '1');
 
     const id1 = id1$?.subscribe((v) => changes.push(v));
 
@@ -506,7 +509,7 @@ describe('Listens to change on specific IDs', () => {
 
   it('Doesnt listen to random ID changes', () => {
     const changes: EditorObserverMessage[] = [];
-    const id1$ = ElementObserverFactory(editor, ELEMENT_H1, 'random_id');
+    const id1$ = change.CreateElementObserver(ELEMENT_H1, 'random_id');
 
     const id1 = id1$?.subscribe((v) => changes.push(v));
 
@@ -519,7 +522,7 @@ describe('Listens to change on specific IDs', () => {
 
   it('Listens to ID change on parent when child changes', () => {
     const changes: EditorObserverMessage[] = [];
-    const id2$ = ElementObserverFactory(editor, ELEMENT_CODE_LINE_V2, '2');
+    const id2$ = change.CreateElementObserver(ELEMENT_CODE_LINE_V2, '2');
 
     const id2 = id2$?.subscribe((v) => changes.push(v));
 
@@ -593,8 +596,7 @@ describe('Listens to change on specific IDs', () => {
 
   it('Doesnt listen to random ID', () => {
     const changes: EditorObserverMessage[] = [];
-    const random$ = ElementObserverFactory(
-      editor,
+    const random$ = change.CreateElementObserver(
       ELEMENT_CODE_LINE_V2,
       'random_id'
     );
@@ -608,7 +610,7 @@ describe('Listens to change on specific IDs', () => {
 
   it('Doesnt listen to changes if type and id dont match a specific element', () => {
     const changes: EditorObserverMessage[] = [];
-    const nonMatch$ = ElementObserverFactory(editor, ELEMENT_H1, '2');
+    const nonMatch$ = change.CreateElementObserver(ELEMENT_H1, '2');
 
     const nonMatch = nonMatch$?.subscribe((v) => changes.push(v));
 
@@ -621,7 +623,7 @@ describe('Listens to change on specific IDs', () => {
 
   it('Listens to deletion on id', () => {
     const changes: EditorObserverMessage[] = [];
-    const id2$ = ElementObserverFactory(editor, ELEMENT_CODE_LINE_V2, '2');
+    const id2$ = change.CreateElementObserver(ELEMENT_CODE_LINE_V2, '2');
 
     const id2 = id2$?.subscribe((v) => changes.push(v));
 
@@ -666,7 +668,7 @@ describe('Listens to change on specific IDs', () => {
 
   it('Listens to insertions in the children', () => {
     const changes: EditorObserverMessage[] = [];
-    const id4$ = ElementObserverFactory(editor, ELEMENT_CODE_LINE_V2_CODE, '4');
+    const id4$ = change.CreateElementObserver(ELEMENT_CODE_LINE_V2_CODE, '4');
 
     const id4 = id4$?.subscribe((v) => changes.push(v));
 
@@ -749,7 +751,7 @@ describe('Listens to change on specific IDs', () => {
 });
 
 describe('Doesnt care about paths', () => {
-  let editor = createTPlateEditor();
+  const editor = createTPlateEditor();
   editor.children = [
     { type: ELEMENT_H1, id: '1', children: [{ text: '' }] },
     {
@@ -763,11 +765,13 @@ describe('Doesnt care about paths', () => {
       children: [{ text: 'some other text' }],
     } satisfies ParagraphElement,
   ];
-  editor = elementChangeFunction(editor);
+
+  const change = new ElementObserver();
+  change.OverrideApply(editor);
 
   it('listens to element even if its path changes', () => {
     const changes: EditorObserverMessage[] = [];
-    const p1$ = ElementObserverFactory(editor, ELEMENT_PARAGRAPH, 'p1');
+    const p1$ = change.CreateElementObserver(ELEMENT_PARAGRAPH, 'p1');
 
     p1$?.subscribe((v) => changes.push(v));
 
@@ -813,8 +817,7 @@ describe('Doesnt care about paths', () => {
 
   it('doesnt listen when a parent node changes', () => {
     const changes: EditorObserverMessage[] = [];
-    const varname3$ = ElementObserverFactory(
-      editor,
+    const varname3$ = change.CreateElementObserver(
       ELEMENT_STRUCTURED_VARNAME,
       '3'
     );
@@ -854,13 +857,12 @@ describe('Doesnt care about paths', () => {
 
   it('doesnt listen when a subling node changes', () => {
     const changes: EditorObserverMessage[] = [];
-    const varname3$ = ElementObserverFactory(
-      editor,
+    const varname3$ = change.CreateElementObserver(
       ELEMENT_STRUCTURED_VARNAME,
       '3'
     );
 
-    varname3$?.subscribe((v) => changes.push(v));
+    varname3$.subscribe((v) => changes.push(v));
 
     setNodes(
       editor,
@@ -875,77 +877,79 @@ describe('Doesnt care about paths', () => {
 });
 
 describe('Observer clean up', () => {
-  let editor = createTPlateEditor();
+  const editor = createTPlateEditor();
   editor.children = [{ type: ELEMENT_H1, id: '1', children: [{ text: '' }] }];
-  editor = elementChangeFunction(editor);
+
+  const change = new ElementObserver();
+  change.OverrideApply(editor);
 
   it('cleans up editor observer pool when unsubscribed', () => {
-    const test = ElementObserverFactory(editor, ELEMENT_H1);
+    const test = change.CreateElementObserver(ELEMENT_H1);
 
-    const test$ = test?.subscribe(() => {});
+    const test$ = test.subscribe(() => {});
 
-    expect(editor.elementObserverPool?.size).toBe(1);
+    expect(change.elementObserverPool.size).toBe(1);
 
     test$?.unsubscribe();
 
-    expect(editor.elementObserverPool?.size).toBe(0);
+    expect(change.elementObserverPool.size).toBe(0);
   });
 
   it('doesnt remove subscriber is another subscription is active', () => {
-    const test = ElementObserverFactory(editor, ELEMENT_H1);
+    const test = change.CreateElementObserver(ELEMENT_H1);
 
     const test1$ = test?.subscribe(() => {});
     const test2$ = test?.subscribe(() => {});
 
-    expect(editor.elementObserverPool?.size).toBe(1);
+    expect(change.elementObserverPool.size).toBe(1);
 
     test1$?.unsubscribe();
-    expect(editor.elementObserverPool?.size).toBe(1);
+    expect(change.elementObserverPool.size).toBe(1);
 
     test2$?.unsubscribe();
-    expect(editor.elementObserverPool?.size).toBe(0);
+    expect(change.elementObserverPool.size).toBe(0);
   });
 
   it('works same with specific element ids', () => {
-    const test = ElementObserverFactory(editor, ELEMENT_H1, '1');
+    const test = change.CreateElementObserver(ELEMENT_H1, '1');
 
     const test1$ = test?.subscribe(() => {});
     const test2$ = test?.subscribe(() => {});
 
-    expect(editor.specificElementObserverPool?.size).toBe(1);
+    expect(change.specificElementObserverPool.size).toBe(1);
 
     test1$?.unsubscribe();
-    expect(editor.specificElementObserverPool?.size).toBe(1);
+    expect(change.specificElementObserverPool.size).toBe(1);
 
     test2$?.unsubscribe();
-    expect(editor.specificElementObserverPool?.size).toBe(0);
+    expect(change.specificElementObserverPool.size).toBe(0);
   });
 
   it('works with various subscriptions', () => {
-    const h1Observable = ElementObserverFactory(editor, ELEMENT_H1, '1');
-    const h2Observable = ElementObserverFactory(editor, ELEMENT_H2, '2');
+    const h1Observable = change.CreateElementObserver(ELEMENT_H1, '1');
+    const h2Observable = change.CreateElementObserver(ELEMENT_H2, '2');
 
-    const h1Observable1$ = h1Observable?.subscribe(() => {});
-    const h1Observable2$ = h1Observable?.subscribe(() => {});
+    const h1Observable1$ = h1Observable.subscribe(() => {});
+    const h1Observable2$ = h1Observable.subscribe(() => {});
 
-    const h2Observable1$ = h2Observable?.subscribe(() => {});
-    const h2Observable2$ = h2Observable?.subscribe(() => {});
+    const h2Observable1$ = h2Observable.subscribe(() => {});
+    const h2Observable2$ = h2Observable.subscribe(() => {});
 
-    expect(editor.specificElementObserverPool?.size).toBe(2);
+    expect(change.specificElementObserverPool.size).toBe(2);
 
     // Size of 2 because even though this unsubscribed, other subscriptions are
     // active
 
     h1Observable1$?.unsubscribe();
-    expect(editor.specificElementObserverPool?.size).toBe(2);
+    expect(change.specificElementObserverPool.size).toBe(2);
 
     h2Observable1$?.unsubscribe();
-    expect(editor.specificElementObserverPool?.size).toBe(2);
+    expect(change.specificElementObserverPool.size).toBe(2);
 
     h1Observable2$?.unsubscribe();
-    expect(editor.specificElementObserverPool?.size).toBe(1);
+    expect(change.specificElementObserverPool.size).toBe(1);
 
     h2Observable2$?.unsubscribe();
-    expect(editor.specificElementObserverPool?.size).toBe(0);
+    expect(change.specificElementObserverPool.size).toBe(0);
   });
 });

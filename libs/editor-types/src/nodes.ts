@@ -56,8 +56,7 @@ export type MyEditor = PlateEditor<MyValue> & {
   isDragging?: boolean;
   interceptEvent?: EventInterceptor;
   previewRef?: RefObject<HTMLDivElement>;
-} & ObserverElements &
-  UndoEditor;
+} & UndoEditor;
 export type MyReactEditor = TReactEditor<MyValue>;
 
 /**

@@ -1,5 +1,5 @@
-import { expect, Page, test } from '@playwright/test';
-import { goToPlayground, waitForEditorToLoad } from '../utils/page/Editor';
+import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
 import {
   clickCell,
   createTable,
@@ -13,10 +13,13 @@ test.describe('Dropdown widget', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;
+  let context: BrowserContext;
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    await goToPlayground(page);
+    context = await page.context();
+
+    await setUp({ page, context });
     await waitForEditorToLoad(page);
   });
 

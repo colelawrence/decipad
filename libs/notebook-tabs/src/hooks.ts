@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { EditorController } from './EditorController';
 import { MyEditor, TabElement } from '@decipad/editor-types';
 import { useRouteParams } from 'typesafe-routes/react-router';
@@ -44,4 +44,8 @@ export function useActiveEditor(
   return tab
     ? controller.SubEditors.find((e) => e.id === tab)
     : controller.SubEditors[0];
+}
+
+export function useEditorController(): EditorController | undefined {
+  return useContext(ControllerProvider);
 }

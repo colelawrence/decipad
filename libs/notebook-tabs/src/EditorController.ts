@@ -45,6 +45,7 @@ import {
   TranslatePathUp,
 } from './TranslatePaths';
 import { IsOldOperation, IsTab, IsTitle, NoSelectOperations } from './utils';
+import { ElementObserver } from './ElementObserver';
 
 const INITIAL_TAB_NAME = 'New Tab';
 const INITIAL_TITLE = 'Welcome to Decipad!';
@@ -95,6 +96,8 @@ export class EditorController {
   private CreateSnapshot: () => void;
   private InsertOperations: Array<TInsertNodeOperation>;
 
+  public ElementObserver: ElementObserver;
+
   /**
    * Constructor initalizes a basic slate text editor, and
    * adds the first children element, linked to the title element.
@@ -119,6 +122,8 @@ export class EditorController {
     this.TitleEditor = this.CreateTitleEditor();
 
     this.InsertOperations = [];
+
+    this.ElementObserver = new ElementObserver();
   }
 
   /**
@@ -229,6 +234,8 @@ export class EditorController {
         apply(op);
       }
     };
+
+    this.ElementObserver.OverrideApply(editor);
 
     editor.onChange = () => {
       this.onChange();

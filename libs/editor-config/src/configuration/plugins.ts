@@ -1,5 +1,4 @@
 import { ClientEventContextType } from '@decipad/client-events';
-import { createElementChangePlugin } from '@decipad/editor-components';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import {
@@ -226,8 +225,6 @@ export const plugins = ({
       createMigrateStructuredInputs(),
       createMigrateTableDropdownToId(),
       createPreventInvalidSelectionPlugin(),
-
-      createElementChangePlugin(),
     ],
     {
       components: components(computer),

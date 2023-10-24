@@ -3,10 +3,10 @@ import {
   ELEMENT_VARIABLE_DEF,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useCallback, useEffect } from 'react';
-import { useEditorChange, usePathMutatorCallback } from '@decipad/editor-hooks';
-import { assertElementType } from '@decipad/editor-utils';
+import { useEffect, useMemo } from 'react';
+import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import type { Path } from 'slate';
+import { useElements } from '@decipad/editor-components';
 
 export const useTableHeaderCellDropdownNames = (
   element: TableHeaderElement,
@@ -14,24 +14,22 @@ export const useTableHeaderCellDropdownNames = (
 ) => {
   const editor = useTEditorRef();
 
-  const dropDownNames = useEditorChange(
-    useCallback(() => {
-      return editor.children
-        .filter(
-          (c) => c.type === ELEMENT_VARIABLE_DEF && c.variant === 'dropdown'
-        )
-        .map((d) => {
-          assertElementType(d, ELEMENT_VARIABLE_DEF);
-          return {
-            id: d.id,
-            value: d.children[0].children[0].text,
-            type:
-              d.coerceToType?.kind === 'string'
-                ? ('string' as const)
-                : ('number' as const),
-          };
-        });
-    }, [editor.children])
+  const dropdownElements = useElements(
+    ELEMENT_VARIABLE_DEF,
+    (el) => el.variant === 'dropdown'
+  );
+
+  const dropdownNames = useMemo(
+    () =>
+      dropdownElements.map((el) => ({
+        id: el.id,
+        value: el.children[0].children[0].text,
+        type:
+          el.coerceToType?.kind === 'string'
+            ? ('string' as const)
+            : ('number' as const),
+      })),
+    [dropdownElements]
   );
 
   const mutateDropdownType = usePathMutatorCallback(
@@ -42,7 +40,7 @@ export const useTableHeaderCellDropdownNames = (
   );
   useEffect(() => {
     if (element.cellType.kind === 'dropdown') {
-      const selectedDropdown = dropDownNames.find((d) => {
+      const selectedDropdown = dropdownNames.find((d) => {
         if (element.cellType.kind === 'dropdown') {
           return element.cellType.id === d.id;
         }
@@ -59,7 +57,7 @@ export const useTableHeaderCellDropdownNames = (
         });
       }
     }
-  }, [dropDownNames, element.cellType, mutateDropdownType]);
+  }, [dropdownNames, element.cellType, mutateDropdownType]);
 
-  return dropDownNames;
+  return dropdownNames;
 };
