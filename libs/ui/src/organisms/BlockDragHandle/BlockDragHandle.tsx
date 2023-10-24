@@ -198,13 +198,14 @@ export const BlockDragHandle = ({
                 <TriggerMenuItem icon={<Switch />}>Move to tab</TriggerMenuItem>
               }
             >
-              {tabs.map((t) => {
+              {tabs.map((t, i) => {
                 const TabIcon = icons[t.icon || 'Receipt'];
                 return (
                   <MenuItem
                     key={t.id}
                     icon={<TabIcon />}
                     onSelect={() => onMoveToTab(t.id)}
+                    testid={`move-to-tab-${i}`}
                   >
                     <div css={{ minWidth: '132px' }}>{t.name}</div>
                   </MenuItem>

@@ -379,14 +379,11 @@ export class EditorController {
 
   private SetTabProps(op: TSetNodeOperation): void {
     const tabIndex = op.path[0];
-
-    const tab = this.children[tabIndex];
-
-    this.children[tabIndex] = {
-      ...tab,
-      ...op.newProperties,
-    };
-
+    for (const key in op.newProperties) {
+      if (key in this.children[tabIndex]) {
+        this.children[tabIndex][key] = (op.newProperties as any)[key];
+      }
+    }
     this.Notifier.next('new-tab');
   }
 

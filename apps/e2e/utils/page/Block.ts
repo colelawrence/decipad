@@ -311,3 +311,46 @@ export async function getResult(page: Page, n: number) {
 
   return locator;
 }
+
+export async function moveToTab(
+  page: Page,
+  blockIndex: number,
+  tabIndex: number
+) {
+  await page
+    .locator(`[data-testid="drag-handle"] >> nth=${blockIndex}`)
+    .click();
+  await page.getByRole('menuitem', { name: 'Move to tab' }).click();
+  await page.getByTestId(`move-to-tab-${tabIndex}`).click();
+}
+
+export async function selectBlocks(
+  page: Page,
+  startBlock: number,
+  endBlock: number
+) {
+  const [startBoxLocation, endBoxLocation] = await Promise.all([
+    page
+      .locator(`[data-testid="drag-handle"] >> nth=${startBlock}`)
+      .boundingBox(),
+    page
+      .locator(`[data-testid="drag-handle"] >> nth=${endBlock}`)
+      .boundingBox(),
+  ]);
+
+  const width = page.viewportSize()?.width;
+  const startMousePosition = {
+    x: startBoxLocation!.x / 2,
+    y: startBoxLocation!.y,
+  };
+
+  const endMouseLocation = {
+    x: endBoxLocation!.x + width! / 2,
+    y: endBoxLocation!.y,
+  };
+
+  await page.mouse.move(startMousePosition.x, startMousePosition.y);
+  await page.mouse.down();
+  await page.mouse.move(endMouseLocation.x, endMouseLocation.y);
+  await page.mouse.up();
+}
