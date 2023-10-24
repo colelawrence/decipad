@@ -57,7 +57,6 @@ const tableTitleWrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   gap: '8px',
-  textAlign: 'center',
 });
 
 const tableIconSizeStyles = css({
@@ -90,7 +89,6 @@ const placeholderStyles = css({
 
 const wrapperStyle = css({
   display: 'flex',
-  textAlign: 'center',
   height: '100%',
 });
 
