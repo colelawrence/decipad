@@ -1,421 +1,512 @@
 {
   "children": [
     {
-      "type": "h1",
       "children": [
         {
           "text": "Weekend Trip - Example Notebook"
         }
-      ]
-    },
-    {
-      "children": [
-        {
-          "text": "Do you find yourselves in need of some time to rest? A quick retreat just to charge up and focus on yourself? This example showcases how you can build a simple budget for your weekend trip on Decipad."
-        }
       ],
-      "type": "p"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "divider"
-    },
-    {
-      "children": [
-        {
-          "text": "Our first step should be to define a budget and plan some expenses"
-        }
-      ],
-      "type": "callout",
-      "color": "Sulu",
-      "icon": "AnnotationWarning"
-    },
-    {
-      "children": [
-        {
-          "text": "To define your budget, you can type '/' and select an input widget from the menu. Just like this:"
-        }
-      ],
-      "type": "p"
+      "type": "title",
+      "id": "Fu-Tub2k7PGZC9M7na7nI"
     },
     {
       "children": [
         {
           "children": [
             {
-              "text": "Budget"
+              "text": "Do you find yourselves in need of some time to rest? A quick retreat just to charge up and focus on yourself? This example showcases how you can build a simple budget for your weekend trip on Decipad."
             }
           ],
-          "type": "caption",
-          "color": "Malibu",
-          "icon": "Wallet"
+          "type": "p",
+          "id": "1"
         },
         {
           "children": [
             {
-              "text": "1000$"
+              "text": ""
             }
           ],
-          "type": "exp"
-        }
-      ],
-      "type": "def",
-      "variant": "expression"
-    },
-    {
-      "children": [
-        {
-          "text": "Then, you can use the '/' command again to add a table to your notebook, where you can list all of your planned expensed and their respective amounts. Here's an example:"
-        }
-      ],
-      "type": "p"
-    },
-    {
-      "children": [
+          "type": "divider",
+          "id": "2"
+        },
         {
           "children": [
             {
-              "text": "Trip"
+              "text": "Our first step should be to define a budget and plan some expenses"
             }
           ],
-          "type": "table-caption"
+          "type": "callout",
+          "color": "Sulu",
+          "icon": "AnnotationWarning"
+        },
+        {
+          "children": [
+            {
+              "text": "To define your budget, you can type '/' and select an input widget from the menu. Just like this:"
+            }
+          ],
+          "type": "p",
+          "id": "3"
         },
         {
           "children": [
             {
               "children": [
                 {
-                  "text": "Expenses"
+                  "text": "Budget"
                 }
               ],
-              "type": "th",
-              "cellType": {
-                "kind": "string"
-              }
+              "type": "caption",
+              "color": "Malibu",
+              "icon": "Wallet"
             },
             {
               "children": [
                 {
-                  "text": "Amount"
+                  "text": "1000$"
                 }
               ],
-              "type": "th",
-              "cellType": {
-                "kind": "number",
-                "unit": {
-                  "type": "units",
-                  "args": [
+              "type": "exp"
+            }
+          ],
+          "type": "def",
+          "variant": "expression",
+          "id": "4"
+        },
+        {
+          "children": [
+            {
+              "text": "Then, you can use the '/' command again to add a table to your notebook, where you can list all of your planned expensed and their respective amounts. Here's an example:"
+            }
+          ],
+          "type": "p",
+          "id": "5"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
                     {
-                      "unit": "usd",
-                      "exp": {
-                        "s": "1",
-                        "n": "1",
-                        "d": "1"
-                      },
-                      "multiplier": {
-                        "s": "1",
-                        "n": "1",
-                        "d": "1"
-                      },
-                      "known": true
+                      "text": "Trip"
                     }
-                  ]
-                }
-              }
-            }
-          ],
-          "type": "tr"
-        },
-        {
-          "children": [
-            {
-              "children": [
-                {
-                  "text": "✈️ Tickets 2x"
+                  ],
+                  "id": "KWLRbZUVtyqyDCAPYoFbT",
+                  "type": "table-var-name"
                 }
               ],
-              "type": "td"
+              "type": "table-caption",
+              "id": "g1BXNZA7Io1UJAM3H6fMx"
             },
             {
               "children": [
                 {
-                  "text": "150"
-                }
-              ],
-              "type": "td"
-            }
-          ],
-          "type": "tr"
-        },
-        {
-          "children": [
-            {
-              "children": [
+                  "children": [
+                    {
+                      "text": "Expenses"
+                    }
+                  ],
+                  "type": "th",
+                  "id": "20",
+                  "cellType": {
+                    "kind": "string"
+                  }
+                },
                 {
-                  "text": "🛏 Hotel + Spa 2 nights"
+                  "children": [
+                    {
+                      "text": "Amount"
+                    }
+                  ],
+                  "type": "th",
+                  "id": "21",
+                  "cellType": {
+                    "kind": "number",
+                    "unit": [
+                      {
+                        "unit": "usd",
+                        "exp": {
+                          "s": "1",
+                          "n": "1",
+                          "d": "1"
+                        },
+                        "multiplier": {
+                          "s": "1",
+                          "n": "1",
+                          "d": "1"
+                        },
+                        "known": true
+                      }
+                    ]
+                  },
+                  "id": "qycnzpjNHwYqfkE2Ugg94"
                 }
               ],
-              "type": "td"
+              "type": "tr",
+              "id": "qAt5Hp6P8f2wPfSquUYUW"
             },
             {
               "children": [
                 {
-                  "text": "250"
-                }
-              ],
-              "type": "td"
-            }
-          ],
-          "type": "tr"
-        },
-        {
-          "children": [
-            {
-              "children": [
+                  "children": [
+                    {
+                      "text": "✈️ Tickets 2x"
+                    }
+                  ],
+                  "type": "td"
+                },
                 {
-                  "text": "🌮 Food "
+                  "children": [
+                    {
+                      "text": "150"
+                    }
+                  ],
+                  "type": "td"
                 }
               ],
-              "type": "td"
+              "type": "tr"
             },
             {
               "children": [
                 {
-                  "text": "300"
-                }
-              ],
-              "type": "td"
-            }
-          ],
-          "type": "tr"
-        },
-        {
-          "children": [
-            {
-              "children": [
+                  "children": [
+                    {
+                      "text": "🛏 Hotel + Spa 2 nights"
+                    }
+                  ],
+                  "type": "td"
+                },
                 {
-                  "text": "🛍 Shopping"
+                  "children": [
+                    {
+                      "text": "250"
+                    }
+                  ],
+                  "type": "td"
                 }
               ],
-              "id": "65i-MJMUqelN5zRs4FtU6",
-              "type": "td"
+              "type": "tr"
             },
             {
               "children": [
                 {
-                  "text": "200"
-                }
-              ],
-              "type": "td"
-            }
-          ],
-          "id": "iwWWTBkDa_5IDgDa81NX3",
-          "type": "tr"
-        },
-        {
-          "children": [
-            {
-              "children": [
+                  "children": [
+                    {
+                      "text": "🌮 Food "
+                    }
+                  ],
+                  "type": "td"
+                },
                 {
-                  "text": "🧳 Extra Luggage"
+                  "children": [
+                    {
+                      "text": "300"
+                    }
+                  ],
+                  "type": "td"
                 }
               ],
-              "id": "XZQBk2OUSdre6GKtCQszp",
-              "type": "td"
+              "type": "tr"
             },
             {
               "children": [
                 {
-                  "text": "150"
+                  "children": [
+                    {
+                      "text": "🛍 Shopping"
+                    }
+                  ],
+                  "id": "65i-MJMUqelN5zRs4FtU6",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "200"
+                    }
+                  ],
+                  "type": "td"
                 }
               ],
-              "id": "a0DHqbFO9nTtCbcg2Hu-K",
-              "type": "td"
+              "id": "iwWWTBkDa_5IDgDa81NX3",
+              "type": "tr"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "text": "🧳 Extra Luggage"
+                    }
+                  ],
+                  "id": "XZQBk2OUSdre6GKtCQszp",
+                  "type": "td"
+                },
+                {
+                  "children": [
+                    {
+                      "text": "150"
+                    }
+                  ],
+                  "id": "a0DHqbFO9nTtCbcg2Hu-K",
+                  "type": "td"
+                }
+              ],
+              "id": "iG-LWPDKNXvurGfz25jfj",
+              "type": "tr"
             }
           ],
-          "id": "iG-LWPDKNXvurGfz25jfj",
-          "type": "tr"
-        }
-      ],
-      "type": "table",
-      "id": "FsYpwD8Z2ymR_5PZhVAyx",
-      "color": "Malibu"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "divider"
-    },
-    {
-      "children": [
-        {
-          "text": "With all of our information collected, we can start creating our model and adjusting where necessary"
-        }
-      ],
-      "type": "callout",
-      "color": "Sulu",
-      "icon": "AnnotationWarning"
-    },
-    {
-      "children": [
-        {
-          "text": "How much are we planning on spending?"
-        }
-      ],
-      "type": "h3"
-    },
-    {
-      "children": [
-        {
-          "text": "We can perform calculations using a calculation block from the '/' command menu. Or by simply typing 'Expenses ='. Check how easy it is to find how much we are planning to spend using the "
+          "type": "table",
+          "id": "wJpfKu-ey-GGniT-Cw2mM",
+          "version": 2,
+          "color": "Malibu"
         },
         {
           "children": [
             {
-              "text": "Decipad Language"
+              "text": ""
             }
           ],
-          "type": "a",
-          "url": "https://app.decipad.com/docs/quick-start/table-calculations",
-          "id": "NmoGnavM-EONaBsFbOa9d"
-        },
-        {
-          "text": ":"
-        }
-      ],
-      "type": "p"
-    },
-    {
-      "children": [
-        {
-          "text": "Expenses = sum(Trip.Amount)"
-        }
-      ],
-      "type": "code_line"
-    },
-    {
-      "children": [
-        {
-          "text": "Are we under budget?"
-        }
-      ],
-      "type": "h3"
-    },
-    {
-      "children": [
-        {
-          "text": "We can also do simple verification using the calculation blocks, In this case if we are over budget:"
-        }
-      ],
-      "type": "p"
-    },
-    {
-      "children": [
-        {
-          "text": "Expenses < Budget"
-        }
-      ],
-      "type": "code_line"
-    },
-    {
-      "children": [
-        {
-          "text": "To make sure we are under budget, you can adjust the budget amount on the input widget or remove items from our planned expenses list. "
-        }
-      ],
-      "type": "p",
-      "id": "8fPLOtmVEtowXy-Y6t3l5"
-    },
-    {
-      "children": [
-        {
-          "text": "To remove items from our table, go up to our table and click on the minus from each item row.  In this case if we remove the Extra Luggage costs expense we are under budget. Go to our table and try for yourself."
-        }
-      ],
-      "type": "p",
-      "id": "nYAqRVCzV2cj_ancTnXrV"
-    },
-    {
-      "children": [
-        {
-          "text": "Did you see the model update? "
-        }
-      ],
-      "type": "h3"
-    },
-    {
-      "children": [
-        {
-          "text": "Have fun adapting this model to plan your own weekend trip!"
-        }
-      ],
-      "type": "p"
-    },
-    {
-      "children": [
-        {
-          "text": "Find more about calculation blocks and the language on our "
+          "type": "divider",
+          "id": "6"
         },
         {
           "children": [
             {
-              "text": "documentation"
+              "text": "With all of our information collected, we can start creating our model and adjusting where necessary"
             }
           ],
-          "type": "a",
-          "url": "https://app.decipad.com/docs/quick-start/table-calculations",
-          "id": "zf4m1ENDOEgK8Ic15uRiI"
-        },
-        {
-          "text": "."
-        }
-      ],
-      "type": "p",
-      "id": "pJwyex9JySub4-5yJAn1K"
-    },
-    {
-      "children": [
-        {
-          "text": ""
-        }
-      ],
-      "type": "divider"
-    },
-    {
-      "children": [
-        {
-          "text": "Don't be a stranger!"
-        }
-      ],
-      "type": "h3"
-    },
-    {
-      "children": [
-        {
-          "text": "Come join the fun at "
+          "type": "callout",
+          "color": "Sulu",
+          "icon": "AnnotationWarning",
+          "id": "7"
         },
         {
           "children": [
             {
-              "text": "Discord"
+              "text": "How much are we planning on spending?"
             }
           ],
-          "type": "a",
-          "url": "http://discord.gg/decipad",
-          "id": "RZecO5lIkGblx1SZMo1HN"
+          "type": "h3",
+          "id": "8"
         },
         {
-          "text": " where we share our Notebooks and geek about numbers and data. We are eager to find out what you're exploring and building next!"
+          "children": [
+            {
+              "text": "We can perform calculations using a calculation block from the '/' command menu. Or by simply typing 'Expenses ='. Check how easy it is to find how much we are planning to spend using the "
+            },
+            {
+              "children": [
+                {
+                  "text": "Decipad Language"
+                }
+              ],
+              "type": "a",
+              "url": "https://app.decipad.com/docs/quick-start/table-calculations",
+              "id": "NmoGnavM-EONaBsFbOa9d"
+            },
+            {
+              "text": ":"
+            }
+          ],
+          "type": "p",
+          "id": "9"
+        },
+        {
+          "children": [
+            {
+              "text": "Expenses = sum("
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "MRBSx0CF2jEVyrAmHHVeF",
+              "type": "smart-ref",
+              "blockId": "wJpfKu-ey-GGniT-Cw2mM",
+              "columnId": "qycnzpjNHwYqfkE2Ugg94",
+              "lastSeenVariableName": "Trip.Amount"
+            },
+            {
+              "text": ")"
+            }
+          ],
+          "type": "code_line",
+          "id": "10"
+        },
+        {
+          "children": [
+            {
+              "text": "Are we under budget?"
+            }
+          ],
+          "type": "h3",
+          "id": "11"
+        },
+        {
+          "children": [
+            {
+              "text": "We can also do simple verification using the calculation blocks, In this case if we are over budget:"
+            }
+          ],
+          "type": "p",
+          "id": "12"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "PEKOrulYfwjXgao9XQYGz",
+              "type": "smart-ref",
+              "blockId": "10",
+              "columnId": null,
+              "lastSeenVariableName": "Expenses"
+            },
+            {
+              "text": " < "
+            },
+            {
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "DkrI7q6v35_LmfvcCSJv4",
+              "type": "smart-ref",
+              "blockId": "4",
+              "columnId": null,
+              "lastSeenVariableName": "Budget"
+            },
+            {
+              "text": ""
+            }
+          ],
+          "type": "code_line",
+          "id": "13"
+        },
+        {
+          "children": [
+            {
+              "text": "To make sure we are under budget, you can adjust the budget amount on the input widget or remove items from our planned expenses list. "
+            }
+          ],
+          "type": "p",
+          "id": "8fPLOtmVEtowXy-Y6t3l5"
+        },
+        {
+          "children": [
+            {
+              "text": "To remove items from our table, go up to our table and click on the minus from each item row.  In this case if we remove the Extra Luggage costs expense we are under budget. Go to our table and try for yourself."
+            }
+          ],
+          "type": "p",
+          "id": "nYAqRVCzV2cj_ancTnXrV"
+        },
+        {
+          "children": [
+            {
+              "text": "Did you see the model update? "
+            }
+          ],
+          "type": "h3",
+          "id": "14"
+        },
+        {
+          "children": [
+            {
+              "text": "Have fun adapting this model to plan your own weekend trip!"
+            }
+          ],
+          "type": "p",
+          "id": "15"
+        },
+        {
+          "children": [
+            {
+              "text": "Find more about calculation blocks and the language on our "
+            },
+            {
+              "children": [
+                {
+                  "text": "documentation"
+                }
+              ],
+              "type": "a",
+              "url": "https://app.decipad.com/docs/quick-start/table-calculations",
+              "id": "zf4m1ENDOEgK8Ic15uRiI"
+            },
+            {
+              "text": "."
+            }
+          ],
+          "type": "p",
+          "id": "pJwyex9JySub4-5yJAn1K"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "divider",
+          "id": "16"
+        },
+        {
+          "children": [
+            {
+              "text": "Don't be a stranger!"
+            }
+          ],
+          "type": "h3",
+          "id": "17"
+        },
+        {
+          "children": [
+            {
+              "text": "Come join the fun at "
+            },
+            {
+              "children": [
+                {
+                  "text": "Discord"
+                }
+              ],
+              "type": "a",
+              "url": "http://discord.gg/decipad",
+              "id": "RZecO5lIkGblx1SZMo1HN"
+            },
+            {
+              "text": " where we share our Notebooks and geek about numbers and data. We are eager to find out what you're exploring and building next!"
+            }
+          ],
+          "type": "p",
+          "id": "18"
+        },
+        {
+          "children": [
+            {
+              "text": ""
+            }
+          ],
+          "type": "p",
+          "id": "Lub0tec4Lt-TvZ5hxcswp"
         }
       ],
-      "type": "p"
+      "type": "tab",
+      "id": "dhEmGGxYwN_f-PazfFuYM",
+      "name": "New Tab",
+      "icon": "Receipt",
+      "isHidden": false
     }
   ]
 }
