@@ -188,14 +188,18 @@ const NewTabs: FC<{
         // No deleting the last tab
         if (tabs.length <= 1) return;
 
+        const tabIndex = tabs.findIndex((t) => t.id === id);
+
         controller.RemoveTab(id);
         if (id !== tab) return;
 
         // We are deleting the currently active tab.
         // We must navigate elsewhere
-        const firstAvailable = tabs.find((t) => t.id !== id);
+        const newSelectedTabIndex = tabs.at(tabIndex - 1) ?? tabs.at(0);
 
-        nav(`${notebooks({}).notebook({ notebook }).$}/${firstAvailable?.id}`);
+        nav(
+          `${notebooks({}).notebook({ notebook }).$}/${newSelectedTabIndex?.id}`
+        );
       }}
       onChangeIcon={controller.ChangeTabIcon.bind(controller)}
       onToggleShowHide={controller.ToggleShowHideTab.bind(controller)}
