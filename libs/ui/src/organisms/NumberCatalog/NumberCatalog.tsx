@@ -1,27 +1,30 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { SmartRefDragCallback } from '@decipad/editor-utils';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { NumberCatalogHeading } from './NumberCatalogHeading';
 import { NumberCatalogItem } from './NumberCatalogItem';
+import { cssVar, p14Medium } from '../../primitives';
 
 export type NumberCatalogItemType = {
   name: string;
   blockId: string;
   type: 'h2' | 'h3' | 'var';
+  currentTab: boolean;
 };
 
 interface NumberCatalogProps {
   onDragStart?: SmartRefDragCallback;
   onDragEnd?: (e: React.DragEvent) => void;
-  items: NumberCatalogItemType[];
+  items: Record<string, NumberCatalogItemType[]>;
   alignment?: 'right' | 'left';
 }
 
 export const NumberCatalog = ({
   onDragStart,
   onDragEnd,
-  items = [],
+  items = {},
 }: NumberCatalogProps) => {
   function getNumberCatalogItemComponent(
     item: NumberCatalogItemType
@@ -45,7 +48,7 @@ export const NumberCatalog = ({
     }
   }
 
-  if (!items.length) {
+  if (!Object.keys(items).length) {
     return null;
   }
 
@@ -53,7 +56,14 @@ export const NumberCatalog = ({
     <div css={wrapperStyles}>
       <div css={numberCatalogMenuStyles}>
         <div css={menuBodyStyles}>
-          {items.map((item) => getNumberCatalogItemComponent(item))}
+          {Object.keys(items).map((tab) => (
+            <div key={tab} css={groupStyles}>
+              {Object.keys(items).length > 1 && (
+                <span css={groupHeadingStyles}>{tab}:</span>
+              )}
+              {items[tab].map((item) => getNumberCatalogItemComponent(item))}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -77,4 +87,20 @@ const menuBodyStyles = css({
   gap: 4,
   minHeight: '40px',
   overflowX: 'hidden',
+});
+
+const groupStyles = css({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 4,
+  padding: '4px 0',
+
+  '&:not(:last-child)': {
+    borderBottom: `1px solid ${cssVar('borderSubdued')}`,
+  },
+});
+
+const groupHeadingStyles = css(p14Medium, {
+  color: cssVar('textSubdued'),
+  padding: '4px 8px',
 });

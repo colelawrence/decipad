@@ -61,6 +61,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({
               return (
                 <TabsTrigger
                   name={tab}
+                  key={label}
                   testId={`sidebar-${label}`}
                   trigger={{
                     label,

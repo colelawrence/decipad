@@ -139,7 +139,7 @@ export const numberCatalogListItemStyles = css(p14Medium, {
   minHeight: 0,
   '&:hover': {
     backgroundColor: cssVar('backgroundDefault'),
-    'span:first-child': {
+    'span:first-of-type': {
       opacity: 1,
     },
 

@@ -29,14 +29,26 @@ const insertInOrder = (
 
 const catalogItem =
   (editor: MyEditor) =>
-  (curr: CatalogItems, name: CatalogItemVar): CatalogItems => {
+  (
+    curr: CatalogItems,
+    _name: Omit<CatalogItemVar, 'currentTab'>
+  ): CatalogItems => {
     const entry = findNode(editor, {
       at: [],
-      match: { id: name.blockId },
+      match: { id: _name.blockId },
     });
+
     if (!entry) {
+      const name: CatalogItemVar = {
+        ..._name,
+        currentTab: false,
+      };
       return [...curr, name];
     }
+    const name: CatalogItemVar = {
+      ..._name,
+      currentTab: true,
+    };
     const parent = findParent(editor, entry as NodeEntry<MyValue[number]>);
     if (!parent) {
       return [...curr, name];
@@ -58,6 +70,7 @@ const catalogItem =
           blockId: parentNode.id,
           name: getNodeString(adoptiveParent),
           path: parentPath,
+          currentTab: true,
         },
         name
       );
@@ -75,5 +88,5 @@ const catalogItem =
 
 export const catalogItems =
   (editor: MyEditor) =>
-  (names: CatalogItemVar[]): CatalogItems =>
+  (names: Omit<CatalogItemVar, 'currentTab'>[]): CatalogItems =>
     names.reduce<CatalogItems>(catalogItem(editor), []);

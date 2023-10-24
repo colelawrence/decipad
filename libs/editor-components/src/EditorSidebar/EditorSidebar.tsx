@@ -8,21 +8,14 @@ import {
   NumberCatalog as UINumberCatalog,
 } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, useCallback, useContext, useMemo, useState } from 'react';
 import { execute } from '../utils/slashCommands';
 import { useOnDragEnd } from '../utils/useDnd';
 import { catalogItems } from './catalogItems';
 import { selectCatalogNames } from './selectCatalogNames';
 import { toVar } from './toVar';
-import { CatalogItems } from './types';
 import { MyEditor } from '@decipad/editor-types';
+import { groupByTab } from './groupByTab';
 
 const catalogDebounceTimeMs = 1_000;
 
@@ -80,15 +73,19 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
   );
 
   const [search, setSearch] = useState('');
-  const [filteredItems, setFilteredItems] = useState<CatalogItems>([]);
 
-  useEffect(() => {
-    // Filter the items array based on the filter value
-    const filtered = items.filter((item) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredItems(filtered);
-  }, [items, search]);
+  const filteredItems = useMemo(
+    () =>
+      items.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [items, search]
+  );
+
+  const groupedItems = useMemo(
+    () => groupByTab(filteredItems),
+    [filteredItems]
+  );
 
   return (
     <ErrorBoundary fallback={<></>}>
@@ -99,7 +96,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
         {...notebookMetaData}
       >
         <UINumberCatalog
-          items={filteredItems}
+          items={groupedItems}
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
         />
