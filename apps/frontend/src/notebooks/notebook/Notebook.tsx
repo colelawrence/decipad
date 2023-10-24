@@ -161,6 +161,10 @@ const NewTabs: FC<{
 
   const nav = useNavigate();
 
+  if (tabs.length === 1 && isReadOnly) {
+    return null;
+  }
+
   return (
     <NotebookTabs
       tabs={tabs.map(({ id, name, icon, isHidden }) => ({
