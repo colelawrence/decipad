@@ -1,0 +1,31 @@
+{
+	"children": [
+		{
+			"children": [
+				{
+					"text": "Welcome to Decipad!"
+				}
+			],
+			"type": "title",
+			"id": "H5zNy7WmEiTjjFMTEcArV"
+		},
+		{
+			"children": [
+				{
+					"children": [
+						{
+							"text": ""
+						}
+					],
+					"type": "p",
+					"id": "mkrrfZT-WzEJd9QzxFOIZ"
+				}
+			],
+			"type": "tab",
+			"id": "s-jYtKeExlHspWsbJASZ1",
+			"name": "New Tab",
+			"icon": "Receipt",
+			"isHidden": false
+		}
+	]
+}

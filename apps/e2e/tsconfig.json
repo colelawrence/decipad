@@ -4,7 +4,7 @@
     "allowJs": true,
     "lib": ["esnext", "dom", "dom.iterable"]
   },
-  "include": ["./utils", "./__fixtures__/**/*.json", "./tests"],
+  "include": [".","./utils", "./__fixtures__/**/*.json", "./tests"],
   "references": [
     { "path": "../../libs/backend-config" },
     { "path": "../../libs/frontend-config" },

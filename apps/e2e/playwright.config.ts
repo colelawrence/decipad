@@ -1,5 +1,6 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -10,6 +11,9 @@ import { devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+export const STORAGE_STATE = path.join(__dirname, './utils/src/user.json');
+
 const config: PlaywrightTestConfig = {
   testDir: './tests',
   /* Maximum time one test can run for. */
@@ -52,9 +56,16 @@ const config: PlaywrightTestConfig = {
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'setup',
+      testMatch: '**/**/*.setup.ts',
+      testDir: './utils/src',
+    },
+    {
       name: 'chromium',
+      dependencies: ['setup'],
       use: {
         ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE,
         trace: 'retain-on-failure',
         contextOptions: {
           // chromium-specific permissions

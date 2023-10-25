@@ -7,7 +7,6 @@ import {
   tableCellLocator,
 } from '../utils/page/Table';
 import { createDropdownBelow } from '../utils/page/Block';
-import waitForExpect from 'wait-for-expect';
 
 test.describe('Dropdown widget', () => {
   test.describe.configure({ mode: 'serial' });
@@ -162,8 +161,7 @@ test.describe('Dropdown widget', () => {
       .locator('[aria-roledescription="dropdownOption"] >> nth=1')
       .waitFor({ state: 'visible', timeout: 5000 });
 
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       const items = await Promise.all(
         (
           await page.locator('[aria-roledescription="dropdownOption"]').all()
@@ -173,7 +171,7 @@ test.describe('Dropdown widget', () => {
       expect(items[1]).toBe('One');
       expect(items[2]).toBe('Two');
       expect(items[3]).toBe('Three');
-    });
+    }).toPass();
 
     await page
       .locator('[aria-roledescription="dropdownOption"] >> nth=1')

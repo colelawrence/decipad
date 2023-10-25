@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
 import { ControlPlus, keyPress } from './Editor';
 
@@ -199,12 +199,13 @@ export async function createCalculationBlockBelow(
   page: Page,
   decilang: string
 ) {
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.typing);
-
+  const checkIncremented = await page.getByTestId('code-line').count();
   await createWithSlashCommand(page, '/advanced');
-
-  await page.waitForSelector('[data-testid="code-line"]');
+  await expect(async () => {
+    await expect(await page.getByTestId('code-line').count()).toBe(
+      checkIncremented + 1
+    );
+  }).toPass();
 
   await page.keyboard.type(decilang);
 

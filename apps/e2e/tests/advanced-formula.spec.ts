@@ -3,7 +3,7 @@ import {
   createCalculationBlockBelow,
   getCodeLineContent,
 } from '../utils/page/Block';
-import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
+import { setUp } from '../utils/page/Editor';
 import { getCaretPosition } from '../utils/src';
 
 test.describe('Calculation Blocks', () => {
@@ -17,8 +17,12 @@ test.describe('Calculation Blocks', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = page.context();
-    await setUp({ page, context });
-    await waitForEditorToLoad(page);
+    await setUp(
+      { page, context },
+      {
+        createAndNavigateToNewPad: true,
+      }
+    );
   });
 
   test.afterAll(async () => {

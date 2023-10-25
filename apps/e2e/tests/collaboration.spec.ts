@@ -1,11 +1,12 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
+import { withTestUser } from '../utils/src';
 
 test.describe('Make sure collaboration works ', () => {
   let page1: Page;
   let context1: BrowserContext;
   let context2: BrowserContext;
-  test.beforeEach(async ({ browser }) => {
+  test.beforeAll(async ({ browser }) => {
     test.setTimeout(120_000);
     [context1, context2] = await Promise.all([
       browser.newContext(),
@@ -27,6 +28,7 @@ test.describe('Make sure collaboration works ', () => {
   });
 
   test('Check user cannot access notebook they do not have permission to', async () => {
+    context2.clearCookies();
     const page2 = await context2.newPage();
     await page2.goto(page1.url());
 
@@ -38,8 +40,9 @@ test.describe('Make sure collaboration works ', () => {
   });
 
   test('Invite another user to notepad with readonly', async () => {
+    context2.clearCookies();
     const page2 = await context2.newPage();
-    const testUser2 = await setUp({ page: page2, context: context2 });
+    const testUser2 = await withTestUser({ context: context2, page: page2 });
     await page1.getByTestId('publish-button').click();
     await page1.getByPlaceholder('Enter email address').fill(testUser2.email);
     await page1.keyboard.press('Tab');
@@ -67,8 +70,9 @@ test.describe('Make sure collaboration works ', () => {
   });
 
   test('Invite another user to notepad as contributor', async () => {
+    context2.clearCookies();
     const page2 = await context2.newPage();
-    const testUser2 = await setUp({ page: page2, context: context2 });
+    const testUser2 = await withTestUser({ context: context2, page: page2 });
     await page1.getByTestId('publish-button').click();
     await page1.getByPlaceholder('Enter email address').fill(testUser2.email);
     await page1.getByPlaceholder('Enter email address').focus();

@@ -1,7 +1,7 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import stringify from 'json-stringify-safe';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
-import { setUp, waitForEditorToLoad } from '../utils/page/Editor';
+import { waitForEditorToLoad } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
 import {
   createWorkspace,
@@ -12,22 +12,14 @@ import {
 
 test.describe('Use case: building a candle business', () => {
   test.describe.configure({ mode: 'serial' });
+  test.slow();
 
   let page: Page;
-  let context: BrowserContext;
   let workspaceId: string;
   let notebookId: string;
 
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
     workspaceId = await createWorkspace(page);
   });
 
@@ -47,13 +39,11 @@ test.describe('Use case: building a candle business', () => {
     await page.goto(`/n/${notebookId}`);
 
     await waitForEditorToLoad(page);
-
     await expect(page).toHaveTitle('🕯Starting a Candle Business | Decipad');
 
-    await page.waitForSelector('[data-testid="number-result:$6,913.8"]');
-
-    expect(await fetchTable(page, '[id="ddTJXSKZzWh56A8NMCZmM"]')).toBe(
-      `.------------------------------------------------.
+    await expect(async () => {
+      expect(await fetchTable(page, '[id="ddTJXSKZzWh56A8NMCZmM"]')).toBe(
+        `.------------------------------------------------.
 |                    Revenue                     |
 |------------------------------------------------|
 | Year |    Units    |    Price     | NetRevenue |
@@ -65,10 +55,10 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | 3,841 units | $25 per unit | ≈$96.03K   |
 | 2027 | 5,378 units | $25 per unit | ≈$134.45K  |
 '------------------------------------------------'`
-    );
+      );
 
-    expect(await fetchTable(page, '[id="HFm_s7Zp8559ZZsUzDnbH"]')).toBe(
-      `.---------------------------------------------.
+      expect(await fetchTable(page, '[id="HFm_s7Zp8559ZZsUzDnbH"]')).toBe(
+        `.---------------------------------------------.
 |                  COGSTable                  |
 |---------------------------------------------|
 | Year |  UnitCost   |    Units    |   COGS   |
@@ -80,10 +70,10 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | $5 per unit | 3,841 units | ≈$19.21K |
 | 2027 | $5 per unit | 5,378 units | ≈$26.89K |
 '---------------------------------------------'`
-    );
+      );
 
-    expect(await fetchTable(page, '[id="hOM1pr8pzdFI19V4lubQD"]')).toBe(
-      `.--------------------------------------------.
+      expect(await fetchTable(page, '[id="hOM1pr8pzdFI19V4lubQD"]')).toBe(
+        `.--------------------------------------------.
 |                GrossMargin                 |
 |--------------------------------------------|
 | Year | NetRevenue |   COGS   | GrossProfit |
@@ -95,10 +85,10 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | ≈$96.03K   | ≈$19.21K | ≈$76.82K    |
 | 2027 | ≈$134.45K  | ≈$26.89K | ≈$107.56K   |
 '--------------------------------------------'`
-    );
+      );
 
-    expect(await fetchTable(page, '[id="NOnNrYjbMXL7-mNf0_HYD"]')).toBe(
-      `.--------------------------------------------------------------------.
+      expect(await fetchTable(page, '[id="NOnNrYjbMXL7-mNf0_HYD"]')).toBe(
+        `.--------------------------------------------------------------------.
 |                                OPEX                                |
 |--------------------------------------------------------------------|
 | Year |  LaborItem  |    Units    |  Labor   | Marketing |  Total   |
@@ -110,10 +100,10 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | $6 per unit | 3,841 units | ≈$23.05K | ≈$19.21K  | ≈$42.25K |
 | 2027 | $6 per unit | 5,378 units | ≈$32.27K | ≈$26.89K  | ≈$59.16K |
 '--------------------------------------------------------------------'`
-    );
+      );
 
-    expect(await fetchTable(page, '[id="-farwyIZskJw6c8lgrotZ"]')).toBe(
-      `.--------------------------------------------------------------.
+      expect(await fetchTable(page, '[id="-farwyIZskJw6c8lgrotZ"]')).toBe(
+        `.--------------------------------------------------------------.
 |                             EBIT                             |
 |--------------------------------------------------------------|
 | Year | NetRevenue | GrossProfit |   OPEX   | OperatingIncome |
@@ -125,10 +115,9 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | ≈$96.03K   | ≈$76.82K    | ≈$42.25K | ≈$34.57K        |
 | 2027 | ≈$134.45K  | ≈$107.56K   | ≈$59.16K | ≈$48.4K         |
 '--------------------------------------------------------------'`
-    );
-
-    expect(await fetchTable(page, '[id="Kqjhk4bqXwF7Y4lKcLZIH"]')).toBe(
-      `.----------------------------.
+      );
+      expect(await fetchTable(page, '[id="Kqjhk4bqXwF7Y4lKcLZIH"]')).toBe(
+        `.----------------------------.
 |            Tax             |
 |----------------------------|
 | Year |   EBIT   |  Taxes   |
@@ -140,10 +129,10 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | ≈$34.57K | $6,913.8 |
 | 2027 | ≈$48.4K  | $9,680.4 |
 '----------------------------'`
-    );
+      );
 
-    expect(await fetchTable(page, '[id="dx3xX7M8CauTJALImf5vt"]')).toBe(
-      `.------------------------------------------------------------.
+      expect(await fetchTable(page, '[id="dx3xX7M8CauTJALImf5vt"]')).toBe(
+        `.------------------------------------------------------------.
 |                       NetIncomeTable                       |
 |------------------------------------------------------------|
 | Year | NetRevenue | OperatingIncome |  Taxes   | NetIncome |
@@ -155,7 +144,8 @@ test.describe('Use case: building a candle business', () => {
 | 2026 | ≈$96.03K   | ≈$34.57K        | $6,913.8 | ≈$27.66K  |
 | 2027 | ≈$134.45K  | ≈$48.4K         | $9,680.4 | ≈$38.72K  |
 '------------------------------------------------------------'`
-    );
+      );
+    }).toPass();
   });
 
   test('load embed version of the notebook', async () => {

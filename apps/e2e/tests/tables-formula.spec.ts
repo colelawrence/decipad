@@ -1,15 +1,11 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import notebookSource from '../__fixtures__/006-notebook-formula-tables.json';
-import {
-  navigateToNotebook,
-  setUp,
-  waitForEditorToLoad,
-} from '../utils/page/Editor';
+import { navigateToNotebook, waitForEditorToLoad } from '../utils/page/Editor';
 import { createWorkspace, importNotebook } from '../utils/src';
 
 export const typeTest = (currentPage: Page, input: string) =>
   test.step('Trying to add text to formulas', async () => {
-    await currentPage.getByTestId('code-line').type(input);
+    await currentPage.getByTestId('code-line').fill(input);
   });
 
 test.describe('Testing tables created from formulas', () => {
@@ -18,32 +14,20 @@ test.describe('Testing tables created from formulas', () => {
   let notebookId: string;
   let workspaceId: string;
   let page: Page;
-  let context: BrowserContext;
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
     workspaceId = await createWorkspace(page);
     notebookId = await importNotebook(
       workspaceId,
       Buffer.from(JSON.stringify(notebookSource), 'utf-8').toString('base64'),
       page
     );
+    await navigateToNotebook(page, notebookId);
+    await waitForEditorToLoad(page);
   });
 
   test.afterAll(async () => {
     await page.close();
-  });
-
-  test('Waiting for editor to be ready', async () => {
-    await navigateToNotebook(page, notebookId);
-    await waitForEditorToLoad(page);
   });
 
   test('Filling in the code and testing that the numbers are displayed properly', async () => {

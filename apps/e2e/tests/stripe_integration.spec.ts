@@ -1,5 +1,4 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { setUp } from '../utils/page/Editor';
 
 test.describe('Stripe integration', () => {
   test.describe.configure({ mode: 'serial' });
@@ -10,13 +9,6 @@ test.describe('Stripe integration', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: false,
-      }
-    );
     await page.goto('/');
   });
 

@@ -15,7 +15,12 @@ test.describe('check notebook duplicate stays in the same workspace', () => {
     page = await browser.newPage();
     context = page.context();
 
-    await setUp({ page, context });
+    await setUp(
+      { page, context },
+      {
+        randomUser: true,
+      }
+    );
     await waitForEditorToLoad(page);
     const workspaces = await getWorkspaces(page);
     originalWorkspace = workspaces[0].name;

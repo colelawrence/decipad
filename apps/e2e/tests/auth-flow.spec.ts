@@ -1,5 +1,6 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { snapshot, withTestUser } from '../utils/src';
+import { snapshot, Timeouts } from '../utils/src';
+import { app } from '@decipad/backend-config';
 
 test.describe('check auth flows @auth', () => {
   let page: Page;
@@ -37,9 +38,17 @@ test.describe('check auth flows @auth', () => {
     ).toBeVisible();
   });
 
-  test('redirect to workspace if authenticated', async () => {
-    await withTestUser({ page, context });
+  test('redirect to workspace if authenticated and can logout', async () => {
     await page.goto('/');
     await expect(page.getByTestId('dashboard')).toBeVisible();
+    await page.getByTestId('account-settings-button').click();
+    await page.getByTestId('logout-link').click();
+    // Checking link rather than render of sign out page since that can timeout
+    // Instead, check if it redirects to the right link and wait
+    // To make sure it doesn't redirect to the workspace
+    await expect(page).toHaveURL(`${app().urlBase}/w`);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.redirectDelay);
+    await expect(page).toHaveURL(`${app().urlBase}/w`);
   });
 });

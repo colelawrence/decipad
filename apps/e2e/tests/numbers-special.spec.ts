@@ -1,5 +1,4 @@
 import { expect, Page, test } from '@playwright/test';
-import waitForExpect from 'wait-for-expect';
 import { getResult } from '../utils/page/Block';
 import {
   goToPlayground,
@@ -58,11 +57,10 @@ test.describe('Formula highlighting', () => {
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       const potentialFormula = await getMagicNumberContent(page);
       expect(potentialFormula).toEqual('4');
-    });
+    }).toPass();
   });
 
   test('you can continue typing after pressing ENTER', async () => {
@@ -98,11 +96,10 @@ test.describe('Formula highlighting', () => {
     await page.keyboard.type('+1');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       const potentialFormula = await getMagicNumberContent(page);
       expect(potentialFormula).toEqual('5');
-    });
+    }).toPass();
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(10000);

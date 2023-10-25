@@ -1,13 +1,21 @@
 import { Flag } from '@decipad/feature-flags';
-import { BrowserContext, Page } from '@playwright/test';
-import { Timeouts, withTestUser } from '../src';
-import { signOut } from './Home';
+import { expect, BrowserContext, Page } from '@playwright/test';
+import {
+  Timeouts,
+  genericTestEmail,
+  withTestUser,
+  createWorkspace,
+  importNotebook,
+} from '../src';
 import { isOnPlayground, navigateToPlayground } from './Playground';
-import { clickNewPadButton, navigateToWorkspacePage } from './Workspace';
+import { navigateToWorkspacePage } from './Workspace';
+import stringify from 'json-stringify-safe';
+import emptyNotebook from '../../__fixtures__/010-empty-notebook.json';
 
 interface SetupOptions {
   createAndNavigateToNewPad?: boolean;
   featureFlags?: Partial<Record<Flag, boolean>>;
+  randomUser?: boolean;
 }
 
 export const editorLocator = (): string => {
@@ -19,13 +27,10 @@ export const editorTitleLocator = (): string => {
 };
 
 export async function waitForEditorToLoad(page: Page) {
-  await page.waitForSelector(editorTitleLocator(), {
-    timeout: Timeouts.maxSelectorWaitTime,
-  });
-  await page.locator(editorTitleLocator()).click({
-    timeout: Timeouts.maxSelectorWaitTime,
-  });
-
+  await expect(async () => {
+    await expect(page.getByTestId('notebook-title')).toBeVisible();
+  }).toPass();
+  await page.getByTestId('notebook-title').click();
   if (!isOnPlayground(page)) {
     if (await page.isVisible('text=/clear all/i')) {
       await page.click('text=/clear all/i');
@@ -39,9 +44,9 @@ export async function waitForEditorToLoad(page: Page) {
 }
 
 export async function waitForNotebookToLoad(page: Page) {
-  await page.waitForSelector(editorTitleLocator(), {
-    timeout: Timeouts.maxSelectorWaitTime,
-  });
+  await expect(async () => {
+    await expect(page.getByTestId('notebook-title')).toBeVisible();
+  }).toPass();
 }
 
 interface SetupProps {
@@ -49,23 +54,24 @@ interface SetupProps {
   context: BrowserContext;
 }
 
-function isOnNotebook(page: Page | URL): boolean {
-  const url = page instanceof URL ? page : new URL(page.url());
-  return url.pathname.match(/\/n\//) !== null;
+export async function navigateToNotebook(page: Page, notebookId: string) {
+  await page.goto(`/n/pad-title:${notebookId}`);
 }
 
 export async function setUp(
   { page, context }: SetupProps,
   options: SetupOptions = {}
 ) {
-  await signOut(page);
-  const { createAndNavigateToNewPad = true, featureFlags } = options;
-  const newUser = await withTestUser({ page, context });
-  await navigateToWorkspacePage(page);
-  if (createAndNavigateToNewPad) {
-    await Promise.all([page.waitForURL(isOnNotebook), clickNewPadButton(page)]);
-    await waitForEditorToLoad(page);
-  }
+  const {
+    createAndNavigateToNewPad = true,
+    featureFlags,
+    randomUser = false,
+  } = options;
+
+  const newUser = randomUser
+    ? await withTestUser({ page, context })
+    : genericTestEmail();
+
   if (featureFlags) {
     const url = new URL(page.url());
     for (const [flagName, value] of Object.entries(featureFlags)) {
@@ -74,11 +80,19 @@ export async function setUp(
     page.goto(url.toString());
     await waitForEditorToLoad(page);
   }
+
   if (createAndNavigateToNewPad) {
-    await page.waitForSelector('[data-slate-editor] h1');
+    const workspaceId = await createWorkspace(page);
+    const notebookId = await importNotebook(
+      workspaceId,
+      Buffer.from(stringify(emptyNotebook), 'utf-8').toString('base64'),
+      page
+    );
+    await navigateToNotebook(page, notebookId);
+    await waitForEditorToLoad(page);
   } else {
     // workspace
-    await page.waitForSelector('.notebookList > li');
+    await navigateToWorkspacePage(page);
   }
 
   return newUser;
@@ -116,8 +130,4 @@ export async function ControlPlus(page: Page, key: string) {
   const isMac = process.platform === 'darwin';
   const modifier = isMac ? 'Meta' : 'Control';
   await page.keyboard.press(`${modifier}+Key${key.toLocaleUpperCase()}`);
-}
-
-export async function navigateToNotebook(page: Page, notebookId: string) {
-  await page.goto(`/n/pad-title:${notebookId}`);
 }

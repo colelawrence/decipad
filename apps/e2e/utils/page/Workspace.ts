@@ -1,10 +1,9 @@
-import { BrowserContext, ElementHandle, Page } from '@playwright/test';
+import { expect, ElementHandle, Page } from '@playwright/test';
 import Zip from 'adm-zip';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 import os from 'os';
 import path from 'path';
-import { withTestUser, Timeouts } from '../src';
 
 interface Pad {
   anchor: ElementHandle;
@@ -23,21 +22,10 @@ export async function navigateToWorkspacePage(page: Page) {
   if (!isOnWorkspacePage(page)) {
     await page.goto('/');
   }
-  await page.waitForSelector('text=/Workspace/i', {
-    timeout: Timeouts.maxSelectorWaitTime,
-  });
-  await page.waitForSelector('.notebookList > li');
-}
 
-interface SetupProps {
-  page: Page;
-  context: BrowserContext;
-}
-
-export async function setUp({ page, context }: SetupProps) {
-  await page.goto('/api/auth/signout');
-  await withTestUser({ page, context });
-  await navigateToWorkspacePage(page);
+  await expect(async () => {
+    await expect(page.getByTestId('workspace-hero-title')).toBeVisible();
+  }).toPass();
 }
 
 export async function getPadList(page: Page): Promise<PadList> {

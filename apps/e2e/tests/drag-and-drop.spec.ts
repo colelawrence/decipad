@@ -16,6 +16,7 @@ test.describe('Section creation', () => {
       { page, context },
       {
         createAndNavigateToNewPad: false,
+        randomUser: true,
       }
     );
   });
@@ -34,6 +35,9 @@ test.describe('Section creation', () => {
   });
 
   test('Searching on the search bar and dragging the notebook', async () => {
+    await expect(async () => {
+      await expect(page.getByTestId('workspace-hero-title')).toBeVisible();
+    }).toPass();
     await page.getByTestId('search-bar').click();
     await page
       .getByTestId('search-bar')

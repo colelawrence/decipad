@@ -1,5 +1,4 @@
 import { expect, Page, test } from '@playwright/test';
-import waitForExpect from 'wait-for-expect';
 import {
   focusOnBody,
   goToPlayground,
@@ -96,15 +95,14 @@ test.describe('Adding tables with keyboard (and more)', () => {
     await focusOnTableColumnFormula(page);
     await page.keyboard.type('1 + 1');
 
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       const codeBlock = await page.waitForSelector(
         'section:has-text("Column3 =")'
       );
       const codeBlockText = await codeBlock.innerText();
       // splitting on new line removes the text from auto-complete menu
       expect(codeBlockText.split('\n')[0]).toBe('Column3 =  1 + 1');
-    });
+    }).toPass();
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.computerDelay);
@@ -133,10 +131,10 @@ test.describe('Adding tables with keyboard (and more)', () => {
     const codeBlock = await page.waitForSelector(
       'section:has-text("Column5 =")'
     );
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+
+    await expect(async () => {
       await expect(await codeBlock.innerText()).toContain('Column5 =');
-    });
+    }).toPass();
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await focusOnTableColumnFormula(page, 'Column5 =');

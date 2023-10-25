@@ -1,5 +1,5 @@
 import { BrowserContext, Page, expect, test } from '@playwright/test';
-import { setUp } from '../utils/page/Workspace';
+import { withTestUser } from '../utils/src';
 
 test.describe('Auto complete menu', () => {
   test.describe.configure({ mode: 'serial' });
@@ -9,7 +9,7 @@ test.describe('Auto complete menu', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = page.context();
-    await setUp({ page, context });
+    await withTestUser({ page, context });
   });
 
   test.afterAll(async () => {

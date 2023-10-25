@@ -1,5 +1,4 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import waitForExpect from 'wait-for-expect';
 import { setUp } from '../utils/page/Editor';
 import {
   clickNewPadButton,
@@ -23,7 +22,10 @@ test.describe('Dashboard snapshot', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = await page.context();
-    await setUp({ page, context }, { createAndNavigateToNewPad: false });
+    await setUp(
+      { page, context },
+      { createAndNavigateToNewPad: false, randomUser: true }
+    );
   });
 
   test.afterAll(async () => {
@@ -71,8 +73,7 @@ test.describe('Dashboard snapshot', () => {
   test.use({ colorScheme: 'dark' });
 
   test('shows workspace in dark mode mode', async () => {
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       localStorageValue = await page.evaluate(() => {
         window.localStorage.setItem('deciThemePreference', 'dark');
         return window.localStorage.getItem('deciThemePreference');
@@ -81,7 +82,7 @@ test.describe('Dashboard snapshot', () => {
       if (localStorageValue !== null) {
         expect(localStorageValue).toMatch('dark');
       }
-    });
+    }).toPass();
     await page.reload({ waitUntil: 'load' });
     await snapshot(page as Page, 'Dashboard: Initial Notebooks Darkmode');
   });
@@ -89,8 +90,7 @@ test.describe('Dashboard snapshot', () => {
   test.use({ colorScheme: 'light' });
 
   test('shows workspace in light mode mode', async () => {
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       localStorageValue = await page.evaluate(() => {
         window.localStorage.setItem('deciThemePreference', 'light');
         return localStorage.getItem('deciThemePreference');
@@ -99,7 +99,7 @@ test.describe('Dashboard snapshot', () => {
       if (localStorageValue !== null) {
         expect(localStorageValue).toMatch('light');
       }
-    });
+    }).toPass();
     await page.reload({ waitUntil: 'load' });
   });
 });
@@ -113,7 +113,10 @@ test.describe('Dashboard operations', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = await page.context();
-    await setUp({ page, context }, { createAndNavigateToNewPad: false });
+    await setUp(
+      { page, context },
+      { createAndNavigateToNewPad: false, randomUser: true }
+    );
   });
 
   test.afterAll(async () => {
@@ -136,21 +139,19 @@ test.describe('Dashboard operations', () => {
     expect(padIndex).toBeGreaterThanOrEqual(0);
     await removePad(page, padIndex);
 
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       const pads = await getPadList(page);
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
       process.env.CI || process.env.DECI_E2E
         ? expect(pads).toHaveLength(3)
         : expect(pads).toHaveLength(14);
-    });
+    }).toPass();
   });
 
   test('can duplicate pad', async () => {
     await duplicatePad(page);
 
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       let pads = await getPadList(page);
       // eslint-disable-next-line no-unused-expressions, playwright/no-conditional-in-test
       process.env.CI
@@ -162,7 +163,7 @@ test.describe('Dashboard operations', () => {
         pad.name?.startsWith('Copy of')
       );
       expect(copyIndex).toBeGreaterThanOrEqual(0);
-    });
+    }).toPass();
   });
 
   test('can navigate to pad detail', async () => {

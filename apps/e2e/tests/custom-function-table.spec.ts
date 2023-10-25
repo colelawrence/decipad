@@ -69,7 +69,9 @@ test.describe('Custom function Table', () => {
   });
 
   test('checks for errors', async () => {
-    expect(await page.getByTestId('code-line-warning').count()).toBe(0);
+    await expect(async () => {
+      expect(await page.getByTestId('code-line-warning').count()).toBe(0);
+    }).toPass();
   });
 
   test('reload page', async () => {

@@ -31,6 +31,7 @@ test.describe('Loading and snapshot of notebook with charts', () => {
     context = page.context();
     incognito = await browser.newContext();
     randomUser = await browser.newContext();
+    incognito.clearCookies();
 
     await setUp({ page, context });
     workspaceId = await createWorkspace(page);
@@ -73,7 +74,6 @@ test.describe('Loading and snapshot of notebook with charts', () => {
     await page.getByTestId('copy-published-link').waitFor();
 
     publishedNotebookPage = await randomUser.newPage();
-
     await withTestUser({ context: randomUser, page: publishedNotebookPage });
 
     await navigateToNotebook(publishedNotebookPage, notebookId);

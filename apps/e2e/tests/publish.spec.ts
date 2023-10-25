@@ -73,6 +73,7 @@ test.describe('Simple does publish work test', () => {
     browser,
   }) => {
     incognito = await browser.newContext();
+    incognito.clearCookies();
     incognitoPage = await incognito.newPage();
     await incognitoPage.goto(sharedPageLocation!);
     await waitForNotebookToLoad(incognitoPage);
@@ -89,6 +90,7 @@ test.describe('Simple does publish work test', () => {
     browser,
   }) => {
     randomUser = await browser.newContext();
+    randomUser.clearCookies();
     const randomPage = await randomUser.newPage();
     await withTestUser({ context: randomUser, page: randomPage });
 

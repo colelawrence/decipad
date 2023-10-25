@@ -1,7 +1,6 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import {
   editorTitleLocator,
-  setUp,
   waitForEditorToLoad,
   editorLocator,
 } from '../utils/page/Editor';
@@ -12,7 +11,7 @@ import {
   getPadList,
   navigateToWorkspacePage,
 } from '../utils/page/Workspace';
-import { Timeouts } from '../utils/src';
+import { withTestUser } from '../utils/src';
 
 test.describe('Duplicating a notebook', () => {
   test.describe.configure({ mode: 'serial' });
@@ -25,7 +24,8 @@ test.describe('Duplicating a notebook', () => {
   test.beforeAll(async ({ browser }) => {
     page = await browser.newPage();
     context = page.context();
-    await setUp({ page, context });
+    withTestUser({ page, context });
+    await page.getByTestId('new-notebook').click();
     await waitForEditorToLoad(page);
   });
 
@@ -50,24 +50,19 @@ test.describe('Duplicating a notebook', () => {
       .getByTestId('paragraph-content')
       .last()
       .fill('this is the third paragraph');
-
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay * 2);
   });
 
   test('Can reload', async () => {
     await page.reload();
     await waitForEditorToLoad(page);
-    await expect(page.locator(editorLocator())).toBeVisible();
-    await navigateToWorkspacePage(page);
+    await expect(page.locator(editorLocator()).first()).toBeVisible();
   });
 
   test('Check if notebook has 4 paragraphs', async () => {
-    await page.getByText('pad title here').waitFor();
-    await page.getByText('pad title here').click();
+    await page.getByTestId('notebook-title').click();
     await expect(page.getByText('this is the third paragraph')).toBeVisible();
     await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
-    await navigateToWorkspacePage(page);
+    await page.getByTestId('go-to-workspace').click();
   });
 
   test('Notebook is listed', async () => {

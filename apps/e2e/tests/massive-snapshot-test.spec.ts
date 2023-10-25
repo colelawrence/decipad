@@ -15,7 +15,6 @@ import {
   snapshot,
   withTestUser,
 } from '../utils/src';
-import waitForExpect from 'wait-for-expect';
 
 test.describe('Loading and snapshot of big notebook', () => {
   test.describe.configure({ mode: 'serial' });
@@ -52,7 +51,6 @@ test.describe('Loading and snapshot of big notebook', () => {
     await navigateToNotebook(page, notebookId);
     // some time for the notebook to render
     await waitForEditorToLoad(page);
-    // eslint-disable-next-line playwright/valid-expect
     await expect(page.locator(editorTitleLocator())).toHaveText(
       'Everything, everywhere, all at once'
     );
@@ -64,8 +62,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   test.use({ colorScheme: 'dark' });
 
   test('shows workspace in dark mode mode', async () => {
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       localStorageValue = await page.evaluate(() => {
         window.localStorage.setItem('deciThemePreference', 'dark');
         return window.localStorage.getItem('deciThemePreference');
@@ -74,7 +71,7 @@ test.describe('Loading and snapshot of big notebook', () => {
       if (localStorageValue !== null) {
         expect(localStorageValue).toMatch('dark');
       }
-    });
+    }).toPass();
     await page.reload({ waitUntil: 'load' });
     await snapshot(page as Page, 'Notebook: All elements Darkmode');
   });
@@ -82,8 +79,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   test.use({ colorScheme: 'light' });
 
   test('shows workspace in light mode mode', async () => {
-    // eslint-disable-next-line playwright/valid-expect
-    await waitForExpect(async () => {
+    await expect(async () => {
       localStorageValue = await page.evaluate(() => {
         window.localStorage.setItem('deciThemePreference', 'light');
         return localStorage.getItem('deciThemePreference');
@@ -92,7 +88,7 @@ test.describe('Loading and snapshot of big notebook', () => {
       if (localStorageValue !== null) {
         expect(localStorageValue).toMatch('light');
       }
-    });
+    }).toPass();
     await page.reload({ waitUntil: 'load' });
   });
 
@@ -142,6 +138,7 @@ test.describe('Loading and snapshot of big notebook', () => {
   // TODO: ENG-1891 fix this test
   // eslint-disable-next-line playwright/no-skipped-test
   test('navigates to published notebook link incognito', async () => {
+    incognito.clearCookies();
     publishedNotebookPage = (await incognito.newPage()) as Page;
 
     await navigateToNotebook(publishedNotebookPage, notebookId);
