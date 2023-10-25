@@ -226,6 +226,7 @@ export const NotebookPublishTab = ({
                   <div>
                     <CopyToClipboard
                       text={link}
+                      options={{ format: 'text/plain' }}
                       onCopy={() => {
                         setCopiedPublicStatusVisible(true);
                         setTimeout(() => {

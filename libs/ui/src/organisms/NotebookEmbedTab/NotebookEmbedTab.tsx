@@ -152,6 +152,7 @@ export const NotebookEmbedTab = ({
                   <div>
                     <CopyToClipboard
                       text={embedLink}
+                      options={{ format: 'text/plain' }}
                       onCopy={() => {
                         setCopiedPublicStatusVisible(true);
                         setTimeout(() => {
