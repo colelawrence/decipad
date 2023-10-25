@@ -8,10 +8,11 @@ import {
   ELEMENT_TABLE,
   ELEMENT_VARIABLE_DEF,
   ElementKind,
+  SlashCommand,
   createTPlateEditor,
 } from '@decipad/editor-types';
 import { createCodeBlockPlugin } from '@udecode/plate';
-import { SlashCommand, execute } from './slashCommands';
+import { execute } from './slashCommands';
 
 const expectedTypes = {
   table: ELEMENT_TABLE,

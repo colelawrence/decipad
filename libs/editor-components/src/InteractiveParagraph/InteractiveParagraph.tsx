@@ -6,6 +6,7 @@ import { Paragraph } from '@decipad/editor-components';
 import {
   ELEMENT_PARAGRAPH,
   PlateComponent,
+  SlashCommand,
   useTEditorRef,
 } from '@decipad/editor-types';
 import { ImportFromLinkMenu, SlashCommandsMenu } from '@decipad/ui';
@@ -56,7 +57,7 @@ export const InteractiveParagraph =
                     editor,
                     path: elementPath.slice(0, 1),
                     deleteFragment,
-                    command,
+                    command: command as SlashCommand,
                     getAvailableIdentifier:
                       computer.getAvailableIdentifier.bind(computer),
                   });

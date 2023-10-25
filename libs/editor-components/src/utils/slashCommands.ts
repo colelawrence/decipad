@@ -7,6 +7,7 @@ import {
   ELEMENT_HR,
   FileType,
   MyEditor,
+  SlashCommand,
 } from '@decipad/editor-types';
 import {
   insertBlockOfTypeBelow,
@@ -19,9 +20,7 @@ import {
   useConnectionStore,
   useFileUploadStore,
 } from '@decipad/react-contexts';
-import { SlashCommandsMenu } from '@decipad/ui';
 import { deleteText, removeNodes, withoutNormalizing } from '@udecode/plate';
-import { ComponentProps } from 'react';
 import { Location, Path, Range } from 'slate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';
@@ -34,12 +33,6 @@ import {
 import { insertLiveQueryBelow } from './live-query';
 import { insertPlotBelow } from './plot';
 import { insertTableBelow } from './table';
-
-type SlashCommandHandler = Exclude<
-  ComponentProps<typeof SlashCommandsMenu>['onExecute'],
-  undefined
->;
-export type SlashCommand = Parameters<SlashCommandHandler>[0];
 
 export type GetAvailableIdentifier = (prefix: string, start?: number) => string;
 export interface ExecuteProps {

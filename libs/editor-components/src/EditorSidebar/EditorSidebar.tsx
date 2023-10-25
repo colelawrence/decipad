@@ -14,7 +14,7 @@ import { useOnDragEnd } from '../utils/useDnd';
 import { catalogItems } from './catalogItems';
 import { selectCatalogNames } from './selectCatalogNames';
 import { toVar } from './toVar';
-import { MyEditor } from '@decipad/editor-types';
+import { MyEditor, SlashCommand } from '@decipad/editor-types';
 import { groupByTab } from './groupByTab';
 
 const catalogDebounceTimeMs = 1_000;
@@ -57,7 +57,7 @@ export const EditorSidebar: FC<EditorSidebarProps> = ({ editor }) => {
         execute({
           editor,
           path: elementPath.slice(0, 1),
-          command,
+          command: command as SlashCommand,
           deleteBlock: false,
           getAvailableIdentifier:
             computer.getAvailableIdentifier.bind(computer),

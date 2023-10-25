@@ -109,7 +109,7 @@ const findSlashCommand = (text: string, selection: BaseRange | null) => {
 };
 
 const findStandaloneSlashCommand = (text: string): string | undefined =>
-  /^\/([a-z ]*)$/i.exec(text)?.[1];
+  /^\/([a-z- ]*)$/i.exec(text)?.[1];
 
 const findInlineSlashCommand = (
   text: string,

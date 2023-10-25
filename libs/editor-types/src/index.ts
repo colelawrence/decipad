@@ -21,6 +21,7 @@ export * from './utils';
 export * from './value';
 export * from './subscription-plans';
 export * from './icons';
+export * from './slashCommands';
 export { markKinds };
 
 import type { TableCellType } from './table';
