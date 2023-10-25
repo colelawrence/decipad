@@ -2,6 +2,7 @@ import {
   Message,
   UserMessage,
   AssistantMessage,
+  useAIChatHistory,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';
@@ -18,6 +19,7 @@ export interface ChatAssistantHelperOptions {
 
 export interface ChatAssistantHelperResult {
   newUserMessage: (allMessages: Message[], message: Message) => void;
+  submitFeedback: (rating: 'like' | 'dislike') => (message: string) => void;
 }
 
 export const useChatAssistantHelper = ({
@@ -29,13 +31,48 @@ export const useChatAssistantHelper = ({
   sendPrompt,
 }: ChatAssistantHelperOptions): ChatAssistantHelperResult => {
   const toast = useToast();
+  const [feedback, clearFeedback] = useAIChatHistory((state) => [
+    state.feedback,
+    state.clearFeedback,
+  ]);
+
+  const submitFeedback = useCallback(
+    (rating: 'like' | 'dislike') => async (message: string) => {
+      try {
+        const response = await fetch('/api/ai/feedback', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            rating,
+            message,
+            feedback,
+          }),
+        });
+
+        if (response.status !== 200) {
+          const err = await response.json();
+          throw new Error(err.message);
+        }
+
+        toast.success('Feedback sent');
+      } catch (error) {
+        console.error(error);
+        toast.error('Failed to send feedback');
+      } finally {
+        clearFeedback();
+      }
+    },
+    [feedback, clearFeedback, toast]
+  );
 
   const newUserMessage = useCallback(
     async (messages: Message[], m: Message) => {
       const newResponse: AssistantMessage = {
         content: 'Generating response...',
         role: 'assistant',
-        type: 'pending',
+        status: 'pending',
         id: nanoid(),
         replyTo: m.id,
       };
@@ -52,7 +89,7 @@ export const useChatAssistantHelper = ({
             const {
               id: _id,
               replyTo: _replyTo,
-              type: _type,
+              status: _status,
               ...rest
             } = message;
             return rest;
@@ -63,7 +100,6 @@ export const useChatAssistantHelper = ({
       if (response.status !== 200) {
         const err = await response.json();
 
-        // TODO: remove this when we have a proper error handling
         if (err.name === 'Error') {
           throw new Error(err.message);
         }
@@ -71,18 +107,17 @@ export const useChatAssistantHelper = ({
 
       const chatAssistantResponse: Message = await response.json();
       try {
-        // TODO: make this check more explicit
         if (!('function_call' in chatAssistantResponse)) {
           updateLatestAssistantMessage({
             content: chatAssistantResponse.content,
-            type: 'success',
+            status: 'success',
           });
           return;
         }
 
         updateLatestAssistantMessage({
           content: 'Got it. Let me update the document for you...',
-          type: 'pending',
+          status: 'pending',
         });
 
         setGettingChangesToastId(
@@ -96,7 +131,7 @@ export const useChatAssistantHelper = ({
         console.error(err);
         updateLatestAssistantMessage({
           content: 'Error generating response',
-          type: 'error',
+          status: 'error',
         });
         toast.error(
           "Couldn't get response from AI assistant. Please try again later."
@@ -116,5 +151,6 @@ export const useChatAssistantHelper = ({
 
   return {
     newUserMessage,
+    submitFeedback,
   };
 };

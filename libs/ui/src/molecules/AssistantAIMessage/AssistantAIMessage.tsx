@@ -1,12 +1,18 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Tooltip, p14Regular } from '@decipad/ui';
-import { DeciAI, Duplicate, ThumbsDown, ThumbsUp } from '../../icons';
-import { componentCssVars, cssVar, p14Medium } from '../../primitives';
 
-import { AIResponseRating, AIResponseType } from '@decipad/react-contexts';
+import { DeciAI, Duplicate } from '../../icons';
+import {
+  componentCssVars,
+  cssVar,
+  p13Medium,
+  p14Regular,
+} from '../../primitives';
+
+import { AIResponseStatus } from '@decipad/react-contexts';
 import { AssistantMessageMarkdown } from '../AssistantMessageMarkdown/AssistantMessageMarkdown';
 import { css } from '@emotion/react';
 import copyToClipboard from 'copy-to-clipboard';
+import { Tooltip } from '../../atoms';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -82,36 +88,24 @@ const buttonContainerStyles = css({
   width: '100%',
 });
 
-const buttonStyles = css(p14Medium, {
-  height: 28,
-  padding: '1px 8px 0px',
-  borderRadius: 4,
-  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
-  color: componentCssVars('AIAssistantTextColor'),
-  cursor: 'pointer',
-
-  '&:hover': {
-    backgroundColor: componentCssVars('AIAssistantBackgroundHoverColor'),
-    color: componentCssVars('AIAssistantTextColor'),
-  },
-
-  '&:active': {
-    boxShadow: `0px 0px 0px 2px ${cssVar('backgroundDefault')}`,
-  },
-});
-
-const iconButtonStyles = css(p14Medium, {
+const tinyButtonStyles = css(p13Medium, {
   height: 24,
-  width: 24,
+  width: 'auto',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  gap: 4,
+  padding: '0px 8px 0px 6px',
   borderRadius: 4,
   cursor: 'pointer',
 
+  span: {
+    marginTop: 2,
+  },
+
   '& > svg': {
-    width: 16,
-    height: 16,
+    width: 14,
+    height: 14,
   },
 
   '&:hover': {
@@ -125,22 +119,12 @@ const iconButtonStyles = css(p14Medium, {
 
 type AssistantAIMessageProps = {
   readonly text: string;
-  readonly type: AIResponseType;
-  readonly rating?: AIResponseRating;
-  readonly canRegenerate?: boolean;
-  readonly handleLikeResponse: () => void;
-  readonly handleDislikeResponse: () => void;
-  readonly handleRegenerateResponse: () => void;
+  readonly status: AIResponseStatus;
 };
 
 export const AssistantAIMessage: React.FC<AssistantAIMessageProps> = ({
   text,
-  type,
-  rating,
-  canRegenerate,
-  handleLikeResponse,
-  handleDislikeResponse,
-  handleRegenerateResponse,
+  status,
 }) => {
   return (
     <div css={wrapperStyles}>
@@ -148,54 +132,21 @@ export const AssistantAIMessage: React.FC<AssistantAIMessageProps> = ({
         <DeciAI />
       </div>
       <div css={contentStyles}>
-        {type === 'pending' && <div css={loadingContentStyles}>{text}</div>}
-        {type === 'error' && <div css={errorContentStyles}>{text}</div>}
-        {type === 'success' && <AssistantMessageMarkdown text={text} />}
-        {type !== 'pending' && (
+        {status === 'pending' && <div css={loadingContentStyles}>{text}</div>}
+        {status === 'error' && <div css={errorContentStyles}>{text}</div>}
+        {status === 'success' && <AssistantMessageMarkdown text={text} />}
+        {status !== 'pending' && (
           <div css={buttonContainerStyles}>
-            {canRegenerate && (
-              <button onClick={handleRegenerateResponse} css={buttonStyles}>
-                Regenerate
-              </button>
-            )}
-            <Tooltip
-              trigger={
-                <button
-                  onClick={handleLikeResponse}
-                  css={iconButtonStyles}
-                  data-selected={rating === 'like'}
-                  data-testid="like-button"
-                >
-                  <ThumbsUp />
-                </button>
-              }
-            >
-              Like response
-            </Tooltip>
-            <Tooltip
-              trigger={
-                <button
-                  onClick={handleDislikeResponse}
-                  css={iconButtonStyles}
-                  data-selected={rating === 'dislike'}
-                  data-testid="dislike-button"
-                >
-                  <ThumbsDown />
-                </button>
-              }
-            >
-              Dislike response
-            </Tooltip>
-            {type !== 'error' && (
+            {status !== 'error' && (
               <Tooltip
                 trigger={
                   <button
                     onClick={() => copyToClipboard(text)}
-                    css={iconButtonStyles}
-                    data-selected={rating === 'dislike'}
+                    css={tinyButtonStyles}
                     data-testid="copy-button"
                   >
                     <Duplicate />
+                    <span>Copy</span>
                   </button>
                 }
               >

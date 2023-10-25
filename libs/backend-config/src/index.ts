@@ -113,6 +113,10 @@ function env(name: SupportedEnvKey): string {
       );
     case 'NOTION_TOKEN':
       return valueOrDefault(name, process.env.NOTION_TOKEN);
+    case 'DISCORD_FEEDBACK_CHANNEL_TOKEN':
+      return valueOrDefault(name, process.env.DISCORD_FEEDBACK_CHANNEL_TOKEN);
+    case 'DISCORD_FEEDBACK_CHANNEL_ID':
+      return valueOrDefault(name, process.env.DISCORD_FEEDBACK_CHANNEL_ID);
   }
 }
 
@@ -242,6 +246,10 @@ export function thirdParty() {
     ),
     notion: {
       apiKey: env('NOTION_TOKEN'),
+    },
+    discord: {
+      channelToken: env('DISCORD_FEEDBACK_CHANNEL_TOKEN'),
+      channelId: env('DISCORD_FEEDBACK_CHANNEL_ID'),
     },
   };
 }

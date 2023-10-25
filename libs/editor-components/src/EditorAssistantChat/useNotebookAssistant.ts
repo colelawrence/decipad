@@ -1,15 +1,21 @@
 /* eslint-disable no-console */
 import { TOperation } from '@udecode/plate';
-import { NotebookAssistantEvent } from './useNotebookAssistantTypes';
+import {
+  NotebookAssistantEvent,
+  NotebookAssistantEventProgress,
+} from './useNotebookAssistantTypes';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetch } from '@decipad/fetch';
 import { noop } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
-import { humanizeMotebookAssistantProgressMessage } from './notebookAssistantProgressMessages';
 
 export interface UseNotebookAssistantOptions {
   onEvent?: (event: NotebookAssistantEvent) => unknown;
-  onProgress?: (progress: string) => unknown;
+  onProgress?: (
+    progress: NotebookAssistantEventProgress,
+    elapsed: number
+  ) => unknown;
+  onPrompt?: (prompt: string) => unknown;
   onOperations: (operations: TOperation[]) => unknown;
   onSummary: (summary: string) => unknown;
   onError: (error: string) => unknown;
@@ -17,6 +23,7 @@ export interface UseNotebookAssistantOptions {
 
 export interface UseNotebookAssistantResult {
   sendPrompt: (prompt: string) => void;
+  isGeneratingChanges: boolean;
 }
 
 const RECONNECT_MS = 3000;
@@ -44,6 +51,7 @@ export const useNotebookAssistant = (
   {
     onEvent = noop,
     onProgress = noop,
+    onPrompt = noop,
     onOperations,
     onSummary,
     onError,
@@ -72,7 +80,7 @@ export const useNotebookAssistant = (
   }, [disconnect]);
 
   const handleEvent = useCallback(
-    (event: NotebookAssistantEvent) => {
+    (event: NotebookAssistantEvent, elapsed: number) => {
       console.debug('notebook assistant event', event);
       onEvent(event);
 
@@ -88,7 +96,7 @@ export const useNotebookAssistant = (
           break;
         }
         case 'progress': {
-          onProgress(humanizeMotebookAssistantProgressMessage(event));
+          onProgress(event, elapsed);
           break;
         }
         case 'error': {
@@ -105,10 +113,10 @@ export const useNotebookAssistant = (
   );
 
   const handleMessage = useCallback(
-    (message: unknown) => {
+    (message: unknown, elapsed: number) => {
       if (typeof message === 'string') {
         try {
-          handleEvent(JSON.parse(message));
+          handleEvent(JSON.parse(message), elapsed);
         } catch (err) {
           console.error(err);
           onError('Error parsing message from assistant');
@@ -126,6 +134,8 @@ export const useNotebookAssistant = (
       }
       disconnecting.current = false;
       connecting.current = true;
+      let lastMessageTime = Date.now();
+
       (async () => {
         const websocket = new WebSocket(
           await wsAddress(notebookId),
@@ -138,7 +148,11 @@ export const useNotebookAssistant = (
         });
 
         websocket.addEventListener('message', (ev) => {
-          handleMessage(ev.data);
+          const now = Date.now();
+          const elapsed = now - lastMessageTime;
+
+          handleMessage(ev.data, elapsed);
+          lastMessageTime = Date.now();
         });
 
         websocket.addEventListener('close', () => {
@@ -170,9 +184,10 @@ export const useNotebookAssistant = (
     (prompt: string) => {
       setStarted(true);
       connect(prompt);
+      onPrompt(prompt);
       console.debug('sent prompt', prompt);
     },
-    [connect]
+    [connect, onPrompt]
   );
 
   useEffect(() => {
@@ -193,5 +208,6 @@ export const useNotebookAssistant = (
 
   return {
     sendPrompt: start,
+    isGeneratingChanges: started,
   };
 };

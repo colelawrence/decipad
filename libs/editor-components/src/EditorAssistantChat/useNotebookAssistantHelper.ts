@@ -1,13 +1,21 @@
-import type { ReplyAssistantMessage } from '@decipad/react-contexts';
+import {
+  ElapsedEventTime,
+  type Feedback,
+  type ReplyAssistantMessage,
+} from '@decipad/react-contexts';
 import type { TOperation } from '@udecode/plate';
 import { useCallback, useEffect, useState } from 'react';
 import { useNotebookAssistant } from './useNotebookAssistant';
 import { useToast } from '@decipad/toast';
 import { EditorController } from '@decipad/notebook-tabs';
+import { humanizeMotebookAssistantProgressMessage } from './notebookAssistantProgressMessages';
+import { NotebookAssistantEventProgress } from './useNotebookAssistantTypes';
 
 export interface NotebookAssistantHelperOptions {
   notebookId: string;
   updateMessage: (message: Partial<ReplyAssistantMessage>) => unknown;
+  updateFeedback: (feedbackData: Partial<Feedback>) => unknown;
+  updateFeedbackElaspedTime: (elapsed: ElapsedEventTime) => unknown;
   controller: EditorController;
   onceDone: () => unknown;
 }
@@ -15,6 +23,8 @@ export interface NotebookAssistantHelperOptions {
 export const useNotebookAssistantHelper = ({
   notebookId,
   updateMessage,
+  updateFeedback,
+  updateFeedbackElaspedTime,
   controller,
   onceDone,
 }: NotebookAssistantHelperOptions) => {
@@ -26,19 +36,35 @@ export const useNotebookAssistantHelper = ({
   const onError = useCallback(
     (error: string) => {
       toast(error, 'error');
+      updateFeedback({
+        error,
+      });
       updateMessage({
         content: 'Error generating response',
-        type: 'error',
+        status: 'error',
       });
       setHaveFatalError(true);
     },
-    [toast, updateMessage]
+    [toast, updateMessage, updateFeedback]
+  );
+
+  const onPrompt = useCallback(
+    (prompt: string) => {
+      updateFeedback({
+        prompt,
+      });
+      setAppliedOperations(false);
+      setHaveSummary(false);
+    },
+    [updateFeedback]
   );
 
   const onOperations = useCallback(
     (ops: TOperation[]) => {
       const toastId = toast.info('Applying changes...', { autoDismiss: false });
-
+      updateFeedback({
+        operations: ops,
+      });
       // Disable normalizer
       if (ops.length > 0) {
         controller.WithoutNormalizing(() => {
@@ -59,28 +85,34 @@ export const useNotebookAssistantHelper = ({
       toast.delete(toastId);
       setAppliedOperations(true);
     },
-    [controller, toast]
+    [controller, toast, updateFeedback]
   );
 
   const onProgress = useCallback(
-    (progress: string) => {
+    (event: NotebookAssistantEventProgress, elapsed: number) => {
       updateMessage({
-        content: `${progress}...`,
-        type: 'pending',
+        content: `${humanizeMotebookAssistantProgressMessage(event)}...`,
+        status: 'pending',
+      });
+      updateFeedbackElaspedTime({
+        [event.action]: elapsed,
       });
     },
-    [updateMessage]
+    [updateMessage, updateFeedbackElaspedTime]
   );
 
   const onSummary = useCallback(
     (summary: string) => {
+      updateFeedback({
+        summary,
+      });
       updateMessage({
         content: summary,
-        type: 'success',
+        status: 'success',
       });
       setHaveSummary(true);
     },
-    [updateMessage]
+    [updateMessage, updateFeedback]
   );
 
   useEffect(() => {
@@ -93,6 +125,7 @@ export const useNotebookAssistantHelper = ({
     onProgress,
     onError,
     onOperations,
+    onPrompt,
     onSummary,
   });
 };

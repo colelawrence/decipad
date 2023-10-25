@@ -11,6 +11,7 @@ export { AssistantAIMessage } from './AssistantAIMessage/AssistantAIMessage';
 export { AssistantChatHeader } from './AssistantChatHeader/AssistantChatHeader';
 export { AssistantNotebookMessage } from './AssistantNotebookMessage/AssistantNotebookMessage';
 export { AssistantUserMessage } from './AssistantUserMessage/AssistantUserMessage';
+export { AssistantFeedbackPopUp } from './AssistantFeedbackPopUp/AssistantFeedbackPopUp';
 export { AssistantMessageMarkdown } from './AssistantMessageMarkdown/AssistantMessageMarkdown';
 export { AssistantMessageInput } from './AssistantMessageInput/AssistantMessageInput';
 export { AuthContent } from './AuthContent/AuthContent';

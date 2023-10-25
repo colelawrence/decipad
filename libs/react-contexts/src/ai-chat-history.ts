@@ -2,6 +2,8 @@ import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
 import { create } from 'zustand';
 
 import { get as getIdb, set as setIdb, del as delIdb } from 'idb-keyval';
+import { NotebookValue } from '@decipad/editor-types';
+import { TOperation } from '@udecode/plate';
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -15,41 +17,27 @@ const storage: StateStorage = {
   },
 };
 
-export type AIResponseRating = 'like' | 'dislike';
-
-// TODO: rename type property to status
-export type AIResponseType = 'success' | 'pending' | 'error';
-
-export type RatedAIResponseBody = {
-  userMessage: string;
-  responseMessage: string;
-};
-
-export type RatedAIResponse = {
-  readonly messageId: string;
-  readonly body: RatedAIResponseBody;
-  readonly rating: AIResponseRating;
-};
+export type AIResponseStatus = 'success' | 'pending' | 'error';
 
 export type UserMessage = {
   readonly id: string;
   readonly role: 'user';
   readonly content: string;
-  readonly type?: never;
+  readonly status?: never;
   readonly replyTo?: never;
 };
 
 type BaseAssistantMessage = {
   readonly id: string;
   readonly role: 'assistant';
-  readonly type: AIResponseType;
+  readonly status: AIResponseStatus;
   readonly replyTo: string;
 };
 
 type FunctionCallAssistantMessage = {
   readonly id: string;
   readonly role: 'assistant';
-  readonly type: AIResponseType;
+  readonly status: AIResponseStatus;
   readonly replyTo: string;
   readonly function_call: {
     arguments: {};
@@ -68,19 +56,32 @@ export type AssistantMessage =
 export type Message = UserMessage | AssistantMessage;
 
 type Chat = {
-  readonly [key: string]: Message[];
+  readonly [notebookId: string]: Message[];
+};
+
+export type ElapsedEventTime = {
+  [event: string]: number;
+};
+
+export type Feedback = {
+  prompt?: string;
+  notebook?: NotebookValue;
+  operations?: TOperation[];
+  summary?: string;
+  error?: string;
+  elapsed?: ElapsedEventTime;
 };
 
 export interface AIChatHistoryType {
   readonly chats: Chat;
-  readonly ratedResponses: RatedAIResponse[];
+  readonly feedback: Feedback;
   readonly addMessage: (notebookId: string) => (message: Message) => void;
   readonly updateMessage: (notebookId: string) => (message: Message) => void;
   readonly deleteMessage: (notebookId: string) => (messageId: string) => void;
   readonly clearMessages: (notebookId: string) => () => void;
-  readonly rateResponse: (
-    notebookId: string
-  ) => (messageId: string, rating: AIResponseRating) => void;
+  readonly updateFeedback: (feedback: Feedback) => void;
+  readonly updateFeedbackElaspedTime: (elapsed: ElapsedEventTime) => void;
+  readonly clearFeedback: () => void;
 }
 
 export const useAIChatHistory = create<AIChatHistoryType>()(
@@ -88,7 +89,7 @@ export const useAIChatHistory = create<AIChatHistoryType>()(
     (set) => {
       return {
         chats: {},
-        ratedResponses: [],
+        feedback: {},
         addMessage: (notebookId: string) => (message: Message) => {
           set((state) => {
             if (!state.chats[notebookId]) {
@@ -150,81 +151,45 @@ export const useAIChatHistory = create<AIChatHistoryType>()(
             };
           });
         },
-        rateResponse:
-          (notebookId: string) =>
-          (messageId: string, rating: AIResponseRating) => {
-            set((state) => {
-              const isAlreadyRatedWithSameRating = state.ratedResponses.some(
-                (response) =>
-                  response.messageId === messageId && response.rating === rating
-              );
-
-              if (isAlreadyRatedWithSameRating) {
-                return {
-                  ratedResponses: state.ratedResponses.filter(
-                    (response) =>
-                      response.messageId !== messageId ||
-                      response.rating !== rating
-                  ),
-                };
-              }
-
-              const isAlreadyRated = state.ratedResponses.some(
-                (response) => response.messageId === messageId
-              );
-
-              const updatedRatedResponses = state.ratedResponses.map(
-                (response) => {
-                  if (response.messageId === messageId) {
-                    return {
-                      ...response,
-                      rating,
-                    };
-                  }
-                  return response;
-                }
-              );
-
-              if (isAlreadyRated) {
-                return {
-                  ratedResponses: updatedRatedResponses,
-                };
-              }
-
-              const userMessageRef = state.chats[notebookId]?.find(
-                (message) => message.id === messageId
-              )?.replyTo as string;
-
-              const userMessage = state.chats[notebookId]?.find(
-                (message): message is UserMessage =>
-                  message.id === userMessageRef
-              )?.content as string;
-
-              const responseMessage = state.chats[notebookId]?.find(
-                (message): message is UserMessage => message.id === messageId
-              )?.content as string;
-
-              const body: RatedAIResponseBody = {
-                userMessage,
-                responseMessage,
-              };
-
-              return {
-                ratedResponses: [
-                  ...state.ratedResponses,
-                  {
-                    messageId,
-                    body,
-                    rating,
-                  },
-                ],
-              };
-            });
-          },
+        updateFeedback: (feedback: Partial<Feedback>) => {
+          set((state) => {
+            return {
+              feedback: {
+                ...state.feedback,
+                ...feedback,
+              },
+            };
+          });
+        },
+        updateFeedbackElaspedTime: (elapsed: ElapsedEventTime) => {
+          set((state) => {
+            return {
+              feedback: {
+                ...state.feedback,
+                elapsed: {
+                  ...state.feedback.elapsed,
+                  ...elapsed,
+                },
+              },
+            };
+          });
+        },
+        clearFeedback: () => {
+          set(() => {
+            return {
+              feedback: {},
+            };
+          });
+        },
       };
     },
     {
       name: 'ai-chat-history',
+      partialize(state) {
+        return Object.fromEntries(
+          Object.entries(state).filter(([key]) => !['feedback'].includes(key))
+        );
+      },
       storage: createJSONStorage(() => storage),
     }
   )

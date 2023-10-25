@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
-import { AIResponseRating, Message } from '@decipad/react-contexts';
+import { Message } from '@decipad/react-contexts';
 import {
   AssistantChatHeader,
   AssistantMessageInput,
@@ -22,38 +22,43 @@ const wrapperStyles = css({
 
 type AssistantChatProps = {
   readonly messages: Message[];
+  readonly submitFeedback: (
+    rating: 'like' | 'dislike'
+  ) => (message: string) => void;
   readonly sendMessage: (content: string) => void;
-  readonly regenerateResponse: (id: string) => void;
-  readonly clearMessages: () => void;
-  readonly rateResponse: (id: string, rating: AIResponseRating) => void;
+  readonly regenerateResponse: () => void;
+  readonly clearChat: () => void;
+  readonly canRegenerateResponse: boolean;
+  readonly canSubmitFeedback: boolean;
   readonly isGeneratingResponse: boolean;
+  readonly isGeneratingChanges: boolean;
 };
 
 export const AssistantChat: React.FC<AssistantChatProps> = ({
   messages,
+  submitFeedback,
   sendMessage,
   regenerateResponse,
-  clearMessages,
-  rateResponse,
+  clearChat,
+  canRegenerateResponse,
+  canSubmitFeedback,
   isGeneratingResponse,
+  isGeneratingChanges,
 }) => {
-  const likeResponse = (id: string) => {
-    rateResponse(id, 'like');
-  };
-
-  const dislikeResponse = (id: string) => {
-    rateResponse(id, 'dislike');
-  };
-
   return (
     <div css={wrapperStyles}>
-      <AssistantChatHeader onClear={clearMessages} />
+      <AssistantChatHeader onClear={clearChat} />
+
       <AssistantMessageList
         messages={messages}
-        handleLikeResponse={likeResponse}
-        handleDislikeResponse={dislikeResponse}
         handleRegenerateResponse={regenerateResponse}
+        handleSendPositiveFeedback={submitFeedback('like')}
+        handleSendNegativeFeedback={submitFeedback('dislike')}
+        isProcessing={isGeneratingResponse || isGeneratingChanges}
+        canRegenerateResponse={canRegenerateResponse}
+        canSubmitFeedback={canSubmitFeedback}
       />
+
       <AssistantMessageInput
         onSubmit={sendMessage}
         isLocked={isGeneratingResponse}

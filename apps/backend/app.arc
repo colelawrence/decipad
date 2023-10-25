@@ -36,11 +36,6 @@ get /api/externaldatasources/callback
 get /api/externaldatasources/:id/data
 any /api/externaldatasources/db/:id/data
 any /api/externaldatasources/db/testconn
-any /api/ai/generate-sql
-any /api/ai/rewrite-paragraph
-any /api/ai/generate-fetch-js
-any /api/ai/complete-column
-post /api/ai/chat/:padid
 get /api/pads/:padid/attachments/:attachmentid
 post /api/pads/:padid/images
 any /api/pads/:padid/export
@@ -52,6 +47,14 @@ post /api/discord
 get /api/ws
 get /api/import/url
 get /api/clear
+
+# AI endpoints
+any /api/ai/generate-sql
+any /api/ai/rewrite-paragraph
+any /api/ai/generate-fetch-js
+any /api/ai/complete-column
+post /api/ai/chat/:padid
+post /api/ai/feedback
 
 # Server-side rendering
 get /n/:notebookid

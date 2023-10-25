@@ -1,9 +1,20 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { AssistantUserMessage, AssistantAIMessage } from '@decipad/ui';
 
-import { Message, useAIChatHistory } from '@decipad/react-contexts';
+import { Message } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { deciOverflowYStyles } from '../../styles/scrollbars';
+import { ThumbsDown, ThumbsUp } from '../../icons';
+import {
+  componentCssVars,
+  cssVar,
+  p13Medium,
+  p14Medium,
+} from '../../primitives';
+import {
+  AssistantAIMessage,
+  AssistantFeedbackPopUp,
+  AssistantUserMessage,
+} from '../../molecules';
 
 const wrapperStyles = css(
   {
@@ -24,30 +35,136 @@ const listStyles = css({
   width: 632,
 });
 
+const buttonContainerStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  padding: '12px 20px',
+  width: '100%',
+});
+
+const buttonStyles = css(p14Medium, {
+  height: 28,
+  padding: '1px 8px 0px',
+  borderRadius: 4,
+  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
+  color: componentCssVars('AIAssistantTextColor'),
+  cursor: 'pointer',
+
+  '&:hover': {
+    backgroundColor: componentCssVars('AIAssistantBackgroundHoverColor'),
+    color: componentCssVars('AIAssistantTextColor'),
+  },
+
+  '&:active': {
+    boxShadow: `0px 0px 0px 2px ${cssVar('backgroundDefault')}`,
+  },
+
+  '&:disabled': {
+    opacity: 0.5,
+    cursor: 'not-allowed',
+    pointerEvents: 'none',
+  },
+});
+
+const secondaryButtonStyles = css(p13Medium, {
+  height: 24,
+  width: 'auto',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 4,
+  padding: '0px 8px 0px 6px',
+  borderRadius: 4,
+  cursor: 'pointer',
+
+  span: {
+    marginTop: 2,
+  },
+
+  '& > svg': {
+    width: 14,
+    height: 14,
+  },
+
+  '&:hover': {
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+
+  '&:active': {
+    backgroundColor: cssVar('backgroundHeavy'),
+  },
+
+  '&:disabled': {
+    opacity: 0.5,
+    cursor: 'not-allowed',
+    pointerEvents: 'none',
+  },
+});
+
 type AssistantMessageListProps = {
   readonly messages: Message[];
-  readonly handleLikeResponse: (id: string) => void;
-  readonly handleDislikeResponse: (id: string) => void;
-  readonly handleRegenerateResponse: (id: string) => void;
+  readonly isProcessing: boolean;
+  readonly canRegenerateResponse: boolean;
+  readonly canSubmitFeedback: boolean;
+  readonly handleRegenerateResponse: () => void;
+  readonly handleSendPositiveFeedback: (message: string) => void;
+  readonly handleSendNegativeFeedback: (message: string) => void;
 };
 
 export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
   messages,
-  handleLikeResponse,
-  handleDislikeResponse,
+  isProcessing,
+  canRegenerateResponse,
+  canSubmitFeedback,
   handleRegenerateResponse,
+  handleSendPositiveFeedback,
+  handleSendNegativeFeedback,
 }) => {
-  const ratedResponses = useAIChatHistory((state) => state.ratedResponses);
-
   return (
     <div css={wrapperStyles}>
+      <div css={buttonContainerStyles}>
+        <button
+          onClick={handleRegenerateResponse}
+          disabled={isProcessing || !canRegenerateResponse}
+          css={buttonStyles}
+        >
+          Regenerate
+        </button>
+        {canSubmitFeedback && (
+          <>
+            <AssistantFeedbackPopUp
+              onSubmit={handleSendPositiveFeedback}
+              trigger={
+                <button
+                  css={secondaryButtonStyles}
+                  disabled={isProcessing}
+                  data-testid="like-button"
+                >
+                  <ThumbsUp />
+                  <span>Like</span>
+                </button>
+              }
+            />
+            <AssistantFeedbackPopUp
+              onSubmit={handleSendNegativeFeedback}
+              trigger={
+                <button
+                  css={secondaryButtonStyles}
+                  disabled={isProcessing}
+                  data-testid="dislike-button"
+                >
+                  <ThumbsDown />
+                  <span>Dislike</span>
+                </button>
+              }
+            />
+          </>
+        )}
+      </div>
       <div css={listStyles} data-testid="assistant-message-list">
-        {messages.map((message, index, array) => {
-          const { id, role, type } = message;
-
-          const responseRating = ratedResponses.find(
-            (response) => response.messageId === id
-          )?.rating;
+        {messages.map((message) => {
+          const { id, role, status } = message;
 
           if (role === 'user') {
             return (
@@ -59,13 +176,8 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
             return (
               <AssistantAIMessage
                 key={id}
-                type={type}
+                status={status}
                 text={message.content}
-                rating={responseRating}
-                canRegenerate={index === array.length - 1}
-                handleLikeResponse={() => handleLikeResponse(id)}
-                handleDislikeResponse={() => handleDislikeResponse(id)}
-                handleRegenerateResponse={() => handleRegenerateResponse(id)}
               />
             );
           }

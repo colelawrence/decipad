@@ -66,6 +66,11 @@ const defaultEnvValues = {
     'https://billing.stripe.com/p/login/test_3cseXB8O17p9eMo000',
 
   NOTION_TOKEN: 'secret_g0S3h99PyM20tZ6oxPonoQ66xwxxmUtNaaDTHVKFPFn',
+
+  // Internal AI feedback
+  DISCORD_FEEDBACK_CHANNEL_TOKEN:
+    'rJLUz9bxS-oRyvOEH5dW8ZBM-9qi4Wme0do7JJ_T7Dpg0ZLQo4-pyNCTy8TmhWg9uyJB',
+  DISCORD_FEEDBACK_CHANNEL_ID: '1164225554824826961',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

@@ -1,4 +1,3 @@
-import { useAIChatHistory } from '@decipad/react-contexts';
 import { AssistantChat } from '@decipad/ui';
 import { useAssistantChat } from './hooks';
 import { EditorController } from '@decipad/notebook-tabs';
@@ -12,26 +11,29 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   notebookId,
   controller,
 }) => {
-  const [clearMessages, rateResponse] = useAIChatHistory((state) => [
-    state.clearMessages,
-    state.rateResponse,
-  ]);
-
   const {
     messages,
+    clearChat,
+    submitFeedback,
     sendUserMessage,
     regenerateResponse,
+    canRegenerateResponse,
+    canSubmitFeedback,
     isGeneratingResponse,
+    isGeneratingChanges,
   } = useAssistantChat(notebookId, controller);
 
   return (
     <AssistantChat
       messages={messages}
+      submitFeedback={submitFeedback}
       sendMessage={sendUserMessage}
       regenerateResponse={regenerateResponse}
+      canRegenerateResponse={canRegenerateResponse}
+      canSubmitFeedback={canSubmitFeedback}
       isGeneratingResponse={isGeneratingResponse}
-      clearMessages={clearMessages(notebookId)}
-      rateResponse={rateResponse(notebookId)}
+      isGeneratingChanges={isGeneratingChanges}
+      clearChat={clearChat}
     />
   );
 };
