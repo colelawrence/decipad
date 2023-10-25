@@ -6,6 +6,7 @@ import { notebooks } from '@decipad/routing';
 import { EditorIdContext } from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
 import { useUndo } from './hooks/useUndo';
+import { useNavigate } from 'react-router-dom';
 
 type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,
@@ -26,7 +27,8 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   workspaceId,
   loaded,
 }) => {
-  const { tab } = useRouteParams(notebooks({}).notebook);
+  const { notebook, tab } = useRouteParams(notebooks({}).notebook);
+  const nav = useNavigate();
 
   useUndo(controller);
 
@@ -34,6 +36,10 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
     tab != null ? controller.SubEditors.findIndex((v) => v.id === tab) : 0;
 
   if (subEditorIndex === -1 || !controller.IsLoaded) {
+    if (tab != null) {
+      // We hit an edge case, where we have a link to a tab that was deleted.
+      nav(notebooks({ notebook }).notebook({ notebook }).$);
+    }
     return <>Loading...</>;
   }
 
