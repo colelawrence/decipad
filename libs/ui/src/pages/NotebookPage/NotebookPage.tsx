@@ -46,7 +46,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
         <S.ArticleWrapper
           isEmbed={isEmbed}
           isAssistantOpen={assistantOpen}
-          isSidebarOpen={sidebarOpen}
+          isSidebarOpen={sidebarOpen && !isEmbed}
           ref={articleRef}
           onDragEnd={onDragEnd}
           onDragOver={onDragOver}
