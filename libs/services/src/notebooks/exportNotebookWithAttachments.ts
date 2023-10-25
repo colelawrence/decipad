@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 import stringify from 'json-stringify-safe';
-import { Document } from '@decipad/editor-types';
+import { Document, RootDocument } from '@decipad/editor-types';
 import { getNodeString } from '@udecode/plate';
 import Zip from 'adm-zip';
 import { captureException } from '@decipad/backend-trace';
@@ -18,13 +18,13 @@ interface ExportNotebookWithAttachmentsResult {
 interface ExportNotebookWithAttachmentsProps {
   notebookId: string;
   remoteUpdates?: string;
-  doc?: Document;
+  doc?: RootDocument | Document;
 }
 
 const serialize = (_: string, value: unknown): unknown =>
   typeof value === 'bigint' ? value.toString() : value;
 
-const getNotebookTitle = (document: Document): string =>
+const getNotebookTitle = (document: RootDocument | Document): string =>
   getNodeString(document?.children[0] ?? { text: '' }) || 'notebook';
 
 export const exportNotebookWithAttachments = async ({

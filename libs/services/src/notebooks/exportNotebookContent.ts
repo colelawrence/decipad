@@ -1,11 +1,13 @@
-import { Document } from '@decipad/editor-types';
+import { Document, RootDocument } from '@decipad/editor-types';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { applyUpdate, Doc as YDoc } from 'yjs';
 
-export const exportNotebookContent = (
+export const exportNotebookContent = <
+  T extends RootDocument | Document = Document
+>(
   id: string,
   remoteUpdates?: string
-): Promise<Document> => {
+): Promise<T> => {
   return new Promise((resolve, reject) => {
     try {
       const doc = new YDoc();
@@ -16,7 +18,7 @@ export const exportNotebookContent = (
           applyUpdate(doc, update, 'remote');
         }
         try {
-          resolve({ children: doc.getArray().toJSON() } as Document);
+          resolve({ children: doc.getArray().toJSON() } as T);
         } catch (err2) {
           reject(err2);
         }

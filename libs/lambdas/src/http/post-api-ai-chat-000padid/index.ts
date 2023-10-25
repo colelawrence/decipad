@@ -7,6 +7,7 @@ import handle from '../handle';
 import { ChatCompletionMessageParam } from 'openai/resources/chat';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import { valuesToMarkdown } from '@decipad/editor-utils';
+import { RootDocument } from '@decipad/editor-types';
 
 const notebooks = resource('notebook');
 
@@ -44,11 +45,26 @@ export const handler = handle(async (event) => {
     minimumPermissionType: 'READ',
   });
 
-  const doc = await exportNotebookContent(padId);
+  // We can be pretty sure this'll be RootDocument as Document is converted to RootDocument when a pad is opened
+  const doc = await exportNotebookContent<RootDocument>(padId);
 
-  let markdown: string;
+  let stringifiedDoc: string;
   try {
-    markdown = valuesToMarkdown(doc.children);
+    const [title, ...tabs] = doc.children;
+
+    stringifiedDoc = `{
+  title: ${JSON.stringify(title)},
+  tabs: [
+    ${tabs
+      .map((tab): string => {
+        return `    {
+      name: ${tab.name},
+      content: \`${valuesToMarkdown(tab.children)}\`
+    }`;
+      })
+      .join('\n')}
+  ]
+}`;
   } catch (e) {
     throw Boom.internal('Unable to parse document');
   }
@@ -72,7 +88,7 @@ export const handler = handle(async (event) => {
 
   messages.unshift({
     role: 'user',
-    content: markdown,
+    content: stringifiedDoc,
   });
   messages.unshift(systemMessageParam);
 
