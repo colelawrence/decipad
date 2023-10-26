@@ -8,6 +8,7 @@ import {
   AlignArrowRightAlt,
   ArrowLeft,
   ArrowRight,
+  Brush,
   Caret,
   Edit,
   Hide,
@@ -368,6 +369,7 @@ const Tab: FC<TabProps> = ({
   onToggleShowHide,
 }) => {
   const [open, setOpen] = useState(false);
+  const iconRef = useRef<HTMLDivElement>(null);
 
   const Icon = icons[icon];
 
@@ -388,6 +390,13 @@ const Tab: FC<TabProps> = ({
     },
     [onClick, onRename]
   );
+
+  const handleOpenIconPopover = useCallback(() => {
+    // This is needed to make sure the popover opens after the click event
+    setTimeout(() => {
+      iconRef.current?.click();
+    }, 0);
+  }, []);
 
   return (
     <TabWrapper
@@ -412,7 +421,7 @@ const Tab: FC<TabProps> = ({
             iconOnly
             color="Catskill"
             trigger={
-              <TabIcon>
+              <TabIcon ref={iconRef}>
                 <Icon />
               </TabIcon>
             }
@@ -479,6 +488,14 @@ const Tab: FC<TabProps> = ({
             </MenuItem>
           </MenuList>
 
+          <MenuItem
+            icon={<Brush />}
+            onSelect={handleOpenIconPopover}
+            onClick={(event) => event.stopPropagation()}
+            disabled={isHidden}
+          >
+            Change icon
+          </MenuItem>
           <MenuItem
             icon={isHidden ? <Show /> : <Hide />}
             onSelect={onToggleShowHide}
