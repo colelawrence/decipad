@@ -52,8 +52,12 @@ const bracketErrorMessage = (err: BracketError) => {
   switch (err.type) {
     case 'never-opened':
       return `Closed a bracket "${err.close.text}" that was never opened`;
-    case 'mismatched-brackets':
+    case 'mismatched-brackets': {
+      if (err.open.text === 'if') {
+        return 'Incomplete statement, requires all of if <condition> then <result1> else <result2>';
+      }
       return `Mismatched brackets "${err.open.text}" and "${err.close.text}"`;
+    }
     case 'never-closed':
       return `Bracket "${err.open.text}" was opened but it is not being closed`;
   }
