@@ -1,15 +1,12 @@
-import { safeNumberForPrecision } from '@decipad/computer';
 import {
   columnTypeCoercionsToRec,
   importFromUnknownJson,
   tableFlip,
 } from '@decipad/import';
-import DeciNumber from '@decipad/number';
 import {
   ExecutionContext,
   TExecution,
   useCodeConnectionStore,
-  useComputer,
   useConnectionStore,
   useCurrentWorkspaceStore,
 } from '@decipad/react-contexts';
@@ -30,7 +27,7 @@ import {
   RemoteData,
   useRdFetch,
 } from 'libs/editor-components/src/AIPanel/hooks';
-import { useWorker } from '../hooks';
+import { useDeciVariables, useWorker } from '../hooks';
 import { ConnectionProps } from './types';
 
 const fieldsetStyles = css({
@@ -206,7 +203,6 @@ export const CodeConnection: FC<ConnectionProps> = ({
   const [log, setLog] = useState<TExecution<boolean>[]>(
     [] as TExecution<boolean>[]
   );
-  const computer = useComputer();
   const { workspaceInfo, setCurrentWorkspaceInfo } = useCurrentWorkspaceStore();
   const { quotaLimit, queryCount, id } = workspaceInfo;
   const [, updateQueryExecCount] = useIncrementQueryCountMutation();
@@ -230,45 +226,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
     );
   }, [quotaLimit, queryCount]);
 
-  /**
-   * We take the results from the computer
-   * Do some restrictions on the type that can go through
-   * And then we have an array of JS objects.
-   */
-  const deciVarDefs = computer.results$.useWithSelector((resObject) => {
-    return Object.fromEntries(
-      Object.values(resObject.blockResults)
-        .map((r) => {
-          if (r.type === 'identified-error') {
-            return undefined;
-          }
-
-          switch (r.result.type.kind) {
-            case 'string':
-            case 'boolean': {
-              const varName = computer.getSymbolDefinedInBlock(r.id);
-              if (!varName) return undefined;
-              return [varName, r.result.value?.valueOf()] as const;
-            }
-            case 'number': {
-              const varName = computer.getSymbolDefinedInBlock(r.id);
-              if (!varName) return undefined;
-              const resVal = r.result.value as DeciNumber;
-              if (!resVal) return undefined;
-              const [, valOf] = safeNumberForPrecision(resVal);
-              return [varName, valOf] as const;
-            }
-          }
-          return undefined;
-        })
-        .reduce((map, current) => {
-          if (!current) return map;
-          map.set(current[0], current[1]);
-          return map;
-        }, new Map<string, any>())
-        .entries()
-    );
-  });
+  const deciVariables = useDeciVariables();
 
   const msgStream = useCallback(
     (msg: WorkerMessageType) => {
@@ -342,13 +300,13 @@ export const CodeConnection: FC<ConnectionProps> = ({
 
   const runCode = useCallback(() => {
     try {
-      worker?.execute(code, deciVarDefs);
+      worker?.execute(code, deciVariables);
     } catch (err) {
       console.error(err);
       setResultPreview(undefined);
       onExecute({ status: 'error', err: err as Error });
     }
-  }, [worker, code, setResultPreview, onExecute, deciVarDefs]);
+  }, [worker, code, deciVariables, setResultPreview, onExecute]);
 
   useEffect(() => {
     if (info.status === 'run') {

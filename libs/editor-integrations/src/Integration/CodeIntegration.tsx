@@ -7,7 +7,7 @@ import {
 import type { ResultMessageType } from '@decipad/safejs';
 import { useCallback, useEffect } from 'react';
 import { useIntegrationContext } from '.';
-import { useWorker } from '../hooks';
+import { useDeciVariables, useWorker } from '../hooks';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 
@@ -27,6 +27,8 @@ export const CodeIntegration = function CodeIntegration({
 
   const store = useConnectionStore();
   const codeStore = useCodeConnectionStore();
+
+  const deciVars = useDeciVariables();
 
   useEffect(() => {
     const result = importFromJSONAndCoercions(
@@ -62,7 +64,7 @@ export const CodeIntegration = function CodeIntegration({
     const sub = observable?.subscribe((action) => {
       switch (action) {
         case 'refresh':
-          worker?.execute(blockOptions.code);
+          worker?.execute(blockOptions.code, deciVars);
           break;
         case 'show-source': {
           store.abort();
@@ -101,6 +103,7 @@ export const CodeIntegration = function CodeIntegration({
     id,
     typeMappings,
     blockOptions.latestResult,
+    deciVars,
   ]);
 
   return null;
