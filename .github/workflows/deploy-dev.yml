@@ -91,6 +91,8 @@ jobs:
           REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           GIT_COMMIT_HASH: '${{github.sha}}'
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
+          DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{secrets.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
+          DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
           DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant'
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"

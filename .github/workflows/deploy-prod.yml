@@ -87,6 +87,8 @@ jobs:
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=32768'
           GIT_COMMIT_HASH: '${{github.sha}}'
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
+          DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{secrets.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
+          DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
 
         run: |
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
