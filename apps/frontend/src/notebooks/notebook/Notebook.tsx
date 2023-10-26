@@ -201,6 +201,29 @@ const NewTabs: FC<{
           `${notebooks({}).notebook({ notebook }).$}/${newSelectedTabIndex?.id}`
         );
       }}
+      onMoveTab={(id, index) => {
+        const tabIndex = tabs.findIndex((t) => t.id === id);
+
+        // check if tab exists
+        if (tabIndex === -1) return;
+        // check if tab is already in the correct position
+        if (tabIndex === index) return;
+
+        // check if index is not out of bounds
+        if (index < 0 || index > tabs.length - 1) return;
+
+        // how many operations we perform to get to the desired index
+        const steps = Math.abs(index - tabIndex);
+        // -1 -> left, 1 -> right
+        const direction = Math.sign(index - tabIndex);
+
+        for (let i = 1; i <= steps; i += 1) {
+          const swapTab = tabs[tabIndex + i * direction];
+
+          if (!swapTab) return;
+          controller.MoveTabs(id, swapTab.id);
+        }
+      }}
       onChangeIcon={controller.ChangeTabIcon.bind(controller)}
       onToggleShowHide={controller.ToggleShowHideTab.bind(controller)}
     />

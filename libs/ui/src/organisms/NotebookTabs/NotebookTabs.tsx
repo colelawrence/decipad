@@ -3,9 +3,21 @@ import styled from '@emotion/styled';
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cssVar, p13Bold, p13Medium } from '../../primitives';
 import { IconPopover, MenuList } from '../../molecules';
-import { Caret, Edit, Hide, Plus, Show, Trash } from '../../icons';
+import {
+  AlignArrowLeftAlt,
+  AlignArrowRightAlt,
+  ArrowLeft,
+  ArrowRight,
+  Caret,
+  Edit,
+  Hide,
+  Plus,
+  Show,
+  Switch,
+  Trash,
+} from '../../icons';
 import * as icons from '../../icons';
-import { MenuItem } from '../../atoms';
+import { MenuItem, TriggerMenuItem } from '../../atoms';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { useToast } from '@decipad/toast';
 import { deciTabsOverflowXStyles } from '../../styles/scrollbars';
@@ -27,6 +39,7 @@ export interface TabsProps {
   readonly onClick: (id: string) => void;
   readonly onCreateTab: () => string;
   readonly onRenameTab: (tabId: string, name: string) => void;
+  readonly onMoveTab: (tabId: string, index: number) => void;
   readonly onDeleteTab: (tabId: string) => void;
   readonly onChangeIcon: (tabId: string, icon: UserIconKey) => void;
   readonly onToggleShowHide: (tabId: string) => void;
@@ -40,6 +53,7 @@ export const NotebookTabs: FC<TabsProps> = ({
   onCreateTab,
   onRenameTab,
   onDeleteTab,
+  onMoveTab,
   onChangeIcon: _onChangeIcon,
   onToggleShowHide,
 }) => {
@@ -124,6 +138,18 @@ export const NotebookTabs: FC<TabsProps> = ({
     [isLastTab, isLastVisibleTab]
   );
 
+  const getCanMove = useCallback(
+    (id: string) => (direction: 'left' | 'right') => {
+      switch (direction) {
+        case 'left':
+          return tabs.findIndex((tab) => tab.id === id) > 0;
+        case 'right':
+          return tabs.findIndex((tab) => tab.id === id) < tabs.length - 1;
+      }
+    },
+    [tabs]
+  );
+
   const onShowHide = useCallback(
     (id: string) => () => {
       if (isLastTab(id)) {
@@ -156,6 +182,27 @@ export const NotebookTabs: FC<TabsProps> = ({
       onDeleteTab(id);
     },
     [onDeleteTab, toast, isLastTab, isLastVisibleTab]
+  );
+
+  const onMove = useCallback(
+    (id: string) => (direction: 'start' | 'left' | 'right' | 'end') => {
+      const index = tabs.findIndex((tab) => tab.id === id);
+      switch (direction) {
+        case 'start':
+          onMoveTab(id, 0);
+          break;
+        case 'left':
+          onMoveTab(id, index - 1);
+          break;
+        case 'right':
+          onMoveTab(id, index + 1);
+          break;
+        case 'end':
+          onMoveTab(id, tabs.length - 1);
+          break;
+      }
+    },
+    [tabs, onMoveTab]
   );
 
   const onChangeName = useCallback(
@@ -259,10 +306,12 @@ export const NotebookTabs: FC<TabsProps> = ({
                 isHidden={isHidden ?? false}
                 isActive={id === activeTabId}
                 canHideDelete={getCanHideDelete(id)}
+                canMove={getCanMove(id)}
                 onClick={() => onClick(id)}
                 onChangeIcon={onChangeIcon(id)}
                 onRename={onChangeName(id)}
                 onDelete={onDelete(id)}
+                onMove={onMove(id)}
                 onToggleShowHide={onShowHide(id)}
               />
             );
@@ -293,9 +342,11 @@ interface TabProps {
   isActive: boolean;
   isReadOnly: boolean;
   canHideDelete: boolean;
+  canMove: (direction: 'left' | 'right') => boolean;
   onClick: () => void;
   onRename: () => void;
   onDelete: () => void;
+  onMove: (direction: 'start' | 'left' | 'right' | 'end') => void;
   onChangeIcon: (icon: UserIconKey) => void;
   onToggleShowHide: () => void;
 }
@@ -307,7 +358,9 @@ const Tab: FC<TabProps> = ({
   icon,
   id,
   canHideDelete,
+  canMove,
   isHidden,
+  onMove,
   onClick,
   onRename,
   onDelete,
@@ -385,6 +438,47 @@ const Tab: FC<TabProps> = ({
           <MenuItem icon={<Edit />} onSelect={onRename}>
             Rename tab
           </MenuItem>
+
+          <MenuList
+            itemTrigger={
+              <TriggerMenuItem
+                disabled={!(canMove('left') || canMove('right'))}
+                icon={<Switch />}
+              >
+                Move tab
+              </TriggerMenuItem>
+            }
+          >
+            <MenuItem
+              icon={<ArrowLeft />}
+              onSelect={() => onMove('left')}
+              disabled={!canMove('left')}
+            >
+              <div css={{ minWidth: '64px' }}>Left</div>
+            </MenuItem>
+            <MenuItem
+              icon={<ArrowRight />}
+              onSelect={() => onMove('right')}
+              disabled={!canMove('right')}
+            >
+              <div css={{ minWidth: '64px' }}>Right</div>
+            </MenuItem>
+            <MenuItem
+              icon={<AlignArrowLeftAlt />}
+              onSelect={() => onMove('start')}
+              disabled={!canMove('left')}
+            >
+              <div css={{ minWidth: '64px' }}>To the start</div>
+            </MenuItem>
+            <MenuItem
+              icon={<AlignArrowRightAlt />}
+              onSelect={() => onMove('end')}
+              disabled={!canMove('right')}
+            >
+              <div css={{ minWidth: '64px' }}>To the end</div>
+            </MenuItem>
+          </MenuList>
+
           <MenuItem
             icon={isHidden ? <Show /> : <Hide />}
             onSelect={onToggleShowHide}
