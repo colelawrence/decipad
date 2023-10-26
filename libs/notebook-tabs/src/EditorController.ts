@@ -713,8 +713,16 @@ export class EditorController {
       this.CreateSnapshot();
     }
 
-    if (this.SubEditors.length === 0 && oldNodesLength === 0 && isNewNotebook) {
+    if (
+      this.SubEditors.length === 0 &&
+      this.InsertOperations.length === 0 &&
+      isNewNotebook
+    ) {
       // This means its a brand new notebook.
+      // - No sub editors created.
+      // - No invertions added
+      // - Initial state says its new notebook.
+
       this.IsNewNotebook = true;
 
       if (_initialDoc == null) {
