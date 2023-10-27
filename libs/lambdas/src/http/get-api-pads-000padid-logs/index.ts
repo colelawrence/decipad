@@ -32,8 +32,12 @@ export const handler = handle(async (event) => {
   const [{ user }] = await expectAuthenticated(event);
   await checkAccess(user);
 
+  const id = event.queryStringParameters?.id;
+
   const data = await tables();
   let output = '';
+  let lastId: string | undefined;
+
   for await (const entry of allPages(data.logs, {
     KeyConditionExpression: '#resource = :resource',
     ExpressionAttributeNames: {
@@ -42,17 +46,30 @@ export const handler = handle(async (event) => {
     ExpressionAttributeValues: {
       ':resource': `/pads/${padId}`,
     },
+    ExclusiveStartKey: id,
+    Limit: 50,
   })) {
     if (entry) {
       output += outputEntry(entry);
+      lastId = entry.id;
     }
   }
+
+  const questionMarkIndex = event.rawPath.indexOf('?');
+  const frontlink = `<a href="${event.rawPath.slice(0, questionMarkIndex)}${
+    lastId != null ? `?id=${lastId}">Next</a>` : ''
+  }`;
 
   return {
     statusCode: 200,
     headers: {
-      'content-type': 'text/plain',
+      'content-type': 'text/html',
     },
-    body: output,
+    body: `<div>
+      ${frontlink}
+      <div>
+        ${output}
+      </div>
+    </div>`,
   };
 });

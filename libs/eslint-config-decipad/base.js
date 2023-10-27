@@ -26,6 +26,7 @@ module.exports = {
   rules: {
     'require-await': 'off',
     'import/prefer-default-export': 'off',
+    'no-plusplus': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
