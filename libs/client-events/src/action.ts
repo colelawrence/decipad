@@ -85,7 +85,9 @@ type Action =
   | {
       action: 'widget renamed';
       props: { variant: ElementVariants };
-    };
+    }
+  // Tabs actions
+  | { action: 'create new tab'; props?: undefined };
 
 export type ActionEvent = {
   type: 'action';

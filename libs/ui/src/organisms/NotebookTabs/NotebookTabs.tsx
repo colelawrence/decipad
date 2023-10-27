@@ -1,6 +1,14 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import styled from '@emotion/styled';
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { cssVar, p13Bold, p13Medium } from '../../primitives';
 import { IconPopover, MenuList } from '../../molecules';
 import {
@@ -25,6 +33,7 @@ import { deciTabsOverflowXStyles } from '../../styles/scrollbars';
 import { UserIconKey } from '@decipad/editor-types';
 
 import { noop } from '@decipad/utils';
+import { ClientEventsContext } from '@decipad/client-events';
 
 type UITab = {
   id: string;
@@ -63,6 +72,8 @@ export const NotebookTabs: FC<TabsProps> = ({
   );
 
   const toast = useToast();
+
+  const clientEvent = useContext(ClientEventsContext);
 
   // Used to set the width of the input to the length of the tab name
   const resizeSpanRef = useRef<HTMLSpanElement>(null);
@@ -240,6 +251,15 @@ export const NotebookTabs: FC<TabsProps> = ({
     [onRenameTab, toast, inputContent]
   );
 
+  const handleAddTab = useCallback(() => {
+    clientEvent({
+      type: 'action',
+      action: 'create new tab',
+    });
+    const id = onCreateTab();
+    setEditableTabId(id);
+  }, [onCreateTab, clientEvent]);
+
   const handleKeyPress = useCallback(
     (id: string) => (event: React.KeyboardEvent) => {
       if (event.key === 'Enter') {
@@ -320,10 +340,7 @@ export const NotebookTabs: FC<TabsProps> = ({
           <NewTabButton
             hidden={isReadOnly}
             disabled={isReadOnly}
-            onClick={() => {
-              const id = onCreateTab();
-              setEditableTabId(id);
-            }}
+            onClick={handleAddTab}
             data-testid="add-tab-button"
           >
             <Plus />
