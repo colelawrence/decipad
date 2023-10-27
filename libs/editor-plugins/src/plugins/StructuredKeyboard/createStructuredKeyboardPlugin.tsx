@@ -4,7 +4,7 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  MyEditor,
+  MyValue,
 } from '@decipad/editor-types';
 import {
   insertStructuredCodeLineBelow,
@@ -12,6 +12,8 @@ import {
   setSelection,
 } from '@decipad/editor-utils';
 import {
+  PlateEditor,
+  Value,
   getEndPoint,
   getFirstNode,
   getLastNode,
@@ -35,17 +37,23 @@ type Shortcuts =
   | 'soft-break';
 
 // In the future this function could be used by all elements to get shortcuts.
-function getShortcut(
-  editor: MyEditor,
+const getShortcut = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  editor: TE,
   computer: RemoteComputer,
   event: KeyboardEvent
-): Shortcuts | undefined {
+): Shortcuts | undefined => {
   switch (true) {
     case event.key === 'Enter' && event.shiftKey:
       return 'new-element';
     case event.key === 'Enter':
       // True when cursor in (), {}, if, etc
-      const shouldSoftBreak = filterStatementSeparator(editor, computer);
+      const shouldSoftBreak = filterStatementSeparator<TV, TE>(
+        editor,
+        computer
+      );
       if (shouldSoftBreak) {
         return 'soft-break';
       }
@@ -60,7 +68,7 @@ function getShortcut(
       return 'select-all';
   }
   return undefined;
-}
+};
 
 /**
  * Selects the whole text on a given path.
@@ -68,17 +76,28 @@ function getShortcut(
  * If you have a text note `1234`, the anchor will stay before 1 and the focus
  * after 4, as to select the whole text.
  */
-function setSelectionFullText(editor: MyEditor, path: Path) {
+const setSelectionFullText = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  editor: TE,
+  path: Path
+) => {
   setSelection(editor, {
     anchor: getStartPoint(editor, path),
     focus: getEndPoint(editor, path),
   });
-}
+};
 
 const ALLOWED_ELEMENTS = new Set([ELEMENT_CODE_LINE_V2]);
 
-export function createStructuredKeyboard(computer: RemoteComputer) {
-  return createOnKeyDownPluginFactory({
+export const createStructuredKeyboard = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  computer: RemoteComputer
+) => {
+  return createOnKeyDownPluginFactory<TV, TE>({
     name: 'STRUCTURED_KEYBOARD_SHORTCUTS',
     plugin:
       (editor) =>
@@ -92,7 +111,7 @@ export function createStructuredKeyboard(computer: RemoteComputer) {
         const node = getNode<CodeLineV2Element>(editor, [anchorPath[0]]);
         if (!node || !ALLOWED_ELEMENTS.has(node.type)) return false;
 
-        const shortcut = getShortcut(editor, computer, event);
+        const shortcut = getShortcut<TV, TE>(editor, computer, event);
         switch (shortcut) {
           case 'move-left':
           case 'move-right':
@@ -107,7 +126,7 @@ export function createStructuredKeyboard(computer: RemoteComputer) {
               // We remove the last part of the path so that we can
               // select the WHOLE of the code element (including smart refs);
               anchorPath.pop();
-              setSelectionFullText(editor, anchorPath);
+              setSelectionFullText<TV, TE>(editor, anchorPath);
               return true;
             }
 
@@ -126,7 +145,7 @@ export function createStructuredKeyboard(computer: RemoteComputer) {
                 ? getFirstNode(editor, moveTo)
                 : getLastNode(editor, moveTo);
             path.pop();
-            setSelectionFullText(editor, path);
+            setSelectionFullText<TV, TE>(editor, path);
             return true;
           case 'move-up':
           case 'move-down':
@@ -175,7 +194,7 @@ export function createStructuredKeyboard(computer: RemoteComputer) {
           case 'new-element':
             event.preventDefault();
             event.stopPropagation();
-            insertStructuredCodeLineBelow({
+            insertStructuredCodeLineBelow<TV, TE>({
               editor,
               path: [anchorPath[0]],
               code: '$100',
@@ -214,4 +233,4 @@ export function createStructuredKeyboard(computer: RemoteComputer) {
         return false;
       },
   })();
-}
+};

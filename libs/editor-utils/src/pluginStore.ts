@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-multi-assign */
-import { MyEditor } from '@decipad/editor-types';
+import { MyGenericEditor, MyValue } from '@decipad/editor-types';
+import { Value } from '@udecode/plate';
 
 const pluginStoreSymbol = Symbol('PLUGIN_STORE');
 
@@ -10,7 +11,9 @@ type StoreBearing = {
 };
 type Creator<T> = () => T;
 
-const editorStore = (editor: MyEditor): StoreByPlugin => {
+const editorStore = <TV extends Value, TE extends MyGenericEditor<TV>>(
+  editor: TE
+): StoreByPlugin => {
   let store = (editor as StoreBearing)[pluginStoreSymbol];
   if (!store) {
     store = {};
@@ -35,11 +38,15 @@ const getPluginStore = <T>(
   return store;
 };
 
-export const pluginStore = <T>(
-  editor: MyEditor,
+export const pluginStore = <
+  T,
+  TV extends Value = MyValue,
+  TE extends MyGenericEditor<TV> = MyGenericEditor<TV>
+>(
+  editor: TE,
   pluginKey: string,
   create: Creator<T>
 ): T => {
-  const globalStore = editorStore(editor);
+  const globalStore = editorStore<TV, TE>(editor);
   return getPluginStore<T>(globalStore, pluginKey, create);
 };

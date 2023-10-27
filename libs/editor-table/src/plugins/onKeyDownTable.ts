@@ -7,12 +7,16 @@ import {
   findNode,
   moveSelection,
   onKeyDownTable as onKeyDownTablePlate,
+  Value,
 } from '@udecode/plate';
 import { Path } from 'slate';
 import { addColumn } from '../hooks/index';
+import { MyValue } from '../../../editor-types/src/value';
 
-export const onKeyDownTable: MyKeyboardHandler =
-  (editor, plugin) => (event) => {
+export const onKeyDownTable =
+  <TV extends Value = MyValue>(): MyKeyboardHandler<object, TV> =>
+  (editor, plugin) =>
+  (event) => {
     onKeyDownTablePlate(editor, plugin)(event);
 
     if (isHotkey('shift+enter', event)) {

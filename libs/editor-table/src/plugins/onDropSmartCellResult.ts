@@ -1,12 +1,10 @@
 import {
-  CodeLineElement,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_LIC,
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
-  MyEditor,
-  MyElement,
+  MyGenericEditor,
   MyText,
 } from '@decipad/editor-types';
 import {
@@ -16,6 +14,9 @@ import {
 } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
 import {
+  ElementOf,
+  TEditor,
+  Value,
   getBlockAbove,
   isElementEmpty,
   isText,
@@ -29,17 +30,19 @@ import { DRAG_SMART_CELL_RESULT } from '../components/SmartColumnCell/onDragSmar
 type DragCellData = string;
 
 export const onDropSmartCellResult =
-  (editor: MyEditor) => (event: DragEvent) => {
+  <TV extends Value, TE extends MyGenericEditor<TV>>() =>
+  (editor: TE) =>
+  (event: DragEvent) => {
     if (editor.dragging === DRAG_SMART_CELL_RESULT) {
       // eslint-disable-next-line no-param-reassign
-      editor.dragging = null;
+      editor.isDragging = undefined;
 
       cursorStore.set.reset();
       dndStore.set.isDragging(false);
       event.preventDefault();
       event.stopPropagation();
 
-      selectEventRange(editor)(event);
+      selectEventRange<TV>(editor)(event);
 
       const fragment = getSlateFragment(
         event.dataTransfer
@@ -71,7 +74,7 @@ export const onDropSmartCellResult =
             [MARK_MAGICNUMBER]: true,
           });
         } else {
-          if (isElementEmpty(editor, block as MyElement)) {
+          if (isElementEmpty(editor, block as ElementOf<TEditor<Value & TV>>)) {
             removeNodes(editor, { at: blockPath });
           }
           insertNodes(editor, [
@@ -83,7 +86,7 @@ export const onDropSmartCellResult =
                   text,
                 },
               ],
-            } as CodeLineElement,
+            } as ElementOf<TEditor<Value & TV>>,
           ]);
         }
       });

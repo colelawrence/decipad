@@ -13,7 +13,9 @@ import {
 } from '@decipad/editor-types';
 import {
   TDescendant,
+  TEditor,
   TElement,
+  Value,
   getEndPoint,
   getNextNode,
   getNode,
@@ -106,8 +108,11 @@ export const getSelectionBubble = (
   return element as InlineNumberElement;
 };
 
-export const insertDividerBelow = (
-  editor: MyEditor,
+export const insertDividerBelow = <
+  TV extends Value,
+  TE extends TEditor<TV> = TEditor<TV>
+>(
+  editor: TE,
   path: Path,
   type: ElementKind
 ): void => {

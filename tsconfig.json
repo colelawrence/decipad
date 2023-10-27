@@ -133,6 +133,7 @@
       "@decipad/services/users": ["libs/services/src/users"],
       "@decipad/services/utils": ["libs/services/src/utils"],
       "@decipad/services/workspaces": ["libs/services/src/workspaces"],
+      "@decipad/services/pad-content": ["libs/services/src/pad-content"],
       "@decipad/slate-yjs": ["libs/slate-yjs/src/index.ts"],
       "@decipad/support": ["libs/support/src/index.ts"],
       "@decipad/sync-connection-lambdas": [
@@ -160,7 +161,8 @@
       "@decipad/backend-notebook-content": [
         "libs/backend-notebook-content/src/index.ts"
       ],
-      "@decipad/doc-verbalizer": ["libs/doc-verbalizer/src/index.ts"]
+      "@decipad/doc-verbalizer": ["libs/doc-verbalizer/src/index.ts"],
+      "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"]
     }
   },
   "files": [],

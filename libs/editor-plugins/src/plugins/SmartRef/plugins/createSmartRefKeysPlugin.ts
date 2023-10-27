@@ -10,8 +10,12 @@ import {
 import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
 import { isSmartRef } from '../utils/isSmartRef';
+import { MyEditor, MyValue } from '@decipad/editor-types';
 
-export const createSmartRefKeysPlugin = createOnKeyDownPluginFactory({
+export const createSmartRefKeysPlugin = createOnKeyDownPluginFactory<
+  MyValue,
+  MyEditor
+>({
   name: 'SMART_REF_KEYS_PLUGIN',
   plugin: (editor) => (event) => {
     if (isCollapsed(editor.selection)) {

@@ -45,6 +45,7 @@ import {
   TranslatePathUp,
 } from './TranslatePaths';
 import { IsOldOperation, IsTab, IsTitle, NoSelectOperations } from './utils';
+import stringify from 'json-stringify-safe';
 import { ElementObserver } from './ElementObserver';
 
 const INITIAL_TAB_NAME = 'New Tab';
@@ -414,7 +415,11 @@ export class EditorController {
   public apply(op: TOperation): void {
     if (!(process.env.NODE_ENV === 'test' && !process.env.DEBUG)) {
       // eslint-disable-next-line no-console
-      console.debug(`Editor Controller: %c${op.type}`, 'color: green', op);
+      console.debug(
+        `Editor Controller: %c${op.type}`,
+        'color: green',
+        stringify(op)
+      );
     }
 
     if (op.TO_REMOTE || op.IS_LOCAL || op.type === 'set_selection') {

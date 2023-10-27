@@ -1,0 +1,584 @@
+openapi: 3.0.1
+info:
+  title: Create and modify a Decipad notebook
+  description: Create and modify a Decipad notebook where you can build a
+    numerical model, adding and manipulating text, tables, data views, sliders
+  version: v1
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/notebook/createNotebook:
+    post:
+      summary: removes an existing element from the notebook
+      description: removes an existing element from the notebook
+      operationId: createNotebook
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  createdNotebookId:
+                    type: string
+                  createdNotebookURL:
+                    type: string
+      parameters:
+        - name: title
+          in: query
+          description: the title of the notebook you want to create
+          required: true
+          schema:
+            type: string
+  /api/notebook/getElementById:
+    post:
+      summary: fetches an element from the notebook with the given id
+      description: fetches an element from the notebook with the given id
+      operationId: getElementById
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnyElement'
+      parameters:
+        - name: elementId
+          in: query
+          description: the id of the element you want to retrieve
+          required: true
+          schema:
+            type: string
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+  /api/notebook/removeElement:
+    post:
+      summary: removes an existing element from the notebook
+      description: removes an existing element from the notebook
+      operationId: removeElement
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: elementId
+          in: query
+          description: the id of the element you want to remove
+          required: true
+          schema:
+            type: string
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+  /api/notebook/appendElement:
+    post:
+      summary: Appends any element to the end of the notebook
+      description: Appends any element to the end of the notebook
+      operationId: appendElement
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                element:
+                  $ref: '#/components/schemas/AnyElement'
+              required:
+                - element
+  /api/notebook/appendText:
+    post:
+      summary: Appends markdown text to the end of the notebook
+      description:
+        splits the markdown into separate elements and inserts them one at
+        a time in the notebook
+      operationId: appendText
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResults'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                markdownText:
+                  description: the name of the table you want to append
+                  type: string
+              required:
+                - markdownText
+  /api/notebook/changeText:
+    post:
+      summary: Changes the text in a text element
+      description: Changes the text in a text element
+      operationId: changeText
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                elementId:
+                  description: the id of the text element you want to change
+                  type: string
+                newText:
+                  description: the new content of the text element
+                  type: string
+              required:
+                - elementId
+                - newText
+  /api/notebook/appendEmptyTable:
+    post:
+      summary: appends an empty table to the end of the notebook
+      description: appends an empty table to the end of the notebook
+      operationId: appendEmptyTable
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableName:
+                  description:
+                    the name of the table you want to append. Should have no spaces or
+                    special characters.
+                  type: string
+                columnNames:
+                  description: the name of the table you want to append
+                  type: array
+                  items:
+                    type: string
+                    description: Column name. Should have no spaces or special characters.
+                rowCount:
+                  description: the number of rows for this new table
+                  type: integer
+              required:
+                - tableName
+                - columnNames
+                - rowCount
+  /api/notebook/appendFilledTable:
+    post:
+      summary: appends a filled table to the end of the notebook
+      description: appends a filled table to the end of the notebook
+      operationId: appendFilledTable
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableName:
+                  description:
+                    the name of the table you want to append. Should have no spaces or
+                    special characters.
+                  type: string
+                columnNames:
+                  description: the column names for the table
+                  type: array
+                  items:
+                    type: string
+                    description: Column name. Should have no spaces or special characters.
+                rowsData:
+                  description: the data for each row in an array for each row.
+                  type: array
+                  items:
+                    type: array
+                    description: the data for a row
+                    items:
+                      type: string
+              required:
+                - tableName
+                - columnNames
+                - rowsData
+  /api/notebook/insertEmptyTableColumn:
+    post:
+      summary: inserts am empty column in an existing table
+      description: inserts am empty column in an existing table
+      operationId: insertEmptyTableColumn
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: tableId
+          in: query
+          description: the id of the table you want to insert a column into
+          required: true
+          schema:
+            type: string
+        - name: columnName
+          in: query
+          description: the name of the new column
+          required: true
+          schema:
+            type: string
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+  /api/notebook/insertFilledTableColumn:
+    post:
+      summary: inserts a column in an existing table and fills it
+      description: inserts a column in an existing table and fills it
+      operationId: insertFilledTableColumn
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table element
+                  type: string
+                columnName:
+                  description: the name of the column
+                  type: string
+                cells:
+                  description: the data for the column
+                  type: array
+                  items:
+                    type: string
+              required:
+                - prompt
+  /api/notebook/insertFormulaTableColumn:
+    post:
+      summary: inserts am empty column in an existing table
+      description: inserts am empty column in an existing table
+      operationId: insertFormulaTableColumn
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table element
+                  type: string
+                columnName:
+                  description: the name of the column
+                  type: string
+                formula:
+                  description: the Decipad language formula for this new column
+                  type: string
+              required:
+                - prompt
+  /api/notebook/removeTableColumn:
+    post:
+      summary: removes a column from a table
+      description: removes a column from a table
+      operationId: removeTableColumn
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: tableId
+          in: query
+          description: the id of the table you want to remove a column from
+          required: true
+          schema:
+            type: string
+        - name: columnName
+          in: query
+          description: the name of the new column you want to remove
+          required: true
+          schema:
+            type: string
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+  /api/notebook/insertTableRow:
+    post:
+      summary: inserts a row in an existing table
+      description: inserts a row in an existing table
+      operationId: insertTableRow
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to insert a new row into
+                  type: string
+                row:
+                  description: the content of that row
+                  type: array
+                  items:
+                    type: string
+              required:
+                - tableId
+                - row
+  /api/notebook/removeTableRow:
+    post:
+      summary: removes a row from a table
+      description: removes a row from a table
+      operationId: removeTableRow
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: tableId
+          in: query
+          description: the id of the table you want to insert remove a row from
+          required: true
+          schema:
+            type: string
+        - name: rowIndex
+          in: query
+          description: the index of the row you want to remove. starts at 0
+          required: true
+          schema:
+            type: number
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+  /api/notebook/updateTableCell:
+    post:
+      summary: updates the content of a cell on a table
+      description: updates the content of a cell on a table
+      operationId: updateTableCell
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to change
+                  type: string
+                columnName:
+                  description: the name of the column you want to change
+                  type: string
+                rowIndex:
+                  description: the index of the row you want to change. starts at 0
+                  type: integer
+                newCellContent:
+                  description: the new content of the cell
+                  type: string
+              required:
+                - tableId
+                - columnName
+                - rowIndex
+                - newCellContent
+  /api/notebook/generateFormula:
+    post:
+      summary: gnerates a Decipad language formula from a prompt
+      description: gnerates a Decipad language formula from a prompt
+      operationId: generateFormula
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  description: natural language description of the formula to generate
+                  type: string
+              required:
+                - prompt
+  /api/notebook/appendDataView:
+    post:
+      summary:
+        appends a data view (pivot table) that summarizes and analyzes the data
+        on a given table
+      description:
+        appends a data view (pivot table) that summarizes and analyzes the
+        data on a given table
+      operationId: appendDataView
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to use in the data view
+                  type: string
+                columnNames:
+                  description:
+                    the names of the columns from the table you want to use to the data
+                    view
+                  type: array
+                  items:
+                    type: string
+                    description: Column name
+              required:
+                - tableId
+                - columnNames
+components:
+  schemas:
+    CreateResult:
+      type: object
+      properties:
+        createdElementId:
+          type: string
+        createdElementType:
+          type: string
+        createdElementName:
+          type: string
+    CreateResults:
+      type: array
+      items:
+        type: object
+        properties:
+          createdElementId:
+            type: string
+          createdElementType:
+            type: string
+          createdElementName:
+            type: string
+    AnyElement:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string

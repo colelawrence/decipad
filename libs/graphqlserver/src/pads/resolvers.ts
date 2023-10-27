@@ -205,11 +205,11 @@ const resolvers = {
         params,
         context
       );
-      const workspacePermission = await isAuthorized(
-        getDefined(notebook.parentResourceUriFromRecord)(parent),
-        context,
-        'WRITE'
+      const workspaceRes = getDefined(notebook.parentResourceUriFromRecord)(
+        parent
       );
+      const workspacePermission =
+        workspaceRes && (await isAuthorized(workspaceRes, context, 'WRITE'));
 
       const maxPermission = maximumPermissionIn(
         [notebookPermission, workspacePermission].filter(
@@ -219,7 +219,12 @@ const resolvers = {
 
       // allow the user to have read permission if the notebook is public
       const effectivePermission =
-        maxPermission ?? (parent.isPublic ? 'READ' : undefined);
+        maxPermission ??
+        (parent.isPublic
+          ? parent.isPublicWritable
+            ? 'WRITE'
+            : 'READ'
+          : undefined);
 
       context.readingModePermission = effectivePermission === 'READ';
       return effectivePermission;
@@ -235,13 +240,16 @@ const resolvers = {
       const workspaceResource = getDefined(
         notebook.parentResourceUriFromRecord
       )(pad);
-      const workspace = await data.workspaces.get({ id: pad.workspace_id });
 
-      if (!(await isAuthorized(workspaceResource, context, 'READ'))) {
-        // small hack to avoid setting the name of the workspace as nullable and changing several files
-        return { id: pad.workspace_id, name: '' };
+      if (
+        workspaceResource &&
+        pad.workspace_id &&
+        (await isAuthorized(workspaceResource, context, 'READ'))
+      ) {
+        return data.workspaces.get({ id: pad.workspace_id });
       }
-      return workspace;
+      // small hack to avoid setting the name of the workspace as nullable and changing several files
+      return { id: pad.workspace_id ?? 'fakeid', name: '' };
     },
 
     async section(

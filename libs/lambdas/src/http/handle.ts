@@ -1,6 +1,6 @@
 import { inspect } from 'util';
 import stringify from 'json-stringify-safe';
-import { boomify } from '@hapi/boom';
+import { Payload, boomify } from '@hapi/boom';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
   APIGatewayProxyResultV2,
@@ -12,7 +12,21 @@ import { Handler } from '@decipad/backendtypes';
 import { captureException, trace } from '@decipad/backend-trace';
 import { debug } from '../debug';
 
-export default (handler: Handler) => {
+interface HandlerOptions {
+  cors?: boolean;
+}
+
+const allowedErrorKeys = new Set<keyof Payload>([
+  'statusCode',
+  'error',
+  'message',
+]);
+const sanitizeErrorPayload = (payload: Payload): Payload =>
+  Object.fromEntries(
+    Object.entries(payload).filter(([key]) => allowedErrorKeys.has(key))
+  ) as Payload;
+
+export default (handler: Handler, options: HandlerOptions = {}) => {
   return trace(
     async (
       req: APIGatewayProxyEvent | ScheduledEvent
@@ -59,20 +73,22 @@ export default (handler: Handler) => {
           console.error((_err as Error).stack);
           console.log(_err);
           await captureException(err);
-          throw err; // throw error for wrapper to log and handle
+        } else {
+          console.error(
+            chalk.yellow(
+              `User error caught while processing request:\n${inspect(
+                req
+              )}\nErr:\n${inspect(err)}`
+            )
+          );
         }
-        console.error(
-          chalk.yellow(
-            `User error caught while processing request:\n${inspect(
-              req
-            )}\nErr:\n${inspect(err)}`
-          )
-        );
-        return {
+        const reply = {
           statusCode: err.output.statusCode,
-          headers: getErrorHeaders(err.output.headers),
-          body: stringify(err.output.payload),
+          headers: getErrorHeaders(err.output.headers, options),
+          body: stringify(sanitizeErrorPayload(err.output.payload)),
         };
+        console.error('Replying with', reply);
+        return reply;
       }
     }
   );
@@ -100,12 +116,26 @@ function okStatusCodeFor(req: APIGatewayProxyEvent) {
   return 200;
 }
 
-function getErrorHeaders(headers: Record<string, any>): Record<string, string> {
+function getErrorHeaders(
+  headers: Record<string, any>,
+  { cors }: { cors?: boolean } = {}
+): Record<string, string> {
   const retEntries = new Map<string, string>();
   for (const [key, value] of Object.entries(headers)) {
     if (typeof value === 'string') {
       retEntries.set(key, value);
     }
   }
-  return Object.fromEntries(retEntries.entries());
+  const headersObj = Object.fromEntries(retEntries.entries());
+  if (cors) {
+    Object.assign(headersObj, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+    });
+  }
+  return {
+    ...headersObj,
+    'Content-Type': 'application/json',
+  };
 }

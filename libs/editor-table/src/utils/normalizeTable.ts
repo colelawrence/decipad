@@ -7,7 +7,6 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
   TableCaptionElement,
   TableCellElement,
   TableColumnFormulaElement,
@@ -28,7 +27,15 @@ import {
 } from '@decipad/utils';
 import {
   ChildOf,
+  EElement,
+  EElementOrText,
+  ENodeEntry,
+  ElementOf,
+  PlateEditor,
+  TEditor,
   TNodeEntry,
+  TNodeProps,
+  Value,
   deleteText,
   getChildren,
   getNodeChildren,
@@ -44,8 +51,8 @@ import { Path } from 'slate';
 import { convertLegacyType } from './convertLegacyType';
 import { createTableCaption } from './createTableCaption';
 
-const normalizeTableStructure = (
-  editor: MyEditor,
+const normalizeTableStructure = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [node, path]: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   const [caption, header, ...body] = node.children;
@@ -81,7 +88,7 @@ const normalizeTableStructure = (
                 children: [{ text: '' }],
               },
             ],
-          } as unknown as TableRowElement,
+          } as EElementOrText<TV>,
         ],
         { at: [...path, 1] }
       );
@@ -104,8 +111,8 @@ const normalizeTableStructure = (
   return false;
 };
 
-const normalizeTableCaption = (
-  editor: MyEditor,
+const normalizeTableCaption = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   entry: TNodeEntry<TableElement>,
   computer: RemoteComputer
 ): NormalizerReturnValue => {
@@ -127,7 +134,7 @@ const normalizeTableCaption = (
               id: nanoid(),
               type: ELEMENT_TABLE_VARIABLE_NAME,
               children: [{ text: '' }],
-            },
+            } as EElement<TV>,
           ],
           { at: [...caption[1], 0] }
         );
@@ -151,13 +158,15 @@ const normalizeTableCaption = (
 
   const [varName] = getChildren(caption);
   const [varNameText] = getChildren(varName);
-  return normalizeIdentifierElement(editor, varNameText, () =>
-    computer.getAvailableIdentifier(generateTableName())
+  return normalizeIdentifierElement<TV, TE>(
+    editor,
+    varNameText as ENodeEntry<TV>,
+    () => computer.getAvailableIdentifier(generateTableName())
   );
 };
 
-const normalizeTableHeaderCell = (
-  editor: MyEditor,
+const normalizeTableHeaderCell = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   path: Path,
   th: TableHeaderElement,
   computer: RemoteComputer
@@ -185,7 +194,7 @@ const normalizeTableHeaderCell = (
       type: ELEMENT_TH,
     };
     return () =>
-      setNodes(editor, replaceWith, {
+      setNodes(editor, replaceWith as Partial<TNodeProps<TEditor<TV>>>, {
         at: path,
       });
   }
@@ -195,7 +204,7 @@ const normalizeTableHeaderCell = (
       cellType: { kind: 'string' },
     };
     return () =>
-      setNodes(editor, insert, {
+      setNodes(editor, insert as Partial<TNodeProps<TEditor<TV>>>, {
         at: path,
       });
   }
@@ -203,7 +212,14 @@ const normalizeTableHeaderCell = (
   if (th.cellType.kind === 'number') {
     const newCellType = convertLegacyType(th.cellType);
     if (newCellType) {
-      return () => setNodes(editor, { cellType: newCellType }, { at: path });
+      return () =>
+        setNodes(
+          editor,
+          { cellType: newCellType } as unknown as Partial<
+            TNodeProps<TEditor<TV>>
+          >,
+          { at: path }
+        );
     }
   }
 
@@ -220,13 +236,16 @@ const normalizeTableHeaderCell = (
   }
 
   const [text] = getChildren([th, path]);
-  return normalizeIdentifierElement(editor, text, () =>
-    computer.getAvailableIdentifier(generateColumnName(), path[2] + 1, false)
+  return normalizeIdentifierElement<TV, TE>(
+    editor,
+    text as ENodeEntry<TV>,
+    () =>
+      computer.getAvailableIdentifier(generateColumnName(), path[2] + 1, false)
   );
 };
 
-const normalizeTableHeaderRow = (
-  editor: MyEditor,
+const normalizeTableHeaderRow = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [node, path]: TNodeEntry<TableElement>,
   computer: RemoteComputer
 ): NormalizerReturnValue => {
@@ -236,7 +255,7 @@ const normalizeTableHeaderRow = (
     return () =>
       setNodes(
         editor,
-        { type: ELEMENT_TR },
+        { type: ELEMENT_TR } as unknown as Partial<TNodeProps<TEditor<TV>>>,
         {
           at: headerRowPath,
         }
@@ -246,7 +265,12 @@ const normalizeTableHeaderRow = (
   for (const th of headerRow.children) {
     thIndex += 1;
     const thPath = [...headerRowPath, thIndex];
-    const normalize = normalizeTableHeaderCell(editor, thPath, th, computer);
+    const normalize = normalizeTableHeaderCell<TV, TE>(
+      editor,
+      thPath,
+      th,
+      computer
+    );
     if (normalize) {
       return normalize;
     }
@@ -255,8 +279,8 @@ const normalizeTableHeaderRow = (
   return false;
 };
 
-const normalizeTableDataCell = (
-  editor: MyEditor,
+const normalizeTableDataCell = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [node, path]: TNodeEntry<TableCellElement>
 ): NormalizerReturnValue => {
   if (isText(node)) {
@@ -267,7 +291,7 @@ const normalizeTableDataCell = (
           id: node.id,
           type: ELEMENT_TD,
           children: [node],
-        },
+        } as ElementOf<TEditor<TV>>,
         {
           at: path,
         }
@@ -278,7 +302,7 @@ const normalizeTableDataCell = (
     return () =>
       setNodes(
         editor,
-        { type: ELEMENT_TD },
+        { type: ELEMENT_TD } as unknown as Partial<TNodeProps<TEditor<TV>>>,
         {
           at: path,
         }
@@ -297,15 +321,15 @@ const normalizeTableDataCell = (
   return false;
 };
 
-const normalizeTableDataRow = (
-  editor: MyEditor,
+const normalizeTableDataRow = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [, path]: TNodeEntry<TableRowElement>
 ): NormalizerReturnValue => {
   for (const [cell, cellPath] of getNodeChildren<ChildOf<TableRowElement>>(
     editor,
     path
   )) {
-    const normalize = normalizeTableDataCell(editor, [cell, cellPath]);
+    const normalize = normalizeTableDataCell<TV, TE>(editor, [cell, cellPath]);
     if (normalize) {
       return normalize;
     }
@@ -313,8 +337,8 @@ const normalizeTableDataRow = (
   return false;
 };
 
-const normalizeTableDataRows = (
-  editor: MyEditor,
+const normalizeTableDataRows = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [, path]: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   for (const [row, rowPath] of Array.from(
@@ -324,13 +348,13 @@ const normalizeTableDataRows = (
       return () =>
         setNodes(
           editor,
-          { type: ELEMENT_TR },
+          { type: ELEMENT_TR } as unknown as Partial<TNodeProps<TE>>,
           {
             at: rowPath,
           }
         );
     }
-    const normalize = normalizeTableDataRow(editor, [row, rowPath]);
+    const normalize = normalizeTableDataRow<TV, TE>(editor, [row, rowPath]);
     if (normalize) {
       return normalize;
     }
@@ -338,8 +362,11 @@ const normalizeTableDataRows = (
   return false;
 };
 
-const normalizeTableRowColumnCount = (
-  editor: MyEditor,
+const normalizeTableRowColumnCount = <
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>(
+  editor: TE,
   [, path]: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   let rowIndex = -1;
@@ -369,7 +396,7 @@ const normalizeTableRowColumnCount = (
                 id: nanoid(),
                 type: ELEMENT_TD,
                 children: [{ text: '' }],
-              },
+              } as EElementOrText<TV>,
             ],
             { at: insertAt }
           );
@@ -379,8 +406,8 @@ const normalizeTableRowColumnCount = (
   return false;
 };
 
-const normalizeTableRowCount = (
-  editor: MyEditor,
+const normalizeTableRowCount = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [, path]: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   // at least two rows of data
@@ -401,7 +428,7 @@ const normalizeTableRowCount = (
                   children: [{ text: '' }],
                 },
               ],
-            },
+            } as EElementOrText<TV>,
           ],
           { at: firstDataRowPath }
         );
@@ -410,17 +437,20 @@ const normalizeTableRowCount = (
   return false;
 };
 
-export const normalizeTable = (
-  editor: MyEditor,
+export const normalizeTable = <
+  TV extends Value = Value,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  editor: TE,
   computer: RemoteComputer,
   entry: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   return (
-    normalizeTableStructure(editor, entry) ||
-    normalizeTableCaption(editor, entry, computer) ||
-    normalizeTableHeaderRow(editor, entry, computer) ||
-    normalizeTableDataRows(editor, entry) ||
-    normalizeTableRowColumnCount(editor, entry) ||
-    normalizeTableRowCount(editor, entry)
+    normalizeTableStructure<TV, TE>(editor, entry) ||
+    normalizeTableCaption<TV, TE>(editor, entry, computer) ||
+    normalizeTableHeaderRow<TV, TE>(editor, entry, computer) ||
+    normalizeTableDataRows<TV, TE>(editor, entry) ||
+    normalizeTableRowColumnCount<TV, TE>(editor, entry) ||
+    normalizeTableRowCount<TV, TE>(editor, entry)
   );
 };

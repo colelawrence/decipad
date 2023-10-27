@@ -13,6 +13,8 @@ import {
 import {
   isElement,
   someNode,
+  TDescendant,
+  Value,
   withDeleteTable,
   withGetFragmentTable,
   withInsertFragmentTable,
@@ -29,72 +31,81 @@ const createEmptyTableHeaderCell = () => ({
   children: [{ text: '' }],
 });
 
-export const withTable: MyWithOverride = (editor, plugin) => {
-  editor = withDeleteTable<MyValue>(editor);
-  editor = withGetFragmentTable<MyValue>(editor);
-  editor = withInsertFragmentTable<MyValue>(editor, plugin);
-  editor = withInsertTextTable<MyValue>(editor, plugin);
-  editor = withSelectionTable<MyValue>(editor);
+export const withTable =
+  <TV extends Value = MyValue>(): MyWithOverride<object, TV> =>
+  (editor, plugin) => {
+    editor = withDeleteTable<TV>(editor);
+    editor = withGetFragmentTable<TV>(editor);
+    editor = withInsertFragmentTable<TV>(editor, plugin);
+    editor = withInsertTextTable<TV>(editor, plugin);
+    editor = withSelectionTable<TV>(editor);
 
-  const myEditor = getMyEditor(editor);
-  const { insertFragment } = myEditor;
+    const myEditor = getMyEditor(editor);
+    const { insertFragment } = myEditor;
 
-  /**
-   * If not in a table and inserted table has no caption:
-   * - add a table caption as first child
-   * - add an empty header row if first row is not composed of th
-   */
-  myEditor.insertFragment = (fragment) => {
-    if (!someNode(editor, { match: { type: ELEMENT_TABLE } })) {
-      fragment = fragment.map((node) => {
-        if (isElement(node) && node.type === ELEMENT_TABLE) {
-          if (!node.children.length) return node;
+    /**
+     * If not in a table and inserted table has no caption:
+     * - add a table caption as first child
+     * - add an empty header row if first row is not composed of th
+     */
+    myEditor.insertFragment = (fragment) => {
+      if (!someNode(editor, { match: { type: ELEMENT_TABLE } })) {
+        fragment = fragment.map((node) => {
+          if (isElement(node) && node.type === ELEMENT_TABLE) {
+            if (!node.children.length) return node;
 
-          if (node.children[0].type !== ELEMENT_TABLE_CAPTION) {
-            const isHeaderRow = node.children[0].children.every(
-              (cell) => (cell as MyElement).type === ELEMENT_TH
-            );
+            if (node.children[0].type !== ELEMENT_TABLE_CAPTION) {
+              const isHeaderRow = (
+                node.children[0]?.children as Array<TDescendant> | undefined
+              )?.every((cell) => (cell as MyElement).type === ELEMENT_TH);
 
-            if (!isHeaderRow) {
-              const cells = Array.from(
-                { length: node.children[0].children.length },
-                createEmptyTableHeaderCell
+              if (!isHeaderRow) {
+                const cells = Array.from(
+                  {
+                    length:
+                      (
+                        node.children[0]?.children as
+                          | Array<TDescendant>
+                          | undefined
+                      )?.length ?? 1,
+                  },
+                  createEmptyTableHeaderCell
+                );
+                node.children.unshift({
+                  type: ELEMENT_TR,
+                  children: cells,
+                } as unknown as TableHeaderRowElement);
+              }
+
+              node.children.unshift(
+                createTableCaption({
+                  id: node.id as string,
+                })
               );
-              node.children.unshift({
-                type: ELEMENT_TR,
-                children: cells,
-              } as unknown as TableHeaderRowElement);
             }
 
-            node.children.unshift(
-              createTableCaption({
-                id: node.id,
-              })
-            );
+            // clear up cell content
+            const trWithCells = node.children.slice(2);
+            trWithCells.map((tr) => {
+              const cells = (tr.children ?? []) as Array<TDescendant>;
+              cells.map((td) => {
+                const cellCores = (td.children ?? []) as Array<TDescendant>;
+                cellCores.map((core) => {
+                  if (core.text && typeof core.text === 'string') {
+                    core.text = core.text.trim();
+                  }
+                });
+              });
+              return cells;
+            });
           }
 
-          // clear up cell content
-          const trWithCells = node.children.slice(2);
-          trWithCells.map((tr) => {
-            const cells = tr.children;
-            cells.map((td) => {
-              const cellCores = td.children;
-              cellCores.map((core) => {
-                if (core.text && typeof core.text === 'string') {
-                  core.text = core.text.trim();
-                }
-              });
-            });
-            return cells;
-          });
-        }
+          return node;
+        });
+      }
 
-        return node;
-      });
-    }
+      insertFragment(fragment);
+    };
 
-    insertFragment(fragment);
+    return editor;
   };
-
-  return editor;
-};

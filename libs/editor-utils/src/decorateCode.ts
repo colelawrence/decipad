@@ -1,18 +1,27 @@
-import { TRange, getNodeString, getPointAfter } from '@udecode/plate';
+import {
+  ENodeEntry,
+  PlateEditor,
+  TElement,
+  TNodeEntry,
+  TRange,
+  Value,
+  getNodeString,
+  getPointAfter,
+} from '@udecode/plate';
 import {
   MyDecorate,
-  MyElementEntry,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   DECORATE_CODE_VARIABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  MyNodeEntry,
-  MyEditor,
-  MyDecorateEntry,
   DECORATE_AUTO_COMPLETE_MENU,
   ELEMENT_SMART_REF,
   CodeLineV2Element,
+  CodeLineElement,
+  CodeLineV2ElementCode,
+  TableColumnFormulaElement,
+  MyValue,
 } from '@decipad/editor-types';
 import { BasePoint, Path, Range } from 'slate';
 import { RemoteComputer, parseStatement } from '@decipad/remote-computer';
@@ -57,7 +66,7 @@ const simpleRangeToSubNodeRange = (range: Range, subNodes: SubNode[]) => {
   return range;
 };
 
-const subNodeCoords = (entry: MyElementEntry): SubNode[] => {
+const subNodeCoords = (entry: TNodeEntry<TElement>): SubNode[] => {
   const [node, path] = entry;
   let offset = 0;
   return node.children.map((child, i) => {
@@ -76,17 +85,20 @@ export interface AutocompleteDecorationProps {
   [DECORATE_AUTO_COMPLETE_MENU]: true;
 }
 
-export const decorateCode = (
+export const decorateCode = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
   computer: RemoteComputer,
   elementType:
     | typeof ELEMENT_CODE_LINE
     | typeof ELEMENT_TABLE_COLUMN_FORMULA
     | typeof ELEMENT_CODE_LINE_V2_CODE
-): MyDecorate =>
-  filterDecorate(
-    memoizeDecorateWithSelection((editor: MyEditor): MyDecorateEntry => {
+): MyDecorate<object, TV, TE> =>
+  filterDecorate<object, TV, TE>(
+    memoizeDecorateWithSelection<object, TV, TE>((editor) => {
       const syntaxErrorDecorations = (
-        [, path]: MyElementEntry,
+        [, path]: TNodeEntry,
         source: string
       ): TRange[] => {
         const { error } = parseStatement(source);
@@ -96,9 +108,9 @@ export const decorateCode = (
       const typeErrorDecorations = ([
         element,
         path,
-      ]: MyElementEntry): TRange[] => {
+      ]: TNodeEntry<TElement>): TRange[] => {
         const { id } = element;
-        const result = computer.getBlockIdResult(id);
+        const result = computer.getBlockIdResult(id as string);
         if (!result || !result.result) {
           return [];
         }
@@ -121,7 +133,7 @@ export const decorateCode = (
       };
 
       const autoCompleteMenuDecoration = (
-        [, path]: MyNodeEntry,
+        [, path]: TNodeEntry,
         variableRanges: RangeWithVariableInfo[]
       ): (Range & AutocompleteDecorationProps)[] => {
         const { selection } = editor;
@@ -157,13 +169,18 @@ export const decorateCode = (
         return [];
       };
 
-      const decorate = (entry: MyElementEntry): Range[] => {
-        const [node, path] = entry;
-        if (node.type !== elementType) {
+      const decorate = (_entry: ENodeEntry<TV>): Range[] => {
+        const [_node, path] = _entry;
+        if (_node.type !== elementType) {
           return [];
         }
+        const node = _node as
+          | CodeLineElement
+          | TableColumnFormulaElement
+          | CodeLineV2ElementCode;
+        const entry = _entry as ENodeEntry<TV>;
 
-        const nodeId = getRootNodeId(editor, entry);
+        const nodeId = getRootNodeId<TV, TE>(editor as TE, entry);
         const sourceString = getCodeLineSource(node);
 
         // Slate seems to have an issue with decorators on empty lines so we're skipping them.
@@ -195,27 +212,36 @@ export const decorateCode = (
           }
         );
 
-        const subNodes = subNodeCoords(entry);
+        const subNodes = subNodeCoords(entry as TNodeEntry<TElement>);
 
         const decorations: TRange[] = [
           ...syntaxErrorDecorations(entry, sourceString).map((range) =>
             simpleRangeToSubNodeRange(range, subNodes)
           ),
-          ...typeErrorDecorations(entry),
+          ...typeErrorDecorations(entry as TNodeEntry<TElement>),
           ...variableDecorations(variableRanges),
-          ...autoCompleteMenuDecoration(entry, variableRanges),
+          ...autoCompleteMenuDecoration(
+            entry as TNodeEntry<TElement>,
+            variableRanges
+          ),
         ];
 
         return decorations;
       };
 
-      return decorate as MyDecorateEntry;
+      return decorate;
     }),
     ([node]) => node.type === elementType
   );
 
 /** Get the node representing "this" element. To be fed into the Computer and avoid recursive references. */
-export function getRootNodeId(editor: MyEditor, [node, path]: MyElementEntry) {
+export const getRootNodeId = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  editor: TE,
+  [node, path]: ENodeEntry<TV>
+) => {
   if (node.type === ELEMENT_TABLE_COLUMN_FORMULA) {
     return node.columnId;
   }
@@ -231,7 +257,7 @@ export function getRootNodeId(editor: MyEditor, [node, path]: MyElementEntry) {
   }
 
   return node.id;
-}
+};
 
 function getVariableUnderCursor(
   cursor: BasePoint,

@@ -106,7 +106,9 @@ export const handler = handle(
     if (!notebook) {
       throw Boom.notFound('missing notebook');
     }
-    const secrets = await fetchSecrets(notebook.workspace_id);
+    const secrets = notebook.workspace_id
+      ? await fetchSecrets(notebook.workspace_id)
+      : {};
     const userRequest: MyRequest = JSON.parse(body);
     if (typeof userRequest.url !== 'string') {
       throw Boom.notAcceptable('missing url');

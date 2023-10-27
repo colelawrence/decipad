@@ -4,6 +4,8 @@ import {
   tokenize,
 } from '@decipad/remote-computer';
 import {
+  PlateEditor,
+  Value,
   getBlockAbove,
   getChildren,
   getNodeString,
@@ -13,14 +15,17 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
-  MyEditor,
   CodeLineV2Element,
   CodeLineElement,
+  MyValue,
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 
-export const filterStatementSeparator = (
-  editor: MyEditor,
+export const filterStatementSeparator = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  editor: TE,
   computer: RemoteComputer
 ): boolean => {
   const anchor = editor.selection?.anchor?.offset ?? 0;

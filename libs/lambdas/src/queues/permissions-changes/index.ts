@@ -273,7 +273,7 @@ async function handlePutPadsWithUser(
       continue;
     }
     const newUserTaggedResource = {
-      id: `/workspaces/${pad.workspace_id}/users/${
+      id: `/workspaces/${pad.workspace_id ?? 'null'}/users/${
         perm.user_id
       }/tags/${encodeURIComponent(tag.tag)}${perm.resource_uri}`,
       user_id: perm.user_id,

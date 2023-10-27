@@ -1,9 +1,12 @@
 import { Path } from 'slate';
-import { MyEditor } from '@decipad/editor-types';
 import { getColumnNames } from './getColumnNames';
+import { TEditor, Value } from '@udecode/plate';
 
-export const getColumnName = (
-  editor: MyEditor,
+export const getColumnName = <
+  TV extends Value,
+  TE extends TEditor<TV> = TEditor<TV>
+>(
+  editor: TE,
   tablePath: Path,
   start: number
 ): string => {

@@ -1,8 +1,13 @@
-import { MyEditor } from '@decipad/editor-types';
 import { Point } from 'slate';
-import { getNode, getNodeString } from '@udecode/plate';
+import { getNode, getNodeString, TEditor, Value } from '@udecode/plate';
 
-export const hasPoint = (editor: MyEditor, point: Point) => {
+export const hasPoint = <
+  TV extends Value,
+  TE extends TEditor<TV> = TEditor<TV>
+>(
+  editor: TE,
+  point: Point
+) => {
   const node = getNode(editor, point.path);
   if (!node) {
     return false;

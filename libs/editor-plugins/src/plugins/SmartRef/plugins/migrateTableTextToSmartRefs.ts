@@ -3,6 +3,7 @@ import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   MyEditor,
+  MyValue,
   SmartRefElement,
   TableCaptionElement,
   TableColumnFormulaElement,
@@ -30,7 +31,10 @@ import {
   createNormalizerPluginFactory,
 } from '../../../pluginFactories';
 
-export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory({
+export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory<
+  MyValue,
+  MyEditor
+>({
   name: 'MIGRATE_TABLE_TEXT_TO_SMART_REFS',
   elementType: ELEMENT_TABLE,
   plugin:

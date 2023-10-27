@@ -53,11 +53,11 @@ export const padResource = Resource({
     });
   },
 
-  parentResourceUriFromCreateInput: ({ workspaceId }: { workspaceId: ID }) =>
-    `/workspaces/${workspaceId}`,
+  parentResourceUriFromCreateInput: ({ workspaceId }: { workspaceId?: ID }) =>
+    workspaceId && `/workspaces/${workspaceId}`,
   /* eslint-disable camelcase */
-  parentResourceUriFromRecord: ({ workspace_id }: { workspace_id: ID }) =>
+  parentResourceUriFromRecord: ({ workspace_id }: { workspace_id?: ID }) =>
     /* eslint-disable camelcase */
-    `/workspaces/${workspace_id}`,
+    workspace_id && `/workspaces/${workspace_id}`,
   delegateAccessToParentResource: true,
 });

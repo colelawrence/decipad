@@ -1,9 +1,12 @@
 import {
+  ENodeEntry,
   getChildren,
   getNodeString,
   insertText,
   isElement,
+  PlateEditor,
   TNodeEntry,
+  Value,
 } from '@udecode/plate';
 import {
   createNormalizerPlugin,
@@ -13,8 +16,6 @@ import {
   ELEMENT_TABLE,
   ELEMENT_TD,
   ELEMENT_TR,
-  MyEditor,
-  MyNodeEntry,
   TableElement,
   TableHeaderElement,
   TableHeaderRowElement,
@@ -32,8 +33,8 @@ const tableIsSquare = ({
   headerRow?.children?.length > 0 &&
   dataRows.every((tr) => tr.children?.length === headerRow.children?.length);
 
-const normalizeFormulaColumns = (
-  editor: MyEditor,
+const normalizeFormulaColumns = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   [table, tablePath]: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   const [, headerRow] = table.children;
@@ -71,8 +72,8 @@ const normalizeFormulaColumns = (
   return false;
 };
 
-const normalizeSeriesColumn = (
-  editor: MyEditor,
+const normalizeSeriesColumn = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   tableEntry: TNodeEntry<TableElement>,
   [th]: NodeEntry<TableHeaderElement>,
   columnIndex: number
@@ -125,14 +126,19 @@ const normalizeSeriesColumn = (
   return false;
 };
 
-const normalizeSeriesColumns = (
-  editor: MyEditor,
+const normalizeSeriesColumns = <TV extends Value, TE extends PlateEditor<TV>>(
+  editor: TE,
   tableEntry: TNodeEntry<TableElement>
 ): NormalizerReturnValue => {
   const [, _ths] = getChildren(tableEntry); // second element of a table is a header table row
   const ths = _ths as NodeEntry<TableHeaderRowElement>;
   for (const [index, th] of enumerate(getChildren(ths))) {
-    const normalize = normalizeSeriesColumn(editor, tableEntry, th, index);
+    const normalize = normalizeSeriesColumn<TV, TE>(
+      editor,
+      tableEntry,
+      th,
+      index
+    );
     if (normalize) {
       return normalize;
     }
@@ -141,25 +147,28 @@ const normalizeSeriesColumns = (
 };
 
 export const normalizeTableFormulaAndSeries =
-  (editor: MyEditor) =>
-  (entry: MyNodeEntry): NormalizerReturnValue => {
+  <TV extends Value, TE extends PlateEditor<TV>>(editor: TE) =>
+  (entry: ENodeEntry<TV>): NormalizerReturnValue => {
     const [node, path] = entry;
     if (!isElement(node) || node.type !== ELEMENT_TABLE) {
       return false;
     }
     if (node.type === ELEMENT_TABLE) {
       return (
-        normalizeFormulaColumns(editor, [node, path]) ||
-        normalizeSeriesColumns(editor, [node, path])
+        normalizeFormulaColumns<TV, TE>(editor, [node as TableElement, path]) ||
+        normalizeSeriesColumns<TV, TE>(editor, [node as TableElement, path])
       );
     }
     return false;
   };
 
-export const createNormalizeTableFormulaAndSeriesCellsPlugin = (
+export const createNormalizeTableFormulaAndSeriesCellsPlugin = <
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>(
   _computer: RemoteComputer
 ) =>
-  createNormalizerPlugin({
+  createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_TABLE_FORMULA_AND_SERIES_CELLS_PLUGIN',
-    plugin: normalizeTableFormulaAndSeries,
+    plugin: normalizeTableFormulaAndSeries<TV, TE>,
   });

@@ -147,10 +147,12 @@ const broadcastMessage = async (
   }
   const from = provider.connId;
   const data = await tables();
-  // are we still alive?
-  const me = await data.connections.get({ id: from });
-  if (!me) {
-    return;
+  if (from) {
+    // are we still alive?
+    const me = await data.connections.get({ id: from });
+    if (!me) {
+      return;
+    }
   }
 
   const conns = (
@@ -165,7 +167,7 @@ const broadcastMessage = async (
 
   await pSeries(
     conns
-      .filter((conn) => conn.id !== from)
+      .filter((conn) => !from || conn.id !== from) // remove self
       .map((conn) => () => trySend(conn.id, message))
   );
 };
@@ -208,7 +210,7 @@ export const trySend = async (
 
 export class LambdaWebsocketProvider extends Observable<string> {
   name: string;
-  connId: string;
+  connId?: string;
   protocolVersion: number;
   doc: YDoc;
   awareness: awarenessProtocol.Awareness;
@@ -233,7 +235,12 @@ export class LambdaWebsocketProvider extends Observable<string> {
   private _selfAwareness = false;
   private _synced = false;
 
-  constructor(name: string, connId: string, doc: YDoc, options: Options = {}) {
+  constructor(
+    name: string,
+    connId: string | undefined,
+    doc: YDoc,
+    options: Options = {}
+  ) {
     super();
     this.name = name;
     this.connId = connId;
@@ -271,7 +278,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
   }
 
   private async lowLevelSend(message: string, to = this.connId): Promise<void> {
-    if (this.destroyed) {
+    if (this.destroyed || !to) {
       return;
     }
     this.sendQueue.push(() => justSend(to, message));

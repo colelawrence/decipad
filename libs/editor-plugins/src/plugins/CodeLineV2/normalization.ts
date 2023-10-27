@@ -2,11 +2,20 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
+  MyGenericEditor,
 } from '@decipad/editor-types';
 import { isElementOfType, insertNodes } from '@decipad/editor-utils';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { nanoid } from 'nanoid';
-import { getNodeChildren, removeNodes, setNodes } from '@udecode/plate';
+import {
+  EElementOrText,
+  TEditor,
+  TNodeProps,
+  Value,
+  getNodeChildren,
+  removeNodes,
+  setNodes,
+} from '@udecode/plate';
 import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeLinePlugin';
 import {
   NormalizerReturnValue,
@@ -14,8 +23,11 @@ import {
 } from '../../pluginFactories';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';
 
-export const createNormalizeCodeLineV2Plugin = () =>
-  createNormalizerPlugin({
+export const createNormalizeCodeLineV2Plugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>() =>
+  createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_CODE_LINE_V2',
     elementType: ELEMENT_CODE_LINE_V2,
     acceptableSubElements: [
@@ -28,7 +40,13 @@ export const createNormalizeCodeLineV2Plugin = () =>
         if (isElementOfType(node, ELEMENT_CODE_LINE_V2)) {
           if (!node.children) {
             return () =>
-              setNodes(editor, { children: [{ text: '' }] }, { at: path });
+              setNodes(
+                editor,
+                { children: [{ text: '' }] } as unknown as Partial<
+                  TNodeProps<TEditor<TV>>
+                >,
+                { at: path }
+              );
           }
 
           if (node.children.length < 1) {
@@ -40,7 +58,7 @@ export const createNormalizeCodeLineV2Plugin = () =>
                     type: ELEMENT_STRUCTURED_VARNAME,
                     id: nanoid(),
                     children: [{ text: '' }],
-                  },
+                  } as EElementOrText<TV>,
                 ],
                 { at: [...path, 0] }
               );
@@ -59,7 +77,7 @@ export const createNormalizeCodeLineV2Plugin = () =>
                     type: ELEMENT_CODE_LINE_V2_CODE,
                     id: nanoid(),
                     children: [{ text: '' }],
-                  },
+                  } as EElementOrText<TV>,
                 ],
                 { at: [...path, 1] }
               );
@@ -86,8 +104,13 @@ export const createNormalizeCodeLineV2Plugin = () =>
       },
   });
 
-export const createNormalizeCodeLineCodePlugin = (computer: RemoteComputer) =>
-  createNormalizerPlugin({
+export const createNormalizeCodeLineCodePlugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>(
+  computer: RemoteComputer
+) =>
+  createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_CODE_LINE_V2_CODE',
     elementType: ELEMENT_CODE_LINE_V2_CODE,
     acceptableSubElements: [],
@@ -101,8 +124,11 @@ export const createNormalizeCodeLineCodePlugin = (computer: RemoteComputer) =>
       },
   });
 
-export const createNormalizeCodeLineVarnamePlugin = () =>
-  createNormalizerPlugin({
+export const createNormalizeCodeLineVarnamePlugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>() =>
+  createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_CODE_LINE_V2_VARNAME',
     elementType: ELEMENT_STRUCTURED_VARNAME,
     acceptableSubElements: [],
@@ -110,7 +136,7 @@ export const createNormalizeCodeLineVarnamePlugin = () =>
       (editor) =>
       (entry): NormalizerReturnValue => {
         if (isElementOfType(entry[0], ELEMENT_STRUCTURED_VARNAME)) {
-          return normalizePlainTextChildren(
+          return normalizePlainTextChildren<TV, TE>(
             editor,
             getNodeChildren(editor, entry[1])
           );

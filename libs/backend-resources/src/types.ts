@@ -9,7 +9,7 @@ import {
 export type BackendResourceDef<DataTableType extends ConcreteRecord> = {
   name: string;
   delegateAccessToParentResource?: boolean;
-  parentResourceUriFromRecord?: (args: DataTableType) => string;
+  parentResourceUriFromRecord?: (args: DataTableType) => string | undefined;
   dataTable: () => Promise<DataTable<DataTableType>>;
   isPublic?: (record: DataTableType) => boolean | undefined;
 };

@@ -28,6 +28,7 @@
     { "path": "../backend-resources" },
     { "path": "../backend-external-db" },
     { "path": "../editor-utils" },
-    { "path": "../backend-notebook-assistant" }
+    { "path": "../backend-notebook-assistant" },
+    { "path": "../backend-notebook" }
   ]
 }

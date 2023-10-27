@@ -1,17 +1,25 @@
-import { getBlockAbove, queryNode, QueryNodeOptions } from '@udecode/plate';
+import {
+  ENodeEntry,
+  getBlockAbove,
+  queryNode,
+  QueryNodeOptions,
+  Value,
+} from '@udecode/plate';
 import isHotkey from 'is-hotkey';
 import {
   BlockElement,
-  MyEditor,
+  MyGenericEditor,
   MyKeyboardHandler,
-  MyNodeEntry,
 } from '@decipad/editor-types';
 
-export interface MyQueryNodeOptions {
+export interface MyQueryNodeOptions<
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+> {
   /**
    * Query the node entry.
    */
-  filter?: (editor: MyEditor) => (entry: MyNodeEntry) => boolean;
+  filter?: (editor: TE) => (entry: ENodeEntry<TV>) => boolean;
   /**
    * List of types that are valid. If empty or undefined - allow all.
    */
@@ -22,16 +30,22 @@ export interface MyQueryNodeOptions {
   exclude?: string[] | string;
 }
 
-export interface SoftBreakRule {
+export interface SoftBreakRule<
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+> {
   hotkey: string;
   /**
    * Filter the block types where the rule applies.
    */
-  query?: MyQueryNodeOptions;
+  query?: MyQueryNodeOptions<TV, TE>;
 }
 
-export interface SoftBreakOnKeyDownOptions {
-  rules?: SoftBreakRule[];
+export interface SoftBreakOnKeyDownOptions<
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+> {
+  rules?: SoftBreakRule<TV, TE>[];
 }
 
 // NOTE: this code is pretty similar to
@@ -40,9 +54,13 @@ export interface SoftBreakOnKeyDownOptions {
 // curry'd way, eg. (editor: MyEditor) => (entry: MyNodeEntry) => boolean, which
 // was needed for this soft break plugin to work.
 export const getSoftBreakOnKeyDown =
-  ({
+  <TV extends Value, TE extends MyGenericEditor<TV>>({
     rules = [{ hotkey: 'shift+enter' }],
-  }: SoftBreakOnKeyDownOptions = {}): MyKeyboardHandler =>
+  }: SoftBreakOnKeyDownOptions<TV, TE> = {}): MyKeyboardHandler<
+    object,
+    TV,
+    TE
+  > =>
   (editor) =>
   (event) => {
     const entry = getBlockAbove<BlockElement>(editor);

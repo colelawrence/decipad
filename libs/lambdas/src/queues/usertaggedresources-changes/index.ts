@@ -30,12 +30,14 @@ async function handleUserTaggedResourceCreate(
 ) {
   const data = await tables();
 
-  const userTagId = `/workspaces/${userTaggedResource.workspace_id}/users/${
-    userTaggedResource.user_id
-  }/tags/${encodeURIComponent(userTaggedResource.tag)}`;
+  const userTagId = `/workspaces/${
+    userTaggedResource.workspace_id ?? 'null'
+  }/users/${userTaggedResource.user_id}/tags/${encodeURIComponent(
+    userTaggedResource.tag
+  )}`;
 
   const userTag = await data.usertags.get({ id: userTagId });
-  if (!userTag) {
+  if (!userTag && userTaggedResource.workspace_id) {
     const newUserTag = {
       id: userTagId,
       workspace_id: userTaggedResource.workspace_id,

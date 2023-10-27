@@ -8,6 +8,7 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
   MyPlatePlugin,
+  MyValue,
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
 import {
@@ -20,6 +21,7 @@ import {
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
+import { PlateEditor, Value } from '@udecode/plate';
 
 const createCodeLineRootPlugin = (_computer: RemoteComputer) => ({
   key: ELEMENT_CODE_LINE_V2,
@@ -31,14 +33,22 @@ const createCodeLineVarnamePlugin = (_computer: RemoteComputer) => ({
   isElement: true,
   component: CodeLineV2Varname,
 });
-const createCodeLineCodeTextPlugin = (computer: RemoteComputer) => ({
+const createCodeLineCodeTextPlugin = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
+  computer: RemoteComputer
+) => ({
   key: ELEMENT_CODE_LINE_V2_CODE,
   isElement: true,
   component: CodeLineV2Code,
-  decorate: decorateCode(computer, ELEMENT_CODE_LINE_V2_CODE),
+  decorate: decorateCode<TV, TE>(computer, ELEMENT_CODE_LINE_V2_CODE),
 });
 
-export const createCodeLineV2Plugin = (
+export const createCodeLineV2Plugin = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
   computer: RemoteComputer
 ): MyPlatePlugin => ({
   key: 'CODE_LINE_V2_ROOT',
@@ -49,7 +59,7 @@ export const createCodeLineV2Plugin = (
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),
     createNormalizeCodeLineVarnamePlugin(),
-    createStructuredKeyboard(computer),
+    createStructuredKeyboard<TV, TE>(computer) as any,
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_CODE_LINE_V2',
       elementTypes: [ELEMENT_CODE_LINE_V2],

@@ -1,6 +1,6 @@
 import { Computer } from '@decipad/computer';
 import { insertTableBelow } from '@decipad/editor-components';
-import { MyEditor, TableElement } from '@decipad/editor-types';
+import { MyEditor, MyValue, TableElement } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
 import { createTEditor } from '@udecode/plate';
@@ -34,7 +34,11 @@ describe('normalizeTable', () => {
         offset: 0,
       })
     ) as NodeEntry<TableElement>;
-    const normalizedTable = normalizeTable(editor, computer, tableEntry);
+    const normalizedTable = normalizeTable<MyValue>(
+      editor,
+      computer,
+      tableEntry
+    );
 
     expect(normalizedTable).not.toBe(false);
   });

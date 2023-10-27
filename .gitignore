@@ -301,4 +301,4 @@ libs/server-side-rendering/build
 .temp_cache
 
 # Doc verbalizer build (used in fine-tuning AI)
-libs/doc-verbalizer/build
+build

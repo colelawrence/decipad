@@ -7,11 +7,11 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
+  MyGenericEditor,
   MyPlatePlugin,
-  MyValue,
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
-import { TablePlugin } from '@udecode/plate';
+import { TablePlugin, Value } from '@udecode/plate';
 import {
   Table,
   TableCaption,
@@ -42,9 +42,12 @@ type Attributes =
     }
   | undefined;
 
-export const createTablePlugin = (
+export const createTablePlugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>(
   computer: RemoteComputer
-): MyPlatePlugin<TablePlugin<MyValue>> => ({
+): MyPlatePlugin<TablePlugin<TV>, TV> => ({
   key: ELEMENT_TABLE,
   isElement: true,
   component: Table,
@@ -63,10 +66,10 @@ export const createTablePlugin = (
       addRow(editor, tablePath);
     },
   },
-  withOverrides: withTable,
+  withOverrides: withTable(),
   handlers: {
-    onDrop: onDropSmartCellResult,
-    onKeyDown: onKeyDownTable,
+    onDrop: onDropSmartCellResult() as any,
+    onKeyDown: onKeyDownTable(),
   },
   plugins: [
     createPreventEnterToCreateCellPlugin(),
@@ -80,7 +83,7 @@ export const createTablePlugin = (
     createCellFormulaShortcutPlugin(),
     createNormalizeTableFormulaPlugin(computer),
     createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
-    createNormalizeTablesPlugin(computer),
+    createNormalizeTablesPlugin<TV, TE>(computer),
     {
       key: ELEMENT_TABLE_CAPTION,
       isElement: true,

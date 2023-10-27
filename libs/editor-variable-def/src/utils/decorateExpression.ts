@@ -73,7 +73,7 @@ export const decorateExpression = (editor: MyEditor): MyDecorate => {
       return (syntax || []).concat(error || []);
     }),
     ([node, path]) => {
-      if (node.type === ELEMENT_EXPRESSION) {
+      if (isElement(node) && node.type === ELEMENT_EXPRESSION) {
         const varDef = getParentNode(
           editor,
           path

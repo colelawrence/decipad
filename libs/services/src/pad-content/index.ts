@@ -1,10 +1,14 @@
-import { SharedType } from '@decipad/slate-yjs';
-import { MyElement } from '@decipad/editor-types';
+import type { SharedType } from '@decipad/slate-yjs';
+import type { MyValue } from '@decipad/editor-types';
 import { Doc as YDoc } from 'yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { toSharedTypeSingular } from 'libs/slate-yjs/src/utils';
+import { EElement, Value } from '@udecode/plate';
 
-function createPadContent(path: string, content: MyElement[]): Promise<void> {
+const createPadContent = <V extends Value = MyValue>(
+  path: string,
+  content: EElement<V>[]
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     try {
       const doc = new YDoc();
@@ -32,8 +36,11 @@ function createPadContent(path: string, content: MyElement[]): Promise<void> {
       reject(err);
     }
   });
-}
+};
 
-export async function create(id: string, content: MyElement[]): Promise<void> {
-  await createPadContent(`/pads/${id}`, content);
-}
+export const create = <V extends Value = MyValue>(
+  id: string,
+  content: EElement<V>[]
+): Promise<void> => {
+  return createPadContent(`/pads/${id}`, content);
+};

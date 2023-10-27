@@ -4,6 +4,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   MyEditor,
+  MyValue,
 } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
 import {
@@ -48,7 +49,10 @@ const move = (editor: MyEditor, path: Path, direction: 1 | -1): boolean => {
   return false;
 };
 
-export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory({
+export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory<
+  MyValue,
+  MyEditor
+>({
   name: 'ARROW_CELL_NAVIGATION_PLUGIN',
   plugin: (editor: MyEditor) => (event) => {
     if (event.shiftKey) {

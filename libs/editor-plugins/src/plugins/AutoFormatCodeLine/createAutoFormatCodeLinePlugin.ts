@@ -8,6 +8,7 @@ import {
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,
   MyEditor,
+  MyGenericEditor,
   ParagraphElement,
   RichText,
 } from '@decipad/editor-types';
@@ -22,6 +23,11 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { ShadowCalcReference } from '@decipad/react-contexts';
 import { generateVarName } from '@decipad/utils';
 import {
+  EElement,
+  EElementOrText,
+  TEditor,
+  TNodeProps,
+  Value,
   getBlockAbove,
   getEndPoint,
   getNodeString,
@@ -47,13 +53,18 @@ interface AutoFormatCodeLinePluginStore {
 
 const pluginName = 'AUTO_FORMAT_CODE_LINE_PLUGIN';
 
-export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
-  createOnKeyDownPluginFactory({
+export const createAutoFormatCodeLinePlugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>(
+  computer: RemoteComputer
+) =>
+  createOnKeyDownPluginFactory<TV, TE>({
     name: pluginName,
     plugin: (editor) => {
       // eslint-disable-next-line complexity
       return (event) => {
-        const store = pluginStore<AutoFormatCodeLinePluginStore>(
+        const store = pluginStore<AutoFormatCodeLinePluginStore, TV, TE>(
           editor,
           pluginName,
           () => ({})
@@ -79,7 +90,10 @@ export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
           const paragraph = node as ParagraphElement & { children: [RichText] };
 
           const nodeText = `${getNodeString(paragraph)}=`;
-          const textBefore = `${getTextBeforeCursor(editor, selection.focus)}=`;
+          const textBefore = `${getTextBeforeCursor<TV, TE>(
+            editor,
+            selection.focus
+          )}=`;
 
           if (nodeText.trim() === '=') {
             event.preventDefault();
@@ -95,7 +109,7 @@ export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
             const newCodeLine = createStructuredCodeLine({
               varName: autoVarName,
               code: '100$',
-            });
+            }) as EElement<TV>;
 
             insertNodes(editor, [newCodeLine], { at: paragraphPath });
             const codeTextPath = [...paragraphPath, 1];
@@ -111,13 +125,18 @@ export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
               focus: { path, offset },
             };
 
-            commitPotentialFormula(editor, computer, expressionRange, (ref) => {
-              openEditor$.next(ref);
-              editorAnalytics$.next({
-                type: 'action',
-                action: 'number created with =',
-              });
-            });
+            commitPotentialFormula<TV, TE>(
+              editor,
+              computer,
+              expressionRange,
+              (ref) => {
+                openEditor$.next(ref);
+                editorAnalytics$.next({
+                  type: 'action',
+                  action: 'number created with =',
+                });
+              }
+            );
           }
         } else if (!hasModifiers && event.key === 'Backspace') {
           const entry = getBlockAbove<CodeLineElement>(editor, {
@@ -137,7 +156,13 @@ export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
           ) {
             event.preventDefault();
 
-            setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
+            setNodes(
+              editor,
+              { type: ELEMENT_PARAGRAPH } as unknown as Partial<
+                TNodeProps<TEditor<TV>>
+              >,
+              { at: path }
+            );
             insertText(editor as MyEditor, lastFormattedBlock.oldText, {
               at: path,
             });
@@ -147,7 +172,13 @@ export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
             // Empty code blocks get turned into a paragraph when backspace is pressed
             event.preventDefault();
 
-            setNodes(editor, { type: ELEMENT_PARAGRAPH }, { at: path });
+            setNodes(
+              editor,
+              { type: ELEMENT_PARAGRAPH } as unknown as Partial<
+                TNodeProps<TEditor<TV>>
+              >,
+              { at: path }
+            );
           }
         } else {
           delete store.lastFormattedBlock;
@@ -156,8 +187,11 @@ export const createAutoFormatCodeLinePlugin = (computer: RemoteComputer) =>
     },
   });
 
-const commitPotentialFormula = (
-  editor: MyEditor,
+const commitPotentialFormula = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>(
+  editor: TE,
   computer: RemoteComputer,
   expressionRange: BaseRange,
   onCommit: (ref: ShadowCalcReference) => void,
@@ -176,12 +210,12 @@ const commitPotentialFormula = (
       generateVarName(isFlagEnabled('SILLY_NAMES'))
     ),
     code: '100$',
-  });
+  }) as EElementOrText<TV>;
 
   const magicNumberInstead = {
     [MARK_MAGICNUMBER]: true,
-    text: getExprRef(codeLineBelow.id),
-  };
+    text: getExprRef(codeLineBelow.id as string),
+  } as EElementOrText<TV>;
 
   const viewInstead = magicNumberInstead;
 
@@ -205,7 +239,7 @@ const commitPotentialFormula = (
 
     onCommit({
       numberId,
-      codeLineId: codeLineBelow.id,
+      codeLineId: codeLineBelow.id as string,
       numberNode: magicNumberInstead,
       codeLineNode: codeLineBelow,
     });

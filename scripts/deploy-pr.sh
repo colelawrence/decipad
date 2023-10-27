@@ -32,6 +32,9 @@ cp -rT apps/docs/build/. apps/backend/public/docs
 echo "Building the backend..."
 yarn build:backend:ssr
 
+echo "Building the notebook API..."
+DECI_DOMAIN="$DECI_APP_URL_BASE" nx build backend-notebook
+
 echo "Clearing sourcemaps..."
 (find apps/backend/public/ | grep '\.map$' | xargs -r rm) || true
 

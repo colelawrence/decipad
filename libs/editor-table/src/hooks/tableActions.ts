@@ -28,6 +28,8 @@ import {
 } from '@decipad/react-contexts';
 import {
   InsertNodesOptions,
+  TEditor,
+  Value,
   getNodeChildren,
   hasNode,
   insertText,
@@ -71,8 +73,11 @@ export interface TableActions {
   onSaveColor: (color?: string) => void;
 }
 
-export const addColumn = (
-  editor: MyEditor,
+export const addColumn = <
+  TV extends Value,
+  TE extends TEditor<TV> = TEditor<TV>
+>(
+  editor: TE,
   {
     tablePath,
     cellType = { kind: 'anything' },
@@ -133,8 +138,8 @@ export const addColumn = (
   });
 };
 
-export const addRow = (
-  editor: MyEditor,
+export const addRow = <TV extends Value, TE extends TEditor<TV> = TEditor<TV>>(
+  editor: TE,
   tablePath: Path,
   options?: InsertNodesOptions<MyValue>
 ) => {

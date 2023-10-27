@@ -46,5 +46,6 @@ module.exports = {
     '<rootDir>/libs/backend-code-assistant',
     '<rootDir>/libs/doc-verbalizer',
     '<rootDir>/libs/remote-computer',
+    '<rootDir>/libs/backend-notebook',
   ],
 };

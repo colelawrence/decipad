@@ -1,11 +1,14 @@
 import { identifierRegExpGlobal } from '@decipad/computer';
-import { getNodeString, insertText, TNodeEntry } from '@udecode/plate';
-import { MyEditor } from '@decipad/editor-types';
+import { ENodeEntry, getNodeString, insertText, Value } from '@udecode/plate';
+import { MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { Path } from 'slate';
 
-export const normalizeIdentifierElement = (
-  editor: MyEditor,
-  [node, path]: TNodeEntry,
+export const normalizeIdentifierElement = <
+  TV extends Value = MyValue,
+  TE extends MyGenericEditor<TV> = MyGenericEditor<TV>
+>(
+  editor: TE,
+  [node, path]: ENodeEntry<TV>,
   getUniqueName?: () => string
 ): false | (() => void) => {
   const text = getNodeString(node);

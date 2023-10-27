@@ -12,7 +12,7 @@ import * as Y from 'yjs';
 import { applyYjsEvents } from '../applyToSlate';
 import applySlateOps from '../applyToYjs';
 import { SharedType, slateYjsSymbol } from '../model';
-import { EditorController } from '@decipad/notebook-tabs';
+import type { EditorController } from '@decipad/notebook-tabs';
 
 export interface YjsEditor {
   editorController: EditorController;

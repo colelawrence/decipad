@@ -46,8 +46,10 @@ export interface Resource<
     args: CreateInputType,
     context: GraphqlContext
   ) => Promise<void>;
-  parentResourceUriFromCreateInput?: (args: CreateInputType) => string;
-  parentResourceUriFromRecord?: (args: DataTableType) => string;
+  parentResourceUriFromCreateInput?: (
+    args: CreateInputType
+  ) => string | undefined;
+  parentResourceUriFromRecord?: (args: DataTableType) => string | undefined;
   pubSubChangeTopic?: string;
   skipPermissions?: boolean;
   delegateAccessToParentResource?: boolean;

@@ -10,9 +10,9 @@ import { timestamp } from '@decipad/backend-utils';
 import { create as createResourcePermission } from '../permissions';
 
 export async function create(
-  workspaceId: ID,
+  workspaceId: ID | undefined,
   pad: PadInput,
-  user: TableRecordIdentifier,
+  user?: TableRecordIdentifier,
   padId?: string
 ): Promise<PadRecord> {
   const newPad = {
@@ -25,15 +25,17 @@ export async function create(
   const data = await tables();
   await data.pads.create(newPad);
 
-  await createResourcePermission({
-    resourceType: 'pads',
-    resourceId: newPad.id,
-    userId: user.id,
-    type: 'ADMIN',
-    givenByUserId: user.id,
-    canComment: true,
-    parentResourceUri: `/workspaces/${workspaceId}`,
-  });
+  if (user) {
+    await createResourcePermission({
+      resourceType: 'pads',
+      resourceId: newPad.id,
+      userId: user.id,
+      type: 'ADMIN',
+      givenByUserId: user.id,
+      canComment: true,
+      parentResourceUri: `/workspaces/${workspaceId}`,
+    });
+  }
 
   return newPad;
 }

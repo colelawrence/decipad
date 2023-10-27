@@ -17,6 +17,7 @@ import {
   MyEditor,
   MyElementEntry,
   MyValue,
+  createTPlateEditor,
 } from '@decipad/editor-types';
 import { getDefined, getOnly } from '@decipad/utils';
 import {
@@ -29,7 +30,7 @@ import { NodeEntry, Path } from 'slate';
 import { decorateCode, getRootNodeId } from './decorateCode';
 import { insertNodes } from './insertNodes';
 
-let editor: MyEditor = createPlateEditor({});
+let editor = createTPlateEditor({});
 const computer = new Computer();
 let codeLine: CodeLineElement;
 beforeEach(() => {

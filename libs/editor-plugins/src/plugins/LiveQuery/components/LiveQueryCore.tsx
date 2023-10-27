@@ -3,6 +3,8 @@ import { Result } from '@decipad/computer';
 import { useNodePath } from '@decipad/editor-hooks';
 import {
   LiveQueryElement,
+  MyEditor,
+  MyValue,
   TableCellType,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -36,7 +38,9 @@ export interface StoreResult {
   error?: string;
 }
 
-const createStore = () => new WeakMap<LiveQueryElement, StoreResult>();
+export type Store = WeakMap<LiveQueryElement, StoreResult>;
+
+const createStore = (): Store => new WeakMap();
 
 export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   element,
@@ -71,7 +75,12 @@ export const LiveQueryCore: FC<LiveConnectionCoreProps> = ({
   // persist results
 
   const store = useMemo(
-    () => pluginStore(editor, 'PLUGIN_LIVE_QUERY_COMPONENT', createStore),
+    () =>
+      pluginStore<Store, MyValue, MyEditor>(
+        editor,
+        'PLUGIN_LIVE_QUERY_COMPONENT',
+        createStore
+      ),
     [editor]
   );
 

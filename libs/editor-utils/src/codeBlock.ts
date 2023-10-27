@@ -1,8 +1,14 @@
 import { Computer } from '@decipad/computer';
-import { ELEMENT_CODE_LINE_V2, MyEditor } from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE_V2, MyEditor, MyValue } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { generateVarName } from '@decipad/utils';
-import { deleteText, getEditorString } from '@udecode/plate';
+import {
+  EElementOrText,
+  PlateEditor,
+  Value,
+  deleteText,
+  getEditorString,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { BaseEditor, Path, Transforms } from 'slate';
 import { createCodeLine, createStructuredCodeLine } from './createCodeLine';
@@ -22,7 +28,10 @@ export const insertCodeLineBelow = (
   });
 };
 
-export const insertStructuredCodeLineBelow = ({
+export const insertStructuredCodeLineBelow = <
+  TV extends Value = MyValue,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>({
   editor,
   path,
   code = '',
@@ -30,7 +39,7 @@ export const insertStructuredCodeLineBelow = ({
   select = false,
   getAvailableIdentifier,
 }: {
-  editor: MyEditor;
+  editor: TE;
   path: Path;
   select?: boolean;
   getAvailableIdentifier: Computer['getAvailableIdentifier'];
@@ -45,7 +54,7 @@ export const insertStructuredCodeLineBelow = ({
       1
     ),
     code,
-  });
+  }) as EElementOrText<TV>;
 
   const pathBelow = requirePathBelowBlock(editor, path);
   insertNodes(editor, [elm], { at: pathBelow });

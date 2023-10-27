@@ -3,14 +3,16 @@ import {
   DECORATE_POTENTIAL_FORMULA,
   ELEMENT_PARAGRAPH,
   markKinds,
+  MyEditor,
   MyText,
+  MyValue,
 } from '@decipad/editor-types';
 import {
   assertElementType,
   filterDecorate,
   memoizeDecorate,
 } from '@decipad/editor-utils';
-import { isText } from '@udecode/plate';
+import { isElement, isText } from '@udecode/plate';
 import { findPotentialFormulas } from './findPotentialFormulas';
 import { PotentialFormulaDecoration } from './interface';
 
@@ -18,8 +20,12 @@ const allMarks = new Set<string>(Object.values(markKinds));
 const hasTextMark = (text: MyText) =>
   Object.keys(text).some((key) => allMarks.has(key));
 
-export const decoratePotentialFormula = filterDecorate(
-  memoizeDecorate(
+export const decoratePotentialFormula = filterDecorate<
+  unknown,
+  MyValue,
+  MyEditor
+>(
+  memoizeDecorate<unknown, MyValue, MyEditor>(
     () =>
       ([node, parentPath]): (PotentialFormulaDecoration & Range)[] => {
         assertElementType(node, ELEMENT_PARAGRAPH);
@@ -42,5 +48,5 @@ export const decoratePotentialFormula = filterDecorate(
         });
       }
   ),
-  (entry) => entry[0].type === ELEMENT_PARAGRAPH
+  ([node]) => isElement(node) && node.type === ELEMENT_PARAGRAPH
 );

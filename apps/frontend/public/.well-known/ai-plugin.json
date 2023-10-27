@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Decipad",
+  "name_for_model": "Decipad",
+  "description_for_human": "Create and mainpulate Decipad documents.",
+  "description_for_model": "Create and mainpulate Decipad documents.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "http://localhost:3000/openapi.yaml"
+  },
+  "logo_url": "https://uploads-ssl.webflow.com/61dda5267f2552f1a1c52b1f/622257a785a56d257a078fa0_Logomark.svg",
+  "contact_email": "support@decipad.com",
+  "legal_info_url": "https://app.decipad.com/docs/terms"
+}

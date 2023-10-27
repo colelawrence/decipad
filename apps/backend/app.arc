@@ -47,6 +47,7 @@ post /api/discord
 get /api/ws
 get /api/import/url
 get /api/clear
+any /api/notebook/:action
 
 # AI endpoints
 any /api/ai/generate-sql

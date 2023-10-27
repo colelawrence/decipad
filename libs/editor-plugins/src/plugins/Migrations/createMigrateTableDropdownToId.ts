@@ -53,13 +53,15 @@ export const createMigrateTableDropdownToId = createNormalizerPluginFactory({
 
         if (indexesToChange.length === 0) return false;
 
-        return () => {
-          for (const [i, text] of indexesToChange) {
-            insertText(editor, text.slice('exprRef_'.length), {
-              at: [tableIndex, i, columnIndex, 0],
-            });
-          }
-        };
+        if (indexesToChange.length > 0) {
+          return () => {
+            for (const [i, text] of indexesToChange) {
+              insertText(editor, text.slice('exprRef_'.length), {
+                at: [tableIndex, i, columnIndex, 0],
+              });
+            }
+          };
+        }
       }
 
       return false;

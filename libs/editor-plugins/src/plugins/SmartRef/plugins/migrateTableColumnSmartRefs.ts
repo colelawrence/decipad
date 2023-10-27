@@ -4,6 +4,7 @@ import {
   ELEMENT_TABLE_COLUMN_FORMULA,
   ELEMENT_TH,
   MyEditor,
+  MyValue,
   SmartRefElement,
 } from '@decipad/editor-types';
 import { assertElementType, isElementOfType } from '@decipad/editor-utils';
@@ -14,7 +15,10 @@ import {
   createNormalizerPluginFactory,
 } from '../../../pluginFactories';
 
-export const migrateTableColumnSmartRefs = createNormalizerPluginFactory({
+export const migrateTableColumnSmartRefs = createNormalizerPluginFactory<
+  MyValue,
+  MyEditor
+>({
   name: 'MIGRATE_TABLE_COLUMN_SMART_REFS',
   elementType: ELEMENT_SMART_REF,
   plugin:

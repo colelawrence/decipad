@@ -120,7 +120,6 @@
                     }
                   ],
                   "type": "th",
-                  "id": "21",
                   "cellType": {
                     "kind": "number",
                     "unit": [

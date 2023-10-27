@@ -7,6 +7,8 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_PARAGRAPH,
   ELEMENT_SMART_REF,
+  MyEditor,
+  MyValue,
 } from '@decipad/editor-types';
 import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
 import {
@@ -44,7 +46,7 @@ function codeLine(varName?: string, code?: string): CodeLineElement {
 let editor: PlateEditor;
 beforeEach(() => {
   const computer = new Computer();
-  const plugins = createPlugins([
+  const plugins = createPlugins<MyValue, MyEditor>([
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),
     createNormalizeCodeLineVarnamePlugin(),

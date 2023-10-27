@@ -28,7 +28,9 @@ export const getResources = async <
     const parentResource = getDefined(resourceType.parentResourceUriFromRecord)(
       record
     );
-    resources.push(parentResource);
+    if (parentResource) {
+      resources.push(parentResource);
+    }
   }
 
   return resources;

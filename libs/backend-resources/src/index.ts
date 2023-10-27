@@ -55,6 +55,9 @@ export const resource = <TData extends ConcreteRecord>(
         const parentResourceId = getDefined(def.parentResourceUriFromRecord)(
           rec
         );
+        if (!parentResourceId) {
+          throw err;
+        }
         return {
           permissionType: await expectAuthorized({
             user,
@@ -73,7 +76,10 @@ export const resource = <TData extends ConcreteRecord>(
         return resourceIds;
       }
       const rec = await load(recordId);
-      resourceIds.push(getDefined(def.parentResourceUriFromRecord)(rec));
+      const resId = getDefined(def.parentResourceUriFromRecord)(rec);
+      if (resId) {
+        resourceIds.push(resId);
+      }
       return resourceIds;
     },
 
@@ -89,7 +95,10 @@ export const resource = <TData extends ConcreteRecord>(
       }
       if (def.parentResourceUriFromRecord && recordId) {
         const rec = await load(recordId);
-        resourceIds.push(await def.parentResourceUriFromRecord(rec));
+        const resId = await def.parentResourceUriFromRecord(rec);
+        if (resId) {
+          resourceIds.push(resId);
+        }
       }
       const { user, permissionType } = await isAuthorizedGraphql(
         resourceIds,

@@ -11,13 +11,14 @@ import type {
   PlateEditor,
   TOperation,
   TReactEditor,
+  Value,
 } from '@udecode/plate';
 import type { RefObject } from 'react';
 import type { UndoManager } from 'yjs';
 import type { Observable, Subject } from 'rxjs';
 import type { EventInterceptor } from './event-interception';
 import type { MyValue } from './value';
-import type { ElementKind } from '.';
+import type { ElementKind, NotebookValue } from '.';
 
 /**
  * Node
@@ -52,12 +53,16 @@ export interface ObserverElements {
   changeObserver$?: Subject<EditorObserverMessage>;
 }
 
-export type MyEditor = PlateEditor<MyValue> & {
+export type MyGenericEditor<TV extends Value> = PlateEditor<TV> & {
   isDragging?: boolean;
   interceptEvent?: EventInterceptor;
   previewRef?: RefObject<HTMLDivElement>;
 } & UndoEditor;
+
+export type MyEditor = MyGenericEditor<MyValue>;
 export type MyReactEditor = TReactEditor<MyValue>;
+
+export type RootEditor = MyGenericEditor<NotebookValue>;
 
 /**
  * Element

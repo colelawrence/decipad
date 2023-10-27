@@ -137,6 +137,8 @@ export type PadInput = {
   section_id?: string;
   archived?: boolean;
   isTemplate?: number;
+  isPublic?: boolean;
+  isPublicWritable?: boolean;
 };
 
 export type SectionInput = {
@@ -328,8 +330,9 @@ export type PadAccessRecord = {
 
 export interface PadRecord extends TableRecordBase {
   name: string;
-  workspace_id: ID;
+  workspace_id?: ID;
   isPublic?: boolean;
+  isPublicWritable?: boolean;
   icon?: string;
   createdAt: number;
   section_id?: string;
@@ -358,7 +361,7 @@ export interface TagRecord extends TableRecordBase {
 export interface UserTaggedResourceRecord extends TableRecordBase {
   user_id: ID;
   tag: string;
-  workspace_id: ID;
+  workspace_id?: ID;
   resource_uri: string;
 }
 export interface UserTagRecord extends TableRecordBase {

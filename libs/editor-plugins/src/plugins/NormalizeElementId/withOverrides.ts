@@ -1,6 +1,13 @@
 /* eslint-disable no-param-reassign */
-import { MyEditor } from '@decipad/editor-types';
-import { setNodes, getChildren, TDescendant } from '@udecode/plate';
+import { MyGenericEditor } from '@decipad/editor-types';
+import {
+  setNodes,
+  getChildren,
+  TDescendant,
+  Value,
+  TNodeProps,
+  TEditor,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { pluginStore } from '@decipad/editor-utils';
 import { Node, NodeEntry } from 'slate';
@@ -8,10 +15,10 @@ import { Node, NodeEntry } from 'slate';
 type Store = Set<string>;
 type NodeWithId = Node & { id?: string };
 
-const scanIds = (
-  editor: MyEditor,
+const scanIds = <TV extends Value, TE extends MyGenericEditor<TV>>(
+  editor: TE,
   store: Store,
-  nodes: NodeEntry<TDescendant | MyEditor>[]
+  nodes: NodeEntry<TDescendant | TE>[]
 ) => {
   for (const entry of nodes) {
     const [node, path] = entry;
@@ -19,18 +26,28 @@ const scanIds = (
     if (id) {
       if (store.has(id)) {
         // duplicate found
-        setNodes(editor, { id: nanoid() }, { at: path });
+        setNodes(
+          editor,
+          { id: nanoid() } as unknown as Partial<TNodeProps<TEditor<TV>>>,
+          {
+            at: path,
+          }
+        );
       }
       store.add(id);
     }
-    scanIds(editor, store, getChildren(entry));
+    scanIds<TV, TE>(editor, store, getChildren(entry));
   }
 };
 
 export const withOverrides =
-  (pluginKey: string) =>
-  (editor: MyEditor): MyEditor => {
-    const store = pluginStore(editor, pluginKey, () => new Set<string>());
+  <TV extends Value, TE extends MyGenericEditor<TV>>(pluginKey: string) =>
+  (editor: TE): TE => {
+    const store = pluginStore<Store, TV, TE>(
+      editor,
+      pluginKey,
+      () => new Set<string>()
+    );
 
     // trap the first on change
     const { onChange } = editor;
@@ -39,7 +56,7 @@ export const withOverrides =
     editor.onChange = () => {
       if (!done) {
         done = true;
-        scanIds(editor, store, [[editor, []]]);
+        scanIds<TV, TE>(editor, store, [[editor, []]]);
       }
 
       onChange();

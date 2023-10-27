@@ -1,16 +1,22 @@
 import stringify from 'json-stringify-safe';
-import { MyDecorate, MyNodeEntry } from '@decipad/editor-types';
+import { MyDecorate } from '@decipad/editor-types';
 import { Range } from 'slate';
-import { getRange } from '@udecode/plate';
+import { ENode, PlateEditor, Value, getRange } from '@udecode/plate';
 
-interface CacheEntry {
+interface CacheEntry<P, TV extends Value, TE extends PlateEditor<TV>> {
   /** The same object might deserve a second annotate call */
   dedupeKey: string;
-  decoratorRet: ReturnType<ReturnType<MyDecorate>>;
+  decoratorRet: ReturnType<ReturnType<MyDecorate<P, TV, TE>>>;
 }
 
-export const memoizeDecorate = (decorate: MyDecorate): MyDecorate => {
-  const cache = new WeakMap<MyNodeEntry[0], CacheEntry>();
+export const memoizeDecorate = <
+  P,
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>(
+  decorate: MyDecorate<P, TV, TE>
+): MyDecorate<P, TV, TE> => {
+  const cache = new WeakMap<ENode<TV>, CacheEntry<P, TV, TE>>();
 
   return (editor, ...args) =>
     (entry) => {
@@ -29,10 +35,14 @@ export const memoizeDecorate = (decorate: MyDecorate): MyDecorate => {
     };
 };
 
-export const memoizeDecorateWithSelection = (
-  decorate: MyDecorate
-): MyDecorate => {
-  const cache = new WeakMap<MyNodeEntry[0], CacheEntry>();
+export const memoizeDecorateWithSelection = <
+  P,
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>(
+  decorate: MyDecorate<P, TV, TE>
+): MyDecorate<P, TV, TE> => {
+  const cache = new WeakMap<ENode<TV>, CacheEntry<P, TV, TE>>();
 
   return (editor, ...args) =>
     (entry) => {

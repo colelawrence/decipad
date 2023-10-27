@@ -1,17 +1,22 @@
-import { MyEditor, MyNodeEntry } from '@decipad/editor-types';
+import { MyGenericEditor } from '@decipad/editor-types';
 import {
   getNodeString,
   unwrapNodes,
   isElement,
   isText,
   removeNodes,
+  Value,
+  ENodeEntry,
 } from '@udecode/plate';
 import { normalizeExcessProperties } from './normalize';
 import { NormalizerReturnValue } from '../pluginFactories';
 
-export const normalizePlainTextChildren = (
-  editor: MyEditor,
-  children: Iterable<MyNodeEntry>
+export const normalizePlainTextChildren = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>(
+  editor: TE,
+  children: Iterable<ENodeEntry<TV>>
 ): NormalizerReturnValue => {
   for (const childEntry of children) {
     const [childNode, childPath] = childEntry;

@@ -11,6 +11,10 @@ import pick from 'lodash.pick';
 const DYNAMODB_PERSISTENCE_ORIGIN = 'ddb';
 const MAX_ALLOWED_RECORD_SIZE_BYTES = 150_000;
 
+interface DynamodbPersistenceOptions {
+  saveOnUpdate?: boolean;
+}
+
 export class DynamodbPersistence extends Observable<string> {
   public db: IDBDatabase | null = null;
   public doc: YDoc;
@@ -23,7 +27,13 @@ export class DynamodbPersistence extends Observable<string> {
   private _readOnly: boolean;
   private _pendingSaves = 0;
 
-  constructor(name: string, doc: YDoc, version?: string, readOnly = false) {
+  constructor(
+    name: string,
+    doc: YDoc,
+    version?: string,
+    readOnly = false,
+    options: DynamodbPersistenceOptions = {}
+  ) {
     super();
     this.doc = doc;
     this.name = name;
@@ -32,6 +42,10 @@ export class DynamodbPersistence extends Observable<string> {
     this.whenSynced = this._init();
     this.destroy = this.destroy.bind(this);
     doc.on('destroy', this.destroy);
+    this._onUpdate = this._onUpdate.bind(this);
+    if (options.saveOnUpdate) {
+      doc.on('update', this._onUpdate);
+    }
   }
 
   private async _init(): Promise<DynamodbPersistence> {
@@ -142,6 +156,12 @@ export class DynamodbPersistence extends Observable<string> {
     });
   }
 
+  _onUpdate(update: Uint8Array, origin: unknown) {
+    if (origin !== DYNAMODB_PERSISTENCE_ORIGIN) {
+      this.storeUpdate(update, origin);
+    }
+  }
+
   async compact(): Promise<void> {
     if (this._readOnly || this.version) {
       return;
@@ -194,5 +214,6 @@ export class DynamodbPersistence extends Observable<string> {
 
   destroy() {
     this.doc.off('destroy', this.destroy);
+    this.doc.off('update', this._onUpdate);
   }
 }

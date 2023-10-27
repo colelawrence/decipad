@@ -1,11 +1,17 @@
-import { MyEditor } from '@decipad/editor-types';
 import { BaseRange, Selection } from 'slate';
-// eslint-disable-next-line no-restricted-imports
-import { setSelection as plateSetSelection } from '@udecode/plate';
+import {
+  TEditor,
+  Value,
+  // eslint-disable-next-line no-restricted-imports
+  setSelection as plateSetSelection,
+} from '@udecode/plate';
 import { hasPoint } from './hasPoint';
 
-const isValidSelection = (
-  editor: MyEditor,
+const isValidSelection = <
+  TV extends Value,
+  TE extends TEditor<TV> = TEditor<TV>
+>(
+  editor: TE,
   sel: Partial<Selection>
 ): boolean => {
   if (sel != null) {
@@ -19,8 +25,14 @@ const isValidSelection = (
   return true;
 };
 
-export function setSelection(editor: MyEditor, sel: Partial<Selection>): void {
+export const setSelection = <
+  TV extends Value,
+  TE extends TEditor<TV> = TEditor<TV>
+>(
+  editor: TE,
+  sel: Partial<Selection>
+): void => {
   if (isValidSelection(editor, sel)) {
     plateSetSelection(editor, sel as BaseRange);
   }
-}
+};

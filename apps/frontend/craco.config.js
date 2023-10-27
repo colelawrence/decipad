@@ -7,6 +7,12 @@ const shouldOpen = !e2e;
 
 let devServer = {
   open: false,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'true',
+  },
 };
 if (shouldOpen) {
   devServer.onListening = async () => {

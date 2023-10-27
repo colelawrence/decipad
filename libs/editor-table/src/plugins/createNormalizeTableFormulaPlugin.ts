@@ -6,18 +6,23 @@ import {
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  MyEditor,
-  MyNodeEntry,
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { assertElementType, insertNodes } from '@decipad/editor-utils';
-import { hasNode, deleteText } from '@udecode/plate';
+import {
+  hasNode,
+  deleteText,
+  Value,
+  PlateEditor,
+  ENodeEntry,
+  EElement,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 
 export const normalizeTableFormula =
-  (_computer: RemoteComputer) =>
-  (editor: MyEditor) =>
-  (entry: MyNodeEntry): NormalizerReturnValue => {
+  <TV extends Value, TE extends PlateEditor<TV>>(_computer: RemoteComputer) =>
+  (editor: TE) =>
+  (entry: ENodeEntry<TV>): NormalizerReturnValue => {
     const [element, path] = entry;
     assertElementType(element, ELEMENT_TABLE);
 
@@ -51,7 +56,7 @@ export const normalizeTableFormula =
                 type: ELEMENT_TABLE_COLUMN_FORMULA,
                 columnId: header.id,
                 children: [{ text: '' }],
-              },
+              } as EElement<TV>,
             ],
             { at: insertPath }
           );
@@ -76,8 +81,13 @@ export const normalizeTableFormula =
     return false;
   };
 
-export const createNormalizeTableFormulaPlugin = (computer: RemoteComputer) =>
-  createNormalizerPlugin({
+export const createNormalizeTableFormulaPlugin = <
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>(
+  computer: RemoteComputer
+) =>
+  createNormalizerPlugin<TV, TE>({
     name: 'NORMALIZE_TABLE_FORMULA_PLUGIN',
     elementType: ELEMENT_TABLE,
     plugin: normalizeTableFormula(computer),

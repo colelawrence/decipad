@@ -5,7 +5,7 @@ import { createNormalizeElementIdPlugin } from './createNormalizeElementIdPlugin
 let editor: TEditor;
 beforeEach(() => {
   editor = createTPlateEditor({
-    plugins: [createNormalizeElementIdPlugin()],
+    plugins: [createNormalizeElementIdPlugin()()],
   });
 });
 

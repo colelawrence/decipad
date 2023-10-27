@@ -10,12 +10,19 @@ import {
   LiveConnectionVarNameElement,
   LiveDataSetVarNameElement,
   LiveQueryElement,
+  MyGenericEditor,
 } from '@decipad/editor-types';
 import {
   assertElementType,
   normalizeIdentifierElement,
 } from '@decipad/editor-utils';
-import { getChildren, insertNodes, removeNodes } from '@udecode/plate';
+import {
+  getChildren,
+  insertNodes,
+  removeNodes,
+  Value,
+  ENodeEntry,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
   createNormalizerPlugin,
@@ -32,116 +39,130 @@ const LazyLiveConnection = lazyElementComponent(
     )
 );
 
-export const createLiveConnectionPlugin = createTPluginFactory({
-  key: ELEMENT_LIVE_CONNECTION,
-  isElement: true,
-  component: LazyLiveConnection,
-  plugins: [
-    {
-      key: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-      isElement: true,
-      component: LiveConnectionVarName,
-    },
-    createNormalizerPlugin({
-      name: 'LIVE_CONNECTION_NORMALIZER',
-      elementType: ELEMENT_LIVE_CONNECTION,
-      plugin:
-        (editor) =>
-        ([element, path]): NormalizerReturnValue => {
-          assertElementType(element, ELEMENT_LIVE_CONNECTION);
-          if (element.children.length < 1) {
-            return () =>
-              insertNodes<LiveConnectionVarNameElement>(
-                editor,
-                {
-                  id: nanoid(),
-                  type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-                  children: [{ text: '' }],
-                },
-                { at: [...path, 1] }
-              );
-          }
-          return false;
-        },
-    }),
-    createNormalizerPlugin({
-      name: 'NORMALIZE_LIVE_CONN_VAR_NAME',
-      elementType: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
-      plugin: (editor) => (entry) => {
-        return normalizeIdentifierElement(editor, getChildren(entry)[0]);
+export const createLiveConnectionPlugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>() =>
+  createTPluginFactory<object, TV, TE>({
+    key: ELEMENT_LIVE_CONNECTION,
+    isElement: true,
+    component: LazyLiveConnection,
+    plugins: [
+      {
+        key: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+        isElement: true,
+        component: LiveConnectionVarName,
       },
-    }),
-  ],
-});
-
-export const createLiveDataSetPlugin = createTPluginFactory({
-  key: ELEMENT_LIVE_DATASET,
-  isElement: true,
-  component: LazyLiveConnection,
-  plugins: [
-    {
-      key: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
-      isElement: true,
-      component: LiveDataSetVarName,
-    },
-    createNormalizerPlugin({
-      name: 'LIVE_DATASET_NORMALIZER',
-      elementType: ELEMENT_LIVE_DATASET,
-      plugin:
-        (editor) =>
-        ([element, path]): NormalizerReturnValue => {
-          assertElementType(element, ELEMENT_LIVE_DATASET);
-          if (element.children.length < 1) {
-            return () =>
-              insertNodes<LiveDataSetVarNameElement>(
-                editor,
-                {
-                  id: nanoid(),
-                  type: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
-                  children: [{ text: '' }],
-                },
-                { at: [...path, 1] }
-              );
-          }
-
-          if (element.children.length < 2) {
-            return () =>
-              insertNodes<LiveQueryElement>(
-                editor,
-                {
-                  type: ELEMENT_LIVE_QUERY,
-                  id: nanoid(),
-                  connectionBlockId: element.id,
-                  columnTypeCoercions: {},
-                  children: [
-                    {
-                      type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
-                      id: nanoid(),
-                      children: [{ text: '' }],
-                    },
-                    {
-                      type: ELEMENT_LIVE_QUERY_QUERY,
-                      id: nanoid(),
-                      children: [{ text: 'SELECT 1 + 1 as result' }],
-                    },
-                  ],
-                },
-                { at: [...path, 1] }
-              );
-          }
-
-          if (element.children.length > 2) {
-            return () => removeNodes(editor, { at: [...path, 2] });
-          }
-          return false;
+      createNormalizerPlugin({
+        name: 'LIVE_CONNECTION_NORMALIZER',
+        elementType: ELEMENT_LIVE_CONNECTION,
+        plugin:
+          (editor) =>
+          ([element, path]): NormalizerReturnValue => {
+            assertElementType(element, ELEMENT_LIVE_CONNECTION);
+            if (element.children.length < 1) {
+              return () =>
+                insertNodes<LiveConnectionVarNameElement>(
+                  editor,
+                  {
+                    id: nanoid(),
+                    type: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+                    children: [{ text: '' }],
+                  },
+                  { at: [...path, 1] }
+                );
+            }
+            return false;
+          },
+      }),
+      createNormalizerPlugin({
+        name: 'NORMALIZE_LIVE_CONN_VAR_NAME',
+        elementType: ELEMENT_LIVE_CONNECTION_VARIABLE_NAME,
+        plugin: (editor) => (entry) => {
+          return normalizeIdentifierElement<TV, TE>(
+            editor,
+            getChildren(entry)[0] as ENodeEntry<TV>
+          );
         },
-    }),
-    createNormalizerPlugin({
-      name: 'NORMALIZE_LIVE_DS_VAR_NAME',
-      elementType: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
-      plugin: (editor) => (entry) => {
-        return normalizeIdentifierElement(editor, getChildren(entry)[0]);
+      }),
+    ],
+  });
+
+export const createLiveDataSetPlugin = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>() =>
+  createTPluginFactory<unknown, TV, TE>({
+    key: ELEMENT_LIVE_DATASET,
+    isElement: true,
+    component: LazyLiveConnection,
+    plugins: [
+      {
+        key: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
+        isElement: true,
+        component: LiveDataSetVarName,
       },
-    }),
-  ],
-});
+      createNormalizerPlugin({
+        name: 'LIVE_DATASET_NORMALIZER',
+        elementType: ELEMENT_LIVE_DATASET,
+        plugin:
+          (editor) =>
+          ([element, path]): NormalizerReturnValue => {
+            assertElementType(element, ELEMENT_LIVE_DATASET);
+            if (element.children.length < 1) {
+              return () =>
+                insertNodes<LiveDataSetVarNameElement>(
+                  editor,
+                  {
+                    id: nanoid(),
+                    type: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
+                    children: [{ text: '' }],
+                  },
+                  { at: [...path, 1] }
+                );
+            }
+
+            if (element.children.length < 2) {
+              return () =>
+                insertNodes<LiveQueryElement>(
+                  editor,
+                  {
+                    type: ELEMENT_LIVE_QUERY,
+                    id: nanoid(),
+                    connectionBlockId: element.id,
+                    columnTypeCoercions: {},
+                    children: [
+                      {
+                        type: ELEMENT_LIVE_QUERY_VARIABLE_NAME,
+                        id: nanoid(),
+                        children: [{ text: '' }],
+                      },
+                      {
+                        type: ELEMENT_LIVE_QUERY_QUERY,
+                        id: nanoid(),
+                        children: [{ text: 'SELECT 1 + 1 as result' }],
+                      },
+                    ],
+                  },
+                  { at: [...path, 1] }
+                );
+            }
+
+            if (element.children.length > 2) {
+              return () => removeNodes(editor, { at: [...path, 2] });
+            }
+            return false;
+          },
+      }),
+      createNormalizerPlugin<TV, TE>({
+        name: 'NORMALIZE_LIVE_DS_VAR_NAME',
+        elementType: ELEMENT_LIVE_DATASET_VARIABLE_NAME,
+        plugin: (editor) => (entry) => {
+          return normalizeIdentifierElement<TV, TE>(
+            editor,
+            getChildren(entry)[0] as ENodeEntry<TV>
+          );
+        },
+      }),
+    ],
+  });

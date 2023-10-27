@@ -1,15 +1,28 @@
-import { isElement, setNodes } from '@udecode/plate';
+import {
+  ENodeEntry,
+  TEditor,
+  TNodeProps,
+  Value,
+  isElement,
+  setNodes,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
-import { MyEditor, MyElement, MyNodeEntry } from '@decipad/editor-types';
+import { MyGenericEditor } from '@decipad/editor-types';
 import { NormalizerReturnValue } from '../../pluginFactories';
 
 export const normalizeElementIdPlugin =
-  (editor: MyEditor) =>
-  ([node, path]: MyNodeEntry): NormalizerReturnValue => {
+  <TV extends Value, TE extends MyGenericEditor<TV>>() =>
+  (editor: TE) =>
+  ([node, path]: ENodeEntry<TV>): NormalizerReturnValue => {
     if (isElement(node) && !node.id) {
       const newId = nanoid();
       // eslint-disable-next-line no-console
-      return () => setNodes<MyElement>(editor, { id: newId }, { at: path });
+      return () =>
+        setNodes(
+          editor,
+          { id: newId } as unknown as Partial<TNodeProps<TEditor<TV>>>,
+          { at: path }
+        );
     }
     return false;
   };

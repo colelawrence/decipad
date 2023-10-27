@@ -1,4 +1,12 @@
 import {
+  EElement,
+  ENodeEntry,
+  PlateEditor,
+  TDescendant,
+  TEditor,
+  TElement,
+  TNodeEntry,
+  Value,
   deleteText,
   getNode,
   hasNode,
@@ -8,10 +16,7 @@ import {
 import {
   createTPluginFactory,
   getMyEditor,
-  MyDescendant,
-  MyEditor,
   MyElement,
-  MyNodeEntry,
   MyPlatePlugin,
   MyWithOverride,
 } from '@decipad/editor-types';
@@ -21,21 +26,27 @@ export type NormalizerNormaliser = () => void;
 
 export type NormalizerReturnValue = false | NormalizerNormaliser;
 
-export type NormalizerPlugin = (
-  editor: MyEditor
-) => (entry: MyNodeEntry) => NormalizerReturnValue;
+export type NormalizerPlugin<TV extends Value, TE extends TEditor<TV>> = (
+  editor: TE
+) => (entry: ENodeEntry<TV>) => NormalizerReturnValue;
 
 const isTesting = !!process.env.JEST_WORKER_ID;
 
-export interface NormalizerPluginProps {
+export interface NormalizerPluginProps<
+  TV extends Value,
+  TE extends TEditor<TV>
+> {
   name: string;
-  elementType?: MyElement['type'] | Array<MyElement['type']>;
+  elementType?: MyElement['type'] | Array<EElement<TV>['type']>;
   acceptableElementProperties?: string[];
   acceptableSubElements?: string[];
-  plugin?: NormalizerPlugin;
+  plugin?: NormalizerPlugin<TV, TE>;
 }
 
-type NormalizerOverrideProps = Omit<NormalizerPluginProps, 'name'>;
+type NormalizerOverrideProps<TV extends Value, TE extends TEditor<TV>> = Omit<
+  NormalizerPluginProps<TV, TE>,
+  'name'
+>;
 
 const EXPECTED_ELEMENT_PROPERTIES = [
   'type',
@@ -45,10 +56,16 @@ const EXPECTED_ELEMENT_PROPERTIES = [
   'isHidden',
 ];
 
-const withRemoveUnacceptableElementProperties = (
-  editor: MyEditor,
-  acceptableElementProperties?: NormalizerPluginProps['acceptableElementProperties'],
-  acceptableSubElements?: NormalizerPluginProps['acceptableSubElements']
+const withRemoveUnacceptableElementProperties = <
+  TV extends Value,
+  TE extends TEditor<TV>
+>(
+  editor: TE,
+  acceptableElementProperties?: NormalizerPluginProps<
+    TV,
+    TE
+  >['acceptableElementProperties'],
+  acceptableSubElements?: NormalizerPluginProps<TV, TE>['acceptableSubElements']
 ) => {
   const acceptable =
     acceptableElementProperties &&
@@ -57,7 +74,7 @@ const withRemoveUnacceptableElementProperties = (
     );
   const acceptableSubElementNames =
     acceptableSubElements && new Set(acceptableSubElements);
-  const isNotAcceptableSubElement = (node: MyDescendant): boolean => {
+  const isNotAcceptableSubElement = (node: TDescendant): boolean => {
     return (
       !isElement(node) ||
       (acceptableSubElementNames &&
@@ -65,7 +82,7 @@ const withRemoveUnacceptableElementProperties = (
       false
     );
   };
-  return (entry: MyNodeEntry): boolean => {
+  return (entry: TNodeEntry): boolean => {
     const [node, path] = entry;
     const propertiesToRemove: string[] = [];
     if (acceptable) {
@@ -76,7 +93,7 @@ const withRemoveUnacceptableElementProperties = (
       }
     }
     if (propertiesToRemove.length > 0) {
-      unsetNodes<MyElement>(editor, propertiesToRemove, { at: path });
+      unsetNodes<TElement>(editor, propertiesToRemove, { at: path });
       return true;
     }
     if (isElement(node)) {
@@ -93,29 +110,32 @@ const withRemoveUnacceptableElementProperties = (
   };
 };
 
-const withNormalizerOverride = (
+const withNormalizerOverride = <
+  TV extends Value,
+  TE extends PlateEditor<TV> = PlateEditor<TV>
+>(
   pluginName: string,
   {
     plugin,
     elementType,
     acceptableElementProperties,
     acceptableSubElements,
-  }: NormalizerOverrideProps
-): MyWithOverride => {
+  }: NormalizerOverrideProps<TV, TE>
+): MyWithOverride<object, TV, TE> => {
   return (editor) => {
-    const myEditor = getMyEditor(editor);
+    const myEditor = getMyEditor<TV, TE>(editor);
 
     const { normalizeNode } = myEditor;
     const newNormalize = plugin?.(editor);
 
     const removeUnacceptableElementProperties =
-      withRemoveUnacceptableElementProperties(
+      withRemoveUnacceptableElementProperties<TV, TE>(
         editor,
         acceptableElementProperties,
         acceptableSubElements
       );
 
-    const acceptedTypes: Array<MyElement['type']> | undefined =
+    const acceptedTypes: Array<EElement<TV>['type']> | undefined =
       elementType == null || Array.isArray(elementType)
         ? elementType
         : [elementType];
@@ -190,20 +210,26 @@ const withNormalizerOverride = (
   };
 };
 
-export const createNormalizerPlugin = ({
+export const createNormalizerPlugin = <
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>({
   name,
   ...props
-}: NormalizerPluginProps): MyPlatePlugin => ({
+}: NormalizerPluginProps<TV, TE>): MyPlatePlugin<object, TV, TE> => ({
   key: name,
-  withOverrides: withNormalizerOverride(name, props),
+  withOverrides: withNormalizerOverride<TV, TE>(name, props),
 });
 
-export const createNormalizerPluginFactory = ({
+export const createNormalizerPluginFactory = <
+  TV extends Value,
+  TE extends PlateEditor<TV>
+>({
   name,
   ...props
-}: NormalizerPluginProps) => {
+}: NormalizerPluginProps<TV, TE>) => {
   return createTPluginFactory({
     key: name,
-    withOverrides: withNormalizerOverride(name, props),
+    withOverrides: withNormalizerOverride<TV, TE>(name, props),
   });
 };

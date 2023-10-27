@@ -10,14 +10,14 @@ import {
   MyValue,
 } from '@decipad/editor-types';
 import { createPlateEditor, select } from '@udecode/plate';
-import { autoformatBlocks } from './autoformatBlocks';
+import { autoformatRules } from './index';
 
 let editor: MyEditor;
 beforeEach(() => {
   editor = createPlateEditor({
     plugins: [
       createTAutoformatPlugin({
-        options: { rules: autoformatBlocks(new Computer()) },
+        options: { rules: autoformatRules(new Computer()) },
       }),
     ],
   });

@@ -1,14 +1,20 @@
 import {
   BlockElement,
   MyElement,
-  MyDescendant,
   MyNode,
   PlainText,
   MyValue,
 } from '@decipad/editor-types';
 import { Path } from 'slate';
 import * as Y from 'yjs';
-import { isElement, isText } from '@udecode/plate';
+import {
+  EElement,
+  TDescendant,
+  TElement,
+  Value,
+  isElement,
+  isText,
+} from '@udecode/plate';
 import { supportBigIntToJSON } from '@decipad/utils';
 import { SharedType, SyncElement } from '../model';
 
@@ -57,7 +63,7 @@ export function toSlateDoc(doc: SharedType): MyValue {
  *
  * @param node
  */
-export function toSyncElement(node: MyElement | MyDescendant): SyncElement {
+export const toSyncElement = (node: TElement | TDescendant): SyncElement => {
   const element: SyncElement = new Y.Map();
 
   if (isElement(node)) {
@@ -79,7 +85,7 @@ export function toSyncElement(node: MyElement | MyDescendant): SyncElement {
   });
 
   return element;
-}
+};
 
 /**
  * Converts all elements int a Slate doc to SyncElements and adds them
@@ -96,13 +102,13 @@ export function toSharedType(sharedType: SharedType, doc: MyElement[]): void {
  * Same as toShareType but takes in a singular element instead,
  * to avoid DynamoDBs size limit.
  */
-export function toSharedTypeSingular(
+export const toSharedTypeSingular = <V extends Value = MyValue>(
   sharedType: SharedType,
-  doc: MyElement,
+  doc: EElement<V>,
   pos: number
-): void {
+): void => {
   sharedType.insert(pos, [toSyncElement(doc)]);
-}
+};
 
 /**
  * Converts a SharedType path the a slate path

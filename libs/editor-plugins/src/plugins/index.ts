@@ -25,7 +25,7 @@ export * from './LiveConnection';
 export * from './LiveQuery';
 export * from './Marks';
 export * from './Media';
-export * from './Migrations';
+export * from './Migrations/index';
 export * from './NormalizeCodeLine';
 export * from './NormalizeColumns';
 export * from './NormalizeEditor';

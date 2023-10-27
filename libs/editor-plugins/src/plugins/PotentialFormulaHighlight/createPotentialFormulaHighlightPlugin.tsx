@@ -1,6 +1,8 @@
 import {
   DECORATE_POTENTIAL_FORMULA,
+  MyEditor,
   MyPlatePlugin,
+  MyValue,
 } from '@decipad/editor-types';
 import { decoratePotentialFormula } from './decorate/decoratePotentialFormula';
 import { PotentialFormulaHighlight } from './component/PotentialFormulaHighlight';
@@ -12,7 +14,7 @@ import { PotentialFormulaHighlight } from './component/PotentialFormulaHighlight
  */
 export const createPotentialFormulaHighlightPlugin = (
   isReadonly: boolean
-): MyPlatePlugin => ({
+): MyPlatePlugin<unknown, MyValue, MyEditor> => ({
   key: DECORATE_POTENTIAL_FORMULA,
   isLeaf: true,
   component: PotentialFormulaHighlight,

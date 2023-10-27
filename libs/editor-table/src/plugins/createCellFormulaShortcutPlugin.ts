@@ -4,6 +4,7 @@ import {
   ELEMENT_TD,
   MyEditor,
   MyElement,
+  MyValue,
   TableCellType,
 } from '@decipad/editor-types';
 import { last } from '@decipad/utils';
@@ -13,7 +14,10 @@ import { changeColumnType } from '../utils/changeColumnType';
 
 const TRIGGER_KEY = '=';
 
-export const createCellFormulaShortcutPlugin = createOnKeyDownPluginFactory({
+export const createCellFormulaShortcutPlugin = createOnKeyDownPluginFactory<
+  MyValue,
+  MyEditor
+>({
   name: 'ARROW_CELL_FORMULA_SHORTCUT_PLUGIN',
   plugin: (editor: MyEditor) => (event) => {
     if (event.key !== TRIGGER_KEY) return false;

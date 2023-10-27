@@ -18,7 +18,7 @@ import { createNavigationPlugin } from './createNavigationPlugin';
 let editor: TEditor;
 beforeEach(() => {
   editor = createTPlateEditor({
-    plugins: [createNavigationPlugin()],
+    plugins: [createNavigationPlugin()()],
   });
 });
 
@@ -123,7 +123,7 @@ describe('Pressing TAB indents inside codelines', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
     expect(editor.children).toMatchObject([
       codeLine(`${SPACES}${codeLineText}`),
     ]);
@@ -141,7 +141,7 @@ describe('Pressing TAB indents inside codelines', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
     expect(editor.children).toMatchObject([
       codeLine(`${codeLineText}${SPACES}`),
     ]);
@@ -161,7 +161,7 @@ describe('Pressing TAB indents inside codelines', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
     expect(editor.children).toMatchObject([
       codeLine(
         `${codeLineText.substring(
@@ -199,7 +199,7 @@ describe('tabs should not be added to non codelines', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
     expect(editor.children).toMatchObject([paragraphElement]);
   });
 });
@@ -217,7 +217,7 @@ describe('pressing enter on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 3, 0, 0]);
   });
@@ -233,7 +233,7 @@ describe('pressing enter on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 2, 1, 0]);
   });
@@ -249,7 +249,7 @@ describe('pressing enter on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 3, 1, 0]);
   });
@@ -268,7 +268,7 @@ describe('pressing tab on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 2, 1, 0]);
   });
@@ -285,7 +285,7 @@ describe('pressing tab on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 2, 0, 0]);
   });
@@ -301,7 +301,7 @@ describe('pressing tab on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 3, 0, 0]);
   });
@@ -317,7 +317,7 @@ describe('pressing tab on tables', () => {
     });
 
     // @ts-expect-error DOM KeyboardEvent vs React event
-    createNavigationPlugin().handlers?.onKeyDown(editor)(event);
+    createNavigationPlugin()().handlers?.onKeyDown(editor)(event);
 
     expect(editor.selection.anchor.path).toMatchObject([0, 3, 1, 0]);
   });

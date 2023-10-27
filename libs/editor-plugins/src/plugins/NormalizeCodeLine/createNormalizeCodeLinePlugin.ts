@@ -4,10 +4,13 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
   MyEditor,
+  MyGenericEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import {
+  ENodeEntry,
+  Value,
   deleteText,
   getNodeChildren,
   insertText,
@@ -23,10 +26,13 @@ import {
 } from '../../pluginFactories';
 import { normalizeExcessProperties } from '../../utils/normalize';
 
-export const normalizeCodeChildren = (
+export const normalizeCodeChildren = <
+  TV extends Value,
+  TE extends MyGenericEditor<TV>
+>(
   _computer: RemoteComputer,
-  editor: MyEditor,
-  [_node, path]: MyNodeEntry
+  editor: TE,
+  [_node, path]: ENodeEntry<TV>
 ): NormalizerReturnValue => {
   const children = Array.from(getNodeChildren(editor, path));
   for (const lineChild of children) {

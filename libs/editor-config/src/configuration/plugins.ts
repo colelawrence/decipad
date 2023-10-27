@@ -129,8 +129,8 @@ export const plugins = ({
       createNormalizeListPlugin(),
       createNormalizeLinkPlugin(),
       createNormalizeImagePlugin(),
-      createNormalizeElementIdPlugin(),
-      createDeduplicateElementIdsPlugin(),
+      createNormalizeElementIdPlugin()(),
+      createDeduplicateElementIdsPlugin()(),
       createNormalizeTextPlugin(),
       createTrailingParagraphPlugin(),
       createNormalizeColumnsPlugin(),
@@ -172,9 +172,9 @@ export const plugins = ({
       }),
       createAutoFormatCodeLinePlugin(computer)(),
       createImportPlugin(interactions),
-      createLiveConnectionPlugin(),
-      createLiveDataSetPlugin(),
-      createLiveQueryPlugin(),
+      createLiveConnectionPlugin()(),
+      createLiveDataSetPlugin()(),
+      createLiveQueryPlugin()(),
 
       // code editing
       createCodeVariableHighlightPlugin(),
