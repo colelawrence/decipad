@@ -31,9 +31,12 @@ type BlockActionParams = {
   element: MyElement;
 };
 
+function getSelection(): [boolean, Set<string>] {
+  const selected = blockSelectionSelectors.selectedIds() as Set<string>;
+  return [selected.size > 1, selected];
+}
+
 export const useBlockActions = ({ editor, element }: BlockActionParams) => {
-  const blockSelectedIds = blockSelectionSelectors.selectedIds() as Set<string>;
-  const isMultipleSelection = blockSelectedIds?.size > 1;
   const nodePath = useNodePath(element);
   const computer = useComputer();
 
@@ -48,6 +51,8 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
     (parentOnDelete?: OnDelete): void => {
       const path = findNodePath(editor, element);
       const onDeleteInternal = () => {
+        const [isMultipleSelection, blockSelectedIds] = getSelection();
+
         if (isMultipleSelection) {
           for (const id of blockSelectedIds.values()) {
             const entry = findNode(editor, { match: { id } });
@@ -77,7 +82,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
           : onDeleteInternal();
       }
     },
-    [blockSelectedIds, editor, element, isMultipleSelection]
+    [editor, element]
   );
 
   const moveTab = useMoveToTab();
@@ -86,6 +91,8 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
     (tabId: string) =>
       withoutNormalizing(editor, () => {
         if (!nodePath) return;
+
+        const [isMultipleSelection, blockSelectedIds] = getSelection();
 
         if (!isMultipleSelection) {
           onDelete();
@@ -114,18 +121,12 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
         // Reset the selection
         blockSelectionStore.set.selectedIds(new Set());
       }),
-    [
-      editor,
-      nodePath,
-      isMultipleSelection,
-      onDelete,
-      moveTab,
-      element,
-      blockSelectedIds,
-    ]
+    [editor, nodePath, onDelete, moveTab, element]
   );
 
   const onDuplicate = useCallback(() => {
+    const [isMultipleSelection, blockSelectedIds] = getSelection();
+
     if (isMultipleSelection) {
       const nodes = [];
       let largestPath = 0;
@@ -151,10 +152,12 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
         at: requirePathBelowBlock(editor, path),
       });
     }
-  }, [computer, editor, element, blockSelectedIds, isMultipleSelection]);
+  }, [computer, editor, element]);
 
   const onShowHide = useCallback(
     (a: 'show' | 'hide') => {
+      const [isMultipleSelection, blockSelectedIds] = getSelection();
+
       if (isMultipleSelection) {
         for (const id of blockSelectedIds.values()) {
           const entry = findNode<MyElement>(editor, { match: { id } });
@@ -169,7 +172,7 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
 
       if (a === 'hide') setIsHidden(true, 'hiding');
     },
-    [editor, blockSelectedIds, isMultipleSelection, setIsHidden]
+    [editor, setIsHidden]
   );
 
   return { onDelete, onMoveTab, onDuplicate, onShowHide };
