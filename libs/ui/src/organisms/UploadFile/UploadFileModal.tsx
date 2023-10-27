@@ -8,7 +8,7 @@ import {
   isValidURL,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { ChangeEvent, FC, useRef, useState } from 'react';
+import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
 import { Button, Link } from '../../atoms';
 import { Close } from '../../icons';
 import { modalDialogStyles } from '../../molecules/Modal/Modal';
@@ -23,6 +23,7 @@ interface UploadFileModalProps {
 
 interface FileCfg {
   title: string;
+  description?: ReactNode;
   maxSize: number;
   accept?: string;
 }
@@ -45,6 +46,15 @@ const getConfigForFileType = (fileType: FileType | undefined): FileCfg => {
       return {
         title: 'Embed URL',
         maxSize: MAX_UPLOAD_FILE_SIZE.embed,
+        description: (
+          <>
+            Embeds are experimental. Check out{' '}
+            <Link href="https://app.decipad.com/docs/quick-start/embed-on-decipad">
+              the docs
+            </Link>{' '}
+            if you run into issues.
+          </>
+        ),
       };
     case 'data':
       return {
@@ -62,7 +72,8 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   onCancel,
   onUpload,
 }) => {
-  const { title, maxSize, accept } = getConfigForFileType(fileType);
+  const { title, maxSize, accept, description } =
+    getConfigForFileType(fileType);
   const MAX_LABEL = `${maxSize / 1_000_000}MB`;
 
   const uploadEnabled = fileType !== 'embed';
@@ -168,13 +179,7 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
           </div>
         </TabsContent>
       </div>
-      <span css={p12Medium}>
-        Embeds are experimental. Check out{' '}
-        <Link href="https://app.decipad.com/docs/quick-start/embed-on-decipad">
-          the docs
-        </Link>{' '}
-        if you run into issues.
-      </span>
+      <span css={p12Medium}>{description}</span>
     </TabsRoot>
   );
 };
