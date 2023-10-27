@@ -4,21 +4,16 @@ sidebar_position: 0
 
 # Notebooks
 
-Decipad Notebooks combine numbers and narrative to share insights on data.
-
-import ImageAnnotation from '@site/src/components/ImageAnnotation/ImageAnnotation';
-import NewNotebook from './img/NewNotebook.png';
-import NewNotebook1 from './img/NewNotebook1.png';
-import AddBlocks from './img/AddBlocks.png';
-import BlockOptions from './img/BlockOptions.png';
-import MoveBlock from './img/MoveBlock.png';
-import NotebookOptions from './img/NotebookOptions.png';
+Decipad Notebooks combine numbers and narrative to share insights on data. <br/>
+Create a new notebook by clicking `+ New Notebook` on the top right of your [workspace](http://app.decipad.com/).
 
  <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
    <iframe src="https://www.loom.com/embed/e18301fb8aa748eca8f7be0ce38c9e6a?sid=726a1216-91e3-4c61-9f55-8190c2ffa632?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
  </div>
 
 ## Notebook Features
+
+---
 
 import {
 newNotebookBadge,
@@ -62,119 +57,12 @@ Card,
                 notebook="/docs/integrations/basics"
                 description="Quickly import data to analyze and visualize."
               />
+            <Card
+                title="Embed on Decipad"
+                notebook="/docs/quick-start/embed-on-decipad"
+                description="Embed from external websites into Decipad."
+              />
             </GridContainer>
-
-<br/>
-
-## Create a New Notebook
-
----
-
-<ImageAnnotation
-alt="Custom Formula Example"
-isOnlyOnHover
-firstSelectedByDefault
-steps={[
-{
-src: NewNotebook,
-xPercent: 83,
-yPercent: 1,
-widthPercent: 14,
-heightPercent: 6.5,
-value: "1",
-description: `<b>To create a new notebook</b>, click <code>+ New Notebook</code> on the top right of your workspace.`,
-},
-{
-src: NewNotebook1,
-xPercent: 78,
-yPercent: 82,
-widthPercent: 18,
-heightPercent: 15,
-value: "2",
-description: `Once you are in the new notebook, click on <code>Clear All</code> at the bottom right corner to begin with an <b>empty notebook.</b>`,
-},
-]}
-/>
-
-<br/>
-
-## Manage Notebooks
-
----
-
-<ImageAnnotation
-alt="Custom Formula Example"
-isOnlyOnHover
-firstSelectedByDefault
-navigationButtons
-steps={[
-{
-src: NotebookOptions,
-xPercent: 28,
-yPercent: 46.5,
-widthPercent: 69,
-heightPercent: 8,
-value: 1,
-description: `On your workspace, hover a notebook.`,
-},
-{
-src: NotebookOptions,
-xPercent: 89,
-yPercent: 46.5,
-widthPercent: 8,
-heightPercent: 8,
-value: 2,
-description: `Click the <code>•••</code> button on the right to open up the option's menu.`,
-},
-{
-src: NotebookOptions,
-xPercent: 75,
-yPercent: 54,
-widthPercent: 21,
-heightPercent: 6.5,
-value: 3,
-description: `<b>Duplicate Notebook</b>`,
-},
-{
-src: NotebookOptions,
-xPercent: 75,
-yPercent: 58.5,
-widthPercent: 21,
-heightPercent: 6.5,
-value: 4,
-description: `<b>Move Notebook</b> to a different workspace.`,
-},
-{
-src: NotebookOptions,
-xPercent: 75,
-yPercent: 63.5,
-widthPercent: 21,
-heightPercent: 6.5,
-value: 5,
-description: `<b>Download a Notebook copy</b>. To import a notebook, drag the <code>.zip</code> file into any Decipad workspace.`,
-},
-{
-src: NotebookOptions,
-xPercent: 75,
-yPercent: 68,
-widthPercent: 21,
-heightPercent: 6.5,
-value: 6,
-description: `<b>Download Notebook backups</b>. To import a backup, drag the <code>.zip</code> file into any Decipad workspace.`,
-},
-{
-src: NotebookOptions,
-xPercent: 75,
-yPercent: 73,
-widthPercent: 21,
-heightPercent: 6.5,
-value: 7,
-description: `<b>Archive Notebook</b>`,
-},
-]}
-/>
-
-<br/>
 
 ## Notebook Blocks
 
@@ -182,159 +70,49 @@ description: `<b>Archive Notebook</b>`,
 
 On Decipad everything is a block, that you can combine to present and analyze your data.
 
-### Add New Blocks
+1. **Add New Blocks**:
+   To add a new block, click the + button located next to an empty line. Alternatively, use the keyboard shortcut by typing `/` on a new empty line. Select the desired block from the menu that appears.
 
-<ImageAnnotation
-alt="Custom Formula Example"
-isOnlyOnHover
-firstSelectedByDefault
-navigationButtons
-steps={[
-{
-src: AddBlocks,
-xPercent: 16,
-yPercent: 38,
-widthPercent: 17,
-heightPercent: 6.5,
-value: "1",
-description: `Click the <code>+</code> button located next to an empty line.<br/> Alternatively, use the keyboard shortcut by typing <code>/</code> on a new empty line.`,
-},
-{
-src: AddBlocks,
-xPercent: 20,
-yPercent: 46.5,
-widthPercent: 30,
-heightPercent: 10,
-value: "2",
-description: `Select the desired block from the menu that appears.`,
-},
-]}
-/>
+2. **Delete Blocks**:
+   To delete a block, hover over the block and click the `⸬` button that appears on its left. Choose `Delete` from the options.
 
-### Move Blocks
+3. **Move Blocks**:
+   To move a block, hold the `⸬` button that appears on the left of the block, and drag the block to the desired position indicated by a blue line. You can stack side-by-side widgets, paragraphs, callouts, quotes, and images.
 
-<ImageAnnotation
-alt="Custom Formula Example"
-isOnlyOnHover
-firstSelectedByDefault
-steps={[
-{
-src: MoveBlock,
-xPercent: 16,
-yPercent: 38,
-widthPercent: 60,
-heightPercent: 8,
-value: 1,
-description: `Hover any block you want to move.`,
-},
-{
-src: MoveBlock,
-xPercent: 18,
-yPercent: 38,
-widthPercent: 6.5,
-heightPercent: 6.5,
-value: 2,
-description: `Hold the <code>⸬</code> button that appears on the left of the block.`,
-},
-{
-src: MoveBlock,
-xPercent: 20,
-yPercent: 55,
-widthPercent: 60,
-heightPercent: 12,
-value: 3,
-description: `Drag the block to the desired position indicated by a blue line.<br/>You can stack side-by-side widgets, paragraphs, callouts, quotes, and images.`,
-},
-{
-src: MoveBlock,
-xPercent: 20,
-yPercent: 55,
-widthPercent: 60,
-heightPercent: 12,
-value: 4,
-description: `Release the <code>⸬</code> button to place the block in its new position.`,
-},
-]}
-/>
+4. **Duplicate Blocks**:
+   To duplicate a block, hover over the block and click the `⸬` button that appears, then select `Duplicate`.
 
-### Block Options
+5. **Hide Blocks from Notebook Readers**:
+   To hide a block from readers, select "Hide from reader". This will hide the block for collaborators with the "Reader" role, the pulished view, and when the document is embedded. The block will fade, and a hidden icon will appear on the left of the block.
 
-<ImageAnnotation
-alt="Custom Formula Example"
-isOnlyOnHover
-firstSelectedByDefault
-navigationButtons
-steps={[
-{
-src:BlockOptions,
-xPercent: 18,
-yPercent: 38,
-widthPercent: 58,
-heightPercent: 9,
-value: 1,
-description: `Hover any block.`,
-},
-{
-src:BlockOptions,
-xPercent: 18,
-yPercent: 38,
-widthPercent: 6.5,
-heightPercent: 6.5,
-value: 2,
-description: `Click the <code>⸬</code> button that appears on the left of the block to open the options menu.`,
-},
-{
-src:BlockOptions,
-xPercent: 5,
-yPercent: 39,
-widthPercent:17,
-heightPercent: 6.5,
-value: 3,
-description: `<b>Hide a block</b><br/> Select <code>Hide from reader</code> to hide any block from a published notebook.<br/>The block will fade, and a hidden icon will appear on the left of the block.`,
-},
-{
-src:BlockOptions,
-xPercent: 5,
-yPercent: 43.5,
-widthPercent:17,
-heightPercent: 6.5,
-value: 4,
-description: `<b>Duplicate a block</b>`,
-},
-{
-src:BlockOptions,
-xPercent: 5,
-yPercent: 48.5,
-widthPercent:17,
-heightPercent: 6.5,
-value: 5,
-description: `<b>Transform a block</b><br/>Select <code>Turn into</code> to transform the type of your block.`,
-},
-{
-src:BlockOptions,
-xPercent: 5,
-yPercent: 55.5,
-widthPercent:17,
-heightPercent: 6.5,
-value: 6,
-description: `<b>Delete a block</b>`,
-},
-]}
-/>
+6. **Transform Blocks**:
+   To transform a block, hover over the block and click the `⸬` button that appears. Select "Turn into" to change the type of your block.
 
-## Upload Files
+## Notebook Tabs
 
-<ImageAnnotation
-noImage
-alt="Custom Formula Example"
-steps={[
-{
-value: "1",
-description: `<b>Upload .CSV files</b>: Drag and drop your .CSV files directly into a notebook or use the slash command "/csv" on an empty paragraph.`,
-},
-{
-value: "2",
-description: `<b>Upload images</b>: Add visual elements and context to your notebooks by dragging and dropping image files or using the slash command "/image" on an empty paragraph.`,
-}
-]}
-/>
+---
+
+Organize your notebook blocks into separate tabs.
+
+ <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+   <iframe src="https://www.loom.com/embed/14016c3eead24523ac0b123dc9411627?sid=54999995-483b-4968-9158-0059631b86a7?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+ </div>
+
+ <br />
+
+1. **Add Tabs:**
+   Click the `Add tab` button at the bottom of your notebooks. Choose a new name for your tab and press enter to confirm. To delete a tab, select it, click the dropdown next to its name, and choose `Delete tab`. To update the tab's icon, click on it and choose a new one. You can also reorder your tabs using `Move tab` in the dropdown menu.
+
+2. **Move Blocks Between Tabs:**
+   Select the block or blocks you want to move. Click the `⸬` button that appears on the left of the block selection. Choose `Move to tab` and select the new tab.
+
+3. **Hide Tabs from Notebooks Readers**
+   Select the tab you want to hide. Click the dropdown next to its name. Choose `Hide from readers`. This will hide the tab for collaborators with the "Reader" role, the published view, and when the document is embedded.
+
+
+## Upload Files: Images & CSVs
+
+---
+
+1. **Upload .CSV files**: Drag and drop your .CSV files directly into a notebook or use the slash command "/csv" on an empty paragraph.
+2. **Upload images**: Add visual elements and context to your notebooks by dragging and dropping image files or using the slash command "/image" on an empty paragraph.

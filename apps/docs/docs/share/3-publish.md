@@ -1,4 +1,3 @@
-
 # Publish Notebooks
 
 import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLoopVideo';
@@ -15,7 +14,7 @@ import AutoplayLoopVideo from '@site/src/components/AutoplayLoopVideo/AutoplayLo
 
 ## Hide Blocks from Readers
 
-When you publish your notebook, you can choose to hide specific blocks from readers. This allows you to control the visibility of certain content.
+When you publish your notebook, you can choose to hide specific blocks from readers. This will hide the block for collaborators with the "Reader" role, the pulished view, and when the document is embedded.
 
 <AutoplayLoopVideo src="https://decipad-docs.s3.eu-west-2.amazonaws.com/videos/hidereader.mov" playbackSpeed={2} />
 

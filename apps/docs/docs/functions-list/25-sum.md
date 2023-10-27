@@ -35,7 +35,7 @@ sum(my_table.column_B)
 
 Calculates the sum of an entire column based on your specified condition.
 
-### Examples
+### Example
 
 ```deci live
 my_table = {

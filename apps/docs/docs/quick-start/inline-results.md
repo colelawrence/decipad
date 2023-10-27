@@ -12,9 +12,9 @@ There are several ways to create Inline Results:
 
     - You can embed any number or calculation within a sentence by using the `=` shortcut. Simply press the `=` key, and a formula bar will appear. Type your calculation, and the result will be embedded in your text.
 
-2.  **Drag & Drop Inline Results from the Number's Catalog**
+2.  **Drag & Drop Inline Results from the Data Tab**
 
-    - You can easily embed any value from the number's catalog on the left side of your notebook. Just click and hold the `⸬` button that appears when you hover over a number, and drop it onto your text.
+    - Easily embed any value from the data tab located on the right side of your notebook. Simply click the sidebar button in the top bar to open the sidebar, then access the data tab. When you hover over a number, a `⸬` button will appear; you can click and drag it to drop it onto your text.
 
 3.  **Drag & Drop Inline Results from Data Views**
 
