@@ -3,7 +3,6 @@ import { getDefined } from '@decipad/utils';
 import { Buffer } from 'buffer';
 import * as decoding from 'lib0/decoding';
 import * as encoding from 'lib0/encoding';
-import * as mutex from 'lib0/mutex';
 import { Observable } from 'lib0/observable';
 import * as time from 'lib0/time';
 import debounce from 'lodash.debounce';
@@ -294,7 +293,6 @@ class WebsocketProvider
   wsLastMessageReceived = 0;
   wsUnsuccessfulReconnects = 0;
   messageHandlers: MessageHandler[];
-  mux: mutex.mutex;
   destroyed = false;
   outUpdates: Uint8Array[] = [];
   debouncedBroadcastUpdateMessage: () => void = debounce(
@@ -342,7 +340,6 @@ class WebsocketProvider
     }
 
     this.messageHandlers = messageHandlers.slice();
-    this.mux = mutex.createMutex();
     this.shouldConnect = connect;
 
     if (resyncInterval > 0) {
