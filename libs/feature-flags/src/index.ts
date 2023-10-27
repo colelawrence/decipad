@@ -68,6 +68,7 @@ export const getQueryStringOverrides = (): Flags => {
 
 // Overrides will always have the highest priority
 let overrides: Flags = {
+  TABS: true,
   POPULATED_NEW_NOTEBOOK: false,
   SILLY_NAMES: false,
 };
