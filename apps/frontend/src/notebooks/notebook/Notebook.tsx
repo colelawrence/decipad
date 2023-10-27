@@ -161,7 +161,7 @@ const NewTabs: FC<{
 
   const nav = useNavigate();
 
-  if (tabs.length === 1 && isReadOnly) {
+  if (tabs.filter((t) => !t.isHidden).length === 1 && isReadOnly) {
     return null;
   }
 
