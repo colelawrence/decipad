@@ -440,7 +440,10 @@ class WebsocketProvider
 
   private _awarenessUpdateHandler(changes: AwarenessUpdate) {
     const { added, updated, removed } = changes;
-    const changedClients = added.concat(updated).concat(removed);
+    const changedClients = added
+      .concat(updated)
+      .concat(removed)
+      .filter((c) => c === this.awareness.clientID);
     this.outAwarenessUpdates = this.outAwarenessUpdates.concat(changedClients);
     this.debouncedBroadcastAwarenessUpdateMessage();
   }
