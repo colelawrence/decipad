@@ -23,6 +23,8 @@ Invite guests to specific notebooks as readers or collaborators.
 - **Share a Notebook**: Open the notebook you want to share, click on the share icon, and enter the email address of the guest. Choose the appropriate access level (reader or collaborator) and send the invitation.
 - **Guest Access**: The shared notebook will appear in the guest's "Shared with Me" section within their workspace.
 
+Note: Only workspace admins will be able to publish new changes to notebooks they didn't author.
+
 ## Manage Personal Settings
 
 - **Personal Settings**: Click on your profile icon or username in the workspace. There you can modify your username, enable dark mode and logout. [Learn more about Account Settings](/account/settings)

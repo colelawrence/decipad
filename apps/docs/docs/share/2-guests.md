@@ -15,7 +15,9 @@ sidebar_class_name: new
 There are two roles you can assign to your teammate:
 
 - `Collaborator`: can make changes to your notebook.
-- `Reader`: has access to read your notebook and can duplicate it to make a copy.
+- `Reader`: has access to read your notebook.
+
+Note: Notebook guests can't publish new changes. Only workspace admins are able to publish new changes to notebooks they didn't author. [Learn more about workspaces →](/share/workspaces)
 
 ## Change Access Permissions
 
