@@ -42,11 +42,12 @@ const allRates = Object.keys(rates).map((rateName) => {
   }
 }).filter((rate) => rate.name !== 'Bitcoin')
 return allRates;`,
-  `// what country are you in
-const result = await fetch('https://jsonip.com/');
-const ipInfo = await result.json();
-const country = ipInfo.country;
-return country;`,
+  // this api seems to be rate limited, commenting for now
+  // `// what country are you in
+  // const result = await fetch('https://jsonip.com/');
+  // const ipInfo = await result.json();
+  // const country = ipInfo.country;
+  // return country;`,
 ];
 
 export function codePlaceholder() {

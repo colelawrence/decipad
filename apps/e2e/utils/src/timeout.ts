@@ -11,6 +11,7 @@ export const Timeouts = {
   tableDelay: 500,
   computerDelay: 2000,
   menuOpenDelay: 200,
+  keyPressDelay: 200,
   liveBlockDelay: 200,
   redirectDelay: 2000,
   maxSelectorWaitTime: 30_000,
