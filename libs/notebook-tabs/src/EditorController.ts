@@ -744,9 +744,18 @@ export class EditorController {
       return;
     }
 
-    const goodTitleIndex = this.InsertOperations.findIndex((op) =>
-      IsTitle(op.node)
-    );
+    let goodTitleIndex = -1;
+
+    // All become `findLastIndex` isn't fully supported :(
+    for (
+      let i = this.InsertOperations.length - 1;
+      i >= 0 && goodTitleIndex === -1;
+      i--
+    ) {
+      if (IsTitle(this.InsertOperations[i].node)) {
+        goodTitleIndex = i;
+      }
+    }
 
     // Extract the one good title (if any)
     if (goodTitleIndex !== -1) {

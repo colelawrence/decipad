@@ -1255,3 +1255,321 @@ describe('Moving tabs', () => {
     expect(controller.children[6].id).toBe('tab1');
   });
 });
+
+describe('Order of operations', () => {
+  it('inserts in a strange order', () => {
+    const controller = new EditorController('id', []);
+
+    const { apply } = controller;
+
+    const applyOps: Array<any> = [];
+
+    controller.apply = (op) => {
+      applyOps.push(op);
+      apply.bind(controller)(op);
+    };
+
+    controller.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: 'title',
+        id: '1',
+        children: [{ text: 'Welcome to Decipad!' }],
+      },
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: 'tab',
+        id: '2',
+        name: 'New Tab',
+        children: [],
+      } satisfies TabElement,
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [1, 0],
+      node: {
+        type: 'p',
+        id: '3',
+        children: [{ text: '' }],
+      },
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [1, 0],
+      node: {
+        type: 'p',
+        id: '3',
+        children: [{ text: '' }],
+      },
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: 'title',
+        id: '4',
+        children: [{ text: 'New title' }],
+      },
+    });
+
+    controller.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: 'tab',
+        id: '5',
+        name: 'New Tab',
+        children: [
+          {
+            type: 'p',
+            id: '6',
+            children: [{ text: 'This is the content' }],
+          },
+          {
+            type: 'p',
+            id: '7',
+            children: [{ text: '' }],
+          },
+        ],
+      } satisfies TabElement,
+    });
+
+    controller.Loaded();
+
+    expect(applyOps).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "Welcome to Decipad!",
+              },
+            ],
+            "id": "1",
+            "type": "title",
+          },
+          "path": Array [
+            0,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "node": Object {
+            "children": Array [],
+            "id": "2",
+            "name": "New Tab",
+            "type": "tab",
+          },
+          "path": Array [
+            1,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "id": "3",
+            "type": "p",
+          },
+          "path": Array [
+            1,
+            0,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "IS_LOCAL": true,
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "id": "3",
+            "type": "p",
+          },
+          "path": Array [
+            1,
+            0,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "id": "3",
+            "type": "p",
+          },
+          "path": Array [
+            1,
+            0,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "IS_LOCAL": true,
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "",
+              },
+            ],
+            "id": "3",
+            "type": "p",
+          },
+          "path": Array [
+            1,
+            0,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "New title",
+              },
+            ],
+            "id": "4",
+            "type": "title",
+          },
+          "path": Array [
+            0,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "node": Object {
+            "children": Array [
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "This is the content",
+                  },
+                ],
+                "id": "6",
+                "type": "p",
+              },
+              Object {
+                "children": Array [
+                  Object {
+                    "text": "",
+                  },
+                ],
+                "id": "7",
+                "type": "p",
+              },
+            ],
+            "id": "5",
+            "name": "New Tab",
+            "type": "tab",
+          },
+          "path": Array [
+            1,
+          ],
+          "type": "insert_node",
+        },
+        Object {
+          "TO_REMOTE": true,
+          "node": Object {
+            "children": Array [
+              Object {
+                "text": "Welcome to Decipad!",
+              },
+            ],
+            "id": "1",
+            "type": "title",
+          },
+          "path": Array [
+            0,
+          ],
+          "type": "remove_node",
+        },
+      ]
+    `);
+
+    expect(controller.children).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "children": Array [
+            Object {
+              "text": "New title",
+            },
+          ],
+          "id": "4",
+          "type": "title",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "3",
+              "type": "p",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "3",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "2",
+          "isHidden": false,
+          "name": "New Tab",
+          "type": "tab",
+        },
+        Object {
+          "children": Array [
+            Object {
+              "children": Array [
+                Object {
+                  "text": "This is the content",
+                },
+              ],
+              "id": "6",
+              "type": "p",
+            },
+            Object {
+              "children": Array [
+                Object {
+                  "text": "",
+                },
+              ],
+              "id": "7",
+              "type": "p",
+            },
+          ],
+          "icon": "Receipt",
+          "id": "5",
+          "isHidden": false,
+          "name": "New Tab",
+          "type": "tab",
+        },
+      ]
+    `);
+  });
+});
