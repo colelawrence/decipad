@@ -1,7 +1,11 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { createInputBelow, createToggleBelow } from '../utils/page/Block';
+import {
+  createInputBelow,
+  createToggleBelow,
+  createWithSlashCommand,
+} from '../utils/page/Block';
 import { keyPress, setUp, waitForEditorToLoad } from '../utils/page/Editor';
-import { Timeouts } from '../utils/src';
+import { Timeouts, createWorkspace } from '../utils/src';
 
 test.describe('Turn Into', () => {
   test.describe.configure({ mode: 'serial' });
@@ -61,5 +65,41 @@ test.describe('Turn Into', () => {
     await expect(page.getByTestId('codeline-code').nth(-1)).toContainText(
       'false'
     );
+  });
+});
+
+test.describe('Make sure the toggle conversion works', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  let page: Page;
+  let context: BrowserContext;
+  test.beforeAll(async ({ browser }) => {
+    page = await browser.newPage();
+    context = page.context();
+
+    await setUp(
+      { page, context },
+      {
+        createAndNavigateToNewPad: true,
+      }
+    );
+
+    await createWorkspace(page);
+  });
+
+  test.afterAll(async () => {
+    await page.close();
+  });
+
+  test('Checks all the files', async () => {
+    await createWithSlashCommand(page, '/input', 'input');
+    await page.locator('article').getByTestId('drag-handle').first().click();
+
+    page.getByText('Turn into').waitFor();
+    await page.getByText('Turn into').click();
+    await page.getByRole('menuitem').getByText('Toggle').waitFor();
+    await page.getByRole('menuitem').getByText('Toggle').click();
+
+    await expect(page.getByTestId('widget-editor:false')).toBeHidden();
   });
 });
