@@ -71,6 +71,10 @@ export const NotebookTabs: FC<TabsProps> = ({
     undefined
   );
 
+  const filteredTabs = useMemo(() => {
+    return isReadOnly ? tabs.filter((tab) => !tab.isHidden) : tabs;
+  }, [tabs, isReadOnly]);
+
   const toast = useToast();
 
   const clientEvent = useContext(ClientEventsContext);
@@ -279,10 +283,13 @@ export const NotebookTabs: FC<TabsProps> = ({
   );
 
   return (
-    <TabsWrapper hasScroll={hasScroll} isFirstTab={tabs[0].id === activeTabId}>
+    <TabsWrapper
+      hasScroll={hasScroll}
+      isFirstTab={filteredTabs[0].id === activeTabId}
+    >
       <TabsScrollWrapper ref={containerRef}>
         <TabsContainer>
-          {tabs.map(({ id, name, icon, isHidden }) => {
+          {filteredTabs.map(({ id, name, icon, isHidden }) => {
             if (id === editableTabId) {
               return (
                 <TabWrapper

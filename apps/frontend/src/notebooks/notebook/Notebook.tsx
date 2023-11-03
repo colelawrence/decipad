@@ -161,6 +161,9 @@ const NewTabs: FC<{
 
   const nav = useNavigate();
 
+  const defaultTabId = tabs.find((t) => !t.isHidden)?.id ?? tabs[0]?.id;
+
+  // if we are in read mode and there is only one tab and it is hidden, then we don't render the tabs
   if (tabs.filter((t) => !t.isHidden).length === 1 && isReadOnly) {
     return null;
   }
@@ -174,7 +177,7 @@ const NewTabs: FC<{
         isHidden,
       }))}
       isReadOnly={isReadOnly}
-      activeTabId={tab ?? tabs[0]?.id}
+      activeTabId={tab ?? defaultTabId}
       onClick={(id) => {
         nav(`${notebooks({}).notebook({ notebook }).$}/${id}`);
       }}

@@ -1,6 +1,6 @@
 import { ComponentProps, FC } from 'react';
 import { Editor } from './Editor.component';
-import { EditorController } from '@decipad/notebook-tabs';
+import { EditorController, useTabs } from '@decipad/notebook-tabs';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { EditorIdContext } from '@decipad/react-contexts';
@@ -28,10 +28,28 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   loaded,
 }) => {
   const { notebook, tab } = useRouteParams(notebooks({}).notebook);
+  const tabs = useTabs(controller);
   const nav = useNavigate();
 
   useUndo(controller);
 
+  // our fallback tab is the first non hidden tab
+  const defaultTabId = tabs.find((t) => !t.isHidden)?.id ?? tabs[0]?.id;
+
+  // check if the tab was provided and exists
+  const tabExists = !!tabs.find((t) => t.id === tab);
+
+  // check if the tab was provided and is hidden
+  const tabIsHidden = tabs.find((t) => t.id === tab)?.isHidden;
+
+  // if we are in read mode and tab doesn't exist or is hidden, then we navigate to the first non hidden tab
+  if (readOnly && (!tabExists || tabIsHidden)) {
+    nav(`${notebooks({}).notebook({ notebook, tab: defaultTabId }).$}`);
+    return <>Loading...</>;
+  }
+
+  // leaving this until tabs reach production
+  // selects 0 index tab if tab is not provided
   const subEditorIndex =
     tab != null ? controller.SubEditors.findIndex((v) => v.id === tab) : 0;
 
