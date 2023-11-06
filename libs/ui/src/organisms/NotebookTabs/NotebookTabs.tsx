@@ -433,11 +433,11 @@ const Tab: FC<TabProps> = ({
     >
       <TabContent>
         {isReadOnly ? (
-          <TabIcon>
+          <TabIcon data-testid="tab-icon">
             <Icon />
           </TabIcon>
         ) : isHidden ? (
-          <TabIcon>
+          <TabIcon data-testid="tab-hidden">
             <Hide />
           </TabIcon>
         ) : (
@@ -445,7 +445,7 @@ const Tab: FC<TabProps> = ({
             iconOnly
             color="Catskill"
             trigger={
-              <TabIcon ref={iconRef}>
+              <TabIcon data-testid="tab-icon" ref={iconRef}>
                 <Icon />
               </TabIcon>
             }

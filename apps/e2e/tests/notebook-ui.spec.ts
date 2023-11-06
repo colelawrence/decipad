@@ -1,18 +1,11 @@
-import { expect, Page, BrowserContext, test } from '@playwright/test';
+import { expect, Page, BrowserContext, test } from './manager/decipad-tests';
 import { PlaywrightManagerFactory } from './manager';
 import { snapshot, Timeouts, withTestUser } from '../utils/src';
-import {
-  focusOnBody,
-  ControlPlus,
-  waitForEditorToLoad,
-  setUp,
-} from '../utils/page/Editor';
+import { focusOnBody, waitForEditorToLoad } from '../utils/page/Editor';
 import { clickNewPadButton } from '../utils/page/Workspace';
 
-import { createTab, getTabName, selectTab } from 'apps/e2e/utils/page/Tab';
 import {
   createCalculationBlockBelow,
-  moveToTab,
   selectBlocks,
 } from 'apps/e2e/utils/page/Block';
 
@@ -177,74 +170,6 @@ test.describe('notebook ui interactions @notebook @ui', () => {
     });
   });
 
-  test('basic tabs funcionality @tabs', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
-
-    await test.step('check new notebook first tab', async () => {
-      await focusOnBody(page);
-      await page.keyboard.type('this is the first paragraph on the first tab');
-      await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
-        'this is the first paragraph on the first tab'
-      );
-      await expect(page.getByTestId('tab-name')).toHaveText('New Tab');
-    });
-
-    await test.step('rename first tab', async () => {
-      await page.getByTestId('tab-options-button').click();
-      await expect(page.getByTestId('tab-options-menu')).toBeVisible();
-      await page
-        .getByTestId('tab-options-menu')
-        .getByText('Rename Tab')
-        .click();
-      ControlPlus(page, 'a');
-      await page.keyboard.press('Backspace');
-      await page.keyboard.insertText('First Tab');
-      await page.keyboard.press('Enter');
-    });
-
-    await test.step('add second tab', async () => {
-      await page.getByTestId('add-tab-button').click();
-      await page.keyboard.press('Enter');
-      await expect(await page.getByTestId('tab-button').count()).toBe(2);
-    });
-
-    await test.step('check second tab does not have text and adds new paragraph', async () => {
-      await focusOnBody(page);
-      await expect(page.getByTestId('paragraph-content')).toHaveText('');
-      await expect(page.getByTestId('paragraph-wrapper').nth(0)).not.toHaveText(
-        'this is the first paragraph on the first tab'
-      );
-      await page.keyboard.type('this is the first paragraph on the second tab');
-      await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
-        'this is the first paragraph on the second tab'
-      );
-    });
-
-    await test.step('check first tab still has original text', async () => {
-      await page.getByTestId('tab-button').first().click();
-      await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
-        'this is the first paragraph on the first tab'
-      );
-    });
-
-    await test.step('delete second tab', async () => {
-      // goes to second tab named New Tab
-      await page.getByTestId('tab-button').getByText('New Tab').click();
-      await page.getByTestId('tab-options-button').nth(1).click();
-      await expect(page.getByTestId('tab-options-menu')).toBeVisible();
-      await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
-        'this is the first paragraph on the second tab'
-      );
-      await page.getByTestId('tab-options-menu').getByText('Delete').click();
-      // check it goes to first tab after delition second tab
-      await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
-        'this is the first paragraph on the first tab'
-      );
-      await expect(await page.getByTestId('tab-button').count()).toBe(1);
-    });
-  });
-
   test('sidebar in publish views @sidebar', async ({ page, browser }) => {
     const manager = await PlaywrightManagerFactory(page);
     await manager.CreateAndNavNewNotebook();
@@ -293,88 +218,110 @@ test.describe('notebook ui interactions @notebook @ui', () => {
   });
 });
 
-test.describe('using multiple tabs', () => {
-  test.describe.configure({ mode: 'serial' });
+test('basic tabs funcionality @tabs', async ({ page, notebook }) => {
+  const manager = await PlaywrightManagerFactory(page);
+  await manager.CreateAndNavNewNotebook();
 
-  let page: Page;
-  let context: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
+  await test.step('create 4 new tabs tabs called Tab #', async () => {
+    await notebook.createTabs(['Tab 2', 'Tab 3', 'Tab 4', 'Tab 5']);
 
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Create a new tab', async () => {
-    await createTab(page, 'Tab 1');
-    await createTab(page, 'Tab 2');
-    await createTab(page, 'Tab 3');
-    await selectTab(page, 0);
-
-    const [tab, tab1, tab2, tab3] = await Promise.all([
-      getTabName(page, 0),
-      getTabName(page, 1),
-      getTabName(page, 2),
-      getTabName(page, 3),
+    // 5 total tabs = initial tab + 4 created
+    expect(await notebook.getTabNames()).toEqual([
+      'New Tab',
+      'Tab 2',
+      'Tab 3',
+      'Tab 4',
+      'Tab 5',
     ]);
-
-    expect(tab).toContain('New Tab');
-    expect(tab1).toContain('Tab 1');
-    expect(tab2).toContain('Tab 2');
-    expect(tab3).toContain('Tab 3');
   });
 
-  test('Create blocks', async () => {
+  await test.step('change Tab 5 icon', async () => {
+    await notebook.hideTab('Tab 5');
+    await notebook.showTab('Tab 5');
+    await notebook.changeTabIcon('Tab 5', 'Announcement');
+    await notebook.changeTabIcon('Tab 5', 'Receipt', { usingMenu: true });
+  });
+
+  await test.step('rename first tab to Tab 1', async () => {
+    await notebook.selectTab('New Tab');
+    await notebook.renameTab('New Tab', 'Tab 1');
+    await expect(await notebook.getTabName(0)).toContain('Tab 1');
+    expect(await notebook.getTabNames()).toEqual([
+      'Tab 1',
+      'Tab 2',
+      'Tab 3',
+      'Tab 4',
+      'Tab 5',
+    ]);
+  });
+
+  await test.step('add text paragraphs to Tab 1', async () => {
     await focusOnBody(page);
-    for (let i = 0; i < 4; i += 1) {
-      await page.keyboard.type(`Block ${i}`);
-      await page.keyboard.press('Enter');
-    }
+
+    // paragraph
+    await page.keyboard.type(`Block 1`);
+    await page.keyboard.press('Enter');
+
+    // quote
+    await page.keyboard.type(`>`);
+    await page.keyboard.press('Space');
+    await page.keyboard.type('Block 2');
+    await page.keyboard.press('Enter');
+
+    // title
+    await page.keyboard.type('#');
+    await page.keyboard.press('Space');
+    await page.keyboard.type('Block 3');
+    await page.keyboard.press('Enter');
+
+    // paragraph
+    await page.keyboard.type(`Block 4`);
+    await page.keyboard.press('Enter');
+
+    await expect(await page.getByText(/Block \d+/).count()).toBe(4);
   });
 
-  test('Move single block to different tab', async () => {
-    await moveToTab(page, 0, 0);
-    await selectTab(page, 1);
-    const blockText = await page
-      .locator('[data-testid="paragraph-wrapper"] >> nth=0')
+  await test.step('check Tab 2 is empty', async () => {
+    await notebook.selectTab('Tab 2');
+    await focusOnBody(page);
+    await expect(page.getByTestId('paragraph-content')).toHaveText('');
+    await expect(await page.getByText(/Block \d+/).count()).toBe(0);
+    await notebook.selectTab('Tab 1');
+    await expect(await page.getByText(/Block \d+/).count()).toBe(4);
+  });
+
+  await test.step('move single paragraph from Tab 1 to Tab 2', async () => {
+    await notebook.selectTab('Tab 1');
+    await notebook.moveToTab(0, 'Tab 2');
+    await notebook.selectTab('Tab 2');
+    const block1 = await page
+      .getByTestId('paragraph-content')
+      .nth(0)
       .innerText();
-    expect(blockText).toContain('Block 0');
-  });
-
-  test('Move multiple blocks to different tab', async () => {
-    await selectTab(page, 0);
-    await selectBlocks(page, 0, 2);
-    await moveToTab(page, 0, 1);
-    await selectTab(page, 2);
-
-    const [block1, block2, block3] = await Promise.all([
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=0').innerText(),
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=1').innerText(),
-      page.locator('[data-testid="paragraph-wrapper"] >> nth=2').innerText(),
-    ]);
-
     expect(block1).toContain('Block 1');
-    expect(block2).toContain('Block 2');
-    expect(block3).toContain('Block 3');
   });
 
-  test('Move calculation based blocks to different tab', async () => {
-    await selectTab(page, 3);
+  await test.step('move multiple blocks from Tab 1 to Tab 3', async () => {
+    await notebook.selectTab('Tab 1');
+    await selectBlocks(page, 0, 2);
+    await notebook.moveToTab(0, 'Tab 3');
+    await notebook.selectTab('Tab 3');
+
+    expect(await page.getByRole('blockquote').innerText()).toContain('Block 2');
+    expect(await page.getByRole('heading').innerText()).toContain('Block 3');
+    expect(
+      await page.getByTestId('paragraph-wrapper').first().innerText()
+    ).toContain('Block 4');
+  });
+
+  await test.step('create advanced calculations in Tab 4 to move to Tab 5', async () => {
+    await notebook.selectTab('Tab 4');
     await createCalculationBlockBelow(page, 'num1 = 10');
     await page.keyboard.press('Shift+Enter');
     await page.keyboard.type('num2 = 20');
     await page.keyboard.press('Shift+Enter');
     await page.keyboard.type('num1 + num2');
-    await moveToTab(page, 2, 0);
+    await notebook.moveToTab(2, 'Tab 5');
 
     await expect(
       page.getByTestId('code-line').first().getByTestId('number-result:10')
@@ -383,10 +330,68 @@ test.describe('using multiple tabs', () => {
       page.getByTestId('code-line').last().getByTestId('number-result:20')
     ).toBeVisible();
 
-    await selectTab(page, 0);
+    await notebook.selectTab('Tab 5');
 
     await expect(
       page.getByTestId('code-line').last().getByTestId('number-result:30')
     ).toBeVisible();
+  });
+
+  await test.step('delete tab 5', async () => {
+    // check something from Tab 4 isn't visible
+    await expect(
+      page.getByTestId('code-line').last().getByTestId('number-result:20')
+    ).toBeHidden();
+
+    await notebook.selectTab('Tab 5');
+    await notebook.deleteTab('Tab 5');
+
+    // check something from Tab 4 is visible since Tab 5 has been deleted and Tab 4 has been selected in its place
+    await expect(
+      page.getByTestId('code-line').last().getByTestId('number-result:20')
+    ).toBeVisible();
+
+    // check something from Tab 5 doesn't exist anymore
+    await expect(
+      page.getByTestId('code-line').last().getByTestId('number-result:30')
+    ).toBeHidden();
+
+    expect(await notebook.getTabNames()).toEqual([
+      'Tab 1',
+      'Tab 2',
+      'Tab 3',
+      'Tab 4',
+    ]);
+  });
+
+  await test.step('move tab 4', async () => {
+    await notebook.moveTab('Tab 4', 'Left');
+    expect(await notebook.getTabNames()).toEqual([
+      'Tab 1',
+      'Tab 2',
+      'Tab 4',
+      'Tab 3',
+    ]);
+    await notebook.moveTab('Tab 4', 'Right');
+    expect(await notebook.getTabNames()).toEqual([
+      'Tab 1',
+      'Tab 2',
+      'Tab 3',
+      'Tab 4',
+    ]);
+    await notebook.moveTab('Tab 4', 'To the start');
+    expect(await notebook.getTabNames()).toEqual([
+      'Tab 4',
+      'Tab 1',
+      'Tab 2',
+      'Tab 3',
+    ]);
+    await notebook.moveTab('Tab 4', 'To the end');
+    expect(await notebook.getTabNames()).toEqual([
+      'Tab 1',
+      'Tab 2',
+      'Tab 3',
+      'Tab 4',
+    ]);
   });
 });

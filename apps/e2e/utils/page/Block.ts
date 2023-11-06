@@ -313,18 +313,6 @@ export async function getResult(page: Page, n: number) {
   return locator;
 }
 
-export async function moveToTab(
-  page: Page,
-  blockIndex: number,
-  tabIndex: number
-) {
-  await page
-    .locator(`[data-testid="drag-handle"] >> nth=${blockIndex}`)
-    .click();
-  await page.getByRole('menuitem', { name: 'Move to tab' }).click();
-  await page.getByTestId(`move-to-tab-${tabIndex}`).click();
-}
-
 export async function selectBlocks(
   page: Page,
   startBlock: number,
