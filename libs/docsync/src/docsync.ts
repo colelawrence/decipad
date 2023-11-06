@@ -3,7 +3,12 @@ import { Awareness } from 'y-protocols/awareness';
 import { applyUpdate, Doc as YDoc } from 'yjs';
 import stringify from 'json-stringify-safe';
 import { fetch } from '@decipad/fetch';
-import { SyncElement, withCursor, withYjs } from '@decipad/slate-yjs';
+import {
+  SyncElement,
+  toSlateDoc,
+  withCursor,
+  withYjs,
+} from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { EditorController } from '@decipad/notebook-tabs';
 import {
@@ -18,6 +23,25 @@ const tokenTimeoutMs = 60 * 1000;
 
 // AAA= is state for a completely empty Yjs document.
 const EMPTY_STATE = 'AAA=';
+
+declare global {
+  interface Window {
+    yjsToJson: (text: string) => void;
+  }
+}
+
+// A few helper functions to help customer support recover notebooks.
+if (
+  typeof window !== 'undefined' &&
+  window.location.host === 'dev.decipad.com'
+) {
+  window.yjsToJson = (text: string) => {
+    const data = Buffer.from(text, 'base64');
+    const yjsDoc = new YDoc();
+    applyUpdate(yjsDoc, data);
+    return { children: toSlateDoc(yjsDoc.getArray()) };
+  };
+}
 
 interface DocSyncConnectionParams {
   url: string;
