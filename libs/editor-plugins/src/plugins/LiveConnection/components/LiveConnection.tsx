@@ -5,7 +5,7 @@ import {
   PlateComponent,
 } from '@decipad/editor-types';
 import { assertElementMultipleType } from '@decipad/editor-utils';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { LiveConnectionCore } from './LiveConnectionCore';
 import { LiveConnectionResultContextProvider } from '../contexts/LiveConnectionResultContext';
 
@@ -15,14 +15,13 @@ const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
     ELEMENT_LIVE_DATASET,
   ]);
   const [deleted, setDeleted] = useState(false);
-  const onceDeleted = useCallback(() => setDeleted(true), []);
 
   return (
     <DraggableBlock
       blockKind="editorTable"
       element={element}
       {...attributes}
-      onceDeleted={onceDeleted}
+      onDelete={() => setDeleted(false)}
       dependencyId={element.id}
     >
       <LiveConnectionResultContextProvider>

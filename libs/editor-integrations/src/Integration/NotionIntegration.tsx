@@ -10,7 +10,6 @@ import {
   columnTypeCoercionsToRec,
 } from '@decipad/import';
 import { useEffect } from 'react';
-import { useIntegrationContext } from '.';
 import {
   GetNotionDocument,
   GetNotionQuery,
@@ -20,6 +19,7 @@ import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { useClient } from 'urql';
 import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
+import { useIntegrationOptions } from '../hooks';
 
 export const NotionIntegration = function CodeIntegration({
   blockOptions,
@@ -28,7 +28,6 @@ export const NotionIntegration = function CodeIntegration({
   varName,
 }: ConcreteIntegrationBlock<'notion'>): null {
   const computer = useComputer();
-  const observable = useIntegrationContext();
 
   const client = useClient();
   const { notebook } = useRouteParams(notebooks({}).notebook);
@@ -43,82 +42,60 @@ export const NotionIntegration = function CodeIntegration({
     }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
-  useEffect(() => {
-    return () => {
-      pushResultToComputer(computer, id, varName, undefined);
-    };
-  }, [computer, id, varName]);
-
-  useEffect(() => {
-    const sub = observable?.subscribe((action) => {
-      switch (action) {
-        case 'refresh':
-          client
-            .query<GetNotionQuery, GetNotionQueryVariables>(GetNotionDocument, {
-              url: blockOptions.notionUrl,
-              notebookId: notebook.id,
-            })
-            .then((res) => {
-              if (!res.data?.getNotion) return;
-
-              const notionResult = importFromUnknownJson(
-                importFromNotion(JSON.parse(res.data.getNotion)),
-                {
-                  columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
-                }
-              );
-              pushResultToComputer(computer, id, varName, notionResult);
-            });
-
-          break;
-        case 'show-source': {
-          const store = useConnectionStore.getState();
-          const notionStore = useNotionConnectionStore.getState();
-
-          store.abort();
-          store.setConnectionType('notion');
-          store.setStage('connect');
-          store.setExistingIntegration(id);
+  useIntegrationOptions({
+    onRefresh() {
+      client
+        .query<GetNotionQuery, GetNotionQueryVariables>(GetNotionDocument, {
+          url: blockOptions.notionUrl,
+          notebookId: notebook.id,
+        })
+        .then((res) => {
+          if (!res.data?.getNotion) return;
 
           const notionResult = importFromUnknownJson(
-            importFromNotion(JSON.parse(blockOptions.latestResult)),
+            importFromNotion(JSON.parse(res.data.getNotion)),
             {
               columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
             }
           );
+          pushResultToComputer(computer, id, varName, notionResult);
+        });
+    },
+    onShowSource() {
+      const store = useConnectionStore.getState();
+      const notionStore = useNotionConnectionStore.getState();
 
-          if (notionResult) {
-            store.setResultPreview(notionResult);
-          }
+      store.abort();
+      store.setConnectionType('notion');
+      store.setStage('connect');
+      store.setExistingIntegration(id);
 
-          store.setRawResult(blockOptions.latestResult);
-          store.setAllTypeMapping(typeMappings);
-          store.setVarName(varName);
-          store.changeOpen(true);
-
-          notionStore.Set({
-            latestResult: blockOptions.latestResult,
-            timeOfLastRun: blockOptions.timeOfLastRun,
-            NotionDatabaseUrl: blockOptions.notionUrl,
-          });
+      const notionResult = importFromUnknownJson(
+        importFromNotion(JSON.parse(blockOptions.latestResult)),
+        {
+          columnTypeCoercions: columnTypeCoercionsToRec(typeMappings),
         }
+      );
+
+      if (notionResult) {
+        store.setResultPreview(notionResult);
       }
-    });
-    return () => {
-      sub?.unsubscribe();
-    };
-  }, [
-    blockOptions.latestResult,
-    varName,
-    id,
-    observable,
-    computer,
-    client,
-    blockOptions.notionUrl,
-    notebook.id,
-    blockOptions.timeOfLastRun,
-    typeMappings,
-  ]);
+
+      store.setRawResult(blockOptions.latestResult);
+      store.setAllTypeMapping(typeMappings);
+      store.setVarName(varName);
+      store.changeOpen(true);
+
+      notionStore.Set({
+        latestResult: blockOptions.latestResult,
+        timeOfLastRun: blockOptions.timeOfLastRun,
+        NotionDatabaseUrl: blockOptions.notionUrl,
+      });
+    },
+    onDelete() {
+      pushResultToComputer(computer, id, varName, undefined);
+    },
+  });
 
   return null;
 };

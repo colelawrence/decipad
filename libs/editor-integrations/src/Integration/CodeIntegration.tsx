@@ -6,8 +6,7 @@ import {
 } from '@decipad/react-contexts';
 import type { ResultMessageType } from '@decipad/safejs';
 import { useCallback, useEffect } from 'react';
-import { useIntegrationContext } from '.';
-import { useDeciVariables, useWorker } from '../hooks';
+import { useDeciVariables, useIntegrationOptions, useWorker } from '../hooks';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
 
@@ -23,7 +22,6 @@ export const CodeIntegration = function CodeIntegration({
   varName,
 }: ConcreteIntegrationBlock<'codeconnection'>): null {
   const computer = useComputer();
-  const observable = useIntegrationContext();
 
   const store = useConnectionStore();
   const codeStore = useCodeConnectionStore();
@@ -40,12 +38,6 @@ export const CodeIntegration = function CodeIntegration({
     }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
-  useEffect(() => {
-    return () => {
-      pushResultToComputer(computer, id, varName, undefined);
-    };
-  }, [computer, id, varName]);
-
   const worker = useWorker(
     useCallback(
       (msg: ResultMessageType) => {
@@ -59,52 +51,35 @@ export const CodeIntegration = function CodeIntegration({
     useCallback((e) => console.error(e), [])
   );
 
-  // REFACTOR: Depending on store and codeStore is inefficient and clunky.
-  useEffect(() => {
-    const sub = observable?.subscribe((action) => {
-      switch (action) {
-        case 'refresh':
-          worker?.execute(blockOptions.code, deciVars);
-          break;
-        case 'show-source': {
-          store.abort();
-          store.setConnectionType('codeconnection');
-          store.setStage('connect');
-          store.setExistingIntegration(id);
+  useIntegrationOptions({
+    onRefresh() {
+      worker?.execute(blockOptions.code, deciVars);
+    },
+    onShowSource() {
+      store.abort();
+      store.setConnectionType('codeconnection');
+      store.setStage('connect');
+      store.setExistingIntegration(id);
 
-          const res = importFromJSONAndCoercions(
-            blockOptions.latestResult,
-            store.resultTypeMapping
-          );
-          if (res) {
-            store.setResultPreview(res);
-          }
-
-          store.setAllTypeMapping(typeMappings);
-          store.setVarName(varName);
-          store.changeOpen(true);
-
-          codeStore.setCode(blockOptions.code);
-          codeStore.setLatestResult(blockOptions.latestResult);
-          break;
-        }
+      const res = importFromJSONAndCoercions(
+        blockOptions.latestResult,
+        store.resultTypeMapping
+      );
+      if (res) {
+        store.setResultPreview(res);
       }
-    });
-    return () => {
-      sub?.unsubscribe();
-    };
-  }, [
-    observable,
-    blockOptions.code,
-    worker,
-    store,
-    codeStore,
-    varName,
-    id,
-    typeMappings,
-    blockOptions.latestResult,
-    deciVars,
-  ]);
+
+      store.setAllTypeMapping(typeMappings);
+      store.setVarName(varName);
+      store.changeOpen(true);
+
+      codeStore.setCode(blockOptions.code);
+      codeStore.setLatestResult(blockOptions.latestResult);
+    },
+    onDelete() {
+      pushResultToComputer(computer, id, varName, undefined);
+    },
+  });
 
   return null;
 };

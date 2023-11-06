@@ -35,9 +35,7 @@ import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import {
   ComponentProps,
   ReactNode,
-  createContext,
   useCallback,
-  useContext,
   useMemo,
   useRef,
   useState,
@@ -47,6 +45,7 @@ import { Subject } from 'rxjs';
 import { CodeIntegration } from './CodeIntegration';
 import { SQLIntegration } from './SQLIntegration';
 import { NotionIntegration } from './NotionIntegration';
+import { ContextActions, IntegrationBlockContext } from '../hooks';
 
 function getIntegrationComponent(
   id: string,
@@ -91,12 +90,6 @@ type IntegrationButtons = Pick<
   ComponentProps<typeof UIIntegrationBlock>,
   'actionButtons'
 >;
-type ContextActions = 'refresh' | 'show-source';
-const IntegrationBlockContext = createContext<
-  Subject<ContextActions> | undefined
->(undefined);
-
-export const useIntegrationContext = () => useContext(IntegrationBlockContext);
 
 export const IntegrationBlock: PlateComponent = ({
   attributes,
@@ -286,6 +279,7 @@ export const IntegrationBlock: PlateComponent = ({
         element={element}
         blockKind="live"
         hasPreviousSibling={isStructuredElement(prevElement?.[0])}
+        onDelete={() => observable.current.next('delete-block')}
       >
         <UIIntegrationBlock
           meta={

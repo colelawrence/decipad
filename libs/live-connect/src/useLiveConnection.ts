@@ -123,10 +123,10 @@ export const useLiveConnection = (
   }, [blockId, computer, result, variableName]);
 
   useEffect(() => {
-    return () => {
+    if (deleted) {
       pushResultToComputer(computer, blockId, variableName, undefined);
-    };
-  }, [computer, blockId, variableName]);
+    }
+  }, [blockId, computer, deleted, variableName]);
 
   const clearCacheAndRetry = useCallback(() => {
     clearCache();
