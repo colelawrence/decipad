@@ -46,7 +46,7 @@ it('random types', async () => {
   );
   expect(
     formatResultPreview(await testCode('date(2020)'))
-  ).toMatchInlineSnapshot(`"date"`);
+  ).toMatchInlineSnapshot(`"2020"`);
   expect(formatResultPreview(await testCode('F(X) = 1'))).toMatchInlineSnapshot(
     `"function"`
   );

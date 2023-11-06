@@ -12,6 +12,7 @@ import { useResolved } from '@decipad/react-utils';
 import { SelectItems, icons } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
 import { getNodeString, insertText, nanoid } from '@udecode/plate';
+import { MaterializedColumnDesc } from 'libs/computer/src/types';
 import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { combineLatestWith, concat, distinctUntilChanged, map, of } from 'rxjs';
@@ -55,7 +56,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
 
   const onChangeTypeMutator = usePathMutatorCallback(
     editor,
-    path?.slice(-1), // the parent (VariableDef)
+    path?.slice(0, 1), // the parent (VariableDef)
     'coerceToType',
     'VariableDef'
   );
@@ -134,7 +135,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         elementChangeColumn(
           element.selectedColumn === option.item ? undefined : option.item
         );
-        onChangeTypeMutator(option.coherceToType);
+        onChangeTypeMutator(option.blockType);
       } else {
         if (selected === option.item) {
           changeOptions('Select');
@@ -207,7 +208,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
 
     return [
       ...materializedColumns
-        .filter((c) =>
+        .filter((c: MaterializedColumnDesc) =>
           element.selectedColumn
             ? element.selectedColumn === `${c.tableName}.${c.columnName}`
             : true
@@ -220,7 +221,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
             group: 'Table column',
             item: `${c.tableName}.${c.columnName}`,
             itemName,
-            coherceToType: c.result.type.cellType,
+            blockType: c.result.type.cellType,
             type: 'column',
             focused:
               element.selectedColumn === `${c.tableName}.${c.columnName}`,

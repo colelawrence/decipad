@@ -2,6 +2,9 @@ import { Result, SerializedType } from '@decipad/language';
 import DeciNumber from '@decipad/number';
 import { formatError } from './formatError';
 import { formatNumber } from './formatNumber';
+import { formatResult } from './formatResult';
+
+const DEFAULT_LOCALE = 'en-US';
 
 export function formatResultPreview({ type, value }: Result.Result): string {
   switch (type.kind) {
@@ -29,7 +32,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     }
 
     case 'date': {
-      return 'date';
+      return formatResult(DEFAULT_LOCALE, value, type);
     }
 
     case 'column': {

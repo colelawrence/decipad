@@ -223,6 +223,7 @@ export interface DropdownElement extends BaseElement {
   /** Used when it's a smart selection, to remember the column that is selected */
   selectedColumn?: string;
   children: [PlainText];
+  variant?: string;
 }
 
 export interface SliderElement extends BaseElement {

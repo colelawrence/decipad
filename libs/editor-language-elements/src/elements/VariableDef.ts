@@ -29,11 +29,13 @@ export const VariableDef: InteractiveLanguageElement = {
       const { id, children } = element;
       const variableName = getNodeString(children[0]);
       let expression: string | AST.Expression = getNodeString(children[1]);
+      const isSmartSelection = !!children[1].smartSelection;
 
       if (
         element.variant === 'expression' ||
         element.variant === 'date' ||
-        element.variant === 'toggle'
+        element.variant === 'toggle' ||
+        (element.variant === 'dropdown' && !isSmartSelection)
       ) {
         const { type, coerced } = await inferType(computer, expression, {
           type: element.coerceToType,
@@ -46,7 +48,18 @@ export const VariableDef: InteractiveLanguageElement = {
         } else {
           expression = coerced || '';
         }
-      } else if (element.variant === 'dropdown') {
+        if (element.variant === 'dropdown') {
+          const dropdownVariable = parseElementAsVariableAssignment(
+            id,
+            variableName,
+            expression
+          );
+          const dropdownOptions = await parseDropdownOptions(computer, element);
+          return [...dropdownVariable, ...dropdownOptions.flat()];
+        }
+      }
+
+      if (element.variant === 'dropdown' && isSmartSelection) {
         return parseDropdown(computer, element);
       }
 
@@ -79,7 +92,6 @@ async function parseDropdown(
   } catch (err) {
     // do nothing
   }
-
   if (!(parsedInput instanceof Error || parsedInput == null)) {
     return [
       ...parseElementAsVariableAssignment(element.id, name, parsedInput),

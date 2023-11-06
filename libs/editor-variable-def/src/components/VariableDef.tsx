@@ -106,10 +106,6 @@ export const VariableDef: PlateComponent = ({
         onChangeSmartSelection(
           !(element as VariableDropdownElement).children[1].smartSelection
         );
-        onChangeTypeMutator({
-          kind: element.coerceToType?.kind,
-          unit: null,
-        });
       } else {
         // When dropdown widget changes to text ot input, it is no longer a smart selection
         if (element.variant === 'dropdown') {
@@ -180,11 +176,7 @@ export const VariableDef: PlateComponent = ({
           }
           color={color as AvailableSwatchColor}
           readOnly={readOnly}
-          type={
-            element.variant === 'dropdown'
-              ? inferredType
-              : element.coerceToType ?? inferredType
-          }
+          type={element.coerceToType ?? inferredType}
           onChangeType={onChangeType}
           value={getNodeString(element.children[1])}
           onChangeValue={onChangeValue}
