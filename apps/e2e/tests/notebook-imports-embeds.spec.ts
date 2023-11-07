@@ -1,17 +1,12 @@
-import { expect, test } from '@playwright/test';
-import { PlaywrightManagerFactory } from './manager';
+import { expect, test } from './manager/decipad-tests';
 import { Timeouts } from '../utils/src';
 
 test.describe('structured input and calculations @calculation-blocks', () => {
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
+  test('import images @imports @images', async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
-  test('import images @imports @images', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
     await test.step('Importing image through file explorer', async () => {
-      await manager.UseSlashCommands('upload-image');
+      await notebook.openImageUploader();
       const fileChooserPromise = page.waitForEvent('filechooser');
       await page.getByText('Choose file').click();
       const fileChooser = await fileChooserPromise;
@@ -32,7 +27,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     });
 
     await test.step('Importing image via link', async () => {
-      await manager.UseSlashCommands('upload-image');
+      await notebook.openImageUploader();
       await page.getByTestId('link-file-tab').click();
       await page
         .getByTestId('upload-link-input')
@@ -48,12 +43,10 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     });
   });
 
-  test('import CSVs @imports @csv', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
-
+  test('import CSVs @imports @csv', async ({ testUser }) => {
+    const { page, notebook } = testUser;
     await test.step('importing csv link through csv panel with link', async () => {
-      await manager.UseSlashCommands('upload-csv');
+      await notebook.openCSVUploader();
       await page.getByRole('button', { name: 'Choose file' }).first().click();
       await page.getByTestId('link-file-tab').click();
       await page
@@ -82,7 +75,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     });
 
     await test.step('importing csv file through csv panel with file', async () => {
-      await manager.UseSlashCommands('upload-csv');
+      await notebook.openCSVUploader();
       await page.getByTestId('upload-file-tab').click();
       await page.getByRole('button', { name: 'Choose file' }).click();
       const fileChooserPromise = page.waitForEvent('filechooser');
@@ -109,12 +102,10 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     });
   });
 
-  test('embed on deipad @embeds', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
-
+  test('embed on deipad @embeds', async ({ testUser }) => {
+    const { page, notebook } = testUser;
     await test.step('embed from loom', async () => {
-      await manager.UseSlashCommands('upload-embed');
+      await notebook.openEmbedUploader();
       await page
         .getByTestId('upload-link-input')
         .fill(
@@ -134,7 +125,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       ).toBeVisible();
     });
     await test.step('embed from google slides', async () => {
-      await manager.UseSlashCommands('upload-embed');
+      await notebook.openEmbedUploader();
       await page
         .getByTestId('upload-link-input')
         .fill(
@@ -152,7 +143,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
     });
 
     await test.step('embed from pitch', async () => {
-      await manager.UseSlashCommands('upload-embed');
+      await notebook.openEmbedUploader();
       await page
         .getByTestId('upload-link-input')
         .fill('https://pitch.com/embed/d32f33f3-1ac8-4d44-aee6-672899febcf9');

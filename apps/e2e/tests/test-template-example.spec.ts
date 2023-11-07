@@ -1,5 +1,4 @@
-import { test } from '@playwright/test';
-import { PlaywrightManagerFactory } from './manager';
+import { test } from './manager/decipad-tests';
 
 /**
  * Example test file.
@@ -15,18 +14,12 @@ import { PlaywrightManagerFactory } from './manager';
 
 // eslint-disable-next-line playwright/no-skipped-test
 test.describe.skip('Testinggg', () => {
-  test('does some stuff', async ({ page }) => {
+  test('does some stuff', async ({ testUser }) => {
     // Every test will need to grab its own copy.
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
-    await manager.GoToWorkspace();
-
-    await test.step('This is how to do test steps', async () => {
-      await manager.CreateAndNavNewNotebook();
-    });
+    const { notebook } = testUser;
 
     await test.step('Like this you dont kill parallelism', async () => {
-      await manager.CreateAndNavNewNotebook();
+      await notebook.addAdvancedFormula('1+1');
     });
   });
 });

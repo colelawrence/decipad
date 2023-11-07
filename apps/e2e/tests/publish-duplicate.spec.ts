@@ -1,6 +1,5 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { BrowserContext, expect, Page, test } from './manager/decipad-tests';
 import {
-  focusOnBody,
   keyPress,
   setUp,
   waitForEditorToLoad,
@@ -19,98 +18,110 @@ import {
   navigateToWorkspacePage,
 } from '../utils/page/Workspace';
 
-const someText = 'Some text to show in the editor';
-const moreText = 'Should work even with some delay';
-const justOneMore = 'One more time we gonna celibate';
-test.describe('Simple does publish work test', () => {
-  test.describe.configure({ mode: 'serial' });
-
+test('simple notebook publish', async ({
+  testUser,
+  randomFreeUser,
+  unregisteredUser,
+}) => {
   let sharedPageLocation: string | null;
-  let page: Page;
-  let context: BrowserContext;
-  let randomUser: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
+  const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
+    unregisteredUser;
+  const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
+    randomFreeUser;
+  const { page: testUserPage, notebook: testUserNotebook } = testUser;
+  const someText = 'Some text to show in the editor';
+  const moreText = 'Should work even with some delay';
+  const justOneMore = 'One more time we gonna celibate';
 
-    await setUp({ page, context });
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('starts empty', async () => {
-    await expect(page.getByTestId('paragraph-content')).toHaveText('');
-  });
-
-  test('can write some stuff', async () => {
-    await focusOnBody(page);
-    await page.keyboard.type(someText);
-    await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+  await test.step('create notebook', async () => {
+    await expect(testUserPage.getByTestId('paragraph-content')).toHaveText('');
+    await testUserNotebook.focusOnBody();
+    await testUserPage.keyboard.type(someText);
+    await expect(testUserNotebook.notebookParagraph.nth(0)).toHaveText(
       someText
     );
-    await page.keyboard.press('Enter');
-    await page.keyboard.type(moreText);
-    await expect(page.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+    await testUserPage.keyboard.press('Enter');
+    await testUserPage.keyboard.type(moreText);
+    await expect(testUserNotebook.notebookParagraph.nth(1)).toHaveText(
       moreText
     );
-  });
+    await testUserPage.keyboard.press('Enter');
 
-  test('share notebook', async () => {
-    // delay for the changes to sync before publishing
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
-
-    await page.getByTestId('publish-button').click();
-    await page.getByTestId('publish-tab').click();
-    await page.locator('[aria-roledescription="enable publishing"]').click();
-    // eslint-disable-next-line playwright/no-networkidle
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByText('Anyone with link can view')).toBeVisible();
-    await page.getByTestId('copy-published-link').click();
-    const clipboardText = (
-      (await page.evaluate('navigator.clipboard.readText()')) as string
-    ).toString();
-    sharedPageLocation = clipboardText;
-    expect(clipboardText).toContain('Welcome-to-Decipad');
+    await testUserPage.waitForTimeout(Timeouts.syncDelay);
   });
 
-  test('[another registered user] duplicates notebook and adds text', async ({
-    browser,
-  }) => {
-    randomUser = await browser.newContext();
-    const randomPage = await randomUser.newPage();
-    await withTestUser({ context: randomUser, page: randomPage });
+  await test.step('share notebook', async () => {
+    sharedPageLocation = await testUser.notebook.publishNotebook();
+  });
 
-    await randomPage.goto(sharedPageLocation!);
-    await waitForNotebookToLoad(randomPage);
-
-    await expect(randomPage.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+  await test.step('[unregisteredUser] navigates to published notebook link', async () => {
+    await unregisteredUserPage.goto(sharedPageLocation!);
+    await unregisteredUserNotebook.waitForEditorToLoad();
+    await expect(unregisteredUserNotebook.notebookParagraph.nth(0)).toHaveText(
       someText
     );
-    await expect(randomPage.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+    await expect(unregisteredUserNotebook.notebookParagraph.nth(1)).toHaveText(
       moreText
     );
-    await randomPage.getByTestId('duplicate-button').click();
+    await unregisteredUserPage.getByText('Try Decipad').waitFor();
+  });
+
+  await test.step('[randomFreeUser] navigates to published notebook link', async () => {
+    await randomFreeUserPage.goto(sharedPageLocation!);
+
+    await waitForNotebookToLoad(randomFreeUserPage);
+    await expect(randomFreeUserNotebook.notebookParagraph.nth(0)).toHaveText(
+      someText
+    );
+    await expect(randomFreeUserNotebook.notebookParagraph.nth(1)).toHaveText(
+      moreText
+    );
+    await randomFreeUserPage.getByText('Duplicate').click();
     // Waits for the share button to be visible, meaning the notebook was duplicated
-    await expect(randomPage.getByTestId('publish-button')).toBeVisible();
+    await expect(
+      randomFreeUserPage.getByTestId('publish-button')
+    ).toBeVisible();
 
     // checks for original content
-    await expect(randomPage.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
+    await expect(randomFreeUserNotebook.notebookParagraph.nth(0)).toHaveText(
       someText
     );
-    await expect(randomPage.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+    await expect(randomFreeUserNotebook.notebookParagraph.nth(1)).toHaveText(
       moreText
     );
+  });
 
-    // checks duplicated notebook can be edited
-    await focusOnBody(randomPage);
-    await keyPress(randomPage, 'Enter');
-    await randomPage.keyboard.type(justOneMore);
-    await expect(randomPage.getByTestId('paragraph-wrapper').nth(1)).toHaveText(
+  await test.step('add one more paragraph', async () => {
+    await testUserNotebook.focusOnBody();
+    await keyPress(testUserPage, 'Enter');
+    await testUserPage.keyboard.type(justOneMore);
+    await expect(testUserNotebook.notebookParagraph.nth(1)).toHaveText(
       justOneMore
+    );
+    await keyPress(testUserPage, 'Enter');
+  });
+
+  await test.step('re-publish notebook', async () => {
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUserPage.waitForTimeout(Timeouts.syncDelay);
+    await testUserPage.getByRole('button').getByText('Share').click();
+    await testUserPage.getByTestId('publish-changes').click();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await testUserPage.waitForTimeout(Timeouts.syncDelay);
+  });
+
+  await test.step('[unregisteredUser] see the republished state', async () => {
+    await unregisteredUserPage.goto(sharedPageLocation!);
+    await waitForNotebookToLoad(unregisteredUserPage);
+    await expect(
+      unregisteredUserPage.getByTestId('paragraph-wrapper').nth(1)
+    ).toHaveText(justOneMore);
+  });
+
+  await test.step("check it doesn't ask to share new changes", async () => {
+    await expect(testUserPage.getByText('Share with new changes')).toHaveCount(
+      0
     );
   });
 });

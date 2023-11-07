@@ -1,13 +1,49 @@
 import { test as base } from '@playwright/test';
-import { Notebook } from './notebook';
+import { User } from './test-users';
+import { STORAGE_STATE } from '../../playwright.config';
 
 type DecipadFixtures = {
-  notebook: Notebook;
+  premiumUser: User;
+  testUser: User;
+  unregisteredUser: User;
+  randomFreeUser: User;
+  randomPremiumUser: User;
 };
 
 export const test = base.extend<DecipadFixtures>({
-  notebook: async ({ page }, use) => {
-    await use(new Notebook(page));
+  premiumUser: async ({ browser }, use) => {
+    const context = await browser.newContext({ storageState: STORAGE_STATE });
+    const adminPage = new User(await context.newPage());
+    await use(adminPage);
+    await context.close();
+  },
+  testUser: async ({ browser }, use) => {
+    const context = await browser.newContext({ storageState: STORAGE_STATE });
+    const userPage = new User(await context.newPage());
+    await userPage.createAndNavNewNotebook();
+    await use(userPage);
+    await context.close();
+  },
+  randomFreeUser: async ({ browser }, use) => {
+    const context = await browser.newContext();
+    const userPage = new User(await context.newPage());
+    await userPage.setupRandomFreeUser();
+    await use(userPage);
+    await context.close();
+  },
+  randomPremiumUser: async ({ browser }, use) => {
+    const context = await browser.newContext();
+    const userPage = new User(await context.newPage());
+    await userPage.setupRandomPremiumUser();
+    await use(userPage);
+    await context.close();
+  },
+  unregisteredUser: async ({ browser }, use) => {
+    const context = await browser.newContext();
+    await context.clearCookies();
+    const userPage = new User(await context.newPage());
+    await use(userPage);
+    await context.close();
   },
 });
 

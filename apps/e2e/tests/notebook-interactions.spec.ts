@@ -1,19 +1,12 @@
-import { expect, Page, test } from '@playwright/test';
-import { PlaywrightManagerFactory } from './manager';
-import { focusOnBody } from '../utils/page/Editor';
+import { expect, Page, test } from './manager/decipad-tests';
 import { snapshot, Timeouts } from '../utils/src';
 
 test.describe('notebook basic interactions @editor', () => {
-  test.afterEach(async ({ page }) => {
-    await page.close();
-  });
-
-  test('notebook undo', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
+  test('notebook undo', async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
     await test.step('undo keyboard shortcuts', async () => {
-      await focusOnBody(page);
+      await notebook.focusOnBody();
       await page.keyboard.type('Hello');
 
       const text = page.locator('text="Hello"');
@@ -28,11 +21,10 @@ test.describe('notebook basic interactions @editor', () => {
     });
   });
 
-  test(`validate multiple clicks don't crash editor`, async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
+  test(`validate multiple clicks don't crash editor`, async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await page.keyboard.insertText('test test test');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -44,11 +36,10 @@ test.describe('notebook basic interactions @editor', () => {
     await expect(page.getByText('Contact support')).toBeHidden();
   });
 
-  test('can create a heading', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
+  test('can create a heading', async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await page.keyboard.press('Enter');
     await page.keyboard.type('# Heading');
     await page.keyboard.press('Enter');
@@ -60,35 +51,32 @@ test.describe('notebook basic interactions @editor', () => {
     await expect(page.locator('svg title:has-text("Hide")')).toHaveCount(1);
   });
 
-  test('inserts a link using markdown syntax', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
+  test('inserts a link using markdown syntax', async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await page.keyboard.type('[text](https://example.com/)');
     const locator = page.locator('a').filter({ hasText: 'text' });
     await expect(locator).toHaveAttribute('href', 'https://example.com/');
   });
 
-  test('inserts a magic number', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
+  test('inserts a magic number', async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
-    await focusOnBody(page);
+    await notebook.focusOnBody();
     await page.keyboard.press('Enter');
 
-    await manager.StructuredInput.Create('Foo', '4');
+    await notebook.addFormula('Foo', '4');
 
-    await manager.SelectLastParagraph();
+    await notebook.selectLastParagraph();
     await page.keyboard.type('The sentence meaning of life is %Foo%');
     await expect(
       page.getByText('The sentence meaning of life is 4Foo')
     ).toBeVisible();
   });
 
-  test('writing in the editor', async ({ page }) => {
-    const manager = await PlaywrightManagerFactory(page);
-    await manager.CreateAndNavNewNotebook();
+  test('writing in the editor', async ({ testUser }) => {
+    const { page, notebook } = testUser;
 
     await test.step('starts empty', async () => {
       expect(
@@ -97,9 +85,9 @@ test.describe('notebook basic interactions @editor', () => {
     });
 
     await test.step('allows changing the first paragraph on the body', async () => {
-      await focusOnBody(page);
+      await notebook.focusOnBody();
       await expect(page.getByText('for new blocks')).toBeVisible();
-      await manager.SelectLastParagraph();
+      await notebook.selectLastParagraph();
       await page.keyboard.type('this is the content for the first paragraph');
       await expect(page.getByTestId('paragraph-wrapper').nth(0)).toHaveText(
         'this is the content for the first paragraph'

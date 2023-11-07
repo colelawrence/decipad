@@ -153,7 +153,11 @@ export const BlockDragHandle = ({
   );
 
   const plusButton = (
-    <button onClick={useEventNoEffect(onPlus)} css={plusStyle}>
+    <button
+      onClick={useEventNoEffect(onPlus)}
+      css={plusStyle}
+      data-testid="plus-block-button"
+    >
       <Plus />
     </button>
   );
