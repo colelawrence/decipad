@@ -3,7 +3,7 @@ import { descriptiveIdParser } from './shared/descriptive-id';
 import { SECRET_URL_PARAM } from './shared/secret';
 
 const notebook = route(
-  `/:notebook&:tab?&:${SECRET_URL_PARAM}?&:embed?`,
+  `/:notebook/:tab?&:${SECRET_URL_PARAM}?&:embed?`,
   {
     notebook: descriptiveIdParser,
     tab: stringParser,

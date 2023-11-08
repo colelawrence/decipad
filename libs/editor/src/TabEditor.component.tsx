@@ -27,7 +27,7 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   workspaceId,
   loaded,
 }) => {
-  const { notebook, tab } = useRouteParams(notebooks({}).notebook);
+  const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
   const tabs = useTabs(controller);
   const nav = useNavigate();
 
@@ -44,7 +44,7 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
 
   // if we are in read mode and tab doesn't exist or is hidden, then we navigate to the first non hidden tab
   if (readOnly && (!tabExists || tabIsHidden)) {
-    nav(`${notebooks({}).notebook({ notebook, tab: defaultTabId }).$}`);
+    nav(notebooks({}).notebook({ notebook, tab: defaultTabId, embed }).$);
     return <>Loading...</>;
   }
 
@@ -56,7 +56,7 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   if (subEditorIndex === -1 || !controller.IsLoaded) {
     if (tab != null) {
       // We hit an edge case, where we have a link to a tab that was deleted.
-      nav(notebooks({ notebook }).notebook({ notebook }).$);
+      nav(notebooks({ notebook }).notebook({ notebook, embed }).$);
     }
     return <>Loading...</>;
   }

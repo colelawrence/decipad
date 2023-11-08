@@ -151,7 +151,7 @@ const NewTabs: FC<{
   controller: EditorController;
 }> = ({ notebookId, controller }) => {
   const tabs = useTabs(controller);
-  const { notebook, tab } = useRouteParams(notebooks({}).notebook);
+  const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
   const docsync = useContext(DocsyncEditorProvider);
 
   const { isReadOnly } = useNotebookStateAndActions({
@@ -179,11 +179,11 @@ const NewTabs: FC<{
       isReadOnly={isReadOnly}
       activeTabId={tab ?? defaultTabId}
       onClick={(id) => {
-        nav(`${notebooks({}).notebook({ notebook }).$}/${id}`);
+        nav(notebooks({}).notebook({ notebook, tab: id, embed }).$);
       }}
       onCreateTab={() => {
         const id = controller.CreateTab();
-        nav(`${notebooks({}).notebook({ notebook }).$}/${id}`);
+        nav(notebooks({}).notebook({ notebook, tab: id, embed }).$);
         return id;
       }}
       onRenameTab={controller.RenameTab.bind(controller)}
@@ -201,7 +201,11 @@ const NewTabs: FC<{
         const newSelectedTabIndex = tabs.at(tabIndex - 1) ?? tabs.at(0);
 
         nav(
-          `${notebooks({}).notebook({ notebook }).$}/${newSelectedTabIndex?.id}`
+          notebooks({}).notebook({
+            notebook,
+            tab: newSelectedTabIndex?.id,
+            embed,
+          }).$
         );
       }}
       onMoveTab={(id, index) => {
