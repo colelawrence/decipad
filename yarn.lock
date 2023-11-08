@@ -31103,10 +31103,10 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-replicate@^0.20.1:
-  version "0.20.1"
-  resolved "https://registry.yarnpkg.com/replicate/-/replicate-0.20.1.tgz#3f9032eaa6a8469dac9abab914967fc2e6cb1549"
-  integrity sha512-QVyI1rowGsSfNuDrRmumYPdCHa/fN/RkI3NHpcK0i5hSSiWK69URAyheAC/0MIAiS3oUs4kD56PB9zEI4oHENw==
+replicate@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.yarnpkg.com/replicate/-/replicate-0.21.1.tgz#8e1a69ee61ecb1dc27bda466d1a1b34158aaf16b"
+  integrity sha512-ftR416+tuD55u6Rz0s5QsxoC2ZasslyFg9jxytirPhqFQwTQy9arU0vF29811t4iws8cMc+neL0IUzyq0pFlkQ==
 
 require-directory@^2.1.1:
   version "2.1.1"
