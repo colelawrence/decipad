@@ -1,8 +1,16 @@
-import { hasNode, insertText, withoutNormalizing } from '@udecode/plate';
+import {
+  TNodeEntry,
+  getNode,
+  hasNode,
+  withoutNormalizing,
+} from '@udecode/plate';
 import { Action, ActionParams, NotebookActionHandler } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { insertTableRow } from './insertTableRow';
+import { replaceText } from './utils/replaceText';
+import { TableCellElement } from '@decipad/editor-types';
+import { getDefined } from '@decipad/utils';
 
 export const updateTableCell: Action<'updateTableCell'> = {
   summary: 'updates the content of a cell on a table',
@@ -45,16 +53,20 @@ export const updateTableCell: Action<'updateTableCell'> = {
   handler: (editor, { tableId, columnName, rowIndex, newCellContent }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const headerIndex = getTableColumnIndexByName(table, columnName);
-    const updateCellIndex = [...tablePath, rowIndex + 2, headerIndex];
+    const updateCellPath = [...tablePath, rowIndex + 2, headerIndex, 0];
     withoutNormalizing(editor, () => {
-      while (!hasNode(editor, updateCellIndex)) {
+      while (!hasNode(editor, updateCellPath)) {
         const tableColumnCount = table.children[1].children.length;
         (insertTableRow.handler as NotebookActionHandler)(editor, {
           tableId,
           row: Array.from({ length: tableColumnCount }).map(() => ''),
         });
       }
-      insertText(editor, newCellContent, { at: updateCellIndex });
+      const entry = [
+        getDefined(getNode(editor, updateCellPath)),
+        updateCellPath,
+      ] as TNodeEntry<TableCellElement>;
+      replaceText(editor, entry, newCellContent);
     });
   },
 };

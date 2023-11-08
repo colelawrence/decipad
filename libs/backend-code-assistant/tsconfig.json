@@ -9,6 +9,8 @@
     { "path": "../doc-verbalizer" },
     { "path": "../backend-config" },
     { "path": "../computer" },
-    { "path": "../backend-search" }
+    { "path": "../backend-search" },
+    { "path": "../editor-language-elements" },
+    { "path": "../format" }
   ]
 }

@@ -12,3 +12,12 @@ string      -> %string                                  {%
                                                           }, string)
                                                         }
                                                         %}
+
+string      -> %altstring                              {%
+                                                        ([string]) => {
+                                                          return addLoc({
+                                                            type: 'literal',
+                                                            args: ['string', string.value],
+                                                          }, string)
+                                                        }
+                                                        %}

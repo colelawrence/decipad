@@ -23,7 +23,6 @@ const creatingIndex = async (fn) => {
   try {
     await fn();
   } catch (err) {
-    console.error(err);
     if (!err.message.toLowerCase().includes('already exists')) {
       throw err;
     }
@@ -69,5 +68,5 @@ exports.createInitialSearchIndexes = async (store) => {
     })
   );
 
-  console.log(`created index ${indexNames.languageDocsVector}`);
+  console.log(`ensured index ${indexNames.languageDocsVector}`);
 };

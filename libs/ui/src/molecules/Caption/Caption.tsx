@@ -72,15 +72,17 @@ const placeholderStyles = css(
   }
 );
 
-export const Caption = ({
+const Empty: FC = () => <></>;
+
+export const Caption: FC<CaptionProps> = ({
   empty = false,
   children,
   color = 'Catskill',
   icon = 'Frame',
   onChangeColor = noop,
   onChangeIcon = noop,
-}: CaptionProps): ReturnType<FC> => {
-  const Icon = icons[icon];
+}) => {
+  const Icon = icons[icon] ?? Empty;
   return (
     <div css={nameWrapperStyles}>
       {useIsEditorReadOnly() ? (

@@ -111,6 +111,7 @@ export const listOperators: Record<string, BuiltinSpec> = {
     argCount: 1,
     argCardinalities: [2],
     noAutoconvert: true,
+    coerceToColumn: true,
     fnValues: ([a]) =>
       Column.fromGenerator(() => {
         let previous = ZERO;
@@ -122,7 +123,8 @@ export const listOperators: Record<string, BuiltinSpec> = {
         });
       }),
     functionSignature: 'column<number>:A -> A',
-    explanation: 'Increments between values in a column.',
+    explanation:
+      'Calculates the increments between consecutive values in a column.',
     syntax: 'stepgrowth(Table.Column)',
     example: 'stepgrowth(SalaryYears.Amount)',
     formulaGroup: 'Columns',

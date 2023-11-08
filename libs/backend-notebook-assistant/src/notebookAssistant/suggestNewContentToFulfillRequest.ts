@@ -418,7 +418,7 @@ No comments.`,
       if (codeSnippet) {
         messages.push({
           role: 'function',
-          content: codeSnippet,
+          content: stringify(codeSnippet, null, '\t'),
           name: reply.function_call.name,
         } as ChatCompletionMessage);
 

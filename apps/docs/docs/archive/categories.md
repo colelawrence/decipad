@@ -23,7 +23,7 @@ Lists can be organized with categories. For example, the list `Cost` with the ca
 
 ```deci live
 InternetProvider = categories["AV&T", "Zerivon"]
-Cost[InternetProvider] = 100$/month
+Cost{InternetProvider} = 100$/month
 ==> [ 100 $ per month, 100 $ per month ]
 ```
 
@@ -31,8 +31,8 @@ Categories can be reused across multiple lists. For instance, the category `Inte
 
 ```deci live
 InternetProvider = categories["AV&T", "Zerivon"]
-Cost[InternetProvider] = 100$/month
-PhonePlan[InternetProvider] = [true, false]
+Cost{InternetProvider} = 100$/month
+PhonePlan{InternetProvider} = [true, false]
 ==> [ true, false ]
 ```
 
@@ -42,7 +42,7 @@ All operations applied to a categorized list are replicated. For example, to fin
 
 ```deci live
 InternetProvider = categories["AV&T", "Zerivon"]
-Cost[InternetProvider] = 100$/month
+Cost{InternetProvider} = 100$/month
 Cost * (12 months)
 ==> [ 1200 $, 1200 $ ]
 ```
@@ -53,7 +53,7 @@ Subsets of categorized lists are accessed with a condition. For example, the `Co
 
 ```deci live
 InternetProvider = categories["AV&T", "Zerivon"]
-Cost[InternetProvider] = 100$/month
-Cost[InternetProvider == "AV&T"] * (24 months)
+Cost{InternetProvider} = 100$/month
+Cost{InternetProvider == "AV&T"} * (24 months)
 ==> [ 2400 $ ]
 ```

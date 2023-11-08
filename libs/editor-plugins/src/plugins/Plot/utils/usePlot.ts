@@ -168,13 +168,13 @@ export const usePlot = (element: PlotElement): UsePlotReturn | undefined => {
     'usePlot'
   );
 
-  const repeatedColumns = useMemo(() => {
+  const repeatedColumns = useMemo((): string[] => {
     if (element.markType === 'arc') {
-      return [element.thetaColumnName];
+      return [element.thetaColumnName ?? ''];
     }
     return uniq([element.y2ColumnName, element.yColumnName])
       .filter((word) => word !== 'None')
-      .filter(Boolean);
+      .filter(Boolean) as string[];
   }, [element]);
 
   const plotParams: PlotParams = useMemo(

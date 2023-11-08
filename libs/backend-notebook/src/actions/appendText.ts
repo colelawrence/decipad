@@ -1,8 +1,10 @@
-import { deserializeMd, insertNodes } from '@udecode/plate';
-import { Action, ActionParams } from './types';
-import { MyElement } from '@decipad/editor-types';
+import { deserializeMd, insertNodes, getNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+import { AnyElement, MyElement } from '@decipad/editor-types';
+import { getDefined } from '@decipad/utils';
+import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
+import { assertElementType } from '@decipad/editor-utils';
 
 export const appendText: Action<'appendText'> = {
   summary: 'Appends markdown text to the end of the notebook',
@@ -44,11 +46,16 @@ export const appendText: Action<'appendText'> = {
         ...element,
         id: nanoid(),
       };
-      insertNodes(editor, [newElement], { at: appendPath(editor) });
+      const newElementPath = appendPath(editor);
+      insertNodes(editor, [newElement], { at: newElementPath });
+      const actualElement: MyElement | undefined = getDefined(
+        getNode<MyElement>(editor, newElementPath)
+      );
+      assertElementType(actualElement, (element as AnyElement)?.type);
       response.push({
-        createdElementId: newElement.id,
-        createdElementType: newElement.type,
-        createdElementName: newElement.id,
+        createdElementId: actualElement.id,
+        createdElementType: actualElement.type,
+        createdElementName: actualElement.id,
       });
     }
 

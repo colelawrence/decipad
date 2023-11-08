@@ -1,3 +1,4 @@
+import { SplitCodeResult } from '@decipad/backend-code-assistant';
 import type { AnyElement } from '@decipad/editor-types';
 
 interface CreateNotebookResult {
@@ -8,6 +9,7 @@ export interface CreateResult {
   createdElementId: string;
   createdElementType: string;
   createdElementName: string;
+  createdSubElements?: Array<CreateResult>;
 }
 
 export interface PlotParams {
@@ -40,6 +42,17 @@ export interface BackendNotebook {
   appendText: (params: { markdownText: string }) => CreateResult[];
   changeText: (params: { elementId: string; newText: string }) => void;
 
+  // code lines
+  appendCodeLine: (params: {
+    variableName: string;
+    codeExpression: string;
+  }) => CreateResult;
+  updateCodeLine: (params: {
+    codeLineId: string;
+    newVariableName: string;
+    newCodeExpression: string;
+  }) => void;
+
   // tables
   appendEmptyTable: (params: {
     tableName: string;
@@ -51,6 +64,17 @@ export interface BackendNotebook {
     columnNames: string[];
     rowsData: string[][];
   }) => CreateResult;
+  fillTable: (params: { tableId: string; rowsData: string[][] }) => void;
+  fillColumn: (params: {
+    tableId: string;
+    columnName: string;
+    columnData: string[];
+  }) => void;
+  fillRow: (params: {
+    tableId: string;
+    rowIndex: number;
+    rowData: string[];
+  }) => void;
   insertEmptyTableColumn: (params: {
     tableId: string;
     columnName: string;
@@ -87,7 +111,18 @@ export interface BackendNotebook {
   // data views
   appendDataView: (params: {
     tableId: string;
-    columnNames: string[];
+    columns: Array<{
+      name: string;
+      aggregation:
+        | 'average'
+        | 'max'
+        | 'median'
+        | 'min'
+        | 'span'
+        | 'sum'
+        | 'stddev';
+      round: string;
+    }>;
   }) => CreateResult;
   addColumnToDataView: (params: {
     dataviewId: string;
@@ -104,8 +139,8 @@ export interface BackendNotebook {
 
   // plots
   appendPlot: (params: {
-    sourceTableName: string;
-    plotParams: Partial<PlotParams>;
+    tableId: string;
+    plotParams: PlotParams;
   }) => CreateResult;
   setPlotParams: (params: {
     plotId: string;
@@ -113,5 +148,21 @@ export interface BackendNotebook {
   }) => void;
 
   // formulas
-  generateFormula: (params: { prompt: string }) => string;
+  generateFormula: (params: { prompt: string }) => SplitCodeResult;
+
+  // sliders
+  appendSliderVariable: (params: {
+    variableName: string;
+    max?: number;
+    min?: number;
+    step?: number;
+    initialValue: number;
+  }) => CreateResult;
+
+  // dropdown
+  appendChoice: (params: {
+    variableName: string;
+    options: Array<string>;
+    selectedName?: string;
+  }) => CreateResult;
 }

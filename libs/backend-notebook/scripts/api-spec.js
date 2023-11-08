@@ -13,8 +13,8 @@ const spec = (paths, schemas) => ({
   openapi: '3.0.1',
   info: {
     title: 'Create and modify a Decipad notebook',
-    description:
-      'Create and modify a Decipad notebook where you can build a numerical model, adding and manipulating text, tables, data views, sliders',
+    description: `Create and modify a Decipad notebook where you can build a numerical model, adding and manipulating text, tables, data views, sliders.
+Column names and variable names must not have spaces or weird characters in them.`,
     version: 'v1',
   },
   servers: [

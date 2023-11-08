@@ -1,12 +1,13 @@
+/* eslint-disable no-await-in-loop */
 import { RootDocument } from '@decipad/editor-types';
-import { getOpenAI } from '../utils/openAi';
 import { ChatCompletionMessage } from 'openai/resources/chat';
 import { getDefined } from '@decipad/utils';
-import { createComputationalSummary } from '../utils/createComputationalSummary';
+import { getOpenAI } from '../utils/openAi';
 import { debug } from '../debug';
 import { getCode } from '../utils/getCode';
-import { getLanguageDocSnippets } from '../utils/getLanguageDocSnippets';
-import { instructions, intro } from './texts';
+import { splitCode } from '../utils/splitCode';
+import { generateInitialMessages } from './generateInitialMessages';
+import { SplitCodeResult } from '../types';
 
 const fineTunedModelForDecilangCode =
   'ft:gpt-3.5-turbo-0613:team-n1n-co::86fVKLap';
@@ -17,70 +18,27 @@ export interface CodeAssistantOptions {
   prompt: string;
   _messages?: ChatCompletionMessage[];
   attempt?: number;
+  previousAttemptResult?: SplitCodeResult | undefined;
 }
 
-const maxLanguageDocSnippetCount = 2;
 const maxAttempts = 4;
 
 export const codeAssistant = async (
   props: CodeAssistantOptions
-): Promise<string | undefined> => {
+): Promise<SplitCodeResult | undefined> => {
   debug('codeAssistant', JSON.stringify(props, null, '\t'));
-  const { summary: _summary, notebook, prompt, _messages, attempt = 1 } = props;
+  let code = props.previousAttemptResult;
+  const { summary, notebook, prompt, _messages, attempt = 1 } = props;
   if (attempt === maxAttempts) {
-    return undefined;
+    return code;
   }
-  const summary =
-    _summary != null
-      ? _summary
-      : createComputationalSummary(
-          getDefined(notebook, 'need a notebook to generate a summary')
-        );
-
-  debug('summary:', summary);
-
-  const summaryText =
-    summary &&
-    `This is a summary of the code elements in the notebook you can use:
-
-  SUMMARY:"""
-  ${summary}
-  """`;
-
-  const snippets = await getLanguageDocSnippets(
-    `${summary}
-${prompt}`,
-    maxLanguageDocSnippetCount
-  );
-
-  const snippetsText =
-    snippets.length > 0
-      ? `Relevant Decipad language doc snippets:
-
-${snippets.map((snippet) => `Docs:"""\n${snippet}\n"""\n`).join('\n')}
-`
-      : '';
-
-  debug('language docs snippets:', snippetsText);
-
-  const messages = _messages || [
-    {
-      role: 'system',
-      content: `${intro}
-
-${snippetsText}
-
-${summaryText}
-
-${instructions}`,
-    },
-    {
-      role: 'user',
-      content: `I want a Decipad language code snippet for my notebook that will allow me to ${prompt}.
-
-No comments.`,
-    },
-  ];
+  const messages =
+    _messages ??
+    (await generateInitialMessages({
+      summary,
+      notebook: getDefined(notebook),
+      prompt,
+    }));
   debug('messages:', JSON.stringify(messages, null, '\t'));
   const completion = await getOpenAI().chat.completions.create({
     model: fineTunedModelForDecilangCode,
@@ -92,22 +50,41 @@ No comments.`,
   const { content } = assistantMessage;
   debug('reply:', content);
   if (content) {
-    try {
-      const code = getCode(content);
-      debug('final reply:', code);
-      return code;
-    } catch (err) {
-      messages.push(assistantMessage);
-      messages.push({
-        role: 'user',
-        content: `${(err as Error).message}\nPlease fix this.`,
-      });
-      return codeAssistant({
-        ...props,
-        _messages: messages,
-        attempt: attempt + 1,
-      });
+    let willTryEscaping = false;
+    while (!willTryEscaping) {
+      try {
+        const codeString = getCode(content, willTryEscaping);
+        debug(`getCode returned ${codeString}`);
+        if (codeString && props.notebook) {
+          code = splitCode(codeString);
+          debug('split code successfully');
+          // const validation = await validateCode(codeString, props.notebook);
+          // if (!validation.valid) {
+          //   debug('throwing validation error', validation.error);
+          //   throw new Error(validation.error);
+          // }
+          return code;
+        }
+      } catch (err) {
+        debug('Error caught in validation', err);
+        if (!willTryEscaping) {
+          willTryEscaping = true;
+          continue;
+        }
+        messages.push(assistantMessage);
+        messages.push({
+          role: 'user',
+          content: `${(err as Error).message}\nPlease fix this.`,
+        });
+        debug('going to try again');
+        return codeAssistant({
+          ...props,
+          _messages: messages,
+          attempt: attempt + 1,
+          previousAttemptResult: code,
+        });
+      }
     }
   }
-  return undefined;
+  return code;
 };

@@ -7,6 +7,7 @@ export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
   lastP.current = p;
   const initialResult = isPromise(p) ? undefined : p;
   const [result, setResult] = useState<T | undefined>(initialResult);
+  const resolving = useRef(false);
   const lastResult = useRef<T | undefined>(initialResult);
   const lastResultP = useRef<PromiseOrType<T> | undefined>();
 
@@ -25,13 +26,24 @@ export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
     let canceled = false;
     if (lastResultP.current !== p) {
       if (isPromise(p)) {
-        p.then((r) => {
-          if (!canceled) {
-            setResultSafe(r);
-          }
-        }).catch((err: Error) => {
-          console.error(err);
-        });
+        if (!resolving.current) {
+          resolving.current = true;
+          p.then((r) => {
+            if (!canceled) {
+              setResultSafe(r);
+            }
+          })
+            .catch((err: Error) => {
+              if (!canceled) {
+                console.error(err);
+              }
+            })
+            .finally(() => {
+              if (!canceled) {
+                resolving.current = false;
+              }
+            });
+        }
       } else if (p != null) {
         setResultSafe(p);
       }
@@ -39,6 +51,7 @@ export const useResolved = <T>(p?: PromiseOrType<T>): T | undefined => {
 
     return () => {
       canceled = true;
+      resolving.current = false;
     };
   }, [p, setResultSafe]);
   return result;

@@ -185,7 +185,7 @@ noSlashMulOp    -> notFracImpMulOp _ nonSlashDivMulOperator _ notFracImpMulOp {%
 noSlashMulOp    -> slashOp _ nonSlashDivMulOperator _ notFracImpMulOp         {% basicBinop %}
 noSlashMulOp    -> noSlashMulOp _ divMulOperator _ notFracImpMulOp            {% basicBinop %}
 
-# We can allow `notNum (/ notNum)+`, `num / notNum` here, but must be careful to avoid 
+# We can allow `notNum (/ notNum)+`, `num / notNum` here, but must be careful to avoid
 # `num / num` as that is handled as a fraction.
 slashOp            -> notNumImpMulOp _ slashOperator _ notFracImpMulOp    {% basicBinop %}
 slashOp            -> number _ slashOperator _ notNumPowOp                {% basicBinop %}
@@ -268,7 +268,9 @@ noNumPrimary       -> ("!" | "not") _ expression        {%
                                                         }
                                                         %}
 
-noNumPrimary       -> (ref | functionCall | parenthesizedExpression | select) _ "." _ %identifier {%
+noNumPrimary       -> propertyAccess                    {% id %}
+
+propertyAccess     -> (ref | functionCall | parenthesizedExpression | select | lookup) _ "." _ %identifier {%
                                                         (d) =>
                                                           addArrayLoc({
                                                             type: 'property-access',
@@ -281,6 +283,8 @@ noNumPrimary       -> (ref | functionCall | parenthesizedExpression | select) _ 
                                                             ]
                                                           }, d)
                                                         %}
+propertyAccess     -> lookup                            {% id %}
+
 
 # This acts like a precedence black hole, where a composed expression can
 # become a primary expression

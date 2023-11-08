@@ -71,6 +71,10 @@ const aggregationTypes: { [type: string]: AggregationType[] } = {
       expression: (colRef) => `median(${colRef})`,
     },
     {
+      name: 'Standard deviation',
+      expression: (colRef) => `stddev(${colRef})`,
+    },
+    {
       name: 'Span',
       expression: (colRef) => `max(${colRef}) - min(${colRef})`,
     },

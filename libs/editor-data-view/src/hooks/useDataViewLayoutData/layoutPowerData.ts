@@ -46,5 +46,6 @@ export const layoutPowerData = async ({
   editorStatsStore
     .getState()
     .pushDataViewStat({ computeLayoutElapsedTimeMs: elapsedMs });
+
   return result;
 };

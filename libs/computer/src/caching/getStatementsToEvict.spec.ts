@@ -36,9 +36,9 @@ describe('findSymbolErrors', () => {
       findSymbolErrors(
         testBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 1',
+          'Matrix{Cat} = 1',
           'Matrix',
-          'Matrix[Cat]'
+          'Matrix{Cat}'
         )
       )
     ).toEqual(new Set());
@@ -253,13 +253,13 @@ describe('evictCache', () => {
       testEvictBlocks({
         oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 1',
-          'Matrix[Cat]'
+          'Matrix{Cat} = 1',
+          'Matrix{Cat}'
         ),
         newProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 2',
-          'Matrix[Cat]'
+          'Matrix{Cat} = 2',
+          'Matrix{Cat}'
         ),
 
         expectEvicted: [1, 2],
@@ -268,12 +268,12 @@ describe('evictCache', () => {
       testEvictBlocks({
         oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 1',
+          'Matrix{Cat} = 1',
           'Matrix'
         ),
         newProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 2',
+          'Matrix{Cat} = 2',
           'Matrix'
         ),
 
@@ -285,11 +285,11 @@ describe('evictCache', () => {
       testEvictBlocks({
         oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 1'
+          'Matrix{Cat} = 1'
         ),
         newProgram: testProgramBlocks(
           'Cat = categories [1, 2, 3]',
-          'Matrix[Cat] = 1'
+          'Matrix{Cat} = 1'
         ),
 
         expectEvicted: [0, 1],
@@ -298,11 +298,11 @@ describe('evictCache', () => {
       testEvictBlocks({
         oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 1'
+          'Matrix{Cat} = 1'
         ),
         newProgram: testProgramBlocks(
           'Cat = categories [1, 2, 3]',
-          'Matrix[Cat] = 2'
+          'Matrix{Cat} = 2'
         ),
 
         expectEvicted: [0, 1],
@@ -311,13 +311,13 @@ describe('evictCache', () => {
       testEvictBlocks({
         oldProgram: testProgramBlocks(
           'Cat = categories [1, 2]',
-          'Matrix[Cat] = 1',
-          'Matrix[Cat]'
+          'Matrix{Cat} = 1',
+          'Matrix{Cat}'
         ),
         newProgram: testProgramBlocks(
           'Cat = categories [1, 2, 3]',
-          'Matrix[Cat] = 1',
-          'Matrix[Cat]'
+          'Matrix{Cat} = 1',
+          'Matrix{Cat}'
         ),
 
         expectEvicted: [0, 1, 2],
@@ -327,9 +327,9 @@ describe('evictCache', () => {
     it('deals with nothing having changed', () => {
       const old = testProgramBlocks(
         'Cat = categories [1, 2]',
-        'Matrix[Cat] = 1',
+        'Matrix{Cat} = 1',
         'Matrix',
-        'Matrix[Cat]'
+        'Matrix{Cat}'
       );
       testEvictBlocks({
         oldProgram: old,

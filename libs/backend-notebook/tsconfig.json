@@ -16,6 +16,7 @@
     { "path": "../notebook-tabs" },
     { "path": "../y-dynamodb" },
     { "path": "../backend-code-assistant" },
-    { "path": "../utils" }
+    { "path": "../utils" },
+    { "path": "../editor-language-elements" }
   ]
 }

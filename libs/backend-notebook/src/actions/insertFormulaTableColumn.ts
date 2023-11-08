@@ -16,7 +16,7 @@ import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
 
 export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
-  summary: 'inserts am empty column in an existing table',
+  summary: 'inserts a calculated column to an existing table',
   responses: {
     '200': {
       description: 'OK',
@@ -33,7 +33,8 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
           type: 'string',
         },
         columnName: {
-          description: 'the name of the column',
+          description:
+            'the name of the new column. Must contain no spaces or weird characters',
           type: 'string',
         },
         formula: {

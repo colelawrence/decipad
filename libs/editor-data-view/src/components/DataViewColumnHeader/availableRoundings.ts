@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/computer';
+import type { TableCellType } from '@decipad/editor-types';
 import { once } from '@decipad/utils';
 
 interface Rounding {
@@ -25,7 +25,7 @@ const numberRoundings = once(() => [
   { id: '6', name: 'to the millionth' },
 ]);
 
-export const availableRoundings = (type: SerializedType): Array<Rounding> => {
+export const availableRoundings = (type: TableCellType): Array<Rounding> => {
   switch (type.kind) {
     case 'date':
       return dateRoundings();

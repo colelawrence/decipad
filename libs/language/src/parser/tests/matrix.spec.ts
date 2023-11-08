@@ -3,13 +3,13 @@ import { runTests } from '../run-tests';
 
 runTests({
   'can assign to matrices': {
-    source: 'Variable[Dim == 1] = 2',
+    source: 'Variable{Dim == 1} = 2',
     sourceMap: false,
     ast: [matrixAssign('Variable', [c('==', r('Dim'), l(1))], l(2))],
   },
 
   'can assign to matrices(2)': {
-    source: 'Variable[Dim == 1, Dim2 == "str"] = 2',
+    source: 'Variable{Dim == 1, Dim2 == "str"} = 2',
     sourceMap: false,
     ast: [
       matrixAssign(
@@ -21,7 +21,7 @@ runTests({
   },
 
   'can refer to matrices': {
-    source: 'Variable[Dim == 1, Dim2 == "str"]',
+    source: 'Variable{Dim == 1, Dim2 == "str"}',
     sourceMap: false,
     ast: [
       matrixRef('Variable', [
@@ -32,7 +32,7 @@ runTests({
   },
 
   'can refer to matrices(2)': {
-    source: 'Variable[WholeDim]',
+    source: 'Variable{WholeDim}',
     sourceMap: false,
     ast: [matrixRef('Variable', [r('WholeDim')])],
   },

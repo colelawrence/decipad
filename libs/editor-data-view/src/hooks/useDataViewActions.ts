@@ -7,6 +7,7 @@ import {
   DataViewHeaderRowElement,
   ELEMENT_DATA_VIEW_TH,
   MyEditor,
+  TableCellType,
 } from '@decipad/editor-types';
 import { insertNodes, withPath } from '@decipad/editor-utils';
 import {
@@ -205,7 +206,7 @@ export const useDataViewActions = (
               {
                 id: nanoid(),
                 type: ELEMENT_DATA_VIEW_TH,
-                cellType: serializedType,
+                cellType: serializedType as TableCellType,
                 label,
                 name: columnName,
                 children: [{ text: '' }],

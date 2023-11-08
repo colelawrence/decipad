@@ -36,6 +36,7 @@ import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
 import { sortValue } from './sortValue';
 import { Expression } from '../parser/ast-types';
+import { isPrevious } from '../utils/isPrevious';
 
 // Gets a single value from an expanded AST.
 
@@ -108,7 +109,7 @@ async function internalEvaluate(
       const funcName = getIdentifierString(node.args[0]);
       const funcArgs = getOfType('argument-list', node.args[1]).args;
 
-      if (funcName === 'previous') {
+      if (isPrevious(funcName)) {
         const defaultValue = await evaluate(realm, funcArgs[0]);
         if (realm.previousRow === null) {
           return defaultValue;

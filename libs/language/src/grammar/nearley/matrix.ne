@@ -1,6 +1,6 @@
 @lexer tokenizer
 
-matrixMatchers      -> "[" _ matrixMatchersInner _ ",":? _ "]"  {%
+matrixMatchers      -> "{" _ matrixMatchersInner _ ",":? _ "}"  {%
                                                         (d) => {
                                                           return addArrayLoc({
                                                             type: 'matrix-matchers',

@@ -7,10 +7,10 @@ it('figures out what symbol a statement creates, if any', () => {
   expect(
     getDefinedSymbol(parseStatementOrThrow('Set = categories [ Exp ]'))
   ).toEqual('Set');
-  expect(getDefinedSymbol(parseStatementOrThrow('Mat[Set] = Exp'))).toEqual(
+  expect(getDefinedSymbol(parseStatementOrThrow('Mat{Set} = Exp'))).toEqual(
     'Mat'
   );
-  expect(getDefinedSymbol(parseStatementOrThrow('Mat[Set]'))).toEqual(null);
+  expect(getDefinedSymbol(parseStatementOrThrow('Mat{Set}'))).toEqual(null);
   expect(getDefinedSymbol(parseStatementOrThrow('table.Col = 1'))).toEqual(
     'table'
   );
@@ -25,11 +25,11 @@ it('intersects two sets of strings', () => {
 it('figures out what symbols a statement uses, if any', () => {
   expect(findSymbolsUsed(parseStatementOrThrow('A + 1'))).toEqual(['+', 'A']);
   expect(findSymbolsUsed(parseStatementOrThrow('"no-op"'))).toEqual([]);
-  expect(findSymbolsUsed(parseStatementOrThrow('Mat[Set]'))).toEqual([
+  expect(findSymbolsUsed(parseStatementOrThrow('Mat{Set}'))).toEqual([
     'Mat',
     'Set',
   ]);
-  expect(findSymbolsUsed(parseStatementOrThrow('Mat[Set] = Exp'))).toEqual([
+  expect(findSymbolsUsed(parseStatementOrThrow('Mat{Set} = Exp'))).toEqual([
     'Set',
     'Exp',
     'Mat',

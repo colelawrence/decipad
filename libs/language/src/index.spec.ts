@@ -1158,13 +1158,13 @@ describe('Tables', () => {
 describe('Matrices', () => {
   const createVars = `
     Cities = categories ["Lisbon", "Faro"]
-    CoffeePrice[Cities] = 0.70 EUR
+    CoffeePrice{Cities} = 0.70 EUR
   `;
   it('can assign contents', async () => {
     expect(
       await runCode(`
         ${createVars}
-        CoffeePrice[Cities] = 1.20 EUR
+        CoffeePrice{Cities} = 1.20 EUR
       `)
     ).toMatchObject({
       type: {
@@ -1182,7 +1182,7 @@ describe('Matrices', () => {
     expect(
       await runCode(`
         ${createVars}
-        CoffeePrice[Cities == "Faro"] = 1.20 EUR
+        CoffeePrice{Cities == "Faro"} = 1.20 EUR
       `)
     ).toMatchObject({
       type: {
@@ -1199,8 +1199,8 @@ describe('Matrices', () => {
     expect(
       await runCode(`
         ${createVars}
-        CoffeePrice[Cities == "Faro"] = 1.20 EUR
-        CoffeePrice[Cities]
+        CoffeePrice{Cities == "Faro"} = 1.20 EUR
+        CoffeePrice{Cities}
       `)
     ).toMatchObject({
       type: {
@@ -1218,8 +1218,8 @@ describe('Matrices', () => {
     expect(
       await runCode(`
         ${createVars}
-        CoffeePrice[Cities == "Faro"] = 1.2
-        CoffeePrice[Cities == "Faro"]
+        CoffeePrice{Cities == "Faro"} = 1.2
+        CoffeePrice{Cities == "Faro"}
       `)
     ).toMatchObject({
       type: {
@@ -3279,6 +3279,302 @@ describe('first in column formula', () => {
             },
           ],
         ],
+      }
+    `);
+  });
+});
+
+describe('lookup syntactic sugar', () => {
+  it('looks up with a value', async () => {
+    expect(
+      await runCode(`
+      Table = {
+        Col1 = [1, 2, 3, 4],
+        Col2 = [5, 6, 7, 8]
+      }
+
+      Table[3]
+    `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": Array [
+            "Col1",
+            "Col2",
+          ],
+          "rowCellTypes": Array [
+            Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgCount": undefined,
+              "functionName": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "Table",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "type": "number",
+              "unit": null,
+              Symbol(immer-draftable): true,
+            },
+            Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgCount": undefined,
+              "functionName": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "Table",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "type": "number",
+              "unit": null,
+              Symbol(immer-draftable): true,
+            },
+          ],
+          "rowCount": undefined,
+          "rowIndexName": "Table",
+          "symbol": null,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 7n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('looks up with an expression', async () => {
+    expect(
+      await runCode(`
+      Table = {
+        Col1 = [1, 2, 3, 4],
+        Col2 = [5, 6, 7, 8]
+      }
+
+      Table[Table.Col1 == 3]
+    `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": Array [
+            "Col1",
+            "Col2",
+          ],
+          "rowCellTypes": Array [
+            Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgCount": undefined,
+              "functionName": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "Table",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "type": "number",
+              "unit": null,
+              Symbol(immer-draftable): true,
+            },
+            Type {
+              "anythingness": false,
+              "atParentIndex": null,
+              "cellType": null,
+              "columnNames": null,
+              "columnTypes": null,
+              "date": null,
+              "delegatesIndexTo": undefined,
+              "errorCause": null,
+              "functionArgCount": undefined,
+              "functionName": undefined,
+              "functionness": false,
+              "indexName": null,
+              "indexedBy": "Table",
+              "node": null,
+              "nothingness": false,
+              "numberError": null,
+              "numberFormat": null,
+              "pending": false,
+              "rangeOf": null,
+              "rowCellNames": null,
+              "rowCellTypes": null,
+              "rowCount": undefined,
+              "rowIndexName": null,
+              "symbol": null,
+              "type": "number",
+              "unit": null,
+              Symbol(immer-draftable): true,
+            },
+          ],
+          "rowCount": undefined,
+          "rowIndexName": "Table",
+          "symbol": null,
+          "type": null,
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": Array [
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 3n,
+            "s": 1n,
+          },
+          DeciNumber {
+            "d": 1n,
+            "infinite": false,
+            "n": 7n,
+            "s": 1n,
+          },
+        ],
+      }
+    `);
+  });
+
+  it('works inside an if', async () => {
+    expect(
+      await runCode(`
+      Table = {
+        Col1 = [1, 2, 3, 4],
+        Col2 = [5, 6, 7, 8]
+      }
+      BoolVar = true
+
+      if BoolVar then Table[Table.Col1 == 3].Col2 else -1
+    `)
+    ).toMatchInlineSnapshot(`
+      Object {
+        "type": Type {
+          "anythingness": false,
+          "atParentIndex": null,
+          "cellType": null,
+          "columnNames": null,
+          "columnTypes": null,
+          "date": null,
+          "delegatesIndexTo": undefined,
+          "errorCause": null,
+          "functionArgCount": undefined,
+          "functionName": undefined,
+          "functionness": false,
+          "indexName": null,
+          "indexedBy": null,
+          "node": null,
+          "nothingness": false,
+          "numberError": null,
+          "numberFormat": null,
+          "pending": false,
+          "rangeOf": null,
+          "rowCellNames": null,
+          "rowCellTypes": null,
+          "rowCount": undefined,
+          "rowIndexName": null,
+          "symbol": null,
+          "type": "number",
+          "unit": null,
+          Symbol(immer-draftable): true,
+        },
+        "value": DeciNumber {
+          "d": 1n,
+          "infinite": false,
+          "n": 7n,
+          "s": 1n,
+        },
       }
     `);
   });

@@ -1,7 +1,9 @@
-import { findNode, isElement, insertText } from '@udecode/plate';
+import { findNode, isElement, EElement, TNodeEntry } from '@udecode/plate';
 import { notAcceptable, notFound } from '@hapi/boom';
 import { matchElementId } from '../utils/matchElementId';
 import { Action, ActionParams } from './types';
+import { replaceText } from './utils/replaceText';
+import { MyValue } from '@decipad/editor-types';
 
 export const changeText: Action<'changeText'> = {
   summary: 'Changes the text in a text element',
@@ -41,9 +43,10 @@ export const changeText: Action<'changeText'> = {
     if (!entry) {
       throw notFound(`Could not find an element with id ${elementId}`);
     }
-    if (!isElement(entry[0])) {
+    const [node, path] = entry;
+    if (!isElement(node)) {
       throw notAcceptable(`node with id ${elementId} is not an element`);
     }
-    insertText(editor, newText, { at: entry[1] });
+    replaceText(editor, [node, path] as TNodeEntry<EElement<MyValue>>, newText);
   },
 };

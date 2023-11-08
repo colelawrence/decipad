@@ -29,6 +29,7 @@ import { tokenizer } from '../tokenizer'
 @include "./range.ne"
 @include "./sequence.ne"
 @include "./functions.ne"
+@include "./lookup.ne"
 
 
 

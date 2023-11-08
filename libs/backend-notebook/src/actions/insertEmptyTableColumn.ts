@@ -6,7 +6,7 @@ import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
 
 export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
-  summary: 'inserts am empty column in an existing table',
+  summary: 'inserts an empty column in an existing table',
   responses: {
     '200': {
       description: 'OK',
@@ -26,7 +26,8 @@ export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
     {
       name: 'columnName',
       in: 'query',
-      description: 'the name of the new column',
+      description:
+        'the name of the new column. Must contain no spaces or weird characters',
       required: true,
       schema: {
         type: 'string',

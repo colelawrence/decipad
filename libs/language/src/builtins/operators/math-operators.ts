@@ -144,6 +144,22 @@ const median = async (
   );
 };
 
+const stddev = async ([value]: Value[]): Promise<Value> => {
+  if (!isColumnLike(value)) {
+    return Promise.resolve(NumberValue.fromValue(ZERO));
+  }
+  const mean = coherceToFraction(await (await average([value])).getData());
+  let acc = ZERO;
+  let count = 0;
+  for await (const val of value.values()) {
+    count += 1;
+    const n = coherceToFraction(await val.getData());
+    const diffSquared = n.sub(mean).pow(TWO);
+    acc = acc.add(diffSquared);
+  }
+  return fromJS(acc.div(N(count)));
+};
+
 const secondArgIsPercentage = (types?: Type[]) =>
   types?.[0].numberFormat == null && types?.[1].numberFormat === 'percentage';
 
@@ -254,6 +270,20 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     syntax: 'median(Table.Column)',
     formulaGroup: 'Columns',
     example: 'median(Prices.Discount)',
+  },
+  stddev: {
+    argCount: 1,
+    argCardinalities: [2],
+    isReducer: true,
+    fnValues: stddev,
+    functionSignature: 'column<R> -> R',
+    explanation: 'Standard deviation of a column.',
+    syntax: 'stddev(Table.Column)',
+    formulaGroup: 'Columns',
+    example: 'stddev(Prices.Discount)',
+  },
+  variance: {
+    aliasFor: 'stddev',
   },
   sqrt: {
     argCount: 1,

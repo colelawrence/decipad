@@ -167,13 +167,13 @@ export interface PlotElement extends BaseElement {
     | 'area'
     | 'point'
     | 'arc';
-  xColumnName: string;
-  yColumnName: string;
-  sizeColumnName: string;
-  colorColumnName: string;
-  thetaColumnName: string;
+  xColumnName?: string;
+  yColumnName?: string;
+  sizeColumnName?: string;
+  colorColumnName?: string;
+  thetaColumnName?: string;
   children: [EmptyText];
-  y2ColumnName: string;
+  y2ColumnName?: string;
 }
 export interface DeprecatedInputElement extends BaseElement {
   type: typeof DEPRECATED_ELEMENT_INPUT;
@@ -187,8 +187,8 @@ export interface DeprecatedInputElement extends BaseElement {
 export interface CaptionElement extends BaseElement {
   type: typeof ELEMENT_CAPTION;
   children: [PlainText];
-  icon: string;
-  color: string;
+  icon?: string;
+  color?: string;
 }
 
 export interface ExpressionElement extends BaseElement {

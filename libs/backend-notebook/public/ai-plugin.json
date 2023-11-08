@@ -11,7 +11,7 @@
     "type": "openapi",
     "url": "[DOMAIN]/openapi.yaml"
   },
-  "logo_url": "https://uploads-ssl.webflow.com/61dda5267f2552f1a1c52b1f/622257a785a56d257a078fa0_Logomark.svg",
+  "logo_url": "https://s.gravatar.com/avatar/564a22726378045a4453d1f7c803b581?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fte.png",
   "contact_email": "support@decipad.com",
   "legal_info_url": "https://app.decipad.com/docs/terms"
 }

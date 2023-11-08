@@ -1,4 +1,4 @@
-import { getNodeString, insertNodes } from '@udecode/plate';
+import { getNodeString, insertNodes, getNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TABLE,
@@ -12,6 +12,8 @@ import {
 } from '@decipad/editor-types';
 import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
+import { getDefined } from '@decipad/utils';
+import { assertElementType } from '@decipad/editor-utils';
 
 export const appendFilledTable: Action<'appendFilledTable'> = {
   summary: 'appends a filled table to the end of the notebook',
@@ -111,13 +113,21 @@ export const appendFilledTable: Action<'appendFilledTable'> = {
         ),
       ],
     };
-    insertNodes(editor, [table], { at: appendPath(editor) });
+    const insertPath = appendPath(editor);
+    insertNodes(editor, [table], { at: insertPath });
+    const actualTable = getDefined(getNode<TableElement>(editor, insertPath));
+    assertElementType(actualTable, ELEMENT_TABLE);
     return {
       createdElementId: table.id,
       createdElementType: table.type,
       createdElementName: getNodeString(
         table.children[0].children[0].children[0]
       ),
+      createdSubElements: actualTable.children[1].children.map((th) => ({
+        createdElementId: th.id,
+        createdElementType: th.type,
+        createdElementName: getNodeString(th),
+      })),
     };
   },
 };

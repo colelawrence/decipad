@@ -21,10 +21,12 @@ import { Realm, RuntimeError, evaluate } from '../interpreter';
 import { shouldEvaluate } from './shouldEvaluate';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { sortValue } from '../interpreter/sortValue';
+import { requiresWholeColumn } from './requiresWholeColumn';
+import { isPrevious } from '../utils/isPrevious';
 
 const isRecursiveReference = (expr: AST.Expression) =>
   expr.type === 'function-call' &&
-  getIdentifierString(expr.args[0]) === 'previous';
+  isPrevious(getIdentifierString(expr.args[0]));
 
 export const usesRecursion = (expr: AST.Expression) => {
   let result = false;
@@ -56,9 +58,10 @@ export const evaluateTableColumn = async (
   rowCount?: number
 ): Promise<ColumnLikeValue> => {
   if (
-    refersToOtherColumnsByName(column, tableColumns) ||
-    usesRecursion(column) ||
-    usesOrdinalReference(column)
+    (refersToOtherColumnsByName(column, tableColumns) ||
+      usesRecursion(column) ||
+      usesOrdinalReference(column)) &&
+    !requiresWholeColumn(column)
   ) {
     return evaluateTableColumnIteratively(
       realm,

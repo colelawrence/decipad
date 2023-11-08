@@ -1,4 +1,3 @@
-import type { SerializedType } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import capitalize from 'lodash.capitalize';
 import { FC, useCallback, useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import { Aggregate, Caret, Cluster, Trash } from '../../icons';
 import { cssVar } from '../../primitives';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { MenuList } from '../MenuList/MenuList';
+import { TableCellType } from '@decipad/editor-types';
 
 interface Rounding {
   id: string;
@@ -14,7 +14,7 @@ interface Rounding {
 }
 
 export interface DataViewColumnMenuProps {
-  type: SerializedType;
+  type: TableCellType;
   selectedAggregation?: string;
   availableAggregations: Array<string>;
   availableRoundings: Array<Rounding>;

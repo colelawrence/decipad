@@ -1,5 +1,4 @@
-import type { SerializedType } from '@decipad/remote-computer';
-import type { BaseElement, EmptyText, Text } from '.';
+import type { BaseElement, EmptyText, TableCellType, Text } from '.';
 import {
   ELEMENT_DATA_VIEW,
   ELEMENT_DATA_VIEW_CAPTION,
@@ -15,8 +14,15 @@ export interface DataViewHeaderRowElement extends BaseElement {
 
 export interface DataViewHeader extends BaseElement {
   type: typeof ELEMENT_DATA_VIEW_TH;
-  cellType: SerializedType;
-  aggregation?: 'average' | 'max' | 'median' | 'min' | 'span' | 'sum';
+  cellType: TableCellType;
+  aggregation?:
+    | 'average'
+    | 'max'
+    | 'median'
+    | 'min'
+    | 'span'
+    | 'sum'
+    | 'stddev';
   rounding?: string;
   name: string;
   label: string;

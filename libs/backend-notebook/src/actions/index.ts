@@ -16,6 +16,15 @@ import { createNotebook } from './createNotebook';
 import type { Actions } from './types';
 import { generateFormula } from './generateFormula';
 import { appendDataView } from './appendDataView';
+import { appendCodeLine } from './appendCodeLine';
+import { updateCodeLine } from './updateCodeLine';
+import { appendSliderVariable } from './appendSliderVariable';
+import { fillTable } from './fillTable';
+import { fillColumn } from './fillColumn';
+import { fillRow } from './fillRow';
+import { appendPlot } from './appendPlot';
+import { setPlotParams } from './setPlotParams';
+import { appendChoice } from './appendChoice';
 
 export const actions: Partial<Actions> = {
   createNotebook,
@@ -24,8 +33,13 @@ export const actions: Partial<Actions> = {
   appendElement,
   appendText,
   changeText,
+  appendCodeLine,
+  updateCodeLine,
   appendEmptyTable,
   appendFilledTable,
+  fillTable,
+  fillColumn,
+  fillRow,
   insertEmptyTableColumn,
   insertFilledTableColumn,
   insertFormulaTableColumn,
@@ -35,4 +49,8 @@ export const actions: Partial<Actions> = {
   updateTableCell,
   generateFormula,
   appendDataView,
+  appendSliderVariable,
+  appendPlot,
+  setPlotParams,
+  appendChoice,
 };

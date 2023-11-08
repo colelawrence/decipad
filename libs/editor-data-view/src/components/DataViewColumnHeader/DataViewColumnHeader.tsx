@@ -13,7 +13,6 @@ import {
 import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { DataViewColumnHeader as UIDataViewColumnHeader } from '@decipad/ui';
-import { isFirstChild } from '@udecode/plate';
 import { DRAG_ITEM_DATAVIEW_COLUMN } from 'libs/editor-table/src/contexts/TableDndContext';
 import { useDragColumn } from 'libs/editor-table/src/hooks/useDragColumn';
 import { useCallback, useMemo, useRef } from 'react';
@@ -56,7 +55,7 @@ export const DataViewColumnHeader: PlateComponent<{ overridePath?: Path }> = ({
   );
 
   const availableAggregations = useMemo(() => {
-    if (!actualPath || isFirstChild(actualPath)) {
+    if (!actualPath) {
       // first column: do not present aggregation choices
       return [];
     }

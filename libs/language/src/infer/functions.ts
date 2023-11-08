@@ -6,6 +6,7 @@ import { callBuiltinFunctor } from '../builtins';
 import { buildType as t, InferError, Type, typeIsPending } from '../type';
 import { getDefined, getIdentifierString, getOfType, zip } from '../utils';
 import { Context, logRetrievedFunctionName } from './context';
+import { isPrevious } from '../utils/isPrevious';
 
 export function inferFunctionDefinition(
   ctx: Context,
@@ -60,7 +61,7 @@ const continueInferFunctionCall = async (
   const givenArguments = await pSeries(
     fArgs.map((arg) => async () => inferExpression(ctx, arg))
   );
-  if (fName === 'previous') {
+  if (isPrevious(fName)) {
     return givenArguments[0];
   }
 

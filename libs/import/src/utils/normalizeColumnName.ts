@@ -5,5 +5,10 @@ export const normalizeColumnName = (_columnName: string): string => {
   if (columnName[0].match(/^[0-9]{1}$/)) {
     columnName = `_${columnName}`;
   }
-  return columnName.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
+  return (
+    columnName
+      .replaceAll(' ', '')
+      .match(new RegExp(identifierRegExpGlobal))
+      ?.join('') || ''
+  );
 };

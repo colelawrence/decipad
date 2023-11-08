@@ -1,6 +1,7 @@
 import {
+  TNodeEntry,
+  getNode,
   insertNodes,
-  insertText,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate';
@@ -10,6 +11,8 @@ import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { TableColumnFormulaElement } from '../../../editor-types/src/table';
+import { replaceText } from './utils/replaceText';
+import { getDefined } from '@decipad/utils';
 
 export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
   summary: 'turns a column into a calculated column with a given formula',
@@ -72,7 +75,12 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
         });
       } else {
         // change the formula
-        insertText(editor, formula, { at: [...tablePath, 0, formulaIndex] });
+        const formulaPath = [...tablePath, 0, formulaIndex];
+        const formulaEntry = [
+          getDefined(getNode(editor, formulaPath)),
+          formulaPath,
+        ] as TNodeEntry<TableColumnFormulaElement>;
+        replaceText(editor, formulaEntry, formula);
       }
       setNodes<TableHeaderElement>(
         editor,

@@ -1,11 +1,13 @@
 import { getDefined, produce } from '@decipad/utils';
 import { type AST } from '..';
 import { Type, buildType as t, InferError } from '../type';
-import { getIdentifierString, walkAst } from '../utils';
+import { getIdentifierString, walkAst, mutateAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { Context, pushTableContext } from '../infer/context';
 import { coerceTableColumnTypeIndices } from './dimensionCoersion';
 import { sortType } from '../infer/sortType';
+import { fakeFunctionCall, requiresWholeColumn } from './requiresWholeColumn';
+import { operators } from '../builtins';
 
 export const inferTable = async (ctx: Context, table: AST.Table) => {
   if (!ctx.stack.isInGlobalScope) {
@@ -42,6 +44,73 @@ export const inferTable = async (ctx: Context, table: AST.Table) => {
   });
 };
 
+const fixColumnExp = (
+  exp: AST.Expression,
+  tableName: string,
+  otherColumns: Map<string, Type>
+): AST.Expression => {
+  const insideColumnCoercionPaths: Array<number[]> = [];
+
+  const insideColumnCoercion = (path: number[]): boolean => {
+    return insideColumnCoercionPaths.some(
+      (eligiblePath) =>
+        eligiblePath.length === 0 || path.every((n, i) => eligiblePath[i] === n)
+    );
+  };
+
+  if (requiresWholeColumn(exp)) {
+    const visitFunctionCall = (
+      fnCall: AST.FunctionCall,
+      path: number[]
+    ): AST.FunctionCall => {
+      const functionName = getIdentifierString(fnCall.args[0]);
+      const builtIn = operators[functionName];
+      if (builtIn) {
+        if (builtIn.aliasFor) {
+          return visitFunctionCall(
+            fakeFunctionCall(fnCall, builtIn.aliasFor),
+            path
+          );
+        }
+        if (builtIn.coerceToColumn) {
+          insideColumnCoercionPaths.push(path);
+        }
+      }
+      return fnCall;
+    };
+
+    const visitAndMutateRef = (ref: AST.Ref): AST.Ref | AST.PropertyAccess => {
+      const refName = getIdentifierString(ref);
+      if (otherColumns.has(refName)) {
+        return {
+          type: 'property-access',
+          args: [
+            {
+              type: 'ref',
+              args: [tableName],
+            },
+            { type: 'colref', args: [refName] },
+          ],
+        };
+      }
+      return ref;
+    };
+
+    const visitNode = (node: AST.Node, path: number[]): AST.Node => {
+      if (node.type === 'function-call') {
+        return visitFunctionCall(node, path);
+      }
+      if (node.type === 'ref' && insideColumnCoercion(path)) {
+        return visitAndMutateRef(node);
+      }
+      return node;
+    };
+    return mutateAst(exp, visitNode) as AST.Expression;
+  }
+
+  return exp;
+};
+
 export async function inferTableColumn(
   ctx: Context,
   {
@@ -59,10 +128,12 @@ export async function inferTableColumn(
     ctx.stack.getNamespace(tableName, 'function')
   );
 
-  const exp: AST.Expression =
+  // eslint-disable-next-line no-underscore-dangle
+  const _exp: AST.Expression =
     columnAst.type === 'table-column' ? columnAst.args[1] : columnAst.args[2];
 
   let type = await pushTableContext(ctx, tableName, async () => {
+    const exp = fixColumnExp(_exp, tableName, otherColumns);
     if (refersToOtherColumnsByName(exp, otherColumns)) {
       return inferTableColumnPerCell(ctx, otherColumns, exp);
     } else {

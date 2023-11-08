@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 const { searchStore } = require('../../config/searchStore');
@@ -11,12 +12,21 @@ const { cleanMarkdown } = require('../utils/cleanMarkdown');
 const splitterChunkSize = 1000;
 const splitterChunkOverlap = 100;
 
-const indexLanguageDocs = async (_store) => {
+const getExistingSnippetIds = async (store) => {
+  const result = await store.search({
+    index: indexNames.languageDocsVector,
+    _source: ['_id'],
+  });
+  return new Set(result.body.hits.hits.map((hit) => hit._id));
+};
+
+const insertNewLanguageDocsSnippets = async (store) => {
   const splitter = RecursiveCharacterTextSplitter.fromLanguage('markdown', {
     chunkSize: splitterChunkSize,
     chunkOverlap: splitterChunkOverlap,
   });
-  const store = _store ?? (await searchStore());
+
+  const insertedIds = [];
   for (const doc of languageDocs) {
     console.log(`-------------> ${doc}`);
     const docContent = await cleanMarkdown(
@@ -37,7 +47,28 @@ const indexLanguageDocs = async (_store) => {
         index: indexNames.languageDocsVector,
         body: { chunk: chunk.pageContent, embeddings_vector: vector },
       });
+      insertedIds.push(id);
     }
   }
+  return new Set(insertedIds);
+};
+
+const removeOldSnippetIds = async (store, oldIds, newIds) => {
+  for (const oldId of oldIds) {
+    if (!newIds.has(oldId)) {
+      console.log(`removing doc ${oldId}`);
+      await store.delete({
+        id: oldId,
+        index: indexNames.languageDocsVector,
+      });
+    }
+  }
+};
+
+const indexLanguageDocs = async (_store) => {
+  const store = _store ?? (await searchStore());
+  const existingIds = await getExistingSnippetIds(store);
+  const insertedIds = await insertNewLanguageDocsSnippets(store);
+  await removeOldSnippetIds(store, existingIds, insertedIds);
 };
 exports.indexLanguageDocs = indexLanguageDocs;

@@ -167,7 +167,7 @@ export const VariableEditor = ({
 }: VariableEditorProps): ReturnType<FC> => {
   const childrenArray = Children.toArray(children);
   const [darkTheme] = useThemeFromStore();
-  const baseSwatches = swatchesThemed(darkTheme);
+  const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
 
   const Icon = useMemo(() => (type && getTypeIcon(type)) ?? Virus, [type]);
   const selected = useSelected();

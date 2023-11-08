@@ -3,7 +3,7 @@ import { Action, ActionParams } from './types';
 import { matchElementId } from '../utils/matchElementId';
 
 export const removeElement: Action<'removeElement'> = {
-  summary: 'removes an existing element from the notebook',
+  summary: 'removes an entire existing element from the notebook',
   responses: {
     '200': {
       description: 'OK',

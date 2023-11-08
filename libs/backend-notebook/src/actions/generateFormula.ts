@@ -9,10 +9,50 @@ import { notImplemented } from '@hapi/boom';
 import { nanoid } from 'nanoid';
 
 export const generateFormula: Action<'generateFormula'> = {
-  summary: 'gnerates a Decipad language formula from a prompt',
+  summary: 'generates Decipad language code from a prompt',
   responses: {
     '200': {
       description: 'OK',
+      schema: {
+        type: 'object',
+        properties: {
+          error: {
+            type: 'string',
+          },
+          errorLocation: {
+            type: 'object',
+            properties: {
+              line: {
+                type: 'number',
+              },
+              column: {
+                type: 'number',
+              },
+            },
+          },
+          blocks: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                type: {
+                  type: 'string',
+                  enum: ['expression', 'assignment'],
+                },
+                expressionCode: {
+                  type: 'string',
+                },
+                varname: {
+                  type: 'string',
+                },
+                value: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
   parameters: [],
@@ -21,8 +61,7 @@ export const generateFormula: Action<'generateFormula'> = {
       type: 'object',
       properties: {
         prompt: {
-          description:
-            'natural language description of the formula to generate',
+          description: 'natural language description of the code to generate',
           type: 'string',
         },
       },

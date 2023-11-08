@@ -1,8 +1,5 @@
-import { findNode } from '@udecode/plate';
-import { notFound, notAcceptable } from '@hapi/boom';
-import { AnyElement } from '@decipad/editor-types';
-import { matchElementId } from '../utils/matchElementId';
 import { Action, ActionParams } from './types';
+import { getElementById as getElementById2 } from './utils/getElementById';
 
 export const getElementById: Action<'getElementById'> = {
   summary: 'fetches an element from the notebook with the given id',
@@ -26,16 +23,5 @@ export const getElementById: Action<'getElementById'> = {
   validateParams: (params): params is ActionParams<'getElementById'> =>
     typeof params.elementId === 'string',
   requiresNotebook: true,
-  handler: (editor, { elementId }) => {
-    if (typeof elementId !== 'string') {
-      throw notAcceptable('elementId should be a string');
-    }
-    const node = findNode<AnyElement>(editor, {
-      match: matchElementId(elementId),
-    })?.[0];
-    if (!node) {
-      throw notFound(`Could not find an element with id ${elementId}`);
-    }
-    return node;
-  },
+  handler: (editor, { elementId }) => getElementById2(editor, elementId)[0],
 };

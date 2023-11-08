@@ -118,6 +118,18 @@ export const tokenRules = {
       ),
       value: (validJsonString: string) => JSON.parse(validJsonString),
     },
+    altstring: {
+      /* eslint-disable-next-line no-control-regex */
+      match: regexHack(
+        "'(?:\\\\[\"bfnrt/\\\\]|\\\\u[a-fA-F0-9]{4}|[^\n'\\\\])*'"
+      ),
+      value: (invalidJSONString: string) => {
+        const jsonString = invalidJSONString
+          .replaceAll('"', '\\"')
+          .replaceAll("'", '"');
+        return JSON.parse(jsonString);
+      },
+    },
     // Moo crashes by default, but we can give it an error token to return us
     error,
   },

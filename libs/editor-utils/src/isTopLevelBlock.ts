@@ -1,5 +1,7 @@
-import { MyElement } from '@decipad/editor-types';
-import { Path } from 'slate';
+import type { MyElement, TopLevelValue } from '@decipad/editor-types';
+import type { Path } from 'slate';
 
-export const isTopLevelBlock = (_el: MyElement, path: Path) =>
-  path.length === 1;
+export const isTopLevelBlock = (
+  _el: MyElement,
+  path: Path
+): _el is TopLevelValue => path.length === 1;

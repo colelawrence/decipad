@@ -1,7 +1,7 @@
 {
   "schema_version": "v1",
-  "name_for_human": "Decipad",
-  "name_for_model": "Decipad",
+  "name_for_human": "Decipad4763",
+  "name_for_model": "Decipad4763",
   "description_for_human": "Create and mainpulate Decipad documents.",
   "description_for_model": "Create and mainpulate Decipad documents.",
   "auth": {

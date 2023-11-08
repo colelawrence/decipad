@@ -482,13 +482,13 @@ let ParserRules = [
   {
     name: 'matrixMatchers',
     symbols: [
-      { literal: '[' },
+      { literal: '{' },
       '_',
       'matrixMatchersInner',
       '_',
       'matrixMatchers$ebnf$1',
       '_',
-      { literal: ']' },
+      { literal: '}' },
     ],
     postprocess: (d) => {
       return addArrayLoc(
@@ -801,6 +801,19 @@ let ParserRules = [
   {
     name: 'string',
     symbols: [tokenizer.has('string') ? { type: 'string' } : string],
+    postprocess: ([string]) => {
+      return addLoc(
+        {
+          type: 'literal',
+          args: ['string', string.value],
+        },
+        string
+      );
+    },
+  },
+  {
+    name: 'string',
+    symbols: [tokenizer.has('altstring') ? { type: 'altstring' } : altstring],
     postprocess: ([string]) => {
       return addLoc(
         {
@@ -1916,17 +1929,19 @@ let ParserRules = [
       );
     },
   },
-  { name: 'noNumPrimary$subexpression$2', symbols: ['ref'] },
-  { name: 'noNumPrimary$subexpression$2', symbols: ['functionCall'] },
+  { name: 'noNumPrimary', symbols: ['propertyAccess'], postprocess: id },
+  { name: 'propertyAccess$subexpression$1', symbols: ['ref'] },
+  { name: 'propertyAccess$subexpression$1', symbols: ['functionCall'] },
   {
-    name: 'noNumPrimary$subexpression$2',
+    name: 'propertyAccess$subexpression$1',
     symbols: ['parenthesizedExpression'],
   },
-  { name: 'noNumPrimary$subexpression$2', symbols: ['select'] },
+  { name: 'propertyAccess$subexpression$1', symbols: ['select'] },
+  { name: 'propertyAccess$subexpression$1', symbols: ['lookup'] },
   {
-    name: 'noNumPrimary',
+    name: 'propertyAccess',
     symbols: [
-      'noNumPrimary$subexpression$2',
+      'propertyAccess$subexpression$1',
       '_',
       { literal: '.' },
       '_',
@@ -1950,6 +1965,7 @@ let ParserRules = [
         d
       ),
   },
+  { name: 'propertyAccess', symbols: ['lookup'], postprocess: id },
   {
     name: 'parenthesizedExpression',
     symbols: [{ literal: '(' }, '_', 'expression', '_', { literal: ')' }],
@@ -2333,6 +2349,41 @@ let ParserRules = [
         {
           type: 'argument-list',
           args: [d[2], ...d[3].map(([_ws, _comma, _ws2, arg]) => arg)],
+        },
+        d
+      ),
+  },
+  {
+    name: 'lookup',
+    symbols: [
+      'ref',
+      '_',
+      { literal: '[' },
+      '_',
+      'expression',
+      '_',
+      { literal: ']' },
+    ],
+    postprocess: (d) =>
+      addArrayLoc(
+        {
+          type: 'function-call',
+          args: [
+            addLoc(
+              {
+                type: 'funcref',
+                args: ['lookup'],
+              },
+              d[0]
+            ),
+            addLoc(
+              {
+                type: 'argument-list',
+                args: [d[0], d[4]],
+              },
+              d[2]
+            ),
+          ],
         },
         d
       ),

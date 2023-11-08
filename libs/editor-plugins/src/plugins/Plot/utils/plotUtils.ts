@@ -27,12 +27,12 @@ import {
 export type DisplayProps = {
   sourceVarName: string;
   markType: PlotElement['markType'];
-  xColumnName: string;
-  yColumnName: string;
-  sizeColumnName: string;
-  colorColumnName: string;
-  thetaColumnName: string;
-  y2ColumnName: string;
+  xColumnName?: string;
+  yColumnName?: string;
+  sizeColumnName?: string;
+  colorColumnName?: string;
+  thetaColumnName?: string;
+  y2ColumnName?: string;
   colorScheme?: string;
 };
 
@@ -77,12 +77,12 @@ export function encodingTypeForColumnType(type: SerializedType): DisplayType {
 
 function relevantColumnNames(displayProps: DisplayProps): string[] {
   return [
-    displayProps.xColumnName,
-    displayProps.yColumnName,
-    displayProps.sizeColumnName,
-    displayProps.colorColumnName,
-    displayProps.thetaColumnName,
-    displayProps.y2ColumnName,
+    displayProps.xColumnName ?? '',
+    displayProps.yColumnName ?? '',
+    displayProps.sizeColumnName ?? '',
+    displayProps.colorColumnName ?? '',
+    displayProps.thetaColumnName ?? '',
+    displayProps.y2ColumnName ?? '',
   ].filter(Boolean);
 }
 

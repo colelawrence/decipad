@@ -1,6 +1,6 @@
 import { AnyMapping } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
-import { AST, isExpression, Type, validateResult } from '.';
+import { AST, isExpression, prettyPrintAST, Type, validateResult } from '.';
 import { Context, inferBlock, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
@@ -60,11 +60,11 @@ interface RunAstOptions {
   doNotMaterialiseResults?: boolean;
 }
 
-interface RunAstResult {
+export interface RunAstResult {
   type: Type;
   value: OneResult;
 }
-type RunAstAndGetContextResult = RunAstResult & {
+export type RunAstAndGetContextResult = RunAstResult & {
   context: Context;
   realm: Realm;
 };
@@ -111,6 +111,7 @@ export const runAST = async (
 
 export const runCode = async (source: string, opts: RunAstOptions = {}) => {
   const block = parseBlockOrThrow(source);
+  prettyPrintAST(block);
   return runAST(block, opts);
 };
 

@@ -15,7 +15,10 @@ export const normalizeIdentifierElement = <
   const { selection } = editor;
 
   const replacement =
-    text.match(new RegExp(identifierRegExpGlobal))?.join('') || '';
+    text
+      .replaceAll(' ', '')
+      .match(new RegExp(identifierRegExpGlobal))
+      ?.join('') || '';
   if (replacement !== text) {
     return () => insertText(editor, replacement, { at: path });
   }

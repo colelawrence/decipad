@@ -32,7 +32,8 @@ export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
           type: 'string',
         },
         columnName: {
-          description: 'the name of the column',
+          description:
+            'the name of the column. Must contain no spaces or weird characters',
           type: 'string',
         },
         cells: {

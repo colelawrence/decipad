@@ -21,6 +21,8 @@ import {
   materializeOneResult,
   parseExpression,
   parseExpressionOrThrow,
+  runCode,
+  serializeResult,
   serializeType,
 } from '@decipad/language';
 import DeciNumber from '@decipad/number';
@@ -586,6 +588,19 @@ export class Computer {
 
     return this.results.pipe(
       switchMap(async () => this.expressionResult(exp)),
+      distinctUntilChanged((cur, next) => dequal(cur, next))
+    );
+  }
+
+  blockResultFromText$(decilang: string) {
+    return this.results.pipe(
+      switchMap(async () => {
+        return runCode(decilang, {
+          ctx: this.computationRealm.inferContext,
+          realm: this.computationRealm.interpreterRealm,
+        });
+      }),
+      map((result) => serializeResult(result.type, result.value)),
       distinctUntilChanged((cur, next) => dequal(cur, next))
     );
   }

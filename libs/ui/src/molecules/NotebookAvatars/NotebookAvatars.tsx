@@ -84,11 +84,14 @@ export const NotebookAvatars = ({
         data: { user, style },
       } = cursor;
       const { _backgroundColor } = style;
-      const { email } = user;
-      if (email && email !== '') {
-        // eslint-disable-next-line no-param-reassign
-        previous[email] = _backgroundColor;
+      if (user) {
+        const { email } = user;
+        if (email && email !== '') {
+          // eslint-disable-next-line no-param-reassign
+          previous[email] = _backgroundColor;
+        }
       }
+
       return previous;
     }, {});
 

@@ -4,7 +4,6 @@ import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
 import { dependencies, findAllTables } from '../dependencies';
 import { getIdentifierString } from '../utils';
 import { getExprRef } from '../exprRefs';
-import { prettyPrintProgramBlock } from '../testUtils';
 
 interface Node {
   entities: Set<string>;
@@ -126,15 +125,10 @@ export const topologicalSort = (blocks: ProgramBlock[]): ProgramBlock[] => {
     if (n.temporaryMark) {
       // Circular dep
       if (!isTesting) {
-        console.error(
-          'node has a dependency cycle',
-          n.value.id,
-          prettyPrintProgramBlock(n.value)
-        );
+        console.error('node has a dependency cycle', n.value.id);
         console.error(
           'node depends on',
           Array.from(n.edges ?? []).map((edge) => [
-            prettyPrintProgramBlock(edge.value),
             Array.from(edge.edges ?? []).map((edge) => edge.value.id),
           ])
         );

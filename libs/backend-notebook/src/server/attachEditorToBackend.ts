@@ -3,6 +3,7 @@ import type { EditorController } from '@decipad/notebook-tabs';
 import { SyncElement, YjsEditor, withYjs } from '@decipad/slate-yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
+import { timeout } from '@decipad/utils';
 
 type Detach = () => Promise<void>;
 
@@ -21,6 +22,7 @@ export const attachEditorToBackend = async (
   });
   await persistence.flush();
   const detach: Detach = async () => {
+    await timeout(1000);
     await comms.flush();
     await persistence.flush();
 

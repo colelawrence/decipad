@@ -5,7 +5,7 @@ import { getTableById } from './utils/getTablebyId';
 import { nanoid } from 'nanoid';
 
 export const insertTableRow: Action<'insertTableRow'> = {
-  summary: 'inserts a row in an existing table',
+  summary: 'appends a row to the end of an existing table',
   responses: {
     '200': {
       description: 'OK',
@@ -17,7 +17,7 @@ export const insertTableRow: Action<'insertTableRow'> = {
       type: 'object',
       properties: {
         tableId: {
-          description: 'the id of the table you want to insert a new row into',
+          description: 'the id of the table you want to append a new row into',
           type: 'string',
         },
         row: {

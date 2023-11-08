@@ -1,8 +1,11 @@
 openapi: 3.0.1
 info:
   title: Create and modify a Decipad notebook
-  description: Create and modify a Decipad notebook where you can build a
-    numerical model, adding and manipulating text, tables, data views, sliders
+  description: >-
+    Create and modify a Decipad notebook where you can build a numerical model,
+    adding and manipulating text, tables, data views, sliders.
+
+    Column names and variable names must not have spaces or weird characters in them.
   version: v1
 servers:
   - url: http://localhost:3000
@@ -58,8 +61,8 @@ paths:
             type: string
   /api/notebook/removeElement:
     post:
-      summary: removes an existing element from the notebook
-      description: removes an existing element from the notebook
+      summary: removes an entire existing element from the notebook
+      description: removes an entire existing element from the notebook
       operationId: removeElement
       responses:
         '200':
@@ -164,6 +167,80 @@ paths:
               required:
                 - elementId
                 - newText
+  /api/notebook/appendCodeLine:
+    post:
+      summary: appends a code line to the notebook
+      description: appends a code line to the notebook
+      operationId: appendCodeLine
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variableName:
+                  description:
+                    the name of the variable to create. Should be unique and have no
+                    spaces or weird characters.
+                  type: string
+                codeExpression:
+                  description: decipad language code expression for this variable
+                  type: string
+              required:
+                - variableName
+                - codeExpression
+  /api/notebook/updateCodeLine:
+    post:
+      summary: changes an existing code line in the notebook
+      description: changes an existing code line in the notebook
+      operationId: updateCodeLine
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                codeLineId:
+                  description: the id of the code line you need to change
+                  type: string
+                newVariableName:
+                  description: the new variable name if it needs changing, or the current one.
+                  type: string
+                newCodeExpression:
+                  description: the new decipad language code expression for this variable
+                  type: string
+              required:
+                - codeLineId
+                - newVariableName
+                - newCodeExpression
   /api/notebook/appendEmptyTable:
     post:
       summary: appends an empty table to the end of the notebook
@@ -255,10 +332,119 @@ paths:
                 - tableName
                 - columnNames
                 - rowsData
+  /api/notebook/fillTable:
+    post:
+      summary: fills the table data
+      description: fills the table data
+      operationId: fillTable
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to fill
+                  type: string
+                rowsData:
+                  description: the content of the table, row by row
+                  type: array
+                  items:
+                    description: a row of data
+                    type: array
+                    items:
+                      description: a cell
+                      type: string
+              required:
+                - tableId
+                - rowsData
+  /api/notebook/fillColumn:
+    post:
+      summary: fills the data on a column of the given table
+      description: fills the data on a column of the given table
+      operationId: fillColumn
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to fill
+                  type: string
+                columnName:
+                  description: the name of the column you want to fill
+                  type: string
+                columnData:
+                  description: the content of the column
+                  type: array
+                  items:
+                    description: a cell
+                    type: string
+              required:
+                - tableId
+                - columnName
+                - columnData
+  /api/notebook/fillRow:
+    post:
+      summary: updates the data on a table row
+      description: updates the data on a table row
+      operationId: fillRow
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to append a new row into
+                  type: string
+                rowIndex:
+                  description: the index of the row you want to change. starts at 0
+                  type: integer
+                rowData:
+                  description: the content of that row
+                  type: array
+                  items:
+                    type: string
+              required:
+                - tableId
+                - rowIndex
+                - rowData
   /api/notebook/insertEmptyTableColumn:
     post:
-      summary: inserts am empty column in an existing table
-      description: inserts am empty column in an existing table
+      summary: inserts an empty column in an existing table
+      description: inserts an empty column in an existing table
       operationId: insertEmptyTableColumn
       responses:
         '200':
@@ -276,7 +462,9 @@ paths:
             type: string
         - name: columnName
           in: query
-          description: the name of the new column
+          description:
+            the name of the new column. Must contain no spaces or weird
+            characters
           required: true
           schema:
             type: string
@@ -315,7 +503,7 @@ paths:
                   description: the id of the table element
                   type: string
                 columnName:
-                  description: the name of the column
+                  description: the name of the column. Must contain no spaces or weird characters
                   type: string
                 cells:
                   description: the data for the column
@@ -326,8 +514,8 @@ paths:
                 - prompt
   /api/notebook/insertFormulaTableColumn:
     post:
-      summary: inserts am empty column in an existing table
-      description: inserts am empty column in an existing table
+      summary: inserts a calculated column to an existing table
+      description: inserts a calculated column to an existing table
       operationId: insertFormulaTableColumn
       responses:
         '200':
@@ -353,7 +541,9 @@ paths:
                   description: the id of the table element
                   type: string
                 columnName:
-                  description: the name of the column
+                  description:
+                    the name of the new column. Must contain no spaces or weird
+                    characters
                   type: string
                 formula:
                   description: the Decipad language formula for this new column
@@ -389,8 +579,8 @@ paths:
             type: string
   /api/notebook/insertTableRow:
     post:
-      summary: inserts a row in an existing table
-      description: inserts a row in an existing table
+      summary: appends a row to the end of an existing table
+      description: appends a row to the end of an existing table
       operationId: insertTableRow
       responses:
         '200':
@@ -409,7 +599,7 @@ paths:
               type: object
               properties:
                 tableId:
-                  description: the id of the table you want to insert a new row into
+                  description: the id of the table you want to append a new row into
                   type: string
                 row:
                   description: the content of that row
@@ -486,12 +676,42 @@ paths:
                 - newCellContent
   /api/notebook/generateFormula:
     post:
-      summary: gnerates a Decipad language formula from a prompt
-      description: gnerates a Decipad language formula from a prompt
+      summary: generates a Decipad language formula from a prompt
+      description: generates a Decipad language formula from a prompt
       operationId: generateFormula
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  errorLocation:
+                    type: object
+                    properties:
+                      line:
+                        type: number
+                      column:
+                        type: number
+                  blocks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                            - expression
+                            - assignment
+                        expressionCode:
+                          type: string
+                        varname:
+                          type: string
+                        value:
+                          type: string
       parameters:
         - name: notebookId
           in: query
@@ -542,17 +762,246 @@ paths:
                 tableId:
                   description: the id of the table you want to use in the data view
                   type: string
-                columnNames:
-                  description:
-                    the names of the columns from the table you want to use to the data
-                    view
+                columns:
+                  description: the columns from the table you want to use to the data view
                   type: array
                   items:
-                    type: string
-                    description: Column name
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Column name
+                      aggregation:
+                        type: string
+                        description: Optional. Aggregates the data from the column
+                        enum:
+                          - average
+                          - max
+                          - median
+                          - min
+                          - span
+                          - sum
+                          - stddev
+                      round:
+                        type: string
+                        description:
+                          'Optional. The number of decimal places it rounds to. Use negative
+                          numbers to round to decimal points. Example: to round
+                          to the thousanth use "-3". When using dates you can
+                          round to "quarter", "year", "month" or "day"'
               required:
                 - tableId
-                - columnNames
+                - columns
+  /api/notebook/appendSliderVariable:
+    post:
+      summary: appends a slider component
+      description:
+        appends a slider component into the notebook. The user will be able
+        to change that value by playing with the slider. The value of the slider
+        can be used in code using the given variable name.
+      operationId: appendSliderVariable
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variableName:
+                  description:
+                    the name of the variable for this slider. Should be unique and have
+                    no spaces or weird characters.
+                  type: string
+                initialValue:
+                  description: the initial value for this slider
+                  type: number
+                min:
+                  description: the minimum value this slider accepts
+                  type: number
+                max:
+                  description: the maximum value this slider accepts
+                  type: number
+                step:
+                  description: the step at which the user can change the value
+                  type: number
+              required:
+                - variableName
+                - initialValue
+  /api/notebook/appendPlot:
+    post:
+      summary: appends a plot (or graph) to the notebook
+      description:
+        plots or graphs can be cartesian or pie charts (plot type "arc").
+        Cartesian chart types can be bar, line, area, tick or point.
+      operationId: appendPlot
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the source table for this plot
+                  type: string
+                plotParams:
+                  description: parameters for the plot
+                  type: object
+                  properties:
+                    plotType:
+                      type: string
+                      enum:
+                        - bar
+                        - circle
+                        - square
+                        - tick
+                        - line
+                        - area
+                        - point
+                        - arc
+                    xColumnName:
+                      type: string
+                    yColumnName:
+                      type: string
+                    sizeColumnName:
+                      type: string
+                    colorColumnName:
+                      type: string
+                    thetaColumnName:
+                      type: string
+                    y2ColumnName:
+                      type: string
+              required:
+                - tableId
+                - plotParams
+  /api/notebook/setPlotParams:
+    post:
+      summary: changes some of the parameters for a plot
+      description: changes some of the parameters for a plot
+      operationId: setPlotParams
+      responses:
+        '200':
+          description: OK
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plotId:
+                  description: the id of the plot element to change
+                  type: string
+                newPlotParams:
+                  description:
+                    the parameters to change on the plot. Only include those that need
+                    to change
+                  type: object
+                  properties:
+                    plotType:
+                      type: string
+                      enum:
+                        - bar
+                        - circle
+                        - square
+                        - tick
+                        - line
+                        - area
+                        - point
+                        - arc
+                    xColumnName:
+                      type: string
+                    yColumnName:
+                      type: string
+                    sizeColumnName:
+                      type: string
+                    colorColumnName:
+                      type: string
+                    thetaColumnName:
+                      type: string
+                    y2ColumnName:
+                      type: string
+              required:
+                - plotId
+                - plotParams
+  /api/notebook/appendChoice:
+    post:
+      summary: appends a selection box for the user to choose one value
+      description:
+        appends a slider component into the notebook. The value of the
+        selected option can be used in code using the given variable name.
+      operationId: appendChoice
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResult'
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variableName:
+                  description:
+                    the name of the variable for this slider. Should be unique and have
+                    no spaces or weird characters.
+                  type: string
+                options:
+                  description: the options available for the user
+                  type: array
+                  items:
+                    description: one available option.
+                    type: string
+                selectedName:
+                  description:
+                    optional. contains the initially selected name from the given
+                    options.
+                  type: string
+              required:
+                - variableName
+                - options
 components:
   schemas:
     CreateResult:

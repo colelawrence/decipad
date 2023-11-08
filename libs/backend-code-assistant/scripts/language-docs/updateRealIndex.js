@@ -2,14 +2,15 @@
 /* eslint-disable global-require */
 /* eslint-disable no-console */
 
-const stackName = process.argv[2];
-if (!stackName) {
-  console.error('Need stack name');
-  process.exit(-1);
-  return;
-}
+const dotenv = require('dotenv');
+const { join } = require('path');
 
 const getSearchResourceId = async (nextToken) => {
+  const stackName = process.argv[2];
+  if (!stackName) {
+    console.error('Need stack name');
+    process.exit(-1);
+  }
   const {
     CloudFormationClient,
     ListStackResourcesCommand,
@@ -50,8 +51,16 @@ const getSearchEndpointFromResource = async (resourceId) => {
 };
 
 const getSearchEndpoint = async () => {
+  if (process.env.DECI_SEARCH_URL) {
+    return process.env.DECI_SEARCH_URL;
+  }
   const searchResourceId = await getSearchResourceId();
   if (!searchResourceId) {
+    const stackName = process.argv[2];
+    if (!stackName) {
+      console.error('Need stack name');
+      process.exit(-1);
+    }
     console.error(`Could not find search resource id in stack ${stackName}`);
     process.exit(-1);
   }
@@ -73,13 +82,36 @@ const createClient = async () => {
     console.error(`Need AWS_REGION env var set`);
     process.exit(-1);
   }
-  return new Client({
-    node: await getSearchEndpoint(),
-    ...AwsSigv4Signer({ region }),
-  });
+  const endpoint = await getSearchEndpoint();
+  console.info(`going to use search endpoint ${endpoint}`);
+  let clientOptions = {
+    node: endpoint,
+  };
+  if (process.env.DECI_SEARCH_USERNAME && process.env.DECI_SEARCH_PASSWORD) {
+    console.info(
+      `going tou use password for user ${process.env.DECI_SEARCH_USERNAME}`
+    );
+    clientOptions.auth = {
+      ...clientOptions.auth,
+      username: process.env.DECI_SEARCH_USERNAME,
+      password: process.env.DECI_SEARCH_PASSWORD,
+    };
+  } else {
+    clientOptions = {
+      ...clientOptions,
+      ...AwsSigv4Signer({ region }),
+    };
+  }
+  return new Client(clientOptions);
 };
 
 (async () => {
+  const { error } = dotenv.config({
+    path: join(__dirname, '..', '..', '.env'),
+  });
+  if (error) {
+    console.warn('error loading .env: ', error.message);
+  }
   const { indexLanguageDocs } = require('./indexLanguageDocs');
   const client = await createClient();
   const {

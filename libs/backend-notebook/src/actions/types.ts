@@ -33,6 +33,7 @@ interface InlineSchema {
   type: string;
   properties?: Record<string, Schema>;
   required?: string[];
+  enum?: string[];
   items?: Schema;
   description?: string;
 }

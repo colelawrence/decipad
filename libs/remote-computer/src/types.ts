@@ -28,6 +28,23 @@ export interface ContextStats {
   totalInferProgramTimeMs: number;
 }
 
+export type ResultType = Result.Result<
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'function'
+  | 'column'
+  | 'materialized-column'
+  | 'table'
+  | 'materialized-table'
+  | 'row'
+  | 'date'
+  | 'range'
+  | 'pending'
+  | 'nothing'
+  | 'anything'
+  | 'type-error'
+>;
 export interface ListenerHelper<Args extends unknown[], Ret> {
   observe(...a: Args): Observable<Ret>;
   observeWithSelector<T>(selector: (item: Ret) => T, ...a: Args): Observable<T>;
@@ -112,27 +129,9 @@ export interface RemoteComputer {
     [_blockId?: string | null | undefined],
     Readonly<IdentifiedError> | Readonly<IdentifiedResult> | undefined
   >;
-  expressionResultFromText$(
-    decilang: string
-  ): Observable<
-    Result.Result<
-      | 'string'
-      | 'number'
-      | 'boolean'
-      | 'function'
-      | 'column'
-      | 'materialized-column'
-      | 'table'
-      | 'materialized-table'
-      | 'row'
-      | 'date'
-      | 'range'
-      | 'pending'
-      | 'nothing'
-      | 'anything'
-      | 'type-error'
-    >
-  >;
+
+  expressionResultFromText$(decilang: string): Observable<ResultType>;
+  blockResultFromText$(decilang: string): Observable<ResultType>;
   getVarResult$: ListenerHelper<
     [varName: string],
     IdentifiedError | IdentifiedResult | undefined

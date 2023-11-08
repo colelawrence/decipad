@@ -1,5 +1,5 @@
 import { useComputer } from '@decipad/react-contexts';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { isColumn } from '@decipad/computer';
 import { Column } from '../../types';
 
@@ -33,21 +33,21 @@ export const useReplacingColumns = ({
   );
 
   const [replacingColumns, setReplacingColumns] = useState<Column[]>([]);
-  const replacingColumnsRef = useRef(replacingColumns);
-  replacingColumnsRef.current = replacingColumns;
 
   useEffect(() => {
     const subscriptions = replacingColumnObservables.map((obs, colIndex) =>
       obs?.subscribe((result) => {
-        const replaceBy = [...replacingColumnsRef.current];
         const originalColumn = columns[colIndex];
         if (originalColumn) {
-          replaceBy[colIndex] = {
-            ...originalColumn,
-            type: isColumn(result.type) ? result.type.cellType : result.type,
-            value: result.value as Column['value'],
-          };
-          setReplacingColumns(replaceBy);
+          setReplacingColumns((previousColumns) => {
+            const replaceBy = [...previousColumns];
+            replaceBy[colIndex] = {
+              ...originalColumn,
+              type: isColumn(result.type) ? result.type.cellType : result.type,
+              value: result.value as Column['value'],
+            };
+            return replaceBy;
+          });
         }
       })
     );
