@@ -6208,10 +6208,10 @@
     "@opensearch-project/opensearch" "^2.2.1"
     memoizee "^0.4.15"
 
-"@nasa-gcn/architect-plugin-search@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@nasa-gcn/architect-plugin-search/-/architect-plugin-search-1.0.0.tgz#301eb4e44a37a3f1ae41b6d9896a94819e2cffd9"
-  integrity sha512-9FX5oCWcUwN0hXY01O6n6KWkhm+NpJb6E+Bj/LttlEKh1YZEZrfV0g7mYA3Ptmm/FJZ134+r69gE9Prf+SII+A==
+"@nasa-gcn/architect-plugin-search@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@nasa-gcn/architect-plugin-search/-/architect-plugin-search-1.1.0.tgz#b966019da36be32154bdca73194f1245cedb4180"
+  integrity sha512-vPAOUCTtKBwOKnU86k8XL7ZA9+o7bDtAwu4z9PvSSMwBToG2n4rwO9amNsoBbjC6OxzIxKzBkwNZPU7eRB0XlQ==
   dependencies:
     "@opensearch-project/opensearch" "^2.2.0"
     env-paths "^3.0.0"
