@@ -63,7 +63,6 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
 
   creationDate,
   notebookStatus,
-  workspaceId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -84,7 +83,8 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             As a Reader, you can not download or copy this notebook.
           </ReaderInfo>
         )}
-        {permissionType !== PermissionType.Read &&
+        {workspaces.length !== 0 &&
+          permissionType !== PermissionType.Read &&
           (workspaces.length > 1 ? (
             <MenuList
               itemTrigger={
@@ -109,7 +109,7 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
             <MenuItem
               icon={<Copy />}
               onSelect={() => {
-                onDuplicate(id, false, workspaceId);
+                onDuplicate(id, false, workspaces[0].id);
                 setIsOpen(false);
               }}
             >

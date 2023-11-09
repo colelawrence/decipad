@@ -9,6 +9,7 @@ import {
   EditorNotebookFragment,
   useFinishOnboarding,
   useGetNotebookMetaQuery,
+  useGetWorkspacesQuery,
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import {
@@ -17,7 +18,7 @@ import {
   useCurrentWorkspaceStore,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
-import { notebooks, useRouteParams } from '@decipad/routing';
+import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import {
   EditorPlaceholder,
@@ -36,6 +37,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { Subject, interval, debounce } from 'rxjs';
@@ -353,6 +355,20 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const actions = useNotebookMetaActions();
   const accessActions = useNotebookAccessActions();
 
+  const [result] = useGetWorkspacesQuery();
+  const { data: workspaceData } = result;
+
+  const allWorkspaces = useMemo(
+    () =>
+      workspaceData?.workspaces?.map((workspace) => ({
+        ...workspace,
+        href: workspaces({}).workspace({
+          workspaceId: workspace.id,
+        }).$,
+      })) ?? [],
+    [workspaceData?.workspaces]
+  );
+
   const sidebarData = useNotebookMetaData((state) => ({
     sidebarOpen: state.sidebarOpen,
     toggleSidebar: state.toggleSidebar,
@@ -461,7 +477,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       permissionType={permission}
       hasUnpublishedChanges={hasUnpublishedChanges}
       notebookMeta={meta.data?.getPadById}
-      userWorkspaces={meta.data?.workspaces ?? []}
+      userWorkspaces={allWorkspaces}
       notebookMetaActions={actions}
       notebookAccessActions={accessActions}
       isNewNotebook={isNewNotebook}
