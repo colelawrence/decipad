@@ -373,7 +373,6 @@ export type AnyElement =
   | DataViewNameElement;
 
 export const topLevelBlockKinds: string[] = [
-  ELEMENT_H1,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,

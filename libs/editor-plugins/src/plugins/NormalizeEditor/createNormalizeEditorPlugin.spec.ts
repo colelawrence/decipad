@@ -79,10 +79,12 @@ it('converts text at top level to a paragraph', () => {
 it('handles no children elements without failing', () => {
   editor.children = [
     {
-      type: ELEMENT_H1,
+      type: ELEMENT_PARAGRAPH,
       children: [],
     },
   ];
   normalizeEditor(editor, { force: true });
-  expect(editor.children).toMatchObject([h1Element()]);
+  expect(editor.children).toMatchObject([
+    { type: ELEMENT_PARAGRAPH, children: [{ text: '' }] },
+  ]);
 });
