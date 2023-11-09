@@ -1,35 +1,19 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, test } from './manager/decipad-tests';
 import stringify from 'json-stringify-safe';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
 import { waitForEditorToLoad } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
-import {
-  createWorkspace,
-  importNotebook,
-  snapshot,
-  Timeouts,
-} from '../utils/src';
+import { importNotebook, snapshot, Timeouts } from '../utils/src';
 
-test.describe('Use case: building a candle business', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Use case: building a candle business', async ({ testUser }) => {
+  const { page, notebook } = testUser;
   test.slow();
 
-  let page: Page;
-  let workspaceId: string;
   let notebookId: string;
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    workspaceId = await createWorkspace(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('loads and computes the "starting a candle business notebook"', async () => {
+  await test.step('loads and computes the "starting a candle business notebook"', async () => {
     notebookId = await importNotebook(
-      workspaceId,
+      testUser.workspace.baseWorkspaceID,
       Buffer.from(stringify(startingACandleBusiness), 'utf-8').toString(
         'base64'
       ),
@@ -148,11 +132,12 @@ test.describe('Use case: building a candle business', () => {
     }).toPass();
   });
 
-  test('load embed version of the notebook', async () => {
-    await page.goto(`/n/${notebookId}?embed=true`);
+  await test.step('load embed version of the notebook', async () => {
+    await page.goto(await notebook.createEmbed());
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.redirectDelay);
+    await expect(page.getByText('Clear Changes')).toBeVisible();
     await snapshot(page, 'Embed: Start a Candle Business', {
       mobile: true,
     });

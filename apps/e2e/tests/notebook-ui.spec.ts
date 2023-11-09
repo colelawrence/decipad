@@ -97,7 +97,9 @@ test('sidebar in publish views @sidebar', async ({
 }) => {
   let sharedPageLocation: string;
   await test.step('publish notebook', async () => {
-    sharedPageLocation = await testUser.notebook.publishNotebook();
+    sharedPageLocation = await testUser.notebook.publishNotebook(
+      'Welcome-to-Decipad'
+    );
   });
 
   await test.step('[another user] check sidebar open in a published notebook from another user', async () => {

@@ -1,16 +1,8 @@
-import { BrowserContext, expect, Page, test } from './manager/decipad-tests';
-import {
-  keyPress,
-  setUp,
-  waitForEditorToLoad,
-  waitForNotebookToLoad,
-  editorTitleLocator,
-  editorLocator,
-} from '../utils/page/Editor';
-import { Timeouts, withTestUser, getWorkspaces } from '../utils/src';
+import { expect, test } from './manager/decipad-tests';
+import { keyPress, editorLocator } from '../utils/page/Editor';
+import { Timeouts, getWorkspaces } from '../utils/src';
 
 import {
-  clickNewPadButton,
   duplicatePad,
   exportPad,
   followPad,
@@ -18,7 +10,7 @@ import {
   navigateToWorkspacePage,
 } from '../utils/page/Workspace';
 
-test('simple notebook publish', async ({
+test('publish notebook, check logged out reader + logged in duplication', async ({
   testUser,
   randomFreeUser,
   unregisteredUser,
@@ -52,7 +44,9 @@ test('simple notebook publish', async ({
   });
 
   await test.step('share notebook', async () => {
-    sharedPageLocation = await testUser.notebook.publishNotebook();
+    sharedPageLocation = await testUser.notebook.publishNotebook(
+      'Welcome-to-Decipad'
+    );
   });
 
   await test.step('[unregisteredUser] navigates to published notebook link', async () => {
@@ -70,7 +64,7 @@ test('simple notebook publish', async ({
   await test.step('[randomFreeUser] navigates to published notebook link', async () => {
     await randomFreeUserPage.goto(sharedPageLocation!);
 
-    await waitForNotebookToLoad(randomFreeUserPage);
+    await randomFreeUserNotebook.waitForEditorToLoad();
     await expect(randomFreeUserNotebook.notebookParagraph.nth(0)).toHaveText(
       someText
     );
@@ -113,7 +107,7 @@ test('simple notebook publish', async ({
 
   await test.step('[unregisteredUser] see the republished state', async () => {
     await unregisteredUserPage.goto(sharedPageLocation!);
-    await waitForNotebookToLoad(unregisteredUserPage);
+    await unregisteredUserNotebook.waitForEditorToLoad();
     await expect(
       unregisteredUserPage.getByTestId('paragraph-wrapper').nth(1)
     ).toHaveText(justOneMore);
@@ -126,28 +120,16 @@ test('simple notebook publish', async ({
   });
 });
 
-test.describe('Duplicating a notebook', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
+test('duplicate in workspace with single workspace', async ({
+  randomFreeUser,
+}) => {
   let padToCopyIndex = -1;
   let padCopyIndex = -1;
+  const { page, notebook } = randomFreeUser;
+  await randomFreeUser.createAndNavNewNotebook();
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-    withTestUser({ page, context });
-    await page.getByTestId('new-notebook').click();
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Makes up a notebook', async () => {
-    await page.locator(editorTitleLocator()).first().fill('pad title here');
+  await test.step('Makes up a notebook', async () => {
+    await notebook.updateNotebookTitle('pad title here');
 
     await page
       .getByTestId('paragraph-content')
@@ -165,27 +147,27 @@ test.describe('Duplicating a notebook', () => {
       .fill('this is the third paragraph');
   });
 
-  test('Can reload', async () => {
+  await test.step('Can reload', async () => {
     await page.reload();
-    await waitForEditorToLoad(page);
+    await notebook.waitForEditorToLoad();
     await expect(page.locator(editorLocator()).first()).toBeVisible();
   });
 
-  test('Check if notebook has 4 paragraphs', async () => {
+  await test.step('Check if notebook has 4 paragraphs', async () => {
     await page.getByTestId('notebook-title').click();
     await expect(page.getByText('this is the third paragraph')).toBeVisible();
     await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(4);
     await page.getByTestId('go-to-workspace').click();
   });
 
-  test('Notebook is listed', async () => {
+  await test.step('Notebook is listed', async () => {
     await page.getByText('pad title here').waitFor();
     const pads = await getPadList(page);
     padToCopyIndex = pads.findIndex((pad) => pad.name === 'pad title here');
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
   });
 
-  test('It can duplicate a pad', async () => {
+  await test.step('It can duplicate a pad', async () => {
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
     await duplicatePad(page, padToCopyIndex);
     await page.getByText('Copy of pad title here').waitFor();
@@ -196,7 +178,7 @@ test.describe('Duplicating a notebook', () => {
 
     expect(padCopyIndex).toBeGreaterThanOrEqual(0);
     await followPad(page, padCopyIndex);
-    await waitForEditorToLoad(page);
+    await notebook.waitForEditorToLoad();
     await expect(page.getByTestId('editor-title')).toHaveText(
       'Copy of pad title here'
     );
@@ -204,7 +186,7 @@ test.describe('Duplicating a notebook', () => {
     await navigateToWorkspacePage(page);
   });
 
-  test('Notebook is listed again', async () => {
+  await test.step('Notebook is listed again', async () => {
     await page.getByText('pad title here').last().waitFor();
     const pads = await getPadList(page);
     padToCopyIndex = pads.findIndex(
@@ -214,7 +196,7 @@ test.describe('Duplicating a notebook', () => {
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
   });
 
-  test('Can export a notebook', async () => {
+  await test.step('Can export a notebook', async () => {
     expect(padToCopyIndex).toBeGreaterThanOrEqual(0);
 
     expect(JSON.parse(await exportPad(page, padToCopyIndex))).toMatchObject({
@@ -276,31 +258,15 @@ test.describe('Duplicating a notebook', () => {
   });
 });
 
-test.describe('check notebook duplicate stays in the same workspace', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
+test('duplicate in workspace with multiple workspaces', async ({
+  randomFreeUser,
+}) => {
+  const { page, notebook } = randomFreeUser;
   const NewWorkspaceName = 'NewWorkspace';
-  let originalWorkspace: string | undefined;
+  const workspaces = await getWorkspaces(page);
+  const originalWorkspace = workspaces[0].name;
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        randomUser: true,
-      }
-    );
-    await waitForEditorToLoad(page);
-    const workspaces = await getWorkspaces(page);
-    originalWorkspace = workspaces[0].name;
-  });
-
-  test('create new workspace', async () => {
-    await page.getByTestId('go-to-workspace').click();
+  await test.step('create new workspace', async () => {
     await page.getByTestId('workspace-selector-button').click();
     await page.getByTestId('create-workspace-button').click();
     await page.getByPlaceholder('Team workspace').click();
@@ -311,19 +277,19 @@ test.describe('check notebook duplicate stays in the same workspace', () => {
     );
   });
 
-  test('new notebook', async () => {
-    await clickNewPadButton(page);
-    await waitForEditorToLoad(page);
+  await test.step('new notebook', async () => {
+    await randomFreeUser.newNotebook.click();
+    await notebook.waitForEditorToLoad();
     await page.getByTestId('go-to-workspace').click();
     expect(page.url()).toMatch(/\/w\/[^/]+/);
   });
 
-  test('duplicate notebook to same workspace', async () => {
+  await test.step('duplicate notebook to same workspace', async () => {
     await duplicatePad(page, 0, NewWorkspaceName);
     await expect(page.getByText('Copy of')).toBeVisible();
   });
 
-  test('duplicate notebook to original workspace', async () => {
+  await test.step('duplicate notebook to original workspace', async () => {
     await duplicatePad(page, 0, originalWorkspace);
     // go back to orginal workspace
     await page.getByTestId('workspace-selector-button').click();
@@ -335,5 +301,135 @@ test.describe('check notebook duplicate stays in the same workspace', () => {
       `Welcome to${originalWorkspace}`
     );
     await expect(page.getByText('Copy of')).toBeVisible();
+  });
+});
+
+test('duplicate inside notebook with single workspace', async ({
+  randomFreeUser,
+}) => {
+  const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
+    randomFreeUser;
+  await randomFreeUser.createAndNavNewNotebook();
+  const currentDate = new Date().getTime();
+  const notebookTitle = currentDate.toString();
+  await randomFreeUserNotebook.updateNotebookTitle(notebookTitle);
+  await randomFreeUserNotebook.duplicate();
+  await randomFreeUserPage.getByTestId('go-to-workspace').click();
+  await expect(
+    randomFreeUserPage.getByText(`Copy of ${notebookTitle}`)
+  ).toBeVisible();
+});
+
+test('duplicate inside notebook with multiple workspaces ', async ({
+  randomFreeUser,
+}) => {
+  const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
+    randomFreeUser;
+
+  const NewWorkspaceName = 'New Workspace';
+  let notebookUrl = '';
+  let newWorkspaceURL = '';
+  await randomFreeUser.createAndNavNewNotebook();
+
+  await test.step('create new workspace', async () => {
+    notebookUrl = randomFreeUserPage.url();
+    await randomFreeUserPage.getByTestId('go-to-workspace').click();
+    await randomFreeUserPage.getByTestId('workspace-selector-button').click();
+    await randomFreeUserPage.getByTestId('create-workspace-button').click();
+    await randomFreeUserPage.getByPlaceholder('Team workspace').click();
+    await randomFreeUserPage
+      .getByPlaceholder('Team workspace')
+      .fill(NewWorkspaceName);
+    await randomFreeUserPage
+      .getByRole('button', { name: 'Create Workspace' })
+      .click();
+    await expect(
+      randomFreeUserPage.getByTestId('workspace-hero-title')
+    ).toHaveText(`Welcome to${NewWorkspaceName}`);
+    newWorkspaceURL = randomFreeUserPage.url();
+  });
+
+  await test.step('create notebook', async () => {
+    await randomFreeUserPage.goto(notebookUrl);
+    const currentDate = new Date().getTime();
+    const notebookTitle = currentDate.toString();
+    await randomFreeUserNotebook.updateNotebookTitle(notebookTitle);
+    await randomFreeUserNotebook.duplicate(NewWorkspaceName);
+    await randomFreeUserPage.goto(newWorkspaceURL);
+    await expect(
+      randomFreeUserPage.getByText(`${notebookTitle}`)
+    ).toBeVisible();
+  });
+});
+
+test('check collaborator duplicate single workspace', async ({
+  testUser,
+  randomFreeUser,
+}) => {
+  const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
+    randomFreeUser;
+  const { page: testUserPage, notebook: testUserNotebook } = testUser;
+  const currentDate = new Date().getTime();
+  const notebookTitle = currentDate.toString();
+  let notebookURL = '';
+
+  await test.step('create notebook', async () => {
+    await testUserNotebook.updateNotebookTitle(notebookTitle);
+    notebookURL = testUserPage.url();
+  });
+
+  await test.step('invite to collaborate', async () => {
+    await testUserPage.getByTestId('publish-button').click();
+    await testUserPage
+      .getByPlaceholder('Enter email address')
+      .fill(randomFreeUser.email);
+    await testUserPage.keyboard.press('Tab');
+    await testUserPage.getByTestId('send-invitation').click();
+  });
+
+  await test.step('invite to collaborate', async () => {
+    await randomFreeUserPage.goto(notebookURL);
+    await randomFreeUserNotebook.checkNotebookTitle(notebookTitle);
+    await randomFreeUserNotebook.duplicate();
+    await randomFreeUserPage.goto(randomFreeUser.workspace.baseWorkspaceID);
+    await expect(
+      randomFreeUserPage.getByText(`${notebookTitle}`)
+    ).toBeVisible();
+  });
+});
+
+test('check collaborator duplicate mulpliple workspaces', async ({
+  testUser,
+  randomFreeUser,
+}) => {
+  const {
+    page: randomFreeUserPage,
+    notebook: randomFreeUserNotebook,
+    workspace: randomFreeUserWorkspace,
+  } = randomFreeUser;
+  const { page: testUserPage, notebook: testUserNotebook } = testUser;
+  const currentDate = new Date().getTime();
+  const notebookTitle = currentDate.toString();
+  let notebookURL = '';
+  let newWorkspaceURL = '';
+  const NewWorkspaceName = 'New workspace';
+
+  await test.step('create notebook and invite [randomFreeUser] to collaborate', async () => {
+    await testUserNotebook.updateNotebookTitle(notebookTitle);
+    notebookURL = testUserPage.url();
+    await testUserNotebook.inviteNotebookCollaborator(randomFreeUser.email);
+  });
+
+  await test.step('[randomFreeUser] create new workspace to duplicate shared notebook', async () => {
+    newWorkspaceURL = await randomFreeUserWorkspace.newWorkspace(
+      NewWorkspaceName
+    );
+    await randomFreeUserPage.goto(notebookURL);
+    await randomFreeUserNotebook.checkNotebookTitle(notebookTitle);
+    await randomFreeUserNotebook.duplicate(NewWorkspaceName);
+    await randomFreeUserPage.goto(newWorkspaceURL);
+    await expect(
+      randomFreeUserPage.getByText(`${notebookTitle}`)
+    ).toBeVisible();
   });
 });

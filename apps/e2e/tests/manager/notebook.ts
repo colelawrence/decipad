@@ -1,6 +1,7 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 import { SlashCommand } from '../../../../libs/editor-types/src/index';
 import { cleanText, Timeouts } from '../../utils/src';
+import { ControlPlus } from '../../utils/page/Editor';
 
 export class Notebook {
   readonly page: Page;
@@ -19,6 +20,7 @@ export class Notebook {
   readonly notebookHelpButton: Locator;
   readonly archiveNotebook: Locator;
   readonly restoreArchiveNotebook: Locator;
+  readonly duplicateNotebook: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -38,6 +40,7 @@ export class Notebook {
       'segment-button-trigger-top-bar-help'
     );
     this.archiveNotebook = page.getByRole('menuitem', { name: 'Archive' });
+    this.duplicateNotebook = page.getByRole('menuitem', { name: 'Duplicate' });
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
       name: 'Put Back',
     });
@@ -383,6 +386,26 @@ export class Notebook {
    */
   async checkNotebookTitle(title: string) {
     await expect(this.notebookTitle).toHaveText(title);
+  }
+
+  /**
+   * Change notebook title.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.updateNotebookTitle('Welcome to Decipad!');
+   * ```
+   */
+  async updateNotebookTitle(title: string) {
+    await this.notebookTitle.click();
+    await ControlPlus(this.page, 'A');
+    await this.page.keyboard.press('Delete');
+    await this.notebookTitle.fill(title);
+    await expect(this.notebookTitle).toHaveText(title);
+    await expect(async () => {
+      await expect(await this.page.getByText(title).count()).toEqual(2);
+    }).toPass();
   }
 
   /**
@@ -866,7 +889,7 @@ export class Notebook {
    * await notebook.publishNotebook();
    * ```
    */
-  async publishNotebook() {
+  async publishNotebook(notebookTitle?: string) {
     await this.page.getByRole('button', { name: 'Share' }).click();
     await this.page.getByTestId('publish-tab').click();
     await this.page
@@ -881,7 +904,9 @@ export class Notebook {
     const clipboardText = (
       (await this.page.evaluate('navigator.clipboard.readText()')) as string
     ).toString();
-    expect(clipboardText).toContain('Welcome-to-Decipad');
+    if (notebookTitle) {
+      expect(clipboardText).toContain('Welcome-to-Decipad');
+    }
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await this.page.waitForTimeout(Timeouts.syncDelay);
     return clipboardText;
@@ -1011,6 +1036,30 @@ export class Notebook {
     ).toBeVisible();
   }
   /**
+   * Duplicate notebook using options menu.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.duplicate();
+   * ```
+   */
+  async duplicate(workspace?: string) {
+    await this.notebookActions.click();
+    await this.duplicateNotebook.click();
+
+    if (workspace) {
+      const selectDuplicateWorkspace = this.page
+        .locator(`div[role="menuitem"] span:has-text("${workspace}")`)
+        .first();
+      await Promise.all([
+        this.page.waitForRequest('/graphql'),
+        selectDuplicateWorkspace.click(),
+      ]);
+    }
+  }
+
+  /**
    * Remove from notebook from.
    *
    * **Usage**
@@ -1029,5 +1078,45 @@ export class Notebook {
     await expect(this.restoreArchiveNotebook).toBeHidden();
     await expect(this.archiveNotebook).toBeVisible();
     await this.page.mouse.click(0, 0);
+  }
+  /**
+   * Invite collaborator to notebook
+   *
+   * **Usage**
+   *
+   * ```js
+   * await inviteNotebookCollaborator('test-email@gmal.com')
+   * ```
+   */
+  async inviteNotebookCollaborator(email: string) {
+    await this.page.getByRole('button', { name: 'Share' }).click();
+    await this.page.getByPlaceholder('Enter email address').fill(email);
+    await this.page.keyboard.press('Tab');
+    await this.page.getByTestId('send-invitation').click();
+  }
+
+  /**
+   * Create Notebook Embed
+   *
+   * **Usage**
+   *
+   * ```js
+   * await inviteNotebookCollaborator('test-email@gmal.com')
+   * ```
+   */
+  async createEmbed(notebookTitle?: string) {
+    await this.publishNotebook(notebookTitle);
+    await this.page.getByRole('button', { name: 'Share' }).click();
+    await this.page.getByTestId('embed-tab').click();
+    await this.page.getByTestId('copy-published-link').click();
+    const clipboardText = (
+      (await this.page.evaluate('navigator.clipboard.readText()')) as string
+    ).toString();
+    if (notebookTitle) {
+      expect(clipboardText).toContain('Welcome-to-Decipad');
+    }
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(Timeouts.syncDelay);
+    return clipboardText;
   }
 }

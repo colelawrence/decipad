@@ -1,6 +1,7 @@
-import { type Locator, type Page } from '@playwright/test';
+import { type Locator, type Page, chromium } from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
+import { Workspace } from './workspace';
 import stringify from 'json-stringify-safe';
 
 function randomNumber(max = 100000) {
@@ -24,17 +25,14 @@ export class User {
   email: string;
   newNotebook: Locator;
   public notebook: Notebook;
-  /*
-   * Id of initial workspace.
-   */
-  public workspace: string;
+  public workspace: Workspace;
 
   constructor(page: Page) {
     this.page = page;
     this.email = 'generic-test-user@decipad.com';
     this.notebook = new Notebook(this.page);
     this.newNotebook = this.page.getByTestId('new-notebook');
-    this.workspace = '';
+    this.workspace = new Workspace(this.page);
   }
 
   async goToWorkspace() {
@@ -42,7 +40,7 @@ export class User {
     await this.page.waitForURL(/\/w\/(.+)/);
     const workspaceID = this.page.url().match(/\/w\/(.+)/);
     if (workspaceID) {
-      this.workspace = workspaceID[1].toString();
+      this.workspace.updateDefaultWorkspaceID(workspaceID[1].toString());
     }
   }
 
@@ -75,6 +73,7 @@ export class User {
    * await testUser.createAndNavNewNotebook();
    * ```
    */
+  // todo: move this to workspace pom
   async createAndNavNewNotebook() {
     await this.goToWorkspace();
     await this.newNotebook.click();
@@ -85,7 +84,10 @@ export class User {
     await this.page.goto(`/n/pad-title:${notebookId}`);
   }
 
-  async importNotebook(source: object, workspaceId: string = this.workspace) {
+  async importNotebook(
+    source: object,
+    workspaceId: string = this.workspace.baseWorkspaceID
+  ) {
     const sourceString = Buffer.from(stringify(source), 'utf-8').toString(
       'base64'
     );
@@ -112,5 +114,23 @@ export class User {
     await this.navigateToNotebook(notebookId);
     await this.notebook.waitForEditorToLoad();
     return notebookId;
+  }
+
+  /*
+   * Open new browser with new user.
+   *
+   * **Usage**
+   * ```js
+   * const { page: testUserPage, notebook: testUserNotebook } = await randomFreeUser.new();
+   * ```
+   */
+
+  async new(email: string = randomEmail()) {
+    const browser = await chromium.launch();
+    const context = await browser.newContext();
+    const userPage = new User(await context.newPage());
+    await this.setupWithEmail(email);
+    await userPage.createAndNavNewNotebook();
+    return userPage;
   }
 }
