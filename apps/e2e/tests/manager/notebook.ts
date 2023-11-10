@@ -689,6 +689,30 @@ export class Notebook {
   }
 
   /**
+   * Get all Dropdown options.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.getDropdownOptions()
+   * ```
+   * **Example**
+   *
+   * ```js
+   * expect(await notebook.getDropdownOptions()).toEqual(['50%', '75%']);
+   * ```
+   */
+  async getDropdownOptions() {
+    const dropdownOptionsArray: string[] = [];
+    for (const tabElement of await this.page
+      .getByTestId('dropdown-option')
+      .all())
+      dropdownOptionsArray.push(await tabElement.innerText());
+
+    return dropdownOptionsArray;
+  }
+
+  /**
    * Add Heading Block.
    *
    * **Usage**

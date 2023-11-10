@@ -11,7 +11,7 @@ import {
 import { useResolved } from '@decipad/react-utils';
 import { SelectItems, icons } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
-import { getNodeString, insertText, nanoid } from '@udecode/plate';
+import { insertText, nanoid } from '@udecode/plate';
 import { MaterializedColumnDesc } from 'libs/computer/src/types';
 import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -35,16 +35,19 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
 
-  const selected = getNodeString(element);
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<SelectItems>({
+    blockId: '',
+    item: 'Selected',
+  });
   const dropdownIds: Array<SelectItems> = useMemo(
     () =>
       element.options.map((n) => ({
         item: n.value,
-        focused: n.value === selected,
+        blockId: n.id,
+        focused: n.value === selectedOption.item,
       })),
-    [element, selected]
+    [element, selectedOption]
   );
 
   const elementChangeOptions = usePathMutatorCallback(
@@ -88,13 +91,13 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
       elementChangeOptions(
         element.options.filter((n) => n.value !== option.item)
       );
-      if (option.item === selected) {
+      if (option.blockId === selectedOption.blockId) {
         insertText(editor, 'Select', {
           at: path,
         });
       }
     },
-    [element.options, elementChangeOptions, editor, path, selected]
+    [element.options, elementChangeOptions, editor, path, selectedOption]
   );
 
   const elementChangeColumn = usePathMutatorCallback(
@@ -119,14 +122,14 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         }
         return e;
       });
-
-      if (option.item === selected) {
-        changeOptions(option.item);
+      if (option.blockId === selectedOption.blockId) {
+        setSelectedOption({ ...selectedOption, item: newText });
+        changeOptions(newText);
       }
       elementChangeOptions(newOps);
       return true;
     },
-    [element.options, elementChangeOptions, changeOptions, selected]
+    [element.options, elementChangeOptions, changeOptions, selectedOption]
   );
 
   const execute = useCallback(
@@ -137,9 +140,11 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         );
         onChangeTypeMutator(option.blockType);
       } else {
-        if (selected === option.item) {
+        if (selectedOption.blockId === option.blockId) {
+          setSelectedOption({ item: 'Selected', blockId: '' });
           changeOptions('Select');
         } else {
+          setSelectedOption(option);
           changeOptions(option.item);
         }
         userEvents({
@@ -157,7 +162,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
       elementChangeColumn,
       element.selectedColumn,
       onChangeTypeMutator,
-      selected,
+      selectedOption,
       userEvents,
       readOnly,
       changeOptions,

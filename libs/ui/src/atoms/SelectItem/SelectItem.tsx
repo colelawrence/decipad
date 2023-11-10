@@ -154,6 +154,7 @@ export const SelectItem: FC<SelectItemProps> = ({
       ]}
       onClick={() => onExecute(item)}
       aria-roledescription="dropdownOption"
+      data-testid="dropdown-option"
     >
       <div
         css={{

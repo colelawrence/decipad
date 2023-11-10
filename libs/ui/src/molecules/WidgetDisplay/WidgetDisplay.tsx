@@ -58,6 +58,7 @@ export const WidgetDisplay: FC<WidgetDisplayProps> = ({
     <div
       css={mainStyles(!allowOpen && readOnly, openMenu)}
       onClick={() => showMenu && setOpenMenu(!openMenu)}
+      data-testid="dropdown-display"
     >
       {result ? (
         <span css={lineStyles}>
