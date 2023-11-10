@@ -1,3 +1,4 @@
+import { MyEditor } from '@decipad/editor-types';
 import { EditorBlock, EditorTitle } from '@decipad/ui';
 import { FC, KeyboardEvent, useMemo } from 'react';
 import { BaseEditor, BaseText, Descendant, Text } from 'slate';
@@ -10,6 +11,7 @@ interface TitleEditorProps {
   readOnly: boolean;
   onUndo: () => void;
   onRedo: () => void;
+  mainEditor?: MyEditor;
 }
 
 export const TitleEditor: FC<TitleEditorProps> = ({
@@ -17,8 +19,12 @@ export const TitleEditor: FC<TitleEditorProps> = ({
   editor,
   initialValue,
   readOnly,
+  mainEditor,
 }) => {
-  const onKeyDown = useMemo(() => onKeyDownCurried(editor), [editor]);
+  const onKeyDown = useMemo(
+    () => onKeyDownCurried(editor, mainEditor),
+    [editor, mainEditor]
+  );
 
   return (
     <Slate key={tab} editor={editor} initialValue={initialValue}>
@@ -71,7 +77,8 @@ function getLeaf(props: RenderElementProps): BaseText {
 }
 
 function onKeyDownCurried(
-  editor: BaseEditor & ReactEditor
+  editor: BaseEditor & ReactEditor,
+  mainEditor?: MyEditor
 ): (e: KeyboardEvent<HTMLDivElement>) => void {
   return (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
@@ -79,6 +86,15 @@ function onKeyDownCurried(
       e.preventDefault();
       e.stopPropagation();
       editor.select([0, 0]);
+    }
+
+    if (mainEditor && !e.shiftKey && e.key === 'Tab') {
+      e.preventDefault();
+      ReactEditor.focus(mainEditor as any);
+      mainEditor.setSelection({
+        anchor: { path: [0, 0], offset: 0 },
+        focus: { path: [0, 0], offset: 0 },
+      });
     }
   };
 }

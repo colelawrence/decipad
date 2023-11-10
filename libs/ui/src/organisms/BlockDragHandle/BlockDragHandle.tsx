@@ -137,6 +137,7 @@ export const BlockDragHandle = ({
       onMouseLeave={setNotHovered}
       onClick={onClick}
       css={[handleStyle, !showHidden && css({ padding: '5px' })]}
+      tabIndex={-1}
     >
       {showHidden ? <EyeLabel /> : <DragHandle />}
     </div>
@@ -154,6 +155,7 @@ export const BlockDragHandle = ({
 
   const plusButton = (
     <button
+      tabIndex={-1}
       onClick={useEventNoEffect(onPlus)}
       css={plusStyle}
       data-testid="plus-block-button"

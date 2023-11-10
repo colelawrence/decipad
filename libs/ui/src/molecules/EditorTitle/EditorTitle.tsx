@@ -18,22 +18,24 @@ interface EditorTitleProps {
 export const EditorTitle: FC<EditorTitleProps> = ({
   children,
   placeholder,
-}) => (
-  <div css={wrapperStyles}>
-    <div>
-      <h1
-        role="textbox"
-        aria-placeholder={placeholder}
-        data-testid="editor-title"
-      >
-        {children}
-      </h1>
+}) => {
+  return (
+    <div css={wrapperStyles} tabIndex={-1}>
+      <div tabIndex={-1}>
+        <h1
+          role="textbox"
+          aria-placeholder={placeholder}
+          data-testid="editor-title"
+        >
+          {children}
+        </h1>
+      </div>
+      <div contentEditable={false}>
+        <Divider />
+      </div>
     </div>
-    <div contentEditable={false}>
-      <Divider />
-    </div>
-  </div>
-);
+  );
+};
 
 const wrapperStyles = css({
   display: 'grid',

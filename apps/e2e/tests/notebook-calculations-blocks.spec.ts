@@ -178,6 +178,19 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       ).toMatch(/[a-zA-Z_$][a-zA-Z0-9_$]*/);
     });
 
+    await test.step('use tab to move between blocks', async () => {
+      for (let i = 0; i < 2; i++) {
+        await page.keyboard.press('Tab');
+      }
+      await page.keyboard.type('7 + 21');
+      await expect(
+        page
+          .getByTestId('codeline-code')
+          .nth(1)
+          .getByTestId('code-line-result:28')
+      ).toBeVisible();
+    });
+
     await test.step('supports smartrefs', async () => {
       await notebook.addFormula('Name3', `100 + ${generatedVarName} `);
       await expect(page.getByTestId('number-result:102')).toBeVisible();

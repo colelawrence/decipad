@@ -57,6 +57,7 @@ import {
   createTrailingParagraphPlugin,
   createTypeErrorHighlightPlugin,
   createUserEventPlugin,
+  createTabSelectionPlugin,
 } from '@decipad/editor-plugins';
 import { createTablePlugin } from '@decipad/editor-table';
 import {
@@ -211,7 +212,7 @@ export const plugins = ({
       // shortcuts
       createSelectionShortcutPlugin(),
       createRenderPerformanceStatsPlugin(),
-
+      createTabSelectionPlugin(),
       // selection
       createPersistSelectionPlugin(),
 

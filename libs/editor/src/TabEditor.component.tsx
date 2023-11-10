@@ -81,6 +81,7 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
             readOnly={readOnly}
             onUndo={controller.Undo}
             onRedo={controller.Redo}
+            mainEditor={subEditor}
           />
         }
       />

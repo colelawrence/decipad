@@ -816,7 +816,7 @@ export class Notebook {
    */
   async addFormula(variableName?: string, formulaExpression?: string) {
     const countStructuredInputs = await this.formulaBlock.count();
-    this.addBlock('structured-code-line');
+    await this.addBlock('structured-code-line');
     await expect(async () => {
       expect(await this.formulaBlock.count()).toBe(countStructuredInputs + 1);
     }).toPass({
