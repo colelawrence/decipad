@@ -54,7 +54,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
           <S.NotebookSpacingWrapper ref={overflowingDiv}>
             {notebook}
           </S.NotebookSpacingWrapper>
-          {!isEmbed && tabs}
+          {tabs}
         </S.ArticleWrapper>
 
         {!isEmbed && (!!sidebar || !!assistant) && (

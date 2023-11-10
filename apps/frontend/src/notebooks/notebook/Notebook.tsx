@@ -126,7 +126,7 @@ export const NewNotebook: FC = () => {
             }
             sidebar={<NewSidebar docsync={docsync} />}
             tabs={
-              !isEmbed && docsync?.editorController && isFlagEnabled('TABS') ? (
+              docsync?.editorController && isFlagEnabled('TABS') ? (
                 <NewTabs
                   notebookId={notebookId}
                   controller={docsync.editorController}
@@ -178,6 +178,7 @@ const NewTabs: FC<{
         icon,
         isHidden,
       }))}
+      isEmbed={Boolean(embed)}
       isReadOnly={isReadOnly}
       activeTabId={tab ?? defaultTabId}
       onClick={(id) => {

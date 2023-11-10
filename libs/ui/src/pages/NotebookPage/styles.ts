@@ -37,17 +37,12 @@ export const AppWrapper = styled.div<IsEmbed>((props) => ({
   }),
 
   'header:first-of-type': {
-    height: '76px',
+    height: '64px',
     width: '100%',
     padding: '0 32px',
     backgroundColor: cssVar('backgroundAccent'),
     display: 'flex',
     alignItems: 'center',
-
-    /* Embed conditional styles */
-    ...(props.isEmbed && {
-      order: 2,
-    }),
   },
 }));
 
@@ -72,7 +67,6 @@ export const MainWrapper = styled.main<IsEmbed>((props) => ({
 
   /* Embed conditional styles */
   ...(props.isEmbed && {
-    order: 1,
     padding: '0px',
   }),
 

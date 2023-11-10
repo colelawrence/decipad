@@ -304,7 +304,11 @@ export const NotebookTopbar = ({
         </button>
       </div>
       {isEmbed && (
-        <button type="button" onClick={onRevertChanges}>
+        <button
+          type="button"
+          disabled={!canRedo && !canUndo}
+          onClick={onRevertChanges}
+        >
           <CircularArrow />
           <span css={p12Bold}>Clear Changes</span>
         </button>

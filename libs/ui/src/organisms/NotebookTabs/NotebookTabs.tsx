@@ -45,6 +45,7 @@ type UITab = {
 export interface TabsProps {
   readonly tabs: UITab[];
   readonly isReadOnly: boolean;
+  readonly isEmbed: boolean;
   readonly activeTabId: string | undefined;
   readonly onClick: (id: string) => void;
   readonly onCreateTab: () => string;
@@ -59,6 +60,7 @@ export const NotebookTabs: FC<TabsProps> = ({
   tabs,
   activeTabId,
   isReadOnly,
+  isEmbed,
   onClick,
   onCreateTab,
   onRenameTab,
@@ -285,6 +287,7 @@ export const NotebookTabs: FC<TabsProps> = ({
   return (
     <TabsWrapper
       hasScroll={hasScroll}
+      isEmbed={isEmbed}
       isFirstTab={filteredTabs[0].id === activeTabId}
     >
       <TabsScrollWrapper ref={containerRef}>
@@ -546,12 +549,13 @@ const Tab: FC<TabProps> = ({
 
 const TabsWrapper = styled(TabsPrimitive.Root)<{
   hasScroll: boolean;
+  isEmbed: boolean;
   isFirstTab: boolean;
 }>((props) => ({
   position: 'relative',
   zIndex: 10,
   display: 'flex',
-  flex: '0 0 52px',
+  flex: props.isEmbed ? '0 0 40px' : '0 0 52px',
   width: '100%',
   backgroundColor: cssVar('backgroundAccent'),
 
@@ -584,7 +588,7 @@ const TabsScrollWrapper = styled.div(
   {
     position: 'relative',
     display: 'flex',
-    height: '52px',
+    height: '100%',
     margin: '0px -1px',
     overflow: 'hidden',
     width: '100%',

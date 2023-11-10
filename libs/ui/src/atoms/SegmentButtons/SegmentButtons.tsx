@@ -140,8 +140,6 @@ const FigureButton = styled.figure<{
   cursor: 'pointer',
   padding: props.padding === 'default' ? '5px' : '4px',
 
-  transition: 'background 0.1s ease-in-out',
-
   backgroundColor: props.selected
     ? componentCssVars('ButtonTertiaryAltDefaultBackground')
     : props.variant === 'transparent'
