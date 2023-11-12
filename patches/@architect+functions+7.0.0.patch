@@ -42,6 +42,42 @@ index b8e7e22..b1ef00a 100644
        }
      }
      snsClient = (params, callback) => {
+diff --git a/node_modules/@architect/functions/src/index.js b/node_modules/@architect/functions/src/index.js
+index 70f27a8..fb0e144 100644
+--- a/node_modules/@architect/functions/src/index.js
++++ b/node_modules/@architect/functions/src/index.js
+@@ -23,21 +23,28 @@ let serviceDiscovery = require('./discovery')
+ let ws = require('./ws')
+ 
+ let services
++let servicesPromise
+ let arc = {
+   http,
+   static: _static,
+   ws,
+   services: function () {
+-    return new Promise(function (resolve, reject) {
++    if (servicesPromise) {
++      return servicesPromise;
++    }
++    servicesPromise = new Promise(function (resolve, reject) {
+       if (services) resolve(services)
+       else serviceDiscovery(function (err, serviceMap) {
+-        if (err) reject(err)
+-        else {
++        if (err){
++          servicesPromise = undefined;
++          reject(err)
++        } else {
+           services = serviceMap
+           resolve(services)
+         }
+       })
+     })
++    return servicesPromise;
+   }
+ }
+ arc.events = require('./events')(arc, 'events')
 diff --git a/node_modules/@architect/functions/src/tables/dynamo.js b/node_modules/@architect/functions/src/tables/dynamo.js
 index adfe2e3..391fd6f 100644
 --- a/node_modules/@architect/functions/src/tables/dynamo.js
