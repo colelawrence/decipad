@@ -63,6 +63,11 @@ get /n/:notebookid
 # Stripe endpoints
 post /api/stripe/webhook
 
+# 3rd parties
+/monday-app-association.json
+  method get
+  src src/http/get-monday-app-association
+
 @static
 folder public
 spa true
