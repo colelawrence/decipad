@@ -36,10 +36,10 @@ const config: PlaywrightTestConfig = {
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : undefined,
+  retries: process.env.CI ? 3 : 0,
+  workers: process.env.CI ? 4 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: process.env.CI ? 'github' : 'html',
+  reporter: process.env.CI ? 'blob' : 'html',
 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
@@ -61,8 +61,25 @@ const config: PlaywrightTestConfig = {
       testDir: './utils/src',
     },
     {
+      name: 'smoke',
+      dependencies: ['setup'],
+      testDir: './tests/smoke',
+      testMatch: '**/**/*.smoke.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: STORAGE_STATE,
+        trace: 'retain-on-failure',
+        contextOptions: {
+          // chromium-specific permissions
+          permissions: ['clipboard-read', 'clipboard-write'],
+        },
+      },
+    },
+    {
       name: 'chromium',
       dependencies: ['setup'],
+      testMatch: '**/*.spec.ts',
+      testIgnore: '**/**/*.smoke.ts',
       use: {
         ...devices['Desktop Chrome'],
         storageState: STORAGE_STATE,

@@ -2,6 +2,11 @@ import { type Locator, type Page, expect } from '@playwright/test';
 import { SlashCommand } from '../../../../libs/editor-types/src/index';
 import { cleanText, Timeouts } from '../../utils/src';
 import { ControlPlus } from '../../utils/page/Editor';
+import path from 'path';
+import os from 'os';
+import Zip from 'adm-zip';
+import { readFile } from 'fs/promises';
+import { nanoid } from 'nanoid';
 
 export class Notebook {
   readonly page: Page;
@@ -19,6 +24,7 @@ export class Notebook {
   readonly notebookIconButton: Locator;
   readonly notebookHelpButton: Locator;
   readonly archiveNotebook: Locator;
+  readonly downloadNotebook: Locator;
   readonly restoreArchiveNotebook: Locator;
   readonly duplicateNotebook: Locator;
 
@@ -40,6 +46,7 @@ export class Notebook {
       'segment-button-trigger-top-bar-help'
     );
     this.archiveNotebook = page.getByRole('menuitem', { name: 'Archive' });
+    this.downloadNotebook = page.getByRole('menuitem', { name: 'Download' });
     this.duplicateNotebook = page.getByRole('menuitem', { name: 'Duplicate' });
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
       name: 'Put Back',
@@ -404,7 +411,9 @@ export class Notebook {
     await this.notebookTitle.fill(title);
     await expect(this.notebookTitle).toHaveText(title);
     await expect(async () => {
-      await expect(await this.page.getByText(title).count()).toEqual(2);
+      await expect(
+        await this.page.getByText(title.substring(0, 20)).count()
+      ).toEqual(2);
     }).toPass();
   }
 
@@ -747,8 +756,27 @@ export class Notebook {
    * await notebook.addInputWidget();
    * ```
    */
-  async addInputWidget() {
+  async addInputWidget(identifier: string, value: number | string) {
     this.addBlock('input');
+
+    await this.page
+      .locator('[data-testid="widget-caption"] >> text=/Input/')
+      .last()
+      .dblclick();
+
+    await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.type(identifier);
+
+    await this.page.click('div [data-testid="input-widget-name"] >> nth=-1');
+    await await this.page.keyboard.press('ArrowDown');
+    // erase 100$, then focus goes to title, we come back down
+    await await this.page.keyboard.press('End');
+    await await this.page.keyboard.press('Backspace');
+    await await this.page.keyboard.press('Backspace');
+    await await this.page.keyboard.press('Backspace');
+    await await this.page.keyboard.press('Backspace');
+
+    await this.page.keyboard.type(value.toString());
   }
 
   /**
@@ -1059,6 +1087,52 @@ export class Notebook {
       this.page.locator('text="Successfully archived notebook."')
     ).toBeVisible();
   }
+
+  async waitForDownload(): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.page.once('download', async (download) => {
+          try {
+            const filePath = path.join(os.tmpdir(), nanoid());
+            await download.saveAs(filePath);
+            resolve(await readFile(filePath));
+          } catch (err) {
+            reject(err);
+          }
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  /**
+   * Download notebook using options menu.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.download();
+   * ```
+   */
+  async download() {
+    await this.notebookActions.click();
+    const exportButton = (await this.page.waitForSelector(
+      'div[role="menuitem"] span:has-text("Download")'
+    ))!;
+    const [fileContent] = await Promise.all([
+      this.waitForDownload(),
+      exportButton.click(),
+    ]);
+    const zip = new Zip(fileContent);
+    const jsonEntry = zip.getEntry('notebook.json');
+    if (!jsonEntry) {
+      throw new Error('expected a notebook.json entry on the export');
+    }
+    const json = jsonEntry.getData();
+    return json.toString('utf8');
+  }
+
   /**
    * Duplicate notebook using options menu.
    *

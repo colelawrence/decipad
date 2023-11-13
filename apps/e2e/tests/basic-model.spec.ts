@@ -1,6 +1,6 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { focusOnBody, setUp, ControlPlus } from '../utils/page/Editor';
-import { createInputBelow, createSliderBelow } from 'apps/e2e/utils/page/Block';
+import { expect, test } from './manager/decipad-tests';
+import { focusOnBody } from '../utils/page/Editor';
+import { createSliderBelow } from 'apps/e2e/utils/page/Block';
 import {
   addColumn,
   clickCell,
@@ -8,46 +8,23 @@ import {
   focusOnTableColumnFormula,
   getFromTable,
   renameColumn,
-  swapTableColumns,
   updateDataType,
 } from 'apps/e2e/utils/page/Table';
 
 const sanitise = (text: string | null) =>
   !!text && text.replaceAll(/[^a-zA-Z0-9£,.]/g, '');
 
-test.describe.configure({ mode: 'serial' });
-
-test.describe('Creating a basic model', () => {
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
+test('Creating a basic model', async ({ testUser }) => {
+  const { page, notebook } = testUser;
+  await test.step('Set editor title', async () => {
+    await notebook.updateNotebookTitle('Compound Interest Calculator');
+    await notebook.checkNotebookTitle('Compound Interest Calculator');
   });
 
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Set editor title', async () => {
-    ControlPlus(page, 'A');
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type('Compound Interest Calculator');
-    const title = await page.getByTestId('editor-title').textContent();
-    expect(title).toBe('Compound Interest Calculator');
-  });
-
-  test('Create input fields', async () => {
-    await createInputBelow(page, 'InitialInvestment', '£1000');
+  await test.step('Create input fields', async () => {
+    await notebook.addInputWidget('InitialInvestment', '£1000');
     await page.keyboard.press('Enter');
-    await createInputBelow(page, 'MonthlyContribution', '£100');
+    await notebook.addInputWidget('MonthlyContribution', '£100');
     await createSliderBelow(page, 'InterestRate', '5%', {
       min: 0,
       max: 100,
@@ -61,7 +38,7 @@ test.describe('Creating a basic model', () => {
   // | 2     | 2024 | £1,200        | £1,307.5   | £107.5      |
   // | 3     | 2025 | £1,300        | £1,472.88  | £172.88     |
 
-  test('Create Table', async () => {
+  await test.step('Create Table', async () => {
     await focusOnBody(page);
     await createTable(page);
 
@@ -115,8 +92,8 @@ test.describe('Creating a basic model', () => {
     expect(sanitise(totalProfit)).toBe('£107.5');
   });
 
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('Swap columns', async () => {
+  /* Todo skiping this tep
+  await test.step('Swap columns', async () => {
     await swapTableColumns(page, 0, 2);
     await swapTableColumns(page, 0, 3);
 
@@ -135,4 +112,5 @@ test.describe('Creating a basic model', () => {
     expect(sanitise(totalMoney)).toBe('£1,307.5');
     expect(sanitise(totalProfit)).toBe('£107.5');
   });
+  */
 });
