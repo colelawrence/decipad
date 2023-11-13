@@ -865,7 +865,7 @@ export class Notebook {
    * **Usage**
    *
    * ```js
-   * await notebook.waitForEditorToLoad();
+   * await notebook.addParapraph();
    * ```
    */
   async addParapraph(text: string) {

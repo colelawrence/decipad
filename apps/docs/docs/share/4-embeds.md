@@ -67,7 +67,7 @@ Add data insights or calculations to any webpage with Decipad embeds.
 
 #### Embed Decipad on a Custom Domain
 
-- We currently support embeds for custom domains on: Notion, Monday.com, ClickUp and Webflow. Please reach out to [support@decipad.com](mailto:support@decipad.com) to have your domain or website approved.
+- We currently support embeds for custom domains on: Notion, monday.com, ClickUp and Webflow. Please reach out to [support@decipad.com](mailto:support@decipad.com) to have your domain or website approved.
 
 ## Request other apps
 
