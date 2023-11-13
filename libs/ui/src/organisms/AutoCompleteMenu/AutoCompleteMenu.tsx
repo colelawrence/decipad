@@ -1,15 +1,15 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
-import { SmartRefDecoration } from '@decipad/editor-types';
+import type { SmartRefDecoration } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
-import { ItemBlockId, matchItemBlocks, once } from '@decipad/utils';
+import { type ItemBlockId, matchItemBlocks, once } from '@decipad/utils';
 import { css } from '@emotion/react';
-import Fuse from 'fuse.js';
+import Fuse, { type IFuseOptions } from 'fuse.js';
 import {
-  ComponentProps,
-  FC,
-  MouseEventHandler,
+  type ComponentProps,
+  type FC,
+  type MouseEventHandler,
   useCallback,
   useContext,
   useEffect,
@@ -17,7 +17,7 @@ import {
   useState,
 } from 'react';
 import {
-  ACItemType,
+  type ACItemType,
   AutoCompleteMenuFormulaTooltip,
   AutoCompleteMenuItem,
   Link,
@@ -77,7 +77,7 @@ interface SearchResultGroup {
 const groupItems = (g: AutoCompleteGroup) => g.items;
 
 const searchOptions = once(
-  (): Fuse.IFuseOptions<AutoCompleteGroup['items'][0]> => ({
+  (): IFuseOptions<AutoCompleteGroup['items'][0]> => ({
     keys: ['identifier', { name: 'explanation', weight: 0.5 }],
     isCaseSensitive: false,
     shouldSort: true,

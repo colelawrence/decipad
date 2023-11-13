@@ -1,5 +1,5 @@
 import searchQuery from 'search-query-parser';
-import Fuse from 'fuse.js';
+import { type Expression as FuseExpression } from 'fuse.js';
 
 const searchQueryOptions = {
   tokenize: true,
@@ -31,7 +31,7 @@ export const TColorKeys = Object.keys(ColorStatusNames);
 
 export function acceptableStatus(
   status: (string | null)[] | never[]
-): Fuse.Expression[] {
+): FuseExpression[] {
   const noNulls = status.filter((x) => x !== null) as string[];
   const statuses = noNulls
     .filter((st) => TColorKeys.includes(st))
@@ -42,7 +42,7 @@ export function acceptableStatus(
   return [];
 }
 
-export function acceptableVisibility(visibility: string): Fuse.Expression[] {
+export function acceptableVisibility(visibility: string): FuseExpression[] {
   if (visibility === 'public') {
     return [{ isPublic: 'true' }];
   }
@@ -59,13 +59,13 @@ export function buildFuseQuery({
 }: {
   include: string[];
   exclude: string[];
-  params?: Fuse.Expression[];
-}): Fuse.Expression {
-  const textPart: Fuse.Expression = {
+  params?: FuseExpression[];
+}): FuseExpression {
+  const textPart: FuseExpression = {
     $or: [{ name: include.join(' ') }],
   };
-  const paramPart: Fuse.Expression[] = params ?? [];
-  const excludePart: Fuse.Expression[] = exclude.map((e) => {
+  const paramPart: FuseExpression[] = params ?? [];
+  const excludePart: FuseExpression[] = exclude.map((e) => {
     return { name: `!${e}` };
   });
   const fullQuery = {
@@ -74,5 +74,5 @@ export function buildFuseQuery({
   if (include.length > 0) {
     fullQuery.$and.push(textPart);
   }
-  return fullQuery as Fuse.Expression;
+  return fullQuery as FuseExpression;
 }
