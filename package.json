@@ -335,7 +335,7 @@
     "unist-util-visit": "2.0.3",
     "unzip-stream": "^0.3.1",
     "urql": "^4.0.5",
-    "use-debounce": "^9.0.2",
+    "use-debounce": "^10.0.0",
     "use-query-params": "^2.2.0",
     "use-sync-external-store": "1.2.0",
     "utility-types": "3.10.0",
