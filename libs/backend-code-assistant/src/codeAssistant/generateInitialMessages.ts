@@ -1,5 +1,8 @@
 import { type RootDocument } from '@decipad/editor-types';
-import type { ChatCompletionMessage } from 'openai/resources/chat';
+import type {
+  ChatCompletionSystemMessageParam,
+  ChatCompletionUserMessageParam,
+} from 'openai/resources/chat';
 import { createComputationalSummary } from '../utils/createComputationalSummary';
 import { debug } from '../debug';
 import { getLanguageDocSnippets } from '../utils/getLanguageDocSnippets';
@@ -17,7 +20,9 @@ export const generateInitialMessages = async ({
   summary: _summary,
   notebook,
   prompt,
-}: GenerateInitialMessagesOptions): Promise<ChatCompletionMessage[]> => {
+}: GenerateInitialMessagesOptions): Promise<
+  (ChatCompletionUserMessageParam | ChatCompletionSystemMessageParam)[]
+> => {
   const summary =
     _summary != null ? _summary : createComputationalSummary(notebook);
 

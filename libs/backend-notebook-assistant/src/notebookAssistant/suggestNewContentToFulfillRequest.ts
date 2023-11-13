@@ -3,8 +3,12 @@
 import stringify from 'json-stringify-safe';
 import type { Subject } from 'rxjs';
 import type {
+  ChatCompletionAssistantMessageParam,
   ChatCompletionCreateParamsNonStreaming,
+  ChatCompletionFunctionMessageParam,
   ChatCompletionMessage,
+  ChatCompletionSystemMessageParam,
+  ChatCompletionUserMessageParam,
 } from 'openai/resources/chat';
 import {
   ELEMENT_TABLE,
@@ -74,7 +78,12 @@ export const suggestNewContentToFulfillRequest = async (
     return '';
   };
 
-  let messages: ChatCompletionMessage[] = [
+  let messages: (
+    | ChatCompletionUserMessageParam
+    | ChatCompletionSystemMessageParam
+    | ChatCompletionAssistantMessageParam
+    | ChatCompletionFunctionMessageParam
+  )[] = [
     {
       role: 'system',
       content: intro,
@@ -420,7 +429,7 @@ No comments.`,
           role: 'function',
           content: stringify(codeSnippet, null, '\t'),
           name: reply.function_call.name,
-        } as ChatCompletionMessage);
+        });
 
         events.next({
           type: 'progress',

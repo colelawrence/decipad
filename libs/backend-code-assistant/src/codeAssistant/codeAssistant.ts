@@ -1,6 +1,10 @@
 /* eslint-disable no-await-in-loop */
 import { RootDocument } from '@decipad/editor-types';
-import { ChatCompletionMessage } from 'openai/resources/chat';
+import {
+  ChatCompletionAssistantMessageParam,
+  ChatCompletionSystemMessageParam,
+  ChatCompletionUserMessageParam,
+} from 'openai/resources/chat';
 import { getDefined } from '@decipad/utils';
 import { getOpenAI } from '../utils/openAi';
 import { debug } from '../debug';
@@ -16,7 +20,11 @@ export interface CodeAssistantOptions {
   summary?: string;
   notebook?: RootDocument;
   prompt: string;
-  _messages?: ChatCompletionMessage[];
+  _messages?: (
+    | ChatCompletionUserMessageParam
+    | ChatCompletionSystemMessageParam
+    | ChatCompletionAssistantMessageParam
+  )[];
   attempt?: number;
   previousAttemptResult?: SplitCodeResult | undefined;
 }
