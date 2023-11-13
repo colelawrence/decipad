@@ -2,23 +2,23 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
-  MyGenericEditor,
+  type MyGenericEditor,
 } from '@decipad/editor-types';
 import { isElementOfType, insertNodes } from '@decipad/editor-utils';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { nanoid } from 'nanoid';
 import {
-  EElementOrText,
-  TEditor,
-  TNodeProps,
-  Value,
+  type EElementOrText,
+  type TEditor,
+  type TNodeProps,
+  type Value,
   getNodeChildren,
   removeNodes,
   setNodes,
 } from '@udecode/plate';
 import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeLinePlugin';
 import {
-  NormalizerReturnValue,
+  type NormalizerReturnValue,
   createNormalizerPlugin,
 } from '../../pluginFactories';
 import { normalizePlainTextChildren } from '../../utils/normalizePlainTextChildren';

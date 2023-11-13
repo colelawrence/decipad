@@ -1,8 +1,8 @@
 import { MyPlatePlugin } from '@decipad/editor-types';
 import type { RemoteComputer } from '@decipad/remote-computer';
-import { createTablePlugin } from '@decipad/editor-table';
 import { createDeserializeMdPlugin } from '@udecode/plate';
-import { createCodeLineV2Plugin } from '@decipad/editor-plugins';
+import { createCodeLineV2NoUiPlugin } from '../../../../editor-plugins/src/plugins/CodeLineV2/createCodeLineV2NoUiPlugin';
+import { createTablePluginNoUI } from '../../../../editor-table/src/plugins/createTablePluginNoUI';
 
 interface EditorPluginsOptions {
   computer: RemoteComputer;
@@ -11,7 +11,7 @@ interface EditorPluginsOptions {
 export const editorPlugins = ({
   computer,
 }: EditorPluginsOptions): MyPlatePlugin[] => [
-  createTablePlugin(computer),
+  createTablePluginNoUI(computer),
   createDeserializeMdPlugin() as MyPlatePlugin,
-  createCodeLineV2Plugin(computer),
+  createCodeLineV2NoUiPlugin(computer),
 ];

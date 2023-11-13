@@ -123,6 +123,22 @@ async function esBuildOptions(env) {
       '.svg': 'file',
       '.png': 'file',
     },
+    treeShaking: true,
+    plugins: [
+      {
+        name: 'perf',
+        setup(build) {
+          build.onStart(() => {
+            console.log('build started');
+            console.time('Esbuild Time:');
+          });
+          build.onEnd((result) => {
+            console.log(`build ended with ${result.errors.length} errors`);
+            console.timeEnd('Esbuild Time:');
+          });
+        },
+      },
+    ],
   };
 }
 
@@ -144,8 +160,7 @@ const buildTraditionalLambdas = async () => {
   } else {
     // console.log('esbuild options: ', buildOptions);
     // console.log('');
-    const result = await esbuild.build(buildOptions);
-    console.log('Built successfully', result);
+    await esbuild.build(buildOptions);
   }
 };
 

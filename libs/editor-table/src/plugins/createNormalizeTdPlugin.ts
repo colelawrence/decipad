@@ -1,10 +1,8 @@
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '@decipad/editor-plugins';
+import { type NormalizerReturnValue } from '@decipad/editor-plugins';
 import { ELEMENT_TD } from '@decipad/editor-types';
-import { PlateEditor, Value, getChildren } from '@udecode/plate';
-import { normalizeExcessProperties } from 'libs/editor-plugins/src/utils/normalize';
+import { type PlateEditor, type Value, getChildren } from '@udecode/plate';
+import { normalizeExcessProperties } from '../../../editor-plugins/src/utils/normalize';
+import { createNormalizerPluginFactory } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 export const createNormalizeTdPlugin = <
   TV extends Value,

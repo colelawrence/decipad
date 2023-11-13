@@ -52,6 +52,7 @@ export const AccountAvatar = ({
           <Chevron type={menuOpen ? 'collapse' : 'expand'} />
         </div>
       )}
+      <p></p>
     </button>
   );
 };

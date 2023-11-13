@@ -1,8 +1,5 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
-import {
-  NormalizerReturnValue,
-  createNormalizerPlugin,
-} from '@decipad/editor-plugins';
+import { type NormalizerReturnValue } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -18,6 +15,8 @@ import {
   EElement,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
+// We do this following import this way because tree-shaking is not good enough
+import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 export const normalizeTableFormula =
   <TV extends Value, TE extends PlateEditor<TV>>(_computer: RemoteComputer) =>

@@ -1,7 +1,4 @@
-import {
-  NormalizerReturnValue,
-  createNormalizerPluginFactory,
-} from '@decipad/editor-plugins';
+import { NormalizerReturnValue } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -21,6 +18,7 @@ import { insertNodes } from '@decipad/editor-utils';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';
 import { normalizeTable } from '../utils/normalizeTable';
+import { createNormalizerPluginFactory } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 const normalizeTableInput = <TV extends Value, TE extends PlateEditor<TV>>(
   editor: TE,

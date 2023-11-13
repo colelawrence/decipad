@@ -8,10 +8,7 @@ import {
   TNodeEntry,
   Value,
 } from '@udecode/plate';
-import {
-  createNormalizerPlugin,
-  NormalizerReturnValue,
-} from '@decipad/editor-plugins';
+import { type NormalizerReturnValue } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,
   ELEMENT_TD,
@@ -26,6 +23,8 @@ import { NodeEntry } from 'slate';
 import { RemoteComputer } from '@decipad/remote-computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
 import { setSelection } from '@decipad/editor-utils';
+// We do this following import this way because tree-shaking is not good enough
+import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
 const tableIsSquare = ({
   children: [, headerRow, ...dataRows],
