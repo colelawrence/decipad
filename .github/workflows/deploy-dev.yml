@@ -94,8 +94,9 @@ jobs:
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{secrets.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
-          DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant'
+          DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistant,@decipad/backend-code-assistant'
         run: |
+          export SAM_BUCKET=decipad-backend-sam
           export SAM_LOCATION="s3://decipad-backend-sam/dev.decipad.com"
           scripts/pull-sam.sh
 

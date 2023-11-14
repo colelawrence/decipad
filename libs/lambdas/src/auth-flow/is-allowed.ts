@@ -6,6 +6,7 @@ const DISABLE_WAITING_LIST = true;
 const ALLOWLIST_REQUIRED_URL_BASES = [
   'https://app.decipad.com',
   'https://dev.decipad.com',
+  'https://staging.decipad.com',
 ];
 
 async function alreadyIn(email: string): Promise<boolean> {

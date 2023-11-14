@@ -92,6 +92,7 @@ jobs:
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
 
         run: |
+          export SAM_BUCKET="decipad-backend-sam"
           export SAM_LOCATION="s3://decipad-backend-sam/alpha.decipad.com"
           scripts/pull-sam.sh
 

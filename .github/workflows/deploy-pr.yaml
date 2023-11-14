@@ -4,7 +4,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
     paths-ignore:
-      - '.github/**'
       - '.husky/**'
       - '.vscode/**'
       - '.yarn/**'
@@ -24,8 +23,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
       - uses: actions/checkout@v4
@@ -57,16 +56,16 @@ jobs:
         env:
           NODE_ENV: 'production'
           DEPLOY_NAME: '${{ github.event.pull_request.number }}'
-          DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.dev.decipad.com'
-          DECI_ZONE_ID: '${{secrets.DECI_ZONE_ID}}'
-          DECI_CERTIFICATE_ARN: '${{secrets.DECI_CERTIFICATE_ARN}}'
+          DECI_CUSTOM_DOMAIN: '${{ github.event.pull_request.number }}.staging.decipad.com'
+          DECI_ZONE_ID: '${{secrets.DECI_DEV_ZONE_ID}}'
+          DECI_CERTIFICATE_ARN: '${{secrets.DECI_DEV_CERTIFICATE_ARN}}'
           SENTRY_DSN: '${{secrets.SENTRY_DSN}}'
           SENTRY_ORG: '${{secrets.SENTRY_ORG}}'
           SENTRY_PROJECT: '${{secrets.SENTRY_PROJECT}}'
           SENTRY_AUTH_TOKEN: '${{secrets.SENTRY_AUTH_TOKEN}}'
           SENTRY_ENVIRONMENT: 'development'
           REACT_APP_ANALYTICS_WRITE_KEY: '${{secrets.DEV_ANALYTICS_WRITE_KEY}}'
-          NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.dev.decipad.com/api/auth'
+          NEXTAUTH_URL: 'https://${{ github.event.pull_request.number }}.staging.decipad.com/api/auth'
           GITHUB_CLIENT_ID: '${{secrets.DECI_GITHUB_CLIENT_ID}}'
           GITHUB_CLIENT_SECRET: '${{secrets.DECI_GITHUB_CLIENT_SECRET}}'
           JWT_SECRET: '${{secrets.JWT_SECRET}}'
@@ -76,7 +75,7 @@ jobs:
           DECI_INVITE_EXPIRATION_SECONDS: '${{secrets.DECI_INVITE_EXPIRATION_SECONDS}}'
           DECI_KEY_VALIDATION_EXPIRATION_SECONDS: '${{secrets.DECI_KEY_VALIDATION_EXPIRATION_SECONDS}}'
           DECI_FROM_EMAIL_ADDRESS: '${{secrets.DECI_FROM_EMAIL_ADDRESS}}'
-          DECI_APP_URL_BASE: 'https://${{ github.event.pull_request.number }}.dev.decipad.com'
+          DECI_APP_URL_BASE: 'https://${{ github.event.pull_request.number }}.staging.decipad.com'
           DECI_S3_ENDPOINT: 's3.eu-west-2.amazonaws.com'
           DECI_S3_ACCESS_KEY_ID: '${{secrets.DECI_S3_ACCESS_KEY_ID}}'
           DECI_S3_SECRET_ACCESS_KEY: '${{secrets.DECI_S3_SECRET_ACCESS_KEY}}'
@@ -103,7 +102,8 @@ jobs:
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
           DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant'
         run: |
-          export SAM_LOCATION="s3://decipad-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
+          export SAM_BUCKET="decipad-dev-backend-sam"
+          export SAM_LOCATION="s3://decipad-dev-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
           scripts/pull-sam.sh
 
           cd apps/backend
@@ -116,8 +116,8 @@ jobs:
 
       - name: Update AI indexes
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: eu-west-2
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: yarn update_ai_indexes DecipadBackendStaging${{ github.event.pull_request.number }}
@@ -135,7 +135,7 @@ jobs:
         uses: nobrayner/discord-webhook@v1
         with:
           title: "${{ needs.deploy.result == 'success' && '💚' || needs.deploy.result == 'cancelled' &&  '🗑️' || '🔴'}} Deploy PR #${{ github.event.pull_request.number }} ${{github.event.pull_request.title }}"
-          description: 'https://${{  github.event.pull_request.number  }}.dev.decipad.com'
+          description: 'https://${{  github.event.pull_request.number  }}.staging.decipad.com'
           github-token: ${{ secrets.github_token }}
           avatar-url: "https://singlecolorimage.com/get/${{ needs.deploy.result == 'failure' && 'f6dae1' || 'd2ec7b' }}/100x100"
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}

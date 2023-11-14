@@ -20,7 +20,7 @@ on:
       - '.yarn/**'
       - 'apps/docs/**'
 env:
-    PERCY_PARALLEL_NONCE: ${{ github.run_id }}-${{ github.run_number }}
+  PERCY_PARALLEL_NONCE: ${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
   build:
@@ -73,16 +73,16 @@ jobs:
           retention-days: 1
 
   merge-reports:
-      name: 📋 Create Report
-      # merge reports after playwright-tests, even if some shards have failed
-      if: failure()
-      needs: [build]
+    name: 📋 Create Report
+    # merge reports after playwright-tests, even if some shards have failed
+    if: failure()
+    needs: [build]
 
-      runs-on: ubuntu-latest
-      concurrency:
-        group: report-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-        cancel-in-progress: true
-      steps:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: report-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
+    steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -101,7 +101,7 @@ jobs:
       - name: Merge Girhub Report
         run: npx playwright merge-reports --reporter github ./all-blob-reports
       - name: Merge into HTML Report
-        run: npx playwright merge-reports --reporter html ./all-blob-reports 
+        run: npx playwright merge-reports --reporter html ./all-blob-reports
 
       - name: Upload HTML Report
         uses: actions/upload-artifact@v3

@@ -33,7 +33,7 @@ declare global {
 // A few helper functions to help customer support recover notebooks.
 if (
   typeof window !== 'undefined' &&
-  window.location.host === 'dev.decipad.com'
+  window.location.host === 'staging.decipad.com'
 ) {
   window.yjsToJson = (text: string) => {
     const data = Buffer.from(text, 'base64');

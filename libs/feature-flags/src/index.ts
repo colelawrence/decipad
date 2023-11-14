@@ -95,7 +95,9 @@ export const isFlagEnabled = (flag: Flag): boolean =>
   envDefaults[process.env.NODE_ENV ?? 'production'] ??
   (!inE2E &&
     'location' in globalThis &&
-    /localhost|.*dev.decipad.com/.test(globalThis.location.hostname));
+    /localhost|.*staging.decipad.com|.*dev.decipad.com/.test(
+      globalThis.location.hostname
+    ));
 
 export const getOverrides = (): Flags => overrides;
 

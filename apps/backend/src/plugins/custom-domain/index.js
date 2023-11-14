@@ -10,6 +10,9 @@ module.exports = {
       console.log(`Custom domain: stage = ${stage}, custom domain = ${customDomain}`);
       if (customDomain) {
         console.log(`Configuring domain name in deploy: ${customDomain}`);
+        console.log('custom domain = ' + customDomain);
+        console.log('certificate ARN = ' + CertificateArn);
+        console.log('hosted zone id = ' + HostedZoneId);
         cloudformation.Resources.HTTP.Properties.Domain = {
           DomainName: customDomain,
           CertificateArn,
