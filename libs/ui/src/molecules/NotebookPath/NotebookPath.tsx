@@ -43,7 +43,7 @@ export const NotebookPath = ({
   return (
     <div css={wrapperStyles}>
       {href ? (
-        <a css={anchorStyles} href={href}>
+        <a css={anchorStyles} href={href} target="_blank" rel="noreferrer">
           <em css={anchorStyles}>{notebookName}</em>
         </a>
       ) : (

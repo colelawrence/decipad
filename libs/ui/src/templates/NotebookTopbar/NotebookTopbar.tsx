@@ -281,7 +281,7 @@ export const NotebookTopbar = ({
   const readModeTopbar = (
     <Styled.LeftContainer>
       <Styled.IconWrap>
-        <Link href="https://decipad.com">
+        <Link target="_blank" rel="noreferrer" href="https://decipad.com">
           <Deci />
         </Link>
       </Styled.IconWrap>

@@ -276,16 +276,20 @@ const NewEditor: FC<{
   const onNotebookTitleChange = useNotebookTitleChange(
     actions.notebook?.id ?? 'New Notebook'
   );
+  const { embed: _embed } = useRouteParams(notebooks({}).notebook);
+  const isEmbed = Boolean(_embed);
 
   return (
     <>
       <GlobalThemeStyles color={actions.iconColor} />
-      <EditorIcon
-        icon={actions.icon ?? 'Deci'}
-        color={actions.iconColor}
-        onChangeIcon={actions.updateIcon}
-        onChangeColor={actions.updateIconColor}
-      />
+      {!isEmbed && (
+        <EditorIcon
+          icon={actions.icon ?? 'Deci'}
+          color={actions.iconColor}
+          onChangeIcon={actions.updateIcon}
+          onChangeColor={actions.updateIconColor}
+        />
+      )}
       <Editor
         secret={undefined}
         notebookId={notebookId}
