@@ -17,6 +17,7 @@ const defaultEnvValues = {
   DECI_S3_ACCESS_KEY_ID: 'S3RVER',
   DECI_S3_SECRET_ACCESS_KEY: 'S3RVER',
   DECI_S3_PADS_BUCKET: 'pads',
+  DECI_S3_PAD_BACKUPS_BUCKET: 'padBackups',
   DECI_S3_ATTACHMENTS_BUCKET: 'attachments',
   DECI_S3_THIRD_PARTIES_BUCKET: 'decipad-staging-third-parties',
   DECI_INVITE_EXPIRATION_SECONDS: '604800',

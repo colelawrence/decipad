@@ -23,6 +23,9 @@ const options = {
       name: 'pads',
     },
     {
+      name: 'padBackups',
+    },
+    {
       name: 'attachments',
       configs: [file(join(__dirname, 'cors-config.xml'))],
     }

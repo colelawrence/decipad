@@ -18,6 +18,8 @@ import {
 import { supports } from '@decipad/support';
 import { docSyncEditor } from './docSyncEditor';
 import { setupUndo } from './setupUndo';
+import { nanoid } from 'nanoid';
+import { getLocalNotebookUpdates } from './getLocalNotebookUpdates';
 
 const tokenTimeoutMs = 60 * 1000;
 
@@ -29,6 +31,8 @@ declare global {
     yjsToJson: (text: string) => void;
   }
 }
+
+const isTesting = !!process.env.JEST_WORKER_ID;
 
 // A few helper functions to help customer support recover notebooks.
 if (
@@ -95,6 +99,10 @@ export function createDocSyncEditor(
   }: DocSyncOptions,
   getSession: () => Session | undefined = () => undefined
 ) {
+  // breaks tests otherwise
+  if (!isTesting) {
+    global.document.cookie = `docsync_session_token=${nanoid()}; path=/;`;
+  }
   const doc = new YDoc();
   const store = supports('indexeddb')
     ? new IndexeddbPersistence(docId, doc, { readOnly })
@@ -186,10 +194,17 @@ export function createDocSyncEditor(
   // Cursor editor
   const cursorEditor = withCursor(yjsEditor, awareness, getSession);
 
+  let interval: ReturnType<typeof setInterval> | undefined;
+  let lastBackedUpDoc: string;
   // Sync editor
   let syncEditor = docSyncEditor(cursorEditor, doc, store, wsp);
   const { destroy } = syncEditor;
   syncEditor.destroy = () => {
+    clearInterval(interval);
+    // breaks tests otherwise
+    if (!isTesting) {
+      document.cookie = `docsync_session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+    }
     destroyed = true;
     store?.destroy();
     wsp?.destroy();
@@ -202,6 +217,33 @@ export function createDocSyncEditor(
   let loadedRemotely = false;
 
   const onLoaded = (source: 'remote' | 'local') => {
+    if (source === 'local' && !isTesting) {
+      interval = setInterval(async () => {
+        const arr = await getLocalNotebookUpdates(docId);
+        if (!arr) return;
+        // convert uint8Array to string
+        const yjsDoc = new YDoc();
+        applyUpdate(yjsDoc, arr);
+        const slateDoc = { children: toSlateDoc(yjsDoc.getArray()) };
+        const body = JSON.stringify(slateDoc);
+        if (body === lastBackedUpDoc) {
+          return;
+        }
+        const res = await fetch(`/api/pads/${docId}/backups`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body,
+        });
+        if (res.status !== 200) {
+          throw new Error(
+            `Error backing up pad: response code was ${res.status}: ${res.statusText}`
+          );
+        }
+        lastBackedUpDoc = body;
+      }, 5000);
+    }
     if (source === 'remote') {
       syncEditor.isLoadedRemotely = true;
       loadedRemotely = true;

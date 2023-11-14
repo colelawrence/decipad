@@ -68,6 +68,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_S3_ENDPOINT);
     case 'DECI_S3_PADS_BUCKET':
       return valueOrDefault(name, process.env.DECI_S3_PADS_BUCKET);
+    case 'DECI_S3_PAD_BACKUPS_BUCKET':
+      return valueOrDefault(name, process.env.DECI_S3_PAD_BACKUPS_BUCKET);
     case 'DECI_S3_THIRD_PARTIES_BUCKET':
       return valueOrDefault(name, process.env.DECI_S3_THIRD_PARTIES_BUCKET);
     case 'DECI_S3_SECRET_ACCESS_KEY':
@@ -152,6 +154,7 @@ const awsEndpoint = (_url: string) => {
 export interface BucketsConfig {
   pads: string;
   attachments: string;
+  padBackups: string;
   thirdParties: string;
 }
 
@@ -171,6 +174,7 @@ export function s3(): S3ClientConfig & { buckets: BucketsConfig } {
     buckets: {
       pads: env('DECI_S3_PADS_BUCKET'),
       attachments: env('DECI_S3_ATTACHMENTS_BUCKET'),
+      padBackups: env('DECI_S3_PAD_BACKUPS_BUCKET'),
       thirdParties: env('DECI_S3_THIRD_PARTIES_BUCKET'),
     },
   };

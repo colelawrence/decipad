@@ -370,6 +370,16 @@ export interface UserTagRecord extends TableRecordBase {
   tag: string;
 }
 
+export interface UserBackup extends TableRecordBase {
+  pad_id: string;
+  user_id: string;
+  file_name: string;
+  datetime: string;
+  session_token: string;
+  user_agent: string;
+  expires_at: number;
+}
+
 export interface RoleRecord extends TableRecordBase {
   name: string;
   workspace_id: ID;
@@ -569,6 +579,7 @@ export interface EnhancedDataTables {
   docsyncupdates: EnhancedDataTable<DocSyncUpdateRecord>;
   users: EnhancedDataTable<UserRecord>;
   userkeys: EnhancedDataTable<UserKeyRecord>;
+  userbackups: DataTable<UserBackup>;
   permissions: EnhancedDataTable<PermissionRecord>;
   workspaces: EnhancedDataTable<WorkspaceRecord>;
   pads: EnhancedDataTable<PadRecord>;

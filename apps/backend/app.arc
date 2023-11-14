@@ -41,6 +41,7 @@ post /api/pads/:padid/images
 any /api/pads/:padid/export
 get /api/pads/:padid/logs
 get /api/pads/:padid/backups/export
+post /api/pads/:padid/backups
 get /api/pads/:padid
 post /api/pads/:padid/fetch
 post /api/discord
@@ -254,6 +255,16 @@ docsyncsnapshots
   docsync_id String
   name String
   data String
+
+userbackups
+  id *String
+  pad_id: String
+  user_id: String
+  file_name String
+  datetime String
+  session_token String
+  user_agent String
+  expires_at TTL
 
 allowlist
   id *String

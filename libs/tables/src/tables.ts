@@ -35,6 +35,7 @@ const enhancedTables: (keyof EnhancedDataTables)[] = [
   'users',
   'userkeys',
   'usergoals',
+  'userbackups',
   'permissions',
   'workspaces',
   'pads',
@@ -57,6 +58,7 @@ const observedTables: (keyof DataTables)[] = [
   'fileattachments',
   'docsyncupdates',
   'docsyncsnapshots',
+  'userbackups',
 ];
 
 const versionedTables: (keyof VersionedDataTables)[] = ['docsync'];

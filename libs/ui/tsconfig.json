@@ -50,6 +50,9 @@
       "path": "../toast"
     },
     {
+      "path": "../docsync"
+    },
+    {
       "path": "../format"
     },
     {

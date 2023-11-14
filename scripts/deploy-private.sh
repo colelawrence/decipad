@@ -48,6 +48,7 @@ arc env staging DECI_S3_ENDPOINT s3.eu-west-2.amazonaws.com
 arc env staging DECI_S3_ACCESS_KEY_ID "$DECI_S3_ACCESS_KEY_ID"
 arc env staging DECI_S3_SECRET_ACCESS_KEY "$DECI_S3_SECRET_ACCESS_KEY"
 arc env staging DECI_S3_PADS_BUCKET "$DECI_S3_PADS_BUCKET"
+arc env staging DECI_S3_PAD_BACKUPS_BUCKET "$DECI_S3_PAD_BACKUPS_BUCKET"
 arc env staging NODE_OPTIONS "--enable-source-maps --max_old_space_size=32768"
 arc env staging GIT_COMMIT_HASH "${GIT_COMMIT_HASH:=$(git rev-parse HEAD)}"
 arc env staging INTERCOM_SECRET_ID "${INTERCOM_SECRET_ID}"
