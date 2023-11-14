@@ -23,8 +23,11 @@ on:
 jobs:
   build:
     name: 🔬 Run Smoke Tests
-    timeout-minutes: 60
+    timeout-minutes: 25
     runs-on: buildjet-4vcpu-ubuntu-2204
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@v4

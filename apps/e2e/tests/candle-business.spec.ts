@@ -1,27 +1,15 @@
 import { expect, test } from './manager/decipad-tests';
-import stringify from 'json-stringify-safe';
 import startingACandleBusiness from '../__fixtures__/starting-a-candle-business.json';
 import { waitForEditorToLoad } from '../utils/page/Editor';
 import { fetchTable } from '../utils/page/ManyTables';
-import { importNotebook, snapshot, Timeouts } from '../utils/src';
+import { snapshot, Timeouts } from '../utils/src';
 
 test('Use case: building a candle business', async ({ testUser }) => {
   const { page, notebook } = testUser;
   test.slow();
 
-  let notebookId: string;
-
   await test.step('loads and computes the "starting a candle business notebook"', async () => {
-    notebookId = await importNotebook(
-      testUser.workspace.baseWorkspaceID,
-      Buffer.from(stringify(startingACandleBusiness), 'utf-8').toString(
-        'base64'
-      ),
-      page
-    );
-
-    await page.goto(`/n/${notebookId}`);
-
+    await testUser.importNotebook(startingACandleBusiness);
     await waitForEditorToLoad(page);
     await expect(page).toHaveTitle('🕯Starting a Candle Business | Decipad');
 

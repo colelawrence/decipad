@@ -92,7 +92,7 @@ test('notebook help button @support', async ({ testUser }) => {
 });
 
 test('sidebar in publish views @sidebar', async ({
-  randomFreeUser,
+  anotherTestUser,
   testUser,
 }) => {
   let sharedPageLocation: string;
@@ -104,13 +104,13 @@ test('sidebar in publish views @sidebar', async ({
 
   await test.step('[another user] check sidebar open in a published notebook from another user', async () => {
     // initial notebook
-    await randomFreeUser.createAndNavNewNotebook();
-    await randomFreeUser.notebook.openSidebar();
+    await anotherTestUser.createAndNavNewNotebook();
+    await anotherTestUser.notebook.openSidebar();
 
     // visit published notebook
-    await randomFreeUser.page.goto(sharedPageLocation!);
-    await randomFreeUser.notebook.waitForEditorToLoad();
-    await randomFreeUser.notebook.checkSidebarIsClosed();
+    await anotherTestUser.page.goto(sharedPageLocation!);
+    await anotherTestUser.notebook.waitForEditorToLoad();
+    await anotherTestUser.notebook.checkSidebarIsClosed();
   });
 });
 

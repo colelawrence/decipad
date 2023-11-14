@@ -9,3 +9,7 @@ export function randomEmail(): string {
 export function genericTestEmail(): string {
   return `generic-test-user@decipad.com`;
 }
+
+export function genericTestEmail2(): string {
+  return `another-generic-test-user@decipad.com`;
+}

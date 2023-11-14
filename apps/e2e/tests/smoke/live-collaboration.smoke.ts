@@ -1,21 +1,24 @@
 import { expect, test as smoketest } from '../manager/decipad-tests';
+import { STORAGE_STATE } from '../../playwright.config';
+import { User } from '../manager/test-users';
 
 smoketest(
   'check live collaboration same notebook',
-  async ({ randomFreeUser }) => {
-    const { page: userAPage, notebook: userANotebook } = randomFreeUser;
-    const userB = await randomFreeUser.new();
+  async ({ testUser: userA, anotherTestUser: userB, browser }) => {
+    const { page: userAPage, notebook: userANotebook } = userA;
     const { page: userBPage, notebook: userBNotebook } = userB;
     const currentDate = new Date().getTime();
-    const notebookTitle = currentDate.toString();
+    const notebookTitle =
+      currentDate.toString() + Math.round(Math.random() * 10000);
     let notebookURL = '';
     let notebookJsonUserA = '';
     let notebookJsonUserB = '';
+    let notebookJsonUserARevisited = '';
 
     await smoketest.step(
       'create notebook and invite [userB] to collaborate',
       async () => {
-        await randomFreeUser.createAndNavNewNotebook();
+        await userA.createAndNavNewNotebook();
         await userANotebook.updateNotebookTitle(notebookTitle);
         notebookURL = userAPage.url();
         await userANotebook.inviteNotebookCollaborator(userB.email);
@@ -253,7 +256,6 @@ smoketest(
           'Tab 4',
         ]);
       }).toPass();
-      userBPage.reload();
     });
     // End modeling
 
@@ -264,6 +266,22 @@ smoketest(
         notebookJsonUserB = await userBNotebook.download();
         expect(JSON.parse(notebookJsonUserA)).toMatchObject(
           JSON.parse(notebookJsonUserB)
+        );
+      }
+    );
+
+    await smoketest.step(
+      'check icognito browser with userA + same notebook keeps same json',
+      async () => {
+        const context = await browser.newContext({
+          storageState: STORAGE_STATE,
+        });
+        const userPage = new User(await context.newPage());
+        await userPage.page.goto(notebookURL);
+        await userPage.notebook.checkNotebookTitle(notebookTitle);
+        notebookJsonUserARevisited = await userPage.notebook.download();
+        expect(JSON.parse(notebookJsonUserARevisited)).toMatchObject(
+          JSON.parse(notebookJsonUserA)
         );
       }
     );

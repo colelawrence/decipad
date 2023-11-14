@@ -1,4 +1,4 @@
-import { type Locator, type Page, chromium } from '@playwright/test';
+import { type Locator, type Page, Browser } from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
 import { Workspace } from './workspace';
@@ -125,12 +125,10 @@ export class User {
    * ```
    */
 
-  async new(email: string = randomEmail()) {
-    const browser = await chromium.launch();
+  async new(browser: Browser, email: string = randomEmail()) {
     const context = await browser.newContext();
     const userPage = new User(await context.newPage());
-    await this.setupWithEmail(email);
-    await userPage.createAndNavNewNotebook();
+    await userPage.setupWithEmail(email);
     return userPage;
   }
 }

@@ -12,14 +12,14 @@ import {
 
 test('publish notebook, check logged out reader + logged in duplication', async ({
   testUser,
-  randomFreeUser,
+  anotherTestUser,
   unregisteredUser,
 }) => {
   let sharedPageLocation: string | null;
   const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
     unregisteredUser;
   const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
-    randomFreeUser;
+    anotherTestUser;
   const { page: testUserPage, notebook: testUserNotebook } = testUser;
   const someText = 'Some text to show in the editor';
   const moreText = 'Should work even with some delay';
@@ -311,7 +311,8 @@ test('duplicate inside notebook with single workspace', async ({
     randomFreeUser;
   await randomFreeUser.createAndNavNewNotebook();
   const currentDate = new Date().getTime();
-  const notebookTitle = currentDate.toString();
+  const notebookTitle =
+    currentDate.toString() + Math.round(Math.random() * 10000);
   await randomFreeUserNotebook.updateNotebookTitle(notebookTitle);
   await randomFreeUserNotebook.duplicate();
   await randomFreeUserPage.getByTestId('go-to-workspace').click();
@@ -326,7 +327,7 @@ test('duplicate inside notebook with multiple workspaces ', async ({
   const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
     randomFreeUser;
 
-  const NewWorkspaceName = 'New Workspace';
+  const NewWorkspaceName = `New Workspace${Math.round(Math.random() * 10000)}`;
   let notebookUrl = '';
   let newWorkspaceURL = '';
   await randomFreeUser.createAndNavNewNotebook();
@@ -352,7 +353,8 @@ test('duplicate inside notebook with multiple workspaces ', async ({
   await test.step('create notebook', async () => {
     await randomFreeUserPage.goto(notebookUrl);
     const currentDate = new Date().getTime();
-    const notebookTitle = currentDate.toString();
+    const notebookTitle =
+      currentDate.toString() + Math.round(Math.random() * 10000);
     await randomFreeUserNotebook.updateNotebookTitle(notebookTitle);
     await randomFreeUserNotebook.duplicate(NewWorkspaceName);
     await randomFreeUserPage.goto(newWorkspaceURL);
@@ -370,7 +372,8 @@ test('check collaborator duplicate single workspace', async ({
     randomFreeUser;
   const { page: testUserPage, notebook: testUserNotebook } = testUser;
   const currentDate = new Date().getTime();
-  const notebookTitle = currentDate.toString();
+  const notebookTitle =
+    currentDate.toString() + Math.round(Math.random() * 10000);
   let notebookURL = '';
 
   await test.step('create notebook', async () => {
@@ -400,27 +403,29 @@ test('check collaborator duplicate single workspace', async ({
 
 test('check collaborator duplicate mulpliple workspaces', async ({
   testUser,
-  randomFreeUser,
+  anotherTestUser,
 }) => {
   const {
     page: randomFreeUserPage,
     notebook: randomFreeUserNotebook,
     workspace: randomFreeUserWorkspace,
-  } = randomFreeUser;
+  } = anotherTestUser;
   const { page: testUserPage, notebook: testUserNotebook } = testUser;
   const currentDate = new Date().getTime();
-  const notebookTitle = currentDate.toString();
+  const notebookTitle =
+    currentDate.toString() + Math.round(Math.random() * 10000);
   let notebookURL = '';
   let newWorkspaceURL = '';
-  const NewWorkspaceName = 'New workspace';
+  const NewWorkspaceName = `New workspace${Math.round(Math.random() * 10000)}`;
 
   await test.step('create notebook and invite [randomFreeUser] to collaborate', async () => {
     await testUserNotebook.updateNotebookTitle(notebookTitle);
     notebookURL = testUserPage.url();
-    await testUserNotebook.inviteNotebookCollaborator(randomFreeUser.email);
+    await testUserNotebook.inviteNotebookCollaborator(anotherTestUser.email);
   });
 
   await test.step('[randomFreeUser] create new workspace to duplicate shared notebook', async () => {
+    await anotherTestUser.goToWorkspace();
     newWorkspaceURL = await randomFreeUserWorkspace.newWorkspace(
       NewWorkspaceName
     );

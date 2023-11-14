@@ -27,6 +27,9 @@ jobs:
     name: 🔬 Run e2e Tests
     timeout-minutes: 60
     runs-on: buildjet-4vcpu-ubuntu-2204
+    concurrency:
+      group: e2e-${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }} - ${{ matrix.shard }}
+      cancel-in-progress: true
 
     strategy:
       matrix:
@@ -71,11 +74,14 @@ jobs:
 
   merge-reports:
       name: 📋 Create Report
-      # Merge reports after playwright-tests, even if some shards have failed
+      # merge reports after playwright-tests, even if some shards have failed
       if: failure()
       needs: [build]
 
       runs-on: ubuntu-latest
+      concurrency:
+        group: report-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+        cancel-in-progress: true
       steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

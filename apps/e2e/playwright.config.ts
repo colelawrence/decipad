@@ -13,11 +13,12 @@ import path from 'path';
  */
 
 export const STORAGE_STATE = path.join(__dirname, './utils/src/user.json');
+export const STORAGE_STATE2 = path.join(__dirname, './utils/src/user2.json');
 
 const config: PlaywrightTestConfig = {
   testDir: './tests',
   /* Maximum time one test can run for. */
-  timeout: 60_000,
+  timeout: 100_000,
 
   expect: {
     /**
@@ -37,7 +38,7 @@ const config: PlaywrightTestConfig = {
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 3 : 0,
-  workers: process.env.CI ? 4 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: process.env.CI ? 'blob' : 'html',
 
