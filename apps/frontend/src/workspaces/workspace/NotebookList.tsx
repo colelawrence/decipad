@@ -1,4 +1,3 @@
-import { ComponentProps, FC } from 'react';
 import {
   WorkspaceNotebookFragment,
   WorkspaceSwitcherWorkspaceFragment,
@@ -8,9 +7,10 @@ import {
   UINotebookList,
   useSearchBarStore,
 } from '@decipad/ui';
-import { PageTypes, useFilteredNotebooks, useSearchResults } from './hooks';
-import { parseIconColorFromIdentifier } from '../../utils';
+import { ComponentProps, FC } from 'react';
 import { useNotebookMetaActions } from '../../hooks';
+import { parseIconColorFromIdentifier } from '../../utils';
+import { PageTypes, useFilteredNotebooks, useSearchResults } from './hooks';
 
 type NotebookListProps = Pick<
   ComponentProps<typeof UINotebookList>,
@@ -71,6 +71,7 @@ export const NotebookList: FC<NotebookListProps> = ({
               id={n.id}
               isArchived={pageType === 'archived'}
               status={(n.status as ListItemType['status']) ?? 'draft'}
+              section={n.section?.name || undefined}
               isPublic={Boolean(n.isPublic)}
               creationDate={n.createdAt && new Date(n.createdAt)}
               name={n.name}

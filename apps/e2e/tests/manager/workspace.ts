@@ -6,6 +6,7 @@ export class Workspace {
   readonly createWorkspaceButton: Locator;
   readonly workspaceHeroName: Locator;
   baseWorkspaceID: string;
+  readonly notebookLabel: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -15,6 +16,7 @@ export class Workspace {
     );
     this.workspaceHeroName = this.page.getByTestId('workspace-hero-title');
     this.baseWorkspaceID = '';
+    this.notebookLabel = page.getByTestId('notebook-section-tag');
   }
 
   /**
@@ -47,5 +49,22 @@ export class Workspace {
    */
   async updateDefaultWorkspaceID(ID: string) {
     this.baseWorkspaceID = ID;
+  }
+
+  /**
+   * Check for notebook label
+   *
+   * **Usage**
+   *
+   * ```js
+   *  await workspace.checkLabel('Drag and Drop Test');
+   * ```
+   */
+  async checkLabel(label: string) {
+    await expect(
+      await this.notebookLabel.filter({
+        hasText: label,
+      })
+    ).toBeVisible();
   }
 }

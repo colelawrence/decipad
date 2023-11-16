@@ -1,4 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+import { UserIconKey } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
 import { noop } from '@decipad/utils';
@@ -6,7 +7,9 @@ import { css } from '@emotion/react';
 import { ComponentProps, FC, memo, useCallback, useEffect } from 'react';
 import { XYCoord, useDrag as useCustomDrag, useDragLayer } from 'react-dnd';
 import * as icons from '../../icons';
+import { Ellipsis } from '../../icons';
 import { NotebookIcon, NotebookStatus } from '../../molecules';
+import { NotebookStatusProps } from '../../molecules/NotebookStatus/NotebookStatus';
 import { cssVar, p14Medium, shortAnimationDuration } from '../../primitives';
 import { notebookList } from '../../styles';
 import { mainIconButtonStyles } from '../../styles/buttons';
@@ -17,10 +20,7 @@ import {
   getEmptyImage,
   swatchesThemed,
 } from '../../utils';
-import { NotebookStatusProps } from '../../molecules/NotebookStatus/NotebookStatus';
 import { NotebookOptions } from './NotebookOptions';
-import { Ellipsis } from '../../icons';
-import { UserIconKey } from '@decipad/editor-types';
 
 function CustomDragLayer() {
   const {
@@ -107,11 +107,12 @@ function CustomDragLayer() {
 
 export type NotebookListItemProps = Pick<
   ComponentProps<typeof NotebookStatus>,
-  'section' | 'isPublic' | 'status'
+  'isPublic' | 'status'
 > &
   Omit<ComponentProps<typeof NotebookOptions>, 'trigger'> & {
     readonly id: string;
     readonly name: string;
+    readonly section?: string;
     readonly onMoveToSection: (padId: string, sectionId: string) => void;
     readonly onChangeStatus: (
       notebookId: string,

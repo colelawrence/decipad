@@ -1,11 +1,10 @@
+import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { FilterBubbles } from '..';
-import { ColorStatusNames } from '../../utils';
-import { css } from '@emotion/react';
-import { Archive, Folder, Globe } from '../../icons';
 import { ColorStatusCircle } from '../../atoms';
+import { Archive, Folder, Globe } from '../../icons';
 import { tabletScreenQuery } from '../../primitives';
-import { Section } from '../../organisms/WorkspaceNavigation/WorkspaceNavigation';
+import { ColorStatusNames } from '../../utils';
 import { NotebookStatusDropdown } from './NotebookStatusDropdown';
 
 export type NotebookStatusProps = Pick<
@@ -14,7 +13,7 @@ export type NotebookStatusProps = Pick<
 > & {
   readonly isPublic: boolean;
   readonly isArchived: boolean;
-  readonly section?: Section;
+  readonly section?: string;
 };
 
 export const NotebookStatus: FC<NotebookStatusProps> = ({
@@ -44,8 +43,12 @@ export const NotebookStatus: FC<NotebookStatusProps> = ({
         <FilterBubbles description="Published" icon={<Globe />} />
       ) : null}
 
-      {section?.name ? (
-        <FilterBubbles description={section.name} icon={<Folder />} />
+      {section ? (
+        <FilterBubbles
+          description={section}
+          icon={<Folder />}
+          testid="notebook-section-tag"
+        />
       ) : null}
 
       {isArchived && <FilterBubbles description="Archive" icon={<Archive />} />}

@@ -37,7 +37,10 @@ test('workspace sections', async ({ randomFreeUser }) => {
     await page.getByRole('button', { name: 'Create Section' }).click();
 
     // Navigating back to My Notebooks
-    await page.getByTestId('my-notebooks-button').click();
+    await expect(async () => {
+      await page.getByTestId('my-notebooks-button').click();
+      await expect(page.getByText('No documents to list')).toBeHidden();
+    }).toPass();
   });
 
   await test.step('Searching on the search bar and dragging the notebook', async () => {
@@ -67,6 +70,19 @@ test('workspace sections', async ({ randomFreeUser }) => {
     await expect(
       page.getByTestId('notebook-list-item').getByText('Welcome to Decipad!')
     ).toBeVisible();
+
+    // check section labels are visible with filter
+    await randomFreeUser.workspace.checkLabel('Drag and Drop Test');
+
+    // check section label are persistant on reload
+    await page.reload();
+    await randomFreeUser.workspace.checkLabel('Drag and Drop Test');
+
+    // check standard view showcases notebook labels
+    await expect(async () => {
+      await page.getByTestId('my-notebooks-button').click();
+      await randomFreeUser.workspace.checkLabel('Drag and Drop Test');
+    }).toPass();
   });
 
   await test.step('Checking if the no search result warning banner is displayed', async () => {
