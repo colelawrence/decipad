@@ -64,7 +64,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ compact }) => {
         <span css={css({ width: '100%' })} data-testid="search-bar">
           <InputField
             type="search"
-            placeholder="Search notebook"
+            placeholder="Search"
             value={search}
             onChange={setSearch}
           />

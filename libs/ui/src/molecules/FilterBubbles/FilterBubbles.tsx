@@ -34,6 +34,8 @@ const tagStyle = css(p12Medium, {
   gap: '4px',
   maxWidth: 125,
   alignItems: 'center',
+  cursor: 'pointer',
+  userSelect: 'none',
 });
 
 const tagInlineStyles = css({
