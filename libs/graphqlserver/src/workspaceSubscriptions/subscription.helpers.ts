@@ -57,10 +57,10 @@ export const findSubscriptionByWorkspaceId = async (workspaceId: string) => {
 };
 
 export const updateStripeIfNeeded = async (
-  subscriptionId: string,
+  subs: WorkspaceSubscriptionRecord,
   newQuantity: number
 ) => {
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const subscription = await stripe.subscriptions.retrieve(subs.id);
 
   if (subscription.items.data.length === 0) {
     throw new Error('Subscription has no items');
@@ -69,12 +69,18 @@ export const updateStripeIfNeeded = async (
   const subscriptionItemID = subscription.items.data[0].id;
   const previousQuantity = subscription.items.data[0].quantity;
 
-  if (newQuantity === previousQuantity) {
-    return;
-  }
-
   await stripe.subscriptionItems.update(subscriptionItemID, {
     quantity: newQuantity,
+  });
+
+  await track({
+    event: 'update Stripe subscription seats',
+    properties: {
+      stripeSubscriptionId: subscription.id,
+      previousQuantity: previousQuantity?.toString(),
+      newQuantity: newQuantity.toString(),
+      billingEmail: subs.email,
+    },
   });
 };
 

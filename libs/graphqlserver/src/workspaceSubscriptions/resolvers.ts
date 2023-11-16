@@ -1,4 +1,8 @@
-import { GraphqlContext, Workspace } from '@decipad/backendtypes';
+import {
+  GraphqlContext,
+  Workspace,
+  WorkspaceSubscriptionRecord,
+} from '@decipad/backendtypes';
 import {
   findSubscriptionByWorkspaceId,
   getWorkspaceSubscription,
@@ -20,10 +24,11 @@ export default {
   Mutation: {
     syncWorkspaceSeats: async (_: unknown, args: { id: string }) => {
       const workspaceId = args.id;
-      const sub = await findSubscriptionByWorkspaceId(workspaceId);
+      const sub: WorkspaceSubscriptionRecord =
+        await findSubscriptionByWorkspaceId(workspaceId);
       const newQuantity = await getWorkspaceMembersCount(workspaceId);
 
-      await updateStripeIfNeeded(sub.id, newQuantity);
+      await updateStripeIfNeeded(sub, newQuantity);
       return sub;
     },
   },

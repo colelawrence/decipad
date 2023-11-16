@@ -76,6 +76,15 @@ export const incrementQueryCount = async (
 
     await data.workspacexecutedqueries.put(newQuery);
 
+    await track({
+      event: 'Query execution updated',
+      properties: {
+        workspaceId,
+        isPremium: !!workspace.isPremium,
+        queryCount: queryCount.toString(),
+      },
+    });
+
     return newQuery;
   }
 };
