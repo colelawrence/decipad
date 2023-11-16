@@ -189,6 +189,22 @@ const isRetryableError = (err: unknown) =>
 const justSend = (connId: string, payload: string) =>
   ws.send({ id: connId, payload });
 
+const PERSIST_RETRY_INTERVAL_MS = 1000;
+
+const persistentSend = async (connId: string, payload: string) => {
+  try {
+    await ws.send({ id: connId, payload });
+  } catch (err) {
+    if (errorIs(err, 'Gone')) {
+      // try again a bit later
+      setTimeout(
+        () => persistentSend(connId, payload),
+        PERSIST_RETRY_INTERVAL_MS
+      );
+    }
+  }
+};
+
 const onSendError = async (err: unknown, isFinal = true) => {
   if (isFinal && err instanceof Error && isSeriousError(err)) {
     // eslint-disable-next-line no-console
@@ -281,7 +297,9 @@ export class LambdaWebsocketProvider extends Observable<string> {
     if (this.destroyed || !to) {
       return;
     }
-    this.sendQueue.push(() => justSend(to, message));
+    this.sendQueue.push(() =>
+      to === this.connId ? persistentSend(to, message) : justSend(to, message)
+    );
   }
 
   private send(message: Buffer) {
