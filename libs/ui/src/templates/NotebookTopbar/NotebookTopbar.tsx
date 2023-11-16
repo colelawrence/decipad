@@ -1,11 +1,21 @@
 /* eslint-disable prefer-destructuring */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { ClientEventsContext } from '@decipad/client-events';
+import { isFlagEnabled } from '@decipad/feature-flags';
+import {
+  NotebookMetaDataFragment,
+  NotebookWorkspacesDataFragment,
+  PermissionType,
+} from '@decipad/graphql-client';
+import {
+  NotebookAccessActionsReturn,
+  NotebookMetaActionsReturn,
+} from '@decipad/interfaces';
 import {
   useCanUseDom,
   useStripeCollaborationRules,
 } from '@decipad/react-utils';
-import { workspaces, docs } from '@decipad/routing';
+import { docs, workspaces } from '@decipad/routing';
 import { isServerSideRendering } from '@decipad/support';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -46,16 +56,6 @@ import {
 import { closeButtonStyles } from '../../styles/buttons';
 import { Anchor, TColorStatus } from '../../utils';
 import * as Styled from './styles';
-import {
-  NotebookMetaDataFragment,
-  NotebookWorkspacesDataFragment,
-  PermissionType,
-} from '@decipad/graphql-client';
-import {
-  NotebookAccessActionsReturn,
-  NotebookMetaActionsReturn,
-} from '@decipad/interfaces';
-import { isFlagEnabled } from '@decipad/feature-flags';
 
 const topBarWrapperStyles = (isEmbed: boolean) =>
   css({
@@ -370,10 +370,10 @@ export const NotebookTopbar = ({
                 isArchived={isArchived}
                 workspaces={userWorkspaces}
                 trigger={
-                  <div data-testId="notebook-actions">
+                  <Styled.MenuItemButton data-testId="notebook-actions">
                     <NotebookPath concatName notebookName={notebookName} />
                     <Caret variant="down" />
-                  </div>
+                  </Styled.MenuItemButton>
                 }
                 notebookStatus={
                   <NotebookStatusDropdown
@@ -438,6 +438,7 @@ export const NotebookTopbar = ({
                           gridTemplateColumns: '1fr auto',
                           gap: '8px',
                           alignItems: 'center',
+                          userSelect: 'none',
                           color: cssVar('textHeavy'),
                         }}
                       >

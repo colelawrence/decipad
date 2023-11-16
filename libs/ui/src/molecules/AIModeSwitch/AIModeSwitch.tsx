@@ -17,6 +17,8 @@ const switchWrapperStyles = css({
   padding: '0px 8px',
   alignItems: 'center',
   height: '32px',
+  cursor: 'pointer',
+  userSelect: 'none',
 });
 
 const switchIconStyles = css({
@@ -61,7 +63,6 @@ const switchThumbStyles = css({
 
 const labelStyles = css({
   ...p13Bold,
-  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   gap: '4px',

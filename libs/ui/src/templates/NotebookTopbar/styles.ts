@@ -75,5 +75,15 @@ export const ActionButtons = styled.div({
 });
 
 export const Status = styled.div(p13Medium, {
+  cursor: 'default',
+  userSelect: 'none',
+});
+
+export const MenuItemButton = styled.div(p13Medium, {
   cursor: 'pointer',
+  userSelect: 'none',
+  'div em': {
+    cursor: 'pointer',
+    userSelect: 'none',
+  },
 });
