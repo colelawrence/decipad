@@ -15,7 +15,6 @@ import {
   getAboveNodeSafe,
   insertNodes,
   isElementOfType,
-  magicNumberId,
 } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import {
@@ -25,7 +24,12 @@ import {
 } from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
-import { findNodePath, getEndPoint, getNodeString } from '@udecode/plate';
+import {
+  findNodePath,
+  getEndPoint,
+  getNodeString,
+  toDOMNode,
+} from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { useCallback, useContext, useEffect } from 'react';
 import { BaseRange, Path, Point } from 'slate';
@@ -144,13 +148,11 @@ export const commitPotentialFormula = (
   insertNodes(editor, [codeLineBelow], { at: currentBlockEnd });
 
   setTimeout(() => {
-    const magicNumberParagraph = editor.children[path[0]];
-    if (!magicNumberParagraph) return;
-    const magicNumberIndex = magicNumberParagraph.children.findIndex(
-      (c) => c.text === magicNumberInstead.text
-    );
-    if (magicNumberIndex === -1) return;
-    const numberId = magicNumberId(magicNumberParagraph, magicNumberIndex);
+    const domNode = toDOMNode(editor, magicNumberInstead);
+    const dataNode = domNode?.querySelector<HTMLElement>('[data-number-id]');
+    const numberId = dataNode?.dataset.numberId;
+
+    if (!numberId) return;
 
     onCommit({
       numberId,

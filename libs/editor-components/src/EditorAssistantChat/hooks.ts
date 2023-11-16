@@ -1,3 +1,4 @@
+import type { EditorController } from '@decipad/notebook-tabs';
 import {
   type Message,
   useAIChatHistory,
@@ -9,11 +10,10 @@ import { nanoid } from 'nanoid';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNotebookAssistantHelper } from './useNotebookAssistantHelper';
 import { useChatAssistantHelper } from './useChatAssistantHelper';
-import { MinimalRootEditor } from '@decipad/editor-types';
 
 export const useAssistantChat = (
   notebookId: string,
-  controller: MinimalRootEditor
+  controller: EditorController
 ) => {
   const [
     chats,

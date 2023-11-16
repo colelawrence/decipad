@@ -1,6 +1,6 @@
 import { TNodeOperation } from '@udecode/plate';
 import * as Y from 'yjs';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import { YjsEditor } from '@decipad/slate-yjs';
 import { SyncElement } from '../model';
 import { toSlatePath } from '../utils/convert';
 
@@ -10,13 +10,13 @@ import { toSlatePath } from '../utils/convert';
  * @param event
  */
 export default function translateMapEvent(
-  editor: MinimalRootEditor,
+  editor: YjsEditor,
   event: Y.YMapEvent<unknown>
 ): TNodeOperation[] {
   const targetPath = toSlatePath(event.path);
-  const targetElement = editor.getNode(targetPath);
-  if (!targetElement) return [];
+  const targetElement = editor.editorController.GetNode(targetPath);
   const targetSyncElement = event.target as SyncElement;
+  if (!targetElement) return [];
 
   const keyChanges = Array.from(event.changes.keys.entries());
   const newProperties = Object.fromEntries(

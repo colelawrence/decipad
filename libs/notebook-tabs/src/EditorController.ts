@@ -2,60 +2,56 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-plusplus */
+import cloneDeep from 'lodash.clonedeep';
+import { BaseEditor, BaseSelection, Path, Text, createEditor } from 'slate';
 import { nanoid } from 'nanoid';
 import { Subject } from 'rxjs';
+import { ReactEditor, withReact } from 'slate-react';
 import {
-  EElement,
+  ELEMENT_H1,
   ELEMENT_PARAGRAPH,
-  ENode,
-  PlateEditor,
   TDescendant,
   TEditor,
   TInsertNodeOperation,
   TMoveNodeOperation,
   TOperation,
   TRemoveNodeOperation,
-  TSelection,
   TSetNodeOperation,
-  createPlateEditor,
   getNode,
-  isEditorNormalizing,
-  isElement,
-  normalizeEditor,
+  insertNodes,
   removeNodes,
+  withoutNormalizing,
 } from '@udecode/plate';
 import {
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  H1Element,
+  MyEditor,
+  MyElement,
   MyPlatePlugin,
-  MyTabEditor,
   NotebookValue,
+  ParagraphElement,
   TabElement,
+  TitleElement,
   UserIconKey,
   createTPlateEditor,
-  MyEditor,
-  AnyElement,
-  TitleElement,
 } from '@decipad/editor-types';
-import { assertEqual, getDefined } from '@decipad/utils';
+import starterNotebook from './InitialNotebook';
+import { noop } from '@decipad/utils';
+import { isFlagEnabled } from '@decipad/feature-flags';
 import {
-  translateOpDown,
-  translateOpUp,
-  translatePathUp,
-  childIndexForOp,
+  TranslateOpDown,
+  TranslateOpUp,
+  TranslatePathUp,
 } from './TranslatePaths';
-import { IsTab } from './utils';
+import { IsOldOperation, IsTab, IsTitle, NoSelectOperations } from './utils';
+import stringify from 'json-stringify-safe';
 import { ElementObserver } from './ElementObserver';
-import { TitleEditor, createTitleEditor } from './TitleEditor';
-import { BaseEditor, Path, isNormalizing, setNormalizing } from 'slate';
-import { RootEditorController } from './types';
-import { getMirrorEditorNormalizers } from './plugins/index';
-import { withoutNormalizingEditors } from './withoutNormalizingEditors';
 
 const INITIAL_TAB_NAME = 'New Tab';
-const TITLE_EDITOR_INDEX = 0;
-
-const isTesting = !!process.env.JEST_WORKER_ID;
+const INITIAL_TITLE = 'Welcome to Decipad!';
+const INITIAL_TAB_ICON: UserIconKey = 'Receipt';
+const PLACEHOLDER_ID = 'placeholder_id';
 
 /**
  * Helper error class to make errors more visible on sentry.
@@ -82,337 +78,295 @@ export class OutOfSyncError extends Error {
  * Important, the `children` object is shared between the controller and the sub editors.
  * This means its shared state (but should not be changed by this class).
  */
-export class EditorController implements RootEditorController {
-  public id: string;
-  public events: RootEditorController['events'];
-  public elementObserver;
+export class EditorController {
+  public children: NotebookValue;
+  public SubEditors: Array<MyEditor>;
+  public NotebookId: string;
 
-  private titleEditor: TitleEditor;
-  private tabEditors: Array<MyTabEditor> = [];
-  private selectedTab = 0;
-  private editorPlugins: Array<MyPlatePlugin>;
-  private mirrorEditor: PlateEditor<NotebookValue>;
+  public Notifier: Subject<
+    'new-tab' | 'any-change' | 'remove-tab' | 'undo' | 'redo'
+  >;
+
+  public TitleEditor: BaseEditor & ReactEditor;
+
+  public IsNewNotebook: boolean;
+  public IsLoaded: boolean;
+
+  private EditorPlugins: Array<MyPlatePlugin>;
+
+  private CreateSnapshot: () => void;
+  private InsertOperations: Array<TInsertNodeOperation>;
+
+  public ElementObserver: ElementObserver;
 
   /**
    * Constructor initalizes a basic slate text editor, and
    * adds the first children element, linked to the title element.
    */
-  constructor(id: string, editorPlugins: Array<MyPlatePlugin> = []) {
-    this.id = id;
+  constructor(
+    id: string,
+    editorPlugins: Array<MyPlatePlugin>,
+    createSnapshot: () => void = noop
+  ) {
+    this.children = [] as unknown as [TitleElement];
+    this.CreateSnapshot = createSnapshot;
 
-    this.editorPlugins = editorPlugins;
-    this.events = new Subject();
-    this.titleEditor = this.createTitleEditor();
-    this.elementObserver = new ElementObserver();
-    this.mirrorEditor = this.createMirrorEditor();
-  }
+    this.SubEditors = [];
+    this.NotebookId = id;
+    this.EditorPlugins = editorPlugins;
 
-  private createTitleEditor(): TitleEditor {
-    const titleEditor = createTitleEditor();
-    titleEditor.children = [];
+    this.Notifier = new Subject();
 
-    const { apply, onChange } = titleEditor;
+    this.IsNewNotebook = false;
+    this.IsLoaded = false;
 
-    titleEditor.apply = (_op) => {
-      const op = _op as TOperation;
-      if (op.FROM_ROOT) {
-        apply(op);
-        return;
-      }
+    this.TitleEditor = this.CreateTitleEditor();
 
-      op.IS_LOCAL = true;
-      this.apply(op);
-    };
+    this.InsertOperations = [];
 
-    titleEditor.onChange = () => {
-      this.onChange();
-      onChange();
-    };
-    return titleEditor;
-  }
-
-  private createMirrorEditor(): PlateEditor<NotebookValue> {
-    const mirrorEditor = createPlateEditor<NotebookValue>({
-      plugins: getMirrorEditorNormalizers(),
-    });
-    const { apply, onChange } = mirrorEditor;
-
-    const tryApplyingOpToMirror = (op: TOperation) => {
-      try {
-        apply(op);
-      } catch (err) {
-        console.error('Error applying op to mirror', op);
-        console.error(err);
-        throw err;
-      }
-    };
-
-    mirrorEditor.apply = (op) => {
-      if (op.type === 'set_selection') {
-        return;
-      }
-
-      if (!op.FROM_MIRROR) {
-        tryApplyingOpToMirror(op);
-      }
-      if (!op.FROM_ROOT) {
-        op.FROM_MIRROR = true;
-        this.applyFromMirrorEditor(op);
-      }
-    };
-
-    mirrorEditor.onChange = () => {
-      onChange();
-      this.onChange();
-    };
-
-    return mirrorEditor;
-  }
-
-  public selectTab(tabIndex: number) {
-    this.selectedTab = tabIndex;
-  }
-
-  public getTabEditorIndex(tabId?: string): number {
-    return this.tabEditors.findIndex(({ id }) => id === tabId);
-  }
-
-  public getTabEditor(tabId?: string): MyEditor {
-    const tabIndex = this.getTabEditorIndex(tabId);
-    return this.tabEditors[tabIndex >= 0 ? tabIndex : 0];
-  }
-
-  public getTabEditorAt(tabIndex: number): MyEditor {
-    return getDefined(
-      this.tabEditors[tabIndex],
-      `no tab editor at index ${tabIndex}`
-    );
-  }
-
-  public getAllTabEditors(): Array<MyEditor> {
-    return this.tabEditors;
-  }
-
-  public getTitleEditor() {
-    return this.titleEditor;
-  }
-
-  // TEditor methods
-  public get children(): NotebookValue {
-    return [
-      this.titleEditor.children[0] as TitleElement,
-      ...this.tabEditors.map(
-        (subEditor): TabElement => ({
-          type: ELEMENT_TAB,
-          id: subEditor.id,
-          children: subEditor.children,
-          name: subEditor.tabName,
-          icon: subEditor.icon,
-          isHidden: subEditor.isHidden,
-        })
-      ),
-    ];
-  }
-
-  public get selection(): TSelection {
-    const editor = this.tabEditors[this.selectedTab];
-    if (editor) {
-      const subEditorSelection = editor.selection;
-      if (subEditorSelection) {
-        return {
-          anchor: {
-            ...subEditorSelection.anchor,
-            path: translatePathUp(
-              this.selectedTab,
-              subEditorSelection.anchor.path
-            ),
-          },
-          focus: {
-            ...subEditorSelection.focus,
-            path: translatePathUp(
-              this.selectedTab,
-              subEditorSelection.focus.path
-            ),
-          },
-        };
-      }
-    }
-    return null;
-  }
-
-  public onChange() {
-    if (isTesting && !isEditorNormalizing(this.mirrorEditor)) {
-      assertEqual(this.children, this.mirrorEditor.children);
-    }
+    this.ElementObserver = new ElementObserver();
   }
 
   /**
-   * Called alongside the constructor to create the title editor.
+   * Called alongside the contructor to create the title editor.
    */
+  private CreateTitleEditor(): BaseEditor & ReactEditor {
+    const editor = withReact(createEditor());
 
-  // getNode re-implementation because Plate getNode requires an entire editor and we are too lazy for that
-  getNode(path: Path): ENode<NotebookValue> | null {
-    return getNode(this as unknown as TEditor, path);
-  }
-  findNodeById(id: string) {
-    return this.findNode((node) => isElement(node) && node.id === id);
-  }
-  findNode(
-    match: (node: ENode<NotebookValue>) => boolean,
-    base: RootEditorController | EElement<NotebookValue> = this
-  ): AnyElement | null {
-    const matchingChild = isElement(base)
-      ? (base.children as ENode<NotebookValue>[]).find((child) =>
-          match(child as ENode<NotebookValue>)
-        )
-      : null;
-    if (matchingChild && isElement(matchingChild)) {
-      return matchingChild as AnyElement;
-    }
-    if (isElement(base)) {
-      for (const child of base.children) {
-        if (isElement(child)) {
-          const hasMatch = this.findNode(match, child);
-          if (hasMatch) {
-            return hasMatch;
-          }
+    const { apply, onChange, normalizeNode } = editor;
+
+    editor.apply = (e) => {
+      // Prevents most slate operations,
+      // as its just a textbox on steroids.
+      if (
+        e.type === 'insert_text' ||
+        e.type === 'remove_text' ||
+        e.type === 'set_selection'
+      ) {
+        apply(e);
+        if (e.type !== 'set_selection') {
+          (e as any).IS_LOCAL = true;
+          this.apply(e as TOperation);
         }
       }
-    }
-    return null;
+    };
+
+    editor.onChange = () => {
+      this.onChange();
+      onChange();
+    };
+
+    editor.normalizeNode = (entry) => {
+      const [node, path] = entry;
+      if (path[0] !== 0) {
+        editor.removeNodes({ at: path });
+        return;
+      }
+
+      if (Text.isText(node) && path[1] !== 0) {
+        editor.removeNodes({ at: path });
+        return;
+      }
+      normalizeNode(entry);
+    };
+
+    const titleEl: TitleElement = {
+      type: ELEMENT_TITLE,
+      id: PLACEHOLDER_ID,
+      get children() {
+        return (editor.children[0] as TitleElement)?.children;
+      },
+    };
+
+    this.children.unshift(titleEl);
+
+    return editor;
+  }
+
+  /**
+   * Creates a sub editor (using plate), and returns the plate editor,
+   * and the tab element for the root children.
+   */
+  private CreateSubEditor(
+    _tabId?: string,
+    _tabName?: string,
+    _tabIcon?: UserIconKey,
+    _tabIsHidden?: boolean
+  ): [MyEditor, TabElement] {
+    const tabId = _tabId ?? nanoid();
+    const tabName = _tabName ?? INITIAL_TAB_NAME;
+    const tabIcon = _tabIcon ?? INITIAL_TAB_ICON;
+    const tabIsHidden = _tabIsHidden ?? false;
+
+    const editor = createTPlateEditor({
+      id: tabId,
+      plugins: this.EditorPlugins,
+      disableCorePlugins: { history: true },
+    });
+
+    const { apply, onChange } = editor;
+
+    editor.apply = (op) => {
+      // this is ugly O(n), everytime we have an apply...
+      // should create a map at least, but more upkeep.
+
+      const index = this.children.findIndex((c) => c.id === tabId);
+      if (index === -1) throw new Error('Chould not find editor');
+
+      const translatedOp = TranslateOpUp(index, op);
+      translatedOp.IS_LOCAL = true;
+
+      /**
+       * For computer updates, we need to apply remove_nodes after the controllers apply
+       */
+      if (op.type !== 'remove_node') {
+        apply(op);
+      }
+
+      if (op.type !== 'set_selection') {
+        this.Notifier.next('any-change');
+      }
+
+      if (!op.IS_LOCAL_SYNTHETIC) {
+        this.apply(translatedOp);
+      }
+
+      if (op.type === 'remove_node') {
+        apply(op);
+      }
+    };
+
+    this.ElementObserver.OverrideApply(editor);
+
+    editor.onChange = () => {
+      this.onChange();
+      onChange();
+    };
+
+    // Define getter such that we always return the current reference to
+    // editor.children.
+    // We do this because Slate uses Immer and the reference to `editor.children`,
+    // is not predictable.
+    const child: TabElement = {
+      type: ELEMENT_TAB,
+      id: tabId,
+      name: tabName,
+      icon: tabIcon,
+      isHidden: tabIsHidden,
+      get children() {
+        return editor!.children;
+      },
+    };
+
+    return [editor, child];
   }
 
   // ======== Slate Editor Stubs ========
 
-  public withoutNormalizing(cb: () => void): void {
-    // Here we subscribe to new editors that may be created while processing an operation.
-    // This allows us to prevent normalization from occurring immediately after the new sub-editor apply,
-    // which can lead to mirror editor from being out of sync
-    // (since we need to only send the operation to the mirror editor at the end of a global apply).
-    const afterNormalizing: Array<() => void> = [];
-    const sub = this.events.subscribe((event) => {
-      if (event.type === 'new-tab-editor') {
-        const { editor } = event;
-        const wasNormalizing = isNormalizing(editor as BaseEditor);
-        // direct normalization prevention for a new editor
-        setNormalizing(editor as BaseEditor, false);
-        afterNormalizing.push(() => {
-          // to be run after normalization ends, restoring the "isNormalizing" state of the new editor to the previous value
-          setNormalizing(editor as BaseEditor, wasNormalizing);
-        });
+  /**
+   * Hacky. Editor Controller is not an editor itself.
+   * so we need some wrapper for plate functions.
+   *
+   * @see https://github.com/udecode/plate/blob/main/packages/slate/src/interfaces/node/getNode.ts
+   * It only requires 'children', which we do have.
+   */
+  public GetNode(path: Path): MyElement | null {
+    return getNode<MyElement>(this as unknown as TEditor, path);
+  }
+
+  /**
+   * Gives the selection of the first editor that has a selection
+   * (This only ever be one editor)
+   * It transforms the path of the selection to put it in context of the EditorController.
+   *
+   * @returns selection or null if none can be found
+   * (ie): the user is not selected on the editor.
+   */
+  public GetSelection(): BaseSelection | null {
+    for (let i = 0; i < this.SubEditors.length; i++) {
+      const editor = this.SubEditors[i];
+      if (editor.selection != null) {
+        const selection = cloneDeep(editor.selection);
+
+        selection.focus.path = TranslatePathUp(i, selection.focus.path);
+        // selection.anchor.path = this.TranslatePathUp(i, selection.anchor.path);
+
+        return selection;
       }
-    });
-    withoutNormalizingEditors([this.mirrorEditor, ...this.tabEditors], cb);
-    sub.unsubscribe();
-    for (const after of afterNormalizing) {
-      // here we return the normalization of any new editor to the previous "isNormalizing" state.
-      after();
     }
+    return null;
+  }
+
+  public WithoutNormalizing(callback: () => void): void {
+    let myCallback = callback;
+    for (const editor of this.SubEditors) {
+      // JS Moment. you need to create a variable inside the loop,
+      // otherwise it will point to unexpected places.
+      const copyOfCallback = myCallback;
+      myCallback = () => withoutNormalizing(editor, copyOfCallback);
+    }
+    myCallback();
   }
 
   /**
    * Helps declutter the `apply` function.
    * Various error throwing, and its crutial this part works perfectly.
    */
-  private handleTopLevelOps(op: TOperation): boolean {
-    if (op.type !== 'set_selection' && op.path.length === 1) {
+  private HandleTopLevelOps(op: NoSelectOperations): boolean {
+    if (op.path.length === 1) {
       // Must be a top level operation.
-      const [childIndex] = op.path;
 
       if (op.type === 'insert_node') {
-        if (IsTab(op.node)) {
+        this.InsertOperations.push(op);
+        if (IsTitle(op.node)) {
+          this.InsertTitle(op as TInsertNodeOperation<TitleElement>);
+        } else if (IsTab(op.node)) {
           this.InsertTab(op as TInsertNodeOperation<TabElement>);
-          return true;
-        }
-        if (childIndex === 0) {
-          this.InsertTitle(op as TInsertNodeOperation<AnyElement>);
-          return true;
+        } else {
+          console.warn('Potential error inserting, ', op);
         }
       } else if (op.type === 'set_node') {
-        this.SetElementProps(op);
+        this.SetTabProps(op);
       } else if (op.type === 'remove_node') {
         if (IsTab(op.node)) {
           this.RemoveTabOp(op as TRemoveNodeOperation<TabElement>);
         }
       } else if (op.type === 'move_node') {
-        const sourceBlock = getNode(this.mirrorEditor, [op.path[0]]);
-        const targetBlock = getNode(this.mirrorEditor, [op.newPath[0]]);
-        if (
-          op.path.length === 1 &&
-          op.newPath.length === 1 &&
-          IsTab(sourceBlock) &&
-          IsTab(targetBlock)
-        ) {
-          this.MoveTab(op);
-          return true;
-        }
-        if (!IsTab(sourceBlock) && !IsTab(targetBlock)) {
-          return true;
-        }
-        if (sourceBlock === targetBlock) {
-          const [tabIndex, translatedOp] = translateOpDown(op);
-          this.tabEditors[tabIndex - 1].apply(translatedOp);
-          return true;
-        }
-        // moving a node from one tab to another
-        const [tabIndex, translatedOp] = translateOpDown(op);
-        const sourceNode = getDefined(
-          getNode(this.mirrorEditor, op.newPath)
-        ) as TDescendant;
-        if (IsTab(sourceBlock) && translatedOp.path.length > 0) {
-          this.tabEditors[tabIndex - 1].apply({
-            type: 'remove_node',
-            path: translatedOp.path,
-            node: sourceNode,
-            FROM_ROOT: true,
-          });
-        }
-        if (IsTab(targetBlock)) {
-          this.tabEditors[tabIndex - 1].apply({
-            type: 'insert_node',
-            path: translatedOp.newPath,
-            node: sourceNode,
-            FROM_ROOT: true,
-          });
-        }
+        this.MoveTab(op);
       }
 
+      this.onChange();
       return true;
     }
     return false;
   }
 
-  private InsertTitle(op: TInsertNodeOperation<AnyElement>): void {
-    op.FROM_ROOT = true;
-    this.titleEditor.apply(op);
+  private InsertTitle(op: TInsertNodeOperation<TitleElement>): void {
+    this.TitleEditor.withoutNormalizing(() => {
+      this.TitleEditor.children = [op.node];
+    });
+
+    // Make sure we are in sync
+    this.children[0].id = op.node.id;
+    this.TitleEditor.onChange();
   }
 
   private InsertTab(op: TInsertNodeOperation<TabElement>): void {
-    const editor = this.createSubEditor(
+    const [editor, child] = this.CreateSubEditor(
       op.node.id,
       op.node.name,
       op.node.icon,
       op.node.isHidden
     );
 
-    const [childIndex, insertSubOp] = translateOpDown(op);
-    const tabIndex = childIndex - 1;
+    this.SubEditors.push(editor);
+    this.children.push(child);
 
-    this.tabEditors.splice(tabIndex, 0, editor);
-
-    // IMPORTANT: This next line must be here so that the new editor does not get normalized before finishing this operation
-    this.events.next({ type: 'new-tab-editor', editor });
-
-    insertSubOp.node.children.forEach((subChild, subChildIndex) => {
-      editor.apply({
-        ...insertSubOp,
-        path: [...insertSubOp.path, subChildIndex],
-        node: subChild,
-        FROM_ROOT: true,
-      });
+    editor.withoutNormalizing(() => {
+      editor.children = op.node.children;
     });
 
-    this.events.next({ type: 'new-tab' });
+    this.Notifier.next('new-tab');
   }
 
   private MoveTab(op: TMoveNodeOperation): void {
@@ -420,9 +374,9 @@ export class EditorController implements RootEditorController {
       return;
     }
 
-    [this.tabEditors[op.path[0] - 1], this.tabEditors[op.newPath[0] - 1]] = [
-      this.tabEditors[op.newPath[0] - 1],
-      this.tabEditors[op.path[0] - 1],
+    [this.SubEditors[op.path[0] - 1], this.SubEditors[op.newPath[0] - 1]] = [
+      this.SubEditors[op.newPath[0] - 1],
+      this.SubEditors[op.path[0] - 1],
     ];
 
     [this.children[op.path[0]], this.children[op.newPath[0]]] = [
@@ -431,101 +385,21 @@ export class EditorController implements RootEditorController {
     ];
   }
 
-  private getTargetEditor(path: Path): [TEditor | BaseEditor, boolean] {
-    if (path.length < 1) {
-      throw new Error('Could not get target editor from empty path');
-    }
-    const [rootChildIndex] = path;
-    if (rootChildIndex === 0) {
-      return [this.titleEditor, true];
-    }
-    const tabEditor = this.tabEditors[rootChildIndex - 1];
-    if (!tabEditor) {
-      throw new Error(
-        `Could not get tab editor for child index ${rootChildIndex}`
-      );
-    }
-    return [tabEditor, false];
-  }
-
-  private SetElementProps(op: TSetNodeOperation): void {
-    const [targetEditor, isTitleEditor] = this.getTargetEditor(op.path);
-    if (op.path.length > 0) {
-      const subOp = isTitleEditor ? op : translateOpDown(op)[1];
-      if (subOp.path.length > 0) {
-        this.withoutNormalizing(() => {
-          subOp.FROM_ROOT = true;
-          targetEditor.apply(subOp);
-        });
+  private SetTabProps(op: TSetNodeOperation): void {
+    const tabIndex = op.path[0];
+    for (const key in op.newProperties) {
+      if (key in this.children[tabIndex]) {
+        this.children[tabIndex][key] = (op.newProperties as any)[key];
       }
     }
-
-    if (!isTitleEditor) {
-      const tabIndex = op.path[0] - 1;
-      const tab = this.tabEditors[tabIndex];
-      if (tab) {
-        for (const [key, value] of Object.entries(op.newProperties)) {
-          switch (key) {
-            case 'name':
-              tab.tabName = value;
-              break;
-            case 'icon':
-            case 'isHidden':
-              tab[key as keyof typeof tab] = value;
-          }
-        }
-        this.events.next({ type: 'new-tab' });
-      }
-    }
+    this.Notifier.next('new-tab');
   }
 
   private RemoveTabOp(op: TRemoveNodeOperation<TabElement>): void {
     const index = op.path[0];
-    this.tabEditors.splice(index - 1, 1);
-    this.events.next({ type: 'remove-tab' });
-  }
-
-  private applyFromMirrorEditor(op: TOperation): void {
-    if (op.type === 'set_selection' || op.path.length === 0) {
-      return;
-    }
-
-    const [childIndex] = op.path;
-    if (childIndex > 0) {
-      if (op.type !== 'move_node') {
-        const targetNode = this.mirrorEditor.children[childIndex];
-        if (!isElement(targetNode) || targetNode.type !== ELEMENT_TAB) {
-          return;
-        }
-        const targetTabIndex = this.mirrorEditor.children
-          .filter(IsTab)
-          .indexOf(targetNode);
-        if (targetTabIndex < 0) {
-          throw new Error(
-            `Could not find tab index for tab at mirror position ${childIndex}`
-          );
-        }
-        return this.apply({
-          ...op,
-          path: [targetTabIndex + 1, ...op.path.slice(1)],
-        });
-      }
-      // op.type === 'move_node'
-      const [targetChildIndex] = op.newPath;
-      const targetNode = this.mirrorEditor.children[targetChildIndex];
-      if (isElement(targetNode) && targetNode.type === ELEMENT_TAB) {
-        const targetTabIndex = this.mirrorEditor.children
-          .filter(IsTab)
-          .indexOf(targetNode);
-        this.apply({
-          ...op,
-          newPath: [targetTabIndex + 1, ...op.newPath.slice(1)],
-        });
-      }
-    }
-    if (childIndex === 0) {
-      this.apply(op);
-    }
+    this.children.splice(index, 1);
+    this.SubEditors.splice(index - 1, 1);
+    this.Notifier.next('remove-tab');
   }
 
   /**
@@ -535,59 +409,142 @@ export class EditorController implements RootEditorController {
    * Concerns:
    * - Migrating old nodes into an `OldNodes` object.
    * - Inserting/Renaming/Deleting Tabs.
-   * - Applying operations from docsync to individual editors
+   * - Applying operatons from docsync to individual editors
    */
   // eslint-disable-next-line complexity
   public apply(op: TOperation): void {
-    try {
-      this.unguardedApply(op);
-    } catch (err) {
-      console.error('Error caught while applying operation', op);
-      console.error(err);
-      throw err;
+    if (!(process.env.NODE_ENV === 'test' && !process.env.DEBUG)) {
+      // eslint-disable-next-line no-console
+      console.debug(
+        `Editor Controller: %c${op.type}`,
+        'color: green',
+        stringify(op)
+      );
     }
-  }
 
-  private unguardedApply(op: TOperation): void {
-    if (op.FROM_ROOT) {
+    if (op.TO_REMOTE || op.IS_LOCAL || op.type === 'set_selection') {
       return;
     }
 
-    const isTopLevel = this.handleTopLevelOps(op);
-    if (!isTopLevel) {
-      const childIndex = childIndexForOp(op);
-      // Remote event to the title (no need to translate down)
-      if (childIndex === TITLE_EDITOR_INDEX) {
-        op.FROM_ROOT = true;
-        this.titleEditor.apply(op);
-      } else {
-        const [tabIndex, translatedOp] = translateOpDown(op);
-        translatedOp.FROM_ROOT = true;
-        const tabEditorIndex = tabIndex - 1;
-        const tabEditor = this.tabEditors[tabEditorIndex];
-        if (!tabEditor) {
-          console.error('editor controller apply', op);
-          console.error('tab editors count:', this.tabEditors.length);
-          console.error('children count:', this.children.length);
-          throw new Error(`Could not find editor at index ${tabEditorIndex}`);
-        }
-        tabEditor.apply(translatedOp);
-      }
+    const isTopLevel = this.HandleTopLevelOps(op);
+    if (isTopLevel) return;
+
+    // Remote event to the title (no need to translate down)
+    if (op.path[0] === 0) {
+      this.TitleEditor.apply(op);
+      return;
     }
 
-    op.FROM_ROOT = true;
-    if (!op.FROM_MIRROR) {
-      this.mirrorEditor.apply(op);
-    }
+    // Remote events that need to be applied to individual editors.
+    const [tab, subOp] = TranslateOpDown(op);
+
+    // -1 because now we have a title editor.
+    // So remote events say that [0, ...] is a modification to the title.
+    this.SubEditors[tab - 1].apply(subOp);
   }
 
+  public onChange(): void {
+    // do nothing
+  }
   // ====== End Slate Editor Stubs ======
+
+  /**
+   * Inital document here.
+   */
+  private EnsureInitialDoc(): void {
+    this.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: ELEMENT_TITLE,
+        id: nanoid(),
+        children: [{ text: INITIAL_TITLE }],
+      } satisfies TitleElement,
+    });
+
+    this.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: ELEMENT_TAB,
+        id: nanoid(),
+        name: INITIAL_TAB_NAME,
+        children: starterNotebook as any,
+        icon: INITIAL_TAB_ICON,
+        isHidden: false,
+      } satisfies TabElement,
+    });
+  }
+
+  /**
+   * Used for testing.
+   * Inserts a title and an empty tab.
+   */
+  private EnsureInitialTestDoc(): void {
+    this.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: ELEMENT_TITLE,
+        id: 'test_title',
+        children: [{ text: '' }],
+      } satisfies TitleElement,
+    });
+
+    this.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: ELEMENT_TAB,
+        id: 'test_tab',
+        name: 'test_tab_name',
+        icon: 'Receipt',
+        isHidden: false,
+        children: [],
+      } satisfies TabElement,
+    });
+  }
+
+  /**
+   * Used for testing.
+   * Inserts a title and an empty tab.
+   */
+  private EnsureEmptyDoc(): void {
+    this.apply({
+      type: 'insert_node',
+      path: [0],
+      node: {
+        type: ELEMENT_TITLE,
+        id: nanoid(),
+        children: [{ text: INITIAL_TITLE }],
+      } satisfies TitleElement,
+    });
+
+    this.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        type: ELEMENT_TAB,
+        id: nanoid(),
+        name: INITIAL_TAB_NAME,
+        children: [
+          {
+            type: ELEMENT_PARAGRAPH,
+            id: nanoid(),
+            children: [{ text: '' }],
+          },
+        ],
+        icon: INITIAL_TAB_ICON,
+        isHidden: false,
+      } satisfies TabElement,
+    });
+  }
 
   /**
    * Removes all the content from the first tab.
    */
-  public clearAllInFirstTab() {
-    const editor = this.tabEditors[0];
+  public ClearAll() {
+    const editor = this.SubEditors[0];
 
     // Children length changes as we remove nodes.
     const childLength = editor.children.length;
@@ -599,12 +556,11 @@ export class EditorController implements RootEditorController {
     });
   }
 
-  // Tabs
-  public insertTab(_tabId?: string, _skipParagraph = false): string {
+  public CreateTab(_tabId?: string, _skipParagraph?: true): string {
     const id = _tabId ?? nanoid();
     this.apply({
       type: 'insert_node',
-      path: [this.mirrorEditor.children.length],
+      path: [this.children.length],
       node: {
         type: ELEMENT_TAB,
         name: 'New tab',
@@ -623,7 +579,7 @@ export class EditorController implements RootEditorController {
     return id;
   }
 
-  public removeTab(tabId: string): void {
+  public RemoveTab(tabId: string): void {
     const index = this.children.findIndex((c) => c.id === tabId);
 
     if (index === -1) {
@@ -642,7 +598,7 @@ export class EditorController implements RootEditorController {
     } as unknown as TOperation);
   }
 
-  public renameTab(id: string, name: string): void {
+  public RenameTab(id: string, name: string): void {
     const index = this.children.findIndex((e) => e.id === id);
     if (index === -1) {
       throw new Error('Could not find this tab');
@@ -667,7 +623,7 @@ export class EditorController implements RootEditorController {
     this.apply(renameMethod);
   }
 
-  public changeTabIcon(id: string, icon: UserIconKey): void {
+  public ChangeTabIcon(id: string, icon: UserIconKey): void {
     const index = this.children.findIndex((e) => e.id === id);
     if (index === -1) {
       throw new Error('Could not find this tab');
@@ -692,7 +648,7 @@ export class EditorController implements RootEditorController {
     this.apply(changeIcon);
   }
 
-  public toggleShowHideTab(id: string): void {
+  public ToggleShowHideTab(id: string): void {
     const index = this.children.findIndex((e) => e.id === id);
     if (index === -1) {
       throw new Error('Could not find this tab');
@@ -721,7 +677,7 @@ export class EditorController implements RootEditorController {
    * Swaps the position of two tabs with the given IDs
    * @throws if the IDs are not found.
    */
-  public moveTabs(fromTabId: string, toTabId: string): void {
+  public MoveTabs(fromTabId: string, toTabId: string): void {
     const fromIndex = this.children.findIndex((e) => e.id === fromTabId);
     if (fromIndex === -1) {
       throw new Error('Tried to move a non-existing tab');
@@ -739,69 +695,152 @@ export class EditorController implements RootEditorController {
     });
 
     // Notify so that `useTabs` hook can update UI.
-    this.events.next({ type: 'new-tab' });
+    this.Notifier.next('new-tab');
   }
 
   /**
-   * Creates a sub editor (using plate), and returns the plate editor,
-   * and the tab element for the root children.
+   * To be used after docsync does all the initial `apply` calls.
+   *
+   * It will perform a migration is one is needed, or create an initial notebook
+   * if this notebook is indeed new.
+   *
+   * @param _skipInitialDoc used for testing
    */
-  private createSubEditor(
-    _tabId?: string,
-    _tabName?: string,
-    tabIcon?: UserIconKey,
-    tabIsHidden?: boolean
-  ): MyTabEditor {
-    const tabId = _tabId ?? nanoid();
-    const tabName = _tabName ?? INITIAL_TAB_NAME;
+  public Loaded(_initialDoc?: 'test' | 'none', isNewNotebook?: boolean): void {
+    this.InsertOperations.sort((a, b) => a.path[0] - b.path[0]);
+    const oldNodesLength = this.InsertOperations.filter((op) =>
+      IsOldOperation(op)
+    ).length;
 
-    const editor = createTPlateEditor({
-      id: tabId,
-      plugins: this.editorPlugins,
-      disableCorePlugins: { history: true },
-    });
+    if (oldNodesLength > 0) {
+      // If we find an old notebook structure.
+      // Lets snapshot just in case we break anything.
+      this.CreateSnapshot();
+    }
 
-    const { apply, withoutNormalizing } = editor;
+    if (
+      this.SubEditors.length === 0 &&
+      this.InsertOperations.length === 0 &&
+      isNewNotebook
+    ) {
+      // This means its a brand new notebook.
+      // - No sub editors created.
+      // - No invertions added
+      // - Initial state says its new notebook.
 
-    editor.withoutNormalizing = (callback) => {
-      this.mirrorEditor.withoutNormalizing(() => {
-        withoutNormalizing(callback);
+      this.IsNewNotebook = true;
+
+      if (_initialDoc == null) {
+        if (isFlagEnabled('POPULATED_NEW_NOTEBOOK')) {
+          this.EnsureInitialDoc();
+        } else {
+          this.EnsureEmptyDoc();
+        }
+      } else if (_initialDoc === 'test') {
+        this.EnsureInitialTestDoc();
+      }
+
+      this.IsLoaded = true;
+      return;
+    }
+
+    let goodTitleIndex = -1;
+
+    // All become `findLastIndex` isn't fully supported :(
+    for (
+      let i = this.InsertOperations.length - 1;
+      i >= 0 && goodTitleIndex === -1;
+      i--
+    ) {
+      if (IsTitle(this.InsertOperations[i].node)) {
+        goodTitleIndex = i;
+      }
+    }
+
+    // Extract the one good title (if any)
+    if (goodTitleIndex !== -1) {
+      this.InsertOperations.splice(goodTitleIndex, 1);
+    }
+
+    let oldNodes: Array<TDescendant> = [];
+
+    // Then good title is not present. We remove everything that isn't a tab.
+    for (let i = this.InsertOperations.length - 1; i >= 0; i--) {
+      const op = this.InsertOperations[i];
+      const { node, path } = op;
+
+      if (IsOldOperation(op)) {
+        oldNodes.push(op.node);
+      }
+
+      if (!IsTab(node)) {
+        this.apply({
+          TO_REMOTE: true,
+          type: 'remove_node',
+          path: [path[0]],
+          node,
+        });
+        this.onChange();
+      }
+    }
+
+    if (goodTitleIndex === -1) {
+      const oldTitleNode = oldNodes.find((node) => node.type === ELEMENT_H1) as
+        | H1Element
+        | undefined;
+
+      oldNodes = oldNodes.filter((node) => node.type !== ELEMENT_H1);
+
+      this.apply({
+        type: 'insert_node',
+        path: [0],
+        node: {
+          type: ELEMENT_TITLE,
+          id: nanoid(),
+          children: [
+            {
+              text: oldTitleNode
+                ? oldTitleNode.children[0].text
+                : INITIAL_TITLE,
+            },
+          ],
+        },
       });
-    };
+    }
 
-    editor.apply = (op) => {
-      if (op.FROM_ROOT) {
-        this.events.next({ type: 'any-change' });
-        apply(op);
-        return;
+    if (this.children.length <= 1) {
+      // We don't have any tabs, just a title.
+      this.CreateTab(undefined, true);
+    }
+
+    const editor = this.SubEditors[0];
+
+    editor.insertNodes(oldNodes.reverse(), { at: [editor.children.length] });
+
+    for (let i = 1; i < this.children.length; i++) {
+      const node = this.children[i];
+      if (node.children.length === 0) {
+        insertNodes(
+          this.SubEditors[i - 1],
+          {
+            type: ELEMENT_PARAGRAPH,
+            id: nanoid(),
+            children: [{ text: '' }],
+          } satisfies ParagraphElement,
+          { at: [0] }
+        );
+        continue;
       }
-      const tabIndex = this.tabEditors.findIndex((e) => e.id === tabId);
-      if (tabIndex === -1) {
-        throw new Error(`Could not find tab editor with id ${tabId}`);
-      }
+    }
 
-      const translatedOp = translateOpUp(tabIndex + 1, op);
-
-      translatedOp.IS_LOCAL = true;
-      this.apply(translatedOp);
-    };
-
-    this.elementObserver.OverrideApply(editor);
-
-    editor.tabName = tabName;
-    editor.icon = tabIcon;
-    editor.isHidden = tabIsHidden;
-
-    return editor as MyTabEditor;
+    this.IsLoaded = true;
   }
 
-  // destroy
-  public destroy() {
-    // do nothing
+  public Undo(): void {
+    this.Notifier.next('undo');
   }
 
-  // for tests only
-  public forceNormalize() {
-    normalizeEditor(this.mirrorEditor, { force: true });
+  public Redo(): void {
+    this.Notifier.next('redo');
   }
 }

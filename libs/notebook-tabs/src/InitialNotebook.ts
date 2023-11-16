@@ -1,11 +1,10 @@
-import { getExprRef } from '@decipad/remote-computer';
-import { MyValue } from '@decipad/editor-types';
+import { getExprRef } from '@decipad/computer';
 import { nanoid } from 'nanoid';
 
 export const title = 'Welcome to Decipad!';
 const profitId = nanoid();
 
-export const starterNotebook: MyValue = [
+const starterNotebook = [
   {
     children: [
       {
@@ -188,7 +187,6 @@ export const starterNotebook: MyValue = [
                 text: '',
               },
             ],
-            columnId: null,
             id: 'G7pyH_Ho4UQ8j61zIDYSO',
             type: 'smart-ref',
             blockId: 'omIaWA334TMJEBQO40n_L',
@@ -203,7 +201,6 @@ export const starterNotebook: MyValue = [
                 text: '',
               },
             ],
-            columnId: null,
             id: 'aaAduP-sMsymkr1GDlvmQ',
             type: 'smart-ref',
             blockId: '9hrcT2k50CLhjHskb216q',
@@ -242,7 +239,6 @@ export const starterNotebook: MyValue = [
                 text: '',
               },
             ],
-            columnId: null,
             id: '1CuNVZx3jh2vzb8SnG4WJ',
             type: 'smart-ref',
             blockId: 'jfVtZs_dNc0jRwmCWOREk',
@@ -257,7 +253,6 @@ export const starterNotebook: MyValue = [
                 text: '',
               },
             ],
-            columnId: null,
             id: 'H53_gu3c6KqkAdBzzTiMK',
             type: 'smart-ref',
             blockId: 'nHLoeAb9CPIPk88Q0j5ej',
@@ -300,3 +295,5 @@ export const starterNotebook: MyValue = [
     id: 'ghac3cy59iREYPgfyPgLM',
   },
 ];
+
+export default starterNotebook;

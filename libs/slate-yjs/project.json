@@ -17,13 +17,6 @@
         "command": "yarn tsc -b libs/slate-yjs"
       }
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/slate-yjs"],
-      "options": {
-        "jestConfig": "libs/slate-yjs/jest.config.js"
-      }
-    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {

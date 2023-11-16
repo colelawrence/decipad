@@ -4,14 +4,13 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_STRUCTURED_VARNAME,
+  createTPlateEditor,
+  ELEMENT_H1,
   CodeLineV2ElementCode,
   ELEMENT_SMART_REF,
-  ELEMENT_TITLE,
-  ELEMENT_TAB,
 } from '@decipad/editor-types';
 import { getOnly } from '@decipad/utils';
 import { parseStructuredCodeLine } from './CodeLineV2';
-import { createTestEditorController } from '../testEditorController';
 
 const createTestCodeLine = (
   code: string | CodeLineV2ElementCode['children']
@@ -34,11 +33,11 @@ const createTestCodeLine = (
   };
 
   const computer = new Computer();
-  const editor = createTestEditorController('id');
+  const editor = createTPlateEditor();
 
   editor.children = [
-    { id: 'title', type: ELEMENT_TITLE, children: [{ text: '' }] },
-    { id: 'tab1', type: ELEMENT_TAB, name: 'First tab', children: [codeLine] },
+    { id: 'h1', type: ELEMENT_H1, children: [{ text: '' }] },
+    codeLine,
   ];
 
   return { editor, computer, codeLine };

@@ -1,21 +1,16 @@
 import { applyYjsEvents, translateYjsEvent } from './applyToSlate';
 import applySlateOps from './applyToYjs';
 import { SyncElement, SyncNode, SharedType } from './model';
-import {
-  type TCursorEditor,
-  withCursor,
-  withYjs,
-  type TYjsEditor,
-} from './plugin';
+import { CursorEditor, withCursor, withYjs, YjsEditor } from './plugin';
 import { toSharedType, toSlateDoc, toSyncElement } from './utils';
 
 export {
-  TCursorEditor,
+  CursorEditor,
   SyncElement,
   SyncNode,
   withCursor,
   withYjs,
-  TYjsEditor,
+  YjsEditor,
   toSharedType,
   toSlateDoc,
   toSyncElement,

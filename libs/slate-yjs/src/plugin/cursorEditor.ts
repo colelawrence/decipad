@@ -1,32 +1,31 @@
 /* eslint-disable no-param-reassign */
 import invariant from 'tiny-invariant';
-import { type Awareness } from 'y-protocols/awareness';
+import { Awareness } from 'y-protocols/awareness';
 import debounce from 'lodash.debounce';
-import { type Session } from 'next-auth';
+import { Session } from 'next-auth';
+import { YjsEditor } from './yjsEditor';
 import { jsonify } from '../utils/jsonify';
-import { MinimalRootEditor } from '@decipad/editor-types';
-import type {
-  TYjsEditor as GTYjsEditor,
-  TCursorEditor as GTCursorEditor,
-} from './types';
+import { noop } from '@decipad/utils';
 
-type TYjsEditor = GTYjsEditor<MinimalRootEditor>;
-type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
+export interface CursorEditor extends YjsEditor {
+  awareness: Awareness;
+  destroy: () => void;
+}
 
-const AWARENESS: WeakMap<TCursorEditor, Awareness> = new WeakMap();
+const AWARENESS: WeakMap<CursorEditor, Awareness> = new WeakMap();
 
 const cursorChangeDebounceMs = 2_000;
 
 export const CursorEditor = {
-  awareness(editor: TCursorEditor): Awareness {
+  awareness(editor: CursorEditor): Awareness {
     const awareness = AWARENESS.get(editor);
     invariant(awareness, 'CursorEditor without attached awareness');
     return awareness;
   },
 
-  updateCursor: (editor: TCursorEditor, session: Session | undefined): void => {
+  updateCursor: (editor: CursorEditor, session: Session | undefined): void => {
     try {
-      const { selection } = editor;
+      const selection = editor.editorController.GetSelection();
 
       const { anchor } = selection ?? {};
       const { focus } = selection ?? {};
@@ -52,38 +51,39 @@ export const CursorEditor = {
 };
 
 export function withCursor(
-  editor: TYjsEditor,
+  editor: YjsEditor,
   awareness: Awareness,
   getSession: () => Session | undefined
-): TCursorEditor {
-  const { onChange, destroy } = editor;
+): CursorEditor {
+  const cursorEditor: CursorEditor = {
+    ...editor,
+    awareness,
+    destroy: noop,
+  };
+
+  AWARENESS.set(cursorEditor, awareness);
+
+  const { onChange } = editor.editorController;
+  const { destroy } = editor;
 
   const debouncedOnChange = debounce(() => {
     try {
-      CursorEditor.updateCursor(
-        editor as unknown as TCursorEditor,
-        getSession()
-      );
+      CursorEditor.updateCursor(cursorEditor, getSession());
     } catch (err) {
       // do nothing, not important
     }
   }, cursorChangeDebounceMs);
 
-  editor.onChange = () => {
+  editor.editorController.onChange = () => {
     debouncedOnChange();
 
-    onChange.bind(editor)();
+    onChange.bind(editor.editorController)();
   };
 
   editor.destroy = () => {
-    editor.onChange = onChange.bind(editor);
-    destroy.call(editor);
+    editor.editorController.onChange = onChange.bind(editor.editorController);
+    destroy.call(cursorEditor);
   };
-
-  const cursorEditor = editor as unknown as TCursorEditor;
-
-  cursorEditor.awareness = awareness;
-  AWARENESS.set(cursorEditor, awareness);
 
   return cursorEditor;
 }

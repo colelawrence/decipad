@@ -1,7 +1,6 @@
 export * from './PromiseOrType';
 export * from './any-mapping-to-map';
 export * from './assert-defined';
-export * from './assertEqual';
 export * from './backendUrl';
 export * from './bigint';
 export * from './byDesc';

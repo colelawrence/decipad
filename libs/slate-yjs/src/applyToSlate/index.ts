@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TOperation } from '@udecode/plate';
 import * as Y from 'yjs';
+import { YjsEditor } from '@decipad/slate-yjs';
 import { captureException } from '@sentry/browser';
-import { MinimalRootEditor } from '@decipad/editor-types';
 import translateArrayEvent from './arrayEvent';
 import translateMapEvent from './mapEvent';
 import translateTextEvent from './textEvent';
@@ -13,7 +13,7 @@ import translateTextEvent from './textEvent';
  * @param event
  */
 export function translateYjsEvent(
-  editor: MinimalRootEditor,
+  editor: YjsEditor,
   event: Y.YEvent<any>
 ): TOperation[] {
   if (event instanceof Y.YArrayEvent) {
@@ -35,19 +35,17 @@ export function translateYjsEvent(
  * Applies multiple yjs events to a slate editor.
  */
 export function applyYjsEvents(
-  editor: MinimalRootEditor,
+  editor: YjsEditor,
   events: Y.YEvent<any>[]
 ): void {
-  editor.withoutNormalizing(() => {
-    events.forEach((event) => {
-      try {
-        // change here probs
-        translateYjsEvent(editor, event).forEach(editor.apply.bind(editor));
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('Error applying yjs event', event, err);
-        captureException(err);
-      }
-    });
+  events.forEach((event) => {
+    try {
+      // change here probs
+      translateYjsEvent(editor, event).forEach(editor.editorController.apply);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error applying yjs event', event, err);
+      captureException(err);
+    }
   });
 }

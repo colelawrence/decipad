@@ -1,10 +1,10 @@
 import { AssistantChat } from '@decipad/ui';
 import { useAssistantChat } from './hooks';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import { EditorController } from '@decipad/notebook-tabs';
 
 type EditorAssistantChatProps = {
   notebookId: string;
-  controller: MinimalRootEditor;
+  controller: EditorController;
 };
 
 export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({

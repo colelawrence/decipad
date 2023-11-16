@@ -1,6 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
+import { noop } from '@decipad/utils';
 import {
   isHistoryEditor,
   TOperation,
@@ -8,24 +9,26 @@ import {
 } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
-import { MinimalRootEditor } from '@decipad/editor-types';
-import type { TYjsEditor } from './types';
 import { applyYjsEvents } from '../applyToSlate';
 import applySlateOps from '../applyToYjs';
 import { SharedType, slateYjsSymbol } from '../model';
+import type { EditorController } from '@decipad/notebook-tabs';
 
-const IS_REMOTE: WeakSet<MinimalRootEditor> = new WeakSet();
-const LOCAL_OPERATIONS: WeakMap<
-  MinimalRootEditor,
-  Set<TOperation>
-> = new WeakMap();
-const SHARED_TYPES: WeakMap<MinimalRootEditor, SharedType> = new WeakMap();
+export interface YjsEditor {
+  editorController: EditorController;
+  sharedType: SharedType;
+  destroy: () => void;
+}
+
+const IS_REMOTE: WeakSet<YjsEditor> = new WeakSet();
+const LOCAL_OPERATIONS: WeakMap<YjsEditor, Set<TOperation>> = new WeakMap();
+const SHARED_TYPES: WeakMap<YjsEditor, SharedType> = new WeakMap();
 
 export const YjsEditor = {
   /**
    * Returns whether the editor currently is applying remote changes.
    */
-  sharedType: (editor: MinimalRootEditor): SharedType => {
+  sharedType: (editor: YjsEditor): SharedType => {
     const sharedType = SHARED_TYPES.get(editor);
     invariant(sharedType, 'YjsEditor without attached shared type');
     return sharedType;
@@ -34,14 +37,14 @@ export const YjsEditor = {
   /**
    * Returns whether the editor currently is applying remote changes.
    */
-  isRemote: (editor: MinimalRootEditor): boolean => {
+  isRemote: (editor: YjsEditor): boolean => {
     return IS_REMOTE.has(editor);
   },
 
   /**
    * Performs an action as a remote operation.
    */
-  asRemote: (editor: MinimalRootEditor, fn: () => void): void => {
+  asRemote: (editor: YjsEditor, fn: () => void): void => {
     const wasRemote = YjsEditor.isRemote(editor);
     IS_REMOTE.add(editor);
 
@@ -51,7 +54,7 @@ export const YjsEditor = {
       IS_REMOTE.delete(editor);
     }
   },
-  asLocal: <T>(editor: MinimalRootEditor, fn: () => T): T => {
+  asLocal: <T>(editor: YjsEditor, fn: () => T): T => {
     const wasRemote = YjsEditor.isRemote(editor);
     if (wasRemote) {
       IS_REMOTE.delete(editor);
@@ -67,16 +70,13 @@ export const YjsEditor = {
   },
 };
 
-function localOperations(editor: MinimalRootEditor): Set<TOperation> {
+function localOperations(editor: YjsEditor): Set<TOperation> {
   const operations = LOCAL_OPERATIONS.get(editor);
   invariant(operations, 'YjsEditor without attached local operations');
   return operations;
 }
 
-function trackLocalOperations(
-  editor: MinimalRootEditor,
-  operation: TOperation
-): void {
+function trackLocalOperations(editor: YjsEditor, operation: TOperation): void {
   if (!YjsEditor.isRemote(editor)) {
     localOperations(editor).add(operation);
   }
@@ -85,7 +85,7 @@ function trackLocalOperations(
 /**
  * Applies a slate operations to the bound shared type.
  */
-function applyLocalOperations(editor: MinimalRootEditor): void {
+function applyLocalOperations(editor: YjsEditor): void {
   const ops = localOperations(editor);
   const editorLocalOperations = Array.from(ops).flat();
 
@@ -105,7 +105,7 @@ function applyLocalOperations(editor: MinimalRootEditor): void {
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const yjsApply = (editor: MinimalRootEditor, events: Y.YEvent<any>[]) =>
+const yjsApply = (editor: YjsEditor, events: Y.YEvent<any>[]) =>
   YjsEditor.asRemote(editor, () => {
     try {
       applyYjsEvents(
@@ -120,60 +120,60 @@ const yjsApply = (editor: MinimalRootEditor, events: Y.YEvent<any>[]) =>
   });
 
 function applyRemoteYjsEvents(
-  editor: MinimalRootEditor,
+  _editor: YjsEditor,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   events: Y.YEvent<any>[]
 ): void {
   try {
-    editor.withoutNormalizing(() => {
-      if (isHistoryEditor(editor)) {
-        withoutSavingHistory(editor, () => {
-          yjsApply(editor, events);
-        });
-      } else {
-        yjsApply(editor, events);
-      }
-    });
+    if (isHistoryEditor(_editor)) {
+      withoutSavingHistory(_editor, () => {
+        yjsApply(_editor, events);
+      });
+    } else {
+      yjsApply(_editor, events);
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Error applying remote events', err, events);
   }
 }
 
-export function withYjs<TEditor extends MinimalRootEditor>(
-  editor: TEditor,
+export function withYjs(
+  editorController: EditorController,
   sharedType: SharedType
-): TYjsEditor<TEditor> {
-  SHARED_TYPES.set(editor, sharedType);
-  LOCAL_OPERATIONS.set(editor, new Set());
+): YjsEditor {
+  const yjs: YjsEditor = {
+    editorController,
+    sharedType,
+    destroy: noop,
+  };
+
+  SHARED_TYPES.set(yjs, sharedType);
+  LOCAL_OPERATIONS.set(yjs, new Set());
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const observer = (events: Y.YEvent<any>[]) =>
-    applyRemoteYjsEvents(editor, events);
+    applyRemoteYjsEvents(yjs, events);
   sharedType.observeDeep(observer);
 
-  const { apply: _apply, onChange: _onChange } = editor;
-  const apply = _apply.bind(editor);
-  const onChange = _onChange.bind(editor);
+  const { apply, onChange } = editorController;
 
-  editor.apply = (op) => {
-    trackLocalOperations(editor, op);
-    apply(op);
+  editorController.apply = (op) => {
+    trackLocalOperations(yjs, op);
+    apply.bind(editorController)(op);
   };
 
-  editor.onChange = () => {
-    applyLocalOperations(editor);
-    onChange();
+  editorController.onChange = () => {
+    applyLocalOperations(yjs);
+    onChange.bind(editorController)();
   };
 
-  editor.destroy = () => {
-    editor.apply = _apply;
-    editor.onChange = _onChange;
+  yjs.destroy = () => {
+    editorController.apply = apply;
+    editorController.onChange = onChange;
 
     sharedType.unobserveDeep(observer);
   };
 
-  (editor as TYjsEditor<TEditor>).sharedType = sharedType;
-
-  return editor as TYjsEditor<TEditor>;
+  return yjs;
 }

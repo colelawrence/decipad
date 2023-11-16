@@ -1,35 +1,12 @@
+import { TopLevelValue } from '@decipad/editor-types';
 import {
-  MinimalRootEditorWithEventsAndTabs,
-  TabElement,
-  TopLevelValue,
-} from '@decipad/editor-types';
-import { ControllerProvider } from '@decipad/react-contexts';
+  ControllerProvider,
+  useTabs as _useTabs,
+} from '@decipad/notebook-tabs';
 import { notebooks } from '@decipad/routing';
 import { insertNodes } from '@udecode/plate';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext } from 'react';
 import { useRouteParams } from 'typesafe-routes/react-router';
-
-// eslint-disable-next-line no-underscore-dangle
-function _useTabs(
-  controller: MinimalRootEditorWithEventsAndTabs | undefined
-): Array<TabElement> {
-  const [, setRender] = useState(0);
-
-  useEffect(() => {
-    if (!controller) return;
-    const sub = controller.events.subscribe((v) => {
-      if (v.type !== 'new-tab' && v.type !== 'remove-tab') return;
-      setRender((r) => r + 1);
-    });
-
-    return () => {
-      sub.unsubscribe();
-    };
-  }, [controller]);
-
-  return (controller?.children.slice(1) as Array<TabElement>) ?? [];
-}
-
 /**
  * Wrapper for `useTabs` in `notebook-tabs`, so you don't need to
  * provide a controller.
@@ -92,7 +69,7 @@ export const useMoveToTab = (): MoveTabCallback => {
 
       if (!controller) return;
 
-      const editor = controller.getTabEditorAt(tabIndex);
+      const editor = controller.SubEditors[tabIndex];
       insertNodes(editor, node, { at: [editor.children.length - 1] });
     },
     [controller, tabs]

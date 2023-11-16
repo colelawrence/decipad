@@ -3,7 +3,7 @@ import {
   ELEMENT_VARIABLE_DEF,
   useTEditorRef,
 } from '@decipad/editor-types';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import type { Path } from 'slate';
 import { useElements } from '@decipad/editor-components';
@@ -16,7 +16,7 @@ export const useTableHeaderCellDropdownNames = (
 
   const dropdownElements = useElements(
     ELEMENT_VARIABLE_DEF,
-    useCallback((el) => el.variant === 'dropdown', [])
+    (el) => el.variant === 'dropdown'
   );
 
   const dropdownNames = useMemo(

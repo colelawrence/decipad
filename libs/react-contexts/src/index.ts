@@ -21,4 +21,3 @@ export * from './file-upload-store';
 export * from './results';
 export * from './theme';
 export * from './notebook-meta-actions';
-export * from './editor-controller';

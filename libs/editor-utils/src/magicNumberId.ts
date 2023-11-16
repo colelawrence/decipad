@@ -1,8 +1,8 @@
-import { AnyElement } from '@decipad/editor-types';
+import { MyElement } from '@decipad/editor-types';
 
 /** Get the (unstable) ID for a magic number. */
 export const magicNumberId = (
-  element: AnyElement,
+  element: MyElement,
   childIndex: number
 ): string => {
   return `${element.id}-${childIndex}`;

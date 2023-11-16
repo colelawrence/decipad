@@ -3,7 +3,6 @@ import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_SMART_REF,
-  MinimalRootEditor,
   MyEditor,
 } from '@decipad/editor-types';
 import {
@@ -49,7 +48,7 @@ const tryParseAsNumber = weakMapMemoizeInteractiveElementOutput(
 );
 
 export const parseStructuredCodeLine = async (
-  editor: MinimalRootEditor | MyEditor,
+  editor: MyEditor,
   computer: RemoteComputer,
   block: CodeLineV2Element
 ): Promise<{

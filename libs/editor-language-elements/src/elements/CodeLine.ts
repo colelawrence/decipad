@@ -1,9 +1,4 @@
-import {
-  AnyElement,
-  ELEMENT_CODE_LINE,
-  MinimalRootEditor,
-  MyEditor,
-} from '@decipad/editor-types';
+import { ELEMENT_CODE_LINE, MyEditor, MyElement } from '@decipad/editor-types';
 import { RemoteComputer } from '@decipad/remote-computer';
 import { getCodeLineSource } from '@decipad/editor-utils';
 import { InteractiveLanguageElement } from '../types';
@@ -11,9 +6,9 @@ import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';
 
 export const getUnparsedBlockFromCodeLine = (
-  _editor: MinimalRootEditor | MyEditor,
+  _editor: MyEditor,
   _computer: RemoteComputer,
-  block: AnyElement
+  block: MyElement
 ) => {
   if (block.type === ELEMENT_CODE_LINE) {
     return parseElementAsSourceCode(block.id, getCodeLineSource(block));

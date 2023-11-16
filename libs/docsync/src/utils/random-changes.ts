@@ -1,11 +1,6 @@
 import { nanoid } from 'nanoid';
-import {
-  MinimalRootEditor,
-  MyElement,
-  MyNode,
-  MyText,
-} from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate';
+import { MyEditor, MyElement, MyNode, MyText } from '@decipad/editor-types';
+import { TOperation, withoutNormalizing } from '@udecode/plate';
 import { timeout } from '@decipad/utils';
 import { randomChar } from './random-char';
 
@@ -32,7 +27,7 @@ function initialInsert(): TOperation<MyElement>[] {
 }
 
 export async function randomChangesToEditors(
-  editors: MinimalRootEditor[],
+  editors: MyEditor[],
   changeCount: number
 ) {
   await Promise.all(
@@ -40,16 +35,13 @@ export async function randomChangesToEditors(
   );
 }
 
-async function randomChangesToEditor(
-  editor: MinimalRootEditor,
-  changeCount: number
-) {
+async function randomChangesToEditor(editor: MyEditor, changeCount: number) {
   for (let i = 0; i < changeCount; i += 1) {
     // simulation
     // eslint-disable-next-line no-await-in-loop
     await randomSmallTimeout();
     const ops = randomChangeToEditor(editor);
-    editor.withoutNormalizing(() => {
+    withoutNormalizing(editor, () => {
       for (const op of ops) {
         editor.apply(op);
       }
@@ -57,7 +49,7 @@ async function randomChangesToEditor(
   }
 }
 
-function randomChangeToEditor(editor: MinimalRootEditor): TOperation[] {
+function randomChangeToEditor(editor: MyEditor): TOperation[] {
   const candidates = editor.children;
   if (candidates.length === 0) {
     return initialInsert();

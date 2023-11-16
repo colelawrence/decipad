@@ -58,9 +58,9 @@ export interface TabsProps {
 
 export const NotebookTabs: FC<TabsProps> = ({
   tabs,
-  isEmbed,
   activeTabId,
   isReadOnly,
+  isEmbed,
   onClick,
   onCreateTab,
   onRenameTab,
@@ -286,9 +286,9 @@ export const NotebookTabs: FC<TabsProps> = ({
 
   return (
     <TabsWrapper
-      isEmbed={isEmbed}
       hasScroll={hasScroll}
-      isFirstTab={filteredTabs[0]?.id === activeTabId}
+      isEmbed={isEmbed}
+      isFirstTab={filteredTabs[0].id === activeTabId}
     >
       <TabsScrollWrapper ref={containerRef}>
         <TabsContainer>

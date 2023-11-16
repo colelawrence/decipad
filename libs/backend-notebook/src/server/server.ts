@@ -28,10 +28,10 @@ export const server = async (
     }
     const editor = await getEditor({ notebookId, computer });
     const [, detach] = await attachEditorToBackend(editor);
-    let subEditor = editor.getTabEditorAt(0);
+    let subEditor = editor.SubEditors[0];
     if (!subEditor) {
-      editor.insertTab();
-      subEditor = editor.getTabEditorAt(0);
+      editor.CreateTab();
+      [subEditor] = editor.SubEditors;
     }
     result = await action.handler(subEditor, params);
     await detach();

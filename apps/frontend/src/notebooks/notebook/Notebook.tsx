@@ -14,7 +14,6 @@ import {
 } from '@decipad/graphql-client';
 import {
   ComputerContextProvider,
-  ControllerProvider,
   EditorChangeContextProvider,
   useCurrentWorkspaceStore,
   useNotebookMetaData,
@@ -50,9 +49,13 @@ import { noop } from '@decipad/utils';
 import { useEditorUndoState } from './hooks';
 import { useNotebookAccessActions, useNotebookMetaActions } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
+import {
+  ControllerProvider,
+  EditorController,
+  useActiveEditor,
+  useTabs,
+} from '@decipad/notebook-tabs';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { useActiveEditor, useTabs } from '@decipad/editor-hooks';
-import { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
 
 export const loadEditor = () => {
   return import(/* webpackChunkName: "notebook-editor" */ './Editor');
@@ -103,7 +106,7 @@ export const NewNotebook: FC = () => {
 
   return (
     <DocsyncEditorProvider.Provider value={docsync}>
-      <ControllerProvider.Provider value={docsync}>
+      <ControllerProvider.Provider value={docsync?.editorController}>
         <ComputerContextProvider computer={computer}>
           <NotebookPage
             notebook={
@@ -123,8 +126,11 @@ export const NewNotebook: FC = () => {
             }
             sidebar={<NewSidebar docsync={docsync} />}
             tabs={
-              !isEmbed && docsync && isFlagEnabled('TABS') ? (
-                <NewTabs notebookId={notebookId} controller={docsync} />
+              docsync?.editorController && isFlagEnabled('TABS') ? (
+                <NewTabs
+                  notebookId={notebookId}
+                  controller={docsync.editorController}
+                />
               ) : null
             }
             assistant={
@@ -144,9 +150,9 @@ export const NewNotebook: FC = () => {
 
 const NewTabs: FC<{
   notebookId: string;
-  controller: MinimalRootEditorWithEventsAndTabs;
+  controller: EditorController;
 }> = ({ notebookId, controller }) => {
-  const tabs = useTabs();
+  const tabs = useTabs(controller);
   const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
   const docsync = useContext(DocsyncEditorProvider);
 
@@ -179,18 +185,18 @@ const NewTabs: FC<{
         nav(notebooks({}).notebook({ notebook, tab: id, embed }).$);
       }}
       onCreateTab={() => {
-        const id = controller.insertTab();
-        nav(`${notebooks({}).notebook({ notebook, embed }).$}/${id}`);
+        const id = controller.CreateTab();
+        nav(notebooks({}).notebook({ notebook, tab: id, embed }).$);
         return id;
       }}
-      onRenameTab={controller.renameTab.bind(controller)}
+      onRenameTab={controller.RenameTab.bind(controller)}
       onDeleteTab={(id) => {
         // No deleting the last tab
         if (tabs.length <= 1) return;
 
         const tabIndex = tabs.findIndex((t) => t.id === id);
 
-        controller.removeTab(id);
+        controller.RemoveTab(id);
         if (id !== tab) return;
 
         // We are deleting the currently active tab.
@@ -225,11 +231,11 @@ const NewTabs: FC<{
           const swapTab = tabs[tabIndex + i * direction];
 
           if (!swapTab) return;
-          controller.moveTabs(id, swapTab.id);
+          controller.MoveTabs(id, swapTab.id);
         }
       }}
-      onChangeIcon={controller.changeTabIcon.bind(controller)}
-      onToggleShowHide={controller.toggleShowHideTab.bind(controller)}
+      onChangeIcon={controller.ChangeTabIcon.bind(controller)}
+      onToggleShowHide={controller.ToggleShowHideTab.bind(controller)}
     />
   );
 };
@@ -440,7 +446,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const [hasUnpublishedChanges, setHasUnpublishedChanges] = useState(false);
 
   useEffect(() => {
-    const debouncedSub = docsync?.events.pipe(
+    const debouncedSub = docsync?.editorController.Notifier.pipe(
       debounce(() => interval(DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS))
     );
 
@@ -453,7 +459,12 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     return () => {
       sub?.unsubscribe();
     };
-  }, [docsync, docsync?.events, isPublic, snapshotVersion]);
+  }, [docsync, docsync?.editorController.Notifier, isPublic, snapshotVersion]);
+
+  const [isNewNotebook, setIsNewNotebook] = useState(false);
+  useEffect(() => {
+    setIsNewNotebook(Boolean(docsync?.editorController.IsNewNotebook));
+  }, [docsync?.editorController.IsNewNotebook]);
 
   const revertChanges = useCallback(() => {
     while (docsync?.undoManager?.canUndo()) {
@@ -474,13 +485,13 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       userWorkspaces={allWorkspaces}
       notebookMetaActions={actions}
       notebookAccessActions={accessActions}
-      isNewNotebook={false}
+      isNewNotebook={isNewNotebook}
       canUndo={canUndo}
       canRedo={canRedo}
       isEmbed={isEmbed}
       onRedo={() => docsync?.undoManager?.redo() || noop}
       onUndo={() => docsync?.undoManager?.undo() || noop}
-      onClearAll={() => docsync?.clearAll()}
+      onClearAll={() => docsync?.editorController.ClearAll()}
       sidebarOpen={sidebarData.sidebarOpen}
       toggleSidebar={sidebarData.toggleSidebar}
       aiMode={aiModeData.aiMode}
@@ -497,7 +508,7 @@ const NewSidebar: FC<{ docsync: DocSyncEditor | undefined }> = ({
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
-  const editor = useActiveEditor(docsync);
+  const editor = useActiveEditor(docsync?.editorController);
 
   if (isSidebarOpen && !isEmbed && editor) {
     return <EditorSidebar editor={editor} />;
@@ -518,8 +529,13 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
-  if (isAssistantOpen && !isEmbed && docsync) {
-    return <AssistantChat notebookId={notebookId} controller={docsync} />;
+  if (isAssistantOpen && !isEmbed && docsync?.editorController) {
+    return (
+      <AssistantChat
+        notebookId={notebookId}
+        controller={docsync.editorController}
+      />
+    );
   }
 
   return null;

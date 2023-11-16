@@ -1,4 +1,4 @@
-import {
+import type {
   EDescendant,
   EElement,
   EElementEntry,
@@ -12,18 +12,13 @@ import {
   TOperation,
   TReactEditor,
   Value,
-  TEditor,
-  TNode,
 } from '@udecode/plate';
 import type { RefObject } from 'react';
 import type { UndoManager } from 'yjs';
 import type { Observable, Subject } from 'rxjs';
-import { BaseEditor, Path } from 'slate';
 import type { EventInterceptor } from './event-interception';
 import type { MyValue } from './value';
-import type { ElementKind, NotebookValue, UserIconKey } from '.';
-import { ElementObserver } from './element-observer';
-import { ReactEditor } from 'slate-react';
+import type { ElementKind, NotebookValue } from '.';
 
 /**
  * Node
@@ -49,11 +44,11 @@ export interface EditorObserverMessage<T extends MyElement = MyElement> {
 export interface ObserverElements {
   elementObserverPool?: Map<
     ElementKind,
-    { observer: Observable<EditorObserverMessage>; subscribers: number }
+    { observer: Observable<EditorObserverMessage>; subsribers: number }
   >;
   specificElementObserverPool?: Map<
     string,
-    { observer: Observable<EditorObserverMessage>; subscribers: number }
+    { observer: Observable<EditorObserverMessage>; subsribers: number }
   >;
   changeObserver$?: Subject<EditorObserverMessage>;
 }
@@ -65,97 +60,10 @@ export type MyGenericEditor<TV extends Value> = PlateEditor<TV> & {
 } & UndoEditor;
 
 export type MyEditor = MyGenericEditor<MyValue>;
-export type MyTabEditor = MyEditor & {
-  tabName: string;
-  icon?: UserIconKey;
-  isHidden?: boolean;
-};
 export type MyReactEditor = TReactEditor<MyValue>;
 
 export type RootEditor = MyGenericEditor<NotebookValue>;
 
-export type MinimalRootEditor = Pick<
-  TEditor<NotebookValue>,
-  | 'selection'
-  | 'children'
-  | 'onChange'
-  | 'apply'
-  | 'id'
-  | 'destroy'
-  | 'withoutNormalizing'
-> & {
-  getNode: (path: Path) => TNode | null;
-};
-
-interface WithElementObserver {
-  elementObserver: ElementObserver;
-}
-
-interface WithTitleEditor {
-  getTitleEditor: () => BaseEditor & ReactEditor;
-}
-interface WithTabs {
-  insertTab: (tabId?: string, skipParagraph?: boolean) => string;
-  renameTab: (tabId: string, name: string) => void;
-  removeTab: (tabId: string) => void;
-  moveTabs: (fromId: string, toId: string) => void;
-  changeTabIcon: (fromId: string, icon: UserIconKey) => void;
-  toggleShowHideTab: (tabId: string) => void;
-  getTabEditor: (tabId?: string) => MyEditor;
-  getTabEditorIndex: (tabId?: string) => number;
-  getTabEditorAt: (tabIndex: number) => MyEditor;
-}
-
-export interface ObservableRootEditorNewTabEvent {
-  type: 'new-tab';
-}
-export interface ObservableRootEditorAnyChangeEvent {
-  type: 'any-change';
-}
-export interface ObservableRootEditorRemoveTabEvent {
-  type: 'remove-tab';
-}
-export interface ObservableRootEditorUndoEvent {
-  type: 'undo';
-}
-export interface ObservableRootEditorRedoEvent {
-  type: 'redo';
-}
-export interface ObservableRootEditorNewTabEditorEvent {
-  type: 'new-tab-editor';
-  editor: TEditor;
-}
-
-export type ObservableRootEditorEvent =
-  | ObservableRootEditorNewTabEvent
-  | ObservableRootEditorAnyChangeEvent
-  | ObservableRootEditorRemoveTabEvent
-  | ObservableRootEditorUndoEvent
-  | ObservableRootEditorRedoEvent
-  | ObservableRootEditorNewTabEditorEvent;
-
-interface WithEvents {
-  events: Subject<ObservableRootEditorEvent>;
-}
-
-export interface WithUndo {
-  undo: () => void;
-  redo: () => void;
-  clearAll: () => void;
-}
-
-export type MinimalRootEditorWithEventsAndObserver = MinimalRootEditor &
-  WithElementObserver &
-  WithEvents;
-
-export type MinimalRootEditorWithEventsAndTabs =
-  MinimalRootEditorWithEventsAndObserver & WithTabs;
-
-export type MinimalRootEditorWithEventsAndTabsAndUndo =
-  MinimalRootEditorWithEventsAndTabs & WithUndo;
-
-export type MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor =
-  MinimalRootEditorWithEventsAndTabsAndUndo & WithTitleEditor;
 /**
  * Element
  */

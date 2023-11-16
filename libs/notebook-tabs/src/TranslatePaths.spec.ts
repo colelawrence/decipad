@@ -1,8 +1,8 @@
-import { translateOpUp, translateOpDown } from './TranslatePaths';
+import { TranslateOpUp, TranslateOpDown } from './TranslatePaths';
 
 describe('Translating paths by adding tab index', () => {
   it('Translates insert_text', () => {
-    const translatedOp = translateOpUp(0, {
+    const translatedOp = TranslateOpUp(0, {
       type: 'insert_text',
       path: [1, 0],
       offset: 5,
@@ -18,7 +18,7 @@ describe('Translating paths by adding tab index', () => {
   });
 
   it('Translates move_node operation', () => {
-    const translatedOp = translateOpUp(5, {
+    const translatedOp = TranslateOpUp(5, {
       type: 'move_node',
       path: [1, 0],
       newPath: [2, 0],
@@ -32,7 +32,7 @@ describe('Translating paths by adding tab index', () => {
   });
 
   it('Translates set_selection operation', () => {
-    const translatedOp = translateOpUp(2, {
+    const translatedOp = TranslateOpUp(2, {
       type: 'set_selection',
       properties: {
         focus: {
@@ -84,7 +84,7 @@ describe('Translating paths by adding tab index', () => {
 
 describe('Translating paths into sub editor operations', () => {
   it('Translates insert_text', () => {
-    const translatedOp = translateOpDown({
+    const translatedOp = TranslateOpDown({
       type: 'insert_text',
       path: [0, 1, 0],
       offset: 5,
@@ -103,7 +103,7 @@ describe('Translating paths into sub editor operations', () => {
   });
 
   it('Translates move_node operation', () => {
-    const translatedOp = translateOpDown({
+    const translatedOp = TranslateOpDown({
       type: 'move_node',
       path: [1, 1, 0],
       newPath: [1, 2, 0],
@@ -120,7 +120,7 @@ describe('Translating paths into sub editor operations', () => {
   });
 
   it('Translates set_selection operation', () => {
-    const translatedOp = translateOpDown({
+    const translatedOp = TranslateOpDown({
       type: 'set_selection',
       properties: {
         focus: {

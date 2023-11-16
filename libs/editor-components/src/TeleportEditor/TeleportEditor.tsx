@@ -1,9 +1,6 @@
 import { ClientEvent, ClientEventsContext } from '@decipad/client-events';
 import { MyEditor } from '@decipad/editor-types';
-import {
-  focusAndSetSelection,
-  getMagicNumberPath,
-} from '@decipad/editor-utils';
+import { focusAndSetSelection } from '@decipad/editor-utils';
 import {
   EditorTeleportContext,
   ShadowCalcPortal,
@@ -38,12 +35,11 @@ export const TeleportEditor: React.FC<TeleportEditorProps> = ({
 
   const focusNumber = useCallback(() => {
     const node = editing?.numberNode;
-    if (!node) return;
+    const path = node ? findNodePath(editor, node) : null;
 
-    const path = getMagicNumberPath(editor, node);
-    if (!path) return;
-
-    focusAndSetSelection(editor, path);
+    if (path) {
+      focusAndSetSelection(editor, path);
+    }
   }, [editor, editing?.numberNode]);
 
   const focusCodeLine = useCallback(() => {
