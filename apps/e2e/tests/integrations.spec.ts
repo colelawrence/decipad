@@ -272,7 +272,9 @@ test.describe('Checks the ability to change the unit of a response', () => {
       .getByRole('textbox')
       .locator('div')
       .first()
-      .fill(allSources[5]);
+      .fill(allSources[4]);
+    // .fill(allSources[5]);
+    // Uncomment when the last source is back online (opentdb.com)
 
     await page.getByTestId('text-icon-button:Run').click();
     await expect(page.getByTestId('code-successfully-run')).toBeVisible();

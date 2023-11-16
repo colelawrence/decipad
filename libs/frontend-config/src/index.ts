@@ -25,11 +25,12 @@ const dogsNoSubsbreeds = Object.keys(message).map((breed) => {
   }
 }).filter((breed) => !breed.hasBreeds)
 return dogsNoSubsbreeds;`,
-  `// ten trivia questions
-const res = await fetch('https://opentdb.com/api.php?amount=10');
-const data = await res.json();
-const results = data.results;
-return results;`,
+  //   Seems to be down and stopping e2e tests.
+  //   `// ten trivia questions
+  // const res = await fetch('https://opentdb.com/api.php?amount=10');
+  // const data = await res.json();
+  // const results = data.results;
+  // return results;`,
   `// Exchange rate for crypto
 const res = await fetch('https://api.coingecko.com/api/v3/exchange_rates');
 const data = await res.json();
