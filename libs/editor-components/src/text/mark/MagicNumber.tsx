@@ -18,6 +18,7 @@ import {
   useShadowCodeLine,
 } from '@decipad/react-contexts';
 import { useWindowListener } from '@decipad/react-utils';
+import { useToast } from '@decipad/toast';
 import {
   Button,
   CodeError,
@@ -45,6 +46,7 @@ const UnprotectedMagicNumber: PlateComponent = ({
   const readOnly = useIsEditorReadOnly();
   const text = getDefined(_text);
   const exp = getNodeString(text);
+  const toast = useToast();
 
   const blockId = useMagicNumberId(text);
 
@@ -110,10 +112,14 @@ const UnprotectedMagicNumber: PlateComponent = ({
     const isCodeline = editSource(sourceId, text);
     if (!isCodeline) {
       const el = document.getElementById(sourceId);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el?.focus();
+      if (el) {
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el?.focus();
+      } else {
+        toast('This number is not editable in this tab', 'warning');
+      }
     }
-  }, [sourceId, isTableReference, editSource, text]);
+  }, [sourceId, isTableReference, editSource, text, toast]);
 
   return (
     <span {...attributes}>
