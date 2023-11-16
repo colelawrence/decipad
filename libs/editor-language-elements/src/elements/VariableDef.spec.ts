@@ -5,16 +5,15 @@ import {
   ELEMENT_EXPRESSION,
   VariableDefinitionElement,
   ELEMENT_SLIDER,
-  MyEditor,
 } from '@decipad/editor-types';
 import { astNode } from '@decipad/editor-utils';
 import { N } from '@decipad/number';
-import { createPlateEditor } from '@udecode/plate';
 import { VariableDef } from './VariableDef';
+import { createTestEditorController } from '../testEditorController';
 
 describe('VariableDef expression element', () => {
   it('converts variable def expression document element into name and expression', async () => {
-    const editor = createPlateEditor() as MyEditor;
+    const editor = createTestEditorController('id');
     const el = {
       id: 'id0',
       type: ELEMENT_VARIABLE_DEF,
@@ -53,7 +52,7 @@ describe('VariableDef expression element', () => {
 });
 
 describe('VariableDef slider element', () => {
-  const editor = createPlateEditor() as MyEditor;
+  const editor = createTestEditorController('id');
   it('converts variable def slider document element into name and expression', async () => {
     const el = {
       id: 'id0',

@@ -7,18 +7,17 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyEditor,
   TableElement,
 } from '@decipad/editor-types';
 import { N } from '@decipad/number';
-import { createPlateEditor } from '@udecode/plate';
 import { getDefined } from '@decipad/utils';
 import { Table } from './Table';
+import { createTestEditorController } from '../../testEditorController';
 
 const getParsedBlockFromElement = getDefined(Table.getParsedBlockFromElement);
 
 describe('Table', () => {
-  const editor = createPlateEditor() as MyEditor;
+  const editor = createTestEditorController('id');
   it('converts table element into table AST node', async () => {
     const node: TableElement = {
       id: 'table1',

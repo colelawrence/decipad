@@ -260,4 +260,8 @@ export class IndexeddbPersistence extends Observable<string> {
     }
     return false;
   }
+
+  public flush(): Promise<unknown> {
+    return this._mux.flush();
+  }
 }

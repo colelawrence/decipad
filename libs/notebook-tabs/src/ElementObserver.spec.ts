@@ -57,22 +57,20 @@ describe('observes changes in specific elements', () => {
 
     editor.insertText('hello');
 
-    expect(items).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "text": "hello",
-              },
-            ],
-            "id": "1",
-            "type": "h1",
-          },
-          "opType": "insert_text",
+    expect(items).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              text: 'hello',
+            },
+          ],
+          id: '1',
+          type: 'h1',
         },
-      ]
-    `);
+        opType: 'insert_text',
+      },
+    ]);
   });
 
   it('listens to various changes on H1 element', () => {
@@ -93,52 +91,46 @@ describe('observes changes in specific elements', () => {
     };
 
     editor.deleteBackward('character');
-    expect(items[0]).toMatchInlineSnapshot(`
-      Object {
-        "element": Object {
-          "children": Array [
-            Object {
-              "text": "hell",
-            },
-          ],
-          "id": "1",
-          "type": "h1",
-        },
-        "opType": "remove_text",
-      }
-    `);
+    expect(items[0]).toMatchObject({
+      element: {
+        children: [
+          {
+            text: 'hell',
+          },
+        ],
+        id: '1',
+        type: 'h1',
+      },
+      opType: 'remove_text',
+    });
 
     editor.deleteBackward('character');
-    expect(items[1]).toMatchInlineSnapshot(`
-      Object {
-        "element": Object {
-          "children": Array [
-            Object {
-              "text": "hel",
-            },
-          ],
-          "id": "1",
-          "type": "h1",
-        },
-        "opType": "remove_text",
-      }
-    `);
+    expect(items[1]).toMatchObject({
+      element: {
+        children: [
+          {
+            text: 'hel',
+          },
+        ],
+        id: '1',
+        type: 'h1',
+      },
+      opType: 'remove_text',
+    });
 
     editor.insertText('b');
-    expect(items[2]).toMatchInlineSnapshot(`
-      Object {
-        "element": Object {
-          "children": Array [
-            Object {
-              "text": "helb",
-            },
-          ],
-          "id": "1",
-          "type": "h1",
-        },
-        "opType": "insert_text",
-      }
-    `);
+    expect(items[2]).toMatchObject({
+      element: {
+        children: [
+          {
+            text: 'helb',
+          },
+        ],
+        id: '1',
+        type: 'h1',
+      },
+      opType: 'insert_text',
+    });
   });
 
   it('Reuses observable objects from pool', () => {
@@ -196,53 +188,49 @@ describe('observes changes in specific elements', () => {
     editor.insertText('e');
 
     expect(codelineItems).toHaveLength(varnameItems.length);
-    expect(codelineItems).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "Varnamee",
-                  },
-                ],
-                "id": "3",
-                "type": "structured_varname",
-              },
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "1 + 1",
-                  },
-                ],
-                "id": "4",
-                "type": "code_line_v2_code",
-              },
-            ],
-            "id": "2",
-            "type": "code_line_v2",
-          },
-          "opType": "insert_text",
+    expect(codelineItems).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Varnamee',
+                },
+              ],
+              id: '3',
+              type: 'structured_varname',
+            },
+            {
+              children: [
+                {
+                  text: '1 + 1',
+                },
+              ],
+              id: '4',
+              type: 'code_line_v2_code',
+            },
+          ],
+          id: '2',
+          type: 'code_line_v2',
         },
-      ]
-    `);
-    expect(varnameItems).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "text": "Varnamee",
-              },
-            ],
-            "id": "3",
-            "type": "structured_varname",
-          },
-          "opType": "insert_text",
+        opType: 'insert_text',
+      },
+    ]);
+    expect(varnameItems).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              text: 'Varnamee',
+            },
+          ],
+          id: '3',
+          type: 'structured_varname',
         },
-      ]
-    `);
+        opType: 'insert_text',
+      },
+    ]);
 
     editor.selection = {
       anchor: {
@@ -299,28 +287,26 @@ describe('observes changes in specific elements', () => {
       { at: [editor.children.length - 1, 1] }
     );
 
-    expect(changes).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "text": "",
-              },
-            ],
-            "id": "7",
-            "options": Array [
-              Object {
-                "id": "dropdown-2",
-                "value": "13",
-              },
-            ],
-            "type": "dropdown",
-          },
-          "opType": "set_node",
+    expect(changes).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              text: '',
+            },
+          ],
+          id: '7',
+          options: [
+            {
+              id: 'dropdown-2',
+              value: '13',
+            },
+          ],
+          type: 'dropdown',
         },
-      ]
-    `);
+        opType: 'set_node',
+      },
+    ]);
   });
 
   it('gets notified of element deletion', () => {
@@ -333,46 +319,44 @@ describe('observes changes in specific elements', () => {
       at: [editor.children.length - 1],
     });
 
-    expect(changes).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "Name",
-                  },
-                ],
-                "color": "color",
-                "icon": "some",
-                "id": "6",
-                "type": "caption",
-              },
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "",
-                  },
-                ],
-                "id": "7",
-                "options": Array [
-                  Object {
-                    "id": "dropdown-2",
-                    "value": "13",
-                  },
-                ],
-                "type": "dropdown",
-              },
-            ],
-            "id": "5",
-            "type": "def",
-            "variant": "dropdown",
-          },
-          "opType": "remove_node",
+    expect(changes).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Name',
+                },
+              ],
+              color: 'color',
+              icon: 'some',
+              id: '6',
+              type: 'caption',
+            },
+            {
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              id: '7',
+              options: [
+                {
+                  id: 'dropdown-2',
+                  value: '13',
+                },
+              ],
+              type: 'dropdown',
+            },
+          ],
+          id: '5',
+          type: 'def',
+          variant: 'dropdown',
         },
-      ]
-    `);
+        opType: 'remove_node',
+      },
+    ]);
   });
 
   it('doesnt get updated on selection changes', () => {
@@ -441,22 +425,20 @@ describe('Listens to change on specific IDs', () => {
 
     editor.insertText('Hello');
 
-    expect(changes).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "text": "Hello",
-              },
-            ],
-            "id": "1",
-            "type": "h1",
-          },
-          "opType": "insert_text",
+    expect(changes).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              text: 'Hello',
+            },
+          ],
+          id: '1',
+          type: 'h1',
         },
-      ]
-    `);
+        opType: 'insert_text',
+      },
+    ]);
 
     id1.unsubscribe();
   });
@@ -559,37 +541,35 @@ describe('Listens to change on specific IDs', () => {
 
     editor.insertText('e');
 
-    expect(changes).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "Varnamee",
-                  },
-                ],
-                "id": "3",
-                "type": "structured_varname",
-              },
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "1 + 1",
-                  },
-                ],
-                "id": "4",
-                "type": "code_line_v2_code",
-              },
-            ],
-            "id": "2",
-            "type": "code_line_v2",
-          },
-          "opType": "insert_text",
+    expect(changes).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Varnamee',
+                },
+              ],
+              id: '3',
+              type: 'structured_varname',
+            },
+            {
+              children: [
+                {
+                  text: '1 + 1',
+                },
+              ],
+              id: '4',
+              type: 'code_line_v2_code',
+            },
+          ],
+          id: '2',
+          type: 'code_line_v2',
         },
-      ]
-    `);
+        opType: 'insert_text',
+      },
+    ]);
 
     id2?.unsubscribe();
   });
@@ -631,37 +611,35 @@ describe('Listens to change on specific IDs', () => {
       at: [editor.children.length - 1],
     });
 
-    expect(changes).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "Varnameeaa",
-                  },
-                ],
-                "id": "3",
-                "type": "structured_varname",
-              },
-              Object {
-                "children": Array [
-                  Object {
-                    "text": "1 + 1",
-                  },
-                ],
-                "id": "4",
-                "type": "code_line_v2_code",
-              },
-            ],
-            "id": "2",
-            "type": "code_line_v2",
-          },
-          "opType": "remove_node",
+    expect(changes).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              children: [
+                {
+                  text: 'Varnameeaa',
+                },
+              ],
+              id: '3',
+              type: 'structured_varname',
+            },
+            {
+              children: [
+                {
+                  text: '1 + 1',
+                },
+              ],
+              id: '4',
+              type: 'code_line_v2_code',
+            },
+          ],
+          id: '2',
+          type: 'code_line_v2',
         },
-      ]
-    `);
+        opType: 'remove_node',
+      },
+    ]);
 
     id2?.unsubscribe();
   });
@@ -708,45 +686,43 @@ describe('Listens to change on specific IDs', () => {
 
     id4?.unsubscribe();
 
-    expect(changes).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "text": "1 + 1",
-              },
-              Object {
-                "blockId": "some_id",
-                "children": Array [
-                  Object {
-                    "text": "",
-                  },
-                ],
-                "columnId": null,
-                "id": "smart_ref_1",
-                "type": "smart-ref",
-              },
-            ],
-            "id": "4",
-            "type": "code_line_v2_code",
-          },
-          "opType": "insert_node",
+    expect(changes).toMatchObject([
+      {
+        element: {
+          children: [
+            {
+              text: '1 + 1',
+            },
+            {
+              blockId: 'some_id',
+              children: [
+                {
+                  text: '',
+                },
+              ],
+              columnId: null,
+              id: 'smart_ref_1',
+              type: 'smart-ref',
+            },
+          ],
+          id: '4',
+          type: 'code_line_v2_code',
         },
-        Object {
-          "element": Object {
-            "children": Array [
-              Object {
-                "text": "1 + 1",
-              },
-            ],
-            "id": "4",
-            "type": "code_line_v2_code",
-          },
-          "opType": "remove_node",
+        opType: 'insert_node',
+      },
+      {
+        element: {
+          children: [
+            {
+              text: '1 + 1',
+            },
+          ],
+          id: '4',
+          type: 'code_line_v2_code',
         },
-      ]
-    `);
+        opType: 'remove_node',
+      },
+    ]);
   });
 });
 

@@ -2,6 +2,7 @@ import { Array as YArray, Map as YMap, Doc as YDoc, Text as YText } from 'yjs';
 import { ELEMENT_PARAGRAPH } from '@udecode/plate';
 import { toSyncElement, toSlateNode } from './convert';
 import { SyncElement } from '../model';
+import { TabElement } from '@decipad/editor-types';
 
 const testElement = <T extends SyncElement>(elem: T): T => {
   const doc = new YDoc();
@@ -45,7 +46,7 @@ describe('converts element from sync to slate node', () => {
     const syncElement = testElement(toSyncElement({ text: 'abc' }));
     const node = toSlateNode(syncElement);
     expect(node).toMatchInlineSnapshot(`
-      Object {
+      {
         "text": "abc",
       }
     `);
@@ -61,9 +62,9 @@ describe('converts element from sync to slate node', () => {
     );
     const element = toSlateNode(syncElement);
     expect(element).toMatchInlineSnapshot(`
-      Object {
-        "children": Array [
-          Object {
+      {
+        "children": [
+          {
             "text": "abc",
           },
         ],
@@ -71,5 +72,68 @@ describe('converts element from sync to slate node', () => {
         "type": "p",
       }
     `);
+  });
+});
+
+describe('converts from tab element to yjs', () => {
+  it('turns a single tab to sync element', () => {
+    const syncElement = testElement(
+      toSyncElement({
+        type: 'tab',
+        name: 'MyTab',
+        id: '1',
+        children: [
+          {
+            type: 'p',
+            id: '2',
+            children: [{ text: 'hello world' }],
+          },
+        ],
+      } satisfies TabElement)
+    );
+
+    expect(syncElement.toJSON()).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "text": "hello world",
+              },
+            ],
+            "id": "2",
+            "type": "p",
+          },
+        ],
+        "id": "1",
+        "name": "MyTab",
+        "type": "tab",
+      }
+    `);
+
+    expect(syncElement).toBeInstanceOf(YMap);
+    expect(syncElement.size).toBe(4);
+    expect(syncElement.get('children')).toBeInstanceOf(YArray);
+    expect(syncElement.get('children').get(0)).toBeInstanceOf(YMap);
+    expect(syncElement.get('children').get(0).get('children')).toBeInstanceOf(
+      YArray
+    );
+    expect(
+      syncElement.get('children').get(0).get('children').get(0).get('text')
+    ).toBeInstanceOf(YText);
+
+    const element = toSlateNode(syncElement);
+    expect(element).toMatchObject({
+      type: 'tab',
+      name: 'MyTab',
+      id: '1',
+      children: [
+        {
+          type: 'p',
+          id: '2',
+          children: [{ text: 'hello world' }],
+        },
+      ],
+    });
   });
 });

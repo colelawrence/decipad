@@ -1,7 +1,3 @@
-import { useActiveEditor } from '@decipad/notebook-tabs';
-
-export { useActiveEditor };
-
 export * from './useElementAbove';
 export * from './useEnsureValidVariableName';
 export * from './useMaterializedColumnResult';
@@ -16,3 +12,4 @@ export * from './useTableColumnFormulaResultForColumn';
 export * from './useWasSelected';
 export * from './useEditorChange';
 export * from './useTabs';
+export * from './useActiveEditor';

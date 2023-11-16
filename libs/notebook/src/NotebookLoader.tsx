@@ -156,7 +156,7 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
               notebookId={notebookId}
               workspaceId={workspaceId}
               loaded={loaded}
-              controller={readOrSuspendEditor.read().editorController}
+              controller={readOrSuspendEditor.read()}
               readOnly={readOnly}
             />
           </div>

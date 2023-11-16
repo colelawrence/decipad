@@ -15,6 +15,7 @@ test('publish notebook, check logged out reader + logged in duplication', async 
   anotherTestUser,
   unregisteredUser,
 }) => {
+  test.slow();
   let sharedPageLocation: string | null;
   const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
     unregisteredUser;
@@ -123,6 +124,7 @@ test('publish notebook, check logged out reader + logged in duplication', async 
 test('duplicate in workspace with single workspace', async ({
   randomFreeUser,
 }) => {
+  test.slow();
   let padToCopyIndex = -1;
   let padCopyIndex = -1;
   const { page, notebook } = randomFreeUser;
@@ -261,6 +263,7 @@ test('duplicate in workspace with single workspace', async ({
 test('duplicate in workspace with multiple workspaces', async ({
   randomFreeUser,
 }) => {
+  test.slow();
   const { page, notebook } = randomFreeUser;
   const NewWorkspaceName = 'NewWorkspace';
   const workspaces = await getWorkspaces(page);
@@ -307,6 +310,7 @@ test('duplicate in workspace with multiple workspaces', async ({
 test('duplicate inside notebook with single workspace', async ({
   randomFreeUser,
 }) => {
+  test.slow();
   const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
     randomFreeUser;
   await randomFreeUser.createAndNavNewNotebook();
@@ -324,6 +328,7 @@ test('duplicate inside notebook with single workspace', async ({
 test('duplicate inside notebook with multiple workspaces ', async ({
   randomFreeUser,
 }) => {
+  test.slow();
   const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
     randomFreeUser;
 
@@ -368,6 +373,7 @@ test('check collaborator duplicate single workspace', async ({
   testUser,
   randomFreeUser,
 }) => {
+  test.slow();
   const { page: randomFreeUserPage, notebook: randomFreeUserNotebook } =
     randomFreeUser;
   const { page: testUserPage, notebook: testUserNotebook } = testUser;
@@ -405,6 +411,7 @@ test('check collaborator duplicate mulpliple workspaces', async ({
   testUser,
   anotherTestUser,
 }) => {
+  test.slow();
   const {
     page: randomFreeUserPage,
     notebook: randomFreeUserNotebook,

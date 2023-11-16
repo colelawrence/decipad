@@ -8,7 +8,7 @@ import { createDocSyncEditor, DocSyncEditor } from '.';
 import { testWithSandbox as test } from '../../backend-test-sandbox/src';
 import { clone } from './utils/clone';
 import { randomChangesToEditors } from './utils/random-changes';
-import { EditorController } from '@decipad/notebook-tabs';
+import { createTestEditorController } from './testEditorController';
 
 waitForExpect.defaults.interval = 500;
 const replicaCount = 5;
@@ -99,8 +99,7 @@ test('sync many', (ctx) => {
     for (let i = 0; i < replicaCount; i += 1) {
       const editor = createDocSyncEditor(pad.id, {
         protocolVersion: 2,
-        controller: new EditorController(pad.id, []),
-        // initialState: EMPTY_INITIAL_NOTEBOOK,
+        editor: createTestEditorController(pad.id, []),
       });
       editors.push(editor);
     }
@@ -115,43 +114,23 @@ test('sync many', (ctx) => {
           })
       )
     );
-
-    editors[0].editorController.Loaded('test');
   });
 
   it('makes random changes to the editors and pad contents converge', async () => {
     expect(editors.length).toBeGreaterThan(0);
 
-    await waitForExpect(
-      () => {
-        for (const editor of editors) {
-          expect(editor.editorController.children).toHaveLength(2);
-        }
-      },
-      20000,
-      5000
-    );
-
-    await randomChangesToEditors(
-      editors.map((e) => e.editorController.SubEditors[0]),
-      randomChangeCountPerReplica
-    );
-
-    const firstEditor = editors[0].editorController.children;
-    expect(firstEditor.filter((e) => e.type === 'title')).toHaveLength(1);
-    expect(firstEditor.filter((e) => e.type === 'tab')).toHaveLength(1);
+    await randomChangesToEditors(editors, randomChangeCountPerReplica);
 
     await waitForExpect(() => {
+      const firstEditor = editors[0].children;
       const expectedContents = clone(firstEditor);
 
       expect(editors.length).toBe(replicaCount);
 
       for (const editor2 of editors.slice(1)) {
-        expect(editor2.editorController.children).toMatchObject(
-          expectedContents
-        );
+        expect(editor2.children).toMatchObject(expectedContents);
       }
     }, 10000);
-    expect(editors[0].editorController.children.length).toBeGreaterThan(0);
+    expect(editors[0].children.length).toBeGreaterThan(0);
   }, 20000);
 });

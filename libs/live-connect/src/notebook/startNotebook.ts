@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop */
-import { dequal, getDefined, noop } from '@decipad/utils';
+import { dequal, getDefined } from '@decipad/utils';
 import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import debounce from 'lodash.debounce';
 import { createDocSyncEditor } from '@decipad/docsync';
@@ -8,11 +8,9 @@ import {
   getRemoteComputer,
   type IdentifiedError,
   type IdentifiedResult,
-  type Program,
   identifiedErrorToMessage,
   type RemoteComputer,
 } from '@decipad/remote-computer';
-import { MyValue, createTPlateEditor } from '@decipad/editor-types';
 import { getURLComponents } from '@decipad/editor-utils';
 import type { Observe, Subscription } from '../types';
 import { liveConnections } from './liveConnections';
@@ -28,11 +26,10 @@ export const startNotebook = (
   onError: OnErrorCallback
 ): RemoteComputer => {
   const { docId, blockId } = getURLComponents(subscription.params.url);
-  const editor = createTPlateEditor();
-  editor.normalizeNode = noop;
+  const editor = new EditorController(docId);
   const syncEditor = createDocSyncEditor(docId, {
     readOnly: true,
-    controller: new EditorController(docId, []),
+    editor: new EditorController(docId, []),
     protocolVersion: 2,
   });
 
@@ -65,14 +62,9 @@ export const startNotebook = (
   } = liveConnections(observeExternal);
 
   const getValue = debounce(async () => {
-    const wholeProgram: Program = [];
-    for (const e of syncEditor.editorController.SubEditors) {
-      wholeProgram.push(
-        ...(await editorToProgram(e, editor.children, computer))
-      );
-    }
+    const program = await editorToProgram(editor, editor.children, computer);
     computer.pushCompute({
-      program: wholeProgram,
+      program,
     });
   }, debounceGetValueMs);
 
@@ -100,22 +92,13 @@ export const startNotebook = (
   };
 
   syncEditor.onLoaded(getValue);
-  const { onChange } = syncEditor.editorController;
-  syncEditor.editorController.onChange = () => {
+  const { onChange } = syncEditor;
+  syncEditor.onChange = () => {
     (async () => {
-      try {
-        const v: MyValue = [];
-        for (const e of syncEditor.editorController.SubEditors) {
-          v.push(...e.children);
-        }
-        await updateLiveConnections(v);
-        getValue();
-      } catch (err) {
-        onError(err as Error);
-      }
+      updateLiveConnections(syncEditor.children);
     })();
 
-    onChange.bind(syncEditor.editorController)();
+    onChange.bind(syncEditor)();
   };
 
   return computer;

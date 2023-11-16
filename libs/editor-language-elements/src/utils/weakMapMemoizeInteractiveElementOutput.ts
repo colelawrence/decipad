@@ -1,14 +1,14 @@
 import { RemoteComputer } from '@decipad/remote-computer';
-import { MyEditor, MyElement } from '@decipad/editor-types';
+import { AnyElement, MinimalRootEditor, MyEditor } from '@decipad/editor-types';
 
-type TransformerFn<T extends MyElement, RetT> = (
-  editor: MyEditor,
+type TransformerFn<T extends AnyElement, RetT> = (
+  editor: MinimalRootEditor | MyEditor,
   computer: RemoteComputer,
   arg: T
 ) => RetT;
 
 export const weakMapMemoizeInteractiveElementOutput = <
-  T extends MyElement,
+  T extends AnyElement,
   RetT
 >(
   fn: TransformerFn<T, RetT | Promise<RetT>>

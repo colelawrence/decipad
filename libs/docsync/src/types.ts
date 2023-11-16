@@ -1,6 +1,11 @@
-import { CursorEditor, YjsEditor } from '@decipad/slate-yjs';
+import { MinimalRootEditor } from '@decipad/editor-types';
+import {
+  type TCursorEditor as GTCursorEditor,
+  type TYjsEditor as GTYjsEditor,
+} from '@decipad/slate-yjs';
 import { BehaviorSubject } from 'rxjs';
 import { Array as YArray, Text as YText, Map as YMap, UndoManager } from 'yjs';
+import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '../../editor-types/src/nodes';
 
 export type Doc = YArray<RootElement>;
 
@@ -15,9 +20,19 @@ export type OnSavedCallback = (source: SyncSource) => void;
 export type OnConnectedCallback = () => void;
 export type OnDisconnectedCallback = () => void;
 
-export type DocSyncEditor = YjsEditor &
-  CursorEditor & {
-    undoManager?: UndoManager;
+interface UndoEditor {
+  undo: () => void;
+  redo: () => void;
+  undoManager?: UndoManager;
+}
+
+type TYjsEditor = GTYjsEditor<MinimalRootEditor>;
+type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
+
+export type DocSyncEditor = TYjsEditor &
+  TCursorEditor &
+  MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor &
+  UndoEditor & {
     withoutCapturingUndo?: (cb: () => void) => void;
     isReadOnly?: boolean;
     isLoadedLocally: boolean;

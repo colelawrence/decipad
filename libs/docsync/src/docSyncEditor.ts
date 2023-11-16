@@ -1,4 +1,7 @@
-import { CursorEditor, toSlateDoc } from '@decipad/slate-yjs';
+import {
+  type TCursorEditor as GTCursorEditor,
+  toSlateDoc,
+} from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import { TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
@@ -15,11 +18,14 @@ import {
   OnConnectedCallback,
 } from './types';
 import { download } from './download';
+import { MinimalRootEditor } from '@decipad/editor-types';
 
 supportBigIntToJSON();
 
+type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
+
 export function docSyncEditor(
-  editor: CursorEditor,
+  editor: TCursorEditor,
   doc: YDoc,
   store?: IndexeddbPersistence,
   ws?: TWebSocketProvider
@@ -88,7 +94,7 @@ export function docSyncEditor(
 
   const { destroy } = editor;
 
-  const useEditor = Object.assign(editor, {
+  Object.assign(editor, {
     onLoaded(cb: OnLoadedCallback) {
       events.on('loaded', cb);
     },
@@ -156,9 +162,9 @@ export function docSyncEditor(
       return md5(canonicalize(toSlateDoc(doc.getArray())));
     },
     download() {
-      download(useEditor as DocSyncEditor);
+      download(editor);
     },
   });
 
-  return useEditor;
+  return editor as DocSyncEditor;
 }

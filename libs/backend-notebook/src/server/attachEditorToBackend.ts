@@ -1,19 +1,25 @@
 import { Doc as YDoc } from 'yjs';
-import type { EditorController } from '@decipad/notebook-tabs';
-import { SyncElement, YjsEditor, withYjs } from '@decipad/slate-yjs';
+import {
+  SyncElement,
+  TYjsEditor as GTYjsEditor,
+  withYjs,
+} from '@decipad/slate-yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { LambdaWebsocketProvider } from '@decipad/y-lambdawebsocket';
+import { MinimalRootEditor } from '@decipad/editor-types';
 import { timeout } from '@decipad/utils';
 
 type Detach = () => Promise<void>;
 
+type TYjsEditor = GTYjsEditor<MinimalRootEditor>;
+
 export const attachEditorToBackend = async (
-  editor: EditorController
-): Promise<[YjsEditor, Detach]> => {
+  editor: MinimalRootEditor
+): Promise<[TYjsEditor, Detach]> => {
   const doc = new YDoc();
   const shared = doc.getArray<SyncElement>();
   const yjsEditor = withYjs(editor, shared);
-  const resource = `/pads/${editor.NotebookId}`;
+  const resource = `/pads/${editor.id}`;
   const persistence = new DynamodbPersistence(resource, doc, undefined, false, {
     saveOnUpdate: true,
   });

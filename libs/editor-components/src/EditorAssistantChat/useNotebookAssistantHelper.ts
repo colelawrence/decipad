@@ -5,9 +5,9 @@ import {
 } from '@decipad/react-contexts';
 import type { TOperation } from '@udecode/plate';
 import { useCallback, useEffect, useState } from 'react';
-import { useNotebookAssistant } from './useNotebookAssistant';
 import { useToast } from '@decipad/toast';
-import { EditorController } from '@decipad/notebook-tabs';
+import { MinimalRootEditor } from '@decipad/editor-types';
+import { useNotebookAssistant } from './useNotebookAssistant';
 import { humanizeMotebookAssistantProgressMessage } from './notebookAssistantProgressMessages';
 import { NotebookAssistantEventProgress } from './useNotebookAssistantTypes';
 
@@ -16,7 +16,7 @@ export interface NotebookAssistantHelperOptions {
   updateMessage: (message: Partial<ReplyAssistantMessage>) => unknown;
   updateFeedback: (feedbackData: Partial<Feedback>) => unknown;
   updateFeedbackElaspedTime: (elapsed: ElapsedEventTime) => unknown;
-  controller: EditorController;
+  controller: MinimalRootEditor;
   onceDone: () => unknown;
 }
 
@@ -67,7 +67,7 @@ export const useNotebookAssistantHelper = ({
       });
       // Disable normalizer
       if (ops.length > 0) {
-        controller.WithoutNormalizing(() => {
+        controller.withoutNormalizing(() => {
           for (const op of ops) {
             try {
               // We apply the changes as if they are "remote".

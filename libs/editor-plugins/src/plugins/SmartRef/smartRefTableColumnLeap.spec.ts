@@ -19,7 +19,7 @@
 import { Computer, getExprRef, materializeResult } from '@decipad/computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import {
-  createTPlateEditor,
+  AnyElement,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -27,7 +27,7 @@ import {
   ELEMENT_TD,
   ELEMENT_TH,
   ELEMENT_TR,
-  MyValue,
+  NotebookValue,
   TableCellElement,
   TableCellType,
   TableColumnFormulaElement,
@@ -38,6 +38,7 @@ import { timeout } from '@decipad/utils';
 import { BaseEditor, Editor } from 'slate';
 import { createCodeLine } from '@decipad/editor-utils';
 import { createSmartRefPlugin } from './createSmartRefPlugin';
+import { createTestEditorController } from '../../utils/createTestEditorController';
 
 it('supports a variable name with the same name as a table', async () => {
   expect(
@@ -741,11 +742,9 @@ it('Legacy reference to a table column ID (now we use blockId + columnId for thi
   `);
 });
 
-const run = async (...elements: MyValue[number][]) => {
-  const editor = createTPlateEditor({
-    plugins: [createSmartRefPlugin()],
-  });
-  editor.children = elements as MyValue;
+const run = async (...elements: AnyElement[]) => {
+  const editor = createTestEditorController('id', [createSmartRefPlugin()]);
+  editor.children = elements as NotebookValue;
 
   Editor.normalize(editor as BaseEditor, { force: true });
 

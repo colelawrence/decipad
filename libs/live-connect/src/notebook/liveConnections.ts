@@ -2,9 +2,9 @@ import {
   AnyElement,
   LiveConnectionElement,
   ELEMENT_LIVE_CONNECTION,
-  MyValue,
   LiveDataSetElement,
   LiveQueryElement,
+  NotebookValue,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import isEmpty from 'lodash.isempty';
@@ -106,7 +106,7 @@ const diffAndProcess = async (
 };
 
 interface LiveConnections {
-  update: (value: MyValue) => Promise<void>;
+  update: (value: NotebookValue) => Promise<void>;
   destroy: () => void;
   getExternalData$: BehaviorSubject<Map<string, ConnectionResult>>;
 }
@@ -120,7 +120,7 @@ export const liveConnections = (observe: Observe): LiveConnections => {
     new Map()
   );
 
-  const update = async (value: MyValue) => {
+  const update = async (value: NotebookValue) => {
     const newLiveConnections = value
       .filter(isLiveConnection)
       .reduce<Connections>((connectionsAcc, elem: AnyElement) => {
