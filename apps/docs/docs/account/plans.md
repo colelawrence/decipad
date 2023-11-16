@@ -32,12 +32,12 @@ Invite your team to collaborate, expand data imports and schedule query executio
 
 You can upgrade or downgrade your workspace plan at any time. Follow these steps to upgrade from a the Starter plan to the Pro plan:
 
-1. Click the "Upgrade to Pro" button in the sidebar of your workspace to see what is included.
-2. Click the "Upgrade to Pro" button inside the new modal and you will be redirected our payments portal.
-3. Enter your email (we recommend using the same email you used to log in to Decipad).
-4. Provide your card information, including card name and country/region.
-5. Review and agree to Decipad's Terms of Service and Privacy Policy.
-6. Click the "Subscribe" button. If the payment is successful, you will be redirected back to Decipad.
+1.  Click the "Upgrade to Pro" button in the sidebar of your workspace to see what is included.
+2.  Click the "Upgrade to Pro" button inside the new modal and you will be redirected our payments portal.
+3.  Enter your email (we recommend using the same email you used to log in to Decipad).
+4.  Provide your card information, including card name and country/region.
+5.  Review and agree to Decipad's Terms of Service and Privacy Policy.
+6.  Click the "Subscribe" button. If the payment is successful, you will be redirected back to Decipad.
 
 Please note that by upgrading your workspace, you authorize Decipad to charge your card for the current and future payments. You can cancel your subscription/plan at any time. To manage your billing information or downgrade your plan, see [Billing & Payments](/account/billing).
 
@@ -47,17 +47,17 @@ Admins on Pro workspaces can add and remove members (seats) at any time. Keep in
 
 To manage your workspace seats:
 
-1. Make sure you are in the correct workspace.
-2. Click on "Manage members."
+1.  Make sure you are in the correct workspace.
+2.  Click on "Manage members."
 
 To **add** a new seat:
 
-1. Enter their email address.
-2. Select the access role ("member" or "admin") from the dropdown.
-3. Click "Send invitation."
+1.  Enter their email address.
+2.  Select the access role ("member" or "admin") from the dropdown.
+3.  Click "Send invitation."
 
 To **remove** existing seats or revoke an invite:
 
-1. In the "User" section, you'll see the list of seats in your workspace.
-2. Click the "..." button on the right of a member you wish to remove.
-3. Click "Revoke invite."
+1.  In the "User" section, you'll see the list of seats in your workspace.
+2.  Click the "..." button on the right of a member you wish to remove.
+3.  Click "Revoke invite."

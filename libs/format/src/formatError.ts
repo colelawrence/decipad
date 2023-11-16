@@ -2,6 +2,8 @@ import { ErrSpec, serializeType } from '@decipad/language';
 import { formatTypeToBasicString } from './formatTypeBasic';
 import { formatUnit } from './formatUnit';
 
+const looksLikeVariable = (s: string) => s.toLocaleLowerCase() !== s;
+
 // istanbul ignore next
 // eslint-disable-next-line complexity
 const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
@@ -23,7 +25,11 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
           : formatTypeToBasicString(locale, serializeType(t))
       );
 
-      return `This operation requires a ${expected} and a ${got} was entered`;
+      const remark = [expected, got].some(looksLikeVariable)
+        ? ' You may have an undeclared or wrong variable name.'
+        : '';
+
+      return `This operation requires a ${expected} and a ${got} was entered.${remark}`;
     }
     case 'expected-primitive': {
       const got = formatTypeToBasicString(locale, serializeType(spec.butGot));
@@ -31,7 +37,14 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
       return `This operation requires a primitive value (string, number, boolean or date) and a ${got} was entered`;
     }
     case 'expected-unit': {
-      return 'This operation requires compatible units';
+      const units = spec.expectedUnit.map((unit) =>
+        unit ? formatUnit(locale, unit) : 'unknown'
+      );
+      const remark = units.some(looksLikeVariable)
+        ? ' You may have an undeclared or wrong variable name.'
+        : '';
+      const [expected, got] = units;
+      return `This operation requires compatible units. Expected unit ${expected} but got ${got}.${remark}`;
     }
     case 'expected-arg-count': {
       const [fname, expected, got] = spec.expectedArgCount;
@@ -59,12 +72,15 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
       )} and ${formatTypeToBasicString(locale, serializeType(got))}`;
     }
     case 'bad-overloaded-builtin-call': {
-      const gotArgTypes = spec.gotArgTypes
-        .map((argType) =>
-          formatTypeToBasicString(locale, serializeType(argType))
-        )
-        .join(', ');
-      return `The function ${spec.functionName} cannot be called with (${gotArgTypes})`;
+      const gotArgTypes = spec.gotArgTypes.map((argType) =>
+        formatTypeToBasicString(locale, serializeType(argType))
+      );
+      const remark = gotArgTypes.some(looksLikeVariable)
+        ? ' You may have an undeclared or wrong variable name.'
+        : '';
+      return `The function ${
+        spec.functionName
+      } cannot be called with (${gotArgTypes.join(', ')})${remark}`;
     }
     case 'cannot-convert-between-units': {
       return `Don't know how to convert between units ${formatUnit(

@@ -8,7 +8,7 @@ import YouTubePlayer from '@site/src/components/VideoCards/videos';
 
 <YouTubePlayer videoId="8MH1r6uA7-g" thumbnailUrl="/docs/img/thumbnails/thumbnail-units.png" />
 
-<br/>
+<br />
 
 Units specify the measurement or quantity of a number, adding context and meaning to calculations. They also simplify calculations by handling conversions automatically, eliminating the need for manual conversions.
 

@@ -48,14 +48,14 @@ Lists cannot contain different types of elements. Here are some examples of non-
 
 ```deci live
 [true, "that"]
-==> This operation requires a boolean and a string was entered
+==> This operation requires a boolean and a string was entered.
 ```
 
 Units on lists must be consistent:
 
 ```deci live
 [1 orange, 2 pears]
-==> This operation requires compatible units
+==> This operation requires compatible units. Expected unit oranges but got pears.
 ```
 
 ## Creating lists from sequences

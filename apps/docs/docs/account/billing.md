@@ -15,10 +15,10 @@ For Pro subscriptions, billing occurs on a monthly basis per workspace and per s
 
 When you add new seats to your workspace, you will incur charges based on the following process:
 
-1. You will be charged for each newly added seat, whether they have admin or member access.
-2. Our system reviews the number of seats you've added or removed on a monthly basis.
-3. The billing is done retroactively on a prorated basis, considering the time the new seats joined your workspace.
-4. Your tax amount is determined by the billing information you provide, and entering a tax ID may impact your bill.
+1.  You will be charged for each newly added seat, whether they have admin or member access.
+2.  Our system reviews the number of seats you've added or removed on a monthly basis.
+3.  The billing is done retroactively on a prorated basis, considering the time the new seats joined your workspace.
+4.  Your tax amount is determined by the billing information you provide, and entering a tax ID may impact your bill.
 
 **Example:**
 
@@ -48,26 +48,26 @@ Since you pay at the beginning of each billing interval, any charges (or credits
 
 To update your payment method and view your billing information, follow these steps:
 
-1. Access "Billing settings" on the sidebar of your your workspace.
-2. Provide your **billing email** address and click "Send." You will receive an email with a log in URL to the billing platform.
-3. Log in using the provided URL, and you'll be able to access the "Payment method" and "Billing information" sections.
+1.  Access "Billing settings" on the sidebar of your your workspace.
+2.  Provide your **billing email** address and click "Send." You will receive an email with a log in URL to the billing platform.
+3.  Log in using the provided URL, and you'll be able to access the "Payment method" and "Billing information" sections.
 
 ## Invoice History
 
 To review all the invoices for your workspace, follow these steps:
 
-1. Access "Billing settings" on the sidebar of your your workspace.
-2. Enter your **billing email** address and click "Send." You will receive an email with a log in URL to the billing platform.
-3. Log in using the provided URL, and you'll find the "Invoice history" section displaying all your received and paid invoices.
+1.  Access "Billing settings" on the sidebar of your your workspace.
+2.  Enter your **billing email** address and click "Send." You will receive an email with a log in URL to the billing platform.
+3.  Log in using the provided URL, and you'll find the "Invoice history" section displaying all your received and paid invoices.
 
 ## Canceling Your Pro Plan
 
 To downgrade from a Pro plan to the free Starter plan, follow these steps:
 
-1. Go to "Billing settings" in the workspace you want to downgrade.
-2. Provide your **billing email** address and click "Send." An email with a login URL to the billing platform will be sent to you.
-3. Log in using the provided URL, then click on "Cancel plan" in the top right corner of the web page.
-4. Click "Cancel plan".
+1.  Go to "Billing settings" in the workspace you want to downgrade.
+2.  Provide your **billing email** address and click "Send." An email with a login URL to the billing platform will be sent to you.
+3.  Log in using the provided URL, then click on "Cancel plan" in the top right corner of the web page.
+4.  Click "Cancel plan".
 
 **Note**: When downgrading a Pro plan, your workspace seats **may lose access to it**.
 
@@ -86,9 +86,9 @@ Invoices and plan prices may differ for several reasons. This can occur due to v
 
 To delete your workspace, follow these steps:
 
-1. Open "Workspace settings" for the workspace you wish to cancel.
-2. Find the "Delete Workspace" section.
-3. Enter the name of the workspace you want to delete (it must match the current workspace name).
-4. Click the "Delete" button.
+1.  Open "Workspace settings" for the workspace you wish to cancel.
+2.  Find the "Delete Workspace" section.
+3.  Enter the name of the workspace you want to delete (it must match the current workspace name).
+4.  Click the "Delete" button.
 
 **Note**: Deleting a workspace with a Pro plan will cancel your subscription. Be aware that deleting a workspace also permanently removes all notebooks within it, and this action cannot be undone. Please exercise caution. If you have only one workspace or wish to delete your account, please [contact support](mailto:support@decipad.com).

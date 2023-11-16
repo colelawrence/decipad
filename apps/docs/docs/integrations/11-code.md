@@ -5,9 +5,9 @@ sidebar_class_name: new
 
 # Code: Data from APIs
 
- <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-   <iframe src="https://www.loom.com/embed/c3d2177a8b744ea7b8a939bdbd3881dc?sid=0388946a-9b00-4095-b8f5-4acc3f3cec75" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
- </div>
+<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+  <iframe src="https://www.loom.com/embed/c3d2177a8b744ea7b8a939bdbd3881dc?sid=0388946a-9b00-4095-b8f5-4acc3f3cec75" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+</div>
 
 <br />
 
@@ -27,11 +27,11 @@ On the preview pane you will see the result and the format it will be available 
 
 ## Private Keys
 
- <div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
-   <iframe src="https://www.loom.com/embed/c3d2177a8b744ea7b8a939bdbd3881dc?sid=bd1b9899-441d-451a-af65-206e219a53a1" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
- </div>
+<div style={{position: 'relative', paddingBottom: '59.01639344262295%', height: 0}}>
+  <iframe src="https://www.loom.com/embed/c3d2177a8b744ea7b8a939bdbd3881dc?sid=bd1b9899-441d-451a-af65-206e219a53a1" frameBorder={0} webkitallowfullscreen mozallowfullscreen allowFullScreen style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}} />
+</div>
 
-<br/>
+<br />
 
 Private keys provide secure access control for your code by restricting unauthorized users.
 

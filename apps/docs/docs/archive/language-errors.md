@@ -65,14 +65,14 @@ You cannot add incompatible types.
 
 ```deci live
 5 apples + 5 oranges
-==> Error in operation "+" (number, number): This operation requires compatible units
+==> Error in operation "+" (number, number): This operation requires compatible units. Expected unit apples but got oranges.
 ```
 
 You can also get this error if you try to perform an operation in incompatible units
 
 ```deci live
 1 month + 1 day
-==> Error in operation "+" (number, number): This operation requires compatible units
+==> Error in operation "+" (number, number): This operation requires compatible units. Expected unit months but got days.
 ```
 
 This is because different months have different amounts of days.
@@ -93,7 +93,7 @@ You are calling a function, or using an operator, with a wrong argument. For ins
 
 ```deci live
 false or 1234
-==> Error in operation "or" (boolean, number): This operation requires a boolean and a number was entered
+==> Error in operation "or" (boolean, number): This operation requires a boolean and a number was entered.
 ```
 
 ## Expected primitive
