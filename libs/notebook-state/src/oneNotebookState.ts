@@ -13,7 +13,7 @@ import { NotebookState, EnhancedPromise } from './state';
 import { isNewNotebook } from './isNewNotebook';
 import { CursorAwarenessSchedule } from './cursors';
 import debounce from 'lodash.debounce';
-import { TitleElement } from '@decipad/editor-types';
+import { getNodeString } from '@udecode/plate';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -59,7 +59,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
     computer: new Computer(),
     initEditor: (
       notebookId,
-      { docsync, plugins, onChangeTitle, onCreateSnapshot },
+      { docsync, plugins, onChangeTitle },
       getSession
     ) => {
       // verify that if we have a matching connected docsync instance
@@ -67,7 +67,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
       if (oldEditor) {
         if (
           syncClientState === 'created' &&
-          oldEditor.editorController.NotebookId === notebookId &&
+          oldEditor.id === notebookId &&
           oldEditor.isReadOnly === docsync.readOnly &&
           !oldEditor.destroyed
         ) {
@@ -86,11 +86,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
         throw new Error('Where is my computer');
       }
 
-      const controller = new EditorController(
-        notebookId,
-        plugins,
-        onCreateSnapshot
-      );
+      const controller = new EditorController(notebookId, plugins);
       const blockProcessor = new BlockProcessor(
         controller,
         computer,
@@ -101,13 +97,13 @@ export const createNotebookStore = (onDestroy: () => void) =>
         onChangeTitle(title);
       }, 1000);
 
-      const { onChange } = controller.TitleEditor;
+      const { onChange } = controller;
 
       let oldTitle: string = '';
-      controller.TitleEditor.onChange = () => {
-        const title = controller.TitleEditor.children[0] as TitleElement;
-        if (title?.children?.[0]?.text !== oldTitle) {
-          oldTitle = title?.children?.[0]?.text;
+      controller.onChange = () => {
+        const title = getNodeString(controller.children[0]);
+        if (title !== oldTitle) {
+          oldTitle = title;
           changeTitle(oldTitle);
         }
         onChange();
@@ -120,7 +116,7 @@ export const createNotebookStore = (onDestroy: () => void) =>
         notebookId,
         {
           ...docsync,
-          controller,
+          editor: controller,
           onError: captureException,
         },
         getSession

@@ -4,33 +4,41 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 
-import { MyElement, TabElement } from '@decipad/editor-types';
-import { Computer, Program, ProgramBlock } from '@decipad/computer';
+import {
+  MyElement,
+  NotebookValue,
+  TabElement,
+  AnyElement,
+} from '@decipad/editor-types';
+import { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
-import { TOperation, findNode, isElement } from '@udecode/plate';
+import { EElement, TOperation, isElement } from '@udecode/plate';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
-import { EditorController } from './EditorController';
+import { RootEditorController } from './types';
 
 export class BlockProcessor {
-  private Controller: EditorController;
-  private Computer: Computer;
+  private rootEditor: RootEditorController;
+  private Computer: RemoteComputer;
 
   private ProgramCache: Map<string, ProgramBlock>;
-  public DirtyBlocksSet: Map<string, MyElement>;
+  public DirtyBlocksSet: Map<string, EElement<NotebookValue>>;
 
   private Computing: Promise<void> | undefined;
   private Next: (() => void) | undefined;
 
   public MaybeCompute: () => void;
 
+  private isFirst: boolean;
+
   constructor(
-    controller: EditorController,
-    computer: Computer,
+    rootEditor: RootEditorController,
+    computer: RemoteComputer,
     debounceEditorChangesMs: number
   ) {
-    this.Controller = controller;
+    this.isFirst = true;
+    this.rootEditor = rootEditor;
     this.Computer = computer;
 
     this.ProgramCache = new Map();
@@ -41,32 +49,30 @@ export class BlockProcessor {
 
     this.MaybeCompute = debounce(this.PushCompute, debounceEditorChangesMs);
 
-    const { apply, onChange, Loaded } = controller;
+    const { apply, onChange } = rootEditor;
 
-    controller.apply = (op) => {
+    rootEditor.apply = (op) => {
       if (op.type !== 'remove_node') {
-        apply.bind(controller)(op);
+        apply.bind(rootEditor)(op);
       }
       this.EditorOverride(op);
       if (op.type === 'remove_node') {
-        apply.bind(controller)(op);
+        apply.bind(rootEditor)(op);
       }
     };
 
-    controller.onChange = () => {
-      onChange.bind(controller)();
-      this.MaybeCompute();
-    };
-
-    controller.Loaded = (...args) => {
-      Loaded.bind(controller)(...args);
-      this.SetAllBlocksDirty();
+    rootEditor.onChange = () => {
+      if (this.isFirst) {
+        this.SetAllBlocksDirty();
+        this.isFirst = false;
+      }
+      onChange.bind(rootEditor)();
       this.MaybeCompute();
     };
   }
 
   public SetAllBlocksDirty() {
-    for (const _tab of this.Controller.children.slice(1)) {
+    for (const _tab of this.rootEditor.children.slice(1)) {
       const tab = _tab as TabElement;
       for (const block of tab.children) {
         this.DirtyBlocksSet.set(block.id, block);
@@ -77,16 +83,11 @@ export class BlockProcessor {
   private async Compute() {
     this.RemoveDirtyBlocks();
 
-    const wholeProgram: Program = [];
-
-    for (const editor of this.Controller.SubEditors) {
-      const programUpdates = await editorToProgram(
-        editor,
-        this.DirtyBlocksSet.values(),
-        this.Computer
-      );
-      wholeProgram.push(...programUpdates);
-    }
+    const wholeProgram = await editorToProgram(
+      this.rootEditor,
+      this.DirtyBlocksSet.values() as Iterable<AnyElement>,
+      this.Computer
+    );
 
     for (const update of wholeProgram) {
       this.ProgramCache.set(update.id, update);
@@ -137,7 +138,7 @@ export class BlockProcessor {
   }
 
   public RemoveNode(id: string) {
-    for (const editor of this.Controller.SubEditors) {
+    for (const editor of this.rootEditor.getAllTabEditors()) {
       for (const blockId of allBlockIds(editor, id)) {
         this.ProgramCache.delete(blockId);
         this.DirtyBlocksSet.delete(blockId);
@@ -159,7 +160,7 @@ export class BlockProcessor {
       // Tab editor, skip
       if (path.length <= 1) continue;
 
-      const node = this.Controller.GetNode(path);
+      const node = this.rootEditor.getNode(path);
       if (isElement(node) && 'id' in node && typeof node.id === 'string') {
         this.DirtyBlocksSet.set(node.id, node);
       }
@@ -170,7 +171,7 @@ export class BlockProcessor {
       if (isElement(node) && 'id' in node && typeof node.id === 'string') {
         this.RemoveNode((node as any).id);
         if (op.path.length > 2) {
-          const rootBlock = this.Controller.GetNode(op.path.slice(0, 2));
+          const rootBlock = this.rootEditor.getNode(op.path.slice(0, 2));
           if (rootBlock) {
             if (
               isElement(rootBlock) &&
@@ -190,13 +191,9 @@ export class BlockProcessor {
       op.path.length > 0
     ) {
       {
-        const tabIndex = op.path[0];
         const oldId = op.properties.id as string;
-        const oldEntry = findNode(this.Controller.SubEditors[tabIndex], {
-          match: { id: oldId },
-        });
-        if (oldEntry) {
-          const [oldNode] = oldEntry;
+        const oldNode = this.rootEditor.findNodeById(oldId);
+        if (oldNode) {
           if (
             isElement(oldNode) &&
             'id' in oldNode &&
@@ -208,13 +205,9 @@ export class BlockProcessor {
       }
 
       {
-        const tabIndex = op.path[0];
         const newId = op.newProperties.id as string;
-        const newEntry = findNode(this.Controller.SubEditors[tabIndex], {
-          match: { id: newId },
-        });
-        if (newEntry) {
-          const [newNode] = newEntry;
+        const newNode = this.rootEditor.findNodeById(newId);
+        if (newNode) {
           if (
             isElement(newNode) &&
             'id' in newNode &&

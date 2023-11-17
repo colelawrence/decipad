@@ -2,7 +2,7 @@ import { disable } from '@decipad/feature-flags';
 import { getDefined } from '@decipad/utils';
 import waitForExpect from 'wait-for-expect';
 import { createDocSyncEditor, DocSyncEditor } from '.';
-import { EditorController } from '@decipad/notebook-tabs';
+import { createTestEditorController } from './testEditorController';
 
 describe('pad editor persistence', () => {
   let editor: DocSyncEditor;
@@ -24,7 +24,7 @@ describe('pad editor persistence', () => {
     editor = createDocSyncEditor('docid', {
       protocolVersion: 2,
       ws: false,
-      controller: new EditorController('docid', []),
+      editor: createTestEditorController('docid', []),
     });
     editor.onLoaded(onLoaded);
     editor.onSaved(onSaved);
@@ -59,7 +59,7 @@ describe('pad editor persistence', () => {
     };
     const e = getDefined(editor);
 
-    e.editorController.apply({
+    e.apply({
       type: 'insert_node',
       path: [0],
       node: {
@@ -69,20 +69,35 @@ describe('pad editor persistence', () => {
       },
     });
 
-    e.editorController.apply({
+    e.apply({
       type: 'insert_text',
       path: [0, 0],
       offset: 0,
       text: title,
     });
 
-    e.editorController.Loaded();
+    e.apply({
+      type: 'insert_node',
+      path: [1],
+      node: {
+        id: 'tabId',
+        type: 'tab',
+        name: 'My Tab',
+        children: [
+          {
+            id: 'pId',
+            type: 'p',
+            children: [{ text: '' }],
+          },
+        ],
+      },
+    });
 
     await waitForExpect(() => {
       expect(saved).toBe(true);
     });
 
-    expect(e.editorController.children).toMatchObject([
+    expect(e.children).toMatchObject([
       {
         children: [
           {
@@ -111,7 +126,7 @@ describe('pad editor persistence', () => {
     };
     const editor2 = createDocSyncEditor('docid', {
       ws: false,
-      controller: new EditorController('docid', []),
+      editor: createTestEditorController('docid', []),
       protocolVersion: 2,
     });
     editor2.onLoaded(onLoaded2);
@@ -120,7 +135,7 @@ describe('pad editor persistence', () => {
       expect(loaded).toBe(true);
     });
 
-    expect(editor2.editorController.children).toMatchObject([
+    expect(editor2.children).toMatchObject([
       {
         children: [
           {

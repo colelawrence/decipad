@@ -4,10 +4,8 @@ import {
   TabElement,
   TitleElement,
 } from '@decipad/editor-types';
-import { TOperation, TSelectionOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate';
 import { Element, Text } from 'slate';
-
-export type NoSelectOperations = Exclude<TOperation, TSelectionOperation>;
 
 export function IsTitle(node: unknown): node is TitleElement {
   return (
@@ -29,7 +27,7 @@ export function IsTab(node: unknown): node is TabElement {
   );
 }
 
-export function IsOldOperation(op: NoSelectOperations): boolean {
+export function IsOldOperation(op: TOperation): boolean {
   return (
     op.type === 'insert_node' &&
     op.path.length === 1 &&

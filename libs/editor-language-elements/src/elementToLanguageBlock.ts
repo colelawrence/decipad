@@ -1,4 +1,8 @@
-import type { MyEditor, MyElement } from '@decipad/editor-types';
+import type {
+  AnyElement,
+  MinimalRootEditor,
+  MyEditor,
+} from '@decipad/editor-types';
 import type { Program, RemoteComputer } from '@decipad/remote-computer';
 import { isElement } from '@udecode/plate';
 
@@ -27,9 +31,9 @@ export const interactiveElementTypes = new Set(
  * The result of this function, called once an element changes, is fed into the computer.
  */
 export const elementToLanguageBlocks = async (
-  editor: MyEditor,
+  editor: MinimalRootEditor | MyEditor,
   computer: RemoteComputer,
-  element: MyElement
+  element: AnyElement
 ): Promise<Program | null> => {
   const interactiveElement = interactiveElementsByType.get(element.type);
   if (!interactiveElement) {

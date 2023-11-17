@@ -1,20 +1,20 @@
 import stringify from 'json-stringify-safe';
-import { isText, TDescendant, TNodeOperation } from '@udecode/plate';
+import { isText, type TDescendant, type TNodeOperation } from '@udecode/plate';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
-import { YjsEditor } from '@decipad/slate-yjs';
 import { SyncElement } from '../model';
 import { toSlateNode, toSlatePath } from '../utils/convert';
+import { MinimalRootEditor } from '@decipad/editor-types';
 
 /**
  * Translates a Yjs array event into a slate operations.
  */
 export default function translateArrayEvent(
-  editor: YjsEditor,
+  editor: MinimalRootEditor,
   event: Y.YArrayEvent<SyncElement>
 ): TNodeOperation[] {
   const targetPath = toSlatePath(event.path);
-  const targetElement = editor.editorController.GetNode(targetPath);
+  const targetElement = editor.getNode(targetPath);
   if (!targetElement) return [];
 
   invariant(!isText(targetElement), 'Cannot apply array event to text node');

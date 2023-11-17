@@ -10,12 +10,12 @@ import {
   withYjs,
 } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
-import { EditorController } from '@decipad/notebook-tabs';
 import {
   TWebSocketProvider,
   createWebsocketProvider,
 } from '@decipad/y-websocket';
 import { supports } from '@decipad/support';
+import { MinimalRootEditor } from '@decipad/editor-types';
 import { docSyncEditor } from './docSyncEditor';
 import { setupUndo } from './setupUndo';
 import { nanoid } from 'nanoid';
@@ -23,8 +23,7 @@ import { getLocalNotebookUpdates } from './getLocalNotebookUpdates';
 
 const tokenTimeoutMs = 60 * 1000;
 
-// AAA= is state for a completely empty Yjs document.
-const EMPTY_STATE = 'AAA=';
+export const slateYjsSymbol = Symbol('slate-yjs');
 
 declare global {
   interface Window {
@@ -37,7 +36,8 @@ const isTesting = !!process.env.JEST_WORKER_ID;
 // A few helper functions to help customer support recover notebooks.
 if (
   typeof window !== 'undefined' &&
-  window.location.host === 'staging.decipad.com'
+  (window.location.host.includes('staging.decipad.com') ||
+    window.location.host.includes('localhost'))
 ) {
   window.yjsToJson = (text: string) => {
     const data = Buffer.from(text, 'base64');
@@ -53,7 +53,7 @@ interface DocSyncConnectionParams {
 }
 
 export interface DocSyncOptions {
-  controller: EditorController;
+  editor: MinimalRootEditor;
   readOnly?: boolean;
   authSecret?: string;
   WebSocketPolyfill?: typeof WebSocket;
@@ -86,7 +86,7 @@ async function wsAddress(docId: string): Promise<string> {
 export function createDocSyncEditor(
   docId: string,
   {
-    controller,
+    editor,
     readOnly = false,
     authSecret,
     onError,
@@ -149,7 +149,7 @@ export function createDocSyncEditor(
 
   // Yjs editor
   const shared = doc.getArray<SyncElement>();
-  const yjsEditor = withYjs(controller, shared);
+  const yjsEditor = withYjs(editor, shared);
 
   let destroyed = false;
   let synced = false;
@@ -165,10 +165,8 @@ export function createDocSyncEditor(
           const update = Buffer.from(initialState, 'base64');
           applyUpdate(doc, update);
 
-          const isInitialState = initialState === EMPTY_STATE;
           setTimeout(() => {
             if (!destroyed) {
-              controller.Loaded(undefined, isInitialState);
               syncEditor.setLoadedRemotely();
             }
           }, 0);

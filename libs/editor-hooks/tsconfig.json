@@ -23,7 +23,7 @@
       "path": "../react-utils"
     },
     {
-      "path": "../notebook-tabs"
+      "path": "../routing"
     }
   ]
 }

@@ -8,11 +8,9 @@ import {
   getPointBefore,
   getRange,
   isCollapsed,
-  isVoid,
   moveSelection,
   someNode,
 } from '@udecode/plate';
-import { normalizeInsertNodeText } from './normalizeInsertNodeText';
 import { applyCodeLineSelection } from './applyCodeLineSelection';
 
 export const withCodeLine: MyWithOverride = (editor) => {
@@ -53,12 +51,7 @@ export const withCodeLine: MyWithOverride = (editor) => {
 
   // eslint-disable-next-line no-param-reassign
   editor.apply = (op) => {
-    if (op.type === 'insert_node' && !isVoid(editor, op.node)) {
-      normalizeInsertNodeText(editor, op.node);
-    }
-
     applyCodeLineSelection(editor, op);
-
     apply(op);
   };
 

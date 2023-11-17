@@ -2,10 +2,11 @@ import {
   ElementKind,
   MyElement,
   EditorObserverMessage,
-  ELEMENT_COLUMNS,
+  AnyElement,
 } from '@decipad/editor-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useEditorController } from '@decipad/notebook-tabs';
+import { useEditorController } from '@decipad/editor-hooks';
+import { extractTopLevelElements } from './extractTopLevelElements';
 
 export type SpecificObserver<T extends ElementKind> = EditorObserverMessage<
   Extract<MyElement, { type: T }>
@@ -29,7 +30,7 @@ export function useElementObserver<T extends ElementKind>(
   const controller = useEditorController();
 
   useEffect(() => {
-    const observer = controller?.ElementObserver.CreateElementObserver(
+    const observer = controller?.elementObserver.CreateElementObserver(
       elementType,
       elementId
     );
@@ -43,7 +44,7 @@ export function useElementObserver<T extends ElementKind>(
     return () => {
       observer$.unsubscribe();
     };
-  }, [callback, controller?.ElementObserver, elementId, elementType]);
+  }, [callback, controller?.elementObserver, elementId, elementType]);
 }
 
 type Element<T extends ElementKind> = Extract<MyElement, { type: T }>;
@@ -53,38 +54,20 @@ type Element<T extends ElementKind> = Extract<MyElement, { type: T }>;
  *
  * Taking in a predicate to run against top level elements on the notebook.
  */
-export function useElements<T extends ElementKind>(
-  elementType: T,
-  predicate: (e: Element<T>) => boolean
-) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const refPredicate = useMemo(() => predicate, [elementType]);
+export function useElements<
+  TKind extends ElementKind,
+  TElement extends Element<TKind>
+>(elementType: TKind, predicate: (e: AnyElement) => boolean): Array<TElement> {
   const controller = useEditorController();
 
-  const [elements, setElements] = useState<Array<Element<T>>>([]);
+  const [elements, setElements] = useState<Array<TElement>>([]);
 
   const callback = useCallback(() => {
-    const el: Array<Element<T>> = [];
-    // Iterate over SubEditors AKA tabs.
-    for (const editor of controller?.SubEditors ?? []) {
-      // We first must check the columns (as they can contain elements too).
-      const elementsInColumns = editor.children
-        .filter(
-          (c): c is Element<typeof ELEMENT_COLUMNS> =>
-            c.type === ELEMENT_COLUMNS
-        )
-        .flatMap((c) => c.children)
-        .filter((c) => c.type === elementType)
-        .filter(refPredicate as any) as Array<Element<T>>;
-
-      el.push(...elementsInColumns);
-
-      el.push(
-        ...(editor.children
-          .filter((c) => c.type === elementType)
-          .filter(refPredicate as any) as Array<Element<T>>)
-      );
-    }
+    const el = controller
+      ? (extractTopLevelElements(controller).filter(
+          predicate
+        ) as Array<TElement>)
+      : [];
 
     // Performance optimisation to reduce initial renders.
     setElements((oldElements) => {
@@ -93,7 +76,7 @@ export function useElements<T extends ElementKind>(
       }
       return el;
     });
-  }, [controller?.SubEditors, elementType, refPredicate]);
+  }, [controller, predicate]);
 
   useElementObserver(callback, elementType);
 

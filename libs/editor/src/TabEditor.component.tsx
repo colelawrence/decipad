@@ -1,18 +1,19 @@
 import { ComponentProps, FC } from 'react';
 import { Editor } from './Editor.component';
-import { EditorController, useTabs } from '@decipad/notebook-tabs';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { EditorIdContext } from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
 import { useUndo } from './hooks/useUndo';
 import { useNavigate } from 'react-router-dom';
+import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
+import { useTabs } from '@decipad/editor-hooks';
 
 type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,
   'editor' | 'tabIndex' | 'titleEditor'
 > & {
-  controller: EditorController;
+  controller: MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor;
 };
 
 /**
@@ -28,7 +29,7 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   loaded,
 }) => {
   const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
-  const tabs = useTabs(controller);
+  const tabs = useTabs();
   const nav = useNavigate();
 
   useUndo(controller);
@@ -50,10 +51,11 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
 
   // leaving this until tabs reach production
   // selects 0 index tab if tab is not provided
-  const subEditorIndex =
-    tab != null ? controller.SubEditors.findIndex((v) => v.id === tab) : 0;
+  const tabEditorIndex = controller.getTabEditorIndex(
+    tabExists ? tab : defaultTabId
+  );
 
-  if (subEditorIndex === -1 || !controller.IsLoaded) {
+  if (tabEditorIndex === -1) {
     if (tab != null) {
       // We hit an edge case, where we have a link to a tab that was deleted.
       nav(notebooks({ notebook }).notebook({ notebook, embed }).$);
@@ -61,7 +63,9 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
     return <>Loading...</>;
   }
 
-  const subEditor = controller.SubEditors[subEditorIndex];
+  const subEditor = controller.getTabEditorAt(tabEditorIndex);
+
+  const titleEditor = controller.getTitleEditor();
 
   return (
     <EditorIdContext.Provider value={notebookId}>
@@ -72,16 +76,15 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
         readOnly={readOnly}
         loaded={loaded}
         editor={subEditor}
-        tabIndex={subEditorIndex}
+        tabIndex={tabEditorIndex}
         titleEditor={
           <TitleEditor
             tab={tab}
-            editor={controller.TitleEditor}
-            initialValue={controller.TitleEditor.children}
+            editor={titleEditor}
+            initialValue={titleEditor.children}
             readOnly={readOnly}
-            onUndo={controller.Undo}
-            onRedo={controller.Redo}
-            mainEditor={subEditor}
+            onUndo={controller.undo}
+            onRedo={controller.redo}
           />
         }
       />

@@ -15,6 +15,7 @@
     { "path": "../fetch" },
     { "path": "../editor-utils" },
     { "path": "../toast" },
-    { "path": "../interfaces" }
+    { "path": "../interfaces" },
+    { "path": "../notebook-tabs" }
   ]
 }

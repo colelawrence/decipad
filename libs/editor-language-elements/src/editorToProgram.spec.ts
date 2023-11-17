@@ -1,6 +1,5 @@
 import {
   ColumnsElement,
-  MyEditor,
   ParagraphElement,
   TableElement,
   TableCaptionElement,
@@ -19,88 +18,101 @@ import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
+  ELEMENT_TITLE,
+  ELEMENT_TAB,
 } from '@decipad/editor-types';
 import { Computer, prettyPrintAST, Program } from '@decipad/computer';
-import { createPlateEditor } from '@udecode/plate';
 import { getOnly } from '@decipad/utils';
 import { editorToProgram } from './editorToProgram';
+import { createTestEditorController } from './testEditorController';
 
 describe('editorToProgram', () => {
   it('creates a program out of an editor', async () => {
-    const editor = createPlateEditor() as MyEditor;
+    const editor = createTestEditorController('id');
     editor.children = [
-      { type: 'h1', id: '1', children: [{ text: '' }] },
+      { type: ELEMENT_TITLE, id: '1', children: [{ text: '' }] },
       {
-        type: ELEMENT_CODE_LINE,
-        id: 'line',
-        children: [{ text: '1 + 1' }],
-      } as CodeLineElement,
-      {
-        type: ELEMENT_CODE_LINE_V2,
-        id: 'line-v2',
+        type: ELEMENT_TAB,
+        id: 'tab1',
+        name: 'First tab',
         children: [
           {
-            type: ELEMENT_STRUCTURED_VARNAME,
-            id: 'line-v2-var',
-            children: [{ text: 'SeparateVarName' }],
-          },
+            type: ELEMENT_CODE_LINE,
+            id: 'line',
+            children: [{ text: '1 + 1' }],
+          } as CodeLineElement,
           {
-            type: ELEMENT_CODE_LINE_V2_CODE,
-            id: 'line-v2-code',
-            children: [{ text: '1' }],
-          },
-        ],
-      } as CodeLineV2Element,
-      mkVariableDef('input', 'varName', '123'),
-      {
-        type: 'columns',
-        id: 'columns',
-        children: [
-          mkVariableDef('columns/1', 'a', '12.34'),
-          mkVariableDef('columns/2', 'b', '45.67'),
-        ],
-      } as ColumnsElement,
-      {
-        type: ELEMENT_PARAGRAPH,
-        id: 'paragraph',
-        children: [{ text: 'x' }, { text: '1 + 1', magicnumberz: true }],
-      } as ParagraphElement,
-      {
-        type: ELEMENT_TABLE,
-        id: 'table',
-        children: [
-          {
-            type: ELEMENT_TABLE_CAPTION,
-            id: 'table-caption',
+            type: ELEMENT_CODE_LINE_V2,
+            id: 'line-v2',
             children: [
               {
-                type: ELEMENT_TABLE_VARIABLE_NAME,
-                id: 'table-varname',
-                children: [{ text: 'TableName' }],
+                type: ELEMENT_STRUCTURED_VARNAME,
+                id: 'line-v2-var',
+                children: [{ text: 'SeparateVarName' }],
+              },
+              {
+                type: ELEMENT_CODE_LINE_V2_CODE,
+                id: 'line-v2-code',
+                children: [{ text: '1' }],
               },
             ],
-          } as TableCaptionElement,
+          } as CodeLineV2Element,
+          mkVariableDef('input', 'varName', '123'),
           {
-            type: ELEMENT_TR,
-            id: 'header-row',
+            type: 'columns',
+            id: 'columns',
+            children: [
+              mkVariableDef('columns/1', 'a', '12.34'),
+              mkVariableDef('columns/2', 'b', '45.67'),
+            ],
+          } as ColumnsElement,
+          {
+            type: ELEMENT_PARAGRAPH,
+            id: 'paragraph',
+            children: [{ text: 'x' }, { text: '1 + 1', magicnumberz: true }],
+          } as ParagraphElement,
+          {
+            type: ELEMENT_TABLE,
+            id: 'table',
             children: [
               {
-                type: ELEMENT_TH,
-                id: 'th',
-                cellType: { kind: 'string' },
-                children: [{ text: 'ColName' }],
+                type: ELEMENT_TABLE_CAPTION,
+                id: 'table-caption',
+                children: [
+                  {
+                    type: ELEMENT_TABLE_VARIABLE_NAME,
+                    id: 'table-varname',
+                    children: [{ text: 'TableName' }],
+                  },
+                ],
+              } as TableCaptionElement,
+              {
+                type: ELEMENT_TR,
+                id: 'header-row',
+                children: [
+                  {
+                    type: ELEMENT_TH,
+                    id: 'th',
+                    cellType: { kind: 'string' },
+                    children: [{ text: 'ColName' }],
+                  },
+                ],
+              },
+              {
+                type: ELEMENT_TR,
+                id: 'tr',
+                children: [
+                  {
+                    type: ELEMENT_TD,
+                    id: 'td',
+                    children: [{ text: 'CellData' }],
+                  },
+                ],
               },
             ],
-          },
-          {
-            type: ELEMENT_TR,
-            id: 'tr',
-            children: [
-              { type: ELEMENT_TD, id: 'td', children: [{ text: 'CellData' }] },
-            ],
-          },
+          } as TableElement,
         ],
-      } as TableElement,
+      },
     ];
     const program = await editorToProgram(
       editor,

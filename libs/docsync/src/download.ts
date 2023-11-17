@@ -1,7 +1,6 @@
 import stringify from 'json-stringify-safe';
-import { DocSyncEditor } from './types';
-import { TNode, getNodeString } from '@udecode/plate';
-import { EditorController } from '@decipad/notebook-tabs';
+import { getNodeString } from '@udecode/plate';
+import { MinimalRootEditor } from '@decipad/editor-types';
 
 const forceDownload = (fileName: string, file: Blob) => {
   // Create blob link to download
@@ -20,21 +19,19 @@ const forceDownload = (fileName: string, file: Blob) => {
   link.parentNode?.removeChild(link);
 };
 
-const getNotebookTitle = (document: EditorController): string =>
-  getNodeString(document.TitleEditor.children[0] as TNode) || 'notebook';
+const getNotebookTitle = (editor: MinimalRootEditor): string =>
+  getNodeString(editor.children[0]) || 'notebook';
 
-export const download = (editor: DocSyncEditor) => {
+export const download = (editor: MinimalRootEditor) => {
   const doc = stringify(
     {
-      children: editor.editorController.children,
+      children: editor.children,
     },
     null,
     '\t'
   );
   forceDownload(
-    `${getNotebookTitle(editor.editorController)}-${
-      editor.editorController.NotebookId
-    }.json`,
+    `${getNotebookTitle(editor)}-${editor.id}.json`,
     new Blob([doc])
   );
 };

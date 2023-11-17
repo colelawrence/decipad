@@ -11,7 +11,7 @@ export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
     /**
      * Previously, the code for changing the `captureTransaction` was in `withoutCapturingUndo`,
      * However this seemed to create a race condition of sorts, and therefore we have the logic here.
-     * We simply change it to true everytime it is false.
+     * We simply change it to true every time it is false.
      */
     captureTransaction: () => {
       if (captureTransaction) {
@@ -31,18 +31,12 @@ export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
 
   editor.undoManager = undoManager;
 
-  const sub = editor.editorController.Notifier.subscribe((e) => {
-    if (e === 'undo') {
-      editor.undoManager?.undo();
-    } else if (e === 'redo') {
-      editor.undoManager?.redo();
-    }
-  });
+  editor.undo = () => {
+    editor.undoManager?.undo();
+  };
 
-  const { destroy } = editor;
-  editor.destroy = () => {
-    sub.unsubscribe();
-    destroy();
+  editor.redo = () => {
+    editor.undoManager?.redo();
   };
 
   return editor;

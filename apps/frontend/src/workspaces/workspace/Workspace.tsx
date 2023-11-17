@@ -39,6 +39,7 @@ import { ErrorPage, Frame, LazyRoute } from '../../meta';
 import { useMutationResultHandler } from '../../utils/useMutationResultHandler';
 import EditDataConnectionsModal from './EditDataConnectionsModal';
 import { NotebookList } from './NotebookList';
+import { initNewDocument } from '@decipad/docsync';
 
 type WorkspaceProps = {
   readonly isRedirectFromStripe?: boolean;
@@ -171,12 +172,18 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     };
 
     const createdNotebookData = await createNotebook(args);
-    if (createdNotebookData != null) {
+    if (createdNotebookData == null) return;
+
+    try {
+      await initNewDocument(createdNotebookData.createPad.id);
       navigate(
         notebooks({}).notebook({
           notebook: createdNotebookData.createPad,
         }).$
       );
+    } catch (e) {
+      console.error(e);
+      toast('Failed to create new notebook', 'error');
     }
   };
   const sidebarWrapper = (

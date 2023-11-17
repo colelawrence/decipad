@@ -29,7 +29,7 @@ import { DropZoneDetector } from './DropZoneDetector';
 import { defaultEditorAttachmentsContextValue } from './EditorAttachmentsContext';
 import { attachGenericFile } from './attachGeneric';
 import { maybeSourceFromFileType } from './maybeSourceFromFileType';
-import { useActiveEditor } from '@decipad/notebook-tabs';
+import { useActiveEditor } from '@decipad/editor-hooks';
 
 const uploadProgressWrapperStyles = css({
   zIndex: 3,
@@ -57,7 +57,7 @@ export const EditorAttachmentsHandler: FC<EditorAttachmentsHandlerProps> = ({
   );
   const canDropState = dndStore.use.canDrop();
 
-  const activeEditor = useActiveEditor(editor?.editorController);
+  const activeEditor = useActiveEditor(editor);
 
   const onUploadProgress = useCallback(
     (file: File) => (progressEvent: AxiosProgressEvent) => {

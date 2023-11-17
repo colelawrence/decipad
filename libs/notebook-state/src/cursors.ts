@@ -1,6 +1,9 @@
 import { BaseSelection } from 'slate';
 import { jsonify } from 'libs/slate-yjs/src/utils/jsonify';
-import { CursorEditor } from '@decipad/slate-yjs';
+import {
+  TCursorEditor as GTCursorEditor,
+  TYjsEditor as GTYjsEditor,
+} from '@decipad/slate-yjs';
 import {
   OpaqueColor,
   blue400,
@@ -13,6 +16,10 @@ import {
 } from '@decipad/ui';
 import debounce from 'lodash.debounce';
 import { cursorStore } from '@decipad/react-contexts';
+import { MinimalRootEditor } from '@decipad/editor-types';
+
+type TCursorEditor = GTCursorEditor<MinimalRootEditor>;
+type TYjsEditor = GTYjsEditor<MinimalRootEditor>;
 
 type CursorData = {
   key: number;
@@ -82,7 +89,7 @@ function getCursorData(
     .filter((cursor) => cursor.selection.anchor && cursor.selection.focus);
 }
 
-export function CursorAwarenessSchedule(editor: CursorEditor) {
+export function CursorAwarenessSchedule(editor: TCursorEditor & TYjsEditor) {
   setTimeout(() => {
     editor.awareness.on(
       'update',

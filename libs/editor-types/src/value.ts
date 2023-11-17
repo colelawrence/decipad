@@ -347,6 +347,8 @@ export type TopLevelValue =
 
 export type NotebookValue = [TitleElement, ...Array<TabElement>];
 
+export type TitleValue = [TitleElement];
+
 export type RootDocument = {
   children: NotebookValue;
 };
