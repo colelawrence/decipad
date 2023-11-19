@@ -7043,12 +7043,12 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@playwright/test@^1.39.0":
-  version "1.39.0"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.39.0.tgz#d10ba8e38e44104499e25001945f07faa9fa91cd"
-  integrity sha512-3u1iFqgzl7zr004bGPYiN/5EZpRUSFddQBra8Rqll5N0/vfpqlP9I9EXqAoGacuAbX6c9Ulg/Cjqglp5VkK6UQ==
+"@playwright/test@^1.40.0":
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.40.0.tgz#d06c506977dd7863aa16e07f2136351ecc1be6ed"
+  integrity sha512-PdW+kn4eV99iP5gxWNSDQCbhMaDVej+RXL5xr6t04nbKLCBwYtA046t7ofoczHOm8u6c+45hpDKQVZqtqwkeQg==
   dependencies:
-    playwright "1.39.0"
+    playwright "1.40.0"
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3", "@pmmmwh/react-refresh-webpack-plugin@^0.5.5":
   version "0.5.10"
@@ -16697,12 +16697,7 @@ caniuse-lite@1.0.30001414:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001414.tgz#5f1715e506e71860b4b07c50060ea6462217611e"
   integrity sha512-t55jfSaWjCdocnFdKQoO+d2ct9C59UZg4dY3OnUlSZ447r8pUtIKdp0hpAzrGFultmTC+Us+KpKi4GZl/LXlFg==
 
-caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001464, caniuse-lite@^1.0.30001541:
-  version "1.0.30001547"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001547.tgz#d4f92efc488aab3c7f92c738d3977c2a3180472b"
-  integrity sha512-W7CrtIModMAxobGhz8iXmDfuJiiKg1WADMO/9x7/CLNin5cpSbuBjooyoIUVB5eyCc36QuTVlkVa1iB2S5+/eA==
-
-caniuse-lite@^1.0.30001406:
+caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001464, caniuse-lite@^1.0.30001541:
   version "1.0.30001562"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001562.tgz#9d16c5fd7e9c592c4cd5e304bc0f75b0008b2759"
   integrity sha512-kfte3Hym//51EdX4239i+Rmp20EsLIYGdPkERegTgU19hQWCRhsRFGKHTliUlsry53tv17K7n077Kqa0WJU4ng==
@@ -28683,17 +28678,17 @@ pkg-up@^3.1.0:
   dependencies:
     find-up "^3.0.0"
 
-playwright-core@1.39.0:
-  version "1.39.0"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.39.0.tgz#efeaea754af4fb170d11845b8da30b2323287c63"
-  integrity sha512-+k4pdZgs1qiM+OUkSjx96YiKsXsmb59evFoqv8SKO067qBA+Z2s/dCzJij/ZhdQcs2zlTAgRKfeiiLm8PQ2qvw==
+playwright-core@1.40.0:
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.40.0.tgz#82f61e5504cb3097803b6f8bbd98190dd34bdf14"
+  integrity sha512-fvKewVJpGeca8t0ipM56jkVSU6Eo0RmFvQ/MaCQNDYm+sdvKkMBBWTE1FdeMqIdumRaXXjZChWHvIzCGM/tA/Q==
 
-playwright@1.39.0:
-  version "1.39.0"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.39.0.tgz#184c81cd6478f8da28bcd9e60e94fcebf566e077"
-  integrity sha512-naE5QT11uC/Oiq0BwZ50gDmy8c8WLPRTEWuSSFVG2egBka/1qMoSqYQcROMT9zLwJ86oPofcTH2jBY/5wWOgIw==
+playwright@1.40.0:
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.40.0.tgz#2a1824b9fe5c4fe52ed53db9ea68003543a99df0"
+  integrity sha512-gyHAgQjiDf1m34Xpwzaqb76KgfzYrhK7iih+2IzcOCoZWr/8ZqmdBw+t0RU85ZmfJMgtgAiNtBQ/KS2325INXw==
   dependencies:
-    playwright-core "1.39.0"
+    playwright-core "1.40.0"
   optionalDependencies:
     fsevents "2.3.2"
 
