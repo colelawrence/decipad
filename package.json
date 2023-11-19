@@ -323,7 +323,7 @@
     "slug": "8.2.2",
     "storybook-dark-mode": "3.0.0",
     "stream-browserify": "3.0.0",
-    "strip-markdown": "^5.0.1",
+    "strip-markdown": "^6.0.0",
     "stripe": "^13.10.0",
     "styled-components": "6.1.0",
     "tedious": "^16.6.0",
