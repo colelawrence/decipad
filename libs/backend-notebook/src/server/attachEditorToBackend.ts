@@ -26,6 +26,7 @@ export const attachEditorToBackend = async (
   const comms = new LambdaWebsocketProvider(resource, undefined, doc, {
     protocolVersion: 2,
   });
+  await timeout(1000); // TODO: fixed timeout
   await persistence.flush();
   const detach: Detach = async () => {
     await timeout(1000);

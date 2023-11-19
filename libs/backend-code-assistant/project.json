@@ -17,6 +17,13 @@
         "command": "yarn tsc -b libs/backend-code-assistant"
       }
     },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "mkdir -p build && ./scripts/collate-language-docs/collateLanguageDocs.js > build/languageDocs.md",
+        "cwd": "libs/backend-code-assistant"
+      }
+    },
     "depcheck": {
       "executor": "nx:run-commands",
       "options": {

@@ -1,9 +1,10 @@
-import { insertNodes, getNode, getNodeString } from '@udecode/plate';
+import { insertNodes, getNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { ELEMENT_TH, TableHeaderElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
+import { getNodeString } from '../utils/getNodeString';
 
 export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
   summary: 'inserts an empty column in an existing table',
@@ -37,6 +38,7 @@ export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
   validateParams: (params): params is ActionParams<'insertEmptyTableColumn'> =>
     typeof params.tableId === 'string' && typeof params.columnName === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const headerRow = table.children[1];

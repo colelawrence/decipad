@@ -11,6 +11,7 @@ import { insertTableRow } from './insertTableRow';
 import { replaceText } from './utils/replaceText';
 import { TableCellElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
+import { notAcceptable } from '@hapi/boom';
 
 export const updateTableCell: Action<'updateTableCell'> = {
   summary: 'updates the content of a cell on a table',
@@ -50,7 +51,13 @@ export const updateTableCell: Action<'updateTableCell'> = {
     typeof params.rowIndex === 'number' &&
     typeof params.newCellContent === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, rowIndex, newCellContent }) => {
+    if (newCellContent.startsWith('=')) {
+      throw notAcceptable(
+        'table cells cannot have formulas. Instead you can use a column formula or a code line.'
+      );
+    }
     const [table, tablePath] = getTableById(editor, tableId);
     const headerIndex = getTableColumnIndexByName(table, columnName);
     const updateCellPath = [...tablePath, rowIndex + 2, headerIndex, 0];

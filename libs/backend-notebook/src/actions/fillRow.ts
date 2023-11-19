@@ -1,9 +1,10 @@
-import { getNodeString, hasNode, withoutNormalizing } from '@udecode/plate';
+import { hasNode, withoutNormalizing } from '@udecode/plate';
 import { Action, ActionParams, RequiresNotebookAction } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { notAcceptable } from '@hapi/boom';
 import { insertTableRow } from './insertTableRow';
 import { updateTableCell } from './updateTableCell';
+import { getNodeString } from '../utils/getNodeString';
 
 export const fillRow: Action<'fillRow'> = {
   summary: 'updates the data on a table row',
@@ -42,6 +43,7 @@ export const fillRow: Action<'fillRow'> = {
     Array.isArray(params.rowData) &&
     params.rowData.every((cell) => typeof cell === 'string'),
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex, rowData }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const columnCount = table.children[1].children.length;

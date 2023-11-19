@@ -32,6 +32,7 @@ export const appendText: Action<'appendText'> = {
   validateParams: (params): params is ActionParams<'appendText'> =>
     typeof params.markdownText === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { markdownText }) => {
     const tree = deserializeMd(editor, markdownText) as MyElement[];
 

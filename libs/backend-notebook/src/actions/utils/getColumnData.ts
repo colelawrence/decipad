@@ -1,5 +1,5 @@
 import { TableElement } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '../../utils/getNodeString';
 
 export const getColumnData = (
   table: TableElement,

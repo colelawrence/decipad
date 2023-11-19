@@ -1,37 +1,26 @@
-import { MyEditor, MyValue } from '@decipad/editor-types';
+import { AnyElement, MyEditor, MyValue } from '@decipad/editor-types';
 import {
   EElement,
   TNodeEntry,
+  hasNode,
   insertText,
   isElement,
-  isText,
-  removeNodes,
-  withoutNormalizing,
 } from '@udecode/plate';
 import stringify from 'json-stringify-safe';
 
 export const replaceText = (
   editor: MyEditor,
-  entry: TNodeEntry<EElement<MyValue>>,
+  entry: TNodeEntry<EElement<MyValue> | AnyElement>,
   text: string
 ): void => {
-  withoutNormalizing(editor, () => {
-    let inserted = false;
-    const [node, path] = entry;
-    if (!isElement(node)) {
-      throw new Error(`Expected node to be element and is ${stringify(node)}`);
-    }
-    node.children.forEach((child, childIndex) => {
-      if (!isText(child)) {
-        throw new Error(`child is not text: ${stringify(child)}`);
-      }
-      const childPath = [...path, childIndex];
-      if (!inserted) {
-        insertText(editor, text, { at: childPath });
-        inserted = true;
-      } else {
-        removeNodes(editor, { at: childPath });
-      }
-    });
-  });
+  const [node, path] = entry;
+  if (!isElement(node)) {
+    throw new Error(`Expected node to be element and is ${stringify(node)}`);
+  }
+  const firstTextPath = [...path, 0];
+  if (hasNode(editor, firstTextPath)) {
+    insertText(editor, text, { at: firstTextPath });
+  } else {
+    insertText(editor, text, { at: path });
+  }
 };

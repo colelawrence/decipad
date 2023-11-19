@@ -32,6 +32,7 @@ export const changeText: Action<'changeText'> = {
   validateParams: (params): params is ActionParams<'changeText'> =>
     typeof params.elementId === 'string' && typeof params.newText === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId, newText }) => {
     if (typeof elementId !== 'string') {
       throw notAcceptable('elementId should be a string');

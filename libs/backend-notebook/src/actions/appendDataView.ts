@@ -10,12 +10,13 @@ import {
 import { nanoid } from 'nanoid';
 import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
-import { getNodeString, insertNodes } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate';
 import { getTableById } from './utils/getTablebyId';
 import { fixColumnName } from './utils/fixColumnName';
 import { getColumnType } from './utils/getColumnType';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
+import { getNodeString } from '../utils/getNodeString';
 
 export const appendDataView: Action<'appendDataView'> = {
   summary:
@@ -28,6 +29,7 @@ export const appendDataView: Action<'appendDataView'> = {
     },
   },
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   requestBody: {
     schema: {
       type: 'object',

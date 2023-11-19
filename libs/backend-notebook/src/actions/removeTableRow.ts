@@ -32,6 +32,7 @@ export const removeTableRow: Action<'removeTableRow'> = {
   validateParams: (params): params is ActionParams<'removeTableRow'> =>
     typeof params.tableId === 'string' && typeof params.rowIndex === 'number',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex }) => {
     const [, tablePath] = getTableById(editor, tableId);
     const removeRowIndex = [...tablePath, rowIndex + 2];

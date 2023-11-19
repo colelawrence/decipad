@@ -1,9 +1,4 @@
-import {
-  insertNodes,
-  getNode,
-  withoutNormalizing,
-  getNodeString,
-} from '@udecode/plate';
+import { insertNodes, getNode, withoutNormalizing } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TH,
@@ -14,6 +9,7 @@ import {
 import { getDefined } from '@decipad/utils';
 import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
+import { getNodeString } from '../utils/getNodeString';
 
 export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
   summary: 'inserts a column in an existing table and fills it',
@@ -54,6 +50,7 @@ export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
     Array.isArray(params.cells) &&
     params.cells.every((cell) => typeof cell === 'string'),
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, cells }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const headerRow = table.children[1];

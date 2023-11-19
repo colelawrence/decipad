@@ -6,13 +6,15 @@ const { readFile, writeFile } = require('node:fs/promises');
 const { getOpenAI } = require('./openai');
 const { join } = require('node:path');
 const { mkdirp } = require('mkdirp');
-const { languageDocs } = require('../../config/languageDocs');
+const { languageDocs, languageDocPath } = require('../../config/languageDocs');
 const { notebooks } = require('./config/notebooks');
 const { conversationToChatMessages } = require('./conversationToChatMessages');
-const verbalizeDocument = require('../../../doc-verbalizer/build').default;
+const { cleanMarkdown } = require('../utils/cleanMarkdown');
+const verbalizeDocument = require('../../../doc-verbalizer/build/main').default;
 
 const createTrainingDataFromDocs = async () => {
-  for (const filePath of languageDocs) {
+  const paths = languageDocs.map(languageDocPath);
+  for (const filePath of paths) {
     if (!existsSync(filePath)) {
       throw new Error(`Could not find file ${filePath}`);
     }
@@ -20,15 +22,16 @@ const createTrainingDataFromDocs = async () => {
 
   const prompts = [];
 
-  for (const filePath of languageDocs) {
+  for (const filePath of paths) {
     console.log(`- ${filePath}`);
-    const expectedReply = await readFile(filePath, 'utf8');
+    const expectedReply = await cleanMarkdown(await readFile(filePath, 'utf8'));
+    console.log('expectedReply', expectedReply);
     const completion = await getOpenAI().chat.completions.create({
       model: 'gpt-3.5-turbo-16k',
       messages: [
         {
           role: 'system',
-          content: `Decipad a notebook that allows the user to insert calculations and low-code elements. You are a bot that replies with documentation about a certain feature of the Decipad language. The user is using the Decipad notebook and will give you a prompt. Give me the optimal ChatGPT prompt that will produce the following response when the user asks something about the Decipad. Reply with the user prompt only.`,
+          content: `Decipad is a notebook that allows the user to insert calculations and low-code elements. You are a bot that replies with documentation about a certain feature of the Decipad language. The user is using the Decipad notebook and will give you a prompt. Give me the optimal ChatGPT prompt that will produce the following response when the user asks something about the Decipad. Reply with the user prompt only.`,
         },
         { role: 'user', content: expectedReply },
       ],

@@ -14,7 +14,7 @@ import { generateInitialMessages } from './generateInitialMessages';
 import { SplitCodeResult } from '../types';
 
 const fineTunedModelForDecilangCode =
-  'ft:gpt-3.5-turbo-0613:team-n1n-co::86fVKLap';
+  'ft:gpt-3.5-turbo-0613:team-n1n-co::8L7t8n9c';
 
 export interface CodeAssistantOptions {
   summary?: string;

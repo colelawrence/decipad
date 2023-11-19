@@ -1,0 +1,23 @@
+import { isElement } from '@udecode/plate';
+import { getNodeString } from './getNodeString';
+import {
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_CODE_LINE,
+  ELEMENT_TABLE,
+  type MyNode,
+} from '@decipad/editor-types';
+
+export const matchElementByVariableName =
+  (variableName: string) => (node: MyNode) => {
+    let varName: string | undefined;
+    if (isElement(node) && 'type' in node) {
+      if (node.type === ELEMENT_CODE_LINE_V2 || node.type === ELEMENT_TABLE) {
+        varName = getNodeString(node.children[0]);
+      } else if (node.type === ELEMENT_CODE_LINE) {
+        const code = getNodeString(node);
+        varName = code.split('=')[0].trim();
+      }
+    }
+
+    return variableName && varName === variableName;
+  };

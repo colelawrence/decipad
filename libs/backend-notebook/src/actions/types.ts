@@ -80,6 +80,7 @@ export interface BaseAction<k extends ActionName> {
 export interface RequiresNotebookAction<k extends ActionName>
   extends BaseAction<k> {
   requiresNotebook: true;
+  returnsActionResultWithNotebookError?: boolean;
   handler: NotebookActionHandler<ActionParams<k>, ActionResult<k>>;
 }
 

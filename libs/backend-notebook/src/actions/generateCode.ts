@@ -8,7 +8,7 @@ import { Action, ActionParams } from './types';
 import { notImplemented } from '@hapi/boom';
 import { nanoid } from 'nanoid';
 
-export const generateFormula: Action<'generateFormula'> = {
+export const generateCode: Action<'generateCode'> = {
   summary: 'generates Decipad language code from a prompt',
   responses: {
     '200': {
@@ -68,7 +68,7 @@ export const generateFormula: Action<'generateFormula'> = {
       required: ['prompt'],
     },
   },
-  validateParams: (params): params is ActionParams<'generateFormula'> =>
+  validateParams: (params): params is ActionParams<'generateCode'> =>
     typeof params.prompt === 'string',
   requiresNotebook: true,
   handler: async (editor, { prompt }) => {

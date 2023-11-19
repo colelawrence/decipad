@@ -26,6 +26,7 @@ export const appendElement: Action<'appendElement'> = {
     },
   },
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { element }) => {
     if (!isElement(element) || !topLevelBlockKinds.includes(element.type)) {
       throw notAcceptable('Invalid element');

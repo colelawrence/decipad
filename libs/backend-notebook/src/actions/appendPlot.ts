@@ -17,6 +17,7 @@ export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
     },
   },
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   requestBody: {
     schema: {
       type: 'object',

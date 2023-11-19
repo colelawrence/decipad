@@ -29,3 +29,6 @@ mkdir -p $PLUGIN_TARGET_DIR
 
 cat public/ai-plugin.json | sed "s/\[DOMAIN\]/$ESCAPED_DOMAIN/g" > ${PLUGIN_TARGET_DIR}/ai-plugin.json
 ./scripts/api-spec.js > ${PUBLIC_TARGET_DIR}/openapi.yaml
+
+mkdir -p build
+./scripts/collateProductDocs/collateProductDocs.js > build/product_docs.md

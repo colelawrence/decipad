@@ -1,4 +1,4 @@
-import { getNodeString, insertNodes, getNode } from '@udecode/plate';
+import { insertNodes, getNode } from '@udecode/plate';
 import {
   ELEMENT_CAPTION,
   ELEMENT_DROPDOWN,
@@ -12,6 +12,7 @@ import {
   VariableSliderElement,
   VariableDropdownElement,
 } from '../../../editor-types/src/interactive-elements';
+import { getNodeString } from '../utils/getNodeString';
 
 export const appendChoice: Action<'appendChoice'> = {
   summary: 'appends a selection box for the user to choose one value',
@@ -25,6 +26,7 @@ export const appendChoice: Action<'appendChoice'> = {
     },
   },
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   requestBody: {
     schema: {
       type: 'object',

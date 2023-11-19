@@ -36,6 +36,7 @@ export const insertTableRow: Action<'insertTableRow'> = {
     Array.isArray(params.row) &&
     params.row.every((cell) => typeof cell === 'string'),
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, row }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const columnCount = table.children[1].children.length;

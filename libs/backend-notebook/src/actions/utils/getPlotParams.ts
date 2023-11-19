@@ -1,8 +1,8 @@
 import { ELEMENT_PLOT, PlotElement, TableElement } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import { getExprRef } from '@decipad/remote-computer';
 import { PlotParams } from '../../types';
+import { getNodeString } from '../../utils/getNodeString';
 
 export const getPlotParams = (
   plotParams: Partial<PlotParams>,

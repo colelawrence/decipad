@@ -72,9 +72,22 @@ Column names and variable names must not have spaces or weird characters in them
   },
 });
 
+const wrapSechemaInActionResultWithNotebookError = (schema) => ({
+  type: 'object',
+  properties: {
+    result: schema,
+    notebookErrors: {
+      type: 'array',
+    },
+  },
+});
+
 const commonResponses = {}; // TODO: fill this
 
-const buildResponses = (responses) => ({
+const buildResponses = (
+  responses,
+  returnsActionResultWithNotebookError = false
+) => ({
   ...commonResponses,
   ...Object.fromEntries(
     Object.entries(responses).map(([responseName, response]) => {
@@ -84,13 +97,16 @@ const buildResponses = (responses) => ({
             $ref: `#/components/schemas/${response.schemaName}`,
           }
         : schema;
+      const finalFinalSchema = returnsActionResultWithNotebookError
+        ? wrapSechemaInActionResultWithNotebookError(schema)
+        : finalSchema;
       const r = {
         ...rest,
       };
-      if (finalSchema) {
+      if (finalFinalSchema) {
         r.content = {
           'application/json': {
-            schema: finalSchema,
+            schema: finalFinalSchema,
           },
         };
       }
@@ -128,12 +144,14 @@ const buildRequestBody = (requestBody) => {
 };
 
 const buildActionPath = (actionName, actionDef) => {
-  // eslint-disable-next-line no-console
   const action = {
     summary: actionDef.summary,
     description: actionDef.description || actionDef.summary,
     operationId: actionName,
-    responses: buildResponses(actionDef.responses),
+    responses: buildResponses(
+      actionDef.responses,
+      actionDef.returnsActionResultWithNotebookError
+    ),
     parameters: buildActionParameters(
       actionDef.parameters ?? [],
       actionDef.requiresNotebook

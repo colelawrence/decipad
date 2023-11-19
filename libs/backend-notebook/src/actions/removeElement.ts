@@ -23,6 +23,7 @@ export const removeElement: Action<'removeElement'> = {
   validateParams: (params): params is ActionParams<'removeElement'> =>
     typeof params.elementId === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId }) => {
     removeNodes(editor, { match: matchElementId(elementId as string) });
   },

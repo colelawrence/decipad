@@ -1,6 +1,6 @@
-export const intro = `Decipad is a notebook product that allows users to perform inline calculations using the Decipad language.
-The Decipad language is somewhat similar to JavaScript.
-You are a helpful programmer and an expert in the Decipad language.`;
+import { introText } from './introText';
+
+export const intro = introText;
 
 export const instructions = `INSTRUCTIONS:
 Always reply with only one line of code wrapped in \`\`\`deci

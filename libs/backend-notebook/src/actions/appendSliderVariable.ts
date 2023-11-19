@@ -1,4 +1,4 @@
-import { getNodeString, insertNodes, getNode } from '@udecode/plate';
+import { insertNodes, getNode } from '@udecode/plate';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
@@ -10,6 +10,7 @@ import { getDefined } from '@decipad/utils';
 import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
 import { VariableSliderElement } from '../../../editor-types/src/interactive-elements';
+import { getNodeString } from '../utils/getNodeString';
 
 export const appendSliderVariable: Action<'appendSliderVariable'> = {
   summary: 'appends a slider component',
@@ -23,6 +24,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
     },
   },
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   requestBody: {
     schema: {
       type: 'object',
@@ -35,6 +37,11 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
         initialValue: {
           description: 'the initial value for this slider',
           type: 'number',
+        },
+        unit: {
+          description:
+            'the unit of this variable (optional). Example: "units per month" or "USD per unit"',
+          type: 'string',
         },
         min: {
           description: 'the minimum value this slider accepts',
@@ -57,7 +64,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
     typeof params.initialValue === 'number',
   handler: (
     editor,
-    { variableName, min = 0, max = 100, initialValue, step = 1 }
+    { variableName, min = 0, max = 100, initialValue, step = 1, unit = '' }
   ) => {
     const newSlider: VariableSliderElement = {
       type: ELEMENT_VARIABLE_DEF,
@@ -78,7 +85,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
           id: nanoid(),
           children: [
             {
-              text: initialValue.toString(),
+              text: `${initialValue.toString()} ${unit}`.trim(),
             },
           ],
         },

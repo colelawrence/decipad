@@ -14,7 +14,7 @@ import { removeTableRow } from './removeTableRow';
 import { updateTableCell } from './updateTableCell';
 import { createNotebook } from './createNotebook';
 import type { Actions } from './types';
-import { generateFormula } from './generateFormula';
+import { generateCode } from './generateCode';
 import { appendDataView } from './appendDataView';
 import { appendCodeLine } from './appendCodeLine';
 import { updateCodeLine } from './updateCodeLine';
@@ -25,9 +25,12 @@ import { fillRow } from './fillRow';
 import { appendPlot } from './appendPlot';
 import { setPlotParams } from './setPlotParams';
 import { appendChoice } from './appendChoice';
+import { evalCode } from './evalCode';
+import { describeAllNotebookElements } from './describeAllNotebookElements';
 
 export const actions: Partial<Actions> = {
   createNotebook,
+  describeAllNotebookElements,
   getElementById,
   removeElement,
   appendElement,
@@ -47,10 +50,11 @@ export const actions: Partial<Actions> = {
   insertTableRow,
   removeTableRow,
   updateTableCell,
-  generateFormula,
   appendDataView,
   appendSliderVariable,
   appendPlot,
   setPlotParams,
   appendChoice,
+  generateCode,
+  evalCode,
 };

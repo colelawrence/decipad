@@ -1,6 +1,6 @@
 import { TableElement } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
 import { notAcceptable } from '@hapi/boom';
+import { getNodeString } from '../../utils/getNodeString';
 
 export const getTableColumnIndexByName = (
   table: TableElement,

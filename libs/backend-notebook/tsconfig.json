@@ -17,6 +17,9 @@
     { "path": "../y-dynamodb" },
     { "path": "../backend-code-assistant" },
     { "path": "../utils" },
+    { "path": "../editor-language-elements" },
+    { "path": "../format" },
+    { "path": "../doc-verbalizer" },
     { "path": "../editor-language-elements" }
   ]
 }

@@ -1,4 +1,4 @@
-import { getNodeString, insertNodes, getNode } from '@udecode/plate';
+import { insertNodes, getNode } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TABLE,
@@ -14,6 +14,7 @@ import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
+import { getNodeString } from '../utils/getNodeString';
 
 export const appendFilledTable: Action<'appendFilledTable'> = {
   summary: 'appends a filled table to the end of the notebook',
@@ -68,6 +69,7 @@ export const appendFilledTable: Action<'appendFilledTable'> = {
         rowData.every((cell) => typeof cell === 'string')
     ),
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowsData }) => {
     const table: TableElement = {
       type: ELEMENT_TABLE,

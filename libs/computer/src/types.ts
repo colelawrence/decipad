@@ -75,10 +75,12 @@ export type ComputeRequestWithExternalData = ComputeRequest & {
   externalData?: AnyMapping<Result.Result>;
 };
 
+export type BlockResult = Readonly<IdentifiedResult | IdentifiedError>;
+
 // User facing
 export interface NotebookResults {
   readonly blockResults: {
-    readonly [blockId: string]: Readonly<IdentifiedResult | IdentifiedError>;
+    readonly [blockId: string]: BlockResult;
   };
   readonly indexLabels: ReadonlyMap<string, ReadonlyArray<string>>;
 }

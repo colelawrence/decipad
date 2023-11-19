@@ -6,6 +6,10 @@ import { actions } from '../actions';
 import { getEditor } from './editor/getEditor';
 import type { Action } from '../actions/types';
 import { attachEditorToBackend } from './attachEditorToBackend';
+import { ActionResultWithNotebookError } from '../types';
+import { gatherNotebookErrors } from '../utils/gatherNotebookErrors';
+
+type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
 export const server = async (
   notebookId: string | undefined,
@@ -21,7 +25,7 @@ export const server = async (
   if (!action.validateParams(params)) {
     throw notAcceptable('invalid parameters');
   }
-  let result: ReturnType<typeof action.handler>;
+  let result: MaybeWrappedInActionResult<ReturnType<typeof action.handler>>;
   if (action.requiresNotebook) {
     if (!notebookId || typeof notebookId !== 'string') {
       throw notAcceptable('need notebookId parameter in query string');
@@ -33,8 +37,21 @@ export const server = async (
       editor.insertTab();
       subEditor = editor.getTabEditorAt(0);
     }
-    result = await action.handler(subEditor, params);
-    await detach();
+    try {
+      result = await action.handler(subEditor, params);
+      if (action.returnsActionResultWithNotebookError) {
+        result = {
+          result,
+          notebookErrors: await gatherNotebookErrors(editor, computer),
+        };
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      throw err;
+    } finally {
+      await detach();
+    }
   } else {
     result = await action.handler(params);
   }

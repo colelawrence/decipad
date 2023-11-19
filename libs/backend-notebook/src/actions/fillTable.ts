@@ -54,6 +54,7 @@ export const fillTable: Action<'fillTable'> = {
         Array.isArray(row) && row.every((cell) => typeof cell === 'string')
     ),
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor: MyEditor, { tableId, rowsData }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const columnCount = table.children[1].children.length;

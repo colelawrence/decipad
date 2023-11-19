@@ -1,8 +1,9 @@
 import {
   insertNodes,
   getNode,
-  getNodeString,
   withoutNormalizing,
+  TPath,
+  insertText,
 } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
@@ -14,6 +15,9 @@ import {
 import { getDefined } from '@decipad/utils';
 import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
+import { findColumn } from './utils/findColumn';
+import { findTableColumnFormula } from './utils/findTableColumnFormula';
+import { getNodeString } from '../utils/getNodeString';
 
 export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
   summary: 'inserts a calculated column to an existing table',
@@ -52,34 +56,55 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
     typeof params.columnName === 'string' &&
     typeof params.formula === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {
-    const [table, tablePath] = getTableById(editor, tableId);
-    const headerRow = table.children[1];
-    const insertHeaderPath = [...tablePath, 1, headerRow.children.length];
+    const tableEntry = getTableById(editor, tableId);
+    const [table, tablePath] = tableEntry;
+
+    let columnEntry = findColumn(editor, tableEntry, columnName);
+    let column = columnEntry?.[0];
+    let columnPath: TPath | undefined = columnEntry?.[1];
 
     withoutNormalizing(editor, () => {
-      const newHeader: TableHeaderElement = {
-        type: ELEMENT_TH,
-        id: nanoid(),
-        cellType: {
-          kind: 'table-formula',
-        },
-        children: [{ text: columnName }],
-      };
-      insertNodes(editor, [newHeader], { at: insertHeaderPath });
+      const headerRow = table.children[1];
+      if (column == null) {
+        columnPath = [...tablePath, 1, headerRow.children.length];
+        // create a new column
+        column = {
+          type: ELEMENT_TH,
+          id: nanoid(),
+          cellType: {
+            kind: 'table-formula',
+          },
+          children: [{ text: columnName }],
+        };
+        insertNodes(editor, [column], { at: columnPath });
+        columnEntry = [column, columnPath];
+      }
 
-      const newFormula: TableColumnFormulaElement = {
-        type: ELEMENT_TABLE_COLUMN_FORMULA,
-        id: nanoid(),
-        columnId: newHeader.id,
-        children: [{ text: formula }],
-      };
-      const newFormulaIndex = table.children[0].children.length;
-      const newFormulaPath = [...tablePath, 0, newFormulaIndex];
-      insertNodes(editor, [newFormula], { at: newFormulaPath });
+      const formulaEntry = findTableColumnFormula(
+        editor,
+        getDefined(columnEntry)
+      );
+
+      if (formulaEntry) {
+        // formula already exists. change it
+        const formulaTextPath = [...formulaEntry[1], 0];
+        insertText(editor, formula, { at: formulaTextPath });
+      } else {
+        const newFormula: TableColumnFormulaElement = {
+          type: ELEMENT_TABLE_COLUMN_FORMULA,
+          id: nanoid(),
+          columnId: column.id,
+          children: [{ text: formula }],
+        };
+        const newFormulaIndex = table.children[0].children.length;
+        const newFormulaPath = [...tablePath, 0, newFormulaIndex];
+        insertNodes(editor, [newFormula], { at: newFormulaPath });
+      }
     });
     const actualElement = getDefined(
-      getNode<TableHeaderElement>(editor, insertHeaderPath)
+      getNode<TableHeaderElement>(editor, getDefined(columnPath))
     );
     return {
       createdElementId: actualElement.id,

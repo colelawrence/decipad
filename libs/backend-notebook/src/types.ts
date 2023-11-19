@@ -1,5 +1,16 @@
 import { SplitCodeResult } from '@decipad/backend-code-assistant';
 import type { AnyElement } from '@decipad/editor-types';
+import { Result } from '@decipad/remote-computer';
+
+export interface NotebookError {
+  elementId: string;
+  error: string;
+}
+
+export interface ActionResultWithNotebookError<T> {
+  result: T;
+  notebookErrors: Array<NotebookError>;
+}
 
 interface CreateNotebookResult {
   createdNotebookId: string;
@@ -30,8 +41,21 @@ export interface PlotParams {
   y2ColumnName: string;
 }
 
+export type AllNotebookElementsDescriptionResult = Array<{
+  elementId: string;
+  description: string;
+}>;
+
 export interface BackendNotebook {
+  // create notebook
   createNotebook: (params: { title: string }) => CreateNotebookResult;
+
+  // get notebook elements
+  describeAllNotebookElements: (
+    params: Record<string, undefined>
+  ) => AllNotebookElementsDescriptionResult;
+
+  // basic element manipulation
   getElementById: (params: { elementId: string }) => AnyElement;
   removeElement: (params: { elementId: string }) => void;
   appendElement: (params: { element: AnyElement }) => void; // internal
@@ -147,9 +171,6 @@ export interface BackendNotebook {
     newPlotParams: Partial<PlotParams>;
   }) => void;
 
-  // formulas
-  generateFormula: (params: { prompt: string }) => SplitCodeResult;
-
   // sliders
   appendSliderVariable: (params: {
     variableName: string;
@@ -157,6 +178,7 @@ export interface BackendNotebook {
     min?: number;
     step?: number;
     initialValue: number;
+    unit?: string;
   }) => CreateResult;
 
   // dropdown
@@ -165,4 +187,8 @@ export interface BackendNotebook {
     options: Array<string>;
     selectedName?: string;
   }) => CreateResult;
+
+  // code
+  generateCode: (params: { prompt: string }) => SplitCodeResult;
+  evalCode: (params: { code: string }) => Result.Result;
 }

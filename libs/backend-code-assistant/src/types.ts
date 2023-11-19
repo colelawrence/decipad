@@ -13,6 +13,7 @@ export type CodeResult = ExpressionCodeResult | AssignmentCodeResult;
 
 export type SplitCodeResult =
   | {
+      source: string;
       error: string;
       errorLocation: {
         line?: number;

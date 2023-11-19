@@ -47,6 +47,7 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
     typeof params.columnName === 'string' &&
     typeof params.formula === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const headerIndex = getTableColumnIndexByName(table, columnName);

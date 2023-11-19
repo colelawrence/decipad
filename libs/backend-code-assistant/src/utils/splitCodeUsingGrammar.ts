@@ -35,6 +35,7 @@ export const splitCodeUsingGrammar = (code: string): SplitCodeResult => {
   const { error } = block;
   if (error) {
     return {
+      source: code,
       error: error.message,
       errorLocation: {
         line: error.line,

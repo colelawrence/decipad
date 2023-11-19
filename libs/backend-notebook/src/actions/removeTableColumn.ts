@@ -33,6 +33,7 @@ export const removeTableColumn: Action<'removeTableColumn'> = {
   validateParams: (params): params is ActionParams<'removeTableColumn'> =>
     typeof params.tableId === 'string' && typeof params.columnName === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const headerIndex = getTableColumnIndexByName(table, columnName);

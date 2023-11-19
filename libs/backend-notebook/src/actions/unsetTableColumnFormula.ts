@@ -31,6 +31,7 @@ export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
   validateParams: (params): params is ActionParams<'unsetTableColumnFormula'> =>
     typeof params.tableId === 'string' && typeof params.columnName === 'string',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const headerIndex = getTableColumnIndexByName(table, columnName);

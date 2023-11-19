@@ -13,6 +13,7 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
     },
   },
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   requestBody: {
     schema: {
       type: 'object',

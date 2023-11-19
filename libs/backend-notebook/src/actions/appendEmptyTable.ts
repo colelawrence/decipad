@@ -1,4 +1,4 @@
-import { getNode, getNodeString, insertNodes } from '@udecode/plate';
+import { getNode, insertNodes } from '@udecode/plate';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TABLE,
@@ -14,6 +14,7 @@ import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
+import { getNodeString } from '../utils/getNodeString';
 
 export const appendEmptyTable: Action<'appendEmptyTable'> = {
   summary: 'appends an empty table to the end of the notebook',
@@ -56,6 +57,7 @@ export const appendEmptyTable: Action<'appendEmptyTable'> = {
     params.columnNames.every((colName) => typeof colName === 'string') &&
     typeof params.rowCount === 'number',
   requiresNotebook: true,
+  returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowCount }) => {
     const table: TableElement = {
       type: ELEMENT_TABLE,
