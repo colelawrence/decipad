@@ -20473,10 +20473,10 @@ fake-indexeddb@5.0.0:
   resolved "https://registry.yarnpkg.com/fake-indexeddb/-/fake-indexeddb-5.0.0.tgz#c9f394d6d36db62760ad596ebec97ba3d700c95b"
   integrity sha512-hGMsl73XgJAk5OtC8hFDSLUVzJ3Z1/C06YpFwI7DzCsEsmH5Mvkxplv3PK6uUL7XCYVBTzayp/4gD+cp7Qi8xQ==
 
-fast-check@3.13.0:
-  version "3.13.0"
-  resolved "https://registry.yarnpkg.com/fast-check/-/fast-check-3.13.0.tgz#1099a36fd945fb06f6e68e261c91fa8c70c29802"
-  integrity sha512-m6+3gZ/yTiCWTuV/1e/UuPPjyyyHdQ5gu0pMd84C6705VTDjAgAE6nqFT5jhgegFllCJ95yOzBpqvJSs2DZAxQ==
+fast-check@3.14.0:
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/fast-check/-/fast-check-3.14.0.tgz#1d15aca87524e598525dbb713d7f9ca1800e55cf"
+  integrity sha512-9Z0zqASzDNjXBox/ileV/fd+4P+V/f3o4shM6QawvcdLFh8yjPG4h5BrHUZ8yzY6amKGDTAmRMyb/JZqe+dCgw==
   dependencies:
     pure-rand "^6.0.0"
 
