@@ -2,7 +2,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCanUseDom, lazyLoad } from '@decipad/react-utils';
 import { notebooks, onboard, playground, workspaces } from '@decipad/routing';
 import { FeatureFlagsSwitcher } from '@decipad/ui';
-import type { FC } from 'react';
+import { useMemo, type FC } from 'react';
 import { createPortal } from 'react-dom';
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import { Onboard } from './Onboard/Onboard';
@@ -18,20 +18,36 @@ export const loadPlayground = () =>
   import(/* webpackChunkName: "playground" */ './playground/Playground');
 const Playground = lazyLoad(loadPlayground);
 
+const createRedirectToWorkspacesUrl = (searchParams: URLSearchParams) => {
+  const searchParamsEntries = Array.from(searchParams.entries());
+  const isRedirectFromStripe = !!searchParams.get('fromStripe');
+  if (isRedirectFromStripe) {
+    searchParamsEntries.push(['fromStripe', 'true']);
+  }
+  const searchParamsString = searchParamsEntries
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .join('&');
+  return (
+    workspaces({}).$ + (searchParamsString ? `?${searchParamsString}` : '')
+  );
+};
+
+const NavigateToWorkspaces: FC = () => {
+  const [searchParams] = useSearchParams();
+  const to = useMemo(
+    () => createRedirectToWorkspacesUrl(searchParams),
+    [searchParams]
+  );
+  return <Navigate to={to} replace />;
+};
+
 export const App: FC = () => {
   const canUseDom = useCanUseDom();
-
-  const [searchParams] = useSearchParams();
-  const isRedirectFromStripe = !!searchParams.get('fromStripe');
-
-  const redirectTo = isRedirectFromStripe
-    ? `${workspaces({}).$}?fromStripe=true`
-    : workspaces({}).$;
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate replace to={redirectTo} />} />
+        <Route path="/" element={<NavigateToWorkspaces />} />
         <Route
           path="/workspaces/:workspaceId/pads/*"
           element={<NotebookRedirect />}

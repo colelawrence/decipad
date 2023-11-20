@@ -1,8 +1,8 @@
 import { GithubUser } from '@decipad/backendtypes';
 
 export default function GitHub(
-  options: Record<string, any>
-): Record<string, any> {
+  options: Record<string, unknown>
+): Record<string, unknown> {
   return {
     id: 'github',
     name: 'GitHub',

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-use-before-define */
 import { Account, NextAuthOptions, User } from 'next-auth';
 import { UserInput } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
@@ -130,14 +132,14 @@ export const adapter = (adapterOpts: AdapterOptions): Adapter => {
 
     /* Only for username / password */
 
-    async getUserByCredentials(credentials: any) {
+    async getUserByCredentials(credentials: Record<string, unknown>) {
       console.log('auth: getUserByCredentials', credentials);
       return null;
     },
 
     /* for when not using JWTs */
 
-    async createSession(session: any) {
+    async createSession(session: Record<string, unknown>) {
       console.log('auth: createSession', session);
       return session;
     },
@@ -152,7 +154,7 @@ export const adapter = (adapterOpts: AdapterOptions): Adapter => {
       return null;
     },
 
-    async updateSession(session: any) {
+    async updateSession(session: Record<string, unknown>) {
       console.log('auth: updateSession', { session });
       return null;
     },

@@ -204,7 +204,7 @@ test('dropdown widget', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await test.step('creates an empty dropdown widget', async () => {
     await createDropdownBelow(page, 'Dropdown');
-    expect(await page.getByText('Dropdown').count()).toBe(1);
+    await expect(await page.getByText('Dropdown').count()).toBe(1);
   });
 
   await test.step('Open dropdown and view box to add option', async () => {
@@ -216,7 +216,7 @@ test('dropdown widget', async ({ testUser }) => {
     // Input box should be focused, so we can just start typing
     await page.keyboard.type('50%');
     await page.keyboard.press('Enter');
-    expect(await notebook.getDropdownOptions()).toEqual(['50%']);
+    await expect(await notebook.getDropdownOptions()).toEqual(['50%']);
   });
 
   await test.step('Add another option to dropdown', async () => {
@@ -226,7 +226,7 @@ test('dropdown widget', async ({ testUser }) => {
     // Dropdown should autofocus on input
     await page.keyboard.type('75%');
     await page.keyboard.press('Enter');
-    expect(await notebook.getDropdownOptions()).toEqual(['50%', '75%']);
+    await expect(await notebook.getDropdownOptions()).toEqual(['50%', '75%']);
   });
 
   await test.step('Select option', async () => {
@@ -235,7 +235,7 @@ test('dropdown widget', async ({ testUser }) => {
       '[aria-roledescription="dropdownOption"]'
     );
     // Dropdown should have hidden.
-    expect(await dropdownOptions.count()).toBe(0);
+    await expect(await dropdownOptions.count()).toBe(0);
   });
 
   await test.step('update first option', async () => {
@@ -252,7 +252,7 @@ test('dropdown widget', async ({ testUser }) => {
     await page.keyboard.type('55%');
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('dropdown-display')).toHaveText(/55%/);
-    expect(await notebook.getDropdownOptions()).toEqual(['55%', '75%']);
+    await expect(await notebook.getDropdownOptions()).toEqual(['55%', '75%']);
   });
 
   await test.step('Dropdown option should appear in table column menu', async () => {

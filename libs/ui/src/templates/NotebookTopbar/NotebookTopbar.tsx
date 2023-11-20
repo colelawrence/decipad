@@ -576,7 +576,9 @@ export const NotebookTopbar = ({
               ) : null
             ) : (
               <Button
-                href="/"
+                href={`/?redirectAfterLogin=${encodeURIComponent(
+                  window.location.pathname
+                )}`}
                 // Analytics
                 type={'primaryBrand'}
                 onClick={onTryDecipadClick}

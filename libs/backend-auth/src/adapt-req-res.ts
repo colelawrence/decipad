@@ -1,11 +1,19 @@
-import { parse as qsParse, ParsedUrlQuery } from 'querystring';
+/* eslint-disable no-param-reassign */
+import { ParsedUrlQuery } from 'querystring';
 import stringify from 'json-stringify-safe';
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
-import { parse as parseCookie } from 'simple-cookie';
 import { boomify } from '@hapi/boom';
 import { TOKEN_COOKIE_NAMES } from '@decipad/services/authentication';
-import { debug } from '../debug';
+import { debug } from './debug';
+import { base64Decode } from './utils/base64Decode';
+import { urlDecode } from './utils/urlDecode';
+import { parseCookies } from './utils/parseCookies';
+
+export interface ReplyBody {
+  url: string;
+  error?: string;
+}
 
 export default function adaptReqRes(handle: NextApiHandler) {
   return async function respondWithAuth(
@@ -63,6 +71,45 @@ export default function adaptReqRes(handle: NextApiHandler) {
         body = {};
       }
 
+      let statusCode = 200;
+
+      const reply = (
+        replyBody: Buffer | string | ReplyBody | undefined = undefined
+      ) => {
+        let isBase64Encoded = false;
+        if (typeof replyBody === 'object') {
+          if (!Buffer.isBuffer(replyBody)) {
+            if (replyBody.url) {
+              const replyUrl = new URL(replyBody.url);
+              const error = replyUrl.searchParams.get('error');
+              if (error) {
+                statusCode = 400;
+                replyBody = { error, url: replyBody.url };
+              }
+            }
+            if (!headers['content-type']) {
+              headers['content-type'] = 'application/json; charset=utf-8';
+            }
+            replyBody = stringify(replyBody);
+          } else {
+            replyBody = Buffer.from(replyBody).toString('base64');
+            isBase64Encoded = true;
+          }
+        }
+        const response = {
+          statusCode,
+          headers,
+          multiValueHeaders:
+            cookies.length === 0 ? {} : { 'Set-Cookie': cookies },
+          body: replyBody,
+          isBase64Encoded,
+        };
+
+        debug('auth response', response);
+
+        resolve(response);
+      };
+
       const newReq = {
         cookies: parseCookies(req.cookies),
         body,
@@ -72,13 +119,12 @@ export default function adaptReqRes(handle: NextApiHandler) {
         headers,
       };
 
-      let statusCode = 200;
       const newRes = {
         end: (buf: string | Buffer) => {
           reply(buf);
         },
-        json: (json: Record<string, any>) => {
-          reply(json);
+        json: (json: Record<string, unknown>) => {
+          reply(json as unknown as ReplyBody);
         },
         send: (buf: string | Buffer) => {
           reply(buf);
@@ -122,63 +168,18 @@ export default function adaptReqRes(handle: NextApiHandler) {
         },
       };
 
-      function reply(
-        replyBody: string | Record<string, any> | undefined = undefined
-      ) {
-        if (typeof replyBody === 'object') {
-          if (replyBody.url) {
-            const replyUrl = new URL(replyBody.url);
-            const error = replyUrl.searchParams.get('error');
-            if (error) {
-              statusCode = 400;
-              replyBody = { error, url: replyBody.url };
-            }
-          }
-          if (!headers['content-type']) {
-            headers['content-type'] = 'application/json; charset=utf-8';
-          }
-          replyBody = stringify(replyBody);
-        }
-        const response = {
-          statusCode,
-          headers,
-          multiValueHeaders:
-            cookies.length === 0 ? {} : { 'Set-Cookie': cookies },
-          body: replyBody,
-        };
-
-        debug('auth response', response);
-
-        resolve(response);
-      }
-
       try {
         handle(newReq as unknown as NextApiRequest, newRes as NextApiResponse);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('caught', err);
         const boomed = boomify(err as Error);
-        statusCode = boomed.output.statusCode;
-        reply(boomed.output.payload);
+        resolve({
+          ...boomed.output,
+          body: stringify(boomed.output.payload),
+          headers: { 'Content-Type': 'application/json' },
+        });
       }
     });
   };
-}
-
-function parseCookies(cookies: string[] = []): Record<string, string> {
-  return cookies.reduce((accCookies: Record<string, string>, cookie) => {
-    const { name, value } = parseCookie(cookie) as {
-      name: string;
-      value: string;
-    };
-    accCookies[name] = decodeURIComponent(value);
-    return accCookies;
-  }, {});
-}
-
-function base64Decode(str: string): string {
-  return Buffer.from(str, 'base64').toString();
-}
-
-function urlDecode(str: string): ParsedUrlQuery {
-  return qsParse(str);
 }

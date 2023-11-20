@@ -9,10 +9,11 @@ import {
 } from '@decipad/services/notebooks';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
-import Boom from '@hapi/boom';
 import { isAuthorized, loadUser } from '../authorization';
 import { isLocalDev } from '@decipad/initial-workspace';
 import { byAsc } from '@decipad/utils';
+import { ELEMENT_TITLE } from '@decipad/editor-types';
+import { nanoid } from 'nanoid';
 
 const notebooks = resource('notebook');
 
@@ -90,10 +91,7 @@ export const duplicatePad = async (
     minimumPermissionType: 'READ',
   });
 
-  const newName =
-    workspaceId === previousPad.workspace_id
-      ? `Copy of ${previousPad.name}`
-      : previousPad.name;
+  const newName = `Copy of ${previousPad.name}`;
 
   previousPad.name = newName;
   previousPad.isPublic = false;
@@ -108,7 +106,11 @@ export const duplicatePad = async (
 
   const doc = (await snapshot(id)).value;
   if (!doc.children[0]) {
-    throw Boom.notAcceptable('snapshot is empty');
+    doc.children[0] = {
+      type: ELEMENT_TITLE,
+      id: nanoid(),
+      children: [{ text: '' }],
+    };
   }
   // set new title
   doc.children[0].children = [{ text: newName }];

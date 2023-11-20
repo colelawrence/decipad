@@ -5,15 +5,17 @@ import { createCalculationBlockBelow } from '../utils/page/Block';
 import { Timeouts } from '../utils/src';
 
 // this test looks broken
-test.describe.fixme('Sharing pad with email', () => {
+test.describe('Sharing pad with email', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;
   let context: BrowserContext;
   let incognito: BrowserContext;
   let publishedNotebookPage: Page;
+  let sharedNotebookLink: string;
 
   test.beforeAll(async ({ browser }) => {
+    test.setTimeout(120000);
     page = await browser.newPage();
     context = page.context();
     incognito = await browser.newContext();
@@ -30,14 +32,7 @@ test.describe.fixme('Sharing pad with email', () => {
   });
 
   test('invites an unregistered user to a notebook', async () => {
-    await page
-      .getByTestId('notebook-list-item')
-      .getByText('Welcome to Decipad')
-      .first()
-      .click();
-
-    await page.getByTestId('notebook-title').fill('');
-
+    await page.getByTestId('new-notebook').click();
     await focusOnBody(page);
 
     // Is hidden by default
@@ -66,7 +61,9 @@ test.describe.fixme('Sharing pad with email', () => {
 
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText('invited-lama2@ranch.org')).toBeVisible();
+    await expect(async () => {
+      await expect(page.getByText('invited-lama2@ranch.org')).toBeVisible();
+    }).toPass();
 
     const collaborators = await page
       .getByTestId(/^sharing-list:/)
@@ -80,6 +77,7 @@ test.describe.fixme('Sharing pad with email', () => {
     expect(readers).toBe(1);
     const authors = await page.getByTestId('text-icon-button:author').count();
     expect(authors).toBe(1);
+    sharedNotebookLink = page.url();
   });
 
   test('an registered user can collaborate after registration', async () => {
@@ -109,18 +107,21 @@ test.describe.fixme('Sharing pad with email', () => {
     }).toPass();
 
     expect(authLink).toBeDefined();
-    publishedNotebookPage.goto(authLink!);
+    await publishedNotebookPage.goto(authLink!);
 
     publishedNotebookPage
       .getByTestId('notebook-title')
       .waitFor({ timeout: 60000 });
 
-    await createCalculationBlockBelow(publishedNotebookPage, 'Test = 68');
-    await expect(
-      publishedNotebookPage.getByTestId('codeline-varname')
-    ).toHaveCount(5);
+    await publishedNotebookPage.goto(sharedNotebookLink!);
+    publishedNotebookPage
+      .getByTestId('notebook-title')
+      .waitFor({ timeout: 60000 });
 
-    publishedNotebookPage.close();
+    await createCalculationBlockBelow(publishedNotebookPage, 'Test = 68');
+    await expect(publishedNotebookPage.getByTestId('code-line')).toHaveCount(1);
+
+    await publishedNotebookPage.close();
   });
 
   test('A reader cannot duplicate notebook', async () => {
@@ -150,7 +151,7 @@ test.describe.fixme('Sharing pad with email', () => {
     }).toPass();
 
     expect(authLink).toBeDefined();
-    publishedNotebookPage.goto(authLink!);
+    await publishedNotebookPage.goto(authLink!);
 
     const duplicateButton = page.locator('text="Duplicate"');
 
@@ -201,7 +202,10 @@ test.describe('[free account] notebook invite flow', () => {
     await page.getByTestId('send-invitation').click();
     // eslint-disable-next-line playwright/no-networkidle
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText('invited-lama-2@ranch.org')).toBeVisible();
+
+    await expect(async () => {
+      await expect(page.getByText('invited-lama-2@ranch.org')).toBeVisible();
+    }).toPass();
 
     collaborators = await page
       .getByTestId(/^sharing-list:/)

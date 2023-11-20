@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import arc from '@architect/functions';
 import { track } from '@decipad/backend-analytics';
-import { auth } from '@decipad/backend-config';
+import { app, auth } from '@decipad/backend-config';
 import tables from '@decipad/tables';
-import { differenceInHours } from 'date-fns';
+import { differenceInMinutes } from 'date-fns';
 import Email from 'next-auth/providers/email';
 import { timestamp } from '@decipad/backend-utils';
 
@@ -13,14 +14,17 @@ type EmailVerificationRequest = {
   token: string;
 };
 
-export default function EmailProvider() {
-  return Email({
-    server: 'mail.decipad.com',
-    from: 'Decipad <info@decipad.com>',
-    sendVerificationRequest,
-    maxAge: auth().userKeyValidationExpirationSeconds,
-  });
-}
+const getRedirectLink = (originalUrl: string, isFirstLogin: boolean) => {
+  const url = new URL(originalUrl);
+  const callbackUrl = new URL(
+    url.searchParams.get('callbackUrl') ?? app().urlBase
+  );
+  if (isFirstLogin && callbackUrl.pathname === '/w') {
+    url.searchParams.set('callbackUrl', '/n/welcome');
+  }
+
+  return url.toString();
+};
 
 async function sendVerificationRequest(
   verificationRequest: EmailVerificationRequest
@@ -47,7 +51,7 @@ async function sendVerificationRequest(
     console.log(url);
   }
 
-  const expires = `${differenceInHours(expiresAt, new Date())} hours`;
+  const expires = `${differenceInMinutes(expiresAt, new Date())} minutes`;
 
   const payload = {
     template: firstTime ? 'auth-magiclink-first' : 'auth-magiclink',
@@ -77,12 +81,11 @@ async function sendVerificationRequest(
   });
 }
 
-const getRedirectLink = (originalUrl: string, isFirstLogin: boolean) => {
-  const url = new URL(originalUrl);
-
-  if (isFirstLogin) {
-    url.searchParams.set('callbackUrl', '/n/welcome');
-  }
-
-  return url.toString();
-};
+export default function EmailProvider() {
+  return Email({
+    server: 'mail.decipad.com',
+    from: 'Decipad <info@decipad.com>',
+    sendVerificationRequest,
+    maxAge: auth().userKeyValidationExpirationSeconds,
+  });
+}

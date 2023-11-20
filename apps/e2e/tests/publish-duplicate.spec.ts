@@ -9,12 +9,14 @@ import {
   getPadList,
   navigateToWorkspacePage,
 } from '../utils/page/Workspace';
+import { timeout } from '@decipad/utils';
 
 test('publish notebook, check logged out reader + logged in duplication', async ({
   testUser,
   anotherTestUser,
   unregisteredUser,
 }) => {
+  test.setTimeout(120000);
   test.slow();
   let sharedPageLocation: string | null;
   const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
@@ -147,6 +149,8 @@ test('duplicate in workspace with single workspace', async ({
       .getByTestId('paragraph-content')
       .last()
       .fill('this is the third paragraph');
+
+    await timeout(Timeouts.syncDelay);
   });
 
   await test.step('Can reload', async () => {

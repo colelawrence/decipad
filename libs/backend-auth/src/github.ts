@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { GithubUser, UserWithSecret } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
@@ -8,7 +9,7 @@ import { isAllowedToLogIn } from './is-allowed';
 
 export async function signInGithub(
   user: UserWithSecret & { provider?: string; providerId?: string },
-  account: any,
+  account: Record<string, unknown>,
   metadata: GithubUser
 ) {
   const githubUser = {
@@ -33,7 +34,7 @@ export async function signInGithub(
   }
 
   const userInput = {
-    name: (githubUser.name || githubUser.login)!,
+    name: (githubUser.name || githubUser.login) ?? '',
     image: githubUser.image,
     email: githubUser.email,
     provider: 'github',

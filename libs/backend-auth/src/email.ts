@@ -16,6 +16,7 @@ export async function signInEmail(
   const { email } = user;
   if (!email || !(await isAllowedToLogIn(email))) {
     await track({ event: 'user denied logging in', properties: { email } });
+    // eslint-disable-next-line no-console
     console.log(`user ${email} not allowed to log in`);
     return false;
   }
@@ -51,6 +52,7 @@ export async function signInEmail(
     ).user;
   }
 
+  // eslint-disable-next-line no-param-reassign
   user.accessToken = existingUser.secret;
 
   return true;

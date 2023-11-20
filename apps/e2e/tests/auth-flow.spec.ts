@@ -41,3 +41,42 @@ test('redirect to workspace if authenticated and can logout @auth', async ({
   await page.waitForTimeout(Timeouts.redirectDelay);
   await expect(page).toHaveURL(`${app().urlBase}/w`);
 });
+
+test('check redirect from signup from try decipad @auth', async ({
+  testUser,
+  unregisteredUser,
+}) => {
+  const { notebook: notebookTestUser } = testUser;
+  let notebookWithTabs: string;
+  const { page: pageUnregisteredUser, notebook: notebookUnregisteredUser } =
+    unregisteredUser;
+  const textFirstTab = 'paragraph first tab';
+  const textSecondTab = 'paragraph second tab';
+  const notebookTitle = 'Check try Decipad';
+
+  await test.step('publish second tab of new notebook', async () => {
+    await testUser.createAndNavNewNotebook();
+    await notebookTestUser.updateNotebookTitle(notebookTitle);
+    await notebookTestUser.addParapraph(textFirstTab);
+    await notebookTestUser.createTab('second tab');
+    await notebookTestUser.addParapraph(textSecondTab);
+    notebookWithTabs = await notebookTestUser.publishNotebook();
+  });
+
+  await test.step('[unregisteredUser] visit published second tab and try decipad', async () => {
+    await pageUnregisteredUser.goto(notebookWithTabs);
+
+    // check shared publish link shows correct tab
+    await expect(
+      notebookUnregisteredUser.notebookParagraph.getByText(textSecondTab)
+    ).toBeVisible();
+
+    await unregisteredUser.tryDecipadCreateAccount();
+    await notebookUnregisteredUser.checkNotebookTitle(notebookTitle);
+
+    // check sign in redirect to correct tab
+    await expect(
+      notebookUnregisteredUser.notebookParagraph.getByText(textSecondTab)
+    ).toBeVisible();
+  });
+});

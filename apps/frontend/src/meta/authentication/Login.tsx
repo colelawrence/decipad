@@ -3,6 +3,7 @@ import { signIn } from 'next-auth/react';
 import { FC, useState } from 'react';
 import { loadWorkspaces } from '../../App';
 import { loadEditor } from '../../notebooks/notebook/Notebook';
+import { useSearchParams } from 'react-router-dom';
 
 type Page =
   | {
@@ -16,6 +17,8 @@ type Page =
 export const Login: FC = () => {
   const [page, setPage] = useState<Page>({ kind: 'initial' });
 
+  const [searchParams] = useSearchParams();
+
   switch (page.kind) {
     case 'initial':
       return (
@@ -24,7 +27,13 @@ export const Login: FC = () => {
           onSubmit={async (email) => {
             try {
               setPage({ kind: 'email-sent', email });
-              const resp = await signIn('email', { email, redirect: false });
+              const resp = await signIn('email', {
+                email,
+                redirect: false,
+                callbackUrl:
+                  searchParams.get('redirectAfterLogin') ??
+                  window.location.href,
+              });
               if (resp && resp.ok) {
                 // Aggressively pre-load stuff for user
                 loadWorkspaces();

@@ -1,11 +1,11 @@
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useMemo } from 'react';
 import { Editor } from './Editor.component';
 import { useRouteParams } from 'typesafe-routes/react-router';
 import { notebooks } from '@decipad/routing';
 import { EditorIdContext } from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
 import { useUndo } from './hooks/useUndo';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
 import { useTabs } from '@decipad/editor-hooks';
 
@@ -28,58 +28,50 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   workspaceId,
   loaded,
 }) => {
-  const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
+  const {
+    notebook,
+    tab: tabId,
+    embed,
+  } = useRouteParams(notebooks({}).notebook);
   const tabs = useTabs();
-  const nav = useNavigate();
 
   useUndo(controller);
 
-  // our fallback tab is the first non hidden tab
-  const defaultTabId = tabs.find((t) => !t.isHidden)?.id ?? tabs[0]?.id;
-
-  // check if the tab was provided and exists
-  const tabExists = !!tabs.find((t) => t.id === tab);
-
-  // check if the tab was provided and is hidden
-  const tabIsHidden = tabs.find((t) => t.id === tab)?.isHidden;
-
-  // if we are in read mode and tab doesn't exist or is hidden, then we navigate to the first non hidden tab
-  if (readOnly && (!tabExists || tabIsHidden)) {
-    nav(notebooks({}).notebook({ notebook, tab: defaultTabId, embed }).$);
-    return <>Loading...</>;
-  }
-
-  // leaving this until tabs reach production
-  // selects 0 index tab if tab is not provided
-  const tabEditorIndex = controller.getTabEditorIndex(
-    tabExists ? tab : defaultTabId
+  const tab = useMemo(
+    () =>
+      tabs.filter((t) => !readOnly || !t.isHidden).find((t) => t.id === tabId),
+    [readOnly, tabId, tabs]
   );
 
-  if (tabEditorIndex === -1) {
-    if (tab != null) {
-      // We hit an edge case, where we have a link to a tab that was deleted.
-      nav(notebooks({ notebook }).notebook({ notebook, embed }).$);
-    }
+  if (!tab && tabs.length > 0) {
+    return (
+      <Navigate
+        to={notebooks({}).notebook({ notebook, tab: tabs[0].id, embed }).$}
+      />
+    );
+  }
+
+  if (!tab) {
     return <>Loading...</>;
   }
 
-  const subEditor = controller.getTabEditorAt(tabEditorIndex);
+  const subEditor = controller.getTabEditor(tab.id);
 
   const titleEditor = controller.getTitleEditor();
 
   return (
     <EditorIdContext.Provider value={notebookId}>
       <Editor
-        key={tab}
+        key={tab.id}
         notebookId={notebookId}
         workspaceId={workspaceId}
         readOnly={readOnly}
         loaded={loaded}
         editor={subEditor}
-        tabIndex={tabEditorIndex}
+        tabIndex={tabs.findIndex((t) => t.id === tab.id)}
         titleEditor={
           <TitleEditor
-            tab={tab}
+            tab={tab.id}
             editor={titleEditor}
             initialValue={titleEditor.children}
             readOnly={readOnly}

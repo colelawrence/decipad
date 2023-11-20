@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "lib": ["esnext"]
+  },
+  "references": [
+    { "path": "../backendtypes" },
+    { "path": "../utils" },
+    { "path": "../services" }
+  ]
+}

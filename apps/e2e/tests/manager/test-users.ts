@@ -1,23 +1,24 @@
-import { type Locator, type Page, Browser } from '@playwright/test';
+import { type Locator, type Page, Browser, expect } from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
 import { Workspace } from './workspace';
 import stringify from 'json-stringify-safe';
+import arc from '@architect/functions';
 
 function randomNumber(max = 100000) {
   return Math.round(Math.random() * max);
 }
 
 export function randomEmail(): string {
-  return `T${randomNumber()}-${Date.now()}@decipad.com`;
+  return `T${randomNumber()}-${Date.now()}@decipad.com`.toLowerCase();
 }
 
 export function premiumEmail(): string {
-  return `T${randomNumber()}-${Date.now()}@n1n.co`;
+  return `T${randomNumber()}-${Date.now()}@n1n.co`.toLowerCase();
 }
 
 export function genericTestEmail(): string {
-  return `generic-test-user@decipad.com`;
+  return `generic-test-user@decipad.com`.toLowerCase();
 }
 
 export class User {
@@ -130,5 +131,66 @@ export class User {
     const userPage = new User(await context.newPage());
     await userPage.setupWithEmail(email);
     return userPage;
+  }
+
+  /**
+   * Click Trye Decipad and create account
+   *
+   * **Usage**
+   *
+   * ```js
+   * await tryDecipadCreateAccount();
+   * ```
+   */
+  async tryDecipadCreateAccount() {
+    this.email = randomEmail();
+    await this.page.getByRole('link', { name: 'Try Decipad' }).click();
+
+    const parseRedirect = this.page
+      .url()
+      .match(/http:\/\/localhost:3000\/w\?redirectAfterLogin=(.*)/);
+    const redirect = parseRedirect ? parseRedirect[1] : '';
+
+    await this.page.getByPlaceholder('Enter your email').fill(this.email);
+    await this.page.getByTestId('login-button').click();
+
+    await expect(
+      this.page.getByText(
+        `Open the link sent to ${this.email}. No email? Check spam folder.`
+      )
+    ).toBeVisible();
+
+    let authLink = '';
+    await expect(async () => {
+      const data = await arc.tables();
+      const verificationRequests = (
+        await data.verificationrequests.query({
+          IndexName: 'byIdentifier',
+          KeyConditionExpression: 'identifier = :email',
+          ExpressionAttributeValues: {
+            ':email': this.email,
+          },
+        })
+      ).Items;
+
+      expect(verificationRequests).toHaveLength(1);
+      const [verificationRequest] = verificationRequests;
+      expect(verificationRequest).toMatchObject({
+        id: expect.any(String),
+        identifier: this.email,
+        openTokenForTestsOnly: expect.any(String),
+        expires: expect.any(Number),
+        token: expect.any(String),
+      });
+      authLink = `${app().urlBase}/api/auth/callback/email?callbackUrl=${
+        app().urlBase
+      }${redirect}&token=${encodeURIComponent(
+        verificationRequest.openTokenForTestsOnly ?? ''
+      )}&email=${encodeURIComponent(this.email)}`;
+      expect(authLink).toBeDefined();
+    }).toPass();
+
+    await this.page.goto(authLink!);
+    await expect(this.page.getByTestId('duplicate-button')).toBeVisible();
   }
 }

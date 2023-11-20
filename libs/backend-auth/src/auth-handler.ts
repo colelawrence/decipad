@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createHmac } from 'crypto';
 import { identify, track } from '@decipad/backend-analytics';
 import { UserWithSecret } from '@decipad/backendtypes';

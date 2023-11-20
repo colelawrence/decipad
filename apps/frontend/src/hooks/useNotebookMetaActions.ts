@@ -179,6 +179,7 @@ export function useNotebookMetaActions(
       });
 
       if (res.error || !res.data?.duplicatePad) {
+        console.error(res.error);
         toast('Unable to duplicate notebook.', 'error');
         return false;
       }

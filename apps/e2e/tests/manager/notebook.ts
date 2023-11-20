@@ -900,7 +900,9 @@ export class Notebook {
     await this.focusOnBody(-1);
     const paragraphNumber = await this.notebookParagraph.count();
     await this.page.keyboard.type(text);
-    await expect(this.notebookParagraph.nth(paragraphNumber)).toHaveText(text);
+    await expect(this.notebookParagraph.nth(paragraphNumber - 1)).toHaveText(
+      text
+    );
   }
 
   /**

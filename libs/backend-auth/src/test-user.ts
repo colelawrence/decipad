@@ -8,7 +8,7 @@ import {
 import { jwt as jwtConf } from '@decipad/services/authentication';
 import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { isAllowedToLogIn } from './is-allowed';
-import { UserInput } from '../types';
+import { UserInput } from '@decipad/backendtypes';
 
 const defaultTestUserEmail = 'test@decipad.com';
 const isSecureCookie =

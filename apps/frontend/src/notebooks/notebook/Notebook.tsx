@@ -53,6 +53,7 @@ import { useNavigate } from 'react-router-dom';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useActiveEditor, useTabs } from '@decipad/editor-hooks';
 import { MinimalRootEditorWithEventsAndTabs } from '@decipad/editor-types';
+import { Helmet } from 'react-helmet';
 
 export const loadEditor = () => {
   return import(/* webpackChunkName: "notebook-editor" */ './Editor');
@@ -102,7 +103,7 @@ export const NewNotebook: FC = () => {
   }
 
   return (
-    <DocsyncEditorProvider.Provider value={docsync}>
+    <DocsyncEditorProvider.Provider value={docsync} key={notebookId}>
       <ControllerProvider.Provider value={docsync}>
         <ComputerContextProvider computer={computer}>
           <NotebookPage
@@ -260,21 +261,28 @@ const NewEditor: FC<{
 
   useSetWorkspaceQuota(actions.notebook?.workspace);
 
-  useEffect(() => {
-    // Hack. We must be the last ones to set the title of the notebook.
-    setTimeout(() => {
-      document.title = `${actions.notebook?.name ?? 'New Notebook'} | Decipad`;
-    }, 0);
-  }, [actions.notebook?.name]);
-
   const onNotebookTitleChange = useNotebookTitleChange(
     actions.notebook?.id ?? 'New Notebook'
   );
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
+  const pageTitle = `${actions.notebook?.name ?? 'New Notebook'} | Decipad`;
+
+  useEffect(() => {
+    // ugly hack to update the document title
+    const intv = setInterval(() => {
+      document.title = pageTitle;
+    }, 1000);
+
+    return () => clearInterval(intv);
+  }, [pageTitle]);
+
   return (
     <>
+      <Helmet title={pageTitle}>
+        <meta property="og:title" content={pageTitle} />
+      </Helmet>
       <GlobalThemeStyles color={actions.iconColor} />
       {!isEmbed && (
         <EditorIcon

@@ -1,6 +1,6 @@
 import { toSlateDoc } from '@decipad/slate-yjs';
 import tables, { allPages } from '@decipad/tables';
-import { Document } from '@decipad/editor-types';
+import { NotebookValue, RootDocument } from '@decipad/editor-types';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
 import { applyUpdate, Doc, mergeUpdates } from 'yjs';
@@ -11,7 +11,7 @@ import { DocSyncSnapshotRecord } from '@decipad/backendtypes';
 export const snapshot = async (
   notebookId: string,
   remoteState?: string
-): Promise<{ data: Buffer; version: string; value: Document }> => {
+): Promise<{ data: Buffer; version: string; value: RootDocument }> => {
   const data = await tables();
 
   const updates: Buffer[] = remoteState
@@ -35,7 +35,7 @@ export const snapshot = async (
   if (mergedUpdates.length) {
     applyUpdate(doc, mergedUpdates);
   }
-  const value = toSlateDoc(doc.getArray());
+  const value = toSlateDoc(doc.getArray()) as unknown as NotebookValue;
   const canonicalizedObj = canonicalize(value);
 
   return {
@@ -47,7 +47,7 @@ export const snapshot = async (
 
 export interface Snapshot {
   name: string;
-  doc: Document;
+  doc: RootDocument;
   date?: Date;
 }
 
@@ -66,7 +66,7 @@ export const snapshotFromDbSnapshot = async (
 
   return {
     name: snapshotRec.snapshotName,
-    doc: { children: toSlateDoc(doc.getArray()) },
+    doc: { children: toSlateDoc(doc.getArray()) as unknown as NotebookValue },
     date:
       (snapshotRec.createdAt && new Date(snapshotRec.createdAt * 1000)) ||
       undefined,
