@@ -162,7 +162,8 @@
         "libs/backend-notebook-content/src/index.ts"
       ],
       "@decipad/doc-verbalizer": ["libs/doc-verbalizer/src/index.ts"],
-      "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"]
+      "@decipad/backend-notebook": ["libs/backend-notebook/src/index.ts"],
+      "@decipad/notebook-open-api": ["libs/notebook-open-api/src/index.ts"]
     }
   },
   "files": [],

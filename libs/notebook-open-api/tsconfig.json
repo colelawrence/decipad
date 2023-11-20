@@ -5,22 +5,14 @@
     "lib": ["esnext"]
   },
   "references": [
-    { "path": "../backend-notebook-content" },
     { "path": "../editor-types" },
     { "path": "../editor-config" },
-    { "path": "../backendtypes" },
     { "path": "../remote-computer" },
     { "path": "../services" },
-    { "path": "../backend-config" },
     { "path": "../slate-yjs" },
     { "path": "../notebook-tabs" },
-    { "path": "../y-dynamodb" },
-    { "path": "../backend-code-assistant" },
     { "path": "../utils" },
     { "path": "../editor-language-elements" },
-    { "path": "../format" },
-    { "path": "../doc-verbalizer" },
-    { "path": "../editor-language-elements" },
-    { "path": "../notebook-open-api" }
+    { "path": "../doc-verbalizer" }
   ]
 }

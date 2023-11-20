@@ -4,71 +4,70 @@ import {
   RootDocument,
 } from '@decipad/editor-types';
 import { codeAssistant } from '@decipad/backend-code-assistant';
-import { Action, ActionParams } from './types';
 import { notImplemented } from '@hapi/boom';
 import { nanoid } from 'nanoid';
+import { ServerSideNotebookApi } from '../types';
+import { CustomAction } from '@decipad/notebook-open-api';
 
-export const generateCode: Action<'generateCode'> = {
+export const generateCode: CustomAction<
+  Parameters<ServerSideNotebookApi['generateCode']>[0],
+  ReturnType<ServerSideNotebookApi['generateCode']>
+> = {
   summary: 'generates Decipad language code from a prompt',
-  responses: {
-    '200': {
-      description: 'OK',
-      schema: {
-        type: 'object',
-        properties: {
-          error: {
-            type: 'string',
-          },
-          errorLocation: {
-            type: 'object',
-            properties: {
-              line: {
-                type: 'number',
-              },
-              column: {
-                type: 'number',
-              },
-            },
-          },
-          blocks: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'string',
-                  enum: ['expression', 'assignment'],
-                },
-                expressionCode: {
-                  type: 'string',
-                },
-                varname: {
-                  type: 'string',
-                },
-                value: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  parameters: [],
-  requestBody: {
+  response: {
     schema: {
       type: 'object',
       properties: {
-        prompt: {
-          description: 'natural language description of the code to generate',
+        error: {
           type: 'string',
         },
+        errorLocation: {
+          type: 'object',
+          properties: {
+            line: {
+              type: 'number',
+            },
+            column: {
+              type: 'number',
+            },
+          },
+        },
+        blocks: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              type: {
+                type: 'string',
+                enum: ['expression', 'assignment'],
+              },
+              expressionCode: {
+                type: 'string',
+              },
+              varname: {
+                type: 'string',
+              },
+              value: {
+                type: 'string',
+              },
+            },
+          },
+        },
       },
-      required: ['prompt'],
     },
   },
-  validateParams: (params): params is ActionParams<'generateCode'> =>
+  parameters: {
+    prompt: {
+      description: 'natural language description of the code to generate',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+    },
+  },
+  validateParams: (
+    params
+  ): params is Parameters<ServerSideNotebookApi['generateCode']>[0] =>
     typeof params.prompt === 'string',
   requiresNotebook: true,
   handler: async (editor, { prompt }) => {

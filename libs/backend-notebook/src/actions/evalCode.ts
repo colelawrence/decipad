@@ -1,58 +1,57 @@
-import { outputResult } from '../utils/outputResult';
-import type { Action, ActionParams } from './types';
 import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
+import { outputResult } from './utils/outputResult';
+import { ServerSideNotebookApi } from '../types';
+import { CustomAction } from '@decipad/notebook-open-api';
 
-export const evalCode: Action<'evalCode'> = {
+export const evalCode: CustomAction<
+  Parameters<ServerSideNotebookApi['evalCode']>[0],
+  ReturnType<ServerSideNotebookApi['evalCode']>
+> = {
   summary: 'evaluates a snippet of decipad language code',
-  responses: {
-    '200': {
-      description: 'OK',
-      schema: {
-        type: 'object',
-        properties: {
-          error: {
-            type: 'string',
-          },
-          errorLocation: {
-            type: 'object',
-            properties: {
-              line: {
-                type: 'number',
-              },
-              column: {
-                type: 'number',
-              },
-            },
-          },
-          result: {
-            type: 'object',
-            properties: {
-              type: {
-                type: 'object',
-              },
-              value: {
-                type: 'object',
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  parameters: [],
-  requestBody: {
+  response: {
     schema: {
       type: 'object',
       properties: {
-        code: {
-          description: 'a bit of decipad language code',
+        error: {
           type: 'string',
         },
+        errorLocation: {
+          type: 'object',
+          properties: {
+            line: {
+              type: 'number',
+            },
+            column: {
+              type: 'number',
+            },
+          },
+        },
+        result: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'object',
+            },
+            value: {
+              type: 'object',
+            },
+          },
+        },
       },
-      required: ['code'],
     },
   },
-  validateParams: (params): params is ActionParams<'evalCode'> =>
+  parameters: {
+    code: {
+      description: 'a bit of decipad language code',
+      required: true,
+      schema: {
+        type: 'string',
+      },
+    },
+  },
+  validateParams: (
+    params
+  ): params is Parameters<ServerSideNotebookApi['evalCode']>[0] =>
     typeof params.code === 'string',
   requiresNotebook: false,
   handler: async ({ code }) => {

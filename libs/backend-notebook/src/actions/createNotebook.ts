@@ -1,7 +1,7 @@
 import { create as createNotebookRecord } from '@decipad/services/notebooks';
 import { create as createNotebookContent } from '@decipad/services/pad-content';
 import { app } from '@decipad/backend-config';
-import { Action, ActionParams } from './types';
+import { CustomAction } from '@decipad/notebook-open-api';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
@@ -10,37 +10,38 @@ import {
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import slug from 'slug';
+import { ServerSideNotebookApi } from '../types';
 
-export const createNotebook: Action<'createNotebook'> = {
+export const createNotebook: CustomAction<
+  Parameters<ServerSideNotebookApi['createNotebook']>[0],
+  ReturnType<ServerSideNotebookApi['createNotebook']>
+> = {
   summary: 'removes an existing element from the notebook',
-  responses: {
-    '200': {
-      description: 'OK',
-      schema: {
-        type: 'object',
-        properties: {
-          createdNotebookId: {
-            type: 'string',
-          },
-          createdNotebookURL: {
-            type: 'string',
-          },
-        },
-      },
-    },
-  },
-  parameters: [
-    {
-      name: 'title',
-      in: 'query',
+  parameters: {
+    title: {
       description: 'the title of the notebook you want to create',
       required: true,
       schema: {
         type: 'string',
       },
     },
-  ],
-  validateParams: (params): params is ActionParams<'createNotebook'> =>
+  },
+  response: {
+    schema: {
+      type: 'object',
+      properties: {
+        createdNotebookId: {
+          type: 'string',
+        },
+        createdNotebookURL: {
+          type: 'string',
+        },
+      },
+    },
+  },
+  validateParams: (
+    params
+  ): params is Parameters<ServerSideNotebookApi['createNotebook']>[0] =>
     typeof params.title === 'string',
   requiresNotebook: false,
   handler: async ({ title }) => {

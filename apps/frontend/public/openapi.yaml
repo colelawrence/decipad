@@ -10,11 +10,11 @@ info:
 servers:
   - url: http://localhost:3000
 paths:
-  /api/notebook/createNotebook:
+  /api/notebook/describeAllNotebookElements:
     post:
-      summary: removes an existing element from the notebook
-      description: removes an existing element from the notebook
-      operationId: createNotebook
+      summary: Retrieves a brief description of all notebook elements
+      description: Retrieves a brief description of all notebook elements
+      operationId: describeAllNotebookElements
       responses:
         '200':
           description: OK
@@ -23,14 +23,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  createdNotebookId:
-                    type: string
-                  createdNotebookURL:
+                  description:
                     type: string
       parameters:
-        - name: title
+        - name: notebookId
           in: query
-          description: the title of the notebook you want to create
+          description: the notebook id
           required: true
           schema:
             type: string
@@ -47,18 +45,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/AnyElement'
       parameters:
-        - name: elementId
-          in: query
-          description: the id of the element you want to retrieve
-          required: true
-          schema:
-            type: string
         - name: notebookId
           in: query
           description: the notebook id
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                elementId:
+                  description: the id of the element you want to retrieve
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/removeElement:
     post:
       summary: removes an entire existing element from the notebook
@@ -74,25 +77,24 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
-        - name: elementId
-          in: query
-          description: the id of the element you want to remove
-          required: true
-          schema:
-            type: string
         - name: notebookId
           in: query
           description: the notebook id
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                elementId:
+                  description: the id of the element you want to remove
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/appendElement:
     post:
       summary: Appends any element to the end of the notebook
@@ -108,12 +110,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -128,9 +124,10 @@ paths:
               type: object
               properties:
                 element:
-                  $ref: '#/components/schemas/AnyElement'
-              required:
-                - element
+                  description: the new element getting appended to the notebook
+                  schema:
+                    $ref: '#/components/schemas/AnyElement'
+                  required: true
   /api/notebook/appendText:
     post:
       summary: Appends markdown text to the end of the notebook
@@ -146,16 +143,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResults'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -171,9 +160,9 @@ paths:
               properties:
                 markdownText:
                   description: the name of the table you want to append
-                  type: string
-              required:
-                - markdownText
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/changeText:
     post:
       summary: Changes the text in a text element
@@ -189,12 +178,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -210,13 +193,14 @@ paths:
               properties:
                 elementId:
                   description: the id of the text element you want to change
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 newText:
                   description: the new content of the text element
-                  type: string
-              required:
-                - elementId
-                - newText
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/appendCodeLine:
     post:
       summary: appends a code line to the notebook
@@ -230,16 +214,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -257,13 +233,14 @@ paths:
                   description:
                     the name of the variable to create. Should be unique and have no
                     spaces or weird characters.
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 codeExpression:
                   description: decipad language code expression for this variable
-                  type: string
-              required:
-                - variableName
-                - codeExpression
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/updateCodeLine:
     post:
       summary: changes an existing code line in the notebook
@@ -277,16 +254,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -302,17 +271,19 @@ paths:
               properties:
                 codeLineId:
                   description: the id of the code line you need to change
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 newVariableName:
                   description: the new variable name if it needs changing, or the current one.
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 newCodeExpression:
                   description: the new decipad language code expression for this variable
-                  type: string
-              required:
-                - codeLineId
-                - newVariableName
-                - newCodeExpression
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/appendEmptyTable:
     post:
       summary: appends an empty table to the end of the notebook
@@ -326,16 +297,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -353,20 +316,22 @@ paths:
                   description:
                     the name of the table you want to append. Should have no spaces or
                     special characters.
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnNames:
                   description: the name of the table you want to append
-                  type: array
-                  items:
-                    type: string
-                    description: Column name. Should have no spaces or special characters.
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      type: string
+                      description: Column name. Should have no spaces or special characters.
                 rowCount:
                   description: the number of rows for this new table
-                  type: integer
-              required:
-                - tableName
-                - columnNames
-                - rowCount
+                  required: true
+                  schema:
+                    type: integer
   /api/notebook/appendFilledTable:
     post:
       summary: appends a filled table to the end of the notebook
@@ -380,16 +345,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -407,25 +364,27 @@ paths:
                   description:
                     the name of the table you want to append. Should have no spaces or
                     special characters.
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnNames:
                   description: the column names for the table
-                  type: array
-                  items:
-                    type: string
-                    description: Column name. Should have no spaces or special characters.
-                rowsData:
-                  description: the data for each row in an array for each row.
-                  type: array
-                  items:
+                  required: true
+                  schema:
                     type: array
-                    description: the data for a row
                     items:
                       type: string
-              required:
-                - tableName
-                - columnNames
-                - rowsData
+                      description: Column name. Should have no spaces or special characters.
+                rowsData:
+                  description: the data for each row in an array for each row.
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      type: array
+                      description: the data for a row
+                      items:
+                        type: string
   /api/notebook/fillTable:
     post:
       summary: fills the table data
@@ -441,12 +400,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -462,19 +415,20 @@ paths:
               properties:
                 tableId:
                   description: the id of the table you want to fill
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 rowsData:
                   description: the content of the table, row by row
-                  type: array
-                  items:
-                    description: a row of data
+                  required: true
+                  schema:
                     type: array
                     items:
-                      description: a cell
-                      type: string
-              required:
-                - tableId
-                - rowsData
+                      description: a row of data
+                      type: array
+                      items:
+                        description: a cell
+                        type: string
   /api/notebook/fillColumn:
     post:
       summary: fills the data on a column of the given table
@@ -490,12 +444,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -511,20 +459,22 @@ paths:
               properties:
                 tableId:
                   description: the id of the table you want to fill
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnName:
                   description: the name of the column you want to fill
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnData:
                   description: the content of the column
-                  type: array
-                  items:
-                    description: a cell
-                    type: string
-              required:
-                - tableId
-                - columnName
-                - columnData
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      description: a cell
+                      type: string
   /api/notebook/fillRow:
     post:
       summary: updates the data on a table row
@@ -540,12 +490,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -561,19 +505,21 @@ paths:
               properties:
                 tableId:
                   description: the id of the table you want to append a new row into
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 rowIndex:
                   description: the index of the row you want to change. starts at 0
-                  type: integer
+                  required: true
+                  schema:
+                    type: integer
                 rowData:
                   description: the content of that row
-                  type: array
-                  items:
-                    type: string
-              required:
-                - tableId
-                - rowIndex
-                - rowData
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      type: string
   /api/notebook/insertEmptyTableColumn:
     post:
       summary: inserts an empty column in an existing table
@@ -587,37 +533,33 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
-        - name: tableId
-          in: query
-          description: the id of the table you want to insert a column into
-          required: true
-          schema:
-            type: string
-        - name: columnName
-          in: query
-          description:
-            the name of the new column. Must contain no spaces or weird
-            characters
-          required: true
-          schema:
-            type: string
         - name: notebookId
           in: query
           description: the notebook id
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to insert a column into
+                  required: true
+                  schema:
+                    type: string
+                columnName:
+                  description:
+                    the name of the new column. Must contain no spaces or weird
+                    characters
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/insertFilledTableColumn:
     post:
       summary: inserts a column in an existing table and fills it
@@ -631,16 +573,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -656,17 +590,21 @@ paths:
               properties:
                 tableId:
                   description: the id of the table element
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnName:
                   description: the name of the column. Must contain no spaces or weird characters
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 cells:
                   description: the data for the column
-                  type: array
-                  items:
-                    type: string
-              required:
-                - prompt
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      type: string
   /api/notebook/insertFormulaTableColumn:
     post:
       summary: inserts a calculated column to an existing table
@@ -680,16 +618,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -705,17 +635,21 @@ paths:
               properties:
                 tableId:
                   description: the id of the table element
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnName:
                   description:
                     the name of the new column. Must contain no spaces or weird
                     characters
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 formula:
                   description: the Decipad language formula for this new column
-                  type: string
-              required:
-                - prompt
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/removeTableColumn:
     post:
       summary: removes a column from a table
@@ -731,31 +665,29 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
-        - name: tableId
-          in: query
-          description: the id of the table you want to remove a column from
-          required: true
-          schema:
-            type: string
-        - name: columnName
-          in: query
-          description: the name of the new column you want to remove
-          required: true
-          schema:
-            type: string
         - name: notebookId
           in: query
           description: the notebook id
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to remove a column from
+                  required: true
+                  schema:
+                    type: string
+                columnName:
+                  description: the name of the new column you want to remove
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/insertTableRow:
     post:
       summary: appends a row to the end of an existing table
@@ -771,12 +703,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -792,15 +718,16 @@ paths:
               properties:
                 tableId:
                   description: the id of the table you want to append a new row into
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 row:
                   description: the content of that row
-                  type: array
-                  items:
-                    type: string
-              required:
-                - tableId
-                - row
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      type: string
   /api/notebook/removeTableRow:
     post:
       summary: removes a row from a table
@@ -816,31 +743,29 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
-        - name: tableId
-          in: query
-          description: the id of the table you want to insert remove a row from
-          required: true
-          schema:
-            type: string
-        - name: rowIndex
-          in: query
-          description: the index of the row you want to remove. starts at 0
-          required: true
-          schema:
-            type: number
         - name: notebookId
           in: query
           description: the notebook id
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tableId:
+                  description: the id of the table you want to insert remove a row from
+                  required: true
+                  schema:
+                    type: string
+                rowIndex:
+                  description: the index of the row you want to remove. starts at 0
+                  required: true
+                  schema:
+                    type: number
   /api/notebook/updateTableCell:
     post:
       summary: updates the content of a cell on a table
@@ -856,12 +781,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -877,21 +796,24 @@ paths:
               properties:
                 tableId:
                   description: the id of the table you want to change
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columnName:
                   description: the name of the column you want to change
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 rowIndex:
                   description: the index of the row you want to change. starts at 0
-                  type: integer
+                  required: true
+                  schema:
+                    type: integer
                 newCellContent:
                   description: the new content of the cell
-                  type: string
-              required:
-                - tableId
-                - columnName
-                - rowIndex
-                - newCellContent
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/appendDataView:
     post:
       summary:
@@ -909,16 +831,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -934,37 +848,39 @@ paths:
               properties:
                 tableId:
                   description: the id of the table you want to use in the data view
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 columns:
                   description: the columns from the table you want to use to the data view
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        description: Column name
-                      aggregation:
-                        type: string
-                        description: Optional. Aggregates the data from the column
-                        enum:
-                          - average
-                          - max
-                          - median
-                          - min
-                          - span
-                          - sum
-                          - stddev
-                      round:
-                        type: string
-                        description:
-                          'Optional. The number of decimal places it rounds to. Use negative
-                          numbers to round to decimal points. Example: to round
-                          to the thousanth use "-3". When using dates you can
-                          round to "quarter", "year", "month" or "day"'
-              required:
-                - tableId
-                - columns
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: Column name
+                        aggregation:
+                          type: string
+                          description: Optional. Aggregates the data from the column
+                          enum:
+                            - average
+                            - max
+                            - median
+                            - min
+                            - span
+                            - sum
+                            - stddev
+                        round:
+                          type: string
+                          description:
+                            'Optional. The number of decimal places it rounds to. Use negative
+                            numbers to round to decimal points. Example: to
+                            round to the thousanth use "-3". When using dates
+                            you can round to "quarter", "year", "month" or
+                            "day"'
   /api/notebook/appendSliderVariable:
     post:
       summary: appends a slider component
@@ -981,16 +897,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -1008,22 +916,29 @@ paths:
                   description:
                     the name of the variable for this slider. Should be unique and have
                     no spaces or weird characters.
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 initialValue:
                   description: the initial value for this slider
-                  type: number
+                  required: true
+                  schema:
+                    type: number
                 min:
                   description: the minimum value this slider accepts
-                  type: number
+                  required: false
+                  schema:
+                    type: number
                 max:
                   description: the maximum value this slider accepts
-                  type: number
+                  required: false
+                  schema:
+                    type: number
                 step:
                   description: the step at which the user can change the value
-                  type: number
-              required:
-                - variableName
-                - initialValue
+                  required: false
+                  schema:
+                    type: number
   /api/notebook/appendPlot:
     post:
       summary: appends a plot (or graph) to the notebook
@@ -1039,16 +954,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -1064,37 +971,38 @@ paths:
               properties:
                 tableId:
                   description: the id of the source table for this plot
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 plotParams:
                   description: parameters for the plot
-                  type: object
-                  properties:
-                    plotType:
-                      type: string
-                      enum:
-                        - bar
-                        - circle
-                        - square
-                        - tick
-                        - line
-                        - area
-                        - point
-                        - arc
-                    xColumnName:
-                      type: string
-                    yColumnName:
-                      type: string
-                    sizeColumnName:
-                      type: string
-                    colorColumnName:
-                      type: string
-                    thetaColumnName:
-                      type: string
-                    y2ColumnName:
-                      type: string
-              required:
-                - tableId
-                - plotParams
+                  required: true
+                  schema:
+                    type: object
+                    properties:
+                      plotType:
+                        type: string
+                        enum:
+                          - bar
+                          - circle
+                          - square
+                          - tick
+                          - line
+                          - area
+                          - point
+                          - arc
+                      xColumnName:
+                        type: string
+                      yColumnName:
+                        type: string
+                      sizeColumnName:
+                        type: string
+                      colorColumnName:
+                        type: string
+                      thetaColumnName:
+                        type: string
+                      y2ColumnName:
+                        type: string
   /api/notebook/setPlotParams:
     post:
       summary: changes some of the parameters for a plot
@@ -1110,12 +1018,6 @@ paths:
                 properties:
                   notebookErrors:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
       parameters:
         - name: notebookId
           in: query
@@ -1131,39 +1033,40 @@ paths:
               properties:
                 plotId:
                   description: the id of the plot element to change
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 newPlotParams:
                   description:
                     the parameters to change on the plot. Only include those that need
                     to change
-                  type: object
-                  properties:
-                    plotType:
-                      type: string
-                      enum:
-                        - bar
-                        - circle
-                        - square
-                        - tick
-                        - line
-                        - area
-                        - point
-                        - arc
-                    xColumnName:
-                      type: string
-                    yColumnName:
-                      type: string
-                    sizeColumnName:
-                      type: string
-                    colorColumnName:
-                      type: string
-                    thetaColumnName:
-                      type: string
-                    y2ColumnName:
-                      type: string
-              required:
-                - plotId
-                - plotParams
+                  required: true
+                  schema:
+                    type: object
+                    properties:
+                      plotType:
+                        type: string
+                        enum:
+                          - bar
+                          - circle
+                          - square
+                          - tick
+                          - line
+                          - area
+                          - point
+                          - arc
+                      xColumnName:
+                        type: string
+                      yColumnName:
+                        type: string
+                      sizeColumnName:
+                        type: string
+                      colorColumnName:
+                        type: string
+                      thetaColumnName:
+                        type: string
+                      y2ColumnName:
+                        type: string
   /api/notebook/appendChoice:
     post:
       summary: appends a selection box for the user to choose one value
@@ -1177,18 +1080,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  result:
-                    $ref: '#/components/schemas/CreateResult'
-                  notebookErrors:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        elementId:
-                          type: string
-                        error: string
+                $ref: '#/components/schemas/CreateResult'
       parameters:
         - name: notebookId
           in: query
@@ -1206,21 +1098,92 @@ paths:
                   description:
                     the name of the variable for this slider. Should be unique and have
                     no spaces or weird characters.
-                  type: string
+                  required: true
+                  schema:
+                    type: string
                 options:
                   description: the options available for the user
-                  type: array
-                  items:
-                    description: one available option.
-                    type: string
+                  required: true
+                  schema:
+                    type: array
+                    items:
+                      description: one available option.
+                      type: string
                 selectedName:
-                  description:
-                    optional. contains the initially selected name from the given
-                    options.
-                  type: string
-              required:
-                - variableName
-                - options
+                  description: contains the initially selected name from the given options.
+                  required: false
+                  schema:
+                    type: string
+  /api/notebook/createNotebook:
+    post:
+      summary: removes an existing element from the notebook
+      description: removes an existing element from the notebook
+      operationId: createNotebook
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  createdNotebookId:
+                    type: string
+                  createdNotebookURL:
+                    type: string
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  description: the title of the notebook you want to create
+                  required: true
+                  schema:
+                    type: string
+  /api/notebook/evalCode:
+    post:
+      summary: evaluates a snippet of decipad language code
+      description: evaluates a snippet of decipad language code
+      operationId: evalCode
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  errorLocation:
+                    type: object
+                    properties:
+                      line:
+                        type: number
+                      column:
+                        type: number
+                  result:
+                    type: object
+                    properties:
+                      type:
+                        type: object
+                      value:
+                        type: object
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  description: a bit of decipad language code
+                  required: true
+                  schema:
+                    type: string
   /api/notebook/generateCode:
     post:
       summary: generates Decipad language code from a prompt
@@ -1274,50 +1237,9 @@ paths:
               properties:
                 prompt:
                   description: natural language description of the code to generate
-                  type: string
-              required:
-                - prompt
-  /api/notebook/evalCode:
-    post:
-      summary: evaluates a snippet of decipad language code
-      description: evaluates a snippet of decipad language code
-      operationId: evalCode
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
+                  required: true
+                  schema:
                     type: string
-                  errorLocation:
-                    type: object
-                    properties:
-                      line:
-                        type: number
-                      column:
-                        type: number
-                  result:
-                    type: object
-                    properties:
-                      type:
-                        type: object
-                      value:
-                        type: object
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  description: a bit of decipad language code
-                  type: string
-              required:
-                - code
 components:
   schemas:
     CreateResult:
@@ -1347,3 +1269,7 @@ components:
           type: string
         type:
           type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyElement'

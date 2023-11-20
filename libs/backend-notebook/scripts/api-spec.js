@@ -65,6 +65,12 @@ Column names and variable names must not have spaces or weird characters in them
           type: {
             type: 'string',
           },
+          children: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/AnyElement',
+            },
+          },
         },
       },
       ...schemas,
@@ -82,38 +88,34 @@ const wrapSechemaInActionResultWithNotebookError = (schema) => ({
   },
 });
 
-const commonResponses = {}; // TODO: fill this
-
 const buildResponses = (
-  responses,
+  response,
   returnsActionResultWithNotebookError = false
-) => ({
-  ...commonResponses,
-  ...Object.fromEntries(
-    Object.entries(responses).map(([responseName, response]) => {
-      const { schema, schemaName, ...rest } = response;
-      const finalSchema = schemaName
-        ? {
-            $ref: `#/components/schemas/${response.schemaName}`,
-          }
-        : schema;
-      const finalFinalSchema = returnsActionResultWithNotebookError
-        ? wrapSechemaInActionResultWithNotebookError(schema)
-        : finalSchema;
-      const r = {
-        ...rest,
-      };
-      if (finalFinalSchema) {
-        r.content = {
-          'application/json': {
-            schema: finalFinalSchema,
-          },
-        };
+) => {
+  const { schema, schemaName, ...rest } = response;
+  const finalSchema = schemaName
+    ? {
+        $ref: `#/components/schemas/${response.schemaName}`,
       }
-      return [responseName, r];
-    })
-  ),
-});
+    : schema;
+  const finalFinalSchema = returnsActionResultWithNotebookError
+    ? wrapSechemaInActionResultWithNotebookError(schema)
+    : finalSchema;
+  const r = {
+    ...rest,
+    description: 'OK',
+  };
+  if (finalFinalSchema) {
+    r.content = {
+      'application/json': {
+        schema: finalFinalSchema,
+      },
+    };
+  }
+  return {
+    200: r,
+  };
+};
 
 const notebookIdParameter = {
   name: 'notebookId',
@@ -125,19 +127,23 @@ const notebookIdParameter = {
   },
 };
 
-const buildActionParameters = (_parameters, requiresNotebook) => {
-  const parameters = [..._parameters];
+const buildActionParameters = (requiresNotebook) => {
   if (requiresNotebook) {
-    parameters.push(notebookIdParameter);
+    return [notebookIdParameter];
   }
-  return parameters;
+  return [];
 };
 
-const buildRequestBody = (requestBody) => {
-  if (requestBody) {
+const buildRequestBody = (parameters) => {
+  if (parameters && Object.entries(parameters).length > 0) {
     return {
       content: {
-        'application/json': requestBody,
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: parameters,
+          },
+        },
       },
     };
   }
@@ -149,16 +155,13 @@ const buildActionPath = (actionName, actionDef) => {
     description: actionDef.description || actionDef.summary,
     operationId: actionName,
     responses: buildResponses(
-      actionDef.responses,
+      actionDef.response ?? {},
       actionDef.returnsActionResultWithNotebookError
     ),
-    parameters: buildActionParameters(
-      actionDef.parameters ?? [],
-      actionDef.requiresNotebook
-    ),
+    parameters: buildActionParameters(actionDef.requiresNotebook),
   };
-  if (actionDef.requestBody) {
-    action.requestBody = buildRequestBody(actionDef.requestBody);
+  if (actionDef.parameters) {
+    action.requestBody = buildRequestBody(actionDef.parameters);
   }
   return [
     `/api/notebook/${actionName}`,
