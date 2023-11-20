@@ -32,13 +32,18 @@ export interface NotebookMetaDataType {
   readonly aiMode: boolean;
   readonly toggleAIMode: () => void;
 
+  // Should the user be able to alter their notebook?
+  // Used for preventing errored notebooks from being editable.
+  readonly canEdit: boolean;
+  readonly setCanEdit: (state: boolean) => void;
+
   // More technical stuff
   readonly hasPublished: Subject<undefined>;
 }
 
 export const useNotebookMetaData = create<NotebookMetaDataType>()(
   persist(
-    (set) => {
+    (set, get) => {
       return {
         hasPublished: new Subject(),
         sidebarTab: 'block',
@@ -46,7 +51,9 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
         aiMode: false,
 
         toggleAIMode() {
-          set(({ aiMode }) => ({ aiMode: !aiMode, sidebarOpen: false }));
+          if (get().canEdit) {
+            set(({ aiMode }) => ({ aiMode: !aiMode, sidebarOpen: false }));
+          }
         },
 
         toggleSidebar() {
@@ -59,6 +66,14 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
         setSidebarTab(sidebarTab: SelectedTab) {
           set(() => ({ sidebarTab }));
         },
+
+        canEdit: true,
+        setCanEdit(canEdit) {
+          if (!canEdit && get().aiMode) {
+            get().toggleAIMode();
+          }
+          set(() => ({ canEdit }));
+        },
       };
     },
     {
@@ -66,7 +81,8 @@ export const useNotebookMetaData = create<NotebookMetaDataType>()(
       partialize(state) {
         return Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) => !['hasPublished', 'aiMode'].includes(key)
+            ([key]) =>
+              !['hasPublished', 'aiMode', 'canEdit', 'setCanEdit'].includes(key)
           )
         );
       },

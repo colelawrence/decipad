@@ -73,6 +73,7 @@ type ArticleWrapperProps = IsEmbed & {
 };
 
 export const ArticleWrapper = styled.article<ArticleWrapperProps>((props) => ({
+  position: 'relative',
   backgroundColor: cssVar('backgroundHeavy'),
   height: '100%',
   width: props.isSidebarOpen
