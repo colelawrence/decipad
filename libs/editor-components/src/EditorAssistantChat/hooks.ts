@@ -1,225 +1,69 @@
 import {
-  type Message,
   useAIChatHistory,
-  AssistantMessage,
+  UserMessage,
+  useAISettings,
 } from '@decipad/react-contexts';
-import { useToast } from '@decipad/toast';
 
 import { nanoid } from 'nanoid';
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { useNotebookAssistantHelper } from './useNotebookAssistantHelper';
-import { useChatAssistantHelper } from './useChatAssistantHelper';
-import { MinimalRootEditor } from '@decipad/editor-types';
+import { useCallback, useMemo } from 'react';
 
-export const useAssistantChat = (
-  notebookId: string,
-  controller: MinimalRootEditor
-) => {
-  const [
-    chats,
-    feedback,
-    addMessage,
-    deleteMessage,
-    updateMessage,
-    clearMessages,
-    clearFeedback,
-    updateFeedback,
-    updateFeedbackElaspedTime,
-  ] = useAIChatHistory((state) => [
+import { useChatAssistantHelper } from './useChatAssistantHelper';
+import { MyEditor } from '@decipad/editor-types';
+
+export const useAssistantChat = (notebookId: string, editor: MyEditor) => {
+  const [chats, addMessage, clearMessages] = useAIChatHistory((state) => [
     state.chats,
-    state.feedback,
     state.addMessage,
-    state.deleteMessage,
-    state.updateMessage,
     state.clearMessages,
-    state.clearFeedback,
-    state.updateFeedback,
-    state.updateFeedbackElaspedTime,
+  ]);
+
+  const [aiMode, setGeneratingChatResponse] = useAISettings((state) => [
+    state.aiMode,
+    state.setGeneratingChatResponse,
   ]);
 
   const messages = useMemo(() => chats[notebookId] || [], [chats, notebookId]);
 
-  const clearChat = () => {
-    clearMessages(notebookId)();
-    clearFeedback();
-  };
+  const clearChat = clearMessages(notebookId);
   const handleAddMessage = addMessage(notebookId);
-  const handleUpdateMessage = updateMessage(notebookId);
-  const handleDeleteMessage = deleteMessage(notebookId);
 
-  const [isGeneratingResponse, setIsGeneratingResponse] = useState(false);
-
-  const toast = useToast();
-
-  const getAssistantMessageReplyToFromId = useCallback(
-    (id: string) => {
-      const assistantMessage = messages.find((message) => message.id === id);
-      if (!assistantMessage) {
-        return null;
-      }
-      return assistantMessage.replyTo;
-    },
-    [messages]
-  );
-
-  const getUserMessageFromReplyTo = useCallback(
-    (replyTo: string) => {
-      const userMessage = messages.find((message) => message.id === replyTo);
-      if (!userMessage) {
-        return null;
-      }
-      return userMessage;
-    },
-    [messages]
-  );
-
-  const latestAssistantMessage = useRef<AssistantMessage | undefined>();
-
-  const setLatestAssistantMessage = useCallback((message: AssistantMessage) => {
-    latestAssistantMessage.current = message;
-  }, []);
-
-  const canRegenerateResponse = useMemo(() => {
-    if (latestAssistantMessage.current) {
-      const replyTo = getAssistantMessageReplyToFromId(
-        latestAssistantMessage.current.id
-      );
-
-      if (!replyTo) {
-        return false;
-      }
-      const userMessage = getUserMessageFromReplyTo(replyTo);
-
-      if (!userMessage) {
-        return false;
-      }
-
-      return true;
-    }
-    return false;
-  }, [
-    getAssistantMessageReplyToFromId,
-    getUserMessageFromReplyTo,
-    latestAssistantMessage,
-  ]);
-
-  const canSubmitFeedback = useMemo(
-    () => Object.keys(feedback).length > 0,
-    [feedback]
-  );
-
-  const updateLatestAssistantMessage = useCallback(
-    (message: Partial<AssistantMessage>) => {
-      if (latestAssistantMessage.current) {
-        const newLatestResponse = {
-          ...latestAssistantMessage.current,
-          ...message,
-        };
-        handleUpdateMessage(newLatestResponse);
-        latestAssistantMessage.current = newLatestResponse;
-      } else {
-        // eslint-disable-next-line no-console
-        console.debug('no latest response');
-      }
-    },
-    [handleUpdateMessage, latestAssistantMessage]
-  );
-
-  const [gettingChangesToastId, setGettingChangesToastId] = useState<
-    string | undefined
-  >();
-
-  const { sendPrompt, isGeneratingChanges } = useNotebookAssistantHelper({
+  const { getChatAgentResponse } = useChatAssistantHelper({
     notebookId,
-    controller,
-
-    updateMessage: updateLatestAssistantMessage,
-    updateFeedback,
-    updateFeedbackElaspedTime,
-    onceDone: useCallback(() => {
-      if (gettingChangesToastId) {
-        updateFeedback({
-          notebook: controller.children,
-        });
-        toast.delete(gettingChangesToastId);
-      }
-    }, [gettingChangesToastId, toast, updateFeedback, controller.children]),
-  });
-
-  const { newUserMessage, submitFeedback } = useChatAssistantHelper({
-    addMessage: handleAddMessage,
-    chatId: notebookId,
-    sendPrompt,
-    setGettingChangesToastId,
-    setLatestAssistantMessage,
-    updateLatestAssistantMessage,
+    editor,
   });
 
   const sendUserMessage = useCallback(
-    async (content: string) => {
-      const newMessage: Message = {
-        role: 'user',
-        content,
+    async (message: string) => {
+      const newMessage: UserMessage = {
+        type: 'user',
+        content: message,
+        status: 'success',
         id: nanoid(),
+        timestamp: Date.now(),
       };
 
       const updatedMessages = [...messages, newMessage];
 
       handleAddMessage(newMessage);
-      setIsGeneratingResponse(true);
 
-      await newUserMessage(updatedMessages, newMessage);
+      setGeneratingChatResponse(true);
 
-      setIsGeneratingResponse(false);
+      await getChatAgentResponse(updatedMessages, newMessage, aiMode);
+
+      setGeneratingChatResponse(false);
     },
-    [handleAddMessage, messages, newUserMessage]
+    [
+      handleAddMessage,
+      messages,
+      getChatAgentResponse,
+      aiMode,
+      setGeneratingChatResponse,
+    ]
   );
-
-  const regenerateResponse = useCallback(async () => {
-    if (latestAssistantMessage.current) {
-      const replyTo = getAssistantMessageReplyToFromId(
-        latestAssistantMessage.current.id
-      );
-
-      if (!replyTo) {
-        return;
-      }
-      const userMessage = getUserMessageFromReplyTo(replyTo);
-
-      if (!userMessage) {
-        return;
-      }
-
-      handleDeleteMessage(latestAssistantMessage.current.id);
-
-      const updatedMessages = [...messages, userMessage];
-
-      setIsGeneratingResponse(true);
-
-      await newUserMessage(updatedMessages, userMessage);
-
-      setIsGeneratingResponse(false);
-    } else {
-      // eslint-disable-next-line no-console
-      console.debug('no latest response');
-    }
-  }, [
-    getAssistantMessageReplyToFromId,
-    getUserMessageFromReplyTo,
-    handleDeleteMessage,
-    messages,
-    newUserMessage,
-  ]);
 
   return {
     messages,
     clearChat,
-    submitFeedback,
     sendUserMessage,
-    regenerateResponse,
-    canRegenerateResponse,
-    canSubmitFeedback,
-    isGeneratingResponse,
-    isGeneratingChanges,
   };
 };

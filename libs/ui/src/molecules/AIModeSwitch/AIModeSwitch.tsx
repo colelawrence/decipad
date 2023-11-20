@@ -1,16 +1,12 @@
 import { css } from '@emotion/react';
 import { Sparkles } from '../../icons';
-import {
-  componentCssVars,
-  cssVar,
-  easingTiming,
-  p13Bold,
-} from '../../primitives';
+import { componentCssVars, cssVar, p13Bold } from '../../primitives';
 
 import * as Switch from '@radix-ui/react-switch';
+import { motion } from 'framer-motion';
 
 const switchWrapperStyles = css({
-  background: cssVar('backgroundHeavy'),
+  background: componentCssVars('ButtonTertiaryAltDefaultBackground'),
   borderRadius: '6px',
   display: 'flex',
   gap: '8px',
@@ -32,21 +28,25 @@ const switchIconStyles = css({
 
     '& path': {
       stroke: cssVar('textDefault'),
+      fill: cssVar('textDefault'),
     },
   },
 });
 
 const switchStyles = css({
   all: 'unset',
-  width: 34,
-  height: 18,
-  background: cssVar('borderDefault'),
+  width: 32,
+  padding: 2,
+  background: cssVar('backgroundHeavy'),
   borderRadius: '9px',
   position: 'relative',
+  display: 'inline-flex',
   WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
   '&[data-state="checked"]': {
     backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
+    justifyContent: 'flex-end',
   },
+  cursor: 'pointer',
 });
 
 const switchThumbStyles = css({
@@ -55,10 +55,6 @@ const switchThumbStyles = css({
   height: 14,
   backgroundColor: componentCssVars('AIAssistantTextColor'),
   borderRadius: '50%',
-  transition: `transform 100ms ${easingTiming.easeOut}`,
-  transform: 'translateX(2px)',
-  willChange: 'transform',
-  '&[data-state="checked"]': { transform: 'translateX(18px)' },
 });
 
 const labelStyles = css({
@@ -86,12 +82,22 @@ export const AIModeSwitch: React.FC<AIModeSwitchProps> = ({
         AI
       </label>
       <Switch.Root
-        css={switchStyles}
+        asChild
         id="ai-mode"
         checked={value}
         onCheckedChange={onChange}
       >
-        <Switch.Thumb css={switchThumbStyles} />
+        <motion.button layout css={switchStyles}>
+          <Switch.Thumb asChild>
+            <motion.span
+              layout
+              transition={{
+                duration: 0.06,
+              }}
+              css={switchThumbStyles}
+            />
+          </Switch.Thumb>
+        </motion.button>
       </Switch.Root>
     </div>
   );

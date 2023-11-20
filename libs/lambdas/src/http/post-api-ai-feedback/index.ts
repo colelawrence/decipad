@@ -7,13 +7,13 @@ import { thirdParty } from '@decipad/backend-config';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
-import { ElapsedEventTime, Feedback } from '@decipad/react-contexts';
+import { ElapsedEventTime, AIFeedback } from '@decipad/react-contexts';
 import { nanoid } from 'nanoid';
 
 export interface FeedbackObject {
   rating: 'like' | 'dislike';
   message: string;
-  feedback: Feedback;
+  feedback: AIFeedback;
 }
 
 const DISCORD_API_URL = 'https://discord.com/api/webhooks';

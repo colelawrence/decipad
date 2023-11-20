@@ -6,9 +6,6 @@ import { cssVar, p14Medium } from '../../primitives';
 
 const wrapperStyles = css({
   position: 'relative',
-  padding: '16px',
-  width: '100%',
-  borderTop: `1px solid ${cssVar('borderDefault')}`,
 });
 
 export const containerStyles = css({
@@ -18,7 +15,7 @@ export const containerStyles = css({
   minHeight: 40,
   width: '100%',
   backgroundColor: cssVar('backgroundDefault'),
-  borderRadius: 8,
+  borderRadius: 12,
   alignItems: 'center',
   padding: '8px 12px 8px 16px',
 });
@@ -44,6 +41,7 @@ const submitButtonStyles = css({
   height: 24,
   width: 24,
   borderRadius: 6,
+  alignSelf: 'flex-end',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -78,18 +76,18 @@ const submitButtonStyles = css({
 
 /* eslint decipad/css-prop-named-variable: 0 */
 type AssistantMessageInputProps = {
-  readonly isLocked: boolean;
+  readonly isGenerating: boolean;
   readonly onSubmit: (text: string) => void;
 };
 
 export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
-  isLocked,
+  isGenerating,
   onSubmit,
 }) => {
   const [value, setValue] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const isDisabled = isLocked || value === '';
+  const isDisabled = isGenerating || value.trim() === '';
 
   const resetInput = () => {
     setValue('');
@@ -136,9 +134,10 @@ export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
   };
 
   return (
-    <form css={wrapperStyles} onSubmit={handleForm}>
+    <form css={wrapperStyles} onSubmit={handleForm} data-testid="message-form">
       <div css={containerStyles}>
         <textarea
+          data-testid="message-input"
           ref={inputRef}
           value={value}
           onChange={(event) => setValue(event.currentTarget.value)}

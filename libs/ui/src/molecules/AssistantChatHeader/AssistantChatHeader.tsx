@@ -1,17 +1,17 @@
 import { css } from '@emotion/react';
-import { componentCssVars, cssVar, p14Medium } from '../../primitives';
+import { cssVar, p14Medium } from '../../primitives';
 
 export const wrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '0px 20px',
-  width: '100%',
-  height: 56,
-  borderBottom: `1px solid ${cssVar('borderDefault')}`,
+  padding: '4px 12px',
+  backgroundColor: cssVar('backgroundDefault'),
+  borderRadius: 12,
 });
 
 export const titleStyles = css(p14Medium, {
+  color: cssVar('textHeavy'),
   margin: 0,
 });
 
@@ -28,8 +28,8 @@ export const buttonStyles = css(p14Medium, {
   },
 
   '&:active': {
-    backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
-    color: componentCssVars('AIAssistantTextColor'),
+    backgroundColor: cssVar('backgroundHeavy'),
+    color: cssVar('textHeavy'),
   },
 });
 
@@ -41,7 +41,7 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   onClear,
 }) => (
   <div css={wrapperStyles}>
-    <h1 css={titleStyles}>Chat with AI assistant</h1>
+    <h1 css={titleStyles}>Talk and build with AI</h1>
     <button css={buttonStyles} onClick={onClear}>
       Clear chat
     </button>

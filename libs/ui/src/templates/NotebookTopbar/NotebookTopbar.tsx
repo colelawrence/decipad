@@ -406,13 +406,14 @@ export const NotebookTopbar = ({
                 Clear All
               </Button>
             )}
+            {isWriter && !isEmbed && isFlagEnabled('AI_ASSISTANT_CHAT') && (
+              <AIModeSwitch value={aiMode} onChange={toggleAIMode} />
+            )}
           </Styled.LeftContainer>
         ) : (
           readModeTopbar
         )}
-        {isWriter && !isEmbed && isFlagEnabled('AI_ASSISTANT_CHAT') && (
-          <AIModeSwitch value={aiMode} onChange={toggleAIMode} />
-        )}
+
         {/* Right side */}
         {isEmbed ? (
           undoButtons

@@ -36,7 +36,7 @@ export const AppWrapper = styled.div<IsEmbed>((props) => ({
     height: 'unset',
   }),
 
-  'header:first-of-type': {
+  '& > header': {
     height: '64px',
     width: '100%',
     padding: '0 32px',
@@ -58,19 +58,13 @@ export const MainWrapper = styled.main<IsEmbed>((props) => ({
   display: 'flex',
   justifyContent: 'flex-end',
   backgroundColor: cssVar('backgroundAccent'),
-  padding: '0px 24px 12px',
+  padding: '0px 24px 4px',
   gap: '24px',
-
-  [smallScreenQuery]: {
-    // paddingBottom: isEmbed ? 0 : 65,
-  },
 
   /* Embed conditional styles */
   ...(props.isEmbed && {
     padding: '0px',
   }),
-
-  // !isE2E && { height: isEmbed ? 'fit-content' : '100%' },
 }));
 
 type ArticleWrapperProps = IsEmbed & {
@@ -130,8 +124,8 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
     : props.isAssistantOpen
     ? ASSISTANT_WIDTH
     : '0px',
-  backgroundColor: cssVar('backgroundMain'),
   height: '100%',
+  paddingBottom: 12,
   borderRadius: '16px 0px 0px 16px',
   zIndex: 40,
 
@@ -140,9 +134,11 @@ export const AsideWrapper = styled.aside<AsideWrapperProps>((props) => ({
   },
   [tabletScreenQuery]: {
     position: 'fixed',
-    height: 'calc(100vh - 82px)',
+    // this is an offset to account for the header and bottom margin
+    height: 'calc(100vh - 80px)',
     border: `solid 1px ${cssVar('borderDefault')}`,
     borderRight: 'none',
     boxShadow: `0px 2px 24px -4px ${mediumShadow.rgba}`,
+    padding: 0,
   },
 }));

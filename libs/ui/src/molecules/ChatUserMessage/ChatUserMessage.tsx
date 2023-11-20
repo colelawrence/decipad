@@ -5,45 +5,40 @@ import { User } from '@decipad/interfaces';
 import { useSession } from 'next-auth/react';
 import { css } from '@emotion/react';
 import { cssVar } from '../../primitives';
+import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
+import { UserMessage } from '@decipad/react-contexts';
 
 const wrapperStyles = css({
   display: 'flex',
   padding: '8px 0px',
-  width: '100%',
-  gap: 8,
+  gap: 4,
 });
 
 const avatarStyles = css({
   width: 28,
   height: 28,
-  margin: '2px 0px',
+  margin: '4px 0px',
   flexShrink: 0,
 });
 
 const contentStyles = css(p14Regular, {
-  width: '100%',
   lineHeight: '20px',
   padding: '2px 6px',
   backgroundColor: cssVar('backgroundDefault'),
   color: cssVar('textHeavy'),
-  borderRadius: 8,
-
-  '& p': {
-    padding: 6,
-    margin: 0,
-  },
+  borderRadius: 12,
 });
 
-type AssistantUserMessageProps = {
-  readonly text: string;
+type Props = {
+  readonly message: UserMessage;
 };
 
-export const AssistantUserMessage: React.FC<AssistantUserMessageProps> = ({
-  text,
-}) => {
+export const ChatUserMessage: React.FC<Props> = ({ message }) => {
   const { data: session } = useSession();
   const user = session?.user as User;
   const { name, image } = user;
+
+  const { content } = message;
 
   return (
     <div css={wrapperStyles}>
@@ -51,7 +46,7 @@ export const AssistantUserMessage: React.FC<AssistantUserMessageProps> = ({
         <Avatar name={name} imageHash={image} useSecondLetter={false} />
       </div>
       <div css={contentStyles}>
-        <p>{text}</p>
+        <ChatMarkdownRenderer content={content} />
       </div>
     </div>
   );

@@ -2,8 +2,6 @@ import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
 import { create } from 'zustand';
 
 import { get as getIdb, set as setIdb, del as delIdb } from 'idb-keyval';
-import { NotebookValue } from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate';
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
@@ -17,132 +15,146 @@ const storage: StateStorage = {
   },
 };
 
-export type AIResponseStatus = 'success' | 'pending' | 'error';
+export type MessageType = 'user' | 'assistant' | 'event';
+export type MessageStatus = 'pending' | 'success' | 'error';
 
-export type UserMessage = {
+export interface BaseMessage {
   readonly id: string;
-  readonly role: 'user';
+  readonly type: MessageType;
+  readonly status: MessageStatus;
+  readonly replyTo?: string | null;
+  readonly timestamp: number;
+}
+
+export interface UserMessage extends BaseMessage {
+  readonly type: 'user';
   readonly content: string;
-  readonly status?: never;
   readonly replyTo?: never;
-};
+}
 
-type BaseAssistantMessage = {
+export type SingleEvent = {
   readonly id: string;
-  readonly role: 'assistant';
-  readonly status: AIResponseStatus;
-  readonly replyTo: string;
-};
-
-type FunctionCallAssistantMessage = {
-  readonly id: string;
-  readonly role: 'assistant';
-  readonly status: AIResponseStatus;
-  readonly replyTo: string;
-  readonly function_call: {
-    arguments: {};
-    name: 'make_changes';
+  readonly content: string;
+  readonly function_call?: unknown;
+  readonly element?: {
+    label: string;
+    id: string;
   };
 };
 
-export type ReplyAssistantMessage = BaseAssistantMessage & {
+export interface EventMessage extends BaseMessage {
+  readonly type: 'event';
+  readonly content?: string;
+  readonly replyTo: string | null;
+  readonly events?: SingleEvent[];
+}
+
+export interface AssistantMessage extends BaseMessage {
+  readonly type: 'assistant';
   readonly content: string;
-};
+  readonly replyTo: string | null;
+}
 
-export type AssistantMessage =
-  | FunctionCallAssistantMessage
-  | ReplyAssistantMessage;
-
-export type Message = UserMessage | AssistantMessage;
+export type Message = UserMessage | AssistantMessage | EventMessage;
 
 type Chat = {
   readonly [notebookId: string]: Message[];
 };
 
-export type ElapsedEventTime = {
-  [event: string]: number;
-};
-
-export type Feedback = {
-  prompt?: string;
-  notebook?: NotebookValue;
-  operations?: TOperation[];
-  summary?: string;
-  error?: string;
-  elapsed?: ElapsedEventTime;
-};
-
-export interface AIChatHistoryType {
+export interface AIChatHistoryStoreType {
   readonly chats: Chat;
-  readonly feedback: Feedback;
   readonly addMessage: (notebookId: string) => (message: Message) => void;
-  readonly updateMessage: (notebookId: string) => (message: Message) => void;
   readonly deleteMessage: (notebookId: string) => (messageId: string) => void;
   readonly clearMessages: (notebookId: string) => () => void;
-  readonly updateFeedback: (feedback: Feedback) => void;
-  readonly updateFeedbackElaspedTime: (elapsed: ElapsedEventTime) => void;
-  readonly clearFeedback: () => void;
+  readonly updateMessageStatus: (
+    notebookId: string
+  ) => (messageId: string, status: MessageStatus) => void;
+  readonly updateMessageContent: (
+    notebookId: string
+  ) => (messageId: string, content: string) => void;
+  readonly updateEventMessage: (
+    notebookId: string
+  ) => (messageId: string, event: SingleEvent) => void;
 }
 
-export const useAIChatHistory = create<AIChatHistoryType>()(
+export const useAIChatHistory = create<AIChatHistoryStoreType>()(
   persist(
     (set) => {
       return {
         chats: {},
-        feedback: {},
         addMessage: (notebookId: string) => (message: Message) => {
           set((state) => {
-            if (!state.chats[notebookId]) {
-              return {
-                chats: {
-                  ...state.chats,
-                  [notebookId]: [message],
-                },
-              };
-            }
             return {
               chats: {
                 ...state.chats,
-                [notebookId]: [...state.chats[notebookId], message],
+                [notebookId]: [
+                  ...(state.chats[notebookId] || []),
+                  { ...message, timestamp: Date.now() },
+                ],
               },
             };
           });
         },
         deleteMessage: (notebookId: string) => (messageId: string) => {
           set((state) => {
-            if (!state.chats[notebookId]) {
-              return state;
-            }
             return {
               chats: {
                 ...state.chats,
                 [notebookId]: state.chats[notebookId].filter(
-                  (message) => message.id !== messageId
+                  (m) => m.id !== messageId
                 ),
               },
             };
           });
         },
-        updateMessage: (notebookId: string) => (message: Message) => {
-          set((state) => {
-            if (!state.chats[notebookId]) {
-              return state;
-            }
-            return {
-              chats: {
-                ...state.chats,
-                [notebookId]: state.chats[notebookId].map((m) =>
-                  m.id === message.id ? message : m
-                ),
-              },
-            };
-          });
+        updateMessageStatus:
+          (notebookId: string) =>
+          (messageId: string, status: MessageStatus) => {
+            set((state) => {
+              return {
+                chats: {
+                  ...state.chats,
+                  [notebookId]: state.chats[notebookId].map((m) =>
+                    m.id === messageId ? { ...m, status } : m
+                  ),
+                },
+              };
+            });
+          },
+        updateMessageContent(notebookId) {
+          return (messageId: string, content: string) => {
+            set((state) => {
+              return {
+                chats: {
+                  ...state.chats,
+                  [notebookId]: state.chats[notebookId].map((m) =>
+                    m.id === messageId ? { ...m, content } : m
+                  ),
+                },
+              };
+            });
+          };
         },
+        updateEventMessage:
+          (notebookId: string) => (messageId: string, event: SingleEvent) => {
+            set((state) => {
+              return {
+                chats: {
+                  ...state.chats,
+                  [notebookId]: state.chats[notebookId].map((m) =>
+                    m.id === messageId && m.type === 'event'
+                      ? {
+                          ...m,
+                          events: [...(m.events || []), event],
+                        }
+                      : m
+                  ),
+                },
+              };
+            });
+          },
         clearMessages: (notebookId: string) => () => {
           set((state) => {
-            if (!state.chats[notebookId]) {
-              return state;
-            }
             return {
               chats: {
                 ...state.chats,
@@ -151,45 +163,10 @@ export const useAIChatHistory = create<AIChatHistoryType>()(
             };
           });
         },
-        updateFeedback: (feedback: Partial<Feedback>) => {
-          set((state) => {
-            return {
-              feedback: {
-                ...state.feedback,
-                ...feedback,
-              },
-            };
-          });
-        },
-        updateFeedbackElaspedTime: (elapsed: ElapsedEventTime) => {
-          set((state) => {
-            return {
-              feedback: {
-                ...state.feedback,
-                elapsed: {
-                  ...state.feedback.elapsed,
-                  ...elapsed,
-                },
-              },
-            };
-          });
-        },
-        clearFeedback: () => {
-          set(() => {
-            return {
-              feedback: {},
-            };
-          });
-        },
       };
     },
     {
       name: 'ai-chat-history',
-      partialize(state) {
-        return Object.fromEntries(
-          Object.entries(state).filter(([key]) => !['feedback'].includes(key))
-        );
-      },
       storage: createJSONStorage(() => storage),
     }
   )

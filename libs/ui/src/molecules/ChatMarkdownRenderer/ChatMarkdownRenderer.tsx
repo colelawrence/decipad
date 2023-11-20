@@ -1,5 +1,5 @@
 import { Remark } from 'react-remark';
-import { code, cssVar, p14Regular, p16Bold } from '../../primitives';
+import { code, cssVar, p14Bold, p14Regular } from '../../primitives';
 import { css } from '@emotion/react';
 
 const contentStyles = css(p14Regular, {
@@ -7,7 +7,7 @@ const contentStyles = css(p14Regular, {
   width: '100%',
 
   'h1, h2, h3, h4, h5, h6': {
-    ...p16Bold,
+    ...p14Bold,
     margin: 0,
     padding: 6,
   },
@@ -28,7 +28,7 @@ const contentStyles = css(p14Regular, {
   pre: {
     ...code,
     padding: 6,
-    margin: 0,
+    margin: '6px 0px',
     width: '100%',
     backgroundColor: cssVar('backgroundHeavy'),
     boxShadow: `0px 1px 0px 1px ${cssVar('borderDefault')}`,
@@ -68,16 +68,14 @@ const contentStyles = css(p14Regular, {
   },
 });
 
-type AssistantMessageMarkdownProps = {
-  readonly text: string;
+type Props = {
+  readonly content: string;
 };
 
-export const AssistantMessageMarkdown: React.FC<
-  AssistantMessageMarkdownProps
-> = ({ text }) => {
+export const ChatMarkdownRenderer: React.FC<Props> = ({ content }) => {
   return (
     <div css={contentStyles}>
-      <Remark>{text}</Remark>
+      <Remark>{content}</Remark>
     </div>
   );
 };

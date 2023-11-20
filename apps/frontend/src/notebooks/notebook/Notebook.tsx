@@ -513,13 +513,15 @@ type NewAssistantProps = {
 const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const docsync = useContext(DocsyncEditorProvider);
 
+  const editor = useActiveEditor(docsync);
+
   const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
-  if (isAssistantOpen && !isEmbed && docsync) {
-    return <AssistantChat notebookId={notebookId} controller={docsync} />;
+  if (isAssistantOpen && !isEmbed && editor) {
+    return <AssistantChat notebookId={notebookId} editor={editor} />;
   }
 
   return null;

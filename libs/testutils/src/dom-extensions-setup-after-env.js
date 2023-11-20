@@ -101,5 +101,3 @@ Object.defineProperty(SVGSVGElement.prototype, 'viewBox', {
     return { baseVal: rect, animVal: rect };
   },
 });
-
-window.matchMedia = () => ({});

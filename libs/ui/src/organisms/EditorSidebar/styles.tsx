@@ -20,6 +20,7 @@ export const sidebarWrapperStyles = css(
     flexDirection: 'column',
     padding: '16px 8px 16px 16px',
     backgroundColor: cssVar('backgroundMain'),
+    borderRadius: '16px 0px 0px 16px',
   },
   deciOverflowYStyles
 );

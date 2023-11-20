@@ -1,156 +1,110 @@
 import {
+  AIMode,
+  EventMessage,
   Message,
   UserMessage,
-  AssistantMessage,
   useAIChatHistory,
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
-import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 
-export interface ChatAssistantHelperOptions {
-  chatId: string;
-  addMessage: (message: Message) => unknown;
-  updateLatestAssistantMessage: (message: Partial<AssistantMessage>) => unknown;
-  setLatestAssistantMessage: (message: AssistantMessage) => unknown;
-  setGettingChangesToastId: (toastId: string) => unknown;
-  sendPrompt: (prompt: string) => unknown;
-}
+import { useModelAgent } from './useModelAgent';
+import { useConversationAgent } from './useConversationAgent';
 
-export interface ChatAssistantHelperResult {
-  newUserMessage: (allMessages: Message[], message: Message) => void;
-  submitFeedback: (rating: 'like' | 'dislike') => (message: string) => void;
+import { nanoid } from 'nanoid';
+import { useAgentMode } from './useAgentMode';
+import { MyEditor } from '@decipad/editor-types';
+
+export interface ChatAssistantHelperOptions {
+  notebookId: string;
+  editor: MyEditor;
 }
 
 export const useChatAssistantHelper = ({
-  chatId,
-  addMessage,
-  setLatestAssistantMessage,
-  updateLatestAssistantMessage,
-  setGettingChangesToastId,
-  sendPrompt,
-}: ChatAssistantHelperOptions): ChatAssistantHelperResult => {
+  notebookId,
+  editor,
+}: ChatAssistantHelperOptions) => {
   const toast = useToast();
-  const [feedback, clearFeedback] = useAIChatHistory((state) => [
-    state.feedback,
-    state.clearFeedback,
-  ]);
 
-  const submitFeedback = useCallback(
-    (rating: 'like' | 'dislike') => async (message: string) => {
+  const addMessage = useAIChatHistory((state) => state.addMessage);
+
+  const handleAddMessage = addMessage(notebookId);
+
+  const { initCreateAgent } = useModelAgent({
+    notebookId,
+    editor,
+  });
+
+  const { initConversationAgent } = useConversationAgent({
+    notebookId,
+  });
+
+  const { selectAgentMode } = useAgentMode({
+    notebookId,
+  });
+
+  const getChatAgentResponse = useCallback(
+    async (
+      messages: Message[],
+      userMessage: UserMessage,
+      command: AIMode = 'auto'
+    ) => {
       try {
-        const response = await fetch('/api/ai/feedback', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            rating,
-            message,
-            feedback,
-          }),
-        });
-
-        if (response.status !== 200) {
-          const err = await response.json();
-          throw new Error(err.message);
+        if (command === 'auto') {
+          const newMode = await selectAgentMode(messages);
+          await getChatAgentResponse(messages, userMessage, newMode);
         }
+        if (command === 'create') {
+          const eventMessage: EventMessage = {
+            timestamp: Date.now(),
+            status: 'pending',
+            type: 'event',
+            id: nanoid(),
+            events: [],
+            replyTo: userMessage.id,
+          };
 
-        toast.success('Feedback sent');
-      } catch (error) {
-        console.error(error);
-        toast.error('Failed to send feedback');
-      } finally {
-        clearFeedback();
-      }
-    },
-    [feedback, clearFeedback, toast]
-  );
-
-  const newUserMessage = useCallback(
-    async (messages: Message[], m: Message) => {
-      const newResponse: AssistantMessage = {
-        content: 'Generating response...',
-        role: 'assistant',
-        status: 'pending',
-        id: nanoid(),
-        replyTo: m.id,
-      };
-      addMessage(newResponse);
-      setLatestAssistantMessage(newResponse);
-
-      const response = await fetch(`/api/ai/chat/${chatId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(
-          messages.map((message) => {
-            const {
-              id: _id,
-              replyTo: _replyTo,
-              status: _status,
-              ...rest
-            } = message;
-            return rest;
-          })
-        ),
-      });
-
-      if (response.status !== 200) {
-        const err = await response.json();
-
-        if (err.name === 'Error') {
-          throw new Error(err.message);
+          handleAddMessage(eventMessage);
+          await initCreateAgent(
+            [...messages, eventMessage],
+            userMessage,
+            eventMessage
+          );
         }
-      }
+        if (command === 'ask') {
+          const eventMessage: EventMessage = {
+            timestamp: Date.now(),
+            content: 'Generating response...',
+            status: 'pending',
+            type: 'event',
+            id: nanoid(),
+            replyTo: userMessage.id,
+          };
 
-      const chatAssistantResponse: Message = await response.json();
-      try {
-        if (!('function_call' in chatAssistantResponse)) {
-          updateLatestAssistantMessage({
-            content: chatAssistantResponse.content,
-            status: 'success',
-          });
-          return;
+          handleAddMessage(eventMessage);
+          await initConversationAgent(
+            [...messages, eventMessage],
+            userMessage,
+            eventMessage
+          );
         }
-
-        updateLatestAssistantMessage({
-          content: 'Got it. Let me update the document for you...',
-          status: 'pending',
-        });
-
-        setGettingChangesToastId(
-          toast.info('Getting changes...', {
-            autoDismiss: false,
-          })
-        );
-
-        sendPrompt((m as UserMessage).content);
       } catch (err) {
         console.error(err);
-        updateLatestAssistantMessage({
-          content: 'Error generating response',
-          status: 'error',
-        });
         toast.error(
           "Couldn't get response from AI assistant. Please try again later."
         );
       }
     },
     [
-      addMessage,
-      chatId,
-      sendPrompt,
-      setGettingChangesToastId,
-      setLatestAssistantMessage,
+      initConversationAgent,
+      initCreateAgent,
+      selectAgentMode,
       toast,
-      updateLatestAssistantMessage,
+      handleAddMessage,
     ]
   );
 
   return {
-    newUserMessage,
-    submitFeedback,
+    getChatAgentResponse,
   };
 };

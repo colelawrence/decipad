@@ -29,6 +29,7 @@ module.exports = {
     require.resolve('jest-canvas-mock'),
     require.resolve('jest-fetch-mock'),
     require.resolve('./libs/testutils/src/dom-extensions-setup-after-env'),
+    require.resolve('./libs/testutils/src/window-match-media-setup'),
   ],
   reporters: [
     process.env.CI
