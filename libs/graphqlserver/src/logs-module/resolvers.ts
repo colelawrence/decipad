@@ -3,7 +3,7 @@ import { GraphqlContext } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import { requireUser } from '../authorization';
 
-const EXPIRATION_TIME_SECONDS = 15 * 24 * 60 * 60;
+const EXPIRATION_TIME_SECONDS = 30 * 24 * 60 * 60; // 30 days
 
 export interface LogEntry {
   source: string;

@@ -2,16 +2,23 @@ import { LogRecord, User } from '@decipad/backendtypes';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { getDefined } from '@decipad/utils';
 import Boom from '@hapi/boom';
-import tables, { allPages } from '@decipad/tables';
+import tables from '@decipad/tables';
 import handle from '../handle';
+import { app } from '@decipad/backend-config';
 
 const outputJSON = (json: string) =>
   JSON.stringify(JSON.parse(json), null, '\t');
 
 const outputEntry = (entry: LogRecord): string => {
-  return `${new Date((entry.createdAt ?? 0) * 1000).toISOString()}: ${
-    entry.source
-  }: ${outputJSON(entry.content)}\n`;
+  return `<tr>
+  <td>${new Date((entry.createdAt ?? 0) * 1000)
+    .toISOString()
+    .split('T')
+    .join(' ')}</td>
+  <td>${entry.user_id}</td>
+  <td>${entry.source}</td>
+  <td>${outputJSON(entry.content)}</td>
+</tr>`;
 };
 
 async function checkAccess(user: User | undefined) {
@@ -32,44 +39,104 @@ export const handler = handle(async (event) => {
   const [{ user }] = await expectAuthenticated(event);
   await checkAccess(user);
 
-  const id = event.queryStringParameters?.id;
+  const { from, page = '1' } = event.queryStringParameters ?? {};
 
   const data = await tables();
   let output = '';
-  let lastId: string | undefined;
+  let entryCount = 0;
 
-  for await (const entry of allPages(data.logs, {
+  const resource = `/pads/${padId}`;
+  console.log('resource:', resource);
+
+  const result = await data.logs.query({
     KeyConditionExpression: '#resource = :resource',
     ExpressionAttributeNames: {
       '#resource': 'resource',
     },
     ExpressionAttributeValues: {
-      ':resource': `/pads/${padId}`,
+      ':resource': resource,
     },
-    ExclusiveStartKey: id,
+    ExclusiveStartKey: from && JSON.parse(from),
     Limit: 50,
-  })) {
+  });
+
+  for (const entry of result.Items) {
     if (entry) {
+      entryCount += 1;
       output += outputEntry(entry);
-      lastId = entry.id;
     }
   }
 
-  const questionMarkIndex = event.rawPath.indexOf('?');
-  const frontlink = `<a href="${event.rawPath.slice(0, questionMarkIndex)}${
-    lastId != null ? `?id=${lastId}">Next</a>` : ''
-  }`;
+  const cursor =
+    result.LastEvaluatedKey && JSON.stringify(result.LastEvaluatedKey);
+
+  console.log(event.rawPath);
+  const nextUrl = new URL(event.rawPath, app().urlBase);
+  nextUrl.searchParams.set('page', (parseInt(page, 10) + 1).toString());
+  if (cursor) {
+    nextUrl.searchParams.set('from', cursor);
+  }
+  if (from) {
+    nextUrl.searchParams.set('previous', from);
+  }
+  const nextLink = cursor
+    ? `<a href="${nextUrl.toString()}">Next</a>`
+    : 'No more entries';
+
+  const body = `
+<html>
+  <head>
+    <link rel="stylesheet"
+      href="https://unpkg.com/purecss@2.0.6/build/pure-min.css"
+      integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5"
+      crossorigin="anonymous"
+      origin="anonymous"
+    />
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .container {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      h1 {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>Showing ${entryCount} log entries</h1>
+        <h2>Page ${page} > ${nextLink}</h2>
+        <p></p>
+        <table class="pure-table pure-table-striped">
+          <thead>
+            <tr>
+              <th>When</th>
+              <th>Who</th>
+              <th>Which</th>
+              <th>What</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${output}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
+`;
 
   return {
     statusCode: 200,
     headers: {
       'content-type': 'text/html',
     },
-    body: `<div>
-      ${frontlink}
-      <div>
-        ${output}
-      </div>
-    </div>`,
+    body,
   };
 });
