@@ -24,6 +24,9 @@ echo "Building frontend..."
 yarn build:frontend
 cp -rT dist/apps/frontend/. apps/backend/public
 
+echo "Building notebook open API manifest..."
+DECI_DOMAIN="$DECI_APP_URL_BASE" nx build backend-notebook
+
 echo "Building docs..."
 yarn build:docs
 mkdir -p apps/backend/public/docs
