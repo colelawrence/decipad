@@ -438,19 +438,19 @@
   dependencies:
     xss "^1.0.8"
 
-"@architect/architect@10.14.0":
-  version "10.14.0"
-  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.14.0.tgz#8ce20149e036a72efb2ee6905f8a97cb352cb38c"
-  integrity sha512-gi9yYJac/Iq4J2QsJveDKpnNzzgaPjT9INS7CNpDcG0S8IEPUD6cs3l3H9+LPZvF95zCVaeSK5/VHods5dJ+5Q==
+"@architect/architect@10.16.2":
+  version "10.16.2"
+  resolved "https://registry.yarnpkg.com/@architect/architect/-/architect-10.16.2.tgz#ab4ecdc9dba655198bf67969732748273f2703f6"
+  integrity sha512-tGeePNU7Sz2Tlsy/OjQJ8IIQdVTTkZeMBIkrM6mkZwWuJ6NoIFs9TnVl89aVfsntb+5ea2WPrv8hTVs4b3pJdg==
   dependencies:
-    "@architect/create" "4.2.3"
-    "@architect/deploy" "4.6.0"
+    "@architect/create" "4.2.4"
+    "@architect/deploy" "4.6.3"
     "@architect/destroy" "3.0.13"
     "@architect/env" "3.0.12"
-    "@architect/hydrate" "3.3.0"
-    "@architect/inventory" "~3.6.1"
-    "@architect/logs" "4.0.10"
-    "@architect/sandbox" "5.8.0"
+    "@architect/hydrate" "3.5.1"
+    "@architect/inventory" "~3.6.3"
+    "@architect/logs" "4.1.0"
+    "@architect/sandbox" "5.9.2"
     "@architect/utils" "~3.1.9"
     "@aws-sdk/client-apigatewaymanagementapi" "^3.319.0"
     "@aws-sdk/client-dynamodb" "^3.319.0"
@@ -478,15 +478,15 @@
   resolved "https://registry.yarnpkg.com/@architect/asap/-/asap-6.0.3.tgz#1d3bb8fd555cb7aac473fcff33aaba3c60b46a20"
   integrity sha512-LxqrtZl141Ao+DH+1Wy8Xvks5Uay/BMoPYa9b47B5Ag4s4PItl33asXI53ueiS2aQDUq01y4C7lfT1KQ4oJGzA==
 
-"@architect/create@4.2.3", "@architect/create@~4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@architect/create/-/create-4.2.3.tgz#13946368846d42f154555f9017135ee96095e66e"
-  integrity sha512-Y7ezZFU6SH409QZafOyjz6HxCyw8gv9FlXnlK7HM0hm9SvcmXzFFS7qUm2l5LOdhTpEopXGWGCEKyykHcX2ZDg==
+"@architect/create@4.2.4", "@architect/create@~4.2.3":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@architect/create/-/create-4.2.4.tgz#b207269a3ee46dada9f9b6822c69af065150a99d"
+  integrity sha512-jwi/Im0FaMUpLtpkxpOWew7uBsJJGHLvUCq5QGgYh2HSzmPzYoA9/5jPcVMV3VnvfiqDpv/Il1j+r1jo6C4tNw==
   dependencies:
-    "@architect/inventory" "~3.6.0"
+    "@architect/inventory" "~3.6.3"
     "@architect/utils" "~3.1.9"
     chalk "4.1.2"
-    lambda-runtimes "~1.1.4"
+    lambda-runtimes "~1.1.6"
     minimist "~1.2.8"
 
 "@architect/deploy@4.6.0":
@@ -503,6 +503,29 @@
     fs-extra "~11.1.1"
     get-folder-size "2.0.1"
     glob "~10.3.3"
+    mime-types "~2.1.35"
+    minimist "~1.2.8"
+    path-sort "~0.1.0"
+    run-parallel "~1.2.0"
+    run-series "~1.1.9"
+    run-waterfall "~1.1.7"
+    zip-dir "~2.0.0"
+    zipit "~2.0.0"
+
+"@architect/deploy@4.6.3":
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/@architect/deploy/-/deploy-4.6.3.tgz#4be0c2fa780ad52c54e305d52442b84e958eb65d"
+  integrity sha512-G0tH61PzzFWKv21fU3cHxd4gjeMRMXk0EvRP/3pAfAYezdrhQJAkLv6DP8bp1WHsACKTR0P5ZDe5kxJkIkY+ig==
+  dependencies:
+    "@architect/create" "~4.2.3"
+    "@architect/hydrate" "~3.5.0"
+    "@architect/inventory" "~3.6.2"
+    "@architect/package" "~8.5.2"
+    "@architect/utils" "~3.1.9"
+    chalk "4.1.2"
+    fs-extra "~11.1.1"
+    get-folder-size "2.0.1"
+    glob "~10.3.10"
     mime-types "~2.1.35"
     minimist "~1.2.8"
     path-sort "~0.1.0"
@@ -576,7 +599,23 @@
     run-waterfall "^1.1.7"
     uid-safe "^2.1.5"
 
-"@architect/hydrate@3.3.0", "@architect/hydrate@~3.3.0":
+"@architect/hydrate@3.5.1", "@architect/hydrate@~3.5.0":
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/@architect/hydrate/-/hydrate-3.5.1.tgz#1761ffd0cf535879bd24cee2cacf9369e5a4fcea"
+  integrity sha512-UiyoKRhEsPz8NnBuLbx0tGmkW3RkQKy5Kcdo0/lhrfvckgcd+91KRXrj+JxTjCQEOIDQzKo80hQJZc+Up+sqpA==
+  dependencies:
+    "@architect/inventory" "~3.6.2"
+    "@architect/utils" "~3.1.9"
+    acorn-loose "~8.4.0"
+    chalk "4.1.2"
+    cpr "~3.0.1"
+    esquery "~1.5.0"
+    glob "~10.3.10"
+    minimist "~1.2.8"
+    run-series "~1.1.9"
+    symlink-or-copy "~1.3.1"
+
+"@architect/hydrate@~3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@architect/hydrate/-/hydrate-3.3.0.tgz#901fb3265c395076821859e9ca78ae37751ce937"
   integrity sha512-YyOjVPvjNsaUirt0saDDf/cAZEyXw3rCzLfhQcxsjpd3cwlQn6yKeYjfKT85Ge6qgmpxS/j4o4LvA0ZET61K6A==
@@ -588,22 +627,6 @@
     cpr "~3.0.1"
     esquery "~1.5.0"
     glob "~10.3.3"
-    minimist "~1.2.8"
-    run-series "~1.1.9"
-    symlink-or-copy "~1.3.1"
-
-"@architect/hydrate@~3.5.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@architect/hydrate/-/hydrate-3.5.0.tgz#db01591b34c3d6db5857ae6c1ee5c2e9affa45bb"
-  integrity sha512-HrazYg0CKLjTgMe6UFD+p2I19djD9jjXHgAii/2MQvY4j9+yMhse/gboSllFWKRh4GdywKfH94mnYiCoXmhPkw==
-  dependencies:
-    "@architect/inventory" "~3.6.2"
-    "@architect/utils" "~3.1.9"
-    acorn-loose "~8.3.0"
-    chalk "4.1.2"
-    cpr "~3.0.1"
-    esquery "~1.5.0"
-    glob "~10.3.10"
     minimist "~1.2.8"
     run-series "~1.1.9"
     symlink-or-copy "~1.3.1"
@@ -637,20 +660,20 @@
     "@architect/utils" "~3.1.7"
     lambda-runtimes "~1.1.4"
 
-"@architect/inventory@~3.6.0", "@architect/inventory@~3.6.1", "@architect/inventory@~3.6.2":
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.6.2.tgz#868890085d7b9959776bb76720fc0d6aa0b14fd6"
-  integrity sha512-YUeTu4tAuSIav8qQke5lXavx+gIGgRSn53B3ruO/nYUmvWGat3zlmxw0XSdg+2Z9U+V/1uYo0tq7ReYnlwqGRg==
+"@architect/inventory@~3.6.0", "@architect/inventory@~3.6.1", "@architect/inventory@~3.6.2", "@architect/inventory@~3.6.3":
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/@architect/inventory/-/inventory-3.6.3.tgz#df7239b429c27f8322577c7e9dbc083e5af7f74e"
+  integrity sha512-1CsN4NEUOENNPgGqsZ0f5vLXjTPzNNyihRE0h+aFjChduS3Y9AOMYxWWM0S+gsvRhV2LTqxvufJIgPza1Vyc0w==
   dependencies:
-    "@architect/asap" "~6.0.0"
-    "@architect/parser" "~6.0.2"
-    "@architect/utils" "~3.1.7"
-    lambda-runtimes "~1.1.4"
+    "@architect/asap" "~6.0.3"
+    "@architect/parser" "~6.0.3"
+    "@architect/utils" "~3.1.9"
+    lambda-runtimes "~1.1.6"
 
-"@architect/logs@4.0.10":
-  version "4.0.10"
-  resolved "https://registry.yarnpkg.com/@architect/logs/-/logs-4.0.10.tgz#59c04ed5d395b52f28ddc5cbcd4b1da3b425bf31"
-  integrity sha512-MZ046B4pDoceq/myLcjLchS4hMstJvuHvAEzBWJJiHNSscRsg56AE8lfWGf53CYblfryfNCGtrvlploFdt7wGw==
+"@architect/logs@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@architect/logs/-/logs-4.1.0.tgz#cd2765c62b94ea2f1c3f73d5547251e46f74d13f"
+  integrity sha512-NF8JY2BRsI71aWROq7eCS6lMMt7JbfF76HXIgUqBpmtTPGHgJJMChJf4RRwPJsTK1zv8WBvWITiWImjwDystCg==
   dependencies:
     "@architect/inventory" "~3.6.0"
     "@architect/utils" "~3.1.9"
@@ -661,10 +684,10 @@
     run-waterfall "~1.1.7"
     strftime "~0.10.2"
 
-"@architect/package@~8.5.1":
-  version "8.5.1"
-  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.5.1.tgz#c488d0511a727e1d86173ec9175ef8485e8586d0"
-  integrity sha512-vt5Wx+OrQAz9b2/T29/XwWb4QDM03M/8Bt5PzUQAHTCn0u/xfiuwtmLVrdUuCxj1KaXQ+Ga+PgSL/1721tHXhg==
+"@architect/package@~8.5.1", "@architect/package@~8.5.2":
+  version "8.5.2"
+  resolved "https://registry.yarnpkg.com/@architect/package/-/package-8.5.2.tgz#099c5aea8a5043f59d8b32ba546d97d5a79dd2a6"
+  integrity sha512-I3y8Tn7AkVx3qOs/uehIunJviQv+ekEegj5hsjM8TIywZWOb8YGIBLCicms5BHacZTslQZOe0DcrzetYfJm/sQ==
   dependencies:
     "@architect/inventory" "~3.6.0"
     "@architect/utils" "~3.1.9"
@@ -678,45 +701,6 @@
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@architect/parser/-/parser-6.0.3.tgz#3303b772b937a0eb59c1a0578f889ed4292fd4db"
   integrity sha512-g03zlsXO0YBVMDFbXHRL3JpVpru4kUeaQIe53tNhs1C9+fMguNCSWq1tNSmwqhBYq43O/R3hleg8VSOI0NFwgA==
-
-"@architect/sandbox@5.8.0":
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/@architect/sandbox/-/sandbox-5.8.0.tgz#6bd9f49c965e94120678a689d471a491de008ac2"
-  integrity sha512-q1Zl1Oq2f6xKS5Te2B/9UCJrbwtFgJAXbkJfPYmnaX+2XmWAS34pOnhT0TyeeCbBCi7nIJ8PVdyYyYhkwg5CfA==
-  dependencies:
-    "@architect/asap" "~6.0.3"
-    "@architect/create" "~4.2.3"
-    "@architect/hydrate" "~3.3.0"
-    "@architect/inventory" "~3.6.1"
-    "@architect/utils" "~3.1.9"
-    "@aws-sdk/client-apigatewaymanagementapi" "^3.316.0"
-    "@aws-sdk/client-dynamodb" "^3.316.0"
-    "@aws-sdk/client-s3" "^3.316.0"
-    "@aws-sdk/client-sns" "^3.316.0"
-    "@aws-sdk/client-sqs" "^3.316.0"
-    "@aws-sdk/client-ssm" "^3.316.0"
-    "@aws-sdk/lib-dynamodb" "^3.316.0"
-    "@aws-sdk/node-http-handler" "^3.360.0"
-    "@begin/hashid" "~1.0.0"
-    aws-sdk "^2.1363.0"
-    chalk "4.1.2"
-    chokidar "~3.5.3"
-    depstatus "~1.1.1"
-    dynalite "~3.2.2"
-    finalhandler "~1.2.0"
-    glob "~10.3.3"
-    http-proxy "~1.18.1"
-    lambda-runtimes "~1.1.4"
-    minimist "~1.2.8"
-    router "~1.3.8"
-    run-parallel "~1.2.0"
-    run-series "~1.1.9"
-    send "~0.18.0"
-    server-destroy "~1.0.1"
-    tmp "~0.2.1"
-    tree-kill "~1.2.2"
-    update-notifier-cjs "~5.1.6"
-    ws "~8.13.0"
 
 "@architect/sandbox@5.9.2":
   version "5.9.2"
@@ -14758,6 +14742,13 @@ acorn-loose@~8.3.0:
   dependencies:
     acorn "^8.5.0"
 
+acorn-loose@~8.4.0:
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/acorn-loose/-/acorn-loose-8.4.0.tgz#26d3e219756d1e180d006f5bcc8d261a28530f55"
+  integrity sha512-M0EUka6rb+QC4l9Z3T0nJEzNOO7JcoJlYMrBlyBCiFSXRyxjLKayd4TbQs2FDRWQU1h9FR7QVNHt+PEaoNL5rQ==
+  dependencies:
+    acorn "^8.11.0"
+
 acorn-walk@^7.1.1, acorn-walk@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.2.0.tgz#0de889a601203909b0fbe07b8938dc21d2e967bc"
@@ -14778,10 +14769,10 @@ acorn@^7.1.1, acorn@^7.4.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
-acorn@^8.0.0, acorn@^8.0.4, acorn@^8.1.0, acorn@^8.2.4, acorn@^8.4.1, acorn@^8.5.0, acorn@^8.7.1, acorn@^8.8.1, acorn@^8.8.2, acorn@^8.9.0:
-  version "8.9.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.9.0.tgz#78a16e3b2bcc198c10822786fa6679e245db5b59"
-  integrity sha512-jaVNAFBHNLXspO543WnNNPZFRtavh3skAkITqD0/2aeMkKZTN+254PyhwxFYrk3vQ1xfY+2wbesJMs/JC8/PwQ==
+acorn@^8.0.0, acorn@^8.0.4, acorn@^8.1.0, acorn@^8.11.0, acorn@^8.2.4, acorn@^8.4.1, acorn@^8.5.0, acorn@^8.7.1, acorn@^8.8.1, acorn@^8.8.2, acorn@^8.9.0:
+  version "8.11.2"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.11.2.tgz#ca0d78b51895be5390a5903c5b3bdcdaf78ae40b"
+  integrity sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==
 
 address@^1.0.1, address@^1.1.2:
   version "1.2.2"
@@ -24998,10 +24989,10 @@ kuler@^2.0.0:
   resolved "https://registry.yarnpkg.com/kuler/-/kuler-2.0.0.tgz#e2c570a3800388fb44407e851531c1d670b061b3"
   integrity sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==
 
-lambda-runtimes@~1.1.4, lambda-runtimes@~1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-1.1.5.tgz#3a1b27bbd6652115cf5fde59117ebdd73030cdcd"
-  integrity sha512-EXW6OcDdTVoSjuoV27vq0XynZ2W12CQ//rVyqCiI7PekR7XixvI5l8dfzGtR4h054bS2PocCQQFnZqFtA+11SA==
+lambda-runtimes@~1.1.4, lambda-runtimes@~1.1.5, lambda-runtimes@~1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/lambda-runtimes/-/lambda-runtimes-1.1.6.tgz#783bbf1547287cca215a9edeb4154684a1a34e6d"
+  integrity sha512-nMYTto/eIzj/5XnPosp2f/3DjyGh+lSz5orxnHx6mBGgCDJCbxTgG/qKGxA8haODiOyg3v4+xONsFRSXAkQTfg==
 
 langchain@^0.0.150:
   version "0.0.150"
@@ -36337,7 +36328,7 @@ write-file-atomic@^4.0.2:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
 
-ws@8.13.0, ws@~8.13.0:
+ws@8.13.0:
   version "8.13.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.13.0.tgz#9a9fb92f93cf41512a0735c8f4dd09b8a1211cd0"
   integrity sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==
