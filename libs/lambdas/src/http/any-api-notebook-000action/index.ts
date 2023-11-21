@@ -52,6 +52,9 @@ export const handler: APIGatewayProxyHandlerV2 = handle(
     }
     const { notebookId, ...rest } = event.queryStringParameters ?? {};
     const { action } = event.pathParameters ?? {};
+    if (!action) {
+      throw notAcceptable('No action parameter');
+    }
     const body = parseBody(event);
 
     const response = await server(notebookId, action as any, {

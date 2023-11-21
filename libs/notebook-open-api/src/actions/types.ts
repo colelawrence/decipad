@@ -111,6 +111,7 @@ export interface NoNotebookCustomAction<
   handler: NotebooklessActionHandler<CustomActionParams, CustomActionResult>;
 }
 
-export type CustomAction<Args extends Record<string, unknown>, Ret> =
-  | NoNotebookCustomAction<Args, Ret>
-  | RequiresNotebookCustomAction<Args, Ret>;
+export type CustomAction<
+  Args extends Record<string, unknown> = Record<string, unknown>,
+  Ret = unknown
+> = NoNotebookCustomAction<Args, Ret> | RequiresNotebookCustomAction<Args, Ret>;

@@ -3,13 +3,13 @@ import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import stringify from 'json-stringify-safe';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
-  actions,
-  Action,
+  CustomAction,
   ActionResultWithNotebookError,
   callAction,
 } from '@decipad/notebook-open-api';
 import { getEditor } from './editor/getEditor';
 import { attachEditorToBackend } from './attachEditorToBackend';
+import { actions } from '../actions';
 
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
@@ -18,9 +18,9 @@ export const server = async (
   actionName: keyof typeof actions,
   params: Record<string, unknown>
 ): Promise<APIGatewayProxyStructuredResultV2> => {
-  const action = actions[actionName] as Action<typeof actionName>;
+  const action = actions[actionName] as CustomAction;
   if (!action) {
-    throw notAcceptable(`Unknown function ${action}`);
+    throw notAcceptable(`Unknown function ${actionName as string}`);
   }
   const computer = await getRemoteComputer();
 
