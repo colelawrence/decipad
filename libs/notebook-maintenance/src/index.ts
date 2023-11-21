@@ -7,22 +7,45 @@ const parseId = (id: string): string => {
   return id.split('/').filter(Boolean)[1];
 };
 
-const processingNotebookIds = new Set<string>();
+const minWaitingTimeMs = 1000 * 60 * 30;
+const processingNotebookIds = new Map<string, number>();
+
+const shouldProcessNotebook = (notebookId: string) => {
+  const lastTime = processingNotebookIds.get(notebookId);
+  return !lastTime || Date.now() - lastTime > minWaitingTimeMs;
+};
+
+const setProcessingNotebook = (notebookId: string) => {
+  processingNotebookIds.set(notebookId, Date.now());
+};
+
+const cleanUp = () => {
+  for (const [notebookId, lastTime] of processingNotebookIds.entries()) {
+    if (Date.now() - lastTime > minWaitingTimeMs) {
+      processingNotebookIds.delete(notebookId);
+    }
+  }
+};
 
 /* eslint-disable no-console */
 export const notebookMaintenance = async (resourceId: string) => {
   const notebookId = parseId(resourceId);
-  if (processingNotebookIds.has(notebookId)) {
+  if (!shouldProcessNotebook(notebookId)) {
     return;
   }
-  processingNotebookIds.add(notebookId);
+  setProcessingNotebook(notebookId);
+  console.log('starting maintenance on notebook', notebookId);
+  const start = Date.now();
   try {
     await maybeBackup(notebookId);
     await compact(resourceId);
     await maybeRemoveOldBackups(notebookId);
     // await maybeUpdateSearchIndex(notebookId);
   } finally {
-    processingNotebookIds.delete(notebookId);
+    console.log(
+      `finished maintenance on notebook ${notebookId}: ${Date.now() - start}ms`
+    );
+    cleanUp();
   }
 };
 
