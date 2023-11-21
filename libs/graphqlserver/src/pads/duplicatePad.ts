@@ -6,16 +6,79 @@ import {
   importNotebookContent,
   duplicateNotebookAttachments,
   snapshot,
+  getStoredSnapshot,
 } from '@decipad/services/notebooks';
 import { UserInputError, ForbiddenError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import { isAuthorized, loadUser } from '../authorization';
 import { isLocalDev } from '@decipad/initial-workspace';
 import { byAsc } from '@decipad/utils';
-import { ELEMENT_TITLE } from '@decipad/editor-types';
+import { ELEMENT_TITLE, RootDocument } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
+import Boom from '@hapi/boom';
 
 const notebooks = resource('notebook');
+const PUBLISHED_SNAPSHOT_NAME = 'Published 1';
+
+async function getNotebookContent(
+  userId: string,
+  notebookId: string
+): Promise<RootDocument> {
+  const data = await tables();
+
+  /**
+   * Lets check the user actually has permissions for this notebook
+   * Or if the notebook is just published.
+   */
+  const notebookPermission = (
+    await data.permissions.query({
+      IndexName: 'byUserId',
+      KeyConditionExpression:
+        'user_id = :user_id and resource_type = :resource_type',
+      FilterExpression: 'resource_id = :resource_id',
+      ExpressionAttributeValues: {
+        ':user_id': userId,
+        ':resource_type': 'pads',
+        ':resource_id': notebookId,
+      },
+    })
+  ).Items;
+
+  // Can the user duplicate the original notebook
+  // Or should they just be able to duplicate the
+  // published version.
+  const isUserPermitted = notebookPermission.length > 0;
+
+  if (isUserPermitted) {
+    const doc = (await snapshot(notebookId)).value;
+    if (!doc.children[0]) {
+      doc.children[0] = {
+        type: ELEMENT_TITLE,
+        id: nanoid(),
+        children: [{ text: '' }],
+      };
+    }
+    return doc;
+  }
+
+  const publishedDoc = await getStoredSnapshot(
+    notebookId,
+    PUBLISHED_SNAPSHOT_NAME
+  );
+
+  if (!publishedDoc) {
+    throw Boom.notAcceptable('Published snapshot is empty');
+  }
+  if (!publishedDoc.doc.children[0]) {
+    publishedDoc.doc.children[0] = {
+      type: ELEMENT_TITLE,
+      id: nanoid(),
+      children: [{ text: '' }],
+    };
+  }
+
+  return publishedDoc.doc;
+}
 
 export const duplicatePad = async (
   _: unknown,
@@ -99,20 +162,15 @@ export const duplicatePad = async (
 
   const clonedPad = await createPad2(workspaceId, previousPad, user);
 
+  // TODO: If duplicating a published notebook, we shouldn't duplicate
+  // ALL attachments, only the ones saved before the time of publishing.
   const replaceList = await duplicateNotebookAttachments(
     previousPad.id,
     clonedPad.id
   );
 
-  const doc = (await snapshot(id)).value;
-  if (!doc.children[0]) {
-    doc.children[0] = {
-      type: ELEMENT_TITLE,
-      id: nanoid(),
-      children: [{ text: '' }],
-    };
-  }
-  // set new title
+  const doc = await getNotebookContent(user.id, id);
+
   doc.children[0].children = [{ text: newName }];
   const document = _document != null ? _document : stringify(doc);
 

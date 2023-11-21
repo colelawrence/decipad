@@ -27,6 +27,7 @@ export class Notebook {
   readonly downloadNotebook: Locator;
   readonly restoreArchiveNotebook: Locator;
   readonly duplicateNotebook: Locator;
+  readonly topRightDuplicateNotebook: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -48,6 +49,7 @@ export class Notebook {
     this.archiveNotebook = page.getByRole('menuitem', { name: 'Archive' });
     this.downloadNotebook = page.getByRole('menuitem', { name: 'Download' });
     this.duplicateNotebook = page.getByRole('menuitem', { name: 'Duplicate' });
+    this.topRightDuplicateNotebook = page.getByTestId('duplicate-button');
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
       name: 'Put Back',
     });
