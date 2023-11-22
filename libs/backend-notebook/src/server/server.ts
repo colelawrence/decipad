@@ -10,6 +10,7 @@ import {
 import { getEditor } from './editor/getEditor';
 import { attachEditorToBackend } from './attachEditorToBackend';
 import { actions } from '../actions';
+import { fetchNotebook } from './fetchNotebook';
 
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
@@ -32,6 +33,10 @@ export const server = async (
     if (!notebookId || typeof notebookId !== 'string') {
       throw notAcceptable('need notebookId parameter in query string');
     }
+
+    // validates user access
+    await fetchNotebook(notebookId);
+
     const editor = await getEditor({ notebookId, computer });
     const [, detach] = await attachEditorToBackend(editor);
     let subEditor = editor.getTabEditorAt(0);

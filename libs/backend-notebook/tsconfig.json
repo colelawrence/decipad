@@ -21,6 +21,7 @@
     { "path": "../format" },
     { "path": "../doc-verbalizer" },
     { "path": "../editor-language-elements" },
-    { "path": "../notebook-open-api" }
+    { "path": "../notebook-open-api" },
+    { "path": "../tables" }
   ]
 }
