@@ -2,6 +2,7 @@ import { ClientEventContextType } from '@decipad/client-events';
 import { createDataViewPlugin } from '@decipad/editor-data-view';
 import { createIntegrationPlugin } from '@decipad/editor-integrations';
 import {
+  createCrossBlockSelection,
   createAttachmentPlugin,
   createAutoCompleteMenuPlugin,
   createAutoFormatCodeLinePlugin,
@@ -116,6 +117,7 @@ export const plugins = ({
       createDisplayPlugin(),
       createIframePlugin(),
       createIntegrationPlugin(),
+      createCrossBlockSelection(),
 
       // Layout blocks
       createLayoutColumnsPlugin(),

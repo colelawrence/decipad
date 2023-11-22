@@ -23,6 +23,7 @@ import { DndPreview } from './components/DndPreview/DndPreview';
 import { useAutoAnimate } from './hooks';
 import { useWriteLock } from './utils/useWriteLock';
 import { Scrubber } from 'slate';
+import { editorOnCopy } from './utils/editorOnCopy';
 
 export interface EditorProps {
   notebookId: string;
@@ -135,6 +136,9 @@ export const Editor = (props: EditorProps) => {
                     }
                     disableCorePlugins={{
                       history: true,
+                    }}
+                    editableProps={{
+                      onCopy: (e) => editorOnCopy(e, editor),
                     }}
                   >
                     <InsidePlate {...props} containerRef={containerRef} />

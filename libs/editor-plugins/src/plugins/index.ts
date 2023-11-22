@@ -53,4 +53,5 @@ export * from './TrailingParagraph';
 export * from './TypeErrorHighlight';
 export * from './UpdateComputer';
 export * from './UserEvent';
+export * from './CreateCrossBlockSelection';
 export * from './TabSelectionPlugin';
