@@ -178,7 +178,7 @@ const errorIs = (err: unknown, errMessage: string): boolean =>
     (err as Error).message.includes(errMessage) ||
     err.name.includes(errMessage));
 
-const nonSeriousErrors = ['Gone', 'LimitExceeded'];
+const nonSeriousErrors = ['Gone', 'LimitExceeded', 'InvalidSignature'];
 const isSeriousError = (err: Error) =>
   !nonSeriousErrors.some((errMessage) => errorIs(err, errMessage));
 
@@ -195,7 +195,7 @@ const persistentSend = async (connId: string, payload: string) => {
   try {
     await ws.send({ id: connId, payload });
   } catch (err) {
-    if (errorIs(err, 'Gone')) {
+    if (!isSeriousError(err as Error)) {
       // try again a bit later
       setTimeout(
         () => persistentSend(connId, payload),
