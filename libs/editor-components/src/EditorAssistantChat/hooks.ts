@@ -17,8 +17,7 @@ export const useAssistantChat = (notebookId: string, editor: MyEditor) => {
     state.clearMessages,
   ]);
 
-  const [aiMode, setGeneratingChatResponse] = useAISettings((state) => [
-    state.aiMode,
+  const [setGeneratingChatResponse] = useAISettings((state) => [
     state.setGeneratingChatResponse,
   ]);
 
@@ -48,7 +47,7 @@ export const useAssistantChat = (notebookId: string, editor: MyEditor) => {
 
       setGeneratingChatResponse(true);
 
-      await getChatAgentResponse(updatedMessages, newMessage, aiMode);
+      await getChatAgentResponse(updatedMessages, newMessage);
 
       setGeneratingChatResponse(false);
     },
@@ -56,7 +55,6 @@ export const useAssistantChat = (notebookId: string, editor: MyEditor) => {
       handleAddMessage,
       messages,
       getChatAgentResponse,
-      aiMode,
       setGeneratingChatResponse,
     ]
   );
