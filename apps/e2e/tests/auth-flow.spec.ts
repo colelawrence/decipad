@@ -33,7 +33,7 @@ test('redirect to workspace if authenticated and can logout @auth', async ({
   await expect(page.getByTestId('dashboard')).toBeVisible();
   await page.getByTestId('account-settings-button').click();
   await page.getByTestId('logout-link').click();
-  // Checking link rather than render of sign out page since that can timeout
+  // checking link rather than render of sign out page since that can timeout
   // Instead, check if it redirects to the right link and wait
   // To make sure it doesn't redirect to the workspace
   await expect(page).toHaveURL(`${app().urlBase}/w`);
