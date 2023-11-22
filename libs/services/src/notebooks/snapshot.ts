@@ -30,9 +30,9 @@ export const snapshot = async (
     }
   }
 
-  const mergedUpdates = mergeUpdates(updates) ?? new Uint8Array();
+  const mergedUpdates = mergeUpdates(updates);
   const doc = new Doc();
-  if (mergedUpdates.length) {
+  if (mergedUpdates?.length) {
     applyUpdate(doc, mergedUpdates);
   }
   const value = toSlateDoc(doc.getArray()) as unknown as NotebookValue;
