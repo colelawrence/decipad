@@ -154,6 +154,12 @@ test.describe('Loading and snapshot of big notebook', () => {
     await page.isVisible('[data-testid="chart-styles"]');
     // eslint-disable-next-line playwright/no-wait-for-timeout
     await page.waitForTimeout(Timeouts.chartsDelay);
+
+    // waits for information on dataviews to be shown
+    await expect(
+      page.locator('th').filter({ hasText: 'Mar' }).locator('span')
+    ).toBeVisible();
+
     await snapshot(
       publishedNotebookPage,
       'Notebook: Published mode (incognito)',
