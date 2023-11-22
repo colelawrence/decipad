@@ -1,6 +1,6 @@
 import { MyEditor } from '@decipad/editor-types';
 import { createDefaultNotebook } from '@decipad/editor-utils';
-import { removeNodes, withoutNormalizing } from '@udecode/plate';
+import { removeNodes, withoutNormalizing } from '@udecode/plate-common';
 
 export function clearNotebook(editor: MyEditor) {
   withoutNormalizing(editor, () => {

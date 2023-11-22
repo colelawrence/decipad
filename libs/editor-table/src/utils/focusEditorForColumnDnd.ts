@@ -1,6 +1,6 @@
 import { MyEditor } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-import { focusEditor, getStartPoint, hasNode } from '@udecode/plate';
+import { focusEditor, getStartPoint, hasNode } from '@udecode/plate-common';
 import { Path } from 'slate';
 
 export const focusEditorForColumnDnd = (

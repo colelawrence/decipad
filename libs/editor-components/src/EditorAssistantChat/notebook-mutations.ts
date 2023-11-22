@@ -3,6 +3,7 @@ import {
   ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_EXPRESSION,
+  ELEMENT_PARAGRAPH,
   ELEMENT_SLIDER,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_TABLE,
@@ -24,15 +25,14 @@ import {
 } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';
 import {
-  ELEMENT_PARAGRAPH,
-  focusEditor,
-  insertNodes,
   findNodePath,
+  focusEditor,
   getNodeString,
-  withoutNormalizing,
+  insertNodes,
   removeNodes,
   setNodes,
-} from '@udecode/plate';
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { insertLiveConnection } from '../InteractiveParagraph/insertLiveConnection';
 import { RemoteComputer } from '@decipad/remote-computer';

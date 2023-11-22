@@ -1,5 +1,5 @@
 import { AnyElement, MyElement } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import { Node } from 'slate';
 
 export function assertElementType<Type extends AnyElement['type']>(

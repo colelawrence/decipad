@@ -13,7 +13,7 @@ import {
   MyEditor,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import { isElement, removeNodes, setNodes } from '@udecode/plate';
+import { isElement, removeNodes, setNodes } from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,

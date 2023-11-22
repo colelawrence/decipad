@@ -5,7 +5,12 @@ import {
   isTopLevelBlock,
 } from '@decipad/editor-utils';
 import { OpaqueColor, RemoteAvatar as UIRemoteAvatar } from '@decipad/ui';
-import { getNodeEntries, hasNode, isElement, toDOMNode } from '@udecode/plate';
+import {
+  getNodeEntries,
+  hasNode,
+  isElement,
+  toDOMNode,
+} from '@udecode/plate-common';
 import { Session } from 'next-auth';
 import { FC, RefObject } from 'react';
 import { Range } from 'slate';

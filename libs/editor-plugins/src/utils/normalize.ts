@@ -10,7 +10,7 @@ import {
   TNodeEntry,
   TNodeProps,
   unsetNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { NormalizerReturnValue } from '../pluginFactories';
 
 const baseProps = {

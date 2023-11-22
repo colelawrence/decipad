@@ -1,4 +1,8 @@
-import { findNode, FindNodeOptions, getPluginType } from '@udecode/plate';
+import {
+  findNode,
+  FindNodeOptions,
+  getPluginType,
+} from '@udecode/plate-common';
 import {
   ELEMENT_SMART_REF,
   MyEditor,

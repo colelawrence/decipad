@@ -5,7 +5,7 @@ import {
   markKinds,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeLinkPlugin } from './createNormalizeLinkPlugin';
 
 let editor: TEditor;

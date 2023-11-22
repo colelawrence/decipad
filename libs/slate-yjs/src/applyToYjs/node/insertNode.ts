@@ -1,6 +1,6 @@
 import invariant from 'tiny-invariant';
 import { MyElement } from '@decipad/editor-types';
-import { TInsertNodeOperation } from '@udecode/plate';
+import { TInsertNodeOperation } from '@udecode/plate-common';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 import { toSyncElement } from '../../utils/convert';

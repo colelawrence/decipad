@@ -1,5 +1,5 @@
 import { MARK_MAGICNUMBER, MyEditor } from '@decipad/editor-types';
-import { TNode, getNodeTexts } from '@udecode/plate';
+import { getNodeTexts, TNode } from '@udecode/plate-common';
 import { Path } from 'slate';
 
 /**

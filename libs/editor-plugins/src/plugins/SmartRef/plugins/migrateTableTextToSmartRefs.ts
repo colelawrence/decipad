@@ -2,6 +2,7 @@ import {
   ELEMENT_SMART_REF,
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
+  ELEMENT_TR,
   MyEditor,
   MyValue,
   SmartRefElement,
@@ -19,16 +20,15 @@ import {
 } from '@decipad/editor-utils';
 import { tokenize } from '@decipad/computer';
 import {
-  ELEMENT_TR,
   getChildren,
   getNodeString,
   nanoid,
   TNodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { BaseEditor, Range, Transforms } from 'slate';
 import {
-  NormalizerReturnValue,
   createNormalizerPluginFactory,
+  NormalizerReturnValue,
 } from '../../../pluginFactories';
 
 export const migrateTableTextRefsToSmartRefs = createNormalizerPluginFactory<

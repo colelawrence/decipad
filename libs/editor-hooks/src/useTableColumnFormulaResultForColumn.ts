@@ -1,4 +1,4 @@
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { Result, isTableResult } from '@decipad/computer';
 import {
   MyReactEditor,

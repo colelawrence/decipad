@@ -11,7 +11,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { dndStore } from '@udecode/plate-dnd';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { Path } from 'slate';
 import {
   CellDndProps,

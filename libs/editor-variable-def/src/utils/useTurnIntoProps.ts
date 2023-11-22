@@ -19,7 +19,7 @@ import {
   getNodeString,
   removeNodes,
   setNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 export const defaultWidgetConversions: { title: string; value: string }[] = [

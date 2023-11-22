@@ -14,7 +14,7 @@ import {
   Value,
   isElement,
   isText,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { supportBigIntToJSON } from '@decipad/utils';
 import { SharedType, SyncElement } from '../model';
 

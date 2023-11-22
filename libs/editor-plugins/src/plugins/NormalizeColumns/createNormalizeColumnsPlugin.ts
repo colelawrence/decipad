@@ -12,7 +12,7 @@ import {
   liftNodes,
   removeNodes,
   unwrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,

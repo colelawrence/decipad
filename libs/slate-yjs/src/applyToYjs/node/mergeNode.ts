@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import { TMergeNodeOperation } from '@udecode/plate';
+import { TMergeNodeOperation } from '@udecode/plate-common';
 import { SharedType, SyncNode } from '../../model';
 import { getParent } from '../../path';
 import { cloneSyncElement } from '../../utils';

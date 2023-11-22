@@ -11,7 +11,7 @@ import {
   ELEMENT_TABLE_VARIABLE_NAME,
   createTPlateEditor,
 } from '@decipad/editor-types';
-import { TEditor } from '@udecode/plate';
+import { TEditor } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { createNavigationPlugin } from './createNavigationPlugin';
 

@@ -3,7 +3,7 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeImagePlugin } from './createNormalizeImagePlugin';
 
 let editor: TEditor;

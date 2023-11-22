@@ -1,4 +1,4 @@
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import { SharedType } from '../model';
 
 export type ApplyFunc<O extends TOperation = TOperation> = (

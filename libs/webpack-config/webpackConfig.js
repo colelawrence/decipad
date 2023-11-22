@@ -104,12 +104,6 @@ module.exports =
     config.resolve.alias = {
       'react/jsx-runtime.js': 'react/jsx-runtime',
       'react/jsx-dev-runtime.js': 'react/jsx-dev-runtime',
-      'styled-components': path.resolve(
-        '..',
-        '..',
-        'node_modules',
-        'styled-components'
-      ),
     };
 
     if (configureSentry && process.env.NODE_ENV === 'production') {

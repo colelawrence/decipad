@@ -12,7 +12,7 @@ import {
   hasNode,
   isElement,
   unsetNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   createTPluginFactory,
   getMyEditor,

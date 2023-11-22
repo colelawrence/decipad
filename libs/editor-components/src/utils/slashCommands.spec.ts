@@ -11,7 +11,7 @@ import {
   SlashCommand,
   createTPlateEditor,
 } from '@decipad/editor-types';
-import { createCodeBlockPlugin } from '@udecode/plate';
+import { createCodeBlockPlugin } from '@udecode/plate-code-block';
 import { execute } from './slashCommands';
 
 const expectedTypes = {

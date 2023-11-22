@@ -1,5 +1,5 @@
 import { MyElement } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import { Node } from 'slate';
 
 export const isElementOfType = <Type extends MyElement['type']>(

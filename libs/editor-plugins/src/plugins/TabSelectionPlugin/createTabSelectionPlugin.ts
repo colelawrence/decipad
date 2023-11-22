@@ -1,10 +1,10 @@
 import {
   ENode,
-  TNodeEntry,
   getNextNode,
   getPreviousNode,
   getStartPoint,
-} from '@udecode/plate';
+  TNodeEntry,
+} from '@udecode/plate-common';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { MyValue } from '@decipad/editor-types';
 

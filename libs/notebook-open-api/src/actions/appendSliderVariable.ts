@@ -1,4 +1,4 @@
-import { insertNodes, getNode } from '@udecode/plate';
+import { insertNodes, getNode } from '@udecode/plate-common';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,

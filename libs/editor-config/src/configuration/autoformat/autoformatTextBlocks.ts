@@ -1,21 +1,13 @@
 import {
-  ELEMENT_CODE_LINE,
-  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_H2,
   ELEMENT_H3,
   ELEMENT_HR,
 } from '@decipad/editor-types';
-import {
-  autoformatArrow,
-  autoformatPunctuation,
-  someNode,
-  TEditor,
-  deleteText,
-  Value,
-  AutoformatRule,
-} from '@udecode/plate';
+import { deleteText, someNode, TEditor, Value } from '@udecode/plate-common';
 import { autoformatImages } from './autoformatImages';
 import { autoformatLinks } from './autoformatLinks';
 import { autoformatLists } from './autoformatLists';
@@ -26,6 +18,11 @@ import {
 } from '@decipad/editor-utils';
 import { Path } from 'slate';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
+import {
+  autoformatArrow,
+  autoformatPunctuation,
+  AutoformatRule,
+} from '@udecode/plate-autoformat';
 
 /** Prevent arrow rules to be applied in codelines,
  * like <= becoming ⇐ */

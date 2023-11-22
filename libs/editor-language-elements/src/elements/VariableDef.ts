@@ -8,7 +8,7 @@ import {
   type Program,
   getExprRef,
 } from '@decipad/remote-computer';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { assertElementType } from '@decipad/editor-utils';
 import { inferType, parseCell } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';

@@ -1,5 +1,5 @@
-import { type TOperation, withoutNormalizing } from '@udecode/plate';
-import { type Document, createTPlateEditor } from '@decipad/editor-types';
+import { type TOperation, withoutNormalizing } from '@udecode/plate-common';
+import { createTPlateEditor, type Document } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
 import cloneDeep from 'lodash.clonedeep';
 

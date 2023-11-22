@@ -15,7 +15,7 @@ import {
   getNodeChildren,
   removeNodes,
   setNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { normalizeCodeChildren } from '../NormalizeCodeLine/createNormalizeCodeLinePlugin';
 import {
   type NormalizerReturnValue,

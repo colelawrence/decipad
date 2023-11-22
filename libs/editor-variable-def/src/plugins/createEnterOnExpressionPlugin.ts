@@ -10,7 +10,7 @@ import {
   getNodeString,
   getParentNode,
   isSelectionExpanded,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 
 export const createEnterOnExpressionPlugin = createOnKeyDownPluginFactory({
   name: 'ENTER_ON_EXPRESSION_PLUGIN',

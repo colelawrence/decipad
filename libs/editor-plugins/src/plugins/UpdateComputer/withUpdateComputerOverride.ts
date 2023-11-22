@@ -2,7 +2,7 @@ import { MyElement, MyEditor } from '@decipad/editor-types';
 import { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
-import { findNode, getNode, isElement } from '@udecode/plate';
+import { findNode, getNode, isElement } from '@udecode/plate-common';
 import { editorStatsStore } from '@decipad/react-contexts';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';

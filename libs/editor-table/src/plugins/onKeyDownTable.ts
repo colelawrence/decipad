@@ -3,12 +3,8 @@ import {
   MyKeyboardHandler,
 } from '@decipad/editor-types';
 import isHotkey from 'is-hotkey';
-import {
-  findNode,
-  moveSelection,
-  onKeyDownTable as onKeyDownTablePlate,
-  Value,
-} from '@udecode/plate';
+import { findNode, moveSelection, Value } from '@udecode/plate-common';
+import { onKeyDownTable as onKeyDownTablePlate } from '@udecode/plate-table';
 import { Path } from 'slate';
 import { addColumn } from '../hooks/index';
 import { MyValue } from '../../../editor-types/src/value';

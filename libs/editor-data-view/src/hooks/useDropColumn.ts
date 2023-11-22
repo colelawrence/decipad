@@ -12,7 +12,7 @@ import {
 import { MutableRefObject, useState, useMemo } from 'react';
 import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { dndStore } from '@udecode/plate-dnd';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { useDataViewActions } from './useDataViewActions';
 
 interface CollectedProps {

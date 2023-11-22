@@ -1,3 +1,4 @@
+import '../../styles/globals.css';
 import { CSSReset as ChakraCssReset } from '@chakra-ui/css-reset';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { Global } from '@emotion/react';
@@ -7,8 +8,8 @@ import { FC } from 'react';
 import {
   cssVar,
   darkTheme,
-  GlobalTextStyles,
   GlobalComponentStyles,
+  GlobalTextStyles,
   lightTheme,
   mediumShadow,
   p13Medium,

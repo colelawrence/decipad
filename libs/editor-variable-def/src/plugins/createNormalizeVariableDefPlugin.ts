@@ -17,7 +17,7 @@ import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,
 } from '@decipad/editor-plugins';
-import { removeNodes, setNodes } from '@udecode/plate';
+import { removeNodes, setNodes } from '@udecode/plate-common';
 import { insertNodes, isElementOfType } from '@decipad/editor-utils';
 
 const allowableVariant = new Set([

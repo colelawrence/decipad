@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { setNodes } from '@udecode/plate';
+import { setNodes } from '@udecode/plate-common';
 import {
   LiveConnectionElement,
   LiveDataSetElement,

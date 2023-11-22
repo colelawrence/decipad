@@ -1,4 +1,8 @@
-import { isElement, withoutNormalizing, wrapNodes } from '@udecode/plate';
+import {
+  isElement,
+  withoutNormalizing,
+  wrapNodes,
+} from '@udecode/plate-common';
 import { Path } from 'slate';
 import {
   ColumnsElement,

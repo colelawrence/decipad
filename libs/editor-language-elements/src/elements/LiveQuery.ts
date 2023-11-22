@@ -1,7 +1,7 @@
 import { AST } from '@decipad/computer';
 import { ELEMENT_LIVE_QUERY } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';

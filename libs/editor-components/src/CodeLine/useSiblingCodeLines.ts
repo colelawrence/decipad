@@ -6,7 +6,7 @@ import {
   getPreviousNode,
   findNodePath,
   getPreviousPath,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Path } from 'slate';
 
 export const useSiblingCodeLines = (element: MyElement) =>

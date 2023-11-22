@@ -10,7 +10,7 @@ import {
   isCollapsed,
   moveSelection,
   someNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { applyCodeLineSelection } from './applyCodeLineSelection';
 
 export const withCodeLine: MyWithOverride = (editor) => {

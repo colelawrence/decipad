@@ -1,4 +1,4 @@
-import { findNodePath, isCollapsed } from '@udecode/plate';
+import { findNodePath, isCollapsed } from '@udecode/plate-common';
 import { TableCellElement, TableHeaderElement } from '@decipad/editor-types';
 import { Path } from 'slate';
 import { useEditorChange } from '@decipad/editor-hooks';

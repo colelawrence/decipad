@@ -9,7 +9,7 @@ import {
   PlateEditor,
   PlatePlugin,
   PlateProps,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { PropsWithChildren } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

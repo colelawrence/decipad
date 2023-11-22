@@ -3,7 +3,7 @@ import {
   TableColumnFormulaElement,
   TableHeaderElement,
 } from '../../../editor-types/src';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { identity, transpose } from 'ramda';
 import { assertElementType } from '../utils/assertElementType';
 import { Verbalizer } from './types';

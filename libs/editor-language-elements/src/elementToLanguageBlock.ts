@@ -4,7 +4,7 @@ import type {
   MyEditor,
 } from '@decipad/editor-types';
 import type { Program, RemoteComputer } from '@decipad/remote-computer';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 
 import * as interactiveLanguageElements from './elements';
 import type { InteractiveLanguageElement } from './types';

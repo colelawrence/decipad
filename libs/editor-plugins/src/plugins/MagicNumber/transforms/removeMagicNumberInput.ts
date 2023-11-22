@@ -4,7 +4,7 @@ import {
   TElement,
   unwrapNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Path } from 'slate';
 import { MyEditor } from '@decipad/editor-types';
 

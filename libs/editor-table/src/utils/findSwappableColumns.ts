@@ -1,5 +1,5 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { getNodeChildren } from '@udecode/plate';
+import { getNodeChildren } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { DropTargetMonitor } from 'react-dnd';
 import { getHoverDirection } from '.';

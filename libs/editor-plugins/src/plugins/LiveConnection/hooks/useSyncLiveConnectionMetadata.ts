@@ -6,7 +6,7 @@ import {
 import { ImportResult } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import { varNamify } from '@decipad/utils';
-import { getNodeString, insertText } from '@udecode/plate';
+import { getNodeString, insertText } from '@udecode/plate-common';
 import { useEffect, useRef } from 'react';
 import { Path } from 'slate';
 

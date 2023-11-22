@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { ComponentProps, useState } from 'react';
 import { Editable, Slate } from 'slate-react';
 
-import { createTEditor, findNodePath, withTReact } from '@udecode/plate';
+import { createTEditor, findNodePath, withTReact } from '@udecode/plate-common';
 import { usePathMutatorCallback } from './usePathMutatorCallback';
 
 describe('usePathMutatorCallback', () => {

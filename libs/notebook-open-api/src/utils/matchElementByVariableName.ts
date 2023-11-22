@@ -1,8 +1,8 @@
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import { getNodeString } from './getNodeString';
 import {
-  ELEMENT_CODE_LINE_V2,
   ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
   ELEMENT_TABLE,
   type MyNode,
 } from '@decipad/editor-types';

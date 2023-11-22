@@ -1,4 +1,8 @@
-import { hasNode, removeNodes, withoutNormalizing } from '@udecode/plate';
+import {
+  hasNode,
+  removeNodes,
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';

@@ -1,11 +1,11 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
 import { NotebookResults, SerializedType } from '@decipad/computer';
 import {
-  TestResultsProvider,
   ComputerContextProvider,
+  TestResultsProvider,
 } from '@decipad/react-contexts';
 import { render } from '@testing-library/react';
-import { Plate } from '@udecode/plate';
+import { Plate } from '@udecode/plate-common';
 import { createRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

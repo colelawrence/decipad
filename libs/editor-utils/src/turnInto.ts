@@ -8,7 +8,7 @@ import {
   MyEditor,
   MyElement,
 } from '@decipad/editor-types';
-import { findNodePath, focusEditor, setNodes } from '@udecode/plate';
+import { findNodePath, focusEditor, setNodes } from '@udecode/plate-common';
 
 export const defaultTextConversions: { title: string; value: string }[] = [
   { title: 'Calculation', value: ELEMENT_CODE_LINE },

@@ -18,7 +18,7 @@ import {
 } from '@decipad/react-contexts';
 import { useNodeText } from '@decipad/editor-hooks';
 import { CodeLine as UICodeLine, ParagraphFormulaEditor } from '@decipad/ui';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { Formula } from 'libs/ui/src/icons';
 import { codeBlock } from 'libs/ui/src/styles';
 import { nanoid } from 'nanoid';

@@ -1,5 +1,9 @@
 import stringify from 'json-stringify-safe';
-import { isText, type TDescendant, type TNodeOperation } from '@udecode/plate';
+import {
+  isText,
+  type TDescendant,
+  type TNodeOperation,
+} from '@udecode/plate-common';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { SyncElement } from '../model';

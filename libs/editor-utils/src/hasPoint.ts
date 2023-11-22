@@ -1,5 +1,5 @@
 import { Point } from 'slate';
-import { getNode, getNodeString, TEditor, Value } from '@udecode/plate';
+import { getNode, getNodeString, TEditor, Value } from '@udecode/plate-common';
 
 export const hasPoint = <
   TV extends Value,

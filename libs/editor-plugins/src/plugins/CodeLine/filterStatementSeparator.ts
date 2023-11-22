@@ -10,7 +10,7 @@ import {
   getChildren,
   getNodeString,
   isElement,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_CODE_LINE,

@@ -1,6 +1,7 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TD,
   ELEMENT_TH,
   MyEditor,
   TableCaptionElement,
@@ -16,13 +17,12 @@ import {
 } from '@decipad/editor-utils';
 import { formatResultPreview } from '@decipad/format';
 import {
-  ELEMENT_TD,
   getNode,
   hasNode,
   insertText,
   setNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { focusCursorOnPath } from '../plugins/createCursorFocusPlugin';

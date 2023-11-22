@@ -19,7 +19,7 @@ import {
   isText,
   unwrapNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPlugin,

@@ -1,4 +1,8 @@
-import { insertNodes, getNode, withoutNormalizing } from '@udecode/plate';
+import {
+  insertNodes,
+  getNode,
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TH,

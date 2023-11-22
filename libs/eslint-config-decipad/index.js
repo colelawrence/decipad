@@ -6,6 +6,10 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  plugins: ['@typescript-eslint/eslint-plugin', 'unused-imports'],
+  plugins: [
+    '@typescript-eslint/eslint-plugin',
+    'tailwindcss',
+    'unused-imports',
+  ],
   overrides,
 };

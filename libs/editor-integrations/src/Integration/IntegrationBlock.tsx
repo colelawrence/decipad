@@ -29,7 +29,7 @@ import {
   icons,
   UpgradePlanWarningTooltip,
 } from '@decipad/ui';
-import { getPreviousNode, setNodes } from '@udecode/plate';
+import { getPreviousNode, setNodes } from '@udecode/plate-common';
 import { Hide, Refresh, Show } from 'libs/ui/src/icons';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import {

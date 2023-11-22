@@ -10,20 +10,18 @@ export const createBlockSelectionPlugin = (): MyPlatePlugin =>
     renderAboveEditable: ({ children }) => (
       <BlockSelectionArea getBoundaries={() => ['html']}>
         <BlockStartArea
-          placement="left"
-          size="50vw"
-          style={{
-            top: -104,
-            zIndex: 1,
+          state={{
+            placement: 'left',
+            size: '50vw',
           }}
+          className="top-[-104px] z-1"
         />
         <BlockStartArea
-          placement="right"
-          size="50vw"
-          style={{
-            top: -104,
-            zIndex: 1,
+          state={{
+            placement: 'right',
+            size: '50vw',
           }}
+          className="top-[-104px] z-1"
         />
         {children}
       </BlockSelectionArea>

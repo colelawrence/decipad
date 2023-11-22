@@ -8,7 +8,7 @@ import {
   isElement,
   toDOMNode,
   isVoid,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useCallback, useEffect } from 'react';
 import { BaseSelection, Path, Selection } from 'slate';
 import { MyEditor } from '@decipad/editor-types';

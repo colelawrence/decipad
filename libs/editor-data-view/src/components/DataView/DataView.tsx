@@ -10,8 +10,8 @@ import { assertElementType } from '@decipad/editor-utils';
 import { useEditorStylesContext } from '@decipad/react-contexts';
 import {
   AvailableSwatchColor,
-  DataViewMenu,
   DataView as UIDataView,
+  DataViewMenu,
   VoidBlock,
 } from '@decipad/ui';
 import { ReactNode, useCallback, useMemo, useState } from 'react';

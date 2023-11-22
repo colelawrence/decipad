@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { TElement } from '@udecode/plate';
+import { TElement } from '@udecode/plate-common';
 import { useTableStore } from '../contexts/tableStore';
 
 export const useIsCellSelected = (element: TElement) => {

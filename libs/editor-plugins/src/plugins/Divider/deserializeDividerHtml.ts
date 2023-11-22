@@ -1,5 +1,5 @@
 import { DividerElement, ELEMENT_HR } from '@decipad/editor-types';
-import { DeserializeHtml } from '@udecode/plate';
+import { DeserializeHtml } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 
 const divider = (): DividerElement => {

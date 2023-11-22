@@ -10,7 +10,7 @@ import { Close } from '../../icons';
 import { cssVar, p13Medium, useThemeColor } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { deciOverflowXStyles } from '../../styles/scrollbars';
-import { AvailableSwatchColor, swatchNames, swatchesThemed } from '../../utils';
+import { AvailableSwatchColor, swatchesThemed, swatchNames } from '../../utils';
 import { UserIconKey, userIconKeys } from '@decipad/editor-types';
 
 const contentWrapper = css({
@@ -68,69 +68,71 @@ export const IconPopover = ({
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>
-      <Popover.Content css={contentWrapper}>
-        <div css={contentHeaderWrapper}>
-          <h2 css={contentHeaderText}>Pick a style</h2>
-          <Popover.Close css={closeButtonStyles}>
-            <Close />
-          </Popover.Close>
-        </div>
-        {!iconOnly && (
-          <>
-            <div css={{ padding: '12px 0' }}>
-              <Divider />
-            </div>
+      <Popover.Portal>
+        <Popover.Content style={{ zIndex: '100' }} css={contentWrapper}>
+          <div css={contentHeaderWrapper}>
+            <h2 css={contentHeaderText}>Pick a style</h2>
+            <Popover.Close css={closeButtonStyles}>
+              <Close />
+            </Popover.Close>
+          </div>
+          {!iconOnly && (
+            <>
+              <div css={{ padding: '12px 0' }}>
+                <Divider />
+              </div>
 
-            <div
-              css={{
-                display: 'flex',
-                gap: '8px',
-                justifyContent: 'space-between',
-              }}
-            >
-              {swatchNames.map((key) => {
-                return (
-                  <button
-                    key={key}
-                    aria-label={key}
-                    data-testid={`icon-color-picker-${key}`}
-                    onClick={() => {
-                      onChangeColor(key);
-                    }}
-                  >
-                    <ColorPicker
-                      color={baseSwatches[key]}
-                      selected={key === color}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          </>
-        )}
-        <div css={iconsWrapper}>
-          {userIconKeys.map((choice) => {
-            const Icon = icons[choice];
-            return (
-              <Popover.Close
-                key={choice}
-                aria-label={choice}
-                data-testid={`icon-picker-${choice}`}
+              <div
+                css={{
+                  display: 'flex',
+                  gap: '8px',
+                  justifyContent: 'space-between',
+                }}
               >
-                <NotebookIconButton
-                  isDefaultBackground={color === 'Catskill'}
-                  onClick={() => {
-                    onChangeIcon(choice);
-                  }}
-                  color={themeColor.Background.Subdued}
+                {swatchNames.map((key) => {
+                  return (
+                    <button
+                      key={key}
+                      aria-label={key}
+                      data-testid={`icon-color-picker-${key}`}
+                      onClick={() => {
+                        onChangeColor(key);
+                      }}
+                    >
+                      <ColorPicker
+                        color={baseSwatches[key]}
+                        selected={key === color}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+          <div css={iconsWrapper}>
+            {userIconKeys.map((choice) => {
+              const Icon = icons[choice];
+              return (
+                <Popover.Close
+                  key={choice}
+                  aria-label={choice}
+                  data-testid={`icon-picker-${choice}`}
                 >
-                  <Icon />
-                </NotebookIconButton>
-              </Popover.Close>
-            );
-          })}
-        </div>
-      </Popover.Content>
+                  <NotebookIconButton
+                    isDefaultBackground={color === 'Catskill'}
+                    onClick={() => {
+                      onChangeIcon(choice);
+                    }}
+                    color={themeColor.Background.Subdued}
+                  >
+                    <Icon />
+                  </NotebookIconButton>
+                </Popover.Close>
+              );
+            })}
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
     </Popover.Root>
   );
 };

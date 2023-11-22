@@ -1,4 +1,4 @@
-import { getNodeString, isText } from '@udecode/plate';
+import { getNodeString, isText } from '@udecode/plate-common';
 import {
   CodeLineElement,
   CodeLineV2ElementCode,

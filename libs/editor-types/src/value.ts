@@ -1,9 +1,5 @@
 import type { Unit } from '@decipad/remote-computer';
-import type {
-  TElement,
-  TImageElement,
-  TMediaEmbedElement,
-} from '@udecode/plate';
+import type { TElement } from '@udecode/plate-common';
 import {
   DEPRECATED_ELEMENT_CODE_BLOCK,
   DEPRECATED_ELEMENT_TABLE_INPUT,
@@ -84,6 +80,7 @@ import type {
   TableRowElement,
   TableVariableNameElement,
 } from './table';
+import { TImageElement, TMediaEmbedElement } from '@udecode/plate-media';
 
 export type { DrawElement, DrawElementDescendant, DrawElements };
 

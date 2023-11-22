@@ -4,7 +4,7 @@ import {
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { getNodeChildren, isElement } from '@udecode/plate';
+import { getNodeChildren, isElement } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { DragColumnItem } from '../types';
 

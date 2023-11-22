@@ -303,7 +303,11 @@ export const NotebookPublishingPopUp = ({
           </Button>
         )}
       </Popover.Trigger>
-      <Popover.Content sideOffset={15}>{popoverDiv}</Popover.Content>
+      <Popover.Portal>
+        <Popover.Content style={{ zIndex: '100' }} sideOffset={15}>
+          {popoverDiv}
+        </Popover.Content>
+      </Popover.Portal>
     </Popover.Root>
   );
 };

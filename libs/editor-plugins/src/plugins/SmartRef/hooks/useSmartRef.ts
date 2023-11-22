@@ -18,7 +18,7 @@ import {
   insertText,
   isElement,
   isText,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounceTime, filter } from 'rxjs';
 import { ReactEditor, useSelected } from 'slate-react';

@@ -9,7 +9,11 @@ import { formatError } from '@decipad/format';
 import { ImportResult, tryImport } from '@decipad/import';
 import { useComputer } from '@decipad/react-contexts';
 import { Spinner } from '@decipad/ui';
-import { findNodePath, removeNodes, withoutNormalizing } from '@udecode/plate';
+import {
+  findNodePath,
+  removeNodes,
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import { useSession } from 'next-auth/react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { importTable } from './importTable';

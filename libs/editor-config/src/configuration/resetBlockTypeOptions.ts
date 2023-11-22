@@ -3,7 +3,10 @@ import {
   ELEMENT_CALLOUT,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { isBlockAboveEmpty, isSelectionAtBlockStart } from '@udecode/plate';
+import {
+  isBlockAboveEmpty,
+  isSelectionAtBlockStart,
+} from '@udecode/plate-common';
 
 const resetBlockTypesCommonRule = {
   types: [ELEMENT_BLOCKQUOTE, ELEMENT_CALLOUT],

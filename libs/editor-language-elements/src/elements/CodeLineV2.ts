@@ -13,7 +13,7 @@ import {
 } from '@decipad/editor-utils';
 import { N } from '@decipad/number';
 import { parseCell } from '@decipad/parse';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsVariableAssignment } from '../utils/parseElementAsVariableAssignment';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';

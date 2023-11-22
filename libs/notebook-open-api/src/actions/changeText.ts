@@ -1,4 +1,9 @@
-import { findNode, isElement, EElement, TNodeEntry } from '@udecode/plate';
+import {
+  EElement,
+  findNode,
+  isElement,
+  TNodeEntry,
+} from '@udecode/plate-common';
 import { notAcceptable, notFound } from '@hapi/boom';
 import { matchElementId } from '../utils/matchElementId';
 import { Action, ActionParams } from './types';

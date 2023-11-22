@@ -1,16 +1,12 @@
-import {
-  ELEMENT_CODE_LINE,
-  type TNodeEntry,
-  findNode,
-  isElement,
-} from '@udecode/plate';
+import { findNode, isElement, type TNodeEntry } from '@udecode/plate-common';
 import {
   type CodeLineElement,
   type CodeLineV2Element,
+  ELEMENT_CODE_LINE,
+  ELEMENT_CODE_LINE_V2,
+  ELEMENT_TABLE,
   type MyEditor,
   type TableElement,
-  ELEMENT_TABLE,
-  ELEMENT_CODE_LINE_V2,
 } from '@decipad/editor-types';
 import { matchElementByVariableName } from '../../utils/matchElementByVariableName';
 

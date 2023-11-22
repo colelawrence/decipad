@@ -1,5 +1,5 @@
 import { MyEditor, MyValue } from '@decipad/editor-types';
-import { findNode, getNodeString } from '@udecode/plate';
+import { findNode, getNodeString } from '@udecode/plate-common';
 import { NodeEntry, Path } from 'slate';
 import { findParent } from './findParent';
 import { CatalogHeadingItem, CatalogItemVar, CatalogItems } from './types';

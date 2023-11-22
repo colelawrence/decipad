@@ -16,7 +16,7 @@ import {
   isElement,
   moveNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DropTargetMonitor, useDrop, XYCoord } from 'react-dnd';
 import { Path, PathRef } from 'slate';

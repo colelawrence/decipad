@@ -2,7 +2,7 @@ import { useWasSelected } from '@decipad/editor-hooks';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
 import { convertCodeSmartRefs } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import { findNodePath, isCollapsed } from '@udecode/plate';
+import { findNodePath, isCollapsed } from '@udecode/plate-common';
 import { useEffect } from 'react';
 import { useSelected } from 'slate-react';
 

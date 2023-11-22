@@ -3,7 +3,7 @@ import {
   MyGenericEditor,
   MyKeyboardHandler,
 } from '@decipad/editor-types';
-import { Value } from '@udecode/plate';
+import { Value } from '@udecode/plate-common';
 
 type OnKeyDownFactoryArgs<TV extends Value, TE extends MyGenericEditor<TV>> = {
   name: string;

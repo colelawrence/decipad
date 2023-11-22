@@ -1,4 +1,4 @@
-import { createPlateEditor, normalizeEditor } from '@udecode/plate';
+import { createPlateEditor, normalizeEditor } from '@udecode/plate-common';
 import { createTPlateEditor, ELEMENT_EXPRESSION } from '@decipad/editor-types';
 import { createNormalizerPluginFactory } from './normalizerPlugin';
 

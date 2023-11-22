@@ -6,13 +6,9 @@ import {
   ELEMENT_IMAGE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import {
-  createImagePlugin,
-  createPlugins,
-  select,
-  TEditor,
-} from '@udecode/plate';
+import { createPlugins, select, TEditor } from '@udecode/plate-common';
 import { autoformatImages } from './autoformatImages';
+import { createImagePlugin } from '@udecode/plate-media';
 
 describe('autoformatting images from markdown', () => {
   let editor: TEditor;

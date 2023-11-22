@@ -1,10 +1,10 @@
 import {
-  TNodeEntry,
   getNode,
   insertNodes,
   setNodes,
+  TNodeEntry,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { TableHeaderElement } from '@decipad/editor-types';
 import { Action, ActionParams } from './types';

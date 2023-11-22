@@ -13,7 +13,7 @@ import {
 import { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
-import { EElement, TOperation, isElement } from '@udecode/plate';
+import { EElement, TOperation, isElement } from '@udecode/plate-common';
 import { affectedPaths } from './affectedPaths';
 import { allBlockIds } from './allBlockIds';
 import { RootEditorController } from './types';

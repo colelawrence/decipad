@@ -9,7 +9,7 @@ import {
   ShadowCalcPortal,
   ShadowCalcReference,
 } from '@decipad/react-contexts';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import {
   PropsWithChildren,
   useCallback,

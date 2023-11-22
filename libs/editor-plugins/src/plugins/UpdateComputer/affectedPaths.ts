@@ -1,4 +1,4 @@
-import type { TOperation } from '@udecode/plate';
+import type { TOperation } from '@udecode/plate-common';
 import type { Path } from 'slate';
 
 const EMPTY: Array<Path> = [];

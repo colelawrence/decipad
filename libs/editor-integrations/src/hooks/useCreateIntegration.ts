@@ -6,7 +6,12 @@ import {
   useNotionConnectionStore,
   useSQLConnectionStore,
 } from '@decipad/react-contexts';
-import { findNode, insertNodes, insertText, setNodes } from '@udecode/plate';
+import {
+  findNode,
+  insertNodes,
+  insertText,
+  setNodes,
+} from '@udecode/plate-common';
 import { useEffect } from 'react';
 import { getDefined } from '@decipad/utils';
 import { getNewIntegration } from '../utils';

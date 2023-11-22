@@ -1,5 +1,10 @@
 import { createOnCursorChangePluginFactory } from '@decipad/editor-plugins';
-import { hasNode, isCollapsed, isElement, removeNodes } from '@udecode/plate';
+import {
+  hasNode,
+  isCollapsed,
+  isElement,
+  removeNodes,
+} from '@udecode/plate-common';
 import { Path, Selection } from 'slate';
 import {
   ELEMENT_TD,

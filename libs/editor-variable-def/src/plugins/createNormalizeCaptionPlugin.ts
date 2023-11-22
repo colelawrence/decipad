@@ -11,7 +11,7 @@ import {
   isElement,
   isText,
   unwrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 
 const normalize =
   (editor: MyEditor) =>

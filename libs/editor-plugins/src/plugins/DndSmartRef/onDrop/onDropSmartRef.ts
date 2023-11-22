@@ -19,7 +19,7 @@ import {
   getNodeString,
   isEditorFocused,
   isElement,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import React from 'react';
 import { BasePoint, Path } from 'slate';

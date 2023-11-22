@@ -1,5 +1,5 @@
 import { MyEditor, MyElementEntry } from '@decipad/editor-types';
-import { getNextNode, getNodeString } from '@udecode/plate';
+import { getNextNode, getNodeString } from '@udecode/plate-common';
 import { setSelection } from './setSelection';
 
 /**

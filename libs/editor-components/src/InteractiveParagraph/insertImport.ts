@@ -11,7 +11,7 @@ import {
   setSelection,
 } from '@decipad/editor-utils';
 import { tryImport } from '@decipad/import';
-import { isCollapsed, withoutNormalizing } from '@udecode/plate';
+import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 
 export interface InsertImportProps {

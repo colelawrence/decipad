@@ -1,6 +1,7 @@
 import { createTPlateEditor } from '@decipad/editor-types';
-import { createLinkPlugin, select } from '@udecode/plate';
+import { select } from '@udecode/plate-common';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';
+import { createLinkPlugin } from '@udecode/plate-link';
 
 const lastChar = 'text'.length;
 it.each([

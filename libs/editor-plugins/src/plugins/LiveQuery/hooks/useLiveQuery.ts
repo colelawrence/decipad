@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { Result } from '@decipad/computer';
 import { LiveQueryElement, MAX_IMPORT_CELL_COUNT } from '@decipad/editor-types';
 import { useComputer } from '@decipad/react-contexts';

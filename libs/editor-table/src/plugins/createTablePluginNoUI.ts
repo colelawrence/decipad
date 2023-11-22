@@ -1,14 +1,15 @@
 import type { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_TABLE,
+  ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_COLUMN_FORMULA,
-  ELEMENT_TH,
   ELEMENT_TD,
+  ELEMENT_TH,
   type MyGenericEditor,
   type MyPlatePlugin,
-  ELEMENT_TABLE_CAPTION,
 } from '@decipad/editor-types';
-import { ELEMENT_TR, type TablePlugin, type Value } from '@udecode/plate';
+import { ELEMENT_TR, type TablePlugin } from '@udecode/plate-table';
+import { type Value } from '@udecode/plate-common';
 import { createNormalizeTdPlugin } from './createNormalizeTdPlugin';
 import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormulaPlugin';
 import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';

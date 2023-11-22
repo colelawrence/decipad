@@ -5,7 +5,11 @@ import {
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
+import {
+  createPlugins,
+  normalizeEditor,
+  PlateEditor,
+} from '@udecode/plate-common';
 import { createNormalizeCodeLinePlugin } from './createNormalizeCodeLinePlugin';
 
 function codeLine(code: string): CodeLineElement {

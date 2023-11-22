@@ -6,7 +6,7 @@ import {
   isEditor,
   isElement,
   TNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Path, Point } from 'slate';
 import { MyEditor, MyElement } from '@decipad/editor-types';
 import { getAboveNodeSafe } from '@decipad/editor-utils';

@@ -5,7 +5,7 @@ import {
 } from '@decipad/editor-types';
 import { ControllerProvider } from '@decipad/react-contexts';
 import { notebooks } from '@decipad/routing';
-import { insertNodes } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate-common';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useRouteParams } from 'typesafe-routes/react-router';
 

@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { getNodeString, setNodes } from '@udecode/plate';
+import { getNodeString, setNodes } from '@udecode/plate-common';
 import pluralize from 'pluralize';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { map } from 'rxjs';

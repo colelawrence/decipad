@@ -33,7 +33,7 @@ import {
   getNodeChild,
   getNodeString,
   getParentNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Hide, Show } from 'libs/ui/src/icons';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import { ComponentProps, useCallback, useMemo, useState } from 'react';

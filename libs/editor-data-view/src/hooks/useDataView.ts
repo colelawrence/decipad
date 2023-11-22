@@ -8,7 +8,7 @@ import {
 import { assertElementType, matchNodeType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
 import { useResolved } from '@decipad/react-utils';
-import { findNode, findNodePath } from '@udecode/plate';
+import { findNode, findNodePath } from '@udecode/plate-common';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Path } from 'slate';
 import { useDataViewActions } from '.';

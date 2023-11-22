@@ -9,7 +9,7 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { createPlateEditor, select } from '@udecode/plate';
+import { createPlateEditor, select } from '@udecode/plate-common';
 import { autoformatRules } from './index';
 
 let editor: MyEditor;

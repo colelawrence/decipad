@@ -17,7 +17,7 @@ import {
   getStartPoint,
   isCollapsed,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { dndStore as plateDndStore } from '@udecode/plate-dnd';
 import axios, { AxiosProgressEvent } from 'axios';
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react';

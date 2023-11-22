@@ -5,7 +5,7 @@ import {
   MyElement,
   DEPRECATED_ELEMENT_INPUT,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeVoidPlugin } from './createNormalizeVoidPlugin';
 
 let editor: TEditor;

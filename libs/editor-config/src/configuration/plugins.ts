@@ -72,23 +72,22 @@ import { noopPromise } from '@decipad/editor-utils';
 import { createVariableDefPlugin } from '@decipad/editor-variable-def';
 import type { UserInteraction } from '@decipad/react-contexts';
 import type { RemoteComputer } from '@decipad/remote-computer';
-import {
-  createBlockquotePlugin,
-  createDeserializeDocxPlugin,
-  createHeadingPlugin,
-  createListPlugin,
-  createParagraphPlugin,
-  createPlugins,
-  createResetNodePlugin,
-  createSelectOnBackspacePlugin,
-} from '@udecode/plate';
 import { createDndPlugin } from '@udecode/plate-dnd';
+import { createPlugins } from '@udecode/plate-common';
 import { createJuicePlugin } from '@udecode/plate-juice';
 import { Subject } from 'rxjs';
 import { autoformatRules } from './autoformat';
 import { components } from './components';
 import { exitBreakOptions } from './exitBreakOptions';
 import { resetBlockTypeOptions } from './resetBlockTypeOptions';
+import { createParagraphPlugin } from '@udecode/plate-paragraph';
+import { createBlockquotePlugin } from '@udecode/plate-block-quote';
+import { createListPlugin } from '@udecode/plate-list';
+import { createHeadingPlugin } from '@udecode/plate-heading';
+import { createResetNodePlugin } from '@udecode/plate-reset-node';
+import { createSelectOnBackspacePlugin } from '@udecode/plate-select';
+import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
+import { createCaptionPlugin } from '@udecode/plate-caption';
 
 interface PluginOptions {
   computer: RemoteComputer;
@@ -168,6 +167,9 @@ export const plugins = ({
       createLinkPlugin(),
       createImagePlugin(),
       createMediaEmbedPlugin(),
+      createCaptionPlugin({
+        options: { pluginKeys: [ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED] },
+      }),
       createTAutoformatPlugin({
         options: { rules: autoformatRules(computer) },
       }),

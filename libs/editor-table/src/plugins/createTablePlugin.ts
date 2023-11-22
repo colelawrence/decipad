@@ -11,7 +11,7 @@ import {
   MyPlatePlugin,
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
-import { TablePlugin, Value } from '@udecode/plate';
+import { Value } from '@udecode/plate-common';
 import {
   Table,
   TableCaption,
@@ -34,6 +34,7 @@ import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCrea
 import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
+import { TablePlugin } from '@udecode/plate-table';
 
 type Attributes =
   | {

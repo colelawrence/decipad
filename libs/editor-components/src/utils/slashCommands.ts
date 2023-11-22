@@ -20,7 +20,11 @@ import {
   useConnectionStore,
   useFileUploadStore,
 } from '@decipad/react-contexts';
-import { deleteText, removeNodes, withoutNormalizing } from '@udecode/plate';
+import {
+  deleteText,
+  removeNodes,
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import { Location, Path, Range } from 'slate';
 import { insertDataViewBelow } from './data-view';
 import { insertDrawBelow } from './draw';

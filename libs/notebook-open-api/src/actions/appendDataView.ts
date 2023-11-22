@@ -10,7 +10,7 @@ import {
 import { nanoid } from 'nanoid';
 import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
-import { insertNodes } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate-common';
 import { getTableById } from './utils/getTablebyId';
 import { fixColumnName } from './utils/fixColumnName';
 import { getColumnType } from './utils/getColumnType';

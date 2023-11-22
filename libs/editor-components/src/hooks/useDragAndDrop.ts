@@ -1,7 +1,7 @@
 import { DraggableBlock, defaultMoveNode } from '@decipad/editor-components';
 import { COLUMN_KINDS, MyEditor, MyElement } from '@decipad/editor-types';
 import { wrapIntoColumns } from '@decipad/editor-utils';
-import { findNode, moveNodes, withoutNormalizing } from '@udecode/plate';
+import { findNode, moveNodes, withoutNormalizing } from '@udecode/plate-common';
 import { ComponentProps, useCallback } from 'react';
 import { Path } from 'slate';
 import { DropTargetMonitor } from 'react-dnd';

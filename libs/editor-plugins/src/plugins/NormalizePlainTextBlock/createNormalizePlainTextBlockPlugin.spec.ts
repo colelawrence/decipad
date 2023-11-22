@@ -6,7 +6,7 @@ import {
   MARK_BOLD,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizePlainTextBlockPlugin } from './createNormalizePlainTextBlockPlugin';
 
 let editor: TEditor;

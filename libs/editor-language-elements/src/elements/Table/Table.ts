@@ -1,4 +1,4 @@
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@decipad/editor-types';
 import { Program, AST, statementToIdentifiedBlock } from '@decipad/computer';
 import { assertElementType } from '@decipad/editor-utils';

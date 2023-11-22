@@ -6,7 +6,7 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useEditorChange } from '@decipad/editor-hooks';
 import { useCallback } from 'react';
-import { findNodePath, getNode } from '@udecode/plate';
+import { findNodePath, getNode } from '@udecode/plate-common';
 
 export const useTableColumnHeaderOfTableAbove = (
   element: TableColumnFormulaElement,

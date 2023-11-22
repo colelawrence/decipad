@@ -17,7 +17,7 @@ import {
   nanoid,
   Value,
   ENodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { lazyElementComponent } from '../../utils/lazyElement';
 import { LiveQueryVarName } from './components/LiveQueryVarName';
 import { LiveQueryQuery } from './components/LiveQueryQuery';

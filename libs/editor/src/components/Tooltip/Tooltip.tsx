@@ -85,14 +85,14 @@ const toolTipMarks: TooltipMark[] = [
 ];
 
 export const Tooltip = (): ReturnType<FC> => {
-  const { floating, style, open } = useEditorTooltip();
+  const { ref, props, hidden } = useEditorTooltip();
 
   const readOnly = useIsEditorReadOnly();
 
-  if (readOnly || !open) return null;
+  if (readOnly || hidden) return null;
 
   return (
-    <div ref={floating} style={style} css={wrapperStyles}>
+    <div ref={ref} css={wrapperStyles} {...props}>
       {toolTipMarks.map((m) => (
         <ToggleMarkButton key={m.type} {...m} />
       ))}

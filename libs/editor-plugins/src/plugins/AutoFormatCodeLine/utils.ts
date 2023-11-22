@@ -1,5 +1,5 @@
 import { MyGenericEditor } from '@decipad/editor-types';
-import { Value, getEditorString } from '@udecode/plate';
+import { Value, getEditorString } from '@udecode/plate-common';
 import { BasePoint } from 'slate';
 
 export const getTextBeforeCursor = <

@@ -10,7 +10,7 @@ import {
 } from '@decipad/editor-utils';
 import { useNodePath } from '@decipad/editor-hooks';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { Image as UIImage } from '@decipad/ui';
+import { ImageElement as UIImage } from '../plate-ui';
 import { DraggableBlock } from '../block-management/index';
 import { useDragAndDropGetAxis, useDragAndDropOnDrop } from '../hooks';
 
@@ -32,7 +32,6 @@ export const Image: PlateComponent = (props) => {
       getAxis={getAxis}
       onDrop={onDrop}
       readOnly={readOnly}
-      pluginKey={ELEMENT_IMAGE}
       {...props}
     />
   );

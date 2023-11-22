@@ -3,7 +3,7 @@ import {
   TableElement,
   TableHeaderElement,
 } from '@decipad/editor-types';
-import { TNodeEntry, getNode } from '@udecode/plate';
+import { getNode, TNodeEntry } from '@udecode/plate-common';
 import { getNodeString } from '../../utils/getNodeString';
 
 export const findColumn = (

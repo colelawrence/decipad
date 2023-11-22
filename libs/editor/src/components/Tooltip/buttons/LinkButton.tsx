@@ -1,13 +1,8 @@
-import {
-  focusEditor,
-  getPluginType,
-  someNode,
-  triggerFloatingLink,
-  unwrapLink,
-} from '@udecode/plate';
+import { focusEditor, getPluginType, someNode } from '@udecode/plate-common';
 import { ComponentProps, FC, MouseEvent, useCallback } from 'react';
 import { ELEMENT_LINK, useTEditorRef } from '@decipad/editor-types';
 import { FloatingButton, useEventNoEffect } from '@decipad/ui';
+import { triggerFloatingLink, unwrapLink } from '@udecode/plate-link';
 
 export const LinkButton = (
   props: ComponentProps<typeof FloatingButton>

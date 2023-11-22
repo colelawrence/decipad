@@ -1,7 +1,7 @@
 import { MyEditor } from '@decipad/editor-types';
 import { EditorChangeContext } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
-import { isCollapsed } from '@udecode/plate';
+import { isCollapsed } from '@udecode/plate-common';
 import { useContext, useEffect, useState } from 'react';
 import { concat, of } from 'rxjs';
 import { useSelected } from 'slate-react';

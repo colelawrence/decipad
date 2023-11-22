@@ -1,6 +1,4 @@
 import {
-  type AutoformatPlugin,
-  createAutoformatPlugin,
   createPlateEditor,
   type CreatePlateEditorOptions,
   createPluginFactory,
@@ -8,20 +6,24 @@ import {
   type NoInfer,
   type PlatePlugin,
   type PluginOptions,
+  TEditor,
   useEditorRef,
   usePlateEditorRef,
   usePlateEditorState,
   usePlateSelectors,
   Value,
-  TEditor,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
+import {
+  type AutoformatPlugin,
+  createAutoformatPlugin,
+} from '@udecode/plate-autoformat';
 import type { MyValue, NotebookValue } from './value';
 import type { MyEditor, MyGenericEditor, RootEditor } from './nodes';
 import type {
   MyOverrideByKey,
   MyPlatePlugin,
-  RootPlatePlugin,
   RootOverrideByKey,
+  RootPlatePlugin,
 } from './plate';
 
 /**
@@ -52,11 +54,11 @@ export const useTPlateSelectors = (id?: string) =>
 
 export const createTPlateEditor = (
   options: CreatePlateEditorOptions<MyValue, MyEditor> = {}
-) => createPlateEditor<MyValue, MyEditor>(options);
+) => createPlateEditor<MyValue, MyEditor>(options) as MyEditor;
 
 export const createTPlateRootEditor = (
   options: CreatePlateEditorOptions<NotebookValue, RootEditor> = {}
-) => createPlateEditor<NotebookValue, RootEditor>(options);
+) => createPlateEditor<NotebookValue, RootEditor>(options) as MyEditor;
 
 export const createTPluginFactory = <
   P = PluginOptions,

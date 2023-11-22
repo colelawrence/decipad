@@ -11,7 +11,7 @@ import {
   findNode,
   setNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { NodeEntry } from 'slate';
 import { drawDummyElement } from './drawDummyElement';
 import { fixElement } from './fixElement';

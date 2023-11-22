@@ -1,5 +1,5 @@
 import { AnyElement, MyNode } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 
 const mergeChildren = <T extends AnyElement>(a: T, b: T): T['children'] => {
   return b.children.map((child) => {

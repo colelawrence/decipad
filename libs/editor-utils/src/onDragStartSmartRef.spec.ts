@@ -3,8 +3,8 @@ import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
 import { onDragStartSmartRef } from './onDragStartSmartRef';
 
-jest.mock('@udecode/plate', () => ({
-  ...jest.requireActual('@udecode/plate'),
+jest.mock('@udecode/plate-common', () => ({
+  ...jest.requireActual('@udecode/plate-common'),
   findNodePath: () => [],
   getNodeString: () => '',
 }));

@@ -1,6 +1,6 @@
-import { Array as YArray, Map as YMap, Doc as YDoc, Text as YText } from 'yjs';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate';
-import { toSyncElement, toSlateNode } from './convert';
+import { Array as YArray, Doc as YDoc, Map as YMap, Text as YText } from 'yjs';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+import { toSlateNode, toSyncElement } from './convert';
 import { SyncElement } from '../model';
 import { TabElement } from '@decipad/editor-types';
 

@@ -4,7 +4,7 @@ import {
   queryNode,
   QueryNodeOptions,
   Value,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import isHotkey from 'is-hotkey';
 import {
   BlockElement,

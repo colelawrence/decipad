@@ -1,8 +1,9 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SerializedStyles, css } from '@emotion/react';
-import { HTMLPropsAs } from '@udecode/plate';
+import { css, SerializedStyles } from '@emotion/react';
+import { createSlotComponent } from '@udecode/plate-common';
 import { Anchor } from '../../utils';
 import { componentCssVars } from '../../primitives';
+import { ComponentProps } from 'react';
 
 type LinkColor = 'default' | 'danger' | 'plain';
 
@@ -39,7 +40,9 @@ const styleColors: Record<LinkColor, SerializedStyles> = {
   }),
 };
 
-interface LinkProps extends HTMLPropsAs<'a'> {
+const LinkSlot = createSlotComponent('a');
+
+interface LinkProps extends ComponentProps<typeof LinkSlot> {
   color?: LinkColor;
   noUnderline?: boolean;
 }

@@ -12,7 +12,7 @@ import {
   TableElement,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 
 function deduplicateVarNameInDef(
   computer: RemoteComputer,

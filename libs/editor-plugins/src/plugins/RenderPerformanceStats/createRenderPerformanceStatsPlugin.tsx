@@ -1,4 +1,7 @@
-import { createPluginFactory, PlatePluginComponent } from '@udecode/plate';
+import {
+  createPluginFactory,
+  PlatePluginComponent,
+} from '@udecode/plate-common';
 import { ComponentProps, FC } from 'react';
 
 type ComponentKey = string;

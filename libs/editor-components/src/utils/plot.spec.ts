@@ -1,5 +1,5 @@
 import { ELEMENT_PLOT, MyEditor } from '@decipad/editor-types';
-import { createTEditor } from '@udecode/plate';
+import { createTEditor } from '@udecode/plate-common';
 import { insertPlotBelow } from './plot';
 
 describe('insertPlotBelow', () => {

@@ -13,7 +13,7 @@ import {
   getPreviousNode,
   isCollapsed,
   isElement,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Location } from 'slate';
 import { findClosestBlockOrColumn } from './findClosestBlockOrColumn';
 import { isCursorAtBlockEdge } from './isCursorAtBlockEdge';

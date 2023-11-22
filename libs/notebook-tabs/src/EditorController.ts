@@ -5,10 +5,15 @@
 import { nanoid } from 'nanoid';
 import { Subject } from 'rxjs';
 import {
+  createPlateEditor,
   EElement,
-  ELEMENT_PARAGRAPH,
   ENode,
+  getNode,
+  isEditorNormalizing,
+  isElement,
+  normalizeEditor,
   PlateEditor,
+  removeNodes,
   TDescendant,
   TEditor,
   TInsertNodeOperation,
@@ -17,37 +22,32 @@ import {
   TRemoveNodeOperation,
   TSelection,
   TSetNodeOperation,
-  createPlateEditor,
-  getNode,
-  isEditorNormalizing,
-  isElement,
-  normalizeEditor,
-  removeNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
+  AnyElement,
+  createTPlateEditor,
+  ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
+  MyEditor,
   MyPlatePlugin,
   MyTabEditor,
   NotebookValue,
   TabElement,
-  UserIconKey,
-  createTPlateEditor,
-  MyEditor,
-  AnyElement,
   TitleElement,
+  UserIconKey,
 } from '@decipad/editor-types';
 import { assertEqual, getDefined } from '@decipad/utils';
 import {
+  childIndexForOp,
   translateOpDown,
   translateOpUp,
   translatePathUp,
-  childIndexForOp,
 } from './TranslatePaths';
 import { IsTab } from './utils';
 import { ElementObserver } from './ElementObserver';
-import { TitleEditor, createTitleEditor } from './TitleEditor';
-import { BaseEditor, Path, isNormalizing, setNormalizing } from 'slate';
+import { createTitleEditor, TitleEditor } from './TitleEditor';
+import { BaseEditor, isNormalizing, Path, setNormalizing } from 'slate';
 import { RootEditorController } from './types';
 import { getMirrorEditorNormalizers } from './plugins/index';
 import { withoutNormalizingEditors } from './withoutNormalizingEditors';
@@ -134,7 +134,7 @@ export class EditorController implements RootEditorController {
   private createMirrorEditor(): PlateEditor<NotebookValue> {
     const mirrorEditor = createPlateEditor<NotebookValue>({
       plugins: getMirrorEditorNormalizers(),
-    });
+    }) as PlateEditor<NotebookValue>;
     const { apply, onChange } = mirrorEditor;
 
     const tryApplyingOpToMirror = (op: TOperation) => {

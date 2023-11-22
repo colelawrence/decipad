@@ -1,10 +1,10 @@
 import {
-  TNodeEntry,
   getNode,
   hasNode,
   insertNodes,
+  TNodeEntry,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';

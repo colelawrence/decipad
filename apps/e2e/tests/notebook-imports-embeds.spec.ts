@@ -91,14 +91,16 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       }).toPass({
         timeout: 1000,
       });
-      await page
-        .getByTestId('integration-block')
-        .filter({ hasText: /accounts_c/ })
-        .getByTestId('segment-button-trigger')
-        .click();
-      await expect(
-        page.getByText('7109 rows, previewing rows 1 to 10')
-      ).toBeVisible();
+      await expect(async () => {
+        await page
+          .getByTestId('integration-block')
+          .filter({ hasText: /accounts_c/ })
+          .getByTestId('segment-button-trigger')
+          .click();
+        await expect(
+          page.getByText('7109 rows, previewing rows 1 to 10')
+        ).toBeVisible();
+      }).toPass();
     });
   });
 
@@ -150,13 +152,15 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       await page.getByTestId('link-button').click();
       // eslint-disable-next-line playwright/no-wait-for-timeout
       await page.waitForTimeout(Timeouts.computerDelay);
-      await expect(
-        page
-          .frameLocator('iframe[title="decipad-embed"]')
-          .nth(2)
-          .locator('[data-test-id="read-only-text"]')
-          .getByText('Pitch Slides Decipad')
-      ).toBeVisible();
+      await expect(async () => {
+        await expect(
+          page
+            .frameLocator('iframe[title="decipad-embed"]')
+            .nth(2)
+            .locator('[data-test-id="read-only-text"]')
+            .getByText('Pitch Slides Decipad')
+        ).toBeVisible();
+      }).toPass();
     });
   });
 });

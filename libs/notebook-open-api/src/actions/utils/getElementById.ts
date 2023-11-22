@@ -1,5 +1,5 @@
-import { TNodeEntry, findNode } from '@udecode/plate';
-import { notFound, notAcceptable } from '@hapi/boom';
+import { findNode, TNodeEntry } from '@udecode/plate-common';
+import { notAcceptable, notFound } from '@hapi/boom';
 import { matchElementId } from '../../utils/matchElementId';
 import { AnyElement, MyEditor } from '@decipad/editor-types';
 

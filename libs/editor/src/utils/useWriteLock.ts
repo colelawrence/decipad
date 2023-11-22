@@ -1,5 +1,5 @@
 import { MyEditor } from '@decipad/editor-types';
-import { focusEditor } from '@udecode/plate';
+import { focusEditor } from '@udecode/plate-common';
 import { useState, useCallback } from 'react';
 import { ReactEditor } from 'slate-react';
 

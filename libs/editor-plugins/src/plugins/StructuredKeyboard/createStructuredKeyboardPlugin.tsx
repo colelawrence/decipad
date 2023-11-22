@@ -20,7 +20,7 @@ import {
   getNode,
   getNodeString,
   getStartPoint,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { KeyboardEvent } from 'react';
 import { BaseEditor, Editor, Path, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';

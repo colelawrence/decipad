@@ -14,7 +14,7 @@ import {
   useEditorUserInteractionsContext,
 } from '@decipad/react-contexts';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
-import { Plate, createPlateEditor } from '@udecode/plate';
+import { Plate, createPlateEditor } from '@udecode/plate-common';
 import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { Subject } from 'rxjs';
 import { ReactEditor, withReact } from 'slate-react';

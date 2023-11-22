@@ -1,9 +1,9 @@
-import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
+import { createJSONStorage, persist, StateStorage } from 'zustand/middleware';
 import { create } from 'zustand';
 
-import { get as getIdb, set as setIdb, del as delIdb } from 'idb-keyval';
+import { del as delIdb, get as getIdb, set as setIdb } from 'idb-keyval';
 import { NotebookValue } from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 
 const storage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {

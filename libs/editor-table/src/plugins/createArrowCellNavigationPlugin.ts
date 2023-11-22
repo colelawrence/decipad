@@ -7,13 +7,9 @@ import {
   MyValue,
 } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-import {
-  getBlockAbove,
-  getEndPoint,
-  hasNode,
-  moveSelectionFromCell,
-} from '@udecode/plate';
+import { getBlockAbove, getEndPoint, hasNode } from '@udecode/plate-common';
 import { Path } from 'slate';
+import { moveSelectionFromCell } from '@udecode/plate-table';
 
 const nextUpOrDown = (
   editor: MyEditor,

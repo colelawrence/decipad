@@ -2,7 +2,7 @@ import { ELEMENT_PLOT } from '@decipad/editor-types';
 import { ActionParams, RequiresNotebookAction } from './types';
 import { getElementById } from './utils/getElementById';
 import { getPartialPlotParams } from './utils/getPartialPlotParams';
-import { setNodes } from '@udecode/plate';
+import { setNodes } from '@udecode/plate-common';
 
 export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
   summary: 'changes some of the parameters for a plot',

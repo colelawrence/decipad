@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import {
   LiveConnectionElement,
   LiveDataSetElement,

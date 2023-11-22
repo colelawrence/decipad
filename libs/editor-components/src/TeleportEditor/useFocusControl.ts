@@ -2,7 +2,7 @@ import { MyElement, useTEditorRef } from '@decipad/editor-types';
 import { focusAndSetSelection } from '@decipad/editor-utils';
 import { useSelection } from '@decipad/editor-hooks';
 import { ShadowCalcReference } from '@decipad/react-contexts';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { useEffect, useState } from 'react';
 import { useSelected } from 'slate-react';
 import { ensureSelectionHack } from './ensureSelectionHack';

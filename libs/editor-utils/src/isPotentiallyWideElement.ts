@@ -3,7 +3,7 @@ import {
   ELEMENT_LIVE_CONNECTION,
   MyValue,
 } from '@decipad/editor-types';
-import { ELEMENT_TABLE } from '@udecode/plate';
+import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 const potentiallyWideElementTypes = new Set([
   ELEMENT_TABLE,

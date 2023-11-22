@@ -19,7 +19,7 @@ import {
   getNodeChild,
   getNodeString,
   isElement,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { MarkType } from 'libs/ui/src/organisms/PlotParams/PlotParams';
 import { useCallback } from 'react';
 import { WIDE_MIN_COL_COUNT } from '../../constants';

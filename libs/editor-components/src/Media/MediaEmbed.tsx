@@ -1,4 +1,4 @@
-import { MediaEmbed as UIMediaEmbed } from '@decipad/ui';
+import { MediaEmbedElement as UIMediaEmbed } from '../plate-ui';
 import { ELEMENT_MEDIA_EMBED, PlateComponent } from '@decipad/editor-types';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { assertElementType } from '@decipad/editor-utils';
@@ -14,7 +14,6 @@ export const MediaEmbed: PlateComponent = (props) => {
       <UIMediaEmbed
         draggableBlock={DraggableBlock}
         readOnly={readOnly}
-        pluginKey={ELEMENT_MEDIA_EMBED}
         {...props}
       />
     </BlockErrorBoundary>

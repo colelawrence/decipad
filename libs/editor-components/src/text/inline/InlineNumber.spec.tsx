@@ -5,7 +5,7 @@ import {
   Plate,
   PlateEditor,
   PlateProps,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   ELEMENT_INLINE_NUMBER,
   ELEMENT_PARAGRAPH,

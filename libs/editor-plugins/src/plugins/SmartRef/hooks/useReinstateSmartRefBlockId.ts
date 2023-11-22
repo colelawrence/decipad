@@ -1,4 +1,4 @@
-import { findNodePath, setNodes } from '@udecode/plate';
+import { findNodePath, setNodes } from '@udecode/plate-common';
 import { Subscription, debounceTime, filter } from 'rxjs';
 import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';

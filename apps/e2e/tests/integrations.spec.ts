@@ -12,6 +12,7 @@ import { createWithSlashCommand } from '../utils/page/Block';
 
 const executeCode = (page: Page, sourcecode: string, x: number) =>
   test.step(`Executing ${x}`, async () => {
+    await page.getByTestId('paragraph-content').last().click();
     await page.getByTestId('paragraph-content').last().fill('/i');
     await page
       .locator('article')
@@ -55,6 +56,11 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
     await page.waitForTimeout(Timeouts.liveBlockDelay);
 
     // Making a formula to test them
+    await page
+      .locator('article')
+      .getByTestId('paragraph-content')
+      .last()
+      .click();
     await page
       .locator('article')
       .getByTestId('paragraph-content')

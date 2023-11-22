@@ -1,6 +1,6 @@
 import { ActionParams, RequiresNotebookAction } from './types';
 import { appendPath } from '../utils/appendPath';
-import { insertNodes } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate-common';
 import { getTableById } from './utils/getTablebyId';
 import { getDefined } from '@decipad/utils';
 import { getPlotParams } from './utils/getPlotParams';

@@ -6,7 +6,7 @@ import {
   getStartPoint,
   hasNode,
   isCollapsed,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../../pluginFactories';
 import { isSmartRef } from '../utils/isSmartRef';

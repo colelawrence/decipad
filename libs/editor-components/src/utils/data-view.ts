@@ -6,7 +6,7 @@ import {
   ELEMENT_DATA_VIEW_NAME,
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
-import { TEditor } from '@udecode/plate';
+import { TEditor } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';

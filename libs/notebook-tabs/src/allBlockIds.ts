@@ -1,5 +1,5 @@
 import { MyEditor } from '@decipad/editor-types';
-import { findNode, isElement } from '@udecode/plate';
+import { findNode, isElement } from '@udecode/plate-common';
 
 /**
  * Some `any` casts because typecheck seems to disagree with the

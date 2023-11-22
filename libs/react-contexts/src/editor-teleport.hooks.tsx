@@ -1,4 +1,4 @@
-import { TNode, useEditorRef } from '@udecode/plate';
+import { TNode, useEditorRef } from '@udecode/plate-common';
 import { useCallback, useEffect, useRef } from 'react';
 import { useEditorTeleportContext } from './editor-teleport';
 

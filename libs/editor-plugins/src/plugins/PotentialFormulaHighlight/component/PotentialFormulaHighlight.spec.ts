@@ -5,7 +5,7 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { noop } from '@decipad/utils';
-import { TEditor } from '@udecode/plate';
+import { TEditor } from '@udecode/plate-common';
 import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPlugin';
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 

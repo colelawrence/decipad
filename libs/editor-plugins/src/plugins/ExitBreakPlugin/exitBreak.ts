@@ -5,11 +5,11 @@ import {
   insertElements,
   PlateEditor,
   Value,
-  ExitBreakRule,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { exitBreakAtEdges } from './exitBreakAtEdges';
+import { ExitBreakRule } from '@udecode/plate-break';
 
 export const exitBreak = <V extends Value>(
   editor: PlateEditor<V>,

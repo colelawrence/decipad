@@ -10,7 +10,11 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { createPlugins, normalizeEditor, PlateEditor } from '@udecode/plate';
+import {
+  createPlugins,
+  normalizeEditor,
+  PlateEditor,
+} from '@udecode/plate-common';
 import {
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineCodePlugin,

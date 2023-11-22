@@ -1,10 +1,10 @@
 import { ELEMENT_SMART_REF } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import {
-  type TNode,
-  isElement,
   getNodeString as rootGetNodeString,
-} from '@udecode/plate';
+  isElement,
+  type TNode,
+} from '@udecode/plate-common';
 
 export const getNodeString = (node: TNode): string => {
   if (!isElement(node)) {

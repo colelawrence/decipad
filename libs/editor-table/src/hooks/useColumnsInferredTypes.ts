@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useComputer } from '@decipad/react-contexts';
-import { findNodePath, getNode, getNodeString } from '@udecode/plate';
+import { findNodePath, getNode, getNodeString } from '@udecode/plate-common';
 import {
   MyEditor,
   TableCellElement,

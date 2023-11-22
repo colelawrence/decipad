@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { markKinds, MyEditor, MyNodeEntry } from '@decipad/editor-types';
-import { isText } from '@udecode/plate';
+import { isText } from '@udecode/plate-common';
 import {
   createNormalizerPluginFactory,
   NormalizerReturnValue,

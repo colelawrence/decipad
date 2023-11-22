@@ -8,7 +8,10 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
-import { draggableStyles } from '../MediaEmbed/styles';
+
+const draggableStyles = css({
+  paddingTop: 8,
+});
 
 export const iframeStyles = css({
   display: 'block',

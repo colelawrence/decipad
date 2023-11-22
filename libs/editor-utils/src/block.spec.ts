@@ -3,7 +3,7 @@ import {
   ELEMENT_PARAGRAPH,
   MyEditor,
 } from '@decipad/editor-types';
-import { createPlateEditor } from '@udecode/plate';
+import { createPlateEditor } from '@udecode/plate-common';
 import {
   allowsTextStyling,
   closestBlockAncestorHasType,

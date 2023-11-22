@@ -1,10 +1,12 @@
-import { H2Element, H3Element, MyEditor, MyValue } from '@decipad/editor-types';
 import {
   ELEMENT_H2,
   ELEMENT_H3,
-  findNode,
-  getParentNode,
-} from '@udecode/plate';
+  H2Element,
+  H3Element,
+  MyEditor,
+  MyValue,
+} from '@decipad/editor-types';
+import { findNode, getParentNode } from '@udecode/plate-common';
 import { NodeEntry } from 'slate';
 
 const searchNodeTypes = new Set([ELEMENT_H2, ELEMENT_H3]);

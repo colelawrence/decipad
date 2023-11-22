@@ -6,7 +6,7 @@ import {
   useEventNoEffect,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { deselect } from '@udecode/plate';
+import { deselect } from '@udecode/plate-common';
 import { Folder, FolderOpen } from 'libs/ui/src/icons';
 import { FC, useCallback } from 'react';
 import { HeaderProps } from '../../types';

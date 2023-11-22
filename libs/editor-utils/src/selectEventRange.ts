@@ -1,5 +1,10 @@
 import React from 'react';
-import { PlateEditor, Value, findEventRange, select } from '@udecode/plate';
+import {
+  PlateEditor,
+  Value,
+  findEventRange,
+  select,
+} from '@udecode/plate-common';
 import { MyValue } from '@decipad/editor-types';
 
 /**

@@ -1,4 +1,4 @@
-import { getNodeString, isElement } from '@udecode/plate';
+import { getNodeString, isElement } from '@udecode/plate-common';
 import {
   type AnyElement,
   type ColumnsElement,

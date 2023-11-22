@@ -13,7 +13,7 @@ import {
   H1Element,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeEditorPlugin } from './createNormalizeEditorPlugin';
 
 const h1Element = () =>

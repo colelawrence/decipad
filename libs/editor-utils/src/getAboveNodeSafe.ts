@@ -5,7 +5,7 @@ import {
   GetAboveNodeOptions,
   TEditor,
   TNodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 
 export const getAboveNodeSafe = <T extends MyNode>(
   editor: TEditor,

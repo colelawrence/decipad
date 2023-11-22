@@ -19,7 +19,7 @@ import {
   getNodeString,
   removeNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useCallback, useMemo } from 'react';
 
 const getElementExpression = (element: MyElement): string => {

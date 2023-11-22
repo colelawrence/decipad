@@ -12,7 +12,11 @@ import {
 } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
 import { CodeResult } from '@decipad/ui';
-import { getBlockAbove, isElementEmpty, removeNodes } from '@udecode/plate';
+import {
+  getBlockAbove,
+  isElementEmpty,
+  removeNodes,
+} from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import { nanoid } from 'nanoid';
 import React, { ComponentProps } from 'react';

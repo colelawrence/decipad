@@ -8,6 +8,7 @@ export * from './hooks';
 export * from './molecules';
 export * from './organisms';
 export * from './pages';
+export { FigCaption } from './utils/resizing';
 export * from './primitives';
 export * from './templates';
 export * from './utils';

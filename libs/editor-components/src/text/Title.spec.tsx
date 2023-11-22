@@ -3,17 +3,17 @@ import { findDomNodePath } from '@decipad/editor-utils';
 import { noop } from '@decipad/utils';
 import { render, waitFor } from '@testing-library/react';
 import {
-  Plate,
-  PlateEditor,
-  PlateProps,
-  createHeadingPlugin,
   createPlateEditor,
   createPlugins,
   deleteText,
   insertText,
+  Plate,
+  PlateEditor,
+  PlateProps,
   select,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Title } from './Title';
+import { createHeadingPlugin } from '@udecode/plate-heading';
 
 let plateProps: PlateProps;
 let editor: PlateEditor;

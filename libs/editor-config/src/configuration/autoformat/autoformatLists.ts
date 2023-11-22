@@ -4,8 +4,8 @@ import {
   ELEMENT_UL,
   MyAutoformatRule,
 } from '@decipad/editor-types';
-import { toggleList } from '@udecode/plate';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';
+import { toggleList } from '@udecode/plate-list';
 
 export const autoformatLists: MyAutoformatRule[] = [
   {

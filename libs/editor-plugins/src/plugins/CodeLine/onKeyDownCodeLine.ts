@@ -6,7 +6,7 @@ import {
   ELEMENT_CODE_LINE,
   MyNodeEntry,
 } from '@decipad/editor-types';
-import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate';
+import { focusEditor, getBlockAbove, getEndPoint } from '@udecode/plate-common';
 import { RemoteComputer } from '@decipad/remote-computer';
 import {
   focusAndSetSelection,

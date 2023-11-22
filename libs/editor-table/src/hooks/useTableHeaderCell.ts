@@ -9,7 +9,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';
-import { getNode } from '@udecode/plate';
+import { getNode } from '@udecode/plate-common';
 import { useMemo } from 'react';
 import { ConnectDragSource, ConnectDropTarget } from 'react-dnd';
 import { Path } from 'slate';

@@ -6,7 +6,7 @@ import {
   type EElementOrText,
   type TEditor,
   type InsertNodesOptions,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { getAnalytics } from '@decipad/client-events';
 
 const elementsFrom = (n: unknown | unknown[]): TElement[] => {

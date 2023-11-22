@@ -2,7 +2,7 @@ import { useNodePath, useSelection } from '@decipad/editor-hooks';
 import { ParagraphElement, useTEditorRef } from '@decipad/editor-types';
 import { useWindowListener } from '@decipad/react-utils';
 import { dequal } from '@decipad/utils';
-import { getEndPoint, getNodeString, isCollapsed } from '@udecode/plate';
+import { getEndPoint, getNodeString, isCollapsed } from '@udecode/plate-common';
 import { setSelection } from '@decipad/editor-utils';
 import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { BaseRange, Location, Path, Range } from 'slate';

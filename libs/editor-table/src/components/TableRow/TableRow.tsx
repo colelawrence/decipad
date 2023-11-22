@@ -14,7 +14,7 @@ import { assertElementType, getNodeEntrySafe } from '@decipad/editor-utils';
 import { useNodePath } from '@decipad/editor-hooks';
 import React, { useContext, useEffect, useRef } from 'react';
 import { useDndNode } from '@udecode/plate-dnd';
-import type { TNodeEntry } from '@udecode/plate';
+import type { TNodeEntry } from '@udecode/plate-common';
 import { useTableActions } from '../../hooks';
 import { selectRow } from '../../utils/selectRow';
 import { MAX_UNCOLLAPSED_TABLE_ROWS } from '../../constants';

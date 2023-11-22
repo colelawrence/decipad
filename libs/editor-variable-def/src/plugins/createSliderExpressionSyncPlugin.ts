@@ -18,7 +18,7 @@ import {
   isElement,
   isText,
   setNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Path } from 'slate';
 
 const isExpression = (n: TNode) =>

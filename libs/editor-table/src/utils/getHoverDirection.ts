@@ -1,6 +1,6 @@
 import { MyReactEditor } from '@decipad/editor-types';
 import { DropTargetMonitor } from 'react-dnd';
-import { TElement, toDOMNode } from '@udecode/plate';
+import { TElement, toDOMNode } from '@udecode/plate-common';
 import { MutableRefObject } from 'react';
 import { ColumnDndDirection, DragColumnItem } from '../types';
 

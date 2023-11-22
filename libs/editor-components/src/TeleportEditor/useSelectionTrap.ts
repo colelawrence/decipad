@@ -1,5 +1,5 @@
 import { MyEditor } from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import { useEffect } from 'react';
 
 /**

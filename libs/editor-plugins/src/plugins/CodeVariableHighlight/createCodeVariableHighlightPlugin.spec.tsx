@@ -7,7 +7,7 @@ import {
   MyValue,
 } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
-import { Plate } from '@udecode/plate';
+import { Plate } from '@udecode/plate-common';
 import { Computer, parseBlock } from '@decipad/computer';
 import { getDefined, timeout } from '@decipad/utils';
 import { ComputerContextProvider } from '@decipad/react-contexts';

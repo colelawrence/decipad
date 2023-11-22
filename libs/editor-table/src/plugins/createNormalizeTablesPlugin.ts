@@ -13,7 +13,7 @@ import {
   PlateEditor,
   TNodeEntry,
   Value,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { insertNodes } from '@decipad/editor-utils';
 import type { RemoteComputer } from '@decipad/remote-computer';
 import { tableFromLegacyTableInputElement } from '../utils/tableFromLegacyTableInputElement';

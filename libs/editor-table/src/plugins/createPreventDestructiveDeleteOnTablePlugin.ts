@@ -9,7 +9,7 @@ import {
   getEndPoint,
   getStartPoint,
   isCollapsed,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Point } from 'slate';
 
 export const createPreventDestructiveDeleteOnTablePlugin =

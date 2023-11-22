@@ -8,7 +8,7 @@ import { LiveQueryQuery as LiveQueryQueryUI } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { LiveQueryAIPanel } from '@decipad/editor-components';
 import { useContext } from 'react';
-import { insertText, findNodePath } from '@udecode/plate';
+import { insertText, findNodePath } from '@udecode/plate-common';
 import { useComputer } from '@decipad/react-contexts';
 import { AIPanelContext } from './LiveQuery';
 import { useLiveConnectionUrl } from '../hooks/useLiveConnectionUrl';

@@ -5,7 +5,7 @@ import {
   distinctUntilChanged,
   type Observable,
 } from 'rxjs';
-import type { PlateEditor } from '@udecode/plate';
+import type { PlateEditor } from '@udecode/plate-common';
 import { dequal } from '@decipad/utils';
 import debounce from 'lodash.debounce';
 import { EditorChangeContext } from '@decipad/react-contexts';

@@ -1,4 +1,4 @@
-import { normalizeEditor } from '@udecode/plate';
+import { normalizeEditor } from '@udecode/plate-common';
 import {
   createTPlateEditor,
   ELEMENT_CAPTION,

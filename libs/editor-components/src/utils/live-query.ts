@@ -8,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { insertNodes, requirePathBelowBlock } from '@decipad/editor-utils';
 import { generateVarName } from '@decipad/utils';
-import { TEditor, findNode, focusEditor, nanoid } from '@udecode/plate';
+import { TEditor, findNode, focusEditor, nanoid } from '@udecode/plate-common';
 import clone from 'lodash.clonedeep';
 import { Path } from 'slate';
 

@@ -14,12 +14,17 @@ module.exports = {
         alwaysTryTypes: true,
       },
     },
+    tailwindcss: {
+      callees: ['cn', 'cva'],
+      config: '../../tailwind.config.js',
+    },
   },
   extends: [
     'eslint:recommended',
     'eslint-config-airbnb-base',
     'plugin:jest/recommended',
     'plugin:playwright/jest-playwright',
+    'plugin:tailwindcss/recommended',
     'eslint-config-prettier',
     'plugin:prettier/recommended',
   ],
@@ -41,6 +46,9 @@ module.exports = {
       'error',
       { devDependencies: [...testFiles, '**/*.config.{js,jsx,ts,tsx}'] },
     ],
+
+    'tailwindcss/classnames-order': 'off',
+    'tailwindcss/no-custom-classname': 'off',
 
     'max-classes-per-file': 'off',
     'lines-between-class-members': 'off',

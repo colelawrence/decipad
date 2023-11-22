@@ -21,6 +21,8 @@ module.exports = {
     ],
     '@typescript-eslint/explicit-function-return-type': 'off',
 
+    'react/jsx-pascal-case': 'off',
+
     'no-console': ['error', { allow: ['error', 'warn', 'info'] }],
 
     // testing-library's waitFor is sometimes used in beforeEach and requires an expect inside

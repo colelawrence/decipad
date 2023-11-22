@@ -4,7 +4,7 @@ import {
   getLastNodeByLevel,
   getNodeString,
   insertElements,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 

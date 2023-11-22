@@ -7,7 +7,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { useComputer } from '@decipad/react-contexts';
 import { useBehaviorSubject } from '@decipad/react-utils';
 import { generateVarName, timeout } from '@decipad/utils';
-import { findNodePath, getNodeString, insertText } from '@udecode/plate';
+import { findNodePath, getNodeString, insertText } from '@udecode/plate-common';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { useSelected } from 'slate-react';

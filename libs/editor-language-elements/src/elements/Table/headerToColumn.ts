@@ -20,7 +20,7 @@ import {
   parseCell,
   getNullReplacementValue,
 } from '@decipad/parse';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { PromiseOrType } from '@decipad/utils';
 import { formulaSourceToColumnAssign } from './formulaSourceToColumnAssign';
 import { seriesColumn } from './seriesColumn';

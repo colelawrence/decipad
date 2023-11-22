@@ -7,7 +7,7 @@ import {
   insertText,
   isText,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import diff from 'fast-diff';
 import { Path, Point } from 'slate';
 

@@ -1,5 +1,5 @@
 import { Path } from 'slate';
-import { getNodeChildren, getNodeString, hasNode } from '@udecode/plate';
+import { getNodeChildren, getNodeString, hasNode } from '@udecode/plate-common';
 import { MyEditor } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 

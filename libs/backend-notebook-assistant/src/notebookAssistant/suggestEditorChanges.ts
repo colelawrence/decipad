@@ -11,7 +11,7 @@ import {
   isText,
   withoutNormalizing,
   TEditor,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { JSONPatchISOFormatOp } from 'jsondiffpatch';
 import stringify from 'json-stringify-safe';
 import set from 'lodash.set';

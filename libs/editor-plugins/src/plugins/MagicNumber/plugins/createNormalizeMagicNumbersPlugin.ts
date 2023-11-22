@@ -1,5 +1,5 @@
 import { insertNodes } from '@decipad/editor-utils';
-import { getNodeChildren, isElement, isText } from '@udecode/plate';
+import { getNodeChildren, isElement, isText } from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,

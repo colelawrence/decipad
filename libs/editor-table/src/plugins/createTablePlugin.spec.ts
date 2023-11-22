@@ -1,11 +1,12 @@
 import { MyValue } from '@decipad/editor-types';
 import {
-  createNodeIdPlugin,
   createPlateEditor,
   normalizeEditor,
   PlatePlugin,
   TEditor,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
+import { createNodeIdPlugin } from '@udecode/plate-node-id';
+
 import { Computer } from '@decipad/computer';
 import { nanoid } from 'nanoid';
 import fixtureDoc from '../__fixtures__/001_doc.json';

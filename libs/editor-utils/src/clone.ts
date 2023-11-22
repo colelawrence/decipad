@@ -1,6 +1,6 @@
 import stringify from 'json-stringify-safe';
 import cloneDeep from 'lodash.clonedeep';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { MyElement, MyNode } from '@decipad/editor-types';
 import { RemoteComputer } from '@decipad/remote-computer';

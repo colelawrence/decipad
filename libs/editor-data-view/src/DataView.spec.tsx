@@ -6,6 +6,7 @@ import {
   ELEMENT_DATA_VIEW_NAME,
   ELEMENT_DATA_VIEW_TH,
   ELEMENT_DATA_VIEW_TR,
+  ELEMENT_H1,
   H1Element,
   useTEditorRef,
 } from '@decipad/editor-types';
@@ -14,14 +15,9 @@ import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { ComputerContextProvider } from '@decipad/react-contexts';
 import { getDefined, timeout } from '@decipad/utils';
 import { act, render } from '@testing-library/react';
-import {
-  ELEMENT_H1,
-  Plate,
-  PlateEditor,
-  createPlateEditor,
-} from '@udecode/plate';
+import { createPlateEditor, Plate, PlateEditor } from '@udecode/plate-common';
 import getPort from 'get-port';
-import { Server, createServer } from 'http';
+import { createServer, Server } from 'http';
 import path from 'path';
 import { FC, PropsWithChildren, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -102,7 +98,7 @@ const WithProviders: FC<
     <DndProvider backend={HTML5Backend}>
       <ComputerContextProvider computer={computer}>
         <BrowserRouter>
-          <Plate editor={editor as PlateEditor}>{children}</Plate>
+          <Plate editor={editor as any}>{children}</Plate>
         </BrowserRouter>
       </ComputerContextProvider>
     </DndProvider>

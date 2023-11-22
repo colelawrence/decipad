@@ -4,7 +4,7 @@ import {
   MyEditor,
   MyValue,
 } from '@decipad/editor-types';
-import { PluginOptions, WithPlatePlugin } from '@udecode/plate';
+import { PluginOptions, WithPlatePlugin } from '@udecode/plate-common';
 import { createEditor } from 'slate';
 import { decorateExpression } from './decorateExpression';
 

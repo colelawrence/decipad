@@ -1,7 +1,11 @@
 import { useSelection } from '@decipad/editor-hooks';
 import { ELEMENT_TABLE, useTEditorRef } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
-import { getAboveNode, getNodeString, isCollapsed } from '@udecode/plate';
+import {
+  getAboveNode,
+  getNodeString,
+  isCollapsed,
+} from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 export const useTableCaption = (): string | undefined => {

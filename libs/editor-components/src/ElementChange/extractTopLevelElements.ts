@@ -1,6 +1,6 @@
 import { ELEMENT_COLUMNS, ELEMENT_TAB } from '@decipad/editor-types';
 import { AnyElement, RootDocument } from '../../../editor-types/src/value';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 
 export const extractTopLevelElements = (
   base: RootDocument | AnyElement

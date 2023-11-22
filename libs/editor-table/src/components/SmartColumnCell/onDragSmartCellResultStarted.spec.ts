@@ -6,8 +6,8 @@ import {
   onDragSmartCellResultStarted,
 } from './onDragSmartCellResultStarted';
 
-jest.mock('@udecode/plate', () => ({
-  ...jest.requireActual('@udecode/plate'),
+jest.mock('@udecode/plate-common', () => ({
+  ...jest.requireActual('@udecode/plate-common'),
   findNodePath: () => [],
   getNodeString: () => '',
 }));

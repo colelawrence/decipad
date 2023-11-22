@@ -1,4 +1,4 @@
-import { createPlateEditor, TEditor } from '@udecode/plate';
+import { createPlateEditor, TEditor } from '@udecode/plate-common';
 import { Point } from 'slate';
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import {

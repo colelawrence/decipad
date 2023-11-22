@@ -25,7 +25,7 @@ import {
 } from '@decipad/react-contexts';
 import { PotentialFormulaHighlight as UIPotentialFormulaHighlight } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
-import { findNodePath, getEndPoint, getNodeString } from '@udecode/plate';
+import { findNodePath, getEndPoint, getNodeString } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { useCallback, useContext, useEffect } from 'react';
 import { BaseRange, Path, Point } from 'slate';

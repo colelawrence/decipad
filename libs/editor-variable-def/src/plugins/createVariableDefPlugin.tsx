@@ -1,4 +1,4 @@
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import {
   ELEMENT_CAPTION,
   ELEMENT_DROPDOWN,

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { MyElement, MyReactEditor } from '@decipad/editor-types';
 import { useCallback, useEffect, useRef } from 'react';
-import { setNodes } from '@udecode/plate';
+import { setNodes } from '@udecode/plate-common';
 import { Path } from 'slate';
 
 const isTesting = !!process.env.JEST_WORKER_ID;

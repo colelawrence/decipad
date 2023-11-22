@@ -14,7 +14,7 @@ import {
   isElement,
   Value,
   PlateEditor,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { getAboveNodeSafe, isElementOfType } from '@decipad/editor-utils';
 import { Range } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';

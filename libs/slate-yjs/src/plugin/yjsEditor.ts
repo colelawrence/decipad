@@ -5,7 +5,7 @@ import {
   isHistoryEditor,
   TOperation,
   withoutSavingHistory,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { MinimalRootEditor } from '@decipad/editor-types';

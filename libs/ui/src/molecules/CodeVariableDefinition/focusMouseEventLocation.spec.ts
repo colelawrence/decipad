@@ -1,12 +1,12 @@
-import * as plate from '@udecode/plate';
-import { TElement } from '@udecode/plate';
+import * as plate from '@udecode/plate-common';
+import { TElement } from '@udecode/plate-common';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import { MouseEvent } from 'react';
 import { focusMouseEventLocation } from './CodeVariableDefinition';
 
-jest.mock('@udecode/plate', () => ({
+jest.mock('@udecode/plate-common', () => ({
   __esModule: true,
-  ...jest.requireActual('@udecode/plate'),
+  ...jest.requireActual('@udecode/plate-common'),
 }));
 
 describe('focusMouseEventLocation', () => {

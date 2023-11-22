@@ -2,7 +2,9 @@ import { Computer } from '@decipad/computer';
 import {
   CodeLineElement,
   createTPlateEditor,
+  ELEMENT_CODE_LINE,
   ELEMENT_SMART_REF,
+  ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,
   ELEMENT_TH,
@@ -11,8 +13,7 @@ import {
   MyValue,
   TableElement,
 } from '@decipad/editor-types';
-import { ELEMENT_CODE_LINE, ELEMENT_TABLE } from '@udecode/plate';
-import { createCodeLine, convertCodeSmartRefs } from '@decipad/editor-utils';
+import { convertCodeSmartRefs, createCodeLine } from '@decipad/editor-utils';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { timeout } from '@decipad/utils';
 import { BaseEditor, Editor } from 'slate';

@@ -1,7 +1,7 @@
 import { noop } from '@decipad/utils';
 import { render } from '@testing-library/react';
 import { Editable, Slate } from 'slate-react';
-import { createTEditor, withTReact } from '@udecode/plate';
+import { createTEditor, withTReact } from '@udecode/plate-common';
 import { findDomNodePath } from './findDomNodePath';
 
 describe('findDomNodePath', () => {

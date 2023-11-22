@@ -1,10 +1,11 @@
 import {
   createMediaEmbedPlugin as _createMediaEmbedPlugin,
-  getPluginType,
-  PlateEditor,
+  parseTwitterUrl,
+  parseVideoUrl,
   TMediaEmbedElement,
-  Value,
-} from '@udecode/plate';
+} from '@udecode/plate-media';
+
+import { getPluginType, PlateEditor, Value } from '@udecode/plate-common';
 import { ELEMENT_MEDIA_EMBED } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { insertNodes } from '@decipad/editor-utils';
@@ -24,25 +25,18 @@ export const insertMediaEmbed = <V extends Value>(
 
 export const createMediaEmbedPlugin = () =>
   _createMediaEmbedPlugin({
-    withOverrides: (editor, { options }) => {
+    withOverrides: (editor) => {
       const { insertData } = editor;
 
       // eslint-disable-next-line no-param-reassign
       editor.insertData = (dataTransfer) => {
         const text = dataTransfer.getData('text/plain');
 
-        const { rules } = options;
+        const parsed = parseVideoUrl(text) || parseTwitterUrl(text);
 
-        if (rules) {
-          for (const rule of rules) {
-            const parsed = rule.parser(text);
-
-            if (parsed?.provider) {
-              insertMediaEmbed(editor, parsed.url!);
-
-              return;
-            }
-          }
+        if (parsed?.provider) {
+          insertMediaEmbed(editor, parsed.url!);
+          return;
         }
 
         insertData(dataTransfer);

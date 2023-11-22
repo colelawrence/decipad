@@ -1,10 +1,10 @@
 import {
-  TNodeEntry,
   getNode,
   hasNode,
   insertNodes,
+  TNodeEntry,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Action, ActionParams, RequiresNotebookAction } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { notAcceptable } from '@hapi/boom';

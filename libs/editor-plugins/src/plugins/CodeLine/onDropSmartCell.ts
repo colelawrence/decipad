@@ -9,7 +9,7 @@ import {
 } from '@decipad/editor-types';
 import { getSlateFragment, selectEventRange } from '@decipad/editor-utils';
 import { cursorStore } from '@decipad/react-contexts';
-import { getBlockAbove } from '@udecode/plate';
+import { getBlockAbove } from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import React from 'react';
 

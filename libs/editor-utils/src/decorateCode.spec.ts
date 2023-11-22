@@ -22,13 +22,13 @@ import {
 import { getDefined, getOnly } from '@decipad/utils';
 import {
   createPlateEditor,
-  ELEMENT_TABLE,
   findNode,
   getSelectionText,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { NodeEntry, Path } from 'slate';
 import { decorateCode, getRootNodeId } from './decorateCode';
 import { insertNodes } from './insertNodes';
+import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 let editor = createTPlateEditor({});
 const computer = new Computer();

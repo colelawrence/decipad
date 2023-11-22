@@ -1,4 +1,4 @@
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
 import { Path } from 'slate';
 import { debug } from './debug';

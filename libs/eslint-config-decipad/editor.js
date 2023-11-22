@@ -1,4 +1,4 @@
-const plate = require('@udecode/plate');
+const plate = require('@udecode/plate-common');
 
 module.exports = {
   plugins: ['unused-imports'],
@@ -20,14 +20,14 @@ module.exports = {
       {
         paths: [
           {
-            name: '@udecode/plate',
+            name: '@udecode/plate-common',
             importNames: Object.keys(plate).filter((importName) =>
               /^(ELEMENT|MARK)_/.test(importName)
             ),
             message: 'Use editor element/mark kinds definition',
           },
           {
-            name: '@udecode/plate',
+            name: '@udecode/plate-common',
             importNames: ['useEditorState'],
             message:
               'useEditorState updates the calling component everytime anything changes anywhere else in the editor.',
@@ -43,25 +43,25 @@ module.exports = {
               'We do not usually set the entire editor to readOnly. Import useIsEditorReadOnly instead.',
           },
           {
-            name: '@udecode/plate',
+            name: '@udecode/plate-common',
             importNames: ['insertNodes'],
             message:
               'Node insertion should be done through @decipad/editor-utils',
           },
           {
-            name: '@udecode/plate',
+            name: '@udecode/plate-common',
             importNames: ['getAboveNode'],
             message:
               'Should use the safe version getAboveNodeSafe in @decipad/editor-utils',
           },
           {
-            name: '@udecode/plate',
+            name: '@udecode/plate-common',
             importNames: ['getNodeEntry'],
             message:
               'Should use the safe version getNodeEntrySafe in @decipad/editor-utils',
           },
           {
-            name: '@udecode/plate',
+            name: '@udecode/plate-common',
             importNames: ['setSelection'],
             message:
               'Should use the safe version setSelection in @decipad/editor-utils',

@@ -1,4 +1,4 @@
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { MySerializeHtml } from '@decipad/editor-types';
 
 export const serializeCalloutHtml: MySerializeHtml = ({ element }) => {

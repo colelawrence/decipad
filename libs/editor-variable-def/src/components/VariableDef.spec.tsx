@@ -13,7 +13,7 @@ import {
   PlateEditor,
   PlatePlugin,
   PlateProps,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { VariableDef } from './VariableDef';

@@ -7,7 +7,7 @@ import {
   ELEMENT_UL,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeListPlugin } from './createNormalizeListPlugin';
 
 let editor: TEditor;

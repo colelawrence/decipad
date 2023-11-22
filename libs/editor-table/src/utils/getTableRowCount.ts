@@ -1,5 +1,5 @@
 import { Path } from 'slate';
-import { getNodeChildren } from '@udecode/plate';
+import { getNodeChildren } from '@udecode/plate-common';
 import { MyEditor } from '@decipad/editor-types';
 
 export const getTableRowCount = (editor: MyEditor, tablePath: Path): number => {

@@ -5,7 +5,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { ColumnDndPreview as UIColumnDndPreview } from '@decipad/ui';
-import { TNodeEntry, findNode } from '@udecode/plate';
+import { TNodeEntry, findNode } from '@udecode/plate-common';
 import { CSSProperties, useMemo } from 'react';
 
 const previewOpacity = 0.7;

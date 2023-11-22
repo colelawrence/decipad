@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import { captureException } from '@sentry/browser';
 import { SharedType } from '../model';
 import node from './node';

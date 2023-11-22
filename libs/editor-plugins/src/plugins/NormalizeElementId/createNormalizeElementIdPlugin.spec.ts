@@ -1,5 +1,5 @@
 import { createTPlateEditor, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeElementIdPlugin } from './createNormalizeElementIdPlugin';
 
 let editor: TEditor;

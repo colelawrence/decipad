@@ -1,7 +1,7 @@
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { act, render, waitFor } from '@testing-library/react';
+import { createParagraphPlugin } from '@udecode/plate-paragraph';
 import {
-  createParagraphPlugin,
   createPlateEditor,
   createPlugins,
   deleteText,
@@ -10,7 +10,7 @@ import {
   PlateEditor,
   PlateProps,
   select,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { findDomNodePath } from '@decipad/editor-utils';

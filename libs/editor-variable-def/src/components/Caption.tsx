@@ -7,7 +7,7 @@ import {
   useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import { getNodeString, isElement } from '@udecode/plate';
+import { getNodeString, isElement } from '@udecode/plate-common';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 import {
   usePathMutatorCallback,

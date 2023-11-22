@@ -8,7 +8,7 @@ import {
   PlateEditor,
   PlatePlugin,
   PlateProps,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Expression } from './Expression';
 import { BrowserRouter } from 'react-router-dom';
 

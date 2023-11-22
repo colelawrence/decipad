@@ -6,7 +6,6 @@ import {
 import { MyEditor, MyElement, TopLevelValue } from '@decipad/editor-types';
 import { requirePathBelowBlock, setSelection } from '@decipad/editor-utils';
 import {
-  TNodeEntry,
   findNode,
   findNodePath,
   getStartPoint,
@@ -14,8 +13,9 @@ import {
   insertElements,
   removeNodes,
   setNodes,
+  TNodeEntry,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   blockSelectionSelectors,
   blockSelectionStore,

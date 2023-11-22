@@ -15,6 +15,7 @@ export * from './Media/Image';
 export * from './Media/MediaEmbed';
 export * from './TeleportEditor';
 export * from './block-management';
+export * from './plate-ui';
 export * from './hooks';
 export * from './text';
 export * from './utils';

@@ -178,59 +178,61 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
       <Popover.Trigger css={{ width: '100%', cursor: 'inherit' }}>
         {children}
       </Popover.Trigger>
-      <Popover.Content>
-        <div css={styles}>
-          <div css={mainStyles}>
-            {Object.entries(splitGroups).map(([key, items]) => (
-              <DropdownMenuGroup
-                key={key}
-                title={key.length === 0 ? undefined : key}
-                items={items}
-                onExecute={onExecute}
-                onEditOption={onEditOption}
-                onRemoveOption={onRemoveOption}
-                isEditingAllowed={isEditingAllowed}
-                focusedItem={focusedItem}
-              />
-            ))}
-            {!isReadOnly && showInput && (
-              <DropdownOption
-                value={inputValue}
-                setValue={setInputValue}
-                error={error}
-              />
-            )}
-          </div>
-
-          {!isReadOnly && isEditingAllowed && (
-            <div
-              css={footerStyles}
-              onClick={() => {
-                if (addingNew) {
-                  addOption(inputValue);
-                  setInputValue('');
-                  setAddingNew(false);
-                } else {
-                  setAddingNew(true);
-                }
-              }}
-            >
-              {addingNew ? (
-                <>
-                  Press <span css={hotKeyStyle}>Enter</span> to save
-                </>
-              ) : (
-                <>
-                  <div css={{ width: 16, height: 16 }}>
-                    <Plus />
-                  </div>
-                  Add new
-                </>
+      <Popover.Portal>
+        <Popover.Content style={{ zIndex: '100' }}>
+          <div css={styles}>
+            <div css={mainStyles}>
+              {Object.entries(splitGroups).map(([key, items]) => (
+                <DropdownMenuGroup
+                  key={key}
+                  title={key.length === 0 ? undefined : key}
+                  items={items}
+                  onExecute={onExecute}
+                  onEditOption={onEditOption}
+                  onRemoveOption={onRemoveOption}
+                  isEditingAllowed={isEditingAllowed}
+                  focusedItem={focusedItem}
+                />
+              ))}
+              {!isReadOnly && showInput && (
+                <DropdownOption
+                  value={inputValue}
+                  setValue={setInputValue}
+                  error={error}
+                />
               )}
             </div>
-          )}
-        </div>
-      </Popover.Content>
+
+            {!isReadOnly && isEditingAllowed && (
+              <div
+                css={footerStyles}
+                onClick={() => {
+                  if (addingNew) {
+                    addOption(inputValue);
+                    setInputValue('');
+                    setAddingNew(false);
+                  } else {
+                    setAddingNew(true);
+                  }
+                }}
+              >
+                {addingNew ? (
+                  <>
+                    Press <span css={hotKeyStyle}>Enter</span> to save
+                  </>
+                ) : (
+                  <>
+                    <div css={{ width: 16, height: 16 }}>
+                      <Plus />
+                    </div>
+                    Add new
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </Popover.Content>
+      </Popover.Portal>
     </Popover.Root>
   );
 };

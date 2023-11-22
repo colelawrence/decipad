@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import { Computer } from '@decipad/computer';
 import { timeout } from '@decipad/utils';
-import { insertNodes, removeNodes, setNodes } from '@udecode/plate';
+import { insertNodes, removeNodes, setNodes } from '@udecode/plate-common';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { withUpdateComputerOverride } from './withUpdateComputerOverride';
 

@@ -1,9 +1,9 @@
 import {
-  TNodeEntry,
   getNode,
   hasNode,
+  TNodeEntry,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Action, ActionParams, NotebookActionHandler } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';

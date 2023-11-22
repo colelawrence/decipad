@@ -1,5 +1,5 @@
 import { MyEditor } from '@decipad/editor-types';
-import { getPoint } from '@udecode/plate';
+import { getPoint } from '@udecode/plate-common';
 import { EditorPointOptions, Location } from 'slate';
 
 export const getPointSafe = (

@@ -13,7 +13,7 @@ import {
   TableElement,
 } from '@decipad/editor-types';
 import { BaseEditor, Editor } from 'slate';
-import { findNode } from '@udecode/plate';
+import { findNode } from '@udecode/plate-common';
 import { isElementOfType } from '@decipad/editor-utils';
 import { createSmartRefPlugin } from '../createSmartRefPlugin';
 

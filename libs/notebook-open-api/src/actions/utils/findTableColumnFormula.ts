@@ -5,7 +5,7 @@ import {
   TableHeaderElement,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
-import { TNodeEntry, findNode } from '@udecode/plate';
+import { findNode, TNodeEntry } from '@udecode/plate-common';
 
 export const findTableColumnFormula = (
   editor: MyEditor,

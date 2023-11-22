@@ -7,7 +7,7 @@ import {
   Value,
   TNodeProps,
   TEditor,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { pluginStore } from '@decipad/editor-utils';
 import { Node, NodeEntry } from 'slate';

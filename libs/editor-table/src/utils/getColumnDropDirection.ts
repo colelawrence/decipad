@@ -1,5 +1,5 @@
 import { MyEditor, MyElement } from '@decipad/editor-types';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { ColumnDropLine } from '../contexts/TableDndContext';
 
 export const getColumnDropDirection = (

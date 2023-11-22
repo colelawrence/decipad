@@ -1,5 +1,5 @@
 import { Path } from 'slate';
-import { isBlock, isElement, isText, TEditor } from '@udecode/plate';
+import { isBlock, isElement, isText, TEditor } from '@udecode/plate-common';
 import { getAboveNodeSafe } from './getAboveNodeSafe';
 import { getNodeEntrySafe } from './getNodeEntrySafe';
 

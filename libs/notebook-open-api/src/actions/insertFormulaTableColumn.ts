@@ -4,7 +4,7 @@ import {
   withoutNormalizing,
   TPath,
   insertText,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TH,

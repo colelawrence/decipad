@@ -1,5 +1,5 @@
 import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
-import { createPlateEditor, TEditor, TElement } from '@udecode/plate';
+import { createPlateEditor, TEditor, TElement } from '@udecode/plate-common';
 import {
   getBlockParentPath,
   requireBlockParentPath,

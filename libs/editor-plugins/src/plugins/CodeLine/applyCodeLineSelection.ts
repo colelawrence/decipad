@@ -9,7 +9,7 @@ import {
   someNode,
   TNodeEntry,
   TOperation,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { normalizeCodeLineSpace } from './normalizeCodeLineSpace';
 
 export const applyCodeLineSelection = (editor: MyEditor, op: TOperation) => {

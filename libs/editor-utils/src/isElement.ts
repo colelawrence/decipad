@@ -1,5 +1,5 @@
 import { AnyElement, allElementKinds } from '@decipad/editor-types';
-import { TElement } from '@udecode/plate';
+import { TElement } from '@udecode/plate-common';
 import { Node } from 'slate';
 
 export function isElement(

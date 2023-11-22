@@ -4,7 +4,7 @@ import {
   MyEditor,
 } from '@decipad/editor-types';
 import { ACItemType } from '@decipad/ui';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { BasePoint } from 'slate';
 import { setSelection } from '@decipad/editor-utils';
 import { commitAutocompleteItem } from './commitAutocompleteItem';

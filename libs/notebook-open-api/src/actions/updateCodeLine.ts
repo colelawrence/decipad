@@ -3,7 +3,7 @@ import {
   findNode,
   withoutNormalizing,
   TNodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,

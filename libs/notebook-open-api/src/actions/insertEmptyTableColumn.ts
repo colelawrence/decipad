@@ -1,4 +1,4 @@
-import { insertNodes, getNode } from '@udecode/plate';
+import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { ELEMENT_TH, TableHeaderElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';

@@ -10,7 +10,7 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   MyElement,
 } from '@decipad/editor-types';
-import { Plate, getNodeString } from '@udecode/plate';
+import { Plate, getNodeString } from '@udecode/plate-common';
 import { useState } from 'react';
 
 import { AST, parseSimpleValueUnit, prettyPrintAST } from '@decipad/computer';

@@ -10,7 +10,7 @@ import {
   assertElementType,
   getResultErrorMessage,
 } from '@decipad/editor-utils';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { selectErrorFromResult } from '@decipad/computer';
 import { useComputer } from '@decipad/react-contexts';
 import { useSelection } from '@decipad/editor-hooks';

@@ -87,6 +87,8 @@ export async function writeInTable(
   col = 0,
   tableName?: string
 ) {
+  // Clicking once doesn't always select the cell
+  await clickCell(page, line, col, tableName);
   await clickCell(page, line, col, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);

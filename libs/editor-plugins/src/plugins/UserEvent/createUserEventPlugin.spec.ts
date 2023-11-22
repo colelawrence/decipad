@@ -9,7 +9,7 @@ import {
   ELEMENT_EXPRESSION,
 } from '@decipad/editor-types';
 import { insertNodes } from '@decipad/editor-utils';
-import { TEditor } from '@udecode/plate';
+import { TEditor } from '@udecode/plate-common';
 import { ChecklistEvent } from 'libs/client-events/src/checklist';
 import { nanoid } from 'nanoid';
 import { createUserEventPlugin } from './createUserEventPlugin';

@@ -3,7 +3,7 @@ import {
   ELEMENT_H2,
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
-import { createPlateEditor, select, TEditor } from '@udecode/plate';
+import { createPlateEditor, select, TEditor } from '@udecode/plate-common';
 import { autoformatMarks } from './autoformatMarks';
 
 const initialText = '__*t';

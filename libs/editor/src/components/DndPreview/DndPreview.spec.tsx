@@ -1,5 +1,5 @@
 import { cleanup, render, waitFor } from '@testing-library/react';
-import { useEditorRef } from '@udecode/plate';
+import { useEditorRef } from '@udecode/plate-common';
 import { DndPreview } from './DndPreview';
 
 jest.mock('react-dnd-preview', () => ({
@@ -13,8 +13,8 @@ const editor = {
   previewRef: null,
 };
 
-jest.mock('@udecode/plate', () => ({
-  ...jest.requireActual('@udecode/plate'),
+jest.mock('@udecode/plate-common', () => ({
+  ...jest.requireActual('@udecode/plate-common'),
   useEditorRef: () => editor,
 }));
 

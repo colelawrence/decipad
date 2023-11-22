@@ -1,8 +1,9 @@
 import { useSelected } from 'slate-react';
-import { getTableGridAbove, useEditorRef } from '@udecode/plate';
+import { useEditorRef } from '@udecode/plate-common';
 import { useEffect } from 'react';
 import { dequal } from '@decipad/utils';
 import { useTableStore } from '../../contexts/tableStore';
+import { getTableGridAbove } from '@udecode/plate-table';
 
 export const useSelectedCells = () => {
   const selected = useSelected();

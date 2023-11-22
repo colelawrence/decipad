@@ -8,7 +8,12 @@ import {
   insertImageBelow,
   requireCollapsedSelection,
 } from '@decipad/editor-utils';
-import { deleteText, getEditorString, isText, wrapNodes } from '@udecode/plate';
+import {
+  deleteText,
+  getEditorString,
+  isText,
+  wrapNodes,
+} from '@udecode/plate-common';
 import { BasePoint } from 'slate';
 import { getTrailingImage } from '../../utils/image';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';

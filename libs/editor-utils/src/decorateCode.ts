@@ -7,7 +7,7 @@ import {
   Value,
   getNodeString,
   getPointAfter,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   MyDecorate,
   ELEMENT_CODE_LINE,

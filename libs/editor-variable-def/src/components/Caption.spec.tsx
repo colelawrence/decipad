@@ -8,7 +8,7 @@ import {
   PlateEditor,
   PlatePlugin,
   PlateProps,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Caption } from './Caption';
 
 let plateProps: PlateProps;

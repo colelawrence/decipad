@@ -11,8 +11,8 @@ import {
 } from '@decipad/slate-yjs';
 import { IndexeddbPersistence } from '@decipad/y-indexeddb';
 import {
-  TWebSocketProvider,
   createWebsocketProvider,
+  TWebSocketProvider,
 } from '@decipad/y-websocket';
 import { supports } from '@decipad/support';
 import { MinimalRootEditor } from '@decipad/editor-types';

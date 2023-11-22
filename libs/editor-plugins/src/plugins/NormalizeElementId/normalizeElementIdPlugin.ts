@@ -5,7 +5,7 @@ import {
   Value,
   isElement,
   setNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { MyGenericEditor } from '@decipad/editor-types';
 import { NormalizerReturnValue } from '../../pluginFactories';

@@ -3,11 +3,10 @@ import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, useMemo } from 'react';
 import { CellInput } from '../../atoms';
-import { captionStyles, captionTextareaStyles } from '../MediaEmbed/styles';
 import { PlotParams } from '../PlotParams/PlotParams';
 import { PlotResult } from '../PlotResult/PlotResult';
 import { initializeVega } from './initializeVega';
-import { cssVar } from '../../primitives';
+import { cssVar, p14Regular } from '../../primitives';
 
 const plotTitleStyles = css({
   position: 'absolute',
@@ -91,8 +90,22 @@ export const PlotBlock = ({
 
       <div
         css={[
-          captionStyles,
-          { input: captionTextareaStyles },
+          { cursor: 'text' },
+          {
+            input: css(p14Regular, {
+              padding: '0',
+              marginTop: 8,
+              width: '100%',
+              borderStyle: 'none',
+              resize: 'none',
+
+              color: 'inherit',
+              overflowY: 'hidden',
+              backgroundColor: 'inherit',
+              textAlign: 'center',
+              ':focus': { '::placeholder': { opacity: 0 } },
+            }),
+          },
           { input: { fontVariantNumeric: 'unset' } },
         ]}
       >

@@ -1,4 +1,4 @@
-import { createPluginFactory } from '@udecode/plate';
+import { createPluginFactory } from '@udecode/plate-common';
 import { onKeyDownExitBreak } from './onKeyDownExitBreak';
 
 export const KEY_EXIT_BREAK = 'exitBreak';

@@ -1,5 +1,5 @@
 import { MyElement } from '@decipad/editor-types';
-import { TNodeEntry } from '@udecode/plate';
+import { TNodeEntry } from '@udecode/plate-common';
 import { NodeEntry } from 'slate';
 import { isElement } from './isElement';
 

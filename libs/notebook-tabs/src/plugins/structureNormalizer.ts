@@ -1,14 +1,15 @@
 import {
+  AnyElement,
+  createTPluginFactory,
+  ELEMENT_H1,
+  ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
   ELEMENT_TITLE,
-  createTPluginFactory,
   NotebookValue,
-  ELEMENT_PARAGRAPH,
-  AnyElement,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { IsTab } from '../utils';
-import { ELEMENT_H1, isElement, withoutNormalizing } from '@udecode/plate';
+import { isElement, withoutNormalizing } from '@udecode/plate-common';
 
 export const createStructureNormalizer = createTPluginFactory<
   {},

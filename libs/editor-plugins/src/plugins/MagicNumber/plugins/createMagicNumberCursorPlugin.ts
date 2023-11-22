@@ -4,7 +4,7 @@ import {
   hasNode,
   isCollapsed,
   isText,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { getNodeEntrySafe, setSelection } from '@decipad/editor-utils';
 import { createOnCursorChangePluginFactory } from '../../../pluginFactories';
 import { isMagicNumber } from '../utils/isMagicNumber';

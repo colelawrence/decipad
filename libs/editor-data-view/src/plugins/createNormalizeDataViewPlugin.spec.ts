@@ -15,7 +15,7 @@ import {
   TableElement,
   createTPlateEditor,
 } from '@decipad/editor-types';
-import { TEditor, findNode, normalizeEditor } from '@udecode/plate';
+import { TEditor, findNode, normalizeEditor } from '@udecode/plate-common';
 import { createNormalizeDataViewPlugin } from './createNormalizeDataViewPlugin';
 
 describe('createNormalizeDataViewPlugin', () => {

@@ -1,14 +1,15 @@
 import {
   ELEMENT_TABLE,
+  ELEMENT_TD,
   ELEMENT_TH,
   MyEditor,
   MyNodeEntry,
   TableCellElement,
 } from '@decipad/editor-types';
-import { ELEMENT_TD, insertText, isElement } from '@udecode/plate';
+import { insertText, isElement } from '@udecode/plate-common';
 import {
-  NormalizerReturnValue,
   createNormalizerPluginFactory,
+  NormalizerReturnValue,
 } from '../../pluginFactories';
 import { assertElementType } from '@decipad/editor-utils';
 

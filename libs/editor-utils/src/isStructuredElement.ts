@@ -6,7 +6,7 @@ import {
   IntegrationTypes,
   StructuredInputElement,
 } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 
 const types = [
   ELEMENT_STRUCTURED_IN,

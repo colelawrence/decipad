@@ -19,7 +19,7 @@ import {
   getEndPoint,
   getNextNode,
   getNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { insertNodes } from './insertNodes';

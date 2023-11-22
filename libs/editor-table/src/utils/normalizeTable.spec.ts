@@ -3,7 +3,7 @@ import { insertTableBelow } from '@decipad/editor-components';
 import { MyEditor, MyValue, TableElement } from '@decipad/editor-types';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';
-import { createTEditor } from '@udecode/plate';
+import { createTEditor } from '@udecode/plate-common';
 import { NodeEntry } from 'slate';
 import { normalizeTable } from './normalizeTable';
 

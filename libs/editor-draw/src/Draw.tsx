@@ -7,17 +7,17 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import { Draw as UIDraw } from '@decipad/ui/src/organisms/Draw/Draw';
+import { Draw as UIDraw } from '../../editor-components/src/plate-ui/draw';
 import cloneDeep from 'lodash.clonedeep';
 import { MutableRefObject, useCallback, useRef, useState } from 'react';
 import { DraggableBlock } from '@decipad/editor-components';
 import { dequal } from '@decipad/utils';
 import { unfixElements } from './fixElement';
-import { ExcalidrawRef, ExcalidrawImperativeAPI } from './types';
+import { ExcalidrawImperativeAPI, ExcalidrawRef } from './types';
 import { useApplyEditorChanges } from './useApplyEditorChanges';
 import { useApplyUserChanges } from './useApplyUserChanges';
 
-export const Draw: PlateComponent = ({ element, attributes }) => {
+export const Draw: PlateComponent = ({ element, attributes, className }) => {
   assertElementType(element, ELEMENT_DRAW);
 
   const editor = useTEditorRef();
@@ -58,6 +58,7 @@ export const Draw: PlateComponent = ({ element, attributes }) => {
 
   return (
     <UIDraw
+      className={className}
       excalidrawRef={excalidrawRef}
       draggableBlock={DraggableBlock}
       readOnly={readOnly}

@@ -37,7 +37,7 @@ import {
   select,
   setNodes,
   toDOMNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { BaseRange, Point } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { getTextBeforeCursor } from './utils';

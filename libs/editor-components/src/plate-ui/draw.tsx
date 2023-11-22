@@ -1,4 +1,3 @@
-/* eslint decipad/css-prop-named-variable: 0 */
 import {
   DrawElement,
   DrawElementDescendant,
@@ -10,12 +9,9 @@ import {
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { THEME } from '@excalidraw/excalidraw';
-import {
-  ExcalidrawDataState,
-  ExcalidrawElement,
-  ExcalidrawElementProps,
-} from '@udecode/plate-ui-excalidraw';
+import { ExcalidrawDataState } from '@udecode/plate-excalidraw';
 import {
   ComponentProps,
   FC,
@@ -24,8 +20,12 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { blue200, blue300, cssVar } from '../../primitives';
-import { DraggableBlock } from '../DraggableBlock/DraggableBlock';
+import { blue200, blue300, cssVar, DraggableBlock } from '@decipad/ui';
+import {
+  ExcalidrawElement,
+  ExcalidrawProps,
+  ExcalidrawRef,
+} from './excalidraw-element';
 
 const drawStyles = css({
   display: 'block',
@@ -36,10 +36,6 @@ const drawStyles = css({
   border: 0,
 });
 
-type ExcalidrawProps = NonNullable<
-  ExcalidrawElementProps<DrawElementDescendant[]>['excalidrawProps']
->;
-type ExcalidrawRef = NonNullable<ExcalidrawProps['excalidrawRef']>;
 type AppState = NonNullable<ExcalidrawDataState['appState']>;
 type ExcalidrawDrawElement = Omit<DrawElementDescendant, 'children'>;
 
@@ -95,7 +91,7 @@ const inferInteracting = (appState: AppState): boolean => {
 };
 
 const ExcalidrawElementWithRef: FC<
-  ComponentProps<typeof ExcalidrawElement> & {
+  ExcalidrawProps & {
     excalidrawProps?: { ref?: ExcalidrawRef };
   }
 > = ExcalidrawElement;

@@ -1,7 +1,7 @@
 import stringify from 'json-stringify-safe';
 import { MyDecorate } from '@decipad/editor-types';
 import { Range } from 'slate';
-import { ENode, PlateEditor, Value, getRange } from '@udecode/plate';
+import { ENode, PlateEditor, Value, getRange } from '@udecode/plate-common';
 
 interface CacheEntry<P, TV extends Value, TE extends PlateEditor<TV>> {
   /** The same object might deserve a second annotate call */

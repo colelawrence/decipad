@@ -5,7 +5,7 @@ import {
   MyEditor,
   ParagraphElement,
 } from '@decipad/editor-types';
-import { createPlateEditor } from '@udecode/plate';
+import { createPlateEditor } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { insertNodes } from './insertNodes';
 import { mutateText } from './mutateText';

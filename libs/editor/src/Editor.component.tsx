@@ -12,7 +12,7 @@ import {
 import { useWindowListener, useCanUseDom } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
-import { Plate } from '@udecode/plate';
+import { Plate } from '@udecode/plate-common';
 import { EditorLayout } from 'libs/ui/src/atoms';
 import { ReactNode, RefObject, useCallback, useContext, useRef } from 'react';
 import { ReactEditor } from 'slate-react';

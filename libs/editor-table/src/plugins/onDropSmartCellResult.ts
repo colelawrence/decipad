@@ -21,7 +21,7 @@ import {
   isElementEmpty,
   isText,
   removeNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { dndStore } from '@udecode/plate-dnd';
 import { nanoid } from 'nanoid';
 import { DragEvent } from 'react';

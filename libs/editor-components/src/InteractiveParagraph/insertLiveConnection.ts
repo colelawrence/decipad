@@ -18,7 +18,7 @@ import { isFlagEnabled } from '@decipad/feature-flags';
 import { ExternalProvider } from '@decipad/graphql-client';
 import { tryImport } from '@decipad/import';
 import { generateVarName, getDefined, noop, timeout } from '@decipad/utils';
-import { isCollapsed, withoutNormalizing } from '@udecode/plate';
+import { isCollapsed, withoutNormalizing } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { insertExternalData } from '../utils/insertExternalData';

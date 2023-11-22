@@ -7,14 +7,14 @@ import {
   MyEditor,
 } from '@decipad/editor-types';
 // eslint-disable-next-line no-restricted-imports
-import * as plate from '@udecode/plate';
+import * as plate from '@udecode/plate-common';
 import { DragEvent } from 'react';
 import { onDragStartTableCellResult } from '@decipad/editor-components';
 import { onDropTableCellResult } from './onDropTableCellResult';
 
-jest.mock('@udecode/plate', () => ({
+jest.mock('@udecode/plate-common', () => ({
   __esModule: true,
-  ...jest.requireActual('@udecode/plate'),
+  ...jest.requireActual('@udecode/plate-common'),
 }));
 
 const testStorage = new Map();

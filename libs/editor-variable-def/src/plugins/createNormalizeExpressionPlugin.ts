@@ -15,7 +15,7 @@ import {
   isText,
   removeNodes,
   unwrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 
 const normalizeExpression =
   (editor: MyEditor) =>

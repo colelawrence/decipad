@@ -25,7 +25,7 @@ import {
   generateInputName,
   generateSliderName,
 } from '@decipad/utils';
-import { getEndPoint, getStartPoint } from '@udecode/plate';
+import { getEndPoint, getStartPoint } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 

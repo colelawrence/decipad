@@ -10,7 +10,7 @@ import {
   focusEditor,
   getStartPoint,
   someNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   HTMLAttributes,
   MouseEvent,

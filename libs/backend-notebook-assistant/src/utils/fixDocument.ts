@@ -2,14 +2,11 @@
 import {
   type AnyElement,
   ELEMENT_DATA_VIEW,
-  type RootDocument,
-} from '@decipad/editor-types';
-import {
   ELEMENT_TABLE,
   ELEMENT_TH,
-  getNodeString,
-  isElement,
-} from '@udecode/plate';
+  type RootDocument,
+} from '@decipad/editor-types';
+import { getNodeString, isElement } from '@udecode/plate-common';
 import cloneDeep from 'lodash.clonedeep';
 import { findNode } from './findNode';
 

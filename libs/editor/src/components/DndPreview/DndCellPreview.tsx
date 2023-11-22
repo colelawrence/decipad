@@ -2,7 +2,7 @@ import { TableCellElement } from '@decipad/editor-types';
 import { ReactNode, useMemo } from 'react';
 import { useComputer } from '@decipad/react-contexts';
 import { isCellAlignRight, useCellType } from '@decipad/editor-table';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { CodeResult, FormulaTableData, TableData } from '@decipad/ui';
 import { useTableColumnFormulaResultForCell } from '@decipad/editor-hooks';
 

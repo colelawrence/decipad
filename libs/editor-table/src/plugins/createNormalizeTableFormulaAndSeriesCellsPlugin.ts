@@ -7,7 +7,7 @@ import {
   PlateEditor,
   TNodeEntry,
   Value,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { type NormalizerReturnValue } from '@decipad/editor-plugins';
 import {
   ELEMENT_TABLE,

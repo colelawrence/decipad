@@ -1,4 +1,4 @@
-import { type TNode, isElement } from '@udecode/plate';
+import { isElement, type TNode } from '@udecode/plate-common';
 import { RootDocument } from '@decipad/editor-types';
 
 const scanNodeElementIds = (

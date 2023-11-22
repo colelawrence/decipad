@@ -1,4 +1,4 @@
-import { insertNodes } from '@udecode/plate';
+import { insertNodes } from '@udecode/plate-common';
 import { ELEMENT_TD, ELEMENT_TR, TableRowElement } from '@decipad/editor-types';
 import { Action, ActionParams } from './types';
 import { getTableById } from './utils/getTablebyId';

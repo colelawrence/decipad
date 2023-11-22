@@ -8,7 +8,7 @@ import {
   getStartPoint,
   isRangeAcrossBlocks,
   TNodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Point, Range } from 'slate';
 
 export const normalizeCodeLineSpace = (editor: MyEditor, entry: TNodeEntry) => {

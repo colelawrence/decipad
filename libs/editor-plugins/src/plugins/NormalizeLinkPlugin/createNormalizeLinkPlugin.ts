@@ -5,7 +5,7 @@ import {
   getNodeString,
   isElement,
   unwrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,

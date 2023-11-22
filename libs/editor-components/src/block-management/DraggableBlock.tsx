@@ -2,6 +2,7 @@ import { ClientEventsContext } from '@decipad/client-events';
 import { RemoteComputer, parseSimpleValue } from '@decipad/remote-computer';
 import { useFilteredTabs, useNodePath } from '@decipad/editor-hooks';
 import {
+  alwaysWritableElementTypes,
   ELEMENT_CODE_LINE,
   ELEMENT_CODE_LINE_V2,
   ELEMENT_PARAGRAPH,
@@ -9,7 +10,6 @@ import {
   MyEditor,
   MyElement,
   MyElementOrText,
-  alwaysWritableElementTypes,
   useTEditorRef,
 } from '@decipad/editor-types';
 import {
@@ -24,8 +24,8 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import {
-  EditorBlock,
   DraggableBlock as UIDraggableBlock,
+  EditorBlock,
   useMergedRef,
 } from '@decipad/ui';
 import { generateVarName, noop } from '@decipad/utils';
@@ -39,13 +39,13 @@ import {
   getPreviousNode,
   insertText,
   select,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import copyToClipboard from 'copy-to-clipboard';
 import { nanoid } from 'nanoid';
 import {
   ComponentProps,
-  ReactNode,
   forwardRef,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -55,7 +55,7 @@ import {
 import { useSelected } from 'slate-react';
 import { BlockErrorBoundary } from '../BlockErrorBoundary';
 import { BlockSelectable } from '../BlockSelection/BlockSelectable';
-import { UseDndNodeOptions, dndStore, useDnd } from '../utils/useDnd';
+import { dndStore, useDnd, UseDndNodeOptions } from '../utils/useDnd';
 import { blockSelectionSelectors } from '@udecode/plate-selection';
 import { useBlockActions } from './hooks';
 

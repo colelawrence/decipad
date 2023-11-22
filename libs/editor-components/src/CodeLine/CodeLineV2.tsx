@@ -41,7 +41,7 @@ import {
   getPreviousNode,
   useElement,
   useEventEditorSelectors,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import {
   Children,
   createContext,

@@ -2,16 +2,22 @@ import { expect, Locator, Page } from '@playwright/test';
 import { Timeouts, cleanText } from '../src';
 import { ControlPlus, keyPress } from './Editor';
 
+export async function focusTrailingParagraph(page: Page) {
+  // Clicking once doesn't always work when running tests at full speed
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
+
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.typing);
+}
+
 export async function createWithSlashCommand(
   page: Page,
   command: string,
   // For disambiguation
   menuItem?: string
 ) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  // eslint-disable-next-line playwright/no-wait-for-timeout
-  await page.waitForTimeout(Timeouts.typing);
+  await focusTrailingParagraph(page);
 
   await page.keyboard.insertText(command);
   // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -220,14 +226,7 @@ export async function createCodeLineV2Below(
   variableName: string,
   decilang: string
 ) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.waitForSelector(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
-  );
-  await page.click(
-    '[data-testid="paragraph-wrapper"]:has-text("Type / for new blocks or = for an input")'
-  );
+  await focusTrailingParagraph(page);
 
   await keyPress(page, '=');
 
@@ -258,18 +257,7 @@ export async function createCSVBelow(page: Page) {
 }
 
 export async function createEmbedBelow(page: Page) {
-  await page.click('[data-testid="paragraph-wrapper"] >> nth=-1');
-
-  await page.keyboard.insertText('/embed');
-
-  await page.waitForSelector('[data-slate-editor] [role="menuitem"]');
-
-  await page
-    .locator('article')
-    .getByRole('menuitem')
-    .getByText('embed')
-    .nth(0)
-    .click();
+  await createWithSlashCommand(page, '/embed');
 }
 
 export function getCodeLineBlockLocator(page: Page) {

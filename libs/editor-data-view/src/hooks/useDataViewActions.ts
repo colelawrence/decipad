@@ -20,7 +20,7 @@ import {
   removeNodes,
   setNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { useCallback, useMemo } from 'react';
 import { Observable, Subject } from 'rxjs';

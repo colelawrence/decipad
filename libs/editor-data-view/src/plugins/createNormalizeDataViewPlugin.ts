@@ -25,7 +25,7 @@ import {
   removeNodes,
   setNodes,
   wrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { NodeEntry } from 'slate';
 

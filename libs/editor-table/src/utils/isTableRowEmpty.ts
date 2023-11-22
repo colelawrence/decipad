@@ -1,5 +1,5 @@
 import { Path } from 'slate';
-import { getNodeChildren, getNodeString } from '@udecode/plate';
+import { getNodeChildren, getNodeString } from '@udecode/plate-common';
 import { MyEditor } from '@decipad/editor-types';
 
 export const isTableRowEmpty = (

@@ -5,7 +5,7 @@ import {
   getNodeEntries,
   getRange,
   isBlock,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Location, Range } from 'slate';
 import { setSelection } from '@decipad/editor-utils';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';

@@ -7,7 +7,7 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { normalizeEditor } from '@udecode/plate';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createMigrateTableDropdownToId } from './createMigrateTableDropdownToId';
 
 const editor = createTPlateEditor({

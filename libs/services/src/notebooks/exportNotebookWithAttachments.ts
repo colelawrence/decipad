@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 import stringify from 'json-stringify-safe';
 import { Document, RootDocument } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import Zip from 'adm-zip';
 import { captureException } from '@decipad/backend-trace';
 import { exportNotebookContent } from './exportNotebookContent';

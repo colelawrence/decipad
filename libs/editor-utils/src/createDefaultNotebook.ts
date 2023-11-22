@@ -1,11 +1,7 @@
 import { H1Element, MyEditor } from '@decipad/editor-types';
-import {
-  ELEMENT_H1,
-  ELEMENT_PARAGRAPH,
-  insertNodes,
-  nanoid,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { insertNodes, nanoid, withoutNormalizing } from '@udecode/plate-common';
+import { ELEMENT_H1 } from '@udecode/plate-heading';
+import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 /**
  * Inserts the default nodes of a notebook.

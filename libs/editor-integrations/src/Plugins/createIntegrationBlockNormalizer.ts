@@ -9,7 +9,7 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
-import { setNodes } from '@udecode/plate';
+import { setNodes } from '@udecode/plate-common';
 
 export const createNormalizeIntegrationBlock = createNormalizerPlugin({
   name: 'NORMALIZE_INTEGRATION_BLOCK_PLUGIN',

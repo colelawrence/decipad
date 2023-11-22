@@ -16,7 +16,7 @@ import {
   VariableNameSelector,
   icons,
 } from '@decipad/ui';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { css } from '@emotion/react';
 import { useSourceLiveConnections } from '../hooks/useSourceLiveConnections';
 

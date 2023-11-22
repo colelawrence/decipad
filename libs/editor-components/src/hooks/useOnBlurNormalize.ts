@@ -7,7 +7,7 @@ import {
   TableColumnFormulaElement,
   TableElement,
 } from '@decipad/editor-types';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { useEffect } from 'react';
 import { useSelected } from 'slate-react';
 

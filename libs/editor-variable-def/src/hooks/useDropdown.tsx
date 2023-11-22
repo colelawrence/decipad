@@ -11,7 +11,7 @@ import {
 import { useResolved } from '@decipad/react-utils';
 import { SelectItems, icons } from '@decipad/ui';
 import { dequal } from '@decipad/utils';
-import { insertText, nanoid } from '@udecode/plate';
+import { insertText, nanoid } from '@udecode/plate-common';
 import { MaterializedColumnDesc } from 'libs/computer/src/types';
 import uniqBy from 'lodash.uniqby';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';

@@ -21,7 +21,7 @@ import {
   unwrapNodes,
   wrapNodeChildren,
   wrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import {
   NormalizerReturnValue,

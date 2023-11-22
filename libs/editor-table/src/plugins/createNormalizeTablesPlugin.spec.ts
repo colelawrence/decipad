@@ -13,7 +13,7 @@ import {
   TElement,
   createPlateEditor,
   normalizeEditor,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { createTablePlugin } from './createTablePlugin';
 
 let editor: TEditor;

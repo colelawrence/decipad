@@ -1,6 +1,6 @@
 import { ELEMENT_TABLE, MyEditor, TableElement } from '@decipad/editor-types';
 import { Path } from 'slate';
-import { getEndPoint, getStartPoint, select } from '@udecode/plate';
+import { getEndPoint, getStartPoint, select } from '@udecode/plate-common';
 import { getAboveNodeSafe } from '@decipad/editor-utils';
 
 export const selectColumn = (editor: MyEditor, cellPath: Path) => {

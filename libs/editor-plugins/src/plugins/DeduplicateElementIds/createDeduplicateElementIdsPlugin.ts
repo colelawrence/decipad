@@ -15,7 +15,7 @@ import {
   isElement,
   nanoid,
   setNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Element } from 'slate';
 
 const key = 'DEDUPLICATE_ELEMENT_IDS_PLUGIN';

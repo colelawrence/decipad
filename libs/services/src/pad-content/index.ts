@@ -3,7 +3,7 @@ import type { MyValue } from '@decipad/editor-types';
 import { Doc as YDoc } from 'yjs';
 import { DynamodbPersistence } from '@decipad/y-dynamodb';
 import { toSharedTypeSingular } from 'libs/slate-yjs/src/utils';
-import { EElement, Value } from '@udecode/plate';
+import { EElement, Value } from '@udecode/plate-common';
 
 const createPadContent = <V extends Value = MyValue>(
   path: string,

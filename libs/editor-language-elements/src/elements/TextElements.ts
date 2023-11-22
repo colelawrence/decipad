@@ -11,7 +11,7 @@ import {
   MARK_MAGICNUMBER,
 } from '@decipad/editor-types';
 import { magicNumberId } from '@decipad/editor-utils';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { InteractiveLanguageElement } from '../types';
 import { parseElementAsSourceCode } from '../utils/parseElementAsSourceCode';
 import { weakMapMemoizeInteractiveElementOutput } from '../utils/weakMapMemoizeInteractiveElementOutput';

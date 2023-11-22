@@ -13,7 +13,7 @@ import {
   isElement,
   isText,
   wrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { BasePoint, Path } from 'slate';
 import { getTrailingLink } from '../../utils/link';
 import { doesSelectionAllowTextStyling } from './doesSelectionAllowTextStyling';

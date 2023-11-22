@@ -7,7 +7,6 @@ export * as dashboard from './dashboard';
 export * as dropline from './drop-line';
 export * as editorLayout from './editor-layout';
 export * as editorViewportBreakpoints from './editor-viewport-breakpoints';
-export * as floating from './floating';
 export * as highlight from './highlight';
 export * as menu from './menu';
 export * as notebookList from './notebook-list';

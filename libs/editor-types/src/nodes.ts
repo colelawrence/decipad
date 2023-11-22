@@ -14,7 +14,7 @@ import {
   Value,
   TEditor,
   TNode,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import type { RefObject } from 'react';
 import type { UndoManager } from 'yjs';
 import type { Observable, Subject } from 'rxjs';

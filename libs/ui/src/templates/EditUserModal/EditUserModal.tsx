@@ -9,13 +9,12 @@ import { useCallback } from 'react';
 import { ClosableModal } from '../../organisms';
 import { componentCssVars, p13Regular } from '../../primitives';
 import { inputLabel } from '../../primitives/text';
-import { Button } from '../../atoms';
+import { Button, Link } from '../../atoms';
 import { ColorThemeSwitch } from '../../molecules';
 import {
   AccountSettingsForm,
   serializeAccountSettingsForm,
 } from '../../molecules/AccountSettingsForm/AccountSettingsForm';
-import { Link } from '../../atoms/Link/Link';
 import { useSession } from 'next-auth/react';
 
 export const useEditUserModalStore = create<{

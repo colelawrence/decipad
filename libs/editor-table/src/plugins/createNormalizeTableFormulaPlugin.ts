@@ -13,7 +13,7 @@ import {
   PlateEditor,
   ENodeEntry,
   EElement,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 // We do this following import this way because tree-shaking is not good enough
 import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';

@@ -6,6 +6,8 @@ import {
   ELEMENT_CODE_LINE_V2_CODE,
   ELEMENT_DROPDOWN,
   ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_PARAGRAPH,
   ELEMENT_SMART_REF,
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_VARIABLE_DEF,
@@ -16,13 +18,11 @@ import {
   createTPlateEditor,
 } from '@decipad/editor-types';
 import {
-  ELEMENT_H2,
-  ELEMENT_PARAGRAPH,
   insertNodes,
   moveNodes,
   removeNodes,
   setNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { setSelection } from '@decipad/editor-utils';
 import { ElementObserver } from './ElementObserver';
 

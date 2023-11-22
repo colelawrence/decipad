@@ -6,7 +6,7 @@ import {
   getNode,
   TOperation,
   getStartPoint,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Point } from 'slate';
 
 export const createPreventInvalidSelectionPlugin = (): MyPlatePlugin => ({

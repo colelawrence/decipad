@@ -7,7 +7,7 @@ import {
 } from '@decipad/editor-types';
 import type { SerializedType } from '@decipad/computer';
 import { useSelected } from 'slate-react';
-import { getNodeString, getParentNode } from '@udecode/plate';
+import { getNodeString, getParentNode } from '@udecode/plate-common';
 import { useNodePath } from '@decipad/editor-hooks';
 import { useContext, useRef, useEffect, useMemo } from 'react';
 import { useComputer, useIsEditorReadOnly } from '@decipad/react-contexts';

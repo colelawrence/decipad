@@ -209,7 +209,9 @@ test('dropdown widget', async ({ testUser }) => {
 
   await test.step('Open dropdown and view box to add option', async () => {
     await page.getByText('Select').click();
-    await expect(page.locator('div >> div >> input')).toBeVisible();
+    await expect(async () => {
+      await expect(page.getByPlaceholder('Type here')).toBeVisible();
+    }).toPass();
   });
 
   await test.step('New option gets added to list', async () => {

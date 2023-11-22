@@ -5,8 +5,13 @@ import {
   MyElement,
 } from '@decipad/editor-types';
 import { onSubscribe } from '@decipad/utils';
-import { Observable, Subject, filter, finalize } from 'rxjs';
-import { getNode, getNodeAncestors, isEditor, isElement } from '@udecode/plate';
+import { filter, finalize, Observable, Subject } from 'rxjs';
+import {
+  getNode,
+  getNodeAncestors,
+  isEditor,
+  isElement,
+} from '@udecode/plate-common';
 
 export type SpecificObserver<T extends ElementKind> = EditorObserverMessage<
   Extract<MyElement, { type: T }>

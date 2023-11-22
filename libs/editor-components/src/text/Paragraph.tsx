@@ -18,7 +18,7 @@ import {
   isElementEmpty,
   isSelectionExpanded,
   findNodePath,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Range } from 'slate';
 import { useState } from 'react';
 import { ReactEditor } from 'slate-react';

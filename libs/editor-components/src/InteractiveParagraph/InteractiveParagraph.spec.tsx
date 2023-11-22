@@ -1,21 +1,20 @@
 import { PropsWithChildren } from 'react';
+import { createParagraphPlugin } from '@udecode/plate-paragraph';
 import {
-  createParagraphPlugin,
   createPlateEditor,
   createPlugins,
-  ELEMENT_H3,
   focusEditor,
   insertText,
   Plate,
   PlateEditor,
   PlateProps,
   select,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { SessionProvider } from 'next-auth/react';
 import { findParentWithStyle } from '@decipad/dom-test-utils';
-import { ELEMENT_PARAGRAPH } from '@decipad/editor-types';
+import { ELEMENT_H3, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, timeout } from '@decipad/utils';
 import { act, render, waitFor } from '@testing-library/react';
 import { findDomNodePath } from '@decipad/editor-utils';

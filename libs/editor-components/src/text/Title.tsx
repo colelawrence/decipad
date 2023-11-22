@@ -6,7 +6,7 @@ import {
 import { assertElementType } from '@decipad/editor-utils';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { EditorBlock, EditorTitle, isEmbed } from '@decipad/ui';
-import { isElementEmpty } from '@udecode/plate';
+import { isElementEmpty } from '@udecode/plate-common';
 
 // TODO Title should probably not be a part of the editor in the first place
 

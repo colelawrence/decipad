@@ -1,8 +1,8 @@
-import { MyGenericEditor, createTPluginFactory } from '@decipad/editor-types';
+import { createTPluginFactory, MyGenericEditor } from '@decipad/editor-types';
 import { withOverrides } from './withOverrides';
 import { createNormalizerPlugin } from '../../pluginFactories/normalizerPlugin';
 import { normalizeElementIdPlugin } from './normalizeElementIdPlugin';
-import { Value } from '@udecode/plate';
+import { Value } from '@udecode/plate-common';
 
 const pluginKey = 'NORMALIZE_ELEMENT_ID_PLUGIN';
 

@@ -3,7 +3,7 @@ import {
   MyNode,
   CodeLineElement,
 } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 
 export const isCodeLine = (node: MyNode): node is CodeLineElement => {
   return isElement(node) && node.type === ELEMENT_CODE_LINE;

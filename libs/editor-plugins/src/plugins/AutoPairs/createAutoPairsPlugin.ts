@@ -11,7 +11,7 @@ import {
   getNodeString,
   getParentNode,
   moveSelection,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { Path, Range } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 

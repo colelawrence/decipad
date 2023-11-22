@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import type { Command } from './applyCommands';
 import { parseJSONResponse } from './parseJSONResponse';
 

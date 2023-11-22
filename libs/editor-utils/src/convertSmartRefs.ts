@@ -8,7 +8,6 @@ import {
 } from '@decipad/editor-types';
 import { captureException } from '@sentry/react';
 import {
-  ELEMENT_TABLE,
   getNextNode,
   getNodeChildren,
   getNodeString,
@@ -16,12 +15,13 @@ import {
   isElement,
   removeNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { BaseEditor, Editor, Location, Path, Point, Range } from 'slate';
 import { insertNodes } from './insertNodes';
 import { isElementOfType } from './isElementOfType';
 import { setSelection } from './setSelection';
+import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 export const convertCodeSmartRefs = (
   editor: MyEditor,

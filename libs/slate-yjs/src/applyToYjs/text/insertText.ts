@@ -1,5 +1,5 @@
 import invariant from 'tiny-invariant';
-import { TInsertTextOperation } from '@udecode/plate';
+import { TInsertTextOperation } from '@udecode/plate-common';
 import { SharedType, SyncElement } from '../../model';
 import { getTarget } from '../../path';
 

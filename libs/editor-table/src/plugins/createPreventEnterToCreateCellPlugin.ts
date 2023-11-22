@@ -1,6 +1,6 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
 import { BlockElement, ELEMENT_TD, ELEMENT_TH } from '@decipad/editor-types';
-import { getBlockAbove, getPointAfter, select } from '@udecode/plate';
+import { getBlockAbove, getPointAfter, select } from '@udecode/plate-common';
 
 export const createPreventEnterToCreateCellPlugin =
   createOnKeyDownPluginFactory({

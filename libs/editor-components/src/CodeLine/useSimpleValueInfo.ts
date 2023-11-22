@@ -12,7 +12,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
-import { findNodePath, insertText } from '@udecode/plate';
+import { findNodePath, insertText } from '@udecode/plate-common';
 
 export function useSimpleValueInfo(
   computer: RemoteComputer,

@@ -1,9 +1,6 @@
-import {
-  createNodeIdPlugin,
-  createPlateEditor,
-  PlatePlugin,
-  TEditor,
-} from '@udecode/plate';
+import { createPlateEditor, PlatePlugin, TEditor } from '@udecode/plate-common';
+import { createNodeIdPlugin } from '@udecode/plate-node-id';
+
 import { nanoid } from 'nanoid';
 import { Computer } from '@decipad/computer';
 import {

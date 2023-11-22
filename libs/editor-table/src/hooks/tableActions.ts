@@ -37,7 +37,7 @@ import {
   removeNodes,
   setNodes,
   withoutNormalizing,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';

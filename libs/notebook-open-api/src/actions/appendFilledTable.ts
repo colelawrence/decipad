@@ -1,4 +1,4 @@
-import { insertNodes, getNode } from '@udecode/plate';
+import { insertNodes, getNode } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import {
   ELEMENT_TABLE,

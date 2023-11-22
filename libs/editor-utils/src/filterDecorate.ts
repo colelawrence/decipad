@@ -1,5 +1,5 @@
 import { MyDecorate } from '@decipad/editor-types';
-import { ENodeEntry, PlateEditor, Value } from '@udecode/plate';
+import { ENodeEntry, PlateEditor, Value } from '@udecode/plate-common';
 
 export const filterDecorate =
   <P, TV extends Value, TE extends PlateEditor<TV>>(

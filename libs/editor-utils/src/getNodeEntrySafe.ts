@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-restricted-imports
-import { getNodeEntry } from '@udecode/plate';
+import { getNodeEntry } from '@udecode/plate-common';
 
 export const getNodeEntrySafe = (
   ...params: Parameters<typeof getNodeEntry>

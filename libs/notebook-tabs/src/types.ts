@@ -1,4 +1,4 @@
-import type { EElement, ENode, TEditor } from '@udecode/plate';
+import type { EElement, ENode, TEditor } from '@udecode/plate-common';
 import { MyEditor, NotebookValue, UserIconKey } from '@decipad/editor-types';
 import { Subject } from 'rxjs';
 import { ElementObserver } from './ElementObserver';

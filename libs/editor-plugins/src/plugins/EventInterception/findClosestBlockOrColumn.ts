@@ -1,7 +1,7 @@
 import { ELEMENT_COLUMNS, MyEditor, MyNodeEntry } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { last } from '@decipad/utils';
-import { getLevels, isElement } from '@udecode/plate';
+import { getLevels, isElement } from '@udecode/plate-common';
 import { Path } from 'slate';
 
 export function findClosestBlockOrColumn(

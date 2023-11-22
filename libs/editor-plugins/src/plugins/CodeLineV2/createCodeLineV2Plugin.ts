@@ -12,8 +12,8 @@ import {
 } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
 import {
-  CodeLineV2Code,
   CodeLineV2,
+  CodeLineV2Code,
   CodeLineV2Varname,
 } from '@decipad/editor-components';
 import {
@@ -21,7 +21,7 @@ import {
   createNormalizeCodeLineV2Plugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
-import { PlateEditor, Value } from '@udecode/plate';
+import { PlateEditor, Value } from '@udecode/plate-common';
 
 const createCodeLineRootPlugin = (_computer: RemoteComputer) => ({
   key: ELEMENT_CODE_LINE_V2,

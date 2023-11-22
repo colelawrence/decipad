@@ -5,7 +5,7 @@ import {
   ParagraphElement,
   RichText,
 } from '@decipad/editor-types';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { NodeEntry, Range } from 'slate';
 import { decoratePotentialFormula } from './decoratePotentialFormula';
 import { isPotentialFormula } from './findPotentialFormulas';

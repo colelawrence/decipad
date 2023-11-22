@@ -1,8 +1,8 @@
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 import {
-  ELEMENT_TITLE,
-  ELEMENT_H1,
   createTPluginFactory,
+  ELEMENT_H1,
+  ELEMENT_TITLE,
   NotebookValue,
 } from '@decipad/editor-types';
 import cloneDeep from 'lodash.clonedeep';

@@ -3,7 +3,7 @@ import {
   ELEMENT_CALLOUT,
   userIconKeys,
 } from '@decipad/editor-types';
-import { DeserializeHtml } from '@udecode/plate';
+import { DeserializeHtml } from '@udecode/plate-common';
 import { swatchNames } from 'libs/ui/src/utils';
 import { nanoid } from 'nanoid';
 import { cleanString } from '../../utils/cleanString';

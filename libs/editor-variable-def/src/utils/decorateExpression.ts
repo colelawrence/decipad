@@ -11,7 +11,7 @@ import {
   memoizeDecorate,
 } from '@decipad/editor-utils';
 import { Token, tokenize } from '@decipad/computer';
-import { getNodeString, getParentNode, isElement } from '@udecode/plate';
+import { getNodeString, getParentNode, isElement } from '@udecode/plate-common';
 import { NodeEntry, Path, Range } from 'slate';
 import { DECORATION_EXPRESSION_SYNTAX } from '../constants';
 import { expressionFromEditorSource } from './expressionFromEditorSource';

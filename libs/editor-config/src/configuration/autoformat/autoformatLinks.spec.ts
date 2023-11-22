@@ -6,13 +6,9 @@ import {
   ELEMENT_PARAGRAPH,
 } from '@decipad/editor-types';
 import { Link } from '@decipad/editor-components';
-import {
-  createLinkPlugin,
-  createPlugins,
-  select,
-  TEditor,
-} from '@udecode/plate';
+import { createPlugins, select, TEditor } from '@udecode/plate-common';
 import { autoformatLinks } from './autoformatLinks';
+import { createLinkPlugin } from '@udecode/plate-link';
 
 let editor: TEditor;
 beforeEach(() => {

@@ -23,7 +23,7 @@ import {
   UpgradePlanWarningTooltip,
 } from '@decipad/ui';
 import { css } from '@emotion/react';
-import { setNodes } from '@udecode/plate';
+import { setNodes } from '@udecode/plate-common';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLiveQuery } from '../hooks/useLiveQuery';
 

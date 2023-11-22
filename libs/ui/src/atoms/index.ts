@@ -72,7 +72,6 @@ export { PendingResult } from './PendingResult/PendingResult';
 export { Placeholder } from './Placeholder/Placeholder';
 export { PlotFunction } from './PlotFunction/PlotFunction';
 export { RemoteAvatarOverlay } from './RemoteAvatarOverlay/RemoteAvatarOverlay';
-export { RemoveNodeButton } from './RemoveNodeButton/RemoveNodeButton';
 export { SegmentButtons } from './SegmentButtons/SegmentButtons';
 export * from './SelectItem/SelectItem';
 export { SidebarIcon } from './SidebarIcon';

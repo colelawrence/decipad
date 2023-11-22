@@ -6,7 +6,7 @@ import {
 } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 
 interface SourceResult {
   sourceCode: string;

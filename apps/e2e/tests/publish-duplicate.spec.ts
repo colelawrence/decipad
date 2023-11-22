@@ -207,6 +207,7 @@ test('duplicate in workspace with single workspace', async ({
   await test.step('Makes up a notebook', async () => {
     await notebook.updateNotebookTitle('pad title here');
 
+    await page.getByTestId('paragraph-content').last().click();
     await page
       .getByTestId('paragraph-content')
       .last()

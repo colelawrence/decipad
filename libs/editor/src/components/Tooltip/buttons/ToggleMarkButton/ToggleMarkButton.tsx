@@ -1,4 +1,4 @@
-import { isMarkActive, toggleMark } from '@udecode/plate';
+import { isMarkActive, toggleMark } from '@udecode/plate-common';
 import { FC, useState } from 'react';
 import { MyMark, useTEditorRef } from '@decipad/editor-types';
 import { FloatingButton } from '@decipad/ui';

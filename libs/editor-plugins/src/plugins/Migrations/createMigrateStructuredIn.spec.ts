@@ -4,7 +4,7 @@ import {
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
 } from '@decipad/editor-types';
-import { normalizeEditor } from '@udecode/plate';
+import { normalizeEditor } from '@udecode/plate-common';
 import { createMigrateStructuredInputs } from './createMigrateStructuredIn';
 
 const editor = createTPlateEditor({

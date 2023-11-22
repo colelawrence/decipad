@@ -1,11 +1,11 @@
 import { createTPlateEditor } from '@decipad/editor-types';
-import * as plate from '@udecode/plate';
-import { eventEditorActions } from '@udecode/plate';
+import * as plate from '@udecode/plate-common';
+import { eventEditorActions } from '@udecode/plate-common';
 import { shouldResetContentEditable } from './CodeVariableDefinition';
 
-jest.mock('@udecode/plate', () => ({
+jest.mock('@udecode/plate-common', () => ({
   __esModule: true,
-  ...jest.requireActual('@udecode/plate'),
+  ...jest.requireActual('@udecode/plate-common'),
 }));
 
 describe('shouldResetContentEditable', () => {

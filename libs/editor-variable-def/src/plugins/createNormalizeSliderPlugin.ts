@@ -3,7 +3,7 @@ import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,
 } from '@decipad/editor-plugins';
-import { isElement, setNodes, unwrapNodes } from '@udecode/plate';
+import { isElement, setNodes, unwrapNodes } from '@udecode/plate-common';
 
 const normalizeSlider =
   (editor: MyEditor) =>

@@ -13,7 +13,7 @@ import {
   insertText,
   nanoid,
   select,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { BasePoint, Range } from 'slate';
 import type { MenuItem } from './AutoCompleteMenu';
 

@@ -1,4 +1,4 @@
-import { createTEditor, TEditor, TText } from '@udecode/plate';
+import { createTEditor, TEditor, TText } from '@udecode/plate-common';
 import { mockConsoleError } from '@decipad/testutils';
 import { getNodeEntrySafe } from '@decipad/editor-utils';
 import { getDefined } from '@decipad/utils';

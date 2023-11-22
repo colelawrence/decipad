@@ -2,6 +2,7 @@ import { getNotebookContent } from '@decipad/backend-notebook-content';
 import { debug } from '../debug';
 import { suggestNewContentToFulfillRequest } from './suggestNewContentToFulfillRequest';
 import { suggestEditorChanges } from './suggestEditorChanges';
+import { TOperation } from '@udecode/plate-common';
 import { fixElementIds } from '../utils/fixElementIds';
 import { RootDocument } from '@decipad/editor-types';
 import { encodeDocumentIds } from '../utils/encodeDocumentIds';
@@ -9,7 +10,6 @@ import cloneDeep from 'lodash.clonedeep';
 import { fixDocument } from '../utils/fixDocument';
 import { Subject, type Observable } from 'rxjs';
 import { NotebookAssistantEvent, NotebookAssistantReply } from '../types';
-import { TOperation } from '@udecode/plate';
 
 const internalNotebookAssistant = (
   oldDocument: RootDocument,

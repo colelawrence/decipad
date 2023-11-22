@@ -7,9 +7,10 @@ import {
   markKinds,
   MyElement,
 } from '@decipad/editor-types';
-import { normalizeEditor, TEditor, upsertLink } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import { createNormalizeRichTextBlockPlugin } from './createNormalizeRichTextBlockPlugin';
 import { createLinkPlugin } from '../Link/index';
+import { upsertLink } from '@udecode/plate-link';
 
 let editor: TEditor;
 beforeEach(() => {

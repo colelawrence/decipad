@@ -4,7 +4,7 @@ import {
   Value,
   // eslint-disable-next-line no-restricted-imports
   setSelection as plateSetSelection,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { hasPoint } from './hasPoint';
 
 const isValidSelection = <

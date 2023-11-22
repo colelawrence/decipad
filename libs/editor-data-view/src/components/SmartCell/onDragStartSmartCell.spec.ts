@@ -4,8 +4,8 @@ import { dndPreviewActions } from '@decipad/react-contexts';
 import { DRAG_SMART_CELL } from '@decipad/editor-plugins';
 import { onDragStartSmartCell } from './onDragStartSmartCell';
 
-jest.mock('@udecode/plate', () => ({
-  ...jest.requireActual('@udecode/plate'),
+jest.mock('@udecode/plate-common', () => ({
+  ...jest.requireActual('@udecode/plate-common'),
   findNodePath: () => [],
   getNodeString: () => '',
 }));

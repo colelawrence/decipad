@@ -5,7 +5,7 @@ import {
   MyNode,
   MyText,
 } from '@decipad/editor-types';
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import { timeout } from '@decipad/utils';
 import { randomChar } from './random-char';
 

@@ -8,7 +8,7 @@ import {
   Value,
   deleteText,
   getEditorString,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { BaseEditor, Path, Transforms } from 'slate';
 import { createCodeLine, createStructuredCodeLine } from './createCodeLine';

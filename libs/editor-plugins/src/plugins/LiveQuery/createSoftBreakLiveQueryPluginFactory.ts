@@ -4,7 +4,7 @@ import {
 } from '@decipad/editor-types';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { getSoftBreakOnKeyDown } from '../SoftBreakPlugin/getSoftBreakOnKeyDown';
-import { Value } from '@udecode/plate';
+import { Value } from '@udecode/plate-common';
 
 export const createSoftBreakLiveQueryPluginFactory = <
   TV extends Value,

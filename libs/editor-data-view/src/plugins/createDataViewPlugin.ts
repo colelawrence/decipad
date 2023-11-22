@@ -4,7 +4,7 @@ import {
   ELEMENT_DATA_VIEW_TH,
   ELEMENT_DATA_VIEW_TR,
 } from '@decipad/editor-types';
-import { createPluginFactory } from '@udecode/plate';
+import { createPluginFactory } from '@udecode/plate-common';
 import { createEventInterceptorPluginFactory } from '@decipad/editor-plugins';
 import {
   DataView,

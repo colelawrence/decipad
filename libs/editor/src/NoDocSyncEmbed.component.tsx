@@ -1,7 +1,7 @@
 import { FC, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { ReactEditor } from 'slate-react';
 import { Subject } from 'rxjs';
-import { createPlateEditor, Plate } from '@udecode/plate';
+import { createPlateEditor, Plate } from '@udecode/plate-common';
 import { EditorLayout, LoadingFilter } from '@decipad/ui';
 import {
   ComputerContextProvider,

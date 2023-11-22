@@ -6,7 +6,7 @@ import {
   MyNodeEntry,
 } from '@decipad/editor-types';
 import { RICH_TEXT_BLOCK_TYPES } from '@decipad/editor-utils';
-import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate';
+import { getNodeChildren, isElement, unwrapNodes } from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,

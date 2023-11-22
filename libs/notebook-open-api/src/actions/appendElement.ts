@@ -1,6 +1,6 @@
-import { EElementOrText, insertNodes, isElement } from '@udecode/plate';
+import { EElementOrText, insertNodes, isElement } from '@udecode/plate-common';
 import { notAcceptable } from '@hapi/boom';
-import { topLevelBlockKinds, MyValue } from '@decipad/editor-types';
+import { MyValue, topLevelBlockKinds } from '@decipad/editor-types';
 import type { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
 

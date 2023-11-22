@@ -8,7 +8,7 @@ import {
   SmartRefElement,
 } from '@decipad/editor-types';
 import { assertElementType, isElementOfType } from '@decipad/editor-utils';
-import { findNode } from '@udecode/plate';
+import { findNode } from '@udecode/plate-common';
 import { BaseEditor, Editor, Transforms } from 'slate';
 import {
   NormalizerReturnValue,

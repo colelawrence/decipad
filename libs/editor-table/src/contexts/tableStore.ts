@@ -1,4 +1,4 @@
-import { createAtomStore, TElement } from '@udecode/plate';
+import { createAtomStore, TElement } from '@udecode/plate-common';
 import { ELEMENT_TABLE, ELEMENT_TR } from '@decipad/editor-types';
 
 export const { useTableStore } = createAtomStore(

@@ -1,4 +1,4 @@
-import { WithRequired } from '@udecode/plate';
+import { WithRequired } from '@udecode/plate-common';
 import {
   ELEMENT_TABLE_CAPTION,
   ELEMENT_TABLE_VARIABLE_NAME,

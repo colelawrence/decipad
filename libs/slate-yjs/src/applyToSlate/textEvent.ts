@@ -1,4 +1,4 @@
-import { isText, TTextOperation } from '@udecode/plate';
+import { isText, TTextOperation } from '@udecode/plate-common';
 import invariant from 'tiny-invariant';
 import * as Y from 'yjs';
 import { MinimalRootEditor } from '@decipad/editor-types';

@@ -11,7 +11,7 @@ import set from 'lodash.set';
 import { removePath } from './removePath';
 import get from 'lodash.get';
 import { debug } from '../debug';
-import { isElement, mergeProps } from '@udecode/plate';
+import { isElement, mergeProps } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 
 export interface AddCommand {

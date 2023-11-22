@@ -1,6 +1,6 @@
 import { CodeLineElement, CodeLineV2Element } from '@decipad/editor-types';
 import { createCodeLine } from '@decipad/editor-utils';
-import { DeserializeHtml } from '@udecode/plate';
+import { DeserializeHtml } from '@udecode/plate-common';
 import { cleanString } from '../../utils/cleanString';
 
 export const deserializeCodeLineHtml: DeserializeHtml = {

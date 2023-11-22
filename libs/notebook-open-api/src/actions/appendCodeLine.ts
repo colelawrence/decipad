@@ -1,4 +1,4 @@
-import { insertNodes, getNode, TPath } from '@udecode/plate';
+import { insertNodes, getNode, TPath } from '@udecode/plate-common';
 import {
   type CodeLineV2Element,
   type CodeLineElement,

@@ -14,7 +14,7 @@ import {
   getNodeString,
   insertText,
   isCollapsed,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useCallback, useMemo } from 'react';
 import { useSelected } from 'slate-react';
 import { useCellType, useIsCellSelected, useIsColumnSelected } from '.';

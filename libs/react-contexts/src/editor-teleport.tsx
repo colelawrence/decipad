@@ -1,5 +1,5 @@
 import { MyElement } from '@decipad/editor-types';
-import { TNode } from '@udecode/plate';
+import { TNode } from '@udecode/plate-common';
 import { createContext, useContext } from 'react';
 
 export type ShadowCalcReference = {

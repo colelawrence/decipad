@@ -45,7 +45,7 @@ import {
   setNodes,
   unwrapNodes,
   wrapNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { convertLegacyType } from './convertLegacyType';

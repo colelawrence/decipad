@@ -1,4 +1,4 @@
-import { createListPlugin, select, TEditor } from '@udecode/plate';
+import { select, TEditor } from '@udecode/plate-common';
 import {
   createTAutoformatPlugin,
   createTPlateEditor,
@@ -10,6 +10,7 @@ import {
 } from '@decipad/editor-types';
 
 import { autoformatLists } from './autoformatLists';
+import { createListPlugin } from '@udecode/plate-list';
 
 let editor: TEditor;
 beforeEach(() => {

@@ -7,7 +7,7 @@ import {
   removeNodes,
   Value,
   ENodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { normalizeExcessProperties } from './normalize';
 import { NormalizerReturnValue } from '../pluginFactories';
 

@@ -1,10 +1,11 @@
-import { deserializeMd, insertNodes, getNode } from '@udecode/plate';
+import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { AnyElement, MyElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { Action, ActionParams } from './types';
 import { appendPath } from '../utils/appendPath';
 import { assertElementType } from '@decipad/editor-utils';
+import { deserializeMd } from '@udecode/plate-serializer-md';
 
 export const appendText: Action<'appendText'> = {
   summary: 'Appends markdown text to the end of the notebook',

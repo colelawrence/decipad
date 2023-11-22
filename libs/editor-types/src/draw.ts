@@ -1,4 +1,4 @@
-import type { TExcalidrawProps } from '@udecode/plate-ui-excalidraw';
+import type { TExcalidrawProps } from '@udecode/plate-excalidraw';
 import type { Mutable } from 'utility-types';
 import type { BaseElement } from './value';
 import type {

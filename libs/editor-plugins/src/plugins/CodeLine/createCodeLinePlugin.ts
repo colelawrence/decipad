@@ -1,7 +1,7 @@
 import { ELEMENT_CODE_LINE, MyPlatePlugin } from '@decipad/editor-types';
 import { decorateCode } from '@decipad/editor-utils';
 import { RemoteComputer } from '@decipad/remote-computer';
-import { eventEditorActions } from '@udecode/plate';
+import { eventEditorActions } from '@udecode/plate-common';
 import { deserializeCodeLineHtml } from './deserializeCodeLineHtml';
 import { serializeCodeLineHtml } from './serializeCodeLineHtml';
 import { onDropCodeLine } from './onDropCodeLine';

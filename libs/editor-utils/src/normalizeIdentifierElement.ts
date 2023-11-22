@@ -1,5 +1,10 @@
 import { identifierRegExpGlobal } from '@decipad/computer';
-import { ENodeEntry, getNodeString, insertText, Value } from '@udecode/plate';
+import {
+  ENodeEntry,
+  getNodeString,
+  insertText,
+  Value,
+} from '@udecode/plate-common';
 import { MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { Path } from 'slate';
 

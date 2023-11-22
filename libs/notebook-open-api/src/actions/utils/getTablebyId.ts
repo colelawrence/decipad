@@ -1,4 +1,4 @@
-import { TNodeEntry } from '@udecode/plate';
+import { TNodeEntry } from '@udecode/plate-common';
 import { ELEMENT_TABLE, MyEditor, TableElement } from '@decipad/editor-types';
 import { getElementById } from './getElementById';
 

@@ -1,6 +1,6 @@
 import { ErrorInfo, FC, ReactNode, useCallback } from 'react';
 import { MyElement, useTEditorRef } from '@decipad/editor-types';
-import { removeNodes } from '@udecode/plate';
+import { removeNodes } from '@udecode/plate-common';
 import { ErrorBlock } from '@decipad/ui';
 import { useNodePath } from '@decipad/editor-hooks';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';

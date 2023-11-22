@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import * as Y from 'yjs';
 import { captureException } from '@sentry/browser';
 import { MinimalRootEditor } from '@decipad/editor-types';

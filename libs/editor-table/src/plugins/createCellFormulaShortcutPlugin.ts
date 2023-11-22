@@ -8,7 +8,7 @@ import {
   TableCellType,
 } from '@decipad/editor-types';
 import { last } from '@decipad/utils';
-import { getBlockAbove } from '@udecode/plate';
+import { getBlockAbove } from '@udecode/plate-common';
 import { Node, Path } from 'slate';
 import { changeColumnType } from '../utils/changeColumnType';
 

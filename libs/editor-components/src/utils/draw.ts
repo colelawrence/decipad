@@ -6,7 +6,7 @@ import {
   requirePathBelowBlock,
   setSelection,
 } from '@decipad/editor-utils';
-import { withoutNormalizing } from '@udecode/plate';
+import { withoutNormalizing } from '@udecode/plate-common';
 import { drawDummyElement } from '../Media/drawDummyElement';
 
 const getDrawElement = (): DrawElement => ({

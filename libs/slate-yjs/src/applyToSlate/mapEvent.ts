@@ -1,4 +1,4 @@
-import { TNodeOperation } from '@udecode/plate';
+import { TNodeOperation } from '@udecode/plate-common';
 import * as Y from 'yjs';
 import { MinimalRootEditor } from '@decipad/editor-types';
 import { SyncElement } from '../model';

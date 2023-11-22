@@ -1,5 +1,9 @@
 import { getTableById } from './utils/getTablebyId';
-import { removeNodes, setNodes, withoutNormalizing } from '@udecode/plate';
+import {
+  removeNodes,
+  setNodes,
+  withoutNormalizing,
+} from '@udecode/plate-common';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { TableHeaderElement } from '@decipad/editor-types';
 import { Action, ActionParams } from './types';

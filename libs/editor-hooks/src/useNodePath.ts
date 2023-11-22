@@ -1,5 +1,5 @@
 import { MyNode, useTEditorRef } from '@decipad/editor-types';
-import { findNodePath } from '@udecode/plate';
+import { findNodePath } from '@udecode/plate-common';
 import { Path } from 'slate';
 import { useCallback } from 'react';
 import { useEditorChange } from './useEditorChange';

@@ -29,7 +29,7 @@ import {
 } from '@decipad/ui';
 import { getDefined } from '@decipad/utils';
 import { css } from '@emotion/react';
-import { findNodePath, getNodeString, insertText } from '@udecode/plate';
+import { findNodePath, getNodeString, insertText } from '@udecode/plate-common';
 import { useCallback, useState } from 'react';
 import { Element } from 'slate';
 import { ReactEditor } from 'slate-react';

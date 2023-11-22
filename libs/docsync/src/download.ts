@@ -1,5 +1,5 @@
 import stringify from 'json-stringify-safe';
-import { getNodeString } from '@udecode/plate';
+import { getNodeString } from '@udecode/plate-common';
 import { MinimalRootEditor } from '@decipad/editor-types';
 
 const forceDownload = (fileName: string, file: Blob) => {

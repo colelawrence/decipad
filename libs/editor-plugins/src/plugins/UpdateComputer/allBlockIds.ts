@@ -1,5 +1,5 @@
 import { MyEditor } from '@decipad/editor-types';
-import { findNode, isElement } from '@udecode/plate';
+import { findNode, isElement } from '@udecode/plate-common';
 
 function* children(editor: MyEditor, blockId: string): Iterable<string> {
   const entry = findNode(editor, { at: [], match: { id: blockId } });

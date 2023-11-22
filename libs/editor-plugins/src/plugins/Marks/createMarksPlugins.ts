@@ -6,15 +6,16 @@ import {
 import {
   createBoldPlugin,
   createCodePlugin,
-  createHighlightPlugin,
   createItalicPlugin,
   createStrikethroughPlugin,
   createUnderlinePlugin,
-  WithRequired,
-} from '@udecode/plate';
+} from '@udecode/plate-basic-marks';
+
+import { WithRequired } from '@udecode/plate-common';
 import { createMagicNumberPlugin } from '../MagicNumber';
 import { createInlineNumberPlugin } from '../MagicNumber/createInlineNumberPlugin';
 import { createSpoilerPlugin } from './createSpoilerPlugin';
+import { createHighlightPlugin } from '@udecode/plate-highlight';
 
 export type StrictPlugin = WithRequired<
   MyPlatePlugin,

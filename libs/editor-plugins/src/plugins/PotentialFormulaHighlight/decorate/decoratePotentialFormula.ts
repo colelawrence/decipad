@@ -12,7 +12,7 @@ import {
   filterDecorate,
   memoizeDecorate,
 } from '@decipad/editor-utils';
-import { isElement, isText } from '@udecode/plate';
+import { isElement, isText } from '@udecode/plate-common';
 import { findPotentialFormulas } from './findPotentialFormulas';
 import { PotentialFormulaDecoration } from './interface';
 

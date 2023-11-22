@@ -1,7 +1,7 @@
 import { createTPluginFactory, MyEditor } from '@decipad/editor-types';
 import { Path } from 'slate';
 import { focusAndSetSelection, pluginStore } from '@decipad/editor-utils';
-import { hasNode } from '@udecode/plate';
+import { hasNode } from '@udecode/plate-common';
 
 type FocusTargetFn = () => Path | null;
 

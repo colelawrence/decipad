@@ -5,7 +5,7 @@ import {
   hasNode,
   insertText,
   isElement,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import stringify from 'json-stringify-safe';
 
 export const replaceText = (

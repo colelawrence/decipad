@@ -1,5 +1,5 @@
 import { ELEMENT_TABLE, MyEditor } from '@decipad/editor-types';
-import { createTEditor } from '@udecode/plate';
+import { createTEditor } from '@udecode/plate-common';
 import { insertTableBelow } from './table';
 
 const getAvailableIdentifier = (prefix: string, start?: number) =>

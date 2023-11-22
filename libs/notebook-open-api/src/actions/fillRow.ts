@@ -1,4 +1,4 @@
-import { hasNode, withoutNormalizing } from '@udecode/plate';
+import { hasNode, withoutNormalizing } from '@udecode/plate-common';
 import { Action, ActionParams, RequiresNotebookAction } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { notAcceptable } from '@hapi/boom';

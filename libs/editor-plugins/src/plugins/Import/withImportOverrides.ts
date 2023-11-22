@@ -1,4 +1,4 @@
-import { WithOverride, getNode } from '@udecode/plate';
+import { WithOverride, getNode } from '@udecode/plate-common';
 import { isImportUrl } from '@decipad/import';
 import type { UserInteraction } from '@decipad/react-contexts';
 import { Subject } from 'rxjs';

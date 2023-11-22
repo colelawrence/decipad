@@ -10,17 +10,14 @@ import {
   MyWithOverride,
   TableHeaderRowElement,
 } from '@decipad/editor-types';
+import { isElement, someNode, TDescendant, Value } from '@udecode/plate-common';
 import {
-  isElement,
-  someNode,
-  TDescendant,
-  Value,
   withDeleteTable,
   withGetFragmentTable,
   withInsertFragmentTable,
   withInsertTextTable,
   withSelectionTable,
-} from '@udecode/plate';
+} from '@udecode/plate-table';
 import { createTableCaption } from '../utils/createTableCaption';
 
 const createEmptyTableHeaderCell = () => ({

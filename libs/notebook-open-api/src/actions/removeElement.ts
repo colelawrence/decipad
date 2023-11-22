@@ -1,4 +1,4 @@
-import { removeNodes } from '@udecode/plate';
+import { removeNodes } from '@udecode/plate-common';
 import { Action, ActionParams } from './types';
 import { matchElementId } from '../utils/matchElementId';
 

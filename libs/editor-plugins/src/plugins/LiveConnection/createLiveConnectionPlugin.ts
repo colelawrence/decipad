@@ -22,7 +22,7 @@ import {
   removeNodes,
   Value,
   ENodeEntry,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import {
   createNormalizerPlugin,

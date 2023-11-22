@@ -1,23 +1,19 @@
 export {
   // Code
   ELEMENT_CODE_BLOCK as DEPRECATED_ELEMENT_CODE_BLOCK,
-  ELEMENT_BLOCKQUOTE,
   ELEMENT_CODE_LINE,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_IMAGE,
+} from '@udecode/plate-code-block';
+export { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote';
+export { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from '@udecode/plate-heading';
+export { ELEMENT_IMAGE, ELEMENT_MEDIA_EMBED } from '@udecode/plate-media';
+export {
+  ELEMENT_UL,
+  ELEMENT_OL,
   ELEMENT_LI,
   ELEMENT_LIC,
-  // Inline
-  ELEMENT_LINK,
-  ELEMENT_MEDIA_EMBED,
-  ELEMENT_OL,
-  // Text blocks
-  ELEMENT_PARAGRAPH,
-  // Lists
-  ELEMENT_UL,
-} from '@udecode/plate';
+} from '@udecode/plate-list';
+export { ELEMENT_LINK } from '@udecode/plate-link';
+export { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
 
 // Layout
 export const ELEMENT_CALLOUT = 'callout';

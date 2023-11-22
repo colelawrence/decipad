@@ -7,7 +7,7 @@ import {
   MyEditor,
   SliderElement,
 } from '@decipad/editor-types';
-import { createPlateEditor } from '@udecode/plate';
+import { createPlateEditor } from '@udecode/plate-common';
 
 import { insertInputBelow, insertSliderInputBelow } from './input';
 

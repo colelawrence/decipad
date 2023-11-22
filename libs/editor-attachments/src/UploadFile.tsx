@@ -9,7 +9,7 @@ import { useComputer, useFileUploadStore } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { Dialog, UploadFileModal } from '@decipad/ui';
 import { noop } from '@decipad/utils';
-import { getStartPoint } from '@udecode/plate';
+import { getStartPoint } from '@udecode/plate-common';
 import axios from 'axios';
 import { FC, useCallback } from 'react';
 import { Path } from 'slate';

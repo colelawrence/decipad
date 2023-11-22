@@ -1,4 +1,4 @@
-import { createPluginFactory } from '@udecode/plate';
+import { createPluginFactory } from '@udecode/plate-common';
 import { DECORATE_AUTO_COMPLETE_MENU } from '../../constants';
 import { AutoCompleteMenu } from './AutoCompleteMenu';
 

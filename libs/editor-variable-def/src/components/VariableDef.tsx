@@ -25,7 +25,7 @@ import {
   useIsEditorReadOnly,
 } from '@decipad/react-contexts';
 import { VariableEditor } from '@decipad/ui';
-import { findNodePath, getNodeString } from '@udecode/plate';
+import { findNodePath, getNodeString } from '@udecode/plate-common';
 import { AvailableSwatchColor } from 'libs/ui/src/utils';
 import { useCallback, useContext } from 'react';
 import { useTurnIntoProps } from '../utils/useTurnIntoProps';

@@ -1,13 +1,9 @@
-import {
-  ELEMENT_PARAGRAPH,
-  isElement,
-  isText,
-  withoutNormalizing,
-} from '@udecode/plate';
+import { isElement, isText, withoutNormalizing } from '@udecode/plate-common';
 import {
   createTPluginFactory,
-  NotebookValue,
+  ELEMENT_PARAGRAPH,
   ELEMENT_TAB,
+  NotebookValue,
 } from '@decipad/editor-types';
 
 export const createTabNormalizer = createTPluginFactory<{}, NotebookValue>({

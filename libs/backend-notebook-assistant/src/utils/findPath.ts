@@ -1,5 +1,5 @@
 import { AnyElement, RootDocument } from '@decipad/editor-types';
-import { isElement } from '@udecode/plate';
+import { isElement } from '@udecode/plate-common';
 
 export const findPath = (
   node: RootDocument | AnyElement,

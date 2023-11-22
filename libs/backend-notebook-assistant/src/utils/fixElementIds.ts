@@ -1,7 +1,7 @@
 import { RootDocument } from '@decipad/editor-types';
 import { scanElementIds } from './scanElementIds';
 import cloneDeep from 'lodash.clonedeep';
-import { TElement, isElement } from '@udecode/plate';
+import { isElement, TElement } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 
 export const fixElementIds = (

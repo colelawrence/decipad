@@ -1,4 +1,4 @@
-import { TOperation } from '@udecode/plate';
+import { TOperation } from '@udecode/plate-common';
 import { RootDocument } from '@decipad/editor-types';
 
 export interface NotebookAssistantReply {

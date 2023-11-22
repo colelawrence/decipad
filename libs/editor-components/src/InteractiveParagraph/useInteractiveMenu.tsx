@@ -17,7 +17,7 @@ import {
   insertText,
   isText,
   removeNodes,
-} from '@udecode/plate';
+} from '@udecode/plate-common';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelected } from 'slate-react';

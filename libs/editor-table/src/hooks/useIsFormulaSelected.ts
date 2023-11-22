@@ -4,7 +4,7 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
-import { getNode, isCollapsed } from '@udecode/plate';
+import { getNode, isCollapsed } from '@udecode/plate-common';
 import { useMemo } from 'react';
 
 export const useIsFormulaSelected = (headerBlockId: string): boolean => {

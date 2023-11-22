@@ -5,7 +5,7 @@ import {
   MyNodeEntry,
   MyValue,
 } from '@decipad/editor-types';
-import { getNodeChildren, isElement } from '@udecode/plate';
+import { getNodeChildren, isElement } from '@udecode/plate-common';
 import {
   NormalizerReturnValue,
   createNormalizerPluginFactory,

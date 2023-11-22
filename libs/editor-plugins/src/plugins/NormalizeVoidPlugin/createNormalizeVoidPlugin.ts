@@ -10,7 +10,12 @@ import {
   MyNodeEntry,
   MyText,
 } from '@decipad/editor-types';
-import { deleteText, getNodeChildren, isElement, isText } from '@udecode/plate';
+import {
+  deleteText,
+  getNodeChildren,
+  isElement,
+  isText,
+} from '@udecode/plate-common';
 import { Path } from 'slate';
 import {
   NormalizerReturnValue,

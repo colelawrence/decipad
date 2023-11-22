@@ -1,4 +1,4 @@
-import { normalizeEditor, TEditor } from '@udecode/plate';
+import { normalizeEditor, TEditor } from '@udecode/plate-common';
 import {
   ColumnsElement,
   createTPlateEditor,

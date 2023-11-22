@@ -6,7 +6,11 @@ import {
   ELEMENT_TH,
   ELEMENT_TR,
 } from '@decipad/editor-types';
-import { createPlateEditor, normalizeEditor, TEditor } from '@udecode/plate';
+import {
+  createPlateEditor,
+  normalizeEditor,
+  TEditor,
+} from '@udecode/plate-common';
 import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
 
 let editor: TEditor;
