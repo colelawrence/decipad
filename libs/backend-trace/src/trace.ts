@@ -76,15 +76,23 @@ export const trace = <
   handle: Handler<TReq, TRes>,
   options: TraceOptions = {}
 ): Handler<TReq, TRes> => {
+  const handler: Handler<TReq, TRes> = (event, context, callback) =>
+    SentryAWSLambda.continueTrace(
+      {
+        baggage: event.headers?.baggage,
+        sentryTrace: event.headers?.['sentry-trace'],
+      },
+      () => {
+        if (event.headers?.['x-transaction-id']) {
+          configureScope((scope) => {
+            scope.setTag('transaction_id', event.headers['x-transaction-id']);
+          });
+        }
+        return handle(event, context, callback);
+      }
+    );
   if (initTrace(options)) {
-    return handleErrors(handle);
+    return handleErrors(handler);
   }
-  return (event, context, callback) => {
-    if (event.headers?.['x-transaction-id']) {
-      configureScope((scope) => {
-        scope.setTag('transaction_id', event.headers['x-transaction-id']);
-      });
-    }
-    return handle(event, context, callback);
-  };
+  return handler;
 };

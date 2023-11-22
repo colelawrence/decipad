@@ -5,8 +5,7 @@ process.env.DECI_ENV_CONFIG_FILE_PATH = join(
   '..',
   '..',
   'apps',
-  'backend',
-  'tests',
+  'backend-tests',
   '.testing.env'
 );
 

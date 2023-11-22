@@ -160,7 +160,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
             .locator('[data-test-id="read-only-text"]')
             .getByText('Pitch Slides Decipad')
         ).toBeVisible();
-      }).toPass();
+      }, `Pitch Embed didn't load properly`).toPass();
     });
   });
 });

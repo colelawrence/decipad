@@ -48,5 +48,6 @@ module.exports = {
     '<rootDir>/libs/remote-computer',
     '<rootDir>/libs/backend-notebook',
     '<rootDir>/libs/notebook-open-api',
+    '<rootDir>/apps/backend-tests',
   ],
 };

@@ -431,9 +431,11 @@ export class Notebook {
   async addBlockShashCommand(command: SlashCommand) {
     // somethimes the first click misses
     await this.notebookParagraph.last().click();
-    await this.notebookParagraph.last().click();
     // check paragraph is ready
-    await expect(this.page.getByText('for new blocks')).toBeVisible();
+    await expect(async () => {
+      await this.notebookParagraph.last().click();
+      await expect(this.page.getByText('for new blocks')).toBeVisible();
+    }).toPass();
     await this.page.keyboard.type(`/`);
     // checks menu had openned
     await this.page.getByRole('menu').isVisible();
@@ -805,6 +807,9 @@ export class Notebook {
    */
   async openEmbedUploader() {
     this.addBlock('upload-embed');
+    await expect(async () => {
+      await expect(this.page.getByText('Embed URL')).toBeVisible();
+    }, `Embed URL Modal didn't open.`).toPass();
   }
 
   /**

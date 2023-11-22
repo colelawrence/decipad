@@ -1,4 +1,5 @@
-export default <P extends string>(prop: P) =>
+const by =
+  <P extends string>(prop: P) =>
   (
     { [prop]: ida }: Record<P, unknown>,
     { [prop]: idb }: Record<P, unknown>
@@ -11,3 +12,5 @@ export default <P extends string>(prop: P) =>
     }
     return 0;
   };
+
+export default by;

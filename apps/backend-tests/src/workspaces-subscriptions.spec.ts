@@ -1,23 +1,20 @@
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { stripeWebhookHandler } from '@decipad/lambdas';
-import { thirdParty } from '@decipad/backend-config';
 import Stripe from 'stripe';
 import { addMonths } from 'date-fns';
 import { Workspace } from '@decipad/backendtypes';
 import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
-import { APIGatewayProxyEventV2, Context } from 'aws-lambda';
-import { GetWorkspacesDocument } from '@decipad/graphql-client';
+// eslint-disable-next-line import/no-relative-packages
+import { defaultEnv } from '../../../libs/backend-config/src/default';
+// eslint-disable-next-line import/no-relative-packages
+import { GetWorkspacesDocument } from '../../../libs/graphql-client/src/generated';
 
 test('workspaces', (ctx) => {
-  const stripeConfig = thirdParty().stripe;
-  const stripe = new Stripe(stripeConfig.apiKey, {
+  const stripe = new Stripe(defaultEnv('STRIPE_API_KEY'), {
     apiVersion: '2023-08-16',
   });
   const { test: it } = ctx;
   let workspace: Workspace;
-  let context: Context;
   let stripeEvent: Stripe.Event;
-  let mockedEvent: APIGatewayProxyEventV2;
 
   beforeAll(async () => {
     const auth = await ctx.auth();
@@ -151,61 +148,25 @@ test('workspaces', (ctx) => {
       type: 'checkout.session.completed',
     };
 
-    mockedEvent = {
-      headers: {
-        'stripe-signature': stripe.webhooks.generateTestHeaderString({
-          payload: JSON.stringify(stripeEvent),
-          secret: stripeConfig.webhookSecret,
-        }),
-      },
-      body: JSON.stringify(stripeEvent),
-      version: '1',
-      rawPath: '',
-      rawQueryString: '',
-      routeKey: '',
-      requestContext: {
-        accountId: '',
-        apiId: '',
-        http: {
-          method: 'GET',
-          path: '',
-          protocol: '',
-          sourceIp: '',
-          userAgent: '',
-        },
-        domainName: '',
-        domainPrefix: '',
-        requestId: '',
-        routeKey: '',
-        stage: '',
-        time: '',
-        timeEpoch: Date.now(),
-      },
-      isBase64Encoded: true,
-    };
-    context = {
-      ...ctx,
-      functionName: '',
-      functionVersion: '',
-      callbackWaitsForEmptyEventLoop: false,
-      memoryLimitInMB: '',
-      awsRequestId: '',
-      logGroupName: '',
-      logStreamName: '',
-      invokedFunctionArn: '',
-      getRemainingTimeInMillis: () => 2000,
-      done: jest.fn(),
-      succeed: jest.fn(),
-      fail: jest.fn(),
-    };
-
     expect(workspace).toMatchObject({ name: 'Workspace 1' });
   });
 
   it('can subscribe a paid plan', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
 
-    await stripeWebhookHandler(mockedEvent, context, jest.fn());
+    const response = await ctx.http.fetch('/api/stripe/webhook', {
+      method: 'POST',
+      body: JSON.stringify(stripeEvent),
+      headers: {
+        'content-type': 'application/json',
+        'stripe-signature': stripe.webhooks.generateTestHeaderString({
+          payload: JSON.stringify(stripeEvent),
+          secret: defaultEnv('STRIPE_WEBHOOK_SECRET'),
+        }),
+      },
+    });
+
+    expect(response.ok).toBe(true);
 
     const { workspaces } = (
       await client.query({
@@ -223,30 +184,20 @@ test('workspaces', (ctx) => {
 
   it('can update a subscription', async () => {
     const client = ctx.graphql.withAuth(await ctx.auth());
-    const updateStripeEvent = {
-      ...stripeEvent,
-      data: {
-        ...stripeEvent.data,
-        object: {
-          ...stripeEvent.data.object,
-          status: 'trialing',
-        },
-      },
-      type: 'customer.subscription.updated',
-    };
 
-    const updateMockedEvent = {
-      ...mockedEvent,
+    const response = await ctx.http.fetch('/api/stripe/webhook', {
+      method: 'POST',
+      body: JSON.stringify(stripeEvent),
       headers: {
+        'content-type': 'application/json',
         'stripe-signature': stripe.webhooks.generateTestHeaderString({
-          payload: JSON.stringify(updateStripeEvent),
-          secret: stripeConfig.webhookSecret,
+          payload: JSON.stringify(stripeEvent),
+          secret: defaultEnv('STRIPE_WEBHOOK_SECRET'),
         }),
       },
-      body: JSON.stringify(updateStripeEvent),
-    };
+    });
 
-    await stripeWebhookHandler(updateMockedEvent, context, jest.fn());
+    expect(response.ok).toBe(true);
 
     const { workspaces } = (
       await client.query({
@@ -269,18 +220,18 @@ test('workspaces', (ctx) => {
       type: 'invoice.created',
     };
 
-    const invoiceMockedEvent = {
-      ...mockedEvent,
+    const response = await ctx.http.fetch('/api/stripe/webhook', {
+      method: 'POST',
+      body: JSON.stringify(invoiceStripeEvent),
       headers: {
+        'content-type': 'application/json',
         'stripe-signature': stripe.webhooks.generateTestHeaderString({
           payload: JSON.stringify(invoiceStripeEvent),
-          secret: stripeConfig.webhookSecret,
+          secret: defaultEnv('STRIPE_WEBHOOK_SECRET'),
         }),
       },
-      body: JSON.stringify(invoiceStripeEvent),
-    };
-
-    await stripeWebhookHandler(invoiceMockedEvent, context, jest.fn());
+    });
+    expect(response.ok).toBe(true);
 
     const { workspaces } = (
       await client.query({
@@ -308,18 +259,18 @@ test('workspaces', (ctx) => {
       type: 'customer.subscription.deleted',
     };
 
-    const cancelMockedEvent = {
-      ...mockedEvent,
+    const response = await ctx.http.fetch('/api/stripe/webhook', {
+      method: 'POST',
+      body: JSON.stringify(cancelStripeEvent),
       headers: {
+        'content-type': 'application/json',
         'stripe-signature': stripe.webhooks.generateTestHeaderString({
           payload: JSON.stringify(cancelStripeEvent),
-          secret: stripeConfig.webhookSecret,
+          secret: defaultEnv('STRIPE_WEBHOOK_SECRET'),
         }),
       },
-      body: JSON.stringify(cancelStripeEvent),
-    };
-
-    await stripeWebhookHandler(cancelMockedEvent, context, jest.fn());
+    });
+    expect(response.ok).toBe(true);
 
     const { workspaces } = (
       await client.query({

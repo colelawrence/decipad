@@ -3,10 +3,11 @@
 // existing tests very granular
 /* eslint-disable jest/expect-expect */
 
+import { ScheduledEvent } from 'aws-lambda';
 import { Workspace } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { queryCountHandler } from '@decipad/lambdas';
-import { ScheduledEvent } from 'aws-lambda';
+// eslint-disable-next-line import/no-relative-packages
+import { handler as queryCountHandler } from '../../../libs/lambdas/src/scheduled/reset-querycount/index';
 
 test('Executed queries', (ctx) => {
   const { test: it } = ctx;

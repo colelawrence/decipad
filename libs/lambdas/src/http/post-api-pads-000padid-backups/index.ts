@@ -1,4 +1,3 @@
-import { getAuthenticatedUser } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import Boom from '@hapi/boom';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
@@ -9,13 +8,12 @@ import { nanoid } from 'nanoid';
 
 const notebooks = resource('notebook');
 
-export const handler = handle(async (event) => {
+export const handler = handle(async (event, user) => {
   const data = await tables();
   const padId = event.pathParameters?.padid;
   if (!padId) {
     throw Boom.notAcceptable('missing parameters');
   }
-  const user = await getAuthenticatedUser(event);
   if (!user) {
     throw Boom.unauthorized('User not authenticated');
   }

@@ -12,21 +12,6 @@
         "cwd": "apps/backend"
       }
     },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/backend/tests/**/*.ts"],
-        "maxWarnings": 0
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/backend"],
-      "options": {
-        "jestConfig": "apps/backend/jest.config.js",
-        "codeCoverage": false
-      }
-    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

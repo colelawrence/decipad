@@ -8,10 +8,9 @@ const {
 const config = {
   ...baseConfig,
   rootDir: __dirname,
-  displayName: 'backend',
+  displayName: 'backend-tests',
   setupFiles: [...setupFiles, './jest.setup.js'],
 
-  modulePathIgnorePatterns: ['<rootDir>/src/'],
   moduleNameMapper: {
     ...moduleNameMapper,
     '@decipad/backend-test-sandbox': path.join(

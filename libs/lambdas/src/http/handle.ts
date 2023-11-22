@@ -8,8 +8,10 @@ import {
   ScheduledEvent,
 } from 'aws-lambda';
 import chalk from 'chalk';
+import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
 import { Handler } from '@decipad/backendtypes';
 import { captureException, trace } from '@decipad/backend-trace';
+import { getAuthenticatedUser } from '@decipad/services/authentication';
 import { debug } from '../debug';
 
 interface HandlerOptions {
@@ -29,11 +31,14 @@ const sanitizeErrorPayload = (payload: Payload): Payload =>
 export default (handler: Handler, options: HandlerOptions = {}) => {
   return trace(
     async (
-      req: APIGatewayProxyEvent | ScheduledEvent
+      _req: APIGatewayProxyEvent | ScheduledEvent
     ): Promise<APIGatewayProxyResultV2> => {
-      debug('request', req);
+      debug('request', _req);
       try {
-        if ('detail-type' in req && req['detail-type'] === 'Scheduled Event') {
+        if (
+          'detail-type' in _req &&
+          _req['detail-type'] === 'Scheduled Event'
+        ) {
           return {
             statusCode: 200,
             headers: { 'content-type': 'application/json; charset=utf-8' },
@@ -41,13 +46,23 @@ export default (handler: Handler, options: HandlerOptions = {}) => {
           };
         }
 
-        let body = await handler(req as APIGatewayProxyEvent);
+        const req = _req as APIGatewayProxyEvent;
+
+        const user = await getAuthenticatedUser(req);
+        if (user) {
+          SentryAWSLambda.setUser({
+            id: user.id,
+            email: user.email ?? undefined,
+          });
+        }
+
+        let body = await handler(req, user);
         if (isFullReturnObject(body)) {
           debug('response', body);
           return body;
         }
 
-        let statusCode = okStatusCodeFor(req as APIGatewayProxyEvent);
+        let statusCode = okStatusCodeFor(req);
         const headers = {
           'content-type': 'application/json; charset=utf-8',
         };
@@ -68,7 +83,7 @@ export default (handler: Handler, options: HandlerOptions = {}) => {
       } catch (_err) {
         const err = boomify(_err as Error);
         if (err.isServer) {
-          console.error('Error caught while processing request', req);
+          console.error('Error caught while processing request', _req);
           console.error((_err as Error).message);
           console.error((_err as Error).stack);
           console.log(_err);
@@ -77,7 +92,7 @@ export default (handler: Handler, options: HandlerOptions = {}) => {
           console.error(
             chalk.yellow(
               `User error caught while processing request:\n${inspect(
-                req
+                _req
               )}\nErr:\n${inspect(err)}`
             )
           );

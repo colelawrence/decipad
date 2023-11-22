@@ -1,8 +1,7 @@
 /* eslint-disable import/no-import-module-exports */
 import Boom from '@hapi/boom';
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+import { APIGatewayProxyResultV2 } from 'aws-lambda';
 import { resource } from '@decipad/backend-resources';
-import { getAuthenticatedUser } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import { fetch } from 'cross-fetch';
 import Handlebars from 'handlebars';
@@ -81,12 +80,11 @@ const replaceRequestWithSecrets = (
 };
 
 export const handler = handle(
-  async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
+  async (event, user): Promise<APIGatewayProxyResultV2> => {
     const padId = event.pathParameters?.padid;
     if (!padId) {
       throw Boom.notAcceptable('missing parameters');
     }
-    const user = await getAuthenticatedUser(event);
     await notebooks.expectAuthorized({
       user,
       recordId: padId,

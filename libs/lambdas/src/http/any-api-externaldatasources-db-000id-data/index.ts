@@ -5,7 +5,6 @@ import { app } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
 import { resource } from '@decipad/backend-resources';
-import { getAuthenticatedUser } from '@decipad/services/authentication';
 import handle from '../handle';
 import { ExternalDataSourceRecord } from '../../types';
 
@@ -19,7 +18,7 @@ const fetchExternalDataSource = async (
   return data.externaldatasources.get({ id });
 };
 
-export const handler = handle(async (event) => {
+export const handler = handle(async (event, user) => {
   const externalDataSourceId = getDefined(getDefined(event.pathParameters).id);
   const externalDataSource = await fetchExternalDataSource(
     externalDataSourceId
@@ -34,13 +33,13 @@ export const handler = handle(async (event) => {
     await workspace.expectAuthorized({
       minimumPermissionType: 'READ',
       recordId: externalDataSource.workspace_id,
-      user: await getAuthenticatedUser(event),
+      user,
     });
   } else if (externalDataSource.padId) {
     await notebook.expectAuthorized({
       minimumPermissionType: 'READ',
       recordId: externalDataSource.padId,
-      user: await getAuthenticatedUser(event),
+      user,
     });
   } else {
     throw Boom.illegal(

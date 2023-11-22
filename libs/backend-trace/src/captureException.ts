@@ -21,7 +21,24 @@ const sentryInitOptions: SentryOptions = {
   environment: process.env.SENTRY_ENVIRONMENT,
   release: meta().version,
   enableTracing: true,
-  integrations: [new Integrations.Apollo(), new ExtraErrorData()],
+  integrations: [
+    new Integrations.Apollo(),
+    new ExtraErrorData(),
+    new Integrations.Console(),
+    new Integrations.Http(),
+    new Integrations.Context(),
+    new Integrations.RequestData({
+      include: {
+        cookies: true,
+        data: true,
+        headers: true,
+        ip: true,
+        query_string: true,
+        url: true,
+        user: true,
+      },
+    }),
+  ],
 };
 
 let sentryInitialized = false;

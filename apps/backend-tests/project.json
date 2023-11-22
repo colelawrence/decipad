@@ -1,0 +1,32 @@
+{
+  "name": "backend-tests",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/backend-tests/src",
+  "projectType": "application",
+  "prefix": "backend-tests",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/backend-tests/src/**/*.ts"],
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/backend-tests"],
+      "options": {
+        "jestConfig": "apps/backend-tests/jest.config.js",
+        "codeCoverage": false
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn tsc -b apps/backend-tests"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["backend"]
+}

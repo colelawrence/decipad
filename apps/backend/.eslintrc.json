@@ -1,6 +1,6 @@
 {
   "extends": ["../../libs/eslint-config-decipad"],
-  "ignorePatterns": ["!**/*", "**/node_modules", "src"],
+  "ignorePatterns": ["!**/*", "**/node_modules"],
   "rules": {
     // existing backend codestyle differs significantly
     "@typescript-eslint/explicit-module-boundary-types": "off",

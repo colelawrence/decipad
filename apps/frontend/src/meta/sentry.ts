@@ -70,6 +70,8 @@ export const initSentry = () => {
         new HttpClientIntegration(),
       ],
       tracesSampleRate: 0.3,
+      enableTracing: true,
+      tracePropagationTargets: ['/graphql', '/api'],
     });
   } catch (err) {
     console.error('Error initialising Sentry');

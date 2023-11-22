@@ -1,7 +1,6 @@
 import { config as configDotEnv, parse as parseDotEnv } from 'dotenv';
 import stringify from 'json-stringify-safe';
 import { readFileSync } from 'fs';
-import { join } from 'path';
 import { nanoid } from 'nanoid';
 import { fromIni, fromEnv } from '@aws-sdk/credential-providers';
 import { Config } from './config';
@@ -53,7 +52,7 @@ export async function createSandboxEnv(
 ): Promise<ISandboxEnvReturn> {
   // read the testing env config file
   const envConfigFilePath =
-    process.env.DECI_ENV_CONFIG_FILE_PATH || join('tests', '.testing.env');
+    process.env.DECI_ENV_CONFIG_FILE_PATH || '.testing.env';
   const baseConfig = parseDotEnv(readFileSync(envConfigFilePath));
 
   const credentials = await getAwsCredentials();
