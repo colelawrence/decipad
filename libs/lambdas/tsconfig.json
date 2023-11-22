@@ -30,6 +30,7 @@
     { "path": "../editor-utils" },
     { "path": "../backend-notebook-assistant" },
     { "path": "../backend-notebook" },
-    { "path": "../backend-auth" }
+    { "path": "../backend-auth" },
+    { "path": "../routing" }
   ]
 }
