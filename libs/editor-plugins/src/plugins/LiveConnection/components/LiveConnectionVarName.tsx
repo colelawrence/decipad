@@ -40,6 +40,7 @@ import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { Path } from 'slate';
 import { useLiveConnectionResult } from '../contexts/LiveConnectionResultContext';
 import { useCoreLiveConnectionActions } from '../hooks/useCoreLiveConnectionActions';
+import { useToast } from '@decipad/toast';
 
 const captionWrapperStyles = css({
   display: 'flex',
@@ -89,17 +90,25 @@ export const LiveConnectionVarName: PlateComponent = ({
 
   const [showData, setShowData] = useState(false);
 
+  const toast = useToast();
+
   const { sourceName, url, returnRange } = useMemo(() => {
     const source = parentElem.source ?? '';
     const parentUrl = parentElem.url;
 
-    const sourceParams: SourceUrlParseResponse | undefined =
-      (source &&
-        parentUrl != null &&
-        !parentElem.externalDataSourceId &&
-        parseSourceUrl(source, parentUrl)) ||
-      (parentUrl != null && { userUrl: parentUrl }) ||
-      undefined;
+    let sourceParams: SourceUrlParseResponse | undefined;
+    try {
+      sourceParams =
+        (source &&
+          parentUrl != null &&
+          !parentElem.externalDataSourceId &&
+          parseSourceUrl(source, parentUrl)) ||
+        (parentUrl != null && { userUrl: parentUrl }) ||
+        undefined;
+    } catch (err) {
+      toast.error((err as Error).message);
+      return {};
+    }
 
     const { isRange, range, subsheetName, userUrl } = sourceParams || {};
     const formattedRange = range?.join(':') || '';
@@ -113,7 +122,12 @@ export const LiveConnectionVarName: PlateComponent = ({
       rangeExplanation,
       returnRange: subsheetName && subsheetName !== '0' ? formattedRange : '',
     };
-  }, [parentElem.externalDataSourceId, parentElem.source, parentElem.url]);
+  }, [
+    parentElem.externalDataSourceId,
+    parentElem.source,
+    parentElem.url,
+    toast,
+  ]);
 
   const computer = useComputer();
 
