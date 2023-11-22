@@ -106,9 +106,17 @@ export function useNotebookMetaActions(
 
   const onDownloadNotebook = useCallback<
     NotebookMetaActionsReturn['onDownloadNotebook']
-  >((notebookId) => {
-    exportNotebook(notebookId)();
-  }, []);
+  >(
+    async (notebookId) => {
+      try {
+        await exportNotebook(notebookId)();
+      } catch (err) {
+        captureException(err);
+        toast.error('Error downloading notebook');
+      }
+    },
+    [toast]
+  );
 
   const onDownloadNotebookHistory = useCallback<
     NotebookMetaActionsReturn['onDownloadNotebookHistory']
