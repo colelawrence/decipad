@@ -185,9 +185,9 @@ describe('verbalizeDoc', () => {
       }
       \`\`\`",
         "<data-view expandedGroups=["25e37b5ac63a7ecbac6e0f2d53756972b353986e333493ef08b295a2563d64c0"] varName="xXsaBPgqRXdE1DCd6r5qE">",
-        "",
-        "",
-        "",
+        "Table2",
+        "🔥",
+        "Table3",
         "<plot title="Chart" sourceVarName="Table3" xColumnName="Column1" yColumnName="Column2" markType="circle" thetaColumnName="" sizeColumnName="" colorColumnName="" colorScheme="" y2ColumnName="">",
         "<plot title="Chart" sourceVarName="Table3" xColumnName="Column1" yColumnName="Column1" markType="line" thetaColumnName="" sizeColumnName="" colorColumnName="" colorScheme="" y2ColumnName="">",
         "<plot title="Chart" sourceVarName="Table2" xColumnName="Column1" yColumnName="Column1" markType="bar" thetaColumnName="" sizeColumnName="" colorColumnName="" colorScheme="" y2ColumnName="">",

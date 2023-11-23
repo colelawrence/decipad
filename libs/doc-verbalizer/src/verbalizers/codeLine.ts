@@ -1,4 +1,4 @@
-import { getNodeString } from '@udecode/plate-common';
+import { getNodeString } from '../utils/getNodeString';
 import { ELEMENT_CODE_LINE_V2 } from '../../../editor-types/src';
 import { assertElementType } from '../utils/assertElementType';
 import { Verbalizer } from './types';

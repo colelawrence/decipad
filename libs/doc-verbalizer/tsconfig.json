@@ -4,6 +4,9 @@
   "references": [
     {
       "path": "../editor-types"
+    },
+    {
+      "path": "../editor-utils"
     }
   ]
 }

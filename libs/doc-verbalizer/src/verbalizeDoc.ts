@@ -1,4 +1,4 @@
-import { getNodeString, isElement } from '@udecode/plate-common';
+import { isElement } from '@udecode/plate-common';
 import {
   type AnyElement,
   type ColumnsElement,
@@ -7,9 +7,11 @@ import {
   ELEMENT_COLUMNS,
   ELEMENT_TAB,
   RootDocument,
+  TabElement,
 } from '../../editor-types/src';
 import { getVerbalizer } from './verbalizers';
 import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
+import { getNodeString } from './utils/getNodeString';
 
 export interface VerbalizedElement {
   element: AnyElement;
@@ -22,7 +24,9 @@ export interface DocumentVerbalization {
   verbalized: VerbalizedElement[];
 }
 
-const isStructuralElement = (element: AnyElement): element is ColumnsElement =>
+const isStructuralElement = (
+  element: AnyElement
+): element is ColumnsElement | TabElement =>
   element.type === ELEMENT_COLUMNS || element.type === ELEMENT_TAB; // right now, only columns are structural elements. Add tabs here later.
 
 export const verbalizeElement = (
@@ -39,19 +43,19 @@ export const verbalizeElement = (
     if (isElement(node)) {
       tags.add(node.type);
       if (node.type === ELEMENT_SMART_REF) {
-        return node.lastSeenVariableName ?? getNodeString(node);
+        return (node.lastSeenVariableName ?? getNodeString(node)) as string;
       }
-      const v = getVerbalizer(node);
+      const v = getVerbalizer(node as AnyElement);
       const result =
         v != null
-          ? v(node, verbalizeOneNode)
+          ? v(node as AnyElement, verbalizeOneNode)
           : node.children.map(verbalizeOneNode).join('');
       return result;
     }
     const result = getNodeString(node);
     return result;
   };
-  const v = getVerbalizer(element);
+  const v = getVerbalizer(element as AnyElement);
   let verbalized: string;
   if (v == null) {
     tags.add(element.type);

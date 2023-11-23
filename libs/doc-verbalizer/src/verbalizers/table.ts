@@ -1,13 +1,13 @@
+import { identity, transpose } from 'ramda';
+import { assertElementType } from '../utils/assertElementType';
+import { Verbalizer } from './types';
+import stringify from 'json-stringify-safe';
 import {
   ELEMENT_TABLE,
   TableColumnFormulaElement,
   TableHeaderElement,
 } from '../../../editor-types/src';
-import { getNodeString } from '@udecode/plate-common';
-import { identity, transpose } from 'ramda';
-import { assertElementType } from '../utils/assertElementType';
-import { Verbalizer } from './types';
-import stringify from 'json-stringify-safe';
+import { getNodeString } from '../utils/getNodeString';
 
 export const tableVerbalizer: Verbalizer = (element, verbalize) => {
   const tableColumnValue = (

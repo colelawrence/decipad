@@ -5,7 +5,7 @@ import {
   ELEMENT_H3,
   ElementKind,
 } from '../../../editor-types/src';
-import { getNodeString } from '@udecode/plate-common';
+import { getNodeString } from '../utils/getNodeString';
 
 const markdownPrefix: Partial<Record<ElementKind, string>> = {
   [ELEMENT_H1]: '#',

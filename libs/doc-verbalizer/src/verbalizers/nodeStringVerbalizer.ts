@@ -1,4 +1,4 @@
-import { getNodeString } from '@udecode/plate-common';
+import { getNodeString } from '../utils/getNodeString';
 import { Verbalizer } from './types';
 
 export const nodeStringVerbalizer: Verbalizer = (element) =>
