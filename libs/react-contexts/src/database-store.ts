@@ -8,6 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { generateVarName } from '@decipad/utils';
 import { importFromJSONAndCoercions, importFromNotion } from '@decipad/import';
+import { Subject } from 'rxjs';
 
 const IntegrationSteps = ['pick-integration', 'connect', 'map'] as const;
 export type Stage = typeof IntegrationSteps[number];
@@ -180,6 +181,7 @@ interface CodeConnectionStore extends ConnectionStore {
   setLatestResult: (newResult: string) => void;
 
   reset: () => void;
+  onReset: Subject<undefined>;
 
   showAi: boolean;
   toggleShowAi: (b?: boolean) => void;
@@ -197,6 +199,7 @@ export const useCodeConnectionStore = create<CodeConnectionStore>((set) => ({
 
   timeOfLastRun: null,
 
+  onReset: new Subject<undefined>(),
   reset: () =>
     set(() => ({
       code: codePlaceholder(),

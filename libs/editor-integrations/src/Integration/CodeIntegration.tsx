@@ -38,7 +38,7 @@ export const CodeIntegration = function CodeIntegration({
     }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
-  const worker = useWorker(
+  const [worker] = useWorker(
     useCallback(
       (msg: ResultMessageType) => {
         const result = importFromJSONAndCoercions(msg.result, typeMappings);

@@ -1,6 +1,6 @@
 import { BackendUrl } from '@decipad/utils';
 import { SafeJs } from '@decipad/safejs';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNotebookId } from '@decipad/react-contexts';
 
 /**
@@ -11,7 +11,7 @@ export function useWorker(
   ...[msgCallback, errorCallback, initOptions]: ConstructorParameters<
     typeof SafeJs
   >
-): SafeJs | undefined {
+): [SafeJs | undefined, () => void] {
   // Use a ref and worker to keep track of prop changes.
   const workerRef = useRef<SafeJs | undefined>(undefined);
   const [worker, setWorker] = useState<SafeJs | undefined>(undefined);
@@ -42,5 +42,11 @@ export function useWorker(
     };
   }, [errorCallback, initOptions, msgCallback, workerOptions]);
 
-  return worker;
+  const resetWorker = useCallback(() => {
+    const w = new SafeJs(msgCallback, errorCallback, workerOptions);
+    setWorker(w);
+    workerRef.current = w;
+  }, [errorCallback, msgCallback, workerOptions]);
+
+  return [worker, resetWorker];
 }

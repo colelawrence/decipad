@@ -196,7 +196,7 @@ export const CodeConnection: FC<ConnectionProps> = ({
 }) => {
   const { stage, setRawResult } = useConnectionStore();
 
-  const { setCode, setLatestResult, code, showAi, toggleShowAi } =
+  const { setCode, setLatestResult, code, showAi, toggleShowAi, onReset } =
     useCodeConnectionStore();
 
   const { onExecute, info } = useContext(ExecutionContext);
@@ -296,7 +296,15 @@ export const CodeConnection: FC<ConnectionProps> = ({
     [onExecute, setResultPreview]
   );
 
-  const worker = useWorker(msgStream, errorStream);
+  const [worker, resetWorker] = useWorker(msgStream, errorStream);
+
+  useEffect(() => {
+    const sub = onReset.subscribe(resetWorker);
+
+    return () => {
+      sub.unsubscribe();
+    };
+  });
 
   const runCode = useCallback(() => {
     try {
