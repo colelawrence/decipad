@@ -16,14 +16,23 @@ import { byAsc } from '@decipad/utils';
 import { ELEMENT_TITLE, RootDocument } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import Boom from '@hapi/boom';
+import { getNodeString } from '@udecode/plate-common';
 
 const notebooks = resource('notebook');
 const PUBLISHED_SNAPSHOT_NAME = 'Published 1';
 
+/**
+ * Returns the document content and title
+ * depending on whether we are duplicating a published notebook
+ * or one we have access to.
+ *
+ * Duplicating from public notebooks means we only ever copy what
+ * the published snapshot is, including title.
+ */
 async function getNotebookContent(
   userId: string,
   notebookId: string
-): Promise<RootDocument> {
+): Promise<[RootDocument, string]> {
   const data = await tables();
 
   /**
@@ -58,7 +67,7 @@ async function getNotebookContent(
         children: [{ text: '' }],
       };
     }
-    return doc;
+    return [doc, getNodeString(doc.children[0])];
   }
 
   const publishedDoc = await getStoredSnapshot(
@@ -77,7 +86,7 @@ async function getNotebookContent(
     };
   }
 
-  return publishedDoc.doc;
+  return [publishedDoc.doc, getNodeString(publishedDoc.doc.children[0])];
 }
 
 export const duplicatePad = async (
@@ -154,9 +163,12 @@ export const duplicatePad = async (
     minimumPermissionType: 'READ',
   });
 
-  const newName = `Copy of ${previousPad.name}`;
+  const [doc, name] = await getNotebookContent(user.id, id);
 
+  const newName = `Copy of ${name}`;
   previousPad.name = newName;
+  doc.children[0].children[0].text = newName;
+
   previousPad.isPublic = false;
   previousPad.archived = false;
 
@@ -169,9 +181,6 @@ export const duplicatePad = async (
     clonedPad.id
   );
 
-  const doc = await getNotebookContent(user.id, id);
-
-  doc.children[0].children = [{ text: newName }];
   const document = _document != null ? _document : stringify(doc);
 
   return importNotebookContent({
