@@ -88,7 +88,7 @@ test.describe('structured input and calculations @calculation-blocks', () => {
         await expect(
           page.getByTestId('live-code').getByTestId('loading-animation').first()
         ).toBeHidden();
-      }).toPass({
+      }, 'CSV from file upload took too much time to load').toPass({
         timeout: 1000,
       });
       await expect(async () => {
@@ -100,7 +100,21 @@ test.describe('structured input and calculations @calculation-blocks', () => {
         await expect(
           page.getByText('7109 rows, previewing rows 1 to 10')
         ).toBeVisible();
-      }).toPass();
+      }, 'CSV table not added to notebook after csv upload').toPass();
+    });
+
+    await test.step('delete csvs', async () => {
+      await expect(async () => {
+        await page.locator(`[data-testid="drag-handle"] >> nth=0`).click();
+        await page.getByRole('menuitem', { name: /Delete/ }).click();
+        await expect(page.getByTestId('integration-block')).toBeHidden();
+      }, "Wasn't able to delete all CSV tables").toPass();
+      await page.reload();
+      await notebook.waitForEditorToLoad();
+      await expect(
+        page.getByTestId('integration-block'),
+        'CSV Tables still present after being deleted and realoading notebook'
+      ).toBeHidden();
     });
   });
 

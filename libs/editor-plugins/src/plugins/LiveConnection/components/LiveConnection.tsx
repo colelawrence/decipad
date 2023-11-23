@@ -21,7 +21,9 @@ const LiveConnection: PlateComponent = ({ attributes, children, element }) => {
       blockKind="editorTable"
       element={element}
       {...attributes}
-      onDelete={() => setDeleted(false)}
+      onDelete={() => {
+        setDeleted(true);
+      }}
       dependencyId={element.id}
     >
       <LiveConnectionResultContextProvider>

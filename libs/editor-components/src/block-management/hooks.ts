@@ -77,9 +77,10 @@ export const useBlockActions = ({ editor, element }: BlockActionParams) => {
       };
 
       if (path) {
-        typeof parentOnDelete === 'function'
-          ? parentOnDelete()
-          : onDeleteInternal();
+        if (typeof parentOnDelete === 'function') {
+          parentOnDelete();
+        }
+        onDeleteInternal();
       }
     },
     [editor, element]
