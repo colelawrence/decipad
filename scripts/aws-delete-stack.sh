@@ -4,11 +4,12 @@ set -euo pipefail
 
 export PATH="${PATH}:./node_modules/.bin"
 
-for stack in "${@:-}"
+for stacksuff in "${@:-}"
 do
-  if [[ -z "$stack" ]]; then
-    echo "please tell me a stack name"
+  if [[ -z "$stacksuff" ]]; then
+    echo "please tell me a PR number"
   else
+    stack="DecipadBackendStaging${stacksuff}"
     if [[ $stack == "DecipadBackendStaging" || $stack == "DecipadBackendStagingAlpha" ]]; then
       echo "Invalid stack name ${stack}"
       return 1
