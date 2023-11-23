@@ -172,6 +172,16 @@ export interface NotebookOpenApi {
     unit?: string;
   }) => CreateResult;
 
+  updateSliderVariable: (params: {
+    elementId: string;
+    variableName?: string;
+    max?: number;
+    min?: number;
+    step?: number;
+    value?: number;
+    unit?: string;
+  }) => void;
+
   // dropdown
   appendChoice: (params: {
     variableName: string;

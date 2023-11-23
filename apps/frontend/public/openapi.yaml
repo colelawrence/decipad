@@ -16,7 +16,7 @@ paths:
       description: Retrieves a brief description of all notebook elements
       operationId: describeAllNotebookElements
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -38,12 +38,12 @@ paths:
       description: fetches an element from the notebook with the given id
       operationId: getElementById
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AnyElement"
+                $ref: '#/components/schemas/AnyElement'
       parameters:
         - name: notebookId
           in: query
@@ -68,7 +68,7 @@ paths:
       description: removes an entire existing element from the notebook
       operationId: removeElement
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -101,7 +101,7 @@ paths:
       description: Appends any element to the end of the notebook
       operationId: appendElement
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -126,16 +126,17 @@ paths:
                 element:
                   description: the new element getting appended to the notebook
                   schema:
-                    $ref: "#/components/schemas/AnyElement"
+                    $ref: '#/components/schemas/AnyElement'
                   required: true
   /api/notebook/appendText:
     post:
       summary: Appends markdown text to the end of the notebook
-      description: splits the markdown into separate elements and inserts them one at
+      description:
+        splits the markdown into separate elements and inserts them one at
         a time in the notebook
       operationId: appendText
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -168,7 +169,7 @@ paths:
       description: Changes the text in a text element
       operationId: changeText
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -206,7 +207,7 @@ paths:
       description: appends a code line to the notebook
       operationId: appendCodeLine
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -229,7 +230,8 @@ paths:
               type: object
               properties:
                 variableName:
-                  description: the name of the variable to create. Should be unique and have no
+                  description:
+                    the name of the variable to create. Should be unique and have no
                     spaces or weird characters.
                   required: true
                   schema:
@@ -245,7 +247,7 @@ paths:
       description: changes an existing code line in the notebook
       operationId: updateCodeLine
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -288,7 +290,7 @@ paths:
       description: appends an empty table to the end of the notebook
       operationId: appendEmptyTable
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -311,7 +313,8 @@ paths:
               type: object
               properties:
                 tableName:
-                  description: the name of the table you want to append. Should have no spaces or
+                  description:
+                    the name of the table you want to append. Should have no spaces or
                     special characters.
                   required: true
                   schema:
@@ -335,7 +338,7 @@ paths:
       description: appends a filled table to the end of the notebook
       operationId: appendFilledTable
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -358,7 +361,8 @@ paths:
               type: object
               properties:
                 tableName:
-                  description: the name of the table you want to append. Should have no spaces or
+                  description:
+                    the name of the table you want to append. Should have no spaces or
                     special characters.
                   required: true
                   schema:
@@ -387,7 +391,7 @@ paths:
       description: fills the table data
       operationId: fillTable
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -431,7 +435,7 @@ paths:
       description: fills the data on a column of the given table
       operationId: fillColumn
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -477,7 +481,7 @@ paths:
       description: updates the data on a table row
       operationId: fillRow
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -522,7 +526,7 @@ paths:
       description: inserts an empty column in an existing table
       operationId: insertEmptyTableColumn
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -550,7 +554,8 @@ paths:
                   schema:
                     type: string
                 columnName:
-                  description: the name of the new column. Must contain no spaces or weird
+                  description:
+                    the name of the new column. Must contain no spaces or weird
                     characters
                   required: true
                   schema:
@@ -561,7 +566,7 @@ paths:
       description: inserts a column in an existing table and fills it
       operationId: insertFilledTableColumn
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -606,7 +611,7 @@ paths:
       description: inserts a calculated column to an existing table
       operationId: insertFormulaTableColumn
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -634,7 +639,8 @@ paths:
                   schema:
                     type: string
                 columnName:
-                  description: the name of the new column. Must contain no spaces or weird
+                  description:
+                    the name of the new column. Must contain no spaces or weird
                     characters
                   required: true
                   schema:
@@ -650,7 +656,7 @@ paths:
       description: removes a column from a table
       operationId: removeTableColumn
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -688,7 +694,7 @@ paths:
       description: appends a row to the end of an existing table
       operationId: insertTableRow
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -728,7 +734,7 @@ paths:
       description: removes a row from a table
       operationId: removeTableRow
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -766,7 +772,7 @@ paths:
       description: updates the content of a cell on a table
       operationId: updateTableCell
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -810,13 +816,15 @@ paths:
                     type: string
   /api/notebook/appendDataView:
     post:
-      summary: appends a data view (pivot table) that summarizes and analyzes the data
+      summary:
+        appends a data view (pivot table) that summarizes and analyzes the data
         on a given table
-      description: appends a data view (pivot table) that summarizes and analyzes the
+      description:
+        appends a data view (pivot table) that summarizes and analyzes the
         data on a given table
       operationId: appendDataView
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -867,7 +875,8 @@ paths:
                             - stddev
                         round:
                           type: string
-                          description: 'Optional. The number of decimal places it rounds to. Use negative
+                          description:
+                            'Optional. The number of decimal places it rounds to. Use negative
                             numbers to round to decimal points. Example: to
                             round to the thousanth use "-3". When using dates
                             you can round to "quarter", "year", "month" or
@@ -875,12 +884,13 @@ paths:
   /api/notebook/appendSliderVariable:
     post:
       summary: appends a slider component
-      description: appends a slider component into the notebook. The user will be able
+      description:
+        appends a slider component into the notebook. The user will be able
         to change that value by playing with the slider. The value of the slider
         can be used in code using the given variable name.
       operationId: appendSliderVariable
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -903,7 +913,8 @@ paths:
               type: object
               properties:
                 variableName:
-                  description: the name of the variable for this slider. Should be unique and have
+                  description:
+                    the name of the variable for this slider. Should be unique and have
                     no spaces or weird characters.
                   required: true
                   schema:
@@ -913,6 +924,13 @@ paths:
                   required: true
                   schema:
                     type: number
+                unit:
+                  description:
+                    the unit of the value. Can be something like "USD per month",
+                    "GBP", "bananas", "bananas per minute", etc.
+                  required: false
+                  schema:
+                    type: string
                 min:
                   description: the minimum value this slider accepts
                   required: false
@@ -928,14 +946,75 @@ paths:
                   required: false
                   schema:
                     type: number
+  /api/notebook/updateSliderVariable:
+    post:
+      summary: changes a slider component
+      description: changes an existing slider component.
+      operationId: updateSliderVariable
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notebookErrors:
+                    type: array
+      parameters:
+        - name: notebookId
+          in: query
+          description: the notebook id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                variableName:
+                  description:
+                    the new name of the variable for this slider. Should be unique and
+                    have no spaces or weird characters.
+                  required: false
+                  schema:
+                    type: string
+                value:
+                  description: the new value for this slider
+                  required: false
+                  schema:
+                    type: number
+                unit:
+                  description: the new unit of the value
+                  required: false
+                  schema:
+                    type: string
+                min:
+                  description: the new minimum value this slider accepts
+                  required: false
+                  schema:
+                    type: number
+                max:
+                  description: the new maximum value this slider accepts
+                  required: false
+                  schema:
+                    type: number
+                step:
+                  description: the new step at which the user can change the value
+                  required: false
+                  schema:
+                    type: number
   /api/notebook/appendPlot:
     post:
       summary: appends a plot (or graph) to the notebook
-      description: plots or graphs can be cartesian or pie charts (plot type "arc").
+      description:
+        plots or graphs can be cartesian or pie charts (plot type "arc").
         Cartesian chart types can be bar, line, area, tick or point.
       operationId: appendPlot
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -997,7 +1076,7 @@ paths:
       description: changes some of the parameters for a plot
       operationId: setPlotParams
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -1025,7 +1104,8 @@ paths:
                   schema:
                     type: string
                 newPlotParams:
-                  description: the parameters to change on the plot. Only include those that need
+                  description:
+                    the parameters to change on the plot. Only include those that need
                     to change
                   required: true
                   schema:
@@ -1057,16 +1137,17 @@ paths:
   /api/notebook/appendChoice:
     post:
       summary: appends a selection box for the user to choose one value
-      description: appends a slider component into the notebook. The value of the
+      description:
+        appends a slider component into the notebook. The value of the
         selected option can be used in code using the given variable name.
       operationId: appendChoice
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateResult"
+                $ref: '#/components/schemas/CreateResult'
       parameters:
         - name: notebookId
           in: query
@@ -1081,7 +1162,8 @@ paths:
               type: object
               properties:
                 variableName:
-                  description: the name of the variable for this slider. Should be unique and have
+                  description:
+                    the name of the variable for this slider. Should be unique and have
                     no spaces or weird characters.
                   required: true
                   schema:
@@ -1105,7 +1187,7 @@ paths:
       description: removes an existing element from the notebook
       operationId: createNotebook
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -1134,7 +1216,7 @@ paths:
       description: evaluates a snippet of decipad language code
       operationId: evalCode
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -1175,7 +1257,7 @@ paths:
       description: generates Decipad language code from a prompt
       operationId: generateCode
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -1257,4 +1339,4 @@ components:
         children:
           type: array
           items:
-            $ref: "#/components/schemas/AnyElement"
+            $ref: '#/components/schemas/AnyElement'

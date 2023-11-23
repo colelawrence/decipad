@@ -32,6 +32,14 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
         type: 'number',
       },
     },
+    unit: {
+      description:
+        'the unit of the value. Can be something like "USD per month", "GBP", "bananas", "bananas per minute", etc.',
+      required: false,
+      schema: {
+        type: 'string',
+      },
+    },
     min: {
       description: 'the minimum value this slider accepts',
       required: false,

@@ -7,6 +7,8 @@ import {
   ELEMENT_TABLE,
   type MyEditor,
   type TableElement,
+  ELEMENT_VARIABLE_DEF,
+  VariableDefinitionElement,
 } from '@decipad/editor-types';
 import { matchElementByVariableName } from '../../utils/matchElementByVariableName';
 
@@ -14,7 +16,12 @@ export const findElementByVariableName = (
   editor: MyEditor,
   variableName: string
 ):
-  | TNodeEntry<CodeLineElement | CodeLineV2Element | TableElement>
+  | TNodeEntry<
+      | CodeLineElement
+      | CodeLineV2Element
+      | TableElement
+      | VariableDefinitionElement
+    >
   | undefined => {
   const nodeEntry = findNode(editor, {
     match: matchElementByVariableName(variableName),
@@ -27,10 +34,14 @@ export const findElementByVariableName = (
       'type' in node &&
       (node.type === ELEMENT_CODE_LINE ||
         node.type === ELEMENT_CODE_LINE_V2 ||
-        node.type === ELEMENT_TABLE)
+        node.type === ELEMENT_TABLE ||
+        node.type === ELEMENT_VARIABLE_DEF)
     ) {
       return nodeEntry as TNodeEntry<
-        CodeLineElement | CodeLineV2Element | TableElement
+        | CodeLineElement
+        | CodeLineV2Element
+        | TableElement
+        | VariableDefinitionElement
       >;
     }
   }
