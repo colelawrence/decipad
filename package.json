@@ -344,7 +344,7 @@
     "search-query-parser": "^1.6.0",
     "sharp": "^0.32.1",
     "simple-cookie": "1.0.13",
-    "slate": "0.94.1",
+    "slate": "0.101.1",
     "slate-history": "0.93.0",
     "slate-hyperscript": "0.77.0",
     "slate-react": "0.98.0",
