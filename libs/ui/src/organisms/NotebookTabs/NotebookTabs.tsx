@@ -589,7 +589,6 @@ const TabsScrollWrapper = styled.div(
     position: 'relative',
     display: 'flex',
     height: '100%',
-    margin: '0px -1px',
     overflow: 'hidden',
     width: '100%',
   },
@@ -636,6 +635,13 @@ const IconWrapper = styled.div({
   },
 });
 
+const FIRST_TAB_BOX_SHADOW = `inset -1px -1px 0px 0px ${cssVar(
+  'backgroundHeavy'
+)}`;
+const ALL_OTHER_TAB_BOX_SHADOW = `inset 0px -1px 0px 1px ${cssVar(
+  'backgroundHeavy'
+)}`;
+
 const TabWrapper = styled(TabsPrimitive.Trigger)<{
   isActive: boolean;
   isHidden: boolean;
@@ -658,14 +664,18 @@ const TabWrapper = styled(TabsPrimitive.Trigger)<{
   ...(props.isActive && {
     backgroundColor: cssVar('backgroundMain'),
     borderRadius: '0px 0px 12px 12px',
-    boxShadow: `inset 0px -1px 0px 1px ${cssVar('backgroundHeavy')}`,
 
     '&:first-of-type': {
+      boxShadow: FIRST_TAB_BOX_SHADOW,
       borderRadius: '0px 0px 12px 16px',
 
       '&::before': {
         display: 'none',
       },
+    },
+
+    '&:not(:first-of-type)': {
+      boxShadow: ALL_OTHER_TAB_BOX_SHADOW,
     },
 
     '&::before, &::after': {
