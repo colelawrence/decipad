@@ -25886,6 +25886,11 @@ mimic-fn@^4.0.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-4.0.0.tgz#60a90550d5cb0b239cca65d893b1a53b29871ecc"
   integrity sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==
 
+mimic-function@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/mimic-function/-/mimic-function-5.0.0.tgz#6cb5a922d17923ee58cf2f7d904f3eb350e0c87a"
+  integrity sha512-RBfQ+9X9DpXdEoK7Bu+KeEU6vFhumEIiXKWECPzRBmDserEq4uR2b/VCm0LwpMSosoq2k+Zuxj/GzOr0Fn6h/g==
+
 mimic-response@^1.0.0, mimic-response@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
@@ -27309,12 +27314,12 @@ p-series@2.1.0:
     "@sindresorhus/is" "^0.15.0"
     p-reduce "^2.1.0"
 
-p-time@2:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/p-time/-/p-time-2.1.0.tgz#b9cbdac8fcd3baa4153999a15c80337036a2e9cf"
-  integrity sha512-qmQMkimWJHh4yeQz1tUcxMkNpPtrWDkwmfG/XfT0TR7iBiZpacyGZmaDf9o6SAwW8r9+DyeqfbYFJDO0J/E+1A==
+p-time@4:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/p-time/-/p-time-4.0.0.tgz#744a1c6c076e5bfc4b3b22070c88b1b26b7c26c3"
+  integrity sha512-bbuYJ6Rng1fCcbhPAHz0LV0geqlbQfWPFkpxOOr0X3bEJiCJoIyeaVEaiAYLEHMG58oKUKeFiGKfl18nxvNMJA==
   dependencies:
-    mimic-fn "^2.1.0"
+    mimic-function "^5.0.0"
 
 p-timeout@^3.1.0, p-timeout@^3.2.0:
   version "3.2.0"
