@@ -159,11 +159,15 @@ test('duplicating only the published changes', async ({
     );
   });
 
-  await test.step('add paragraph but dont publish', async () => {
+  await test.step('add paragraph but dont publish (and checks the unpublished notification)', async () => {
     await testUserPage.keyboard.type(unpublishedParagraph);
     await expect(testUserNotebook.notebookParagraph.nth(2)).toHaveText(
       unpublishedParagraph
     );
+    await expect(testUserNotebook.republishNotification).toBeVisible();
+    await testUserPage.goBack();
+    await testUserPage.goForward();
+    await expect(testUserNotebook.republishNotification).toBeVisible();
   });
 
   await test.step('[anotherTestUser] should only see the published changes', async () => {

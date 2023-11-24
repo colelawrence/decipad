@@ -116,6 +116,7 @@ export class EditorController implements RootEditorController {
     titleEditor.apply = (_op) => {
       const op = _op as TOperation;
       if (op.FROM_ROOT) {
+        this.events.next({ type: 'any-change' });
         apply(op);
         return;
       }

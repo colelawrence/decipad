@@ -123,6 +123,7 @@ export default gql`
       notebookId: ID!
       snapshotName: String!
       remoteState: String
+      localVersionHash: String # For caching use on the frontend
       forceSearchIndexUpdate: Boolean
     ): Boolean!
 

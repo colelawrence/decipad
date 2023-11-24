@@ -288,7 +288,10 @@ export const NotebookPublishingPopUp = ({
             onClick={toggleMenuOpen}
             testId="publish-button"
           >
-            <span css={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span
+              css={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}
+              data-testId="publish-notification"
+            >
               <Dot size={4} noBorder position="relative" />
               Share
             </span>

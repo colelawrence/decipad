@@ -23,6 +23,10 @@ import { NotebookMetaActionsReturn } from '@decipad/interfaces';
 import { useNotebookMetaData } from '@decipad/react-contexts';
 import { getLocalNotebookUpdates } from '@decipad/docsync';
 import { captureException } from '@sentry/browser';
+import * as Y from 'yjs';
+import { toSlateDoc } from '@decipad/slate-yjs';
+import { canonicalize } from 'json-canonicalize';
+import md5 from 'md5';
 
 const SNAPSHOT_NAME = 'Published 1';
 
@@ -210,10 +214,19 @@ export function useNotebookMetaActions(
 
       const localState = await getLocalNotebookUpdates(notebookId);
 
+      let checksumLocal: string | undefined;
+      if (localState) {
+        const doc = new Y.Doc();
+        Y.applyUpdate(doc, localState);
+        const canonicalizedObj = canonicalize(toSlateDoc(doc.getArray()));
+        checksumLocal = md5(canonicalizedObj);
+      }
+
       await createOrUpdateSnapshot({
         notebookId,
         snapshotName: SNAPSHOT_NAME,
         remoteState: localState && Buffer.from(localState).toString('base64'),
+        localVersionHash: checksumLocal,
       });
       await remoteUpdateNotebookIsPublic({ id: notebookId, isPublic: true });
     },

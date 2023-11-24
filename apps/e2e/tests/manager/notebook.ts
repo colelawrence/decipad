@@ -28,6 +28,7 @@ export class Notebook {
   readonly restoreArchiveNotebook: Locator;
   readonly duplicateNotebook: Locator;
   readonly topRightDuplicateNotebook: Locator;
+  readonly republishNotification: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -53,6 +54,7 @@ export class Notebook {
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
       name: 'Put Back',
     });
+    this.republishNotification = page.getByTestId('publish-notification');
   }
 
   /**
@@ -428,14 +430,11 @@ export class Notebook {
    * await notebook.addBlockShashCommand('table');
    * ```
    */
-  async addBlockShashCommand(command: SlashCommand) {
+  async addBlockSlashCommand(command: SlashCommand) {
     // somethimes the first click misses
     await this.notebookParagraph.last().click();
+    await this.notebookParagraph.last().click({ delay: 100 });
     // check paragraph is ready
-    await expect(async () => {
-      await this.notebookParagraph.last().click();
-      await expect(this.page.getByText('for new blocks')).toBeVisible();
-    }).toPass();
     await this.page.keyboard.type(`/`);
     // checks menu had openned
     await this.page.getByRole('menu').isVisible();
@@ -506,7 +505,7 @@ export class Notebook {
         await this.addBlockPlusBlockCommand(command);
         break;
       default:
-        await this.addBlockShashCommand(command);
+        await this.addBlockSlashCommand(command);
     }
   }
 
@@ -772,13 +771,13 @@ export class Notebook {
     await this.page.keyboard.type(identifier);
 
     await this.page.click('div [data-testid="input-widget-name"] >> nth=-1');
-    await await this.page.keyboard.press('ArrowDown');
+    await this.page.keyboard.press('ArrowDown');
     // erase 100$, then focus goes to title, we come back down
-    await await this.page.keyboard.press('End');
-    await await this.page.keyboard.press('Backspace');
-    await await this.page.keyboard.press('Backspace');
-    await await this.page.keyboard.press('Backspace');
-    await await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.press('End');
+    await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.press('Backspace');
+    await this.page.keyboard.press('Backspace');
 
     await this.page.keyboard.type(value.toString());
   }

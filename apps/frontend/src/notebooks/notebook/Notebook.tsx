@@ -392,6 +392,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+
   const permission = meta.data?.getPadById?.myPermissionType;
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
@@ -428,12 +429,19 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     }
   }, [permission, sidebarData]);
 
-  const isPublic = meta.data?.getPadById?.isPublic;
-  const snapshot = meta.data?.getPadById?.snapshots.find(
-    (s) => s.snapshotName === SNAPSHOT_NAME
+  const [snapshotVersion, setSnapshotVersion] = useState<string | undefined>(
+    undefined
   );
-
-  const [snapshotVersion, setSnapshotVersion] = useState(snapshot?.version);
+  useEffect(() => {
+    setSnapshotVersion((version) => {
+      if (version) return;
+      return (
+        meta.data?.getPadById?.snapshots.find(
+          (s) => s.snapshotName === SNAPSHOT_NAME
+        )?.version ?? undefined
+      );
+    });
+  }, [meta.data?.getPadById?.snapshots]);
 
   useEffect(() => {
     const sub = sidebarData.hasPublished.subscribe(() => {
@@ -448,12 +456,23 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
   const [hasUnpublishedChanges, setHasUnpublishedChanges] = useState(false);
 
   useEffect(() => {
+    if (!meta.data?.getPadById?.isPublic || !docsync || !snapshotVersion)
+      return;
+    if (!docsync.isLoadedLocally || !docsync.isLoadedRemotely) return;
+
+    setHasUnpublishedChanges(!docsync.equals(snapshotVersion));
+  }, [docsync, snapshotVersion, meta.data?.getPadById?.isPublic]);
+
+  useEffect(() => {
     const debouncedSub = docsync?.events.pipe(
       debounce(() => interval(DEBOUNCE_HAS_UNPUBLISHED_CHANGES_TIME_MS))
     );
 
     const sub = debouncedSub?.subscribe(() => {
-      if (isPublic && !(snapshotVersion && docsync?.equals(snapshotVersion))) {
+      if (
+        meta.data?.getPadById?.isPublic &&
+        !(snapshotVersion && docsync?.equals(snapshotVersion))
+      ) {
         setHasUnpublishedChanges(true);
       }
     });
@@ -461,7 +480,12 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     return () => {
       sub?.unsubscribe();
     };
-  }, [docsync, docsync?.events, isPublic, snapshotVersion]);
+  }, [
+    docsync,
+    docsync?.events,
+    snapshotVersion,
+    meta.data?.getPadById?.isPublic,
+  ]);
 
   const revertChanges = useCallback(() => {
     while (docsync?.undoManager?.canUndo()) {

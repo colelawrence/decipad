@@ -20,6 +20,8 @@ import {
 } from './generated';
 import * as schema from './schema.generated.json';
 
+const PUBLISHED_SNAPSHOT = 'Published 1';
+
 const addNotebookToItsWorkspace = (cache: Cache, notebook: Pad) => {
   cache.updateQuery<GetWorkspacesQuery>(
     { query: GetWorkspacesDocument },
@@ -106,6 +108,36 @@ export const graphCacheConfig: GraphCacheConfig = {
       importPad: (result, _args, cache) => {
         addNotebookToItsWorkspace(cache, result.importPad as Pad);
       },
+      createOrUpdateSnapshot(_result, args, cache) {
+        if (typeof args.remoteState !== 'string') return;
+
+        cache.updateQuery<GetNotebookMetaQuery>(
+          {
+            query: GetNotebookMetaDocument,
+            variables: {
+              id: args.notebookId,
+            },
+          },
+          (data) => {
+            if (!data?.getPadById || !args.localVersionHash) return data;
+
+            const publishedSnapshot = data.getPadById.snapshots.find(
+              (s) => s.snapshotName === PUBLISHED_SNAPSHOT
+            );
+            if (!publishedSnapshot) {
+              data.getPadById.snapshots.push({
+                __typename: 'PadSnapshot',
+                snapshotName: PUBLISHED_SNAPSHOT,
+                version: args.localVersionHash,
+                createdAt: new Date().getTime(),
+                updatedAt: new Date().getTime(),
+              });
+            }
+
+            return data;
+          }
+        );
+      },
       updatePad: (_result, args, cache) => {
         cache.updateQuery<GetNotebookByIdQuery>(
           {
@@ -161,9 +193,6 @@ export const graphCacheConfig: GraphCacheConfig = {
             return data;
           }
         );
-      },
-      createOrUpdateSnapshot() {
-        // cache.invalidate({ __typename: 'Pad', id: args.notebookId });
       },
       removePad: (_result, args, cache) => {
         cache.invalidate({ __typename: 'Pad', id: args.id });
