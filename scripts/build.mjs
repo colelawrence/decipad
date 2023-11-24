@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import stringify from 'json-stringify-safe';
-import globby from 'globby';
+import { globby } from 'globby';
 import esbuild from 'esbuild';
 import { join, dirname } from 'path';
 import { exec, spawn } from 'child_process';
