@@ -4,14 +4,15 @@ import {
   TNodeEntry,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { Action, ActionParams, NotebookActionHandler } from './types';
+import { z } from 'zod';
+import { notAcceptable } from '@hapi/boom';
+import { TableCellElement } from '@decipad/editor-types';
+import { getDefined } from '@decipad/utils';
+import { Action, NotebookActionHandler } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { insertTableRow } from './insertTableRow';
 import { replaceText } from './utils/replaceText';
-import { TableCellElement } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
-import { notAcceptable } from '@hapi/boom';
 
 export const updateTableCell: Action<'updateTableCell'> = {
   summary: 'updates the content of a cell on a table',
@@ -45,11 +46,13 @@ export const updateTableCell: Action<'updateTableCell'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'updateTableCell'> =>
-    typeof params.tableId === 'string' &&
-    typeof params.columnName === 'string' &&
-    typeof params.rowIndex === 'number' &&
-    typeof params.newCellContent === 'string',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+      rowIndex: z.number().int(),
+      newCellContent: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, rowIndex, newCellContent }) => {
@@ -60,7 +63,7 @@ export const updateTableCell: Action<'updateTableCell'> = {
     }
     const [table, tablePath] = getTableById(editor, tableId);
     const headerIndex = getTableColumnIndexByName(table, columnName);
-    const updateCellPath = [...tablePath, rowIndex + 2, headerIndex, 0];
+    const updateCellPath = [...tablePath, rowIndex + 2, headerIndex];
     withoutNormalizing(editor, () => {
       while (!hasNode(editor, updateCellPath)) {
         const tableColumnCount = table.children[1].children.length;

@@ -1,8 +1,10 @@
 import { ELEMENT_PLOT } from '@decipad/editor-types';
-import { ActionParams, RequiresNotebookAction } from './types';
+import { setNodes } from '@udecode/plate-common';
+import { z } from 'zod';
+import { RequiresNotebookAction } from './types';
 import { getElementById } from './utils/getElementById';
 import { getPartialPlotParams } from './utils/getPartialPlotParams';
-import { setNodes } from '@udecode/plate-common';
+import { plotParams } from './schemas/plotParams';
 
 export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
   summary: 'changes some of the parameters for a plot',
@@ -58,10 +60,11 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
-  validateParams: (params): params is ActionParams<'setPlotParams'> =>
-    typeof params.plotId === 'string' &&
-    params.newPlotParams != null &&
-    typeof params.newPlotParams === 'object',
+  parameterSchema: () =>
+    z.object({
+      polotId: z.string(),
+      newPlotParams: plotParams(),
+    }),
   handler: (editor, { plotId, newPlotParams }) => {
     const [plot, plotPath] = getElementById(editor, plotId, ELEMENT_PLOT);
 

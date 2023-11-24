@@ -1,9 +1,11 @@
-import { ActionParams, RequiresNotebookAction } from './types';
-import { appendPath } from '../utils/appendPath';
 import { insertNodes } from '@udecode/plate-common';
-import { getTableById } from './utils/getTablebyId';
+import { z } from 'zod';
 import { getDefined } from '@decipad/utils';
+import { RequiresNotebookAction } from './types';
+import { appendPath } from '../utils/appendPath';
+import { getTableById } from './utils/getTablebyId';
 import { getPlotParams } from './utils/getPlotParams';
+import { plotParams as plotParamsSchema } from './schemas/plotParams';
 
 export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
   summary: 'appends a plot (or graph) to the notebook',
@@ -63,10 +65,11 @@ export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
-  validateParams: (params): params is ActionParams<'appendPlot'> =>
-    typeof params.tableId === 'string' &&
-    params.plotParams != null &&
-    typeof params.plotParams === 'object',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      plotParams: plotParamsSchema(),
+    }),
   handler: (editor, { tableId, plotParams }) => {
     const [table] = getTableById(editor, tableId);
 

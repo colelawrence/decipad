@@ -1,8 +1,9 @@
 import { insertNodes } from '@udecode/plate-common';
-import { ELEMENT_TD, ELEMENT_TR, TableRowElement } from '@decipad/editor-types';
-import { Action, ActionParams } from './types';
-import { getTableById } from './utils/getTablebyId';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
+import { ELEMENT_TD, ELEMENT_TR, TableRowElement } from '@decipad/editor-types';
+import { Action } from './types';
+import { getTableById } from './utils/getTablebyId';
 
 export const insertTableRow: Action<'insertTableRow'> = {
   summary: 'appends a row to the end of an existing table',
@@ -25,10 +26,11 @@ export const insertTableRow: Action<'insertTableRow'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'insertTableRow'> =>
-    typeof params.tableId === 'string' &&
-    Array.isArray(params.row) &&
-    params.row.every((cell) => typeof cell === 'string'),
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      row: z.array(z.string()),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, row }) => {

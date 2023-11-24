@@ -1,12 +1,13 @@
-import { getTableById } from './utils/getTablebyId';
 import {
   removeNodes,
   setNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
+import { z } from 'zod';
 import { TableHeaderElement } from '@decipad/editor-types';
-import { Action, ActionParams } from './types';
+import { getTableById } from './utils/getTablebyId';
+import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
+import { Action } from './types';
 
 export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
   summary: 'turns a calculated back into a data column',
@@ -26,8 +27,11 @@ export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'unsetTableColumnFormula'> =>
-    typeof params.tableId === 'string' && typeof params.columnName === 'string',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {

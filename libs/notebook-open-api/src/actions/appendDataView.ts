@@ -8,9 +8,10 @@ import {
   ELEMENT_DATA_VIEW_TR,
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import { Action, ActionParams } from './types';
-import { appendPath } from '../utils/appendPath';
+import { z } from 'zod';
 import { insertNodes } from '@udecode/plate-common';
+import { Action } from './types';
+import { appendPath } from '../utils/appendPath';
 import { getTableById } from './utils/getTablebyId';
 import { fixColumnName } from './utils/fixColumnName';
 import { getColumnType } from './utils/getColumnType';
@@ -70,10 +71,18 @@ export const appendDataView: Action<'appendDataView'> = {
     schemaName: 'CreateResult',
   },
   requiresNotebook: true,
-  validateParams: (params): params is ActionParams<'appendDataView'> =>
-    typeof params.tableId === 'string' &&
-    Array.isArray(params.columns) &&
-    params.columns.every((col) => col != null && typeof col === 'object'),
+  parameterSchema: () =>
+    z.object({
+      columns: z.array(
+        z.object({
+          name: z.string(),
+          aggregation: z
+            .enum(['average', 'max', 'median', 'min', 'span', 'sum', 'stddev'])
+            .optional(),
+          round: z.string().optional(),
+        })
+      ),
+    }),
   handler: async (editor, { tableId, columns: _columns }) => {
     const [table] = getTableById(editor, tableId);
     const computer = getRemoteComputer();

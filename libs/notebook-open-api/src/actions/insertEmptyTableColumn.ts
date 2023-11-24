@@ -1,8 +1,9 @@
 import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 import { ELEMENT_TH, TableHeaderElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { Action, ActionParams } from './types';
+import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getNodeString } from '../utils/getNodeString';
 
@@ -28,8 +29,11 @@ export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'insertEmptyTableColumn'> =>
-    typeof params.tableId === 'string' && typeof params.columnName === 'string',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {

@@ -2,6 +2,7 @@ import { getRemoteComputer, materializeResult } from '@decipad/remote-computer';
 import { outputResult } from './utils/outputResult';
 import { ServerSideNotebookApi } from '../types';
 import { CustomAction } from '@decipad/notebook-open-api';
+import { z } from 'zod';
 
 export const evalCode: CustomAction<
   Parameters<ServerSideNotebookApi['evalCode']>[0],
@@ -49,10 +50,10 @@ export const evalCode: CustomAction<
       },
     },
   },
-  validateParams: (
-    params
-  ): params is Parameters<ServerSideNotebookApi['evalCode']>[0] =>
-    typeof params.code === 'string',
+  parameterSchema: () =>
+    z.object({
+      code: z.string(),
+    }),
   requiresNotebook: false,
   handler: async ({ code }) => {
     const computer = getRemoteComputer();

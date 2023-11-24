@@ -1,4 +1,5 @@
 import { insertNodes, getNode } from '@udecode/plate-common';
+import { z } from 'zod';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
@@ -7,7 +8,7 @@ import {
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';
-import { Action, ActionParams } from './types';
+import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { VariableSliderElement } from '../../../editor-types/src/interactive-elements';
 import { getNodeString } from '../utils/getNodeString';
@@ -67,9 +68,15 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
-  validateParams: (params): params is ActionParams<'appendSliderVariable'> =>
-    typeof params.variableName === 'string' &&
-    typeof params.initialValue === 'number',
+  parameterSchema: () =>
+    z.object({
+      variableName: z.string(),
+      initialValue: z.number(),
+      unit: z.string().optional(),
+      min: z.number().optional(),
+      max: z.number().optional(),
+      step: z.number().optional(),
+    }),
   handler: (
     editor,
     { variableName, min = 0, max = 100, initialValue, step = 1, unit = '' }

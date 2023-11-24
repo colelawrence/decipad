@@ -1,8 +1,9 @@
 import { hasNode, withoutNormalizing } from '@udecode/plate-common';
-import { Action, ActionParams, RequiresNotebookAction } from './types';
-import { getTableById } from './utils/getTablebyId';
 import { notAcceptable } from '@hapi/boom';
+import { z } from 'zod';
 import { insertTableRow } from './insertTableRow';
+import { Action, RequiresNotebookAction } from './types';
+import { getTableById } from './utils/getTablebyId';
 import { updateTableCell } from './updateTableCell';
 import { getNodeString } from '../utils/getNodeString';
 
@@ -34,11 +35,12 @@ export const fillRow: Action<'fillRow'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'fillRow'> =>
-    typeof params.tableId === 'string' &&
-    typeof params.rowIndex === 'number' &&
-    Array.isArray(params.rowData) &&
-    params.rowData.every((cell) => typeof cell === 'string'),
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      rowIndex: z.number().int(),
+      rowData: z.array(z.string()),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex, rowData }) => {

@@ -1,6 +1,7 @@
-import { Action, ActionParams } from './types';
+import { z } from 'zod';
 import { ELEMENT_TAB, ELEMENT_TITLE } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
+import { Action } from './types';
 
 export const describeAllNotebookElements: Action<'describeAllNotebookElements'> =
   {
@@ -17,9 +18,7 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
     },
     parameters: {},
     requiresNotebook: true,
-    validateParams: (
-      _params
-    ): _params is ActionParams<'describeAllNotebookElements'> => true,
+    parameterSchema: () => z.unknown(),
     handler: (editor) =>
       verbalizeDoc({
         children: [

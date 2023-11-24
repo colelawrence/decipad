@@ -1,5 +1,6 @@
 import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -10,10 +11,10 @@ import {
   TableElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { Action, ActionParams } from './types';
-import { appendPath } from '../utils/appendPath';
 import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
+import { Action } from './types';
+import { appendPath } from '../utils/appendPath';
 import { getNodeString } from '../utils/getNodeString';
 
 export const appendEmptyTable: Action<'appendEmptyTable'> = {
@@ -50,11 +51,11 @@ export const appendEmptyTable: Action<'appendEmptyTable'> = {
   response: {
     schemaName: 'CreateResult',
   },
-  validateParams: (params): params is ActionParams<'appendEmptyTable'> =>
-    typeof params.tableName === 'string' &&
-    Array.isArray(params.columnNames) &&
-    params.columnNames.every((colName) => typeof colName === 'string') &&
-    typeof params.rowCount === 'number',
+  parameterSchema: () =>
+    z.object({
+      columnNames: z.array(z.string()),
+      rowCount: z.number().int(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowCount }) => {

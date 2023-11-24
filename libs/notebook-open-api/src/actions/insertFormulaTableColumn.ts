@@ -6,6 +6,7 @@ import {
   insertText,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 import {
   ELEMENT_TH,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -13,7 +14,7 @@ import {
   type TableColumnFormulaElement,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { Action, ActionParams } from './types';
+import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { findColumn } from './utils/findColumn';
 import { findTableColumnFormula } from './utils/findTableColumnFormula';
@@ -48,12 +49,12 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
       },
     },
   },
-  validateParams: (
-    params
-  ): params is ActionParams<'insertFormulaTableColumn'> =>
-    typeof params.tableId === 'string' &&
-    typeof params.columnName === 'string' &&
-    typeof params.formula === 'string',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+      formula: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {

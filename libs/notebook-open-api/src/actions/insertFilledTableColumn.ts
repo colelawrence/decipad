@@ -4,6 +4,7 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 import {
   ELEMENT_TH,
   ELEMENT_TD,
@@ -11,7 +12,7 @@ import {
   type TableCellElement,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { Action, ActionParams } from './types';
+import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getNodeString } from '../utils/getNodeString';
 
@@ -47,11 +48,12 @@ export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'insertFilledTableColumn'> =>
-    typeof params.tableId === 'string' &&
-    typeof params.columnName === 'string' &&
-    Array.isArray(params.cells) &&
-    params.cells.every((cell) => typeof cell === 'string'),
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+      cells: z.array(z.string()),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, cells }) => {

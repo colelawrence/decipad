@@ -14,9 +14,10 @@ import {
   parseSimpleValue,
   simpleValueToString,
 } from '@decipad/remote-computer';
-import { Action, ActionParams } from './types';
-import { getNodeString } from '../utils/getNodeString';
+import { z } from 'zod';
 import { notFound, notAcceptable } from '@hapi/boom';
+import { Action } from './types';
+import { getNodeString } from '../utils/getNodeString';
 import { matchElementId } from '../utils/matchElementId';
 import { replaceText } from './utils/replaceText';
 import { findElementByVariableName } from './utils/findElementByVariableName';
@@ -78,8 +79,16 @@ export const updateSliderVariable: Action<'updateSliderVariable'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
-  validateParams: (_params): _params is ActionParams<'updateSliderVariable'> =>
-    true,
+  parameterSchema: () =>
+    z.object({
+      elementId: z.string().optional(),
+      variableName: z.string().optional(),
+      value: z.number(),
+      unit: z.string().optional(),
+      min: z.number().optional(),
+      max: z.number().optional(),
+      step: z.number().optional(),
+    }),
   handler: (
     editor,
     { elementId, variableName, min, max, value, step, unit }

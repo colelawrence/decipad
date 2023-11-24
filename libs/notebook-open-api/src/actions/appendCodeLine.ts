@@ -1,4 +1,7 @@
 import { insertNodes, getNode, TPath } from '@udecode/plate-common';
+import { nanoid } from 'nanoid';
+import { z } from 'zod';
+import { notAcceptable } from '@hapi/boom';
 import {
   type CodeLineV2Element,
   type CodeLineElement,
@@ -7,14 +10,12 @@ import {
   ELEMENT_STRUCTURED_VARNAME,
   ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
-import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';
-import { Action, ActionParams, NotebookActionHandler } from './types';
+import { Action, NotebookActionHandler } from './types';
 import { appendPath } from '../utils/appendPath';
 import {} from '../../../editor-types/src/value';
 import { updateCodeLine } from './updateCodeLine';
 import { findElementByVariableName } from './utils/findElementByVariableName';
-import { notAcceptable } from '@hapi/boom';
 import { getNodeString } from '../utils/getNodeString';
 
 export const appendCodeLine: Action<'appendCodeLine'> = {
@@ -41,9 +42,11 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
   },
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
-  validateParams: (params): params is ActionParams<'appendCodeLine'> =>
-    typeof params.variableName === 'string' &&
-    typeof params.codeExpression === 'string',
+  parameterSchema: () =>
+    z.object({
+      variableName: z.string(),
+      codeExpression: z.string(),
+    }),
   handler: async (editor, { variableName, codeExpression }) => {
     const alreadyHasElementEntry = findElementByVariableName(
       editor,

@@ -1,5 +1,6 @@
 import { removeNodes } from '@udecode/plate-common';
-import { Action, ActionParams } from './types';
+import { z } from 'zod';
+import { Action } from './types';
 import { matchElementId } from '../utils/matchElementId';
 
 export const removeElement: Action<'removeElement'> = {
@@ -13,8 +14,10 @@ export const removeElement: Action<'removeElement'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'removeElement'> =>
-    typeof params.elementId === 'string',
+  parameterSchema: () =>
+    z.object({
+      elementId: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId }) => {

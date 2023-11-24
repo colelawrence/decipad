@@ -1,6 +1,5 @@
 import { findNode, TNodeEntry } from '@udecode/plate-common';
 import { notAcceptable, notFound } from '@hapi/boom';
-import { matchElementId } from '../../utils/matchElementId';
 import { AnyElement, MyEditor } from '@decipad/editor-types';
 
 export const getElementById = <T extends AnyElement>(
@@ -12,7 +11,8 @@ export const getElementById = <T extends AnyElement>(
     throw notAcceptable('element id should be a string');
   }
   const entry = findNode<AnyElement>(editor, {
-    match: matchElementId(id),
+    match: { id },
+    block: true,
   });
   if (!entry) {
     throw notFound(`Could not find an element with id ${id}`);

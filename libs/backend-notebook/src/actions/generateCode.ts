@@ -8,6 +8,7 @@ import { notImplemented } from '@hapi/boom';
 import { nanoid } from 'nanoid';
 import { ServerSideNotebookApi } from '../types';
 import { CustomAction } from '@decipad/notebook-open-api';
+import { z } from 'zod';
 
 export const generateCode: CustomAction<
   Parameters<ServerSideNotebookApi['generateCode']>[0],
@@ -65,10 +66,10 @@ export const generateCode: CustomAction<
       },
     },
   },
-  validateParams: (
-    params
-  ): params is Parameters<ServerSideNotebookApi['generateCode']>[0] =>
-    typeof params.prompt === 'string',
+  parameterSchema: () =>
+    z.object({
+      prompt: z.string(),
+    }),
   requiresNotebook: true,
   handler: async (editor, { prompt }) => {
     // code assistant works with the root document, so we have to

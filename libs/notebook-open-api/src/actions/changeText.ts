@@ -4,11 +4,12 @@ import {
   isElement,
   TNodeEntry,
 } from '@udecode/plate-common';
+import { z } from 'zod';
 import { notAcceptable, notFound } from '@hapi/boom';
-import { matchElementId } from '../utils/matchElementId';
-import { Action, ActionParams } from './types';
-import { replaceText } from './utils/replaceText';
 import { MyValue } from '@decipad/editor-types';
+import { matchElementId } from '../utils/matchElementId';
+import { Action } from './types';
+import { replaceText } from './utils/replaceText';
 
 export const changeText: Action<'changeText'> = {
   summary: 'Changes the text in a text element',
@@ -28,8 +29,11 @@ export const changeText: Action<'changeText'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'changeText'> =>
-    typeof params.elementId === 'string' && typeof params.newText === 'string',
+  parameterSchema: () =>
+    z.object({
+      elementId: z.string(),
+      newText: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId, newText }) => {

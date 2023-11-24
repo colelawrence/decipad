@@ -1,4 +1,5 @@
-import { Action, ActionParams } from './types';
+import { z } from 'zod';
+import { Action } from './types';
 import { getElementById as getElementById2 } from './utils/getElementById';
 
 export const getElementById: Action<'getElementById'> = {
@@ -15,8 +16,10 @@ export const getElementById: Action<'getElementById'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'getElementById'> =>
-    typeof params.elementId === 'string',
+  parameterSchema: () =>
+    z.object({
+      elementId: z.string(),
+    }),
   requiresNotebook: true,
   handler: (editor, { elementId }) => getElementById2(editor, elementId)[0],
 };

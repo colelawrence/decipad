@@ -3,7 +3,8 @@ import {
   removeNodes,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { Action, ActionParams } from './types';
+import { z } from 'zod';
+import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 
@@ -25,8 +26,11 @@ export const removeTableColumn: Action<'removeTableColumn'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'removeTableColumn'> =>
-    typeof params.tableId === 'string' && typeof params.columnName === 'string',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {

@@ -10,6 +10,7 @@ import {
 } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import slug from 'slug';
+import { z } from 'zod';
 import { ServerSideNotebookApi } from '../types';
 
 export const createNotebook: CustomAction<
@@ -39,10 +40,10 @@ export const createNotebook: CustomAction<
       },
     },
   },
-  validateParams: (
-    params
-  ): params is Parameters<ServerSideNotebookApi['createNotebook']>[0] =>
-    typeof params.title === 'string',
+  parameterSchema: () =>
+    z.object({
+      title: z.string(),
+    }),
   requiresNotebook: false,
   handler: async ({ title }) => {
     const notebook = await createNotebookRecord(undefined, {

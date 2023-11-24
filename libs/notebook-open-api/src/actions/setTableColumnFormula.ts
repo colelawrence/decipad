@@ -6,13 +6,14 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 import { TableHeaderElement } from '@decipad/editor-types';
-import { Action, ActionParams } from './types';
+import { getDefined } from '@decipad/utils';
+import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { TableColumnFormulaElement } from '../../../editor-types/src/table';
 import { replaceText } from './utils/replaceText';
-import { getDefined } from '@decipad/utils';
 
 export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
   summary: 'turns a column into a calculated column with a given formula',
@@ -39,10 +40,12 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'setTableColumnFormula'> =>
-    typeof params.tableId === 'string' &&
-    typeof params.columnName === 'string' &&
-    typeof params.formula === 'string',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      columnName: z.string(),
+      formula: z.string(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {

@@ -5,14 +5,15 @@ import {
   TNodeEntry,
   withoutNormalizing,
 } from '@udecode/plate-common';
-import { Action, ActionParams, RequiresNotebookAction } from './types';
-import { getTableById } from './utils/getTablebyId';
+import { z } from 'zod';
 import { notAcceptable } from '@hapi/boom';
-import { insertTableRow } from './insertTableRow';
-import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
-import { replaceText } from './utils/replaceText';
 import { getDefined } from '@decipad/utils';
+import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';
+import { Action, RequiresNotebookAction } from './types';
+import { getTableById } from './utils/getTablebyId';
+import { insertTableRow } from './insertTableRow';
+import { replaceText } from './utils/replaceText';
 
 export const fillTable: Action<'fillTable'> = {
   summary: 'fills the table data',
@@ -40,13 +41,11 @@ export const fillTable: Action<'fillTable'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'fillTable'> =>
-    typeof params.tableId === 'string' &&
-    Array.isArray(params.rowsData) &&
-    params.rowsData.every(
-      (row: unknown) =>
-        Array.isArray(row) && row.every((cell) => typeof cell === 'string')
-    ),
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      rowsData: z.array(z.array(z.string())),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor: MyEditor, { tableId, rowsData }) => {

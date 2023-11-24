@@ -1,6 +1,7 @@
+import { z } from 'zod';
 import { PromiseOrType } from '@decipad/utils';
-import { NotebookOpenApi } from '../types';
 import { MyEditor } from '@decipad/editor-types';
+import { NotebookOpenApi } from '../types';
 
 export type NotebookActionHandler<
   TParams extends Record<string, unknown> = Record<string, unknown>,
@@ -56,24 +57,22 @@ interface Parameter {
   schema: Schema;
 }
 
-export interface BaseAction<k extends ActionName> {
+export interface BaseAction {
   summary: string;
   description?: string;
   response?: ResponseSpec;
   parameters: Record<string, Parameter>;
-  validateParams: (
-    params: Record<string, unknown>
-  ) => params is ActionParams<k>;
+  parameterSchema: () => ReturnType<typeof z['object' | 'unknown']>;
 }
 
 export interface RequiresNotebookAction<k extends ActionName>
-  extends BaseAction<k> {
+  extends BaseAction {
   requiresNotebook: true;
   returnsActionResultWithNotebookError?: boolean;
   handler: NotebookActionHandler<ActionParams<k>, ActionResult<k>>;
 }
 
-export interface NoNotebookAction<k extends ActionName> extends BaseAction<k> {
+export interface NoNotebookAction<k extends ActionName> extends BaseAction {
   requiresNotebook: false;
   handler: NotebooklessActionHandler<ActionParams<k>, ActionResult<k>>;
 }
@@ -86,18 +85,18 @@ export type Actions = {
   [k in ActionName]: Action<k>;
 };
 
-export interface BaseCustomAction<Params extends Record<string, unknown>> {
+export interface BaseCustomAction {
   summary: string;
   description?: string;
   response?: ResponseSpec;
   parameters: Record<string, Parameter>;
-  validateParams: (params: Record<string, unknown>) => params is Params;
+  parameterSchema: () => ReturnType<typeof z['object' | 'unknown']>;
 }
 
 export interface RequiresNotebookCustomAction<
   CustomActionParams extends Record<string, unknown>,
   CustomActionResult
-> extends BaseCustomAction<CustomActionParams> {
+> extends BaseCustomAction {
   requiresNotebook: true;
   returnsActionResultWithNotebookError?: boolean;
   handler: NotebookActionHandler<CustomActionParams, CustomActionResult>;
@@ -106,7 +105,7 @@ export interface RequiresNotebookCustomAction<
 export interface NoNotebookCustomAction<
   CustomActionParams extends Record<string, unknown>,
   CustomActionResult
-> extends BaseCustomAction<CustomActionParams> {
+> extends BaseCustomAction {
   requiresNotebook: false;
   handler: NotebooklessActionHandler<CustomActionParams, CustomActionResult>;
 }

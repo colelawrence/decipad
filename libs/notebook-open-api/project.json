@@ -11,6 +11,13 @@
         "maxWarnings": 0
       }
     },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/notebook-open-api"],
+      "options": {
+        "jestConfig": "libs/notebook-open-api/jest.config.js"
+      }
+    },
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {

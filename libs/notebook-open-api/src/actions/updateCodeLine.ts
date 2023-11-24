@@ -1,3 +1,4 @@
+import { Path } from 'slate';
 import {
   isElement,
   findNode,
@@ -10,10 +11,9 @@ import {
   type AnyElement,
 } from '@decipad/editor-types';
 import { notFound, notAcceptable } from '@hapi/boom';
-import type { Action, ActionParams } from './types';
-import { matchElementId } from '../utils/matchElementId';
+import { z } from 'zod';
+import type { Action } from './types';
 import { replaceText } from './utils/replaceText';
-import { Path } from 'slate';
 import {
   StructuredVarnameElement,
   CodeLineV2ElementCode,
@@ -51,13 +51,15 @@ export const updateCodeLine: Action<'updateCodeLine'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
-  validateParams: (params): params is ActionParams<'updateCodeLine'> =>
-    typeof params.codeLineId === 'string' &&
-    typeof params.newVariableName === 'string' &&
-    typeof params.newCodeExpression === 'string',
+  parameterSchema: () =>
+    z.object({
+      codeLineId: z.string(),
+      newVariableName: z.string(),
+      newCodeExpression: z.string(),
+    }),
   handler: (editor, { codeLineId, newVariableName, newCodeExpression }) => {
     const entry = findNode<AnyElement>(editor, {
-      match: matchElementId(codeLineId),
+      match: { id: codeLineId },
       block: true,
     });
     if (!entry || !isElement(entry[0])) {

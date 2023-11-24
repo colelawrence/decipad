@@ -1,5 +1,6 @@
 import { insertNodes, getNode } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
+import { z } from 'zod';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -10,10 +11,10 @@ import {
   TableElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { Action, ActionParams } from './types';
-import { appendPath } from '../utils/appendPath';
-import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
+import { getDefined } from '@decipad/utils';
+import { Action } from './types';
+import { appendPath } from '../utils/appendPath';
 import { getNodeString } from '../utils/getNodeString';
 
 export const appendFilledTable: Action<'appendFilledTable'> = {
@@ -57,16 +58,12 @@ export const appendFilledTable: Action<'appendFilledTable'> = {
   response: {
     schemaName: 'CreateResult',
   },
-  validateParams: (params): params is ActionParams<'appendFilledTable'> =>
-    typeof params.tableName === 'string' &&
-    Array.isArray(params.columnNames) &&
-    params.columnNames.every((colName) => typeof colName === 'string') &&
-    Array.isArray(params.rowsData) &&
-    params.rowsData.every(
-      (rowData) =>
-        Array.isArray(rowData) &&
-        rowData.every((cell) => typeof cell === 'string')
-    ),
+  parameterSchema: () =>
+    z.object({
+      tableName: z.string(),
+      columnNames: z.array(z.string()),
+      rowsData: z.array(z.array(z.string())),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowsData }) => {

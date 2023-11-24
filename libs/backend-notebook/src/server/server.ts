@@ -25,9 +25,6 @@ export const server = async (
   }
   const computer = await getRemoteComputer();
 
-  if (!action.validateParams(params)) {
-    throw notAcceptable('invalid parameters');
-  }
   let result: MaybeWrappedInActionResult<ReturnType<typeof action.handler>>;
   if (action.requiresNotebook) {
     if (!notebookId || typeof notebookId !== 'string') {

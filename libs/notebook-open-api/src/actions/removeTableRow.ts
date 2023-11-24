@@ -1,5 +1,6 @@
 import { removeNodes } from '@udecode/plate-common';
-import { Action, ActionParams } from './types';
+import { z } from 'zod';
+import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 
 export const removeTableRow: Action<'removeTableRow'> = {
@@ -20,8 +21,11 @@ export const removeTableRow: Action<'removeTableRow'> = {
       },
     },
   },
-  validateParams: (params): params is ActionParams<'removeTableRow'> =>
-    typeof params.tableId === 'string' && typeof params.rowIndex === 'number',
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string(),
+      rowIndex: z.number().int(),
+    }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex }) => {

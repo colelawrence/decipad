@@ -1,12 +1,13 @@
 import { insertNodes, getNode } from '@udecode/plate-common';
+import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import {
   ELEMENT_CAPTION,
   ELEMENT_DROPDOWN,
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
-import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';
-import { Action, ActionParams } from './types';
+import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import {
   VariableSliderElement,
@@ -51,10 +52,12 @@ export const appendChoice: Action<'appendChoice'> = {
     schemaName: 'CreateResult',
   },
   requiresNotebook: true,
-  validateParams: (params): params is ActionParams<'appendChoice'> =>
-    typeof params.variableName === 'string' &&
-    Array.isArray(params.options) &&
-    params.options.every((param) => param != null && typeof param === 'string'),
+  parameterSchema: () =>
+    z.object({
+      variableName: z.string(),
+      options: z.array(z.string()),
+      selectedName: z.string().optional(),
+    }),
   handler: (editor, { variableName, options, selectedName = '' }) => {
     const newDropdown: VariableDropdownElement = {
       type: ELEMENT_VARIABLE_DEF,
