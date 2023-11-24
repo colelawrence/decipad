@@ -538,12 +538,16 @@ export class Notebook {
   async addBlockSlashCommand(command: SlashCommand) {
     await expect(async () => {
       await this.notebookParagraph.last().click();
+      await this.notebookParagraph.last().click();
       await expect(this.page.getByText('for new blocks')).toBeVisible();
     }).toPass();
     // check paragraph is ready
     await this.page.keyboard.type(`/`);
     // checks menu had openned
-    await this.page.getByRole('menu').isVisible();
+    await expect(
+      this.page.getByRole('menu'),
+      'Block menu is visible'
+    ).toBeVisible();
     await this.page.getByTestId(`menu-item-${command}`).first().click();
   }
 
@@ -899,6 +903,9 @@ export class Notebook {
    */
   async openImageUploader() {
     this.addBlock('upload-image');
+    await expect(async () => {
+      await expect(this.page.getByText('Insert image')).toBeVisible();
+    }, `Embed Image modal didn't open`).toPass();
   }
 
   /**

@@ -11,8 +11,6 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       await page.getByText('Choose file').click();
       const fileChooser = await fileChooserPromise;
       await fileChooser.setFiles('./__fixtures__/images/download.png');
-      // eslint-disable-next-line playwright/no-wait-for-timeout
-      await page.waitForTimeout(Timeouts.computerDelay);
       await expect(
         page.getByTestId('notebook-image-block').locator('img')
       ).toBeVisible();
