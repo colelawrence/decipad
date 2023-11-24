@@ -1,5 +1,4 @@
-import { type Locator, type Page, expect } from '@playwright/test';
-import { SlashCommand } from '../../../../libs/editor-types/src/index';
+import { type Locator, type Page, expect, test } from '@playwright/test';
 import { cleanText, Timeouts } from '../../utils/src';
 import { ControlPlus } from '../../utils/page/Editor';
 import path from 'path';
@@ -7,6 +6,11 @@ import os from 'os';
 import Zip from 'adm-zip';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
+import type {
+  AvailableSwatchColor,
+  SlashCommand,
+  UserIconKey,
+} from '@decipad/editor-types';
 
 export class Notebook {
   readonly page: Page;
@@ -74,6 +78,107 @@ export class Notebook {
       await this.page.keyboard.type(name);
     }
     await this.page.keyboard.press('Enter');
+  }
+
+  /**
+   * Check Default Notebook Icon
+   *
+   * **Usage**
+   *
+   * ```js
+   *  await notebook.checkDefaultIcon();
+   * ```
+   */
+  async checkDefaultIcon() {
+    await test.step('check notebook icon', async () => {
+      await expect(
+        this.notebookIconButton.locator('title'),
+        "Initial Notebook Icon isn't the Decipad Logo"
+      ).toHaveText('Decipad Logo');
+      const initialColor = await this.notebookIconButton.evaluate((el) => {
+        return getComputedStyle(el).backgroundColor;
+      });
+
+      expect(initialColor, "Initial Notebook Icon isn't grey").toBe(
+        'rgb(245, 247, 250)'
+      ); // grey100
+    });
+  }
+
+  /**
+   * Open Notebook Icon Picker
+   *
+   * **Usage**
+   *
+   * ```js
+   *  await notebook.openNotebookIconPicker();
+   * ```
+   */
+  async openNotebookIconPicker() {
+    await this.notebookIconButton.click();
+    await expect(
+      this.page.getByText('Pick a style'),
+      "Icon picker menu didn't open"
+    ).toBeVisible();
+  }
+
+  /**
+   * Pick Notebook Icon Color
+   *
+   * **Usage**
+   *
+   * ```js
+   *  await notebook.pickNotebookColor('Sulu');
+   * ```
+   */
+  async pickNotebookColor(color: AvailableSwatchColor) {
+    await this.page.getByTestId(`icon-color-picker-${color}`).click();
+
+    await expect(async () => {
+      const notebookIconColor = await this.notebookIconButton.evaluate((el) => {
+        return getComputedStyle(el).backgroundColor;
+      });
+      // Todo: expand this in the future
+      expect(notebookIconColor).toBe('rgb(230, 253, 196)');
+    }).toPass();
+  }
+
+  /**
+   * Pick Notebook Icon Color
+   *
+   * **Usage**
+   *
+   * ```js
+   *  await notebook.pickNotebookColor('Sulu');
+   * ```
+   */
+  async pickNotebookIcon(icon: UserIconKey) {
+    await this.page.getByTestId(`icon-picker-${icon}`).click();
+    await expect(
+      this.notebookIconButton,
+      "Notebook Icon didn't update"
+    ).toHaveText(icon);
+  }
+
+  /**
+   * Change Notebook Icon
+   *
+   * **Usage**
+   *
+   * ```js
+   *  await notebook.changeNotebookIcon('Moon');
+   * await notebook.changeNotebookIcon('Moon','Sulu');
+   * ```
+   */
+  async changeNotebookIcon(icon: UserIconKey, color?: AvailableSwatchColor) {
+    await test.step('changes notebook icon', async () => {
+      await this.openNotebookIconPicker();
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (color) {
+        await this.pickNotebookColor(color);
+      }
+      await this.pickNotebookIcon(icon);
+    });
   }
 
   /**
@@ -252,7 +357,7 @@ export class Notebook {
    */
   async changeTabIcon(
     selector: string | number,
-    icon: string,
+    icon: UserIconKey,
     options: { usingMenu?: boolean } = { usingMenu: false }
   ) {
     if (options.usingMenu) {
@@ -431,9 +536,10 @@ export class Notebook {
    * ```
    */
   async addBlockSlashCommand(command: SlashCommand) {
-    // somethimes the first click misses
-    await this.notebookParagraph.last().click();
-    await this.notebookParagraph.last().click({ delay: 100 });
+    await expect(async () => {
+      await this.notebookParagraph.last().click();
+      await expect(this.page.getByText('for new blocks')).toBeVisible();
+    }).toPass();
     // check paragraph is ready
     await this.page.keyboard.type(`/`);
     // checks menu had openned

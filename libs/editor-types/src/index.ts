@@ -43,3 +43,12 @@ export const allElementKinds: readonly string[] = Object.freeze(
 );
 
 export type CellValueType = TableCellType | SerializedType;
+
+export type AvailableSwatchColor =
+  | 'Catskill'
+  | 'Sulu'
+  | 'Sun'
+  | 'Grapefruit'
+  | 'Rose'
+  | 'Perfume'
+  | 'Malibu';

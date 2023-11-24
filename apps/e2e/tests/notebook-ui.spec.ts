@@ -33,30 +33,18 @@ test('notebook actions topbar @notebook', async ({ testUser }) => {
 
 test('notebook icon @notebook', async ({ testUser }) => {
   const { page, notebook } = testUser;
-  await test.step('renders the initial color and icon', async () => {
-    await expect(notebook.notebookIconButton.locator('title')).toHaveText(
-      'Decipad Logo'
-    );
-    const initialColor = await notebook.notebookIconButton.evaluate((el) => {
-      return getComputedStyle(el).backgroundColor;
-    });
-
-    expect(initialColor).toBe('rgb(245, 247, 250)'); // grey100
-  });
-
-  await test.step('changes notebook icon', async () => {
-    await page.locator('button[aria-haspopup="dialog"]').click();
-    await page.getByTestId('icon-picker-Moon').click();
-
-    await expect(
-      page.locator('button[aria-haspopup="dialog"] title')
-    ).toHaveText('Moon');
-  });
+  await testUser.importNotebook(notebookSource);
+  await notebook.checkNotebookTitle('Number Catalog Test');
+  await notebook.checkDefaultIcon();
 
   await test.step('changes the color of the notebook icon', async () => {
-    await page.locator('button[aria-haspopup="dialog"]').click();
-    await page.getByTestId('icon-color-picker-Sulu').click();
-    await expect(page.getByText('Pick a style')).toBeVisible();
+    await notebook.openNotebookIconPicker();
+    await notebook.pickNotebookColor('Sulu');
+    await notebook.pickNotebookIcon('Moon');
+  });
+
+  await test.step('screenshot notebook icon picker', async () => {
+    await notebook.openNotebookIconPicker();
     await snapshot(page, 'Notebook: Icon selection');
   });
 });

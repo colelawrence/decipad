@@ -16,6 +16,7 @@ import {
   ComputerContextProvider,
   ControllerProvider,
   EditorChangeContextProvider,
+  EditorStylesContext,
   useCurrentWorkspaceStore,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
@@ -279,7 +280,7 @@ const NewEditor: FC<{
   }, [pageTitle]);
 
   return (
-    <>
+    <EditorStylesContext.Provider value={{ color: actions.iconColor }}>
       <Helmet title={pageTitle}>
         <meta property="og:title" content={pageTitle} />
       </Helmet>
@@ -307,7 +308,7 @@ const NewEditor: FC<{
         onAttached={actions.onAttached}
         onCreateSnapshot={actions.onCreateSnapshot}
       />
-    </>
+    </EditorStylesContext.Provider>
   );
 };
 
