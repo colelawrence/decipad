@@ -289,10 +289,10 @@ export const NotebookPublishingPopUp = ({
             testId="publish-button"
           >
             <span
-              css={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}
+              css={{ display: 'flex', alignItems: 'center', gap: '8px' }}
               data-testId="publish-notification"
             >
-              <Dot size={4} noBorder position="relative" />
+              <Dot size={8} noBorder position="relative" />
               Share
             </span>
           </Button>
