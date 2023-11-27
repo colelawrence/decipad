@@ -2,6 +2,7 @@ import { type Locator, type Page, Browser, expect } from '@playwright/test';
 import { app, auth } from '@decipad/backend-config';
 import { Notebook } from './notebook';
 import { Workspace } from './workspace';
+import { AiAssistant } from './ai-assistant';
 import stringify from 'json-stringify-safe';
 import arc from '@architect/functions';
 
@@ -27,6 +28,7 @@ export class User {
   newNotebook: Locator;
   public notebook: Notebook;
   public workspace: Workspace;
+  public aiAssistant: AiAssistant;
 
   constructor(page: Page) {
     this.page = page;
@@ -34,6 +36,7 @@ export class User {
     this.notebook = new Notebook(this.page);
     this.newNotebook = this.page.getByTestId('new-notebook');
     this.workspace = new Workspace(this.page);
+    this.aiAssistant = new AiAssistant(this.page);
   }
 
   async goToWorkspace() {
