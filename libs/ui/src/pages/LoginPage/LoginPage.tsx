@@ -28,22 +28,24 @@ const useParameter = (name: string) => {
   return params.get(name);
 };
 
-const LoginForm = ({ onSubmit }: LoginPageProps) => {
+const LoginForm = ({ email: initialEmail, onSubmit }: LoginPageProps) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [formValid, setFormValid] = useState(false);
-  const [email, setEmail] = useState('');
+  const [formValid, setFormValid] = useState(formRef.current?.checkValidity());
+  const [email, setEmail] = useState(initialEmail ?? '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const signUpEmail = useParameter('email');
   const signUpMessage = useParameter('message');
   const signUpRedirect = useParameter('redirect');
 
+  useEffect(() => {
+    if (formRef.current) {
+      setFormValid(formRef.current.checkValidity());
+    }
+  }, [email]);
+
   const onChangeEmail = (newEmail: string) => {
     setEmail(newEmail);
-
-    // ref must be set here
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    setFormValid(formRef.current!.checkValidity());
   };
 
   const handleSubmit = useCallback(
@@ -98,14 +100,15 @@ const LoginForm = ({ onSubmit }: LoginPageProps) => {
 };
 
 export interface LoginPageProps {
+  email?: string | null;
   onSubmit: (email: string) => void | Promise<void>;
 }
 
-export const LoginPage = ({ onSubmit }: LoginPageProps): ReturnType<FC> => {
+export const LoginPage = (props: LoginPageProps): ReturnType<FC> => {
   return (
     <LoginBox>
       <AuthContent title="Welcome to Decipad!" />
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm {...props} />
     </LoginBox>
   );
 };

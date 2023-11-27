@@ -24,6 +24,7 @@ export const Login: FC = () => {
       return (
         // proper back to login without url change
         <LoginPage
+          email={searchParams.get('refemail')}
           onSubmit={async (email) => {
             try {
               setPage({ kind: 'email-sent', email });
