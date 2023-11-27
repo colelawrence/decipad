@@ -2,8 +2,6 @@ name: 🔬 Run Smoke Tests
 
 on:
   push:
-    # Since Percy will auto-approve main, it'll become the new baseline for
-    # future PRs.
     branches: [main]
     paths-ignore:
       - '.github/**'
@@ -56,12 +54,11 @@ jobs:
 
       - name: Run e2e & Visual Regression Tests
         env:
-          PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
           NODE_OPTIONS: '--enable-source-maps --max_old_space_size=16384'
           REACT_APP_STRIPE_PAYMENT_LINK: '${{secrets.DEV_STRIPE_PAYMENT_LINK}}'
           REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK: '${{secrets.DEV_STRIPE_CUSTOMER_PORTAL_LINK}}'
           DECI_VERBOSE: false
-        run: ./scripts/e2e-noshard.sh
+        run: ./scripts/e2e-smoke.sh
 
       - uses: actions/upload-artifact@v3
         if: always()
