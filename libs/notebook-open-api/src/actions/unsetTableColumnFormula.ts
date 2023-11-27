@@ -4,33 +4,24 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { TableHeaderElement } from '@decipad/editor-types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { Action } from './types';
 
+extendZodWithOpenApi(z);
+
 export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
   summary: 'turns a calculated back into a data column',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description: 'the name of the column you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table you want to change' }),
+      columnName: z
+        .string()
+        .openapi({ description: 'the name of the column you want to change' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

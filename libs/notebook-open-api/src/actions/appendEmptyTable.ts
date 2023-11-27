@@ -1,6 +1,7 @@
 import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -17,44 +18,35 @@ import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const appendEmptyTable: Action<'appendEmptyTable'> = {
   summary: 'appends an empty table to the end of the notebook',
-  parameters: {
-    tableName: {
-      description:
-        'the name of the table you want to append. Should have no spaces or special characters.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnNames: {
-      description: 'the name of the table you want to append',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'string',
-          description:
-            'Column name. Should have no spaces or special characters.',
-        },
-      },
-    },
-    rowCount: {
-      description: 'the number of rows for this new table',
-      required: true,
-      schema: {
-        type: 'integer',
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResult',
+    schema: {
+      ref: '#/components/schemas/CreateResult',
+    },
   },
   parameterSchema: () =>
     z.object({
-      columnNames: z.array(z.string()),
-      rowCount: z.number().int(),
+      tableName: z.string().openapi({
+        description:
+          'the name of the table you want to append. Should have no spaces or special characters.',
+      }),
+      columnNames: z
+        .array(
+          z.string().openapi({
+            description:
+              'Column name. Should have no spaces or special characters.',
+          })
+        )
+        .openapi({
+          description: 'the names of the columns you want this table to have',
+        }),
+      rowCount: z
+        .number()
+        .int()
+        .openapi({ description: 'the number of rows for this new table' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

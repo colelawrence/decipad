@@ -7,44 +7,30 @@ import {
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { TableHeaderElement } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
 import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { TableColumnFormulaElement } from '../../../editor-types/src/table';
 import { replaceText } from './utils/replaceText';
+import { getDefined } from '@decipad/utils';
+
+extendZodWithOpenApi(z);
 
 export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
   summary: 'turns a column into a calculated column with a given formula',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description: 'the name of the column you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    formula: {
-      description: 'the formula for that column in Decipad language',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
-      formula: z.string(),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table you want to change' }),
+      columnName: z
+        .string()
+        .openapi({ description: 'the name of the column you want to change' }),
+      formula: z.string().openapi({
+        description: 'the formula for that column in Decipad language',
+      }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

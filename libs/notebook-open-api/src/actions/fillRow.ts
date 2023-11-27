@@ -1,45 +1,28 @@
 import { hasNode, withoutNormalizing } from '@udecode/plate-common';
 import { notAcceptable } from '@hapi/boom';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { insertTableRow } from './insertTableRow';
 import { Action, RequiresNotebookAction } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { updateTableCell } from './updateTableCell';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const fillRow: Action<'fillRow'> = {
   summary: 'updates the data on a table row',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to append a new row into',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    rowIndex: {
-      description: 'the index of the row you want to change. starts at 0',
-      required: true,
-      schema: {
-        type: 'integer',
-      },
-    },
-    rowData: {
-      description: 'the content of that row',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'string',
-        },
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      rowIndex: z.number().int(),
-      rowData: z.array(z.string()),
+      tableId: z.string().openapi({
+        description: 'the id of the table you want to append a new row into',
+      }),
+      rowIndex: z.number().int().openapi({
+        description: 'the index of the row you want to change. starts at 0',
+      }),
+      rowData: z
+        .array(z.string())
+        .openapi({ description: 'the content of that row' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

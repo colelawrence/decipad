@@ -30,13 +30,6 @@
         "command": "../../node_modules/.bin/madge --circular src",
         "cwd": "libs/notebook-open-api"
       }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./scripts/build.sh",
-        "cwd": "libs/notebook-open-api"
-      }
     }
   },
   "tags": []

@@ -16,7 +16,6 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
         },
       },
     },
-    parameters: {},
     requiresNotebook: true,
     parameterSchema: () => z.unknown(),
     handler: (editor) =>

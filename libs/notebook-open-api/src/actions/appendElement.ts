@@ -1,25 +1,21 @@
 import { EElementOrText, insertNodes, isElement } from '@udecode/plate-common';
 import { notAcceptable } from '@hapi/boom';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { MyValue, topLevelBlockKinds } from '@decipad/editor-types';
 import type { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { anyElement } from './schemas/anyElement';
 
+extendZodWithOpenApi(z);
+
 export const appendElement: Action<'appendElement'> = {
   summary: 'Appends any element to the end of the notebook',
-  parameters: {
-    element: {
-      description: 'the new element getting appended to the notebook',
-      schema: {
-        $ref: '#/components/schemas/AnyElement',
-      },
-      required: true,
-    },
-  },
   parameterSchema: () =>
     z.object({
-      element: anyElement(),
+      element: anyElement().openapi({
+        description: 'the new element getting appended to the notebook',
+      }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

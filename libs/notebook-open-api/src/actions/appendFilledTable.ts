@@ -1,6 +1,7 @@
 import { insertNodes, getNode } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import {
   ELEMENT_TABLE,
   ELEMENT_TABLE_CAPTION,
@@ -17,52 +18,34 @@ import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const appendFilledTable: Action<'appendFilledTable'> = {
   summary: 'appends a filled table to the end of the notebook',
-  parameters: {
-    tableName: {
-      description:
-        'the name of the table you want to append. Should have no spaces or special characters.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnNames: {
-      description: 'the column names for the table',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'string',
-          description:
-            'Column name. Should have no spaces or special characters.',
-        },
-      },
-    },
-    rowsData: {
-      description: 'the data for each row in an array for each row.',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'array',
-          description: 'the data for a row',
-          items: {
-            type: 'string',
-          },
-        },
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResult',
+    schema: {
+      ref: '#/components/schemas/CreateResult',
+    },
   },
   parameterSchema: () =>
     z.object({
-      tableName: z.string(),
-      columnNames: z.array(z.string()),
-      rowsData: z.array(z.array(z.string())),
+      tableName: z.string().openapi({
+        description:
+          'the name of the table you want to append. Should have no spaces or special characters.',
+      }),
+      columnNames: z
+        .array(
+          z.string().openapi({
+            description:
+              'Column name. Should have no spaces or special characters.',
+          })
+        )
+        .openapi({ description: 'the column names for the table' }),
+      rowsData: z
+        .array(z.array(z.string()).describe('the data for a row'))
+        .openapi({
+          description: 'the data for each row in an array for each row.',
+        }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

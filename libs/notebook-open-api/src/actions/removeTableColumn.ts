@@ -4,32 +4,23 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 
+extendZodWithOpenApi(z);
+
 export const removeTableColumn: Action<'removeTableColumn'> = {
   summary: 'removes a column from a table',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to remove a column from',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description: 'the name of the new column you want to remove',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
+      tableId: z.string().openapi({
+        description: 'the id of the table you want to remove a column from',
+      }),
+      columnName: z.string().openapi({
+        description: 'the name of the new column you want to remove',
+      }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

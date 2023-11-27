@@ -6,45 +6,32 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { z } from 'zod';
-import { notAcceptable } from '@hapi/boom';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { nanoid } from 'nanoid';
-import { getDefined } from '@decipad/utils';
+import { notAcceptable } from '@hapi/boom';
 import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';
+import { replaceText } from './utils/replaceText';
+import { getDefined } from '@decipad/utils';
 import { Action, RequiresNotebookAction } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { insertTableRow } from './insertTableRow';
-import { replaceText } from './utils/replaceText';
+
+extendZodWithOpenApi(z);
 
 export const fillTable: Action<'fillTable'> = {
   summary: 'fills the table data',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to fill',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    rowsData: {
-      description: 'the content of the table, row by row',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          description: 'a row of data',
-          type: 'array',
-          items: {
-            description: 'a cell',
-            type: 'string',
-          },
-        },
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      rowsData: z.array(z.array(z.string())),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table you want to fill' }),
+      rowsData: z
+        .array(
+          z
+            .array(z.string().openapi({ description: 'a cell' }))
+            .openapi({ description: 'a row of data' })
+        )
+        .openapi({ description: 'the content of the table, row by row' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

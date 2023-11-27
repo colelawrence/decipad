@@ -1,35 +1,23 @@
 import { insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { ELEMENT_TD, ELEMENT_TR, TableRowElement } from '@decipad/editor-types';
 import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 
+extendZodWithOpenApi(z);
+
 export const insertTableRow: Action<'insertTableRow'> = {
   summary: 'appends a row to the end of an existing table',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to append a new row into',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    row: {
-      description: 'the content of that row',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'string',
-        },
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      row: z.array(z.string()),
+      tableId: z.string().openapi({
+        description: 'the id of the table you want to append a new row into',
+      }),
+      row: z
+        .array(z.string())
+        .openapi({ description: 'the content of that row' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

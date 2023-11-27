@@ -10,6 +10,7 @@ import {
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
 import { insertNodes } from '@udecode/plate-common';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import { getTableById } from './utils/getTablebyId';
@@ -19,35 +20,29 @@ import { getRemoteComputer } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const appendDataView: Action<'appendDataView'> = {
   summary:
     'appends a data view (pivot table) that summarizes and analyzes the data on a given table',
   returnsActionResultWithNotebookError: true,
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to use in the data view',
-      required: true,
-      schema: {
-        type: 'string',
-      },
+  response: {
+    schema: {
+      ref: '#/components/schemas/CreateResult',
     },
-    columns: {
-      description:
-        'the columns from the table you want to use to the data view',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string',
-              description: 'Column name',
-            },
-            aggregation: {
-              type: 'string',
-              description: 'Optional. Aggregates the data from the column',
-              enum: [
+  },
+  requiresNotebook: true,
+  parameterSchema: () =>
+    z.object({
+      tableId: z.string().openapi({
+        description: 'the id of the table you want to use in the data view',
+      }),
+      columns: z
+        .array(
+          z.object({
+            name: z.string().describe('Column name'),
+            aggregation: z
+              .enum([
                 'average',
                 'max',
                 'median',
@@ -55,33 +50,21 @@ export const appendDataView: Action<'appendDataView'> = {
                 'span',
                 'sum',
                 'stddev',
-              ],
-            },
-            round: {
-              type: 'string',
+              ])
+              .optional()
+              .openapi({
+                description: 'Aggregates the data from the column',
+              }),
+            round: z.string().optional().openapi({
               description:
                 'Optional. The number of decimal places it rounds to. Use negative numbers to round to decimal points. Example: to round to the thousanth use "-3". When using dates you can round to "quarter", "year", "month" or "day"',
-            },
-          },
-        },
-      },
-    },
-  },
-  response: {
-    schemaName: 'CreateResult',
-  },
-  requiresNotebook: true,
-  parameterSchema: () =>
-    z.object({
-      columns: z.array(
-        z.object({
-          name: z.string(),
-          aggregation: z
-            .enum(['average', 'max', 'median', 'min', 'span', 'sum', 'stddev'])
-            .optional(),
-          round: z.string().optional(),
-        })
-      ),
+            }),
+          })
+        )
+        .openapi({
+          description:
+            'the columns from the table you want to use to the data view',
+        }),
     }),
   handler: async (editor, { tableId, columns: _columns }) => {
     const [table] = getTableById(editor, tableId);

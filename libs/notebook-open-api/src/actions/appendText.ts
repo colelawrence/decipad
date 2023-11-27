@@ -5,28 +5,26 @@ import { getDefined } from '@decipad/utils';
 import { assertElementType } from '@decipad/editor-utils';
 import { deserializeMd } from '@udecode/plate-serializer-md';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
+
+extendZodWithOpenApi(z);
 
 export const appendText: Action<'appendText'> = {
   summary: 'Appends markdown text to the end of the notebook',
   description:
     'splits the markdown into separate elements and inserts them one at a time in the notebook',
-  parameters: {
-    markdownText: {
-      description: 'the markdown text you want to append',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResults',
+    schema: {
+      ref: '#/components/schemas/CreateResults',
+    },
   },
   parameterSchema: () =>
     z.object({
-      markdownText: z.string(),
+      markdownText: z
+        .string()
+        .openapi({ description: 'markdown text to add to the notebook' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

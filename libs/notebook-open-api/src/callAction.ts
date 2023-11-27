@@ -7,6 +7,7 @@ import { ZodFormattedError } from 'zod';
 import { CustomAction } from './actions/types';
 import { gatherNotebookErrors } from './utils/gatherNotebookErrors';
 import { NotebookError } from './types';
+import { debug } from './debug';
 
 export interface CallActionOptions<Args extends Record<string, unknown>, Ret> {
   editor: EditorController;
@@ -36,8 +37,10 @@ const parseParams = <Args extends Record<string, unknown>, Ret>(
   action: CustomAction<Args, Ret>,
   params: unknown
 ): Args => {
+  debug('parseParams', params);
   const parseResult = action.parameterSchema().safeParse(params);
   if (!parseResult.success) {
+    debug('params parsed successfully');
     throw notAcceptable(formatError(parseResult.error.format()));
   }
   // } catch (err) {

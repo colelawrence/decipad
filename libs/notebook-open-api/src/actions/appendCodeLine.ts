@@ -11,6 +11,8 @@ import {
   ELEMENT_CODE_LINE,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
+import { extendZodWithOpenApi } from 'zod-openapi';
+
 import { Action, NotebookActionHandler } from './types';
 import { appendPath } from '../utils/appendPath';
 import {} from '../../../editor-types/src/value';
@@ -18,34 +20,26 @@ import { updateCodeLine } from './updateCodeLine';
 import { findElementByVariableName } from './utils/findElementByVariableName';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const appendCodeLine: Action<'appendCodeLine'> = {
   summary: 'appends a code line to the notebook',
-  parameters: {
-    variableName: {
-      description:
-        'the name of the variable to create. Should be unique and have no spaces or weird characters.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    codeExpression: {
-      description: 'decipad language code expression for this variable',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResult',
+    schema: {
+      ref: '#/components/schemas/CreateResult',
+    },
   },
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
   parameterSchema: () =>
     z.object({
-      variableName: z.string(),
-      codeExpression: z.string(),
+      variableName: z.string().openapi({
+        description:
+          'the name of the variable to create. Should be unique and have no spaces or weird characters.',
+      }),
+      codeExpression: z.string().openapi({
+        description: 'decipad language code expression for this variable',
+      }),
     }),
   handler: async (editor, { variableName, codeExpression }) => {
     const alreadyHasElementEntry = findElementByVariableName(

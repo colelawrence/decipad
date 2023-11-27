@@ -35735,6 +35735,11 @@ zipit@~2.0.0:
     insync "2.1.1"
     yazl "2.5.1"
 
+zod-openapi@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/zod-openapi/-/zod-openapi-2.11.0.tgz#070f64eb6006eb15a8348a734cc1d0c1e4f5b817"
+  integrity sha512-nG/l7AzEguGnnWrLmVLZfk80c6G79LQFlIVG3oby203DLcQ1X8lged82pkxPZoD6ytdutoKTyKLles760+mZUw==
+
 zod-to-json-schema@^3.20.4:
   version "3.21.4"
   resolved "https://registry.yarnpkg.com/zod-to-json-schema/-/zod-to-json-schema-3.21.4.tgz#de97c5b6d4a25e9d444618486cb55c0c7fb949fd"

@@ -5,34 +5,25 @@ import {
   TNodeEntry,
 } from '@udecode/plate-common';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { notAcceptable, notFound } from '@hapi/boom';
-import { MyValue } from '@decipad/editor-types';
 import { matchElementId } from '../utils/matchElementId';
 import { Action } from './types';
 import { replaceText } from './utils/replaceText';
+import { MyValue } from '@decipad/editor-types';
+
+extendZodWithOpenApi(z);
 
 export const changeText: Action<'changeText'> = {
   summary: 'Changes the text in a text element',
-  parameters: {
-    elementId: {
-      description: 'the id of the text element you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    newText: {
-      description: 'the new content of the text element',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      elementId: z.string(),
-      newText: z.string(),
+      elementId: z.string().openapi({
+        description: 'the id of the text element you want to change',
+      }),
+      newText: z
+        .string()
+        .openapi({ description: 'the new content of the text element' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

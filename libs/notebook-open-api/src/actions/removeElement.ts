@@ -1,22 +1,18 @@
 import { removeNodes } from '@udecode/plate-common';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action } from './types';
 import { matchElementId } from '../utils/matchElementId';
 
+extendZodWithOpenApi(z);
+
 export const removeElement: Action<'removeElement'> = {
   summary: 'removes an entire existing element from the notebook',
-  parameters: {
-    elementId: {
-      description: 'the id of the element you want to remove',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      elementId: z.string(),
+      elementId: z
+        .string()
+        .openapi({ description: 'the id of the element you want to remove' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

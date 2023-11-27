@@ -5,6 +5,7 @@ import {
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import {
   ELEMENT_TH,
   ELEMENT_TD,
@@ -16,43 +17,27 @@ import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
   summary: 'inserts a column in an existing table and fills it',
   response: {
-    schemaName: 'CreateResult',
-  },
-  parameters: {
-    tableId: {
-      description: 'the id of the table element',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description:
-        'the name of the column. Must contain no spaces or weird characters',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    cells: {
-      description: 'the data for the column',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          type: 'string',
-        },
-      },
+    schema: {
+      ref: '#/components/schemas/CreateResult',
     },
   },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
-      cells: z.array(z.string()),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table element' }),
+      columnName: z.string().openapi({
+        description:
+          'the name of the column. Must contain no spaces or weird characters',
+      }),
+      cells: z
+        .array(z.string())
+        .openapi({ description: 'the data for the column' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

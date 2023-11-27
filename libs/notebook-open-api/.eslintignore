@@ -1,0 +1,8 @@
+_next
+coverage
+dist
+apps/frontend/src/graphql/generated.ts
+apps/frontend/src/src/setupProxy.js
+libs/graphql-client/src/generated.ts
+jest.config.js
+jest.setup.js

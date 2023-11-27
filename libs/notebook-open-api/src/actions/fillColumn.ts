@@ -5,50 +5,32 @@ import {
   TNodeEntry,
   withoutNormalizing,
 } from '@udecode/plate-common';
+import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { notAcceptable } from '@hapi/boom';
 import { nanoid } from 'nanoid';
 import { getDefined } from '@decipad/utils';
-import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';
 import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { replaceText } from './utils/replaceText';
 
+extendZodWithOpenApi(z);
+
 export const fillColumn: Action<'fillColumn'> = {
   summary: 'fills the data on a column of the given table',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to fill',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description: 'the name of the column you want to fill',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnData: {
-      description: 'the content of the column',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          description: 'a cell',
-          type: 'string',
-        },
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
-      columnData: z.array(z.string()),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table you want to fill' }),
+      columnName: z
+        .string()
+        .openapi({ description: 'the name of the column you want to fill' }),
+      columnData: z
+        .array(z.string())
+        .openapi({ description: 'the content of the column' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

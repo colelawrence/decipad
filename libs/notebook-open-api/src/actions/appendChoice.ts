@@ -7,6 +7,8 @@ import {
   ELEMENT_VARIABLE_DEF,
 } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
+import { extendZodWithOpenApi } from 'zod-openapi';
+
 import { Action } from './types';
 import { appendPath } from '../utils/appendPath';
 import {
@@ -15,48 +17,31 @@ import {
 } from '../../../editor-types/src/interactive-elements';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const appendChoice: Action<'appendChoice'> = {
   summary: 'appends a selection box for the user to choose one value',
   description:
     'appends a slider component into the notebook. The value of the selected option can be used in code using the given variable name.',
-  parameters: {
-    variableName: {
-      description:
-        'the name of the variable for this slider. Should be unique and have no spaces or weird characters.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    options: {
-      description: 'the options available for the user',
-      required: true,
-      schema: {
-        type: 'array',
-        items: {
-          description: 'one available option.',
-          type: 'string',
-        },
-      },
-    },
-    selectedName: {
-      description:
-        'contains the initially selected name from the given options.',
-      required: false,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResult',
+    schema: {
+      ref: '#/components/schemas/CreateResult',
+    },
   },
   requiresNotebook: true,
   parameterSchema: () =>
     z.object({
-      variableName: z.string(),
-      options: z.array(z.string()),
-      selectedName: z.string().optional(),
+      variableName: z.string().openapi({
+        description:
+          'the name of the variable for this slider. Should be unique and have no spaces or weird characters.',
+      }),
+      options: z
+        .array(z.string().describe('one available option'))
+        .openapi({ description: 'the options available for the user' }),
+      selectedName: z.string().optional().openapi({
+        description:
+          'contains the initially selected name from the given options.',
+      }),
     }),
   handler: (editor, { variableName, options, selectedName = '' }) => {
     const newDropdown: VariableDropdownElement = {

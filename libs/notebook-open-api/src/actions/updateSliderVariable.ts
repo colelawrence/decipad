@@ -5,6 +5,8 @@ import {
   setNodes,
   TNodeEntry,
 } from '@udecode/plate-common';
+import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import {
   ELEMENT_VARIABLE_DEF,
   type AnyElement,
@@ -14,80 +16,48 @@ import {
   parseSimpleValue,
   simpleValueToString,
 } from '@decipad/remote-computer';
-import { z } from 'zod';
-import { notFound, notAcceptable } from '@hapi/boom';
 import { Action } from './types';
 import { getNodeString } from '../utils/getNodeString';
+import { notFound, notAcceptable } from '@hapi/boom';
 import { matchElementId } from '../utils/matchElementId';
 import { replaceText } from './utils/replaceText';
 import { findElementByVariableName } from './utils/findElementByVariableName';
 
+extendZodWithOpenApi(z);
+
 export const updateSliderVariable: Action<'updateSliderVariable'> = {
   summary: 'changes a slider component',
   description: 'changes an existing slider component.',
-  parameters: {
-    elementId: {
-      description: 'the id of the slider element to change. mandatory.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    variableName: {
-      description:
-        'the new name of the variable for this slider. Should be unique and have no spaces or weird characters.',
-      required: false,
-      schema: {
-        type: 'string',
-      },
-    },
-    value: {
-      description: 'the new value for this slider',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-    unit: {
-      description: 'the new unit of the value',
-      required: false,
-      schema: {
-        type: 'string',
-      },
-    },
-    min: {
-      description: 'the new minimum value this slider accepts',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-    max: {
-      description: 'the new maximum value this slider accepts',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-    step: {
-      description: 'the new step at which the user can change the value',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-  },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
   parameterSchema: () =>
     z.object({
-      elementId: z.string().optional(),
-      variableName: z.string().optional(),
-      value: z.number(),
-      unit: z.string().optional(),
-      min: z.number().optional(),
-      max: z.number().optional(),
-      step: z.number().optional(),
+      elementId: z
+        .string()
+        .optional()
+        .openapi({ description: 'the id of the slider element to change' }),
+      variableName: z.string().optional().openapi({
+        description:
+          'the new name of the variable for this slider. Should be unique and have no spaces or weird characters.',
+      }),
+      value: z
+        .number()
+        .openapi({ description: 'the new value for this slider' }),
+      unit: z
+        .string()
+        .optional()
+        .openapi({ description: 'the new unit of the value' }),
+      min: z
+        .number()
+        .optional()
+        .openapi({ description: 'the new minimum value this slider accepts' }),
+      max: z
+        .number()
+        .optional()
+        .openapi({ description: 'the new maximum value this slider accepts' }),
+      step: z.number().optional().openapi({
+        description: 'the new step at which the user can change the value',
+      }),
     }),
   handler: (
     editor,

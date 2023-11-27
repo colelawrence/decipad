@@ -14,17 +14,6 @@ paths:
     post:
       summary: Retrieves a brief description of all notebook elements
       description: Retrieves a brief description of all notebook elements
-      operationId: describeAllNotebookElements
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  description:
-                    type: string
       parameters:
         - name: notebookId
           in: query
@@ -32,18 +21,15 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        $ref: '#/components/requestBodies/describeAllNotebookElementsParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/describeAllNotebookElementsResponse'
   /api/notebook/getElementById:
     post:
       summary: fetches an element from the notebook with the given id
       description: fetches an element from the notebook with the given id
-      operationId: getElementById
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AnyElement'
       parameters:
         - name: notebookId
           in: query
@@ -52,31 +38,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                elementId:
-                  description: the id of the element you want to retrieve
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/getElementByIdParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/getElementByIdResponse'
   /api/notebook/removeElement:
     post:
       summary: removes an entire existing element from the notebook
       description: removes an entire existing element from the notebook
-      operationId: removeElement
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -85,31 +54,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                elementId:
-                  description: the id of the element you want to remove
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/removeElementParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/removeElementResponse'
   /api/notebook/appendElement:
     post:
       summary: Appends any element to the end of the notebook
       description: Appends any element to the end of the notebook
-      operationId: appendElement
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -118,33 +70,16 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                element:
-                  description: the new element getting appended to the notebook
-                  schema:
-                    $ref: '#/components/schemas/AnyElement'
-                  required: true
+        $ref: '#/components/requestBodies/appendElementParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendElementResponse'
   /api/notebook/appendText:
     post:
       summary: Appends markdown text to the end of the notebook
       description:
         splits the markdown into separate elements and inserts them one at
         a time in the notebook
-      operationId: appendText
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -153,31 +88,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                markdownText:
-                  description: the name of the table you want to append
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/appendTextParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendTextResponse'
   /api/notebook/changeText:
     post:
       summary: Changes the text in a text element
       description: Changes the text in a text element
-      operationId: changeText
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -186,36 +104,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                elementId:
-                  description: the id of the text element you want to change
-                  required: true
-                  schema:
-                    type: string
-                newText:
-                  description: the new content of the text element
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/changeTextParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/changeTextResponse'
   /api/notebook/appendCodeLine:
     post:
       summary: appends a code line to the notebook
       description: appends a code line to the notebook
-      operationId: appendCodeLine
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -224,38 +120,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                variableName:
-                  description:
-                    the name of the variable to create. Should be unique and have no
-                    spaces or weird characters.
-                  required: true
-                  schema:
-                    type: string
-                codeExpression:
-                  description: decipad language code expression for this variable
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/appendCodeLineParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendCodeLineResponse'
   /api/notebook/updateCodeLine:
     post:
       summary: changes an existing code line in the notebook
       description: changes an existing code line in the notebook
-      operationId: updateCodeLine
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -264,41 +136,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                codeLineId:
-                  description: the id of the code line you need to change
-                  required: true
-                  schema:
-                    type: string
-                newVariableName:
-                  description: the new variable name if it needs changing, or the current one.
-                  required: true
-                  schema:
-                    type: string
-                newCodeExpression:
-                  description: the new decipad language code expression for this variable
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/updateCodeLineParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/updateCodeLineResponse'
   /api/notebook/appendEmptyTable:
     post:
       summary: appends an empty table to the end of the notebook
       description: appends an empty table to the end of the notebook
-      operationId: appendEmptyTable
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -307,46 +152,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableName:
-                  description:
-                    the name of the table you want to append. Should have no spaces or
-                    special characters.
-                  required: true
-                  schema:
-                    type: string
-                columnNames:
-                  description: the name of the table you want to append
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: string
-                      description: Column name. Should have no spaces or special characters.
-                rowCount:
-                  description: the number of rows for this new table
-                  required: true
-                  schema:
-                    type: integer
+        $ref: '#/components/requestBodies/appendEmptyTableParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendEmptyTableResponse'
   /api/notebook/appendFilledTable:
     post:
       summary: appends a filled table to the end of the notebook
       description: appends a filled table to the end of the notebook
-      operationId: appendFilledTable
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -355,51 +168,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableName:
-                  description:
-                    the name of the table you want to append. Should have no spaces or
-                    special characters.
-                  required: true
-                  schema:
-                    type: string
-                columnNames:
-                  description: the column names for the table
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: string
-                      description: Column name. Should have no spaces or special characters.
-                rowsData:
-                  description: the data for each row in an array for each row.
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: array
-                      description: the data for a row
-                      items:
-                        type: string
+        $ref: '#/components/requestBodies/appendFilledTableParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendFilledTableResponse'
   /api/notebook/fillTable:
     post:
       summary: fills the table data
       description: fills the table data
-      operationId: fillTable
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -408,42 +184,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to fill
-                  required: true
-                  schema:
-                    type: string
-                rowsData:
-                  description: the content of the table, row by row
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      description: a row of data
-                      type: array
-                      items:
-                        description: a cell
-                        type: string
+        $ref: '#/components/requestBodies/fillTableParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/fillTableResponse'
   /api/notebook/fillColumn:
     post:
       summary: fills the data on a column of the given table
       description: fills the data on a column of the given table
-      operationId: fillColumn
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -452,44 +200,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to fill
-                  required: true
-                  schema:
-                    type: string
-                columnName:
-                  description: the name of the column you want to fill
-                  required: true
-                  schema:
-                    type: string
-                columnData:
-                  description: the content of the column
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      description: a cell
-                      type: string
+        $ref: '#/components/requestBodies/fillColumnParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/fillColumnResponse'
   /api/notebook/fillRow:
     post:
       summary: updates the data on a table row
       description: updates the data on a table row
-      operationId: fillRow
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -498,43 +216,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to append a new row into
-                  required: true
-                  schema:
-                    type: string
-                rowIndex:
-                  description: the index of the row you want to change. starts at 0
-                  required: true
-                  schema:
-                    type: integer
-                rowData:
-                  description: the content of that row
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: string
+        $ref: '#/components/requestBodies/fillRowParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/fillRowResponse'
   /api/notebook/insertEmptyTableColumn:
     post:
       summary: inserts an empty column in an existing table
       description: inserts an empty column in an existing table
-      operationId: insertEmptyTableColumn
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -543,38 +232,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to insert a column into
-                  required: true
-                  schema:
-                    type: string
-                columnName:
-                  description:
-                    the name of the new column. Must contain no spaces or weird
-                    characters
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/insertEmptyTableColumnParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/insertEmptyTableColumnResponse'
   /api/notebook/insertFilledTableColumn:
     post:
       summary: inserts a column in an existing table and fills it
       description: inserts a column in an existing table and fills it
-      operationId: insertFilledTableColumn
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -583,43 +248,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table element
-                  required: true
-                  schema:
-                    type: string
-                columnName:
-                  description: the name of the column. Must contain no spaces or weird characters
-                  required: true
-                  schema:
-                    type: string
-                cells:
-                  description: the data for the column
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: string
+        $ref: '#/components/requestBodies/insertFilledTableColumnParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/insertFilledTableColumnResponse'
   /api/notebook/insertFormulaTableColumn:
     post:
       summary: inserts a calculated column to an existing table
       description: inserts a calculated column to an existing table
-      operationId: insertFormulaTableColumn
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -628,43 +264,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table element
-                  required: true
-                  schema:
-                    type: string
-                columnName:
-                  description:
-                    the name of the new column. Must contain no spaces or weird
-                    characters
-                  required: true
-                  schema:
-                    type: string
-                formula:
-                  description: the Decipad language formula for this new column
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/insertFormulaTableColumnParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/insertFormulaTableColumnResponse'
   /api/notebook/removeTableColumn:
     post:
       summary: removes a column from a table
       description: removes a column from a table
-      operationId: removeTableColumn
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -673,36 +280,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to remove a column from
-                  required: true
-                  schema:
-                    type: string
-                columnName:
-                  description: the name of the new column you want to remove
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/removeTableColumnParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/removeTableColumnResponse'
   /api/notebook/insertTableRow:
     post:
       summary: appends a row to the end of an existing table
       description: appends a row to the end of an existing table
-      operationId: insertTableRow
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -711,38 +296,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to append a new row into
-                  required: true
-                  schema:
-                    type: string
-                row:
-                  description: the content of that row
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: string
+        $ref: '#/components/requestBodies/insertTableRowParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/insertTableRowResponse'
   /api/notebook/removeTableRow:
     post:
       summary: removes a row from a table
       description: removes a row from a table
-      operationId: removeTableRow
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -751,36 +312,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to insert remove a row from
-                  required: true
-                  schema:
-                    type: string
-                rowIndex:
-                  description: the index of the row you want to remove. starts at 0
-                  required: true
-                  schema:
-                    type: number
+        $ref: '#/components/requestBodies/removeTableRowParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/removeTableRowResponse'
   /api/notebook/updateTableCell:
     post:
       summary: updates the content of a cell on a table
       description: updates the content of a cell on a table
-      operationId: updateTableCell
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -789,31 +328,10 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to change
-                  required: true
-                  schema:
-                    type: string
-                columnName:
-                  description: the name of the column you want to change
-                  required: true
-                  schema:
-                    type: string
-                rowIndex:
-                  description: the index of the row you want to change. starts at 0
-                  required: true
-                  schema:
-                    type: integer
-                newCellContent:
-                  description: the new content of the cell
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/updateTableCellParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/updateTableCellResponse'
   /api/notebook/appendDataView:
     post:
       summary:
@@ -822,17 +340,6 @@ paths:
       description:
         appends a data view (pivot table) that summarizes and analyzes the
         data on a given table
-      operationId: appendDataView
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -841,46 +348,10 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the table you want to use in the data view
-                  required: true
-                  schema:
-                    type: string
-                columns:
-                  description: the columns from the table you want to use to the data view
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          description: Column name
-                        aggregation:
-                          type: string
-                          description: Optional. Aggregates the data from the column
-                          enum:
-                            - average
-                            - max
-                            - median
-                            - min
-                            - span
-                            - sum
-                            - stddev
-                        round:
-                          type: string
-                          description:
-                            'Optional. The number of decimal places it rounds to. Use negative
-                            numbers to round to decimal points. Example: to
-                            round to the thousanth use "-3". When using dates
-                            you can round to "quarter", "year", "month" or
-                            "day"'
+        $ref: '#/components/requestBodies/appendDataViewParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendDataViewResponse'
   /api/notebook/appendSliderVariable:
     post:
       summary: appends a slider component
@@ -888,17 +359,6 @@ paths:
         appends a slider component into the notebook. The user will be able
         to change that value by playing with the slider. The value of the slider
         can be used in code using the given variable name.
-      operationId: appendSliderVariable
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -907,60 +367,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                variableName:
-                  description:
-                    the name of the variable for this slider. Should be unique and have
-                    no spaces or weird characters.
-                  required: true
-                  schema:
-                    type: string
-                initialValue:
-                  description: the initial value for this slider
-                  required: true
-                  schema:
-                    type: number
-                unit:
-                  description:
-                    the unit of the value. Can be something like "USD per month",
-                    "GBP", "bananas", "bananas per minute", etc.
-                  required: false
-                  schema:
-                    type: string
-                min:
-                  description: the minimum value this slider accepts
-                  required: false
-                  schema:
-                    type: number
-                max:
-                  description: the maximum value this slider accepts
-                  required: false
-                  schema:
-                    type: number
-                step:
-                  description: the step at which the user can change the value
-                  required: false
-                  schema:
-                    type: number
+        $ref: '#/components/requestBodies/appendSliderVariableParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendSliderVariableResponse'
   /api/notebook/updateSliderVariable:
     post:
       summary: changes a slider component
       description: changes an existing slider component.
-      operationId: updateSliderVariable
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -969,60 +383,16 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                variableName:
-                  description:
-                    the new name of the variable for this slider. Should be unique and
-                    have no spaces or weird characters.
-                  required: false
-                  schema:
-                    type: string
-                value:
-                  description: the new value for this slider
-                  required: false
-                  schema:
-                    type: number
-                unit:
-                  description: the new unit of the value
-                  required: false
-                  schema:
-                    type: string
-                min:
-                  description: the new minimum value this slider accepts
-                  required: false
-                  schema:
-                    type: number
-                max:
-                  description: the new maximum value this slider accepts
-                  required: false
-                  schema:
-                    type: number
-                step:
-                  description: the new step at which the user can change the value
-                  required: false
-                  schema:
-                    type: number
+        $ref: '#/components/requestBodies/updateSliderVariableParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/updateSliderVariableResponse'
   /api/notebook/appendPlot:
     post:
       summary: appends a plot (or graph) to the notebook
       description:
         plots or graphs can be cartesian or pie charts (plot type "arc").
         Cartesian chart types can be bar, line, area, tick or point.
-      operationId: appendPlot
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -1031,60 +401,14 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tableId:
-                  description: the id of the source table for this plot
-                  required: true
-                  schema:
-                    type: string
-                plotParams:
-                  description: parameters for the plot
-                  required: true
-                  schema:
-                    type: object
-                    properties:
-                      plotType:
-                        type: string
-                        enum:
-                          - bar
-                          - circle
-                          - square
-                          - tick
-                          - line
-                          - area
-                          - point
-                          - arc
-                      xColumnName:
-                        type: string
-                      yColumnName:
-                        type: string
-                      sizeColumnName:
-                        type: string
-                      colorColumnName:
-                        type: string
-                      thetaColumnName:
-                        type: string
-                      y2ColumnName:
-                        type: string
+        $ref: '#/components/requestBodies/appendPlotParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendPlotResponse'
   /api/notebook/setPlotParams:
     post:
       summary: changes some of the parameters for a plot
       description: changes some of the parameters for a plot
-      operationId: setPlotParams
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  notebookErrors:
-                    type: array
       parameters:
         - name: notebookId
           in: query
@@ -1093,61 +417,16 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                plotId:
-                  description: the id of the plot element to change
-                  required: true
-                  schema:
-                    type: string
-                newPlotParams:
-                  description:
-                    the parameters to change on the plot. Only include those that need
-                    to change
-                  required: true
-                  schema:
-                    type: object
-                    properties:
-                      plotType:
-                        type: string
-                        enum:
-                          - bar
-                          - circle
-                          - square
-                          - tick
-                          - line
-                          - area
-                          - point
-                          - arc
-                      xColumnName:
-                        type: string
-                      yColumnName:
-                        type: string
-                      sizeColumnName:
-                        type: string
-                      colorColumnName:
-                        type: string
-                      thetaColumnName:
-                        type: string
-                      y2ColumnName:
-                        type: string
+        $ref: '#/components/requestBodies/setPlotParamsParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/setPlotParamsResponse'
   /api/notebook/appendChoice:
     post:
       summary: appends a selection box for the user to choose one value
       description:
         appends a slider component into the notebook. The value of the
         selected option can be used in code using the given variable name.
-      operationId: appendChoice
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateResult'
       parameters:
         - name: notebookId
           in: query
@@ -1156,139 +435,32 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                variableName:
-                  description:
-                    the name of the variable for this slider. Should be unique and have
-                    no spaces or weird characters.
-                  required: true
-                  schema:
-                    type: string
-                options:
-                  description: the options available for the user
-                  required: true
-                  schema:
-                    type: array
-                    items:
-                      description: one available option.
-                      type: string
-                selectedName:
-                  description: contains the initially selected name from the given options.
-                  required: false
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/appendChoiceParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/appendChoiceResponse'
   /api/notebook/createNotebook:
     post:
       summary: removes an existing element from the notebook
       description: removes an existing element from the notebook
-      operationId: createNotebook
+      requestBody:
+        $ref: '#/components/requestBodies/createNotebookParameters'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  createdNotebookId:
-                    type: string
-                  createdNotebookURL:
-                    type: string
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  description: the title of the notebook you want to create
-                  required: true
-                  schema:
-                    type: string
+          $ref: '#/components/responses/createNotebookResponse'
   /api/notebook/evalCode:
     post:
       summary: evaluates a snippet of decipad language code
       description: evaluates a snippet of decipad language code
-      operationId: evalCode
+      requestBody:
+        $ref: '#/components/requestBodies/evalCodeParameters'
       responses:
         '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                  errorLocation:
-                    type: object
-                    properties:
-                      line:
-                        type: number
-                      column:
-                        type: number
-                  result:
-                    type: object
-                    properties:
-                      type:
-                        type: object
-                      value:
-                        type: object
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  description: a bit of decipad language code
-                  required: true
-                  schema:
-                    type: string
+          $ref: '#/components/responses/evalCodeResponse'
   /api/notebook/generateCode:
     post:
       summary: generates Decipad language code from a prompt
       description: generates Decipad language code from a prompt
-      operationId: generateCode
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                  errorLocation:
-                    type: object
-                    properties:
-                      line:
-                        type: number
-                      column:
-                        type: number
-                  blocks:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        type:
-                          type: string
-                          enum:
-                            - expression
-                            - assignment
-                        expressionCode:
-                          type: string
-                        varname:
-                          type: string
-                        value:
-                          type: string
       parameters:
         - name: notebookId
           in: query
@@ -1297,16 +469,10 @@ paths:
           schema:
             type: string
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                prompt:
-                  description: natural language description of the code to generate
-                  required: true
-                  schema:
-                    type: string
+        $ref: '#/components/requestBodies/generateCodeParameters'
+      responses:
+        '200':
+          $ref: '#/components/responses/generateCodeResponse'
 components:
   schemas:
     CreateResult:
@@ -1321,14 +487,7 @@ components:
     CreateResults:
       type: array
       items:
-        type: object
-        properties:
-          createdElementId:
-            type: string
-          createdElementType:
-            type: string
-          createdElementName:
-            type: string
+        $ref: '#/components/schemas/CreateResult'
     AnyElement:
       type: object
       properties:
@@ -1340,3 +499,903 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnyElement'
+  requestBodies:
+    describeAllNotebookElementsParameters:
+      content:
+        application/json:
+          schema: {}
+      ref: describeAllNotebookElementsParameters
+    getElementByIdParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              elementId:
+                type: string
+                description: the id of the element you want to retrieve
+            required:
+              - elementId
+      ref: getElementByIdParameters
+    removeElementParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              elementId:
+                type: string
+                description: the id of the element you want to remove
+            required:
+              - elementId
+      ref: removeElementParameters
+    appendElementParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              element:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  children:
+                    type: array
+                    items: {}
+                required:
+                  - id
+                  - type
+                  - children
+                description: the new element getting appended to the notebook
+            required:
+              - element
+      ref: appendElementParameters
+    appendTextParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              markdownText:
+                type: string
+                description: markdown text to add to the notebook
+            required:
+              - markdownText
+      ref: appendTextParameters
+    changeTextParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              elementId:
+                type: string
+                description: the id of the text element you want to change
+              newText:
+                type: string
+                description: the new content of the text element
+            required:
+              - elementId
+              - newText
+      ref: changeTextParameters
+    appendCodeLineParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              variableName:
+                type: string
+                description:
+                  the name of the variable to create. Should be unique and have no
+                  spaces or weird characters.
+              codeExpression:
+                type: string
+                description: decipad language code expression for this variable
+            required:
+              - variableName
+              - codeExpression
+      ref: appendCodeLineParameters
+    updateCodeLineParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              codeLineId:
+                type: string
+                description: the id of the code line you need to change
+              newVariableName:
+                type: string
+                description: the new variable name if it needs changing, or the current one.
+              newCodeExpression:
+                type: string
+                description: the new decipad language code expression for this variable
+            required:
+              - codeLineId
+              - newVariableName
+              - newCodeExpression
+      ref: updateCodeLineParameters
+    appendEmptyTableParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableName:
+                type: string
+                description:
+                  the name of the table you want to append. Should have no spaces or
+                  special characters.
+              columnNames:
+                type: array
+                items:
+                  type: string
+                  description: Column name. Should have no spaces or special characters.
+                description: the names of the columns you want this table to have
+              rowCount:
+                type: integer
+                description: the number of rows for this new table
+            required:
+              - tableName
+              - columnNames
+              - rowCount
+      ref: appendEmptyTableParameters
+    appendFilledTableParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableName:
+                type: string
+                description:
+                  the name of the table you want to append. Should have no spaces or
+                  special characters.
+              columnNames:
+                type: array
+                items:
+                  type: string
+                  description: Column name. Should have no spaces or special characters.
+                description: the column names for the table
+              rowsData:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: string
+                  description: the data for a row
+                description: the data for each row in an array for each row.
+            required:
+              - tableName
+              - columnNames
+              - rowsData
+      ref: appendFilledTableParameters
+    fillTableParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to fill
+              rowsData:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: string
+                    description: a cell
+                  description: a row of data
+                description: the content of the table, row by row
+            required:
+              - tableId
+              - rowsData
+      ref: fillTableParameters
+    fillColumnParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to fill
+              columnName:
+                type: string
+                description: the name of the column you want to fill
+              columnData:
+                type: array
+                items:
+                  type: string
+                description: the content of the column
+            required:
+              - tableId
+              - columnName
+              - columnData
+      ref: fillColumnParameters
+    fillRowParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to append a new row into
+              rowIndex:
+                type: integer
+                description: the index of the row you want to change. starts at 0
+              rowData:
+                type: array
+                items:
+                  type: string
+                description: the content of that row
+            required:
+              - tableId
+              - rowIndex
+              - rowData
+      ref: fillRowParameters
+    insertEmptyTableColumnParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to insert a column into
+              columnName:
+                type: string
+                description:
+                  the name of the new column. Must contain no spaces or weird
+                  characters
+            required:
+              - tableId
+              - columnName
+      ref: insertEmptyTableColumnParameters
+    insertFilledTableColumnParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table element
+              columnName:
+                type: string
+                description: the name of the column. Must contain no spaces or weird characters
+              cells:
+                type: array
+                items:
+                  type: string
+                description: the data for the column
+            required:
+              - tableId
+              - columnName
+              - cells
+      ref: insertFilledTableColumnParameters
+    insertFormulaTableColumnParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table element
+              columnName:
+                type: string
+                description:
+                  the name of the new column. Must contain no spaces or weird
+                  characters
+              formula:
+                type: string
+                description: the Decipad language formula for this new column
+            required:
+              - tableId
+              - columnName
+              - formula
+      ref: insertFormulaTableColumnParameters
+    removeTableColumnParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to remove a column from
+              columnName:
+                type: string
+                description: the name of the new column you want to remove
+            required:
+              - tableId
+              - columnName
+      ref: removeTableColumnParameters
+    insertTableRowParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to append a new row into
+              row:
+                type: array
+                items:
+                  type: string
+                description: the content of that row
+            required:
+              - tableId
+              - row
+      ref: insertTableRowParameters
+    removeTableRowParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to insert remove a row from
+              rowIndex:
+                type: integer
+                description: the index of the row you want to remove. starts at 0
+            required:
+              - tableId
+              - rowIndex
+      ref: removeTableRowParameters
+    updateTableCellParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to change
+              columnName:
+                type: string
+                description: the name of the column you want to change
+              rowIndex:
+                type: integer
+                description: the index of the row you want to change. starts at 0
+              newCellContent:
+                type: string
+                description: the new content of the cell
+            required:
+              - tableId
+              - columnName
+              - rowIndex
+              - newCellContent
+      ref: updateTableCellParameters
+    appendDataViewParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the table you want to use in the data view
+              columns:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Column name
+                    aggregation:
+                      type: string
+                      enum:
+                        - average
+                        - max
+                        - median
+                        - min
+                        - span
+                        - sum
+                        - stddev
+                      description: Aggregates the data from the column
+                    round:
+                      type: string
+                      description:
+                        'Optional. The number of decimal places it rounds to. Use negative
+                        numbers to round to decimal points. Example: to round to
+                        the thousanth use "-3". When using dates you can round
+                        to "quarter", "year", "month" or "day"'
+                  required:
+                    - name
+                description: the columns from the table you want to use to the data view
+            required:
+              - tableId
+              - columns
+      ref: appendDataViewParameters
+    appendSliderVariableParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              variableName:
+                type: string
+                description:
+                  the name of the variable for this slider. Should be unique and have
+                  no spaces or weird characters.
+              initialValue:
+                type: number
+                description: the initial value for this slider
+              unit:
+                type: string
+                description:
+                  the unit of the value. Can be something like "USD per month",
+                  "GBP", "bananas", "bananas per minute", etc.
+              min:
+                type: number
+                description: the minimum value this slider accepts
+              max:
+                type: number
+                description: the maximum value this slider accepts
+              step:
+                type: number
+                description: the step at which the user can change the value
+            required:
+              - variableName
+              - initialValue
+      ref: appendSliderVariableParameters
+    updateSliderVariableParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              elementId:
+                type: string
+                description: the id of the slider element to change
+              variableName:
+                type: string
+                description:
+                  the new name of the variable for this slider. Should be unique and
+                  have no spaces or weird characters.
+              value:
+                type: number
+                description: the new value for this slider
+              unit:
+                type: string
+                description: the new unit of the value
+              min:
+                type: number
+                description: the new minimum value this slider accepts
+              max:
+                type: number
+                description: the new maximum value this slider accepts
+              step:
+                type: number
+                description: the new step at which the user can change the value
+            required:
+              - value
+      ref: updateSliderVariableParameters
+    appendPlotParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tableId:
+                type: string
+                description: the id of the source table for this plot
+              plotParams:
+                type: object
+                properties:
+                  plotType:
+                    type: string
+                    enum:
+                      - bar
+                      - circle
+                      - square
+                      - tick
+                      - line
+                      - area
+                      - point
+                      - arc
+                  xColumnName:
+                    type: string
+                  yColumnName:
+                    type: string
+                  sizeColumnName:
+                    type: string
+                  colorColumnName:
+                    type: string
+                  thetaColumnName:
+                    type: string
+                  y2ColumnName:
+                    type: string
+                required:
+                  - plotType
+                description: parameters for the plot
+            required:
+              - tableId
+              - plotParams
+      ref: appendPlotParameters
+    setPlotParamsParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              polotId:
+                type: string
+                description: the id of the plot element to change
+              newPlotParams:
+                type: object
+                properties:
+                  plotType:
+                    type: string
+                    enum:
+                      - bar
+                      - circle
+                      - square
+                      - tick
+                      - line
+                      - area
+                      - point
+                      - arc
+                  xColumnName:
+                    type: string
+                  yColumnName:
+                    type: string
+                  sizeColumnName:
+                    type: string
+                  colorColumnName:
+                    type: string
+                  thetaColumnName:
+                    type: string
+                  y2ColumnName:
+                    type: string
+                required:
+                  - plotType
+                description:
+                  the parameters to change on the plot. Only include those that need
+                  to change
+            required:
+              - polotId
+              - newPlotParams
+      ref: setPlotParamsParameters
+    appendChoiceParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              variableName:
+                type: string
+                description:
+                  the name of the variable for this slider. Should be unique and have
+                  no spaces or weird characters.
+              options:
+                type: array
+                items:
+                  type: string
+                  description: one available option
+                description: the options available for the user
+              selectedName:
+                type: string
+                description: contains the initially selected name from the given options.
+            required:
+              - variableName
+              - options
+      ref: appendChoiceParameters
+    createNotebookParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+            required:
+              - title
+      ref: createNotebookParameters
+    evalCodeParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+            required:
+              - code
+      ref: evalCodeParameters
+    generateCodeParameters:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              prompt:
+                type: string
+            required:
+              - prompt
+      ref: generateCodeParameters
+  responses:
+    describeAllNotebookElementsResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+    getElementByIdResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            schema:
+              ref: '#/components/schemas/AnyElement'
+    removeElementResponse:
+      description: Ok
+      content:
+        application/json: {}
+    appendElementResponse:
+      description: Ok
+      content:
+        application/json: {}
+    appendTextResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResults'
+              notebookErrors:
+                type: array
+    changeTextResponse:
+      description: Ok
+      content:
+        application/json: {}
+    appendCodeLineResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    updateCodeLineResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    appendEmptyTableResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    appendFilledTableResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    fillTableResponse:
+      description: Ok
+      content:
+        application/json: {}
+    fillColumnResponse:
+      description: Ok
+      content:
+        application/json: {}
+    fillRowResponse:
+      description: Ok
+      content:
+        application/json: {}
+    insertEmptyTableColumnResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    insertFilledTableColumnResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    insertFormulaTableColumnResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    removeTableColumnResponse:
+      description: Ok
+      content:
+        application/json: {}
+    insertTableRowResponse:
+      description: Ok
+      content:
+        application/json: {}
+    removeTableRowResponse:
+      description: Ok
+      content:
+        application/json: {}
+    updateTableCellResponse:
+      description: Ok
+      content:
+        application/json: {}
+    appendDataViewResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    appendSliderVariableResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    updateSliderVariableResponse:
+      description: Ok
+      content:
+        application/json: {}
+    appendPlotResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              result:
+                schema:
+                  ref: '#/components/schemas/CreateResult'
+              notebookErrors:
+                type: array
+    setPlotParamsResponse:
+      description: Ok
+      content:
+        application/json: {}
+    appendChoiceResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            schema:
+              ref: '#/components/schemas/CreateResult'
+    createNotebookResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            schema:
+              type: object
+              properties:
+                createdNotebookId:
+                  type: string
+                createdNotebookURL:
+                  type: string
+    evalCodeResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                errorLocation:
+                  type: object
+                  properties:
+                    line:
+                      type: number
+                    column:
+                      type: number
+                result:
+                  type: object
+                  properties:
+                    type:
+                      type: object
+                    value:
+                      type: object
+    generateCodeResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                errorLocation:
+                  type: object
+                  properties:
+                    line:
+                      type: number
+                    column:
+                      type: number
+                blocks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - expression
+                          - assignment
+                      expressionCode:
+                        type: string
+                      varname:
+                        type: string
+                      value:
+                        type: string

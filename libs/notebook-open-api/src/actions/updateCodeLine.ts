@@ -12,6 +12,7 @@ import {
 } from '@decipad/editor-types';
 import { notFound, notAcceptable } from '@hapi/boom';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import type { Action } from './types';
 import { replaceText } from './utils/replaceText';
 import {
@@ -20,42 +21,30 @@ import {
 } from '../../../editor-types/src/value';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const updateCodeLine: Action<'updateCodeLine'> = {
   summary: 'changes an existing code line in the notebook',
-  parameters: {
-    codeLineId: {
-      description: 'the id of the code line you need to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    newVariableName: {
-      description:
-        'the new variable name if it needs changing, or the current one.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    newCodeExpression: {
-      description: 'the new decipad language code expression for this variable',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResult',
+    schema: {
+      ref: '#/components/schemas/CreateResult',
+    },
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
   parameterSchema: () =>
     z.object({
-      codeLineId: z.string(),
-      newVariableName: z.string(),
-      newCodeExpression: z.string(),
+      codeLineId: z
+        .string()
+        .openapi({ description: 'the id of the code line you need to change' }),
+      newVariableName: z.string().openapi({
+        description:
+          'the new variable name if it needs changing, or the current one.',
+      }),
+      newCodeExpression: z.string().openapi({
+        description:
+          'the new decipad language code expression for this variable',
+      }),
     }),
   handler: (editor, { codeLineId, newVariableName, newCodeExpression }) => {
     const entry = findNode<AnyElement>(editor, {

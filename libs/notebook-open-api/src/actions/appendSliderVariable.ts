@@ -1,5 +1,6 @@
 import { insertNodes, getNode } from '@udecode/plate-common';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import {
   ELEMENT_CAPTION,
   ELEMENT_EXPRESSION,
@@ -13,69 +14,43 @@ import { appendPath } from '../utils/appendPath';
 import { VariableSliderElement } from '../../../editor-types/src/interactive-elements';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const appendSliderVariable: Action<'appendSliderVariable'> = {
   summary: 'appends a slider component',
   description:
     'appends a slider component into the notebook. The user will be able to change that value by playing with the slider. The value of the slider can be used in code using the given variable name.',
-  parameters: {
-    variableName: {
-      description:
-        'the name of the variable for this slider. Should be unique and have no spaces or weird characters.',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    initialValue: {
-      description: 'the initial value for this slider',
-      required: true,
-      schema: {
-        type: 'number',
-      },
-    },
-    unit: {
-      description:
-        'the unit of the value. Can be something like "USD per month", "GBP", "bananas", "bananas per minute", etc.',
-      required: false,
-      schema: {
-        type: 'string',
-      },
-    },
-    min: {
-      description: 'the minimum value this slider accepts',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-    max: {
-      description: 'the maximum value this slider accepts',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-    step: {
-      description: 'the step at which the user can change the value',
-      required: false,
-      schema: {
-        type: 'number',
-      },
-    },
-  },
   response: {
-    schemaName: 'CreateResult',
+    schema: {
+      ref: '#/components/schemas/CreateResult',
+    },
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
   parameterSchema: () =>
     z.object({
-      variableName: z.string(),
-      initialValue: z.number(),
-      unit: z.string().optional(),
-      min: z.number().optional(),
-      max: z.number().optional(),
-      step: z.number().optional(),
+      variableName: z.string().openapi({
+        description:
+          'the name of the variable for this slider. Should be unique and have no spaces or weird characters.',
+      }),
+      initialValue: z
+        .number()
+        .openapi({ description: 'the initial value for this slider' }),
+      unit: z.string().optional().openapi({
+        description:
+          'the unit of the value. Can be something like "USD per month", "GBP", "bananas", "bananas per minute", etc.',
+      }),
+      min: z
+        .number()
+        .optional()
+        .openapi({ description: 'the minimum value this slider accepts' }),
+      max: z
+        .number()
+        .optional()
+        .openapi({ description: 'the maximum value this slider accepts' }),
+      step: z.number().optional().openapi({
+        description: 'the step at which the user can change the value',
+      }),
     }),
   handler: (
     editor,

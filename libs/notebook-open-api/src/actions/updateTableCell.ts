@@ -5,53 +5,34 @@ import {
   withoutNormalizing,
 } from '@udecode/plate-common';
 import { z } from 'zod';
-import { notAcceptable } from '@hapi/boom';
-import { TableCellElement } from '@decipad/editor-types';
-import { getDefined } from '@decipad/utils';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action, NotebookActionHandler } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getTableColumnIndexByName } from './utils/getTableColumnIndexByName';
 import { insertTableRow } from './insertTableRow';
 import { replaceText } from './utils/replaceText';
+import { TableCellElement } from '@decipad/editor-types';
+import { getDefined } from '@decipad/utils';
+import { notAcceptable } from '@hapi/boom';
+
+extendZodWithOpenApi(z);
 
 export const updateTableCell: Action<'updateTableCell'> = {
   summary: 'updates the content of a cell on a table',
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description: 'the name of the column you want to change',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    rowIndex: {
-      description: 'the index of the row you want to change. starts at 0',
-      required: true,
-      schema: {
-        type: 'integer',
-      },
-    },
-    newCellContent: {
-      description: 'the new content of the cell',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-  },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
-      rowIndex: z.number().int(),
-      newCellContent: z.string(),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table you want to change' }),
+      columnName: z
+        .string()
+        .openapi({ description: 'the name of the column you want to change' }),
+      rowIndex: z.number().int().openapi({
+        description: 'the index of the row you want to change. starts at 0',
+      }),
+      newCellContent: z
+        .string()
+        .openapi({ description: 'the new content of the cell' }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

@@ -1,38 +1,32 @@
 import { getNode, insertNodes } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { ELEMENT_TH, TableHeaderElement } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
 import { Action } from './types';
 import { getTableById } from './utils/getTablebyId';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
   summary: 'inserts an empty column in an existing table',
   response: {
-    schemaName: 'CreateResult',
-  },
-  parameters: {
-    tableId: {
-      description: 'the id of the table you want to insert a column into',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description:
-        'the name of the new column. Must contain no spaces or weird characters',
-      required: true,
-      schema: {
-        type: 'string',
-      },
+    schema: {
+      ref: '#/components/schemas/CreateResult',
     },
   },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
+      tableId: z.string().openapi({
+        description: 'the id of the table you want to insert a column into',
+      }),
+      columnName: z
+        .string()
+        .describe(
+          'the name of the new column. Must contain no spaces or weird characters'
+        ),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,

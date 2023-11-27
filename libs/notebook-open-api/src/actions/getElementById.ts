@@ -1,24 +1,22 @@
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action } from './types';
 import { getElementById as getElementById2 } from './utils/getElementById';
+
+extendZodWithOpenApi(z);
 
 export const getElementById: Action<'getElementById'> = {
   summary: 'fetches an element from the notebook with the given id',
   response: {
-    schemaName: 'AnyElement',
-  },
-  parameters: {
-    elementId: {
-      description: 'the id of the element you want to retrieve',
-      required: true,
-      schema: {
-        type: 'string',
-      },
+    schema: {
+      ref: '#/components/schemas/AnyElement',
     },
   },
   parameterSchema: () =>
     z.object({
-      elementId: z.string(),
+      elementId: z
+        .string()
+        .openapi({ description: 'the id of the element you want to retrieve' }),
     }),
   requiresNotebook: true,
   handler: (editor, { elementId }) => getElementById2(editor, elementId)[0],

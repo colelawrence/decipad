@@ -7,6 +7,7 @@ import {
 } from '@udecode/plate-common';
 import { nanoid } from 'nanoid';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 import {
   ELEMENT_TH,
   ELEMENT_TABLE_COLUMN_FORMULA,
@@ -20,40 +21,27 @@ import { findColumn } from './utils/findColumn';
 import { findTableColumnFormula } from './utils/findTableColumnFormula';
 import { getNodeString } from '../utils/getNodeString';
 
+extendZodWithOpenApi(z);
+
 export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
   summary: 'inserts a calculated column to an existing table',
   response: {
-    schemaName: 'CreateResult',
-  },
-  parameters: {
-    tableId: {
-      description: 'the id of the table element',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    columnName: {
-      description:
-        'the name of the new column. Must contain no spaces or weird characters',
-      required: true,
-      schema: {
-        type: 'string',
-      },
-    },
-    formula: {
-      description: 'the Decipad language formula for this new column',
-      required: true,
-      schema: {
-        type: 'string',
-      },
+    schema: {
+      ref: '#/components/schemas/CreateResult',
     },
   },
   parameterSchema: () =>
     z.object({
-      tableId: z.string(),
-      columnName: z.string(),
-      formula: z.string(),
+      tableId: z
+        .string()
+        .openapi({ description: 'the id of the table element' }),
+      columnName: z.string().openapi({
+        description:
+          'the name of the new column. Must contain no spaces or weird characters',
+      }),
+      formula: z.string().openapi({
+        description: 'the Decipad language formula for this new column',
+      }),
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
