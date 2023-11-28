@@ -51,12 +51,14 @@ export class Notebook {
     this.notebookHelpButton = page.getByTestId(
       'segment-button-trigger-top-bar-help'
     );
-    this.archiveNotebook = page.getByRole('menuitem', { name: 'Archive' });
+    this.archiveNotebook = page.getByRole('menuitem', {
+      name: 'Archive Archive',
+    });
     this.downloadNotebook = page.getByRole('menuitem', { name: 'Download' });
     this.duplicateNotebook = page.getByRole('menuitem', { name: 'Duplicate' });
     this.topRightDuplicateNotebook = page.getByTestId('duplicate-button');
     this.restoreArchiveNotebook = page.getByRole('menuitem', {
-      name: 'Put Back',
+      name: 'Folder Open Unarchive',
     });
     this.republishNotification = page.getByTestId('publish-notification');
   }

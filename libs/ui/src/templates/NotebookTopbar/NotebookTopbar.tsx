@@ -365,6 +365,7 @@ export const NotebookTopbar = ({
             )}
             <Styled.TitleContainer>
               <NotebookOptions
+                canDelete={false}
                 permissionType={permissionType}
                 notebookId={notebookId}
                 isArchived={isArchived}
@@ -391,7 +392,7 @@ export const NotebookTopbar = ({
                 workspaceId={workspace?.id ?? ''}
               />
               <Styled.Status data-testId="notebook-status">
-                {status}
+                {isArchived ? 'Archive' : status}
               </Styled.Status>
             </Styled.TitleContainer>
             {!(isReadOnly || isEmbed) && undoButtons}

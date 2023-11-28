@@ -32,6 +32,7 @@ export interface NotebookOptionsProps {
   readonly isArchived: boolean;
   readonly trigger: ReactNode;
   readonly workspaceId: string;
+  readonly canDelete?: boolean;
   readonly workspaces: Array<WorkspaceSwitcherWorkspaceFragment>;
   readonly onDuplicate: NotebookMetaActionsType['onDuplicateNotebook'];
   readonly onExport: NotebookMetaActionsType['onDownloadNotebook'];
@@ -60,9 +61,9 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
   isArchived,
   workspaces,
   notebookId: id,
-
   creationDate,
   notebookStatus,
+  canDelete = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -169,21 +170,22 @@ export const NotebookOptions: FC<NotebookOptionsProps> = ({
               setIsOpen(false);
             }}
           >
-            Put back
+            Unarchive
           </MenuItem>
         )}
 
-        {permissionType !== PermissionType.Read && (
-          <MenuItem
-            icon={isArchived ? <Trash /> : <Archive />}
-            onSelect={() => {
-              onDelete(id, true);
-              setIsOpen(false);
-            }}
-          >
-            {isArchived ? 'Delete' : 'Archive'}
-          </MenuItem>
-        )}
+        {permissionType !== PermissionType.Read &&
+          (canDelete || !isArchived) && (
+            <MenuItem
+              icon={isArchived ? <Trash /> : <Archive />}
+              onSelect={() => {
+                onDelete(id, true);
+                setIsOpen(false);
+              }}
+            >
+              {isArchived ? 'Delete' : 'Archive'}
+            </MenuItem>
+          )}
 
         {creationDate && (
           <li css={creationDateStyles}>
