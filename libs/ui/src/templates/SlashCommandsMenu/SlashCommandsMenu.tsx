@@ -151,8 +151,7 @@ const integrationsGroups = (paint: boolean) => ({
     {
       command: 'upload-embed',
       title: 'Embed',
-      description:
-        'Embed slides, videos, or other content from another website',
+      description: 'Embed content from a website',
       icon: paintIcon(<ImportTable />, paint ? 'Daffodil' : undefined),
       enabled: true,
       extraSearchTerms: ['import', 'embed'],
