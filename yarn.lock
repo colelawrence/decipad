@@ -7943,6 +7943,15 @@
     "@sentry/types" "7.82.0"
     "@sentry/utils" "7.82.0"
 
+"@sentry-internal/tracing@7.83.0":
+  version "7.83.0"
+  resolved "https://registry.yarnpkg.com/@sentry-internal/tracing/-/tracing-7.83.0.tgz#8f69d339569b020c495f8350a8ea527c369586e8"
+  integrity sha512-fY1ZyOiQaaUTuoq5rO+G4/5Ov3n8BnfNK7ck97yAGxy3w+E1CwhVZkXHEvTngNfdYV3ArxvlrtPRb9STFRqXvQ==
+  dependencies:
+    "@sentry/core" "7.83.0"
+    "@sentry/types" "7.83.0"
+    "@sentry/utils" "7.83.0"
+
 "@sentry/browser@7.82.0":
   version "7.82.0"
   resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-7.82.0.tgz#239d7d6b31af31d624acb1bd4b3fd54a60fecc74"
@@ -7987,14 +7996,22 @@
     "@sentry/types" "7.82.0"
     "@sentry/utils" "7.82.0"
 
-"@sentry/integrations@^7.82.0":
-  version "7.82.0"
-  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-7.82.0.tgz#f2f631301b93c6c08c4989f7d92b0e600efd8f42"
-  integrity sha512-dLfLG7W+mNK7tyyIdoJc0eBd/vmboyBprQgnusbFFZeTgf7NjEjI4gk/VNFZp/EhZ+G6lLu/UJxttx/2QtSCYg==
+"@sentry/core@7.83.0":
+  version "7.83.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-7.83.0.tgz#29bdd5aba40a6f25c01c68387b6a9aa13e27f20a"
+  integrity sha512-fglvpw8aWM6nWXzCjAVXIMTiTEAQ9G9b85IpDd/7L8fuwaFTPQAUSJXupF2PfbpQ3FUYbJt80dxshbERVJG8vQ==
   dependencies:
-    "@sentry/core" "7.82.0"
-    "@sentry/types" "7.82.0"
-    "@sentry/utils" "7.82.0"
+    "@sentry/types" "7.83.0"
+    "@sentry/utils" "7.83.0"
+
+"@sentry/integrations@^7.83.0":
+  version "7.83.0"
+  resolved "https://registry.yarnpkg.com/@sentry/integrations/-/integrations-7.83.0.tgz#c9256bd6168bef587e4bde04b66609aaea16a3ab"
+  integrity sha512-KyptWUyg/Z+3qN1dBDDVcNNUzIwWpCO3mfiToV20LSeA+e/NS4IWTtsZKo2mqvoQQ/4QKcrMj7NbF5iOjKckaQ==
+  dependencies:
+    "@sentry/core" "7.83.0"
+    "@sentry/types" "7.83.0"
+    "@sentry/utils" "7.83.0"
     localforage "^1.8.1"
 
 "@sentry/node@7.82.0", "@sentry/node@^7.60.0":
@@ -8040,24 +8057,36 @@
     "@types/aws-lambda" "^8.10.62"
     "@types/express" "^4.17.14"
 
-"@sentry/tracing@7.82.0":
-  version "7.82.0"
-  resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-7.82.0.tgz#6f902b580989a95726ab6be387a18ac81b2f095b"
-  integrity sha512-GLk63iuxJnOheZ4j7lr1dlEV60lOwDz4u54xZiY/hE7LE6+0v/SM+kSOQXLwKOVcS1yZYamf+T2mDU80bg0zOA==
+"@sentry/tracing@7.83.0":
+  version "7.83.0"
+  resolved "https://registry.yarnpkg.com/@sentry/tracing/-/tracing-7.83.0.tgz#816c99ca1c9dc0b04962da88d4728b6360f46ee7"
+  integrity sha512-0VqUOV/DTYdnkxMU28miybyxsRDjizFe+O5vBzShZNR2XfRHI70ozd8kI/Uni685QlCYirpcnS5evrEx1yLf+A==
   dependencies:
-    "@sentry-internal/tracing" "7.82.0"
+    "@sentry-internal/tracing" "7.83.0"
 
 "@sentry/types@7.82.0":
   version "7.82.0"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.82.0.tgz#8f12f089069306bfe04d00f471fa1607a96eed80"
   integrity sha512-mWiSaWXas2zAyO7Kt5Eb9/W2vEiDiTw56NGRjKWsZnmKyl9bK3Mnxuk0TR7M6F+q8OoAFZPK1rECnyGIcb0fqQ==
 
-"@sentry/utils@7.82.0", "@sentry/utils@^7.60.0":
+"@sentry/types@7.83.0":
+  version "7.83.0"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-7.83.0.tgz#117e45900603190c547e52bba35e1b3d539d47fb"
+  integrity sha512-Bd+zJcy8p1VgCfQqUprmUaw0QPWUV+GmCt6zJRHrHTb2pwLahXv6sHJvQ8F8Va6S7Keuy088U+kHzUFGQLMZMQ==
+
+"@sentry/utils@7.82.0":
   version "7.82.0"
   resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.82.0.tgz#0047db67ca8ad5f336dfa2994fd1a717a2941fbb"
   integrity sha512-Tba4yemyePW+bwKO/UR5/hlY3CBuBWc/PiKMLLfE6VNhFgZN/Ei9T/Wfp2ld/ANhfC0imqSd2iCv2rUuDPNRpQ==
   dependencies:
     "@sentry/types" "7.82.0"
+
+"@sentry/utils@7.83.0", "@sentry/utils@^7.60.0":
+  version "7.83.0"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-7.83.0.tgz#ec0fc0a468ec35ab9623603f1ba218dd58233eda"
+  integrity sha512-7SrZtgAn3pHFBqSSvV/VL0CWTBQ7VenJjok4+WGWd6/FhP3fKrEEd9rjVTUb2Pzq9WLJJYzdvxAG8RlggG+H4g==
+  dependencies:
+    "@sentry/types" "7.83.0"
 
 "@sentry/webpack-plugin@^2.10.0":
   version "2.10.0"
@@ -14790,10 +14819,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1502.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1502.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1502.0.tgz#13bc01d63f19bae4ddc3992d8971861d58a740e0"
-  integrity sha512-mUXUaWmbIyqE6zyIcbUUQIUgw1evK7gV1vQP7ZZEE0qi6hO2Mw99Nc25Bh+187yvRxamMTsFXvvmBViR0Q75SA==
+aws-sdk@2.1505.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1505.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1505.0.tgz#25591cbf123b40af4e923a10d784212036d8f7ac"
+  integrity sha512-z7LeSpQpP0P3xWvJiLMhleQNXebj+jHj6A2tdoL36B7Qk1dDxIKm2Xzfd+JUdyq9Yra7/fOH/BXy/K5/2KPLsA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
