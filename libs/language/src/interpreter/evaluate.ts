@@ -7,7 +7,7 @@ import {
   getIdentifierString,
   multiplyMultipliers,
 } from '../utils';
-import { dateNodeToTimeUnit, getDateFromAstForm } from '../date';
+import { getDateFromAstForm } from '../date';
 import { expandDirectiveToValue } from '../directives';
 
 import { Realm } from './Realm';
@@ -176,14 +176,24 @@ async function internalEvaluate(
       const end = await evaluate(realm, getDefined(node.args[1]));
 
       if (start instanceof DateValue && end instanceof DateValue) {
-        const startUnit = dateNodeToTimeUnit(
-          getOfType('date', node.args[0]).args
-        );
-        const endUnit = dateNodeToTimeUnit(
-          getOfType('date', node.args[1]).args
-        );
+        const startUnit = realm.getTypeAt(node.args[0]);
+        if (!startUnit.date) {
+          throw new Error(
+            'Unexpected type of start unit. It should have been a date'
+          );
+        }
+        const endUnit = realm.getTypeAt(node.args[1]);
+        if (!endUnit.date) {
+          throw new Error(
+            'Unexpected type of start unit. It should have been a date'
+          );
+        }
 
-        const step = getDateSequenceIncrement(node.args[2], startUnit, endUnit);
+        const step = getDateSequenceIncrement(
+          node.args[2],
+          startUnit.date,
+          endUnit.date
+        );
         return getDefined(await columnFromDateSequence(start, end, step));
       } else {
         const step = node.args[2]

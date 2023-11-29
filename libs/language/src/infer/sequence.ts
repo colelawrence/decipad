@@ -8,8 +8,6 @@ import {
   getJSDateUnitAndMultiplier,
   getSpecificity,
   getTimeUnit,
-  getDateFromAstForm,
-  dateNodeToTimeUnit,
   sortTimeUnits,
 } from '../date';
 import { Context } from './context';
@@ -153,35 +151,22 @@ export const inferSequence = async (
 
   if (boundTypes.errorCause != null) {
     return boundTypes;
-  } else if (startN.type === 'date' && endN.type === 'date') {
-    const [start, startSpec] = getDateFromAstForm(startN.args);
-    const [end] = getDateFromAstForm(endN.args);
-    const boundsSpecificity = getSpecificity(startSpec);
-
+  } else if (boundTypes.date) {
     let increment;
     let specificity;
 
     try {
       increment = getDateSequenceIncrement(
         byN,
-        dateNodeToTimeUnit(startN.args),
-        dateNodeToTimeUnit(endN.args)
+        boundTypes.date,
+        boundTypes.date
       );
       specificity = getSpecificity(increment);
     } catch {
       return t.impossible('Invalid increment clause in date sequence');
     }
 
-    const countOrError = await getDateSequenceError(
-      start,
-      end,
-      boundsSpecificity,
-      increment
-    );
-
-    return countOrError
-      ? t.impossible(countOrError)
-      : t.column(t.date(specificity));
+    return t.column(t.date(specificity));
   } else {
     const type = await startType.isScalar('number');
     if (type.errorCause) {
