@@ -80,7 +80,9 @@ jobs:
           path: /home/runner/actions-runner/_work/decipad/decipad/blob-report
           retention-days: 1
       - name: Finalize Percy
-        if: failure()
+        env:
+          PERCY_TOKEN: '${{ secrets.PERCY_TOKEN }}'
+        if: failure() || cancelled()
         run: npx percy build:finalize
 
   merge-reports:
