@@ -526,3 +526,78 @@ test('check collaborator duplicate mulpliple workspaces', async ({
     ).toBeVisible();
   });
 });
+
+test('reader can load notebook where the first tab is hidden @tabs', async ({
+  testUser,
+  unregisteredUser,
+}) => {
+  const { notebook: testUserNotebook } = testUser;
+  const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
+    unregisteredUser;
+  let sharedPageLocation: string;
+  const notebookName = 'Check Redirects';
+
+  await test.step('publish notebook with first tab hidden', async () => {
+    await testUserNotebook.updateNotebookTitle(notebookName);
+    await testUserNotebook.createTabs(['Tab 2', 'Tab 3']);
+    expect(await testUserNotebook.getTabNames()).toEqual([
+      'New Tab',
+      'Tab 2',
+      'Tab 3',
+    ]);
+    await testUserNotebook.hideTab('New Tab');
+    sharedPageLocation = await testUser.notebook.publishNotebook();
+  });
+
+  await test.step('[unregisteredUser] can navigate to notebook with first tab hidden', async () => {
+    await unregisteredUserPage.goto(sharedPageLocation!);
+    await unregisteredUserNotebook.waitForEditorToLoad();
+    await unregisteredUserNotebook.checkNotebookTitle(notebookName);
+    await unregisteredUserPage.getByText('Try Decipad').waitFor();
+    expect(await unregisteredUserNotebook.getTabNames()).toEqual([
+      'Tab 2',
+      'Tab 3',
+    ]);
+    await unregisteredUserPage.reload();
+    await unregisteredUserNotebook.checkNotebookTitle(notebookName);
+  });
+});
+
+test('reader can load notebook with link to deleted tab @tabs', async ({
+  testUser,
+  unregisteredUser,
+}) => {
+  const { page: testUserPage, notebook: testUserNotebook } = testUser;
+  const { page: unregisteredUserPage, notebook: unregisteredUserNotebook } =
+    unregisteredUser;
+  let notebookDeletedTabLink: string;
+  const notebookName = 'Check deleted tab redirects';
+
+  await test.step('publish notebook with first tab hidden', async () => {
+    await testUserNotebook.updateNotebookTitle(notebookName);
+    await testUserNotebook.createTabs(['Tab 2', 'Tab 3']);
+    expect(await testUserNotebook.getTabNames()).toEqual([
+      'New Tab',
+      'Tab 2',
+      'Tab 3',
+    ]);
+    await testUserNotebook.selectTab('Tab 2');
+    // publish and get link from tab that will be deleted
+    notebookDeletedTabLink = testUserPage.url();
+    await testUserNotebook.deleteTab('Tab 2');
+    await testUser.notebook.publishNotebook();
+  });
+
+  await test.step('[unregisteredUser] can navigate to notebook link of deleted tab', async () => {
+    await unregisteredUserPage.goto(notebookDeletedTabLink!);
+    await unregisteredUserNotebook.waitForEditorToLoad();
+    await unregisteredUserNotebook.checkNotebookTitle(notebookName);
+    await unregisteredUserPage.getByText('Try Decipad').waitFor();
+    expect(await unregisteredUserNotebook.getTabNames()).toEqual([
+      'New Tab',
+      'Tab 3',
+    ]);
+    await unregisteredUserPage.reload();
+    await unregisteredUserNotebook.checkNotebookTitle(notebookName);
+  });
+});

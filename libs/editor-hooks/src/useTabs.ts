@@ -33,29 +33,31 @@ function _useTabs(
 /**
  * Wrapper for `useTabs` in `notebook-tabs`, so you don't need to
  * provide a controller.
+ *
+ * if `isReadOnly` is true, then hidden tabs will not be returned;
  */
-export const useTabs = (): ReturnType<typeof _useTabs> => {
+export const useTabs = (isReadOnly?: boolean): ReturnType<typeof _useTabs> => {
   const controller = useContext(ControllerProvider);
-  return _useTabs(controller);
+  const tabs = _useTabs(controller);
+
+  if (!isReadOnly) {
+    return tabs;
+  }
+
+  return tabs.filter((t) => !t.isHidden);
 };
 
 /**
  * Returns an active tab id, or null if there is no active tab.
  */
-export const useActiveTabId = (): string | null => {
+export const useActiveTabId = (): string | undefined => {
   const controller = useContext(ControllerProvider);
   const tabs = _useTabs(controller);
   const { tab } = useRouteParams(notebooks({}).notebook);
 
-  if (tabs.length === 0) return null;
+  if (tabs.length === 0) return undefined;
 
   const activeTabId = !tab ? tabs[0].id : tabs.find((t) => t.id === tab)?.id;
-
-  if (!activeTabId) {
-    throw new Error(
-      'Tab ID must always be found, there is likely a disconnect between URL param and tabID'
-    );
-  }
 
   return activeTabId;
 };

@@ -135,7 +135,7 @@ export const NotebookPublishingPopUp = ({
           isFlagEnabled('TABS')
             ? {
                 notebook: { id: notebookId, name: notebookName },
-                tab: activeTabId ?? undefined,
+                tab: activeTabId,
               }
             : {
                 notebook: { id: notebookId, name: notebookName },

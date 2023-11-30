@@ -5,7 +5,6 @@ import { notebooks } from '@decipad/routing';
 import { EditorIdContext, useNotebookMetaData } from '@decipad/react-contexts';
 import { TitleEditor } from './TitleEditor.component';
 import { useUndo } from './hooks/useUndo';
-import { Navigate } from 'react-router-dom';
 import { MinimalRootEditorWithEventsAndTabsAndUndoAndTitleEditor } from '@decipad/editor-types';
 import { useTabs } from '@decipad/editor-hooks';
 import { useRecoverNotebook } from './hooks';
@@ -41,29 +40,21 @@ export const TabEditorComponent: FC<TabEditorComponentProps> = ({
   workspaceId,
   loaded,
 }) => {
-  const {
-    notebook,
-    tab: tabId,
-    embed,
-  } = useRouteParams(notebooks({}).notebook);
-  const tabs = useTabs();
+  const { tab: tabId } = useRouteParams(notebooks({}).notebook);
+  const tabs = useTabs(readOnly);
 
   useUndo(controller);
   const [showRecovery, unsetTimer] = useRecoverNotebook();
 
-  const tab = useMemo(
-    () =>
-      tabs.filter((t) => !readOnly || !t.isHidden).find((t) => t.id === tabId),
-    [readOnly, tabId, tabs]
-  );
+  const tab = useMemo(() => {
+    const selectedTab = tabs.find((t) => t.id === tabId);
 
-  if (!tab && tabs.length > 0) {
-    return (
-      <Navigate
-        to={notebooks({}).notebook({ notebook, tab: tabs[0].id, embed }).$}
-      />
-    );
-  }
+    if (selectedTab) {
+      return selectedTab;
+    }
+
+    return tabs.at(0);
+  }, [tabId, tabs]);
 
   if (!tab) {
     if (showRecovery) {

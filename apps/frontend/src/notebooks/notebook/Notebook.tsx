@@ -148,7 +148,6 @@ const NewTabs: FC<{
   notebookId: string;
   controller: MinimalRootEditorWithEventsAndTabs;
 }> = ({ notebookId, controller }) => {
-  const tabs = useTabs();
   const { notebook, tab, embed } = useRouteParams(notebooks({}).notebook);
   const docsync = useContext(DocsyncEditorProvider);
 
@@ -157,12 +156,12 @@ const NewTabs: FC<{
     docsync,
   });
 
+  const tabs = useTabs(isReadOnly);
   const nav = useNavigate();
 
-  const defaultTabId = tabs.find((t) => !t.isHidden)?.id ?? tabs[0]?.id;
+  const defaultTabId = tabs.at(0)?.id;
 
-  // if we are in read mode and there is only one tab and it is hidden, then we don't render the tabs
-  if (tabs.filter((t) => !t.isHidden).length === 1 && isReadOnly) {
+  if (tabs.length === 1 && isReadOnly) {
     return null;
   }
 
