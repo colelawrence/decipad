@@ -39,7 +39,7 @@ export const useTableHeaderCellDropdownNames = (
     'useTableHeaderCellDropdownNames'
   );
   useEffect(() => {
-    if (element.cellType.kind === 'dropdown') {
+    if (element?.cellType?.kind === 'dropdown') {
       const selectedDropdown = dropdownNames.find((d) => {
         if (element.cellType.kind === 'dropdown') {
           return element.cellType.id === d.id;
