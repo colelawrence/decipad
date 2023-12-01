@@ -1,7 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable-next-line import/no-extraneous-dependencies */
 import arc from '@architect/functions';
-import {
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import type {
   ConcreteDataTable,
   ConcreteRecord,
   DataTable,
@@ -14,10 +15,10 @@ import {
   VersionedDataTables,
   VersionedTableRecord,
 } from '@decipad/backendtypes';
+import { OBSERVED } from '@decipad/backendtypes';
 import { withLock, WithLockUserFunction } from '@decipad/dynamodb-lock';
 import { unique } from '@decipad/utils';
 import assert from 'assert';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { timestamp } from './timestamp';
 import { debug } from './debug';
 import { batchDelete } from './batchDelete';
@@ -103,13 +104,28 @@ function observe(dataTables: DataTables, tableName: keyof DataTables) {
   if (!table) {
     throw new Error(`No table named ${tableName}`);
   }
-  if (table.__deci_observed__) {
+  if (table[OBSERVED]) {
     return;
   }
-  table.__deci_observed__ = true;
 
-  table.put = putReplacer(table, tableName, table.put);
-  table.delete = deleteReplacer(table, tableName, table.delete);
+  let putCache: ReturnType<typeof putReplacer>;
+  let deleteCache: ReturnType<typeof deleteReplacer>;
+
+  Object.assign(table, {
+    [OBSERVED]: true,
+    get put() {
+      if (!putCache) {
+        putCache = putReplacer(table, tableName, table.put);
+      }
+      return putCache;
+    },
+    get delete() {
+      if (!deleteCache) {
+        deleteCache = deleteReplacer(table, tableName, table.delete);
+      }
+      return deleteCache;
+    },
+  });
 }
 
 function randomPublish(eventProbability: number): boolean {
@@ -204,41 +220,56 @@ function enhance(
     return table;
   }
 
-  // TODO type this magic property
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  table.create = async function create(doc: any, noEvents = false) {
-    if (!doc.createdAt) {
-      /* eslint-disable-next-line no-param-reassign */
-      doc.createdAt = timestamp();
-    }
+  let createCache: EnhancedDataTable<any>['create'];
+  let batchGetCache: EnhancedDataTable<any>['batchGet'];
+  let batchDeleteCache: EnhancedDataTable<any>['batchDelete'];
 
-    return table.put(doc, noEvents);
-  };
-
-  table.batchGet = async function batchGet(ids: string[]) {
-    debug(`${tableName}:batchGet`, ids);
-    const uniqueIds = unique(ids);
-    if (uniqueIds.length < 1) {
-      return [];
-    }
-    const query = {
-      RequestItems: {
-        [realTableName]: { Keys: uniqueIds.map((id) => ({ id })) },
-      },
-    };
-    return db
-      .batchGet(query)
-      .then((data) => data.Responses?.[realTableName] ?? []);
-  };
-
-  table.batchDelete = async (selectors) => {
-    debug(`${tableName}:batchDelete`, selectors);
-    if (selectors.length < 1) {
-      return;
-    }
-    return batchDelete(db, realTableName, selectors);
-  };
-
+  Object.assign(table, {
+    get create() {
+      if (!createCache) {
+        createCache = async (doc: any, noEvents = false) => {
+          if (!doc.createdAt) {
+            /* eslint-disable-next-line no-param-reassign */
+            doc.createdAt = timestamp();
+          }
+          return table.put(doc, noEvents);
+        };
+      }
+      return createCache;
+    },
+    get batchGet() {
+      if (!batchGetCache) {
+        batchGetCache = async (ids: string[]) => {
+          debug(`${tableName}:batchGet`, ids);
+          const uniqueIds = unique(ids);
+          if (uniqueIds.length < 1) {
+            return [];
+          }
+          const query = {
+            RequestItems: {
+              [realTableName]: { Keys: uniqueIds.map((id) => ({ id })) },
+            },
+          };
+          return db
+            .batchGet(query)
+            .then((data) => data.Responses?.[realTableName] ?? []);
+        };
+      }
+      return batchGetCache;
+    },
+    get batchDelete() {
+      if (!batchDeleteCache) {
+        batchDeleteCache = async (selectors) => {
+          debug(`${tableName}:batchDelete`, selectors);
+          if (selectors.length < 1) {
+            return;
+          }
+          return batchDelete(db, realTableName, selectors);
+        };
+      }
+      return batchDeleteCache;
+    },
+  });
   return table;
 }
 
@@ -254,10 +285,21 @@ function withWithVersion(
   if (!table) {
     throw new Error(`No table named ${tableName}`);
   }
-  const locking = withLock(db, tableName);
-  table.withLock = (
-    id: string,
-    fn: WithLockUserFunction<VersionedTableRecord>
-  ) => locking(id, fn);
+
+  let withLockCache: VersionedDataTable<VersionedTableRecord>['withLock'];
+
+  Object.assign(table, {
+    get withLock() {
+      if (!withLockCache) {
+        const locking = withLock(db, tableName);
+        withLockCache = (
+          id: string,
+          fn: WithLockUserFunction<VersionedTableRecord>
+        ) => locking(id, fn);
+      }
+      return withLockCache;
+    },
+  });
+
   return table;
 }

@@ -1,6 +1,7 @@
 import type { PromiseOrType } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { OBSERVED } from './constants';
 
 /* Basic */
 
@@ -565,7 +566,7 @@ export interface DataTable<T extends TableRecordBase> {
     Count: number;
     LastEvaluatedKey?: string;
   }>;
-  __deci_observed__?: boolean;
+  [OBSERVED]?: boolean;
 }
 
 export interface EnhancedDataTable<T extends TableRecordBase>
@@ -642,7 +643,7 @@ export type TableRecord = VirtualRecord | ConcreteRecord;
 
 export type ConcreteDataTable = DataTable<ConcreteRecord>;
 
-export type TableName = keyof ConcreteDataTable;
+export type TableName = keyof Omit<ConcreteDataTable, typeof OBSERVED>;
 
 /* DynamoDB */
 

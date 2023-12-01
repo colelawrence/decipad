@@ -115,6 +115,23 @@ index adfe2e3..391fd6f 100644
          return callback(null, type === 'db' ? db : doc)
        }
      })
+diff --git a/node_modules/@architect/functions/src/tables/factory.js b/node_modules/@architect/functions/src/tables/factory.js
+index fc235d1..6326980 100644
+--- a/node_modules/@architect/functions/src/tables/factory.js
++++ b/node_modules/@architect/functions/src/tables/factory.js
+@@ -17,7 +17,11 @@ module.exports = function reflectFactory (tables, callback) {
+       })
+       .reduce((client, fullName) => {
+         let name = local ? fullName.replace(/.+-staging-/, '') : fullName
+-        client[name] = factory(tables[name])
++        Object.assign(client, {
++          get [name]() {
++            return factory(tables[name])
++          }
++        })
+         return client
+       }, {})
+ 
 diff --git a/node_modules/@architect/functions/src/ws/index.js b/node_modules/@architect/functions/src/ws/index.js
 index d018a21..f9d640f 100644
 --- a/node_modules/@architect/functions/src/ws/index.js
