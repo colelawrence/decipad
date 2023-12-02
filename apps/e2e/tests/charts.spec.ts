@@ -85,7 +85,7 @@ test.describe('Charts', () => {
     await page.isVisible("text='I like this caption'");
   });
 
-  test('test pie chart menu', async () => {
+  test('pie chart menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
   });

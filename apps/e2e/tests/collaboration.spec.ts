@@ -2,7 +2,7 @@ import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import { withTestUser } from '../utils/src';
 
-test.describe('Make sure collaboration works ', () => {
+test.describe('Make sure collaboration works', () => {
   let page1: Page;
   let context1: BrowserContext;
   let context2: BrowserContext;

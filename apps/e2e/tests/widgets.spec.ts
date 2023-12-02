@@ -86,7 +86,7 @@ test.describe('date Widget', () => {
     await page.close();
   });
 
-  test('Test Date Widget', async () => {
+  test('Date Widget', async () => {
     await keyPress(page, 'ArrowDown');
     await createDateBelow(page, 'Input3');
 
@@ -189,7 +189,7 @@ test.describe('slider Widget', () => {
     await page.close();
   });
 
-  test('Test Slider Widget', async () => {
+  test('Slider Widget', async () => {
     await keyPress(page, 'ArrowDown');
     await createSliderBelow(page, 'Input3', '$5 per hotdog');
     await page.getByRole('slider').click();

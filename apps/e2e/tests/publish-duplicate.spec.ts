@@ -406,7 +406,7 @@ test('duplicate inside notebook with single workspace', async ({
   ).toBeVisible();
 });
 
-test('duplicate inside notebook with multiple workspaces ', async ({
+test('duplicate inside notebook with multiple workspaces', async ({
   randomFreeUser,
 }) => {
   test.slow();
