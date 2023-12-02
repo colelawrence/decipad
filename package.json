@@ -245,7 +245,7 @@
     "get-port": "5.1.1",
     "get-stream": "^7.0.1",
     "globby": "14.0.0",
-    "gpt-tokens": "^1.1.2",
+    "gpt-tokens": "^1.2.0",
     "graphql": "16.8.0",
     "graphql-scalars": "1.22.1",
     "graphql-type-json": "^0.3.2",
