@@ -1,9 +1,6 @@
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { tables } from '@architect/functions';
-import {
-  VersionedDataTables,
-  VersionedTableRecord,
-} from '@decipad/backendtypes';
+import { DataTables, VersionedTableRecord } from '@decipad/backendtypes';
 import { PromiseOrType, getDefined } from '../../utils/src';
 
 export type WithLockUserFunction<T> = (
@@ -20,7 +17,7 @@ interface ErrorWithCode extends Error {
 
 export function withLock<RecordType extends VersionedTableRecord>(
   docs: DynamoDBDocument,
-  tableName: string & keyof VersionedDataTables
+  tableName: string & keyof DataTables
 ): WithLock<RecordType> {
   const getDoc = docs.get.bind(docs);
   const putDoc = docs.put.bind(docs);

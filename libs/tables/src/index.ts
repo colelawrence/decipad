@@ -1,6 +1,6 @@
-import { tablesWithRetry } from './tablesWithRetry';
+import { tables } from './tables';
 
 export * from './utils';
-export default tablesWithRetry;
 export * from './timestamp';
-export * from './tables';
+export { tables };
+export default tables;
