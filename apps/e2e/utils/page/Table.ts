@@ -115,7 +115,7 @@ export async function addRow(page: Page, tableName?: string) {
 }
 
 export async function removeRow(page: Page, line: number, tableName?: string) {
-  focusOnTable(page, tableName);
+  await focusOnTable(page, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
   await openRowMenu(page, line, tableName);

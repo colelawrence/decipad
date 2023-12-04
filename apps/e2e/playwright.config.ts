@@ -51,7 +51,7 @@ const config: PlaywrightTestConfig = {
     trace: process.env.CI ? undefined : 'retain-on-failure',
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'http://localhost:3000/',
-    permissions: ['clipboard-read'],
+    permissions: ['clipboard-read', 'clipboard-write'],
   },
 
   /* Configure projects for major browsers */

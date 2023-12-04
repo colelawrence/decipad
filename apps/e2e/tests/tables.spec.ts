@@ -1,4 +1,4 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { expect, test, Page, BrowserContext } from './manager/decipad-tests';
 import {
   focusOnBody,
   setUp,
@@ -41,6 +41,8 @@ import {
   createWorkspace,
   importNotebook,
 } from '../utils/src';
+import fs from 'fs';
+import path from 'path';
 
 const getTableCellRenderCount = (page: Page) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -714,5 +716,47 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
         window.getComputedStyle(element).getPropertyValue('color')
       );
     expect(color).not.toBe('rgb(192, 55, 55)');
+  });
+});
+
+test('Paste table from Wikipedia', async ({ testUser }) => {
+  await test.step('set clipboard', async () => {
+    const textTable = fs.readFileSync(
+      path.join(__dirname, '../__fixtures__/clipboard/table1.txt'),
+      'utf-8'
+    );
+
+    await testUser.writeToClipboard({
+      'text/html': textTable,
+    });
+  });
+
+  await test.step('paste table', async () => {
+    await focusOnBody(testUser.page);
+    await testUser.page.keyboard.press('Control+v');
+  });
+
+  await test.step("check that table's data is correct", async () => {
+    expect(await getFromTable(testUser.page, 0, 0, false, 'Table')).toBe(
+      'Index'
+    );
+    expect(await getFromTable(testUser.page, 0, 1, false, 'Table')).toBe(
+      'Driver'
+    );
+    expect(await getFromTable(testUser.page, 0, 2, false, 'Table')).toBe('Age');
+    expect(await getFromTable(testUser.page, 0, 3, false, 'Table')).toBe(
+      'Year'
+    );
+
+    expect(await getFromTable(testUser.page, 2, 0, false, 'Table')).toBe('2');
+    expect(await getFromTable(testUser.page, 2, 1, false, 'Table')).toBe(
+      'Lewis Hamilton'
+    );
+    expect(await getFromTable(testUser.page, 2, 2, false, 'Table')).toBe(
+      '23 years, 300 days'
+    );
+    expect(await getFromTable(testUser.page, 2, 3, false, 'Table')).toBe(
+      '2008'
+    );
   });
 });

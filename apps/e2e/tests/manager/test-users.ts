@@ -196,4 +196,30 @@ export class User {
     await this.page.goto(authLink!);
     await expect(this.page.getByTestId('duplicate-button')).toBeVisible();
   }
+
+  /**
+   * Add values to the clipboard in the current browser
+   * @param values map from mime type to to value
+   *
+   * **Usage**
+   * ```js
+   * await testUser.writeToClipboard({
+   *  'text/plain': 'Hello World',
+   *  'text/html': '<b>Hello World</b>'
+   * });
+   * ```
+   */
+  async writeToClipboard(values: { [key: string]: string }) {
+    this.page.evaluate(async (clipboard) => {
+      for (const type in clipboard) {
+        if (type) {
+          navigator.clipboard.write([
+            new ClipboardItem({
+              [type]: new Blob([clipboard[type]], { type }),
+            }),
+          ]);
+        }
+      }
+    }, values);
+  }
 }
