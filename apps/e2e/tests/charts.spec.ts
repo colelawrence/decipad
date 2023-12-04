@@ -1,4 +1,5 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
+import { test, expect } from './manager/decipad-tests';
+import { BrowserContext, Page } from '@playwright/test';
 import {
   focusOnBody,
   setUp,
@@ -19,34 +20,13 @@ import {
 import stringify from 'json-stringify-safe';
 import notebookSource from '../__fixtures__/002-notebook-charts.json';
 
-test.describe('Charts', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates table', async () => {
+test('Charts', async ({ testUser: { page } }) => {
+  await test.step('creates table', async () => {
     await focusOnBody(page);
     await createTable(page);
   });
 
-  test('fills table', async () => {
+  await test.step('fills table', async () => {
     // first column
     await writeInTable(page, 'Imports', 1, 0);
     expect(await getFromTable(page, 1, 0)).toBe('Imports');
@@ -64,7 +44,7 @@ test.describe('Charts', () => {
     expect(await getFromTable(page, 3, 1)).toBe('9.32%');
   });
 
-  test('creates a pie chart', async () => {
+  await test.step('creates a pie chart', async () => {
     await page.getByTestId('create-chart-from-table-button').click();
     await page.getByTestId('create-chart:arc').click();
 
@@ -75,41 +55,41 @@ test.describe('Charts', () => {
     await page.waitForTimeout(Timeouts.computerDelay);
   });
 
-  test('pie chart looks ok', async () => {
+  await test.step('pie chart looks ok', async () => {
     await page.evaluate(() => document.fonts.ready);
   });
 
-  test('updates chart caption', async () => {
+  await test.step('updates chart caption', async () => {
     await page.getByPlaceholder('Chart caption').dblclick();
     await page.keyboard.type('I like this caption');
     await page.isVisible("text='I like this caption'");
   });
 
-  test('pie chart menu', async () => {
+  await test.step('pie chart menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
   });
 
-  test('change color scheme', async () => {
+  await test.step('change color scheme', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByText('Color scheme').click();
     await page.getByText('Monochrome').click();
     await page.getByText('Purple').click();
   });
 
-  test('convert to bar chart', async () => {
+  await test.step('convert to bar chart', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__bar').click();
   });
 
-  test('bar chart menu', async () => {
+  await test.step('bar chart menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
   });
 
-  test('swap axes', async () => {
+  await test.step('swap axes', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByText('label').click();
     await page.getByTestId('chart__settings__label__Column2').click();
@@ -119,14 +99,14 @@ test.describe('Charts', () => {
     await page.getByTestId('chart__settings__value__Column1').click();
   });
 
-  test('convert to scatter chart', async () => {
+  await test.step('convert to scatter chart', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     await page.getByText('Chart type').click();
     await page.getByTestId('chart__settings__chart-type__point').click();
   });
 
-  test('scatter plot menu', async () => {
+  await test.step('scatter plot menu', async () => {
     await page.evaluate(() => document.fonts.ready);
     await page.getByTestId('chart-settings-button').click();
     await snapshot(page as Page, 'Notebook: Last chart');
