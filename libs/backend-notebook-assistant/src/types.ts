@@ -1,5 +1,6 @@
 import { TOperation } from '@udecode/plate-common';
 import { RootDocument } from '@decipad/editor-types';
+import { CompletionUsage } from 'openai/resources';
 
 export interface NotebookAssistantReply {
   operations: TOperation[];
@@ -58,6 +59,13 @@ export interface NotebookAssistantEventEnd {
   type: 'end';
 }
 
+export interface NotebookAssistantEventTokens {
+  type: 'tokens';
+  usage: CompletionUsage | undefined;
+  /* GPT-4? GPT-3.5, etc... */
+  model: string;
+}
+
 export type NotebookAssistantEvent =
   | NotebookAssistantEventBegin
   | NotebookAssistantEventNewDoc
@@ -65,4 +73,5 @@ export type NotebookAssistantEvent =
   | NotebookAssistantEventOperations
   | NotebookAssistantEventSummary
   | NotebookAssistantEventError
-  | NotebookAssistantEventEnd;
+  | NotebookAssistantEventEnd
+  | NotebookAssistantEventTokens;

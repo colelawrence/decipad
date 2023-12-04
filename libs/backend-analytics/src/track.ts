@@ -5,7 +5,7 @@ import { analyticsClient } from './client';
 export interface AnalyticsEvent {
   event: string;
   userId?: string;
-  properties?: Record<string, string | boolean | undefined | null>;
+  properties?: Record<string, unknown>;
 }
 
 export const track = (

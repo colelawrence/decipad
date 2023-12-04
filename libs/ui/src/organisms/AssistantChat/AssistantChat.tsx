@@ -27,6 +27,9 @@ type AssistantChatProps = {
   readonly sendMessage: (content: string) => void;
   readonly clearChat: () => void;
   readonly isGenerating: boolean;
+  readonly aiCreditsUsed?: number;
+  readonly aiQuotaLimit?: number;
+  readonly isPremium?: boolean;
 };
 
 export const AssistantChat: React.FC<AssistantChatProps> = ({
@@ -34,10 +37,18 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
   sendMessage,
   clearChat,
   isGenerating,
+  aiCreditsUsed,
+  aiQuotaLimit,
+  isPremium = false,
 }) => {
   return (
     <div css={wrapperStyles}>
-      <AssistantChatHeader onClear={clearChat} />
+      <AssistantChatHeader
+        onClear={clearChat}
+        creditsUsed={aiCreditsUsed}
+        creditsQuotaLimit={aiQuotaLimit}
+        isPremium={isPremium}
+      />
 
       <AssistantMessageList messages={messages} />
 

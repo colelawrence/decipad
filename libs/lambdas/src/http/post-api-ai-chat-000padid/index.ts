@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
-import { thirdParty } from '@decipad/backend-config';
+import { app, thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
@@ -13,15 +13,27 @@ import {
   ChatCompletionMessageParam,
 } from 'openai/resources';
 import { AIMode } from 'libs/editor-components/src/EditorAssistantChat/types';
+import { tables } from '@decipad/tables';
+import { track } from '@decipad/backend-analytics';
+import { OPEN_AI_TOKENS_LIMIT } from '@decipad/backendtypes';
+import {
+  COMPLETION_TOKENS_USED,
+  PROMPT_TOKENS_USED,
+  getResources,
+  updateWorkspaceAndUserResourceUsage,
+} from './helpers';
+import { debug } from '../../debug';
 
 interface ModePossibility {
   conversation: number;
   modelling: number;
 }
 
+const GPT_MODEL = 'gpt-4-1106-preview';
+
 export const DEFAULT_AUTO_MODE_SYSTEM_PROMPT = `
 You are responsible for determining intent of the user message.
-Your only to options are 'conversation' and 'modelling'.
+Your only two options are 'conversation' and 'modelling'.
 Conversation is when user is asking a question, making a statement or asking for help, implying they need to be asked follow-up questions, or you don't have sufficient information to suggest modelling.
 Modelling is when user is making a change to the document, implying they don't need to be asked follow-up questions.
 Respond with a valid JSON that represents chance of each intent.
@@ -52,6 +64,9 @@ const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
 });
 
+const isProd = app().urlBase === 'https://app.decipad.com';
+
+// eslint-disable-next-line complexity
 export const handler = handle(async (event) => {
   const [{ user }] = await expectAuthenticated(event);
   if (!event.pathParameters) {
@@ -69,6 +84,37 @@ export const handler = handle(async (event) => {
 
   // We can be pretty sure this'll be RootDocument as Document is converted to RootDocument when a pad is opened
   const doc = await exportNotebookContent<RootDocument>(padId);
+  const { pads } = await tables();
+  const workspaceId = (await pads.get({ id: padId }))?.workspace_id;
+
+  const [promptTokens, completionTokens] = await getResources([
+    {
+      resource: 'openai',
+      subType: GPT_MODEL,
+      field: PROMPT_TOKENS_USED,
+      consumer: 'workspaces',
+      consumerId: workspaceId ?? '',
+    },
+    {
+      resource: 'openai',
+      subType: GPT_MODEL,
+      field: COMPLETION_TOKENS_USED,
+      consumer: 'workspaces',
+      consumerId: workspaceId ?? '',
+    },
+  ]);
+
+  const workspaceTotalTokensUsed =
+    (promptTokens?.consumption ?? 0) + (completionTokens?.consumption ?? 0);
+
+  if (workspaceTotalTokensUsed > OPEN_AI_TOKENS_LIMIT) {
+    debug('Reminder: Not blocking users from usage!!!');
+    // NOTE: For testing in DEV we won't block users from making requests.
+    // CHANGE ME BEFORE GOING INTO PROD!!!
+    if (isProd) {
+      throw Boom.tooManyRequests("You've exceeded AI quota");
+    }
+  }
 
   let verbalizedDoc: string;
 
@@ -105,7 +151,7 @@ export const handler = handle(async (event) => {
     };
 
     const modeCompletion = await openai.chat.completions.create({
-      model: 'gpt-4-1106-preview',
+      model: GPT_MODEL,
       messages: [
         {
           role: 'system',
@@ -119,22 +165,46 @@ export const handler = handle(async (event) => {
       max_tokens: 100,
     });
 
+    await updateWorkspaceAndUserResourceUsage({
+      userId: user.id,
+      workspaceId,
+      aiModel: GPT_MODEL,
+      tokensUsed: {
+        promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
+        completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
+      },
+    });
+
+    track({
+      event: `ApiChatLambda-mode:mode-choice`,
+      userId: user.id,
+      properties: {
+        padId,
+        promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
+        completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
+      },
+    });
+
     const msgContent = modeCompletion.choices[0].message.content;
     const parsedContent: ModePossibility = JSON.parse(msgContent || '{}');
 
     let mode: AIMode = 'ask';
     if (parsedContent.conversation >= 0.5) {
       mode = 'ask';
+      track({
+        event: `ApiChatLambda-mode:ask`,
+      });
     } else if (parsedContent.modelling >= 0.5) {
       mode = 'create';
-    } else {
-      mode = 'ask';
+      track({
+        event: `ApiChatLambda-mode:create`,
+      });
     }
 
     let message: ChatCompletionMessage;
     if (mode === 'ask') {
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4-1106-preview',
+        model: GPT_MODEL,
         messages: [
           {
             role: 'system',
@@ -146,10 +216,30 @@ export const handler = handle(async (event) => {
         temperature: 0.7,
         max_tokens: 800,
       });
+
+      await updateWorkspaceAndUserResourceUsage({
+        userId: user.id,
+        workspaceId,
+        aiModel: GPT_MODEL,
+        tokensUsed: {
+          promptTokensUsed: completion.usage?.prompt_tokens ?? 0,
+          completionTokensUsed: completion.usage?.completion_tokens ?? 0,
+        },
+      });
+
+      track({
+        event: `ApiChatLambda-mode:ask`,
+        userId: user.id,
+        properties: {
+          padId,
+          promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
+          completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
+        },
+      });
       message = completion.choices[0].message;
     } else {
       const completion = await openai.chat.completions.create({
-        model: 'gpt-4-1106-preview',
+        model: GPT_MODEL,
         messages: [
           {
             role: 'system',
@@ -163,14 +253,58 @@ export const handler = handle(async (event) => {
         max_tokens: 800,
       });
 
+      await updateWorkspaceAndUserResourceUsage({
+        userId: user.id,
+        workspaceId,
+        aiModel: GPT_MODEL,
+        tokensUsed: {
+          promptTokensUsed: completion.usage?.prompt_tokens ?? 0,
+          completionTokensUsed: completion.usage?.completion_tokens ?? 0,
+        },
+      });
+
+      track({
+        event: `ApiChatLambda-mode:model`,
+        userId: user.id,
+        properties: {
+          padId,
+          promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
+          completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
+        },
+      });
       message = completion.choices[0].message;
     }
+
+    const [newPrompt, newCompletion] = await getResources([
+      {
+        resource: 'openai',
+        subType: GPT_MODEL,
+        field: PROMPT_TOKENS_USED,
+        consumer: 'workspaces',
+        consumerId: workspaceId ?? '',
+      },
+      {
+        resource: 'openai',
+        subType: GPT_MODEL,
+        field: COMPLETION_TOKENS_USED,
+        consumer: 'workspaces',
+        consumerId: workspaceId ?? '',
+      },
+    ]);
+
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ mode, message }),
+      body: JSON.stringify({
+        mode,
+        message,
+        usage: {
+          promptTokensUsed: newPrompt?.consumption ?? 0,
+          completionTokensUsed: newCompletion?.consumption ?? 0,
+        },
+      }),
     };
   } catch (e: any) {
     console.log(e);

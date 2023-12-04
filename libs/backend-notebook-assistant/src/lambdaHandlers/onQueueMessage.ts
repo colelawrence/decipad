@@ -24,11 +24,14 @@ export const onQueueMessage = async (event: ChatAgentMessage) => {
     event.message,
     event.connectionId
   );
+
   return new Promise<void>((resolve) => {
     let subscription: undefined | Subscription;
+    let aiModel = 'not a model';
 
     const close = () => {
       subscription?.unsubscribe();
+
       resolve();
     };
 
@@ -53,6 +56,12 @@ export const onQueueMessage = async (event: ChatAgentMessage) => {
       switch (assistantEvent.type) {
         case 'new-doc':
           // ignore this one
+          break;
+        case 'tokens':
+          if (!aiModel) {
+            // Probably a better way to do this.
+            aiModel = assistantEvent.model;
+          }
           break;
         case 'error':
         case 'end':

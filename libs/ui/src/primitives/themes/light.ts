@@ -40,6 +40,7 @@ export const theme: CssVariables = {
   backgroundSubdued: grey50.hex,
   backgroundDefault: grey100.hex,
   backgroundHeavy: grey200.hex,
+  backgroundHeavier: grey300.hex,
 
   borderSubdued: grey200.hex,
   borderDefault: grey300.hex,

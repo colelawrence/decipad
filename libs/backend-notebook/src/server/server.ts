@@ -11,6 +11,7 @@ import { getEditor } from './editor/getEditor';
 import { attachEditorToBackend } from './attachEditorToBackend';
 import { actions } from '../actions';
 import { fetchNotebook } from './fetchNotebook';
+import { track } from '@decipad/backend-analytics';
 
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
@@ -23,6 +24,11 @@ export const server = async (
   if (!action) {
     throw notAcceptable(`Unknown function ${actionName as string}`);
   }
+  track({
+    event: `AI-Action:${actionName}`,
+    properties: params,
+  });
+
   const computer = await getRemoteComputer();
 
   let result: MaybeWrappedInActionResult<ReturnType<typeof action.handler>>;

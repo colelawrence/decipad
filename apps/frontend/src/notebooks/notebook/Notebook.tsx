@@ -13,6 +13,7 @@ import {
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import {
+  AiUsageProvider,
   ComputerContextProvider,
   ControllerProvider,
   EditorChangeContextProvider,
@@ -546,14 +547,49 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const docsync = useContext(DocsyncEditorProvider);
 
   const editor = useActiveEditor(docsync);
+  const [meta] = useGetNotebookMetaQuery({
+    variables: { id: notebookId },
+  });
 
   const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
+  const [prompt, completion, quotaLimit, isPremium] = useMemo(() => {
+    const workspace = meta.data?.getPadById?.workspace;
+    const usageList = workspace?.resourceUsages ?? [];
+    const isWorkspacePremium = workspace?.isPremium;
+
+    const aiUsage = usageList.filter((u) => u?.resourceType === 'openai') ?? [];
+    const promptTokens =
+      aiUsage.find((u) => u?.id.includes('prompt'))?.consumption ?? 0;
+    const completionTokens =
+      aiUsage.find((u) => u?.id.includes('completion'))?.consumption ?? 0;
+    const tokensQuotaLimit = aiUsage[0]?.quotaLimit;
+
+    return [
+      promptTokens,
+      completionTokens,
+      tokensQuotaLimit,
+      isWorkspacePremium,
+    ];
+  }, [meta.data?.getPadById?.workspace]);
+
   if (isAssistantOpen && !isEmbed && editor) {
-    return <AssistantChat notebookId={notebookId} editor={editor} />;
+    return (
+      <AiUsageProvider
+        promptTokensUsed={prompt}
+        completionTokensUsed={completion}
+      >
+        <AssistantChat
+          notebookId={notebookId}
+          editor={editor}
+          aiQuotaLimit={quotaLimit}
+          isPremium={Boolean(isPremium)}
+        />
+      </AiUsageProvider>
+    );
   }
 
   return null;

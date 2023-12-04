@@ -81,6 +81,12 @@ fragment DashboardWorkspace on Workspace {
     ...WorkspaceSection
   }
   ...WorkspaceMembers
+  resourceUsages {
+    id
+    resourceType
+    consumption
+    quotaLimit
+  }
 }
 
 query GetWorkspaces {

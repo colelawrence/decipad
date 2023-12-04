@@ -49,6 +49,20 @@ interface NotebookConnectionParams {
   url: string;
   token: string;
 }
+
+interface AiUsage {
+  promptTokensUsed: number;
+  completionTokensUSed: number;
+}
+interface Users {
+  aiUsage: AiUsage;
+}
+
+interface UserAccess {
+  id: string;
+  users: Users[];
+}
+
 interface UseNotebookStateAndActionsResult {
   error?: Error;
   notebook: Notebook | undefined;
@@ -65,6 +79,7 @@ interface UseNotebookStateAndActionsResult {
   createdAt: Date;
   isNew: boolean;
   externalData: ExternalDataSourcesContextValue;
+  access?: UserAccess;
 
   removeLocalChanges: () => Promise<void>;
   updateIcon: (icon: Icon) => void;

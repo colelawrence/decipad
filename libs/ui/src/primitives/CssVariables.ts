@@ -16,6 +16,7 @@ export interface CssVariables {
   readonly backgroundSubdued: Property.Color;
   readonly backgroundDefault: Property.Color;
   readonly backgroundHeavy: Property.Color;
+  readonly backgroundHeavier: Property.Color;
 
   readonly borderSubdued: Property.Color;
   readonly borderDefault: Property.Color;

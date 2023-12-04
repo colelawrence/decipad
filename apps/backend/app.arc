@@ -285,6 +285,13 @@ secrets
   secret String
   encrypt true
 
+# Big composite key
+# /resource_type/sub_type/field_name/[users/workspaces]/id
+# /openai/gpt-4-1106/users
+resourceusages
+  id *String
+  consumption Number
+
 @tables-indexes
 workspacesubscriptions
   workspace_id *String

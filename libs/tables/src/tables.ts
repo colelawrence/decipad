@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable-next-line import/no-extraneous-dependencies */
 import arc from '@architect/functions';

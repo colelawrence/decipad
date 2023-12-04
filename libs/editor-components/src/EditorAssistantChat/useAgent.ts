@@ -3,6 +3,7 @@ import {
   Message,
   UserMessage,
   useAIChatHistory,
+  useAiUsage,
   useComputer,
 } from '@decipad/react-contexts';
 import { useCallback } from 'react';
@@ -21,6 +22,7 @@ import {
 } from './notebook-mutations';
 import { MyEditor } from '@decipad/editor-types';
 import { RemoteComputer } from '@decipad/remote-computer';
+import { AiUsage } from '@decipad/interfaces';
 
 type ModelAgentOptions = {
   editor: MyEditor;
@@ -74,6 +76,7 @@ export const useAgent = ({ notebookId, editor }: ModelAgentOptions) => {
   const handleUpdateEventMessage = updateEventMessage(notebookId);
 
   const computer = useComputer();
+  const { updateUsage } = useAiUsage();
 
   const initAgent = useCallback(
     async (
@@ -103,8 +106,11 @@ export const useAgent = ({ notebookId, editor }: ModelAgentOptions) => {
         const {
           mode,
           message,
-        }: { mode: AIMode; message: ChatCompletionMessage } =
+          usage,
+        }: { mode: AIMode; message: ChatCompletionMessage; usage: AiUsage } =
           await response.json();
+
+        updateUsage(usage);
 
         if (mode === 'create') {
           if (message.function_call) {
@@ -181,12 +187,13 @@ export const useAgent = ({ notebookId, editor }: ModelAgentOptions) => {
       }
     },
     [
-      computer,
-      editor,
+      notebookId,
+      updateUsage,
+      handleUpdateMessageStatus,
       handleAddMessage,
       handleUpdateEventMessage,
-      handleUpdateMessageStatus,
-      notebookId,
+      editor,
+      computer,
       handleDeleteMessage,
     ]
   );

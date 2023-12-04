@@ -29,6 +29,12 @@ fragment NotebookMetaData on Pad {
       }
     }
     membersCount
+    resourceUsages {
+      id
+      resourceType
+      consumption
+      quotaLimit
+    }
   }
   snapshots {
     snapshotName

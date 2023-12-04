@@ -1,5 +1,8 @@
 import { ComponentProps, useMemo } from 'react';
-import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
+import {
+  DashboardWorkspaceFragment,
+  UserAccessMetaFragment,
+} from '@decipad/graphql-client';
 import { useSession } from 'next-auth/react';
 import { User } from '@decipad/interfaces';
 import { useStripeLinks } from '@decipad/react-utils';
@@ -24,7 +27,7 @@ export const EditMembersModal: React.FC<EditWorkspaceModalProps> = ({
   const { paymentLink } = useStripeLinks(currentWorkspace);
 
   const members = useMemo(
-    () => [
+    (): Array<UserAccessMetaFragment> => [
       ...(currentWorkspace.access?.users?.map((u) => ({
         ...u,
         canComment: true,

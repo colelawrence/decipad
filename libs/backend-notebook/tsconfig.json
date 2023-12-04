@@ -5,6 +5,7 @@
     "lib": ["esnext"]
   },
   "references": [
+    { "path": "../backend-analytics" },
     { "path": "../backend-notebook-content" },
     { "path": "../editor-types" },
     { "path": "../editor-config" },

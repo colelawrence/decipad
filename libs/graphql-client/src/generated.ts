@@ -708,6 +708,14 @@ export type QueryTagsArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+export type ResourceUsage = {
+  __typename?: 'ResourceUsage';
+  consumption: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  quotaLimit: Scalars['Int']['output'];
+  resourceType: Scalars['String']['output'];
+};
+
 export type Role = {
   __typename?: 'Role';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
@@ -876,6 +884,7 @@ export type User = {
   image?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   onboarded?: Maybe<Scalars['Boolean']['output']>;
+  resourceUsages?: Maybe<Array<Maybe<ResourceUsage>>>;
   username?: Maybe<Scalars['String']['output']>;
 };
 
@@ -909,6 +918,7 @@ export type Workspace = {
   myPermissionType?: Maybe<PermissionType>;
   name: Scalars['String']['output'];
   pads: PagedPadResult;
+  resourceUsages?: Maybe<Array<Maybe<ResourceUsage>>>;
   roles: Array<Role>;
   secrets: Array<Secret>;
   sections: Array<Section>;
@@ -1031,7 +1041,7 @@ export type CreateWorkspaceMutationVariables = Exact<{
 }>;
 
 
-export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null } };
+export type CreateWorkspaceMutation = { __typename?: 'Mutation', createWorkspace: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null } };
 
 export type CreateWorkspaceSecretMutationVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -1316,7 +1326,7 @@ export type GetNotebookByIdQuery = { __typename?: 'Query', getPadById?: { __type
 
 export type UserAccessMetaFragment = { __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null };
 
-export type NotebookMetaDataFragment = { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, createdAt?: any | null, initialState?: string | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, myPermissionType?: PermissionType | null, membersCount: number, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'PadAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } };
+export type NotebookMetaDataFragment = { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, createdAt?: any | null, initialState?: string | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, myPermissionType?: PermissionType | null, membersCount: number, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'PadAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } };
 
 export type NotebookWorkspacesDataFragment = { __typename?: 'Workspace', id: string, name: string };
 
@@ -1325,7 +1335,7 @@ export type GetNotebookMetaQueryVariables = Exact<{
 }>;
 
 
-export type GetNotebookMetaQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, createdAt?: any | null, initialState?: string | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, myPermissionType?: PermissionType | null, membersCount: number, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'PadAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } } | null, workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
+export type GetNotebookMetaQuery = { __typename?: 'Query', getPadById?: { __typename?: 'Pad', id: string, name: string, status?: string | null, myPermissionType?: PermissionType | null, isPublic?: boolean | null, createdAt?: any | null, initialState?: string | null, archived?: boolean | null, workspace?: { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, myPermissionType?: PermissionType | null, membersCount: number, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } | null, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null } | null, snapshots: Array<{ __typename?: 'PadSnapshot', snapshotName: string, createdAt?: any | null, updatedAt?: any | null, version?: string | null }>, access: { __typename?: 'PadAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null } | null }> | null } } | null, workspaces: Array<{ __typename?: 'Workspace', id: string, name: string }> };
 
 export type GetNotionQueryVariables = Exact<{
   url: Scalars['String']['input'];
@@ -1355,12 +1365,12 @@ export type WorkspaceMembersFragment = { __typename?: 'Workspace', access?: { __
 
 export type WorkspaceSubscriptionWithDataFragment = { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null };
 
-export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null };
+export type DashboardWorkspaceFragment = { __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null };
 
 export type GetWorkspacesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
+export type GetWorkspacesQuery = { __typename?: 'Query', workspaces: Array<{ __typename?: 'Workspace', id: string, name: string, isPremium?: boolean | null, membersCount: number, pads: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }, workspaceSubscription?: { __typename?: 'WorkspaceSubscription', paymentStatus?: SubscriptionPaymentStatus | null } | null, workspaceExecutedQuery?: { __typename?: 'WorkspaceExecutedQuery', queryCount: number, quotaLimit: number } | null, sections: Array<{ __typename?: 'Section', id: string, name: string, color: string, createdAt?: any | null, pads: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> }>, resourceUsages?: Array<{ __typename?: 'ResourceUsage', id: string, resourceType: string, consumption: number, quotaLimit: number } | null> | null, access?: { __typename?: 'WorkspaceAccess', id: string, users?: Array<{ __typename?: 'UserAccess', permission: PermissionType, user?: { __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null } | null }> | null, roles?: Array<{ __typename?: 'RoleAccess', permission: PermissionType, role: { __typename?: 'Role', id: string, users: Array<{ __typename?: 'User', id: string, name: string, email?: string | null, image?: string | null, emailValidatedAt?: any | null }> } }> | null } | null }>, padsSharedWithMe: { __typename?: 'PagedPadResult', items: Array<{ __typename?: 'Pad', id: string, name: string, icon?: string | null, status?: string | null, createdAt?: any | null, archived?: boolean | null, isPublic?: boolean | null, myPermissionType?: PermissionType | null, section?: { __typename?: 'Section', id: string, name: string } | null }> } };
 
 export type GetWorkspaceMembersQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -1479,6 +1489,12 @@ export const NotebookMetaDataFragmentDoc = gql`
       }
     }
     membersCount
+    resourceUsages {
+      id
+      resourceType
+      consumption
+      quotaLimit
+    }
   }
   snapshots {
     snapshotName
@@ -1591,6 +1607,12 @@ export const DashboardWorkspaceFragmentDoc = gql`
     ...WorkspaceSection
   }
   ...WorkspaceMembers
+  resourceUsages {
+    id
+    resourceType
+    consumption
+    quotaLimit
+  }
 }
     ${WorkspaceNotebookFragmentDoc}
 ${WorkspaceSubscriptionWithDataFragmentDoc}
@@ -2271,6 +2293,7 @@ export type GraphCacheKeysConfig = {
   PagedPadResult?: (data: WithTypename<PagedPadResult>) => null | string,
   PagedResult?: (data: WithTypename<PagedResult>) => null | string,
   Permission?: (data: WithTypename<Permission>) => null | string,
+  ResourceUsage?: (data: WithTypename<ResourceUsage>) => null | string,
   Role?: (data: WithTypename<Role>) => null | string,
   RoleAccess?: (data: WithTypename<RoleAccess>) => null | string,
   RoleInvitation?: (data: WithTypename<RoleInvitation>) => null | string,
@@ -2422,6 +2445,12 @@ export type GraphCacheResolvers = {
     type?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, PermissionType | string>,
     user?: GraphCacheResolver<WithTypename<Permission>, Record<string, never>, WithTypename<User> | string>
   },
+  ResourceUsage?: {
+    consumption?: GraphCacheResolver<WithTypename<ResourceUsage>, Record<string, never>, Scalars['Int'] | string>,
+    id?: GraphCacheResolver<WithTypename<ResourceUsage>, Record<string, never>, Scalars['ID'] | string>,
+    quotaLimit?: GraphCacheResolver<WithTypename<ResourceUsage>, Record<string, never>, Scalars['Int'] | string>,
+    resourceType?: GraphCacheResolver<WithTypename<ResourceUsage>, Record<string, never>, Scalars['String'] | string>
+  },
   Role?: {
     createdAt?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Scalars['DateTime'] | string>,
     id?: GraphCacheResolver<WithTypename<Role>, Record<string, never>, Scalars['ID'] | string>,
@@ -2504,6 +2533,7 @@ export type GraphCacheResolvers = {
     image?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     name?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>,
     onboarded?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['Boolean'] | string>,
+    resourceUsages?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Array<WithTypename<ResourceUsage> | string>>,
     username?: GraphCacheResolver<WithTypename<User>, Record<string, never>, Scalars['String'] | string>
   },
   UserAccess?: {
@@ -2521,6 +2551,7 @@ export type GraphCacheResolvers = {
     myPermissionType?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, PermissionType | string>,
     name?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Scalars['String'] | string>,
     pads?: GraphCacheResolver<WithTypename<Workspace>, WorkspacePadsArgs, WithTypename<PagedPadResult> | string>,
+    resourceUsages?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<ResourceUsage> | string>>,
     roles?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Role> | string>>,
     secrets?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Secret> | string>>,
     sections?: GraphCacheResolver<WithTypename<Workspace>, Record<string, never>, Array<WithTypename<Section> | string>>,
@@ -2808,6 +2839,12 @@ export type GraphCacheUpdaters = {
     type?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>,
     user?: GraphCacheUpdateResolver<Maybe<WithTypename<Permission>>, Record<string, never>>
   },
+  ResourceUsage?: {
+    consumption?: GraphCacheUpdateResolver<Maybe<WithTypename<ResourceUsage>>, Record<string, never>>,
+    id?: GraphCacheUpdateResolver<Maybe<WithTypename<ResourceUsage>>, Record<string, never>>,
+    quotaLimit?: GraphCacheUpdateResolver<Maybe<WithTypename<ResourceUsage>>, Record<string, never>>,
+    resourceType?: GraphCacheUpdateResolver<Maybe<WithTypename<ResourceUsage>>, Record<string, never>>
+  },
   Role?: {
     createdAt?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>,
     id?: GraphCacheUpdateResolver<Maybe<WithTypename<Role>>, Record<string, never>>,
@@ -2890,6 +2927,7 @@ export type GraphCacheUpdaters = {
     image?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     name?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     onboarded?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
+    resourceUsages?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>,
     username?: GraphCacheUpdateResolver<Maybe<WithTypename<User>>, Record<string, never>>
   },
   UserAccess?: {
@@ -2907,6 +2945,7 @@ export type GraphCacheUpdaters = {
     myPermissionType?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     name?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     pads?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, WorkspacePadsArgs>,
+    resourceUsages?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     roles?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     secrets?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,
     sections?: GraphCacheUpdateResolver<Maybe<WithTypename<Workspace>>, Record<string, never>>,

@@ -20,6 +20,7 @@ const enhancedTables: Set<keyof DataTables> = new Set([
   'externaldatasourcekeys',
   'secrets',
   'workspacesubscriptions',
+  'resourceusages',
 ]);
 
 const observedTables: Set<keyof DataTables> = new Set([

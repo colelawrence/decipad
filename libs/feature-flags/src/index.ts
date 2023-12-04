@@ -22,6 +22,8 @@ export const availableFlags = [
   'TABS',
   // Enable AI assistant
   'AI_ASSISTANT_CHAT',
+  // Enable UI tokens usage
+  'RESOURCE_USAGE_COUNT',
 ] as const;
 
 export type Flag = typeof availableFlags[number];

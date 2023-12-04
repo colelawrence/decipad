@@ -2,6 +2,8 @@ import type { PromiseOrType } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { OBSERVED } from './constants';
+import { ArcTable } from '@architect/functions/types/tables';
+import type { DynamoDB } from 'aws-sdk';
 
 /* Basic */
 
@@ -542,6 +544,9 @@ export interface LogRecord extends TableRecordBase {
   expiresAt: number;
 }
 
+type UpdateParams<T> = Parameters<ArcTable<T>['update']>[0];
+type UpdateOutput = DynamoDB.DocumentClient.UpdateItemOutput;
+
 export interface DataTable<T extends TableRecordBase> {
   delete(
     key: TableRecordIdentifier | (TableRecordIdentifier & { seq: string }),
@@ -566,6 +571,7 @@ export interface DataTable<T extends TableRecordBase> {
     Count: number;
     LastEvaluatedKey?: string;
   }>;
+  update(params: UpdateParams<T>): Promise<UpdateOutput>;
   [OBSERVED]?: boolean;
 }
 
@@ -595,6 +601,7 @@ export interface EnhancedDataTables {
   secrets: EnhancedDataTable<SecretRecord>;
   workspacesubscriptions: EnhancedDataTable<WorkspaceSubscriptionRecord>;
   workspacexecutedqueries: EnhancedDataTable<WorkspaceExecutedQueryRecord>;
+  resourceusages: EnhancedDataTable<ResourceUsageRecord>;
 }
 
 export interface DataTables extends EnhancedDataTables {
@@ -637,7 +644,8 @@ export type ConcreteRecord =
   | LogRecord
   | SecretRecord
   | WorkspaceSubscriptionRecord
-  | WorkspaceExecutedQueryRecord;
+  | WorkspaceExecutedQueryRecord
+  | ResourceUsageRecord;
 
 export type TableRecord = VirtualRecord | ConcreteRecord;
 
@@ -654,6 +662,7 @@ export interface DynamoDbQuery {
   ExpressionAttributeNames?: Record<string, string>;
   ExclusiveStartKey?: string;
   FilterExpression?: string;
+  UpdateExpression?: string;
   Limit?: number;
   ConsistentRead?: boolean;
   Select?: 'COUNT' | 'SPECIFIC_ATTRIBUTES';
@@ -685,6 +694,17 @@ export interface DocSyncSnapshotRecord extends TableRecordBase {
   version: string;
   isBackup?: boolean;
 }
+
+export interface ResourceUsageRecord extends TableRecordBase {
+  // Big composite key
+  // /resource_type/sub_type/field_name/[users/workspaces]
+  // /openai/gpt-4-1106/users
+  id: ID;
+  consumption: number;
+}
+
+export type ResourceConsumer = 'users' | 'workspaces';
+export type ResourceUsageTypes = 'openai';
 
 export type AllowListRecord = TableRecordBase;
 
@@ -741,3 +761,9 @@ export interface CreateAttachmentFormResult {
   fileType: string;
   fields: Record<string, string>;
 }
+
+export type TokensUsedProps = {
+  promptTokensUsed: number;
+  completionTokensUsed: number;
+  quotaLimit?: number;
+};

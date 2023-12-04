@@ -502,6 +502,11 @@ No comments.`,
     debug(`------------------- ITERATION -${maxIterations}`, messages);
     const result = await generateChatCompletion();
     events.next({
+      type: 'tokens',
+      usage: result.usage,
+      model: openAi.model,
+    });
+    events.next({
       type: 'progress',
       action: 'have response from the agent',
     });

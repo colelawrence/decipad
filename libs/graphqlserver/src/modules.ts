@@ -19,6 +19,7 @@ import logs from './logs-module';
 import secrets from './secrets';
 import workspaceSubscriptions from './workspaceSubscriptions';
 import workspaceExecutedQueries from './workspaceExecutedQueries';
+import resourceUsage from './resource-usage';
 import notion from './notion';
 
 type GraphqlModule = {
@@ -44,6 +45,7 @@ const modules: GraphqlModule[] = [
   secrets,
   workspaceSubscriptions,
   workspaceExecutedQueries,
+  resourceUsage,
   notion,
 ];
 
