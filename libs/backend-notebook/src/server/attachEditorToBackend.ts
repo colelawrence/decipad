@@ -28,6 +28,7 @@ export const attachEditorToBackend = async (
   });
   await timeout(1000); // TODO: fixed timeout
   await persistence.flush();
+  await comms.flush();
   const detach: Detach = async () => {
     await timeout(1000);
     await comms.flush();

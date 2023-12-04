@@ -57,7 +57,7 @@ export const server = async (
       await detach();
     }
   } else {
-    result = await action.handler(params);
+    result = await action.handler(params, { computer });
   }
   // eslint-disable-next-line no-console
   console.log('result:', result);

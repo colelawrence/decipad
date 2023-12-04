@@ -8,10 +8,16 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
     summary: 'Retrieves a brief description of all notebook elements',
     response: {
       schema: {
-        type: 'object',
-        properties: {
-          description: {
-            type: 'string',
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            elementId: {
+              type: 'string',
+            },
+            description: {
+              type: 'string',
+            },
           },
         },
       },
@@ -35,6 +41,7 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
         ],
       }).verbalized.map((v) => ({
         elementId: v.element.id,
+        type: v.element.type,
         description: v.verbalized,
       })),
   };

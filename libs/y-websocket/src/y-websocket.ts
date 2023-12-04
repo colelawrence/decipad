@@ -332,6 +332,9 @@ class WebsocketProvider
     this.onError = onError;
     this.protocolVersion = protocolVersion;
 
+    // eslint-disable-next-line no-console
+    console.log(`WS Provider: using protocol version ${protocolVersion}`);
+
     if (!awareness) {
       this.awareness = new awarenessProtocol.Awareness(doc);
       this._selfAwareness = true;
@@ -560,7 +563,7 @@ class WebsocketProvider
 
 export const createWebsocketProvider = (
   doc: YDoc,
-  options: Options = { protocolVersion: 1 }
+  options: Options = { protocolVersion: 2 }
 ): TWebSocketProvider => {
   return new WebsocketProvider(doc, options);
 };

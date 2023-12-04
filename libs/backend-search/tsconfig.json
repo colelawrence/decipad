@@ -8,6 +8,8 @@
     { "path": "../backendtypes" },
     { "path": "../tables" },
     { "path": "../backend-config" },
-    { "path": "../editor-types" }
+    { "path": "../editor-types" },
+    { "path": "../services" },
+    { "path": "../doc-verbalizer" }
   ]
 }

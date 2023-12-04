@@ -37,6 +37,7 @@ export interface PlotParams {
 
 export type AllNotebookElementsDescriptionResult = Array<{
   elementId: string;
+  type: string;
   description: string;
 }>;
 

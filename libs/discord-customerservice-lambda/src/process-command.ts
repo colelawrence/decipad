@@ -1,7 +1,7 @@
-import Boom from '@hapi/boom';
+import { notImplemented, forbidden } from '@hapi/boom';
 import { getDefined } from '@decipad/utils';
 import tables from '@decipad/tables';
-import { Command, CommandReply } from './command';
+import { type Command, type CommandReply } from './command';
 import commands from './commands';
 
 async function verifyAuth(command: Command): Promise<string> {
@@ -11,16 +11,14 @@ async function verifyAuth(command: Command): Promise<string> {
   const data = await tables();
   const userKey = await data.userkeys.get({ id: userKeyId });
   if (!userKey) {
-    throw Boom.forbidden(`Could not find user key with id ${userKeyId}`);
+    throw forbidden(`Could not find user key with id ${userKeyId}`);
   }
 
   const superAdmin = await data.superadminusers.get({
     id: userKey.user_id,
   });
   if (!superAdmin) {
-    throw Boom.forbidden(
-      `Could not find super admin permissions for your user`
-    );
+    throw forbidden(`Could not find super admin permissions for your user`);
   }
 
   return userKey.user_id;
@@ -36,8 +34,11 @@ async function parseAndReplyToCommand(command: Command): Promise<string> {
     case 'superadmins': {
       return commands.superadmins(commandData.options);
     }
+    case 'templates': {
+      return commands.templates(commandData.options);
+    }
     default: {
-      throw Boom.notImplemented(
+      throw notImplemented(
         `command not recognized: ${(commandData as Command['data'])?.name}`
       );
     }

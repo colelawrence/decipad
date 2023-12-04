@@ -41,7 +41,7 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
         description: 'decipad language code expression for this variable',
       }),
     }),
-  handler: async (editor, { variableName, codeExpression }) => {
+  handler: async (editor, { variableName, codeExpression }, context) => {
     const alreadyHasElementEntry = findElementByVariableName(
       editor,
       variableName
@@ -60,11 +60,15 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
         );
       }
       codeLinePath = alreadyHasElementEntryPath;
-      await (updateCodeLine.handler as NotebookActionHandler)(editor, {
-        codeLineId: alreadyHasElement.id,
-        newVariableName: variableName,
-        newCodeExpression: codeExpression,
-      });
+      await (updateCodeLine.handler as NotebookActionHandler)(
+        editor,
+        {
+          codeLineId: alreadyHasElement.id,
+          newVariableName: variableName,
+          newCodeExpression: codeExpression,
+        },
+        context
+      );
     } else {
       let newCodeLine: CodeLineElement | CodeLineV2Element;
       if (codeExpression.replaceAll(' ', '').startsWith(`${variableName}=`)) {

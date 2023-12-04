@@ -1,15 +1,15 @@
 import Boom from '@hapi/boom';
 
 export function parseNotebookUrl(url: string) {
-  const matchExp =
-    /^https:\/\/([a-zA-Z0-9]+)\.decipad.com\/n\/([a-zA-Z0-9-]*)%3A([a-zA-Z0-9]+)/;
+  const matchExp = /^https:\/\/(.+)\.decipad.com\/n\/([^/]+)/;
   const match = matchExp.exec(url);
   if (!match) {
     throw Boom.notAcceptable(`notebook url seems invalid: ${url}`);
   }
   const [, prEnvId, notebookId] = match;
+  const idParts = decodeURIComponent(notebookId).split(':');
   return {
     prEnvId,
-    notebookId,
+    notebookId: idParts[1] ?? idParts[0],
   };
 }

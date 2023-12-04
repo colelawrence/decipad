@@ -151,6 +151,13 @@ export type SuperadminsCommandData = {
   options: SuperadminsApplicationCommandDataOption[];
 };
 
+// templates
+
+export type TemplatesCommandData = {
+  name: 'templates';
+  options: TemplatesApplicationCommandDataOption[];
+};
+
 // ----------
 
 export type ApplicationCommandDataOption =
@@ -165,7 +172,8 @@ export type ApplicationCommandDataOptions = ApplicationCommandDataOption[];
 
 export type ApplicationCommandData =
   | AllowlistCommandData
-  | SuperadminsCommandData;
+  | SuperadminsCommandData
+  | TemplatesCommandData;
 
 export type Command = APIBaseInteraction<
   InteractionType.ApplicationCommand,

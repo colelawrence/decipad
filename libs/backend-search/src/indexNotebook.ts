@@ -10,8 +10,10 @@ export const indexNotebook = async (
   previousAttempts = 0
 ): Promise<void> => {
   debug('indexNotebook', { notebook, content, previousAttempts });
-  const vector = await createVectorEmbeddings(content);
+  const [vector, summary] = await createVectorEmbeddings(content);
   const store = await searchStore();
+
+  debug('searching using vector', vector);
 
   try {
     await store.index({
@@ -19,6 +21,7 @@ export const indexNotebook = async (
       index: indexNames.notebookTemplates,
       body: {
         embeddings_vector: vector,
+        summary,
       },
     });
   } catch (err) {

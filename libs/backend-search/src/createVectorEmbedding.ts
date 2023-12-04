@@ -13,7 +13,7 @@ const maxShorteningAttempts = 3;
 export const createVectorEmbeddings = async (
   content: string,
   previousAttempts = 0
-): Promise<EmbeddingsVector> => {
+): Promise<[EmbeddingsVector, string]> => {
   const shortenedContent = await shortenNotebook(content);
   const embeddings = new OpenAIEmbeddings({
     openAIApiKey: thirdParty().openai.apiKey,
@@ -32,5 +32,5 @@ export const createVectorEmbeddings = async (
     }
     throw err;
   }
-  return getDefined(vector[0]);
+  return [getDefined(vector[0]), shortenedContent];
 };

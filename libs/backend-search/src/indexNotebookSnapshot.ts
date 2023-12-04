@@ -1,11 +1,11 @@
 import { tables } from '@architect/functions';
-import { indexNotebook } from '@decipad/backend-search';
 import { getStoredSnapshot } from '@decipad/services/notebooks';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
+import { indexNotebook } from './indexNotebook';
 
 const SNAPSHOT_NAME = 'Published 1';
 
-export const maybeUpdateSearchIndex = async (
+export const indexNotebookSnapshot = async (
   notebookId: string
 ): Promise<void> => {
   const data = await tables();

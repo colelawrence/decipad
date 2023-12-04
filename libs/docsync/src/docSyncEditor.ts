@@ -2,8 +2,8 @@ import {
   type TCursorEditor as GTCursorEditor,
   toSlateDoc,
 } from '@decipad/slate-yjs';
-import { IndexeddbPersistence } from '@decipad/y-indexeddb';
-import { TWebSocketProvider } from '@decipad/y-websocket';
+import { type IndexeddbPersistence } from '@decipad/y-indexeddb';
+import { type TWebSocketProvider } from '@decipad/y-websocket';
 import EventEmitter from 'events';
 import { canonicalize } from 'json-canonicalize';
 import md5 from 'md5';

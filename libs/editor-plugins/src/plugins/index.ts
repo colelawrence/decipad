@@ -24,6 +24,7 @@ export * from './Link';
 export * from './LiveConnection';
 export * from './LiveQuery';
 export * from './Marks';
+export * from './MagicNumber';
 export * from './Media';
 export * from './Migrations/index';
 export * from './NormalizeCodeLine';

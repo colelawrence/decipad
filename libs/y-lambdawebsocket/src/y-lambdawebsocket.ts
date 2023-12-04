@@ -261,7 +261,7 @@ export class LambdaWebsocketProvider extends Observable<string> {
     this.name = name;
     this.connId = connId;
     const { awareness, protocolVersion } = options;
-    this.protocolVersion = protocolVersion ?? 1;
+    this.protocolVersion = protocolVersion ?? 2;
 
     this.doc = doc;
 

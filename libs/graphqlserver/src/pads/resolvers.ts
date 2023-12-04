@@ -115,7 +115,7 @@ const resolvers = {
         cursor: String(cursor + results.length),
         hasNextPage: userResultSize < results.length,
         count: userResultSize,
-        items: results.slice(0, userResultSize),
+        items: results.slice(0, userResultSize).map((r) => r.notebook),
       };
     },
   },

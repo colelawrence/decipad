@@ -1,6 +1,7 @@
 import Boom, { notFound } from '@hapi/boom';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
+import { parseNotebookUrl } from '@decipad/backend-utils';
 import {
   TemplatesApplicationCommandDataOption,
   TemplatesAddApplicationCommandDataOption,
@@ -8,7 +9,6 @@ import {
 } from '../command';
 import { allPages } from '../../../tables/src/utils/all-pages';
 import { createNotebookUrl } from '../utils/createNotebookUrl';
-import { parseNotebookUrl } from '@decipad/backend-utils';
 
 async function add(
   options: TemplatesAddApplicationCommandDataOption['options']
@@ -22,14 +22,14 @@ async function add(
 
   const notebook = await data.pads.get({ id: notebookId });
   if (!notebook) {
-    throw notFound();
+    throw notFound(`Could not find notebook with id ${notebookId}`);
   }
 
   if (notebook.isTemplate) {
     return 'Notebook is already template';
   }
   notebook.isTemplate = 1;
-  await data.pads.put(notebook, 1); // always trigger maintenance
+  await data.pads.put(notebook, true);
 
   return `Added template`;
 }
@@ -53,9 +53,9 @@ async function remove(
     return 'Notebook is already not a template';
   }
   notebook.isTemplate = 0;
-  await data.pads.put(notebook, 1); // always trigger maintenance
+  await data.pads.put(notebook, true);
 
-  return `Added template`;
+  return `Template removed`;
 }
 
 async function list(): Promise<string> {
@@ -69,15 +69,13 @@ async function list(): Promise<string> {
     },
   })) {
     if (entry) {
-      entries.push(createNotebookUrl(entry));
+      entries.push(`- [${entry.name}](${createNotebookUrl(entry)})`);
     }
   }
 
   return `Templates list currently consists of:
 
-\`\`\`
 ${entries.map((entry) => `${entry}\n`)}
-\`\`\`
 
 (retrieved at ${new Date()})
   `;

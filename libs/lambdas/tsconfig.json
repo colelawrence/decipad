@@ -31,6 +31,7 @@
     { "path": "../backend-notebook-assistant" },
     { "path": "../backend-notebook" },
     { "path": "../backend-auth" },
-    { "path": "../routing" }
+    { "path": "../routing" },
+    { "path": "../backend-search" }
   ]
 }

@@ -22,6 +22,8 @@
     { "path": "../doc-verbalizer" },
     { "path": "../editor-language-elements" },
     { "path": "../notebook-open-api" },
-    { "path": "../tables" }
+    { "path": "../tables" },
+    { "path": "../backend-search" },
+    { "path": "../editor-utils" }
   ]
 }

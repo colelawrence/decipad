@@ -53,7 +53,7 @@ Column names and variable names must not have spaces or weird characters in them
             children: {
               type: 'array',
               items: {
-                $ref: '#/components/schemas/AnyElement',
+                type: 'object',
               },
             },
           },

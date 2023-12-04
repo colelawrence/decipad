@@ -36,7 +36,11 @@ export const updateTableCell: Action<'updateTableCell'> = {
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
-  handler: (editor, { tableId, columnName, rowIndex, newCellContent }) => {
+  handler: (
+    editor,
+    { tableId, columnName, rowIndex, newCellContent },
+    context
+  ) => {
     if (newCellContent.startsWith('=')) {
       throw notAcceptable(
         'table cells cannot have formulas. Instead you can use a column formula or a code line.'
@@ -48,10 +52,14 @@ export const updateTableCell: Action<'updateTableCell'> = {
     withoutNormalizing(editor, () => {
       while (!hasNode(editor, updateCellPath)) {
         const tableColumnCount = table.children[1].children.length;
-        (insertTableRow.handler as NotebookActionHandler)(editor, {
-          tableId,
-          row: Array.from({ length: tableColumnCount }).map(() => ''),
-        });
+        (insertTableRow.handler as NotebookActionHandler)(
+          editor,
+          {
+            tableId,
+            row: Array.from({ length: tableColumnCount }).map(() => ''),
+          },
+          context
+        );
       }
       const entry = [
         getDefined(getNode(editor, updateCellPath)),

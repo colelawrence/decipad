@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import { nanoid } from 'nanoid';
 import { notAcceptable } from '@hapi/boom';
-import { ELEMENT_TD, MyEditor, TableCellElement } from '@decipad/editor-types';
+import { ELEMENT_TD, TableCellElement } from '@decipad/editor-types';
 import { replaceText } from './utils/replaceText';
 import { getDefined } from '@decipad/utils';
 import { Action, RequiresNotebookAction } from './types';
@@ -35,7 +35,7 @@ export const fillTable: Action<'fillTable'> = {
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
-  handler: (editor: MyEditor, { tableId, rowsData }) => {
+  handler: (editor, { tableId, rowsData }, context) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const columnCount = table.children[1].children.length;
 
@@ -51,7 +51,8 @@ export const fillTable: Action<'fillTable'> = {
             {
               tableId,
               row,
-            }
+            },
+            context
           );
         }
         row.forEach((cell, columnIndex) => {

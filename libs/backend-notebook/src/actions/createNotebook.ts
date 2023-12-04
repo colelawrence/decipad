@@ -17,7 +17,7 @@ export const createNotebook: CustomAction<
   Parameters<ServerSideNotebookApi['createNotebook']>[0],
   ReturnType<ServerSideNotebookApi['createNotebook']>
 > = {
-  summary: 'removes an existing element from the notebook',
+  summary: 'creates a notebook',
   parameters: {
     title: {
       description: 'the title of the notebook you want to create',

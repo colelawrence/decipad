@@ -2,16 +2,25 @@ import { z } from 'zod';
 import { PromiseOrType } from '@decipad/utils';
 import { MyEditor } from '@decipad/editor-types';
 import { NotebookOpenApi } from '../types';
+import { RemoteComputer } from '@decipad/remote-computer';
+
+export interface HandlerContext {
+  computer: RemoteComputer;
+}
 
 export type NotebookActionHandler<
   TParams extends Record<string, unknown> = Record<string, unknown>,
   TRet = unknown
-> = (editor: MyEditor, params: TParams) => PromiseOrType<TRet>;
+> = (
+  editor: MyEditor,
+  params: TParams,
+  context: HandlerContext
+) => PromiseOrType<TRet>;
 
 export type NotebooklessActionHandler<
   TParams extends Record<string, unknown> = Record<string, unknown>,
   TRet = unknown
-> = (params: TParams) => PromiseOrType<TRet>;
+> = (params: TParams, context: HandlerContext) => PromiseOrType<TRet>;
 
 export type ActionParams<
   TActionName extends keyof NotebookOpenApi,

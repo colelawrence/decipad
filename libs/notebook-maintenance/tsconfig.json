@@ -9,6 +9,7 @@
     { "path": "../tables" },
     { "path": "../services" },
     { "path": "../backend-utils" },
-    { "path": "../backend-search" }
+    { "path": "../backend-search" },
+    { "path": "../doc-verbalizer" }
   ]
 }

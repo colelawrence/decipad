@@ -26,7 +26,7 @@ export const fillRow: Action<'fillRow'> = {
     }),
   requiresNotebook: true,
   returnsActionResultWithNotebookError: true,
-  handler: (editor, { tableId, rowIndex, rowData }) => {
+  handler: (editor, { tableId, rowIndex, rowData }, context) => {
     const [table, tablePath] = getTableById(editor, tableId);
     const columnCount = table.children[1].children.length;
     if (rowData.length > columnCount) {
@@ -38,19 +38,26 @@ export const fillRow: Action<'fillRow'> = {
     if (!hasNode(editor, rowPath)) {
       (insertTableRow as RequiresNotebookAction<'insertTableRow'>).handler(
         editor,
-        { tableId, row: rowData }
+        { tableId, row: rowData },
+        context
       );
     } else {
       withoutNormalizing(editor, () => {
         rowData.forEach((cell, columnIndex) => {
           (
             updateTableCell as RequiresNotebookAction<'updateTableCell'>
-          ).handler(editor, {
-            tableId,
-            columnName: getNodeString(table.children[1].children[columnIndex]),
-            rowIndex,
-            newCellContent: cell,
-          });
+          ).handler(
+            editor,
+            {
+              tableId,
+              columnName: getNodeString(
+                table.children[1].children[columnIndex]
+              ),
+              rowIndex,
+              newCellContent: cell,
+            },
+            context
+          );
         });
       });
     }

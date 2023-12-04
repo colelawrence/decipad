@@ -140,8 +140,7 @@ export async function _onMessage(
     return { statusCode: 401 };
   }
 
-  const canWrite =
-    hasMinimumPermission('WRITE')(permissions) && !conn.versionName;
+  const canWrite = hasMinimumPermission('WRITE')(permissions);
 
   const resource = getDefined(conn.room, 'no room in connection');
   const ops = [

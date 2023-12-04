@@ -4,8 +4,9 @@ import {
   TableRecordIdentifier,
 } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import Boom from '@hapi/boom';
 import { hasMinimumPermission } from './minimum-permission';
+import parseResourceUri from '../common/resource/parse-uri';
+import { unauthorized } from '@hapi/boom';
 
 function canonizeResource(resource: string): string {
   const [type, id] = resource.split('/').filter(notEmpty);
@@ -77,17 +78,19 @@ export const isAuthorized = async ({
     : [];
 
   for (const resource of resources) {
+    const { id, type } = parseResourceUri(resource);
     if (
       !userPermissions.length &&
       !secretPermissions.length &&
-      resource.match(/^\/pads\/.*/)
+      type === 'pads'
     ) {
-      // shortcut for when pad is public
-      const padId = resource.split('/')[2];
       // eslint-disable-next-line no-await-in-loop
-      const pad = await data.pads.get({ id: padId });
+      const pad = await data.pads.get({ id });
       if (pad?.isPublic && minimumPermissionType === 'READ') {
         return 'READ';
+      }
+      if (pad?.isPublicWritable) {
+        return 'WRITE';
       }
     }
   }
@@ -112,7 +115,7 @@ export const expectAuthorized = async ({
     minimumPermissionType,
   });
   if (!permissionType) {
-    throw Boom.unauthorized('Forbidden');
+    throw unauthorized('Forbidden');
   }
   return permissionType;
 };
