@@ -1,12 +1,12 @@
 import { useCanUseDom } from '@decipad/react-utils';
 import { docs } from '@decipad/routing';
-import { HelpMenu } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { useSession } from 'next-auth/react';
 import { Button } from '../../atoms';
 import { Plus, Users } from '../../icons';
 import { SearchBar } from '../../molecules';
 import { cssVar } from '../../primitives';
+import { HelpMenu } from '../../organisms';
 
 type WorkspaceHeroHeaderProps = {
   membersHref?: string;

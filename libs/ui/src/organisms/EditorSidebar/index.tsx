@@ -11,7 +11,7 @@ import {
   sidebarWrapperStyles,
 } from './styles';
 import { EditorSidebarProps, SelectedTab } from './types';
-import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@decipad/ui';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../molecules';
 
 const AVAILABLE_TABS: SelectedTab[] = ['block', 'variable'];
 

@@ -21,9 +21,9 @@ import type {
   IdentifiedError,
   IdentifiedResult,
 } from '@decipad/remote-computer';
-import { CodeResult } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ResultFormatting } from '../../types';
+import { CodeResult } from '../CodeResult/CodeResult';
 
 type VariableEditorMenuProps = {
   readonly type?: CellValueType;

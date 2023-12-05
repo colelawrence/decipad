@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ToastItem } from '@decipad/ui';
-
 import * as ToastPrimitive from '@radix-ui/react-toast';
 
 import { ToastContext, ToastContextImpl, ToastType } from '@decipad/toast';
 import { css } from '@emotion/react';
 import { isServerSideRendering } from '@decipad/support';
+import { ToastItem } from '../../atoms';
 
 const ANIMATION_OUT_DURATION = 150;
 

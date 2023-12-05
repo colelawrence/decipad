@@ -6,20 +6,17 @@ import type {
   IdentifiedResult,
 } from '@decipad/remote-computer';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
-import {
-  CodeResult,
-  AvailableSwatchColor,
-  IconPopover,
-  Tooltip,
-  DropdownMenu,
-  SelectItems,
-} from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { Caret } from '../../icons';
 import * as icons from '../../icons';
 import { cssVar, p14Regular, p24Medium } from '../../primitives';
 import { ResultFormatting } from '../../types';
 import { UserIconKey } from '@decipad/editor-types';
+import { AvailableSwatchColor } from '../../utils';
+import { DropdownMenu, SelectItems } from '../DropdownMenu/DropdownMenu';
+import { IconPopover } from '../../molecules';
+import { Tooltip } from '../../atoms';
+import { CodeResult } from '../CodeResult/CodeResult';
 
 const wrapperStyles = css({
   display: 'flex',

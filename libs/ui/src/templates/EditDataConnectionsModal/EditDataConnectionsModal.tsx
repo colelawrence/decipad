@@ -4,8 +4,12 @@ import { DashboardWorkspaceFragment } from '@decipad/graphql-client';
 import { css } from '@emotion/react';
 import { workspaces } from '@decipad/routing';
 import { ClosableModal } from '../../organisms';
-import { ClosableModalHeader } from '../../molecules';
-import { TabsRoot, TabsList, TabsTrigger } from '@decipad/ui';
+import {
+  ClosableModalHeader,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '../../molecules';
 
 type EditDataConnectionsModalProps = {
   readonly closeHref: string;

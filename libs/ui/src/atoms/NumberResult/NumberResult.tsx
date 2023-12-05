@@ -5,8 +5,8 @@ import { FC } from 'react';
 import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { useFormattedResultString } from '@decipad/ui';
 import { css } from '@emotion/react';
+import { useFormattedResultString } from '../../hooks';
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,

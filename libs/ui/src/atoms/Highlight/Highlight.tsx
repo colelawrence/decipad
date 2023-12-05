@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useThemeFromStore } from '@decipad/react-contexts';
-import { Swatch, swatchesThemed } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ReactNode } from 'react';
 import {
@@ -10,6 +9,7 @@ import {
   weakOpacity,
 } from '../../primitives';
 import { highlight } from '../../styles';
+import { Swatch, swatchesThemed } from '../../utils';
 
 const styles = (baseSwatches: Swatch) => {
   return css(highlight.highlightStyles, {

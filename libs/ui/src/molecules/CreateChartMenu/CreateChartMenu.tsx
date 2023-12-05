@@ -1,4 +1,3 @@
-import { icons } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { FC, PropsWithChildren } from 'react';
 import { MenuItem, TextAndIconButton } from '../../atoms';
@@ -10,6 +9,7 @@ import {
 } from '../../organisms/PlotParams/PlotParams';
 import { hideOnPrint } from '../../styles/editor-layout';
 import { MenuList } from '../MenuList/MenuList';
+import { Plot } from '../../icons';
 
 type CreateChartMenuProps = PropsWithChildren<{
   onAddChartViewButtonPress: (type: typeof markTypes[number]) => void;
@@ -24,7 +24,7 @@ export const CreateChartMenu: FC<CreateChartMenuProps> = ({
     trigger={
       <button data-testid="create-chart-from-table-button" css={buttonStyles}>
         <TextAndIconButton text="Chart" iconPosition="left">
-          <icons.Plot />
+          <Plot />
         </TextAndIconButton>
       </button>
     }

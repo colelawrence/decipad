@@ -5,8 +5,8 @@ import { ComponentProps, FC } from 'react';
 import { CodeError } from '../CodeError/CodeError';
 import { TextAndIconButton } from '../TextAndIconButton/TextAndIconButton';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { GoogleConnectButton } from '@decipad/ui';
 import { Refresh } from '../../icons';
+import { GoogleConnectButton } from '..';
 
 interface LiveErrorProps {
   error: Error;

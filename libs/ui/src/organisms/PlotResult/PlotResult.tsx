@@ -1,5 +1,4 @@
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { icons } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, useRef } from 'react';
@@ -10,6 +9,7 @@ import { hideOnPrint } from '../../styles/editor-layout';
 import { PlotResultProps } from './PlotResult.types';
 import { serializeVisualisationSpec } from './serializeVisualisationSpec';
 import { usePlotTheme } from './usePlotTheme';
+import { Download } from '../../icons';
 
 export const PlotResult = ({
   spec,
@@ -53,7 +53,7 @@ export const PlotResult = ({
         {isFlagEnabled('DOWNLOAD_CHART') && (
           <button css={hideOnPrint} onClick={handleExportPNG}>
             <TextAndIconButton text="Download chart" iconPosition="left">
-              <icons.Download />
+              <Download />
             </TextAndIconButton>
           </button>
         )}

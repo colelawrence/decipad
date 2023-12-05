@@ -14,8 +14,13 @@ import { MessageBlock } from '.';
 import { Caret, Edit, Loading, Trash, Warning } from '../../icons';
 import { cssVar, p13Bold, p14Medium, p16Bold } from '../../primitives';
 import { Button, MenuItem } from '../../atoms';
-import { MenuList } from '../../molecules';
-import { TabsRoot, TabsList, TabsTrigger, TabsContent } from '@decipad/ui';
+import {
+  MenuList,
+  TabsContent,
+  TabsList,
+  TabsRoot,
+  TabsTrigger,
+} from '../../molecules';
 
 interface DatabaseConnectionProps {
   workspaceId: string;

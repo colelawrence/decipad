@@ -1,6 +1,6 @@
-import { useEventNoEffect } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { FC, PropsWithChildren } from 'react';
+import { useEventNoEffect } from '../../utils/useEventNoEffect';
 
 export const VoidBlock: FC<
   PropsWithChildren<{ dontPreventDefault?: boolean }>

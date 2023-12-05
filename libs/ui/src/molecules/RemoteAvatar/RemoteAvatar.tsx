@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Avatar } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { OpaqueColor, shortAnimationDuration } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
+import { Avatar } from '../../atoms';
 
 const avatarSize = '30px';
 const avatarMarginLeft = '5px';

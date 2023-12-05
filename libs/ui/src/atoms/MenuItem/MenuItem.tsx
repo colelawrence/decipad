@@ -1,10 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Badge, Tooltip } from '@decipad/ui';
 import { ComponentProps, FC, ReactNode, useCallback, useState } from 'react';
 import { menu } from '../../styles';
 import { componentCssVars, cssVar } from '../../primitives';
+import { Badge } from '../Badge/Badge';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 const iconWrapperStyles = css({
   display: 'grid',

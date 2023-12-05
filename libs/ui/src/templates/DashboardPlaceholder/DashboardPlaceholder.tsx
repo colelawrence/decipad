@@ -1,9 +1,6 @@
-import {
-  Dashboard,
-  DashboardSidebarPlaceholder,
-  DashboardTopbar,
-  NotebookListPlaceholder,
-} from '@decipad/ui';
+import { DashboardTopbar, NotebookListPlaceholder } from '..';
+import { DashboardSidebarPlaceholder } from '../../atoms';
+import { Dashboard } from '../../pages';
 
 export const DashboardPlaceholder: React.FC = () => (
   <Dashboard

@@ -13,7 +13,18 @@
       "off"
     ],
     // "custom-emotion/css-prop-named-variable": "error",
-    "decipad/css-prop-named-variable": "error"
+    "decipad/css-prop-named-variable": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@decipad/ui",
+            "message": "Do not import @decipad/ui from within the UI. Use relative paths"
+          }
+        ]
+      }
+    ]
   },
   "overrides": [
     {

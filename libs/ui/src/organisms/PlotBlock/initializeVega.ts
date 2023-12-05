@@ -1,6 +1,6 @@
 import { scheme } from 'vega';
 import { once } from '@decipad/utils';
-import { colorSchemes } from '@decipad/ui';
+import { colorSchemes } from '../../primitives';
 
 export const initializeVega = once(() => {
   Object.entries(colorSchemes).forEach(([uniqueName, cs]) => {

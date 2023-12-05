@@ -25,7 +25,6 @@ import {
 } from 'react';
 import { Button, TextAndIconButton, UpgradePlanWarning } from '../../atoms';
 import { Close, Play, Sparkles } from '../../icons';
-import { TabsList, TabsTrigger, TabsRoot } from '@decipad/ui';
 import {
   cssVar,
   mobileQuery,
@@ -35,6 +34,7 @@ import {
   smallestMobile,
 } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
+import { TabsList, TabsRoot, TabsTrigger } from '../../molecules';
 
 type Stages = 'pick-integration' | 'connect' | 'map';
 

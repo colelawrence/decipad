@@ -1,14 +1,10 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-
-import {
-  AssistantChatHeader,
-  AssistantMessageInput,
-  AssistantMessageList,
-} from '@decipad/ui';
 import { css } from '@emotion/react';
 
 import { cssVar } from '../../primitives';
 import { Message } from '@decipad/react-contexts';
+import { AssistantChatHeader, AssistantMessageInput } from '../../molecules';
+import { AssistantMessageList } from '..';
 import { EElementOrText } from '@udecode/plate-common';
 import { MyValue } from '@decipad/editor-types';
 

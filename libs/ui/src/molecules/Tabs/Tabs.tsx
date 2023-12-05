@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 import { cssVar, p13Medium } from '../../primitives';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { Tooltip } from '@decipad/ui';
+import { Tooltip } from '../../atoms';
 
 const tabsListStyles = (fullWidth: boolean) =>
   css({

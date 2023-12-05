@@ -1,12 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Avatar, p14Regular } from '@decipad/ui';
-
 import { User } from '@decipad/interfaces';
 import { useSession } from 'next-auth/react';
 import { css } from '@emotion/react';
-import { cssVar } from '../../primitives';
+import { cssVar, p14Regular } from '../../primitives';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
 import { UserMessage } from '@decipad/react-contexts';
+import { Avatar } from '../../atoms';
 
 const wrapperStyles = css({
   display: 'flex',

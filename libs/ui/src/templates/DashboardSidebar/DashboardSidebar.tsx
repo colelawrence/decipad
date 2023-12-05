@@ -1,7 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { useWorkspacePermission } from '@decipad/graphql-client';
 import { useThemeFromStore } from '@decipad/react-contexts';
-import { mediumShadow } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ComponentProps, FC } from 'react';
 import { AccountAvatar } from '../../molecules';
@@ -17,6 +16,7 @@ import { MobileSidebar } from '../../organisms/MobileSidebar/MobileSidebar';
 import {
   black,
   cssVar,
+  mediumShadow,
   smallScreenQuery,
   transparency,
 } from '../../primitives';

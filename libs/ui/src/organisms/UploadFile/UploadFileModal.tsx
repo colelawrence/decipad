@@ -1,12 +1,5 @@
 import { FileType, MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
-import {
-  TabsContent,
-  TabsList,
-  TabsRoot,
-  TabsTrigger,
-  isValidURL,
-} from '@decipad/ui';
 import { css } from '@emotion/react';
 import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
 import { Button, Link } from '../../atoms';
@@ -14,6 +7,8 @@ import { Close } from '../../icons';
 import { modalDialogStyles } from '../../molecules/Modal/Modal';
 import { cssVar, p12Medium, p15Medium } from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../molecules';
+import { isValidURL } from '../../utils';
 
 interface UploadFileModalProps {
   fileType?: FileType;

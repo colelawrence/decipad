@@ -1,11 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { AnimatedIcon, componentCssVars } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Refresh } from '../../icons';
 import {
   black,
+  componentCssVars,
   cssVar,
   p12Medium,
   p13Medium,
@@ -13,6 +13,7 @@ import {
 } from '../../primitives';
 import { Anchor, TextChildren } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
+import { AnimatedIcon } from '../AnimatedIcon/AnimatedIcon';
 
 type IconButtonProps = {
   readonly text?: TextChildren;

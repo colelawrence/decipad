@@ -1,6 +1,8 @@
-import { BetaBadge, Button, Link, p14Medium } from '@decipad/ui';
 import { css } from '@emotion/react';
 import { Deci } from '../../icons';
+import { BetaBadge } from '../BetaBadge/BetaBadge';
+import { Button, Link } from '../../atoms';
+import { p14Medium } from '../../primitives';
 
 export const PlaygroundTopBar = () => (
   <div css={playTopBarWrapperStyles}>
