@@ -240,10 +240,13 @@ const resolvers = {
       }
 
       const newUser = (
-        await createUser({
-          name: email,
-          email,
-        })
+        await createUser(
+          {
+            name: email,
+            email,
+          },
+          context.event
+        )
       ).user;
 
       const parsedResource = parseResource(resource);

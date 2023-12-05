@@ -7,6 +7,7 @@ import { create as createUser } from '@decipad/services/users';
 import { createVerifier } from '@decipad/services/authentication';
 import { isAllowedToLogIn } from './is-allowed';
 import pick from 'lodash.pick';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 // Next-Auth does not expose some types
 // So we have to help here.
@@ -30,13 +31,16 @@ type EmailConfig = {
 type Adapter = NonNullable<NextAuthOptions['adapter']>;
 type AdapterUser = User & { id: string; emailVerified: boolean };
 
-export const adapter = (adapterOpts: AdapterOptions): Adapter => {
-  const verifier = createVerifier(adapterOpts);
+export const adapter = (
+  event: APIGatewayProxyEventV2,
+  adapterOpts: AdapterOptions
+): Adapter => {
+  const verifier = createVerifier({ ...adapterOpts, event });
 
   return {
     async createUser(profile: Omit<User, 'id'>): Promise<AdapterUser> {
       const name = profile.name || 'unknown';
-      return (await createUser({ ...profile, name } as UserInput))
+      return (await createUser({ ...profile, name } as UserInput, event))
         .user as unknown as AdapterUser;
     },
 
@@ -55,12 +59,15 @@ export const adapter = (adapterOpts: AdapterOptions): Adapter => {
       }
       if (!user && (await isAllowedToLogIn(email))) {
         user = (
-          await createUser({
-            name: email,
-            email,
-            provider: 'email',
-            providerId: email,
-          })
+          await createUser(
+            {
+              name: email,
+              email,
+              provider: 'email',
+              providerId: email,
+            },
+            event
+          )
         ).user;
       }
 

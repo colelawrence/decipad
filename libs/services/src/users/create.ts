@@ -16,6 +16,7 @@ import timestamp from '../common/timestamp';
 import { create as createPad } from '../notebooks';
 import { create as createContent } from '../pad-content';
 import { create as createWorkspace } from '../workspaces/create';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export interface UserCreationResult {
   user: UserWithSecret;
@@ -80,7 +81,10 @@ async function createInitialWorkspace(
   };
 }
 
-export async function create(user: UserInput): Promise<UserCreationResult> {
+export async function create(
+  user: UserInput,
+  event: APIGatewayProxyEventV2
+): Promise<UserCreationResult> {
   const data = await tables();
   const email = user.email?.toLowerCase();
 
@@ -121,7 +125,7 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
     newUser
   );
 
-  await track({
+  await track(event, {
     event: 'user created',
     userId: newUser.id,
     properties: { email, firstName },

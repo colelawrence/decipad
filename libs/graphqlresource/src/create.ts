@@ -56,6 +56,7 @@ export function create<
     }
 
     await track(
+      context.event,
       { userId: user.id, event: `${resourceType.humanName} created` },
       context
     );

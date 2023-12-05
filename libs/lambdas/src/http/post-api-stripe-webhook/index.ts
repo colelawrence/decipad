@@ -36,11 +36,11 @@ export const handler = handle(async (event: APIGatewayProxyEventV2) => {
       case 'invoice.created':
         return processInvoiceCreated(stripeEvent);
       case 'checkout.session.completed':
-        return processSessionComplete(stripeEvent);
+        return processSessionComplete(event, stripeEvent);
       case 'customer.subscription.updated':
-        return processSubscriptionUpdated(stripeEvent);
+        return processSubscriptionUpdated(event, stripeEvent);
       case 'customer.subscription.deleted':
-        return processSubscriptionDeleted(stripeEvent);
+        return processSubscriptionDeleted(event, stripeEvent);
       default:
         throw Boom.teapot(`webhook ignored: ${stripeEvent.type}`);
     }

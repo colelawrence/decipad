@@ -28,13 +28,17 @@ export const Login: FC = () => {
           onSubmit={async (email) => {
             try {
               setPage({ kind: 'email-sent', email });
-              const resp = await signIn('email', {
-                email,
-                redirect: false,
-                callbackUrl:
-                  searchParams.get('redirectAfterLogin') ??
-                  window.location.href,
-              });
+              const loc = new URL(window.location.toString());
+              const resp = await signIn(
+                'email',
+                {
+                  email,
+                  redirect: false,
+                  callbackUrl:
+                    searchParams.get('redirectAfterLogin') ?? loc.toString(),
+                },
+                loc.searchParams
+              );
               if (resp && resp.ok) {
                 // Aggressively pre-load stuff for user
                 loadWorkspaces();

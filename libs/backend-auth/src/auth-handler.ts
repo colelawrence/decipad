@@ -6,7 +6,7 @@ import { app, auth as authConfig, thirdParty } from '@decipad/backend-config';
 import { jwt } from '@decipad/services/authentication';
 import tables from '@decipad/tables';
 import Boom from '@hapi/boom';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
+import { APIGatewayProxyHandlerV2, APIGatewayProxyEventV2 } from 'aws-lambda';
 import pick from 'lodash.pick';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import adaptReqRes from './adapt-req-res';
@@ -21,19 +21,14 @@ const {
 } = authConfig();
 
 export function createAuthHandler(): APIGatewayProxyHandlerV2 {
-  const providers = [
-    // Github(githubConfig), // uncommment this when enabling Github logins
-    Email(),
-  ];
+  const providers = (event: APIGatewayProxyEventV2) => [Email(event)];
 
-  const callbacks: NextAuthOptions['callbacks'] = {
+  const callbacks = (
+    event: APIGatewayProxyEventV2
+  ): NextAuthOptions['callbacks'] => ({
     async signIn({ user, account }) {
-      // uncommment this when enabling Github logins
-      // if (account.provider === 'github' && metadata && metadata.id) {
-      //   return signInGithub(user, account, metadata);
-      // }
       if (account?.type === 'email') {
-        if (!(await signInEmail(user as UserWithSecret, account))) {
+        if (!(await signInEmail(event, user as UserWithSecret, account))) {
           throw Boom.forbidden(
             `It looks like your email isn't allowed yet. We are in closed beta, so hopefully your turn is coming up soon.`
           );
@@ -120,15 +115,17 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
 
       return session;
     },
-  };
+  });
 
-  const events: NextAuthOptions['events'] = {
+  const events = (
+    event: APIGatewayProxyEventV2
+  ): NextAuthOptions['events'] => ({
     signIn: async (message) => {
-      await identify(message.user.id, {
+      await identify(event, message.user.id, {
         email: message.user.email,
         fullName: message.user.name,
       });
-      await track({
+      await track(event, {
         event: 'sign in',
         userId: message.user.id,
         properties: {
@@ -138,30 +135,30 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
     },
 
     signOut: async (message) => {
-      await track({
+      await track(event, {
         event: 'sign out',
         properties: {
           email: message.session?.user?.email,
         },
       });
     },
-  };
+  });
 
   const adapterOptions = {
     secret: jwtConfig.secret,
     baseUrl: app().urlBase,
   };
 
-  const options: NextAuthOptions = {
+  const options = (event: APIGatewayProxyEventV2): NextAuthOptions => ({
     session: {
       strategy: 'jwt',
       maxAge: jwtConfig.maxAge,
     },
-    providers,
-    callbacks,
-    events,
+    providers: providers(event),
+    callbacks: callbacks(event),
+    events: events(event),
     jwt,
-    adapter: adapter(adapterOptions),
+    adapter: adapter(event, adapterOptions),
     debug: !!process.env.DEBUG,
     pages: {
       verifyRequest: '/verifyEmail',
@@ -174,7 +171,7 @@ export function createAuthHandler(): APIGatewayProxyHandlerV2 {
       logo: '/docs/img/deci-logo-brand.png',
       brandColor: 'rgb(243, 254, 225)',
     },
-  };
+  });
 
-  return adaptReqRes(NextAuth(options));
+  return (event) => adaptReqRes(NextAuth(options(event)))(event);
 }

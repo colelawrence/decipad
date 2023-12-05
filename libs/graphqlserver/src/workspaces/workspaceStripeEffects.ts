@@ -19,7 +19,13 @@ export const withSubscriptionSideEffects = <TArgs>(
     const result = await fn(parent, args, context);
 
     const workspaceId = result.id;
-    await syncWorkspaceSeats(parent, { id: workspaceId }).catch((err) => {
+    await syncWorkspaceSeats(
+      parent as { id: string },
+      {
+        id: workspaceId,
+      },
+      context
+    ).catch((err) => {
       // eslint-disable-next-line no-console
       console.error('Error running syncWorkspaceSeats:', err);
     });

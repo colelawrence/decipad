@@ -173,7 +173,7 @@ export default {
       const workspace = await data.workspaces.get({ id });
 
       if (workspace?.isPremium) {
-        await cancelSubscriptionFromWorkspaceId(id);
+        await cancelSubscriptionFromWorkspaceId(context.event, id);
       }
 
       // TODO should we use Promise.all?

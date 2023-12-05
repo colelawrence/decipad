@@ -7,6 +7,7 @@ import tables from '@decipad/tables';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { track } from '@decipad/backend-analytics';
 import { GraphQLError } from 'graphql';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export const getWorkspaceExecutedQuery = async (
   workspaceId: string
@@ -16,6 +17,7 @@ export const getWorkspaceExecutedQuery = async (
 };
 
 export const incrementQueryCount = async (
+  event: APIGatewayProxyEventV2,
   workspaceId: string
 ): Promise<WorkspaceExecutedQueryRecord> => {
   const data = await tables();
@@ -53,7 +55,7 @@ export const incrementQueryCount = async (
   const { queryCount } = executedQuery;
 
   if (queryCount >= maxCreditsPerPlan) {
-    await track({
+    await track(event, {
       event: 'Query execution limit exceeded',
       properties: {
         workspaceId,
@@ -76,7 +78,7 @@ export const incrementQueryCount = async (
 
     await data.workspacexecutedqueries.put(newQuery);
 
-    await track({
+    await track(event, {
       event: 'Query execution updated',
       properties: {
         workspaceId,

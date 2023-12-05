@@ -13,6 +13,7 @@ import { boomify } from '@hapi/boom';
 import { monitor as monitorConfig } from '@decipad/backend-config';
 import { getDefined } from '@decipad/utils';
 import { captureException, initTrace, TraceOptions } from './captureException';
+import isPromise from 'is-promise';
 
 const {
   sentry: { dsn: sentryDSN },
@@ -76,8 +77,8 @@ export const trace = <
   handle: Handler<TReq, TRes>,
   options: TraceOptions = {}
 ): Handler<TReq, TRes> => {
-  const handler: Handler<TReq, TRes> = (event, context, callback) =>
-    SentryAWSLambda.continueTrace(
+  const handler: Handler<TReq, TRes> = (event, context, callback) => {
+    const res = SentryAWSLambda.continueTrace(
       {
         baggage: event.headers?.baggage,
         sentryTrace: event.headers?.['sentry-trace'],
@@ -91,6 +92,13 @@ export const trace = <
         return handle(event, context, callback);
       }
     );
+    if (isPromise(res)) {
+      return res.finally(() => {
+        SentryAWSLambda.flush();
+      });
+    }
+    return res;
+  };
   if (initTrace(options)) {
     return handleErrors(handler);
   }

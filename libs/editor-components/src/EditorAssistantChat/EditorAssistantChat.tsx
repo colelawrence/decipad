@@ -3,11 +3,8 @@ import { useAssistantChat } from './hooks';
 import { useAISettings, useAiUsage } from '@decipad/react-contexts';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { useCallback } from 'react';
-import {
-  EElementOrText,
-  insertNodes,
-  setSelection,
-} from '@udecode/plate-common';
+import { EElementOrText, insertNodes } from '@udecode/plate-common';
+import { setSelection } from '@decipad/editor-utils';
 
 type EditorAssistantChatProps = {
   notebookId: string;
@@ -34,7 +31,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   const generatingChatResponse = useAISettings(
     (state) => state.generatingChatResponse
   );
-  insertNodes;
+  // eslint-disable-next-line no-underscore-dangle
   const _insertNodes = useCallback(
     (node: EElementOrText<MyValue> | EElementOrText<MyValue>[]) => {
       const path = editor.selection?.anchor.path[0] || 1;
@@ -44,7 +41,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
       const anchor = { offset: 0, path: [path, 0] };
       setTimeout(() => setSelection(editor, { anchor, focus: anchor }), 0);
     },
-    []
+    [editor]
   );
 
   return (

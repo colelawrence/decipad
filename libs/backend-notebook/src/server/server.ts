@@ -1,5 +1,8 @@
 import { notAcceptable } from '@hapi/boom';
-import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import {
+  APIGatewayProxyStructuredResultV2,
+  APIGatewayProxyEventV2,
+} from 'aws-lambda';
 import stringify from 'json-stringify-safe';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
@@ -16,6 +19,7 @@ import { track } from '@decipad/backend-analytics';
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
 export const server = async (
+  event: APIGatewayProxyEventV2,
   notebookId: string | undefined,
   actionName: keyof typeof actions,
   params: Record<string, unknown>
@@ -24,7 +28,7 @@ export const server = async (
   if (!action) {
     throw notAcceptable(`Unknown function ${actionName as string}`);
   }
-  track({
+  track(event, {
     event: `AI-Action:${actionName}`,
     properties: params,
   });

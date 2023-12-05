@@ -57,7 +57,7 @@ export const handler: APIGatewayProxyHandlerV2 = handle(
     }
     const body = parseBody(event);
 
-    const response = await server(notebookId, action as any, {
+    const response = await server(event, notebookId, action as any, {
       ...rest,
       ...body,
     });

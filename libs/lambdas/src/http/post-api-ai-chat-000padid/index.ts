@@ -3,7 +3,6 @@ import Boom from '@hapi/boom';
 import { app, thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
-import handle from '../handle';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
@@ -21,6 +20,7 @@ import {
   getResources,
   updateWorkspaceAndUserResourceUsage,
 } from './helpers';
+import handle from '../handle';
 import { debug } from '../../debug';
 import { functions } from './functions';
 
@@ -68,7 +68,7 @@ Your function should NEVER accept sensitive information like API keys as argumen
 You should use JSDoc comments to decribe the function's parameters.
 You should think through the problem and then output the code in a single JavaScript codeblock at the END of your message.
 You should return either a string, number, boolean, or table-like object. If the data is suitable for tabulation then you should process the data so that it is of the form:
-{ 
+{
   key1: [value1a, value1b],
   key2: [value2a, value2b],
 }
@@ -241,7 +241,7 @@ export const handler = handle(async (event) => {
       },
     });
 
-    track({
+    track(event, {
       event: `ApiChatLambda-mode:mode-choice`,
       userId: user.id,
       properties: {
@@ -257,16 +257,16 @@ export const handler = handle(async (event) => {
     let mode: AIMode = 'ask';
     if (parsedContent.conversation >= 0.5) {
       mode = 'ask';
-      track({
+      track(event, {
         event: `ApiChatLambda-mode:ask`,
       });
     } else if (parsedContent.modelling >= 0.5) {
       mode = 'create';
-      track({
+      track(event, {
         event: `ApiChatLambda-mode:create`,
       });
     } else {
-      track({
+      track(event, {
         event: `ApiChatLambda-mode:fetch_data`,
       });
       mode = 'fetch_data';
@@ -298,7 +298,7 @@ export const handler = handle(async (event) => {
           },
         });
 
-        track({
+        track(event, {
           event: `ApiChatLambda-mode:ask`,
           userId: user.id,
           properties: {
@@ -336,7 +336,7 @@ export const handler = handle(async (event) => {
           },
         });
 
-        track({
+        track(event, {
           event: `ApiChatLambda-mode:model`,
           userId: user.id,
           properties: {
@@ -375,7 +375,7 @@ export const handler = handle(async (event) => {
           },
         });
 
-        track({
+        track(event, {
           event: `ApiChatLambda-mode:fetch_data`,
           userId: user.id,
           properties: {

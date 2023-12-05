@@ -1,4 +1,4 @@
-import { Workspace } from '@decipad/backendtypes';
+import { GraphqlContext, Workspace } from '@decipad/backendtypes';
 import {
   incrementQueryCount,
   getWorkspaceExecutedQuery,
@@ -12,9 +12,13 @@ export default {
   },
 
   Mutation: {
-    incrementQueryCount: async (_: unknown, args: { id: string }) => {
+    incrementQueryCount: async (
+      _: unknown,
+      args: { id: string },
+      context: GraphqlContext
+    ) => {
       const workspaceId = args.id;
-      return incrementQueryCount(workspaceId);
+      return incrementQueryCount(context.event, workspaceId);
     },
   },
 };

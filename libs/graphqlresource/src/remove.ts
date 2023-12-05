@@ -40,6 +40,7 @@ export function remove<
     ]);
 
     await track(
+      context.event,
       {
         userId: context.user?.id,
         event: `${resourceType.humanName} removed`,

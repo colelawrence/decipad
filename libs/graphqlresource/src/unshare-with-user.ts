@@ -53,6 +53,7 @@ export function unshareWithUser<
     const user = loadUser(context);
 
     await track(
+      context.event,
       {
         userId: user?.id,
         event: `unshared with user`,

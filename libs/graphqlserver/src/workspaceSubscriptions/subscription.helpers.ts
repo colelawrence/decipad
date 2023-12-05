@@ -8,6 +8,7 @@ import {
   WorkspaceSubscriptionRecord,
 } from '@decipad/backendtypes';
 import { track } from '@decipad/backend-analytics';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const stripeConfig = thirdParty().stripe;
 const stripe = new Stripe(stripeConfig.secretKey, {
@@ -57,6 +58,7 @@ export const findSubscriptionByWorkspaceId = async (workspaceId: string) => {
 };
 
 export const updateStripeIfNeeded = async (
+  event: APIGatewayProxyEventV2,
   subs: WorkspaceSubscriptionRecord,
   newQuantity: number
 ) => {
@@ -73,7 +75,7 @@ export const updateStripeIfNeeded = async (
     quantity: newQuantity,
   });
 
-  await track({
+  await track(event, {
     event: 'update Stripe subscription seats',
     properties: {
       stripeSubscriptionId: subscription.id,
@@ -94,14 +96,17 @@ export const cancelStripeSubscription = async (subscriptionId: ID) => {
   await stripe.subscriptions.cancel(subscriptionId);
 };
 
-export const cancelSubscriptionFromWorkspaceId = async (workspaceId: ID) => {
+export const cancelSubscriptionFromWorkspaceId = async (
+  event: APIGatewayProxyEventV2,
+  workspaceId: ID
+) => {
   const subscription = await findSubscriptionByWorkspaceId(workspaceId);
 
   if (!subscription) {
     throw new Error('Stripe Subscription does not exist');
   }
 
-  await track({
+  await track(event, {
     event: 'Stripe subscription deleted',
     properties: {
       id: subscription.id,
