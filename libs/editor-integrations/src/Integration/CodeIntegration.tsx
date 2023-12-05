@@ -3,12 +3,14 @@ import {
   useCodeConnectionStore,
   useComputer,
   useConnectionStore,
+  useNotebookId,
 } from '@decipad/react-contexts';
 import type { ResultMessageType } from '@decipad/safejs';
 import { useCallback, useEffect } from 'react';
-import { useDeciVariables, useIntegrationOptions, useWorker } from '../hooks';
+import { useDeciVariables, useIntegrationOptions } from '../hooks';
 import { importFromJSONAndCoercions } from '@decipad/import';
 import { ConcreteIntegrationBlock } from 'libs/editor-types/src/integrations';
+import { useWorker } from '@decipad/editor-hooks';
 
 /**
  * Code block integration, child of the regular IntegrationBlock
@@ -38,6 +40,7 @@ export const CodeIntegration = function CodeIntegration({
     }
   }, [computer, blockOptions.latestResult, id, varName, typeMappings]);
 
+  const notebookId = useNotebookId();
   const [worker] = useWorker(
     useCallback(
       (msg: ResultMessageType) => {
@@ -48,7 +51,8 @@ export const CodeIntegration = function CodeIntegration({
       },
       [computer, id, varName, typeMappings]
     ),
-    useCallback((e) => console.error(e), [])
+    useCallback((e) => console.error(e), []),
+    notebookId
   );
 
   useIntegrationOptions({

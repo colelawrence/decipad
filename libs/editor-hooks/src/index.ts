@@ -13,3 +13,4 @@ export * from './useWasSelected';
 export * from './useEditorChange';
 export * from './useTabs';
 export * from './useActiveEditor';
+export * from './useWorker';

@@ -8,4 +8,4 @@ export interface AgentResponse {
   content: string;
 }
 
-export type AIMode = 'ask' | 'create';
+export type AIMode = 'ask' | 'create' | 'fetch_data';

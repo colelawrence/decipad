@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 
 export * from './useCreateIntegration';
 export * from './useEditorElements';
-export * from './useWorker';
 export * from './useIntegrationScreenFactory';
 export * from './useNotionQuery';
 export * from './useDeciVariables';

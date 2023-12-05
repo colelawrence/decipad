@@ -9,6 +9,8 @@ import { css } from '@emotion/react';
 
 import { cssVar } from '../../primitives';
 import { Message } from '@decipad/react-contexts';
+import { EElementOrText } from '@udecode/plate-common';
+import { MyValue } from '@decipad/editor-types';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -23,10 +25,15 @@ const wrapperStyles = css({
 });
 
 type AssistantChatProps = {
+  readonly notebookId: string;
+  readonly workspaceId: string;
   readonly messages: Message[];
   readonly sendMessage: (content: string) => void;
   readonly clearChat: () => void;
   readonly isGenerating: boolean;
+  readonly insertNodes: (
+    ops: EElementOrText<MyValue> | EElementOrText<MyValue>[]
+  ) => void;
   readonly aiCreditsUsed?: number;
   readonly aiQuotaLimit?: number;
   readonly isPremium?: boolean;
@@ -34,9 +41,12 @@ type AssistantChatProps = {
 
 export const AssistantChat: React.FC<AssistantChatProps> = ({
   messages,
+  notebookId,
+  workspaceId,
   sendMessage,
   clearChat,
   isGenerating,
+  insertNodes,
   aiCreditsUsed,
   aiQuotaLimit,
   isPremium = false,
@@ -50,7 +60,12 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
         isPremium={isPremium}
       />
 
-      <AssistantMessageList messages={messages} />
+      <AssistantMessageList
+        messages={messages}
+        notebookId={notebookId}
+        workspaceId={workspaceId}
+        insertNodes={insertNodes}
+      />
 
       <AssistantMessageInput
         onSubmit={sendMessage}

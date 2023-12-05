@@ -22,6 +22,7 @@ import {
 } from './notebook-mutations';
 import { MyEditor } from '@decipad/editor-types';
 import { RemoteComputer } from '@decipad/remote-computer';
+import { parseIntegration } from '@decipad/utils';
 import { AiUsage } from '@decipad/interfaces';
 
 type ModelAgentOptions = {
@@ -110,63 +111,86 @@ export const useAgent = ({ notebookId, editor }: ModelAgentOptions) => {
         }: { mode: AIMode; message: ChatCompletionMessage; usage: AiUsage } =
           await response.json();
 
-        updateUsage(usage);
+        switch (mode) {
+          case 'ask': {
+            handleDeleteMessage(eventMessage.id);
+            updateUsage(usage);
 
-        if (mode === 'create') {
-          if (message.function_call) {
-            const { function_call: functionCall } = message;
-
-            let args: any = {};
-
-            try {
-              args = JSON.parse(functionCall.arguments);
-            } catch (err) {
-              throw new Error('Could not parse arguments');
-            }
-
-            const newEvent = {
-              id: nanoid(),
-              content: humanizeFunctionName(functionCall.name),
-              function_call: functionCall,
-            };
-
-            handleUpdateEventMessage(eventMessage.id, newEvent);
-
-            const updatedMessages = messages.map((msg) => {
-              if (msg.id === eventMessage.id && msg.type === 'event') {
-                return {
-                  ...msg,
-                  events: [...(msg.events || []), newEvent],
-                };
-              }
-              return msg;
+            const newResponseId = nanoid();
+            handleAddMessage({
+              type: 'assistant',
+              id: newResponseId,
+              content: message.content || "Couldn't come up with a response...",
+              status: 'success',
+              timestamp: Date.now(),
+              replyTo: userMessage.id,
             });
-
-            updateDoc(functionCall.name, args, editor, computer);
-            // Recursively call the agent again until we get a response without a function call
-            return initAgent(updatedMessages, userMessage, eventMessage);
+            break;
           }
-          handleUpdateMessageStatus(eventMessage.id, 'success');
-          handleAddMessage({
-            type: 'assistant',
-            id: nanoid(),
-            content: message.content || 'All done! What else can I help with?',
-            timestamp: Date.now(),
-            replyTo: userMessage.id,
-            status: 'success',
-          });
-        } else {
-          handleDeleteMessage(eventMessage.id);
+          case 'create': {
+            if (message.function_call) {
+              const { function_call: functionCall } = message;
 
-          const newResponseId = nanoid();
-          handleAddMessage({
-            type: 'assistant',
-            id: newResponseId,
-            content: message.content || "Couldn't come up with a response...",
-            status: 'success',
-            timestamp: Date.now(),
-            replyTo: userMessage.id,
-          });
+              let args: any = {};
+
+              try {
+                args = JSON.parse(functionCall.arguments);
+              } catch (err) {
+                throw new Error('Could not parse arguments');
+              }
+
+              const newEvent = {
+                id: nanoid(),
+                content: humanizeFunctionName(functionCall.name),
+                function_call: functionCall,
+              };
+
+              handleUpdateEventMessage(eventMessage.id, newEvent);
+
+              const updatedMessages = messages.map((msg) => {
+                if (msg.id === eventMessage.id && msg.type === 'event') {
+                  return {
+                    ...msg,
+                    events: [...(msg.events || []), newEvent],
+                  };
+                }
+                return msg;
+              });
+
+              updateDoc(functionCall.name, args, editor, computer);
+              // Recursively call the agent again until we get a response without a function call
+              return initAgent(updatedMessages, userMessage, eventMessage);
+            }
+            handleUpdateMessageStatus(eventMessage.id, 'success');
+            handleAddMessage({
+              type: 'assistant',
+              id: nanoid(),
+              content:
+                message.content || 'All done! What else can I help with?',
+              timestamp: Date.now(),
+              replyTo: userMessage.id,
+              status: 'success',
+            });
+            break;
+          }
+          case 'fetch_data': {
+            handleDeleteMessage(eventMessage.id);
+            if (!message.content) {
+              throw new Error('No content in response');
+            }
+            const parsed = await parseIntegration(message.content);
+            const newResponseId = nanoid();
+            handleAddMessage({
+              type: 'assistant',
+              id: newResponseId,
+              content: message.content || "Couldn't come up with a response...",
+              status: 'success',
+              timestamp: Date.now(),
+              replyTo: userMessage.id,
+              ...(parsed ? { integrationData: parsed } : {}),
+            });
+            break;
+          }
         }
       } catch (err) {
         console.error(err);

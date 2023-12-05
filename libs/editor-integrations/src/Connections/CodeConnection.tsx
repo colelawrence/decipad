@@ -9,6 +9,7 @@ import {
   useCodeConnectionStore,
   useConnectionStore,
   useCurrentWorkspaceStore,
+  useNotebookId,
 } from '@decipad/react-contexts';
 import type { ErrorMessageType, WorkerMessageType } from '@decipad/safejs';
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
@@ -27,8 +28,9 @@ import {
   RemoteData,
   useRdFetch,
 } from 'libs/editor-components/src/AIPanel/hooks';
-import { useDeciVariables, useWorker } from '../hooks';
+import { useDeciVariables } from '../hooks';
 import { ConnectionProps } from './types';
+import { useWorker } from '@decipad/editor-hooks';
 
 const fieldsetStyles = css({
   display: 'grid',
@@ -296,7 +298,8 @@ export const CodeConnection: FC<ConnectionProps> = ({
     [onExecute, setResultPreview]
   );
 
-  const [worker, resetWorker] = useWorker(msgStream, errorStream);
+  const notebookId = useNotebookId();
+  const [worker, resetWorker] = useWorker(msgStream, errorStream, notebookId);
 
   useEffect(() => {
     const sub = onReset.subscribe(resetWorker);

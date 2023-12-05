@@ -31,7 +31,14 @@ describe('<AssistantMessageList />', () => {
   ];
 
   it('renders without crashing', () => {
-    const { getByTestId } = render(<AssistantMessageList messages={[]} />);
+    const { getByTestId } = render(
+      <AssistantMessageList
+        messages={[]}
+        notebookId=""
+        workspaceId=""
+        insertNodes={() => {}}
+      />
+    );
     expect(getByTestId('assistant-message-list')).toBeInTheDocument();
   });
 
@@ -43,7 +50,12 @@ describe('<AssistantMessageList />', () => {
           expires: new Date(Date.now() + 100000000).toISOString(),
         }}
       >
-        <AssistantMessageList messages={mockMessages} />
+        <AssistantMessageList
+          messages={mockMessages}
+          notebookId=""
+          workspaceId=""
+          insertNodes={() => {}}
+        />
       </SessionProvider>
     );
 

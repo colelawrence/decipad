@@ -546,6 +546,11 @@ type NewAssistantProps = {
 const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const docsync = useContext(DocsyncEditorProvider);
 
+  const actions = useNotebookStateAndActions({
+    notebookId,
+    docsync,
+  });
+
   const editor = useActiveEditor(docsync);
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
@@ -584,6 +589,7 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
       >
         <AssistantChat
           notebookId={notebookId}
+          workspaceId={actions.notebook?.workspace?.id ?? ''}
           editor={editor}
           aiQuotaLimit={quotaLimit}
           isPremium={Boolean(isPremium)}

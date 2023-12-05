@@ -12,6 +12,8 @@ import {
 } from '../../molecules';
 import { Message } from '@decipad/react-contexts';
 import { useLayoutEffect, useRef } from 'react';
+import { EElementOrText } from '@udecode/plate-common';
+import { MyValue } from '@decipad/editor-types';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -44,10 +46,18 @@ const messageWrapperStyles = css({
 
 type AssistantMessageListProps = {
   readonly messages: Message[];
+  readonly notebookId: string;
+  readonly workspaceId: string;
+  readonly insertNodes: (
+    op: EElementOrText<MyValue> | EElementOrText<MyValue>[]
+  ) => void;
 };
 
 export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
   messages,
+  notebookId,
+  workspaceId,
+  insertNodes,
 }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -97,7 +107,13 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 }}
                   >
-                    <ChatAssistantMessage key={id} message={entry} />
+                    <ChatAssistantMessage
+                      key={id}
+                      message={entry}
+                      notebookId={notebookId}
+                      workspaceId={workspaceId}
+                      insertNodes={insertNodes}
+                    />
                   </motion.div>
                 );
               }

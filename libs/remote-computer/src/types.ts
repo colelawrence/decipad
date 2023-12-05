@@ -21,6 +21,8 @@ import DeciNumber from '@decipad/number';
 import { ProgramBlock } from '../../computer/src/types';
 import { ErrSpec, SerializedType } from '@decipad/language';
 
+export type { ErrSpec };
+
 export interface ContextStats {
   inferProgramCount: number;
   inferStatementCount: number;
