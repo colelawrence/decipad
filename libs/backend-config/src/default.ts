@@ -73,6 +73,9 @@ const defaultEnvValues = {
   DISCORD_FEEDBACK_CHANNEL_TOKEN:
     'rJLUz9bxS-oRyvOEH5dW8ZBM-9qi4Wme0do7JJ_T7Dpg0ZLQo4-pyNCTy8TmhWg9uyJB',
   DISCORD_FEEDBACK_CHANNEL_ID: '1164225554824826961',
+  DECI_MAX_CREDITS_FREE: '50',
+  DECI_MAX_CREDITS_PRO: '500',
+  DECI_OPEN_AI_TOKENS_LIMIT: '50000',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

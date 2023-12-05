@@ -1,10 +1,10 @@
-import {
-  OPEN_AI_TOKENS_LIMIT,
+import { limits } from '@decipad/backend-config';
+import type {
   ResourceUsageRecord,
   ResourceUsageTypes,
 } from '@decipad/backendtypes';
 import tables, {
-  ResourceKeyParams,
+  type ResourceKeyParams,
   getResourceUsageKey,
 } from '@decipad/tables';
 
@@ -54,7 +54,7 @@ export const getAiUsage = async (
     .filter((t): t is ResourceUsageRecord => t != null)
     .map((t) => ({
       ...t,
-      quotaLimit: OPEN_AI_TOKENS_LIMIT,
+      quotaLimit: limits().openAiTokensLimit,
       resourceType: 'openai',
     }));
 };

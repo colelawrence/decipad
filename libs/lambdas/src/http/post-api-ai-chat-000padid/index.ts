@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
-import { app, thirdParty } from '@decipad/backend-config';
+import { app, limits, thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
@@ -14,7 +14,6 @@ import {
 import { AIMode } from 'libs/editor-components/src/EditorAssistantChat/types';
 import { tables } from '@decipad/tables';
 import { track } from '@decipad/backend-analytics';
-import { OPEN_AI_TOKENS_LIMIT } from '@decipad/backendtypes';
 import {
   COMPLETION_TOKENS_USED,
   PROMPT_TOKENS_USED,
@@ -158,7 +157,7 @@ export const handler = handle(async (event) => {
   const workspaceTotalTokensUsed =
     (promptTokens?.consumption ?? 0) + (completionTokens?.consumption ?? 0);
 
-  if (workspaceTotalTokensUsed > OPEN_AI_TOKENS_LIMIT) {
+  if (workspaceTotalTokensUsed > limits().openAiTokensLimit) {
     debug('Reminder: Not blocking users from usage!!!');
     // NOTE: For testing in DEV we won't block users from making requests.
     // CHANGE ME BEFORE GOING INTO PROD!!!

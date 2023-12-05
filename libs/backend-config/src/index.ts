@@ -121,6 +121,12 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DISCORD_FEEDBACK_CHANNEL_TOKEN);
     case 'DISCORD_FEEDBACK_CHANNEL_ID':
       return valueOrDefault(name, process.env.DISCORD_FEEDBACK_CHANNEL_ID);
+    case 'DECI_MAX_CREDITS_FREE':
+      return valueOrDefault(name, process.env.DECI_MAX_CREDITS_FREE);
+    case 'DECI_MAX_CREDITS_PRO':
+      return valueOrDefault(name, process.env.DECI_MAX_CREDITS_PRO);
+    case 'DECI_OPEN_AI_TOKENS_LIMIT':
+      return valueOrDefault(name, process.env.DECI_OPEN_AI_TOKENS_LIMIT);
   }
 }
 
@@ -205,6 +211,16 @@ export function auth() {
       maxAge: Number(env('JWT_MAX_AGE')),
     },
     testUserSecret: env('DECI_TEST_USER_SECRET'),
+  };
+}
+
+export function limits() {
+  return {
+    maxCredits: {
+      free: Number(env('DECI_MAX_CREDITS_FREE')),
+      pro: Number(env('DECI_MAX_CREDITS_PRO')),
+    },
+    openAiTokensLimit: Number(env('DECI_OPEN_AI_TOKENS_LIMIT')),
   };
 }
 

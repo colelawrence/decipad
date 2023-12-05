@@ -1,12 +1,10 @@
 import { timestamp } from '@decipad/backend-utils';
-import {
-  WorkspaceExecutedQueryRecord,
-  MAX_CREDITS_EXEC_COUNT,
-} from '@decipad/backendtypes';
+import { type WorkspaceExecutedQueryRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { ApolloServerErrorCode } from '@apollo/server/errors';
 import { track } from '@decipad/backend-analytics';
 import { GraphQLError } from 'graphql';
+import { limits } from '@decipad/backend-config';
 
 export const getWorkspaceExecutedQuery = async (
   workspaceId: string
@@ -34,8 +32,8 @@ export const incrementQueryCount = async (
     id: workspaceId,
   });
   const maxCreditsPerPlan = workspace.isPremium
-    ? MAX_CREDITS_EXEC_COUNT.pro
-    : MAX_CREDITS_EXEC_COUNT.free;
+    ? limits().maxCredits.pro
+    : limits().maxCredits.free;
 
   if (!executedQuery) {
     const execQuery = {

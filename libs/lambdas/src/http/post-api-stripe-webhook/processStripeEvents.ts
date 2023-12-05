@@ -3,8 +3,8 @@
 import { Stripe } from 'stripe';
 import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
-import { MAX_CREDITS_EXEC_COUNT } from '@decipad/backendtypes';
 import { timestamp, tables } from '@decipad/tables';
+import { limits } from '@decipad/backend-config';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
 
@@ -21,8 +21,8 @@ const updateQueryExecutionTable = async (
     await data.workspacexecutedqueries.put({
       ...queryExecutionRecord,
       quotaLimit: isPremium
-        ? MAX_CREDITS_EXEC_COUNT.pro
-        : MAX_CREDITS_EXEC_COUNT.free,
+        ? limits().maxCredits.pro
+        : limits().maxCredits.free,
     });
   }
 };
