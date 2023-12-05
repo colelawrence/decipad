@@ -7,14 +7,15 @@ import {
   ELEMENT_H3,
   ELEMENT_PLOT,
   ELEMENT_TABLE,
+  ELEMENT_TH,
   ELEMENT_VARIABLE_DEF,
 } from '../../../editor-types/src';
 import { AnyElement } from '../../../editor-types/src/value';
-import { codeLineVerbalizer } from './codeLine';
-import { defVerbalizer } from './def';
-import { tableVerbalizer } from './table';
+import { codeLineVarnameToId, codeLineVerbalizer } from './codeLine';
+import { defVarnameToId, defVerbalizer } from './def';
+import { columnVarnameToId, tableVarnameToId, tableVerbalizer } from './table';
 import { headingVerbalizer } from './headingVerbalizer';
-import { Verbalizer } from './types';
+import { VarnameToId, Verbalizer } from './types';
 import { defaultVerbalizer } from './default';
 import { captionVerbalizer } from './caption';
 
@@ -30,5 +31,15 @@ const verbalizers: Partial<Record<AnyElement['type'], Verbalizer>> = {
   [ELEMENT_CAPTION]: captionVerbalizer,
 };
 
+const varnameToIds: Partial<Record<AnyElement['type'], VarnameToId>> = {
+  [ELEMENT_CODE_LINE_V2]: codeLineVarnameToId,
+  [ELEMENT_VARIABLE_DEF]: defVarnameToId,
+  [ELEMENT_TABLE]: tableVarnameToId,
+  [ELEMENT_TH]: columnVarnameToId,
+};
+
 export const getVerbalizer = (element: AnyElement): Verbalizer | undefined =>
   verbalizers[element.type];
+
+export const getVarnameToId = (element: AnyElement): VarnameToId | undefined =>
+  varnameToIds[element.type];

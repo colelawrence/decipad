@@ -6,3 +6,6 @@ export type Verbalizer = (
   element: AnyElement,
   verbalize: LeafVerbalizer
 ) => string;
+
+type VarnameAndId = [string, string];
+export type VarnameToId = (element: AnyElement) => VarnameAndId;

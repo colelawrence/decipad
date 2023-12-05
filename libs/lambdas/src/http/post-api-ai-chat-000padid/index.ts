@@ -117,14 +117,28 @@ export const handler = handle(async (event) => {
   }
 
   let verbalizedDoc: string;
+  let varnameToId: string;
 
   try {
     const { verbalized } = verbalizeDoc(doc);
 
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
+
+    varnameToId = verbalized
+      .map((v) => [v.varName, v.element.id])
+      .filter(([v]) => v != null)
+      .join('\n');
   } catch (e) {
     throw Boom.internal('Unable to parse document');
   }
+
+  const varnameToIdMessage: ChatCompletionMessageParam = {
+    role: 'user',
+    content: `
+      This is a map between variable names and element IDs, use this to find out the element ID
+      when you have a variable name.
+      ${varnameToId}`,
+  };
 
   const { body: requestBodyRaw } = event;
   let requestBodyString: string;
@@ -158,6 +172,7 @@ export const handler = handle(async (event) => {
           content: DEFAULT_AUTO_MODE_SYSTEM_PROMPT,
         },
         verablizedDocMsg,
+        varnameToIdMessage,
         ...messages,
       ],
       response_format: { type: 'json_object' },
@@ -246,6 +261,7 @@ export const handler = handle(async (event) => {
             content: DEFAULT_CREATE_MODE_SYSTEM_PROMPT,
           },
           verablizedDocMsg,
+          varnameToIdMessage,
           ...messages,
         ],
         functions,

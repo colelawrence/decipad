@@ -9,7 +9,7 @@ import {
   RootDocument,
   TabElement,
 } from '../../editor-types/src';
-import { getVerbalizer } from './verbalizers';
+import { getVerbalizer, getVarnameToId } from './verbalizers';
 import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
 import { getNodeString } from './utils/getNodeString';
 
@@ -17,6 +17,7 @@ export interface VerbalizedElement {
   element: AnyElement;
   verbalized: string;
   tags: Set<string>;
+  varName?: string;
 }
 
 export interface DocumentVerbalization {
@@ -64,11 +65,26 @@ export const verbalizeElement = (
     verbalized = v(element, verbalizeOneNode);
   }
 
+  const varnameMapper = getVarnameToId(element);
+
+  if (!varnameMapper) {
+    return [
+      {
+        element,
+        verbalized,
+        tags,
+      },
+    ];
+  }
+
+  const [varName] = varnameMapper(element);
+
   return [
     {
       element,
       verbalized,
       tags,
+      varName,
     },
   ];
 };

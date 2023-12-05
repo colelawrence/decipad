@@ -61,6 +61,23 @@ describe('verbalizeDoc', () => {
         Set {},
       ]
     `);
+
+    expect(
+      verbalized
+        .map((v) => [v.element.id, v.varName])
+        .filter(([, varname]) => varname != null)
+    ).toMatchInlineSnapshot(`
+      [
+        [
+          "FDSffDfa3refdsFsdf",
+          "VarName1",
+        ],
+        [
+          "fjsdfdofsd3-e3dsdcj",
+          "VarName2",
+        ],
+      ]
+    `);
   });
 
   it('verbalizes some simple UI components', () => {
@@ -128,6 +145,35 @@ describe('verbalizeDoc', () => {
           "table-column-formula",
           "smart-ref",
         },
+      ]
+    `);
+
+    expect(
+      verbalized
+        .map((v) => [v.element.id, v.varName])
+        .filter(([, varname]) => varname != null)
+    ).toMatchInlineSnapshot(`
+      [
+        [
+          "QeyklnGhr7iEZvZ1ntElO",
+          "Slider",
+        ],
+        [
+          "OcOgbmVNoCfO01wmhFkKO",
+          "UnitCostGrowth",
+        ],
+        [
+          "OcOgbmVNoCfO01wmhFkKO",
+          "StartDate",
+        ],
+        [
+          "nDm8PqFEVkHrR9uLsOQqT",
+          "Dropdown1",
+        ],
+        [
+          "c9z4Gq_NFAzSQjEzufgxt",
+          "Historicals",
+        ],
       ]
     `);
   });

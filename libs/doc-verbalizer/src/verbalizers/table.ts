@@ -1,9 +1,10 @@
 import { identity, transpose } from 'ramda';
 import { assertElementType } from '../utils/assertElementType';
-import { Verbalizer } from './types';
+import { VarnameToId, Verbalizer } from './types';
 import stringify from 'json-stringify-safe';
 import {
   ELEMENT_TABLE,
+  ELEMENT_TH,
   TableColumnFormulaElement,
   TableHeaderElement,
 } from '../../../editor-types/src';
@@ -54,4 +55,16 @@ ${columns
   .join('\n')}
 }
 \`\`\``;
+};
+
+export const tableVarnameToId: VarnameToId = (element) => {
+  assertElementType(element, ELEMENT_TABLE);
+  const [caption] = element.children;
+  const [varname] = caption.children;
+  return [getNodeString(varname), element.id];
+};
+
+export const columnVarnameToId: VarnameToId = (element) => {
+  assertElementType(element, ELEMENT_TH);
+  return [getNodeString(element), element.id];
 };
