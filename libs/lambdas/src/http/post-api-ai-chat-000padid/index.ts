@@ -36,6 +36,7 @@ You are responsible for determining intent of the user message.
 Your only options are 'conversation', 'fetch_data' and 'modelling'.
 Conversation is when user is asking a question, making a statement or asking for help, implying they need to be asked follow-up questions, or you don't have sufficient information to suggest modelling.
 Modelling is when user is making a change to the document, implying they don't need to be asked follow-up questions.
+Modelling is when the user is asking you to fetch data from an external API.
 Respond with a valid JSON that represents chance of each intent.
 Make sure JSON is valid and can be parsed by JSON.parse().
 Example: { "conversation": 0.8, "modelling": 0.2 "fetch_data": 0.1}
@@ -261,8 +262,13 @@ export const handler = handle(async (event) => {
       });
     } else if (parsedContent.modelling >= 0.5) {
       mode = 'create';
+      track({
+        event: `ApiChatLambda-mode:create`,
+      });
     } else {
-      // HACK
+      track({
+        event: `ApiChatLambda-mode:fetch_data`,
+      });
       mode = 'fetch_data';
     }
 
