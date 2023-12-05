@@ -24,6 +24,7 @@ import { useAutoAnimate } from './hooks';
 import { useWriteLock } from './utils/useWriteLock';
 import { Scrubber } from 'slate';
 import { editorOnCopy } from './utils/editorOnCopy';
+import { editorOnPaste } from './utils/editorOnPaste';
 
 export interface EditorProps {
   notebookId: string;
@@ -139,6 +140,7 @@ export const Editor = (props: EditorProps) => {
                     }}
                     editableProps={{
                       onCopy: (e) => editorOnCopy(e, editor),
+                      onPaste: (e) => editorOnPaste(e, editor),
                     }}
                   >
                     <InsidePlate {...props} containerRef={containerRef} />
