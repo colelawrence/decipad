@@ -400,4 +400,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_INTEGRATION,
   ELEMENT_DISPLAY,
   ELEMENT_IFRAME,
+  ELEMENT_MEDIA_EMBED,
 ];
