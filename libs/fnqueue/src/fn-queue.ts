@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { PromiseOrType, noop } from '@decipad/utils';
+import { PromiseOrType, noop, timeout } from '@decipad/utils';
 
 type AsyncFunction<T> = () => PromiseOrType<T>;
 type Fn<T> = (value: T) => void;
@@ -14,7 +14,7 @@ type FunctionQueue = {
 export interface FnQueueOptions {
   onError?: (err: unknown, finalRetry: boolean) => unknown;
   maxRetries?: number;
-  isRetryable?: (err: unknown) => boolean;
+  isRetryable?: (err: unknown) => boolean | number;
 }
 
 const returnsFalse = () => false;
@@ -32,19 +32,31 @@ export function fnQueue({
 
   async function callFn<T>(
     fn: AsyncFunction<T>,
-    previousRetryCount = 0
+    previousRetryCount = 0,
+    waitFor = 0
   ): Promise<T> {
     const handleError = (err: unknown) => {
-      if (previousRetryCount < maxRetries && isRetryable(err)) {
-        onError(err, false);
-        if (!isTesting) {
-          console.log('going to retry');
+      if (previousRetryCount < maxRetries) {
+        const shouldRetry = isRetryable(err);
+        if (shouldRetry) {
+          onError(err, false);
+          if (!isTesting) {
+            console.log('going to retry');
+          }
+          if (shouldRetry === true) {
+            return callFn(fn, previousRetryCount + 1);
+          }
+          // should retry is a number, so it gives you a timeout to wait for
+          return callFn(fn, previousRetryCount + 1, shouldRetry);
         }
-        return callFn(fn, previousRetryCount + 1);
       }
       onError(err, true);
       throw err;
     };
+
+    if (waitFor) {
+      await timeout(waitFor);
+    }
 
     try {
       return Promise.resolve(fn()).catch(handleError);
