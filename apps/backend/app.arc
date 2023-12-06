@@ -480,8 +480,8 @@ reset-querycount cron(0 0 1 * ? *)
 @search
 availabilityZoneCount 1
 instanceCount 1
-instanceType t3.medium.search
-volumeSize 100
+instanceType t3.small.search
+volumeSize 50
 
 @plugins
 s3
