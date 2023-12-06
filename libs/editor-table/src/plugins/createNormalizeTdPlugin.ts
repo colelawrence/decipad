@@ -8,6 +8,7 @@ import {
 import { normalizeExcessProperties } from '../../../editor-plugins/src/utils/normalize';
 import { createNormalizerPluginFactory } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
+const restrictedChildren = ['img'];
 export const createNormalizeTdPlugin = <
   TV extends Value,
   TE extends PlateEditor<TV>
@@ -19,6 +20,9 @@ export const createNormalizeTdPlugin = <
       (editor) =>
       (entry): NormalizerReturnValue => {
         for (const child of getChildren(entry)) {
+          if (restrictedChildren.includes(child[0].type as string)) {
+            editor.removeNodes({ at: child[1] });
+          }
           const normalize = normalizeExcessProperties(editor, child);
           if (normalize) {
             return normalize;
