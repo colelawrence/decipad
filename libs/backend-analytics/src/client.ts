@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import {
   Analytics as AnalyticsClient,
+  AnalyticsSettings,
   TrackParams,
 } from '@segment/analytics-node';
 import { analytics } from '@decipad/backend-config';
@@ -43,14 +44,22 @@ class MyAnalyticsClient extends AnalyticsClient {
 
 const clientForEvent = new WeakMap<APIGatewayProxyEventV2, MyAnalyticsClient>();
 
+const analyticsSettings = (): AnalyticsSettings => ({
+  writeKey: secretKey,
+  host: 'https://events.eu1.segmentapis.com',
+  maxEventsInBatch: 1,
+  maxRetries: 1,
+});
+
 export const analyticsClient = (event: APIGatewayProxyEventV2) => {
   if (!secretKey) {
     return undefined;
   }
   let client = clientForEvent.get(event);
   if (!client) {
-    client = new MyAnalyticsClient({ writeKey: secretKey });
+    client = new MyAnalyticsClient(analyticsSettings());
     clientForEvent.set(event, client);
+    client.once('deregister', () => clientForEvent.delete(event));
   }
   return client;
 };

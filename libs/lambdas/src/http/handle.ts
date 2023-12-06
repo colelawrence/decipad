@@ -114,7 +114,7 @@ const wrapHandler = (
       } finally {
         const client = analyticsClient(req);
         if (client) {
-          await client.closeAndFlush();
+          await client.closeAndFlush({ timeout: 2000 });
         }
       }
     }

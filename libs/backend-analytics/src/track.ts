@@ -23,15 +23,7 @@ export const track = (
     };
     // eslint-disable-next-line no-console
     console.log('analytics tracking', consumeEvent);
-    return new Promise((resolve) => {
-      client.track(consumeEvent, (err) => {
-        if (err) {
-          console.error('Error tracking event:', err);
-        } else {
-          console.log('Tracked successfully');
-        }
-        resolve();
-      });
-    });
+    // fire and forget
+    client.track(consumeEvent);
   }
 };
