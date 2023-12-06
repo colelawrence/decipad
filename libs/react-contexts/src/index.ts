@@ -1,6 +1,4 @@
 export * from './ai-chat-history';
-export * from './ai-feedback';
-export * from './ai-settings';
 export * from './computer';
 export * from './current-workspace-store';
 export * from './cursor-store';

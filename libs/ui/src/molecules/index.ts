@@ -12,6 +12,7 @@ export { AssistantChatHeader } from './AssistantChatHeader/AssistantChatHeader';
 export { ChatEventMessage } from './ChatEventMessage/ChatEventMessage';
 export { ChatEventGroupMessage } from './ChatEventGroupMessage/ChatEventGroupMessage';
 export { ChatUserMessage } from './ChatUserMessage/ChatUserMessage';
+export { ChatIntegrationMessage } from './ChatIntegrationMessage/ChatIntegrationMessage';
 export { AssistantFeedbackPopUp } from './AssistantFeedbackPopUp/AssistantFeedbackPopUp';
 export { ChatMarkdownRenderer } from './ChatMarkdownRenderer/ChatMarkdownRenderer';
 export { AssistantMessageInput } from './AssistantMessageInput/AssistantMessageInput';

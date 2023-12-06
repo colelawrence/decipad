@@ -63,20 +63,23 @@ type Chat = {
   readonly [notebookId: string]: Message[];
 };
 
+type ThreadMap = {
+  readonly [notebookId: string]: string;
+};
+
 export interface AIChatHistoryStoreType {
   readonly chats: Chat;
+  readonly threads: ThreadMap;
   readonly addMessage: (notebookId: string) => (message: Message) => void;
   readonly deleteMessage: (notebookId: string) => (messageId: string) => void;
   readonly clearMessages: (notebookId: string) => () => void;
   readonly updateMessageStatus: (
     notebookId: string
   ) => (messageId: string, status: MessageStatus) => void;
-  readonly updateMessageContent: (
-    notebookId: string
-  ) => (messageId: string, content: string) => void;
-  readonly updateEventMessage: (
+  readonly addEventToMessage: (
     notebookId: string
   ) => (messageId: string, event: SingleEvent) => void;
+  readonly mapThreadToChat: (notebookId: string) => (threadId: string) => void;
 }
 
 export const useAIChatHistory = create<AIChatHistoryStoreType>()(
@@ -84,6 +87,17 @@ export const useAIChatHistory = create<AIChatHistoryStoreType>()(
     (set) => {
       return {
         chats: {},
+        threads: {},
+        mapThreadToChat: (notebookId: string) => (threadId: string) => {
+          set((state) => {
+            return {
+              threads: {
+                ...state.threads,
+                [notebookId]: threadId,
+              },
+            };
+          });
+        },
         addMessage: (notebookId: string) => (message: Message) => {
           set((state) => {
             return {
@@ -123,21 +137,7 @@ export const useAIChatHistory = create<AIChatHistoryStoreType>()(
               };
             });
           },
-        updateMessageContent(notebookId) {
-          return (messageId: string, content: string) => {
-            set((state) => {
-              return {
-                chats: {
-                  ...state.chats,
-                  [notebookId]: state.chats[notebookId].map((m) =>
-                    m.id === messageId ? { ...m, content } : m
-                  ),
-                },
-              };
-            });
-          };
-        },
-        updateEventMessage:
+        addEventToMessage:
           (notebookId: string) => (messageId: string, event: SingleEvent) => {
             set((state) => {
               return {

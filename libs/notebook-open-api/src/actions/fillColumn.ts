@@ -67,5 +67,9 @@ export const fillColumn: Action<'fillColumn'> = {
         }
       });
     });
+
+    return {
+      summary: `Filled column ${columnName} on table ${tableId}`,
+    };
   },
 };

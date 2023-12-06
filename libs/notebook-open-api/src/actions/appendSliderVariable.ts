@@ -98,6 +98,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
       getNode<VariableSliderElement>(editor, insertPath)
     );
     return {
+      summary: `Added a new slider with variable name ${variableName}`,
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),

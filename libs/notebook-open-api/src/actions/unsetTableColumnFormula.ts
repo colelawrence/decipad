@@ -50,5 +50,9 @@ export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
         { at: updateHeaderIndex }
       );
     });
+
+    return {
+      summary: `Removed formula from column ${columnName} in table`,
+    };
   },
 };

@@ -67,5 +67,9 @@ export const updateTableCell: Action<'updateTableCell'> = {
       ] as TNodeEntry<TableCellElement>;
       replaceText(editor, entry, newCellContent);
     });
+
+    return {
+      summary: `Updated cell at row ${rowIndex} and column ${columnName}`,
+    };
   },
 };

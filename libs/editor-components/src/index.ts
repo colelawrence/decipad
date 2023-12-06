@@ -5,7 +5,6 @@ export * from './BlockLengthSynchronization/BlockLengthSynchronizationReceiver';
 export * from './BlockSelection/BlockSelectable';
 export * from './CodeLine';
 export * from './Display';
-export * from './EditorAssistantChat/EditorAssistantChat';
 export * from './EditorSidebar';
 export * from './ElementChange';
 export * from './Iframe/Iframe';

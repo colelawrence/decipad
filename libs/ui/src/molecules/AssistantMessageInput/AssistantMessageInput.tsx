@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Send } from '../../icons';
+import { Send, Stop } from '../../icons';
 import { css } from '@emotion/react';
-import { cssVar, p14Medium } from '../../primitives';
+import { cssVar, p13Bold, p14Medium } from '../../primitives';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -10,12 +10,12 @@ const wrapperStyles = css({
 
 export const containerStyles = css({
   display: 'grid',
-  gridTemplateColumns: 'auto 24px',
+  gridTemplateColumns: 'auto max-content',
   gap: 8,
   minHeight: 40,
   width: '100%',
-  backgroundColor: cssVar('backgroundDefault'),
-  borderRadius: 12,
+  backgroundColor: cssVar('backgroundHeavy'),
+  borderRadius: 8,
   alignItems: 'center',
   padding: '8px 12px 8px 16px',
 });
@@ -37,9 +37,11 @@ const inputStyles = css(p14Medium, {
   },
 });
 
-const submitButtonStyles = css({
+const submitButtonStyles = css(p13Bold, {
   height: 24,
-  width: 24,
+  minWidth: 24,
+  padding: '0px 4px',
+  width: 'auto',
   borderRadius: 6,
   alignSelf: 'flex-end',
   display: 'flex',
@@ -48,9 +50,14 @@ const submitButtonStyles = css({
   border: 'none',
   outline: 'none',
   cursor: 'pointer',
+  color: cssVar('textSubdued'),
+
+  '& > span': {
+    padding: '2px 4px 0px 4px',
+  },
 
   '&:hover': {
-    backgroundColor: cssVar('backgroundHeavy'),
+    backgroundColor: cssVar('backgroundDefault'),
   },
 
   '&:disabled': {
@@ -58,36 +65,32 @@ const submitButtonStyles = css({
     pointerEvents: 'none',
 
     '& svg': {
-      '& path': {
-        stroke: cssVar('textDisabled'),
-      },
+      color: cssVar('textDisabled'),
     },
   },
 
   '& svg': {
     width: 18,
     height: 18,
-
-    '& path': {
-      stroke: cssVar('textDefault'),
-    },
   },
 });
 
 /* eslint decipad/css-prop-named-variable: 0 */
 type AssistantMessageInputProps = {
   readonly isGenerating: boolean;
+  readonly onStop: () => void;
   readonly onSubmit: (text: string) => void;
 };
 
 export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
   isGenerating,
+  onStop,
   onSubmit,
 }) => {
   const [value, setValue] = useState('');
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const isDisabled = isGenerating || value.trim() === '';
+  const isDisabled = !isGenerating && value.trim() === '';
 
   const resetInput = () => {
     setValue('');
@@ -147,9 +150,16 @@ export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({
           placeholder="What can I do for you?"
         />
 
-        <button type="submit" disabled={isDisabled} css={submitButtonStyles}>
-          <Send />
-        </button>
+        {isGenerating ? (
+          <button type="button" onClick={onStop} css={submitButtonStyles}>
+            <span>Stop</span>
+            <Stop />
+          </button>
+        ) : (
+          <button type="submit" disabled={isDisabled} css={submitButtonStyles}>
+            <Send />
+          </button>
+        )}
       </div>
     </form>
   );

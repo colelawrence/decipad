@@ -167,5 +167,9 @@ export const updateSliderVariable: Action<'updateSliderVariable'> = {
         }
       }
     });
+
+    return {
+      summary: `Updated slider`,
+    };
   },
 };

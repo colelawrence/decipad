@@ -38,5 +38,9 @@ export const removeTableColumn: Action<'removeTableColumn'> = {
         }
       }
     });
+
+    return {
+      summary: `Removed column ${columnName} from table`,
+    };
   },
 };

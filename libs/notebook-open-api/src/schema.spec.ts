@@ -1,7 +1,7 @@
 import { getOpenApiSchema } from './schema';
 
 it('tests every action', () => {
-  expect(getOpenApiSchema()).toMatchInlineSnapshot(`
+  expect(getOpenApiSchema(true)).toMatchInlineSnapshot(`
     [
       {
         "description": "Retrieves a brief description of all notebook elements",

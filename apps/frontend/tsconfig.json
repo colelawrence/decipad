@@ -41,6 +41,9 @@
     },
     {
       "path": "../../libs/remote-computer"
+    },
+    {
+      "path": "../../libs/editor-ai-assistant"
     }
   ]
 }

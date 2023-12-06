@@ -49,6 +49,7 @@ export const insertEmptyTableColumn: Action<'insertEmptyTableColumn'> = {
       getNode<TableHeaderElement>(editor, insertHeaderPath)
     );
     return {
+      summary: 'Inserted an empty column in an existing table',
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement),

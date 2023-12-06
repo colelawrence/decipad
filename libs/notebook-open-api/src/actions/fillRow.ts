@@ -61,5 +61,9 @@ export const fillRow: Action<'fillRow'> = {
         });
       });
     }
+
+    return {
+      summary: `Filled row`,
+    };
   },
 };

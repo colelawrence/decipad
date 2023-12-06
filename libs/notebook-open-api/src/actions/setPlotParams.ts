@@ -32,5 +32,9 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
       markType: updateParams.markType ?? plot.markType,
     };
     setNodes(editor, newPlot, { at: plotPath });
+
+    return {
+      summary: `Changed plot params`,
+    };
   },
 };

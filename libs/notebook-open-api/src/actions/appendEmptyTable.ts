@@ -100,6 +100,7 @@ export const appendEmptyTable: Action<'appendEmptyTable'> = {
     const actualTable = getDefined(getNode<TableElement>(editor, insertPath));
     assertElementType(actualTable, ELEMENT_TABLE);
     return {
+      summary: 'Added an empty table',
       createdElementId: table.id,
       createdElementType: table.type,
       createdElementName: getNodeString(

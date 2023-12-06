@@ -1,7 +1,7 @@
 import { Verbalizer } from './types';
 import stringify from 'json-stringify-safe';
 
-const doNotShowAttributes = new Set(['children', 'id', 'type']);
+const doNotShowAttributes = new Set(['children', 'type', 'id']);
 
 const defaultAttributeVerbalizer: Verbalizer = (element): string =>
   Object.entries(element)

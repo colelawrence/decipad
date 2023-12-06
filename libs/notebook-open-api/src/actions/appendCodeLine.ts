@@ -110,6 +110,7 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
       getNode<CodeLineV2Element>(editor, codeLinePath)
     );
     return {
+      summary: `Added a new code line with variable name ${variableName}`,
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),

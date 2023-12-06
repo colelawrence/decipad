@@ -95,6 +95,7 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
       getNode<TableHeaderElement>(editor, getDefined(columnPath))
     );
     return {
+      summary: 'Inserted a calculated column in an existing table',
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement),

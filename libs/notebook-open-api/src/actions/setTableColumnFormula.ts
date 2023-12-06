@@ -77,5 +77,9 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
         { at: updateHeaderIndex }
       );
     });
+
+    return {
+      summary: `Set formula for column ${columnName} on table`,
+    };
   },
 };

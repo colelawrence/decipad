@@ -7,13 +7,15 @@ import { thirdParty } from '@decipad/backend-config';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
-import { ElapsedEventTime, AIFeedback } from '@decipad/react-contexts';
+import { Message } from '@decipad/react-contexts';
 import { nanoid } from 'nanoid';
+import { User } from '@decipad/interfaces';
 
 export interface FeedbackObject {
-  rating: 'like' | 'dislike';
-  message: string;
-  feedback: AIFeedback;
+  rating?: 'like' | 'dislike';
+  message?: string;
+  history: Message[];
+  user?: User;
 }
 
 const DISCORD_API_URL = 'https://discord.com/api/webhooks';
@@ -22,45 +24,18 @@ const CHANNEL_TOKEN = thirdParty().discord.channelToken;
 const CHANNEL_ID = thirdParty().discord.channelId;
 
 const transformToDiscordMessage = (data: FeedbackObject) => {
-  const { rating, message, feedback } = data;
+  const { rating, message, user } = data;
 
   const ratingToEmoji = {
-    like: ':thumbsup:',
-    dislike: ':thumbsdown:',
-  };
-
-  const getTotalElapsedTime = (elapsed: ElapsedEventTime | undefined) => {
-    if (!elapsed) {
-      return 0;
-    }
-    return Object.values(elapsed).reduce((acc, curr) => acc + curr, 0);
-  };
-
-  const createElapsedTimeStrings = (elapsed: ElapsedEventTime | undefined) => {
-    if (!elapsed) {
-      return [];
-    }
-    return Object.entries(elapsed).map(([ev, time]) => {
-      return `- ${ev}: \`${time}ms\` (${(
-        (time / getTotalElapsedTime(elapsed)) *
-        100
-      ).toFixed(2)}%)`;
-    });
+    like: 'Liked :thumbsup:',
+    dislike: 'Disliked :thumbsdown:',
   };
 
   const discordMessage = [
-    `New feedback submitted :tada:`,
-    `**Rating**: ${ratingToEmoji[rating]}`,
-    `**Feedback Message**:`,
-    `> ${message}`,
-    `**Initial Prompt**: ${feedback.prompt}`,
-    `**Errors**: ${feedback.error || 'No errors :white_check_mark:'}`,
-    `**Changes Summary**:`,
-    `> ${feedback.summary}`,
-    `**Elapsed Time**:`,
-    createElapsedTimeStrings(feedback.elapsed).join('\n'),
-    '---',
-    `Operations & notebook attached below :arrow_down:`,
+    `:tada: New feedback submitted from **${user?.email ?? 'anonymous'}**`,
+    rating ? `**Rating**: ${ratingToEmoji[rating]}` : '',
+    message ? `**Message**: ${message}` : '',
+    `Message history attached below :arrow_down:`,
   ].join('\n');
 
   return discordMessage;
@@ -70,6 +45,7 @@ export const handler = handle(async (event) => {
   await expectAuthenticated(event);
 
   let { body } = event;
+
   if (!body) {
     throw Boom.notAcceptable('Missing request body');
   }
@@ -93,67 +69,34 @@ export const handler = handle(async (event) => {
       console.error(
         `Failed to send message. Status: ${response.status}. Body: ${responseBody}`
       );
-      throw new Error(
+      throw Boom.internal(
         `Failed to send message. Status: ${response.status}. Body: ${responseBody}`
       );
     }
   }
 
-  async function sendOperationsAttachment(
-    operations: FeedbackObject['feedback']['operations'],
+  async function sendHistoryAttachment(
+    history: Message[],
     webhookUrl: string,
     fileId: string
   ) {
-    const filePath = `/tmp/operations-${fileId}.json`;
-    const fileContent = JSON.stringify(operations, null, 2);
+    const filePath = `/tmp/history-${fileId}.json`;
+    const fileContent = JSON.stringify(history, null, 2);
+
+    console.log(`Writing notebook to ${filePath}`);
+    console.log(fileContent);
 
     try {
       fs.writeFileSync(filePath, fileContent, 'utf8');
     } catch (e) {
-      throw new Error(`Failed to write operations to file`);
+      console.error(e);
+      throw Boom.internal(`Failed to write notebook to file`);
     }
 
     const formData = new FormData();
+
     formData.append('file', fs.createReadStream(filePath), {
-      filename: 'operations.json',
-    });
-
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      body: formData,
-      headers: formData.getHeaders(),
-    });
-
-    if (!response.ok) {
-      const responseBody = await response.text();
-      console.error(
-        `Failed to send operations attachment. Status: ${response.status}. Body: ${responseBody}`
-      );
-      throw new Error(
-        `Failed to send operations attachment. Status: ${response.status}. Body: ${responseBody}`
-      );
-    }
-
-    fs.unlinkSync(filePath);
-  }
-
-  async function sendNotebookAttachment(
-    notebook: FeedbackObject['feedback']['notebook'],
-    webhookUrl: string,
-    fileId: string
-  ) {
-    const filePath = `/tmp/notebook-${fileId}.json`;
-    const fileContent = JSON.stringify(notebook, null, 2);
-
-    try {
-      fs.writeFileSync(filePath, fileContent, 'utf8');
-    } catch (e) {
-      throw new Error(`Failed to write notebook to file`);
-    }
-
-    const formData = new FormData();
-    formData.append('file', fs.createReadStream(filePath), {
-      filename: 'notebook.json',
+      filename: 'history.json',
     });
 
     const response = await fetch(webhookUrl, {
@@ -167,7 +110,7 @@ export const handler = handle(async (event) => {
       console.error(
         `Failed to send notebook attachment. Status: ${response.status}. Body: ${responseBody}`
       );
-      throw new Error(
+      throw Boom.internal(
         `Failed to send notebook attachment. Status: ${response.status}. Body: ${responseBody}`
       );
     }
@@ -179,23 +122,9 @@ export const handler = handle(async (event) => {
   const url = `${DISCORD_API_URL}/${CHANNEL_ID}/${CHANNEL_TOKEN}`;
   const fileId = nanoid();
 
-  try {
-    await sendMessage(data, url);
-  } catch (e) {
-    throw Boom.internal(`Failed to send discord message:`, e);
-  }
+  await sendMessage(data, url);
 
-  try {
-    await sendOperationsAttachment(data.feedback.operations, url, fileId);
-  } catch (e) {
-    throw Boom.internal(`Failed to send operations:`, e);
-  }
-
-  try {
-    await sendNotebookAttachment(data.feedback.notebook, url, fileId);
-  } catch (e) {
-    throw Boom.internal(`Failed to send notebook:`, e);
-  }
+  await sendHistoryAttachment(data.history, url, fileId);
 
   return {
     statusCode: 200,

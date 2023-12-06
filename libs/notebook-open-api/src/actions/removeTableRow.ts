@@ -23,5 +23,9 @@ export const removeTableRow: Action<'removeTableRow'> = {
     const [, tablePath] = getTableById(editor, tableId);
     const removeRowIndex = [...tablePath, rowIndex + 2];
     removeNodes(editor, { at: removeRowIndex });
+
+    return {
+      summary: `Removed row ${rowIndex} from table`,
+    };
   },
 };

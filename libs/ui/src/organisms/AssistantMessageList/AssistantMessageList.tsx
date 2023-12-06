@@ -9,15 +9,18 @@ import {
   ChatUserMessage,
   ChatEventMessage,
   ChatEventGroupMessage,
+  ChatIntegrationMessage,
 } from '../../molecules';
-import { Message } from '@decipad/react-contexts';
-import { useLayoutEffect, useRef } from 'react';
+import { Message, UserMessage } from '@decipad/react-contexts';
+import { useCallback, useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+import { User } from '@decipad/interfaces';
 import { EElementOrText } from '@udecode/plate-common';
 import { MyValue } from '@decipad/editor-types';
 
 const wrapperStyles = css({
   position: 'relative',
-  width: 616,
+  width: 608,
   height: '100%',
 });
 
@@ -37,7 +40,7 @@ const listStyles = css({
   display: 'flex',
   flexDirection: 'column',
   padding: 8,
-  width: 616,
+  width: 608,
 });
 
 const messageWrapperStyles = css({
@@ -46,6 +49,9 @@ const messageWrapperStyles = css({
 
 type AssistantMessageListProps = {
   readonly messages: Message[];
+  readonly isGenerating: boolean;
+  readonly currentUserMessage?: UserMessage;
+  readonly regenerateResponse: () => void;
   readonly notebookId: string;
   readonly workspaceId: string;
   readonly insertNodes: (
@@ -55,10 +61,16 @@ type AssistantMessageListProps = {
 
 export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
   messages,
+  isGenerating,
+  currentUserMessage,
+  regenerateResponse,
   notebookId,
   workspaceId,
   insertNodes,
 }) => {
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -68,9 +80,59 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const submitFeedback = useCallback(
+    async (message: string) => {
+      const body = {
+        user,
+        history: messages,
+        message,
+      };
+
+      const response = await fetch(`/api/ai/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.status !== 200) {
+        const err = await response.json();
+
+        throw new Error(err.message);
+      }
+    },
+    [messages, user]
+  );
+
+  const submitRating = useCallback(
+    async (rating: 'like' | 'dislike') => {
+      const body = {
+        user,
+        history: messages,
+        rating,
+      };
+
+      const response = await fetch(`/api/ai/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.status !== 200) {
+        const err = await response.json();
+
+        throw new Error(err.message);
+      }
+    },
+    [messages, user]
+  );
 
   return (
     <motion.div css={wrapperStyles}>
@@ -82,7 +144,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
         >
           <LayoutGroup>
             {messages.map((entry) => {
-              const { id, type } = entry;
+              const { id, type, replyTo } = entry;
 
               if (type === 'user') {
                 return (
@@ -93,12 +155,36 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 }}
                   >
-                    <ChatUserMessage key={id} message={entry} />
+                    <ChatUserMessage
+                      key={id}
+                      message={entry}
+                      user={user as User}
+                    />
                   </motion.div>
                 );
               }
 
               if (type === 'assistant') {
+                const { integrationData } = entry;
+                if (integrationData) {
+                  return (
+                    <motion.div
+                      layout="position"
+                      css={messageWrapperStyles}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      <ChatIntegrationMessage
+                        key={id}
+                        message={entry}
+                        notebookId={notebookId}
+                        workspaceId={workspaceId}
+                        insertNodes={insertNodes}
+                      />
+                    </motion.div>
+                  );
+                }
                 return (
                   <motion.div
                     layout="position"
@@ -110,9 +196,11 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                     <ChatAssistantMessage
                       key={id}
                       message={entry}
-                      notebookId={notebookId}
-                      workspaceId={workspaceId}
-                      insertNodes={insertNodes}
+                      isCurrentReply={currentUserMessage?.id === replyTo}
+                      isGenerating={isGenerating}
+                      regenerateResponse={regenerateResponse}
+                      submitFeedback={submitFeedback}
+                      submitRating={submitRating}
                     />
                   </motion.div>
                 );

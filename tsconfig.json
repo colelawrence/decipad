@@ -57,6 +57,7 @@
       "@decipad/dom-test-utils": ["libs/dom-test-utils/src/index.ts"],
       "@decipad/dynamodb-lock": ["libs/dynamodb-lock/src/index.ts"],
       "@decipad/editor": ["libs/editor/src/index.tsx"],
+      "@decipad/editor-ai-assistant": ["libs/editor-ai-assistant/src/index.ts"],
       "@decipad/editor-config": ["libs/editor-config/src/index.ts"],
       "@decipad/editor-attachments": ["libs/editor-attachments/src/index.ts"],
       "@decipad/editor-components": ["libs/editor-components/src/index.ts"],

@@ -69,7 +69,9 @@ export const updateCodeLine: Action<'updateCodeLine'> = {
         replaceText(editor, entry, newCodeExpression);
       } else
         replaceText(editor, entry, `${newVariableName} = ${newCodeExpression}`);
-      return;
+      return {
+        summary: `Updated code line`,
+      };
     }
 
     withoutNormalizing(editor, () => {
@@ -90,5 +92,9 @@ export const updateCodeLine: Action<'updateCodeLine'> = {
         replaceText(editor, expressionEntry, newCodeExpression);
       }
     });
+
+    return {
+      summary: `Updated code line`,
+    };
   },
 };

@@ -1,7 +1,4 @@
-import { isFlagEnabled } from '@decipad/feature-flags';
 import { css } from '@emotion/react';
-import { useState } from 'react';
-import { Tooltip } from '../../atoms';
 import {
   componentCssVars,
   cssVar,
@@ -9,19 +6,57 @@ import {
   p13Medium,
   p14Medium,
 } from '../../primitives';
+import { Magic } from '../../icons';
+import { Tooltip } from '../../atoms';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 export const wrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '4px 12px',
+  padding: '4px 8px',
   backgroundColor: cssVar('backgroundDefault'),
-  borderRadius: 12,
+  borderRadius: 8,
+});
+
+const contentStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  gap: 4,
+  marginLeft: 8,
+});
+
+const iconStyles = css({
+  width: 16,
+  height: 16,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+
+  svg: {
+    width: 16,
+    height: 16,
+  },
 });
 
 export const titleStyles = css(p14Medium, {
   color: cssVar('textHeavy'),
   margin: 0,
+  paddingTop: 2,
+});
+
+const labelStyles = css(p13Medium, {
+  color: cssVar('textSubdued'),
+  padding: '0px 6px',
+  height: 24,
+  paddingTop: 2,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 6,
+  marginLeft: 4,
+  backgroundColor: cssVar('backgroundHeavy'),
+  cursor: 'default',
 });
 
 export const buttonStyles = css(p14Medium, {
@@ -32,40 +67,24 @@ export const buttonStyles = css(p14Medium, {
   cursor: 'pointer',
 
   '&:hover': {
-    backgroundColor: cssVar('backgroundDefault'),
-    color: cssVar('textHeavy'),
+    backgroundColor: cssVar('backgroundHeavy'),
+    color: cssVar('textDefault'),
   },
 
   '&:active': {
     backgroundColor: cssVar('backgroundHeavy'),
     color: cssVar('textHeavy'),
+    boxShadow: `0px 0px 0px 2px ${cssVar('borderDefault')}`,
   },
 });
 
-const labelWrapperStyles = css(p13Medium, {
-  padding: '4px',
-  backgroundColor: cssVar('backgroundHeavy'),
-  borderRadius: '4px',
-  display: 'flex',
-  gap: '4px',
-  alignItems: 'center',
-});
-
-const creditsLabelStyles = css({
-  color: cssVar('textDisabled'),
-});
-
-const creditsStyles = css({
+const creditsStyles = css(p12Bold, {
   color: cssVar('textTitle'),
   backgroundColor: cssVar('backgroundHeavier'),
   padding: '0 4px',
+  height: 16,
+  marginLeft: 4,
   borderRadius: '4px',
-});
-
-const titleWrapperStyles = css({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '6px',
 });
 
 const tooltipTitleStyles = css(p12Bold, {
@@ -88,49 +107,39 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   creditsUsed = 0,
   creditsQuotaLimit = 0,
   isPremium = false,
-}) => {
-  const [hovered, setHovered] = useState(false);
-
-  const handleMouseEnter = () => {
-    setHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHovered(false);
-  };
-
-  const creditsLabel = (
-    <div
-      css={labelWrapperStyles}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <p css={creditsLabelStyles}>Credits</p>
-      <p css={creditsStyles}>{creditsUsed}</p>
-    </div>
-  );
-
-  return (
-    <div css={wrapperStyles}>
-      <div css={titleWrapperStyles}>
-        <h1 css={titleStyles}>Talk and build with AI</h1>
-        {isFlagEnabled('RESOURCE_USAGE_COUNT') && (
-          <Tooltip
-            trigger={creditsLabel}
-            open={hovered}
-            side="bottom"
-            variant="small"
-          >
-            <div css={tooltipTitleStyles}>
-              {creditsUsed}/{creditsQuotaLimit} used
-            </div>
-            {!isPremium && <p css={tooltipTextStyles}>Upgrade to earn more</p>}
-          </Tooltip>
-        )}
+}) => (
+  <div css={wrapperStyles}>
+    <div css={contentStyles}>
+      <div css={iconStyles}>
+        <Magic />
       </div>
-      <button css={buttonStyles} onClick={onClear}>
-        Clear chat
-      </button>
+      <p css={titleStyles}>Talk and build with AI</p>
+      <Tooltip trigger={<span css={labelStyles}>Experimental</span>}>
+        <span>
+          This experimental version can make mistakes. Please provide feedback
+          to help us improve.
+        </span>
+      </Tooltip>
+      {isFlagEnabled('RESOURCE_USAGE_COUNT') && (
+        <Tooltip
+          trigger={
+            <span css={labelStyles}>
+              <span>Credits</span>
+              <span css={creditsStyles}>{creditsUsed}</span>
+            </span>
+          }
+          side="bottom"
+          variant="small"
+        >
+          <div css={tooltipTitleStyles}>
+            {creditsUsed}/{creditsQuotaLimit} used
+          </div>
+          {!isPremium && <p css={tooltipTextStyles}>Upgrade to earn more</p>}
+        </Tooltip>
+      )}
     </div>
-  );
-};
+    <button css={buttonStyles} onClick={onClear}>
+      Clear chat
+    </button>
+  </div>
+);

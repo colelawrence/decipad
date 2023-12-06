@@ -99,6 +99,7 @@ export const appendFilledTable: Action<'appendFilledTable'> = {
     const actualTable = getDefined(getNode<TableElement>(editor, insertPath));
     assertElementType(actualTable, ELEMENT_TABLE);
     return {
+      summary: `Added a new table with name ${tableName}`,
       createdElementId: table.id,
       createdElementType: table.type,
       createdElementName: getNodeString(

@@ -19,6 +19,7 @@ module.exports = {
     '<rootDir>/libs/client-events',
     '<rootDir>/libs/externaldata',
     '<rootDir>/libs/fraction',
+    '<rootDir>/libs/editor-ai-assistant',
     '<rootDir>/libs/editor-types',
     '<rootDir>/libs/editor-plugins',
     '<rootDir>/libs/editor-language-elements',

@@ -119,6 +119,7 @@ export const appendDataView: Action<'appendDataView'> = {
 
     insertNodes(editor, [newDataView], { at: appendPath(editor) });
     return {
+      summary: `Added a new data view for ${tableName}`,
       createdElementId: newDataView.id,
       createdElementType: newDataView.type,
       createdElementName: getNodeString(newDataView.children[0]),

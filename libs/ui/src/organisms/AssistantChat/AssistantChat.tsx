@@ -1,12 +1,15 @@
 /* eslint decipad/css-prop-named-variable: 0 */
+
+import { AssistantChatHeader } from '../../molecules/AssistantChatHeader/AssistantChatHeader';
+import { AssistantMessageInput } from '../../molecules/AssistantMessageInput/AssistantMessageInput';
+import { AssistantMessageList } from '../AssistantMessageList/AssistantMessageList';
+
 import { css } from '@emotion/react';
 
 import { cssVar } from '../../primitives';
-import { Message } from '@decipad/react-contexts';
-import { AssistantChatHeader, AssistantMessageInput } from '../../molecules';
-import { AssistantMessageList } from '..';
-import { EElementOrText } from '@udecode/plate-common';
+import { Message, UserMessage } from '@decipad/react-contexts';
 import { MyValue } from '@decipad/editor-types';
+import { EElementOrText } from '@udecode/plate-common';
 
 const wrapperStyles = css({
   position: 'relative',
@@ -26,7 +29,10 @@ type AssistantChatProps = {
   readonly messages: Message[];
   readonly sendMessage: (content: string) => void;
   readonly clearChat: () => void;
+  readonly stopGenerating: () => void;
+  readonly regenerateResponse: () => void;
   readonly isGenerating: boolean;
+  readonly currentUserMessage?: UserMessage;
   readonly insertNodes: (
     ops: EElementOrText<MyValue> | EElementOrText<MyValue>[]
   ) => void;
@@ -42,6 +48,9 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
   sendMessage,
   clearChat,
   isGenerating,
+  stopGenerating,
+  regenerateResponse,
+  currentUserMessage,
   insertNodes,
   aiCreditsUsed,
   aiQuotaLimit,
@@ -58,12 +67,16 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
 
       <AssistantMessageList
         messages={messages}
+        currentUserMessage={currentUserMessage}
+        isGenerating={isGenerating}
+        regenerateResponse={regenerateResponse}
         notebookId={notebookId}
         workspaceId={workspaceId}
         insertNodes={insertNodes}
       />
 
       <AssistantMessageInput
+        onStop={stopGenerating}
         onSubmit={sendMessage}
         isGenerating={isGenerating}
       />

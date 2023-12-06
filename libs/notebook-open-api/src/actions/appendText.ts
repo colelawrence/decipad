@@ -35,7 +35,7 @@ export const appendText: Action<'appendText'> = {
       throw new Error('Expected tree to be array');
     }
 
-    const response = [];
+    const createdElements = [];
 
     for (const element of tree) {
       const newElement = {
@@ -48,13 +48,17 @@ export const appendText: Action<'appendText'> = {
         getNode<MyElement>(editor, newElementPath)
       );
       assertElementType(actualElement, (element as AnyElement)?.type);
-      response.push({
+      createdElements.push({
+        summary: `Added a new paragraph`,
         createdElementId: actualElement.id,
         createdElementType: actualElement.type,
         createdElementName: actualElement.id,
       });
     }
 
-    return response;
+    return {
+      summary: `Added new paragraph`,
+      createdElements,
+    };
   },
 };

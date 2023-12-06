@@ -1,6 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { User } from '@decipad/interfaces';
-import { useSession } from 'next-auth/react';
 import { css } from '@emotion/react';
 import { cssVar, p14Regular } from '../../primitives';
 import { ChatMarkdownRenderer } from '../ChatMarkdownRenderer/ChatMarkdownRenderer';
@@ -30,11 +29,10 @@ const contentStyles = css(p14Regular, {
 
 type Props = {
   readonly message: UserMessage;
+  readonly user: User;
 };
 
-export const ChatUserMessage: React.FC<Props> = ({ message }) => {
-  const { data: session } = useSession();
-  const user = session?.user as User;
+export const ChatUserMessage: React.FC<Props> = ({ message, user }) => {
   const { name, image } = user;
 
   const { content } = message;

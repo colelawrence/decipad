@@ -18,5 +18,9 @@ export const removeElement: Action<'removeElement'> = {
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId }) => {
     removeNodes(editor, { match: matchElementId(elementId as string) });
+
+    return {
+      summary: `Removed element with id ${elementId}`,
+    };
   },
 };

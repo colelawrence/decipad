@@ -37,5 +37,9 @@ export const insertTableRow: Action<'insertTableRow'> = {
 
     const insertRowIndex = [...tablePath, table.children.length];
     insertNodes(editor, [tr], { at: insertRowIndex });
+
+    return {
+      summary: 'Inserted a row',
+    };
   },
 };

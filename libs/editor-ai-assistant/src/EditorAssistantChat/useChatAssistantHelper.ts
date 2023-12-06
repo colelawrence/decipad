@@ -6,18 +6,15 @@ import {
 } from '@decipad/react-contexts';
 import { useToast } from '@decipad/toast';
 import { useCallback } from 'react';
-import { nanoid } from 'nanoid';
-import { MyEditor } from '@decipad/editor-types';
 import { useAgent } from './useAgent';
+import { nanoid } from 'nanoid';
 
 export interface ChatAssistantHelperOptions {
   notebookId: string;
-  editor: MyEditor;
 }
 
 export const useChatAssistantHelper = ({
   notebookId,
-  editor,
 }: ChatAssistantHelperOptions) => {
   const toast = useToast();
 
@@ -25,12 +22,11 @@ export const useChatAssistantHelper = ({
 
   const handleAddMessage = addMessage(notebookId);
 
-  const { initAgent } = useAgent({
+  const { submitChat, stopGenerating } = useAgent({
     notebookId,
-    editor,
   });
 
-  const getChatAgentResponse = useCallback(
+  const getChatResponse = useCallback(
     async (messages: Message[], userMessage: UserMessage) => {
       try {
         const eventMessage: EventMessage = {
@@ -43,7 +39,10 @@ export const useChatAssistantHelper = ({
         };
 
         handleAddMessage(eventMessage);
-        await initAgent([...messages, eventMessage], userMessage, eventMessage);
+
+        const newMessages = [...messages, eventMessage];
+
+        await submitChat(newMessages, userMessage, eventMessage);
       } catch (err) {
         console.error(err);
         toast.error(
@@ -51,10 +50,11 @@ export const useChatAssistantHelper = ({
         );
       }
     },
-    [initAgent, toast, handleAddMessage]
+    [submitChat, toast, handleAddMessage]
   );
 
   return {
-    getChatAgentResponse,
+    getChatResponse,
+    stopGenerating,
   };
 };

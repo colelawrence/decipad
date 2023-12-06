@@ -26,5 +26,9 @@ export const appendElement: Action<'appendElement'> = {
     insertNodes(editor, [element as EElementOrText<MyValue>], {
       at: appendPath(editor),
     });
+
+    return {
+      summary: `Added a new ${element.type}`,
+    };
   },
 };

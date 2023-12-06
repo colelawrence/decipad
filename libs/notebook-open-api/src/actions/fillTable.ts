@@ -74,5 +74,9 @@ export const fillTable: Action<'fillTable'> = {
         });
       });
     });
+
+    return {
+      summary: `Filled table ${tableId}`,
+    };
   },
 };

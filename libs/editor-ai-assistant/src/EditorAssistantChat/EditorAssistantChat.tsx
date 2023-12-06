@@ -1,6 +1,6 @@
 import { AssistantChat } from '@decipad/ui';
-import { useAssistantChat } from './hooks';
-import { useAISettings, useAiUsage } from '@decipad/react-contexts';
+import { useAssistantChat } from './useAssistantChat';
+import { useAiUsage } from '@decipad/react-contexts';
 import { MyEditor, MyValue } from '@decipad/editor-types';
 import { useCallback } from 'react';
 import { EElementOrText, insertNodes } from '@udecode/plate-common';
@@ -21,16 +21,18 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   aiQuotaLimit,
   isPremium,
 }) => {
-  const { messages, clearChat, sendUserMessage } = useAssistantChat(
-    notebookId,
-    editor
-  );
+  const {
+    messages,
+    clearChat,
+    sendUserMessage,
+    stopGenerating,
+    regenerateResponse,
+    isGeneratingResponse,
+    currentUserMessage,
+  } = useAssistantChat(notebookId);
 
   const { promptTokensUsed, completionTokensUsed } = useAiUsage();
 
-  const generatingChatResponse = useAISettings(
-    (state) => state.generatingChatResponse
-  );
   // eslint-disable-next-line no-underscore-dangle
   const _insertNodes = useCallback(
     (node: EElementOrText<MyValue> | EElementOrText<MyValue>[]) => {
@@ -51,7 +53,10 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
       messages={messages}
       sendMessage={sendUserMessage}
       clearChat={clearChat}
-      isGenerating={generatingChatResponse}
+      stopGenerating={stopGenerating}
+      regenerateResponse={regenerateResponse}
+      isGenerating={isGeneratingResponse}
+      currentUserMessage={currentUserMessage}
       insertNodes={_insertNodes}
       aiCreditsUsed={promptTokensUsed + completionTokensUsed}
       aiQuotaLimit={aiQuotaLimit}
