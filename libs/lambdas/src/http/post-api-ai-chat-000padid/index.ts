@@ -107,7 +107,9 @@ export const handler = handle(async (event) => {
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
     idMapping = verbalized
       .filter((v) => v.varName)
-      .map((v) => `\`${v.varName}\` has id ${v.element.id}`)
+      .map(
+        (v) => `variable \`${v.varName}\` has element_id \`${v.element.id}\``
+      )
       .join('\n');
   } catch (e) {
     throw Boom.internal('Unable to parse document');
@@ -189,7 +191,14 @@ export const handler = handle(async (event) => {
 
   const docMessage: ChatCompletionMessageParam = {
     role: 'user',
-    content: `This is my current document: \n ${verbalizedDoc}, \n These are element ids: ${idMapping}`,
+    content: `This is my current document: \n ${verbalizedDoc}, `,
+  };
+
+  const elementIds: ChatCompletionMessageParam = {
+    role: 'user',
+    content: `Here is a list of variable names to the corresponding ID.
+    Please don't ask me about them
+    ${idMapping}`,
   };
 
   console.log(docMessage);
@@ -203,6 +212,7 @@ export const handler = handle(async (event) => {
           content: CREATION_SYSTEM_PROMPT,
         },
         docMessage,
+        elementIds,
         ...messages,
       ],
       functions: openApiSchema,
@@ -239,6 +249,7 @@ export const handler = handle(async (event) => {
           content: FETCH_DATA_SYSTEM_PROMPT,
         },
         docMessage,
+        elementIds,
         ...messages,
       ],
       temperature: 0.1,
@@ -281,6 +292,7 @@ export const handler = handle(async (event) => {
           content: CONVERSATION_SYSTEM_PROMPT,
         },
         docMessage,
+        elementIds,
         ...messages,
       ],
       temperature: 0.6,
