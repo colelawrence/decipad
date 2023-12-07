@@ -35,11 +35,17 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
   const readOnly = useIsEditorReadOnly();
   const userEvents = useContext(ClientEventsContext);
 
+  const preSelectedOptionText = element.children[0].text;
+  const preSelectedBlockId = element.options.find(
+    (elem) => elem.value === preSelectedOptionText
+  )?.id;
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SelectItems>({
-    blockId: '',
-    item: 'Selected',
+    blockId: preSelectedBlockId ?? '',
+    item: preSelectedOptionText ?? 'Selected',
   });
+
   const dropdownIds: Array<SelectItems> = useMemo(
     () =>
       element.options.map((n) => ({
@@ -140,13 +146,9 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
         );
         onChangeTypeMutator(option.blockType);
       } else {
-        if (selectedOption.blockId === option.blockId) {
-          setSelectedOption({ item: 'Selected', blockId: '' });
-          changeOptions('Select');
-        } else {
-          setSelectedOption(option);
-          changeOptions(option.item);
-        }
+        setSelectedOption(option);
+        changeOptions(option.item);
+
         userEvents({
           type: 'action',
           action: 'widget value updated',
@@ -162,7 +164,6 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
       elementChangeColumn,
       element.selectedColumn,
       onChangeTypeMutator,
-      selectedOption,
       userEvents,
       readOnly,
       changeOptions,
@@ -227,6 +228,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
             item: `${c.tableName}.${c.columnName}`,
             itemName,
             blockType: c.result.type.cellType,
+            blockId: c.blockId,
             type: 'column',
             focused:
               element.selectedColumn === `${c.tableName}.${c.columnName}`,
@@ -238,6 +240,7 @@ export const useDropdown = (element: DropdownElement): UseDropdownResult => {
             [
               ...colValues.result.value.map((v) => ({
                 group: 'Values',
+                blockId: v?.toString(),
                 item: formatResultPreview({
                   value: v,
                   type: colValues.result.type.cellType,
