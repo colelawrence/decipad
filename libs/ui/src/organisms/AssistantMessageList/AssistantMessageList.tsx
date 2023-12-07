@@ -11,12 +11,18 @@ import {
   ChatEventGroupMessage,
   ChatIntegrationMessage,
 } from '../../molecules';
-import { Message, UserMessage } from '@decipad/react-contexts';
+import {
+  AssistantMessage,
+  Message,
+  UserMessage,
+} from '@decipad/react-contexts';
 import { useCallback, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { User } from '@decipad/interfaces';
 import { EElementOrText } from '@udecode/plate-common';
 import { MyValue } from '@decipad/editor-types';
+import { nanoid } from 'nanoid';
+import { noop } from '@decipad/utils';
 import { cssVar } from '../../primitives';
 
 const wrapperStyles = css({
@@ -61,6 +67,16 @@ const listStyles = css({
 const messageWrapperStyles = css({
   width: '100%',
 });
+
+const DEFAULT_GREETING_MESSAGE: AssistantMessage = {
+  id: nanoid(),
+  type: 'assistant',
+  status: 'success',
+  content:
+    'Hey there! Keep in mind that this **experimental** version can make mistakes. Please, provide feedback to help us improve.',
+  timestamp: Date.now(),
+  replyTo: null,
+};
 
 type AssistantMessageListProps = {
   readonly messages: Message[];
@@ -158,6 +174,23 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
           layout
         >
           <LayoutGroup>
+            <motion.div
+              layout="position"
+              css={messageWrapperStyles}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.15 }}
+            >
+              <ChatAssistantMessage
+                key={DEFAULT_GREETING_MESSAGE.id}
+                message={DEFAULT_GREETING_MESSAGE}
+                isCurrentReply={false}
+                isGenerating={false}
+                regenerateResponse={noop}
+                submitFeedback={noop}
+                submitRating={noop}
+              />
+            </motion.div>
             {messages.map((entry) => {
               const { id, type, replyTo } = entry;
 
