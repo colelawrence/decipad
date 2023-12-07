@@ -15,7 +15,7 @@ const wrapperStyles = css({
   position: 'relative',
   display: 'grid',
   overflow: 'hidden',
-  gridTemplateRows: '36px auto max-content',
+  gridTemplateRows: '32px auto max-content',
   height: '100%',
   width: '100%',
   padding: 16,
@@ -63,6 +63,8 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
         creditsUsed={aiCreditsUsed}
         creditsQuotaLimit={aiQuotaLimit}
         isPremium={isPremium}
+        onStop={stopGenerating}
+        isGenerating={isGenerating}
       />
 
       <AssistantMessageList

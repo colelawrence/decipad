@@ -17,11 +17,26 @@ import { useSession } from 'next-auth/react';
 import { User } from '@decipad/interfaces';
 import { EElementOrText } from '@udecode/plate-common';
 import { MyValue } from '@decipad/editor-types';
+import { cssVar } from '../../primitives';
 
 const wrapperStyles = css({
   position: 'relative',
   width: 608,
   height: '100%',
+
+  '::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    width: 608,
+    height: 40,
+    zIndex: 1,
+    backgroundImage: `linear-gradient(to bottom, ${cssVar(
+      'backgroundMain'
+    )} 0%, transparent 100%)`,
+  },
 });
 
 const containerStyles = css(

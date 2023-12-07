@@ -1,29 +1,26 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import {
-  componentCssVars,
-  cssVar,
-  p12Bold,
-  p13Medium,
-  p14Medium,
-} from '../../primitives';
-import { Magic } from '../../icons';
+import { componentCssVars, cssVar, p12Bold, p13Medium } from '../../primitives';
+import { Magic, Trash } from '../../icons';
 import { Tooltip } from '../../atoms';
 import { isFlagEnabled } from '@decipad/feature-flags';
+import { useCallback } from 'react';
 
 export const wrapperStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '4px 8px',
-  backgroundColor: cssVar('backgroundDefault'),
-  borderRadius: 8,
 });
 
-const contentStyles = css({
+const headingStyles = css(p13Medium, {
+  height: 32,
   display: 'flex',
   alignItems: 'center',
+  padding: '4px 8px 4px 10px',
   gap: 4,
-  marginLeft: 8,
+  backgroundColor: cssVar('backgroundDefault'),
+  borderRadius: 8,
+  color: cssVar('textHeavy'),
 });
 
 const iconStyles = css({
@@ -34,37 +31,54 @@ const iconStyles = css({
   justifyContent: 'center',
 
   svg: {
-    width: 16,
-    height: 16,
+    width: 14,
+    height: 14,
+
+    path: {
+      fill: cssVar('textHeavy'),
+      stroke: cssVar('textHeavy'),
+    },
   },
 });
 
-export const titleStyles = css(p14Medium, {
+export const titleStyles = css(p13Medium, {
   color: cssVar('textHeavy'),
   margin: 0,
   paddingTop: 2,
+  marginRight: 4,
 });
 
-const labelStyles = css(p13Medium, {
+const tagStyles = css(p13Medium, {
   color: cssVar('textSubdued'),
-  padding: '0px 6px',
-  height: 24,
-  paddingTop: 2,
+  height: 32,
+  padding: '0px 8px',
+  margin: '-4px -8px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 6,
   marginLeft: 4,
-  backgroundColor: cssVar('backgroundHeavy'),
+  backgroundColor: cssVar('backgroundDefault'),
+  boxShadow: `0 0 0 2px ${cssVar('backgroundMain')}`,
   cursor: 'default',
+  transition: 'background-position 0.3s ease-in-out',
 });
 
-export const buttonStyles = css(p14Medium, {
-  height: 24,
-  padding: '2px 8px 0px',
+export const buttonStyles = css(p13Medium, {
+  height: 32,
+  width: 32,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   borderRadius: 6,
   color: cssVar('textSubdued'),
+  backgroundColor: cssVar('backgroundDefault'),
   cursor: 'pointer',
+
+  '& > svg': {
+    width: 18,
+    height: 18,
+  },
 
   '&:hover': {
     backgroundColor: cssVar('backgroundHeavy'),
@@ -72,17 +86,20 @@ export const buttonStyles = css(p14Medium, {
   },
 
   '&:active': {
-    backgroundColor: cssVar('backgroundHeavy'),
+    backgroundColor: cssVar('backgroundHeavier'),
     color: cssVar('textHeavy'),
-    boxShadow: `0px 0px 0px 2px ${cssVar('borderDefault')}`,
   },
 });
 
-const creditsStyles = css(p12Bold, {
-  color: cssVar('textTitle'),
+const labelStyles = css(p12Bold, {
+  color: cssVar('textHeavy'),
   backgroundColor: cssVar('backgroundHeavier'),
-  padding: '0 4px',
-  height: 16,
+  padding: '1px 4px 0px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: 20,
+  minWidth: 20,
   marginLeft: 4,
   borderRadius: '4px',
 });
@@ -100,6 +117,8 @@ type AssistantChatHeaderProps = {
   creditsUsed?: number;
   creditsQuotaLimit?: number;
   isPremium?: boolean;
+  onStop: () => void;
+  isGenerating: boolean;
 };
 
 export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
@@ -107,39 +126,71 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   creditsUsed = 0,
   creditsQuotaLimit = 0,
   isPremium = false,
-}) => (
-  <div css={wrapperStyles}>
-    <div css={contentStyles}>
-      <div css={iconStyles}>
-        <Magic />
-      </div>
-      <p css={titleStyles}>Talk and build with AI</p>
-      <Tooltip trigger={<span css={labelStyles}>Experimental</span>}>
-        <span>
-          This experimental version can make mistakes. Please provide feedback
-          to help us improve.
-        </span>
-      </Tooltip>
-      {isFlagEnabled('RESOURCE_USAGE_COUNT') && (
+  onStop,
+  isGenerating,
+}) => {
+  const handleStop = useCallback(() => {
+    onClear();
+    if (isGenerating) {
+      onStop();
+    }
+  }, [isGenerating, onClear, onStop]);
+
+  return (
+    <div css={wrapperStyles}>
+      <div css={headingStyles}>
+        <div css={iconStyles}>
+          <Magic />
+        </div>
+        <p css={titleStyles}>Talk and build with AI</p>
         <Tooltip
           trigger={
-            <span css={labelStyles}>
-              <span>Credits</span>
-              <span css={creditsStyles}>{creditsUsed}</span>
+            <span css={tagStyles}>
+              <span css={{ paddingTop: 1 }}>Experimental</span>
             </span>
           }
           side="bottom"
           variant="small"
         >
-          <div css={tooltipTitleStyles}>
-            {creditsUsed}/{creditsQuotaLimit} used
-          </div>
-          {!isPremium && <p css={tooltipTextStyles}>Upgrade to earn more</p>}
+          <p css={tooltipTextStyles}>
+            Please, keep in mind that this experimental version can make
+            mistakes. Please provide feedback to help us improve.
+          </p>
         </Tooltip>
-      )}
+      </div>
+      <div css={{ display: 'flex', gap: 8 }}>
+        {isFlagEnabled('RESOURCE_USAGE_COUNT') && (
+          <Tooltip
+            trigger={
+              <span css={headingStyles}>
+                <span css={{ paddingTop: 1 }}>Credits</span>
+                <span css={labelStyles}>{creditsUsed}</span>
+              </span>
+            }
+            side="bottom"
+            variant="small"
+          >
+            <p css={tooltipTitleStyles}>
+              {creditsUsed}/{creditsQuotaLimit} used
+            </p>
+            {!isPremium && (
+              <p css={tooltipTextStyles}>Upgrade to Pro plan to get more</p>
+            )}
+          </Tooltip>
+        )}
+
+        <Tooltip
+          trigger={
+            <button css={buttonStyles} onClick={handleStop}>
+              <Trash />
+            </button>
+          }
+          side="bottom"
+          variant="small"
+        >
+          <span>Clear all chat history</span>
+        </Tooltip>
+      </div>
     </div>
-    <button css={buttonStyles} onClick={onClear}>
-      Clear chat
-    </button>
-  </div>
-);
+  );
+};
