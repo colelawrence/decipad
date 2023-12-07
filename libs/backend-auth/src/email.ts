@@ -4,10 +4,10 @@ import tables from '@decipad/tables';
 import {
   create as createUser,
   maybeEnrich as maybeEnrichUser,
+  isAllowedToLogIn,
 } from '@decipad/services/users';
 import { track } from '@decipad/backend-analytics';
 import { timestamp } from '@decipad/backend-utils';
-import { isAllowedToLogIn } from './is-allowed';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export async function signInEmail(

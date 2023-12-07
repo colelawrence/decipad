@@ -3,9 +3,11 @@
 import { Account, NextAuthOptions, User } from 'next-auth';
 import { UserInput } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { create as createUser } from '@decipad/services/users';
+import {
+  create as createUser,
+  isAllowedToLogIn,
+} from '@decipad/services/users';
 import { createVerifier } from '@decipad/services/authentication';
-import { isAllowedToLogIn } from './is-allowed';
 import pick from 'lodash.pick';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 

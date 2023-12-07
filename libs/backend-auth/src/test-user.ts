@@ -4,10 +4,10 @@ import tables from '@decipad/tables';
 import {
   create as createUser,
   maybeEnrich as maybeEnrichUser,
+  isAllowedToLogIn,
 } from '@decipad/services/users';
 import { jwt as jwtConf } from '@decipad/services/authentication';
 import { APIGatewayProxyResultV2, APIGatewayProxyEventV2 } from 'aws-lambda';
-import { isAllowedToLogIn } from './is-allowed';
 import { UserInput } from '@decipad/backendtypes';
 
 const defaultTestUserEmail = 'test@decipad.com';
