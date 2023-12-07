@@ -5,6 +5,7 @@ import { ws } from '@architect/functions';
 import type { NotebookAssistantEvent } from '../types';
 import { Subscription } from 'rxjs';
 import { fnQueue } from '@decipad/fnqueue';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 export interface ChatAgentMessage {
   connectionId: string;
@@ -22,7 +23,8 @@ export const onQueueMessage = async (event: ChatAgentMessage) => {
   const assistant = await streamingNotebookAssistant(
     resource.id,
     event.message,
-    event.connectionId
+    event.connectionId,
+    getRemoteComputer()
   );
 
   return new Promise<void>((resolve) => {

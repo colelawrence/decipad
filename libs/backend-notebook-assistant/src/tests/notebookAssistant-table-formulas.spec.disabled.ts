@@ -4,6 +4,7 @@ import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
 import _document from './__fixtures__/tables.json';
 import { applyOperations } from '../utils/applyOperations';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const document = _document as Document;
 
@@ -17,7 +18,8 @@ test('notebook assistant: table formulas', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add a column to the table that calculates the sum of the EBITDA and Capex columns',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -682,7 +684,8 @@ test('notebook assistant: table formulas', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the last column to calculate the average of the EBITDA column instead',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([

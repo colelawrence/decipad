@@ -4,6 +4,7 @@ import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
 import _notebook from './__fixtures__/simplest.json';
 import { applyOperations } from '../utils/applyOperations';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const notebook = _notebook as Document;
 
@@ -17,7 +18,8 @@ test('notebook assistant: prose', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the title text to say "🕯Stopping a Candle Business"',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`
@@ -71,7 +73,8 @@ test('notebook assistant: prose', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'remove the last paragraph',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`
@@ -109,7 +112,8 @@ test('notebook assistant: prose', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add a paragraph asking people to follow me on Twitter',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
@@ -166,7 +170,8 @@ test('notebook assistant: prose', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the second paragraph asking people to follow me on Twitter',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
@@ -214,7 +219,8 @@ test('notebook assistant: prose', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add a code line calculating 3 divided by 4',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {

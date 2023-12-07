@@ -5,6 +5,7 @@ import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
 import _document from './__fixtures__/simple-with-ui-components.json';
 import { applyOperations } from '../utils/applyOperations';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const document = _document as Document;
 
@@ -18,7 +19,8 @@ test('notebook assistant: data views', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add a data view to analyze the first 2 columns of my table',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([
@@ -322,7 +324,8 @@ test('notebook assistant: data views', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'summarize table Table1',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([

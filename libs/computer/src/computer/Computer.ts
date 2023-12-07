@@ -54,6 +54,7 @@ import { captureException } from '../reporting';
 import { ResultStreams } from '../resultStreams';
 import { dropWhileComputing } from '../tools/dropWhileComputing';
 import type {
+  BlockResult,
   ComputeRequest,
   ComputeRequestWithExternalData,
   ComputerProgram,
@@ -115,6 +116,8 @@ export class Computer {
   public results = this.resultStreams.global;
   public stats = this.computationRealm.stats;
 
+  private flushedSubject = new BehaviorSubject<boolean>(true);
+
   constructor({ initialProgram }: ComputerOpts = {}) {
     this.wireRequestsToResults();
     if (initialProgram) {
@@ -160,13 +163,16 @@ export class Computer {
         // Make sure the new request is actually different
         distinctUntilChanged((prevReq, req) => dequal(prevReq, req)),
         // Compute me some computes!
-        dropWhileComputing(async (req) => {
-          const start = Date.now();
-          const result = await this.computeRequest(req);
-          const fullRequestElapsedTimeMs = Date.now() - start;
-          this.stats.pushComputerRequestStat({ fullRequestElapsedTimeMs });
-          return result;
-        }),
+        dropWhileComputing(
+          async (req) => {
+            const start = Date.now();
+            const result = await this.computeRequest(req);
+            const fullRequestElapsedTimeMs = Date.now() - start;
+            this.stats.pushComputerRequestStat({ fullRequestElapsedTimeMs });
+            return result;
+          },
+          (pendingCount) => this.flushedSubject.next(pendingCount === 0)
+        ),
         switchMap((item) => (item == null ? [] : [item])),
         shareReplay(1)
       )
@@ -189,7 +195,7 @@ export class Computer {
 
   results$ = listenerHelper(this.results, identity);
 
-  getBlockIdResult(blockId: string) {
+  getBlockIdResult(blockId: string): BlockResult | undefined {
     return this.results.value.blockResults[blockId ?? ''];
   }
 
@@ -885,5 +891,21 @@ export class Computer {
 
   formatError(error: ErrSpec): string {
     return formatError(this.locale, error);
+  }
+
+  // flush
+  async flush(): Promise<void> {
+    return new Promise((resolve) => {
+      if (this.flushedSubject.getValue()) {
+        resolve();
+        return;
+      }
+      const sub = this.flushedSubject.subscribe((flushed) => {
+        if (flushed) {
+          sub.unsubscribe();
+          resolve();
+        }
+      });
+    });
   }
 }

@@ -15,6 +15,7 @@ import { attachEditorToBackend } from './attachEditorToBackend';
 import { actions } from '../actions';
 import { fetchNotebook } from './fetchNotebook';
 import { track } from '@decipad/backend-analytics';
+import { syncComputer } from './syncComputer';
 
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
@@ -46,6 +47,7 @@ export const server = async (
 
     const editor = await getEditor({ notebookId, computer });
     const [, detach] = await attachEditorToBackend(editor);
+    await syncComputer(editor, computer);
     let subEditor = editor.getTabEditorAt(0);
     if (!subEditor) {
       editor.insertTab();

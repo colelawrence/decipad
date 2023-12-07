@@ -12,6 +12,7 @@ import { getCode } from '../utils/getCode';
 import { splitCode } from '../utils/splitCode';
 import { generateInitialMessages } from './generateInitialMessages';
 import { SplitCodeResult } from '../types';
+import { RemoteComputer } from '@decipad/remote-computer';
 
 const fineTunedModelForDecilangCode =
   'ft:gpt-3.5-turbo-0613:team-n1n-co::8L7t8n9c';
@@ -19,6 +20,7 @@ const fineTunedModelForDecilangCode =
 export interface CodeAssistantOptions {
   summary?: string;
   notebook?: RootDocument;
+  computer: RemoteComputer;
   prompt: string;
   _messages?: (
     | ChatCompletionUserMessageParam
@@ -36,7 +38,7 @@ export const codeAssistant = async (
 ): Promise<SplitCodeResult | undefined> => {
   debug('codeAssistant', JSON.stringify(props, null, '\t'));
   let code = props.previousAttemptResult;
-  const { summary, notebook, prompt, _messages, attempt = 1 } = props;
+  const { summary, notebook, computer, prompt, _messages, attempt = 1 } = props;
   if (attempt === maxAttempts) {
     return code;
   }
@@ -46,6 +48,7 @@ export const codeAssistant = async (
       summary,
       notebook: getDefined(notebook),
       prompt,
+      computer,
     }));
   debug('messages:', JSON.stringify(messages, null, '\t'));
   const completion = await getOpenAI().chat.completions.create({

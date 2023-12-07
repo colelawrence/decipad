@@ -25,9 +25,11 @@ import { setPlotParams } from './setPlotParams';
 import { appendChoice } from './appendChoice';
 import { describeAllNotebookElements } from './describeAllNotebookElements';
 import { updateSliderVariable } from './updateSliderVariable';
+import { getElementResult } from './getElementResult';
 
 export const actions: Partial<Actions> = {
   describeAllNotebookElements,
+  getElementResult,
   getElementById,
   removeElement,
   appendElement,

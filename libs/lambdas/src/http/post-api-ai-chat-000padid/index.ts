@@ -32,6 +32,7 @@ import {
 import { debug } from '../../debug';
 import tables from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const GPT_MODEL = 'gpt-4-1106-preview';
 
@@ -101,7 +102,7 @@ export const handler = handle(async (event) => {
   let idMapping: string;
 
   try {
-    const { verbalized } = verbalizeDoc(doc);
+    const { verbalized } = verbalizeDoc(doc, getRemoteComputer());
 
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
     idMapping = verbalized

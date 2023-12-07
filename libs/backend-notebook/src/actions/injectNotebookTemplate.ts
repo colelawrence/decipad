@@ -43,7 +43,7 @@ export const injectNotebookTemplate: CustomAction<
     },
   },
   requiresNotebook: true,
-  handler: async (editor, { notebookTemplateId }) => {
+  handler: async (editor, { notebookTemplateId }, { computer }) => {
     const data = await tables();
     const template = await data.pads.get({ id: notebookTemplateId });
     if (!template) {
@@ -64,7 +64,7 @@ export const injectNotebookTemplate: CustomAction<
       'injectNotebookTemplate: content',
       JSON.stringify(content, null, '\t')
     );
-    const { verbalized } = verbalizeDoc(content);
+    const { verbalized } = verbalizeDoc(content, computer);
     debug(
       'injectNotebookTemplate: verbalized:',
       JSON.stringify(verbalized, null, '\t')
@@ -96,21 +96,24 @@ export const injectNotebookTemplate: CustomAction<
       }
     });
 
-    return verbalizeDoc({
-      children: [
-        {
-          type: ELEMENT_TITLE,
-          id: 'title-id',
-          children: [{ text: title }],
-        },
-        {
-          type: ELEMENT_TAB,
-          id: 'tab-id',
-          name: 'First tab',
-          children: editor.children,
-        },
-      ],
-    }).verbalized.map((v) => ({
+    return verbalizeDoc(
+      {
+        children: [
+          {
+            type: ELEMENT_TITLE,
+            id: 'title-id',
+            children: [{ text: title }],
+          },
+          {
+            type: ELEMENT_TAB,
+            id: 'tab-id',
+            name: 'First tab',
+            children: editor.children,
+          },
+        ],
+      },
+      computer
+    ).verbalized.map((v) => ({
       elementId: v.element.id,
       type: v.element.type,
       description: v.verbalized,

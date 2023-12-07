@@ -50,6 +50,11 @@ export interface NotebookOpenApi {
   describeAllNotebookElements: (
     params: Record<string, undefined>
   ) => GenericSummaryResult<AllNotebookElementsDescriptionResult>;
+  getElementResult: (
+    params:
+      | { varName: string; elementId?: undefined }
+      | { elementId: string; varName?: undefined }
+  ) => string;
 
   // basic element manipulation
   getElementById: (params: {

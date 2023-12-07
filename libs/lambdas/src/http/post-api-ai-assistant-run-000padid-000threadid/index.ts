@@ -10,6 +10,7 @@ import { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 
 import { ASSISTANT_SYSTEM_PROMPT } from './constants';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const notebooks = resource('notebook');
 
@@ -48,7 +49,7 @@ export const handler = handle(async (event) => {
   let verbalizedDoc: string;
 
   try {
-    const { verbalized } = verbalizeDoc(doc);
+    const { verbalized } = verbalizeDoc(doc, getRemoteComputer());
 
     verbalizedDoc = verbalized.map((v) => v.verbalized).join('\n');
   } catch (e) {

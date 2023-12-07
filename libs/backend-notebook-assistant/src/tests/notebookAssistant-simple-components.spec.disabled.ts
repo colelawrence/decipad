@@ -6,6 +6,7 @@ import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
 import _notebook from './__fixtures__/simple-with-ui-components.json';
 import { applyOperations } from '../utils/applyOperations';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const notebook = _notebook as Document;
 
@@ -19,7 +20,8 @@ test('notebook assistant: simple UI components', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add another slider named MyNewSlider with default value of 10, min of 0 and max of 100',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     if (
       dequal(results.operations.slice(0, 2), [
@@ -326,7 +328,8 @@ test('notebook assistant: simple UI components', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the slider var name to be "MySlider1"',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`

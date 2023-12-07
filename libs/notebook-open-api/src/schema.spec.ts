@@ -9,6 +9,27 @@ it('tests every action', () => {
         "parameters": {},
       },
       {
+        "description": "fetches the result of an element",
+        "name": "getElementResult",
+        "parameters": {
+          "properties": {
+            "elementId": {
+              "description": "the id of the element you want to get the result for",
+              "type": "string",
+            },
+            "varName": {
+              "description": "the variable name you want to get the result for",
+              "type": "string",
+            },
+          },
+          "required": [
+            "varName",
+            "elementId",
+          ],
+          "type": "object",
+        },
+      },
+      {
         "description": "fetches an element from the notebook with the given id",
         "name": "getElementById",
         "parameters": {

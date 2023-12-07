@@ -5,6 +5,7 @@ import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
 import _document from './__fixtures__/simple-with-ui-components.json';
 import { applyOperations } from '../utils/applyOperations';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const document = _document as Document;
 
@@ -18,7 +19,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'create another table with two columns and 3 rows',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([
@@ -382,7 +384,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the table variable name to be "MyTableName"',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -626,7 +629,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the table second column name to "MySecondColumn"',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -870,7 +874,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add another column to the table',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -1153,7 +1158,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'remove the last column of the table',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -1343,7 +1349,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the type of the second column to number',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -1587,7 +1594,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'fill the first column of the existing table with numbers from 10 to 14, adding extra rows if needed',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations))
@@ -1879,7 +1887,8 @@ test('notebook assistant: tables', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'fill the second column of the existing table with 10 Pokemon names',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
 
     expect(applyOperations(document, results.operations)).toMatchObject([

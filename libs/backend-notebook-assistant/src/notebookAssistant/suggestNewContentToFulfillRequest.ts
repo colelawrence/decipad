@@ -35,6 +35,7 @@ import {
 import { parseInstructionConstituents } from '../utils/parseInstructionConstituents';
 import { getAllTags } from '../utils/getAllTags';
 import type { NotebookAssistantEvent } from '../types';
+import { RemoteComputer } from '@decipad/remote-computer';
 
 export interface SuggestNewContentReply {
   newDocument: RootDocument;
@@ -59,13 +60,14 @@ export const suggestNewContentToFulfillRequest = async (
   content: RootDocument,
   request: string,
   events: Subject<NotebookAssistantEvent>,
-  connectionId: string
+  connectionId: string,
+  computer: RemoteComputer
 ) => {
   const debug = createSubDebug(connectionId);
   debug('suggestNewContentToFulfillRequest', content, request);
   const openAi = getOpenAI();
 
-  const verbalizedDocument = verbalizeDoc(content);
+  const verbalizedDocument = verbalizeDoc(content, computer);
   const intro = (await introTemplate.invoke({})).toString();
 
   const nudges = (): string => {
@@ -420,8 +422,9 @@ No comments.`,
       ).description;
       debug('code prompt: %j', codePrompt);
       const codeSnippet = await codeAssistant({
-        summary: createComputationalSummary(content),
+        summary: createComputationalSummary(content, computer),
         prompt: codePrompt,
+        computer,
       });
       debug('code snippet:', codeSnippet);
       if (codeSnippet) {

@@ -5,11 +5,12 @@ import someCode from './__fixtures__/some-code.json';
 import uiComponents from './__fixtures__/simple-ui-components.json';
 import mostComponents from './__fixtures__/most-components.json';
 import { RootDocument } from '@decipad/editor-types';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 describe('verbalizeDoc', () => {
   it('verbalizes text documents into the text itself', () => {
     const doc = textOnly as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.element)).toMatchObject(doc.children);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
@@ -23,7 +24,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes code lines', () => {
     const doc = someCode as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -82,7 +83,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes some simple UI components', () => {
     const doc = uiComponents as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -180,7 +181,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes most components', () => {
     const doc = mostComponents as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [

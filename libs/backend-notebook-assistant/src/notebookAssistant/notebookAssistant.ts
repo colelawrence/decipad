@@ -10,11 +10,13 @@ import cloneDeep from 'lodash.clonedeep';
 import { fixDocument } from '../utils/fixDocument';
 import { Subject, type Observable } from 'rxjs';
 import { NotebookAssistantEvent, NotebookAssistantReply } from '../types';
+import { RemoteComputer } from '@decipad/remote-computer';
 
 const internalNotebookAssistant = (
   oldDocument: RootDocument,
   request: string,
-  connectionId: string
+  connectionId: string,
+  computer: RemoteComputer
 ): Observable<NotebookAssistantEvent> => {
   const events = new Subject<NotebookAssistantEvent>();
   try {
@@ -48,7 +50,8 @@ const internalNotebookAssistant = (
       cloneDeep(encodedOldDocument),
       request,
       events,
-      connectionId
+      connectionId,
+      computer
     ).catch((err) => {
       events.next({
         type: 'error',
@@ -71,17 +74,24 @@ const internalNotebookAssistant = (
 export const streamingNotebookAssistant = async (
   notebookId: string,
   request: string,
-  connectionId: string
+  connectionId: string,
+  computer: RemoteComputer
 ): Promise<Observable<NotebookAssistantEvent>> => {
   debug('notebookAssistant', { notebookId, request, connectionId });
   const oldDocument = await getNotebookContent(notebookId);
-  return internalNotebookAssistant(oldDocument, request, connectionId);
+  return internalNotebookAssistant(
+    oldDocument,
+    request,
+    connectionId,
+    computer
+  );
 };
 
 export const notebookAssistant = async (
   notebookId: string,
   request: string,
-  connectionId: string
+  connectionId: string,
+  computer: RemoteComputer
 ): Promise<NotebookAssistantReply> => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise<NotebookAssistantReply>(async (resolve, reject) => {
@@ -89,7 +99,12 @@ export const notebookAssistant = async (
     let summary: undefined | string;
 
     const subscription = (
-      await streamingNotebookAssistant(notebookId, request, connectionId)
+      await streamingNotebookAssistant(
+        notebookId,
+        request,
+        connectionId,
+        computer
+      )
     ).subscribe((event) => {
       switch (event.type) {
         case 'error': {

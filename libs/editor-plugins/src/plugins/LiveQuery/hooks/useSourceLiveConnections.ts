@@ -16,6 +16,9 @@ const isSourceLiveConnection = (
     const indexOfTypeColumn = columnNames.indexOf('type');
     if (indexOfTypeColumn >= 0) {
       const result = computer.getBlockIdResult(autoCompleteName.blockId);
+      if (!result) {
+        return false;
+      }
       return (
         (result.result as Result.Result<'materialized-table'>)?.value?.[
           indexOfTypeColumn

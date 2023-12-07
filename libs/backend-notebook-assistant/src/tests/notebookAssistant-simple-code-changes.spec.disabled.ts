@@ -5,6 +5,7 @@ import { notebookAssistant } from '../notebookAssistant/notebookAssistant';
 import { setupTest } from './_setupTest';
 import _notebook from './__fixtures__/simple-with-code.json';
 import { applyOperations } from '../utils/applyOperations';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 const notebook = _notebook as Document;
 
@@ -18,7 +19,8 @@ test('notebook assistant: simple code changes', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'change the variable name of VarName1 to NewVarName',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations))
       .toMatchInlineSnapshot(`
@@ -141,7 +143,8 @@ test('notebook assistant: simple code changes', async (ctx) => {
     const results = await notebookAssistant(
       newNotebookId,
       'add 1 to the end of the cosine calculation',
-      'conn-id'
+      'conn-id',
+      getRemoteComputer()
     );
     expect(applyOperations(notebook, results.operations)).toMatchObject([
       {
