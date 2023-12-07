@@ -6,14 +6,21 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { useChatAssistantHelper } from './useChatAssistantHelper';
 
 export const useAssistantChat = (notebookId: string) => {
-  const [chats, addMessage, deleteMessage, clearMessages] = useAIChatHistory(
-    (state) => [
-      state.chats,
-      state.addMessage,
-      state.deleteMessage,
-      state.clearMessages,
-    ]
-  );
+  const [
+    chats,
+    addMessage,
+    deleteMessage,
+    clearMessages,
+    isFirstInteraction,
+    startInteraction,
+  ] = useAIChatHistory((state) => [
+    state.chats,
+    state.addMessage,
+    state.deleteMessage,
+    state.clearMessages,
+    state.isFirstInteraction,
+    state.startInteraction,
+  ]);
 
   const [isGeneratingResponse, setGeneratingResponse] = useState(false);
 
@@ -53,6 +60,8 @@ export const useAssistantChat = (notebookId: string) => {
 
   const sendUserMessage = useCallback(
     async (message: string) => {
+      startInteraction();
+
       const newMessage: UserMessage = {
         type: 'user',
         content: message,
@@ -73,7 +82,7 @@ export const useAssistantChat = (notebookId: string) => {
 
       setGeneratingResponse(false);
     },
-    [handleAddMessage, messages, getChatResponse]
+    [handleAddMessage, messages, getChatResponse, startInteraction]
   );
 
   return {
@@ -83,6 +92,7 @@ export const useAssistantChat = (notebookId: string) => {
     stopGenerating,
     regenerateResponse,
     isGeneratingResponse,
+    isFirstInteraction,
     currentUserMessage: currentUserMessage.current,
   };
 };

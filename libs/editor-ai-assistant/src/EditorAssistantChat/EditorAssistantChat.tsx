@@ -28,6 +28,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
     stopGenerating,
     regenerateResponse,
     isGeneratingResponse,
+    isFirstInteraction,
     currentUserMessage,
   } = useAssistantChat(notebookId);
 
@@ -61,6 +62,7 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
       aiCreditsUsed={promptTokensUsed + completionTokensUsed}
       aiQuotaLimit={aiQuotaLimit}
       isPremium={isPremium}
+      isFirstInteraction={isFirstInteraction}
     />
   );
 };

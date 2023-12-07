@@ -39,6 +39,7 @@ type AssistantChatProps = {
   readonly aiCreditsUsed?: number;
   readonly aiQuotaLimit?: number;
   readonly isPremium?: boolean;
+  readonly isFirstInteraction: boolean;
 };
 
 export const AssistantChat: React.FC<AssistantChatProps> = ({
@@ -55,6 +56,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
   aiCreditsUsed,
   aiQuotaLimit,
   isPremium = false,
+  isFirstInteraction,
 }) => {
   return (
     <div css={wrapperStyles}>
@@ -78,6 +80,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
       />
 
       <AssistantMessageInput
+        isFirstInteraction={isFirstInteraction}
         onStop={stopGenerating}
         onSubmit={sendMessage}
         isGenerating={isGenerating}

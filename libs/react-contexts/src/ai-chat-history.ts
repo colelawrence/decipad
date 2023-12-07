@@ -68,6 +68,7 @@ type ThreadMap = {
 };
 
 export interface AIChatHistoryStoreType {
+  readonly isFirstInteraction: boolean;
   readonly chats: Chat;
   readonly threads: ThreadMap;
   readonly addMessage: (notebookId: string) => (message: Message) => void;
@@ -80,14 +81,19 @@ export interface AIChatHistoryStoreType {
     notebookId: string
   ) => (messageId: string, event: SingleEvent) => void;
   readonly mapThreadToChat: (notebookId: string) => (threadId: string) => void;
+  readonly startInteraction: () => void;
 }
 
 export const useAIChatHistory = create<AIChatHistoryStoreType>()(
   persist(
     (set) => {
       return {
+        isFirstInteraction: true,
         chats: {},
         threads: {},
+        startInteraction: () => {
+          set({ isFirstInteraction: false });
+        },
         mapThreadToChat: (notebookId: string) => (threadId: string) => {
           set((state) => {
             return {

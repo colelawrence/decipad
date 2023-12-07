@@ -7,19 +7,21 @@ describe('<AssistantMessageInput />', () => {
   it('renders correctly', () => {
     render(
       <AssistantMessageInput
+        isFirstInteraction={false}
         onStop={noop}
         isGenerating={false}
         onSubmit={noop}
       />
     );
     expect(
-      screen.getByPlaceholderText(/what can i do for you/i)
+      screen.getByPlaceholderText(/type your message here/i)
     ).toBeInTheDocument();
   });
 
   it('updates value on input change', async () => {
     const { getByTestId } = render(
       <AssistantMessageInput
+        isFirstInteraction={false}
         onStop={noop}
         isGenerating={false}
         onSubmit={noop}
@@ -34,6 +36,7 @@ describe('<AssistantMessageInput />', () => {
     const mockOnSubmit = jest.fn();
     const { getByTestId } = render(
       <AssistantMessageInput
+        isFirstInteraction={false}
         onStop={noop}
         isGenerating={false}
         onSubmit={mockOnSubmit}
@@ -53,6 +56,7 @@ describe('<AssistantMessageInput />', () => {
     const mockOnSubmit = jest.fn();
     const { getByTestId } = render(
       <AssistantMessageInput
+        isFirstInteraction={false}
         onStop={noop}
         isGenerating={false}
         onSubmit={mockOnSubmit}
