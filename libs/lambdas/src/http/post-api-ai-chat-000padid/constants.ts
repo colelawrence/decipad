@@ -3,10 +3,10 @@ You are responsible for determining intent of the user message.
 Your only two options are 'conversation', 'creation' and 'fetch_data'.
 Conversation is when user is asking a question, making a statement or asking for help, implying they need to be asked follow-up questions, or you don't have sufficient information to suggest modelling.
 Creation is when user is making a change to the document, implying they don't need to be asked follow-up questions.
-Fetch data is when user is asking for data from extrernal sources, implying they don't need to be asked follow-up questions.
 Respond with a valid JSON that represents chance of each intent.
+If message ask whether assistant is able to build something, use creation mode.
 Make sure JSON is valid and can be parsed by JSON.parse().
-Example: { "conversation": 0.7, "creation": 0.2, "fetch_data": 0.1 }
+Example: { "conversation": 0.7, "creation": 0.2 }
 `;
 
 const LANGUAGE_DESCRIPTION = `
