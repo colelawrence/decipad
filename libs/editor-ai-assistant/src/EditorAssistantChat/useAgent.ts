@@ -56,6 +56,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
   }, [abortController]);
 
   const submitChat = useCallback(
+    // eslint-disable-next-line complexity
     async (
       messages: Message[],
       userMessage: UserMessage,
@@ -109,6 +110,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
 
             const action = actions[actionName] as Action<typeof actionName>;
 
+            let newEventMessage = eventMessage;
             let newMessages = messages;
 
             if (!action) {
@@ -143,14 +145,16 @@ export const useAgent = ({ notebookId }: AgentParams) => {
 
                 handleAddEventToMessage(eventMessage.id, newEvent);
 
-                newMessages = messages.map((msg) => {
-                  if (msg.id === eventMessage.id && msg.type === 'event') {
-                    return {
-                      ...msg,
-                      events: [...(msg.events || []), newEvent],
-                    };
+                newEventMessage = {
+                  ...eventMessage,
+                  events: [...(newEventMessage.events || []), newEvent],
+                };
+
+                newMessages = messages.map((m) => {
+                  if (m.id === eventMessage.id && m.type === 'event') {
+                    return newEventMessage;
                   }
-                  return msg;
+                  return m;
                 });
               } catch (err) {
                 console.error(err);
@@ -163,19 +167,21 @@ export const useAgent = ({ notebookId }: AgentParams) => {
 
                 handleAddEventToMessage(eventMessage.id, newEvent);
 
-                newMessages = messages.map((msg) => {
-                  if (msg.id === eventMessage.id && msg.type === 'event') {
-                    return {
-                      ...msg,
-                      events: [...(msg.events || []), newEvent],
-                    };
+                newEventMessage = {
+                  ...eventMessage,
+                  events: [...(newEventMessage.events || []), newEvent],
+                };
+
+                newMessages = messages.map((m) => {
+                  if (m.id === eventMessage.id && m.type === 'event') {
+                    return newEventMessage;
                   }
-                  return msg;
+                  return m;
                 });
               }
             }
             // Recursively call the agent again until we get a response without a function call
-            return submitChat(newMessages, userMessage, eventMessage);
+            return submitChat(newMessages, userMessage, newEventMessage);
           }
           handleUpdateMessageStatus(eventMessage.id, 'success');
           if (message.content) {
@@ -227,7 +233,11 @@ export const useAgent = ({ notebookId }: AgentParams) => {
         }
       } catch (err) {
         console.error(err);
-        handleDeleteMessage(eventMessage.id);
+        if (eventMessage.events && eventMessage.events.length > 0) {
+          handleUpdateMessageStatus(eventMessage.id, 'error');
+        } else {
+          handleDeleteMessage(eventMessage.id);
+        }
         handleAddMessage({
           type: 'event',
           id: nanoid(),

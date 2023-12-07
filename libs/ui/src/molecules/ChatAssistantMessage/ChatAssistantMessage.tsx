@@ -1,6 +1,13 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 
-import { DeciAI, Duplicate, Feedback, ThumbsDown, ThumbsUp } from '../../icons';
+import {
+  DeciAI,
+  Duplicate,
+  Feedback,
+  Refresh,
+  ThumbsDown,
+  ThumbsUp,
+} from '../../icons';
 import {
   componentCssVars,
   cssVar,
@@ -59,8 +66,8 @@ const contentStyles = css(p14Regular, {
 const buttonContainerStyles = css({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
   padding: '0px 6px',
+  gap: 4,
 });
 
 const buttonStyles = css(p13Medium, {
@@ -89,27 +96,6 @@ const buttonStyles = css(p13Medium, {
 
   '&:active': {
     backgroundColor: cssVar('backgroundHeavy'),
-  },
-});
-
-const primaryButtonStyles = css(p13Medium, {
-  height: 24,
-
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '0px 6px',
-  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
-  color: componentCssVars('AIAssistantTextColor'),
-  borderRadius: 6,
-  cursor: 'pointer',
-
-  '&:hover': {
-    backgroundColor: componentCssVars('AIAssistantBackgroundHoverColor'),
-  },
-
-  '&:active': {
-    boxShadow: `0px 0px 0px 1px ${cssVar('borderDefault')}`,
   },
 });
 
@@ -160,66 +146,72 @@ export const ChatAssistantMessage: React.FC<Props> = ({
         <ChatMarkdownRenderer content={content} />
         {isCurrentReply && !isGenerating && (
           <div css={buttonContainerStyles}>
-            <button css={primaryButtonStyles} onClick={regenerateResponse}>
-              Retry
-            </button>
-            <div css={{ display: 'flex', gap: 4 }}>
-              <Tooltip
-                trigger={
-                  <button
-                    onClick={hasRated ? noop : () => handleSendRating('like')}
-                    css={buttonStyles}
-                    disabled={hasRated}
-                    data-testid="like-button"
-                  >
-                    <ThumbsUp />
-                  </button>
-                }
-              >
-                This response is helpful
-              </Tooltip>
-              <Tooltip
-                trigger={
-                  <button
-                    onClick={
-                      hasRated ? noop : () => handleSendRating('dislike')
-                    }
-                    disabled={hasRated}
-                    css={buttonStyles}
-                    data-testid="copy-button"
-                  >
-                    <ThumbsDown />
-                  </button>
-                }
-              >
-                This response is not helpful
-              </Tooltip>
-              <AssistantFeedbackPopUp
-                onSubmit={hasSubmittedFeedback ? noop : handleSendFeedback}
-                trigger={
-                  <button
-                    css={buttonStyles}
-                    disabled={hasSubmittedFeedback}
-                    data-testid="feedback-button"
-                  >
-                    <Feedback />
-                  </button>
-                }
-              />
-              <Tooltip
-                trigger={
-                  <button
-                    onClick={() => copyToClipboard(content || '')}
-                    css={buttonStyles}
-                    data-testid="copy-button"
-                  >
-                    <Duplicate />
-                  </button>
-                }
-              >
-                Copy response to clipboard
-              </Tooltip>
-            </div>
+            <Tooltip
+              trigger={
+                <button
+                  onClick={hasRated ? noop : () => handleSendRating('like')}
+                  css={buttonStyles}
+                  disabled={hasRated}
+                  data-testid="like-button"
+                >
+                  <ThumbsUp />
+                </button>
+              }
+            >
+              This response is helpful
+            </Tooltip>
+            <Tooltip
+              trigger={
+                <button
+                  onClick={hasRated ? noop : () => handleSendRating('dislike')}
+                  disabled={hasRated}
+                  css={buttonStyles}
+                  data-testid="copy-button"
+                >
+                  <ThumbsDown />
+                </button>
+              }
+            >
+              This response is not helpful
+            </Tooltip>
+            <AssistantFeedbackPopUp
+              onSubmit={hasSubmittedFeedback ? noop : handleSendFeedback}
+              trigger={
+                <button
+                  css={buttonStyles}
+                  disabled={hasSubmittedFeedback}
+                  data-testid="feedback-button"
+                >
+                  <Feedback />
+                </button>
+              }
+            />
+            <Tooltip
+              trigger={
+                <button
+                  onClick={() => copyToClipboard(content || '')}
+                  css={buttonStyles}
+                  data-testid="copy-button"
+                >
+                  <Duplicate />
+                </button>
+              }
+            >
+              Copy response to clipboard
+            </Tooltip>
+            <Tooltip
+              trigger={
+                <button
+                  onClick={regenerateResponse}
+                  css={buttonStyles}
+                  data-testid="regenerate-button"
+                >
+                  <Refresh />
+                </button>
+              }
+            >
+              Regenerate this response
+            </Tooltip>
           </div>
         )}
       </div>

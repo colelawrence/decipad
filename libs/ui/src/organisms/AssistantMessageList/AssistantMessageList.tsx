@@ -281,7 +281,14 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 }}
                   >
-                    <ChatEventMessage key={id} message={entry} />
+                    <ChatEventMessage
+                      key={id}
+                      message={entry}
+                      isCurrentReply={currentUserMessage?.id === replyTo}
+                      isGenerating={isGenerating}
+                      regenerateResponse={regenerateResponse}
+                      submitFeedback={submitFeedback}
+                    />
                   </motion.div>
                 );
               }
