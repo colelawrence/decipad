@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { AssistantChat } from '@decipad/ui';
 import { useAssistantChat } from './useAssistantChat';
 import { useAiUsage } from '@decipad/react-contexts';
@@ -5,20 +6,19 @@ import { MyEditor, MyValue } from '@decipad/editor-types';
 import { useCallback } from 'react';
 import { EElementOrText, insertNodes } from '@udecode/plate-common';
 import { setSelection } from '@decipad/editor-utils';
+import { TOKENS_TO_CREDITS, getLimit } from './limits';
 
 type EditorAssistantChatProps = {
   notebookId: string;
   workspaceId: string;
   editor: MyEditor;
-  aiQuotaLimit?: number;
-  isPremium?: boolean;
+  isPremium: boolean;
 };
 
 export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   notebookId,
   workspaceId,
   editor,
-  aiQuotaLimit,
   isPremium,
 }) => {
   const {
@@ -33,6 +33,11 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
   } = useAssistantChat(notebookId);
 
   const { promptTokensUsed, completionTokensUsed } = useAiUsage();
+
+  const limit = getLimit(Boolean(isPremium));
+  const creditsUsed = Math.floor(
+    (promptTokensUsed + completionTokensUsed) / TOKENS_TO_CREDITS
+  );
 
   // eslint-disable-next-line no-underscore-dangle
   const _insertNodes = useCallback(
@@ -59,9 +64,8 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
       isGenerating={isGeneratingResponse}
       currentUserMessage={currentUserMessage}
       insertNodes={_insertNodes}
-      aiCreditsUsed={promptTokensUsed + completionTokensUsed}
-      aiQuotaLimit={aiQuotaLimit}
-      isPremium={isPremium}
+      aiCreditsUsed={creditsUsed}
+      aiQuotaLimit={limit}
       isFirstInteraction={isFirstInteraction}
     />
   );

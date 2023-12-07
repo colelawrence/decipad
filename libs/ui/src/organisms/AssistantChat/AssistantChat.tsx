@@ -36,8 +36,8 @@ type AssistantChatProps = {
   readonly insertNodes: (
     ops: EElementOrText<MyValue> | EElementOrText<MyValue>[]
   ) => void;
-  readonly aiCreditsUsed?: number;
-  readonly aiQuotaLimit?: number;
+  readonly aiCreditsUsed: number;
+  readonly aiQuotaLimit: number;
   readonly isPremium?: boolean;
   readonly isFirstInteraction: boolean;
 };
@@ -55,7 +55,6 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
   insertNodes,
   aiCreditsUsed,
   aiQuotaLimit,
-  isPremium = false,
   isFirstInteraction,
 }) => {
   return (
@@ -64,7 +63,6 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
         onClear={clearChat}
         creditsUsed={aiCreditsUsed}
         creditsQuotaLimit={aiQuotaLimit}
-        isPremium={isPremium}
         onStop={stopGenerating}
         isGenerating={isGenerating}
       />
@@ -84,6 +82,9 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
         onStop={stopGenerating}
         onSubmit={sendMessage}
         isGenerating={isGenerating}
+        reachedCreditLimit={
+          aiCreditsUsed && aiQuotaLimit ? aiCreditsUsed >= aiQuotaLimit : false
+        }
       />
     </div>
   );

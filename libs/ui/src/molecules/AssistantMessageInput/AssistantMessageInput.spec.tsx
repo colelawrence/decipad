@@ -11,6 +11,7 @@ describe('<AssistantMessageInput />', () => {
         onStop={noop}
         isGenerating={false}
         onSubmit={noop}
+        reachedCreditLimit={false}
       />
     );
     expect(
@@ -25,6 +26,7 @@ describe('<AssistantMessageInput />', () => {
         onStop={noop}
         isGenerating={false}
         onSubmit={noop}
+        reachedCreditLimit={false}
       />
     );
     const input = getByTestId('message-input') as HTMLInputElement;
@@ -40,6 +42,7 @@ describe('<AssistantMessageInput />', () => {
         onStop={noop}
         isGenerating={false}
         onSubmit={mockOnSubmit}
+        reachedCreditLimit={false}
       />
     );
     const input = getByTestId('message-input');
@@ -60,6 +63,7 @@ describe('<AssistantMessageInput />', () => {
         onStop={noop}
         isGenerating={false}
         onSubmit={mockOnSubmit}
+        reachedCreditLimit={false}
       />
     );
     const input = getByTestId('message-input');

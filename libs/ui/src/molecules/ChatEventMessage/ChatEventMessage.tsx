@@ -119,7 +119,7 @@ export const ChatEventMessage: React.FC<Props> = ({
 }) => {
   const [hasReported, setHasReported] = useState(false);
 
-  const { content, status } = message;
+  const { content, uiContent, status } = message;
 
   const handleSendFeedback = useCallback(
     (m: string) => {
@@ -132,7 +132,7 @@ export const ChatEventMessage: React.FC<Props> = ({
   return (
     <div css={wrapperStyles}>
       <div css={iconStyles}>{messageMeta(status).icon}</div>
-      <p css={contentStyles}>{content}</p>
+      <p css={contentStyles}>{uiContent ?? content}</p>
       {isCurrentReply && !isGenerating && status === 'error' && (
         <div css={buttonContainerStyles}>
           <AssistantFeedbackPopUp

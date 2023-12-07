@@ -95,19 +95,6 @@ export const buttonStyles = css(p13Medium, {
   },
 });
 
-const labelStyles = css(p12Bold, {
-  color: cssVar('textHeavy'),
-  backgroundColor: cssVar('backgroundHeavier'),
-  padding: '1px 4px 0px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 20,
-  minWidth: 20,
-  marginLeft: 4,
-  borderRadius: '4px',
-});
-
 const tooltipTitleStyles = css(p12Bold, {
   color: componentCssVars('TooltipText'),
 });
@@ -116,20 +103,56 @@ const tooltipTextStyles = css({
   color: componentCssVars('TooltipTextSecondary'),
 });
 
+const creditsStyles = css(tagStyles, {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  label: {
+    ...p12Bold,
+    backgroundColor: cssVar('backgroundHeavier'),
+    display: 'flex',
+    height: '16px',
+    padding: '0px 4px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: '4px',
+  },
+});
+
+const Credits: React.FC<{ creditsUsed: number; creditsQuota: number }> = ({
+  creditsUsed,
+  creditsQuota,
+}) => (
+  <Tooltip
+    trigger={
+      <div css={creditsStyles}>
+        <span>Credits</span>
+        <label>
+          <span>{Math.max(0, creditsQuota - creditsUsed)}</span>
+        </label>
+      </div>
+    }
+    side="bottom"
+    variant="small"
+  >
+    <div css={tooltipTitleStyles}>
+      {Math.min(creditsQuota, creditsUsed)}/{creditsQuota} used
+    </div>
+  </Tooltip>
+);
+
 type AssistantChatHeaderProps = {
   onClear: () => void;
-  creditsUsed?: number;
-  creditsQuotaLimit?: number;
-  isPremium?: boolean;
+  creditsUsed: number;
+  creditsQuotaLimit: number;
   onStop: () => void;
   isGenerating: boolean;
 };
 
 export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
   onClear,
-  creditsUsed = 0,
-  creditsQuotaLimit = 0,
-  isPremium = false,
+  creditsUsed,
+  creditsQuotaLimit,
   onStop,
   isGenerating,
 }) => {
@@ -162,27 +185,10 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
           </p>
         </Tooltip>
       </div>
-      <div css={{ display: 'flex', gap: 8 }}>
+      <div css={{ display: 'flex', gap: 12, alignItems: 'center' }}>
         {isFlagEnabled('RESOURCE_USAGE_COUNT') && (
-          <Tooltip
-            trigger={
-              <span css={headingStyles}>
-                <span css={{ paddingTop: 1 }}>Credits</span>
-                <span css={labelStyles}>{creditsUsed}</span>
-              </span>
-            }
-            side="bottom"
-            variant="small"
-          >
-            <p css={tooltipTitleStyles}>
-              {creditsUsed}/{creditsQuotaLimit} used
-            </p>
-            {!isPremium && (
-              <p css={tooltipTextStyles}>Upgrade to Pro plan to get more</p>
-            )}
-          </Tooltip>
+          <Credits creditsUsed={creditsUsed} creditsQuota={creditsQuotaLimit} />
         )}
-
         <Tooltip
           trigger={
             <button css={buttonStyles} onClick={handleStop}>

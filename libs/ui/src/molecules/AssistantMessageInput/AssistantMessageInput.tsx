@@ -129,6 +129,7 @@ type AssistantMessageInputProps = {
   readonly onStop: () => void;
   readonly onSubmit: (text: string) => void;
   readonly isFirstInteraction: boolean;
+  readonly reachedCreditLimit: boolean;
 };
 
 export const AssistantMessageInput: React.FC<AssistantMessageInputProps> = ({

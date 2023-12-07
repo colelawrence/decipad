@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   ControllerProvider,
   EventMessage,
@@ -26,6 +27,10 @@ import { parseIntegration } from '@decipad/utils';
 type AgentParams = {
   notebookId: string;
 };
+
+const TOO_MANY_REQUESTS = 429;
+
+class OutOfCreditsError extends Error {}
 
 export const useAgent = ({ notebookId }: AgentParams) => {
   const [addMessage, deleteMessage, addEventToMessage, updateMessageStatus] =
@@ -64,7 +69,11 @@ export const useAgent = ({ notebookId }: AgentParams) => {
     ): Promise<void> => {
       try {
         const body = {
-          messages: mapChatHistoryToGPTChat(messages),
+          messages: mapChatHistoryToGPTChat(
+            messages.filter(
+              (m) => !(m.type === 'event' && m.status === 'ui-only-error')
+            )
+          ),
         };
 
         const response = await fetch(`/api/ai/chat/${notebookId}`, {
@@ -75,6 +84,10 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           body: JSON.stringify(body),
           signal,
         });
+
+        if (response.status === TOO_MANY_REQUESTS) {
+          throw new OutOfCreditsError();
+        }
 
         if (response.status !== 200) {
           const err = await response.json();
@@ -233,6 +246,32 @@ export const useAgent = ({ notebookId }: AgentParams) => {
         }
       } catch (err) {
         console.error(err);
+        handleDeleteMessage(eventMessage.id);
+
+        if (err instanceof OutOfCreditsError) {
+          handleAddMessage({
+            type: 'event',
+            id: nanoid(),
+            content: "Sorry, you've ran out of AI credits.",
+            timestamp: Date.now(),
+            replyTo: userMessage.id,
+            status: 'ui-only-error',
+          });
+          return;
+        }
+
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          handleAddMessage({
+            type: 'event',
+            id: nanoid(),
+            content: 'Request aborted',
+            timestamp: Date.now(),
+            replyTo: userMessage.id,
+            status: 'ui-only-error',
+          });
+          return;
+        }
+
         if (eventMessage.events && eventMessage.events.length > 0) {
           handleUpdateMessageStatus(eventMessage.id, 'error');
         } else {
@@ -242,6 +281,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           type: 'event',
           id: nanoid(),
           content: `Error: ${(err as Error).message}`,
+          uiContent:
+            "Sorry, but there was an error. You can retry, hopefully it won't happen again.",
           timestamp: Date.now(),
           replyTo: userMessage.id,
           status: 'error',

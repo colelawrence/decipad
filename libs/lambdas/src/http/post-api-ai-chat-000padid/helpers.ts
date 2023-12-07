@@ -122,3 +122,11 @@ export async function getResources(
   const ids = keys.map(getResourceUsageKey);
   return resourceusages.batchGet(ids);
 }
+
+export async function isPremiumWorkspace(
+  workspaceId: string
+): Promise<boolean> {
+  const { workspaces } = await tables();
+  const workspace = await workspaces.get({ id: workspaceId });
+  return Boolean(workspace?.isPremium);
+}

@@ -17,7 +17,7 @@ const storage: StateStorage = {
 };
 
 export type MessageType = 'user' | 'assistant' | 'event';
-export type MessageStatus = 'pending' | 'success' | 'error';
+export type MessageStatus = 'pending' | 'success' | 'error' | 'ui-only-error';
 
 export interface BaseMessage {
   readonly id: string;
@@ -45,7 +45,10 @@ export type SingleEvent = {
 
 export interface EventMessage extends BaseMessage {
   readonly type: 'event';
+  /* Always goes to AI (therefore the real error message) */
   readonly content?: string;
+  /* Used to override content if you want custom UI message. */
+  readonly uiContent?: string;
   readonly replyTo: string | null;
   readonly events?: SingleEvent[];
 }

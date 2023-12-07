@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
-import { app, thirdParty } from '@decipad/backend-config';
+import { thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
@@ -14,7 +14,10 @@ import {
 } from 'openai/resources';
 
 import { track } from '@decipad/backend-analytics';
-import { OPEN_AI_TOKENS_LIMIT } from '@decipad/backendtypes';
+import {
+  OPEN_AI_PREMIUM_TOKENS_LIMIT,
+  OPEN_AI_TOKENS_LIMIT,
+} from '@decipad/backendtypes';
 import {
   CONVERSATION_SYSTEM_PROMPT,
   CREATION_SYSTEM_PROMPT,
@@ -26,10 +29,9 @@ import {
   COMPLETION_TOKENS_USED,
   PROMPT_TOKENS_USED,
   getResources,
+  isPremiumWorkspace,
   updateWorkspaceAndUserResourceUsage,
 } from './helpers';
-
-import { debug } from '../../debug';
 import tables from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
 import { getRemoteComputer } from '@decipad/remote-computer';
@@ -41,8 +43,6 @@ const notebooks = resource('notebook');
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
 });
-
-const isProd = app().urlBase === 'https://app.decipad.com';
 
 // eslint-disable-next-line complexity
 export const handler = handle(async (event) => {
@@ -59,6 +59,10 @@ export const handler = handle(async (event) => {
 
   const { pads } = await tables();
   const workspaceId = (await pads.get({ id: padId }))?.workspace_id;
+
+  if (!workspaceId) {
+    throw Boom.badRequest('AI cannot be used on a pad without workspace');
+  }
 
   const [promptTokens, completionTokens] = await getResources([
     {
@@ -77,16 +81,15 @@ export const handler = handle(async (event) => {
     },
   ]);
 
+  const isPremium = await isPremiumWorkspace(workspaceId);
+
   const workspaceTotalTokensUsed =
     (promptTokens?.consumption ?? 0) + (completionTokens?.consumption ?? 0);
 
-  if (workspaceTotalTokensUsed > OPEN_AI_TOKENS_LIMIT) {
-    debug('Reminder: Not blocking users from usage!!!');
-    // NOTE: For testing in DEV we won't block users from making requests.
-    // CHANGE ME BEFORE GOING INTO PROD!!!
-    if (isProd) {
-      throw Boom.tooManyRequests("You've exceeded AI quota");
-    }
+  const limit = isPremium ? OPEN_AI_PREMIUM_TOKENS_LIMIT : OPEN_AI_TOKENS_LIMIT;
+
+  if (workspaceTotalTokensUsed > limit) {
+    throw Boom.tooManyRequests("You've exceeded AI quota");
   }
 
   await notebooks.expectAuthorized({
