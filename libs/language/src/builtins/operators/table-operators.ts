@@ -233,5 +233,9 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
   },
   grab: {
     aliasFor: 'filter',
+    explanation: 'Filter table rows based on column values.',
+    syntax: 'grab(Table, Column Condition)',
+    formulaGroup: 'Tables',
+    example: 'grab(Prices, Prices.Discount > 20%)',
   },
 };

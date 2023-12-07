@@ -9,9 +9,10 @@ pagination_prev: null
 
 **Syntax**:
 
-`filter( Table, Table Column Condition )`
+`filter( Table, Table Column Condition )` <br />
+`grab( Table, Table Column Condition )`
 
-The `filter()` formula lets you filter the values from a table.
+The `filter()` formula lets you filter the values from a table. You can use `grab()`as an alternative syntax:
 
 ### Examples
 
