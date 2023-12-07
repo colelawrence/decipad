@@ -62,39 +62,6 @@ it('tests every action', () => {
         },
       },
       {
-        "description": "Appends any element to the end of the notebook",
-        "name": "appendElement",
-        "parameters": {
-          "properties": {
-            "element": {
-              "description": "the new element getting appended to the notebook",
-              "properties": {
-                "children": {
-                  "items": {},
-                  "type": "array",
-                },
-                "id": {
-                  "type": "string",
-                },
-                "type": {
-                  "type": "string",
-                },
-              },
-              "required": [
-                "id",
-                "type",
-                "children",
-              ],
-              "type": "object",
-            },
-          },
-          "required": [
-            "element",
-          ],
-          "type": "object",
-        },
-      },
-      {
         "description": "Appends markdown text to the end of the notebook",
         "name": "appendText",
         "parameters": {
@@ -328,27 +295,6 @@ it('tests every action', () => {
             "tableId",
             "rowIndex",
             "rowData",
-          ],
-          "type": "object",
-        },
-      },
-      {
-        "description": "inserts an empty column in an existing table",
-        "name": "insertEmptyTableColumn",
-        "parameters": {
-          "properties": {
-            "columnName": {
-              "description": "the name of the new column. Must contain no spaces or weird characters",
-              "type": "string",
-            },
-            "tableId": {
-              "description": "the id of the table you want to insert a column into",
-              "type": "string",
-            },
-          },
-          "required": [
-            "tableId",
-            "columnName",
           ],
           "type": "object",
         },

@@ -1,11 +1,9 @@
 import { getElementById } from './getElementById';
 import { removeElement } from './removeElement';
-import { appendElement } from './appendElement';
 import { appendText } from './appendText';
 import { changeText } from './changeText';
 import { appendEmptyTable } from './appendEmptyTable';
 import { appendFilledTable } from './appendFilledTable';
-import { insertEmptyTableColumn } from './insertEmptyTableColumn';
 import { insertFilledTableColumn } from './insertFilledTableColumn';
 import { insertFormulaTableColumn } from './insertFormulaTableColumn';
 import { removeTableColumn } from './removeTableColumn';
@@ -32,7 +30,6 @@ export const actions: Partial<Actions> = {
   getElementResult,
   getElementById,
   removeElement,
-  appendElement,
   appendText,
   changeText,
   appendCodeLine,
@@ -42,7 +39,6 @@ export const actions: Partial<Actions> = {
   fillTable,
   fillColumn,
   fillRow,
-  insertEmptyTableColumn,
   insertFilledTableColumn,
   insertFormulaTableColumn,
   removeTableColumn,
