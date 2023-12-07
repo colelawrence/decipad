@@ -52,6 +52,7 @@ const containerStyles = css(
     width: 624,
     height: '100%',
     display: 'flex',
+    paddingTop: 8,
     flexDirection: 'column',
   },
   deciOverflowYStyles

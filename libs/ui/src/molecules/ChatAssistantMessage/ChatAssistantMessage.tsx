@@ -40,14 +40,11 @@ const avatarStyles = css({
   flexShrink: 0,
   borderRadius: '50%',
   backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
+  color: componentCssVars('AIAssistantTextColor'),
 
   '& svg': {
     width: 16,
     height: 16,
-
-    '& path': {
-      fill: componentCssVars('AIAssistantTextColor'),
-    },
   },
 });
 

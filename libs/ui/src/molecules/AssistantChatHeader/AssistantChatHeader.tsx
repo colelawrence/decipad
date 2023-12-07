@@ -83,6 +83,10 @@ export const buttonStyles = css(p13Medium, {
   '&:hover': {
     backgroundColor: cssVar('backgroundHeavy'),
     color: cssVar('textDefault'),
+
+    '& > svg > path': {
+      stroke: cssVar('textDefault'),
+    },
   },
 
   '&:active': {

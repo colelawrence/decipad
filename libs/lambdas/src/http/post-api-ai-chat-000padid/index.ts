@@ -201,8 +201,6 @@ export const handler = handle(async (event) => {
     ${idMapping}`,
   };
 
-  console.log(docMessage);
-
   if (mode === 'creation') {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-1106-preview',
