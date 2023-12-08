@@ -7,6 +7,7 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { EditorSidebar } from '@decipad/editor-components';
 import {
   EditorNotebookFragment,
+  PermissionType,
   useFinishOnboarding,
   useGetNotebookMetaQuery,
   useGetWorkspacesQuery,
@@ -556,6 +557,10 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
     variables: { id: notebookId },
   });
 
+  const isReadOnly =
+    meta.data?.getPadById?.myPermissionType === PermissionType.Read ||
+    meta.data?.getPadById?.myPermissionType == null;
+
   const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
@@ -575,7 +580,7 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
     return [promptTokens, completionTokens, isWorkspacePremium];
   }, [meta.data?.getPadById?.workspace]);
 
-  if (isAssistantOpen && !isEmbed && editor) {
+  if (isAssistantOpen && !isEmbed && editor && !isReadOnly) {
     return (
       <AiUsageProvider
         promptTokensUsed={prompt}
