@@ -22,7 +22,15 @@ const installLambdaDependencies = async () => {
     if (process.env.CI) {
       // building for Lambda: https://sharp.pixelplumbing.com/install#aws-lambda
       await pExec('rm -rf node_modules/sharp');
-      await pExec('npm install --arch=x64 --platform=linux --libc=glibc sharp');
+      await pExec(
+        'SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp'
+      );
+      const lambdaImageLayer = process.env.DECI_IMAGE_LAMBDA_LAYER;
+      if (lambdaImageLayer) {
+        await pExec(
+          `sed -i '/s/arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2/${lambdaImageLayer}/g' config.arc`
+        );
+      }
     }
   }
   process.chdir(dir);
