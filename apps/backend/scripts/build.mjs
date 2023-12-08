@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-console */
 import { join, dirname } from 'path';
 import { promisify } from 'util';
 import { exec } from 'child_process';
@@ -26,11 +27,13 @@ const installLambdaDependencies = async () => {
         'SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp'
       );
       const lambdaImageLayer = process.env.DECI_IMAGE_LAMBDA_LAYER;
-      if (lambdaImageLayer) {
-        await pExec(
-          `sed -i '/s/arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2/${lambdaImageLayer}/g' config.arc`
-        );
+      console.log(`Using AWS Lambda image layer ${lambdaImageLayer}`);
+      if (!lambdaImageLayer) {
+        throw new Error('Need env var DECI_IMAGE_LAMBDA_LAYER defined');
       }
+      await pExec(
+        `sed -i '/s/arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2/${lambdaImageLayer}/g' config.arc`
+      );
     }
   }
   process.chdir(dir);
