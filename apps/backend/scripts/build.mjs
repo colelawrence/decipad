@@ -22,7 +22,9 @@ const installLambdaDependencies = async () => {
     if (process.env.CI) {
       // building for Lambda: https://sharp.pixelplumbing.com/install#aws-lambda
       await pExec('rm -rf node_modules/sharp');
-      await pExec('npm install --arch=x64 --platform=linux --libc=glibc sharp');
+      await pExec(
+        'SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install --arch=x64 --platform=linux --libc=glibc sharp'
+      );
     }
   }
   process.chdir(dir);
