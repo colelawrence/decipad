@@ -92,7 +92,6 @@ jobs:
           NOTION_TOKEN: '${{secrets.NOTION_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{secrets.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
-          DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:974894071214:layer:sharp:1'
 
         run: |
           export SAM_BUCKET="decipad-backend-sam"

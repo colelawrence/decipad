@@ -106,7 +106,6 @@ jobs:
           DISCORD_FEEDBACK_CHANNEL_TOKEN: '${{secrets.DISCORD_FEEDBACK_CHANNEL_TOKEN}}'
           DISCORD_FEEDBACK_CHANNEL_ID: '${{secrets.DISCORD_FEEDBACK_CHANNEL_ID}}'
           DEBUG: '@decipad/backend-notebook-assistant,@decipad/backend-notebook-assistan/*t,@decipad/backend-code-assistant,@decipad/notebook-open-api,@decipad/backend-notebook,@decipad/backend-search'
-          DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:861969788890:layer:sharp:2'
         run: |
           export SAM_BUCKET="decipad-dev-backend-sam"
           export SAM_LOCATION="s3://decipad-dev-backend-sam/${{env.DECI_CUSTOM_DOMAIN}}"
