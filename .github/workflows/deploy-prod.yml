@@ -30,6 +30,7 @@ jobs:
       - name: Install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
+          DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:974894071214:layer:sharp:1'
         run: yarn install --ignore-engines
 
       - name: Cache NX things
