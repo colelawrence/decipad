@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
-import { thirdParty } from '@decipad/backend-config';
+import { app, thirdParty } from '@decipad/backend-config';
 import { expectAuthenticated } from '@decipad/services/authentication';
 import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
@@ -39,6 +39,11 @@ import { getRemoteComputer } from '@decipad/remote-computer';
 const GPT_MODEL = 'gpt-4-1106-preview';
 
 const notebooks = resource('notebook');
+
+const isDevOrStaging =
+  app().urlBase.includes('staging.decipad.com') ||
+  app().urlBase.includes('dev.decipad.com') ||
+  app().urlBase.includes('localhost');
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -88,7 +93,7 @@ export const handler = handle(async (event) => {
 
   const limit = isPremium ? OPEN_AI_PREMIUM_TOKENS_LIMIT : OPEN_AI_TOKENS_LIMIT;
 
-  if (workspaceTotalTokensUsed > limit) {
+  if (!isDevOrStaging && workspaceTotalTokensUsed > limit) {
     throw Boom.tooManyRequests("You've exceeded AI quota");
   }
 
