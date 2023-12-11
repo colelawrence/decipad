@@ -55,6 +55,7 @@ export const evalCode: CustomAction<
       code: z.string(),
     }),
   requiresNotebook: false,
+  requiresRootEditor: false,
   handler: async ({ code }) => {
     const computer = getRemoteComputer();
 

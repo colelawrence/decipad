@@ -3,6 +3,7 @@ import { PromiseOrType } from '@decipad/utils';
 import { MyEditor } from '@decipad/editor-types';
 import { NotebookOpenApi } from '../types';
 import { RemoteComputer } from '@decipad/remote-computer';
+import { RootEditorController } from '@decipad/notebook-tabs';
 
 export interface HandlerContext {
   computer: RemoteComputer;
@@ -13,6 +14,15 @@ export type NotebookActionHandler<
   TRet = unknown
 > = (
   editor: MyEditor,
+  params: TParams,
+  context: HandlerContext
+) => PromiseOrType<TRet>;
+
+export type RootEditorActionHandler<
+  TParams extends Record<string, unknown> = Record<string, unknown>,
+  TRet = unknown
+> = (
+  editor: RootEditorController,
   params: TParams,
   context: HandlerContext
 ) => PromiseOrType<TRet>;
@@ -75,8 +85,19 @@ export interface RequiresNotebookCustomAction<
   CustomActionResult
 > extends BaseCustomAction {
   requiresNotebook: true;
+  requiresRootEditor: false;
   returnsActionResultWithNotebookError?: boolean;
   handler: NotebookActionHandler<CustomActionParams, CustomActionResult>;
+}
+
+export interface RequiresRootEditorCustomAction<
+  CustomActionParams extends Record<string, unknown>,
+  CustomActionResult
+> extends BaseCustomAction {
+  requiresNotebook: true;
+  requiresRootEditor: true;
+  returnsActionResultWithNotebookError?: boolean;
+  handler: RootEditorActionHandler<CustomActionParams, CustomActionResult>;
 }
 
 export interface NoNotebookCustomAction<
@@ -84,13 +105,17 @@ export interface NoNotebookCustomAction<
   CustomActionResult
 > extends BaseCustomAction {
   requiresNotebook: false;
+  requiresRootEditor: false;
   handler: NotebooklessActionHandler<CustomActionParams, CustomActionResult>;
 }
 
 export type CustomAction<
   Args extends Record<string, unknown> = Record<string, unknown>,
   Ret = unknown
-> = NoNotebookCustomAction<Args, Ret> | RequiresNotebookCustomAction<Args, Ret>;
+> =
+  | NoNotebookCustomAction<Args, Ret>
+  | RequiresNotebookCustomAction<Args, Ret>
+  | RequiresRootEditorCustomAction<Args, Ret>;
 
 export interface BaseAction {
   summary: string;
@@ -102,6 +127,9 @@ export interface BaseAction {
 export type RequiresNotebookAction<k extends ActionName> =
   RequiresNotebookCustomAction<ActionParams<k>, ActionResult<k>>;
 
+export type RequiresRootEditorAction<k extends ActionName> =
+  RequiresRootEditorCustomAction<ActionParams<k>, ActionResult<k>>;
+
 export type NoNotebookAction<k extends ActionName> = NoNotebookCustomAction<
   ActionParams<k>,
   ActionResult<k>
@@ -109,7 +137,8 @@ export type NoNotebookAction<k extends ActionName> = NoNotebookCustomAction<
 
 export type Action<k extends ActionName> =
   | NoNotebookAction<k>
-  | RequiresNotebookAction<k>;
+  | RequiresNotebookAction<k>
+  | RequiresRootEditorAction<k>;
 
 export type Actions = {
   [k in ActionName]: Action<k>;

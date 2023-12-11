@@ -49,6 +49,7 @@ export const appendEmptyTable: Action<'appendEmptyTable'> = {
         .openapi({ description: 'the number of rows for this new table' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowCount }) => {
     const table: TableElement = {

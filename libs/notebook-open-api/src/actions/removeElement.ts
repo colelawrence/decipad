@@ -15,6 +15,7 @@ export const removeElement: Action<'removeElement'> = {
         .openapi({ description: 'the id of the element you want to remove' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId }) => {
     removeNodes(editor, { match: matchElementId(elementId as string) });

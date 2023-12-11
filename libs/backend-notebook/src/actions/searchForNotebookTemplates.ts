@@ -43,6 +43,7 @@ export const searchForNotebookTemplates: CustomAction<
       }),
     }),
   requiresNotebook: false,
+  requiresRootEditor: false,
   handler: async ({ prompt, maxResults = 5 }) => {
     const searchResults = await searchTemplates(prompt, { maxResults });
     return {

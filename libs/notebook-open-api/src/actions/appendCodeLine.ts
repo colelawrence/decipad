@@ -30,6 +30,7 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
     },
   },
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   parameterSchema: () =>
     z.object({

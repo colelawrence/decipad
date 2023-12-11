@@ -19,5 +19,6 @@ export const getElementById: Action<'getElementById'> = {
         .openapi({ description: 'the id of the element you want to retrieve' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   handler: (editor, { elementId }) => getElementById2(editor, elementId)[0],
 };

@@ -44,6 +44,7 @@ export const insertFormulaTableColumn: Action<'insertFormulaTableColumn'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {
     const tableEntry = getTableById(editor, tableId);

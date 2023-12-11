@@ -18,6 +18,7 @@ export const appendElement: Action<'appendElement'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { element }) => {
     if (!isElement(element) || !topLevelBlockKinds.includes(element.type)) {

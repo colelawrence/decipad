@@ -32,6 +32,7 @@ export const appendDataView: Action<'appendDataView'> = {
     },
   },
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       tableId: z.string().openapi({

@@ -32,6 +32,7 @@ export const updateCodeLine: Action<'updateCodeLine'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       codeLineId: z

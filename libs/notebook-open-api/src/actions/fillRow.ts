@@ -25,6 +25,7 @@ export const fillRow: Action<'fillRow'> = {
         .openapi({ description: 'the content of that row' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex, rowData }, context) => {
     const [table, tablePath] = getTableById(editor, tableId);

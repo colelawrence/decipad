@@ -27,6 +27,7 @@ export const getElementResult: Action<'getElementResult'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   handler: (editor, { elementId, varName }, { computer }) => {
     if (!elementId && !varName) {
       throw notAcceptable('need either elementId or varName arguments');

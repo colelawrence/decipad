@@ -23,6 +23,7 @@ export const removeTableColumn: Action<'removeTableColumn'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {
     const [table, tablePath] = getTableById(editor, tableId);

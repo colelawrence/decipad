@@ -20,6 +20,7 @@ export const insertTableRow: Action<'insertTableRow'> = {
         .openapi({ description: 'the content of that row' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, row }) => {
     const [table, tablePath] = getTableById(editor, tableId);

@@ -35,6 +35,7 @@ export const updateTableCell: Action<'updateTableCell'> = {
         .openapi({ description: 'the new content of the cell' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (
     editor,

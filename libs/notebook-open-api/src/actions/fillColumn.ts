@@ -33,6 +33,7 @@ export const fillColumn: Action<'fillColumn'> = {
         .openapi({ description: 'the content of the column' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor: MyEditor, { tableId, columnName, columnData }) => {
     const [table, tablePath] = getTableById(editor, tableId);

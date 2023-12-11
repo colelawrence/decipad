@@ -48,6 +48,7 @@ export const appendFilledTable: Action<'appendFilledTable'> = {
         }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowsData }) => {
     const table: TableElement = {

@@ -24,6 +24,7 @@ import { appendChoice } from './appendChoice';
 import { describeAllNotebookElements } from './describeAllNotebookElements';
 import { updateSliderVariable } from './updateSliderVariable';
 import { getElementResult } from './getElementResult';
+import { changeNotebookTitle } from './changeNotebookTitle';
 
 export const actions: Partial<Actions> = {
   describeAllNotebookElements,
@@ -32,6 +33,7 @@ export const actions: Partial<Actions> = {
   removeElement,
   appendText,
   changeText,
+  changeNotebookTitle,
   appendCodeLine,
   updateCodeLine,
   appendEmptyTable,

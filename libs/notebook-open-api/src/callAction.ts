@@ -62,7 +62,9 @@ export const callAction = async <Args extends Record<string, unknown>, Ret>({
   const parsedParams = parseParams(action, params);
   const context = { computer };
   let result: CallActionResult<Ret> = await (action.requiresNotebook
-    ? action.handler(subEditor, parsedParams, context)
+    ? action.requiresRootEditor
+      ? action.handler(editor, parsedParams, context)
+      : action.handler(subEditor, parsedParams, context)
     : action.handler(parsedParams, context));
 
   if (action.requiresNotebook && action.returnsActionResultWithNotebookError) {

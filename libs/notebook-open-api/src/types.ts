@@ -63,7 +63,8 @@ export interface NotebookOpenApi {
   removeElement: (params: { elementId: string }) => GenericSummaryResult;
   appendElement: (params: { element: AnyElement }) => GenericSummaryResult; // internal
 
-  // manipulate elements
+  // notebook title
+  changeNotebookTitle: (params: { newTitle: string }) => GenericSummaryResult;
 
   // text
   appendText: (params: {

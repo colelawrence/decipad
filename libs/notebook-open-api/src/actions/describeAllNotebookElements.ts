@@ -27,6 +27,7 @@ export const describeAllNotebookElements: Action<'describeAllNotebookElements'> 
       },
     },
     requiresNotebook: true,
+    requiresRootEditor: false,
     parameterSchema: () => z.unknown(),
     handler: (editor) =>
       verbalizeDoc(

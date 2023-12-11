@@ -13,6 +13,7 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
   summary: 'changes some of the parameters for a plot',
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       polotId: z

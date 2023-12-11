@@ -71,6 +71,7 @@ export const generateCode: CustomAction<
       prompt: z.string(),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   handler: async (editor, { prompt }, { computer }) => {
     // code assistant works with the root document, so we have to
     // pass a fake one in

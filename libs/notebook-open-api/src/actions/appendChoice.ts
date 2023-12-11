@@ -29,6 +29,7 @@ export const appendChoice: Action<'appendChoice'> = {
     },
   },
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       variableName: z.string().openapi({

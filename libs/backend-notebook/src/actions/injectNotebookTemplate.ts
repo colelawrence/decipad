@@ -43,6 +43,7 @@ export const injectNotebookTemplate: CustomAction<
     },
   },
   requiresNotebook: true,
+  requiresRootEditor: false,
   handler: async (editor, { notebookTemplateId }, { computer }) => {
     const data = await tables();
     const template = await data.pads.get({ id: notebookTemplateId });

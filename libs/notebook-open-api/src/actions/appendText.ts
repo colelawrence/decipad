@@ -27,6 +27,7 @@ export const appendText: Action<'appendText'> = {
         .openapi({ description: 'markdown text to add to the notebook' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { markdownText }) => {
     const tree = deserializeMd(editor, markdownText) as MyElement[];

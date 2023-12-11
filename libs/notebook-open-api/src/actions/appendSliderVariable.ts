@@ -27,6 +27,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       variableName: z.string().openapi({

@@ -21,6 +21,7 @@ export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       tableId: z

@@ -18,6 +18,7 @@ export const removeTableRow: Action<'removeTableRow'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex }) => {
     const [, tablePath] = getTableById(editor, tableId);

@@ -26,6 +26,7 @@ export const changeText: Action<'changeText'> = {
         .openapi({ description: 'the new content of the text element' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId, newText }) => {
     if (typeof elementId !== 'string') {

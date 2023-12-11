@@ -33,6 +33,7 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {
     const [table, tablePath] = getTableById(editor, tableId);

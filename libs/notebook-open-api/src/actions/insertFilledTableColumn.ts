@@ -40,6 +40,7 @@ export const insertFilledTableColumn: Action<'insertFilledTableColumn'> = {
         .openapi({ description: 'the data for the column' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, cells }) => {
     const [table, tablePath] = getTableById(editor, tableId);

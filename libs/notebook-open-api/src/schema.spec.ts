@@ -99,6 +99,22 @@ it('tests every action', () => {
         },
       },
       {
+        "description": "Changes the title of the notebook",
+        "name": "changeNotebookTitle",
+        "parameters": {
+          "properties": {
+            "newTitle": {
+              "description": "the new content of the notebook title",
+              "type": "string",
+            },
+          },
+          "required": [
+            "newTitle",
+          ],
+          "type": "object",
+        },
+      },
+      {
         "description": "appends a code line to the notebook",
         "name": "appendCodeLine",
         "parameters": {
