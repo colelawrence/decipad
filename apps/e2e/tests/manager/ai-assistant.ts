@@ -5,58 +5,81 @@ export class AiAssistant {
   readonly messageInput: Locator;
   readonly chatToggle: Locator;
   readonly sendMessage: Locator;
+  readonly mockUsage = {
+    promptTokensUsed: 13099,
+    completionTokensUsed: 12938,
+  };
   readonly finishedMessage = {
-    mode: 'create',
+    mode: 'creation',
     message: {
       role: 'assistant',
       content: 'done',
     },
+    usage: this.mockUsage,
   };
+  readonly chatMessage = [
+    {
+      mode: 'conversation',
+      message: {
+        role: 'assistant',
+        content: 'test chat reply',
+      },
+      usage: {
+        promptTokensUsed: 13099,
+        completionTokensUsed: 12938,
+      },
+    },
+  ];
   readonly addParagraphMessage = [
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
         function_call: {
-          name: 'add_paragraph',
-          arguments: '{"text":"Hello!"}',
+          name: 'appendText',
+          arguments: '{"markdownText":"Hello!"}',
         },
       },
+      usage: this.mockUsage,
     },
     this.finishedMessage,
   ];
   readonly addFormulaMessage = [
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
         function_call: {
-          name: 'add_calculation',
-          arguments: '{"label":"SimpleAddition","math_statement":"1 + 1"}',
+          name: 'appendCodeLine',
+          arguments:
+            '{"variableName":"SimpleAddition","codeExpression":"1 + 1"}',
         },
       },
+      usage: this.mockUsage,
     },
     this.finishedMessage,
   ];
   readonly addVariableMessage = [
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
         function_call: {
-          name: 'add_variable',
-          arguments: '{"label":"InitialInvestment","value":"200"}',
+          name: 'appendCodeLine',
+          arguments:
+            '{"variableName":"InitialInvestment","codeExpression":"200"}',
         },
       },
+      usage: this.mockUsage,
     },
     this.finishedMessage,
   ];
   readonly addInputMessage = [
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
@@ -65,9 +88,10 @@ export class AiAssistant {
           arguments: '{"label":"NumberOfBananas","value":"10"}',
         },
       },
+      usage: this.mockUsage,
     },
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
@@ -75,58 +99,40 @@ export class AiAssistant {
           name: 'variable_to_input_widget',
           arguments: '{"variable_name":"NumberOfBananas"}',
         },
+        usage: this.mockUsage,
       },
     },
     this.finishedMessage,
   ];
   readonly addSliderMessage = [
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
         function_call: {
-          name: 'add_variable',
-          arguments: '{"label":"NumberOfCars","value":"10"}',
+          name: 'appendSliderVariable',
+          arguments:
+            '{"variableName":"NumberOfCars","initialValue":1000000,"unit":"cars","min":0,"max":10000000,"step":100000}',
         },
       },
-    },
-    {
-      mode: 'create',
-      message: {
-        role: 'assistant',
-        content: null,
-        function_call: {
-          name: 'variable_to_input_widget',
-          arguments: '{"variable_name":"NumberOfCars"}',
-        },
-      },
-    },
-    {
-      mode: 'create',
-      message: {
-        role: 'assistant',
-        content: null,
-        function_call: {
-          name: 'input_widget_to_slider',
-          arguments: '{"variable_name":"NumberOfCars"}',
-        },
-      },
+      usage: this.mockUsage,
     },
     this.finishedMessage,
   ];
   readonly addTableMessage = [
     {
-      mode: 'create',
+      mode: 'creation',
       message: {
         role: 'assistant',
         content: null,
         function_call: {
-          name: 'add_table',
+          name: 'appendFilledTable',
           arguments:
-            '{\n  "label": "CityInformation",\n  "columns": ["City", "Country", "Population", "Area (km\\u00b2)", "Density (per km\\u00b2)"],\n  "rows": [\n    ["New York", "USA", "8,336,817", "783.8", "10,933"],\n    ["Tokyo", "Japan", "13,515,271", "2,194", "6,158"],\n    ["Paris", "France", "2,161,000", "105.4", "20,499"],\n    ["London", "UK", "8,982,000", "1,572", "5,701"],\n    ["Sydney", "Australia", "5,312,163", "12,368", "429"]\n  ]\n}',
+            '{\n  "tableName": "CityInformation",\n  "columnNames": ["City", "Population", "Country"],\n  "rowsData": [\n    ["New York", "8419000", "USA"],\n    ["Los Angeles", "3980000", "USA"],\n    ["Chicago", "2716000", "USA"]\n  ]\n}',
         },
       },
+      usage: this.mockUsage,
     },
     this.finishedMessage,
   ];
@@ -221,6 +227,17 @@ export class AiAssistant {
   }
 
   /**
+   * Mock AI Assistant cheat message.
+   */
+  async mockAIChat() {
+    await this.mockAPI(this.chatMessage);
+    await this.sendChatMessage('test chat');
+    await expect(async () => {
+      await expect(this.page.getByText('test chat reply')).toBeVisible();
+    }).toPass();
+  }
+
+  /**
    * Mock AI Assistant adding a paragraph to the notebook.
    */
   async mockParagraph() {
@@ -253,6 +270,44 @@ export class AiAssistant {
     await expect(async () => {
       await this.chatToggle.click();
       await expect(this.messageInput).toBeVisible();
+      expect(
+        await this.getChatMessages(),
+        'Initial AI Chat Message Missing'
+      ).toEqual([
+        'Hey there! Keep in mind that this experimental version can make mistakes. Please, provide feedback to help us improve.',
+      ]);
     }, "AI show didn't open").toPass();
+  }
+
+  /**
+   * Return ai chat messages.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.getChatMessages()
+   * ```
+   */
+  async getChatMessages() {
+    const tabsArray: string[] = [];
+    for (const tabElement of await this.page
+      .getByTestId('ai-chat-message')
+      .all())
+      tabsArray.push(await tabElement.innerText());
+
+    return tabsArray;
+  }
+
+  /**
+   * Clear ai chat messages.
+   *
+   * **Usage**
+   *
+   * ```js
+   * await notebook.clearChat()
+   * ```
+   */
+  async clearChat() {
+    this.page.getByTestId('ai-chat-clear').click();
   }
 }

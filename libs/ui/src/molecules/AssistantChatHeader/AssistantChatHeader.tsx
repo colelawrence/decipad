@@ -191,7 +191,11 @@ export const AssistantChatHeader: React.FC<AssistantChatHeaderProps> = ({
         )}
         <Tooltip
           trigger={
-            <button css={buttonStyles} onClick={handleStop}>
+            <button
+              css={buttonStyles}
+              onClick={handleStop}
+              data-testid="ai-chat-clear"
+            >
               <Trash />
             </button>
           }

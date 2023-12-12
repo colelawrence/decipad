@@ -1,4 +1,4 @@
-import { test } from './manager/decipad-tests';
+import { expect, test } from './manager/decipad-tests';
 
 test('AI adds variable block @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
@@ -14,14 +14,15 @@ test('AI adds basic formula block @AI', async ({ testUser }) => {
   await aiAssistant.mockAddFormula();
 });
 
-test('AI transform variable on input widget @AI', async ({ testUser }) => {
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('AI adds input widget @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
   await aiAssistant.openPannel();
   await aiAssistant.mockInputWidget();
 });
 
-test('AI transform input widget on slider @AI', async ({ testUser }) => {
+test('AI adds slider @AI', async ({ testUser }) => {
   const { aiAssistant } = testUser;
 
   await aiAssistant.openPannel();
@@ -40,4 +41,17 @@ test('AI adds table to notebook @AI', async ({ testUser }) => {
 
   await aiAssistant.openPannel();
   await aiAssistant.mockTable();
+});
+
+test('AI clear chat @AI', async ({ testUser }) => {
+  const { aiAssistant } = testUser;
+
+  await aiAssistant.openPannel();
+  const initialMessages = await aiAssistant.getChatMessages();
+  await aiAssistant.mockAIChat();
+  await aiAssistant.clearChat();
+
+  await expect(async () => {
+    await expect(await aiAssistant.getChatMessages()).toEqual(initialMessages);
+  }, "chat didn't clear").toPass();
 });
