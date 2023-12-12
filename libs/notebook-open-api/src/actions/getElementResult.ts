@@ -50,6 +50,8 @@ export const getElementResult: Action<'getElementResult'> = {
     if (!result || !result.result) {
       throw notFound('no result');
     }
-    return formatResult('en-US', result.result?.value, result.result?.type);
+    return {
+      summary: formatResult('en-US', result.result?.value, result.result?.type),
+    };
   },
 };

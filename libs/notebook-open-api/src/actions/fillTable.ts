@@ -77,7 +77,7 @@ export const fillTable: Action<'fillTable'> = {
     });
 
     return {
-      summary: `Filled table ${tableId}`,
+      summary: `Filled table with ${rowsData.length} rows`,
     };
   },
 };

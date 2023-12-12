@@ -37,6 +37,7 @@ export type SingleEvent = {
   readonly id: string;
   readonly content: string;
   readonly function_call?: unknown;
+  readonly result?: unknown;
   readonly element?: {
     label: string;
     id: string;

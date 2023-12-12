@@ -17,12 +17,13 @@ import { mapChatHistoryToGPTChat } from './helpers';
 import { AiUsage } from '@decipad/interfaces';
 import {
   Action,
-  CallActionResult,
+  GenericSummaryResult,
   actions,
   callAction,
 } from '@decipad/notebook-open-api';
 import { EditorController } from '@decipad/notebook-tabs';
 import { parseIntegration } from '@decipad/utils';
+import { useActiveEditor } from '@decipad/editor-hooks';
 
 type AgentParams = {
   notebookId: string;
@@ -49,6 +50,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
   const computer = useComputer();
   const controller = useContext(ControllerProvider);
 
+  const subEditor = useActiveEditor(controller);
+
   const { updateUsage } = useAiUsage();
 
   const abortController = useRef(new AbortController());
@@ -65,7 +68,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
     async (
       messages: Message[],
       userMessage: UserMessage,
-      eventMessage: EventMessage
+      eventMessage: EventMessage,
+      forceMode?: 'creation' | 'conversation'
     ): Promise<void> => {
       try {
         const body = {
@@ -74,6 +78,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
               (m) => !(m.type === 'event' && m.status === 'ui-only-error')
             )
           ),
+          forceMode,
         };
 
         const response = await fetch(`/api/ai/chat/${notebookId}`, {
@@ -132,14 +137,12 @@ export const useAgent = ({ notebookId }: AgentParams) => {
             }
 
             if (controller) {
-              const subEditor = controller.getTabEditorAt(0);
-
               if (!subEditor) {
                 throw new Error('Could not get sub editor');
               }
 
               try {
-                const results = await callAction({
+                const result = await callAction({
                   editor: controller as EditorController,
                   subEditor,
                   computer,
@@ -150,10 +153,15 @@ export const useAgent = ({ notebookId }: AgentParams) => {
                 const newEvent = {
                   id: nanoid(),
                   content:
-                    // Sorry, I have no clue how to deal with this type
-                    (results as CallActionResult<any>).result?.summary ||
-                    'Invoked action',
+                    'notebookErrors' in result
+                      ? (result.result as GenericSummaryResult).summary ||
+                        // Fallback summary for better UX
+                        'Updated notebook data'
+                      : (result as GenericSummaryResult).summary ||
+                        // Fallback summary for better UX
+                        'Updated notebook data',
                   function_call: functionCall,
+                  result: JSON.stringify(result),
                 };
 
                 handleAddEventToMessage(eventMessage.id, newEvent);
@@ -176,6 +184,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
                   id: nanoid(),
                   content: `Error: ${(err as Error).message}`,
                   function_call: functionCall,
+                  result: JSON.stringify(err),
                 };
 
                 handleAddEventToMessage(eventMessage.id, newEvent);
@@ -194,7 +203,12 @@ export const useAgent = ({ notebookId }: AgentParams) => {
               }
             }
             // Recursively call the agent again until we get a response without a function call
-            return submitChat(newMessages, userMessage, newEventMessage);
+            return submitChat(
+              newMessages,
+              userMessage,
+              newEventMessage,
+              'creation'
+            );
           }
           handleUpdateMessageStatus(eventMessage.id, 'success');
           if (message.content) {
@@ -299,6 +313,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
       notebookId,
       updateUsage,
       signal,
+      subEditor,
     ]
   );
 

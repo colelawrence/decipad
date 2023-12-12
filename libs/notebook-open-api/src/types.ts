@@ -54,7 +54,7 @@ export interface NotebookOpenApi {
     params:
       | { varName: string; elementId?: undefined }
       | { elementId: string; varName?: undefined }
-  ) => string;
+  ) => GenericSummaryResult;
 
   // basic element manipulation
   getElementById: (params: {

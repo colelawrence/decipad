@@ -6,13 +6,11 @@ import { resource } from '@decipad/backend-resources';
 import handle from '../handle';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import { RootDocument } from '@decipad/editor-types';
-
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
 import {
   ChatCompletionMessage,
   ChatCompletionMessageParam,
 } from 'openai/resources';
-
 import { track } from '@decipad/backend-analytics';
 import {
   OPEN_AI_PREMIUM_TOKENS_LIMIT,
@@ -38,12 +36,12 @@ import { getRemoteComputer } from '@decipad/remote-computer';
 
 const GPT_MODEL = 'gpt-4-1106-preview';
 
-const notebooks = resource('notebook');
-
 const isDevOrStaging =
   app().urlBase.includes('staging.decipad.com') ||
   app().urlBase.includes('dev.decipad.com') ||
   app().urlBase.includes('localhost');
+
+const notebooks = resource('notebook');
 
 const openai = new OpenAI({
   apiKey: thirdParty().openai.apiKey,
@@ -56,6 +54,7 @@ export const handler = handle(async (event) => {
   if (!event.pathParameters) {
     throw Boom.notAcceptable('Missing path parameters');
   }
+
   const padId = event.pathParameters.padid;
 
   if (!padId) {
@@ -63,6 +62,7 @@ export const handler = handle(async (event) => {
   }
 
   const { pads } = await tables();
+
   const workspaceId = (await pads.get({ id: padId }))?.workspace_id;
 
   if (!workspaceId) {
@@ -116,7 +116,8 @@ export const handler = handle(async (event) => {
     idMapping = verbalized
       .filter((v) => v.varName)
       .map(
-        (v) => `variable \`${v.varName}\` has element_id \`${v.element.id}\``
+        (v) =>
+          `Variable with name \`${v.varName}\` has elementId \`${v.element.id}\``
       )
       .join('\n');
   } catch (e) {
@@ -137,7 +138,7 @@ export const handler = handle(async (event) => {
 
   const payload: RequestPayload = JSON.parse(requestBodyString);
 
-  const { messages } = payload;
+  const { messages, forceMode } = payload;
 
   const userMessage = messages.at(-1);
 
@@ -145,68 +146,72 @@ export const handler = handle(async (event) => {
     throw Boom.notFound('Missing user message');
   }
 
-  const modeCompletion = await openai.chat.completions.create({
-    model: 'gpt-4-1106-preview',
-    messages: [
-      {
-        role: 'system',
-        content: MODE_DETECTION_PROMPT,
+  let mode;
+
+  if (!forceMode) {
+    const modeCompletion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo-1106',
+      messages: [
+        {
+          role: 'system',
+          content: MODE_DETECTION_PROMPT,
+        },
+        userMessage,
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0,
+      max_tokens: 100,
+    });
+
+    await updateWorkspaceAndUserResourceUsage({
+      userId: user.id,
+      workspaceId,
+      aiModel: GPT_MODEL,
+      tokensUsed: {
+        promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
+        completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
       },
-      userMessage,
-    ],
-    response_format: { type: 'json_object' },
-    temperature: 0,
-    max_tokens: 100,
-  });
+    });
 
-  await updateWorkspaceAndUserResourceUsage({
-    userId: user.id,
-    workspaceId,
-    aiModel: GPT_MODEL,
-    tokensUsed: {
-      promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
-      completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
-    },
-  });
+    track(event, {
+      event: `ApiChatLambda-mode:mode-choice`,
+      userId: user.id,
+      properties: {
+        padId,
+        promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
+        completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
+      },
+    });
 
-  track(event, {
-    event: `ApiChatLambda-mode:mode-choice`,
-    userId: user.id,
-    properties: {
-      padId,
-      promptTokensUsed: modeCompletion.usage?.prompt_tokens ?? 0,
-      completionTokensUsed: modeCompletion.usage?.completion_tokens ?? 0,
-    },
-  });
+    const modeObjectString = modeCompletion.choices[0].message.content;
 
-  const modeObjectString = modeCompletion.choices[0].message.content;
+    if (!modeObjectString) {
+      throw Boom.internal('Unable to parse mode');
+    }
 
-  if (!modeObjectString) {
-    throw Boom.internal('Unable to parse mode');
+    const parsedContent = JSON.parse(modeObjectString);
+
+    // Helper to get key of max value in object
+    const getKeyOfMaxValue = (obj: { [key: string]: number }) =>
+      Object.entries(obj).reduce((maxEntry, currentEntry) =>
+        currentEntry[1] > maxEntry[1] ? currentEntry : maxEntry
+      )[0];
+
+    mode = getKeyOfMaxValue(parsedContent);
+  } else {
+    mode = forceMode;
   }
-
-  const parsedContent = JSON.parse(modeObjectString);
-
-  // Helper to get key of max value in object
-  const getKeyOfMaxValue = (obj: { [key: string]: number }) =>
-    Object.entries(obj).reduce((maxEntry, currentEntry) =>
-      currentEntry[1] > maxEntry[1] ? currentEntry : maxEntry
-    )[0];
-
-  const mode = getKeyOfMaxValue(parsedContent);
 
   let message: ChatCompletionMessage;
 
   const docMessage: ChatCompletionMessageParam = {
-    role: 'user',
-    content: `This is my current document: \n ${verbalizedDoc}, `,
+    role: 'system',
+    content: `This the current document: \n ${verbalizedDoc}`,
   };
 
-  const elementIds: ChatCompletionMessageParam = {
-    role: 'user',
-    content: `Here is a list of variable names to the corresponding ID.
-    Please don't ask me about them
-    ${idMapping}`,
+  const elementIdsMessage: ChatCompletionMessageParam = {
+    role: 'system',
+    content: `Don't expose this to the user, but here's the mapping of variable names to elementIds: \n ${idMapping}`,
   };
 
   if (mode === 'creation') {
@@ -217,12 +222,12 @@ export const handler = handle(async (event) => {
           role: 'system',
           content: CREATION_SYSTEM_PROMPT,
         },
-        docMessage,
-        elementIds,
         ...messages,
+        docMessage,
+        elementIdsMessage,
       ],
       functions: openApiSchema,
-      temperature: 0.1,
+      temperature: 0,
       max_tokens: 1200,
     });
 
@@ -254,11 +259,11 @@ export const handler = handle(async (event) => {
           role: 'system',
           content: FETCH_DATA_SYSTEM_PROMPT,
         },
-        docMessage,
-        elementIds,
         ...messages,
+        docMessage,
+        elementIdsMessage,
       ],
-      temperature: 0.1,
+      temperature: 0,
       max_tokens: 800,
       stop: `\`\`\`\n`,
     });
@@ -297,11 +302,11 @@ export const handler = handle(async (event) => {
           role: 'system',
           content: CONVERSATION_SYSTEM_PROMPT,
         },
-        docMessage,
-        elementIds,
         ...messages,
+        docMessage,
+        elementIdsMessage,
       ],
-      temperature: 0.6,
+      temperature: 0.2,
       max_tokens: 800,
     });
 

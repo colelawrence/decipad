@@ -85,7 +85,7 @@ export const appendChoice: Action<'appendChoice'> = {
       getNode<VariableSliderElement>(editor, insertPath)
     );
     return {
-      summary: `Added a new dropdown with variable name ${variableName}`,
+      summary: `Added a new dropdown with name "${variableName}"`,
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),
