@@ -16,16 +16,18 @@ const getBody = (message: unknown, isBase64Encoded: boolean) => {
 
 export const onMessage = async (
   conn: ConnectionRecord,
-  message: unknown,
+  _message: unknown,
   isBase64Encoded: boolean
 ) => {
-  const prompt = getBody(message, isBase64Encoded);
+  const message = getBody(_message, isBase64Encoded);
+  // eslint-disable-next-line no-console
+  console.log('backend notebook assistant: message:', message);
   await queues.publish({
     name: 'chat-agent-message',
     payload: {
       connectionId: conn.id,
       room: conn.room,
-      message: prompt,
+      message,
     },
   });
   return { statusCode: 200 };

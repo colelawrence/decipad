@@ -1,11 +1,12 @@
 import assert from 'assert';
-import { streamingNotebookAssistant } from '../notebookAssistant/notebookAssistant';
+import tables from '@decipad/tables';
+import { getDefined } from '@decipad/utils';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { ChatCompletionMessage } from 'openai/resources';
 import { resourceFromRoomName } from './roomName';
+import { engageAssistant } from '../notebookAssistant/engageAssistant';
 import { ws } from '@architect/functions';
-import type { NotebookAssistantEvent } from '../types';
-import { Subscription } from 'rxjs';
-import { fnQueue } from '@decipad/fnqueue';
-import { getRemoteComputer } from '@decipad/remote-computer';
+import { boomify, badRequest } from '@hapi/boom';
 
 export interface ChatAgentMessage {
   connectionId: string;
@@ -13,67 +14,58 @@ export interface ChatAgentMessage {
   message: string;
 }
 
-export const onQueueMessage = async (event: ChatAgentMessage) => {
-  // eslint-disable-next-line no-console
-  console.log('onQueueMessage', event);
-  const resource = resourceFromRoomName(event.room);
-  // eslint-disable-next-line no-console
-  console.log('resource', resource);
-  assert(resource.type === 'pads');
-  const assistant = await streamingNotebookAssistant(
-    resource.id,
-    event.message,
-    event.connectionId,
-    getRemoteComputer()
-  );
+export const onQueueMessage = async (
+  { connectionId, room, message }: ChatAgentMessage,
+  event: APIGatewayProxyEventV2
+) => {
+  try {
+    let messages: ChatCompletionMessage[];
+    let forceMode: string;
+    try {
+      const parsedMessage = JSON.parse(message);
+      messages = parsedMessage.messages;
+      forceMode = parsedMessage.forceMode;
+    } catch (err) {
+      throw badRequest('invalid message');
+    }
+    const resource = resourceFromRoomName(room);
+    // eslint-disable-next-line no-console
+    console.log('resource', resource);
+    assert(resource.type === 'pads');
 
-  return new Promise<void>((resolve) => {
-    let subscription: undefined | Subscription;
-    let aiModel = 'not a model';
-
-    const close = () => {
-      subscription?.unsubscribe();
-
-      resolve();
-    };
-
-    const messageQueue = fnQueue();
-    const sendMessage = (assistantEvent: NotebookAssistantEvent) => {
-      messageQueue.push(async () => {
-        try {
-          await ws.send({
-            id: event.connectionId,
-            payload: assistantEvent,
-          });
-        } catch (err) {
-          // ws connection is gone
-          // eslint-disable-next-line no-console
-          console.error(err);
-          close();
-        }
-      });
-    };
-
-    subscription = assistant.subscribe((assistantEvent) => {
-      switch (assistantEvent.type) {
-        case 'new-doc':
-          // ignore this one
-          break;
-        case 'tokens':
-          if (!aiModel) {
-            // Probably a better way to do this.
-            aiModel = assistantEvent.model;
-          }
-          break;
-        case 'error':
-        case 'end':
-          sendMessage(assistantEvent);
-          messageQueue.flush().finally(close);
-          break;
-        default: {
-          sendMessage(assistantEvent);
-        }
-      }
+    const data = await tables();
+    const conn = await data.connections.get({ id: connectionId });
+    if (!conn) {
+      return;
+    }
+    const user = await data.users.get({
+      id: getDefined(conn.user_id, 'connection with no user id'),
     });
-  });
+    if (!user) {
+      return;
+    }
+
+    const response = await engageAssistant({
+      user,
+      event,
+      messages,
+      forceMode,
+      notebookId: resource.id,
+    });
+
+    await ws.send({
+      id: connectionId,
+      payload: response,
+    });
+  } catch (err) {
+    const bErr = boomify(err as Error);
+    if (bErr.isBoom) {
+      // eslint-disable-next-line no-console
+      console.error(bErr);
+    }
+    await ws.send({
+      id: connectionId,
+      payload: bErr.output.payload,
+    });
+  }
 };

@@ -10,11 +10,8 @@ import {
 } from '@decipad/react-contexts';
 import { useCallback, useContext, useRef } from 'react';
 
-import { ChatCompletionMessage } from 'openai/resources';
 import { nanoid } from 'nanoid';
-import { mapChatHistoryToGPTChat } from './helpers';
 
-import { AiUsage } from '@decipad/interfaces';
 import {
   Action,
   GenericSummaryResult,
@@ -23,15 +20,13 @@ import {
 } from '@decipad/notebook-open-api';
 import { EditorController } from '@decipad/notebook-tabs';
 import { parseIntegration } from '@decipad/utils';
+import { useRemoteAgent } from './useRemoteAgent';
+import { OutOfCreditsError } from './OutOfCreditsError';
 import { useActiveEditor } from '@decipad/editor-hooks';
 
 type AgentParams = {
   notebookId: string;
 };
-
-const TOO_MANY_REQUESTS = 429;
-
-class OutOfCreditsError extends Error {}
 
 export const useAgent = ({ notebookId }: AgentParams) => {
   const [addMessage, deleteMessage, addEventToMessage, updateMessageStatus] =
@@ -63,6 +58,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
     abortController.current = new AbortController();
   }, [abortController]);
 
+  const remoteAgent = useRemoteAgent({ notebookId });
+
   const submitChat = useCallback(
     // eslint-disable-next-line complexity
     async (
@@ -72,44 +69,13 @@ export const useAgent = ({ notebookId }: AgentParams) => {
       forceMode?: 'creation' | 'conversation'
     ): Promise<void> => {
       try {
-        const body = {
-          messages: mapChatHistoryToGPTChat(
-            messages.filter(
-              (m) => !(m.type === 'event' && m.status === 'ui-only-error')
-            )
-          ),
-          forceMode,
-        };
-
-        const response = await fetch(`/api/ai/chat/${notebookId}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const { mode, usage, message } = await remoteAgent.setMessage(
+          {
+            forceMode,
+            messages,
           },
-          body: JSON.stringify(body),
-          signal,
-        });
-
-        if (response.status === TOO_MANY_REQUESTS) {
-          throw new OutOfCreditsError();
-        }
-
-        if (response.status !== 200) {
-          const err = await response.json();
-
-          throw new Error(err.message);
-        }
-
-        const {
-          mode,
-          message,
-          usage,
-        }: {
-          mode: 'conversation' | 'creation' | 'fetch_data';
-          message: ChatCompletionMessage;
-          usage: AiUsage;
-        } = await response.json();
-
+          signal
+        );
         updateUsage(usage);
 
         if (mode === 'creation') {
@@ -304,15 +270,15 @@ export const useAgent = ({ notebookId }: AgentParams) => {
       }
     },
     [
-      computer,
+      remoteAgent,
+      signal,
+      updateUsage,
       controller,
+      computer,
       handleAddEventToMessage,
       handleAddMessage,
       handleDeleteMessage,
       handleUpdateMessageStatus,
-      notebookId,
-      updateUsage,
-      signal,
       subEditor,
     ]
   );

@@ -29,6 +29,7 @@ export const handler = trace<TWSRequestContext>(
       }
       return await onChatAgentMessage(conn, event.body, event.isBase64Encoded);
     } catch (err) {
+      console.error(err);
       if (err instanceof Error) {
         const boom = boomify(err);
         if (boom.isServer) {

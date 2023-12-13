@@ -58,8 +58,10 @@ export const analyticsClient = (event: APIGatewayProxyEventV2) => {
   let client = clientForEvent.get(event);
   if (!client) {
     client = new MyAnalyticsClient(analyticsSettings());
-    clientForEvent.set(event, client);
-    client.once('deregister', () => clientForEvent.delete(event));
+    if (event && typeof event === 'object') {
+      clientForEvent.set(event, client);
+      client.once('deregister', () => clientForEvent.delete(event));
+    }
   }
   return client;
 };

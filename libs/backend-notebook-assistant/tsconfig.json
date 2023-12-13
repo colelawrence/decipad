@@ -14,6 +14,8 @@
     { "path": "../backend-code-assistant" },
     { "path": "../computer" },
     { "path": "../services" },
-    { "path": "../fnqueue" }
+    { "path": "../fnqueue" },
+    { "path": "../backend-resources" },
+    { "path": "../notebook-open-api" }
   ]
 }

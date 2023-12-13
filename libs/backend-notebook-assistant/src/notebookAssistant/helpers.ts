@@ -1,9 +1,9 @@
+import { ResourceUsageRecord } from '@decipad/backendtypes';
 import tables, {
   ResourceKeyParams,
   getResourceUsageKey,
   incrementResource,
 } from '@decipad/tables';
-import { ResourceUsageRecord } from '../../types';
 
 export const PROMPT_TOKENS_USED = 'promptTokensUsed';
 export const COMPLETION_TOKENS_USED = 'completionTokensUsed';
