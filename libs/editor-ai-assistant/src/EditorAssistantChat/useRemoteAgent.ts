@@ -103,14 +103,14 @@ export const useRemoteAgent = ({
   }, [connectState, pendingMessage]);
 
   // close connection on idle
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      ws.current?.close();
-    }, IDLE_TIMEOUT_MS);
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [pendingMessage]);
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     ws.current?.close();
+  //   }, IDLE_TIMEOUT_MS);
+  //   return () => {
+  //     clearTimeout(timeout);
+  //   };
+  // }, [pendingMessage]);
 
   return {
     connectionState: connectState,
