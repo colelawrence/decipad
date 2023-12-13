@@ -41,7 +41,7 @@ export interface UseRemoteAgentResult {
   connectionState: ConnectState;
 }
 
-// const IDLE_TIMEOUT_MS = 120_000; // 2 minutes
+const IDLE_TIMEOUT_MS = 600_000; // 10 minutes
 
 export const useRemoteAgent = ({
   notebookId,
@@ -103,18 +103,20 @@ export const useRemoteAgent = ({
   }, [connectState, pendingMessage]);
 
   // close connection on idle
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     ws.current?.close();
-  //   }, IDLE_TIMEOUT_MS);
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   };
-  // }, [pendingMessage]);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      ws.current?.close();
+    }, IDLE_TIMEOUT_MS);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [pendingMessage]);
 
   return {
     connectionState: connectState,
     setMessage: useCallback(async (message, abortSignal) => {
+      // eslint-disable-next-line no-console
+      console.debug('set message', message);
       setPendingMessage({
         ...message,
         messages: mapChatHistoryToGPTChat(
@@ -127,6 +129,12 @@ export const useRemoteAgent = ({
       const onAbort = () => {
         abortSignal.removeEventListener('abort', onAbort);
         ws.current?.close();
+        const error: Payload = {
+          statusCode: 418,
+          error: "I'm a teapot",
+          message: 'Aborted',
+        };
+        responseListener.current.next(error);
       };
 
       abortSignal.addEventListener('abort', onAbort);
@@ -134,6 +142,10 @@ export const useRemoteAgent = ({
         const sub = responseListener.current.subscribe((response) => {
           sub.unsubscribe();
           if ((response as Payload).error) {
+            const error = response as Payload;
+            if (error.message === 'Aborted') {
+              reject(new DOMException('Aborted', 'AbortError'));
+            }
             reject(new Error((response as Payload).message));
           } else {
             resolve(response as RemoteAgentResponse);
