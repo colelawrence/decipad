@@ -41,7 +41,7 @@ export interface UseRemoteAgentResult {
   connectionState: ConnectState;
 }
 
-const IDLE_TIMEOUT_MS = 120_000; // 2 minutes
+// const IDLE_TIMEOUT_MS = 120_000; // 2 minutes
 
 export const useRemoteAgent = ({
   notebookId,
