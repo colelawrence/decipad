@@ -83,6 +83,7 @@ export const createDeduplicateElementIdsPlugin = <
             if (el.id && seenIds.has(el.id)) {
               insertNeedsDeduping(el.id, op.node);
             }
+
             seenIds.add(el.id);
           } else if (
             op.type === 'set_node' &&
