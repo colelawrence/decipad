@@ -39,6 +39,7 @@ const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
         versionName: qs.version ?? '',
       });
     } else if (qs.protocol?.startsWith('agent-chat')) {
+      console.debug('is agent chat');
       await onChatAgentConnect({
         connId,
         resources,
@@ -46,6 +47,7 @@ const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
         protocol: qs.protocol,
       });
     } else {
+      console.error('Unknown protocol', qs.protocol);
       throw notAcceptable(`Unknown protocol ${qs.protocol}`);
     }
 
@@ -53,7 +55,7 @@ const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
       event.headers['sec-websocket-protocol'] ||
       event.headers['Sec-WebSocket-Protocol'];
 
-    return {
+    const response = {
       statusCode: 200,
       headers: wsProtocol
         ? {
@@ -61,8 +63,11 @@ const handle: APIGatewayProxyHandlerV2 = async (event: TWSRequestEvent) => {
           }
         : undefined,
     };
+    console.log('connect replying', response);
+    return response;
   } catch (err) {
     const e = boomify(err as Error);
+    console.error(e);
     if (e.isServer) {
       console.error('Error on connect:', e);
       console.error('headers:', event.headers);

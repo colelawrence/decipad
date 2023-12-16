@@ -4,10 +4,10 @@ import tables from '@decipad/tables';
 import {
   create as createUser,
   maybeEnrich as maybeEnrichUser,
+  isAllowedToLogIn,
 } from '@decipad/services/users';
 import { jwt as jwtConf } from '@decipad/services/authentication';
-import { APIGatewayProxyResultV2 } from 'aws-lambda';
-import { isAllowedToLogIn } from './is-allowed';
+import { APIGatewayProxyResultV2, APIGatewayProxyEventV2 } from 'aws-lambda';
 import { UserInput } from '@decipad/backendtypes';
 
 const defaultTestUserEmail = 'test@decipad.com';
@@ -18,6 +18,7 @@ const tokenCookieName = isSecureCookie
   : 'next-auth.session-token';
 
 export const testUserAuth = async (
+  event: APIGatewayProxyEventV2,
   url: URL
 ): Promise<APIGatewayProxyResultV2> => {
   const email = url.searchParams.get('email') || defaultTestUserEmail;
@@ -47,11 +48,14 @@ export const testUserAuth = async (
     // to a registration page by defining next-auth options.pages.newUser.
 
     existingUser = (
-      await createUser({
-        name: 'Test User',
-        email,
-        provider: 'email',
-      })
+      await createUser(
+        {
+          name: 'Test User',
+          email,
+          provider: 'email',
+        },
+        event
+      )
     ).user;
   }
 

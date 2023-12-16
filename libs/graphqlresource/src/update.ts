@@ -63,6 +63,7 @@ export function update<
     }
 
     await track(
+      context.event,
       {
         userId: context.user?.id,
         event: `${resourceType.humanName} updated`,
@@ -75,6 +76,7 @@ export function update<
       !(updatedRecord as MaybePublic).isPublic
     ) {
       await track(
+        context.event,
         {
           userId: context.user?.id,
           event: `${resourceType.humanName} made private`,
@@ -86,6 +88,7 @@ export function update<
       (updatedRecord as MaybePublic).isPublic
     ) {
       await track(
+        context.event,
         {
           userId: context.user?.id,
           event: `${resourceType.humanName} made public`,

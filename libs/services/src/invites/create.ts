@@ -5,6 +5,7 @@ import { app as appConfig, auth as authConfig } from '@decipad/backend-config';
 import tables from '@decipad/tables';
 import { nanoid } from 'nanoid';
 import { createVerifier } from '../authentication';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export interface INotifyInviteArguments {
   user: User;
@@ -67,10 +68,13 @@ export async function create(args: ICreateInviteArguments) {
   });
 }
 
-export async function notify(args: INotifyInviteArguments) {
+export async function notify(
+  event: APIGatewayProxyEventV2,
+  args: INotifyInviteArguments
+) {
   const acceptLink = args.isRegistered
     ? args.resourceLink
-    : await generateAuthLink(args);
+    : await generateAuthLink(event, args);
 
   if (process.env.ARC_ENV !== 'production') {
     // eslint-disable-next-line no-console
@@ -90,11 +94,15 @@ export async function notify(args: INotifyInviteArguments) {
   });
 }
 
-export async function generateAuthLink(args: INotifyInviteArguments) {
+export async function generateAuthLink(
+  event: APIGatewayProxyEventV2,
+  args: INotifyInviteArguments
+) {
   const { jwt: jwtConfig, inviteExpirationSeconds } = authConfig();
   const { urlBase } = appConfig();
 
   const verifier = createVerifier({
+    event,
     secret: jwtConfig.secret,
     baseUrl: urlBase,
   });

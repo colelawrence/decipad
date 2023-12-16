@@ -1,30 +1,45 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 hide_table_of_contents: true
 sidebar_class_name: ai-icon
 pagination_next: null
 pagination_prev: null
-title: AI
+title: AI Assistant
 ---
 
-# Artificial Intelligence
+# Decipad AI Assistant (Preview)
 
-We are continuously expanding our AI capabilities to help you make building your notebooks more efficient. These features are undergoing rapid changes, so you may find slight differences in the actual product.
+Decipad notebooks are powered by AI Assistant features to help you speed up you data analysis and report building.
 
-## Paragraph Assistant
+## Notebook Chat Assistant
 
-The most basic usage of AI is at your fingertips in Decipad: Let AI write, or rewrite, text for you.
+The Notebook Chat Assistant is your smart collaborator for brainstorming, clarifying, and optimizing your data analysis notebooks.
 
-![AI Paragraph Assistant](/img/docs/ai-paragraph.png)
+To access the AI Chat, just click the AI button on the topbar of your notebook and start your conversation. Here's what it can do for you:
 
-## Integration Code Assistant
+- **Suggest Ideas and Topics**: <br/>
+  Kickstart your analysis by receiving creative ideas and relevant topics tailored to your notebook's context.
+- **Explain Your Notebook or Template**: <br/>
+  Gain a deeper understanding of your own work. <br/> The Chat Assistant can provide explanations, making your notebooks more comprehensible to both yourself and others.
+- **Help You Create Calculations and Models**: <br/>
+  Need assistance with complex calculations or model building? <br/> The Chat Assistant is here to guide you through the process, offering valuable insights, suggestions and by creating calculations for you.
 
-When integrating data from an API, try letting our AI assistant write the code for you.
+**Note:** This feature is available as a limited preview. To help us improve share your thoughts and feedback by sending us an email ([support@decipad.com](mailto:support@decipad.com)) or via the support chat.
 
-![AI Integration Assistant](/img/docs/ai-code.png)
+## Rewrite or Improve Specific Paragraphs
 
-## Populate Columns
+Receive instant suggestions to enhance the clarity, coherence, and overall quality of your written content.
 
-Sometimes you just want some mock data in table. AI can do that chore for you.
+**To rewrite a paragraph**, click the option's menu (`⸬`) that shows up when you hover any paragraph and choose `AI Assistant`.
 
-![AI Populate Colum](/img/docs/ai-column.png)
+## Generate New Data to Populate Table Columns
+
+Quickly create and populate columns with relevant and diverse data, saving you time and effort when creating new models.
+
+**To populate columns**, add a new column to a table and click the option's menu (`⸬`) that shows up when you hover the column name, then choose `AI Assistant`.
+
+## Generate Code to Pull Data from API Endpoints
+
+Simply specify the API endpoints, and let the Integrations Assistant generate the necessary code to pull data into your notebooks.
+
+**To make data queries using the API Integrations assistant**, type "/integrations" on an empty line to open the Integrations panel. Then, select "Integrations" and go to the `AI Assistant` section.

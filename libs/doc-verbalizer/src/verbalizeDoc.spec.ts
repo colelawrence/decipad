@@ -5,11 +5,12 @@ import someCode from './__fixtures__/some-code.json';
 import uiComponents from './__fixtures__/simple-ui-components.json';
 import mostComponents from './__fixtures__/most-components.json';
 import { RootDocument } from '@decipad/editor-types';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 describe('verbalizeDoc', () => {
   it('verbalizes text documents into the text itself', () => {
     const doc = textOnly as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.element)).toMatchObject(doc.children);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
@@ -23,7 +24,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes code lines', () => {
     const doc = someCode as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -82,7 +83,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes some simple UI components', () => {
     const doc = uiComponents as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -97,7 +98,7 @@ describe('verbalizeDoc', () => {
         "\`\`\`deci
       StartDate = date(2020-10-15)
       \`\`\`",
-        "Dropdown list that exposes a variable named \`Dropdown1\`, currently has the value of "A", where the user can select from any of the elements: \`["A", "B", "C"]\`.",
+        "Dropdown list that exposes a variable named \`Dropdown1\`, with selected value of "A", and options of: \`["A", "B", "C"]\`.",
         "\`\`\`deci
       Historicals = {
         Year = ["2018", "2019", "2020", "2021", "2022"]
@@ -180,7 +181,7 @@ describe('verbalizeDoc', () => {
 
   it('verbalizes most components', () => {
     const doc = mostComponents as RootDocument;
-    const { document, verbalized } = verbalizeDoc(doc);
+    const { document, verbalized } = verbalizeDoc(doc, getRemoteComputer());
     expect(document).toMatchObject(doc);
     expect(verbalized.map((v) => v.verbalized)).toMatchInlineSnapshot(`
       [
@@ -264,8 +265,8 @@ describe('verbalizeDoc', () => {
         "\`\`\`deci
       👗 = 10%
       \`\`\`",
-        "Dropdown list that exposes a variable named \`Dropdown\`, currently has the value of "10%", where the user can select from any of the elements: \`["10%", "20%", "30%"]\`.",
-        "Dropdown list that exposes a variable named \`Positions\`, currently has the value of "\\"Software Dev\\"", where the user can select from any of the elements: \`["\\"Software Dev\\"", "\\"Designer\\""]\`.",
+        "Dropdown list that exposes a variable named \`Dropdown\`, with selected value of "10%", and options of: \`["10%", "20%", "30%"]\`.",
+        "Dropdown list that exposes a variable named \`Positions\`, with selected value of "\\"Software Dev\\"", and options of: \`["\\"Software Dev\\"", "\\"Designer\\""]\`.",
         "\`\`\`deci
       Input1 = 100$ &
       \`\`\`",
@@ -363,8 +364,8 @@ describe('verbalizeDoc', () => {
         Column4 = [AqD22IuRny6JIpMe9o7Zm, RF8aRVCm2fJJZ4zfi6H59, ]
       }
       \`\`\`",
-        "Dropdown list that exposes a variable named \`Dropdown1\`, currently has the value of "A", where the user can select from any of the elements: \`["A", "B", "C"]\`.",
-        "Dropdown list that exposes a variable named \`Dropdown2\`, currently has the value of "Select", where the user can select from any of the elements: \`[]\`.",
+        "Dropdown list that exposes a variable named \`Dropdown1\`, with selected value of "A", and options of: \`["A", "B", "C"]\`.",
+        "Dropdown list that exposes a variable named \`Dropdown2\`, with selected value of "Select", and options of: \`[]\`.",
         "Long quote underline bold italics crossed highlight💀  code",
         "Long quote underline bold italics crossed highlightcode
 

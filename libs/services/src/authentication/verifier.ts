@@ -3,10 +3,12 @@ import tables from '@decipad/tables';
 import { VerificationRequestRecord } from '@decipad/backendtypes';
 import { track } from '@decipad/backend-analytics';
 import { randomString } from '../utils/randomString';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 interface AdapterOptions {
   secret: string;
   baseUrl: string;
+  event: APIGatewayProxyEventV2;
 }
 
 interface VerificationRequest {
@@ -15,7 +17,7 @@ interface VerificationRequest {
   openTokenForTestsOnly?: string;
 }
 
-export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
+export const createVerifier = ({ secret, baseUrl, event }: AdapterOptions) => {
   function hashToken(token: string): string {
     return createHash('sha256').update(`${token}${secret}`).digest('hex');
   }
@@ -94,7 +96,7 @@ export const createVerifier = ({ secret, baseUrl }: AdapterOptions) => {
         const expirationDate = new Date(verificationRequest.expires * 1000);
         if (expirationDate.getTime() <= Date.now()) {
           if (verificationRequest.resourceLink) {
-            await track({
+            await track(event, {
               event: 'accepted invitation',
               properties: {
                 identifier: verificationRequest.identifier,

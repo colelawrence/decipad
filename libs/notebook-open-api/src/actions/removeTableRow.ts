@@ -18,10 +18,15 @@ export const removeTableRow: Action<'removeTableRow'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowIndex }) => {
     const [, tablePath] = getTableById(editor, tableId);
     const removeRowIndex = [...tablePath, rowIndex + 2];
     removeNodes(editor, { at: removeRowIndex });
+
+    return {
+      summary: `Removed row ${rowIndex} from table`,
+    };
   },
 };

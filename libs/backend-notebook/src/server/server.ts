@@ -1,5 +1,8 @@
 import { notAcceptable } from '@hapi/boom';
-import type { APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import {
+  APIGatewayProxyStructuredResultV2,
+  APIGatewayProxyEventV2,
+} from 'aws-lambda';
 import stringify from 'json-stringify-safe';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
@@ -12,10 +15,12 @@ import { attachEditorToBackend } from './attachEditorToBackend';
 import { actions } from '../actions';
 import { fetchNotebook } from './fetchNotebook';
 import { track } from '@decipad/backend-analytics';
+import { syncComputer } from './syncComputer';
 
 type MaybeWrappedInActionResult<T> = T | ActionResultWithNotebookError<T>;
 
 export const server = async (
+  event: APIGatewayProxyEventV2,
   notebookId: string | undefined,
   actionName: keyof typeof actions,
   params: Record<string, unknown>
@@ -24,7 +29,7 @@ export const server = async (
   if (!action) {
     throw notAcceptable(`Unknown function ${actionName as string}`);
   }
-  track({
+  track(event, {
     event: `AI-Action:${actionName}`,
     properties: params,
   });
@@ -42,6 +47,7 @@ export const server = async (
 
     const editor = await getEditor({ notebookId, computer });
     const [, detach] = await attachEditorToBackend(editor);
+    await syncComputer(editor, computer);
     let subEditor = editor.getTabEditorAt(0);
     if (!subEditor) {
       editor.insertTab();

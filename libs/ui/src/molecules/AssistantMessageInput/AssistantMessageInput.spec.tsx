@@ -5,40 +5,45 @@ import { noop } from '@decipad/utils';
 
 describe('<AssistantMessageInput />', () => {
   it('renders correctly', () => {
-    render(<AssistantMessageInput isGenerating={false} onSubmit={noop} />);
+    render(
+      <AssistantMessageInput
+        isFirstInteraction={false}
+        onStop={noop}
+        isGenerating={false}
+        onSubmit={noop}
+        reachedCreditLimit={false}
+      />
+    );
     expect(
-      screen.getByPlaceholderText(/what can i do for you/i)
+      screen.getByPlaceholderText(/type your message here/i)
     ).toBeInTheDocument();
   });
 
   it('updates value on input change', async () => {
     const { getByTestId } = render(
-      <AssistantMessageInput isGenerating={false} onSubmit={noop} />
+      <AssistantMessageInput
+        isFirstInteraction={false}
+        onStop={noop}
+        isGenerating={false}
+        onSubmit={noop}
+        reachedCreditLimit={false}
+      />
     );
     const input = getByTestId('message-input') as HTMLInputElement;
     await userEvent.type(input, 'Test Message');
     expect(input.value).toBe('Test Message');
   });
 
-  it('enables/disables submit button based on input and isGenerating', async () => {
-    const { rerender, getByTestId } = render(
-      <AssistantMessageInput isGenerating={false} onSubmit={noop} />
-    );
-    const submitButton = screen.getByRole('button');
-    expect(submitButton).toBeDisabled();
-
-    rerender(<AssistantMessageInput isGenerating={true} onSubmit={noop} />);
-    expect(submitButton).toBeDisabled();
-
-    rerender(<AssistantMessageInput isGenerating={false} onSubmit={noop} />);
-    await userEvent.type(getByTestId('message-input'), 'Test');
-    expect(submitButton).not.toBeDisabled();
-  });
-
   it('calls onSubmit when form is submitted', async () => {
     const mockOnSubmit = jest.fn();
     const { getByTestId } = render(
-      <AssistantMessageInput isGenerating={false} onSubmit={mockOnSubmit} />
+      <AssistantMessageInput
+        isFirstInteraction={false}
+        onStop={noop}
+        isGenerating={false}
+        onSubmit={mockOnSubmit}
+        reachedCreditLimit={false}
+      />
     );
     const input = getByTestId('message-input');
     const form = getByTestId('message-form');
@@ -53,7 +58,13 @@ describe('<AssistantMessageInput />', () => {
   it('submits form on Enter key press', async () => {
     const mockOnSubmit = jest.fn();
     const { getByTestId } = render(
-      <AssistantMessageInput isGenerating={false} onSubmit={mockOnSubmit} />
+      <AssistantMessageInput
+        isFirstInteraction={false}
+        onStop={noop}
+        isGenerating={false}
+        onSubmit={mockOnSubmit}
+        reachedCreditLimit={false}
+      />
     );
     const input = getByTestId('message-input');
 

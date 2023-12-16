@@ -46,6 +46,8 @@ export const onConnect = async ({
     )
   ).filter(Boolean) as PermissionType[];
   if (permissionTypes.length < 1) {
+    // eslint-disable-next-line no-console
+    console.debug('not authorized');
     throw unauthorized();
   }
 

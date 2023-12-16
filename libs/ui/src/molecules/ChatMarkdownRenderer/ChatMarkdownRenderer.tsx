@@ -74,7 +74,7 @@ type Props = {
 
 export const ChatMarkdownRenderer: React.FC<Props> = ({ content }) => {
   return (
-    <div css={contentStyles}>
+    <div css={contentStyles} data-testid="ai-chat-message">
       <Remark>{content}</Remark>
     </div>
   );

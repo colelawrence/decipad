@@ -1,12 +1,13 @@
-import { toSlateDoc } from '@decipad/slate-yjs';
-import tables, { allPages } from '@decipad/tables';
-import { NotebookValue, RootDocument } from '@decipad/editor-types';
+import { applyUpdate, Doc, mergeUpdates } from 'yjs';
 import md5 from 'md5';
 import { canonicalize } from 'json-canonicalize';
-import { applyUpdate, Doc, mergeUpdates } from 'yjs';
-import { fetchSnapshotFromFile } from '../../../backend-notebook-content/src/fetchSnapshotFromFile';
+import { toSlateDoc } from '@decipad/slate-yjs';
+import { notFound } from '@hapi/boom';
+import tables, { allPages } from '@decipad/tables';
+import { NotebookValue, RootDocument } from '@decipad/editor-types';
 import { getDefined } from '@decipad/utils';
-import { DocSyncSnapshotRecord } from '@decipad/backendtypes';
+import type { DocSyncSnapshotRecord } from '@decipad/backendtypes';
+import { fetchSnapshotFromFile } from '../../../backend-notebook-content/src/fetchSnapshotFromFile';
 
 export const snapshot = async (
   notebookId: string,
@@ -28,6 +29,10 @@ export const snapshot = async (
     if (update) {
       updates.push(Buffer.from(update.data, 'base64'));
     }
+  }
+
+  if (!updates.length) {
+    throw notFound('No updates for this notebook found');
   }
 
   const mergedUpdates = mergeUpdates(updates);

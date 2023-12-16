@@ -30,6 +30,7 @@ export const updateSliderVariable: Action<'updateSliderVariable'> = {
   description: 'changes an existing slider component.',
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       elementId: z
@@ -167,5 +168,9 @@ export const updateSliderVariable: Action<'updateSliderVariable'> = {
         }
       }
     });
+
+    return {
+      summary: `Updated slider`,
+    };
   },
 };

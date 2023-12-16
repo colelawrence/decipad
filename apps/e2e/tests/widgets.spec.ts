@@ -257,6 +257,24 @@ test('dropdown widget', async ({ testUser }) => {
     await expect(await notebook.getDropdownOptions()).toEqual(['55%', '75%']);
   });
 
+  await test.step('refresh notebook and see it still can edit', async () => {
+    await page.reload();
+    await page.getByText('55%').click();
+    await page.getByTestId('dropdown-option').getByText('55%').hover();
+    await page
+      .getByRole('dialog')
+      .getByRole('complementary')
+      .locator('div')
+      .filter({ hasText: 'Edit' })
+      .click();
+    ControlPlus(page, 'A');
+    page.keyboard.press('Delete');
+    await page.keyboard.type('50%');
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('dropdown-display')).toHaveText(/50%/);
+    expect(await notebook.getDropdownOptions()).toEqual(['50%', '75%']);
+  });
+
   await test.step('Dropdown option should appear in table column menu', async () => {
     await createTable(page);
     await openColTypeMenu(page, 2);
@@ -278,10 +296,10 @@ test('dropdown widget', async ({ testUser }) => {
     expect(await dropdownOptions.count()).toBe(2);
     await page
       .locator('[aria-roledescription="dropdownOption"]')
-      .getByText('55%')
+      .getByText('50%')
       .click();
     await expect(dropdownOptions).toBeHidden();
-    await expect(page.locator(tableCellLocator(1, 2))).toContainText('55%');
+    await expect(page.locator(tableCellLocator(1, 2))).toContainText('50%');
   });
 
   await test.step('Changing original dropdown value, also changes the cells value', async () => {
@@ -289,7 +307,7 @@ test('dropdown widget', async ({ testUser }) => {
 
     await page
       .locator('[aria-roledescription="dropdownOption"]')
-      .getByText('55%')
+      .getByText('50%')
       .hover();
 
     await page
@@ -302,7 +320,7 @@ test('dropdown widget', async ({ testUser }) => {
     await page.keyboard.insertText('0');
     await page.keyboard.press('Enter');
 
-    await expect(page.locator(tableCellLocator(1, 2))).toHaveText(/550%/, {
+    await expect(page.locator(tableCellLocator(1, 2))).toHaveText(/500%/, {
       timeout: 5000,
     });
   });

@@ -1,22 +1,13 @@
 import { FC } from 'react';
-import { cssVar } from '../../primitives';
 
 export const Send = (): ReturnType<FC> => (
-  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
     <title>Send</title>
     <path
-      d="M3.16634 3.16699L12.833 8.00033L3.16634 12.8337L5.49967 8.00033L3.16634 3.16699Z"
-      stroke={cssVar('iconColorHeavy')}
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M5.66667 8L7.5 8"
-      stroke={cssVar('iconColorHeavy')}
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M4.91326 2.72992C3.50535 2.02596 2.00511 3.50551 2.68945 4.92306L3.86759 7.36351C3.91037 7.35465 3.95468 7.35 4.00007 7.35L7.00007 7.35C7.35906 7.35 7.65007 7.64101 7.65007 8C7.65007 8.35898 7.35906 8.65 7.00007 8.65L4.00007 8.65C3.9547 8.65 3.91042 8.64535 3.86767 8.6365L2.68945 11.0771C2.00511 12.4946 3.50535 13.9742 4.91326 13.2702L12.502 9.47588C13.7181 8.86782 13.7181 7.13234 12.502 6.52428L4.91326 2.72992Z"
+      fill="currentColor"
     />
   </svg>
 );

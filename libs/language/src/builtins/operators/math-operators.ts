@@ -284,6 +284,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
   },
   variance: {
     aliasFor: 'stddev',
+    explanation: 'Standard deviation of a column.',
+    syntax: 'variance(Table.Column)',
+    formulaGroup: 'Columns',
+    example: 'variance(Prices.Discount)',
   },
   sqrt: {
     argCount: 1,

@@ -1,4 +1,4 @@
-import {
+import type {
   GraphqlContext,
   Workspace,
   WorkspaceSubscriptionRecord,
@@ -22,13 +22,17 @@ export default {
   },
 
   Mutation: {
-    syncWorkspaceSeats: async (_: unknown, args: { id: string }) => {
+    syncWorkspaceSeats: async (
+      _: unknown,
+      args: { id: string },
+      ctx: GraphqlContext
+    ) => {
       const workspaceId = args.id;
       const sub: WorkspaceSubscriptionRecord =
         await findSubscriptionByWorkspaceId(workspaceId);
       const newQuantity = await getWorkspaceMembersCount(workspaceId);
 
-      await updateStripeIfNeeded(sub, newQuantity);
+      await updateStripeIfNeeded(ctx.event, sub, newQuantity);
       return sub;
     },
   },

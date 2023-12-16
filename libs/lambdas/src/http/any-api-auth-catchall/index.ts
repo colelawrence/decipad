@@ -11,7 +11,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (req, ...params) => {
     app().urlBase
   );
   if (url.pathname === testUserPath) {
-    return testUserAuth(url);
+    return testUserAuth(req, url);
   }
 
   return auth(req, ...params) as Promise<APIGatewayProxyResultV2>;

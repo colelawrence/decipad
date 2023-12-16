@@ -96,7 +96,7 @@ export interface RemoteComputer {
   results: NotebookResultStream;
   getBlockIdResult(
     blockId: string
-  ): Readonly<IdentifiedError | IdentifiedResult>;
+  ): Readonly<IdentifiedError | IdentifiedResult> | undefined;
   expressionResult(_expression: AST.Expression): Promise<Result.Result>;
 
   // --------------- symbols --------------//
@@ -179,4 +179,7 @@ export interface RemoteComputer {
   formatError(error: ErrSpec): string;
   getUnitFromText(text: string): Promise<Unit[] | null>;
   stats: ComputerStats;
+
+  // flush
+  flush(): Promise<void>;
 }

@@ -27,6 +27,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       variableName: z.string().openapi({
@@ -98,6 +99,7 @@ export const appendSliderVariable: Action<'appendSliderVariable'> = {
       getNode<VariableSliderElement>(editor, insertPath)
     );
     return {
+      summary: `Added a new slider with name "${variableName}"`,
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),

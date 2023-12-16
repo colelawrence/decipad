@@ -12,12 +12,15 @@ import {
 import { getVerbalizer, getVarnameToId } from './verbalizers';
 import { nodeStringVerbalizer } from './verbalizers/nodeStringVerbalizer';
 import { getNodeString } from './utils/getNodeString';
+import { RemoteComputer } from '@decipad/remote-computer';
+import { verbalizeResult } from './verbalizeResult';
 
 export interface VerbalizedElement {
   element: AnyElement;
   verbalized: string;
   tags: Set<string>;
   varName?: string;
+  value?: string;
 }
 
 export interface DocumentVerbalization {
@@ -32,11 +35,12 @@ const isStructuralElement = (
 
 export const verbalizeElement = (
   element: AnyElement,
+  computer: RemoteComputer,
   tags: Set<string> = new Set()
 ): VerbalizedElement[] => {
   if (isStructuralElement(element)) {
     return element.children.flatMap(
-      (child) => verbalizeElement(child, new Set()),
+      (child) => verbalizeElement(child, computer, new Set()),
       tags
     );
   }
@@ -79,21 +83,28 @@ export const verbalizeElement = (
 
   const [varName] = varnameMapper(element);
 
+  const result = computer.getBlockIdResult(element.blockId as string);
+  const value = result != null ? verbalizeResult(result) : undefined;
+
   return [
     {
       element,
       verbalized,
       tags,
       varName,
+      value,
     },
   ];
 };
 
-export const verbalizeDoc = (doc: RootDocument): DocumentVerbalization => {
+export const verbalizeDoc = (
+  doc: RootDocument,
+  computer: RemoteComputer
+): DocumentVerbalization => {
   return {
     document: doc,
     verbalized: doc.children.flatMap((child) =>
-      verbalizeElement(child, new Set())
+      verbalizeElement(child, computer, new Set())
     ),
   };
 };

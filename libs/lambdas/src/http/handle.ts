@@ -1,39 +1,48 @@
 import { inspect } from 'util';
 import stringify from 'json-stringify-safe';
-import { Payload, boomify } from '@hapi/boom';
+import { boomify } from '@hapi/boom';
 import {
   APIGatewayProxyEventV2 as APIGatewayProxyEvent,
+  APIGatewayProxyEventV2WithRequestContext,
   APIGatewayProxyResultV2,
-  APIGatewayProxyStructuredResultV2,
   ScheduledEvent,
+  APIGatewayEventRequestContextV2,
+  Handler,
 } from 'aws-lambda';
 import chalk from 'chalk';
 import { AWSLambda as SentryAWSLambda } from '@sentry/serverless';
-import { Handler } from '@decipad/backendtypes';
 import { captureException, trace } from '@decipad/backend-trace';
+import { analyticsClient } from '@decipad/backend-analytics';
+import { Handler as MyHandler } from '@decipad/backendtypes';
 import { getAuthenticatedUser } from '@decipad/services/authentication';
 import { debug } from '../debug';
+import {
+  getErrorHeaders,
+  isFullReturnObject,
+  okStatusCodeFor,
+  sanitizeErrorPayload,
+} from '../common/http';
 
 interface HandlerOptions {
   cors?: boolean;
 }
 
-const allowedErrorKeys = new Set<keyof Payload>([
-  'statusCode',
-  'error',
-  'message',
-]);
-const sanitizeErrorPayload = (payload: Payload): Payload =>
-  Object.fromEntries(
-    Object.entries(payload).filter(([key]) => allowedErrorKeys.has(key))
-  ) as Payload;
+type HttpHandler<
+  TReqContext extends APIGatewayEventRequestContextV2 = APIGatewayEventRequestContextV2,
+  TReq extends APIGatewayProxyEventV2WithRequestContext<TReqContext> = APIGatewayProxyEventV2WithRequestContext<TReqContext>,
+  TRes extends APIGatewayProxyResultV2 = APIGatewayProxyResultV2
+> = Handler<TReq, TRes>;
 
-export default (handler: Handler, options: HandlerOptions = {}) => {
+const wrapHandler = (
+  handler: MyHandler,
+  options: HandlerOptions = {}
+): HttpHandler => {
   return trace(
     async (
       _req: APIGatewayProxyEvent | ScheduledEvent
     ): Promise<APIGatewayProxyResultV2> => {
       debug('request', _req);
+      const req = _req as APIGatewayProxyEvent;
       try {
         if (
           'detail-type' in _req &&
@@ -45,8 +54,6 @@ export default (handler: Handler, options: HandlerOptions = {}) => {
             body: '',
           };
         }
-
-        const req = _req as APIGatewayProxyEvent;
 
         const user = await getAuthenticatedUser(req);
         if (user) {
@@ -104,53 +111,77 @@ export default (handler: Handler, options: HandlerOptions = {}) => {
         };
         console.error('Replying with', reply);
         return reply;
+      } finally {
+        const client = analyticsClient(req);
+        if (client) {
+          await client.closeAndFlush({ timeout: 2000 });
+        }
       }
     }
   );
 };
 
-function isFullReturnObject(
-  result: unknown
-): result is APIGatewayProxyStructuredResultV2 {
-  return (
-    result != null &&
-    typeof result === 'object' &&
-    ('statusCode' in result || 'body' in result)
-  );
-}
+const utmKeys = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+] as const;
 
-function okStatusCodeFor(req: APIGatewayProxyEvent) {
-  const verb = req.routeKey.split(' ')[0];
-  switch (verb) {
-    case 'PUT':
-    case 'DELETE':
-      return 202;
-    case 'POST':
-      return 201;
-  }
-  return 200;
-}
+const anonymousIdFromCookies = (cookies: string[]): string =>
+  cookies
+    .filter((cookie) => cookie.startsWith('ajs_anonymous_id='))
+    .reduce((_, cookie) => cookie.split('=')[1], '');
 
-function getErrorHeaders(
-  headers: Record<string, any>,
-  { cors }: { cors?: boolean } = {}
-): Record<string, string> {
-  const retEntries = new Map<string, string>();
-  for (const [key, value] of Object.entries(headers)) {
-    if (typeof value === 'string') {
-      retEntries.set(key, value);
+const trackingUtmAndReferer = (handler: Handler): HttpHandler => {
+  return async (event, ctx, cb) => {
+    const client = analyticsClient(event);
+    if (client) {
+      // track UTM params
+      const params = event.queryStringParameters ?? {};
+      for (const utmKey of utmKeys) {
+        const value = params[utmKey];
+        if (value) {
+          client.recordProperty(utmKey, value);
+        }
+      }
+
+      // track referer
+      const { referer } = event.headers;
+      if (referer) {
+        client.recordProperty('$referrer', referer);
+        try {
+          const refUrl = new URL(referer);
+          client.recordProperty('$referring_domain', refUrl.hostname);
+        } catch (err) {
+          console.error('Error parsing referrer', err);
+        }
+      }
+
+      // track user id
+      const user = await getAuthenticatedUser(event);
+      if (user) {
+        client.myIdentify({ userId: user.id });
+        client.identify({ userId: user.id });
+      } else {
+        const anonymousId =
+          anonymousIdFromCookies(event.cookies ?? []) || 'unknown';
+        client.myIdentify({
+          anonymousId,
+        });
+        client.identify({ anonymousId });
+      }
     }
-  }
-  const headersObj = Object.fromEntries(retEntries.entries());
-  if (cors) {
-    Object.assign(headersObj, {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers': '*',
-    });
-  }
-  return {
-    ...headersObj,
-    'Content-Type': 'application/json',
+    return handler(event, ctx, cb);
   };
-}
+};
+
+const handle = (
+  handler: MyHandler,
+  options: HandlerOptions = {}
+): HttpHandler => {
+  return trackingUtmAndReferer(wrapHandler(handler, options));
+};
+
+export default handle;

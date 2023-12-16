@@ -73,6 +73,8 @@ let overrides: Flags = {
   TABS: true,
   POPULATED_NEW_NOTEBOOK: false,
   SILLY_NAMES: false,
+  RESOURCE_USAGE_COUNT: true,
+  AI_ASSISTANT_CHAT: true,
 };
 
 const localStorageOverrides: Flags = getLocalStorageOverrides();

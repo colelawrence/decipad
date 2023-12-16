@@ -88,6 +88,7 @@ import { createHeadingPlugin } from '@udecode/plate-heading';
 import { createResetNodePlugin } from '@udecode/plate-reset-node';
 import { createSelectOnBackspacePlugin } from '@udecode/plate-select';
 import { createDeserializeDocxPlugin } from '@udecode/plate-serializer-docx';
+import { createDeserializeMdPlugin } from '@udecode/plate-serializer-md';
 import { createCaptionPlugin } from '@udecode/plate-caption';
 
 interface PluginOptions {
@@ -209,6 +210,7 @@ export const plugins = ({
 
       // deserializers
       createDeserializeDocxPlugin(),
+      createDeserializeMdPlugin(),
       createJuicePlugin({}),
 
       createUserEventPlugin(events),

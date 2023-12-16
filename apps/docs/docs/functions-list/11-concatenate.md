@@ -9,9 +9,10 @@ pagination_prev: null
 
 **Syntax**:
 
-`concatenate(Table, Table)`
+`concatenate(Table, Table)` <br />
+`cat(Table, Table)`
 
-Combines two tables into a new table. These tables have to have the same column types and names.
+Combines two tables into a new table. These tables have to have the same column types and names. You can use `cat()`as an alternative syntax:
 
 ### Examples
 

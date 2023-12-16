@@ -13,7 +13,7 @@ import {
   type RemoteComputer,
   getRemoteComputer,
 } from '@decipad/remote-computer';
-import { plugins } from '@decipad/editor-config';
+import { plugins } from '../../../editor-config/src/configuration/plugins';
 import { fillRow } from './fillRow';
 
 describe('fillRow', () => {

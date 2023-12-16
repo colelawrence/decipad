@@ -34,6 +34,7 @@ export const fillTable: Action<'fillTable'> = {
         .openapi({ description: 'the content of the table, row by row' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, rowsData }, context) => {
     const [table, tablePath] = getTableById(editor, tableId);
@@ -74,5 +75,9 @@ export const fillTable: Action<'fillTable'> = {
         });
       });
     });
+
+    return {
+      summary: `Filled table with ${rowsData.length} rows`,
+    };
   },
 };

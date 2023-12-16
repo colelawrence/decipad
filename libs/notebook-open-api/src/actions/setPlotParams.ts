@@ -13,6 +13,7 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
   summary: 'changes some of the parameters for a plot',
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       polotId: z
@@ -32,5 +33,9 @@ export const setPlotParams: RequiresNotebookAction<'setPlotParams'> = {
       markType: updateParams.markType ?? plot.markType,
     };
     setNodes(editor, newPlot, { at: plotPath });
+
+    return {
+      summary: `Changed plot params`,
+    };
   },
 };

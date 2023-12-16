@@ -1,12 +1,33 @@
 import { getOpenApiSchema } from './schema';
 
 it('tests every action', () => {
-  expect(getOpenApiSchema()).toMatchInlineSnapshot(`
+  expect(getOpenApiSchema(true)).toMatchInlineSnapshot(`
     [
       {
         "description": "Retrieves a brief description of all notebook elements",
         "name": "describeAllNotebookElements",
         "parameters": {},
+      },
+      {
+        "description": "fetches the result of an element",
+        "name": "getElementResult",
+        "parameters": {
+          "properties": {
+            "elementId": {
+              "description": "the id of the element you want to get the result for",
+              "type": "string",
+            },
+            "varName": {
+              "description": "the variable name you want to get the result for",
+              "type": "string",
+            },
+          },
+          "required": [
+            "varName",
+            "elementId",
+          ],
+          "type": "object",
+        },
       },
       {
         "description": "fetches an element from the notebook with the given id",
@@ -36,39 +57,6 @@ it('tests every action', () => {
           },
           "required": [
             "elementId",
-          ],
-          "type": "object",
-        },
-      },
-      {
-        "description": "Appends any element to the end of the notebook",
-        "name": "appendElement",
-        "parameters": {
-          "properties": {
-            "element": {
-              "description": "the new element getting appended to the notebook",
-              "properties": {
-                "children": {
-                  "items": {},
-                  "type": "array",
-                },
-                "id": {
-                  "type": "string",
-                },
-                "type": {
-                  "type": "string",
-                },
-              },
-              "required": [
-                "id",
-                "type",
-                "children",
-              ],
-              "type": "object",
-            },
-          },
-          "required": [
-            "element",
           ],
           "type": "object",
         },
@@ -106,6 +94,22 @@ it('tests every action', () => {
           "required": [
             "elementId",
             "newText",
+          ],
+          "type": "object",
+        },
+      },
+      {
+        "description": "Changes the title of the notebook",
+        "name": "changeNotebookTitle",
+        "parameters": {
+          "properties": {
+            "newTitle": {
+              "description": "the new content of the notebook title",
+              "type": "string",
+            },
+          },
+          "required": [
+            "newTitle",
           ],
           "type": "object",
         },
@@ -307,27 +311,6 @@ it('tests every action', () => {
             "tableId",
             "rowIndex",
             "rowData",
-          ],
-          "type": "object",
-        },
-      },
-      {
-        "description": "inserts an empty column in an existing table",
-        "name": "insertEmptyTableColumn",
-        "parameters": {
-          "properties": {
-            "columnName": {
-              "description": "the name of the new column. Must contain no spaces or weird characters",
-              "type": "string",
-            },
-            "tableId": {
-              "description": "the id of the table you want to insert a column into",
-              "type": "string",
-            },
-          },
-          "required": [
-            "tableId",
-            "columnName",
           ],
           "type": "object",
         },

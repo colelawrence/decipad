@@ -1,11 +1,9 @@
 import { getElementById } from './getElementById';
 import { removeElement } from './removeElement';
-import { appendElement } from './appendElement';
 import { appendText } from './appendText';
 import { changeText } from './changeText';
 import { appendEmptyTable } from './appendEmptyTable';
 import { appendFilledTable } from './appendFilledTable';
-import { insertEmptyTableColumn } from './insertEmptyTableColumn';
 import { insertFilledTableColumn } from './insertFilledTableColumn';
 import { insertFormulaTableColumn } from './insertFormulaTableColumn';
 import { removeTableColumn } from './removeTableColumn';
@@ -25,14 +23,17 @@ import { setPlotParams } from './setPlotParams';
 import { appendChoice } from './appendChoice';
 import { describeAllNotebookElements } from './describeAllNotebookElements';
 import { updateSliderVariable } from './updateSliderVariable';
+import { getElementResult } from './getElementResult';
+import { changeNotebookTitle } from './changeNotebookTitle';
 
 export const actions: Partial<Actions> = {
   describeAllNotebookElements,
+  getElementResult,
   getElementById,
   removeElement,
-  appendElement,
   appendText,
   changeText,
+  changeNotebookTitle,
   appendCodeLine,
   updateCodeLine,
   appendEmptyTable,
@@ -40,7 +41,6 @@ export const actions: Partial<Actions> = {
   fillTable,
   fillColumn,
   fillRow,
-  insertEmptyTableColumn,
   insertFilledTableColumn,
   insertFormulaTableColumn,
   removeTableColumn,

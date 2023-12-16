@@ -217,6 +217,9 @@ export function createDocSyncEditor(
   const onLoaded = (source: 'remote' | 'local') => {
     if (source === 'local' && !isTesting) {
       interval = setInterval(async () => {
+        if (!docId) {
+          return;
+        }
         const arr = await getLocalNotebookUpdates(docId);
         if (!arr) return;
         // convert uint8Array to string

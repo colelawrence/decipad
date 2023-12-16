@@ -35,6 +35,7 @@ export const updateTableCell: Action<'updateTableCell'> = {
         .openapi({ description: 'the new content of the cell' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (
     editor,
@@ -67,5 +68,9 @@ export const updateTableCell: Action<'updateTableCell'> = {
       ] as TNodeEntry<TableCellElement>;
       replaceText(editor, entry, newCellContent);
     });
+
+    return {
+      summary: `Updated cell at row ${rowIndex} and column ${columnName}`,
+    };
   },
 };

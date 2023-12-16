@@ -14,7 +14,7 @@ import {
   getRemoteComputer,
 } from '@decipad/remote-computer';
 import { updateTableCell } from './updateTableCell';
-import { plugins } from '@decipad/editor-config';
+import { plugins } from '../../../editor-config/src/configuration/plugins';
 
 describe('updateTableCell', () => {
   let editor: EditorController;

@@ -41,88 +41,117 @@ export type AllNotebookElementsDescriptionResult = Array<{
   description: string;
 }>;
 
+export type GenericSummaryResult<T = object> = T & {
+  summary?: string;
+};
+
 export interface NotebookOpenApi {
   // get notebook elements
   describeAllNotebookElements: (
     params: Record<string, undefined>
-  ) => AllNotebookElementsDescriptionResult;
+  ) => GenericSummaryResult<AllNotebookElementsDescriptionResult>;
+  getElementResult: (
+    params:
+      | { varName: string; elementId?: undefined }
+      | { elementId: string; varName?: undefined }
+  ) => GenericSummaryResult;
 
   // basic element manipulation
-  getElementById: (params: { elementId: string }) => AnyElement;
-  removeElement: (params: { elementId: string }) => void;
-  appendElement: (params: { element: AnyElement }) => void; // internal
+  getElementById: (params: {
+    elementId: string;
+  }) => GenericSummaryResult<AnyElement>;
+  removeElement: (params: { elementId: string }) => GenericSummaryResult;
+  appendElement: (params: { element: AnyElement }) => GenericSummaryResult; // internal
 
-  // manipulate elements
+  // notebook title
+  changeNotebookTitle: (params: { newTitle: string }) => GenericSummaryResult;
 
   // text
-  appendText: (params: { markdownText: string }) => CreateResult[];
-  changeText: (params: { elementId: string; newText: string }) => void;
+  appendText: (params: {
+    markdownText: string;
+  }) => GenericSummaryResult<{ createdElements: CreateResult[] }>;
+  changeText: (params: {
+    elementId: string;
+    newText: string;
+  }) => GenericSummaryResult;
 
   // code lines
   appendCodeLine: (params: {
     variableName: string;
     codeExpression: string;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
   updateCodeLine: (params: {
     codeLineId: string;
     newVariableName: string;
     newCodeExpression: string;
-  }) => void;
+  }) => GenericSummaryResult;
 
   // tables
   appendEmptyTable: (params: {
     tableName: string;
     columnNames: string[];
     rowCount: number;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
   appendFilledTable: (params: {
     tableName: string;
     columnNames: string[];
     rowsData: string[][];
-  }) => CreateResult;
-  fillTable: (params: { tableId: string; rowsData: string[][] }) => void;
+  }) => GenericSummaryResult<CreateResult>;
+  fillTable: (params: {
+    tableId: string;
+    rowsData: string[][];
+  }) => GenericSummaryResult;
   fillColumn: (params: {
     tableId: string;
     columnName: string;
     columnData: string[];
-  }) => void;
+  }) => GenericSummaryResult;
   fillRow: (params: {
     tableId: string;
     rowIndex: number;
     rowData: string[];
-  }) => void;
+  }) => GenericSummaryResult;
   insertEmptyTableColumn: (params: {
     tableId: string;
     columnName: string;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
   insertFormulaTableColumn: (params: {
     tableId: string;
     columnName: string;
     formula: string;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
   insertFilledTableColumn: (params: {
     tableId: string;
     columnName: string;
     cells: string[];
-  }) => CreateResult;
-  removeTableColumn: (params: { tableId: string; columnName: string }) => void;
-  insertTableRow: (params: { tableId: string; row: string[] }) => void;
-  removeTableRow: (params: { tableId: string; rowIndex: number }) => void;
+  }) => GenericSummaryResult<CreateResult>;
+  removeTableColumn: (params: {
+    tableId: string;
+    columnName: string;
+  }) => GenericSummaryResult;
+  insertTableRow: (params: {
+    tableId: string;
+    row: string[];
+  }) => GenericSummaryResult;
+  removeTableRow: (params: {
+    tableId: string;
+    rowIndex: number;
+  }) => GenericSummaryResult;
   updateTableCell: (params: {
     tableId: string;
     columnName: string;
     rowIndex: number;
     newCellContent: string;
-  }) => void;
+  }) => GenericSummaryResult;
   setTableColumnFormula: (params: {
     tableId: string;
     columnName: string;
     formula: string;
-  }) => void;
+  }) => GenericSummaryResult;
   unsetTableColumnFormula: (params: {
     tableId: string;
     columnName: string;
-  }) => void;
+  }) => GenericSummaryResult;
 
   // data views
   appendDataView: (params: {
@@ -139,29 +168,29 @@ export interface NotebookOpenApi {
         | 'stddev';
       round: string;
     }>;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
   addColumnToDataView: (params: {
     dataviewId: string;
     columnName: string;
-  }) => void;
+  }) => GenericSummaryResult;
   removeColumnFromDataView: (params: {
     dataviewId: string;
     columnName: string;
-  }) => void;
+  }) => GenericSummaryResult;
   setDataViewColumns: (params: {
     dataviewId: string;
     columnNames: string[];
-  }) => void;
+  }) => GenericSummaryResult;
 
   // plots
   appendPlot: (params: {
     tableId: string;
     plotParams: PlotParams;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
   setPlotParams: (params: {
     plotId: string;
     newPlotParams: Partial<PlotParams>;
-  }) => void;
+  }) => GenericSummaryResult;
 
   // sliders
   appendSliderVariable: (params: {
@@ -171,7 +200,7 @@ export interface NotebookOpenApi {
     step?: number;
     initialValue: number;
     unit?: string;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
 
   updateSliderVariable: (params: {
     elementId: string;
@@ -181,12 +210,12 @@ export interface NotebookOpenApi {
     step?: number;
     value?: number;
     unit?: string;
-  }) => void;
+  }) => GenericSummaryResult;
 
   // dropdown
   appendChoice: (params: {
     variableName: string;
     options: Array<string>;
     selectedName?: string;
-  }) => CreateResult;
+  }) => GenericSummaryResult<CreateResult>;
 }

@@ -12,10 +12,13 @@ import { initialWorkspace } from '@decipad/initial-workspace';
 import tables from '@decipad/tables';
 import { timeout } from '@decipad/utils';
 import { nanoid } from 'nanoid';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { forbidden, notAcceptable } from '@hapi/boom';
 import timestamp from '../common/timestamp';
 import { create as createPad } from '../notebooks';
 import { create as createContent } from '../pad-content';
 import { create as createWorkspace } from '../workspaces/create';
+import { isAllowedToLogIn } from './isAllowed';
 
 export interface UserCreationResult {
   user: UserWithSecret;
@@ -80,9 +83,20 @@ async function createInitialWorkspace(
   };
 }
 
-export async function create(user: UserInput): Promise<UserCreationResult> {
+export async function create(
+  user: UserInput,
+  event: APIGatewayProxyEventV2
+): Promise<UserCreationResult> {
   const data = await tables();
   const email = user.email?.toLowerCase();
+
+  if (!user.email) {
+    throw notAcceptable('Need user email');
+  }
+
+  if (!isAllowedToLogIn(user.email)) {
+    throw forbidden();
+  }
 
   const newUser = {
     email,
@@ -121,7 +135,7 @@ export async function create(user: UserInput): Promise<UserCreationResult> {
     newUser
   );
 
-  await track({
+  await track(event, {
     event: 'user created',
     userId: newUser.id,
     properties: { email, firstName },

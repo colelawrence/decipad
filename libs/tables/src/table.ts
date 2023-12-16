@@ -32,6 +32,7 @@ const observedTables: Set<keyof DataTables> = new Set([
   'docsyncupdates',
   'docsyncsnapshots',
   'userbackups',
+  'pads',
 ]);
 
 const versionedTables: Set<keyof DataTables> = new Set(['docsync']);

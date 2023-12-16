@@ -186,14 +186,14 @@ function parseCookies(cookies: string[] | string): ParsedCookies {
 
 function getSessionTokens(event: Request): SessionTokenResult[] {
   const tokens: SessionTokenResult[] = [];
-  const cookies = parseCookies(event.headers.Cookie || event.cookies || []);
+  const cookies = parseCookies(event.headers?.Cookie || event.cookies || []);
   for (const cookieName of TOKEN_COOKIE_NAMES) {
     if (cookies[cookieName]) {
       tokens.push({ token: cookies[cookieName] });
     }
   }
   for (const headerName of ['authorization', 'Authorizatiion']) {
-    let value = event.headers[headerName];
+    let value = event.headers?.[headerName];
     if (!value) {
       continue;
     }
@@ -207,8 +207,8 @@ function getSessionTokens(event: Request): SessionTokenResult[] {
     'sec-websocket-protocol',
     'Sec-WebSocket-Protocol',
   ]) {
-    if (event.headers[headerName]) {
-      const protocol = event.headers[headerName];
+    if (event.headers?.[headerName]) {
+      const protocol = event.headers?.[headerName];
       if (!protocol) {
         continue;
       }

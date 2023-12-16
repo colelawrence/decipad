@@ -125,8 +125,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.DECI_MAX_CREDITS_FREE);
     case 'DECI_MAX_CREDITS_PRO':
       return valueOrDefault(name, process.env.DECI_MAX_CREDITS_PRO);
-    case 'DECI_OPEN_AI_TOKENS_LIMIT':
-      return valueOrDefault(name, process.env.DECI_OPEN_AI_TOKENS_LIMIT);
+    case 'DECI_TOKENS_TO_CREDITS':
+      return valueOrDefault(name, process.env.DECI_TOKENS_TO_CREDITS);
   }
 }
 
@@ -215,12 +215,17 @@ export function auth() {
 }
 
 export function limits() {
+  const maxCredits = {
+    free: Number(env('DECI_MAX_CREDITS_FREE')),
+    pro: Number(env('DECI_MAX_CREDITS_PRO')),
+  };
+  const TOKENS_TO_CREDITS = Number(env('DECI_TOKENS_TO_CREDITS'));
   return {
-    maxCredits: {
-      free: Number(env('DECI_MAX_CREDITS_FREE')),
-      pro: Number(env('DECI_MAX_CREDITS_PRO')),
+    maxCredits,
+    openAiTokensLimit: {
+      free: maxCredits.free * TOKENS_TO_CREDITS,
+      pro: maxCredits.pro * TOKENS_TO_CREDITS,
     },
-    openAiTokensLimit: Number(env('DECI_OPEN_AI_TOKENS_LIMIT')),
   };
 }
 

@@ -30,6 +30,7 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
     },
   },
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   parameterSchema: () =>
     z.object({
@@ -110,6 +111,7 @@ export const appendCodeLine: Action<'appendCodeLine'> = {
       getNode<CodeLineV2Element>(editor, codeLinePath)
     );
     return {
+      summary: `Added a new expression with name "${variableName}"`,
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),

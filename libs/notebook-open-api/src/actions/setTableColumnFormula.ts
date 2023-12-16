@@ -33,6 +33,7 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName, formula }) => {
     const [table, tablePath] = getTableById(editor, tableId);
@@ -77,5 +78,9 @@ export const setTableColumnFormula: Action<'setTableColumnFormula'> = {
         { at: updateHeaderIndex }
       );
     });
+
+    return {
+      summary: `Set formula for column ${columnName} on table`,
+    };
   },
 };

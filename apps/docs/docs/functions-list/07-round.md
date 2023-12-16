@@ -10,9 +10,10 @@ pagination_prev: null
 
 **Syntax**:
 
-`round(Number, [Precision])`
+`round(Number, [Precision])` <br />
+`precision(Number, [Precision])`
 
-Rounds a number to a specified number of decimal places or to the nearest whole number. You can also round a number down with `floor()` or `rounddown()` and round a number up with `ceil()` or `roundup()`.
+Rounds a number to a specified number of decimal places or to the nearest whole number. You can use `precision()`as an alternative syntax and you can also round a number down with `floor()` or `rounddown()` or round a number up with `ceil()` or `roundup()`.
 
 ### Examples
 

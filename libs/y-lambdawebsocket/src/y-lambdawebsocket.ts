@@ -183,8 +183,21 @@ const isSeriousError = (err: Error) =>
   !nonSeriousErrors.some((errMessage) => errorIs(err, errMessage));
 
 const retryableErrors = ['LimitExceeded', 'InvalidSignature'];
-const isRetryableError = (err: unknown) =>
-  retryableErrors.some((errMessage) => errorIs(err, errMessage));
+const isRetryableError = (err: unknown): boolean | number => {
+  const shouldRetry = retryableErrors.some((errMessage) =>
+    errorIs(err, errMessage)
+  );
+  if (shouldRetry) {
+    if (
+      err instanceof Error &&
+      '$retryable' in err &&
+      (err as { $retryable: { throttling?: boolean } }).$retryable?.throttling
+    ) {
+      return false;
+    }
+  }
+  return shouldRetry;
+};
 
 const justSend = (connId: string, payload: string) =>
   ws.send({ id: connId, payload });

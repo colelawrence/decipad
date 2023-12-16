@@ -8,6 +8,7 @@ import { MyEditor, MyValue } from '@decipad/editor-types';
 import {
   EditorBlockParentRefProvider,
   EditorReadOnlyContext,
+  useComputer,
 } from '@decipad/react-contexts';
 import { useWindowListener, useCanUseDom } from '@decipad/react-utils';
 import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
@@ -93,6 +94,7 @@ export const Editor = (props: EditorProps) => {
 
   const { isWritingLocked, lockWriting } = useWriteLock(editor as ReactEditor);
   const { onRefChange } = useAutoAnimate();
+  const computer = useComputer();
 
   // When in read-mode, disallow any kind of drag & drop.
   useWindowListener(
@@ -140,7 +142,7 @@ export const Editor = (props: EditorProps) => {
                     }}
                     editableProps={{
                       onCopy: (e) => editorOnCopy(e, editor),
-                      onPaste: (e) => editorOnPaste(e, editor),
+                      onPaste: (e) => editorOnPaste(e, editor, computer),
                     }}
                   >
                     <InsidePlate {...props} containerRef={containerRef} />

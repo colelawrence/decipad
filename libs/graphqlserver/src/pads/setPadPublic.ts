@@ -26,6 +26,7 @@ export const setPadPublic = async (
 
   const event = isPublic ? 'notebook published' : 'notebook unpublished';
   await track(
+    context.event,
     { userId: user?.id, event, properties: { notebookdId: id } },
     context
   );

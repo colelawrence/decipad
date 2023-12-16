@@ -57,7 +57,7 @@ export default {
       }
 
       if (!user.onboarded && props.onboarded) {
-        await track({
+        await track(context.event, {
           event: 'user onboarded',
           userId: user.id,
           properties: { email: user.email },
@@ -68,7 +68,10 @@ export default {
 
       await data.users.put(self);
 
-      await identify(user.id, { fullName: self.name, email: self.email });
+      await identify(context.event, user.id, {
+        fullName: self.name,
+        email: self.email,
+      });
       return self;
     },
 

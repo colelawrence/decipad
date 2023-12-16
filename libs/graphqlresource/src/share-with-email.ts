@@ -75,10 +75,13 @@ export const shareWithEmail = <
       const user = registeredUserId
         ? await users.get({ id: registeredUserId })
         : (
-            await createUser({
-              email,
-              name: email,
-            })
+            await createUser(
+              {
+                email,
+                name: email,
+              },
+              context.event
+            )
           ).user;
 
       if (!user) {
@@ -97,7 +100,7 @@ export const shareWithEmail = <
         context
       );
 
-      await notifyInvitee({
+      await notifyInvitee(context.event, {
         user,
         email,
         invitedByUser: actingUser,
@@ -107,11 +110,11 @@ export const shareWithEmail = <
         resourceName:
           'name' in record ? record.name : `<Random ${resourceType.humanName}>`,
       });
-      await identify(actingUser.id, {
+      await identify(context.event, actingUser.id, {
         email: actingUser.email,
         fullName: actingUser.name,
       });
-      await track({
+      await track(context.event, {
         event: 'share with email',
         properties: {
           email,

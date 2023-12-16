@@ -4,13 +4,13 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 
-import {
+import type {
   MyElement,
   NotebookValue,
   TabElement,
   AnyElement,
 } from '@decipad/editor-types';
-import { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
+import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import debounce from 'lodash.debounce';
 import { EElement, TOperation, isElement } from '@udecode/plate-common';

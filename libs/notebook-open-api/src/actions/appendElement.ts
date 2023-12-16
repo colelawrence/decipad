@@ -18,6 +18,7 @@ export const appendElement: Action<'appendElement'> = {
       }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { element }) => {
     if (!isElement(element) || !topLevelBlockKinds.includes(element.type)) {
@@ -26,5 +27,9 @@ export const appendElement: Action<'appendElement'> = {
     insertNodes(editor, [element as EElementOrText<MyValue>], {
       at: appendPath(editor),
     });
+
+    return {
+      summary: `Added a new ${element.type}`,
+    };
   },
 };

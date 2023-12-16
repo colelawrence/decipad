@@ -54,7 +54,7 @@ export const getAiUsage = async (
     .filter((t): t is ResourceUsageRecord => t != null)
     .map((t) => ({
       ...t,
-      quotaLimit: limits().openAiTokensLimit,
+      quotaLimit: limits().openAiTokensLimit.free,
       resourceType: 'openai',
     }));
 };

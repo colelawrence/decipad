@@ -26,6 +26,7 @@ export const changeText: Action<'changeText'> = {
         .openapi({ description: 'the new content of the text element' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId, newText }) => {
     if (typeof elementId !== 'string') {
@@ -43,5 +44,9 @@ export const changeText: Action<'changeText'> = {
       throw notAcceptable(`node with id ${elementId} is not an element`);
     }
     replaceText(editor, [node, path] as TNodeEntry<EElement<MyValue>>, newText);
+
+    return {
+      summary: `Changed text`,
+    };
   },
 };

@@ -7,6 +7,7 @@ import {
   RootDocument,
 } from '../../../editor-types/src';
 import { debug } from '../debug';
+import { RemoteComputer } from '@decipad/remote-computer';
 
 const computationalBlocks: Set<AnyElement['type']> = new Set([
   ELEMENT_CODE_LINE_V2,
@@ -17,8 +18,11 @@ const computationalBlocks: Set<AnyElement['type']> = new Set([
 const isComputationalBlock = (element: VerbalizedElement) =>
   computationalBlocks.has(element.element.type);
 
-export const createComputationalSummary = (content: RootDocument): string => {
-  const summary = verbalizeDoc(content)
+export const createComputationalSummary = (
+  content: RootDocument,
+  computer: RemoteComputer
+): string => {
+  const summary = verbalizeDoc(content, computer)
     .verbalized.filter(isComputationalBlock)
     .map((elem) => elem.verbalized)
     .join('\n\n');

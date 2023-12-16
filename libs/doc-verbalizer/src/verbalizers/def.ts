@@ -27,11 +27,9 @@ export const defVerbalizer: Verbalizer = (element, verbalize) => {
     case 'dropdown': {
       const dropDown = element.children[1];
       const options = dropDown.options.map(({ value }) => stringify(value));
-      return `Dropdown list that exposes a variable named \`${varName}\`, currently has the value of ${stringify(
+      return `Dropdown list that exposes a variable named \`${varName}\`, with selected value of ${stringify(
         expression
-      )}, where the user can select from any of the elements: \`[${options.join(
-        ', '
-      )}]\`.`;
+      )}, and options of: \`[${options.join(', ')}]\`.`;
     }
   }
 };

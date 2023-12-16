@@ -29,6 +29,7 @@ export const appendChoice: Action<'appendChoice'> = {
     },
   },
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       variableName: z.string().openapi({
@@ -84,6 +85,7 @@ export const appendChoice: Action<'appendChoice'> = {
       getNode<VariableSliderElement>(editor, insertPath)
     );
     return {
+      summary: `Added a new dropdown with name "${variableName}"`,
       createdElementId: actualElement.id,
       createdElementType: actualElement.type,
       createdElementName: getNodeString(actualElement.children[0]),

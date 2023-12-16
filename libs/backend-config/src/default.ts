@@ -75,7 +75,7 @@ const defaultEnvValues = {
   DISCORD_FEEDBACK_CHANNEL_ID: '1164225554824826961',
   DECI_MAX_CREDITS_FREE: '50',
   DECI_MAX_CREDITS_PRO: '500',
-  DECI_OPEN_AI_TOKENS_LIMIT: '50000',
+  DECI_TOKENS_TO_CREDITS: '200',
 };
 
 export type SupportedEnvKey = keyof typeof defaultEnvValues;

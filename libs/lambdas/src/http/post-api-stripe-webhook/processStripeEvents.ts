@@ -5,6 +5,7 @@ import Boom from '@hapi/boom';
 import { track } from '@decipad/backend-analytics';
 import { timestamp, tables } from '@decipad/tables';
 import { limits } from '@decipad/backend-config';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const VALID_SUBSCRIPTION_STATES = ['trialing', 'active'];
 
@@ -43,7 +44,10 @@ const resetQueryCount = async (workspaceId: string) => {
   }
 };
 
-export const processSessionComplete = async (event: Stripe.Event) => {
+export const processSessionComplete = async (
+  req: APIGatewayProxyEventV2,
+  event: Stripe.Event
+) => {
   const {
     client_reference_id,
     payment_link,
@@ -95,7 +99,7 @@ export const processSessionComplete = async (event: Stripe.Event) => {
   });
   updateQueryExecutionTable(workspace.id, payment_status === 'paid');
 
-  await track({
+  await track(req, {
     event: 'Stripe subscription created',
     properties: {
       id: subscriptionId,
@@ -110,7 +114,10 @@ export const processSessionComplete = async (event: Stripe.Event) => {
   };
 };
 
-export const processSubscriptionDeleted = async (event: Stripe.Event) => {
+export const processSubscriptionDeleted = async (
+  req: APIGatewayProxyEventV2,
+  event: Stripe.Event
+) => {
   const { id, status } = event.data.object as Stripe.Subscription;
   const data = await tables();
 
@@ -139,7 +146,7 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
     });
     updateQueryExecutionTable(workspace.id, false);
 
-    await track({
+    await track(req, {
       event: 'Stripe subscription immediately cancelled',
       properties: {
         id,
@@ -155,7 +162,10 @@ export const processSubscriptionDeleted = async (event: Stripe.Event) => {
   };
 };
 
-export const processSubscriptionUpdated = async (event: Stripe.Event) => {
+export const processSubscriptionUpdated = async (
+  req: APIGatewayProxyEventV2,
+  event: Stripe.Event
+) => {
   const { id, status, cancel_at_period_end } = event.data
     .object as Stripe.Subscription;
   const data = await tables();
@@ -184,7 +194,7 @@ export const processSubscriptionUpdated = async (event: Stripe.Event) => {
   }
 
   if (cancel_at_period_end) {
-    await track({
+    await track(req, {
       event: 'Stripe subscription to be cancelled at period end',
       properties: {
         id: wsSubscription.workspace_id,

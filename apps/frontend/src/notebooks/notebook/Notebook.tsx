@@ -7,6 +7,7 @@ import { DocSyncEditor } from '@decipad/docsync';
 import { EditorSidebar } from '@decipad/editor-components';
 import {
   EditorNotebookFragment,
+  PermissionType,
   useFinishOnboarding,
   useGetNotebookMetaQuery,
   useGetWorkspacesQuery,
@@ -556,12 +557,16 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
     variables: { id: notebookId },
   });
 
+  const isReadOnly =
+    meta.data?.getPadById?.myPermissionType === PermissionType.Read ||
+    meta.data?.getPadById?.myPermissionType == null;
+
   const [isAssistantOpen] = useNotebookMetaData((state) => [state.aiMode]);
 
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
-  const [prompt, completion, quotaLimit, isPremium] = useMemo(() => {
+  const [prompt, completion, isPremium] = useMemo(() => {
     const workspace = meta.data?.getPadById?.workspace;
     const usageList = workspace?.resourceUsages ?? [];
     const isWorkspacePremium = workspace?.isPremium;
@@ -571,17 +576,11 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
       aiUsage.find((u) => u?.id.includes('prompt'))?.consumption ?? 0;
     const completionTokens =
       aiUsage.find((u) => u?.id.includes('completion'))?.consumption ?? 0;
-    const tokensQuotaLimit = aiUsage[0]?.quotaLimit;
 
-    return [
-      promptTokens,
-      completionTokens,
-      tokensQuotaLimit,
-      isWorkspacePremium,
-    ];
+    return [promptTokens, completionTokens, isWorkspacePremium];
   }, [meta.data?.getPadById?.workspace]);
 
-  if (isAssistantOpen && !isEmbed && editor) {
+  if (isAssistantOpen && !isEmbed && editor && !isReadOnly) {
     return (
       <AiUsageProvider
         promptTokensUsed={prompt}
@@ -591,7 +590,6 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
           notebookId={notebookId}
           workspaceId={actions.notebook?.workspace?.id ?? ''}
           editor={editor}
-          aiQuotaLimit={quotaLimit}
           isPremium={Boolean(isPremium)}
         />
       </AiUsageProvider>

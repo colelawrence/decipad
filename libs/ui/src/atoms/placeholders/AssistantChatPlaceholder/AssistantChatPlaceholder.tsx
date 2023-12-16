@@ -1,47 +1,43 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { componentCssVars } from '../../../primitives';
+import { cssVar } from '../../../primitives';
 import { FC } from 'react';
 
 const wrapperStyles = css({
   position: 'relative',
   display: 'grid',
   overflow: 'hidden',
-  gridTemplateRows: '44px auto 44px',
+  gridTemplateRows: '36px auto max-content',
   height: '100%',
   width: '100%',
-  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
-  gap: 2,
+  padding: 16,
+  borderRadius: '16px 0px 0px 16px',
+  backgroundColor: cssVar('backgroundMain'),
 });
 
 export const headerStyles = css({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '0px 20px',
-  width: '100%',
-  height: 44,
-  backgroundColor: componentCssVars('AIAssistantElevationColor'),
+  padding: '4px 8px',
+  backgroundColor: cssVar('backgroundDefault'),
+  borderRadius: 8,
 });
 
 const listStyles = css({
   position: 'relative',
-  overflowX: 'hidden',
-  width: 640,
+  width: 608,
   height: '100%',
-  display: 'flex',
-  flexDirection: 'column-reverse',
-  backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
 });
 
 const inputStyles = css({
-  position: 'relative',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+  display: 'relative',
+  minHeight: 40,
   width: '100%',
-  height: 44,
-  backgroundColor: componentCssVars('AIAssistantElevationColor'),
+  backgroundColor: cssVar('backgroundHeavy'),
+  borderRadius: 8,
+  alignItems: 'center',
+  padding: '8px 12px 8px 16px',
 });
 
 export const AssistantChatPlaceholder = (): ReturnType<FC> => {

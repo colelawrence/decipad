@@ -3,7 +3,10 @@ import { timeout as runTimeout } from '@decipad/utils';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { debug } from '../debug';
 
-type RecordHandler<T> = (payload: T) => Promise<void>;
+type RecordHandler<T> = (
+  payload: T,
+  event: APIGatewayProxyEventV2
+) => Promise<void>;
 
 type EventWithRecord = APIGatewayProxyEventV2 & {
   Records?: Array<{
@@ -21,7 +24,7 @@ const processAllRecords = async <T>(
     (event as unknown as EventWithRecord).Records?.map(async (record) => {
       const payload = JSON.parse(record.body);
       debug('payload', payload);
-      await userHandler(payload);
+      await userHandler(payload, event);
     }) ?? []
   );
   for (const result of results) {

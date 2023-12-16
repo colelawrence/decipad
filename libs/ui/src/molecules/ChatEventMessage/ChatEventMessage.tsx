@@ -3,7 +3,11 @@
 import { css } from '@emotion/react';
 import { cssVar, p13Medium } from '../../primitives';
 import { EventMessage, MessageStatus } from '@decipad/react-contexts';
-import { Sparkles, Spinner, Warning } from '../../icons';
+import { Feedback, Refresh, Sparkles, Spinner, Warning } from '../../icons';
+import { Tooltip } from '../../atoms';
+import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
+import { useCallback, useState } from 'react';
+import { noop } from '@decipad/utils';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -38,10 +42,51 @@ const contentStyles = css(p13Medium, {
   color: cssVar('textSubdued'),
   margin: 0,
   padding: 0,
+  flex: 1,
+});
+
+const buttonContainerStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 4,
+});
+
+const buttonStyles = css(p13Medium, {
+  height: 24,
+  width: 24,
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: 6,
+  cursor: 'pointer',
+
+  '& > svg': {
+    width: 16,
+    height: 16,
+  },
+
+  '&:disabled': {
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  },
+
+  '&:hover': {
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+
+  '&:active': {
+    backgroundColor: cssVar('backgroundHeavy'),
+  },
 });
 
 type Props = {
   readonly message: EventMessage;
+  readonly regenerateResponse: () => void;
+  readonly submitFeedback: (message: string) => void;
+  readonly isCurrentReply: boolean;
+  readonly isGenerating: boolean;
 };
 
 const messageMeta = (status: MessageStatus) => {
@@ -65,13 +110,58 @@ const messageMeta = (status: MessageStatus) => {
   }
 };
 
-export const ChatEventMessage: React.FC<Props> = ({ message }) => {
-  const { content, status } = message;
+export const ChatEventMessage: React.FC<Props> = ({
+  message,
+  isCurrentReply,
+  isGenerating,
+  regenerateResponse,
+  submitFeedback,
+}) => {
+  const [hasReported, setHasReported] = useState(false);
+
+  const { content, uiContent, status } = message;
+
+  const handleSendFeedback = useCallback(
+    (m: string) => {
+      submitFeedback(m);
+      setHasReported(true);
+    },
+    [submitFeedback]
+  );
 
   return (
     <div css={wrapperStyles}>
       <div css={iconStyles}>{messageMeta(status).icon}</div>
-      <p css={contentStyles}>{content}</p>
+      <p css={contentStyles}>{uiContent ?? content}</p>
+      {isCurrentReply && !isGenerating && status === 'error' && (
+        <div css={buttonContainerStyles}>
+          <AssistantFeedbackPopUp
+            onSubmit={hasReported ? noop : handleSendFeedback}
+            trigger={
+              <button
+                css={buttonStyles}
+                disabled={hasReported}
+                data-testid="report-button"
+              >
+                <Feedback />
+              </button>
+            }
+          />
+          <Tooltip
+            trigger={
+              <button
+                onClick={regenerateResponse}
+                css={buttonStyles}
+                data-testid="regenerate-button"
+              >
+                <Refresh />
+              </button>
+            }
+          >
+            Regenerate this response
+          </Tooltip>
+        </div>
+      )}
     </div>
   );
 };

@@ -9,7 +9,8 @@ pagination_prev: null
 # Column Average
 
 **Syntax**:
-`average(Table.Column)`
+`average(Table.Column)` <br />
+`avg(Table.Column)`
 
 Calculate the average of a column. You can also use alternative syntaxes for improved readability: `avg()` and `mean()`.
 
@@ -24,7 +25,8 @@ average([1, 2, 3, 4])
 
 **Syntax**:
 
-`averageif(Table.Column, Table Column Condition)`
+`averageif(Table.Column, Table Column Condition)`<br />
+`avgif(Table.Column, Table Column Condition)`
 
 Calculate average of a column of numbers that meet your specified condition. You can also use alternative syntaxes for improved readability: `avgif()` and `meanif()`.
 

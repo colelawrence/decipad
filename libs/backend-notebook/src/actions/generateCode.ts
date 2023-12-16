@@ -71,7 +71,8 @@ export const generateCode: CustomAction<
       prompt: z.string(),
     }),
   requiresNotebook: true,
-  handler: async (editor, { prompt }) => {
+  requiresRootEditor: false,
+  handler: async (editor, { prompt }, { computer }) => {
     // code assistant works with the root document, so we have to
     // pass a fake one in
     const rootDocument: RootDocument = {
@@ -89,7 +90,11 @@ export const generateCode: CustomAction<
         },
       ],
     };
-    const result = await codeAssistant({ notebook: rootDocument, prompt });
+    const result = await codeAssistant({
+      notebook: rootDocument,
+      prompt,
+      computer,
+    });
     if (!result) {
       throw notImplemented('Could not generate code from the given prompt');
     }

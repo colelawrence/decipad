@@ -37,13 +37,13 @@ const switchStyles = css({
   all: 'unset',
   width: 32,
   padding: 2,
-  background: cssVar('backgroundHeavy'),
+  background: cssVar('borderSubdued'),
   borderRadius: '9px',
   position: 'relative',
   display: 'inline-flex',
   WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
   '&[data-state="checked"]': {
-    backgroundColor: componentCssVars('AIAssistantBackgroundColor'),
+    backgroundColor: componentCssVars('ToggleOnBackgroundColor'),
     justifyContent: 'flex-end',
   },
   cursor: 'pointer',
@@ -55,6 +55,7 @@ const switchThumbStyles = css({
   height: 14,
   backgroundColor: componentCssVars('AIAssistantTextColor'),
   borderRadius: '50%',
+  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
 });
 
 const labelStyles = css({

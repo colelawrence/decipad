@@ -1,10 +1,67 @@
 /* eslint-disable no-console */
-import AnalyticsClient from 'analytics-node';
+import {
+  Analytics as AnalyticsClient,
+  AnalyticsSettings,
+  TrackParams,
+} from '@segment/analytics-node';
 import { analytics } from '@decipad/backend-config';
-import { once } from '@decipad/utils';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const { secretKey } = analytics();
-export const analyticsClient = once(
-  () =>
-    secretKey && new AnalyticsClient(secretKey, { flushAt: 1, enable: true })
-);
+
+type MyTrackParams = Omit<TrackParams, 'userId' | 'anonymousId'> & {
+  userId?: string;
+  anonymousId?: string;
+};
+
+type MyIdentify =
+  | { userId: string; anonymousId?: undefined }
+  | { userId?: undefined; anonymousId: string };
+
+class MyAnalyticsClient extends AnalyticsClient {
+  private myRecordedProperties: Record<string, string> = {};
+
+  public recordProperty(key: string, value: string) {
+    this.myRecordedProperties[key] = value;
+  }
+
+  private myRecordedIdentify: MyIdentify = { anonymousId: 'unknown' };
+
+  public myIdentify(identify: MyIdentify) {
+    this.myRecordedIdentify = identify;
+  }
+
+  track(message: MyTrackParams, callback?: (err?: unknown) => unknown) {
+    if (!message.properties) {
+      // eslint-disable-next-line no-param-reassign
+      message.properties = {};
+    }
+    Object.assign(message, this.myRecordedIdentify);
+    Object.assign(message.properties, this.myRecordedProperties);
+    super.track(message as TrackParams, callback);
+  }
+}
+
+const clientForEvent = new WeakMap<APIGatewayProxyEventV2, MyAnalyticsClient>();
+
+const analyticsSettings = (): AnalyticsSettings => ({
+  writeKey: secretKey,
+  host: 'https://events.eu1.segmentapis.com',
+  maxEventsInBatch: 1,
+  maxRetries: 1,
+});
+
+export const analyticsClient = (event: APIGatewayProxyEventV2) => {
+  if (!secretKey) {
+    return undefined;
+  }
+  let client = clientForEvent.get(event);
+  if (!client) {
+    client = new MyAnalyticsClient(analyticsSettings());
+    if (event && typeof event === 'object') {
+      clientForEvent.set(event, client);
+      client.once('deregister', () => clientForEvent.delete(event));
+    }
+  }
+  return client;
+};

@@ -17,7 +17,6 @@
     { "path": "../backend-trace" },
     { "path": "../backend-search" },
     { "path": "../backend-notebook-content" },
-    { "path": "../backend-notebook-assistant" },
     { "path": "../notebook-maintenance" }
   ]
 }

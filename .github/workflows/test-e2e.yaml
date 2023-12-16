@@ -132,7 +132,7 @@ jobs:
 
     steps:
       - name: Notify
-        uses: nobrayner/discord-webhook@v1
+        uses: decipad/discord-webhook@v5
         with:
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}

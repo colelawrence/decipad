@@ -49,6 +49,7 @@ export const appendEmptyTable: Action<'appendEmptyTable'> = {
         .openapi({ description: 'the number of rows for this new table' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableName, columnNames, rowCount }) => {
     const table: TableElement = {
@@ -100,6 +101,7 @@ export const appendEmptyTable: Action<'appendEmptyTable'> = {
     const actualTable = getDefined(getNode<TableElement>(editor, insertPath));
     assertElementType(actualTable, ELEMENT_TABLE);
     return {
+      summary: 'Added an empty table',
       createdElementId: table.id,
       createdElementType: table.type,
       createdElementName: getNodeString(

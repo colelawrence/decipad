@@ -55,7 +55,6 @@ any /api/ai/generate-sql
 any /api/ai/rewrite-paragraph
 any /api/ai/generate-fetch-js
 any /api/ai/complete-column
-post /api/ai/chat/:padid
 post /api/ai/feedback
 
 # Server-side rendering
@@ -480,8 +479,8 @@ reset-querycount cron(0 0 1 * ? *)
 @search
 availabilityZoneCount 1
 instanceCount 1
-instanceType t3.medium.search
-volumeSize 100
+instanceType t3.small.search
+volumeSize 50
 
 @plugins
 s3

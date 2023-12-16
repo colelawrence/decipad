@@ -4,18 +4,23 @@ import tables from '@decipad/tables';
 import {
   create as createUser,
   maybeEnrich as maybeEnrichUser,
+  isAllowedToLogIn,
 } from '@decipad/services/users';
 import { track } from '@decipad/backend-analytics';
 import { timestamp } from '@decipad/backend-utils';
-import { isAllowedToLogIn } from './is-allowed';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 export async function signInEmail(
+  event: APIGatewayProxyEventV2,
   user: UserWithSecret & { provider?: string; providerId?: string },
   account: Account
 ) {
   const { email } = user;
   if (!email || !(await isAllowedToLogIn(email))) {
-    await track({ event: 'user denied logging in', properties: { email } });
+    await track(event, {
+      event: 'user denied logging in',
+      properties: { email },
+    });
     // eslint-disable-next-line no-console
     console.log(`user ${email} not allowed to log in`);
     return false;
@@ -44,11 +49,14 @@ export async function signInEmail(
     // to a registration page by defining next-auth options.pages.newUser.
 
     existingUser = (
-      await createUser({
-        name: account.userId ?? '',
-        email: account.userId,
-        provider: account.provider,
-      })
+      await createUser(
+        {
+          name: account.userId ?? '',
+          email: account.userId,
+          provider: account.provider,
+        },
+        event
+      )
     ).user;
   }
 

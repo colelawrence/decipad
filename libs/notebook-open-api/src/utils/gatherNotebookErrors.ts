@@ -5,9 +5,8 @@ import type {
 } from '@decipad/remote-computer';
 import type { NotebookError } from '../types';
 import { formatError } from '@decipad/format';
-import { EditorController } from '@decipad/notebook-tabs';
+import { type RootEditorController } from '@decipad/notebook-tabs';
 import { fullRootEditorToProgram } from '@decipad/editor-language-elements';
-import { Subscription, filter, map } from 'rxjs';
 
 const errorStringFromBlockResult = (
   blockResult: IdentifiedResult | IdentifiedError
@@ -35,27 +34,15 @@ const isErrorBlockResult = (blockResult: IdentifiedResult | IdentifiedError) =>
   blockResult.result.type.kind === 'type-error';
 
 export const gatherNotebookErrors = async (
-  editor: EditorController,
+  editor: RootEditorController,
   computer: RemoteComputer
 ): Promise<Array<NotebookError>> => {
   const program = await fullRootEditorToProgram(editor, computer);
   computer.pushCompute({
     program,
   });
-  let subscription: Subscription | undefined;
-  return new Promise<Array<NotebookError>>((resolve) => {
-    subscription = computer.results
-      .pipe(
-        filter((notebookResults) => notebookResults.blockResults != null),
-        map((notebookResults) => notebookResults.blockResults),
-        map((blockResults) =>
-          Object.values(blockResults)
-            .filter(isErrorBlockResult)
-            .map(errorFromBlockResult)
-        )
-      )
-      .subscribe(resolve);
-  }).finally(() => {
-    subscription?.unsubscribe();
-  });
+  await computer.flush();
+  return Object.values(computer.results.getValue().blockResults)
+    .filter(isErrorBlockResult)
+    .map(errorFromBlockResult);
 };

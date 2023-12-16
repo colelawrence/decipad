@@ -17,6 +17,8 @@ const wrapperStyles = css({
   borderRadius: '8px',
   minWidth: '240px',
   position: 'absolute',
+  // A bit hacky, but we need to make sure the pop up is above the chat
+  transform: 'translateX(-100%)',
   zIndex: 400,
 });
 
@@ -81,24 +83,30 @@ export const AssistantFeedbackPopUp: React.FC<AssistantFeedbackPopUpProps> = ({
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
-      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
-      <Popover.Content sideOffset={5} css={wrapperStyles}>
-        <form onSubmit={handleSubmit} css={formStyles}>
-          <textarea
-            css={inputStyles}
-            onKeyDown={handleEnterKey}
-            placeholder="Type your feedback here..."
-            rows={3}
-            id="message"
-            name="message"
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-          />
-          <Button type="primary" submit disabled={message === ''}>
-            Submit
-          </Button>
-        </form>
-      </Popover.Content>
+      <Popover.Trigger>{trigger}</Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content
+          avoidCollisions={false}
+          css={wrapperStyles}
+          sideOffset={4}
+        >
+          <form onSubmit={handleSubmit} css={formStyles}>
+            <textarea
+              css={inputStyles}
+              onKeyDown={handleEnterKey}
+              placeholder="Type your feedback here..."
+              rows={3}
+              id="message"
+              name="message"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+            />
+            <Button type="primary" submit disabled={message === ''}>
+              Submit
+            </Button>
+          </form>
+        </Popover.Content>
+      </Popover.Portal>
     </Popover.Root>
   );
 };

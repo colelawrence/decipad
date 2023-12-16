@@ -31,12 +31,14 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
+          architecture: 'x64'
           cache: yarn
 
       - name: Install
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
+          DECI_IMAGE_LAMBDA_LAYER: 'arn:aws:lambda:eu-west-2:974894071214:layer:sharp:1'
         run: yarn install --ignore-engines
 
       - name: Cache NX things
@@ -125,7 +127,7 @@ jobs:
     if: ${{ failure() && github.ref == 'refs/heads/main' }}
     steps:
       - name: Notify
-        uses: nobrayner/discord-webhook@v1
+        uses: decipad/discord-webhook@v5
         with:
           github-token: ${{ secrets.github_token }}
           discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}

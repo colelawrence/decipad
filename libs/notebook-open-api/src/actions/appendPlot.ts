@@ -21,6 +21,7 @@ export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
   },
   returnsActionResultWithNotebookError: true,
   requiresNotebook: true,
+  requiresRootEditor: false,
   parameterSchema: () =>
     z.object({
       tableId: z
@@ -36,6 +37,7 @@ export const appendPlot: RequiresNotebookAction<'appendPlot'> = {
     const newPlot = getPlotParams(plotParams, table);
     insertNodes(editor, [newPlot], { at: appendPath(editor) });
     return {
+      summary: `Added a new plot`,
       createdElementId: newPlot.id,
       createdElementType: getDefined(newPlot.type),
       createdElementName: getDefined(newPlot.title),

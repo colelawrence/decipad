@@ -24,6 +24,7 @@ export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
         .openapi({ description: 'the name of the column you want to change' }),
     }),
   requiresNotebook: true,
+  requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { tableId, columnName }) => {
     const [table, tablePath] = getTableById(editor, tableId);
@@ -50,5 +51,9 @@ export const unsetTableColumnFormula: Action<'unsetTableColumnFormula'> = {
         { at: updateHeaderIndex }
       );
     });
+
+    return {
+      summary: `Removed formula from column ${columnName} in table`,
+    };
   },
 };

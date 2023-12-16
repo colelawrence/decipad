@@ -45,6 +45,7 @@ export const createNotebook: CustomAction<
       title: z.string(),
     }),
   requiresNotebook: false,
+  requiresRootEditor: false,
   handler: async ({ title }) => {
     const notebook = await createNotebookRecord(undefined, {
       name: title,
