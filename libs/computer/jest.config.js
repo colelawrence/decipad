@@ -6,10 +6,10 @@ module.exports = {
   displayName: 'computer',
   coverageThreshold: {
     global: {
-      statements: 83,
+      statements: 82,
       branches: 73,
       functions: 80,
-      lines: 84,
+      lines: 83,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

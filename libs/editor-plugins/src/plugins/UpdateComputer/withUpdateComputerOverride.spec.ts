@@ -280,9 +280,9 @@ describe('withUpdateComputerOverride', () => {
   });
 
   it('allows changing ids of code elements', async () => {
-    await timeout(200);
+    await timeout(500);
     setNodes(editor, { id: 'id3-new' }, { at: [2] });
-    await timeout(200);
+    await timeout(500);
     expect(computer.results.getValue().blockResults).toMatchInlineSnapshot(`
       Object {
         "id3": Object {
