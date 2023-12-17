@@ -1,4 +1,4 @@
-const baseConfig = require('../../jest-dom.config');
+const baseConfig = require('../../jest-dom.swc.config');
 
 module.exports = {
   ...baseConfig,

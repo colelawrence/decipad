@@ -1,7 +1,7 @@
 const {
   coveragePathIgnorePatterns,
   ...domConfig
-} = require('../../jest-dom.config');
+} = require('../../jest-dom.swc.config');
 
 module.exports = {
   ...domConfig,

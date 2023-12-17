@@ -19,10 +19,14 @@ import { createTablePlugin } from './createTablePlugin';
 let editor: TEditor;
 
 // To have nice and consistent IDs
-let mockCounter = 0;
 jest.mock('nanoid', () => {
-  mockCounter += 1;
-  return { nanoid: () => `id-${mockCounter}` };
+  let mockCounter = 0;
+  return {
+    nanoid: () => {
+      mockCounter += 1;
+      return `id-${mockCounter}`;
+    },
+  };
 });
 
 beforeEach(() => {
@@ -52,7 +56,7 @@ it('normalizes empty table', () => {
                     "text": "Table",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-2",
                 "type": "table-var-name",
               },
             ],
@@ -70,11 +74,11 @@ it('normalizes empty table', () => {
                     "text": "Column1",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-4",
                 "type": "th",
               },
             ],
-            "id": "id-0",
+            "id": "id-3",
             "type": "tr",
           },
           Object {
@@ -85,11 +89,11 @@ it('normalizes empty table', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-6",
                 "type": "td",
               },
             ],
-            "id": "id-0",
+            "id": "id-5",
             "type": "tr",
           },
         ],
@@ -132,7 +136,7 @@ it('inserts tds and ths if needed', () => {
                     "text": "Table",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-7",
                 "type": "table-var-name",
               },
             ],
@@ -214,7 +218,7 @@ it('removes strange types of nodes inside a table', () => {
                     "text": "Table",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-8",
                 "type": "table-var-name",
               },
             ],
@@ -232,11 +236,11 @@ it('removes strange types of nodes inside a table', () => {
                     "text": "Column1",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-10",
                 "type": "th",
               },
             ],
-            "id": "id-0",
+            "id": "id-9",
             "type": "tr",
           },
           Object {
@@ -247,11 +251,11 @@ it('removes strange types of nodes inside a table', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-12",
                 "type": "td",
               },
             ],
-            "id": "id-0",
+            "id": "id-11",
             "type": "tr",
           },
         ],
@@ -385,7 +389,7 @@ it('makes all rows the same size as header row', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-13",
                 "type": "td",
               },
             ],
@@ -562,7 +566,7 @@ it('makes th and td elements contain only text elements', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-14",
                 "type": "td",
               },
             ],
@@ -686,7 +690,7 @@ it('makes table have at least one row', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-16",
                 "type": "td",
               },
               Object {
@@ -695,11 +699,11 @@ it('makes table have at least one row', () => {
                     "text": "",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-17",
                 "type": "td",
               },
             ],
-            "id": "id-0",
+            "id": "id-15",
             "type": "tr",
           },
         ],
@@ -765,7 +769,7 @@ it('normalizes caption, th and td elements to contain only valid characters', ()
                     "text": "caption",
                   },
                 ],
-                "id": "id-0",
+                "id": "id-18",
                 "type": "table-var-name",
               },
             ],
@@ -891,7 +895,7 @@ it('creates caption formulas when missing', () => {
                   },
                 ],
                 "columnId": "columnforumulaid",
-                "id": "id-0",
+                "id": "id-19",
                 "type": "table-column-formula",
               },
             ],

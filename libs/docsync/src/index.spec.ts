@@ -14,12 +14,13 @@ waitForExpect.defaults.interval = 500;
 const replicaCount = 5;
 const randomChangeCountPerReplica = 50;
 
-let mockCounter = 0;
 jest.mock('nanoid', () => {
+  let mockCounter = 0;
   return {
     nanoid: () => {
+      mockCounter += 1;
       // eslint-disable-next-line no-plusplus
-      const id = mockCounter++;
+      const id = mockCounter;
       return id.toString();
     },
   };
