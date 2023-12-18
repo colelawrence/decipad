@@ -1,7 +1,7 @@
 // Copied from backendtypes constant
 const MAX_CREDITS_EXEC_COUNT = {
-  free: 50,
-  pro: 500,
+  free: 50 + 100, // temporary Xmas allowance
+  pro: 500 + 100, // temporary Xmas allowance
 };
 
 export const getLimit = (isPremium: boolean) =>
