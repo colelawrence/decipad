@@ -87,6 +87,7 @@ export const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({
       <div css={invitationFormStyles}>
         <div css={inputContainerStyles}>
           <InputField
+            type="email"
             placeholder="Enter email address"
             value={email}
             onChange={setEmail}
