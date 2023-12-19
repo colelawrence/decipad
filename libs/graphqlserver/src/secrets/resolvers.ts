@@ -1,13 +1,8 @@
-import {
-  GraphqlContext,
-  ID,
-  SecretInput,
-  SecretRecord,
-  Workspace,
-} from '@decipad/backendtypes';
+import { GraphqlContext, SecretRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { resource } from '@decipad/backend-resources';
 import { UserInputError } from 'apollo-server-lambda';
+import { Resolvers } from '@decipad/graphqlserver-types';
 
 const workspaces = resource('workspace');
 
@@ -33,23 +28,15 @@ const getWorkspaceSecrets = async (
   ).Items;
 };
 
-export default {
+const resolvers: Resolvers = {
   Query: {
-    async getWorkspaceSecrets(
-      _: unknown,
-      { workspaceId }: { workspaceId: ID },
-      context: GraphqlContext
-    ): Promise<SecretRecord[]> {
+    async getWorkspaceSecrets(_, { workspaceId }, context) {
       return getWorkspaceSecrets(workspaceId, context);
     },
   },
 
   Mutation: {
-    async createSecret(
-      _: unknown,
-      { workspaceId, secret }: { workspaceId: string; secret: SecretInput },
-      context: GraphqlContext
-    ): Promise<SecretRecord> {
+    async createSecret(_, { workspaceId, secret }, context) {
       await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: workspaceId,
@@ -75,11 +62,7 @@ export default {
       return newSecret;
     },
 
-    async updateSecret(
-      _: unknown,
-      { secretId, secret: newSecret }: { secretId: string; secret: string },
-      context: GraphqlContext
-    ): Promise<SecretRecord> {
+    async updateSecret(_, { secretId, secret: newSecret }, context) {
       const data = await tables();
       const secret = await data.secrets.get({ id: secretId });
       if (!secret) {
@@ -100,11 +83,7 @@ export default {
       return secret;
     },
 
-    async removeSecret(
-      _: unknown,
-      { secretId }: { secretId: string },
-      context: GraphqlContext
-    ): Promise<boolean> {
+    async removeSecret(_, { secretId }, context) {
       const data = await tables();
       const secret = await data.secrets.get({ id: secretId });
       if (!secret) {
@@ -122,8 +101,10 @@ export default {
   },
 
   Workspace: {
-    async secrets(workspace: Workspace, _: unknown, context: GraphqlContext) {
+    async secrets(workspace, _, context) {
       return getWorkspaceSecrets(workspace.id, context);
     },
   },
 };
+
+export default resolvers;

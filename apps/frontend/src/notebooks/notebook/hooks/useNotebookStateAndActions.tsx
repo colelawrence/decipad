@@ -293,7 +293,9 @@ export const useNotebookStateAndActions = ({
     // TODO: this must invalidate the Pad since snapshots are a property of Pad. One way to do
     // this is if the mutation returns a Pad instead of a PadSnapshot. Another way to do it is to
     // programmatically invalidate/update cache, either here or in the urql config.
-    createOrUpdateSnapshot({ notebookId, snapshotName: SNAPSHOT_NAME })
+    createOrUpdateSnapshot({
+      params: { notebookId, snapshotName: SNAPSHOT_NAME },
+    })
       .then((ret) => {
         if (ret.error) {
           console.error(`Error publishing notebook: ${ret.error.message}`);

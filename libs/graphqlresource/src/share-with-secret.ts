@@ -1,31 +1,13 @@
-import {
-  ConcreteRecord,
-  GraphqlContext,
-  GraphqlObjectType,
-  ID,
-  PermissionType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import {
   create as createResourcePermission,
   getSecretPermissions,
 } from '@decipad/services/permissions';
 import { nanoid } from 'nanoid';
 import { UserInputError } from 'apollo-server-lambda';
-import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
 import { getResources } from './utils/getResources';
-
-export type ShareWithSecretArgs = {
-  id: ID;
-  permissionType: PermissionType;
-  canComment?: boolean;
-};
-
-export type ShareWithSecretFunction = (
-  _: unknown,
-  args: ShareWithSecretArgs,
-  context: GraphqlContext
-) => Promise<string>;
+import { Resource, ResourceResolvers } from './types';
 
 export function shareWithSecret<
   RecordT extends ConcreteRecord,
@@ -34,12 +16,13 @@ export function shareWithSecret<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): ShareWithSecretFunction {
-  return async function shareWithSecret(
-    _: unknown,
-    args: ShareWithSecretArgs,
-    context: GraphqlContext
-  ) {
+): ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['shareWithSecret'] {
+  return async function shareWithSecret(_, args, context) {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -72,7 +55,7 @@ export function shareWithSecret<
       resourceUri: resources[0],
       parentResourceUri: resources[1],
       type: args.permissionType,
-      canComment: !!args.canComment,
+      canComment: false,
     };
     if (resourceType.parentResourceUriFromRecord) {
       permission.parentResourceUri =

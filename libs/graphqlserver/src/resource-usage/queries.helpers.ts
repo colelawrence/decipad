@@ -15,7 +15,7 @@ const PROMPT_TOKENS_USED = 'promptTokensUsed';
 const COMPLETION_TOKENS_USED = 'completionTokensUsed';
 
 export type FrontendAiUsageRecord = ResourceUsageRecord & {
-  quotaLimit?: number;
+  quotaLimit: number;
   resourceType: ResourceUsageTypes;
 };
 

@@ -19,6 +19,9 @@
     },
     {
       "path": "../../libs/graphql-client"
+    },
+    {
+      "path": "../../libs/graphqlserver-types"
     }
   ]
 }

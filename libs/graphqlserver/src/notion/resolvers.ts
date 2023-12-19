@@ -1,8 +1,8 @@
 import { resource } from '@decipad/backend-resources';
 import { Client, ClientErrorCode, isNotionClientError } from '@notionhq/client';
 import { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints';
-import { GraphqlContext } from '../../../backendtypes/src';
 import { thirdParty } from '../../../backend-config/src';
+import { Resolvers } from '@decipad/graphqlserver-types';
 
 const notebooks = resource('notebook');
 
@@ -10,13 +10,9 @@ const notion = new Client({
   auth: thirdParty().notion.apiKey,
 });
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    async getNotion(
-      _: unknown,
-      { url, notebookId }: { url: string; notebookId: string },
-      context: GraphqlContext
-    ): Promise<string> {
+    async getNotion(_, { url, notebookId }, context) {
       await notebooks.expectAuthorizedForGraphql({
         context,
         recordId: notebookId,

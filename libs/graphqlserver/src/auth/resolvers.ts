@@ -1,10 +1,10 @@
-import { ID, GraphqlContext } from '@decipad/backendtypes';
 import assert from 'assert';
 import { encode, JWTEncodeParams } from 'next-auth/jwt';
 import { tokenize as tokenizeCookies } from 'simple-cookie';
 import tables from '@decipad/tables';
 import { jwt as jwtConf } from '@decipad/services/authentication';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
+import { Resolvers } from '@decipad/graphqlserver-types';
 
 const inTesting = process.env.ARC_ENV === 'testing';
 
@@ -19,13 +19,9 @@ async function generateToken(
   });
 }
 
-export default {
+const resolvers: Resolvers = {
   Mutation: {
-    async pretendUser(
-      _: unknown,
-      { userId }: { userId: ID },
-      context: GraphqlContext
-    ) {
+    async pretendUser(_, { userId }, context) {
       if (!inTesting) {
         throw new ForbiddenError('Forbidden');
       }
@@ -51,3 +47,5 @@ export default {
     },
   },
 };
+
+export default resolvers;

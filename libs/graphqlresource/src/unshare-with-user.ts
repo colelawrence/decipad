@@ -1,26 +1,10 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized, loadUser } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type UnshareWithUserArgs = {
-  id: ID;
-  userId: ID;
-};
-
-export type UnshareWithUserFunction<RecordT extends ConcreteRecord> = (
-  _: unknown,
-  args: UnshareWithUserArgs,
-  context: GraphqlContext
-) => Promise<RecordT>;
+import { Resource, ResourceResolvers } from './types';
 
 export function unshareWithUser<
   RecordT extends ConcreteRecord,
@@ -29,12 +13,13 @@ export function unshareWithUser<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): UnshareWithUserFunction<RecordT> {
-  return async function unshareAndReturnUpdatedResource(
-    _: unknown,
-    args: UnshareWithUserArgs,
-    context: GraphqlContext
-  ) {
+): ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['unshareWithUser'] {
+  return async function unshareAndReturnUpdatedResource(_, args, context) {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -65,6 +50,6 @@ export function unshareWithUser<
       context
     );
 
-    return updatedRecord;
+    return resourceType.toGraphql(updatedRecord);
   };
 }

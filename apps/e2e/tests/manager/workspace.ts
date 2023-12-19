@@ -5,6 +5,9 @@ import {
   type ElementHandle,
 } from '@playwright/test';
 
+// 90 seconds.
+const LONG_TIMEOUT = 90000;
+
 interface Pad {
   anchor: ElementHandle;
   name: string;
@@ -108,7 +111,9 @@ export class Workspace {
       create: true,
     }
   ) {
-    await this.page.getByTestId('new-section-button').click();
+    await this.page
+      .getByTestId('new-section-button')
+      .click({ timeout: LONG_TIMEOUT });
     await this.page.getByPlaceholder('My section').fill(name);
     if (options.colourIndex && options.colourIndex > 1) {
       await this.page

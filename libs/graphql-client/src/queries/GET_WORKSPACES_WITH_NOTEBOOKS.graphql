@@ -6,6 +6,7 @@ fragment WorkspaceNotebook on Pad {
   createdAt
   archived
   isPublic
+  sectionId
   section {
     id
     name

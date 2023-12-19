@@ -50,6 +50,11 @@ function parseResource(resource: URI): Resource {
   };
 }
 
+//
+// TODO: This file isn't being used anywhere.
+// Will need to be cleaned up.
+//
+
 const resolvers = {
   Query: {
     async resourceSharedWith(

@@ -1,28 +1,16 @@
-import stringify from 'json-stringify-safe';
-import {
-  ID,
-  GraphqlContext,
-  PageInput,
-  UserTaggedResourceRecord,
-  PadRecord,
-  Pad,
-} from '@decipad/backendtypes';
+import { UserTaggedResourceRecord, PadRecord } from '@decipad/backendtypes';
 import assert from 'assert';
 import tables, { allPages, paginate } from '@decipad/tables';
-import { subscribe } from '@decipad/services/pubsub';
 import { resource } from '@decipad/backend-resources';
 import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
+import { PagedPadResult, Resolvers } from '@decipad/graphqlserver-types';
 
 const notebooks = resource('notebook');
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    async tags(
-      _: unknown,
-      { workspaceId }: { workspaceId: ID },
-      context: GraphqlContext
-    ) {
+    async tags(_, { workspaceId }, context) {
       const user = requireUser(context);
 
       const data = await tables();
@@ -45,15 +33,7 @@ const resolvers = {
       return tags.sort();
     },
 
-    async padsByTag(
-      _: unknown,
-      {
-        workspaceId,
-        tag,
-        page,
-      }: { workspaceId: ID; tag: string; page: PageInput },
-      context: GraphqlContext
-    ) {
+    async padsByTag(_, { workspaceId, tag, page }, context) {
       const user = requireUser(context);
 
       const query = {
@@ -69,7 +49,7 @@ const resolvers = {
 
       const data = await tables();
 
-      return paginate<UserTaggedResourceRecord, PadRecord>(
+      const paginated = await paginate<UserTaggedResourceRecord, PadRecord>(
         data.usertaggedresources,
         query,
         page,
@@ -83,15 +63,14 @@ const resolvers = {
           },
         }
       );
+
+      /* Cast required to omit deeper graphql properties */
+      return paginated as PagedPadResult;
     },
   },
 
   Mutation: {
-    async addTagToPad(
-      _: unknown,
-      { padId, tag }: { padId: ID; tag: string },
-      context: GraphqlContext
-    ) {
+    async addTagToPad(_, { padId, tag }, context) {
       const { resources } = await notebooks.expectAuthorizedForGraphql({
         context,
         recordId: padId,
@@ -105,13 +84,11 @@ const resolvers = {
         resource_uri: resources[0],
       };
       await data.tags.put(newTag);
+
+      return true;
     },
 
-    async removeTagFromPad(
-      _: unknown,
-      { padId, tag }: { padId: ID; tag: string },
-      context: GraphqlContext
-    ) {
+    async removeTagFromPad(_, { padId, tag }, context) {
       const { resources } = await notebooks.expectAuthorizedForGraphql({
         context,
         recordId: padId,
@@ -121,32 +98,13 @@ const resolvers = {
       const data = await tables();
       const tagId = `${resources[0]}/tags/${encodeURIComponent(tag)}`;
       await data.tags.delete({ id: tagId });
-    },
-  },
 
-  Subscription: {
-    tagsChanged: {
-      async subscribe(
-        _: unknown,
-        { workspaceId }: { workspaceId: ID },
-        context: GraphqlContext
-      ) {
-        const user = requireUser(context);
-        assert(context.subscriptionId, 'no subscriptionId in context');
-        assert(context.connectionId, 'no connectionId in context');
-        return subscribe({
-          subscriptionId: context.subscriptionId,
-          connectionId: context.connectionId,
-          user,
-          type: 'tagsChanged',
-          filter: stringify({ workspaceId }),
-        });
-      },
+      return true;
     },
   },
 
   Pad: {
-    async tags(pad: Pad): Promise<string[]> {
+    async tags(pad) {
       const notebookResource = `/pads/${pad.id}`;
       const data = await tables();
 

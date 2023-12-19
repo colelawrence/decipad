@@ -1,29 +1,19 @@
 import { identify, track } from '@decipad/backend-analytics';
-import {
-  GoalFulfilmentInput,
-  GraphqlContext,
-  SetUsernameInput,
-  User,
-  UserInput,
-} from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { AuthenticationError, UserInputError } from 'apollo-server-lambda';
 import { loadUser, requireUser } from '../authorization';
 import { forbiddenUsernamePrefixes } from './forbiddenUsernamePrefixes';
+import { Resolvers, User } from '@decipad/graphqlserver-types';
 
 const minimumUsernameCharCount = 1;
 
-export default {
+const resolvers: Resolvers = {
   Query: {
-    self(_: unknown, _args: unknown, context: GraphqlContext) {
-      return context.user;
+    self(_, _args, context) {
+      return context.user as User;
     },
-    async selfFulfilledGoals(
-      _: unknown,
-      _args: unknown,
-      context: GraphqlContext
-    ): Promise<string[]> {
+    async selfFulfilledGoals(_, _args, context) {
       const user = loadUser(context);
       if (!user) {
         return [];
@@ -42,11 +32,7 @@ export default {
   },
 
   Mutation: {
-    async updateSelf(
-      _: unknown,
-      { props }: { props: Partial<UserInput> },
-      context: GraphqlContext
-    ): Promise<User> {
+    async updateSelf(_, { props }, context) {
       const user = requireUser(context);
 
       const data = await tables();
@@ -72,14 +58,10 @@ export default {
         fullName: self.name,
         email: self.email,
       });
-      return self;
+      return self as User;
     },
 
-    async fulfilGoal(
-      _: unknown,
-      { props }: { props: GoalFulfilmentInput },
-      context: GraphqlContext
-    ): Promise<boolean> {
+    async fulfilGoal(_, { props }, context) {
       const user = requireUser(context);
 
       const data = await tables();
@@ -99,11 +81,7 @@ export default {
       return true;
     },
 
-    async setUsername(
-      _: unknown,
-      { props }: { props: SetUsernameInput },
-      context: GraphqlContext
-    ): Promise<boolean> {
+    async setUsername(_, { props }, context) {
       const user = requireUser(context);
 
       let { username } = props;
@@ -153,3 +131,5 @@ export default {
     },
   },
 };
+
+export default resolvers;

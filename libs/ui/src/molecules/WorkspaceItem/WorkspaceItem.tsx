@@ -50,7 +50,7 @@ export interface WorkspaceItemProps {
   readonly name: string;
   readonly imageHash?: string;
   readonly isActive?: boolean;
-  readonly membersCount?: number;
+  readonly membersCount?: number | null;
   readonly onWorkspaceNavigate?: (id: string) => void;
 }
 

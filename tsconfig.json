@@ -90,6 +90,7 @@
       "@decipad/graphql-client": ["libs/graphql-client/src/index.ts"],
       "@decipad/graphqlresource": ["libs/graphqlresource/src/index.ts"],
       "@decipad/graphqlserver": ["libs/graphqlserver/src/index.ts"],
+      "@decipad/graphqlserver-types": ["libs/graphqlserver-types/src/index.ts"],
       "@decipad/graphqlserver/resolvers": [
         "libs/graphqlserver/src/resolvers.ts"
       ],

@@ -1,20 +1,19 @@
 import { resource } from '@decipad/backend-resources';
-import {
-  ExternalDataSourceCreateInput,
-  ExternalDataSourceProvider,
-  ExternalDataSourceRecord,
-  ExternalDataSourceUpdateInput,
-  GraphqlContext,
-  PageInput,
-  PagedResult,
-} from '@decipad/backendtypes';
+import { ExternalDataSourceRecord } from '@decipad/backendtypes';
 import { app } from '@decipad/backend-config';
 import Resource from '@decipad/graphqlresource';
 import tables, { paginate } from '@decipad/tables';
-import { identity } from '@decipad/utils';
 import { nanoid } from 'nanoid';
+import {
+  ExternalDataSource,
+  ExternalDataSourceCreateInput,
+  ExternalDataSourceUpdateInput,
+  ExternalProvider,
+  Resolvers,
+} from '@decipad/graphqlserver-types';
+import { getDefined } from '@decipad/utils';
 
-const isDatabaseSource = new Set<ExternalDataSourceProvider>([
+const isDatabaseSource = new Set<ExternalProvider>([
   'postgresql',
   'mysql',
   'oracledb',
@@ -23,49 +22,62 @@ const isDatabaseSource = new Set<ExternalDataSourceProvider>([
   'mariadb',
 ]);
 
-function baseUrlFor(externalDataSource: ExternalDataSourceRecord): string {
+function baseUrlFor(externalDataSource: ExternalDataSource): string {
   const { urlBase, apiPathBase } = app();
   return `${urlBase}${apiPathBase}/externaldatasources/${
     isDatabaseSource.has(externalDataSource.provider) ? 'db/' : ''
   }${externalDataSource.id}`;
 }
 
-function dataUrlFor(externalDataSource: ExternalDataSourceRecord): string {
+function dataUrlFor(externalDataSource: ExternalDataSource): string {
   return `${baseUrlFor(externalDataSource)}/data`;
 }
 
-function authUrlFor(externalDataSource: ExternalDataSourceRecord): string {
+function authUrlFor(externalDataSource: ExternalDataSource): string {
   return `${baseUrlFor(externalDataSource)}/auth`;
 }
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
 
-const externalDataResource = Resource({
+const externalDataResource = Resource<
+  ExternalDataSourceRecord,
+  ExternalDataSource,
+  ExternalDataSourceCreateInput,
+  { dataSource: ExternalDataSourceUpdateInput }
+>({
   resourceTypeName: 'externaldatasources',
   humanName: 'external data source',
   dataTable: async () => (await tables()).externaldatasources,
-  toGraphql: identity,
+  toGraphql: (record) => {
+    return {
+      ...record,
+      // Sub resolvers will find these.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      access: {} as any,
+      keys: [],
+    } satisfies ExternalDataSource;
+  },
   newRecordFrom: ({
-    dataSource,
-  }: {
-    dataSource: ExternalDataSourceCreateInput;
+    name,
+    padId,
+    workspace_id: workspaceId,
+    provider,
+    externalId,
+    dataSourceName,
   }) => {
     const eds: ExternalDataSourceRecord = {
       id: nanoid(),
-      name: dataSource.name,
-      padId: dataSource.padId,
-      workspace_id: dataSource.workspace_id,
-      provider: dataSource.provider,
-      externalId: dataSource.externalId,
-      dataSourceName: dataSource.dataSourceName,
+      name,
+      padId,
+      workspace_id: workspaceId,
+      provider: provider as ExternalDataSourceRecord['provider'],
+      externalId,
+      dataSourceName,
     };
     return eds;
   },
-  updateRecordFrom: (
-    record: ExternalDataSourceRecord,
-    { dataSource }: { dataSource: ExternalDataSourceUpdateInput }
-  ) => {
+  updateRecordFrom: (record, { dataSource }) => {
     return {
       ...record,
       ...dataSource,
@@ -74,14 +86,14 @@ const externalDataResource = Resource({
   skipPermissions: true,
 });
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    getExternalDataSource: externalDataResource.getById,
-    getExternalDataSources: async (
-      _: unknown,
-      { notebookId, page }: { notebookId: string; page: PageInput },
-      context: GraphqlContext
-    ): Promise<PagedResult<ExternalDataSourceRecord>> => {
+    async getExternalDataSource(pad, input, context) {
+      return getDefined(
+        await externalDataResource.getById(pad, input, context)
+      );
+    },
+    getExternalDataSources: async (_, { notebookId, page }, context) => {
       await notebooks.expectAuthorizedForGraphql({
         context,
         recordId: notebookId,
@@ -102,10 +114,10 @@ const resolvers = {
       );
     },
     getExternalDataSourcesWorkspace: async (
-      _: unknown,
-      { workspaceId, page }: { workspaceId: string; page: PageInput },
-      context: GraphqlContext
-    ): Promise<PagedResult<ExternalDataSourceRecord>> => {
+      _,
+      { workspaceId, page },
+      context
+    ) => {
       await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: workspaceId,
@@ -129,7 +141,9 @@ const resolvers = {
   },
 
   Mutation: {
-    createExternalDataSource: externalDataResource.create,
+    async createExternalDataSource(_, { dataSource }, context) {
+      return externalDataResource.create(_, dataSource, context);
+    },
     updateExternalDataSource: externalDataResource.update,
     removeExternalDataSource: externalDataResource.remove,
     shareExternalDataSourceWithUser: externalDataResource.shareWithUser,
@@ -141,7 +155,7 @@ const resolvers = {
 
   ExternalDataSource: {
     access: externalDataResource.access,
-    keys: async (externalDataSource: ExternalDataSourceRecord) => {
+    keys: async (externalDataSource) => {
       const data = await tables();
       return (
         await data.externaldatasourcekeys.query({
@@ -153,8 +167,8 @@ const resolvers = {
         })
       ).Items;
     },
-    dataUrl: (d: ExternalDataSourceRecord) => dataUrlFor(d),
-    authUrl: (d: ExternalDataSourceRecord) => authUrlFor(d),
+    dataUrl: (d) => dataUrlFor(d),
+    authUrl: (d) => authUrlFor(d),
   },
 };
 

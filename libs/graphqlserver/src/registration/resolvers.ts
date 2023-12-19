@@ -1,15 +1,12 @@
 import { nanoid } from 'nanoid';
-import { User } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { timestamp } from '@decipad/backend-utils';
 import { UserInputError } from 'apollo-server-lambda';
+import { Resolvers } from '@decipad/graphqlserver-types';
 
-export default {
+const resolvers: Resolvers = {
   Mutation: {
-    async createUserViaMagicLink(
-      _: unknown,
-      { email }: { email: string }
-    ): Promise<User> {
+    async createUserViaMagicLink(_, { email }) {
       const data = await tables();
 
       const key = `email:${email}`;
@@ -37,10 +34,7 @@ export default {
       return newUser;
     },
 
-    async resendRegistrationMagicLinkEmail(
-      _: unknown,
-      { email }: { email: string }
-    ) {
+    async resendRegistrationMagicLinkEmail(_, { email }) {
       const data = await tables();
 
       const keyId = `email:${email}`;
@@ -61,3 +55,5 @@ export default {
     },
   },
 };
+
+export default resolvers;

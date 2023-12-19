@@ -1,19 +1,8 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type GetByIdFunction<GraphqlT extends GraphqlObjectType> = (
-  _: unknown,
-  { id }: { id: ID },
-  context: GraphqlContext
-) => Promise<GraphqlT>;
+import { Resource, ResourceResolvers } from './types';
 
 export function getById<
   RecordT extends ConcreteRecord,
@@ -22,8 +11,8 @@ export function getById<
   UpdateT
 >(
   resource: Resource<RecordT, GraphqlT, CreateT, UpdateT>
-): GetByIdFunction<GraphqlT> {
-  return async (_: unknown, args, context: GraphqlContext) => {
+): ResourceResolvers<RecordT, GraphqlT, CreateT, UpdateT>['getById'] {
+  return async (_, args, context) => {
     const { id } = args;
     const data = await resource.dataTable();
     const record = await data.get({ id });

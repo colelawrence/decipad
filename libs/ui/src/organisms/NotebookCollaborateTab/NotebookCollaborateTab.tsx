@@ -77,7 +77,7 @@ interface NotebookCollaborateTabProps {
   readonly workspaceId: string;
   readonly isAdmin: boolean;
   readonly usersWithAccess?: UserAccessMetaFragment[] | null;
-  readonly nrOfTeamMembers?: number;
+  readonly nrOfTeamMembers?: number | null;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
 

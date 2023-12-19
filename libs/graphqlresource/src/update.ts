@@ -1,32 +1,14 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { notifyAllWithAccessTo } from '@decipad/services/pubsub';
 import { track } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type UpdateArgs<T> = T & {
-  id: ID;
-};
+import { Resource, ResourceResolvers } from './types';
 
 interface MaybePublic {
   isPublic?: boolean;
 }
-
-export type UpdateFunction<
-  GraphqlT extends GraphqlObjectType,
-  UpdateInputType
-> = (
-  _: unknown,
-  args: UpdateArgs<UpdateInputType>,
-  context: GraphqlContext
-) => Promise<GraphqlT>;
 
 export function update<
   RecordT extends ConcreteRecord,
@@ -35,12 +17,8 @@ export function update<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): UpdateFunction<GraphqlT, UpdateInputT> {
-  return async function update(
-    _: unknown,
-    input: UpdateArgs<UpdateInputT>,
-    context: GraphqlContext
-  ) {
+): ResourceResolvers<RecordT, GraphqlT, CreateInputT, UpdateInputT>['update'] {
+  return async function update(_, input, context) {
     const resources = await getResources(resourceType, input.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'WRITE');

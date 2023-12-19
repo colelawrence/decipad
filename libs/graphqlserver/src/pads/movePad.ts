@@ -1,16 +1,16 @@
-import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables, { allPages } from '@decipad/tables';
 import { UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
+import { MutationResolvers, Pad } from '@decipad/graphqlserver-types';
 
 const notebooks = resource('notebook');
 const workspaces = resource('workspace');
 
-export const movePad = async (
-  _: unknown,
-  { id, workspaceId }: { id: ID; workspaceId: ID },
-  context: GraphqlContext
-): Promise<Pad> => {
+export const movePad: MutationResolvers['movePad'] = async (
+  _,
+  { id, workspaceId },
+  context
+) => {
   const data = await tables();
   const pad = await data.pads.get({ id });
 
@@ -53,5 +53,5 @@ export const movePad = async (
     }
   }
 
-  return pad;
+  return pad as Pad;
 };

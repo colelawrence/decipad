@@ -1,22 +1,7 @@
-import stringify from 'json-stringify-safe';
-import assert from 'assert';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { unauthorized } from '@hapi/boom';
 import { Doc as YDoc, applyUpdate } from 'yjs';
-import {
-  GraphqlContext,
-  ID,
-  PadInput,
-  PadRecord,
-  PageInput,
-  RoleRecord,
-  Section,
-  SectionRecord,
-  User,
-  WorkspaceRecord,
-  PagedResult,
-  PermissionType,
-} from '@decipad/backendtypes';
-import { subscribe } from '@decipad/services/pubsub';
+import { PadRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
 import {
@@ -46,35 +31,38 @@ import { movePad } from './movePad';
 import { padResource } from './padResource';
 import { maximumPermissionIn } from 'libs/services/src/authorization/maximum-permission';
 import { notebook } from 'libs/backend-resources/src/resources';
+import {
+  Pad,
+  PagedPadResult,
+  PermissionType,
+  Resolvers,
+  Section,
+  User,
+  Workspace,
+} from '@decipad/graphqlserver-types';
 
 const MAX_INITIAL_STATE_PAYLOAD_SIZE = 5 * 1000 * 1000; // 5MB
 
 const workspaces = resource('workspace');
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    async getPadById(
-      _: unknown,
-      params: { id: ID; snapshotName?: string },
-      context: GraphqlContext
-    ) {
+    async getPadById(_, params, context) {
       // So we can set `initialState` to be the last published snapshot.
-      context.snapshotName = params.snapshotName;
+      if (params.snapshotName) {
+        context.snapshotName = params.snapshotName;
+      }
 
       return padResource.getById(_, params, context);
     },
 
-    async pads(
-      _: unknown,
-      { page, workspaceId }: { page: PageInput; workspaceId: ID },
-      context: GraphqlContext
-    ): Promise<PagedResult<PadRecord>> {
+    async pads(_, { page, workspaceId }, context) {
       const workspaceResource = `/workspaces/${workspaceId}`;
       if (await isAuthorized(workspaceResource, context, 'READ')) {
-        return getWorkspaceNotebooks({
+        return (await getWorkspaceNotebooks({
           workspaceId,
           page,
-        });
+        })) as PagedPadResult;
       }
       return {
         items: [],
@@ -83,27 +71,19 @@ const resolvers = {
       };
     },
 
-    async padsSharedWithMe(
-      _: unknown,
-      { page }: { page: PageInput },
-      context: GraphqlContext
-    ) {
-      return getNotebooksSharedWith({
-        user: requireUser(context),
+    async padsSharedWithMe(_, { page }, context) {
+      return (await getNotebooksSharedWith({
+        user: requireUser(context) as User,
         page,
-      });
+      })) as PagedPadResult;
     },
 
-    async searchTemplates(
-      _: unknown,
-      { search, page }: { search: string; page: PageInput },
-      context: GraphqlContext
-    ): Promise<PagedResult<PadRecord>> {
-      await requireUser(context);
+    async searchTemplates(_, { query, page }, context) {
+      requireUser(context);
 
       const { maxItems, cursor: cursorString = '0' } = page;
-      const cursor = parseInt(cursorString, 10);
-      const results = await searchTemplates(search, {
+      const cursor = parseInt(cursorString as string, 10);
+      const results = await searchTemplates(query, {
         startIndex: cursor,
         maxResults: maxItems + 1,
       });
@@ -115,17 +95,15 @@ const resolvers = {
         cursor: String(cursor + results.length),
         hasNextPage: userResultSize < results.length,
         count: userResultSize,
-        items: results.slice(0, userResultSize).map((r) => r.notebook),
+        items: results
+          .slice(0, userResultSize)
+          .map((r) => r.notebook) as Array<Pad>,
       };
     },
   },
 
   Mutation: {
-    async createPad(
-      _: unknown,
-      opts: { workspaceId: ID; pad: PadInput; sectionId: ID },
-      context: GraphqlContext
-    ) {
+    async createPad(_, opts, context) {
       const workspaceResource = `/workspaces/${opts.workspaceId}`;
       await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
@@ -141,15 +119,11 @@ const resolvers = {
         context
       );
     },
-    async updatePad(
-      parent: unknown,
-      opts: { id: ID; workspaceId: ID; pad: PadInput; sectionId: ID },
-      context: GraphqlContext
-    ) {
-      if (opts.pad.isTemplate && !(await isSuperAdmin(context))) {
+    async updatePad(parent, { id, pad }, context) {
+      if (pad.isTemplate && !(await isSuperAdmin(context))) {
         throw unauthorized();
       }
-      return padResource.update(parent, opts, context);
+      return padResource.update(parent, { id, pad }, context);
     },
     removePad: padResource.remove,
     sharePadWithRole: padResource.shareWithRole,
@@ -158,55 +132,29 @@ const resolvers = {
     unsharePadWithUser: padResource.unshareWithUser,
     sharePadWithEmail: padResource.shareWithEmail,
     sharePadWithSecret: padResource.shareWithSecret,
-    unshareNotebookWithSecret: padResource.unshareWithSecret,
+    // TODO: uncomment?
+    // Not being used by frontend, maybe we deprecate secrets.
+    // unshareNotebookWithSecret: padResource.unshareWithSecret,
 
     duplicatePad,
     setPadPublic,
     createOrUpdateSnapshot,
     createSnapshot,
     movePad,
-    importPad: async (
-      parent: unknown,
-      args: { workspaceId: ID; source: string },
-      context: GraphqlContext
-    ) => padResource.toGraphql(await importPad(parent, args, context)),
-  },
-
-  Subscription: {
-    padsChanged: {
-      async subscribe(
-        _: unknown,
-        { workspaceId }: { workspaceId: ID },
-        context: GraphqlContext
-      ) {
-        const user = requireUser(context);
-        assert(context.subscriptionId, 'no subscriptionId in context');
-        assert(context.connectionId, 'no connectionId in context');
-        return subscribe({
-          subscriptionId: context.subscriptionId,
-          connectionId: context.connectionId,
-          user,
-          type: 'padsChanged',
-          filter: stringify({ workspace_id: workspaceId }),
-        });
-      },
-    },
+    importPad: async (parent, args, context) =>
+      padResource.toGraphql(await importPad(parent, args, context)),
   },
 
   Pad: {
     access: padResource.access,
-    myPermissionType: async (
-      parent: PadRecord,
-      params: unknown,
-      context: GraphqlContext
-    ) => {
+    myPermissionType: async (parent, params, context) => {
       const notebookPermission = await padResource.myPermissionType(
         parent,
         params,
         context
       );
       const workspaceRes = getDefined(notebook.parentResourceUriFromRecord)(
-        parent
+        parent as PadRecord
       );
       const workspacePermission =
         workspaceRes && (await isAuthorized(workspaceRes, context, 'WRITE'));
@@ -221,7 +169,7 @@ const resolvers = {
       const effectivePermission =
         maxPermission ??
         (parent.isPublic
-          ? parent.isPublicWritable
+          ? (parent as PadRecord).isPublicWritable
             ? 'WRITE'
             : 'READ'
           : undefined);
@@ -230,49 +178,39 @@ const resolvers = {
       return effectivePermission;
     },
 
-    async workspace(
-      pad: PadRecord,
-      _: unknown,
-      context: GraphqlContext
-    ): Promise<WorkspaceRecord | Partial<WorkspaceRecord> | undefined> {
+    async workspace(pad, _, context) {
       const data = await tables();
 
       const workspaceResource = getDefined(
         notebook.parentResourceUriFromRecord
-      )(pad);
+      )(pad as PadRecord);
 
       if (
         workspaceResource &&
-        pad.workspace_id &&
+        pad.workspaceId &&
         (await isAuthorized(workspaceResource, context, 'READ'))
       ) {
-        return data.workspaces.get({ id: pad.workspace_id });
+        return (await data.workspaces.get({
+          id: pad.workspaceId,
+        })) as Workspace;
       }
       // small hack to avoid setting the name of the workspace as nullable and changing several files
-      return { id: pad.workspace_id ?? 'fakeid', name: '' };
+      return { id: pad.workspaceId ?? 'fakeid', name: '' } as Workspace;
     },
 
-    async section(
-      pad: PadRecord,
-      _: unknown,
-      context: GraphqlContext
-    ): Promise<SectionRecord | undefined> {
-      if (!pad.section_id) {
-        return;
+    async section(pad, _, context) {
+      if (!pad.sectionId) {
+        return undefined;
       }
-      const workspaceResource = `/workspaces/${pad.workspace_id}`;
+      const workspaceResource = `/workspaces/${pad.workspaceId}`;
       if (!(await isAuthorized(workspaceResource, context, 'READ'))) {
         return undefined;
       }
       const data = await tables();
-      return data.sections.get({ id: pad.section_id });
+      return (await data.sections.get({ id: pad.sectionId })) as Section;
     },
 
-    async padConnectionParams(
-      pad: PadRecord,
-      __: unknown,
-      context: GraphqlContext
-    ) {
+    async padConnectionParams(pad, __, context) {
       return {
         url: `${getDefined(
           process.env.ARC_WSS_URL,
@@ -282,11 +220,7 @@ const resolvers = {
       };
     },
 
-    async initialState(
-      pad: PadRecord,
-      params: unknown,
-      context: GraphqlContext
-    ) {
+    async initialState(pad, params, context) {
       const permissionType = await padResource.myPermissionType(
         pad,
         params,
@@ -304,13 +238,13 @@ const resolvers = {
       return Buffer.from(initialState).toString('base64');
     },
 
-    async snapshots(pad: PadRecord) {
+    async snapshots(pad) {
       return getSnapshots({
         notebookId: pad.id,
       });
     },
 
-    async document(pad: PadRecord) {
+    async document(pad) {
       const initialState = await getNotebookInitialState(pad.id);
       const doc = new YDoc();
       applyUpdate(doc, initialState);
@@ -321,19 +255,8 @@ const resolvers = {
 
   /* eslint-disable camelcase */
 
-  RoleAccess: {
-    async role({ role_id }: { role_id: ID }): Promise<RoleRecord | undefined> {
-      const data = await tables();
-      return data.workspaceroles.get({ id: role_id });
-    },
-  },
-
   Section: {
-    async pads(
-      section: Section,
-      _: unknown,
-      context: GraphqlContext
-    ): Promise<PadRecord[]> {
+    async pads(section, _, context) {
       await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: section.workspace_id,
@@ -350,14 +273,21 @@ const resolvers = {
       };
 
       const padIds = (await data.pads.query(query)).Items.map((e) => e.id);
-      return data.pads.batchGet(padIds);
+      return (await data.pads.batchGet(padIds)) as Array<Pad>;
     },
   },
 
   UserAccess: {
-    async user({ user_id }: { user_id: ID }): Promise<User | undefined> {
+    async user({ userId }) {
       const data = await tables();
-      return data.users.get({ id: user_id });
+      const dbUsers = await data.users.get({ id: getDefined(userId) });
+      return {
+        ...dbUsers,
+        id: getDefined(userId),
+        name: getDefined(dbUsers).name,
+        email: getDefined(getDefined(dbUsers).email),
+        image: dbUsers?.email ?? undefined,
+      } satisfies User;
     },
   },
 };

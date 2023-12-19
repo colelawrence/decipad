@@ -1,13 +1,3 @@
-mutation CreateOrUpdateNotebookSnapshot(
-  $notebookId: ID!
-  $snapshotName: String!
-  $remoteState: String
-  $localVersionHash: String
-) {
-  createOrUpdateSnapshot(
-    notebookId: $notebookId
-    snapshotName: $snapshotName
-    remoteState: $remoteState
-    localVersionHash: $localVersionHash
-  )
+mutation CreateOrUpdateNotebookSnapshot($params: CreateOrUpdateSnapshotInput!) {
+  createOrUpdateSnapshot(params: $params)
 }

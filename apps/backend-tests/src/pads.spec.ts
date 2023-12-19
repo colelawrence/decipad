@@ -5,9 +5,14 @@
 
 import arc from '@architect/functions';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
-import { Pad, Role, RoleInvitation, Workspace } from '@decipad/backendtypes';
 import { timeout } from './utils/timeout';
 import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseIsErrorFree';
+import type {
+  Pad,
+  Role,
+  RoleInvitation,
+  Workspace,
+} from '@decipad/graphqlserver-types';
 
 test('pads', (ctx) => {
   const { test: it } = ctx;
@@ -16,7 +21,6 @@ test('pads', (ctx) => {
   let invitations: RoleInvitation[];
   let pad: Pad;
   let targetUserId: string;
-  let secret: string;
 
   beforeAll(async () => {
     const auth = await ctx.auth();
@@ -37,7 +41,10 @@ test('pads', (ctx) => {
       )
     ).data.createWorkspace;
 
-    expect(workspace).toMatchObject({ name: 'Workspace 1' });
+    expect(workspace).toMatchObject({
+      id: expect.any(String),
+      name: 'Workspace 1',
+    });
   });
 
   beforeAll(async () => {
@@ -161,12 +168,6 @@ test('pads', (ctx) => {
                 id
                 name
               }
-              access {
-                secrets {
-                  permission
-                  secret
-                }
-              }
             }
           }
         `,
@@ -263,40 +264,6 @@ test('pads', (ctx) => {
       `,
       })
     ).resolves.not.toThrow();
-  });
-
-  it('the creator can share a notebook with secret', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-
-    const result = await ensureGraphqlResponseIsErrorFree(
-      client.mutate({
-        mutation: ctx.gql`
-        mutation {
-          sharePadWithSecret(id: "${pad.id}", permissionType: READ, canComment: false)
-        }
-      `,
-      })
-    );
-
-    secret = result.data.sharePadWithSecret;
-
-    expect(result.data.sharePadWithSecret).toBeTruthy();
-  });
-
-  it('the creator can unshare a notebook with secret', async () => {
-    const client = ctx.graphql.withAuth(await ctx.auth());
-
-    const result = await ensureGraphqlResponseIsErrorFree(
-      client.mutate({
-        mutation: ctx.gql`
-        mutation {
-          unshareNotebookWithSecret(id: "${pad.id}", secret: "${secret}")
-        }
-      `,
-      })
-    );
-
-    expect(result.data.unshareNotebookWithSecret).toBe(true);
   });
 
   it('the creator can share pad with role', async () => {

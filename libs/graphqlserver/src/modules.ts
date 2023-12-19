@@ -1,4 +1,3 @@
-import { DocumentNode } from 'graphql';
 import attachments from './attachments';
 import auth from './auth';
 import base from './base';
@@ -11,7 +10,6 @@ import pagination from './pagination';
 import registration from './registration';
 import roles from './roles';
 import sections from './sections';
-import share from './share';
 import tags from './tags';
 import users from './users';
 import workspaces from './workspaces';
@@ -23,8 +21,7 @@ import resourceUsage from './resource-usage';
 import notion from './notion';
 
 type GraphqlModule = {
-  typedefs: DocumentNode;
-  resolvers?: unknown;
+  resolvers: unknown;
 };
 const modules: GraphqlModule[] = [
   base,
@@ -39,7 +36,6 @@ const modules: GraphqlModule[] = [
   workspaces,
   pads,
   attachments,
-  share,
   externalData,
   logs,
   secrets,

@@ -1,7 +1,7 @@
 import tables, { timestamp } from '@decipad/tables';
-import { GraphqlContext } from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import { requireUser } from '../authorization';
+import { Resolvers } from '@decipad/graphqlserver-types';
 
 const EXPIRATION_TIME_SECONDS = 30 * 24 * 60 * 60; // 30 days
 
@@ -11,13 +11,9 @@ export interface LogEntry {
   content: string;
 }
 
-const resolvers = {
+const resolvers: Resolvers = {
   Mutation: {
-    async createLogs(
-      _: unknown,
-      args: { input: { resource: string; entries: LogEntry[] } },
-      context: GraphqlContext
-    ) {
+    async createLogs(_, args, context) {
       const user = requireUser(context);
       const data = await tables();
       const expiresAt = timestamp() + EXPIRATION_TIME_SECONDS;
@@ -35,6 +31,8 @@ const resolvers = {
           expiresAt,
         });
       }
+
+      return true;
     },
   },
 };

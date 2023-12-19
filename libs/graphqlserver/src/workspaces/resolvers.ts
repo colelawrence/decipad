@@ -1,58 +1,78 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
 import { resource } from '@decipad/backend-resources';
-import {
-  GraphqlContext,
-  ID,
-  PadRecord,
-  PagedResult,
-  PageInput,
-  Workspace,
-  WorkspaceInput,
-  WorkspaceRecord,
-} from '@decipad/backendtypes';
 import { maximumPermissionType } from '@decipad/graphqlresource';
-import { isLocalDev } from '@decipad/initial-workspace';
 import { pads } from '@decipad/services';
 import {
   queryAccessibleResources,
   removeAllPermissionsFor,
 } from '@decipad/services/permissions';
-import { notifyAllWithAccessTo, subscribe } from '@decipad/services/pubsub';
+import { notifyAllWithAccessTo } from '@decipad/services/pubsub';
 import { create as createWorkspace2 } from '@decipad/services/workspaces';
 import tables from '@decipad/tables';
 import { byDesc } from '@decipad/utils';
 import { UserInputError } from 'apollo-server-lambda';
-import assert from 'assert';
-import by from '../../../graphqlresource/src/utils/by';
 import { isAuthorized, loadUser, requireUser } from '../authorization';
 import { cancelSubscriptionFromWorkspaceId } from '../workspaceSubscriptions/subscription.helpers';
 import { getWorkspaceMembersCount } from './workspace.helpers';
 import { workspaceResource } from './workspaceResource';
 import { withSubscriptionSideEffects } from './workspaceStripeEffects';
+import {
+  PermissionType,
+  Resolvers,
+  Role,
+  Workspace,
+  WorkspaceAccess,
+} from '@decipad/graphqlserver-types';
+import { WorkspaceRecord } from '@decipad/backendtypes';
+import by from 'libs/graphqlresource/src/utils/by';
+import { padResource } from '../pads/padResource';
 
 const workspaces = resource('workspace');
 
-export default {
+function WorkspaceRecordToWorkspace(
+  workspaceRecord: WorkspaceRecord
+): Workspace {
+  return {
+    ...workspaceRecord,
+    /* These fields are gathered by sub-resolvers */
+    // membersCount: 0,
+    // pads: {
+    //   items: [],
+    //   count: 0,
+    //   hasNextPage: false,
+    // },
+    // secrets: [],
+    // sections: [],
+  } as unknown as Workspace;
+}
+
+const getWorkspaceById: NonNullable<
+  NonNullable<Resolvers['Query']>['getWorkspaceById']
+> = async (_, { id }, context) => {
+  await workspaces.expectAuthorizedForGraphql({
+    context,
+    recordId: id,
+    minimumPermissionType: 'READ',
+  });
+
+  const data = await tables();
+  const dbWorkspaces = await data.workspaces.get({ id });
+  if (dbWorkspaces == null) {
+    return null;
+  }
+
+  // Note: we return some dummy data for type safety.
+  // But the relevant processing is done at the end of this file.
+  // in computed properties.
+  return WorkspaceRecordToWorkspace(dbWorkspaces);
+};
+
+const resolvers: Resolvers = {
   Query: {
-    async getWorkspaceById(
-      _: unknown,
-      { id }: { id: ID },
-      context: GraphqlContext
-    ): Promise<WorkspaceRecord | undefined> {
-      await workspaces.expectAuthorizedForGraphql({
-        context,
-        recordId: id,
-        minimumPermissionType: 'READ',
-      });
+    getWorkspaceById,
 
-      const data = await tables();
-      return data.workspaces.get({ id });
-    },
-
-    async workspaces(
-      _: unknown,
-      __: unknown,
-      context: GraphqlContext
-    ): Promise<WorkspaceRecord[]> {
+    async workspaces(_, __, context) {
       const user = loadUser(context);
       if (!user) {
         return [];
@@ -71,52 +91,52 @@ export default {
         })
       ).Items;
 
-      const workspaceRecords = [];
-
-      for (const permission of permissions) {
-        // eslint-disable-next-line no-await-in-loop
-        const workspace = await data.workspaces.get({
-          id: permission.resource_id,
-        });
-        if (workspace) {
-          const { name: workspaceName } = workspace;
-          const ws = { ...workspace };
-          // for development purposes we want
-          // to be able to have premium
-          // and non premium workspaces
-          if (isLocalDev() && workspaceName.includes('@n1n.co')) {
-            ws.isPremium = true;
+      const myWorkspaces = (
+        await Promise.all(
+          permissions.map((p) =>
+            getWorkspaceById({}, { id: p.resource_id }, context, {} as any)
+          )
+        )
+      )
+        .filter((w): w is Workspace => w != null)
+        .map((w) => {
+          if (w.name.includes('@n1n.co')) {
+            w.isPremium = true;
           }
+          return w;
+        });
 
-          workspaceRecords.push(ws);
-        }
-      }
-
-      return workspaceRecords.sort(byDesc('name'));
+      return myWorkspaces.sort(byDesc('name'));
     },
   },
 
   Mutation: {
-    shareWorkspaceWithEmail: withSubscriptionSideEffects(
-      workspaceResource.shareWithEmail
-    ),
-    unshareWorkspaceWithUser: withSubscriptionSideEffects(
-      workspaceResource.unshareWithUser
-    ),
-    async createWorkspace(
-      _: unknown,
-      { workspace }: { workspace: WorkspaceInput },
-      context: GraphqlContext
-    ): Promise<WorkspaceRecord> {
+    async shareWorkspaceWithEmail(parent, args, context) {
+      return WorkspaceRecordToWorkspace(
+        await withSubscriptionSideEffects(workspaceResource.shareWithEmail)(
+          parent,
+          args,
+          context
+        )
+      );
+    },
+    async unshareWorkspaceWithUser(parent, args, context) {
+      return WorkspaceRecordToWorkspace(
+        await withSubscriptionSideEffects(workspaceResource.unshareWithUser)(
+          parent,
+          args,
+          context
+        )
+      );
+    },
+    async createWorkspace(_, { workspace }, context) {
       const user = requireUser(context);
-      return createWorkspace2(workspace, user);
+      return WorkspaceRecordToWorkspace(
+        await createWorkspace2(workspace, user)
+      );
     },
 
-    async updateWorkspace(
-      _: unknown,
-      { id, workspace }: { id: ID; workspace: WorkspaceInput },
-      context: GraphqlContext
-    ) {
+    async updateWorkspace(_, { id, workspace }, context) {
       const { resources } = await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: id,
@@ -129,7 +149,10 @@ export default {
         throw new UserInputError('No such workspace');
       }
 
-      const newWorkspace = { ...previousWorkspace, ...workspace };
+      const newWorkspace: WorkspaceRecord = {
+        ...previousWorkspace,
+        ...workspace,
+      };
       await data.workspaces.put(newWorkspace);
 
       await notifyAllWithAccessTo<WorkspaceRecord>(
@@ -145,14 +168,10 @@ export default {
         }
       );
 
-      return newWorkspace;
+      return WorkspaceRecordToWorkspace(newWorkspace);
     },
 
-    async removeWorkspace(
-      _: unknown,
-      { id }: { id: ID },
-      context: GraphqlContext
-    ) {
+    async removeWorkspace(_, { id }, context) {
       const { resources } = await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: id,
@@ -185,27 +204,13 @@ export default {
       /* eslint-enable no-await-in-loop */
 
       await removeAllPermissionsFor(resources[0]);
-    },
-  },
 
-  Subscription: {
-    workspacesChanged: {
-      async subscribe(_: unknown, __: unknown, context: GraphqlContext) {
-        assert(context.subscriptionId, 'context does not have subscriptionId');
-        assert(context.connectionId, 'context does not have connectionId');
-        const user = requireUser(context);
-        return subscribe({
-          subscriptionId: context.subscriptionId,
-          connectionId: context.connectionId,
-          user,
-          type: 'workspacesChanged',
-        });
-      },
+      return true;
     },
   },
 
   Workspace: {
-    async roles(workspace: Workspace, _: unknown, context: GraphqlContext) {
+    async roles(workspace, _, context) {
       const user = requireUser(context);
       const data = await tables();
       let roles;
@@ -241,10 +246,12 @@ export default {
         }
       }
 
-      return roles.sort(byDesc('name'));
+      const roleAccess = roles.sort(byDesc('name'));
+
+      return roleAccess as unknown as Array<Role>;
     },
 
-    async access(workspace: Workspace) {
+    async access(workspace) {
       const workspaceResourceName = `/workspaces/${workspace.id}`;
       const data = await tables();
       const permissions = (
@@ -270,7 +277,7 @@ export default {
       const userAccesses = permissions
         .filter((p) => p.user_id !== 'null' && p.role_id === 'null')
         .map((p) => ({
-          user_id: p.user_id,
+          userId: p.user_id,
           permission: p.type,
           canComment: p.can_comment,
           createdAt: p.createdAt,
@@ -279,20 +286,19 @@ export default {
 
       return {
         id: workspace.id,
-        roles: roleAccesses,
+        roles: roleAccesses.map((r) => ({
+          ...r,
+          roleId: r.role_id,
+        })),
         users: userAccesses,
-      };
+      } as unknown as WorkspaceAccess;
     },
 
     async membersCount(workspace: Workspace) {
       return getWorkspaceMembersCount(workspace.id);
     },
 
-    async myPermissionType(
-      parent: WorkspaceRecord,
-      _: unknown,
-      context: GraphqlContext
-    ) {
+    async myPermissionType(parent, _, context) {
       const workspaceResourceName = `/workspaces/${parent.id}`;
       const data = await tables();
       const { user } = context;
@@ -324,19 +330,28 @@ export default {
           })
         ).Items;
 
-        return maximumPermissionType(permissions);
+        return (maximumPermissionType(permissions) as PermissionType) ?? null;
       }
       return undefined;
     },
 
-    async pads(
-      workspace: Workspace,
-      { page }: { page: PageInput }
-    ): Promise<PagedResult<PadRecord>> {
-      return pads.getWorkspaceNotebooks({
+    async pads(workspace, { page }) {
+      const pagedDbPads = await pads.getWorkspaceNotebooks({
         workspaceId: workspace.id,
-        page,
+        page: {
+          maxItems: page.maxItems,
+          cursor: page.cursor ?? null,
+        },
       });
+
+      const pagedPadsItems = pagedDbPads.items.map(padResource.toGraphql);
+
+      return {
+        ...pagedDbPads,
+        items: pagedPadsItems,
+      };
     },
   },
 };
+
+export default resolvers;

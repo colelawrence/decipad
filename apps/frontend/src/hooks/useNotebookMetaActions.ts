@@ -223,10 +223,12 @@ export function useNotebookMetaActions(
       }
 
       await createOrUpdateSnapshot({
-        notebookId,
-        snapshotName: SNAPSHOT_NAME,
-        remoteState: localState && Buffer.from(localState).toString('base64'),
-        localVersionHash: checksumLocal,
+        params: {
+          notebookId,
+          snapshotName: SNAPSHOT_NAME,
+          remoteState: localState && Buffer.from(localState).toString('base64'),
+          localVersionHash: checksumLocal,
+        },
       });
       await remoteUpdateNotebookIsPublic({ id: notebookId, isPublic: true });
     },

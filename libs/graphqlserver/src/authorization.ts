@@ -1,31 +1,26 @@
-import { PermissionType, User } from '@decipad/backendtypes';
 import { isAuthorized as isAuthorizedBase } from '@decipad/services/authorization';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { ForbiddenError } from 'apollo-server-lambda';
 import tables from '@decipad/tables';
+import { GraphqlContext, PermissionType } from '@decipad/graphqlserver-types';
+import { User } from '@decipad/backendtypes';
 
-type Context = {
-  user?: User;
-  event: APIGatewayProxyEventV2;
-};
-
-export function loadUser(context: Context): User | undefined {
+export function loadUser(context: GraphqlContext): User | undefined {
   return context.user;
 }
-export function requireUser(context: Context): User {
+export function requireUser(context: GraphqlContext): User {
   const user = loadUser(context);
   if (!user) {
     throw new ForbiddenError('Forbidden');
   }
   return user;
 }
-export function loadSecret(context: Context): string | undefined {
+export function loadSecret(context: GraphqlContext): string | undefined {
   return context.event.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
 }
 
 export async function isAuthorized(
   resource: string,
-  context: Context,
+  context: GraphqlContext,
   permissionType: PermissionType = 'READ'
 ): Promise<PermissionType | null> {
   const user = loadUser(context);
@@ -40,7 +35,7 @@ export async function isAuthorized(
 
 export async function isAuthenticatedAndAuthorized(
   resource: string,
-  context: Context,
+  context: GraphqlContext,
   permissionType: PermissionType
 ): Promise<User> {
   const user = requireUser(context);
@@ -50,7 +45,7 @@ export async function isAuthenticatedAndAuthorized(
   return user;
 }
 
-export async function isSuperAdmin(context: Context): Promise<boolean> {
+export async function isSuperAdmin(context: GraphqlContext): Promise<boolean> {
   const user = requireUser(context);
   const data = await tables();
   const superAdmin = await data.superadminusers.get({ id: user.id });

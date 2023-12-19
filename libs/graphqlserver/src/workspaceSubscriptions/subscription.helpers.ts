@@ -2,13 +2,14 @@ import tables from '@decipad/tables';
 import { Stripe } from 'stripe';
 import { thirdParty } from '@decipad/backend-config';
 import { resource } from '@decipad/backend-resources';
-import {
-  GraphqlContext,
-  ID,
-  WorkspaceSubscriptionRecord,
-} from '@decipad/backendtypes';
+import { GraphqlContext, ID } from '@decipad/backendtypes';
 import { track } from '@decipad/backend-analytics';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import {
+  SubscriptionPaymentStatus,
+  WorkspaceSubscription,
+} from '@decipad/graphqlserver-types';
+import { getDefined } from '@decipad/utils';
 
 const stripeConfig = thirdParty().stripe;
 const stripe = new Stripe(stripeConfig.secretKey, {
@@ -20,7 +21,7 @@ const workspacesResource = resource('workspace');
 export const getWorkspaceSubscription = async (
   workspaceId: string,
   context: GraphqlContext
-): Promise<WorkspaceSubscriptionRecord | undefined> => {
+): Promise<WorkspaceSubscription | null> => {
   await workspacesResource.expectAuthorizedForGraphql({
     context,
     recordId: workspaceId,
@@ -28,7 +29,7 @@ export const getWorkspaceSubscription = async (
   });
 
   const data = await tables();
-  return (
+  const workspaceSubs = (
     await data.workspacesubscriptions.query({
       IndexName: 'byWorkspace',
       KeyConditionExpression: 'workspace_id = :workspace_id',
@@ -37,9 +38,22 @@ export const getWorkspaceSubscription = async (
       },
     })
   ).Items[0];
+
+  if (workspaceSubs == null) {
+    return null;
+  }
+
+  // Cast because the _technical_ type is an enum.
+  return {
+    ...workspaceSubs,
+    customer_id: workspaceSubs.customer_id,
+    paymentStatus: workspaceSubs.paymentStatus as SubscriptionPaymentStatus,
+  };
 };
 
-export const findSubscriptionByWorkspaceId = async (workspaceId: string) => {
+export const findSubscriptionByWorkspaceId = async (
+  workspaceId: string
+): Promise<WorkspaceSubscription> => {
   const data = await tables();
 
   const workspaces = await data.workspacesubscriptions.query({
@@ -54,12 +68,19 @@ export const findSubscriptionByWorkspaceId = async (workspaceId: string) => {
     throw new Error('Workspace not found');
   }
 
-  return workspaces.Items[0];
+  const sub = workspaces.Items[0];
+
+  // Cast because the _technical_ type is an enum.
+  return {
+    ...sub,
+    customer_id: getDefined(sub.customer_id),
+    paymentStatus: sub.paymentStatus as SubscriptionPaymentStatus,
+  };
 };
 
 export const updateStripeIfNeeded = async (
   event: APIGatewayProxyEventV2,
-  subs: WorkspaceSubscriptionRecord,
+  subs: WorkspaceSubscription,
   newQuantity: number
 ) => {
   const subscription = await stripe.subscriptions.retrieve(subs.id);
@@ -81,7 +102,8 @@ export const updateStripeIfNeeded = async (
       stripeSubscriptionId: subscription.id,
       previousQuantity: previousQuantity?.toString(),
       newQuantity: newQuantity.toString(),
-      billingEmail: subs.email,
+      // TODO
+      // billingEmail: subs.email,
     },
   });
 };
@@ -110,8 +132,9 @@ export const cancelSubscriptionFromWorkspaceId = async (
     event: 'Stripe subscription deleted',
     properties: {
       id: subscription.id,
-      workspaceId: subscription.workspace_id,
-      billingEmail: subscription.email,
+      workspaceId: subscription.id,
+      // TODO
+      // billingEmail: subscription.email,
     },
   });
 

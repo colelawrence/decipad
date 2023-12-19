@@ -226,7 +226,7 @@ export type ExternalDataSourceProvider =
 /* Pagination */
 
 export type PageInput = {
-  cursor?: string;
+  cursor?: string | null;
   maxItems: number;
 };
 

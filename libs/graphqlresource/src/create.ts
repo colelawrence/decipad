@@ -1,21 +1,8 @@
-import {
-  ConcreteRecord,
-  GraphqlContext,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { create as createPermission } from '@decipad/services/permissions';
 import { track } from '@decipad/backend-analytics';
-import { Resource } from '.';
 import { requireUser } from './authorization';
-
-export type CreateFunction<
-  GraphqlT extends GraphqlObjectType,
-  CreateInputType
-> = (
-  _: unknown,
-  args: CreateInputType,
-  context: GraphqlContext
-) => Promise<GraphqlT>;
+import { Resource, ResourceResolvers } from './types';
 
 export function create<
   RecordT extends ConcreteRecord,
@@ -24,12 +11,8 @@ export function create<
   UpdateT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateT>
-): CreateFunction<GraphqlT, CreateInputT> {
-  return async function create(
-    _: unknown,
-    input: CreateInputT,
-    context: GraphqlContext
-  ) {
+): ResourceResolvers<RecordT, GraphqlT, CreateInputT, UpdateT>['create'] {
+  return async function create(_, input, context) {
     if (resourceType.beforeCreate) {
       await resourceType.beforeCreate(input, context);
     }

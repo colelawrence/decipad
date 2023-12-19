@@ -3,8 +3,8 @@
 // existing tests very granular
 /* eslint-disable jest/expect-expect */
 
-import { Workspace, Role, RoleInvitation } from '@decipad/backendtypes';
 import { testWithSandbox as test } from '@decipad/backend-test-sandbox';
+import { Role, RoleInvitation, Workspace } from '@decipad/graphqlserver-types';
 
 test('workspaces', (ctx) => {
   const { test: it } = ctx;
@@ -270,15 +270,6 @@ test('workspaces', (ctx) => {
         id: workspace.id,
         name: workspace.name,
         roles: [
-          {
-            id: role.id,
-            name: role.name,
-            users: [
-              {
-                id: 'test user id 2',
-              },
-            ],
-          },
           {
             name: 'Administrator',
             users: [

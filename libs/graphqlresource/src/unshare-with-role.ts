@@ -1,24 +1,8 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type UnshareWithRoleArgs = {
-  id: ID;
-  roleId: ID;
-};
-
-export type UnshareWithRoleFunction = (
-  _: unknown,
-  args: UnshareWithRoleArgs,
-  context: GraphqlContext
-) => Promise<void>;
+import { Resource, ResourceResolvers } from './types';
 
 export function unshareWithRole<
   RecordT extends ConcreteRecord,
@@ -27,12 +11,13 @@ export function unshareWithRole<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): UnshareWithRoleFunction {
-  return async (
-    _: unknown,
-    args: UnshareWithRoleArgs,
-    context: GraphqlContext
-  ) => {
+): ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['unshareWithRole'] {
+  return async (_, args, context) => {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -41,5 +26,6 @@ export function unshareWithRole<
     await data.permissions.delete({
       id: `/users/null/roles/${args.roleId}${resources[0]}`,
     });
+    return true;
   };
 }

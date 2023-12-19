@@ -60,7 +60,7 @@ export type NotebookSharingPopUpProps = Pick<
   readonly snapshots: NotebookMetaDataFragment['snapshots'];
   readonly hasPaywall?: boolean;
   readonly invitedUsers?: UserAccessMetaFragment[] | null;
-  readonly nrOfTeamMembers?: number;
+  readonly nrOfTeamMembers?: number | null;
   readonly manageTeamURL?: string;
   readonly teamName?: string;
   readonly isAdmin?: boolean;

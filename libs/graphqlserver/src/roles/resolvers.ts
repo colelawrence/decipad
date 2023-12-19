@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import arc from '@architect/functions';
 import { nanoid } from 'nanoid';
 import {
   ID,
   GraphqlContext,
-  RoleInput,
   RoleRecord,
-  PermissionType,
   PermissionRecord,
   User,
 } from '@decipad/backendtypes';
@@ -15,6 +14,14 @@ import { timestamp } from '@decipad/backend-utils';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { resource } from '@decipad/backend-resources';
 import { isAuthenticatedAndAuthorized, isAuthorized } from '../authorization';
+import {
+  Resolvers,
+  Role,
+  RoleInvitation,
+  Workspace,
+  User as GQLUser,
+} from '@decipad/graphqlserver-types';
+import { getDefined } from '@decipad/utils';
 
 const { urlBase } = appConfig();
 const { inviteExpirationSeconds } = authConfig();
@@ -124,13 +131,9 @@ async function removeUserFromRole(
   }
 }
 
-export default {
+const resolvers: Resolvers = {
   Mutation: {
-    async createRole(
-      _: unknown,
-      { role }: { role: RoleInput },
-      context: GraphqlContext
-    ): Promise<RoleRecord> {
+    async createRole(_, { role }, context) {
       await workspaces.expectAuthorizedForGraphql({
         context,
         recordId: role.workspaceId,
@@ -145,14 +148,18 @@ export default {
 
       const data = await tables();
       await data.workspaceroles.create(newRole);
-      return newRole;
+      const r = {
+        ...newRole,
+        /* for typescript, other resolvers will take care of this */
+        // users: [],
+        // workspace: {} as any,
+        workspaceId: role.workspaceId,
+      } as unknown as Role;
+
+      return r;
     },
 
-    async removeRole(
-      _: unknown,
-      { roleId }: { roleId: ID },
-      context: GraphqlContext
-    ) {
+    async removeRole(_, { roleId }, context) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -190,15 +197,7 @@ export default {
       return true;
     },
 
-    async inviteUserToRole(
-      _: unknown,
-      {
-        roleId,
-        userId,
-        permission,
-      }: { roleId: ID; userId: ID; permission: PermissionType },
-      context: GraphqlContext
-    ) {
+    async inviteUserToRole(_, { roleId, userId, permission }, context) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -266,14 +265,10 @@ export default {
         },
       });
 
-      return invites;
+      return invites as unknown as Array<RoleInvitation>;
     },
 
-    async removeUserFromRole(
-      _: unknown,
-      { roleId, userId }: { roleId: ID; userId: ID },
-      context: GraphqlContext
-    ) {
+    async removeUserFromRole(_, { roleId, userId }, context) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -294,11 +289,7 @@ export default {
       return true;
     },
 
-    async removeSelfFromRole(
-      _: unknown,
-      { roleId }: { roleId: ID },
-      context: GraphqlContext
-    ) {
+    async removeSelfFromRole(_, { roleId }, context) {
       const data = await tables();
       const role = await data.workspaceroles.get({ id: roleId });
       if (!role) {
@@ -319,16 +310,18 @@ export default {
   },
 
   Role: {
-    async workspace(role: RoleRecord, _: unknown, context: GraphqlContext) {
-      const workspaceResource = `/workspaces/${role.workspace_id}`;
+    async workspace(role, _, context) {
+      const workspaceResource = `/workspaces/${role.workspaceId}`;
       await isAuthenticatedAndAuthorized(workspaceResource, context, 'READ');
 
       const data = await tables();
-      return data.workspaces.get({ id: role.workspace_id });
+      return data.workspaces.get({
+        id: role.workspaceId,
+      }) as unknown as Workspace;
     },
-    async users(role: RoleRecord, _: unknown, context: GraphqlContext) {
+    async users(role, _, context) {
       const roleResource = `/roles/${role.id}`;
-      const workspaceResource = `/workspaces/${role.workspace_id}`;
+      const workspaceResource = `/workspaces/${role.workspaceId}`;
       if (
         !(await isAuthorized(roleResource, context, 'READ')) &&
         !(await isAuthorized(workspaceResource, context, 'ADMIN'))
@@ -356,7 +349,24 @@ export default {
         }
       }
 
-      return users;
+      return users as Array<GQLUser>;
+    },
+  },
+  RoleAccess: {
+    async role(roleAccess) {
+      const data = await tables();
+      const dbRole = await data.workspaceroles.get({ id: roleAccess.roleId });
+      return {
+        ...dbRole,
+        name: getDefined(dbRole).name,
+        id: roleAccess.roleId,
+        // Other resolvers will find this
+        users: [],
+        workspace: {} as any,
+        workspaceId: getDefined(dbRole).workspace_id,
+      } satisfies Role;
     },
   },
 };
+
+export default resolvers;

@@ -1,8 +1,13 @@
-export default {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Resolvers } from '@decipad/graphqlserver-types';
+
+const resolvers: Resolvers = {
   Pageable: {
     // eslint-disable-next-line no-underscore-dangle
-    __resolveType(obj: { gqlType: unknown }) {
-      return obj.gqlType;
+    __resolveType(obj) {
+      return (obj as any).gqlType;
     },
   },
 };
+
+export default resolvers;

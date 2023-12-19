@@ -155,6 +155,10 @@ const installLambdaDependencies = async () => {
   await pExec(join(__dirname, '..', 'apps', 'backend', 'scripts', 'build.mjs'));
 };
 
+const hackyGraphqlBuild = async () => {
+  await pExec(join(__dirname, 'hacky-build-graphql.sh'));
+};
+
 const buildTraditionalLambdas = async () => {
   const { watch, ...buildOptions } = await esBuildOptions(env);
 
@@ -182,6 +186,7 @@ const buildSSRLambdas = async (watch) => {
 };
 
 (async () => {
+  await hackyGraphqlBuild();
   await installLambdaDependencies();
   await buildTraditionalLambdas();
   if (process.env.DECI_SSR) {

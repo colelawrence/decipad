@@ -1,24 +1,9 @@
-import {
-  ConcreteRecord,
-  GraphqlContext,
-  GraphqlObjectType,
-  ID,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { Resource } from '.';
 import { expectAuthenticatedAndAuthorized } from './authorization';
 import { getResources } from './utils/getResources';
-
-export type UnshareWithSecretArgs = {
-  id: ID;
-  secret: string;
-};
-
-export type UnshareWithSecretFunction = (
-  _: unknown,
-  args: UnshareWithSecretArgs,
-  context: GraphqlContext
-) => Promise<boolean>;
+import { Resource, ResourceResolvers } from './types';
+import { getDefined } from '@decipad/utils';
 
 export function unshareWithSecret<
   RecordT extends ConcreteRecord,
@@ -27,12 +12,13 @@ export function unshareWithSecret<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): UnshareWithSecretFunction {
-  return async function doUnshareWithSecret(
-    _: unknown,
-    args: UnshareWithSecretArgs,
-    context: GraphqlContext
-  ) {
+): ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['unshareWithSecret'] {
+  return async function doUnshareWithSecret(_, args, context) {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -49,7 +35,9 @@ export function unshareWithSecret<
                   'resource_uri = :resource AND secret = :secret',
                 ExpressionAttributeValues: {
                   ':resource': resource,
-                  ':secret': args.secret,
+                  ':secret': getDefined(
+                    (args as unknown as { secret: string }).secret
+                  ),
                 },
               })
             ).Items

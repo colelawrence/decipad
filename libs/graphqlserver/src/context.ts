@@ -1,18 +1,13 @@
-import { User } from '@decipad/backendtypes';
 import { authenticate, AuthResult } from '@decipad/services/authentication';
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { debug } from './debug';
+import { GraphqlContext } from '@decipad/graphqlserver-types';
 
 function hasUser(authResult: AuthResult): boolean {
   return !!authResult.user;
 }
 
 export default () =>
-  async ({
-    context,
-  }: {
-    context: { event: APIGatewayProxyEventV2; user: User | undefined };
-  }) => {
+  async ({ context }: { context: GraphqlContext }) => {
     const credentials = await authenticate(context.event);
     const userCred = credentials.find(hasUser);
     if (userCred) {

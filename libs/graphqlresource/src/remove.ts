@@ -1,20 +1,9 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { removeAllPermissionsFor } from '@decipad/services/permissions';
 import { track } from '@decipad/backend-analytics';
 import { expectAuthenticatedAndAuthorized } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type RemoveFunction = (
-  _: unknown,
-  args: { id: ID },
-  context: GraphqlContext
-) => Promise<void>;
+import { Resource, ResourceResolvers } from './types';
 
 export function remove<
   RecordT extends ConcreteRecord,
@@ -23,12 +12,8 @@ export function remove<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): RemoveFunction {
-  return async function remove(
-    _: unknown,
-    args: { id: ID },
-    context: GraphqlContext
-  ) {
+): ResourceResolvers<RecordT, GraphqlT, CreateInputT, UpdateInputT>['remove'] {
+  return async function remove(_, args, context) {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -47,5 +32,7 @@ export function remove<
       },
       context
     );
+
+    return true;
   };
 }

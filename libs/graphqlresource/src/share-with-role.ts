@@ -1,28 +1,9 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-  PermissionType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type ShareWithRoleArgs = {
-  id: ID;
-  roleId: ID;
-  permissionType: PermissionType;
-  canComment?: boolean;
-};
-
-export type ShareWithRoleFunction = (
-  _: unknown,
-  args: ShareWithRoleArgs,
-  context: GraphqlContext
-) => Promise<void>;
+import { Resource, ResourceResolvers } from './types';
 
 export function shareWithRole<
   RecordT extends ConcreteRecord,
@@ -31,12 +12,13 @@ export function shareWithRole<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): ShareWithRoleFunction {
-  return async (
-    _: unknown,
-    args: ShareWithRoleArgs,
-    context: GraphqlContext
-  ) => {
+): ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['shareWithRole'] {
+  return async (_, args, context) => {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -55,7 +37,7 @@ export function shareWithRole<
       resourceUri: resources[0],
       parentResourceUri: resources[1],
       type: args.permissionType,
-      canComment: !!args.canComment,
+      canComment: false,
     };
     if (resourceType.parentResourceUriFromRecord) {
       permission.parentResourceUri =
@@ -63,5 +45,6 @@ export function shareWithRole<
     }
 
     await createResourcePermission(permission);
+    return true;
   };
 }

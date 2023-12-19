@@ -1,39 +1,17 @@
-import type {
-  GraphqlContext,
-  Workspace,
-  WorkspaceSubscriptionRecord,
-} from '@decipad/backendtypes';
-import {
-  findSubscriptionByWorkspaceId,
-  getWorkspaceSubscription,
-  updateStripeIfNeeded,
-} from './subscription.helpers';
-import { getWorkspaceMembersCount } from '../workspaces/workspace.helpers';
+import { getWorkspaceSubscription } from './subscription.helpers';
+import { Resolvers } from '@decipad/graphqlserver-types';
+import { syncWorkspaceSeats } from './syncWorkspaceSeats';
 
-export default {
+const resolvers: Resolvers = {
   Workspace: {
-    async workspaceSubscription(
-      workspace: Workspace,
-      _: unknown,
-      context: GraphqlContext
-    ) {
+    async workspaceSubscription(workspace, _, context) {
       return getWorkspaceSubscription(workspace.id, context);
     },
   },
 
   Mutation: {
-    syncWorkspaceSeats: async (
-      _: unknown,
-      args: { id: string },
-      ctx: GraphqlContext
-    ) => {
-      const workspaceId = args.id;
-      const sub: WorkspaceSubscriptionRecord =
-        await findSubscriptionByWorkspaceId(workspaceId);
-      const newQuantity = await getWorkspaceMembersCount(workspaceId);
-
-      await updateStripeIfNeeded(ctx.event, sub, newQuantity);
-      return sub;
-    },
+    syncWorkspaceSeats,
   },
 };
+
+export default resolvers;

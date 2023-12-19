@@ -1,10 +1,4 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  PermissionType,
-  GraphqlObjectType,
-} from '@decipad/backendtypes';
+import { ID, ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { notify as notifyInvitee } from '@decipad/services/invites';
 import { create as createUser } from '@decipad/services/users';
 import { app } from '@decipad/backend-config';
@@ -12,9 +6,9 @@ import tables from '@decipad/tables';
 import { track, identify } from '@decipad/backend-analytics';
 import { UserInputError } from 'apollo-server-lambda';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
-import { Resource } from '.';
-import { ShareWithUserFunction } from './share-with-user';
 import { getResources } from './utils/getResources';
+import { GraphqlContext, PermissionType } from '@decipad/graphqlserver-types';
+import { Resource, ResourceResolvers } from './types';
 
 export type ShareWithEmailArgs = {
   id: ID;
@@ -37,97 +31,101 @@ export const shareWithEmail = <
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
 ): ((
-  shareWithUser: ShareWithUserFunction<RecordT>
-) => ShareWithEmailFunction<RecordT>) => {
-  return (shareWithUser: ShareWithUserFunction<RecordT>) =>
-    async (
-      _: unknown,
-      args: ShareWithEmailArgs,
-      context: GraphqlContext
-    ): Promise<RecordT> => {
-      if (!resourceType.skipPermissions) {
-        const resources = await getResources(resourceType, args.id);
-        await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
-      }
-      const actingUser = requireUser(context);
+  shareWithUser: ResourceResolvers<
+    RecordT,
+    GraphqlT,
+    CreateInputT,
+    UpdateInputT
+  >['shareWithUser']
+) => ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['shareWithEmail']) => {
+  return (shareWithUser) => async (_, args, context) => {
+    if (!resourceType.skipPermissions) {
+      const resources = await getResources(resourceType, args.id);
+      await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
+    }
+    const actingUser = requireUser(context);
 
-      const data = await resourceType.dataTable();
-      const record = await data.get({ id: args.id });
-      if (!record) {
-        throw new UserInputError(`no such ${resourceType.humanName}`);
-      }
+    const data = await resourceType.dataTable();
+    const record = await data.get({ id: args.id });
+    if (!record) {
+      throw new UserInputError(`no such ${resourceType.humanName}`);
+    }
 
-      const email = args.email.toLowerCase();
-      const emailKeyId = `email:${email}`;
-      const { userkeys, users } = await tables();
-      const emailKey = await userkeys.get({ id: emailKeyId });
+    const email = args.email.toLowerCase();
+    const emailKeyId = `email:${email}`;
+    const { userkeys, users } = await tables();
+    const emailKey = await userkeys.get({ id: emailKeyId });
 
-      const registeredUserId = emailKey?.user_id;
+    const registeredUserId = emailKey?.user_id;
 
-      if (!email.includes('@')) {
-        throw new UserInputError('invalid email');
-      }
+    if (!email.includes('@')) {
+      throw new UserInputError('invalid email');
+    }
 
-      if (actingUser.email === email) {
-        throw new UserInputError('cannot share with yourself');
-      }
+    if (actingUser.email === email) {
+      throw new UserInputError('cannot share with yourself');
+    }
 
-      const user = registeredUserId
-        ? await users.get({ id: registeredUserId })
-        : (
-            await createUser(
-              {
-                email,
-                name: email,
-              },
-              context.event
-            )
-          ).user;
+    const user = registeredUserId
+      ? await users.get({ id: registeredUserId })
+      : (
+          await createUser(
+            {
+              email,
+              name: email,
+            },
+            context.event
+          )
+        ).user;
 
-      if (!user) {
-        // Invariant: if we have a registeredUserId, we should have a user
-        throw new UserInputError(`no such user ${registeredUserId}`);
-      }
+    if (!user) {
+      // Invariant: if we have a registeredUserId, we should have a user
+      throw new UserInputError(`no such user ${registeredUserId}`);
+    }
 
-      await shareWithUser(
-        _,
-        {
-          id: args.id,
-          userId: user.id,
-          permissionType: args.permissionType,
-          canComment: args.canComment,
-        },
-        context
-      );
+    await shareWithUser(
+      _,
+      {
+        id: args.id,
+        userId: user.id,
+        permissionType: args.permissionType,
+      },
+      context
+    );
 
-      await notifyInvitee(context.event, {
-        user,
+    await notifyInvitee(context.event, {
+      user,
+      email,
+      invitedByUser: actingUser,
+      isRegistered: registeredUserId != null,
+      resourceType,
+      resourceLink: getResourceUrl(resourceType.resourceTypeName, args.id),
+      resourceName:
+        'name' in record ? record.name : `<Random ${resourceType.humanName}>`,
+    });
+    await identify(context.event, actingUser.id, {
+      email: actingUser.email,
+      fullName: actingUser.name,
+    });
+    await track(context.event, {
+      event: 'share with email',
+      properties: {
         email,
-        invitedByUser: actingUser,
+        userId: actingUser.id,
+        resourceType: resourceType.humanName,
+        resourceId: args.id,
+        permissionType: args.permissionType,
         isRegistered: registeredUserId != null,
-        resourceType,
-        resourceLink: getResourceUrl(resourceType.resourceTypeName, args.id),
-        resourceName:
-          'name' in record ? record.name : `<Random ${resourceType.humanName}>`,
-      });
-      await identify(context.event, actingUser.id, {
-        email: actingUser.email,
-        fullName: actingUser.name,
-      });
-      await track(context.event, {
-        event: 'share with email',
-        properties: {
-          email,
-          userId: actingUser.id,
-          resourceType: resourceType.humanName,
-          resourceId: args.id,
-          permissionType: args.permissionType,
-          isRegistered: registeredUserId != null,
-        },
-      });
+      },
+    });
 
-      return record;
-    };
+    return resourceType.toGraphql(record);
+  };
 };
 
 const resourceTypeNameRootPathComponent: Record<string, string> = {

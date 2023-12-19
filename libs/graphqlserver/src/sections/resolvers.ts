@@ -1,49 +1,35 @@
-import stringify from 'json-stringify-safe';
-import {
-  GraphqlContext,
-  ID,
-  SectionInput,
-  SectionRecord,
-  Workspace,
-} from '@decipad/backendtypes';
-import { subscribe } from '@decipad/services/pubsub';
+import { SectionRecord } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { byAsc } from '@decipad/utils';
+import { byAsc, getDefined } from '@decipad/utils';
 import { timestamp } from '@decipad/backend-utils';
 import Boom from '@hapi/boom';
-import assert from 'assert';
 import { nanoid } from 'nanoid';
 import { resource } from '@decipad/backend-resources';
-import { isAuthenticatedAndAuthorized, requireUser } from '../authorization';
+import { isAuthenticatedAndAuthorized } from '../authorization';
+import { Resolvers, Section } from '@decipad/graphqlserver-types';
 
 const notebooks = resource('notebook');
 
-const resolvers = {
+const resolvers: Resolvers = {
   Mutation: {
-    async addSectionToWorkspace(
-      _: unknown,
-      { workspaceId, section }: { workspaceId: ID; section: SectionInput },
-      context: GraphqlContext
-    ): Promise<SectionRecord> {
+    async addSectionToWorkspace(_, { workspaceId, section }, context) {
       const workspaceResource = `/workspaces/${workspaceId}`;
       await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
       const data = await tables();
-      const newSection = {
-        ...section,
+      const newSection: SectionRecord = {
+        name: getDefined(section.name),
+        color: getDefined(section.color),
         id: nanoid(),
         workspace_id: workspaceId,
         createdAt: timestamp(),
       };
+
       await data.sections.put(newSection);
-      return newSection;
+      return newSection as Section;
     },
 
-    async addNotebookToSection(
-      _: unknown,
-      { sectionId, notebookId }: { sectionId: ID; notebookId: ID },
-      context: GraphqlContext
-    ) {
+    async addNotebookToSection(_, { sectionId, notebookId }, context) {
       await notebooks.expectAuthorizedForGraphql({
         context,
         recordId: notebookId,
@@ -79,13 +65,10 @@ const resolvers = {
       };
 
       await data.pads.put(toUpdate);
+      return true;
     },
 
-    async removeSectionFromWorkspace(
-      _: unknown,
-      { workspaceId, sectionId }: { workspaceId: ID; sectionId: ID },
-      context: GraphqlContext
-    ) {
+    async removeSectionFromWorkspace(_, { workspaceId, sectionId }, context) {
       const workspaceResource = `/workspaces/${workspaceId}`;
       await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
 
@@ -95,13 +78,9 @@ const resolvers = {
     },
 
     async updateSectionInWorkspace(
-      _: unknown,
-      {
-        workspaceId,
-        sectionId,
-        section,
-      }: { workspaceId: ID; sectionId: ID; section: SectionInput },
-      context: GraphqlContext
+      _,
+      { workspaceId, sectionId, section },
+      context
     ) {
       const workspaceResource = `/workspaces/${workspaceId}`;
       await isAuthenticatedAndAuthorized(workspaceResource, context, 'WRITE');
@@ -114,35 +93,15 @@ const resolvers = {
         ...section,
         workspace_id: workspaceId,
         id: sectionId,
-      };
+      } as SectionRecord;
 
       await data.sections.put(toUpdate);
-    },
-  },
-
-  Subscription: {
-    sectionsChanged: {
-      async subscribe(
-        _: unknown,
-        { workspaceId }: { workspaceId: ID },
-        context: GraphqlContext
-      ) {
-        const user = requireUser(context);
-        assert(context.subscriptionId, 'no subscriptionId in context');
-        assert(context.connectionId, 'no connectionId in context');
-        return subscribe({
-          subscriptionId: context.subscriptionId,
-          connectionId: context.connectionId,
-          user,
-          type: 'sectionsChanged',
-          filter: stringify({ workspaceId }),
-        });
-      },
+      return true;
     },
   },
 
   Workspace: {
-    async sections(workspace: Workspace): Promise<SectionRecord[]> {
+    async sections(workspace) {
       const data = await tables();
 
       const query = {
@@ -155,7 +114,7 @@ const resolvers = {
       const res = (await data.sections.query(query)).Items.sort(
         byAsc('createdAt')
       );
-      return res;
+      return res as Array<Section>;
     },
   },
 };

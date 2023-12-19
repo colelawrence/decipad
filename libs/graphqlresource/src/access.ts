@@ -1,48 +1,9 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-  PermissionType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import { getDefined } from '@decipad/utils';
-import { Resource } from '.';
 import by from './utils/by';
-
-export interface UserAccess {
-  user_id: ID;
-  permission: PermissionType;
-  canComment: boolean;
-  createdAt?: number;
-}
-
-export interface RoleAccess {
-  role_id: ID;
-  permission: PermissionType;
-  canComment: boolean;
-  createdAt?: number;
-}
-
-export interface SecretAccess {
-  secret: string;
-  permission: PermissionType;
-  canComment: boolean;
-  createdAt?: number;
-}
-
-export interface Access {
-  id: ID;
-  roles?: RoleAccess[];
-  users?: UserAccess[];
-  secrets?: SecretAccess[];
-}
-
-export type AccessFunction<RecordT extends ConcreteRecord> = (
-  parent: RecordT,
-  _: unknown,
-  context: GraphqlContext
-) => Promise<Access>;
+import { Resource, ResourceResolvers } from './types';
+import { ResourceAccess } from '@decipad/graphqlserver-types';
 
 export function access<
   RecordT extends ConcreteRecord,
@@ -51,9 +12,11 @@ export function access<
   UpdateT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateT, UpdateT>
-): AccessFunction<RecordT> {
-  return async (parent: RecordT): Promise<Access> => {
-    const resource = `/${resourceType.resourceTypeName}/${parent.id}`;
+): ResourceResolvers<RecordT, GraphqlT, CreateT, UpdateT>['access'] {
+  return async (parent) => {
+    const resource = `/${resourceType.resourceTypeName}/${getDefined(
+      (parent as { id: string }).id
+    )}`;
     const data = await tables();
     const permissions = (
       await data.permissions.query({
@@ -78,7 +41,7 @@ export function access<
     const userAccesses = permissions
       .filter((p) => p.user_id !== 'null' && p.role_id === 'null')
       .map((p) => ({
-        user_id: p.user_id,
+        userId: p.user_id,
         permission: p.type,
         canComment: p.can_comment,
         createdAt: p.createdAt,
@@ -99,10 +62,10 @@ export function access<
       .sort(by('permission'));
 
     return {
-      id: parent.id,
+      id: getDefined((parent as { id: string }).id),
       roles: roleAccesses,
       users: userAccesses,
       secrets: secretAccesses,
-    };
+    } as unknown as ResourceAccess;
   };
 }

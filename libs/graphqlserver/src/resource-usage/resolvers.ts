@@ -1,17 +1,17 @@
-import { User, Workspace } from '@decipad/backendtypes';
-import { getAiUsage, FrontendAiUsageRecord } from './queries.helpers';
+import { getAiUsage } from './queries.helpers';
+import { Resolvers } from '@decipad/graphqlserver-types';
 
-export default {
+const resolvers: Resolvers = {
   User: {
-    async resourceUsages(user: User): Promise<Array<FrontendAiUsageRecord>> {
+    async resourceUsages(user) {
       return getAiUsage('users', user.id);
     },
   },
   Workspace: {
-    async resourceUsages(
-      workspace: Workspace
-    ): Promise<Array<FrontendAiUsageRecord>> {
+    async resourceUsages(workspace) {
       return getAiUsage('workspaces', workspace.id);
     },
   },
 };
+
+export default resolvers;

@@ -1,29 +1,10 @@
-import {
-  ID,
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-  PermissionType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { create as createResourcePermission } from '@decipad/services/permissions';
 import { UserInputError } from 'apollo-server-lambda';
 import tables from '@decipad/tables';
 import { expectAuthenticatedAndAuthorized, requireUser } from './authorization';
-import { Resource } from '.';
 import { getResources } from './utils/getResources';
-
-export type ShareWithUserArgs = {
-  id: ID;
-  userId: ID;
-  permissionType: PermissionType;
-  canComment?: boolean;
-};
-
-export type ShareWithUserFunction<RecordT extends ConcreteRecord> = (
-  _: unknown,
-  args: ShareWithUserArgs,
-  context: GraphqlContext
-) => Promise<RecordT>;
+import { Resource, ResourceResolvers } from './types';
 
 export function shareWithUser<
   RecordT extends ConcreteRecord,
@@ -32,12 +13,13 @@ export function shareWithUser<
   UpdateInputT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateInputT, UpdateInputT>
-): ShareWithUserFunction<RecordT> {
-  return async (
-    _: unknown,
-    args: ShareWithUserArgs,
-    context: GraphqlContext
-  ) => {
+): ResourceResolvers<
+  RecordT,
+  GraphqlT,
+  CreateInputT,
+  UpdateInputT
+>['shareWithUser'] {
+  return async (_, args, context) => {
     const resources = await getResources(resourceType, args.id);
     if (!resourceType.skipPermissions) {
       await expectAuthenticatedAndAuthorized(resources, context, 'ADMIN');
@@ -77,7 +59,7 @@ export function shareWithUser<
         resourceUri: resources[0],
         parentResourceUri: resources[1],
         type: args.permissionType,
-        canComment: !!args.canComment,
+        canComment: false,
       };
       if (resourceType.parentResourceUriFromRecord) {
         permission.parentResourceUri =
@@ -87,6 +69,6 @@ export function shareWithUser<
       await createResourcePermission(permission);
     }
 
-    return record;
+    return resourceType.toGraphql(record);
   };
 }

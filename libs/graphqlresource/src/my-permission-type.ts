@@ -1,18 +1,8 @@
-import {
-  GraphqlContext,
-  ConcreteRecord,
-  GraphqlObjectType,
-  PermissionType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
-import { Resource } from '.';
 import { maximumPermissionType } from './maximumPermissionType';
-
-export type MyPermissionTypeFunction<RecordT extends ConcreteRecord> = (
-  parent: RecordT,
-  _: unknown,
-  context: GraphqlContext
-) => Promise<PermissionType | undefined>;
+import { Resource, ResourceResolvers } from './types';
+import { getDefined } from '@decipad/utils';
 
 export function myPermissionType<
   RecordT extends ConcreteRecord,
@@ -21,13 +11,11 @@ export function myPermissionType<
   UpdateT
 >(
   resourceType: Resource<RecordT, GraphqlT, CreateT, UpdateT>
-): MyPermissionTypeFunction<RecordT> {
-  return async (
-    parent: RecordT,
-    _: unknown,
-    context: GraphqlContext
-  ): Promise<PermissionType | undefined> => {
-    const resource = `/${resourceType.resourceTypeName}/${parent.id}`;
+): ResourceResolvers<RecordT, GraphqlT, CreateT, UpdateT>['myPermissionType'] {
+  return async (parent, _, context) => {
+    const id = getDefined((parent as { id: string }).id);
+
+    const resource = `/${resourceType.resourceTypeName}/${id}`;
     const data = await tables();
     const { user } = context;
     const secret =

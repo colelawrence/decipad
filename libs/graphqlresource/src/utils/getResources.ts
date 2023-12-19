@@ -1,7 +1,7 @@
 import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { UserInputError } from 'apollo-server-lambda';
 import { getDefined } from '@decipad/utils';
-import { Resource } from '..';
+import { Resource } from '../types';
 
 export const getResources = async <
   DataTableType extends ConcreteRecord,

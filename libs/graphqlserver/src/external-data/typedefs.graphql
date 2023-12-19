@@ -1,0 +1,95 @@
+enum ExternalProvider {
+  decipad
+  gsheets
+  csv
+  json
+  postgresql
+  mysql
+  oracledb
+  cockroachdb
+  redshift
+  mariadb
+  mssql
+  notion
+}
+
+type ExternalKey {
+  id: ID!
+  lastError: String
+  createdAt: DateTime!
+  expiresAt: DateTime
+  lastUsedAt: DateTime
+}
+
+input ExternalDataSourceCreateInput {
+  name: String!
+  workspace_id: ID
+  padId: ID
+  provider: ExternalProvider!
+  externalId: String!
+  dataSourceName: String
+}
+
+input ExternalDataSourceUpdateInput {
+  name: String
+  dataSourceName: String
+  externalId: String
+}
+
+type ExternalDataSource {
+  id: ID!
+  name: String!
+  dataSourceName: String
+  workspace_id: ID
+  padId: ID
+  provider: ExternalProvider!
+  dataUrl: String
+  authUrl: String
+  externalId: String
+  access: ResourceAccess!
+  keys: [ExternalKey!]!
+}
+
+extend type Query {
+  getExternalDataSource(id: ID!): ExternalDataSource!
+  getExternalDataSources(notebookId: ID!, page: PageInput!): PagedResult!
+  getExternalDataSourcesWorkspace(
+    workspaceId: ID!
+    page: PageInput!
+  ): PagedResult!
+}
+
+extend type Mutation {
+  createExternalDataSource(
+    dataSource: ExternalDataSourceCreateInput!
+  ): ExternalDataSource
+
+  removeExternalDataSource(id: ID!): Boolean
+
+  updateExternalDataSource(
+    id: ID!
+    dataSource: ExternalDataSourceUpdateInput!
+  ): ExternalDataSource
+
+  shareExternalDataSourceWithRole(
+    id: ID!
+    roleId: ID!
+    permissionType: PermissionType!
+  ): Boolean
+
+  unshareExternalDataSourceWithRole(id: ID!, roleId: ID!): Boolean
+
+  shareExternalDataSourceWithUser(
+    id: ID!
+    userId: ID!
+    permissionType: PermissionType!
+  ): ExternalDataSource
+
+  unshareExternalDataSourceWithUser(id: ID!, userId: ID!): ExternalDataSource!
+
+  shareExternalDataSourceWithEmail(
+    id: ID!
+    email: String!
+    permissionType: PermissionType!
+  ): ExternalDataSource
+}

@@ -1,128 +1,21 @@
-import {
-  ConcreteRecord,
-  DataTable,
-  GraphqlContext,
-  GraphqlObjectType,
-  ID,
-  PermissionType,
-} from '@decipad/backendtypes';
+import { ConcreteRecord, GraphqlObjectType } from '@decipad/backendtypes';
 import { identity } from '@decipad/utils';
-import { access, Access } from './access';
+import { access } from './access';
 import { create } from './create';
 import { getById } from './get-by-id';
 import { myPermissionType } from './my-permission-type';
 import { remove } from './remove';
-import { shareWithEmail, ShareWithEmailArgs } from './share-with-email';
-import { shareWithRole, ShareWithRoleArgs } from './share-with-role';
-import { shareWithSecret, ShareWithSecretArgs } from './share-with-secret';
-import { shareWithUser, ShareWithUserArgs } from './share-with-user';
-import { unshareWithRole, UnshareWithRoleArgs } from './unshare-with-role';
-import {
-  unshareWithSecret,
-  UnshareWithSecretArgs,
-} from './unshare-with-secret';
-import { unshareWithUser, UnshareWithUserArgs } from './unshare-with-user';
+import { shareWithEmail } from './share-with-email';
+import { shareWithRole } from './share-with-role';
+import { shareWithSecret } from './share-with-secret';
+import { shareWithUser } from './share-with-user';
+import { unshareWithRole } from './unshare-with-role';
+import { unshareWithSecret } from './unshare-with-secret';
+import { unshareWithUser } from './unshare-with-user';
 import { update } from './update';
+import { Resource, ResourceResolvers } from './types';
 
 export { maximumPermissionType } from './maximumPermissionType';
-
-export interface Resource<
-  DataTableType extends ConcreteRecord,
-  GraphqlType extends GraphqlObjectType,
-  CreateInputType,
-  UpdateInputType
-> {
-  resourceTypeName: string;
-  humanName: string;
-  dataTable: () => Promise<DataTable<DataTableType>>;
-  isPublic?: (d: DataTableType) => boolean;
-  toGraphql: (d: DataTableType) => GraphqlType;
-  newRecordFrom: (d: CreateInputType) => DataTableType;
-  updateRecordFrom: (
-    old: DataTableType,
-    input: UpdateInputType
-  ) => DataTableType;
-  beforeCreate?: (
-    args: CreateInputType,
-    context: GraphqlContext
-  ) => Promise<void>;
-  parentResourceUriFromCreateInput?: (
-    args: CreateInputType
-  ) => string | undefined;
-  parentResourceUriFromRecord?: (args: DataTableType) => string | undefined;
-  pubSubChangeTopic?: string;
-  skipPermissions?: boolean;
-  delegateAccessToParentResource?: boolean;
-}
-
-export interface ResourceResolvers<DataT, GraphqlT, CreateT, UpdateT> {
-  getById: (
-    _: unknown,
-    { id }: { id: ID },
-    context: GraphqlContext
-  ) => Promise<GraphqlT | undefined>;
-  create: (
-    _: unknown,
-    create: CreateT,
-    context: GraphqlContext
-  ) => Promise<GraphqlT>;
-  update: (
-    _: unknown,
-    update: { id: ID } & UpdateT,
-    context: GraphqlContext
-  ) => Promise<GraphqlT>;
-  remove: (
-    _: unknown,
-    { id }: { id: ID },
-    context: GraphqlContext
-  ) => Promise<void>;
-  shareWithUser: (
-    _: unknown,
-    args: ShareWithUserArgs,
-    context: GraphqlContext
-  ) => Promise<DataT>;
-  unshareWithUser: (
-    _: unknown,
-    args: UnshareWithUserArgs,
-    context: GraphqlContext
-  ) => Promise<DataT>;
-  shareWithRole: (
-    _: unknown,
-    args: ShareWithRoleArgs,
-    context: GraphqlContext
-  ) => Promise<void>;
-  unshareWithRole: (
-    _: unknown,
-    args: UnshareWithRoleArgs,
-    context: GraphqlContext
-  ) => Promise<void>;
-  shareWithEmail: (
-    _: unknown,
-    args: ShareWithEmailArgs,
-    context: GraphqlContext
-  ) => Promise<DataT>;
-  shareWithSecret: (
-    _: unknown,
-    args: ShareWithSecretArgs,
-    context: GraphqlContext
-  ) => Promise<string>;
-  unshareWithSecret: (
-    _: unknown,
-    args: UnshareWithSecretArgs,
-    context: GraphqlContext
-  ) => Promise<boolean>;
-  access: (
-    parent: DataT,
-    _: unknown,
-    context: GraphqlContext
-  ) => Promise<Access>;
-  myPermissionType: (
-    parent: DataT,
-    _: unknown,
-    context: GraphqlContext
-  ) => Promise<PermissionType | undefined>;
-  toGraphql: (d: DataT) => GraphqlT;
-}
 
 export default function createGraphqlResource<
   DataTableT extends ConcreteRecord,

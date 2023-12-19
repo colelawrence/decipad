@@ -1,0 +1,34 @@
+input UserInput {
+  name: String
+  description: String
+  hideChecklist: Boolean
+  onboarded: Boolean
+  image: String
+}
+
+type UserAccess {
+  # Helps with resolvers
+  userId: ID
+  user: User
+  permission: PermissionType!
+  canComment: Boolean!
+}
+
+input GoalFulfilmentInput {
+  goalName: String!
+}
+
+input UsernameInput {
+  username: String!
+}
+
+extend type Query {
+  self: User
+  selfFulfilledGoals: [String!]!
+}
+
+extend type Mutation {
+  updateSelf(props: UserInput!): User!
+  fulfilGoal(props: GoalFulfilmentInput!): Boolean! ## returns false if already fulfilled
+  setUsername(props: UsernameInput!): Boolean! ## returns false if another user with that name already exists
+}

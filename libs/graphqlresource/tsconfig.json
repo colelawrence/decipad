@@ -8,6 +8,7 @@
     { "path": "../backendtypes" },
     { "path": "../services" },
     { "path": "../tables" },
-    { "path": "../backend-analytics" }
+    { "path": "../backend-analytics" },
+    { "path": "../graphqlserver-types" }
   ]
 }

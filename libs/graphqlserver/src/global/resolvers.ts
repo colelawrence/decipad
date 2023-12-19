@@ -1,41 +1,37 @@
-import {
-  GraphqlContext,
-  PermissionRecord,
-  User,
-  UserRecord,
-} from '@decipad/backendtypes';
+import { Resolvers, User } from '@decipad/graphqlserver-types';
 import tables from '@decipad/tables';
+import { getDefined } from '@decipad/utils';
 import md5 from 'md5';
 
 const maskName = (name: string): string => {
   return name.slice(0, 2);
 };
 
-export default {
+const resolvers: Resolvers = {
   Query: {
-    me(_: unknown, __: unknown, context: GraphqlContext): User | undefined {
-      return context.user;
+    me(_, __, context) {
+      return context.user as User;
     },
   },
 
   Permission: {
-    async user(permission: PermissionRecord): Promise<User | undefined> {
+    async user(permission) {
       const data = await tables();
-      return data.users.get({ id: permission.user_id });
+      return getDefined(
+        await data.users.get({ id: permission.user.id })
+      ) as User;
     },
-    async givenBy(permission: PermissionRecord): Promise<User | undefined> {
+    async givenBy(permission) {
       const data = await tables();
-      return data.users.get({ id: permission.given_by_user_id });
+      return getDefined(
+        await data.users.get({ id: permission.user.id })
+      ) as User;
     },
   },
   User: {
-    async username(
-      _: unknown,
-      __: unknown,
-      context: GraphqlContext
-    ): Promise<string | undefined> {
+    async username(_, __, context) {
       if (!context.user) {
-        return;
+        return '';
       }
 
       const data = await tables();
@@ -50,7 +46,7 @@ export default {
       ).Items.filter((key) => key.id.startsWith('username:'));
 
       if (userKeys.length === 0) {
-        return;
+        return '';
       }
 
       const [userKey] = userKeys;
@@ -58,16 +54,12 @@ export default {
       return username;
     },
     // This represents the email hash to be used by gravatar component
-    async image(user: UserRecord): Promise<string | undefined> {
+    async image(user) {
       const { email } = user;
 
-      return email ? md5(email, { encoding: 'binary' }) : undefined;
+      return email ? md5(email, { encoding: 'binary' }) : '';
     },
-    async name(
-      user: UserRecord,
-      _: unknown,
-      context: GraphqlContext
-    ): Promise<string | undefined> {
+    async name(user, _, context) {
       const { name } = user;
 
       if (!context.readingModePermission) {
@@ -76,16 +68,12 @@ export default {
 
       return maskName(name);
     },
-    async email(
-      user: UserRecord,
-      _: unknown,
-      context: GraphqlContext
-    ): Promise<string | undefined> {
+    async email(user, _, context) {
       const { email } = user;
 
-      return email && !context.readingModePermission ? email : undefined;
+      return email && !context.readingModePermission ? email : '';
     },
-    async emailValidatedAt(user: UserRecord): Promise<Date | undefined> {
+    async emailValidatedAt(user) {
       const data = await tables();
       const userKeys = (
         await data.userkeys.query({
@@ -108,3 +96,4 @@ export default {
     },
   },
 };
+export default resolvers;

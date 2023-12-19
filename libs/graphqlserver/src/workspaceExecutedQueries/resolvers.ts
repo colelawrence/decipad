@@ -1,24 +1,34 @@
-import { GraphqlContext, Workspace } from '@decipad/backendtypes';
+import { WorkspaceExecutedQueryRecord } from '@decipad/backendtypes';
 import {
   incrementQueryCount,
   getWorkspaceExecutedQuery,
 } from './queries.helpers';
+import {
+  Resolvers,
+  WorkspaceExecutedQuery,
+} from '@decipad/graphqlserver-types';
 
-export default {
+function workspaceExecutedQueryRecordToGraphql(
+  record: WorkspaceExecutedQueryRecord | undefined
+): WorkspaceExecutedQuery | null {
+  if (!record) return null;
+  return record as WorkspaceExecutedQuery;
+}
+
+const resolvers: Resolvers = {
   Workspace: {
-    async workspaceExecutedQuery(workspace: Workspace) {
-      return getWorkspaceExecutedQuery(workspace.id);
+    async workspaceExecutedQuery(workspace) {
+      return workspaceExecutedQueryRecordToGraphql(
+        await getWorkspaceExecutedQuery(workspace.id)
+      );
     },
   },
 
   Mutation: {
-    incrementQueryCount: async (
-      _: unknown,
-      args: { id: string },
-      context: GraphqlContext
-    ) => {
-      const workspaceId = args.id;
-      return incrementQueryCount(context.event, workspaceId);
+    incrementQueryCount: async (_, { id }, context) => {
+      return incrementQueryCount(context.event, id);
     },
   },
 };
+
+export default resolvers;

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint decipad/css-prop-named-variable: 0 */
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -8,7 +9,7 @@ import { UserAccessMetaFragment } from '@decipad/graphql-client';
 
 type CollabMembersRightsProps = {
   readonly usersWithAccess?: UserAccessMetaFragment[] | null;
-  readonly nrOfTeamMembers?: number;
+  readonly nrOfTeamMembers?: number | null;
   readonly teamName?: string;
   readonly manageTeamURL?: string;
   readonly onRemoveCollaborator?: (userId: string) => void;
@@ -34,6 +35,9 @@ export const CollabMembersRights: FC<CollabMembersRightsProps> = ({
   onChangePermission = noop,
   disabled = false,
 }) => {
+  if (nrOfTeamMembers == null) {
+    nrOfTeamMembers = 0;
+  }
   if (!usersWithAccess?.length) {
     return null;
   }

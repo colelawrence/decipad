@@ -50,9 +50,57 @@ const addSectionToItsWorkspace = (
   );
 };
 
+/**
+ * Returns workspace index and pad index as a tuple type.
+ * or undefined if any aren't found.
+ *
+ * Useful when you want to get a workspace based on a padId.
+ */
+const getWorkspaceIndexAndPadIndex = (
+  workspaces: Array<Workspace>,
+  padId: string
+): [number, number] | undefined => {
+  // The updatePad doesnt know about the workspace of the pad.
+  // So we must search workspaces until we find the pad we want.
+  // O(n^2) but most users only have 1 workspace, and either way
+  // number of workspaces is usually small.
+
+  let workspaceIndex: number | undefined;
+  let padIndex: number | undefined;
+
+  outerLoop: for (let i = 0; i < workspaces.length; i += 1) {
+    const workspace = workspaces[i];
+    for (let j = 0; j < workspace.pads.items.length; j += 1) {
+      const pad = workspace.pads.items[j];
+      if (pad.id === padId) {
+        workspaceIndex = i;
+        padIndex = j;
+        break outerLoop;
+      }
+    }
+  }
+
+  if (workspaceIndex == null) return undefined;
+  if (padIndex == null) return undefined;
+
+  return [workspaceIndex, padIndex];
+};
+
+//
+// Important that we include section ID as a composite key,
+// otherwise we will not regiser that notebooks are part of sections.
+//
+// This is likely a misunderstaing of Urql cache on my part, but
+// until I figure it out we need to have this as a key.
+//
+const getPadId = (pad: Pad) => `${pad.id}-section-${pad.sectionId}`;
+
 export const graphCacheConfig: GraphCacheConfig = {
   schema: schema as GraphCacheConfig['schema'],
   keys: {
+    Pad(data) {
+      return getPadId(data as Pad);
+    },
     UserAccess(data) {
       return data.user?.id ?? null;
     },
@@ -108,7 +156,7 @@ export const graphCacheConfig: GraphCacheConfig = {
       importPad: (result, _args, cache) => {
         addNotebookToItsWorkspace(cache, result.importPad as Pad);
       },
-      createOrUpdateSnapshot(_result, args, cache) {
+      createOrUpdateSnapshot(_result, { params: args }, cache) {
         if (typeof args.remoteState !== 'string') return;
 
         cache.updateQuery<GetNotebookMetaQuery>(
@@ -139,6 +187,12 @@ export const graphCacheConfig: GraphCacheConfig = {
         );
       },
       updatePad: (_result, args, cache) => {
+        //
+        // Updating Pad!
+        // - The workspace is aware of pads by `GetWorkspaces` query.
+        // - Therefore, we need to update both the notebook query and this workspace query.
+        //
+
         cache.updateQuery<GetNotebookByIdQuery>(
           {
             query: GetNotebookByIdDocument,
@@ -157,21 +211,30 @@ export const graphCacheConfig: GraphCacheConfig = {
             return data;
           }
         );
-        cache.updateQuery<GetNotebookMetaQuery>(
+
+        cache.updateQuery<GetWorkspacesQuery>(
           {
-            query: GetNotebookMetaDocument,
-            variables: {
-              id: args.id,
-            },
+            query: GetWorkspacesDocument,
           },
           (data) => {
-            if (!data?.getPadById) return data;
+            if (!data) return data;
+
+            const indexes = getWorkspaceIndexAndPadIndex(
+              data.workspaces as Array<Workspace>,
+              args.id.toString()
+            );
+
+            if (!indexes) return data;
+            const [workspaceIndex, padIndex] = indexes;
 
             for (const [k, v] of Object.entries(args.pad)) {
               if (v != null) {
-                data.getPadById[k as keyof typeof data.getPadById] = v;
+                data.workspaces[workspaceIndex].pads.items[padIndex][
+                  k as keyof typeof data.workspaces[number]['pads']['items'][number]
+                ] = v;
               }
             }
+
             return data;
           }
         );
@@ -195,7 +258,26 @@ export const graphCacheConfig: GraphCacheConfig = {
         );
       },
       removePad: (_result, args, cache) => {
-        cache.invalidate({ __typename: 'Pad', id: args.id });
+        cache.updateQuery<GetWorkspacesQuery>(
+          {
+            query: GetWorkspacesDocument,
+          },
+          (data) => {
+            if (!data) return data;
+
+            const indexes = getWorkspaceIndexAndPadIndex(
+              data.workspaces as Array<Workspace>,
+              args.id.toString()
+            );
+
+            if (!indexes) return data;
+            const [workspaceIndex, padIndex] = indexes;
+
+            data.workspaces[workspaceIndex].pads.items.splice(padIndex, 1);
+
+            return data;
+          }
+        );
       },
       movePad: (_result, args, cache) => {
         cache.updateQuery<GetWorkspacesQuery>(

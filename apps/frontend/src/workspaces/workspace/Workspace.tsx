@@ -242,7 +242,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                     <WorkspaceHero
                       name={currentWorkspace.name}
                       isPremium={!!currentWorkspace.isPremium}
-                      membersCount={currentWorkspace.membersCount}
+                      membersCount={currentWorkspace.membersCount ?? 1}
                       onCreateNotebook={handleCreateNotebook}
                       membersHref={currentWorkspaceRoute.members({}).$}
                     />

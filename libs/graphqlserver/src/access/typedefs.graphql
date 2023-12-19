@@ -1,0 +1,6 @@
+type ResourceAccess {
+  # ID is the same as the parent ID.
+  id: ID!
+  roles: [RoleAccess!]!
+  users: [UserAccess!]!
+}

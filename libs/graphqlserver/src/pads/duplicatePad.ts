@@ -1,5 +1,4 @@
 import stringify from 'json-stringify-safe';
-import { GraphqlContext, ID, Pad } from '@decipad/backendtypes';
 import tables from '@decipad/tables';
 import {
   create as createPad2,
@@ -17,6 +16,8 @@ import { ELEMENT_TITLE, RootDocument } from '@decipad/editor-types';
 import { nanoid } from 'nanoid';
 import Boom from '@hapi/boom';
 import { getNodeString } from '@udecode/plate-common';
+import { MutationResolvers } from '@decipad/graphqlserver-types';
+import { padResource } from './padResource';
 
 const notebooks = resource('notebook');
 const PUBLISHED_SNAPSHOT_NAME = 'Published 1';
@@ -89,15 +90,11 @@ async function getNotebookContent(
   return [publishedDoc.doc, getNodeString(publishedDoc.doc.children[0])];
 }
 
-export const duplicatePad = async (
-  _: unknown,
-  {
-    id,
-    document: _document,
-    targetWorkspace,
-  }: { id: ID; document?: string; targetWorkspace?: string },
-  context: GraphqlContext
-): Promise<Pad> => {
+export const duplicatePad: MutationResolvers['duplicatePad'] = async (
+  _,
+  { id, document: _document, targetWorkspace },
+  context
+) => {
   const user = loadUser(context);
   if (!user) {
     throw new ForbiddenError('Not signed in');
@@ -183,11 +180,16 @@ export const duplicatePad = async (
 
   const document = _document != null ? _document : stringify(doc);
 
-  return importNotebookContent({
+  const importedNotebook = await importNotebookContent({
     workspaceId,
     source: document,
     user,
     pad: clonedPad,
     replaceList,
   });
+
+  // Graphql types mismatch the DB types here.
+  // But the mismatch happens because of nested properties
+  // and are resolved using their own resolvers.
+  return padResource.toGraphql(importedNotebook);
 };

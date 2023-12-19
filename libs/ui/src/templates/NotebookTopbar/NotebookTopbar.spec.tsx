@@ -118,8 +118,10 @@ describe('Notebook Topbar', () => {
             name: 'name',
             myPermissionType: PermissionType.Read,
             snapshots: [],
+            createdAt: 0,
             access: {
               id: 'id',
+              users: [],
             },
           }}
         />
@@ -136,8 +138,10 @@ describe('Notebook Topbar', () => {
             name: 'name',
             myPermissionType: PermissionType.Admin,
             snapshots: [],
+            createdAt: 0,
             access: {
               id: 'id',
+              users: [],
             },
           }}
         />
@@ -157,8 +161,10 @@ it('renders well for writers', () => {
           name: 'name',
           myPermissionType: PermissionType.Write,
           snapshots: [],
+          createdAt: 0,
           access: {
             id: 'id',
+            users: [],
           },
         }}
       />

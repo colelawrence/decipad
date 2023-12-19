@@ -1,10 +1,3 @@
-import {
-  GraphqlContext,
-  Pad,
-  User,
-  Attachment,
-  FileAttachmentRecord,
-} from '@decipad/backendtypes';
 import { nanoid } from 'nanoid';
 import { strictEqual as expectEqual } from 'assert';
 import {
@@ -18,6 +11,8 @@ import { resource } from '@decipad/backend-resources';
 import { ForbiddenError, UserInputError } from 'apollo-server-lambda';
 import { requireUser } from '../authorization';
 import parseResourceUri from '../utils/resource/parse-uri';
+import { Attachment, Pad, Resolvers, User } from '@decipad/graphqlserver-types';
+import { FileAttachmentRecord } from '@decipad/backendtypes';
 
 const ONE_HOUR_IN_SECONDS = 60 * 60;
 
@@ -29,12 +24,12 @@ export interface ICreateAttachmentFormParams {
   fileType: string;
 }
 
-export default {
+const resolvers: Resolvers = {
   Mutation: {
     async getCreateAttachmentForm(
-      _: unknown,
-      { padId, fileName: userFileName, fileType }: ICreateAttachmentFormParams,
-      context: GraphqlContext
+      _,
+      { padId, fileName: userFileName, fileType },
+      context
     ) {
       const { user, resources } = await notebooks.expectAuthorizedForGraphql({
         context,
@@ -68,11 +63,7 @@ export default {
         })),
       };
     },
-    async attachFileToPad(
-      _: unknown,
-      { handle }: { handle: string },
-      context: GraphqlContext
-    ): Promise<Attachment> {
+    async attachFileToPad(_, { handle }, context) {
       const user = requireUser(context);
 
       const data = await tables();
@@ -105,18 +96,15 @@ export default {
         id: newFileAttachment.id,
         fileName: newFileAttachment.user_filename,
         fileType: newFileAttachment.filetype,
-        uploadedByUserId: newFileAttachment.user_id,
+        userId: newFileAttachment.user_id,
         padId: parsedResource.id,
         createdAt: newFileAttachment.createdAt,
         fileSize: newFileAttachment.filesize,
+        url: newFileAttachment.resource_uri,
       };
     },
 
-    async removeAttachmentFromPad(
-      _: unknown,
-      { attachmentId }: { attachmentId: string },
-      context: GraphqlContext
-    ) {
+    async removeAttachmentFromPad(_, { attachmentId }, context) {
       const data = await tables();
       const attachment = await data.fileattachments.get({ id: attachmentId });
       if (!attachment) {
@@ -130,11 +118,13 @@ export default {
       });
 
       await data.fileattachments.delete({ id: attachmentId });
+
+      return true;
     },
   },
 
   Pad: {
-    async attachments(pad: Pad): Promise<Attachment[]> {
+    async attachments(pad) {
       const query = {
         IndexName: 'byResource',
         KeyConditionExpression: 'resource_uri = :resource_uri',
@@ -154,9 +144,10 @@ export default {
           fileName: fileAttachment.user_filename,
           fileType: fileAttachment.filetype,
           fileSize: fileAttachment.filesize,
-          uploadedByUserId: fileAttachment.user_id,
+          userId: fileAttachment.user_id,
           createdAt: fileAttachment.createdAt,
-          padId: parseResourceUri(fileAttachment.resource_uri).id,
+          url: fileAttachment.resource_uri,
+          padId: pad.id,
         })
       )) {
         if (attachment) {
@@ -169,18 +160,28 @@ export default {
   },
 
   Attachment: {
-    async uploadedBy(attachment: Attachment): Promise<User | undefined> {
+    async uploadedBy(attachment) {
       const data = await tables();
-      return data.users.get({ id: attachment.uploadedByUserId });
+      if (!attachment.userId) {
+        return null;
+      }
+
+      return (await data.users.get({
+        id: attachment.userId,
+      })) as User;
     },
 
-    url(attachment: Attachment): string {
+    url(attachment) {
       return attachmentUrl(attachment.padId, attachment.id);
     },
 
-    async pad(attachment: Attachment): Promise<Pad | undefined> {
+    async pad(attachment) {
       const data = await tables();
-      return data.pads.get({ id: attachment.padId });
+      return (await data.pads.get({
+        id: attachment.padId,
+      })) as Pad;
     },
   },
 };
+
+export default resolvers;
