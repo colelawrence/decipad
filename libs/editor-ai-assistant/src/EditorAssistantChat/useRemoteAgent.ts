@@ -146,6 +146,9 @@ export const useRemoteAgent = ({
             if (error.message === 'Aborted') {
               reject(new DOMException('Aborted', 'AbortError'));
             }
+            if (error.message === `You've exceeded AI quota`) {
+              reject(new DOMException('Quota exceeded', 'QuotaExceededError'));
+            }
             reject(new Error((response as Payload).message));
           } else {
             resolve(response as RemoteAgentResponse);

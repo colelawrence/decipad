@@ -21,7 +21,6 @@ import {
 import { EditorController } from '@decipad/notebook-tabs';
 import { parseIntegration } from '@decipad/utils';
 import { useRemoteAgent } from './useRemoteAgent';
-import { OutOfCreditsError } from './OutOfCreditsError';
 import { useActiveEditor } from '@decipad/editor-hooks';
 import { objectToHumanReadableString } from './helpers';
 
@@ -271,10 +270,10 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           }
         }
       } catch (err) {
-        console.error(err);
         handleDeleteMessage(eventMessage.id);
 
-        if (err instanceof OutOfCreditsError) {
+        // We show a different error message if the user has ran out of AI credits
+        if (err instanceof DOMException && err.name === 'QuotaExceededError') {
           handleAddMessage({
             type: 'event',
             id: nanoid(),
@@ -287,14 +286,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
         }
 
         if (err instanceof DOMException && err.name === 'AbortError') {
-          handleAddMessage({
-            type: 'event',
-            id: nanoid(),
-            content: 'Request aborted',
-            timestamp: Date.now(),
-            replyTo: userMessage.id,
-            status: 'ui-only-error',
-          });
+          // Clear the last user message when aborting
+          handleDeleteMessage(userMessage.id);
           return;
         }
 
