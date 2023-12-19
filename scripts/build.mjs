@@ -52,6 +52,9 @@ const envVarNames = [
   'DISCORD_FEEDBACK_CHANNEL_TOKEN',
   'DISCORD_FEEDBACK_CHANNEL_ID',
   'DEBUG',
+  'DECI_MAX_CREDITS_FREE',
+  'DECI_MAX_CREDITS_PRO',
+  'DECI_TOKENS_TO_CREDITS',
 ];
 
 function getEnvVar(name) {

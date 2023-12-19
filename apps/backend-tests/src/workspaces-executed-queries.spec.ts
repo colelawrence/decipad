@@ -45,7 +45,9 @@ test('Executed queries', (ctx) => {
       })
     ).data.incrementQueryCount;
     expect(workspaceQueryCount.queryCount).toBe(1);
-    expect(workspaceQueryCount.quotaLimit).toBe(50);
+    // expect(workspaceQueryCount.quotaLimit).toBe(50);
+    // Christmas gift
+    expect(workspaceQueryCount.quotaLimit).toBe(150);
   });
 
   it('can reset the query count when the scheduled job is executed', async () => {
@@ -172,6 +174,8 @@ test('Executed queries', (ctx) => {
     const { workspaceExecutedQuery } = workspaces[0];
 
     expect(workspaceExecutedQuery.queryCount).toBe(0);
-    expect(workspaceExecutedQuery.quotaLimit).toBe(50);
+    // expect(workspaceExecutedQuery.quotaLimit).toBe(50);
+    // Christmas gift!
+    expect(workspaceExecutedQuery.quotaLimit).toBe(150);
   });
 });

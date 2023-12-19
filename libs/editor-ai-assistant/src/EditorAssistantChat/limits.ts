@@ -1,4 +1,7 @@
 // Copied from backendtypes constant
+//
+// Purely used for frontend visuals, if you want to change actual
+// backend limits look at `default.ts` in `backend-config`.
 const MAX_CREDITS_EXEC_COUNT = {
   free: 50 + 100, // temporary Xmas allowance
   pro: 500 + 100, // temporary Xmas allowance

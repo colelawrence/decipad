@@ -36,6 +36,10 @@ const isDevOrStaging =
   app().urlBase.includes('dev.decipad.com') ||
   app().urlBase.includes('localhost');
 
+function isTesting(workspaceName: string) {
+  return workspaceName.includes('testing-ai-limits');
+}
+
 const notebooks = resource('notebook');
 
 const openai = new OpenAI({
@@ -69,11 +73,16 @@ export const engageAssistant = async ({
   event,
   forceMode,
 }: EngageAssistantParams): Promise<EngageAssistantResponse> => {
-  const { pads } = await tables();
+  const { pads, workspaces } = await tables();
   const workspaceId = (await pads.get({ id: notebookId }))?.workspace_id;
 
   if (!workspaceId) {
     throw Boom.badRequest('AI cannot be used on a pad without workspace');
+  }
+
+  const workspaceName = (await workspaces.get({ id: workspaceId }))?.name;
+  if (!workspaceName) {
+    throw Boom.badRequest('Workspace has no name');
   }
 
   const [promptTokens, completionTokens] = await getResources([
@@ -100,7 +109,14 @@ export const engageAssistant = async ({
 
   const limit = limits().openAiTokensLimit[isPremium ? 'pro' : 'free'];
 
-  if (!isDevOrStaging && workspaceTotalTokensUsed > limit) {
+  //
+  // Lets not have limits for dev/staging with n1n.co workspace names.
+  //
+
+  if (
+    !(isDevOrStaging && !isTesting(workspaceName)) &&
+    workspaceTotalTokensUsed > limit
+  ) {
     throw Boom.tooManyRequests("You've exceeded AI quota");
   }
 
