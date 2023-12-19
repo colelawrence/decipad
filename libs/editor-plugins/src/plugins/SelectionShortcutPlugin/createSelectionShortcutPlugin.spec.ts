@@ -4,8 +4,7 @@ import {
   ELEMENT_PARAGRAPH,
   MyEditor,
 } from '@decipad/editor-types';
-import { getEndPoint, getRange, getStartPoint } from '@udecode/plate-common';
-import { Selection } from 'slate';
+import { getRange, getStartPoint } from '@udecode/plate-common';
 import { createSelectionShortcutPlugin } from './createSelectionShortcutPlugin';
 
 const triggerKeyDownEvent = (
@@ -64,23 +63,11 @@ describe('pressing cmd+a', () => {
   });
 
   describe('when selection spans an entire element', () => {
-    it('default behaviour should happen', () => {
+    it('removes editor selection', () => {
       const previousSelection = getRange(editor, [1]);
       editor.selection = previousSelection;
       triggerKeyDownEvent(editor, 'a', { metaKey: true });
-      expect(editor.selection).toEqual(previousSelection);
-    });
-  });
-
-  describe('when selection spans the entire editor', () => {
-    it('default behaviour should happen', () => {
-      const previousSelection: Selection = {
-        anchor: getStartPoint(editor, [0]),
-        focus: getEndPoint(editor, [1]),
-      };
-      editor.selection = previousSelection;
-      triggerKeyDownEvent(editor, 'a', { metaKey: true });
-      expect(editor.selection).toEqual(previousSelection);
+      expect(editor.selection).toEqual(null);
     });
   });
 
