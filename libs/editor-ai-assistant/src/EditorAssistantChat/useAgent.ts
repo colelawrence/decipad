@@ -23,6 +23,7 @@ import { parseIntegration } from '@decipad/utils';
 import { useRemoteAgent } from './useRemoteAgent';
 import { OutOfCreditsError } from './OutOfCreditsError';
 import { useActiveEditor } from '@decipad/editor-hooks';
+import { objectToHumanReadableString } from './helpers';
 
 type AgentParams = {
   notebookId: string;
@@ -127,7 +128,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
                         // Fallback summary for better UX
                         'Updated notebook data',
                   function_call: functionCall,
-                  result: JSON.stringify(result),
+                  result: `Result is: ${objectToHumanReadableString(result)}`,
                 };
 
                 handleAddEventToMessage(eventMessage.id, newEvent);
@@ -178,28 +179,73 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           }
           handleUpdateMessageStatus(eventMessage.id, 'success');
           if (message.content) {
-            handleAddMessage({
-              type: 'assistant',
-              id: nanoid(),
-              content: message.content,
-              timestamp: Date.now(),
-              replyTo: userMessage.id,
-              status: 'success',
-            });
+            try {
+              const { answer, suggestions } = JSON.parse(message.content);
+
+              handleAddMessage({
+                type: 'assistant',
+                id: nanoid(),
+                content: answer,
+                suggestions,
+                timestamp: Date.now(),
+                replyTo: userMessage.id,
+                status: 'success',
+              });
+            } catch (err) {
+              // Try to extract the answer from the message when AI hallucinates
+              // and returns invalid JSON
+              const findAnswer = message.content.match(/"answer":\s*"(.*)"/);
+
+              if (findAnswer) {
+                const answerString = findAnswer[1].replace(/\\n/g, '\n');
+
+                handleAddMessage({
+                  type: 'assistant',
+                  id: nanoid(),
+                  content: answerString,
+                  timestamp: Date.now(),
+                  replyTo: userMessage.id,
+                  status: 'success',
+                });
+              } else {
+                handleAddMessage({
+                  type: 'assistant',
+                  id: nanoid(),
+                  content: message.content,
+                  timestamp: Date.now(),
+                  replyTo: userMessage.id,
+                  status: 'success',
+                });
+              }
+            }
           }
         }
         if (mode === 'conversation') {
           handleDeleteMessage(eventMessage.id);
 
           if (message.content) {
-            handleAddMessage({
-              type: 'assistant',
-              id: nanoid(),
-              content: message.content,
-              timestamp: Date.now(),
-              replyTo: userMessage.id,
-              status: 'success',
-            });
+            try {
+              const { answer, suggestions } = JSON.parse(message.content);
+
+              handleAddMessage({
+                type: 'assistant',
+                id: nanoid(),
+                content: answer,
+                suggestions,
+                timestamp: Date.now(),
+                replyTo: userMessage.id,
+                status: 'success',
+              });
+            } catch (err) {
+              handleAddMessage({
+                type: 'assistant',
+                id: nanoid(),
+                content: message.content,
+                timestamp: Date.now(),
+                replyTo: userMessage.id,
+                status: 'success',
+              });
+            }
           }
         }
 

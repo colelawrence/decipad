@@ -218,6 +218,7 @@ export const engageAssistant = async ({
         elementIdsMessage,
       ],
       functions: openApiSchema,
+      response_format: { type: 'json_object' },
       temperature: 0,
       max_tokens: 1200,
     });
@@ -297,6 +298,7 @@ export const engageAssistant = async ({
         docMessage,
         elementIdsMessage,
       ],
+      response_format: { type: 'json_object' },
       temperature: 0.2,
       max_tokens: 800,
     });

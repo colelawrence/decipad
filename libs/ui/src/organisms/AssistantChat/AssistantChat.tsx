@@ -72,6 +72,7 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({
         currentUserMessage={currentUserMessage}
         isGenerating={isGenerating}
         regenerateResponse={regenerateResponse}
+        sendMessage={sendMessage}
         notebookId={notebookId}
         workspaceId={workspaceId}
         insertNodes={insertNodes}

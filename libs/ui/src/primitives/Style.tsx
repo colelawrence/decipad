@@ -522,6 +522,7 @@ export interface ComponentCssVariables {
   AIAssistantTextColor: string;
   AIAssistantTextSubduedColor: string;
   AIAssistantHighlightColor: string;
+  AIAssistantHighlightTextColor: string;
   AIAssistantCodeBackgroundColor: string;
   // ----------- End AI Assistant -------------
 }
@@ -637,6 +638,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       AIAssistantTextColor: offWhite.hex,
       AIAssistantTextSubduedColor: grey400.hex,
       AIAssistantHighlightColor: brand500.hex,
+      AIAssistantHighlightTextColor: brand700.hex,
       AIAssistantCodeBackgroundColor: teal900.hex,
     },
     Dark: {
@@ -744,6 +746,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       AIAssistantTextColor: offBlack.hex,
       AIAssistantTextSubduedColor: grey400.hex,
       AIAssistantHighlightColor: purple300.hex,
+      AIAssistantHighlightTextColor: purple500.hex,
       AIAssistantCodeBackgroundColor: teal900.hex,
     },
   } as const;

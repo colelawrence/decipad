@@ -56,3 +56,11 @@ export const mapChatHistoryToGPTChat = (
 
   return newHistory;
 };
+
+export const objectToHumanReadableString = (obj: {
+  [key: string]: any;
+}): string => {
+  return Object.entries(obj)
+    .map(([key, value]) => `${key} is ${value}`)
+    .join(', ');
+};

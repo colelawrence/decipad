@@ -58,6 +58,7 @@ export interface AssistantMessage extends BaseMessage {
   readonly type: 'assistant';
   readonly content: string;
   readonly replyTo: string | null;
+  readonly suggestions?: string[];
   readonly integrationData?: IntegrationMessageData;
 }
 

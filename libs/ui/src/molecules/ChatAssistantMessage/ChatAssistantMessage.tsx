@@ -11,6 +11,7 @@ import {
 import {
   componentCssVars,
   cssVar,
+  p12Medium,
   p13Medium,
   p14Regular,
 } from '../../primitives';
@@ -21,8 +22,9 @@ import { css } from '@emotion/react';
 import copyToClipboard from 'copy-to-clipboard';
 import { Tooltip } from '../../atoms';
 import { AssistantFeedbackPopUp } from '../AssistantFeedbackPopUp/AssistantFeedbackPopUp';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { noop } from '@decipad/utils';
+import { ClientEventsContext } from '@decipad/client-events';
 
 const wrapperStyles = css({
   display: 'flex',
@@ -58,6 +60,30 @@ const contentStyles = css(p14Regular, {
   display: 'grid',
   gap: 4,
   gridTemplateRows: 'auto max-content',
+});
+
+const suggestionContainerStyles = css({
+  display: 'flex',
+  alignItems: 'center',
+  flexWrap: 'wrap',
+  padding: '0px 6px 4px',
+  gap: 4,
+});
+
+const suggestionStyles = css(p12Medium, {
+  border: `1px solid ${cssVar('borderDefault')}`,
+  color: componentCssVars('AIAssistantHighlightTextColor'),
+  padding: '5px 8px 3px',
+  borderRadius: 8,
+  cursor: 'pointer',
+
+  '&:hover': {
+    backgroundColor: cssVar('backgroundDefault'),
+  },
+
+  '&:active': {
+    backgroundColor: cssVar('backgroundHeavy'),
+  },
 });
 
 const buttonContainerStyles = css({
@@ -100,6 +126,7 @@ type Props = {
   readonly message: AssistantMessage;
   readonly isCurrentReply: boolean;
   readonly isGenerating: boolean;
+  readonly sendMessage: (content: string) => void;
   readonly regenerateResponse: () => void;
   readonly submitFeedback: (message: string) => void;
   readonly submitRating: (rating: 'like' | 'dislike') => void;
@@ -110,11 +137,14 @@ export const ChatAssistantMessage: React.FC<Props> = ({
   isCurrentReply,
   isGenerating,
   regenerateResponse,
+  sendMessage,
   submitFeedback,
   submitRating,
 }) => {
   const [hasRated, setHasRated] = useState(false);
   const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
+
+  const clientEvent = useContext(ClientEventsContext);
 
   const handleSendRating = useCallback(
     (r: 'like' | 'dislike') => {
@@ -132,7 +162,21 @@ export const ChatAssistantMessage: React.FC<Props> = ({
     [submitFeedback]
   );
 
-  const { content } = message;
+  const handleUseSuggestions = useCallback(
+    (s: string) => {
+      sendMessage(s);
+      clientEvent({
+        type: 'action',
+        action: 'ai chat send message',
+        props: {
+          isSuggested: true,
+        },
+      });
+    },
+    [sendMessage, clientEvent]
+  );
+
+  const { content, suggestions } = message;
 
   return (
     <div css={wrapperStyles}>
@@ -141,6 +185,19 @@ export const ChatAssistantMessage: React.FC<Props> = ({
       </div>
       <div css={contentStyles}>
         <ChatMarkdownRenderer content={content} />
+        {isCurrentReply && suggestions && suggestions.length > 0 && (
+          <div css={suggestionContainerStyles}>
+            {suggestions.map((s) => (
+              <div
+                key={s}
+                css={suggestionStyles}
+                onClick={() => handleUseSuggestions(s)}
+              >
+                {s}
+              </div>
+            ))}
+          </div>
+        )}
         {isCurrentReply && !isGenerating && (
           <div css={buttonContainerStyles}>
             <Tooltip

@@ -62,6 +62,7 @@ const listStyles = css({
   display: 'flex',
   flexDirection: 'column',
   padding: 8,
+  paddingBottom: 32,
   width: 608,
 });
 
@@ -75,6 +76,10 @@ const DEFAULT_GREETING_MESSAGE: AssistantMessage = {
   status: 'success',
   content:
     'Hey there! Keep in mind that this **experimental** version can make mistakes. Please, provide feedback to help us improve.',
+  suggestions: [
+    'What is Decipad AI Assistant?',
+    'I want to build a model in Decipad.',
+  ],
   timestamp: Date.now(),
   replyTo: null,
 };
@@ -83,6 +88,7 @@ type AssistantMessageListProps = {
   readonly messages: Message[];
   readonly isGenerating: boolean;
   readonly currentUserMessage?: UserMessage;
+  readonly sendMessage: (content: string) => void;
   readonly regenerateResponse: () => void;
   readonly notebookId: string;
   readonly workspaceId: string;
@@ -96,6 +102,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
   isGenerating,
   currentUserMessage,
   regenerateResponse,
+  sendMessage,
   notebookId,
   workspaceId,
   insertNodes,
@@ -185,8 +192,9 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
               <ChatAssistantMessage
                 key={DEFAULT_GREETING_MESSAGE.id}
                 message={DEFAULT_GREETING_MESSAGE}
-                isCurrentReply={false}
+                isCurrentReply={messages.length === 0}
                 isGenerating={false}
+                sendMessage={sendMessage}
                 regenerateResponse={noop}
                 submitFeedback={noop}
                 submitRating={noop}
@@ -245,6 +253,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                     <ChatAssistantMessage
                       key={id}
                       message={entry}
+                      sendMessage={sendMessage}
                       isCurrentReply={currentUserMessage?.id === replyTo}
                       isGenerating={isGenerating}
                       regenerateResponse={regenerateResponse}

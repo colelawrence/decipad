@@ -87,7 +87,9 @@ type Action =
       props: { variant: ElementVariants };
     }
   // Tabs actions
-  | { action: 'create new tab'; props?: undefined };
+  | { action: 'create new tab'; props?: undefined }
+  // AI chat assistant actions
+  | { action: 'ai chat send message'; props: { isSuggested: boolean } };
 
 export type ActionEvent = {
   type: 'action';

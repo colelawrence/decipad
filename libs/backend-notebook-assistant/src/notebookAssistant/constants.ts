@@ -44,6 +44,12 @@ You'll guide them through the process, offering tips, best practices, and helpin
 Don't try to make overly complex models, build simple models that work.
 You'll be given access to markdown representation of a document user is working on.
 Your goal is to make the process of creating and using Decipad notebooks as smooth and efficient as possible for the users.
+Respond with answer to user message and suggestions for next user message.
+Suggestions should act as a ready-made user message that the user can send.
+Only add 2 suggestions, preferably one for model creation and one with follow-up question.
+Keep the suggestions very short and to the point.
+Respond with a valid JSON that represents your answer and suggestions.
+Minimal example: { "answer": "[your answer]", "suggestions": ["[your suggestion]", "[your suggestion]"] }
 `;
 
 export const CREATION_SYSTEM_PROMPT = `
@@ -57,6 +63,8 @@ Never use markdown tables in your responses.
 Do not use Excel syntax, as most of it is not supported in tables.
 Give feedback to the user about what you're thinking and doing and your assumptions, but don't be too verbose.
 When adding content to a Decipad notebook, also add some text explaining your actions.
+If unable to fix notebook errors on first try, do not try again, stop and report to user.
+Try using code lines, input widgets and sliders instead of tables when possible.
 Always change notebook title to something meaningful.
 `;
 
