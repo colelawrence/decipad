@@ -5592,7 +5592,7 @@
     auto-bind "~4.0.0"
     tslib "~2.6.0"
 
-"@graphql-codegen/typescript@4.0.0", "@graphql-codegen/typescript@^4.0.0":
+"@graphql-codegen/typescript@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-4.0.0.tgz#8742f6d022564bbc7626a5a68cd90ca1841f5339"
   integrity sha512-9Wv050+a4O/c3RRDbXKVnm0e45mhmb8XuW3ICsmmwPUVJ5oX8NOLYIMU8ie1/gNTTCfJNwOtZr5EwX2yhXYUfQ==
@@ -5603,7 +5603,7 @@
     auto-bind "~4.0.0"
     tslib "~2.5.0"
 
-"@graphql-codegen/typescript@^4.0.1":
+"@graphql-codegen/typescript@^4.0.0", "@graphql-codegen/typescript@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-4.0.1.tgz#7481d68f59bea802dd10e278dce73c8a1552b2a4"
   integrity sha512-3YziQ21dCVdnHb+Us1uDb3pA6eG5Chjv0uTK+bt9dXeMlwYBU8MbtzvQTo4qvzWVC1AxSOKj0rgfNu1xCXqJyA==
@@ -5639,7 +5639,7 @@
     parse-filepath "^1.0.2"
     tslib "~2.4.0"
 
-"@graphql-codegen/visitor-plugin-common@4.0.0", "@graphql-codegen/visitor-plugin-common@^4.0.0":
+"@graphql-codegen/visitor-plugin-common@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-4.0.0.tgz#b1db0138ea78b96a1f78b78ebce0443faee27fba"
   integrity sha512-OFWr5tkrG4nCcE7AI9BSAwuA0VLP16uNCLssbmXpBa1rKR6b4mX+rJTQCoz47TFV5hii8yp8xaWfXVUcsNY39w==
@@ -5655,7 +5655,7 @@
     parse-filepath "^1.0.2"
     tslib "~2.5.0"
 
-"@graphql-codegen/visitor-plugin-common@4.0.1":
+"@graphql-codegen/visitor-plugin-common@4.0.1", "@graphql-codegen/visitor-plugin-common@^4.0.0":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/visitor-plugin-common/-/visitor-plugin-common-4.0.1.tgz#64e293728b3c186f6767141e41fcdb310e50d367"
   integrity sha512-Bi/1z0nHg4QMsAqAJhds+ForyLtk7A3HQOlkrZNm3xEkY7lcBzPtiOTLBtvziwopBsXUxqeSwVjOOFPLS5Yw1Q==
@@ -30172,10 +30172,10 @@ react-tweet@^3.1.1:
     date-fns "^2.30.0"
     swr "^2.2.0"
 
-react-use-intercom@5.1.4:
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-5.1.4.tgz#c4677dad230b3f2013b48fb6c341b735dbaf3bb9"
-  integrity sha512-37dMuCg3H5KgMqpUMiZiu7Ni1LcRAkO8T7F1Zg4Xc+hL89j8OYFHzWWBy29EFgRsTdvCEJ2X8J5wAXerU9uuqw==
+react-use-intercom@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-5.3.0.tgz#bf86b277f0f0656fa8952c9a02a20017101fe786"
+  integrity sha512-sS93lEe4lpDl8DrLdLbqocOJOm2AjQzoq0KR2L8pCU5pXVUhr8C4yzNR4ek4pIvPrLGW7BFz1rOlRYHAcHL+UA==
 
 react-vega@7.6.0:
   version "7.6.0"
