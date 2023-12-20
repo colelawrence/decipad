@@ -159,7 +159,9 @@ export const WorkspaceNavigation = ({
               isActive={isSharedPage}
               icon={<Users />}
             >
-              <span css={itemTextStyles}>Manage members</span>
+              <span data-testid="manage-workspace-members" css={itemTextStyles}>
+                Manage members
+              </span>
             </NavigationItem>
           </NavigationList>
 

@@ -39,8 +39,12 @@ export class User {
     this.aiAssistant = new AiAssistant(this.page);
   }
 
-  async goToWorkspace() {
-    await this.page.goto('/');
+  async goToWorkspace(workspaceIdOverride: string | null = null) {
+    if (workspaceIdOverride) {
+      await this.page.goto(`/w/${workspaceIdOverride}`);
+    } else {
+      await this.page.goto('/');
+    }
     await this.page.waitForURL(/\/w\/(.+)/);
     const workspaceID = this.page.url().match(/\/w\/(.+)/);
     if (workspaceID) {
@@ -78,8 +82,8 @@ export class User {
    * ```
    */
   // todo: move this to workspace pom
-  async createAndNavNewNotebook() {
-    await this.goToWorkspace();
+  async createAndNavNewNotebook(workspaceId?: string) {
+    await this.goToWorkspace(workspaceId);
     await this.newNotebook.click();
     await this.page.waitForSelector('[data-slate-editor] h1');
   }

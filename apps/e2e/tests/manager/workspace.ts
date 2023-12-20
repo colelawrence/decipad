@@ -305,4 +305,21 @@ export class Workspace {
   async clickNewPadButton() {
     await this.page.getByTestId('new-notebook').click();
   }
+
+  /**
+   * Ivite user to the current workspace
+   * @param email - email of user to add
+   * @param role - role of user to add
+   */
+  async addWorkspaceMember(email: string, role: 'Admin' | 'Member' = 'Member') {
+    await this.page.getByTestId('manage-workspace-members').click();
+    await this.page.locator('input[type="email"]').fill(email);
+
+    if (role === 'Admin') {
+      await this.page.getByTestId('text-icon-button:member').click();
+      await this.page.getByText('Workspace admin').click();
+    }
+    await this.page.getByText('Send invitation').click();
+    await this.page.getByTestId('closable-modal').click();
+  }
 }
