@@ -1,27 +1,14 @@
-import { BrowserContext, Page, expect, test } from '@playwright/test';
-import { withTestUser } from '../utils/src';
+import { expect, test } from './manager/decipad-tests';
 
-test.describe('Auto complete menu', () => {
-  test.describe.configure({ mode: 'serial' });
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-    await withTestUser({ page, context });
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Can see data connections button', async () => {
+test('Data connections', async ({ testUser }) => {
+  const { page } = testUser;
+  await test.step('Can see data connections button', async () => {
+    await page.goto('/');
     const dataConnections = page.locator('text="Data Connections"');
     await expect(dataConnections).toBeVisible();
   });
 
-  test('Can click data connections and view modal', async () => {
+  await test.step('Can click data connections and view modal', async () => {
     const dataConnections = page.locator('text="Data Connections"');
     await dataConnections.click();
 
@@ -32,7 +19,7 @@ test.describe('Auto complete menu', () => {
     await expect(sqlConnections).toBeVisible();
   });
 
-  test('Clicking code secrets shows the code secrets UI, and allows user to add.', async () => {
+  await test.step('Clicking code secrets shows the code secrets UI, and allows user to add.', async () => {
     const apiSecrets = page.locator('text="API Secrets"');
     await apiSecrets.click();
 
@@ -49,7 +36,7 @@ test.describe('Auto complete menu', () => {
     await expect(newSecret).toBeVisible();
   });
 
-  test('Can delete code secrets', async () => {
+  await test.step('Can delete code secrets', async () => {
     const deleteSecret = page.locator('[data-testid="delete-secret"]');
     await deleteSecret.click();
 
@@ -58,7 +45,7 @@ test.describe('Auto complete menu', () => {
     await expect(secretName).toHaveCount(0);
   });
 
-  test('Can view SQL Connections', async () => {
+  await test.step('Can view SQL Connections', async () => {
     const sqlConnectionButton = page.locator('text="SQL Connections"');
     await sqlConnectionButton.click();
 
@@ -67,7 +54,7 @@ test.describe('Auto complete menu', () => {
     await expect(addConnButton).toBeVisible();
   });
 
-  test('Can add SQL Connection', async () => {
+  await test.step('Can add SQL Connection', async () => {
     const addConnButton = page.locator('text="Add a New Connection"');
     await addConnButton.click();
 

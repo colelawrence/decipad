@@ -1,8 +1,6 @@
-import { BrowserContext, expect, Page, test } from '@playwright/test';
-import { setUp } from '../utils/page/Editor';
+import { Page, expect, test } from './manager/decipad-tests';
 import {
   codePlaceholders,
-  createWorkspace,
   getClearText,
   Timeouts,
   snapshot,
@@ -86,30 +84,10 @@ const executeCode = (page: Page, sourcecode: string, x: number) =>
     await expect(page.getByTitle('Error')).toBeHidden();
   });
 
-test.describe('Make sure our js code templates work', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Make sure our js code templates work', async ({ testUser }) => {
+  const { page } = testUser;
 
-  let page: Page;
-  let context: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-
-    await createWorkspace(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Checks all the files', async () => {
+  await test.step('Checks all the files', async () => {
     const allSources = codePlaceholders;
 
     expect(allSources.length).toBeGreaterThan(0);
@@ -120,7 +98,7 @@ test.describe('Make sure our js code templates work', () => {
     }
   });
 
-  test('Adding a duplicate to make sure it is not allowed', async () => {
+  await test.step('Adding a duplicate to make sure it is not allowed', async () => {
     const allSources = codePlaceholders;
     await executeCode(
       page,
@@ -133,32 +111,12 @@ test.describe('Make sure our js code templates work', () => {
   });
 });
 
-test.describe('More JS codeblock checks', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-
-    await createWorkspace(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
+test('More JS codeblock checks', async ({ testUser }) => {
+  const { page } = testUser;
 
   let generatedVarName: string;
 
-  test('Create a variable', async () => {
+  await test.step('Create a variable', async () => {
     await page.getByTestId('paragraph-content').last().click();
     await page.keyboard.press('=');
 
@@ -177,7 +135,7 @@ test.describe('More JS codeblock checks', () => {
     ).toMatch(/[a-zA-Z_$][a-zA-Z0-9_$]*/);
   });
 
-  test('Checks if the variable is accessible inside of the notebook', async () => {
+  await test.step('Checks if the variable is accessible inside of the notebook', async () => {
     const code = `
 // returns variable ${generatedVarName}
 return this.${generatedVarName};`;
@@ -210,104 +168,68 @@ return this.${generatedVarName};`;
   });
 });
 
-test.describe('Import Menu', () => {
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp({ page, context });
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('screenshots the import menu', async () => {
-    await page.getByTestId('paragraph-content').last().click();
-    await page.keyboard.type('hello world');
-    await page.keyboard.press('Enter');
-    await page.keyboard.type('/t');
-    await expect(
-      page.locator('article').getByTestId('menu-item-table')
-    ).toBeVisible();
-    await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(3);
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type('integrations');
-    await page.keyboard.press('Enter');
-    await snapshot(page as Page, 'Notebook: Import Menu');
-    await page.keyboard.press('Backspace');
-  });
+test('screenshots the import menu', async ({ testUser }) => {
+  const { page } = testUser;
+  await page.getByTestId('paragraph-content').last().click();
+  await page.keyboard.type('hello world');
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('/t');
+  await expect(
+    page.locator('article').getByTestId('menu-item-table')
+  ).toBeVisible();
+  await expect(page.getByTestId('paragraph-wrapper')).toHaveCount(3);
+  await page.keyboard.press('Backspace');
+  await page.keyboard.type('integrations');
+  await page.keyboard.press('Enter');
+  await snapshot(page as Page, 'Notebook: Import Menu');
+  await page.keyboard.press('Backspace');
 });
 
-test.describe('Checks the ability to change the unit of a response', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Checks the ability to change the unit of a response', async ({
+  testUser,
+}) => {
+  const { page } = testUser;
+  const allSources = codePlaceholders;
+  expect(allSources.length).toBeGreaterThan(0);
 
-  let page: Page;
-  let context: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
+  await createWithSlashCommand(page, '/integrations');
+  await page.getByTestId('select-integration:Code').click();
 
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
+  // First line of the CodeMirror
+  await page
+    .getByTestId('code-mirror')
+    .getByRole('textbox')
+    .locator('div')
+    .first()
+    .fill(allSources[4]);
+  // .fill(allSources[5]);
+  // Uncomment when the last source is back online (opentdb.com)
 
-    await createWorkspace(page);
-  });
+  await page.getByTestId('text-icon-button:Run').click();
+  await expect(page.getByTestId('code-successfully-run')).toBeVisible();
+  await page.getByTestId('integration-modal-continue').click();
 
-  test.afterAll(async () => {
-    await page.close();
-  });
+  const generatedVarName = await page.evaluate(
+    getClearText,
+    await page.getByTestId('result-preview-input').innerHTML()
+  );
 
-  test('Checks the ability to change the unit of a response', async () => {
-    const allSources = codePlaceholders;
-    expect(allSources.length).toBeGreaterThan(0);
+  await page
+    .getByTestId('result-preview-input')
+    .getByText(generatedVarName)
+    .dblclick();
+  await page.keyboard.press('Backspace');
+  await page.keyboard.type('F');
 
-    await createWithSlashCommand(page, '/integrations');
-    await page.getByTestId('select-integration:Code').click();
+  // The column menu button for the API response
+  await page
+    .getByRole('cell', { name: 'value' })
+    .getByTestId('table-column-menu-button')
+    .click();
 
-    // First line of the CodeMirror
-    await page
-      .getByTestId('code-mirror')
-      .getByRole('textbox')
-      .locator('div')
-      .first()
-      .fill(allSources[4]);
-    // .fill(allSources[5]);
-    // Uncomment when the last source is back online (opentdb.com)
+  await page.getByRole('menuitem').getByText('Number').nth(1).click();
 
-    await page.getByTestId('text-icon-button:Run').click();
-    await expect(page.getByTestId('code-successfully-run')).toBeVisible();
-    await page.getByTestId('integration-modal-continue').click();
-
-    const generatedVarName = await page.evaluate(
-      getClearText,
-      await page.getByTestId('result-preview-input').innerHTML()
-    );
-
-    await page
-      .getByTestId('result-preview-input')
-      .getByText(generatedVarName)
-      .dblclick();
-    await page.keyboard.press('Backspace');
-    await page.keyboard.type('F');
-
-    // The column menu button for the API response
-    await page
-      .getByRole('cell', { name: 'value' })
-      .getByTestId('table-column-menu-button')
-      .click();
-
-    await page.getByRole('menuitem').getByText('Number').nth(1).click();
-
-    await page.getByTestId('integration-modal-continue').click();
-    // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.liveBlockDelay);
-  });
+  await page.getByTestId('integration-modal-continue').click();
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.liveBlockDelay);
 });

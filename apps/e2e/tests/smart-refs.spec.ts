@@ -1,29 +1,12 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, test } from './manager/decipad-tests';
 import { createCalculationBlockBelow } from '../utils/page/Block';
-import {
-  goToPlayground,
-  keyPress,
-  waitForEditorToLoad,
-} from '../utils/page/Editor';
+import { keyPress } from '../utils/page/Editor';
 import { createTable } from '../utils/page/Table';
 import { cleanText } from '../utils/src';
 
-test.describe('SmartRefs simple case', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('replaces variable name with smart ref', async () => {
+test('SmartRefs simple case', async ({ testUser }) => {
+  const { page } = testUser;
+  await test.step('replaces variable name with smart ref', async () => {
     await createCalculationBlockBelow(page, 'var = 10');
     await page.keyboard.press('Enter');
     await createCalculationBlockBelow(page, 'x = var ');
@@ -32,59 +15,31 @@ test.describe('SmartRefs simple case', () => {
     );
   });
 
-  test('does not replace variable name with smart ref if selected', async () => {
+  await test.step('does not replace variable name with smart ref if selected', async () => {
     await createCalculationBlockBelow(page, 'y = var');
-    // no new smart refs
-    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
-      1
-    );
+    await expect(
+      page.locator('span[data-slate-node="element"]'),
+      'new smart refs were added'
+    ).toHaveCount(1);
   });
 });
 
-test.describe('SmartRefs in low code tables', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('replaces low code table column name with smart ref', async () => {
-    await page.keyboard.press('Enter');
-    await createTable(page);
-    await page.keyboard.press('Enter');
-    await createCalculationBlockBelow(page, 'x = Table1.Column1');
-    await page.keyboard.press('Enter');
-    await page.getByTestId('smart-ref').getByText('Column1').waitFor();
-    const text = await page.getByTestId('smart-ref').textContent();
-    expect(cleanText(text)).toContain('Column1');
-    expect(cleanText(text)).toContain('Table');
-  });
+test('SmartRefs in low code tables', async ({ testUser }) => {
+  const { page } = testUser;
+  await page.keyboard.press('Enter');
+  await createTable(page);
+  await page.keyboard.press('Enter');
+  await createCalculationBlockBelow(page, 'x = Table1.Column1');
+  await page.keyboard.press('Enter');
+  await page.getByTestId('smart-ref').getByText('Column1').waitFor();
+  const text = await page.getByTestId('smart-ref').textContent();
+  expect(cleanText(text)).toContain('Column1');
+  expect(cleanText(text)).toContain('Table');
 });
 
-test.describe('SmartRefs in code tables', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('no infinite loops on code table column declaration', async () => {
+test('SmartRefs in code tables', async ({ testUser }) => {
+  const { page } = testUser;
+  await test.step('no infinite loops on code table column declaration', async () => {
     await createCalculationBlockBelow(page, 'A = 5');
     await page.keyboard.press('Enter');
 
@@ -96,28 +51,15 @@ test.describe('SmartRefs in code tables', () => {
     );
   });
 
-  test('no highlight in column declarations in code tables', async () => {
+  await test.step('no highlight in column declarations in code tables', async () => {
     // var decorations
     await expect(page.locator('code [data-state="closed"]')).toHaveCount(11);
   });
 });
 
-test.describe('Deleting SmartRefs', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await goToPlayground(page);
-    await waitForEditorToLoad(page);
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('selects, then deletes smart ref on Backspace', async () => {
+test('Deleting SmartRefs', async ({ testUser }) => {
+  const { page } = testUser;
+  await test.step('selects, then deletes smart ref on Backspace', async () => {
     await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
       0
     );
@@ -141,7 +83,7 @@ test.describe('Deleting SmartRefs', () => {
     );
   });
 
-  test('selects, then deletes smart ref on Delete', async () => {
+  await test.step('selects, then deletes smart ref on Delete', async () => {
     await createCalculationBlockBelow(page, 'var2 = 10');
     await keyPress(page, 'Enter');
     await createCalculationBlockBelow(page, 'var2 ');
@@ -153,16 +95,17 @@ test.describe('Deleting SmartRefs', () => {
     await keyPress(page, 'ArrowRight'); // we're now at the start of the line
     await keyPress(page, 'Delete'); // select smart ref
 
-    // did not delete
-    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
-      1
-    );
+    await expect(
+      page.locator('span[data-slate-node="element"]'),
+      'smart ref was deleted'
+    ).toHaveCount(1);
 
     await keyPress(page, 'Backspace');
     await keyPress(page, 'Backspace');
-    // delete smart ref
-    await expect(page.locator('span[data-slate-node="element"]')).toHaveCount(
-      0
-    );
+
+    await expect(
+      page.locator('span[data-slate-node="element"]'),
+      "smart ref wasn't deleted"
+    ).toHaveCount(0);
   });
 });
