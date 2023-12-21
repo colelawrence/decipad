@@ -15,6 +15,7 @@ import { nanoid } from 'nanoid';
 import {
   Action,
   GenericSummaryResult,
+  NotebookError,
   actions,
   callAction,
 } from '@decipad/notebook-open-api';
@@ -66,8 +67,11 @@ export const useAgent = ({ notebookId }: AgentParams) => {
       messages: Message[],
       userMessage: UserMessage,
       eventMessage: EventMessage,
-      forceMode?: 'creation' | 'conversation'
+      forceMode?: 'creation' | 'conversation',
+      consecutiveErrors = 0
     ): Promise<void> => {
+      let errorCount = consecutiveErrors;
+
       try {
         const { mode, usage, message } = await remoteAgent.setMessage(
           {
@@ -127,8 +131,17 @@ export const useAgent = ({ notebookId }: AgentParams) => {
                         // Fallback summary for better UX
                         'Updated notebook data',
                   function_call: functionCall,
-                  result: `Result is: ${objectToHumanReadableString(result)}`,
+                  result: `${objectToHumanReadableString(result)}`,
                 };
+
+                if (
+                  'notebookErrors' in result &&
+                  (result.notebookErrors as Array<NotebookError>).length > 0
+                ) {
+                  errorCount += 1;
+                } else {
+                  errorCount = 0;
+                }
 
                 handleAddEventToMessage(eventMessage.id, newEvent);
 
@@ -173,7 +186,8 @@ export const useAgent = ({ notebookId }: AgentParams) => {
               newMessages,
               userMessage,
               newEventMessage,
-              'creation'
+              errorCount === 3 ? 'conversation' : 'creation',
+              errorCount
             );
           }
           handleUpdateMessageStatus(eventMessage.id, 'success');
@@ -193,7 +207,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
             } catch (err) {
               // Try to extract the answer from the message when AI hallucinates
               // and returns invalid JSON
-              const findAnswer = message.content.match(/"answer":\s*"(.*)"/);
+              const findAnswer = message.content.match(/"answer":\s*"(.*?)"/);
 
               if (findAnswer) {
                 const answerString = findAnswer[1].replace(/\\n/g, '\n');
@@ -270,10 +284,9 @@ export const useAgent = ({ notebookId }: AgentParams) => {
           }
         }
       } catch (err) {
-        handleDeleteMessage(eventMessage.id);
-
         // We show a different error message if the user has ran out of AI credits
         if (err instanceof DOMException && err.name === 'QuotaExceededError') {
+          handleDeleteMessage(eventMessage.id);
           handleAddMessage({
             type: 'event',
             id: nanoid(),
@@ -286,7 +299,19 @@ export const useAgent = ({ notebookId }: AgentParams) => {
         }
 
         if (err instanceof DOMException && err.name === 'AbortError') {
-          // Clear the last user message when aborting
+          if (eventMessage.events && eventMessage.events.length > 0) {
+            handleUpdateMessageStatus(eventMessage.id, 'error');
+            handleAddMessage({
+              type: 'event',
+              id: nanoid(),
+              content: `AI generation run cancelled by user.`,
+              timestamp: Date.now(),
+              replyTo: userMessage.id,
+              status: 'error',
+            });
+            return;
+          }
+          handleDeleteMessage(eventMessage.id);
           handleDeleteMessage(userMessage.id);
           return;
         }

@@ -50,6 +50,7 @@ Only add 2 suggestions, preferably one for model creation and one with follow-up
 Keep the suggestions very short and to the point.
 Respond with a valid JSON that represents your answer and suggestions.
 Minimal example: { "answer": "[your answer]", "suggestions": ["[your suggestion]", "[your suggestion]"] }
+Do not try to fix errors in the document more then one time, report the error to the user and ask them to fix, tell them you messed up.
 `;
 
 export const CREATION_SYSTEM_PROMPT = `
