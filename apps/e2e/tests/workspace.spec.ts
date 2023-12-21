@@ -268,7 +268,9 @@ test('workspace permissions', async ({
     ).toBeHidden();
 
     await randomFreeUser.page.getByTestId('list-notebook-title').click();
-    await expect(randomFreeUser.page.getByText('Test Notepad')).toBeVisible();
+    await expect(
+      randomFreeUser.page.getByText('Test Notepad').first()
+    ).toBeVisible();
     await expect(
       randomFreeUser.page.getByTestId('editor-title')
     ).toBeEditable();

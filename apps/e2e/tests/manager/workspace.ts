@@ -320,6 +320,11 @@ export class Workspace {
       await this.page.getByText('Workspace admin').click();
     }
     await this.page.getByText('Send invitation').click();
-    await this.page.getByTestId('closable-modal').click();
+    await expect(async () => {
+      await this.page.getByTestId('closable-modal').click();
+      await expect(
+        this.page.getByTestId('manage-workspace-members')
+      ).toBeVisible();
+    }).toPass();
   }
 }
