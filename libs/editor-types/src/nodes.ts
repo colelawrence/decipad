@@ -141,7 +141,6 @@ interface WithEvents {
 export interface WithUndo {
   undo: () => void;
   redo: () => void;
-  clearAll: () => void;
 }
 
 export type MinimalRootEditorWithEventsAndObserver = MinimalRootEditor &

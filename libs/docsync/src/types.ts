@@ -24,6 +24,7 @@ interface UndoEditor {
   undo: () => void;
   redo: () => void;
   undoManager?: UndoManager;
+  clearAll: () => void;
 }
 
 type TYjsEditor = GTYjsEditor<MinimalRootEditor>;

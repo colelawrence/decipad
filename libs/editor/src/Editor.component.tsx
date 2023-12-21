@@ -15,7 +15,15 @@ import { EditorPlaceholder, LoadingFilter } from '@decipad/ui';
 import { ErrorBoundary } from '@sentry/react';
 import { Plate } from '@udecode/plate-common';
 import { EditorLayout } from 'libs/ui/src/atoms';
-import { ReactNode, RefObject, useCallback, useContext, useRef } from 'react';
+import {
+  ReactNode,
+  RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { ReactEditor } from 'slate-react';
 import { useDebouncedCallback } from 'use-debounce';
 import { EditorChangeContext } from '../../react-contexts/src/editor-change';
@@ -73,14 +81,21 @@ const InsidePlate = ({
   </>
 );
 
-/**
- * TODO: remove Plate.id after plate patch
- */
 export const Editor = (props: EditorProps) => {
   const { editor, readOnly, workspaceId, notebookId } = props;
 
-  // Cursor remote presence
-  // useCursors(editor);
+  //
+  // Why do we need this?
+  // - When you update `editor`, the component doesnt change state,
+  // - because as react sees it, nothing much changed. So it will not re-render
+  // - the children.
+  //
+  // Like this, we can tell react that it really is a new component.
+  //
+  const [key, setKey] = useState(0);
+  useEffect(() => {
+    setKey((k) => k + 1);
+  }, [editor]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const changeSubject = useContext(EditorChangeContext);
@@ -129,6 +144,7 @@ export const Editor = (props: EditorProps) => {
               <BlockLengthSynchronizationProvider editor={editor}>
                 <TeleportEditor editor={editor}>
                   <Plate<MyValue>
+                    key={key}
                     editor={editor}
                     onChange={onChange}
                     readOnly={

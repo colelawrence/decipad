@@ -8,7 +8,6 @@ interface InitNotebookStateOptions {
   docsync: Omit<DocSyncOptions, 'editor' | 'controller'>;
   plugins: MyPlatePlugin[];
   onChangeTitle: (title: string) => void;
-  onCreateSnapshot: () => void;
 }
 
 export type EnhancedPromise<T> = typeof Promise & {

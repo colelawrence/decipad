@@ -30,7 +30,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   onDocsync,
   onComputer,
   onNotebookTitleChange,
-  onCreateSnapshot,
 }) => {
   const { data: session } = useSession();
 
@@ -68,7 +67,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
             protocolVersion: 2,
           },
           onChangeTitle: onNotebookTitleChange,
-          onCreateSnapshot,
         },
         () => session ?? undefined
       );
@@ -79,7 +77,6 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
     initialState,
     notebookId,
     notebookMetaLoaded,
-    onCreateSnapshot,
     onNotebookTitleChange,
     plugins,
     readOnly,
@@ -88,7 +85,9 @@ export const NotebookLoader: FC<NotebookLoaderProps> = ({
   ]);
 
   // notebook initialization: client-side rendering
-  useEffect(init, [init]);
+  // We take `editor`, because if that dependency changes
+  // we want to force `init` to run to get us an up to date editor.
+  useEffect(init, [init, editor]);
 
   // notebook initialization: SSR
   if (isServerSideRendering()) {

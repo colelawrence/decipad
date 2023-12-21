@@ -21,5 +21,4 @@ export interface NotebookProps {
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;
   onAttached: (handle: string) => Promise<undefined | { url: URL }>;
-  onCreateSnapshot: () => void;
 }

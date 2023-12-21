@@ -39,5 +39,10 @@ export const setupUndo = (editor: DocSyncEditor): DocSyncEditor => {
     editor.undoManager?.redo();
   };
 
+  // Overriden in `oneNotebookState` in `initEditor`;
+  editor.clearAll = () => {
+    throw new Error('Clear all not overridden');
+  };
+
   return editor;
 };

@@ -14,6 +14,7 @@ import { isNewNotebook } from './isNewNotebook';
 import { CursorAwarenessSchedule } from './cursors';
 import debounce from 'lodash.debounce';
 import { getNodeString } from '@udecode/plate-common';
+import * as idb from 'lib0/indexeddb';
 
 const LOAD_TIMEOUT_MS = 5000;
 const HAS_NOT_SAVED_IN_A_WHILE_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutes
@@ -121,6 +122,28 @@ export const createNotebookStore = (onDestroy: () => void) =>
         },
         getSession
       );
+
+      //
+      // Only to be used in read mode.
+      // It clears all the current read mode changes and resets notebook
+      // back to the latest published versions state.
+      //
+      docSyncEditor.clearAll = function overridenClearAll() {
+        const isReadOnly = Boolean(docSyncEditor.isReadOnly);
+        if (!isReadOnly) {
+          throw new Error(
+            'Dont call this when not isReadOnly, youll destroy your notebook'
+          );
+        }
+
+        idb.deleteDB(`${docSyncEditor.id}:readonly`).then(() => {
+          docSyncEditor.destroy();
+          // Forces us to get a new editor.
+          set(() => ({
+            editor: undefined,
+          }));
+        });
+      };
 
       // ==== Cursor awareness ====
 

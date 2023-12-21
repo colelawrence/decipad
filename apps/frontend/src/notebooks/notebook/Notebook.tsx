@@ -307,7 +307,6 @@ const NewEditor: FC<{
         initialState={actions.initialState}
         getAttachmentForm={actions.getAttachmentForm}
         onAttached={actions.onAttached}
-        onCreateSnapshot={actions.onCreateSnapshot}
       />
     </EditorStylesContext.Provider>
   );
@@ -489,19 +488,13 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
     meta.data?.getPadById?.isPublic,
   ]);
 
-  const revertChanges = useCallback(() => {
-    while (docsync?.undoManager?.canUndo()) {
-      docsync.undoManager.undo();
-    }
-  }, [docsync?.undoManager]);
-
   if (!meta.data?.getPadById) {
     return <TopbarPlaceholder />;
   }
 
   return (
     <NotebookTopbar
-      onRevertChanges={revertChanges}
+      onRevertChanges={() => docsync?.clearAll()}
       permissionType={permission}
       hasUnpublishedChanges={hasUnpublishedChanges}
       notebookMeta={meta.data?.getPadById}
@@ -514,7 +507,7 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       isEmbed={isEmbed}
       onRedo={() => docsync?.undoManager?.redo() || noop}
       onUndo={() => docsync?.undoManager?.undo() || noop}
-      onClearAll={() => docsync?.clearAll()}
+      onClearAll={() => {}}
       sidebarOpen={sidebarData.sidebarOpen}
       toggleSidebar={sidebarData.toggleSidebar}
       aiMode={aiModeData.aiMode}
