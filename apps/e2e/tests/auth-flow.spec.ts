@@ -57,9 +57,9 @@ test('check redirect from signup from try decipad @auth', async ({
   await test.step('publish second tab of new notebook', async () => {
     await testUser.createAndNavNewNotebook();
     await notebookTestUser.updateNotebookTitle(notebookTitle);
-    await notebookTestUser.addParapraph(textFirstTab);
+    await notebookTestUser.addParagraph(textFirstTab);
     await notebookTestUser.createTab('second tab');
-    await notebookTestUser.addParapraph(textSecondTab);
+    await notebookTestUser.addParagraph(textSecondTab);
     notebookWithTabs = await notebookTestUser.publishNotebook();
   });
 

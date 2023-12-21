@@ -239,6 +239,7 @@ test('workspace permissions', async ({
   randomFreeUser,
   anotherRandomFreeUser,
 }) => {
+  test.slow();
   let premiumWorkspaceId: string;
   await test.step('premium user is premium', async () => {
     await premiumUser.goToWorkspace();
@@ -258,6 +259,7 @@ test('workspace permissions', async ({
     );
     await premiumUser.createAndNavNewNotebook(premiumWorkspaceId);
     await premiumUser.notebook.updateNotebookTitle('Test Notepad');
+    await premiumUser.notebook.checkNotebookTitle('Test Notepad');
     await premiumUser.goToWorkspace(premiumWorkspaceId);
   });
 
@@ -268,15 +270,25 @@ test('workspace permissions', async ({
     ).toBeHidden();
 
     await randomFreeUser.page.getByTestId('list-notebook-title').click();
-    await expect(
-      randomFreeUser.page.getByText('Test Notepad').first()
-    ).toBeVisible();
-    await expect(
-      randomFreeUser.page.getByTestId('editor-title')
-    ).toBeEditable();
+    await randomFreeUser.notebook.waitForEditorToLoad();
+    await expect(randomFreeUser.notebook.notebookTitle).toBeEditable();
     await expect(
       randomFreeUser.page.getByTestId('paragraph-content')
     ).toBeEditable();
+
+    await randomFreeUser.notebook.addParagraph('I am editing');
+    await expect(randomFreeUser.page.getByText('I am editing')).toBeVisible();
+
+    await randomFreeUser.notebook.checkNotebookTitle('Test Notepad');
+    await randomFreeUser.notebook.updateNotebookTitle('Standard member update');
+    await randomFreeUser.notebook.checkNotebookTitle('Standard member update');
+
+    await randomFreeUser.page.getByTestId('publish-button').click();
+    await expect(
+      randomFreeUser.page.getByText(
+        'Request access to have more sharing options'
+      )
+    ).toBeVisible();
   });
 
   await test.step('standard member checks', async () => {
@@ -286,14 +298,88 @@ test('workspace permissions', async ({
     ).toBeVisible();
 
     await anotherRandomFreeUser.page.getByTestId('list-notebook-title').click();
+
+    await expect(anotherRandomFreeUser.notebook.notebookTitle).toBeEditable();
+
+    await anotherRandomFreeUser.notebook.checkNotebookTitle(
+      'Standard member update'
+    );
+    await anotherRandomFreeUser.notebook.updateNotebookTitle(
+      'admin member update'
+    );
+    await anotherRandomFreeUser.notebook.checkNotebookTitle(
+      'admin member update'
+    );
+
+    await anotherRandomFreeUser.page.getByTestId('publish-button').click();
     await expect(
-      anotherRandomFreeUser.page.getByText('Test Notepad')
+      anotherRandomFreeUser.page.getByText(
+        'Invited users will receive an email to the provided email address'
+      )
     ).toBeVisible();
+  });
+});
+
+test('reader and collaborator permissions', async ({
+  premiumUser,
+  randomFreeUser,
+  anotherRandomFreeUser,
+}) => {
+  let notebook: string;
+
+  await test.step('invite reader and collaborator to notebook', async () => {
+    await premiumUser.createAndNavNewNotebook();
+    await premiumUser.notebook.inviteUser(randomFreeUser.email, 'reader');
+    await premiumUser.notebook.inviteUser(
+      anotherRandomFreeUser.email,
+      'collaborator'
+    );
+    notebook = premiumUser.page.url();
+  });
+
+  await test.step('reader checks', async () => {
+    await randomFreeUser.page.goto(notebook);
+    await randomFreeUser.notebook.waitForEditorToLoad();
     await expect(
-      anotherRandomFreeUser.page.getByTestId('editor-title')
-    ).toBeEditable();
+      randomFreeUser.page.getByText('You are in reading mode')
+    ).toBeVisible();
+
+    expect(
+      await randomFreeUser.notebook.notebookTitle.evaluate(
+        (e: HTMLElement) => e.isContentEditable
+      )
+    ).toBeFalsy();
+
+    expect(
+      await randomFreeUser.notebook.notebookParagraph.evaluate(
+        (e: HTMLElement) => e.isContentEditable
+      )
+    ).toBeFalsy();
+  });
+
+  await test.step('collaborator checks', async () => {
+    await anotherRandomFreeUser.page.goto(notebook);
+    await anotherRandomFreeUser.notebook.waitForEditorToLoad();
     await expect(
-      anotherRandomFreeUser.page.getByTestId('paragraph-content')
-    ).toBeEditable();
+      anotherRandomFreeUser.page.getByText('You are in reading mode')
+    ).toBeHidden();
+
+    await anotherRandomFreeUser.page.getByTestId('publish-button').click();
+    await expect(
+      anotherRandomFreeUser.page.getByText(
+        'Request access to have more sharing options'
+      )
+    ).toBeVisible();
+    await anotherRandomFreeUser.notebook.focusOnBody();
+    await anotherRandomFreeUser.notebook.addParagraph('I am editing');
+    await expect(
+      anotherRandomFreeUser.page.getByText('I am editing')
+    ).toBeVisible();
+    await anotherRandomFreeUser.notebook.updateNotebookTitle(
+      'edited by collaborator'
+    );
+    await anotherRandomFreeUser.notebook.checkNotebookTitle(
+      'edited by collaborator'
+    );
   });
 });

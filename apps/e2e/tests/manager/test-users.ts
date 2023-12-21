@@ -48,7 +48,7 @@ export class User {
     await this.page.waitForURL(/\/w\/(.+)/);
     const workspaceID = this.page.url().match(/\/w\/(.+)/);
     if (workspaceID) {
-      this.workspace.updateDefaultWorkspaceID(workspaceID[1].toString());
+      await this.workspace.updateDefaultWorkspaceID(workspaceID[1].toString());
     }
   }
 
@@ -84,6 +84,7 @@ export class User {
   // todo: move this to workspace pom
   async createAndNavNewNotebook(workspaceId?: string) {
     await this.goToWorkspace(workspaceId);
+    await this.newNotebook.waitFor();
     await this.newNotebook.click();
     await this.page.waitForSelector('[data-slate-editor] h1');
   }

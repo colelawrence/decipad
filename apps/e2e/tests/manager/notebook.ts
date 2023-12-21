@@ -1009,15 +1009,15 @@ export class Notebook {
   }
 
   /**
-   * FIX: Add parapraph.
+   * FIX: Add paragraph.
    *
    * **Usage**
    *
    * ```js
-   * await notebook.addParapraph();
+   * await notebook.addParagraph();
    * ```
    */
-  async addParapraph(text: string) {
+  async addParagraph(text: string) {
     await this.focusOnBody(-1);
     const paragraphNumber = await this.notebookParagraph.count();
     await this.page.keyboard.type(text);
@@ -1049,9 +1049,7 @@ export class Notebook {
    * ```
    */
   async waitForEditorToLoad() {
-    await expect(async () => {
-      await expect(this.notebookTitle).toBeVisible();
-    }).toPass();
+    await this.notebookTitle.waitFor({ state: 'visible' });
     await this.notebookTitle.click();
   }
 
@@ -1309,11 +1307,18 @@ export class Notebook {
    * await inviteNotebookCollaborator('test-email@gmal.com')
    * ```
    */
-  async inviteNotebookCollaborator(email: string) {
+  async inviteUser(email: string, role: 'reader' | 'collaborator') {
     await this.page.getByRole('button', { name: 'Share' }).click();
     await this.page.getByPlaceholder('Enter email address').fill(email);
-    await this.page.keyboard.press('Tab');
+
+    if (role === 'reader') {
+      await this.page.keyboard.press('Tab');
+      await this.page.keyboard.press('Enter');
+      await this.page.getByTestId('notebook-reader').click();
+    }
+
     await this.page.getByTestId('send-invitation').click();
+    await this.focusOnBody();
   }
 
   /**

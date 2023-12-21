@@ -21,7 +21,7 @@ smoketest(
         await userA.createAndNavNewNotebook();
         await userANotebook.updateNotebookTitle(notebookTitle);
         notebookURL = userAPage.url();
-        await userANotebook.inviteNotebookCollaborator(userB.email);
+        await userANotebook.inviteUser(userB.email, 'collaborator');
       }
     );
 

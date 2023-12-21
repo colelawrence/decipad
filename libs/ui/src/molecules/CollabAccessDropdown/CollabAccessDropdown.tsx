@@ -74,6 +74,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       <MenuItem
         onSelect={onReaderSelected}
         selected={currentPermission === 'READ'}
+        testid="notebook-reader"
       >
         <p css={p14Medium}>Notebook reader</p>
         <p css={dropDownItemStyles}>
@@ -83,6 +84,7 @@ export const CollabAccessDropdown: FC<CollabAccessDropdownProps> = ({
       <MenuItem
         onSelect={onCollaboratorSelected}
         selected={currentPermission === 'WRITE'}
+        testid="notebook-collaborator"
       >
         <p css={p14Medium}>Notebook collaborator</p>
         <p css={dropDownItemStyles}>Can edit only this notebook</p>
