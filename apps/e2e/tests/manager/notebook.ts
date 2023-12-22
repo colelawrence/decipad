@@ -1345,4 +1345,17 @@ export class Notebook {
     await this.page.waitForTimeout(Timeouts.syncDelay);
     return clipboardText;
   }
+
+  async updateSlider(index: number, value: string) {
+    const sliderInput = this.page.getByTestId('widget-input').nth(index);
+    await sliderInput.waitFor({ state: 'visible' });
+    await sliderInput.click();
+    const { length } = await sliderInput.innerText();
+
+    for (let i = 0; i < length; i += 1) {
+      await this.page.keyboard.press('Backspace');
+    }
+
+    await this.page.keyboard.type(value);
+  }
 }
