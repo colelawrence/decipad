@@ -40,6 +40,18 @@ function isTesting(workspaceName: string) {
   return workspaceName.includes('testing-ai-limits');
 }
 
+function getEmailDomain(email: string): string | undefined {
+  return email.split('@').at(-1);
+}
+
+function isInternalEmail(email: string | null | undefined): boolean {
+  if (email == null) return false;
+  const domain = getEmailDomain(email);
+  if (!domain) return false;
+
+  return domain === 'decipad.com' || domain === 'n1n.co';
+}
+
 const notebooks = resource('notebook');
 
 const openai = new OpenAI({
@@ -103,6 +115,7 @@ export const engageAssistant = async ({
   ]);
 
   const isPremium = await isPremiumWorkspace(workspaceId);
+  const internalEmail = isInternalEmail(user.email);
 
   const workspaceTotalTokensUsed =
     (promptTokens?.consumption ?? 0) + (completionTokens?.consumption ?? 0);
@@ -111,9 +124,11 @@ export const engageAssistant = async ({
 
   //
   // Lets not have limits for dev/staging with n1n.co workspace names.
+  // Let's also not limit "internal" emails. Look at `isInternalEmail`.
   //
 
   if (
+    !internalEmail &&
     !(isDevOrStaging && !isTesting(workspaceName)) &&
     workspaceTotalTokensUsed > limit
   ) {
