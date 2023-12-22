@@ -1,4 +1,11 @@
-import { Value, getEndPoint, getStartPoint } from '@udecode/plate-common';
+import {
+  Value,
+  getEndPoint,
+  getNodeEntry,
+  getStartPoint,
+  isCollapsed,
+  isText,
+} from '@udecode/plate-common';
 import { BaseEditor, BaseSelection, Transforms } from 'slate';
 import { createOnKeyDownPluginFactory } from '../../pluginFactories';
 import { blockSelectionStore } from '@udecode/plate-selection';
@@ -16,18 +23,35 @@ function selectAll(editor: MyGenericEditor<Value>): void {
   blockSelectionStore.set.selectedIds(new Set(ids));
 }
 
-function isSelectionSameBlock(selection: BaseSelection): boolean {
-  if (!selection) return false;
-  return selection.anchor.path[0] === selection.focus.path[0];
+function selectBetweenRange(
+  editor: MyGenericEditor<Value>,
+  [start, end]: [number, number]
+): void {
+  const ids = editor.children
+    .filter((_, i) => i >= start && i <= end)
+    .map((n) => n.id);
+
+  blockSelectionStore.set.selectedIds(new Set(ids));
+}
+
+function getBlockRange(
+  selection: NonNullable<BaseSelection>
+): [number, number] {
+  return [
+    Math.min(selection.anchor.path[0], selection.focus.path[0]),
+    Math.max(selection.anchor.path[0], selection.focus.path[0]),
+  ];
 }
 
 //
 // What should happen when the user presses Ctrl+A?
 //
-// 1) If selection is in same block
-// 1.1) If it doesn't span the entire block (only partially selected), we select whole block.
-// 1.2) Otherwise we select ALL blocks using `blockSelectionStore` and deselect the editor.
-// 2) Everything else, we deselect the editor and select ALL blocks using `blockSelectionStore`.
+// 1) No selection? This can happen when you are selecting a single block (blockSelectionStore).
+// Or arent focused on the editor. We select all blocks.
+//
+// 2) Is selection in a node? and is it not selecting the whole node? Select the text.
+//
+// 3) If the selection isn't collapsed we select the blocks that the range is over.
 //
 
 export const createSelectionShortcutPlugin = createOnKeyDownPluginFactory({
@@ -38,32 +62,36 @@ export const createSelectionShortcutPlugin = createOnKeyDownPluginFactory({
     if ((event.metaKey || event.ctrlKey) && event.key === 'a') {
       event.preventDefault();
 
-      if (isSelectionSameBlock(selection)) {
-        assert(selection);
-
-        const wholeBlockSelection: BaseSelection = {
-          anchor: getStartPoint(editor, [selection.anchor.path[0]]),
-          focus: getEndPoint(editor, [selection.anchor.path[0]]),
-        };
-
-        if (dequal(wholeBlockSelection, selection)) {
-          editor.deselect();
-          selectAll(editor);
-          return;
-        }
-
-        editor.setSelection(wholeBlockSelection);
-        return;
-      }
-
       if (!selection) {
         // The cursor is not on any node inside the editor, select everything.
         selectAll(editor);
         return;
       }
 
-      // Otherwise, lets fully select the current block.
-      Transforms.select(editor as BaseEditor, selection.anchor.path);
+      assert(selection);
+
+      const wholeBlockSelection: BaseSelection = {
+        anchor: getStartPoint(editor, [selection.anchor.path[0]]),
+        focus: getEndPoint(editor, [selection.anchor.path[0]]),
+      };
+
+      if (isCollapsed(selection) && !dequal(wholeBlockSelection, selection)) {
+        const entry = getNodeEntry(editor, selection.anchor.path);
+        assert(entry != null, 'Node must be defined under selection');
+
+        const [node] = entry;
+        const path = [...selection.anchor.path];
+        if (isText(node)) {
+          path.pop();
+        }
+
+        Transforms.select(editor as BaseEditor, path);
+        return;
+      }
+
+      const range = getBlockRange(selection);
+      editor.deselect();
+      selectBetweenRange(editor, range);
     }
   },
 });

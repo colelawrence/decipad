@@ -84,14 +84,13 @@ describe('pressing cmd+a', () => {
   });
 
   describe('when selection is a sub-range of one element', () => {
-    it('should select the entire element', () => {
-      const expectedSelection = getRange(editor, [0]);
+    it('should deselect editor and select using blockSelectionStore', () => {
       editor.selection = {
         focus: getStartPoint(editor, [0, 0]),
         anchor: getStartPoint(editor, [0, 1]),
       };
       triggerKeyDownEvent(editor, 'a', { metaKey: true });
-      expect(editor.selection).toEqual(expectedSelection);
+      expect(editor.selection).toEqual(null);
     });
   });
 });
