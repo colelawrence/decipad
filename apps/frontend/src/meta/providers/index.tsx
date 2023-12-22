@@ -9,6 +9,7 @@ import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { AnalyticsProvider } from './AnalyticsProvider';
 import { IntercomProvider } from './IntercomProvider';
 import { UpdatesHandler } from './UpdatesHandler';
+import { AiUsageProvider } from '@decipad/react-contexts';
 
 const backendForDND = () =>
   'window' in globalThis && 'ontouchstart' in window
@@ -23,13 +24,17 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
       <UpdatesHandler>
         <QueryParamProvider adapter={ReactRouter6Adapter}>
           <AnalyticsProvider>
-            {session.status !== 'unauthenticated' ? (
-              <IntercomProvider>
+            <AiUsageProvider>
+              {session.status !== 'unauthenticated' ? (
+                <IntercomProvider>
+                  <DndProvider backend={backendForDND()}>
+                    {children}
+                  </DndProvider>
+                </IntercomProvider>
+              ) : (
                 <DndProvider backend={backendForDND()}>{children}</DndProvider>
-              </IntercomProvider>
-            ) : (
-              <DndProvider backend={backendForDND()}>{children}</DndProvider>
-            )}
+              )}
+            </AiUsageProvider>
           </AnalyticsProvider>
         </QueryParamProvider>
       </UpdatesHandler>

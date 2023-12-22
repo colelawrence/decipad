@@ -701,6 +701,7 @@ export interface ResourceUsageRecord extends TableRecordBase {
   // /openai/gpt-4-1106/users
   id: ID;
   consumption: number;
+  quotaLimit?: number;
 }
 
 export type ResourceConsumer = 'users' | 'workspaces';

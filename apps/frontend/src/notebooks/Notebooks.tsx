@@ -1,12 +1,14 @@
 import { notebooks } from '@decipad/routing';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, Outlet } from 'react-router-dom';
 import { ErrorPage, RequireSession, RouteEvents } from '../meta';
 import Notebook from './notebook/Notebook';
 import NotebookInvite from './notebookInvite/notebookInvite';
 import { WelcomeNotebookRedirect } from '../Onboard/WelcomeNotebookRedirect';
+import { AddCreditsModal } from '@decipad/ui';
 
 const Notebooks: React.FC = () => {
   const routeDefs = notebooks({});
+  const navigate = useNavigate();
 
   return (
     <Routes>
@@ -15,9 +17,15 @@ const Notebooks: React.FC = () => {
         element={
           <RouteEvents category="notebook">
             <Notebook />
+            <Outlet />
           </RouteEvents>
         }
-      />
+      >
+        <Route
+          path="add-credits"
+          element={<AddCreditsModal closeAction={() => navigate(-1)} />}
+        />
+      </Route>
       <Route
         path={routeDefs.acceptInvite.template}
         element={

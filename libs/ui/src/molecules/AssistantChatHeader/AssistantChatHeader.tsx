@@ -1,10 +1,17 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { css } from '@emotion/react';
-import { componentCssVars, cssVar, p12Bold, p13Medium } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Bold,
+  p12Medium,
+  p13Medium,
+} from '../../primitives';
 import { Magic, Trash } from '../../icons';
-import { Tooltip } from '../../atoms';
+import { Button, Tooltip } from '../../atoms';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const wrapperStyles = css({
   display: 'flex',
@@ -51,7 +58,7 @@ export const titleStyles = css(p13Medium, {
 const tagStyles = css(p13Medium, {
   color: cssVar('textSubdued'),
   height: 32,
-  padding: '0px 8px',
+  padding: '2px 8px',
   margin: '-4px -8px',
   display: 'flex',
   alignItems: 'center',
@@ -112,34 +119,54 @@ const creditsStyles = css(tagStyles, {
     backgroundColor: cssVar('backgroundHeavier'),
     display: 'flex',
     height: '16px',
-    padding: '0px 4px',
+    padding: '10px 4px',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: '4px',
   },
 });
 
-const Credits: React.FC<{ creditsUsed: number; creditsQuota: number }> = ({
-  creditsUsed,
-  creditsQuota,
-}) => (
-  <Tooltip
-    trigger={
-      <div css={creditsStyles}>
-        <span>Credits</span>
-        <label>
-          <span>{Math.max(0, creditsQuota - creditsUsed)}</span>
-        </label>
+const addMoreCreditsButton = css(p12Medium, {
+  borderRadius: '4px',
+  padding: '2px 4px',
+  backgroundColor: componentCssVars('ButtonTertiaryAltDefaultBackground'),
+  color: componentCssVars('ButtonTertiaryAltDefaultText'),
+  display: 'inline',
+});
+
+const Credits: React.FC<{
+  creditsUsed: number;
+  creditsQuota: number;
+}> = ({ creditsUsed, creditsQuota }) => {
+  const navigate = useNavigate();
+  return (
+    <Tooltip
+      trigger={
+        <div css={creditsStyles}>
+          <span>Credits</span>
+          <label>
+            <span>{Math.max(0, creditsQuota - creditsUsed)}</span>
+          </label>
+          {isFlagEnabled('AI_BUY_MORE_CREDITS') && (
+            <Button
+              type="secondary"
+              styles={addMoreCreditsButton}
+              onClick={() => navigate('add-credits', { relative: 'path' })}
+            >
+              Buy more
+            </Button>
+          )}
+        </div>
+      }
+      side="bottom"
+      variant="small"
+    >
+      <div css={tooltipTitleStyles}>
+        {Math.min(creditsQuota, creditsUsed)}/{creditsQuota} used
       </div>
-    }
-    side="bottom"
-    variant="small"
-  >
-    <div css={tooltipTitleStyles}>
-      {Math.min(creditsQuota, creditsUsed)}/{creditsQuota} used
-    </div>
-  </Tooltip>
-);
+    </Tooltip>
+  );
+};
 
 type AssistantChatHeaderProps = {
   onClear: () => void;

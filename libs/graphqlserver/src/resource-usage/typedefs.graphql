@@ -5,6 +5,18 @@ type ResourceUsage {
   quotaLimit: Int!
 }
 
+type NewResourceQuotaLimit {
+  newQuotaLimit: Int!
+}
+
+extend type Mutation {
+  updateExtraAiAllowance(
+    resourceType: String!
+    resourceId: String!
+    paymentMethodId: String!
+  ): NewResourceQuotaLimit
+}
+
 extend type User {
   # An array because we can use various AI Models
   resourceUsages: [ResourceUsage]

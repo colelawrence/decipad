@@ -14,11 +14,11 @@ import {
   useRenameNotebookMutation,
 } from '@decipad/graphql-client';
 import {
-  AiUsageProvider,
   ComputerContextProvider,
   ControllerProvider,
   EditorChangeContextProvider,
   EditorStylesContext,
+  useAiUsage,
   useCurrentWorkspaceStore,
   useNotebookMetaData,
 } from '@decipad/react-contexts';
@@ -549,6 +549,8 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const [meta] = useGetNotebookMetaQuery({
     variables: { id: notebookId },
   });
+  const isPremium = Boolean(meta.data?.getPadById?.workspace?.isPremium);
+  const { updateUsage } = useAiUsage();
 
   const isReadOnly =
     meta.data?.getPadById?.myPermissionType === PermissionType.Read ||
@@ -559,7 +561,7 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
   const { embed: _embed } = useRouteParams(notebooks({}).notebook);
   const isEmbed = Boolean(_embed);
 
-  const [prompt, completion, isPremium] = useMemo(() => {
+  useEffect(() => {
     const workspace = meta.data?.getPadById?.workspace;
     const usageList = workspace?.resourceUsages ?? [];
     const isWorkspacePremium = workspace?.isPremium;
@@ -569,23 +571,27 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
       aiUsage.find((u) => u?.id.includes('prompt'))?.consumption ?? 0;
     const completionTokens =
       aiUsage.find((u) => u?.id.includes('completion'))?.consumption ?? 0;
+    const tokensLimit =
+      aiUsage[0]?.quotaLimit ??
+      (isWorkspacePremium
+        ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
+        : Number(process.env.REACT_APP_MAX_CREDITS_FREE));
 
-    return [promptTokens, completionTokens, isWorkspacePremium];
-  }, [meta.data?.getPadById?.workspace]);
+    updateUsage({
+      promptTokensUsed: promptTokens,
+      completionTokensUsed: completionTokens,
+      tokensQuotaLimit: tokensLimit,
+    });
+  }, [updateUsage, meta.data?.getPadById?.workspace]);
 
   if (isAssistantOpen && !isEmbed && editor && !isReadOnly) {
     return (
-      <AiUsageProvider
-        promptTokensUsed={prompt}
-        completionTokensUsed={completion}
-      >
-        <AssistantChat
-          notebookId={notebookId}
-          workspaceId={actions.notebook?.workspace?.id ?? ''}
-          editor={editor}
-          isPremium={Boolean(isPremium)}
-        />
-      </AiUsageProvider>
+      <AssistantChat
+        notebookId={notebookId}
+        workspaceId={actions.notebook?.workspace?.id ?? ''}
+        editor={editor}
+        isPremium={isPremium}
+      />
     );
   }
 

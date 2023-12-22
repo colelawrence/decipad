@@ -20,6 +20,7 @@ const pageCoverStyles = css({
   gridTemplate: '100% / 100%',
   overflow: 'hidden',
   backdropFilter: 'brightness(50%)',
+  zIndex: '200',
 });
 
 const overlayStyles = css({

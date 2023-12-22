@@ -32,9 +32,10 @@ export const EditorAssistantChat: React.FC<EditorAssistantChatProps> = ({
     currentUserMessage,
   } = useAssistantChat(notebookId);
 
-  const { promptTokensUsed, completionTokensUsed } = useAiUsage();
+  const { promptTokensUsed, completionTokensUsed, tokensQuotaLimit } =
+    useAiUsage();
 
-  const limit = getLimit(Boolean(isPremium));
+  const limit = tokensQuotaLimit ?? getLimit(Boolean(isPremium));
   const creditsUsed = Math.floor(
     (promptTokensUsed + completionTokensUsed) / TOKENS_TO_CREDITS
   );

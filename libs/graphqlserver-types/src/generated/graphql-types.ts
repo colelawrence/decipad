@@ -176,6 +176,7 @@ export type Mutation = {
   unsharePadWithUser?: Maybe<Pad>;
   unshareWorkspaceWithUser?: Maybe<Workspace>;
   updateExternalDataSource?: Maybe<ExternalDataSource>;
+  updateExtraAiAllowance?: Maybe<NewResourceQuotaLimit>;
   updatePad: Pad;
   updateSecret: Secret;
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
@@ -479,6 +480,13 @@ export type MutationUpdateExternalDataSourceArgs = {
 };
 
 
+export type MutationUpdateExtraAiAllowanceArgs = {
+  paymentMethodId: Scalars['String']['input'];
+  resourceId: Scalars['String']['input'];
+  resourceType: Scalars['String']['input'];
+};
+
+
 export type MutationUpdatePadArgs = {
   id: Scalars['ID']['input'];
   pad: PadInput;
@@ -506,6 +514,11 @@ export type MutationUpdateSelfArgs = {
 export type MutationUpdateWorkspaceArgs = {
   id: Scalars['ID']['input'];
   workspace: WorkspaceInput;
+};
+
+export type NewResourceQuotaLimit = {
+  __typename?: 'NewResourceQuotaLimit';
+  newQuotaLimit: Scalars['Int']['output'];
 };
 
 export type Pad = {
@@ -1099,6 +1112,7 @@ export type ResolversTypes = {
   LogEntry: LogEntry;
   LogInput: LogInput;
   Mutation: ResolverTypeWrapper<{}>;
+  NewResourceQuotaLimit: ResolverTypeWrapper<NewResourceQuotaLimit>;
   Pad: ResolverTypeWrapper<Pad>;
   PadChanges: ResolverTypeWrapper<PadChanges>;
   PadConnectionParams: ResolverTypeWrapper<PadConnectionParams>;
@@ -1170,6 +1184,7 @@ export type ResolversParentTypes = {
   LogEntry: LogEntry;
   LogInput: LogInput;
   Mutation: {};
+  NewResourceQuotaLimit: NewResourceQuotaLimit;
   Pad: Pad;
   PadChanges: PadChanges;
   PadConnectionParams: PadConnectionParams;
@@ -1327,11 +1342,17 @@ export type MutationResolvers<ContextType = GraphqlContext, ParentType extends R
   unsharePadWithUser?: Resolver<Maybe<ResolversTypes['Pad']>, ParentType, ContextType, RequireFields<MutationUnsharePadWithUserArgs, 'id' | 'userId'>>;
   unshareWorkspaceWithUser?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType, RequireFields<MutationUnshareWorkspaceWithUserArgs, 'id' | 'userId'>>;
   updateExternalDataSource?: Resolver<Maybe<ResolversTypes['ExternalDataSource']>, ParentType, ContextType, RequireFields<MutationUpdateExternalDataSourceArgs, 'dataSource' | 'id'>>;
+  updateExtraAiAllowance?: Resolver<Maybe<ResolversTypes['NewResourceQuotaLimit']>, ParentType, ContextType, RequireFields<MutationUpdateExtraAiAllowanceArgs, 'paymentMethodId' | 'resourceId' | 'resourceType'>>;
   updatePad?: Resolver<ResolversTypes['Pad'], ParentType, ContextType, RequireFields<MutationUpdatePadArgs, 'id' | 'pad'>>;
   updateSecret?: Resolver<ResolversTypes['Secret'], ParentType, ContextType, RequireFields<MutationUpdateSecretArgs, 'secret' | 'secretId'>>;
   updateSectionInWorkspace?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateSectionInWorkspaceArgs, 'section' | 'sectionId' | 'workspaceId'>>;
   updateSelf?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateSelfArgs, 'props'>>;
   updateWorkspace?: Resolver<ResolversTypes['Workspace'], ParentType, ContextType, RequireFields<MutationUpdateWorkspaceArgs, 'id' | 'workspace'>>;
+};
+
+export type NewResourceQuotaLimitResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['NewResourceQuotaLimit'] = ResolversParentTypes['NewResourceQuotaLimit']> = {
+  newQuotaLimit?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PadResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['Pad'] = ResolversParentTypes['Pad']> = {
@@ -1682,6 +1703,7 @@ export type Resolvers<ContextType = GraphqlContext> = {
   ExternalKey?: ExternalKeyResolvers<ContextType>;
   KeyValue?: KeyValueResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  NewResourceQuotaLimit?: NewResourceQuotaLimitResolvers<ContextType>;
   Pad?: PadResolvers<ContextType>;
   PadChanges?: PadChangesResolvers<ContextType>;
   PadConnectionParams?: PadConnectionParamsResolvers<ContextType>;

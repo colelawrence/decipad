@@ -108,6 +108,8 @@ function env(name: SupportedEnvKey): string {
       return valueOrDefault(name, process.env.STRIPE_WEBHOOK_SECRET);
     case 'STRIPE_SECRET_KEY':
       return valueOrDefault(name, process.env.STRIPE_SECRET_KEY);
+    case 'STRIPE_EXTRA_CREDITS_PRODUCT_ID':
+      return valueOrDefault(name, process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID);
     case 'REACT_APP_STRIPE_PAYMENT_LINK':
       return valueOrDefault(name, process.env.REACT_APP_STRIPE_PAYMENT_LINK);
     case 'REACT_APP_STRIPE_CUSTOMER_PORTAL_LINK':
@@ -226,6 +228,7 @@ export function limits() {
       free: maxCredits.free * TOKENS_TO_CREDITS,
       pro: maxCredits.pro * TOKENS_TO_CREDITS,
     },
+    tokensToCredits: TOKENS_TO_CREDITS,
   };
 }
 
@@ -269,6 +272,7 @@ export function thirdParty() {
       webhookSecret: env('STRIPE_WEBHOOK_SECRET'),
       secretKey: env('STRIPE_SECRET_KEY'), // 'sk_test_...
       apiKey: env('STRIPE_API_KEY'), // 'pk_test_...
+      extraCreditsProdId: env('STRIPE_EXTRA_CREDITS_PRODUCT_ID'), // prod_...
     },
     defaultTokenExpirationSeconds: Number(
       env('DECI_DEFAULT_TOKEN_EXPIRATION_SECONDS')

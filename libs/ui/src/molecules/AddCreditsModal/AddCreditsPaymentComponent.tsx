@@ -1,0 +1,98 @@
+import { css } from '@emotion/react';
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { Button } from '../../atoms';
+import { useUpdateResourceQuotaLimitMutation } from '@decipad/graphql-client';
+import { FormEventHandler, useCallback, useState } from 'react';
+import { useAiUsage } from '@decipad/react-contexts';
+import { LoadingIndicator } from '../../templates';
+import { cssVarHex } from '../../primitives';
+
+type AddCreditsPaymentComponentProps = {
+  resourceId: string;
+  closeAction: () => void;
+};
+
+const test = {
+  style: {
+    base: {
+      color: cssVarHex('textHeavy'),
+    },
+  },
+};
+
+export const AddCreditsPaymentComponent: React.FC<
+  AddCreditsPaymentComponentProps
+> = ({ resourceId, closeAction }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [, UpdateResourceQuotaLimit] = useUpdateResourceQuotaLimitMutation();
+
+  const updateNewQuotaLimit = useCallback(
+    async (paymentMethodId: string) => {
+      return UpdateResourceQuotaLimit({
+        resourceType: 'workspaces',
+        resourceId,
+        paymentMethodId,
+      });
+    },
+    [resourceId, UpdateResourceQuotaLimit]
+  );
+
+  const { updateUsage } = useAiUsage();
+  const [loading, setLoadingState] = useState(false);
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+    const card = elements.getElement(CardElement);
+
+    // Create a PaymentMethod using the card element
+    if (card) {
+      const result = await stripe.createPaymentMethod({
+        type: 'card',
+        card,
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+      } else {
+        setLoadingState(true);
+        const newCreditsLimitResult = await updateNewQuotaLimit(
+          result.paymentMethod.id
+        );
+
+        if (newCreditsLimitResult.data) {
+          const newLimit =
+            newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??
+            0;
+
+          updateUsage({ tokensQuotaLimit: newLimit });
+          setLoadingState(false);
+          closeAction();
+        }
+      }
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <CardElement options={test} />
+        {!loading && (
+          <Button type="primaryBrand" styles={buyNowButtonStyles}>
+            Buy Now
+          </Button>
+        )}
+        {loading && <LoadingIndicator />}
+      </form>
+    </div>
+  );
+};
+
+const buyNowButtonStyles = css({
+  marginTop: '20px',
+  width: '100%',
+});

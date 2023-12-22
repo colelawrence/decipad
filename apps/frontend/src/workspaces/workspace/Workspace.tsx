@@ -9,10 +9,11 @@ import {
   useRenameWorkspaceMutation,
   useUpdateSectionMutation,
 } from '@decipad/graphql-client';
-import { useCurrentWorkspaceStore } from '@decipad/react-contexts';
+import { useAiUsage, useCurrentWorkspaceStore } from '@decipad/react-contexts';
 import { notebooks, useRouteParams, workspaces } from '@decipad/routing';
 import { useToast } from '@decipad/toast';
 import {
+  AddCreditsModal,
   CreateWorkspaceModal,
   Dashboard,
   DashboardSidebar,
@@ -135,6 +136,41 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     [allWorkspaces, workspaceId]
   );
 
+  const { updateUsage } = useAiUsage();
+
+  useEffect(() => {
+    let quotaLimit = currentWorkspace?.isPremium
+      ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
+      : Number(process.env.REACT_APP_MAX_CREDITS_FREE);
+    let pTokens = 0;
+    let cTokens = 0;
+    (currentWorkspace?.resourceUsages || [])
+      .filter((u) => u?.resourceType === 'openai')
+      .forEach((u) => {
+        if (u?.id.includes('prompt')) {
+          pTokens = u.consumption;
+        }
+
+        if (u?.id.includes('completion')) {
+          cTokens = u.consumption;
+        }
+
+        if (u?.quotaLimit) {
+          quotaLimit = u.quotaLimit;
+        }
+      });
+
+    updateUsage({
+      promptTokensUsed: pTokens,
+      completionTokensUsed: cTokens,
+      tokensQuotaLimit: quotaLimit,
+    });
+  }, [
+    updateUsage,
+    currentWorkspace?.isPremium,
+    currentWorkspace?.resourceUsages,
+  ]);
+
   useEffect(() => {
     setCurrentWorkspaceInfo({
       id: currentWorkspace?.id,
@@ -226,7 +262,6 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
       />
     </Frame>
   );
-
   return (
     <>
       <Routes>
@@ -245,6 +280,7 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                       membersCount={currentWorkspace.membersCount ?? 1}
                       onCreateNotebook={handleCreateNotebook}
                       membersHref={currentWorkspaceRoute.members({}).$}
+                      creditsHref={currentWorkspaceRoute.addcredits({}).$}
                     />
                     <NotebookList
                       pageType={pageInfo}
@@ -353,6 +389,17 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
                   closeHref={currentWorkspaceRoute.$}
                   currentWorkspace={currentWorkspace}
                 />
+              </LazyRoute>
+            }
+          />
+          <Route
+            path={currentWorkspaceRoute.addcredits.template}
+            element={
+              <LazyRoute>
+                <AddCreditsModal
+                  closeAction={() => navigate(currentWorkspaceRoute.$)}
+                  resourceId={currentWorkspace.id}
+                ></AddCreditsModal>
               </LazyRoute>
             }
           />

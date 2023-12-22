@@ -178,6 +178,7 @@ export type Mutation = {
   unsharePadWithUser?: Maybe<Pad>;
   unshareWorkspaceWithUser?: Maybe<Workspace>;
   updateExternalDataSource?: Maybe<ExternalDataSource>;
+  updateExtraAiAllowance?: Maybe<NewResourceQuotaLimit>;
   updatePad: Pad;
   updateSecret: Secret;
   updateSectionInWorkspace?: Maybe<Scalars['Boolean']['output']>;
@@ -481,6 +482,13 @@ export type MutationUpdateExternalDataSourceArgs = {
 };
 
 
+export type MutationUpdateExtraAiAllowanceArgs = {
+  paymentMethodId: Scalars['String']['input'];
+  resourceId: Scalars['String']['input'];
+  resourceType: Scalars['String']['input'];
+};
+
+
 export type MutationUpdatePadArgs = {
   id: Scalars['ID']['input'];
   pad: PadInput;
@@ -508,6 +516,11 @@ export type MutationUpdateSelfArgs = {
 export type MutationUpdateWorkspaceArgs = {
   id: Scalars['ID']['input'];
   workspace: WorkspaceInput;
+};
+
+export type NewResourceQuotaLimit = {
+  __typename?: 'NewResourceQuotaLimit';
+  newQuotaLimit: Scalars['Int']['output'];
 };
 
 export type Pad = {
@@ -1299,6 +1312,15 @@ export type UpdatePadPermissionMutationVariables = Exact<{
 
 
 export type UpdatePadPermissionMutation = { __typename?: 'Mutation', unsharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null, emailValidatedAt?: any | null } | null }> } } | null, sharePadWithUser?: { __typename?: 'Pad', id: string, name: string, access: { __typename?: 'ResourceAccess', id: string, users: Array<{ __typename?: 'UserAccess', permission: PermissionType, canComment: boolean, user?: { __typename?: 'User', id: string, image?: string | null, name: string, email?: string | null, username?: string | null, onboarded?: boolean | null, emailValidatedAt?: any | null } | null }> } } | null };
+
+export type UpdateResourceQuotaLimitMutationVariables = Exact<{
+  resourceType: Scalars['String']['input'];
+  resourceId: Scalars['String']['input'];
+  paymentMethodId: Scalars['String']['input'];
+}>;
+
+
+export type UpdateResourceQuotaLimitMutation = { __typename?: 'Mutation', updateExtraAiAllowance?: { __typename?: 'NewResourceQuotaLimit', newQuotaLimit: number } | null };
 
 export type UpdateSectionMutationVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
@@ -2130,6 +2152,21 @@ export const UpdatePadPermissionDocument = gql`
 export function useUpdatePadPermissionMutation() {
   return Urql.useMutation<UpdatePadPermissionMutation, UpdatePadPermissionMutationVariables>(UpdatePadPermissionDocument);
 };
+export const UpdateResourceQuotaLimitDocument = gql`
+    mutation UpdateResourceQuotaLimit($resourceType: String!, $resourceId: String!, $paymentMethodId: String!) {
+  updateExtraAiAllowance(
+    resourceType: $resourceType
+    resourceId: $resourceId
+    paymentMethodId: $paymentMethodId
+  ) {
+    newQuotaLimit
+  }
+}
+    `;
+
+export function useUpdateResourceQuotaLimitMutation() {
+  return Urql.useMutation<UpdateResourceQuotaLimitMutation, UpdateResourceQuotaLimitMutationVariables>(UpdateResourceQuotaLimitDocument);
+};
 export const UpdateSectionDocument = gql`
     mutation UpdateSection($workspaceId: ID!, $sectionId: ID!, $name: String!, $color: String!) {
   updateSectionInWorkspace(
@@ -2320,6 +2357,7 @@ export type GraphCacheKeysConfig = {
   ExternalDataSource?: (data: WithTypename<ExternalDataSource>) => null | string,
   ExternalKey?: (data: WithTypename<ExternalKey>) => null | string,
   KeyValue?: (data: WithTypename<KeyValue>) => null | string,
+  NewResourceQuotaLimit?: (data: WithTypename<NewResourceQuotaLimit>) => null | string,
   Pad?: (data: WithTypename<Pad>) => null | string,
   PadChanges?: (data: WithTypename<PadChanges>) => null | string,
   PadConnectionParams?: (data: WithTypename<PadConnectionParams>) => null | string,
@@ -2420,6 +2458,9 @@ export type GraphCacheResolvers = {
   KeyValue?: {
     key?: GraphCacheResolver<WithTypename<KeyValue>, Record<string, never>, Scalars['String'] | string>,
     value?: GraphCacheResolver<WithTypename<KeyValue>, Record<string, never>, Scalars['String'] | string>
+  },
+  NewResourceQuotaLimit?: {
+    newQuotaLimit?: GraphCacheResolver<WithTypename<NewResourceQuotaLimit>, Record<string, never>, Scalars['Int'] | string>
   },
   Pad?: {
     access?: GraphCacheResolver<WithTypename<Pad>, Record<string, never>, WithTypename<ResourceAccess> | string>,
@@ -2708,6 +2749,7 @@ export type GraphCacheOptimisticUpdaters = {
   unsharePadWithUser?: GraphCacheOptimisticMutationResolver<MutationUnsharePadWithUserArgs, Maybe<WithTypename<Pad>>>,
   unshareWorkspaceWithUser?: GraphCacheOptimisticMutationResolver<MutationUnshareWorkspaceWithUserArgs, Maybe<WithTypename<Workspace>>>,
   updateExternalDataSource?: GraphCacheOptimisticMutationResolver<MutationUpdateExternalDataSourceArgs, Maybe<WithTypename<ExternalDataSource>>>,
+  updateExtraAiAllowance?: GraphCacheOptimisticMutationResolver<MutationUpdateExtraAiAllowanceArgs, Maybe<WithTypename<NewResourceQuotaLimit>>>,
   updatePad?: GraphCacheOptimisticMutationResolver<MutationUpdatePadArgs, WithTypename<Pad>>,
   updateSecret?: GraphCacheOptimisticMutationResolver<MutationUpdateSecretArgs, WithTypename<Secret>>,
   updateSectionInWorkspace?: GraphCacheOptimisticMutationResolver<MutationUpdateSectionInWorkspaceArgs, Maybe<Scalars['Boolean']>>,
@@ -2789,6 +2831,7 @@ export type GraphCacheUpdaters = {
     unsharePadWithUser?: GraphCacheUpdateResolver<{ unsharePadWithUser: Maybe<WithTypename<Pad>> }, MutationUnsharePadWithUserArgs>,
     unshareWorkspaceWithUser?: GraphCacheUpdateResolver<{ unshareWorkspaceWithUser: Maybe<WithTypename<Workspace>> }, MutationUnshareWorkspaceWithUserArgs>,
     updateExternalDataSource?: GraphCacheUpdateResolver<{ updateExternalDataSource: Maybe<WithTypename<ExternalDataSource>> }, MutationUpdateExternalDataSourceArgs>,
+    updateExtraAiAllowance?: GraphCacheUpdateResolver<{ updateExtraAiAllowance: Maybe<WithTypename<NewResourceQuotaLimit>> }, MutationUpdateExtraAiAllowanceArgs>,
     updatePad?: GraphCacheUpdateResolver<{ updatePad: WithTypename<Pad> }, MutationUpdatePadArgs>,
     updateSecret?: GraphCacheUpdateResolver<{ updateSecret: WithTypename<Secret> }, MutationUpdateSecretArgs>,
     updateSectionInWorkspace?: GraphCacheUpdateResolver<{ updateSectionInWorkspace: Maybe<Scalars['Boolean']> }, MutationUpdateSectionInWorkspaceArgs>,
@@ -2843,6 +2886,9 @@ export type GraphCacheUpdaters = {
   KeyValue?: {
     key?: GraphCacheUpdateResolver<Maybe<WithTypename<KeyValue>>, Record<string, never>>,
     value?: GraphCacheUpdateResolver<Maybe<WithTypename<KeyValue>>, Record<string, never>>
+  },
+  NewResourceQuotaLimit?: {
+    newQuotaLimit?: GraphCacheUpdateResolver<Maybe<WithTypename<NewResourceQuotaLimit>>, Record<string, never>>
   },
   Pad?: {
     access?: GraphCacheUpdateResolver<Maybe<WithTypename<Pad>>, Record<string, never>>,

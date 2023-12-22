@@ -19,6 +19,16 @@ const acceptInvite = route(
   {}
 );
 
+const addCredits = route(
+  `/:notebook/add-credits`,
+  { notebook: descriptiveIdParser },
+  {}
+);
+
 const welcomeNotebook = route(`/welcome`, {}, {});
 
-export default route('/n', {}, { notebook, acceptInvite, welcomeNotebook });
+export default route(
+  '/n',
+  {},
+  { notebook, acceptInvite, welcomeNotebook, addCredits }
+);

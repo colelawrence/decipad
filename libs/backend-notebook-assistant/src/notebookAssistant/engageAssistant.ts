@@ -1,7 +1,6 @@
 import { OpenAI } from 'openai';
 import Boom from '@hapi/boom';
 import { thirdParty, app, limits } from '@decipad/backend-config';
-import { resource } from '@decipad/backend-resources';
 import { exportNotebookContent } from '@decipad/services/notebooks';
 import { RootDocument } from '@decipad/editor-types';
 import { verbalizeDoc } from '@decipad/doc-verbalizer';
@@ -11,7 +10,13 @@ import {
 } from 'openai/resources';
 import { track } from '@decipad/backend-analytics';
 import { User } from '@decipad/backendtypes';
-import tables from '@decipad/tables';
+import tables, {
+  COMPLETION_TOKENS_USED,
+  PROMPT_TOKENS_USED,
+  getResources,
+  isPremiumWorkspace,
+  updateWorkspaceAndUserResourceUsage,
+} from '@decipad/tables';
 import { openApiSchema } from '@decipad/notebook-open-api';
 import { getRemoteComputer } from '@decipad/remote-computer';
 import {
@@ -20,13 +25,7 @@ import {
   FETCH_DATA_SYSTEM_PROMPT,
   MODE_DETECTION_PROMPT,
 } from './constants';
-import {
-  COMPLETION_TOKENS_USED,
-  PROMPT_TOKENS_USED,
-  getResources,
-  isPremiumWorkspace,
-  updateWorkspaceAndUserResourceUsage,
-} from './helpers';
+import { resource } from '@decipad/backend-resources';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 const GPT_MODEL = 'gpt-4-1106-preview';

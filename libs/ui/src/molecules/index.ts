@@ -87,3 +87,4 @@ export { WidgetDisplay } from './WidgetDisplay/WidgetDisplay';
 export { WorkspaceItem } from './WorkspaceItem/WorkspaceItem';
 export type { WorkspaceItemProps } from './WorkspaceItem/WorkspaceItem';
 export { WorkspaceItemCreate } from './WorkspaceItemCreate/WorkspaceItemCreate';
+export { AddCreditsModal } from './AddCreditsModal/AddCreditsModal';

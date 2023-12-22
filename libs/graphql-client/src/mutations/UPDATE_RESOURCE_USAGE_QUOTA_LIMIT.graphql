@@ -1,0 +1,13 @@
+mutation UpdateResourceQuotaLimit(
+  $resourceType: String!
+  $resourceId: String!
+  $paymentMethodId: String!
+) {
+  updateExtraAiAllowance(
+    resourceType: $resourceType
+    resourceId: $resourceId
+    paymentMethodId: $paymentMethodId
+  ) {
+    newQuotaLimit
+  }
+}

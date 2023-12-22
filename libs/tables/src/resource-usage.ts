@@ -3,12 +3,13 @@ import tables, {
   ResourceKeyParams,
   getResourceUsageKey,
   incrementResource,
-} from '@decipad/tables';
+} from '.';
 
 export const PROMPT_TOKENS_USED = 'promptTokensUsed';
 export const COMPLETION_TOKENS_USED = 'completionTokensUsed';
 
 const CONSUMPTION = 'consumption';
+const QUOTA_LIMIT = 'quotaLimit';
 
 type UpdateAiProps = {
   consumerType: 'users' | 'workspaces';
@@ -18,6 +19,7 @@ type UpdateAiProps = {
     promptTokensUsed: number;
     completionTokensUsed: number;
   };
+  quotaLimit?: number;
 };
 
 type UpdateBothAiProps = {
@@ -28,6 +30,7 @@ type UpdateBothAiProps = {
     promptTokensUsed: number;
     completionTokensUsed: number;
   };
+  quotaLimit?: number;
 };
 
 export async function insertOrUpdateUsage({
@@ -35,6 +38,7 @@ export async function insertOrUpdateUsage({
   consumerId,
   aiModel,
   tokensUsed,
+  quotaLimit,
 }: UpdateAiProps): Promise<void> {
   const { resourceusages } = await tables();
   const { promptTokensUsed, completionTokensUsed } = tokensUsed;
@@ -58,10 +62,19 @@ export async function insertOrUpdateUsage({
       CONSUMPTION,
       promptTokensUsed
     );
+
+    if (quotaLimit) {
+      await resourceusages.put({
+        id: promptCompositeKey,
+        consumption: promptTokenUsedExists.consumption + promptTokensUsed,
+        [QUOTA_LIMIT]: quotaLimit,
+      });
+    }
   } else {
     await resourceusages.put({
       id: promptCompositeKey,
       consumption: promptTokensUsed,
+      ...(quotaLimit && { [QUOTA_LIMIT]: quotaLimit }),
     });
   }
 
@@ -83,10 +96,19 @@ export async function insertOrUpdateUsage({
       CONSUMPTION,
       promptTokensUsed
     );
+
+    if (quotaLimit) {
+      await resourceusages.put({
+        id: completionCompositeKey,
+        consumption: completionTokensUsedExists.consumption + promptTokensUsed,
+        [QUOTA_LIMIT]: quotaLimit,
+      });
+    }
   } else {
     await resourceusages.put({
       id: completionCompositeKey,
       consumption: completionTokensUsed,
+      ...(quotaLimit && { [QUOTA_LIMIT]: quotaLimit }),
     });
   }
 }
@@ -96,6 +118,7 @@ export async function updateWorkspaceAndUserResourceUsage({
   workspaceId,
   aiModel,
   tokensUsed,
+  quotaLimit,
 }: UpdateBothAiProps): Promise<void> {
   await Promise.all([
     insertOrUpdateUsage({
@@ -103,6 +126,7 @@ export async function updateWorkspaceAndUserResourceUsage({
       consumerId: userId,
       tokensUsed,
       aiModel,
+      quotaLimit,
     }),
     workspaceId != null
       ? insertOrUpdateUsage({
@@ -110,6 +134,7 @@ export async function updateWorkspaceAndUserResourceUsage({
           consumerId: workspaceId,
           tokensUsed,
           aiModel,
+          quotaLimit,
         })
       : null,
   ]);

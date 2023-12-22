@@ -106,6 +106,8 @@ export async function createSandboxEnv(
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_EXTRA_CREDITS_PRODUCT_ID:
+      process.env.STRIPE_EXTRA_CREDITS_PRODUCT_ID,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     NOTION_TOKEN: process.env.NOTION_TOKEN,
     DECI_BACKEND_TEST: 'true',
