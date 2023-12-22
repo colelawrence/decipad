@@ -51,7 +51,10 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
           onDragEnd={onDragEnd}
           onDragOver={onDragOver}
         >
-          <S.NotebookSpacingWrapper ref={overflowingDiv}>
+          <S.NotebookSpacingWrapper
+            ref={overflowingDiv}
+            id="overflowing-editor"
+          >
             {notebook}
           </S.NotebookSpacingWrapper>
           {tabs}

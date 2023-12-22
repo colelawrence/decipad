@@ -8,7 +8,7 @@ import {
 export const createBlockSelectionPlugin = (): MyPlatePlugin =>
   _createBlockSelectionPlugin({
     renderAboveEditable: ({ children }) => (
-      <BlockSelectionArea getBoundaries={() => ['html']}>
+      <BlockSelectionArea getBoundaries={() => ['#overflowing-editor']}>
         <BlockStartArea
           state={{
             placement: 'left',
