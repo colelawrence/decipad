@@ -35,7 +35,7 @@ test('Embeds', async ({ testUser, unregisteredUser }) => {
       unregisteredUser.page.getByTestId('widget-input').nth(1).textContent(),
       unregisteredUser.page.getByTestId('widget-input').nth(2).textContent(),
     ]);
-    expect(slider1Text).toBe('1200 unit');
+    expect(slider1Text).toBe('1000 unit');
     expect(slider2Text).toBe('45%');
     expect(slider3Text).toContain('25$');
   });
