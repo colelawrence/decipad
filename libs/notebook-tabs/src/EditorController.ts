@@ -303,7 +303,14 @@ export class EditorController implements RootEditorController {
         });
       }
     });
-    withoutNormalizingEditors([this.mirrorEditor, ...this.tabEditors], cb);
+    withoutNormalizingEditors(
+      [
+        this.mirrorEditor,
+        this.titleEditor as unknown as TEditor,
+        ...this.tabEditors,
+      ],
+      cb
+    );
     sub.unsubscribe();
     for (const after of afterNormalizing) {
       // here we return the normalization of any new editor to the previous "isNormalizing" state.
