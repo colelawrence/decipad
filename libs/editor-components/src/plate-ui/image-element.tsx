@@ -138,6 +138,7 @@ export const ImageElement: ImageComponent = ({
                 readOnly={readOnly}
                 placeholder="Description of your image..."
                 css={[p14Regular]}
+                data-testid="notebook-image-caption"
               />
             </Caption>
           </figure>

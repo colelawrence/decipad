@@ -16,6 +16,15 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       ).toBeVisible();
     });
 
+    await test.step('set image caption', async () => {
+      await page.getByTestId('draggable-block').nth(1).click();
+      await page.getByTestId('notebook-image-caption').fill('Test Caption');
+      await notebook.focusOnBody();
+      await expect(page.getByTestId('notebook-image-caption')).toHaveText(
+        'Test Caption'
+      );
+    });
+
     await test.step('delete image imported via file', async () => {
       await page.getByTestId('drag-handle').nth(1).click();
       await page.getByRole('menuitem', { name: 'Delete Delete' }).click();
