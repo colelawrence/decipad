@@ -1068,8 +1068,7 @@ export class Notebook {
     await this.page
       .locator('[aria-roledescription="enable publishing"]')
       .click();
-    // eslint-disable-next-line playwright/no-networkidle
-    await this.page.waitForLoadState('networkidle');
+    await this.page.getByTestId('copy-published-link').waitFor();
     await expect(
       this.page.getByText('Anyone with link can view')
     ).toBeVisible();

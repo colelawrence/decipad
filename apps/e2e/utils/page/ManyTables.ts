@@ -55,17 +55,14 @@ const fetchDataRows = async (
   tableSelector: string
 ): Promise<TableRow[]> => {
   const rowCount = await fetchDataRowCount(page, tableSelector);
-  const rows: TableRow[] = [];
-  for (let i = 1; i <= rowCount; i += 1) {
-    const cells = await fetchAllStringElements(
-      page,
-      `${tableRowSelector(tableSelector, i)} td`
-    );
-    rows.push({
-      cells,
-    });
-  }
-
+  const selectors = Array.from(
+    { length: rowCount },
+    (_, i) => `${tableRowSelector(tableSelector, i + 1)} td`
+  );
+  const cells = await Promise.all(
+    selectors.map((selector) => fetchAllStringElements(page, selector))
+  );
+  const rows: TableRow[] = cells.map((cell) => ({ cells: cell }));
   return rows;
 };
 

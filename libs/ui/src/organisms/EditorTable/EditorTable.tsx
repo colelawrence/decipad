@@ -236,7 +236,7 @@ export const EditorTable: FC<EditorTableProps> = ({
             {!isDragging && (
               <div css={tableOverflowStyles} contentEditable={false} />
             )}
-            <div css={tableScroll}>
+            <div css={tableScroll} contentEditable={!readOnly}>
               <Table
                 isReadOnly={false}
                 dropRef={dropRef}
