@@ -316,8 +316,9 @@ export const NotebookTabs: FC<TabsProps> = ({
                       onBlur={() => onSubmitEdit(id)}
                       type="text"
                       name="tabName"
+                      id="tabName"
                       defaultValue={name}
-                      placeholder="Name..."
+                      placeholder="New tab..."
                       autoFocus
                       pattern=".*[^ ].*"
                     />
@@ -720,21 +721,23 @@ const TabName = styled.span({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  minWidth: '40px',
+  textAlign: 'start',
+  minWidth: '48px',
+  maxWidth: '400px',
 });
 
 const TabContent = styled.div({
   display: 'flex',
   alignItems: 'flex-end',
   margin: '0px 28px 0px 4px',
-  minWidth: '64px',
+  minWidth: '80px',
   gap: '4px',
 });
 
 const TabForm = styled.div({
   position: 'relative',
-  minWidth: '52px',
-  margin: '0px 44px 0px 8px',
+  minWidth: '60px',
+  margin: '0px 48px 0px 4px',
 });
 
 // Used to update width of form, otherwise text jumps when typing
