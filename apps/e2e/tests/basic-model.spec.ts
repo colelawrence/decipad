@@ -3,12 +3,12 @@ import { focusOnBody } from '../utils/page/Editor';
 import { createSliderBelow } from 'apps/e2e/utils/page/Block';
 import {
   addColumn,
-  clickCell,
   createTable,
   focusOnTableColumnFormula,
   getFromTable,
   renameColumn,
   updateDataType,
+  writeInTable,
 } from 'apps/e2e/utils/page/Table';
 
 const sanitise = (text: string | null) =>
@@ -47,13 +47,11 @@ test('Creating a basic model', async ({ testUser }) => {
 
     await renameColumn(page, 0, 'Index');
     await updateDataType(page, 0, undefined, 'Sequence', 'Number');
-    await clickCell(page, 1, 0);
-    await page.keyboard.type('1');
+    await writeInTable(page, '1', 1, 0);
 
     await renameColumn(page, 1, 'Year');
     await updateDataType(page, 1, undefined, 'Sequence', 'Date');
-    await clickCell(page, 1, 1);
-    await page.keyboard.type('2023');
+    await writeInTable(page, '2023', 1, 1);
 
     await renameColumn(page, 2, 'TotalInvested');
     await updateDataType(page, 2, undefined, 'Formula');
@@ -78,11 +76,11 @@ test('Creating a basic model', async ({ testUser }) => {
     // check second row values are correct
     const [index, year, totalInvested, totalMoney, totalProfit] =
       await Promise.all([
-        getFromTable(page, 2, 0, false),
-        getFromTable(page, 2, 1, false),
-        getFromTable(page, 2, 2, true),
-        getFromTable(page, 2, 3, true),
-        getFromTable(page, 2, 4, true),
+        getFromTable(page, 2, 0),
+        getFromTable(page, 2, 1),
+        getFromTable(page, 2, 2),
+        getFromTable(page, 2, 3),
+        getFromTable(page, 2, 4),
       ]);
 
     expect(sanitise(index)).toBe('2');
@@ -98,13 +96,13 @@ test('Creating a basic model', async ({ testUser }) => {
     await swapTableColumns(page, 0, 3);
 
     const [totalInvested, index, totalMoney, year, totalProfit] =
-      await Promise.all([
-        getFromTable(page, 2, 0, true),
-        getFromTable(page, 2, 1, false),
-        getFromTable(page, 2, 2, true),
-        getFromTable(page, 2, 3, false),
-        getFromTable(page, 2, 4, true),
-      ]);
+     await Promise.all([
+         getFromTable(page, 2, 0),
+         getFromTable(page, 2, 1),
+         getFromTable(page, 2, 2),
+         getFromTable(page, 2, 3),
+         getFromTable(page, 2, 4),
+       ]);
 
     expect(sanitise(totalInvested)).toBe('£1,200');
     expect(sanitise(index)).toBe('2');

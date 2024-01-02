@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   ELEMENT_TD,
   ELEMENT_TH,
@@ -8,15 +8,17 @@ import {
 } from '@decipad/editor-types';
 import { isElementOfType } from '@decipad/editor-utils';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { TableData } from '@decipad/ui';
-import { dndStore } from '@udecode/plate-dnd';
-import { useColumnDropDirection } from '../../hooks';
-import { useTableCell } from '../../hooks/useTableCell';
-import { sanitizeColumnDropDirection } from '../../utils';
-import { isCellAlignRight } from '../../utils/isCellAlignRight';
-import { TableCellDropColumnEffect } from './TableCellDropColumnEffect';
-import { TableCellFormulaTableData } from './TableCellFormulaTableData';
-import { RefPipe } from '@decipad/react-utils';
+import { useCellType, useCellAnchor, useCellSelected } from '../../hooks';
+import { useMemoPath } from '@decipad/react-utils';
+import { findNodePath, getNodeString } from '@udecode/plate-common';
+import { setCellText } from '../../utils/setCellText';
+import { useTableCellWidth } from '../../hooks/useTableCellWidth';
+import { useEditorTableContext } from '@decipad/react-contexts';
+import { TableData, CellEditor } from '@decipad/ui';
+import { changeColumnType } from '../../utils/changeColumnType';
+import { last } from '@decipad/utils';
+import { useFocused } from 'slate-react';
+import { selectNextCell } from '../../utils/selectNextCell';
 
 declare global {
   interface Window {
@@ -35,17 +37,6 @@ export const TableCell: PlateComponent = ({
   children,
   element,
 }) => {
-  if (shouldCountRenders) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      window.tableCellRenderCount += 1;
-    });
-  }
-
-  const [tableDataElementPipe] = useState(
-    () => new RefPipe<HTMLTableCellElement | null>()
-  );
-
   if (
     !isElementOfType(element, ELEMENT_TH) &&
     !isElementOfType(element, ELEMENT_TD)
@@ -55,79 +46,91 @@ export const TableCell: PlateComponent = ({
     );
   }
 
-  const {
-    selected,
-    editable,
-    disabled,
-    selectedCells,
-    focused,
-    unit,
-    cellType,
-    nodeText,
-    onChangeValue,
-    showParseError,
-    parseErrorMessage,
-    dropdownOptions,
-    dropdownResult,
-    width,
-  } = useTableCell(element);
-
-  const editor = useTEditorRef();
-  const dropDirection = useColumnDropDirection(editor, element);
-  const isDragging = dndStore.use.isDragging();
-
-  if (cellType?.kind === 'table-formula') {
-    // IMPORTANT NOTE: do not remove the children elements from rendering.
-    // Even though they're one element with an empty text property, their absence triggers
-    // an uncaught exception in slate-react.
-    // Also, be careful with the element structure:
-    // https://github.com/ianstormtaylor/slate/issues/3930#issuecomment-723288696
-    return (
-      <TableCellFormulaTableData
-        element={element}
-        attributes={attributes}
-        selected={selected}
-        dropDirection={sanitizeColumnDropDirection(dropDirection)}
-      >
-        {children}
-      </TableCellFormulaTableData>
-    );
+  if (shouldCountRenders) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      window.tableCellRenderCount += 1;
+    });
   }
 
-  return (
-    <>
-      {isDragging && (
-        <TableCellDropColumnEffect
-          element={element}
-          dropTargetPipe={tableDataElementPipe}
-        />
-      )}
+  const editor = useTEditorRef();
+  const anchor = useCellAnchor();
+  const selected = useCellSelected();
+  const focused = useFocused();
+  const { tableFrozen } = useEditorTableContext();
+  const cellType = useCellType(element);
+  const path = useMemoPath(findNodePath(editor, element)!);
+  const width = useTableCellWidth(element);
+  const value = getNodeString(element);
+  const [editing, setEditing] = useState(false); // Controlled by CellEditor
+  const [cellEventTarget] = useState<EventTarget>(() => new EventTarget());
 
-      <TableData
-        ref={tableDataElementPipe.toRef()}
-        isEditable={editable}
-        disabled={disabled}
-        width={width}
-        isUserContent
-        as="td"
-        attributes={attributes}
-        selected={selected}
-        focused={selectedCells && selectedCells.length > 1 ? false : focused}
-        unit={unit}
-        type={cellType}
-        value={nodeText}
-        onChangeValue={onChangeValue}
-        alignRight={isCellAlignRight(cellType)}
-        parseError={showParseError ? parseErrorMessage : undefined}
-        dropDirection={sanitizeColumnDropDirection(dropDirection)}
-        dropdownOptions={{
-          dropdownOptions,
-          dropdownResult,
-        }}
-        element={element}
-      >
-        {children}
-      </TableData>
-    </>
+  const setValue = useCallback(
+    (newValue: string) => setCellText(editor, path, newValue),
+    [editor, path]
+  );
+
+  const convertToFormula = useCallback(() => {
+    const tablePath = path.slice(0, 1);
+    const columnIndex = last(path)!;
+    changeColumnType(editor, tablePath, { kind: 'table-formula' }, columnIndex);
+  }, [editor, path]);
+
+  const selectNextCellCallback = useCallback(
+    () => selectNextCell(editor, path),
+    [editor, path]
+  );
+
+  // Pass keydown event to cell editor
+  useEffect(() => {
+    if (!focused || !anchor) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (editing) return;
+
+      const cellEvent = new KeyboardEvent(event.type, event);
+      cellEventTarget.dispatchEvent(cellEvent);
+      if (cellEvent.defaultPrevented) event.preventDefault();
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [anchor, focused, editing, cellEventTarget]);
+
+  return (
+    <TableData
+      as="td"
+      isUserContent
+      isFormulaResult={cellType?.kind === 'table-formula'}
+      attributes={attributes}
+      anchor={anchor}
+      selected={selected}
+      editing={editing}
+      onDoubleClick={(event) => {
+        const cellEvent = new MouseEvent(event.type, event.nativeEvent);
+        cellEventTarget.dispatchEvent(cellEvent);
+        if (cellEvent.defaultPrevented) event.preventDefault();
+      }}
+    >
+      <div contentEditable={false} css={width && { width }}>
+        <CellEditor
+          isTableFrozen={tableFrozen}
+          type={cellType}
+          value={value}
+          eventTarget={cellEventTarget}
+          onValueChange={setValue}
+          onConvertToFormula={convertToFormula}
+          onSelectNextCell={selectNextCellCallback}
+          path={path}
+          element={element}
+          onEditingChange={setEditing}
+        />
+      </div>
+
+      <span css={{ caretColor: 'transparent' }}>{children}</span>
+    </TableData>
   );
 };

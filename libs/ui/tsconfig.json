@@ -38,6 +38,9 @@
       "path": "../client-events"
     },
     {
+      "path": "../editor-hooks"
+    },
+    {
       "path": "../editor-types"
     },
     {

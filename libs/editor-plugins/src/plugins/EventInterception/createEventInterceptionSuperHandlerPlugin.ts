@@ -1,6 +1,7 @@
 import {
   ELEMENT_COLUMNS,
   ELEMENT_LIC,
+  ELEMENT_TD,
   InterceptableEvent,
   MyEditor,
   MyElementEntry,
@@ -55,10 +56,12 @@ export const createEventInterceptionSuperHandlerPlugin = (): MyPlatePlugin => {
           // Preventing backspace and other events in them causes
           // strange behavior.
           // Also preventing backspace for lists can also lead to a weird behavior
+          // Table cells have their own backspace handling
           if (
             document.activeElement?.tagName === 'INPUT' ||
             document.activeElement?.tagName === 'TEXTAREA' ||
-            parentNode.type === ELEMENT_LIC
+            parentNode.type === ELEMENT_LIC ||
+            parentNode.type === ELEMENT_TD
           )
             return;
           switch (event.key) {

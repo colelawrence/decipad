@@ -186,7 +186,6 @@ export const Display: PlateComponent = ({ attributes, element, children }) => {
           variant="display"
           readOnly={readOnly}
           color={element.color as AvailableSwatchColor}
-          element={element}
           lineResult={res}
           formatting={element.formatting as ResultFormatting}
         >

@@ -15,7 +15,7 @@ export const MAX_UPLOAD_FILE_SIZE = {
 
 export const SUPPORTED_FILE_TYPES = Object.keys(MAX_UPLOAD_FILE_SIZE);
 
-export const MAX_IMPORT_CELL_COUNT = 10000;
+export const MAX_IMPORT_CELL_COUNT = Infinity;
 
 // NOT USED YET
 export const MAX_ATTACHMENT_SIZE = {

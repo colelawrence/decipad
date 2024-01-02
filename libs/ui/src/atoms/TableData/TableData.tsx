@@ -1,30 +1,17 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import {
-  AnyElement,
-  CellValueType,
-  PlateComponentAttributes,
-} from '@decipad/editor-types';
-import { noop } from '@decipad/utils';
+import { PlateComponentAttributes } from '@decipad/editor-types';
 import { css } from '@emotion/react';
-import {
-  ComponentProps,
-  ElementType,
-  FC,
-  HTMLAttributes,
-  ReactNode,
-  forwardRef,
-} from 'react';
-import { useMergedRef } from '../../hooks';
-import { CellEditor, SyntaxErrorHighlight } from '../../molecules';
-import { componentCssVars, p12Medium } from '../../primitives';
+import { FC, HTMLAttributes, forwardRef } from 'react';
+import { componentCssVars, cssVar, p12Medium } from '../../primitives';
 import { table } from '../../styles';
 import {
   innerTablesNoBottomBorderStyles,
   innerTablesNoTopBorderStyles,
   tdBaseStyles,
+  tdHorizontalPadding,
 } from '../../styles/table';
 import { tableRowCounter } from '../../utils';
-import { ColumnDropLine } from '../DropLine/ColumnDropLine';
+import { useMergedRef } from '../../hooks';
 
 const lineNumberWidth = '22px';
 
@@ -35,6 +22,8 @@ const tdPlaceholderStyles = css({
 
   '&:first-of-type': {
     paddingLeft: table.firstTdPaddingLeft,
+    '--td-placeholder-width': `${table.firstTdPaddingLeft}px`,
+    '--td-no-padding-left': '0px',
   },
 
   '&:first-of-type::before': {
@@ -53,93 +42,68 @@ const tdPlaceholderStyles = css({
   },
 });
 
-const tdGridStyles = {};
-
 const editableStyles = css({
-  paddingLeft: '12px',
-  paddingRight: '12px',
+  paddingLeft: tdHorizontalPadding,
+  paddingRight: tdHorizontalPadding,
 });
 
-const tdDisabledStyles = css({});
-
-const alignRightStyles = css({
-  textAlign: 'right',
-});
-
-const selectedStyles = css({
-  backgroundColor: componentCssVars('TableSelectionBackgroundColor'),
-});
-
-const focusedStyles = css({
-  boxShadow: `0 0 0 2px ${componentCssVars('TableFocusColor')} inset`,
-});
-
-const draggableStyles = css({
-  ':hover': {
-    '.drag-handle': {
-      display: 'block',
-    },
-  },
-});
-
-const nonContentEditableStyles = css({
-  whiteSpace: 'nowrap',
+const nonEditableStyles = css({
   backgroundColor: 'transparent',
 });
 
-export interface TableDataProps extends HTMLAttributes<HTMLDivElement> {
-  as?: ElementType;
-  alignRight?: boolean;
-  isEditable?: boolean;
+const formulaResultStyles = css({
+  backgroundColor: cssVar('backgroundSubdued'),
+});
+
+const selectedStyles = ({ isFormulaResult }: { isFormulaResult: boolean }) =>
+  css({
+    backgroundColor: isFormulaResult
+      ? cssVar('backgroundHeavy')
+      : componentCssVars('TableSelectionBackgroundColor'),
+  });
+
+const tdAnchorStyles = css({
+  boxShadow: `0 0 0 2px ${componentCssVars('TableFocusColor')} inset`,
+});
+
+const editingStyles = css({
+  filter: componentCssVars('TableEditingShadowFilter'),
+  zIndex: 1,
+});
+
+// const draggableStyles = css({
+//   ':hover': {
+//     '.drag-handle': {
+//       display: 'block',
+//     },
+//   },
+// });
+
+export interface TableDataProps extends HTMLAttributes<HTMLTableCellElement> {
+  as?: 'td' | 'div';
   isUserContent?: boolean;
-  isLiveResult?: boolean;
+  isFormulaResult?: boolean;
   attributes?: PlateComponentAttributes;
   showPlaceholder?: boolean;
-  grabbing?: boolean;
   selected?: boolean;
-  focused?: boolean;
-  disabled?: boolean;
-  type?: CellValueType;
+  anchor?: boolean;
+  editing?: boolean;
   rowSpan?: number;
-  value?: string;
-  onChangeValue?: ComponentProps<typeof CellEditor>['onChangeValue'];
-  unit?: string;
-  dropDirection?: 'left' | 'right';
-  parseError?: string;
-  firstChildren?: ReactNode;
-  dropdownOptions?: Pick<
-    ComponentProps<typeof CellEditor>,
-    'dropdownOptions' | 'dropdownResult'
-  >;
-  width?: number;
-  element?: AnyElement;
 }
 
 export const TableData = forwardRef(
   (
     {
       as: Component = 'div',
-      isEditable = false,
       isUserContent = false,
+      isFormulaResult = false,
       attributes,
       showPlaceholder = true,
-      draggable,
       selected,
-      focused,
+      anchor,
+      editing,
       rowSpan,
-      disabled = false,
-      type,
-      unit,
-      value,
-      onChangeValue = noop,
-      alignRight,
       children,
-      parseError,
-      firstChildren,
-      dropDirection,
-      dropdownOptions,
-      width,
-      element,
       ...props
     }: TableDataProps,
     ref
@@ -147,25 +111,22 @@ export const TableData = forwardRef(
     const existingRef =
       attributes && 'ref' in attributes ? attributes.ref : undefined;
     const tdRef = useMergedRef(existingRef, ref);
-    const additionalProps = isEditable ? {} : { contentEditable: false };
 
     return (
       <Component
         {...attributes}
-        {...additionalProps}
         ref={tdRef}
         rowSpan={rowSpan}
         css={[
           isUserContent && editableStyles,
           tdBaseStyles,
-          tdGridStyles,
           showPlaceholder && tdPlaceholderStyles,
-          disabled && tdDisabledStyles,
-          selected && selectedStyles,
-          focused && focusedStyles,
-          alignRight && alignRightStyles,
-          draggable && draggableStyles,
-          !isEditable && nonContentEditableStyles,
+          isFormulaResult && formulaResultStyles,
+          selected && selectedStyles({ isFormulaResult }),
+          anchor && tdAnchorStyles,
+          editing && editingStyles,
+          !isUserContent && nonEditableStyles,
+          // draggable && draggableStyles,
           {
             table: {
               height: '100%',
@@ -176,39 +137,11 @@ export const TableData = forwardRef(
             },
           },
         ]}
+        // Used in e2e tests
+        data-selected={selected || anchor}
         {...props}
       >
-        {firstChildren}
-
-        <CellEditor
-          focused={focused}
-          isEditable={isEditable}
-          width={width}
-          type={type}
-          value={value}
-          unit={unit}
-          onChangeValue={onChangeValue}
-          parentType="table"
-          element={element}
-          {...dropdownOptions}
-        >
-          {/* Retain DOM structure for error highlighting
-     To avoid jumping cursor when an error is fixed or caused around it.
-     This keeps happening. Please do not undo. */}
-          <SyntaxErrorHighlight
-            variant="custom"
-            error={parseError}
-            hideError={!parseError}
-          >
-            {dropDirection === 'left' && (
-              <ColumnDropLine dropDirection={dropDirection} />
-            )}
-            {children}
-            {dropDirection === 'right' && (
-              <ColumnDropLine dropDirection={dropDirection} />
-            )}
-          </SyntaxErrorHighlight>
-        </CellEditor>
+        {children}
       </Component>
     );
   }

@@ -47,62 +47,58 @@ export const TableResultCell: FC<TableResultCellProps> = ({
       ref={previewRef}
       key={colIndex}
       as="td"
-      isEditable={false}
-      isLiveResult={isLiveResult}
       showPlaceholder={false}
       css={{ ...tableParentStyles }}
       draggable={!!onDragStartCell && allowsForLookup}
-      firstChildren={
-        <div
-          draggable
-          onDragStart={(e) => {
-            onDragStartCell?.(
-              {
-                tableName: tableType.indexName ?? '',
-                columnName,
-                cellValue: value,
-              },
-              {
-                previewRef,
-                result: {
-                  type: columnType,
-                  value: cellValue,
-                },
-              }
-            )(e);
-          }}
-          onDragEnd={onDragEnd}
-          className={onDragStartCell && 'drag-handle'}
-          css={{
-            display: 'none',
-            position: 'absolute',
-            top: 8,
-            right: 4,
-            zIndex: 2,
-            height: 18,
-            width: 18,
-            borderRadius: 6,
-            ':hover': {
-              background: cssVar('backgroundDefault'),
+    >
+      <div
+        draggable
+        onDragStart={(e) => {
+          onDragStartCell?.(
+            {
+              tableName: tableType.indexName ?? '',
+              columnName,
+              cellValue: value,
             },
+            {
+              previewRef,
+              result: {
+                type: columnType,
+                value: cellValue,
+              },
+            }
+          )(e);
+        }}
+        onDragEnd={onDragEnd}
+        className={onDragStartCell && 'drag-handle'}
+        css={{
+          display: 'none',
+          position: 'absolute',
+          top: 8,
+          right: 4,
+          zIndex: 2,
+          height: 18,
+          width: 18,
+          borderRadius: 6,
+          ':hover': {
+            background: cssVar('backgroundDefault'),
+          },
+        }}
+      >
+        <button
+          css={{
+            width: '8px',
+            height: 9,
+            transform: 'translateY(50%)',
+            display: 'block',
+            margin: 'auto',
+            cursor: 'grab',
           }}
         >
-          <button
-            css={{
-              width: '8px',
-              height: 9,
-              transform: 'translateY(50%)',
-              display: 'block',
-              margin: 'auto',
-              cursor: 'grab',
-            }}
-          >
-            <DragHandle />
-          </button>
-        </div>
-      }
-      element={element}
-    >
+          <DragHandle />
+        </button>
+      </div>
+
       <div
         css={[
           css(table.getCellWrapperStyles(columnType)),

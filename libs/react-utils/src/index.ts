@@ -1,7 +1,6 @@
 export * from './delay-value';
 export * from './event-listener';
 export * from './justStopEventPropagation';
-export * from './RefPipe';
 export * from './removeFocus';
 export * from './selectable-context';
 export * from './state';
@@ -12,5 +11,6 @@ export * from './useCanUseDom';
 export * from './useEventListener';
 export * from './useIntercom';
 export * from './useLocalStorage';
+export * from './useMemoPath';
 export * from './useResolved';
 export * from './lazyLoad';

@@ -2,6 +2,7 @@ import { BrowserContext, Page, expect, test } from '@playwright/test';
 import { setUp } from '../utils/page/Editor';
 import {
   addColumn,
+  clickCell,
   createTable,
   renameColumn,
   writeInTable,
@@ -65,7 +66,8 @@ test.describe('Make sure auto-complete works', () => {
   });
 
   test('Enter table formula and checks for proper output', async () => {
-    await writeInTable(page, '=', 1, 2);
+    await clickCell(page, 1, 2);
+    await page.keyboard.press('=');
     await page.getByTestId('code-line').last().fill('Revenue');
     await page
       .getByTestId('autocomplete-group:Variables')
@@ -106,7 +108,8 @@ test.describe('Make sure auto-complete works', () => {
 
   test('Tests formulas with RevenueNew table', async () => {
     // Checks sum()
-    await writeInTable(page, '=', 1, 2, 'Table2');
+    await clickCell(page, 1, 2, 'Table2');
+    await page.keyboard.press('=');
     await page.getByTestId('code-line').last().click();
     await page.keyboard.type('sum(Table2.RevenueNew)');
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -115,7 +118,8 @@ test.describe('Make sure auto-complete works', () => {
 
     // Checks previous()
     await addColumn(page, 'Table2');
-    await writeInTable(page, '=', 1, 3, 'Table2');
+    await clickCell(page, 1, 3, 'Table2');
+    await page.keyboard.press('=');
     await page.getByTestId('code-line').last().click();
     await page.keyboard.type('(RevenueNew');
     await page

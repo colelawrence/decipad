@@ -1,7 +1,7 @@
 /* eslint-disable playwright/no-force-option */
-import { Page } from '@playwright/test';
+import { JSHandle, Locator, Page } from '@playwright/test';
 import { Timeouts } from '../src';
-import { keyPress } from './Editor';
+import { ControlPlus, keyPress } from './Editor';
 import { createWithSlashCommand } from './Block';
 
 export async function createTable(page: Page) {
@@ -21,7 +21,30 @@ export function tableCellLocator(line: number, col = 0) {
 }
 
 export function tableCellTextLocator(line: number, col = 0) {
-  return `${tableCellLocator(line, col)} span[data-slate-string="true"]`;
+  const cellLocator = tableCellLocator(line, col);
+
+  // Only header cells contain string spans
+  if (line === 0) {
+    return `${cellLocator} span[data-slate-string]`;
+  }
+
+  return cellLocator;
+}
+
+export async function getCellPosition(cellElement: Locator) {
+  return cellElement.evaluate((cell) => {
+    const row = cell.parentElement!;
+    const parent = row.parentElement!;
+
+    const col = Array.from(row.children).indexOf(cell) - 1;
+
+    const line =
+      parent.tagName === 'THEAD'
+        ? 0
+        : Array.from(parent.children).indexOf(row) + 1;
+
+    return { line, col };
+  });
 }
 
 export function getTableOrPage(page: Page, tableName?: string) {
@@ -39,17 +62,14 @@ export async function getFromTable(
   line: number,
   // eslint-disable-next-line default-param-last
   col = 0,
-  // eslint-disable-next-line default-param-last
-  formula = false,
   tableName?: string
-) {
+): Promise<string | null> {
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
-  return getTableOrPage(page, tableName)
-    .locator(
-      formula ? tableCellLocator(line, col) : tableCellTextLocator(line, col)
-    )
+  const textContent = await getTableOrPage(page, tableName)
+    .locator(tableCellTextLocator(line, col))
     .textContent();
+  return textContent?.trim().replace(/Caret (up|down)/, '') ?? null;
 }
 
 export async function clickCell(
@@ -65,6 +85,36 @@ export async function clickCell(
   return getTableOrPage(page, tableName)
     .locator(tableCellLocator(line, col))
     .click({ force: true, delay: 100 });
+}
+
+export async function doubleClickCell(
+  page: Page,
+  line: number,
+  // eslint-disable-next-line default-param-last
+  col = 0,
+  tableName?: string
+) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+
+  return getTableOrPage(page, tableName)
+    .locator(tableCellLocator(line, col))
+    .dblclick({ force: true, delay: 100 });
+}
+
+export async function hoverCell(
+  page: Page,
+  line: number,
+  // eslint-disable-next-line default-param-last
+  col = 0,
+  tableName?: string
+) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+
+  return getTableOrPage(page, tableName)
+    .locator(tableCellLocator(line, col))
+    .hover({ force: true });
 }
 
 export async function clickCalculateFirstColumn(
@@ -87,12 +137,53 @@ export async function writeInTable(
   col = 0,
   tableName?: string
 ) {
-  // Clicking once doesn't always select the cell
-  await clickCell(page, line, col, tableName);
-  await clickCell(page, line, col, tableName);
+  await doubleClickCell(page, line, col, tableName);
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(Timeouts.tableDelay);
+  await ControlPlus(page, 'a');
   await page.keyboard.type(text);
+  await page.keyboard.press('Enter');
+}
+
+export async function isCellSelected(
+  page: Page,
+  line: number,
+  // eslint-disable-next-line default-param-last
+  col = 0,
+  tableName?: string
+): Promise<boolean> {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+
+  const dataSelected = await getTableOrPage(page, tableName)
+    .locator(tableCellLocator(line, col))
+    .getAttribute('data-selected');
+
+  return dataSelected === 'true';
+}
+
+export async function getSelectionGrid(page: Page, tableName?: string) {
+  // eslint-disable-next-line playwright/no-wait-for-timeout
+  await page.waitForTimeout(Timeouts.tableDelay);
+
+  const selectedCells = await getTableOrPage(page, tableName)
+    .locator('[data-selected="true"]')
+    .all();
+
+  if (selectedCells.length === 0) {
+    return null;
+  }
+
+  const firstSelectedCell = selectedCells[0];
+  const lastSelectedCell = selectedCells[selectedCells.length - 1];
+
+  const firstCellPosition = await getCellPosition(firstSelectedCell);
+  const lastCellPosition = await getCellPosition(lastSelectedCell);
+
+  return {
+    start: firstCellPosition,
+    end: lastCellPosition,
+  };
 }
 
 export function openRowMenu(page: Page, line: number, tableName?: string) {
@@ -168,7 +259,7 @@ export function hideTable(page: Page, tableName?: string) {
 
 export function deleteTable(page: Page) {
   page.getByTestId('drag-handle').first().click();
-  return page.getByText('Delete').click();
+  return page.getByText('Delete').last().click();
 }
 
 export function showTable(page: Page, tableName?: string) {
@@ -340,4 +431,87 @@ export async function swapTableColumns(
   // eslint-disable-next-line playwright/no-wait-for-timeout
   await page.waitForTimeout(1_000);
   await page.mouse.up();
+}
+
+async function dispatchEventToCell(
+  page: Page,
+  event: JSHandle<Event>,
+  line: number,
+  col = 0,
+  selectFirst = true
+) {
+  if (selectFirst) await clickCell(page, line, col);
+
+  const cellElement = await page
+    .locator(tableCellLocator(line, col))
+    .elementHandle();
+
+  await page.evaluate(
+    // eslint-disable-next-line no-shadow
+    ({ cellElement, event }) => {
+      cellElement!.dispatchEvent(event!);
+    },
+    { cellElement, event }
+  );
+}
+
+export async function pasteHtmlIntoCell(
+  page: Page,
+  // Must not contain inter-element whitespace
+  html: string,
+  line: number,
+  col = 0,
+  selectFirst = true
+) {
+  // eslint-disable-next-line no-shadow
+  const eventHandle = await page.evaluateHandle((html) => {
+    const event = new Event('beforeinput', {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    Object.assign(event, {
+      inputType: 'insertFromPaste',
+      dataTransfer: {
+        getData: (type: string) => {
+          if (type === 'text/html') return html;
+          return '';
+        },
+        types: ['text/plain', 'text/html'],
+        constructor: { name: 'DataTransfer' },
+      },
+      getTargetRanges: () => [],
+    });
+
+    return event;
+  }, html);
+
+  await dispatchEventToCell(page, eventHandle, line, col, selectFirst);
+}
+
+export async function pastePlainTextIntoCell(
+  page: Page,
+  text: string,
+  line: number,
+  col = 0,
+  selectFirst = true
+) {
+  // eslint-disable-next-line no-shadow
+  const eventHandle = await page.evaluateHandle((text) => {
+    const event = new Event('paste', {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    Object.assign(event, {
+      clipboardData: {
+        getData: () => text,
+        types: ['text/plain'],
+      },
+    });
+
+    return event;
+  }, text);
+
+  await dispatchEventToCell(page, eventHandle, line, col, selectFirst);
 }

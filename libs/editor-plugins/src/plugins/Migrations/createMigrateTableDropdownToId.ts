@@ -6,12 +6,17 @@ import {
   MyNodeEntry,
   TableCellElement,
 } from '@decipad/editor-types';
-import { insertText, isElement } from '@udecode/plate-common';
+import {
+  getNodeString,
+  isElement,
+  replaceNodeChildren,
+} from '@udecode/plate-common';
 import {
   createNormalizerPluginFactory,
   NormalizerReturnValue,
 } from '../../pluginFactories';
 import { assertElementType } from '@decipad/editor-utils';
+import { Path } from 'slate';
 
 export const createMigrateTableDropdownToId = createNormalizerPluginFactory({
   name: 'MIGRATE_TABLE_DROPDOWN_TO_ID',
@@ -36,29 +41,38 @@ export const createMigrateTableDropdownToId = createNormalizerPluginFactory({
 
         assertElementType(table, ELEMENT_TABLE);
 
-        const indexesToChange: [number, string][] = [];
+        const cellsToChange: { cellPath: Path; replacedText: string }[] = [];
 
-        for (let i = 2; i < table.children.length; i += 1) {
-          const cell = table.children[i].children[
+        for (
+          let rowIndex = 2;
+          rowIndex < table.children.length;
+          rowIndex += 1
+        ) {
+          const cell = table.children[rowIndex].children[
             columnIndex
           ] as TableCellElement;
 
           assertElementType(cell, ELEMENT_TD);
 
-          const { text } = cell.children[0];
+          const text = getNodeString(cell);
 
           if (text.includes('exprRef_')) {
-            indexesToChange.push([i, text]);
+            const replacedText = text.replace(/exprRef_/g, '');
+            const cellPath = [tableIndex, rowIndex, columnIndex];
+            cellsToChange.push({ cellPath, replacedText });
           }
         }
 
-        if (indexesToChange.length === 0) return false;
-
-        if (indexesToChange.length > 0) {
+        if (cellsToChange.length > 0) {
           return () => {
-            for (const [i, text] of indexesToChange) {
-              insertText(editor, text.slice('exprRef_'.length), {
-                at: [tableIndex, i, columnIndex, 0],
+            for (const { cellPath, replacedText } of cellsToChange) {
+              // Duplicate of setCellText
+              replaceNodeChildren(editor, {
+                at: cellPath,
+                nodes: { text: replacedText },
+                removeOptions: {
+                  voids: true,
+                },
               });
             }
           };

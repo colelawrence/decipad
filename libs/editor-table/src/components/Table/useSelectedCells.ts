@@ -1,13 +1,13 @@
 import { useSelected } from 'slate-react';
-import { useEditorRef } from '@udecode/plate-common';
+import { useTEditorRef } from '@decipad/editor-types';
 import { useEffect } from 'react';
 import { dequal } from '@decipad/utils';
 import { useTableStore } from '../../contexts/tableStore';
-import { getTableGridAbove } from '@udecode/plate-table';
+import { getSelectedCells } from '../../utils/getSelectedCells';
 
 export const useSelectedCells = () => {
   const selected = useSelected();
-  const editor = useEditorRef();
+  const editor = useTEditorRef();
 
   const [selectedCells, setSelectedCells] = useTableStore().use.selectedCells();
 
@@ -16,7 +16,7 @@ export const useSelectedCells = () => {
   }, [selected, editor, setSelectedCells]);
 
   useEffect(() => {
-    const cellEntries = getTableGridAbove(editor, { format: 'cell' });
+    const cellEntries = getSelectedCells(editor);
 
     if (cellEntries.length > 1) {
       const cells = cellEntries.map((entry) => entry[0]);

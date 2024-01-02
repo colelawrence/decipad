@@ -481,6 +481,7 @@ export interface ComponentCssVariables {
   DroplineColor: string;
   TableSelectionBackgroundColor: string;
   TableFocusColor: string;
+  TableEditingShadowFilter: string;
   // ------------ End Droplines ---------------
 
   // REMOVE ME
@@ -606,6 +607,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       DroplineColor: blue300.hex,
       TableSelectionBackgroundColor: blue50.hex,
       TableFocusColor: blue300.hex,
+      TableEditingShadowFilter: `drop-shadow(0 0 0.5rem ${black.hex}30)`,
 
       WeakerSlashIconColor: blue100.hex,
       WeakSlashIconColor: blue200.hex,
@@ -714,6 +716,7 @@ export const ComponentColors: Record<'Light' | 'Dark', ComponentCssVariables> =
       DroplineColor: blue600.hex,
       TableSelectionBackgroundColor: blue900.hex,
       TableFocusColor: blue600.hex,
+      TableEditingShadowFilter: `drop-shadow(0 0 0.5rem ${black.hex}90)`,
 
       WeakerSlashIconColor: blue100.hex,
       WeakSlashIconColor: blue200.hex,

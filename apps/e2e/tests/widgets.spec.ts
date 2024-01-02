@@ -2,8 +2,9 @@ import { expect, test, Page, BrowserContext } from './manager/decipad-tests';
 import {
   clickCell,
   createTable,
+  getFromTable,
   openColTypeMenu,
-  tableCellLocator,
+  writeInTable,
 } from '../utils/page/Table';
 import {
   createDropdownBelow,
@@ -71,7 +72,7 @@ test.describe('toggle Widget', () => {
   });
 });
 
-test.describe('date Widget', () => {
+test.describe('Date Widget', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;
@@ -204,7 +205,7 @@ test('dropdown widget', async ({ testUser }) => {
   const { page, notebook } = testUser;
   await test.step('creates an empty dropdown widget', async () => {
     await createDropdownBelow(page, 'Dropdown');
-    await expect(await page.getByText('Dropdown').count()).toBe(1);
+    expect(await page.getByText('Dropdown').count()).toBe(1);
   });
 
   await test.step('Open dropdown and view box to add option', async () => {
@@ -218,7 +219,7 @@ test('dropdown widget', async ({ testUser }) => {
     // Input box should be focused, so we can just start typing
     await page.keyboard.type('50%');
     await page.keyboard.press('Enter');
-    await expect(await notebook.getDropdownOptions()).toEqual(['50%']);
+    expect(await notebook.getDropdownOptions()).toEqual(['50%']);
   });
 
   await test.step('Add another option to dropdown', async () => {
@@ -228,7 +229,7 @@ test('dropdown widget', async ({ testUser }) => {
     // Dropdown should autofocus on input
     await page.keyboard.type('75%');
     await page.keyboard.press('Enter');
-    await expect(await notebook.getDropdownOptions()).toEqual(['50%', '75%']);
+    expect(await notebook.getDropdownOptions()).toEqual(['50%', '75%']);
   });
 
   await test.step('Select option', async () => {
@@ -237,7 +238,7 @@ test('dropdown widget', async ({ testUser }) => {
       '[aria-roledescription="dropdownOption"]'
     );
     // Dropdown should have hidden.
-    await expect(await dropdownOptions.count()).toBe(0);
+    expect(await dropdownOptions.count()).toBe(0);
   });
 
   await test.step('update first option', async () => {
@@ -249,12 +250,12 @@ test('dropdown widget', async ({ testUser }) => {
       .locator('div')
       .filter({ hasText: 'Edit' })
       .click();
-    ControlPlus(page, 'A');
-    page.keyboard.press('Delete');
+    await ControlPlus(page, 'A');
+    await page.keyboard.press('Delete');
     await page.keyboard.type('55%');
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('dropdown-display')).toHaveText(/55%/);
-    await expect(await notebook.getDropdownOptions()).toEqual(['55%', '75%']);
+    expect(await notebook.getDropdownOptions()).toEqual(['55%', '75%']);
   });
 
   await test.step('refresh notebook and see it still can edit', async () => {
@@ -267,8 +268,8 @@ test('dropdown widget', async ({ testUser }) => {
       .locator('div')
       .filter({ hasText: 'Edit' })
       .click();
-    ControlPlus(page, 'A');
-    page.keyboard.press('Delete');
+    await ControlPlus(page, 'A');
+    await page.keyboard.press('Delete');
     await page.keyboard.type('50%');
     await page.keyboard.press('Enter');
     await expect(page.getByTestId('dropdown-display')).toHaveText(/50%/);
@@ -287,7 +288,7 @@ test('dropdown widget', async ({ testUser }) => {
     await page.getByRole('menuitem').getByText('Categories').click();
     await page.getByRole('menuitem').getByText('Dropdown').click();
 
-    await page.waitForSelector('[aria-roledescription="dropdown-editor"]');
+    await expect(page.getByTestId('dropdown-editor')).toHaveCount(3);
     await clickCell(page, 1, 2);
 
     const dropdownOptions = page.locator(
@@ -299,7 +300,7 @@ test('dropdown widget', async ({ testUser }) => {
       .getByText('50%')
       .click();
     await expect(dropdownOptions).toBeHidden();
-    await expect(page.locator(tableCellLocator(1, 2))).toContainText('50%');
+    expect(await getFromTable(page, 1, 2)).toBe('50%');
   });
 
   await test.step('Changing original dropdown value, also changes the cells value', async () => {
@@ -320,9 +321,10 @@ test('dropdown widget', async ({ testUser }) => {
     await page.keyboard.insertText('0');
     await page.keyboard.press('Enter');
 
-    await expect(page.locator(tableCellLocator(1, 2))).toHaveText(/500%/, {
-      timeout: 5000,
-    });
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.computerDelay);
+
+    expect(await getFromTable(page, 1, 2)).toBe('500%');
   });
 
   await test.step('Load Drop down with values from table column', async () => {
@@ -330,14 +332,9 @@ test('dropdown widget', async ({ testUser }) => {
     await page.getByRole('menuitem', { name: 'Change type' }).click();
     await page.getByRole('menuitem', { name: 'From existing column' }).click();
 
-    await clickCell(page, 1, 0);
-    await page.keyboard.type('One');
-
-    await clickCell(page, 2, 0);
-    await page.keyboard.type('Two');
-
-    await clickCell(page, 3, 0);
-    await page.keyboard.type('Three');
+    await writeInTable(page, 'One', 1, 0);
+    await writeInTable(page, 'Two', 2, 0);
+    await writeInTable(page, 'Three', 3, 0);
 
     await page.locator('[aria-roledescription="dropdown-open"]').click();
 

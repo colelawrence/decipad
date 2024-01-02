@@ -1,88 +1,83 @@
 import { createOnKeyDownPluginFactory } from '@decipad/editor-plugins';
-import {
-  BlockElement,
-  ELEMENT_TD,
-  ELEMENT_TH,
-  MyEditor,
-  MyValue,
-} from '@decipad/editor-types';
+import { ELEMENT_TD, MyGenericEditor, MyValue } from '@decipad/editor-types';
 import { setSelection } from '@decipad/editor-utils';
-import { getBlockAbove, getEndPoint, hasNode } from '@udecode/plate-common';
+import { getBlockAbove, getNode, TElement, Value } from '@udecode/plate-common';
 import { Path } from 'slate';
-import { moveSelectionFromCell } from '@udecode/plate-table';
 
-const nextUpOrDown = (
-  editor: MyEditor,
-  path: Path,
-  direction: 1 | -1
-): Path | undefined => {
-  const keepPath = path.slice(0, path.length - 2);
-  const nextPath = [
-    ...keepPath,
-    path[path.length - 2] + direction,
-    path[path.length - 1],
+type Edge = 'top' | 'left' | 'bottom' | 'right';
+
+const nextPath = (path: Path, edge: Edge): Path => {
+  const vector: [number, number] = (() => {
+    if (edge === 'top') return [-1, 0];
+    if (edge === 'left') return [0, -1];
+    if (edge === 'bottom') return [1, 0];
+    if (edge === 'right') return [0, 1];
+    return [0, 0];
+  })();
+
+  return [
+    ...path.slice(0, path.length - 2),
+    path[path.length - 2] + vector[0],
+    path[path.length - 1] + vector[1],
   ];
-  if (!hasNode(editor, nextPath)) {
-    if (nextPath.length > 2) {
-      return nextUpOrDown(editor, keepPath, direction);
-    }
-    return undefined;
-  }
-  return nextPath;
 };
 
-const move = (editor: MyEditor, path: Path, direction: 1 | -1): boolean => {
-  const nextPath = nextUpOrDown(editor, path, direction);
-  if (nextPath) {
-    const focusPoint = getEndPoint(editor, nextPath);
-    // if (hasNode(editor, nextPath)) {
-    setSelection(editor, {
-      anchor: focusPoint,
-      focus: focusPoint,
-    });
-    return true;
-  }
-  return false;
+const withoutCurrentKeyboardEvent = <
+  TV extends Value = MyValue,
+  TE extends MyGenericEditor<TV> = MyGenericEditor<TV>
+>(
+  editor: TE,
+  callback: () => void
+) => {
+  const { currentKeyboardEvent } = editor;
+  // eslint-disable-next-line no-param-reassign
+  editor.currentKeyboardEvent = null;
+  callback();
+  // eslint-disable-next-line no-param-reassign
+  editor.currentKeyboardEvent = currentKeyboardEvent;
 };
 
-export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory<
-  MyValue,
-  MyEditor
->({
+export const createArrowCellNavigationPlugin = createOnKeyDownPluginFactory({
   name: 'ARROW_CELL_NAVIGATION_PLUGIN',
-  plugin: (editor: MyEditor) => (event) => {
-    if (event.shiftKey) {
-      const edges: Record<string, 'top' | 'left' | 'bottom' | 'right'> = {
-        ArrowLeft: 'left',
-        ArrowRight: 'right',
-        ArrowUp: 'top',
-        ArrowDown: 'bottom',
-      };
+  plugin: (editor) => (event) => {
+    /**
+     * Only override shift+arrow key behaviour. Plate's withSelectionTable is
+     * sufficient for standard arrow key behaviour.
+     */
+    if (!event.shiftKey) return false;
 
-      const edge = edges[event.key];
-      if (edge) {
-        if (moveSelectionFromCell(editor, { edge })) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-      }
-    }
+    const edges: Record<string, Edge> = {
+      ArrowLeft: 'left',
+      ArrowRight: 'right',
+      ArrowUp: 'top',
+      ArrowDown: 'bottom',
+    };
 
-    const entry = getBlockAbove<BlockElement>(editor);
-    if (!entry) return false;
-    const [node, path] = entry;
-    const dir =
-      event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : null;
-    if (dir == null) {
-      return false;
-    }
-    if (node.type === ELEMENT_TD || node.type === ELEMENT_TH) {
-      if (move(editor, path, dir)) {
-        event.preventDefault();
-        event.stopPropagation();
-        return true;
-      }
-    }
-    return false;
+    const edge = edges[event.key];
+    if (!edge) return false;
+
+    // Make sure the focus is in a cell
+    const cellEntry = getBlockAbove(editor, {
+      at: editor.selection?.focus,
+      match: { type: ELEMENT_TD },
+    });
+    if (!cellEntry) return false;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Make sure the new focus will be in a cell
+    const focusPath = nextPath(cellEntry[1], edge);
+    const focusNode = getNode<TElement>(editor, focusPath);
+    if (focusNode?.type !== ELEMENT_TD) return false;
+
+    // Hack: Prevent withSelectionTable from reversing the selection
+    withoutCurrentKeyboardEvent<Value>(editor, () => {
+      setSelection(editor, {
+        focus: { path: focusPath.concat([0]), offset: 0 },
+      });
+    });
+
+    return true;
   },
 });

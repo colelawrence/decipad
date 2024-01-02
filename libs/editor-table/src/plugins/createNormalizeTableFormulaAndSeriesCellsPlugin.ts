@@ -2,7 +2,6 @@ import {
   ENodeEntry,
   getChildren,
   getNodeString,
-  insertText,
   isElement,
   PlateEditor,
   TNodeEntry,
@@ -18,11 +17,11 @@ import {
   TableHeaderRowElement,
   TableRowElement,
 } from '@decipad/editor-types';
-import { enumerate, dequal } from '@decipad/utils';
+import { enumerate } from '@decipad/utils';
 import { NodeEntry } from 'slate';
 import { RemoteComputer } from '@decipad/remote-computer';
 import { parseSeriesStart, seriesIterator } from '@decipad/parse';
-import { setSelection } from '@decipad/editor-utils';
+import { setCellText } from '../utils/setCellText';
 // We do this following import this way because tree-shaking is not good enough
 import { createNormalizerPlugin } from '../../../editor-plugins/src/pluginFactories/normalizerPlugin';
 
@@ -63,7 +62,7 @@ const normalizeFormulaColumns = <TV extends Value, TE extends PlateEditor<TV>>(
       if (cell.type === ELEMENT_TD && getNodeString(cell).length > 0) {
         const tdPath = [...tablePath, rowIndex, cellIndex];
 
-        return () => insertText(editor, '', { at: tdPath });
+        return () => setCellText<TV>(editor, tdPath, '');
       }
     }
   }
@@ -112,13 +111,7 @@ const normalizeSeriesColumn = <TV extends Value, TE extends PlateEditor<TV>>(
       const existingText = getNodeString(cellEl).trim();
       const expectedText = series.next().value;
       if (typeof expectedText === 'string' && existingText !== expectedText) {
-        return () => {
-          const selectionBefore = editor.selection;
-          insertText(editor, expectedText, { at: cellPath });
-          if (selectionBefore && !dequal(selectionBefore, editor.selection)) {
-            setSelection(editor, selectionBefore);
-          }
-        };
+        return () => setCellText<TV>(editor, cellPath, expectedText);
       }
     }
   }

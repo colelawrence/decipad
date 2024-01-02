@@ -4,9 +4,8 @@ import {
   useTEditorRef,
 } from '@decipad/editor-types';
 import { useCallback, useEffect, useMemo } from 'react';
-import { usePathMutatorCallback } from '@decipad/editor-hooks';
+import { usePathMutatorCallback, useElements } from '@decipad/editor-hooks';
 import type { Path } from 'slate';
-import { useElements } from '@decipad/editor-components';
 
 export const useTableHeaderCellDropdownNames = (
   element: TableHeaderElement,

@@ -44,7 +44,7 @@ import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
 import { Path } from 'slate';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
-import { getColumnName } from '../utils';
+import { getColumnName, setCellText } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
 import * as Sentry from '@sentry/react';
 
@@ -466,9 +466,7 @@ export const useTableActions = (
 
             const columnCellPath = [...path, i + 2, suggestion.columnIndex];
             if (hasNode(editor, columnCellPath)) {
-              insertText(editor, suggestion.suggestion, {
-                at: columnCellPath,
-              });
+              setCellText(editor, columnCellPath, suggestion.suggestion);
             }
           });
           return;

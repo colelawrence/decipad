@@ -36,12 +36,7 @@ export const RowResult = ({
         <TableRow readOnly>
           {value.map((col, colIndex) => {
             return (
-              <TableData
-                as="td"
-                key={colIndex}
-                showPlaceholder={false}
-                element={element}
-              >
+              <TableData key={colIndex} as="td" showPlaceholder={false}>
                 <div
                   css={[
                     css(table.getCellWrapperStyles(rowCellTypes[colIndex])),

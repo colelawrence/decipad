@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { act, renderHook } from '@testing-library/react';
 import { mockConsoleError } from '@decipad/testutils';
-import { useMounted, useSafeState } from './state';
+import { useMounted, useSafeState, useOverridableState } from './state';
 
 describe('useMounted', () => {
   it('contains false before the component is mounted', () => {
@@ -38,5 +38,26 @@ describe('useSafeState', () => {
     unmount();
     await act(() => setState(42));
     expect(mockedConsoleError).not.toHaveBeenCalled();
+  });
+});
+
+describe('useOverridableState', () => {
+  it('updates the state', async () => {
+    const { result } = renderHook(() => useOverridableState(5));
+    const [, setState] = result.current;
+    await act(() => setState(42));
+    const [state] = result.current;
+    expect(state).toBe(42);
+  });
+
+  it('updates the state when the argument changes', async () => {
+    const { result, rerender } = renderHook((initialState) =>
+      useOverridableState(initialState)
+    );
+    const [, setState] = result.current;
+    await act(() => setState(42));
+    rerender(5);
+    const [state] = result.current;
+    expect(state).toBe(5);
   });
 });

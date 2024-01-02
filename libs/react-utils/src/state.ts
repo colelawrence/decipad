@@ -45,3 +45,23 @@ export function useSafeState<S>(
   );
   return [state, setSafeState as Dispatch<SetStateAction<S | undefined>>];
 }
+
+export function useOverridableState<S>(
+  initialState: S | (() => S)
+): [S, Dispatch<SetStateAction<S>>];
+export function useOverridableState<S>(
+  initialState?: S | (() => S)
+): [S | undefined, Dispatch<SetStateAction<S | undefined>>] {
+  const afterFirst = useRef(false);
+  const [state, setState] = useState<S | undefined>(initialState);
+
+  useEffect(() => {
+    if (afterFirst.current) {
+      setState(initialState);
+    } else {
+      afterFirst.current = true;
+    }
+  }, [initialState]);
+
+  return [state, setState];
+}

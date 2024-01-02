@@ -4,7 +4,6 @@ import type {
   IdentifiedResult,
   SerializedType,
 } from '@decipad/remote-computer';
-import { AnyElement } from '@decipad/editor-types';
 import { useThemeFromStore } from '@decipad/react-contexts';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
@@ -12,10 +11,11 @@ import { Children, ComponentProps, FC, ReactNode, useMemo } from 'react';
 import { useSelected } from 'slate-react';
 import { VariableEditorMenu } from '..';
 import { Ellipsis, Virus } from '../../icons';
-import { CellEditor } from '../../molecules';
+import { DatePickerWrapper, Toggle } from '../../atoms';
 import {
   cssVar,
   grey700,
+  p24Medium,
   offBlack,
   smallestDesktop,
   transparency,
@@ -136,6 +136,18 @@ const variableNameStyles = (variant: Variant) =>
     },
   });
 
+const toggleWrapperStyles = css({
+  display: 'flex',
+  gap: '8px',
+  minHeight: '40px',
+  alignItems: 'center',
+  padding: '0px 8px 0px 8px',
+});
+
+const hiddenChildrenStyles = css({
+  display: 'none',
+});
+
 interface VariableEditorProps
   extends Omit<ComponentProps<typeof VariableEditorMenu>, 'trigger'> {
   children?: ReactNode;
@@ -149,7 +161,6 @@ interface VariableEditorProps
     value: string | undefined // only booleans for now
   ) => void;
   smartSelection?: boolean;
-  element?: AnyElement;
 }
 
 export const VariableEditor = ({
@@ -161,7 +172,6 @@ export const VariableEditor = ({
   value,
   lineResult,
   onChangeValue = noop,
-  element,
   variant,
   ...menuProps
 }: VariableEditorProps): ReturnType<FC> => {
@@ -173,6 +183,47 @@ export const VariableEditor = ({
   const selected = useSelected();
 
   const resultType = lineResult?.result?.type;
+
+  const editor = (() => {
+    if (variant === 'display' || childrenArray.length === 0) {
+      return null;
+    }
+
+    const wrappedChildren = (
+      <div css={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
+        {childrenArray.slice(1)}
+      </div>
+    );
+
+    if (variant === 'date') {
+      return (
+        <DatePickerWrapper
+          granularity={type && 'date' in type ? type.date : undefined}
+          value={value ?? ''}
+          open={selected}
+          onChange={onChangeValue}
+          customInput={wrappedChildren}
+        />
+      );
+    }
+
+    if (variant === 'toggle') {
+      return (
+        <div contentEditable={false} css={toggleWrapperStyles}>
+          <Toggle
+            active={value === 'true'}
+            onChange={(newValue) => onChangeValue(newValue ? 'true' : 'false')}
+          />
+
+          <span css={p24Medium}>{value === 'true' ? 'true' : 'false'}</span>
+
+          <div css={hiddenChildrenStyles}>{wrappedChildren}</div>
+        </div>
+      );
+    }
+
+    return wrappedChildren;
+  })();
 
   return (
     <div
@@ -228,20 +279,8 @@ export const VariableEditor = ({
             )}
           </>
         </div>
-        {variant !== 'display' && childrenArray.length > 1 && (
-          <CellEditor
-            type={type}
-            value={value}
-            onChangeValue={onChangeValue}
-            focused={selected}
-            isEditable={!readOnly}
-            element={element}
-          >
-            <div css={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-              {childrenArray.slice(1)}
-            </div>
-          </CellEditor>
-        )}
+
+        {editor}
       </div>
     </div>
   );

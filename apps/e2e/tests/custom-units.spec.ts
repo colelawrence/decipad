@@ -1,6 +1,11 @@
 import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { focusOnBody, setUp } from '../utils/page/Editor';
-import { createTable, writeInTable, addColumnUnit } from '../utils/page/Table';
+import {
+  createTable,
+  writeInTable,
+  addColumnUnit,
+  getFromTable,
+} from '../utils/page/Table';
 
 test.describe('Tests Custom Units', () => {
   test.describe.configure({ mode: 'serial' });
@@ -32,7 +37,8 @@ test.describe('Tests Custom Units', () => {
     await writeInTable(page, '1', 1, 1);
     await writeInTable(page, '2', 2, 1);
     await writeInTable(page, '3', 3, 1);
-    const locator = page.locator('span[data-unit="bananas"]');
-    expect(await locator.count()).toBe(3);
+    expect(await getFromTable(page, 1, 1)).toBe('1 bananas');
+    expect(await getFromTable(page, 2, 1)).toBe('2 bananas');
+    expect(await getFromTable(page, 3, 1)).toBe('3 bananas');
   });
 });

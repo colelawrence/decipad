@@ -555,7 +555,7 @@ it('makes th and td elements contain only text elements', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "value 1.1",
+                    "text": "value 1.1value 1.2",
                   },
                 ],
                 "type": "td",

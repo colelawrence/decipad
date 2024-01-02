@@ -6,7 +6,6 @@ export * from './BlockSelection/BlockSelectable';
 export * from './CodeLine';
 export * from './Display';
 export * from './EditorSidebar';
-export * from './ElementChange';
 export * from './Iframe/Iframe';
 export * from './Import/Import';
 export * from './InteractiveParagraph';

@@ -12,5 +12,7 @@ export * from './useTableColumnFormulaResultForColumn';
 export * from './useWasSelected';
 export * from './useEditorChange';
 export * from './useTabs';
+export * from './useDropdownConsumer';
 export * from './useActiveEditor';
 export * from './useWorker';
+export * from './ElementChange';

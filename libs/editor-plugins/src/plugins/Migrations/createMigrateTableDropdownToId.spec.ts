@@ -42,7 +42,7 @@ it('Replaces all expression ref with block ids', () => {
               },
               children: [
                 {
-                  text: 'Column 1',
+                  text: 'Column1',
                 },
               ],
             },
@@ -53,7 +53,7 @@ it('Replaces all expression ref with block ids', () => {
               },
               children: [
                 {
-                  text: 'Column 2',
+                  text: 'Column2',
                 },
               ],
             },
@@ -66,7 +66,7 @@ it('Replaces all expression ref with block ids', () => {
               type: ELEMENT_TD,
               children: [
                 {
-                  text: 'exprRef_1',
+                  text: 'This exprRef_1 should be updated, and so should exprRef_2',
                 },
               ],
             },
@@ -130,7 +130,7 @@ it('Replaces all expression ref with block ids', () => {
                 },
                 "children": Array [
                   Object {
-                    "text": "Column 1",
+                    "text": "Column1",
                   },
                 ],
                 "type": "th",
@@ -141,7 +141,7 @@ it('Replaces all expression ref with block ids', () => {
                 },
                 "children": Array [
                   Object {
-                    "text": "Column 2",
+                    "text": "Column2",
                   },
                 ],
                 "type": "th",
@@ -154,7 +154,7 @@ it('Replaces all expression ref with block ids', () => {
               Object {
                 "children": Array [
                   Object {
-                    "text": "1",
+                    "text": "This 1 should be updated, and so should 2",
                   },
                 ],
                 "type": "td",

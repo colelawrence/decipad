@@ -19,6 +19,19 @@ import { AvailableSwatchColor, TableStyleContext } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { TableWidth } from '../Table/Table';
 import { UserIconKey } from '@decipad/editor-types';
+import {
+  findNodePath,
+  PlateEditor,
+  toSlateNode,
+  usePlateEditorRef,
+  setSelection,
+  getAboveNode,
+  useElement,
+  TElement,
+  focusEditor,
+} from '@udecode/plate-common';
+import { ELEMENT_TD, ELEMENT_TABLE } from '@udecode/plate-table';
+import { Point } from 'slate';
 
 const halfSlimBlockWidth = `${Math.round(editorLayout.slimBlockWidth / 2)}px`;
 const totalWidth = cssVar('editorWidth');
@@ -158,6 +171,63 @@ interface EditorTableProps {
   readonly smartRow?: ReactNode;
 }
 
+const getTableCellForEvent = (
+  editor: PlateEditor,
+  { target }: { target: EventTarget }
+) => {
+  let currentNode: Node | null = target as Node;
+
+  // Get the first Slate element ancestor of the event target
+  while (currentNode) {
+    if (currentNode instanceof HTMLElement && currentNode.tagName === 'INPUT') {
+      // Ignore events on modal cell editor
+      return null;
+    }
+
+    if (
+      currentNode instanceof HTMLElement &&
+      currentNode.dataset.slateNode === 'element'
+    ) {
+      break;
+    }
+
+    currentNode = currentNode.parentNode;
+  }
+
+  if (!currentNode) return null;
+
+  const slateNode = toSlateNode(editor, currentNode);
+  if (slateNode?.type !== ELEMENT_TD) return null;
+
+  const slatePath = findNodePath(editor, slateNode);
+  if (!slatePath) return null;
+
+  // Return the path of the text node inside the Slate element
+  return slatePath.concat([0]);
+};
+
+const isPointInCellOfCurrentTable = (
+  editor: PlateEditor,
+  currentTable: TElement,
+  at?: Point
+) => {
+  if (!at) return false;
+
+  // Make sure the point is inside some cell
+  if (!getAboveNode(editor, { at, match: { type: ELEMENT_TD } })) return false;
+
+  // Make sure the cell is inside the current table
+  const tableEntry = getAboveNode(editor, {
+    at: editor.selection?.anchor,
+    match: { type: ELEMENT_TABLE },
+  });
+
+  if (!tableEntry) return false;
+
+  const [anchorTableNode] = tableEntry;
+  return anchorTableNode === currentTable;
+};
+
 export const EditorTable: FC<EditorTableProps> = ({
   id,
   onAddRow,
@@ -181,6 +251,8 @@ export const EditorTable: FC<EditorTableProps> = ({
 
   useDndPreviewSelectors().previewText();
 
+  const editor = usePlateEditorRef();
+  const element = useElement();
   const { color: defaultColor } = useEditorStylesContext();
   const readOnly = useIsEditorReadOnly();
 
@@ -209,8 +281,75 @@ export const EditorTable: FC<EditorTableProps> = ({
   );
 
   const [mouseOver, setMouseOver] = useState(false);
+  const [mouseDown, setMouseDown] = useState(false);
+
   const onMouseEnter = useCallback(() => setMouseOver(true), []);
   const onMouseLeave = useCallback(() => setMouseOver(false), []);
+
+  const onMouseDown = useCallback(
+    (event: React.MouseEvent) => {
+      const cellPath = getTableCellForEvent(editor, event);
+      if (!cellPath) return;
+
+      setMouseDown(true);
+
+      /**
+       * Mouse down sets anchor (unless shift key) and focus. Also set the
+       * anchor if not already in the current table.
+       */
+      const shouldSetAnchor =
+        !event.shiftKey ||
+        !isPointInCellOfCurrentTable(editor, element, editor.selection?.anchor);
+
+      const newAnchor = shouldSetAnchor
+        ? { path: cellPath, offset: 0 }
+        : editor.selection?.anchor;
+
+      /**
+       * Prevent default to avoid incorrect selection behaviour; manually
+       * focus the editor since this is also prevented.
+       */
+      event.preventDefault();
+      focusEditor(editor, []);
+
+      setSelection(editor, {
+        anchor: newAnchor,
+        focus: { path: cellPath, offset: 0 },
+      });
+
+      document.addEventListener('mouseup', () => {
+        setMouseDown(false);
+      });
+    },
+    [editor, element]
+  );
+
+  const onMouseMove = useCallback(
+    (event: React.MouseEvent) => {
+      if (!mouseDown) return;
+
+      const focusCellPath = getTableCellForEvent(editor, event);
+      if (!focusCellPath) return;
+
+      // Mouse move sets focus
+      setSelection(editor, {
+        focus: { path: focusCellPath, offset: 0 },
+      });
+
+      event.preventDefault();
+    },
+    [editor, mouseDown]
+  );
+
+  // Prevent click event on cell from setting anchor
+  const onClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (getTableCellForEvent(editor, event)) {
+        event.stopPropagation();
+      }
+    },
+    [editor]
+  );
 
   const onAddColumnClick = useEventNoEffect(onAddColumn);
 
@@ -232,6 +371,9 @@ export const EditorTable: FC<EditorTableProps> = ({
                 : tableWrapperDraggingStyles,
               tableWrapperDefaultStyles,
             ]}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onClick={onClick}
           >
             {!isDragging && (
               <div css={tableOverflowStyles} contentEditable={false} />

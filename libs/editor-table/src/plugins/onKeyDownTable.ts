@@ -1,20 +1,34 @@
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,
+  ELEMENT_TABLE,
   MyKeyboardHandler,
+  ELEMENT_TD,
+  MyValue,
+  MyGenericEditor,
+  ELEMENT_TH,
 } from '@decipad/editor-types';
 import isHotkey from 'is-hotkey';
-import { findNode, moveSelection, Value } from '@udecode/plate-common';
-import { onKeyDownTable as onKeyDownTablePlate } from '@udecode/plate-table';
+import {
+  findNode,
+  getAboveNode,
+  moveSelection,
+  TElement,
+  select,
+  getNodeEntries,
+  Value,
+  getBlockAbove,
+} from '@udecode/plate-common';
 import { Path } from 'slate';
 import { addColumn } from '../hooks/index';
-import { MyValue } from '../../../editor-types/src/value';
+import { selectNextCell } from '../utils/selectNextCell';
 
 export const onKeyDownTable =
-  <TV extends Value = MyValue>(): MyKeyboardHandler<object, TV> =>
-  (editor, plugin) =>
+  <
+    TV extends Value = MyValue,
+    TE extends MyGenericEditor<TV> = MyGenericEditor<TV>
+  >(): MyKeyboardHandler<object, TV, TE> =>
+  (editor) =>
   (event) => {
-    onKeyDownTablePlate(editor, plugin)(event);
-
     if (isHotkey('shift+enter', event)) {
       const entry = findNode(editor, {
         match: { type: ELEMENT_TABLE_COLUMN_FORMULA },
@@ -32,5 +46,62 @@ export const onKeyDownTable =
         });
         moveSelection(editor);
       }
+    }
+
+    // Select next cell on enter (header cells only)
+    if (isHotkey('enter', event)) {
+      const entry = getBlockAbove(editor, {
+        match: { type: ELEMENT_TH },
+      });
+
+      if (entry) {
+        const [, path] = entry;
+        selectNextCell(editor as any, path);
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
+
+    // Select next cell on tab
+    if (isHotkey('tab', event)) {
+      const entry = getBlockAbove(editor, {
+        match: { type: [ELEMENT_TD, ELEMENT_TH] },
+      });
+
+      if (entry) {
+        const [, path] = entry;
+        selectNextCell(editor as any, path);
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    }
+
+    // Select all cells in the table
+    if (isHotkey('mod+a', event)) {
+      const res = getAboveNode<TElement>(editor, {
+        match: { type: ELEMENT_TABLE },
+      });
+      if (!res) return;
+
+      const [, tablePath] = res;
+
+      const cells = Array.from(
+        getNodeEntries(editor, {
+          at: tablePath,
+          match: { type: ELEMENT_TD },
+        })
+      );
+      if (cells.length === 0) return;
+
+      const [, firstCellPath] = cells[0];
+      const [, lastCellPath] = cells[cells.length - 1];
+
+      select(editor, {
+        anchor: { path: firstCellPath.concat([0]), offset: 0 },
+        focus: { path: lastCellPath.concat([0]), offset: 0 },
+      });
+
+      event.preventDefault();
+      event.stopPropagation();
     }
   };

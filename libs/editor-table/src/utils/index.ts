@@ -5,3 +5,4 @@ export * from './getColumnName';
 export * from './getHoverDirection';
 export * from './isCellAlignRight';
 export * from './sanitizeColumnDropDirection';
+export * from './setCellText';

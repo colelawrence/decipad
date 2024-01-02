@@ -24,13 +24,12 @@ import { createNormalizeTableFormulaPlugin } from './createNormalizeTableFormula
 // import { createExtraColumnPlaceholderPlugin } from './createExtraColumnPlaceholderPlugin';
 // import { createExtraRowPlaceholderPlugin } from './createExtraRowPlaceholderPlugin';
 import { addColumn, addRow } from '../hooks/index';
-import { createCellFormulaShortcutPlugin } from './createCellFormulaShortcutPlugin';
+import { createArrowCellNavigationPlugin } from './createArrowCellNavigationPlugin';
 import { createCursorFocusPlugin } from './createCursorFocusPlugin';
 import { createNormalizeTableFormulaAndSeriesCellsPlugin } from './createNormalizeTableFormulaAndSeriesCellsPlugin';
 import { createNormalizeTablesPlugin } from './createNormalizeTablesPlugin';
 import { createNormalizeTdPlugin } from './createNormalizeTdPlugin';
-import { createPreventDestructiveDeleteOnTablePlugin } from './createPreventDestructiveDeleteOnTablePlugin';
-import { createPreventEnterToCreateCellPlugin } from './createPreventEnterToCreateCellPlugin';
+import { createClearCellPlugin } from './createClearCellPlugin';
 import { onDropSmartCellResult } from './onDropSmartCellResult';
 import { onKeyDownTable } from './onKeyDownTable';
 import { withTable } from './withTable';
@@ -73,15 +72,13 @@ export const createTablePlugin = <
     onKeyDown: onKeyDownTable(),
   },
   plugins: [
-    createPreventEnterToCreateCellPlugin(),
-    createPreventDestructiveDeleteOnTablePlugin(),
-    // createArrowCellNavigationPlugin(),
+    createClearCellPlugin(),
+    createArrowCellNavigationPlugin(),
     createCursorFocusPlugin(),
     // TODO: enable this
     // createExtraColumnPlaceholderPlugin(),
     // TODO: enable this
     // createExtraRowPlaceholderPlugin(),
-    createCellFormulaShortcutPlugin(),
     createNormalizeTableFormulaPlugin(computer),
     createNormalizeTableFormulaAndSeriesCellsPlugin(computer),
     createNormalizeTablesPlugin<TV, TE>(computer),
@@ -101,6 +98,7 @@ export const createTablePlugin = <
     {
       key: ELEMENT_TD,
       isElement: true,
+      isVoid: true,
       component: TableCell,
       deserializeHtml: {
         attributeNames: ['rowspan', 'colspan'],

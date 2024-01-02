@@ -3,7 +3,15 @@ import { useWindowListener } from '@decipad/react-utils';
 import { noop } from '@decipad/utils';
 import { css } from '@emotion/react';
 import * as Popover from '@radix-ui/react-popover';
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { EditItemsOptions, SelectItems } from '../../atoms';
 import { Plus } from '../../icons';
 import { DropdownOption } from '../../molecules';
@@ -78,7 +86,7 @@ export type DropdownMenuProps = EditItemsOptions & {
   readonly groups: Array<SelectItems>;
   readonly isEditingAllowed?: boolean;
   readonly addOption?: (a: string) => void;
-  readonly children: JSX.Element;
+  readonly children?: ReactNode;
 };
 
 /**

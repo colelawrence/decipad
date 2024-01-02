@@ -77,6 +77,10 @@ export const tdBaseStyles = css(p14Medium, {
   verticalAlign: 'middle',
   paddingTop: tdVerticalPadding,
   paddingBottom: tdVerticalPadding,
+
+  '> *': {
+    minHeight: '1lh',
+  },
 });
 
 export const innerTablesNoTopBorderStyles = {

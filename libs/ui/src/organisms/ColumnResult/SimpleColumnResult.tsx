@@ -45,7 +45,7 @@ export const SimpleColumnResult: FC<CodeResultProps<'materialized-column'>> = ({
           {valuesForPage.map((oneValue, index) => {
             return (
               <TableRow readOnly key={index}>
-                <TableData as="td" showPlaceholder={false} element={element}>
+                <TableData as="td" showPlaceholder={false}>
                   <span css={rowLabelStyles}>
                     <CodeResult
                       type={type.cellType}

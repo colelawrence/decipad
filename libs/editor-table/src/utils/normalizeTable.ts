@@ -39,6 +39,7 @@ import {
   deleteText,
   getChildren,
   getNodeChildren,
+  getNodeString,
   hasNode,
   isElement,
   isText,
@@ -50,6 +51,7 @@ import { nanoid } from 'nanoid';
 import { Path } from 'slate';
 import { convertLegacyType } from './convertLegacyType';
 import { createTableCaption } from './createTableCaption';
+import { setCellText } from './setCellText';
 
 const normalizeTableStructure = <TV extends Value, TE extends PlateEditor<TV>>(
   editor: TE,
@@ -309,13 +311,8 @@ const normalizeTableDataCell = <TV extends Value, TE extends PlateEditor<TV>>(
       );
   }
 
-  let childIndex = -1;
-  for (const el of node.children || []) {
-    childIndex += 1;
-    if (!isText(el)) {
-      // eslint-disable-next-line no-loop-func
-      return () => unwrapNodes(editor, { at: [...path, childIndex] });
-    }
+  if ((node.children || []).some((el) => !isText(el))) {
+    return () => setCellText<TV>(editor, path, getNodeString(node));
   }
 
   return false;

@@ -12,7 +12,6 @@ import {
 } from '@decipad/editor-types';
 import { dndStore } from '@udecode/plate-dnd';
 import { findNodePath } from '@udecode/plate-common';
-import { Path } from 'slate';
 import {
   CellDndProps,
   ColumnDropLine,
@@ -20,18 +19,7 @@ import {
 } from '../../contexts/TableDndContext';
 import { findColumnAndDragItem } from '../../utils/findColumnAndDragItem';
 import { focusEditorForColumnDnd } from '../../utils/focusEditorForColumnDnd';
-
-/**
- * Ensure that React treats identical path arrays as equal.
- *
- * The deps array should read `path || []` and is not a typo.
- * Do not replace with `[path]`.
- *
- * TODO: Refactor or replace with alternative solution
- */
-const useMemoPath = <T extends Path | null | undefined>(path: T): T =>
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useMemo(() => path, path || []);
+import { useMemoPath } from '@decipad/react-utils';
 
 export const TableDndProvider = ({
   editor,
@@ -47,9 +35,7 @@ export const TableDndProvider = ({
   );
   const dropLine = columnDropLine?.direction;
 
-  const tablePath = useMemoPath(
-    useMemo(() => findNodePath(editor, table), [editor, table])
-  );
+  const tablePath = useMemoPath(findNodePath(editor, table));
 
   const onCellHover = useCallback(
     (props: CellDndProps) => {

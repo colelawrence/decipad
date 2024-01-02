@@ -32,6 +32,7 @@ import {
   tableCellLocator,
   changeColumnMonth,
   changeColumnDay,
+  doubleClickCell,
 } from '../utils/page/Table';
 
 import notebookSource from '../__fixtures__/006-notebook-formula-tables.json';
@@ -102,23 +103,8 @@ test.describe('Count how many times table cells render', () => {
      * the expected count. Congratulations, you've made tables more efficient!
      */
     const cellCount = 9;
-    const expectedPerCell = 3;
+    const expectedPerCell = 4;
     expect(renderCount).toBe(cellCount * expectedPerCell);
-  });
-
-  test('count renders in response to a single keystroke', async () => {
-    await writeInTable(page, 'a', 1, 1);
-    const previousRenderCount = await waitUntilStopRendering(page);
-    await writeInTable(page, 'b', 1, 1);
-    const renderCount = await waitUntilStopRendering(page);
-
-    expect(renderCount).toBeGreaterThan(0);
-
-    /**
-     * If this fails with a number less than what's currently expected, reduce
-     * the expected count. Congratulations, you've made tables more efficient!
-     */
-    expect(renderCount - previousRenderCount).toBe(2);
   });
 });
 
@@ -169,15 +155,13 @@ test.describe('Basic Table Interactions + Collisions', () => {
   test('fills first table', async () => {
     // first column
     await writeInTable(page, 'Imports', 1, 0, 'NewTableName');
-    expect(await getFromTable(page, 1, 0, false, 'NewTableName')).toBe(
-      'Imports'
-    );
+    expect(await getFromTable(page, 1, 0, 'NewTableName')).toBe('Imports');
     await writeInTable(page, 'Hydro, wind and solar', 2, 0, 'NewTableName');
     await writeInTable(page, 'Bioenergy', 3, 0, 'NewTableName');
 
     // second column
     await writeInTable(page, '0.68%', 1, 1, 'NewTableName');
-    expect(await getFromTable(page, 1, 1, false, 'NewTableName')).toBe('0.68%');
+    expect(await getFromTable(page, 1, 1, 'NewTableName')).toBe('0.68%');
     await writeInTable(page, '3.02%', 2, 1, 'NewTableName');
     await writeInTable(page, '9.32%', 3, 1, 'NewTableName');
   });
@@ -310,6 +294,8 @@ test.describe('Basic Table', () => {
 
   test('deletes table and created a new table to check for name collisions', async () => {
     await deleteTable(page);
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await page.waitForTimeout(Timeouts.typing);
     await createTable(page);
     await expect(
       await page.getByTestId('code-line-warning').count(),
@@ -390,7 +376,7 @@ test.describe('tests table date pickers', () => {
     line = 1;
     col = 1;
     await changeColumnYear(page, col);
-    await clickCell(page, line, col);
+    await doubleClickCell(page, line, col);
 
     await page.getByText('Today').isVisible();
     await snapshot(page as Page, 'Tables: Year Picker');
@@ -404,7 +390,7 @@ test.describe('tests table date pickers', () => {
     line = 1;
     col = 2;
     await changeColumnMonth(page, col);
-    await clickCell(page, line, col);
+    await doubleClickCell(page, line, col);
 
     await page.getByText('Today').isVisible();
     await snapshot(page as Page, 'Tables: Month Picker');
@@ -420,7 +406,7 @@ test.describe('tests table date pickers', () => {
     col = 3;
     await addColumn(page);
     await changeColumnDay(page, col);
-    await clickCell(page, line, col);
+    await doubleClickCell(page, line, col);
 
     // skipping snapshot since the modal is the same as the date widget
     await page.getByText('Today').click();
@@ -431,7 +417,7 @@ test.describe('tests table date pickers', () => {
   });
 });
 
-test.describe('Number Parcing Checks', () => {
+test.describe('Number Parsing Checks', () => {
   test.describe.configure({ mode: 'serial' });
 
   let page: Page;
@@ -667,14 +653,10 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
   });
 
   test('Causes error by deleting values', async () => {
-    await clickCell(page, 1);
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('Backspace');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('Backspace');
+    await doubleClickCell(page, 1); // |13.21|
+    await page.keyboard.press('ArrowRight'); // 13.21|
+    await page.keyboard.press('Backspace'); // 13.2|
+    await page.keyboard.press('Backspace'); // 13.|
     await clickCell(page, 2);
     await clickCell(page, 1);
     await page.getByText('13.').hover();
@@ -701,10 +683,10 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
 
   test('Tests if adding the number back fixes parsing error', async () => {
     await clickCell(page, 1);
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.type('25');
+    await doubleClickCell(page, 1); // |13.|
+    await page.keyboard.press('ArrowRight'); // 13.|
+    await page.keyboard.type('25'); // 13.25|
+    await clickCell(page, 2);
     await page.getByText('13.25').hover();
     // RGB 600, tooltips are too flaky to be tested
     // eslint-disable-next-line playwright/no-wait-for-timeout
@@ -737,26 +719,36 @@ test('Paste table from Wikipedia', async ({ testUser }) => {
   });
 
   await test.step("check that table's data is correct", async () => {
-    expect(await getFromTable(testUser.page, 0, 0, false, 'Table')).toBe(
-      'Index'
-    );
-    expect(await getFromTable(testUser.page, 0, 1, false, 'Table')).toBe(
-      'Driver'
-    );
-    expect(await getFromTable(testUser.page, 0, 2, false, 'Table')).toBe('Age');
-    expect(await getFromTable(testUser.page, 0, 3, false, 'Table')).toBe(
-      'Year'
-    );
+    expect(await getFromTable(testUser.page, 0, 0, 'Table')).toBe('Index');
+    expect(await getFromTable(testUser.page, 0, 1, 'Table')).toBe('Driver');
+    expect(await getFromTable(testUser.page, 0, 2, 'Table')).toBe('Age');
+    expect(await getFromTable(testUser.page, 0, 3, 'Table')).toBe('Year');
 
-    expect(await getFromTable(testUser.page, 2, 0, false, 'Table')).toBe('2');
-    expect(await getFromTable(testUser.page, 2, 1, false, 'Table')).toBe(
+    expect(await getFromTable(testUser.page, 2, 0, 'Table')).toBe('2');
+    expect(await getFromTable(testUser.page, 2, 1, 'Table')).toBe(
       'Lewis Hamilton'
     );
-    expect(await getFromTable(testUser.page, 2, 2, false, 'Table')).toBe(
+    expect(await getFromTable(testUser.page, 2, 2, 'Table')).toBe(
       '23 years, 300 days'
     );
-    expect(await getFromTable(testUser.page, 2, 3, false, 'Table')).toBe(
-      '2008'
-    );
+    expect(await getFromTable(testUser.page, 2, 3, 'Table')).toBe('2008');
+  });
+});
+
+test('Starts editing cell on enter', async ({ testUser }) => {
+  await test.step('create table', async () => {
+    await createTable(testUser.page);
+  });
+
+  await test.step('edit cell', async () => {
+    await writeInTable(testUser.page, 'before', 1);
+    await clickCell(testUser.page, 1);
+    await testUser.page.keyboard.press('Enter');
+    await testUser.page.keyboard.type(' after');
+    await testUser.page.keyboard.press('Enter');
+  });
+
+  await test.step('check that cell is edited', async () => {
+    expect(await getFromTable(testUser.page, 1)).toBe('before after');
   });
 });

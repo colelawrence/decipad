@@ -43,7 +43,6 @@ export { EditorTitle } from './EditorTitle/EditorTitle';
 export { Expression } from './Expression/Expression';
 export { FeatureFlagsSwitcher } from './FeatureFlagsSwitcher/FeatureFlagsSwitcher';
 export { FilterBubbles } from './FilterBubbles/FilterBubbles';
-export { FormulaTableData } from './FormulaTableData/FormulaTableData';
 export { IconPopover } from './IconPopover/IconPopover';
 export { ImportTableFirstRowControls } from './ImportTableFirstRowControls/ImportTableFirstRowControls';
 export { InlineCodeError } from './InlineCodeError/InlineCodeError';

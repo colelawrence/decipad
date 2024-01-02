@@ -82,7 +82,6 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
                       as="td"
                       rowSpan={labelInfo.productOfRemainingLengths}
                       showPlaceholder={false}
-                      element={element}
                     >
                       <span
                         css={[
@@ -99,7 +98,7 @@ export const LabeledColumnResult: FC<LabeledColumnResultProps> = ({
                     </TableData>
                   ) : null;
                 })}
-                <TableData as="td" showPlaceholder={false} element={element}>
+                <TableData as="td" showPlaceholder={false}>
                   <span css={rowLabelStyles}>
                     <CodeResult
                       type={matrixValue.result.type}
