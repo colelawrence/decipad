@@ -27,8 +27,8 @@ export const FilterBubbles = ({
 };
 
 const tagStyle = css(p12Medium, {
-  border: `1px solid ${cssVar('borderSubdued')}`,
-  padding: '2px 6px',
+  boxShadow: `inset 0px 0px 0px 1px ${cssVar('borderSubdued')}`,
+  padding: '3px 8px 3px 6px',
   borderRadius: '4px',
   display: 'flex',
   gap: '4px',
