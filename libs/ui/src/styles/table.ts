@@ -32,11 +32,12 @@ export const tableParentStyles = css({
 export const importTableDragHandleStyles = css({
   gridArea: 'handle',
   cursor: 'pointer',
-  borderRadius: '6px 0 0px 6px',
-  backgroundColor: componentCssVars('TableFocusColor'),
+  width: '18px',
+  height: '18px',
+  borderRadius: '4px',
 
-  ':hover': {
-    backgroundColor: componentCssVars('TableFocusColor'),
+  ':focus, :active': {
+    boxShadow: `0 0 0 1px ${componentCssVars('TableFocusColor')}`,
   },
 });
 
