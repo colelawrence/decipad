@@ -1,6 +1,6 @@
 import {
   RemoteComputer,
-  convertToMultiplierUnit,
+  Unit,
   materializeResult,
   Result,
   safeNumberForPrecision,
@@ -10,7 +10,6 @@ import { PlotElement } from '@decipad/editor-types';
 import { formatResult } from '@decipad/format';
 import DeciNumber from '@decipad/number';
 import { componentCssVarHex, cssVarHex } from '@decipad/ui';
-import { ResultMaterializedTable } from 'libs/language/src/interpreter/interpreter-types';
 import {
   AllowedPlotValue,
   comparableChartTypes,
@@ -302,7 +301,7 @@ function toPlotColumn(
   if (type.kind === 'number') {
     return (column as Array<DeciNumber>).map((f) => {
       const [rounded] = safeNumberForPrecision(
-        convertToMultiplierUnit(f, type.unit)
+        Unit.convertToMultiplierUnit(f, type.unit)
       );
       return rounded;
     });
@@ -352,7 +351,7 @@ export async function resultToPlotResultData(
   if (!value) {
     return;
   }
-  const tableValue = value as ResultMaterializedTable;
+  const tableValue = value as Result.ResultMaterializedTable;
   const columnNames = relevantColumnNames(displayProps);
 
   const columnsTypesAndResults: Array<[SerializedType, Result.OneResult[]]> =

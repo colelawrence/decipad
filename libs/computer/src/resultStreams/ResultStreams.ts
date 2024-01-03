@@ -1,5 +1,6 @@
 import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
-import { InferError, Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { InferError, Unknown } from '@decipad/language';
 import type { Computer } from '..';
 import { defaultComputerResults } from '../computer/defaultComputerResults';
 import type {
@@ -67,7 +68,7 @@ export class ResultStreams {
               previous.usedNames?.[0]?.[0] ?? 'unknown'
             ).spec,
           },
-          value: Result.Unknown,
+          value: Unknown,
         },
         epoch: this.computer.computationRealm.epoch,
       });

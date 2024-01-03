@@ -1,6 +1,7 @@
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as T } from '@decipad/language-types';
 import { runAST } from '..';
-import { buildType as T } from '../type';
 import { n, block, tiered, tieredDef, r, c } from '../utils';
 
 describe('evaluateTiered', () => {

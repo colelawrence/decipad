@@ -90,6 +90,26 @@ module.exports = {
               'Use @decipad/remote-computer instead of @decipad/computer',
           },
           {
+            name: '@decipad/language',
+            message:
+              'Use @decipad/remote-computer instead of @decipad/language',
+          },
+          {
+            name: '@decipad/language-types',
+            message:
+              'Use @decipad/remote-computer instead of @decipad/language-types',
+          },
+          {
+            name: '@decipad/language-builtins',
+            message:
+              'Use @decipad/remote-computer instead of @decipad/language-builtins',
+          },
+          {
+            name: '@decipad/language-utils',
+            message:
+              'Use @decipad/remote-computer instead of @decipad/language-utils',
+          },
+          {
             name: 'fraction.js',
             message: 'Use @decipad/number instead of fraction.js',
           },

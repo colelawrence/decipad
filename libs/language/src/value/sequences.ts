@@ -1,21 +1,16 @@
 /* eslint-disable no-underscore-dangle */
+// eslint-disable-next-line no-restricted-imports
+import { RuntimeError, Time, Value } from '@decipad/language-types';
 import DeciNumber, { N } from '@decipad/number';
-import { getDefined } from '@decipad/utils';
-import { RuntimeError, Time } from '..';
-import { addTime, getSpecificity } from '../date';
-
-import { Column, DateValue, Scalar } from './Value';
-import { Value, ColumnLikeValue } from './types';
-import { getInstanceof } from '../utils';
-import { defaultValue } from './defaultValue';
+import { getDefined, getInstanceof } from '@decipad/utils';
 
 const MAX_ITERATIONS = 10_000; // Failsafe
 
 export async function columnFromSequence(
-  startV: Value,
-  endV: Value,
-  byV?: Value
-): Promise<ColumnLikeValue> {
+  startV: Value.Value,
+  endV: Value.Value,
+  byV?: Value.Value
+): Promise<Value.ColumnLikeValue> {
   const [start, end] = await Promise.all(
     [startV, endV].map(async (val) =>
       getInstanceof(await val.getData(), DeciNumber)
@@ -42,10 +37,10 @@ export async function columnFromSequence(
         `A maximum number of ${MAX_ITERATIONS} has been reached in sequence. Check for an unbounded sequence in your code.`
       );
     }
-    array.push(Scalar.fromValue(i));
+    array.push(Value.Scalar.fromValue(i));
   }
 
-  return Column.fromValues(array, defaultValue('column'));
+  return Value.Column.fromValues(array, Value.defaultValue('column'));
 }
 
 // helper to allow decreasing date sequences
@@ -55,10 +50,10 @@ const cmpFn = (s: bigint, e: bigint, i: bigint) => {
 
 // eslint-disable-next-line complexity
 export async function columnFromDateSequence(
-  startD: DateValue,
-  endD: DateValue,
-  by: Time.Unit
-): Promise<ColumnLikeValue | undefined> {
+  startD: Value.DateValue,
+  endD: Value.DateValue,
+  by: Time.TimeUnit
+): Promise<Value.ColumnLikeValue | undefined> {
   let start = await startD.getData();
   let end = await endD.getData();
   if (start == null || end == null) {
@@ -73,7 +68,7 @@ export async function columnFromDateSequence(
     return undefined;
   }
 
-  const spec = getSpecificity(by);
+  const spec = Time.getSpecificity(by);
 
   const array = [];
 
@@ -85,7 +80,7 @@ export async function columnFromDateSequence(
     let cur: bigint = start;
     cmpFn(start, end, cur);
     // eslint-disable-next-line no-await-in-loop
-    cur = getDefined(await addTime(cur, by, BigInt(step)))
+    cur = getDefined(await Time.addTime(cur, by, BigInt(step)))
   ) {
     if (++iterations > MAX_ITERATIONS) {
       throw new RuntimeError(
@@ -93,8 +88,8 @@ export async function columnFromDateSequence(
       );
     }
 
-    array.push(DateValue.fromDateAndSpecificity(cur, spec));
+    array.push(Value.DateValue.fromDateAndSpecificity(cur, spec));
   }
 
-  return Column.fromValues(array);
+  return Value.Column.fromValues(array);
 }

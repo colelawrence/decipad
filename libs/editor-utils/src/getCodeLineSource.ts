@@ -5,7 +5,7 @@ import {
   ELEMENT_SMART_REF,
   TableColumnFormulaElement,
 } from '@decipad/editor-types';
-import { getExprRef } from '@decipad/computer';
+import { getExprRef } from '@decipad/remote-computer';
 import { isElementOfType } from './isElementOfType';
 
 export const getCodeLineSource = (

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import type { Context } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { getExprRef } from '../exprRefs';

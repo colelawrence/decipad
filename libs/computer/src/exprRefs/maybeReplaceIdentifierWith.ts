@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-restricted-imports
+import { type AST } from '@decipad/language';
 import { type ReadOnlyVarNameToBlockMap } from '../internalTypes';
-import { type AST, getExprRef } from '..';
+import { getExprRef } from '..';
 import { getIdentifierString } from '../utils';
 
 export const maybeReplaceIdentifierWith =

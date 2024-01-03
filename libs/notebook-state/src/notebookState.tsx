@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/browser';
-import { setErrorReporter } from '@decipad/computer';
+import { setErrorReporter } from '@decipad/remote-computer';
 import { useStore } from 'zustand';
 import type { StoreApi } from 'zustand';
 import type { NotebookState } from './state';

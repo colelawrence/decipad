@@ -2,25 +2,25 @@ import util from 'util';
 import DeciNumber, { N } from '@decipad/number';
 import { getDefined, zip } from '@decipad/utils';
 import {
-  Interpreter,
-  stringifyDate,
-  Type,
-  convertToMultiplierUnit,
-  serializeType,
+  Result,
   SerializedType,
-} from '@decipad/language';
+  Time,
+  Type,
+  Unit,
+  serializeType,
+} from '@decipad/remote-computer';
 import { formatType } from './formatType';
 
 export const formatResult = (
   locale: string,
-  result: Interpreter.OneResult | undefined | null,
+  result: Result.OneResult | undefined | null,
   _type: Type | SerializedType,
   color = (s: string) => s
 ): string => {
   const type = serializeType(_type);
 
   if (type.kind === 'range') {
-    const [start, end] = result as Interpreter.OneResult[];
+    const [start, end] = result as Result.OneResult[];
     return `range(${formatResult(
       locale,
       start,
@@ -30,14 +30,14 @@ export const formatResult = (
   }
 
   if (type.kind === 'date') {
-    return color(stringifyDate(result as bigint, type.date));
+    return color(Time.stringifyDate(result as bigint, type.date));
   }
 
   if (type.kind === 'number') {
     if (type.numberFormat === 'percentage') {
       return `${color((result as DeciNumber).mul(N(100)).toString())}%`;
     }
-    const numStr = convertToMultiplierUnit(
+    const numStr = Unit.convertToMultiplierUnit(
       result as DeciNumber,
       type.unit
     ).toString(4);

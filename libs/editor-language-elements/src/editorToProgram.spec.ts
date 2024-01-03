@@ -21,7 +21,11 @@ import {
   ELEMENT_TITLE,
   ELEMENT_TAB,
 } from '@decipad/editor-types';
-import { Computer, prettyPrintAST, Program } from '@decipad/computer';
+import {
+  prettyPrintAST,
+  Program,
+  getRemoteComputer,
+} from '@decipad/remote-computer';
 import { getOnly } from '@decipad/utils';
 import { editorToProgram } from './editorToProgram';
 import { createTestEditorController } from './testEditorController';
@@ -117,7 +121,7 @@ describe('editorToProgram', () => {
     const program = await editorToProgram(
       editor,
       editor.children,
-      new Computer()
+      getRemoteComputer()
     );
 
     expect(program.length).toBe(8);

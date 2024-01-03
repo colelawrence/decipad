@@ -1,12 +1,12 @@
 /* eslint-disable no-await-in-loop */
-import { evaluate, Realm, RuntimeError } from '../interpreter';
-import { AST } from '../parser';
-import { Value } from '../value';
+// eslint-disable-next-line no-restricted-imports
+import { AST, RuntimeError, Value } from '@decipad/language-types';
+import { evaluate, Realm } from '../interpreter';
 
 const evaluateMatchDef = async (
   realm: Realm,
   def: AST.MatchDef
-): Promise<Value | undefined> => {
+): Promise<Value.Value | undefined> => {
   const [condition, result] = def.args;
   const conditionValue = await evaluate(realm, condition);
   if (await conditionValue.getData()) {
@@ -18,7 +18,7 @@ const evaluateMatchDef = async (
 export const evaluateMatch = async (
   realm: Realm,
   node: AST.Match
-): Promise<Value> => {
+): Promise<Value.Value> => {
   for (const matchDef of node.args) {
     const matchDefValue = await evaluateMatchDef(realm, matchDef);
     if (matchDefValue != null) {

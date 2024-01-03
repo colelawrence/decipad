@@ -4,7 +4,7 @@ import {
   insertPlotBelow,
 } from '@decipad/editor-components';
 
-import { getExprRef } from '@decipad/computer';
+import { getExprRef } from '@decipad/remote-computer';
 import { usePathMutatorCallback } from '@decipad/editor-hooks';
 import {
   ELEMENT_LIVE_CONNECTION,

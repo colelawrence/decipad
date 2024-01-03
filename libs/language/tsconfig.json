@@ -17,6 +17,15 @@
     },
     {
       "path": "../generator-utils"
+    },
+    {
+      "path": "../language-types"
+    },
+    {
+      "path": "../language-builtins"
+    },
+    {
+      "path": "../language-utils"
     }
   ]
 }

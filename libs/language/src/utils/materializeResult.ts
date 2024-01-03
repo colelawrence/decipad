@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
+// eslint-disable-next-line no-restricted-imports
+import {
+  Result,
+  SerializedTypeKind,
+  materializeOneResult,
+} from '@decipad/language-types';
 import { PromiseOrType, bind } from '@decipad/utils';
-import { Result } from '../result';
-import { materializeOneResult } from './materializeOneResult';
-import { SerializedTypeKind } from '../type';
 
 export const materializeResult = <T extends SerializedTypeKind>(
-  _result: PromiseOrType<Result<T>>
-): PromiseOrType<Result> =>
+  _result: PromiseOrType<Result.Result<T>>
+): PromiseOrType<Result.Result> =>
   bind(_result, (result) => {
     const valueP =
       result.value != null ? materializeOneResult(result.value) : null;

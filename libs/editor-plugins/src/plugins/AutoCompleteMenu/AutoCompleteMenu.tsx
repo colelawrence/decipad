@@ -1,7 +1,7 @@
 import {
   AutocompleteName,
   getBuiltinsForAutocomplete,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import type { AutocompleteDecorationProps } from '@decipad/editor-utils';
 import { useComputer } from '@decipad/react-contexts';

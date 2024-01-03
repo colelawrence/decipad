@@ -1,16 +1,17 @@
+// eslint-disable-next-line no-restricted-imports
 import {
   AST,
   buildType as t,
-  Context,
-  evaluateStatement,
   RuntimeError,
+  Value,
+  Type,
+  Unknown,
+  Context,
+  Realm,
+  evaluateStatement,
+  inferBlock,
   serializeResult,
   validateResult,
-  Value,
-  Result,
-  Type,
-  buildType,
-  inferBlock,
 } from '@decipad/language';
 import { getDefined, zip } from '@decipad/utils';
 import { captureException } from '../reporting';
@@ -32,10 +33,10 @@ const internalComputeStatement = async (
   program: ComputerProgram,
   blockId: string,
   computer: Computer
-): Promise<[IdentifiedResult, Value | undefined]> => {
+): Promise<[IdentifiedResult, Value.Value | undefined]> => {
   const realm = computer.computationRealm;
   const cachedResult = realm.getFromCache(blockId);
-  let value: Value | undefined;
+  let value: Value.Value | undefined;
 
   const block = getBlockFromProgram(program, blockId);
   if (block && cachedResult) {
@@ -50,7 +51,7 @@ const internalComputeStatement = async (
 
   realm.inferContext.statementId = getExprRef(blockId);
   const [_valueType, usedNames] = await inferWhileRetrievingNames(
-    realm.inferContext,
+    realm.interpreterRealm,
     block
   );
   const valueType = _valueType;
@@ -64,7 +65,7 @@ const internalComputeStatement = async (
     );
 
   if (valueType.pending) {
-    value = Result.UnknownValue;
+    value = Value.UnknownValue;
   } else if (valueType.errorCause == null || valueType.functionness) {
     realm.interpreterRealm.statementId = getExprRef(blockId);
     try {
@@ -77,8 +78,8 @@ const internalComputeStatement = async (
           id: blockId,
           epoch: realm.epoch,
           result: serializeResult(
-            buildType.impossible((err as Error).message),
-            Result.Unknown
+            t.impossible((err as Error).message),
+            Unknown
           ),
           visibleVariables: getVisibleVariables(
             program,
@@ -133,7 +134,7 @@ const computeStatement = async (
   program: ComputerProgram,
   blockId: string,
   computer: Computer
-): Promise<[IdentifiedResult, Value | undefined]> => {
+): Promise<[IdentifiedResult, Value.Value | undefined]> => {
   const [resultWithAbstractRefs, value] = await internalComputeStatement(
     program,
     blockId,
@@ -218,12 +219,13 @@ export const computeProgram = async (
 };
 
 const inferWhileRetrievingNames = async (
-  ctx: Context,
+  realm: Realm,
   block: AST.Block
 ): Promise<[Type, Context['usedNames']]> => {
+  const { inferContext: ctx } = realm;
   try {
     ctx.usedNames = [];
-    const valueType = await inferBlock(block, ctx);
+    const valueType = await inferBlock(block, realm);
     const { usedNames } = ctx;
     return [valueType, usedNames];
   } finally {

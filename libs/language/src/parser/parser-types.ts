@@ -1,5 +1,6 @@
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
 import { BracketError } from '..';
-import * as AST from './ast-types';
 
 export interface ParserError {
   message: string;

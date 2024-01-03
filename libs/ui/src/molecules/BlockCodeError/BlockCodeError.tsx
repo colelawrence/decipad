@@ -1,7 +1,6 @@
 import { ClientEventsContext } from '@decipad/client-events';
 import { InferError } from '@decipad/remote-computer';
 import { AnyElement } from '@decipad/editor-types';
-import { useComputer } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { FC, useContext, useEffect } from 'react';
 import {
@@ -11,15 +10,15 @@ import {
 } from '../../primitives';
 import { slimBlockWidth } from '../../styles/editor-layout';
 import { CodeResultProps } from '../../types';
+import { formatError } from '@decipad/format';
 
 type BlockCodeErrorProps = CodeResultProps<'type-error'> & {
   element?: AnyElement;
 };
 
 export const BlockCodeError: FC<BlockCodeErrorProps> = ({ type, element }) => {
-  const computer = useComputer();
   const { url } = new InferError(type.errorCause);
-  const message = computer.formatError(type.errorCause);
+  const message = formatError('en-us', type.errorCause);
   const clientEvent = useContext(ClientEventsContext);
 
   useEffect(() => {

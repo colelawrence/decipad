@@ -1,9 +1,9 @@
 export function getDefined<T>(
   o: T | null | undefined | void,
-  message = 'is not defined'
+  message: string | (() => string) = 'is not defined'
 ): T {
   if (o == null) {
-    throw new TypeError(message);
+    throw new TypeError(typeof message === 'string' ? message : message());
   }
   return o;
 }

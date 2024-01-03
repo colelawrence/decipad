@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Result } from '@decipad/remote-computer';
 import { ImportElementSource, TableCellType } from '@decipad/editor-types';
 
 export interface ConnectionProps {

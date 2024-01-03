@@ -1,12 +1,11 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { N } from '@decipad/number';
-import { useComputer } from '@decipad/react-contexts';
 import { FC } from 'react';
 import { characterLimitStyles } from '../../styles/results';
 import { CodeResultProps } from '../../types';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { css } from '@emotion/react';
 import { useFormattedResultString } from '../../hooks';
+import { formatNumber } from '@decipad/format';
 
 export const NumberResult: FC<CodeResultProps<'number'>> = ({
   type,
@@ -15,14 +14,18 @@ export const NumberResult: FC<CodeResultProps<'number'>> = ({
   tooltip = true,
   variant = 'block',
 }) => {
-  const computer = useComputer();
+  const formatted = formatNumber(
+    'en-US',
+    type.unit,
+    value,
+    type.numberFormat,
+    type.numberError === 'month-day-conversion'
+  );
 
-  const formatted = computer.formatNumber(type, N(value));
-
-  const unitPart = formatted.partsOf.find(
+  const unitPart = formatted.partsOf?.find(
     (part) => part.type === 'unit'
   )?.value;
-  const currencyPart = formatted.partsOf.find(
+  const currencyPart = formatted.partsOf?.find(
     (part) => part.type === 'currency'
   )?.value;
 

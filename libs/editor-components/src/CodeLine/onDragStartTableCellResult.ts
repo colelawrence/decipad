@@ -2,20 +2,16 @@ import { MyEditor } from '@decipad/editor-types';
 import { ComponentProps } from 'react';
 import { setSlateFragment } from '@decipad/editor-utils';
 import { CodeResult } from '@decipad/ui';
-import { RemoteComputer, SerializedTypes } from '@decipad/remote-computer';
+import { SerializedTypes } from '@decipad/remote-computer';
 import { DeciNumber } from '@decipad/number';
 import { dndPreviewActions } from '@decipad/react-contexts';
+import { formatResult } from '@decipad/format';
 
 export const DRAG_TABLE_CELL_RESULT = 'table-cell-result';
 
 export const onDragStartTableCellResult =
   (
-    editor: MyEditor,
-    {
-      computer,
-    }: {
-      computer: RemoteComputer;
-    }
+    editor: MyEditor
   ): NonNullable<ComponentProps<typeof CodeResult>['onDragStartCell']> =>
   (data, { previewRef, result }) =>
   (e) => {
@@ -26,12 +22,13 @@ export const onDragStartTableCellResult =
     editor.setFragmentData(e.dataTransfer, 'drag');
 
     if (editor.previewRef?.current && previewRef?.current) {
-      const formatted = computer.formatNumber(
-        result.type as SerializedTypes.Number,
-        result.value as DeciNumber
+      dndPreviewActions.previewText(
+        formatResult(
+          'en-US',
+          result.value as DeciNumber,
+          result.type as SerializedTypes.Number
+        )
       );
-
-      dndPreviewActions.previewText(formatted.asString);
 
       e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
     }

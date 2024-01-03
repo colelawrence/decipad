@@ -1,38 +1,3 @@
-import { fnQueue } from '@decipad/fnqueue';
-import {
-  DeciNumberRep,
-  formatError,
-  formatNumber,
-  formatUnit,
-} from '@decipad/format';
-import {
-  AST,
-  AutocompleteName,
-  ErrSpec,
-  ExternalDataMap,
-  Result,
-  SerializedType,
-  SerializedTypes,
-  Unit,
-  deserializeType,
-  evaluateStatement,
-  inferExpression,
-  linearizeType,
-  materializeOneResult,
-  parseExpression,
-  parseExpressionOrThrow,
-  runCode,
-  serializeResult,
-  serializeType,
-} from '@decipad/language';
-import DeciNumber from '@decipad/number';
-import {
-  anyMappingToMap,
-  dequal,
-  getDefined,
-  identity,
-  zip,
-} from '@decipad/utils';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
   combineLatestWith,
@@ -41,6 +6,34 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs/operators';
+import { fnQueue } from '@decipad/fnqueue';
+
+// eslint-disable-next-line no-restricted-imports
+import {
+  AutocompleteName,
+  ExternalDataMap,
+  evaluateStatement,
+  inferExpression,
+  parseExpression,
+  parseExpressionOrThrow,
+  runCode,
+  serializeResult,
+  AST,
+  Result,
+  SerializedType,
+  SerializedTypes,
+  Unit,
+  deserializeType,
+  materializeOneResult,
+  serializeType,
+} from '@decipad/language';
+import {
+  anyMappingToMap,
+  dequal,
+  getDefined,
+  identity,
+  zip,
+} from '@decipad/utils';
 import { findNames } from '../autocomplete';
 import { computeProgram } from '../compute/computeProgram';
 import { blocksInUse, isInUse, programDependencies } from '../dependencies';
@@ -83,6 +76,7 @@ import { flattenTableDeclarations } from './transformTables';
 import { ColumnDesc, DimensionExplanation, TableDesc } from '../types';
 import { programToComputerProgram } from '../utils/programToComputerProgram';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';
+import { linearizeType } from 'libs/language-types/src/Dimension';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -95,7 +89,6 @@ export interface IngestComputeRequestResponse {
 }
 
 export class Computer {
-  private locale = 'en-US';
   private latestProgram: ComputerProgram = emptyComputerProgram();
   private latestExternalData: ExternalDataMap = new Map();
   computationRealm = new ComputationRealm();
@@ -639,7 +632,7 @@ export class Computer {
       );
       const start = Date.now();
       const type = await inferExpression(
-        this.computationRealm.inferContext,
+        this.computationRealm.interpreterRealm,
         expression
       );
 
@@ -679,7 +672,7 @@ export class Computer {
 
   async expressionType(expression: AST.Expression): Promise<SerializedType> {
     const type = await inferExpression(
-      this.computationRealm.inferContext,
+      this.computationRealm.interpreterRealm,
       expression
     );
     return serializeType(type);
@@ -848,7 +841,7 @@ export class Computer {
    * Parses a unit from text.
    * NOTE: Don't use with '%', percentages are NOT units. I will crash
    */
-  async getUnitFromText(text: string): Promise<Unit[] | null> {
+  async getUnitFromText(text: string): Promise<Unit.Unit[] | null> {
     if (text.trim() === '%') {
       throw new Error('% is not a unit!');
     }
@@ -859,7 +852,7 @@ export class Computer {
     }
     const [stmt] = statementWithAbstractRefs(ast, this.latestVarNameToBlockMap);
     const expr = await inferExpression(
-      this.computationRealm.inferContext,
+      this.computationRealm.interpreterRealm,
       stmt
     );
     return expr.unit;
@@ -867,30 +860,6 @@ export class Computer {
 
   getLatestProgram(): Readonly<Program> {
     return this.latestProgram.asSequence;
-  }
-
-  // locale
-
-  setLocale(locale: string) {
-    this.locale = locale;
-  }
-
-  formatNumber(type: SerializedTypes.Number, value: DeciNumber): DeciNumberRep {
-    return formatNumber(
-      this.locale,
-      type.unit,
-      value,
-      type.numberFormat,
-      type.numberError === 'month-day-conversion'
-    );
-  }
-
-  formatUnit(unit: Unit[], value?: DeciNumber): string {
-    return formatUnit(this.locale, unit, value);
-  }
-
-  formatError(error: ErrSpec): string {
-    return formatError(this.locale, error);
   }
 
   // flush

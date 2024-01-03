@@ -1,10 +1,10 @@
+import { getDefined } from '@decipad/utils';
 import type { Domain } from './Domain';
 import { EMPTY_LIST, List } from './List';
 import { Binding, isBinding, makeBinding, Val } from './Binding';
 import { isLvar, LogicVar } from './LogicVar';
 import { Constraint } from './Constraint';
 import { Frame } from './Frame';
-import { getDefined } from '../utils';
 import { ToStringable } from './types';
 import { equals } from './Infinity';
 

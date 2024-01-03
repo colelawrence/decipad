@@ -3,30 +3,30 @@
 import repl from 'repl';
 import chalk from 'chalk';
 import {
-  AST,
   parseBlock,
-  Realm,
+  type AST,
   runBlock,
   inferBlock,
-  makeContext as makeInferContext,
-} from '@decipad/language';
+  Realm,
+  makeContext,
+} from '@decipad/remote-computer';
 import { formatError, formatResult } from '@decipad/format';
 
 const DEFAULT_LOCALE = 'en-US';
 
 let accumulatedSource = '';
-let inferContext = makeInferContext();
+let inferContext = makeContext();
 let realm = new Realm(inferContext);
 
 export const reset = () => {
   accumulatedSource = '';
-  inferContext = makeInferContext();
+  inferContext = makeContext();
   realm = new Realm(inferContext);
 };
 
 async function execDeci(ast: AST.Block) {
   try {
-    const type = await inferBlock(ast, inferContext);
+    const type = await inferBlock(ast, realm);
 
     if (type.errorCause != null) {
       return `Error: ${formatError(DEFAULT_LOCALE, type.errorCause.spec)}`;

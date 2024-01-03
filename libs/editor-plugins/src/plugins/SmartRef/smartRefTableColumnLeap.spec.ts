@@ -16,7 +16,11 @@
  * If they don't pass, then surely existing models will break
  */
 
-import { Computer, getExprRef, materializeResult } from '@decipad/computer';
+import {
+  getExprRef,
+  getRemoteComputer,
+  materializeResult,
+} from '@decipad/remote-computer';
 import { editorToProgram } from '@decipad/editor-language-elements';
 import {
   AnyElement,
@@ -748,7 +752,7 @@ const run = async (...elements: AnyElement[]) => {
 
   Editor.normalize(editor as BaseEditor, { force: true });
 
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   const program = await editorToProgram(editor, editor.children, computer);
 
   computer.pushCompute({ program });

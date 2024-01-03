@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   CodeLineElement,
   DECORATE_AUTO_COMPLETE_MENU,
@@ -31,7 +31,7 @@ import { insertNodes } from './insertNodes';
 import { ELEMENT_TABLE } from '@udecode/plate-table';
 
 let editor = createTPlateEditor({});
-const computer = new Computer();
+const computer = getRemoteComputer();
 let codeLine: CodeLineElement;
 beforeEach(() => {
   editor = createPlateEditor();

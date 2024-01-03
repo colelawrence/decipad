@@ -1,23 +1,28 @@
-import { zip } from '@decipad/utils';
-import { isColumnLike, ColumnLikeValue, Table, Value } from '../value';
-import type { AST, ExternalDataMap, Context } from '..';
+import { getDefined, zip } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { AST, ContextUtils, Value } from '@decipad/language-types';
+import type { ExternalDataMap, Context } from '..';
 import { Stack, StackNamespaceJoiner, StackNamespaceSplitter } from '../stack';
-import { getDefined } from '../utils';
 import { ExpressionCache } from '../expression-cache';
 import { InterpreterStats, initialInterpreterStats } from './interpreterStats';
+import { simpleExpressionEvaluate } from './simpleExpressionEvaluate';
 
 // The name "realm" comes from V8.
 // It's passed around during interpretation and
 // contains a stack of variables and a map of
 // function names to AST.FunctionDefinition.
 export class Realm {
-  stack = new Stack<Value>(undefined, tableItemsToTable, tableToTableItems);
+  stack = new Stack<Value.Value>(
+    undefined,
+    tableItemsToTable,
+    tableToTableItems
+  );
   functions = new Map<string, AST.FunctionDefinition>();
-  previousRow: Map<string | symbol, Value> | null = null;
+  previousRow: Map<string | symbol, Value.Value> | null = null;
   inferContext: Context;
-  previousStatementValue?: Value;
+  previousStatementValue?: Value.Value;
   statementId?: string;
-  expressionCache = new ExpressionCache<Value>();
+  expressionCache = new ExpressionCache<Value.Value>();
   stats: InterpreterStats = initialInterpreterStats();
 
   get externalData() {
@@ -70,20 +75,32 @@ export class Realm {
     this.stats[key] += howMuch;
   }
 
+  get utils(): ContextUtils {
+    return {
+      ...this.inferContext.utils,
+      simpleExpressionEvaluate: async (s: AST.Statement) =>
+        simpleExpressionEvaluate(this, s),
+      retrieveVariableValueByGlobalVariableName: (varName, group) =>
+        this.stack.get(varName, group),
+    };
+  }
+
   constructor(context: Context) {
     this.inferContext = context;
   }
 }
 
-const tableItemsToTable: StackNamespaceJoiner<Value> = (tableItems) => {
+const tableItemsToTable: StackNamespaceJoiner<Value.Value> = (tableItems) => {
   for (const v of tableItems.values()) {
-    if (!isColumnLike(v)) throw new Error('expected column-like');
+    if (!Value.isColumnLike(v)) throw new Error('expected column-like');
   }
-  return Table.fromMapping(tableItems as Map<string, ColumnLikeValue>);
+  return Value.Table.fromMapping(
+    tableItems as Map<string, Value.ColumnLikeValue>
+  );
 };
 
-const tableToTableItems: StackNamespaceSplitter<Value> = (table) => {
-  if (table instanceof Table) {
+const tableToTableItems: StackNamespaceSplitter<Value.Value> = (table) => {
+  if (table instanceof Value.Table) {
     return zip(table.columnNames, table.columns);
   }
   return undefined;

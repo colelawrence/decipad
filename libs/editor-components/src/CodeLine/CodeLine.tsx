@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Result } from '@decipad/remote-computer';
 import {
   DisplayElement,
   ELEMENT_CODE_LINE,
@@ -94,9 +94,8 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
   const isReadOnly = useIsEditorReadOnly();
 
   const handleDragStartCell = useMemo(
-    () =>
-      isReadOnly ? undefined : onDragStartTableCellResult(editor, { computer }),
-    [computer, editor, isReadOnly]
+    () => (isReadOnly ? undefined : onDragStartTableCellResult(editor)),
+    [editor, isReadOnly]
   );
 
   const handleDragStartInlineResult = useMemo(
@@ -105,10 +104,9 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
         ? undefined
         : onDragStartInlineResult(editor, {
             element,
-            computer,
             result: lineResult as Result.Result,
           }),
-    [computer, editor, element, isReadOnly, lineResult]
+    [editor, element, isReadOnly, lineResult]
   );
 
   const onDragEnd = useOnDragEnd();

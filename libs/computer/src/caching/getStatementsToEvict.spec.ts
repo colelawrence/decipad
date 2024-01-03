@@ -1,5 +1,5 @@
+// eslint-disable-next-line no-restricted-imports
 import { astNode, Result } from '@decipad/language';
-
 import { anyMappingToMap } from '@decipad/utils';
 import {
   findSymbolErrors,

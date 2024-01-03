@@ -1,5 +1,6 @@
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
 import { prettyPrintAST } from './utils';
-import { AST } from '..';
 import { decilang } from './decilang-tag';
 
 it('creates ASTs with interpolations', () => {

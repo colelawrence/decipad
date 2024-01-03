@@ -1,4 +1,4 @@
-import { isExprRef } from '@decipad/computer';
+import { isExprRef } from '@decipad/remote-computer';
 import {
   useEditorChange,
   useNodePath,

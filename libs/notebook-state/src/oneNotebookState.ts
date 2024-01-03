@@ -6,7 +6,7 @@ import {
 import { createStore } from 'zustand';
 import { captureException } from '@sentry/browser';
 import { take } from 'rxjs';
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { isServerSideRendering } from '@decipad/support';
 import { BlockProcessor, EditorController } from '@decipad/notebook-tabs';
 import { EnhancedPromise, NotebookState } from './state';
@@ -57,7 +57,7 @@ const initialState = (): Omit<
 export const createNotebookStore = (onDestroy: () => void) =>
   createStore<NotebookState>((set, get) => ({
     ...initialState(),
-    computer: new Computer(),
+    computer: getRemoteComputer(),
     initEditor: (
       notebookId,
       { docsync, plugins, onChangeTitle },

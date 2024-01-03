@@ -1,4 +1,4 @@
-import { ErrSpec, Result } from '@decipad/computer';
+import { ErrSpec, Result } from '@decipad/remote-computer';
 import { SimpleTableCellType, TableCellType } from '@decipad/editor-types';
 import { formatError } from '@decipad/format';
 import {

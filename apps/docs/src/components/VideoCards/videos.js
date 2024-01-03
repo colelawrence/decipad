@@ -14,7 +14,7 @@ const YouTubePlayer = ({ videoId, thumbnailUrl }) => {
           modestbranding: 1,
         },
         events: {
-          onReady: (event) => {
+          onReady: () => {
             setPlayerLoaded(true);
           },
         },

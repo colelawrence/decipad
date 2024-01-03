@@ -1,7 +1,5 @@
-import type { SerializedType } from '@decipad/language';
+import { type SerializedType, Format } from '@decipad/remote-computer';
 import { zip } from '@decipad/utils';
-import { formatUnit } from './formatUnit';
-import { formatError } from './formatError';
 
 export function formatType(
   locale: string,
@@ -40,7 +38,7 @@ export function formatTypeInner(
     case 'range':
       return `range of ${formatType(locale, type.rangeOf)}`;
     case 'number':
-      return type.unit ? formatUnit(locale, type.unit) : '<number>';
+      return type.unit ? Format.formatUnit(locale, type.unit) : '<number>';
     case 'materialized-table':
     case 'table': {
       const columnStrings = zip(type.columnNames, type.columnTypes).map(
@@ -67,6 +65,6 @@ export function formatTypeInner(
       return columnStr;
     }
     case 'type-error':
-      return `Error: ${formatError(locale, type.errorCause)}`;
+      return `Error: ${Format.formatError(locale, type.errorCause)}`;
   }
 }

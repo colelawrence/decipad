@@ -1,18 +1,23 @@
-import { zip } from '@decipad/utils';
-import { AST } from '..';
-import { Context } from '../infer';
-import { buildType as t, InferError, Type } from '../type';
-import { getDefined, getIdentifierString, getInstanceof } from '../utils';
+import { getDefined, getInstanceof, zip } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  AST,
+  InferError,
+  Type,
+  Value,
+  buildType as t,
+} from '@decipad/language-types';
+import { getIdentifierString } from '../utils';
 import { Realm } from '../interpreter';
-import { Table, UnknownValue, Value } from '../value';
 import { inferTableColumn } from './inference';
 import { evaluateTableColumn } from './evaluate';
 import { shouldEvaluate } from './shouldEvaluate';
 
 export const inferColumnAssign = async (
-  ctx: Context,
+  realm: Realm,
   assign: AST.TableColumnAssign
 ): Promise<Type> => {
+  const { inferContext: ctx } = realm;
   if (!ctx.stack.isInGlobalScope) {
     return t.impossible(InferError.forbiddenInsideFunction('table'));
   }
@@ -34,7 +39,7 @@ export const inferColumnAssign = async (
   const newColumnAtParentIndex =
     sortOrder ?? getDefined(table.columnNames).length;
 
-  const newColumn = await inferTableColumn(ctx, {
+  const newColumn = await inferTableColumn(realm, {
     columnAst: assign,
     tableName,
     columnName,
@@ -50,17 +55,20 @@ export const inferColumnAssign = async (
 export async function evaluateColumnAssign(
   realm: Realm,
   assign: AST.TableColumnAssign
-): Promise<Value> {
+): Promise<Value.Value> {
   const [tableNameAst, tableColAst, expAst] = assign.args;
 
   const tableName = getIdentifierString(tableNameAst);
   const columnName = getIdentifierString(tableColAst);
 
   if (!shouldEvaluate(realm, tableName, columnName)) {
-    return UnknownValue;
+    return Value.UnknownValue;
   }
 
-  const table = getInstanceof(getDefined(realm.stack.get(tableName)), Table);
+  const table = getInstanceof(
+    getDefined(realm.stack.get(tableName)),
+    Value.Table
+  );
 
   const columns = new Map(zip(table.columnNames, table.columns));
 

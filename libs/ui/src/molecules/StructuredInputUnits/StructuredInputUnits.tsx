@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { AST, currencyUnits, UnitOfMeasure } from '@decipad/language';
+import { AST, currencyUnits, UnitOfMeasure } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { FC, useCallback, useState } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';

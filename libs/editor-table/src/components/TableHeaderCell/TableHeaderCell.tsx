@@ -11,7 +11,7 @@ import {
   getResultErrorMessage,
 } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate-common';
-import { selectErrorFromResult } from '@decipad/computer';
+import { selectErrorFromResult } from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { useSelection } from '@decipad/editor-hooks';
 import { selectColumn } from '../../utils/selectColumn';

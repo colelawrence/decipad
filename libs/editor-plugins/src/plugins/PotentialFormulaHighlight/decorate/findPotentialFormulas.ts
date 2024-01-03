@@ -1,4 +1,4 @@
-import { AST, parseStatement, Token, tokenize } from '@decipad/computer';
+import { AST, parseStatement, Token, tokenize } from '@decipad/remote-computer';
 import { acceptableOperators, isAcceptableUnit } from './languageSubset';
 
 interface FormulaLoc {

@@ -1,19 +1,25 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable no-await-in-loop */
 import DeciNumber, { min, max, ZERO } from '@decipad/number';
-import { NumberValue, Value } from '../value';
-import { evaluate, Realm, RuntimeError } from '../interpreter';
-import { AST } from '../parser';
-import { Type, Unit } from '../type';
-import { convertBetweenUnits } from '../units';
-import { getDefined, getIdentifierString, getInstanceof } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  AST,
+  RuntimeError,
+  Type,
+  Unit,
+  Value,
+  convertBetweenUnits,
+} from '@decipad/language-types';
+import { evaluate, Realm } from '../interpreter';
+import { getIdentifierString } from '../utils';
 import { predicateSymbols } from './inferTiered';
 import { cleanInferred } from './cleanInferred';
+import { getDefined, getInstanceof } from '@decipad/utils';
 
 const maybeConvertBetweenUnits = (
   f: DeciNumber,
-  from: Unit[] | null,
-  to: Unit[] | null
+  from: Unit.Unit[] | null,
+  to: Unit.Unit[] | null
 ) => {
   if (!from || !to) {
     return f;
@@ -73,7 +79,7 @@ const evaluateTier = async (
   tierResultType: Type
 ): Promise<DeciNumber> => {
   const tierValueType = cleanInferred(getDefined(tierValueExp.inferredType));
-  const tierSizeValue = NumberValue.fromValue(tierSize);
+  const tierSizeValue = Value.NumberValue.fromValue(tierSize);
   const tierValue = await realm.withPush(async () => {
     realm.stack.set('tier', tierSizeValue);
     realm.stack.set('slice', tierSizeValue);
@@ -132,7 +138,7 @@ const iterateTier = async (
 export const evaluateTiered = async (
   realm: Realm,
   node: AST.Tiered
-): Promise<Value> => {
+): Promise<Value.Value> => {
   const [initial, ...tierDefs] = node.args;
   const initialNumber = getInstanceof(
     await (await evaluate(realm, initial)).getData(),
@@ -201,5 +207,5 @@ export const evaluateTiered = async (
     acc = min(acc, maximumValue);
   }
 
-  return NumberValue.fromValue(acc);
+  return Value.NumberValue.fromValue(acc);
 };

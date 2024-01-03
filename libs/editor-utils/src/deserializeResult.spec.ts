@@ -1,8 +1,6 @@
-import { Unit } from '@decipad/computer';
-import { OneResult } from 'libs/language/src/result';
+import { Result, Unit } from '@decipad/remote-computer';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { deserializeResult } from './deserializeResult';
-// eslint-disable-next-line import/no-relative-packages
 
 setupDeciNumberSnapshotSerializer();
 
@@ -27,10 +25,10 @@ describe('deserialize result', () => {
 
               unit: 'bananas',
               known: false,
-            } as unknown as Unit,
+            } as unknown as Unit.Unit,
           ],
         },
-        value: { n: 1, d: 1, s: 1 } as unknown as OneResult,
+        value: { n: 1, d: 1, s: 1 } as unknown as Result.OneResult,
       })
     ).toMatchInlineSnapshot(`
       Object {
@@ -107,14 +105,14 @@ describe('deserialize result', () => {
 
                 unit: 'bananas',
                 known: false,
-              } as unknown as Unit,
+              } as unknown as Unit.Unit,
             ],
           },
         },
         value: [
           { n: 1, d: 1, s: 1 },
           { n: 2, d: 1, s: 1 },
-        ] as unknown as OneResult,
+        ] as unknown as Result.OneResult,
       })
     ).toMatchInlineSnapshot(`
       Object {
@@ -205,7 +203,7 @@ describe('deserialize result', () => {
 
                   unit: 'bananas',
                   known: false,
-                } as unknown as Unit,
+                } as unknown as Unit.Unit,
               ],
             },
           ],
@@ -215,7 +213,7 @@ describe('deserialize result', () => {
             { n: 1, d: 1, s: 1 },
             { n: 2, d: 1, s: 1 },
           ],
-        ] as unknown as OneResult,
+        ] as unknown as Result.OneResult,
       })
     ).toMatchInlineSnapshot(`
       Object {

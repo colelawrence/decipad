@@ -12,7 +12,7 @@ import {
   useComputer,
   ExternalDataSourceContext,
 } from '@decipad/react-contexts';
-import { Result } from '@decipad/computer';
+import { Result } from '@decipad/remote-computer';
 import { useCoreLiveConnectionActions } from './useCoreLiveConnectionActions';
 import { useSyncLiveConnectionMetadata } from './useSyncLiveConnectionMetadata';
 import { useLiveConnectionResult$ } from '../contexts/LiveConnectionResultContext';

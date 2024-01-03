@@ -1,28 +1,24 @@
 import { getDefined } from '@decipad/utils';
-import { buildType } from '../type';
-import { Type } from '../type/Type';
+// eslint-disable-next-line no-restricted-imports
 import {
-  ColumnLikeValue,
+  Dimension,
   RuntimeError,
-  Table,
+  Type,
   Value,
-  isColumnLike,
-  isTableValue,
-} from '../value';
-import { resolveIndexDelegation } from '../dimtools';
-import { Realm, sortValue } from '../interpreter';
-import { Context } from '../infer';
+  buildType as t,
+} from '@decipad/language-types';
+import { Realm } from '../interpreter';
 
 const getColumnDimensionTypes = (
-  ctx: Context,
+  realm: Realm,
   columnType: Type
 ): Array<[string, Type]> => {
   const { indexedBy } = columnType;
   if (!indexedBy) {
     return [];
   }
-  const indexName = resolveIndexDelegation(ctx, indexedBy);
-  const tableType = ctx.stack.get(indexName);
+  const indexName = Dimension.resolveIndexDelegation(realm.utils, indexedBy);
+  const tableType = realm.inferContext.stack.get(indexName);
   if (!tableType) {
     return [];
   }
@@ -35,33 +31,33 @@ const getColumnDimensionTypes = (
 const getColumnDimensions = (
   realm: Realm,
   columnType: Type
-): Array<[string, ColumnLikeValue]> => {
+): Array<[string, Value.ColumnLikeValue]> => {
   const { indexedBy } = columnType;
   if (!indexedBy) {
     return [];
   }
-  const indexName = resolveIndexDelegation(realm.inferContext, indexedBy);
+  const indexName = Dimension.resolveIndexDelegation(realm.utils, indexedBy);
   const tableType = realm.inferContext.stack.get(indexName);
   const table = realm.stack.get(indexName);
   if (!tableType || !table) {
     return [];
   }
-  const [, sortedTable] = sortValue(tableType, table);
-  if (!isTableValue(sortedTable)) {
+  const [, sortedTable] = Value.sortValue(tableType, table);
+  if (!Value.isTableValue(sortedTable)) {
     return [];
   }
   return [[sortedTable.columnNames[0], sortedTable.columns[0]]];
 };
 
-const columnToTableType = (ctx: Context, source: Type): Type => {
-  const dimensions = getColumnDimensionTypes(ctx, source);
+const columnToTableType = (realm: Realm, source: Type): Type => {
+  const dimensions = getColumnDimensionTypes(realm, source);
   const columnNames = dimensions.map(([name]) => name);
   let columnName = 'Value';
   while (columnNames.includes(columnName)) {
     columnName = `_${columnName}`;
   }
   const allColumnNames = [...columnNames, columnName];
-  return buildType.table({
+  return t.table({
     indexName: allColumnNames[0],
     columnNames: allColumnNames,
     columnTypes: dimensions
@@ -73,9 +69,9 @@ const columnToTableType = (ctx: Context, source: Type): Type => {
 const columnToTableValue = (
   realm: Realm,
   sourceType: Type,
-  sourceValue: Value
-): Table => {
-  if (!isColumnLike(sourceValue)) {
+  sourceValue: Value.Value
+): Value.Table => {
+  if (!Value.isColumnLike(sourceValue)) {
     throw new RuntimeError('Expected column');
   }
   const dimensions = getColumnDimensions(realm, sourceType);
@@ -85,7 +81,7 @@ const columnToTableValue = (
     columnName = `_${columnName}`;
   }
 
-  return Table.fromNamedColumns(
+  return Value.Table.fromNamedColumns(
     dimensions.map(([, value]) => value).concat(sourceValue),
     dimensions.map(([name]) => name).concat(columnName)
   );

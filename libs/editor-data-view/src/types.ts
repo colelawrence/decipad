@@ -1,5 +1,5 @@
 import { ColumnLike } from '@decipad/column';
-import { Result, SerializedType } from '@decipad/computer';
+import type { Result, SerializedType } from '@decipad/remote-computer';
 import { Comparable } from '@decipad/universal-compare';
 import { Subject } from 'rxjs';
 

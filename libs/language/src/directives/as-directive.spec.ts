@@ -1,11 +1,12 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { buildType as t } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { c, col, l, U, u, ne, r, n, sortedTable, prop } from '../utils';
 import { date } from '../date';
 import { getType, getValue } from './as-directive';
 import { testGetType, testGetValue } from './testUtils';
 import { makeContext } from '../infer';
-import { runASTAndGetContext } from '..';
+import { Realm, runASTAndGetContext } from '..';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -52,7 +53,8 @@ describe('getType', () => {
     );
     const quantity = ne(2, 'ton');
     const ref = r('nuno');
-    expect(await testGetType(getType, ctx, quantity, ref)).toMatchObject(
+    const realm = new Realm(ctx);
+    expect(await testGetType(getType, realm, quantity, ref)).toMatchObject(
       t.number(
         U(
           u('nuno', { known: false, aliasFor: U('g', { multiplier: N(1000) }) })
@@ -79,7 +81,7 @@ describe('getType', () => {
   });
 
   it('converts indexed column to table', async () => {
-    const { context } = await runASTAndGetContext({
+    const { realm } = await runASTAndGetContext({
       type: 'block',
       id: 'table-block',
       args: [
@@ -91,7 +93,7 @@ describe('getType', () => {
     });
     const tableType = await testGetType(
       getType,
-      context,
+      realm,
       prop('Table1', 'Col2'),
       ne(1, 'table')
     );

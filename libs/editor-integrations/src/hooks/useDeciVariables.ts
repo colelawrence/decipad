@@ -1,4 +1,4 @@
-import { safeNumberForPrecision } from '@decipad/computer';
+import { safeNumberForPrecision } from '@decipad/remote-computer';
 import DeciNumber from '@decipad/number';
 import { useComputer } from '@decipad/react-contexts';
 

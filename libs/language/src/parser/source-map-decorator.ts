@@ -1,4 +1,5 @@
-import { AST } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
 import { ParserNode } from './types';
 
 const typesWithArgs = new Set<AST.Node['type']>([

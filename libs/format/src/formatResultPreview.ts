@@ -1,7 +1,5 @@
-import { Result, SerializedType } from '@decipad/language';
+import { Result, SerializedType, Format } from '@decipad/remote-computer';
 import DeciNumber from '@decipad/number';
-import { formatError } from './formatError';
-import { formatNumber } from './formatNumber';
 import { formatResult } from './formatResult';
 
 const DEFAULT_LOCALE = 'en-US';
@@ -9,7 +7,8 @@ const DEFAULT_LOCALE = 'en-US';
 export function formatResultPreview({ type, value }: Result.Result): string {
   switch (type.kind) {
     case 'number': {
-      return formatNumber('en-US', type.unit, value as DeciNumber).asString;
+      return Format.formatNumber('en-US', type.unit, value as DeciNumber)
+        .asString;
     }
 
     case 'anything':
@@ -57,7 +56,7 @@ export function formatResultPreview({ type, value }: Result.Result): string {
     }
 
     case 'type-error': {
-      return formatError('en-US', type.errorCause);
+      return Format.formatError('en-US', type.errorCause);
     }
   }
 }

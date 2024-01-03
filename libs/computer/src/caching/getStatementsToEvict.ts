@@ -1,4 +1,5 @@
-import { AST, ExternalDataMap } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { type ExternalDataMap, type AST } from '@decipad/language';
 import { dequal } from '@decipad/utils';
 import { getDependents } from './dependents';
 import {

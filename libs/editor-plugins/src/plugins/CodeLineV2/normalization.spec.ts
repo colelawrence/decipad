@@ -1,4 +1,3 @@
-import { Computer } from '@decipad/computer';
 import {
   CodeLineElement,
   createTPlateEditor,
@@ -20,6 +19,7 @@ import {
   createNormalizeCodeLineCodePlugin,
   createNormalizeCodeLineVarnamePlugin,
 } from './normalization';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 jest.mock('nanoid', () => ({ nanoid: () => 'mocked-id' }));
 
@@ -49,7 +49,7 @@ function codeLine(varName?: string, code?: string): CodeLineElement {
 
 let editor: PlateEditor;
 beforeEach(() => {
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   const plugins = createPlugins<MyValue, MyEditor>([
     createNormalizeCodeLineV2Plugin(),
     createNormalizeCodeLineCodePlugin(computer),

@@ -1,4 +1,5 @@
 import { dequal } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
 import { astNode, decilang, parseBlock } from '@decipad/language';
 import { ComputerProgram, Program, ProgramBlock } from '../types';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';

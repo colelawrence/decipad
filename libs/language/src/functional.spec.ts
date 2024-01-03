@@ -1,8 +1,8 @@
 import { N } from '@decipad/number';
 import ptime from 'p-time';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t, Time } from '@decipad/language-types';
 import { u, U } from './utils';
-import { buildType as t } from './type';
-import { cleanDate } from './date';
 import {
   runCodeForVariables,
   objectToTableType,
@@ -450,7 +450,7 @@ describe('use of funds document', () => {
 describe('more models', () => {
   test('Discounted cash flow (for dogecoin)', async () => {
     const years = Array.from({ length: 4 }, (_, i) =>
-      cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
+      Time.cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
     const unit = [
       {
@@ -516,7 +516,7 @@ describe('more models', () => {
 
   test('retirement model', async () => {
     const years = Array.from({ length: 3 }, (_, i) =>
-      cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
+      Time.cleanDate(BigInt(Date.UTC(2020 + i, 0)), 'year')
     );
 
     const [result, time] = await runAndMeasure(async () =>

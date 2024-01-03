@@ -30,10 +30,11 @@ const runCode = (sources) => {
   // NOTE: this is very slow even when batching all examples in each .md file
   // But we can load all markdown ASTs into memory and run this subprocess only once.
   const { stdout, stderr, error } = spawnSync(
-    pathJoin(docsDir, '../../node_modules/.bin/babel-node'),
+    'node',
     [
-      '--extensions=.js,.jsx,.ts,.tsx',
-      pathJoin(docsDir, '../../libs/computer/src/evaluate-docs-examples.ts'),
+      '-r',
+      pathJoin(docsDir, '../../node_modules/esbuild-runner/register'),
+      pathJoin(docsDir, '../../apps/docs/utils/evaluate-docs-examples.ts'),
     ],
     {
       input: stringify(Object.fromEntries(sources.entries())),

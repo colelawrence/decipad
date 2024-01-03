@@ -1,4 +1,4 @@
-import { Computer, SerializedType } from '@decipad/computer';
+import { SerializedType, getRemoteComputer } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 import {
@@ -66,7 +66,7 @@ const tableData = [
 ];
 
 describe('specFromType', () => {
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   it('returns no spec if no type is provided', () => {
     expect(specFromType(computer, undefined, displayProps())).toBeUndefined();
   });
@@ -297,7 +297,7 @@ describe('resultToPlotResultData', () => {
 });
 
 describe('enhanceSpecFromWideData', () => {
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   it('enhances spec when data are numbers', () => {
     const data = {
       table: [

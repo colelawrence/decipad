@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import type { FC, DragEvent } from 'react';
 import { Aggregation } from '@decipad/ui';
 import { AnyElement, useTEditorRef } from '@decipad/editor-types';
-import { SerializedType } from '@decipad/computer';
+import { SerializedType } from '@decipad/remote-computer';
 import { ColumnLike, Comparable } from '@decipad/column';
 import { useOnDragEnd } from '@decipad/editor-components';
 import { useComputer } from '@decipad/react-contexts';

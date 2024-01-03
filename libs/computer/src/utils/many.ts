@@ -1,6 +1,11 @@
-import { walkAst } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import {
+  walkAst,
+  type SyntaxError,
+  type BracketError,
+  type AST,
+} from '@decipad/language';
 import { getDefined } from '@decipad/utils';
-import type { AST, SyntaxError, BracketError } from '@decipad/language';
 import type {
   ComputerProgram,
   IdentifiedBlock,

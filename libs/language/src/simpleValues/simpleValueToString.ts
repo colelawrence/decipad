@@ -1,6 +1,8 @@
 import DeciNumber, { N } from '@decipad/number';
-import type { AST } from '..';
-import { operators } from '../builtins/operators/operators';
+// eslint-disable-next-line no-restricted-imports
+import type { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { operators } from '@decipad/language-builtins';
 import { prefixCurrencies } from '../grammar/tokenizer';
 import { getIdentifierString } from '../utils';
 import {

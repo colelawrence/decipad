@@ -1,5 +1,5 @@
 import { ELEMENT_PLOT, PlotElement } from '@decipad/editor-types';
-import { NotebookResults, SerializedType } from '@decipad/computer';
+import type { NotebookResults, SerializedType } from '@decipad/remote-computer';
 import {
   ComputerContextProvider,
   TestResultsProvider,

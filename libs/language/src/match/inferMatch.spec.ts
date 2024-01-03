@@ -1,19 +1,23 @@
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as t } from '@decipad/language-types';
 import { makeContext } from '../infer';
 import { match, matchDef, n } from '../utils';
-import { buildType as t } from '../type';
 import { inferMatch } from './inferMatch';
+import { Realm } from '../interpreter/Realm';
 
 describe('inferMatch', () => {
   it('infers to nothing if empty', async () => {
-    expect(await inferMatch(makeContext(), match())).toEqual(t.nothing());
+    expect(await inferMatch(new Realm(makeContext()), match())).toEqual(
+      t.nothing()
+    );
   });
 
   it('errors if match def is not boolean', async () => {
     expect(
       (
         await inferMatch(
-          makeContext(),
+          new Realm(makeContext()),
           match(
             matchDef(n('literal', 'number', N(1)), n('literal', 'number', N(1)))
           )
@@ -25,7 +29,7 @@ describe('inferMatch', () => {
   it('infers to the value type', async () => {
     expect(
       await inferMatch(
-        makeContext(),
+        new Realm(makeContext()),
         match(
           matchDef(n('literal', 'boolean', true), n('literal', 'number', N(1)))
         )
@@ -37,7 +41,7 @@ describe('inferMatch', () => {
     expect(
       (
         await inferMatch(
-          makeContext(),
+          new Realm(makeContext()),
           match(
             matchDef(
               n('literal', 'boolean', true),

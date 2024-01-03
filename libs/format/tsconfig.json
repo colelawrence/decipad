@@ -9,10 +9,13 @@
       "path": "../number"
     },
     {
-      "path": "../language"
+      "path": "../language-utils"
     },
     {
       "path": "../utils"
+    },
+    {
+      "path": "../remote-computer"
     }
   ]
 }

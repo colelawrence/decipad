@@ -1,5 +1,6 @@
+// eslint-disable-next-line no-restricted-imports
+import { Unknown } from '@decipad/language';
 import type { IdentifiedResult } from '../types';
-import { Result } from '..';
 
 export const defaultBlockResults = (
   blockId: string,
@@ -11,7 +12,7 @@ export const defaultBlockResults = (
     type: {
       kind: 'pending',
     },
-    value: Result.Unknown,
+    value: Unknown,
   },
   epoch,
 });

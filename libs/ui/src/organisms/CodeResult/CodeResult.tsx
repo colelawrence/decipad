@@ -1,8 +1,8 @@
 import {
-  Result,
   type SerializedTypeKind,
   isColumn,
   isTable,
+  Unknown,
 } from '@decipad/remote-computer';
 import { isDeciNumberInput } from '@decipad/number';
 import {
@@ -65,8 +65,7 @@ const getResultMatchers = (): ResultMatcher[] => [
       type.kind !== 'pending' &&
       (type.kind === 'anything' ||
         type.kind === 'nothing' ||
-        (type.kind !== 'type-error' &&
-          (value == null || value === Result.Unknown))),
+        (type.kind !== 'type-error' && (value == null || value === Unknown))),
   },
   {
     component: FunctionResult,

@@ -1,4 +1,4 @@
-import { Result } from '@decipad/remote-computer';
+import { Result, Unknown } from '@decipad/remote-computer';
 
 export const errorResult = (message: string): Result.Result => {
   return {
@@ -9,6 +9,6 @@ export const errorResult = (message: string): Result.Result => {
         message,
       },
     },
-    value: Result.Unknown,
+    value: Unknown,
   };
 };

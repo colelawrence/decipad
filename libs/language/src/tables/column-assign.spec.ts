@@ -1,15 +1,22 @@
-import { inferStatement, makeContext } from '../infer';
-import { buildType as t } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import {
+  AST,
+  Value,
+  materializeOneResult,
+  buildType as t,
+} from '@decipad/language-types';
+import { Context, inferStatement, makeContext } from '../infer';
 import { c, col, l, r, tableColAssign } from '../utils';
 import { evaluateColumnAssign, inferColumnAssign } from './column-assign';
 import { Realm } from '../interpreter';
-import { AST, parseExpressionOrThrow, Table } from '..';
-import { jsCol } from '../lazy/testUtils';
-import { materializeOneResult } from '../utils/materializeOneResult';
+import { parseExpressionOrThrow } from '..';
+import { jsCol } from '../testUtils';
 
-let ctx = makeContext();
+let ctx: Context;
+let realm: Realm;
 beforeEach(() => {
   ctx = makeContext();
+  realm = new Realm(ctx);
   ctx.stack.setNamespaced(['Table', 'Col1'], t.number(), 'function');
   ctx.stack.set('ColumnOfUnknownLength', t.column(t.number()));
   ctx.stack.createNamespace('Empty');
@@ -18,7 +25,7 @@ beforeEach(() => {
 describe('Column assignment inference', () => {
   it('can create a new column with column data', async () => {
     const table = await inferColumnAssign(
-      ctx,
+      realm,
       tableColAssign('Table', 'Col2', col(123))
     );
     expect(table).toMatchInlineSnapshot(`
@@ -83,7 +90,7 @@ describe('Column assignment inference', () => {
   });
   it('can create a new column with scalar number', async () => {
     const expandedNum = await inferColumnAssign(
-      ctx,
+      realm,
       tableColAssign('Table', 'Col2', l(1))
     );
     expect(expandedNum).toMatchInlineSnapshot(`
@@ -148,7 +155,7 @@ describe('Column assignment inference', () => {
   });
   it('can create a new column with a formula', async () => {
     const expandedFormula = await inferColumnAssign(
-      ctx,
+      realm,
       tableColAssign('Table', 'Col2', c('+', r('Col1'), l(1)))
     );
     expect(expandedFormula).toMatchInlineSnapshot(`
@@ -213,7 +220,7 @@ describe('Column assignment inference', () => {
   });
   it('can create a new column with a formula using previous', async () => {
     const usingPrevious = await inferColumnAssign(
-      ctx,
+      realm,
       tableColAssign('Table', 'Col2', c('+', c('previous', l(1)), l(1)))
     );
     expect(usingPrevious).toMatchInlineSnapshot(`
@@ -280,7 +287,7 @@ describe('Column assignment inference', () => {
   it('only works in global scope', async () => {
     await ctx.stack.withPushCall(async () => {
       const error = await inferColumnAssign(
-        ctx,
+        realm,
         tableColAssign('Table', 'Col2', col(1, 2))
       );
 
@@ -295,7 +302,7 @@ describe('Column assignment inference', () => {
 
   it('propagates multiple errors', async () => {
     const duplicatedColumn = await inferColumnAssign(
-      ctx,
+      realm,
       tableColAssign('Table', 'Col1', col('1', '2'))
     );
     expect(duplicatedColumn.errorCause?.spec.errType).toEqual(
@@ -308,7 +315,7 @@ describe('Column assignment inference', () => {
 
     ctx.stack.set('Num', t.number());
     const assigningToNonTable = await inferStatement(
-      ctx,
+      realm,
       tableColAssign('Num', 'Col', col(1, 2))
     );
     expect(assigningToNonTable.errorCause?.spec.errType).toMatchInlineSnapshot(
@@ -329,17 +336,17 @@ describe('Column assignment evaluation', () => {
     realm = new Realm(ctx);
     realm.stack.createNamespace('Table');
     realm.stack.setNamespaced(['Table', 'Col1'], jsCol([1, 2]), 'function');
-    await inferStatement(ctx, columnFormula);
-    await inferStatement(ctx, columnFormulaWithPrevious);
+    await inferStatement(realm, columnFormula);
+    await inferStatement(realm, columnFormulaWithPrevious);
   });
 
   const testColumnAssign = async (column: AST.Expression) => {
     const colAssign = tableColAssign('Table', 'Col2', column);
-    await inferColumnAssign(realm.inferContext, colAssign);
+    await inferColumnAssign(realm, colAssign);
     return evaluateColumnAssign(realm, colAssign);
   };
   const getColNames = () =>
-    (realm.stack.globalVariables.get('Table') as Table).columnNames;
+    (realm.stack.globalVariables.get('Table') as Value.Table).columnNames;
 
   it('whole-column assignment', async () => {
     const assigned = await testColumnAssign(col(3, 4));

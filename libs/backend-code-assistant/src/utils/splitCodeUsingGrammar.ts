@@ -1,5 +1,5 @@
-import { AST, parseBlock } from '@decipad/remote-computer';
-import { CodeResult, SplitCodeResult } from '../types';
+import { type AST, parseBlock } from '../../../remote-computer/src/index';
+import type { CodeResult, SplitCodeResult } from '../types';
 
 const getOneCodeResult = (
   statement: AST.Statement,

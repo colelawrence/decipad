@@ -1,4 +1,6 @@
-import { AST, getColumnLike, inferExpression } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Value } from '@decipad/language-types';
+import { inferExpression } from '..';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
 import { evaluate } from '../interpreter';
 import { getIdentifierString } from '../utils';
@@ -22,7 +24,7 @@ export const over: DirectiveImpl<AST.OverDirective> = {
     return dimSwapValues(
       getIdentifierString(indexName),
       type,
-      getColumnLike(value)
+      Value.getColumnLike(value)
     );
   },
 };

@@ -1,5 +1,5 @@
 import { findNodePath } from '@udecode/plate-common';
-import { Result, isTableResult } from '@decipad/computer';
+import { Result, isTableResult } from '@decipad/remote-computer';
 import {
   MyReactEditor,
   TableCellElement,

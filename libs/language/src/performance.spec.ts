@@ -1,6 +1,7 @@
 import { N } from '@decipad/number';
-import { Result, serializeResult } from './result';
-import { AST } from './parser';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Result } from '@decipad/language-types';
+import { serializeResult } from './result';
 import { runAST } from '.';
 
 const TEST_COLUMN_LENGTH = 10_000;
@@ -82,7 +83,7 @@ const createProgram = (op: string): AST.Block => ({
 describe.skip('language performance', () => {
   it.each(OPS)('performs', async (op) => {
     const test = async () => {
-      const columnValues: Result = {
+      const columnValues: Result.Result = {
         type: {
           kind: 'table',
           columnNames: ['Col1', 'Col2'],

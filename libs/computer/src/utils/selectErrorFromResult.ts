@@ -1,4 +1,5 @@
-import { Result } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { Result, Unknown } from '@decipad/language';
 import { IdentifiedError, IdentifiedResult } from '../types';
 
 const errorMessage = (message?: IdentifiedError['errorKind']): string => {
@@ -23,7 +24,7 @@ export const selectErrorFromResult = (
           message: errorMessage(blockResult.errorKind),
         },
       },
-      value: Result.Unknown,
+      value: Unknown,
     };
   }
   if (

@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/language';
+import { type SerializedType } from '@decipad/remote-computer';
 import { isTabularType } from './results';
 
 describe('isTabularType function', () => {

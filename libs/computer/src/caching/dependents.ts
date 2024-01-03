@@ -1,6 +1,6 @@
-import { previousRefSymbols } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { previousRefSymbols, type AST } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
-import { AST } from '..';
 import {
   iterProgram,
   findSymbolsUsed,

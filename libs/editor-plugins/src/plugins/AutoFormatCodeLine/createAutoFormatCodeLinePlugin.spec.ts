@@ -1,5 +1,4 @@
 /* eslint-disable jest/no-disabled-tests */
-import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE_V2,
@@ -13,11 +12,12 @@ import {
 import React from 'react';
 import { createAutoFormatCodeLinePlugin } from './createAutoFormatCodeLinePlugin';
 import { createNormalizeCodeLinePlugin } from '../NormalizeCodeLine';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 let editor: MyEditor;
 let plugin: MyPlatePlugin;
 beforeEach(() => {
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   plugin = createAutoFormatCodeLinePlugin(computer)();
   editor = createTPlateEditor({
     plugins: [plugin, createNormalizeCodeLinePlugin(computer)],

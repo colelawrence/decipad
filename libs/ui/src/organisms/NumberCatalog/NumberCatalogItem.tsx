@@ -78,7 +78,6 @@ export const NumberCatalogItem = ({
           onDragStart({
             blockId,
             asText,
-            computer,
             result: result.result,
           })
         }

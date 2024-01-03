@@ -1,16 +1,23 @@
-import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE,
   ELEMENT_PARAGRAPH,
   MyEditor,
 } from '@decipad/editor-types';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { createAutoPairsPlugin } from './createAutoPairsPlugin';
 
 const insert = (editor: MyEditor, key: string) => {
   const event = new KeyboardEvent('keydown', { key, cancelable: true });
-  // @ts-expect-error DOM KeyboardEvent vs React event
-  createAutoPairsPlugin(new Computer()).handlers?.onKeyDown?.(editor)(event);
+  const plugin = createAutoPairsPlugin(getRemoteComputer());
+  plugin.handlers?.onKeyDown?.(
+    // @ts-expect-error
+    editor,
+    plugin
+  )(
+    // @ts-expect-error DOM KeyboardEvent vs React event
+    event
+  );
   if (!event.defaultPrevented) {
     switch (true) {
       case '()[]{}'.includes(key):

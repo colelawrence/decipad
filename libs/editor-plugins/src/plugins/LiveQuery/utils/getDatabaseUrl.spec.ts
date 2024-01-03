@@ -1,4 +1,4 @@
-import { Result, getResultGenerator } from '@decipad/computer';
+import { type Result, getResultGenerator } from '@decipad/remote-computer';
 import { getDatabaseUrl } from './getDatabaseUrl';
 
 test('should return the DB url if it exists', async () => {

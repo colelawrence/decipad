@@ -1,6 +1,6 @@
-import { walkAst } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { type AST, walkAst } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
-import { type AST } from '..';
 import { getIdentifierString } from '../utils';
 import { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 import { maybeReplaceIdentifierWith } from './maybeReplaceIdentifierWith';

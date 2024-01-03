@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { DocSyncEditor } from '@decipad/docsync';
 
 export interface NotebookConnectionParams {
@@ -16,7 +16,7 @@ export interface NotebookProps {
   connectionParams: NotebookConnectionParams | undefined;
   initialState?: string;
   onDocsync: (docsync: DocSyncEditor) => void;
-  onComputer: (computer: Computer) => void;
+  onComputer: (computer: RemoteComputer) => void;
   getAttachmentForm: (
     file: File
   ) => Promise<undefined | [URL, FormData, string]>;

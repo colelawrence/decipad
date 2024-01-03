@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { parseStatementOrThrow } from '@decipad/language';
 import { findSymbolsUsed, getDefinedSymbol, setIntersection } from './many';
 

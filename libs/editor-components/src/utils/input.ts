@@ -1,5 +1,5 @@
-import type { SerializedTypeKind } from '@decipad/computer';
-import { Computer } from '@decipad/computer';
+import type { SerializedTypeKind } from '@decipad/remote-computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   DisplayElement,
   DropdownElement,
@@ -80,7 +80,7 @@ export const insertInputBelow = (
   editor: MyEditor,
   path: Path,
   kind: SerializedTypeKind,
-  getAvailableIdentifier: Computer['getAvailableIdentifier']
+  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier']
 ): void => {
   const [variant, placeholder] = getVariantAndHolder(kind);
   const name = getAvailableIdentifier(generateInputName());
@@ -136,7 +136,7 @@ const getSliderInputElement = () => {
 export const insertSliderInputBelow = (
   editor: MyEditor,
   path: Path,
-  getAvailableIdentifier: Computer['getAvailableIdentifier']
+  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier']
 ): void => {
   const input = getSliderInputElement();
   input.children[0].children[0].text = getAvailableIdentifier(
@@ -194,7 +194,7 @@ const getDropdownElement = () =>
 export const insertDropdownBelow = (
   editor: MyEditor,
   path: Path,
-  getAvailableIdentifier: Computer['getAvailableIdentifier']
+  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier']
 ): void => {
   const dropdown = getDropdownElement();
   dropdown.children[0].children[0].text = getAvailableIdentifier(

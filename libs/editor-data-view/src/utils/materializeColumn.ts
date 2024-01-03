@@ -1,12 +1,12 @@
 import { all, slice } from '@decipad/generator-utils';
-import { Interpreter } from '@decipad/computer';
+import { type Result } from '@decipad/remote-computer';
 
 export type AnyImmaterializedColumn = {
-  value: Interpreter.ResultColumn;
+  value: Result.ResultColumn;
 };
 
 export type AnyMaterializedColumn = {
-  value: Interpreter.OneResult[];
+  value: Result.OneResult[];
 };
 
 export type AnyColumn = AnyImmaterializedColumn | AnyMaterializedColumn;

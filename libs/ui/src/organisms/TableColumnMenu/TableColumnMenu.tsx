@@ -39,6 +39,7 @@ import {
 } from '../../utils';
 import { getFormulaType } from '../../utils/table';
 import { typeFromUnitsAction } from './typeFromUnitsAction';
+import { formatUnit } from '@decipad/format';
 
 const tableColumnMenuStyles = css({
   mixBlendMode: 'luminosity',
@@ -62,7 +63,7 @@ interface TableColumnMenuProps
   readonly dropdownNames?: ColumnMenuDropdown[];
 }
 
-const isCurrencyUnit = (unit?: Unit[]): boolean => {
+const isCurrencyUnit = (unit?: Unit.Unit[]): boolean => {
   return (
     (unit && unit.length === 1 && unit[0].baseSuperQuantity === 'currency') ||
     false
@@ -70,7 +71,7 @@ const isCurrencyUnit = (unit?: Unit[]): boolean => {
 };
 
 const sameUnits = (
-  unit: Unit[] | null | undefined,
+  unit: Unit.Unit[] | null | undefined,
   um: UnitOfMeasure
 ): boolean => {
   if (!unit || unit.length !== 1) {
@@ -129,7 +130,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
             type.unit != null &&
             !isCurrencyUnit(type.unit) && (
               <MenuItem key="all" icon={<All />} selected>
-                {computer.formatUnit(type.unit, N(1))}
+                {formatUnit('en-US', type.unit, ONE)}
               </MenuItem>
             )}
           <MenuItem
@@ -163,7 +164,7 @@ export const TableColumnMenu: React.FC<TableColumnMenuProps> = ({
                         known: true,
                         unit: unit.name,
                         baseSuperQuantity: unit.superBaseQuantity,
-                        baseQuantity: unit.name as Unit['baseQuantity'],
+                        baseQuantity: unit.name as Unit.Unit['baseQuantity'],
                       },
                     ])
                   )

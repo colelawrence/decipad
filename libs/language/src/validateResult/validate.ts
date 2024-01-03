@@ -1,15 +1,19 @@
 import DeciNumber from '@decipad/number';
 import { zip } from '@decipad/utils';
-import { Type } from '..';
-import { getSpecificity } from '../date';
-import { Interpreter } from '../interpreter';
-import { Unknown } from '../value';
-import { SerializedType, SerializedTypeKind, serializeType } from '../type';
+import { empty } from '@decipad/generator-utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  EMPTY,
+  Result,
+  SerializedType,
+  SerializedTypeKind,
+  Time,
+  Type,
+  Unknown,
+  serializeType,
+} from '@decipad/language-types';
 import { validateColumnResult } from './validateColumnResult';
 import { Validate } from './types';
-import { ResultGenerator } from '../interpreter/interpreter-types';
-import { empty } from '@decipad/generator-utils';
-import { EMPTY } from '../lazy/materialize';
 
 const getTrue = (cond: boolean, failureMessage: string) => {
   if (cond) return true;
@@ -26,14 +30,14 @@ const getOfKind = (type: SerializedType, ...kinds: SerializedTypeKind[]) => {
 
 // eslint-disable-next-line complexity
 const validate: Validate = <
-  T extends Interpreter.OneResult | null | undefined =
-    | Interpreter.OneResult
+  T extends Result.OneResult | null | undefined =
+    | Result.OneResult
     | null
     | undefined
 >(
   type: SerializedType,
   value: T
-): Interpreter.OneResult | null | undefined => {
+): Result.OneResult | null | undefined => {
   if (
     value == null ||
     typeof value === 'symbol' ||
@@ -61,7 +65,7 @@ const validate: Validate = <
     }
     case 'date': {
       getTrue(
-        getSpecificity(type.date) === type.date,
+        Time.getSpecificity(type.date) === type.date,
         `invalid date specificity ${type.date}`
       );
       getTrue(
@@ -74,7 +78,7 @@ const validate: Validate = <
       break;
     }
     case 'range': {
-      const values = getArray(value as Interpreter.ResultRange);
+      const values = getArray(value as Result.ResultRange);
 
       getTrue(
         values.length === 2,
@@ -91,13 +95,13 @@ const validate: Validate = <
     case 'materialized-column': {
       return validateColumnResult(
         type,
-        value as ResultGenerator | null,
+        value as Result.ResultGenerator | null,
         getTrue,
         validateResult
       ) as T;
     }
     case 'table': {
-      const columnValues = getArray(value as Interpreter.ResultTable);
+      const columnValues = getArray(value as Result.ResultTable);
       if (columnValues.length !== type.columnTypes.length) {
         console.log('columnValues', columnValues);
         throw new Error(
@@ -117,7 +121,7 @@ const validate: Validate = <
       break;
     }
     case 'row': {
-      zip(type.rowCellTypes, getArray(value as Interpreter.ResultRow)).forEach(
+      zip(type.rowCellTypes, getArray(value as Result.ResultRow)).forEach(
         ([type, value]) => validate(type, value)
       );
       break;
@@ -140,7 +144,7 @@ const validate: Validate = <
 
 const reportError = (
   type: SerializedType,
-  value: Interpreter.OneResult | null | undefined,
+  value: Result.OneResult | null | undefined,
   error?: Error
 ) => {
   console.error('Failed to validate a Result:', error?.message);
@@ -149,8 +153,8 @@ const reportError = (
 
 export function validateResult(
   _type: Type | SerializedType,
-  value: Interpreter.OneResult | null | undefined
-): Interpreter.OneResult | null | undefined {
+  value: Result.OneResult | null | undefined
+): Result.OneResult | null | undefined {
   let type: Type | SerializedType = _type;
   if (type instanceof Type) {
     type = serializeType(type);

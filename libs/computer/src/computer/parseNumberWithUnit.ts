@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { tokenRules } from '@decipad/language';
 
 const captureNumberAndExpression = new RegExp(

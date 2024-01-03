@@ -3,7 +3,7 @@ import {
   parseStatement,
   Program,
   statementToIdentifiedBlock,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 
 /**
  * The main function that passes user code through to computer

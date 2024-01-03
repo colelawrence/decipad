@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useResolved } from '@decipad/react-utils';
 import { Column as ColumnImpl } from '@decipad/column';
-import { OneMaterializedResult } from 'libs/language/src/interpreter/interpreter-types';
 import { AggregationKind, Column, DataGroup } from '../../types';
 import { layoutPowerData } from './layoutPowerData';
 import { useReplacingColumns } from './useReplacingColumns';
+import { Result } from '@decipad/remote-computer';
 
 interface UseDataViewLayoutDataProps {
   tableName: string;
@@ -40,7 +40,7 @@ export const useDataViewLayoutData = ({
           columns: columns.map((column) => ({
             ...column,
             value: ColumnImpl.fromValues(
-              column.value as OneMaterializedResult[]
+              column.value as Result.OneMaterializedResult[]
             ),
           })),
           aggregationTypes,

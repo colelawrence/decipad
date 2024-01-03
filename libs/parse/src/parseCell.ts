@@ -5,9 +5,8 @@ import {
   RemoteComputer,
   areUnitsConvertible,
   convertBetweenUnits,
-  convertToMultiplierUnit,
   type Result,
-  type Unit,
+  Unit,
   SerializedType,
   parseStatement,
   isExpression,
@@ -82,8 +81,8 @@ const parsing = async (
   }
 };
 
-const fixCellUnit = (unit: Unit[]): Unit[] => {
-  return unit.map((u): Unit => {
+const fixCellUnit = (unit: Unit.Unit[]): Unit.Unit[] => {
+  return unit.map((u): Unit.Unit => {
     return {
       ...u,
       multiplier: N(u.multiplier),
@@ -144,7 +143,7 @@ export const parseCell = memoize(
                   );
                 }
                 // eslint-disable-next-line no-param-reassign
-                result.value = convertToMultiplierUnit(
+                result.value = Unit.convertToMultiplierUnit(
                   convertBetweenUnits(
                     result.value as DeciNumber,
                     type.unit,

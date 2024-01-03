@@ -1,4 +1,4 @@
-import { buildType as t, parseUnit, parseUTCDate } from '@decipad/language';
+import { buildType as t, parseUnit, Time } from '@decipad/remote-computer';
 import { N } from '@decipad/number';
 import { formatResult } from './formatResult';
 
@@ -26,7 +26,12 @@ describe('stringify', () => {
     ).toMatchInlineSnapshot(`"range(<1> to <10>)"`);
 
     expect(
-      formatResult(locale, parseUTCDate('2020-01'), t.date('month'), highlight)
+      formatResult(
+        locale,
+        Time.parseUTCDate('2020-01'),
+        t.date('month'),
+        highlight
+      )
     ).toMatchInlineSnapshot(`"<2020-01>"`);
 
     expect(

@@ -7,3 +7,4 @@ export * from './max';
 export * from './comparisons';
 export * from './deci-number-snapshot-serializer';
 export type { DeciNumberInput } from './types';
+export * from './safeNumberForPrecision';

@@ -47,12 +47,12 @@ const buttonStyles = css(p12Medium, {
 
 export type UnitsAction =
   | { type: 'text'; value: string }
-  | { type: 'unit'; value: Unit[] | null }
+  | { type: 'unit'; value: Unit.Unit[] | null }
   | { type: 'constant'; value: Constant };
 
 interface UnitsState {
   text: string;
-  unit: Unit[] | null;
+  unit: Unit.Unit[] | null;
   constant?: Constant;
 }
 
@@ -78,7 +78,7 @@ interface UnitMenuItemProps {
   readonly onSelect?: (unit: UnitsAction | undefined) => void;
   readonly parseUnit?: (
     value: string
-  ) => Promise<Unit[] | null> | Unit[] | null;
+  ) => Promise<Unit.Unit[] | null> | Unit.Unit[] | null;
   readonly placeholder?: string;
 }
 

@@ -1,32 +1,37 @@
 import stringify from 'json-stringify-safe';
+import pTime from 'p-time';
 import DeciNumber, { N } from '@decipad/number';
 import { AnyMapping, getDefined, zip, produce } from '@decipad/utils';
-import pTime from 'p-time';
-import type { AST } from '.';
-import { inferBlock, inferProgram, makeContext } from './infer';
-import { Realm, run } from './interpreter';
-import { fromJS, FromJSArg, Table } from './value';
-import { OneResult, Result } from './result';
-import { parseBlockOrThrow } from './run';
+// eslint-disable-next-line no-restricted-imports
 import {
-  buildType as t,
-  convertToMultiplierUnit,
-  getErrSpec,
-  normalizeUnits,
-  SerializedType,
-  serializeType,
+  type AST,
+  type Result,
+  type SerializedType,
   Type,
   Unit,
-} from './type';
-import { materializeOneResult } from './utils/materializeOneResult';
+  Value,
+  materializeOneResult,
+  serializeType,
+  buildType as t,
+} from '@decipad/language-types';
+import { parseBlockOrThrow } from '.';
+import { inferBlock, inferProgram, makeContext } from './infer';
+import { Realm, run } from './interpreter';
+import { getErrSpec } from './type/getErrorSpec';
+import {
+  FromJSArg,
+  fromJS,
+  getColumnLike,
+} from '../../language-types/src/Value';
 
 export const runAST = async (
   block: AST.Block,
-  { externalData }: { externalData?: AnyMapping<Result> } = {}
+  { externalData }: { externalData?: AnyMapping<Result.Result> } = {}
 ) => {
   const ctx = makeContext({ externalData });
+  const realm = new Realm(ctx);
 
-  const inferResult = await inferBlock(block, ctx);
+  const inferResult = await inferBlock(block, realm);
 
   const erroredType = inferResult.errorCause != null ? inferResult : null;
   expect(erroredType).toEqual(null);
@@ -68,22 +73,22 @@ export const runCodeForVariables = async (
   };
 };
 
-const userValue = (type: Type, value: OneResult): OneResult => {
+const userValue = (type: Type, value: Result.OneResult): Result.OneResult => {
   if (value instanceof DeciNumber) {
-    const units = normalizeUnits(type.unit);
-    return convertToMultiplierUnit(value, units);
+    const units = Unit.normalizeUnits(type.unit);
+    return Unit.convertToMultiplierUnit(value, units);
   }
   return value;
 };
 
 interface TypeAndValuePair {
   type: Type;
-  value: OneResult;
+  value: Result.OneResult;
 }
 
 const typeAndValuePairs = (
   types: Record<string, Type>,
-  values: Record<string, OneResult>,
+  values: Record<string, Result.OneResult>,
   asUser = true
 ): Record<string, TypeAndValuePair> => {
   const keys = new Set(Object.keys(types));
@@ -152,10 +157,12 @@ export const objectToTableType = (
     delegatesIndexTo: indexName,
   });
 
-export const objectToTableValue = async (obj: Record<string, FromJSArg[]>) => {
-  const values = Object.values(obj).map((v) => fromJS(v));
+export const objectToTableValue = async (
+  obj: Record<string, Value.FromJSArg[]>
+) => {
+  const values = Object.values(obj).map((v) => Value.fromJS(v));
 
-  return Table.fromNamedColumns(values, Object.keys(obj)).getData();
+  return Value.Table.fromNamedColumns(values, Object.keys(obj)).getData();
 };
 
 type ObjectOf<V> = {
@@ -172,7 +179,7 @@ export function dataUrl(data: Buffer | string, contentType: string): string {
 }
 
 /** Stringify units (for testing/snapshots ONLY) */
-export const snapshotUnit = (unit: Unit[]) => {
+export const snapshotUnit = (unit: Unit.Unit[]) => {
   return unit
     .map((u) => {
       const exp = N(u.exp).valueOf();
@@ -276,3 +283,5 @@ export const runAndMeasure = async <T>(
   const p = pTime(fn)();
   return [await p, getDefined(p.time)];
 };
+
+export const jsCol = (items: FromJSArg) => getColumnLike(fromJS(items));

@@ -1,7 +1,14 @@
-import { AST, Context } from '..';
-import { Realm, RuntimeError } from '../interpreter';
-import { isColumnLike } from '../value';
-import { buildType as t, Type, InferError } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import {
+  InferError,
+  Type,
+  buildType as t,
+  Value,
+  RuntimeError,
+  AST,
+} from '@decipad/language-types';
+import { type Context } from '..';
+import { type Realm } from '../interpreter/Realm';
 import { getIdentifierString } from '../utils';
 
 export const getIndexName = (type: Type) =>
@@ -33,7 +40,7 @@ export const evaluateVariable = (realm: Realm, varName: RefLike) => {
 
   if (!variable) {
     throw new RuntimeError(InferError.missingVariable(refName(varName)));
-  } else if (!isColumnLike(variable)) {
+  } else if (!Value.isColumnLike(variable)) {
     throw new RuntimeError('Expected column');
   } else {
     return variable;

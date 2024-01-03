@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import {
   AutocompleteName,
   isTable as isComputerTable,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 
 const namesThatLookLikeTablesOnly = (name: AutocompleteName) =>

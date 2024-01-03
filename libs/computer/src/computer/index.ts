@@ -1,4 +1,4 @@
-import { safeNumberForPrecision } from '@decipad/language';
+import { safeNumberForPrecision } from '@decipad/number';
 
 export type {
   ComputeRequest,

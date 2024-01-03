@@ -1,21 +1,31 @@
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { buildType as T } from '@decipad/language-types';
 import { makeContext } from '../infer';
-import { buildType as T } from '../type';
 import { c, n, r, tiered, tieredDef, U } from '../utils';
 import { inferTiered } from './inferTiered';
+import { Realm } from '../interpreter/Realm';
 
 describe('inferTiered', () => {
   it('infers to error if empty', async () => {
     expect(
-      (await inferTiered(makeContext(), tiered(n('literal', 'number', N(1)))))
-        .errorCause
+      (
+        await inferTiered(
+          new Realm(makeContext()),
+          tiered(n('literal', 'number', N(1)))
+        )
+      ).errorCause
     ).toBeDefined();
   });
 
   it('errors if tiered arg is not number', async () => {
     expect(
-      (await inferTiered(makeContext(), tiered(n('literal', 'boolean', true))))
-        .errorCause
+      (
+        await inferTiered(
+          new Realm(makeContext()),
+          tiered(n('literal', 'boolean', true))
+        )
+      ).errorCause
     ).toBeDefined();
   });
 
@@ -23,7 +33,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          makeContext(),
+          new Realm(makeContext()),
           tiered(
             tiered(
               n('literal', 'number', N(1)),
@@ -42,7 +52,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          makeContext(),
+          new Realm(makeContext()),
           tiered(
             tiered(
               n('literal', 'number', N(1)),
@@ -60,7 +70,7 @@ describe('inferTiered', () => {
   it('infers to type of value', async () => {
     expect(
       await inferTiered(
-        makeContext(),
+        new Realm(makeContext()),
         tiered(
           n('literal', 'number', N(1)),
           tieredDef(
@@ -80,7 +90,7 @@ describe('inferTiered', () => {
     expect(
       (
         await inferTiered(
-          makeContext(),
+          new Realm(makeContext()),
           tiered(
             n('literal', 'number', N(1)),
             tieredDef(

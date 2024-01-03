@@ -1,4 +1,4 @@
-import { getUnitByName } from '@decipad/computer';
+import { getUnitByName } from '@decipad/remote-computer';
 
 export const acceptableOperators = new Set([
   '+',

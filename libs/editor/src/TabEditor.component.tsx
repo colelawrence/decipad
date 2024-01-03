@@ -19,7 +19,7 @@ import {
 } from '@decipad/ui';
 import styled from '@emotion/styled';
 import { useIntercom } from 'react-use-intercom';
-import { captureException } from '@decipad/computer';
+import { captureException } from '@decipad/remote-computer';
 
 type TabEditorComponentProps = Omit<
   ComponentProps<typeof Editor>,

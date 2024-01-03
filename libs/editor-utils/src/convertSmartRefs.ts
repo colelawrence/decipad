@@ -1,4 +1,4 @@
-import { getUsedIdentifiers, tokenize } from '@decipad/computer';
+import { getUsedIdentifiers, tokenize } from '@decipad/remote-computer';
 import {
   ELEMENT_SMART_REF,
   MyEditor,

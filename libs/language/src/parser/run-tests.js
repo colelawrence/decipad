@@ -1,5 +1,6 @@
+import { zip } from '@decipad/utils';
 import { parseBlock } from '.';
-import { walkAst, zip } from '../utils';
+import { walkAst } from '../utils';
 import { prettyPrintAST } from './utils';
 
 function cleanSourceMap(ast) {

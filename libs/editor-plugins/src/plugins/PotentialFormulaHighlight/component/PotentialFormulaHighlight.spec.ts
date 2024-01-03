@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
 import {
   createTPlateEditor,
   DECORATE_POTENTIAL_FORMULA,
@@ -10,12 +10,12 @@ import { createInlineNumberPlugin } from '../../MagicNumber/createInlineNumberPl
 import { commitPotentialFormula } from './PotentialFormulaHighlight';
 
 let editor: TEditor;
-let computer: Computer;
+let computer: RemoteComputer;
 beforeEach(() => {
   editor = createTPlateEditor({
     plugins: [createInlineNumberPlugin()],
   });
-  computer = new Computer();
+  computer = getRemoteComputer();
 });
 
 it('turns a decoration into a magic number and a code line', () => {

@@ -1,8 +1,8 @@
-import { SerializedType, Unit } from '@decipad/computer';
+import type { SerializedType, Unit } from '@decipad/remote-computer';
 
-type LegacyUnits = { type: 'units'; args: Unit[] };
+type LegacyUnits = { type: 'units'; args: Unit.Unit[] };
 const isLegacyUnitObject = (
-  unit: Unit[] | LegacyUnits | null | undefined
+  unit: Unit.Unit[] | LegacyUnits | null | undefined
 ): unit is LegacyUnits =>
   unit != null &&
   'type' in unit &&

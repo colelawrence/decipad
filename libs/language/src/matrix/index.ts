@@ -1,6 +1,8 @@
 import { getOnly } from '@decipad/utils';
-
-import { AST, Context, Type } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Type, Value, typeIsPending } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { valueTransforms } from '@decipad/language-builtins';
 import { inferExpression } from '../infer';
 import { Realm } from '../interpreter';
 import { getIdentifierString } from '../utils';
@@ -10,17 +12,16 @@ import {
 } from './assignMultidim';
 import { evaluateVariable, inferVariable } from './getVariable';
 import { inferMatchers, matchTargets, readSimpleMatchers } from './matcher';
-import { ColumnLikeValue, applyFilterMap } from '../value';
-import { typeIsPending } from '../type';
 
 export async function inferMatrixRef(
-  context: Context,
+  realm: Realm,
   ref: AST.MatrixRef
 ): Promise<Type> {
   const [varExp, matchersExp] = ref.args;
 
+  const { inferContext: context } = realm;
   const variable = await inferVariable(context, getIdentifierString(varExp));
-  const matchers = await inferMatchers(context, matchersExp);
+  const matchers = await inferMatchers(realm, matchersExp);
 
   // pending is contagious
   const pending = [variable, matchers].find(typeIsPending);
@@ -34,7 +35,7 @@ export async function inferMatrixRef(
 export async function evaluateMatrixRef(
   realm: Realm,
   ref: AST.MatrixRef
-): Promise<ColumnLikeValue> {
+): Promise<Value.ColumnLikeValue> {
   const {
     args: [varName, matchers],
   } = ref;
@@ -44,11 +45,11 @@ export async function evaluateMatrixRef(
   const [, matches] = await matchTargets(realm.inferContext, realm, matchers);
 
   // Let's run the matcher against every item in Column
-  return applyFilterMap(variable, matches);
+  return valueTransforms.applyFilterMap(variable, matches);
 }
 
 export async function inferMatrixAssign(
-  context: Context,
+  realm: Realm,
   assign: AST.MatrixAssign
 ): Promise<Type> {
   const {
@@ -56,12 +57,13 @@ export async function inferMatrixAssign(
   } = assign;
 
   const varName = getIdentifierString(varExp);
-  const matchers = await inferMatchers(context, matchersExp);
-  const assignee = await inferExpression(context, assigneeExp);
+  const matchers = await inferMatchers(realm, matchersExp);
+  const assignee = await inferExpression(realm, assigneeExp);
 
   const matcher = getOnly(matchersExp.args);
-  const [dimName, needle] = readSimpleMatchers(context, matcher);
+  const [dimName, needle] = readSimpleMatchers(realm.inferContext, matcher);
 
+  const { inferContext: context } = realm;
   const dimension = await (needle == null
     ? // Variable[DimName] = ...
       inferVariable(context, dimName)
@@ -73,7 +75,7 @@ export async function inferMatrixAssign(
     // variable[DimName]
     newMatrix = await (
       await Type.combine(matchers, dimension)
-    ).mapType(async (dim) => inferMultidimAssignment(await dim, assignee));
+    ).mapType(async (dim: Type) => inferMultidimAssignment(dim, assignee));
   } else {
     newMatrix = await (
       await (
@@ -81,7 +83,7 @@ export async function inferMatrixAssign(
       ).mapType(async () =>
         inferMultidimAssignment(dimension, assignee, dimension)
       )
-    ).mapType(async (newMatrix) => dimension.sameAs(newMatrix));
+    ).mapType(async (newMatrix: Type) => dimension.sameAs(newMatrix));
   }
 
   context.stack.set(varName, newMatrix, 'function', context.statementId);
@@ -91,7 +93,7 @@ export async function inferMatrixAssign(
 export async function evaluateMatrixAssign(
   realm: Realm,
   assign: AST.MatrixAssign
-): Promise<ColumnLikeValue> {
+): Promise<Value.ColumnLikeValue> {
   const [varRef, matchers] = assign.args;
 
   const varName = getIdentifierString(varRef);

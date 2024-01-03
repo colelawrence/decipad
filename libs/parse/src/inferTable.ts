@@ -3,7 +3,7 @@ import {
   Result,
   SerializedType,
   memoizedColumnResultGenerator,
-  cleanDate,
+  Time,
 } from '@decipad/remote-computer';
 import { varNamify } from '@decipad/utils';
 import { slice } from '@decipad/generator-utils';
@@ -52,7 +52,7 @@ const columnToValue = async function* columnToValue(
           yield undefined;
         } else {
           // eslint-disable-next-line no-await-in-loop
-          yield cleanDate(parsed.date, type.date);
+          yield Time.cleanDate(parsed.date, type.date);
         }
         break;
       }

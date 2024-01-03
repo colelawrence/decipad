@@ -1,26 +1,12 @@
-import { getDefined } from '@decipad/utils';
-import { AST } from '..';
+import { getDefined, getInstanceof } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { AST, RuntimeError, Value } from '@decipad/language-types';
 import { refersToOtherColumnsByName } from './inference';
-import {
-  Column,
-  ColumnLikeValue,
-  Row,
-  Scalar,
-  Table,
-  Value,
-  defaultValue,
-} from '../value';
 import { mapWithPrevious } from '../interpreter/previous';
-import {
-  walkAst,
-  getIdentifierString,
-  isExpression,
-  getInstanceof,
-} from '../utils';
-import { Realm, RuntimeError, evaluate } from '../interpreter';
+import { walkAst, getIdentifierString, isExpression } from '../utils';
+import { Realm, evaluate } from '../interpreter';
 import { shouldEvaluate } from './shouldEvaluate';
 import { coerceTableColumnIndices } from './dimensionCoersion';
-import { sortValue } from '../interpreter/sortValue';
 import { requiresWholeColumn } from './requiresWholeColumn';
 import { isPrevious } from '../utils/isPrevious';
 
@@ -52,11 +38,11 @@ const usesOrdinalReference = (expr: AST.Expression): boolean => {
 
 export const evaluateTableColumn = async (
   realm: Realm,
-  tableColumns: Map<string, ColumnLikeValue>,
+  tableColumns: Map<string, Value.ColumnLikeValue>,
   column: AST.Expression,
   indexName: string,
   rowCount?: number
-): Promise<ColumnLikeValue> => {
+): Promise<Value.ColumnLikeValue> => {
   if (
     (refersToOtherColumnsByName(column, tableColumns) ||
       usesRecursion(column) ||
@@ -82,10 +68,10 @@ export const evaluateTableColumn = async (
 
 export const evaluateTableColumnIteratively = async (
   realm: Realm,
-  otherColumns: Map<string, ColumnLikeValue>,
+  otherColumns: Map<string, Value.ColumnLikeValue>,
   column: AST.Expression,
   rowCount: number
-): Promise<ColumnLikeValue> =>
+): Promise<Value.ColumnLikeValue> =>
   realm.withPush(async () => {
     const cells = await mapWithPrevious(
       realm,
@@ -98,24 +84,24 @@ export const evaluateTableColumnIteratively = async (
             realm.stack.set(otherColName, await otherCol.atIndex(index));
           }
           // make ordinal references available
-          realm.stack.set('first', Scalar.fromValue(index === 0));
+          realm.stack.set('first', Value.Scalar.fromValue(index === 0));
           // eslint-disable-next-line no-await-in-loop
           yield evaluate(realm, column);
         }
       }
     );
 
-    return Column.fromValues(
+    return Value.Column.fromValues(
       cells,
-      defaultValue(getDefined(column.inferredType))
+      Value.defaultValue(getDefined(column.inferredType))
     );
   });
 
 export const evaluateTable = async (
   realm: Realm,
   table: AST.Table
-): Promise<Table> => {
-  const tableColumns = new Map<string, ColumnLikeValue>();
+): Promise<Value.Table> => {
+  const tableColumns = new Map<string, Value.ColumnLikeValue>();
   const {
     args: [tName, ...items],
   } = table;
@@ -128,7 +114,7 @@ export const evaluateTable = async (
   const tableDef = table.args[0];
   let tableLength: number | undefined = tableDef.args[1];
   return realm.withPush(async () => {
-    const addColumn = async (name: string, value: ColumnLikeValue) => {
+    const addColumn = async (name: string, value: Value.ColumnLikeValue) => {
       const valueCount = await value.rowCount();
       if (tableLength != null && valueCount !== tableLength) {
         throw new RuntimeError(
@@ -173,17 +159,23 @@ export const evaluateTable = async (
     }
 
     const tableType = realm.getTypeAt(table);
-    return sortValue(
+    return Value.sortValue(
       tableType,
-      getInstanceof(getDefined(realm.stack.get(tableName, 'function')), Table)
+      getInstanceof(
+        getDefined(realm.stack.get(tableName, 'function')),
+        Value.Table
+      )
     )[1];
   });
 };
 
-export const getProperty = (object: Value, property: string): Value => {
-  if (object instanceof Row) {
+export const getProperty = (
+  object: Value.Value,
+  property: string
+): Value.Value => {
+  if (object instanceof Value.Row) {
     return object.getCell(property);
   } else {
-    return getInstanceof(object, Table).getColumn(property);
+    return getInstanceof(object, Value.Table).getColumn(property);
   }
 };

@@ -1,5 +1,5 @@
 import { Path, Range } from 'slate';
-import { getUsedIdentifiers } from '@decipad/computer';
+import { getUsedIdentifiers } from '@decipad/remote-computer';
 
 export type RangeWithVariableInfo = Range & VariableInfo;
 

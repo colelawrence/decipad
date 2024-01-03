@@ -1,4 +1,4 @@
-import { buildType as t, ErrSpec } from '@decipad/language';
+import { buildType as t, ErrSpec } from '@decipad/remote-computer';
 import { formatError } from './formatError';
 
 const locale = 'en-US';

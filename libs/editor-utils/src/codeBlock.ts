@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { ELEMENT_CODE_LINE_V2, MyEditor, MyValue } from '@decipad/editor-types';
 import { isFlagEnabled } from '@decipad/feature-flags';
 import { generateVarName } from '@decipad/utils';
@@ -42,7 +42,7 @@ export const insertStructuredCodeLineBelow = <
   editor: TE;
   path: Path;
   select?: boolean;
-  getAvailableIdentifier: Computer['getAvailableIdentifier'];
+  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier'];
   code?: string;
   varName?: string;
 }): string => {
@@ -80,7 +80,7 @@ export const insertStructuredCodeLineBelowOrReplace = ({
   path: Path;
   code?: string;
   select?: boolean;
-  getAvailableIdentifier: Computer['getAvailableIdentifier'];
+  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier'];
 }) => {
   const blockPath = requireBlockParentPath(editor, path);
   const isBlockEmpty = !getEditorString(editor, blockPath);

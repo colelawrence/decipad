@@ -13,7 +13,11 @@
   "excludeRegExp": [
     "debug.ts",
     "meta/authentication/next-auth.d.ts",
-    "\\.d\\.ts$"
+    "\\.d\\.ts$",
+    "utils/openai.ts",
+    "build",
+    "node_modules",
+    ".docusaurus"
   ],
   "tsConfig": "./tsconfig.json"
 }

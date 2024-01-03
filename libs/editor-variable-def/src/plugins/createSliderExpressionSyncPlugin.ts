@@ -1,4 +1,4 @@
-import { parseNumberWithUnit } from '@decipad/computer';
+import { parseNumberWithUnit } from '@decipad/remote-computer';
 import { createOverrideApplyPluginFactory } from '@decipad/editor-plugins';
 import {
   ELEMENT_EXPRESSION,

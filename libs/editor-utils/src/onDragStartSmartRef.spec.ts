@@ -13,7 +13,6 @@ describe('onDragStartSmartRef', () => {
   let editor: any;
   let previewRef: any;
   let dragEvent: React.DragEvent;
-  let computer: any;
   let result: any;
 
   beforeEach(() => {
@@ -30,11 +29,6 @@ describe('onDragStartSmartRef', () => {
         setDragImage: jest.fn(),
       },
     } as any;
-    computer = {
-      formatNumber: jest.fn(() => ({
-        asString: 'FormattedString',
-      })),
-    };
     result = {
       type: {
         kind: 'number',
@@ -57,12 +51,9 @@ describe('onDragStartSmartRef', () => {
         id: 'mockId',
       } as any,
       asText: '',
-      computer,
       result,
     })(dragEvent);
 
-    expect(dndPreviewActions.previewText).toHaveBeenCalledWith(
-      'FormattedString'
-    );
+    expect(dndPreviewActions.previewText).toHaveBeenCalledWith('2');
   });
 });

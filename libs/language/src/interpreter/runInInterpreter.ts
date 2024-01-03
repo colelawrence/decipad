@@ -1,13 +1,12 @@
 import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Result, materializeOneResult } from '@decipad/language-types';
 import pSeries from 'p-series';
-import type { AST } from '..';
 import { block } from '../utils';
 import { inferProgram } from '../infer';
 import { Realm } from './Realm';
-import type * as Interpreter from './interpreter-types';
 import { evaluate } from './evaluate';
 import { evaluateTargets } from './selective';
-import { materializeOneResult } from '../utils/materializeOneResult';
 // TODO replace these with the ones in src/run, or move them there
 
 export const run = async (
@@ -15,7 +14,7 @@ export const run = async (
   desiredTargets: Array<string | number | [number, number]>,
   realm?: Realm,
   doNotMaterialiseResults?: boolean
-): Promise<Interpreter.OneResult[]> => {
+): Promise<Result.OneResult[]> => {
   realm = realm ?? new Realm(await inferProgram(program));
 
   return pSeries(

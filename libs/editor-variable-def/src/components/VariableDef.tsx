@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { SerializedType } from '@decipad/computer';
+import { type SerializedType } from '@decipad/remote-computer';
 import {
   DraggableBlock,
   useDragAndDropGetAxis,

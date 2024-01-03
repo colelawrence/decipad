@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { DocSyncEditor, DocSyncOptions } from '@decipad/docsync';
 import { BlockProcessor } from '@decipad/notebook-tabs';
 import { MyPlatePlugin } from '@decipad/editor-types';
@@ -21,7 +21,7 @@ export interface NotebookState {
   notebookId?: string | undefined;
   syncClientState: 'idle' | 'created';
   editor?: DocSyncEditor | undefined;
-  computer: Computer | undefined;
+  computer: RemoteComputer | undefined;
   initEditor: (
     notebookId: string,
     options: InitNotebookStateOptions,

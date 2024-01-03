@@ -5,7 +5,7 @@ import {
   MyEditor,
   createTPlateEditor,
 } from '@decipad/editor-types';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer, getRemoteComputer } from '@decipad/remote-computer';
 import { timeout } from '@decipad/utils';
 import { insertNodes, removeNodes, setNodes } from '@udecode/plate-common';
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
@@ -15,7 +15,7 @@ setupDeciNumberSnapshotSerializer();
 
 describe('withUpdateComputerOverride', () => {
   let editor: MyEditor;
-  let computer: Computer;
+  let computer: RemoteComputer;
   beforeEach(() => {
     const ed = createTPlateEditor();
     ed.children = [
@@ -33,7 +33,7 @@ describe('withUpdateComputerOverride', () => {
     ];
     editor = ed as MyEditor;
 
-    computer = new Computer();
+    computer = getRemoteComputer();
     withUpdateComputerOverride(computer, { debounceEditorChangesMs: 100 })(
       editor
     );

@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { Result } from '@decipad/language';
+import { Result } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { Meta, StoryFn } from '@storybook/react';
 import { ComponentProps } from 'react';

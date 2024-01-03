@@ -1,4 +1,4 @@
-import { AST } from '@decipad/computer';
+import { AST } from '@decipad/remote-computer';
 import { ELEMENT_LIVE_QUERY } from '@decipad/editor-types';
 import { assertElementType } from '@decipad/editor-utils';
 import { getNodeString } from '@udecode/plate-common';

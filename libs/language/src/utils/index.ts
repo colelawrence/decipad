@@ -1,15 +1,12 @@
-import DeciNumber, { N, ONE } from '@decipad/number';
-import type { Class } from 'utility-types';
-import type { AST } from '../parser';
-import { Unit } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Unit } from '@decipad/language-types';
+import DeciNumber, { N } from '@decipad/number';
+import { getDefined } from '@decipad/utils';
 
 export { date } from '../date';
 
 type WalkFn = (node: AST.Node, path: number[]) => void;
 type MutateFn = (node: AST.Node, path: number[]) => AST.Node;
-
-export const DEFAULT_PRECISION = 10;
-export const MAX_PRECISION = 15;
 
 export const walkAst = (
   node: AST.Node,
@@ -349,76 +346,7 @@ export const getIdentifierString = (node: AST.Identifier): string => {
 
 export type ErrorMessage = string | (() => string);
 
-export const getDefined = <T>(
-  anything: T | null | undefined,
-  message: ErrorMessage = 'getDefined did not expect null or undefined'
-): T => {
-  if (anything == null) {
-    throw new Error(
-      `panic: ${typeof message === 'function' ? message() : message}`
-    );
-  } else {
-    return anything;
-  }
-};
-
-export const getInstanceof = <T>(
-  thing: T | unknown,
-  cls: Class<T>,
-  message?: string
-): T => {
-  if (thing instanceof cls) {
-    return thing as T;
-  } else {
-    throw new Error(
-      `panic: ${
-        message ??
-        `getInstanceof expected an instance of ${
-          cls?.name ?? 'a specific class'
-        } and got ${
-          (thing as { constructor: { name: string } })?.constructor?.name
-        }`
-      }`
-    );
-  }
-};
-
-export const zip = <K, V>(keys: K[], values: V[]): [K, V][] => {
-  if (keys.length !== values.length) {
-    throw new Error('panic: cannot zip arrays of different lengths');
-  }
-
-  const out = [];
-
-  for (let i = 0; i < keys.length; i++) {
-    const pair: [K, V] = [keys[i], values[i]];
-    out.push(pair);
-  }
-
-  return out;
-};
-
 /** Filter two same-length arrays. Calls `filterFn` with each pair. */
-export const filterUnzipped = <K, V>(
-  keys: K[],
-  values: V[],
-  filterFn: (key: K, val: V) => boolean
-): [K[], V[]] => {
-  if (keys.length !== values.length) {
-    throw new Error('panic: cannot filter arrays of different lengths');
-  }
-
-  const outKeys: K[] = [];
-  const outValues: V[] = [];
-  for (let i = 0; i < keys.length; i++) {
-    if (filterFn(keys[i], values[i])) {
-      outKeys.push(keys[i]);
-      outValues.push(values[i]);
-    }
-  }
-
-  return [outKeys, outValues];
-};
 
 export function* enumerate<T>(items: Iterable<T>): Generator<[number, T]> {
   let index = 0;
@@ -434,28 +362,14 @@ export function* pairwise<T1, T2>(array: (T1 | T2)[]) {
   }
 }
 
-export function equalOrUndefined<T>(
-  a: T | null | undefined,
-  b: T | null | undefined
-) {
-  if (a == null || b == null) {
-    return true;
-  }
-  return a === b;
-}
-
 export function identity<T>(o: T): T {
   return o;
 }
 
-export function invert(
-  f: (n: DeciNumber) => DeciNumber
-): (n: DeciNumber) => DeciNumber {
-  const reversingFactor = f(ONE).inverse();
-  return (n) => n.mul(reversingFactor);
-}
-
-export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
+export function u(
+  unit: string | Unit.Unit,
+  opts: Partial<Unit.Unit> = {}
+): Unit.Unit {
   if (typeof unit === 'string') {
     unit = {
       unit,
@@ -467,7 +381,10 @@ export function u(unit: string | Unit, opts: Partial<Unit> = {}): Unit {
   return { ...unit, ...opts };
 }
 
-export function U(units: string | Unit | Unit[], opts?: Partial<Unit>): Unit[] {
+export function U(
+  units: string | Unit.Unit | Unit.Unit[],
+  opts?: Partial<Unit.Unit>
+): Unit.Unit[] {
   const unitsArr = Array.isArray(units) ? units : [units];
   return unitsArr.map((unit) => u(unit, opts));
 }
@@ -487,27 +404,4 @@ export function ne(n: number, unit: string): AST.Expression {
       },
     ],
   };
-}
-
-export function multiplyMultipliers(
-  units: Unit[] | undefined | null,
-  start: DeciNumber = ONE
-): DeciNumber {
-  if (!units) {
-    return start;
-  }
-  let acc = start;
-  for (const unit of units) {
-    acc = acc.mul(unit.multiplier.pow(unit.exp));
-  }
-  return acc;
-}
-
-export function safeNumberForPrecision(n: DeciNumber): [number, number] {
-  const rounded = n.round(MAX_PRECISION).valueOf();
-  const precise = n.valueOf();
-  return [
-    rounded,
-    Number.isNaN(precise) || !Number.isFinite(precise) ? rounded : precise,
-  ];
 }

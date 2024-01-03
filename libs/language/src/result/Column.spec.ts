@@ -1,8 +1,9 @@
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { sort, unique, slice } from '@decipad/column';
 import { all } from '@decipad/generator-utils';
+// eslint-disable-next-line no-restricted-imports
+import { compare } from '@decipad/language-types';
 import { Column } from './Column';
-import { compare } from '../compare';
 
 setupDeciNumberSnapshotSerializer();
 

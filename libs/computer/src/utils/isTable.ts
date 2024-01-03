@@ -1,4 +1,5 @@
-import type { SerializedType, SerializedTypes } from '..';
+// eslint-disable-next-line no-restricted-imports
+import type { SerializedType, SerializedTypes } from '@decipad/language';
 
 const tableTypes = new Set(['table', 'materialized-table']);
 

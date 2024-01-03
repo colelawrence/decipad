@@ -1,7 +1,9 @@
+// eslint-disable-next-line import/no-unresolved
 import Layout from '@theme/Layout';
 import React from 'react';
 
 import { DocSearch } from '@docsearch/react';
+// eslint-disable-next-line import/no-unresolved
 import { Card, GridContainer } from '@site/src/components/GalleryCards';
 
 import '@docsearch/css';

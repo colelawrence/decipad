@@ -1,6 +1,8 @@
-import { AST } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
+// eslint-disable-next-line no-restricted-imports
+import { operators } from '@decipad/language-builtins';
 import { walkAst, getIdentifierString } from '../utils';
-import { operators } from '../builtins/index';
 
 export const fakeFunctionCall = (
   fnCall: AST.FunctionCall,

@@ -1,10 +1,12 @@
 import stringify from 'json-stringify-safe';
 import nearley, { Parser as NearleyParser } from 'nearley';
 import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
 import { compiledGrammar, tokenize } from '../grammar';
 import { ParserNode } from './types';
 import { sourceMapDecorator } from './source-map-decorator';
-import { AST, prettyPrintAST } from '..';
+import { prettyPrintAST } from '..';
 import { ISyntaxError, SyntaxError } from './SyntaxError';
 
 const grammar = nearley.Grammar.fromCompiled(compiledGrammar);

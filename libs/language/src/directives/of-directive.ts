@@ -1,21 +1,27 @@
 import { produce } from '@decipad/utils';
-import { AST, Context, inferExpression } from '..';
-import { automapTypes } from '../dimtools';
-import { evaluate, Realm } from '../interpreter';
-import { InferError, Type, buildType as t } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import {
+  type AST,
+  Dimension,
+  InferError,
+  type Type,
+  buildType as t,
+} from '@decipad/language-types';
+import { inferExpression } from '..';
+import { evaluate, type Realm } from '../interpreter';
 import { getIdentifierString } from '../utils';
-import { DirectiveImpl } from './types';
+import { type DirectiveImpl } from './types';
 
 export const getType: DirectiveImpl<AST.OfDirective>['getType'] = async (
-  ctx: Context,
+  realm: Realm,
   { args: [, expr, quality] }
 ) => {
-  const expressionType = await inferExpression(ctx, expr);
+  const expressionType = await inferExpression(realm, expr);
   if (expressionType.errorCause || expressionType.pending) {
     return expressionType;
   }
-  return automapTypes(
-    ctx,
+  return Dimension.automapTypes(
+    realm.utils,
     [expressionType],
     async ([expressionType]: Type[]) => {
       return (await expressionType.isScalar('number')).mapType((type): Type => {

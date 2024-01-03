@@ -33,6 +33,13 @@
         "command": "yarn tsc -b apps/docs"
       }
     },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/docs/**/*.{js,ts}"],
+        "maxWarnings": 0
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {

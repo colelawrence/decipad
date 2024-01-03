@@ -1,4 +1,5 @@
-import { AST, AutocompleteName, serializeType } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { AutocompleteName, AST, serializeType } from '@decipad/language';
 import { getDefinedSymbol, getIdentifierString } from '../utils';
 import { getExprRef, isExprRef } from '../exprRefs';
 import type { Computer, Program } from '..';

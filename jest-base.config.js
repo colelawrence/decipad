@@ -2,7 +2,6 @@
 // we need to also ensure a defined TZ for the tests here just in case of e.g. `yarn nx test ui`.
 process.env.TZ = process.env.TZ || 'America/Los_Angeles';
 
-const { join } = require('path');
 const { presets, plugins, moduleNameMapper } = require('./babel-web.config');
 
 module.exports = {
@@ -27,7 +26,6 @@ module.exports = {
 
   moduleNameMapper: {
     ...moduleNameMapper,
-    '@decipad/editor-types': join(__dirname, 'libs/editor-types/src/index.ts'),
   },
 
   setupFilesAfterEnv: [

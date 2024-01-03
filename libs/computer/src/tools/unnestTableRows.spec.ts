@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { Result } from '@decipad/language';
 import { getDefined, timeout } from '@decipad/utils';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
 import {
   CodeLineElement,
   createTPlateEditor,
@@ -26,7 +26,7 @@ jest.mock('nanoid', () => ({
 }));
 
 let editor: MyEditor;
-let computer: Computer;
+let computer: RemoteComputer;
 beforeEach(() => {
   editor = createTPlateEditor({
     plugins: [createSmartRefPlugin()],
@@ -64,7 +64,7 @@ beforeEach(() => {
     createCodeLine({ id: 'varId', code: 'var = 1' }),
   ] as unknown as MyValue;
 
-  computer = new Computer();
+  computer = getRemoteComputer();
 });
 
 it('can turn text into smartrefs', async () => {

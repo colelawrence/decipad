@@ -1,7 +1,11 @@
-export * from './formatError';
-export * from './formatNumber';
+import { Format, type DeciNumberRep } from '@decipad/remote-computer';
+
 export * from './formatResult';
-export * from './formatTime';
 export * from './formatType';
-export * from './formatUnit';
 export * from './formatResultPreview';
+
+const { simpleFormatUnit, formatUnit, formatError, formatNumber } = Format;
+
+export { simpleFormatUnit, formatUnit, formatError, formatNumber };
+
+export { DeciNumberRep };

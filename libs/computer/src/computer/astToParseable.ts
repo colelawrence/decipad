@@ -1,9 +1,9 @@
+// eslint-disable-next-line no-restricted-imports
 import {
   Time,
   AST,
-  getDateFromAstForm,
-  stringifyDate,
   SerializedType,
+  getDateFromAstForm,
 } from '@decipad/language';
 
 export interface Parseable {
@@ -47,7 +47,7 @@ export function astToParseable(
   if (ast.type === 'date') {
     const [utcDate, granularity] = getDateFromAstForm(ast.args);
 
-    const dateStr = stringifyDate(utcDate, granularity);
+    const dateStr = Time.stringifyDate(utcDate, granularity);
 
     return {
       kind: 'date',

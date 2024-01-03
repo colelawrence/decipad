@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_LIVE_QUERY,
   ELEMENT_LIVE_QUERY_QUERY,
@@ -40,7 +40,7 @@ const getInitialLiveQueryElement = (
 export const insertLiveQueryBelow = (
   editor: TEditor,
   path: Path,
-  getAvailableIdentifier: Computer['getAvailableIdentifier'],
+  getAvailableIdentifier: RemoteComputer['getAvailableIdentifier'],
   connectionBlockId?: string,
   query?: string
 ): void => {

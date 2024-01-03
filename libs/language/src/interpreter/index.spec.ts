@@ -1,4 +1,6 @@
 import { N } from '@decipad/number';
+// eslint-disable-next-line no-restricted-imports
+import { Time, materializeOneResult } from '@decipad/language-types';
 import {
   c,
   l,
@@ -12,11 +14,8 @@ import {
   prop,
   r,
 } from '../utils';
-import { parseUTCDate } from '../date';
 import { runAST } from '../testUtils';
-
 import { run, runOne } from './index';
-import { materializeOneResult } from '../utils/materializeOneResult';
 
 it('evaluates and returns', async () => {
   const basicProgram = [
@@ -68,7 +67,7 @@ describe('ranges', () => {
   });
 
   it('evaluates ranges of dates', async () => {
-    const d = parseUTCDate;
+    const d = Time.parseUTCDate;
 
     const r = range(date('2020-01', 'month'), date('2020-11', 'month'));
 
@@ -90,7 +89,7 @@ describe('ranges', () => {
   it('evaluates ranges of dates (2)', async () => {
     expect(
       await runOne(range(n('date', 'year', 2020n), n('date', 'year', 2022n)))
-    ).toEqual([parseUTCDate('2020'), parseUTCDate('2023') - 1n]);
+    ).toEqual([Time.parseUTCDate('2020'), Time.parseUTCDate('2023') - 1n]);
   });
 });
 
@@ -122,7 +121,7 @@ describe('sequences', () => {
           )
         )
       )
-    ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
+    ).toEqual([Time.parseUTCDate('2020-01'), Time.parseUTCDate('2020-02')]);
 
     expect(
       await materializeOneResult(
@@ -134,7 +133,7 @@ describe('sequences', () => {
           )
         )
       )
-    ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
+    ).toEqual([Time.parseUTCDate('2020-02'), Time.parseUTCDate('2020-01')]);
 
     const dates = (await materializeOneResult(
       runOne(
@@ -143,8 +142,8 @@ describe('sequences', () => {
     )) as bigint[];
 
     expect(dates.length).toEqual(12);
-    expect(dates[0]).toEqual(parseUTCDate('2020-01'));
-    expect(dates[11]).toEqual(parseUTCDate('2020-12'));
+    expect(dates[0]).toEqual(Time.parseUTCDate('2020-01'));
+    expect(dates[11]).toEqual(Time.parseUTCDate('2020-12'));
   });
 
   it('can omit the increment', async () => {
@@ -152,13 +151,13 @@ describe('sequences', () => {
       await materializeOneResult(
         runOne(seq(date('2020-01', 'month'), date('2020-02', 'month')))
       )
-    ).toEqual([parseUTCDate('2020-01'), parseUTCDate('2020-02')]);
+    ).toEqual([Time.parseUTCDate('2020-01'), Time.parseUTCDate('2020-02')]);
 
     expect(
       await materializeOneResult(
         runOne(seq(date('2020-02', 'month'), date('2020-01', 'month')))
       )
-    ).toEqual([parseUTCDate('2020-02'), parseUTCDate('2020-01')]);
+    ).toEqual([Time.parseUTCDate('2020-02'), Time.parseUTCDate('2020-01')]);
 
     expect(await materializeOneResult(runOne(seq(l(1), l(3))))).toEqual([
       N(1),
@@ -249,7 +248,7 @@ describe('columns', () => {
 });
 
 describe('dates', () => {
-  const d = parseUTCDate;
+  const d = Time.parseUTCDate;
 
   it('can evaluate dates', async () => {
     expect(

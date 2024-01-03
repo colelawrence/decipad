@@ -1,6 +1,4 @@
-import { ErrSpec, serializeType } from '@decipad/language';
-import { formatTypeToBasicString } from './formatTypeBasic';
-import { formatUnit } from './formatUnit';
+import { type ErrSpec, serializeType, Format } from '@decipad/remote-computer';
 
 const looksLikeVariable = (s: string) => s.toLocaleLowerCase() !== s;
 
@@ -22,7 +20,7 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
       const [expected, got] = spec.expectedButGot.map((t) =>
         typeof t === 'string'
           ? t
-          : formatTypeToBasicString(locale, serializeType(t))
+          : Format.formatTypeToBasicString(locale, serializeType(t))
       );
 
       const remark = [expected, got].some(looksLikeVariable)
@@ -32,13 +30,16 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
       return `This operation requires a ${expected} and a ${got} was entered.${remark}`;
     }
     case 'expected-primitive': {
-      const got = formatTypeToBasicString(locale, serializeType(spec.butGot));
+      const got = Format.formatTypeToBasicString(
+        locale,
+        serializeType(spec.butGot)
+      );
 
       return `This operation requires a primitive value (string, number, boolean or date) and a ${got} was entered`;
     }
     case 'expected-unit': {
       const units = spec.expectedUnit.map((unit) =>
-        unit ? formatUnit(locale, unit) : 'unknown'
+        unit ? Format.formatUnit(locale, unit) : 'unknown'
       );
       const remark = units.some(looksLikeVariable)
         ? ' You may have an undeclared or wrong variable name.'
@@ -66,14 +67,14 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
     }
     case 'column-contains-inconsistent-type': {
       const { cellType, got } = spec;
-      return `Column cannot contain both ${formatTypeToBasicString(
+      return `Column cannot contain both ${Format.formatTypeToBasicString(
         locale,
         serializeType(cellType)
-      )} and ${formatTypeToBasicString(locale, serializeType(got))}`;
+      )} and ${Format.formatTypeToBasicString(locale, serializeType(got))}`;
     }
     case 'bad-overloaded-builtin-call': {
       const gotArgTypes = spec.gotArgTypes.map((argType) =>
-        formatTypeToBasicString(locale, serializeType(argType))
+        Format.formatTypeToBasicString(locale, serializeType(argType))
       );
       const remark = gotArgTypes.some(looksLikeVariable)
         ? ' You may have an undeclared or wrong variable name.'
@@ -83,16 +84,16 @@ const formatErrorWithoutContext = (locale: string, spec: ErrSpec): string => {
       } cannot be called with (${gotArgTypes.join(', ')})${remark}`;
     }
     case 'cannot-convert-between-units': {
-      return `Don't know how to convert between units ${formatUnit(
+      return `Don't know how to convert between units ${Format.formatUnit(
         locale,
         spec.fromUnit
-      )} and ${formatUnit(locale, spec.toUnit)}`;
+      )} and ${Format.formatUnit(locale, spec.toUnit)}`;
     }
     case 'formula-cannot-call-itself': {
       return `${spec.fname}() cannot be used in its own definition`;
     }
     case 'cannot-convert-to-unit': {
-      return `Cannot convert to unit ${formatUnit(locale, spec.toUnit)}`;
+      return `Cannot convert to unit ${Format.formatUnit(locale, spec.toUnit)}`;
     }
     case 'unknown-category': {
       return `Unknown category ${spec.dimensionId}`;

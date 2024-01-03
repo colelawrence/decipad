@@ -1,13 +1,6 @@
-import { Type } from '../type';
-import { linearizeType } from '../dimtools/common';
+// eslint-disable-next-line no-restricted-imports
+import { Dimension, Type, Value } from '@decipad/language-types';
 import { dimSwapTypes, dimSwapValues } from '../dimtools';
-import {
-  Column,
-  ColumnLikeValue,
-  isColumnLike,
-  Value,
-  defaultValue,
-} from '../value';
 
 /**
  * This module specifies how tables work with 0-dimensional and 2+ dimensional columns.
@@ -31,7 +24,9 @@ export const coerceTableColumnTypeIndices = async (
   if (type.cellType == null) {
     // Because we're so very nice, allow `Column = 1` as syntax sugar.
     return type;
-  } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
+  } else if (
+    Dimension.linearizeType(type).some((t) => t.indexedBy === indexName)
+  ) {
     return (await dimSwapTypes(indexName, type)).reduced();
   } else {
     // We want our table index on top
@@ -41,16 +36,18 @@ export const coerceTableColumnTypeIndices = async (
 
 export const coerceTableColumnIndices = async (
   type: Type,
-  value: ColumnLikeValue | Value,
+  value: Value.ColumnLikeValue | Value.Value,
   indexName: string,
   tableLength?: number
-): Promise<ColumnLikeValue> => {
-  if (!isColumnLike(value)) {
-    return Column.fromValues(
+): Promise<Value.ColumnLikeValue> => {
+  if (!Value.isColumnLike(value)) {
+    return Value.Column.fromValues(
       repeat(value, tableLength ?? 1),
-      defaultValue(type)
+      Value.defaultValue(type)
     );
-  } else if (linearizeType(type).some((t) => t.indexedBy === indexName)) {
+  } else if (
+    Dimension.linearizeType(type).some((t) => t.indexedBy === indexName)
+  ) {
     return dimSwapValues(indexName, type, value);
   } else {
     return value;

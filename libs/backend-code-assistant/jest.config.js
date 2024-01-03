@@ -1,3 +1,4 @@
+const { join } = require('node:path');
 const {
   setupFilesAfterEnv = [],
   ...baseConfig
@@ -5,7 +6,7 @@ const {
 
 module.exports = {
   ...baseConfig,
-  rootDir: __dirname,
+  rootDir: join(__dirname),
   displayName: 'backend-code-assistant',
-  setupFilesAfterEnv: [...setupFilesAfterEnv, './jest.setup.js'],
+  setupFilesAfterEnv: [...setupFilesAfterEnv, join(__dirname, 'jest.setup.js')],
 };

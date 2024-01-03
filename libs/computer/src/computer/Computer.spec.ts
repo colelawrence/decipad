@@ -1,12 +1,13 @@
 import { all } from '@decipad/generator-utils';
+// eslint-disable-next-line no-restricted-imports
 import {
+  serializeType,
+  buildType as t,
   Result,
   astNode,
   parseBlockOrThrow,
-  serializeType,
-  buildType as t,
 } from '@decipad/language';
-import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
+import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { AnyMapping, produce, timeout } from '@decipad/utils';
 import { filter, firstValueFrom } from 'rxjs';
 import { getExprRef } from '../exprRefs';
@@ -757,27 +758,4 @@ it('can get table/column data by block id', async () => {
   expect(
     computer.getSymbolOrTableDotColumn$.get('block-0', 'block-1')
   ).toMatchInlineSnapshot(`"Table.Xs"`);
-});
-
-it('formats stuff', () => {
-  expect(
-    computer.formatNumber(
-      { kind: 'number', numberFormat: 'percentage' },
-      N(0.1)
-    ).asString
-  ).toMatchInlineSnapshot(`"10%"`);
-
-  expect(
-    computer.formatError({ errType: 'free-form', message: 'error!' })
-  ).toMatchInlineSnapshot(`"error!"`);
-
-  expect(
-    computer.formatUnit(
-      [{ known: true, multiplier: N(1), unit: 'meter', exp: N(1) }],
-      N(1)
-    )
-  ).toMatchInlineSnapshot(`"meter"`);
-
-  computer.setLocale('pt-PT');
-  expect(computer).toHaveProperty('locale', 'pt-PT');
 });

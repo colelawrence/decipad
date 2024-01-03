@@ -1,14 +1,11 @@
+// eslint-disable-next-line no-restricted-imports
 import {
-  ColumnLikeValue,
-  ExternalDataMap,
-  isColumnLike,
-  makeContext as makeInferContext,
-  Realm,
-  sortValue,
-  stringifyDate,
-  Table,
+  Time,
   Type,
   Value,
+  ExternalDataMap,
+  makeContext as makeInferContext,
+  Realm,
 } from '@decipad/language';
 import { all, map } from '@decipad/generator-utils';
 import {
@@ -23,7 +20,7 @@ import { ReadOnlyVarNameToBlockMap } from '../internalTypes';
 
 export type CacheContents = {
   result: IdentifiedResult;
-  value?: Value;
+  value?: Value.Value;
 };
 
 export class ComputationRealm {
@@ -78,7 +75,7 @@ export class ComputationRealm {
 
     const addLabels = async (
       _name: string,
-      column?: ColumnLikeValue,
+      column?: Value.ColumnLikeValue,
       cellType?: Type
     ) => {
       if (!column || !cellType) {
@@ -98,7 +95,10 @@ export class ComputationRealm {
           name,
           await all(
             map(data(), (d) =>
-              stringifyDate(d as bigint | number | symbol | undefined, date)
+              Time.stringifyDate(
+                d as bigint | number | symbol | undefined,
+                date
+              )
             )
           )
         );
@@ -111,10 +111,10 @@ export class ComputationRealm {
     ] of this.inferContext.stack.globalVariables.entries()) {
       const tableOrColumn = this.interpreterRealm.stack.get(name, 'global');
 
-      if (tableOrColumn instanceof Table) {
+      if (tableOrColumn instanceof Value.Table) {
         const tableType = this.inferContext.stack.get(name, 'global');
         if (tableType) {
-          const [sortedTableType, sortedTableValue] = sortValue(
+          const [sortedTableType, sortedTableValue] = Value.sortValue(
             tableType,
             tableOrColumn
           );
@@ -125,7 +125,7 @@ export class ComputationRealm {
             sortedTableType.columnTypes?.[0]
           );
         }
-      } else if (tableOrColumn != null && isColumnLike(tableOrColumn)) {
+      } else if (tableOrColumn != null && Value.isColumnLike(tableOrColumn)) {
         // eslint-disable-next-line no-await-in-loop
         await addLabels(
           type.indexedBy ?? name,

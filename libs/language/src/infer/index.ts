@@ -1,20 +1,22 @@
 /* eslint-disable no-await-in-loop */
 import pSeries from 'p-series';
 import { Writable } from 'utility-types';
-import { AST } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { getConstantByName } from '@decipad/language-builtins';
+// eslint-disable-next-line no-restricted-imports
 import {
+  AST,
   InferError,
   Type,
-  buildType as t,
   deserializeType,
+  Unit,
+  parseUnit,
+  buildType as t,
   typeIsPending,
-  buildType,
-} from '../type';
-import { matchUnitArraysForColumn } from '../type/units';
-import { getDefined, getIdentifierString } from '../utils';
+} from '@decipad/language-types';
+import { getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
 import { expandDirectiveToType } from '../directives';
-import { parseUnit } from '../units';
 import { inferTable } from '../tables/inference';
 import { inferColumnAssign } from '../tables/column-assign';
 
@@ -24,10 +26,11 @@ import { isPreviousRef } from '../previous-ref';
 import { inferMatrixAssign, inferMatrixRef } from '../matrix';
 import { inferCategories } from '../categories';
 import { inferFunctionDefinition, inferFunctionCall } from './functions';
-import { getConstantByName } from '../builtins';
 import { inferMatch } from '../match/inferMatch';
 import { inferTiered } from '../tiered/inferTiered';
 import { sortType } from './sortType';
+import { Realm } from '../interpreter/Realm';
+import { getDefined } from '@decipad/utils';
 
 export { makeContext, logRetrievedName };
 export type { Context };
@@ -46,10 +49,10 @@ export const linkToAST = (node: Writable<AST.Node>, type: Type) => {
 
 const wrap =
   <T extends AST.Node>(
-    fn: (ctx: Context, node: T, cohercingTo?: Type) => Promise<Type>
+    fn: (realm: Realm, node: T, cohercingTo?: Type) => Promise<Type>
   ) =>
-  async (ctx: Context, node: T, cohercingTo?: Type): Promise<Type> => {
-    let type = await fn(ctx, node);
+  async (realm: Realm, node: T, cohercingTo?: Type): Promise<Type> => {
+    let type = await fn(realm, node);
     if (cohercingTo) {
       type = await type.sameAs(cohercingTo);
     }
@@ -68,7 +71,8 @@ const wrap =
 export const inferExpression = wrap(
   // exhaustive switch
   // eslint-disable-next-line consistent-return, complexity
-  async (ctx: Context, expr: Writable<AST.Expression>): Promise<Type> => {
+  async (realm: Realm, expr: Writable<AST.Expression>): Promise<Type> => {
+    const { inferContext: ctx } = realm;
     ctx.incrementStatsCounter('inferExpressionCount');
     switch (expr.type) {
       case 'noop': {
@@ -129,7 +133,7 @@ export const inferExpression = wrap(
       case 'range': {
         const [start, end] = await pSeries(
           expr.args.map(
-            (expr) => async () => inferExpression(ctx, getDefined(expr))
+            (expr) => async () => inferExpression(realm, getDefined(expr))
           )
         );
         const pending = [start, end].find(typeIsPending);
@@ -146,7 +150,7 @@ export const inferExpression = wrap(
         });
       }
       case 'sequence': {
-        return inferSequence(ctx, expr, inferExpression);
+        return inferSequence(realm, expr, inferExpression);
       }
       case 'date': {
         const [, specificity] = getDateFromAstForm(expr.args);
@@ -158,10 +162,10 @@ export const inferExpression = wrap(
           return t.impossible(InferError.unexpectedEmptyColumn());
         }
         const [firstCellNode, ...restCellNodes] = columnItems.args;
-        const firstCellType = await inferExpression(ctx, firstCellNode);
+        const firstCellType = await inferExpression(realm, firstCellNode);
         const restCellTypes = await pSeries(
           restCellNodes.map(
-            (a) => async () => inferExpression(ctx, a, firstCellType)
+            (a) => async () => inferExpression(realm, a, firstCellType)
           )
         );
 
@@ -178,7 +182,7 @@ export const inferExpression = wrap(
 
         for (const restCell of restCellTypes) {
           if (
-            !matchUnitArraysForColumn(
+            !Unit.matchUnitArraysForColumn(
               (await firstCellType.reducedToLowest()).unit,
               (await restCell.reducedToLowest()).unit
             )
@@ -193,7 +197,7 @@ export const inferExpression = wrap(
       case 'property-access': {
         const [thing, prop] = expr.args;
         const propName = getIdentifierString(prop);
-        const potentialTable = await inferExpression(ctx, thing);
+        const potentialTable = await inferExpression(realm, thing);
         // pending is contagious
         if (potentialTable.pending) {
           return potentialTable;
@@ -242,27 +246,28 @@ export const inferExpression = wrap(
         }
       }
       case 'matrix-ref': {
-        return inferMatrixRef(ctx, expr);
+        return inferMatrixRef(realm, expr);
       }
       case 'function-call': {
-        return inferFunctionCall(ctx, expr);
+        return inferFunctionCall(realm, expr);
       }
       case 'directive': {
-        return expandDirectiveToType(ctx, expr);
+        return expandDirectiveToType(realm, expr);
       }
       case 'match':
-        return inferMatch(ctx, expr);
+        return inferMatch(realm, expr);
       case 'tiered':
-        return inferTiered(ctx, expr);
+        return inferTiered(realm, expr);
     }
   }
 );
 
 const inferStatementInternal = wrap(
   async (
-    /* Mutable! */ ctx: Context,
+    /* Mutable! */ realm: Realm,
     statement: AST.Statement
   ): Promise<Type> => {
+    const { inferContext: ctx } = realm;
     ctx.incrementStatsCounter('inferStatementCount');
     switch (statement.type) {
       case 'assign': {
@@ -274,28 +279,28 @@ const inferStatementInternal = wrap(
         const type =
           constant || ctx.stack.has(varName, 'function')
             ? t.impossible(InferError.duplicatedName(varName))
-            : await inferExpression(ctx, nValue);
+            : await inferExpression(realm, nValue);
 
         ctx.stack.set(varName, type, 'function', ctx.statementId);
         return type;
       }
       case 'table': {
-        return inferTable(ctx, statement);
+        return inferTable(realm, statement);
       }
       case 'table-column-assign': {
-        return inferColumnAssign(ctx, statement);
+        return inferColumnAssign(realm, statement);
       }
       case 'matrix-assign': {
-        return inferMatrixAssign(ctx, statement);
+        return inferMatrixAssign(realm, statement);
       }
       case 'categories': {
-        return inferCategories(ctx, statement);
+        return inferCategories(realm, statement);
       }
       case 'function-definition': {
         return inferFunctionDefinition(ctx, statement);
       }
       default: {
-        return inferExpression(ctx, statement);
+        return inferExpression(realm, statement);
       }
     }
   }
@@ -304,7 +309,8 @@ const inferStatementInternal = wrap(
 export const inferStatement = async (
   ...args: Parameters<typeof inferStatementInternal>
 ): Promise<Type> => {
-  const [ctx] = args;
+  const [realm] = args;
+  const { inferContext: ctx } = realm;
   const { usedNames: previoususedNames = [] } = ctx;
 
   ctx.usedNames = [...previoususedNames];
@@ -321,17 +327,15 @@ export const inferStatement = async (
 
 export const inferBlock = async (
   block: AST.Block,
-  ctx = makeContext()
+  realm = new Realm(makeContext())
 ): Promise<Type> => {
   if (block.hasDuplicateName) {
-    return buildType.impossible(
-      InferError.duplicatedName(block.hasDuplicateName)
-    );
+    return t.impossible(InferError.duplicatedName(block.hasDuplicateName));
   }
   let last: Type | undefined;
   for (const stmt of block.args) {
     // eslint-disable-next-line no-await-in-loop
-    last = await inferStatement(ctx, stmt);
+    last = await inferStatement(realm, stmt);
   }
   block.inferredType = last;
   return getDefined(last, 'Unexpected empty block');
@@ -339,14 +343,15 @@ export const inferBlock = async (
 
 export const inferProgram = async (
   program: AST.Block[],
-  ctx = makeContext()
+  realm = new Realm(makeContext())
 ): Promise<Context> => {
   const start = Date.now();
   for (const block of program) {
     // eslint-disable-next-line no-await-in-loop
-    await inferBlock(block, ctx);
+    await inferBlock(block, realm);
   }
   const elapsed = Date.now() - start;
+  const { inferContext: ctx } = realm;
   ctx.incrementStatsCounter('totalInferProgramTimeMs', elapsed);
   return ctx;
 };

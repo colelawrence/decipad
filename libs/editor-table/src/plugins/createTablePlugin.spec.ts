@@ -7,8 +7,8 @@ import {
 } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';
 
-import { Computer } from '@decipad/computer';
 import { nanoid } from 'nanoid';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import fixtureDoc from '../__fixtures__/001_doc.json';
 import { createTablePlugin } from './createTablePlugin';
 
@@ -17,7 +17,7 @@ beforeEach(() => {
   editor = createPlateEditor({
     plugins: [
       createNodeIdPlugin({ options: { idCreator: nanoid } }),
-      createTablePlugin(new Computer()) as PlatePlugin,
+      createTablePlugin(getRemoteComputer()) as PlatePlugin,
     ],
   });
 });

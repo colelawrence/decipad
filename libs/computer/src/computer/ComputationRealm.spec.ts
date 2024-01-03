@@ -1,13 +1,6 @@
-// TODO fix types
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Column,
-  Table,
-  DateValue,
-  fromJS,
-  buildType,
-  parseUTCDate,
-} from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import { Value, Time, buildType } from '@decipad/language';
 import { testProgramBlocks } from '../testUtils';
 import { ComputationRealm } from './ComputationRealm';
 
@@ -49,8 +42,8 @@ describe('getIndexLabels', () => {
     );
     realm.interpreterRealm.stack.set(
       'DimName',
-      Table.fromNamedColumns(
-        [fromJS(['One', 'Two', 'Three']), fromJS([1, 2, 3])],
+      Value.Table.fromNamedColumns(
+        [Value.fromJS(['One', 'Two', 'Three']), Value.fromJS([1, 2, 3])],
         ['Names', 'Numbers']
       )
     );
@@ -73,7 +66,7 @@ describe('getIndexLabels', () => {
     );
     realm.interpreterRealm.stack.set(
       'DimName',
-      fromJS(['One', 'Two', 'Three'])
+      Value.fromJS(['One', 'Two', 'Three'])
     );
 
     expect(await realm.getIndexLabels()).toMatchInlineSnapshot(`
@@ -99,7 +92,7 @@ describe('getIndexLabels', () => {
 
     realm.interpreterRealm.stack.set(
       'Diabetes',
-      Table.fromNamedColumns([fromJS([1, 2])], ['Nums'])
+      Value.Table.fromNamedColumns([Value.fromJS([1, 2])], ['Nums'])
     );
 
     expect(await realm.getIndexLabels()).toMatchInlineSnapshot(`
@@ -124,10 +117,13 @@ describe('getIndexLabels', () => {
 
     realm.interpreterRealm.stack.set(
       'Dates',
-      Table.fromNamedColumns(
+      Value.Table.fromNamedColumns(
         [
-          Column.fromValues([
-            DateValue.fromDateAndSpecificity(parseUTCDate('2020-01'), 'month'),
+          Value.Column.fromValues([
+            Value.DateValue.fromDateAndSpecificity(
+              Time.parseUTCDate('2020-01'),
+              'month'
+            ),
           ]),
         ],
         ['Dates']

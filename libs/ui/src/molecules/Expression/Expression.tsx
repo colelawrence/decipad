@@ -1,5 +1,5 @@
 /* eslint decipad/css-prop-named-variable: 0 */
-import { SerializedType } from '@decipad/language';
+import { type SerializedType } from '@decipad/remote-computer';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode, useEffect, useRef } from 'react';
 import { CodeError } from '../../atoms';

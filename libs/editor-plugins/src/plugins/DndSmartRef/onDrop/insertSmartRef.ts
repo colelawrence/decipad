@@ -1,4 +1,4 @@
-import { getExprRef, parseStatement } from '@decipad/computer';
+import { getExprRef, parseStatement } from '@decipad/remote-computer';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_CALLOUT,

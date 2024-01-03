@@ -1,4 +1,4 @@
-import { Result } from '@decipad/remote-computer';
+import { Result, Unknown } from '@decipad/remote-computer';
 import { useMemo } from 'react';
 import { useMaterializedColumnResultValue } from './useMaterializedColumnResultValue';
 
@@ -27,7 +27,7 @@ export const useMaterializedColumnResult = (
             type: {
               kind: 'pending',
             },
-            value: Result.Unknown,
+            value: Unknown,
           },
     [newValue, result]
   );

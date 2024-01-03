@@ -1,10 +1,10 @@
 import { FC, useEffect, useContext } from 'react';
 import { InferError } from '@decipad/remote-computer';
-import { useComputer } from '@decipad/react-contexts';
 import { ClientEventsContext } from '@decipad/client-events';
 import { AnyElement } from '@decipad/editor-types';
 import { CodeError } from '../../atoms';
 import { CodeResultProps } from '../../types';
+import { formatError } from '@decipad/format';
 
 type InlineCodeErrorProps = CodeResultProps<'type-error'> & {
   element?: AnyElement;
@@ -14,9 +14,8 @@ export const InlineCodeError: FC<InlineCodeErrorProps> = ({
   type,
   element,
 }) => {
-  const computer = useComputer();
   const { url } = new InferError(type.errorCause);
-  const message = computer.formatError(type.errorCause);
+  const message = formatError('en-US', type.errorCause);
   const clientEvent = useContext(ClientEventsContext);
 
   useEffect(() => {

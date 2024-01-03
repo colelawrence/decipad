@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { parseBlockOrThrow, parseStatementOrThrow } from '@decipad/language';
 import { dependencies, findAllTables } from './dependencies';
 

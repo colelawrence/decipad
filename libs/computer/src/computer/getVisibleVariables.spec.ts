@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { inferProgram } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import { getVisibleVariables } from './getVisibleVariables';

@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/computer';
+import { type SerializedType } from '@decipad/remote-computer';
 import { BehaviorSubject } from 'rxjs';
 import { Comparable } from '@decipad/universal-compare';
 import {

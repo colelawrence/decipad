@@ -3,7 +3,7 @@ import {
   parseExpression,
   Program,
   statementToIdentifiedBlock,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 
 /**
  * Parse a variable assignment. Source code or AST.

@@ -1,5 +1,7 @@
-import { inferBlock } from '..';
-import { buildType as t, getErrSpec, InferError } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { InferError, buildType as t } from '@decipad/language-types';
+import { Realm, inferBlock } from '..';
+import { getErrSpec } from '../type';
 import { assign, block, c, funcDef, l, r, U } from '../utils';
 import { makeContext } from './context';
 import { inferFunction } from './functions';
@@ -11,7 +13,9 @@ describe('function inference', () => {
     const functionWithSpecificTypes = funcDef('Fn', ['A'], r('A'));
 
     expect(
-      await inferFunction(ctx, functionWithSpecificTypes, [t.boolean()])
+      await inferFunction(new Realm(ctx), functionWithSpecificTypes, [
+        t.boolean(),
+      ])
     ).toEqual(t.boolean());
   });
 
@@ -45,15 +49,19 @@ describe('function inference', () => {
     const unaryFn = funcDef('Fn', ['A'], r('A'));
 
     let errorCtx = makeContext();
-    expect((await inferFunction(errorCtx, unaryFn, [])).errorCause).toEqual(
-      InferError.expectedArgCount('Fn', 1, 0)
-    );
+    expect(
+      (await inferFunction(new Realm(errorCtx), unaryFn, [])).errorCause
+    ).toEqual(InferError.expectedArgCount('Fn', 1, 0));
 
     errorCtx = makeContext();
     const badArgumentCountError2 = InferError.expectedArgCount('Fn', 1, 2);
     expect(
-      (await inferFunction(errorCtx, unaryFn, [t.boolean(), t.string()]))
-        .errorCause
+      (
+        await inferFunction(new Realm(errorCtx), unaryFn, [
+          t.boolean(),
+          t.string(),
+        ])
+      ).errorCause
     ).toEqual(badArgumentCountError2);
   });
 
@@ -65,7 +73,7 @@ describe('function inference', () => {
     );
 
     const ctx = makeContext();
-    expect(await inferBlock(funcs, ctx)).toMatchObject({
+    expect(await inferBlock(funcs, new Realm(ctx))).toMatchObject({
       type: 'number',
       unit: U('OtherFunctionsArgument', { known: false }),
     });

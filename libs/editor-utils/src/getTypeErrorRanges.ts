@@ -1,5 +1,5 @@
 import { DECORATE_TYPE_ERROR } from '@decipad/editor-types';
-import type { SerializedTypes } from '@decipad/computer';
+import type { SerializedTypes } from '@decipad/remote-computer';
 import { Path } from 'slate';
 import { formatError } from '@decipad/format';
 import { TypeErrorAnnotation } from './TypeErrorAnnotation';

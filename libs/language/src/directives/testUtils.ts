@@ -1,11 +1,9 @@
-import type { AST, Value } from '..';
-import { buildType } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Type, Value, buildType as t } from '@decipad/language-types';
 import { isExpression, isNode } from '../utils';
 import { Realm } from '../interpreter';
-import { Context, inferExpression, makeContext } from '../infer';
-
+import { inferExpression, makeContext } from '../infer';
 import { DirectiveImpl } from './types';
-import { Type } from '../type';
 
 export const directiveFor = (args: AST.Node[]): AST.Directive => {
   return {
@@ -18,17 +16,16 @@ export const testGetValue = async (
   getValue: DirectiveImpl['getValue'],
   args: AST.Node[],
   _realm?: Realm
-): Promise<Value> => {
+): Promise<Value.Value> => {
   const realm = _realm || new Realm(makeContext());
-  const ctx = realm.inferContext;
   const root = directiveFor(args);
-  root.inferredType = buildType.number();
+  root.inferredType = t.number();
 
   // Preload passed arguments into ctx.nodeTypes
   for (const passedArg of args) {
     if (isExpression(passedArg)) {
       // eslint-disable-next-line no-await-in-loop
-      await inferExpression(ctx, passedArg);
+      await inferExpression(realm, passedArg);
     }
   }
 
@@ -37,12 +34,12 @@ export const testGetValue = async (
 
 export const testGetType = async (
   getType: DirectiveImpl['getType'],
-  ...args: [Context | AST.Node, ...AST.Node[]]
+  ...args: [Realm | AST.Node, ...AST.Node[]]
 ): Promise<Type> => {
   // Allow passing a context along with the args, it's useful for testing
   const [firstArg, ...restArgs] = args;
-  const ctx = isNode(firstArg) ? makeContext() : firstArg;
+  const realm = isNode(firstArg) ? new Realm(makeContext()) : firstArg;
   const argsWithoutCtx = isNode(firstArg) ? [firstArg, ...restArgs] : restArgs;
 
-  return getType(ctx, directiveFor(argsWithoutCtx));
+  return getType(realm, directiveFor(argsWithoutCtx));
 };

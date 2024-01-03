@@ -2,7 +2,7 @@ import { createPlateEditor, PlatePlugin, TEditor } from '@udecode/plate-common';
 import { createNodeIdPlugin } from '@udecode/plate-node-id';
 
 import { nanoid } from 'nanoid';
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
@@ -22,7 +22,7 @@ describe('withTable', () => {
     editor = createPlateEditor({
       plugins: [
         createNodeIdPlugin({ options: { idCreator: nanoid } }),
-        createTablePlugin(new Computer()) as PlatePlugin,
+        createTablePlugin(getRemoteComputer()) as PlatePlugin,
       ],
     });
   });

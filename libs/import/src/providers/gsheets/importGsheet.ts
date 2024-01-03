@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/react';
-import { RemoteComputer, Result } from '@decipad/remote-computer';
+import { RemoteComputer, Result, Unknown } from '@decipad/remote-computer';
 import { inferTable } from '@decipad/parse';
 import { getDefined } from '@decipad/utils';
 import {
@@ -29,7 +29,7 @@ const errorResult = (err: string): ImportResultWithMandatoryResult => {
           message: err,
         },
       },
-      value: Result.Unknown,
+      value: Unknown,
     },
     loading: false,
   };

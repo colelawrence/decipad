@@ -1,4 +1,4 @@
-import { Result } from '@decipad/language';
+import { Result } from '@decipad/remote-computer';
 import { Meta, StoryFn } from '@storybook/react';
 import { InlineCodeError } from './InlineCodeError';
 

@@ -1,4 +1,5 @@
-import type { AST, Parser, Result, SerializedType } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import type { AST, Result, SerializedType, Parser } from '@decipad/language';
 import type { AnyMapping } from '@decipad/utils';
 import type { BehaviorSubject } from 'rxjs';
 import type { VisibleVariables } from './computer/getVisibleVariables';

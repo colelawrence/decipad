@@ -1,20 +1,22 @@
 import DeciNumber, { N, ONE } from '@decipad/number';
-import { produce, getDefined } from '@decipad/utils';
-import { evaluate, RuntimeError } from '../interpreter';
-import { automapTypes, automapValues } from '../dimtools';
-import { NumberValue, fromJS, Value, defaultValue } from '../value';
-import { AST } from '../parser';
+import { produce, getDefined, getInstanceof } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
 import {
-  buildType as t,
-  convertToMultiplierUnit,
+  AST,
+  Dimension,
   InferError,
+  RuntimeError,
   Type,
   Unit,
-} from '../type';
-import { matchUnitArrays } from '../type/units';
-import { areUnitsConvertible, convertBetweenUnits, parseUnit } from '../units';
+  Value,
+  areUnitsConvertible,
+  convertBetweenUnits,
+  parseUnit,
+  buildType as t,
+} from '@decipad/language-types';
+import { evaluate } from '../interpreter';
 import type { DirectiveImpl } from './types';
-import { getIdentifierString, getInstanceof, U } from '../utils';
+import { getIdentifierString, U } from '../utils';
 import { inferExpression } from '../infer';
 import {
   isTypeCoercionTarget,
@@ -22,22 +24,22 @@ import {
   coerceValue,
 } from '../type-coercion';
 
-function isUserUnit(exp: AST.Expression, targetUnit: Unit[]) {
+function isUserUnit(exp: AST.Expression, targetUnit: Unit.Unit[]) {
   if (exp.type !== 'ref') {
     return false;
   }
-  const unit: Unit[] = [parseUnit(getIdentifierString(exp))];
-  return !matchUnitArrays(unit, targetUnit);
+  const unit: Unit.Unit[] = [parseUnit(getIdentifierString(exp))];
+  return !Unit.matchUnitArrays(unit, targetUnit);
 }
 
-function singleUnitRef(unit?: Unit): string | undefined {
+function singleUnitRef(unit?: Unit.Unit): string | undefined {
   if (!unit || !unit.exp.equals(ONE) || !unit.multiplier.equals(ONE)) {
     return undefined;
   }
   return unit.unit;
 }
 
-function isTypeCoercion(units: Unit[]): boolean {
+function isTypeCoercion(units: Unit.Unit[]): boolean {
   if (units.length !== 1) {
     return false;
   }
@@ -49,7 +51,9 @@ function isTypeCoercion(units: Unit[]): boolean {
   return isTypeCoercionTarget(ref);
 }
 
-function multiplyUnitMultipliers(units: Unit[] | null | undefined): DeciNumber {
+function multiplyUnitMultipliers(
+  units: Unit.Unit[] | null | undefined
+): DeciNumber {
   return (units || []).reduce(
     (acc, unit) => acc.mul(unit.multiplier.pow(unit.exp)),
     N(1)
@@ -57,7 +61,7 @@ function multiplyUnitMultipliers(units: Unit[] | null | undefined): DeciNumber {
 }
 
 function multiplyUnitMultipliersIfNeedsEnforcing(
-  units: Unit[] | null | undefined
+  units: Unit.Unit[] | null | undefined
 ): DeciNumber {
   return (units || []).reduce(
     (acc, unit) =>
@@ -76,8 +80,8 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
   }
 
   if (representsPercentage(unitExpr)) {
-    return automapTypes(
-      ctx,
+    return Dimension.automapTypes(
+      ctx.utils,
       [await expressionType.isScalar('number')],
       (): Type => {
         return t.number(null, 'percentage');
@@ -104,8 +108,8 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
     return coerceType(ctx, expressionType, getDefined(singleUnitRef(unit[0])));
   }
 
-  const ret = automapTypes(
-    ctx,
+  const ret = Dimension.automapTypes(
+    ctx.utils,
     [expressionType],
     ([expressionType]: Type[]): Type => {
       const sourceUnits = expressionType.unit;
@@ -131,11 +135,11 @@ export const getType: DirectiveImpl<AST.AsDirective>['getType'] = async (
   return ret;
 };
 
-function inlineUnitAliases(units: Unit[] | null): Unit[] | null {
+function inlineUnitAliases(units: Unit.Unit[] | null): Unit.Unit[] | null {
   if (!units) {
     return null;
   }
-  return units.reduce<Unit[]>((units, oneUnit) => {
+  return units.reduce<Unit.Unit[]>((units, oneUnit) => {
     if (oneUnit.aliasFor != null) {
       const unit = getDefined(inlineUnitAliases(oneUnit.aliasFor));
       for (const u of unit) {
@@ -155,7 +159,7 @@ function inlineUnitAliases(units: Unit[] | null): Unit[] | null {
 export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   realm,
   root
-): Promise<Value> => {
+): Promise<Value.Value> => {
   const [, expression, unitsExpression] = root.args;
   const expressionType = realm.getTypeAt(expression);
   const expressionValue = await evaluate(realm, expression);
@@ -164,22 +168,22 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   );
 
   if (representsPercentage(unitsExpression)) {
-    return automapValues(
-      realm.inferContext,
+    return Dimension.automapValues(
+      realm.utils,
       [expressionType],
       [expressionValue],
       ([value], [type]) => {
-        const noMultiplier = convertToMultiplierUnit(
-          getInstanceof(value, NumberValue).value,
+        const noMultiplier = Unit.convertToMultiplierUnit(
+          getInstanceof(value, Value.NumberValue).value,
           type.unit
         );
-        return NumberValue.fromValue(noMultiplier);
+        return Value.NumberValue.fromValue(noMultiplier);
       }
     );
   }
 
   const targetUnitExpressionType = await (
-    await inferExpression(realm.inferContext, unitsExpression)
+    await inferExpression(realm, unitsExpression)
   ).isScalar('number');
   const { unit: targetUnit } =
     (targetUnitExpressionType.errorCause == null &&
@@ -218,16 +222,16 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
   );
   const conversionRate = targetMultiplierConversionRate.mul(returnTypeDivider);
 
-  return automapValues(
-    realm.inferContext,
+  return Dimension.automapValues(
+    realm.utils,
     [expressionType],
     [expressionValue],
     async ([value]) => {
-      if (value instanceof NumberValue) {
+      if (value instanceof Value.NumberValue) {
         if (!targetUnits || !sourceUnits || sourceUnits.length < 1) {
-          return fromJS(
+          return Value.fromJS(
             (await value.getData()).div(conversionRate),
-            defaultValue(expressionType)
+            Value.defaultValue(expressionType)
           );
         }
 
@@ -238,9 +242,9 @@ export const getValue: DirectiveImpl<AST.AsDirective>['getValue'] = async (
           { tolerateImprecision: true }
         );
 
-        return fromJS(
+        return Value.fromJS(
           converted.div(conversionRate),
-          defaultValue(expressionType)
+          Value.defaultValue(expressionType)
         );
       }
 

@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { SimpleTableCellType } from '@decipad/editor-types';
-import { Result } from '@decipad/language';
+import { type Result } from '@decipad/remote-computer';
 import { useIsEditorReadOnly } from '@decipad/react-contexts';
 import { css } from '@emotion/react';
 import { ComponentProps, FC, ReactNode } from 'react';

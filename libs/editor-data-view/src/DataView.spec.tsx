@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { RemoteComputer, getRemoteComputer } from '@decipad/remote-computer';
 import {
   DataViewElement,
   ELEMENT_DATA_VIEW,
@@ -92,7 +92,7 @@ const createEditor = (): TestEditor => {
 };
 
 const WithProviders: FC<
-  PropsWithChildren<{ computer: Computer; editor: TestEditor }>
+  PropsWithChildren<{ computer: RemoteComputer; editor: TestEditor }>
 > = ({ computer, editor, children }) => {
   return (
     <DndProvider backend={HTML5Backend}>
@@ -124,7 +124,7 @@ const WithDataViewHook: FC<WithDataViewHookProps> = ({
 };
 
 const loadAndPushTable = async (
-  computer: Computer,
+  computer: RemoteComputer,
   fileName: string
 ): Promise<void> => {
   const server = await createStaticServer();
@@ -170,41 +170,41 @@ const loadAndPushTable = async (
 
 interface RunTestProps {
   waitForCallbackCount?: number;
-  computer?: Computer;
+  computer?: RemoteComputer;
 }
 
 const runWithDataView = async ({
   waitForCallbackCount = 1,
-  computer = new Computer(),
+  computer = getRemoteComputer(),
 }: RunTestProps) => {
-  return new Promise<[ReturnType<typeof useDataView>, TestEditor, Computer]>(
-    (resolve, reject) => {
-      try {
-        let count = waitForCallbackCount;
-        const editor = createEditor();
-        const dataViewElement = editor.children[1];
+  return new Promise<
+    [ReturnType<typeof useDataView>, TestEditor, RemoteComputer]
+  >((resolve, reject) => {
+    try {
+      let count = waitForCallbackCount;
+      const editor = createEditor();
+      const dataViewElement = editor.children[1];
 
-        const onChange = (r: ReturnType<typeof useDataView>) => {
-          count -= 1;
-          expect(count).toBeGreaterThanOrEqual(0);
-          if (count === 0) {
-            resolve([r, editor, computer]);
-          }
-        };
+      const onChange = (r: ReturnType<typeof useDataView>) => {
+        count -= 1;
+        expect(count).toBeGreaterThanOrEqual(0);
+        if (count === 0) {
+          resolve([r, editor, computer]);
+        }
+      };
 
-        render(
-          <WithProviders computer={computer} editor={editor}>
-            <WithDataViewHook
-              element={dataViewElement}
-              onDataViewResultChange={onChange}
-            />
-          </WithProviders>
-        );
-      } catch (err) {
-        reject(err);
-      }
+      render(
+        <WithProviders computer={computer} editor={editor}>
+          <WithDataViewHook
+            element={dataViewElement}
+            onDataViewResultChange={onChange}
+          />
+        </WithProviders>
+      );
+    } catch (err) {
+      reject(err);
     }
-  );
+  });
 };
 
 interface WithLayoutDataHookProps {
@@ -254,7 +254,7 @@ const runWithLayoutData = async ({
   expandedGroups,
 }: {
   waitForCallbackCount: number;
-  computer: Computer;
+  computer: RemoteComputer;
   editor: TestEditor;
   tableName: string;
   columns: Column[];
@@ -313,7 +313,7 @@ describe('useDataView hook performance', () => {
   });
 
   it('works on a small table', async () => {
-    const computer = new Computer();
+    const computer = getRemoteComputer();
     await loadAndPushTable(computer, '/small1.csv');
     const [testResult, editor] = await runWithDataView({
       waitForCallbackCount: 5,
@@ -336,7 +336,7 @@ describe('useDataView hook performance', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('works on a big table', async () => {
-    const computer = new Computer();
+    const computer = getRemoteComputer();
     await loadAndPushTable(computer, '/big1.csv');
     let startTime = Date.now();
     const [testResult, editor] = await runWithDataView({

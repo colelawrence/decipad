@@ -1,4 +1,4 @@
-import { IdentifiedError } from '@decipad/computer';
+import { type IdentifiedError } from '@decipad/remote-computer';
 
 export const simpleArtifficialError = (
   id: string,

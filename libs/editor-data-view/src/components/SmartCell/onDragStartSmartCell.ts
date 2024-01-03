@@ -2,14 +2,13 @@ import { MyEditor } from '@decipad/editor-types';
 import { setSlateFragment } from '@decipad/editor-utils';
 import { DragEvent } from 'react';
 import { DRAG_SMART_CELL } from '@decipad/editor-plugins';
-import { DeciNumber } from '@decipad/number';
 import { RemoteComputer, Result } from '@decipad/remote-computer';
 import { dndPreviewActions } from '@decipad/react-contexts';
+import { formatResult } from '@decipad/format';
 
 export const onDragStartSmartCell =
   (editor: MyEditor) =>
   ({
-    computer,
     expression,
     result,
   }: {
@@ -24,12 +23,9 @@ export const onDragStartSmartCell =
     setSlateFragment(e.dataTransfer, [expression]);
 
     if (editor.previewRef?.current) {
-      const formatted = computer.formatNumber(
-        result.type as any,
-        result.value as DeciNumber
+      dndPreviewActions.previewText(
+        formatResult('en-US', result.value, result.type)
       );
-
-      dndPreviewActions.previewText(formatted.asString);
 
       e.dataTransfer.setDragImage(editor.previewRef.current, 0, 0);
     }

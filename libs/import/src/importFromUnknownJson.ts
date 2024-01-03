@@ -2,6 +2,7 @@ import {
   Result,
   type SerializedTypes,
   isColumn,
+  Unknown,
 } from '@decipad/remote-computer';
 import { ColIndex, TableCellType } from '@decipad/editor-types';
 import { N } from '@decipad/number';
@@ -40,7 +41,7 @@ const importFromArray = (
       type: {
         kind: 'anything',
       },
-      value: Result.Unknown,
+      value: Unknown,
     };
   }
   if (arr.some((elem) => Array.isArray(elem))) {
@@ -83,7 +84,7 @@ const importTableFromObject = (
     );
   const value = results.map((res) => {
     if (res.value == null) {
-      return Result.UnknownValue.getData();
+      return Unknown;
     }
     if (isColumn(res.type)) {
       return res.value as Result.Result['value'];
@@ -199,7 +200,7 @@ const internalImportFromUnknownJson = (
       type: {
         kind: 'anything',
       },
-      value: Result.Unknown,
+      value: Unknown,
     };
   }
   if (tof === 'object' && json != null) {

@@ -1,11 +1,10 @@
 import stringify from 'json-stringify-safe';
-// If you call this you'll need to rely on the ===
-
-import { AST } from '..';
-import { getDefined, getIdentifierString } from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Value } from '@decipad/language-types';
+import { getIdentifierString } from '../utils';
 import { evaluateStatement } from './evaluate';
 import { Realm } from './Realm';
-import { UnknownValue, Value } from '../value';
+import { getDefined } from '@decipad/utils';
 
 // (object identity equality) of the returned statements.
 const desiredTargetsToStatements = (
@@ -50,18 +49,18 @@ export async function evaluateTargets(
     string | number | [blockIdx: number, statementIdx: number]
   >,
   realm: Realm
-): Promise<Value[]> {
-  const targetSet: Map<unknown, Value> = new Map(
+): Promise<Value.Value[]> {
+  const targetSet: Map<unknown, Value.Value> = new Map(
     desiredTargetsToStatements(program, desiredTargets).map((target) => [
       target,
-      UnknownValue,
+      Value.UnknownValue,
     ])
   );
 
   for (const block of program) {
     for (const statement of block.args) {
       // eslint-disable-next-line no-await-in-loop
-      const value: Value = await evaluateStatement(realm, statement);
+      const value: Value.Value = await evaluateStatement(realm, statement);
 
       if (targetSet.has(statement)) {
         targetSet.set(statement, value);

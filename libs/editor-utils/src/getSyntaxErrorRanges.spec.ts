@@ -1,4 +1,4 @@
-import type { Parser } from '@decipad/computer';
+import type { Parser } from '@decipad/remote-computer';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { getSyntaxErrorRanges } from './getSyntaxErrorRanges';
 

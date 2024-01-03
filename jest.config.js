@@ -3,7 +3,11 @@ module.exports = {
   projects: [
     '<rootDir>/apps/backend',
     '<rootDir>/apps/docs',
+    '<rootDir>/libs/language-utils',
+    '<rootDir>/libs/language-units',
+    '<rootDir>/libs/language-types',
     '<rootDir>/libs/language',
+    '<rootDir>/libs/language-builtins',
     '<rootDir>/libs/ui',
     '<rootDir>/libs/editor',
     '<rootDir>/libs/fnqueue',

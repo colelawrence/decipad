@@ -1,4 +1,4 @@
-import { selectErrorFromResult } from '@decipad/computer';
+import { selectErrorFromResult } from '@decipad/remote-computer';
 import { useAutoConvertToSmartRef } from '@decipad/editor-components';
 import {
   ELEMENT_TABLE_COLUMN_FORMULA,

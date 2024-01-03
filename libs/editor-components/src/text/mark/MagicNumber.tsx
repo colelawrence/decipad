@@ -1,4 +1,4 @@
-import { getExprRef } from '@decipad/computer';
+import { getExprRef } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
 import {
   MyElement,

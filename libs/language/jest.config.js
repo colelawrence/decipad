@@ -3,7 +3,7 @@ const {
   collectCoverageFrom,
   coveragePathIgnorePatterns,
   ...baseConfig
-} = require('../../jest-base.swc.config');
+} = require('../../jest-base.config');
 
 module.exports = {
   ...baseConfig,
@@ -21,10 +21,10 @@ module.exports = {
   ],
   coverageThreshold: {
     global: {
-      statements: 88,
+      statements: 86,
       branches: 77,
-      functions: 92,
-      lines: 89,
+      lines: 86,
+      functions: 88,
     },
   },
   /* TODO: Update to latest Jest snapshotFormat

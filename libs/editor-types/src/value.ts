@@ -166,7 +166,7 @@ export interface DeprecatedCodeBlockElement extends BaseElement {
 
 export interface StructuredInputElement extends BaseElement {
   type: typeof ELEMENT_STRUCTURED_IN;
-  unit?: string | Unit[];
+  unit?: string | Unit.Unit[];
   children: [StructuredVarnameElement, StructuredInputElementChildren];
 }
 

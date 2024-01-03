@@ -1,6 +1,10 @@
 import { getNodeString } from '@udecode/plate-common';
 import { ELEMENT_TABLE } from '@decipad/editor-types';
-import { Program, AST, statementToIdentifiedBlock } from '@decipad/computer';
+import {
+  Program,
+  AST,
+  statementToIdentifiedBlock,
+} from '@decipad/remote-computer';
 import { assertElementType } from '@decipad/editor-utils';
 import { weakMapMemoizeInteractiveElementOutput } from '../../utils/weakMapMemoizeInteractiveElementOutput';
 import { InteractiveLanguageElement } from '../../types';

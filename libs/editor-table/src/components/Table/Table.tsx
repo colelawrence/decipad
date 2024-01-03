@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { type Result } from '@decipad/remote-computer';
 import { DraggableBlock } from '@decipad/editor-components';
 import { useNodePath } from '@decipad/editor-hooks';
 import {

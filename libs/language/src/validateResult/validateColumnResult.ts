@@ -1,14 +1,14 @@
 import { getDefined } from '@decipad/utils';
-import { ResultGenerator } from '../interpreter/interpreter-types';
-import { SerializedTypes } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { Result, SerializedTypes } from '@decipad/language-types';
 import { Validate } from './types';
 
 export const validateColumnResult = (
   type: SerializedTypes.Column | SerializedTypes.MaterializedColumn,
-  value: ResultGenerator | null | undefined,
+  value: Result.ResultGenerator | null | undefined,
   getTrue: (v: boolean, message: string) => void,
   validate: Validate
-): ResultGenerator => {
+): Result.ResultGenerator => {
   if (Array.isArray(value)) {
     value.forEach((cell) => validate(type.cellType, cell));
     return value;

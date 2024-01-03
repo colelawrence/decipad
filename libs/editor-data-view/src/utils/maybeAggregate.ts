@@ -2,7 +2,7 @@ import {
   columnAggregationTypes,
   TotalAggregationExpressions,
 } from '@decipad/editor-table';
-import { SerializedType } from '@decipad/computer';
+import { type SerializedType } from '@decipad/remote-computer';
 import { TableCellType } from '@decipad/editor-types';
 import { AggregationKind } from '../types';
 

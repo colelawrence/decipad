@@ -3,7 +3,7 @@ import {
   IdentifiedResult,
   isBracketError,
   isSyntaxError,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import { docs } from '@decipad/routing';
 
 export const getSyntaxError = (line?: IdentifiedResult | IdentifiedError) => {

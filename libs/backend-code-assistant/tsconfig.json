@@ -6,11 +6,11 @@
   },
   "references": [
     { "path": "../editor-types" },
-    { "path": "../doc-verbalizer" },
+    { "path": "../utils" },
+    { "path": "../remote-computer" },
     { "path": "../backend-config" },
-    { "path": "../computer" },
-    { "path": "../backend-search" },
     { "path": "../editor-language-elements" },
-    { "path": "../format" }
+    { "path": "../doc-verbalizer" },
+    { "path": "../backend-search" }
   ]
 }

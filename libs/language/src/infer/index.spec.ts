@@ -1,15 +1,21 @@
+import omit from 'lodash.omit';
 import { dequal, getDefined, produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
-import omit from 'lodash.omit';
+// eslint-disable-next-line no-restricted-imports
 import {
   AST,
+  InferError,
+  Type,
+  Unit,
+  buildType as t,
+} from '@decipad/language-types';
+import {
+  Realm,
   inferBlock,
   parseBlockOrThrow,
   parseExpressionOrThrow,
-  Unit,
 } from '..';
 import { objectToMap, objectToTableType } from '../testUtils';
-import { buildType as t, InferError, Type } from '../type';
 import {
   as,
   assign,
@@ -31,7 +37,9 @@ import { makeContext } from './context';
 import { inferExpression, inferProgram, inferStatement } from './index';
 
 let nilCtx = makeContext();
-const degC: Unit = {
+let nilRealm = new Realm(nilCtx);
+
+const degC: Unit.Unit = {
   unit: 'celsius',
   exp: ONE,
   multiplier: ONE,
@@ -83,13 +91,14 @@ afterEach(() => {
     newContext.previous = nilCtx.previous;
   }
   nilCtx = makeContext();
+  nilRealm = new Realm(nilCtx);
 });
 
 it('infers literals', async () => {
-  expect(await inferExpression(nilCtx, l(1.1))).toEqual(t.number());
-  expect(await inferExpression(nilCtx, l(1))).toEqual(t.number());
-  expect(await inferExpression(nilCtx, l('one'))).toEqual(t.string());
-  expect(await inferExpression(nilCtx, l(true))).toEqual(t.boolean());
+  expect(await inferExpression(nilRealm, l(1.1))).toEqual(t.number());
+  expect(await inferExpression(nilRealm, l(1))).toEqual(t.number());
+  expect(await inferExpression(nilRealm, l('one'))).toEqual(t.string());
+  expect(await inferExpression(nilRealm, l(true))).toEqual(t.boolean());
 });
 
 describe('variables', () => {
@@ -109,48 +118,53 @@ describe('variables', () => {
 
 describe('ranges', () => {
   it('infers ranges', async () => {
-    expect(await inferExpression(nilCtx, range(1, 2))).toEqual(
+    expect(await inferExpression(nilRealm, range(1, 2))).toEqual(
       t.range(t.number())
     );
 
     expect(
-      (await inferExpression(nilCtx, range(false, true))).errorCause
+      (await inferExpression(nilRealm, range(false, true))).errorCause
     ).toBeDefined();
     expect(
-      (await inferExpression(nilCtx, range(range(1, 2), range(3, 4))))
+      (await inferExpression(nilRealm, range(range(1, 2), range(3, 4))))
         .errorCause
     ).toBeDefined();
     expect(
-      (await inferExpression(nilCtx, range('string', 'string2'))).errorCause
+      (await inferExpression(nilRealm, range('string', 'string2'))).errorCause
     ).toBeDefined();
   });
 
   it('infers ranges of dates', async () => {
     const r = range(date('2030-01', 'month'), date('2031-11', 'month'));
-    expect(await inferExpression(nilCtx, r)).toEqual(t.range(t.date('month')));
+    expect(await inferExpression(nilRealm, r)).toEqual(
+      t.range(t.date('month'))
+    );
 
     expect(
-      await inferExpression(nilCtx, c('contains', r, date('2020-01', 'month')))
+      await inferExpression(
+        nilRealm,
+        c('contains', r, date('2020-01', 'month'))
+      )
     ).toEqual(t.boolean());
   });
 
   it('infers range functions', async () => {
     expect(
-      await inferExpression(nilCtx, c('contains', range(1, 10), l(1)))
+      await inferExpression(nilRealm, c('contains', range(1, 10), l(1)))
     ).toEqual(t.boolean());
     expect(
-      (await inferExpression(nilCtx, c('contains', l(1), l(1)))).errorCause
+      (await inferExpression(nilRealm, c('contains', l(1), l(1)))).errorCause
     ).not.toBeNull();
   });
 });
 
 describe('dates', () => {
   it('infers dates', async () => {
-    expect(await inferExpression(nilCtx, date('2020-01', 'month'))).toEqual(
+    expect(await inferExpression(nilRealm, date('2020-01', 'month'))).toEqual(
       t.date('month')
     );
 
-    expect(await inferExpression(nilCtx, date('2020-01-15', 'day'))).toEqual(
+    expect(await inferExpression(nilRealm, date('2020-01-15', 'day'))).toEqual(
       t.date('day')
     );
   });
@@ -158,7 +172,7 @@ describe('dates', () => {
   it('infers date fns', async () => {
     expect(
       await inferExpression(
-        nilCtx,
+        nilRealm,
         c('==', date('2020-01', 'month'), date('2020-01', 'month'))
       )
     ).toEqual(t.boolean());
@@ -166,7 +180,7 @@ describe('dates', () => {
     expect(
       (
         await inferExpression(
-          nilCtx,
+          nilRealm,
           c('==', date('2020-01-01', 'day'), date('2020-01', 'month'))
         )
       ).errorCause
@@ -176,21 +190,21 @@ describe('dates', () => {
 
 describe('columns', () => {
   it('infers columns', async () => {
-    expect(await inferExpression(nilCtx, col(1, 2, 3))).toEqual(
+    expect(await inferExpression(nilRealm, col(1, 2, 3))).toEqual(
       t.column(t.number())
     );
 
-    expect(await inferExpression(nilCtx, col(c('+', l(1), l(1))))).toEqual(
+    expect(await inferExpression(nilRealm, col(c('+', l(1), l(1))))).toEqual(
       t.column(t.number())
     );
 
     const mixedCol = col(l(1), l('hi'));
-    expect(await inferExpression(nilCtx, mixedCol)).toMatchObject({
+    expect(await inferExpression(nilRealm, mixedCol)).toMatchObject({
       errorCause: InferError.expectedButGot(t.number(), t.string()),
     });
 
     const emptyCol = col();
-    expect(await inferExpression(nilCtx, emptyCol)).toMatchObject({
+    expect(await inferExpression(nilRealm, emptyCol)).toMatchObject({
       errorCause: InferError.unexpectedEmptyColumn(),
     });
   });
@@ -198,7 +212,7 @@ describe('columns', () => {
   it('does not mangle units', async () => {
     expect(
       await inferExpression(
-        nilCtx,
+        nilRealm,
         col(c('*', l(1), r('centimeter')), c('*', l(1), r('ft')))
       )
     ).toMatchObject({
@@ -207,10 +221,10 @@ describe('columns', () => {
   });
 
   it('column-ness is infectious', async () => {
-    expect(await inferExpression(nilCtx, c('+', col(1, 2, 3), l(1)))).toEqual(
+    expect(await inferExpression(nilRealm, c('+', col(1, 2, 3), l(1)))).toEqual(
       t.column(t.number())
     );
-    expect(await inferExpression(nilCtx, c('+', l(1), col(1, 2, 3)))).toEqual(
+    expect(await inferExpression(nilRealm, c('+', l(1), col(1, 2, 3)))).toEqual(
       t.column(t.number())
     );
   });
@@ -218,14 +232,14 @@ describe('columns', () => {
   it('infers columns of dates', async () => {
     expect(
       await inferExpression(
-        nilCtx,
+        nilRealm,
         col(date('2020-01', 'month'), date('2020-02', 'month'))
       )
     ).toEqual(t.column(t.date('month')));
   });
 
   it('can be reduced with the total function', async () => {
-    expect(await inferExpression(nilCtx, c('total', col(1, 2, 3)))).toEqual(
+    expect(await inferExpression(nilRealm, c('total', col(1, 2, 3)))).toEqual(
       t.number()
     );
   });
@@ -239,7 +253,7 @@ describe('error source tracking', () => {
     const program = block(badStatement, badStatement2);
 
     const ctx = makeContext();
-    await inferBlock(program, ctx);
+    await inferBlock(program, new Realm(ctx));
 
     // Both errors came from the same place
     expect(omit(badStatement.inferredType?.node, 'inferredType')).toEqual(
@@ -263,7 +277,7 @@ describe('tables', () => {
 
     expect(
       await inferStatement(
-        tableContext,
+        new Realm(tableContext),
         tableDef('Table', {
           Col1: col(1, 2, 3),
           Col2: c('+', n('ref', 'Col1'), l(2)),
@@ -299,7 +313,8 @@ describe('tables', () => {
       Col3: c('previous', l('hi')),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+    expect(await inferStatement(new Realm(makeContext()), table))
+      .toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -430,7 +445,8 @@ describe('tables', () => {
       Col2: col(1, 2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+    expect(await inferStatement(new Realm(makeContext()), table))
+      .toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -531,7 +547,8 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+    expect(await inferStatement(new Realm(makeContext()), table))
+      .toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -632,7 +649,8 @@ describe('tables', () => {
       Col2: l(2),
     });
 
-    expect(await inferStatement(makeContext(), table)).toMatchInlineSnapshot(`
+    expect(await inferStatement(new Realm(makeContext()), table))
+      .toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
         "atParentIndex": null,
@@ -732,7 +750,7 @@ describe('tables', () => {
       getDefined(
         (
           await inferStatement(
-            makeContext(),
+            new Realm(makeContext()),
             tableDef('Table', {
               Col1: prop(r('MissingVar'), 'nosuchprop'),
             })
@@ -763,7 +781,7 @@ describe('tables', () => {
   it('tracks the index through columns', async () => {
     expect(
       await inferStatement(
-        makeContext(),
+        new Realm(makeContext()),
         tableDef('Table', {
           Col1: col(1, 2, 3),
           Col2: l(2),
@@ -804,26 +822,21 @@ describe('Property access', () => {
       ['NotATable', t.number()],
     ],
   });
+  const realm = new Realm(scopeWithTable);
 
   it('Accesses columns in tables', async () => {
-    expect(
-      await inferExpression(scopeWithTable, prop('Table', 'Col'))
-    ).toMatchObject({
+    expect(await inferExpression(realm, prop('Table', 'Col'))).toMatchObject({
       cellType: { type: 'number' },
     });
 
-    expect(
-      await inferExpression(scopeWithTable, prop('Row', 'Name'))
-    ).toMatchObject({
+    expect(await inferExpression(realm, prop('Row', 'Name'))).toMatchObject({
       type: 'string',
     });
   });
 
   it('Property access errors', async () => {
-    expect(
-      (await inferExpression(scopeWithTable, prop('Table', 'A'))).errorCause
-        ?.spec
-    ).toMatchInlineSnapshot(`
+    expect((await inferExpression(realm, prop('Table', 'A'))).errorCause?.spec)
+      .toMatchInlineSnapshot(`
       Object {
         "columnName": "A",
         "errType": "unknown-table-column",
@@ -832,13 +845,12 @@ describe('Property access', () => {
     `);
 
     expect(
-      (await inferExpression(scopeWithTable, prop('NotATable', 'Col')))
-        .errorCause?.spec.errType
+      (await inferExpression(realm, prop('NotATable', 'Col'))).errorCause?.spec
+        .errType
     ).toEqual('expected-but-got');
 
     expect(
-      (await inferExpression(scopeWithTable, prop('MissingVar', 'Col')))
-        .errorCause?.spec
+      (await inferExpression(realm, prop('MissingVar', 'Col'))).errorCause?.spec
     ).toMatchInlineSnapshot(`
       Object {
         "errType": "expected-but-got",
@@ -899,19 +911,19 @@ describe('Property access', () => {
 describe('refs', () => {
   it('infers refs', async () => {
     const scopeWithVariable = makeContext();
+    const realm = new Realm(scopeWithVariable);
     scopeWithVariable.stack.set('N', t.number());
 
-    expect(await inferExpression(scopeWithVariable, r('N'))).toEqual(
-      t.number()
-    );
+    expect(await inferExpression(realm, r('N'))).toEqual(t.number());
   });
 
   it('References to automatically generated varnames which are missing, are errors', async () => {
     const scopeWithVariable = makeContext({
       autoGeneratedVarNames: new Set(['AutoGenerated']),
     });
+    const realm = new Realm(scopeWithVariable);
 
-    expect(await inferExpression(scopeWithVariable, r('AutoGenerated')))
+    expect(await inferExpression(realm, r('AutoGenerated')))
       .toMatchInlineSnapshot(`
       Type {
         "anythingness": false,
@@ -952,49 +964,53 @@ describe('refs', () => {
 });
 
 it('infers binops', async () => {
-  expect(await inferExpression(nilCtx, c('+', l(1), l(1)))).toEqual(t.number());
+  expect(await inferExpression(nilRealm, c('+', l(1), l(1)))).toEqual(
+    t.number()
+  );
 
   // These assertions will be different WRT integer/float casts eventually
-  expect(await inferExpression(nilCtx, c('+', l(0.1), l(0.2)))).toEqual(
+  expect(await inferExpression(nilRealm, c('+', l(0.1), l(0.2)))).toEqual(
     t.number()
   );
-  expect(await inferExpression(nilCtx, c('+', l(1.1), l(1)))).toEqual(
+  expect(await inferExpression(nilRealm, c('+', l(1.1), l(1)))).toEqual(
     t.number()
   );
-  expect(await inferExpression(nilCtx, c('+', l(1), l(1.1)))).toEqual(
+  expect(await inferExpression(nilRealm, c('+', l(1), l(1.1)))).toEqual(
     t.number()
   );
 
-  expect(await inferExpression(nilCtx, c('>', l(1), l(0.5)))).toEqual(
+  expect(await inferExpression(nilRealm, c('>', l(1), l(0.5)))).toEqual(
     t.boolean()
   );
-  expect(await inferExpression(nilCtx, c('==', l(1), l(0.5)))).toEqual(
+  expect(await inferExpression(nilRealm, c('==', l(1), l(0.5)))).toEqual(
     t.boolean()
   );
 
   const errorCtx = makeContext();
+  const errorRealm = new Realm(errorCtx);
   const badExpr = c('==', l(1), l(true));
 
-  expect((await inferExpression(errorCtx, badExpr)).errorCause).toEqual(
+  expect((await inferExpression(errorRealm, badExpr)).errorCause).toEqual(
     InferError.expectedButGot(t.number(), t.boolean())
   );
 });
 
 it('infers conditions', async () => {
-  expect(await inferExpression(nilCtx, c('if', l(true), l(1), l(1)))).toEqual(
+  expect(await inferExpression(nilRealm, c('if', l(true), l(1), l(1)))).toEqual(
     t.number()
   );
 
   expect(
-    await inferExpression(nilCtx, c('if', l(true), l('str'), l('other str')))
+    await inferExpression(nilRealm, c('if', l(true), l('str'), l('other str')))
   ).toEqual(t.string());
 
   const errorCtx = makeContext();
+  const errorRealm = new Realm(errorCtx);
   const badConditional = c('if', l(true), l('wrong!'), l(1));
 
-  expect((await inferExpression(errorCtx, badConditional)).errorCause).toEqual(
-    InferError.expectedButGot(t.string(), t.number())
-  );
+  expect(
+    (await inferExpression(errorRealm, badConditional)).errorCause
+  ).toEqual(InferError.expectedButGot(t.string(), t.number()));
 });
 
 describe('inferProgram', () => {
@@ -1026,17 +1042,18 @@ describe('inferProgram', () => {
 
 it('expands directives such as `as`', async () => {
   expect(
-    await inferExpression(nilCtx, as(l(3), ne(1, 'celsius')))
+    await inferExpression(nilRealm, as(l(3), ne(1, 'celsius')))
   ).toMatchObject(t.number([degC]));
 });
 
 describe('name usage tracking', () => {
   const track = async (source: string) => {
     const ctx = makeContext();
+    const realm = new Realm(ctx);
     ctx.usedNames = [];
 
     const program = parseBlockOrThrow(source);
-    await inferBlock(program, ctx);
+    await inferBlock(program, realm);
 
     return ctx.usedNames.map(([ns, name]) => (ns ? `${ns}.${name}` : name));
   };

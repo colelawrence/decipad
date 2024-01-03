@@ -1,11 +1,12 @@
 /* eslint-disable no-await-in-loop */
 import { PromiseOrType } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Type, buildType as t } from '@decipad/language-types';
 import pSeries from 'p-series';
-import { Context, inferExpression } from '../infer';
-import { AST } from '../parser';
-import { Type, buildType as t } from '../type';
+import { inferExpression } from '../infer';
 import { getIdentifierString } from '../utils';
 import { cleanInferred } from './cleanInferred';
+import { Realm } from '../interpreter';
 
 export const predicateSymbols = new Set(['rest', 'max', 'min']);
 
@@ -18,9 +19,10 @@ const isPredicate = (exp: AST.Expression): boolean => {
 
 const inferTieredDef = async (
   initialType: Type,
-  ctx: Context,
+  realm: Realm,
   def: AST.TieredDef
 ): Promise<Type> => {
+  const { inferContext: ctx } = realm;
   return ctx.stack.withPush(async () => {
     ctx.stack.set('tier', initialType);
     ctx.stack.set('slice', initialType);
@@ -29,22 +31,22 @@ const inferTieredDef = async (
     let conditionType: Type | undefined;
     if (!isPredicate(condition)) {
       conditionType = await (
-        await (await inferExpression(ctx, condition)).isScalar('number')
+        await (await inferExpression(realm, condition)).isScalar('number')
       ).sameAs(initialType);
     }
     if (conditionType?.errorCause) {
       return conditionType;
     }
-    return cleanInferred(await inferExpression(ctx, result));
+    return cleanInferred(await inferExpression(realm, result));
   });
 };
 
 export const inferTiered = async (
-  ctx: Context,
+  realm: Realm,
   node: AST.Tiered
 ): Promise<Type> => {
   const [initial, ...tieredDefs] = node.args;
-  const argType = await inferExpression(ctx, initial);
+  const argType = await inferExpression(realm, initial);
   if (argType.errorCause || argType.pending) {
     return argType;
   }
@@ -57,7 +59,9 @@ export const inferTiered = async (
     return t.impossible('tiered definitions are empty');
   }
   const types = await pSeries(
-    tieredDefs.map((def) => async () => inferTieredDef(argTypeNumber, ctx, def))
+    tieredDefs.map(
+      (def) => async () => inferTieredDef(argTypeNumber, realm, def)
+    )
   );
   return cleanInferred(
     await types.reduce<PromiseOrType<Type>>(

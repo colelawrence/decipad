@@ -16,7 +16,6 @@ describe('onDragSmartCellResultStarted', () => {
   let editor: any;
   let previewRef: any;
   let dragEvent: React.DragEvent;
-  let computer: any;
   let result: any;
 
   beforeEach(() => {
@@ -34,21 +33,16 @@ describe('onDragSmartCellResultStarted', () => {
         setDragImage: jest.fn(),
       },
     } as any;
-    computer = {
-      formatNumber: jest.fn(() => ({
-        asString: 'FormattedString',
-      })),
-    };
     result = {
-      type: 'number',
+      type: {
+        kind: 'number',
+      },
       value: new DeciNumber('2'),
     };
   });
 
   it('should set editor.dragging to "smart-ref"', () => {
-    onDragSmartCellResultStarted(editor)({ computer, expression: '', result })(
-      dragEvent
-    );
+    onDragSmartCellResultStarted(editor)({ expression: '', result })(dragEvent);
     expect(editor.dragging).toBe(DRAG_SMART_CELL_RESULT);
   });
 
@@ -58,12 +52,9 @@ describe('onDragSmartCellResultStarted', () => {
     const dragStartSmartRef = onDragSmartCellResultStarted(editor);
     dragStartSmartRef({
       expression: '2 + 2',
-      computer,
       result,
     })(dragEvent);
 
-    expect(dndPreviewActions.previewText).toHaveBeenCalledWith(
-      'FormattedString'
-    );
+    expect(dndPreviewActions.previewText).toHaveBeenCalledWith('2');
   });
 });

@@ -1,5 +1,5 @@
 import { ColumnLike, Comparable } from '@decipad/column';
-import { Result, SerializedType } from '@decipad/computer';
+import { Result, SerializedType } from '@decipad/remote-computer';
 import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { textify } from '@decipad/parse';

@@ -18,7 +18,7 @@ import {
   isElementOfType,
   isEntryOfType,
 } from '@decipad/editor-utils';
-import { tokenize } from '@decipad/computer';
+import { tokenize } from '@decipad/remote-computer';
 import {
   getChildren,
   getNodeString,

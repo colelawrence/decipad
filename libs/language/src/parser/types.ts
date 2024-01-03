@@ -1,4 +1,5 @@
-import * as AST from './ast-types';
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
 
 export interface ParserNode {
   type: string;

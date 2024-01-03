@@ -1,4 +1,4 @@
-import { tokenize } from '@decipad/computer';
+import { tokenize } from '@decipad/remote-computer';
 import {
   ELEMENT_PARAGRAPH,
   MARK_MAGICNUMBER,

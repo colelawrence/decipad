@@ -1,4 +1,3 @@
-import { Computer } from '@decipad/computer';
 import {
   ELEMENT_PARAGRAPH,
   ELEMENT_TABLE,
@@ -15,6 +14,7 @@ import {
   normalizeEditor,
 } from '@udecode/plate-common';
 import { createTablePlugin } from './createTablePlugin';
+import { getRemoteComputer } from '@decipad/remote-computer';
 
 let editor: TEditor;
 
@@ -30,7 +30,7 @@ jest.mock('nanoid', () => {
 });
 
 beforeEach(() => {
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   editor = createPlateEditor({
     plugins: [createTablePlugin(computer)],
   });

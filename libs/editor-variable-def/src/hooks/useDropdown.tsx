@@ -1,5 +1,5 @@
 import { ClientEventsContext } from '@decipad/client-events';
-import { ColumnDesc, materializeColumnDesc } from '@decipad/computer';
+import { ColumnDesc, materializeColumnDesc } from '@decipad/remote-computer';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
 import { DropdownElement, useTPlateEditorRef } from '@decipad/editor-types';
 import { formatResultPreview } from '@decipad/format';

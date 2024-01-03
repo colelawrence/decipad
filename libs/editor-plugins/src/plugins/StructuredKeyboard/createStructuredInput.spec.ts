@@ -1,4 +1,4 @@
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { createTPlateEditor, MyEditor } from '@decipad/editor-types';
 import { reset } from '@decipad/feature-flags';
 import { createStructuredKeyboard } from './createStructuredKeyboardPlugin';
@@ -6,7 +6,7 @@ import { getSmartRef, getStructuredCalc } from './test_utils';
 
 describe('Structured input basic keyboard shortcuts', () => {
   let editor: MyEditor;
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   beforeEach(() => {
     editor = createTPlateEditor({
       plugins: [createStructuredKeyboard(computer)],
@@ -259,7 +259,7 @@ describe('Structured input basic keyboard shortcuts', () => {
 
 describe('Works with smart refs', () => {
   let editor: MyEditor;
-  const computer = new Computer();
+  const computer = getRemoteComputer();
   beforeEach(() => {
     editor = createTPlateEditor({
       plugins: [createStructuredKeyboard(computer)],

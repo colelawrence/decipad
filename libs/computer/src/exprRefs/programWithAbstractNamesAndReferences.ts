@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { isAssignment } from '@decipad/language';
 import uniq from 'lodash.uniq';
 import {

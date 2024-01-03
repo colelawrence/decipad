@@ -1,4 +1,6 @@
-import { AST, parseStatementOrThrow } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST } from '@decipad/language-types';
+import { parseStatementOrThrow } from '..';
 import { mutateAst, isNode, isIdentifier } from '../utils';
 
 /**

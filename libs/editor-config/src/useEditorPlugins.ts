@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Computer } from '@decipad/computer';
+import { RemoteComputer } from '@decipad/remote-computer';
 import { MyPlatePlugin } from '@decipad/editor-types';
 import type { UserInteraction } from '@decipad/react-contexts';
 import { Subject } from 'rxjs';
@@ -8,7 +8,7 @@ import * as configuration from './configuration';
 
 export interface CreateEditorProps {
   readOnly: boolean;
-  computer?: Computer;
+  computer?: RemoteComputer;
   interactions: Subject<UserInteraction>;
 }
 

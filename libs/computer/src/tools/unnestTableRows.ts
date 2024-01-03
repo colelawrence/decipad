@@ -1,10 +1,11 @@
+// eslint-disable-next-line no-restricted-imports
 import {
   deserializeType,
   serializeType,
-  linearizeType,
+  Dimension,
+  Result,
   materializeOneResult,
 } from '@decipad/language';
-import type { Result } from '@decipad/language';
 import { getDefined, last } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
 import { getResultGenerator } from '../utils';
@@ -34,7 +35,7 @@ export async function* unnestTableRows(
   result: Result.Result<'materialized-column'>
 ): AsyncIterable<ResultAndLabelInfo> {
   const scalarType = serializeType(
-    getDefined(last(linearizeType(deserializeType(result.type))))
+    getDefined(last(Dimension.linearizeType(deserializeType(result.type))))
   );
 
   async function* recurseDimensions(

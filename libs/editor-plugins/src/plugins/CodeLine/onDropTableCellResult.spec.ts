@@ -22,7 +22,6 @@ const testStorage = new Map();
 describe('onDropTableCellResult', () => {
   let editor: MyEditor;
   let testEvent: DragEvent<HTMLDivElement>;
-  let computer: any;
   let result: any;
 
   beforeEach(() => {
@@ -59,9 +58,7 @@ describe('onDropTableCellResult', () => {
         focus: { path: [0, 0], offset: 0 },
       });
 
-      onDragStartTableCellResult(editor, {
-        computer,
-      })(
+      onDragStartTableCellResult(editor)(
         {
           columnName: 'col',
           tableName: 'table',
@@ -98,9 +95,7 @@ describe('onDropTableCellResult', () => {
         focus: { path: [0, 0], offset: 2 },
       });
 
-      onDragStartTableCellResult(editor, {
-        computer,
-      })(
+      onDragStartTableCellResult(editor)(
         {
           columnName: 'col',
           tableName: 'table',
@@ -138,7 +133,7 @@ describe('onDropTableCellResult', () => {
         focus: { path: [0, 0], offset: 0 },
       });
 
-      onDragStartTableCellResult(editor, { computer })(
+      onDragStartTableCellResult(editor)(
         {
           columnName: 'col',
           tableName: 'table',

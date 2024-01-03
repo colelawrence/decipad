@@ -1,16 +1,9 @@
 import React from 'react';
-import Desktop from '@theme-original/BlogSidebar/Desktop';
-
-import { useBlogPost } from '@docusaurus/theme-common/internal';
-
-import {
-  PageMetadata,
-  HtmlClassNameProvider,
-  ThemeClassNames,
-} from '@docusaurus/theme-common';
 
 import clsx from 'clsx';
+// eslint-disable-next-line import/no-unresolved
 import Link from '@docusaurus/Link';
+// eslint-disable-next-line import/no-unresolved
 import { translate } from '@docusaurus/Translate';
 
 import styles from './styles.module.css';
@@ -33,32 +26,30 @@ export default function DesktopWrapper(props) {
           </div>
 
           <ul className={clsx(styles.sidebarItemList, 'clean-list')}>
-            {props.sidebar.items
-              .slice(0, maxPosts)
-              .map((item) => (
-                <li key={item.permalink} className={styles.sidebarItem}>
-                  <Link
-                    isNavLink
-                    to={item.permalink}
-                    className={styles.sidebarItemLink}
-                    activeClassName={styles.sidebarItemLinkActive}
+            {props.sidebar.items.slice(0, maxPosts).map((item) => (
+              <li key={item.permalink} className={styles.sidebarItem}>
+                <Link
+                  isNavLink
+                  to={item.permalink}
+                  className={styles.sidebarItemLink}
+                  activeClassName={styles.sidebarItemLinkActive}
+                >
+                  {item.title}
+                  <br></br>
+                  <time
+                    dateTime={item.date}
+                    itemProp="datePublished"
+                    style={{
+                      color: 'darkgray',
+                      fontSize: '0.8em',
+                      fontWeight: '400',
+                    }}
                   >
-                    {item.title}
-                    <br></br>
-                    <time
-                      dateTime={item.date}
-                      itemProp="datePublished"
-                      style={{
-                        color: 'darkgray',
-                        fontSize: '0.8em',
-                        fontWeight: '400',
-                      }}
-                    >
-                      {item.formattedDate}
-                    </time>
-                  </Link>
-                </li>
-              ))}
+                    {item.formattedDate}
+                  </time>
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </aside>

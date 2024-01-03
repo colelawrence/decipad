@@ -1,6 +1,6 @@
 import { useComputer } from '@decipad/react-contexts';
 import { useEffect, useMemo, useState } from 'react';
-import { isColumn, materializeResult } from '@decipad/computer';
+import { isColumn, materializeResult } from '@decipad/remote-computer';
 import { Column } from '../../types';
 import { concatMap } from 'rxjs';
 

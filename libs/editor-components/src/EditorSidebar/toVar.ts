@@ -1,4 +1,4 @@
-import { AutocompleteName } from '@decipad/computer';
+import { AutocompleteName } from '@decipad/remote-computer';
 import { getDefined } from '@decipad/utils';
 import { CatalogItemVar } from './types';
 

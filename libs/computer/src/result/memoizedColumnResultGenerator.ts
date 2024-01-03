@@ -1,12 +1,13 @@
-import type { Interpreter, Result } from '@decipad/language';
+// eslint-disable-next-line no-restricted-imports
+import type { Result } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 
 const keyOf = (start: number, end: number) =>
   `${start.toString()}-${end.toString()}`;
 
 export const memoizedColumnResultGenerator = (
-  gen: Interpreter.ResultGenerator
-): Interpreter.ResultGenerator => {
+  gen: Result.ResultGenerator
+): Result.ResultGenerator => {
   const memo = new Map<string, Array<Result.OneResult>>();
   return async function* generate(start = 0, end = Infinity) {
     if (end < start) {

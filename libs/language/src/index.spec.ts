@@ -1,7 +1,16 @@
 // E2e tests
 import { N, setupDeciNumberSnapshotSerializer } from '@decipad/number';
 import { produce } from '@decipad/utils';
-import { date, parseUTCDate } from './date';
+// eslint-disable-next-line no-restricted-imports
+import {
+  Time,
+  Type,
+  materializeOneResult,
+  buildType as t,
+  serializeType,
+  InferError,
+} from '@decipad/language-types';
+import { date } from './date';
 import { runCode } from './run';
 import {
   objectToTableType,
@@ -9,10 +18,7 @@ import {
   runAST,
   runCodeForVariables,
 } from './testUtils';
-import { buildType as t, InferError, serializeType, Type } from './type';
-import { number } from './type/buildType';
 import { block, c, n, U, u } from './utils';
-import { materializeOneResult } from './utils/materializeOneResult';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -1390,7 +1396,7 @@ describe('Dates', () => {
         Time = date(2020-10-10 10:30)
       `)
     ).toMatchObject({
-      value: parseUTCDate('2020-10-10T10:30'),
+      value: Time.parseUTCDate('2020-10-10T10:30'),
     });
   });
 
@@ -1719,7 +1725,7 @@ describe('number units work together', () => {
   it('calculates number from time quantity', async () => {
     expect(await runCode(`(date(2021) - date(2020)) as years`)).toMatchObject({
       value: N(1),
-      type: number(U('years')),
+      type: t.number(U('years')),
     });
   });
 
@@ -1757,7 +1763,7 @@ describe('number units work together', () => {
   it('calculates number from time quantity decade', async () => {
     expect(await runCode(`(date(2040) - date(2030)) as decade`)).toMatchObject({
       value: N(1),
-      type: number(U('decade')),
+      type: t.number(U('decade')),
     });
   });
 
@@ -1765,7 +1771,7 @@ describe('number units work together', () => {
     expect(await runCode(`(date(2130) - date(2030)) as century`)).toMatchObject(
       {
         value: N(1),
-        type: number(U('century')),
+        type: t.number(U('century')),
       }
     );
   });
@@ -1775,7 +1781,7 @@ describe('number units work together', () => {
       await runCode(`(date(4000) - date(1000)) as millennia`)
     ).toMatchObject({
       value: N(3),
-      type: number(U('millennia')),
+      type: t.number(U('millennia')),
     });
   });
 
@@ -1784,7 +1790,7 @@ describe('number units work together', () => {
       await runCode(`(date(8000) - date(1000)) as millenniums`)
     ).toMatchObject({
       value: N(7),
-      type: number(U('millenniums')),
+      type: t.number(U('millenniums')),
     });
   });
 

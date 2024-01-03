@@ -1,14 +1,20 @@
 import { getOnly } from '@decipad/utils';
 import { all, map } from '@decipad/generator-utils';
-import { AST, Context } from '..';
-import { getCardinality } from '../dimtools/common';
+// eslint-disable-next-line no-restricted-imports
+import {
+  AST,
+  Dimension,
+  InferError,
+  Type,
+  Value,
+  compare,
+  buildType as t,
+} from '@decipad/language-types';
+import { Context } from '..';
 import { inferExpression, logRetrievedName } from '../infer';
 import { evaluate, Realm } from '../interpreter';
-import { buildType as t, Type, InferError } from '../type';
 import { getIdentifierString, getOfType } from '../utils';
-import type { NumberValue, Value } from '../value';
 import { evaluateVariable, getIndexName } from './getVariable';
-import { compare } from '../compare';
 import { generatorOfPromisesToGenerator } from '../../../generator-utils/src/generatorOfPromisesToGenerator';
 
 /** Read inside the square brackets */
@@ -45,23 +51,28 @@ export const matchTargets = async (
     // VariableName[DimensionName == "Dimension item"]
 
     // We know these are comparable
-    const compareScalars = async (a: Value, b: Value) =>
+    const compareScalars = async (a: Value.Value, b: Value.Value) =>
       compare(
-        await (a as NumberValue).getData(),
-        await (b as NumberValue).getData()
+        await (a as Value.NumberValue).getData(),
+        await (b as Value.NumberValue).getData()
       );
 
     let length = 0;
     const matcher = generatorOfPromisesToGenerator(
-      map<Value, Promise<boolean>>(dimension.values(), async (dimItem) => {
-        const result =
-          (await compareScalars(dimItem, await evaluate(realm, needleExp))) ===
-          0;
-        if (result) {
-          length++;
+      map<Value.Value, Promise<boolean>>(
+        dimension.values(),
+        async (dimItem) => {
+          const result =
+            (await compareScalars(
+              dimItem,
+              await evaluate(realm, needleExp)
+            )) === 0;
+          if (result) {
+            length++;
+          }
+          return result;
         }
-        return result;
-      })
+      )
     );
     const matches = await all(matcher);
 
@@ -70,9 +81,10 @@ export const matchTargets = async (
 };
 
 export const inferMatchers = async (
-  ctx: Context,
+  realm: Realm,
   matchers: AST.MatrixMatchers
 ): Promise<Type> => {
+  const { inferContext: ctx } = realm;
   const matcher = getOnly(matchers.args);
   const [dimName, needleExp] = readSimpleMatchers(ctx, matcher);
 
@@ -83,7 +95,7 @@ export const inferMatchers = async (
     return t.impossible(InferError.missingVariable(dimName));
   }
 
-  if (getCardinality(dimension) !== 2 && !getIndexName(dimension)) {
+  if (Dimension.getCardinality(dimension) !== 2 && !getIndexName(dimension)) {
     return t.impossible(
       InferError.expectedTableAndAssociatedColumn(dimension, undefined)
     );
@@ -94,8 +106,8 @@ export const inferMatchers = async (
     return (await dimension.reduced()).isPrimitive();
   } else {
     // VariableName[DimensionName == "Needle"]
-    return (await (await inferExpression(ctx, needleExp)).isPrimitive()).sameAs(
-      dimension.reduced()
-    );
+    return (
+      await (await inferExpression(realm, needleExp)).isPrimitive()
+    ).sameAs(dimension.reduced());
   }
 };

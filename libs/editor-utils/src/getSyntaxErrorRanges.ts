@@ -1,4 +1,8 @@
-import { isSyntaxError, Parser, hasBracketError } from '@decipad/computer';
+import {
+  isSyntaxError,
+  Parser,
+  hasBracketError,
+} from '@decipad/remote-computer';
 import { Path } from 'slate';
 import { DECORATE_SYNTAX_ERROR } from '@decipad/editor-types';
 import { SyntaxErrorAnnotation } from './SyntaxErrorAnnotation';

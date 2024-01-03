@@ -1,27 +1,14 @@
 import pSeries from 'p-series';
-import { AST, prettyPrintAST } from '..';
-import { callBuiltin, getConstantByName } from '../builtins';
-import {
-  getOfType,
-  getDefined,
-  getIdentifierString,
-  multiplyMultipliers,
-} from '../utils';
+// eslint-disable-next-line no-restricted-imports
+import { callBuiltin, getConstantByName } from '@decipad/language-builtins';
+// eslint-disable-next-line no-restricted-imports
+import { AST, RuntimeError, Unit, Value } from '@decipad/language-types';
+import { prettyPrintAST } from '..';
+import { getOfType, getIdentifierString } from '../utils';
 import { getDateFromAstForm } from '../date';
 import { expandDirectiveToValue } from '../directives';
-
 import { Realm } from './Realm';
-import {
-  Scalar,
-  Range,
-  DateValue,
-  Column,
-  Value,
-  UnknownValue,
-  columnFromDateSequence,
-  columnFromSequence,
-  defaultValue,
-} from '../value';
+import { columnFromDateSequence, columnFromSequence } from '../value';
 import { evaluateTable, getProperty } from '../tables/evaluate';
 import { getDateSequenceIncrement } from '../infer/sequence';
 import { isPreviousRef } from '../previous-ref';
@@ -30,13 +17,11 @@ import { evaluateCategories } from '../categories';
 import { evaluateColumnAssign } from '../tables/column-assign';
 import { evaluateMatch } from '../match/evaluateMatch';
 import { evaluateTiered } from '../tiered/evaluateTiered';
-import { RuntimeError } from '.';
 import { resultToValue } from '../result';
 import { getDependencies } from '../dependencies/getDependencies';
 import { CURRENT_COLUMN_SYMBOL, usingPrevious } from './previous';
-import { sortValue } from './sortValue';
-import { Expression } from '../parser/ast-types';
 import { isPrevious } from '../utils/isPrevious';
+import { getDefined } from '@decipad/utils';
 
 // Gets a single value from an expanded AST.
 
@@ -45,25 +30,25 @@ import { isPrevious } from '../utils/isPrevious';
 async function internalEvaluate(
   realm: Realm,
   node: AST.Statement
-): Promise<Value> {
+): Promise<Value.Value> {
   switch (node.type) {
     case 'noop': {
-      return UnknownValue;
+      return Value.UnknownValue;
     }
     case 'literal': {
       switch (node.args[0]) {
         case 'number': {
           const type = realm.maybeGetTypeAt(node);
           if (type && type.unit) {
-            return Scalar.fromValue(
-              multiplyMultipliers(type.unit, node.args[1])
+            return Value.Scalar.fromValue(
+              Unit.multiplyMultipliers(type.unit, node.args[1])
             );
           }
-          return Scalar.fromValue(node.args[1]);
+          return Value.Scalar.fromValue(node.args[1]);
         }
         case 'string':
         case 'boolean': {
-          return Scalar.fromValue(node.args[1]);
+          return Value.Scalar.fromValue(node.args[1]);
         }
         default: {
           throw new Error(
@@ -93,17 +78,17 @@ async function internalEvaluate(
       const type = realm.getTypeAt(node);
       const value = realm.stack.get(identifier);
       if (value != null) {
-        return sortValue(type, value)[1];
+        return Value.sortValue(type, value)[1];
       }
 
-      return Scalar.fromValue(multiplyMultipliers(type.unit ?? []));
+      return Value.Scalar.fromValue(Unit.multiplyMultipliers(type.unit ?? []));
     }
     case 'externalref': {
       const data = realm.externalData.get(node.args[0]);
       if (data) {
         return resultToValue(data);
       }
-      return UnknownValue;
+      return Value.UnknownValue;
     }
     case 'function-call': {
       const funcName = getIdentifierString(node.args[0]);
@@ -121,7 +106,7 @@ async function internalEvaluate(
             'no previous value'
           );
         }
-        const previousExpression: Expression = funcArgs[1];
+        const previousExpression: AST.Expression = funcArgs[1];
 
         return usingPrevious(realm, previousExpression, evaluate);
       } else if (realm.functions.has(funcName)) {
@@ -161,7 +146,7 @@ async function internalEvaluate(
           )
         );
         const returnType = getDefined(node.inferredType);
-        return callBuiltin(realm, funcName, args, argTypes, returnType);
+        return callBuiltin(realm.utils, funcName, args, argTypes, returnType);
       }
     }
     case 'range': {
@@ -169,13 +154,13 @@ async function internalEvaluate(
         node.args.map((arg) => async () => evaluate(realm, getDefined(arg)))
       );
 
-      return Range.fromBounds(start, end);
+      return Value.Range.fromBounds(start, end);
     }
     case 'sequence': {
       const start = await evaluate(realm, getDefined(node.args[0]));
       const end = await evaluate(realm, getDefined(node.args[1]));
 
-      if (start instanceof DateValue && end instanceof DateValue) {
+      if (start instanceof Value.DateValue && end instanceof Value.DateValue) {
         const startUnit = realm.getTypeAt(node.args[0]);
         if (!startUnit.date) {
           throw new Error(
@@ -204,16 +189,16 @@ async function internalEvaluate(
     }
     case 'date': {
       const [dateMs, specificity] = getDateFromAstForm(node.args);
-      return DateValue.fromDateAndSpecificity(dateMs, specificity);
+      return Value.DateValue.fromDateAndSpecificity(dateMs, specificity);
     }
     case 'column': {
-      const values: Value[] = await pSeries(
+      const values: Value.Value[] = await pSeries(
         node.args[0].args.map((v) => async () => evaluate(realm, v))
       );
 
-      return Column.fromValues(
+      return Value.Column.fromValues(
         values,
-        defaultValue(getDefined(node.inferredType))
+        Value.defaultValue(getDefined(node.inferredType))
       );
     }
     case 'table': {
@@ -242,7 +227,7 @@ async function internalEvaluate(
 
       // Typecheck ensures this isn't used as a result
       // but we want to always return something
-      return UnknownValue;
+      return Value.UnknownValue;
     }
     case 'directive': {
       return expandDirectiveToValue(realm, node);
@@ -259,7 +244,7 @@ async function internalEvaluate(
 export async function evaluate(
   realm: Realm,
   node: AST.Statement
-): Promise<Value> {
+): Promise<Value.Value> {
   realm.incrementStatsCounter('evaluateCount');
   const cachedValue = node.cacheKey
     ? realm.expressionCache.getCacheResult(node.cacheKey)
@@ -287,7 +272,7 @@ export async function evaluateStatement(
 export async function evaluateBlock(
   realm: Realm,
   block: AST.Block
-): Promise<Value> {
+): Promise<Value.Value> {
   let previous;
   for (const statement of block.args) {
     // eslint-disable-next-line no-await-in-loop

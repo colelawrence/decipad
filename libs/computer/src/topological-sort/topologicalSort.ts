@@ -1,4 +1,5 @@
 import { getDefined } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
 import { isAssignment } from '@decipad/language';
 import { IdentifiedBlock, IdentifiedError, ProgramBlock } from '../types';
 import { dependencies, findAllTables } from '../dependencies';

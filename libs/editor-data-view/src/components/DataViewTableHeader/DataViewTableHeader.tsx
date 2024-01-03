@@ -1,4 +1,4 @@
-import { Result } from '@decipad/computer';
+import { Result } from '@decipad/remote-computer';
 import { AnyElement, useTEditorRef } from '@decipad/editor-types';
 import {
   CodeResult,

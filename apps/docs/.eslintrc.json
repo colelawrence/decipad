@@ -1,6 +1,6 @@
 {
   "extends": ["../../libs/eslint-config-decipad/react"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "build/*", ".docusaurus/*", "node_modules/*"],
   "rules": {
     // TODO re-enable when using Yarn workspaces
     "import/no-extraneous-dependencies": "off"

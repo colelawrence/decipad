@@ -1,13 +1,11 @@
 import { useMemo } from 'react';
-import { useComputer } from '@decipad/react-contexts';
 import type { CellPlugin } from '../types';
 import { matchCellKind } from '../matchCellKind';
+import { formatUnit } from '@decipad/format';
 
 export const unitPlugin: CellPlugin = {
   query: matchCellKind('number'),
   useTransformValue: (value, { cellType }) => {
-    const computer = useComputer();
-
     const unit: string | undefined = useMemo(() => {
       if (
         cellType?.kind === 'number' &&
@@ -15,7 +13,7 @@ export const unitPlugin: CellPlugin = {
         value &&
         !Number.isNaN(Number(value))
       ) {
-        return computer.formatUnit(cellType.unit);
+        return formatUnit('en-US', cellType.unit);
       }
 
       if (cellType?.kind === 'constant') {
@@ -23,7 +21,7 @@ export const unitPlugin: CellPlugin = {
       }
 
       return undefined;
-    }, [cellType, value, computer]);
+    }, [cellType, value]);
 
     return unit ? `${value} ${unit}` : value;
   },

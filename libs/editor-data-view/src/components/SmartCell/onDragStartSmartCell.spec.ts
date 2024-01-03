@@ -32,13 +32,10 @@ describe('onDragStartSmartCell', () => {
         setDragImage: jest.fn(),
       },
     } as any;
-    computer = {
-      formatNumber: jest.fn(() => ({
-        asString: 'FormattedString',
-      })),
-    };
     result = {
-      type: 'number',
+      type: {
+        kind: 'number',
+      },
       value: new DeciNumber('2'),
     };
   });
@@ -60,8 +57,6 @@ describe('onDragStartSmartCell', () => {
       result,
     })(dragEvent);
 
-    expect(dndPreviewActions.previewText).toHaveBeenCalledWith(
-      'FormattedString'
-    );
+    expect(dndPreviewActions.previewText).toHaveBeenCalledWith('2');
   });
 });

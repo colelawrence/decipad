@@ -13,7 +13,11 @@ import {
 import { Plate, getNodeString } from '@udecode/plate-common';
 import { useState } from 'react';
 
-import { AST, parseSimpleValueUnit, prettyPrintAST } from '@decipad/computer';
+import {
+  AST,
+  parseSimpleValueUnit,
+  prettyPrintAST,
+} from '@decipad/remote-computer';
 import { useComputer } from '@decipad/react-contexts';
 import { timeout } from '@decipad/utils';
 import { act } from 'react-dom/test-utils';

@@ -6,9 +6,6 @@ const RenderRectangleAnnotation = ({
   isHovered,
   handleNumberMouseEnter,
   handleNumberMouseLeave,
-  circleColor,
-  circleHoverColor,
-  circleTextColor,
 }) => {
   const { xPercent, yPercent, value, tooltip, widthPercent, heightPercent } =
     number;
@@ -203,7 +200,6 @@ const BottomNavigationArrow = ({
 
 const DescriptionList = ({
   steps,
-  hoveredNumber,
   handleNumberMouseEnter,
   handleNumberMouseLeave,
 }) => {
@@ -253,11 +249,9 @@ const DescriptionList = ({
 };
 
 const ImageAnnotation = ({
-  src,
   caption,
   steps,
   isOnlyOnHover,
-  noNumbers,
   firstSelectedByDefault,
   navigationButtons,
   noImage,

@@ -3,23 +3,22 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import type {
   IdentifiedError,
   IdentifiedResult,
-  AST,
   AutocompleteName,
-  SerializedTypes,
   BlockDependents,
-  Result,
   ColumnDesc,
   NotebookResults,
   ComputeRequest,
-  Unit,
   DimensionExplanation,
   Parseable,
   ParseableDate,
+  ErrSpec,
+  SerializedType,
+  Result,
+  Unit,
+  AST,
+  ProgramBlock,
+  ComputeRequestWithExternalData,
 } from '@decipad/computer';
-import { DeciNumberRep } from '@decipad/format';
-import DeciNumber from '@decipad/number';
-import { ProgramBlock } from '../../computer/src/types';
-import { ErrSpec, SerializedType } from '@decipad/language';
 
 export type { ErrSpec };
 
@@ -141,6 +140,7 @@ export interface RemoteComputer {
 
   // --- symbols
   getSetOfNamesDefined$: ListenerHelper<[], Set<string>>;
+  getNamesDefined(inBlockId?: string): AutocompleteName[];
   getNamesDefined$: ListenerHelper<
     [inBlockId?: string | undefined],
     AutocompleteName[]
@@ -173,11 +173,12 @@ export interface RemoteComputer {
     string | undefined
   >;
 
-  // --------------- utils --------------//
-  formatNumber(type: SerializedTypes.Number, value: DeciNumber): DeciNumberRep;
-  formatUnit(unit: Unit[], value?: DeciNumber): string;
-  formatError(error: ErrSpec): string;
-  getUnitFromText(text: string): Promise<Unit[] | null>;
+  // immediate compute
+  computeRequest(
+    req: ComputeRequestWithExternalData
+  ): Promise<NotebookResults | null>;
+
+  getUnitFromText(text: string): Promise<Unit.Unit[] | null>;
   stats: ComputerStats;
 
   // flush

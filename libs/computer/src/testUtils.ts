@@ -1,16 +1,17 @@
 import stringify from 'json-stringify-safe';
-import { formatError } from '@decipad/format';
+// eslint-disable-next-line no-restricted-imports
 import {
+  AST,
+  Result,
   astNode,
   parseBlock,
   parseStatementOrThrow,
   validateResult,
 } from '@decipad/language';
-import DeciNumber from '@decipad/number';
+import DeciNumber, { N } from '@decipad/number';
 import { getOnly, timeout } from '@decipad/utils';
 import { all } from '@decipad/generator-utils';
-import { Result } from 'libs/language/src/result';
-import { AST, Computer, Program, prettyPrintAST } from '.';
+import { Computer, Program, prettyPrintAST } from '.';
 import {
   ComputerProgram,
   IdentifiedBlock,
@@ -25,6 +26,31 @@ import {
   getResultGenerator,
 } from './utils';
 import { programToComputerProgram } from './utils/programToComputerProgram';
+import { Unit } from '@decipad/language-units';
+import { formatError } from './format/formatError';
+
+export function u(
+  unit: string | Unit.Unit,
+  opts: Partial<Unit.Unit> = {}
+): Unit.Unit {
+  if (typeof unit === 'string') {
+    unit = {
+      unit,
+      exp: N(1),
+      multiplier: N(1),
+      known: true,
+    };
+  }
+  return { ...unit, ...opts };
+}
+
+export function U(
+  units: string | Unit.Unit | Unit.Unit[],
+  opts?: Partial<Unit.Unit>
+): Unit.Unit[] {
+  const unitsArr = Array.isArray(units) ? units : [units];
+  return unitsArr.map((unit) => u(unit, opts));
+}
 
 export const testProgramBlocks = (
   ...blocks: (AST.Block | string)[]
@@ -152,7 +178,9 @@ export function getIdentifiedBlock(
 }
 
 export const simplifyInBlockResults = async (results: IdentifiedResult[]) => {
-  const numberToString = async (value: Result['value']): Promise<string> => {
+  const numberToString = async (
+    value: Result.Result['value']
+  ): Promise<string> => {
     if (Array.isArray(value))
       return `[${(await Promise.all(value.map(numberToString))).join(', ')}]`;
     if (typeof value === 'function') {

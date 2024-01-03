@@ -1,11 +1,11 @@
 import {
   buildType as t,
-  inverseExponent,
   serializeType,
-} from '@decipad/language';
+  Unit,
+  Format,
+} from '@decipad/remote-computer';
 import { produce } from '@decipad/utils';
 import { formatType } from './formatType';
-import { formatTypeToBasicString } from './formatTypeBasic';
 import { u, U } from './testUtils';
 
 const locale = 'en-US';
@@ -30,7 +30,7 @@ it('type can be stringified', () => {
   expect(
     formatType(
       locale,
-      serializeType(t.number([meter, inverseExponent(second)]))
+      serializeType(t.number([meter, Unit.inverseExponent(second)]))
     )
   ).toEqual('meters per second');
 
@@ -80,33 +80,36 @@ it('annotates symbol if present', () => {
 
 it('can be stringified in basic form', () => {
   expect(
-    formatTypeToBasicString(
+    Format.formatTypeToBasicString(
       locale,
       serializeType(t.functionPlaceholder('fname', 2))
     )
   ).toEqual('function');
-  expect(formatTypeToBasicString(locale, serializeType(t.number()))).toEqual(
-    'number'
-  );
   expect(
-    formatTypeToBasicString(locale, serializeType(t.number([meter])))
+    Format.formatTypeToBasicString(locale, serializeType(t.number()))
+  ).toEqual('number');
+  expect(
+    Format.formatTypeToBasicString(locale, serializeType(t.number([meter])))
   ).toEqual('meters');
   expect(
-    formatTypeToBasicString(locale, serializeType(t.number(U([meter, second]))))
+    Format.formatTypeToBasicString(
+      locale,
+      serializeType(t.number(U([meter, second])))
+    )
   ).toEqual('meters·second');
   expect(
-    formatTypeToBasicString(
+    Format.formatTypeToBasicString(
       locale,
-      serializeType(t.number([meter, inverseExponent(second)]))
+      serializeType(t.number([meter, Unit.inverseExponent(second)]))
     )
   ).toEqual('meters per second');
 
   expect(
-    formatTypeToBasicString(locale, serializeType(t.range(t.number())))
+    Format.formatTypeToBasicString(locale, serializeType(t.range(t.number())))
   ).toEqual('range');
 
   expect(
-    formatTypeToBasicString(locale, serializeType(t.date('month')))
+    Format.formatTypeToBasicString(locale, serializeType(t.date('month')))
   ).toEqual('date(month)');
 
   const table = serializeType(
@@ -115,18 +118,18 @@ it('can be stringified in basic form', () => {
       columnNames: ['Col1', 'Col2'],
     })
   );
-  expect(formatTypeToBasicString(locale, table)).toEqual('table');
+  expect(Format.formatTypeToBasicString(locale, table)).toEqual('table');
 
   const row = serializeType(
     t.row([t.number([meter]), t.string()], ['Col1', 'Col2'])
   );
-  expect(formatTypeToBasicString(locale, row)).toEqual('row');
+  expect(Format.formatTypeToBasicString(locale, row)).toEqual('row');
 
   const col = serializeType(t.column(t.string()));
-  expect(formatTypeToBasicString(locale, col)).toEqual('column');
+  expect(Format.formatTypeToBasicString(locale, col)).toEqual('column');
 
   expect(() =>
-    formatTypeToBasicString(
+    Format.formatTypeToBasicString(
       locale,
       serializeType(t.number().withErrorCause(''))
     )

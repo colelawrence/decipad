@@ -1235,10 +1235,8 @@ export const IconBeach = (
 );
 
 export const Card = ({
-  children,
   title,
   description,
-  img,
   img2,
   notebook,
   icon,

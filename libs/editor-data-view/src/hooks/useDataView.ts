@@ -1,4 +1,4 @@
-import { AutocompleteName, SerializedType } from '@decipad/computer';
+import { AutocompleteName, SerializedType } from '@decipad/remote-computer';
 import { useEditorChange } from '@decipad/editor-hooks';
 import {
   DataViewElement,

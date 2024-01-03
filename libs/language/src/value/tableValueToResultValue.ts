@@ -1,7 +1,10 @@
-import { Table } from '.';
-import { Interpreter } from '../interpreter';
-import { columnValueToResultValue } from './columnValueToResultValue';
+// eslint-disable-next-line no-restricted-imports
+import {
+  Result,
+  Value,
+  columnValueToResultValue,
+} from '@decipad/language-types';
 
 export const tableValueToTableResultValue = (
-  v: Table
-): Interpreter.ResultTable => v.columns.map(columnValueToResultValue);
+  v: Value.Table
+): Result.ResultTable => v.columns.map(columnValueToResultValue);

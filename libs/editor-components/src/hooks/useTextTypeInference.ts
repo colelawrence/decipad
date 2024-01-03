@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { dequal } from '@decipad/utils';
 import { findNodePath, getNode, getNodeString } from '@udecode/plate-common';
 import { inferType } from '@decipad/parse';
-import { SerializedType } from '@decipad/computer';
+import { type SerializedType } from '@decipad/remote-computer';
 import { useEditorChangeCallback } from '@decipad/editor-hooks';
 
 export const useTextTypeInference = (

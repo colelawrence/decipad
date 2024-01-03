@@ -2,7 +2,7 @@ import type {
   IdentifiedError,
   IdentifiedResult,
   SimpleValue,
-} from '@decipad/computer';
+} from '@decipad/remote-computer';
 import {
   CodeLineV2Element,
   ELEMENT_CODE_LINE_V2,
@@ -108,9 +108,8 @@ export const CodeLineV2: PlateComponent = ({
   const isReadOnly = useIsEditorReadOnly();
 
   const handleDragStartCell = useMemo(
-    () =>
-      isReadOnly ? undefined : onDragStartTableCellResult(editor, { computer }),
-    [computer, editor, isReadOnly]
+    () => (isReadOnly ? undefined : onDragStartTableCellResult(editor)),
+    [editor, isReadOnly]
   );
 
   const handleDragStartInlineResult = useMemo(
@@ -119,10 +118,9 @@ export const CodeLineV2: PlateComponent = ({
         ? undefined
         : onDragStartInlineResult(editor, {
             element,
-            computer,
             result: lineResult?.result as any,
           }),
-    [computer, editor, element, isReadOnly, lineResult]
+    [editor, element, isReadOnly, lineResult]
   );
 
   const {
@@ -260,10 +258,9 @@ export const CodeLineV2Varname: PlateComponent = (props) => {
         ? undefined
         : onDragStartInlineResult(editor, {
             element,
-            computer,
             result: lineResult?.result as any,
           }),
-    [computer, editor, element, isReadOnly, lineResult]
+    [editor, element, isReadOnly, lineResult]
   );
 
   const onEditorChange = useCallback(() => {

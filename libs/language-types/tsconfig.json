@@ -1,0 +1,27 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "WebWorker"]
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../number"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../column"
+    },
+    {
+      "path": "../generator-utils"
+    },
+    {
+      "path": "../language-utils"
+    },
+    {
+      "path": "../language-units"
+    }
+  ]
+}

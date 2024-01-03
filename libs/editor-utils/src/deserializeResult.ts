@@ -2,13 +2,13 @@ import {
   SerializedTypes,
   Unit,
   Result,
-  Interpreter,
   isColumn,
-} from '@decipad/computer';
+  Unknown,
+} from '@decipad/remote-computer';
 import { fromNumber } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
 
-const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
+const fixUnit = (unit: Unit.Unit[] | undefined | null): Unit.Unit[] | null =>
   unit?.map(
     (u) =>
       ({
@@ -16,7 +16,7 @@ const fixUnit = (unit: Unit[] | undefined | null): Unit[] | null =>
         exp: fromNumber(u.exp),
         multiplier: fromNumber(u.multiplier),
         aliasFor: u.aliasFor && fixUnit(u.aliasFor),
-      } as Unit)
+      } as Unit.Unit)
   ) ?? null;
 
 export const deserializeResult = <T extends Result.Result>(
@@ -45,7 +45,7 @@ export const deserializeResult = <T extends Result.Result>(
       ) {
         replaceValue = BigInt(value as string | number | bigint | boolean);
       } else {
-        replaceValue = Result.Unknown;
+        replaceValue = Unknown;
       }
       break;
     case 'column':
@@ -86,7 +86,7 @@ export const deserializeResult = <T extends Result.Result>(
             kind: 'materialized-column',
             cellType: colType,
           } as SerializedTypes.MaterializedColumn,
-          value: (value as Interpreter.ResultMaterializedColumn)?.[colIndex],
+          value: (value as Result.ResultMaterializedColumn)?.[colIndex],
         });
       });
       replaceType = {

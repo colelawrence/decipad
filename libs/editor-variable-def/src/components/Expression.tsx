@@ -5,7 +5,7 @@ import {
   useTEditorRef,
   VariableDefinitionElement,
 } from '@decipad/editor-types';
-import type { SerializedType } from '@decipad/computer';
+import type { SerializedType } from '@decipad/remote-computer';
 import { useSelected } from 'slate-react';
 import { getNodeString, getParentNode } from '@udecode/plate-common';
 import { useNodePath } from '@decipad/editor-hooks';

@@ -1,5 +1,6 @@
-import { ResultGenerator } from 'libs/language/src/interpreter/interpreter-types';
-import { OneResult } from 'libs/language/src/result';
+// eslint-disable-next-line no-restricted-imports
+import { Result } from '@decipad/language';
 
-export const isResultGenerator = (v: OneResult): v is ResultGenerator =>
-  typeof v === 'function';
+export const isResultGenerator = (
+  v: Result.OneResult
+): v is Result.ResultGenerator => typeof v === 'function';

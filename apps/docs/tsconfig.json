@@ -5,20 +5,20 @@
     "jsx": "preserve",
     "noEmit": false
   },
-  "include": ["src"],
+  "include": ["src", "utils"],
   "exclude": [],
   "references": [
     {
       "path": "../../libs/ui"
     },
     {
-      "path": "../../libs/computer"
-    },
-    {
-      "path": "../../libs/react-contexts"
+      "path": "../../libs/remote-computer"
     },
     {
       "path": "../../libs/format"
+    },
+    {
+      "path": "../../libs/react-contexts"
     }
   ]
 }

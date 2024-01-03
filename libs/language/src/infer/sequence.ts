@@ -1,16 +1,18 @@
 import DeciNumber, { N, ONE, ZERO } from '@decipad/number';
 import { getDefined } from '@decipad/utils';
-import { AST, Time, DateValue } from '..';
-import { getIdentifierString, getOfType } from '../utils';
-import { InferError, buildType as t, Type, typeIsPending } from '../type';
+// eslint-disable-next-line no-restricted-imports
 import {
-  dateToArray,
-  getJSDateUnitAndMultiplier,
-  getSpecificity,
-  getTimeUnit,
-  sortTimeUnits,
-} from '../date';
-import { Context } from './context';
+  InferError,
+  Type,
+  typeIsPending,
+  buildType as t,
+  Time,
+  Value,
+  AST,
+} from '@decipad/language-types';
+import { Realm } from '..';
+import { getIdentifierString, getOfType } from '../utils';
+import { getJSDateUnitAndMultiplier, sortTimeUnits } from '../date';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 
@@ -57,7 +59,7 @@ export const getDateSequenceError = async (
   start: bigint | undefined,
   _end: bigint | undefined,
   boundsSpecificity: Time.Specificity,
-  by: Time.Unit
+  by: Time.TimeUnit
 ): Promise<InferError | undefined> => {
   if (start == null) {
     return new InferError('No start date');
@@ -67,7 +69,10 @@ export const getDateSequenceError = async (
   }
   // Get the end of the year, month or day.
   const end = getDefined(
-    await DateValue.fromDateAndSpecificity(_end, boundsSpecificity).getEnd()
+    await Value.DateValue.fromDateAndSpecificity(
+      _end,
+      boundsSpecificity
+    ).getEnd()
   );
 
   const dateUnitAndMultiplier = getJSDateUnitAndMultiplier(by);
@@ -88,8 +93,8 @@ export const getDateSequenceError = async (
 
   switch (stepUnit) {
     case 'month': {
-      const [startYear, startMonth] = dateToArray(start);
-      const [endYear, endMonth] = dateToArray(end);
+      const [startYear, startMonth] = Time.dateToArray(start);
+      const [endYear, endMonth] = Time.dateToArray(end);
 
       const monthDiff = (endYear - startYear) * 12n + (endMonth - startMonth);
       return getNumberSequenceErrorN(0, monthDiff, steps);
@@ -122,11 +127,11 @@ const tryGetNumber = (n: AST.Expression): DeciNumber | undefined => {
 
 export const getDateSequenceIncrement = (
   byExpr: AST.Expression | void,
-  startUnit: Time.Unit,
-  endUnit: Time.Unit
+  startUnit: Time.TimeUnit,
+  endUnit: Time.TimeUnit
 ) => {
   if (byExpr) {
-    return getTimeUnit(getIdentifierString(getOfType('ref', byExpr)));
+    return Time.getTimeUnit(getIdentifierString(getOfType('ref', byExpr)));
   }
 
   return getDefined(sortTimeUnits([startUnit, endUnit]).pop());
@@ -134,13 +139,13 @@ export const getDateSequenceIncrement = (
 
 // eslint-disable-next-line complexity
 export const inferSequence = async (
-  ctx: Context,
+  realm: Realm,
   expr: AST.Sequence,
-  inferExpression: (ctx: Context, expr: AST.Expression) => Promise<Type>
+  inferExpression: (realm: Realm, expr: AST.Expression) => Promise<Type>
 ): Promise<Type> => {
   const [startN, endN, byN] = expr.args;
-  const startType = await inferExpression(ctx, startN);
-  const endType = await inferExpression(ctx, endN);
+  const startType = await inferExpression(realm, startN);
+  const endType = await inferExpression(realm, endN);
 
   // pending is contagious
   const pending = [startType, endType].find(typeIsPending);
@@ -161,7 +166,7 @@ export const inferSequence = async (
         boundTypes.date,
         boundTypes.date
       );
-      specificity = getSpecificity(increment);
+      specificity = Time.getSpecificity(increment);
     } catch {
       return t.impossible('Invalid increment clause in date sequence');
     }

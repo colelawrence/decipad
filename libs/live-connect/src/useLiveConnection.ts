@@ -7,6 +7,7 @@ import {
   serializeType,
   Result,
   isTableResult,
+  Unknown,
 } from '@decipad/remote-computer';
 import type { RemoteComputer, ProgramBlock } from '@decipad/remote-computer';
 import { PromiseOrType, zip } from '@decipad/utils';
@@ -172,7 +173,7 @@ function pushPendingResultToComputer(
         type: {
           kind: 'pending',
         },
-        value: Result.Unknown,
+        value: Unknown,
       },
     ],
   ]);

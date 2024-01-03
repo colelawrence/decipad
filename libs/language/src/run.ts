@@ -1,11 +1,16 @@
-import { AnyMapping } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
-import { AST, isExpression, prettyPrintAST, Type, validateResult } from '.';
+import { AnyMapping } from '@decipad/utils';
+// eslint-disable-next-line no-restricted-imports
+import {
+  AST,
+  Result,
+  Type,
+  materializeOneResult,
+} from '@decipad/language-types';
+import { isExpression, prettyPrintAST, validateResult } from '.';
 import { Context, inferBlock, makeContext } from './infer';
 import { Realm, run } from './interpreter';
 import { parseBlock } from './parser';
-import { OneResult, Result } from './result';
-import { materializeOneResult } from './utils/materializeOneResult';
 
 export const parseBlockOrThrow = (
   source: string,
@@ -52,7 +57,7 @@ export const parseExpressionOrThrow = (
 };
 
 interface RunAstOptions {
-  externalData?: AnyMapping<Result>;
+  externalData?: AnyMapping<Result.Result>;
   ctx?: Context;
   realm?: Realm;
   throwOnError?: boolean;
@@ -62,7 +67,7 @@ interface RunAstOptions {
 
 export interface RunAstResult {
   type: Type;
-  value: OneResult;
+  value: Result.OneResult;
 }
 export type RunAstAndGetContextResult = RunAstResult & {
   context: Context;
@@ -80,14 +85,14 @@ export const runASTAndGetContext = async (
     doNotMaterialiseResults,
   }: RunAstOptions = {}
 ): Promise<RunAstAndGetContextResult> => {
-  const type = await inferBlock(block, ctx);
+  const realm = _realm || new Realm(ctx);
+  const type = await inferBlock(block, realm);
 
   const erroredType = type.errorCause != null ? type : null;
   if (erroredType && throwOnError) {
     throw new TypeError(`Type error: ${stringify(erroredType)}`);
   }
 
-  const realm = _realm || new Realm(ctx);
   const results = await run([block], [0], realm, doNotMaterialiseResults);
   if (doNotMaterialiseResults) {
     return { type, value: results[0], context: ctx, realm };

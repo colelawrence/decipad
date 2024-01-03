@@ -1,7 +1,7 @@
-import { Result } from '@decipad/computer';
 import { N } from '@decipad/number';
 import { VirtualColumn } from '../types';
 import { layoutPowerData } from './useDataViewLayoutData';
+import { Column } from '@decipad/column';
 
 describe('layoutPowerData', () => {
   it('lays out an empty table', async () => {
@@ -21,7 +21,7 @@ describe('layoutPowerData', () => {
       {
         name: 'columnName',
         blockId: 'A',
-        value: Result.Column.fromValues([N(1)]),
+        value: Column.fromValues([N(1)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -54,7 +54,7 @@ describe('layoutPowerData', () => {
       {
         name: 'columnName',
         blockId: 'A',
-        value: Result.Column.fromValues([N(1), N(2), N(3)]),
+        value: Column.fromValues([N(1), N(2), N(3)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -109,7 +109,7 @@ describe('layoutPowerData', () => {
       {
         name: 'columnName',
         blockId: 'A',
-        value: Result.Column.fromValues([N(1), N(2), N(1)]),
+        value: Column.fromValues([N(1), N(2), N(1)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -152,13 +152,13 @@ describe('layoutPowerData', () => {
       {
         name: 'Column1',
         blockId: 'A',
-        value: Result.Column.fromValues([N(1), N(2), N(3)]),
+        value: Column.fromValues([N(1), N(2), N(3)]),
         type: { kind: 'number', unit: null },
       },
       {
         name: 'Column2',
         blockId: 'A',
-        value: Result.Column.fromValues([N(4), N(5), N(6)]),
+        value: Column.fromValues([N(4), N(5), N(6)]),
         type: { kind: 'number', unit: null },
       },
     ];
@@ -249,13 +249,13 @@ describe('layoutPowerData', () => {
       {
         name: 'Column1',
         blockId: 'A',
-        value: Result.Column.fromValues([N(1), N(2), N(1)]),
+        value: Column.fromValues([N(1), N(2), N(1)]),
         type: { kind: 'number', unit: null },
       },
       {
         name: 'Column2',
         blockId: 'A',
-        value: Result.Column.fromValues([N(4), N(5), N(6)]),
+        value: Column.fromValues([N(4), N(5), N(6)]),
         type: { kind: 'number', unit: null },
       },
     ];

@@ -1,6 +1,7 @@
 import { PromiseOrType } from '@decipad/utils';
-import type { AST, Context, Realm, Type } from '..';
-import type { Value } from '../value';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Type, Value } from '@decipad/language-types';
+import { Realm } from '../interpreter/Realm';
 
 /**
  * Macros are for new language features that don't deserve their own AST node.
@@ -8,6 +9,6 @@ import type { Value } from '../value';
  * But aren't because they need to see the AST to determine their result.
  */
 export interface DirectiveImpl<D extends AST.Directive = AST.Directive> {
-  getType(ctx: Context, root: D): PromiseOrType<Type>;
-  getValue(ctx: Realm, root: D): PromiseOrType<Value>;
+  getType(ctx: Realm, root: D): PromiseOrType<Type>;
+  getValue(ctx: Realm, root: D): PromiseOrType<Value.Value>;
 }

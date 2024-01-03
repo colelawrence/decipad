@@ -1,35 +1,16 @@
 import { N } from '@decipad/number';
 import { from, map } from '@decipad/generator-utils';
-import { Result, Value, Table, Column, SerializedTypes } from '..';
-import {
-  DateValue,
-  defaultValue,
-  fromJS,
-  Range,
-  Row,
-  Scalar,
-  UnknownValue,
-} from '../value';
-import {
-  ResultBoolean,
-  ResultColumn,
-  ResultDate,
-  ResultNumber,
-  ResultRange,
-  ResultRow,
-  ResultString,
-  ResultTable,
-  ResultMaterializedColumn,
-  ResultMaterializedTable,
-} from '../interpreter/interpreter-types';
-import { ValueGeneratorFunction } from '../value/types';
+// eslint-disable-next-line no-restricted-imports
+import { Result, SerializedTypes, Value } from '@decipad/language-types';
 
 // eslint-disable-next-line complexity
-export const resultToValue = async (result: Result.Result): Promise<Value> => {
+export const resultToValue = async (
+  result: Result.Result
+): Promise<Value.Value> => {
   const { type, value } = result;
 
   if (typeof value === 'symbol') {
-    return UnknownValue;
+    return Value.UnknownValue;
   }
 
   switch (type.kind) {
@@ -38,10 +19,10 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
     case 'nothing':
     case 'function':
     case 'anything':
-      return Result.UnknownValue;
+      return Value.UnknownValue;
 
     case 'materialized-table': {
-      const tableValue = value as ResultMaterializedTable;
+      const tableValue = value as Result.ResultMaterializedTable;
       const tableType = type as SerializedTypes.MaterializedTable;
       const columns = await Promise.all(
         tableType.columnTypes.map(async (columnType, index) => {
@@ -55,11 +36,11 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
           });
         })
       );
-      return Table.fromNamedColumns(columns, tableType.columnNames);
+      return Value.Table.fromNamedColumns(columns, tableType.columnNames);
     }
 
     case 'table': {
-      const tableValue = value as ResultTable;
+      const tableValue = value as Result.ResultTable;
       const tableType = type as SerializedTypes.Table;
       const columns = await Promise.all(
         tableType.columnTypes.map(async (columnType, index) => {
@@ -73,18 +54,20 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
           });
         })
       );
-      return Table.fromNamedColumns(columns, tableType.columnNames);
+      return Value.Table.fromNamedColumns(columns, tableType.columnNames);
     }
 
     case 'column':
     case 'materialized-column': {
-      const columnValue = value as ResultColumn | ResultMaterializedColumn;
+      const columnValue = value as
+        | Result.ResultColumn
+        | Result.ResultMaterializedColumn;
       if (columnValue == null) {
-        const defaultV = defaultValue(type);
-        return Column.fromValues([fromJS(0, defaultV)], defaultV);
+        const defaultV = Value.defaultValue(type);
+        return Value.Column.fromValues([Value.fromJS(0, defaultV)], defaultV);
       }
       const columnType = type as SerializedTypes.Column;
-      let columnGen: ValueGeneratorFunction;
+      let columnGen: Value.ValueGeneratorFunction;
       if (typeof columnValue === 'function') {
         columnGen = (start?: number, end?: number) =>
           map(columnValue(start, end), async (cell: Result.OneResult) =>
@@ -98,17 +81,17 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
       } else {
         throw new Error(`panic: got invalid column: ${typeof value}`);
       }
-      return Column.fromGenerator(columnGen);
+      return Value.Column.fromGenerator(columnGen);
     }
 
     case 'number': {
-      return Scalar.fromValue(N(value as ResultNumber));
+      return Value.Scalar.fromValue(N(value as Result.ResultNumber));
     }
 
     case 'date': {
-      let dateValue = value as ResultDate;
+      let dateValue = value as Result.ResultDate;
       if (dateValue == null || typeof dateValue === 'symbol') {
-        return UnknownValue;
+        return Value.UnknownValue;
       }
       if (typeof dateValue !== 'bigint') {
         try {
@@ -118,27 +101,27 @@ export const resultToValue = async (result: Result.Result): Promise<Value> => {
           throw err;
         }
       }
-      return DateValue.fromDateAndSpecificity(
+      return Value.DateValue.fromDateAndSpecificity(
         dateValue,
         (result.type as SerializedTypes.Date).date
       );
     }
 
     case 'boolean':
-      return Scalar.fromValue(value as ResultBoolean);
+      return Value.Scalar.fromValue(value as Result.ResultBoolean);
 
     case 'string':
-      return Scalar.fromValue((value as ResultString).toString());
+      return Value.Scalar.fromValue((value as Result.ResultString).toString());
 
     case 'range':
-      const rangeValue = value as ResultRange;
-      const [start, end] = rangeValue.map(Scalar.fromValue);
-      return Range.fromBounds(start, end);
+      const rangeValue = value as Result.ResultRange;
+      const [start, end] = rangeValue.map(Value.Scalar.fromValue);
+      return Value.Range.fromBounds(start, end);
 
     case 'row':
-      const rowValue = value as ResultRow;
+      const rowValue = value as Result.ResultRow;
       const rowType = type as SerializedTypes.Row;
-      return Row.fromNamedCells(
+      return Value.Row.fromNamedCells(
         await Promise.all(
           rowValue.map(async (cell, index) =>
             resultToValue({ type: rowType.rowCellTypes[index], value: cell })

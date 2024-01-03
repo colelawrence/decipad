@@ -1,6 +1,6 @@
 /* eslint decipad/css-prop-named-variable: 0 */
 import { CellValueType } from '@decipad/editor-types';
-import { SerializedType, tokenRules } from '@decipad/language';
+import { SerializedType, tokenRules } from '@decipad/remote-computer';
 import { noop } from '@decipad/utils';
 import { ComponentProps, ReactNode, useCallback } from 'react';
 import { MenuItem, TriggerMenuItem } from '../../atoms';

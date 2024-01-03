@@ -1,4 +1,4 @@
-import { identifierRegExpGlobal } from '@decipad/computer';
+import { identifierRegExpGlobal } from '@decipad/remote-computer';
 import {
   ENodeEntry,
   getNodeString,

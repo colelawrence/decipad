@@ -1,4 +1,4 @@
-import { isTableResult } from '@decipad/computer';
+import { isTableResult } from '@decipad/remote-computer';
 import {
   ImportElement,
   useTEditorRef,

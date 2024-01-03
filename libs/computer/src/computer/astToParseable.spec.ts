@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { parseStatementOrThrow } from '@decipad/language';
 import { astToParseable } from './astToParseable';
 

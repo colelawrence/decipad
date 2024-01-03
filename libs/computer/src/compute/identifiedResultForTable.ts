@@ -1,11 +1,11 @@
+// eslint-disable-next-line no-restricted-imports
 import {
-  buildType as t,
-  serializeResult,
   AST,
   Result,
-  isTableValue,
+  Value,
+  buildType as t,
+  serializeResult,
   tableValueToTableResultValue,
-  sortValue,
 } from '@decipad/language';
 import { getDefined } from '@decipad/utils';
 import stringify from 'json-stringify-safe';
@@ -25,7 +25,7 @@ export const identifiedResultForTable = (
     );
   }
 
-  if (!value || !isTableValue(value)) {
+  if (!value || !Value.isTableValue(value)) {
     throw new Error(
       `table does not have table value: ${value}, ${stringify(
         value
@@ -33,9 +33,9 @@ export const identifiedResultForTable = (
     );
   }
 
-  [type, value] = sortValue(type, value);
+  [type, value] = Value.sortValue(type, value);
 
-  if (!value || !isTableValue(value)) {
+  if (!value || !Value.isTableValue(value)) {
     throw new Error(
       `table does not have table value: ${value}, ${stringify(
         value

@@ -1,4 +1,9 @@
-import { Result, SerializedType, isTableResult } from '@decipad/computer';
+import {
+  Result,
+  SerializedType,
+  Unknown,
+  isTableResult,
+} from '@decipad/remote-computer';
 import { empty } from '@decipad/generator-utils';
 import { TableColumn } from '..';
 
@@ -6,7 +11,7 @@ const unknownResult: Result.Result<'pending'> = {
   type: {
     kind: 'pending',
   },
-  value: Result.Unknown,
+  value: Unknown,
 };
 
 type ColumnReplacement = Omit<TableColumn, 'blockId'> & {

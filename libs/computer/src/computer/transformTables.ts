@@ -1,8 +1,6 @@
 import groupBy from 'lodash.groupby';
-import {
-  TableColumn,
-  TableColumnAssign,
-} from 'libs/language/src/parser/ast-types';
+// eslint-disable-next-line no-restricted-imports
+import { type AST } from '@decipad/language';
 import { ProgramBlock } from '../types';
 import { decilang } from '..';
 import { statementToIdentifiedBlock } from '../utils';
@@ -34,7 +32,7 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
     const grouped = groupBy(columnDefs, 'type');
 
     // curse lodash and its poor type safety
-    const tableColumns = (grouped['table-column'] || []) as TableColumn[];
+    const tableColumns = (grouped['table-column'] || []) as AST.TableColumn[];
 
     const [tableName] = tableDef.args;
 
@@ -47,7 +45,7 @@ export const flattenTableDeclarations = (programs: ProgramBlock[]) => {
 
     tableColumns.forEach((column, i) => {
       const [colDef, expression] = column.args;
-      const columnAssign: TableColumnAssign = {
+      const columnAssign: AST.TableColumnAssign = {
         type: 'table-column-assign',
         args: [
           { type: 'tablepartialdef', args: [tableName] },

@@ -1,7 +1,7 @@
-import { Interpreter } from '../interpreter';
-import { SerializedType } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { Result, SerializedType } from '@decipad/language-types';
 
-export type Validate = <T extends Interpreter.OneResult | null | undefined>(
+export type Validate = <T extends Result.OneResult | null | undefined>(
   type: SerializedType,
   value: T
-) => Interpreter.OneResult | null | undefined;
+) => Result.OneResult | null | undefined;

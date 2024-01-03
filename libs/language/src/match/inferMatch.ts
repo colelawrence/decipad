@@ -1,33 +1,34 @@
 /* eslint-disable no-await-in-loop */
 import { getDefined } from '@decipad/utils';
-import { Context, inferExpression } from '../infer';
-import { AST } from '../parser';
-import { Type, buildType as T } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Type, buildType as t } from '@decipad/language-types';
+import { inferExpression } from '../infer';
+import { Realm } from '../interpreter';
 
 const inferMatchDef = async (
-  ctx: Context,
+  realm: Realm,
   def: AST.MatchDef
 ): Promise<Type> => {
   const [condition, result] = def.args;
   const conditionType = await (
-    await inferExpression(ctx, condition)
+    await inferExpression(realm, condition)
   ).isScalar('boolean');
   if (conditionType.errorCause) {
     return conditionType;
   }
-  return inferExpression(ctx, result);
+  return inferExpression(realm, result);
 };
 
 export const inferMatch = async (
-  ctx: Context,
+  realm: Realm,
   node: AST.Match
 ): Promise<Type> => {
   if (node.args.length < 1) {
-    return T.nothing();
+    return t.nothing();
   }
   let resultType: Type | undefined;
   for (const matchDef of node.args) {
-    const matchDefType = await inferMatchDef(ctx, matchDef);
+    const matchDefType = await inferMatchDef(realm, matchDef);
     if (matchDefType.pending || matchDefType.errorCause) {
       return matchDefType;
     }

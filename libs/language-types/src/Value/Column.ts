@@ -1,0 +1,77 @@
+/* eslint-disable no-underscore-dangle */
+import { from } from '@decipad/generator-utils';
+import { Dimension } from '../Dimension';
+import { isColumnLike, type ColumnLikeValue } from './ColumnLike';
+import { EmptyColumn } from './EmptyColumn';
+import { GeneratorColumn } from './GeneratorColumn';
+import type { Value } from './Value';
+import { ValueGeneratorFunction } from './ValueGenerator';
+import { lowLevelGet } from './lowLevelGet';
+import { UnknownValue } from './Unknown';
+import { OneResult } from '../Result';
+import { columnValueToResultValue } from '../utils/columnValueToResultValue';
+
+export class Column implements ColumnLikeValue {
+  readonly _values: ReadonlyArray<Value>;
+  private defaultValue?: Value;
+
+  constructor(values: ReadonlyArray<Value>, defaultValue?: Value) {
+    this._values = values;
+    this.defaultValue = defaultValue;
+  }
+
+  async dimensions() {
+    const contents = this._values[0];
+
+    if (isColumnLike(contents)) {
+      return [
+        { dimensionLength: await this.rowCount() },
+        ...(await contents.dimensions()),
+      ];
+    } else {
+      return [{ dimensionLength: await this.rowCount() }];
+    }
+  }
+
+  async lowLevelGet(...keys: number[]) {
+    return lowLevelGet(await this.atIndex(keys[0]), keys.slice(1));
+  }
+
+  /**
+   * Create a column from the values inside. Empty columns return a special value.
+   */
+  static fromValues(
+    values: ReadonlyArray<Value>,
+    defaultValue?: Value,
+    innerDimensions?: Dimension[]
+  ): ColumnLikeValue {
+    if (values.length === 0) {
+      if (innerDimensions) {
+        // We can create a column with no values
+        return new EmptyColumn(innerDimensions);
+      }
+      throw new Error('panic: Empty columns are forbidden');
+    }
+    return new Column(values, defaultValue);
+  }
+
+  static fromGenerator(gen: ValueGeneratorFunction): ColumnLikeValue {
+    return GeneratorColumn.fromGenerator(gen);
+  }
+
+  values(start = 0, end = Infinity) {
+    return from(this._values.slice(start, end));
+  }
+
+  async rowCount() {
+    return Promise.resolve(this._values.length);
+  }
+
+  async atIndex(i: number): Promise<Value> {
+    return this._values[i] ?? this.defaultValue ?? UnknownValue;
+  }
+
+  async getData(): Promise<OneResult> {
+    return Promise.resolve(columnValueToResultValue(this));
+  }
+}

@@ -1,4 +1,3 @@
-import { Computer } from '@decipad/computer';
 import {
   createTPlateEditor,
   ELEMENT_CODE_LINE,
@@ -7,12 +6,13 @@ import {
 import { setSelection } from '@decipad/editor-utils';
 import { createCodeLinePlugin } from './createCodeLinePlugin';
 import { codeLine } from '../NormalizeCodeBlock/testUtils';
+import { getRemoteComputer, RemoteComputer } from '@decipad/remote-computer';
 
 describe('withCodeLine', () => {
   let editor: MyEditor;
-  let computer: Computer;
+  let computer: RemoteComputer;
   beforeEach(() => {
-    computer = new Computer();
+    computer = getRemoteComputer();
     editor = createTPlateEditor({
       plugins: [createCodeLinePlugin(computer)],
     });

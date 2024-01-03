@@ -1,5 +1,6 @@
-import { Result } from '@decipad/language';
-import { Computer, ErrSpec, IdentifiedResult, Unit } from '..';
+// eslint-disable-next-line no-restricted-imports
+import type { Result, Unit, ErrSpec } from '@decipad/language';
+import type { Computer, IdentifiedResult } from '..';
 
 const translateIdentifier = (
   identifier: string,
@@ -34,7 +35,7 @@ const toUserlandError = (err: ErrSpec, computer: Computer): ErrSpec => {
   return err;
 };
 
-const toUserlandUnit = <T extends Unit[] | null | undefined>(
+const toUserlandUnit = <T extends Unit.Unit[] | null | undefined>(
   units: T,
   computer: Computer
 ): T => {

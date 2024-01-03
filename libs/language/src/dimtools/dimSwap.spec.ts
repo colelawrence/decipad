@@ -1,17 +1,20 @@
 import { setupDeciNumberSnapshotSerializer } from '@decipad/number';
-import { buildType as t } from '..';
-import { materializeOneResult } from '../utils/materializeOneResult';
-import { ColumnLikeValue, fromJS } from '../value';
+// eslint-disable-next-line no-restricted-imports
+import {
+  materializeOneResult,
+  buildType as t,
+  Value,
+} from '@decipad/language-types';
 import { dimSwapTypes, dimSwapValues } from './dimSwap';
 
 setupDeciNumberSnapshotSerializer();
 
 const twoDColumn = t.column(t.column(t.number(), 'X'), 'Y');
-const twoDColumnVal = fromJS([
+const twoDColumnVal = Value.fromJS([
   [1n, 2n],
   [3n, 4n],
   [5n, 6n],
-]) as ColumnLikeValue;
+]) as Value.ColumnLikeValue;
 
 it('does nothing if wanted dimension is already dominant', async () => {
   expect(await dimSwapTypes('Y', twoDColumn)).toEqual(

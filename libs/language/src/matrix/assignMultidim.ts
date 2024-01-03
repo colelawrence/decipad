@@ -1,9 +1,15 @@
 import { getDefined } from '@decipad/utils';
 import { map } from '@decipad/generator-utils';
-import { AST, Column, Type } from '..';
-import { evaluate, Realm, RuntimeError } from '../interpreter';
-import { ColumnLikeValue, Value, isColumnLike } from '../value';
-import { buildType as t, InferError } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import {
+  AST,
+  InferError,
+  RuntimeError,
+  Type,
+  Value,
+  buildType as t,
+} from '@decipad/language-types';
+import { evaluate, Realm } from '../interpreter';
 import { getIndexName } from './getVariable';
 import { matchTargets } from './matcher';
 
@@ -24,8 +30,8 @@ export async function inferMultidimAssignment(
 export async function evaluateMultidimAssignment(
   realm: Realm,
   node: AST.MatrixAssign,
-  dimension: ColumnLikeValue
-): Promise<ColumnLikeValue> {
+  dimension: Value.ColumnLikeValue
+): Promise<Value.ColumnLikeValue> {
   const [, matchers, assigneeExp] = node.args;
   const [matchCount, matches] = await matchTargets(
     realm.inferContext,
@@ -35,8 +41,8 @@ export async function evaluateMultidimAssignment(
 
   const assignee = await evaluate(realm, assigneeExp);
 
-  let getAssignee = async (): Promise<Value> => Promise.resolve(assignee);
-  if (isColumnLike(assignee)) {
+  let getAssignee = async (): Promise<Value.Value> => Promise.resolve(assignee);
+  if (Value.isColumnLike(assignee)) {
     // There must be one item for each match
     if ((await assignee.rowCount()) !== matchCount) {
       throw new RuntimeError(new InferError('Mismatched column sizes'));
@@ -55,5 +61,5 @@ export async function evaluateMultidimAssignment(
       }
     });
 
-  return Column.fromGenerator(gen);
+  return Value.Column.fromGenerator(gen);
 }

@@ -1,4 +1,3 @@
-import { Computer } from '@decipad/computer';
 import {
   createTAutoformatPlugin,
   ELEMENT_CODE_LINE_V2,
@@ -10,6 +9,7 @@ import {
   MyValue,
 } from '@decipad/editor-types';
 import { createPlateEditor, select } from '@udecode/plate-common';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import { autoformatRules } from './index';
 
 let editor: MyEditor;
@@ -17,7 +17,7 @@ beforeEach(() => {
   editor = createPlateEditor({
     plugins: [
       createTAutoformatPlugin({
-        options: { rules: autoformatRules(new Computer()) },
+        options: { rules: autoformatRules(getRemoteComputer()) },
       }),
     ],
   });

@@ -1,13 +1,15 @@
-import { AST } from '..';
+// eslint-disable-next-line no-restricted-imports
+import { AST, buildType as t } from '@decipad/language-types';
 import { inferStatement, makeContext } from '../infer';
 import { table, col, n, c, l, r } from '../utils';
-import { buildType as t } from '../type';
 import { objectToMap } from '../testUtils';
 import { inferTable, inferTableColumnPerCell } from './inference';
+import { Realm } from '../interpreter';
 
 const nilCtx = makeContext({
   initialGlobalScope: new Map([['SomeCol', t.column(t.number())]]),
 });
+const nilRealm = new Realm(nilCtx);
 nilCtx.stack.setNamespaced(
   ['SomeExistingTable', 'Col'],
   t.column(t.number(), 'SomeExistingTable'),
@@ -20,13 +22,14 @@ it('puts column types in ether', async () => {
   const tbl = n('table', n('tabledef', 'tbl'), col1, col2);
 
   const ctx = makeContext();
-  await inferStatement(ctx, tbl);
+  const realm = new Realm(ctx);
+  await inferStatement(realm, tbl);
   expect(col1.inferredType).toBeDefined();
   expect(col2.inferredType).toBeDefined();
 });
 
 it('allows empty tables', async () => {
-  expect(await inferTable(nilCtx, table('TableName', {}))).toMatchObject({
+  expect(await inferTable(nilRealm, table('TableName', {}))).toMatchObject({
     indexName: 'TableName',
     columnNames: [],
     columnTypes: [],
@@ -38,7 +41,7 @@ it('forbids tables inside functions', async () => {
     const tbl = table('TableName', {
       Calculated: n('ref', 'SomeCol'),
     });
-    expect((await inferTable(nilCtx, tbl)).errorCause?.spec)
+    expect((await inferTable(nilRealm, tbl)).errorCause?.spec)
       .toMatchInlineSnapshot(`
       Object {
         "errType": "forbidden-inside-function",
@@ -51,7 +54,7 @@ it('forbids tables inside functions', async () => {
 describe('table with formulae', () => {
   const testComputed = async (expression: AST.Expression) =>
     inferTableColumnPerCell(
-      makeContext(),
+      new Realm(makeContext()),
       objectToMap({ OtherColumn: t.number() }),
       expression
     );

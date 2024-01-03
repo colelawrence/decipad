@@ -1,9 +1,16 @@
 /* istanbul ignore file: just config and re-export */
-import { operators } from './builtins';
-import type { Result } from './result';
-import { buildType as t, SerializedType, serializeType, Unit } from './type';
 
-export { parseUTCDate, stringifyDate, Time, getDateFromAstForm } from './date';
+// eslint-disable-next-line no-restricted-imports
+import { operators } from '@decipad/language-builtins';
+// eslint-disable-next-line no-restricted-imports
+import {
+  serializeType,
+  type Result,
+  type SerializedType,
+  buildType as t,
+} from '@decipad/language-types';
+
+export { Time, getDateFromAstForm } from './date';
 export {
   identifierRegExpGlobal,
   STATEMENT_SEP_TOKEN_TYPE,
@@ -21,25 +28,15 @@ export {
   initialInferStats,
 } from './infer';
 export type { Context, ContextStats } from './infer';
-export type { ColumnLikeValue, Value } from './value';
-export {
-  isColumnLike,
-  getColumnLike,
-  isTableValue,
-  tableValueToTableResultValue,
-} from './value';
+export { tableValueToTableResultValue } from './value';
 export {
   evaluateStatement,
   Realm,
   runBlock,
-  RuntimeError,
-  sortValue,
   initialInterpreterStats,
 } from './interpreter';
-export type { Interpreter, InterpreterStats } from './interpreter';
-export { Column, DateValue, fromJS, Range, Row, Scalar, Table } from './value';
+export type { InterpreterStats } from './interpreter';
 export {
-  AST,
   parse,
   decilang,
   parseBlock,
@@ -49,52 +46,23 @@ export {
   SyntaxError,
 } from './parser';
 export { prettyPrintAST } from './parser/utils';
-export * from './langPluralize';
 export { previousRefSymbols } from './previous-ref';
 export { serializeResult } from './result';
-export * as Result from './result';
 export { validateResult } from './validateResult';
 export * from './run';
 export {
-  buildType,
-  convertToMultiplierUnit,
-  deserializeType,
-  InferError,
-  inverseExponent,
-  normalizeUnits,
-  pluralizeUnit,
-  serializeType,
-  simplifyUnits,
-  Type,
-} from './type';
-export type {
-  ErrSpec,
-  SerializedType,
-  SerializedTypeKind,
-  SerializedTypes,
-} from './type';
-export * from './units';
-export {
-  DEFAULT_PRECISION,
   isAssignment,
   isExpression,
   isIdentifier,
-  MAX_PRECISION,
   n as astNode,
-  safeNumberForPrecision,
   walkAst,
   mutateAst,
   isStatement,
 } from './utils';
 export { materializeResult } from './utils/materializeResult';
-export { materializeOneResult } from './utils/materializeOneResult';
-export { linearizeType } from './dimtools/common';
-export type { Unit };
 export * from './simpleValues';
 
-export { cleanDate } from './date';
-
-export type ExternalDataMap = Map<string, Result>;
+export type ExternalDataMap = Map<string, Result.Result>;
 
 export interface AutocompleteName {
   kind: 'function' | 'variable' | 'column';
@@ -133,5 +101,8 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
 
   return cachedBuiltins;
 };
-export { getConstantByName } from './builtins';
-export type { Constant } from './builtins';
+
+// eslint-disable-next-line no-restricted-imports
+export { getConstantByName, type Constant } from '@decipad/language-builtins';
+// eslint-disable-next-line no-restricted-imports
+export * from '@decipad/language-types';

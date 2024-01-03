@@ -18,7 +18,7 @@ import { ELEMENT_H3, ELEMENT_PARAGRAPH } from '@decipad/editor-types';
 import { noop, timeout } from '@decipad/utils';
 import { act, render, waitFor } from '@testing-library/react';
 import { findDomNodePath } from '@decipad/editor-utils';
-import { Computer } from '@decipad/computer';
+import { getRemoteComputer } from '@decipad/remote-computer';
 import userEvent from '@testing-library/user-event';
 import { InteractiveParagraph } from './InteractiveParagraph';
 import { ToastDisplay } from '@decipad/ui';
@@ -30,7 +30,7 @@ let wrapper: React.FC<PropsWithChildren<unknown>>;
 beforeEach(() => {
   const plugins = createPlugins([createParagraphPlugin()], {
     components: {
-      [ELEMENT_PARAGRAPH]: InteractiveParagraph(new Computer()),
+      [ELEMENT_PARAGRAPH]: InteractiveParagraph(getRemoteComputer()),
     },
   });
 

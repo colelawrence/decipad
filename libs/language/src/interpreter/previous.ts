@@ -1,11 +1,11 @@
 // Accumulate values into a list by consuming an async iterable.
 
 import { getDefined } from '@decipad/utils';
-import type { Expression, Statement } from '../parser/ast-types';
-import { ColumnLikeValue, Value } from '../value';
+// eslint-disable-next-line no-restricted-imports
+import { AST, Value } from '@decipad/language-types';
 import { Realm } from './Realm';
 
-type Evaluate = (realm: Realm, block: Statement) => Promise<Value>;
+type Evaluate = (realm: Realm, block: AST.Statement) => Promise<Value.Value>;
 
 export const CURRENT_COLUMN_SYMBOL = Symbol('current column');
 
@@ -13,10 +13,10 @@ export const CURRENT_COLUMN_SYMBOL = Symbol('current column');
 // Manages realm.previousValue too.
 export const mapWithPrevious = async (
   realm: Realm,
-  otherColumns: Map<string, ColumnLikeValue>,
-  iter: () => AsyncIterable<Value>
+  otherColumns: Map<string, Value.ColumnLikeValue>,
+  iter: () => AsyncIterable<Value.Value>
 ) => {
-  const ret: Value[] = [];
+  const ret: Value.Value[] = [];
 
   // mapWithPrevious can be called again during iter()
   // For example with nested `given`
@@ -24,7 +24,7 @@ export const mapWithPrevious = async (
   realm.previousRow = null;
 
   for await (const result of iter()) {
-    const previousRow = new Map<string | symbol, Value>();
+    const previousRow = new Map<string | symbol, Value.Value>();
     await Promise.all(
       [...otherColumns.entries()].map(async ([key, value]) => {
         const v = await value.atIndex(ret.length);
@@ -46,9 +46,9 @@ export const mapWithPrevious = async (
 
 export const usingPrevious = async (
   realm: Realm,
-  expression: Expression,
+  expression: AST.Expression,
   evaluate: Evaluate
-): Promise<Value> => {
+): Promise<Value.Value> => {
   const previousRow = getDefined(realm.previousRow, 'no previous row');
   return realm.stack.withPush(async () => {
     for (const [columnName, columnValue] of previousRow) {

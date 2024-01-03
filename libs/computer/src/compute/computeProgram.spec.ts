@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { RuntimeError, AST } from '@decipad/language';
 import { computeProgram, resultFromError } from './computeProgram';
 import {

@@ -8,7 +8,11 @@ import {
 } from '@decipad/editor-types';
 import { render } from '@testing-library/react';
 import { Plate } from '@udecode/plate-common';
-import { Computer, parseBlock } from '@decipad/computer';
+import {
+  RemoteComputer,
+  getRemoteComputer,
+  parseBlock,
+} from '@decipad/remote-computer';
 import { getDefined, timeout } from '@decipad/utils';
 import { ComputerContextProvider } from '@decipad/react-contexts';
 import { DndProvider } from 'react-dnd';
@@ -20,7 +24,7 @@ let cleanup: undefined | (() => void);
 afterEach(() => cleanup?.());
 
 type PlateWrapperProps = Pick<DeprecatedCodeBlockElement, 'children'> & {
-  computer: Computer;
+  computer: RemoteComputer;
 };
 const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
   <DndProvider backend={HTML5Backend}>
@@ -46,7 +50,7 @@ const PlateWrapper = ({ children, computer }: PlateWrapperProps) => (
 
 describe('variable highlights', () => {
   it('show bubbles in variable declarations', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [getIdentifiedBlock('x1', 'id = 42')],
     });
 
@@ -78,7 +82,7 @@ describe('variable highlights', () => {
   });
 
   it('show bubbles in usages of defined variables', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [
         getIdentifiedBlock('x1', 'x=42'),
         getIdentifiedBlock('x2', 'y=x'),
@@ -120,7 +124,7 @@ describe('variable highlights', () => {
   });
 
   it('highlights defined columns of a table', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [
         getIdentifiedBlock('x1', 'MyTable = { A = [1] }'),
         getIdentifiedBlock('x2', 'MyTable.A'),
@@ -172,7 +176,7 @@ describe('variable highlights', () => {
   });
 
   it('highlights column access inside table', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [
         getIdentifiedBlock('defining t for test purposes', 't = {A = 1}'),
         getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = A\n  C = t.A\n}'),
@@ -208,7 +212,7 @@ describe('variable highlights', () => {
   });
 
   it('highlights column access with spaces', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [
         getIdentifiedBlock('x1', 'x = {\n  A = 1\n  B = x . A\n}'),
       ],
@@ -245,7 +249,7 @@ describe('variable highlights', () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('does not mistake a table column access for another declared variable', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [
         getIdentifiedBlock('x1', 'x = { A = [1]}'),
         getIdentifiedBlock('x2', 'B = 2'),
@@ -287,7 +291,7 @@ describe('variable highlights', () => {
   });
 
   it('show bubbles for external variables in function declarations', async () => {
-    const computer = new Computer({
+    const computer = getRemoteComputer({
       initialProgram: [
         getIdentifiedBlock('x1', 'X=3'),
         getIdentifiedBlock('x2', 'F(A) = A+X'),

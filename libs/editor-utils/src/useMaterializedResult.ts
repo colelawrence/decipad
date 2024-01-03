@@ -1,4 +1,4 @@
-import { Result, materializeResult } from '@decipad/computer';
+import { Result, materializeResult } from '@decipad/remote-computer';
 import { PromiseOrType } from '@decipad/utils';
 import { useEffect, useState } from 'react';
 

@@ -1,7 +1,8 @@
 import unzip from 'lodash.unzip';
 import zip from 'lodash.zip';
 import { produce } from '@decipad/utils';
-import { Type } from '../type';
+// eslint-disable-next-line no-restricted-imports
+import { Type } from '@decipad/language-types';
 
 export const sortType = (type: Type): Type => {
   // Checking that declaration is a table

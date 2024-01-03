@@ -1,4 +1,4 @@
-import { SerializedType } from '@decipad/language';
+import { type SerializedType } from '@decipad/remote-computer';
 import { docs } from '@decipad/routing';
 import { Meta, StoryFn } from '@storybook/react';
 import { CodeLine } from '..';

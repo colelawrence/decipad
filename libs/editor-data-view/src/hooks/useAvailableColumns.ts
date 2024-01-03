@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useComputer } from '@decipad/react-contexts';
-import { SerializedType, isColumn } from '@decipad/computer';
+import { SerializedType, isColumn } from '@decipad/remote-computer';
 import { dequal } from '@decipad/utils';
 import {
   debounceTime,
