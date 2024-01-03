@@ -110,21 +110,24 @@ const tooltipTextStyles = css({
   color: componentCssVars('TooltipTextSecondary'),
 });
 
-const creditsStyles = css(tagStyles, {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '4px',
-  label: {
-    ...p12Bold,
-    backgroundColor: cssVar('backgroundHeavier'),
+const creditsStyles = (noCreditsLeft: boolean) =>
+  css(tagStyles, {
     display: 'flex',
-    height: '16px',
-    padding: '10px 4px',
-    justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: '4px',
-  },
-});
+    gap: '4px',
+    label: {
+      ...p12Bold,
+      backgroundColor: noCreditsLeft
+        ? componentCssVars('ErrorBlockError')
+        : cssVar('backgroundHeavier'),
+      display: 'flex',
+      height: '16px',
+      padding: '10px 4px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: '4px',
+    },
+  });
 
 const addMoreCreditsButton = css(p12Medium, {
   borderRadius: '4px',
@@ -139,13 +142,14 @@ const Credits: React.FC<{
   creditsQuota: number;
 }> = ({ creditsUsed, creditsQuota }) => {
   const navigate = useNavigate();
+  const creditsLeft = Math.max(0, creditsQuota - creditsUsed);
   return (
     <Tooltip
       trigger={
-        <div css={creditsStyles}>
+        <div css={creditsStyles(creditsLeft === 0)}>
           <span>Credits</span>
           <label>
-            <span>{Math.max(0, creditsQuota - creditsUsed)}</span>
+            <span>{Math.max(0, creditsLeft)}</span>
           </label>
           {isFlagEnabled('AI_BUY_MORE_CREDITS') && (
             <Button

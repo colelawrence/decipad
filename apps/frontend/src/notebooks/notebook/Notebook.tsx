@@ -550,7 +550,12 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
     variables: { id: notebookId },
   });
   const isPremium = Boolean(meta.data?.getPadById?.workspace?.isPremium);
-  const { updateUsage } = useAiUsage();
+  const {
+    updateUsage,
+    promptTokensUsed,
+    completionTokensUsed,
+    tokensQuotaLimit,
+  } = useAiUsage();
 
   const isReadOnly =
     meta.data?.getPadById?.myPermissionType === PermissionType.Read ||
@@ -577,12 +582,21 @@ const NewAssistant: FC<NewAssistantProps> = ({ notebookId }) => {
         ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
         : Number(process.env.REACT_APP_MAX_CREDITS_FREE));
 
-    updateUsage({
-      promptTokensUsed: promptTokens,
-      completionTokensUsed: completionTokens,
-      tokensQuotaLimit: tokensLimit,
-    });
-  }, [updateUsage, meta.data?.getPadById?.workspace]);
+    // we only want to update the usage with the DB values when the user refreshes the page
+    if (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) {
+      updateUsage({
+        promptTokensUsed: promptTokens,
+        completionTokensUsed: completionTokens,
+        tokensQuotaLimit: tokensLimit,
+      });
+    }
+  }, [
+    updateUsage,
+    meta.data?.getPadById?.workspace,
+    promptTokensUsed,
+    completionTokensUsed,
+    tokensQuotaLimit,
+  ]);
 
   if (isAssistantOpen && !isEmbed && editor && !isReadOnly) {
     return (

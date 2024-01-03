@@ -136,7 +136,12 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     [allWorkspaces, workspaceId]
   );
 
-  const { updateUsage } = useAiUsage();
+  const {
+    updateUsage,
+    promptTokensUsed,
+    tokensQuotaLimit,
+    completionTokensUsed,
+  } = useAiUsage();
 
   useEffect(() => {
     let quotaLimit = currentWorkspace?.isPremium
@@ -160,15 +165,21 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         }
       });
 
-    updateUsage({
-      promptTokensUsed: pTokens,
-      completionTokensUsed: cTokens,
-      tokensQuotaLimit: quotaLimit,
-    });
+    // we only want to update the usage with the DB values when the user refreshes the page
+    if (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) {
+      updateUsage({
+        promptTokensUsed: pTokens,
+        completionTokensUsed: cTokens,
+        tokensQuotaLimit: quotaLimit,
+      });
+    }
   }, [
     updateUsage,
     currentWorkspace?.isPremium,
     currentWorkspace?.resourceUsages,
+    promptTokensUsed,
+    completionTokensUsed,
+    tokensQuotaLimit,
   ]);
 
   useEffect(() => {

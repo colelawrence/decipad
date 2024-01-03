@@ -179,9 +179,7 @@ test('workspaces', (ctx) => {
 
     expect(workspaceSubscription.paymentStatus).toBe('paid');
     expect(isPremium).toBeTruthy();
-    // expect(workspaceExecutedQuery.quotaLimit).toBe(500);
-    // Christmas Gift - 500
-    expect(workspaceExecutedQuery.quotaLimit).toBe(600);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(500);
   });
 
   it('can update a subscription', async () => {
@@ -212,9 +210,7 @@ test('workspaces', (ctx) => {
 
     expect(workspaceSubscription).not.toBeNull();
     expect(isPremium).toBeTruthy();
-    // expect(workspaceExecutedQuery.quotaLimit).toBe(500);
-    // Christmas Gift - 500
-    expect(workspaceExecutedQuery.quotaLimit).toBe(600);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(500);
   });
 
   it('can reset the query count when a subscription is renewed', async () => {
@@ -287,8 +283,6 @@ test('workspaces', (ctx) => {
 
     expect(workspaceSubscription).toBeNull();
     expect(isPremium).toBeFalsy();
-    // expect(workspaceExecutedQuery.quotaLimit).toBe(50);
-    // Christmas Gift - 150 for free users
-    expect(workspaceExecutedQuery.quotaLimit).toBe(150);
+    expect(workspaceExecutedQuery.quotaLimit).toBe(50);
   });
 });

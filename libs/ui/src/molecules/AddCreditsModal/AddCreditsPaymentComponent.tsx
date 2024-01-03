@@ -12,20 +12,20 @@ type AddCreditsPaymentComponentProps = {
   closeAction: () => void;
 };
 
-const test = {
-  style: {
-    base: {
-      color: cssVarHex('textHeavy'),
-    },
-  },
-};
-
 export const AddCreditsPaymentComponent: React.FC<
   AddCreditsPaymentComponentProps
 > = ({ resourceId, closeAction }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [, UpdateResourceQuotaLimit] = useUpdateResourceQuotaLimitMutation();
+
+  const cardComponentStyles = {
+    style: {
+      base: {
+        color: cssVarHex('textHeavy'),
+      },
+    },
+  };
 
   const updateNewQuotaLimit = useCallback(
     async (paymentMethodId: string) => {
@@ -80,7 +80,7 @@ export const AddCreditsPaymentComponent: React.FC<
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <CardElement options={test} />
+        <CardElement options={cardComponentStyles} />
         {!loading && (
           <Button type="primaryBrand" styles={buyNowButtonStyles}>
             Buy Now

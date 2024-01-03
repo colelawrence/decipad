@@ -49,7 +49,7 @@ export const WorkspaceHero: React.FC<WorkspaceHeroProps> = ({
   const creditsUsed = Math.floor(
     (promptTokensUsed + completionTokensUsed) / 2_000
   );
-  const creditsLeft = limit - creditsUsed;
+  const creditsLeft = Math.max(0, limit - creditsUsed);
 
   const credits = isFlagEnabled('RESOURCE_USAGE_COUNT') &&
     isFlagEnabled('AI_BUY_MORE_CREDITS') && (

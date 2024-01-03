@@ -4,8 +4,8 @@ export const Feedback = (): ReturnType<React.FC> => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
     <title>Feedback</title>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M4.69482 3.69958H11.3056C12.4102 3.69958 13.3056 4.59502 13.3056 5.69958V9.12715C13.3056 10.2317 12.4102 11.1271 11.3056 11.1271H10.8298V11.8496C10.8298 12.7213 9.79206 13.1757 9.15149 12.5844L8.11113 11.624C7.95401 11.479 7.8579 11.3064 7.81461 11.1271H4.69482C3.59025 11.1271 2.69482 10.2317 2.69482 9.12715V5.69958C2.69482 4.59501 3.59025 3.69958 4.69482 3.69958Z"
       fill={cssVar('iconColorSubdued')}
     />
