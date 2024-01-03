@@ -2,7 +2,8 @@ import { removeNodes } from '@udecode/plate-common';
 import { z } from 'zod';
 import { extendZodWithOpenApi } from 'zod-openapi';
 import { Action } from './types';
-import { matchElementId } from '../utils/matchElementId';
+import { findElementById } from './utils/findElementById';
+import { notFound } from '@hapi/boom';
 
 extendZodWithOpenApi(z);
 
@@ -18,10 +19,14 @@ export const removeElement: Action<'removeElement'> = {
   requiresRootEditor: false,
   returnsActionResultWithNotebookError: true,
   handler: (editor, { elementId }) => {
-    removeNodes(editor, { match: matchElementId(elementId as string) });
+    const entry = findElementById(editor, elementId);
+    if (!entry) {
+      throw notFound(`Element with id ${elementId} could not be found`);
+    }
+    removeNodes(editor, { at: entry[1] });
 
     return {
-      summary: `Removed element with id ${elementId}`,
+      summary: `Removed element of type ${entry[0].type} with id ${elementId}`,
     };
   },
 };
