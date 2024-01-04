@@ -1,3 +1,4 @@
+/* eslint decipad/css-prop-named-variable: 0 */
 import { FileType, MAX_UPLOAD_FILE_SIZE } from '@decipad/editor-types';
 import { useToast } from '@decipad/toast';
 import { css } from '@emotion/react';
@@ -5,7 +6,13 @@ import { ChangeEvent, FC, ReactNode, useRef, useState } from 'react';
 import { Button, Link } from '../../atoms';
 import { Close } from '../../icons';
 import { modalDialogStyles } from '../../molecules/Modal/Modal';
-import { cssVar, p12Medium, p15Medium } from '../../primitives';
+import {
+  componentCssVars,
+  cssVar,
+  p12Medium,
+  p13Bold,
+  p15Medium,
+} from '../../primitives';
 import { closeButtonStyles } from '../../styles/buttons';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '../../molecules';
 import { isValidURL } from '../../utils';
@@ -14,6 +21,8 @@ interface UploadFileModalProps {
   fileType?: FileType;
   onCancel: () => void;
   onUpload: (file: any, uploadType: string) => void;
+  uploading: boolean;
+  uploadProgress?: number;
 }
 
 interface FileCfg {
@@ -66,6 +75,8 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
   fileType,
   onCancel,
   onUpload,
+  uploading,
+  uploadProgress,
 }) => {
   const { title, maxSize, accept, description } =
     getConfigForFileType(fileType);
@@ -164,13 +175,23 @@ export const UploadFileModal: FC<UploadFileModalProps> = ({
               ref={fileInputRef}
               css={hiddenElement}
             />
-            <Button
-              key="upload-button"
-              type="primary"
-              onClick={handleButtonClick}
-            >
-              Choose file
-            </Button>
+
+            {!(uploading && uploadProgress) ? (
+              <Button
+                key="upload-button"
+                type="primary"
+                disabled={uploading}
+                onClick={handleButtonClick}
+              >
+                Choose file
+              </Button>
+            ) : (
+              <div
+                css={uploadingButtonPlaceholderStyles({
+                  progress: uploadProgress,
+                })}
+              />
+            )}
           </div>
         </TabsContent>
       </div>
@@ -255,5 +276,47 @@ const titleWrapperStyles = css({
 const tabWrapStyles = css({
   width: '100%',
 });
+
+const uploadingButtonPlaceholderStyles = ({ progress }: { progress: number }) =>
+  css(p13Bold, {
+    position: 'relative',
+    flex: '0 0 120px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '8px 24px',
+    borderRadius: '6px',
+    backgroundColor: cssVar('backgroundHeavier'),
+    color: componentCssVars('ButtonPrimaryDefaultText'),
+
+    '&::before': {
+      zIndex: 0,
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      borderRadius: '6px',
+      backgroundColor: componentCssVars('ButtonPrimaryDefaultBackground'),
+      width: `${progress}%`,
+      height: '100%',
+    },
+
+    '@keyframes loading': {
+      '0%': { content: '"Uploading"' },
+      '25%': { content: '"Uploading."' },
+      '50%': { content: '"Uploading.."' },
+      '75%': { content: '"Uploading..."' },
+    },
+
+    '&::after': {
+      zIndex: 1,
+      overflow: 'hidden',
+      display: 'inline-block',
+      verticalAlign: 'bottom',
+      animation: 'loading steps(1,end) 1s infinite',
+      content: '"Uploading"',
+      width: '100%',
+    },
+  });
 
 const allWrapperStyles = [wrapperStyles, modalDialogStyles];

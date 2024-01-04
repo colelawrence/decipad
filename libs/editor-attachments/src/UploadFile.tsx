@@ -10,15 +10,23 @@ import { useToast } from '@decipad/toast';
 import { Dialog, UploadFileModal } from '@decipad/ui';
 import { noop } from '@decipad/utils';
 import { getStartPoint } from '@udecode/plate-common';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { FC, useCallback } from 'react';
 import { Path } from 'slate';
 import { attachGenericFile } from './attachGeneric';
 
 export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
   const computer = useComputer();
-  const { dialogOpen, fileType, setDialogOpen, resetStore } =
-    useFileUploadStore();
+  const {
+    dialogOpen,
+    fileType,
+    setDialogOpen,
+    resetStore,
+    uploading,
+    setUploading,
+    uploadProgress,
+    setUploadProgress,
+  } = useFileUploadStore();
 
   const insertFunctionForFileType = useCallback(
     (editor: MyEditor, path: Path, url: string, fileName?: string) => {
@@ -65,12 +73,47 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
   const insertFromComputer = useCallback(
     async (file: File) => {
       const targetURL = arcEndpoint(notebookId);
-      const response = await axios.post(targetURL, file);
-      const url = response.data;
 
-      insertByUrl(url, file.name);
+      setUploading(true);
+      try {
+        const response = await axios.post(targetURL, file, {
+          onUploadProgress(progressEvent) {
+            if (!progressEvent.total) {
+              return;
+            }
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted);
+          },
+        });
+        if (response.status >= 400) {
+          toast.warning('There was an error uploading your file');
+          return;
+        }
+        const url = response.data;
+        insertByUrl(url, file.name);
+      } catch (err) {
+        console.error(err);
+        let message = 'There was an error uploading your file';
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 502) {
+            message += ': File not accepted';
+          }
+        }
+        toast(message, 'warning');
+      } finally {
+        setUploading(false);
+      }
     },
-    [arcEndpoint, insertByUrl, notebookId]
+    [
+      arcEndpoint,
+      insertByUrl,
+      notebookId,
+      setUploadProgress,
+      setUploading,
+      toast,
+    ]
   );
 
   const [, getCreateAttachmentForm] = useGetCreateAttachmentFormMutation();
@@ -94,13 +137,13 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
   );
 
   const uploadFile = useCallback(
-    (fileInfo: File | string, uploadType: string) => {
+    async (fileInfo: File | string, uploadType: string) => {
       switch (fileType) {
         case 'image': {
           if (uploadType === 'link' && typeof fileInfo === 'string') {
             insertByUrl(fileInfo);
           } else if (fileInfo instanceof File) {
-            insertFromComputer(fileInfo);
+            await insertFromComputer(fileInfo);
           } else {
             throw new Error('This cannot happen');
           }
@@ -185,6 +228,8 @@ export const UploadFile: FC<{ notebookId: string }> = ({ notebookId }) => {
             fileType={fileType}
             onCancel={resetStore}
             onUpload={uploadFile}
+            uploading={uploading}
+            uploadProgress={uploadProgress}
           />
         </Dialog>
       )}

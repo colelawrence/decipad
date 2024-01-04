@@ -8,6 +8,11 @@ interface UploadFileStore {
   fileType?: FileType;
   setFileType: (fileType: FileType | undefined) => void;
 
+  uploading: boolean;
+  uploadProgress?: number;
+  setUploading: (uploading: boolean) => void;
+  setUploadProgress: (progress: number) => void;
+
   resetStore: () => void;
 }
 
@@ -20,6 +25,11 @@ export const useFileUploadStore = create<UploadFileStore>((set) => ({
     set(() => ({
       fileType: type,
     })),
+
+  uploading: false,
+  setUploading: (uploading: boolean) => set(() => ({ uploading })),
+  setUploadProgress: (progress: number) =>
+    set(() => ({ uploadProgress: progress })),
 
   resetStore: () =>
     set(() => ({
