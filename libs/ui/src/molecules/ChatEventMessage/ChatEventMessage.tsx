@@ -87,6 +87,7 @@ type Props = {
   readonly submitFeedback: (message: string) => void;
   readonly isCurrentReply: boolean;
   readonly isGenerating: boolean;
+  readonly container: HTMLElement | null;
 };
 
 const messageMeta = (status: MessageStatus) => {
@@ -116,6 +117,7 @@ export const ChatEventMessage: React.FC<Props> = ({
   isGenerating,
   regenerateResponse,
   submitFeedback,
+  container,
 }) => {
   const [hasReported, setHasReported] = useState(false);
 
@@ -137,6 +139,7 @@ export const ChatEventMessage: React.FC<Props> = ({
         <div css={buttonContainerStyles}>
           <AssistantFeedbackPopUp
             onSubmit={hasReported ? noop : handleSendFeedback}
+            container={container}
             trigger={
               <button
                 css={buttonStyles}

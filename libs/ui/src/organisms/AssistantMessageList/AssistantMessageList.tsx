@@ -198,6 +198,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                 regenerateResponse={noop}
                 submitFeedback={noop}
                 submitRating={noop}
+                container={chatContainerRef.current}
               />
             </motion.div>
             {messages.map((entry) => {
@@ -259,6 +260,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                       regenerateResponse={regenerateResponse}
                       submitFeedback={submitFeedback}
                       submitRating={submitRating}
+                      container={chatContainerRef.current}
                     />
                   </motion.div>
                 );
@@ -298,6 +300,7 @@ export const AssistantMessageList: React.FC<AssistantMessageListProps> = ({
                       isGenerating={isGenerating}
                       regenerateResponse={regenerateResponse}
                       submitFeedback={submitFeedback}
+                      container={chatContainerRef.current}
                     />
                   </motion.div>
                 );

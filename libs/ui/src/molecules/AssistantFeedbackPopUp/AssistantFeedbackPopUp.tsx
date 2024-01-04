@@ -16,9 +16,6 @@ const wrapperStyles = css({
   border: `1px solid ${cssVar('borderSubdued')}`,
   borderRadius: '8px',
   minWidth: '240px',
-  position: 'absolute',
-  // A bit hacky, but we need to make sure the pop up is above the chat
-  transform: 'translateX(-100%)',
   zIndex: 400,
 });
 
@@ -46,11 +43,13 @@ const inputStyles = css(p13Medium, {
 type AssistantFeedbackPopUpProps = {
   trigger: React.ReactNode;
   onSubmit: (message: string) => void;
+  container: HTMLElement | null;
 };
 
 export const AssistantFeedbackPopUp: React.FC<AssistantFeedbackPopUpProps> = ({
   onSubmit,
   trigger,
+  container,
 }) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
@@ -84,11 +83,16 @@ export const AssistantFeedbackPopUp: React.FC<AssistantFeedbackPopUpProps> = ({
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger>{trigger}</Popover.Trigger>
-      <Popover.Portal>
+      <Popover.Portal container={container}>
         <Popover.Content
-          avoidCollisions={false}
+          avoidCollisions={true}
           css={wrapperStyles}
           sideOffset={4}
+          collisionBoundary={container}
+          side="bottom"
+          align="start"
+          hideWhenDetached={true}
+          sticky="always"
         >
           <form onSubmit={handleSubmit} css={formStyles}>
             <textarea

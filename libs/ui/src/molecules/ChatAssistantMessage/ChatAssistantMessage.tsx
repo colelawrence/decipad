@@ -130,6 +130,7 @@ type Props = {
   readonly regenerateResponse: () => void;
   readonly submitFeedback: (message: string) => void;
   readonly submitRating: (rating: 'like' | 'dislike') => void;
+  readonly container: HTMLDivElement | null;
 };
 
 export const ChatAssistantMessage: React.FC<Props> = ({
@@ -140,6 +141,7 @@ export const ChatAssistantMessage: React.FC<Props> = ({
   sendMessage,
   submitFeedback,
   submitRating,
+  container,
 }) => {
   const [hasRated, setHasRated] = useState(false);
   const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
@@ -230,6 +232,7 @@ export const ChatAssistantMessage: React.FC<Props> = ({
             </Tooltip>
             <AssistantFeedbackPopUp
               onSubmit={hasSubmittedFeedback ? noop : handleSendFeedback}
+              container={container}
               trigger={
                 <button
                   css={buttonStyles}
