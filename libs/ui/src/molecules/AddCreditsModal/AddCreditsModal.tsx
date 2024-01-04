@@ -12,6 +12,9 @@ type AddCreditsModalProps = {
   resourceId?: string;
 };
 
+// TODO: refactor this when we have multiple plans.
+const nrOfCredits = 500;
+
 const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
   closeAction,
 }) => {
@@ -25,6 +28,7 @@ const WrapperAddCreditsModal: React.FC<AddCreditsModalProps> = ({
     <AddCreditsPaymentComponent
       resourceId={workspaceId}
       closeAction={closeAction}
+      nrOfCredits={nrOfCredits}
     />
   );
 };
@@ -43,8 +47,8 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
     >
       <ModalWrapper>
         <ModalSubtitle>
-          <p>500 Credits</p>
-          <p>$10</p>
+          <p>${nrOfCredits} Credits</p>
+          <p>$15</p>
         </ModalSubtitle>
         <p css={p14Regular}>Add 500 credits to your workspace</p>
       </ModalWrapper>
@@ -54,6 +58,7 @@ export const AddCreditsModal: React.FC<AddCreditsModalProps> = ({
             <AddCreditsPaymentComponent
               resourceId={resourceId}
               closeAction={closeAction}
+              nrOfCredits={nrOfCredits}
             />
           )}
           {!resourceId && <WrapperAddCreditsModal closeAction={closeAction} />}

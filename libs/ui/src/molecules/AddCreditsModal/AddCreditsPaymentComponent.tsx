@@ -4,17 +4,19 @@ import { Button } from '../../atoms';
 import { useUpdateResourceQuotaLimitMutation } from '@decipad/graphql-client';
 import { FormEventHandler, useCallback, useState } from 'react';
 import { useAiUsage } from '@decipad/react-contexts';
+import { getAnalytics } from '@decipad/client-events';
 import { LoadingIndicator } from '../../templates';
 import { cssVarHex } from '../../primitives';
 
 type AddCreditsPaymentComponentProps = {
   resourceId: string;
   closeAction: () => void;
+  nrOfCredits: number | string;
 };
 
 export const AddCreditsPaymentComponent: React.FC<
   AddCreditsPaymentComponentProps
-> = ({ resourceId, closeAction }) => {
+> = ({ resourceId, closeAction, nrOfCredits }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [, UpdateResourceQuotaLimit] = useUpdateResourceQuotaLimitMutation();
@@ -43,7 +45,7 @@ export const AddCreditsPaymentComponent: React.FC<
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-
+    const analytics = getAnalytics();
     if (!stripe || !elements) {
       return;
     }
@@ -57,18 +59,42 @@ export const AddCreditsPaymentComponent: React.FC<
       });
 
       if (result.error) {
+        if (analytics) {
+          analytics.track('Purchase', {
+            category: 'Credits',
+            subCategory: 'AI',
+            resource: {
+              type: 'workspace',
+              id: resourceId,
+            },
+            amount: nrOfCredits,
+            error: {
+              code: result.error.code,
+              message: result.error.message,
+            },
+          });
+        }
         console.error(result.error.message);
       } else {
         setLoadingState(true);
         const newCreditsLimitResult = await updateNewQuotaLimit(
           result.paymentMethod.id
         );
-
         if (newCreditsLimitResult.data) {
+          if (analytics) {
+            analytics.track('Purchase', {
+              category: 'Credits',
+              subCategory: 'AI',
+              resource: {
+                type: 'workspace',
+                id: resourceId,
+              },
+              amount: nrOfCredits,
+            });
+          }
           const newLimit =
             newCreditsLimitResult.data.updateExtraAiAllowance?.newQuotaLimit ??
             0;
-
           updateUsage({ tokensQuotaLimit: newLimit });
           setLoadingState(false);
           closeAction();
