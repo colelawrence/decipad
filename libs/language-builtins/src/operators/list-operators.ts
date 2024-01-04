@@ -82,6 +82,13 @@ export const listOperators: Record<string, BuiltinSpec> = {
     example: 'count(Sales.Entries)',
     formulaGroup: 'Columns',
   },
+  previous: {
+    explanation:
+      'Access the previous value in the column. Takes a default argument, which is returned for the first value.',
+    syntax: 'previous(0)',
+    example: 'previous(0) + Sales.Amount',
+    formulaGroup: 'Columns',
+  },
   countif: {
     argCount: 1,
     argCardinalities: [2],

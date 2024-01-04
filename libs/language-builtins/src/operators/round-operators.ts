@@ -100,8 +100,7 @@ export const roundOperators: Record<string, BuiltinSpec> = {
             return Value.DateValue.fromDateAndSpecificity(d, unitName);
           },
         },
-      ],
-      'prefix'
+      ]
     ),
     explanation: 'Rounds a number.',
     formulaGroup: 'Numbers',
