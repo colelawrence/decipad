@@ -56,17 +56,26 @@ import {
 import { closeButtonStyles } from '../../styles/buttons';
 import { Anchor, TColorStatus } from '../../utils';
 import * as Styled from './styles';
+import { deciOverflowXStyles } from '../../styles/scrollbars';
 
 const topBarWrapperStyles = (isEmbed: boolean) =>
-  css({
+  css(deciOverflowXStyles, {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     rowGap: '8px',
     width: '100%',
     height: '100%',
-
     padding: isEmbed ? '0' : '16px 0',
+
+    [smallScreenQuery]: {
+      padding: 0,
+
+      '& > div': {
+        width: 'auto',
+        minWidth: '100%',
+      },
+    },
   });
 
 const rightSideStyles = css({
@@ -338,6 +347,7 @@ export const NotebookTopbar = ({
         css={{
           width: '100%',
           height: '32px',
+          gap: '8px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',

@@ -10,17 +10,13 @@ import { deciOverflowYStyles } from '../../styles/scrollbars';
 // needed for screenshot testing
 const isE2E = 'navigator' in globalThis && navigator.webdriver;
 
-interface IsEmbed {
-  isEmbed: boolean;
-}
-
 const SIDEBAR_WIDTH = '320px';
 const ASSISTANT_WIDTH = '640px';
 
 /**
  * Used to wrap everything inside the app.
  */
-export const AppWrapper = styled.div<IsEmbed>((props) => ({
+export const AppWrapper = styled.div<{ isEmbed: boolean }>((props) => ({
   width: '100%',
   overflow: 'hidden',
   display: 'flex',
@@ -39,35 +35,44 @@ export const AppWrapper = styled.div<IsEmbed>((props) => ({
   '& > header': {
     height: '64px',
     width: '100%',
-    padding: '0 32px',
+    padding: '0px 32px',
     backgroundColor: cssVar('backgroundAccent'),
     display: 'flex',
     alignItems: 'center',
+
+    [smallScreenQuery]: {
+      padding: '4px 8px 0px',
+    },
   },
 }));
 
 /**
  * Used to wrap the editor + sidebar
  */
-export const MainWrapper = styled.main<IsEmbed>((props) => ({
-  // min-height: 0 is very important
-  // See: https://stackoverflow.com/questions/30861247/flexbox-children-does-not-respect-height-of-parent-with-flex-direction-column
-  minHeight: '0px',
-  height: '100%',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'flex-end',
-  backgroundColor: cssVar('backgroundAccent'),
-  padding: '0px 24px 4px',
-  gap: '24px',
+export const MainWrapper = styled.main<{ isEmbed: boolean; hasTabs: boolean }>(
+  (props) => ({
+    // min-height: 0 is very important
+    // See: https://stackoverflow.com/questions/30861247/flexbox-children-does-not-respect-height-of-parent-with-flex-direction-column
+    minHeight: '0px',
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    backgroundColor: cssVar('backgroundAccent'),
+    padding: '0px 24px 4px',
+    gap: '24px',
 
-  /* Embed conditional styles */
-  ...(props.isEmbed && {
-    padding: '0px',
-  }),
-}));
+    [smallScreenQuery]: {
+      padding: '0px 4px 12px',
+      ...(props.hasTabs && {
+        paddingBottom: '0px',
+      }),
+    },
+  })
+);
 
-type ArticleWrapperProps = IsEmbed & {
+type ArticleWrapperProps = {
+  isEmbed: boolean;
   isSidebarOpen: boolean;
   isAssistantOpen: boolean;
 };
@@ -104,7 +109,7 @@ export const NotebookSpacingWrapper = styled.div(deciOverflowYStyles, {
   height: '100%',
   overflowX: 'hidden',
   [smallScreenQuery]: {
-    padding: '12px 24px',
+    padding: '16px',
   },
 });
 

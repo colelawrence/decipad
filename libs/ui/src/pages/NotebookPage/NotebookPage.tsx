@@ -42,7 +42,7 @@ export const NotebookPage: React.FC<NotebookPageProps> = ({
     <S.AppWrapper isEmbed={isEmbed}>
       {topbar && <header>{topbar}</header>}
 
-      <S.MainWrapper isEmbed={isEmbed} ref={scrollToRef}>
+      <S.MainWrapper isEmbed={isEmbed} hasTabs={!!tabs} ref={scrollToRef}>
         <S.ArticleWrapper
           isEmbed={isEmbed}
           isAssistantOpen={assistantOpen}
