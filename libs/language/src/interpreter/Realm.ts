@@ -1,8 +1,12 @@
-import { getDefined, zip } from '@decipad/utils';
+import { PromiseOrType, getDefined, zip } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { AST, ContextUtils, Value } from '@decipad/language-types';
 import type { ExternalDataMap, Context } from '..';
-import { Stack, StackNamespaceJoiner, StackNamespaceSplitter } from '../stack';
+import {
+  StackNamespaceJoiner,
+  StackNamespaceSplitter,
+  createStack,
+} from '../stack';
 import { ExpressionCache } from '../expression-cache';
 import { InterpreterStats, initialInterpreterStats } from './interpreterStats';
 import { simpleExpressionEvaluate } from './simpleExpressionEvaluate';
@@ -12,7 +16,7 @@ import { simpleExpressionEvaluate } from './simpleExpressionEvaluate';
 // contains a stack of variables and a map of
 // function names to AST.FunctionDefinition.
 export class Realm {
-  stack = new Stack<Value.Value>(
+  stack = createStack<Value.Value>(
     undefined,
     tableItemsToTable,
     tableToTableItems
@@ -43,21 +47,24 @@ export class Realm {
     );
   }
 
+  async scopedToDepth<T>(
+    depth: number,
+    wrapper: () => PromiseOrType<T>
+  ): Promise<T> {
+    const stackBefore = this.stack;
+    this.stack = stackBefore.scopedToDepth(depth);
+    try {
+      return await wrapper();
+    } finally {
+      this.stack = stackBefore;
+    }
+  }
+
   async withPush<T>(wrapper: () => Promise<T>): Promise<T> {
     const parentExpressionCache = this.expressionCache;
     this.expressionCache = new ExpressionCache(parentExpressionCache);
     try {
       return await this.stack.withPush(wrapper);
-    } finally {
-      this.expressionCache = parentExpressionCache;
-    }
-  }
-
-  async withPushCall<T>(wrapper: () => Promise<T>): Promise<T> {
-    const parentExpressionCache = this.expressionCache;
-    this.expressionCache = new ExpressionCache(parentExpressionCache);
-    try {
-      return await this.stack.withPushCall(wrapper);
     } finally {
       this.expressionCache = parentExpressionCache;
     }
@@ -80,8 +87,8 @@ export class Realm {
       ...this.inferContext.utils,
       simpleExpressionEvaluate: async (s: AST.Statement) =>
         simpleExpressionEvaluate(this, s),
-      retrieveVariableValueByGlobalVariableName: (varName, group) =>
-        this.stack.get(varName, group),
+      retrieveVariableValueByGlobalVariableName: (varName) =>
+        this.stack.get(varName),
     };
   }
 

@@ -32,7 +32,7 @@ export const inferColumnAssign = async (
     return table ?? t.impossible(InferError.missingVariable(tableName));
   }
 
-  if (ctx.stack.hasNamespaced([tableName, columnName], 'function')) {
+  if (ctx.stack.hasNamespaced([tableName, columnName])) {
     return t.impossible(InferError.duplicateTableColumn(columnName));
   }
 
@@ -83,11 +83,8 @@ export async function evaluateColumnAssign(
   realm.stack.setNamespaced(
     [tableName, columnName],
     newColumn,
-    'function',
     realm.statementId
   );
 
-  return getDefined(
-    realm.stack.getNamespaced([tableName, columnName], 'function')
-  );
+  return getDefined(realm.stack.getNamespaced([tableName, columnName]));
 }

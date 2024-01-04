@@ -172,6 +172,7 @@ export interface RemoteComputer {
     [blockId: string, columnId: string | null],
     string | undefined
   >;
+  blockToMathML$: (blockId: string) => Observable<string>;
 
   // immediate compute
   computeRequest(

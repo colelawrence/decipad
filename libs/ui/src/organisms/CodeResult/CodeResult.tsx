@@ -18,6 +18,7 @@ import {
   BooleanResult,
   DateResult,
   DefaultFunctionResult,
+  ExpandedFunctionResult,
   FunctionResult,
   NumberResult,
   PendingResult,
@@ -66,6 +67,10 @@ const getResultMatchers = (): ResultMatcher[] => [
       (type.kind === 'anything' ||
         type.kind === 'nothing' ||
         (type.kind !== 'type-error' && (value == null || value === Unknown))),
+  },
+  {
+    component: ExpandedFunctionResult,
+    match: ({ type, expanded }) => type.kind === 'function' && !!expanded,
   },
   {
     component: FunctionResult,
@@ -152,6 +157,7 @@ export function CodeResult<T extends SerializedTypeKind>(
     element,
     tooltip,
     isLiveResult,
+    expanded,
   } = props;
   const materializedValue = useMaterializedResult(value) as
     | CodeResultProps<T>['value']
@@ -165,6 +171,7 @@ export function CodeResult<T extends SerializedTypeKind>(
     element,
     tooltip,
     isLiveResult,
+    expanded,
   });
   // Does not present result when result is not present, except for type errors.
   if (

@@ -54,8 +54,8 @@ export class ComputationRealm {
     if (statement) {
       const sym = getDefinedSymbol(statement);
       if (sym) {
-        this.interpreterRealm.stack.delete(sym, 'global');
-        this.inferContext.stack.delete(sym, 'global');
+        this.interpreterRealm.stack.delete(sym);
+        this.inferContext.stack.delete(sym);
         this.interpreterRealm.functions.delete(sym);
         this.interpreterRealm.clearCacheForSymbols([sym]);
         this.inferContext.functionDefinitions.delete(sym);
@@ -109,10 +109,10 @@ export class ComputationRealm {
       name,
       type,
     ] of this.inferContext.stack.globalVariables.entries()) {
-      const tableOrColumn = this.interpreterRealm.stack.get(name, 'global');
+      const tableOrColumn = this.interpreterRealm.stack.get(name);
 
       if (tableOrColumn instanceof Value.Table) {
-        const tableType = this.inferContext.stack.get(name, 'global');
+        const tableType = this.inferContext.stack.get(name);
         if (tableType) {
           const [sortedTableType, sortedTableValue] = Value.sortValue(
             tableType,

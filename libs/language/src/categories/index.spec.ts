@@ -34,7 +34,7 @@ it('infers sets', async () => {
 });
 
 it('does not infer inside functions', async () => {
-  await testContext.stack.withPushCall(async () => {
+  await testContext.stack.withPush(async () => {
     expect(
       (await inferCategories(testRealm, categories('Name', col(1, 2))))
         .errorCause?.spec?.errType

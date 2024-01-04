@@ -12,6 +12,8 @@ export const dequal = (foo: unknown, bar: unknown): boolean => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Dequal errored', foo, bar);
-    throw err;
+    // eslint-disable-next-line no-console
+    console.error(err);
+    return false;
   }
 };

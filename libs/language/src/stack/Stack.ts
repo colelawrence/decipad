@@ -1,32 +1,16 @@
-import { AnyMapping, anyMappingToMap, getDefined } from '@decipad/utils';
-
-export type VarGroup =
-  // Global variables
-  | 'global'
-  // Arguments and variables in the current function
-  | 'function'
-  // The temporary scope (and if not found, function and global)
-  | 'lexical';
-
-/** Take a mapping of keys to values and join it. Used to join tables */
-export type StackNamespaceJoiner<T> = (
-  x: ReadonlyMap<string, T>,
-  nsName: string
-) => T;
-
-/** Take a stack item and split it. Used to split tables ondemand */
-export type StackNamespaceSplitter<T> = (
-  x: T
-) => Iterable<[string, T]> | undefined;
-
-/**
- * MASSIVE HACK
- * Language tables contain the types of "CELLS", not the types of the columns. So we need a callback to raise the dimension of the cells to the column-level.
- */
-export type StackNamespaceRetrieverHackForTypesystemTables<T> = (
-  x: T,
-  container: T
-) => T;
+import {
+  AnyReadonlyMapping,
+  PromiseOrType,
+  anyMappingToMap,
+  getDefined,
+  identity,
+} from '@decipad/utils';
+import {
+  Stack,
+  StackNamespaceJoiner,
+  StackNamespaceRetrieverHackForTypesystemTables,
+  StackNamespaceSplitter,
+} from './types';
 
 /**
  * Holds scopes, which are maps of variable names to things like Type,
@@ -39,13 +23,11 @@ export type StackNamespaceRetrieverHackForTypesystemTables<T> = (
  * When calling a function, use .pushFunction and .popFunction to replace the
  * temporary scopes and leave only the global variables and a local scope available.
  */
-export class Stack<T> {
+export class StackImpl<T> {
   private globalScope: Map<string, Map<string, T>>;
 
-  /** Current function scope. Cannot be lexically nested */
-  private functionScope: Map<string, Map<string, T>> | undefined = undefined;
   /** Non-call scopes that can be pushed and popped. Used within tables for storing column names */
-  private temporaryScopes: Map<string, Map<string, T>>[] = [];
+  private temporaryScopes: Map<string, Map<string, T>>[];
   private namespaceJoiner: StackNamespaceJoiner<T>;
   private namespaceSplitter: StackNamespaceSplitter<T>;
   private namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T>;
@@ -53,58 +35,41 @@ export class Stack<T> {
   private idMap = new Map<string, readonly [string, string]>();
 
   constructor(
-    initialGlobalScope: AnyMapping<T> | undefined,
+    initialGlobalScope: AnyReadonlyMapping<T> | undefined,
     namespaceJoiner: StackNamespaceJoiner<T>,
     namespaceSplitter: StackNamespaceSplitter<T>,
-    namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T> = (
-      x
-    ) => x
+    namespaceRetriever: StackNamespaceRetrieverHackForTypesystemTables<T> = identity,
+    temporaryScopes: Map<string, Map<string, T>>[] = []
   ) {
     this.globalScope = new Map([
       ['', anyMappingToMap(initialGlobalScope ?? new Map())],
     ]);
+    this.temporaryScopes = temporaryScopes;
     this.namespaceJoiner = namespaceJoiner;
     this.namespaceSplitter = namespaceSplitter;
     this.namespaceRetriever = namespaceRetriever;
   }
 
-  private *getVisibleScopes(varGroup: VarGroup = 'lexical') {
-    if (varGroup === 'lexical') {
-      for (let i = this.temporaryScopes.length - 1; i >= 0; i--) {
-        yield this.temporaryScopes[i];
-      }
-    }
-    if (
-      this.functionScope &&
-      (varGroup === 'lexical' || varGroup === 'function')
-    ) {
-      yield this.functionScope;
+  private *getVisibleScopes() {
+    for (let i = this.temporaryScopes.length - 1; i >= 0; i--) {
+      yield this.temporaryScopes[i];
     }
     yield this.globalScope;
   }
 
-  private getAssignmentScope(varGroup: VarGroup = 'lexical') {
-    if (varGroup === 'lexical' && this.temporaryScopes.length) {
+  private getAssignmentScope() {
+    if (this.temporaryScopes.length) {
       return this.temporaryScopes[this.temporaryScopes.length - 1];
-    }
-    if (
-      this.functionScope &&
-      (varGroup === 'function' || varGroup === 'lexical')
-    ) {
-      return this.functionScope;
     }
     return this.globalScope;
   }
 
   get isInGlobalScope() {
-    return !this.functionScope;
+    return !this.temporaryScopes.length;
   }
 
-  isNameGlobal(
-    [ns, name]: readonly [string, string],
-    varGroup: VarGroup = 'lexical'
-  ) {
-    for (const scope of this.getVisibleScopes(varGroup)) {
+  isNameGlobal([ns, name]: readonly [string, string]) {
+    for (const scope of this.getVisibleScopes()) {
       if ((ns === '' && scope.has(name)) || scope.get(ns)?.has(name)) {
         return scope === this.globalScope;
       }
@@ -127,6 +92,36 @@ export class Stack<T> {
     return out;
   }
 
+  get availableVariables(): ReadonlyMap<string, T> {
+    const out = new Map<string, T>();
+    for (const oneScope of this.getVisibleScopes()) {
+      for (const [ns, scope] of oneScope.entries()) {
+        if (ns !== '') out.set(ns, this.namespaceJoiner(scope, ns));
+        else {
+          for (const [key, val] of scope.entries()) {
+            out.set(key, val);
+          }
+        }
+      }
+    }
+
+    return out;
+  }
+
+  get depth(): number {
+    return this.temporaryScopes.length;
+  }
+
+  scopedToDepth(depth: number) {
+    return new StackImpl(
+      this.globalVariables,
+      this.namespaceJoiner as StackNamespaceJoiner<T>,
+      this.namespaceSplitter,
+      this.namespaceRetriever,
+      this.temporaryScopes.slice(0, depth)
+    );
+  }
+
   get namespaces(): Iterable<[string, ReadonlyMap<string, T>]> {
     return (function* getNs(globals) {
       for (const [ns, items] of globals.entries()) {
@@ -135,8 +130,8 @@ export class Stack<T> {
     })(this.globalScope);
   }
 
-  getNamespace(ns: string, varGroup: VarGroup) {
-    for (const scope of this.getVisibleScopes(varGroup)) {
+  getNamespace(ns: string) {
+    for (const scope of this.getVisibleScopes()) {
       const namespace = scope.get(ns);
       if (namespace) return namespace;
     }
@@ -148,8 +143,8 @@ export class Stack<T> {
     return this.idMap.get(id);
   }
 
-  createNamespace(ns: string, varGroup: VarGroup = 'lexical') {
-    const scope = this.getAssignmentScope(varGroup);
+  createNamespace(ns: string) {
+    const scope = this.getAssignmentScope();
     if (scope.get('')?.get(ns)) {
       throw new Error(`panic: cannot create the namespace ${ns}`);
     }
@@ -159,11 +154,10 @@ export class Stack<T> {
   set(
     varName: string,
     value: T | undefined,
-    varGroup: VarGroup = 'lexical',
     id: string | undefined = undefined
   ) {
     if (value != null) {
-      return this.setNamespaced(['', varName], value, varGroup, id);
+      return this.setNamespaced(['', varName], value, id);
     }
   }
 
@@ -171,7 +165,6 @@ export class Stack<T> {
   setNamespaced(
     [ns, name]: readonly [namespace: string, name: string],
     value: T,
-    varGroup: VarGroup,
     id: string | undefined = undefined
   ) {
     let asSplitNs;
@@ -179,7 +172,7 @@ export class Stack<T> {
       // console.log(`split into `, value, asSplitNs);
       this.createNamespace(name);
       for (const [colName, value] of asSplitNs) {
-        this.setNamespaced([name, colName], value, varGroup);
+        this.setNamespaced([name, colName], value);
       }
       return;
     }
@@ -191,7 +184,7 @@ export class Stack<T> {
       }
     }
 
-    const map = this.getAssignmentScope(varGroup);
+    const map = this.getAssignmentScope();
 
     let subMap = map.get(ns);
     if (!subMap) {
@@ -200,43 +193,39 @@ export class Stack<T> {
     subMap.set(name, value);
   }
 
-  setMulti(variables: AnyMapping<T>, varGroup: VarGroup = 'lexical') {
+  setMulti(variables: AnyReadonlyMapping<T>) {
     for (const [k, v] of anyMappingToMap(variables).entries()) {
-      this.set(k, v, varGroup);
+      this.set(k, v);
     }
   }
 
-  has(varName: string, varGroup: VarGroup = 'lexical') {
-    return this.hasNamespaced(['', varName], varGroup);
+  has(varName: string) {
+    return this.hasNamespaced(['', varName]);
   }
 
-  hasNamespaced(
-    [ns, name]: [namespace: string, name: string],
-    varGroup: VarGroup
-  ) {
-    for (const scope of this.getVisibleScopes(varGroup)) {
+  hasNamespaced([ns, name]: [namespace: string, name: string]) {
+    for (const scope of this.getVisibleScopes()) {
       if (ns === '' && scope.has(name)) return true;
       if (scope.get(ns)?.has(name)) return true;
     }
     return false;
   }
 
-  get(varName: string, varGroup: VarGroup = 'lexical', depth = 0) {
-    return this.getNamespaced(['', varName], varGroup, depth);
+  get(varName: string, depth = 0) {
+    return this.getNamespaced(['', varName], depth);
   }
 
   getNamespaced(
     [ns, name]: readonly [namespace: string, name: string],
-    varGroup: VarGroup,
     depth = 0
   ): T | null {
     // console.log('[ns, name]', [ns, name]);
     const foundWithId = ns === '' && this.idMap.get(name);
     if (foundWithId && depth < 3) {
-      return this.getNamespaced(foundWithId, varGroup, depth + 1);
+      return this.getNamespaced(foundWithId, depth + 1);
     }
 
-    for (const scope of this.getVisibleScopes(varGroup)) {
+    for (const scope of this.getVisibleScopes()) {
       if (ns === '' && scope.has(name)) {
         return this.namespaceJoiner(getDefined(scope.get(name)), name);
       }
@@ -246,7 +235,7 @@ export class Stack<T> {
         if (ns !== '') {
           value = this.namespaceRetriever(
             value,
-            getDefined(this.get(ns, varGroup, depth))
+            getDefined(this.get(ns, depth))
           );
         }
         return getDefined(value);
@@ -256,15 +245,12 @@ export class Stack<T> {
     return null;
   }
 
-  delete(varName: string, varGroup: VarGroup = 'lexical') {
-    return this.deleteNamespaced(['', varName], varGroup);
+  delete(varName: string) {
+    return this.deleteNamespaced(['', varName]);
   }
 
-  deleteNamespaced(
-    [ns, name]: readonly [namespace: string, name: string],
-    varGroup: VarGroup
-  ) {
-    for (const scope of this.getVisibleScopes(varGroup)) {
+  deleteNamespaced([ns, name]: readonly [namespace: string, name: string]) {
+    for (const scope of this.getVisibleScopes()) {
       if (ns === '' && scope.has(name)) {
         scope.delete(name);
       }
@@ -276,53 +262,26 @@ export class Stack<T> {
     }
   }
 
-  async withPush<T>(wrapper: () => Promise<T>): Promise<T> {
+  async withPush<T>(wrapper: () => PromiseOrType<T>): Promise<T> {
     this.temporaryScopes.push(new Map());
 
     try {
       return await wrapper();
     } finally {
       getDefined(this.temporaryScopes.pop());
-    }
-  }
-
-  async withPushCall<T>(wrapper: () => Promise<T>): Promise<T> {
-    const preCallTemporaryScope = this.temporaryScopes;
-    const preCallFunctionScope = this.functionScope;
-
-    this.temporaryScopes = [];
-    this.functionScope = new Map();
-
-    try {
-      return await wrapper();
-    } finally {
-      this.temporaryScopes = preCallTemporaryScope;
-      this.functionScope = preCallFunctionScope;
-    }
-  }
-
-  withPushSync<T>(wrapper: () => T): T {
-    this.temporaryScopes.push(new Map());
-
-    try {
-      return wrapper();
-    } finally {
-      getDefined(this.temporaryScopes.pop());
-    }
-  }
-
-  withPushCallSync<T>(wrapper: () => T): T {
-    const preCallTemporaryScope = this.temporaryScopes;
-    const preCallFunctionScope = this.functionScope;
-
-    this.temporaryScopes = [];
-    this.functionScope = new Map();
-
-    try {
-      return wrapper();
-    } finally {
-      this.temporaryScopes = preCallTemporaryScope;
-      this.functionScope = preCallFunctionScope;
     }
   }
 }
+
+export const createStack = <T>(
+  initialGlobalScope: AnyReadonlyMapping<T> | undefined,
+  namespaceJoiner: StackNamespaceJoiner<T>,
+  namespaceSplitter: StackNamespaceSplitter<T>,
+  namespaceRetriever?: StackNamespaceRetrieverHackForTypesystemTables<T>
+): Stack<T> =>
+  new StackImpl(
+    initialGlobalScope,
+    namespaceJoiner,
+    namespaceSplitter,
+    namespaceRetriever
+  );

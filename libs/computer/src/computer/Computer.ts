@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import {
   combineLatestWith,
   distinctUntilChanged,
@@ -77,6 +77,7 @@ import { ColumnDesc, DimensionExplanation, TableDesc } from '../types';
 import { programToComputerProgram } from '../utils/programToComputerProgram';
 import { emptyComputerProgram } from '../utils/emptyComputerProgram';
 import { linearizeType } from 'libs/language-types/src/Dimension';
+import { statementToML } from '../mathML/statementToML';
 
 export { getUsedIdentifiers } from './getUsedIdentifiers';
 export type { TokenPos } from './getUsedIdentifiers';
@@ -601,6 +602,31 @@ export class Computer {
       }),
       map((result) => serializeResult(result.type, result.value)),
       distinctUntilChanged((cur, next) => dequal(cur, next))
+    );
+  }
+
+  blockToMathML$(blockId: string): Observable<string> {
+    return this.results.pipe(
+      map(() => this.latestProgram.asBlockIdMap.get(blockId)?.block?.args[0]),
+      map((_statement) => {
+        let statement = _statement;
+        if (statement?.type === 'assign') {
+          [, statement] = statement.args;
+        }
+        if (statement?.type === 'ref') {
+          const refName = statement.args[0];
+          const block = this.latestProgram.asSequence.find(
+            (block) => getExprRef(block.id) === refName
+          );
+          if (block) {
+            statement = block.block?.args[0];
+          }
+        }
+        return statement;
+      }),
+      switchMap(async (statement) =>
+        statement ? `<math>${await statementToML(statement, this)}</math>` : ''
+      )
     );
   }
 

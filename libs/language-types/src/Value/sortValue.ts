@@ -34,11 +34,21 @@ export const sortValue = <V extends Value>(type: Type, value: V): [Type, V] => {
 
   const tableValue = sortTableByType(value, type);
 
-  const sorted = zip(tableValue.columns, columnNames, columnTypes).sort(
-    ([, , type1], [, , type2]) =>
+  const namesAndTypes: Array<
+    [string | undefined, Type | undefined, ColumnLikeValue | undefined]
+  > = zip(columnNames, columnTypes).map(([name, type]) => {
+    const index = name != null ? tableValue.columnNames.indexOf(name) : -1;
+    return [name, type, tableValue.columns[index]];
+  });
+
+  const sorted: Array<
+    [string | undefined, Type | undefined, ColumnLikeValue | undefined]
+  > = namesAndTypes.sort(
+    ([, type1], [, type2]) =>
       (type1?.atParentIndex ?? 0) - (type2?.atParentIndex ?? 0)
   );
-  const [columns, newColumnNames, newColumnTypes] = unzip(sorted);
+
+  const [newColumnNames, newColumnTypes, columns] = unzip(sorted);
 
   const columnType = produce(type, (t) => {
     t.columnNames = newColumnNames as string[];

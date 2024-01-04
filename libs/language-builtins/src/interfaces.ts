@@ -8,7 +8,21 @@ export type Functor = (
   utils: ContextUtils
 ) => Type | Promise<Type>;
 
-export interface BuiltinSpec {
+export interface GenericBuiltinSpec {
+  explanation?: string;
+  syntax?: string;
+  example?: string;
+  formulaGroup?: string;
+  operatorKind?: 'infix' | 'prefix';
+  hidden?: boolean;
+}
+
+export interface AliasBuiltinSpec extends GenericBuiltinSpec {
+  aliasFor: string;
+}
+
+export interface FullBuiltinSpec extends GenericBuiltinSpec {
+  aliasFor?: undefined;
   argCount?: number | number[];
   /**
    * Use this to indicate desired cardinality per argument (1 for 1D, 2 for 2D, etc.)
@@ -16,7 +30,6 @@ export interface BuiltinSpec {
    */
   argCardinalities?: number[];
   isReducer?: boolean;
-  aliasFor?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn?: (args: any[], types?: Type[]) => any;
   likesUnknowns?: boolean;
@@ -24,8 +37,6 @@ export interface BuiltinSpec {
   autoConvertArgs?: boolean;
   absoluteNumberInput?: boolean;
   coerceToColumn?: boolean;
-  hidden?: boolean;
-  // Variant that operates on Value specifically
 
   fnValuesNoAutomap?: (
     args: Value.Value[],
@@ -44,9 +55,7 @@ export interface BuiltinSpec {
     values: AST.Expression[],
     utils: ContextUtils
   ) => PromiseOrType<Type>;
-  operatorKind?: 'infix' | 'prefix';
-  explanation?: string;
-  syntax?: string;
-  example?: string;
-  formulaGroup?: string;
+  toMathML?: (args: string[]) => string;
 }
+
+export type BuiltinSpec = FullBuiltinSpec | AliasBuiltinSpec;

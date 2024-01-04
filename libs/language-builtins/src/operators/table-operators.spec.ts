@@ -9,6 +9,7 @@ import {
 } from '@decipad/language-types';
 import { tableOperators as operators } from './table-operators';
 import { U, makeContext } from '../utils/testUtils';
+import { FullBuiltinSpec } from '../interfaces';
 
 setupDeciNumberSnapshotSerializer();
 
@@ -16,7 +17,7 @@ describe('table operators', () => {
   it('concatenates tables', async () => {
     expect(
       await (
-        await operators.concatenate.fnValues?.(
+        await (operators.concatenate as FullBuiltinSpec).fnValues?.(
           [
             Value.Table.fromNamedColumns(
               [
@@ -107,7 +108,7 @@ describe('table operators', () => {
     });
 
     const result = (
-      await operators.concatenate.fnValues?.(
+      await (operators.concatenate as FullBuiltinSpec).fnValues?.(
         [t1, t2],
         [t1Type, t2Type],
         makeContext()
@@ -173,7 +174,7 @@ describe('table operators', () => {
     });
 
     expect(
-      await operators.concatenate.functor?.(
+      await (operators.concatenate as FullBuiltinSpec).functor?.(
         [tNumber, tNumber],
         [],
         makeContext()
@@ -195,7 +196,11 @@ describe('table operators', () => {
     });
 
     expect(
-      operators.concatenate.functor?.([t1, t2], [], makeContext())
+      (operators.concatenate as FullBuiltinSpec).functor?.(
+        [t1, t2],
+        [],
+        makeContext()
+      )
     ).not.toMatchObject({
       errorCause: null,
     });
@@ -208,7 +213,11 @@ describe('table operators', () => {
     });
     const column = t.column(t.number(U('bananas')), undefined, 1);
     expect(
-      await operators.sortby.functor!([table, column], [], makeContext())
+      await (operators.sortby as FullBuiltinSpec).functor!(
+        [table, column],
+        [],
+        makeContext()
+      )
     ).toMatchObject(table);
 
     const tableValue = Value.Table.fromNamedColumns(
@@ -220,7 +229,7 @@ describe('table operators', () => {
     expect(
       await materializeOneResult(
         (
-          await operators.sortby.fnValues!(
+          await (operators.sortby as FullBuiltinSpec).fnValues!(
             [tableValue, columnValue],
             [],
             makeContext()
@@ -280,7 +289,7 @@ describe('table operators', () => {
     });
     const column = t.column(t.boolean(), undefined, 1);
     expect(
-      await operators.filter.functorNoAutomap!(
+      await (operators.filter as FullBuiltinSpec).functorNoAutomap!(
         [table, column],
         [],
         makeContext()
@@ -303,7 +312,7 @@ describe('table operators', () => {
     expect(
       await materializeOneResult(
         (
-          await operators.filter.fnValuesNoAutomap!(
+          await (operators.filter as FullBuiltinSpec).fnValuesNoAutomap!(
             [tableValue, columnValue],
             [],
             makeContext()
@@ -351,7 +360,7 @@ describe('table operators', () => {
       ['Index', 'Value']
     );
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
-      operators.lookup;
+      operators.lookup as FullBuiltinSpec;
 
     expect(
       await functor?.([tableType, t.string()], [], makeContext())
@@ -395,7 +404,7 @@ describe('table operators', () => {
       ['Index', 'Value']
     );
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
-      operators.lookup;
+      operators.lookup as FullBuiltinSpec;
 
     expect(
       await functor?.([tableType, t.string()], [], makeContext())
@@ -437,7 +446,11 @@ describe('table operators', () => {
     };
 
     expect(
-      await operators.lookup.functorNoAutomap!([column, t.number()], [], ctx)
+      await (operators.lookup as FullBuiltinSpec).functorNoAutomap!(
+        [column, t.number()],
+        [],
+        ctx
+      )
     ).toMatchObject({
       type: 'boolean',
     });
@@ -458,7 +471,7 @@ describe('table operators', () => {
 
     expect(
       await (
-        await operators.lookup.fnValuesNoAutomap!(
+        await (operators.lookup as FullBuiltinSpec).fnValuesNoAutomap!(
           [columnValue, Value.fromJS(3)],
           [column],
           ctx
@@ -467,7 +480,7 @@ describe('table operators', () => {
     ).toMatchInlineSnapshot(`true`);
 
     await expect(async () =>
-      operators.lookup.fnValuesNoAutomap?.(
+      (operators.lookup as FullBuiltinSpec).fnValuesNoAutomap?.(
         [columnValue, Value.fromJS(404)],
         [column],
         ctx
@@ -489,7 +502,7 @@ describe('table operators', () => {
     const conditionColumnValue = Value.fromJS([false, true, true]);
 
     const { functorNoAutomap: functor, fnValuesNoAutomap: fnValues } =
-      operators.lookup;
+      operators.lookup as FullBuiltinSpec;
 
     expect(
       await functor?.([tableType, conditionColumnType], [], makeContext())

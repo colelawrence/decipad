@@ -70,6 +70,7 @@ export class Type {
   functionness = false;
   functionName: string | undefined;
   functionArgCount: number | undefined;
+  functionScopeDepth: number | undefined;
 
   // Set to true when the type is still pending inference
   pending = false;
@@ -333,12 +334,14 @@ export const column = (
 
 export const functionPlaceholder = (
   name: string,
-  argCount: number | undefined
+  argCount: number | undefined,
+  scopeDepth = 0
 ) =>
   produce(new Type(), (fType) => {
     fType.functionness = true;
     fType.functionName = name;
     fType.functionArgCount = argCount;
+    fType.functionScopeDepth = scopeDepth;
   });
 
 export const nothing = () =>

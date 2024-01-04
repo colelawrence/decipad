@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import { AST } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { operators } from '@decipad/language-builtins';
+import { FullBuiltinSpec, operators } from '@decipad/language-builtins';
 import { walkAst, getIdentifierString } from '../utils';
 
 export const fakeFunctionCall = (
@@ -29,7 +29,7 @@ export const requiresWholeColumn = (expr: AST.Expression): boolean => {
       if (builtIn.aliasFor) {
         return visitFunctionCall(fakeFunctionCall(fnCall, builtIn.aliasFor));
       }
-      if (builtIn.coerceToColumn) {
+      if ((builtIn as FullBuiltinSpec).coerceToColumn) {
         requires = true;
       }
     }

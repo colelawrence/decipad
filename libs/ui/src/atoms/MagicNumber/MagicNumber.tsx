@@ -122,9 +122,11 @@ export const MagicNumber = ({
               data-testid={`code-result:${resultToSmallString(result?.value)}`}
             >
               <CodeResult
+                expanded
                 tooltip={false}
                 variant="inline"
                 {...result}
+                blockId={tempId}
                 element={element}
               />
             </span>

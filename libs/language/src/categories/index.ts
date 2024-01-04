@@ -33,7 +33,7 @@ export const inferCategories = async (
     return t.column(await setCell, name);
   });
 
-  ctx.stack.set(name, theSet, 'function', ctx.statementId);
+  ctx.stack.set(name, theSet, ctx.statementId);
   return theSet;
 };
 
@@ -48,6 +48,6 @@ export const evaluateCategories = async (
 
   const theSet = Value.getColumnLike(contents);
 
-  realm.stack.set(name, theSet, 'function', realm.statementId);
+  realm.stack.set(name, theSet, realm.statementId);
   return theSet;
 };

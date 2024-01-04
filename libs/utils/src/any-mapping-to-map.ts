@@ -3,7 +3,14 @@ export type AnyMapping<T> =
   | { [key: string]: T }
   | Array<[key: string, val: T]>;
 
-export const anyMappingToMap = <T>(mapping: AnyMapping<T>): Map<string, T> => {
+export type AnyReadonlyMapping<T> =
+  | ReadonlyMap<string, T>
+  | { [key: string]: T }
+  | ReadonlyArray<[key: string, val: T]>;
+
+export const anyMappingToMap = <T>(
+  mapping: AnyReadonlyMapping<T>
+): Map<string, T> => {
   if (mapping instanceof Map || Array.isArray(mapping)) {
     return new Map(mapping);
   }

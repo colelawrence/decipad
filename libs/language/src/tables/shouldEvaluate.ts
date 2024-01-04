@@ -6,9 +6,6 @@ export const shouldEvaluate = (
   tableName: string,
   columnName: string
 ) => {
-  const type = realm.inferContext.stack.getNamespaced(
-    [tableName, columnName],
-    'function'
-  );
+  const type = realm.inferContext.stack.getNamespaced([tableName, columnName]);
   return type != null && type.errorCause == null;
 };

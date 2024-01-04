@@ -161,4 +161,28 @@ describe('programWithAbstractNamesAndReferences', () => {
       ]
     `);
   });
+
+  it('does something with function definitions', () => {
+    expect(
+      prettyPrintProgram(
+        programWithAbstractNamesAndReferences(
+          getIdentifiedBlocks('func(a) = a + 1')
+        ).program
+      )
+    ).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "block": "(block
+        (function-definition
+          (funcdef exprRef_block_0)
+          (argument-names (def a))
+          (block
+            (+ (ref a) 1))))",
+          "definesVariable": "func",
+          "id": "block-0",
+          "type": "identified-block",
+        },
+      ]
+    `);
+  });
 });

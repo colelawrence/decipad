@@ -22,6 +22,7 @@ export interface CodeResultProps<T extends SerializedTypeKind>
   extends Result.Result<T> {
   readonly parentType?: SerializedType;
   readonly variant?: 'block' | 'inline';
+  readonly expanded?: boolean;
   readonly onDragStartCell?: (
     data: DragCellData,
     options: { previewRef?: RefObject<Element>; result: Result.Result }
@@ -37,4 +38,5 @@ export interface CodeResultProps<T extends SerializedTypeKind>
     type?: SimpleTableCellType
   ) => void;
   readonly element?: AnyElement;
+  readonly blockId?: string;
 }

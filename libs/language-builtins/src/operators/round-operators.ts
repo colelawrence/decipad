@@ -12,12 +12,12 @@ import {
   Value,
 } from '@decipad/language-types';
 import { overloadBuiltin } from '../overloadBuiltin';
-import { BuiltinSpec } from '../interfaces';
+import { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
 
-const roundNumberFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
+const roundNumberFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   Type.combine((precision ?? n).isScalar('number'), n.isScalar('number'));
 
-const roundDateFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
+const roundDateFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   (await Type.combine(precision.isScalar('number'), n.isDate())).mapType(
     (t) => {
       if (!precision.unit || precision.unit.length !== 1) {
@@ -37,7 +37,7 @@ const roundDateFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
 
 const roundWrap = (
   round: (f: DeciNumber, decimalPrecisionValue: DeciNumber) => DeciNumber
-): NonNullable<BuiltinSpec['fnValues']> => {
+): NonNullable<FullBuiltinSpec['fnValues']> => {
   return async ([nValue, decimalPrecisionValue], [type] = []) => {
     const nGeneric = await nValue.getData();
     if (nGeneric === Unknown) {

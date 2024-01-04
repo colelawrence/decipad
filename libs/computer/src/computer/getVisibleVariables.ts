@@ -56,7 +56,7 @@ export const getVisibleVariables = (
       if (sym) {
         globalVars.add(sym);
 
-        const type = inferContext.stack.get(sym, 'global');
+        const type = inferContext.stack.get(sym);
         if (type?.columnNames != null) {
           for (const rootSymbol of [sym, toUserSymbol(sym)]) {
             if (rootSymbol) {

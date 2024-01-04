@@ -1,6 +1,6 @@
 import { getOnly, produce } from '@decipad/utils';
 import { getOperatorByName } from './operators';
-import { BuiltinSpec, Functor } from './interfaces';
+import { FullBuiltinSpec, Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';
 // eslint-disable-next-line no-restricted-imports
 import {
@@ -134,7 +134,7 @@ function typeHasError(t: Type) {
   return t.errorCause != null;
 }
 
-const getFunctor = (op: BuiltinSpec): Functor => {
+const getFunctor = (op: FullBuiltinSpec): Functor => {
   if (op.functor) {
     return op.functor;
   }

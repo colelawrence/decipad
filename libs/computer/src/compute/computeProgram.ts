@@ -127,6 +127,7 @@ const internalComputeStatement = async (
     },
     usedNames: getUsedNames(),
   };
+
   return [result, value];
 };
 
@@ -176,8 +177,6 @@ export const computeProgram = async (
   const realm = computer.computationRealm;
   realm.inferContext.previousStatement = undefined;
   realm.interpreterRealm.previousStatementValue = undefined;
-
-  // console.log('compute program', program.map(prettyPrintAST));
 
   let resultsToCache: CacheContents[] = [];
   for (const block of program.asSequence) {

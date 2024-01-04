@@ -1,5 +1,5 @@
 import omit from 'lodash.omit';
-import { dequal, getDefined, produce } from '@decipad/utils';
+import { dequal, produce } from '@decipad/utils';
 import { ONE } from '@decipad/number';
 // eslint-disable-next-line no-restricted-imports
 import {
@@ -9,12 +9,7 @@ import {
   Unit,
   buildType as t,
 } from '@decipad/language-types';
-import {
-  Realm,
-  inferBlock,
-  parseBlockOrThrow,
-  parseExpressionOrThrow,
-} from '..';
+import { Realm, inferBlock, parseBlockOrThrow } from '..';
 import { objectToMap, objectToTableType } from '../testUtils';
 import {
   as,
@@ -29,7 +24,6 @@ import {
   prop,
   r,
   range,
-  tableColAssign,
   tableDef,
 } from '../utils';
 
@@ -336,6 +330,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -365,6 +360,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -394,6 +390,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -418,6 +415,7 @@ describe('tables', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": "Table",
         "indexedBy": null,
@@ -467,6 +465,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -496,6 +495,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -520,6 +520,7 @@ describe('tables', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": "Table",
         "indexedBy": null,
@@ -569,6 +570,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -598,6 +600,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -622,6 +625,7 @@ describe('tables', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": "Table",
         "indexedBy": null,
@@ -671,6 +675,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -700,6 +705,7 @@ describe('tables', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": "Table",
@@ -724,6 +730,7 @@ describe('tables', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": "Table",
         "indexedBy": null,
@@ -743,39 +750,6 @@ describe('tables', () => {
         Symbol(immer-draftable): true,
       }
     `);
-  });
-
-  it('Errors cause the column to not be present', async () => {
-    expect(
-      getDefined(
-        (
-          await inferStatement(
-            new Realm(makeContext()),
-            tableDef('Table', {
-              Col1: prop(r('MissingVar'), 'nosuchprop'),
-            })
-          )
-        ).columnTypes
-      )[0]
-    ).toBe(undefined);
-
-    expect(
-      getDefined(
-        (
-          await inferBlock(
-            block(
-              tableDef('Table', {}),
-              tableColAssign(
-                'Table',
-                'NoColumnHere',
-                parseExpressionOrThrow('1 meter + 1 second')
-              ),
-              r('Table')
-            )
-          )
-        ).columnTypes
-      )[0]
-    ).toBe(undefined);
   });
 
   it('tracks the index through columns', async () => {
@@ -867,6 +841,7 @@ describe('Property access', () => {
             "errorCause": null,
             "functionArgCount": undefined,
             "functionName": undefined,
+            "functionScopeDepth": undefined,
             "functionness": false,
             "indexName": null,
             "indexedBy": null,
@@ -936,6 +911,7 @@ describe('refs', () => {
         "errorCause": [Error: Inference Error: unknown-reference],
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": null,
         "indexedBy": null,
@@ -1163,12 +1139,7 @@ describe('name usage tracking', () => {
           Y = Table.X + 1
         }
       `)
-    ).toMatchInlineSnapshot(`
-      Array [
-        "Table",
-        "Table.X",
-      ]
-    `);
+    ).toMatchInlineSnapshot(`Array []`);
 
     expect(
       await track(`

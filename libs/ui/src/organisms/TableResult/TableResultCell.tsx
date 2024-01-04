@@ -105,15 +105,17 @@ export const TableResultCell: FC<TableResultCellProps> = ({
           colIndex === 0 && table.cellLeftPaddingStyles,
         ]}
       >
-        <CodeResult
-          parentType={tableType}
-          type={columnType}
-          value={cellValue}
-          variant="block"
-          tooltip={tooltip}
-          isLiveResult={isLiveResult}
-          element={element}
-        />
+        {columnType?.kind !== 'type-error' && (
+          <CodeResult
+            parentType={tableType}
+            type={columnType}
+            value={cellValue}
+            variant="block"
+            tooltip={tooltip}
+            isLiveResult={isLiveResult}
+            element={element}
+          />
+        )}
       </div>
     </TableData>
   );

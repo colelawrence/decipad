@@ -103,6 +103,13 @@ export const getBuiltinsForAutocomplete = (): AutocompleteName[] => {
 };
 
 // eslint-disable-next-line no-restricted-imports
-export { getConstantByName, type Constant } from '@decipad/language-builtins';
+export {
+  getConstantByName,
+  type Constant,
+  type BuiltinSpec,
+  type FullBuiltinSpec,
+} from '@decipad/language-builtins';
 // eslint-disable-next-line no-restricted-imports
 export * from '@decipad/language-types';
+
+export { operators };

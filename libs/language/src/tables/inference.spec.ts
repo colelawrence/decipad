@@ -36,21 +36,6 @@ it('allows empty tables', async () => {
   });
 });
 
-it('forbids tables inside functions', async () => {
-  await nilCtx.stack.withPushCall(async () => {
-    const tbl = table('TableName', {
-      Calculated: n('ref', 'SomeCol'),
-    });
-    expect((await inferTable(nilRealm, tbl)).errorCause?.spec)
-      .toMatchInlineSnapshot(`
-      Object {
-        "errType": "forbidden-inside-function",
-        "forbiddenThing": "table",
-      }
-    `);
-  });
-});
-
 describe('table with formulae', () => {
   const testComputed = async (expression: AST.Expression) =>
     inferTableColumnPerCell(

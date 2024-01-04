@@ -17,7 +17,7 @@ let realm: Realm;
 beforeEach(() => {
   ctx = makeContext();
   realm = new Realm(ctx);
-  ctx.stack.setNamespaced(['Table', 'Col1'], t.number(), 'function');
+  ctx.stack.setNamespaced(['Table', 'Col1'], t.number());
   ctx.stack.set('ColumnOfUnknownLength', t.column(t.number()));
   ctx.stack.createNamespace('Empty');
 });
@@ -43,6 +43,7 @@ describe('Column assignment inference', () => {
           "errorCause": null,
           "functionArgCount": undefined,
           "functionName": undefined,
+          "functionScopeDepth": undefined,
           "functionness": false,
           "indexName": null,
           "indexedBy": "Table",
@@ -68,6 +69,7 @@ describe('Column assignment inference', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": null,
         "indexedBy": "Table",
@@ -108,6 +110,7 @@ describe('Column assignment inference', () => {
           "errorCause": null,
           "functionArgCount": undefined,
           "functionName": undefined,
+          "functionScopeDepth": undefined,
           "functionness": false,
           "indexName": null,
           "indexedBy": "Table",
@@ -133,6 +136,7 @@ describe('Column assignment inference', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": null,
         "indexedBy": "Table",
@@ -173,6 +177,7 @@ describe('Column assignment inference', () => {
           "errorCause": null,
           "functionArgCount": undefined,
           "functionName": undefined,
+          "functionScopeDepth": undefined,
           "functionness": false,
           "indexName": null,
           "indexedBy": "Table",
@@ -198,6 +203,7 @@ describe('Column assignment inference', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": null,
         "indexedBy": "Table",
@@ -238,6 +244,7 @@ describe('Column assignment inference', () => {
           "errorCause": null,
           "functionArgCount": undefined,
           "functionName": undefined,
+          "functionScopeDepth": undefined,
           "functionness": false,
           "indexName": null,
           "indexedBy": "Table",
@@ -263,6 +270,7 @@ describe('Column assignment inference', () => {
         "errorCause": null,
         "functionArgCount": undefined,
         "functionName": undefined,
+        "functionScopeDepth": undefined,
         "functionness": false,
         "indexName": null,
         "indexedBy": "Table",
@@ -282,22 +290,6 @@ describe('Column assignment inference', () => {
         Symbol(immer-draftable): true,
       }
     `);
-  });
-
-  it('only works in global scope', async () => {
-    await ctx.stack.withPushCall(async () => {
-      const error = await inferColumnAssign(
-        realm,
-        tableColAssign('Table', 'Col2', col(1, 2))
-      );
-
-      expect(error.errorCause?.spec).toMatchInlineSnapshot(`
-        Object {
-          "errType": "forbidden-inside-function",
-          "forbiddenThing": "table",
-        }
-      `);
-    });
   });
 
   it('propagates multiple errors', async () => {
@@ -335,7 +327,7 @@ describe('Column assignment evaluation', () => {
   beforeEach(async () => {
     realm = new Realm(ctx);
     realm.stack.createNamespace('Table');
-    realm.stack.setNamespaced(['Table', 'Col1'], jsCol([1, 2]), 'function');
+    realm.stack.setNamespaced(['Table', 'Col1'], jsCol([1, 2]));
     await inferStatement(realm, columnFormula);
     await inferStatement(realm, columnFormulaWithPrevious);
   });

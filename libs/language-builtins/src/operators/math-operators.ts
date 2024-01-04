@@ -163,6 +163,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     formulaGroup: 'Numbers',
     syntax: 'abs(Number)',
     example: 'abs(-$300)',
+    toMathML: ([n]) => `<mo>|</mo>${n}<mo>|</mo>`,
   },
   max: {
     argCount: 1,
@@ -305,6 +306,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     formulaGroup: 'Numbers',
     syntax: 'sqrt(Number)',
     example: 'sqrt(9ft)',
+    toMathML: ([n]) => `<msqrt>${n}</msqrt>`,
   },
   ln: {
     argCount: 1,
@@ -363,69 +365,75 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     example: 'factorial(5)',
     formulaGroup: 'Numbers',
   },
-  '+': overloadBuiltin(
-    '+',
-    2,
-    [
-      {
-        argTypes: ['number', 'number'],
-        fnValues: async ([n1, n2], types) => {
-          if (secondArgIsPercentage(types)) {
+  '+': {
+    ...overloadBuiltin(
+      '+',
+      2,
+      [
+        {
+          argTypes: ['number', 'number'],
+          fnValues: async ([n1, n2], types) => {
+            if (secondArgIsPercentage(types)) {
+              return Value.Scalar.fromValue(
+                coherceToFraction(await n1.getData()).mul(
+                  coherceToFraction(await n2.getData()).add(ONE)
+                )
+              );
+            }
+
             return Value.Scalar.fromValue(
-              coherceToFraction(await n1.getData()).mul(
-                coherceToFraction(await n2.getData()).add(ONE)
+              coherceToFraction(await n1.getData()).add(
+                coherceToFraction(await n2.getData())
               )
             );
-          }
-
-          return Value.Scalar.fromValue(
-            coherceToFraction(await n1.getData()).add(
-              coherceToFraction(await n2.getData())
-            )
-          );
+          },
+          functor: binopFunctor,
         },
-        functor: binopFunctor,
-      },
-      {
-        argTypes: ['string', 'string'],
-        fnValues: async ([n1, n2]) =>
-          Value.Scalar.fromValue(
-            String(await n1.getData()) + String(await n2.getData())
-          ),
-        functor: async ([a, b]) =>
-          Type.combine(a.isScalar('string'), b.isScalar('string')),
-      },
-      ...dateOverloads['+'],
-    ],
-    'infix'
-  ),
-  '-': overloadBuiltin(
-    '-',
-    2,
-    [
-      {
-        argTypes: ['number', 'number'],
-        fnValues: async ([a, b], types) => {
-          if (secondArgIsPercentage(types)) {
+        {
+          argTypes: ['string', 'string'],
+          fnValues: async ([n1, n2]) =>
+            Value.Scalar.fromValue(
+              String(await n1.getData()) + String(await n2.getData())
+            ),
+          functor: async ([a, b]) =>
+            Type.combine(a.isScalar('string'), b.isScalar('string')),
+        },
+        ...dateOverloads['+'],
+      ],
+      'infix'
+    ),
+    toMathML: ([a, b]) => `<mo>(</mo>${a}<mo>+</mo>${b}<mo>)</mo>`,
+  },
+  '-': {
+    ...overloadBuiltin(
+      '-',
+      2,
+      [
+        {
+          argTypes: ['number', 'number'],
+          fnValues: async ([a, b], types) => {
+            if (secondArgIsPercentage(types)) {
+              return Value.Scalar.fromValue(
+                coherceToFraction(await a.getData()).mul(
+                  ONE.sub((await b.getData()) as DeciNumber)
+                )
+              );
+            }
+
             return Value.Scalar.fromValue(
-              coherceToFraction(await a.getData()).mul(
-                ONE.sub((await b.getData()) as DeciNumber)
+              coherceToFraction(await a.getData()).sub(
+                (await b.getData()) as DeciNumber
               )
             );
-          }
-
-          return Value.Scalar.fromValue(
-            coherceToFraction(await a.getData()).sub(
-              (await b.getData()) as DeciNumber
-            )
-          );
+          },
+          functor: binopFunctor,
         },
-        functor: binopFunctor,
-      },
-      ...dateOverloads['-'],
-    ],
-    'infix'
-  ),
+        ...dateOverloads['-'],
+      ],
+      'infix'
+    ),
+    toMathML: ([a, b]) => `<mo>(</mo>${a}<mo>-</mo>${b}<mo>)</mo>`,
+  },
   'unary-': {
     argCount: 1,
     noAutoconvert: true,
@@ -443,6 +451,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         (await a.sharePercentage(b)).multiplyUnit(b.unit)
       ),
     operatorKind: 'infix',
+    toMathML: ([a, b]) => `${a}<mo>*</mo>${b}`,
   },
   // this is added when we use implicit multiplication instead of '*'
   // there is a separate function because this way we can tell it apart from '*'
@@ -464,6 +473,10 @@ export const mathOperators: Record<string, BuiltinSpec> = {
         (await a.sharePercentage(b)).divideUnit(b.unit)
       ),
     operatorKind: 'infix',
+    toMathML: ([a, b]) => `<mfrac>
+      <mrow>${a}</mrow>
+      <mrow>${b}</mrow>
+    </mfrac>`,
   },
   per: {
     aliasFor: '/',
@@ -478,6 +491,7 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     formulaGroup: 'Numbers',
     syntax: 'Number mod Number',
     example: '5 mod 2',
+    toMathML: ([a, b]) => `${a}<mspace /><mo>mod</mo><mspace />${b}`,
   },
   modulo: {
     aliasFor: 'mod',
@@ -494,6 +508,8 @@ export const mathOperators: Record<string, BuiltinSpec> = {
     absoluteNumberInput: true,
     functor: exponentiationFunctor,
     operatorKind: 'infix',
+    toMathML: ([a, b]) =>
+      `<msup><mrow><mo>(</mo>${a}<mo>)</mo></mrow>${b}</msup>`,
   },
   '^': {
     aliasFor: '**',

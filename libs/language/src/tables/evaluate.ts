@@ -5,7 +5,6 @@ import { refersToOtherColumnsByName } from './inference';
 import { mapWithPrevious } from '../interpreter/previous';
 import { walkAst, getIdentifierString, isExpression } from '../utils';
 import { Realm, evaluate } from '../interpreter';
-import { shouldEvaluate } from './shouldEvaluate';
 import { coerceTableColumnIndices } from './dimensionCoersion';
 import { requiresWholeColumn } from './requiresWholeColumn';
 import { isPrevious } from '../utils/isPrevious';
@@ -109,64 +108,49 @@ export const evaluateTable = async (
   const tableName = getIdentifierString(tName);
   const indexName = getDefined(realm.getTypeAt(table).indexName);
 
-  realm.stack.createNamespace(tableName, 'function');
+  realm.stack.createNamespace(tableName);
 
   const tableDef = table.args[0];
   let tableLength: number | undefined = tableDef.args[1];
-  return realm.withPush(async () => {
-    const addColumn = async (name: string, value: Value.ColumnLikeValue) => {
-      const valueCount = await value.rowCount();
-      if (tableLength != null && valueCount !== tableLength) {
-        throw new RuntimeError(
-          `Error evaluating table column: expected length to be ${tableLength}`
-        );
-      }
-      tableLength ??= valueCount;
-
-      tableColumns.set(name, value);
-      realm.stack.setNamespaced(
-        [tableName, name],
-        value,
-        'function',
-        realm.statementId
+  const addColumn = async (name: string, value: Value.ColumnLikeValue) => {
+    const valueCount = await value.rowCount();
+    if (tableLength != null && valueCount !== tableLength) {
+      throw new RuntimeError(
+        `Error evaluating table column: expected length to be ${tableLength}`
       );
-    };
-
-    for (const item of items) {
-      if (item.type === 'table-column') {
-        const [def, column] = item.args;
-        const colName = getIdentifierString(def);
-
-        if (!shouldEvaluate(realm, tableName, colName)) {
-          // Avoid differing type and value
-          continue;
-        }
-
-        // eslint-disable-next-line no-await-in-loop
-        const columnData = await evaluateTableColumn(
-          realm,
-          tableColumns,
-          column,
-          indexName,
-          tableLength
-        );
-
-        // eslint-disable-next-line no-await-in-loop
-        await addColumn(colName, columnData);
-      } else {
-        throw new Error('panic: unreachable');
-      }
     }
+    tableLength ??= valueCount;
 
-    const tableType = realm.getTypeAt(table);
-    return Value.sortValue(
-      tableType,
-      getInstanceof(
-        getDefined(realm.stack.get(tableName, 'function')),
-        Value.Table
-      )
-    )[1];
-  });
+    tableColumns.set(name, value);
+    realm.stack.setNamespaced([tableName, name], value, realm.statementId);
+  };
+
+  for (const item of items) {
+    if (item.type === 'table-column') {
+      const [def, column] = item.args;
+      const colName = getIdentifierString(def);
+
+      // eslint-disable-next-line no-await-in-loop
+      const columnData = await evaluateTableColumn(
+        realm,
+        tableColumns,
+        column,
+        indexName,
+        tableLength
+      );
+
+      // eslint-disable-next-line no-await-in-loop
+      await addColumn(colName, columnData);
+    } else {
+      throw new Error('panic: unreachable');
+    }
+  }
+
+  const tableType = realm.getTypeAt(table);
+  return Value.sortValue(
+    tableType,
+    getInstanceof(getDefined(realm.stack.get(tableName)), Value.Table)
+  )[1];
 };
 
 export const getProperty = (

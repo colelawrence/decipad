@@ -72,7 +72,7 @@ export const tableOperators: { [fname: string]: BuiltinSpec } = {
         [, table] = Value.sortValue(
           tableType,
           getInstanceof(
-            ctx.retrieveVariableValueByGlobalVariableName(tableName, 'global'),
+            ctx.retrieveVariableValueByGlobalVariableName(tableName),
             Value.Table
           )
         );

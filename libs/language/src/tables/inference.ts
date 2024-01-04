@@ -2,7 +2,7 @@ import { getDefined, produce } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { AST, InferError, Type, buildType as t } from '@decipad/language-types';
 // eslint-disable-next-line no-restricted-imports
-import { operators } from '@decipad/language-builtins';
+import { FullBuiltinSpec, operators } from '@decipad/language-builtins';
 import { getIdentifierString, walkAst, mutateAst } from '../utils';
 import { inferExpression, linkToAST } from '../infer';
 import { pushTableContext } from '../infer/context';
@@ -13,18 +13,15 @@ import { Realm } from '../interpreter';
 
 export const inferTable = async (realm: Realm, table: AST.Table) => {
   const { inferContext: ctx } = realm;
-  if (!ctx.stack.isInGlobalScope) {
-    return t.impossible(InferError.forbiddenInsideFunction('table'));
-  }
 
   const tableDef = table.args[0];
   const tableName = getIdentifierString(tableDef);
-  if (ctx.stack.has(tableName, 'function')) {
+  if (ctx.stack.has(tableName)) {
     return t.impossible(InferError.duplicatedName(tableName));
   }
 
   const tableType = await pushTableContext(ctx, tableName, async () => {
-    ctx.stack.createNamespace(tableName, 'function');
+    ctx.stack.createNamespace(tableName);
 
     for (const tableItem of table.args.slice(1)) {
       if (tableItem.type === 'table-column') {
@@ -39,12 +36,16 @@ export const inferTable = async (realm: Realm, table: AST.Table) => {
       }
     }
 
-    return sortType(getDefined(ctx.stack.get(tableName, 'function')));
+    return sortType(getDefined(ctx.stack.get(tableName)));
   });
 
-  return produce(tableType, (type) => {
+  const tableFinalType = produce(tableType, (type) => {
     [, type.rowCount] = tableDef.args;
   });
+
+  ctx.stack.set(tableName, tableFinalType);
+
+  return tableFinalType;
 };
 
 const fixColumnExp = (
@@ -75,7 +76,7 @@ const fixColumnExp = (
             path
           );
         }
-        if (builtIn.coerceToColumn) {
+        if ((builtIn as FullBuiltinSpec).coerceToColumn) {
           insideColumnCoercionPaths.push(path);
         }
       }
@@ -127,10 +128,8 @@ export async function inferTableColumn(
   }
 ): Promise<Type> {
   const { inferContext: ctx } = realm;
-  ctx.stack.createNamespace(tableName, 'function');
-  const otherColumns = getDefined(
-    ctx.stack.getNamespace(tableName, 'function')
-  );
+  ctx.stack.createNamespace(tableName);
+  const otherColumns = getDefined(ctx.stack.getNamespace(tableName));
 
   // eslint-disable-next-line no-underscore-dangle
   const _exp: AST.Expression =
@@ -162,16 +161,11 @@ export async function inferTableColumn(
 
   linkToAST(columnAst, type);
 
+  ctx.stack.setNamespaced([tableName, columnName], type, ctx.statementId);
+
   if (type.errorCause) {
     return type;
   }
-
-  ctx.stack.setNamespaced(
-    [tableName, columnName],
-    type,
-    'function',
-    ctx.statementId
-  );
 
   return type;
 }

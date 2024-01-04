@@ -1,9 +1,9 @@
 import stringify from 'json-stringify-safe';
-import { Stack, VarGroup } from './index';
+import { Stack, createStack } from './index';
 
 let stack: Stack<string>;
 beforeEach(() => {
-  stack = new Stack(
+  stack = createStack(
     undefined,
     (nsContents) => stringify([...nsContents]),
     (table) => {
@@ -19,7 +19,7 @@ beforeEach(() => {
 });
 
 it('can push and pop contexts', async () => {
-  await stack.withPushSync(() => {
+  await stack.withPush(() => {
     stack.set('variable', '1');
     expect(stack.get('variable')).toEqual('1');
   });
@@ -30,9 +30,9 @@ it('can push and pop contexts', async () => {
 it('can check if names are global', async () => {
   stack.set('variable', '1');
   stack.set('globalVariable', '1');
-  stack.setNamespaced(['Table', 'Column'], '1', 'lexical');
+  stack.setNamespaced(['Table', 'Column'], '1');
 
-  await stack.withPushSync(() => {
+  await stack.withPush(() => {
     expect(stack.isNameGlobal(['', 'variable'])).toEqual(true);
     expect(stack.isNameGlobal(['', 'globalVariable'])).toEqual(true);
     expect(stack.isNameGlobal(['Table', 'Column'])).toEqual(true);
@@ -59,7 +59,7 @@ it('can delete variables', () => {
 
 it('checks for the presence of a variable', async () => {
   stack.set('GlobalScope', '1');
-  await stack.withPushSync(() => {
+  await stack.withPush(() => {
     stack.set('InnerScope', '2');
 
     expect(stack.has('InnerScope')).toEqual(true);
@@ -69,20 +69,18 @@ it('checks for the presence of a variable', async () => {
 });
 
 it('can push a function call', async () => {
-  stack.set('GlobalScope', 'GlobalScope', 'global');
+  stack.set('name', 'value1');
 
   await stack.withPush(async () => {
-    stack.set('GlobalScope', 'garbage');
-    stack.set('garbage', 'garbage');
+    stack.set('name', 'value2');
 
-    await stack.withPushCallSync(() => {
-      expect(stack.get('GlobalScope')).toEqual('GlobalScope');
-      expect(stack.get('garbage')).toEqual(null);
+    await stack.withPush(() => {
+      expect(stack.get('name')).toEqual('value2');
     });
 
-    expect(stack.get('GlobalScope')).toEqual('garbage');
-    expect(stack.get('garbage')).toEqual('garbage');
+    expect(stack.get('name')).toEqual('value2');
   });
+  expect(stack.get('name')).toEqual('value1');
 });
 
 it('can use namespaces', () => {
@@ -111,7 +109,7 @@ it('can use namespaces', () => {
     `"[[\\"ColName\\",\\"1\\"]]"`
   );
   expect(
-    stack.getNamespaced(['TableToSplit', 'ColName'], 'function')
+    stack.getNamespaced(['TableToSplit', 'ColName'])
   ).toMatchInlineSnapshot(`"1"`);
 });
 
@@ -126,9 +124,9 @@ it('can expand an empty namespace', () => {
 });
 
 describe('scope modifiers', () => {
-  const getHas = (name: string, place: VarGroup) => {
-    const has = stack.has(name, place);
-    const val = stack.get(name, place);
+  const getHas = (name: string) => {
+    const has = stack.has(name);
+    const val = stack.get(name);
 
     // Existence should equal .has() return
     expect(has).toEqual(val != null);
@@ -139,110 +137,91 @@ describe('scope modifiers', () => {
   it('can have a duplicate variable at multiple scopes', async () => {
     stack.set('Duplicate', 'Global', 'global');
 
-    expect(getHas('Duplicate', 'global')).toEqual('Global');
-    expect(getHas('Duplicate', 'function')).toEqual('Global');
-    expect(getHas('Duplicate', 'lexical')).toEqual('Global');
+    expect(getHas('Duplicate')).toEqual('Global');
 
-    await stack.withPushSync(() => {
+    await stack.withPush(() => {
       stack.set('Duplicate', 'lexical', 'lexical');
 
-      expect(getHas('Duplicate', 'global')).toEqual('Global');
-      expect(getHas('Duplicate', 'function')).toEqual('Global');
-      expect(getHas('Duplicate', 'lexical')).toEqual('lexical');
+      expect(getHas('Duplicate')).toEqual('lexical');
     });
 
-    await stack.withPushCall(async () => {
-      stack.set('Duplicate', 'Function', 'function');
+    await stack.withPush(async () => {
+      stack.set('Duplicate', 'Function', 'lexical');
 
-      expect(getHas('Duplicate', 'global')).toEqual('Global');
-      expect(getHas('Duplicate', 'function')).toEqual('Function');
-      expect(getHas('Duplicate', 'lexical')).toEqual('Function');
+      expect(getHas('Duplicate')).toEqual('Function');
 
-      await stack.withPushSync(() => {
+      await stack.withPush(() => {
         stack.set('Duplicate', 'lexical', 'lexical');
 
-        expect(getHas('Duplicate', 'global')).toEqual('Global');
-        expect(getHas('Duplicate', 'function')).toEqual('Function');
-        expect(getHas('Duplicate', 'lexical')).toEqual('lexical');
+        expect(getHas('Duplicate')).toEqual('lexical');
       });
     });
 
-    expect(getHas('Duplicate', 'global')).toEqual('Global');
-    expect(getHas('Duplicate', 'function')).toEqual('Global');
-    expect(getHas('Duplicate', 'lexical')).toEqual('Global');
+    expect(getHas('Duplicate')).toEqual('Global');
   });
 
   it('can set variables into other scopes', async () => {
-    await stack.withPushCall(async () => {
-      await stack.withPushSync(() => {
+    await stack.withPush(async () => {
+      await stack.withPush(() => {
         stack.set('Global', 'Global', 'global');
-        stack.set('Function', 'Function', 'function');
         stack.set('Lexical', 'Lexical', 'lexical');
       });
 
-      expect(getHas('Lexical', 'lexical')).toEqual(null);
-      expect(getHas('Function', 'lexical')).toEqual('Function');
-      expect(getHas('Function', 'function')).toEqual('Function');
+      expect(getHas('Lexical')).toEqual(null);
+      expect(getHas('Global')).toEqual(null);
     });
 
     // Cleaned up
-    expect(getHas('lexical', 'lexical')).toEqual(null);
-    expect(getHas('Function', 'lexical')).toEqual(null);
-    expect(getHas('Function', 'function')).toEqual(null);
+    expect(getHas('lexical')).toEqual(null);
+    expect(getHas('Function')).toEqual(null);
+    expect(getHas('Function')).toEqual(null);
   });
 });
 
 describe('can set with an ID', () => {
   it('can set with ID', () => {
-    stack.setNamespaced(['', 'A'], 'AVal', 'global', 'AId');
-    stack.setNamespaced(['Table', 'B'], 'BVal', 'global', 'BId');
+    stack.setNamespaced(['', 'A'], 'AVal', 'AId');
+    stack.setNamespaced(['Table', 'B'], 'BVal', 'BId');
 
     expect(stack.get('A')).toEqual('AVal');
     expect(stack.get('Table')).toMatchInlineSnapshot(
       `"[[\\"B\\",\\"BVal\\"]]"`
     );
-    expect(stack.getNamespaced(['Table', 'B'], 'lexical')).toEqual('BVal');
+    expect(stack.getNamespaced(['Table', 'B'])).toEqual('BVal');
     expect(stack.get('AId')).toEqual('AVal');
     expect(stack.get('BId')).toEqual('BVal');
 
-    stack.deleteNamespaced(['Table', 'B'], 'global');
+    stack.deleteNamespaced(['Table', 'B']);
     expect(stack.get('BId')).toEqual(null);
   });
 
   it('can set with ID in the context of a table', () => {
-    stack.setNamespaced(
-      ['', 'Table'],
-      stringify([['A', 'AVal']]),
-      'global',
-      'TableId'
-    );
-    stack.setNamespaced(['Table', 'B'], 'ColumnVal', 'global', 'ColumnId');
+    stack.setNamespaced(['', 'Table'], stringify([['A', 'AVal']]), 'TableId');
+    stack.setNamespaced(['Table', 'B'], 'ColumnVal', 'ColumnId');
 
-    expect(
-      stack.getNamespaced(['Table', 'A'], 'lexical')
-    ).toMatchInlineSnapshot(`"AVal"`);
-    expect(
-      stack.getNamespaced(['Table', 'B'], 'lexical')
-    ).toMatchInlineSnapshot(`"ColumnVal"`);
+    expect(stack.getNamespaced(['Table', 'A'])).toMatchInlineSnapshot(`"AVal"`);
+    expect(stack.getNamespaced(['Table', 'B'])).toMatchInlineSnapshot(
+      `"ColumnVal"`
+    );
     expect(stack.get('Table')).toMatchInlineSnapshot(
       `"[[\\"A\\",\\"AVal\\"],[\\"B\\",\\"ColumnVal\\"]]"`
     );
   });
 
   it('can delete things with IDs', () => {
-    stack.setNamespaced(['', 'A'], 'AVal', 'global', 'AId');
-    stack.setNamespaced(['Table', 'B'], 'BVal', 'global', 'BId');
+    stack.setNamespaced(['', 'A'], 'AVal', 'AId');
+    stack.setNamespaced(['Table', 'B'], 'BVal', 'BId');
 
-    stack.deleteNamespaced(['Table', 'B'], 'global');
+    stack.deleteNamespaced(['Table', 'B']);
     expect(stack.get('BId')).toEqual(null);
 
-    stack.deleteNamespaced(['', 'A'], 'global');
+    stack.deleteNamespaced(['', 'A']);
     expect(stack.get('AId')).toEqual(null);
   });
 });
 
 it('has a weird namespace retriever for language tables', () => {
-  const stack = new Stack<string>(
+  const stack = createStack<string>(
     undefined,
     (nsContents) => stringify([...nsContents]),
     (table) => {
@@ -257,11 +236,11 @@ it('has a weird namespace retriever for language tables', () => {
     (namespacedThing) => `Hey I retrieved ${namespacedThing}`
   );
 
-  stack.setNamespaced(['', 'A'], 'AVal', 'global', 'AId');
-  stack.setNamespaced(['Table', 'B'], 'BVal', 'global', 'BId');
+  stack.setNamespaced(['', 'A'], 'AVal', 'AId');
+  stack.setNamespaced(['Table', 'B'], 'BVal', 'BId');
 
   expect(stack.get('A')).toEqual('AVal');
-  expect(stack.getNamespaced(['Table', 'B'], 'global')).toMatchInlineSnapshot(
+  expect(stack.getNamespaced(['Table', 'B'])).toMatchInlineSnapshot(
     `"Hey I retrieved BVal"`
   );
 });

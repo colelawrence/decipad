@@ -60,7 +60,7 @@ async function internalEvaluate(
     case 'assign': {
       const varName = getIdentifierString(node.args[0]);
       const value = await evaluate(realm, node.args[1]);
-      realm.stack.set(varName, value, 'function', realm.statementId);
+      realm.stack.set(varName, value, realm.statementId);
       return value;
     }
     case 'ref': {
@@ -114,27 +114,32 @@ async function internalEvaluate(
           funcArgs.map((arg) => async () => evaluate(realm, arg))
         );
         const customFunc = getDefined(realm.functions.get(funcName));
+        const functionType = realm.getTypeAt(customFunc);
+        return realm.scopedToDepth(
+          functionType.functionScopeDepth ?? 0,
+          async () => {
+            return realm.withPush(async () => {
+              for (let i = 0; i < args.length; i++) {
+                const argName = getIdentifierString(customFunc.args[1].args[i]);
 
-        return realm.withPushCall(async () => {
-          for (let i = 0; i < args.length; i++) {
-            const argName = getIdentifierString(customFunc.args[1].args[i]);
+                realm.stack.set(argName, args[i]);
+              }
 
-            realm.stack.set(argName, args[i]);
+              const funcBody: AST.Block = customFunc.args[2];
+
+              for (let i = 0; i < funcBody.args.length; i++) {
+                // eslint-disable-next-line no-await-in-loop
+                const value = await evaluate(realm, funcBody.args[i]);
+
+                if (i === funcBody.args.length - 1) {
+                  return value;
+                }
+              }
+
+              throw new Error('function is empty');
+            });
           }
-
-          const funcBody: AST.Block = customFunc.args[2];
-
-          for (let i = 0; i < funcBody.args.length; i++) {
-            // eslint-disable-next-line no-await-in-loop
-            const value = await evaluate(realm, funcBody.args[i]);
-
-            if (i === funcBody.args.length - 1) {
-              return value;
-            }
-          }
-
-          throw new Error('function is empty');
-        });
+        );
       } else {
         const args = await pSeries(
           funcArgs.map((arg) => async () => evaluate(realm, arg))
@@ -224,10 +229,9 @@ async function internalEvaluate(
     case 'function-definition': {
       const funcName = getIdentifierString(getDefined(node.args[0]));
       realm.functions.set(funcName, node);
-
-      // Typecheck ensures this isn't used as a result
-      // but we want to always return something
-      return Value.UnknownValue;
+      const value = Value.UnknownValue;
+      realm.stack.set(funcName, value, realm.statementId);
+      return value;
     }
     case 'directive': {
       return expandDirectiveToValue(realm, node);

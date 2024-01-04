@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { FC, useEffect, useState } from 'react';
 import MathJax from 'react-mathjax-preview';
 import { CodeResultProps } from '../../types';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { useComputer } from '@decipad/react-contexts';
 
 const functionResultStyles = css({
@@ -13,27 +12,23 @@ const functionResultStyles = css({
   lineHeight: 1.2,
 });
 
-export const FunctionResult: FC<CodeResultProps<'function'>> = ({
-  element,
+export const ExpandedFunctionResult: FC<CodeResultProps<'function'>> = ({
+  blockId,
 }) => {
   const computer = useComputer();
   const [math, setMath] = useState('');
+
   useEffect(() => {
-    if (element) {
-      const sub = computer.blockToMathML$(element.id).subscribe(setMath);
+    if (blockId) {
+      const sub = computer.blockToMathML$(blockId).subscribe(setMath);
       return () => sub.unsubscribe();
     }
     return undefined;
-  }, [computer, element]);
-  const trigger = (
-    <span data-highlight-changes css={functionResultStyles}>
-      ƒ
-    </span>
-  );
+  }, [blockId, computer]);
 
   return (
-    <Tooltip trigger={trigger}>
+    <span data-highlight-changes css={functionResultStyles}>
       <MathJax math={math}></MathJax>
-    </Tooltip>
+    </span>
   );
 };

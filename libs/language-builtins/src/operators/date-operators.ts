@@ -8,9 +8,9 @@ import {
   Type,
   Value,
 } from '@decipad/language-types';
-import { BuiltinSpec } from '../interfaces';
+import { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
 
-const extractFunctor: BuiltinSpec['functor'] = async ([n, precision]) =>
+const extractFunctor: FullBuiltinSpec['functor'] = async ([n, precision]) =>
   (await Type.combine(precision.isTimeQuantity(), n.isDate())).mapType((t) => {
     if (!precision.unit || precision.unit.length !== 1) {
       return t.withErrorCause(`round: invalid time unit`);

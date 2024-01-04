@@ -86,7 +86,7 @@ export async function inferMatrixAssign(
     ).mapType(async (newMatrix: Type) => dimension.sameAs(newMatrix));
   }
 
-  context.stack.set(varName, newMatrix, 'function', context.statementId);
+  context.stack.set(varName, newMatrix, context.statementId);
   return newMatrix;
 }
 
@@ -109,6 +109,6 @@ export async function evaluateMatrixAssign(
 
   const newColumn = await evaluateMultidimAssignment(realm, assign, dimension);
 
-  realm.stack.set(varName, newColumn, 'function', realm.statementId);
+  realm.stack.set(varName, newColumn, realm.statementId);
   return newColumn;
 }

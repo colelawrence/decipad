@@ -8,7 +8,7 @@ import {
   Value,
   buildType as t,
 } from '@decipad/language-types';
-import { BuiltinSpec, Functor } from './interfaces';
+import { FullBuiltinSpec, Functor } from './interfaces';
 import { parseFunctor } from './parseFunctor';
 
 export type OverloadTypeName =
@@ -46,7 +46,7 @@ export const overloadBuiltin = (
   argCount: number | number[],
   overloads: OverloadedBuiltinSpec[],
   operatorKind?: 'prefix' | 'infix'
-): BuiltinSpec => {
+): FullBuiltinSpec => {
   const byArgTypes = new Map(
     overloads.map((o) => [argTypesKey(o.argTypes), o])
   );

@@ -3,20 +3,18 @@ import { N } from '@decipad/number';
 import { buildType as t, Value } from '@decipad/language-types';
 import { roundOperators as operators } from './round-operators';
 import { makeContext, U } from '../utils/testUtils';
+import { FullBuiltinSpec } from '../interfaces';
 
 describe('round', () => {
+  const round = operators.round as FullBuiltinSpec;
   it('rounds a number', async () => {
     expect(
-      await operators.round.functor?.(
-        [t.number(U('bananas'))],
-        [],
-        makeContext()
-      )
+      await round.functor?.([t.number(U('bananas'))], [], makeContext())
     ).toEqual(t.number(U('bananas')));
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(1127, 1000)), Value.fromJS(N(2))],
             [t.number()],
             makeContext()
@@ -27,7 +25,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(1127, 10)), Value.fromJS(N(0))],
             [t.number()],
             makeContext()
@@ -41,7 +39,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(1127, 10))],
             [t.number()],
             makeContext()
@@ -55,7 +53,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(1))],
             [t.number()],
             makeContext()
@@ -69,7 +67,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(0))],
             [t.number()],
             makeContext()
@@ -83,7 +81,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(-2))],
             [t.number()],
             makeContext()
@@ -97,7 +95,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.round.fnValues!(
+          await round.fnValues!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(-5))],
             [t.number()],
             makeContext()
@@ -111,7 +109,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.rounddown.fnValues!(
+          await (operators.rounddown as FullBuiltinSpec).fnValues!(
             [Value.fromJS(N(112799, 1000)), Value.fromJS(N(1))],
             [t.number()],
             makeContext()
@@ -125,7 +123,7 @@ describe('round', () => {
     expect(
       (
         await (
-          await operators.rounddown.fnValues!(
+          await (operators.rounddown as FullBuiltinSpec).fnValues!(
             [Value.fromJS(N(1127, 10))],
             [t.number()],
             makeContext()

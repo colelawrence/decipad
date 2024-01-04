@@ -25,40 +25,43 @@ export function inferFunctionDefinition(
 
   ctx.functionDefinitions.set(fName, statement);
 
-  return t.functionPlaceholder(fName, args.args.length);
+  return t.functionPlaceholder(fName, args.args.length, ctx.stack.depth);
 }
 
 export const inferFunction = async (
   realm: Realm,
   func: AST.FunctionDefinition,
-  givenArguments: Type[]
+  givenArguments: Type[],
+  depth = 0
 ): Promise<Type> => {
   const { inferContext: ctx } = realm;
-  return ctx.stack.withPushCall(async () => {
-    const [fName, fArgs, fBody] = func.args;
+  return ctx.scopedToDepth(depth, async () =>
+    ctx.stack.withPush(async () => {
+      const [fName, fArgs, fBody] = func.args;
 
-    if (givenArguments.length !== fArgs.args.length) {
-      const error = InferError.expectedArgCount(
-        getIdentifierString(fName),
-        fArgs.args.length,
-        givenArguments.length
-      );
+      if (givenArguments.length !== fArgs.args.length) {
+        const error = InferError.expectedArgCount(
+          getIdentifierString(fName),
+          fArgs.args.length,
+          givenArguments.length
+        );
 
-      return t.impossible(error);
-    }
+        return t.impossible(error);
+      }
 
-    for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
-      ctx.stack.set(getIdentifierString(argDef), arg);
-    }
+      for (const [argDef, arg] of zip(fArgs.args, givenArguments)) {
+        ctx.stack.set(getIdentifierString(argDef), arg);
+      }
 
-    let returned;
-    for (const statement of fBody.args) {
-      // eslint-disable-next-line no-await-in-loop
-      returned = await inferStatement(realm, statement);
-    }
+      let returned;
+      for (const statement of fBody.args) {
+        // eslint-disable-next-line no-await-in-loop
+        returned = await inferStatement(realm, statement);
+      }
 
-    return getDefined(returned, 'panic: function did not return');
-  });
+      return getDefined(returned, 'panic: function did not return');
+    })
+  );
 };
 
 const continueInferFunctionCall = async (
@@ -87,7 +90,12 @@ const continueInferFunctionCall = async (
   const functionDefinition = ctx.functionDefinitions.get(fName);
 
   if (functionDefinition != null) {
-    return inferFunction(realm, functionDefinition, givenArguments);
+    return inferFunction(
+      realm,
+      functionDefinition,
+      givenArguments,
+      functionDefinition.inferredType?.functionScopeDepth ?? 0
+    );
   } else {
     return callBuiltinFunctor(realm.utils, fName, givenArguments, fArgs);
   }

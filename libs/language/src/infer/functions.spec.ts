@@ -78,4 +78,23 @@ describe('function inference', () => {
       unit: U('OtherFunctionsArgument', { known: false }),
     });
   });
+
+  it('can access parent scope', async () => {
+    const funcs = block(
+      funcDef(
+        'Function',
+        ['FuncArg'],
+        funcDef('Func2', [], r('FuncArg')),
+        funcDef('Func', [], c('Func2')),
+        c('Func')
+      ),
+      c('Function', l(true))
+    );
+
+    const ctx = makeContext();
+    expect(await inferBlock(funcs, new Realm(ctx))).toMatchObject({
+      errorCause: null,
+      type: 'boolean',
+    });
+  });
 });

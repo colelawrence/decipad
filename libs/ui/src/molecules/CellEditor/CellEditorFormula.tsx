@@ -35,7 +35,7 @@ export const CellEditorFormula = ({ element }: CellProps) => {
 
   // Causes re-renders even when the result is the same
   const formulaResult = useTableColumnFormulaResultForCell(element);
-  if (!formulaResult) return null;
+  if (!formulaResult || formulaResult.type.kind === 'type-error') return null;
 
   const noPadding = NO_PADDING_RESULT_KINDS.includes(formulaResult.type.kind);
 

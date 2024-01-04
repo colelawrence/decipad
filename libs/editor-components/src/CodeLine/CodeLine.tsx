@@ -174,6 +174,7 @@ export const CodeLine: PlateComponent = ({ attributes, children, element }) => {
             onClickedResult={isReadOnly ? undefined : onClickedResult}
             hasNextSibling={!teleport && siblingCodeLines?.hasNext}
             hasPreviousSibling={!teleport && siblingCodeLines?.hasPrevious}
+            element={element}
           >
             {children}
           </UICodeLine>

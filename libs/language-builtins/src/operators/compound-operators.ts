@@ -2,7 +2,7 @@ import DeciNumber, { ONE, ZERO } from '@decipad/number';
 import { getDefined, getInstanceof } from '@decipad/utils';
 // eslint-disable-next-line no-restricted-imports
 import { Type, Value } from '@decipad/language-types';
-import { BuiltinSpec } from '../interfaces';
+import { BuiltinSpec, FullBuiltinSpec } from '../interfaces';
 
 export const compoundOperators: { [fname: string]: BuiltinSpec } = {
   compoundrate: {
@@ -34,7 +34,10 @@ export const compoundOperators: { [fname: string]: BuiltinSpec } = {
       const nPer = getInstanceof(_nPer, DeciNumber);
 
       const compounded = getDefined(
-        compoundOperators.compoundrate.fn?.([periodicInterest, nPer])
+        (compoundOperators.compoundrate as FullBuiltinSpec).fn?.([
+          periodicInterest,
+          nPer,
+        ])
       );
       return compounded.add(ONE).mul(presentValue);
     },

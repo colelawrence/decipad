@@ -277,11 +277,11 @@ const inferStatementInternal = wrap(
 
         const constant = getConstantByName(varName);
         const type =
-          constant || ctx.stack.has(varName, 'function')
+          constant || ctx.stack.has(varName)
             ? t.impossible(InferError.duplicatedName(varName))
             : await inferExpression(realm, nValue);
 
-        ctx.stack.set(varName, type, 'function', ctx.statementId);
+        ctx.stack.set(varName, type, ctx.statementId);
         return type;
       }
       case 'table': {
@@ -297,7 +297,14 @@ const inferStatementInternal = wrap(
         return inferCategories(realm, statement);
       }
       case 'function-definition': {
-        return inferFunctionDefinition(ctx, statement);
+        const [fName] = statement.args;
+        const functionType = inferFunctionDefinition(ctx, statement);
+        ctx.stack.set(
+          getIdentifierString(fName),
+          functionType,
+          ctx.statementId
+        );
+        return functionType;
       }
       default: {
         return inferExpression(realm, statement);

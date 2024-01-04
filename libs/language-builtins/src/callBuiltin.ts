@@ -1,7 +1,7 @@
 import DeciNumber from '@decipad/number';
 import { getDefined, getOnly } from '@decipad/utils';
 import { getOperatorByName } from './operators';
-import { BuiltinSpec } from './interfaces';
+import { FullBuiltinSpec } from './interfaces';
 // eslint-disable-next-line no-restricted-imports
 import {
   ContextUtils,
@@ -38,7 +38,7 @@ async function shouldAutoconvert(types: Type[]): Promise<boolean> {
 async function callBuiltinAfterAutoconvert(
   context: ContextUtils,
   funcName: string,
-  builtin: BuiltinSpec,
+  builtin: FullBuiltinSpec,
   args: Value.Value[],
   argTypes: Type[]
 ): Promise<Value.Value> {

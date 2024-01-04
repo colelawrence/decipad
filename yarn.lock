@@ -18795,6 +18795,11 @@ domhandler@^5.0.2, domhandler@^5.0.3:
   dependencies:
     domelementtype "^2.3.0"
 
+dompurify@^2.0.8:
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.4.7.tgz#277adeb40a2c84be2d42a8bcd45f582bfa4d0cfc"
+  integrity sha512-kxxKlPEDa6Nc5WJi+qRgPbOAbgTpSULL+vI3NUXsZMlkJxTqYI9wg5ZTay2sFrdZRWHPWNi+EdAhcJf81WtoMQ==
+
 domutils@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/domutils/-/domutils-1.7.0.tgz#56ea341e834e06e6748af7a1cb25da67ea9f8c2a"
@@ -29991,6 +29996,13 @@ react-loadable-ssr-addon-v5-slorber@^1.0.1:
   integrity sha512-lq3Lyw1lGku8zUEJPDxsNm1AfYHBrO9Y1+olAYwpUJ2IGFBskM0DMKok97A6LWUpHm+o7IvQBOWu9MLenp9Z+A==
   dependencies:
     "@babel/runtime" "^7.10.3"
+
+react-mathjax-preview@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/react-mathjax-preview/-/react-mathjax-preview-2.2.6.tgz#adcdaf73733e45f98562105c5822d851fe3c105e"
+  integrity sha512-lS+wQ49jd/XyXu8tTWWZ38qfNJrAlxsDjkUrQoldfM1MdS6s18DxFV4dwP9xoAsq86kuSb/raXU8qJrH5dtV5w==
+  dependencies:
+    dompurify "^2.0.8"
 
 react-onclickoutside@^6.13.0:
   version "6.13.0"
