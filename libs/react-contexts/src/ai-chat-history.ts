@@ -36,6 +36,7 @@ export interface UserMessage extends BaseMessage {
 export type SingleEvent = {
   readonly id: string;
   readonly content: string;
+  readonly uiContent?: string;
   readonly function_call?: unknown;
   readonly result?: unknown;
   readonly element?: {

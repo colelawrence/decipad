@@ -162,6 +162,7 @@ export const useAgent = ({ notebookId }: AgentParams) => {
                 const newEvent = {
                   id: nanoid(),
                   content: `Error: ${(err as Error).message}`,
+                  uiContent: 'Unknown error occurred',
                   function_call: functionCall,
                   result: JSON.stringify(err),
                 };

@@ -147,6 +147,10 @@ const eventContentStyles = css(p13Regular, {
   margin: '0px -4px',
   padding: '1px 4px',
   borderRadius: 4,
+  flex: 1,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 
   '&:hover': {
     backgroundColor: cssVar('backgroundHeavy'),
@@ -297,7 +301,9 @@ export const ChatEventGroupMessage: React.FC<Props> = ({ status, events }) => {
                       />
                     </svg>
                   </div>
-                  <p css={eventContentStyles}>{event.content}</p>
+                  <p css={eventContentStyles}>
+                    {event.uiContent ?? event.content}
+                  </p>
                 </motion.li>
               ))}
             </motion.ul>
