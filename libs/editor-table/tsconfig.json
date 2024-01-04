@@ -36,6 +36,9 @@
     },
     {
       "path": "../generator-utils"
+    },
+    {
+      "path": "../export"
     }
   ]
 }

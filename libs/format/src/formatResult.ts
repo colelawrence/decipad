@@ -1,6 +1,6 @@
 import util from 'util';
 import DeciNumber, { N } from '@decipad/number';
-import { getDefined, zip } from '@decipad/utils';
+import { getDefined, identity, zip } from '@decipad/utils';
 import {
   Result,
   SerializedType,
@@ -11,22 +11,31 @@ import {
 } from '@decipad/remote-computer';
 import { formatType } from './formatType';
 
-export const formatResult = (
+export type FormatResult = (
   locale: string,
   result: Result.OneResult | undefined | null,
-  _type: Type | SerializedType,
-  color = (s: string) => s
+  type: Type | SerializedType,
+  color?: (s: string) => string,
+  recurse?: FormatResult
+) => string;
+
+export const formatResult: FormatResult = (
+  locale,
+  result,
+  _type,
+  color = identity,
+  recurse = formatResult
 ): string => {
   const type = serializeType(_type);
 
   if (type.kind === 'range') {
     const [start, end] = result as Result.OneResult[];
-    return `range(${formatResult(
+    return `range(${recurse(locale, start, type.rangeOf, color)} to ${recurse(
       locale,
-      start,
+      end,
       type.rangeOf,
       color
-    )} to ${formatResult(locale, end, type.rangeOf, color)})`;
+    )})`;
   }
 
   if (type.kind === 'date') {
@@ -54,9 +63,7 @@ export const formatResult = (
     Array.isArray(result)
   ) {
     return `[ ${result
-      .map((item) =>
-        formatResult(locale, item, getDefined(type.cellType), color)
-      )
+      .map((item) => recurse(locale, item, getDefined(type.cellType), color))
       .join(', ')} ]`;
   }
 
@@ -67,7 +74,7 @@ export const formatResult = (
     const cols = zip(result, zip(type.columnTypes, type.columnNames))
       .map(
         ([col, [t, name]]) =>
-          `  ${name} = ${formatResult(
+          `  ${name} = ${recurse(
             locale,
             col,
             {
@@ -85,8 +92,7 @@ export const formatResult = (
   if (type.kind === 'row' && Array.isArray(result)) {
     const cols = zip(result, zip(type.rowCellTypes, type.rowCellNames))
       .map(
-        ([col, [t, name]]) =>
-          `  ${name} = ${formatResult(locale, col, t, color)}`
+        ([col, [t, name]]) => `  ${name} = ${recurse(locale, col, t, color)}`
       )
       .join(',\n');
     return `{\n${cols}\n}`;

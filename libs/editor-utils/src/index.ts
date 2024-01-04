@@ -11,6 +11,7 @@ export * from './deserializeResult';
 export * from './filterDecorate';
 export * from './findDomNodePath';
 export * from './focusAndSetSelection';
+export * from './forceDownload';
 export * from './generateHash';
 export * from './getAboveNodeSafe';
 export * from './getCodeLineSource';

@@ -96,6 +96,10 @@ interface DraggableBlockProps extends ComponentProps<typeof EditorBlock> {
    */
   readonly isCentered?: boolean;
   readonly hasPreviousSibling?: boolean;
+
+  // Downloadable
+  readonly isDownloadable?: boolean;
+  readonly onDownload?: () => void;
 }
 // eslint-disable-next-line complexity
 export const DraggableBlock = ({
@@ -135,6 +139,9 @@ export const DraggableBlock = ({
   hasPreviousSibling,
 
   aiPanel,
+
+  isDownloadable,
+  onDownload,
 
   ...props
 }: DraggableBlockProps): ReturnType<FC> => {
@@ -232,6 +239,8 @@ export const DraggableBlock = ({
               showAddBlock={!isHidden}
               onCopyHref={onCopyHref}
               aiPanel={aiPanel}
+              isDownloadable={isDownloadable}
+              onDownload={onDownload}
             >
               {!isMultipleSelection &&
                 turnInto != null &&

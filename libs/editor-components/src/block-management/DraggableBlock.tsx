@@ -74,6 +74,8 @@ type DraggableBlockProps = {
   | 'onTurnInto'
   | 'turnInto'
   | 'isCentered'
+  | 'isDownloadable'
+  | 'onDownload'
 > &
   Pick<UseDndNodeOptions, 'accept' | 'getAxis' | 'onDrop'>;
 

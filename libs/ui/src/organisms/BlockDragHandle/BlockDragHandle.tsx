@@ -94,6 +94,8 @@ interface BlockDragHandleProps {
     visible: boolean;
     toggle: () => void;
   };
+  readonly isDownloadable?: boolean;
+  readonly onDownload?: () => void;
 }
 
 export const BlockDragHandle = ({
@@ -114,6 +116,8 @@ export const BlockDragHandle = ({
   onCopyHref,
   dependenciesForBlock,
   aiPanel,
+  isDownloadable = false,
+  onDownload = noop,
 }: BlockDragHandleProps): ReturnType<FC> => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -218,6 +222,11 @@ export const BlockDragHandle = ({
                 );
               })}
             </MenuList>
+          )}
+          {isDownloadable && (
+            <MenuItem icon={<icons.Download />} onSelect={onDownload}>
+              Download as CSV
+            </MenuItem>
           )}
           {children}
           {!isMultipleSelection ? aiButton : null}

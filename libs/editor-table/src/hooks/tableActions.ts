@@ -15,6 +15,7 @@ import {
   TableRowElement,
 } from '@decipad/editor-types';
 import {
+  forceDownload,
   getNodeEntrySafe,
   insertNodes,
   isElementOfType,
@@ -31,6 +32,7 @@ import {
   TEditor,
   Value,
   getNodeChildren,
+  getNodeString,
   hasNode,
   insertText,
   moveNodes,
@@ -42,11 +44,13 @@ import { useIncrementQueryCountMutation } from '@decipad/graphql-client';
 import { useToast } from '@decipad/toast';
 import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
-import { Path } from 'slate';
+import { type Path } from 'slate';
+import * as Sentry from '@sentry/react';
+import { exportCsv } from '@decipad/export';
+import { Result, materializeResult } from '@decipad/computer';
 import { useRdFetch } from 'libs/editor-components/src/AIPanel/hooks';
 import { getColumnName, setCellText } from '../utils';
 import { changeColumnType } from '../utils/changeColumnType';
-import * as Sentry from '@sentry/react';
 
 export interface TableActions {
   onDelete: () => void;
@@ -71,6 +75,7 @@ export interface TableActions {
   onMoveColumn: (fromColumnIndex: number, toColumnIndex: number) => void;
   onSaveIcon: (icon?: string) => void;
   onSaveColor: (color?: string) => void;
+  onDownload: () => void;
 }
 
 export const addColumn = <
@@ -579,6 +584,34 @@ export const useTableActions = (
     [editor, path]
   );
 
+  const onDownload = useCallback(async () => {
+    if (element) {
+      const tableName = getNodeString(element.children[0].children[0]);
+      const result = computer.getBlockIdResult(element.id);
+      if (
+        !result ||
+        result.error ||
+        !result.result ||
+        (result.result.type.kind !== 'materialized-table' &&
+          result.result.type.kind !== 'table')
+      ) {
+        toast.error(
+          `Cannot download table data${
+            result?.error ? `: ${result.error}` : ''
+          }`
+        );
+        return;
+      }
+      const rResult = await materializeResult(result.result);
+      if (!rResult) {
+        toast.error('Cannot download table data: no result');
+        return;
+      }
+      const csv = exportCsv(rResult as Result.Result<'materialized-table'>);
+      forceDownload(`${tableName}.csv`, new Blob([csv]));
+    }
+  }, [computer, element, toast]);
+
   return {
     onDelete,
     onChangeColumnName,
@@ -596,5 +629,6 @@ export const useTableActions = (
     onSetHideFormulas,
     onSaveIcon,
     onSaveColor,
+    onDownload,
   };
 };

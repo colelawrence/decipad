@@ -77,6 +77,7 @@
       "@decipad/email-templates": ["emails/src/index.tsx"],
       "@decipad/emails": ["libs/emails/src/index.ts"],
       "@decipad/eslint-config-decipad": ["libs/eslint-config-decipad/index.js"],
+      "@decipad/export": ["libs/export/src/index.ts"],
       "@decipad/external-data-lambdas": [
         "libs/external-data-lambdas/src/index.ts"
       ],

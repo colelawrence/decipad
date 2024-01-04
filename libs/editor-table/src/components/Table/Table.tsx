@@ -45,6 +45,7 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
     onSetHideFormulas,
     onSaveColor,
     onSaveIcon,
+    onDownload,
   } = useTableActions(editor, element);
   const selectedCells = useTableStore().get.selectedCells();
 
@@ -97,6 +98,8 @@ export const Table: PlateComponent = ({ attributes, children, element }) => {
         id={blockId}
         dependencyId={blockId}
         key={blockId}
+        isDownloadable
+        onDownload={onDownload}
       >
         <EditorTableContext.Provider value={contextValue}>
           <EditorTableResultContext.Provider

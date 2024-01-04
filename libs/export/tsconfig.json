@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "dom", "dom.iterable"]
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../remote-computer"
+    },
+    {
+      "path": "../format"
+    },
+    {
+      "path": "../number"
+    }
+  ]
+}
