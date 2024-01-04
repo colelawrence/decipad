@@ -5,6 +5,7 @@ import { User } from '../manager/test-users';
 smoketest(
   'check live collaboration same notebook',
   async ({ testUser: userA, anotherTestUser: userB, browser }) => {
+    smoketest.slow();
     const { page: userAPage, notebook: userANotebook } = userA;
     const { page: userBPage, notebook: userBNotebook } = userB;
     const currentDate = new Date().getTime();

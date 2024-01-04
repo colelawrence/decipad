@@ -1,11 +1,9 @@
-import { expect, test, Page, BrowserContext } from './manager/decipad-tests';
+import { expect, test, Page } from './manager/decipad-tests';
 import {
   focusOnBody,
-  setUp,
   ControlPlus,
   keyPress,
   navigateToNotebook,
-  waitForEditorToLoad,
   editorTitleLocator,
 } from '../utils/page/Editor';
 
@@ -70,33 +68,12 @@ const waitUntilStopRendering = async (page: Page): Promise<number> => {
   throw new Error('Timeout exceeded while waiting for table to stop rendering');
 };
 
-test.describe('Count how many times table cells render', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Count how many times table cells render', async ({ testUser }) => {
+  await test.step('count initial renders', async () => {
+    await testUser.notebook.focusOnBody();
+    await createTable(testUser.page);
 
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('count initial renders', async () => {
-    await focusOnBody(page);
-    await createTable(page);
-
-    const renderCount = await waitUntilStopRendering(page);
+    const renderCount = await waitUntilStopRendering(testUser.page);
 
     /**
      * If this fails with a number less than what's currently expected, reduce
@@ -108,245 +85,217 @@ test.describe('Count how many times table cells render', () => {
   });
 });
 
-test.describe('Basic Table Interactions + Collisions', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates 2 tables and names them', async () => {
-    await focusOnBody(page);
-    await createTable(page);
-    await page.getByTestId('table-name-input').getByText('Table').waitFor();
-    await page.getByTestId('table-name-input').getByText('Table').dblclick();
-    await page.keyboard.type('NewTableName');
-    await expect(page.getByText('NewTableName')).toBeVisible();
+test('Basic Table Interactions + Collisions', async ({ testUser }) => {
+  await test.step('creates 2 tables and names them', async () => {
+    await testUser.notebook.focusOnBody();
+    await createTable(testUser.page);
+    await testUser.page
+      .getByTestId('table-name-input')
+      .getByText('Table')
+      .waitFor();
+    await testUser.page
+      .getByTestId('table-name-input')
+      .getByText('Table')
+      .dblclick();
+    await testUser.page.keyboard.type('NewTableName');
+    await expect(testUser.page.getByText('NewTableName')).toBeVisible();
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.computerDelay); // IMPORTANT
-    await createTable(page);
-    await page
+    await testUser.page.waitForTimeout(Timeouts.computerDelay); // IMPORTANT
+    await createTable(testUser.page);
+    await testUser.page
       .getByTestId('table-name-input')
       .getByText('Table', { exact: true })
       .waitFor();
-    await page
+    await testUser.page
       .getByTestId('table-name-input')
       .getByText('Table', { exact: true })
       .dblclick();
-    await page.keyboard.type('NewTableName2');
-    await expect(page.getByText('NewTableName2')).toBeVisible();
+    await testUser.page.keyboard.type('NewTableName2');
+    await expect(testUser.page.getByText('NewTableName2')).toBeVisible();
   });
 
-  test('fills first table', async () => {
+  await test.step('fills first table', async () => {
     // first column
-    await writeInTable(page, 'Imports', 1, 0, 'NewTableName');
-    expect(await getFromTable(page, 1, 0, 'NewTableName')).toBe('Imports');
-    await writeInTable(page, 'Hydro, wind and solar', 2, 0, 'NewTableName');
-    await writeInTable(page, 'Bioenergy', 3, 0, 'NewTableName');
+    await writeInTable(testUser.page, 'Imports', 1, 0, 'NewTableName');
+    expect(await getFromTable(testUser.page, 1, 0, 'NewTableName')).toBe(
+      'Imports'
+    );
+    await writeInTable(
+      testUser.page,
+      'Hydro, wind and solar',
+      2,
+      0,
+      'NewTableName'
+    );
+    await writeInTable(testUser.page, 'Bioenergy', 3, 0, 'NewTableName');
 
     // second column
-    await writeInTable(page, '0.68%', 1, 1, 'NewTableName');
-    expect(await getFromTable(page, 1, 1, 'NewTableName')).toBe('0.68%');
-    await writeInTable(page, '3.02%', 2, 1, 'NewTableName');
-    await writeInTable(page, '9.32%', 3, 1, 'NewTableName');
+    await writeInTable(testUser.page, '0.68%', 1, 1, 'NewTableName');
+    expect(await getFromTable(testUser.page, 1, 1, 'NewTableName')).toBe(
+      '0.68%'
+    );
+    await writeInTable(testUser.page, '3.02%', 2, 1, 'NewTableName');
+    await writeInTable(testUser.page, '9.32%', 3, 1, 'NewTableName');
   });
 
-  test('adds sum smart row to percentages', async () => {
-    await clickCalculateFirstColumn(page, 'NewTableName');
-    await page.getByText('Sum').click();
+  await test.step('adds sum smart row to percentages', async () => {
+    await clickCalculateFirstColumn(testUser.page, 'NewTableName');
+    await testUser.page.getByText('Sum').click();
     // check the 13.02 result
-    await expect(page.getByText('13.02%')).toBeVisible();
+    await expect(testUser.page.getByText('13.02%')).toBeVisible();
   });
 
-  test('fills second table', async () => {
-    await writeInTable(page, 'Imports', 1, 0, 'NewTableName2');
+  await test.step('fills second table', async () => {
+    await writeInTable(testUser.page, 'Imports', 1, 0, 'NewTableName2');
   });
 
-  test('adds 2 columns to first table', async () => {
-    await addColumn(page, 'NewTableName');
-    await addColumn(page, 'NewTableName');
+  await test.step('adds 2 columns to first table', async () => {
+    await addColumn(testUser.page, 'NewTableName');
+    await addColumn(testUser.page, 'NewTableName');
   });
 
-  test('adds 2 columns to second table', async () => {
-    await addColumn(page, 'NewTableName2');
-    await addColumn(page, 'NewTableName2');
+  await test.step('adds 2 columns to second table', async () => {
+    await addColumn(testUser.page, 'NewTableName2');
+    await addColumn(testUser.page, 'NewTableName2');
   });
 
-  test('adds col to the right', async () => {
-    await addColRight(page, 2, 'NewTableName2');
-    const table = getTableOrPage(page, 'NewTableName2');
+  await test.step('adds col to the right', async () => {
+    await addColRight(testUser.page, 2, 'NewTableName2');
+    const table = getTableOrPage(testUser.page, 'NewTableName2');
     const headersCount = await table.getByTestId('table-header').count();
 
     expect(headersCount).toBe(6);
   });
 
-  test('adds col to the left', async () => {
-    await addColLeft(page, 2, 'NewTableName2');
-    const table = getTableOrPage(page, 'NewTableName2');
+  await test.step('adds col to the left', async () => {
+    await addColLeft(testUser.page, 2, 'NewTableName2');
+    const table = getTableOrPage(testUser.page, 'NewTableName2');
     const headersCount = await table.getByTestId('table-header').count();
 
     expect(headersCount).toBe(7);
   });
 
-  test('remove 2 columns from first table', async () => {
-    await removeColumn(page, 3, 'NewTableName');
-    await removeColumn(page, 2, 'NewTableName');
+  await test.step('remove 2 columns from first table', async () => {
+    await removeColumn(testUser.page, 3, 'NewTableName');
+    await removeColumn(testUser.page, 2, 'NewTableName');
   });
 
-  test('remove 2 columns from second table', async () => {
-    await removeColumn(page, 3, 'NewTableName2');
-    await removeColumn(page, 2, 'NewTableName2');
+  await test.step('remove 2 columns from second table', async () => {
+    await removeColumn(testUser.page, 3, 'NewTableName2');
+    await removeColumn(testUser.page, 2, 'NewTableName2');
   });
 
-  test('adds 2 rows to first table', async () => {
-    await addRow(page, 'NewTableName');
-    await addRow(page, 'NewTableName');
+  await test.step('adds 2 rows to first table', async () => {
+    await addRow(testUser.page, 'NewTableName');
+    await addRow(testUser.page, 'NewTableName');
   });
 
-  test('adds 2 rows to second table', async () => {
-    await addRow(page, 'NewTableName2');
-    await addRow(page, 'NewTableName2');
+  await test.step('adds 2 rows to second table', async () => {
+    await addRow(testUser.page, 'NewTableName2');
+    await addRow(testUser.page, 'NewTableName2');
   });
 
-  test('remove 2 rows to first table', async () => {
-    await removeRow(page, 4, 'NewTableName');
-    await removeRow(page, 4, 'NewTableName');
+  await test.step('remove 2 rows to first table', async () => {
+    await removeRow(testUser.page, 4, 'NewTableName');
+    await removeRow(testUser.page, 4, 'NewTableName');
   });
 
-  test('remove 2 rows to second table', async () => {
-    await removeRow(page, 4, 'NewTableName2');
-    await removeRow(page, 4, 'NewTableName2');
+  await test.step('remove 2 rows to second table', async () => {
+    await removeRow(testUser.page, 4, 'NewTableName2');
+    await removeRow(testUser.page, 4, 'NewTableName2');
   });
 
-  test('rename 2 columns to first table', async () => {
-    await renameColumn(page, 1, 'NewColumName2', 'NewTableName');
-    await renameColumn(page, 2, 'NewColumnName3', 'NewTableName');
+  await test.step('rename 2 columns to first table', async () => {
+    await renameColumn(testUser.page, 1, 'NewColumName2', 'NewTableName');
+    await renameColumn(testUser.page, 2, 'NewColumnName3', 'NewTableName');
   });
 
-  test('rename 2 columns to second table', async () => {
-    await renameColumn(page, 1, 'NewColumName2', 'NewTableName2');
-    await renameColumn(page, 2, 'NewColumnName3', 'NewTableName2');
+  await test.step('rename 2 columns to second table', async () => {
+    await renameColumn(testUser.page, 1, 'NewColumName2', 'NewTableName2');
+    await renameColumn(testUser.page, 2, 'NewColumnName3', 'NewTableName2');
   });
 
-  test('update 2 columns  data types from first table', async () => {
-    await updateDataType(page, 1, 'NewTableName');
-    await updateDataType(page, 2, 'NewTableName');
+  await test.step('update 2 columns  data types from first table', async () => {
+    await updateDataType(testUser.page, 1, 'NewTableName');
+    await updateDataType(testUser.page, 2, 'NewTableName');
   });
 
-  test('update 2 columns  data types from second table', async () => {
-    await updateDataType(page, 1, 'NewTableName2');
-    await updateDataType(page, 2, 'NewTableName2');
+  await test.step('update 2 columns  data types from second table', async () => {
+    await updateDataType(testUser.page, 1, 'NewTableName2');
+    await updateDataType(testUser.page, 2, 'NewTableName2');
   });
 
-  test('copy and paste', async () => {
-    await page.getByTestId('paragraph-wrapper').nth(-1).click();
-    await page.keyboard.insertText('test copy and paste text');
-    await ControlPlus(page, 'A');
-    await ControlPlus(page, 'C');
-    await writeInTable(page, '', 2, 0, 'NewTableName2');
-    await ControlPlus(page, 'V');
-    await keyPress(page, 'ArrowRight');
-    await ControlPlus(page, 'V');
+  await test.step('copy and paste', async () => {
+    await testUser.page.getByTestId('paragraph-wrapper').nth(-1).click();
+    await testUser.page.keyboard.insertText('test copy and paste text');
+    await ControlPlus(testUser.page, 'A');
+    await ControlPlus(testUser.page, 'C');
+    await writeInTable(testUser.page, '', 2, 0, 'NewTableName2');
+    await ControlPlus(testUser.page, 'V');
+    await keyPress(testUser.page, 'ArrowRight');
+    await ControlPlus(testUser.page, 'V');
   });
 });
 
-test.describe('Basic Table', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
+test('Basic Table', async ({ testUser }) => {
+  await test.step('creates table', async () => {
+    await testUser.notebook.focusOnBody();
+    await createTable(testUser.page);
   });
 
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('creates table', async () => {
-    await focusOnBody(page);
-    await createTable(page);
-  });
-
-  test('deletes table and created a new table to check for name collisions', async () => {
-    await deleteTable(page);
+  await test.step('deletes table and created a new table to check for name collisions', async () => {
+    await deleteTable(testUser.page);
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.typing);
-    await createTable(page);
+    await testUser.page.waitForTimeout(Timeouts.typing);
+    await createTable(testUser.page);
     await expect(
-      await page.getByTestId('code-line-warning').count(),
+      await testUser.page.getByTestId('code-line-warning').count(),
       `calculation errors`
     ).toBe(0);
   });
 
-  test('fills table', async () => {
+  await test.step('fills table', async () => {
     // first column
-    await writeInTable(page, 'Imports', 1, 0);
-    expect(await getFromTable(page, 1, 0)).toBe('Imports');
-    await writeInTable(page, 'Hydro, wind and solar', 2, 0);
-    expect(await getFromTable(page, 2, 0)).toBe('Hydro, wind and solar');
-    await writeInTable(page, 'Bioenergy', 3, 0);
-    expect(await getFromTable(page, 3, 0)).toBe('Bioenergy');
+    await writeInTable(testUser.page, 'Imports', 1, 0);
+    expect(await getFromTable(testUser.page, 1, 0)).toBe('Imports');
+    await writeInTable(testUser.page, 'Hydro, wind and solar', 2, 0);
+    expect(await getFromTable(testUser.page, 2, 0)).toBe(
+      'Hydro, wind and solar'
+    );
+    await writeInTable(testUser.page, 'Bioenergy', 3, 0);
+    expect(await getFromTable(testUser.page, 3, 0)).toBe('Bioenergy');
 
     // second column
-    await writeInTable(page, '0.68%', 1, 1);
-    expect(await getFromTable(page, 1, 1)).toBe('0.68%');
-    await writeInTable(page, '3.02%', 2, 1);
-    expect(await getFromTable(page, 2, 1)).toBe('3.02%');
-    await writeInTable(page, '9.32%', 3, 1);
-    expect(await getFromTable(page, 3, 1)).toBe('9.32%');
+    await writeInTable(testUser.page, '0.68%', 1, 1);
+    expect(await getFromTable(testUser.page, 1, 1)).toBe('0.68%');
+    await writeInTable(testUser.page, '3.02%', 2, 1);
+    expect(await getFromTable(testUser.page, 2, 1)).toBe('3.02%');
+    await writeInTable(testUser.page, '9.32%', 3, 1);
+    expect(await getFromTable(testUser.page, 3, 1)).toBe('9.32%');
   });
 
-  test('updates table name', async () => {
-    await page.getByTestId('table-name-input').dblclick();
-    await page.keyboard.type('NewTableName');
-    await expect(page.getByText('NewTableName')).toBeVisible();
+  await test.step('updates table name', async () => {
+    await testUser.page.getByTestId('table-name-input').dblclick();
+    await testUser.page.keyboard.type('NewTableName');
+    await expect(testUser.page.getByText('NewTableName')).toBeVisible();
   });
 
-  test('can insert a new row below', async () => {
-    await focusOnTable(page);
-    await insertRowBelow(page, 3);
-    await writeInTable(page, '1%', 4, 1);
-    expect(await getFromTable(page, 4, 1)).toBe('1%');
+  await test.step('can insert a new row below', async () => {
+    await focusOnTable(testUser.page);
+    await insertRowBelow(testUser.page, 3);
+    await writeInTable(testUser.page, '1%', 4, 1);
+    expect(await getFromTable(testUser.page, 4, 1)).toBe('1%');
   });
 
-  test('can insert a new row above', async () => {
-    await focusOnTable(page);
-    await insertRowAbove(page, 4);
+  await test.step('can insert a new row above', async () => {
+    await focusOnTable(testUser.page);
+    await insertRowAbove(testUser.page, 4);
     // row 4 with 1% is now row 5
-    expect(await getFromTable(page, 5, 1)).toBe('1%');
+    expect(await getFromTable(testUser.page, 5, 1)).toBe('1%');
   });
 });
 
-test.describe('tests table date pickers', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
+test('tests table date pickers', async ({ testUser }) => {
   let col;
   let line;
   const today = new Date();
@@ -354,155 +303,102 @@ test.describe('tests table date pickers', () => {
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
 
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('checks table year picker', async () => {
-    await focusOnBody(page);
-    await createTable(page);
+  await test.step('checks table year picker', async () => {
+    await focusOnBody(testUser.page);
+    await createTable(testUser.page);
     line = 1;
     col = 1;
-    await changeColumnYear(page, col);
-    await doubleClickCell(page, line, col);
+    await changeColumnYear(testUser.page, col);
+    await doubleClickCell(testUser.page, line, col);
 
-    await page.getByText('Today').isVisible();
-    await snapshot(page as Page, 'Tables: Year Picker');
-    await page.getByText('Today').click();
-    await expect(page.locator(tableCellLocator(col, line))).toContainText(
-      `${year}`
-    );
+    await testUser.page.getByText('Today').isVisible();
+    await snapshot(testUser.page as Page, 'Tables: Year Picker');
+    await testUser.page.getByText('Today').click();
+    await expect(
+      testUser.page.locator(tableCellLocator(col, line))
+    ).toContainText(`${year}`);
   });
 
-  test('checks table month picker', async () => {
+  await test.step('checks table month picker', async () => {
     line = 1;
     col = 2;
-    await changeColumnMonth(page, col);
-    await doubleClickCell(page, line, col);
+    await changeColumnMonth(testUser.page, col);
+    await doubleClickCell(testUser.page, line, col);
 
-    await page.getByText('Today').isVisible();
-    await snapshot(page as Page, 'Tables: Month Picker');
-    await page.getByText('Today').click();
+    await testUser.page.getByText('Today').isVisible();
+    await snapshot(testUser.page as Page, 'Tables: Month Picker');
+    await testUser.page.getByText('Today').click();
 
-    await expect(page.locator(tableCellLocator(line, col))).toContainText(
-      `${year}-${month}`
-    );
+    await expect(
+      testUser.page.locator(tableCellLocator(line, col))
+    ).toContainText(`${year}-${month}`);
   });
 
-  test('checks table day picker', async () => {
+  await test.step('checks table day picker', async () => {
     line = 1;
     col = 3;
-    await addColumn(page);
-    await changeColumnDay(page, col);
-    await doubleClickCell(page, line, col);
+    await addColumn(testUser.page);
+    await changeColumnDay(testUser.page, col);
+    await doubleClickCell(testUser.page, line, col);
 
     // skipping snapshot since the modal is the same as the date widget
-    await page.getByText('Today').click();
+    await testUser.page.getByText('Today').click();
 
-    await expect(page.locator(tableCellLocator(line, col))).toContainText(
-      `${year}-${month}-${day}`
-    );
+    await expect(
+      testUser.page.locator(tableCellLocator(line, col))
+    ).toContainText(`${year}-${month}-${day}`);
   });
 });
 
-test.describe('Number Parsing Checks', () => {
-  test.describe.configure({ mode: 'serial' });
+test('Number Parsing Checks', async ({ testUser }) => {
+  await test.step('setup new notebook', async () => {
+    await testUser.notebook.focusOnBody();
+  });
 
-  let page: Page;
-  let context: BrowserContext;
-  let url: string;
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = await page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
+  /**
+   * Table pasted
+   * +------+----------------+
+   * | Type | Number         |
+   * | 0    | $1.00          |
+   * | 1    | $10.00         |
+   * | 2    | $100.00        |
+   * | 3    | $1,000.00      |
+   * | 4    | $10,000.00     |
+   * | 5    | $100,000.00    |
+   * | 6    | $1,000,000.00  |
+   * | 7    | $10,000,000.00 |
+   * | 8    | $100,000,000.00|
+   * +------+----------------+
+   */
+  await test.step('copy google sheet table', async () => {
+    const textTable = fs.readFileSync(
+      path.join(__dirname, '../__fixtures__/clipboard/google-sheets.txt'),
+      'utf-8'
     );
-  });
 
-  test.afterAll(async () => {
-    await page.close();
-  });
+    await testUser.writeToClipboard({
+      'text/html': textTable,
+    });
 
-  test('setup new notebook', async () => {
-    await focusOnBody(page);
-  });
-
-  // can't make copy and paste work on our tests
-  // eslint-disable-next-line playwright/no-skipped-test
-  test.skip('copy google sheet table', async () => {
-    url = page.url();
-    await page.goto(
-      'https://docs.google.com/spreadsheets/d/1CimD6WcVrqqyqI7u7LqOmDIbfDYdh6SIhyUdLfnPQM0/edit#gid=0'
-    );
-    await page.locator('#waffle-rich-text-editor').press('ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowDown');
-    await page.locator('#waffle-rich-text-editor').press('Shift+ArrowRight');
-    page.locator('#waffle-rich-text-editor');
-    await ControlPlus(page, 'C');
-    await page.goto(url);
-    await focusOnBody(page);
-    await page.getByTestId('paragraph-content').click();
-    await ControlPlus(page, 'V');
+    await testUser.notebook.focusOnBody();
+    await ControlPlus(testUser.page, 'V');
 
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
+    await testUser.page.waitForTimeout(Timeouts.syncDelay);
   });
 
-  test('create table', async () => {
-    await createTable(page);
-    await writeInTable(page, 'Thousand', 1, 0);
-    expect(await getFromTable(page, 1, 0)).toBe('Thousand');
-    await writeInTable(page, '$1,000.00', 1, 1);
-    expect(await getFromTable(page, 1, 1)).toBe('$1,000.00');
-    await writeInTable(page, 'Million', 2, 0);
-    expect(await getFromTable(page, 2, 0)).toBe('Million');
-    await writeInTable(page, '$1,000,000.00', 2, 1);
-    expect(await getFromTable(page, 2, 1)).toBe('$1,000,000.00');
-    await writeInTable(page, 'Billion', 3, 0);
-    expect(await getFromTable(page, 3, 0)).toBe('Billion');
-    await writeInTable(page, '$1,000,000,000.00', 3, 1);
-    expect(await getFromTable(page, 3, 1)).toBe('$1,000,000,000.00');
-  });
-
-  test('update data type to number', async () => {
-    await page
-      .getByRole('cell', { name: 'Column2' })
-      .getByTestId('table-column-menu-button')
-      .click();
-    await page.getByRole('menuitem', { name: 'Number' }).click();
-    await focusOnBody(page);
+  await test.step('update data type to number', async () => {
+    await testUser.page.getByTestId('table-column-menu-button').nth(1).click();
+    await testUser.page.getByRole('menuitem', { name: 'Number' }).click();
+    await testUser.notebook.focusOnBody();
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
-    await page.getByText('$1,000,000,000.00').click();
+    await testUser.page.waitForTimeout(Timeouts.syncDelay);
+    await testUser.page.getByText('$100,000,000.00').click();
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.syncDelay);
+    await testUser.page.waitForTimeout(Timeouts.syncDelay);
     await expect(
-      page.getByText('Cannot parse number out of "$1,000,000,000.00"')
-    ).toContainText('Cannot parse number out of "$1,000,000,000.00');
+      testUser.page.getByText('Cannot parse number out of "$100,000,000.00"')
+    ).toContainText('Cannot parse number out of "$100,000,000.00');
   });
 });
 
@@ -511,29 +407,22 @@ export const typeTest = (currentPage: Page, input: string) =>
     await currentPage.getByTestId('code-line').fill(input);
   });
 
-test.describe('Testing tables created from formulas', () => {
-  test.describe.configure({ mode: 'serial' });
-
+test('Testing tables created from formulas', async ({ testUser }) => {
   let notebookId: string;
   let workspaceId: string;
-  let page: Page;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    workspaceId = await createWorkspace(page);
+
+  await test.step('create workspace and import notebook', async () => {
+    workspaceId = await createWorkspace(testUser.page);
     notebookId = await importNotebook(
       workspaceId,
       Buffer.from(JSON.stringify(notebookSource), 'utf-8').toString('base64'),
-      page
+      testUser.page
     );
-    await navigateToNotebook(page, notebookId);
-    await waitForEditorToLoad(page);
+    await navigateToNotebook(testUser.page, notebookId);
+    await testUser.notebook.waitForEditorToLoad();
   });
 
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Filling in the code and testing that the numbers are displayed properly', async () => {
+  await test.step('Filling in the code and testing that the numbers are displayed properly', async () => {
     // This test will fail if topological sort is not working properly
     // Failing behavior:
     // +------+--------+
@@ -548,60 +437,32 @@ test.describe('Testing tables created from formulas', () => {
     // | D    | 1      |
     // +------+--------+
 
-    await page.getByTestId('code-line').click();
-    await page
+    await testUser.page.getByTestId('code-line').click();
+    await testUser.page
       .getByTestId('code-line')
       .fill(
         'Table = {Name = ["A", "B", "C", "D"] \n Values = [Unnamed1, Unnamed2, Unnamed3, Unnamed4]}'
       );
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('text-result:A')
-        .getByText('A')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('text-result:B')
-        .getByText('B')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('text-result:C')
-        .getByText('C')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('text-result:D')
-        .getByText('D')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('number-result:1')
-        .getByText('1')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('number-result:2')
-        .getByText('2')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('number-result:3')
-        .getByText('3')
-    ).toBeVisible();
-    await expect(
-      page
-        .getByTestId('editor-table')
-        .getByTestId('number-result:4')
-        .getByText('4')
-    ).toBeVisible();
+
+    const expectResults = [
+      { result: 'A', searchText: 'text-result:A' },
+      { result: 'B', searchText: 'text-result:B' },
+      { result: 'C', searchText: 'text-result:C' },
+      { result: 'D', searchText: 'text-result:D' },
+      { result: '1', searchText: 'number-result:1' },
+      { result: '2', searchText: 'number-result:2' },
+      { result: '3', searchText: 'number-result:3' },
+      { result: '4', searchText: 'number-result:4' },
+    ];
+    const expectPromises = expectResults.map(async (expectResult) =>
+      expect(
+        testUser.page
+          .getByTestId('editor-table')
+          .getByTestId(expectResult.searchText)
+          .getByText(expectResult.result)
+      ).toBeVisible()
+    );
+    await Promise.all(expectPromises);
   });
 });
 
@@ -623,47 +484,27 @@ const changeToGBP = (page: Page, nth: number) =>
     await page.getByText('GBP').click();
   });
 
-test.describe('Make sure deleting decimals does not break parsing', () => {
-  test.describe.configure({ mode: 'serial' });
-
-  let page: Page;
-  let context: BrowserContext;
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    context = page.context();
-
-    await setUp(
-      { page, context },
-      {
-        createAndNavigateToNewPad: true,
-      }
-    );
-
-    await createWorkspace(page);
+test('Make sure deleting decimals does not break parsing', async ({
+  testUser,
+}) => {
+  await test.step('Creates a table and sets a value', async () => {
+    await createTable(testUser.page);
+    await writeInTable(testUser.page, '13.21', 1);
+    await changeToGBP(testUser.page, 0);
   });
 
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('Creates a table and sets a value', async () => {
-    await createTable(page);
-    await writeInTable(page, '13.21', 1);
-    await changeToGBP(page, 0);
-  });
-
-  test('Causes error by deleting values', async () => {
-    await doubleClickCell(page, 1); // |13.21|
-    await page.keyboard.press('ArrowRight'); // 13.21|
-    await page.keyboard.press('Backspace'); // 13.2|
-    await page.keyboard.press('Backspace'); // 13.|
-    await clickCell(page, 2);
-    await clickCell(page, 1);
-    await page.getByText('13.').hover();
+  await test.step('Causes error by deleting values', async () => {
+    await doubleClickCell(testUser.page, 1); // |13.21|
+    await testUser.page.keyboard.press('ArrowRight'); // 13.21|
+    await testUser.page.keyboard.press('Backspace'); // 13.2|
+    await testUser.page.keyboard.press('Backspace'); // 13.|
+    await clickCell(testUser.page, 2);
+    await clickCell(testUser.page, 1);
+    await testUser.page.getByText('13.').hover();
     // RGB 600, tooltips are too flaky to be tested
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
-    const color = await page
+    await testUser.page.waitForTimeout(Timeouts.chartsDelay);
+    const color = await testUser.page
       .getByText('13.')
       .first()
       .evaluate((element) =>
@@ -672,26 +513,26 @@ test.describe('Make sure deleting decimals does not break parsing', () => {
     expect(color).toBe('rgb(192, 55, 55)');
   });
 
-  test('Checks other cells', async () => {
-    await checkForError(page, '13.21', 2, 0);
+  await test.step('Checks other cells', async () => {
+    await checkForError(testUser.page, '13.21', 2, 0);
   });
 
-  test('Checks other column', async () => {
-    await changeToGBP(page, 1);
-    await checkForError(page, '13.22', 1, 1);
+  await test.step('Checks other column', async () => {
+    await changeToGBP(testUser.page, 1);
+    await checkForError(testUser.page, '13.22', 1, 1);
   });
 
-  test('Tests if adding the number back fixes parsing error', async () => {
-    await clickCell(page, 1);
-    await doubleClickCell(page, 1); // |13.|
-    await page.keyboard.press('ArrowRight'); // 13.|
-    await page.keyboard.type('25'); // 13.25|
-    await clickCell(page, 2);
-    await page.getByText('13.25').hover();
+  await test.step('Tests if adding the number back fixes parsing error', async () => {
+    await clickCell(testUser.page, 1);
+    await doubleClickCell(testUser.page, 1); // |13.|
+    await testUser.page.keyboard.press('ArrowRight'); // 13.|
+    await testUser.page.keyboard.type('25'); // 13.25|
+    await clickCell(testUser.page, 2);
+    await testUser.page.getByText('13.25').hover();
     // RGB 600, tooltips are too flaky to be tested
     // eslint-disable-next-line playwright/no-wait-for-timeout
-    await page.waitForTimeout(Timeouts.chartsDelay);
-    const color = await page
+    await testUser.page.waitForTimeout(Timeouts.chartsDelay);
+    const color = await testUser.page
       .getByText('13.25')
       .first()
       .evaluate((element) =>
