@@ -10,7 +10,7 @@
   "dependencies": {
     "@architect/architect": "10.16.2",
     "@architect/destroy": "decipad/destroy",
-    "@apollo/server": "4.9.0",
+    "@apollo/server": "4.10.0",
     "aws-sdk": "2.1514.0",
     "dotenv": "16.3.0",
     "form-data": "4.0.0",
