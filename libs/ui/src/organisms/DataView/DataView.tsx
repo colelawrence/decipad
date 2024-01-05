@@ -148,6 +148,7 @@ export const DataView: FC<DataViewProps> = ({
               variableNames={availableVariableNames}
               selectedVariableName={variableName}
               onChangeVariableName={onChangeVariableName}
+              testId="data-view-source"
             />
           )}
           {!readOnly && (

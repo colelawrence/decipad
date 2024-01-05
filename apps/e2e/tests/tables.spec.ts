@@ -555,7 +555,7 @@ test('Paste table from Wikipedia', async ({ testUser }) => {
   });
 
   await test.step('paste table', async () => {
-    await focusOnBody(testUser.page);
+    await testUser.notebook.focusOnBody();
     await testUser.page.keyboard.press('Control+v');
   });
 
@@ -573,6 +573,66 @@ test('Paste table from Wikipedia', async ({ testUser }) => {
       '23 years, 300 days'
     );
     expect(await getFromTable(testUser.page, 2, 3, 'Table')).toBe('2008');
+  });
+
+  await test.step('make changes in preparation for data view', async () => {
+    await addColumn(testUser.page, 'Table');
+    await renameColumn(testUser.page, 4, 'Checkbox', 'Table');
+    await updateDataType(testUser.page, 0, 'Table', 'Number');
+    await updateDataType(testUser.page, 3, 'Table', 'Date', 'Year');
+    await updateDataType(testUser.page, 4, 'Table', 'Checkbox');
+    await testUser.page
+      .getByRole('row', { name: 'Drag Handle 2 Lewis Hamilton' })
+      .getByRole('checkbox')
+      .click();
+  });
+
+  await test.step('create data view and display data from table', async () => {
+    await testUser.notebook.addDataView();
+    await testUser.page.getByTestId('data-view-source').click();
+    await testUser.page.keyboard.press('ArrowDown');
+    await testUser.page.keyboard.press('Enter');
+
+    await testUser.page.getByTestId('add-data-view-column-button').click();
+    await testUser.page.getByRole('menuitem', { name: 'Index' }).click();
+    await testUser.page.getByTestId('add-data-view-column-button').click();
+    await testUser.page.getByRole('menuitem', { name: 'Driver' }).click();
+    await testUser.page.getByTestId('add-data-view-column-button').click();
+    await testUser.page.getByRole('menuitem', { name: 'Year' }).click();
+    await testUser.page.getByTestId('add-data-view-column-button').click();
+    await testUser.page.getByRole('menuitem', { name: 'Checkbox' }).click();
+
+    await testUser.page.getByTestId('data-view-options-menu-Driver').click();
+    await testUser.page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await testUser.page.getByRole('menuitem', { name: 'Count Values' }).click();
+
+    await testUser.page.getByTestId('data-view-options-menu-Year').click();
+    await testUser.page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await testUser.page.getByRole('menuitem', { name: 'Time span' }).click();
+
+    await testUser.page.getByTestId('data-view-options-menu-Checkbox').click();
+    await testUser.page.getByRole('menuitem', { name: 'Aggregate' }).click();
+    await testUser.page.getByRole('menuitem', { name: 'Count true' }).click();
+  });
+
+  await test.step('check data view values are correct', async () => {
+    await Promise.all([
+      expect(
+        testUser.page
+          .getByRole('row', { name: 'Total' })
+          .getByTestId('number-result:3')
+      ).toBeVisible(),
+      expect(
+        testUser.page
+          .getByRole('row', { name: 'Total' })
+          .getByTestId('number-result:5 years')
+      ).toBeVisible(),
+      expect(
+        testUser.page
+          .getByRole('row', { name: 'Total' })
+          .getByTestId('number-result:1')
+      ).toBeVisible(),
+    ]);
   });
 });
 

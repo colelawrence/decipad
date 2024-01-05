@@ -60,6 +60,7 @@ interface VariableNameProps {
   variableNames: AutocompleteName[];
   selectedVariableName?: string;
   onChangeVariableName: (varName: string) => void;
+  testId?: string;
 }
 
 export const VariableNameSelector: FC<VariableNameProps> = ({
@@ -67,9 +68,10 @@ export const VariableNameSelector: FC<VariableNameProps> = ({
   variableNames,
   selectedVariableName,
   onChangeVariableName,
+  testId,
 }) => {
   return (
-    <div css={hideOnPrint} contentEditable={false}>
+    <div css={hideOnPrint} contentEditable={false} data-testid={testId}>
       <SelectInput
         labelText={label}
         value={selectedVariableName}
