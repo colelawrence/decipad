@@ -56,3 +56,4 @@ export * from './UpdateComputer';
 export * from './UserEvent';
 export * from './CreateCrossBlockSelection';
 export * from './TabSelectionPlugin';
+export * from './SubmitForm';

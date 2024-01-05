@@ -45,41 +45,41 @@ const sheet = <T extends Result.OneResult>(
 describe('findAllIslands', () => {
   it('works on an empty sheet', () => {
     expect(findAllIslands('Sheet1', sheet(0, 0, false))).toMatchInlineSnapshot(
-      `Array []`
+      `[]`
     );
   });
 
   it('works on a one cell sheet', () => {
     expect(findAllIslands('Sheet1', sheet(1, 1, 'hey'))).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AA1?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "hey",
               ],
             ],
@@ -91,62 +91,62 @@ describe('findAllIslands', () => {
 
   it('works on a one island sheet', () => {
     expect(findAllIslands('Sheet1', sheet(4, 3, 'hey'))).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AD3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
                 "col",
                 "col",
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "hey",
                 "hey",
                 "hey",
               ],
-              Array [
+              [
                 "hey",
                 "hey",
                 "hey",
               ],
-              Array [
+              [
                 "hey",
                 "hey",
                 "hey",
               ],
-              Array [
+              [
                 "hey",
                 "hey",
                 "hey",
@@ -165,53 +165,53 @@ describe('findAllIslands', () => {
     );
 
     expect(findAllIslands('Sheet1', r)).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AC3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
                 "col",
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "1",
                 "1",
                 "1",
               ],
-              Array [
+              [
                 "1",
                 "1",
                 "1",
               ],
-              Array [
+              [
                 "1",
                 "1",
                 "1",
@@ -219,52 +219,52 @@ describe('findAllIslands', () => {
             ],
           },
         },
-        Object {
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!E1%3AG3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
                 "col",
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "2",
                 "2",
                 "2",
               ],
-              Array [
+              [
                 "2",
                 "2",
                 "2",
               ],
-              Array [
+              [
                 "2",
                 "2",
                 "2",
@@ -288,53 +288,53 @@ describe('findAllIslands', () => {
     expect(islands).toHaveLength(3);
 
     expect(islands).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A1%3AC3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
                 "col",
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "1",
                 "1",
                 "1",
               ],
-              Array [
+              [
                 "1",
                 "1",
                 "1",
               ],
-              Array [
+              [
                 "1",
                 "1",
                 "1",
@@ -342,23 +342,23 @@ describe('findAllIslands', () => {
             ],
           },
         },
-        Object {
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!A5%3AG6?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
                 "col",
                 "col",
@@ -367,109 +367,109 @@ describe('findAllIslands', () => {
                 "col",
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "3",
                 "3",
               ],
-              Array [
+              [
                 "3",
                 "3",
               ],
-              Array [
+              [
                 "3",
                 "3",
               ],
-              Array [
+              [
                 "3",
                 "3",
               ],
-              Array [
+              [
                 "3",
                 "3",
               ],
-              Array [
+              [
                 "3",
                 "3",
               ],
-              Array [
+              [
                 "3",
                 "3",
               ],
             ],
           },
         },
-        Object {
+        {
           "loading": false,
-          "meta": Object {
+          "meta": {
             "sheetId": "sheetid",
-            "sourceMeta": Object {
-              "properties": Object {
+            "sourceMeta": {
+              "properties": {
                 "sheetId": 1,
                 "title": "title",
               },
-              "sheets": Array [],
+              "sheets": [],
               "spreadsheetId": "sheetid",
             },
             "sourceUrl": "https://content-sheets.googleapis.com/v4/spreadsheets/sheetid/values/Sheet1!E1%3AG3?majorDimension=COLUMNS&valueRenderOption=UNFORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING&key=AIzaSyC1rl_w_G-RMx6hJJZRJ9rSbyD00POLIEM",
           },
-          "result": Object {
-            "type": Object {
-              "columnNames": Array [
+          "result": {
+            "type": {
+              "columnNames": [
                 "col",
                 "col",
                 "col",
               ],
-              "columnTypes": Array [
-                Object {
+              "columnTypes": [
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
-                Object {
+                {
                   "kind": "string",
                 },
               ],
               "kind": "table",
             },
-            "value": Array [
-              Array [
+            "value": [
+              [
                 "2",
                 "2",
                 "2",
               ],
-              Array [
+              [
                 "2",
                 "2",
                 "2",
               ],
-              Array [
+              [
                 "2",
                 "2",
                 "2",

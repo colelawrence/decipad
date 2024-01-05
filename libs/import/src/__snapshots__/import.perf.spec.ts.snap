@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`import performance imports big(ish) csv: bigish1.csv-import-result 1`] = `
-Object {
-  "type": Object {
-    "columnNames": Array [
+{
+  "type": {
+    "columnNames": [
       "Id",
       "Created",
       "Currency",
@@ -17,53 +17,53 @@ Object {
       "PlanInterval",
       "CancelledInLast30Days",
     ],
-    "columnTypes": Array [
-      Object {
+    "columnTypes": [
+      {
         "kind": "number",
         "unit": null,
       },
-      Object {
+      {
         "date": "day",
         "kind": "date",
       },
-      Object {
+      {
         "kind": "string",
       },
-      Object {
+      {
         "kind": "boolean",
       },
-      Object {
+      {
         "kind": "boolean",
       },
-      Object {
+      {
         "kind": "string",
       },
-      Object {
+      {
         "kind": "string",
       },
-      Object {
+      {
         "date": "day",
         "kind": "date",
       },
-      Object {
+      {
         "kind": "string",
       },
-      Object {
+      {
         "kind": "number",
         "unit": null,
       },
-      Object {
+      {
         "kind": "string",
       },
-      Object {
+      {
         "kind": "string",
       },
     ],
     "indexName": "Id",
     "kind": "table",
   },
-  "value": Array [
-    Array [
+  "value": [
+    [
       DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -6065,7 +6065,7 @@ Object {
         "s": 1n,
       },
     ],
-    Array [
+    [
       1671926400000n,
       1673049600000n,
       1657670400000n,
@@ -7067,7 +7067,7 @@ Object {
       1652486400000n,
       1680048000000n,
     ],
-    Array [
+    [
       "USD",
       "EUR",
       "EUR",
@@ -8069,7 +8069,7 @@ Object {
       "EUR",
       "USD",
     ],
-    Array [
+    [
       true,
       true,
       false,
@@ -9071,7 +9071,7 @@ Object {
       true,
       true,
     ],
-    Array [
+    [
       true,
       false,
       false,
@@ -10073,7 +10073,7 @@ Object {
       true,
       true,
     ],
-    Array [
+    [
       "past due",
       "active",
       "trial",
@@ -11075,7 +11075,7 @@ Object {
       "trial",
       "cancelled",
     ],
-    Array [
+    [
       "",
       "",
       "",
@@ -12077,7 +12077,7 @@ Object {
       "",
       "",
     ],
-    Array [
+    [
       undefined,
       undefined,
       undefined,
@@ -13079,7 +13079,7 @@ Object {
       undefined,
       undefined,
     ],
-    Array [
+    [
       "Enterprise",
       "Basic",
       "Basic",
@@ -14081,7 +14081,7 @@ Object {
       "Basic",
       "Pro",
     ],
-    Array [
+    [
       DeciNumber {
         "d": 1n,
         "infinite": false,
@@ -20083,7 +20083,7 @@ Object {
         "s": 1n,
       },
     ],
-    Array [
+    [
       "Annual",
       "Annual",
       "Monthly",
@@ -21085,7 +21085,7 @@ Object {
       "Monthly",
       "Monthly",
     ],
-    Array [
+    [
       "",
       "",
       "",

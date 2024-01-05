@@ -13,12 +13,12 @@ it('flips array of objects to object with lists', () => {
   ];
 
   expect(tableFlip(myArrayObject)).toMatchInlineSnapshot(`
-    Object {
-      "aKey": Array [
+    {
+      "aKey": [
         123,
         420,
       ],
-      "anotherKey": Array [
+      "anotherKey": [
         "hello",
         "world",
       ],
@@ -41,9 +41,9 @@ it('flips array with items of dodgy types', () => {
   ];
 
   expect(tableFlip(myArrayObject)).toMatchInlineSnapshot(`
-    Object {
-      "aKey": Array [],
-      "anotherKey": Array [
+    {
+      "aKey": [],
+      "anotherKey": [
         "world",
       ],
     }
@@ -145,8 +145,8 @@ it('Big json array', () => {
   ];
 
   expect(tableFlip(arr)).toMatchInlineSnapshot(`
-    Object {
-      "category": Array [
+    {
+      "category": [
         "History",
         "Entertainment: Books",
         "Entertainment: Video Games",
@@ -158,7 +158,7 @@ it('Big json array', () => {
         "General Knowledge",
         "Entertainment: Film",
       ],
-      "correct_answer": Array [
+      "correct_answer": [
         "Jethro Tull",
         "Dr. Seuss",
         "6",
@@ -170,7 +170,7 @@ it('Big json array', () => {
         "Liver",
         "Ford Falcon",
       ],
-      "difficulty": Array [
+      "difficulty": [
         "medium",
         "easy",
         "easy",
@@ -182,8 +182,8 @@ it('Big json array', () => {
         "easy",
         "medium",
       ],
-      "incorrect_answers": Array [],
-      "question": Array [
+      "incorrect_answers": [],
+      "question": [
         "The seed drill was invented by which British inventor?",
         "&quot;Green Eggs And Ham&quot; is a book by which author?",
         "How many times do you fight Gilgamesh in &quot;Final Fantasy 5&quot;?",
@@ -195,7 +195,7 @@ it('Big json array', () => {
         "Foie gras is a French delicacy typically made from what part of a duck or goose?",
         "In the Mad Max franchise, what type of car is the Pursuit Special driven by Max?",
       ],
-      "type": Array [
+      "type": [
         "multiple",
         "multiple",
         "multiple",

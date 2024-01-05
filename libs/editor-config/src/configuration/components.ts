@@ -18,6 +18,7 @@ import {
   MediaEmbed,
   OrderedList,
   Strikethrough,
+  SubmitForm,
   Title,
   Underline,
   UnorderedList,
@@ -38,6 +39,7 @@ import {
   ELEMENT_MEDIA_EMBED,
   ELEMENT_OL,
   ELEMENT_PARAGRAPH,
+  ELEMENT_SUBMIT_FORM,
   ELEMENT_UL,
   ElementKind,
   MARK_BOLD,
@@ -71,6 +73,9 @@ export const components = (computer: RemoteComputer): PlateComponents => ({
   [ELEMENT_IMAGE]: Image,
   [ELEMENT_MEDIA_EMBED]: MediaEmbed,
   [ELEMENT_IFRAME]: IframeEmbed,
+
+  // Submit
+  [ELEMENT_SUBMIT_FORM]: SubmitForm,
 
   // Lists
   [ELEMENT_UL]: UnorderedList,

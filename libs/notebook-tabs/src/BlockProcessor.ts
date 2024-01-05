@@ -96,6 +96,7 @@ export class BlockProcessor {
     this.Computer.pushCompute({
       program: Array.from(this.ProgramCache.values()),
     });
+
     this.DirtyBlocksSet = new Map();
   }
 

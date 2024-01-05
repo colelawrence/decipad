@@ -90,6 +90,7 @@ export { Duplicate } from './Duplicate/Duplicate';
 export { Edit } from './Edit/Edit';
 export { Education } from './Education/Education';
 export { Ellipsis } from './Ellipsis/Ellipsis';
+export { Email } from './Email/Email';
 export { Feedback } from './Feedback/Feedback';
 export { File } from './File/File';
 export { FilePlus } from './FilePlus/FilePlus';

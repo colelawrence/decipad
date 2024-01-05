@@ -53,6 +53,7 @@ import {
   ELEMENT_STRUCTURED_IN,
   ELEMENT_STRUCTURED_IN_CHILD,
   ELEMENT_STRUCTURED_VARNAME,
+  ELEMENT_SUBMIT_FORM,
   ELEMENT_TAB,
   ELEMENT_TITLE,
   ELEMENT_VARIABLE_DEF,
@@ -209,6 +210,12 @@ export interface InlineNumberElement extends BaseElement {
   children: [EmptyText];
 }
 
+export interface SubmitForm extends BaseElement {
+  type: typeof ELEMENT_SUBMIT_FORM;
+  blockId: string;
+  children: [EmptyText];
+}
+
 //
 // for now just cell, you can add more
 // decorations here
@@ -297,7 +304,9 @@ export type BlockElement =
   | TableColumnFormulaElement
   | IframeEmbedElement
   // Draw Elements
-  | DrawElementDescendant;
+  | DrawElementDescendant
+  // Submit form elements
+  | SubmitForm;
 
 type InlineElement = LinkElement | InlineNumberElement | SmartRefElement;
 
@@ -340,6 +349,7 @@ export type TopLevelValue =
   | InteractiveElement
   | DataViewElement
   | IframeEmbedElement
+  | SubmitForm
   | IntegrationTypes.IntegrationBlock;
 
 export type NotebookValue = [TitleElement, ...Array<TabElement>];
@@ -401,4 +411,5 @@ export const topLevelBlockKinds: string[] = [
   ELEMENT_DISPLAY,
   ELEMENT_IFRAME,
   ELEMENT_MEDIA_EMBED,
+  ELEMENT_SUBMIT_FORM,
 ];

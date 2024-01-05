@@ -29,6 +29,7 @@ import {
   Value,
 } from '../../icons';
 import { InlineMenu } from '../../organisms';
+import { isFlagEnabled } from '@decipad/feature-flags';
 
 type Theme = 'Ocean' | 'Mint' | 'Orange' | 'Wine' | 'Daffodil';
 
@@ -134,6 +135,32 @@ const dataItems = (paint: boolean) => {
 const modelGroup = (paint: boolean) => ({
   title: 'Model',
   items: dataItems(paint),
+});
+
+const submitFormItems = (paint: boolean) => {
+  const color = paint ? 'Orange' : undefined;
+  return [
+    {
+      command: 'submit-form',
+      title: 'Submit form',
+      description: 'Make document submittable to readers',
+      // TODO change
+      icon: paintIcon(<FormulaSlash />, color),
+      enabled: true,
+      extraSearchTerms: [
+        'submit',
+        'zappier',
+        'form',
+        'submission',
+        'integration',
+      ],
+    },
+  ];
+};
+
+const submitGroup = (paint: boolean) => ({
+  title: 'Submit form',
+  items: submitFormItems(paint),
 });
 
 const integrationsGroups = (paint: boolean) => ({
@@ -331,6 +358,7 @@ const groups = (paint: boolean) => [
   mostFrequentlyUsedGroup(paint),
   modelGroup(paint),
   integrationsGroups(paint),
+  ...(isFlagEnabled('ENABLE_SUBMIT_FORM') ? [submitGroup(paint)] : []),
   widgetGroup(paint),
   visualisationGroup(paint),
   writingGroup(paint),

@@ -7,6 +7,7 @@ import {
   ELEMENT_HR,
   FileType,
   MyEditor,
+  ELEMENT_SUBMIT_FORM,
   SlashCommand,
 } from '@decipad/editor-types';
 import {
@@ -131,6 +132,9 @@ export const execute = ({
         break;
       case 'import':
         insertBlockOfTypeBelow(editor, path, ELEMENT_FETCH);
+        break;
+      case 'submit-form':
+        insertBlockOfTypeBelow(editor, path, ELEMENT_SUBMIT_FORM);
         break;
       case 'heading1':
         insertBlockOfTypeBelow(editor, path, ELEMENT_H2);

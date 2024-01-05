@@ -8,7 +8,7 @@ test('getSheetRequestDataFromUrl.spec', () => {
       )
     )
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "gid": "gid1",
       "sheetId": "spreadsheetid",
     }
@@ -21,7 +21,7 @@ test('getSheetRequestDataFromUrl.spec', () => {
       )
     )
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "gid": "3",
       "sheetId": "1ITWWhsdu66mNCr7N3CrPNTUqQStXF6JAsEdPQF7YBFU",
     }
@@ -34,7 +34,7 @@ test('getSheetRequestDataFromUrl.spec', () => {
       )
     )
   ).toMatchInlineSnapshot(`
-    Object {
+    {
       "gid": "4",
       "sheetId": "1ITWWhsdu66mNCr7N3CrPNTUqQStXF6JAsEdPQF7YBFU",
     }

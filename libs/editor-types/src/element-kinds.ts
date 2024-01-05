@@ -91,6 +91,7 @@ export const ELEMENT_DRAW_IMAGE = 'image';
 // others
 export const ELEMENT_CAPTION = 'caption';
 export const ELEMENT_IFRAME = 'iframe';
+export const ELEMENT_SUBMIT_FORM = 'submit-form';
 
 // Tabs
 export const ELEMENT_TAB = 'tab';

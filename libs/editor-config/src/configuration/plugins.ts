@@ -22,6 +22,7 @@ import {
   createEventInterceptionSuperHandlerPlugin,
   createExitBreakPlugin,
   createIframePlugin,
+  createSubmitFormPlugin,
   createImagePlugin,
   createImportPlugin,
   createLayoutColumnsPlugin,
@@ -119,6 +120,7 @@ export const plugins = ({
       createIframePlugin(),
       createIntegrationPlugin(),
       createCrossBlockSelection(),
+      createSubmitFormPlugin(),
 
       // Layout blocks
       createLayoutColumnsPlugin(),

@@ -11,6 +11,7 @@ export * from './Import/Import';
 export * from './InteractiveParagraph';
 export * from './Media/Image';
 export * from './Media/MediaEmbed';
+export * from './SubmitForm/SubmitForm';
 export * from './TeleportEditor';
 export * from './block-management';
 export * from './plate-ui';
