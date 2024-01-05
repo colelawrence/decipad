@@ -1,4 +1,4 @@
-import { BrowserContext, Page, expect, test } from '@playwright/test';
+import { BrowserContext, Page, expect, test } from './manager/decipad-tests';
 import stringify from 'json-stringify-safe';
 import notebookSource from '../__fixtures__/001-notebook.json';
 import {
@@ -15,6 +15,12 @@ import {
   snapshot,
   withTestUser,
 } from '../utils/src';
+
+const waitForPageLoad = async (page: Page) =>
+  Promise.all([
+    page.getByTestId('number-result:454534534534534510149632').nth(0).waitFor(),
+    page.waitForSelector('text="ם עוד. על בקר"'),
+  ]);
 
 test.describe('Loading and snapshot of big notebook', () => {
   test.describe.configure({ mode: 'serial' });
@@ -54,7 +60,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     await expect(page.locator(editorTitleLocator())).toHaveText(
       'Everything, everywhere, all at once'
     );
-    await page.waitForSelector('text="ם עוד. על בקר"');
+    await waitForPageLoad(page);
 
     await snapshot(page as Page, 'Notebook: All elements');
   });
@@ -73,6 +79,7 @@ test.describe('Loading and snapshot of big notebook', () => {
       }
     }).toPass();
     await page.reload({ waitUntil: 'load' });
+    await waitForPageLoad(page);
     await snapshot(page as Page, 'Notebook: All elements Darkmode');
   });
 
@@ -104,7 +111,6 @@ test.describe('Loading and snapshot of big notebook', () => {
     await snapshot(page as Page, 'Notebook: Publish Popover');
   });
 
-  // eslint-disable-next-line playwright/no-skipped-test
   test('navigates to published notebook link', async () => {
     await page.getByTestId('copy-published-link').waitFor();
 
@@ -116,7 +122,7 @@ test.describe('Loading and snapshot of big notebook', () => {
 
     await waitForNotebookToLoad(publishedNotebookPage);
 
-    await publishedNotebookPage.waitForSelector('text="ם עוד. על בקר"');
+    await waitForPageLoad(publishedNotebookPage);
   });
 
   // eslint-disable-next-line playwright/no-skipped-test
@@ -127,7 +133,7 @@ test.describe('Loading and snapshot of big notebook', () => {
     await page.waitForTimeout(2_000);
 
     await waitForNotebookToLoad(publishedNotebookPage);
-    await publishedNotebookPage.waitForSelector('text="ם עוד. על בקר"');
+    await waitForPageLoad(publishedNotebookPage);
 
     await expect(page.locator('[data-testid="paragraph-wrapper"]')).toHaveCount(
       25
@@ -135,8 +141,6 @@ test.describe('Loading and snapshot of big notebook', () => {
     await expect(page.locator('[data-slate-editor] p')).toHaveCount(9);
   });
 
-  // TODO: ENG-1891 fix this test
-  // eslint-disable-next-line playwright/no-skipped-test
   test('navigates to published notebook link incognito', async () => {
     incognito.clearCookies();
     publishedNotebookPage = (await incognito.newPage()) as Page;
