@@ -26,6 +26,7 @@ const bubbleStyles = css(codeBlock.variableStyles, {
   borderRadius: '8px',
   backgroundColor: cssVar('backgroundSubdued'),
   border: `1px solid ${cssVar('borderSubdued')}`,
+  display: 'flex',
   ':hover': {
     ...hoveredBubbleStyles,
   },

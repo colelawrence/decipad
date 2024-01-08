@@ -15,17 +15,19 @@ import { Anchor, TextChildren } from '../../utils';
 import { useEventNoEffect } from '../../utils/useEventNoEffect';
 import { AnimatedIcon } from '../AnimatedIcon/AnimatedIcon';
 
+type Color =
+  | 'default'
+  | 'blue'
+  | 'transparent'
+  | 'transparent-green'
+  | 'red'
+  | 'grey'
+  | 'brand'
+  | 'black';
 type IconButtonProps = {
   readonly text?: TextChildren;
   readonly children?: ReactNode;
-  readonly color?:
-    | 'default'
-    | 'blue'
-    | 'transparent'
-    | 'transparent-green'
-    | 'red'
-    | 'grey'
-    | 'brand';
+  readonly color?: Color;
   readonly iconPosition?: 'left' | 'right';
   readonly size?: 'fit' | 'normal';
   readonly href?: string;
@@ -60,10 +62,7 @@ export const TextAndIconButton = ({
   const textElement = (
     <span
       data-testid={`text-icon-button:${text}`}
-      css={[
-        buttonTextStyles(notSelectedLook),
-        notSelectedLook && { color: cssVar('textDisabled') },
-      ]}
+      css={buttonTextStyles(notSelectedLook, color)}
     >
       {text}
     </span>
@@ -79,6 +78,7 @@ export const TextAndIconButton = ({
       ? [
           currentColor === 'blue' && blueBackgroundStyles(disabled),
           currentColor === 'red' && redBackgroundStyles(disabled),
+          currentColor === 'black' && blackBackgroundStyles(disabled),
           currentColor === 'transparent' &&
             transparentBackgroundStyles(disabled),
           currentColor === 'transparent-green' &&
@@ -89,6 +89,7 @@ export const TextAndIconButton = ({
       : [
           color === 'blue' && blueBackgroundStyles(disabled),
           color === 'red' && redBackgroundStyles(disabled),
+          color === 'black' && blackBackgroundStyles(disabled),
           color === 'transparent' && transparentBackgroundStyles(disabled),
           currentColor === 'transparent-green' &&
             transparentGreenBackgroundStyles(disabled),
@@ -170,20 +171,23 @@ const styles = (size: 'fit' | 'normal', variantHover: boolean) =>
     },
   ]);
 
-const buttonTextStyles = (notSelectedLook: boolean) =>
-  css(p12Medium, [
-    {
-      color: cssVar('textDefault'),
-      whiteSpace: 'nowrap',
-      // Top padding here to align text with icon.
-      padding: '1px 4px 0 4px',
-    },
-    notSelectedLook && {
-      ':hover': {
-        color: cssVar('textHeavy'),
+const buttonTextStyles = (notSelectedLook: boolean, color?: Color) =>
+  css(
+    p12Medium, // <--- need to override this in black
+    [
+      {
+        color: color === 'black' ? 'white' : cssVar('textDefault'),
+        whiteSpace: 'nowrap',
+        // Top padding here to align text with icon.
+        padding: '1px 4px 0 4px',
       },
-    },
-  ]);
+      notSelectedLook && {
+        ':hover': {
+          color: cssVar('textHeavy'),
+        },
+      },
+    ]
+  );
 
 const blueBackgroundStyles = (_disabled: boolean) =>
   css({
@@ -202,6 +206,17 @@ const redBackgroundStyles = (_disabled: boolean) =>
 
     ':hover, :focus': {
       backgroundColor: cssVar('stateDangerIconBackground'),
+    },
+  });
+
+const blackBackgroundStyles = (_disabled: boolean) =>
+  css(p13Medium, {
+    backgroundColor: componentCssVars('ButtonSecondaryDefaultBackground'),
+    color: componentCssVars('ButtonSecondaryDefaultText'),
+    border: `solid 1px ${transparency(black, 0.08).rgba}`,
+    ':hover, :focus': {
+      backgroundColor: componentCssVars('ButtonSecondaryHoverBackground'),
+      color: componentCssVars('ButtonSecondaryHoverText'),
     },
   });
 

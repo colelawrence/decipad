@@ -1,8 +1,8 @@
 import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
 import { exportProgramByVarname } from '@decipad/import';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
-import { Button, InputField } from '../../atoms';
+import { TextAndIconButton, Button, InputField, IconButton } from '../../atoms';
 import {
   useComputer,
   useCurrentWorkspaceStore,
@@ -15,15 +15,20 @@ import { useNavigate } from 'react-router-dom';
 import { workspaces } from '@decipad/routing';
 import { css } from '@emotion/react';
 import { SelectInput } from '../../SelectInput';
-import { Loading, Email } from '../../icons';
+import { Email, Send, Close, Spinner } from '../../icons';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { grey200 } from '../../primitives';
+import { brand200, cssVar, grey200 } from '../../primitives';
+import { useToast } from '@decipad/toast';
 
 const configContainerStyles = css({
   display: 'grid',
   gridTemplateColumns: 'auto 32px',
   justifyContent: 'start',
   gridGap: '8px',
+  marginBottom: 10,
+  div: {
+    height: `100%`,
+  },
 });
 
 const Config = ({
@@ -52,13 +57,7 @@ const Config = ({
 
   return (
     <div css={configContainerStyles}>
-      <SelectInput
-        labelText=""
-        value={targetUrl}
-        setValue={(s) => {
-          setTargetUrl(s);
-        }}
-      >
+      <SelectInput labelText="" value={targetUrl} setValue={setTargetUrl}>
         <option value="">Choose a Target URL</option>
         {secrets.map((s) => (
           <option key={s.id} value={s.name}>
@@ -73,7 +72,7 @@ const Config = ({
   );
 };
 
-const formContainerStyles = css({
+const baseFormContainerStyles = css({
   display: 'grid',
   gridTemplateColumns: '13px 1fr auto',
   alignItems: 'center',
@@ -84,30 +83,93 @@ const formContainerStyles = css({
   borderLeftWidth: 6,
   input: {
     border: 'none',
+    ':focus': {
+      background: cssVar('backgroundAccent'),
+    },
   },
 });
 
-const documentGuestSuccessStyles = css({});
-const documentGuestErrorStyles = css({});
+const formContainerErrorStyles = css({
+  input: {
+    background: cssVar('stateDangerIconBackground'),
+    color: cssVar('stateDangerIconOutline'),
+    ':focus': {
+      background: cssVar('stateDangerIconBackground'),
+    },
+    '::placeholder': {
+      color: cssVar('stateDangerBackground'),
+    },
+  },
+});
+
+const documentGuestSuccessStyles = css({
+  // spread across grid
+  gridColumn: '1 / 4',
+  background: brand200.rgb,
+  padding: '6px 12px',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+  alignItems: 'center',
+  borderRadius: 5,
+  div: {
+    justifySelf: 'center',
+  },
+  // icon button
+  span: {
+    padding: 0,
+  },
+});
 
 const Form = ({
   email,
   setEmail,
   onSubmit,
   formStatus,
+  resetForm,
 }: {
   email: string;
   setEmail: (e: string) => void;
   onSubmit: () => void;
   formStatus: FormStatus;
+  resetForm: () => void;
 }) => {
+  const toast = useToast();
+
+  useEffect(() => {
+    if (formStatus.status === 'error') {
+      toast.error(formStatus.error);
+    }
+  }, [formStatus, toast]);
+
   if (formStatus.status === 'success') {
-    return <div css={documentGuestSuccessStyles}>Thank you for submitting</div>;
+    return (
+      <div css={baseFormContainerStyles}>
+        <div css={documentGuestSuccessStyles}>
+          <div>All done!</div>
+          {
+            <IconButton transparent={true} onClick={resetForm}>
+              <Close />
+            </IconButton>
+          }
+        </div>
+      </div>
+    );
   }
+
+  const formContainerStyles = [
+    baseFormContainerStyles,
+    formStatus.status === 'error' && formContainerErrorStyles,
+  ];
 
   return (
     <>
-      <div css={formContainerStyles}>
+      <form
+        css={formContainerStyles}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <Email />
         <InputField
           type="email"
@@ -115,18 +177,18 @@ const Form = ({
           value={email}
           placeholder="Email"
           onChange={setEmail}
+          disabled={formStatus.status === 'loading'}
         />
-        {formStatus.status === 'loading' ? (
-          <Loading />
-        ) : (
-          <Button onClick={onSubmit}>Submit</Button>
-        )}
-      </div>
-      {formStatus.status === 'error' && (
-        <div css={documentGuestErrorStyles}>
-          {formStatus.error || 'An error occured.'}
-        </div>
-      )}
+
+        <TextAndIconButton
+          onClick={onSubmit}
+          text="Submit"
+          iconPosition="left"
+          color={formStatus.status === 'loading' ? 'grey' : 'black'}
+        >
+          {formStatus.status === 'loading' ? <Spinner /> : <Send />}
+        </TextAndIconButton>
+      </form>
     </>
   );
 };
@@ -209,6 +271,11 @@ export const SubmitForm: SubmitFormProps = ({ ...props }) => {
     setFormStatus({ status: 'success' });
   }, [email, secret, computer, proxyUrl]);
 
+  const resetForm = useCallback(() => {
+    setFormStatus({ status: 'idle' });
+    setEmail('');
+  }, [setFormStatus, setEmail]);
+
   if (!isFlagEnabled('ENABLE_SUBMIT_FORM')) {
     return null;
   }
@@ -228,6 +295,7 @@ export const SubmitForm: SubmitFormProps = ({ ...props }) => {
           formStatus={formStatus}
           setEmail={setEmail}
           onSubmit={handleSubmit}
+          resetForm={resetForm}
         />
       )}
     </div>
