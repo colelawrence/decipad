@@ -280,12 +280,22 @@ const resolvers: Resolvers = {
   UserAccess: {
     async user({ userId }) {
       const data = await tables();
-      const dbUsers = await data.users.get({ id: getDefined(userId) });
+
+      if (!userId) {
+        return undefined;
+      }
+
+      const dbUsers = await data.users.get({ id: userId });
+
+      if (!dbUsers) {
+        return undefined;
+      }
+
       return {
         ...dbUsers,
-        id: getDefined(userId),
-        name: getDefined(dbUsers).name,
-        email: getDefined(getDefined(dbUsers).email),
+        id: userId,
+        name: dbUsers.name,
+        email: getDefined(dbUsers.email),
         image: dbUsers?.email ?? undefined,
       } satisfies User;
     },
