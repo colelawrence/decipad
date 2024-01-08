@@ -28,7 +28,7 @@ export const units: UnitOfMeasure[] = [
   },
   {
     name: 'pound',
-    symbols: ['lbav'],
+    symbols: ['lbav', 'lb'],
     baseQuantity: 'mass',
     toBaseQuantity: pound,
     fromBaseQuantity: invert(pound),
