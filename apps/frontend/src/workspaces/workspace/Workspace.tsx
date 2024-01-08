@@ -27,7 +27,7 @@ import {
 } from '@decipad/ui';
 import { useIntercom } from '@decipad/react-utils';
 import { signOut, useSession } from 'next-auth/react';
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Outlet,
   Route,
@@ -143,6 +143,9 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     completionTokensUsed,
   } = useAiUsage();
 
+  // hack to check if the workspace Id has changed
+  const [prevWorkspaceId, setPrevWorkspaceId] = useState(currentWorkspace?.id);
+
   useEffect(() => {
     let quotaLimit = currentWorkspace?.isPremium
       ? Number(process.env.REACT_APP_MAX_CREDITS_PRO)
@@ -165,13 +168,19 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
         }
       });
 
-    // we only want to update the usage with the DB values when the user refreshes the page
-    if (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) {
+    /* we only want to update the usage with the DB values when the user refreshes the page OR
+     * if the workspace Id has changed
+     */
+    if (
+      (!promptTokensUsed && !completionTokensUsed && !tokensQuotaLimit) ||
+      prevWorkspaceId !== currentWorkspace?.id
+    ) {
       updateUsage({
         promptTokensUsed: pTokens,
         completionTokensUsed: cTokens,
         tokensQuotaLimit: quotaLimit,
       });
+      setPrevWorkspaceId(currentWorkspace?.id);
     }
   }, [
     updateUsage,
@@ -180,6 +189,8 @@ const Workspace: FC<WorkspaceProps> = ({ isRedirectFromStripe }) => {
     promptTokensUsed,
     completionTokensUsed,
     tokensQuotaLimit,
+    currentWorkspace?.id,
+    prevWorkspaceId,
   ]);
 
   useEffect(() => {
