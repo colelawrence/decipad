@@ -12803,10 +12803,10 @@
   resolved "https://registry.yarnpkg.com/@types/long/-/long-4.0.2.tgz#b74129719fc8d11c01868010082d483b7545591a"
   integrity sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==
 
-"@types/luxon@3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.3.0.tgz#a61043a62c0a72696c73a0a305c544c96501e006"
-  integrity sha512-uKRI5QORDnrGFYgcdAVnHvEIvEZ8noTpP/Bg+HeUzZghwinDlIS87DEenV5r1YoOF9G4x600YsUXLWZ19rmTmg==
+"@types/luxon@3.4.0":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.4.0.tgz#02c16b7c6ecea55426b404e13e4ea971fb057b87"
+  integrity sha512-PEVoA4MOfSsFNaPrZjIUGUZujBDxnO/tj2A2N9KfzlR+pNgpBdDuk0TmRvSMAVUP5q4q8IkMEZ8UOp3MIr+QgA==
 
 "@types/md5@^2.3.2":
   version "2.3.2"
@@ -15293,10 +15293,10 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1514.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
-  version "2.1514.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1514.0.tgz#e13eefdaff667ba0c87d03280b7ce03150b03944"
-  integrity sha512-ZQE5kHhJozwBB+Zaa21Gglm2pSQVU+8fFZNOn4pr+Kc1scYPlmVBPR3a0w19Vc4HNXPzjApAk2G4xMvzZDktAw==
+aws-sdk@2.1530.0, aws-sdk@^2.1363.0, aws-sdk@^2.1364.0, aws-sdk@^2.814.0, aws-sdk@^2.820.0:
+  version "2.1530.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1530.0.tgz#85b5f9d46bc2e17c662c9af21c9d4d7c760ea27f"
+  integrity sha512-00hEQvur+ohBQiBzyLm5YU3B5UrU2QgEzmIuvB88i4vrViRIcxHotWmdMMSQPOhHjyQb8RwfksfUMpstnyGWxg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
