@@ -285,6 +285,10 @@ export class EditorController implements RootEditorController {
 
   // ======== Slate Editor Stubs ========
 
+  public withoutCapturingUndo(cb: () => void): void {
+    cb();
+  }
+
   public withoutNormalizing(cb: () => void): void {
     // Here we subscribe to new editors that may be created while processing an operation.
     // This allows us to prevent normalization from occurring immediately after the new sub-editor apply,
@@ -776,6 +780,8 @@ export class EditorController implements RootEditorController {
         withoutNormalizing(callback);
       });
     };
+
+    editor.withoutCapturingUndo = this.withoutCapturingUndo;
 
     editor.apply = (op) => {
       if (op.FROM_ROOT) {

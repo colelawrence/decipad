@@ -21,7 +21,7 @@ export { LoadingIndicator } from './LoadingIndicator/LoadingIndicator';
 export { LoadingLogo } from './LoadingLogo/LoadingLogo';
 export { UINotebookList } from './NotebookList/UINotebookList';
 export { NotebookListPlaceholder } from './NotebookListPlaceholder/NotebookListPlaceholder';
-export { NotebookTopbar } from './NotebookTopbar/NotebookTopbar';
+export * from './NotebookTopbar';
 export { SlashCommandsMenu } from './SlashCommandsMenu/SlashCommandsMenu';
 export { SmartCell } from './SmartCell/SmartCell';
 export { ToastDisplay } from './ToastDisplay/ToastDisplay';

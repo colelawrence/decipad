@@ -11,15 +11,21 @@ export function useEditorUndoState(
   const [canRedo, setCanRedo] = useState(false);
 
   useEffect(() => {
-    if (!editor) return;
-    if (!editor.undoManager) return;
+    // Reset values based on `editor` prop changing.
+    setCanUndo(false);
+    setCanRedo(false);
+
+    if (editor == null) return;
+    if (editor.undoManager == null) return;
+
+    const { undoManager } = editor;
 
     editor.undoManager.on('stack-item-added', () => {
-      setCanUndo(!!editor.undoManager?.canUndo());
+      setCanUndo(undoManager.canUndo());
     });
 
     editor.undoManager.on('stack-item-popped', () => {
-      setCanRedo(!!editor.undoManager?.canRedo());
+      setCanRedo(undoManager.canRedo());
     });
   }, [editor]);
 

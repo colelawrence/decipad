@@ -21,7 +21,6 @@ import { createNormalizeVariableDefPlugin } from './createNormalizeVariableDefPl
 import { createMigrateElementInputToVariableDefPlugin } from './createMigrateElementInputToVariableDefPlugin';
 import { decorateExpression } from '../utils/decorateExpression';
 import { createNormalizeSliderPlugin } from './createNormalizeSliderPlugin';
-import { createSliderExpressionSyncPlugin } from './createSliderExpressionSyncPlugin';
 import { Dropdown } from '../components/Dropdown';
 import { createNormalizeCaptionPlugin } from './createNormalizeCaptionPlugin';
 import { createNormalizeExpressionPlugin } from './createNormalizeExpressionPlugin';
@@ -133,7 +132,6 @@ export const createVariableDefPlugin = (): MyPlatePlugin => ({
       ),
     },
     createNormalizeSliderPlugin(),
-    createSliderExpressionSyncPlugin(),
     createEventInterceptorPluginFactory({
       name: 'INTERCEPT_VAR_DEF',
       elementTypes: [

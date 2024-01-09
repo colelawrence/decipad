@@ -17,12 +17,8 @@ const noop = () => Promise.resolve();
 
 const props: ComponentProps<typeof NotebookTopbar> = {
   permissionType: null,
-  onRevertChanges: noop,
   sidebarOpen: true,
-  canRedo: true,
-  canUndo: true,
-  onUndo: noop,
-  onRedo: noop,
+  UndoButtons: undefined,
   isNewNotebook: true,
   onClearAll: noop,
   isEmbed: false,

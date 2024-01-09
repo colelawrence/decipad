@@ -26,8 +26,6 @@ import { Button, IconButton, Link, SegmentButtons, Tooltip } from '../../atoms';
 import {
   Cards,
   Caret,
-  CircularArrow,
-  CurvedArrow,
   Deci,
   LeftArrowShort,
   Show,
@@ -47,7 +45,6 @@ import {
 import {
   componentCssVars,
   cssVar,
-  p12Bold,
   p13Bold,
   p13Medium,
   smallScreenQuery,
@@ -128,7 +125,6 @@ const VerticalDivider = () => (
 
 export type NotebookTopbarProps = {
   readonly permissionType: NotebookMetaDataFragment['myPermissionType'];
-  readonly onRevertChanges: () => void;
   readonly onRemove?: (userId: string) => Promise<void>;
   readonly onInvite?: (
     email: string,
@@ -148,13 +144,9 @@ export type NotebookTopbarProps = {
   readonly aiMode: boolean;
   readonly toggleAIMode: () => void;
 
-  // Undo buttons
-  readonly canUndo: boolean;
-  readonly canRedo: boolean;
-  readonly onUndo: () => void;
-  readonly onRedo: () => void;
-
   readonly onClearAll: () => void;
+
+  readonly UndoButtons: React.ReactNode;
 
   readonly isEmbed: boolean;
 
@@ -180,12 +172,6 @@ export const NotebookTopbar = ({
   isNewNotebook,
   hasUnpublishedChanges,
 
-  canUndo,
-  canRedo,
-  onUndo,
-  onRedo,
-  onRevertChanges,
-
   onClearAll,
 
   // Status dropdown
@@ -195,6 +181,9 @@ export const NotebookTopbar = ({
   notebookMetaActions,
   notebookAccessActions,
   userWorkspaces,
+
+  // Composition components
+  UndoButtons,
 }: NotebookTopbarProps): ReturnType<FC> => {
   // --------------------------------------------------
 
@@ -299,26 +288,8 @@ export const NotebookTopbar = ({
         notebookName={'Decipad — smart document'}
         href="https://decipad.com"
       />
+      {!isEmbed && UndoButtons}
     </Styled.LeftContainer>
-  );
-
-  const undoButtons = (
-    <Styled.ActionButtons>
-      <div>
-        <button type="button" onClick={onUndo} disabled={!canUndo}>
-          <CurvedArrow direction="left" active={canUndo} />
-        </button>
-        <button type="button" onClick={onRedo} disabled={!canRedo}>
-          <CurvedArrow direction="right" active={canRedo} />
-        </button>
-      </div>
-      {isEmbed && (
-        <button type="button" onClick={onRevertChanges}>
-          <CircularArrow />
-          <span css={p12Bold}>Clear Changes</span>
-        </button>
-      )}
-    </Styled.ActionButtons>
   );
 
   const [isDuplicating, setIsDuplicating] = useState(false);
@@ -401,7 +372,7 @@ export const NotebookTopbar = ({
                 {isArchived ? 'Archive' : status}
               </Styled.Status>
             </Styled.TitleContainer>
-            {!(isReadOnly || isEmbed) && undoButtons}
+            {!isEmbed && UndoButtons}
             {isNewNotebook && showClearAll && (
               <Button
                 type="primary"
@@ -423,7 +394,7 @@ export const NotebookTopbar = ({
 
         {/* Right side */}
         {isEmbed ? (
-          undoButtons
+          UndoButtons
         ) : (
           <div css={rightSideStyles}>
             <div

@@ -6,16 +6,11 @@ import { noop } from '@decipad/utils';
 const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   permissionType: null,
   sidebarOpen: true,
-  canRedo: true,
-  canUndo: true,
-  onUndo: noop,
-  onRedo: noop,
   isNewNotebook: true,
   onClearAll: noop,
   isEmbed: false,
   toggleSidebar: noop,
   notebookMeta: undefined,
-  onRevertChanges: noop,
   notebookMetaActions: {
     onChangeStatus: noop,
     onMoveToSection: noop,
@@ -37,6 +32,7 @@ const args: Omit<ComponentProps<typeof NotebookTopbar>, 'workspaceHref'> = {
   hasUnpublishedChanges: false,
   toggleAIMode: noop,
   aiMode: false,
+  UndoButtons: undefined,
 };
 export default {
   title: 'Templates / Notebook / Top Bar / Topbar',

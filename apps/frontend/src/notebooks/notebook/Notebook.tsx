@@ -30,6 +30,7 @@ import {
   GlobalThemeStyles,
   TopbarPlaceholder,
   NotebookTopbar,
+  UndoButtons,
   EditorIcon,
   NotebookTabs,
   AssistantChatPlaceholder,
@@ -494,7 +495,6 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
 
   return (
     <NotebookTopbar
-      onRevertChanges={() => docsync?.clearAll()}
       permissionType={permission}
       hasUnpublishedChanges={hasUnpublishedChanges}
       notebookMeta={meta.data?.getPadById}
@@ -502,16 +502,22 @@ const NewTopbar: FC<{ notebookId: string }> = ({ notebookId }) => {
       notebookMetaActions={actions}
       notebookAccessActions={accessActions}
       isNewNotebook={false}
-      canUndo={canUndo}
-      canRedo={canRedo}
-      isEmbed={isEmbed}
-      onRedo={() => docsync?.undoManager?.redo() || noop}
-      onUndo={() => docsync?.undoManager?.undo() || noop}
       onClearAll={() => {}}
+      isEmbed={isEmbed}
       sidebarOpen={sidebarData.sidebarOpen}
       toggleSidebar={sidebarData.toggleSidebar}
       aiMode={aiModeData.aiMode}
       toggleAIMode={aiModeData.toggleAiMode}
+      UndoButtons={
+        <UndoButtons
+          canUndo={canUndo}
+          canRedo={canRedo}
+          isEmbed={isEmbed}
+          onRedo={() => docsync?.undoManager?.redo() || noop}
+          onUndo={() => docsync?.undoManager?.undo() || noop}
+          onRevertChanges={() => docsync?.clearAll()}
+        />
+      }
     />
   );
 };
