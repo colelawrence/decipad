@@ -87,6 +87,9 @@ const baseFormContainerStyles = css({
       background: cssVar('backgroundAccent'),
     },
   },
+  '> svg': {
+    maxWidth: 16,
+  },
 });
 
 const formContainerErrorStyles = css({
