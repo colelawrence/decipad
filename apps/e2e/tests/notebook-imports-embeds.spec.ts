@@ -1,5 +1,5 @@
-import { expect, test } from './manager/decipad-tests';
-import { Timeouts } from '../utils/src';
+import { expect, test, Page } from './manager/decipad-tests';
+import { Timeouts, snapshot } from '../utils/src';
 
 test.describe('structured input and calculations @calculation-blocks', () => {
   test('import images @imports @images', async ({ testUser }) => {
@@ -14,6 +14,29 @@ test.describe('structured input and calculations @calculation-blocks', () => {
       await expect(
         page.getByTestId('notebook-image-block').locator('img')
       ).toBeVisible();
+      await snapshot(
+        page as Page,
+        'Notebook: Decipad logo image at biggest size'
+      );
+    });
+
+    await test.step('Rezise image to smallest size', async () => {
+      await page
+        .getByTestId('notebook-image-block')
+        .locator('div')
+        .nth(3)
+        .hover();
+      await page.mouse.down();
+      await page
+        .getByTestId('notebook-image-block')
+        .locator('div')
+        .nth(2)
+        .hover();
+      await page.mouse.up();
+      await snapshot(
+        page as Page,
+        'Notebook: Decipad logo image at smallest size'
+      );
     });
 
     await test.step('set image caption', async () => {
