@@ -105,6 +105,10 @@ export const handler = handle(async (event) => {
       h1 {
         color: green;
       }
+      .pure-table td {
+        max-width: 800px;
+        overflow-x: scroll;
+      }
     </style>
   </head>
   <body>
