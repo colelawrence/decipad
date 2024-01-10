@@ -32,7 +32,7 @@ type Variant = Pick<
   'variant'
 >['variant'];
 
-const wrapperStyles = (color: string) => {
+export const wrapperStyles = (color: string) => {
   const bgColor = cssVar('backgroundMain');
 
   const finalColor = cssVar('borderSubdued');

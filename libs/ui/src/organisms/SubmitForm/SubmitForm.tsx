@@ -1,13 +1,19 @@
-import { PlateComponent, useTEditorRef } from '@decipad/editor-types';
+import {
+  AvailableSwatchColor,
+  PlateComponent,
+  useTEditorRef,
+} from '@decipad/editor-types';
 import { exportProgramByVarname } from '@decipad/import';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useWorkspaceSecrets } from '@decipad/graphql-client';
 import { TextAndIconButton, Button, InputField, IconButton } from '../../atoms';
 import {
   useComputer,
   useCurrentWorkspaceStore,
+  useEditorStylesContext,
   useIsEditorReadOnly,
   useNotebookId,
+  useThemeFromStore,
 } from '@decipad/react-contexts';
 import { BackendUrl } from '@decipad/utils';
 import { useNodePath, usePathMutatorCallback } from '@decipad/editor-hooks';
@@ -17,8 +23,10 @@ import { css } from '@emotion/react';
 import { SelectInput } from '../../SelectInput';
 import { Email, Send, Close, Spinner } from '../../icons';
 import { isFlagEnabled } from '@decipad/feature-flags';
-import { brand200, cssVar, grey200 } from '../../primitives';
+import { brand200, cssVar, white } from '../../primitives';
 import { useToast } from '@decipad/toast';
+import { wrapperStyles } from '../VariableEditor/VariableEditor';
+import { swatchesThemed } from '../../utils';
 
 const configContainerStyles = css({
   display: 'grid',
@@ -73,14 +81,7 @@ const Config = ({
 };
 
 const baseFormContainerStyles = css({
-  display: 'grid',
-  gridTemplateColumns: '13px 1fr auto',
-  alignItems: 'center',
-  gap: '8px',
-  borderRadius: 12,
-  padding: 8,
-  border: `1px solid ${grey200.rgb}`,
-  borderLeftWidth: 6,
+  maxWidth: '100%',
   input: {
     border: 'none',
     ':focus': {
@@ -91,6 +92,14 @@ const baseFormContainerStyles = css({
     maxWidth: 16,
   },
 });
+
+const innerFormContainerStyles = {
+  margin: 8,
+  display: 'grid',
+  gridTemplateColumns: '13px 1fr auto',
+  alignItems: 'center',
+  gap: '8px',
+};
 
 const formContainerErrorStyles = css({
   input: {
@@ -138,6 +147,15 @@ const Form = ({
 }) => {
   const toast = useToast();
 
+  const { color } = useEditorStylesContext();
+  const [darkTheme] = useThemeFromStore();
+  const baseSwatches = useMemo(() => swatchesThemed(darkTheme), [darkTheme]);
+  const formContainerStyles = [
+    wrapperStyles(baseSwatches[color as AvailableSwatchColor].rgb),
+    baseFormContainerStyles,
+    formStatus.status === 'error' && formContainerErrorStyles,
+  ];
+
   useEffect(() => {
     if (formStatus.status === 'error') {
       toast.error(formStatus.error);
@@ -159,11 +177,6 @@ const Form = ({
     );
   }
 
-  const formContainerStyles = [
-    baseFormContainerStyles,
-    formStatus.status === 'error' && formContainerErrorStyles,
-  ];
-
   return (
     <>
       <form
@@ -173,24 +186,30 @@ const Form = ({
           onSubmit();
         }}
       >
-        <Email />
-        <InputField
-          type="email"
-          size="small"
-          value={email}
-          placeholder="Email"
-          onChange={setEmail}
-          disabled={formStatus.status === 'loading'}
-        />
+        <div css={innerFormContainerStyles}>
+          <Email />
+          <InputField
+            type="email"
+            size="small"
+            value={email}
+            placeholder="Email"
+            onChange={setEmail}
+            disabled={formStatus.status === 'loading'}
+          />
 
-        <TextAndIconButton
-          onClick={onSubmit}
-          text="Submit"
-          iconPosition="left"
-          color={formStatus.status === 'loading' ? 'grey' : 'black'}
-        >
-          {formStatus.status === 'loading' ? <Spinner /> : <Send />}
-        </TextAndIconButton>
+          <TextAndIconButton
+            onClick={onSubmit}
+            text="Submit"
+            iconPosition="left"
+            color={formStatus.status === 'loading' ? 'grey' : 'black'}
+          >
+            {formStatus.status === 'loading' ? (
+              <Spinner />
+            ) : (
+              <Send fill={white.rgb} />
+            )}
+          </TextAndIconButton>
+        </div>
       </form>
     </>
   );
