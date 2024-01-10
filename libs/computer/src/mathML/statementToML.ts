@@ -1,3 +1,4 @@
+import { escape } from 'html-escaper';
 // eslint-disable-next-line no-restricted-imports
 import {
   AST,
@@ -6,10 +7,9 @@ import {
   getDateFromAstForm,
   operators,
 } from '@decipad/language';
+import { formatDate } from '@decipad/utils';
 import type { Computer } from '../computer/Computer';
 import { getIdentifierString } from '../utils/many';
-import { formatDate } from '@decipad/utils';
-import htmlescape from 'htmlescape';
 
 const blockToML = async (
   block: AST.Block,
@@ -33,7 +33,7 @@ const functionDefinitionToML = async (
     <mi>${realFuncName}</mi>
     <mo fence="true">(</mo>
       ${funcDef.args[1].args
-        .map((arg) => `<mi>${getIdentifierString(arg)}</mi>`)
+        .map((arg) => `<mi>${escape(getIdentifierString(arg))}</mi>`)
         .join('<mo>,</mo><mspace />')}
     <mo fence="true">)</mo>
     <mspace />
@@ -54,7 +54,7 @@ const defaultFuncitonCallToML = async (
     )
   ).join('<mo>,</mo><mspace />');
   return `<mrow>
-    <mo>${opName}</mo>
+    <mo>${escape(opName)}</mo>
     <mo fence="true">(</mo>
       ${argsML}
     <mo fence="true">)</mo>
@@ -109,7 +109,7 @@ export const expressionToML = async (
 ): Promise<string> => {
   switch (expression?.type) {
     case 'ref': {
-      return `<mi>${expression.args[0]}</mi>`;
+      return `<mi>${expression.previousVarName ?? expression.args[0]}</mi>`;
     }
     case 'function-call': {
       return functionCallToML(expression, computer);
@@ -129,13 +129,13 @@ export const expressionToML = async (
       switch (litArgs[0]) {
         case 'string': {
           return `<mo fence="true">"</mo>
-            <ms>${htmlescape(litArgs[1])}</ms>
+            <ms>${escape(litArgs[1])}</ms>
             <mo fence="true">"</mo>`;
         }
         case 'number': {
           const n = litArgs[1];
           if (n.d === 1n) {
-            return `<mn>${n.toString()}</mn>`;
+            return `<mn>${escape(n.toString())}</mn>`;
           }
           const parts: string[] = [];
           if (n.s === -1n) {
@@ -143,10 +143,10 @@ export const expressionToML = async (
           }
           parts.push(`<mfrac>
             <mrow>
-              <mn>${n.n?.toString()}</mn>
+              <mn>${escape(n.n?.toString() ?? '')}</mn>
             </mrow>
             <mrow>
-              <mn>${n.d?.toString()}</mn>
+              <mn>${escape(n.d?.toString() ?? '')}</mn>
             </mrow>
           </mfrac>`);
           return parts.join('');
