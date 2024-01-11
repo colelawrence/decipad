@@ -7,10 +7,13 @@ import { ensureGraphqlResponseIsErrorFree } from './utils/ensureGraphqlResponseI
 import { defaultEnv } from '../../../libs/backend-config/src/default';
 // eslint-disable-next-line import/no-relative-packages
 import { GetWorkspacesDocument } from '../../../libs/graphql-client/src/generated';
+import { thirdParty } from '@decipad/backend-config';
+
+const stripeApiVersion = thirdParty().stripe.apiVersion;
 
 test('workspaces', (ctx) => {
   const stripe = new Stripe(defaultEnv('STRIPE_API_KEY'), {
-    apiVersion: '2023-08-16',
+    apiVersion: stripeApiVersion,
   });
   const { test: it } = ctx;
   let workspace: Workspace;
@@ -49,7 +52,7 @@ test('workspaces', (ctx) => {
     stripeEvent = {
       id: 'evt_1NuywjB0kCiHMJmLmpKXGHIf',
       object: 'event',
-      api_version: '2023-08-16',
+      api_version: stripeApiVersion,
       created: Date.now(),
       data: {
         object: {

@@ -9,11 +9,10 @@ import {
   SubscriptionPaymentStatus,
   WorkspaceSubscription,
 } from '@decipad/graphqlserver-types';
-import { getDefined } from '@decipad/utils';
 
-const stripeConfig = thirdParty().stripe;
-const stripe = new Stripe(stripeConfig.secretKey, {
-  apiVersion: '2023-08-16',
+const { secretKey, apiVersion } = thirdParty().stripe;
+const stripe = new Stripe(secretKey, {
+  apiVersion,
 });
 
 const workspacesResource = resource('workspace');
@@ -46,7 +45,6 @@ export const getWorkspaceSubscription = async (
   // Cast because the _technical_ type is an enum.
   return {
     ...workspaceSubs,
-    customer_id: workspaceSubs.customer_id,
     paymentStatus: workspaceSubs.paymentStatus as SubscriptionPaymentStatus,
   };
 };
@@ -73,7 +71,6 @@ export const findSubscriptionByWorkspaceId = async (
   // Cast because the _technical_ type is an enum.
   return {
     ...sub,
-    customer_id: getDefined(sub.customer_id),
     paymentStatus: sub.paymentStatus as SubscriptionPaymentStatus,
   };
 };

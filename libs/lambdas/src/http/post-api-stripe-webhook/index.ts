@@ -11,10 +11,10 @@ import {
   processInvoiceCreated,
 } from './processStripeEvents';
 
-const stripeConfig = thirdParty().stripe;
+const { apiKey, apiVersion, webhookSecret } = thirdParty().stripe;
 
-export const stripe = new Stripe(stripeConfig.apiKey, {
-  apiVersion: '2023-08-16',
+export const stripe = new Stripe(apiKey, {
+  apiVersion,
 });
 
 export const handler = handle(async (event: APIGatewayProxyEventV2) => {
@@ -29,7 +29,7 @@ export const handler = handle(async (event: APIGatewayProxyEventV2) => {
     stripeEvent = stripe.webhooks.constructEvent(
       event.body,
       sig || '',
-      stripeConfig.webhookSecret || ''
+      webhookSecret || ''
     );
 
     switch (stripeEvent.type) {

@@ -75,10 +75,9 @@ export const updateExtraAiAllowance = async (
   paymentMethodId: string,
   user: User
 ) => {
-  const stripeConfig = thirdParty().stripe;
-  const { secretKey, extraCreditsProdId } = stripeConfig;
+  const { secretKey, extraCreditsProdId, apiVersion } = thirdParty().stripe;
   const stripe = new Stripe(secretKey, {
-    apiVersion: '2023-08-16',
+    apiVersion,
   });
 
   const product = await stripe.products.retrieve(extraCreditsProdId);

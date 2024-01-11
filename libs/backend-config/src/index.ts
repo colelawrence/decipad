@@ -269,6 +269,7 @@ export function thirdParty() {
       apiKey: env('OPENAI_API_KEY'),
     },
     stripe: {
+      apiVersion: '2023-08-16' as const,
       webhookSecret: env('STRIPE_WEBHOOK_SECRET'),
       secretKey: env('STRIPE_SECRET_KEY'), // 'sk_test_...
       apiKey: env('STRIPE_API_KEY'), // 'pk_test_...

@@ -1004,7 +1004,6 @@ export type WorkspaceInput = {
 
 export type WorkspaceSubscription = {
   __typename?: 'WorkspaceSubscription';
-  customer_id?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
   paymentLink: Scalars['String']['output'];
   paymentStatus: SubscriptionPaymentStatus;
@@ -1678,7 +1677,6 @@ export type WorkspaceExecutedQueryResolvers<ContextType = GraphqlContext, Parent
 };
 
 export type WorkspaceSubscriptionResolvers<ContextType = GraphqlContext, ParentType extends ResolversParentTypes['WorkspaceSubscription'] = ResolversParentTypes['WorkspaceSubscription']> = {
-  customer_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentLink?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentStatus?: Resolver<ResolversTypes['SubscriptionPaymentStatus'], ParentType, ContextType>;
